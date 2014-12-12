@@ -10,9 +10,13 @@ import java.io.IOException;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import org.bukkit.craftbukkit.v1_8_R1.inventory.CraftItemStack;
 import org.spigotmc.LimitStream;
 import org.spigotmc.SneakyThrow;
 
+import protocolsupport.remappers.ItemIDRemapper;
+import net.minecraft.server.v1_8_R1.Item;
+import net.minecraft.server.v1_8_R1.ItemStack;
 import net.minecraft.server.v1_8_R1.NBTCompressedStreamTools;
 import net.minecraft.server.v1_8_R1.NBTReadLimiter;
 import net.minecraft.server.v1_8_R1.NBTTagCompound;
@@ -32,6 +36,28 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R1.PacketDat
 
 	public int getVersion() {
 		return version;
+	}
+
+	@Override
+	public void a(ItemStack itemstack) {
+		if (itemstack == null || itemstack.getItem() == null) {
+			this.writeShort(-1);
+		} else {
+			if (getVersion() == DataStorage.CLIENT_1_8_PROTOCOL_VERSION) {
+				this.writeShort(Item.getId(itemstack.getItem()));
+			} else {
+				this.writeShort(ItemIDRemapper.replaceItemId(Item.getId(itemstack.getItem())));
+			}
+			this.writeByte(itemstack.count);
+			this.writeShort(itemstack.getData());
+			NBTTagCompound nbttagcompound = null;
+			if (itemstack.getItem().usesDurability() || itemstack.getItem().p()) {
+				itemstack = itemstack.cloneItemStack();
+				CraftItemStack.setItemMeta(itemstack, CraftItemStack.getItemMeta(itemstack));
+				nbttagcompound = itemstack.getTag();
+			}
+			this.a(nbttagcompound);
+		}
 	}
 
 	@Override

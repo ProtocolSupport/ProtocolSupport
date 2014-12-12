@@ -1,4 +1,4 @@
-package protocolsupport.protocol.clientboundtransformer;
+package protocolsupport.remappers;
 
 public class EntityIDRemapper {
 
