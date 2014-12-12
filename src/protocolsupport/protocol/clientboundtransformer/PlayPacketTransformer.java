@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 
 import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.remappers.BlockIDRemapper;
 import protocolsupport.remappers.EntityIDRemapper;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -69,7 +70,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(blockPos.getY());
 				serializer.writeInt(blockPos.getZ());
 				int stateId = packetdata.readVarInt();
-				serializer.writeVarInt(stateId >> 4);
+				serializer.writeVarInt(BlockIDRemapper.replaceBlockId(stateId >> 4));
 				serializer.writeByte(stateId & 0xF);
 				return true;
 			}
@@ -268,10 +269,9 @@ public class PlayPacketTransformer implements PacketTransformer {
 				final ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream(count * 4);
 				final DataOutputStream dataoutputstream = new DataOutputStream(bytearrayoutputstream);
 				for (int i = 0; i < count; i++) {
-					int coord = packetdata.readUnsignedShort();
+					dataoutputstream.writeShort(packetdata.readUnsignedShort());
 					int id = packetdata.readVarInt();
-					dataoutputstream.writeShort((id << 4) | id >> 12);
-					dataoutputstream.writeShort(coord);
+					dataoutputstream.writeShort((BlockIDRemapper.replaceBlockId(id >> 4) << 4) | (id & 0xF));
 				}
 				serializer.writeInt(dataoutputstream.size());
 				serializer.writeBytes(bytearrayoutputstream.toByteArray());

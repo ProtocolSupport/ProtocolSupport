@@ -1,5 +1,7 @@
 package protocolsupport.protocol.clientboundtransformer;
 
+import protocolsupport.remappers.BlockIDRemapper;
+
 public class ChunkUtils {
 
 	public static int calcDataSize(final int bitmap, final boolean light, final boolean sendBiomes) {
@@ -22,7 +24,7 @@ public class ChunkUtils {
 		int mIndex = count * 4096;
 		for (int i = 0; i < 8192 * count; i+=2) {
 			int state = ((data18[i + 1] & 0xFF) << 8) | (data18[i] & 0xFF);
-			newdata[tIndex] = (byte) (state >> 4);
+			newdata[tIndex] = (byte) BlockIDRemapper.replaceBlockId(state >> 4);
 			byte data = (byte) (state & 0xF);
 			if ((tIndex & 1) == 0) {
 				newdata[mIndex] = data;
