@@ -19,7 +19,7 @@ public class LoginListener extends net.minecraft.server.v1_8_R1.LoginListener {
     @Override
     public void b() {
     	try {
-	    	if (ServerConnectionChannel.getVersion(Utilities.getChannel(this.networkManager).remoteAddress()) == ServerConnectionChannel.CLIENT_1_8_PROTOCOL_VERSION) {
+	    	if (DataStorage.getVersion(Utilities.getChannel(this.networkManager).remoteAddress()) == DataStorage.CLIENT_1_8_PROTOCOL_VERSION) {
 	    		super.b();
 	    	} else {
         		GameProfile profile = (GameProfile) Utilities.<Field>setAccessible(net.minecraft.server.v1_8_R1.LoginListener.class.getDeclaredField("i")).get(this);

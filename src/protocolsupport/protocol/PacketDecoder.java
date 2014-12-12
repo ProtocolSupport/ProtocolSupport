@@ -35,7 +35,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
 		if (bytebuf.readableBytes() == 0) {
 			return;
 		}
-		int version = ServerConnectionChannel.getVersion(channelHandlerContext.channel().remoteAddress());
+		int version = DataStorage.getVersion(channelHandlerContext.channel().remoteAddress());
 		final PacketDataSerializer packetDataSerializer = new PacketDataSerializer(bytebuf, version);
 		final int packetId = packetDataSerializer.e();
 		final Packet packet = channelHandlerContext.channel().attr(currentStateAttrKey).get().a(direction, packetId);

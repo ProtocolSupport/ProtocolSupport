@@ -9,14 +9,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import protocolsupport.injector.Utilities;
-import protocolsupport.protocol.ServerConnectionChannel;
+import protocolsupport.protocol.DataStorage;
 
 public class PlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onJoin(PlayerJoinEvent event) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		NetworkManager nm = ((CraftPlayer) event.getPlayer()).getHandle().playerConnection.networkManager;
-		ServerConnectionChannel.setPlayer(Utilities.getChannel(nm).remoteAddress(), event.getPlayer());
+		DataStorage.setPlayer(Utilities.getChannel(nm).remoteAddress(), event.getPlayer());
 	}
 
 }

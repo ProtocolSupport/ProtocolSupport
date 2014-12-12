@@ -36,7 +36,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R1.PacketDat
 
 	@Override
 	public void a(final NBTTagCompound nbttagcompound) {
-		if (this.getVersion() != ServerConnectionChannel.CLIENT_1_8_PROTOCOL_VERSION) {
+		if (this.getVersion() != DataStorage.CLIENT_1_8_PROTOCOL_VERSION) {
 			if (nbttagcompound == null) {
 				this.writeShort(-1);
 			} else {
@@ -56,7 +56,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R1.PacketDat
 
 	@Override
 	public NBTTagCompound h() {
-		if (this.getVersion() != ServerConnectionChannel.CLIENT_1_8_PROTOCOL_VERSION) {
+		if (this.getVersion() != DataStorage.CLIENT_1_8_PROTOCOL_VERSION) {
 			final short short1 = this.readShort();
 			if (short1 < 0) {
 				return null;
@@ -106,7 +106,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R1.PacketDat
 		}
 	}
 
-	public static byte[] write(final NBTTagCompound nbttagcompound) {
+	private static byte[] write(final NBTTagCompound nbttagcompound) {
 		try {
 			final ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream();
 			final DataOutputStream dataoutputstream = new DataOutputStream(new GZIPOutputStream(bytearrayoutputstream));

@@ -55,8 +55,8 @@ public class PacketEncoder extends MessageToByteEncoder<Packet> {
         if (packetId == null) {
             throw new IOException("Can't serialize unregistered packet");
         }
-		int version = ServerConnectionChannel.getVersion(channelHandlerContext.channel().remoteAddress());
-		if (version != ServerConnectionChannel.CLIENT_1_8_PROTOCOL_VERSION && currentProtocol == EnumProtocol.PLAY) {
+		int version = DataStorage.getVersion(channelHandlerContext.channel().remoteAddress());
+		if (version != DataStorage.CLIENT_1_8_PROTOCOL_VERSION && currentProtocol == EnumProtocol.PLAY) {
 			if (blockedPlayPackets[packetId]) {
 				return;
 			} else if (packetId == 0x38) {

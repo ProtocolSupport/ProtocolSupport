@@ -3,23 +3,23 @@ package protocolsupport.protocol.clientboundtransformer;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.SocketAddress;
 import java.util.HashMap;
 import java.util.UUID;
-import java.util.WeakHashMap;
 import java.util.zip.Deflater;
 
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R1.util.CraftChatMessage;
 import org.bukkit.entity.Player;
 
+import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.ServerConnectionChannel;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import net.minecraft.server.v1_8_R1.BlockPosition;
 import net.minecraft.server.v1_8_R1.ChatSerializer;
+import net.minecraft.server.v1_8_R1.Entity;
 import net.minecraft.server.v1_8_R1.EnumParticle;
 import net.minecraft.server.v1_8_R1.Packet;
 
@@ -27,7 +27,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 
 	@Override
 	public boolean tranform(Channel channel, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException {
-		if (serializer.getVersion() == ServerConnectionChannel.CLIENT_1_8_PROTOCOL_VERSION) {
+		if (serializer.getVersion() == DataStorage.CLIENT_1_8_PROTOCOL_VERSION) {
 			return false;
 		}
 		PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
@@ -135,9 +135,9 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x1C: { // PacketPlayOutEntityMetadata
 				packet.b(packetdata);
-				serializer.writeInt(packetdata.readVarInt());
-				// TODO: filter datawatcher data
-				serializer.writeBytes(packetdata.readBytes(packetdata.readableBytes()));
+				int entityId = packetdata.readVarInt();
+				serializer.writeInt(entityId);
+				serializer.writeBytes(DataWatcherFilter.filterEntityLivingData(serializer.getVersion(), getEntity(channel, entityId), packetdata.readBytes(packetdata.readableBytes()).array()));
 				return true;
 			}
 			case 0x18: { // PacketPlayOutEntityTeleport
@@ -281,7 +281,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeVarInt(packetdata.readVarInt());
 				UUID uuid = packetdata.g();
 				serializer.writeString(serializer.getVersion() == 5 ? uuid.toString() : uuid.toString().replace("-", ""));
-				String playerName = getTabName(channel.remoteAddress(), uuid);
+				String playerName = DataStorage.getTabName(channel.remoteAddress(), uuid);
 				serializer.writeString(playerName != null ? playerName : "Unknown");
 				if (serializer.getVersion() == 5) {
 					serializer.writeVarInt(0);
@@ -289,10 +289,10 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeInt(packetdata.readInt());
 				serializer.writeInt(packetdata.readInt());
 				serializer.writeInt(packetdata.readInt());
-				serializer.writeByte(packetdata.readByte());
-				serializer.writeByte(packetdata.readByte());
-				serializer.writeShort(packetdata.readShort());
-				serializer.writeBytes(packetdata.readBytes(packetdata.readableBytes()));
+				serializer.writeByte(packetdata.readUnsignedByte());
+				serializer.writeByte(packetdata.readUnsignedByte());
+				serializer.writeShort(packetdata.readUnsignedShort());
+				serializer.writeBytes(packetdata.readBytes(packetdata.readableBytes()).array());
 				return true;
 			}
 			case 0x36: { // PacketPlayOutOpenSignEditor
@@ -324,7 +324,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				switch (action) {
 					case 0: {
 						String playerName = packetdata.readString(16);
-						addTabName(channel.remoteAddress(), uuid, playerName);
+						DataStorage.addTabName(channel.remoteAddress(), uuid, playerName);
 						int props = packetdata.readVarInt();
 						for (int p = 0; p < props; p++) {
 							packetdata.readString(32767);
@@ -341,14 +341,14 @@ public class PlayPacketTransformer implements PacketTransformer {
 						return true;
 					}
 					case 4: {
-						String playerName = getTabName(channel.remoteAddress(), uuid);
+						String playerName = DataStorage.getTabName(channel.remoteAddress(), uuid);
 						serializer.writeString(playerName);
 						serializer.writeBoolean(false);
 						serializer.writeShort(0);
 						return true;
 					}
 					default: {
-						String playerName = getTabName(channel.remoteAddress(), uuid);
+						String playerName = DataStorage.getTabName(channel.remoteAddress(), uuid);
 						serializer.writeString(playerName != null ? playerName : "Unknown");
 						serializer.writeBoolean(true);
 						serializer.writeShort(0);
@@ -358,7 +358,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x08: { // PacketPlayOutPosition
 				packet.b(packetdata);
-				Player player = ServerConnectionChannel.getPlayer(channel.remoteAddress());
+				Player player = DataStorage.getPlayer(channel.remoteAddress());
 				double x = packetdata.readDouble();
 				double y = packetdata.readDouble() + 1.63;
 				double z = packetdata.readDouble();
@@ -574,24 +574,30 @@ public class PlayPacketTransformer implements PacketTransformer {
 				// TODO: additional data
 				return true;
 			}
+			case 0x0F: { //PacketPlayOutSpawnEntityLiving
+				packet.b(packetdata);
+				int entityId = packetdata.readVarInt();
+				serializer.writeVarInt(entityId);
+				int type = packetdata.readUnsignedByte();
+				serializer.writeByte(EntityIDRemapper.replaceLivingEntityId(type));
+				serializer.writeInt(packetdata.readInt());
+				serializer.writeInt(packetdata.readInt());
+				serializer.writeInt(packetdata.readInt());
+				serializer.writeByte(packetdata.readByte());
+				serializer.writeByte(packetdata.readByte());
+				serializer.writeByte(packetdata.readByte());
+				serializer.writeShort(packetdata.readShort());
+				serializer.writeShort(packetdata.readShort());
+				serializer.writeShort(packetdata.readShort());
+				serializer.writeBytes(DataWatcherFilter.filterEntityLivingData(serializer.getVersion(), getEntity(channel, entityId), packetdata.readBytes(packetdata.readableBytes()).array()));
+				return true;
+			}
 		}
 		return false;
 	}
 
-	private WeakHashMap<SocketAddress, HashMap<UUID, String>> tabListData = new WeakHashMap<SocketAddress, HashMap<UUID, String>>();
-
-	private void addTabName(SocketAddress address, UUID uuid, String name) {
-		if (!tabListData.containsKey(address)) {
-			tabListData.put(address, new HashMap<UUID, String>());
-		}
-		tabListData.get(address).put(uuid, name);
-	}
-
-	private String getTabName(SocketAddress address, UUID uuid) {
-		if (!tabListData.containsKey(address)) {
-			return null;
-		}
-		return tabListData.get(address).get(uuid);
+	private Entity getEntity(Channel channel, int entityId) {
+		return ((CraftPlayer) DataStorage.getPlayer(channel.remoteAddress())).getHandle().getWorld().a(entityId);
 	}
 
 	@SuppressWarnings("serial")

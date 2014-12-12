@@ -2,8 +2,8 @@ package protocolsupport.protocol.serverboundtransformer;
 
 import java.io.IOException;
 
+import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.ServerConnectionChannel;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import net.minecraft.server.v1_8_R1.BlockPosition;
@@ -14,7 +14,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 
 	@Override
 	public boolean tranform(Channel channel, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException {
-		if (serializer.getVersion() == ServerConnectionChannel.CLIENT_1_8_PROTOCOL_VERSION) {
+		if (serializer.getVersion() == DataStorage.CLIENT_1_8_PROTOCOL_VERSION) {
 			return false;
 		}
 		PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());

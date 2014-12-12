@@ -6,12 +6,7 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 
-import java.net.SocketAddress;
 import java.util.List;
-import java.util.WeakHashMap;
-
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import net.minecraft.server.v1_8_R1.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R1.LegacyPingHandler;
@@ -22,50 +17,6 @@ import net.minecraft.server.v1_8_R1.PacketSplitter;
 import net.minecraft.server.v1_8_R1.ServerConnection;
 
 public class ServerConnectionChannel extends ChannelInitializer<Channel> {
-
-	private final static WeakHashMap<SocketAddress, ChannelInfo> channelInfo = new WeakHashMap<SocketAddress, ChannelInfo>() {
-		@Override
-		public ChannelInfo get(Object address) {
-			if (!super.containsKey(address)) {
-				super.put((SocketAddress) address, new ChannelInfo());
-			}
-			return super.get(address);
-		}
-	};
-
-	public static final int CLIENT_1_8_PROTOCOL_VERSION = 47;
-
-	public static void setVersion(SocketAddress address, int version) {
-		channelInfo.get(address).version = version;
-	}
-
-	public static int getVersion(SocketAddress address) {
-		return channelInfo.get(address).version;
-	}
-
-	public static void setPlayer(SocketAddress address, Player player) {
-		channelInfo.get(address).player = player;
-	}
-
-	@SuppressWarnings("deprecation")
-	public static Player getPlayer(SocketAddress address) {
-		Player player = channelInfo.get(address).player;
-		if (player == null) {
-			for (Player oplayer : Bukkit.getOnlinePlayers()) {
-				if (oplayer.getAddress().equals(address)) {
-					return oplayer;
-				}
-			}
-		}
-		return player;
-	}
-
-	private static class ChannelInfo {
-		int version = 47;
-		Player player;
-	}
-
-
 
 	private ServerConnection connection;
 	private List<NetworkManager> networkManagers;

@@ -1,5 +1,0 @@
-name: ProtocolSupport
-main: protocolsupport.ProtocolSupport
-version: 1.0
-author: _Shevchik_
-load: STARTUP

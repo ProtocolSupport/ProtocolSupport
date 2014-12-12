@@ -2,8 +2,8 @@ package protocolsupport.protocol.clientboundtransformer;
 
 import java.io.IOException;
 
+import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.ServerConnectionChannel;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import net.minecraft.server.v1_8_R1.ChatModifier;
@@ -35,14 +35,14 @@ public class StatusPacketTransformer implements PacketTransformer {
 
 	@Override
 	public boolean tranform(Channel channel, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException {
-		if (serializer.getVersion() == ServerConnectionChannel.CLIENT_1_8_PROTOCOL_VERSION) {
+		if (serializer.getVersion() == DataStorage.CLIENT_1_8_PROTOCOL_VERSION) {
 			return false;
 		}
 		if (packetId == 0x00) {
 			PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
 			packet.b(packetdata);
 			ServerPing serverPing = gson.fromJson(packetdata.readString(32767), ServerPing.class);
-			serverPing.setServerInfo(new ServerPingServerData(serverPing.c().a(), ServerConnectionChannel.getVersion(channel.remoteAddress())));
+			serverPing.setServerInfo(new ServerPingServerData(serverPing.c().a(), DataStorage.getVersion(channel.remoteAddress())));
 			serializer.writeString(gson.toJson(serverPing));
 			return true;
 		}
