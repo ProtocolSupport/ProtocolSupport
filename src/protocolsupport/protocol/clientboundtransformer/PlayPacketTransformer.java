@@ -22,6 +22,8 @@ import io.netty.channel.Channel;
 import net.minecraft.server.v1_8_R1.BlockPosition;
 import net.minecraft.server.v1_8_R1.ChatSerializer;
 import net.minecraft.server.v1_8_R1.Entity;
+import net.minecraft.server.v1_8_R1.EntityFallingBlock;
+import net.minecraft.server.v1_8_R1.EntityTNTPrimed;
 import net.minecraft.server.v1_8_R1.EnumParticle;
 import net.minecraft.server.v1_8_R1.Packet;
 
@@ -139,15 +141,20 @@ public class PlayPacketTransformer implements PacketTransformer {
 				packet.b(packetdata);
 				int entityId = packetdata.readVarInt();
 				serializer.writeInt(entityId);
-				serializer.writeBytes(DataWatcherFilter.filterEntityLivingData(serializer.getVersion(), getEntity(channel, entityId), packetdata.readBytes(packetdata.readableBytes()).array()));
+				serializer.writeBytes(DataWatcherFilter.filterEntityData(serializer.getVersion(), getEntity(channel, entityId), packetdata.readBytes(packetdata.readableBytes()).array()));
 				return true;
 			}
 			case 0x18: { // PacketPlayOutEntityTeleport
 				packet.b(packetdata);
-				serializer.writeInt(packetdata.readVarInt());
+				int entityId = packetdata.readVarInt();
+				serializer.writeInt(entityId);
 				serializer.writeInt(packetdata.readInt());
-				// TODO: height correction
-				serializer.writeInt(packetdata.readInt());
+				int y = packetdata.readInt();
+				Entity entity = getEntity(channel, entityId);
+				if (entity instanceof EntityFallingBlock || entity instanceof EntityTNTPrimed) {
+					y += 16;
+				}
+				serializer.writeInt(y);
 				serializer.writeInt(packetdata.readInt());
 				serializer.writeByte(packetdata.readByte());
 				serializer.writeByte(packetdata.readByte());
@@ -458,9 +465,61 @@ public class PlayPacketTransformer implements PacketTransformer {
 				}
 				return true;
 			}
-			case 0x0E: { // PacketPlayOutSpawnObject
-				// TODO
-				break;
+			case 0x0E: { // PacketPlayOutSpawnEntity
+				packet.b(packetdata);
+				serializer.writeVarInt(packetdata.readVarInt());
+				int type = packetdata.readUnsignedByte();
+				serializer.writeByte(type);
+				int x = packetdata.readInt();
+				int y = packetdata.readInt();
+				int z = packetdata.readInt();
+				int pitch = packetdata.readUnsignedByte();
+				int yaw = packetdata.readUnsignedByte();
+				int objectdata = packetdata.readInt();
+		        if (type == 71) {
+		            switch (objectdata) {
+		                case 0: {
+		                    z -= 32;
+		                    yaw = 128;
+		                    break;
+		                }
+		                case 1: {
+		                    x += 32;
+		                    yaw = 64;
+		                    break;
+		                }
+		                case 2: {
+		                    z += 32;
+		                    yaw = 0;
+		                    break;
+		                }
+		                case 3: {
+		                    x -= 32;
+		                    yaw = 192;
+		                    break;
+		                }
+		            }
+		        }
+		        if (type == 70) {
+		            final int id = objectdata & 0xFFFF;
+		            final int data = objectdata >> 12;
+		            objectdata = (id | data << 16);
+		        }
+		        if (type == 50 || type == 70 || type == 74) {
+		            y += 16;
+		        }
+		        serializer.writeInt(x);
+		        serializer.writeInt(y);
+		        serializer.writeInt(z);
+		        serializer.writeByte(pitch);
+		        serializer.writeByte(yaw);
+		        serializer.writeInt(objectdata);
+		        if (objectdata > 0) {
+		        	serializer.writeShort(packetdata.readShort());
+		        	serializer.writeShort(packetdata.readShort());
+		        	serializer.writeShort(packetdata.readShort());
+		        }
+		        return true;
 			}
 			case 0x10: { // PacketPlayOutSpawnPainting
 				packet.b(packetdata);
@@ -590,7 +649,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeShort(packetdata.readShort());
 				serializer.writeShort(packetdata.readShort());
 				serializer.writeShort(packetdata.readShort());
-				serializer.writeBytes(DataWatcherFilter.filterEntityLivingData(serializer.getVersion(), getEntity(channel, entityId), packetdata.readBytes(packetdata.readableBytes()).array()));
+				serializer.writeBytes(DataWatcherFilter.filterEntityData(serializer.getVersion(), getEntity(channel, entityId), packetdata.readBytes(packetdata.readableBytes()).array()));
 				return true;
 			}
 		}
