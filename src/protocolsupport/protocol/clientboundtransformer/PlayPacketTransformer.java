@@ -22,12 +22,15 @@ import io.netty.channel.Channel;
 import net.minecraft.server.v1_8_R1.BlockPosition;
 import net.minecraft.server.v1_8_R1.ChatSerializer;
 import net.minecraft.server.v1_8_R1.Entity;
+import net.minecraft.server.v1_8_R1.EntityArmorStand;
 import net.minecraft.server.v1_8_R1.EntityFallingBlock;
 import net.minecraft.server.v1_8_R1.EntityTNTPrimed;
 import net.minecraft.server.v1_8_R1.EnumParticle;
 import net.minecraft.server.v1_8_R1.Packet;
 
 public class PlayPacketTransformer implements PacketTransformer {
+
+	//TODO: Create watched entities id map
 
 	@Override
 	public boolean tranform(Channel channel, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException {
@@ -469,7 +472,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				packet.b(packetdata);
 				serializer.writeVarInt(packetdata.readVarInt());
 				int type = packetdata.readUnsignedByte();
-				serializer.writeByte(type);
+				serializer.writeByte(EntityIDRemapper.replaceObjectEntityId(type));
 				int x = packetdata.readInt();
 				int y = packetdata.readInt();
 				int z = packetdata.readInt();
@@ -573,7 +576,11 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x20: { // PacketPlayOutUpdateAttributes
 				packet.b(packetdata);
-				serializer.writeInt(packetdata.readVarInt());
+				int entityId = packetdata.readVarInt();
+				if (getEntity(channel, entityId) instanceof EntityArmorStand) { //if the entity is armor stand than we send the entity that shouldn't exist
+					entityId = -1;
+				}
+				serializer.writeInt(entityId);
 				int ascount = packetdata.readInt();
 				serializer.writeInt(ascount);
 				for (int i = 0; i < ascount; i++) {
