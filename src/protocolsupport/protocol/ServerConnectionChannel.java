@@ -9,11 +9,8 @@ import io.netty.handler.timeout.ReadTimeoutHandler;
 import java.util.List;
 
 import net.minecraft.server.v1_8_R1.EnumProtocolDirection;
-import net.minecraft.server.v1_8_R1.LegacyPingHandler;
 import net.minecraft.server.v1_8_R1.MinecraftServer;
 import net.minecraft.server.v1_8_R1.NetworkManager;
-import net.minecraft.server.v1_8_R1.PacketPrepender;
-import net.minecraft.server.v1_8_R1.PacketSplitter;
 import net.minecraft.server.v1_8_R1.ServerConnection;
 
 public class ServerConnectionChannel extends ChannelInitializer<Channel> {
@@ -38,10 +35,7 @@ public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 		}
 		channel.pipeline()
 		.addLast("timeout", new ReadTimeoutHandler(30))
-		.addLast("legacy_query", new LegacyPingHandler(connection))
-		.addLast("splitter", new PacketSplitter())
 		.addLast("decoder", new PacketDecoder())
-		.addLast("prepender", new PacketPrepender())
 		.addLast("encoder", new PacketEncoder());
 		NetworkManager networkmanager = new NetworkManager(EnumProtocolDirection.SERVERBOUND);
 		networkManagers.add(networkmanager);

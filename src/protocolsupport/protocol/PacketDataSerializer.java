@@ -14,6 +14,7 @@ import org.bukkit.craftbukkit.v1_8_R1.inventory.CraftItemStack;
 import org.spigotmc.LimitStream;
 import org.spigotmc.SneakyThrow;
 
+import protocolsupport.protocol.DataStorage.ProtocolVersion;
 import protocolsupport.remappers.ItemIDRemapper;
 import net.minecraft.server.v1_8_R1.Item;
 import net.minecraft.server.v1_8_R1.ItemStack;
@@ -27,14 +28,14 @@ import io.netty.buffer.Unpooled;
 
 public class PacketDataSerializer extends net.minecraft.server.v1_8_R1.PacketDataSerializer {
 
-	private int version;
+	private ProtocolVersion version;
 
-	public PacketDataSerializer(ByteBuf buf, int version) {
+	public PacketDataSerializer(ByteBuf buf, ProtocolVersion version) {
 		super(buf);
 		this.version = version;
 	}
 
-	public int getVersion() {
+	public ProtocolVersion getVersion() {
 		return version;
 	}
 
@@ -43,7 +44,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R1.PacketDat
 		if (itemstack == null || itemstack.getItem() == null) {
 			this.writeShort(-1);
 		} else {
-			if (getVersion() == DataStorage.CLIENT_1_8_PROTOCOL_VERSION) {
+			if (getVersion() == ProtocolVersion.MINECRAFT_1_8) {
 				this.writeShort(Item.getId(itemstack.getItem()));
 			} else {
 				this.writeShort(ItemIDRemapper.replaceItemId(Item.getId(itemstack.getItem())));
@@ -62,7 +63,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R1.PacketDat
 
 	@Override
 	public void a(final NBTTagCompound nbttagcompound) {
-		if (this.getVersion() != DataStorage.CLIENT_1_8_PROTOCOL_VERSION) {
+		if (this.getVersion() != ProtocolVersion.MINECRAFT_1_8) {
 			if (nbttagcompound == null) {
 				this.writeShort(-1);
 			} else {
@@ -82,7 +83,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R1.PacketDat
 
 	@Override
 	public NBTTagCompound h() {
-		if (this.getVersion() != DataStorage.CLIENT_1_8_PROTOCOL_VERSION) {
+		if (this.getVersion() != ProtocolVersion.MINECRAFT_1_8) {
 			final short short1 = this.readShort();
 			if (short1 < 0) {
 				return null;

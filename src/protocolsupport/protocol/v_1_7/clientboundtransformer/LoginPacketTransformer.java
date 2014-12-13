@@ -1,9 +1,9 @@
-package protocolsupport.protocol.clientboundtransformer;
+package protocolsupport.protocol.v_1_7.clientboundtransformer;
 
 import java.io.IOException;
 
-import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.DataStorage.ProtocolVersion;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import net.minecraft.server.v1_8_R1.Packet;
@@ -12,7 +12,7 @@ public class LoginPacketTransformer implements PacketTransformer {
 
 	@Override
 	public boolean tranform(Channel channel, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException {
-		if (serializer.getVersion() == DataStorage.CLIENT_1_8_PROTOCOL_VERSION) {
+		if (serializer.getVersion() == ProtocolVersion.MINECRAFT_1_8) {
 			return false;
 		}
 		switch (packetId) {
@@ -32,7 +32,7 @@ public class LoginPacketTransformer implements PacketTransformer {
 				PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
 				packet.b(packetdata);
 				String uuidstring = packetdata.readString(36);
-				if (serializer.getVersion() == 4) {
+				if (serializer.getVersion() == ProtocolVersion.MINECRAFT_1_7_5) {
 					uuidstring = uuidstring.replace("-", "");
 				}
 				serializer.writeString(uuidstring);

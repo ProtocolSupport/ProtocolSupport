@@ -1,4 +1,4 @@
-package protocolsupport.protocol.clientboundtransformer;
+package protocolsupport.protocol.v_1_7.clientboundtransformer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 
 import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.DataStorage.ProtocolVersion;
 import protocolsupport.remappers.BlockIDRemapper;
 import protocolsupport.remappers.EntityIDRemapper;
 import io.netty.buffer.ByteBuf;
@@ -34,9 +35,6 @@ public class PlayPacketTransformer implements PacketTransformer {
 
 	@Override
 	public boolean tranform(Channel channel, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException {
-		if (serializer.getVersion() == DataStorage.CLIENT_1_8_PROTOCOL_VERSION) {
-			return false;
-		}
 		PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
 		switch (packetId) {
 			case 0x0A: { // PacketPlayOutBed
@@ -291,10 +289,10 @@ public class PlayPacketTransformer implements PacketTransformer {
 				packet.b(packetdata);
 				serializer.writeVarInt(packetdata.readVarInt());
 				UUID uuid = packetdata.g();
-				serializer.writeString(serializer.getVersion() == 5 ? uuid.toString() : uuid.toString().replace("-", ""));
+				serializer.writeString(serializer.getVersion() == ProtocolVersion.MINECRAFT_1_7_10 ? uuid.toString() : uuid.toString().replace("-", ""));
 				String playerName = DataStorage.getTabName(channel.remoteAddress(), uuid);
 				serializer.writeString(playerName != null ? playerName : "Unknown");
-				if (serializer.getVersion() == 5) {
+				if (serializer.getVersion() == ProtocolVersion.MINECRAFT_1_7_10) {
 					serializer.writeVarInt(0);
 				}
 				serializer.writeInt(packetdata.readInt());

@@ -1,8 +1,7 @@
-package protocolsupport.protocol.serverboundtransformer;
+package protocolsupport.protocol.v_1_7.serverboundtransformer;
 
 import java.io.IOException;
 
-import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
@@ -12,9 +11,6 @@ public class LoginPacketTransformer implements PacketTransformer {
 
 	@Override
 	public boolean tranform(Channel channel, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException {
-		if (serializer.getVersion() == DataStorage.CLIENT_1_8_PROTOCOL_VERSION) {
-			return false;
-		}
 		PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
 		switch (packetId) {
 			case 0x01: { //packetLoginInEncryptionBegin

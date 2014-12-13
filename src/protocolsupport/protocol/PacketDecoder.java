@@ -1,55 +1,131 @@
 package protocolsupport.protocol;
 
-import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import protocolsupport.protocol.serverboundtransformer.HandshakePacketTransformer;
-import protocolsupport.protocol.serverboundtransformer.LoginPacketTransformer;
-import protocolsupport.protocol.serverboundtransformer.PacketTransformer;
-import protocolsupport.protocol.serverboundtransformer.PlayPacketTransformer;
-import protocolsupport.protocol.serverboundtransformer.StatusPacketTransformer;
+import net.minecraft.server.v1_8_R1.Packet;
+import protocolsupport.protocol.DataStorage.ProtocolVersion;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import io.netty.util.AttributeKey;
-import net.minecraft.server.v1_8_R1.EnumProtocol;
-import net.minecraft.server.v1_8_R1.EnumProtocolDirection;
-import net.minecraft.server.v1_8_R1.NetworkManager;
-import net.minecraft.server.v1_8_R1.Packet;
+import io.netty.handler.codec.CorruptedFrameException;
 
 public class PacketDecoder extends ByteToMessageDecoder {
 
-	private PacketTransformer[] transformers = new PacketTransformer[] {
-		new HandshakePacketTransformer(),
-		new PlayPacketTransformer(),
-		new StatusPacketTransformer(),
-		new LoginPacketTransformer()
-	};
-
-	private static final EnumProtocolDirection direction = EnumProtocolDirection.SERVERBOUND;
-	@SuppressWarnings("unchecked")
-	private static final AttributeKey<EnumProtocol> currentStateAttrKey = NetworkManager.c;
-
 	@Override
-	protected void decode(final ChannelHandlerContext channelHandlerContext, final ByteBuf bytebuf, final List<Object> list) throws Exception {
-		if (bytebuf.readableBytes() == 0) {
-			return;
+	protected void decode(final ChannelHandlerContext channelHandlerContext, final ByteBuf input, final List<Object> list) throws Exception {
+		try {
+			ProtocolVersion version = DataStorage.getVersion(channelHandlerContext.channel().remoteAddress());
+			if (version != ProtocolVersion.UNKNOWN) {
+				decodeWithKnownVersion(channelHandlerContext, input, list, version);
+			} else {
+				//detect protocol
+				ProtocolVersion handshakeversion = ProtocolVersion.UNKNOWN;
+				input.markReaderIndex();
+				int firstbyte = input.readUnsignedByte();
+				if (firstbyte == 0xFE) { //1.6 ping (should we check if FE is actually a part of a varint length?)
+					if (
+						input.readUnsignedByte() == 1 &&
+						input.readUnsignedByte() == 0xFA &&
+						"MC|PingHost".equals(new String(input.readBytes(input.readUnsignedShort() * 2).array(), StandardCharsets.UTF_16BE))
+					) {
+						input.readUnsignedShort();
+						handshakeversion = ProtocolVersion.fromId(input.readUnsignedByte());
+						input.resetReaderIndex();
+					}
+				} else { //1.7 handshake
+					input.resetReaderIndex();
+					input.markReaderIndex();
+					ByteBuf data = getVarIntPrefixedData(input, false);
+					if (data != null) {
+						handshakeversion = read1_7_1_8Handshake(data);
+					}
+					input.resetReaderIndex();
+				}
+				//if we detected the protocol than we save it and process data
+				if (handshakeversion != ProtocolVersion.UNKNOWN) {
+					DataStorage.setVersion(channelHandlerContext.channel().remoteAddress(), handshakeversion);
+					decodeWithKnownVersion(channelHandlerContext, input, list, handshakeversion);
+				}
+			}
+		} catch (Throwable t) {
+			t.printStackTrace();
 		}
-		int version = DataStorage.getVersion(channelHandlerContext.channel().remoteAddress());
-		final PacketDataSerializer packetDataSerializer = new PacketDataSerializer(bytebuf, version);
-		final int packetId = packetDataSerializer.e();
-		final Packet packet = channelHandlerContext.channel().attr(currentStateAttrKey).get().a(direction, packetId);
-		if (packet == null) {
-			throw new IOException("Bad packet id " + packetId);
+	}
+
+	private void decodeWithKnownVersion(final ChannelHandlerContext channelHandlerContext, final ByteBuf input, final List<Object> list, ProtocolVersion version) throws Exception {
+		Packet receivedPacket = null;
+		switch (version) {
+			case MINECRAFT_1_8: {
+				ByteBuf data = getVarIntPrefixedData(input, true);
+				if (data != null && data.readableBytes() != 0) {
+					receivedPacket = protocolsupport.protocol.v_1_8.FullPacketDecoder.decodePacket(channelHandlerContext.channel(), data);
+				}
+				break;
+			}
+			case MINECRAFT_1_7_5: case MINECRAFT_1_7_10: {
+				ByteBuf data = getVarIntPrefixedData(input, true);
+				if (data != null && data.readableBytes() != 0) {
+					receivedPacket = protocolsupport.protocol.v_1_7.serverboundtransformer.FullPacketDecoder.decodePacket(channelHandlerContext.channel(), data);
+				}
+				break;
+			}
+			default: {
+				throw new RuntimeException("Not supported yet");
+			}
 		}
-		boolean needsRead = !transformers[channelHandlerContext.channel().attr(currentStateAttrKey).get().ordinal()].tranform(channelHandlerContext.channel(), packetId, packet, packetDataSerializer);
-		if (needsRead) {
-			packet.a(packetDataSerializer);
+		if (receivedPacket != null) {
+			channelHandlerContext.fireChannelRead(receivedPacket);
 		}
-		if (packetDataSerializer.readableBytes() > 0) {
-			throw new IOException("Packet " + channelHandlerContext.channel().attr(currentStateAttrKey).get().a() + "/" + packetId + " (" + packet.getClass().getSimpleName() + ") was larger than I expected, found " + packetDataSerializer.readableBytes() + " bytes extra whilst reading packet " + packetId);
+	}
+
+	private ByteBuf getVarIntPrefixedData(final ByteBuf byteBuf, boolean resetIndexIfFailure) {
+		if (resetIndexIfFailure) {
+			byteBuf.markReaderIndex();
 		}
-		list.add(packet);
+        final byte[] array = new byte[3];
+        for (int i = 0; i < array.length; ++i) {
+            if (!byteBuf.isReadable()) {
+        		if (resetIndexIfFailure) {
+        			byteBuf.resetReaderIndex();
+        		}
+                return null;
+            }
+            array[i] = byteBuf.readByte();
+            if (array[i] >= 0) {
+                final int length = readVarInt(Unpooled.wrappedBuffer(array));
+                if (byteBuf.readableBytes() < length) {
+            		if (resetIndexIfFailure) {
+            			byteBuf.resetReaderIndex();
+            		}
+                    return null;
+                }
+                return byteBuf.readBytes(length);
+            }
+        }
+        throw new CorruptedFrameException("Packet length is wider than 21 bit");
+	}
+
+	private ProtocolVersion read1_7_1_8Handshake(ByteBuf data) {
+		if (readVarInt(data) == 0x00) {
+			return ProtocolVersion.fromId(readVarInt(data));
+		}
+		return ProtocolVersion.UNKNOWN;
+	}
+
+	private int readVarInt(ByteBuf data) {
+		int value = 0;
+		int length = 0;
+		byte b0;
+		do {
+			b0 = data.readByte();
+			value |= (b0 & 0x7F) << length++ * 7;
+			if (length > 5) {
+				throw new RuntimeException("VarInt too big");
+			}
+		} while ((b0 & 0x80) == 0x80);
+		return value;
 	}
 
 }

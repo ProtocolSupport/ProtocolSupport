@@ -1,4 +1,4 @@
-package protocolsupport.protocol.serverboundtransformer;
+package protocolsupport.protocol.v_1_7.serverboundtransformer;
 
 import protocolsupport.protocol.PacketDataSerializer;
 import io.netty.channel.Channel;

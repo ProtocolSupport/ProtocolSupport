@@ -1,4 +1,4 @@
-package protocolsupport.protocol.clientboundtransformer;
+package protocolsupport.protocol.v_1_7.clientboundtransformer;
 
 import java.io.IOException;
 
@@ -35,14 +35,11 @@ public class StatusPacketTransformer implements PacketTransformer {
 
 	@Override
 	public boolean tranform(Channel channel, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException {
-		if (serializer.getVersion() == DataStorage.CLIENT_1_8_PROTOCOL_VERSION) {
-			return false;
-		}
 		if (packetId == 0x00) {
 			PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
 			packet.b(packetdata);
 			ServerPing serverPing = gson.fromJson(packetdata.readString(32767), ServerPing.class);
-			serverPing.setServerInfo(new ServerPingServerData(serverPing.c().a(), DataStorage.getVersion(channel.remoteAddress())));
+			serverPing.setServerInfo(new ServerPingServerData(serverPing.c().a(), DataStorage.getVersion(channel.remoteAddress()).getId()));
 			serializer.writeString(gson.toJson(serverPing));
 			return true;
 		}

@@ -1,4 +1,4 @@
-package protocolsupport.protocol.clientboundtransformer;
+package protocolsupport.protocol.v_1_7.clientboundtransformer;
 
 import protocolsupport.remappers.BlockIDRemapper;
 

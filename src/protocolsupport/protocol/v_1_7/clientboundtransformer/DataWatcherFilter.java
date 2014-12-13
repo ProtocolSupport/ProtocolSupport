@@ -1,4 +1,4 @@
-package protocolsupport.protocol.clientboundtransformer;
+package protocolsupport.protocol.v_1_7.clientboundtransformer;
 
 import java.util.Iterator;
 
@@ -15,11 +15,12 @@ import net.minecraft.server.v1_8_R1.EntityItemFrame;
 import net.minecraft.server.v1_8_R1.EntityMinecartAbstract;
 import net.minecraft.server.v1_8_R1.ItemStack;
 import net.minecraft.server.v1_8_R1.Vector3f;
+import protocolsupport.protocol.DataStorage.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 
 public class DataWatcherFilter {
 
-	public static byte[] filterEntityData(int version, Entity entity, byte[] data) {
+	public static byte[] filterEntityData(ProtocolVersion version, Entity entity, byte[] data) {
 		TIntObjectMap<DataWatcherObject> objects = decodeData(version, data);
 		if (entity instanceof EntityAgeable) {
 			DataWatcherObject object = objects.get(12);
@@ -68,7 +69,7 @@ public class DataWatcherFilter {
 		return encodeData(version, objects);
 	}
 
-	private static TIntObjectMap<DataWatcherObject> decodeData(int version, byte[] data) {
+	private static TIntObjectMap<DataWatcherObject> decodeData(ProtocolVersion version, byte[] data) {
 		TIntObjectMap<DataWatcherObject> map = new TIntObjectHashMap<DataWatcherObject>(10, 0.5f, -1);
 		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.wrappedBuffer(data), version);
 		do {
@@ -122,7 +123,7 @@ public class DataWatcherFilter {
 		return map;
 	}
 
-	private static byte[] encodeData(int version, TIntObjectMap<DataWatcherObject> objects) {
+	private static byte[] encodeData(ProtocolVersion version, TIntObjectMap<DataWatcherObject> objects) {
 		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer(), version);
 		TIntObjectIterator<DataWatcherObject> iterator = objects.iterator();
 		while (iterator.hasNext()) {
