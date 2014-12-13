@@ -3,14 +3,14 @@ package protocolsupport.protocol;
 import java.net.SocketAddress;
 import java.util.HashMap;
 import java.util.UUID;
-import java.util.WeakHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class DataStorage {
 
-	private final static WeakHashMap<SocketAddress, ChannelInfo> channelInfo = new WeakHashMap<SocketAddress, ChannelInfo>() {
+	@SuppressWarnings("serial")
+	private final static HashMap<SocketAddress, ChannelInfo> channelInfo = new HashMap<SocketAddress, ChannelInfo>() {
 		@Override
 		public ChannelInfo get(Object address) {
 			if (!super.containsKey(address)) {
@@ -19,6 +19,10 @@ public class DataStorage {
 			return super.get(address);
 		}
 	};
+
+	public static void clearData(SocketAddress address) {
+		channelInfo.remove(address);
+	}
 
 	public static final int CLIENT_1_8_PROTOCOL_VERSION = 47;
 
