@@ -63,6 +63,10 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 				protocolsupport.protocol.v_1_7.PipeLineBuilder.buildPipeLine(ctx, input);
 				break;
 			}
+			case MINECRAFT_1_6_2: case MINECRAFT_1_6_4: {
+				protocolsupport.protocol.v_1_6.PipeLineBuilder.buildPipeLine(ctx, input);
+				break;
+			}
 			default: {
 				throw new RuntimeException("Not supported yet");
 			}

@@ -1,8 +1,9 @@
 package protocolsupport.protocol.v_1_6.clientboundtransformer;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.MessageToByteEncoder;
 import io.netty.util.AttributeKey;
 
 import java.io.IOException;
@@ -22,7 +23,7 @@ import protocolsupport.injector.Utilities;
 import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
 
-public class FullPacketEncoder {
+public class PacketEncoder extends MessageToByteEncoder<Packet> {
 
 	private static final EnumProtocolDirection direction = EnumProtocolDirection.CLIENTBOUND;
 	@SuppressWarnings("unchecked")
@@ -45,7 +46,9 @@ public class FullPacketEncoder {
 		blockedPlayPackets[0x34] = true;
 	}
 
-	public static void encodePacket(Channel channel, Packet packet, ByteBuf output) throws IOException, IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+	@Override
+	protected void encode(ChannelHandlerContext ctx, Packet packet, ByteBuf output) throws Exception {
+		Channel channel = ctx.channel();
 		EnumProtocol currentProtocol = channel.attr(currentStateAttrKey).get();
         final Integer packetId = currentProtocol.a(direction, packet);
         if (packetId == null) {
@@ -66,11 +69,8 @@ public class FullPacketEncoder {
 				}
 			}
 		}
-		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer(), DataStorage.getVersion(channel.remoteAddress()));
+		PacketDataSerializer serializer = new PacketDataSerializer(output, DataStorage.getVersion(channel.remoteAddress()));
 		transformers[currentProtocol.ordinal()].tranform(channel, packetId, packet, serializer);
-		if (serializer.readableBytes() > 0) {
-			channel.pipeline().firstContext().writeAndFlush(serializer);
-		}
 	}
 
 	private static HashSet<Packet> skipPlayerInfo = new HashSet<Packet>();
