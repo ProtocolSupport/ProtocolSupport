@@ -34,16 +34,18 @@ public class StatusPacketTransformer implements PacketTransformer {
     .create();
 
 	@Override
-	public boolean tranform(Channel channel, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException {
+	public void tranform(Channel channel, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException {
 		if (packetId == 0x00) {
 			PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
 			packet.b(packetdata);
 			ServerPing serverPing = gson.fromJson(packetdata.readString(32767), ServerPing.class);
 			serverPing.setServerInfo(new ServerPingServerData(serverPing.c().a(), DataStorage.getVersion(channel.remoteAddress()).getId()));
+			serializer.writeVarInt(packetId);
 			serializer.writeString(gson.toJson(serverPing));
-			return true;
+			return;
 		}
-		return false;
+		serializer.writeVarInt(packetId);
+		packet.b(serializer);
 	}
 
 }

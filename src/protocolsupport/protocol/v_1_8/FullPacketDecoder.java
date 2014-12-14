@@ -20,7 +20,7 @@ public class FullPacketDecoder {
 	private static final AttributeKey<EnumProtocol> currentStateAttrKey = NetworkManager.c;
 
 	public static Packet decodePacket(Channel channel, ByteBuf bytebuf) throws Exception {
-		if (Compression.isEnabled()) {
+		if (DataStorage.isCompressionEnabled(channel.remoteAddress())) {
 			bytebuf = Compression.decompress(bytebuf);
 		}
 		ProtocolVersion version = DataStorage.getVersion(channel.remoteAddress());

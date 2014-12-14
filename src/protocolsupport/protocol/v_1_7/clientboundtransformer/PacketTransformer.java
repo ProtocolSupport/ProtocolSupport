@@ -8,6 +8,6 @@ import net.minecraft.server.v1_8_R1.Packet;
 
 public interface PacketTransformer {
 
-	public boolean tranform(Channel channel, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException;
+	public void tranform(Channel channel, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException;
 
 }

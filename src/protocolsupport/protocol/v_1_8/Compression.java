@@ -26,15 +26,6 @@ public class Compression {
 		}
 	};
 
-	private static volatile boolean compressionEnabled = false;
-
-	public static void enable() {
-		compressionEnabled = true;
-	}
-
-	public static boolean isEnabled() {
-		return compressionEnabled;
-	}
 
 	public static ByteBuf compress(ByteBuf packetData) {
 		final int length = packetData.readableBytes();

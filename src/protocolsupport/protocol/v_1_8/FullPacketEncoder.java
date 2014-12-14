@@ -29,7 +29,7 @@ public class FullPacketEncoder {
         }
 		serializer.writeVarInt(packetId);
 		packet.b(serializer);
-		if (Compression.isEnabled()) {
+		if (DataStorage.isCompressionEnabled(channel.remoteAddress())) {
 			ByteBuf data = Compression.compress(serializer);
 			writeVarInt(data.readableBytes(), output);
 			output.writeBytes(data);

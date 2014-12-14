@@ -46,7 +46,6 @@ public class FullPacketEncoder {
 	}
 
 	public static void encodePacket(Channel channel, Packet packet, ByteBuf output) throws IOException, IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer(), DataStorage.getVersion(channel.remoteAddress()));
 		EnumProtocol currentProtocol = channel.attr(currentStateAttrKey).get();
         final Integer packetId = currentProtocol.a(direction, packet);
         if (packetId == null) {
@@ -67,10 +66,10 @@ public class FullPacketEncoder {
 				}
 			}
 		}
-		serializer.writeVarInt(packetId);
-		boolean needsWrite = !transformers[currentProtocol.ordinal()].tranform(channel, packetId, packet, serializer);
-		if (needsWrite) {
-			packet.b(serializer);
+		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer(), DataStorage.getVersion(channel.remoteAddress()));
+		transformers[currentProtocol.ordinal()].tranform(channel, packetId, packet, serializer);
+		if (serializer.readableBytes() == 0) {
+			return;
 		}
 		writeVarInt(serializer.readableBytes(), output);
 		output.writeBytes(serializer);

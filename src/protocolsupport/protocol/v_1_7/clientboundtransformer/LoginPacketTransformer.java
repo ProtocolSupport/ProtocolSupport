@@ -11,12 +11,12 @@ import net.minecraft.server.v1_8_R1.Packet;
 public class LoginPacketTransformer implements PacketTransformer {
 
 	@Override
-	public boolean tranform(Channel channel, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException {
-
+	public void tranform(Channel channel, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException {
 		PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
 		switch (packetId) {
 			case 0x01: { //PacketLoginOutEncryptionBegin
 				packet.b(packetdata);
+				serializer.writeVarInt(packetId);
 				serializer.writeString(packetdata.readString(20));
 				int length1 = packetdata.readVarInt();
 				serializer.writeShort(length1);
@@ -24,20 +24,25 @@ public class LoginPacketTransformer implements PacketTransformer {
 				int length2 = packetdata.readVarInt();
 				serializer.writeShort(length2);
 				serializer.writeBytes(packetdata.readBytes(length2));
-				return true;
+				return;
 			}
 			case 0x02: { //PacketLoginOutSuccess
 				packet.b(packetdata);
+				serializer.writeVarInt(packetId);
 				String uuidstring = packetdata.readString(36);
 				if (serializer.getVersion() == ProtocolVersion.MINECRAFT_1_7_5) {
 					uuidstring = uuidstring.replace("-", "");
 				}
 				serializer.writeString(uuidstring);
 				serializer.writeString(packetdata.readString(16));
-				return true;	
+				return;	
+			}
+			default: { //Any other packet
+				serializer.writeVarInt(packetId);
+				packet.b(serializer);
+				return;
 			}
 		}
-		return false;
 	}
 
 }

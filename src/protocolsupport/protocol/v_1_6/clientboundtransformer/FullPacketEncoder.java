@@ -68,7 +68,9 @@ public class FullPacketEncoder {
 		}
 		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer(), DataStorage.getVersion(channel.remoteAddress()));
 		transformers[currentProtocol.ordinal()].tranform(channel, packetId, packet, serializer);
-		channel.pipeline().firstContext().writeAndFlush(serializer);
+		if (serializer.readableBytes() > 0) {
+			channel.pipeline().firstContext().writeAndFlush(serializer);
+		}
 	}
 
 	private static HashSet<Packet> skipPlayerInfo = new HashSet<Packet>();

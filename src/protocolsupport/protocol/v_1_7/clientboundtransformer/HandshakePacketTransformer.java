@@ -9,8 +9,9 @@ import protocolsupport.protocol.PacketDataSerializer;
 public class HandshakePacketTransformer implements PacketTransformer {
 
 	@Override
-	public boolean tranform(Channel channel, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException {
-		return false;
+	public void tranform(Channel channel, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException {
+		serializer.writeVarInt(packetId);
+		packet.b(serializer);
 	}
 
 }

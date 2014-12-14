@@ -31,11 +31,11 @@ public class LoginListener extends net.minecraft.server.v1_8_R1.LoginListener {
         		Class<?> clazz = Class.forName("net.minecraft.server.v1_8_R1.EnumProtocolState");
         		Object obj = Utilities.<Field>setAccessible(clazz.getDeclaredField("ACCEPTED")).get(null);
         		Utilities.<Field>setAccessible(net.minecraft.server.v1_8_R1.LoginListener.class.getDeclaredField("g")).set(this, obj);
-        		if (DataStorage.getVersion(Utilities.getChannel(this.networkManager).remoteAddress()) == ProtocolVersion.MINECRAFT_1_8) {
+        		if (DataStorage.getVersion(this.networkManager.getRawAddress()) == ProtocolVersion.MINECRAFT_1_8) {
         			this.networkManager.a(new PacketLoginOutSetCompression(MinecraftServer.getServer().aI()), new GenericFutureListener<Future<?>>() {
 						@Override
 						public void operationComplete(Future<?> future) throws Exception {
-							protocolsupport.protocol.v_1_8.Compression.enable();
+							DataStorage.setCompressionEnabled(LoginListener.this.networkManager.getRawAddress());;
 						}
 					});
         		}
