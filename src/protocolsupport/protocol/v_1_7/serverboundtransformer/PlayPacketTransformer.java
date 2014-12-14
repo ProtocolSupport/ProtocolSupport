@@ -84,8 +84,8 @@ public class PlayPacketTransformer implements PacketTransformer {
 				packetdata.writeBoolean(false);
 				break;
 			}
-			case 0x33: { //PacketPlayInUpdateSign
-				packetdata.a(new BlockPosition(serializer.readInt(), serializer.readUnsignedByte(), serializer.readInt()));
+			case 0x12: { //PacketPlayInUpdateSign
+				packetdata.a(new BlockPosition(serializer.readInt(), serializer.readShort(), serializer.readInt()));
 				for (int i = 0; i < 4; i++) {
 					packetdata.writeString(serializer.readString(15));
 				}

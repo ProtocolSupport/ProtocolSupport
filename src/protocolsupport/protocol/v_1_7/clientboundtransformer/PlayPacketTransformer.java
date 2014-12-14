@@ -308,7 +308,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				packet.b(packetdata);
 				BlockPosition blockPos = packetdata.c();
 				serializer.writeInt(blockPos.getX());
-				serializer.writeByte(blockPos.getY());
+				serializer.writeInt(blockPos.getY());
 				serializer.writeInt(blockPos.getZ());
 				return true;
 			}
