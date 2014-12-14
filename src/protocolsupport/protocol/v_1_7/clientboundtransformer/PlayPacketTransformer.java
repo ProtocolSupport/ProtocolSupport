@@ -602,7 +602,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeShort(blockPos.getY());
 				serializer.writeInt(blockPos.getZ());
 				for (int i = 0; i < 4; i++) {
-					serializer.writeString(CraftChatMessage.fromComponent(packetdata.d()).substring(0, 15));
+					serializer.writeString(clampString(CraftChatMessage.fromComponent(packetdata.d()), 15));
 				}
 				return true;
 			}
@@ -659,6 +659,10 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 		}
 		return false;
+	}
+
+	private String clampString(String string, int limit) {
+		return string.substring(0, string.length() > limit ? limit : string.length());
 	}
 
 	private Entity getEntity(Channel channel, int entityId) {
