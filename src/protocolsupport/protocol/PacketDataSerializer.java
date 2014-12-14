@@ -7,6 +7,7 @@ import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -99,6 +100,27 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R1.PacketDat
 			this.readerIndex(index);
 			return NBTCompressedStreamTools.a(new DataInputStream(new ByteBufInputStream(this)), new NBTReadLimiter(2097152L));
 		}
+	}
+
+	@Override
+	public String c(int limit) {
+		if (getVersion() == ProtocolVersion.MINECRAFT_1_6_4 || getVersion() == ProtocolVersion.MINECRAFT_1_6_2) {
+			int length = readUnsignedShort();
+			return new String(readBytes(length * 2).array(), StandardCharsets.UTF_16BE);
+		} else {
+			return super.c(limit);
+		}
+	}
+
+	@Override
+	public net.minecraft.server.v1_8_R1.PacketDataSerializer a(String string) {
+		if (getVersion() == ProtocolVersion.MINECRAFT_1_6_4 || getVersion() == ProtocolVersion.MINECRAFT_1_6_2) {
+			writeShort(string.length());
+			writeBytes(string.getBytes(StandardCharsets.UTF_16BE));
+		} else {
+			super.a(string);
+		}
+		return this;
 	}
 
 	public int readVarInt() {

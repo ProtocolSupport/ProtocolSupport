@@ -3,14 +3,14 @@ package protocolsupport.protocol;
 import java.net.SocketAddress;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.WeakHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class DataStorage {
 
-	@SuppressWarnings("serial")
-	private final static HashMap<SocketAddress, ChannelInfo> channelInfo = new HashMap<SocketAddress, ChannelInfo>() {
+	private final static WeakHashMap<SocketAddress, ChannelInfo> channelInfo = new WeakHashMap<SocketAddress, ChannelInfo>() {
 		@Override
 		public ChannelInfo get(Object address) {
 			if (!super.containsKey(address)) {
@@ -91,6 +91,12 @@ public class DataStorage {
 				}
 				case 4: {
 					return MINECRAFT_1_7_5;
+				}
+				case 78: {
+					return MINECRAFT_1_6_4;
+				}
+				case 74: {
+					return MINECRAFT_1_6_2;
 				}
 			}
 			return UNKNOWN;

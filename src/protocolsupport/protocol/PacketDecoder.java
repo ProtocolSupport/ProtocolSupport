@@ -55,28 +55,35 @@ public class PacketDecoder extends ByteToMessageDecoder {
 	}
 
 	private void decodeWithKnownVersion(final ChannelHandlerContext channelHandlerContext, final ByteBuf input, final List<Object> list, ProtocolVersion version) throws Exception {
-		Packet receivedPacket = null;
 		switch (version) {
 			case MINECRAFT_1_8: {
 				ByteBuf data = getVarIntPrefixedData(input, true);
 				if (data != null && data.readableBytes() != 0) {
-					receivedPacket = protocolsupport.protocol.v_1_8.FullPacketDecoder.decodePacket(channelHandlerContext.channel(), data);
+					channelHandlerContext.fireChannelRead(protocolsupport.protocol.v_1_8.FullPacketDecoder.decodePacket(channelHandlerContext.channel(), data));
 				}
 				break;
 			}
 			case MINECRAFT_1_7_5: case MINECRAFT_1_7_10: {
 				ByteBuf data = getVarIntPrefixedData(input, true);
 				if (data != null && data.readableBytes() != 0) {
-					receivedPacket = protocolsupport.protocol.v_1_7.serverboundtransformer.FullPacketDecoder.decodePacket(channelHandlerContext.channel(), data);
+					channelHandlerContext.fireChannelRead(protocolsupport.protocol.v_1_7.serverboundtransformer.FullPacketDecoder.decodePacket(channelHandlerContext.channel(), data));
+				}
+				break;
+			}
+			case MINECRAFT_1_6_2: case MINECRAFT_1_6_4: {
+				if (input.readableBytes() != 0) {
+					Packet[] packets = protocolsupport.protocol.v_1_6.serverboundtransformer.FullPacketDecoder.decodePacket(channelHandlerContext.channel(), input);
+					if (packets != null) {
+						for (Packet packet : packets) {
+							channelHandlerContext.fireChannelRead(packet);
+						}
+					}
 				}
 				break;
 			}
 			default: {
 				throw new RuntimeException("Not supported yet");
 			}
-		}
-		if (receivedPacket != null) {
-			channelHandlerContext.fireChannelRead(receivedPacket);
 		}
 	}
 

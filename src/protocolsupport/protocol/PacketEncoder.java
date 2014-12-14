@@ -21,6 +21,9 @@ public class PacketEncoder extends MessageToByteEncoder<Packet> {
 				protocolsupport.protocol.v_1_7.clientboundtransformer.FullPacketEncoder.encodePacket(channelHandlerContext.channel(), packet, byteBuf);
 				return;
 			}
+			case MINECRAFT_1_6_2: case MINECRAFT_1_6_4: {
+				protocolsupport.protocol.v_1_6.clientboundtransformer.FullPacketEncoder.encodePacket(channelHandlerContext.channel(), packet, byteBuf);
+			}
 			case UNKNOWN: {
 				throw new CorruptedFrameException("Unknown protocol version");
 			}
