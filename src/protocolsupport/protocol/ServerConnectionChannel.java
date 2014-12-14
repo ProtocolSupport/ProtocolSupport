@@ -9,7 +9,6 @@ import io.netty.handler.timeout.ReadTimeoutHandler;
 import java.util.List;
 
 import net.minecraft.server.v1_8_R1.EnumProtocolDirection;
-import net.minecraft.server.v1_8_R1.MinecraftServer;
 import net.minecraft.server.v1_8_R1.NetworkManager;
 
 public class ServerConnectionChannel extends ChannelInitializer<Channel> {
@@ -27,17 +26,15 @@ public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 		} catch (ChannelException channelexception) {
 		}
 		try {
-			channel.config().setOption(ChannelOption.TCP_NODELAY, Boolean.valueOf(false));
-		} catch (ChannelException channelexception1) {
+			channel.config().setOption(ChannelOption.TCP_NODELAY, false);
+		} catch (ChannelException channelexception) {
 		}
 		channel.pipeline()
 		.addLast("timeout", new ReadTimeoutHandler(30))
-		.addLast("decoder", new PacketDecoder())
-		.addLast("encoder", new PacketEncoder());
+		.addLast("initial_decoder", new InitialPacketDecoder());
 		NetworkManager networkmanager = new NetworkManager(EnumProtocolDirection.SERVERBOUND);
 		networkManagers.add(networkmanager);
 		channel.pipeline().addLast("packet_handler", networkmanager);
-		networkmanager.a(new HandshakeListener(MinecraftServer.getServer(), networkmanager));
 	}
 
 }

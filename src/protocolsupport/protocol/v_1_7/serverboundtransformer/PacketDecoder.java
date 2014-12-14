@@ -2,9 +2,12 @@ package protocolsupport.protocol.v_1_7.serverboundtransformer;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.util.AttributeKey;
 
 import java.io.IOException;
+import java.util.List;
 
 import net.minecraft.server.v1_8_R1.EnumProtocol;
 import net.minecraft.server.v1_8_R1.EnumProtocolDirection;
@@ -14,7 +17,7 @@ import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.DataStorage.ProtocolVersion;
 
-public class FullPacketDecoder {
+public class PacketDecoder extends ByteToMessageDecoder {
 
 	private static final PacketTransformer[] transformers = new PacketTransformer[] {
 		new HandshakePacketTransformer(),
@@ -27,7 +30,9 @@ public class FullPacketDecoder {
 	@SuppressWarnings("unchecked")
 	private static final AttributeKey<EnumProtocol> currentStateAttrKey = NetworkManager.c;
 
-	public static Packet decodePacket(Channel channel, final ByteBuf bytebuf) throws Exception {
+	@Override
+	protected void decode(ChannelHandlerContext ctx, ByteBuf bytebuf, List<Object> list) throws Exception {
+		Channel channel = ctx.channel();
 		ProtocolVersion version = DataStorage.getVersion(channel.remoteAddress());
 		final PacketDataSerializer packetDataSerializer = new PacketDataSerializer(bytebuf, version);
 		final int packetId = packetDataSerializer.readVarInt();
@@ -42,7 +47,7 @@ public class FullPacketDecoder {
 		if (packetDataSerializer.readableBytes() > 0) {
 			throw new IOException("Packet " + channel.attr(currentStateAttrKey).get().a() + "/" + packetId + " (" + packet.getClass().getSimpleName() + ") was larger than expected, found " + packetDataSerializer.readableBytes() + " bytes extra whilst reading packet " + packetId);
 		}
-		return packet;
+		list.add(packet);
 	}
 
 }

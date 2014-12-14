@@ -1,4 +1,4 @@
-package protocolsupport.protocol;
+package protocolsupport.protocol.v_1_7;
 
 import java.util.Iterator;
 import java.util.Map.Entry;

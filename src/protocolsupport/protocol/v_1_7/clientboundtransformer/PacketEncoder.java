@@ -1,8 +1,9 @@
 package protocolsupport.protocol.v_1_7.clientboundtransformer;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.MessageToByteEncoder;
 import io.netty.util.AttributeKey;
 
 import java.io.IOException;
@@ -22,7 +23,7 @@ import protocolsupport.injector.Utilities;
 import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
 
-public class FullPacketEncoder {
+public class PacketEncoder extends MessageToByteEncoder<Packet> {
 
 	private static final EnumProtocolDirection direction = EnumProtocolDirection.CLIENTBOUND;
 	@SuppressWarnings("unchecked")
@@ -45,7 +46,25 @@ public class FullPacketEncoder {
 		blockedPlayPackets[0x34] = true;
 	}
 
-	public static void encodePacket(Channel channel, Packet packet, ByteBuf output) throws IOException, IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+	private static HashSet<Packet> skipPlayerInfo = new HashSet<Packet>();
+
+	@SuppressWarnings("unchecked")
+	private static List<Packet> splitPlayerInfoPacket(PacketPlayOutPlayerInfo packet) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+		List<Packet> packets = new ArrayList<Packet>();
+		EnumPlayerInfoAction action = (EnumPlayerInfoAction) Utilities.<Field>setAccessible(PacketPlayOutPlayerInfo.class.getDeclaredField("a")).get(packet);
+		List<PlayerInfoData> datas = (List<PlayerInfoData>) Utilities.<Field>setAccessible(PacketPlayOutPlayerInfo.class.getDeclaredField("b")).get(packet);
+		for (int i = 0; i < datas.size(); i++) {
+			PacketPlayOutPlayerInfo newpacket = new PacketPlayOutPlayerInfo();
+			Utilities.<Field>setAccessible(PacketPlayOutPlayerInfo.class.getDeclaredField("a")).set(newpacket, action);
+			((List<PlayerInfoData>) Utilities.<Field>setAccessible(PacketPlayOutPlayerInfo.class.getDeclaredField("b")).get(newpacket)).add(datas.get(i));
+			packets.add(newpacket);
+		}
+		return packets;
+	}
+
+	@Override
+	protected void encode(ChannelHandlerContext ctx, Packet packet, ByteBuf output) throws Exception {
+		Channel channel = ctx.channel();
 		EnumProtocol currentProtocol = channel.attr(currentStateAttrKey).get();
         final Integer packetId = currentProtocol.a(direction, packet);
         if (packetId == null) {
@@ -66,37 +85,8 @@ public class FullPacketEncoder {
 				}
 			}
 		}
-		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer(), DataStorage.getVersion(channel.remoteAddress()));
+		PacketDataSerializer serializer = new PacketDataSerializer(output, DataStorage.getVersion(channel.remoteAddress()));
 		transformers[currentProtocol.ordinal()].tranform(channel, packetId, packet, serializer);
-		if (serializer.readableBytes() == 0) {
-			return;
-		}
-		writeVarInt(serializer.readableBytes(), output);
-		output.writeBytes(serializer);
-	}
-
-	private static void writeVarInt(int value, ByteBuf buf) {
-        while ((value & 0xFFFFFF80) != 0x0) {
-        	buf.writeByte((value & 0x7F) | 0x80);
-            value >>>= 7;
-        }
-        buf.writeByte(value);
-	}
-
-	private static HashSet<Packet> skipPlayerInfo = new HashSet<Packet>();
-
-	@SuppressWarnings("unchecked")
-	private static List<Packet> splitPlayerInfoPacket(PacketPlayOutPlayerInfo packet) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		List<Packet> packets = new ArrayList<Packet>();
-		EnumPlayerInfoAction action = (EnumPlayerInfoAction) Utilities.<Field>setAccessible(PacketPlayOutPlayerInfo.class.getDeclaredField("a")).get(packet);
-		List<PlayerInfoData> datas = (List<PlayerInfoData>) Utilities.<Field>setAccessible(PacketPlayOutPlayerInfo.class.getDeclaredField("b")).get(packet);
-		for (int i = 0; i < datas.size(); i++) {
-			PacketPlayOutPlayerInfo newpacket = new PacketPlayOutPlayerInfo();
-			Utilities.<Field>setAccessible(PacketPlayOutPlayerInfo.class.getDeclaredField("a")).set(newpacket, action);
-			((List<PlayerInfoData>) Utilities.<Field>setAccessible(PacketPlayOutPlayerInfo.class.getDeclaredField("b")).get(newpacket)).add(datas.get(i));
-			packets.add(newpacket);
-		}
-		return packets;
 	}
 
 }

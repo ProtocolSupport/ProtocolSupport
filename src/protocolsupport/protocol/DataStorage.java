@@ -94,14 +94,6 @@ public class DataStorage {
 		}
 	}
 
-	public static void setCompressionEnabled(SocketAddress address) {
-		channelInfo.get(address).compressionEnabled = true;
-	}
-
-	public static boolean isCompressionEnabled(SocketAddress address) {
-		return channelInfo.get(address).compressionEnabled;
-	}
-
 	private static class ChannelInfo {
 		ProtocolVersion version = ProtocolVersion.UNKNOWN;
 		Player player;
@@ -116,7 +108,6 @@ public class DataStorage {
 				return super.get(uuid);
 			}
 		};
-		volatile boolean compressionEnabled = false;
 	}
 
 	public static enum ProtocolVersion {
