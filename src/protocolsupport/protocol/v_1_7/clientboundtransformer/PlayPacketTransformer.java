@@ -602,7 +602,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeShort(blockPos.getY());
 				serializer.writeInt(blockPos.getZ());
 				for (int i = 0; i < 4; i++) {
-					serializer.writeString(CraftChatMessage.fromComponent(packetdata.d()));
+					serializer.writeString(CraftChatMessage.fromComponent(packetdata.d()).substring(0, 15));
 				}
 				return true;
 			}

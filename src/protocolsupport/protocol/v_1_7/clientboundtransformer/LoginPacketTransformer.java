@@ -12,12 +12,10 @@ public class LoginPacketTransformer implements PacketTransformer {
 
 	@Override
 	public boolean tranform(Channel channel, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException {
-		if (serializer.getVersion() == ProtocolVersion.MINECRAFT_1_8) {
-			return false;
-		}
+
+		PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
 		switch (packetId) {
 			case 0x01: { //PacketLoginOutEncryptionBegin
-				PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
 				packet.b(packetdata);
 				serializer.writeString(packetdata.readString(20));
 				int length1 = packetdata.readVarInt();
@@ -29,7 +27,6 @@ public class LoginPacketTransformer implements PacketTransformer {
 				return true;
 			}
 			case 0x02: { //PacketLoginOutSuccess
-				PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
 				packet.b(packetdata);
 				String uuidstring = packetdata.readString(36);
 				if (serializer.getVersion() == ProtocolVersion.MINECRAFT_1_7_5) {
