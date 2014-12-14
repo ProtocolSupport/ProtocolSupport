@@ -1,12 +1,16 @@
 package protocolsupport.protocol;
 
 import java.net.SocketAddress;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.UUID;
 import java.util.WeakHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+
+import com.mojang.authlib.properties.Property;
 
 public class DataStorage {
 
@@ -54,13 +58,56 @@ public class DataStorage {
 	}
 
 	public static String getTabName(SocketAddress address, UUID uuid) {
-		return channelInfo.get(address).tablist.get(uuid);
+		String name = channelInfo.get(address).tablist.get(uuid);
+		if (name == null) {
+			Player player = Bukkit.getPlayer(uuid);
+			if (player != null) {
+				return player.getName();
+			}
+		}
+		return name;
+	}
+
+	public static void addPropertyData(SocketAddress address, UUID uuid, Property property) {
+		ArrayList<Property> properties = channelInfo.get(address).skins.get(uuid);
+		Iterator<Property> iterator = properties.iterator();
+		while (iterator.hasNext()) {
+			if (iterator.next().getName().equals(property.getName())) {
+				iterator.remove();
+			}
+		}
+		properties.add(property);
+	}
+
+	public static ArrayList<Property> getPropertyData(SocketAddress address, UUID uuid, boolean filterNonSigned) {
+		ArrayList<Property> properties = channelInfo.get(address).skins.get(uuid); 
+		if (!filterNonSigned) {
+			return properties;
+		} else {
+			Iterator<Property> iterator = properties.iterator();
+			while (iterator.hasNext()) {
+				if (!iterator.next().hasSignature()) {
+					iterator.remove();
+				}
+			}
+			return properties;
+		}
 	}
 
 	private static class ChannelInfo {
 		ProtocolVersion version = ProtocolVersion.UNKNOWN;
 		Player player;
 		HashMap<UUID, String> tablist = new HashMap<UUID, String>();
+		@SuppressWarnings("serial")
+		HashMap<UUID, ArrayList<Property>> skins = new HashMap<UUID, ArrayList<Property>>() {
+			@Override
+			public ArrayList<Property> get(Object uuid) {
+				if (!super.containsKey(uuid)) {
+					super.put((UUID) uuid, new ArrayList<Property>());
+				}
+				return super.get(uuid);
+			}
+		};
 	}
 
 	public static enum ProtocolVersion {

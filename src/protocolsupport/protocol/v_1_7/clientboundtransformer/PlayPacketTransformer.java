@@ -3,6 +3,7 @@ package protocolsupport.protocol.v_1_7.clientboundtransformer;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.zip.Deflater;
@@ -11,6 +12,8 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R1.util.CraftChatMessage;
 import org.bukkit.entity.Player;
+
+import com.mojang.authlib.properties.Property;
 
 import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
@@ -293,7 +296,13 @@ public class PlayPacketTransformer implements PacketTransformer {
 				String playerName = DataStorage.getTabName(channel.remoteAddress(), uuid);
 				serializer.writeString(playerName != null ? playerName : "Unknown");
 				if (serializer.getVersion() == ProtocolVersion.MINECRAFT_1_7_10) {
-					serializer.writeVarInt(0);
+					ArrayList<Property> properties = DataStorage.getPropertyData(channel.remoteAddress(), uuid, true);
+					serializer.writeVarInt(properties.size());
+					for (Property property : properties) {
+						serializer.writeString(property.getName());
+						serializer.writeString(property.getValue());
+						serializer.writeString(property.getSignature());
+					}
 				}
 				serializer.writeInt(packetdata.readInt());
 				serializer.writeInt(packetdata.readInt());
@@ -336,11 +345,13 @@ public class PlayPacketTransformer implements PacketTransformer {
 						DataStorage.addTabName(channel.remoteAddress(), uuid, playerName);
 						int props = packetdata.readVarInt();
 						for (int p = 0; p < props; p++) {
-							packetdata.readString(32767);
-							packetdata.readString(32767);
+							String name = packetdata.readString(32767);
+							String value = packetdata.readString(32767);
+							String signature = null;
 							if (packetdata.readBoolean()) {
-								packetdata.readString(32767);
+								signature = packetdata.readString(32767);
 							}
+							DataStorage.addPropertyData(channel.remoteAddress(), uuid, signature != null ? new Property(name, value, signature) : new Property(value, name));
 						}
 						packetdata.readVarInt();
 						packetdata.readVarInt();
