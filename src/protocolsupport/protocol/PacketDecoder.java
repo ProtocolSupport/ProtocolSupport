@@ -15,16 +15,19 @@ public class PacketDecoder extends ByteToMessageDecoder {
 
 	@Override
 	protected void decode(final ChannelHandlerContext channelHandlerContext, final ByteBuf input, final List<Object> list) throws Exception {
-		try {
-			ProtocolVersion version = DataStorage.getVersion(channelHandlerContext.channel().remoteAddress());
-			if (version != ProtocolVersion.UNKNOWN) {
-				decodeWithKnownVersion(channelHandlerContext, input, list, version);
-			} else {
-				//detect protocol
-				ProtocolVersion handshakeversion = ProtocolVersion.UNKNOWN;
-				input.markReaderIndex();
-				int firstbyte = input.readUnsignedByte();
-				if (firstbyte == 0xFE) { //1.6 ping (should we check if FE is actually a part of a varint length?)
+		if (input.readableBytes() == 0) {
+			return;
+		}
+		ProtocolVersion version = DataStorage.getVersion(channelHandlerContext.channel().remoteAddress());
+		if (version != ProtocolVersion.UNKNOWN) {
+			decodeWithKnownVersion(channelHandlerContext, input, list, version);
+		} else {
+			//detect protocol
+			ProtocolVersion handshakeversion = ProtocolVersion.UNKNOWN;
+			input.markReaderIndex();
+			int firstbyte = input.readUnsignedByte();
+			if (firstbyte == 0xFE) { //1.6 ping (should we check if FE is actually a part of a varint length?)
+				try {
 					if (
 						input.readUnsignedByte() == 1 &&
 						input.readUnsignedByte() == 0xFA &&
@@ -34,23 +37,24 @@ public class PacketDecoder extends ByteToMessageDecoder {
 						handshakeversion = ProtocolVersion.fromId(input.readUnsignedByte());
 						input.resetReaderIndex();
 					}
-				} else { //1.7 handshake
+				} catch (IndexOutOfBoundsException ex) {
 					input.resetReaderIndex();
-					input.markReaderIndex();
-					ByteBuf data = getVarIntPrefixedData(input, false);
-					if (data != null) {
-						handshakeversion = read1_7_1_8Handshake(data);
-					}
-					input.resetReaderIndex();
+					return;
 				}
-				//if we detected the protocol than we save it and process data
-				if (handshakeversion != ProtocolVersion.UNKNOWN) {
-					DataStorage.setVersion(channelHandlerContext.channel().remoteAddress(), handshakeversion);
-					decodeWithKnownVersion(channelHandlerContext, input, list, handshakeversion);
+			} else { //1.7 handshake
+				input.resetReaderIndex();
+				input.markReaderIndex();
+				ByteBuf data = getVarIntPrefixedData(input, false);
+				if (data != null) {
+					handshakeversion = read1_7_1_8Handshake(data);
 				}
+				input.resetReaderIndex();
 			}
-		} catch (Throwable t) {
-			t.printStackTrace();
+			//if we detected the protocol than we save it and process data
+			if (handshakeversion != ProtocolVersion.UNKNOWN) {
+				DataStorage.setVersion(channelHandlerContext.channel().remoteAddress(), handshakeversion);
+				decodeWithKnownVersion(channelHandlerContext, input, list, handshakeversion);
+			}
 		}
 	}
 

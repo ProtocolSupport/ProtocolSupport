@@ -1,6 +1,7 @@
 package protocolsupport.protocol.v_1_6.clientboundtransformer;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.util.AttributeKey;
 
@@ -45,7 +46,6 @@ public class FullPacketEncoder {
 	}
 
 	public static void encodePacket(Channel channel, Packet packet, ByteBuf output) throws IOException, IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		PacketDataSerializer serializer = new PacketDataSerializer(output, DataStorage.getVersion(channel.remoteAddress()));
 		EnumProtocol currentProtocol = channel.attr(currentStateAttrKey).get();
         final Integer packetId = currentProtocol.a(direction, packet);
         if (packetId == null) {
@@ -66,8 +66,9 @@ public class FullPacketEncoder {
 				}
 			}
 		}
+		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer(), DataStorage.getVersion(channel.remoteAddress()));
 		transformers[currentProtocol.ordinal()].tranform(channel, packetId, packet, serializer);
-		channel.flush();
+		channel.pipeline().firstContext().writeAndFlush(serializer);
 	}
 
 	private static HashSet<Packet> skipPlayerInfo = new HashSet<Packet>();

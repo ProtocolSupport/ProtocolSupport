@@ -11,15 +11,12 @@ import java.util.List;
 import net.minecraft.server.v1_8_R1.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R1.MinecraftServer;
 import net.minecraft.server.v1_8_R1.NetworkManager;
-import net.minecraft.server.v1_8_R1.ServerConnection;
 
 public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 
-	private ServerConnection connection;
 	private List<NetworkManager> networkManagers;
 
-	public ServerConnectionChannel(ServerConnection connection, List<NetworkManager> networkManagers) {
-		this.connection = connection;
+	public ServerConnectionChannel(List<NetworkManager> networkManagers) {
 		this.networkManagers = networkManagers;
 	}
 
