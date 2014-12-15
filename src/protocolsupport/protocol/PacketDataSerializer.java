@@ -16,7 +16,7 @@ import org.spigotmc.LimitStream;
 import org.spigotmc.SneakyThrow;
 
 import protocolsupport.protocol.DataStorage.ProtocolVersion;
-import protocolsupport.remappers.ItemIDRemapper;
+import protocolsupport.protocol.v_1_7.remappers.ItemIDRemapper;
 import net.minecraft.server.v1_8_R1.Item;
 import net.minecraft.server.v1_8_R1.ItemStack;
 import net.minecraft.server.v1_8_R1.NBTCompressedStreamTools;

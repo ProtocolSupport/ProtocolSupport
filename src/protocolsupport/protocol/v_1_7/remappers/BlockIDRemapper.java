@@ -1,4 +1,4 @@
-package protocolsupport.remappers;
+package protocolsupport.protocol.v_1_7.remappers;
 
 public class BlockIDRemapper {
 
