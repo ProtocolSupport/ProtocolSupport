@@ -15,7 +15,7 @@ public class HandshakePacketTransformer implements PacketTransformer {
 	@Override
 	public Packet[] tranform(Channel channel, int packetId, PacketDataSerializer serializer) throws IOException {
 		switch (packetId) {
-			case 0xFE: {
+			case 0xFE: { //Ping
 				Packet[] packets = new Packet[2];
 				Packet handshakepacket = EnumProtocol.HANDSHAKING.a(EnumProtocolDirection.SERVERBOUND, 0x00);
 				PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), ProtocolVersion.MINECRAFT_1_8);
@@ -33,7 +33,7 @@ public class HandshakePacketTransformer implements PacketTransformer {
 				packets[1] = EnumProtocol.STATUS.a(EnumProtocolDirection.SERVERBOUND, 0x00);
 				return packets;
 			}
-			case 0x02: {
+			case 0x02: { //Handsahke
 				Packet[] packets = new Packet[2];
 				Packet handshakepacket = EnumProtocol.HANDSHAKING.a(EnumProtocolDirection.SERVERBOUND, 0x00);
 				PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), ProtocolVersion.MINECRAFT_1_8);
