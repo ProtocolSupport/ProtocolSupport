@@ -40,6 +40,14 @@ public class PlayPacketTransformer implements PacketTransformer {
 				packet.b(packetdata);
 				serializer.writeInt(0x03);
 				serializer.writeString(ChatSerializer.a(packetdata.d()));
+				break;
+			}
+			case 0x03: { //PacketPlayOutUpdateTime
+				packet.b(packetdata);
+				serializer.writeInt(0x04);
+				serializer.writeLong(packetdata.readLong());
+				serializer.writeLong(packetdata.readLong());
+				break;
 			}
 			case 0x05: { //PacketPlayOutSpawnPosition
 				packet.b(packetdata);
