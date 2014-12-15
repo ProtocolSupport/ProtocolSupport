@@ -19,39 +19,50 @@ public class PlayPacketTransformer implements PacketTransformer {
 		switch (packetId) {
 			case 0x00: { //PacketPlayOutKeepAlive
 				packet.b(packetdata);
-				serializer.writeInt(0x00);
+				serializer.writeByte(0x00);
 				serializer.writeInt(packetdata.readVarInt());
 				break;
 			}
 			case 0x01: { //PacketPlayOutLogin
 				packet.b(packetdata);
-				serializer.writeInt(0x01);
+				serializer.writeByte(0x01);
 				serializer.writeInt(packetdata.readInt());
-				String levelType = packetdata.readString(32767);
-				serializer.writeByte(packetdata.readUnsignedByte());
-				serializer.writeByte(packetdata.readUnsignedByte());
-				serializer.writeByte(packetdata.readUnsignedByte());
+				int gamemode = packetdata.readUnsignedByte();
+				int dimension = packetdata.readUnsignedByte();
+				int difficulty = packetdata.readUnsignedByte();
+				int maxplayers = packetdata.readUnsignedByte();
+				serializer.writeString(packetdata.readString(32767));
+				serializer.writeByte(gamemode);
+				serializer.writeByte(dimension);
+				serializer.writeByte(difficulty);
 				serializer.writeByte(0);
-				serializer.writeByte(packetdata.readUnsignedByte());
-				serializer.writeString(levelType);
+				serializer.writeByte(maxplayers);
 				break;
 			}
 			case 0x02: { //PacketPlayOutChat
 				packet.b(packetdata);
-				serializer.writeInt(0x03);
+				serializer.writeByte(0x03);
 				serializer.writeString(ChatSerializer.a(packetdata.d()));
 				break;
 			}
 			case 0x03: { //PacketPlayOutUpdateTime
 				packet.b(packetdata);
-				serializer.writeInt(0x04);
+				serializer.writeByte(0x04);
 				serializer.writeLong(packetdata.readLong());
 				serializer.writeLong(packetdata.readLong());
 				break;
 			}
+			case 0x04: { //PacketPlayOutEntityEquipment
+				packet.b(packetdata);
+				serializer.writeByte(0x05);
+				serializer.writeInt(packetdata.readVarInt());
+				serializer.writeShort(packetdata.readUnsignedShort());
+				serializer.a(packetdata.i());
+				break;
+			}
 			case 0x05: { //PacketPlayOutSpawnPosition
 				packet.b(packetdata);
-				serializer.writeInt(0x06);
+				serializer.writeByte(0x06);
 				BlockPosition blockPos = packetdata.c();
 				serializer.writeInt(blockPos.getX());
 				serializer.writeInt(blockPos.getY());
