@@ -1,5 +1,6 @@
 package protocolsupport.protocol.v_1_8;
 
+import protocolsupport.injector.ProtocolLibFixer;
 import protocolsupport.protocol.fake.FakeDecoder;
 import protocolsupport.protocol.fake.FakeEncoder;
 import protocolsupport.protocol.fake.FakePrepender;
@@ -12,21 +13,23 @@ import net.minecraft.server.v1_8_R1.PacketDecoder;
 import net.minecraft.server.v1_8_R1.PacketEncoder;
 import net.minecraft.server.v1_8_R1.PacketPrepender;
 import net.minecraft.server.v1_8_R1.PacketSplitter;
-import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
 
 public class PipeLineBuilder {
 
-	public static void buildPipeLine(ChannelHandlerContext ctx, ByteBuf data) {
+	public static void buildPipeLine(ChannelHandlerContext ctx) {
 		ChannelPipeline pipeline = ctx.channel().pipeline();
 		NetworkManager networkmanager = pipeline.get(NetworkManager.class);
 		networkmanager.a(new HandshakeListener(MinecraftServer.getServer(), networkmanager));
+		ChannelHandler decoder = new PacketDecoder(EnumProtocolDirection.SERVERBOUND);
+		ChannelHandler encoder = new PacketEncoder(EnumProtocolDirection.CLIENTBOUND);
 		pipeline.replace(FakeSplitter.class, "splitter", new PacketSplitter());
-		pipeline.replace(FakeDecoder.class, "decoder", new PacketDecoder(EnumProtocolDirection.SERVERBOUND));
+		pipeline.replace(FakeDecoder.class, "decoder", decoder);
 		pipeline.replace(FakePrepender.class, "prepender", new PacketPrepender());
-		pipeline.replace(FakeEncoder.class, "encoder", new PacketEncoder(EnumProtocolDirection.CLIENTBOUND));
-		ctx.channel().pipeline().firstContext().fireChannelRead(data);
+		pipeline.replace(FakeEncoder.class, "encoder", encoder);
+		ProtocolLibFixer.fixProtocolLib(pipeline, decoder, encoder);
 	}
 
 }

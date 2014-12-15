@@ -10,6 +10,7 @@ public class FakeSplitter extends ByteToMessageDecoder {
 
 	@Override
 	protected void decode(ChannelHandlerContext arg0, ByteBuf arg1, List<Object> arg2) throws Exception {
+		throw new Exception("Fake pipeline element is still in pipeline");
 	}
 
 }

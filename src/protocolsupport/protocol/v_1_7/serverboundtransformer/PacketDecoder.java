@@ -32,6 +32,9 @@ public class PacketDecoder extends ByteToMessageDecoder {
 
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf bytebuf, List<Object> list) throws Exception {
+		if (bytebuf.readableBytes() == 0) {
+			return;
+		}
 		Channel channel = ctx.channel();
 		ProtocolVersion version = DataStorage.getVersion(channel.remoteAddress());
 		final PacketDataSerializer packetDataSerializer = new PacketDataSerializer(bytebuf, version);

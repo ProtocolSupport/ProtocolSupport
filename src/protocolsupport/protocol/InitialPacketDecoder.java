@@ -56,21 +56,22 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 		ctx.channel().pipeline().remove(InitialPacketDecoder.class);
 		switch (version) {
 			case MINECRAFT_1_8: {
-				protocolsupport.protocol.v_1_8.PipeLineBuilder.buildPipeLine(ctx, input);
+				protocolsupport.protocol.v_1_8.PipeLineBuilder.buildPipeLine(ctx);
 				break;
 			}
 			case MINECRAFT_1_7_5: case MINECRAFT_1_7_10: {
-				protocolsupport.protocol.v_1_7.PipeLineBuilder.buildPipeLine(ctx, input);
+				protocolsupport.protocol.v_1_7.PipeLineBuilder.buildPipeLine(ctx);
 				break;
 			}
 			case MINECRAFT_1_6_2: case MINECRAFT_1_6_4: {
-				protocolsupport.protocol.v_1_6.PipeLineBuilder.buildPipeLine(ctx, input);
+				protocolsupport.protocol.v_1_6.PipeLineBuilder.buildPipeLine(ctx);
 				break;
 			}
 			default: {
 				throw new RuntimeException("Not supported yet");
 			}
 		}
+		ctx.channel().pipeline().firstContext().fireChannelRead(input);
 	}
 
 	private ByteBuf getVarIntPrefixedData(final ByteBuf byteBuf) {

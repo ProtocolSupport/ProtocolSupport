@@ -29,15 +29,15 @@ public class PacketEncoder extends MessageToByteEncoder<Packet> {
 	@SuppressWarnings("unchecked")
 	private static final AttributeKey<EnumProtocol> currentStateAttrKey = NetworkManager.c;
 
-	private static final PacketTransformer[] transformers = new PacketTransformer[] {
+	private final PacketTransformer[] transformers = new PacketTransformer[] {
 		new HandshakePacketTransformer(),
 		new PlayPacketTransformer(),
 		new StatusPacketTransformer(),
 		new LoginPacketTransformer()
 	};
 
-	private static boolean[] blockedPlayPackets = new boolean[256];
-	static {
+	private boolean[] blockedPlayPackets = new boolean[256];
+	{
 		//packet from 1.8
 		for (int i = 0x41; i < 0x49; i++) {
 			blockedPlayPackets[i] = true;
@@ -46,10 +46,10 @@ public class PacketEncoder extends MessageToByteEncoder<Packet> {
 		blockedPlayPackets[0x34] = true;
 	}
 
-	private static HashSet<Packet> skipPlayerInfo = new HashSet<Packet>();
+	private HashSet<Packet> skipPlayerInfo = new HashSet<Packet>();
 
 	@SuppressWarnings("unchecked")
-	private static List<Packet> splitPlayerInfoPacket(PacketPlayOutPlayerInfo packet) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+	private List<Packet> splitPlayerInfoPacket(PacketPlayOutPlayerInfo packet) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		List<Packet> packets = new ArrayList<Packet>();
 		EnumPlayerInfoAction action = (EnumPlayerInfoAction) Utilities.<Field>setAccessible(PacketPlayOutPlayerInfo.class.getDeclaredField("a")).get(packet);
 		List<PlayerInfoData> datas = (List<PlayerInfoData>) Utilities.<Field>setAccessible(PacketPlayOutPlayerInfo.class.getDeclaredField("b")).get(packet);

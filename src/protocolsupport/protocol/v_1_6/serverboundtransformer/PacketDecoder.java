@@ -32,24 +32,27 @@ public class PacketDecoder extends ByteToMessageDecoder {
 	}
 
 	@Override
-	protected void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> packets) throws Exception {
+	protected void decode(ChannelHandlerContext ctx, ByteBuf bytebuf, List<Object> packets) throws Exception {
+		if (bytebuf.readableBytes() == 0) {
+			return;
+		}
 		Channel channel = ctx.channel();
-		input.markReaderIndex();
+		bytebuf.markReaderIndex();
 		try {
 			EnumProtocol currentProtocol = channel.attr(currentStateAttrKey).get();
-			int packetId = input.readUnsignedByte();
-			packets.addAll(
-				Arrays.asList(
-					transformers[currentProtocol.ordinal()].tranform(
-						channel,
-						packetId,
-						new PacketDataSerializer(input, DataStorage.getVersion(channel.remoteAddress()))
-					)
-				)
+			int packetId = bytebuf.readUnsignedByte();
+			Packet[] transformedPackets = transformers[currentProtocol.ordinal()].tranform(
+				channel,
+				packetId,
+				new PacketDataSerializer(bytebuf, DataStorage.getVersion(channel.remoteAddress()))
 			);
+			if (transformedPackets != null) {
+				packets.addAll(Arrays.asList(transformedPackets));
+				return;
+			}
 		} catch (IndexOutOfBoundsException ex) {
 		}
-		input.resetReaderIndex();
+		bytebuf.resetReaderIndex();
 	}
 
 }
