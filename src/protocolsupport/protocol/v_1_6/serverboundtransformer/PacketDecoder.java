@@ -26,11 +26,6 @@ public class PacketDecoder extends ByteToMessageDecoder {
 		new LoginPacketTransformer()
 	};
 
-	public static Packet[] decodePacket(Channel channel, final ByteBuf bytebuf) throws Exception {
-
-		return null;
-	}
-
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf bytebuf, List<Object> packets) throws Exception {
 		if (bytebuf.readableBytes() == 0) {

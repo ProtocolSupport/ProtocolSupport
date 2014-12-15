@@ -36,6 +36,14 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 				input.resetReaderIndex();
 				return;
 			}
+		} else if (firstbyte == 0x02) { //1.6 handshake
+			try {
+				handshakeversion = ProtocolVersion.fromId(input.readUnsignedByte());
+				input.resetReaderIndex();
+			} catch (IndexOutOfBoundsException ex) {
+				input.resetReaderIndex();
+				return;
+			}
 		} else { //1.7 handshake
 			input.resetReaderIndex();
 			input.markReaderIndex();
