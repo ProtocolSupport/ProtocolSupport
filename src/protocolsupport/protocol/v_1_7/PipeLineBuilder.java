@@ -1,5 +1,9 @@
 package protocolsupport.protocol.v_1_7;
 
+import protocolsupport.protocol.fake.FakeDecoder;
+import protocolsupport.protocol.fake.FakeEncoder;
+import protocolsupport.protocol.fake.FakePrepender;
+import protocolsupport.protocol.fake.FakeSplitter;
 import protocolsupport.protocol.v_1_7.clientboundtransformer.PacketEncoder;
 import protocolsupport.protocol.v_1_7.serverboundtransformer.PacketDecoder;
 import io.netty.buffer.ByteBuf;
@@ -16,11 +20,10 @@ public class PipeLineBuilder {
 		ChannelPipeline pipeline = ctx.channel().pipeline();
 		NetworkManager networkmanager = pipeline.get(NetworkManager.class);
 		networkmanager.a(new HandshakeListener(MinecraftServer.getServer(), networkmanager));
-		pipeline
-		.addAfter("timeout", "splitter", new PacketSplitter())
-		.addAfter("splitter", "decoder", new PacketDecoder())
-		.addAfter("decoder", "prepender", new PacketPrepender())
-		.addAfter("prepender", "encoder", new PacketEncoder());
+		pipeline.replace(FakeSplitter.class, "splitter", new PacketSplitter());
+		pipeline.replace(FakeDecoder.class, "decoder", new PacketDecoder());
+		pipeline.replace(FakePrepender.class, "prepender", new PacketPrepender());
+		pipeline.replace(FakeEncoder.class, "encoder", new PacketEncoder());
 		ctx.channel().pipeline().firstContext().fireChannelRead(data);
 	}
 
