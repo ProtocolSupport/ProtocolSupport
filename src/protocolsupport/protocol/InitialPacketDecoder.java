@@ -13,50 +13,54 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 
 	@Override
 	public void channelRead(final ChannelHandlerContext channelHandlerContext, final Object inputObj) throws Exception {
-		ByteBuf input = (ByteBuf) inputObj;
-		if (input.readableBytes() == 0) {
-			return;
-		}
-		//detect protocol
-		ProtocolVersion handshakeversion = ProtocolVersion.UNKNOWN;
-		input.markReaderIndex();
-		int firstbyte = input.readUnsignedByte();
-		if (firstbyte == 0xFE) { //1.6 ping (should we check if FE is actually a part of a varint length?)
-			try {
-				if (
-					input.readUnsignedByte() == 1 &&
-					input.readUnsignedByte() == 0xFA &&
-					"MC|PingHost".equals(new String(input.readBytes(input.readUnsignedShort() * 2).array(), StandardCharsets.UTF_16BE))
-				) {
-					input.readUnsignedShort();
+		try {
+			ByteBuf input = (ByteBuf) inputObj;
+			if (input.readableBytes() == 0) {
+				return;
+			}
+			//detect protocol
+			ProtocolVersion handshakeversion = ProtocolVersion.UNKNOWN;
+			input.markReaderIndex();
+			int firstbyte = input.readUnsignedByte();
+			if (firstbyte == 0xFE) { //1.6 ping (should we check if FE is actually a part of a varint length?)
+				try {
+					if (
+						input.readUnsignedByte() == 1 &&
+						input.readUnsignedByte() == 0xFA &&
+						"MC|PingHost".equals(new String(input.readBytes(input.readUnsignedShort() * 2).array(), StandardCharsets.UTF_16BE))
+					) {
+						input.readUnsignedShort();
+						handshakeversion = ProtocolVersion.fromId(input.readUnsignedByte());
+						input.resetReaderIndex();
+					}
+				} catch (IndexOutOfBoundsException ex) {
+					input.resetReaderIndex();
+					return;
+				}
+			} else if (firstbyte == 0x02) { //1.6 handshake
+				try {
 					handshakeversion = ProtocolVersion.fromId(input.readUnsignedByte());
 					input.resetReaderIndex();
+				} catch (IndexOutOfBoundsException ex) {
+					input.resetReaderIndex();
+					return;
 				}
-			} catch (IndexOutOfBoundsException ex) {
+			} else { //1.7 handshake
 				input.resetReaderIndex();
-				return;
-			}
-		} else if (firstbyte == 0x02) { //1.6 handshake
-			try {
-				handshakeversion = ProtocolVersion.fromId(input.readUnsignedByte());
+				input.markReaderIndex();
+				ByteBuf data = getVarIntPrefixedData(input);
+				if (data != null) {
+					handshakeversion = read1_7_1_8Handshake(data);
+				}
 				input.resetReaderIndex();
-			} catch (IndexOutOfBoundsException ex) {
-				input.resetReaderIndex();
-				return;
 			}
-		} else { //1.7 handshake
-			input.resetReaderIndex();
-			input.markReaderIndex();
-			ByteBuf data = getVarIntPrefixedData(input);
-			if (data != null) {
-				handshakeversion = read1_7_1_8Handshake(data);
+			//if we detected the protocol than we save it and process data
+			if (handshakeversion != ProtocolVersion.UNKNOWN) {
+				DataStorage.setVersion(channelHandlerContext.channel().remoteAddress(), handshakeversion);
+				rebuildPipeLine(channelHandlerContext, input, handshakeversion);
 			}
-			input.resetReaderIndex();
-		}
-		//if we detected the protocol than we save it and process data
-		if (handshakeversion != ProtocolVersion.UNKNOWN) {
-			DataStorage.setVersion(channelHandlerContext.channel().remoteAddress(), handshakeversion);
-			rebuildPipeLine(channelHandlerContext, input, handshakeversion);
+		} catch (Throwable t) {
+			channelHandlerContext.channel().close();
 		}
 	}
 

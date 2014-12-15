@@ -21,7 +21,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				packet.b(packetdata);
 				serializer.writeByte(0x00);
 				serializer.writeInt(packetdata.readVarInt());
-				break;
+				return;
 			}
 			case 0x01: { //PacketPlayOutLogin
 				packet.b(packetdata);
@@ -37,20 +37,20 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(difficulty);
 				serializer.writeByte(0);
 				serializer.writeByte(maxplayers);
-				break;
+				return;
 			}
 			case 0x02: { //PacketPlayOutChat
 				packet.b(packetdata);
 				serializer.writeByte(0x03);
 				serializer.writeString(ChatSerializer.a(packetdata.d()));
-				break;
+				return;
 			}
 			case 0x03: { //PacketPlayOutUpdateTime
 				packet.b(packetdata);
 				serializer.writeByte(0x04);
 				serializer.writeLong(packetdata.readLong());
 				serializer.writeLong(packetdata.readLong());
-				break;
+				return;
 			}
 			case 0x04: { //PacketPlayOutEntityEquipment
 				packet.b(packetdata);
@@ -58,7 +58,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeInt(packetdata.readVarInt());
 				serializer.writeShort(packetdata.readUnsignedShort());
 				serializer.a(packetdata.i());
-				break;
+				return;
 			}
 			case 0x05: { //PacketPlayOutSpawnPosition
 				packet.b(packetdata);
@@ -67,7 +67,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeInt(blockPos.getX());
 				serializer.writeInt(blockPos.getY());
 				serializer.writeInt(blockPos.getZ());
-				break;
+				return;
 			}
 		}
 	}
