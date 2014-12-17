@@ -63,6 +63,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x25: { // PacketPlayOutBlockBreakAnimation
 				packet.b(packetdata);
 				serializer.writeVarInt(packetId);
+				serializer.writeVarInt(packetdata.readVarInt());
 				BlockPosition blockPos = packetdata.c();
 				serializer.writeInt(blockPos.getX());
 				serializer.writeInt(blockPos.getY());
@@ -570,8 +571,8 @@ public class PlayPacketTransformer implements PacketTransformer {
 				BlockPosition blockPos = packetdata.c();
 				int x = blockPos.getX();
 				int z = blockPos.getZ();
-				int type = packetdata.readByte();
-				switch (type) {
+				int direction = packetdata.readByte();
+				switch (direction) {
 					case 0: {
 						--z;
 						break;
@@ -592,7 +593,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeInt(x);
 				serializer.writeInt(blockPos.getY());
 				serializer.writeInt(z);
-				serializer.writeInt(type);
+				serializer.writeInt(direction);
 				return;
 			}
 			case 0x05: { // PacketPlayOutSpawnPosition
