@@ -9,7 +9,6 @@ import io.netty.util.AttributeKey;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import net.minecraft.server.v1_8_R1.EnumPlayerInfoAction;
@@ -46,14 +45,12 @@ public class PacketEncoder extends MessageToByteEncoder<Packet> {
         }
 		if (currentProtocol == EnumProtocol.PLAY) {
 			if (packetId == 0x38) {
-				if (!skipPlayerInfo.contains(packet)) {
-					for (Packet rpacket : splitPlayerInfoPacket((PacketPlayOutPlayerInfo) packet)) {
-						skipPlayerInfo.add(rpacket);
-						channel.writeAndFlush(rpacket);
+				List<Packet> playerInfoPackets = splitPlayerInfoPacket((PacketPlayOutPlayerInfo) packet);
+				if (playerInfoPackets != null) {
+					for (Packet rpacket : playerInfoPackets) {
+						channel.pipeline().firstContext().writeAndFlush(rpacket);
 					}
 					return;
-				} else {
-					skipPlayerInfo.remove(packet);
 				}
 			}
 		}
@@ -61,13 +58,14 @@ public class PacketEncoder extends MessageToByteEncoder<Packet> {
 		transformers[currentProtocol.ordinal()].tranform(channel, packetId, packet, serializer);
 	}
 
-	private HashSet<Packet> skipPlayerInfo = new HashSet<Packet>();
-
 	@SuppressWarnings("unchecked")
 	private List<Packet> splitPlayerInfoPacket(PacketPlayOutPlayerInfo packet) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		List<Packet> packets = new ArrayList<Packet>();
-		EnumPlayerInfoAction action = (EnumPlayerInfoAction) Utils.<Field>setAccessible(PacketPlayOutPlayerInfo.class.getDeclaredField("a")).get(packet);
 		List<PlayerInfoData> datas = (List<PlayerInfoData>) Utils.<Field>setAccessible(PacketPlayOutPlayerInfo.class.getDeclaredField("b")).get(packet);
+		if (datas.size() <= 1) {
+			return null;
+		}
+		EnumPlayerInfoAction action = (EnumPlayerInfoAction) Utils.<Field>setAccessible(PacketPlayOutPlayerInfo.class.getDeclaredField("a")).get(packet);
 		for (int i = 0; i < datas.size(); i++) {
 			PacketPlayOutPlayerInfo newpacket = new PacketPlayOutPlayerInfo();
 			Utils.<Field>setAccessible(PacketPlayOutPlayerInfo.class.getDeclaredField("a")).set(newpacket, action);

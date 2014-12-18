@@ -3,15 +3,18 @@ package protocolsupport.protocol.v_1_6.clientboundtransformer;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.zip.Deflater;
 
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_8_R1.util.CraftChatMessage;
 import org.bukkit.entity.Player;
 
 import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.utils.Utils;
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import net.minecraft.server.v1_8_R1.BlockPosition;
@@ -114,8 +117,8 @@ public class PlayPacketTransformer implements PacketTransformer {
 					pitch += location.getPitch();
 				}
 				serializer.writeDouble(x);
-				serializer.writeDouble(y + 1.63);
 				serializer.writeDouble(y);
+				serializer.writeDouble(y + 1.63);
 				serializer.writeDouble(z);
 				serializer.writeFloat(yaw);
 				serializer.writeFloat(pitch);
@@ -277,6 +280,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x1B: { //PacketPlayOutAttachEntity
 				serializer.writeByte(0x27);
 				Utils.writeTheRestOfTheData(packetdata, serializer);
+				return;
 			}
 			case 0x1C: { //PacketPlayOutEntityMetadata
 				/*serializer.writeByte(0x28);
@@ -372,6 +376,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				int stateId = packetdata.readVarInt();
 				serializer.writeShort(stateId >> 4);
 				serializer.writeByte(stateId & 0xF);
+				return;
 			}
 			case 0x24: { //PacketPlayOutBlockAction
 				serializer.writeByte(0x36);
@@ -382,6 +387,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(packetdata.readUnsignedByte());
 				serializer.writeByte(packetdata.readUnsignedByte());
 				serializer.writeShort(packetdata.readVarInt());
+				return;
 			}
 			case 0x25: { //PacketPlayOutBlockBreakAnimation
 				serializer.writeByte(0x37);
@@ -506,6 +512,187 @@ public class PlayPacketTransformer implements PacketTransformer {
 				if (id == 11) {
 					serializer.writeInt(packetdata.readInt());
 				}
+				return;
+			}
+			case 0x2E: { //PacketPlayOutCloseWindow
+				serializer.writeByte(0x65);
+				serializer.writeByte(packetdata.readByte());
+				return;
+			}
+			case 0x2F: { //PacketPlayOutSetSlot
+				/*serializer.writeByte(0x67);
+				Utils.writeTheRestOfTheData(packetdata, serializer);*/
+				return;
+			}
+			case 0x30: { //PacketPlayOutWindowItems
+				/*serializer.writeInt(0x68);
+				Utils.writeTheRestOfTheData(packetdata, serializer);*/
+				return;
+			}
+			case 0x31: { //PacketPlayOutWindowData
+				serializer.writeByte(0x69);
+				Utils.writeTheRestOfTheData(packetdata, serializer);
+				return;
+			}
+			case 0x32: { //PacketPlayOutTransaction
+				serializer.writeByte(0x6A);
+				Utils.writeTheRestOfTheData(packetdata, serializer);
+				return;
+			}
+			case 0x33: { //PacketPlayOutUpdateSign
+				serializer.writeByte(0x82);
+				BlockPosition blockPos = packetdata.c();
+				serializer.writeInt(blockPos.getX());
+				serializer.writeShort(blockPos.getY());
+				serializer.writeInt(blockPos.getZ());
+				for (int i = 0; i < 4; i++) {
+					serializer.writeString(Utils.clampString(CraftChatMessage.fromComponent(packetdata.d()), 15));
+				}
+				return;
+			}
+			case 0x34: { //PacketPlayOutMap
+				//TODO
+				return;
+			}
+			case 0x35: { //PacketPlayOutTileEntityData
+				serializer.writeByte(0x84);
+				serializer.writeVarInt(packetId);
+				BlockPosition blockPos = packetdata.c();
+				serializer.writeInt(blockPos.getX());
+				serializer.writeShort(blockPos.getY());
+				serializer.writeInt(blockPos.getZ());
+				Utils.writeTheRestOfTheData(packetdata, serializer);
+				return;
+			}
+			case 0x36: { //PacketPlayOutOpenSignEditor
+				serializer.writeByte(0x85);
+				serializer.writeByte(0);
+				BlockPosition blockPos = packetdata.c();
+				serializer.writeInt(blockPos.getX());
+				serializer.writeInt(blockPos.getY());
+				serializer.writeInt(blockPos.getZ());
+				return;
+			}
+			case 0x37: { //PacketPlayOutStatistic
+				//TODO, will probably have to split them to multiple packets in packetencoder
+				return;
+			}
+			case 0x38: { //PacketPlayOutPlayerInfo
+				int action = packetdata.readVarInt();
+				packetdata.readVarInt();
+				UUID uuid = packetdata.g();
+				switch (action) {
+					case 0: {
+						String playerName = packetdata.readString(16);
+						DataStorage.addTabName(channel.remoteAddress(), uuid, playerName);
+						int props = packetdata.readVarInt();
+						for (int p = 0; p < props; p++) {
+							packetdata.readString(32767);
+							packetdata.readString(32767);
+							if (packetdata.readBoolean()) {
+								packetdata.readString(32767);
+							}
+						}
+						serializer.writeByte(0xC9);
+						serializer.writeString(playerName);
+						serializer.writeBoolean(true);
+						serializer.writeShort(0);
+						return;
+					}
+					case 4: {
+						String playerName = DataStorage.getTabName(channel.remoteAddress(), uuid);
+						serializer.writeByte(0xC9);
+						serializer.writeString(playerName);
+						serializer.writeBoolean(false);
+						serializer.writeShort(0);
+						return;
+					}
+					default: { //do not send packet at all, we don't update ping anyway
+						return;
+					}
+				}
+			}
+			case 0x39: { //PacketPlayOutAbilities
+				serializer.writeByte(0xCA);
+				Utils.writeTheRestOfTheData(packetdata, serializer);
+				return;
+			}
+			case 0x3A: { //PacketPlayOutTabComplete
+				int count = packetdata.readVarInt();
+				if (count == 0) {
+					return;
+				}
+				serializer.writeByte(0xCB);
+				StringBuilder builder = new StringBuilder();
+				builder.append(packetdata.readString(32767));
+				for (int i = 0; i < count; i++) {
+					builder.append(new String("\u0000".getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_16BE));
+					builder.append(packetdata.readString(32767));
+				}
+				serializer.writeString(builder.toString());
+				return;
+			}
+			case 0x3B: { //PacketPlayOutScoreboardObjective
+				serializer.writeByte(0xCE);
+				serializer.writeString(packetdata.readString(16));
+				int mode = serializer.readByte();
+				if (mode == 2) {
+					mode = 0;
+				}
+				serializer.writeString(packetdata.readString(32));
+				serializer.writeByte(mode);
+				return;
+			}
+			case 0x3C: { //PacketPlayOutScoreboardScore
+				serializer.writeByte(0xCF);
+				serializer.writeString(packetdata.readString(16));
+				int mode = packetdata.readByte();
+				serializer.writeByte(mode);
+				if (mode != 1) {
+					serializer.writeString(packetdata.readString(16));
+					serializer.writeInt(packetdata.readVarInt());
+				}
+				return;
+			}
+			case 0x3D: { //PacketPlayOutScoreboardDisplayObjective
+				serializer.writeByte(0xD0);
+				Utils.writeTheRestOfTheData(packetdata, serializer);
+				return;
+			}
+			case 0x3E: { //PacketPlayOutScoreboardTeam
+				serializer.writeByte(0xD1);
+				serializer.writeString(packetdata.readString(16));
+				int mode = packetdata.readByte();
+				serializer.writeByte(mode);
+				if (mode == 0 || mode == 2) {
+					serializer.writeString(packetdata.readString(32));
+					serializer.writeString(packetdata.readString(16));
+					serializer.writeString(packetdata.readString(16));
+					serializer.writeByte(packetdata.readByte());
+					packetdata.readString(32);
+					packetdata.readByte();
+				}
+				if (mode == 0 || mode == 3 || mode == 4) {
+					int count = packetdata.readVarInt();
+					serializer.writeShort(count);
+					Utils.writeTheRestOfTheData(packetdata, serializer);
+				}
+				return;
+			}
+			case 0x3F: { //PacketPlayOutCustomPayload
+				serializer.writeByte(0xFA);
+				serializer.writeString(packetdata.readString(20));
+				ByteBuf data = packetdata.readBytes(packetdata.readableBytes());
+				serializer.writeShort(data.readableBytes());
+				serializer.writeBytes(data);
+				return;
+			}
+			case 0x40: { //PacketPlayOutKickDisconnect
+				serializer.writeByte(0xFF);
+				Utils.writeTheRestOfTheData(packetdata, serializer);
+				return;
+			}
+			default: {
 				return;
 			}
 		}

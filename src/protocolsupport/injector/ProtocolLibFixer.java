@@ -1,6 +1,7 @@
 package protocolsupport.injector;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
@@ -82,7 +83,7 @@ public class ProtocolLibFixer {
 				Method method = cachedMethods.get(clazz);
 				method.setAccessible(true);
 				return method.invoke(obj, args);
-			} catch (Throwable t) {
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException t) {
 				System.err.println("Failed to access pipeline decode and encode methods, shutting down");
 				t.printStackTrace();
 				Bukkit.shutdown();
