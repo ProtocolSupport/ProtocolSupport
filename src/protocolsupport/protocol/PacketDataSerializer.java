@@ -69,7 +69,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R1.PacketDat
 				this.writeShort(-1);
 			} else {
 				final byte[] abyte = write(nbttagcompound);
-				this.writeShort((short) abyte.length);
+				this.writeShort(abyte.length);
 				this.writeBytes(abyte);
 			}
 		} else if (nbttagcompound == null) {

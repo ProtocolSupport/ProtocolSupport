@@ -520,13 +520,13 @@ public class PlayPacketTransformer implements PacketTransformer {
 				return;
 			}
 			case 0x2F: { //PacketPlayOutSetSlot
-				/*serializer.writeByte(0x67);
-				Utils.writeTheRestOfTheData(packetdata, serializer);*/
+				serializer.writeByte(0x67);
+				Utils.writeTheRestOfTheData(packetdata, serializer);
 				return;
 			}
 			case 0x30: { //PacketPlayOutWindowItems
-				/*serializer.writeInt(0x68);
-				Utils.writeTheRestOfTheData(packetdata, serializer);*/
+				serializer.writeByte(0x68);
+				Utils.writeTheRestOfTheData(packetdata, serializer);
 				return;
 			}
 			case 0x31: { //PacketPlayOutWindowData
