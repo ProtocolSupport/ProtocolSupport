@@ -13,12 +13,14 @@ import org.bukkit.entity.Player;
 
 import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.v_1_6.remappers.BlockIDRemapper;
 import protocolsupport.utils.Utils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import net.minecraft.server.v1_8_R1.BlockPosition;
 import net.minecraft.server.v1_8_R1.ChatSerializer;
+import net.minecraft.server.v1_8_R1.EntityArmorStand;
 import net.minecraft.server.v1_8_R1.EnumParticle;
 import net.minecraft.server.v1_8_R1.Packet;
 
@@ -283,9 +285,10 @@ public class PlayPacketTransformer implements PacketTransformer {
 				return;
 			}
 			case 0x1C: { //PacketPlayOutEntityMetadata
-				/*serializer.writeByte(0x28);
-				serializer.writeByte(packetdata.readVarInt());
-				serializer.writeBytes(packetdata.readBytes(packetdata.readableBytes())); //TODO : filter metadata*/
+				serializer.writeByte(0x28);
+				int entityId = packetdata.readVarInt();
+				serializer.writeInt(entityId);
+				serializer.writeBytes(DataWatcherFilter.filterEntityData(serializer.getVersion(), Utils.getEntity(channel, entityId), packetdata.readBytes(packetdata.readableBytes()).array()));
 				return;
 			}
 			case 0x1D: { //PacketPlayOutEntityEffect
@@ -310,8 +313,12 @@ public class PlayPacketTransformer implements PacketTransformer {
 				return;
 			}
 			case 0x20: { //PacketPlayOutUpdateAttributes
+				int entityId = packetdata.readVarInt();
+				if (Utils.getEntity(channel, entityId) instanceof EntityArmorStand) { //if the entity is armor stand than we don't send this packet at all
+					return;
+				}
 				serializer.writeByte(0x2C);
-				serializer.writeInt(packetdata.readVarInt());
+				serializer.writeInt(entityId);
 				int ascount = packetdata.readInt();
 				serializer.writeInt(ascount);
 				for (int i = 0; i < ascount; i++) {
@@ -361,7 +368,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				for (int i = 0; i < count; i++) {
 					dataoutputstream.writeShort(packetdata.readUnsignedShort());
 					int id = packetdata.readVarInt();
-					dataoutputstream.writeShort(((id >> 4) << 4) | (id & 0xF));
+					dataoutputstream.writeShort((BlockIDRemapper.replaceBlockId(id >> 4) << 4) | (id & 0xF));
 				}
 				serializer.writeInt(dataoutputstream.size());
 				serializer.writeBytes(bytearrayoutputstream.toByteArray());
@@ -374,7 +381,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(blockPos.getY());
 				serializer.writeInt(blockPos.getZ());
 				int stateId = packetdata.readVarInt();
-				serializer.writeShort(stateId >> 4);
+				serializer.writeShort(BlockIDRemapper.replaceBlockId(stateId >> 4));
 				serializer.writeByte(stateId & 0xF);
 				return;
 			}

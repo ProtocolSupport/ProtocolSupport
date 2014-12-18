@@ -45,11 +45,14 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R1.PacketDat
 		if (itemstack == null || itemstack.getItem() == null) {
 			this.writeShort(-1);
 		} else {
-			if (getVersion() == ProtocolVersion.MINECRAFT_1_8) {
-				this.writeShort(Item.getId(itemstack.getItem()));
+			int itemId = Item.getId(itemstack.getItem());
+			if (getVersion() == ProtocolVersion.MINECRAFT_1_6_4 || getVersion() == ProtocolVersion.MINECRAFT_1_6_2) {
+				this.writeShort(protocolsupport.protocol.v_1_6.remappers.ItemIDRemapper.replaceItemId(itemId));
+			} else if (getVersion() == ProtocolVersion.MINECRAFT_1_7_10 || getVersion() == ProtocolVersion.MINECRAFT_1_7_5) {
+				this.writeShort(ItemIDRemapper.replaceItemId(itemId));
 			} else {
-				this.writeShort(ItemIDRemapper.replaceItemId(Item.getId(itemstack.getItem())));
-			}
+				this.writeShort(itemId);
+			} 
 			this.writeByte(itemstack.count);
 			this.writeShort(itemstack.getData());
 			NBTTagCompound nbttagcompound = null;

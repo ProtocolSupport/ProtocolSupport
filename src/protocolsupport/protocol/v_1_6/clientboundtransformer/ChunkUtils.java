@@ -1,6 +1,6 @@
 package protocolsupport.protocol.v_1_6.clientboundtransformer;
 
-import protocolsupport.protocol.v_1_7.remappers.BlockIDRemapper;
+import protocolsupport.protocol.v_1_6.remappers.BlockIDRemapper;
 
 public class ChunkUtils {
 
