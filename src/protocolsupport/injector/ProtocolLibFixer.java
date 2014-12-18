@@ -9,6 +9,8 @@ import net.minecraft.server.v1_8_R1.Packet;
 
 import org.bukkit.Bukkit;
 
+import protocolsupport.utils.Utils;
+
 import com.comphenix.protocol.reflect.accessors.MethodAccessor;
 
 import io.netty.buffer.ByteBuf;
@@ -26,17 +28,17 @@ public class ProtocolLibFixer {
 			ChannelHandler protocolLibDecoder = pipeline.get("protocol_lib_decoder");
 			if (protocolLibDecoder != null) {
 				if (!methodAccessorsInjected) {
-					Utilities.<Field>setAccessible(protocolLibDecoder.getClass().getDeclaredField("DECODE_BUFFER")).set(
+					Utils.<Field>setAccessible(protocolLibDecoder.getClass().getDeclaredField("DECODE_BUFFER")).set(
 						null, new PipelineEncodeDecodeMethodAccessor(true)
 					);
-					Utilities.<Field>setAccessible(protocolLibDecoder.getClass().getDeclaredField("ENCODE_BUFFER")).set(
+					Utils.<Field>setAccessible(protocolLibDecoder.getClass().getDeclaredField("ENCODE_BUFFER")).set(
 						null, new PipelineEncodeDecodeMethodAccessor(false)
 					);
 					methodAccessorsInjected = true;
 				}
-				Utilities.<Method>setAccessible(protocolLibDecoder.getClass().getDeclaredMethod("patchEncoder", MessageToByteEncoder.class)).invoke(protocolLibDecoder, encoder);
-				Utilities.<Field>setAccessible(protocolLibDecoder.getClass().getDeclaredField("vanillaDecoder")).set(protocolLibDecoder, decoder);
-				Utilities.<Field>setAccessible(protocolLibDecoder.getClass().getDeclaredField("vanillaEncoder")).set(protocolLibDecoder, encoder);
+				Utils.<Method>setAccessible(protocolLibDecoder.getClass().getDeclaredMethod("patchEncoder", MessageToByteEncoder.class)).invoke(protocolLibDecoder, encoder);
+				Utils.<Field>setAccessible(protocolLibDecoder.getClass().getDeclaredField("vanillaDecoder")).set(protocolLibDecoder, decoder);
+				Utils.<Field>setAccessible(protocolLibDecoder.getClass().getDeclaredField("vanillaEncoder")).set(protocolLibDecoder, encoder);
 			}
 		} catch (Throwable t) {
 			System.err.println("Failed to fix protocollib decoder, shutting down");

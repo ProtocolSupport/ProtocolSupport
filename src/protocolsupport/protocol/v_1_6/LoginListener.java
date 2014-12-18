@@ -9,7 +9,7 @@ import com.mojang.authlib.GameProfile;
 
 import net.minecraft.server.v1_8_R1.NetworkManager;
 import net.minecraft.server.v1_8_R1.MinecraftServer;
-import protocolsupport.injector.Utilities;
+import protocolsupport.utils.Utils;
 
 public class LoginListener extends net.minecraft.server.v1_8_R1.LoginListener {
 
@@ -20,12 +20,12 @@ public class LoginListener extends net.minecraft.server.v1_8_R1.LoginListener {
 	@Override
 	public void b() {
 		try {
-			GameProfile profile = (GameProfile) Utilities.<Field> setAccessible(net.minecraft.server.v1_8_R1.LoginListener.class.getDeclaredField("i")).get(this);
+			GameProfile profile = (GameProfile) Utils.<Field> setAccessible(net.minecraft.server.v1_8_R1.LoginListener.class.getDeclaredField("i")).get(this);
 			final EntityPlayer s = MinecraftServer.getServer().getPlayerList().attemptLogin(this, profile, this.hostname);
 			if (s != null) {
 				Class<?> clazz = Class.forName("net.minecraft.server.v1_8_R1.EnumProtocolState");
-				Object obj = Utilities.<Field> setAccessible(clazz.getDeclaredField("ACCEPTED")).get(null);
-				Utilities.<Field>setAccessible(net.minecraft.server.v1_8_R1.LoginListener.class.getDeclaredField("g")).set(this, obj);
+				Object obj = Utils.<Field> setAccessible(clazz.getDeclaredField("ACCEPTED")).get(null);
+				Utils.<Field>setAccessible(net.minecraft.server.v1_8_R1.LoginListener.class.getDeclaredField("g")).set(this, obj);
 				this.networkManager.handle(new PacketLoginOutSuccess(profile));
 				MinecraftServer.getServer().getPlayerList().a(this.networkManager, MinecraftServer.getServer().getPlayerList().processLogin(profile, s));
 			}

@@ -13,8 +13,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import protocolsupport.ProtocolSupport;
-import protocolsupport.injector.Utilities;
 import protocolsupport.protocol.DataStorage;
+import protocolsupport.utils.Utils;
 
 public class PlayerListener implements Listener {
 
@@ -27,7 +27,7 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onJoin(PlayerJoinEvent event) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		NetworkManager nm = ((CraftPlayer) event.getPlayer()).getHandle().playerConnection.networkManager;
-		DataStorage.setPlayer(Utilities.getChannel(nm).remoteAddress(), event.getPlayer());
+		DataStorage.setPlayer(Utils.getChannel(nm).remoteAddress(), event.getPlayer());
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)

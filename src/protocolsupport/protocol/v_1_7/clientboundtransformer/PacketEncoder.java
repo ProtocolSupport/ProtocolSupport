@@ -19,9 +19,9 @@ import net.minecraft.server.v1_8_R1.NetworkManager;
 import net.minecraft.server.v1_8_R1.Packet;
 import net.minecraft.server.v1_8_R1.PacketPlayOutPlayerInfo;
 import net.minecraft.server.v1_8_R1.PlayerInfoData;
-import protocolsupport.injector.Utilities;
 import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.utils.Utils;
 
 public class PacketEncoder extends MessageToByteEncoder<Packet> {
 
@@ -51,12 +51,12 @@ public class PacketEncoder extends MessageToByteEncoder<Packet> {
 	@SuppressWarnings("unchecked")
 	private List<Packet> splitPlayerInfoPacket(PacketPlayOutPlayerInfo packet) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		List<Packet> packets = new ArrayList<Packet>();
-		EnumPlayerInfoAction action = (EnumPlayerInfoAction) Utilities.<Field>setAccessible(PacketPlayOutPlayerInfo.class.getDeclaredField("a")).get(packet);
-		List<PlayerInfoData> datas = (List<PlayerInfoData>) Utilities.<Field>setAccessible(PacketPlayOutPlayerInfo.class.getDeclaredField("b")).get(packet);
+		EnumPlayerInfoAction action = (EnumPlayerInfoAction) Utils.<Field>setAccessible(PacketPlayOutPlayerInfo.class.getDeclaredField("a")).get(packet);
+		List<PlayerInfoData> datas = (List<PlayerInfoData>) Utils.<Field>setAccessible(PacketPlayOutPlayerInfo.class.getDeclaredField("b")).get(packet);
 		for (int i = 0; i < datas.size(); i++) {
 			PacketPlayOutPlayerInfo newpacket = new PacketPlayOutPlayerInfo();
-			Utilities.<Field>setAccessible(PacketPlayOutPlayerInfo.class.getDeclaredField("a")).set(newpacket, action);
-			((List<PlayerInfoData>) Utilities.<Field>setAccessible(PacketPlayOutPlayerInfo.class.getDeclaredField("b")).get(newpacket)).add(datas.get(i));
+			Utils.<Field>setAccessible(PacketPlayOutPlayerInfo.class.getDeclaredField("a")).set(newpacket, action);
+			((List<PlayerInfoData>) Utils.<Field>setAccessible(PacketPlayOutPlayerInfo.class.getDeclaredField("b")).get(newpacket)).add(datas.get(i));
 			packets.add(newpacket);
 		}
 		return packets;

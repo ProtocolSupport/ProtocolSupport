@@ -4,12 +4,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.UUID;
 import java.util.zip.Deflater;
 
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R1.util.CraftChatMessage;
 import org.bukkit.entity.Player;
 
@@ -20,6 +18,7 @@ import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.DataStorage.ProtocolVersion;
 import protocolsupport.protocol.v_1_7.remappers.BlockIDRemapper;
 import protocolsupport.protocol.v_1_7.remappers.EntityIDRemapper;
+import protocolsupport.utils.Utils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
@@ -158,7 +157,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeVarInt(packetId);
 				int entityId = packetdata.readVarInt();
 				serializer.writeInt(entityId);
-				serializer.writeBytes(DataWatcherFilter.filterEntityData(serializer.getVersion(), getEntity(channel, entityId), packetdata.readBytes(packetdata.readableBytes()).array()));
+				serializer.writeBytes(DataWatcherFilter.filterEntityData(serializer.getVersion(), Utils.getEntity(channel, entityId), packetdata.readBytes(packetdata.readableBytes()).array()));
 				return;
 			}
 			case 0x18: { // PacketPlayOutEntityTeleport
@@ -168,7 +167,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeInt(entityId);
 				serializer.writeInt(packetdata.readInt());
 				int y = packetdata.readInt();
-				Entity entity = getEntity(channel, entityId);
+				Entity entity = Utils.getEntity(channel, entityId);
 				if (entity instanceof EntityFallingBlock || entity instanceof EntityTNTPrimed) {
 					y += 16;
 				}
@@ -348,7 +347,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				packet.b(packetdata);
 				serializer.writeVarInt(packetId);
 				serializer.writeByte(packetdata.readUnsignedByte());
-				byte id = inventoryNameToId.get(packetdata.readString(32));
+				byte id = Utils.getInventoryId(packetdata.readString(32));
 				serializer.writeByte(id);
 				serializer.writeString(packetdata.d().getText());
 				serializer.writeByte(packetdata.readUnsignedByte());
@@ -619,7 +618,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x20: { // PacketPlayOutUpdateAttributes
 				packet.b(packetdata);
 				int entityId = packetdata.readVarInt();
-				if (getEntity(channel, entityId) instanceof EntityArmorStand) { //if the entity is armor stand than we don't send this packet at all
+				if (Utils.getEntity(channel, entityId) instanceof EntityArmorStand) { //if the entity is armor stand than we don't send this packet at all
 					return;
 				}
 				serializer.writeVarInt(packetId);
@@ -648,7 +647,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeShort(blockPos.getY());
 				serializer.writeInt(blockPos.getZ());
 				for (int i = 0; i < 4; i++) {
-					serializer.writeString(clampString(CraftChatMessage.fromComponent(packetdata.d()), 15));
+					serializer.writeString(Utils.clampString(CraftChatMessage.fromComponent(packetdata.d()), 15));
 				}
 				return;
 			}
@@ -704,7 +703,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeShort(packetdata.readShort());
 				serializer.writeShort(packetdata.readShort());
 				serializer.writeShort(packetdata.readShort());
-				serializer.writeBytes(DataWatcherFilter.filterEntityData(serializer.getVersion(), getEntity(channel, entityId), packetdata.readBytes(packetdata.readableBytes()).array()));
+				serializer.writeBytes(DataWatcherFilter.filterEntityData(serializer.getVersion(), Utils.getEntity(channel, entityId), packetdata.readBytes(packetdata.readableBytes()).array()));
 				return;
 			}
 			default: { //Any other packet
@@ -714,31 +713,5 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 		}
 	}
-
-	private String clampString(String string, int limit) {
-		return string.substring(0, string.length() > limit ? limit : string.length());
-	}
-
-	private Entity getEntity(Channel channel, int entityId) {
-		return ((CraftPlayer) DataStorage.getPlayer(channel.remoteAddress())).getHandle().getWorld().a(entityId);
-	}
-
-	@SuppressWarnings("serial")
-	private static final HashMap<String, Byte> inventoryNameToId = new HashMap<String, Byte>() {
-		{
-			put("minecraft:chest", (byte) 0);
-			put("minecraft:crafting_table", (byte) 1);
-			put("minecraft:furnace", (byte) 2);
-			put("minecraft:dispenser", (byte) 3);
-			put("minecraft:enchanting_table", (byte) 4);
-			put("minecraft:brewing_stand", (byte) 5);
-			put("minecraft:villager", (byte) 6);
-			put("minecraft:beacon", (byte) 7);
-			put("minecraft:anvil", (byte) 8);
-			put("minecraft:hopper", (byte) 9);
-			put("minecraft:dropper", (byte) 10);
-			put("EntityHorse", (byte) 11);
-		}
-	};
 
 }

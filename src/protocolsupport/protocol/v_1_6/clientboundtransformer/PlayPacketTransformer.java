@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 
 import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.utils.Utils;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import net.minecraft.server.v1_8_R1.BlockPosition;
@@ -54,13 +55,13 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x03: { //PacketPlayOutUpdateTime
 				serializer.writeByte(0x04);
-				writeTheRestOfTheData(packetdata, serializer);
+				Utils.writeTheRestOfTheData(packetdata, serializer);
 				return;
 			}
 			case 0x04: { //PacketPlayOutEntityEquipment
 				serializer.writeByte(0x05);
 				serializer.writeInt(packetdata.readVarInt());
-				writeTheRestOfTheData(packetdata, serializer);
+				Utils.writeTheRestOfTheData(packetdata, serializer);
 				return;
 			}
 			case 0x05: { //PacketPlayOutSpawnPosition
@@ -84,7 +85,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(packetdata.readByte());
 				serializer.writeByte(packetdata.readByte());
 				serializer.writeShort(256);
-				writeTheRestOfTheData(packetdata, serializer);
+				Utils.writeTheRestOfTheData(packetdata, serializer);
 				return;
 			}
 			case 0x08: { // PacketPlayOutPosition
@@ -154,7 +155,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(packetdata.readByte());
 				serializer.writeByte(packetdata.readByte());
 				serializer.writeShort(packetdata.readShort());
-				writeTheRestOfTheData(packetdata, serializer);
+				Utils.writeTheRestOfTheData(packetdata, serializer);
 				return;
 			}
 			case 0x0D: { //PacketPlayOutCollect
@@ -204,13 +205,13 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x11: { //PacketPlayOutSpawnEntityExperienceOrb
 				serializer.writeByte(0x1A);
 				serializer.writeInt(packetdata.readVarInt());
-				writeTheRestOfTheData(packetdata, serializer);
+				Utils.writeTheRestOfTheData(packetdata, serializer);
 				return;
 			}
 			case 0x12: { //PacketPlayOutEntityVelocity
 				serializer.writeByte(0x1C);
 				serializer.writeInt(packetdata.readVarInt());
-				writeTheRestOfTheData(packetdata, serializer);
+				Utils.writeTheRestOfTheData(packetdata, serializer);
 				return;
 			}
 			case 0x13: { //PacketPlayOutEntityDestroy
@@ -270,12 +271,12 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x1A: { //PacketPlayOutEntityStatus
 				serializer.writeByte(0x26);
-				writeTheRestOfTheData(packetdata, serializer);
+				Utils.writeTheRestOfTheData(packetdata, serializer);
 				return;
 			}
 			case 0x1B: { //PacketPlayOutAttachEntity
 				serializer.writeByte(0x27);
-				writeTheRestOfTheData(packetdata, serializer);
+				Utils.writeTheRestOfTheData(packetdata, serializer);
 			}
 			case 0x1C: { //PacketPlayOutEntityMetadata
 				/*serializer.writeByte(0x28);
@@ -448,7 +449,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeDouble(packetdata.readFloat());
 				serializer.writeDouble(packetdata.readFloat());
 				serializer.writeDouble(packetdata.readFloat());
-				writeTheRestOfTheData(packetdata, serializer);
+				Utils.writeTheRestOfTheData(packetdata, serializer);
 				return;
 			}
 			case 0x28: { //PacketPlayOutWorldEvent
@@ -458,12 +459,12 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeInt(blockPos.getX());
 				serializer.writeByte(blockPos.getY());
 				serializer.writeInt(blockPos.getZ());
-				writeTheRestOfTheData(packetdata, serializer);
+				Utils.writeTheRestOfTheData(packetdata, serializer);
 				return;
 			}
 			case 0x29: { //PacketPlayOutNamedSoundEffect
 				serializer.writeByte(0x3E);
-				writeTheRestOfTheData(packetdata, serializer);
+				Utils.writeTheRestOfTheData(packetdata, serializer);
 				return;
 			}
 			case 0x2A: { //PacketPlayOutWorldParticles
@@ -491,16 +492,23 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x2C: { //PacketPlayOutSpawnEntityWeather
 				serializer.writeByte(0x47);
 				serializer.writeInt(packetdata.readVarInt());
-				writeTheRestOfTheData(packetdata, serializer);
+				Utils.writeTheRestOfTheData(packetdata, serializer);
+				return;
+			}
+			case 0x2D: { //PacketPlayOutOpenWindow
+				serializer.writeByte(0x64);
+				serializer.writeByte(packetdata.readUnsignedByte());
+				byte id = Utils.getInventoryId(packetdata.readString(32));
+				serializer.writeByte(id);
+				serializer.writeString(packetdata.d().getText());
+				serializer.writeByte(packetdata.readUnsignedByte());
+				serializer.writeBoolean(true);
+				if (id == 11) {
+					serializer.writeInt(packetdata.readInt());
+				}
 				return;
 			}
 		}
 	}
-
-
-	private void writeTheRestOfTheData(PacketDataSerializer input, PacketDataSerializer output) {
-		output.writeBytes(input.readBytes(input.readableBytes()));
-	}
-	
 
 }
