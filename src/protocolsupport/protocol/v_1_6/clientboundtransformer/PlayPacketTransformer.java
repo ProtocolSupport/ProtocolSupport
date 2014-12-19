@@ -74,7 +74,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(0x06);
 				BlockPosition blockPos = packetdata.c();
 				serializer.writeInt(blockPos.getX());
-				serializer.writeInt(blockPos.getY());
+				serializer.writeInt(blockPos.getY() + 1);
 				serializer.writeInt(blockPos.getZ());
 				return;
 			}
@@ -98,7 +98,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(0x0D);
 				Player player = DataStorage.getPlayer(channel.remoteAddress());
 				double x = packetdata.readDouble();
-				double y = packetdata.readDouble() /*+ 1.63*/;
+				double y = packetdata.readDouble() + 1.63;
 				double z = packetdata.readDouble();
 				float yaw = packetdata.readFloat();
 				float pitch = packetdata.readFloat();

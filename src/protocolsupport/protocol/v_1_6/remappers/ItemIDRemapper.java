@@ -17,6 +17,10 @@ public class ItemIDRemapper {
 		replacements[168] = 48;
 		// sea lantern -> glowstone
 		replacements[169] = 89;
+		// packed ice -> ice
+		replacements[174] = 79;
+		// tall plant -> yellow flower
+		replacements[175] = 38;
 		// red sandstone -> sandstone
 		replacements[179] = 24;
 		// red sandstone stairs -> sandstone stairs

@@ -17,6 +17,10 @@ public class BlockIDRemapper {
 		replacements[168] = 48;
 		// sea lantern -> glowstone
 		replacements[169] = 89;
+		// packed ice -> ice
+		replacements[174] = 79;
+		// tall plant -> yellow flower
+		replacements[175] = 38;
 		// standing banner -> standing sign
 		replacements[176] = 63;
 		// wall banner -> wall sign
