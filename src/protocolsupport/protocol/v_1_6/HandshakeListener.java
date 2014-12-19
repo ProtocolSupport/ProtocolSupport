@@ -31,6 +31,7 @@ import java.util.HashMap;
 
 import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
 
+import protocolsupport.protocol.v_1_6.serverboundtransformer.PacketDecoder;
 import net.minecraft.server.v1_8_R1.PacketHandshakingInListener;
 
 public class HandshakeListener implements PacketHandshakingInListener {
@@ -42,9 +43,12 @@ public class HandshakeListener implements PacketHandshakingInListener {
 	private final MinecraftServer a;
 	private final NetworkManager b;
 
-	public HandshakeListener(final MinecraftServer minecraftserver, final NetworkManager networkmanager) {
+	private final PacketDecoder decoder;
+
+	public HandshakeListener(final MinecraftServer minecraftserver, PacketDecoder decoder, final NetworkManager networkmanager) {
 		this.a = minecraftserver;
 		this.b = networkmanager;
+		this.decoder = decoder;
 	}
 
 	@Override
@@ -92,7 +96,7 @@ public class HandshakeListener implements PacketHandshakingInListener {
 					this.b.close(chatcomponenttext);
 					break;
 				}
-				this.b.a(new LoginListener(this.a, this.b));
+				this.b.a(new LoginListener(this.a, decoder, this.b));
 				if (SpigotConfig.bungee) {
 					final String[] split = packethandshakinginsetprotocol.b.split("\u0000");
 					if (split.length != 3 && split.length != 4) {

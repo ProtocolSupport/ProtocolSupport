@@ -3,6 +3,8 @@ package protocolsupport.protocol.v_1_6.serverboundtransformer;
 import java.io.IOException;
 import java.util.List;
 
+import javax.crypto.Cipher;
+
 import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
 import io.netty.buffer.ByteBuf;
@@ -26,6 +28,12 @@ public class PacketDecoder extends ByteToMessageDecoder {
 		new LoginPacketTransformer()
 	};
 
+	private PacketDecrypter decrypter;
+
+	public void attachDecryptor(Cipher cipher) {
+		decrypter = new PacketDecrypter(cipher);
+	}
+
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf bytebuf, List<Object> packets) throws Exception {
 		if (bytebuf.readableBytes() == 0) {
@@ -34,6 +42,9 @@ public class PacketDecoder extends ByteToMessageDecoder {
 		Channel channel = ctx.channel();
 		bytebuf.markReaderIndex();
 		try {
+			if (decrypter != null) {
+				bytebuf = decrypter.decrypt(ctx, bytebuf);
+			}
 			EnumProtocol currentProtocol = channel.attr(currentStateAttrKey).get();
 			int packetId = bytebuf.readUnsignedByte();
 			Packet[] transformedPackets = transformers[currentProtocol.ordinal()].tranform(

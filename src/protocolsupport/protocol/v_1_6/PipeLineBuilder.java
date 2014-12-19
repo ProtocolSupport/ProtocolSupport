@@ -18,10 +18,10 @@ public class PipeLineBuilder {
 	public static void buildPipeLine(ChannelHandlerContext ctx) {
 		ChannelPipeline pipeline = ctx.channel().pipeline();
 		NetworkManager networkmanager = pipeline.get(NetworkManager.class);
-		networkmanager.a(new HandshakeListener(MinecraftServer.getServer(), networkmanager));
+		PacketDecoder decoder = new PacketDecoder();
+		networkmanager.a(new HandshakeListener(MinecraftServer.getServer(), decoder, networkmanager));
 		pipeline.remove(FakeSplitter.class);
 		pipeline.remove(FakePrepender.class);
-		ChannelHandler decoder = new PacketDecoder();
 		ChannelHandler encoder = new PacketEncoder();
 		pipeline.replace(FakeDecoder.class, "decoder", decoder);
 		pipeline.replace(FakeEncoder.class, "encoder", encoder);

@@ -6,9 +6,12 @@ import java.security.PrivateKey;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.crypto.SecretKey;
+
 import org.apache.commons.lang3.Validate;
 
 import net.minecraft.server.v1_8_R1.EntityPlayer;
+import net.minecraft.server.v1_8_R1.MinecraftEncryption;
 import net.minecraft.server.v1_8_R1.PacketLoginInEncryptionBegin;
 import net.minecraft.server.v1_8_R1.PacketLoginOutSuccess;
 
@@ -16,14 +19,17 @@ import com.mojang.authlib.GameProfile;
 
 import net.minecraft.server.v1_8_R1.NetworkManager;
 import net.minecraft.server.v1_8_R1.MinecraftServer;
+import protocolsupport.protocol.v_1_6.serverboundtransformer.PacketDecoder;
 import protocolsupport.utils.Utils;
 
 public class LoginListener extends net.minecraft.server.v1_8_R1.LoginListener {
 
 	private AtomicInteger counter = new AtomicInteger(0);
+	private PacketDecoder decoder;
 
-	public LoginListener(final MinecraftServer minecraftserver, final NetworkManager networkmanager) {
+	public LoginListener(MinecraftServer minecraftserver, PacketDecoder decoder, NetworkManager networkmanager) {
 		super(minecraftserver, networkmanager);
+		this.decoder = decoder;
 	}
 
 	@Override
@@ -50,8 +56,10 @@ public class LoginListener extends net.minecraft.server.v1_8_R1.LoginListener {
 			if (!Arrays.equals((byte[]) Utils.<Field>setAccessible(net.minecraft.server.v1_8_R1.LoginListener.class.getDeclaredField("e")).get(this), packet.b(privatekey))) {
 				throw new IllegalStateException("Invalid nonce!");
 			}
-			Utils.<Field>setAccessible(net.minecraft.server.v1_8_R1.LoginListener.class.getDeclaredField("loginKey")).set(this, packet.a(privatekey));
+			SecretKey secretKey = packet.a(privatekey);
+			Utils.<Field>setAccessible(net.minecraft.server.v1_8_R1.LoginListener.class.getDeclaredField("loginKey")).set(this, secretKey);
 			setCurrentState("AUTHENTICATING");
+			decoder.attachDecryptor(MinecraftEncryption.a(2, secretKey));
 			((Thread) Utils.<Constructor<?>>setAccessible(
 				Class.forName("net.minecraft.server.v1_8_R1.ThreadPlayerLookupUUID").getDeclaredConstructor(
 						net.minecraft.server.v1_8_R1.LoginListener.class, String.class
