@@ -1,6 +1,6 @@
 package protocolsupport.protocol.v_1_6.serverboundtransformer;
 
-import java.util.Arrays;
+import java.io.IOException;
 import java.util.List;
 
 import protocolsupport.protocol.DataStorage;
@@ -42,8 +42,12 @@ public class PacketDecoder extends ByteToMessageDecoder {
 				new PacketDataSerializer(bytebuf, DataStorage.getVersion(channel.remoteAddress()))
 			);
 			if (transformedPackets != null) {
-				packets.addAll(Arrays.asList(transformedPackets));
+				for (Packet transformedPacket : transformedPackets) {
+					packets.add(transformedPacket);
+				}
 				return;
+			} else {
+				throw new IOException("Can't deserialize unknown packet "+packetId);
 			}
 		} catch (IndexOutOfBoundsException ex) {
 		}

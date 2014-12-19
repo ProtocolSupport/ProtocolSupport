@@ -3,7 +3,6 @@ package protocolsupport.protocol.v_1_6.clientboundtransformer;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.zip.Deflater;
 
@@ -534,12 +533,18 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x28: { //PacketPlayOutWorldEvent
 				serializer.writeByte(0x3D);
-				serializer.writeInt(packetdata.readInt());
+				int type = packetdata.readInt();
+				serializer.writeInt(type);
 				BlockPosition blockPos = packetdata.c();
 				serializer.writeInt(blockPos.getX());
 				serializer.writeByte(blockPos.getY());
 				serializer.writeInt(blockPos.getZ());
-				Utils.writeTheRestOfTheData(packetdata, serializer);
+				int data = packetdata.readInt();
+				if (type == 2001) {
+					data = BlockIDRemapper.replaceBlockId(data & 0xFFF);
+				}
+				serializer.writeInt(data);
+				serializer.writeBoolean(packetdata.readBoolean());
 				return;
 			}
 			case 0x29: { //PacketPlayOutNamedSoundEffect
@@ -698,8 +703,8 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(0xCB);
 				StringBuilder builder = new StringBuilder();
 				builder.append(packetdata.readString(32767));
-				for (int i = 0; i < count; i++) {
-					builder.append(new String("\u0000".getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_16BE));
+				while (--count > 0) {
+					builder.append("\u0000");
 					builder.append(packetdata.readString(32767));
 				}
 				serializer.writeString(builder.toString());
@@ -763,9 +768,6 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x40: { //PacketPlayOutKickDisconnect
 				serializer.writeByte(0xFF);
 				Utils.writeTheRestOfTheData(packetdata, serializer);
-				return;
-			}
-			default: {
 				return;
 			}
 		}
