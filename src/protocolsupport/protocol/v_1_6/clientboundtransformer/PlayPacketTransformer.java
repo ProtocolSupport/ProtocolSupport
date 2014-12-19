@@ -22,6 +22,7 @@ import net.minecraft.server.v1_8_R1.BlockPosition;
 import net.minecraft.server.v1_8_R1.ChatSerializer;
 import net.minecraft.server.v1_8_R1.EntityArmorStand;
 import net.minecraft.server.v1_8_R1.EnumParticle;
+import net.minecraft.server.v1_8_R1.IChatBaseComponent;
 import net.minecraft.server.v1_8_R1.Packet;
 
 public class PlayPacketTransformer implements PacketTransformer {
@@ -53,7 +54,8 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x02: { //PacketPlayOutChat
 				serializer.writeByte(0x03);
-				serializer.writeString(ChatSerializer.a(packetdata.d()));
+				IChatBaseComponent component = packetdata.d();
+				serializer.writeString(ChatSerializer.a(component));
 				return;
 			}
 			case 0x03: { //PacketPlayOutUpdateTime

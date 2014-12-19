@@ -153,10 +153,11 @@ public class PlayPacketTransformer implements PacketTransformer {
 				packet = getPacketById(0x15);
 				packetdata.writeString(serializer.readString(32767));
 				packetdata.writeByte(serializer.readByte());
-				packetdata.writeByte(serializer.readByte());
+				int chatState = serializer.readByte();
+				packetdata.writeByte(chatState & 7);
+				packetdata.writeBoolean((chatState & 8) == 8);
 				serializer.readByte();
 				serializer.readBoolean();
-				packetdata.writeBoolean(true);
 				packetdata.writeByte(0);
 				break;
 			}
