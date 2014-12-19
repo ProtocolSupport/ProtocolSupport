@@ -13,7 +13,7 @@ public class LoginPacketTransformer implements PacketTransformer {
 	public boolean tranform(Channel channel, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException {
 		PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
 		switch (packetId) {
-			case 0x01: { //packetLoginInEncryptionBegin
+			case 0x01: { //PacketLoginInEncryptionBegin
 				int length1 = serializer.readUnsignedShort();
 				packetdata.writeVarInt(length1);
 				packetdata.writeBytes(serializer.readBytes(length1));
@@ -29,5 +29,6 @@ public class LoginPacketTransformer implements PacketTransformer {
 		}
 		return false;
 	}
+
 
 }
