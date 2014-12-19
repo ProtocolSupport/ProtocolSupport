@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.v_1_6.remappers.BlockIDRemapper;
+import protocolsupport.protocol.v_1_6.remappers.EntityIDRemapper;
 import protocolsupport.utils.Utils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -169,7 +170,60 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeInt(packetdata.readVarInt());
 				return;
 			}
-			case 0x0E: { //TODO
+			case 0x0E: { //PacketPlayOutSpawnEntity
+				serializer.writeByte(0x17);
+				serializer.writeInt(packetdata.readVarInt());
+				int type = packetdata.readUnsignedByte();
+				serializer.writeByte(EntityIDRemapper.replaceObjectEntityId(type));
+				int x = packetdata.readInt();
+				int y = packetdata.readInt();
+				int z = packetdata.readInt();
+				int pitch = packetdata.readUnsignedByte();
+				int yaw = packetdata.readUnsignedByte();
+				int objectdata = packetdata.readInt();
+		        if (type == 71) {
+		            switch (objectdata) {
+		                case 0: {
+		                    z -= 32;
+		                    yaw = 128;
+		                    break;
+		                }
+		                case 1: {
+		                    x += 32;
+		                    yaw = 64;
+		                    break;
+		                }
+		                case 2: {
+		                    z += 32;
+		                    yaw = 0;
+		                    break;
+		                }
+		                case 3: {
+		                    x -= 32;
+		                    yaw = 192;
+		                    break;
+		                }
+		            }
+		        }
+		        if (type == 70) {
+		            final int id = objectdata & 0xFFFF;
+		            final int data = objectdata >> 12;
+		            objectdata = (id | data << 16);
+		        }
+		        if (type == 50 || type == 70 || type == 74) {
+		            y += 16;
+		        }
+		        serializer.writeInt(x);
+		        serializer.writeInt(y);
+		        serializer.writeInt(z);
+		        serializer.writeByte(pitch);
+		        serializer.writeByte(yaw);
+		        serializer.writeInt(objectdata);
+		        if (objectdata > 0) {
+		        	serializer.writeShort(packetdata.readShort());
+		        	serializer.writeShort(packetdata.readShort());
+		        	serializer.writeShort(packetdata.readShort());
+		        }
 				return;
 			}
 			case 0x0F: { //TODO
