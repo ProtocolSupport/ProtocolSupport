@@ -13,8 +13,6 @@ public class EntityIDRemapper {
 		replacementsLiving[68] = 94;
 		// rabbit -> chicken
 		replacementsLiving[101] = 93;
-		// armor stand -> ender crystal
-		replacementsLiving[78] = 51; 
 	}
 
 	public static int replaceLivingEntityId(int oldId) {

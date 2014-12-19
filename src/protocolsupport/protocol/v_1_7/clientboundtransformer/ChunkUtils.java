@@ -22,7 +22,7 @@ public class ChunkUtils {
 		byte[] newdata = new byte[count * (4096 + 2048) + (data18.length - count * 8192)];
 		int tIndex = 0;
 		int mIndex = count * 4096;
-		for (int i = 0; i < 8192 * count; i+=2) {
+		for (int i = 0; i < 8192 * count; i += 2) {
 			int state = ((data18[i + 1] & 0xFF) << 8) | (data18[i] & 0xFF);
 			newdata[tIndex] = (byte) BlockIDRemapper.replaceBlockId(state >> 4);
 			byte data = (byte) (state & 0xF);

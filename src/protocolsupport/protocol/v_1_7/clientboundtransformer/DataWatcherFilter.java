@@ -51,18 +51,18 @@ public class DataWatcherFilter {
 				int rotation = (byte) objects.get(9).value;
 				objects.put(3, new DataWatcherObject(0, ((byte) (rotation >> 1))));
 			}
-		} else if (entity instanceof EntityArmorStand) { //replace with entity ender crystal data
+		} else if (entity instanceof EntityArmorStand) { // replace with entity ender crystal data
 			objects.clear();
 			objects.put(8, new DataWatcherObject(2, 5));
 		}
-		//remove type 7 watched objects
+		// remove type 7 watched objects
 		Iterator<DataWatcherObject> iterator = objects.valueCollection().iterator();
 		while (iterator.hasNext()) {
 			if (iterator.next().type == 7) {
 				iterator.remove();
 			}
 		}
-		//add object in case objects list is empty
+		// add object in case objects list is empty
 		if (objects.isEmpty()) {
 			objects.put(0, new DataWatcherObject(0, (byte) 0));
 		}
@@ -77,25 +77,25 @@ public class DataWatcherFilter {
 			if (b0 == 127) {
 				break;
 			}
-            final int type = (b0 & 0xE0) >> 5;
-            final int key = b0 & 0x1F;
-            switch (type) {
-            	case 0: {
-            		map.put(key, new DataWatcherObject(type, serializer.readByte()));
-            		break;
-            	}
-            	case 1: {
-            		map.put(key, new DataWatcherObject(type, serializer.readShort()));
-            		break;
-            	}
-            	case 2: {
-            		map.put(key, new DataWatcherObject(type, serializer.readInt()));
-            		break;
-            	}
-            	case 3: {
-            		map.put(key, new DataWatcherObject(type, serializer.readFloat()));
-            		break;
-            	}
+			final int type = (b0 & 0xE0) >> 5;
+			final int key = b0 & 0x1F;
+			switch (type) {
+				case 0: {
+					map.put(key, new DataWatcherObject(type, serializer.readByte()));
+					break;
+				}
+				case 1: {
+					map.put(key, new DataWatcherObject(type, serializer.readShort()));
+					break;
+				}
+				case 2: {
+					map.put(key, new DataWatcherObject(type, serializer.readInt()));
+					break;
+				}
+				case 3: {
+					map.put(key, new DataWatcherObject(type, serializer.readFloat()));
+					break;
+				}
 				case 4: {
 					map.put(key, new DataWatcherObject(type, serializer.readString(32767)));
 					break;
@@ -118,7 +118,7 @@ public class DataWatcherFilter {
 					map.put(key, new DataWatcherObject(type, new Vector3f(x, y, z)));
 					break;
 				}
-            }
+			}
 		} while (true);
 		return map;
 	}
@@ -129,25 +129,25 @@ public class DataWatcherFilter {
 		while (iterator.hasNext()) {
 			iterator.advance();
 			DataWatcherObject object = iterator.value();
-	        final int tk = (object.type << 5 | (iterator.key() & 0x1F)) & 0xFF;
-	        serializer.writeByte(tk);
-	        switch (object.type) {
-            	case 0: {
-            		serializer.writeByte((byte) object.value);
-            		break;
-            	}
-            	case 1: {
-            		serializer.writeShort((short) object.value);
-            		break;
-            	}
-            	case 2: {
-            		serializer.writeInt((int) object.value);
-            		break;
-            	}
-            	case 3: {
-            		serializer.writeFloat((float) object.value);
-            		break;
-            	}
+			final int tk = (object.type << 5 | (iterator.key() & 0x1F)) & 0xFF;
+			serializer.writeByte(tk);
+			switch (object.type) {
+				case 0: {
+					serializer.writeByte((byte) object.value);
+					break;
+				}
+				case 1: {
+					serializer.writeShort((short) object.value);
+					break;
+				}
+				case 2: {
+					serializer.writeInt((int) object.value);
+					break;
+				}
+				case 3: {
+					serializer.writeFloat((float) object.value);
+					break;
+				}
 				case 4: {
 					serializer.writeString((String) object.value);
 					break;
@@ -170,9 +170,9 @@ public class DataWatcherFilter {
 					serializer.writeFloat(vector.getZ());
 					break;
 				}
-	        }
+			}
 		}
-        serializer.writeByte(127);
+		serializer.writeByte(127);
 		return serializer.readBytes(serializer.readableBytes()).array();
 	}
 
@@ -180,6 +180,7 @@ public class DataWatcherFilter {
 
 		private int type;
 		private Object value;
+
 		public DataWatcherObject(int type, Object value) {
 			this.type = type;
 			this.value = value;
