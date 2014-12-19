@@ -226,7 +226,22 @@ public class PlayPacketTransformer implements PacketTransformer {
 		        }
 				return;
 			}
-			case 0x0F: { //TODO
+			case 0x0F: { //PacketPlayOutSpawnEntityLiving
+				serializer.writeByte(0x18);
+				int entityId = packetdata.readVarInt();
+				serializer.writeInt(entityId);
+				int type = packetdata.readUnsignedByte();
+				serializer.writeByte(EntityIDRemapper.replaceLivingEntityId(type));
+				serializer.writeInt(packetdata.readInt());
+				serializer.writeInt(packetdata.readInt());
+				serializer.writeInt(packetdata.readInt());
+				serializer.writeByte(packetdata.readByte());
+				serializer.writeByte(packetdata.readByte());
+				serializer.writeByte(packetdata.readByte());
+				serializer.writeShort(packetdata.readShort());
+				serializer.writeShort(packetdata.readShort());
+				serializer.writeShort(packetdata.readShort());
+				serializer.writeBytes(DataWatcherFilter.filterEntityData(serializer.getVersion(), Utils.getEntity(channel, entityId), packetdata.readBytes(packetdata.readableBytes()).array()));
 				return;
 			}
 			case 0x10: { //PacketPlayOutSpawnEntityPainting

@@ -9,6 +9,7 @@ import java.util.List;
 import net.minecraft.server.v1_8_R1.Packet;
 
 import org.bukkit.Bukkit;
+import org.spigotmc.SneakyThrow;
 
 import protocolsupport.utils.Utils;
 
@@ -84,9 +85,13 @@ public class ProtocolLibFixer {
 				method.setAccessible(true);
 				return method.invoke(obj, args);
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException t) {
-				System.err.println("Failed to access pipeline decode and encode methods, shutting down");
-				t.printStackTrace();
-				Bukkit.shutdown();
+				if (t.getCause() == null) {
+					System.err.println("Failed to access pipeline decode and encode methods, shutting down");
+					t.printStackTrace();
+					Bukkit.shutdown();
+				} else {
+					SneakyThrow.sneaky(t.getCause());
+				}
 				return null;
 			}
 		}
