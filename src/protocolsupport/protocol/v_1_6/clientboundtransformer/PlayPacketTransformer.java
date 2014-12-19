@@ -27,8 +27,6 @@ import net.minecraft.server.v1_8_R1.Packet;
 
 public class PlayPacketTransformer implements PacketTransformer {
 
-	//TODO: filter invalid blocks and entities
-
 	@Override
 	public void tranform(Channel channel, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException {
 		PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
@@ -566,7 +564,6 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x2B: { //PacketPlayOutGameStateChange
 				serializer.writeByte(0x46);
-				//TODO: filter game states
 				serializer.writeByte(packetdata.readByte());
 				serializer.writeByte((int) packetdata.readFloat());
 				return;
