@@ -633,7 +633,6 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x35: { //PacketPlayOutTileEntityData
 				serializer.writeByte(0x84);
-				serializer.writeVarInt(packetId);
 				BlockPosition blockPos = packetdata.c();
 				serializer.writeInt(blockPos.getX());
 				serializer.writeShort(blockPos.getY());
