@@ -16,7 +16,6 @@ import org.spigotmc.LimitStream;
 import org.spigotmc.SneakyThrow;
 
 import protocolsupport.protocol.DataStorage.ProtocolVersion;
-import protocolsupport.protocol.v_1_7.remappers.ItemIDRemapper;
 import net.minecraft.server.v1_8_R1.Item;
 import net.minecraft.server.v1_8_R1.ItemStack;
 import net.minecraft.server.v1_8_R1.NBTCompressedStreamTools;
@@ -40,6 +39,8 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R1.PacketDat
 		return version;
 	}
 
+	
+	//TODO: use switch
 	@Override
 	public void a(ItemStack itemstack) {
 		if (itemstack == null || itemstack.getItem() == null) {
@@ -49,7 +50,9 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R1.PacketDat
 			if (getVersion() == ProtocolVersion.MINECRAFT_1_6_4 || getVersion() == ProtocolVersion.MINECRAFT_1_6_2) {
 				this.writeShort(protocolsupport.protocol.v_1_6.remappers.ItemIDRemapper.replaceItemId(itemId));
 			} else if (getVersion() == ProtocolVersion.MINECRAFT_1_7_10 || getVersion() == ProtocolVersion.MINECRAFT_1_7_5) {
-				this.writeShort(ItemIDRemapper.replaceItemId(itemId));
+				this.writeShort(protocolsupport.protocol.v_1_7.remappers.ItemIDRemapper.replaceItemId(itemId));
+			} else if (getVersion() == ProtocolVersion.MINECRAFT_1_5_2) {
+				this.writeShort(protocolsupport.protocol.v_1_5.remappers.ItemIDRemapper.replaceItemId(itemId));
 			} else {
 				this.writeShort(itemId);
 			} 
@@ -107,7 +110,11 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R1.PacketDat
 
 	@Override
 	public String c(int limit) {
-		if (getVersion() == ProtocolVersion.MINECRAFT_1_6_4 || getVersion() == ProtocolVersion.MINECRAFT_1_6_2) {
+		if (
+			getVersion() == ProtocolVersion.MINECRAFT_1_6_4 ||
+			getVersion() == ProtocolVersion.MINECRAFT_1_6_2 ||
+			getVersion() == ProtocolVersion.MINECRAFT_1_5_2
+		) {
 			int length = readUnsignedShort();
 			return new String(readBytes(length * 2).array(), StandardCharsets.UTF_16BE);
 		} else {
@@ -117,7 +124,11 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R1.PacketDat
 
 	@Override
 	public net.minecraft.server.v1_8_R1.PacketDataSerializer a(String string) {
-		if (getVersion() == ProtocolVersion.MINECRAFT_1_6_4 || getVersion() == ProtocolVersion.MINECRAFT_1_6_2) {
+		if (
+			getVersion() == ProtocolVersion.MINECRAFT_1_6_4 ||
+			getVersion() == ProtocolVersion.MINECRAFT_1_6_2 ||
+			getVersion() == ProtocolVersion.MINECRAFT_1_5_2
+		) {
 			writeShort(string.length());
 			writeBytes(string.getBytes(StandardCharsets.UTF_16BE));
 		} else {

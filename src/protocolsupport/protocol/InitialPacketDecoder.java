@@ -22,29 +22,24 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 			ProtocolVersion handshakeversion = ProtocolVersion.UNKNOWN;
 			input.markReaderIndex();
 			int firstbyte = input.readUnsignedByte();
-			if (firstbyte == 0xFE) { //1.6 ping (should we check if FE is actually a part of a varint length?)
-				try {
-					if (
-						input.readUnsignedByte() == 1 &&
+			if (firstbyte == 0xFE) { //1.6 ping or 1.5 ping (should we check if FE is actually a part of a varint length?)
+				if (input.readUnsignedByte() == 1) {
+					if (input.readableBytes() == 0) {
+						//1.5.2
+						handshakeversion = ProtocolVersion.MINECRAFT_1_5_2;
+						input.resetReaderIndex();
+					} else if (
 						input.readUnsignedByte() == 0xFA &&
 						"MC|PingHost".equals(new String(input.readBytes(input.readUnsignedShort() * 2).array(), StandardCharsets.UTF_16BE))
-					) {
+					) { //1.6.*
 						input.readUnsignedShort();
 						handshakeversion = ProtocolVersion.fromId(input.readUnsignedByte());
 						input.resetReaderIndex();
 					}
-				} catch (IndexOutOfBoundsException ex) {
-					input.resetReaderIndex();
-					return;
 				}
-			} else if (firstbyte == 0x02) { //1.6 handshake
-				try {
-					handshakeversion = ProtocolVersion.fromId(input.readUnsignedByte());
-					input.resetReaderIndex();
-				} catch (IndexOutOfBoundsException ex) {
-					input.resetReaderIndex();
-					return;
-				}
+			} else if (firstbyte == 0x02) { //1.6 or 1.5.2 handshake
+				handshakeversion = ProtocolVersion.fromId(input.readUnsignedByte());
+				input.resetReaderIndex();
 			} else { //1.7 handshake
 				input.resetReaderIndex();
 				input.markReaderIndex();
@@ -77,6 +72,10 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 			}
 			case MINECRAFT_1_6_2: case MINECRAFT_1_6_4: {
 				protocolsupport.protocol.v_1_6.PipeLineBuilder.buildPipeLine(ctx);
+				break;
+			}
+			case MINECRAFT_1_5_2: {
+				protocolsupport.protocol.v_1_5.PipeLineBuilder.buildPipeLine(ctx);
 				break;
 			}
 			default: {

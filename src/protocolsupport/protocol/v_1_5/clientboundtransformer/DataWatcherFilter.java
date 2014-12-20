@@ -1,4 +1,4 @@
-package protocolsupport.protocol.v_1_6.clientboundtransformer;
+package protocolsupport.protocol.v_1_5.clientboundtransformer;
 
 import java.util.Iterator;
 
@@ -12,6 +12,7 @@ import net.minecraft.server.v1_8_R1.EntityAgeable;
 import net.minecraft.server.v1_8_R1.EntityArmorStand;
 import net.minecraft.server.v1_8_R1.EntityEnderman;
 import net.minecraft.server.v1_8_R1.EntityItemFrame;
+import net.minecraft.server.v1_8_R1.EntityLiving;
 import net.minecraft.server.v1_8_R1.EntityMinecartAbstract;
 import net.minecraft.server.v1_8_R1.ItemStack;
 import net.minecraft.server.v1_8_R1.Vector3f;
@@ -22,6 +23,18 @@ public class DataWatcherFilter {
 
 	public static byte[] filterEntityData(ProtocolVersion version, Entity entity, byte[] data) {
 		TIntObjectMap<DataWatcherObject> objects = decodeData(version, data);
+		if (entity instanceof EntityLiving) {
+			DataWatcherObject damageobject = objects.get(6);
+			if (damageobject != null) {
+				damageobject.value = ((byte) ((float) damageobject.value));
+				damageobject.type = 0;
+			}
+			DataWatcherObject object = objects.get(8);
+			if (object != null) {
+				object.value = ((int) ((byte) object.value));
+				object.type = 2;
+			}
+		}
 		if (entity instanceof EntityAgeable) {
 			DataWatcherObject object = objects.get(12);
 			if (object != null) {
@@ -35,6 +48,11 @@ public class DataWatcherFilter {
 				object.type = 0;
 			}
 		} else if (entity instanceof EntityMinecartAbstract) {
+			DataWatcherObject damageobject = objects.get(19);
+			if (damageobject != null) {
+				damageobject.value = ((int) ((float) damageobject.value));
+				damageobject.type = 2;
+			}
 			DataWatcherObject object = objects.get(20);
 			if (object != null) {
 				int value = (int) object.value;

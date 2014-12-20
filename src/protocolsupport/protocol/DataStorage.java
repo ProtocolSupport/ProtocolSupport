@@ -116,6 +116,7 @@ public class DataStorage {
 		MINECRAFT_1_7_5(4),
 		MINECRAFT_1_6_4(78),
 		MINECRAFT_1_6_2(74),
+		MINECRAFT_1_5_2(61),
 		UNKNOWN(-1);
 
 		private int id;
@@ -144,6 +145,9 @@ public class DataStorage {
 				}
 				case 74: {
 					return MINECRAFT_1_6_2;
+				}
+				case 61: {
+					return MINECRAFT_1_5_2;
 				}
 			}
 			return UNKNOWN;
