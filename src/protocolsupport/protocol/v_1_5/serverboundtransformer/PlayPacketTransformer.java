@@ -159,6 +159,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0xCD: { //PacketPlayInClientCommand
 				packet = getPacketById(0x16);
 				packetdata.writeVarInt(0);
+				serializer.readByte();
 				break;
 			}
 			case 0xFA: { //PacketPlayInCustomPayload
