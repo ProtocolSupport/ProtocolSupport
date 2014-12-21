@@ -11,7 +11,9 @@ import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
 import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
 import net.minecraft.server.v1_8_R1.Entity;
+import net.minecraft.server.v1_8_R1.EntityTrackerEntry;
 import net.minecraft.server.v1_8_R1.NetworkManager;
+import net.minecraft.server.v1_8_R1.WorldServer;
 
 public class Utils {
 
@@ -42,7 +44,15 @@ public class Utils {
 	}
 
 	public static Entity getEntity(Channel channel, int entityId) {
-		return ((CraftPlayer) DataStorage.getPlayer(channel.remoteAddress())).getHandle().getWorld().a(entityId);
+		WorldServer world = (WorldServer) ((CraftPlayer) DataStorage.getPlayer(channel.remoteAddress())).getHandle().getWorld();
+		Entity entity = world.a(entityId);
+		if (entity == null) {
+			EntityTrackerEntry entry = (EntityTrackerEntry) world.tracker.trackedEntities.d(entityId);
+			if (entry != null) {
+				entity = entry.tracker;
+			}
+		}
+		return entity;
 	}
 
 	public static void writeTheRestOfTheData(PacketDataSerializer input, PacketDataSerializer output) {
