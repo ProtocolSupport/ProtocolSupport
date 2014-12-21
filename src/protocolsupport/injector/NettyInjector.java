@@ -16,7 +16,7 @@ import net.minecraft.server.v1_8_R1.ServerConnection;
 public class NettyInjector {
 
 	@SuppressWarnings("unchecked")
-	public static void injectStreamSerializer() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+	public static void inject() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		ServerConnection serverConnection = MinecraftServer.getServer().getServerConnection();
 		List<NetworkManager> networkManagersList = ((List<NetworkManager>) Utils.<Field>setAccessible(serverConnection.getClass().getDeclaredField("g")).get(serverConnection));
 		Channel channel = ((List<ChannelFuture>) Utils.<Field>setAccessible(serverConnection.getClass().getDeclaredField("f")).get(serverConnection)).get(0).channel();

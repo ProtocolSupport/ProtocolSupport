@@ -10,6 +10,7 @@ import java.util.zip.Deflater;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R1.util.CraftChatMessage;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
 
 import com.mojang.authlib.properties.Property;
 
@@ -29,6 +30,7 @@ import net.minecraft.server.v1_8_R1.EntityArmorStand;
 import net.minecraft.server.v1_8_R1.EntityFallingBlock;
 import net.minecraft.server.v1_8_R1.EntityTNTPrimed;
 import net.minecraft.server.v1_8_R1.EnumParticle;
+import net.minecraft.server.v1_8_R1.ItemStack;
 import net.minecraft.server.v1_8_R1.Packet;
 
 public class PlayPacketTransformer implements PacketTransformer {
@@ -705,6 +707,49 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeShort(packetdata.readShort());
 				serializer.writeBytes(DataWatcherFilter.filterEntityData(serializer.getVersion(), Utils.getEntity(channel, entityId), packetdata.readBytes(packetdata.readableBytes()).array()));
 				return;
+			}
+			case 0x30: { //PacketPlayOutWindowItems
+				if (DataStorage.getPlayer(channel.remoteAddress()).getOpenInventory().getType() == InventoryType.ENCHANTING) {
+					packet.b(packetdata);
+					serializer.writeVarInt(packetId);
+					serializer.writeByte(packetdata.readByte());
+					int count = packetdata.readShort();
+					serializer.writeShort(count - 1);
+					for (int i = 0; i < count; i++) {
+						ItemStack item = packetdata.i();
+						if (i == 1) {
+							continue;
+						}
+						serializer.a(item);
+					}
+					return;
+				} else {
+					serializer.writeVarInt(packetId);
+					packet.b(serializer);
+					return;
+				}
+			}
+			case 0x2F: { //PacketPlayOutSetSlot
+				if (DataStorage.getPlayer(channel.remoteAddress()).getOpenInventory().getType() == InventoryType.ENCHANTING) {
+					packet.b(packetdata);
+					byte windowId = packetdata.readByte();
+					int slot = packetdata.readShort();
+					if (slot == 1) {
+						return;
+					}
+					if (slot > 0) {
+						slot--;
+					}
+					serializer.writeVarInt(packetId);
+					serializer.writeByte(windowId);
+					serializer.writeShort(slot);
+					serializer.a(packetdata.i());
+					return;
+				} else {
+					serializer.writeVarInt(packetId);
+					packet.b(serializer);
+					return;
+				}
 			}
 			default: { //Any other packet
 				serializer.writeVarInt(packetId);
