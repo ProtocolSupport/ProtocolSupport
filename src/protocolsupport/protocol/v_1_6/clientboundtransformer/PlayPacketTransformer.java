@@ -9,6 +9,7 @@ import java.util.zip.Deflater;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R1.util.CraftChatMessage;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
 
 import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
@@ -21,6 +22,7 @@ import io.netty.channel.Channel;
 import net.minecraft.server.v1_8_R1.BlockPosition;
 import net.minecraft.server.v1_8_R1.EntityArmorStand;
 import net.minecraft.server.v1_8_R1.EnumParticle;
+import net.minecraft.server.v1_8_R1.ItemStack;
 import net.minecraft.server.v1_8_R1.Packet;
 
 public class PlayPacketTransformer implements PacketTransformer {
@@ -597,14 +599,44 @@ public class PlayPacketTransformer implements PacketTransformer {
 				return;
 			}
 			case 0x2F: { //PacketPlayOutSetSlot
-				serializer.writeByte(0x67);
-				Utils.writeTheRestOfTheData(packetdata, serializer);
-				return;
+				if (DataStorage.getPlayer(channel.remoteAddress()).getOpenInventory().getType() == InventoryType.ENCHANTING) {
+					byte windowId = packetdata.readByte();
+					int slot = packetdata.readShort();
+					if (slot == 1) {
+						return;
+					}
+					if (slot > 0) {
+						slot--;
+					}
+					serializer.writeByte(0x67);
+					serializer.writeByte(windowId);
+					serializer.writeShort(slot);
+					serializer.a(packetdata.i());
+					return;
+				} else {
+					serializer.writeByte(0x67);
+					Utils.writeTheRestOfTheData(packetdata, serializer);
+					return;
+				}
 			}
 			case 0x30: { //PacketPlayOutWindowItems
 				serializer.writeByte(0x68);
-				Utils.writeTheRestOfTheData(packetdata, serializer);
-				return;
+				if (DataStorage.getPlayer(channel.remoteAddress()).getOpenInventory().getType() == InventoryType.ENCHANTING) {
+					serializer.writeByte(packetdata.readByte());
+					int count = packetdata.readShort();
+					serializer.writeShort(count - 1);
+					for (int i = 0; i < count; i++) {
+						ItemStack item = packetdata.i();
+						if (i == 1) {
+							continue;
+						}
+						serializer.a(item);
+					}
+					return;
+				} else {
+					Utils.writeTheRestOfTheData(packetdata, serializer);
+					return;
+				}
 			}
 			case 0x31: { //PacketPlayOutWindowData
 				serializer.writeByte(0x69);

@@ -2,6 +2,9 @@ package protocolsupport.protocol.v_1_6.serverboundtransformer;
 
 import java.io.IOException;
 
+import org.bukkit.event.inventory.InventoryType;
+
+import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
@@ -112,7 +115,20 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x66: { //PacketPlayInWindowClick
 				packet = getPacketById(0x0E);
-				useOriginalStream = true;
+				if (DataStorage.getPlayer(channel.remoteAddress()).getOpenInventory().getType() == InventoryType.ENCHANTING) {
+					packetdata.writeByte(serializer.readByte());
+					int slot = serializer.readShort();
+					if (slot > 0) {
+						slot++;
+					}
+					packetdata.writeShort(slot);
+					packetdata.writeByte(serializer.readByte());
+					packetdata.writeShort(serializer.readShort());
+					packetdata.writeByte(serializer.readByte());
+					packetdata.a(serializer.i());
+				} else {
+					useOriginalStream = true;
+				}
 				break;
 			}
 			case 0x6A: { //PacketPlayInTransaction
