@@ -7,6 +7,16 @@ public class BlockIDRemapper {
 		for (int i = 0; i < replacements.length; i++) {
 			replacements[i] = -1;
 		}
+		// stained glass pane -> glass pane
+		replacements[160] = 102;
+		// leaves2 -> leaves
+		replacements[161] = 18;
+		// log2 -> log
+		replacements[162] = 17;
+		// acacia stairs -> oak stairs
+		replacements[163] = 53;
+		// dark oak stairs -> oak stairs
+		replacements[164] = 53;
 		// slime -> emerald block
 		replacements[165] = 133;
 		// barrier -> ? (probably not needed) (or maybe glass?)
