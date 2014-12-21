@@ -1,5 +1,5 @@
 name: ProtocolSupport
 main: protocolsupport.ProtocolSupport
-version: 4.3.dev
+version: 4.3
 author: _Shevchik_
 load: STARTUP
