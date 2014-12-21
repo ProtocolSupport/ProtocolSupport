@@ -15,6 +15,7 @@ import java.util.List;
 import net.minecraft.server.v1_8_R1.EnumPlayerInfoAction;
 import net.minecraft.server.v1_8_R1.EnumProtocol;
 import net.minecraft.server.v1_8_R1.EnumProtocolDirection;
+import net.minecraft.server.v1_8_R1.MinecraftServer;
 import net.minecraft.server.v1_8_R1.NetworkManager;
 import net.minecraft.server.v1_8_R1.Packet;
 import net.minecraft.server.v1_8_R1.PacketPlayOutPlayerInfo;
@@ -84,6 +85,9 @@ public class PacketEncoder extends MessageToByteEncoder<Packet> {
 					skipPlayerInfo.remove(packet);
 				}
 			}
+		}
+		if (MinecraftServer.getServer().isDebugging()) {
+			System.out.println("Writing packet: "+packet);
 		}
 		PacketDataSerializer serializer = new PacketDataSerializer(output, DataStorage.getVersion(channel.remoteAddress()));
 		transformers[currentProtocol.ordinal()].tranform(channel, packetId, packet, serializer);
