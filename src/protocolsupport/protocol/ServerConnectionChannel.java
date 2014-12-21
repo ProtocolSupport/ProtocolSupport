@@ -10,6 +10,7 @@ import java.util.List;
 
 import protocolsupport.protocol.fake.FakeDecoder;
 import protocolsupport.protocol.fake.FakeEncoder;
+import protocolsupport.protocol.fake.FakePacketListener;
 import protocolsupport.protocol.fake.FakePrepender;
 import protocolsupport.protocol.fake.FakeSplitter;
 import net.minecraft.server.v1_8_R1.EnumProtocolDirection;
@@ -36,12 +37,13 @@ public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 		channel.pipeline()
 		.addLast("timeout", new ReadTimeoutHandler(30))
 		.addLast("initial_decoder", new InitialPacketDecoder())
-		//fake elements, will be replaced or removed manually on every protocol pipeline builder
+		//fake elements, will be replaced or removed manually in every protocol pipeline builder
 		.addLast("splitter", new FakeSplitter())
 		.addLast("decoder", new FakeDecoder())
 		.addLast("prepender", new FakePrepender())
 		.addLast("encoder", new FakeEncoder());
 		NetworkManager networkmanager = new NetworkManager(EnumProtocolDirection.SERVERBOUND);
+		networkmanager.a(new FakePacketListener());
 		networkManagers.add(networkmanager);
 		channel.pipeline().addLast("packet_handler", networkmanager);
 	}
