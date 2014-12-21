@@ -464,7 +464,12 @@ public class PlayPacketTransformer implements PacketTransformer {
 				packet.b(packetdata);
 				serializer.writeVarInt(packetId);
 				serializer.writeString(packetdata.readString(16));
-				int mode = serializer.readByte();
+				int mode = packetdata.readByte();
+				if (mode == 1) {
+					serializer.writeString("");
+					serializer.writeByte(mode);
+					return;
+				}
 				if (mode == 2) {
 					mode = 0;
 				}
