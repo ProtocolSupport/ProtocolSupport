@@ -1,6 +1,9 @@
 ProtocolSupport
 ===============
 
+Spigot: http://www.spigotmc.org/resources/protocolsupport.2367/
+Jenkins: http://build.true-games.org/job/ProtocolSupport/
+
 Support 1.7.*, 1.6.*, 1.5.2 on spigot 1.8
 
 Known issues:
