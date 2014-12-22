@@ -209,7 +209,8 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(packetdata.readUnsignedByte());
 				serializer.writeByte(packetdata.readByte());
 				serializer.writeByte(packetdata.readUnsignedByte());
-				serializer.writeByte(packetdata.readUnsignedByte());
+				int maxplayers = packetdata.readUnsignedByte();
+				serializer.writeByte(Math.min(maxplayers, 60));
 				serializer.writeString(packetdata.readString(16));
 				return;
 			}
