@@ -23,19 +23,23 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 			input.markReaderIndex();
 			int firstbyte = input.readUnsignedByte();
 			if (firstbyte == 0xFE) { //1.6 ping or 1.5 ping (should we check if FE is actually a part of a varint length?)
-				if (input.readUnsignedByte() == 1) {
-					if (input.readableBytes() == 0) {
-						//1.5.2
-						handshakeversion = ProtocolVersion.MINECRAFT_1_5_2;
-						input.resetReaderIndex();
-					} else if (
-						input.readUnsignedByte() == 0xFA &&
-						"MC|PingHost".equals(new String(input.readBytes(input.readUnsignedShort() * 2).array(), StandardCharsets.UTF_16BE))
-					) { //1.6.*
-						input.readUnsignedShort();
-						handshakeversion = ProtocolVersion.fromId(input.readUnsignedByte());
-						input.resetReaderIndex();
+				try {
+					if (input.readUnsignedByte() == 1) {
+						if (input.readableBytes() == 0) {
+							//1.5.2
+							handshakeversion = ProtocolVersion.MINECRAFT_1_5_2;
+							input.resetReaderIndex();
+						} else if (
+							input.readUnsignedByte() == 0xFA &&
+							"MC|PingHost".equals(new String(input.readBytes(input.readUnsignedShort() * 2).array(), StandardCharsets.UTF_16BE))
+						) { //1.6.*
+							input.readUnsignedShort();
+							handshakeversion = ProtocolVersion.fromId(input.readUnsignedByte());
+							input.resetReaderIndex();
+						}
 					}
+				} catch (IndexOutOfBoundsException ex) {
+					input.resetReaderIndex();
 				}
 			} else if (firstbyte == 0x02) { //1.6 or 1.5.2 handshake
 				handshakeversion = ProtocolVersion.fromId(input.readUnsignedByte());
