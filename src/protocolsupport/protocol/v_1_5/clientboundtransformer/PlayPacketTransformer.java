@@ -721,6 +721,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 						}
 					}
 				}
+				return;
 			}
 			case 0x39: { //PacketPlayOutAbilities
 				serializer.writeByte(0xCA);
