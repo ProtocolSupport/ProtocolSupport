@@ -45,11 +45,23 @@ public class Utils {
 
 	public static Entity getEntity(Channel channel, int entityId) {
 		WorldServer world = (WorldServer) ((CraftPlayer) DataStorage.getPlayer(channel.remoteAddress())).getHandle().getWorld();
+		//try direct map lookup
 		Entity entity = world.a(entityId);
+		//search entity tracker
 		if (entity == null) {
 			EntityTrackerEntry entry = (EntityTrackerEntry) world.tracker.trackedEntities.d(entityId);
 			if (entry != null) {
 				entity = entry.tracker;
+			}
+		}
+		//last chance, search it entity list (really slow)
+		if (entity == null) {
+			for (Object lentityObj : world.entityList) {
+				Entity lentity = (Entity) lentityObj;
+				if (lentity.getId() == entityId) {
+					entity = lentity;
+					break;
+				}
 			}
 		}
 		return entity;
