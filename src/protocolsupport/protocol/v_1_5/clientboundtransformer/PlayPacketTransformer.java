@@ -286,11 +286,17 @@ public class PlayPacketTransformer implements PacketTransformer {
 				return;
 			}
 			case 0x13: { //PacketPlayOutEntityDestroy
-				serializer.writeByte(0x1D);
 				int count = packetdata.readVarInt();
-				serializer.writeByte(count);
+				int[] array = new int[count];
 				for (int i = 0; i < count; i++) {
-					serializer.writeInt(packetdata.readVarInt());
+					array[i] = packetdata.readVarInt();
+				}
+				for (int[] part : Utils.splitArray(array, 120)) {
+					serializer.writeByte(0x1D);
+					serializer.writeByte(part.length);
+					for (int i = 0; i < part.length; i++) {
+						serializer.writeInt(part[i]);
+					}
 				}
 				return;
 			}
