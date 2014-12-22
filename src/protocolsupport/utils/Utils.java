@@ -96,7 +96,7 @@ public class Utils {
 			count++;
 		}
 		for (int i = 0; i < count; i++) {
-			list.add(Arrays.copyOfRange(array, copied, copied + limit));
+			list.add(Arrays.copyOfRange(array, copied, Math.min(array.length, copied + limit)));
 			copied+= limit;
 		}
 		return list;
