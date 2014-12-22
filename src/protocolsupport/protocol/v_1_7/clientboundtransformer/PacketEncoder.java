@@ -10,7 +10,6 @@ import io.netty.util.AttributeKey;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import net.minecraft.server.v1_8_R1.EnumPlayerInfoAction;
@@ -49,13 +48,14 @@ public class PacketEncoder extends MessageToByteEncoder<Packet> {
 		blockedPlayPackets[0x34] = true;
 	}
 
-	private HashSet<Packet> skipPacket = new HashSet<Packet>();
-
 	@SuppressWarnings("unchecked")
 	private List<Packet> splitPlayerInfoPacket(PacketPlayOutPlayerInfo packet) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		List<Packet> packets = new ArrayList<Packet>();
-		EnumPlayerInfoAction action = (EnumPlayerInfoAction) Utils.<Field>setAccessible(PacketPlayOutPlayerInfo.class.getDeclaredField("a")).get(packet);
 		List<PlayerInfoData> datas = (List<PlayerInfoData>) Utils.<Field>setAccessible(PacketPlayOutPlayerInfo.class.getDeclaredField("b")).get(packet);
+		if (datas.size() <= 1) {
+			return null;
+		}
+		EnumPlayerInfoAction action = (EnumPlayerInfoAction) Utils.<Field>setAccessible(PacketPlayOutPlayerInfo.class.getDeclaredField("a")).get(packet);
 		for (int i = 0; i < datas.size(); i++) {
 			PacketPlayOutPlayerInfo newpacket = new PacketPlayOutPlayerInfo();
 			Utils.<Field>setAccessible(PacketPlayOutPlayerInfo.class.getDeclaredField("a")).set(newpacket, action);
@@ -70,6 +70,9 @@ public class PacketEncoder extends MessageToByteEncoder<Packet> {
 		PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), ProtocolVersion.MINECRAFT_1_8);
 		packet.b(packetdata);
 		int count = packetdata.readVarInt();
+		if (count <= 120) {
+			return null;
+		}
 		int[] array = new int[count];
 		for (int i = 0; i < count; i++) {
 			array[i] = packetdata.readVarInt();
@@ -92,24 +95,20 @@ public class PacketEncoder extends MessageToByteEncoder<Packet> {
 			if (blockedPlayPackets[packetId]) {
 				return;
 			} else if (packetId == 0x38) {
-				if (!skipPacket.contains(packet)) {
-					for (Packet rpacket : splitPlayerInfoPacket((PacketPlayOutPlayerInfo) packet)) {
-						skipPacket.add(rpacket);
+				List<Packet> splitPackets = splitPlayerInfoPacket((PacketPlayOutPlayerInfo) packet);
+				if (splitPackets != null) {
+					for (Packet rpacket : splitPackets) {
 						channel.writeAndFlush(rpacket);
 					}
 					return;
-				} else {
-					skipPacket.remove(packet);
 				}
 			} else if (packetId == 0x13) {
-				if (!skipPacket.contains(packet)) {
-					for (Packet rpacket : splitEntityDestroyPacket(packet)) {
-						skipPacket.add(rpacket);
+				List<Packet> splitPackets = splitEntityDestroyPacket(packet);
+				if (splitPackets != null) {
+					for (Packet rpacket : splitPackets) {
 						channel.writeAndFlush(rpacket);
 					}
 					return;
-				} else {
-					skipPacket.remove(packet);
 				}
 			}
 		}
