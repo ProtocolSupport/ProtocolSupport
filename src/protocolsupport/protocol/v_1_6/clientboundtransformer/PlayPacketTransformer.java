@@ -687,36 +687,38 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x38: { //PacketPlayOutPlayerInfo
 				int action = packetdata.readVarInt();
-				packetdata.readVarInt();
-				UUID uuid = packetdata.g();
-				switch (action) {
-					case 0: {
-						String playerName = packetdata.readString(16);
-						DataStorage.addTabName(channel.remoteAddress(), uuid, playerName);
-						int props = packetdata.readVarInt();
-						for (int p = 0; p < props; p++) {
-							packetdata.readString(32767);
-							packetdata.readString(32767);
-							if (packetdata.readBoolean()) {
+				int count = packetdata.readVarInt();
+				for (int i = 0; i < count; i++) {
+					UUID uuid = packetdata.g();
+					switch (action) {
+						case 0: {
+							String playerName = packetdata.readString(16);
+							DataStorage.addTabName(channel.remoteAddress(), uuid, playerName);
+							int props = packetdata.readVarInt();
+							for (int p = 0; p < props; p++) {
 								packetdata.readString(32767);
+								packetdata.readString(32767);
+								if (packetdata.readBoolean()) {
+									packetdata.readString(32767);
+								}
 							}
+							serializer.writeByte(0xC9);
+							serializer.writeString(playerName);
+							serializer.writeBoolean(true);
+							serializer.writeShort(0);
+							break;
 						}
-						serializer.writeByte(0xC9);
-						serializer.writeString(playerName);
-						serializer.writeBoolean(true);
-						serializer.writeShort(0);
-						return;
-					}
-					case 4: {
-						String playerName = DataStorage.getTabName(channel.remoteAddress(), uuid);
-						serializer.writeByte(0xC9);
-						serializer.writeString(playerName);
-						serializer.writeBoolean(false);
-						serializer.writeShort(0);
-						return;
-					}
-					default: { //do not send packet at all, we don't update ping anyway
-						return;
+						case 4: {
+							String playerName = DataStorage.getTabName(channel.remoteAddress(), uuid);
+							serializer.writeByte(0xC9);
+							serializer.writeString(playerName);
+							serializer.writeBoolean(false);
+							serializer.writeShort(0);
+							break;
+						}
+						default: { //do not send packet at all, we don't update ping anyway
+							break;
+						}
 					}
 				}
 			}

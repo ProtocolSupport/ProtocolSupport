@@ -4,7 +4,10 @@ import io.netty.channel.Channel;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
 
@@ -79,6 +82,24 @@ public class Utils {
 
 	public static Channel getChannel(NetworkManager nm) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		return (Channel) Utils.<Field>setAccessible(NetworkManager.class.getDeclaredField("i")).get(nm);
+	}
+
+	public static List<int[]> splitArray(int[] array, int limit) {
+		List<int[]> list = new ArrayList<int[]>();
+		if (array.length <= limit) {
+			list.add(array);
+			return list;
+		}
+		int copied = 0;
+		int count = array.length / limit;
+		if (array.length % limit != 0) {
+			count++;
+		}
+		for (int i = 0; i < count; i++) {
+			list.add(Arrays.copyOfRange(array, copied, copied + limit));
+			copied+= limit;
+		}
+		return list;
 	}
 
 }
