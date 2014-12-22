@@ -708,6 +708,11 @@ public class PlayPacketTransformer implements PacketTransformer {
 									packetdata.readString(32767);
 								}
 							}
+							packetdata.readVarInt();
+							packetdata.readVarInt();
+							if (packetdata.readBoolean()) {
+								packetdata.d();
+							}
 							serializer.writeByte(0xC9);
 							serializer.writeString(playerName);
 							serializer.writeBoolean(true);
@@ -722,7 +727,19 @@ public class PlayPacketTransformer implements PacketTransformer {
 							serializer.writeShort(0);
 							break;
 						}
-						default: { //do not send packet at all, we don't update ping anyway
+						//don't send packet, but still read data
+						case 1: {
+							packetdata.readVarInt();
+							break;
+						}
+						case 2: {
+							packetdata.readVarInt();
+							break;
+						}
+						case 3: {
+							if (packetdata.readBoolean()) {
+								packetdata.d();
+							}
 							break;
 						}
 					}
