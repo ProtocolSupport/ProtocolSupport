@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
 
+import protocolsupport.collections.TIntObjectBakedEntityList;
 import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
 import net.minecraft.server.v1_8_R1.Entity;
@@ -50,24 +51,29 @@ public class Utils {
 		WorldServer world = (WorldServer) ((CraftPlayer) DataStorage.getPlayer(channel.remoteAddress())).getHandle().getWorld();
 		//try direct map lookup
 		Entity entity = world.a(entityId);
-		//search entity tracker
-		if (entity == null) {
-			EntityTrackerEntry entry = (EntityTrackerEntry) world.tracker.trackedEntities.d(entityId);
-			if (entry != null) {
-				entity = entry.tracker;
-			}
+		if (entity != null) {
+			return entity;
 		}
-		//last chance, search it entity list (really slow)
-		if (entity == null) {
+		//search entity tracker
+		EntityTrackerEntry entry = (EntityTrackerEntry) world.tracker.trackedEntities.d(entityId);
+		if (entry != null) {
+			return entry.tracker;
+		}
+		//last chance, search it entity list
+		@SuppressWarnings("unchecked")
+		List<Entity> entityList = world.entityList;
+		//use our injected list if possible
+		if (entityList instanceof TIntObjectBakedEntityList) {
+			return ((TIntObjectBakedEntityList) entityList).getById(entityId);
+		} else {
 			for (Object lentityObj : world.entityList) {
 				Entity lentity = (Entity) lentityObj;
 				if (lentity.getId() == entityId) {
-					entity = lentity;
-					break;
+					return lentity;
 				}
 			}
 		}
-		return entity;
+		return null;
 	}
 
 	public static void writeTheRestOfTheData(PacketDataSerializer input, PacketDataSerializer output) {

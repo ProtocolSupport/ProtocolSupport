@@ -16,6 +16,9 @@ public class TIntObjectBakedEntityList implements List<Entity> {
 
 	public TIntObjectBakedEntityList(List<Entity> entityList) {
 		this.entityList = entityList;
+		for (Entity entity : entityList) {
+			entityByIdMap.put(entity.getId(), entity);
+		}
 	}
 
 	public Entity getById(int entityId) {
@@ -34,7 +37,10 @@ public class TIntObjectBakedEntityList implements List<Entity> {
 
 	@Override
 	public boolean contains(Object o) {
-		return entityList.contains(o);
+		if (o == null) {
+			return false;
+		}
+		return entityByIdMap.containsKey(((Entity) o).getId());
 	}
 
 	@Override
@@ -62,9 +68,7 @@ public class TIntObjectBakedEntityList implements List<Entity> {
 	public boolean remove(Object o) {
 		if (o instanceof Entity) {
 			entityList.remove(o);
-			if (o != null) {
-				entityByIdMap.remove(((Entity) o).getId());
-			}
+			entityByIdMap.remove(((Entity) o).getId());
 			return true;
 		}
 		return false;
