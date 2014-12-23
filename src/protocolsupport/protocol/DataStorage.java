@@ -1,5 +1,7 @@
 package protocolsupport.protocol;
 
+import gnu.trove.map.hash.TIntObjectHashMap;
+
 import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,6 +11,8 @@ import java.util.WeakHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+
+import protocolsupport.protocol.watchedentites.WatchedEntity;
 
 import com.mojang.authlib.properties.Property;
 
@@ -94,6 +98,21 @@ public class DataStorage {
 		}
 	}
 
+	public static void addWatchedEntity(SocketAddress address, WatchedEntity entity) {
+		channelInfo.get(address).watchedEntities.put(entity.getId(), entity);
+	}
+
+	public static WatchedEntity getWatchedEntity(SocketAddress address, int entityId) {
+		return channelInfo.get(address).watchedEntities.get(entityId);
+	}
+
+	public static void removeWatchedEntities(SocketAddress address, int[] entityIds) {
+		TIntObjectHashMap<WatchedEntity> watchedEntities = channelInfo.get(address).watchedEntities;
+		for (int entityId : entityIds) {
+			watchedEntities.remove(entityId);
+		}
+	}
+
 	private static class ChannelInfo {
 		ProtocolVersion version = ProtocolVersion.UNKNOWN;
 		Player player;
@@ -108,6 +127,7 @@ public class DataStorage {
 				return super.get(uuid);
 			}
 		};
+		TIntObjectHashMap<WatchedEntity> watchedEntities = new TIntObjectHashMap<WatchedEntity>();
 	}
 
 	public static enum ProtocolVersion {

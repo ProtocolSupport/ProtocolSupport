@@ -19,6 +19,7 @@ import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.DataStorage.ProtocolVersion;
 import protocolsupport.protocol.v_1_7.remappers.BlockIDRemapper;
 import protocolsupport.protocol.v_1_7.remappers.EntityIDRemapper;
+import protocolsupport.protocol.watchedentites.WatchedEntity;
 import protocolsupport.utils.Utils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -159,7 +160,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeVarInt(packetId);
 				int entityId = packetdata.readVarInt();
 				serializer.writeInt(entityId);
-				serializer.writeBytes(DataWatcherFilter.filterEntityData(serializer.getVersion(), Utils.getEntity(channel, entityId), packetdata.readBytes(packetdata.readableBytes()).array()));
+				serializer.writeBytes(DataWatcherFilter.filterEntityData(serializer.getVersion(), DataStorage.getWatchedEntity(channel.remoteAddress(), entityId), packetdata.readBytes(packetdata.readableBytes()).array()));
 				return;
 			}
 			case 0x18: { // PacketPlayOutEntityTeleport
@@ -516,8 +517,10 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x0E: { // PacketPlayOutSpawnEntity
 				packet.b(packetdata);
 				serializer.writeVarInt(packetId);
-				serializer.writeVarInt(packetdata.readVarInt());
+				int entityId = packetdata.readVarInt();
+				serializer.writeVarInt(entityId);
 				int type = packetdata.readUnsignedByte();
+				DataStorage.addWatchedEntity(channel.remoteAddress(), new WatchedEntity(entityId, type));
 				serializer.writeByte(EntityIDRemapper.replaceObjectEntityId(type));
 				int x = packetdata.readInt();
 				int y = packetdata.readInt();
@@ -701,6 +704,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				int entityId = packetdata.readVarInt();
 				serializer.writeVarInt(entityId);
 				int type = packetdata.readUnsignedByte();
+				DataStorage.addWatchedEntity(channel.remoteAddress(), new WatchedEntity(entityId, type));
 				serializer.writeByte(EntityIDRemapper.replaceLivingEntityId(type));
 				serializer.writeInt(packetdata.readInt());
 				serializer.writeInt(packetdata.readInt());
@@ -711,7 +715,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeShort(packetdata.readShort());
 				serializer.writeShort(packetdata.readShort());
 				serializer.writeShort(packetdata.readShort());
-				serializer.writeBytes(DataWatcherFilter.filterEntityData(serializer.getVersion(), Utils.getEntity(channel, entityId), packetdata.readBytes(packetdata.readableBytes()).array()));
+				serializer.writeBytes(DataWatcherFilter.filterEntityData(serializer.getVersion(), DataStorage.getWatchedEntity(channel.remoteAddress(), entityId), packetdata.readBytes(packetdata.readableBytes()).array()));
 				return;
 			}
 			case 0x30: { //PacketPlayOutWindowItems

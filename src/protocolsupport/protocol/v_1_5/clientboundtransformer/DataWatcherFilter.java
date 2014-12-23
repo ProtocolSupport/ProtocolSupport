@@ -7,23 +7,20 @@ import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import io.netty.buffer.Unpooled;
 import net.minecraft.server.v1_8_R1.BlockPosition;
-import net.minecraft.server.v1_8_R1.Entity;
-import net.minecraft.server.v1_8_R1.EntityAgeable;
-import net.minecraft.server.v1_8_R1.EntityArmorStand;
-import net.minecraft.server.v1_8_R1.EntityEnderman;
-import net.minecraft.server.v1_8_R1.EntityItemFrame;
-import net.minecraft.server.v1_8_R1.EntityLiving;
-import net.minecraft.server.v1_8_R1.EntityMinecartAbstract;
 import net.minecraft.server.v1_8_R1.ItemStack;
 import net.minecraft.server.v1_8_R1.Vector3f;
 import protocolsupport.protocol.DataStorage.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.watchedentites.WatchedEntity;
 
 public class DataWatcherFilter {
 
-	public static byte[] filterEntityData(ProtocolVersion version, Entity entity, byte[] data) {
+	public static byte[] filterEntityData(ProtocolVersion version, WatchedEntity entity, byte[] data) {
+		if (entity == null) {
+			return data;
+		}
 		TIntObjectMap<DataWatcherObject> objects = decodeData(version, data);
-		if (entity instanceof EntityLiving) {
+		if (entity.isLiving()) {
 			DataWatcherObject damageobject = objects.get(6);
 			if (damageobject != null) {
 				damageobject.value = ((byte) ((float) damageobject.value));
@@ -35,19 +32,19 @@ public class DataWatcherFilter {
 				object.type = 2;
 			}
 		}
-		if (entity instanceof EntityAgeable) {
+		if (entity.isAgeable()) {
 			DataWatcherObject object = objects.get(12);
 			if (object != null) {
 				object.value = ((int) ((byte) object.value));
 				object.type = 2;
 			}
-		} else if (entity instanceof EntityEnderman) {
+		} else if (entity.isEnderman()) {
 			DataWatcherObject object = objects.get(16);
 			if (object != null) {
 				object.value = ((byte) ((short) object.value));
 				object.type = 0;
 			}
-		} else if (entity instanceof EntityMinecartAbstract) {
+		} else if (entity.isMinecart()) {
 			DataWatcherObject damageobject = objects.get(19);
 			if (damageobject != null) {
 				damageobject.value = ((int) ((float) damageobject.value));
@@ -60,7 +57,7 @@ public class DataWatcherFilter {
 				int p2 = value >> 12;
 				object.value = (p2 << 16) | p1;
 			}
-		} else if (entity instanceof EntityItemFrame) {
+		} else if (entity.isItemFrame()) {
 			if (objects.containsKey(8)) {
 				ItemStack item = (ItemStack) objects.get(8).value;
 				objects.put(2, new DataWatcherObject(5, item));
@@ -69,7 +66,7 @@ public class DataWatcherFilter {
 				int rotation = (byte) objects.get(9).value;
 				objects.put(3, new DataWatcherObject(0, ((byte) (rotation >> 1))));
 			}
-		} else if (entity instanceof EntityArmorStand) { // replace with entity ender crystal data
+		} else if (entity.isArmorStand()) { // replace with entity ender crystal data
 			objects.clear();
 			objects.put(8, new DataWatcherObject(2, 5));
 		}

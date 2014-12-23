@@ -59,8 +59,6 @@ public class Utils {
 			return entry.tracker;
 		}
 		//last chance, search it entity list
-		@SuppressWarnings("unchecked")
-		List<Entity> entityList = world.entityList;
 		for (Object lentityObj : world.entityList) {
 			Entity lentity = (Entity) lentityObj;
 			if (lentity.getId() == entityId) {
