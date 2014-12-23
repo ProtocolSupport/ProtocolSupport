@@ -6,7 +6,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import protocolsupport.injector.NettyInjector;
 import protocolsupport.injector.ServerInjector;
 import protocolsupport.listeners.PlayerListener;
-import protocolsupport.listeners.WorldListener;
 
 public class ProtocolSupport extends JavaPlugin {
 
@@ -23,7 +22,6 @@ public class ProtocolSupport extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
-		getServer().getPluginManager().registerEvents(new WorldListener(), this);
 	}
 
 	@Override

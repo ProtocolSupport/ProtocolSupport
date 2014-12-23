@@ -11,7 +11,6 @@ import java.util.List;
 
 import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
 
-import protocolsupport.collections.TIntObjectBakedEntityList;
 import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
 import net.minecraft.server.v1_8_R1.Entity;
@@ -62,15 +61,10 @@ public class Utils {
 		//last chance, search it entity list
 		@SuppressWarnings("unchecked")
 		List<Entity> entityList = world.entityList;
-		//use our injected list if possible
-		if (entityList instanceof TIntObjectBakedEntityList) {
-			return ((TIntObjectBakedEntityList) entityList).getById(entityId);
-		} else {
-			for (Object lentityObj : world.entityList) {
-				Entity lentity = (Entity) lentityObj;
-				if (lentity.getId() == entityId) {
-					return lentity;
-				}
+		for (Object lentityObj : world.entityList) {
+			Entity lentity = (Entity) lentityObj;
+			if (lentity.getId() == entityId) {
+				return lentity;
 			}
 		}
 		return null;
