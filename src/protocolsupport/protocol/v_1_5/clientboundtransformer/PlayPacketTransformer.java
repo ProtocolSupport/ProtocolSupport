@@ -40,7 +40,6 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x01: { //PacketPlayOutLogin
 				serializer.writeByte(0x01);
 				int playerEnityId = packetdata.readInt();
-				System.out.println(playerEnityId);
 				DataStorage.addWatchedEntity(channel.remoteAddress(), new WatchedEntity(playerEnityId));
 				serializer.writeInt(playerEnityId);
 				int gamemode = packetdata.readByte();
@@ -152,7 +151,9 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x0C: { //PacketPlayOutNamedEntitySpawn
 				serializer.writeByte(0x14);
-				serializer.writeInt(packetdata.readVarInt());
+				int playerEntityId = packetdata.readVarInt();
+				DataStorage.addWatchedEntity(channel.remoteAddress(), new WatchedEntity(playerEntityId));
+				serializer.writeInt(playerEntityId);
 				UUID uuid = packetdata.g();
 				String playerName = DataStorage.getTabName(channel.remoteAddress(), uuid);
 				serializer.writeString(playerName != null ? playerName : "Unknown");
@@ -162,7 +163,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(packetdata.readByte());
 				serializer.writeByte(packetdata.readByte());
 				serializer.writeShort(packetdata.readShort());
-				Utils.writeTheRestOfTheData(packetdata, serializer);
+				serializer.writeBytes(DataWatcherFilter.filterEntityData(serializer.getVersion(), DataStorage.getWatchedEntity(channel.remoteAddress(), playerEntityId), packetdata.readBytes(packetdata.readableBytes()).array()));
 				return;
 			}
 			case 0x0D: { //PacketPlayOutCollect
