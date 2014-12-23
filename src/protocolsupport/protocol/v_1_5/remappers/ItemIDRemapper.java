@@ -9,6 +9,8 @@ public class ItemIDRemapper {
 		}
 		// stained glass -> glass
 		replacements[95] = 20;
+		// stained clay -> clay
+		replacements[159] = 82;
 		// stained glass pane -> glass pane
 		replacements[160] = 102;
 		// leaves2 -> leaves
