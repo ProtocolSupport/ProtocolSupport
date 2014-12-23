@@ -27,7 +27,6 @@ import io.netty.channel.Channel;
 import net.minecraft.server.v1_8_R1.BlockPosition;
 import net.minecraft.server.v1_8_R1.ChatSerializer;
 import net.minecraft.server.v1_8_R1.Entity;
-import net.minecraft.server.v1_8_R1.EntityArmorStand;
 import net.minecraft.server.v1_8_R1.EntityFallingBlock;
 import net.minecraft.server.v1_8_R1.EntityTNTPrimed;
 import net.minecraft.server.v1_8_R1.EnumParticle;
@@ -629,7 +628,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x20: { // PacketPlayOutUpdateAttributes
 				packet.b(packetdata);
 				int entityId = packetdata.readVarInt();
-				if (Utils.getEntity(channel, entityId) instanceof EntityArmorStand) { //if the entity is armor stand than we don't send this packet at all
+				if (DataStorage.getWatchedEntity(channel.remoteAddress(), entityId).isArmorStand()) { //if the entity is armor stand than we don't send this packet at all
 					return;
 				}
 				serializer.writeVarInt(packetId);
