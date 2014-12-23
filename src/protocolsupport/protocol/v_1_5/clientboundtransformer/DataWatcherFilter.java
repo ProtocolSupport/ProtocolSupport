@@ -32,6 +32,13 @@ public class DataWatcherFilter {
 				object.type = 2;
 			}
 		}
+		if (entity.isWolf()) {
+			DataWatcherObject damageobject = objects.get(18);
+			if (damageobject != null) {
+				damageobject.value = ((int) ((float) damageobject.value));
+				damageobject.type = 2;
+			}
+		}
 		if (entity.isAgeable()) {
 			DataWatcherObject object = objects.get(12);
 			if (object != null) {

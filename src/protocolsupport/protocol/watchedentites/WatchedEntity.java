@@ -8,6 +8,7 @@ public class WatchedEntity {
 	private boolean isAgeable = false;
 	private boolean isMinecart = false;
 	private boolean isEnderman = false;
+	private boolean isWolf = false;
 	private boolean isItemFrame = false;
 	private boolean isArmorStand = false;
 
@@ -72,7 +73,12 @@ public class WatchedEntity {
 				isLiving = true;
 				break;
 			}
-			case 95:
+			case 95: {
+				isAgeable = true;
+				isLiving = true;
+				isWolf = true;
+				break;
+			}
 			case 96: {
 				isAgeable = true;
 				isLiving = true;
@@ -119,6 +125,10 @@ public class WatchedEntity {
 
 	public boolean isEnderman() {
 		return isEnderman;
+	}
+
+	public boolean isWolf() {
+		return isWolf;
 	}
 
 	public boolean isItemFrame() {
