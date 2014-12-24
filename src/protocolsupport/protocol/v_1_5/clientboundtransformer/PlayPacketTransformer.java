@@ -391,17 +391,27 @@ public class PlayPacketTransformer implements PacketTransformer {
 				return;
 			}
 			case 0x1D: { //PacketPlayOutEntityEffect
+				int entityId = packetdata.readVarInt();
+				int effectId = packetdata.readByte();
+				if (effectId >= 21 && effectId <= 23) {
+					return;
+				}
 				serializer.writeByte(0x29);
-				serializer.writeInt(packetdata.readVarInt());
-				serializer.writeByte(packetdata.readByte());
+				serializer.writeInt(entityId);
+				serializer.writeByte(effectId);
 				serializer.writeByte(packetdata.readByte());
 				serializer.writeShort(packetdata.readVarInt());
 				return;
 			}
 			case 0x1E: { //PacketPlayOutRemoveEntityEffect
+				int entityId = packetdata.readVarInt();
+				int effectId = packetdata.readByte();
+				if (effectId >= 21 && effectId <= 23) {
+					return;
+				}
 				serializer.writeByte(0x2A);
-				serializer.writeInt(packetdata.readVarInt());
-				serializer.writeByte(packetdata.readByte());
+				serializer.writeInt(entityId);
+				serializer.writeByte(effectId);
 				return;
 			}
 			case 0x1F: { //PacketPlayOutExperience
