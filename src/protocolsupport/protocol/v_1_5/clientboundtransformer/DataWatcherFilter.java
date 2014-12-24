@@ -26,10 +26,20 @@ public class DataWatcherFilter {
 				damageobject.value = ((byte) ((float) damageobject.value));
 				damageobject.type = 0;
 			}
-			DataWatcherObject object = objects.get(8);
-			if (object != null) {
-				object.value = ((int) ((byte) object.value));
-				object.type = 2;
+			DataWatcherObject arrows = objects.get(9);
+			if (arrows != null) {
+				objects.remove(9);
+				objects.put(10, arrows);
+			}
+			DataWatcherObject pambient = objects.get(8);
+			if (arrows != null) {
+				objects.remove(8);
+				objects.put(9, pambient);
+			}
+			DataWatcherObject pcolor = objects.get(7);
+			if (arrows != null) {
+				objects.remove(7);
+				objects.put(8, pcolor);
 			}
 		}
 		if (entity.isWolf()) {
