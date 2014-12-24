@@ -51,7 +51,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(dimension);
 				serializer.writeByte(difficulty);
 				serializer.writeByte(0);
-				serializer.writeByte(Math.min(maxplayers, 60));
+				serializer.writeByte(Math.min(Math.abs(maxplayers), 60));
 				return;
 			}
 			case 0x02: { //PacketPlayOutChat
