@@ -36,7 +36,7 @@ public class ItemIDRemapper {
 		// carpet -> stone pressure plate
 		replacements[171] = 70;
 		// hardened clay -> clay
-		replacements[172] = 159;
+		replacements[172] = 82;
 		// coal block -> stone
 		replacements[173] = 1;
 		// packed ice -> ice
