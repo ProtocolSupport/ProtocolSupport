@@ -408,7 +408,8 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x20: { //PacketPlayOutUpdateAttributes
 				int entityId = packetdata.readVarInt();
-				if (getWatchedEntity(entityId).isArmorStand()) { //if the entity is armor stand than we don't send this packet at all
+				WatchedEntity entity = getWatchedEntity(entityId);
+				if (entity != null && entity.isArmorStand()) { //if the entity is armor stand than we don't send this packet at all
 					return;
 				}
 				serializer.writeByte(0x2C);
