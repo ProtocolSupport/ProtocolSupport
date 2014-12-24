@@ -56,6 +56,7 @@ public class PacketEncoder extends MessageToByteEncoder<Packet> {
 		}
 		PacketDataSerializer serializer = new PacketDataSerializer(output, DataStorage.getVersion(channel.remoteAddress()));
 		transformers[currentProtocol.ordinal()].tranform(channel, packetId, packet, serializer);
+		channel.flush();
 	}
 
 	@SuppressWarnings("unchecked")
