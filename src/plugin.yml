@@ -3,3 +3,8 @@ main: protocolsupport.ProtocolSupport
 version: 4.4.dev
 author: _Shevchik_
 load: STARTUP
+commands:
+  protocolsupport:
+    description: All ProtocolSupport commands
+    aliases: ps
+    usage: Invalid command
