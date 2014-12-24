@@ -1,6 +1,9 @@
 package protocolsupport.protocol;
 
+import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import protocolsupport.protocol.DataStorage.ProtocolVersion;
 import io.netty.buffer.ByteBuf;
@@ -11,10 +14,12 @@ import io.netty.handler.codec.CorruptedFrameException;
 
 public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 
+	private final Timer pingTimeout = new Timer();
+
 	@Override
 	public void channelRead(final ChannelHandlerContext channelHandlerContext, final Object inputObj) throws Exception {
 		try {
-			ByteBuf input = (ByteBuf) inputObj;
+			final ByteBuf input = (ByteBuf) inputObj;
 			if (input.readableBytes() == 0) {
 				return;
 			}
@@ -26,9 +31,22 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 				try {
 					if (input.readUnsignedByte() == 1) {
 						if (input.readableBytes() == 0) {
-							//1.5.2
-							handshakeversion = ProtocolVersion.MINECRAFT_1_5_2;
-							input.resetReaderIndex();
+							//1.5.2 or maybe we still didn't receive it all
+							pingTimeout.schedule(new TimerTask() {
+								@Override
+								public void run() {
+									try {
+										SocketAddress remoteAddress = channelHandlerContext.channel().remoteAddress();
+										if (DataStorage.getVersion(remoteAddress) == ProtocolVersion.UNKNOWN) {
+											DataStorage.setVersion(remoteAddress, ProtocolVersion.MINECRAFT_1_5_2);
+											input.resetReaderIndex();
+											rebuildPipeLine(channelHandlerContext, input, ProtocolVersion.MINECRAFT_1_5_2);
+										}
+									} catch (Throwable t) {
+										channelHandlerContext.channel().close();
+									}
+								}
+							}, 500);
 						} else if (
 							input.readUnsignedByte() == 0xFA &&
 							"MC|PingHost".equals(new String(input.readBytes(input.readUnsignedShort() * 2).array(), StandardCharsets.UTF_16BE))
