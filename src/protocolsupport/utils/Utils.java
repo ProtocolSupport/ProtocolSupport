@@ -24,6 +24,7 @@ public class Utils {
 	private static final HashMap<String, Byte> inventoryNameToId = new HashMap<String, Byte>() {
 		{
 			put("minecraft:chest", (byte) 0);
+			put("minecraft:container", (byte) 0);
 			put("minecraft:crafting_table", (byte) 1);
 			put("minecraft:furnace", (byte) 2);
 			put("minecraft:dispenser", (byte) 3);
