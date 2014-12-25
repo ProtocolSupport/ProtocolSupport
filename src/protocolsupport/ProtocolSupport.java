@@ -15,7 +15,8 @@ public class ProtocolSupport extends JavaPlugin {
 		try {
 			NettyInjector.inject();
 			ServerInjector.inject();
-		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
+		} catch (Throwable e) {
+			e.printStackTrace();
 			Bukkit.shutdown();
 		}
 	}
