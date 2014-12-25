@@ -39,7 +39,6 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 										SocketAddress remoteAddress = channelHandlerContext.channel().remoteAddress();
 										if (DataStorage.getVersion(remoteAddress) == ProtocolVersion.UNKNOWN) {
 											DataStorage.setVersion(remoteAddress, ProtocolVersion.MINECRAFT_1_5_2);
-											input.resetReaderIndex();
 											rebuildPipeLine(channelHandlerContext, input, ProtocolVersion.MINECRAFT_1_5_2);
 										}
 									} catch (Throwable t) {
@@ -47,6 +46,7 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 									}
 								}
 							}, 500);
+							input.resetReaderIndex();
 						} else if (
 							input.readUnsignedByte() == 0xFA &&
 							"MC|PingHost".equals(new String(input.readBytes(input.readUnsignedShort() * 2).array(), StandardCharsets.UTF_16BE))
