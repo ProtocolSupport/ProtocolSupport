@@ -5,7 +5,7 @@ import java.io.IOException;
 import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.server.v1_8_R1.ChatModifier;
 import net.minecraft.server.v1_8_R1.ChatModifierSerializer;
 import net.minecraft.server.v1_8_R1.ChatSerializer;
@@ -34,12 +34,12 @@ public class StatusPacketTransformer implements PacketTransformer {
     .create();
 
 	@Override
-	public void tranform(Channel channel, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException {
+	public void tranform(ChannelHandlerContext ctx, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException {
 		if (packetId == 0x00) {
 			PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
 			packet.b(packetdata);
 			ServerPing serverPing = gson.fromJson(packetdata.readString(32767), ServerPing.class);
-			serverPing.setServerInfo(new ServerPingServerData(serverPing.c().a(), DataStorage.getVersion(channel.remoteAddress()).getId()));
+			serverPing.setServerInfo(new ServerPingServerData(serverPing.c().a(), DataStorage.getVersion(ctx.channel().remoteAddress()).getId()));
 			serializer.writeVarInt(packetId);
 			serializer.writeString(gson.toJson(serverPing));
 			return;

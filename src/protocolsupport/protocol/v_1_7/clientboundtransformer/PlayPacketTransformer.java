@@ -25,6 +25,7 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.server.v1_8_R1.BlockPosition;
 import net.minecraft.server.v1_8_R1.ChatSerializer;
 import net.minecraft.server.v1_8_R1.Entity;
@@ -53,7 +54,8 @@ public class PlayPacketTransformer implements PacketTransformer {
 	}
 
 	@Override
-	public void tranform(Channel channel, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException {
+	public void tranform(ChannelHandlerContext ctx, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException {
+		Channel channel = ctx.channel();
 		PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
 		switch (packetId) {
 			case 0x0A: { // PacketPlayOutBed
@@ -131,16 +133,21 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x13: { // PacketPlayOutEntityDestroy
 				packet.b(packetdata);
-				serializer.writeVarInt(packetId);
+				PacketDataSerializer writePacketData = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
 				int count = packetdata.readVarInt();
 				int[] array = new int[count];
 				for (int i = 0; i < count; i++) {
 					array[i] = packetdata.readVarInt();
 				}
 				removeWatchedEntities(array);
-				serializer.writeByte(array.length);
-				for (int i = 0; i < count; i++) {
-					serializer.writeInt(array[i]);
+				for (int[] part : Utils.splitArray(array, 120)) {
+					writePacketData.clear();
+					writePacketData.writeVarInt(packetId);
+					writePacketData.writeByte(part.length);
+					for (int i = 0; i < part.length; i++) {
+						writePacketData.writeInt(part[i]);
+					}
+					ctx.write(writePacketData.copy());
 				}
 				return;
 			}
@@ -237,7 +244,52 @@ public class PlayPacketTransformer implements PacketTransformer {
 				return;
 			}
 			case 0x34: { // PacketPlayOutMap
-				// TODO
+				/* (not yet working, problems with columns)
+				PacketDataSerializer writePacketData = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
+				packet.b(packetdata);
+				int itemData = packetdata.readVarInt();
+				int scale = packetdata.readByte();
+				//send scale
+				writePacketData.writeVarInt(packetId);
+				writePacketData.writeVarInt(itemData);
+				writePacketData.writeShort(2);
+				writePacketData.writeByte(2);
+				writePacketData.writeByte(scale);
+				ctx.write(writePacketData.copy());
+				//send icons
+				int icons = packetdata.readVarInt();
+				if (icons > 0) {
+					writePacketData.clear();
+					writePacketData.writeVarInt(packetId);
+					writePacketData.writeVarInt(itemData);
+					writePacketData.writeShort(icons * 3 + 1);
+					writePacketData.writeByte(1);
+					writePacketData.writeBytes(packetdata.readBytes(icons * 3));
+					ctx.write(writePacketData.copy());
+				}
+				//send columns
+				int columns = packetdata.readUnsignedByte();
+				if (columns > 0) {
+					int rows = packetdata.readUnsignedByte();
+					int xstart = packetdata.readUnsignedByte();
+					int ystart = packetdata.readUnsignedByte();
+					byte[] data = new byte[packetdata.readVarInt()];
+					packetdata.readBytes(data);
+					for (int column = 0; column < columns; column++) {
+						int startindex = column * rows;
+						int endindex = startindex + rows;
+						writePacketData.clear();
+						writePacketData.writeVarInt(packetId);
+						writePacketData.writeVarInt(itemData);
+						writePacketData.writeShort(3 + endindex - startindex);
+						writePacketData.writeByte(0);
+						writePacketData.writeByte(xstart + column);
+						writePacketData.writeByte(ystart);
+						writePacketData.writeBytes(Arrays.copyOfRange(data, startindex, endindex));
+						ctx.write(writePacketData.copy());
+					}
+				}
+				*/
 				return;
 			}
 			case 0x21: { // PacketPlayOutMapChunk
@@ -384,43 +436,69 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x38: { // PacketPlayOutPlayerInfo
 				packet.b(packetdata);
+				PacketDataSerializer writePacketData = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
 				int action = packetdata.readVarInt();
-				packetdata.readVarInt();
-				UUID uuid = packetdata.g();
-				switch (action) {
-					case 0: {
-						String playerName = packetdata.readString(16);
-						DataStorage.addTabName(channel.remoteAddress(), uuid, playerName);
-						int props = packetdata.readVarInt();
-						for (int p = 0; p < props; p++) {
-							String name = packetdata.readString(32767);
-							String value = packetdata.readString(32767);
-							String signature = null;
-							if (packetdata.readBoolean()) {
-								signature = packetdata.readString(32767);
+				int count = packetdata.readVarInt();
+				for (int i = 0; i < count; i++) {
+					UUID uuid = packetdata.g();
+					switch (action) {
+						case 0: {
+							String playerName = packetdata.readString(16);
+							DataStorage.addTabName(channel.remoteAddress(), uuid, playerName);
+							int props = packetdata.readVarInt();
+							for (int p = 0; p < props; p++) {
+								String name = packetdata.readString(32767);
+								String value = packetdata.readString(32767);
+								String signature = null;
+								if (packetdata.readBoolean()) {
+									signature = packetdata.readString(32767);
+								}
+								DataStorage.addPropertyData(channel.remoteAddress(), uuid, signature != null ? new Property(name, value, signature) : new Property(value, name));
 							}
-							DataStorage.addPropertyData(channel.remoteAddress(), uuid, signature != null ? new Property(name, value, signature) : new Property(value, name));
+							packetdata.readVarInt();
+							packetdata.readVarInt();
+							if (packetdata.readBoolean()) {
+								packetdata.d();
+							}
+							writePacketData.clear();
+							writePacketData.writeVarInt(packetId);
+							writePacketData.writeString(playerName);
+							writePacketData.writeBoolean(true);
+							writePacketData.writeShort(0);
+							ctx.write(writePacketData.copy());
+							break;
 						}
-						packetdata.readVarInt();
-						packetdata.readVarInt();
-						serializer.writeVarInt(packetId);
-						serializer.writeString(playerName);
-						serializer.writeBoolean(true);
-						serializer.writeShort(0);
-						return;
-					}
-					case 4: {
-						String playerName = DataStorage.getTabName(channel.remoteAddress(), uuid);
-						serializer.writeVarInt(packetId);
-						serializer.writeString(playerName);
-						serializer.writeBoolean(false);
-						serializer.writeShort(0);
-						return;
-					}
-					default: { //do not send packet at all, we don't update ping anyway
-						return;
+						case 4: {
+							String playerName = DataStorage.getTabName(channel.remoteAddress(), uuid);
+							writePacketData.clear();
+							writePacketData.writeVarInt(packetId);
+							writePacketData.writeString(playerName);
+							writePacketData.writeBoolean(false);
+							writePacketData.writeShort(0);
+							ctx.write(writePacketData.copy());
+							break;
+						}
+						//don't send packet, but still read data
+						case 1: {
+							packetdata.readVarInt();
+							break;
+						}
+						case 2: {
+							packetdata.readVarInt();
+							break;
+						}
+						case 3: {
+							if (packetdata.readBoolean()) {
+								packetdata.d();
+							}
+							break;
+						}
+						default: {
+							break;
+						}
 					}
 				}
+				return;
 			}
 			case 0x08: { // PacketPlayOutPosition
 				packet.b(packetdata);
