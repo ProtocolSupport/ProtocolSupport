@@ -26,19 +26,17 @@ public class DataWatcherFilter {
 				damageobject.value = ((byte) ((float) damageobject.value));
 				damageobject.type = 0;
 			}
-			DataWatcherObject arrows = objects.get(9);
+			objects.remove(10);
+			DataWatcherObject arrows = objects.remove(9);
+			DataWatcherObject pambient = objects.remove(8);
+			DataWatcherObject pcolor = objects.remove(7);
 			if (arrows != null) {
-				objects.remove(9);
 				objects.put(10, arrows);
 			}
-			DataWatcherObject pambient = objects.get(8);
-			if (arrows != null) {
-				objects.remove(8);
+			if (pambient != null) {
 				objects.put(9, pambient);
 			}
-			DataWatcherObject pcolor = objects.get(7);
-			if (arrows != null) {
-				objects.remove(7);
+			if (pcolor != null) {
 				objects.put(8, pcolor);
 			}
 		}
