@@ -94,7 +94,7 @@ public class DataWatcherFilter {
 		}
 		// add object in case objects list is empty
 		if (objects.isEmpty()) {
-			objects.put(0, new DataWatcherObject(0, (byte) 0));
+			objects.put(31, new DataWatcherObject(0, (byte) 0));
 		}
 		return encodeData(version, objects);
 	}
