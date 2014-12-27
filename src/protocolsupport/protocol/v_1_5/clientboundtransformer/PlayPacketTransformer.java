@@ -250,7 +250,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x0F: { //PacketPlayOutSpawnEntityLiving
 				int entityId = packetdata.readVarInt();
 				int type = packetdata.readUnsignedByte();
-				if (entityId == 30) { //skip armor stands spawned by entityliving spawn packet
+				if (type == 30) { //skip armor stands spawned by entityliving spawn packet
 					return;
 				}
 				addWatchedEntity(new WatchedEntity(entityId, type));
