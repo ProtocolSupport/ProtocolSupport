@@ -11,6 +11,7 @@ public class WatchedEntity {
 	private boolean isWolf = false;
 	private boolean isItemFrame = false;
 	private boolean isArmorStand = false;
+	private boolean isBoat = false;
 
 	public WatchedEntity(int id) {
 		this.id = id;
@@ -20,6 +21,10 @@ public class WatchedEntity {
 	public WatchedEntity(int id, int type) {
 		this.id = id;
 		switch (type) {
+			case 1: {
+				isBoat = true;
+				break;
+			}
 			case 71: {
 				isItemFrame = true;
 				break;
@@ -121,6 +126,10 @@ public class WatchedEntity {
 
 	public boolean isMinecart() {
 		return isMinecart;
+	}
+
+	public boolean isBoat() {
+		return isBoat;
 	}
 
 	public boolean isEnderman() {

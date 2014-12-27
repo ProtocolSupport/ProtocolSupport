@@ -77,6 +77,12 @@ public class DataWatcherFilter {
 				int p2 = value >> 12;
 				object.value = (p2 << 16) | p1;
 			}
+		} else if (entity.isBoat()) {
+			DataWatcherObject damageobject = objects.get(19);
+			if (damageobject != null) {
+				damageobject.value = ((int) ((float) damageobject.value));
+				damageobject.type = 2;
+			}
 		} else if (entity.isItemFrame()) {
 			if (objects.containsKey(8)) {
 				ItemStack item = (ItemStack) objects.get(8).value;
