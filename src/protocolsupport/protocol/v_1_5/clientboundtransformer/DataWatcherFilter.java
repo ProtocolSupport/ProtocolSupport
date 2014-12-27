@@ -92,9 +92,6 @@ public class DataWatcherFilter {
 				int rotation = (byte) objects.get(9).value;
 				objects.put(3, new DataWatcherObject(0, ((byte) (rotation >> 1))));
 			}
-		} else if (entity.isArmorStand()) { // replace with entity ender crystal data
-			objects.clear();
-			objects.put(8, new DataWatcherObject(2, 5));
 		}
 		// remove type 7 watched objects
 		Iterator<DataWatcherObject> iterator = objects.valueCollection().iterator();

@@ -24,20 +24,4 @@ public class EntityIDRemapper {
 		return oldId;
 	}
 
-	private static int replacementsObjects[] = new int[256];
-	static {
-		for (int i = 0; i < replacementsObjects.length; i++) {
-			replacementsObjects[i] = -1;
-		}
-		// armor stand -> ender crystal
-		replacementsObjects[78] = 51; 
-	}
-
-	public static int replaceObjectEntityId(int oldId) {
-		if (replacementsObjects[oldId] != -1) {
-			return replacementsObjects[oldId];
-		}
-		return oldId;
-	}
-
 }

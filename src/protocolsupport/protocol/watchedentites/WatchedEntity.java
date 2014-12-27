@@ -10,7 +10,6 @@ public class WatchedEntity {
 	private boolean isEnderman = false;
 	private boolean isWolf = false;
 	private boolean isItemFrame = false;
-	private boolean isArmorStand = false;
 	private boolean isBoat = false;
 
 	public WatchedEntity(int id) {
@@ -27,10 +26,6 @@ public class WatchedEntity {
 			}
 			case 71: {
 				isItemFrame = true;
-				break;
-			}
-			case 78: {
-				isArmorStand = true;
 				break;
 			}
 			case 10: {
@@ -142,10 +137,6 @@ public class WatchedEntity {
 
 	public boolean isItemFrame() {
 		return isItemFrame;
-	}
-
-	public boolean isArmorStand() {
-		return isArmorStand;
 	}
 
 }

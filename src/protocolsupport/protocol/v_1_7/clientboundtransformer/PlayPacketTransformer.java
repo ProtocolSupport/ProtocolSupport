@@ -615,12 +615,15 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x0E: { // PacketPlayOutSpawnEntity
 				packet.b(packetdata);
-				serializer.writeVarInt(packetId);
 				int entityId = packetdata.readVarInt();
-				serializer.writeVarInt(entityId);
 				int type = packetdata.readUnsignedByte();
+				if (type == 78) { //skip armor stand
+					return;
+				}
 				addWatchedEntity(new WatchedEntity(entityId, type));
-				serializer.writeByte(EntityIDRemapper.replaceObjectEntityId(type));
+				serializer.writeVarInt(packetId);
+				serializer.writeVarInt(entityId);
+				serializer.writeByte(type);
 				int x = packetdata.readInt();
 				int y = packetdata.readInt();
 				int z = packetdata.readInt();
@@ -727,13 +730,8 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x20: { // PacketPlayOutUpdateAttributes
 				packet.b(packetdata);
-				int entityId = packetdata.readVarInt();
-				WatchedEntity entity = getWatchedEntity(entityId);
-				if (entity != null && entity.isArmorStand()) { //if the entity is armor stand than we don't send this packet at all
-					return;
-				}
 				serializer.writeVarInt(packetId);
-				serializer.writeInt(entityId);
+				serializer.writeInt(packetdata.readVarInt());
 				int ascount = packetdata.readInt();
 				serializer.writeInt(ascount);
 				for (int i = 0; i < ascount; i++) {
@@ -802,7 +800,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				packet.b(packetdata);
 				int entityId = packetdata.readVarInt();
 				int type = packetdata.readUnsignedByte();
-				if (type == 30) { //skip armor stands spawned by entityliving spawn packet
+				if (type == 30) { //skip armor stands
 					return;
 				}
 				addWatchedEntity(new WatchedEntity(entityId, type));
