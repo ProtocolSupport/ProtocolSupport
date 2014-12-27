@@ -21,10 +21,15 @@ public class DataWatcherFilter {
 		}
 		TIntObjectMap<DataWatcherObject> objects = decodeData(version, data);
 		if (entity.isLiving()) {
-			DataWatcherObject damageobject = objects.get(6);
-			if (damageobject != null) {
-				damageobject.value = ((byte) ((float) damageobject.value));
-				damageobject.type = 0;
+			objects.remove(5);
+			objects.remove(6);
+			DataWatcherObject nametag = objects.remove(2);
+			DataWatcherObject nametagvisible = objects.remove(3);
+			if (nametag != null) {
+				objects.put(5, nametag);
+			}
+			if (nametagvisible != null) {
+				objects.put(6, nametagvisible);
 			}
 			objects.remove(10);
 			DataWatcherObject arrows = objects.remove(9);
