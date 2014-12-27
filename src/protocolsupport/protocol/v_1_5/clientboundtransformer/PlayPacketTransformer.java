@@ -248,11 +248,14 @@ public class PlayPacketTransformer implements PacketTransformer {
 				return;
 			}
 			case 0x0F: { //PacketPlayOutSpawnEntityLiving
-				serializer.writeByte(0x18);
 				int entityId = packetdata.readVarInt();
-				serializer.writeInt(entityId);
 				int type = packetdata.readUnsignedByte();
+				if (entityId == 30) { //skip armor stands spawned by entityliving spawn packet
+					return;
+				}
 				addWatchedEntity(new WatchedEntity(entityId, type));
+				serializer.writeByte(0x18);
+				serializer.writeInt(entityId);
 				serializer.writeByte(EntityIDRemapper.replaceLivingEntityId(type));
 				serializer.writeInt(packetdata.readInt());
 				serializer.writeInt(packetdata.readInt());
