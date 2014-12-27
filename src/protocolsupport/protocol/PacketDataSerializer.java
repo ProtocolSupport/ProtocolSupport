@@ -11,16 +11,21 @@ import java.nio.charset.StandardCharsets;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R1.inventory.CraftItemStack;
 import org.spigotmc.LimitStream;
 import org.spigotmc.SneakyThrow;
 
+import com.mojang.authlib.GameProfile;
+
 import protocolsupport.protocol.DataStorage.ProtocolVersion;
+import net.minecraft.server.v1_8_R1.GameProfileSerializer;
 import net.minecraft.server.v1_8_R1.Item;
 import net.minecraft.server.v1_8_R1.ItemStack;
 import net.minecraft.server.v1_8_R1.NBTCompressedStreamTools;
 import net.minecraft.server.v1_8_R1.NBTReadLimiter;
 import net.minecraft.server.v1_8_R1.NBTTagCompound;
+import net.minecraft.server.v1_8_R1.NBTTagString;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
@@ -39,8 +44,8 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R1.PacketDat
 		return version;
 	}
 
-	
-	//TODO: use switch
+
+	@SuppressWarnings("deprecation")
 	@Override
 	public void a(ItemStack itemstack) {
 		if (itemstack == null || itemstack.getItem() == null) {
@@ -55,7 +60,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R1.PacketDat
 				this.writeShort(protocolsupport.protocol.v_1_5.remappers.ItemIDRemapper.replaceItemId(itemId));
 			} else {
 				this.writeShort(itemId);
-			} 
+			}
 			this.writeByte(itemstack.count);
 			this.writeShort(itemstack.getData());
 			NBTTagCompound nbttagcompound = null;
@@ -63,6 +68,23 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R1.PacketDat
 				itemstack = itemstack.cloneItemStack();
 				CraftItemStack.setItemMeta(itemstack, CraftItemStack.getItemMeta(itemstack));
 				nbttagcompound = itemstack.getTag();
+			}
+			if (
+				getVersion() == ProtocolVersion.MINECRAFT_1_7_5 ||
+				getVersion() == ProtocolVersion.MINECRAFT_1_6_4 ||
+				getVersion() == ProtocolVersion.MINECRAFT_1_6_2 ||
+				getVersion() == ProtocolVersion.MINECRAFT_1_5_2
+			) {
+				if (nbttagcompound != null && itemId == Material.SKULL_ITEM.getId()) {
+					if (nbttagcompound.hasKeyOfType("SkullOwner", 10)) {
+						GameProfile gameprofile = GameProfileSerializer.deserialize(nbttagcompound.getCompound("SkullOwner"));
+						if (gameprofile.getName() != null) {
+							nbttagcompound.set("SkullOwner", new NBTTagString(gameprofile.getName()));
+						} else {
+							nbttagcompound.remove("SkullOwner");
+						}
+	                }
+				}
 			}
 			this.a(nbttagcompound);
 		}
