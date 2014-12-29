@@ -4,6 +4,7 @@ import io.netty.channel.Channel;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -77,6 +78,20 @@ public class Utils {
 	public static <T> T setAccessible(AccessibleObject object) {
 		object.setAccessible(true);
 		return (T) object;
+	}
+
+	public static void setStaticFinalField(Field field, Object newValue) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		field.setAccessible(true);
+		Field fieldModifiers = Field.class.getDeclaredField("modifiers");
+		fieldModifiers.setAccessible(true);
+		fieldModifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+		Field root = Field.class.getDeclaredField("root");
+		root.setAccessible(true);
+		root.set(field, null);
+		Field accessor = Field.class.getDeclaredField("overrideFieldAccessor");
+		accessor.setAccessible(true);
+		accessor.set(field, null);
+		field.set(null, newValue);
 	}
 
 	public static Channel getChannel(NetworkManager nm) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
