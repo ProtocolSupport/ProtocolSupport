@@ -854,7 +854,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x40: { //PacketPlayOutKickDisconnect
 				serializer.writeByte(0xFF);
-				Utils.writeTheRestOfTheData(packetdata, serializer);
+				serializer.writeString(CraftChatMessage.fromComponent(packetdata.d()));
 				return;
 			}
 		}
