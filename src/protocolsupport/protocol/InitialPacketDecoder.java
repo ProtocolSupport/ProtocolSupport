@@ -60,8 +60,12 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 					input.resetReaderIndex();
 				}
 			} else if (firstbyte == 0x02) { //1.6 or 1.5.2 handshake
-				handshakeversion = ProtocolVersion.fromId(input.readUnsignedByte());
-				input.resetReaderIndex();
+				try {
+					handshakeversion = ProtocolVersion.fromId(input.readUnsignedByte());
+					input.resetReaderIndex();
+				} catch (IndexOutOfBoundsException ex) {
+					input.resetReaderIndex();
+				}
 			} else { //1.7 handshake
 				input.resetReaderIndex();
 				input.markReaderIndex();
@@ -73,10 +77,12 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 			}
 			//if we detected the protocol than we save it and process data
 			if (handshakeversion != ProtocolVersion.UNKNOWN) {
+				System.out.println(channelHandlerContext.channel().remoteAddress()+" connected with protocol version "+handshakeversion);
 				DataStorage.setVersion(channelHandlerContext.channel().remoteAddress(), handshakeversion);
 				rebuildPipeLine(channelHandlerContext, input, handshakeversion);
 			}
 		} catch (Throwable t) {
+			t.printStackTrace();
 			channelHandlerContext.channel().close();
 		}
 	}
