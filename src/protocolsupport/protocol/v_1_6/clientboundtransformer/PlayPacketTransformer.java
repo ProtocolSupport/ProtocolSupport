@@ -188,10 +188,10 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x0E: { //PacketPlayOutSpawnEntity
 				int entityId = packetdata.readVarInt();
 				int type = packetdata.readUnsignedByte();
+				addWatchedEntity(new WatchedEntity(entityId, type));
 				if (type == 78) { //skip armor stands
 					return;
 				}
-				addWatchedEntity(new WatchedEntity(entityId, type));
 				serializer.writeByte(0x17);
 				serializer.writeInt(entityId);
 				serializer.writeByte(type);
@@ -249,10 +249,10 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x0F: { //PacketPlayOutSpawnEntityLiving
 				int entityId = packetdata.readVarInt();
 				int type = packetdata.readUnsignedByte();
+				addWatchedEntity(new WatchedEntity(entityId, type));
 				if (type == 30) { //skip armor stands
 					return;
 				}
-				addWatchedEntity(new WatchedEntity(entityId, type));
 				serializer.writeByte(0x18);
 				serializer.writeInt(entityId);
 				serializer.writeByte(EntityIDRemapper.replaceLivingEntityId(type));
