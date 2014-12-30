@@ -40,7 +40,7 @@ public class BlockIDRemapper {
 		// coal block -> stone
 		replacements[173] = 1;
 		// packed ice -> ice
-		replacements[174] = 79;
+		replacements[174] = 80;
 		// tall plant -> yellow flower
 		replacements[175] = 38;
 		// standing banner -> standing sign
