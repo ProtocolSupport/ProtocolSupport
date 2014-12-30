@@ -710,10 +710,6 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeInt(blockPos.getZ());
 				return;
 			}
-			case 0x37: { //PacketPlayOutStatistic
-				//TODO, will probably have to split them to multiple packets in packetencoder
-				return;
-			}
 			case 0x38: { //PacketPlayOutPlayerInfo
 				int action = packetdata.readVarInt();
 				int count = packetdata.readVarInt();

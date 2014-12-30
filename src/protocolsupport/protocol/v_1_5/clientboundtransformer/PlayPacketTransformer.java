@@ -697,19 +697,6 @@ public class PlayPacketTransformer implements PacketTransformer {
 				Utils.writeTheRestOfTheData(packetdata, serializer);
 				return;
 			}
-			case 0x36: { //PacketPlayOutOpenSignEditor
-				serializer.writeByte(0x85);
-				serializer.writeByte(0);
-				BlockPosition blockPos = packetdata.c();
-				serializer.writeInt(blockPos.getX());
-				serializer.writeInt(blockPos.getY());
-				serializer.writeInt(blockPos.getZ());
-				return;
-			}
-			case 0x37: { //PacketPlayOutStatistic
-				//TODO, will probably have to split them to multiple packets in packetencoder
-				return;
-			}
 			case 0x38: { //PacketPlayOutPlayerInfo
 				int action = packetdata.readVarInt();
 				int count = packetdata.readVarInt();
