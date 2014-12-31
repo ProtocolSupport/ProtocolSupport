@@ -3,6 +3,7 @@ package protocolsupport.protocol.v_1_8;
 import java.io.IOException;
 import java.util.List;
 
+import protocolsupport.protocol.PublicPacketDecoder;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -13,7 +14,7 @@ import net.minecraft.server.v1_8_R1.NetworkManager;
 import net.minecraft.server.v1_8_R1.Packet;
 import net.minecraft.server.v1_8_R1.PacketDataSerializer;
 
-public class PacketDecoder extends ByteToMessageDecoder {
+public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketDecoder {
 
 	private static final EnumProtocolDirection direction = EnumProtocolDirection.SERVERBOUND;
 	@SuppressWarnings("unchecked")
@@ -35,6 +36,11 @@ public class PacketDecoder extends ByteToMessageDecoder {
 			throw new IOException("Packet " + ctx.channel().attr(currentStateAttrKey).get().a() + "/" + packetId + " (" + packet.getClass().getSimpleName() + ") was larger than I expected, found " + packetDataSerializer.readableBytes() + " bytes extra whilst reading packet " + packetId);
 		}
 		list.add(packet);
+	}
+
+	@Override
+	public void publicDecode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
+		decode(ctx, input, list);
 	}
 
 }

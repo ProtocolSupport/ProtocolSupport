@@ -7,6 +7,7 @@ import javax.crypto.Cipher;
 
 import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.PublicPacketDecoder;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -16,7 +17,7 @@ import net.minecraft.server.v1_8_R1.EnumProtocol;
 import net.minecraft.server.v1_8_R1.NetworkManager;
 import net.minecraft.server.v1_8_R1.Packet;
 
-public class PacketDecoder extends ByteToMessageDecoder {
+public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketDecoder {
 
 	@SuppressWarnings("unchecked")
 	private static final AttributeKey<EnumProtocol> currentStateAttrKey = NetworkManager.c;
@@ -63,6 +64,11 @@ public class PacketDecoder extends ByteToMessageDecoder {
 		} catch (IndexOutOfBoundsException ex) {
 		}
 		bytebuf.resetReaderIndex();
+	}
+
+	@Override
+	public void publicDecode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
+		decode(ctx, input, list);
 	}
 
 }

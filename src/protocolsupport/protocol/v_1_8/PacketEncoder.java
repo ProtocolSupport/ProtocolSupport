@@ -2,6 +2,7 @@ package protocolsupport.protocol.v_1_8;
 
 import java.io.IOException;
 
+import protocolsupport.protocol.PublicPacketEncoder;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -13,7 +14,7 @@ import net.minecraft.server.v1_8_R1.NetworkManager;
 import net.minecraft.server.v1_8_R1.Packet;
 import net.minecraft.server.v1_8_R1.PacketDataSerializer;
 
-public class PacketEncoder extends MessageToByteEncoder<Packet> {
+public class PacketEncoder extends MessageToByteEncoder<Packet> implements PublicPacketEncoder {
 
 	private static final EnumProtocolDirection direction = EnumProtocolDirection.CLIENTBOUND;
 	@SuppressWarnings("unchecked")
@@ -30,6 +31,11 @@ public class PacketEncoder extends MessageToByteEncoder<Packet> {
 		PacketDataSerializer serializer = new PacketDataSerializer(output);
 		serializer.b(packetId);
 		packet.b(serializer);
+	}
+
+	@Override
+	public void publicEncode(ChannelHandlerContext ctx, Packet packet, ByteBuf output) throws Exception {
+		encode(ctx, packet, output);
 	}
 
 }

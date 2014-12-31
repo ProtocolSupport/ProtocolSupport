@@ -15,9 +15,10 @@ import net.minecraft.server.v1_8_R1.NetworkManager;
 import net.minecraft.server.v1_8_R1.Packet;
 import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.PublicPacketDecoder;
 import protocolsupport.protocol.DataStorage.ProtocolVersion;
 
-public class PacketDecoder extends ByteToMessageDecoder {
+public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketDecoder {
 
 	private static final PacketTransformer[] transformers = new PacketTransformer[] {
 		new HandshakePacketTransformer(),
@@ -51,6 +52,11 @@ public class PacketDecoder extends ByteToMessageDecoder {
 			throw new IOException("Packet " + channel.attr(currentStateAttrKey).get().a() + "/" + packetId + " (" + packet.getClass().getSimpleName() + ") was larger than expected, found " + packetDataSerializer.readableBytes() + " bytes extra whilst reading packet " + packetId);
 		}
 		list.add(packet);
+	}
+
+	@Override
+	public void publicDecode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
+		decode(ctx, input, list);
 	}
 
 }

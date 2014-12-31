@@ -12,11 +12,11 @@ import net.minecraft.server.v1_8_R1.EnumProtocol;
 import net.minecraft.server.v1_8_R1.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R1.NetworkManager;
 import net.minecraft.server.v1_8_R1.Packet;
-
 import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.PublicPacketEncoder;
 
-public class PacketEncoder extends MessageToByteEncoder<Packet> {
+public class PacketEncoder extends MessageToByteEncoder<Packet> implements PublicPacketEncoder {
 
 	private static final EnumProtocolDirection direction = EnumProtocolDirection.CLIENTBOUND;
 	@SuppressWarnings("unchecked")
@@ -40,6 +40,11 @@ public class PacketEncoder extends MessageToByteEncoder<Packet> {
 		PacketDataSerializer serializer = new PacketDataSerializer(output, DataStorage.getVersion(channel.remoteAddress()));
 		transformers[currentProtocol.ordinal()].tranform(channel, packetId, packet, serializer);
 		channel.flush();
+	}
+
+	@Override
+	public void publicEncode(ChannelHandlerContext ctx, Packet packet, ByteBuf output) throws Exception {
+		encode(ctx, packet, output);
 	}
 
 }

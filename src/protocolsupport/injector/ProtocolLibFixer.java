@@ -1,9 +1,7 @@
 package protocolsupport.injector;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.server.v1_8_R1.Packet;
@@ -11,6 +9,8 @@ import net.minecraft.server.v1_8_R1.Packet;
 import org.bukkit.Bukkit;
 import org.spigotmc.SneakyThrow;
 
+import protocolsupport.protocol.PublicPacketDecoder;
+import protocolsupport.protocol.PublicPacketEncoder;
 import protocolsupport.utils.Utils;
 
 import com.comphenix.protocol.reflect.accessors.MethodAccessor;
@@ -31,10 +31,10 @@ public class ProtocolLibFixer {
 			if (protocolLibDecoder != null) {
 				if (!methodAccessorsInjected) {
 					Utils.<Field>setAccessible(protocolLibDecoder.getClass().getDeclaredField("DECODE_BUFFER")).set(
-						null, new PipelineEncodeDecodeMethodAccessor(true)
+						null, new PipelineDecodeMethodAccessor()
 					);
 					Utils.<Field>setAccessible(protocolLibDecoder.getClass().getDeclaredField("ENCODE_BUFFER")).set(
-						null, new PipelineEncodeDecodeMethodAccessor(false)
+						null, new PipelineEncodeMethodAccessor()
 					);
 					methodAccessorsInjected = true;
 				}
@@ -49,48 +49,45 @@ public class ProtocolLibFixer {
 		}
 	}
 
-	private static class PipelineEncodeDecodeMethodAccessor implements MethodAccessor {
-
-		private boolean isForDecoder;
-		public PipelineEncodeDecodeMethodAccessor(boolean isForDecoder) {
-			this.isForDecoder = isForDecoder;
-		}
-
-		private HashMap<Class<?>, Method> cachedMethods = new HashMap<Class<?>, Method>();
+	private static class PipelineEncodeMethodAccessor implements MethodAccessor {
 
 		@Override
 		public Method getMethod() {
-			throw new RuntimeException("PipelineEncodeDecodeMethodAccessor is dynamic and can't provide method instance");
+			throw new RuntimeException("PipelineEncodeMethodAccessor is dynamic and can't provide method instance");
 		}
 
 		@Override
 		public Object invoke(Object obj, Object... args) {
-			Class<?> clazz = obj.getClass();
 			try {
-				if (!cachedMethods.containsKey(clazz)) {
-					if (isForDecoder) {
-						Method method = clazz.getDeclaredMethod("decode", ChannelHandlerContext.class, ByteBuf.class, List.class);
-						cachedMethods.put(clazz, method);
-					} else {
-						Method method = clazz.getDeclaredMethod("encode", ChannelHandlerContext.class, Packet.class, ByteBuf.class);
-						cachedMethods.put(clazz, method);
-					}
-				}
-				Method method = cachedMethods.get(clazz);
-				method.setAccessible(true);
-				return method.invoke(obj, args);
-			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException t) {
-				if (t.getCause() == null) {
-					System.err.println("Failed to access pipeline decode and encode methods, shutting down");
-					t.printStackTrace();
-					Bukkit.shutdown();
-				} else {
-					SneakyThrow.sneaky(t.getCause());
-				}
-				return null;
+				PublicPacketEncoder publicEncoder = (PublicPacketEncoder) obj;
+				publicEncoder.publicEncode((ChannelHandlerContext) args[0], (Packet) args[1], (ByteBuf) args[2]);
+			} catch (Throwable t) {
+				SneakyThrow.sneaky(t.getCause());
 			}
+			return null;
 		}
-		
+
+	}
+
+	private static class PipelineDecodeMethodAccessor implements MethodAccessor {
+
+		@Override
+		public Method getMethod() {
+			throw new RuntimeException("PipelineDecodeMethodAccessor is dynamic and can't provide method instance");
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public Object invoke(Object obj, Object... args) {
+			try {
+				PublicPacketDecoder publicDecoder = (PublicPacketDecoder) obj;
+				publicDecoder.publicDecode((ChannelHandlerContext) args[0], (ByteBuf) args[1], (List<Object>) args[2]);
+			} catch (Throwable t) {
+				SneakyThrow.sneaky(t.getCause());
+			}
+			return null;
+		}
+
 	}
 
 }
