@@ -72,13 +72,8 @@ public class ProtocolLibFixer {
 						Method method = clazz.getDeclaredMethod("decode", ChannelHandlerContext.class, ByteBuf.class, List.class);
 						cachedMethods.put(clazz, method);
 					} else {
-						try {
-							Method method = clazz.getDeclaredMethod("encode", ChannelHandlerContext.class, Packet.class, ByteBuf.class);
-							cachedMethods.put(clazz, method);
-						} catch (NoSuchMethodException nosuchmethod) {
-							Method method = clazz.getDeclaredMethod("encode", ChannelHandlerContext.class, Object.class, ByteBuf.class);
-							cachedMethods.put(clazz, method);
-						}
+						Method method = clazz.getDeclaredMethod("encode", ChannelHandlerContext.class, Packet.class, ByteBuf.class);
+						cachedMethods.put(clazz, method);
 					}
 				}
 				Method method = cachedMethods.get(clazz);
