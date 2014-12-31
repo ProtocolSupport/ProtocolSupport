@@ -17,73 +17,74 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 	private final Timer pingTimeout = new Timer();
 
 	@Override
-	public void channelRead(final ChannelHandlerContext channelHandlerContext, final Object inputObj) throws Exception {
+	public void channelRead(final ChannelHandlerContext ctx, final Object inputObj) throws Exception {
 		try {
 			final ByteBuf input = (ByteBuf) inputObj;
-			if (input.readableBytes() == 0) {
+			if (!input.isReadable()) {
 				return;
 			}
 			//detect protocol
 			ProtocolVersion handshakeversion = ProtocolVersion.UNKNOWN;
-			input.markReaderIndex();
+			//reset reader index to 0
+			input.readerIndex(0);
 			int firstbyte = input.readUnsignedByte();
-			if (firstbyte == 0xFE) { //1.6 ping or 1.5 ping (should we check if FE is actually a part of a varint length?)
-				try {
-					if (input.readUnsignedByte() == 1) {
-						if (input.readableBytes() == 0) {
-							//1.5.2 or maybe we still didn't receive it all
-							pingTimeout.schedule(new TimerTask() {
-								@Override
-								public void run() {
-									try {
-										SocketAddress remoteAddress = channelHandlerContext.channel().remoteAddress();
-										if (DataStorage.getVersion(remoteAddress) == ProtocolVersion.UNKNOWN) {
-											DataStorage.setVersion(remoteAddress, ProtocolVersion.MINECRAFT_1_5_2);
-											rebuildPipeLine(channelHandlerContext, input, ProtocolVersion.MINECRAFT_1_5_2);
+			switch (firstbyte) {
+				case 0xFE: { //1.6 ping or 1.5 ping (should we check if FE is actually a part of a varint length?)
+					try {
+						if (input.readUnsignedByte() == 1) {
+							if (input.readableBytes() == 0) {
+								//1.5.2 or maybe we still didn't receive it all
+								pingTimeout.schedule(new TimerTask() {
+									@Override
+									public void run() {
+										try {
+											SocketAddress remoteAddress = ctx.channel().remoteAddress();
+											if (DataStorage.getVersion(remoteAddress) == ProtocolVersion.UNKNOWN) {
+												DataStorage.setVersion(remoteAddress, ProtocolVersion.MINECRAFT_1_5_2);
+												rebuildPipeLine(ctx, input, ProtocolVersion.MINECRAFT_1_5_2);
+											}
+										} catch (Throwable t) {
+											ctx.channel().close();
 										}
-									} catch (Throwable t) {
-										channelHandlerContext.channel().close();
 									}
-								}
-							}, 500);
-							input.resetReaderIndex();
-						} else if (
-							input.readUnsignedByte() == 0xFA &&
-							"MC|PingHost".equals(new String(input.readBytes(input.readUnsignedShort() * 2).array(), StandardCharsets.UTF_16BE))
-						) { //1.6.*
-							input.readUnsignedShort();
-							handshakeversion = ProtocolVersion.fromId(input.readUnsignedByte());
-							input.resetReaderIndex();
+								}, 500);
+							} else if (
+								input.readUnsignedByte() == 0xFA &&
+								"MC|PingHost".equals(new String(input.readBytes(input.readUnsignedShort() * 2).array(), StandardCharsets.UTF_16BE))
+							) { //1.6.*
+								input.readUnsignedShort();
+								handshakeversion = ProtocolVersion.fromId(input.readUnsignedByte());
+							}
 						}
+					} catch (IndexOutOfBoundsException ex) {
 					}
-				} catch (IndexOutOfBoundsException ex) {
-					input.resetReaderIndex();
+					break;
 				}
-			} else if (firstbyte == 0x02) { //1.6 or 1.5.2 handshake
-				try {
-					handshakeversion = ProtocolVersion.fromId(input.readUnsignedByte());
-					input.resetReaderIndex();
-				} catch (IndexOutOfBoundsException ex) {
-					input.resetReaderIndex();
+				case 0x02: { //1.6 or 1.5.2 handshake
+					try {
+						handshakeversion = ProtocolVersion.fromId(input.readUnsignedByte());
+					} catch (IndexOutOfBoundsException ex) {
+					}
+					break;
 				}
-			} else { //1.7 handshake
-				input.resetReaderIndex();
-				input.markReaderIndex();
-				ByteBuf data = getVarIntPrefixedData(input);
-				if (data != null) {
-					handshakeversion = read1_7_1_8Handshake(data);
+				default: { //1.7 or 1.8 handshake
+					input.readerIndex(0);
+					ByteBuf data = getVarIntPrefixedData(input);
+					if (data != null) {
+						handshakeversion = read1_7_1_8Handshake(data);
+					}
+					break;
 				}
-				input.resetReaderIndex();
 			}
 			//if we detected the protocol than we save it and process data
 			if (handshakeversion != ProtocolVersion.UNKNOWN) {
-				System.out.println(channelHandlerContext.channel().remoteAddress()+" connected with protocol version "+handshakeversion);
-				DataStorage.setVersion(channelHandlerContext.channel().remoteAddress(), handshakeversion);
-				rebuildPipeLine(channelHandlerContext, input, handshakeversion);
+				System.out.println(ctx.channel().remoteAddress()+" connected with protocol version "+handshakeversion);
+				DataStorage.setVersion(ctx.channel().remoteAddress(), handshakeversion);
+				rebuildPipeLine(ctx, input, handshakeversion);
 			}
 		} catch (Throwable t) {
 			t.printStackTrace();
-			channelHandlerContext.channel().close();
+			ctx.channel().close();
 		}
 	}
 
@@ -110,6 +111,9 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 				throw new RuntimeException("Not supported yet");
 			}
 		}
+		//set reader index to 0
+		input.readerIndex(0);
+		//fire data read
 		ctx.channel().pipeline().firstContext().fireChannelRead(input);
 	}
 
