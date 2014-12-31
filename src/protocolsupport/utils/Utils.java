@@ -10,14 +10,15 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
-
-import protocolsupport.protocol.DataStorage;
-import protocolsupport.protocol.PacketDataSerializer;
 import net.minecraft.server.v1_8_R1.Entity;
 import net.minecraft.server.v1_8_R1.EntityTrackerEntry;
 import net.minecraft.server.v1_8_R1.NetworkManager;
 import net.minecraft.server.v1_8_R1.WorldServer;
+
+import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
+
+import protocolsupport.protocol.DataStorage;
+import protocolsupport.protocol.PacketDataSerializer;
 
 public class Utils {
 
@@ -106,7 +107,7 @@ public class Utils {
 		}
 		int copied = 0;
 		int count = array.length / limit;
-		if (array.length % limit != 0) {
+		if ((array.length % limit) != 0) {
 			count++;
 		}
 		for (int i = 0; i < count; i++) {

@@ -1,10 +1,20 @@
 package protocolsupport.protocol.v_1_5.clientboundtransformer;
 
+import gnu.trove.map.hash.TIntObjectHashMap;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.UUID;
 import java.util.zip.Deflater;
+
+import net.minecraft.server.v1_8_R1.BlockPosition;
+import net.minecraft.server.v1_8_R1.EnumParticle;
+import net.minecraft.server.v1_8_R1.ItemStack;
+import net.minecraft.server.v1_8_R1.Packet;
 
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R1.util.CraftChatMessage;
@@ -17,14 +27,6 @@ import protocolsupport.protocol.v_1_5.remappers.BlockIDRemapper;
 import protocolsupport.protocol.v_1_5.remappers.EntityIDRemapper;
 import protocolsupport.protocol.watchedentites.WatchedEntity;
 import protocolsupport.utils.Utils;
-import gnu.trove.map.hash.TIntObjectHashMap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.Channel;
-import net.minecraft.server.v1_8_R1.BlockPosition;
-import net.minecraft.server.v1_8_R1.EnumParticle;
-import net.minecraft.server.v1_8_R1.ItemStack;
-import net.minecraft.server.v1_8_R1.Packet;
 
 public class PlayPacketTransformer implements PacketTransformer {
 
@@ -205,49 +207,49 @@ public class PlayPacketTransformer implements PacketTransformer {
 				int pitch = packetdata.readUnsignedByte();
 				int yaw = packetdata.readUnsignedByte();
 				int objectdata = packetdata.readInt();
-		        if (type == 71) {
-		            switch (objectdata) {
-		                case 0: {
-		                    z -= 32;
-		                    yaw = 128;
-		                    break;
-		                }
-		                case 1: {
-		                    x += 32;
-		                    yaw = 64;
-		                    break;
-		                }
-		                case 2: {
-		                    z += 32;
-		                    yaw = 0;
-		                    break;
-		                }
-		                case 3: {
-		                    x -= 32;
-		                    yaw = 192;
-		                    break;
-		                }
-		            }
-		        }
-		        if (type == 70) {
-		            final int id = objectdata & 0xFFFF;
-		            final int data = objectdata >> 12;
-		            objectdata = (id | data << 16);
-		        }
-		        if (type == 50 || type == 70 || type == 74) {
-		            y += 16;
-		        }
-		        serializer.writeInt(x);
-		        serializer.writeInt(y);
-		        serializer.writeInt(z);
-		        serializer.writeByte(pitch);
-		        serializer.writeByte(yaw);
-		        serializer.writeInt(objectdata);
-		        if (objectdata > 0) {
-		        	serializer.writeShort(packetdata.readShort());
-		        	serializer.writeShort(packetdata.readShort());
-		        	serializer.writeShort(packetdata.readShort());
-		        }
+				if (type == 71) {
+					switch (objectdata) {
+						case 0: {
+							z -= 32;
+							yaw = 128;
+							break;
+						}
+						case 1: {
+							x += 32;
+							yaw = 64;
+							break;
+						}
+						case 2: {
+							z += 32;
+							yaw = 0;
+							break;
+						}
+						case 3: {
+							x -= 32;
+							yaw = 192;
+							break;
+						}
+					}
+				}
+				if (type == 70) {
+					final int id = objectdata & 0xFFFF;
+					final int data = objectdata >> 12;
+					objectdata = (id | (data << 16));
+				}
+				if ((type == 50) || (type == 70) || (type == 74)) {
+					y += 16;
+				}
+				serializer.writeInt(x);
+				serializer.writeInt(y);
+				serializer.writeInt(z);
+				serializer.writeByte(pitch);
+				serializer.writeByte(yaw);
+				serializer.writeInt(objectdata);
+				if (objectdata > 0) {
+					serializer.writeShort(packetdata.readShort());
+					serializer.writeShort(packetdata.readShort());
+					serializer.writeShort(packetdata.readShort());
+				}
 				return;
 			}
 			case 0x0F: { //PacketPlayOutSpawnEntityLiving
@@ -399,7 +401,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x1D: { //PacketPlayOutEntityEffect
 				int entityId = packetdata.readVarInt();
 				int effectId = packetdata.readByte();
-				if (effectId >= 21 && effectId <= 23) {
+				if ((effectId >= 21) && (effectId <= 23)) {
 					return;
 				}
 				serializer.writeByte(0x29);
@@ -412,7 +414,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x1E: { //PacketPlayOutRemoveEntityEffect
 				int entityId = packetdata.readVarInt();
 				int effectId = packetdata.readByte();
-				if (effectId >= 21 && effectId <= 23) {
+				if ((effectId >= 21) && (effectId <= 23)) {
 					return;
 				}
 				serializer.writeByte(0x2A);
@@ -467,7 +469,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				return;
 			}
 			case 0x23: { //PacketPlayOutBlockChange
-				serializer.writeByte(0x35);	
+				serializer.writeByte(0x35);
 				BlockPosition blockPos = packetdata.c();
 				serializer.writeInt(blockPos.getX());
 				serializer.writeByte(blockPos.getY());
@@ -811,7 +813,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeString(packetdata.readString(16));
 				int mode = packetdata.readByte();
 				serializer.writeByte(mode);
-				if (mode == 0 || mode == 2) {
+				if ((mode == 0) || (mode == 2)) {
 					serializer.writeString(packetdata.readString(32));
 					serializer.writeString(packetdata.readString(16));
 					serializer.writeString(packetdata.readString(16));
@@ -819,7 +821,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 					packetdata.readString(32);
 					packetdata.readByte();
 				}
-				if (mode == 0 || mode == 3 || mode == 4) {
+				if ((mode == 0) || (mode == 3) || (mode == 4)) {
 					int count = packetdata.readVarInt();
 					serializer.writeShort(count);
 					Utils.writeTheRestOfTheData(packetdata, serializer);

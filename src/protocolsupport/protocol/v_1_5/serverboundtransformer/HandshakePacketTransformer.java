@@ -1,14 +1,16 @@
 package protocolsupport.protocol.v_1_5.serverboundtransformer;
 
-import java.io.IOException;
-
-import org.bukkit.Bukkit;
-
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
+
+import java.io.IOException;
+
 import net.minecraft.server.v1_8_R1.EnumProtocol;
 import net.minecraft.server.v1_8_R1.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R1.Packet;
+
+import org.bukkit.Bukkit;
+
 import protocolsupport.protocol.DataStorage.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 

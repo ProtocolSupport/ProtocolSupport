@@ -1,11 +1,12 @@
 package protocolsupport.protocol.v_1_7.serverboundtransformer;
 
-import java.io.IOException;
-
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
-import protocolsupport.protocol.DataStorage.ProtocolVersion;
+
+import java.io.IOException;
+
 import net.minecraft.server.v1_8_R1.Packet;
+import protocolsupport.protocol.DataStorage.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 
 public class HandshakePacketTransformer implements PacketTransformer {

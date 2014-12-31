@@ -1,12 +1,13 @@
 package protocolsupport.protocol.v_1_7.clientboundtransformer;
 
-import java.io.IOException;
-
-import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.DataStorage.ProtocolVersion;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
+
+import java.io.IOException;
+
 import net.minecraft.server.v1_8_R1.Packet;
+import protocolsupport.protocol.DataStorage.ProtocolVersion;
+import protocolsupport.protocol.PacketDataSerializer;
 
 public class LoginPacketTransformer implements PacketTransformer {
 
@@ -35,7 +36,7 @@ public class LoginPacketTransformer implements PacketTransformer {
 				}
 				serializer.writeString(uuidstring);
 				serializer.writeString(packetdata.readString(16));
-				return;	
+				return;
 			}
 			default: { //Any other packet
 				serializer.writeVarInt(packetId);

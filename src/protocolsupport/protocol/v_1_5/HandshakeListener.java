@@ -1,38 +1,31 @@
 package protocolsupport.protocol.v_1_5;
 
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.text.MessageFormat;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
 
+import net.minecraft.server.v1_8_R1.ChatComponentText;
+import net.minecraft.server.v1_8_R1.EnumProtocol;
+import net.minecraft.server.v1_8_R1.IChatBaseComponent;
+import net.minecraft.server.v1_8_R1.MinecraftServer;
+import net.minecraft.server.v1_8_R1.NetworkManager;
+import net.minecraft.server.v1_8_R1.PacketHandshakingInListener;
+import net.minecraft.server.v1_8_R1.PacketHandshakingInSetProtocol;
+import net.minecraft.server.v1_8_R1.PacketLoginOutDisconnect;
 import net.minecraft.server.v1_8_R1.PacketStatusListener;
+
+import org.apache.logging.log4j.LogManager;
+import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
+import org.spigotmc.SpigotConfig;
+
+import protocolsupport.protocol.v_1_5.serverboundtransformer.PacketDecoder;
 
 import com.mojang.authlib.properties.Property;
 import com.mojang.util.UUIDTypeAdapter;
-
-import java.text.MessageFormat;
-
-import org.spigotmc.SpigotConfig;
-import org.apache.logging.log4j.LogManager;
-
-import java.util.Map;
-
-import net.minecraft.server.v1_8_R1.IChatBaseComponent;
-import net.minecraft.server.v1_8_R1.PacketLoginOutDisconnect;
-import net.minecraft.server.v1_8_R1.ChatComponentText;
-
-import java.net.InetSocketAddress;
-
-import net.minecraft.server.v1_8_R1.EnumProtocol;
-import net.minecraft.server.v1_8_R1.PacketHandshakingInSetProtocol;
-import net.minecraft.server.v1_8_R1.NetworkManager;
-import net.minecraft.server.v1_8_R1.MinecraftServer;
-
-import java.net.InetAddress;
-import java.util.HashMap;
-
-import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
-
-import protocolsupport.protocol.v_1_5.serverboundtransformer.PacketDecoder;
-import net.minecraft.server.v1_8_R1.PacketHandshakingInListener;
 
 public class HandshakeListener implements PacketHandshakingInListener {
 
@@ -46,8 +39,8 @@ public class HandshakeListener implements PacketHandshakingInListener {
 	private final PacketDecoder decoder;
 
 	public HandshakeListener(final MinecraftServer minecraftserver, PacketDecoder decoder, final NetworkManager networkmanager) {
-		this.a = minecraftserver;
-		this.b = networkmanager;
+		a = minecraftserver;
+		b = networkmanager;
 		this.decoder = decoder;
 	}
 
@@ -55,17 +48,17 @@ public class HandshakeListener implements PacketHandshakingInListener {
 	public void a(final PacketHandshakingInSetProtocol packethandshakinginsetprotocol) {
 		switch (packethandshakinginsetprotocol.a()) {
 			case LOGIN: {
-				this.b.a(EnumProtocol.LOGIN);
+				b.a(EnumProtocol.LOGIN);
 				try {
 					final long currentTime = System.currentTimeMillis();
 					final long connectionThrottle = MinecraftServer.getServer().server.getConnectionThrottle();
-					final InetAddress address = ((InetSocketAddress) this.b.getSocketAddress()).getAddress();
+					final InetAddress address = ((InetSocketAddress) b.getSocketAddress()).getAddress();
 					synchronized (HandshakeListener.throttleTracker) {
-						if (HandshakeListener.throttleTracker.containsKey(address) && !"127.0.0.1".equals(address.getHostAddress()) && currentTime - HandshakeListener.throttleTracker.get(address) < connectionThrottle) {
+						if (HandshakeListener.throttleTracker.containsKey(address) && !"127.0.0.1".equals(address.getHostAddress()) && ((currentTime - HandshakeListener.throttleTracker.get(address)) < connectionThrottle)) {
 							HandshakeListener.throttleTracker.put(address, currentTime);
 							final ChatComponentText chatcomponenttext = new ChatComponentText("Connection throttled! Please wait before reconnecting.");
-							this.b.handle(new PacketLoginOutDisconnect(chatcomponenttext));
-							this.b.close(chatcomponenttext);
+							b.handle(new PacketLoginOutDisconnect(chatcomponenttext));
+							b.close(chatcomponenttext);
 							return;
 						}
 						HandshakeListener.throttleTracker.put(address, currentTime);
@@ -86,38 +79,38 @@ public class HandshakeListener implements PacketHandshakingInListener {
 				}
 				if (packethandshakinginsetprotocol.b() > 47) {
 					final ChatComponentText chatcomponenttext = new ChatComponentText(MessageFormat.format(SpigotConfig.outdatedServerMessage, "1.8"));
-					this.b.handle(new PacketLoginOutDisconnect(chatcomponenttext));
-					this.b.close(chatcomponenttext);
+					b.handle(new PacketLoginOutDisconnect(chatcomponenttext));
+					b.close(chatcomponenttext);
 					break;
 				}
 				if (packethandshakinginsetprotocol.b() < 47) {
 					final ChatComponentText chatcomponenttext = new ChatComponentText(MessageFormat.format(SpigotConfig.outdatedClientMessage, "1.8"));
-					this.b.handle(new PacketLoginOutDisconnect(chatcomponenttext));
-					this.b.close(chatcomponenttext);
+					b.handle(new PacketLoginOutDisconnect(chatcomponenttext));
+					b.close(chatcomponenttext);
 					break;
 				}
-				this.b.a(new LoginListener(this.a, decoder, this.b));
+				b.a(new LoginListener(a, decoder, b));
 				if (SpigotConfig.bungee) {
 					final String[] split = packethandshakinginsetprotocol.b.split("\u0000");
-					if (split.length != 3 && split.length != 4) {
+					if ((split.length != 3) && (split.length != 4)) {
 						final ChatComponentText chatcomponenttext = new ChatComponentText("If you wish to use IP forwarding, please enable it in your BungeeCord config as well!");
-						this.b.handle(new PacketLoginOutDisconnect(chatcomponenttext));
-						this.b.close(chatcomponenttext);
+						b.handle(new PacketLoginOutDisconnect(chatcomponenttext));
+						b.close(chatcomponenttext);
 						return;
 					}
 					packethandshakinginsetprotocol.b = split[0];
-					this.b.j = new InetSocketAddress(split[1], ((InetSocketAddress) this.b.getSocketAddress()).getPort());
-					this.b.spoofedUUID = UUIDTypeAdapter.fromString(split[2]);
+					b.j = new InetSocketAddress(split[1], ((InetSocketAddress) b.getSocketAddress()).getPort());
+					b.spoofedUUID = UUIDTypeAdapter.fromString(split[2]);
 					if (split.length == 4) {
-						this.b.spoofedProfile = HandshakeListener.gson.fromJson(split[3], Property[].class);
+						b.spoofedProfile = HandshakeListener.gson.fromJson(split[3], Property[].class);
 					}
 				}
-				((LoginListener) this.b.getPacketListener()).hostname = packethandshakinginsetprotocol.b + ":" + packethandshakinginsetprotocol.c;
+				((LoginListener) b.getPacketListener()).hostname = packethandshakinginsetprotocol.b + ":" + packethandshakinginsetprotocol.c;
 				break;
 			}
 			case STATUS: {
-				this.b.a(EnumProtocol.STATUS);
-				this.b.a(new PacketStatusListener(this.a, this.b));
+				b.a(EnumProtocol.STATUS);
+				b.a(new PacketStatusListener(a, b));
 				break;
 			}
 			default: {

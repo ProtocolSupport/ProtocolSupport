@@ -1,5 +1,11 @@
 package protocolsupport.injector;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelPipeline;
+import io.netty.handler.codec.MessageToByteEncoder;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -14,12 +20,6 @@ import protocolsupport.protocol.PublicPacketEncoder;
 import protocolsupport.utils.Utils;
 
 import com.comphenix.protocol.reflect.accessors.MethodAccessor;
-
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPipeline;
-import io.netty.handler.codec.MessageToByteEncoder;
 
 public class ProtocolLibFixer {
 

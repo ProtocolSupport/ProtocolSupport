@@ -8,13 +8,13 @@ import io.netty.handler.timeout.ReadTimeoutHandler;
 
 import java.util.List;
 
+import net.minecraft.server.v1_8_R1.EnumProtocolDirection;
+import net.minecraft.server.v1_8_R1.NetworkManager;
 import protocolsupport.protocol.fake.FakeDecoder;
 import protocolsupport.protocol.fake.FakeEncoder;
 import protocolsupport.protocol.fake.FakePacketListener;
 import protocolsupport.protocol.fake.FakePrepender;
 import protocolsupport.protocol.fake.FakeSplitter;
-import net.minecraft.server.v1_8_R1.EnumProtocolDirection;
-import net.minecraft.server.v1_8_R1.NetworkManager;
 
 public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 

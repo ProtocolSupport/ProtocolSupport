@@ -1,5 +1,9 @@
 package protocolsupport.injector;
 
+import java.lang.reflect.Field;
+import java.util.Iterator;
+import java.util.Map;
+
 import net.minecraft.server.v1_8_R1.Block;
 import net.minecraft.server.v1_8_R1.Blocks;
 import net.minecraft.server.v1_8_R1.IBlockData;
@@ -7,11 +11,6 @@ import net.minecraft.server.v1_8_R1.Item;
 import net.minecraft.server.v1_8_R1.ItemBlock;
 import net.minecraft.server.v1_8_R1.MinecraftKey;
 import net.minecraft.server.v1_8_R1.TileEntity;
-
-import java.lang.reflect.Field;
-import java.util.Iterator;
-import java.util.Map;
-
 import protocolsupport.server.block.BlockEnchantTable;
 import protocolsupport.server.tileentity.TileEntityEnchantTable;
 import protocolsupport.utils.Utils;
@@ -36,11 +35,11 @@ public class ServerInjector {
 		ItemBlock itemblock = new ItemBlock(block);
 		Block.REGISTRY.a(id, stringkey, block);
 		Iterator<IBlockData> blockdataiterator = block.O().a().iterator();
-        while (blockdataiterator.hasNext()) {
-        	IBlockData blockdata = blockdataiterator.next();
-            final int stateId = id << 4 | block.toLegacyData(blockdata);
-            Block.d.a(blockdata, stateId);
-        }
+		while (blockdataiterator.hasNext()) {
+			IBlockData blockdata = blockdataiterator.next();
+			final int stateId = (id << 4) | block.toLegacyData(blockdata);
+			Block.d.a(blockdata, stateId);
+		}
 		Item.REGISTRY.a(id, stringkey, itemblock);
 		((Map<Block, Item>)Utils.<Field>setAccessible(Item.class.getDeclaredField("a")).get(null)).put(block, itemblock);
 	}

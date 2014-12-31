@@ -8,19 +8,19 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.crypto.SecretKey;
 
-import org.apache.commons.lang3.Validate;
-
 import net.minecraft.server.v1_8_R1.EntityPlayer;
 import net.minecraft.server.v1_8_R1.MinecraftEncryption;
+import net.minecraft.server.v1_8_R1.MinecraftServer;
+import net.minecraft.server.v1_8_R1.NetworkManager;
 import net.minecraft.server.v1_8_R1.PacketLoginInEncryptionBegin;
 import net.minecraft.server.v1_8_R1.PacketLoginOutSuccess;
 
-import com.mojang.authlib.GameProfile;
+import org.apache.commons.lang3.Validate;
 
-import net.minecraft.server.v1_8_R1.NetworkManager;
-import net.minecraft.server.v1_8_R1.MinecraftServer;
 import protocolsupport.protocol.v_1_6.serverboundtransformer.PacketDecoder;
 import protocolsupport.utils.Utils;
+
+import com.mojang.authlib.GameProfile;
 
 public class LoginListener extends net.minecraft.server.v1_8_R1.LoginListener {
 
@@ -36,15 +36,15 @@ public class LoginListener extends net.minecraft.server.v1_8_R1.LoginListener {
 	public void b() {
 		try {
 			GameProfile profile = (GameProfile) Utils.<Field> setAccessible(net.minecraft.server.v1_8_R1.LoginListener.class.getDeclaredField("i")).get(this);
-			final EntityPlayer s = MinecraftServer.getServer().getPlayerList().attemptLogin(this, profile, this.hostname);
+			final EntityPlayer s = MinecraftServer.getServer().getPlayerList().attemptLogin(this, profile, hostname);
 			if (s != null) {
 				setCurrentState("ACCEPTED");
-				this.networkManager.handle(new PacketLoginOutSuccess(profile));
-				MinecraftServer.getServer().getPlayerList().a(this.networkManager, MinecraftServer.getServer().getPlayerList().processLogin(profile, s));
+				networkManager.handle(new PacketLoginOutSuccess(profile));
+				MinecraftServer.getServer().getPlayerList().a(networkManager, MinecraftServer.getServer().getPlayerList().processLogin(profile, s));
 			}
 		} catch (Throwable t) {
 			t.printStackTrace();
-			this.disconnect("Failed to setup channel");
+			disconnect("Failed to setup channel");
 		}
 	}
 
@@ -62,12 +62,12 @@ public class LoginListener extends net.minecraft.server.v1_8_R1.LoginListener {
 			decoder.attachDecryptor(MinecraftEncryption.a(2, secretKey));
 			((Thread) Utils.<Constructor<?>>setAccessible(
 				Class.forName("net.minecraft.server.v1_8_R1.ThreadPlayerLookupUUID").getDeclaredConstructor(
-						net.minecraft.server.v1_8_R1.LoginListener.class, String.class
+					net.minecraft.server.v1_8_R1.LoginListener.class, String.class
 				)
 			).newInstance(this, "User Authenticator #" + counter.incrementAndGet())).start();
 		} catch (Throwable t) {
 			t.printStackTrace();
-			this.disconnect("Failed to setup channel");
+			disconnect("Failed to setup channel");
 		}
 	}
 

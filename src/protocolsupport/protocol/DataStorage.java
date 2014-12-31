@@ -80,7 +80,7 @@ public class DataStorage {
 	}
 
 	public static ArrayList<Property> getPropertyData(SocketAddress address, UUID uuid, boolean filterNonSigned) {
-		ArrayList<Property> properties = channelInfo.get(address).skins.get(uuid); 
+		ArrayList<Property> properties = channelInfo.get(address).skins.get(uuid);
 		if (!filterNonSigned) {
 			return properties;
 		} else {

@@ -1,11 +1,12 @@
 package protocolsupport.protocol.v_1_7.clientboundtransformer;
 
-import java.util.Iterator;
-
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import io.netty.buffer.Unpooled;
+
+import java.util.Iterator;
+
 import net.minecraft.server.v1_8_R1.BlockPosition;
 import net.minecraft.server.v1_8_R1.ItemStack;
 import net.minecraft.server.v1_8_R1.Vector3f;
@@ -124,7 +125,7 @@ public class DataWatcherFilter {
 		while (iterator.hasNext()) {
 			iterator.advance();
 			DataWatcherObject object = iterator.value();
-			final int tk = (object.type << 5 | (iterator.key() & 0x1F)) & 0xFF;
+			final int tk = ((object.type << 5) | (iterator.key() & 0x1F)) & 0xFF;
 			serializer.writeByte(tk);
 			switch (object.type) {
 				case 0: {

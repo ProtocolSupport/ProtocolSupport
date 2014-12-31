@@ -23,10 +23,10 @@ public class PacketEncoder extends MessageToByteEncoder<Packet> implements Publi
 	private static final AttributeKey<EnumProtocol> currentStateAttrKey = NetworkManager.c;
 
 	private final PacketTransformer[] transformers = new PacketTransformer[] {
-		new HandshakePacketTransformer(),
-		new PlayPacketTransformer(),
-		new StatusPacketTransformer(),
-		new LoginPacketTransformer()
+			new HandshakePacketTransformer(),
+			new PlayPacketTransformer(),
+			new StatusPacketTransformer(),
+			new LoginPacketTransformer()
 	};
 
 	private boolean[] blockedPlayPackets = new boolean[256];
@@ -41,11 +41,11 @@ public class PacketEncoder extends MessageToByteEncoder<Packet> implements Publi
 	protected void encode(ChannelHandlerContext ctx, Packet packet, ByteBuf output) throws Exception {
 		Channel channel = ctx.channel();
 		EnumProtocol currentProtocol = channel.attr(currentStateAttrKey).get();
-        final Integer packetId = currentProtocol.a(direction, packet);
-        if (packetId == null) {
-            throw new IOException("Can't serialize unregistered packet");
-        }
-		if (currentProtocol == EnumProtocol.PLAY && blockedPlayPackets[packetId]) {
+		final Integer packetId = currentProtocol.a(direction, packet);
+		if (packetId == null) {
+			throw new IOException("Can't serialize unregistered packet");
+		}
+		if ((currentProtocol == EnumProtocol.PLAY) && blockedPlayPackets[packetId]) {
 			return;
 		}
 		PacketDataSerializer serializer = new PacketDataSerializer(output, DataStorage.getVersion(channel.remoteAddress()));

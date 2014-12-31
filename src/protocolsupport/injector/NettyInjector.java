@@ -7,11 +7,11 @@ import io.netty.channel.ChannelHandler;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import protocolsupport.protocol.ServerConnectionChannel;
-import protocolsupport.utils.Utils;
 import net.minecraft.server.v1_8_R1.MinecraftServer;
 import net.minecraft.server.v1_8_R1.NetworkManager;
 import net.minecraft.server.v1_8_R1.ServerConnection;
+import protocolsupport.protocol.ServerConnectionChannel;
+import protocolsupport.utils.Utils;
 
 public class NettyInjector {
 

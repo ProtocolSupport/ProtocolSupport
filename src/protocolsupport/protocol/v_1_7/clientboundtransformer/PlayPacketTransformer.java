@@ -1,5 +1,11 @@
 package protocolsupport.protocol.v_1_7.clientboundtransformer;
 
+import gnu.trove.map.hash.TIntObjectHashMap;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -7,25 +13,6 @@ import java.util.ArrayList;
 import java.util.UUID;
 import java.util.zip.Deflater;
 
-import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_8_R1.util.CraftChatMessage;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryType;
-
-import com.mojang.authlib.properties.Property;
-
-import protocolsupport.protocol.DataStorage;
-import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.DataStorage.ProtocolVersion;
-import protocolsupport.protocol.v_1_7.remappers.BlockIDRemapper;
-import protocolsupport.protocol.v_1_7.remappers.EntityIDRemapper;
-import protocolsupport.protocol.watchedentites.WatchedEntity;
-import protocolsupport.utils.Utils;
-import gnu.trove.map.hash.TIntObjectHashMap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.server.v1_8_R1.BlockPosition;
 import net.minecraft.server.v1_8_R1.ChatSerializer;
 import net.minecraft.server.v1_8_R1.Entity;
@@ -34,6 +21,21 @@ import net.minecraft.server.v1_8_R1.EntityTNTPrimed;
 import net.minecraft.server.v1_8_R1.EnumParticle;
 import net.minecraft.server.v1_8_R1.ItemStack;
 import net.minecraft.server.v1_8_R1.Packet;
+
+import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_8_R1.util.CraftChatMessage;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
+
+import protocolsupport.protocol.DataStorage;
+import protocolsupport.protocol.DataStorage.ProtocolVersion;
+import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.v_1_7.remappers.BlockIDRemapper;
+import protocolsupport.protocol.v_1_7.remappers.EntityIDRemapper;
+import protocolsupport.protocol.watchedentites.WatchedEntity;
+import protocolsupport.utils.Utils;
+
+import com.mojang.authlib.properties.Property;
 
 public class PlayPacketTransformer implements PacketTransformer {
 
@@ -201,50 +203,50 @@ public class PlayPacketTransformer implements PacketTransformer {
 				int pitch = packetdata.readUnsignedByte();
 				int yaw = packetdata.readUnsignedByte();
 				int objectdata = packetdata.readInt();
-		        if (type == 71) {
-		            switch (objectdata) {
-		                case 0: {
-		                    z -= 32;
-		                    yaw = 128;
-		                    break;
-		                }
-		                case 1: {
-		                    x += 32;
-		                    yaw = 64;
-		                    break;
-		                }
-		                case 2: {
-		                    z += 32;
-		                    yaw = 0;
-		                    break;
-		                }
-		                case 3: {
-		                    x -= 32;
-		                    yaw = 192;
-		                    break;
-		                }
-		            }
-		        }
-		        if (type == 70) {
-		            final int id = objectdata & 0xFFFF;
-		            final int data = objectdata >> 12;
-		            objectdata = (id | data << 16);
-		        }
-		        if (type == 50 || type == 70 || type == 74) {
-		            y += 16;
-		        }
-		        serializer.writeInt(x);
-		        serializer.writeInt(y);
-		        serializer.writeInt(z);
-		        serializer.writeByte(pitch);
-		        serializer.writeByte(yaw);
-		        serializer.writeInt(objectdata);
-		        if (objectdata > 0) {
-		        	serializer.writeShort(packetdata.readShort());
-		        	serializer.writeShort(packetdata.readShort());
-		        	serializer.writeShort(packetdata.readShort());
-		        }
-		        return;
+				if (type == 71) {
+					switch (objectdata) {
+						case 0: {
+							z -= 32;
+							yaw = 128;
+							break;
+						}
+						case 1: {
+							x += 32;
+							yaw = 64;
+							break;
+						}
+						case 2: {
+							z += 32;
+							yaw = 0;
+							break;
+						}
+						case 3: {
+							x -= 32;
+							yaw = 192;
+							break;
+						}
+					}
+				}
+				if (type == 70) {
+					final int id = objectdata & 0xFFFF;
+					final int data = objectdata >> 12;
+					objectdata = (id | (data << 16));
+				}
+				if ((type == 50) || (type == 70) || (type == 74)) {
+					y += 16;
+				}
+				serializer.writeInt(x);
+				serializer.writeInt(y);
+				serializer.writeInt(z);
+				serializer.writeByte(pitch);
+				serializer.writeByte(yaw);
+				serializer.writeInt(objectdata);
+				if (objectdata > 0) {
+					serializer.writeShort(packetdata.readShort());
+					serializer.writeShort(packetdata.readShort());
+					serializer.writeShort(packetdata.readShort());
+				}
+				return;
 			}
 			case 0x0F: { //PacketPlayOutSpawnEntityLiving
 				packet.b(packetdata);
@@ -426,7 +428,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeInt(packetdata.readInt());
 				int y = packetdata.readInt();
 				Entity entity = Utils.getEntity(channel, entityId);
-				if (entity instanceof EntityFallingBlock || entity instanceof EntityTNTPrimed) {
+				if ((entity instanceof EntityFallingBlock) || (entity instanceof EntityTNTPrimed)) {
 					y += 16;
 				}
 				serializer.writeInt(y);
@@ -843,7 +845,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeString(packetdata.readString(16));
 				int mode = packetdata.readByte();
 				serializer.writeByte(mode);
-				if (mode == 0 || mode == 2) {
+				if ((mode == 0) || (mode == 2)) {
 					serializer.writeString(packetdata.readString(32));
 					serializer.writeString(packetdata.readString(16));
 					serializer.writeString(packetdata.readString(16));
@@ -851,7 +853,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 					packetdata.readString(32);
 					packetdata.readByte();
 				}
-				if (mode == 0 || mode == 3 || mode == 4) {
+				if ((mode == 0) || (mode == 3) || (mode == 4)) {
 					int count = packetdata.readVarInt();
 					serializer.writeShort(count);
 					for (int i = 0; i < count; i++) {

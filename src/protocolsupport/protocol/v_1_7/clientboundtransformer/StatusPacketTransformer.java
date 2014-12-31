@@ -1,11 +1,10 @@
 package protocolsupport.protocol.v_1_7.clientboundtransformer;
 
-import java.io.IOException;
-
-import protocolsupport.protocol.DataStorage;
-import protocolsupport.protocol.PacketDataSerializer;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
+
+import java.io.IOException;
+
 import net.minecraft.server.v1_8_R1.ChatModifier;
 import net.minecraft.server.v1_8_R1.ChatModifierSerializer;
 import net.minecraft.server.v1_8_R1.ChatSerializer;
@@ -22,16 +21,19 @@ import net.minecraft.server.v1_8_R1.ServerPingServerDataSerializer;
 import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
 import org.bukkit.craftbukkit.libs.com.google.gson.GsonBuilder;
 
+import protocolsupport.protocol.DataStorage;
+import protocolsupport.protocol.PacketDataSerializer;
+
 public class StatusPacketTransformer implements PacketTransformer {
 
-    private static final Gson gson = new GsonBuilder()
-    .registerTypeAdapter(ServerPingServerData.class, new ServerPingServerDataSerializer())
-    .registerTypeAdapter(ServerPingPlayerSample.class, new ServerPingPlayerSampleSerializer())
-    .registerTypeAdapter(ServerPing.class, new ServerPingSerializer())
-    .registerTypeHierarchyAdapter(IChatBaseComponent.class, new ChatSerializer())
-    .registerTypeHierarchyAdapter(ChatModifier.class, new ChatModifierSerializer())
-    .registerTypeAdapterFactory(new ChatTypeAdapterFactory())
-    .create();
+	private static final Gson gson = new GsonBuilder()
+	.registerTypeAdapter(ServerPingServerData.class, new ServerPingServerDataSerializer())
+	.registerTypeAdapter(ServerPingPlayerSample.class, new ServerPingPlayerSampleSerializer())
+	.registerTypeAdapter(ServerPing.class, new ServerPingSerializer())
+	.registerTypeHierarchyAdapter(IChatBaseComponent.class, new ChatSerializer())
+	.registerTypeHierarchyAdapter(ChatModifier.class, new ChatModifierSerializer())
+	.registerTypeAdapterFactory(new ChatTypeAdapterFactory())
+	.create();
 
 	@Override
 	public void tranform(ChannelHandlerContext ctx, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException {

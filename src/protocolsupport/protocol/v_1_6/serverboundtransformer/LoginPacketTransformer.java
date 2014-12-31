@@ -1,13 +1,14 @@
 package protocolsupport.protocol.v_1_6.serverboundtransformer;
 
-import java.io.IOException;
-
-import protocolsupport.protocol.PacketDataSerializer;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
+
+import java.io.IOException;
+
 import net.minecraft.server.v1_8_R1.EnumProtocol;
 import net.minecraft.server.v1_8_R1.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R1.Packet;
+import protocolsupport.protocol.PacketDataSerializer;
 
 public class LoginPacketTransformer implements PacketTransformer {
 

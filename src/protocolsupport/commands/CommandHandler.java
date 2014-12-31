@@ -19,7 +19,7 @@ public class CommandHandler implements CommandExecutor {
 			sender.sendMessage(ChatColor.RED + "No permission");
 			return true;
 		}
-		if (args.length == 1 && args[0].equalsIgnoreCase("list")) {
+		if ((args.length == 1) && args[0].equalsIgnoreCase("list")) {
 			sender.sendMessage(ChatColor.GOLD+"[1.8]: "+getPlayersStringForProtocol(ProtocolVersion.MINECRAFT_1_8));
 			sender.sendMessage(ChatColor.GOLD+"[1.7.10]: "+getPlayersStringForProtocol(ProtocolVersion.MINECRAFT_1_7_10));
 			sender.sendMessage(ChatColor.GOLD+"[1.7.5]: "+getPlayersStringForProtocol(ProtocolVersion.MINECRAFT_1_7_5));
@@ -28,8 +28,8 @@ public class CommandHandler implements CommandExecutor {
 			sender.sendMessage(ChatColor.GOLD+"[1.5.2]: "+getPlayersStringForProtocol(ProtocolVersion.MINECRAFT_1_5_2));
 			return true;
 		}
-		if (args.length == 2 && args[0].equalsIgnoreCase("entity")) {
-			sender.sendMessage(ChatColor.GOLD+"Entity: "+CraftPlayer.class.cast(((Player) sender)).getHandle().world.a(Integer.parseInt(args[1])).toString());
+		if ((args.length == 2) && args[0].equalsIgnoreCase("entity")) {
+			sender.sendMessage(ChatColor.GOLD+"Entity: "+CraftPlayer.class.cast((sender)).getHandle().world.a(Integer.parseInt(args[1])).toString());
 			return true;
 		}
 		return false;

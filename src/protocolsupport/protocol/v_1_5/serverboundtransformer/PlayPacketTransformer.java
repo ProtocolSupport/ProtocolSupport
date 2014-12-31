@@ -1,17 +1,19 @@
 package protocolsupport.protocol.v_1_5.serverboundtransformer;
 
+import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
+
 import java.io.IOException;
+
+import net.minecraft.server.v1_8_R1.BlockPosition;
+import net.minecraft.server.v1_8_R1.EnumProtocol;
+import net.minecraft.server.v1_8_R1.EnumProtocolDirection;
+import net.minecraft.server.v1_8_R1.Packet;
 
 import org.bukkit.event.inventory.InventoryType;
 
 import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.Channel;
-import net.minecraft.server.v1_8_R1.BlockPosition;
-import net.minecraft.server.v1_8_R1.EnumProtocol;
-import net.minecraft.server.v1_8_R1.EnumProtocolDirection;
-import net.minecraft.server.v1_8_R1.Packet;
 
 public class PlayPacketTransformer implements PacketTransformer {
 
@@ -150,8 +152,8 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0xCA: { //PacketPlayInAbilities
 				packet = getPacketById(0x13);
 				packetdata.writeByte(serializer.readUnsignedByte());
-				packetdata.writeFloat((float)serializer.readByte() / 255.0F);
-				packetdata.writeFloat((float)serializer.readByte() / 255.0F);
+				packetdata.writeFloat(serializer.readByte() / 255.0F);
+				packetdata.writeFloat(serializer.readByte() / 255.0F);
 				break;
 			}
 			case 0xCB: { //PacketPlayInTabComplete

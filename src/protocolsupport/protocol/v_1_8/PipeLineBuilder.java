@@ -1,18 +1,18 @@
 package protocolsupport.protocol.v_1_8;
 
-import protocolsupport.injector.ProtocolLibFixer;
-import protocolsupport.protocol.fake.FakeDecoder;
-import protocolsupport.protocol.fake.FakeEncoder;
-import protocolsupport.protocol.fake.FakePrepender;
-import protocolsupport.protocol.fake.FakeSplitter;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelPipeline;
 import net.minecraft.server.v1_8_R1.HandshakeListener;
 import net.minecraft.server.v1_8_R1.MinecraftServer;
 import net.minecraft.server.v1_8_R1.NetworkManager;
 import net.minecraft.server.v1_8_R1.PacketPrepender;
 import net.minecraft.server.v1_8_R1.PacketSplitter;
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPipeline;
+import protocolsupport.injector.ProtocolLibFixer;
+import protocolsupport.protocol.fake.FakeDecoder;
+import protocolsupport.protocol.fake.FakeEncoder;
+import protocolsupport.protocol.fake.FakePrepender;
+import protocolsupport.protocol.fake.FakeSplitter;
 
 public class PipeLineBuilder {
 

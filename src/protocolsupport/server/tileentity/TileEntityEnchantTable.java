@@ -1,9 +1,9 @@
 package protocolsupport.server.tileentity;
 
-import protocolsupport.server.container.ContainerEnchantTable;
 import net.minecraft.server.v1_8_R1.Container;
 import net.minecraft.server.v1_8_R1.EntityHuman;
 import net.minecraft.server.v1_8_R1.PlayerInventory;
+import protocolsupport.server.container.ContainerEnchantTable;
 
 public class TileEntityEnchantTable extends net.minecraft.server.v1_8_R1.TileEntityEnchantTable {
 
@@ -13,7 +13,7 @@ public class TileEntityEnchantTable extends net.minecraft.server.v1_8_R1.TileEnt
 
 	@Override
 	public Container createContainer(final PlayerInventory playerinventory, final EntityHuman entityHuman) {
-		return new ContainerEnchantTable(playerinventory, this.world, this.position);
+		return new ContainerEnchantTable(playerinventory, world, position);
 	}
 
 }

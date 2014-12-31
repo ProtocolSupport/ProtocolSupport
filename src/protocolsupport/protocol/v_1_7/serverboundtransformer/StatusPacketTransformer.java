@@ -1,8 +1,8 @@
 package protocolsupport.protocol.v_1_7.serverboundtransformer;
 
-import protocolsupport.protocol.PacketDataSerializer;
 import io.netty.channel.Channel;
 import net.minecraft.server.v1_8_R1.Packet;
+import protocolsupport.protocol.PacketDataSerializer;
 
 public class StatusPacketTransformer implements PacketTransformer {
 

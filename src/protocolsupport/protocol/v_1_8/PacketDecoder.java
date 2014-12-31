@@ -1,18 +1,19 @@
 package protocolsupport.protocol.v_1_8;
 
-import java.io.IOException;
-import java.util.List;
-
-import protocolsupport.protocol.PublicPacketDecoder;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.util.AttributeKey;
+
+import java.io.IOException;
+import java.util.List;
+
 import net.minecraft.server.v1_8_R1.EnumProtocol;
 import net.minecraft.server.v1_8_R1.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R1.NetworkManager;
 import net.minecraft.server.v1_8_R1.Packet;
 import net.minecraft.server.v1_8_R1.PacketDataSerializer;
+import protocolsupport.protocol.PublicPacketDecoder;
 
 public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketDecoder {
 

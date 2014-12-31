@@ -1,8 +1,9 @@
 package protocolsupport.protocol.v_1_7.clientboundtransformer;
 
+import io.netty.channel.ChannelHandlerContext;
+
 import java.io.IOException;
 
-import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.server.v1_8_R1.Packet;
 import protocolsupport.protocol.PacketDataSerializer;
 

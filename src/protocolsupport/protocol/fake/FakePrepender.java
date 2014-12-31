@@ -1,9 +1,9 @@
 package protocolsupport.protocol.fake;
 
-import net.minecraft.server.v1_8_R1.Packet;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
+import net.minecraft.server.v1_8_R1.Packet;
 
 public class FakePrepender extends MessageToByteEncoder<Packet> {
 
