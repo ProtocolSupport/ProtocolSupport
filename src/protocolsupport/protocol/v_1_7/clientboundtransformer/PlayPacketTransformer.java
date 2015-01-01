@@ -582,7 +582,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				return;
 			}
 			case 0x34: { // PacketPlayOutMap
-				PacketDataSerializer writePacketData = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
+				/*PacketDataSerializer writePacketData = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
 				packet.b(packetdata);
 				int itemData = packetdata.readVarInt();
 				int scale = packetdata.readByte();
@@ -625,7 +625,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 						writePacketData.writeBytes(Arrays.copyOfRange(data, startindex, endindex));
 						ctx.write(writePacketData.copy());
 					}
-				}
+				}*/
 				return;
 			}
 			case 0x36: { // PacketPlayOutOpenSignEditor
