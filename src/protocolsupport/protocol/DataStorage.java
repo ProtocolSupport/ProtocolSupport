@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.UUID;
-import java.util.WeakHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -14,7 +13,8 @@ import com.mojang.authlib.properties.Property;
 
 public class DataStorage {
 
-	private final static WeakHashMap<SocketAddress, ChannelInfo> channelInfo = new WeakHashMap<SocketAddress, ChannelInfo>() {
+	@SuppressWarnings("serial")
+	private final static HashMap<SocketAddress, ChannelInfo> channelInfo = new HashMap<SocketAddress, ChannelInfo>() {
 		@Override
 		public ChannelInfo get(Object address) {
 			if (!super.containsKey(address)) {

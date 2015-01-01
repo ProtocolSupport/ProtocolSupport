@@ -23,7 +23,7 @@ public class ProtocolSupport extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+		getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 		getCommand("protocolsupport").setExecutor(new CommandHandler());
 	}
 
