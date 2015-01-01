@@ -9,7 +9,7 @@ import io.netty.util.ReferenceCountUtil;
 
 import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -99,7 +99,7 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 	}
 
 	@SuppressWarnings("serial")
-	private static HashMap<ProtocolVersion, IPipeLineBuilder> pipelineBuilders = new HashMap<ProtocolVersion, IPipeLineBuilder>() {{
+	private static EnumMap<ProtocolVersion, IPipeLineBuilder> pipelineBuilders = new EnumMap<ProtocolVersion, IPipeLineBuilder>(ProtocolVersion.class) {{
 		put(ProtocolVersion.MINECRAFT_1_8, new protocolsupport.protocol.v_1_8.PipeLineBuilder());
 		put(ProtocolVersion.MINECRAFT_1_7_10, new protocolsupport.protocol.v_1_7.PipeLineBuilder());
 		put(ProtocolVersion.MINECRAFT_1_7_5, new protocolsupport.protocol.v_1_7.PipeLineBuilder());
