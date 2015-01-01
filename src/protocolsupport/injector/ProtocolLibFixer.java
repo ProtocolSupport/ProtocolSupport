@@ -62,7 +62,7 @@ public class ProtocolLibFixer {
 				PublicPacketEncoder publicEncoder = (PublicPacketEncoder) obj;
 				publicEncoder.publicEncode((ChannelHandlerContext) args[0], (Packet) args[1], (ByteBuf) args[2]);
 			} catch (Throwable t) {
-				SneakyThrow.sneaky(t.getCause());
+				SneakyThrow.sneaky(t);
 			}
 			return null;
 		}
@@ -83,7 +83,7 @@ public class ProtocolLibFixer {
 				PublicPacketDecoder publicDecoder = (PublicPacketDecoder) obj;
 				publicDecoder.publicDecode((ChannelHandlerContext) args[0], (ByteBuf) args[1], (List<Object>) args[2]);
 			} catch (Throwable t) {
-				SneakyThrow.sneaky(t.getCause());
+				SneakyThrow.sneaky(t);
 			}
 			return null;
 		}
