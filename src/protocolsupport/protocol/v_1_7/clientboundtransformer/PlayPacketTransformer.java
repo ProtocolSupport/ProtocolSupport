@@ -10,15 +10,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.UUID;
 import java.util.zip.Deflater;
 
 import net.minecraft.server.v1_8_R1.BlockPosition;
 import net.minecraft.server.v1_8_R1.ChatSerializer;
-import net.minecraft.server.v1_8_R1.Entity;
-import net.minecraft.server.v1_8_R1.EntityFallingBlock;
-import net.minecraft.server.v1_8_R1.EntityTNTPrimed;
 import net.minecraft.server.v1_8_R1.EnumParticle;
 import net.minecraft.server.v1_8_R1.ItemStack;
 import net.minecraft.server.v1_8_R1.Packet;
@@ -34,6 +30,8 @@ import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.v_1_7.remappers.BlockIDRemapper;
 import protocolsupport.protocol.v_1_7.remappers.EntityIDRemapper;
 import protocolsupport.protocol.watchedentites.WatchedEntity;
+import protocolsupport.protocol.watchedentites.WatchedLiving;
+import protocolsupport.protocol.watchedentites.WatchedObject;
 import protocolsupport.utils.Utils;
 
 import com.mojang.authlib.properties.Property;
@@ -191,7 +189,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				packet.b(packetdata);
 				int entityId = packetdata.readVarInt();
 				int type = packetdata.readUnsignedByte();
-				addWatchedEntity(new WatchedEntity(entityId, type));
+				addWatchedEntity(new WatchedObject(entityId, type));
 				if (type == 78) { //skip armor stand
 					return;
 				}
@@ -253,7 +251,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				packet.b(packetdata);
 				int entityId = packetdata.readVarInt();
 				int type = packetdata.readUnsignedByte();
-				addWatchedEntity(new WatchedEntity(entityId, type));
+				addWatchedEntity(new WatchedLiving(entityId, type));
 				if (type == 30) { //skip armor stands
 					return;
 				}
@@ -428,8 +426,8 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeInt(entityId);
 				serializer.writeInt(packetdata.readInt());
 				int y = packetdata.readInt();
-				Entity entity = Utils.getEntity(channel, entityId);
-				if ((entity instanceof EntityFallingBlock) || (entity instanceof EntityTNTPrimed)) {
+				WatchedEntity entity = getWatchedEntity(entityId);
+				if (entity != null && entity.isFallingBlockOrTnt()) {
 					y += 16;
 				}
 				serializer.writeInt(y);

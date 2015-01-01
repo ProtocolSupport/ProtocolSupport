@@ -10,14 +10,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import net.minecraft.server.v1_8_R1.Entity;
-import net.minecraft.server.v1_8_R1.EntityTrackerEntry;
 import net.minecraft.server.v1_8_R1.NetworkManager;
-import net.minecraft.server.v1_8_R1.WorldServer;
 
-import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
-
-import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
 
 public class Utils {
@@ -49,29 +43,7 @@ public class Utils {
 		return string.substring(0, string.length() > limit ? limit : string.length());
 	}
 
-	public static Entity getEntity(Channel channel, int entityId) {
-		WorldServer world = (WorldServer) ((CraftPlayer) DataStorage.getPlayer(channel.remoteAddress())).getHandle().getWorld();
-		//try direct map lookup
-		Entity entity = world.a(entityId);
-		if (entity != null) {
-			return entity;
-		}
-		//search entity tracker
-		EntityTrackerEntry entry = (EntityTrackerEntry) world.tracker.trackedEntities.d(entityId);
-		if (entry != null) {
-			return entry.tracker;
-		}
-		//last chance, search it entity list
-		for (Object lentityObj : world.entityList) {
-			Entity lentity = (Entity) lentityObj;
-			if (lentity.getId() == entityId) {
-				return lentity;
-			}
-		}
-		return null;
-	}
-
-	public static void writeTheRestOfTheData(PacketDataSerializer input, PacketDataSerializer output) {
+	public static void writeAll(PacketDataSerializer input, PacketDataSerializer output) {
 		output.writeBytes(input.readBytes(input.readableBytes()));
 	}
 
