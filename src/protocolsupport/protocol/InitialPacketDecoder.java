@@ -5,6 +5,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.CorruptedFrameException;
+import io.netty.util.ReferenceCountUtil;
 
 import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
@@ -20,6 +21,8 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 
 	private final Timer pingTimeout = new Timer();
 
+	private ByteBuf receivedData = Unpooled.buffer();
+
 	@Override
 	public void channelRead(final ChannelHandlerContext ctx, final Object inputObj) throws Exception {
 		try {
@@ -27,16 +30,17 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 			if (!input.isReadable()) {
 				return;
 			}
+			receivedData.writeBytes(input.readBytes(input.readableBytes()));
 			//detect protocol
 			ProtocolVersion handshakeversion = ProtocolVersion.UNKNOWN;
 			//reset reader index to 0
-			input.readerIndex(0);
-			int firstbyte = input.readUnsignedByte();
+			receivedData.readerIndex(0);
+			int firstbyte = receivedData.readUnsignedByte();
 			switch (firstbyte) {
 				case 0xFE: { //1.6 ping or 1.5 ping (should we check if FE is actually a part of a varint length?)
 					try {
-						if (input.readUnsignedByte() == 1) {
-							if (input.readableBytes() == 0) {
+						if (receivedData.readUnsignedByte() == 1) {
+							if (receivedData.readableBytes() == 0) {
 								//1.5.2 or maybe we still didn't receive it all
 								pingTimeout.schedule(new TimerTask() {
 									@Override
@@ -45,7 +49,7 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 											SocketAddress remoteAddress = ctx.channel().remoteAddress();
 											if (DataStorage.getVersion(remoteAddress) == ProtocolVersion.UNKNOWN) {
 												DataStorage.setVersion(remoteAddress, ProtocolVersion.MINECRAFT_1_5_2);
-												rebuildPipeLine(ctx, input, ProtocolVersion.MINECRAFT_1_5_2);
+												rebuildPipeLine(ctx, receivedData, ProtocolVersion.MINECRAFT_1_5_2);
 											}
 										} catch (Throwable t) {
 											ctx.channel().close();
@@ -53,11 +57,11 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 									}
 								}, 500);
 							} else if (
-									(input.readUnsignedByte() == 0xFA) &&
-									"MC|PingHost".equals(new String(input.readBytes(input.readUnsignedShort() * 2).array(), StandardCharsets.UTF_16BE))
-									) { //1.6.*
-								input.readUnsignedShort();
-								handshakeversion = ProtocolVersion.fromId(input.readUnsignedByte());
+								(receivedData.readUnsignedByte() == 0xFA) &&
+								"MC|PingHost".equals(new String(receivedData.readBytes(receivedData.readUnsignedShort() * 2).array(), StandardCharsets.UTF_16BE))
+							) { //1.6.*
+								receivedData.readUnsignedShort();
+								handshakeversion = ProtocolVersion.fromId(receivedData.readUnsignedByte());
 							}
 						}
 					} catch (IndexOutOfBoundsException ex) {
@@ -66,14 +70,14 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 				}
 				case 0x02: { //1.6 or 1.5.2 handshake
 					try {
-						handshakeversion = ProtocolVersion.fromId(input.readUnsignedByte());
+						handshakeversion = ProtocolVersion.fromId(receivedData.readUnsignedByte());
 					} catch (IndexOutOfBoundsException ex) {
 					}
 					break;
 				}
 				default: { //1.7 or 1.8 handshake
-					input.readerIndex(0);
-					ByteBuf data = getVarIntPrefixedData(input);
+					receivedData.readerIndex(0);
+					ByteBuf data = getVarIntPrefixedData(receivedData);
 					if (data != null) {
 						handshakeversion = read1_7_1_8Handshake(data);
 					}
@@ -84,11 +88,13 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 			if (handshakeversion != ProtocolVersion.UNKNOWN) {
 				System.out.println(ctx.channel().remoteAddress()+" connected with protocol version "+handshakeversion);
 				DataStorage.setVersion(ctx.channel().remoteAddress(), handshakeversion);
-				rebuildPipeLine(ctx, input, handshakeversion);
+				rebuildPipeLine(ctx, receivedData, handshakeversion);
 			}
 		} catch (Throwable t) {
 			t.printStackTrace();
 			ctx.channel().close();
+		} finally {
+			ReferenceCountUtil.release(inputObj);
 		}
 	}
 
