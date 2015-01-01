@@ -1,4 +1,4 @@
-package protocolsupport.protocol.v_1_7.clientboundtransformer;
+ package protocolsupport.protocol.v_1_7.clientboundtransformer;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
 import io.netty.buffer.ByteBuf;
@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 import java.util.zip.Deflater;
 
@@ -581,7 +582,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				return;
 			}
 			case 0x34: { // PacketPlayOutMap
-				/*PacketDataSerializer writePacketData = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
+				PacketDataSerializer writePacketData = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
 				packet.b(packetdata);
 				int itemData = packetdata.readVarInt();
 				int scale = packetdata.readByte();
@@ -624,7 +625,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 						writePacketData.writeBytes(Arrays.copyOfRange(data, startindex, endindex));
 						ctx.write(writePacketData.copy());
 					}
-				}*/
+				}
 				return;
 			}
 			case 0x36: { // PacketPlayOutOpenSignEditor

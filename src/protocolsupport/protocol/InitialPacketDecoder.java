@@ -8,10 +8,13 @@ import io.netty.handler.codec.CorruptedFrameException;
 
 import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import protocolsupport.injector.ProtocolLibFixer;
 import protocolsupport.protocol.DataStorage.ProtocolVersion;
+import protocolsupport.protocol.IPipeLineBuilder.DecoderEncoderTuple;
 
 public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 
@@ -89,29 +92,20 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 		}
 	}
 
+	@SuppressWarnings("serial")
+	private static HashMap<ProtocolVersion, IPipeLineBuilder> pipelineBuilders = new HashMap<ProtocolVersion, IPipeLineBuilder>() {{
+		put(ProtocolVersion.MINECRAFT_1_8, new protocolsupport.protocol.v_1_8.PipeLineBuilder());
+		put(ProtocolVersion.MINECRAFT_1_7_10, new protocolsupport.protocol.v_1_7.PipeLineBuilder());
+		put(ProtocolVersion.MINECRAFT_1_7_5, new protocolsupport.protocol.v_1_7.PipeLineBuilder());
+		put(ProtocolVersion.MINECRAFT_1_6_4, new protocolsupport.protocol.v_1_6.PipeLineBuilder());
+		put(ProtocolVersion.MINECRAFT_1_6_2, new protocolsupport.protocol.v_1_6.PipeLineBuilder());
+		put(ProtocolVersion.MINECRAFT_1_5_2, new protocolsupport.protocol.v_1_5.PipeLineBuilder());
+	}};
+
 	private void rebuildPipeLine(final ChannelHandlerContext ctx, final ByteBuf input, ProtocolVersion version) throws Exception {
 		ctx.channel().pipeline().remove(InitialPacketDecoder.class);
-		switch (version) {
-			case MINECRAFT_1_8: {
-				protocolsupport.protocol.v_1_8.PipeLineBuilder.buildPipeLine(ctx);
-				break;
-			}
-			case MINECRAFT_1_7_5: case MINECRAFT_1_7_10: {
-				protocolsupport.protocol.v_1_7.PipeLineBuilder.buildPipeLine(ctx);
-				break;
-			}
-			case MINECRAFT_1_6_2: case MINECRAFT_1_6_4: {
-				protocolsupport.protocol.v_1_6.PipeLineBuilder.buildPipeLine(ctx);
-				break;
-			}
-			case MINECRAFT_1_5_2: {
-				protocolsupport.protocol.v_1_5.PipeLineBuilder.buildPipeLine(ctx);
-				break;
-			}
-			default: {
-				throw new RuntimeException("Not supported yet");
-			}
-		}
+		DecoderEncoderTuple tuple = pipelineBuilders.get(version).buildPipeLine(ctx);
+		ProtocolLibFixer.fixProtocolLib(ctx.channel().pipeline(), tuple.getDecoder(), tuple.getEncoder());
 		//set reader index to 0
 		input.readerIndex(0);
 		//fire data read

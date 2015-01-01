@@ -5,7 +5,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
 import net.minecraft.server.v1_8_R1.MinecraftServer;
 import net.minecraft.server.v1_8_R1.NetworkManager;
-import protocolsupport.injector.ProtocolLibFixer;
+import protocolsupport.protocol.IPipeLineBuilder;
 import protocolsupport.protocol.fake.FakeDecoder;
 import protocolsupport.protocol.fake.FakeEncoder;
 import protocolsupport.protocol.fake.FakePrepender;
@@ -13,9 +13,9 @@ import protocolsupport.protocol.fake.FakeSplitter;
 import protocolsupport.protocol.v_1_6.clientboundtransformer.PacketEncoder;
 import protocolsupport.protocol.v_1_6.serverboundtransformer.PacketDecoder;
 
-public class PipeLineBuilder {
+public class PipeLineBuilder implements IPipeLineBuilder {
 
-	public static void buildPipeLine(ChannelHandlerContext ctx) {
+	public DecoderEncoderTuple buildPipeLine(ChannelHandlerContext ctx) {
 		ChannelPipeline pipeline = ctx.channel().pipeline();
 		NetworkManager networkmanager = pipeline.get(NetworkManager.class);
 		PacketDecoder decoder = new PacketDecoder();
@@ -25,7 +25,7 @@ public class PipeLineBuilder {
 		ChannelHandler encoder = new PacketEncoder();
 		pipeline.replace(FakeDecoder.class, "decoder", decoder);
 		pipeline.replace(FakeEncoder.class, "encoder", encoder);
-		ProtocolLibFixer.fixProtocolLib(pipeline, decoder, encoder);
+		return new DecoderEncoderTuple(decoder, encoder);
 	}
 
 }
