@@ -6,6 +6,8 @@ import io.netty.channel.Channel;
 import java.io.IOException;
 
 import net.minecraft.server.v1_8_R1.BlockPosition;
+import net.minecraft.server.v1_8_R1.ChatComponentText;
+import net.minecraft.server.v1_8_R1.ChatSerializer;
 import net.minecraft.server.v1_8_R1.EnumEntityUseAction;
 import net.minecraft.server.v1_8_R1.Packet;
 
@@ -92,7 +94,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x12: { //PacketPlayInUpdateSign
 				packetdata.a(new BlockPosition(serializer.readInt(), serializer.readShort(), serializer.readInt()));
 				for (int i = 0; i < 4; i++) {
-					packetdata.writeString(serializer.readString(15));
+					packetdata.writeString(ChatSerializer.a(new ChatComponentText(serializer.readString(15))));
 				}
 				break;
 			}
