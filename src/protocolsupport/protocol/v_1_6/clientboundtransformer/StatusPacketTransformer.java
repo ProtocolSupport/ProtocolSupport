@@ -22,8 +22,8 @@ import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
 import org.bukkit.craftbukkit.libs.com.google.gson.GsonBuilder;
 import org.bukkit.craftbukkit.v1_8_R1.util.CraftChatMessage;
 
-import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.storage.ProtocolStorage;
 
 public class StatusPacketTransformer implements PacketTransformer {
 
@@ -44,7 +44,7 @@ public class StatusPacketTransformer implements PacketTransformer {
 			ServerPing serverPing = gson.fromJson(packetdata.readString(32767), ServerPing.class);
 			String response =
 				"§1\u0000" +
-				DataStorage.getVersion(channel.remoteAddress()).getId() +
+				ProtocolStorage.getVersion(channel.remoteAddress()).getId() +
 				"\u0000" +
 				serverPing.c().a() +
 				"\u0000" +

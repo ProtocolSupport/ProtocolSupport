@@ -29,7 +29,7 @@ import org.bukkit.craftbukkit.v1_8_R1.inventory.CraftItemStack;
 import org.spigotmc.LimitStream;
 import org.spigotmc.SneakyThrow;
 
-import protocolsupport.protocol.DataStorage.ProtocolVersion;
+import protocolsupport.protocol.storage.ProtocolStorage.ProtocolVersion;
 
 import com.mojang.authlib.GameProfile;
 

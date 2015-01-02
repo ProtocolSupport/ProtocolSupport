@@ -13,8 +13,8 @@ import net.minecraft.server.v1_8_R1.EnumProtocol;
 import net.minecraft.server.v1_8_R1.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R1.NetworkManager;
 import net.minecraft.server.v1_8_R1.Packet;
-import protocolsupport.protocol.DataStorage;
-import protocolsupport.protocol.DataStorage.ProtocolVersion;
+import protocolsupport.protocol.storage.ProtocolStorage;
+import protocolsupport.protocol.storage.ProtocolStorage.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.PublicPacketDecoder;
 
@@ -37,7 +37,7 @@ public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketD
 			return;
 		}
 		Channel channel = ctx.channel();
-		ProtocolVersion version = DataStorage.getVersion(channel.remoteAddress());
+		ProtocolVersion version = ProtocolStorage.getVersion(channel.remoteAddress());
 		final PacketDataSerializer packetDataSerializer = new PacketDataSerializer(bytebuf, version);
 		final int packetId = packetDataSerializer.readVarInt();
 		final Packet packet = channel.attr(currentStateAttrKey).get().a(direction, packetId);

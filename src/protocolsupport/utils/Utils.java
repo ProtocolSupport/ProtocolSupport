@@ -69,10 +69,6 @@ public class Utils {
 		field.set(null, newValue);
 	}
 
-	public static Channel getChannel(NetworkManager nm) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		return (Channel) Utils.<Field>setAccessible(NetworkManager.class.getDeclaredField("i")).get(nm);
-	}
-
 	public static Player getPlayer(Channel channel) {
 		return ((PlayerConnection) ((NetworkManager) channel.pipeline().get("packet_handler")).getPacketListener()).player.getBukkitEntity();
 	}

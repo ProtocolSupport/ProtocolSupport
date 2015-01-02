@@ -1,6 +1,5 @@
  package protocolsupport.protocol.v_1_7.clientboundtransformer;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
@@ -24,9 +23,9 @@ import org.bukkit.craftbukkit.v1_8_R1.util.CraftChatMessage;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 
-import protocolsupport.protocol.DataStorage;
-import protocolsupport.protocol.DataStorage.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.storage.LocalStorage;
+import protocolsupport.protocol.storage.ProtocolStorage.ProtocolVersion;
 import protocolsupport.protocol.v_1_7.remappers.BlockIDRemapper;
 import protocolsupport.protocol.v_1_7.remappers.EntityIDRemapper;
 import protocolsupport.protocol.watchedentites.WatchedEntity;
@@ -38,21 +37,7 @@ import com.mojang.authlib.properties.Property;
 
 public class PlayPacketTransformer implements PacketTransformer {
 
-	private TIntObjectHashMap<WatchedEntity> watchedEntities = new TIntObjectHashMap<WatchedEntity>();
-
-	private void addWatchedEntity(WatchedEntity entity) {
-		watchedEntities.put(entity.getId(), entity);
-	}
-
-	private WatchedEntity getWatchedEntity(int entityId) {
-		return watchedEntities.get(entityId);
-	}
-
-	private void removeWatchedEntities(int[] entityIds) {
-		for (int entityId : entityIds) {
-			watchedEntities.remove(entityId);
-		}
-	}
+	private LocalStorage storage = new LocalStorage();
 
 	@Override
 	public void tranform(ChannelHandlerContext ctx, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException {
@@ -158,10 +143,10 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeVarInt(packetdata.readVarInt());
 				UUID uuid = packetdata.g();
 				serializer.writeString(serializer.getVersion() == ProtocolVersion.MINECRAFT_1_7_10 ? uuid.toString() : uuid.toString().replace("-", ""));
-				String playerName = DataStorage.getTabName(channel.remoteAddress(), uuid);
+				String playerName = storage.getPlayerListName(uuid);
 				serializer.writeString(playerName != null ? playerName : "Unknown");
 				if (serializer.getVersion() == ProtocolVersion.MINECRAFT_1_7_10) {
-					ArrayList<Property> properties = DataStorage.getPropertyData(channel.remoteAddress(), uuid, true);
+					ArrayList<Property> properties = storage.getPropertyData(uuid, true);
 					serializer.writeVarInt(properties.size());
 					for (Property property : properties) {
 						serializer.writeString(property.getName());
@@ -189,7 +174,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				packet.b(packetdata);
 				int entityId = packetdata.readVarInt();
 				int type = packetdata.readUnsignedByte();
-				addWatchedEntity(new WatchedObject(entityId, type));
+				storage.addWatchedEntity(new WatchedObject(entityId, type));
 				if (type == 78) { //skip armor stand
 					return;
 				}
@@ -251,7 +236,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				packet.b(packetdata);
 				int entityId = packetdata.readVarInt();
 				int type = packetdata.readUnsignedByte();
-				addWatchedEntity(new WatchedLiving(entityId, type));
+				storage.addWatchedEntity(new WatchedLiving(entityId, type));
 				if (type == 30) { //skip armor stands
 					return;
 				}
@@ -267,7 +252,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeShort(packetdata.readShort());
 				serializer.writeShort(packetdata.readShort());
 				serializer.writeShort(packetdata.readShort());
-				serializer.writeBytes(DataWatcherFilter.filterEntityData(serializer.getVersion(), getWatchedEntity(entityId), packetdata.readBytes(packetdata.readableBytes()).array()));
+				serializer.writeBytes(DataWatcherFilter.filterEntityData(serializer.getVersion(), storage.getWatchedEntity(entityId), packetdata.readBytes(packetdata.readableBytes()).array()));
 				return;
 			}
 			case 0x24: { // PacketPlayOutBlockAction
@@ -328,7 +313,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				for (int i = 0; i < count; i++) {
 					array[i] = packetdata.readVarInt();
 				}
-				removeWatchedEntities(array);
+				storage.removeWatchedEntities(array);
 				for (int[] part : Utils.splitArray(array, 120)) {
 					writePacketData.clear();
 					writePacketData.writeVarInt(packetId);
@@ -426,7 +411,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeInt(entityId);
 				serializer.writeInt(packetdata.readInt());
 				int y = packetdata.readInt();
-				WatchedEntity entity = getWatchedEntity(entityId);
+				WatchedEntity entity = storage.getWatchedEntity(entityId);
 				if (entity != null && entity.isFallingBlockOrTnt()) {
 					y += 16;
 				}
@@ -448,7 +433,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeVarInt(packetId);
 				int entityId = packetdata.readVarInt();
 				serializer.writeInt(entityId);
-				serializer.writeBytes(DataWatcherFilter.filterEntityData(serializer.getVersion(), getWatchedEntity(entityId), packetdata.readBytes(packetdata.readableBytes()).array()));
+				serializer.writeBytes(DataWatcherFilter.filterEntityData(serializer.getVersion(), storage.getWatchedEntity(entityId), packetdata.readBytes(packetdata.readableBytes()).array()));
 				return;
 			}
 			case 0x1E: { // PacketPlayOutRemoveEntityEffect
@@ -753,7 +738,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 					switch (action) {
 						case 0: {
 							String playerName = packetdata.readString(16);
-							DataStorage.addTabName(channel.remoteAddress(), uuid, playerName);
+							storage.addPlayerListName(uuid, playerName);
 							int props = packetdata.readVarInt();
 							for (int p = 0; p < props; p++) {
 								String name = packetdata.readString(32767);
@@ -762,7 +747,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 								if (packetdata.readBoolean()) {
 									signature = packetdata.readString(32767);
 								}
-								DataStorage.addPropertyData(channel.remoteAddress(), uuid, signature != null ? new Property(name, value, signature) : new Property(value, name));
+								storage.addPropertyData(uuid, signature != null ? new Property(name, value, signature) : new Property(value, name));
 							}
 							packetdata.readVarInt();
 							packetdata.readVarInt();
@@ -778,7 +763,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 							break;
 						}
 						case 4: {
-							String playerName = DataStorage.getTabName(channel.remoteAddress(), uuid);
+							String playerName = storage.getPlayerListName(uuid);
 							writePacketData.clear();
 							writePacketData.writeVarInt(packetId);
 							writePacketData.writeString(playerName);

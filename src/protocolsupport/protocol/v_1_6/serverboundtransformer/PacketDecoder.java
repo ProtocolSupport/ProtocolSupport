@@ -14,9 +14,9 @@ import javax.crypto.Cipher;
 import net.minecraft.server.v1_8_R1.EnumProtocol;
 import net.minecraft.server.v1_8_R1.NetworkManager;
 import net.minecraft.server.v1_8_R1.Packet;
-import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.PublicPacketDecoder;
+import protocolsupport.protocol.storage.ProtocolStorage;
 
 public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketDecoder {
 
@@ -52,7 +52,7 @@ public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketD
 			Packet[] transformedPackets = transformers[currentProtocol.ordinal()].tranform(
 					channel,
 					packetId,
-					new PacketDataSerializer(bytebuf, DataStorage.getVersion(channel.remoteAddress()))
+					new PacketDataSerializer(bytebuf, ProtocolStorage.getVersion(channel.remoteAddress()))
 					);
 			if (transformedPackets != null) {
 				for (Packet transformedPacket : transformedPackets) {

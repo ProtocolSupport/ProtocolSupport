@@ -12,9 +12,9 @@ import net.minecraft.server.v1_8_R1.EnumProtocol;
 import net.minecraft.server.v1_8_R1.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R1.NetworkManager;
 import net.minecraft.server.v1_8_R1.Packet;
-import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.PublicPacketEncoder;
+import protocolsupport.protocol.storage.ProtocolStorage;
 
 public class PacketEncoder extends MessageToByteEncoder<Packet> implements PublicPacketEncoder {
 
@@ -48,7 +48,7 @@ public class PacketEncoder extends MessageToByteEncoder<Packet> implements Publi
 		if ((currentProtocol == EnumProtocol.PLAY) && blockedPlayPackets[packetId]) {
 			return;
 		}
-		PacketDataSerializer serializer = new PacketDataSerializer(output, DataStorage.getVersion(channel.remoteAddress()));
+		PacketDataSerializer serializer = new PacketDataSerializer(output, ProtocolStorage.getVersion(channel.remoteAddress()));
 		transformers[currentProtocol.ordinal()].tranform(ctx, packetId, packet, serializer);
 	}
 

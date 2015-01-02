@@ -14,8 +14,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import protocolsupport.injector.ProtocolLibFixer;
-import protocolsupport.protocol.DataStorage.ProtocolVersion;
 import protocolsupport.protocol.IPipeLineBuilder.DecoderEncoderTuple;
+import protocolsupport.protocol.storage.ProtocolStorage;
+import protocolsupport.protocol.storage.ProtocolStorage.ProtocolVersion;
 
 public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 
@@ -47,8 +48,8 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 									public void run() {
 										try {
 											SocketAddress remoteAddress = ctx.channel().remoteAddress();
-											if (DataStorage.getVersion(remoteAddress) == ProtocolVersion.UNKNOWN) {
-												DataStorage.setVersion(remoteAddress, ProtocolVersion.MINECRAFT_1_5_2);
+											if (ProtocolStorage.getVersion(remoteAddress) == ProtocolVersion.UNKNOWN) {
+												ProtocolStorage.setVersion(remoteAddress, ProtocolVersion.MINECRAFT_1_5_2);
 												rebuildPipeLine(ctx, receivedData, ProtocolVersion.MINECRAFT_1_5_2);
 											}
 										} catch (Throwable t) {
@@ -87,7 +88,7 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 			//if we detected the protocol than we save it and process data
 			if (handshakeversion != ProtocolVersion.UNKNOWN) {
 				System.out.println(ctx.channel().remoteAddress()+" connected with protocol version "+handshakeversion);
-				DataStorage.setVersion(ctx.channel().remoteAddress(), handshakeversion);
+				ProtocolStorage.setVersion(ctx.channel().remoteAddress(), handshakeversion);
 				rebuildPipeLine(ctx, receivedData, handshakeversion);
 			}
 		} catch (Throwable t) {

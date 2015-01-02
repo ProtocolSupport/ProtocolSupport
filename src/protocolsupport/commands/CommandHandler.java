@@ -8,8 +8,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import protocolsupport.protocol.DataStorage;
-import protocolsupport.protocol.DataStorage.ProtocolVersion;
+import protocolsupport.protocol.storage.ProtocolStorage;
+import protocolsupport.protocol.storage.ProtocolStorage.ProtocolVersion;
 
 public class CommandHandler implements CommandExecutor {
 
@@ -39,7 +39,7 @@ public class CommandHandler implements CommandExecutor {
 	private String getPlayersStringForProtocol(ProtocolVersion version) {
 		StringBuilder sb = new StringBuilder();
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (DataStorage.getVersion(player.getAddress()) == version) {
+			if (ProtocolStorage.getVersion(player.getAddress()) == version) {
 				sb.append(player.getName());
 				sb.append(", ");
 			}

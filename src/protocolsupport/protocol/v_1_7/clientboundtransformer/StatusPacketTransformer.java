@@ -21,8 +21,8 @@ import net.minecraft.server.v1_8_R1.ServerPingServerDataSerializer;
 import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
 import org.bukkit.craftbukkit.libs.com.google.gson.GsonBuilder;
 
-import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.storage.ProtocolStorage;
 
 public class StatusPacketTransformer implements PacketTransformer {
 
@@ -41,7 +41,7 @@ public class StatusPacketTransformer implements PacketTransformer {
 			PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
 			packet.b(packetdata);
 			ServerPing serverPing = gson.fromJson(packetdata.readString(32767), ServerPing.class);
-			serverPing.setServerInfo(new ServerPingServerData(serverPing.c().a(), DataStorage.getVersion(ctx.channel().remoteAddress()).getId()));
+			serverPing.setServerInfo(new ServerPingServerData(serverPing.c().a(), ProtocolStorage.getVersion(ctx.channel().remoteAddress()).getId()));
 			serializer.writeVarInt(packetId);
 			serializer.writeString(gson.toJson(serverPing));
 			return;
