@@ -92,7 +92,6 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 				rebuildPipeLine(ctx, receivedData, handshakeversion);
 			}
 		} catch (Throwable t) {
-			t.printStackTrace();
 			ctx.channel().close();
 		} finally {
 			ReferenceCountUtil.release(inputObj);
