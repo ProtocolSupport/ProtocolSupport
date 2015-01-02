@@ -10,8 +10,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import net.minecraft.server.v1_8_R1.NetworkManager;
+import org.bukkit.entity.Player;
 
+import net.minecraft.server.v1_8_R1.NetworkManager;
+import net.minecraft.server.v1_8_R1.PlayerConnection;
 import protocolsupport.protocol.PacketDataSerializer;
 
 public class Utils {
@@ -69,6 +71,10 @@ public class Utils {
 
 	public static Channel getChannel(NetworkManager nm) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		return (Channel) Utils.<Field>setAccessible(NetworkManager.class.getDeclaredField("i")).get(nm);
+	}
+
+	public static Player getPlayer(Channel channel) {
+		return ((PlayerConnection) ((NetworkManager) channel.pipeline().get("packet_handler")).getPacketListener()).player.getBukkitEntity();
 	}
 
 	public static List<int[]> splitArray(int[] array, int limit) {

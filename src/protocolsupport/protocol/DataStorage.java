@@ -36,23 +36,6 @@ public class DataStorage {
 		return channelInfo.get(address).version;
 	}
 
-	public static void setPlayer(SocketAddress address, Player player) {
-		channelInfo.get(address).player = player;
-	}
-
-	@SuppressWarnings("deprecation")
-	public static Player getPlayer(SocketAddress address) {
-		Player player = channelInfo.get(address).player;
-		if (player == null) {
-			for (Player oplayer : Bukkit.getOnlinePlayers()) {
-				if (oplayer.getAddress().equals(address)) {
-					return oplayer;
-				}
-			}
-		}
-		return player;
-	}
-
 	public static void addTabName(SocketAddress address, UUID uuid, String name) {
 		channelInfo.get(address).tablist.put(uuid, name);
 	}
@@ -96,7 +79,6 @@ public class DataStorage {
 
 	private static class ChannelInfo {
 		ProtocolVersion version = ProtocolVersion.UNKNOWN;
-		Player player;
 		HashMap<UUID, String> tablist = new HashMap<UUID, String>();
 		@SuppressWarnings("serial")
 		HashMap<UUID, ArrayList<Property>> skins = new HashMap<UUID, ArrayList<Property>>() {

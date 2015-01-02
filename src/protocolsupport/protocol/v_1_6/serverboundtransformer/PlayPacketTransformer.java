@@ -12,8 +12,8 @@ import net.minecraft.server.v1_8_R1.Packet;
 
 import org.bukkit.event.inventory.InventoryType;
 
-import protocolsupport.protocol.DataStorage;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.utils.Utils;
 
 public class PlayPacketTransformer implements PacketTransformer {
 
@@ -117,7 +117,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x66: { //PacketPlayInWindowClick
 				packet = getPacketById(0x0E);
-				if (DataStorage.getPlayer(channel.remoteAddress()).getOpenInventory().getType() == InventoryType.ENCHANTING) {
+				if (Utils.getPlayer(channel).getOpenInventory().getType() == InventoryType.ENCHANTING) {
 					packetdata.writeByte(serializer.readByte());
 					int slot = serializer.readShort();
 					if (slot > 0) {

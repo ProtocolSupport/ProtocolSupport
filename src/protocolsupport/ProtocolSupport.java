@@ -6,7 +6,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import protocolsupport.commands.CommandHandler;
 import protocolsupport.injector.NettyInjector;
 import protocolsupport.injector.ServerInjector;
-import protocolsupport.listeners.PlayerListener;
 
 public class ProtocolSupport extends JavaPlugin {
 
@@ -15,15 +14,14 @@ public class ProtocolSupport extends JavaPlugin {
 		try {
 			NettyInjector.inject();
 			ServerInjector.inject();
-		} catch (Throwable e) {
-			e.printStackTrace();
+		} catch (Throwable t) {
+			t.printStackTrace();
 			Bukkit.shutdown();
 		}
 	}
 
 	@Override
 	public void onEnable() {
-		getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 		getCommand("protocolsupport").setExecutor(new CommandHandler());
 	}
 

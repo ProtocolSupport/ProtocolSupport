@@ -111,7 +111,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x08: { // PacketPlayOutPosition
 				packet.b(packetdata);
 				serializer.writeVarInt(packetId);
-				Player player = DataStorage.getPlayer(channel.remoteAddress());
+				Player player = Utils.getPlayer(channel);
 				double x = packetdata.readDouble();
 				double y = packetdata.readDouble() + 1.63;
 				double z = packetdata.readDouble();
@@ -678,7 +678,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				return;
 			}
 			case 0x2F: { //PacketPlayOutSetSlot
-				if (DataStorage.getPlayer(channel.remoteAddress()).getOpenInventory().getType() == InventoryType.ENCHANTING) {
+				if (Utils.getPlayer(channel).getOpenInventory().getType() == InventoryType.ENCHANTING) {
 					packet.b(packetdata);
 					byte windowId = packetdata.readByte();
 					int slot = packetdata.readShort();
@@ -700,7 +700,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				}
 			}
 			case 0x30: { //PacketPlayOutWindowItems
-				if (DataStorage.getPlayer(channel.remoteAddress()).getOpenInventory().getType() == InventoryType.ENCHANTING) {
+				if (Utils.getPlayer(channel).getOpenInventory().getType() == InventoryType.ENCHANTING) {
 					packet.b(packetdata);
 					serializer.writeVarInt(packetId);
 					serializer.writeByte(packetdata.readByte());
