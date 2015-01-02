@@ -19,7 +19,6 @@ import net.minecraft.server.v1_8_R1.ItemStack;
 import net.minecraft.server.v1_8_R1.Packet;
 
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_8_R1.util.CraftChatMessage;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 
@@ -713,7 +712,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeShort(blockPos.getY());
 				serializer.writeInt(blockPos.getZ());
 				for (int i = 0; i < 4; i++) {
-					serializer.writeString(Utils.clampString(CraftChatMessage.fromComponent(packetdata.d()), 15));
+					serializer.writeString(Utils.clampString(Utils.fromComponent(packetdata.d()), 15));
 				}
 				return;
 			}

@@ -16,7 +16,6 @@ import net.minecraft.server.v1_8_R1.ItemStack;
 import net.minecraft.server.v1_8_R1.Packet;
 
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_8_R1.util.CraftChatMessage;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 
@@ -59,7 +58,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x02: { //PacketPlayOutChat
 				serializer.writeByte(0x03);
-				serializer.writeString(ChatEncoder.encode(CraftChatMessage.fromComponent(packetdata.d())));
+				serializer.writeString(ChatEncoder.encode(Utils.fromComponent(packetdata.d())));
 				return;
 			}
 			case 0x03: { //PacketPlayOutUpdateTime
@@ -672,7 +671,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeShort(blockPos.getY());
 				serializer.writeInt(blockPos.getZ());
 				for (int i = 0; i < 4; i++) {
-					serializer.writeString(Utils.clampString(CraftChatMessage.fromComponent(packetdata.d()), 15));
+					serializer.writeString(Utils.clampString(Utils.fromComponent(packetdata.d()), 15));
 				}
 				return;
 			}
@@ -838,7 +837,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x40: { //PacketPlayOutKickDisconnect
 				serializer.writeByte(0xFF);
-				serializer.writeString(CraftChatMessage.fromComponent(packetdata.d()));
+				serializer.writeString(Utils.fromComponent(packetdata.d()));
 				return;
 			}
 		}

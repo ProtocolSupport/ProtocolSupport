@@ -20,10 +20,10 @@ import net.minecraft.server.v1_8_R1.ServerPingServerDataSerializer;
 
 import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
 import org.bukkit.craftbukkit.libs.com.google.gson.GsonBuilder;
-import org.bukkit.craftbukkit.v1_8_R1.util.CraftChatMessage;
 
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.storage.ProtocolStorage;
+import protocolsupport.utils.Utils;
 
 public class StatusPacketTransformer implements PacketTransformer {
 
@@ -48,7 +48,7 @@ public class StatusPacketTransformer implements PacketTransformer {
 				"\u0000" +
 				serverPing.c().a() +
 				"\u0000" +
-				CraftChatMessage.fromComponent(serverPing.a()) +
+				Utils.fromComponent(serverPing.a()) +
 				"\u0000" +
 				serverPing.b().b() +
 				"\u0000" +

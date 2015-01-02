@@ -8,10 +8,14 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import org.bukkit.entity.Player;
 
+import net.minecraft.server.v1_8_R1.ChatModifier;
+import net.minecraft.server.v1_8_R1.EnumChatFormat;
+import net.minecraft.server.v1_8_R1.IChatBaseComponent;
 import net.minecraft.server.v1_8_R1.NetworkManager;
 import net.minecraft.server.v1_8_R1.PlayerConnection;
 import protocolsupport.protocol.PacketDataSerializer;
@@ -89,6 +93,43 @@ public class Utils {
 			copied+= limit;
 		}
 		return list;
+	}
+
+	public static String fromComponent(final IChatBaseComponent component) {
+		if (component == null) {
+			return "";
+		}
+		final StringBuilder out = new StringBuilder();
+		@SuppressWarnings("unchecked")
+		Iterator<IChatBaseComponent> iterator = component.iterator();
+		while (iterator.hasNext()) {
+			IChatBaseComponent c = iterator.next();
+			final ChatModifier modi = c.getChatModifier();
+			if (modi.getColor() != null) {
+				out.append(modi.getColor());
+			} else {
+				if (out.length() != 0) {
+					out.append(EnumChatFormat.RESET);
+				}
+			}
+			if (modi.isBold()) {
+				out.append(EnumChatFormat.BOLD);
+			}
+			if (modi.isItalic()) {
+				out.append(EnumChatFormat.ITALIC);
+			}
+			if (modi.isUnderlined()) {
+				out.append(EnumChatFormat.UNDERLINE);
+			}
+			if (modi.isStrikethrough()) {
+				out.append(EnumChatFormat.STRIKETHROUGH);
+			}
+			if (modi.isRandom()) {
+				out.append(EnumChatFormat.OBFUSCATED);
+			}
+			out.append(c.getText());
+		}
+		return out.toString();
 	}
 
 }
