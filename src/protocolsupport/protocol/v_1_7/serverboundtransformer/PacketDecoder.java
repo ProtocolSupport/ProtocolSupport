@@ -13,10 +13,10 @@ import net.minecraft.server.v1_8_R1.EnumProtocol;
 import net.minecraft.server.v1_8_R1.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R1.NetworkManager;
 import net.minecraft.server.v1_8_R1.Packet;
-import protocolsupport.protocol.storage.ProtocolStorage;
-import protocolsupport.protocol.storage.ProtocolStorage.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.PublicPacketDecoder;
+import protocolsupport.protocol.storage.ProtocolStorage;
+import protocolsupport.protocol.storage.ProtocolStorage.ProtocolVersion;
 
 public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketDecoder {
 

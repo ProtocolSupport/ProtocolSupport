@@ -1,5 +1,7 @@
 package protocolsupport.protocol.storage;
 
+import gnu.trove.map.hash.TIntObjectHashMap;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -8,10 +10,9 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import com.mojang.authlib.properties.Property;
-
-import gnu.trove.map.hash.TIntObjectHashMap;
 import protocolsupport.protocol.watchedentites.WatchedEntity;
+
+import com.mojang.authlib.properties.Property;
 
 public class LocalStorage {
 

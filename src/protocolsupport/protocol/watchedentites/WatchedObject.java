@@ -11,8 +11,8 @@ public class WatchedObject extends WatchedEntity {
 		super(id);
 		switch (type) {
 			case 1: {
-			isBoat = true;
-			break;
+				isBoat = true;
+				break;
 			}
 			case 71: {
 				isItemFrame = true;

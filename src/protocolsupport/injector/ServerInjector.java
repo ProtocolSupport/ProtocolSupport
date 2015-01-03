@@ -11,6 +11,7 @@ import net.minecraft.server.v1_8_R1.Item;
 import net.minecraft.server.v1_8_R1.ItemBlock;
 import net.minecraft.server.v1_8_R1.MinecraftKey;
 import net.minecraft.server.v1_8_R1.TileEntity;
+import protocolsupport.server.block.BlockAnvil;
 import protocolsupport.server.block.BlockEnchantTable;
 import protocolsupport.server.tileentity.TileEntityEnchantTable;
 import protocolsupport.utils.Utils;
@@ -20,6 +21,7 @@ public class ServerInjector {
 	public static void inject() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		registerTileEntity(TileEntityEnchantTable.class, "EnchantTable");
 		registerBlock(116, "enchanting_table", new BlockEnchantTable());
+		registerBlock(145, "anvil", new BlockAnvil());
 		fixBlocksRefs();
 	}
 

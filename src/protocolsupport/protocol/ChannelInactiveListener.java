@@ -1,8 +1,8 @@
 package protocolsupport.protocol;
 
-import protocolsupport.protocol.storage.ProtocolStorage;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import protocolsupport.protocol.storage.ProtocolStorage;
 
 public class ChannelInactiveListener extends ChannelInboundHandlerAdapter {
 

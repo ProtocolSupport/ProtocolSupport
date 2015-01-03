@@ -11,13 +11,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import org.bukkit.entity.Player;
-
 import net.minecraft.server.v1_8_R1.ChatModifier;
 import net.minecraft.server.v1_8_R1.EnumChatFormat;
 import net.minecraft.server.v1_8_R1.IChatBaseComponent;
 import net.minecraft.server.v1_8_R1.NetworkManager;
 import net.minecraft.server.v1_8_R1.PlayerConnection;
+
+import org.bukkit.entity.Player;
+
 import protocolsupport.protocol.PacketDataSerializer;
 
 public class Utils {

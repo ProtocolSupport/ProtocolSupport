@@ -1,5 +1,6 @@
 package protocolsupport.protocol.v_1_5.serverboundtransformer;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 
@@ -184,9 +185,14 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0xFA: { //PacketPlayInCustomPayload
 				packet = getPacketById(0x17);
-				packetdata.writeString(serializer.readString(20));
-				int length = serializer.readShort();
-				packetdata.writeBytes(serializer.readBytes(length));
+				String tag = serializer.readString(20);
+				packetdata.writeString(tag);
+				ByteBuf buf = serializer.readBytes(serializer.readShort());
+				//special handle for anvil renaming, in 1.8 it reads string from serializer, but in 1.7 and before it just reads bytes and converts it to string
+				if (tag.equalsIgnoreCase("MC|ItemName")) {
+					packetdata.writeVarInt(buf.readableBytes());
+				}
+				packetdata.writeBytes(buf);
 				break;
 			}
 			case 0xFF: { //No corresponding packet
