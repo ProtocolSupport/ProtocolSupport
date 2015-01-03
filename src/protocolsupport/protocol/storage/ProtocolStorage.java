@@ -16,7 +16,8 @@ public class ProtocolStorage {
 	}
 
 	public static ProtocolVersion getVersion(SocketAddress address) {
-		return protocolVersions.get(address);
+		ProtocolVersion version = protocolVersions.get(address);
+		return version == null ? ProtocolVersion.UNKNOWN : version;
 	}
 
 	public static enum ProtocolVersion {

@@ -49,10 +49,10 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 										try {
 											SocketAddress remoteAddress = ctx.channel().remoteAddress();
 											if (ProtocolStorage.getVersion(remoteAddress) == ProtocolVersion.UNKNOWN) {
-												ProtocolStorage.setVersion(remoteAddress, ProtocolVersion.MINECRAFT_1_5_2);
-												rebuildPipeLine(ctx, receivedData, ProtocolVersion.MINECRAFT_1_5_2);
+												setProtocol(ctx, receivedData, ProtocolVersion.MINECRAFT_1_5_2);
 											}
 										} catch (Throwable t) {
+											t.printStackTrace();
 											ctx.channel().close();
 										}
 									}
@@ -87,15 +87,19 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 			}
 			//if we detected the protocol than we save it and process data
 			if (handshakeversion != ProtocolVersion.UNKNOWN) {
-				System.out.println(ctx.channel().remoteAddress()+" connected with protocol version "+handshakeversion);
-				ProtocolStorage.setVersion(ctx.channel().remoteAddress(), handshakeversion);
-				rebuildPipeLine(ctx, receivedData, handshakeversion);
+				setProtocol(ctx, receivedData, handshakeversion);
 			}
 		} catch (Throwable t) {
 			ctx.channel().close();
 		} finally {
 			ReferenceCountUtil.release(inputObj);
 		}
+	}
+
+	private void setProtocol(final ChannelHandlerContext ctx, final ByteBuf input, ProtocolVersion version) throws Exception {
+		System.out.println(ctx.channel().remoteAddress()+" connected with protocol version "+version);
+		ProtocolStorage.setVersion(ctx.channel().remoteAddress(), version);
+		rebuildPipeLine(ctx, receivedData, version);
 	}
 
 	@SuppressWarnings("serial")
