@@ -34,9 +34,9 @@ public class ProtocolLibFixer {
 			Class<?> channelInjectorClass = Class.forName("com.comphenix.protocol.injector.netty.ChannelInjector");
 			Utils.setAccessible(channelInjectorClass.getDeclaredField("DECODE_BUFFER")).set(null, new PipelineDecodeMethodAccessor());
 			Utils.setAccessible(channelInjectorClass.getDeclaredField("ENCODE_BUFFER")).set(null, new PipelineEncodeMethodAccessor());
-			patchEncoderMethod = channelInjectorClass.getDeclaredMethod("patchEncoder", MessageToByteEncoder.class);
-			vanillaDecoderField = channelInjectorClass.getDeclaredField("vanillaDecoder");
-			vanillaEncoderField = channelInjectorClass.getDeclaredField("vanillaEncoder");
+			patchEncoderMethod = Utils.setAccessible(channelInjectorClass.getDeclaredMethod("patchEncoder", MessageToByteEncoder.class));
+			vanillaDecoderField = Utils.setAccessible(channelInjectorClass.getDeclaredField("vanillaDecoder"));
+			vanillaEncoderField = Utils.setAccessible(channelInjectorClass.getDeclaredField("vanillaEncoder"));
 			init = true;
 		} catch (Throwable t) {
 		}
@@ -48,9 +48,9 @@ public class ProtocolLibFixer {
 		}
 		try {
 			ChannelHandler protocolLibDecoder = pipeline.get("protocol_lib_decoder");
-			Utils.setAccessible(patchEncoderMethod).invoke(protocolLibDecoder, encoder);
-			Utils.setAccessible(vanillaDecoderField).set(protocolLibDecoder, decoder);
-			Utils.setAccessible(vanillaEncoderField).set(protocolLibDecoder, encoder);
+			patchEncoderMethod.invoke(protocolLibDecoder, encoder);
+			vanillaDecoderField.set(protocolLibDecoder, decoder);
+			vanillaEncoderField.set(protocolLibDecoder, encoder);
 		} catch (Throwable t) {
 			System.err.println("Failed to fix protocollib decoder, shutting down");
 			t.printStackTrace();
