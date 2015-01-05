@@ -3,7 +3,6 @@ package protocolsupport.protocol.v_1_6;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
-import net.minecraft.server.v1_8_R1.MinecraftServer;
 import net.minecraft.server.v1_8_R1.NetworkManager;
 import protocolsupport.protocol.IPipeLineBuilder;
 import protocolsupport.protocol.fake.FakeDecoder;
@@ -20,7 +19,7 @@ public class PipeLineBuilder implements IPipeLineBuilder {
 		ChannelPipeline pipeline = ctx.channel().pipeline();
 		NetworkManager networkmanager = pipeline.get(NetworkManager.class);
 		PacketDecoder decoder = new PacketDecoder();
-		networkmanager.a(new HandshakeListener(MinecraftServer.getServer(), decoder, networkmanager));
+		networkmanager.a(new HandshakeListener(decoder, networkmanager));
 		pipeline.remove(FakeSplitter.class);
 		pipeline.remove(FakePrepender.class);
 		ChannelHandler encoder = new PacketEncoder();
