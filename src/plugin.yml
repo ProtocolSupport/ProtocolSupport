@@ -2,6 +2,7 @@ name: ProtocolSupport
 main: protocolsupport.ProtocolSupport
 version: 4.7
 author: _Shevchik_
+softdepend: [ProtocolLib]
 load: STARTUP
 commands:
   protocolsupport:

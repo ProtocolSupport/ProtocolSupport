@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import protocolsupport.commands.CommandHandler;
 import protocolsupport.injector.NettyInjector;
+import protocolsupport.injector.ProtocolLibFixer;
 import protocolsupport.injector.ServerInjector;
 
 public class ProtocolSupport extends JavaPlugin {
@@ -14,6 +15,7 @@ public class ProtocolSupport extends JavaPlugin {
 		try {
 			NettyInjector.inject();
 			ServerInjector.inject();
+			ProtocolLibFixer.init();
 		} catch (Throwable t) {
 			t.printStackTrace();
 			Bukkit.shutdown();

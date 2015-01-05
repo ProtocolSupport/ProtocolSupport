@@ -23,25 +23,34 @@ import com.comphenix.protocol.reflect.accessors.MethodAccessor;
 
 public class ProtocolLibFixer {
 
-	private static boolean methodAccessorsInjected = false;
+	private static boolean init = false;
+
+	private static Method patchEncoderMethod;
+	private static Field vanillaDecoderField;
+	private static Field vanillaEncoderField;
+
+	public static void init() {
+		try {
+			Class<?> channelInjectorClass = Class.forName("com.comphenix.protocol.injector.netty.ChannelInjector");
+			Utils.setAccessible(channelInjectorClass.getDeclaredField("DECODE_BUFFER")).set(null, new PipelineDecodeMethodAccessor());
+			Utils.setAccessible(channelInjectorClass.getDeclaredField("ENCODE_BUFFER")).set(null, new PipelineEncodeMethodAccessor());
+			patchEncoderMethod = channelInjectorClass.getDeclaredMethod("patchEncoder", MessageToByteEncoder.class);
+			vanillaDecoderField = channelInjectorClass.getDeclaredField("vanillaDecoder");
+			vanillaEncoderField = channelInjectorClass.getDeclaredField("vanillaEncoder");
+			init = true;
+		} catch (Throwable t) {
+		}
+	}
 
 	public static void fixProtocolLib(ChannelPipeline pipeline, ChannelHandler decoder, ChannelHandler encoder) {
+		if (!init) {
+			return;
+		}
 		try {
 			ChannelHandler protocolLibDecoder = pipeline.get("protocol_lib_decoder");
-			if (protocolLibDecoder != null) {
-				if (!methodAccessorsInjected) {
-					Utils.setAccessible(protocolLibDecoder.getClass().getDeclaredField("DECODE_BUFFER")).set(
-						null, new PipelineDecodeMethodAccessor()
-					);
-					Utils.setAccessible(protocolLibDecoder.getClass().getDeclaredField("ENCODE_BUFFER")).set(
-						null, new PipelineEncodeMethodAccessor()
-					);
-					methodAccessorsInjected = true;
-				}
-				Utils.<Method>setAccessible(protocolLibDecoder.getClass().getDeclaredMethod("patchEncoder", MessageToByteEncoder.class)).invoke(protocolLibDecoder, encoder);
-				Utils.<Field>setAccessible(protocolLibDecoder.getClass().getDeclaredField("vanillaDecoder")).set(protocolLibDecoder, decoder);
-				Utils.<Field>setAccessible(protocolLibDecoder.getClass().getDeclaredField("vanillaEncoder")).set(protocolLibDecoder, encoder);
-			}
+			Utils.setAccessible(patchEncoderMethod).invoke(protocolLibDecoder, encoder);
+			Utils.setAccessible(vanillaDecoderField).set(protocolLibDecoder, decoder);
+			Utils.setAccessible(vanillaEncoderField).set(protocolLibDecoder, encoder);
 		} catch (Throwable t) {
 			System.err.println("Failed to fix protocollib decoder, shutting down");
 			t.printStackTrace();
