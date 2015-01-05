@@ -19,7 +19,7 @@ public class LoginListener extends net.minecraft.server.v1_8_R1.LoginListener {
 	@Override
 	public void b() {
 		try {
-			GameProfile profile = (GameProfile) Utils.<Field> setAccessible(net.minecraft.server.v1_8_R1.LoginListener.class.getDeclaredField("i")).get(this);
+			GameProfile profile = (GameProfile) Utils.setAccessible(net.minecraft.server.v1_8_R1.LoginListener.class.getDeclaredField("i")).get(this);
 			final EntityPlayer s = MinecraftServer.getServer().getPlayerList().attemptLogin(this, profile, hostname);
 			if (s != null) {
 				Class<?> clazz = Class.forName("net.minecraft.server.v1_8_R1.EnumProtocolState");

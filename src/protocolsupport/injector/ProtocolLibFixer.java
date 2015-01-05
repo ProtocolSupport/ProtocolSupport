@@ -30,10 +30,10 @@ public class ProtocolLibFixer {
 			ChannelHandler protocolLibDecoder = pipeline.get("protocol_lib_decoder");
 			if (protocolLibDecoder != null) {
 				if (!methodAccessorsInjected) {
-					Utils.<Field>setAccessible(protocolLibDecoder.getClass().getDeclaredField("DECODE_BUFFER")).set(
+					Utils.setAccessible(protocolLibDecoder.getClass().getDeclaredField("DECODE_BUFFER")).set(
 						null, new PipelineDecodeMethodAccessor()
 					);
-					Utils.<Field>setAccessible(protocolLibDecoder.getClass().getDeclaredField("ENCODE_BUFFER")).set(
+					Utils.setAccessible(protocolLibDecoder.getClass().getDeclaredField("ENCODE_BUFFER")).set(
 						null, new PipelineEncodeMethodAccessor()
 					);
 					methodAccessorsInjected = true;

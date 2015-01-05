@@ -27,8 +27,8 @@ public class ServerInjector {
 
 	@SuppressWarnings("unchecked")
 	private static void registerTileEntity(Class<? extends TileEntity> entityClass, String name) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		((Map<String, Class<? extends TileEntity>>) Utils.<Field>setAccessible(TileEntity.class.getDeclaredField("f")).get(null)).put(name, entityClass);
-		((Map<Class<? extends TileEntity>, String>) Utils.<Field>setAccessible(TileEntity.class.getDeclaredField("g")).get(null)).put(entityClass, name);
+		((Map<String, Class<? extends TileEntity>>) Utils.setAccessible(TileEntity.class.getDeclaredField("f")).get(null)).put(name, entityClass);
+		((Map<Class<? extends TileEntity>, String>) Utils.setAccessible(TileEntity.class.getDeclaredField("g")).get(null)).put(entityClass, name);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -43,7 +43,7 @@ public class ServerInjector {
 			Block.d.a(blockdata, stateId);
 		}
 		Item.REGISTRY.a(id, stringkey, itemblock);
-		((Map<Block, Item>)Utils.<Field>setAccessible(Item.class.getDeclaredField("a")).get(null)).put(block, itemblock);
+		((Map<Block, Item>)Utils.setAccessible(Item.class.getDeclaredField("a")).get(null)).put(block, itemblock);
 	}
 
 	private static void fixBlocksRefs() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {

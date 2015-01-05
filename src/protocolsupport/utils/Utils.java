@@ -7,7 +7,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,27 +22,47 @@ import protocolsupport.protocol.PacketDataSerializer;
 
 public class Utils {
 
-	@SuppressWarnings("serial")
-	private static final HashMap<String, Byte> inventoryNameToId = new HashMap<String, Byte>() {
-		{
-			put("minecraft:chest", (byte) 0);
-			put("minecraft:container", (byte) 0);
-			put("minecraft:crafting_table", (byte) 1);
-			put("minecraft:furnace", (byte) 2);
-			put("minecraft:dispenser", (byte) 3);
-			put("minecraft:enchanting_table", (byte) 4);
-			put("minecraft:brewing_stand", (byte) 5);
-			put("minecraft:villager", (byte) 6);
-			put("minecraft:beacon", (byte) 7);
-			put("minecraft:anvil", (byte) 8);
-			put("minecraft:hopper", (byte) 9);
-			put("minecraft:dropper", (byte) 10);
-			put("EntityHorse", (byte) 11);
-		}
-	};
-
 	public static byte getInventoryId(String inventoryid) {
-		return inventoryNameToId.get(inventoryid);
+		switch (inventoryid.toLowerCase()) {
+			case "minecraft:chest":
+			case "minecraft:container": {
+				return 0;
+			}
+			case "minecraft:crafting_table": {
+				return 1;
+			}
+			case "minecraft:furnace": {
+				return 2;
+			}
+			case "minecraft:dispenser": {
+				return 3;
+			}
+			case "minecraft:enchanting_table": {
+				return 4;
+			}
+			case "minecraft:brewing_stand": {
+				return 5;
+			}
+			case "minecraft:villager": {
+				return 6;
+			}
+			case "minecraft:beacon": {
+				return 7;
+			}
+			case "minecraft:anvil": {
+				return 8;
+			}
+			case "minecraft:hopper": {
+				return 9;
+			}
+			case "minecraft:dropper": {
+				return 10;
+			}
+			case "EntityHorse": {
+				return 11;
+			}
+		}
+		throw new IllegalArgumentException("Don't know how to convert "+inventoryid);
 	}
 
 	public static String clampString(String string, int limit) {
@@ -54,24 +73,16 @@ public class Utils {
 		output.writeBytes(input.readBytes(input.readableBytes()));
 	}
 
-	@SuppressWarnings("unchecked")
-	public static <T> T setAccessible(AccessibleObject object) {
+	public static <T extends AccessibleObject> T setAccessible(T object) {
 		object.setAccessible(true);
-		return (T) object;
+		return object;
 	}
 
 	public static void setStaticFinalField(Field field, Object newValue) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		field.setAccessible(true);
-		Field fieldModifiers = Field.class.getDeclaredField("modifiers");
-		fieldModifiers.setAccessible(true);
-		fieldModifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-		Field root = Field.class.getDeclaredField("root");
-		root.setAccessible(true);
-		root.set(field, null);
-		Field accessor = Field.class.getDeclaredField("overrideFieldAccessor");
-		accessor.setAccessible(true);
-		accessor.set(field, null);
-		field.set(null, newValue);
+		setAccessible(Field.class.getDeclaredField("modifiers")).setInt(field, field.getModifiers() & ~Modifier.FINAL);
+		setAccessible(Field.class.getDeclaredField("root")).set(field, null);
+		setAccessible(Field.class.getDeclaredField("overrideFieldAccessor")).set(field, null);
+		setAccessible(field).set(null, newValue);
 	}
 
 	public static Player getPlayer(Channel channel) {
