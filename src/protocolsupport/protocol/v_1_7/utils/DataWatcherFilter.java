@@ -1,4 +1,4 @@
-package protocolsupport.protocol.v_1_7.clientboundtransformer;
+package protocolsupport.protocol.v_1_7.utils;
 
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.TIntObjectMap;
@@ -97,7 +97,7 @@ public class DataWatcherFilter {
 					break;
 				}
 				case 5: {
-					map.put(key, new DataWatcherObject(type, serializer.i()));
+					map.put(key, new DataWatcherObject(type, serializer.readItemStack()));
 					break;
 				}
 				case 6: {
@@ -149,7 +149,7 @@ public class DataWatcherFilter {
 					break;
 				}
 				case 5: {
-					serializer.a((ItemStack) object.value);
+					serializer.writeItemStack((ItemStack) object.value);
 					break;
 				}
 				case 6: {

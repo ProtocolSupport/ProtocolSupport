@@ -1,4 +1,4 @@
-package protocolsupport.protocol.v_1_6.clientboundtransformer;
+package protocolsupport.protocol.v_1_6.utils;
 
 import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
 import org.bukkit.craftbukkit.libs.com.google.gson.GsonBuilder;

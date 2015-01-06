@@ -177,6 +177,14 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R1.PacketDat
 		a(string);
 	}
 
+	public ItemStack readItemStack() {
+		return i();
+	}
+
+	public void writeItemStack(ItemStack itemstack) {
+		a(itemstack);
+	}
+
 	private static NBTTagCompound read(final byte[] data, final NBTReadLimiter nbtreadlimiter) {
 		try {
 			final DataInputStream datainputstream = new DataInputStream(new BufferedInputStream(new LimitStream(new GZIPInputStream(new ByteArrayInputStream(data)), nbtreadlimiter)));

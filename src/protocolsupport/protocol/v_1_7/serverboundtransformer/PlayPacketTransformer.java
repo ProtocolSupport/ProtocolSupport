@@ -59,7 +59,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x08: { //PacketPlayInBlockPlace
 				packetdata.a(new BlockPosition(serializer.readInt(), serializer.readUnsignedByte(), serializer.readInt()));
 				packetdata.writeByte(serializer.readUnsignedByte());
-				packetdata.a(serializer.i());
+				packetdata.writeItemStack(serializer.readItemStack());
 				packetdata.writeByte(serializer.readUnsignedByte());
 				packetdata.writeByte(serializer.readUnsignedByte());
 				packetdata.writeByte(serializer.readUnsignedByte());
@@ -93,7 +93,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 					packetdata.writeByte(serializer.readByte());
 					packetdata.writeShort(serializer.readShort());
 					packetdata.writeByte(serializer.readByte());
-					packetdata.a(serializer.i());
+					packetdata.writeItemStack(serializer.readItemStack());
 				}
 				break;
 			}

@@ -84,7 +84,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				packet = getPacketById(0x08);
 				packetdata.a(new BlockPosition(serializer.readInt(), serializer.readUnsignedByte(), serializer.readInt()));
 				packetdata.writeByte(serializer.readUnsignedByte());
-				packetdata.a(serializer.i());
+				packetdata.writeItemStack(serializer.readItemStack());
 				packetdata.writeByte(serializer.readUnsignedByte());
 				packetdata.writeByte(serializer.readUnsignedByte());
 				packetdata.writeByte(serializer.readUnsignedByte());
@@ -123,7 +123,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 					packetdata.writeByte(serializer.readByte());
 					packetdata.writeShort(serializer.readShort());
 					packetdata.writeByte(serializer.readByte());
-					packetdata.a(serializer.i());
+					packetdata.writeItemStack(serializer.readItemStack());
 				} else {
 					useOriginalStream = true;
 				}

@@ -27,6 +27,9 @@ import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.storage.ProtocolStorage.ProtocolVersion;
 import protocolsupport.protocol.v_1_7.remappers.BlockIDRemapper;
 import protocolsupport.protocol.v_1_7.remappers.EntityIDRemapper;
+import protocolsupport.protocol.v_1_7.utils.ChunkUtils;
+import protocolsupport.protocol.v_1_7.utils.DataWatcherFilter;
+import protocolsupport.protocol.v_1_7.utils.VillagerTradeTransformer;
 import protocolsupport.protocol.watchedentites.WatchedEntity;
 import protocolsupport.protocol.watchedentites.WatchedLiving;
 import protocolsupport.protocol.watchedentites.WatchedObject;
@@ -72,7 +75,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeVarInt(packetId);
 				serializer.writeInt(packetdata.readVarInt());
 				serializer.writeShort(packetdata.readShort());
-				serializer.a(packetdata.i());
+				serializer.writeItemStack(packetdata.readItemStack());
 				return;
 			}
 			case 0x05: { // PacketPlayOutSpawnPosition
@@ -610,7 +613,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 					serializer.writeVarInt(packetId);
 					serializer.writeByte(windowId);
 					serializer.writeShort(slot);
-					serializer.a(packetdata.i());
+					serializer.writeItemStack(packetdata.readItemStack());
 					return;
 				} else {
 					serializer.writeVarInt(packetId);
@@ -626,11 +629,11 @@ public class PlayPacketTransformer implements PacketTransformer {
 					int count = packetdata.readShort();
 					serializer.writeShort(count - 1);
 					for (int i = 0; i < count; i++) {
-						ItemStack item = packetdata.i();
+						ItemStack item = packetdata.readItemStack();
 						if (i == 1) {
 							continue;
 						}
-						serializer.a(item);
+						serializer.writeItemStack(item);
 					}
 					return;
 				} else {
@@ -839,8 +842,14 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x3F: { // PacketPlayOutCustomPayload
 				packet.b(packetdata);
 				serializer.writeVarInt(packetId);
-				serializer.writeString(packetdata.readString(20));
+				String tag = packetdata.readString(20);
+				serializer.writeString(tag);
 				ByteBuf data = packetdata.readBytes(packetdata.readableBytes());
+				//fix villager trade list
+				if (tag.equals("MC|TrList")) {
+					//read data as version minecraft 1.8, because it is written like on that on packet creation, not on real stream write
+					data = VillagerTradeTransformer.to17VillagerTradeList(new PacketDataSerializer(data, ProtocolVersion.MINECRAFT_1_8), serializer.getVersion());
+				}
 				serializer.writeShort(data.readableBytes());
 				serializer.writeBytes(data);
 				return;

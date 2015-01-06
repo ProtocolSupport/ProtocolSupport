@@ -1,6 +1,6 @@
-package protocolsupport.protocol.v_1_5.clientboundtransformer;
+package protocolsupport.protocol.v_1_6.utils;
 
-import protocolsupport.protocol.v_1_5.remappers.BlockIDRemapper;
+import protocolsupport.protocol.v_1_6.remappers.BlockIDRemapper;
 
 public class ChunkUtils {
 
@@ -12,7 +12,7 @@ public class ChunkUtils {
 		return j + k + l + i2;
 	}
 
-	public static byte[] to15ChunkData(byte[] data18, int bitmap) {
+	public static byte[] to16ChunkData(byte[] data18, int bitmap) {
 		int count = 0;
 		for (int i = 0; i < 16; i++) {
 			if ((bitmap & (1 << i)) != 0) {
