@@ -25,9 +25,19 @@ import protocolsupport.protocol.storage.ProtocolStorage.ProtocolVersion;
 
 public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 
-	private final Timer pingTimeout = new Timer();
+	private static final Timer pingTimeout = new Timer();
+	@SuppressWarnings("serial")
+	private static final EnumMap<ProtocolVersion, IPipeLineBuilder> pipelineBuilders = new EnumMap<ProtocolVersion, IPipeLineBuilder>(ProtocolVersion.class) {{
+		put(ProtocolVersion.MINECRAFT_1_8, new protocolsupport.protocol.v_1_8.PipeLineBuilder());
+		put(ProtocolVersion.MINECRAFT_1_7_10, new protocolsupport.protocol.v_1_7.PipeLineBuilder());
+		put(ProtocolVersion.MINECRAFT_1_7_5, new protocolsupport.protocol.v_1_7.PipeLineBuilder());
+		put(ProtocolVersion.MINECRAFT_1_6_4, new protocolsupport.protocol.v_1_6.PipeLineBuilder());
+		put(ProtocolVersion.MINECRAFT_1_6_2, new protocolsupport.protocol.v_1_6.PipeLineBuilder());
+		put(ProtocolVersion.MINECRAFT_1_5_2, new protocolsupport.protocol.v_1_5.PipeLineBuilder());
+	}};
 
-	private ByteBuf receivedData = Unpooled.buffer();
+
+	protected ByteBuf receivedData = Unpooled.buffer();
 
 	@Override
 	public void channelRead(final ChannelHandlerContext ctx, final Object inputObj) throws Exception {
@@ -127,21 +137,11 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 		}
 	}
 
-	private void setProtocol(final ChannelHandlerContext ctx, final ByteBuf input, ProtocolVersion version) throws Exception {
+	protected void setProtocol(final ChannelHandlerContext ctx, final ByteBuf input, ProtocolVersion version) throws Exception {
 		System.out.println(ctx.channel().remoteAddress()+" connected with protocol version "+version);
 		ProtocolStorage.setVersion(ctx.channel().remoteAddress(), version);
 		rebuildPipeLine(ctx, receivedData, version);
 	}
-
-	@SuppressWarnings("serial")
-	private static EnumMap<ProtocolVersion, IPipeLineBuilder> pipelineBuilders = new EnumMap<ProtocolVersion, IPipeLineBuilder>(ProtocolVersion.class) {{
-		put(ProtocolVersion.MINECRAFT_1_8, new protocolsupport.protocol.v_1_8.PipeLineBuilder());
-		put(ProtocolVersion.MINECRAFT_1_7_10, new protocolsupport.protocol.v_1_7.PipeLineBuilder());
-		put(ProtocolVersion.MINECRAFT_1_7_5, new protocolsupport.protocol.v_1_7.PipeLineBuilder());
-		put(ProtocolVersion.MINECRAFT_1_6_4, new protocolsupport.protocol.v_1_6.PipeLineBuilder());
-		put(ProtocolVersion.MINECRAFT_1_6_2, new protocolsupport.protocol.v_1_6.PipeLineBuilder());
-		put(ProtocolVersion.MINECRAFT_1_5_2, new protocolsupport.protocol.v_1_5.PipeLineBuilder());
-	}};
 
 	private void rebuildPipeLine(final ChannelHandlerContext ctx, final ByteBuf input, ProtocolVersion version) throws Exception {
 		ctx.channel().pipeline().remove(ChannelHandlers.INITIAL_DECODER);
