@@ -7,11 +7,16 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.CorruptedFrameException;
 import io.netty.util.ReferenceCountUtil;
 
+import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.EnumMap;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.event.server.ServerListPingEvent;
 
 import protocolsupport.injector.ProtocolLibFixer;
 import protocolsupport.protocol.IPipeLineBuilder.DecoderEncoderTuple;
@@ -40,6 +45,34 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 			switch (firstbyte) {
 				case 0xFE: { //1.6 ping or 1.5 ping (should we check if FE is actually a part of a varint length?)
 					try {
+						if (receivedData.readableBytes() == 0) { //really old protocol
+							pingTimeout.schedule(new TimerTask() {
+								@Override
+								public void run() {
+									try {
+										SocketAddress remoteAddress = ctx.channel().remoteAddress();
+										if (ProtocolStorage.getVersion(remoteAddress) == ProtocolVersion.UNKNOWN) {
+											System.out.println(remoteAddress + " pinged with a really outdated protocol");
+											@SuppressWarnings("deprecation")
+											ServerListPingEvent event = new ServerListPingEvent(
+												((InetSocketAddress) remoteAddress).getAddress(),
+												Bukkit.getMotd(), Bukkit.getOnlinePlayers().length,
+												Bukkit.getMaxPlayers()
+											);
+											Bukkit.getPluginManager().callEvent(event);
+											String response = ChatColor.stripColor(event.getMotd())+"§"+event.getNumPlayers()+"§"+event.getMaxPlayers();
+											ByteBuf buf = Unpooled.buffer();
+											buf.writeByte(255);
+											buf.writeShort(response.length());
+											buf.writeBytes(response.getBytes(StandardCharsets.UTF_16BE));
+											ctx.pipeline().firstContext().writeAndFlush(buf);
+										}
+									} catch (Throwable t) {
+										ctx.channel().close();
+									}
+								}
+							}, 1000);
+						}
 						if (receivedData.readUnsignedByte() == 1) {
 							if (receivedData.readableBytes() == 0) {
 								//1.5.2 or maybe we still didn't receive it all
