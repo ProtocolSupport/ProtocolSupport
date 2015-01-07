@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
+
 import net.minecraft.server.v1_8_R1.Block;
 import net.minecraft.server.v1_8_R1.Blocks;
 import net.minecraft.server.v1_8_R1.IBlockData;
@@ -23,6 +25,7 @@ public class ServerInjector {
 		registerBlock(116, "enchanting_table", new BlockEnchantTable());
 		registerBlock(145, "anvil", new BlockAnvil());
 		fixBlocksRefs();
+		Bukkit.resetRecipes();
 	}
 
 	@SuppressWarnings("unchecked")
