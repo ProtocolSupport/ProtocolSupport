@@ -40,6 +40,12 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 	protected ByteBuf receivedData = Unpooled.buffer();
 
 	@Override
+	public void channelActive(ChannelHandlerContext ctx) {
+		ProtocolStorage.setVersion(ctx.channel().remoteAddress(), ProtocolVersion.UNKNOWN);
+		ctx.fireChannelActive();
+	}
+
+	@Override
 	public void channelRead(final ChannelHandlerContext ctx, final Object inputObj) throws Exception {
 		try {
 			final ByteBuf input = (ByteBuf) inputObj;
@@ -47,9 +53,7 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 				return;
 			}
 			receivedData.writeBytes(input.readBytes(input.readableBytes()));
-			//detect protocol
 			ProtocolVersion handshakeversion = ProtocolVersion.UNKNOWN;
-			//reset reader index to 0
 			receivedData.readerIndex(0);
 			int firstbyte = receivedData.readUnsignedByte();
 			switch (firstbyte) {
