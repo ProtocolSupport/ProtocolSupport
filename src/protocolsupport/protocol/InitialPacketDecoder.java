@@ -52,7 +52,6 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 												setProtocol(ctx, receivedData, ProtocolVersion.MINECRAFT_1_5_2);
 											}
 										} catch (Throwable t) {
-											t.printStackTrace();
 											ctx.channel().close();
 										}
 									}
