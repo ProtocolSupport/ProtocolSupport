@@ -72,8 +72,7 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 									}
 								}
 							}, 1000);
-						}
-						if (receivedData.readUnsignedByte() == 1) {
+						} else if (receivedData.readUnsignedByte() == 1) {
 							if (receivedData.readableBytes() == 0) {
 								//1.5.2 or maybe we still didn't receive it all
 								pingTimeout.schedule(new TimerTask() {
