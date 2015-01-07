@@ -18,6 +18,7 @@ import net.minecraft.server.v1_8_R1.PlayerConnection;
 
 import org.bukkit.entity.Player;
 
+import protocolsupport.protocol.ChannelHandlers;
 import protocolsupport.protocol.PacketDataSerializer;
 
 public class Utils {
@@ -86,7 +87,7 @@ public class Utils {
 	}
 
 	public static Player getPlayer(Channel channel) {
-		return ((PlayerConnection) ((NetworkManager) channel.pipeline().get("packet_handler")).getPacketListener()).player.getBukkitEntity();
+		return ((PlayerConnection) ((NetworkManager) channel.pipeline().get(ChannelHandlers.NETWORK_MANAGER)).getPacketListener()).player.getBukkitEntity();
 	}
 
 	public static List<int[]> splitArray(int[] array, int limit) {

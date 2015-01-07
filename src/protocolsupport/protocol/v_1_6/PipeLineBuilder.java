@@ -4,11 +4,8 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
 import net.minecraft.server.v1_8_R1.NetworkManager;
+import protocolsupport.protocol.ChannelHandlers;
 import protocolsupport.protocol.IPipeLineBuilder;
-import protocolsupport.protocol.fake.FakeDecoder;
-import protocolsupport.protocol.fake.FakeEncoder;
-import protocolsupport.protocol.fake.FakePrepender;
-import protocolsupport.protocol.fake.FakeSplitter;
 import protocolsupport.protocol.v_1_6.clientboundtransformer.PacketEncoder;
 import protocolsupport.protocol.v_1_6.serverboundtransformer.PacketDecoder;
 
@@ -17,14 +14,14 @@ public class PipeLineBuilder implements IPipeLineBuilder {
 	@Override
 	public DecoderEncoderTuple buildPipeLine(ChannelHandlerContext ctx) {
 		ChannelPipeline pipeline = ctx.channel().pipeline();
-		NetworkManager networkmanager = pipeline.get(NetworkManager.class);
+		NetworkManager networkmanager = (NetworkManager) pipeline.get(ChannelHandlers.NETWORK_MANAGER);
 		PacketDecoder decoder = new PacketDecoder();
 		networkmanager.a(new HandshakeListener(decoder, networkmanager));
-		pipeline.remove(FakeSplitter.class);
-		pipeline.remove(FakePrepender.class);
+		pipeline.remove(ChannelHandlers.SPLITTER);
+		pipeline.remove(ChannelHandlers.PREPENDER);
 		ChannelHandler encoder = new PacketEncoder();
-		pipeline.replace(FakeDecoder.class, "decoder", decoder);
-		pipeline.replace(FakeEncoder.class, "encoder", encoder);
+		pipeline.replace(ChannelHandlers.DECODER, ChannelHandlers.DECODER, decoder);
+		pipeline.replace(ChannelHandlers.ENCODER, ChannelHandlers.ENCODER, encoder);
 		return new DecoderEncoderTuple(decoder, encoder);
 	}
 

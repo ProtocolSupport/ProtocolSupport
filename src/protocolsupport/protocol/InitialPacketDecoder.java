@@ -113,7 +113,7 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 	}};
 
 	private void rebuildPipeLine(final ChannelHandlerContext ctx, final ByteBuf input, ProtocolVersion version) throws Exception {
-		ctx.channel().pipeline().remove(InitialPacketDecoder.class);
+		ctx.channel().pipeline().remove(ChannelHandlers.INITIAL_DECODER);
 		DecoderEncoderTuple tuple = pipelineBuilders.get(version).buildPipeLine(ctx);
 		ProtocolLibFixer.fixProtocolLib(ctx.channel().pipeline(), tuple.getDecoder(), tuple.getEncoder());
 		//set reader index to 0

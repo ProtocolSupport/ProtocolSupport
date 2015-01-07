@@ -37,18 +37,18 @@ public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 		channel.pipeline()
 		.addLast("timeout", new ReadTimeoutHandler(30))
 		//protocol detector
-		.addLast("initial_decoder", new InitialPacketDecoder())
+		.addLast(ChannelHandlers.INITIAL_DECODER, new InitialPacketDecoder())
 		//channel inactive listener to cleanup data
 		.addLast("channel_inactive_listener", new ChannelInactiveListener())
 		//fake elements, will be replaced or removed manually in every protocol pipeline builder
-		.addLast("splitter", new FakeSplitter())
-		.addLast("decoder", new FakeDecoder())
-		.addLast("prepender", new FakePrepender())
-		.addLast("encoder", new FakeEncoder());
+		.addLast(ChannelHandlers.SPLITTER, new FakeSplitter())
+		.addLast(ChannelHandlers.DECODER, new FakeDecoder())
+		.addLast(ChannelHandlers.PREPENDER, new FakePrepender())
+		.addLast(ChannelHandlers.ENCODER, new FakeEncoder());
 		NetworkManager networkmanager = new NetworkManager(EnumProtocolDirection.SERVERBOUND);
 		networkmanager.a(new FakePacketListener());
 		networkManagers.add(networkmanager);
-		channel.pipeline().addLast("packet_handler", networkmanager);
+		channel.pipeline().addLast(ChannelHandlers.NETWORK_MANAGER, networkmanager);
 	}
 
 }
