@@ -22,7 +22,6 @@ import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
 import org.bukkit.craftbukkit.libs.com.google.gson.GsonBuilder;
 
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.utils.Utils;
 
 public class StatusPacketTransformer implements PacketTransformer {
@@ -44,7 +43,7 @@ public class StatusPacketTransformer implements PacketTransformer {
 			ServerPing serverPing = gson.fromJson(packetdata.readString(32767), ServerPing.class);
 			String response =
 				"§1\u0000" +
-				ProtocolStorage.getVersion(channel.remoteAddress()).getId() +
+				serializer.getVersion().getId() +
 				"\u0000" +
 				serverPing.c().a() +
 				"\u0000" +

@@ -20,8 +20,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.ProtocolVersion;
 import protocolsupport.protocol.storage.LocalStorage;
-import protocolsupport.protocol.storage.ProtocolStorage.ProtocolVersion;
 import protocolsupport.protocol.v_1_5.remappers.BlockIDRemapper;
 import protocolsupport.protocol.v_1_5.remappers.EntityIDRemapper;
 import protocolsupport.protocol.v_1_5.utils.ChunkUtils;

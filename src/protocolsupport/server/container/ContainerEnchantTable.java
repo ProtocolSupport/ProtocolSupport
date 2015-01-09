@@ -10,6 +10,7 @@ import net.minecraft.server.v1_8_R1.BlockPosition;
 import net.minecraft.server.v1_8_R1.Blocks;
 import net.minecraft.server.v1_8_R1.EnchantmentManager;
 import net.minecraft.server.v1_8_R1.EntityHuman;
+import net.minecraft.server.v1_8_R1.EntityPlayer;
 import net.minecraft.server.v1_8_R1.IInventory;
 import net.minecraft.server.v1_8_R1.Items;
 import net.minecraft.server.v1_8_R1.PlayerInventory;
@@ -22,8 +23,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 
-import protocolsupport.protocol.storage.ProtocolStorage;
-import protocolsupport.protocol.storage.ProtocolStorage.ProtocolVersion;
+import protocolsupport.protocol.ProtocolVersion;
+import protocolsupport.utils.Utils;
 
 public class ContainerEnchantTable extends net.minecraft.server.v1_8_R1.ContainerEnchantTable {
 
@@ -113,7 +114,7 @@ public class ContainerEnchantTable extends net.minecraft.server.v1_8_R1.Containe
 	@SuppressWarnings("deprecation")
 	@Override
 	public boolean a(final EntityHuman entityhuman, final int slot) {
-		boolean supportsLapisSlot = ProtocolStorage.getVersion(player.getAddress()) == ProtocolVersion.MINECRAFT_1_8;
+		boolean supportsLapisSlot = Utils.getVersion((EntityPlayer) entityhuman) == ProtocolVersion.MINECRAFT_1_8;
 		net.minecraft.server.v1_8_R1.ItemStack itemstack = enchantSlots.getItem(0);
 		net.minecraft.server.v1_8_R1.ItemStack lapis = enchantSlots.getItem(1);
 		final int cost = slot + 1;

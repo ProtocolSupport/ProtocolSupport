@@ -23,6 +23,8 @@ import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import protocolsupport.protocol.ProtocolVersion;
+
 import com.google.common.base.Charsets;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
@@ -33,6 +35,7 @@ public class LoginListener extends net.minecraft.server.v1_8_R1.LoginListener {
 	private static final AtomicInteger authThreadsCounter = new AtomicInteger(0);
 	private static final Random random = new Random();
 
+	private ProtocolVersion version;
 	private final byte[] randomBytes = new byte[4];
 	private int loginTicks;
 	protected SecretKey loginKey;
@@ -40,9 +43,10 @@ public class LoginListener extends net.minecraft.server.v1_8_R1.LoginListener {
 	protected GameProfile profile;
 	protected String serverId = "";
 
-	public LoginListener(final MinecraftServer minecraftserver, final NetworkManager networkmanager) {
-		super(minecraftserver, networkmanager);
+	public LoginListener(final NetworkManager networkmanager, ProtocolVersion version) {
+		super(MinecraftServer.getServer(), networkmanager);
 		random.nextBytes(randomBytes);
+		this.version = version;
 	}
 
 	@Override
@@ -90,6 +94,7 @@ public class LoginListener extends net.minecraft.server.v1_8_R1.LoginListener {
 			state = LoginState.ACCEPTED;
 			networkManager.handle(new PacketLoginOutSuccess(profile));
 			MinecraftServer.getServer().getPlayerList().a(networkManager, MinecraftServer.getServer().getPlayerList().processLogin(profile, s));
+			networkManager.spoofedUUID = version.getUUID();
 		}
 	}
 

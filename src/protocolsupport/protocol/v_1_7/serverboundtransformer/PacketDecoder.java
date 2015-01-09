@@ -14,11 +14,15 @@ import net.minecraft.server.v1_8_R1.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R1.NetworkManager;
 import net.minecraft.server.v1_8_R1.Packet;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.ProtocolVersion;
 import protocolsupport.protocol.PublicPacketDecoder;
-import protocolsupport.protocol.storage.ProtocolStorage;
-import protocolsupport.protocol.storage.ProtocolStorage.ProtocolVersion;
 
 public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketDecoder {
+
+	private ProtocolVersion version;
+	public PacketDecoder(ProtocolVersion version) {
+		this.version = version;
+	}
 
 	private static final PacketTransformer[] transformers = new PacketTransformer[] {
 		new HandshakePacketTransformer(),
@@ -37,7 +41,6 @@ public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketD
 			return;
 		}
 		Channel channel = ctx.channel();
-		ProtocolVersion version = ProtocolStorage.getVersion(channel.remoteAddress());
 		final PacketDataSerializer packetDataSerializer = new PacketDataSerializer(bytebuf, version);
 		final int packetId = packetDataSerializer.readVarInt();
 		final Packet packet = channel.attr(currentStateAttrKey).get().a(direction, packetId);

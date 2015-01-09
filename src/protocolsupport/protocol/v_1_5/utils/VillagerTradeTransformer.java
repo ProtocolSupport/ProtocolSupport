@@ -1,7 +1,7 @@
 package protocolsupport.protocol.v_1_5.utils;
 
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.storage.ProtocolStorage.ProtocolVersion;
+import protocolsupport.protocol.ProtocolVersion;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 

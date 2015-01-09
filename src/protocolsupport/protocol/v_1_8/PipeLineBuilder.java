@@ -10,11 +10,12 @@ import net.minecraft.server.v1_8_R1.PacketPrepender;
 import net.minecraft.server.v1_8_R1.PacketSplitter;
 import protocolsupport.protocol.ChannelHandlers;
 import protocolsupport.protocol.IPipeLineBuilder;
+import protocolsupport.protocol.ProtocolVersion;
 
 public class PipeLineBuilder implements IPipeLineBuilder {
 
 	@Override
-	public DecoderEncoderTuple buildPipeLine(ChannelHandlerContext ctx) {
+	public DecoderEncoderTuple buildPipeLine(ChannelHandlerContext ctx, ProtocolVersion version) {
 		ChannelPipeline pipeline = ctx.channel().pipeline();
 		NetworkManager networkmanager = (NetworkManager) pipeline.get(ChannelHandlers.NETWORK_MANAGER);
 		networkmanager.a(new HandshakeListener(MinecraftServer.getServer(), networkmanager));

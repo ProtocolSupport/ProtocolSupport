@@ -11,7 +11,7 @@ import net.minecraft.server.v1_8_R1.BlockPosition;
 import net.minecraft.server.v1_8_R1.ItemStack;
 import net.minecraft.server.v1_8_R1.Vector3f;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.storage.ProtocolStorage.ProtocolVersion;
+import protocolsupport.protocol.ProtocolVersion;
 import protocolsupport.protocol.watchedentites.WatchedEntity;
 
 public class DataWatcherFilter {

@@ -12,7 +12,7 @@ import net.minecraft.server.v1_8_R1.Packet;
 import org.bukkit.Bukkit;
 
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.storage.ProtocolStorage.ProtocolVersion;
+import protocolsupport.protocol.ProtocolVersion;
 
 public class HandshakePacketTransformer implements PacketTransformer {
 

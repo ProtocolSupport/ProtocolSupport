@@ -15,10 +15,15 @@ import net.minecraft.server.v1_8_R1.EnumProtocol;
 import net.minecraft.server.v1_8_R1.NetworkManager;
 import net.minecraft.server.v1_8_R1.Packet;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.ProtocolVersion;
 import protocolsupport.protocol.PublicPacketDecoder;
-import protocolsupport.protocol.storage.ProtocolStorage;
 
 public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketDecoder {
+
+	private ProtocolVersion version;
+	public PacketDecoder(ProtocolVersion version) {
+		this.version = version;
+	}
 
 	@SuppressWarnings("unchecked")
 	private static final AttributeKey<EnumProtocol> currentStateAttrKey = NetworkManager.c;
@@ -50,10 +55,10 @@ public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketD
 			EnumProtocol currentProtocol = channel.attr(currentStateAttrKey).get();
 			int packetId = bytebuf.readUnsignedByte();
 			Packet[] transformedPackets = transformers[currentProtocol.ordinal()].tranform(
-					channel,
-					packetId,
-					new PacketDataSerializer(bytebuf, ProtocolStorage.getVersion(channel.remoteAddress()))
-					);
+				channel,
+				packetId,
+				new PacketDataSerializer(bytebuf, version)
+			);
 			if (transformedPackets != null) {
 				for (Packet transformedPacket : transformedPackets) {
 					packets.add(transformedPacket);

@@ -5,7 +5,7 @@ import io.netty.channel.ChannelHandlerContext;
 
 public interface IPipeLineBuilder {
 
-	public DecoderEncoderTuple buildPipeLine(ChannelHandlerContext ctx);
+	public DecoderEncoderTuple buildPipeLine(ChannelHandlerContext ctx, ProtocolVersion version);
 
 	public static class DecoderEncoderTuple {
 

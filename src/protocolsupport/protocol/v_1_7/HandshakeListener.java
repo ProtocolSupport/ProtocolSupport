@@ -22,6 +22,8 @@ import org.apache.logging.log4j.LogManager;
 import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
 import org.spigotmc.SpigotConfig;
 
+import protocolsupport.protocol.ProtocolVersion;
+
 import com.mojang.authlib.properties.Property;
 import com.mojang.util.UUIDTypeAdapter;
 
@@ -32,9 +34,11 @@ public class HandshakeListener implements PacketHandshakingInListener {
 	private static int throttleCounter = 0;
 
 	private final NetworkManager networkManager;
+	private final ProtocolVersion version;
 
-	public HandshakeListener(final NetworkManager networkmanager) {
+	public HandshakeListener(final NetworkManager networkmanager, ProtocolVersion version) {
 		networkManager = networkmanager;
+		this.version = version;
 	}
 
 	@Override
@@ -82,7 +86,7 @@ public class HandshakeListener implements PacketHandshakingInListener {
 					networkManager.close(chatcomponenttext);
 					break;
 				}
-				networkManager.a(new LoginListener(MinecraftServer.getServer(), networkManager));
+				networkManager.a(new LoginListener(networkManager, version));
 				if (SpigotConfig.bungee) {
 					final String[] split = packethandshakinginsetprotocol.b.split("\u0000");
 					if ((split.length != 3) && (split.length != 4)) {

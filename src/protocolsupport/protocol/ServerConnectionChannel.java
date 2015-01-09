@@ -38,8 +38,6 @@ public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 		.addLast("timeout", new ReadTimeoutHandler(30))
 		//protocol detector
 		.addLast(ChannelHandlers.INITIAL_DECODER, new InitialPacketDecoder())
-		//channel inactive listener to cleanup data
-		.addLast("channel_inactive_listener", new ChannelInactiveListener())
 		//fake elements, will be replaced or removed manually in every protocol pipeline builder
 		.addLast(ChannelHandlers.SPLITTER, new FakeSplitter())
 		.addLast(ChannelHandlers.DECODER, new FakeDecoder())

@@ -24,6 +24,7 @@ import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import protocolsupport.protocol.ProtocolVersion;
 import protocolsupport.protocol.v_1_6.serverboundtransformer.PacketDecoder;
 
 import com.google.common.base.Charsets;
@@ -37,6 +38,7 @@ public class LoginListener extends net.minecraft.server.v1_8_R1.LoginListener {
 	private static final Random random = new Random();
 
 	private PacketDecoder decoder;
+	private ProtocolVersion version;
 	private final byte[] randomBytes = new byte[4];
 	private int loginTicks;
 	protected SecretKey loginKey;
@@ -44,10 +46,11 @@ public class LoginListener extends net.minecraft.server.v1_8_R1.LoginListener {
 	protected GameProfile profile;
 	protected String serverId = "";
 
-	public LoginListener(MinecraftServer minecraftserver, PacketDecoder decoder, NetworkManager networkmanager) {
-		super(minecraftserver, networkmanager);
+	public LoginListener(PacketDecoder decoder, NetworkManager networkmanager, ProtocolVersion version) {
+		super(MinecraftServer.getServer(), networkmanager);
 		random.nextBytes(randomBytes);
 		this.decoder = decoder;
+		this.version = version;
 	}
 
 	@Override
@@ -90,11 +93,12 @@ public class LoginListener extends net.minecraft.server.v1_8_R1.LoginListener {
 
 	@Override
 	public void b() {
-		final EntityPlayer s = MinecraftServer.getServer().getPlayerList().attemptLogin(this, profile, hostname);
-		if (s != null) {
+		final EntityPlayer player = MinecraftServer.getServer().getPlayerList().attemptLogin(this, profile, hostname);
+		if (player != null) {
 			state = LoginState.ACCEPTED;
 			networkManager.handle(new PacketLoginOutSuccess(profile));
-			MinecraftServer.getServer().getPlayerList().a(networkManager, MinecraftServer.getServer().getPlayerList().processLogin(profile, s));
+			MinecraftServer.getServer().getPlayerList().a(networkManager, MinecraftServer.getServer().getPlayerList().processLogin(profile, player));
+			networkManager.spoofedUUID = version.getUUID();
 		}
 	}
 

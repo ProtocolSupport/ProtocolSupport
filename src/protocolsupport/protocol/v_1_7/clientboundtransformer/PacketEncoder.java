@@ -13,10 +13,15 @@ import net.minecraft.server.v1_8_R1.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R1.NetworkManager;
 import net.minecraft.server.v1_8_R1.Packet;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.ProtocolVersion;
 import protocolsupport.protocol.PublicPacketEncoder;
-import protocolsupport.protocol.storage.ProtocolStorage;
 
 public class PacketEncoder extends MessageToByteEncoder<Packet> implements PublicPacketEncoder {
+
+	private ProtocolVersion version;
+	public PacketEncoder(ProtocolVersion version) {
+		this.version = version;
+	}
 
 	private static final EnumProtocolDirection direction = EnumProtocolDirection.CLIENTBOUND;
 	@SuppressWarnings("unchecked")
@@ -48,7 +53,7 @@ public class PacketEncoder extends MessageToByteEncoder<Packet> implements Publi
 		if ((currentProtocol == EnumProtocol.PLAY) && blockedPlayPackets[packetId]) {
 			return;
 		}
-		PacketDataSerializer serializer = new PacketDataSerializer(output, ProtocolStorage.getVersion(channel.remoteAddress()));
+		PacketDataSerializer serializer = new PacketDataSerializer(output, version);
 		transformers[currentProtocol.ordinal()].tranform(ctx, packetId, packet, serializer);
 	}
 

@@ -20,8 +20,6 @@ import org.bukkit.event.server.ServerListPingEvent;
 
 import protocolsupport.injector.ProtocolLibFixer;
 import protocolsupport.protocol.IPipeLineBuilder.DecoderEncoderTuple;
-import protocolsupport.protocol.storage.ProtocolStorage;
-import protocolsupport.protocol.storage.ProtocolStorage.ProtocolVersion;
 
 public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 
@@ -38,12 +36,6 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 
 
 	protected ByteBuf receivedData = Unpooled.buffer();
-
-	@Override
-	public void channelActive(ChannelHandlerContext ctx) {
-		ProtocolStorage.setVersion(ctx.channel().remoteAddress(), ProtocolVersion.UNKNOWN);
-		ctx.fireChannelActive();
-	}
 
 	@Override
 	public void channelRead(final ChannelHandlerContext ctx, final Object inputObj) throws Exception {
@@ -65,7 +57,7 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 								public void run() {
 									try {
 										SocketAddress remoteAddress = ctx.channel().remoteAddress();
-										if (ProtocolStorage.getVersion(remoteAddress) == ProtocolVersion.UNKNOWN) {
+										if (!ctx.isRemoved()) {
 											System.out.println(remoteAddress + " pinged with a really outdated protocol");
 											@SuppressWarnings("deprecation")
 											ServerListPingEvent event = new ServerListPingEvent(
@@ -93,8 +85,7 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 									@Override
 									public void run() {
 										try {
-											SocketAddress remoteAddress = ctx.channel().remoteAddress();
-											if (ProtocolStorage.getVersion(remoteAddress) == ProtocolVersion.UNKNOWN) {
+											if (!ctx.isRemoved()) {
 												setProtocol(ctx, receivedData, ProtocolVersion.MINECRAFT_1_5_2);
 											}
 										} catch (Throwable t) {
@@ -143,19 +134,13 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 
 	protected void setProtocol(final ChannelHandlerContext ctx, final ByteBuf input, ProtocolVersion version) throws Exception {
 		System.out.println(ctx.channel().remoteAddress()+" connected with protocol version "+version);
-		ProtocolStorage.setVersion(ctx.channel().remoteAddress(), version);
-		rebuildPipeLine(ctx, receivedData, version);
-	}
-
-	private void rebuildPipeLine(final ChannelHandlerContext ctx, final ByteBuf input, ProtocolVersion version) throws Exception {
 		ctx.channel().pipeline().remove(ChannelHandlers.INITIAL_DECODER);
-		DecoderEncoderTuple tuple = pipelineBuilders.get(version).buildPipeLine(ctx);
+		DecoderEncoderTuple tuple = pipelineBuilders.get(version).buildPipeLine(ctx, version);
 		ProtocolLibFixer.fixProtocolLib(ctx.channel().pipeline(), tuple.getDecoder(), tuple.getEncoder());
-		//set reader index to 0
 		input.readerIndex(0);
-		//fire data read
 		ctx.channel().pipeline().firstContext().fireChannelRead(input);
 	}
+
 
 	private ByteBuf getVarIntPrefixedData(final ByteBuf byteBuf) {
 		final byte[] array = new byte[3];
