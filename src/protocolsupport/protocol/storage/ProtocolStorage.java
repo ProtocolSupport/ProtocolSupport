@@ -1,11 +1,11 @@
 package protocolsupport.protocol.storage;
 
 import java.net.SocketAddress;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
 
 public class ProtocolStorage {
 
-	private final static ConcurrentHashMap<SocketAddress, ProtocolVersion> protocolVersions = new ConcurrentHashMap<SocketAddress, ProtocolVersion>();
+	private final static HashMap<SocketAddress, ProtocolVersion> protocolVersions = new HashMap<SocketAddress, ProtocolVersion>();
 
 	public static void clearData(SocketAddress address) {
 		protocolVersions.remove(address);
