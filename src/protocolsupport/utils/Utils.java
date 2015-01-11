@@ -28,7 +28,7 @@ import protocolsupport.protocol.ProtocolVersion;
 public class Utils {
 
 	public static byte getInventoryId(String inventoryid) {
-		switch (inventoryid.toLowerCase()) {
+		switch (inventoryid) {
 			case "minecraft:chest":
 			case "minecraft:container": {
 				return 0;
