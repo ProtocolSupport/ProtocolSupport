@@ -65,8 +65,10 @@ public class ProtocolLibFixer {
 		}
 		try {
 			ChannelHandler protocolLibDecoder = pipeline.get("protocol_lib_decoder");
-			vanillaDecoder.invokeExact(protocolLibDecoder, decoder);
-			vanillaEncoder.invokeExact(protocolLibDecoder, encoder);
+			if (protocolLibDecoder != null) {
+				vanillaDecoder.invokeExact(protocolLibDecoder, decoder);
+				vanillaEncoder.invokeExact(protocolLibDecoder, encoder);
+			}
 		} catch (Throwable t) {
 			System.err.println("Failed to fix protocollib decoder, shutting down");
 			t.printStackTrace();
