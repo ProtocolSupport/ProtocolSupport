@@ -15,6 +15,7 @@ import protocolsupport.protocol.fake.FakeEncoder;
 import protocolsupport.protocol.fake.FakePacketListener;
 import protocolsupport.protocol.fake.FakePrepender;
 import protocolsupport.protocol.fake.FakeSplitter;
+import protocolsupport.protocol.initial.InitialPacketDecoder;
 
 public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 

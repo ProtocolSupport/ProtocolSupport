@@ -1,7 +1,7 @@
 package protocolsupport.protocol.v_1_8;
 
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
 import net.minecraft.server.v1_8_R1.HandshakeListener;
 import net.minecraft.server.v1_8_R1.MinecraftServer;
@@ -15,8 +15,8 @@ import protocolsupport.protocol.ProtocolVersion;
 public class PipeLineBuilder implements IPipeLineBuilder {
 
 	@Override
-	public DecoderEncoderTuple buildPipeLine(ChannelHandlerContext ctx, ProtocolVersion version) {
-		ChannelPipeline pipeline = ctx.channel().pipeline();
+	public DecoderEncoderTuple buildPipeLine(Channel channel, ProtocolVersion version) {
+		ChannelPipeline pipeline = channel.pipeline();
 		NetworkManager networkmanager = (NetworkManager) pipeline.get(ChannelHandlers.NETWORK_MANAGER);
 		networkmanager.a(new HandshakeListener(MinecraftServer.getServer(), networkmanager));
 		ChannelHandler decoder = new PacketDecoder();

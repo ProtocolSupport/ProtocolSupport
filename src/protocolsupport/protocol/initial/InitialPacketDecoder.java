@@ -1,29 +1,25 @@
-package protocolsupport.protocol;
+package protocolsupport.protocol.initial;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.CorruptedFrameException;
 import io.netty.util.ReferenceCountUtil;
 
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.EnumMap;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.event.server.ServerListPingEvent;
+import java.util.concurrent.TimeUnit;
 
 import protocolsupport.injector.ProtocolLibFixer;
+import protocolsupport.protocol.ChannelHandlers;
+import protocolsupport.protocol.IPipeLineBuilder;
+import protocolsupport.protocol.ProtocolVersion;
 import protocolsupport.protocol.IPipeLineBuilder.DecoderEncoderTuple;
 
 public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 
-	private static final Timer pingTimeout = new Timer();
 	@SuppressWarnings("serial")
 	private static final EnumMap<ProtocolVersion, IPipeLineBuilder> pipelineBuilders = new EnumMap<ProtocolVersion, IPipeLineBuilder>(ProtocolVersion.class) {{
 		put(ProtocolVersion.MINECRAFT_1_8, new protocolsupport.protocol.v_1_8.PipeLineBuilder());
@@ -37,6 +33,8 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 
 	protected ByteBuf receivedData = Unpooled.buffer();
 
+	protected volatile boolean protocolSet = false;
+
 	@Override
 	public void channelRead(final ChannelHandlerContext ctx, final Object inputObj) throws Exception {
 		try {
@@ -44,55 +42,20 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 			if (!input.isReadable()) {
 				return;
 			}
+			final Channel channel = ctx.channel();
 			receivedData.writeBytes(input.readBytes(input.readableBytes()));
 			ProtocolVersion handshakeversion = ProtocolVersion.UNKNOWN;
 			receivedData.readerIndex(0);
 			int firstbyte = receivedData.readUnsignedByte();
 			switch (firstbyte) {
-				case 0xFE: { //1.6 ping or 1.5 ping (should we check if FE is actually a part of a varint length?)
+				case 0xFE: { //old ping (should we check if FE is actually a part of a varint length?)
 					try {
-						if (receivedData.readableBytes() == 0) { //really old protocol
-							pingTimeout.schedule(new TimerTask() {
-								@Override
-								public void run() {
-									try {
-										SocketAddress remoteAddress = ctx.channel().remoteAddress();
-										if (!ctx.isRemoved() && ctx.channel().isOpen()) {
-											System.out.println(remoteAddress + " pinged with a really outdated protocol");
-											@SuppressWarnings("deprecation")
-											ServerListPingEvent event = new ServerListPingEvent(
-												((InetSocketAddress) remoteAddress).getAddress(),
-												Bukkit.getMotd(), Bukkit.getOnlinePlayers().length,
-												Bukkit.getMaxPlayers()
-											);
-											Bukkit.getPluginManager().callEvent(event);
-											String response = ChatColor.stripColor(event.getMotd())+"§"+event.getNumPlayers()+"§"+event.getMaxPlayers();
-											ByteBuf buf = Unpooled.buffer();
-											buf.writeByte(255);
-											buf.writeShort(response.length());
-											buf.writeBytes(response.getBytes(StandardCharsets.UTF_16BE));
-											ctx.pipeline().firstContext().writeAndFlush(buf);
-										}
-									} catch (Throwable t) {
-										ctx.channel().close();
-									}
-								}
-							}, 1000);
+						if (receivedData.readableBytes() == 0) { //really old protocol probably
+							ctx.executor().schedule(new OldPingResponseTask(this, channel), 1000, TimeUnit.MILLISECONDS);
 						} else if (receivedData.readUnsignedByte() == 1) {
 							if (receivedData.readableBytes() == 0) {
-								//1.5.2 or maybe we still didn't receive it all
-								pingTimeout.schedule(new TimerTask() {
-									@Override
-									public void run() {
-										try {
-											if (!ctx.isRemoved() && ctx.channel().isOpen()) {
-												setProtocol(ctx, receivedData, ProtocolVersion.MINECRAFT_1_5_2);
-											}
-										} catch (Throwable t) {
-											ctx.channel().close();
-										}
-									}
-								}, 500);
+								//1.5.2 probably
+								ctx.executor().schedule(new Minecraft152PingResponseTask(this, channel), 500, TimeUnit.MILLISECONDS);
 							} else if (
 								(receivedData.readUnsignedByte() == 0xFA) &&
 								"MC|PingHost".equals(new String(receivedData.readBytes(receivedData.readUnsignedShort() * 2).array(), StandardCharsets.UTF_16BE))
@@ -123,31 +86,28 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 			}
 			//if we detected the protocol than we save it and process data
 			if (handshakeversion != ProtocolVersion.UNKNOWN) {
-				setProtocol(ctx, receivedData, handshakeversion);
+				setProtocol(channel, receivedData, handshakeversion);
 			}
 		} catch (Throwable t) {
-			ctx.channel().close();
+			if (ctx.channel().isOpen()) {
+				ctx.channel().close();
+			}
 		} finally {
 			ReferenceCountUtil.release(inputObj);
 		}
 	}
 
-	protected void setProtocol(final ChannelHandlerContext ctx, final ByteBuf input, ProtocolVersion version) throws Exception {
-		try {
-			System.out.println(ctx.channel().remoteAddress()+" connected with protocol version "+version);
-			ctx.channel().pipeline().remove(ChannelHandlers.INITIAL_DECODER);
-			DecoderEncoderTuple tuple = pipelineBuilders.get(version).buildPipeLine(ctx, version);
-			ProtocolLibFixer.fixProtocolLib(ctx.channel().pipeline(), tuple.getDecoder(), tuple.getEncoder());
-			input.readerIndex(0);
-			ctx.channel().pipeline().firstContext().fireChannelRead(input);
-		} catch (Throwable t) {
-			System.err.println("Failed to set protocol version");
-			t.printStackTrace();
-			System.err.println("Is removed: "+ctx.isRemoved());
-			System.err.println(ctx.channel().pipeline().names());
-			System.err.println(ctx.channel().isOpen());
-			throw t;
+	protected void setProtocol(final Channel channel, final ByteBuf input, ProtocolVersion version) throws Exception {
+		if (protocolSet) {
+			return;
 		}
+		protocolSet = true;
+		System.out.println(channel.remoteAddress()+" connected with protocol version "+version);
+		channel.pipeline().remove(ChannelHandlers.INITIAL_DECODER);
+		DecoderEncoderTuple tuple = pipelineBuilders.get(version).buildPipeLine(channel, version);
+		ProtocolLibFixer.fixProtocolLib(channel.pipeline(), tuple.getDecoder(), tuple.getEncoder());
+		input.readerIndex(0);
+		channel.pipeline().firstContext().fireChannelRead(input);
 	}
 
 

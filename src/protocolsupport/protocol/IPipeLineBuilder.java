@@ -1,11 +1,11 @@
 package protocolsupport.protocol;
 
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelHandlerContext;
 
 public interface IPipeLineBuilder {
 
-	public DecoderEncoderTuple buildPipeLine(ChannelHandlerContext ctx, ProtocolVersion version);
+	public DecoderEncoderTuple buildPipeLine(Channel channel, ProtocolVersion version);
 
 	public static class DecoderEncoderTuple {
 
