@@ -146,6 +146,7 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 			System.err.println("Is removed: "+ctx.isRemoved());
 			System.err.println(ctx.channel().pipeline().names());
 			System.err.println(ctx.channel().isOpen());
+			throw t;
 		}
 	}
 
