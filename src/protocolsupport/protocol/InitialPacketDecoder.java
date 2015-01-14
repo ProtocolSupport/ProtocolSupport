@@ -57,7 +57,7 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 								public void run() {
 									try {
 										SocketAddress remoteAddress = ctx.channel().remoteAddress();
-										if (!ctx.isRemoved()) {
+										if (!ctx.isRemoved() && ctx.channel().isOpen()) {
 											System.out.println(remoteAddress + " pinged with a really outdated protocol");
 											@SuppressWarnings("deprecation")
 											ServerListPingEvent event = new ServerListPingEvent(
@@ -85,7 +85,7 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 									@Override
 									public void run() {
 										try {
-											if (!ctx.isRemoved()) {
+											if (!ctx.isRemoved() && ctx.channel().isOpen()) {
 												setProtocol(ctx, receivedData, ProtocolVersion.MINECRAFT_1_5_2);
 											}
 										} catch (Throwable t) {
