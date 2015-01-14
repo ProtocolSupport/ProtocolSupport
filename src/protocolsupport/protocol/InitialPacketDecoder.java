@@ -133,12 +133,20 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 	}
 
 	protected void setProtocol(final ChannelHandlerContext ctx, final ByteBuf input, ProtocolVersion version) throws Exception {
-		System.out.println(ctx.channel().remoteAddress()+" connected with protocol version "+version);
-		ctx.channel().pipeline().remove(ChannelHandlers.INITIAL_DECODER);
-		DecoderEncoderTuple tuple = pipelineBuilders.get(version).buildPipeLine(ctx, version);
-		ProtocolLibFixer.fixProtocolLib(ctx.channel().pipeline(), tuple.getDecoder(), tuple.getEncoder());
-		input.readerIndex(0);
-		ctx.channel().pipeline().firstContext().fireChannelRead(input);
+		try {
+			System.out.println(ctx.channel().remoteAddress()+" connected with protocol version "+version);
+			ctx.channel().pipeline().remove(ChannelHandlers.INITIAL_DECODER);
+			DecoderEncoderTuple tuple = pipelineBuilders.get(version).buildPipeLine(ctx, version);
+			ProtocolLibFixer.fixProtocolLib(ctx.channel().pipeline(), tuple.getDecoder(), tuple.getEncoder());
+			input.readerIndex(0);
+			ctx.channel().pipeline().firstContext().fireChannelRead(input);
+		} catch (Throwable t) {
+			System.err.println("Failed to set protocol version");
+			t.printStackTrace();
+			System.err.println("Is removed: "+ctx.isRemoved());
+			System.err.println(ctx.channel().pipeline().names());
+			System.err.println(ctx.channel().isOpen());
+		}
 	}
 
 
