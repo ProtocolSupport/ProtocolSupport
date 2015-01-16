@@ -44,7 +44,6 @@ public class ProtocolLibFixer {
 			Class<?> channelInjectorClass = Class.forName("com.comphenix.protocol.injector.netty.ChannelInjector");
 			return MethodHandles.lookup().unreflectSetter(Utils.setAccessible(channelInjectorClass.getDeclaredField("vanillaDecoder")));
 		} catch (Throwable t) {
-			t.printStackTrace();
 		}
 		return null;		
 	}
@@ -54,7 +53,6 @@ public class ProtocolLibFixer {
 			Class<?> channelInjectorClass = Class.forName("com.comphenix.protocol.injector.netty.ChannelInjector");
 			return MethodHandles.lookup().unreflectSetter(Utils.setAccessible(channelInjectorClass.getDeclaredField("vanillaEncoder")));
 		} catch (Throwable t) {
-			t.printStackTrace();
 		}
 		return null;		
 	}
