@@ -5,8 +5,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import protocolsupport.commands.CommandHandler;
 import protocolsupport.injector.NettyInjector;
-import protocolsupport.injector.ProtocolLibFixer;
 import protocolsupport.injector.ServerInjector;
+import protocolsupport.injector.protocollib.ProtocolLibFixer;
 
 public class ProtocolSupport extends JavaPlugin {
 

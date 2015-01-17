@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.EnumMap;
 import java.util.concurrent.TimeUnit;
 
-import protocolsupport.injector.ProtocolLibFixer;
+import protocolsupport.injector.protocollib.ProtocolLibFixer;
 import protocolsupport.protocol.ChannelHandlers;
 import protocolsupport.protocol.IPipeLineBuilder;
 import protocolsupport.protocol.ProtocolVersion;

@@ -35,7 +35,6 @@ public class CommandHandler implements CommandExecutor {
 		return false;
 	}
 
-	@SuppressWarnings("deprecation")
 	private String getPlayersStringForProtocol(ProtocolVersion version) {
 		StringBuilder sb = new StringBuilder();
 		for (Player player : Bukkit.getOnlinePlayers()) {

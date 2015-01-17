@@ -28,10 +28,9 @@ public class OldPingResponseTask implements Runnable {
 			SocketAddress remoteAddress = channel.remoteAddress();
 			if (channel.isOpen() && !initialDecoder.protocolSet) {
 				System.out.println(remoteAddress + " pinged with a really outdated protocol");
-				@SuppressWarnings("deprecation")
 				ServerListPingEvent event = new ServerListPingEvent(
 					((InetSocketAddress) remoteAddress).getAddress(),
-					Bukkit.getMotd(), Bukkit.getOnlinePlayers().length,
+					Bukkit.getMotd(), Bukkit.getOnlinePlayers().size(),
 					Bukkit.getMaxPlayers()
 				);
 				Bukkit.getPluginManager().callEvent(event);
