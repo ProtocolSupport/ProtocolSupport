@@ -110,7 +110,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				packet = getPacketById(0x0C);
 				packetdata.writeFloat(serializer.readFloat());
 				packetdata.writeFloat(serializer.readFloat());
-				packetdata.writeByte(serializer.readBoolean() ? 1 : 0 + (serializer.readBoolean() ? 1 << 1 : 0));
+				packetdata.writeByte((serializer.readBoolean() ? 1 : 0) + (serializer.readBoolean() ? 1 << 1 : 0));
 				break;
 			}
 			case 0x65: { //PacketPlayInCloseWindow
