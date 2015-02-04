@@ -732,6 +732,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 						}
 						case 4: {
 							String playerName = storage.getPlayerListName(uuid);
+							storage.removePlayerListName(uuid);
 							serializer.writeByte(0xC9);
 							serializer.writeString(playerName);
 							serializer.writeBoolean(false);

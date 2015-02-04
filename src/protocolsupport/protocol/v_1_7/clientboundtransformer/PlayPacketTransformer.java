@@ -757,6 +757,8 @@ public class PlayPacketTransformer implements PacketTransformer {
 						}
 						case 4: {
 							String playerName = storage.getPlayerListName(uuid);
+							storage.removePlayerListName(uuid);
+							storage.removePropertyData(uuid);
 							writePacketData.clear();
 							writePacketData.writeVarInt(packetId);
 							writePacketData.writeString(playerName);

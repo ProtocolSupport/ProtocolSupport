@@ -58,6 +58,10 @@ public class LocalStorage {
 		return name;
 	}
 
+	public void removePlayerListName(UUID uuid) {
+		playerlist.remove(uuid);
+	}
+
 	public void addPropertyData(UUID uuid, Property property) {
 		ArrayList<Property> lproperties = properties.get(uuid);
 		Iterator<Property> iterator = lproperties.iterator();
@@ -82,6 +86,10 @@ public class LocalStorage {
 			}
 			return lproperties;
 		}
+	}
+
+	public void removePropertyData(UUID uuid) {
+		properties.remove(uuid);
 	}
 
 }
