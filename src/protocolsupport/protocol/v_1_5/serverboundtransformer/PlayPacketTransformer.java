@@ -37,10 +37,28 @@ public class PlayPacketTransformer implements PacketTransformer {
 				break;
 			}
 			case 0x07: { //PacketPlayInUseEntity
-				packet = getPacketById(0x02);
 				serializer.readInt();
-				packetdata.writeVarInt(serializer.readInt());
-				packetdata.writeVarInt(serializer.readBoolean() ? 1 : 0);
+				int entityId = serializer.readInt();
+				boolean isLeftClick = serializer.readBoolean();
+				//if player interacts with the entity he is riding than he wants to unmont it
+				if (!isLeftClick) {
+					//reading is async so this is potentially dangerous
+					org.bukkit.entity.Entity vehicle = Utils.getPlayer(channel).getVehicle();
+					if (vehicle != null && vehicle.getEntityId() == entityId) {
+						packet = getPacketById(0x0C);
+						packetdata.writeFloat(0);
+						packetdata.writeFloat(0);
+						packetdata.writeByte(1 << 1);
+					} else {
+						packet = getPacketById(0x02);
+						packetdata.writeVarInt(entityId);
+						packetdata.writeVarInt(isLeftClick ? 1 : 0);
+					}
+				} else {
+					packet = getPacketById(0x02);
+					packetdata.writeVarInt(entityId);
+					packetdata.writeVarInt(isLeftClick ? 1 : 0);
+				}
 				break;
 			}
 			case 0x0A: { //PacketPlayInFlying
@@ -63,14 +81,40 @@ public class PlayPacketTransformer implements PacketTransformer {
 				break;
 			}
 			case 0x0D: { //PacketPlayInPositionLook
-				packet = getPacketById(0x06);
-				packetdata.writeDouble(serializer.readDouble());
-				packetdata.writeDouble(serializer.readDouble());
-				serializer.readDouble();
-				packetdata.writeDouble(serializer.readDouble());
-				packetdata.writeFloat(serializer.readFloat());
-				packetdata.writeFloat(serializer.readFloat());
-				packetdata.writeBoolean(serializer.readBoolean());
+				double x = serializer.readDouble();
+				double yfeet = serializer.readDouble();
+				double y = serializer.readDouble();
+				double z = serializer.readDouble();
+				float yaw = serializer.readFloat();
+				float pitch = serializer.readFloat();
+				boolean onGroud = serializer.readBoolean();
+				//when y is -999.0D than it means that client actually tries to control vehicle movement
+				if (yfeet == -999.0D && y == -999.0D) {
+					Packet[] packets = new Packet[2];
+					Packet playerlook = getPacketById(0x05);
+					packetdata.writeFloat(yaw);
+					packetdata.writeFloat(pitch);
+					packetdata.writeBoolean(onGroud);
+					playerlook.a(packetdata);
+					packets[0] = playerlook;
+					packetdata.clear();
+					Packet steervehicle = getPacketById(0x0C);
+					//TODO: convert motX and motZ to strafes
+					packetdata.writeFloat(0.0F);
+					packetdata.writeFloat(0.0F);
+					packetdata.writeByte(0);
+					steervehicle.a(packetdata);
+					packets[1] = steervehicle;
+					return packets;
+				} else {
+					packet = getPacketById(0x06);
+					packetdata.writeDouble(x);
+					packetdata.writeDouble(yfeet);
+					packetdata.writeDouble(z);
+					packetdata.writeFloat(yaw);
+					packetdata.writeFloat(pitch);
+					packetdata.writeBoolean(onGroud);
+				}
 				break;
 			}
 			case 0x0E: { //PacketPlayInBlockDig
