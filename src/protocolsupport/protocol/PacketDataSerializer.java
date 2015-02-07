@@ -16,18 +16,22 @@ import java.nio.charset.StandardCharsets;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import net.minecraft.server.v1_8_R1.ChatSerializer;
 import net.minecraft.server.v1_8_R1.GameProfileSerializer;
 import net.minecraft.server.v1_8_R1.Item;
 import net.minecraft.server.v1_8_R1.ItemStack;
 import net.minecraft.server.v1_8_R1.NBTCompressedStreamTools;
 import net.minecraft.server.v1_8_R1.NBTReadLimiter;
 import net.minecraft.server.v1_8_R1.NBTTagCompound;
+import net.minecraft.server.v1_8_R1.NBTTagList;
 import net.minecraft.server.v1_8_R1.NBTTagString;
 
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R1.inventory.CraftItemStack;
 import org.spigotmc.LimitStream;
 import org.spigotmc.SneakyThrow;
+
+import protocolsupport.utils.Utils;
 
 import com.mojang.authlib.GameProfile;
 
@@ -75,14 +79,28 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R1.PacketDat
 				(getVersion() == ProtocolVersion.MINECRAFT_1_6_2) ||
 				(getVersion() == ProtocolVersion.MINECRAFT_1_5_2)
 			) {
-				if ((nbttagcompound != null) && (itemId == Material.SKULL_ITEM.getId())) {
+				if ((nbttagcompound != null) && itemId == Material.SKULL_ITEM.getId()) {
 					if (nbttagcompound.hasKeyOfType("SkullOwner", 10)) {
+						nbttagcompound = (NBTTagCompound) nbttagcompound.clone();
 						GameProfile gameprofile = GameProfileSerializer.deserialize(nbttagcompound.getCompound("SkullOwner"));
 						if (gameprofile.getName() != null) {
 							nbttagcompound.set("SkullOwner", new NBTTagString(gameprofile.getName()));
 						} else {
 							nbttagcompound.remove("SkullOwner");
 						}
+					}
+				}
+			}
+			if (getVersion() != ProtocolVersion.MINECRAFT_1_8) {
+				if ((nbttagcompound != null) && itemId == Material.WRITTEN_BOOK.getId()) {
+					if (nbttagcompound.hasKeyOfType("pages", 9)) {
+						nbttagcompound = (NBTTagCompound) nbttagcompound.clone();
+						NBTTagList pages = nbttagcompound.getList("pages", 8);
+						NBTTagList newpages = new NBTTagList();
+						for (int i = 0; i < pages.size(); i++) {
+							newpages.add(new NBTTagString(Utils.fromComponent(ChatSerializer.a(pages.getString(i)))));
+						}
+						nbttagcompound.set("pages", newpages);
 					}
 				}
 			}
