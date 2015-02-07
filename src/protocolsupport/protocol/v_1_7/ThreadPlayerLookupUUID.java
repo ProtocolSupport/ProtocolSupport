@@ -48,7 +48,7 @@ public class ThreadPlayerLookupUUID extends Thread {
 				listener.state = LoginState.READY_TO_ACCEPT;
 			} else {
 				listener.disconnect("Failed to verify username!");
-				LoginListener.logger.error("Username '" + listener.profile.getName() + "' tried to join with an invalid session");
+				LoginListener.logger.error("Username '" + gameprofile.getName() + "' tried to join with an invalid session");
 			}
 		} catch (AuthenticationUnavailableException authenticationunavailableexception) {
 			if (MinecraftServer.getServer().S()) {
@@ -61,7 +61,7 @@ public class ThreadPlayerLookupUUID extends Thread {
 			}
 		} catch (Exception exception) {
 			listener.disconnect("Failed to verify username!");
-			MinecraftServer.getServer().server.getLogger().log(Level.WARNING, "Exception verifying " + listener.profile.getName(), exception);
+			MinecraftServer.getServer().server.getLogger().log(Level.WARNING, "Exception verifying " + gameprofile.getName(), exception);
 		}
 	}
 
