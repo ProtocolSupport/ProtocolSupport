@@ -799,9 +799,6 @@ public class PlayPacketTransformer implements PacketTransformer {
 					serializer.writeByte(mode);
 					return;
 				}
-				if (mode == 2) {
-					mode = 0;
-				}
 				serializer.writeString(packetdata.readString(32));
 				serializer.writeByte(mode);
 				return;

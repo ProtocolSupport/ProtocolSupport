@@ -598,16 +598,19 @@ public class PlayPacketTransformer implements PacketTransformer {
 				return;
 			}
 			case 0x2D: { //PacketPlayOutOpenWindow
-				serializer.writeByte(0x64);
-				serializer.writeByte(packetdata.readUnsignedByte());
+				int windowId = packetdata.readUnsignedByte();
 				byte id = Utils.getInventoryId(packetdata.readString(32));
+				//fiter out horse inventory
+				if (id == 11) {
+					Utils.getPlayer(channel).closeInventory();
+					return;
+				}
+				serializer.writeByte(0x64);
+				serializer.writeByte(windowId);
 				serializer.writeByte(id);
 				serializer.writeString(packetdata.d().getText());
 				serializer.writeByte(packetdata.readUnsignedByte());
 				serializer.writeBoolean(true);
-				if (id == 11) {
-					serializer.writeInt(packetdata.readInt());
-				}
 				return;
 			}
 			case 0x2E: { //PacketPlayOutCloseWindow
@@ -775,9 +778,6 @@ public class PlayPacketTransformer implements PacketTransformer {
 					serializer.writeString("");
 					serializer.writeByte(mode);
 					return;
-				}
-				if (mode == 2) {
-					mode = 0;
 				}
 				serializer.writeString(packetdata.readString(32));
 				serializer.writeByte(mode);
