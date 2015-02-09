@@ -859,7 +859,9 @@ public class PlayPacketTransformer implements PacketTransformer {
 				//remap to custom payload send with resource pack tag
 				serializer.writeVarInt(0x3F);
 				serializer.writeString("MC|RPack");
-				serializer.writeBytes(packetdata.readString(32767).getBytes(StandardCharsets.UTF_8));
+				byte[] urldata = packetdata.readString(32767).getBytes(StandardCharsets.UTF_8);
+				serializer.writeShort(urldata.length);
+				serializer.writeBytes(urldata);
 				return;
 			}
 			default: { //Any other packet
