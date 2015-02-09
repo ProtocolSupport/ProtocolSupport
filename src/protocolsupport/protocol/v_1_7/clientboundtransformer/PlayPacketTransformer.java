@@ -8,6 +8,7 @@ import io.netty.channel.ChannelHandlerContext;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.zip.Deflater;
@@ -851,6 +852,14 @@ public class PlayPacketTransformer implements PacketTransformer {
 				}
 				serializer.writeShort(data.readableBytes());
 				serializer.writeBytes(data);
+				return;
+			}
+			case 0x48: { //PacketPlayOutResourcePackSend
+				packet.b(packetdata);
+				//remap to custom payload send with resource pack tag
+				serializer.writeVarInt(0x3F);
+				serializer.writeString("MC|RPack");
+				serializer.writeBytes(packetdata.readString(32767).getBytes(StandardCharsets.UTF_8));
 				return;
 			}
 			default: { //Any other packet

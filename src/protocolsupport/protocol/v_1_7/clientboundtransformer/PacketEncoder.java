@@ -38,6 +38,9 @@ public class PacketEncoder extends MessageToByteEncoder<Packet> implements Publi
 	{
 		//packet from 1.8
 		for (int i = 0x41; i < 0x49; i++) {
+			if (i == 0x48) {
+				continue;
+			}
 			blockedPlayPackets[i] = true;
 		}
 	}
