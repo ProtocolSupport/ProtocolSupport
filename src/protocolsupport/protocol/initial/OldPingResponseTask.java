@@ -11,6 +11,7 @@ import org.bukkit.event.server.ServerListPingEvent;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFutureListener;
 
 public class OldPingResponseTask implements Runnable {
 
@@ -27,7 +28,6 @@ public class OldPingResponseTask implements Runnable {
 		try {
 			SocketAddress remoteAddress = channel.remoteAddress();
 			if (channel.isOpen() && !initialDecoder.protocolSet) {
-				System.out.println(remoteAddress + " pinged with a really outdated protocol");
 				ServerListPingEvent event = new ServerListPingEvent(
 					((InetSocketAddress) remoteAddress).getAddress(),
 					Bukkit.getMotd(), Bukkit.getOnlinePlayers().size(),
@@ -39,7 +39,7 @@ public class OldPingResponseTask implements Runnable {
 				buf.writeByte(255);
 				buf.writeShort(response.length());
 				buf.writeBytes(response.getBytes(StandardCharsets.UTF_16BE));
-				channel.pipeline().firstContext().writeAndFlush(buf);
+				channel.pipeline().firstContext().writeAndFlush(buf).addListener(ChannelFutureListener.CLOSE);
 			}
 		} catch (Throwable t) {
 			if (channel.isOpen()) {

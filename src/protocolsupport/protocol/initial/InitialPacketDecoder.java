@@ -102,7 +102,6 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 			return;
 		}
 		protocolSet = true;
-		System.out.println(channel.remoteAddress()+" connected with protocol version "+version);
 		channel.pipeline().remove(ChannelHandlers.INITIAL_DECODER);
 		DecoderEncoderTuple tuple = pipelineBuilders.get(version).buildPipeLine(channel, version);
 		ProtocolLibFixer.fixProtocolLib(channel.pipeline(), tuple.getDecoder(), tuple.getEncoder());
