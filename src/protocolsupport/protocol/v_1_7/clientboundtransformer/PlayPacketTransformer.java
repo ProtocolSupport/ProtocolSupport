@@ -758,14 +758,16 @@ public class PlayPacketTransformer implements PacketTransformer {
 						}
 						case 4: {
 							String playerName = storage.getPlayerListName(uuid);
-							storage.removePlayerListName(uuid);
-							storage.removePropertyData(uuid);
-							writePacketData.clear();
-							writePacketData.writeVarInt(packetId);
-							writePacketData.writeString(playerName);
-							writePacketData.writeBoolean(false);
-							writePacketData.writeShort(0);
-							ctx.write(writePacketData.copy());
+							if (playerName != null) {
+								storage.removePlayerListName(uuid);
+								storage.removePropertyData(uuid);
+								writePacketData.clear();
+								writePacketData.writeVarInt(packetId);
+								writePacketData.writeString(playerName);
+								writePacketData.writeBoolean(false);
+								writePacketData.writeShort(0);
+								ctx.write(writePacketData.copy());
+							}
 							break;
 						}
 						//don't send packet, but still read data

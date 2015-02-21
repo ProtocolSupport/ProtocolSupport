@@ -722,11 +722,13 @@ public class PlayPacketTransformer implements PacketTransformer {
 						}
 						case 4: {
 							String playerName = storage.getPlayerListName(uuid);
-							storage.removePlayerListName(uuid);
-							serializer.writeByte(0xC9);
-							serializer.writeString(playerName);
-							serializer.writeBoolean(false);
-							serializer.writeShort(0);
+							if (playerName != null) {
+								storage.removePlayerListName(uuid);
+								serializer.writeByte(0xC9);
+								serializer.writeString(playerName);
+								serializer.writeBoolean(false);
+								serializer.writeShort(0);
+							}
 							break;
 						}
 						//don't send packet, but still read data
