@@ -815,7 +815,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x3C: { // PacketPlayOutScoreboardScore
 				packet.b(packetdata);
 				serializer.writeVarInt(packetId);
-				serializer.writeString(packetdata.readString(16));
+				serializer.writeString(Utils.clampString(packetdata.readString(40), 16));
 				int mode = packetdata.readByte();
 				serializer.writeByte(mode);
 				if (mode != 1) {
