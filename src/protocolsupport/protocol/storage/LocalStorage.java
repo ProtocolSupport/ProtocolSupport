@@ -43,6 +43,10 @@ public class LocalStorage {
 		}
 	}
 
+	public void clearWatchedEntities() {
+		watchedEntities.clear();
+	}
+
 	public void addPlayerListName(UUID uuid, String name) {
 		playerlist.put(uuid, name);
 	}

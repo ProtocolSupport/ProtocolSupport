@@ -93,6 +93,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				return;
 			}
 			case 0x07: { //PacketPlayOutRespawn
+				storage.clearWatchedEntities();
 				serializer.writeByte(0x09);
 				serializer.writeInt(packetdata.readInt());
 				serializer.writeByte(packetdata.readByte());
@@ -798,7 +799,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x3C: { //PacketPlayOutScoreboardScore
 				serializer.writeByte(0xCF);
-				serializer.writeString(packetdata.readString(16));
+				serializer.writeString(Utils.clampString(packetdata.readString(40), 16));
 				int mode = packetdata.readByte();
 				serializer.writeByte(mode);
 				if (mode != 1) {

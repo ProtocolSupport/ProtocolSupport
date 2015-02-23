@@ -96,6 +96,12 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeFloat(packetdata.readFloat());
 				return;
 			}
+			case 0x07: { //PacketPlayOutRespawn
+				storage.clearWatchedEntities();
+				serializer.writeVarInt(packetId);
+				packet.b(serializer);
+				return;
+			}
 			case 0x08: { // PacketPlayOutPosition
 				packet.b(packetdata);
 				serializer.writeVarInt(packetId);
