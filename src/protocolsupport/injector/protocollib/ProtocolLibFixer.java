@@ -55,7 +55,7 @@ public class ProtocolLibFixer {
 			vanillaDecoder.invokeExact(protocolLibDecoder, decoder);
 			vanillaEncoder.invokeExact(protocolLibDecoder, encoder);
 		} catch (Throwable t) {
-			System.err.println("Failed to fix protocollib decoder, closing connection with "+pipeline.channel().remoteAddress());
+			System.err.println("[ProtocolSupport] Failed to fix protocollib decoder, closing connection with "+pipeline.channel().remoteAddress());
 			t.printStackTrace();
 			pipeline.channel().close();
 		}
