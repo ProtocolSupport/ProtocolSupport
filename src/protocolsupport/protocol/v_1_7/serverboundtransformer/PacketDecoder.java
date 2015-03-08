@@ -9,13 +9,15 @@ import io.netty.util.AttributeKey;
 import java.io.IOException;
 import java.util.List;
 
-import net.minecraft.server.v1_8_R1.EnumProtocol;
-import net.minecraft.server.v1_8_R1.EnumProtocolDirection;
-import net.minecraft.server.v1_8_R1.NetworkManager;
-import net.minecraft.server.v1_8_R1.Packet;
+import net.minecraft.server.v1_8_R2.EnumProtocol;
+import net.minecraft.server.v1_8_R2.EnumProtocolDirection;
+import net.minecraft.server.v1_8_R2.NetworkManager;
+import net.minecraft.server.v1_8_R2.Packet;
+import net.minecraft.server.v1_8_R2.PacketListener;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.ProtocolVersion;
 import protocolsupport.protocol.PublicPacketDecoder;
+import protocolsupport.protocol.storage.ProtocolStorage;
 
 public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketDecoder {
 
@@ -32,9 +34,9 @@ public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketD
 	};
 
 	private static final EnumProtocolDirection direction = EnumProtocolDirection.SERVERBOUND;
-	@SuppressWarnings("unchecked")
 	private static final AttributeKey<EnumProtocol> currentStateAttrKey = NetworkManager.c;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf bytebuf, List<Object> list) throws Exception {
 		if (bytebuf.readableBytes() == 0) {
@@ -43,7 +45,7 @@ public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketD
 		Channel channel = ctx.channel();
 		final PacketDataSerializer packetDataSerializer = new PacketDataSerializer(bytebuf, version);
 		final int packetId = packetDataSerializer.readVarInt();
-		final Packet packet = channel.attr(currentStateAttrKey).get().a(direction, packetId);
+		final Packet<PacketListener> packet = channel.attr(currentStateAttrKey).get().a(direction, packetId);
 		if (packet == null) {
 			throw new IOException("Bad packet id " + packetId);
 		}
@@ -60,6 +62,12 @@ public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketD
 	@Override
 	public void publicDecode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
 		decode(ctx, input, list);
+	}
+
+	@Override
+	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+		super.channelInactive(ctx);
+		ProtocolStorage.clearData(ctx.channel().remoteAddress());
 	}
 
 }

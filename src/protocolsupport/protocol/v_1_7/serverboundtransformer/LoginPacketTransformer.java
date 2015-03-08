@@ -5,13 +5,14 @@ import io.netty.channel.Channel;
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_8_R1.Packet;
+import net.minecraft.server.v1_8_R2.Packet;
+import net.minecraft.server.v1_8_R2.PacketListener;
 import protocolsupport.protocol.PacketDataSerializer;
 
 public class LoginPacketTransformer implements PacketTransformer {
 
 	@Override
-	public boolean tranform(Channel channel, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException {
+	public boolean tranform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
 		PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
 		switch (packetId) {
 			case 0x01: { //PacketLoginInEncryptionBegin

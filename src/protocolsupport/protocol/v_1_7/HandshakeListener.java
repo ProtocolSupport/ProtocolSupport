@@ -2,43 +2,34 @@ package protocolsupport.protocol.v_1_7;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
 
-import net.minecraft.server.v1_8_R1.ChatComponentText;
-import net.minecraft.server.v1_8_R1.EnumProtocol;
-import net.minecraft.server.v1_8_R1.IChatBaseComponent;
-import net.minecraft.server.v1_8_R1.MinecraftServer;
-import net.minecraft.server.v1_8_R1.NetworkManager;
-import net.minecraft.server.v1_8_R1.PacketHandshakingInListener;
-import net.minecraft.server.v1_8_R1.PacketHandshakingInSetProtocol;
-import net.minecraft.server.v1_8_R1.PacketLoginOutDisconnect;
-import net.minecraft.server.v1_8_R1.PacketStatusListener;
+import net.minecraft.server.v1_8_R2.ChatComponentText;
+import net.minecraft.server.v1_8_R2.EnumProtocol;
+import net.minecraft.server.v1_8_R2.IChatBaseComponent;
+import net.minecraft.server.v1_8_R2.MinecraftServer;
+import net.minecraft.server.v1_8_R2.NetworkManager;
+import net.minecraft.server.v1_8_R2.PacketHandshakingInListener;
+import net.minecraft.server.v1_8_R2.PacketHandshakingInSetProtocol;
+import net.minecraft.server.v1_8_R2.PacketLoginOutDisconnect;
+import net.minecraft.server.v1_8_R2.PacketStatusListener;
 
 import org.apache.logging.log4j.LogManager;
-import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
 import org.spigotmc.SpigotConfig;
 
-import protocolsupport.protocol.ProtocolVersion;
+import protocolsupport.protocol.storage.ThrottleTracker;
 
+import com.google.gson.Gson;
 import com.mojang.authlib.properties.Property;
 import com.mojang.util.UUIDTypeAdapter;
 
 public class HandshakeListener implements PacketHandshakingInListener {
 
 	private static final Gson gson = new Gson();
-	private static final HashMap<InetAddress, Long> throttleTracker = new HashMap<InetAddress, Long>();
-	private static int throttleCounter = 0;
 
 	private final NetworkManager networkManager;
-	private final ProtocolVersion version;
 
-	public HandshakeListener(final NetworkManager networkmanager, ProtocolVersion version) {
+	public HandshakeListener(final NetworkManager networkmanager) {
 		networkManager = networkmanager;
-		this.version = version;
 	}
 
 	@Override
@@ -47,46 +38,19 @@ public class HandshakeListener implements PacketHandshakingInListener {
 			case LOGIN: {
 				networkManager.a(EnumProtocol.LOGIN);
 				try {
-					final long currentTime = System.currentTimeMillis();
-					final long connectionThrottle = MinecraftServer.getServer().server.getConnectionThrottle();
 					final InetAddress address = ((InetSocketAddress) networkManager.getSocketAddress()).getAddress();
-					synchronized (HandshakeListener.throttleTracker) {
-						if (HandshakeListener.throttleTracker.containsKey(address) && !"127.0.0.1".equals(address.getHostAddress()) && ((currentTime - HandshakeListener.throttleTracker.get(address)) < connectionThrottle)) {
-							HandshakeListener.throttleTracker.put(address, currentTime);
+					if (ThrottleTracker.isEnabled() && !"127.0.0.1".equals(address.getHostAddress())) {
+						if (ThrottleTracker.isThrottled(address)) {
 							final ChatComponentText chatcomponenttext = new ChatComponentText("Connection throttled! Please wait before reconnecting.");
 							networkManager.handle(new PacketLoginOutDisconnect(chatcomponenttext));
 							networkManager.close(chatcomponenttext);
-							return;
 						}
-						HandshakeListener.throttleTracker.put(address, currentTime);
-						++HandshakeListener.throttleCounter;
-						if (HandshakeListener.throttleCounter > 200) {
-							HandshakeListener.throttleCounter = 0;
-							final Iterator<Entry<InetAddress, Long>> iter = HandshakeListener.throttleTracker.entrySet().iterator();
-							while (iter.hasNext()) {
-								final Map.Entry<InetAddress, Long> entry = iter.next();
-								if (entry.getValue() > connectionThrottle) {
-									iter.remove();
-								}
-							}
-						}
+						ThrottleTracker.track(address, System.currentTimeMillis());
 					}
 				} catch (Throwable t) {
 					LogManager.getLogger().debug("Failed to check connection throttle", t);
 				}
-				if (packethandshakinginsetprotocol.b() > 47) {
-					final ChatComponentText chatcomponenttext = new ChatComponentText(MessageFormat.format(SpigotConfig.outdatedServerMessage, "1.8"));
-					networkManager.handle(new PacketLoginOutDisconnect(chatcomponenttext));
-					networkManager.close(chatcomponenttext);
-					break;
-				}
-				if (packethandshakinginsetprotocol.b() < 47) {
-					final ChatComponentText chatcomponenttext = new ChatComponentText(MessageFormat.format(SpigotConfig.outdatedClientMessage, "1.8"));
-					networkManager.handle(new PacketLoginOutDisconnect(chatcomponenttext));
-					networkManager.close(chatcomponenttext);
-					break;
-				}
-				networkManager.a(new LoginListener(networkManager, version));
+				networkManager.a(new LoginListener(networkManager));
 				if (SpigotConfig.bungee) {
 					final String[] split = packethandshakinginsetprotocol.b.split("\u0000");
 					if ((split.length != 3) && (split.length != 4)) {
@@ -96,7 +60,7 @@ public class HandshakeListener implements PacketHandshakingInListener {
 						return;
 					}
 					packethandshakinginsetprotocol.b = split[0];
-					networkManager.j = new InetSocketAddress(split[1], ((InetSocketAddress) networkManager.getSocketAddress()).getPort());
+					networkManager.l = new InetSocketAddress(split[1], ((InetSocketAddress) networkManager.getSocketAddress()).getPort());
 					networkManager.spoofedUUID = UUIDTypeAdapter.fromString(split[2]);
 					if (split.length == 4) {
 						networkManager.spoofedProfile = HandshakeListener.gson.fromJson(split[3], Property[].class);

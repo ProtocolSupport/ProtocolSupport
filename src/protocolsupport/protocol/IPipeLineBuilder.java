@@ -1,5 +1,6 @@
 package protocolsupport.protocol;
 
+import protocolsupport.api.ProtocolVersion;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 

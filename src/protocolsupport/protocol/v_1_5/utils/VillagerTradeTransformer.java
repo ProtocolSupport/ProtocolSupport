@@ -1,13 +1,15 @@
 package protocolsupport.protocol.v_1_5.utils;
 
+import java.io.IOException;
+
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.ProtocolVersion;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
 public class VillagerTradeTransformer {
 
-	public static ByteBuf to15VillagerTradeList(PacketDataSerializer data, ProtocolVersion newversion) {
+	public static ByteBuf to15VillagerTradeList(PacketDataSerializer data, ProtocolVersion newversion) throws IOException {
 		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer(), newversion);
 		serializer.writeInt(data.readInt());
 		int count = data.readByte() & 0xFF;

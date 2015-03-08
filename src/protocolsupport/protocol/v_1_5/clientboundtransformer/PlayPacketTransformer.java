@@ -10,17 +10,18 @@ import java.io.IOException;
 import java.util.UUID;
 import java.util.zip.Deflater;
 
-import net.minecraft.server.v1_8_R1.BlockPosition;
-import net.minecraft.server.v1_8_R1.EnumParticle;
-import net.minecraft.server.v1_8_R1.ItemStack;
-import net.minecraft.server.v1_8_R1.Packet;
+import net.minecraft.server.v1_8_R2.BlockPosition;
+import net.minecraft.server.v1_8_R2.EnumParticle;
+import net.minecraft.server.v1_8_R2.ItemStack;
+import net.minecraft.server.v1_8_R2.Packet;
+import net.minecraft.server.v1_8_R2.PacketListener;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.ProtocolVersion;
 import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.v_1_5.remappers.BlockIDRemapper;
 import protocolsupport.protocol.v_1_5.remappers.EntityIDRemapper;
@@ -37,7 +38,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 	private LocalStorage storage = new LocalStorage();
 
 	@Override
-	public void tranform(Channel channel, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException {
+	public void tranform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
 		PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
 		packet.b(packetdata);
 		switch (packetId) {

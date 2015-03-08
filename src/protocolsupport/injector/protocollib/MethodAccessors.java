@@ -6,7 +6,8 @@ import io.netty.channel.ChannelHandlerContext;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import net.minecraft.server.v1_8_R1.Packet;
+import net.minecraft.server.v1_8_R2.Packet;
+import net.minecraft.server.v1_8_R2.PacketListener;
 
 import org.spigotmc.SneakyThrow;
 
@@ -24,11 +25,12 @@ public class MethodAccessors {
 			throw new RuntimeException("PipelineEncodeMethodAccessor is dynamic and can't provide method instance");
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public Object invoke(Object obj, Object... args) {
 			try {
 				PublicPacketEncoder publicEncoder = (PublicPacketEncoder) obj;
-				publicEncoder.publicEncode((ChannelHandlerContext) args[0], (Packet) args[1], (ByteBuf) args[2]);
+				publicEncoder.publicEncode((ChannelHandlerContext) args[0], (Packet<PacketListener>) args[1], (ByteBuf) args[2]);
 			} catch (Throwable t) {
 				SneakyThrow.sneaky(t);
 			}

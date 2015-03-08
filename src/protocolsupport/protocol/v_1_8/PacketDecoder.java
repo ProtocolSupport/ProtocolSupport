@@ -8,27 +8,29 @@ import io.netty.util.AttributeKey;
 import java.io.IOException;
 import java.util.List;
 
-import net.minecraft.server.v1_8_R1.EnumProtocol;
-import net.minecraft.server.v1_8_R1.EnumProtocolDirection;
-import net.minecraft.server.v1_8_R1.NetworkManager;
-import net.minecraft.server.v1_8_R1.Packet;
-import net.minecraft.server.v1_8_R1.PacketDataSerializer;
+import net.minecraft.server.v1_8_R2.EnumProtocol;
+import net.minecraft.server.v1_8_R2.EnumProtocolDirection;
+import net.minecraft.server.v1_8_R2.NetworkManager;
+import net.minecraft.server.v1_8_R2.Packet;
+import net.minecraft.server.v1_8_R2.PacketDataSerializer;
+import net.minecraft.server.v1_8_R2.PacketListener;
 import protocolsupport.protocol.PublicPacketDecoder;
+import protocolsupport.protocol.storage.ProtocolStorage;
 
 public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketDecoder {
 
 	private static final EnumProtocolDirection direction = EnumProtocolDirection.SERVERBOUND;
-	@SuppressWarnings("unchecked")
 	private static final AttributeKey<EnumProtocol> currentStateAttrKey = NetworkManager.c;
 
+	@SuppressWarnings("unchecked")
 	@Override
-	protected void decode(final ChannelHandlerContext ctx, final ByteBuf bytebuf, final List<Object> list) throws IOException {
+	protected void decode(final ChannelHandlerContext ctx, final ByteBuf bytebuf, final List<Object> list) throws IOException, IllegalAccessException, InstantiationException {
 		if (bytebuf.readableBytes() == 0) {
 			return;
 		}
 		final PacketDataSerializer packetDataSerializer = new PacketDataSerializer(bytebuf);
 		final int packetId = packetDataSerializer.e();
-		final Packet packet = ctx.channel().attr(currentStateAttrKey).get().a(direction, packetId);
+		final Packet<PacketListener> packet = ctx.channel().attr(currentStateAttrKey).get().a(direction, packetId);
 		if (packet == null) {
 			throw new IOException("Bad packet id " + packetId);
 		}
@@ -42,6 +44,12 @@ public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketD
 	@Override
 	public void publicDecode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
 		decode(ctx, input, list);
+	}
+
+	@Override
+	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+		super.channelInactive(ctx);
+		ProtocolStorage.clearData(ctx.channel().remoteAddress());
 	}
 
 }

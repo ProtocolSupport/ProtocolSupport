@@ -12,11 +12,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.EnumMap;
 import java.util.concurrent.TimeUnit;
 
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.injector.protocollib.ProtocolLibFixer;
 import protocolsupport.protocol.ChannelHandlers;
 import protocolsupport.protocol.IPipeLineBuilder;
-import protocolsupport.protocol.ProtocolVersion;
 import protocolsupport.protocol.IPipeLineBuilder.DecoderEncoderTuple;
+import protocolsupport.protocol.storage.ProtocolStorage;
 
 public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 
@@ -102,6 +103,7 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 			return;
 		}
 		protocolSet = true;
+		ProtocolStorage.setProtocolVersion(channel.remoteAddress(), version);
 		channel.pipeline().remove(ChannelHandlers.INITIAL_DECODER);
 		DecoderEncoderTuple tuple = pipelineBuilders.get(version).buildPipeLine(channel, version);
 		ProtocolLibFixer.fixProtocolLib(channel.pipeline(), tuple.getDecoder(), tuple.getEncoder());

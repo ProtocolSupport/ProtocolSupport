@@ -5,18 +5,19 @@ import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import io.netty.buffer.Unpooled;
 
+import java.io.IOException;
 import java.util.Iterator;
 
-import net.minecraft.server.v1_8_R1.BlockPosition;
-import net.minecraft.server.v1_8_R1.ItemStack;
-import net.minecraft.server.v1_8_R1.Vector3f;
+import net.minecraft.server.v1_8_R2.BlockPosition;
+import net.minecraft.server.v1_8_R2.ItemStack;
+import net.minecraft.server.v1_8_R2.Vector3f;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.ProtocolVersion;
 import protocolsupport.protocol.watchedentites.WatchedEntity;
 
 public class DataWatcherFilter {
 
-	public static byte[] filterEntityData(ProtocolVersion version, WatchedEntity entity, byte[] data) {
+	public static byte[] filterEntityData(ProtocolVersion version, WatchedEntity entity, byte[] data) throws IOException {
 		if (entity == null) {
 			return data;
 		}
@@ -108,7 +109,7 @@ public class DataWatcherFilter {
 		return encodeData(version, objects);
 	}
 
-	private static TIntObjectMap<DataWatcherObject> decodeData(ProtocolVersion version, byte[] data) {
+	private static TIntObjectMap<DataWatcherObject> decodeData(ProtocolVersion version, byte[] data) throws IOException {
 		TIntObjectMap<DataWatcherObject> map = new TIntObjectHashMap<DataWatcherObject>(10, 0.5f, -1);
 		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.wrappedBuffer(data), version);
 		do {

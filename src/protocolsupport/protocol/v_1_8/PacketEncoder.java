@@ -8,21 +8,21 @@ import io.netty.util.AttributeKey;
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_8_R1.EnumProtocol;
-import net.minecraft.server.v1_8_R1.EnumProtocolDirection;
-import net.minecraft.server.v1_8_R1.NetworkManager;
-import net.minecraft.server.v1_8_R1.Packet;
-import net.minecraft.server.v1_8_R1.PacketDataSerializer;
+import net.minecraft.server.v1_8_R2.EnumProtocol;
+import net.minecraft.server.v1_8_R2.EnumProtocolDirection;
+import net.minecraft.server.v1_8_R2.NetworkManager;
+import net.minecraft.server.v1_8_R2.Packet;
+import net.minecraft.server.v1_8_R2.PacketDataSerializer;
+import net.minecraft.server.v1_8_R2.PacketListener;
 import protocolsupport.protocol.PublicPacketEncoder;
 
-public class PacketEncoder extends MessageToByteEncoder<Packet> implements PublicPacketEncoder {
+public class PacketEncoder extends MessageToByteEncoder<Packet<PacketListener>> implements PublicPacketEncoder {
 
 	private static final EnumProtocolDirection direction = EnumProtocolDirection.CLIENTBOUND;
-	@SuppressWarnings("unchecked")
 	private static final AttributeKey<EnumProtocol> currentStateAttrKey = NetworkManager.c;
 
 	@Override
-	protected void encode(ChannelHandlerContext ctx, Packet packet, ByteBuf output) throws Exception {
+	protected void encode(ChannelHandlerContext ctx, Packet<PacketListener> packet, ByteBuf output) throws Exception {
 		Channel channel = ctx.channel();
 		EnumProtocol currentProtocol = channel.attr(currentStateAttrKey).get();
 		final Integer packetId = currentProtocol.a(direction, packet);
@@ -35,7 +35,7 @@ public class PacketEncoder extends MessageToByteEncoder<Packet> implements Publi
 	}
 
 	@Override
-	public void publicEncode(ChannelHandlerContext ctx, Packet packet, ByteBuf output) throws Exception {
+	public void publicEncode(ChannelHandlerContext ctx, Packet<PacketListener> packet, ByteBuf output) throws Exception {
 		encode(ctx, packet, output);
 	}
 

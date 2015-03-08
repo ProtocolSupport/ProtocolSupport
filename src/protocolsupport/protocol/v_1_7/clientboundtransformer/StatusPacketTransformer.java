@@ -5,42 +5,36 @@ import io.netty.channel.ChannelHandlerContext;
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_8_R1.ChatModifier;
-import net.minecraft.server.v1_8_R1.ChatModifierSerializer;
-import net.minecraft.server.v1_8_R1.ChatSerializer;
-import net.minecraft.server.v1_8_R1.ChatTypeAdapterFactory;
-import net.minecraft.server.v1_8_R1.IChatBaseComponent;
-import net.minecraft.server.v1_8_R1.Packet;
-import net.minecraft.server.v1_8_R1.ServerPing;
-import net.minecraft.server.v1_8_R1.ServerPingPlayerSample;
-import net.minecraft.server.v1_8_R1.ServerPingPlayerSampleSerializer;
-import net.minecraft.server.v1_8_R1.ServerPingSerializer;
-import net.minecraft.server.v1_8_R1.ServerPingServerData;
-import net.minecraft.server.v1_8_R1.ServerPingServerDataSerializer;
+import net.minecraft.server.v1_8_R2.ChatModifier;
+import net.minecraft.server.v1_8_R2.ChatTypeAdapterFactory;
+import net.minecraft.server.v1_8_R2.IChatBaseComponent;
+import net.minecraft.server.v1_8_R2.Packet;
+import net.minecraft.server.v1_8_R2.PacketListener;
+import net.minecraft.server.v1_8_R2.ServerPing;
 
-import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
-import org.bukkit.craftbukkit.libs.com.google.gson.GsonBuilder;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.utils.ServerPingSerializers;
 
 public class StatusPacketTransformer implements PacketTransformer {
 
 	private static final Gson gson = new GsonBuilder()
-	.registerTypeAdapter(ServerPingServerData.class, new ServerPingServerDataSerializer())
-	.registerTypeAdapter(ServerPingPlayerSample.class, new ServerPingPlayerSampleSerializer())
-	.registerTypeAdapter(ServerPing.class, new ServerPingSerializer())
-	.registerTypeHierarchyAdapter(IChatBaseComponent.class, new ChatSerializer())
-	.registerTypeHierarchyAdapter(ChatModifier.class, new ChatModifierSerializer())
-	.registerTypeAdapterFactory(new ChatTypeAdapterFactory())
-	.create();
+	.registerTypeAdapter(ServerPing.ServerData.class, new ServerPingSerializers.ServerDataSerializer())
+	.registerTypeAdapter(ServerPing.ServerPingPlayerSample.class, new ServerPingSerializers.PlayerSampleSerializer())
+	.registerTypeAdapter(ServerPing.class, new ServerPing.Serializer())
+	.registerTypeHierarchyAdapter(IChatBaseComponent.class,new IChatBaseComponent.ChatSerializer())
+	.registerTypeHierarchyAdapter(ChatModifier.class, new ChatModifier.ChatModifierSerializer())
+	.registerTypeAdapterFactory(new ChatTypeAdapterFactory()).create();
 
 	@Override
-	public void tranform(ChannelHandlerContext ctx, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException {
+	public void tranform(ChannelHandlerContext ctx, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
 		if (packetId == 0x00) {
 			PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
 			packet.b(packetdata);
 			ServerPing serverPing = gson.fromJson(packetdata.readString(32767), ServerPing.class);
-			serverPing.setServerInfo(new ServerPingServerData(serverPing.c().a(), serializer.getVersion().getId()));
+			serverPing.setServerInfo(new ServerPing.ServerData(serverPing.c().a(), serializer.getVersion().getId()));
 			serializer.writeVarInt(packetId);
 			serializer.writeString(gson.toJson(serverPing));
 			return;

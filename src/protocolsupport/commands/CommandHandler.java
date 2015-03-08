@@ -5,11 +5,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import protocolsupport.protocol.ProtocolVersion;
-import protocolsupport.utils.Utils;
+import protocolsupport.api.ProtocolSupportAPI;
+import protocolsupport.api.ProtocolVersion;
 
 public class CommandHandler implements CommandExecutor {
 
@@ -38,7 +38,7 @@ public class CommandHandler implements CommandExecutor {
 	private String getPlayersStringForProtocol(ProtocolVersion version) {
 		StringBuilder sb = new StringBuilder();
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (Utils.getVersion(((CraftPlayer)player).getHandle()) == version) {
+			if (ProtocolSupportAPI.getProtocolVersion(player) == version) {
 				sb.append(player.getName());
 				sb.append(", ");
 			}

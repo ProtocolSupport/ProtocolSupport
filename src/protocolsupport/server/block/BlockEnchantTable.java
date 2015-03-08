@@ -1,10 +1,10 @@
 package protocolsupport.server.block;
 
-import net.minecraft.server.v1_8_R1.TileEntity;
-import net.minecraft.server.v1_8_R1.World;
+import net.minecraft.server.v1_8_R2.TileEntity;
+import net.minecraft.server.v1_8_R2.World;
 import protocolsupport.server.tileentity.TileEntityEnchantTable;
 
-public class BlockEnchantTable extends net.minecraft.server.v1_8_R1.BlockEnchantmentTable {
+public class BlockEnchantTable extends net.minecraft.server.v1_8_R2.BlockEnchantmentTable {
 
 	public BlockEnchantTable() {
 		super();

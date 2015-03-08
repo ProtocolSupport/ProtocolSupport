@@ -5,20 +5,22 @@ import io.netty.channel.Channel;
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_8_R1.EnumProtocol;
-import net.minecraft.server.v1_8_R1.EnumProtocolDirection;
-import net.minecraft.server.v1_8_R1.Packet;
+import net.minecraft.server.v1_8_R2.EnumProtocol;
+import net.minecraft.server.v1_8_R2.PacketListener;
+import net.minecraft.server.v1_8_R2.EnumProtocolDirection;
+import net.minecraft.server.v1_8_R2.Packet;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.ProtocolVersion;
 
 public class HandshakePacketTransformer implements PacketTransformer {
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Packet[] tranform(Channel channel, int packetId, PacketDataSerializer serializer) throws IOException {
+	public Packet<PacketListener>[] tranform(Channel channel, int packetId, PacketDataSerializer serializer) throws IOException, IllegalAccessException, InstantiationException {
 		switch (packetId) {
 			case 0xFE: { //Ping
-				Packet[] packets = new Packet[2];
-				Packet handshakepacket = EnumProtocol.HANDSHAKING.a(EnumProtocolDirection.SERVERBOUND, 0x00);
+				Packet<PacketListener>[] packets = new Packet[2];
+				Packet<PacketListener> handshakepacket = EnumProtocol.HANDSHAKING.a(EnumProtocolDirection.SERVERBOUND, 0x00);
 				PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), ProtocolVersion.MINECRAFT_1_8);
 				serializer.readUnsignedByte();
 				serializer.readUnsignedByte();
@@ -35,8 +37,8 @@ public class HandshakePacketTransformer implements PacketTransformer {
 				return packets;
 			}
 			case 0x02: { //Handsahke
-				Packet[] packets = new Packet[2];
-				Packet handshakepacket = EnumProtocol.HANDSHAKING.a(EnumProtocolDirection.SERVERBOUND, 0x00);
+				Packet<PacketListener>[] packets = new Packet[2];
+				Packet<PacketListener> handshakepacket = EnumProtocol.HANDSHAKING.a(EnumProtocolDirection.SERVERBOUND, 0x00);
 				PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), ProtocolVersion.MINECRAFT_1_8);
 				serializer.readUnsignedByte();
 				packetdata.writeVarInt(ProtocolVersion.MINECRAFT_1_8.getId());
@@ -47,7 +49,7 @@ public class HandshakePacketTransformer implements PacketTransformer {
 				handshakepacket.a(packetdata);
 				packets[0] = handshakepacket;
 				packetdata.clear();
-				Packet loginstartpacket = EnumProtocol.LOGIN.a(EnumProtocolDirection.SERVERBOUND, 0x00);
+				Packet<PacketListener> loginstartpacket = EnumProtocol.LOGIN.a(EnumProtocolDirection.SERVERBOUND, 0x00);
 				packetdata.writeString(username);
 				loginstartpacket.a(packetdata);
 				packets[1] = loginstartpacket;

@@ -1,6 +1,6 @@
 package protocolsupport.protocol.initial;
 
-import protocolsupport.protocol.ProtocolVersion;
+import protocolsupport.api.ProtocolVersion;
 import io.netty.channel.Channel;
 
 public class Minecraft152PingResponseTask implements Runnable {

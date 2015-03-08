@@ -3,14 +3,14 @@ package protocolsupport.protocol.v_1_8;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelPipeline;
-import net.minecraft.server.v1_8_R1.HandshakeListener;
-import net.minecraft.server.v1_8_R1.MinecraftServer;
-import net.minecraft.server.v1_8_R1.NetworkManager;
-import net.minecraft.server.v1_8_R1.PacketPrepender;
-import net.minecraft.server.v1_8_R1.PacketSplitter;
+import net.minecraft.server.v1_8_R2.HandshakeListener;
+import net.minecraft.server.v1_8_R2.MinecraftServer;
+import net.minecraft.server.v1_8_R2.NetworkManager;
+import net.minecraft.server.v1_8_R2.PacketPrepender;
+import net.minecraft.server.v1_8_R2.PacketSplitter;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ChannelHandlers;
 import protocolsupport.protocol.IPipeLineBuilder;
-import protocolsupport.protocol.ProtocolVersion;
 
 public class PipeLineBuilder implements IPipeLineBuilder {
 

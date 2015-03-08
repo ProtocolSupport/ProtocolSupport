@@ -6,26 +6,28 @@ import io.netty.channel.Channel;
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_8_R1.BlockPosition;
-import net.minecraft.server.v1_8_R1.ChatComponentText;
-import net.minecraft.server.v1_8_R1.ChatSerializer;
-import net.minecraft.server.v1_8_R1.EnumProtocol;
-import net.minecraft.server.v1_8_R1.EnumProtocolDirection;
-import net.minecraft.server.v1_8_R1.Packet;
+import net.minecraft.server.v1_8_R2.BlockPosition;
+import net.minecraft.server.v1_8_R2.ChatComponentText;
+import net.minecraft.server.v1_8_R2.EnumProtocol;
+import net.minecraft.server.v1_8_R2.EnumProtocolDirection;
+import net.minecraft.server.v1_8_R2.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_8_R2.Packet;
+import net.minecraft.server.v1_8_R2.PacketListener;
 
 import org.bukkit.event.inventory.InventoryType;
 
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.ProtocolVersion;
 import protocolsupport.utils.Utils;
 
 public class PlayPacketTransformer implements PacketTransformer {
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public Packet[] tranform(Channel channel, int packetId, PacketDataSerializer serializer) throws IOException {
+	public Packet<PacketListener>[] tranform(Channel channel, int packetId, PacketDataSerializer serializer) throws IOException, IllegalAccessException, InstantiationException {
 		PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
 		boolean useOriginalStream = false;
-		Packet packet = null;
+		Packet<PacketListener> packet = null;
 		switch (packetId) {
 			case 0x00: { //PacketPlayInKeepAlive
 				packet = getPacketById(0x00);
@@ -92,14 +94,14 @@ public class PlayPacketTransformer implements PacketTransformer {
 				//when y is -999.0D than it means that client actually tries to control vehicle movement
 				if (yfeet == -999.0D && y == -999.0D) {
 					Packet[] packets = new Packet[2];
-					Packet playerlook = getPacketById(0x05);
+					Packet<PacketListener> playerlook = getPacketById(0x05);
 					packetdata.writeFloat(yaw);
 					packetdata.writeFloat(pitch);
 					packetdata.writeBoolean(onGroud);
 					playerlook.a(packetdata);
 					packets[0] = playerlook;
 					packetdata.clear();
-					Packet steervehicle = getPacketById(0x0C);
+					Packet<PacketListener> steervehicle = getPacketById(0x0C);
 					//TODO: convert motX and motZ to strafes
 					packetdata.writeFloat(0.0F);
 					packetdata.writeFloat(0.0F);
@@ -271,7 +273,8 @@ public class PlayPacketTransformer implements PacketTransformer {
 		return null;
 	}
 
-	private Packet getPacketById(int realPacketId) {
+	@SuppressWarnings("unchecked")
+	private Packet<PacketListener> getPacketById(int realPacketId) throws IllegalAccessException, InstantiationException {
 		return EnumProtocol.PLAY.a(EnumProtocolDirection.SERVERBOUND, realPacketId);
 	}
 

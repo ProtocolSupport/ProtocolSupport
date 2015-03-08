@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
+import io.netty.handler.codec.EncoderException;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -16,26 +17,27 @@ import java.nio.charset.StandardCharsets;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import net.minecraft.server.v1_8_R1.ChatSerializer;
-import net.minecraft.server.v1_8_R1.GameProfileSerializer;
-import net.minecraft.server.v1_8_R1.Item;
-import net.minecraft.server.v1_8_R1.ItemStack;
-import net.minecraft.server.v1_8_R1.NBTCompressedStreamTools;
-import net.minecraft.server.v1_8_R1.NBTReadLimiter;
-import net.minecraft.server.v1_8_R1.NBTTagCompound;
-import net.minecraft.server.v1_8_R1.NBTTagList;
-import net.minecraft.server.v1_8_R1.NBTTagString;
+import net.minecraft.server.v1_8_R2.GameProfileSerializer;
+import net.minecraft.server.v1_8_R2.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_8_R2.Item;
+import net.minecraft.server.v1_8_R2.ItemStack;
+import net.minecraft.server.v1_8_R2.NBTCompressedStreamTools;
+import net.minecraft.server.v1_8_R2.NBTReadLimiter;
+import net.minecraft.server.v1_8_R2.NBTTagCompound;
+import net.minecraft.server.v1_8_R2.NBTTagList;
+import net.minecraft.server.v1_8_R2.NBTTagString;
 
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_8_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_8_R2.inventory.CraftItemStack;
 import org.spigotmc.LimitStream;
 import org.spigotmc.SneakyThrow;
 
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.utils.Utils;
 
 import com.mojang.authlib.GameProfile;
 
-public class PacketDataSerializer extends net.minecraft.server.v1_8_R1.PacketDataSerializer {
+public class PacketDataSerializer extends net.minecraft.server.v1_8_R2.PacketDataSerializer {
 
 	private ProtocolVersion version;
 
@@ -122,14 +124,18 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R1.PacketDat
 			writeByte(0);
 		} else {
 			final ByteBufOutputStream out = new ByteBufOutputStream(Unpooled.buffer());
-			NBTCompressedStreamTools.a(nbttagcompound, (DataOutput) new DataOutputStream(out));
+			try {
+				NBTCompressedStreamTools.a(nbttagcompound, (DataOutput) new DataOutputStream(out));
+			} catch (Exception ioexception) {
+				throw new EncoderException(ioexception);
+			}
 			this.writeBytes(out.buffer());
 			out.buffer().release();
 		}
 	}
 
 	@Override
-	public NBTTagCompound h() {
+	public NBTTagCompound h() throws IOException {
 		if (getVersion() != ProtocolVersion.MINECRAFT_1_8) {
 			final short short1 = readShort();
 			if (short1 < 0) {
@@ -163,7 +169,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R1.PacketDat
 	}
 
 	@Override
-	public net.minecraft.server.v1_8_R1.PacketDataSerializer a(String string) {
+	public PacketDataSerializer a(String string) {
 		if (
 			(getVersion() == ProtocolVersion.MINECRAFT_1_6_4) ||
 			(getVersion() == ProtocolVersion.MINECRAFT_1_6_2) ||
@@ -193,7 +199,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R1.PacketDat
 		a(string);
 	}
 
-	public ItemStack readItemStack() {
+	public ItemStack readItemStack() throws IOException {
 		return i();
 	}
 

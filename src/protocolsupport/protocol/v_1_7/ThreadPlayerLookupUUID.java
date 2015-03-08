@@ -6,11 +6,11 @@ import java.net.InetSocketAddress;
 import java.util.UUID;
 import java.util.logging.Level;
 
-import net.minecraft.server.v1_8_R1.MinecraftEncryption;
-import net.minecraft.server.v1_8_R1.MinecraftServer;
+import net.minecraft.server.v1_8_R2.MinecraftEncryption;
+import net.minecraft.server.v1_8_R2.MinecraftServer;
 
-import org.bukkit.craftbukkit.v1_8_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_8_R1.util.Waitable;
+import org.bukkit.craftbukkit.v1_8_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_8_R2.util.Waitable;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerPreLoginEvent;
 
@@ -39,7 +39,7 @@ public class ThreadPlayerLookupUUID extends Thread {
 				return;
 			}
 			final String hash = new BigInteger(MinecraftEncryption.a(listener.serverId, MinecraftServer.getServer().P().getPublic(), listener.loginKey)).toString(16);
-			listener.profile = MinecraftServer.getServer().aB().hasJoinedServer(new GameProfile(null, gameprofile.getName()), hash);
+			listener.profile = MinecraftServer.getServer().aC().hasJoinedServer(new GameProfile(null, gameprofile.getName()), hash);
 			if (listener.profile != null) {
 				fireLoginEvents();
 			} else if (MinecraftServer.getServer().S()) {

@@ -11,12 +11,14 @@ import java.util.List;
 
 import javax.crypto.Cipher;
 
-import net.minecraft.server.v1_8_R1.EnumProtocol;
-import net.minecraft.server.v1_8_R1.NetworkManager;
-import net.minecraft.server.v1_8_R1.Packet;
+import net.minecraft.server.v1_8_R2.EnumProtocol;
+import net.minecraft.server.v1_8_R2.NetworkManager;
+import net.minecraft.server.v1_8_R2.Packet;
+import net.minecraft.server.v1_8_R2.PacketListener;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.ProtocolVersion;
 import protocolsupport.protocol.PublicPacketDecoder;
+import protocolsupport.protocol.storage.ProtocolStorage;
 
 public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketDecoder {
 
@@ -25,7 +27,6 @@ public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketD
 		this.version = version;
 	}
 
-	@SuppressWarnings("unchecked")
 	private static final AttributeKey<EnumProtocol> currentStateAttrKey = NetworkManager.c;
 
 	private static final PacketTransformer[] transformers = new PacketTransformer[] {
@@ -54,13 +55,13 @@ public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketD
 			}
 			EnumProtocol currentProtocol = channel.attr(currentStateAttrKey).get();
 			int packetId = bytebuf.readUnsignedByte();
-			Packet[] transformedPackets = transformers[currentProtocol.ordinal()].tranform(
+			Packet<PacketListener>[] transformedPackets = transformers[currentProtocol.ordinal()].tranform(
 				channel,
 				packetId,
 				new PacketDataSerializer(bytebuf, version)
 			);
 			if (transformedPackets != null) {
-				for (Packet transformedPacket : transformedPackets) {
+				for (Packet<PacketListener> transformedPacket : transformedPackets) {
 					packets.add(transformedPacket);
 				}
 				return;
@@ -75,6 +76,12 @@ public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketD
 	@Override
 	public void publicDecode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
 		decode(ctx, input, list);
+	}
+
+	@Override
+	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+		super.channelInactive(ctx);
+		ProtocolStorage.clearData(ctx.channel().remoteAddress());
 	}
 
 }

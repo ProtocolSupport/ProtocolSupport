@@ -6,22 +6,23 @@ import io.netty.channel.Channel;
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_8_R1.BlockPosition;
-import net.minecraft.server.v1_8_R1.ChatComponentText;
-import net.minecraft.server.v1_8_R1.ChatSerializer;
-import net.minecraft.server.v1_8_R1.EnumEntityUseAction;
-import net.minecraft.server.v1_8_R1.Packet;
+import net.minecraft.server.v1_8_R2.BlockPosition;
+import net.minecraft.server.v1_8_R2.ChatComponentText;
+import net.minecraft.server.v1_8_R2.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_8_R2.Packet;
+import net.minecraft.server.v1_8_R2.PacketListener;
+import net.minecraft.server.v1_8_R2.PacketPlayInUseEntity;
 
 import org.bukkit.event.inventory.InventoryType;
 
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.ProtocolVersion;
 import protocolsupport.utils.Utils;
 
 public class PlayPacketTransformer implements PacketTransformer {
 
 	@Override
-	public boolean tranform(Channel channel, int packetId, Packet packet, PacketDataSerializer serializer) throws IOException {
+	public boolean tranform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
 		PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
 		switch (packetId) {
 			case 0x00: { //PacketPlayInKeepAlive
@@ -30,7 +31,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x02: { //PacketPlayInUseEntity
 				packetdata.writeVarInt(serializer.readInt());
-				packetdata.writeVarInt(serializer.readByte() % EnumEntityUseAction.values().length);
+				packetdata.writeVarInt(serializer.readByte() % PacketPlayInUseEntity.EnumEntityUseAction.values().length);
 				break;
 			}
 			case 0x04: { //PacketPlayInPosition

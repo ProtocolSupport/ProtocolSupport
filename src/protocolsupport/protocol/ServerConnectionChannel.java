@@ -8,8 +8,8 @@ import io.netty.handler.timeout.ReadTimeoutHandler;
 
 import java.util.List;
 
-import net.minecraft.server.v1_8_R1.EnumProtocolDirection;
-import net.minecraft.server.v1_8_R1.NetworkManager;
+import net.minecraft.server.v1_8_R2.EnumProtocolDirection;
+import net.minecraft.server.v1_8_R2.NetworkManager;
 import protocolsupport.protocol.fake.FakeDecoder;
 import protocolsupport.protocol.fake.FakeEncoder;
 import protocolsupport.protocol.fake.FakePacketListener;

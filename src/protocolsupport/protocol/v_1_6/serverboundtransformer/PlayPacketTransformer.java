@@ -6,26 +6,28 @@ import io.netty.channel.Channel;
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_8_R1.BlockPosition;
-import net.minecraft.server.v1_8_R1.ChatComponentText;
-import net.minecraft.server.v1_8_R1.ChatSerializer;
-import net.minecraft.server.v1_8_R1.EnumProtocol;
-import net.minecraft.server.v1_8_R1.EnumProtocolDirection;
-import net.minecraft.server.v1_8_R1.Packet;
+import net.minecraft.server.v1_8_R2.BlockPosition;
+import net.minecraft.server.v1_8_R2.ChatComponentText;
+import net.minecraft.server.v1_8_R2.EnumProtocol;
+import net.minecraft.server.v1_8_R2.EnumProtocolDirection;
+import net.minecraft.server.v1_8_R2.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_8_R2.Packet;
+import net.minecraft.server.v1_8_R2.PacketListener;
 
 import org.bukkit.event.inventory.InventoryType;
 
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.ProtocolVersion;
 import protocolsupport.utils.Utils;
 
 public class PlayPacketTransformer implements PacketTransformer {
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Packet[] tranform(Channel channel, int packetId, PacketDataSerializer serializer) throws IOException {
+	public Packet<PacketListener>[] tranform(Channel channel, int packetId, PacketDataSerializer serializer) throws IOException, IllegalAccessException, InstantiationException {
 		PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
 		boolean useOriginalStream = false;
-		Packet packet = null;
+		Packet<PacketListener> packet = null;
 		switch (packetId) {
 			case 0x00: { //PacketPlayInKeepAlive
 				packet = getPacketById(0x00);
@@ -232,7 +234,8 @@ public class PlayPacketTransformer implements PacketTransformer {
 		return null;
 	}
 
-	private Packet getPacketById(int realPacketId) {
+	@SuppressWarnings("unchecked")
+	private Packet<PacketListener> getPacketById(int realPacketId) throws IllegalAccessException, InstantiationException {
 		return EnumProtocol.PLAY.a(EnumProtocolDirection.SERVERBOUND, realPacketId);
 	}
 

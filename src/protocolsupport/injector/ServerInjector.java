@@ -6,13 +6,13 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 
-import net.minecraft.server.v1_8_R1.Block;
-import net.minecraft.server.v1_8_R1.Blocks;
-import net.minecraft.server.v1_8_R1.IBlockData;
-import net.minecraft.server.v1_8_R1.Item;
-import net.minecraft.server.v1_8_R1.ItemBlock;
-import net.minecraft.server.v1_8_R1.MinecraftKey;
-import net.minecraft.server.v1_8_R1.TileEntity;
+import net.minecraft.server.v1_8_R2.Block;
+import net.minecraft.server.v1_8_R2.Blocks;
+import net.minecraft.server.v1_8_R2.IBlockData;
+import net.minecraft.server.v1_8_R2.Item;
+import net.minecraft.server.v1_8_R2.ItemBlock;
+import net.minecraft.server.v1_8_R2.MinecraftKey;
+import net.minecraft.server.v1_8_R2.TileEntity;
 import protocolsupport.server.block.BlockAnvil;
 import protocolsupport.server.block.BlockEnchantTable;
 import protocolsupport.server.tileentity.TileEntityEnchantTable;
@@ -39,7 +39,7 @@ public class ServerInjector {
 		MinecraftKey stringkey = new MinecraftKey(name);
 		ItemBlock itemblock = new ItemBlock(block);
 		Block.REGISTRY.a(id, stringkey, block);
-		Iterator<IBlockData> blockdataiterator = block.O().a().iterator();
+		Iterator<IBlockData> blockdataiterator = block.P().a().iterator();
 		while (blockdataiterator.hasNext()) {
 			IBlockData blockdata = blockdataiterator.next();
 			final int stateId = (id << 4) | block.toLegacyData(blockdata);
