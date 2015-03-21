@@ -58,14 +58,25 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R2.PacketDat
 			writeShort(-1);
 		} else {
 			int itemId = Item.getId(itemstack.getItem());
-			if ((getVersion() == ProtocolVersion.MINECRAFT_1_6_4) || (getVersion() == ProtocolVersion.MINECRAFT_1_6_2)) {
-				writeShort(protocolsupport.protocol.v_1_6.remappers.ItemIDRemapper.replaceItemId(itemId));
-			} else if ((getVersion() == ProtocolVersion.MINECRAFT_1_7_10) || (getVersion() == ProtocolVersion.MINECRAFT_1_7_5)) {
-				writeShort(protocolsupport.protocol.v_1_7.remappers.ItemIDRemapper.replaceItemId(itemId));
-			} else if (getVersion() == ProtocolVersion.MINECRAFT_1_5_2) {
-				writeShort(protocolsupport.protocol.v_1_5.remappers.ItemIDRemapper.replaceItemId(itemId));
-			} else {
-				writeShort(itemId);
+			switch (getVersion()) {
+				case MINECRAFT_1_6_4:
+				case MINECRAFT_1_6_2: {
+					writeShort(protocolsupport.protocol.v_1_6.remappers.ItemIDRemapper.replaceItemId(itemId));
+					break;
+				}
+				case MINECRAFT_1_7_10:
+				case MINECRAFT_1_7_5: {
+					writeShort(protocolsupport.protocol.v_1_7.remappers.ItemIDRemapper.replaceItemId(itemId));
+					break;
+				}
+				case MINECRAFT_1_5_2: {
+					writeShort(protocolsupport.protocol.v_1_5.remappers.ItemIDRemapper.replaceItemId(itemId));
+					break;
+				}
+				default: {
+					writeShort(itemId);
+					break;
+				}
 			}
 			writeByte(itemstack.count);
 			writeShort(itemstack.getData());
@@ -75,22 +86,26 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R2.PacketDat
 				CraftItemStack.setItemMeta(itemstack, CraftItemStack.getItemMeta(itemstack));
 				nbttagcompound = itemstack.getTag();
 			}
-			if (
-				(getVersion() == ProtocolVersion.MINECRAFT_1_7_5) ||
-				(getVersion() == ProtocolVersion.MINECRAFT_1_6_4) ||
-				(getVersion() == ProtocolVersion.MINECRAFT_1_6_2) ||
-				(getVersion() == ProtocolVersion.MINECRAFT_1_5_2)
-			) {
-				if ((nbttagcompound != null) && itemId == Material.SKULL_ITEM.getId()) {
-					if (nbttagcompound.hasKeyOfType("SkullOwner", 10)) {
-						nbttagcompound = (NBTTagCompound) nbttagcompound.clone();
-						GameProfile gameprofile = GameProfileSerializer.deserialize(nbttagcompound.getCompound("SkullOwner"));
-						if (gameprofile.getName() != null) {
-							nbttagcompound.set("SkullOwner", new NBTTagString(gameprofile.getName()));
-						} else {
-							nbttagcompound.remove("SkullOwner");
+			switch (getVersion()) {
+				case MINECRAFT_1_7_5:
+				case MINECRAFT_1_6_4:
+				case MINECRAFT_1_6_2:
+				case MINECRAFT_1_5_2: {
+					if ((nbttagcompound != null) && itemId == Material.SKULL_ITEM.getId()) {
+						if (nbttagcompound.hasKeyOfType("SkullOwner", 10)) {
+							nbttagcompound = (NBTTagCompound) nbttagcompound.clone();
+							GameProfile gameprofile = GameProfileSerializer.deserialize(nbttagcompound.getCompound("SkullOwner"));
+							if (gameprofile.getName() != null) {
+								nbttagcompound.set("SkullOwner", new NBTTagString(gameprofile.getName()));
+							} else {
+								nbttagcompound.remove("SkullOwner");
+							}
 						}
 					}
+					break;
+				}
+				default: {
+					break;
 				}
 			}
 			if (getVersion() != ProtocolVersion.MINECRAFT_1_8) {
@@ -156,29 +171,33 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R2.PacketDat
 
 	@Override
 	public String c(int limit) {
-		if (
-			(getVersion() == ProtocolVersion.MINECRAFT_1_6_4) ||
-			(getVersion() == ProtocolVersion.MINECRAFT_1_6_2) ||
-			(getVersion() == ProtocolVersion.MINECRAFT_1_5_2)
-		) {
-			int length = readUnsignedShort();
-			return new String(readBytes(length * 2).array(), StandardCharsets.UTF_16BE);
-		} else {
-			return super.c(limit);
+		switch (getVersion()) {
+			case MINECRAFT_1_6_4:
+			case MINECRAFT_1_6_2:
+			case MINECRAFT_1_5_2: {
+				int length = readUnsignedShort();
+				return new String(readBytes(length * 2).array(), StandardCharsets.UTF_16BE);
+			}
+			default: {
+				return super.c(limit);
+			}
 		}
 	}
 
 	@Override
 	public PacketDataSerializer a(String string) {
-		if (
-			(getVersion() == ProtocolVersion.MINECRAFT_1_6_4) ||
-			(getVersion() == ProtocolVersion.MINECRAFT_1_6_2) ||
-			(getVersion() == ProtocolVersion.MINECRAFT_1_5_2)
-		) {
-			writeShort(string.length());
-			writeBytes(string.getBytes(StandardCharsets.UTF_16BE));
-		} else {
-			super.a(string);
+		switch (getVersion()) {
+			case MINECRAFT_1_6_4:
+			case MINECRAFT_1_6_2:
+			case MINECRAFT_1_5_2: {
+				writeShort(string.length());
+				writeBytes(string.getBytes(StandardCharsets.UTF_16BE));
+				break;
+			}
+			default: {
+				super.a(string);
+				break;
+			}
 		}
 		return this;
 	}
