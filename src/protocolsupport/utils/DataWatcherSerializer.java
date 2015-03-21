@@ -12,6 +12,7 @@ import net.minecraft.server.v1_8_R2.ItemStack;
 import net.minecraft.server.v1_8_R2.Vector3f;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.utils.DataWatcherSerializer.DataWatcherObject.ValueType;
 
 public class DataWatcherSerializer {
 
@@ -23,41 +24,41 @@ public class DataWatcherSerializer {
 			if (b0 == 127) {
 				break;
 			}
-			final int type = (b0 & 0xE0) >> 5;
+			final ValueType type = ValueType.fromId((b0 & 0xE0) >> 5);
 			final int key = b0 & 0x1F;
 			switch (type) {
-				case 0: {
+				case BYTE: {
 					map.put(key, new DataWatcherObject(type, serializer.readByte()));
 					break;
 				}
-				case 1: {
+				case SHORT: {
 					map.put(key, new DataWatcherObject(type, serializer.readShort()));
 					break;
 				}
-				case 2: {
+				case INT: {
 					map.put(key, new DataWatcherObject(type, serializer.readInt()));
 					break;
 				}
-				case 3: {
+				case FLOAT: {
 					map.put(key, new DataWatcherObject(type, serializer.readFloat()));
 					break;
 				}
-				case 4: {
+				case STRING: {
 					map.put(key, new DataWatcherObject(type, serializer.readString(32767)));
 					break;
 				}
-				case 5: {
+				case ITEMSTACK: {
 					map.put(key, new DataWatcherObject(type, serializer.readItemStack()));
 					break;
 				}
-				case 6: {
+				case VECTOR3I: {
 					final int x = serializer.readInt();
 					final int y = serializer.readInt();
 					final int z = serializer.readInt();
 					map.put(key, new DataWatcherObject(type, new BlockPosition(x, y, z)));
 					break;
 				}
-				case 7: {
+				case VECTOR3F: {
 					final float x = serializer.readFloat();
 					final float y = serializer.readFloat();
 					final float z = serializer.readFloat();
@@ -75,41 +76,41 @@ public class DataWatcherSerializer {
 		while (iterator.hasNext()) {
 			iterator.advance();
 			DataWatcherObject object = iterator.value();
-			final int tk = ((object.type << 5) | (iterator.key() & 0x1F)) & 0xFF;
+			final int tk = ((object.type.getId() << 5) | (iterator.key() & 0x1F)) & 0xFF;
 			serializer.writeByte(tk);
 			switch (object.type) {
-				case 0: {
+				case BYTE: {
 					serializer.writeByte((byte) object.value);
 					break;
 				}
-				case 1: {
+				case SHORT: {
 					serializer.writeShort((short) object.value);
 					break;
 				}
-				case 2: {
+				case INT: {
 					serializer.writeInt((int) object.value);
 					break;
 				}
-				case 3: {
+				case FLOAT: {
 					serializer.writeFloat((float) object.value);
 					break;
 				}
-				case 4: {
+				case STRING: {
 					serializer.writeString((String) object.value);
 					break;
 				}
-				case 5: {
+				case ITEMSTACK: {
 					serializer.writeItemStack((ItemStack) object.value);
 					break;
 				}
-				case 6: {
+				case VECTOR3I: {
 					BlockPosition blockPos = (BlockPosition) object.value;
 					serializer.writeInt(blockPos.getX());
 					serializer.writeInt(blockPos.getY());
 					serializer.writeInt(blockPos.getZ());
 					break;
 				}
-				case 7: {
+				case VECTOR3F: {
 					Vector3f vector = (Vector3f) object.value;
 					serializer.writeFloat(vector.getX());
 					serializer.writeFloat(vector.getY());
@@ -124,12 +125,32 @@ public class DataWatcherSerializer {
 
 	public static class DataWatcherObject {
 
-		public int type;
+		public ValueType type;
 		public Object value;
 
-		public DataWatcherObject(int type, Object value) {
+		public DataWatcherObject(ValueType type, Object value) {
 			this.type = type;
 			this.value = value;
+		}
+
+		public void toByte() {
+			type = ValueType.BYTE;
+			value = ((Number) value).byteValue();
+		}
+
+		public void toShort() {
+			type = ValueType.SHORT;
+			value = ((Number) value).shortValue();
+		}
+
+		public void toInt() {
+			type = ValueType.INT;
+			value = ((Number) value).intValue();
+		}
+
+		public void toFloat() {
+			type = ValueType.FLOAT;
+			value = ((Number) value).floatValue();
 		}
 
 		@Override
@@ -139,6 +160,18 @@ public class DataWatcherSerializer {
 				.append("type: ").append(type).append(" ")
 				.append("value: ").append(value)
 				.toString();
+		}
+
+		public static enum ValueType {
+			BYTE, SHORT, INT, FLOAT, STRING, ITEMSTACK, VECTOR3I, VECTOR3F;
+
+			public int getId() {
+				return ordinal();
+			}
+
+			public static ValueType fromId(int id) {
+				return values()[id];
+			}
 		}
 
 	}
