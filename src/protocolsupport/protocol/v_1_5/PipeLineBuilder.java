@@ -16,7 +16,7 @@ public class PipeLineBuilder implements IPipeLineBuilder {
 	public DecoderEncoderTuple buildPipeLine(Channel channel, ProtocolVersion version) {
 		ChannelPipeline pipeline = channel.pipeline();
 		NetworkManager networkmanager = (NetworkManager) pipeline.get(ChannelHandlers.NETWORK_MANAGER);
-		PacketDecoder decoder = new PacketDecoder(version);
+		PacketDecoder decoder = new PacketDecoder();
 		networkmanager.a(new HandshakeListener(decoder, networkmanager));
 		pipeline.remove(ChannelHandlers.SPLITTER);
 		pipeline.remove(ChannelHandlers.PREPENDER);

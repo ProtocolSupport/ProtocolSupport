@@ -22,11 +22,6 @@ import protocolsupport.protocol.storage.ProtocolStorage;
 
 public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketDecoder {
 
-	private ProtocolVersion version;
-	public PacketDecoder(ProtocolVersion version) {
-		this.version = version;
-	}
-
 	private static final AttributeKey<EnumProtocol> currentStateAttrKey = NetworkManager.c;
 
 	private static final PacketTransformer[] transformers = new PacketTransformer[] {
@@ -58,7 +53,7 @@ public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketD
 			Packet<PacketListener>[] transformedPackets = transformers[currentProtocol.ordinal()].tranform(
 				channel,
 				packetId,
-				new PacketDataSerializer(bytebuf, version)
+				new PacketDataSerializer(bytebuf, ProtocolVersion.MINECRAFT_1_5_2)
 			);
 			if (transformedPackets != null) {
 				for (Packet<PacketListener> transformedPacket : transformedPackets) {
