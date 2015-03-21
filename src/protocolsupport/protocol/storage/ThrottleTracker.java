@@ -17,7 +17,7 @@ public class ThrottleTracker {
 	}
 
 	public static void track(InetAddress address, long time) {
-		/*synchronized (tracker) {
+		synchronized (tracker) {
 			tracker.put(address, time);
 			if (tracker.size() > 100) {
 				TObjectLongIterator<InetAddress> iterator = tracker.iterator();
@@ -28,14 +28,13 @@ public class ThrottleTracker {
 					}
 				}
 			}
-		}*/
+		}
 	}
 
 	public static boolean isThrottled(InetAddress address) {
-		return false;
-		/*synchronized (tracker) {
+		synchronized (tracker) {
 			return tracker.containsKey(address) && System.currentTimeMillis() - tracker.get(address) < time;
-		}*/
+		}
 	}
 
 }

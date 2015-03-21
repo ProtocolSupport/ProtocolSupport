@@ -28,4 +28,20 @@ public abstract class WatchedEntity {
 
 	public abstract boolean isFallingBlockOrTnt();
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder(100);
+		builder
+		.append("Id: ").append(getId()).append(", ")
+		.append("living: ").append(isLiving()).append(", ")
+		.append("ageable: ").append(isAgeable()).append(", ")
+		.append("enderman: ").append(isEnderman()).append(", ")
+		.append("wolf: ").append(isWolf()).append(", ")
+		.append("minecart: ").append(isMinecart()).append(", ")
+		.append("boat: ").append(isBoat()).append(", ")
+		.append("itemframe: ").append(isItemFrame()).append(", ")
+		.append("falling: ").append(isFallingBlockOrTnt());
+		return builder.toString();
+	}
+
 }

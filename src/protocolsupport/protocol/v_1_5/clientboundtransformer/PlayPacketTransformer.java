@@ -89,7 +89,6 @@ public class PlayPacketTransformer implements PacketTransformer {
 				return;
 			}
 			case 0x06: { //PacketPlayOutUpdateHealth
-				storage.clearWatchedEntities();
 				serializer.writeByte(0x08);
 				serializer.writeShort((int) packetdata.readFloat());
 				serializer.writeShort(packetdata.readVarInt());
@@ -97,6 +96,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				return;
 			}
 			case 0x07: { //PacketPlayOutRespawn
+				storage.clearWatchedEntities();
 				serializer.writeByte(0x09);
 				serializer.writeInt(packetdata.readInt());
 				serializer.writeByte(packetdata.readByte());
