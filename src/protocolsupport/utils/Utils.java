@@ -5,6 +5,7 @@ import io.netty.channel.Channel;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -88,6 +89,10 @@ public class Utils {
 
 	public static Player getPlayer(Channel channel) {
 		return ((PlayerConnection) ((NetworkManager) channel.pipeline().get(ChannelHandlers.NETWORK_MANAGER)).getPacketListener()).player.getBukkitEntity();
+	}
+
+	public static SocketAddress getNetworkManagerSocketAddress(Channel channel) {
+		return ((NetworkManager) channel.pipeline().get(ChannelHandlers.NETWORK_MANAGER)).l;
 	}
 
 	public static List<int[]> splitArray(int[] array, int limit) {

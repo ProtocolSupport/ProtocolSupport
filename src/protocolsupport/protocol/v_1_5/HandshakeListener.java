@@ -16,6 +16,8 @@ import net.minecraft.server.v1_8_R2.PacketStatusListener;
 import org.apache.logging.log4j.LogManager;
 import org.spigotmc.SpigotConfig;
 
+import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.protocol.storage.ThrottleTracker;
 import protocolsupport.protocol.v_1_5.serverboundtransformer.PacketDecoder;
 
@@ -63,7 +65,9 @@ public class HandshakeListener implements PacketHandshakingInListener {
 						return;
 					}
 					packethandshakinginsetprotocol.b = split[0];
+					ProtocolVersion version = ProtocolStorage.getProtocolVersion(networkManager.l);
 					networkManager.l = new InetSocketAddress(split[1], ((InetSocketAddress) networkManager.getSocketAddress()).getPort());
+					ProtocolStorage.setProtocolVersion(networkManager.l, version);
 					networkManager.spoofedUUID = UUIDTypeAdapter.fromString(split[2]);
 					if (split.length == 4) {
 						networkManager.spoofedProfile = HandshakeListener.gson.fromJson(split[3], Property[].class);

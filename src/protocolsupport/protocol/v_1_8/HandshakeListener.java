@@ -1,4 +1,4 @@
-package protocolsupport.protocol.v_1_6;
+package protocolsupport.protocol.v_1_8;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -6,6 +6,7 @@ import java.net.InetSocketAddress;
 import net.minecraft.server.v1_8_R2.ChatComponentText;
 import net.minecraft.server.v1_8_R2.EnumProtocol;
 import net.minecraft.server.v1_8_R2.IChatBaseComponent;
+import net.minecraft.server.v1_8_R2.LoginListener;
 import net.minecraft.server.v1_8_R2.MinecraftServer;
 import net.minecraft.server.v1_8_R2.NetworkManager;
 import net.minecraft.server.v1_8_R2.PacketHandshakingInListener;
@@ -19,7 +20,6 @@ import org.spigotmc.SpigotConfig;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.protocol.storage.ThrottleTracker;
-import protocolsupport.protocol.v_1_6.serverboundtransformer.PacketDecoder;
 
 import com.google.gson.Gson;
 import com.mojang.authlib.properties.Property;
@@ -30,11 +30,9 @@ public class HandshakeListener implements PacketHandshakingInListener {
 	private static final Gson gson = new Gson();
 
 	private final NetworkManager networkManager;
-	private final PacketDecoder decoder;
 
-	public HandshakeListener(PacketDecoder decoder, final NetworkManager networkmanager) {
+	public HandshakeListener(final NetworkManager networkmanager) {
 		networkManager = networkmanager;
-		this.decoder = decoder;
 	}
 
 	@Override
@@ -55,7 +53,7 @@ public class HandshakeListener implements PacketHandshakingInListener {
 				} catch (Throwable t) {
 					LogManager.getLogger().debug("Failed to check connection throttle", t);
 				}
-				networkManager.a(new LoginListener(decoder, networkManager));
+				networkManager.a(new LoginListener(MinecraftServer.getServer(), networkManager));
 				if (SpigotConfig.bungee) {
 					final String[] split = packethandshakinginsetprotocol.b.split("\u0000");
 					if ((split.length != 3) && (split.length != 4)) {

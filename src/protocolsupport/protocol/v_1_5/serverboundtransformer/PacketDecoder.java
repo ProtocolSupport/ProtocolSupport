@@ -19,6 +19,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.PublicPacketDecoder;
 import protocolsupport.protocol.storage.ProtocolStorage;
+import protocolsupport.utils.Utils;
 
 public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketDecoder {
 
@@ -77,6 +78,7 @@ public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketD
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		super.channelInactive(ctx);
 		ProtocolStorage.clearData(ctx.channel().remoteAddress());
+		ProtocolStorage.clearData(Utils.getNetworkManagerSocketAddress(ctx.channel()));
 	}
 
 }

@@ -16,6 +16,7 @@ import net.minecraft.server.v1_8_R2.PacketDataSerializer;
 import net.minecraft.server.v1_8_R2.PacketListener;
 import protocolsupport.protocol.PublicPacketDecoder;
 import protocolsupport.protocol.storage.ProtocolStorage;
+import protocolsupport.utils.Utils;
 
 public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketDecoder {
 
@@ -50,6 +51,7 @@ public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketD
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		super.channelInactive(ctx);
 		ProtocolStorage.clearData(ctx.channel().remoteAddress());
+		ProtocolStorage.clearData(Utils.getNetworkManagerSocketAddress(ctx.channel()));
 	}
 
 }
