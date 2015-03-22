@@ -1,16 +1,20 @@
 package protocolsupport.commands;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
 
-public class CommandHandler implements CommandExecutor {
+public class CommandHandler implements CommandExecutor, TabCompleter {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -42,6 +46,14 @@ public class CommandHandler implements CommandExecutor {
 			sb.delete(sb.length() - 2, sb.length());
 		}
 		return sb.toString();
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+		if ("list".startsWith(args[0])) {
+			return Collections.singletonList("list");
+		}
+		return Collections.emptyList();
 	}
 
 }

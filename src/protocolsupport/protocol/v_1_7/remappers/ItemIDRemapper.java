@@ -1,5 +1,7 @@
 package protocolsupport.protocol.v_1_7.remappers;
 
+import net.minecraft.server.v1_8_R2.Item;
+
 public class ItemIDRemapper {
 
 	private static int[] replacements = new int[4096];
@@ -68,6 +70,16 @@ public class ItemIDRemapper {
 			return replacements[oldId];
 		}
 		return oldId;
+	}
+
+	public static void setRemap(int oldId, int newId) {
+		if (oldId < 1 || oldId > 4095 || newId < 1 || newId > 4095) {
+			throw new IllegalArgumentException("Id should be in range of 1-4095");
+		}
+		if (Item.getById(newId) == null) {
+			throw new IllegalArgumentException("Item with id "+newId+" doesn't exist");
+		}
+		replacements[oldId] = newId;
 	}
 
 }
