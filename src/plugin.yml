@@ -1,6 +1,6 @@
 name: ProtocolSupport
 main: protocolsupport.ProtocolSupport
-version: 4.14.dev
+version: 4.14
 author: _Shevchik_
 softdepend: [ProtocolLib]
 load: STARTUP
