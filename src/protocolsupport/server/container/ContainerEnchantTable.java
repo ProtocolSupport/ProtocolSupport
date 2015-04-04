@@ -126,48 +126,46 @@ public class ContainerEnchantTable extends net.minecraft.server.v1_8_R2.Containe
 				enchantments = new ArrayList<WeightedRandomEnchant>();
 			}
 			final boolean isBook = itemstack.getItem() == Items.BOOK;
-			if (enchantments != null) {
-				final Map<Enchantment, Integer> enchants = new HashMap<Enchantment, Integer>();
-				for (final WeightedRandomEnchant enchantment : enchantments) {
-					enchants.put(Enchantment.getById(enchantment.enchantment.id), enchantment.level);
-				}
-				final CraftItemStack item = CraftItemStack.asCraftMirror(itemstack);
-				final EnchantItemEvent event = new EnchantItemEvent((Player) entityhuman.getBukkitEntity(), getBukkitView(), world.getWorld().getBlockAt(position.getX(), position.getY(), position.getZ()), item, costs[slot], enchants, slot);
-				world.getServer().getPluginManager().callEvent(event);
-				final int level = event.getExpLevelCost();
-				if (event.isCancelled() || ((level > entityhuman.expLevel) && !entityhuman.abilities.canInstantlyBuild) || event.getEnchantsToAdd().isEmpty()) {
-					return false;
-				}
-				if (isBook) {
-					itemstack.setItem(Items.ENCHANTED_BOOK);
-				}
-				for (final Map.Entry<Enchantment, Integer> entry : event.getEnchantsToAdd().entrySet()) {
-					try {
-						if (isBook) {
-							final int enchantId = entry.getKey().getId();
-							if (net.minecraft.server.v1_8_R2.Enchantment.getById(enchantId) == null) {
-								continue;
-							}
-							final WeightedRandomEnchant enchantment = new WeightedRandomEnchant(net.minecraft.server.v1_8_R2.Enchantment.getById(enchantId), entry.getValue());
-							Items.ENCHANTED_BOOK.a(itemstack, enchantment);
-						} else {
-							item.addUnsafeEnchantment(entry.getKey(), entry.getValue());
-						}
-					} catch (IllegalArgumentException ex) {
-					}
-				}
-				entityhuman.b(supportsLapisSlot ? cost : costs[slot]); //take old levels count from clients that don't support lapis slot
-				if (!entityhuman.abilities.canInstantlyBuild && supportsLapisSlot) { //ignore lapis remove for clients that don't support this slot
-					final net.minecraft.server.v1_8_R2.ItemStack itemStack = lapis;
-					itemStack.count -= cost;
-					if (lapis.count <= 0) {
-						enchantSlots.setItem(1, null);
-					}
-				}
-				enchantSlots.update();
-				f = entityhuman.cj();
-				this.a(enchantSlots);
+			final Map<Enchantment, Integer> enchants = new HashMap<Enchantment, Integer>();
+			for (final WeightedRandomEnchant enchantment : enchantments) {
+				enchants.put(Enchantment.getById(enchantment.enchantment.id), enchantment.level);
 			}
+			final CraftItemStack item = CraftItemStack.asCraftMirror(itemstack);
+			final EnchantItemEvent event = new EnchantItemEvent((Player) entityhuman.getBukkitEntity(), getBukkitView(), world.getWorld().getBlockAt(position.getX(), position.getY(), position.getZ()), item, costs[slot], enchants, slot);
+			world.getServer().getPluginManager().callEvent(event);
+			final int level = event.getExpLevelCost();
+			if (event.isCancelled() || ((level > entityhuman.expLevel) && !entityhuman.abilities.canInstantlyBuild) || event.getEnchantsToAdd().isEmpty()) {
+				return false;
+			}
+			if (isBook) {
+				itemstack.setItem(Items.ENCHANTED_BOOK);
+			}
+			for (final Map.Entry<Enchantment, Integer> entry : event.getEnchantsToAdd().entrySet()) {
+				try {
+					if (isBook) {
+						final int enchantId = entry.getKey().getId();
+						if (net.minecraft.server.v1_8_R2.Enchantment.getById(enchantId) == null) {
+							continue;
+						}
+						final WeightedRandomEnchant enchantment = new WeightedRandomEnchant(net.minecraft.server.v1_8_R2.Enchantment.getById(enchantId), entry.getValue());
+						Items.ENCHANTED_BOOK.a(itemstack, enchantment);
+					} else {
+						item.addUnsafeEnchantment(entry.getKey(), entry.getValue());
+					}
+				} catch (IllegalArgumentException ex) {
+				}
+			}
+			entityhuman.b(supportsLapisSlot ? cost : costs[slot]); //take old levels count from clients that don't support lapis slot
+			if (!entityhuman.abilities.canInstantlyBuild && supportsLapisSlot) { //ignore lapis remove for clients that don't support this slot
+				final net.minecraft.server.v1_8_R2.ItemStack itemStack = lapis;
+				itemStack.count -= cost;
+				if (lapis.count <= 0) {
+					enchantSlots.setItem(1, null);
+				}
+			}
+			enchantSlots.update();
+			f = entityhuman.cj();
+			this.a(enchantSlots);
 			return true;
 		}
 		return false;

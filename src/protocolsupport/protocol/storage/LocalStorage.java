@@ -17,7 +17,7 @@ import com.mojang.authlib.properties.Property;
 public class LocalStorage {
 
 	private TIntObjectHashMap<WatchedEntity> watchedEntities = new TIntObjectHashMap<WatchedEntity>();
-	private HashMap<UUID, String> playerlist = new HashMap<UUID, String>();
+	private HashMap<UUID, String> playersNames = new HashMap<UUID, String>();
 	@SuppressWarnings("serial")
 	private HashMap<UUID, ArrayList<Property>> properties = new HashMap<UUID, ArrayList<Property>>() {
 		@Override
@@ -48,11 +48,11 @@ public class LocalStorage {
 	}
 
 	public void addPlayerListName(UUID uuid, String name) {
-		playerlist.put(uuid, name);
+		playersNames.put(uuid, name);
 	}
 
 	public String getPlayerListName(UUID uuid) {
-		String name = playerlist.get(uuid);
+		String name = playersNames.get(uuid);
 		if (name == null) {
 			Player player = Bukkit.getPlayer(uuid);
 			if (player != null) {
@@ -63,7 +63,7 @@ public class LocalStorage {
 	}
 
 	public void removePlayerListName(UUID uuid) {
-		playerlist.remove(uuid);
+		playersNames.remove(uuid);
 	}
 
 	public void addPropertyData(UUID uuid, Property property) {

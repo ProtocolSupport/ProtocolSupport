@@ -2,17 +2,12 @@ package protocolsupport.server.block;
 
 import net.minecraft.server.v1_8_R2.Block;
 import net.minecraft.server.v1_8_R2.BlockPosition;
-import net.minecraft.server.v1_8_R2.BlockStateDirection;
-import net.minecraft.server.v1_8_R2.BlockStateInteger;
 import net.minecraft.server.v1_8_R2.EntityHuman;
 import net.minecraft.server.v1_8_R2.EnumDirection;
 import net.minecraft.server.v1_8_R2.IBlockData;
 import net.minecraft.server.v1_8_R2.World;
 
 public class BlockAnvil extends net.minecraft.server.v1_8_R2.BlockAnvil {
-
-	public static final BlockStateDirection FACING = BlockStateDirection.of("facing", EnumDirection.EnumDirectionLimit.HORIZONTAL);
-	public static final BlockStateInteger DAMAGE = BlockStateInteger.of("damage", 0, 2);
 
 	public BlockAnvil() {
 		super();

@@ -447,7 +447,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeShort(bitmap);
 				serializer.writeShort(0);
 				byte[] data = ChunkUtils.to17ChunkData(packetdata.a(), bitmap);
-				final Deflater deflater = new Deflater(4);
+				final Deflater deflater = new Deflater(Deflater.BEST_SPEED);
 				try {
 					deflater.setInput(data, 0, data.length);
 					deflater.finish();
@@ -541,12 +541,14 @@ public class PlayPacketTransformer implements PacketTransformer {
 					pos += data[i].length;
 				}
 				// compress
-				final Deflater deflater = new Deflater(4);
+				final Deflater deflater = new Deflater(Deflater.BEST_SPEED);
+				long timeA = System.currentTimeMillis();
 				try {
 					deflater.setInput(ldata, 0, ldata.length);
 					deflater.finish();
 					byte[] networkdata = new byte[ldata.length + 100];
 					int size = deflater.deflate(networkdata);
+					System.out.println(size);
 					// write data
 					serializer.writeShort(count);
 					serializer.writeInt(size);
@@ -563,6 +565,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				} finally {
 					deflater.end();
 				}
+				System.out.println(System.currentTimeMillis() - timeA);
 				return;
 			}
 			case 0x28: { // PacketPlayOutWorldEvent

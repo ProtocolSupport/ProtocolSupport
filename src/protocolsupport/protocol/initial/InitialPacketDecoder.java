@@ -90,9 +90,7 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 				setProtocol(channel, receivedData, handshakeversion);
 			}
 		} catch (Throwable t) {
-			if (ctx.channel().isOpen()) {
-				ctx.channel().close();
-			}
+			ctx.channel().close();
 		} finally {
 			ReferenceCountUtil.release(inputObj);
 		}
