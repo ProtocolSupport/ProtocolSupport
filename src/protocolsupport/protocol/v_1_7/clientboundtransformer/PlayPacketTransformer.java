@@ -542,13 +542,11 @@ public class PlayPacketTransformer implements PacketTransformer {
 				}
 				// compress
 				final Deflater deflater = new Deflater(Deflater.BEST_SPEED);
-				long timeA = System.currentTimeMillis();
 				try {
 					deflater.setInput(ldata, 0, ldata.length);
 					deflater.finish();
 					byte[] networkdata = new byte[ldata.length + 100];
 					int size = deflater.deflate(networkdata);
-					System.out.println(size);
 					// write data
 					serializer.writeShort(count);
 					serializer.writeInt(size);
@@ -565,7 +563,6 @@ public class PlayPacketTransformer implements PacketTransformer {
 				} finally {
 					deflater.end();
 				}
-				System.out.println(System.currentTimeMillis() - timeA);
 				return;
 			}
 			case 0x28: { // PacketPlayOutWorldEvent
