@@ -25,13 +25,16 @@ import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.v_1_5.remappers.BlockIDRemapper;
 import protocolsupport.protocol.v_1_5.remappers.EntityIDRemapper;
+import protocolsupport.protocol.v_1_5.remappers.MapColorRemapper;
 import protocolsupport.protocol.v_1_5.utils.ChunkUtils;
 import protocolsupport.protocol.v_1_5.utils.DataWatcherFilter;
 import protocolsupport.protocol.v_1_5.utils.VillagerTradeTransformer;
 import protocolsupport.protocol.watchedentites.WatchedLiving;
 import protocolsupport.protocol.watchedentites.WatchedObject;
 import protocolsupport.protocol.watchedentites.WatchedPlayer;
+import protocolsupport.utils.MapTransformer;
 import protocolsupport.utils.Utils;
+import protocolsupport.utils.MapTransformer.ColumnEntry;
 
 public class PlayPacketTransformer implements PacketTransformer {
 
@@ -682,7 +685,51 @@ public class PlayPacketTransformer implements PacketTransformer {
 				return;
 			}
 			case 0x34: { //PacketPlayOutMap
-				//TODO
+				packet.b(packetdata);
+				int itemData = packetdata.readVarInt();
+				int scale = packetdata.readByte();
+				//send scale
+				serializer.writeByte(0x83);
+				serializer.writeShort(358);
+				serializer.writeShort(itemData);
+				serializer.writeShort(2);
+				serializer.writeByte(2);
+				serializer.writeByte(scale);
+				//send icons
+				int icons = packetdata.readVarInt();
+				if (icons > 0) {
+					serializer.writeByte(0x83);
+					serializer.writeShort(358);
+					serializer.writeShort(itemData);
+					serializer.writeShort(icons * 3 + 1);
+					serializer.writeByte(1);
+					serializer.writeBytes(packetdata.readBytes(icons * 3));
+				}
+				//send columns
+				int columns = packetdata.readUnsignedByte();
+				if (columns > 0) {
+					int rows = packetdata.readUnsignedByte();
+					int xstart = packetdata.readUnsignedByte();
+					int ystart = packetdata.readUnsignedByte();
+					byte[] data = new byte[packetdata.readVarInt()];
+					packetdata.readBytes(data);
+					MapTransformer maptransformer = new MapTransformer();
+					maptransformer.loadFromNewMapData(columns, rows, xstart, ystart, data);
+					for (ColumnEntry entry : maptransformer.transformToOldMapData()) {
+						serializer.writeByte(0x83);
+						serializer.writeShort(358);
+						serializer.writeShort(itemData);
+						serializer.writeShort(3 + entry.getColors().length);
+						serializer.writeByte(0);
+						serializer.writeByte(entry.getX());
+						serializer.writeByte(entry.getY());
+						byte[] colors = entry.getColors();
+						for (int i = 0; i < colors.length; i++) {
+							colors[i] = MapColorRemapper.replaceMapColor(colors[i]);
+						}
+						serializer.writeBytes(colors);
+					}
+				}
 				return;
 			}
 			case 0x35: { //PacketPlayOutTileEntityData

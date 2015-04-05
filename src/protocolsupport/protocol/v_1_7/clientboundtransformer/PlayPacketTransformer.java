@@ -35,6 +35,8 @@ import protocolsupport.protocol.v_1_7.utils.VillagerTradeTransformer;
 import protocolsupport.protocol.watchedentites.WatchedEntity;
 import protocolsupport.protocol.watchedentites.WatchedLiving;
 import protocolsupport.protocol.watchedentites.WatchedObject;
+import protocolsupport.utils.MapTransformer;
+import protocolsupport.utils.MapTransformer.ColumnEntry;
 import protocolsupport.utils.Utils;
 
 import com.mojang.authlib.properties.Property;
@@ -663,7 +665,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				return;
 			}
 			case 0x34: { // PacketPlayOutMap
-				/*PacketDataSerializer writePacketData = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
+				PacketDataSerializer writePacketData = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
 				packet.b(packetdata);
 				int itemData = packetdata.readVarInt();
 				int scale = packetdata.readByte();
@@ -693,20 +695,20 @@ public class PlayPacketTransformer implements PacketTransformer {
 					int ystart = packetdata.readUnsignedByte();
 					byte[] data = new byte[packetdata.readVarInt()];
 					packetdata.readBytes(data);
-					for (int column = 0; column < columns; column++) {
-						int startindex = column * rows;
-						int endindex = startindex + rows;
+					MapTransformer maptransformer = new MapTransformer();
+					maptransformer.loadFromNewMapData(columns, rows, xstart, ystart, data);
+					for (ColumnEntry entry : maptransformer.transformToOldMapData()) {
 						writePacketData.clear();
 						writePacketData.writeVarInt(packetId);
 						writePacketData.writeVarInt(itemData);
-						writePacketData.writeShort(3 + endindex - startindex);
+						writePacketData.writeShort(3 + entry.getColors().length);
 						writePacketData.writeByte(0);
-						writePacketData.writeByte(xstart + column);
-						writePacketData.writeByte(ystart);
-						writePacketData.writeBytes(Arrays.copyOfRange(data, startindex, endindex));
+						writePacketData.writeByte(entry.getX());
+						writePacketData.writeByte(entry.getY());
+						writePacketData.writeBytes(entry.getColors());
 						ctx.write(writePacketData.copy());
 					}
-				}*/
+				}
 				return;
 			}
 			case 0x35: { // PacketPlayOutTileEntityData
