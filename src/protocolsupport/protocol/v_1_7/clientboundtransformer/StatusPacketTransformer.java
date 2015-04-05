@@ -11,12 +11,11 @@ import net.minecraft.server.v1_8_R2.IChatBaseComponent;
 import net.minecraft.server.v1_8_R2.Packet;
 import net.minecraft.server.v1_8_R2.PacketListener;
 import net.minecraft.server.v1_8_R2.ServerPing;
+import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.utils.ServerPingSerializers;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.utils.ServerPingSerializers;
 
 public class StatusPacketTransformer implements PacketTransformer {
 

@@ -23,7 +23,7 @@ public class ThrottleTracker {
 				TObjectLongIterator<InetAddress> iterator = tracker.iterator();
 				while (iterator.hasNext()) {
 					iterator.advance();
-					if (System.currentTimeMillis() - iterator.value() < time) {
+					if ((System.currentTimeMillis() - iterator.value()) < time) {
 						iterator.remove();
 					}
 				}
@@ -33,7 +33,7 @@ public class ThrottleTracker {
 
 	public static boolean isThrottled(InetAddress address) {
 		synchronized (tracker) {
-			return tracker.containsKey(address) && System.currentTimeMillis() - tracker.get(address) < time;
+			return tracker.containsKey(address) && ((System.currentTimeMillis() - tracker.get(address)) < time);
 		}
 	}
 

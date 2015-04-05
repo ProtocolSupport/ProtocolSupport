@@ -20,21 +20,24 @@ import com.mojang.authlib.GameProfile;
 public class ServerPingSerializers {
 
 	public static class ServerDataSerializer implements JsonDeserializer<ServerData>, JsonSerializer<ServerData> {
+		@Override
 		public ServerData deserialize(final JsonElement element, final Type type, final JsonDeserializationContext ctx) throws JsonParseException {
-	        final JsonObject l = ChatDeserializer.l(element, "version");
-	        return new ServerData(ChatDeserializer.h(l, "name"), ChatDeserializer.m(l, "protocol"));
-	    }
+			final JsonObject l = ChatDeserializer.l(element, "version");
+			return new ServerData(ChatDeserializer.h(l, "name"), ChatDeserializer.m(l, "protocol"));
+		}
 
+		@Override
 		public JsonElement serialize(final ServerData data, final Type type, final JsonSerializationContext ctx) {
-	        final JsonObject jsonObject = new JsonObject();
-	        jsonObject.addProperty("name", data.a());
-	        jsonObject.addProperty("protocol", data.b());
-	        return (JsonElement)jsonObject;
-	    }
+			final JsonObject jsonObject = new JsonObject();
+			jsonObject.addProperty("name", data.a());
+			jsonObject.addProperty("protocol", data.b());
+			return jsonObject;
+		}
 	}
 
 
 	public static class PlayerSampleSerializer implements JsonDeserializer<ServerPingPlayerSample>, JsonSerializer<ServerPingPlayerSample> {
+		@Override
 		public ServerPingPlayerSample deserialize(final JsonElement element, final Type type, final JsonDeserializationContext ctx) throws JsonParseException {
 			final JsonObject players = ChatDeserializer.l(element, "players");
 			final ServerPingPlayerSample serverPingPlayerSample = new ServerPingPlayerSample(ChatDeserializer.m(players, "max"), ChatDeserializer.m(players, "online"));
@@ -53,22 +56,23 @@ public class ServerPingSerializers {
 			return serverPingPlayerSample;
 		}
 
+		@Override
 		public JsonElement serialize(final ServerPingPlayerSample data, final Type type, final JsonSerializationContext ctx) {
 			final JsonObject jsonObject = new JsonObject();
-			jsonObject.addProperty("max", (Number) data.a());
-			jsonObject.addProperty("online", (Number) data.b());
-			if (data.c() != null && data.c().length > 0) {
+			jsonObject.addProperty("max", data.a());
+			jsonObject.addProperty("online", data.b());
+			if ((data.c() != null) && (data.c().length > 0)) {
 				final JsonArray jsonArray = new JsonArray();
 				for (int i = 0; i < data.c().length; ++i) {
 					final JsonObject jsonObject2 = new JsonObject();
 					final UUID id = data.c()[i].getId();
 					jsonObject2.addProperty("id", (id == null) ? "" : id.toString());
 					jsonObject2.addProperty("name", data.c()[i].getName());
-					jsonArray.add((JsonElement) jsonObject2);
+					jsonArray.add(jsonObject2);
 				}
-				jsonObject.add("sample", (JsonElement) jsonArray);
+				jsonObject.add("sample", jsonArray);
 			}
-			return (JsonElement) jsonObject;
+			return jsonObject;
 		}
 	}
 

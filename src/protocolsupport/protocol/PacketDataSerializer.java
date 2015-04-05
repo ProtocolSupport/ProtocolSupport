@@ -91,7 +91,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R2.PacketDat
 				case MINECRAFT_1_6_4:
 				case MINECRAFT_1_6_2:
 				case MINECRAFT_1_5_2: {
-					if ((nbttagcompound != null) && itemId == Material.SKULL_ITEM.getId()) {
+					if ((nbttagcompound != null) && (itemId == Material.SKULL_ITEM.getId())) {
 						if (nbttagcompound.hasKeyOfType("SkullOwner", 10)) {
 							nbttagcompound = (NBTTagCompound) nbttagcompound.clone();
 							GameProfile gameprofile = GameProfileSerializer.deserialize(nbttagcompound.getCompound("SkullOwner"));
@@ -109,7 +109,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R2.PacketDat
 				}
 			}
 			if (getVersion() != ProtocolVersion.MINECRAFT_1_8) {
-				if ((nbttagcompound != null) && itemId == Material.WRITTEN_BOOK.getId()) {
+				if ((nbttagcompound != null) && (itemId == Material.WRITTEN_BOOK.getId())) {
 					if (nbttagcompound.hasKeyOfType("pages", 9)) {
 						nbttagcompound = (NBTTagCompound) nbttagcompound.clone();
 						NBTTagList pages = nbttagcompound.getList("pages", 8);

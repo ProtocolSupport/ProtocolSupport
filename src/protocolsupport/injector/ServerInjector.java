@@ -4,8 +4,6 @@ import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.bukkit.Bukkit;
-
 import net.minecraft.server.v1_8_R2.Block;
 import net.minecraft.server.v1_8_R2.Blocks;
 import net.minecraft.server.v1_8_R2.IBlockData;
@@ -13,6 +11,9 @@ import net.minecraft.server.v1_8_R2.Item;
 import net.minecraft.server.v1_8_R2.ItemBlock;
 import net.minecraft.server.v1_8_R2.MinecraftKey;
 import net.minecraft.server.v1_8_R2.TileEntity;
+
+import org.bukkit.Bukkit;
+
 import protocolsupport.server.block.BlockAnvil;
 import protocolsupport.server.block.BlockEnchantTable;
 import protocolsupport.server.tileentity.TileEntityEnchantTable;

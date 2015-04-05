@@ -1,7 +1,7 @@
 package protocolsupport.protocol;
 
-import protocolsupport.api.ProtocolVersion;
 import io.netty.channel.Channel;
+import protocolsupport.api.ProtocolVersion;
 
 public interface IPipeLineBuilder {
 

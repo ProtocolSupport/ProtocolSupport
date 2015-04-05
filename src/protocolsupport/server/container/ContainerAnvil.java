@@ -15,8 +15,8 @@ public class ContainerAnvil extends net.minecraft.server.v1_8_R2.ContainerAnvil 
 	@Override
 	public void b() {
 		super.b();
-		for (ICrafting listener : this.listeners) {
-			listener.setContainerData(this, 0, this.a);
+		for (ICrafting listener : listeners) {
+			listener.setContainerData(this, 0, a);
 		}
 	}
 

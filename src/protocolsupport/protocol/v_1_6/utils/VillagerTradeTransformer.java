@@ -1,11 +1,12 @@
 package protocolsupport.protocol.v_1_6.utils;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+
 import java.io.IOException;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 
 public class VillagerTradeTransformer {
 

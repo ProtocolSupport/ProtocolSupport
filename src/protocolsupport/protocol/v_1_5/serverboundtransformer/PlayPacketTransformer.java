@@ -47,7 +47,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				if (!isLeftClick) {
 					//reading is async so this is potentially dangerous
 					org.bukkit.entity.Entity vehicle = Utils.getPlayer(channel).getVehicle();
-					if (vehicle != null && vehicle.getEntityId() == entityId) {
+					if ((vehicle != null) && (vehicle.getEntityId() == entityId)) {
 						packet = getPacketById(0x0C);
 						packetdata.writeFloat(0);
 						packetdata.writeFloat(0);
@@ -92,7 +92,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				float pitch = serializer.readFloat();
 				boolean onGroud = serializer.readBoolean();
 				//when y is -999.0D than it means that client actually tries to control vehicle movement
-				if (yfeet == -999.0D && y == -999.0D) {
+				if ((yfeet == -999.0D) && (y == -999.0D)) {
 					Packet[] packets = new Packet[2];
 					Packet<PacketListener> playerlook = getPacketById(0x05);
 					packetdata.writeFloat(yaw);

@@ -1,11 +1,11 @@
 package protocolsupport.server.tileentity;
 
-import protocolsupport.server.container.ContainerAnvil;
 import net.minecraft.server.v1_8_R2.BlockPosition;
 import net.minecraft.server.v1_8_R2.Container;
 import net.minecraft.server.v1_8_R2.EntityHuman;
 import net.minecraft.server.v1_8_R2.PlayerInventory;
 import net.minecraft.server.v1_8_R2.World;
+import protocolsupport.server.container.ContainerAnvil;
 
 public class TileEntityContainerAnvil extends net.minecraft.server.v1_8_R2.BlockAnvil.TileEntityContainerAnvil {
 

@@ -1,11 +1,11 @@
 package protocolsupport.protocol.wrapped;
 
-import protocolsupport.protocol.PublicPacketEncoder;
-import net.minecraft.server.v1_8_R2.Packet;
-import net.minecraft.server.v1_8_R2.PacketListener;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
+import net.minecraft.server.v1_8_R2.Packet;
+import net.minecraft.server.v1_8_R2.PacketListener;
+import protocolsupport.protocol.PublicPacketEncoder;
 
 public class WrappedEncoder extends MessageToByteEncoder<Packet<PacketListener>> {
 

@@ -31,15 +31,15 @@ public abstract class WatchedEntity {
 	@Override
 	public String toString() {
 		return new StringBuilder(100)
-			.append("Id: ").append(getId()).append(", ")
-			.append("living: ").append(isLiving()).append(", ")
-			.append("ageable: ").append(isAgeable()).append(", ")
-			.append("enderman: ").append(isEnderman()).append(", ")
-			.append("wolf: ").append(isWolf()).append(", ")
-			.append("minecart: ").append(isMinecart()).append(", ")
-			.append("boat: ").append(isBoat()).append(", ")
-			.append("itemframe: ").append(isItemFrame()).append(", ")
-			.append("falling: ").append(isFallingBlockOrTnt())
+		.append("Id: ").append(getId()).append(", ")
+		.append("living: ").append(isLiving()).append(", ")
+		.append("ageable: ").append(isAgeable()).append(", ")
+		.append("enderman: ").append(isEnderman()).append(", ")
+		.append("wolf: ").append(isWolf()).append(", ")
+		.append("minecart: ").append(isMinecart()).append(", ")
+		.append("boat: ").append(isBoat()).append(", ")
+		.append("itemframe: ").append(isItemFrame()).append(", ")
+		.append("falling: ").append(isFallingBlockOrTnt())
 		.toString();
 	}
 

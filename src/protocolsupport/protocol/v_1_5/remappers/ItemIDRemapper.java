@@ -103,7 +103,7 @@ public class ItemIDRemapper {
 	}
 
 	public static void setRemap(int oldId, int newId) {
-		if (oldId < 1 || oldId > 4095 || newId < 1 || newId > 4095) {
+		if ((oldId < 1) || (oldId > 4095) || (newId < 1) || (newId > 4095)) {
 			throw new IllegalArgumentException("Id should be in range of 1-4095");
 		}
 		if (Item.getById(newId) == null) {
