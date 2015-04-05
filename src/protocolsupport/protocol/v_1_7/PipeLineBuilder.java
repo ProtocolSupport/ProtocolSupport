@@ -1,7 +1,6 @@
 package protocolsupport.protocol.v_1_7;
 
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelPipeline;
 import net.minecraft.server.v1_8_R2.NetworkManager;
 import net.minecraft.server.v1_8_R2.PacketPrepender;
@@ -15,17 +14,14 @@ import protocolsupport.protocol.v_1_7.serverboundtransformer.PacketDecoder;
 public class PipeLineBuilder implements IPipeLineBuilder {
 
 	@Override
-	public DecoderEncoderTuple buildPipeLine(Channel channel, ProtocolVersion version) {
+	public void buildPipeLine(Channel channel, ProtocolVersion version) {
 		ChannelPipeline pipeline = channel.pipeline();
 		NetworkManager networkmanager = (NetworkManager) pipeline.get(ChannelHandlers.NETWORK_MANAGER);
 		networkmanager.a(new HandshakeListener(networkmanager));
-		ChannelHandler decoder = new PacketDecoder(version);
-		ChannelHandler encoder = new PacketEncoder(version);
 		pipeline.replace(ChannelHandlers.SPLITTER, ChannelHandlers.SPLITTER, new PacketSplitter());
-		pipeline.replace(ChannelHandlers.DECODER, ChannelHandlers.DECODER, decoder);
 		pipeline.replace(ChannelHandlers.PREPENDER, ChannelHandlers.PREPENDER, new PacketPrepender());
-		pipeline.replace(ChannelHandlers.ENCODER, ChannelHandlers.ENCODER, encoder);
-		return new DecoderEncoderTuple(decoder, encoder);
+		ChannelHandlers.getDecoder(pipeline).setRealDecoder(new PacketDecoder(version));
+		ChannelHandlers.getEncoder(pipeline).setRealEncoder(new PacketEncoder(version));
 	}
 
 }

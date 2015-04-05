@@ -10,12 +10,12 @@ import java.util.List;
 
 import net.minecraft.server.v1_8_R2.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R2.NetworkManager;
-import protocolsupport.protocol.fake.FakeDecoder;
-import protocolsupport.protocol.fake.FakeEncoder;
 import protocolsupport.protocol.fake.FakePacketListener;
 import protocolsupport.protocol.fake.FakePrepender;
 import protocolsupport.protocol.fake.FakeSplitter;
 import protocolsupport.protocol.initial.InitialPacketDecoder;
+import protocolsupport.protocol.wrapped.WrappedDecoder;
+import protocolsupport.protocol.wrapped.WrappedEncoder;
 
 public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 
@@ -37,13 +37,11 @@ public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 		}
 		channel.pipeline()
 		.addLast("timeout", new ReadTimeoutHandler(30))
-		//protocol detector
 		.addLast(ChannelHandlers.INITIAL_DECODER, new InitialPacketDecoder())
-		//fake elements, will be replaced or removed manually in every protocol pipeline builder
 		.addLast(ChannelHandlers.SPLITTER, new FakeSplitter())
-		.addLast(ChannelHandlers.DECODER, new FakeDecoder())
+		.addLast(ChannelHandlers.DECODER, new WrappedDecoder())
 		.addLast(ChannelHandlers.PREPENDER, new FakePrepender())
-		.addLast(ChannelHandlers.ENCODER, new FakeEncoder());
+		.addLast(ChannelHandlers.ENCODER, new WrappedEncoder());
 		NetworkManager networkmanager = new NetworkManager(EnumProtocolDirection.SERVERBOUND);
 		networkmanager.a(new FakePacketListener());
 		networkManagers.add(networkmanager);
