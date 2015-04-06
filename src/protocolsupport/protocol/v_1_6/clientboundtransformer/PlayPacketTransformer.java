@@ -25,6 +25,7 @@ import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.v_1_6.remappers.BlockIDRemapper;
 import protocolsupport.protocol.v_1_6.remappers.EntityIDRemapper;
+import protocolsupport.protocol.v_1_6.remappers.ItemIDRemapper;
 import protocolsupport.protocol.v_1_6.remappers.MapColorRemapper;
 import protocolsupport.protocol.v_1_6.utils.ChatEncoder;
 import protocolsupport.protocol.v_1_6.utils.ChunkUtils;
@@ -581,17 +582,42 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x2A: { //PacketPlayOutWorldParticles
 				serializer.writeByte(0x3F);
-				int type = packetdata.readInt();
-				serializer.writeString(EnumParticle.values()[type].b());
-				serializer.writeFloat(packetdata.readFloat());
-				serializer.writeFloat(packetdata.readFloat());
-				serializer.writeFloat(packetdata.readFloat());
-				serializer.writeFloat(packetdata.readFloat());
-				serializer.writeFloat(packetdata.readFloat());
-				serializer.writeFloat(packetdata.readFloat());
-				serializer.writeFloat(packetdata.readFloat());
-				serializer.writeInt(packetdata.readInt());
-				// TODO: additional data
+				EnumParticle particle = EnumParticle.values()[packetdata.readInt()];
+				String particlename = particle.b();
+				packetdata.readBoolean();
+				float x = packetdata.readFloat();
+				float y = packetdata.readFloat();
+				float z = packetdata.readFloat();
+				float addx = packetdata.readFloat();
+				float addy = packetdata.readFloat();
+				float addz = packetdata.readFloat();
+				float speed = packetdata.readFloat();
+				int count = packetdata.readInt();
+				switch (particle) {
+					case ITEM_CRACK: {
+						int itemid = packetdata.readVarInt();
+						particlename += ItemIDRemapper.replaceItemId(itemid);
+						break;
+					}
+					case BLOCK_CRACK:
+					case BLOCK_DUST: {
+						int blockstateId = packetdata.readVarInt();
+						particlename = "tilecrack_" + BlockIDRemapper.replaceBlockId((blockstateId & 4095)) + "_" + ((blockstateId >> 12) & 0xF);
+						break;
+					}
+					default: {
+						break;
+					}
+				}
+				serializer.writeString(particlename);
+				serializer.writeFloat(x);
+				serializer.writeFloat(y);
+				serializer.writeFloat(z);
+				serializer.writeFloat(addx);
+				serializer.writeFloat(addy);
+				serializer.writeFloat(addz);
+				serializer.writeFloat(speed);
+				serializer.writeInt(count);
 				return;
 			}
 			case 0x2B: { //PacketPlayOutGameStateChange
