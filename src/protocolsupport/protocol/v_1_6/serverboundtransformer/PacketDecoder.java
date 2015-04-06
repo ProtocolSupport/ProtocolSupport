@@ -17,7 +17,7 @@ import net.minecraft.server.v1_8_R2.Packet;
 import net.minecraft.server.v1_8_R2.PacketListener;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.PublicPacketDecoder;
+import protocolsupport.protocol.pipeline.PublicPacketDecoder;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.utils.Utils;
 

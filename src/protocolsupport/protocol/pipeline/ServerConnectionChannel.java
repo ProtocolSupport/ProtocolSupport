@@ -1,4 +1,4 @@
-package protocolsupport.protocol;
+package protocolsupport.protocol.pipeline;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelException;
@@ -10,12 +10,12 @@ import java.util.List;
 
 import net.minecraft.server.v1_8_R2.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R2.NetworkManager;
-import protocolsupport.protocol.fake.FakePacketListener;
-import protocolsupport.protocol.fake.FakePrepender;
-import protocolsupport.protocol.fake.FakeSplitter;
-import protocolsupport.protocol.initial.InitialPacketDecoder;
-import protocolsupport.protocol.wrapped.WrappedDecoder;
-import protocolsupport.protocol.wrapped.WrappedEncoder;
+import protocolsupport.protocol.pipeline.fake.FakePacketListener;
+import protocolsupport.protocol.pipeline.fake.FakePrepender;
+import protocolsupport.protocol.pipeline.fake.FakeSplitter;
+import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
+import protocolsupport.protocol.pipeline.wrapped.WrappedDecoder;
+import protocolsupport.protocol.pipeline.wrapped.WrappedEncoder;
 
 public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 

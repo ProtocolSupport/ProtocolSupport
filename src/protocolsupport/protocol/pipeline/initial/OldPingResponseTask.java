@@ -1,4 +1,4 @@
-package protocolsupport.protocol.initial;
+package protocolsupport.protocol.pipeline.initial;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;

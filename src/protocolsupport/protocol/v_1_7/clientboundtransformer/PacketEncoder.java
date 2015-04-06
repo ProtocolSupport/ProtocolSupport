@@ -15,7 +15,7 @@ import net.minecraft.server.v1_8_R2.Packet;
 import net.minecraft.server.v1_8_R2.PacketListener;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.PublicPacketEncoder;
+import protocolsupport.protocol.pipeline.PublicPacketEncoder;
 
 public class PacketEncoder extends MessageToByteEncoder<Packet<PacketListener>> implements PublicPacketEncoder {
 

@@ -4,8 +4,8 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import net.minecraft.server.v1_8_R2.NetworkManager;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.ChannelHandlers;
-import protocolsupport.protocol.IPipeLineBuilder;
+import protocolsupport.protocol.pipeline.ChannelHandlers;
+import protocolsupport.protocol.pipeline.IPipeLineBuilder;
 import protocolsupport.protocol.v_1_5.clientboundtransformer.PacketEncoder;
 import protocolsupport.protocol.v_1_5.serverboundtransformer.PacketDecoder;
 

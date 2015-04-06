@@ -19,8 +19,8 @@ import net.minecraft.server.v1_8_R2.PlayerConnection;
 
 import org.bukkit.entity.Player;
 
-import protocolsupport.protocol.ChannelHandlers;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.pipeline.ChannelHandlers;
 
 public class Utils {
 

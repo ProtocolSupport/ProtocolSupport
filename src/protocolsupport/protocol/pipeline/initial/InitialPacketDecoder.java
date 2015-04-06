@@ -1,4 +1,4 @@
-package protocolsupport.protocol.initial;
+package protocolsupport.protocol.pipeline.initial;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -13,8 +13,8 @@ import java.util.EnumMap;
 import java.util.concurrent.TimeUnit;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.ChannelHandlers;
-import protocolsupport.protocol.IPipeLineBuilder;
+import protocolsupport.protocol.pipeline.ChannelHandlers;
+import protocolsupport.protocol.pipeline.IPipeLineBuilder;
 import protocolsupport.protocol.storage.ProtocolStorage;
 
 public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {

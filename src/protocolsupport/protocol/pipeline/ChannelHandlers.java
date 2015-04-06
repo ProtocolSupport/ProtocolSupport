@@ -1,8 +1,8 @@
-package protocolsupport.protocol;
+package protocolsupport.protocol.pipeline;
 
 import io.netty.channel.ChannelPipeline;
-import protocolsupport.protocol.wrapped.WrappedDecoder;
-import protocolsupport.protocol.wrapped.WrappedEncoder;
+import protocolsupport.protocol.pipeline.wrapped.WrappedDecoder;
+import protocolsupport.protocol.pipeline.wrapped.WrappedEncoder;
 
 public class ChannelHandlers {
 

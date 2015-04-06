@@ -6,8 +6,8 @@ import net.minecraft.server.v1_8_R2.NetworkManager;
 import net.minecraft.server.v1_8_R2.PacketPrepender;
 import net.minecraft.server.v1_8_R2.PacketSplitter;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.ChannelHandlers;
-import protocolsupport.protocol.IPipeLineBuilder;
+import protocolsupport.protocol.pipeline.ChannelHandlers;
+import protocolsupport.protocol.pipeline.IPipeLineBuilder;
 import protocolsupport.protocol.v_1_7.clientboundtransformer.PacketEncoder;
 import protocolsupport.protocol.v_1_7.serverboundtransformer.PacketDecoder;
 

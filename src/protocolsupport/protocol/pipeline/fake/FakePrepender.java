@@ -1,4 +1,4 @@
-package protocolsupport.protocol.fake;
+package protocolsupport.protocol.pipeline.fake;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
