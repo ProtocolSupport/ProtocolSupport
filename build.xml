@@ -2,14 +2,12 @@
 
     <path id="libs">
     	<filelist>
-    	<file name="${basedir}/libs/spigotapi.jar"/>
     	<file name="${basedir}/libs/spigot.jar"/>
     	</filelist>
     </path>
 
 	<target name="build">
 		<mkdir dir="libs"/>
-		<get src="https://dl.dropboxusercontent.com/u/71299154/ProtocolSupport/spigotapi.jar" dest="libs/spigotapi.jar" usetimestamp="true"/>
 		<get src="https://dl.dropboxusercontent.com/u/71299154/ProtocolSupport/spigot.jar" dest="libs/spigot.jar" usetimestamp="true"/>
         <mkdir dir="build/classes"/>
         <javac source="1.7" target="1.7" encoding="UTF-8" srcdir="src" destdir="build/classes" classpathref="libs" debug="on"/>
