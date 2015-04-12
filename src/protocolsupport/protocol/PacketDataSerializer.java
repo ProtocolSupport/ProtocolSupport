@@ -86,28 +86,6 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R2.PacketDat
 				CraftItemStack.setItemMeta(itemstack, CraftItemStack.getItemMeta(itemstack));
 				nbttagcompound = itemstack.getTag();
 			}
-			switch (getVersion()) {
-				case MINECRAFT_1_7_5:
-				case MINECRAFT_1_6_4:
-				case MINECRAFT_1_6_2:
-				case MINECRAFT_1_5_2: {
-					if ((nbttagcompound != null) && (itemId == Material.SKULL_ITEM.getId())) {
-						if (nbttagcompound.hasKeyOfType("SkullOwner", 10)) {
-							nbttagcompound = (NBTTagCompound) nbttagcompound.clone();
-							GameProfile gameprofile = GameProfileSerializer.deserialize(nbttagcompound.getCompound("SkullOwner"));
-							if (gameprofile.getName() != null) {
-								nbttagcompound.set("SkullOwner", new NBTTagString(gameprofile.getName()));
-							} else {
-								nbttagcompound.remove("SkullOwner");
-							}
-						}
-					}
-					break;
-				}
-				default: {
-					break;
-				}
-			}
 			if (getVersion() != ProtocolVersion.MINECRAFT_1_8) {
 				if ((nbttagcompound != null) && (itemId == Material.WRITTEN_BOOK.getId())) {
 					if (nbttagcompound.hasKeyOfType("pages", 9)) {
@@ -126,7 +104,23 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R2.PacketDat
 	}
 
 	@Override
-	public void a(final NBTTagCompound nbttagcompound) {
+	public void a(NBTTagCompound nbttagcompound) {
+		if (nbttagcompound != null) {
+			switch (getVersion()) {
+				case MINECRAFT_1_7_5:
+				case MINECRAFT_1_6_4:
+				case MINECRAFT_1_6_2:
+				case MINECRAFT_1_5_2: {
+					nbttagcompound = (NBTTagCompound) nbttagcompound.clone();
+					transformSkull(nbttagcompound, "SkullOwner", "SkullOwner");
+					transformSkull(nbttagcompound, "Owner", "ExtraType");
+					break;
+				}
+				default: {
+					break;
+				}
+			}
+		}
 		if (getVersion() != ProtocolVersion.MINECRAFT_1_8) {
 			if (nbttagcompound == null) {
 				writeShort(-1);
@@ -146,6 +140,17 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R2.PacketDat
 			}
 			this.writeBytes(out.buffer());
 			out.buffer().release();
+		}
+	}
+
+	private void transformSkull(NBTTagCompound tag, String tagname, String newtagname) {
+		if (tag.hasKeyOfType(tagname, 10)) {
+			GameProfile gameprofile = GameProfileSerializer.deserialize(tag.getCompound(tagname));
+			if (gameprofile.getName() != null) {
+				tag.set(newtagname, new NBTTagString(gameprofile.getName()));
+			} else {
+				tag.remove(tagname);
+			}
 		}
 	}
 

@@ -43,7 +43,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.readInt();
 				int entityId = serializer.readInt();
 				boolean isLeftClick = serializer.readBoolean();
-				//if player interacts with the entity he is riding than he wants to unmont it
+				//if player interacts with the entity he is riding than he wants to unmount it
 				if (!isLeftClick) {
 					//reading is async so this is potentially dangerous
 					org.bukkit.entity.Entity vehicle = Utils.getPlayer(channel).getVehicle();
@@ -102,7 +102,6 @@ public class PlayPacketTransformer implements PacketTransformer {
 					packets[0] = playerlook;
 					packetdata.clear();
 					Packet<PacketListener> steervehicle = getPacketById(0x0C);
-					//TODO: convert motX and motZ to strafes
 					packetdata.writeFloat(0.0F);
 					packetdata.writeFloat(0.0F);
 					packetdata.writeByte(0);
