@@ -9,6 +9,8 @@ public class MapColorRemapper {
 			replacements[i] = -1;
 		}
 		//see http://minecraft.gamepedia.com/Map_item_format
+		replacements[14] = 8;
+		replacements[15] = 10;
 		replacements[16] = 5;
 		replacements[17] = 5;
 		replacements[18] = 2;
