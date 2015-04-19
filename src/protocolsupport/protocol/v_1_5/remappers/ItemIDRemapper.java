@@ -93,6 +93,7 @@ public class ItemIDRemapper {
 		replacements[418] = 1;
 		replacements[419] = 1;
 		replacements[420] = 1;
+		replacements[421] = 1;
 	}
 
 	public static int replaceItemId(int oldId) {
