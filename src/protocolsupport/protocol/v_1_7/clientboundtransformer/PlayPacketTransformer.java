@@ -658,9 +658,9 @@ public class PlayPacketTransformer implements PacketTransformer {
 				}
 			}
 			case 0x30: { //PacketPlayOutWindowItems
+				serializer.writeVarInt(packetId);
 				if (Utils.getPlayer(channel).getOpenInventory().getType() == InventoryType.ENCHANTING) {
 					packet.b(packetdata);
-					serializer.writeVarInt(packetId);
 					serializer.writeByte(packetdata.readByte());
 					int count = packetdata.readShort();
 					serializer.writeShort(count - 1);
@@ -673,7 +673,36 @@ public class PlayPacketTransformer implements PacketTransformer {
 					}
 					return;
 				} else {
-					serializer.writeVarInt(packetId);
+					packet.b(serializer);
+					return;
+				}
+			}
+			case 0x31: { //PacketPlayOutWindowData
+				serializer.writeVarInt(packetId);
+				if (serializer.getVersion() == ProtocolVersion.MINECRAFT_1_7_5 && Utils.getPlayer(channel).getOpenInventory().getType() == InventoryType.FURNACE) {
+					serializer.writeByte(packetdata.readByte());
+					int type = packetdata.readShort();
+					switch (type) {
+						case 0: {
+							serializer.writeShort(1);
+							break;
+						}
+						case 1: {
+							serializer.writeShort(2);
+							break;
+						}
+						case 2: {
+							serializer.writeShort(0);
+							break;
+						}
+						default: {
+							serializer.writeShort(type);
+							break;
+						}
+					}
+					serializer.writeShort(packetdata.readShort());
+					return;
+				} else {
 					packet.b(serializer);
 					return;
 				}

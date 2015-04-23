@@ -691,7 +691,31 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x31: { //PacketPlayOutWindowData
 				serializer.writeByte(0x69);
-				Utils.writeAll(packetdata, serializer);
+				if (Utils.getPlayer(channel).getOpenInventory().getType() == InventoryType.FURNACE) {
+					serializer.writeByte(packetdata.readByte());
+					int type = packetdata.readShort();
+					switch (type) {
+						case 0: {
+							serializer.writeShort(1);
+							break;
+						}
+						case 1: {
+							serializer.writeShort(2);
+							break;
+						}
+						case 2: {
+							serializer.writeShort(0);
+							break;
+						}
+						default: {
+							serializer.writeShort(type);
+							break;
+						}
+					}
+					serializer.writeShort(packetdata.readShort());
+				} else {
+					Utils.writeAll(packetdata, serializer);
+				}
 				return;
 			}
 			case 0x32: { //PacketPlayOutTransaction
