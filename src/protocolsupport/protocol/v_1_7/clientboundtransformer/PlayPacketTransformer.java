@@ -679,7 +679,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x31: { //PacketPlayOutWindowData
 				serializer.writeVarInt(packetId);
-				if (serializer.getVersion() == ProtocolVersion.MINECRAFT_1_7_5 && Utils.getPlayer(channel).getOpenInventory().getType() == InventoryType.FURNACE) {
+				if (Utils.getPlayer(channel).getOpenInventory().getType() == InventoryType.FURNACE) {
 					serializer.writeByte(packetdata.readByte());
 					int type = packetdata.readShort();
 					switch (type) {
