@@ -24,6 +24,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 	@Override
 	public boolean tranform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
 		PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
+		int initialReaderIndex = serializer.readerIndex();
 		switch (packetId) {
 			case 0x00: { //PacketPlayInKeepAlive
 				packetdata.writeVarInt(serializer.readInt());
@@ -70,7 +71,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x0A: { //PacketPlayInArmAnimation
 				serializer.readInt();
 				serializer.readByte();
-				return true;
+				break;
 			}
 			case 0x0B: { //PacketPlayInEntityAction
 				packetdata.writeVarInt(serializer.readInt());
@@ -153,7 +154,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				break;
 			}
 		}
-		if (packetdata.readableBytes() > 0) {
+		if (initialReaderIndex != serializer.readerIndex()) {
 			packet.a(packetdata);
 			return true;
 		}
