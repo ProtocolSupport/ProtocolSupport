@@ -680,6 +680,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x31: { //PacketPlayOutWindowData
 				serializer.writeVarInt(packetId);
 				if (Utils.getPlayer(channel).getOpenInventory().getType() == InventoryType.FURNACE) {
+					packet.b(packetdata);
 					serializer.writeByte(packetdata.readByte());
 					int type = packetdata.readShort();
 					switch (type) {
