@@ -32,16 +32,16 @@ public class BlockRemapperControl {
 		switch (version) {
 			case MINECRAFT_1_7_10:
 			case MINECRAFT_1_7_5: {
-				protocolsupport.protocol.v_1_7.remappers.BlockIDRemapper.setRemap(from, to);
+				protocolsupport.protocol.transformer.v_1_7.remappers.BlockIDRemapper.setRemap(from, to);
 				break;
 			}
 			case MINECRAFT_1_6_4:
 			case MINECRAFT_1_6_2: {
-				protocolsupport.protocol.v_1_6.remappers.BlockIDRemapper.setRemap(from, to);
+				protocolsupport.protocol.transformer.v_1_6.remappers.BlockIDRemapper.setRemap(from, to);
 				break;
 			}
 			case MINECRAFT_1_5_2: {
-				protocolsupport.protocol.v_1_5.remappers.BlockIDRemapper.setRemap(from, to);
+				protocolsupport.protocol.transformer.v_1_5.remappers.BlockIDRemapper.setRemap(from, to);
 				break;
 			}
 			default: {
@@ -59,14 +59,14 @@ public class BlockRemapperControl {
 		switch (version) {
 			case MINECRAFT_1_7_10:
 			case MINECRAFT_1_7_5: {
-				return protocolsupport.protocol.v_1_7.remappers.BlockIDRemapper.replaceBlockId(id);
+				return protocolsupport.protocol.transformer.v_1_7.remappers.BlockIDRemapper.replaceBlockId(id);
 			}
 			case MINECRAFT_1_6_4:
 			case MINECRAFT_1_6_2: {
-				return protocolsupport.protocol.v_1_6.remappers.BlockIDRemapper.replaceBlockId(id);
+				return protocolsupport.protocol.transformer.v_1_6.remappers.BlockIDRemapper.replaceBlockId(id);
 			}
 			case MINECRAFT_1_5_2: {
-				return protocolsupport.protocol.v_1_5.remappers.BlockIDRemapper.replaceBlockId(id);
+				return protocolsupport.protocol.transformer.v_1_5.remappers.BlockIDRemapper.replaceBlockId(id);
 			}
 			default: {
 				return -1;

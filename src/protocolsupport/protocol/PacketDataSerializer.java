@@ -61,16 +61,16 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R2.PacketDat
 			switch (getVersion()) {
 				case MINECRAFT_1_6_4:
 				case MINECRAFT_1_6_2: {
-					writeShort(protocolsupport.protocol.v_1_6.remappers.ItemIDRemapper.replaceItemId(itemId));
+					writeShort(protocolsupport.protocol.transformer.v_1_6.remappers.ItemIDRemapper.replaceItemId(itemId));
 					break;
 				}
 				case MINECRAFT_1_7_10:
 				case MINECRAFT_1_7_5: {
-					writeShort(protocolsupport.protocol.v_1_7.remappers.ItemIDRemapper.replaceItemId(itemId));
+					writeShort(protocolsupport.protocol.transformer.v_1_7.remappers.ItemIDRemapper.replaceItemId(itemId));
 					break;
 				}
 				case MINECRAFT_1_5_2: {
-					writeShort(protocolsupport.protocol.v_1_5.remappers.ItemIDRemapper.replaceItemId(itemId));
+					writeShort(protocolsupport.protocol.transformer.v_1_5.remappers.ItemIDRemapper.replaceItemId(itemId));
 					break;
 				}
 				default: {
