@@ -1,5 +1,8 @@
 package protocolsupport.protocol.pipeline.wrapped;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
@@ -9,6 +12,8 @@ import protocolsupport.protocol.pipeline.PublicPacketEncoder;
 
 public class WrappedEncoder extends MessageToByteEncoder<Packet<PacketListener>> {
 
+	private static final Logger logger = LogManager.getLogger();
+
 	private PublicPacketEncoder realEncoder;
 
 	public void setRealEncoder(PublicPacketEncoder realEncoder) {
@@ -17,7 +22,11 @@ public class WrappedEncoder extends MessageToByteEncoder<Packet<PacketListener>>
 
 	@Override
 	protected void encode(ChannelHandlerContext ctx, Packet<PacketListener> packet, ByteBuf output) throws Exception {
-		realEncoder.publicEncode(ctx, packet, output);
+		try {
+			realEncoder.publicEncode(ctx, packet, output);
+		} catch (Throwable t) {
+			logger.error(t);
+		}
 	}
 
 }
