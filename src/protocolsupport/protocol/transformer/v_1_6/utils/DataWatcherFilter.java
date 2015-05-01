@@ -18,6 +18,17 @@ public class DataWatcherFilter {
 			return data;
 		}
 		TIntObjectMap<DataWatcherObject> objects = DataWatcherSerializer.decodeData(version, data);
+		//Change in 1.8: nameTags shifted from 10 to 2.
+		if (entity.isLiving()) {
+			if (objects.get(2) != null)
+			{
+				objects.put(10, objects.remove(2));
+			}
+			if (objects.get(3) != null)
+			{
+				objects.put(11, objects.remove(3));
+			}
+		}
 		if (entity.isAgeable()) {
 			DataWatcherObject object = objects.get(12);
 			if (object != null) {
