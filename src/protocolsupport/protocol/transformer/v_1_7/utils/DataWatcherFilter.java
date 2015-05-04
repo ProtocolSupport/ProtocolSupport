@@ -18,6 +18,16 @@ public class DataWatcherFilter {
 			return data;
 		}
 		TIntObjectMap<DataWatcherObject> objects = DataWatcherSerializer.decodeData(version, data);
+		if (entity.isLiving()) {
+			DataWatcherObject nametag = objects.remove(2);
+			if (nametag != null) {
+				objects.put(10, nametag);
+			}
+			DataWatcherObject nametagvisible = objects.remove(3);
+			if (nametag != null) {
+				objects.put(11, nametagvisible);
+			}
+		}
 		if (entity.isAgeable()) {
 			DataWatcherObject object = objects.get(12);
 			if (object != null) {
