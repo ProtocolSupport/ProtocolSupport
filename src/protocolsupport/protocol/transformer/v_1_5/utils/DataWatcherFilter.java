@@ -10,6 +10,7 @@ import protocolsupport.protocol.watchedentity.WatchedEntity;
 import protocolsupport.utils.DataWatcherSerializer;
 import protocolsupport.utils.DataWatcherSerializer.DataWatcherObject;
 import protocolsupport.utils.DataWatcherSerializer.DataWatcherObject.ValueType;
+import protocolsupport.utils.Utils;
 
 public class DataWatcherFilter {
 
@@ -24,6 +25,7 @@ public class DataWatcherFilter {
 			DataWatcherObject nametag = objects.remove(2);
 			DataWatcherObject nametagvisible = objects.remove(3);
 			if (nametag != null) {
+				nametag.value = Utils.clampString((String) nametag.value, 64);
 				objects.put(5, nametag);
 			}
 			if (nametagvisible != null) {

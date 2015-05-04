@@ -8,6 +8,7 @@ import java.util.Iterator;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.watchedentity.WatchedEntity;
 import protocolsupport.utils.DataWatcherSerializer;
+import protocolsupport.utils.Utils;
 import protocolsupport.utils.DataWatcherSerializer.DataWatcherObject;
 import protocolsupport.utils.DataWatcherSerializer.DataWatcherObject.ValueType;
 
@@ -21,6 +22,7 @@ public class DataWatcherFilter {
 		if (entity.isLiving()) {
 			DataWatcherObject nametag = objects.remove(2);
 			if (nametag != null) {
+				nametag.value = Utils.clampString((String) nametag.value, 64);
 				objects.put(10, nametag);
 			}
 			DataWatcherObject nametagvisible = objects.remove(3);
