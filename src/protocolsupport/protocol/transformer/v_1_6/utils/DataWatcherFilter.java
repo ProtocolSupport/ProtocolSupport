@@ -24,7 +24,7 @@ public class DataWatcherFilter {
 				objects.put(10, nametag);
 			}
 			DataWatcherObject nametagvisible = objects.remove(3);
-			if (nametag != null) {
+			if (nametagvisible != null) {
 				objects.put(11, nametagvisible);
 			}
 		}
