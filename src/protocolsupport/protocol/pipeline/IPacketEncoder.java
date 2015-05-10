@@ -5,8 +5,8 @@ import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.server.v1_8_R2.Packet;
 import net.minecraft.server.v1_8_R2.PacketListener;
 
-public interface PublicPacketEncoder {
+public interface IPacketEncoder {
 
-	public void publicEncode(ChannelHandlerContext ctx, Packet<PacketListener> packet, ByteBuf output) throws Exception;
+	public void encode(ChannelHandlerContext ctx, Packet<PacketListener> packet, ByteBuf output) throws Exception;
 
 }

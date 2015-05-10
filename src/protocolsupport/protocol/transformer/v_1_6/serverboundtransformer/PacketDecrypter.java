@@ -1,19 +1,27 @@
 package protocolsupport.protocol.transformer.v_1_6.serverboundtransformer;
 
+import java.util.List;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.ByteToMessageDecoder;
 
 import javax.crypto.Cipher;
 import javax.crypto.ShortBufferException;
 
-public class PacketDecrypter {
+public class PacketDecrypter extends ByteToMessageDecoder {
 
 	private Cipher cipher;
 	private byte[] buffer;
 
-	protected PacketDecrypter(final Cipher cipher) {
+	public PacketDecrypter(final Cipher cipher) {
 		buffer = new byte[0];
 		this.cipher = cipher;
+	}
+
+	@Override
+	protected void decode(ChannelHandlerContext ctx, ByteBuf buf, List<Object> packet) throws Exception {
+		packet.add(decrypt(ctx, buf));
 	}
 
 	private byte[] readToBuffer(final ByteBuf byteBuf) {

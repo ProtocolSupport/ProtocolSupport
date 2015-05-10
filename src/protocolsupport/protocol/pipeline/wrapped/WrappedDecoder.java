@@ -6,19 +6,28 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 
 import java.util.List;
 
-import protocolsupport.protocol.pipeline.PublicPacketDecoder;
+import protocolsupport.protocol.pipeline.IPacketDecoder;
+import protocolsupport.protocol.storage.ProtocolStorage;
+import protocolsupport.utils.Utils;
 
 public class WrappedDecoder extends ByteToMessageDecoder {
 
-	private PublicPacketDecoder realDecoder;
+	private IPacketDecoder realDecoder;
 
-	public void setRealDecoder(PublicPacketDecoder realDecoder) {
+	public void setRealDecoder(IPacketDecoder realDecoder) {
 		this.realDecoder = realDecoder;
 	}
 
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
-		realDecoder.publicDecode(ctx, input, list);
+		realDecoder.decode(ctx, input, list);
+	}
+
+	@Override
+	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+		super.channelInactive(ctx);
+		ProtocolStorage.clearData(ctx.channel().remoteAddress());
+		ProtocolStorage.clearData(Utils.getNetworkManagerSocketAddress(ctx.channel()));
 	}
 
 }

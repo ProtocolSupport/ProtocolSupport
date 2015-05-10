@@ -2,7 +2,6 @@ package protocolsupport.protocol.transformer.v_1_8;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.util.AttributeKey;
 
 import java.io.IOException;
@@ -14,22 +13,20 @@ import net.minecraft.server.v1_8_R2.NetworkManager;
 import net.minecraft.server.v1_8_R2.Packet;
 import net.minecraft.server.v1_8_R2.PacketDataSerializer;
 import net.minecraft.server.v1_8_R2.PacketListener;
-import protocolsupport.protocol.pipeline.PublicPacketDecoder;
-import protocolsupport.protocol.storage.ProtocolStorage;
-import protocolsupport.utils.Utils;
+import protocolsupport.protocol.pipeline.IPacketDecoder;
 
-public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketDecoder {
+public class PacketDecoder implements IPacketDecoder {
 
 	private static final EnumProtocolDirection direction = EnumProtocolDirection.SERVERBOUND;
 	private static final AttributeKey<EnumProtocol> currentStateAttrKey = NetworkManager.c;
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void decode(final ChannelHandlerContext ctx, final ByteBuf bytebuf, final List<Object> list) throws IOException, IllegalAccessException, InstantiationException {
-		if (bytebuf.readableBytes() == 0) {
+	public void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
+		if (!input.isReadable()) {
 			return;
 		}
-		final PacketDataSerializer packetDataSerializer = new PacketDataSerializer(bytebuf);
+		final PacketDataSerializer packetDataSerializer = new PacketDataSerializer(input);
 		final int packetId = packetDataSerializer.e();
 		final Packet<PacketListener> packet = ctx.channel().attr(currentStateAttrKey).get().a(direction, packetId);
 		if (packet == null) {
@@ -40,18 +37,6 @@ public class PacketDecoder extends ByteToMessageDecoder implements PublicPacketD
 			throw new IOException("Packet " + ctx.channel().attr(currentStateAttrKey).get().a() + "/" + packetId + " (" + packet.getClass().getSimpleName() + ") was larger than I expected, found " + packetDataSerializer.readableBytes() + " bytes extra whilst reading packet " + packetId);
 		}
 		list.add(packet);
-	}
-
-	@Override
-	public void publicDecode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
-		decode(ctx, input, list);
-	}
-
-	@Override
-	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-		super.channelInactive(ctx);
-		ProtocolStorage.clearData(ctx.channel().remoteAddress());
-		ProtocolStorage.clearData(Utils.getNetworkManagerSocketAddress(ctx.channel()));
 	}
 
 }

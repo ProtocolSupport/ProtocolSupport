@@ -5,8 +5,8 @@ import io.netty.channel.ChannelHandlerContext;
 
 import java.util.List;
 
-public interface PublicPacketDecoder {
+public interface IPacketDecoder {
 
-	public void publicDecode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception;
+	public void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception;
 
 }

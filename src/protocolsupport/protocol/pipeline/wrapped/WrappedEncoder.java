@@ -8,22 +8,22 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import net.minecraft.server.v1_8_R2.Packet;
 import net.minecraft.server.v1_8_R2.PacketListener;
-import protocolsupport.protocol.pipeline.PublicPacketEncoder;
+import protocolsupport.protocol.pipeline.IPacketEncoder;
 
 public class WrappedEncoder extends MessageToByteEncoder<Packet<PacketListener>> {
 
 	private static final Logger logger = LogManager.getLogger();
 
-	private PublicPacketEncoder realEncoder;
+	private IPacketEncoder realEncoder;
 
-	public void setRealEncoder(PublicPacketEncoder realEncoder) {
+	public void setRealEncoder(IPacketEncoder realEncoder) {
 		this.realEncoder = realEncoder;
 	}
 
 	@Override
 	protected void encode(ChannelHandlerContext ctx, Packet<PacketListener> packet, ByteBuf output) throws Exception {
 		try {
-			realEncoder.publicEncode(ctx, packet, output);
+			realEncoder.encode(ctx, packet, output);
 		} catch (Throwable t) {
 			logger.error(t);
 		}

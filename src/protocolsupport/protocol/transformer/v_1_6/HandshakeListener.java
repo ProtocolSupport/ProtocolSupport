@@ -19,7 +19,6 @@ import org.spigotmc.SpigotConfig;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.protocol.storage.ThrottleTracker;
-import protocolsupport.protocol.transformer.v_1_6.serverboundtransformer.PacketDecoder;
 
 import com.google.gson.Gson;
 import com.mojang.authlib.properties.Property;
@@ -30,11 +29,9 @@ public class HandshakeListener implements PacketHandshakingInListener {
 	private static final Gson gson = new Gson();
 
 	private final NetworkManager networkManager;
-	private final PacketDecoder decoder;
 
-	public HandshakeListener(PacketDecoder decoder, final NetworkManager networkmanager) {
+	public HandshakeListener(NetworkManager networkmanager) {
 		networkManager = networkmanager;
-		this.decoder = decoder;
 	}
 
 	@Override
@@ -55,7 +52,7 @@ public class HandshakeListener implements PacketHandshakingInListener {
 				} catch (Throwable t) {
 					LogManager.getLogger().debug("Failed to check connection throttle", t);
 				}
-				networkManager.a(new LoginListener(decoder, networkManager));
+				networkManager.a(new LoginListener(networkManager));
 				if (SpigotConfig.bungee) {
 					final String[] split = packethandshakinginsetprotocol.b.split("\u0000");
 					if ((split.length != 3) && (split.length != 4)) {

@@ -15,11 +15,10 @@ public class PipeLineBuilder implements IPipeLineBuilder {
 	public void buildPipeLine(Channel channel, ProtocolVersion version) {
 		ChannelPipeline pipeline = channel.pipeline();
 		NetworkManager networkmanager = (NetworkManager) pipeline.get(ChannelHandlers.NETWORK_MANAGER);
-		PacketDecoder decoder = new PacketDecoder(version);
-		networkmanager.a(new HandshakeListener(decoder, networkmanager));
-		pipeline.remove(ChannelHandlers.SPLITTER);
-		pipeline.remove(ChannelHandlers.PREPENDER);
-		ChannelHandlers.getDecoder(pipeline).setRealDecoder(decoder);
+		networkmanager.a(new HandshakeListener(networkmanager));
+		ChannelHandlers.getSplitter(pipeline).setRealSplitter(new PacketSplitter());
+		ChannelHandlers.getPrepender(pipeline).setRealPrepender(new PacketPrepender());
+		ChannelHandlers.getDecoder(pipeline).setRealDecoder(new PacketDecoder(version));
 		ChannelHandlers.getEncoder(pipeline).setRealEncoder(new PacketEncoder(version));
 	}
 

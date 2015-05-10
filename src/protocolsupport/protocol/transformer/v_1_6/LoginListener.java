@@ -24,7 +24,8 @@ import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import protocolsupport.protocol.transformer.v_1_6.serverboundtransformer.PacketDecoder;
+import protocolsupport.protocol.pipeline.ChannelHandlers;
+import protocolsupport.protocol.transformer.v_1_6.serverboundtransformer.PacketDecrypter;
 
 import com.google.common.base.Charsets;
 import com.mojang.authlib.GameProfile;
@@ -36,7 +37,6 @@ public class LoginListener extends net.minecraft.server.v1_8_R2.LoginListener {
 	private static final AtomicInteger authThreadsCounter = new AtomicInteger(0);
 	private static final Random random = new Random();
 
-	private PacketDecoder decoder;
 	private final byte[] randomBytes = new byte[4];
 	private int loginTicks;
 	protected SecretKey loginKey;
@@ -44,10 +44,9 @@ public class LoginListener extends net.minecraft.server.v1_8_R2.LoginListener {
 	protected GameProfile profile;
 	protected String serverId = "";
 
-	public LoginListener(PacketDecoder decoder, NetworkManager networkmanager) {
+	public LoginListener(NetworkManager networkmanager) {
 		super(MinecraftServer.getServer(), networkmanager);
 		random.nextBytes(randomBytes);
-		this.decoder = decoder;
 	}
 
 	@Override
@@ -129,7 +128,7 @@ public class LoginListener extends net.minecraft.server.v1_8_R2.LoginListener {
 		}
 		loginKey = packetlogininencryptionbegin.a(privatekey);
 		state = LoginState.AUTHENTICATING;
-		decoder.attachDecryptor(MinecraftEncryption.a(2, loginKey));
+		networkManager.k.pipeline().addBefore(ChannelHandlers.SPLITTER, ChannelHandlers.DECRYPT, new PacketDecrypter(MinecraftEncryption.a(2, loginKey)));
 		new ThreadPlayerLookupUUID(this, "User Authenticator #" + LoginListener.authThreadsCounter.incrementAndGet()).start();
 	}
 
