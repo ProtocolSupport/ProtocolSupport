@@ -1,4 +1,7 @@
-package protocolsupport.protocol.transformer.v_1_7;
+package protocolsupport.protocol.transformer.v_1_8;
+
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 
 import java.net.InetSocketAddress;
 import java.security.PrivateKey;
@@ -18,6 +21,7 @@ import net.minecraft.server.v1_8_R2.PacketLoginInEncryptionBegin;
 import net.minecraft.server.v1_8_R2.PacketLoginInStart;
 import net.minecraft.server.v1_8_R2.PacketLoginOutDisconnect;
 import net.minecraft.server.v1_8_R2.PacketLoginOutEncryptionBegin;
+import net.minecraft.server.v1_8_R2.PacketLoginOutSetCompression;
 import net.minecraft.server.v1_8_R2.PacketLoginOutSuccess;
 
 import org.apache.commons.lang3.Validate;
@@ -93,6 +97,7 @@ public class LoginListener extends net.minecraft.server.v1_8_R2.LoginListener im
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void b() {
 		if (isOnlineMode && !useOnlineModeUUID) {
@@ -101,6 +106,17 @@ public class LoginListener extends net.minecraft.server.v1_8_R2.LoginListener im
 		final EntityPlayer s = MinecraftServer.getServer().getPlayerList().attemptLogin(this, profile, hostname);
 		if (s != null) {
 			state = LoginState.ACCEPTED;
+			if (MinecraftServer.getServer().aJ() >= 0 && !this.networkManager.c()) {
+				this.networkManager.a(
+					new PacketLoginOutSetCompression(MinecraftServer.getServer().aJ()),
+					new ChannelFutureListener() {
+						@Override
+						public void operationComplete(ChannelFuture future) throws Exception {
+							networkManager.a(MinecraftServer.getServer().aJ());
+						}
+					}
+				);
+			}
 			networkManager.handle(new PacketLoginOutSuccess(profile));
 			MinecraftServer.getServer().getPlayerList().a(networkManager, MinecraftServer.getServer().getPlayerList().processLogin(profile, s));
 		}

@@ -1,4 +1,4 @@
-package protocolsupport.protocol.transformer.v_1_6;
+package protocolsupport.protocol.transformer;
 
 import java.math.BigInteger;
 import java.net.InetAddress;
@@ -14,50 +14,50 @@ import org.bukkit.craftbukkit.v1_8_R2.util.Waitable;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerPreLoginEvent;
 
-import protocolsupport.protocol.transformer.v_1_6.LoginListener.LoginState;
-
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.exceptions.AuthenticationUnavailableException;
 
 @SuppressWarnings("deprecation")
 public class ThreadPlayerLookupUUID extends Thread {
 
-	private final LoginListener listener;
+	private boolean isOnlineMode;
+	private final ILoginListener listener;
 
-	protected ThreadPlayerLookupUUID(final LoginListener loginlistener, final String threadName) {
+	public ThreadPlayerLookupUUID(ILoginListener loginlistener, String threadName, boolean isOnlineMode) {
 		super(threadName);
 		listener = loginlistener;
+		this.isOnlineMode = isOnlineMode;
 	}
 
 	@Override
 	public void run() {
-		final GameProfile gameprofile = listener.profile;
+		final GameProfile gameprofile = listener.getProfile();
 		try {
-			if (!MinecraftServer.getServer().getOnlineMode()) {
+			if (!isOnlineMode) {
 				listener.initUUID();
 				fireLoginEvents();
 				return;
 			}
-			final String hash = new BigInteger(MinecraftEncryption.a(listener.serverId, MinecraftServer.getServer().P().getPublic(), listener.loginKey)).toString(16);
-			listener.profile = MinecraftServer.getServer().aC().hasJoinedServer(new GameProfile(null, gameprofile.getName()), hash);
-			if (listener.profile != null) {
+			final String hash = new BigInteger(MinecraftEncryption.a("", MinecraftServer.getServer().P().getPublic(), listener.getLoginKey())).toString(16);
+			listener.setProfile(MinecraftServer.getServer().aC().hasJoinedServer(new GameProfile(null, gameprofile.getName()), hash));
+			if (listener.getProfile() != null) {
 				fireLoginEvents();
 			} else if (MinecraftServer.getServer().S()) {
-				LoginListener.logger.warn("Failed to verify username but will let them in anyway!");
-				listener.profile = listener.a(gameprofile);
-				listener.state = LoginState.READY_TO_ACCEPT;
+				listener.getLogger().warn("Failed to verify username but will let them in anyway!");
+				listener.setProfile(listener.generateOfflineProfile(gameprofile));
+				listener.setLoginState(LoginState.READY_TO_ACCEPT);
 			} else {
 				listener.disconnect("Failed to verify username!");
-				LoginListener.logger.error("Username '" + gameprofile.getName() + "' tried to join with an invalid session");
+				listener.getLogger().error("Username '" + gameprofile.getName() + "' tried to join with an invalid session");
 			}
 		} catch (AuthenticationUnavailableException authenticationunavailableexception) {
 			if (MinecraftServer.getServer().S()) {
-				LoginListener.logger.warn("Authentication servers are down but will let them in anyway!");
-				listener.profile = listener.a(gameprofile);
-				listener.state = LoginState.READY_TO_ACCEPT;
+				listener.getLogger().warn("Authentication servers are down but will let them in anyway!");
+				listener.setProfile(listener.generateOfflineProfile(gameprofile));
+				listener.setLoginState(LoginState.READY_TO_ACCEPT);
 			} else {
 				listener.disconnect("Authentication servers are down. Please try again later, sorry!");
-				LoginListener.logger.error("Couldn't verify username because servers are unavailable");
+				listener.getLogger().error("Couldn't verify username because servers are unavailable");
 			}
 		} catch (Exception exception) {
 			listener.disconnect("Failed to verify username!");
@@ -66,12 +66,12 @@ public class ThreadPlayerLookupUUID extends Thread {
 	}
 
 	private void fireLoginEvents() throws Exception {
-		if (!listener.networkManager.g()) {
+		if (!listener.getNetworkManager().g()) {
 			return;
 		}
-		final String playerName = listener.profile.getName();
-		final InetAddress address = ((InetSocketAddress) listener.networkManager.getSocketAddress()).getAddress();
-		final UUID uniqueId = listener.profile.getId();
+		final String playerName = listener.getProfile().getName();
+		final InetAddress address = ((InetSocketAddress) listener.getNetworkManager().getSocketAddress()).getAddress();
+		final UUID uniqueId = listener.getProfile().getId();
 		final CraftServer server = MinecraftServer.getServer().server;
 		final AsyncPlayerPreLoginEvent asyncEvent = new AsyncPlayerPreLoginEvent(playerName, address, uniqueId);
 		server.getPluginManager().callEvent(asyncEvent);
@@ -96,7 +96,7 @@ public class ThreadPlayerLookupUUID extends Thread {
 			listener.disconnect(asyncEvent.getKickMessage());
 			return;
 		}
-		LoginListener.logger.info("UUID of player " + listener.profile.getName() + " is " + listener.profile.getId());
-		listener.state = LoginState.READY_TO_ACCEPT;
+		listener.getLogger().info("UUID of player " + listener.getProfile().getName() + " is " + listener.getProfile().getId());
+		listener.setLoginState(LoginState.READY_TO_ACCEPT);
 	}
 }

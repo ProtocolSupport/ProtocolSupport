@@ -6,7 +6,6 @@ import java.net.InetSocketAddress;
 import net.minecraft.server.v1_8_R2.ChatComponentText;
 import net.minecraft.server.v1_8_R2.EnumProtocol;
 import net.minecraft.server.v1_8_R2.IChatBaseComponent;
-import net.minecraft.server.v1_8_R2.LoginListener;
 import net.minecraft.server.v1_8_R2.MinecraftServer;
 import net.minecraft.server.v1_8_R2.NetworkManager;
 import net.minecraft.server.v1_8_R2.PacketHandshakingInListener;
@@ -53,7 +52,7 @@ public class HandshakeListener implements PacketHandshakingInListener {
 				} catch (Throwable t) {
 					LogManager.getLogger().debug("Failed to check connection throttle", t);
 				}
-				networkManager.a(new LoginListener(MinecraftServer.getServer(), networkManager));
+				networkManager.a(new LoginListener(networkManager));
 				if (SpigotConfig.bungee) {
 					final String[] split = packethandshakinginsetprotocol.b.split("\u0000");
 					if ((split.length != 3) && (split.length != 4)) {
