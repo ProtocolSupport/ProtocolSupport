@@ -1,5 +1,8 @@
 package protocolsupport.protocol.transformer;
 
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
+
 import java.net.InetSocketAddress;
 import java.security.PrivateKey;
 import java.util.Arrays;
@@ -10,6 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.crypto.SecretKey;
 
 import net.minecraft.server.v1_8_R3.ChatComponentText;
+import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.NetworkManager;
@@ -17,6 +21,8 @@ import net.minecraft.server.v1_8_R3.PacketLoginInEncryptionBegin;
 import net.minecraft.server.v1_8_R3.PacketLoginInStart;
 import net.minecraft.server.v1_8_R3.PacketLoginOutDisconnect;
 import net.minecraft.server.v1_8_R3.PacketLoginOutEncryptionBegin;
+import net.minecraft.server.v1_8_R3.PacketLoginOutSetCompression;
+import net.minecraft.server.v1_8_R3.PacketLoginOutSuccess;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
@@ -89,15 +95,34 @@ public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void b() {
 		if (isOnlineMode && !useOnlineModeUUID) {
 			initUUID();
 		}
-		completeLogin();
+		final EntityPlayer s = MinecraftServer.getServer().getPlayerList().attemptLogin(this, profile, hostname);
+		if (s != null) {
+			state = LoginState.ACCEPTED;
+			if (hasCompression()) {
+				if (MinecraftServer.getServer().aK() >= 0 && !this.networkManager.c()) {
+					this.networkManager.a(
+						new PacketLoginOutSetCompression(MinecraftServer.getServer().aK()),
+						new ChannelFutureListener() {
+							@Override
+							public void operationComplete(ChannelFuture future) throws Exception {
+								networkManager.a(MinecraftServer.getServer().aK());
+							}
+						}
+					);
+				}
+			}
+			networkManager.handle(new PacketLoginOutSuccess(profile));
+			MinecraftServer.getServer().getPlayerList().a(networkManager, MinecraftServer.getServer().getPlayerList().processLogin(profile, s));
+		}
 	}
 
-	protected abstract void completeLogin();
+	protected abstract boolean hasCompression();
 
 	@Override
 	public void a(final IChatBaseComponent ichatbasecomponent) {
@@ -141,9 +166,11 @@ public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3
 		}
 		loginKey = packetlogininencryptionbegin.a(privatekey);
 		state = LoginState.AUTHENTICATING;
-		networkManager.a(loginKey);
+		enableEncryption(loginKey);
 		new ThreadPlayerLookupUUID(this, "User Authenticator #" + authThreadsCounter.incrementAndGet(), isOnlineMode).start();
 	}
+
+	protected abstract void enableEncryption(SecretKey key);
 
 	@Override
 	public Logger getLogger() {

@@ -1,11 +1,12 @@
 package protocolsupport.protocol.transformer.v_1_6;
 
+import javax.crypto.SecretKey;
+
+import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.transformer.AbstractLoginListener;
-import protocolsupport.protocol.transformer.LoginState;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.MinecraftServer;
+import protocolsupport.protocol.transformer.v_1_6.serverboundtransformer.PacketDecrypter;
+import net.minecraft.server.v1_8_R3.MinecraftEncryption;
 import net.minecraft.server.v1_8_R3.NetworkManager;
-import net.minecraft.server.v1_8_R3.PacketLoginOutSuccess;
 
 public class LoginListener extends AbstractLoginListener {
 
@@ -14,13 +15,13 @@ public class LoginListener extends AbstractLoginListener {
 	}
 
 	@Override
-	public void completeLogin() {
-		final EntityPlayer s = MinecraftServer.getServer().getPlayerList().attemptLogin(this, profile, hostname);
-		if (s != null) {
-			state = LoginState.ACCEPTED;
-			networkManager.handle(new PacketLoginOutSuccess(profile));
-			MinecraftServer.getServer().getPlayerList().a(networkManager, MinecraftServer.getServer().getPlayerList().processLogin(profile, s));
-		}
+	protected boolean hasCompression() {
+		return true;
+	}
+
+	@Override
+	protected void enableEncryption(SecretKey key) {
+		networkManager.channel.pipeline().addBefore(ChannelHandlers.SPLITTER, ChannelHandlers.DECRYPT, new PacketDecrypter(MinecraftEncryption.a(2, loginKey)));
 	}
 
 }
