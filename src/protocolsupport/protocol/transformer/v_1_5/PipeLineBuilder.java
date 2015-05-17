@@ -2,7 +2,7 @@ package protocolsupport.protocol.transformer.v_1_5;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
-import net.minecraft.server.v1_8_R2.NetworkManager;
+import net.minecraft.server.v1_8_R3.NetworkManager;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.IPipeLineBuilder;

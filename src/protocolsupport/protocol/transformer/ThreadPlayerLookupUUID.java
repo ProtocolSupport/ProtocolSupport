@@ -6,11 +6,11 @@ import java.net.InetSocketAddress;
 import java.util.UUID;
 import java.util.logging.Level;
 
-import net.minecraft.server.v1_8_R2.MinecraftEncryption;
-import net.minecraft.server.v1_8_R2.MinecraftServer;
+import net.minecraft.server.v1_8_R3.MinecraftEncryption;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
 
-import org.bukkit.craftbukkit.v1_8_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_8_R2.util.Waitable;
+import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_8_R3.util.Waitable;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerPreLoginEvent;
 
@@ -38,11 +38,11 @@ public class ThreadPlayerLookupUUID extends Thread {
 				fireLoginEvents();
 				return;
 			}
-			final String hash = new BigInteger(MinecraftEncryption.a("", MinecraftServer.getServer().P().getPublic(), listener.getLoginKey())).toString(16);
-			listener.setProfile(MinecraftServer.getServer().aC().hasJoinedServer(new GameProfile(null, gameprofile.getName()), hash));
+			final String hash = new BigInteger(MinecraftEncryption.a("", MinecraftServer.getServer().Q().getPublic(), listener.getLoginKey())).toString(16);
+			listener.setProfile(MinecraftServer.getServer().aD().hasJoinedServer(new GameProfile(null, gameprofile.getName()), hash));
 			if (listener.getProfile() != null) {
 				fireLoginEvents();
-			} else if (MinecraftServer.getServer().S()) {
+			} else if (MinecraftServer.getServer().T()) {
 				listener.getLogger().warn("Failed to verify username but will let them in anyway!");
 				listener.setProfile(listener.generateOfflineProfile(gameprofile));
 				listener.setLoginState(LoginState.READY_TO_ACCEPT);
@@ -51,7 +51,7 @@ public class ThreadPlayerLookupUUID extends Thread {
 				listener.getLogger().error("Username '" + gameprofile.getName() + "' tried to join with an invalid session");
 			}
 		} catch (AuthenticationUnavailableException authenticationunavailableexception) {
-			if (MinecraftServer.getServer().S()) {
+			if (MinecraftServer.getServer().T()) {
 				listener.getLogger().warn("Authentication servers are down but will let them in anyway!");
 				listener.setProfile(listener.generateOfflineProfile(gameprofile));
 				listener.setLoginState(LoginState.READY_TO_ACCEPT);
@@ -99,4 +99,5 @@ public class ThreadPlayerLookupUUID extends Thread {
 		listener.getLogger().info("UUID of player " + listener.getProfile().getName() + " is " + listener.getProfile().getId());
 		listener.setLoginState(LoginState.READY_TO_ACCEPT);
 	}
+
 }

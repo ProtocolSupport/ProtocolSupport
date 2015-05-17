@@ -15,10 +15,11 @@ public class PlayerLoginStartEvent extends Event {
 
 	private static final HandlerList list = new HandlerList();
 
-	public PlayerLoginStartEvent(InetSocketAddress address, String username, boolean onlinemode, String hostname) {
+	public PlayerLoginStartEvent(InetSocketAddress address, String username, boolean onlinemode, boolean useonlinemodeuuid, String hostname) {
 		this.address = address;
 		this.username = username;
 		this.onlinemode = onlinemode;
+		this.useonlinemodeuuid = useonlinemodeuuid;
 		this.hostname = hostname;
 	}
 

@@ -5,7 +5,7 @@ import gnu.trove.map.hash.TObjectLongHashMap;
 
 import java.net.InetAddress;
 
-import net.minecraft.server.v1_8_R2.MinecraftServer;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
 
 public class ThrottleTracker {
 

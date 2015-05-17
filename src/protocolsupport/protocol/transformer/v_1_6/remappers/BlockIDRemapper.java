@@ -1,6 +1,6 @@
 package protocolsupport.protocol.transformer.v_1_6.remappers;
 
-import net.minecraft.server.v1_8_R2.Block;
+import net.minecraft.server.v1_8_R3.Block;
 
 public class BlockIDRemapper {
 

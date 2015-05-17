@@ -8,12 +8,12 @@ import java.io.IOException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import net.minecraft.server.v1_8_R2.ChatModifier;
-import net.minecraft.server.v1_8_R2.ChatTypeAdapterFactory;
-import net.minecraft.server.v1_8_R2.IChatBaseComponent;
-import net.minecraft.server.v1_8_R2.Packet;
-import net.minecraft.server.v1_8_R2.PacketListener;
-import net.minecraft.server.v1_8_R2.ServerPing;
+import net.minecraft.server.v1_8_R3.ChatModifier;
+import net.minecraft.server.v1_8_R3.ChatTypeAdapterFactory;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent;
+import net.minecraft.server.v1_8_R3.Packet;
+import net.minecraft.server.v1_8_R3.PacketListener;
+import net.minecraft.server.v1_8_R3.ServerPing;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.utils.ServerPingSerializers;
 import protocolsupport.utils.Utils;

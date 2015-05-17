@@ -1,6 +1,6 @@
 package protocolsupport.protocol.transformer.v_1_7.remappers;
 
-import net.minecraft.server.v1_8_R2.Item;
+import net.minecraft.server.v1_8_R3.Item;
 
 public class ItemIDRemapper {
 

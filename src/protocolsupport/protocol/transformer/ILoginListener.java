@@ -4,7 +4,7 @@ import javax.crypto.SecretKey;
 
 import org.apache.logging.log4j.Logger;
 
-import net.minecraft.server.v1_8_R2.NetworkManager;
+import net.minecraft.server.v1_8_R3.NetworkManager;
 
 import com.mojang.authlib.GameProfile;
 

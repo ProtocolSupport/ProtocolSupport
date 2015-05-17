@@ -14,17 +14,18 @@ import com.google.gson.Gson;
 import com.mojang.authlib.properties.Property;
 import com.mojang.util.UUIDTypeAdapter;
 
-import net.minecraft.server.v1_8_R2.ChatComponentText;
-import net.minecraft.server.v1_8_R2.EnumProtocol;
-import net.minecraft.server.v1_8_R2.IChatBaseComponent;
-import net.minecraft.server.v1_8_R2.LoginListener;
-import net.minecraft.server.v1_8_R2.MinecraftServer;
-import net.minecraft.server.v1_8_R2.NetworkManager;
-import net.minecraft.server.v1_8_R2.PacketHandshakingInSetProtocol;
-import net.minecraft.server.v1_8_R2.PacketLoginOutDisconnect;
-import net.minecraft.server.v1_8_R2.PacketStatusListener;
+import net.minecraft.server.v1_8_R3.ChatComponentText;
+import net.minecraft.server.v1_8_R3.EnumProtocol;
+import net.minecraft.server.v1_8_R3.HandshakeListener;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent;
+import net.minecraft.server.v1_8_R3.LoginListener;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
+import net.minecraft.server.v1_8_R3.NetworkManager;
+import net.minecraft.server.v1_8_R3.PacketHandshakingInSetProtocol;
+import net.minecraft.server.v1_8_R3.PacketLoginOutDisconnect;
+import net.minecraft.server.v1_8_R3.PacketStatusListener;
 
-public abstract class AbstractHandshakeListener extends net.minecraft.server.v1_8_R2.HandshakeListener {
+public abstract class AbstractHandshakeListener extends HandshakeListener {
 
 	private static final Gson gson = new Gson();
 

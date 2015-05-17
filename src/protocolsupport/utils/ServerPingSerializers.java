@@ -3,9 +3,9 @@ package protocolsupport.utils;
 import java.lang.reflect.Type;
 import java.util.UUID;
 
-import net.minecraft.server.v1_8_R2.ChatDeserializer;
-import net.minecraft.server.v1_8_R2.ServerPing.ServerData;
-import net.minecraft.server.v1_8_R2.ServerPing.ServerPingPlayerSample;
+import net.minecraft.server.v1_8_R3.ChatDeserializer;
+import net.minecraft.server.v1_8_R3.ServerPing.ServerData;
+import net.minecraft.server.v1_8_R3.ServerPing.ServerPingPlayerSample;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;

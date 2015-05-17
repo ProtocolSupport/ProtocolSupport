@@ -7,12 +7,12 @@ import io.netty.util.AttributeKey;
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_8_R2.EnumProtocol;
-import net.minecraft.server.v1_8_R2.EnumProtocolDirection;
-import net.minecraft.server.v1_8_R2.NetworkManager;
-import net.minecraft.server.v1_8_R2.Packet;
-import net.minecraft.server.v1_8_R2.PacketDataSerializer;
-import net.minecraft.server.v1_8_R2.PacketListener;
+import net.minecraft.server.v1_8_R3.EnumProtocol;
+import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
+import net.minecraft.server.v1_8_R3.NetworkManager;
+import net.minecraft.server.v1_8_R3.Packet;
+import net.minecraft.server.v1_8_R3.PacketDataSerializer;
+import net.minecraft.server.v1_8_R3.PacketListener;
 import protocolsupport.protocol.pipeline.IPacketEncoder;
 
 public class PacketEncoder implements IPacketEncoder {
