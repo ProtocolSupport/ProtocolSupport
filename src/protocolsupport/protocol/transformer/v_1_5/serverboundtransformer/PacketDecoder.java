@@ -15,6 +15,8 @@ import net.minecraft.server.v1_8_R3.PacketListener;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.pipeline.IPacketDecoder;
+import protocolsupport.utils.ReplayingDecoderBuffer;
+import protocolsupport.utils.ReplayingDecoderBuffer.EOFSignal;
 
 public class PacketDecoder implements IPacketDecoder {
 
@@ -27,18 +29,21 @@ public class PacketDecoder implements IPacketDecoder {
 		new LoginPacketTransformer()
 	};
 
+	private ReplayingDecoderBuffer buffer = new ReplayingDecoderBuffer();
+
 	@Override
 	public void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
 		if (!input.isReadable()) {
 			return;
 		}
-		input.markReaderIndex();
+		buffer.setCumulation(input);
+		buffer.markReaderIndex();
 		Channel channel = ctx.channel();
 		try {
-			int packetId = input.readUnsignedByte();
+			int packetId = buffer.readUnsignedByte();
 			Packet<PacketListener>[] transformedPackets = transformers[channel.attr(currentStateAttrKey).get().ordinal()].tranform(
 				channel, packetId,
-				new PacketDataSerializer(input, ProtocolVersion.MINECRAFT_1_5_2)
+				new PacketDataSerializer(buffer, ProtocolVersion.MINECRAFT_1_5_2)
 			);
 			if (transformedPackets != null) {
 				for (Packet<PacketListener> transformedPacket : transformedPackets) {
@@ -47,8 +52,8 @@ public class PacketDecoder implements IPacketDecoder {
 			} else {
 				throw new IOException("Can't deserialize unknown packet "+packetId);
 			}
-		} catch (IndexOutOfBoundsException ex) {
-			input.resetReaderIndex();
+		} catch (EOFSignal ex) {
+			buffer.resetReaderIndex();
 		}
 	}
 

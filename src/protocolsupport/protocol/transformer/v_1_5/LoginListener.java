@@ -16,7 +16,7 @@ public class LoginListener extends AbstractLoginListener {
 
 	@Override
 	protected boolean hasCompression() {
-		return true;
+		return false;
 	}
 
 	@Override
