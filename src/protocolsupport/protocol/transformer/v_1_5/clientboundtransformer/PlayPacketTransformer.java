@@ -39,6 +39,7 @@ import protocolsupport.utils.MapTransformer.ColumnEntry;
 
 public class PlayPacketTransformer implements PacketTransformer {
 
+	private WatchedPlayer player;
 	private LocalStorage storage = new LocalStorage();
 
 	@Override
@@ -54,7 +55,8 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x01: { //PacketPlayOutLogin
 				serializer.writeByte(0x01);
 				int playerEnityId = packetdata.readInt();
-				storage.addWatchedEntity(new WatchedPlayer(playerEnityId));
+				player = new WatchedPlayer(playerEnityId);
+				storage.addWatchedEntity(player);
 				serializer.writeInt(playerEnityId);
 				int gamemode = packetdata.readByte();
 				int dimension = packetdata.readByte();
@@ -101,6 +103,9 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x07: { //PacketPlayOutRespawn
 				storage.clearWatchedEntities();
+				if (player != null) {
+					storage.addWatchedEntity(player);
+				}
 				serializer.writeByte(0x09);
 				serializer.writeInt(packetdata.readInt());
 				serializer.writeByte(packetdata.readByte());
@@ -321,6 +326,9 @@ public class PlayPacketTransformer implements PacketTransformer {
 					array[i] = packetdata.readVarInt();
 				}
 				storage.removeWatchedEntities(array);
+				if (player != null) {
+					storage.addWatchedEntity(player);
+				}
 				for (int[] part : Utils.splitArray(array, 120)) {
 					serializer.writeByte(0x1D);
 					serializer.writeByte(part.length);
