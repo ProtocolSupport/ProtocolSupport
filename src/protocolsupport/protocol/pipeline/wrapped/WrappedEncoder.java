@@ -14,7 +14,11 @@ public class WrappedEncoder extends MessageToByteEncoder<Packet<PacketListener>>
 
 	private static final Logger logger = LogManager.getLogger();
 
-	private IPacketEncoder realEncoder;
+	private IPacketEncoder realEncoder = new IPacketEncoder() {
+		@Override
+		public void encode(ChannelHandlerContext ctx, Packet<PacketListener> packet, ByteBuf output) throws Exception {
+		}
+	};
 
 	public void setRealEncoder(IPacketEncoder realEncoder) {
 		this.realEncoder = realEncoder;

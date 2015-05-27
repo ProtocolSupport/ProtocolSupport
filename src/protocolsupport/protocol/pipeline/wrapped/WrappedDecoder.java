@@ -12,7 +12,11 @@ import protocolsupport.utils.Utils;
 
 public class WrappedDecoder extends ByteToMessageDecoder {
 
-	private IPacketDecoder realDecoder;
+	private IPacketDecoder realDecoder = new IPacketDecoder() {
+		@Override
+		public void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
+		}
+	};
 
 	public void setRealDecoder(IPacketDecoder realDecoder) {
 		this.realDecoder = realDecoder;

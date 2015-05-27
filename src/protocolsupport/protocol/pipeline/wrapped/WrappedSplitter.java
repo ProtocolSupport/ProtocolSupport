@@ -9,7 +9,11 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 
 public class WrappedSplitter extends ByteToMessageDecoder {
 
-	private IPacketSplitter realSplitter;
+	private IPacketSplitter realSplitter = new IPacketSplitter() {
+		@Override
+		public void split(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
+		}
+	};
 
 	public void setRealSplitter(IPacketSplitter realSplitter) {
 		this.realSplitter = realSplitter;
