@@ -3,6 +3,9 @@ package protocolsupport.commands;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.server.v1_8_R3.MinecraftServer;
+import net.minecraft.server.v1_8_R3.PropertyManager;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -15,6 +18,8 @@ import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
 
 public class CommandHandler implements CommandExecutor, TabCompleter {
+
+	private static final String DEBUG_PROPERTY = "debug";
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -29,6 +34,17 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			sender.sendMessage(ChatColor.GOLD+"[1.6.4]: "+ChatColor.GREEN+getPlayersStringForProtocol(ProtocolVersion.MINECRAFT_1_6_4));
 			sender.sendMessage(ChatColor.GOLD+"[1.6.2]: "+ChatColor.GREEN+getPlayersStringForProtocol(ProtocolVersion.MINECRAFT_1_6_2));
 			sender.sendMessage(ChatColor.GOLD+"[1.5.2]: "+ChatColor.GREEN+getPlayersStringForProtocol(ProtocolVersion.MINECRAFT_1_5_2));
+			return true;
+		}
+		if (args.length == 2 && args[0].equalsIgnoreCase("debug")) {
+			PropertyManager manager = MinecraftServer.getServer().getPropertyManager();
+			if (!manager.getBoolean(DEBUG_PROPERTY, false)) {
+				manager.setProperty(DEBUG_PROPERTY, true);
+				sender.sendMessage(ChatColor.GOLD + "Enabled debug");
+			} else {
+				manager.setProperty(DEBUG_PROPERTY, false);
+				sender.sendMessage(ChatColor.GOLD + "Disabled debug");
+			}
 			return true;
 		}
 		return false;
