@@ -36,7 +36,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			sender.sendMessage(ChatColor.GOLD+"[1.5.2]: "+ChatColor.GREEN+getPlayersStringForProtocol(ProtocolVersion.MINECRAFT_1_5_2));
 			return true;
 		}
-		if (args.length == 2 && args[0].equalsIgnoreCase("debug")) {
+		if (args.length == 1 && args[0].equalsIgnoreCase("debug")) {
 			PropertyManager manager = MinecraftServer.getServer().getPropertyManager();
 			if (!manager.getBoolean(DEBUG_PROPERTY, false)) {
 				manager.setProperty(DEBUG_PROPERTY, true);
