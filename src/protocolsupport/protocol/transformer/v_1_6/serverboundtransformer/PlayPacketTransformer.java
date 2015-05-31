@@ -100,6 +100,8 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x12: { //PacketPlayInArmAnimation
 				packet = getPacketById(0x0A);
+				serializer.readInt();
+				serializer.readByte();
 				break;
 			}
 			case 0x13: { //PacketPlayInEntityAction
