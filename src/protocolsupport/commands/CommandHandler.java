@@ -69,6 +69,9 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 		if ("list".startsWith(args[0])) {
 			return Collections.singletonList("list");
 		}
+		if ("debug".startsWith(args[0])) {
+			return Collections.singletonList("debug");
+		}
 		return Collections.emptyList();
 	}
 
