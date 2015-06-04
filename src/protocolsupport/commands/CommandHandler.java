@@ -1,5 +1,6 @@
 package protocolsupport.commands;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -66,6 +67,9 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+		if (args[0].isEmpty()) {
+			return Arrays.asList("list", "debug");
+		}
 		if ("list".startsWith(args[0])) {
 			return Collections.singletonList("list");
 		}
