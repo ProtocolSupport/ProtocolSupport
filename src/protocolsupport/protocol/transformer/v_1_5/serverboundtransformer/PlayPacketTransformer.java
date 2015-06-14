@@ -150,7 +150,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x13: { //PacketPlayInEntityAction
 				packet = getPacketById(0x0B);
 				packetdata.writeVarInt(serializer.readInt());
-				packetdata.writeVarInt(serializer.readByte());
+				packetdata.writeVarInt(serializer.readByte() - 1);
 				packetdata.writeVarInt(0);
 				break;
 			}
