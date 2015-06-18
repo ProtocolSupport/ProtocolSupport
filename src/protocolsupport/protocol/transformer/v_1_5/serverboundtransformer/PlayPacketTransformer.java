@@ -22,7 +22,7 @@ import protocolsupport.utils.Utils;
 
 public class PlayPacketTransformer implements PacketTransformer {
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings("unchecked")
 	@Override
 	public Packet<PacketListener>[] tranform(Channel channel, int packetId, PacketDataSerializer serializer) throws IOException, IllegalAccessException, InstantiationException {
 		PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
@@ -91,25 +91,14 @@ public class PlayPacketTransformer implements PacketTransformer {
 				float yaw = serializer.readFloat();
 				float pitch = serializer.readFloat();
 				boolean onGroud = serializer.readBoolean();
+				packet = getPacketById(0x06);
 				//when y is -999.0D than it means that client actually tries to control vehicle movement
 				if ((yfeet == -999.0D) && (y == -999.0D)) {
-					Packet[] packets = new Packet[2];
-					Packet<PacketListener> playerlook = getPacketById(0x05);
+					packet = getPacketById(0x05);
 					packetdata.writeFloat(yaw);
 					packetdata.writeFloat(pitch);
 					packetdata.writeBoolean(onGroud);
-					playerlook.a(packetdata);
-					packets[0] = playerlook;
-					packetdata.clear();
-					Packet<PacketListener> steervehicle = getPacketById(0x0C);
-					packetdata.writeFloat(0.0F);
-					packetdata.writeFloat(0.0F);
-					packetdata.writeByte(0);
-					steervehicle.a(packetdata);
-					packets[1] = steervehicle;
-					return packets;
 				} else {
-					packet = getPacketById(0x06);
 					packetdata.writeDouble(x);
 					packetdata.writeDouble(yfeet);
 					packetdata.writeDouble(z);

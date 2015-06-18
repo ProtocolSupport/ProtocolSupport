@@ -159,7 +159,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x0B: { //PacketPlayOutAnimation
 				serializer.writeByte(0x12);
 				serializer.writeInt(packetdata.readVarInt());
-				serializer.writeByte(packetdata.readByte());
+				serializer.writeByte(packetdata.readByte() + 1);
 				return;
 			}
 			case 0x0C: { //PacketPlayOutNamedEntitySpawn

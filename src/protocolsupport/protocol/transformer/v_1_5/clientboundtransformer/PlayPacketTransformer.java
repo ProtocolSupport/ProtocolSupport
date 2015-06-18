@@ -118,7 +118,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(0x0D);
 				Player player = Utils.getPlayer(channel);
 				double x = packetdata.readDouble();
-				double y = packetdata.readDouble() + 1.63;
+				double y = packetdata.readDouble() + 1.6200000047683716D;
 				double z = packetdata.readDouble();
 				float yaw = packetdata.readFloat();
 				float pitch = packetdata.readFloat();
@@ -141,7 +141,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				}
 				serializer.writeDouble(x);
 				serializer.writeDouble(y);
-				serializer.writeDouble(y + 1.63);
+				serializer.writeDouble(y - 1.6200000047683716D);
 				serializer.writeDouble(z);
 				serializer.writeFloat(yaw);
 				serializer.writeFloat(pitch);
@@ -166,7 +166,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x0B: { //PacketPlayOutAnimation
 				serializer.writeByte(0x12);
 				serializer.writeInt(packetdata.readVarInt());
-				serializer.writeByte(packetdata.readByte());
+				serializer.writeByte(packetdata.readByte() + 1);
 				return;
 			}
 			case 0x0C: { //PacketPlayOutNamedEntitySpawn
