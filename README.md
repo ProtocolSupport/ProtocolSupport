@@ -1,7 +1,7 @@
 ProtocolSupport
 ===============
 
-Support 1.7, 1.6, 1.5.2 on spigot 1.8.3
+Support 1.7, 1.6, 1.5.2 on spigot
 
 Known issues:
 * [1.5.2, 1.6] Stats are not sent - won't be fixed, no point in it anyway
