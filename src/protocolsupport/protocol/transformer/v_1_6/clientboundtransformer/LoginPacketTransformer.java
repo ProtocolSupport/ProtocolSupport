@@ -8,6 +8,7 @@ import java.io.IOException;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketListener;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.utils.Utils;
 
 public class LoginPacketTransformer implements PacketTransformer {
 
@@ -16,6 +17,11 @@ public class LoginPacketTransformer implements PacketTransformer {
 		PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
 		packet.b(packetdata);
 		switch (packetId) {
+	        	case 0x00:{ //PacketLoginOutDisconnect
+                  		serializer.writeByte(0xFF);
+                  		serializer.writeString(Utils.fromComponent(packetdata.d()));
+                  		return;
+            		}
 			case 0x01: { //PacketLoginOutEncryptionBegin
 				serializer.writeByte(0xFD);
 				serializer.writeString(packetdata.readString(20));
