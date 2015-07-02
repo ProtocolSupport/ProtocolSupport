@@ -622,7 +622,13 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x2B: { //PacketPlayOutGameStateChange
 				serializer.writeByte(0x46);
-				serializer.writeByte(packetdata.readByte());
+                		byte value = packetdata.readByte();
+                		if(value == 1){
+                    		    value = 2;
+                		}else if(value == 2){
+                		    value = 1;
+                		}
+                		serializer.writeByte(value);
 				serializer.writeByte((int) packetdata.readFloat());
 				return;
 			}
