@@ -103,15 +103,17 @@ public class PlayPacketTransformer implements PacketTransformer {
 					packetdata.writeFloat(pitch);
 					packetdata.writeBoolean(onGroud);
 					Player player = Utils.getPlayer(channel);
-					EntityPlayer pl = ((CraftPlayer) player).getHandle();
-					double speedBoost = 0.1;// Random value
-					if (player.getVehicle().getType() == EntityType.BOAT) {
+					if (player.getVehicle() != null) {
+					    EntityPlayer pl = ((CraftPlayer) player).getHandle();
+					    double speedBoost = 0.1;// Random value
+					    if (player.getVehicle().getType() == EntityType.BOAT) {
 						speedBoost = 0.4D; // from EntityBoat: maxSpeed;
-					} else if (player.getVehicle().getType() == EntityType.MINECART) {
+					    } else if (player.getVehicle().getType() == EntityType.MINECART) {
 						speedBoost = 0.3D; // Random value
-					}
+					    }
 					pl.vehicle.motX += x * speedBoost;
 					pl.vehicle.motZ += z * speedBoost;
+					}
 				} else {
 					packetdata.writeDouble(x);
 					packetdata.writeDouble(yfeet);
