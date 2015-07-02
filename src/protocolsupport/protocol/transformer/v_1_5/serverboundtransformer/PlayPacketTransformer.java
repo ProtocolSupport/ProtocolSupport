@@ -112,8 +112,9 @@ public class PlayPacketTransformer implements PacketTransformer {
                                                 } else if (player.getVehicle().getType() == EntityType.MINECART) {
                                                         speedBoost = 0.3D; // Random
                                                 }
-					pl.vehicle.motX += x * speedBoost;
-					pl.vehicle.motZ += z * speedBoost;
+						pl.vehicle.motX += x * speedBoost;
+						pl.vehicle.motZ += z * speedBoost;
+						}
 					}
 				} else {
 					packetdata.writeDouble(x);
