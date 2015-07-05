@@ -651,7 +651,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(packetdata.readUnsignedByte());
 				byte id = Utils.getInventoryId(packetdata.readString(32));
 				serializer.writeByte(id);
-				serializer.writeString(packetdata.d().getText());
+				serializer.writeString(Utils.fromComponent(packetdata.d()));
 				serializer.writeByte(packetdata.readUnsignedByte());
 				serializer.writeBoolean(true);
 				if (id == 11) {
