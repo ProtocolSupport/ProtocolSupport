@@ -622,7 +622,21 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x2B: { //PacketPlayOutGameStateChange
 				serializer.writeByte(0x46);
-				serializer.writeByte(packetdata.readByte());
+				byte value = packetdata.readByte();
+				switch (value) {
+					case 1: {
+						value = 2;
+						break;
+					}
+					case 2: {
+						value = 1;
+						break;
+					}
+					default: {
+						break;
+					}
+				}
+				serializer.writeByte(value);
 				serializer.writeByte((int) packetdata.readFloat());
 				return;
 			}
@@ -637,7 +651,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(packetdata.readUnsignedByte());
 				byte id = Utils.getInventoryId(packetdata.readString(32));
 				serializer.writeByte(id);
-				serializer.writeString(packetdata.d().getText());
+				serializer.writeString(Utils.fromComponent(packetdata.d()));
 				serializer.writeByte(packetdata.readUnsignedByte());
 				serializer.writeBoolean(true);
 				if (id == 11) {

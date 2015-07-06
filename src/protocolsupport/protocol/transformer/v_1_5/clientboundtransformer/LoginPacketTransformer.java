@@ -17,10 +17,10 @@ public class LoginPacketTransformer implements PacketTransformer {
 		PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
 		packet.b(packetdata);
 		switch (packetId) {
-		    	case 0x00:{ //PacketLoginOutDisconnect
-	              		serializer.writeByte(0xFF);
-	              		serializer.writeString(Utils.fromComponent(packetdata.d()));
-	              		return;
+			case 0x00: { // PacketLoginOutDisconnect
+				serializer.writeByte(0xFF);
+				serializer.writeString(Utils.fromComponent(packetdata.d()));
+				return;
 			}
 			case 0x01: { //PacketLoginOutEncryptionBegin
 				serializer.writeByte(0xFD);
