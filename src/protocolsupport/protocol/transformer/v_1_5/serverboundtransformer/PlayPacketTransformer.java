@@ -8,20 +8,18 @@ import java.io.IOException;
 
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.ChatComponentText;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.EnumProtocol;
 import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketListener;
 
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.utils.SteerVehicleUtils;
 import protocolsupport.utils.Utils;
 
 public class PlayPacketTransformer implements PacketTransformer {
@@ -102,24 +100,9 @@ public class PlayPacketTransformer implements PacketTransformer {
 					packetdata.writeFloat(yaw);
 					packetdata.writeFloat(pitch);
 					packetdata.writeBoolean(onGroud);
+					
 					Player player = Utils.getPlayer(channel);
-					if (player.getVehicle() != null) {
-						if (x != 0 || z != 0) {
-							EntityPlayer pl = ((CraftPlayer) player).getHandle();
-							double speedBoost = 0.1;// ?
-							if (player.getVehicle().getType() == EntityType.BOAT) {
-								speedBoost = 0.4D; // from EntityBoat: maxSpeed;
-							} else if (player.getVehicle().getType() == EntityType.MINECART) {
-								speedBoost = 0.1D; // Random EntityMinecart
-							}
-							if (pl.vehicle.motX < speedBoost) {
-								pl.vehicle.motX += x * speedBoost;
-							}
-							if (pl.vehicle.motZ < speedBoost) {
-								pl.vehicle.motZ += z * speedBoost;
-							}
-						}
-					}
+					SteerVehicleUtils.applyVehicle(player, x, z);
 				} else {
 					packetdata.writeDouble(x);
 					packetdata.writeDouble(yfeet);
