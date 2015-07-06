@@ -70,36 +70,36 @@ public class SteerVehicleUtils {
 			if (dx != 0 || dz != 0) {
 				float f = getLookAtYaw(dx, dz);
 				float wrappedYaw = getCompressedAngle(wrapAngle(f));
-				float wrappedVehicleYaw = getCompressedAngle(wrapAngle(pl.yaw));
-				float moveForward = getForwardValue(wrappedVehicleYaw, wrappedYaw);
+				float wrappedPlayerYaw = getCompressedAngle(wrapAngle(pl.yaw));
+				float moveForward = getForwardValue(wrappedPlayerYaw, wrappedYaw);
 				float moveStrafe = 0;//??
 				pl.a(moveStrafe, moveForward, false, false);
 			}
 		}
 	}
 
-	public static float getForwardValue(float vehicleYaw, float yaw) {
+	public static float getForwardValue(float playerYaw, float yaw) {
 		float value = 0;
 
-		if (vehicleYaw >= COMPRESSED_EAST_MIN && vehicleYaw <= COMPRESSED_EAST_MAX) {// EAST
+		if (playerYaw >= COMPRESSED_EAST_MIN && playerYaw <= COMPRESSED_EAST_MAX) {// EAST
 			if (yaw > COMPRESSED_WEST_MIN && yaw < COMPRESSED_WEST_MAX) { // WEST
 				value = -moveForward;
 			} else {
 				value = moveForward;
 			}
-		} else if (vehicleYaw >= COMPRESSED_SOUTH_MIN && vehicleYaw <= COMPRESSED_SOUTH_MAX) { // SOUTH
+		} else if (playerYaw >= COMPRESSED_SOUTH_MIN && playerYaw <= COMPRESSED_SOUTH_MAX) { // SOUTH
 			if (yaw >= COMPRESSED_NORTH_MIN && yaw <= 128 || yaw > -128 && yaw <= COMPRESSED_NORTH_MAX) {// NORTH
 				value = -moveForward;
 			} else {
 				value = moveForward;
 			}
-		} else if (vehicleYaw > COMPRESSED_WEST_MIN && vehicleYaw < COMPRESSED_WEST_MAX) { // WEST
+		} else if (playerYaw > COMPRESSED_WEST_MIN && playerYaw < COMPRESSED_WEST_MAX) { // WEST
 			if (yaw > COMPRESSED_EAST_MIN && yaw < COMPRESSED_EAST_MAX) { // EAST
 				value = -moveForward;
 			} else {
 				value = moveForward;
 			}
-		} else if (vehicleYaw >= COMPRESSED_NORTH_MIN && vehicleYaw <= 128 || vehicleYaw > -128 && vehicleYaw <= COMPRESSED_NORTH_MAX) { // NORTH
+		} else if (playerYaw >= COMPRESSED_NORTH_MIN && playerYaw <= 128 || playerYaw > -128 && playerYaw <= COMPRESSED_NORTH_MAX) { // NORTH
 			if (yaw >= COMPRESSED_SOUTH_MIN && yaw <= COMPRESSED_SOUTH_MAX) { // SOUTH
 				value = -moveForward;
 			} else {
