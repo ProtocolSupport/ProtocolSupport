@@ -15,6 +15,7 @@ import net.minecraft.server.v1_8_R3.PacketListener;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.pipeline.IPacketDecoder;
+import protocolsupport.utils.Allocator;
 import protocolsupport.utils.ReplayingDecoderBuffer;
 import protocolsupport.utils.ReplayingDecoderBuffer.EOFSignal;
 
@@ -39,11 +40,13 @@ public class PacketDecoder implements IPacketDecoder {
 		buffer.setCumulation(input);
 		buffer.markReaderIndex();
 		Channel channel = ctx.channel();
+		PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), ProtocolVersion.MINECRAFT_1_5_2);
 		try {
 			int packetId = buffer.readUnsignedByte();
 			Packet<PacketListener>[] transformedPackets = transformers[channel.attr(currentStateAttrKey).get().ordinal()].tranform(
 				channel, packetId,
-				new PacketDataSerializer(buffer, ProtocolVersion.MINECRAFT_1_5_2)
+				new PacketDataSerializer(buffer, ProtocolVersion.MINECRAFT_1_5_2),
+				packetdata
 			);
 			if (transformedPackets != null) {
 				for (Packet<PacketListener> transformedPacket : transformedPackets) {
@@ -54,6 +57,8 @@ public class PacketDecoder implements IPacketDecoder {
 			}
 		} catch (EOFSignal ex) {
 			buffer.resetReaderIndex();
+		} finally {
+			packetdata.release();
 		}
 	}
 

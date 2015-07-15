@@ -1,6 +1,5 @@
 package protocolsupport.protocol.transformer.v_1_5.clientboundtransformer;
 
-import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 
 import java.io.IOException;
@@ -16,6 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.utils.Allocator;
 import protocolsupport.utils.ServerPingSerializers;
 import protocolsupport.utils.Utils;
 
@@ -32,7 +32,7 @@ public class StatusPacketTransformer implements PacketTransformer {
 	@Override
 	public void tranform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
 		if (packetId == 0x00) {
-			PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
+			PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), serializer.getVersion());
 			packet.b(packetdata);
 			ServerPing serverPing = gson.fromJson(packetdata.readString(32767), ServerPing.class);
 			String response =
@@ -48,6 +48,7 @@ public class StatusPacketTransformer implements PacketTransformer {
 				serverPing.b().a();
 			serializer.writeByte(0xFF);
 			serializer.writeString(response);
+			packetdata.release();
 		}
 	}
 

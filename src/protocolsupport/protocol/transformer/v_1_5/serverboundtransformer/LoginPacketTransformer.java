@@ -1,6 +1,5 @@
 package protocolsupport.protocol.transformer.v_1_5.serverboundtransformer;
 
-import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 
 import java.io.IOException;
@@ -15,8 +14,7 @@ public class LoginPacketTransformer implements PacketTransformer {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Packet<PacketListener>[] tranform(Channel channel, int packetId, PacketDataSerializer serializer) throws IOException, IllegalAccessException, InstantiationException {
-		PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
+	public Packet<PacketListener>[] tranform(Channel channel, int packetId, PacketDataSerializer serializer, PacketDataSerializer packetdata) throws IOException, IllegalAccessException, InstantiationException {
 		Packet<PacketListener> packet = null;
 		switch (packetId) {
 			case 0xFC: { //PacketLoginInEncryptionBegin

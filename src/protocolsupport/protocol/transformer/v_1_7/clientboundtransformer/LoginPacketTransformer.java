@@ -1,6 +1,5 @@
 package protocolsupport.protocol.transformer.v_1_7.clientboundtransformer;
 
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.io.IOException;
@@ -9,12 +8,13 @@ import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketListener;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.utils.Allocator;
 
 public class LoginPacketTransformer implements PacketTransformer {
 
 	@Override
 	public void tranform(ChannelHandlerContext ctx, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
-		PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
+		PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), serializer.getVersion());
 		switch (packetId) {
 			case 0x01: { //PacketLoginOutEncryptionBegin
 				packet.b(packetdata);
@@ -26,7 +26,7 @@ public class LoginPacketTransformer implements PacketTransformer {
 				int length2 = packetdata.readVarInt();
 				serializer.writeShort(length2);
 				serializer.writeBytes(packetdata.readBytes(length2));
-				return;
+				break;
 			}
 			case 0x02: { //PacketLoginOutSuccess
 				packet.b(packetdata);
@@ -37,14 +37,15 @@ public class LoginPacketTransformer implements PacketTransformer {
 				}
 				serializer.writeString(uuidstring);
 				serializer.writeString(packetdata.readString(16));
-				return;
+				break;
 			}
 			default: { //Any other packet
 				serializer.writeVarInt(packetId);
 				packet.b(serializer);
-				return;
+				break;
 			}
 		}
+		packetdata.release();
 	}
 
 }

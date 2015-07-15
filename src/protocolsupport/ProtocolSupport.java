@@ -7,12 +7,14 @@ import protocolsupport.commands.CommandHandler;
 import protocolsupport.injector.NettyInjector;
 import protocolsupport.injector.ServerInjector;
 import protocolsupport.server.listeners.PlayerListener;
+import protocolsupport.utils.Allocator;
 
 public class ProtocolSupport extends JavaPlugin {
 
 	@Override
 	public void onLoad() {
 		try {
+			Allocator.init();
 			NettyInjector.inject();
 			ServerInjector.inject();
 		} catch (Throwable t) {
