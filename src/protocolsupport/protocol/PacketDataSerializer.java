@@ -13,6 +13,10 @@ import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -180,8 +184,10 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 			case MINECRAFT_1_6_4:
 			case MINECRAFT_1_6_2:
 			case MINECRAFT_1_5_2: {
-				int length = readUnsignedShort();
-				return new String(readBytes(length * 2).array(), StandardCharsets.UTF_16BE);
+				return new String(readBytes(readUnsignedShort() * 2).array(), StandardCharsets.UTF_16BE);
+			}
+			case MINECRAFT_PE: {
+				return new String(readBytes(readUnsignedShort()).array(), StandardCharsets.UTF_8);
 			}
 			default: {
 				return super.c(limit);
@@ -199,6 +205,10 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 				writeBytes(string.getBytes(StandardCharsets.UTF_16BE));
 				break;
 			}
+			case MINECRAFT_PE: {
+				writeShort(string.length());
+				writeBytes(string.getBytes(StandardCharsets.UTF_8));
+			}
 			default: {
 				super.a(string);
 				break;
@@ -215,6 +225,10 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 		b(varInt);
 	}
 
+	public String readString() {
+		return readString(Short.MAX_VALUE);
+	}
+
 	public String readString(int limit) {
 		return c(limit);
 	}
@@ -229,6 +243,40 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 
 	public void writeItemStack(ItemStack itemstack) {
 		a(itemstack);
+	}
+
+	public int readLTriad() {
+		return readUnsignedByte() | (readUnsignedByte() << 8) | (readUnsignedByte() << 16);
+	}
+
+	public void writeLTriad(int triad) {
+		writeByte(triad & 0x0000FF);
+		writeByte((triad & 0x00FF00) >> 8);
+		writeByte((triad & 0xFF0000) >> 16);
+	}
+
+	public InetSocketAddress readAddress() throws UnknownHostException {
+		byte[] addr = null;
+		int type = readByte();
+		if ((type & 0xFF) == 4) {
+			addr = readBytes(4).array();
+		} else {
+			throw new RuntimeException("IPV6 is not supported yet");
+		}
+		int port = readShort();
+        return new InetSocketAddress(InetAddress.getByAddress(addr), port);
+	}
+
+	public void writeAddress(InetSocketAddress address) {
+		InetAddress addr = address.getAddress();
+		if (addr instanceof Inet4Address) {
+			writeByte((byte) 4);
+			byte[] data = addr.getAddress();
+			writeInt((data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3]);
+			writeShort(address.getPort());
+		} else {
+			throw new RuntimeException("IPV6 is not supported yet");
+		}
 	}
 
 	private static NBTTagCompound read(final byte[] data, final NBTReadLimiter nbtreadlimiter) {

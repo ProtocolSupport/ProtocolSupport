@@ -1,12 +1,12 @@
 package protocolsupport.protocol.transformer.v_1_6.remappers;
 
+import java.util.Arrays;
+
 public class EntityIDRemapper {
 
 	private static int replacementsLiving[] = new int[256];
 	static {
-		for (int i = 0; i < replacementsLiving.length; i++) {
-			replacementsLiving[i] = -1;
-		}
+		Arrays.fill(replacementsLiving, -1);
 		// endermite -> silverfish
 		replacementsLiving[67] = 60;
 		// guardian -> sqiud

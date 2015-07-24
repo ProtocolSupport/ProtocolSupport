@@ -1,14 +1,14 @@
 package protocolsupport.protocol.transformer.v_1_5.remappers;
 
+import java.util.Arrays;
+
 import net.minecraft.server.v1_8_R3.Item;
 
 public class ItemIDRemapper {
 
 	private static int[] replacements = new int[4096];
 	static {
-		for (int i = 0; i < replacements.length; i++) {
-			replacements[i] = -1;
-		}
+		Arrays.fill(replacements, -1);
 		// stained glass -> glass
 		replacements[95] = 20;
 		// stained clay -> clay

@@ -8,6 +8,7 @@ public enum ProtocolVersion {
 	MINECRAFT_1_6_4(78),
 	MINECRAFT_1_6_2(74),
 	MINECRAFT_1_5_2(61),
+	MINECRAFT_PE(-2),
 	UNKNOWN(-1);
 
 	private int id;
@@ -39,6 +40,9 @@ public enum ProtocolVersion {
 			}
 			case 61: {
 				return MINECRAFT_1_5_2;
+			}
+			case -2: {
+				return MINECRAFT_PE;
 			}
 		}
 		return UNKNOWN;

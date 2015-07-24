@@ -35,6 +35,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			sender.sendMessage(ChatColor.GOLD+"[1.6.4]: "+ChatColor.GREEN+getPlayersStringForProtocol(ProtocolVersion.MINECRAFT_1_6_4));
 			sender.sendMessage(ChatColor.GOLD+"[1.6.2]: "+ChatColor.GREEN+getPlayersStringForProtocol(ProtocolVersion.MINECRAFT_1_6_2));
 			sender.sendMessage(ChatColor.GOLD+"[1.5.2]: "+ChatColor.GREEN+getPlayersStringForProtocol(ProtocolVersion.MINECRAFT_1_5_2));
+			sender.sendMessage(ChatColor.GOLD+"[PE] "+ChatColor.GREEN+getPlayersStringForProtocol(ProtocolVersion.MINECRAFT_PE));
 			return true;
 		}
 		if (args.length == 1 && args[0].equalsIgnoreCase("debug")) {
