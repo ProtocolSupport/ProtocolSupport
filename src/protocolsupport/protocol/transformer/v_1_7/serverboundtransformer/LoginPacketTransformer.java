@@ -1,6 +1,5 @@
 package protocolsupport.protocol.transformer.v_1_7.serverboundtransformer;
 
-import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 
 import java.io.IOException;
@@ -12,8 +11,7 @@ import protocolsupport.protocol.PacketDataSerializer;
 public class LoginPacketTransformer implements PacketTransformer {
 
 	@Override
-	public boolean tranform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
-		PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
+	public boolean tranform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer, PacketDataSerializer packetdata) throws IOException {
 		switch (packetId) {
 			case 0x01: { //PacketLoginInEncryptionBegin
 				int length1 = serializer.readUnsignedShort();

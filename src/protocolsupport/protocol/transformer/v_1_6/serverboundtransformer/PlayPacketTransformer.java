@@ -24,8 +24,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Packet<PacketListener>[] tranform(Channel channel, int packetId, PacketDataSerializer serializer) throws IOException, IllegalAccessException, InstantiationException {
-		PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
+	public Packet<PacketListener>[] tranform(Channel channel, int packetId, PacketDataSerializer serializer, PacketDataSerializer packetdata) throws IOException, IllegalAccessException, InstantiationException {
 		boolean useOriginalStream = false;
 		Packet<PacketListener> packet = null;
 		switch (packetId) {

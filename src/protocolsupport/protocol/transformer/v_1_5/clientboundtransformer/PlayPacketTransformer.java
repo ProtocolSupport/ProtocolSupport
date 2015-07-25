@@ -1,7 +1,6 @@
 package protocolsupport.protocol.transformer.v_1_5.clientboundtransformer;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 
 import java.io.ByteArrayOutputStream;
@@ -34,6 +33,7 @@ import protocolsupport.protocol.watchedentity.WatchedLiving;
 import protocolsupport.protocol.watchedentity.WatchedObject;
 import protocolsupport.protocol.watchedentity.WatchedPlayer;
 import protocolsupport.utils.MapTransformer;
+import protocolsupport.utils.Allocator;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.MapTransformer.ColumnEntry;
 
@@ -44,13 +44,13 @@ public class PlayPacketTransformer implements PacketTransformer {
 
 	@Override
 	public void tranform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
-		PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
+		PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), serializer.getVersion());
 		packet.b(packetdata);
 		switch (packetId) {
 			case 0x00: { //PacketPlayOutKeepAlive
 				serializer.writeByte(0x00);
 				serializer.writeInt(packetdata.readVarInt());
-				return;
+				break;
 			}
 			case 0x01: { //PacketPlayOutLogin
 				serializer.writeByte(0x01);
@@ -68,23 +68,23 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(difficulty);
 				serializer.writeByte(0);
 				serializer.writeByte(Math.min(Math.abs(maxplayers), 60));
-				return;
+				break;
 			}
 			case 0x02: { //PacketPlayOutChat
 				serializer.writeByte(0x03);
 				serializer.writeString(Utils.fromComponent(packetdata.d()));
-				return;
+				break;
 			}
 			case 0x03: { //PacketPlayOutUpdateTime
 				serializer.writeByte(0x04);
 				Utils.writeAll(packetdata, serializer);
-				return;
+				break;
 			}
 			case 0x04: { //PacketPlayOutEntityEquipment
 				serializer.writeByte(0x05);
 				serializer.writeInt(packetdata.readVarInt());
 				Utils.writeAll(packetdata, serializer);
-				return;
+				break;
 			}
 			case 0x05: { //PacketPlayOutSpawnPosition
 				serializer.writeByte(0x06);
@@ -92,14 +92,14 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeInt(blockPos.getX());
 				serializer.writeInt(blockPos.getY() + 1);
 				serializer.writeInt(blockPos.getZ());
-				return;
+				break;
 			}
 			case 0x06: { //PacketPlayOutUpdateHealth
 				serializer.writeByte(0x08);
 				serializer.writeShort((int) packetdata.readFloat());
 				serializer.writeShort(packetdata.readVarInt());
 				serializer.writeFloat(packetdata.readFloat());
-				return;
+				break;
 			}
 			case 0x07: { //PacketPlayOutRespawn
 				storage.clearWatchedEntities();
@@ -112,7 +112,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(packetdata.readByte());
 				serializer.writeShort(256);
 				Utils.writeAll(packetdata, serializer);
-				return;
+				break;
 			}
 			case 0x08: { // PacketPlayOutPosition
 				serializer.writeByte(0x0D);
@@ -146,12 +146,12 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeFloat(yaw);
 				serializer.writeFloat(pitch);
 				serializer.writeBoolean(false);
-				return;
+				break;
 			}
 			case 0x09: { //PacketPlayOutHeldItemSlot
 				serializer.writeByte(0x10);
 				serializer.writeShort(packetdata.readByte());
-				return;
+				break;
 			}
 			case 0x0A: { //PacketPlayOutBed
 				serializer.writeByte(0x11);
@@ -161,13 +161,13 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeInt(blockPos.getX());
 				serializer.writeByte(blockPos.getY());
 				serializer.writeInt(blockPos.getZ());
-				return;
+				break;
 			}
 			case 0x0B: { //PacketPlayOutAnimation
 				serializer.writeByte(0x12);
 				serializer.writeInt(packetdata.readVarInt());
 				serializer.writeByte(packetdata.readByte() + 1);
-				return;
+				break;
 			}
 			case 0x0C: { //PacketPlayOutNamedEntitySpawn
 				serializer.writeByte(0x14);
@@ -184,20 +184,20 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(packetdata.readByte());
 				serializer.writeShort(packetdata.readShort());
 				serializer.writeBytes(DataWatcherFilter.filterEntityData(serializer.getVersion(), storage.getWatchedEntity(playerEntityId), packetdata.readBytes(packetdata.readableBytes()).array()));
-				return;
+				break;
 			}
 			case 0x0D: { //PacketPlayOutCollect
 				serializer.writeByte(0x16);
 				serializer.writeInt(packetdata.readVarInt());
 				serializer.writeInt(packetdata.readVarInt());
-				return;
+				break;
 			}
 			case 0x0E: { //PacketPlayOutSpawnEntity
 				int entityId = packetdata.readVarInt();
 				int type = packetdata.readUnsignedByte();
 				storage.addWatchedEntity(new WatchedObject(entityId, type));
 				if (type == 78) { //skip armor stands
-					return;
+					break;
 				}
 				serializer.writeByte(0x17);
 				serializer.writeInt(entityId);
@@ -251,14 +251,14 @@ public class PlayPacketTransformer implements PacketTransformer {
 					serializer.writeShort(packetdata.readShort());
 					serializer.writeShort(packetdata.readShort());
 				}
-				return;
+				break;
 			}
 			case 0x0F: { //PacketPlayOutSpawnEntityLiving
 				int entityId = packetdata.readVarInt();
 				int type = packetdata.readUnsignedByte();
 				storage.addWatchedEntity(new WatchedLiving(entityId, type));
 				if (type == 30) { //skip armor stands
-					return;
+					break;
 				}
 				serializer.writeByte(0x18);
 				serializer.writeInt(entityId);
@@ -273,7 +273,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeShort(packetdata.readShort());
 				serializer.writeShort(packetdata.readShort());
 				serializer.writeBytes(DataWatcherFilter.filterEntityData(serializer.getVersion(), storage.getWatchedEntity(entityId), packetdata.readBytes(packetdata.readableBytes()).array()));
-				return;
+				break;
 			}
 			case 0x10: { //PacketPlayOutSpawnEntityPainting
 				serializer.writeByte(0x19);
@@ -305,19 +305,19 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeInt(blockPos.getY());
 				serializer.writeInt(z);
 				serializer.writeInt(direction);
-				return;
+				break;
 			}
 			case 0x11: { //PacketPlayOutSpawnEntityExperienceOrb
 				serializer.writeByte(0x1A);
 				serializer.writeInt(packetdata.readVarInt());
 				Utils.writeAll(packetdata, serializer);
-				return;
+				break;
 			}
 			case 0x12: { //PacketPlayOutEntityVelocity
 				serializer.writeByte(0x1C);
 				serializer.writeInt(packetdata.readVarInt());
 				Utils.writeAll(packetdata, serializer);
-				return;
+				break;
 			}
 			case 0x13: { //PacketPlayOutEntityDestroy
 				int count = packetdata.readVarInt();
@@ -336,12 +336,12 @@ public class PlayPacketTransformer implements PacketTransformer {
 						serializer.writeInt(part[i]);
 					}
 				}
-				return;
+				break;
 			}
 			case 0x14: { //PacketPlayOutEntity
 				serializer.writeByte(0x1E);
 				serializer.writeInt(packetdata.readVarInt());
-				return;
+				break;
 			}
 			case 0x15: { //PacketPlayOutRelEntityMove
 				serializer.writeByte(0x1F);
@@ -349,14 +349,14 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(packetdata.readByte());
 				serializer.writeByte(packetdata.readByte());
 				serializer.writeByte(packetdata.readByte());
-				return;
+				break;
 			}
 			case 0x16: { //PacketPlayOutEntityLook
 				serializer.writeByte(0x20);
 				serializer.writeInt(packetdata.readVarInt());
 				serializer.writeByte(packetdata.readByte());
 				serializer.writeByte(packetdata.readByte());
-				return;
+				break;
 			}
 			case 0x17: { //PacketPlayOutRelEntityMoveLook
 				serializer.writeByte(0x21);
@@ -366,7 +366,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(packetdata.readByte());
 				serializer.writeByte(packetdata.readByte());
 				serializer.writeByte(packetdata.readByte());
-				return;
+				break;
 			}
 			case 0x18: { //PacketPlayOutEntityTeleport
 				serializer.writeByte(0x22);
@@ -376,62 +376,62 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeInt(packetdata.readInt());
 				serializer.writeByte(packetdata.readByte());
 				serializer.writeByte(packetdata.readByte());
-				return;
+				break;
 			}
 			case 0x19: { //PacketPlayOutEntityHeadRotation
 				serializer.writeByte(0x23);
 				serializer.writeInt(packetdata.readVarInt());
 				serializer.writeByte(packetdata.readByte());
-				return;
+				break;
 			}
 			case 0x1A: { //PacketPlayOutEntityStatus
 				serializer.writeByte(0x26);
 				Utils.writeAll(packetdata, serializer);
-				return;
+				break;
 			}
 			case 0x1B: { //PacketPlayOutAttachEntity
 				serializer.writeByte(0x27);
 				serializer.writeInt(packetdata.readInt());
 				serializer.writeInt(packetdata.readInt());
-				return;
+				break;
 			}
 			case 0x1C: { //PacketPlayOutEntityMetadata
 				serializer.writeByte(0x28);
 				int entityId = packetdata.readVarInt();
 				serializer.writeInt(entityId);
 				serializer.writeBytes(DataWatcherFilter.filterEntityData(serializer.getVersion(), storage.getWatchedEntity(entityId), packetdata.readBytes(packetdata.readableBytes()).array()));
-				return;
+				break;
 			}
 			case 0x1D: { //PacketPlayOutEntityEffect
 				int entityId = packetdata.readVarInt();
 				int effectId = packetdata.readByte();
 				if ((effectId >= 21) && (effectId <= 23)) {
-					return;
+					break;
 				}
 				serializer.writeByte(0x29);
 				serializer.writeInt(entityId);
 				serializer.writeByte(effectId);
 				serializer.writeByte(packetdata.readByte());
 				serializer.writeShort(packetdata.readVarInt());
-				return;
+				break;
 			}
 			case 0x1E: { //PacketPlayOutRemoveEntityEffect
 				int entityId = packetdata.readVarInt();
 				int effectId = packetdata.readByte();
 				if ((effectId >= 21) && (effectId <= 23)) {
-					return;
+					break;
 				}
 				serializer.writeByte(0x2A);
 				serializer.writeInt(entityId);
 				serializer.writeByte(effectId);
-				return;
+				break;
 			}
 			case 0x1F: { //PacketPlayOutExperience
 				serializer.writeByte(0x2B);
 				serializer.writeFloat(packetdata.readFloat());
 				serializer.writeShort(packetdata.readVarInt());
 				serializer.writeShort(packetdata.readVarInt());
-				return;
+				break;
 			}
 			case 0x21: { //PacketPlayOutMapChunk
 				serializer.writeByte(0x33);
@@ -453,7 +453,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				} finally {
 					deflater.end();
 				}
-				return;
+				break;
 			}
 			case 0x22: { //PacketPlayOutMultiBlockChange
 				serializer.writeByte(0x34);
@@ -470,7 +470,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				}
 				serializer.writeInt(dataoutputstream.size());
 				serializer.writeBytes(bytearrayoutputstream.toByteArray());
-				return;
+				break;
 			}
 			case 0x23: { //PacketPlayOutBlockChange
 				serializer.writeByte(0x35);
@@ -481,7 +481,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				int stateId = packetdata.readVarInt();
 				serializer.writeShort(BlockIDRemapper.replaceBlockId(stateId >> 4));
 				serializer.writeByte(stateId & 0xF);
-				return;
+				break;
 			}
 			case 0x24: { //PacketPlayOutBlockAction
 				serializer.writeByte(0x36);
@@ -492,7 +492,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(packetdata.readUnsignedByte());
 				serializer.writeByte(packetdata.readUnsignedByte());
 				serializer.writeShort(packetdata.readVarInt());
-				return;
+				break;
 			}
 			case 0x25: { //PacketPlayOutBlockBreakAnimation
 				serializer.writeByte(0x37);
@@ -502,7 +502,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeInt(blockPos.getY());
 				serializer.writeInt(blockPos.getY());
 				serializer.writeByte(packetdata.readByte());
-				return;
+				break;
 			}
 			case 0x26: { //PacketPlayOutMapChunkBulk
 				serializer.writeByte(0x38);
@@ -553,7 +553,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				} finally {
 					deflater.end();
 				}
-				return;
+				break;
 			}
 			case 0x27: { //PacketPlayOutExplosion
 				serializer.writeByte(0x3C);
@@ -561,7 +561,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeDouble(packetdata.readFloat());
 				serializer.writeDouble(packetdata.readFloat());
 				Utils.writeAll(packetdata, serializer);
-				return;
+				break;
 			}
 			case 0x28: { //PacketPlayOutWorldEvent
 				serializer.writeByte(0x3D);
@@ -577,12 +577,12 @@ public class PlayPacketTransformer implements PacketTransformer {
 				}
 				serializer.writeInt(data);
 				serializer.writeBoolean(packetdata.readBoolean());
-				return;
+				break;
 			}
 			case 0x29: { //PacketPlayOutNamedSoundEffect
 				serializer.writeByte(0x3E);
 				Utils.writeAll(packetdata, serializer);
-				return;
+				break;
 			}
 			case 0x2A: { //PacketPlayOutWorldParticles
 				serializer.writeByte(0x3F);
@@ -622,7 +622,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeFloat(addz);
 				serializer.writeFloat(speed);
 				serializer.writeInt(count);
-				return;
+				break;
 			}
 			case 0x2B: { //PacketPlayOutGameStateChange
 				serializer.writeByte(0x46);
@@ -642,13 +642,13 @@ public class PlayPacketTransformer implements PacketTransformer {
 				}
 				serializer.writeByte(value);
 				serializer.writeByte((int) packetdata.readFloat());
-				return;
+				break;
 			}
 			case 0x2C: { //PacketPlayOutSpawnEntityWeather
 				serializer.writeByte(0x47);
 				serializer.writeInt(packetdata.readVarInt());
 				Utils.writeAll(packetdata, serializer);
-				return;
+				break;
 			}
 			case 0x2D: { //PacketPlayOutOpenWindow
 				int windowId = packetdata.readUnsignedByte();
@@ -656,7 +656,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				//fiter out horse inventory
 				if (id == 11) {
 					Utils.getPlayer(channel).closeInventory();
-					return;
+					break;
 				}
 				serializer.writeByte(0x64);
 				serializer.writeByte(windowId);
@@ -664,19 +664,19 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeString(Utils.fromComponent(packetdata.d()));
 				serializer.writeByte(packetdata.readUnsignedByte());
 				serializer.writeBoolean(true);
-				return;
+				break;
 			}
 			case 0x2E: { //PacketPlayOutCloseWindow
 				serializer.writeByte(0x65);
 				serializer.writeByte(packetdata.readByte());
-				return;
+				break;
 			}
 			case 0x2F: { //PacketPlayOutSetSlot
 				if (Utils.getPlayer(channel).getOpenInventory().getType() == InventoryType.ENCHANTING) {
 					byte windowId = packetdata.readByte();
 					int slot = packetdata.readShort();
 					if (slot == 1) {
-						return;
+						break;
 					}
 					if (slot > 0) {
 						slot--;
@@ -685,11 +685,11 @@ public class PlayPacketTransformer implements PacketTransformer {
 					serializer.writeByte(windowId);
 					serializer.writeShort(slot);
 					serializer.writeItemStack(packetdata.readItemStack());
-					return;
+					break;
 				} else {
 					serializer.writeByte(0x67);
 					Utils.writeAll(packetdata, serializer);
-					return;
+					break;
 				}
 			}
 			case 0x30: { //PacketPlayOutWindowItems
@@ -705,10 +705,10 @@ public class PlayPacketTransformer implements PacketTransformer {
 						}
 						serializer.writeItemStack(item);
 					}
-					return;
+					break;
 				} else {
 					Utils.writeAll(packetdata, serializer);
-					return;
+					break;
 				}
 			}
 			case 0x31: { //PacketPlayOutWindowData
@@ -738,12 +738,12 @@ public class PlayPacketTransformer implements PacketTransformer {
 				} else {
 					Utils.writeAll(packetdata, serializer);
 				}
-				return;
+				break;
 			}
 			case 0x32: { //PacketPlayOutTransaction
 				serializer.writeByte(0x6A);
 				Utils.writeAll(packetdata, serializer);
-				return;
+				break;
 			}
 			case 0x33: { //PacketPlayOutUpdateSign
 				serializer.writeByte(0x82);
@@ -754,7 +754,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				for (int i = 0; i < 4; i++) {
 					serializer.writeString(Utils.clampString(Utils.fromComponent(packetdata.d()), 15));
 				}
-				return;
+				break;
 			}
 			case 0x34: { //PacketPlayOutMap
 				packet.b(packetdata);
@@ -802,7 +802,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 						serializer.writeBytes(colors);
 					}
 				}
-				return;
+				break;
 			}
 			case 0x35: { //PacketPlayOutTileEntityData
 				serializer.writeByte(0x84);
@@ -811,7 +811,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeShort(blockPos.getY());
 				serializer.writeInt(blockPos.getZ());
 				Utils.writeAll(packetdata, serializer);
-				return;
+				break;
 			}
 			case 0x38: { //PacketPlayOutPlayerInfo
 				int action = packetdata.readVarInt();
@@ -869,19 +869,19 @@ public class PlayPacketTransformer implements PacketTransformer {
 						}
 					}
 				}
-				return;
+				break;
 			}
 			case 0x39: { //PacketPlayOutAbilities
 				serializer.writeByte(0xCA);
 				serializer.writeByte(packetdata.readUnsignedByte());
 				serializer.writeByte((int) (packetdata.readFloat() * 255.0F));
 				serializer.writeByte((int) (packetdata.readFloat() * 255.0F));
-				return;
+				break;
 			}
 			case 0x3A: { //PacketPlayOutTabComplete
 				int count = packetdata.readVarInt();
 				if (count == 0) {
-					return;
+					break;
 				}
 				serializer.writeByte(0xCB);
 				StringBuilder builder = new StringBuilder();
@@ -891,7 +891,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 					builder.append(packetdata.readString(32767));
 				}
 				serializer.writeString(builder.toString());
-				return;
+				break;
 			}
 			case 0x3B: { //PacketPlayOutScoreboardObjective
 				serializer.writeByte(0xCE);
@@ -900,11 +900,11 @@ public class PlayPacketTransformer implements PacketTransformer {
 				if (mode == 1) {
 					serializer.writeString("");
 					serializer.writeByte(mode);
-					return;
+					break;
 				}
 				serializer.writeString(packetdata.readString(32));
 				serializer.writeByte(mode);
-				return;
+				break;
 			}
 			case 0x3C: { //PacketPlayOutScoreboardScore
 				serializer.writeByte(0xCF);
@@ -915,12 +915,12 @@ public class PlayPacketTransformer implements PacketTransformer {
 					serializer.writeString(packetdata.readString(16));
 					serializer.writeInt(packetdata.readVarInt());
 				}
-				return;
+				break;
 			}
 			case 0x3D: { //PacketPlayOutScoreboardDisplayObjective
 				serializer.writeByte(0xD0);
 				Utils.writeAll(packetdata, serializer);
-				return;
+				break;
 			}
 			case 0x3E: { //PacketPlayOutScoreboardTeam
 				serializer.writeByte(0xD1);
@@ -940,7 +940,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 					serializer.writeShort(count);
 					Utils.writeAll(packetdata, serializer);
 				}
-				return;
+				break;
 			}
 			case 0x3F: { //PacketPlayOutCustomPayload
 				serializer.writeByte(0xFA);
@@ -954,14 +954,15 @@ public class PlayPacketTransformer implements PacketTransformer {
 				}
 				serializer.writeShort(data.readableBytes());
 				serializer.writeBytes(data);
-				return;
+				break;
 			}
 			case 0x40: { //PacketPlayOutKickDisconnect
 				serializer.writeByte(0xFF);
 				serializer.writeString(Utils.fromComponent(packetdata.d()));
-				return;
+				break;
 			}
 		}
+		packetdata.release();
 	}
 
 }

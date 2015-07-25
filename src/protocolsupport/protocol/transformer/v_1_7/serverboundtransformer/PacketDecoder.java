@@ -16,6 +16,7 @@ import net.minecraft.server.v1_8_R3.PacketListener;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.pipeline.IPacketDecoder;
+import protocolsupport.utils.Allocator;
 
 public class PacketDecoder implements IPacketDecoder {
 
@@ -41,18 +42,23 @@ public class PacketDecoder implements IPacketDecoder {
 			return;
 		}
 		Channel channel = ctx.channel();
-		final PacketDataSerializer packetDataSerializer = new PacketDataSerializer(input, version);
-		final int packetId = packetDataSerializer.readVarInt();
+		final PacketDataSerializer serializer = new PacketDataSerializer(input, version);
+		final int packetId = serializer.readVarInt();
 		final Packet<PacketListener> packet = channel.attr(currentStateAttrKey).get().a(direction, packetId);
 		if (packet == null) {
 			throw new IOException("Bad packet id " + packetId);
 		}
-		boolean needsRead = !transformers[channel.attr(currentStateAttrKey).get().ordinal()].tranform(channel, packetId, packet, packetDataSerializer);
-		if (needsRead) {
-			packet.a(packetDataSerializer);
+		PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), version);
+		try {
+			boolean needsRead = !transformers[channel.attr(currentStateAttrKey).get().ordinal()].tranform(channel, packetId, packet, serializer, packetdata);
+			if (needsRead) {
+				packet.a(serializer);
+			}
+		} finally {
+			packetdata.release();
 		}
-		if (packetDataSerializer.readableBytes() > 0) {
-			throw new IOException("Packet " + channel.attr(currentStateAttrKey).get().a() + "/" + packetId + " (" + packet.getClass().getSimpleName() + ") was larger than expected, found " + packetDataSerializer.readableBytes() + " bytes extra whilst reading packet " + packetId);
+		if (serializer.readableBytes() > 0) {
+			throw new IOException("Packet " + channel.attr(currentStateAttrKey).get().a() + "/" + packetId + " (" + packet.getClass().getSimpleName() + ") was larger than expected, found " + serializer.readableBytes() + " bytes extra whilst reading packet " + packetId);
 		}
 		list.add(packet);
 	}

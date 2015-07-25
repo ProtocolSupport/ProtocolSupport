@@ -8,7 +8,7 @@ import protocolsupport.protocol.PacketDataSerializer;
 public class StatusPacketTransformer implements PacketTransformer {
 
 	@Override
-	public boolean tranform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) {
+	public boolean tranform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer, PacketDataSerializer packetdata) {
 		return false;
 	}
 

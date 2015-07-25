@@ -22,8 +22,7 @@ import protocolsupport.utils.Utils;
 public class PlayPacketTransformer implements PacketTransformer {
 
 	@Override
-	public boolean tranform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
-		PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), serializer.getVersion());
+	public boolean tranform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer, PacketDataSerializer packetdata) throws IOException {
 		int initialReaderIndex = serializer.readerIndex();
 		switch (packetId) {
 			case 0x00: { //PacketPlayInKeepAlive

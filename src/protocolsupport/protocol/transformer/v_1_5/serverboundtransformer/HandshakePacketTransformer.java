@@ -1,6 +1,5 @@
 package protocolsupport.protocol.transformer.v_1_5.serverboundtransformer;
 
-import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 
 import java.io.IOException;
@@ -19,12 +18,11 @@ public class HandshakePacketTransformer implements PacketTransformer {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Packet<PacketListener>[] tranform(Channel channel, int packetId, PacketDataSerializer serializer) throws IOException, IllegalAccessException, InstantiationException {
+	public Packet<PacketListener>[] tranform(Channel channel, int packetId, PacketDataSerializer serializer, PacketDataSerializer packetdata) throws IOException, IllegalAccessException, InstantiationException {
 		switch (packetId) {
 			case 0xFE: { //Ping
 				Packet<PacketListener>[] packets = new Packet[2];
 				Packet<PacketListener> handshakepacket = EnumProtocol.HANDSHAKING.a(EnumProtocolDirection.SERVERBOUND, 0x00);
-				PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), ProtocolVersion.MINECRAFT_1_8);
 				serializer.readUnsignedByte();
 				packetdata.writeVarInt(ProtocolVersion.MINECRAFT_1_8.getId());
 				packetdata.writeString("");
@@ -38,7 +36,6 @@ public class HandshakePacketTransformer implements PacketTransformer {
 			case 0x02: { //Handsahke
 				Packet<PacketListener>[] packets = new Packet[2];
 				Packet<PacketListener> handshakepacket = EnumProtocol.HANDSHAKING.a(EnumProtocolDirection.SERVERBOUND, 0x00);
-				PacketDataSerializer packetdata = new PacketDataSerializer(Unpooled.buffer(), ProtocolVersion.MINECRAFT_1_8);
 				serializer.readUnsignedByte();
 				packetdata.writeVarInt(ProtocolVersion.MINECRAFT_1_8.getId());
 				String username = serializer.readString(16);
