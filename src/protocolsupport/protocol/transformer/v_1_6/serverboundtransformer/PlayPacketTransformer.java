@@ -8,12 +8,14 @@ import java.io.IOException;
 
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.ChatComponentText;
+import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.EnumProtocol;
 import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketListener;
 
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.event.inventory.InventoryType;
 
 import protocolsupport.api.ProtocolVersion;
@@ -223,9 +225,10 @@ public class PlayPacketTransformer implements PacketTransformer {
 				packetdata.writeBytes(buf);
 				break;
 			}
-			case 0xFF: { //No corresponding packet
-				serializer.readString(32767);
-				return new Packet[0];
+			case 0xFF: { //No corresponding packet (PacketClientDisconnect?)
+				EntityPlayer player = ((CraftPlayer) Utils.getPlayer(channel)).getHandle();
+				player.playerConnection.networkManager.close(new ChatComponentText(serializer.readString(32767)));
+				break;
 			}
 		}
 		if (packet != null) {
