@@ -577,7 +577,13 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x29: { //PacketPlayOutNamedSoundEffect
 				serializer.writeByte(0x3E);
-				Utils.writeAll(packetdata, serializer);
+				String name = Utils.getLegacySound(packetdata.readString(32767));
+				serializer.writeString(name);
+				serializer.writeInt(packetdata.readInt());
+				serializer.writeInt(packetdata.readInt());
+				serializer.writeInt(packetdata.readInt());
+				serializer.writeFloat(packetdata.readFloat());
+				serializer.writeByte(packetdata.readByte());
 				break;
 			}
 			case 0x2A: { //PacketPlayOutWorldParticles
