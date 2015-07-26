@@ -6,6 +6,9 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 import io.netty.buffer.Unpooled;
 
 import java.io.IOException;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.ItemStack;
@@ -24,7 +27,7 @@ public class DataWatcherSerializer {
 			if (b0 == 127) {
 				break;
 			}
-			final ValueType type = ValueType.fromId((b0 & 0xE0) >> 5);
+			final ValueType type = ValueType.fromId((b0 & 0xE0) >> 5, serializer.getVersion());
 			final int key = b0 & 0x1F;
 			switch (type) {
 				case BYTE: {
@@ -65,6 +68,10 @@ public class DataWatcherSerializer {
 					map.put(key, new DataWatcherObject(type, new Vector3f(x, y, z)));
 					break;
 				}
+				case LONG: {
+					map.put(key, new DataWatcherObject(type, serializer.readLong()));
+					break;
+				}
 			}
 		} while (true);
 		return map;
@@ -76,7 +83,7 @@ public class DataWatcherSerializer {
 		while (iterator.hasNext()) {
 			iterator.advance();
 			DataWatcherObject object = iterator.value();
-			final int tk = ((object.type.getId() << 5) | (iterator.key() & 0x1F)) & 0xFF;
+			final int tk = ((object.type.getId(serializer.getVersion()) << 5) | (iterator.key() & 0x1F)) & 0xFF;
 			serializer.writeByte(tk);
 			switch (object.type) {
 				case BYTE: {
@@ -115,6 +122,10 @@ public class DataWatcherSerializer {
 					serializer.writeFloat(vector.getX());
 					serializer.writeFloat(vector.getY());
 					serializer.writeFloat(vector.getZ());
+					break;
+				}
+				case LONG: {
+					serializer.writeLong((long) object.value);
 					break;
 				}
 			}
@@ -163,15 +174,81 @@ public class DataWatcherSerializer {
 		}
 
 		public static enum ValueType {
-			BYTE, SHORT, INT, FLOAT, STRING, ITEMSTACK, VECTOR3I, VECTOR3F;
 
-			public int getId() {
-				return ordinal();
+			BYTE(0),
+			SHORT(1),
+			INT(2),
+			FLOAT(3),
+			STRING(4),
+			ITEMSTACK(5),
+			VECTOR3I(6),
+			VECTOR3F(7),
+			LONG(-1, ProtocolVersion.MINECRAFT_PE, 7);
+
+			private static final HashMap<ProtocolVersionIdTuple, ValueType> byId = new HashMap<ProtocolVersionIdTuple, ValueType>();
+			static {
+				for (ValueType vtype : values()) {
+					for (Entry<ProtocolVersion, Integer> entry : vtype.ids.entrySet()) {
+						if (entry.getValue() == -1) {
+							continue;
+						}
+						byId.put(new ProtocolVersionIdTuple(entry.getKey(), entry.getValue()), vtype);
+					}
+				}
 			}
 
-			public static ValueType fromId(int id) {
-				return values()[id];
+			private final EnumMap<ProtocolVersion, Integer> ids = new EnumMap<>(ProtocolVersion.class);
+
+			ValueType(int defaultId, Object... protocoDefines) {
+				for (ProtocolVersion version : ProtocolVersion.values()) {
+					ids.put(version, defaultId);
+				}
+				for (int i = 0; i < protocoDefines.length; i++) {
+					ids.put((ProtocolVersion) protocoDefines[i], (Integer) protocoDefines[i + 1]);
+				}
 			}
+
+			public int getId(ProtocolVersion version) {
+				int id = ids.get(version);
+				if (id == -1) {
+					throw new IllegalArgumentException("This metadata type doesn't exist for protocol "+version);
+				}
+				return id;
+			}
+
+			public static ValueType fromId(int id, ProtocolVersion version) {
+				ValueType type = byId.get(new ProtocolVersionIdTuple(version, id));
+				if (type == null) {
+					throw new IllegalArgumentException("No metadata type for protocol "+version+" and id "+id+" doesn't exist");
+				}
+				return type;
+			}
+
+			private static class ProtocolVersionIdTuple {
+
+				private ProtocolVersion version;
+				private int id;
+
+				public ProtocolVersionIdTuple(ProtocolVersion version, int id) {
+					this.version = version;
+					this.id = id;
+				}
+
+				@Override
+				public boolean equals(Object other) {
+					if (!(other instanceof ProtocolVersionIdTuple)) {
+						return false;
+					}
+					ProtocolVersionIdTuple othertuple = (ProtocolVersionIdTuple) other;
+					return othertuple.id == id && othertuple.version == version;
+				}
+
+				@Override
+				public int hashCode() {
+					return (version.ordinal() << 5) + id;
+				}
+			}
+
 		}
 
 	}
