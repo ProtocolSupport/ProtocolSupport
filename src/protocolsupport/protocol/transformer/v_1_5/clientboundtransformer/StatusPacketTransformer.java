@@ -15,9 +15,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.transformer.utils.LegacyUtils;
+import protocolsupport.protocol.transformer.utils.ServerPingSerializers;
 import protocolsupport.utils.Allocator;
-import protocolsupport.utils.ServerPingSerializers;
-import protocolsupport.utils.Utils;
 
 public class StatusPacketTransformer implements PacketTransformer {
 
@@ -41,7 +41,7 @@ public class StatusPacketTransformer implements PacketTransformer {
 				"\u0000" +
 				serverPing.c().a() +
 				"\u0000" +
-				Utils.fromComponent(serverPing.a()) +
+				LegacyUtils.fromComponent(serverPing.a()) +
 				"\u0000" +
 				serverPing.b().b() +
 				"\u0000" +

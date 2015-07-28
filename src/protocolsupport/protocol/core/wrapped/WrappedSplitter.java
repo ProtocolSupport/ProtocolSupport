@@ -1,8 +1,8 @@
-package protocolsupport.protocol.pipeline.wrapped;
+package protocolsupport.protocol.core.wrapped;
 
 import java.util.List;
 
-import protocolsupport.protocol.pipeline.IPacketSplitter;
+import protocolsupport.protocol.core.IPacketSplitter;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;

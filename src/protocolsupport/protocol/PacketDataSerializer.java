@@ -33,7 +33,7 @@ import org.spigotmc.LimitStream;
 import org.spigotmc.SneakyThrow;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.utils.Utils;
+import protocolsupport.protocol.transformer.utils.LegacyUtils;
 
 import com.mojang.authlib.GameProfile;
 
@@ -93,7 +93,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 						NBTTagList pages = nbttagcompound.getList("pages", 8);
 						NBTTagList newpages = new NBTTagList();
 						for (int i = 0; i < pages.size(); i++) {
-							newpages.add(new NBTTagString(Utils.fromComponent(ChatSerializer.a(pages.getString(i)))));
+							newpages.add(new NBTTagString(LegacyUtils.fromComponent(ChatSerializer.a(pages.getString(i)))));
 						}
 						nbttagcompound.set("pages", newpages);
 					}
