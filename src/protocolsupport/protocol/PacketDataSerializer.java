@@ -3,7 +3,6 @@ package protocolsupport.protocol;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
-import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.EncoderException;
 
 import java.io.BufferedInputStream;
@@ -34,6 +33,8 @@ import org.spigotmc.SneakyThrow;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
+import protocolsupport.utils.Allocator;
+import protocolsupport.utils.Utils;
 
 import com.mojang.authlib.GameProfile;
 
@@ -48,6 +49,10 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 
 	public ProtocolVersion getVersion() {
 		return version;
+	}
+
+	public void setVersion(ProtocolVersion version) {
+		this.version = version;
 	}
 
 
@@ -127,19 +132,20 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 			} else {
 				final byte[] abyte = write(nbttagcompound);
 				writeShort(abyte.length);
-				this.writeBytes(abyte);
+				writeBytes(abyte);
 			}
 		} else if (nbttagcompound == null) {
 			writeByte(0);
 		} else {
-			final ByteBufOutputStream out = new ByteBufOutputStream(Unpooled.buffer());
+			ByteBufOutputStream out = new ByteBufOutputStream(Allocator.allocateBuffer());
 			try {
 				NBTCompressedStreamTools.a(nbttagcompound, (DataOutput) new DataOutputStream(out));
-			} catch (Exception ioexception) {
+				writeBytes(out.buffer());
+			} catch (Throwable ioexception) {
 				throw new EncoderException(ioexception);
+			} finally {
+				out.buffer().release();
 			}
-			this.writeBytes(out.buffer());
-			out.buffer().release();
 		}
 	}
 
@@ -181,7 +187,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 			case MINECRAFT_1_6_2:
 			case MINECRAFT_1_5_2: {
 				int length = readUnsignedShort();
-				return new String(readBytes(length * 2).array(), StandardCharsets.UTF_16BE);
+				return new String(Utils.toArray(readBytes(length * 2)), StandardCharsets.UTF_16BE);
 			}
 			default: {
 				return super.c(limit);

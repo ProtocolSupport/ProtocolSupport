@@ -42,9 +42,7 @@ public class OldPingResponseTask implements Runnable {
 				channel.pipeline().firstContext().writeAndFlush(buf).addListener(ChannelFutureListener.CLOSE);
 			}
 		} catch (Throwable t) {
-			if (channel.isOpen()) {
-				channel.close();
-			}
+			channel.close();
 		}
 	}
 

@@ -264,7 +264,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeShort(packetdata.readShort());
 				serializer.writeShort(packetdata.readShort());
 				serializer.writeShort(packetdata.readShort());
-				serializer.writeBytes(DataWatcherFilter.filterEntityData(serializer.getVersion(), storage.getWatchedEntity(entityId), packetdata.readBytes(packetdata.readableBytes()).array()));
+				serializer.writeBytes(DataWatcherFilter.filterEntityData(serializer.getVersion(), storage.getWatchedEntity(entityId), Utils.toArray(packetdata)));
 				break;
 			}
 			case 0x10: { //PacketPlayOutSpawnEntityPainting
@@ -387,7 +387,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(0x28);
 				int entityId = packetdata.readVarInt();
 				serializer.writeInt(entityId);
-				serializer.writeBytes(DataWatcherFilter.filterEntityData(serializer.getVersion(), storage.getWatchedEntity(entityId), packetdata.readBytes(packetdata.readableBytes()).array()));
+				serializer.writeBytes(DataWatcherFilter.filterEntityData(serializer.getVersion(), storage.getWatchedEntity(entityId), Utils.toArray(packetdata)));
 				break;
 			}
 			case 0x1D: { //PacketPlayOutEntityEffect
@@ -518,8 +518,13 @@ public class PlayPacketTransformer implements PacketTransformer {
 				byte[] ldata;
 				int pos = 0;
 				for (int i = 0; i < count; i++) {
-					data[i] = ChunkUtils.to16ChunkData(packetdata.readBytes(ChunkUtils.calcDataSize(Integer.bitCount(bitmap[i]), skylight, true)).array(), bitmap[i]);
-					pos += data[i].length;
+					ByteBuf chunkdata = packetdata.readBytes(ChunkUtils.calcDataSize(Integer.bitCount(bitmap[i]), skylight, true));
+					try {
+						data[i] = ChunkUtils.to16ChunkData(Utils.toArray(chunkdata), bitmap[i]);
+						pos += data[i].length;
+					} finally {
+						chunkdata.release();
+					}
 				}
 				ldata = new byte[pos];
 				pos = 0;
@@ -956,14 +961,17 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(0xFA);
 				String tag = packetdata.readString(20);
 				serializer.writeString(tag);
-				ByteBuf data = packetdata.readBytes(packetdata.readableBytes());
 				//fix villager trade list
 				if (tag.equals("MC|TrList")) {
 					//read data as version minecraft 1.8, because it is written like on that on packet creation, not on real stream write
-					data = VillagerTradeTransformer.to16VillagerTradeList(new PacketDataSerializer(data, ProtocolVersion.MINECRAFT_1_8), serializer.getVersion());
+					packetdata.setVersion(ProtocolVersion.MINECRAFT_1_8);
+					byte[] data = VillagerTradeTransformer.to16VillagerTradeList(packetdata, serializer.getVersion());
+					serializer.writeShort(data.length);
+					serializer.writeBytes(data);
+					break;
 				}
-				serializer.writeShort(data.readableBytes());
-				serializer.writeBytes(data);
+				serializer.writeShort(packetdata.readableBytes());
+				serializer.writeBytes(packetdata);
 				break;
 			}
 			case 0x40: { //PacketPlayOutKickDisconnect
