@@ -1,0 +1,10 @@
+name: ProtocolSupport
+main: com.github.shevchik.protocolsupport.ProtocolSupport
+version: maven-version
+author: _Shevchik_
+load: STARTUP
+commands:
+  protocolsupport:
+    description: All ProtocolSupport commands
+    aliases: ps
+    usage: Invalid command

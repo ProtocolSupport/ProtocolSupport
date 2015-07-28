@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.github.shevchik</groupId>
+	<artifactId>protocolsupport</artifactId>
+	<version>4.19</version>
+
+	<packaging>jar</packaging>
+
+	<name>ProtocolSupport</name>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<!-- Change Compiler Version (JDK) HERE! -->
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
+
+		<!-- Change MC Version HERE! -->
+		<bukkitVersion>1.8.7-R0.1</bukkitVersion>
+	</properties>
+
+	<!-- Official Build Server -->
+	<ciManagement>
+		<system>jenkins</system>
+		<url>http://build.true-games.org/job/ProtocolSupport/</url>
+	</ciManagement>
+
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/Shevchik/ProtocolSupport/issues/</url>
+	</issueManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.google.code.maven-replacer-plugin</groupId>
+				<artifactId>replacer</artifactId>
+				<version>1.5.3</version>
+				<executions>
+					<execution>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>replace</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<file>target/classes/plugin.yml</file>
+					<replacements>
+						<replacement>
+							<token>maven-version</token>
+							<value>${project.version}</value>
+						</replacement>
+					</replacements>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<archive>
+						<manifestFile>${manifest.file}</manifestFile>
+					</archive>
+					<finalName>${project.name}-${project.version}</finalName>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<repositories>
+		<!-- Unofficial Spigot Repo -->
+		<repository>
+			<id>minelink-thirdparty</id>
+			<url>http://repo.minelink.net/content/repositories/public</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<!-- Spigot, http://www.spigotmc.org/ Based on the Bukkit project, http://bukkit.org/ -->
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot</artifactId>
+			<version>${bukkitVersion}</version>
+			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>bungeecord-chat</artifactId>
+					<groupId>net.md-5</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+	</dependencies>
+</project>
