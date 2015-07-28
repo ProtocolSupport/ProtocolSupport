@@ -22,6 +22,9 @@ import org.bukkit.event.inventory.InventoryType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage;
+import protocolsupport.protocol.transformer.utils.LegacyUtils;
+import protocolsupport.protocol.transformer.utils.MapTransformer;
+import protocolsupport.protocol.transformer.utils.MapTransformer.ColumnEntry;
 import protocolsupport.protocol.transformer.v_1_5.remappers.BlockIDRemapper;
 import protocolsupport.protocol.transformer.v_1_5.remappers.EntityIDRemapper;
 import protocolsupport.protocol.transformer.v_1_5.remappers.ItemIDRemapper;
@@ -32,10 +35,8 @@ import protocolsupport.protocol.transformer.v_1_5.utils.VillagerTradeTransformer
 import protocolsupport.protocol.watchedentity.WatchedLiving;
 import protocolsupport.protocol.watchedentity.WatchedObject;
 import protocolsupport.protocol.watchedentity.WatchedPlayer;
-import protocolsupport.utils.MapTransformer;
 import protocolsupport.utils.Allocator;
 import protocolsupport.utils.Utils;
-import protocolsupport.utils.MapTransformer.ColumnEntry;
 
 public class PlayPacketTransformer implements PacketTransformer {
 
@@ -72,7 +73,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x02: { //PacketPlayOutChat
 				serializer.writeByte(0x03);
-				serializer.writeString(Utils.fromComponent(packetdata.d()));
+				serializer.writeString(LegacyUtils.fromComponent(packetdata.d()));
 				break;
 			}
 			case 0x03: { //PacketPlayOutUpdateTime
@@ -581,7 +582,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x29: { //PacketPlayOutNamedSoundEffect
 				serializer.writeByte(0x3E);
-				String name = Utils.getLegacySound(packetdata.readString(32767));
+				String name = LegacyUtils.getSound(packetdata.readString(32767));
 				serializer.writeString(name);
 				serializer.writeInt(packetdata.readInt());
 				serializer.writeInt(packetdata.readInt());
@@ -658,7 +659,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x2D: { //PacketPlayOutOpenWindow
 				int windowId = packetdata.readUnsignedByte();
-				byte id = Utils.getInventoryId(packetdata.readString(32));
+				byte id = LegacyUtils.getInventoryId(packetdata.readString(32));
 				//fiter out horse inventory
 				if (id == 11) {
 					Utils.getPlayer(channel).closeInventory();
@@ -667,7 +668,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(0x64);
 				serializer.writeByte(windowId);
 				serializer.writeByte(id);
-				serializer.writeString(Utils.fromComponent(packetdata.d()));
+				serializer.writeString(LegacyUtils.fromComponent(packetdata.d()));
 				serializer.writeByte(packetdata.readUnsignedByte());
 				serializer.writeBoolean(true);
 				break;
@@ -758,7 +759,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeShort(blockPos.getY());
 				serializer.writeInt(blockPos.getZ());
 				for (int i = 0; i < 4; i++) {
-					serializer.writeString(Utils.clampString(Utils.fromComponent(packetdata.d()), 15));
+					serializer.writeString(Utils.clampString(LegacyUtils.fromComponent(packetdata.d()), 15));
 				}
 				break;
 			}
@@ -964,7 +965,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x40: { //PacketPlayOutKickDisconnect
 				serializer.writeByte(0xFF);
-				serializer.writeString(Utils.fromComponent(packetdata.d()));
+				serializer.writeString(LegacyUtils.fromComponent(packetdata.d()));
 				break;
 			}
 		}

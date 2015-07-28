@@ -8,7 +8,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.CorruptedFrameException;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.pipeline.IPacketSplitter;
+import protocolsupport.protocol.core.IPacketSplitter;
 
 public class PacketSplitter implements IPacketSplitter {
 

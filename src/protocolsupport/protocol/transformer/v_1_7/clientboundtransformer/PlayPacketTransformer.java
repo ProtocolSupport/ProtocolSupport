@@ -27,6 +27,9 @@ import org.bukkit.event.inventory.InventoryType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage;
+import protocolsupport.protocol.transformer.utils.LegacyUtils;
+import protocolsupport.protocol.transformer.utils.MapTransformer;
+import protocolsupport.protocol.transformer.utils.MapTransformer.ColumnEntry;
 import protocolsupport.protocol.transformer.v_1_7.remappers.BlockIDRemapper;
 import protocolsupport.protocol.transformer.v_1_7.remappers.EntityIDRemapper;
 import protocolsupport.protocol.transformer.v_1_7.remappers.ItemIDRemapper;
@@ -37,8 +40,6 @@ import protocolsupport.protocol.watchedentity.WatchedEntity;
 import protocolsupport.protocol.watchedentity.WatchedLiving;
 import protocolsupport.protocol.watchedentity.WatchedObject;
 import protocolsupport.utils.Allocator;
-import protocolsupport.utils.MapTransformer;
-import protocolsupport.utils.MapTransformer.ColumnEntry;
 import protocolsupport.utils.Utils;
 
 import com.mojang.authlib.properties.Property;
@@ -626,9 +627,9 @@ public class PlayPacketTransformer implements PacketTransformer {
 				packet.b(packetdata);
 				serializer.writeVarInt(packetId);
 				serializer.writeByte(packetdata.readUnsignedByte());
-				byte id = Utils.getInventoryId(packetdata.readString(32));
+				byte id = LegacyUtils.getInventoryId(packetdata.readString(32));
 				serializer.writeByte(id);
-				serializer.writeString(Utils.fromComponent(packetdata.d()));
+				serializer.writeString(LegacyUtils.fromComponent(packetdata.d()));
 				serializer.writeByte(packetdata.readUnsignedByte());
 				serializer.writeBoolean(true);
 				if (id == 11) {
@@ -717,7 +718,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeShort(blockPos.getY());
 				serializer.writeInt(blockPos.getZ());
 				for (int i = 0; i < 4; i++) {
-					serializer.writeString(Utils.clampString(Utils.fromComponent(packetdata.d()), 15));
+					serializer.writeString(Utils.clampString(LegacyUtils.fromComponent(packetdata.d()), 15));
 				}
 				break;
 			}

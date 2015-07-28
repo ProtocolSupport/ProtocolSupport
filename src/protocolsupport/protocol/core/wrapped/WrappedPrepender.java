@@ -1,9 +1,9 @@
-package protocolsupport.protocol.pipeline.wrapped;
+package protocolsupport.protocol.core.wrapped;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
-import protocolsupport.protocol.pipeline.IPacketPrepender;
+import protocolsupport.protocol.core.IPacketPrepender;
 
 public class WrappedPrepender extends MessageToByteEncoder<ByteBuf> {
 

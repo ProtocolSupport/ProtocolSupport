@@ -24,7 +24,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.raknet.RakNetConstants;
 import protocolsupport.protocol.transformer.mcpe.packet.raknet.RakNetPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.raknet.ServerInfoPacket;
 import protocolsupport.protocol.transformer.mcpe.pipeline.UDPRouter;
-import protocolsupport.utils.Utils;
+import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import net.minecraft.server.v1_8_R3.ChatComponentText;
 import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
@@ -74,7 +74,7 @@ public class UDPNetworkManager extends NetworkManager {
 	public void close(IChatBaseComponent comp) {
 		if (channel.isOpen()) {
 			try {
-				sendPEPacket(new KickPacket(Utils.fromComponent(comp)));
+				sendPEPacket(new KickPacket(LegacyUtils.fromComponent(comp)));
 				super.close(comp);
 			} catch (Throwable e) {
 			} finally {

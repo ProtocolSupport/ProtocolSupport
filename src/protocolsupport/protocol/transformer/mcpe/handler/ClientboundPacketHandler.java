@@ -25,8 +25,8 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetBloc
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetTimePacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.StartGamePacket;
 import protocolsupport.protocol.transformer.mcpe.remapper.BlockIDRemapper;
+import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.utils.Allocator;
-import protocolsupport.utils.Utils;
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.ChatComponentText;
 import net.minecraft.server.v1_8_R3.Chunk;
@@ -100,7 +100,7 @@ public class ClientboundPacketHandler {
 					);
 				}
 				case 0x02: { //PacketPlayOutChat
-					return Collections.singletonList(new ChatPacket(Utils.fromComponent(packetdata.d())));
+					return Collections.singletonList(new ChatPacket(LegacyUtils.fromComponent(packetdata.d())));
 				}
 				case 0x06: { //PacketPlayOutUpdateHealth
 					return Collections.singletonList(new SetHealthPacket((int) packetdata.readFloat()));

@@ -4,8 +4,8 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import net.minecraft.server.v1_8_R3.NetworkManager;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.pipeline.ChannelHandlers;
-import protocolsupport.protocol.pipeline.IPipeLineBuilder;
+import protocolsupport.protocol.core.ChannelHandlers;
+import protocolsupport.protocol.core.IPipeLineBuilder;
 
 public class PipeLineBuilder implements IPipeLineBuilder {
 

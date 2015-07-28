@@ -1,4 +1,4 @@
-package protocolsupport.protocol.pipeline;
+package protocolsupport.protocol.core;
 
 import java.util.List;
 
