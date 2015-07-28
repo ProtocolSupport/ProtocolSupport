@@ -78,60 +78,64 @@ public class DataWatcherSerializer {
 	}
 
 	public static byte[] encodeData(ProtocolVersion version, TIntObjectMap<DataWatcherObject> objects) {
-		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer(), version);
-		TIntObjectIterator<DataWatcherObject> iterator = objects.iterator();
-		while (iterator.hasNext()) {
-			iterator.advance();
-			DataWatcherObject object = iterator.value();
-			final int tk = ((object.type.getId(serializer.getVersion()) << 5) | (iterator.key() & 0x1F)) & 0xFF;
-			serializer.writeByte(tk);
-			switch (object.type) {
-				case BYTE: {
-					serializer.writeByte((byte) object.value);
-					break;
-				}
-				case SHORT: {
-					serializer.writeShort((short) object.value);
-					break;
-				}
-				case INT: {
-					serializer.writeInt((int) object.value);
-					break;
-				}
-				case FLOAT: {
-					serializer.writeFloat((float) object.value);
-					break;
-				}
-				case STRING: {
-					serializer.writeString((String) object.value);
-					break;
-				}
-				case ITEMSTACK: {
-					serializer.writeItemStack((ItemStack) object.value);
-					break;
-				}
-				case VECTOR3I: {
-					BlockPosition blockPos = (BlockPosition) object.value;
-					serializer.writeInt(blockPos.getX());
-					serializer.writeInt(blockPos.getY());
-					serializer.writeInt(blockPos.getZ());
-					break;
-				}
-				case VECTOR3F: {
-					Vector3f vector = (Vector3f) object.value;
-					serializer.writeFloat(vector.getX());
-					serializer.writeFloat(vector.getY());
-					serializer.writeFloat(vector.getZ());
-					break;
-				}
-				case LONG: {
-					serializer.writeLong((long) object.value);
-					break;
+		PacketDataSerializer serializer = new PacketDataSerializer(Allocator.allocateBuffer(), version);
+		try {
+			TIntObjectIterator<DataWatcherObject> iterator = objects.iterator();
+			while (iterator.hasNext()) {
+				iterator.advance();
+				DataWatcherObject object = iterator.value();
+				final int tk = ((object.type.getId(serializer.getVersion()) << 5) | (iterator.key() & 0x1F)) & 0xFF;
+				serializer.writeByte(tk);
+				switch (object.type) {
+					case BYTE: {
+						serializer.writeByte((byte) object.value);
+						break;
+					}
+					case SHORT: {
+						serializer.writeShort((short) object.value);
+						break;
+					}
+					case INT: {
+						serializer.writeInt((int) object.value);
+						break;
+					}
+					case FLOAT: {
+						serializer.writeFloat((float) object.value);
+						break;
+					}
+					case STRING: {
+						serializer.writeString((String) object.value);
+						break;
+					}
+					case ITEMSTACK: {
+						serializer.writeItemStack((ItemStack) object.value);
+						break;
+					}
+					case VECTOR3I: {
+						BlockPosition blockPos = (BlockPosition) object.value;
+						serializer.writeInt(blockPos.getX());
+						serializer.writeInt(blockPos.getY());
+						serializer.writeInt(blockPos.getZ());
+						break;
+					}
+					case VECTOR3F: {
+						Vector3f vector = (Vector3f) object.value;
+						serializer.writeFloat(vector.getX());
+						serializer.writeFloat(vector.getY());
+						serializer.writeFloat(vector.getZ());
+						break;
+					}
+					case LONG: {
+						serializer.writeLong((long) object.value);
+						break;
+					}
 				}
 			}
+			serializer.writeByte(127);
+			return Utils.toArray(serializer);
+		} finally {
+			serializer.release();
 		}
-		serializer.writeByte(127);
-		return serializer.readBytes(serializer.readableBytes()).array();
 	}
 
 	public static class DataWatcherObject {

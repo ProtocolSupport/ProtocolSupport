@@ -3,7 +3,6 @@ package protocolsupport.protocol;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
-import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.EncoderException;
 
 import java.io.BufferedInputStream;
@@ -38,6 +37,8 @@ import org.spigotmc.SneakyThrow;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
+import protocolsupport.utils.Allocator;
+import protocolsupport.utils.Utils;
 
 import com.mojang.authlib.GameProfile;
 
@@ -54,6 +55,9 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 		return version;
 	}
 
+	public void setVersion(ProtocolVersion version) {
+		this.version = version;
+	}
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -131,19 +135,20 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 			} else {
 				final byte[] abyte = write(nbttagcompound);
 				writeShort(abyte.length);
-				this.writeBytes(abyte);
+				writeBytes(abyte);
 			}
 		} else if (nbttagcompound == null) {
 			writeByte(0);
 		} else {
-			final ByteBufOutputStream out = new ByteBufOutputStream(Unpooled.buffer());
+			ByteBufOutputStream out = new ByteBufOutputStream(Allocator.allocateBuffer());
 			try {
 				NBTCompressedStreamTools.a(nbttagcompound, (DataOutput) new DataOutputStream(out));
-			} catch (Exception ioexception) {
+				writeBytes(out.buffer());
+			} catch (Throwable ioexception) {
 				throw new EncoderException(ioexception);
+			} finally {
+				out.buffer().release();
 			}
-			this.writeBytes(out.buffer());
-			out.buffer().release();
 		}
 	}
 
@@ -184,10 +189,10 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 			case MINECRAFT_1_6_4:
 			case MINECRAFT_1_6_2:
 			case MINECRAFT_1_5_2: {
-				return new String(readBytes(readUnsignedShort() * 2).array(), StandardCharsets.UTF_16BE);
+				return new String(Utils.toArray(readBytes(readUnsignedShort() * 2)), StandardCharsets.UTF_16BE);
 			}
 			case MINECRAFT_PE: {
-				return new String(readBytes(readUnsignedShort()).array(), StandardCharsets.UTF_8);
+				return new String(Utils.toArray(readBytes(readUnsignedShort())), StandardCharsets.UTF_8);
 			}
 			default: {
 				return super.c(limit);

@@ -1,5 +1,6 @@
 package protocolsupport.utils;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 
 import java.lang.reflect.AccessibleObject;
@@ -41,11 +42,15 @@ public class Utils {
 	}
 
 	public static Player getPlayer(Channel channel) {
-		return ((PlayerConnection) ((NetworkManager) channel.pipeline().get(ChannelHandlers.NETWORK_MANAGER)).getPacketListener()).player.getBukkitEntity();
+		return ((PlayerConnection) getNetworkManager(channel).getPacketListener()).player.getBukkitEntity();
 	}
 
 	public static SocketAddress getNetworkManagerSocketAddress(Channel channel) {
-		return ((NetworkManager) channel.pipeline().get(ChannelHandlers.NETWORK_MANAGER)).l;
+		return getNetworkManager(channel).l;
+	}
+
+	public static NetworkManager getNetworkManager(Channel channel) {
+		return (NetworkManager) channel.pipeline().get(ChannelHandlers.NETWORK_MANAGER);
 	}
 
 	public static List<int[]> splitArray(int[] array, int limit) {
@@ -64,6 +69,12 @@ public class Utils {
 			copied+= limit;
 		}
 		return list;
+	}
+
+	public static byte[] toArray(ByteBuf buf) {
+		byte[] result = new byte[buf.readableBytes()];
+		buf.readBytes(result);
+		return result;
 	}
 
 }

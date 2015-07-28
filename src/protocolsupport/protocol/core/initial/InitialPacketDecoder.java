@@ -16,6 +16,8 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.core.ChannelHandlers;
 import protocolsupport.protocol.core.IPipeLineBuilder;
 import protocolsupport.protocol.storage.ProtocolStorage;
+import protocolsupport.utils.Allocator;
+import protocolsupport.utils.Utils;
 
 public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 
@@ -30,9 +32,19 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 	}};
 
 
-	protected ByteBuf receivedData = Unpooled.buffer();
+	protected ByteBuf receivedData = Allocator.allocateBuffer();
 
 	protected volatile boolean protocolSet = false;
+
+	@Override
+	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+		receivedData.release();
+	}
+
+	@Override
+	public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
+		receivedData.release();
+	}
 
 	@Override
 	public void channelRead(final ChannelHandlerContext ctx, final Object inputObj) throws Exception {
@@ -57,7 +69,7 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 								ctx.executor().schedule(new Minecraft152PingResponseTask(this, channel), 500, TimeUnit.MILLISECONDS);
 							} else if (
 								(receivedData.readUnsignedByte() == 0xFA) &&
-								"MC|PingHost".equals(new String(receivedData.readBytes(receivedData.readUnsignedShort() * 2).array(), StandardCharsets.UTF_16BE))
+								"MC|PingHost".equals(new String(Utils.toArray(receivedData.readBytes(receivedData.readUnsignedShort() * 2)), StandardCharsets.UTF_16BE))
 							) { //1.6.*
 								receivedData.readUnsignedShort();
 								handshakeversion = ProtocolVersion.fromId(receivedData.readUnsignedByte());

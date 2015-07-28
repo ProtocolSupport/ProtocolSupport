@@ -8,14 +8,12 @@ import java.io.IOException;
 
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.ChatComponentText;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.EnumProtocol;
 import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketListener;
 
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.event.inventory.InventoryType;
 
 import protocolsupport.api.ProtocolVersion;
@@ -199,36 +197,40 @@ public class PlayPacketTransformer implements PacketTransformer {
 				String tag = serializer.readString(20);
 				packetdata.writeString(tag);
 				ByteBuf buf = serializer.readBytes(serializer.readShort());
-				//special handle for anvil renaming, in 1.8 it reads string from serializer, but in 1.7 and before it just reads bytes and converts it to string
-				if (tag.equalsIgnoreCase("MC|ItemName")) {
-					packetdata.writeVarInt(buf.readableBytes());
+				try {
+					//special handle for anvil renaming, in 1.8 it reads string from serializer, but in 1.7 and before it just reads bytes and converts it to string
+					if (tag.equalsIgnoreCase("MC|ItemName")) {
+						packetdata.writeVarInt(buf.readableBytes());
+					}
+					//special handle for book sign and book edit, the bytes are written as 1.6 stream, but server will attempt to read bytes as 1.8 stream, so we should rewrite the itemstack
+					else if (tag.equals("MC|BSign") || tag.equals("MC|BEdit")) {
+						PacketDataSerializer data = new PacketDataSerializer(Unpooled.wrappedBuffer(buf), serializer.getVersion());
+						PacketDataSerializer newdata = new PacketDataSerializer(Unpooled.buffer(), ProtocolVersion.MINECRAFT_1_8);
+						newdata.writeItemStack(data.readItemStack());
+						buf = newdata;
+					}
+					//special handle for command block, reason is almost the same as for books, but also stream in 1.8 should have a last output flag, and cmd block type
+					else if (tag.equals("MC|AdvCdm")) {
+						PacketDataSerializer data = new PacketDataSerializer(Unpooled.wrappedBuffer(buf), serializer.getVersion());
+						PacketDataSerializer newdata = new PacketDataSerializer(Unpooled.buffer(), ProtocolVersion.MINECRAFT_1_8);
+						newdata.writeByte(0);
+						newdata.writeInt(data.readInt());
+						newdata.writeInt(data.readInt());
+						newdata.writeInt(data.readInt());
+						newdata.writeString(data.readString(32767));
+						newdata.writeBoolean(true);
+						buf = newdata;
+					}
+					//now write
+					packetdata.writeBytes(buf);
+				} finally {
+					buf.release();
 				}
-				//special handle for book sign and book edit, the bytes are written as 1.6 stream, but server will attempt to read bytes as 1.8 stream, so we should rewrite the itemstack
-				else if (tag.equals("MC|BSign") || tag.equals("MC|BEdit")) {
-					PacketDataSerializer data = new PacketDataSerializer(Unpooled.wrappedBuffer(buf), serializer.getVersion());
-					PacketDataSerializer newdata = new PacketDataSerializer(Unpooled.buffer(), ProtocolVersion.MINECRAFT_1_8);
-					newdata.writeItemStack(data.readItemStack());
-					buf = newdata.readBytes(newdata.readableBytes());
-				}
-				//special handle for command block, reason is almost the same as for books, but also stream in 1.8 should have a last output flag, and cmd block type
-				else if (tag.equals("MC|AdvCdm")) {
-					PacketDataSerializer data = new PacketDataSerializer(Unpooled.wrappedBuffer(buf), serializer.getVersion());
-					PacketDataSerializer newdata = new PacketDataSerializer(Unpooled.buffer(), ProtocolVersion.MINECRAFT_1_8);
-					newdata.writeByte(0);
-					newdata.writeInt(data.readInt());
-					newdata.writeInt(data.readInt());
-					newdata.writeInt(data.readInt());
-					newdata.writeString(data.readString(32767));
-					newdata.writeBoolean(true);
-					buf = newdata.readBytes(newdata.readableBytes());
-				}
-				packetdata.writeBytes(buf);
 				break;
 			}
 			case 0xFF: { //No corresponding packet (PacketClientDisconnect?)
-				EntityPlayer player = ((CraftPlayer) Utils.getPlayer(channel)).getHandle();
-				player.playerConnection.networkManager.close(new ChatComponentText(serializer.readString(32767)));
-				break;
+				Utils.getNetworkManager(channel).close(new ChatComponentText(serializer.readString(32767)));
+				return new Packet[0];
 			}
 		}
 		if (packet != null) {
