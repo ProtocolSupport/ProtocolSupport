@@ -1,3 +1,4 @@
+<!-- DEPRECATED, use maven instead! -->
 <project name="ProtocolSupport" default="build" basedir=".">
 
     <path id="libs">
