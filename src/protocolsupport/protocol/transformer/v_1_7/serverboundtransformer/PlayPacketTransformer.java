@@ -22,8 +22,7 @@ import protocolsupport.utils.Utils;
 public class PlayPacketTransformer implements PacketTransformer {
 
 	@Override
-	public boolean tranform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer, PacketDataSerializer packetdata) throws IOException {
-		int initialReaderIndex = serializer.readerIndex();
+	public void tranform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer, PacketDataSerializer packetdata) throws IOException {
 		switch (packetId) {
 			case 0x00: { //PacketPlayInKeepAlive
 				packetdata.writeVarInt(serializer.readInt());
@@ -156,12 +155,13 @@ public class PlayPacketTransformer implements PacketTransformer {
 				}
 				break;
 			}
+			default: { //Any other packet - just read from original stream
+				packet.a(serializer);
+				return;
+			}
 		}
-		if (initialReaderIndex != serializer.readerIndex()) {
-			packet.a(packetdata);
-			return true;
-		}
-		return false;
+		//decode transformed packetdata
+		packet.a(packetdata);
 	}
 
 }

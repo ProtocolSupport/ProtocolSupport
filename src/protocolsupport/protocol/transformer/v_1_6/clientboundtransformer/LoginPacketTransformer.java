@@ -24,13 +24,7 @@ public class LoginPacketTransformer implements PacketTransformer {
 			}
 			case 0x01: { //PacketLoginOutEncryptionBegin
 				serializer.writeByte(0xFD);
-				serializer.writeString(packetdata.readString(20));
-				int length1 = packetdata.readVarInt();
-				serializer.writeShort(length1);
-				serializer.writeBytes(packetdata.readBytes(length1));
-				int length2 = packetdata.readVarInt();
-				serializer.writeShort(length2);
-				serializer.writeBytes(packetdata.readBytes(length2));
+				packet.b(serializer);
 				break;
 			}
 			case 0x02: { //PacketLoginOutSuccess

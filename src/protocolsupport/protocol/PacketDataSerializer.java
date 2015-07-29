@@ -104,7 +104,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 					}
 				}
 			}
-			this.a(nbttagcompound);
+			a(nbttagcompound);
 		}
 	}
 
@@ -130,7 +130,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 			if (nbttagcompound == null) {
 				writeShort(-1);
 			} else {
-				final byte[] abyte = write(nbttagcompound);
+				byte[] abyte = write(nbttagcompound);
 				writeShort(abyte.length);
 				writeBytes(abyte);
 			}
@@ -163,19 +163,19 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 	@Override
 	public NBTTagCompound h() throws IOException {
 		if (getVersion() != ProtocolVersion.MINECRAFT_1_8) {
-			final short short1 = readShort();
-			if (short1 < 0) {
+			final short length = readShort();
+			if (length < 0) {
 				return null;
 			}
-			final byte[] abyte = new byte[short1];
-			this.readBytes(abyte);
-			return read(abyte, new NBTReadLimiter(2097152L));
+			final byte[] data = new byte[length];
+			readBytes(data);
+			return read(data, new NBTReadLimiter(2097152L));
 		} else {
-			final int index = this.readerIndex();
+			int index = readerIndex();
 			if (readByte() == 0) {
 				return null;
 			}
-			this.readerIndex(index);
+			readerIndex(index);
 			return NBTCompressedStreamTools.a(new DataInputStream(new ByteBufInputStream(this)), new NBTReadLimiter(2097152L));
 		}
 	}
@@ -186,8 +186,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 			case MINECRAFT_1_6_4:
 			case MINECRAFT_1_6_2:
 			case MINECRAFT_1_5_2: {
-				int length = readUnsignedShort();
-				return new String(Utils.toArray(readBytes(length * 2)), StandardCharsets.UTF_16BE);
+				return new String(Utils.toArray(readBytes(readUnsignedShort() * 2)), StandardCharsets.UTF_16BE);
 			}
 			default: {
 				return super.c(limit);
@@ -211,6 +210,43 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 			}
 		}
 		return this;
+	}
+
+	@Override
+	public byte[] a() {
+		switch (getVersion()) {
+			case MINECRAFT_1_7_10:
+			case MINECRAFT_1_7_5:
+			case MINECRAFT_1_6_4:
+			case MINECRAFT_1_6_2:
+			case MINECRAFT_1_5_2: {
+				byte[] array = new byte[readUnsignedShort()];
+				readBytes(array);
+				return array;
+			}
+			default: {
+				return super.a();
+			}
+		}
+	}
+
+	@Override
+	public void a(byte[] array) {
+		switch (getVersion()) {
+			case MINECRAFT_1_7_10:
+			case MINECRAFT_1_7_5:
+			case MINECRAFT_1_6_4:
+			case MINECRAFT_1_6_2:
+			case MINECRAFT_1_5_2: {
+				writeShort(array.length);
+				writeBytes(array);
+				break;
+			}
+			default: {
+				super.a(array);
+				break;
+			}
+		}
 	}
 
 	public int readVarInt() {
@@ -237,16 +273,19 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 		a(itemstack);
 	}
 
+	public byte[] readArray() {
+		return a();
+	}
+
+	public void writeArray(byte[] array) {
+		a(array);
+	}
+
 	private static NBTTagCompound read(final byte[] data, final NBTReadLimiter nbtreadlimiter) {
 		try {
-			final DataInputStream datainputstream = new DataInputStream(new BufferedInputStream(new LimitStream(new GZIPInputStream(new ByteArrayInputStream(data)), nbtreadlimiter)));
-			NBTTagCompound nbttagcompound;
-			try {
-				nbttagcompound = NBTCompressedStreamTools.a(datainputstream, nbtreadlimiter);
-			} finally {
-				datainputstream.close();
+			try (DataInputStream datainputstream = new DataInputStream(new BufferedInputStream(new LimitStream(new GZIPInputStream(new ByteArrayInputStream(data)), nbtreadlimiter)))) {
+				return NBTCompressedStreamTools.a(datainputstream, nbtreadlimiter);
 			}
-			return nbttagcompound;
 		} catch (IOException ex) {
 			SneakyThrow.sneaky(ex);
 			return null;
@@ -255,12 +294,9 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 
 	private static byte[] write(final NBTTagCompound nbttagcompound) {
 		try {
-			final ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream();
-			final DataOutputStream dataoutputstream = new DataOutputStream(new GZIPOutputStream(bytearrayoutputstream));
-			try {
+			ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream();
+			try (DataOutputStream dataoutputstream = new DataOutputStream(new GZIPOutputStream(bytearrayoutputstream))) {
 				NBTCompressedStreamTools.a(nbttagcompound, (DataOutput) dataoutputstream);
-			} finally {
-				dataoutputstream.close();
 			}
 			return bytearrayoutputstream.toByteArray();
 		} catch (IOException ex) {

@@ -43,7 +43,6 @@ public class PacketEncoder implements IPacketEncoder {
 		}
 		PacketDataSerializer serializer = new PacketDataSerializer(output, version);
 		transformers[currentProtocol.ordinal()].tranform(channel, packetId, packet, serializer);
-		channel.flush();
 	}
 
 }

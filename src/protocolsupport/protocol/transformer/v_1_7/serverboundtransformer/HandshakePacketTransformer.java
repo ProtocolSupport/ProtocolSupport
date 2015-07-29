@@ -12,14 +12,22 @@ import protocolsupport.protocol.PacketDataSerializer;
 public class HandshakePacketTransformer implements PacketTransformer {
 
 	@Override
-	public boolean tranform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer, PacketDataSerializer packetdata) throws IOException {
-		serializer.readVarInt();
-		packetdata.writeVarInt(ProtocolVersion.MINECRAFT_1_8.getId());
-		packetdata.writeString(serializer.readString(32767));
-		packetdata.writeShort(serializer.readUnsignedShort());
-		packetdata.writeVarInt(serializer.readVarInt());
-		packet.a(packetdata);
-		return true;
+	public void tranform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer, PacketDataSerializer packetdata) throws IOException {
+		switch (packetId) {
+			case 0x00: {
+				serializer.readVarInt();
+				packetdata.writeVarInt(ProtocolVersion.MINECRAFT_1_8.getId());
+				packetdata.writeString(serializer.readString(32767));
+				packetdata.writeShort(serializer.readUnsignedShort());
+				packetdata.writeVarInt(serializer.readVarInt());
+				packet.a(packetdata);
+				break;
+			}
+			default: {
+				packet.a(serializer);
+				break;
+			}
+		}
 	}
 
 }
