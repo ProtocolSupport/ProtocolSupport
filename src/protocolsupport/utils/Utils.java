@@ -26,7 +26,7 @@ public class Utils {
 	}
 
 	public static void writeAll(PacketDataSerializer input, PacketDataSerializer output) {
-		output.writeBytes(input.readBytes(input.readableBytes()));
+		output.writeBytes(input);
 	}
 
 	public static <T extends AccessibleObject> T setAccessible(T object) {

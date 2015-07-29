@@ -15,22 +15,12 @@ public class LoginPacketTransformer implements PacketTransformer {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Packet<PacketListener>[] tranform(Channel channel, int packetId, PacketDataSerializer serializer, PacketDataSerializer packetdata) throws IOException, IllegalAccessException, InstantiationException {
-		Packet<PacketListener> packet = null;
 		switch (packetId) {
 			case 0xFC: { //PacketLoginInEncryptionBegin
-				packet = getPacketById(0x01);
-				int length1 = serializer.readUnsignedShort();
-				packetdata.writeVarInt(length1);
-				packetdata.writeBytes(serializer.readBytes(length1));
-				int length2 = serializer.readUnsignedShort();
-				packetdata.writeVarInt(length2);
-				packetdata.writeBytes(serializer.readBytes(length2));
-				break;
+				Packet<PacketListener> packet = getPacketById(0x01);
+				packet.a(serializer);
+				return new Packet[] {packet};
 			}
-		}
-		if (packet != null) {
-			packet.a(packetdata);
-			return new Packet[] {packet};
 		}
 		return null;
 	}

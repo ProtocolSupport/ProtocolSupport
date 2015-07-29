@@ -50,10 +50,7 @@ public class PacketDecoder implements IPacketDecoder {
 		}
 		PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), version);
 		try {
-			boolean needsRead = !transformers[channel.attr(currentStateAttrKey).get().ordinal()].tranform(channel, packetId, packet, serializer, packetdata);
-			if (needsRead) {
-				packet.a(serializer);
-			}
+			transformers[channel.attr(currentStateAttrKey).get().ordinal()].tranform(channel, packetId, packet, serializer, packetdata);
 		} finally {
 			packetdata.release();
 		}

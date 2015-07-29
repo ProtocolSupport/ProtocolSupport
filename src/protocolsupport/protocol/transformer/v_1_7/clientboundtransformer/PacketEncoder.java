@@ -18,23 +18,11 @@ import protocolsupport.protocol.core.IPacketEncoder;
 
 public class PacketEncoder implements IPacketEncoder {
 
-	private ProtocolVersion version;
-	public PacketEncoder(ProtocolVersion version) {
-		this.version = version;
-	}
-
 	private static final EnumProtocolDirection direction = EnumProtocolDirection.CLIENTBOUND;
 	private static final AttributeKey<EnumProtocol> currentStateAttrKey = NetworkManager.c;
 
-	private final PacketTransformer[] transformers = new PacketTransformer[] {
-		new HandshakePacketTransformer(),
-		new PlayPacketTransformer(),
-		new StatusPacketTransformer(),
-		new LoginPacketTransformer()
-	};
-
-	private boolean[] blockedPlayPackets = new boolean[256];
-	{
+	private static boolean[] blockedPlayPackets = new boolean[256];
+	static {
 		//packet from 1.8
 		for (int i = 0x41; i < 0x49; i++) {
 			if (i == 0x48) {
@@ -43,6 +31,18 @@ public class PacketEncoder implements IPacketEncoder {
 			blockedPlayPackets[i] = true;
 		}
 	}
+
+	private ProtocolVersion version;
+	public PacketEncoder(ProtocolVersion version) {
+		this.version = version;
+	}
+
+	private final PacketTransformer[] transformers = new PacketTransformer[] {
+		new HandshakePacketTransformer(),
+		new PlayPacketTransformer(),
+		new StatusPacketTransformer(),
+		new LoginPacketTransformer()
+	};
 
 	@Override
 	public void encode(ChannelHandlerContext ctx, Packet<PacketListener> packet, ByteBuf output) throws Exception {

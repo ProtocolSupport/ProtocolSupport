@@ -16,18 +16,6 @@ public class LoginPacketTransformer implements PacketTransformer {
 	public void tranform(ChannelHandlerContext ctx, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
 		PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), serializer.getVersion());
 		switch (packetId) {
-			case 0x01: { //PacketLoginOutEncryptionBegin
-				packet.b(packetdata);
-				serializer.writeVarInt(packetId);
-				serializer.writeString(packetdata.readString(20));
-				int length1 = packetdata.readVarInt();
-				serializer.writeShort(length1);
-				serializer.writeBytes(packetdata.readBytes(length1));
-				int length2 = packetdata.readVarInt();
-				serializer.writeShort(length2);
-				serializer.writeBytes(packetdata.readBytes(length2));
-				break;
-			}
 			case 0x02: { //PacketLoginOutSuccess
 				packet.b(packetdata);
 				serializer.writeVarInt(packetId);
