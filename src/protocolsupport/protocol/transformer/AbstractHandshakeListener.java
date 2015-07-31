@@ -56,14 +56,14 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 				}
 				networkManager.a(getLoginListener(networkManager));
 				if (SpigotConfig.bungee) {
-					final String[] split = packethandshakinginsetprotocol.b.split("\u0000");
+					final String[] split = packethandshakinginsetprotocol.hostname.split("\u0000");
 					if ((split.length != 3) && (split.length != 4)) {
 						final ChatComponentText chatcomponenttext = new ChatComponentText("If you wish to use IP forwarding, please enable it in your BungeeCord config as well!");
 						networkManager.handle(new PacketLoginOutDisconnect(chatcomponenttext));
 						networkManager.close(chatcomponenttext);
 						return;
 					}
-					packethandshakinginsetprotocol.b = split[0];
+					packethandshakinginsetprotocol.hostname = split[0];
 					ProtocolVersion version = ProtocolStorage.getProtocolVersion(networkManager.l);
 					networkManager.l = new InetSocketAddress(split[1], ((InetSocketAddress) networkManager.getSocketAddress()).getPort());
 					ProtocolStorage.setProtocolVersion(networkManager.l, version);
@@ -72,7 +72,7 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 						networkManager.spoofedProfile = gson.fromJson(split[3], Property[].class);
 					}
 				}
-				((LoginListener) networkManager.getPacketListener()).hostname = packethandshakinginsetprotocol.b + ":" + packethandshakinginsetprotocol.c;
+				((LoginListener) networkManager.getPacketListener()).hostname = packethandshakinginsetprotocol.hostname + ":" + packethandshakinginsetprotocol.port;
 				break;
 			}
 			case STATUS: {
