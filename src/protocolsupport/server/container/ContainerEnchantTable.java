@@ -13,6 +13,7 @@ import net.minecraft.server.v1_8_R3.EntityHuman;
 import net.minecraft.server.v1_8_R3.IInventory;
 import net.minecraft.server.v1_8_R3.Items;
 import net.minecraft.server.v1_8_R3.PlayerInventory;
+import net.minecraft.server.v1_8_R3.StatisticList;
 import net.minecraft.server.v1_8_R3.WeightedRandomEnchant;
 import net.minecraft.server.v1_8_R3.World;
 
@@ -155,7 +156,7 @@ public class ContainerEnchantTable extends net.minecraft.server.v1_8_R3.Containe
 				} catch (IllegalArgumentException ex) {
 				}
 			}
-			entityhuman.b(supportsLapisSlot ? cost : costs[slot]); //take old levels count from clients that don't support lapis slot
+			entityhuman.enchantDone(supportsLapisSlot ? cost : costs[slot]); //take old levels count from clients that don't support lapis slot
 			if (!entityhuman.abilities.canInstantlyBuild && supportsLapisSlot) { //ignore lapis remove for clients that don't support this slot
 				final net.minecraft.server.v1_8_R3.ItemStack itemStack = lapis;
 				itemStack.count -= cost;
@@ -163,6 +164,7 @@ public class ContainerEnchantTable extends net.minecraft.server.v1_8_R3.Containe
 					enchantSlots.setItem(1, null);
 				}
 			}
+			entityhuman.b(StatisticList.W);
 			enchantSlots.update();
 			f = entityhuman.cj();
 			this.a(enchantSlots);
