@@ -95,6 +95,8 @@ public class PlayPacketTransformer implements PacketTransformer {
 					packetdata.writeShort(serializer.readShort());
 					packetdata.writeByte(serializer.readByte());
 					packetdata.writeItemStack(serializer.readItemStack());
+				} else {
+					packetdata.writeBytes(serializer);
 				}
 				break;
 			}
