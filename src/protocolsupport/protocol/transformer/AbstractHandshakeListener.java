@@ -54,6 +54,12 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 				} catch (Throwable t) {
 					LogManager.getLogger().debug("Failed to check connection throttle", t);
 				}
+				if (packethandshakinginsetprotocol.b() != ProtocolVersion.MINECRAFT_1_8.getId()) {
+					final ChatComponentText chatcomponenttext = new ChatComponentText("Unsupported protocol version "+packethandshakinginsetprotocol.b());
+					this.networkManager.handle(new PacketLoginOutDisconnect(chatcomponenttext));
+					this.networkManager.close(chatcomponenttext);
+					break;
+				}
 				networkManager.a(getLoginListener(networkManager));
 				if (SpigotConfig.bungee) {
 					final String[] split = packethandshakinginsetprotocol.hostname.split("\u0000");
