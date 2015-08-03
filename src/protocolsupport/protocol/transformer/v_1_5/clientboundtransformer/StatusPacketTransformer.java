@@ -14,6 +14,7 @@ import net.minecraft.server.v1_8_R3.ServerPing;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.protocol.transformer.utils.ServerPingSerializers;
@@ -32,7 +33,7 @@ public class StatusPacketTransformer implements PacketTransformer {
 	@Override
 	public void tranform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
 		if (packetId == 0x00) {
-			PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), serializer.getVersion());
+			PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), ProtocolVersion.MINECRAFT_1_8);
 			packet.b(packetdata);
 			ServerPing serverPing = gson.fromJson(packetdata.readString(32767), ServerPing.class);
 			String response =

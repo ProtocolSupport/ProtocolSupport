@@ -45,7 +45,7 @@ public class PacketDecoder implements IPacketDecoder {
 		buffer.setCumulation(input);
 		buffer.markReaderIndex();
 		Channel channel = ctx.channel();
-		PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), version);
+		PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), ProtocolVersion.MINECRAFT_1_8);
 		try {
 			int packetId = buffer.readUnsignedByte();
 			Packet<PacketListener>[] transformedPackets = transformers[channel.attr(currentStateAttrKey).get().ordinal()].tranform(

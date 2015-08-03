@@ -14,11 +14,11 @@ import protocolsupport.utils.Utils;
 
 public class DataWatcherFilter {
 
-	public static byte[] filterEntityData(ProtocolVersion version, WatchedEntity entity, byte[] data) throws IOException {
+	public static byte[] filterEntityData(ProtocolVersion from, ProtocolVersion to, WatchedEntity entity, byte[] data) throws IOException {
+		TIntObjectMap<DataWatcherObject> objects = DataWatcherSerializer.decodeData(from, data);
 		if (entity == null) {
-			return data;
+			return DataWatcherSerializer.encodeData(to, objects);
 		}
-		TIntObjectMap<DataWatcherObject> objects = DataWatcherSerializer.decodeData(version, data);
 		if (entity.isLiving()) {
 			objects.remove(5);
 			objects.remove(6);
@@ -98,7 +98,7 @@ public class DataWatcherFilter {
 		if (objects.isEmpty()) {
 			objects.put(31, new DataWatcherObject(ValueType.BYTE, (byte) 0));
 		}
-		return DataWatcherSerializer.encodeData(version, objects);
+		return DataWatcherSerializer.encodeData(to, objects);
 	}
 
 }
