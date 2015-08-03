@@ -457,6 +457,9 @@ public class PlayPacketTransformer implements PacketTransformer {
 				deflater.finish();
 				byte[] networkdata = new byte[data.length + 200];
 				int size = deflater.deflate(networkdata);
+				if (size < 0) {
+					throw new RuntimeException("Negative deflater result size: "+size+", input data length: "+data.length);
+				}
 				deflater.end();
 				serializer.writeInt(size);
 				serializer.writeBytes(networkdata, 0, size);
