@@ -451,15 +451,12 @@ public class PlayPacketTransformer implements PacketTransformer {
 				int bitmap = packetdata.readShort() & 0xFFFF;
 				serializer.writeShort(bitmap);
 				serializer.writeShort(0);
-				byte[] data = ChunkUtils.to17ChunkData(packetdata.readArray(), bitmap);
+				byte[] data = ChunkUtils.to17ChunkData(packetdata.a(), bitmap);
 				final Deflater deflater = new Deflater(Deflater.BEST_SPEED);
 				deflater.setInput(data, 0, data.length);
 				deflater.finish();
 				byte[] networkdata = new byte[data.length + 200];
 				int size = deflater.deflate(networkdata);
-				if (size < 0) {
-					throw new RuntimeException("Negative deflater result size: "+size+", input data length: "+data.length);
-				}
 				deflater.end();
 				serializer.writeInt(size);
 				serializer.writeBytes(networkdata, 0, size);

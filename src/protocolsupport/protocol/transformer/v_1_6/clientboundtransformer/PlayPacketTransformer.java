@@ -438,7 +438,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				int bitmap = packetdata.readShort() & 0xFFFF;
 				serializer.writeShort(bitmap);
 				serializer.writeShort(0);
-				byte[] data = ChunkUtils.to16ChunkData(packetdata.readArray(), bitmap);
+				byte[] data = ChunkUtils.to16ChunkData(packetdata.a(), bitmap);
 				final Deflater deflater = new Deflater(Deflater.BEST_SPEED);
 				deflater.setInput(data, 0, data.length);
 				deflater.finish();

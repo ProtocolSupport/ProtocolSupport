@@ -232,6 +232,9 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 
 	@Override
 	public void a(byte[] array) {
+		if (array.length > Short.MAX_VALUE) {
+			throw new RuntimeException("Too big array length of "+array.length);
+		}
 		switch (getVersion()) {
 			case MINECRAFT_1_7_10:
 			case MINECRAFT_1_7_5:

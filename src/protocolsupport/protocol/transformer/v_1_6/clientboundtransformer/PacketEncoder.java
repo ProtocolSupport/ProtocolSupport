@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import net.minecraft.server.v1_8_R3.EnumProtocol;
 import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.NetworkManager;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketListener;
@@ -42,7 +43,14 @@ public class PacketEncoder implements IPacketEncoder {
 			throw new IOException("Can't serialize unregistered packet");
 		}
 		PacketDataSerializer serializer = new PacketDataSerializer(output, version);
-		transformers[currentProtocol.ordinal()].tranform(channel, packetId, packet, serializer);
+		try {
+			transformers[currentProtocol.ordinal()].tranform(channel, packetId, packet, serializer);
+		} catch (Throwable t) {
+			if (MinecraftServer.getServer().isDebugging()) {
+				t.printStackTrace();
+			}
+			throw t;
+		}
 	}
 
 }
