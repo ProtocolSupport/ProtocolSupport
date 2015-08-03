@@ -78,7 +78,8 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x03: { //PacketPlayOutUpdateTime
 				serializer.writeByte(0x04);
-				Utils.writeAll(packetdata, serializer);
+				serializer.writeLong(packetdata.readLong());
+				serializer.writeLong(Math.abs(packetdata.readLong()));
 				break;
 			}
 			case 0x04: { //PacketPlayOutEntityEquipment
