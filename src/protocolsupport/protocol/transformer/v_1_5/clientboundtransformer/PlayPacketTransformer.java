@@ -444,16 +444,13 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeShort(0);
 				byte[] data = ChunkUtils.to15ChunkData(packetdata.readArray(), bitmap);
 				final Deflater deflater = new Deflater(Deflater.BEST_SPEED);
-				try {
-					deflater.setInput(data, 0, data.length);
-					deflater.finish();
-					byte[] networkdata = new byte[data.length];
-					int size = deflater.deflate(networkdata);
-					serializer.writeInt(size);
-					serializer.writeBytes(networkdata, 0, size);
-				} finally {
-					deflater.end();
-				}
+				deflater.setInput(data, 0, data.length);
+				deflater.finish();
+				byte[] networkdata = new byte[data.length + 200];
+				int size = deflater.deflate(networkdata);
+				deflater.end();
+				serializer.writeInt(size);
+				serializer.writeBytes(networkdata, 0, size);
 				break;
 			}
 			case 0x22: { //PacketPlayOutMultiBlockChange
@@ -538,26 +535,21 @@ public class PlayPacketTransformer implements PacketTransformer {
 				}
 				// compress
 				final Deflater deflater = new Deflater(Deflater.BEST_SPEED);
-				try {
-					deflater.setInput(ldata, 0, ldata.length);
-					deflater.finish();
-					byte[] networkdata = new byte[ldata.length + 100];
-					int size = deflater.deflate(networkdata);
-					// write data
-					serializer.writeShort(count);
-					serializer.writeInt(size);
-					serializer.writeBoolean(skylight);
-					serializer.writeBytes(networkdata, 0, size);
-					for (int i = 0; i < count; i++) {
-						serializer.writeInt(x[i]);
-						serializer.writeInt(y[i]);
-						serializer.writeShort(bitmap[i] & 0xFFFF);
-						serializer.writeShort(0);
-					}
-				} catch (Throwable t) {
-					t.printStackTrace();
-				} finally {
-					deflater.end();
+				deflater.setInput(ldata, 0, ldata.length);
+				deflater.finish();
+				byte[] networkdata = new byte[ldata.length + 200];
+				int size = deflater.deflate(networkdata);
+				deflater.end();
+				// write data
+				serializer.writeShort(count);
+				serializer.writeInt(size);
+				serializer.writeBoolean(skylight);
+				serializer.writeBytes(networkdata, 0, size);
+				for (int i = 0; i < count; i++) {
+					serializer.writeInt(x[i]);
+					serializer.writeInt(y[i]);
+					serializer.writeShort(bitmap[i] & 0xFFFF);
+					serializer.writeShort(0);
 				}
 				break;
 			}

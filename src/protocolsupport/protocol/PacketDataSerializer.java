@@ -220,7 +220,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 			case MINECRAFT_1_6_4:
 			case MINECRAFT_1_6_2:
 			case MINECRAFT_1_5_2: {
-				byte[] array = new byte[readUnsignedShort()];
+				byte[] array = new byte[readShort()];
 				readBytes(array);
 				return array;
 			}
