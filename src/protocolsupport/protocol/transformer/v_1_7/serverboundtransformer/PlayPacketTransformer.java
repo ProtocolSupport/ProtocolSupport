@@ -84,20 +84,18 @@ public class PlayPacketTransformer implements PacketTransformer {
 				break;
 			}
 			case 0x0E: { //PacketPlayInWindowClick
+				packetdata.writeByte(serializer.readByte());
+				int slot = serializer.readShort();
 				if (Utils.getPlayer(channel).getOpenInventory().getType() == InventoryType.ENCHANTING) {
-					packetdata.writeByte(serializer.readByte());
-					int slot = serializer.readShort();
 					if (slot > 0) {
 						slot++;
 					}
-					packetdata.writeShort(slot);
-					packetdata.writeByte(serializer.readByte());
-					packetdata.writeShort(serializer.readShort());
-					packetdata.writeByte(serializer.readByte());
-					packetdata.writeItemStack(serializer.readItemStack());
-				} else {
-					packetdata.writeBytes(serializer);
 				}
+				packetdata.writeShort(slot);
+				packetdata.writeByte(serializer.readByte());
+				packetdata.writeShort(serializer.readShort());
+				packetdata.writeByte(serializer.readByte());
+				packetdata.writeItemStack(serializer.readItemStack());
 				break;
 			}
 			case 0x12: { //PacketPlayInUpdateSign
