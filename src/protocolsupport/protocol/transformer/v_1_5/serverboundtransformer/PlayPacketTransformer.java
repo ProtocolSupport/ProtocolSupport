@@ -256,6 +256,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				break;
 			}
 			case 0xFF: { //No corresponding packet
+				serializer.readString(32767);
 				return new Packet[0];
 			}
 		}

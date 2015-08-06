@@ -12,6 +12,7 @@ import java.util.zip.Deflater;
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.EnumParticle;
 import net.minecraft.server.v1_8_R3.ItemStack;
+import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketListener;
 
@@ -817,8 +818,14 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeInt(blockPos.getX());
 				serializer.writeShort(blockPos.getY());
 				serializer.writeInt(blockPos.getZ());
-				serializer.writeByte(packetdata.readByte());
-				serializer.a(packetdata.h());
+				int id = packetdata.readByte();
+				serializer.writeByte(id);
+				NBTTagCompound compound = packetdata.h();
+				if (id == 1) {
+					compound.remove("SpawnPotentials");
+					compound.remove("SpawnData");
+				}
+				serializer.a(compound);
 				break;
 			}
 			case 0x38: { //PacketPlayOutPlayerInfo
