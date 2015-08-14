@@ -14,7 +14,7 @@ public class LoginPacketTransformer implements PacketTransformer {
 
 	@Override
 	public void tranform(ChannelHandlerContext ctx, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
-		PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), serializer.getVersion());
+		PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), ProtocolVersion.MINECRAFT_1_8);
 		switch (packetId) {
 			case 0x02: { //PacketLoginOutSuccess
 				packet.b(packetdata);

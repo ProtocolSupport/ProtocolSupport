@@ -255,8 +255,8 @@ public class PlayPacketTransformer implements PacketTransformer {
 				}
 				break;
 			}
-			case 0xFF: { //No corresponding packet (PacketClientDisconnect?)
-				Utils.getNetworkManager(channel).close(new ChatComponentText(serializer.readString(32767)));
+			case 0xFF: { //No corresponding packet
+				serializer.readString(32767);
 				return new Packet[0];
 			}
 		}

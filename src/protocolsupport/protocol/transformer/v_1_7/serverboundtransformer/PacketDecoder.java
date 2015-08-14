@@ -48,7 +48,7 @@ public class PacketDecoder implements IPacketDecoder {
 		if (packet == null) {
 			throw new IOException("Bad packet id " + packetId);
 		}
-		PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), version);
+		PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), ProtocolVersion.MINECRAFT_1_8);
 		try {
 			transformers[channel.attr(currentStateAttrKey).get().ordinal()].tranform(channel, packetId, packet, serializer, packetdata);
 		} finally {

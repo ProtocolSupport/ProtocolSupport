@@ -230,7 +230,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 			case MINECRAFT_1_6_4:
 			case MINECRAFT_1_6_2:
 			case MINECRAFT_1_5_2: {
-				byte[] array = new byte[readUnsignedShort()];
+				byte[] array = new byte[readShort()];
 				readBytes(array);
 				return array;
 			}
@@ -248,6 +248,9 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 			case MINECRAFT_1_6_4:
 			case MINECRAFT_1_6_2:
 			case MINECRAFT_1_5_2: {
+				if (array.length > 32767) {
+					throw new IllegalArgumentException("Too big array length of "+array.length);
+				}
 				writeShort(array.length);
 				writeBytes(array);
 				break;
@@ -289,10 +292,6 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 
 	public byte[] readArray() {
 		return a();
-	}
-
-	public void writeArray(byte[] array) {
-		a(array);
 	}
 
 	public int readLTriad() {

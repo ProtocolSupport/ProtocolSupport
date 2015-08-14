@@ -1,4 +1,4 @@
-package protocolsupport.protocol.transformer;
+package protocolsupport.protocol.transformer.handlers;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -53,6 +53,12 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 					}
 				} catch (Throwable t) {
 					LogManager.getLogger().debug("Failed to check connection throttle", t);
+				}
+				if (packethandshakinginsetprotocol.b() != ProtocolVersion.MINECRAFT_1_8.getId()) {
+					final ChatComponentText chatcomponenttext = new ChatComponentText("Unsupported protocol version "+packethandshakinginsetprotocol.b());
+					this.networkManager.handle(new PacketLoginOutDisconnect(chatcomponenttext));
+					this.networkManager.close(chatcomponenttext);
+					break;
 				}
 				networkManager.a(getLoginListener(networkManager));
 				if (SpigotConfig.bungee) {

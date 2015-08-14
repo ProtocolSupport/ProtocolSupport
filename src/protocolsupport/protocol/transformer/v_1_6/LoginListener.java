@@ -3,7 +3,7 @@ package protocolsupport.protocol.transformer.v_1_6;
 import javax.crypto.SecretKey;
 
 import protocolsupport.protocol.core.ChannelHandlers;
-import protocolsupport.protocol.transformer.AbstractLoginListener;
+import protocolsupport.protocol.transformer.handlers.AbstractLoginListener;
 import protocolsupport.protocol.transformer.v_1_6.serverboundtransformer.PacketDecrypter;
 import net.minecraft.server.v1_8_R3.MinecraftEncryption;
 import net.minecraft.server.v1_8_R3.NetworkManager;

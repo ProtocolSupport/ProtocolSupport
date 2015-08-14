@@ -51,7 +51,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 	@Override
 	public void tranform(ChannelHandlerContext ctx, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
 		Channel channel = ctx.channel();
-		PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), serializer.getVersion());
+		PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), ProtocolVersion.MINECRAFT_1_8);
 		switch (packetId) {
 			case 0x00: { // PacketPlayOutKeepAlive
 				packet.b(packetdata);
@@ -267,7 +267,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeShort(packetdata.readShort());
 				serializer.writeShort(packetdata.readShort());
 				serializer.writeShort(packetdata.readShort());
-				serializer.writeBytes(DataWatcherFilter.filterEntityData(serializer.getVersion(), storage.getWatchedEntity(entityId), Utils.toArray(packetdata)));
+				serializer.writeBytes(DataWatcherFilter.filterEntityData(ProtocolVersion.MINECRAFT_1_8, serializer.getVersion(), storage.getWatchedEntity(entityId), Utils.toArray(packetdata)));
 				break;
 			}
 			case 0x10: { // PacketPlayOutSpawnPainting
@@ -395,7 +395,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeVarInt(packetId);
 				int entityId = packetdata.readVarInt();
 				serializer.writeInt(entityId);
-				serializer.writeBytes(DataWatcherFilter.filterEntityData(serializer.getVersion(), storage.getWatchedEntity(entityId), Utils.toArray(packetdata)));
+				serializer.writeBytes(DataWatcherFilter.filterEntityData(ProtocolVersion.MINECRAFT_1_8, serializer.getVersion(), storage.getWatchedEntity(entityId), Utils.toArray(packetdata)));
 				break;
 			}
 			case 0x1D: { // PacketPlayOutEntityEffect
@@ -453,16 +453,13 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeShort(0);
 				byte[] data = ChunkUtils.to17ChunkData(packetdata.readArray(), bitmap);
 				final Deflater deflater = new Deflater(Deflater.BEST_SPEED);
-				try {
-					deflater.setInput(data, 0, data.length);
-					deflater.finish();
-					byte[] networkdata = new byte[data.length];
-					int size = deflater.deflate(networkdata);
-					serializer.writeInt(size);
-					serializer.writeBytes(networkdata, 0, size);
-				} finally {
-					deflater.end();
-				}
+				deflater.setInput(data, 0, data.length);
+				deflater.finish();
+				byte[] networkdata = new byte[data.length + 200];
+				int size = deflater.deflate(networkdata);
+				deflater.end();
+				serializer.writeInt(size);
+				serializer.writeBytes(networkdata, 0, size);
 				break;
 			}
 			case 0x22: { // PacketPlayOutMultiBlockChange
@@ -551,27 +548,22 @@ public class PlayPacketTransformer implements PacketTransformer {
 					pos += data[i].length;
 				}
 				// compress
-				final Deflater deflater = new Deflater(Deflater.BEST_SPEED);
-				try {
-					deflater.setInput(ldata, 0, ldata.length);
-					deflater.finish();
-					byte[] networkdata = new byte[ldata.length + 100];
-					int size = deflater.deflate(networkdata);
-					// write data
-					serializer.writeShort(count);
-					serializer.writeInt(size);
-					serializer.writeBoolean(skylight);
-					serializer.writeBytes(networkdata, 0, size);
-					for (int i = 0; i < count; i++) {
-						serializer.writeInt(x[i]);
-						serializer.writeInt(y[i]);
-						serializer.writeShort(bitmap[i] & 0xFFFF);
-						serializer.writeShort(0);
-					}
-				} catch (Throwable t) {
-					t.printStackTrace();
-				} finally {
-					deflater.end();
+				Deflater deflater = new Deflater(Deflater.BEST_SPEED);
+				deflater.setInput(ldata, 0, ldata.length);
+				deflater.finish();
+				byte[] networkdata = new byte[ldata.length + 200];
+				int size = deflater.deflate(networkdata);
+				deflater.end();
+				// write data
+				serializer.writeShort(count);
+				serializer.writeInt(size);
+				serializer.writeBoolean(skylight);
+				serializer.writeBytes(networkdata, 0, size);
+				for (int i = 0; i < count; i++) {
+					serializer.writeInt(x[i]);
+					serializer.writeInt(y[i]);
+					serializer.writeShort(bitmap[i] & 0xFFFF);
+					serializer.writeShort(0);
 				}
 				break;
 			}
@@ -920,8 +912,6 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeString(tag);
 				//fix villager trade list
 				if (tag.equals("MC|TrList")) {
-					//read data as version minecraft 1.8, because it is written like on that on packet creation, not on real stream write
-					packetdata.setVersion(ProtocolVersion.MINECRAFT_1_8);
 					byte[] data = VillagerTradeTransformer.to17VillagerTradeList(packetdata, serializer.getVersion());
 					serializer.writeShort(data.length);
 					serializer.writeBytes(data);

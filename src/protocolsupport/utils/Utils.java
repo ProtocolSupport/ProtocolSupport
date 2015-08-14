@@ -16,17 +16,12 @@ import net.minecraft.server.v1_8_R3.PlayerConnection;
 
 import org.bukkit.entity.Player;
 
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.core.ChannelHandlers;
 
 public class Utils {
 
 	public static String clampString(String string, int limit) {
 		return string.substring(0, string.length() > limit ? limit : string.length());
-	}
-
-	public static void writeAll(PacketDataSerializer input, PacketDataSerializer output) {
-		output.writeBytes(input);
 	}
 
 	public static <T extends AccessibleObject> T setAccessible(T object) {
