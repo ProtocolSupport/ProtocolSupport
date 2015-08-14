@@ -6,31 +6,26 @@ import java.io.IOException;
 
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketListener;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.utils.Allocator;
-import protocolsupport.utils.Utils;
 
 public class LoginPacketTransformer implements PacketTransformer {
 
 	@Override
 	public void tranform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
-		PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), serializer.getVersion());
+		PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), ProtocolVersion.MINECRAFT_1_8);
 		packet.b(packetdata);
 		switch (packetId) {
 			case 0x00: { // PacketLoginOutDisconnect
 				serializer.writeByte(0xFF);
-				serializer.writeString(Utils.fromComponent(packetdata.d()));
+				serializer.writeString(LegacyUtils.fromComponent(packetdata.d()));
 				break;
 			}
 			case 0x01: { //PacketLoginOutEncryptionBegin
 				serializer.writeByte(0xFD);
-				serializer.writeString(packetdata.readString(20));
-				int length1 = packetdata.readVarInt();
-				serializer.writeShort(length1);
-				serializer.writeBytes(packetdata.readBytes(length1));
-				int length2 = packetdata.readVarInt();
-				serializer.writeShort(length2);
-				serializer.writeBytes(packetdata.readBytes(length2));
+				packet.b(serializer);
 				break;
 			}
 			case 0x02: { //PacketLoginOutSuccess

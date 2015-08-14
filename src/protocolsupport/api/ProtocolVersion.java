@@ -8,7 +8,8 @@ public enum ProtocolVersion {
 	MINECRAFT_1_6_4(78),
 	MINECRAFT_1_6_2(74),
 	MINECRAFT_1_5_2(61),
-	UNKNOWN(-1);
+	UNKNOWN(-1),
+	NOT_SET(0);
 
 	private int id;
 

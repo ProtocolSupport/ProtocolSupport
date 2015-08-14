@@ -22,8 +22,7 @@ import protocolsupport.utils.Utils;
 public class PlayPacketTransformer implements PacketTransformer {
 
 	@Override
-	public boolean tranform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer, PacketDataSerializer packetdata) throws IOException {
-		int initialReaderIndex = serializer.readerIndex();
+	public void tranform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer, PacketDataSerializer packetdata) throws IOException {
 		switch (packetId) {
 			case 0x00: { //PacketPlayInKeepAlive
 				packetdata.writeVarInt(serializer.readInt());
@@ -85,18 +84,18 @@ public class PlayPacketTransformer implements PacketTransformer {
 				break;
 			}
 			case 0x0E: { //PacketPlayInWindowClick
+				packetdata.writeByte(serializer.readByte());
+				int slot = serializer.readShort();
 				if (Utils.getPlayer(channel).getOpenInventory().getType() == InventoryType.ENCHANTING) {
-					packetdata.writeByte(serializer.readByte());
-					int slot = serializer.readShort();
 					if (slot > 0) {
 						slot++;
 					}
-					packetdata.writeShort(slot);
-					packetdata.writeByte(serializer.readByte());
-					packetdata.writeShort(serializer.readShort());
-					packetdata.writeByte(serializer.readByte());
-					packetdata.writeItemStack(serializer.readItemStack());
 				}
+				packetdata.writeShort(slot);
+				packetdata.writeByte(serializer.readByte());
+				packetdata.writeShort(serializer.readShort());
+				packetdata.writeByte(serializer.readByte());
+				packetdata.writeItemStack(serializer.readItemStack());
 				break;
 			}
 			case 0x12: { //PacketPlayInUpdateSign
@@ -125,39 +124,44 @@ public class PlayPacketTransformer implements PacketTransformer {
 				String tag = serializer.readString(20);
 				packetdata.writeString(tag);
 				ByteBuf buf = serializer.readBytes(serializer.readShort());
-				//special handle for anvil renaming, in 1.8 it reads string from serializer, but in 1.7 and before it just reads bytes and converts it to string, so we append data length before data
-				if (tag.equals("MC|ItemName")) {
-					packetdata.writeVarInt(buf.readableBytes());
+				try {
+					//special handle for anvil renaming, in 1.8 it reads string from serializer, but in 1.7 and before it just reads bytes and converts it to string, so we append data length before data
+					if (tag.equals("MC|ItemName")) {
+						packetdata.writeVarInt(buf.readableBytes());
+					}
+					//special handle for book sign and book edit, the bytes are written as 1.7 stream, but server will attempt to read bytes as 1.8 stream, so we should rewrite the itemstack
+					else if (tag.equals("MC|BSign") || tag.equals("MC|BEdit")) {
+						PacketDataSerializer data = new PacketDataSerializer(Unpooled.wrappedBuffer(buf), serializer.getVersion());
+						PacketDataSerializer newdata = new PacketDataSerializer(Unpooled.buffer(), ProtocolVersion.MINECRAFT_1_8);
+						newdata.writeItemStack(data.readItemStack());
+						buf = newdata;
+					}
+					//special handle for command block, reason is almost the same as for books, but also stream in 1.8 should have a last output flag
+					else if (tag.equals("MC|AdvCdm")) {
+						PacketDataSerializer data = new PacketDataSerializer(Unpooled.wrappedBuffer(buf), serializer.getVersion());
+						PacketDataSerializer newdata = new PacketDataSerializer(Unpooled.buffer(), ProtocolVersion.MINECRAFT_1_8);
+						newdata.writeByte(data.readByte());
+						newdata.writeInt(data.readInt());
+						newdata.writeInt(data.readInt());
+						newdata.writeInt(data.readInt());
+						newdata.writeString(data.readString(32767));
+						newdata.writeBoolean(true);
+						buf = newdata;
+					}
+					//now write
+					packetdata.writeBytes(buf);
+				} finally {
+					buf.release();
 				}
-				//special handle for book sign and book edit, the bytes are written as 1.7 stream, but server will attempt to read bytes as 1.8 stream, so we should rewrite the itemstack
-				else if (tag.equals("MC|BSign") || tag.equals("MC|BEdit")) {
-					PacketDataSerializer data = new PacketDataSerializer(Unpooled.wrappedBuffer(buf), serializer.getVersion());
-					PacketDataSerializer newdata = new PacketDataSerializer(Unpooled.buffer(), ProtocolVersion.MINECRAFT_1_8);
-					newdata.writeItemStack(data.readItemStack());
-					buf = newdata.readBytes(newdata.readableBytes());
-				}
-				//special handle for command block, reason is almost the same as for books, but also stream in 1.8 should have a last output flag
-				else if (tag.equals("MC|AdvCdm")) {
-					PacketDataSerializer data = new PacketDataSerializer(Unpooled.wrappedBuffer(buf), serializer.getVersion());
-					PacketDataSerializer newdata = new PacketDataSerializer(Unpooled.buffer(), ProtocolVersion.MINECRAFT_1_8);
-					newdata.writeByte(data.readByte());
-					newdata.writeInt(data.readInt());
-					newdata.writeInt(data.readInt());
-					newdata.writeInt(data.readInt());
-					newdata.writeString(data.readString(32767));
-					newdata.writeBoolean(true);
-					buf = newdata.readBytes(newdata.readableBytes());
-				}
-				//write buf
-				packetdata.writeBytes(buf);
 				break;
 			}
+			default: { //Any other packet - just read from original stream
+				packet.a(serializer);
+				return;
+			}
 		}
-		if (initialReaderIndex != serializer.readerIndex()) {
-			packet.a(packetdata);
-			return true;
-		}
-		return false;
+		//decode transformed packetdata
+		packet.a(packetdata);
 	}
 
 }

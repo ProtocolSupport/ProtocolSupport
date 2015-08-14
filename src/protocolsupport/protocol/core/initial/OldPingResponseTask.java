@@ -1,4 +1,4 @@
-package protocolsupport.protocol.pipeline.initial;
+package protocolsupport.protocol.core.initial;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -42,9 +42,7 @@ public class OldPingResponseTask implements Runnable {
 				channel.pipeline().firstContext().writeAndFlush(buf).addListener(ChannelFutureListener.CLOSE);
 			}
 		} catch (Throwable t) {
-			if (channel.isOpen()) {
-				channel.close();
-			}
+			channel.close();
 		}
 	}
 

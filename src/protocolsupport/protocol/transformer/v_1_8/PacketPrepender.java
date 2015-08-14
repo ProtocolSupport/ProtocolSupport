@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.pipeline.IPacketPrepender;
+import protocolsupport.protocol.core.IPacketPrepender;
 
 public class PacketPrepender implements IPacketPrepender {
 

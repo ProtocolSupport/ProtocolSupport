@@ -1,4 +1,4 @@
-package protocolsupport.protocol.pipeline.initial;
+package protocolsupport.protocol.core.initial;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -13,9 +13,10 @@ import java.util.EnumMap;
 import java.util.concurrent.TimeUnit;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.pipeline.ChannelHandlers;
-import protocolsupport.protocol.pipeline.IPipeLineBuilder;
+import protocolsupport.protocol.core.ChannelHandlers;
+import protocolsupport.protocol.core.IPipeLineBuilder;
 import protocolsupport.protocol.storage.ProtocolStorage;
+import protocolsupport.utils.Utils;
 
 public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 
@@ -27,6 +28,7 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 		put(ProtocolVersion.MINECRAFT_1_6_4, new protocolsupport.protocol.transformer.v_1_6.PipeLineBuilder());
 		put(ProtocolVersion.MINECRAFT_1_6_2, new protocolsupport.protocol.transformer.v_1_6.PipeLineBuilder());
 		put(ProtocolVersion.MINECRAFT_1_5_2, new protocolsupport.protocol.transformer.v_1_5.PipeLineBuilder());
+		put(ProtocolVersion.UNKNOWN, new protocolsupport.protocol.transformer.v_1_8.PipeLineBuilder());
 	}};
 
 
@@ -42,12 +44,12 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 				return;
 			}
 			final Channel channel = ctx.channel();
-			receivedData.writeBytes(input.readBytes(input.readableBytes()));
-			ProtocolVersion handshakeversion = ProtocolVersion.UNKNOWN;
+			receivedData.writeBytes(input);
+			ProtocolVersion handshakeversion = ProtocolVersion.NOT_SET;
 			receivedData.readerIndex(0);
 			int firstbyte = receivedData.readUnsignedByte();
 			switch (firstbyte) {
-				case 0xFE: { //old ping (should we check if FE is actually a part of a varint length?)
+				case 0xFE: { //old ping
 					try {
 						if (receivedData.readableBytes() == 0) { //really old protocol probably
 							ctx.executor().schedule(new OldPingResponseTask(this, channel), 1000, TimeUnit.MILLISECONDS);
@@ -57,7 +59,7 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 								ctx.executor().schedule(new Minecraft152PingResponseTask(this, channel), 500, TimeUnit.MILLISECONDS);
 							} else if (
 								(receivedData.readUnsignedByte() == 0xFA) &&
-								"MC|PingHost".equals(new String(receivedData.readBytes(receivedData.readUnsignedShort() * 2).array(), StandardCharsets.UTF_16BE))
+								"MC|PingHost".equals(new String(Utils.toArray(receivedData.readBytes(receivedData.readUnsignedShort() * 2)), StandardCharsets.UTF_16BE))
 							) { //1.6.*
 								receivedData.readUnsignedShort();
 								handshakeversion = ProtocolVersion.fromId(receivedData.readUnsignedByte());
@@ -78,13 +80,13 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 					receivedData.readerIndex(0);
 					ByteBuf data = getVarIntPrefixedData(receivedData);
 					if (data != null) {
-						handshakeversion = read1_7_1_8Handshake(data);
+						handshakeversion = readNPHandshake(data);
 					}
 					break;
 				}
 			}
 			//if we detected the protocol than we save it and process data
-			if (handshakeversion != ProtocolVersion.UNKNOWN) {
+			if (handshakeversion != ProtocolVersion.NOT_SET) {
 				setProtocol(channel, receivedData, handshakeversion);
 			}
 		} catch (Throwable t) {
@@ -125,7 +127,7 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 		throw new CorruptedFrameException("Packet length is wider than 21 bit");
 	}
 
-	private ProtocolVersion read1_7_1_8Handshake(ByteBuf data) {
+	private ProtocolVersion readNPHandshake(ByteBuf data) {
 		if (readVarInt(data) == 0x00) {
 			return ProtocolVersion.fromId(readVarInt(data));
 		}

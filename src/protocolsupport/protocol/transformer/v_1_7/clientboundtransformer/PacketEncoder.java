@@ -9,32 +9,21 @@ import java.io.IOException;
 
 import net.minecraft.server.v1_8_R3.EnumProtocol;
 import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.NetworkManager;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketListener;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.pipeline.IPacketEncoder;
+import protocolsupport.protocol.core.IPacketEncoder;
 
 public class PacketEncoder implements IPacketEncoder {
-
-	private ProtocolVersion version;
-	public PacketEncoder(ProtocolVersion version) {
-		this.version = version;
-	}
 
 	private static final EnumProtocolDirection direction = EnumProtocolDirection.CLIENTBOUND;
 	private static final AttributeKey<EnumProtocol> currentStateAttrKey = NetworkManager.c;
 
-	private final PacketTransformer[] transformers = new PacketTransformer[] {
-		new HandshakePacketTransformer(),
-		new PlayPacketTransformer(),
-		new StatusPacketTransformer(),
-		new LoginPacketTransformer()
-	};
-
-	private boolean[] blockedPlayPackets = new boolean[256];
-	{
+	private static boolean[] blockedPlayPackets = new boolean[256];
+	static {
 		//packet from 1.8
 		for (int i = 0x41; i < 0x49; i++) {
 			if (i == 0x48) {
@@ -43,6 +32,18 @@ public class PacketEncoder implements IPacketEncoder {
 			blockedPlayPackets[i] = true;
 		}
 	}
+
+	private ProtocolVersion version;
+	public PacketEncoder(ProtocolVersion version) {
+		this.version = version;
+	}
+
+	private final PacketTransformer[] transformers = new PacketTransformer[] {
+		new HandshakePacketTransformer(),
+		new PlayPacketTransformer(),
+		new StatusPacketTransformer(),
+		new LoginPacketTransformer()
+	};
 
 	@Override
 	public void encode(ChannelHandlerContext ctx, Packet<PacketListener> packet, ByteBuf output) throws Exception {
@@ -56,7 +57,14 @@ public class PacketEncoder implements IPacketEncoder {
 			return;
 		}
 		PacketDataSerializer serializer = new PacketDataSerializer(output, version);
-		transformers[currentProtocol.ordinal()].tranform(ctx, packetId, packet, serializer);
+		try {
+			transformers[currentProtocol.ordinal()].tranform(ctx, packetId, packet, serializer);
+		} catch (Throwable t) {
+			if (MinecraftServer.getServer().isDebugging()) {
+				t.printStackTrace();
+			}
+			throw t;
+		}
 	}
 
 }

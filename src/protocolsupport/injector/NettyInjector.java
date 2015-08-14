@@ -9,7 +9,7 @@ import java.util.List;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.NetworkManager;
 import net.minecraft.server.v1_8_R3.ServerConnection;
-import protocolsupport.protocol.pipeline.ServerConnectionChannel;
+import protocolsupport.protocol.core.ServerConnectionChannel;
 import protocolsupport.utils.Utils;
 
 public class NettyInjector {

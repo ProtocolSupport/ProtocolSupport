@@ -40,10 +40,10 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 		if (args.length == 1 && args[0].equalsIgnoreCase("debug")) {
 			PropertyManager manager = MinecraftServer.getServer().getPropertyManager();
 			if (!manager.getBoolean(DEBUG_PROPERTY, false)) {
-				manager.setProperty(DEBUG_PROPERTY, true);
+				manager.setProperty(DEBUG_PROPERTY, Boolean.TRUE);
 				sender.sendMessage(ChatColor.GOLD + "Enabled debug");
 			} else {
-				manager.setProperty(DEBUG_PROPERTY, false);
+				manager.setProperty(DEBUG_PROPERTY, Boolean.FALSE);
 				sender.sendMessage(ChatColor.GOLD + "Disabled debug");
 			}
 			return true;

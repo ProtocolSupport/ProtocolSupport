@@ -15,7 +15,7 @@ import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketListener;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.pipeline.IPacketDecoder;
+import protocolsupport.protocol.core.IPacketDecoder;
 import protocolsupport.utils.Allocator;
 
 public class PacketDecoder implements IPacketDecoder {
@@ -48,12 +48,9 @@ public class PacketDecoder implements IPacketDecoder {
 		if (packet == null) {
 			throw new IOException("Bad packet id " + packetId);
 		}
-		PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), version);
+		PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), ProtocolVersion.MINECRAFT_1_8);
 		try {
-			boolean needsRead = !transformers[channel.attr(currentStateAttrKey).get().ordinal()].tranform(channel, packetId, packet, serializer, packetdata);
-			if (needsRead) {
-				packet.a(serializer);
-			}
+			transformers[channel.attr(currentStateAttrKey).get().ordinal()].tranform(channel, packetId, packet, serializer, packetdata);
 		} finally {
 			packetdata.release();
 		}
