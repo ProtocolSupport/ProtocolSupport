@@ -9,13 +9,14 @@ import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketPlayInArmAnimation;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.DualPEPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
 
 public class AnimatePacket implements DualPEPacket {
 
 	@Override
 	public int getId() {
-		return 0xA3;
+		return PEPacketIDs.ANIMATE_PACKET;
 	}
 
 	@Override
@@ -31,9 +32,8 @@ public class AnimatePacket implements DualPEPacket {
 		return null;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public List<? extends Packet> transfrom() throws Exception {
+	public List<? extends Packet<?>> transfrom() throws Exception {
 		return Collections.singletonList(new PacketPlayInArmAnimation());
 	}
 

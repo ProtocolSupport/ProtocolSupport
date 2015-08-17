@@ -14,6 +14,7 @@ import net.minecraft.server.v1_8_R3.PacketPlayInClientCommand.EnumClientCommand;
 import net.minecraft.server.v1_8_R3.PacketPlayInEntityAction;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.DualPEPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
 import protocolsupport.utils.Allocator;
 
@@ -34,7 +35,7 @@ public class PlayerActionPacket implements DualPEPacket {
 
 	@Override
 	public int getId() {
-		return 0x9C;
+		return PEPacketIDs.PLAYER_ACTION_PACKET;
 	}
 
 	@Override
@@ -54,9 +55,8 @@ public class PlayerActionPacket implements DualPEPacket {
 		return null;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public List<? extends Packet> transfrom() throws Exception {
+	public List<? extends Packet<?>> transfrom() throws Exception {
 		switch (action) {
 			case ACTION_START_BREAK:
 			case ACTION_CANCEL_BREAK:

@@ -8,6 +8,7 @@ import java.net.InetSocketAddress;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 
 public class ServerHandshakePacket implements ClientboundPEPacket {
 
@@ -23,7 +24,7 @@ public class ServerHandshakePacket implements ClientboundPEPacket {
 
 	@Override
 	public int getId() {
-		return 0x10;
+		return PEPacketIDs.SERVER_HANDSHAKE;
 	}
 
 	@Override

@@ -17,6 +17,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -166,11 +167,11 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 	@Override
 	public NBTTagCompound h() throws IOException {
 		if (getVersion() != ProtocolVersion.MINECRAFT_1_8) {
-			final short short1 = readShort();
-			if (short1 < 0) {
+			final short length = readShort();
+			if (length < 0) {
 				return null;
 			}
-			final byte[] abyte = new byte[short1];
+			final byte[] abyte = new byte[length];
 			this.readBytes(abyte);
 			return read(abyte, new NBTReadLimiter(2097152L));
 		} else {
@@ -294,6 +295,10 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 		return a();
 	}
 
+	public UUID readUUID() {
+		return g();
+	}
+
 	public int readLTriad() {
 		return readUnsignedByte() | (readUnsignedByte() << 8) | (readUnsignedByte() << 16);
 	}
@@ -312,7 +317,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 		} else {
 			throw new RuntimeException("IPV6 is not supported yet");
 		}
-		int port = readShort();
+		int port = readUnsignedShort();
         return new InetSocketAddress(InetAddress.getByAddress(addr), port);
 	}
 

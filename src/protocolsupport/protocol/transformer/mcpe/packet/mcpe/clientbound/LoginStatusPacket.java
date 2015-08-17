@@ -1,8 +1,8 @@
 package protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound;
 
 import io.netty.buffer.ByteBuf;
-
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 
 public class LoginStatusPacket implements ClientboundPEPacket {
 
@@ -14,7 +14,7 @@ public class LoginStatusPacket implements ClientboundPEPacket {
 
 	@Override
 	public int getId() {
-		return 0x83;
+		return PEPacketIDs.PLAY_STATUS_PACKET;
 	}
 
 	@Override

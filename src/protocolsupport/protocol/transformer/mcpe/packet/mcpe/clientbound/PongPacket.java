@@ -1,8 +1,8 @@
 package protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound;
 
 import io.netty.buffer.ByteBuf;
-
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 
 public class PongPacket implements ClientboundPEPacket {
 
@@ -14,7 +14,7 @@ public class PongPacket implements ClientboundPEPacket {
 
 	@Override
 	public int getId() {
-		return 0x03;
+		return PEPacketIDs.PONG;
 	}
 
 	@Override

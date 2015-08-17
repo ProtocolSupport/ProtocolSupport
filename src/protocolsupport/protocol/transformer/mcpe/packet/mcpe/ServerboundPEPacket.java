@@ -10,7 +10,6 @@ public interface ServerboundPEPacket extends PEPacket {
 
 	public ServerboundPEPacket decode(ByteBuf buf) throws Exception;
 
-	@SuppressWarnings("rawtypes")
-	public List<? extends Packet> transfrom() throws Exception;
+	public List<? extends Packet<?>> transfrom() throws Exception;
 
 }

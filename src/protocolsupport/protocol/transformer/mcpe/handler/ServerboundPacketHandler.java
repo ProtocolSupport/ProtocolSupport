@@ -54,7 +54,7 @@ public class ServerboundPacketHandler {
 
 	@SuppressWarnings("rawtypes")
 	private List<? extends Packet> transformFullPacket(ByteBuf fullpacket) throws Exception {
-		return PEPacketRegistry.getPacket(fullpacket.readByte() & 0xFF).decode(fullpacket).transfrom();
+		return PEPacketRegistry.getPacket(fullpacket.readUnsignedByte()).decode(fullpacket).transfrom();
 	}
 
 

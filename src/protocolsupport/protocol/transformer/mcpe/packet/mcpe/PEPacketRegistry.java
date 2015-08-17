@@ -6,7 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.AnimatePacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.BatchPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.ChatPacket;
-import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.MovePacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.MovePlayerPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.PlayerActionPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.SetHealthPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.ClientConnectPacket;
@@ -30,7 +30,7 @@ public class PEPacketRegistry {
 		register(LoginPacket.class);
 		register(PingPacket.class);
 		register(ClientDisconnectPacket.class);
-		register(MovePacket.class);
+		register(MovePlayerPacket.class);
 		register(UseItemPacket.class);
 		register(RemoveBlockPacket.class);
 		register(PlayerActionPacket.class);

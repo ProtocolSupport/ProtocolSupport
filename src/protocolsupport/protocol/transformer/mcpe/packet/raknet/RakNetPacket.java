@@ -42,14 +42,13 @@ public class RakNetPacket {
 
 	public void decode(ByteBuf buf) {
 		data.writeBytes(buf);
-		PacketDataSerializer serializer = new PacketDataSerializer(data, ProtocolVersion.MINECRAFT_PE);
-		id = serializer.readByte() & 0xFF;
+		id = data.readUnsignedByte();
 	}
 
 	public void decodeEncapsulated() {
 		PacketDataSerializer serializer = new PacketDataSerializer(data, ProtocolVersion.MINECRAFT_PE);
 		sequenceNumber = serializer.readLTriad();
-		while (data.readableBytes() > 3) {
+		while (data.isReadable()) {
 			EncapsulatedPacket packet = new EncapsulatedPacket();
 			packet.decode(data);
 			encapsulatedPackets.add(packet);

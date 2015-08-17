@@ -5,9 +5,9 @@ import io.netty.buffer.ByteBuf;
 import java.util.Collections;
 import java.util.List;
 
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
 import protocolsupport.utils.Allocator;
-
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketDataSerializer;
@@ -21,7 +21,7 @@ public class RemoveBlockPacket implements ServerboundPEPacket {
 
 	@Override
 	public int getId() {
-		return 0x90;
+		return PEPacketIDs.UPDATE_BLOCK_PACKET;
 	}
 
 	@Override
@@ -33,9 +33,8 @@ public class RemoveBlockPacket implements ServerboundPEPacket {
 		return this;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public List<? extends Packet> transfrom() throws Exception {
+	public List<? extends Packet<?>> transfrom() throws Exception {
 		PacketPlayInBlockDig dig = new PacketPlayInBlockDig();
 		PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer());
 		try {

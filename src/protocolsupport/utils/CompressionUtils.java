@@ -25,6 +25,7 @@ public class CompressionUtils {
 		byte[] compressed = new byte[data.length + 200];
 		Deflater deflater = new Deflater();
 		deflater.setInput(data);
+		deflater.finish();
 		int compressedsize = deflater.deflate(compressed);
 		deflater.end();
 		return Unpooled.wrappedBuffer(compressed, 0, compressedsize);

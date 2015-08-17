@@ -1,10 +1,10 @@
 package protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound;
 
 import io.netty.buffer.ByteBuf;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 
 public class KickPacket implements ClientboundPEPacket {
 
@@ -16,7 +16,7 @@ public class KickPacket implements ClientboundPEPacket {
 
 	@Override
 	public int getId() {
-		return 0x84;
+		return PEPacketIDs.DISCONNECT_PACKET;
 	}
 
 	@Override

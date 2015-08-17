@@ -9,6 +9,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.DualPEPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
 import net.minecraft.server.v1_8_R3.PacketPlayInChat;
 
@@ -29,7 +30,7 @@ public class ChatPacket implements DualPEPacket {
 
 	@Override
 	public int getId() {
-		return 0x85;
+		return PEPacketIDs.TEXT_PACKET;
 	}
 
 	@Override
@@ -37,12 +38,12 @@ public class ChatPacket implements DualPEPacket {
 		PacketDataSerializer serializer = new PacketDataSerializer(buf, ProtocolVersion.MINECRAFT_PE);
 		type = TextType.fromNum(serializer.readByte());
 		switch (type) {
+			case POPUP:
 			case CHAT: {
 				source = serializer.readString();
 				break;
 			}
 			case RAW:
-			case POPUP:
 			case TIP: {
 				message = serializer.readString();
 				break;

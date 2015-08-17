@@ -8,6 +8,7 @@ import java.util.List;
 import net.minecraft.server.v1_8_R3.Packet;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.DualPEPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
 
 public class SetHealthPacket implements DualPEPacket {
@@ -23,7 +24,7 @@ public class SetHealthPacket implements DualPEPacket {
 
 	@Override
 	public int getId() {
-		return 0xA1;
+		return PEPacketIDs.SET_HEALTH_PACKET;
 	}
 
 	@Override
@@ -38,9 +39,8 @@ public class SetHealthPacket implements DualPEPacket {
 		return this;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public List<? extends Packet> transfrom() throws Exception {
+	public List<? extends Packet<?>> transfrom() throws Exception {
 		return Collections.emptyList();
 	}
 

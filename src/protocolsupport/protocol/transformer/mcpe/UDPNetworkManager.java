@@ -113,6 +113,9 @@ public class UDPNetworkManager extends NetworkManager {
 
 	@SuppressWarnings("rawtypes")
 	public void handleUDP(RakNetPacket raknetpacket) {
+		if (!channel.isOpen()) {
+			return;
+		}
 		lastSentPacket = System.currentTimeMillis();
 		try {
 			switch (raknetpacket.getId()) {
@@ -201,7 +204,6 @@ public class UDPNetworkManager extends NetworkManager {
                 	if (state == State.CONNECTED) {
                 		raknetpacket.decodeEncapsulated();
                 		for (Packet nativepacket : serverboundTransformer.transform(raknetpacket)) {
-                			System.out.println(nativepacket.getClass().getName());
                 			channelRead0(null, nativepacket);
                 		}
                 	}

@@ -1,31 +1,31 @@
 package protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound;
 
-import io.netty.buffer.ByteBuf;
+import java.util.UUID;
 
+import net.minecraft.server.v1_8_R3.ItemStack;
+import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 
 public class SpawnPlayerPacket implements ClientboundPEPacket {
 
-	private int clientID;
-	private String username;
-	private int eid;
-	private int x;
-	private int y;
-	private int z;
-	private float speedX;
-	private float speedY;
-	private float speedZ;
-	private float pitch;
-	private float yaw;
-	private int item;
-	private int meta;
-	private byte[] metadata;
-	private boolean slim;
-	private String skin;
+	protected UUID uuid;
+	protected String username;
+	protected int eid;
+	protected int x;
+	protected int y;
+	protected int z;
+	protected float speedX;
+	protected float speedY;
+	protected float speedZ;
+	protected float pitch;
+	protected float yaw;
+	protected ItemStack item;
+	protected byte[] metadata;
 
 	@Override
 	public int getId() {
-		return 0x88;
+		return PEPacketIDs.ADD_PLAYER_PACKET;
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 package protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound;
 
 import io.netty.buffer.ByteBuf;
-
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 
 public class SetBlocksPacket implements ClientboundPEPacket {
 
@@ -22,7 +22,7 @@ public class SetBlocksPacket implements ClientboundPEPacket {
 
 	@Override
 	public int getId() {
-		return 0x91;
+		return PEPacketIDs.UPDATE_BLOCK_PACKET;
 	}
 
 	@Override

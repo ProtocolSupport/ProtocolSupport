@@ -7,13 +7,14 @@ import java.util.List;
 
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.DualPEPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
 import protocolsupport.utils.Allocator;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketDataSerializer;
 import net.minecraft.server.v1_8_R3.PacketPlayInFlying.PacketPlayInPositionLook;
 
-public class MovePacket implements DualPEPacket {
+public class MovePlayerPacket implements DualPEPacket {
 
 	protected long eid;
 	protected float x;
@@ -22,12 +23,12 @@ public class MovePacket implements DualPEPacket {
 	protected float yaw;
 	protected float pitch;
 	protected float bodyYaw;
-	protected boolean onGround;
+	protected boolean onGround; //uncertain, different docs and implementations tell different things
 
-	public MovePacket() {
+	public MovePlayerPacket() {
 	}
 
-	public MovePacket(int eid, float x, float y, float z, float yaw, float pitch, boolean onGround) {
+	public MovePlayerPacket(int eid, float x, float y, float z, float yaw, float pitch, boolean onGround) {
 		this.eid = eid;
 		this.x = x;
 		this.y = y;
@@ -39,7 +40,7 @@ public class MovePacket implements DualPEPacket {
 
 	@Override
 	public int getId() {
-		return 0x8F;
+		return PEPacketIDs.MOVE_PLAYER_PACKET;
 	}
 
 	@Override
@@ -68,9 +69,8 @@ public class MovePacket implements DualPEPacket {
 		return this;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public List<? extends Packet> transfrom() throws Exception {
+	public List<? extends Packet<?>> transfrom() throws Exception {
 		PacketPlayInPositionLook mlook = new PacketPlayInPositionLook();
 		ByteBuf packetdata = Allocator.allocateBuffer();
 		try {

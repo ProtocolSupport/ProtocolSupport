@@ -16,12 +16,13 @@ import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.transformer.mcpe.UDPNetworkManager;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.ChatPacket;
-import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.MovePacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.MovePlayerPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.SetHealthPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ChunkPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PongPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetBlocksPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetBlocksPacket.UpdateBlockRecord;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetSpawnPosition;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetTimePacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.StartGamePacket;
 import protocolsupport.protocol.transformer.mcpe.remapper.BlockIDRemapper;
@@ -90,11 +91,13 @@ public class ClientboundPacketHandler {
 					return Arrays.asList(
 						new ClientboundPEPacket[] {
 							new StartGamePacket(
+								bukkitplayer.getWorld().getEnvironment().getId(),
 								bukkitplayer.getGameMode().getValue() & 0x1,
 								bukkitplayer.getEntityId(),
 								bukkitplayer.getWorld().getSpawnLocation(),
 								bukkitplayer.getLocation()
 							),
+							new SetSpawnPosition(bukkitplayer.getLocation()),
 							new SetTimePacket()
 						}
 					);
@@ -129,7 +132,7 @@ public class ClientboundPacketHandler {
 					if ((field & 0x10) != 0) {
 						pitch += location.getPitch();
 					}
-					return Collections.singletonList(new MovePacket(
+					return Collections.singletonList(new MovePlayerPacket(
 						player.getEntityId(),
 						(float) x, (float) y, (float) z,
 						yaw, pitch, false)
@@ -142,7 +145,6 @@ public class ClientboundPacketHandler {
 					int mask = packetdata.readShort();
 					Chunk chunk = getPlayer(networkManager).getWorld().getChunkIfLoaded(x, z);
 					if (chunk != null && !(cont && mask == 0)) {
-						loadedChunkCount++;
 						return Collections.singletonList(new ChunkPacket(chunk));
 					} else {
 						return Collections.emptyList();
@@ -191,7 +193,7 @@ public class ClientboundPacketHandler {
 							packets.add(new ChunkPacket(chunk));
 						}
 					}
-					//MCPE is kinda retarded and can't accept many chunks at once, so we will have to delay them if player is not logged in
+					//Queue chunks to be able to tell when should we spawn player
 					if (spawned) {
 						return packets;
 					} else {

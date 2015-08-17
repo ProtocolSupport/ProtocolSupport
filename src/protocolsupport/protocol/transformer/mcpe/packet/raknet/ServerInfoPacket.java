@@ -2,6 +2,8 @@ package protocolsupport.protocol.transformer.mcpe.packet.raknet;
 
 import java.net.InetSocketAddress;
 
+import net.md_5.bungee.api.ChatColor;
+
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 
@@ -12,8 +14,7 @@ import io.netty.buffer.ByteBuf;
 
 public class ServerInfoPacket extends RakNetPacket {
 
-	private static final int MINECRAFT_PE_PROTOCOL = 27;
-	private static final String MINECRAFT_PE_VERSION = "0.11.0";
+	private static final int MINECRAFT_PE_PROTOCOL = 33;
 
 	private long time;
 	private long serverID = UDPNetworkManager.serverID;
@@ -39,9 +40,9 @@ public class ServerInfoPacket extends RakNetPacket {
 		serializer.writeString(StringUtils.join(
 			new String[] {
 				"MCPE",
-				"ProtocolSupport",
+				ChatColor.stripColor(Bukkit.getMotd()).replace(";", ""),
 				Integer.toString(MINECRAFT_PE_PROTOCOL),
-				MINECRAFT_PE_VERSION,
+				"ProtocolSupport",
 				Integer.toString(playerCount),
 				Integer.toString(maxPlayers)
 			}, ";")

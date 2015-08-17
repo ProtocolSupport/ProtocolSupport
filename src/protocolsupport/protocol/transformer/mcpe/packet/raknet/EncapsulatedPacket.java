@@ -11,8 +11,6 @@ public class EncapsulatedPacket {
 	public boolean hasSplit;
 
 	public int messageIndex;
-	public int orderIndex;
-	public int orderChannel;
 
 	public int splitCount;
 	public int splitID;
@@ -44,14 +42,17 @@ public class EncapsulatedPacket {
 		reliability = (flags & 0b11100000) >> 5;
 		hasSplit = (flags & 0b00010000) > 0;
 
-		int length = (serializer.readShort() & 0xFFFF) / 8;
-		if (reliability == 2 || reliability == 3 || reliability == 4 || reliability == 6 || reliability == 7) {
-			messageIndex = serializer.readLTriad();
-		}
+		//yes, all this shit is important, because you can have a length of 273 bits or so, how does this even happen?
+		int length = (int) Math.ceil(((double) serializer.readUnsignedShort()) / 8.0D);
 
-		if (reliability == 1 || reliability == 3 || reliability == 4 || reliability == 7) {
-			orderIndex = serializer.readLTriad();
-			orderChannel = serializer.readByte() & 0xFF;
+		if (reliability > 0) {
+			if (reliability >= 2 && reliability != 5) {
+				messageIndex = serializer.readLTriad();
+			}
+			if (reliability <= 4 && reliability != 2) {
+				serializer.readLTriad();
+				serializer.readUnsignedByte();
+			}
 		}
 
 		if (hasSplit) {
@@ -59,6 +60,7 @@ public class EncapsulatedPacket {
 			splitID = serializer.readShort();
 			splitIndex = serializer.readInt();
 		}
+
 		data.writeBytes(serializer, length);
 	}
 
@@ -71,19 +73,18 @@ public class EncapsulatedPacket {
 			flag = (byte) ((flag & 0xFF) | 0x10);
 		}
 		serializer.writeByte(flag);
+
 		serializer.writeShort((data.readableBytes() << 3) & 0xFFFF);
-		if (reliability == 2 || reliability == 3 || reliability == 4 || reliability == 6 || reliability == 7) {
-			serializer.writeLTriad(messageIndex);
-		}
-		if (reliability == 1 || reliability == 3 || reliability == 4 || reliability == 7) {
-			serializer.writeLTriad(orderIndex);
-			serializer.writeByte(orderChannel & 0xFF);
-		}
+
+		//only support reliability level 2 for sending
+		serializer.writeLTriad(messageIndex);
+
 		if (hasSplit) {
 			serializer.writeInt(splitCount);
 			serializer.writeShort(splitID & 0xFFFF);
 			serializer.writeInt(splitIndex);
 		}
+
 		serializer.writeBytes(data);
 	}
 
