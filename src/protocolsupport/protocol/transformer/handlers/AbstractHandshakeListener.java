@@ -2,6 +2,7 @@ package protocolsupport.protocol.transformer.handlers;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 
 import org.apache.logging.log4j.LogManager;
 import org.spigotmc.SpigotConfig;
@@ -70,9 +71,12 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 						return;
 					}
 					packethandshakinginsetprotocol.hostname = split[0];
-					ProtocolVersion version = ProtocolStorage.getProtocolVersion(networkManager.l);
-					networkManager.l = new InetSocketAddress(split[1], ((InetSocketAddress) networkManager.getSocketAddress()).getPort());
-					ProtocolStorage.setProtocolVersion(networkManager.l, version);
+					SocketAddress oldaddress = networkManager.getSocketAddress();
+					ProtocolVersion version = ProtocolStorage.getProtocolVersion(oldaddress);
+					SocketAddress newaddress = new InetSocketAddress(split[1], ((InetSocketAddress) oldaddress).getPort());
+					ProtocolStorage.setProtocolVersion(newaddress, version);
+					networkManager.l = newaddress;
+					ProtocolStorage.clearData(oldaddress);
 					networkManager.spoofedUUID = UUIDTypeAdapter.fromString(split[2]);
 					if (split.length == 4) {
 						networkManager.spoofedProfile = gson.fromJson(split[3], Property[].class);
