@@ -24,8 +24,8 @@ public class ChatPacket implements DualPEPacket {
 	}
 
 	public ChatPacket(String message) {
-		type = TextType.CHAT;
-		this.source = message;
+		this.type = TextType.RAW;
+		this.message = message + "  "; //add two spaces to make it show normally (dafuq?)
 	}
 
 	@Override
@@ -38,11 +38,11 @@ public class ChatPacket implements DualPEPacket {
 		PacketDataSerializer serializer = new PacketDataSerializer(buf, ProtocolVersion.MINECRAFT_PE);
 		type = TextType.fromNum(serializer.readByte());
 		switch (type) {
-			case POPUP:
 			case CHAT: {
 				source = serializer.readString();
 				break;
 			}
+			case POPUP:
 			case RAW:
 			case TIP: {
 				message = serializer.readString();
@@ -90,7 +90,7 @@ public class ChatPacket implements DualPEPacket {
 
 	@Override
 	public List<PacketPlayInChat> transfrom() {
-		return Collections.singletonList(new PacketPlayInChat(message));
+		return Collections.singletonList(new PacketPlayInChat(source));
 	}
 
 

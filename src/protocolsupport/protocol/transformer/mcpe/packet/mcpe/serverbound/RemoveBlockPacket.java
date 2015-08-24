@@ -21,7 +21,7 @@ public class RemoveBlockPacket implements ServerboundPEPacket {
 
 	@Override
 	public int getId() {
-		return PEPacketIDs.UPDATE_BLOCK_PACKET;
+		return PEPacketIDs.REMOVE_BLOCK_PACKET;
 	}
 
 	@Override

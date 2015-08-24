@@ -14,7 +14,8 @@ import io.netty.buffer.ByteBuf;
 
 public class ServerInfoPacket extends RakNetPacket {
 
-	private static final int MINECRAFT_PE_PROTOCOL = 33;
+	private static final int MINECRAFT_PE_PROTOCOL = 34;
+	private static final String MINECRAFT_PE_VERSION = "0.12.1";
 
 	private long time;
 	private long serverID = UDPNetworkManager.serverID;
@@ -42,7 +43,7 @@ public class ServerInfoPacket extends RakNetPacket {
 				"MCPE",
 				ChatColor.stripColor(Bukkit.getMotd()).replace(";", ""),
 				Integer.toString(MINECRAFT_PE_PROTOCOL),
-				"ProtocolSupport",
+				MINECRAFT_PE_VERSION,
 				Integer.toString(playerCount),
 				Integer.toString(maxPlayers)
 			}, ";")
