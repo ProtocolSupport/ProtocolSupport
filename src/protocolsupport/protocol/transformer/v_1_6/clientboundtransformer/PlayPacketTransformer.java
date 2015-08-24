@@ -34,8 +34,8 @@ import protocolsupport.protocol.transformer.v_1_6.utils.ChatEncoder;
 import protocolsupport.protocol.transformer.v_1_6.utils.ChunkUtils;
 import protocolsupport.protocol.transformer.v_1_6.utils.DataWatcherFilter;
 import protocolsupport.protocol.transformer.v_1_6.utils.VillagerTradeTransformer;
-import protocolsupport.protocol.watchedentity.WatchedLiving;
-import protocolsupport.protocol.watchedentity.WatchedObject;
+import protocolsupport.protocol.watchedentity.types.WatchedLiving;
+import protocolsupport.protocol.watchedentity.types.WatchedObject;
 import protocolsupport.utils.Allocator;
 import protocolsupport.utils.Utils;
 

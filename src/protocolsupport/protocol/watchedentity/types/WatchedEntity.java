@@ -1,4 +1,4 @@
-package protocolsupport.protocol.watchedentity;
+package protocolsupport.protocol.watchedentity.types;
 
 public abstract class WatchedEntity {
 

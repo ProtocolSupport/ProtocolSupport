@@ -12,7 +12,7 @@ import net.minecraft.server.v1_8_R3.ItemStack;
 import net.minecraft.server.v1_8_R3.Vector3f;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.utils.DataWatcherSerializer.DataWatcherObject.ValueType;
+import protocolsupport.utils.DataWatcherObject.ValueType;
 
 public class DataWatcherSerializer {
 
@@ -24,7 +24,7 @@ public class DataWatcherSerializer {
 			if (b0 == 127) {
 				break;
 			}
-			final ValueType type = ValueType.fromId((b0 & 0xE0) >> 5);
+			final ValueType type = ValueType.fromId(version, (b0 & 0xE0) >> 5);
 			final int key = b0 & 0x1F;
 			switch (type) {
 				case BYTE: {
@@ -77,7 +77,7 @@ public class DataWatcherSerializer {
 			while (iterator.hasNext()) {
 				iterator.advance();
 				DataWatcherObject object = iterator.value();
-				final int tk = ((object.type.getId() << 5) | (iterator.key() & 0x1F)) & 0xFF;
+				final int tk = ((object.type.getId(version) << 5) | (iterator.key() & 0x1F)) & 0xFF;
 				serializer.writeByte(tk);
 				switch (object.type) {
 					case BYTE: {
@@ -125,59 +125,6 @@ public class DataWatcherSerializer {
 		} finally {
 			serializer.release();
 		}
-	}
-
-	public static class DataWatcherObject {
-
-		public ValueType type;
-		public Object value;
-
-		public DataWatcherObject(ValueType type, Object value) {
-			this.type = type;
-			this.value = value;
-		}
-
-		public void toByte() {
-			type = ValueType.BYTE;
-			value = ((Number) value).byteValue();
-		}
-
-		public void toShort() {
-			type = ValueType.SHORT;
-			value = ((Number) value).shortValue();
-		}
-
-		public void toInt() {
-			type = ValueType.INT;
-			value = ((Number) value).intValue();
-		}
-
-		public void toFloat() {
-			type = ValueType.FLOAT;
-			value = ((Number) value).floatValue();
-		}
-
-		@Override
-		public String toString() {
-			return
-				new StringBuilder()
-				.append("type: ").append(type).append(" ")
-				.append("value: ").append(value)
-				.toString();
-		}
-
-		public static enum ValueType {
-			BYTE, SHORT, INT, FLOAT, STRING, ITEMSTACK, VECTOR3I, VECTOR3F;
-
-			public int getId() {
-				return ordinal();
-			}
-
-			public static ValueType fromId(int id) {
-				return values()[id];
-			}
-		}
-
 	}
 
 }

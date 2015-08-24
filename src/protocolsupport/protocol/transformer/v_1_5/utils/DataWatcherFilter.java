@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.watchedentity.WatchedEntity;
+import protocolsupport.protocol.watchedentity.types.WatchedEntity;
+import protocolsupport.utils.DataWatcherObject;
+import protocolsupport.utils.DataWatcherObject.ValueType;
 import protocolsupport.utils.DataWatcherSerializer;
-import protocolsupport.utils.DataWatcherSerializer.DataWatcherObject;
-import protocolsupport.utils.DataWatcherSerializer.DataWatcherObject.ValueType;
 import protocolsupport.utils.Utils;
 
 public class DataWatcherFilter {

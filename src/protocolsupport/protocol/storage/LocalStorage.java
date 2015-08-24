@@ -10,7 +10,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import protocolsupport.protocol.watchedentity.WatchedEntity;
+import protocolsupport.protocol.watchedentity.types.WatchedEntity;
 
 import com.mojang.authlib.properties.Property;
 

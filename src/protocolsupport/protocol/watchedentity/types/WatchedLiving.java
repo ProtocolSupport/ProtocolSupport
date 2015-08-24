@@ -1,4 +1,5 @@
-package protocolsupport.protocol.watchedentity;
+package protocolsupport.protocol.watchedentity.types;
+
 
 public class WatchedLiving extends WatchedEntity {
 
