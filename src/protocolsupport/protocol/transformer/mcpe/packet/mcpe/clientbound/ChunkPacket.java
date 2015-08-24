@@ -28,15 +28,31 @@ public class ChunkPacket implements ClientboundPEPacket {
 	public ClientboundPEPacket encode(ByteBuf buf) throws Exception {
 		buf.writeInt(chunk.locX);
 		buf.writeInt(chunk.locZ);
-		buf.writeByte(0); //type, 0 - columns, 1 - layers
+		buf.writeByte(1); //type, 0 - columns, 1 - layers
 
 		ByteBuf temp = Unpooled.buffer(90000);
 
-		buf.writeInt(83200); //following data length
-
 		MutableBlockPosition pos = new MutableBlockPosition(0, 0, 0);
 
-		for (int x = 0; x < 16; x++) {
+		for (int y = 0; y < 128; y++) {
+			for (int z = 0; z < 16; z++) {
+				for (int x = 0; x < 16; x++) {
+					temp.writeByte(BlockIDRemapper.replaceBlockId(Block.getId(getType(x, y, z, pos).getBlock())));
+				}
+			}
+		}
+
+		//metadata and light format is not yet known
+		for (int y = 0; y < 128; y+=2) {
+			for (int x = 0; x < 16; x++) {
+				for (int z = 0; z < 16; z++) {
+					temp.writeByte(0);
+					temp.writeByte(0);
+					temp.writeByte(0);
+				}
+			}
+		}
+		/*for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
 				for (int y = 0; y < 128; y++) {
 					temp.writeByte(BlockIDRemapper.replaceBlockId(Block.getId(getType(x, y, z, pos).getBlock())));
@@ -74,7 +90,7 @@ public class ChunkPacket implements ClientboundPEPacket {
 					temp.writeByte(data);
 				}
 			}
-		}
+		}*/
 
 		for (int i = 0; i < 256; i++) {
 			temp.writeByte((byte) 0x00);
