@@ -3,22 +3,26 @@ package protocolsupport.protocol.transformer.mcpe.handler;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.transformer.mcpe.UDPNetworkManager;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.ChatPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.MovePlayerPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.SetHealthPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ChunkPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PlayerListPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PongPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetBlocksPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetBlocksPacket.UpdateBlockRecord;
@@ -60,20 +64,16 @@ public class ClientboundPacketHandler {
 	private LinkedList<ChunkPacket> chunkQueue = new LinkedList<ChunkPacket>();
 
 	public void tick() {
-		if (!spawned) {
-			ChunkPacket chunkpacket = chunkQueue.poll();
-			if (chunkpacket != null) {
-				try {
-					loadedChunkCount++;
-					networkManager.sendPEPacket(chunkpacket);
-				} catch (Exception e) {
-					networkManager.close(new ChatComponentText(e.getMessage()));
-				}
+		ChunkPacket chunkpacket = chunkQueue.poll();
+		if (chunkpacket != null) {
+			try {
+				loadedChunkCount++;
+				networkManager.sendPEPacket(chunkpacket);
+			} catch (Exception e) {
+				networkManager.close(new ChatComponentText(e.getMessage()));
 			}
 		}
 	}
-
-	private final LocalStorage storage = new LocalStorage();
 
 	@SuppressWarnings({ "rawtypes", "deprecation" })
 	public List<? extends ClientboundPEPacket> transform(Packet packet) throws Exception {
@@ -132,10 +132,12 @@ public class ClientboundPacketHandler {
 					if ((field & 0x10) != 0) {
 						pitch += location.getPitch();
 					}
-					return Collections.singletonList(new MovePlayerPacket(
-						player.getEntityId(),
-						(float) x, (float) y, (float) z,
-						yaw, pitch, false)
+					return Collections.singletonList(
+						new MovePlayerPacket(
+							player.getEntityId(),
+							(float) x, (float) y, (float) z,
+							yaw, pitch, false
+						)
 					);
 				}
 				case 0x21: { //PacketPlayOutMapChunk
@@ -204,12 +206,12 @@ public class ClientboundPacketHandler {
 				case 0x38: { // PacketPlayOutPlayerInfo
 					int action = packetdata.readVarInt();
 					int count = packetdata.readVarInt();
+					HashSet<UUID> uuids = new HashSet<UUID>();
 					for (int i = 0; i < count; i++) {
-						UUID uuid = packetdata.g();
+						uuids.add(packetdata.readUUID());
 						switch (action) {
 							case 0: {
-								String playerName = packetdata.readString(16);
-								storage.addPlayerListName(uuid, playerName);
+								packetdata.readString(16);
 								int props = packetdata.readVarInt();
 								for (int p = 0; p < props; p++) {
 									packetdata.readString(32767);
@@ -226,10 +228,6 @@ public class ClientboundPacketHandler {
 								break;
 							}
 							case 4: {
-								String playerName = storage.getPlayerListName(uuid);
-								if (playerName != null) {
-									storage.removePlayerListName(uuid);
-								}
 								break;
 							}
 							case 1: {
@@ -246,8 +244,30 @@ public class ClientboundPacketHandler {
 								}
 								break;
 							}
-							default: {
-								break;
+						}
+					}
+					switch (action) {
+						case 4: {
+							return Collections.singletonList(new PlayerListPacket(uuids.toArray(new UUID[uuids.size()])));
+						}
+						case 0: {
+							ArrayList<EntityPlayer> players = new ArrayList<EntityPlayer>();
+							Iterator<UUID> iterator = uuids.iterator();
+							while (iterator.hasNext()) {
+								UUID uuid = iterator.next();
+								Player player = Bukkit.getPlayer(uuid);
+								if (player != null) {
+									iterator.remove();
+									players.add(((CraftPlayer) player).getHandle());
+								}
+							}
+							if (uuids.size() != 0) {
+								//TODO: pull entities directly for world players list to support NPC
+							}
+							if (players.size() != 0) {
+								return Collections.singletonList(new PlayerListPacket(players.toArray(new EntityPlayer[players.size()])));
+							} else {
+								return Collections.emptyList();
 							}
 						}
 					}

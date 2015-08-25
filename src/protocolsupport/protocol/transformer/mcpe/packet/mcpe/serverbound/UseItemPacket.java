@@ -37,7 +37,6 @@ public class UseItemPacket implements ServerboundPEPacket {
 		this.y = buf.readInt();
 		this.z = buf.readInt();
 		this.face = buf.readByte() & 0xFF;
-		buf.readLong();
 		this.fx = buf.readFloat();
 		this.fy = buf.readFloat();
 		this.fz = buf.readFloat();

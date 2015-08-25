@@ -299,6 +299,10 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 		return g();
 	}
 
+	public void writeUUID(UUID uuid) {
+		a(uuid);
+	}
+
 	public int readLTriad() {
 		return readUnsignedByte() | (readUnsignedByte() << 8) | (readUnsignedByte() << 16);
 	}
