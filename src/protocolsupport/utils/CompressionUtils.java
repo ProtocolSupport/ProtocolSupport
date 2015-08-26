@@ -9,18 +9,19 @@ import java.util.zip.Inflater;
 
 public class CompressionUtils {
 
-	public static ByteBuf uncompress(byte[] payload, int expecteduncompressedsize) throws DataFormatException {
+	public static ByteBuf uncompress(ByteBuf payload, int expecteduncompressedsize) throws DataFormatException {
+		byte[] data = Utils.toArray(payload);
 		//TODO: actually decompress all
         byte[] decompressedPayload = new byte[expecteduncompressedsize];
         Inflater inflater = new Inflater();
-        inflater.setInput(payload);
+        inflater.setInput(data);
         int decompressedSize = inflater.inflate(decompressedPayload);
         inflater.end();
         return Unpooled.wrappedBuffer(decompressedPayload, 0, decompressedSize);
 	}
 
 	public static ByteBuf compress(ByteBuf input) {
-		byte[] data = input.readBytes(input.readableBytes()).array();
+		byte[] data = Utils.toArray(input);
 		//TODO: actually calculate worst case array length
 		byte[] compressed = new byte[data.length + 200];
 		Deflater deflater = new Deflater();

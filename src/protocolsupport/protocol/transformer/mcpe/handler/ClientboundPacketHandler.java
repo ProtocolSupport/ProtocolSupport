@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,6 +15,7 @@ import org.bukkit.entity.Player;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.transformer.mcpe.UDPNetworkManager;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.ChatPacket;
@@ -28,16 +28,18 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetBloc
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetBlocksPacket.UpdateBlockRecord;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetSpawnPosition;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetTimePacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SpawnPlayerPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.StartGamePacket;
 import protocolsupport.protocol.transformer.mcpe.remapper.BlockIDRemapper;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.utils.Allocator;
 import net.minecraft.server.v1_8_R3.BlockPosition;
-import net.minecraft.server.v1_8_R3.ChatComponentText;
 import net.minecraft.server.v1_8_R3.Chunk;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.EnumProtocol;
 import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
+import net.minecraft.server.v1_8_R3.Item;
+import net.minecraft.server.v1_8_R3.ItemStack;
 import net.minecraft.server.v1_8_R3.NetworkManager;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PlayerConnection;
@@ -61,19 +63,7 @@ public class ClientboundPacketHandler {
 		spawned = true;
 	}
 
-	private LinkedList<ChunkPacket> chunkQueue = new LinkedList<ChunkPacket>();
-
-	public void tick() {
-		ChunkPacket chunkpacket = chunkQueue.poll();
-		if (chunkpacket != null) {
-			try {
-				loadedChunkCount++;
-				networkManager.sendPEPacket(chunkpacket);
-			} catch (Exception e) {
-				networkManager.close(new ChatComponentText(e.getMessage()));
-			}
-		}
-	}
+	private final LocalStorage storage = new LocalStorage();
 
 	@SuppressWarnings({ "rawtypes", "deprecation" })
 	public List<? extends ClientboundPEPacket> transform(Packet packet) throws Exception {
@@ -195,23 +185,39 @@ public class ClientboundPacketHandler {
 							packets.add(new ChunkPacket(chunk));
 						}
 					}
-					//Queue chunks to be able to tell when should we spawn player
-					if (spawned) {
-						return packets;
-					} else {
-						chunkQueue.addAll(packets);
-						return Collections.emptyList();
+					loadedChunkCount += packets.size();
+					return packets;
+				}
+				case 0x0C: { //PacketPlayOutNamedEntitySpawn
+					int entityId = packetdata.readVarInt();
+					UUID uuid = packetdata.readUUID();
+					float locX = packetdata.readInt() / 32.0F;
+					float locY = packetdata.readInt() / 32.0F;
+					float locZ = packetdata.readInt() / 32.0F;
+					float yaw = packetdata.readByte() * 360.0F / 256.0F;
+					float pitch = packetdata.readByte() * 360.0F / 256.0F;
+					short itemId = packetdata.readShort();
+					String username = storage.getPlayerListName(uuid);
+					if (username == null) {
+						username = "Unknown";
 					}
+					return Collections.singletonList(new SpawnPlayerPacket(
+						uuid, username, entityId,
+						locX, locY, locZ, yaw, pitch,
+						itemId != 0 ? new ItemStack(Item.getById(itemId)) : null
+					));
 				}
 				case 0x38: { // PacketPlayOutPlayerInfo
 					int action = packetdata.readVarInt();
 					int count = packetdata.readVarInt();
 					HashSet<UUID> uuids = new HashSet<UUID>();
 					for (int i = 0; i < count; i++) {
-						uuids.add(packetdata.readUUID());
+						UUID uuid = packetdata.readUUID();
+						uuids.add(uuid);
 						switch (action) {
 							case 0: {
-								packetdata.readString(16);
+								String username = packetdata.readString(16);
+								storage.addPlayerListName(uuid, username);
 								int props = packetdata.readVarInt();
 								for (int p = 0; p < props; p++) {
 									packetdata.readString(32767);
@@ -228,6 +234,7 @@ public class ClientboundPacketHandler {
 								break;
 							}
 							case 4: {
+								storage.removePlayerListName(uuid);
 								break;
 							}
 							case 1: {

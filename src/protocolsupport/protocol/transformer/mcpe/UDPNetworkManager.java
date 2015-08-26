@@ -1,11 +1,11 @@
 package protocolsupport.protocol.transformer.mcpe;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.util.concurrent.GenericFutureListener;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.ConcurrentHashMap;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
@@ -13,6 +13,7 @@ import protocolsupport.protocol.transformer.mcpe.handler.ClientboundPacketHandle
 import protocolsupport.protocol.transformer.mcpe.handler.PELoginListener;
 import protocolsupport.protocol.transformer.mcpe.handler.ServerboundPacketHandler;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.BatchPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.KickPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.LoginStatusPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.raknet.ACK;
@@ -38,7 +39,7 @@ public class UDPNetworkManager extends NetworkManager {
 
 	private final ClientboundPacketHandler clientboundTransforner = new ClientboundPacketHandler(this);
 	private final ServerboundPacketHandler serverboundTransformer = new ServerboundPacketHandler(this);
-	private final TIntObjectHashMap<RakNetPacket> sentPackets = new TIntObjectHashMap<RakNetPacket>();
+	private final ConcurrentHashMap<Integer, RakNetPacket> sentPackets = new ConcurrentHashMap<Integer, RakNetPacket>();
 
 	private long lastSentPacket = System.currentTimeMillis();
 
@@ -56,7 +57,6 @@ public class UDPNetworkManager extends NetworkManager {
 			close(new ChatComponentText("Timed out"));
 			return;
 		}
-		clientboundTransforner.tick();
 		if (clientboundTransforner.canSpawnPlayer()) {
 			clientboundTransforner.setSpawned();
 			try {
@@ -226,18 +226,18 @@ public class UDPNetworkManager extends NetworkManager {
 		ByteBuf buf = Unpooled.buffer();
 		buf.writeByte(pepacket.getId());
 		pepacket.encode(buf);
+		if (buf.readableBytes() > 128 && !(pepacket instanceof BatchPacket)) {
+			sendPEPacket(new BatchPacket(pepacket));
+			return;
+		}
 		int maxsize = mtu - 40;
 		if (buf.readableBytes() > mtu + 40) {
-			//if (pepacket instanceof BatchPacket) {
-				EncapsulatedPacket[] epackets = new EncapsulatedPacket[(buf.readableBytes() / maxsize) + 1];
-				int splitID = getNextSplitID();
-				for (int splitIndex = 0; splitIndex < epackets.length; splitIndex++) {
-					epackets[splitIndex] = new EncapsulatedPacket(buf.readBytes(buf.readableBytes() < maxsize ? buf.readableBytes() : maxsize), getNextMessageID(), splitID, epackets.length, splitIndex);
-				}
-				sendEncapsulatedPackets(epackets);
-			/*} else {
-				sendPEPacket(new BatchPacket(pepacket));
-			}*/
+			EncapsulatedPacket[] epackets = new EncapsulatedPacket[(buf.readableBytes() / maxsize) + 1];
+			int splitID = getNextSplitID();
+			for (int splitIndex = 0; splitIndex < epackets.length; splitIndex++) {
+				epackets[splitIndex] = new EncapsulatedPacket(buf.readBytes(buf.readableBytes() < maxsize ? buf.readableBytes() : maxsize), getNextMessageID(), splitID, epackets.length, splitIndex);
+			}
+			sendEncapsulatedPackets(epackets);
 		} else {
 			sendEncapsulatedPackets(new EncapsulatedPacket(buf, getNextMessageID()));
 		}
@@ -251,7 +251,7 @@ public class UDPNetworkManager extends NetworkManager {
 
 	public void sendACK(int seqNumber) {
 		ACK ack = new ACK((InetSocketAddress) l);
-		ack.id = seqNumber;
+		ack.id  = seqNumber;
 		sendRakNetPacket0(ack);
 	}
 

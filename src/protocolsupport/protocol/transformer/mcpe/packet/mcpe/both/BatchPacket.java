@@ -10,7 +10,6 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketRegistry;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
 import protocolsupport.utils.CompressionUtils;
-import protocolsupport.utils.Utils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.server.v1_8_R3.Packet;
@@ -33,7 +32,7 @@ public class BatchPacket implements DualPEPacket {
 
 	@Override
 	public BatchPacket decode(ByteBuf buf) throws Exception {
-        ByteBuf uncompressedbuf = CompressionUtils.uncompress(Utils.toArray(buf.readBytes(buf.readInt())), 1024 * 1024 * 64);
+        ByteBuf uncompressedbuf = CompressionUtils.uncompress(buf.readBytes(buf.readInt()), 1024 * 1024 * 64);
         while (uncompressedbuf.isReadable()) {
         	ByteBuf packetData = uncompressedbuf.readBytes(uncompressedbuf.readInt());
             packets.add(PEPacketRegistry.getPacket(packetData.readUnsignedByte()).decode(packetData));

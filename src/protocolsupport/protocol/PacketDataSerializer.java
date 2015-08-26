@@ -113,6 +113,29 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 	}
 
 	@Override
+	public ItemStack i() throws IOException {
+		switch (getVersion()) {
+			case MINECRAFT_PE: {
+				int id = readShort();
+				if (id <= 0) {
+					return null;
+				}
+				int count = readByte();
+				int data = readShort();
+				ItemStack itemstack = new ItemStack(Item.getById(id), count, data);
+				itemstack.setTag(h());
+				if (itemstack.getTag() != null) {
+					CraftItemStack.setItemMeta(itemstack, CraftItemStack.getItemMeta(itemstack));
+				}
+				return itemstack;
+			}
+			default: {
+				return super.i();
+			}
+		}
+	}
+
+	@Override
 	public void a(NBTTagCompound nbttagcompound) {
 		if (nbttagcompound != null) {
 			switch (getVersion()) {
