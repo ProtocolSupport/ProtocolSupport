@@ -6,6 +6,7 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 
 import java.util.List;
 
+import net.minecraft.server.v1_8_R3.MinecraftServer;
 import protocolsupport.protocol.core.IPacketDecoder;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.utils.Utils;
@@ -30,8 +31,13 @@ public class WrappedDecoder extends ByteToMessageDecoder {
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		super.channelInactive(ctx);
-		ProtocolStorage.clearData(ctx.channel().remoteAddress());
-		ProtocolStorage.clearData(Utils.getNetworkManagerSocketAddress(ctx.channel()));
+		try {
+			ProtocolStorage.clearData(Utils.getNetworkManagerSocketAddress(ctx.channel()));
+		} catch (Throwable t) {
+			if (MinecraftServer.getServer().isDebugging()) {
+				t.printStackTrace();
+			}
+		}
 	}
 
 }

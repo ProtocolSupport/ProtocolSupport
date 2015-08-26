@@ -131,7 +131,7 @@ public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3
 
 	@Override
 	public String d() {
-		return (profile != null) ? (profile.toString() + " (" + networkManager.getSocketAddress().toString() + ")") : String.valueOf(networkManager.getSocketAddress());
+		return (profile != null) ? (profile + " (" + networkManager.getSocketAddress() + ")") : networkManager.getSocketAddress().toString();
 	}
 
 	@Override
