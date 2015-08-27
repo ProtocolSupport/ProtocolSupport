@@ -39,11 +39,11 @@ public class ServerHandshakePacket implements ClientboundPEPacket {
 		serializer.writeAddress(new InetSocketAddress(InetAddress.getByName("0.0.0.0"), 0));
 		serializer.writeAddress(new InetSocketAddress(InetAddress.getByName("0.0.0.0"), 0));
 		serializer.writeAddress(new InetSocketAddress(InetAddress.getByName("0.0.0.0"), 0));
-        serializer.writeAddress(new InetSocketAddress(InetAddress.getByName("0.0.0.0"), 0));
-        serializer.writeAddress(new InetSocketAddress(InetAddress.getByName("0.0.0.0"), 0));
-        serializer.writeAddress(new InetSocketAddress(InetAddress.getByName("0.0.0.0"), 0));
-        serializer.writeLong(session1);
-        serializer.writeLong(session2);
+		serializer.writeAddress(new InetSocketAddress(InetAddress.getByName("0.0.0.0"), 0));
+		serializer.writeAddress(new InetSocketAddress(InetAddress.getByName("0.0.0.0"), 0));
+		serializer.writeAddress(new InetSocketAddress(InetAddress.getByName("0.0.0.0"), 0));
+		serializer.writeLong(session1);
+		serializer.writeLong(session2);
         return this;
 	}
 

@@ -64,7 +64,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 	@Override
 	public void a(ItemStack itemstack) {
 		if ((itemstack == null) || (itemstack.getItem() == null)) {
-			writeShort(-1);
+			writeShort(getVersion() != ProtocolVersion.MINECRAFT_PE ? -1 : 0);
 		} else {
 			int itemId = Item.getId(itemstack.getItem());
 			switch (getVersion()) {
@@ -253,7 +253,8 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 			case MINECRAFT_1_7_5:
 			case MINECRAFT_1_6_4:
 			case MINECRAFT_1_6_2:
-			case MINECRAFT_1_5_2: {
+			case MINECRAFT_1_5_2:
+			case MINECRAFT_PE: {
 				byte[] array = new byte[readShort()];
 				readBytes(array);
 				return array;
@@ -271,7 +272,8 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 			case MINECRAFT_1_7_5:
 			case MINECRAFT_1_6_4:
 			case MINECRAFT_1_6_2:
-			case MINECRAFT_1_5_2: {
+			case MINECRAFT_1_5_2:
+			case MINECRAFT_PE: {
 				if (array.length > 32767) {
 					throw new IllegalArgumentException("Too big array length of "+array.length);
 				}
@@ -316,6 +318,10 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 
 	public byte[] readArray() {
 		return a();
+	}
+
+	public void writeArray(byte[] array) {
+		a(array);
 	}
 
 	public UUID readUUID() {

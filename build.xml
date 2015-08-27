@@ -14,6 +14,9 @@
 		<copy todir="build/classes">
 			<fileset file="src/plugin.yml" />
 		</copy>
+		<copy todir="build/classes/protocolsupport/protocol/transformer/mcpe">
+			<fileset file="src/protocolsupport/protocol/transformer/mcpe/SKIN.bin" />
+		</copy>
 		<jar destfile="target/ProtocolSupport.jar" basedir="build/classes" />
 		<delete dir="build" />
 	</target>

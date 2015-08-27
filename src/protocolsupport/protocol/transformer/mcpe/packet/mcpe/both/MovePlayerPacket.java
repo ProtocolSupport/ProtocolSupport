@@ -16,7 +16,7 @@ import net.minecraft.server.v1_8_R3.PacketPlayInFlying.PacketPlayInPositionLook;
 
 public class MovePlayerPacket implements DualPEPacket {
 
-	protected long eid;
+	protected long entityId;
 	protected float x;
 	protected float y;
 	protected float z;
@@ -24,13 +24,13 @@ public class MovePlayerPacket implements DualPEPacket {
 	protected float pitch;
 	protected float bodyYaw;
 	protected byte mode;
-	protected boolean onGround; //uncertain, different docs and implementations tell different things
+	protected boolean onGround;
 
 	public MovePlayerPacket() {
 	}
 
-	public MovePlayerPacket(int eid, float x, float y, float z, float yaw, float pitch, boolean onGround) {
-		this.eid = eid;
+	public MovePlayerPacket(int entityId, float x, float y, float z, float yaw, float pitch, boolean onGround) {
+		this.entityId = entityId;
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -46,7 +46,7 @@ public class MovePlayerPacket implements DualPEPacket {
 
 	@Override
 	public ServerboundPEPacket decode(ByteBuf buf) throws Exception {
-		this.eid = buf.readLong();
+		this.entityId = buf.readLong();
         this.x = buf.readFloat();
         this.y = buf.readFloat() - 1.62f;
         this.z = buf.readFloat();
@@ -60,7 +60,7 @@ public class MovePlayerPacket implements DualPEPacket {
 
 	@Override
 	public ClientboundPEPacket encode(ByteBuf buf) throws Exception {
-		buf.writeLong(eid);
+		buf.writeLong(entityId);
 		buf.writeFloat(x);
 		buf.writeFloat(y + 1.62F);
 		buf.writeFloat(z);

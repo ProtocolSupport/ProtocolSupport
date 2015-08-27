@@ -3,11 +3,15 @@ package protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound;
 import java.util.UUID;
 
 import net.minecraft.server.v1_8_R3.ItemStack;
+import gnu.trove.map.hash.TIntObjectHashMap;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
+import protocolsupport.utils.DataWatcherSerializer;
+import protocolsupport.utils.DataWatcherSerializer.DataWatcherObject;
+import protocolsupport.utils.DataWatcherSerializer.DataWatcherObject.ValueType;
 
 public class SpawnPlayerPacket implements ClientboundPEPacket {
 
@@ -54,7 +58,15 @@ public class SpawnPlayerPacket implements ClientboundPEPacket {
 		serializer.writeFloat(yaw);
 		serializer.writeFloat(pitch);
 		serializer.writeItemStack(item);
-		serializer.writeByte(127); //TODO: actual metadata
+		//TODO: actual metadata
+		TIntObjectHashMap<DataWatcherObject> metadata = new TIntObjectHashMap<>();
+		metadata.put(0, new DataWatcherObject(ValueType.BYTE, (byte) 0));
+		metadata.put(1, new DataWatcherObject(ValueType.SHORT, (short) 300));
+		metadata.put(2, new DataWatcherObject(ValueType.STRING, name));
+		metadata.put(3, new DataWatcherObject(ValueType.BYTE, (byte) 1));
+		metadata.put(4, new DataWatcherObject(ValueType.BYTE, (byte) 0));
+		metadata.put(15, new DataWatcherObject(ValueType.BYTE, (byte) 0));
+		serializer.writeBytes(DataWatcherSerializer.encodeData(ProtocolVersion.MINECRAFT_PE, metadata));
 		return this;
 	}
 

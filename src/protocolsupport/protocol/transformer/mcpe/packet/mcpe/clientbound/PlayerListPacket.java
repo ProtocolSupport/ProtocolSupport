@@ -7,6 +7,7 @@ import net.minecraft.server.v1_8_R3.EntityPlayer;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.transformer.mcpe.UDPNetworkManager;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 
@@ -45,8 +46,8 @@ public class PlayerListPacket implements ClientboundPEPacket {
 					serializer.writeUUID(entry.uuid);
 					serializer.writeLong(entry.entityId);
 					serializer.writeString(entry.name);
-					serializer.writeBoolean(true);
-					serializer.writeString("");
+					serializer.writeBoolean(false);
+					serializer.writeArray(UDPNetworkManager.defaultSkin);
 				}
 				break;
 			}
@@ -63,7 +64,7 @@ public class PlayerListPacket implements ClientboundPEPacket {
 		return this;
 	}
 
-	private static class PlayerListEntry {
+	protected static class PlayerListEntry {
 		private UUID uuid;
 		private String name;
 		private int entityId;

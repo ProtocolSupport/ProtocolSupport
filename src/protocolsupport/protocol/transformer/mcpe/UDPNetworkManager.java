@@ -7,6 +7,11 @@ import io.netty.util.concurrent.GenericFutureListener;
 import java.net.InetSocketAddress;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.io.IOUtils;
+import org.spigotmc.SneakyThrow;
+
+import com.google.common.base.Function;
+
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.mcpe.handler.ClientboundPacketHandler;
@@ -34,6 +39,18 @@ import net.minecraft.server.v1_8_R3.NetworkManager;
 import net.minecraft.server.v1_8_R3.Packet;
 
 public class UDPNetworkManager extends NetworkManager {
+
+	public static final byte[] defaultSkin = new Function<Object, byte[]>() {
+		@Override
+		public byte[] apply(Object n) {
+			try {
+				return IOUtils.toByteArray(UDPNetworkManager.class.getResourceAsStream("SKIN.bin"));
+			} catch (Throwable t) {
+				SneakyThrow.sneaky(t);
+			}
+			return null;
+		}
+	}.apply(null);
 
 	public final static long serverID = 0x0000000012345678L;
 

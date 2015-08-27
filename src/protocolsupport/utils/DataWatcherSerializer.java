@@ -187,7 +187,7 @@ public class DataWatcherSerializer {
 			ITEMSTACK(5),
 			VECTOR3I(6),
 			VECTOR3F(7),
-			LONG(-1, ProtocolVersion.MINECRAFT_PE, 7);
+			LONG(-1, ProtocolVersion.MINECRAFT_PE, 8);
 
 			private static final HashMap<ProtocolVersionIdTuple, ValueType> byId = new HashMap<ProtocolVersionIdTuple, ValueType>();
 			static {
@@ -207,7 +207,7 @@ public class DataWatcherSerializer {
 				for (ProtocolVersion version : ProtocolVersion.values()) {
 					ids.put(version, defaultId);
 				}
-				for (int i = 0; i < protocoDefines.length; i++) {
+				for (int i = 0; i < protocoDefines.length; i += 2) {
 					ids.put((ProtocolVersion) protocoDefines[i], (Integer) protocoDefines[i + 1]);
 				}
 			}

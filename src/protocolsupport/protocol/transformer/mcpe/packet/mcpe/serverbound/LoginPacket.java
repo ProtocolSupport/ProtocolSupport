@@ -24,7 +24,7 @@ public class LoginPacket implements ServerboundPEPacket {
 	protected String hostname;
 
 	protected boolean slim;
-	protected String skin;
+	protected byte[] skin;
 
 	@Override
 	public int getId() {
@@ -40,9 +40,9 @@ public class LoginPacket implements ServerboundPEPacket {
 		clientID = serializer.readLong();
 		uuid = serializer.readUUID();
 		hostname = serializer.readString();
-		serializer.readString();
+		serializer.readArray(); //some sort of key for future auth maybe?
 		slim = serializer.readBoolean();
-		skin = serializer.readString();
+		skin = serializer.readArray();
 		return this;
 	}
 
