@@ -37,6 +37,7 @@ public class ChatPacket implements DualPEPacket {
 	public ServerboundPEPacket decode(ByteBuf buf) throws Exception {
 		PacketDataSerializer serializer = new PacketDataSerializer(buf, ProtocolVersion.MINECRAFT_PE);
 		type = TextType.fromNum(serializer.readByte());
+		serializer.readString(); // Nickname
 		switch (type) {
 			case CHAT: {
 				source = serializer.readString();
