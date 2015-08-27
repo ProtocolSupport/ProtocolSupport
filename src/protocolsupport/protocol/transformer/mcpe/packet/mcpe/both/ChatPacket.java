@@ -37,10 +37,10 @@ public class ChatPacket implements DualPEPacket {
 	public ServerboundPEPacket decode(ByteBuf buf) throws Exception {
 		PacketDataSerializer serializer = new PacketDataSerializer(buf, ProtocolVersion.MINECRAFT_PE);
 		type = TextType.fromNum(serializer.readByte());
-		serializer.readString(); // Nickname
 		switch (type) {
 			case CHAT: {
 				source = serializer.readString();
+				message = serializer.readString();
 				break;
 			}
 			case POPUP:
@@ -69,6 +69,7 @@ public class ChatPacket implements DualPEPacket {
 		switch (type) {
 			case CHAT: {
 				serializer.writeString(source);
+				serializer.writeString(message);
 				break;
 			}
 			case RAW:
@@ -91,7 +92,7 @@ public class ChatPacket implements DualPEPacket {
 
 	@Override
 	public List<PacketPlayInChat> transfrom() {
-		return Collections.singletonList(new PacketPlayInChat(source));
+		return Collections.singletonList(new PacketPlayInChat(message));
 	}
 
 
