@@ -1,10 +1,12 @@
 package protocolsupport.protocol.watchedentity.remapper;
 
+import protocolsupport.protocol.watchedentity.remapper.value.ValueRemapper;
+
 public class RemappingEntry {
 
-	private int from;
-	private int to;
-	private ValueRemapper vremap = ValueRemapper.NO_OP;
+	protected int from;
+	protected int to;
+	protected ValueRemapper vremap = ValueRemapper.NO_OP;
 
 	protected RemappingEntry(int from, int to) {
 		this.from = from;
@@ -26,6 +28,20 @@ public class RemappingEntry {
 
 	public ValueRemapper getValueRemapper() {
 		return vremap;
+	}
+
+	public static class RemappingEntryCopyOriginal extends RemappingEntry {
+		public RemappingEntryCopyOriginal(int id) {
+			super(id, id);
+		}
+
+		public static RemappingEntryCopyOriginal[] of(int... ids) {
+			RemappingEntryCopyOriginal[] entries = new RemappingEntryCopyOriginal[ids.length];
+			for (int i = 0; i < entries.length; i++) {
+				entries[i] = new RemappingEntryCopyOriginal(ids[i]);
+			}
+			return entries;
+		}
 	}
 
 }

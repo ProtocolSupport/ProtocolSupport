@@ -1,5 +1,7 @@
 package protocolsupport.protocol.watchedentity.types;
 
+import protocolsupport.protocol.watchedentity.remapper.SpecificType;
+
 
 public class WatchedPlayer extends WatchedEntity {
 
@@ -8,43 +10,8 @@ public class WatchedPlayer extends WatchedEntity {
 	}
 
 	@Override
-	public boolean isLiving() {
-		return true;
-	}
-
-	@Override
-	public boolean isAgeable() {
-		return false;
-	}
-
-	@Override
-	public boolean isEnderman() {
-		return false;
-	}
-
-	@Override
-	public boolean isWolf() {
-		return false;
-	}
-
-	@Override
-	public boolean isMinecart() {
-		return false;
-	}
-
-	@Override
-	public boolean isBoat() {
-		return false;
-	}
-
-	@Override
-	public boolean isItemFrame() {
-		return false;
-	}
-
-	@Override
-	public boolean isFallingBlockOrTnt() {
-		return false;
+	public SpecificType getType() {
+		return SpecificType.PLAYER;
 	}
 
 }

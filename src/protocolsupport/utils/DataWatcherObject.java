@@ -44,7 +44,14 @@ public class DataWatcherObject {
 	}
 
 	public static enum ValueType {
-		BYTE, SHORT, INT, FLOAT, STRING, ITEMSTACK, VECTOR3I, VECTOR3F;
+		BYTE(new TypeToProtocolsMappingEntry(0, ProtocolVersionsHelper.ALL)),
+		SHORT(new TypeToProtocolsMappingEntry(1, ProtocolVersionsHelper.ALL)),
+		INT(new TypeToProtocolsMappingEntry(2, ProtocolVersionsHelper.ALL)),
+		FLOAT(new TypeToProtocolsMappingEntry(3, ProtocolVersionsHelper.ALL)),
+		STRING(new TypeToProtocolsMappingEntry(4, ProtocolVersionsHelper.ALL)),
+		ITEMSTACK(new TypeToProtocolsMappingEntry(5, ProtocolVersionsHelper.ALL)),
+		VECTOR3I(new TypeToProtocolsMappingEntry(6, ProtocolVersionsHelper.ALL_BEFORE_19_DW_UPDATE)),
+		VECTOR3F(new TypeToProtocolsMappingEntry(7, ProtocolVersionsHelper.ALL));
 
 		private static final EnumMap<ProtocolVersion, ValueType[]> TYPE_BY_PROTOCOL_AND_ID = new EnumMap<ProtocolVersion, ValueType[]>(ProtocolVersion.class);
 
@@ -71,11 +78,19 @@ public class DataWatcherObject {
 		}
 
 		public int getId(ProtocolVersion version) {
-			return ordinal();
+			Integer type = types.get(version);
+			if (type == null) {
+				throw new IllegalArgumentException("Type id for protocol version "+version+" doesn't exist for datawatcher valuetype "+this);
+			}
+			return type;
 		}
 
 		public static ValueType fromId(ProtocolVersion version, int id) {
-			return values()[id];//BY_PROTOCOL_AND_ID.get(version)[id];
+			ValueType vtype = TYPE_BY_PROTOCOL_AND_ID.get(version)[id];
+			if (vtype == null) {
+				throw new IllegalArgumentException("Datawatcher valuetype doesn't exist for protocol version "+version+" and type id "+id);
+			}
+			return vtype;
 		}
 
 		private static final class TypeToProtocolsMappingEntry {
@@ -86,6 +101,7 @@ public class DataWatcherObject {
 				this.versions = versions;
 			}
 		}
+
 	}
 
 }

@@ -1,5 +1,7 @@
 package protocolsupport.protocol.watchedentity.types;
 
+import protocolsupport.protocol.watchedentity.remapper.SpecificType;
+
 public abstract class WatchedEntity {
 
 	private int id;
@@ -12,34 +14,13 @@ public abstract class WatchedEntity {
 		return id;
 	}
 
-	public abstract boolean isLiving();
-
-	public abstract boolean isAgeable();
-
-	public abstract boolean isEnderman();
-
-	public abstract boolean isWolf();
-
-	public abstract boolean isMinecart();
-
-	public abstract boolean isBoat();
-
-	public abstract boolean isItemFrame();
-
-	public abstract boolean isFallingBlockOrTnt();
+	public abstract SpecificType getType();
 
 	@Override
 	public String toString() {
 		return new StringBuilder(100)
 		.append("Id: ").append(getId()).append(", ")
-		.append("living: ").append(isLiving()).append(", ")
-		.append("ageable: ").append(isAgeable()).append(", ")
-		.append("enderman: ").append(isEnderman()).append(", ")
-		.append("wolf: ").append(isWolf()).append(", ")
-		.append("minecart: ").append(isMinecart()).append(", ")
-		.append("boat: ").append(isBoat()).append(", ")
-		.append("itemframe: ").append(isItemFrame()).append(", ")
-		.append("falling: ").append(isFallingBlockOrTnt())
+		.append("Type: ").append(getType())
 		.toString();
 	}
 
