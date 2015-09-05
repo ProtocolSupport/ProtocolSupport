@@ -9,9 +9,9 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
+import protocolsupport.utils.DataWatcherObject;
+import protocolsupport.utils.DataWatcherObject.ValueType;
 import protocolsupport.utils.DataWatcherSerializer;
-import protocolsupport.utils.DataWatcherSerializer.DataWatcherObject;
-import protocolsupport.utils.DataWatcherSerializer.DataWatcherObject.ValueType;
 
 public class SpawnPlayerPacket implements ClientboundPEPacket {
 

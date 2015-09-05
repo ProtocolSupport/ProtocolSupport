@@ -155,7 +155,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 		}
 		if (getVersion() != ProtocolVersion.MINECRAFT_1_8) {
 			if (nbttagcompound == null) {
-				writeShort(-1);
+				writeShort(getVersion() != ProtocolVersion.MINECRAFT_PE ? -1 : 0);
 			} else {
 				final byte[] abyte = write(nbttagcompound);
 				writeShort(abyte.length);
@@ -191,7 +191,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 	public NBTTagCompound h() throws IOException {
 		if (getVersion() != ProtocolVersion.MINECRAFT_1_8) {
 			final short length = readShort();
-			if (length < 0) {
+			if (length < 0 || (getVersion() == ProtocolVersion.MINECRAFT_PE && length == 0)) {
 				return null;
 			}
 			final byte[] abyte = new byte[length];

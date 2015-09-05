@@ -31,12 +31,13 @@ import protocolsupport.protocol.transformer.v_1_5.remappers.EntityIDRemapper;
 import protocolsupport.protocol.transformer.v_1_5.remappers.ItemIDRemapper;
 import protocolsupport.protocol.transformer.v_1_5.remappers.MapColorRemapper;
 import protocolsupport.protocol.transformer.v_1_5.utils.ChunkUtils;
-import protocolsupport.protocol.transformer.v_1_5.utils.DataWatcherFilter;
 import protocolsupport.protocol.transformer.v_1_5.utils.VillagerTradeTransformer;
-import protocolsupport.protocol.watchedentity.WatchedLiving;
-import protocolsupport.protocol.watchedentity.WatchedObject;
-import protocolsupport.protocol.watchedentity.WatchedPlayer;
+import protocolsupport.protocol.watchedentity.WatchedDataRemapper;
+import protocolsupport.protocol.watchedentity.types.WatchedLiving;
+import protocolsupport.protocol.watchedentity.types.WatchedObject;
+import protocolsupport.protocol.watchedentity.types.WatchedPlayer;
 import protocolsupport.utils.Allocator;
+import protocolsupport.utils.DataWatcherSerializer;
 import protocolsupport.utils.Utils;
 
 public class PlayPacketTransformer implements PacketTransformer {
@@ -187,7 +188,16 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(packetdata.readByte());
 				serializer.writeByte(packetdata.readByte());
 				serializer.writeShort(packetdata.readShort());
-				serializer.writeBytes(DataWatcherFilter.filterEntityData(ProtocolVersion.MINECRAFT_1_8, serializer.getVersion(), storage.getWatchedEntity(playerEntityId), Utils.toArray(packetdata)));
+				serializer.writeBytes(
+					DataWatcherSerializer.encodeData(
+						serializer.getVersion(),
+						WatchedDataRemapper.transform(
+							storage.getWatchedEntity(playerEntityId),
+							DataWatcherSerializer.decodeData(ProtocolVersion.MINECRAFT_1_8, Utils.toArray(packetdata)),
+							serializer.getVersion()
+						)
+					)
+				);
 				break;
 			}
 			case 0x0D: { //PacketPlayOutCollect
@@ -276,7 +286,16 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeShort(packetdata.readShort());
 				serializer.writeShort(packetdata.readShort());
 				serializer.writeShort(packetdata.readShort());
-				serializer.writeBytes(DataWatcherFilter.filterEntityData(ProtocolVersion.MINECRAFT_1_8, serializer.getVersion(), storage.getWatchedEntity(entityId), Utils.toArray(packetdata)));
+				serializer.writeBytes(
+					DataWatcherSerializer.encodeData(
+						serializer.getVersion(),
+						WatchedDataRemapper.transform(
+							storage.getWatchedEntity(entityId),
+							DataWatcherSerializer.decodeData(ProtocolVersion.MINECRAFT_1_8, Utils.toArray(packetdata)),
+							serializer.getVersion()
+						)
+					)
+				);
 				break;
 			}
 			case 0x10: { //PacketPlayOutSpawnEntityPainting
@@ -409,7 +428,16 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(0x28);
 				int entityId = packetdata.readVarInt();
 				serializer.writeInt(entityId);
-				serializer.writeBytes(DataWatcherFilter.filterEntityData(ProtocolVersion.MINECRAFT_1_8, serializer.getVersion(), storage.getWatchedEntity(entityId), Utils.toArray(packetdata)));
+				serializer.writeBytes(
+					DataWatcherSerializer.encodeData(
+						serializer.getVersion(),
+						WatchedDataRemapper.transform(
+							storage.getWatchedEntity(entityId),
+							DataWatcherSerializer.decodeData(ProtocolVersion.MINECRAFT_1_8, Utils.toArray(packetdata)),
+							serializer.getVersion()
+						)
+					)
+				);
 				break;
 			}
 			case 0x1D: { //PacketPlayOutEntityEffect

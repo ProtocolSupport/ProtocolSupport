@@ -19,9 +19,7 @@ public class ProtocolStorage {
 	}
 
 	public static void clearData(SocketAddress socketAddress) {
-		if (socketAddress != null) {
-			versions.remove(socketAddress);
-		}
+		versions.remove(socketAddress);
 	}
 
 }

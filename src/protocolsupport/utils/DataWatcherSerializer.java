@@ -6,16 +6,13 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 import io.netty.buffer.Unpooled;
 
 import java.io.IOException;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map.Entry;
 
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.ItemStack;
 import net.minecraft.server.v1_8_R3.Vector3f;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.utils.DataWatcherSerializer.DataWatcherObject.ValueType;
+import protocolsupport.utils.DataWatcherObject.ValueType;
 
 public class DataWatcherSerializer {
 
@@ -27,7 +24,7 @@ public class DataWatcherSerializer {
 			if (b0 == 127) {
 				break;
 			}
-			final ValueType type = ValueType.fromId((b0 & 0xE0) >> 5, serializer.getVersion());
+			final ValueType type = ValueType.fromId(version, (b0 & 0xE0) >> 5);
 			final int key = b0 & 0x1F;
 			switch (type) {
 				case BYTE: {
@@ -84,7 +81,7 @@ public class DataWatcherSerializer {
 			while (iterator.hasNext()) {
 				iterator.advance();
 				DataWatcherObject object = iterator.value();
-				final int tk = ((object.type.getId(serializer.getVersion()) << 5) | (iterator.key() & 0x1F)) & 0xFF;
+				final int tk = ((object.type.getId(version) << 5) | (iterator.key() & 0x1F)) & 0xFF;
 				serializer.writeByte(tk);
 				switch (object.type) {
 					case BYTE: {
@@ -136,125 +133,6 @@ public class DataWatcherSerializer {
 		} finally {
 			serializer.release();
 		}
-	}
-
-	public static class DataWatcherObject {
-
-		public ValueType type;
-		public Object value;
-
-		public DataWatcherObject(ValueType type, Object value) {
-			this.type = type;
-			this.value = value;
-		}
-
-		public void toByte() {
-			type = ValueType.BYTE;
-			value = ((Number) value).byteValue();
-		}
-
-		public void toShort() {
-			type = ValueType.SHORT;
-			value = ((Number) value).shortValue();
-		}
-
-		public void toInt() {
-			type = ValueType.INT;
-			value = ((Number) value).intValue();
-		}
-
-		public void toFloat() {
-			type = ValueType.FLOAT;
-			value = ((Number) value).floatValue();
-		}
-
-		@Override
-		public String toString() {
-			return
-				new StringBuilder()
-				.append("type: ").append(type).append(" ")
-				.append("value: ").append(value)
-				.toString();
-		}
-
-		public static enum ValueType {
-
-			BYTE(0),
-			SHORT(1),
-			INT(2),
-			FLOAT(3),
-			STRING(4),
-			ITEMSTACK(5),
-			VECTOR3I(6),
-			VECTOR3F(7),
-			LONG(-1, ProtocolVersion.MINECRAFT_PE, 8);
-
-			private static final HashMap<ProtocolVersionIdTuple, ValueType> byId = new HashMap<ProtocolVersionIdTuple, ValueType>();
-			static {
-				for (ValueType vtype : values()) {
-					for (Entry<ProtocolVersion, Integer> entry : vtype.ids.entrySet()) {
-						if (entry.getValue() == -1) {
-							continue;
-						}
-						byId.put(new ProtocolVersionIdTuple(entry.getKey(), entry.getValue()), vtype);
-					}
-				}
-			}
-
-			private final EnumMap<ProtocolVersion, Integer> ids = new EnumMap<>(ProtocolVersion.class);
-
-			ValueType(int defaultId, Object... protocoDefines) {
-				for (ProtocolVersion version : ProtocolVersion.values()) {
-					ids.put(version, defaultId);
-				}
-				for (int i = 0; i < protocoDefines.length; i += 2) {
-					ids.put((ProtocolVersion) protocoDefines[i], (Integer) protocoDefines[i + 1]);
-				}
-			}
-
-			public int getId(ProtocolVersion version) {
-				int id = ids.get(version);
-				if (id == -1) {
-					throw new IllegalArgumentException("This metadata type doesn't exist for protocol "+version);
-				}
-				return id;
-			}
-
-			public static ValueType fromId(int id, ProtocolVersion version) {
-				ValueType type = byId.get(new ProtocolVersionIdTuple(version, id));
-				if (type == null) {
-					throw new IllegalArgumentException("No metadata type for protocol "+version+" and id "+id+" doesn't exist");
-				}
-				return type;
-			}
-
-			private static class ProtocolVersionIdTuple {
-
-				private ProtocolVersion version;
-				private int id;
-
-				public ProtocolVersionIdTuple(ProtocolVersion version, int id) {
-					this.version = version;
-					this.id = id;
-				}
-
-				@Override
-				public boolean equals(Object other) {
-					if (!(other instanceof ProtocolVersionIdTuple)) {
-						return false;
-					}
-					ProtocolVersionIdTuple othertuple = (ProtocolVersionIdTuple) other;
-					return othertuple.id == id && othertuple.version == version;
-				}
-
-				@Override
-				public int hashCode() {
-					return (version.ordinal() << 5) + id;
-				}
-			}
-
-		}
-
 	}
 
 }

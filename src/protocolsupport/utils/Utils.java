@@ -41,7 +41,7 @@ public class Utils {
 	}
 
 	public static SocketAddress getNetworkManagerSocketAddress(Channel channel) {
-		return getNetworkManager(channel).l;
+		return getNetworkManager(channel).getSocketAddress();
 	}
 
 	public static NetworkManager getNetworkManager(Channel channel) {
