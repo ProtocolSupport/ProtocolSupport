@@ -1,6 +1,7 @@
 package protocolsupport.api.events;
 
 import java.net.InetSocketAddress;
+import java.util.UUID;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -12,8 +13,7 @@ public class PlayerLoginStartEvent extends Event {
 	private String username;
 	private boolean onlinemode;
 	private boolean useonlinemodeuuid;
-
-	private static final HandlerList list = new HandlerList();
+	private UUID uuid;
 
 	public PlayerLoginStartEvent(InetSocketAddress address, String username, boolean onlinemode, boolean useonlinemodeuuid, String hostname) {
 		this.address = address;
@@ -50,6 +50,20 @@ public class PlayerLoginStartEvent extends Event {
 	public void setUseOnlineModeUUID(boolean useonlinemodeuuid) {
 		this.useonlinemodeuuid = useonlinemodeuuid;
 	}
+
+	public boolean hasForcedUUID() {
+		return uuid != null;
+	}
+
+	public void setForcedUUID(UUID uuid) {
+		this.uuid = uuid;
+	}
+
+	public UUID getForcedUUID() {
+		return uuid;
+	}
+
+	private static final HandlerList list = new HandlerList();
 
 	@Override
 	public HandlerList getHandlers() {

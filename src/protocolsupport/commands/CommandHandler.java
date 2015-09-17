@@ -25,17 +25,15 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (!sender.hasPermission("protocolsupport.admin")) {
-			sender.sendMessage(ChatColor.RED + "No permission");
+			sender.sendMessage(ChatColor.RED + "You have no power here!");
 			return true;
 		}
 		if ((args.length == 1) && args[0].equalsIgnoreCase("list")) {
-			sender.sendMessage(ChatColor.GOLD+"[1.8]: "+ChatColor.GREEN+getPlayersStringForProtocol(ProtocolVersion.MINECRAFT_1_8));
-			sender.sendMessage(ChatColor.GOLD+"[1.7.10]: "+ChatColor.GREEN+getPlayersStringForProtocol(ProtocolVersion.MINECRAFT_1_7_10));
-			sender.sendMessage(ChatColor.GOLD+"[1.7.5]: "+ChatColor.GREEN+getPlayersStringForProtocol(ProtocolVersion.MINECRAFT_1_7_5));
-			sender.sendMessage(ChatColor.GOLD+"[1.6.4]: "+ChatColor.GREEN+getPlayersStringForProtocol(ProtocolVersion.MINECRAFT_1_6_4));
-			sender.sendMessage(ChatColor.GOLD+"[1.6.2]: "+ChatColor.GREEN+getPlayersStringForProtocol(ProtocolVersion.MINECRAFT_1_6_2));
-			sender.sendMessage(ChatColor.GOLD+"[1.5.2]: "+ChatColor.GREEN+getPlayersStringForProtocol(ProtocolVersion.MINECRAFT_1_5_2));
-			sender.sendMessage(ChatColor.GOLD+"[PE] "+ChatColor.GREEN+getPlayersStringForProtocol(ProtocolVersion.MINECRAFT_PE));
+			for (ProtocolVersion version : ProtocolVersion.values()) {
+				if (version.getName() != null) {
+					sender.sendMessage(ChatColor.GOLD+"["+version.getName()+"]: "+ChatColor.GREEN+getPlayersStringForProtocol(version));
+				}
+			}
 			return true;
 		}
 		if (args.length == 1 && args[0].equalsIgnoreCase("debug")) {
