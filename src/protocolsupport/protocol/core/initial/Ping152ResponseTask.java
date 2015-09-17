@@ -3,12 +3,12 @@ package protocolsupport.protocol.core.initial;
 import io.netty.channel.Channel;
 import protocolsupport.api.ProtocolVersion;
 
-public class Minecraft152PingResponseTask implements Runnable {
+public class Ping152ResponseTask implements Runnable {
 
 	private InitialPacketDecoder initialDecoder;
 	private Channel channel;
 
-	public Minecraft152PingResponseTask(InitialPacketDecoder initialDecoder, Channel channel) {
+	public Ping152ResponseTask(InitialPacketDecoder initialDecoder, Channel channel) {
 		this.initialDecoder = initialDecoder;
 		this.channel = channel;
 	}
@@ -18,9 +18,7 @@ public class Minecraft152PingResponseTask implements Runnable {
 		try {
 			initialDecoder.setProtocol(channel, initialDecoder.receivedData, ProtocolVersion.MINECRAFT_1_5_2);
 		} catch (Throwable t) {
-			if (channel.isOpen()) {
-				channel.close();
-			}
+			channel.close();
 		}
 	}
 
