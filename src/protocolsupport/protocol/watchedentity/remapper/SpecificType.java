@@ -21,14 +21,14 @@ public enum SpecificType {
 
 	NONE(EType.NONE, -1),
 	ENTITY(EType.NONE, -1,
-		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(0, 1)).addProtocols(ProtocolVersionsHelper.ALL), //flags, air
+		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(0, 1)).addProtocols(ProtocolVersionsHelper.ALL) //flags, air
+	),
+	LIVING(EType.NONE, -1, SpecificType.ENTITY,
 		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(2, 3)).addProtocols(ProtocolVersion.MINECRAFT_1_8), //nametag, nametagvisible
 		new RemappingEntriesForProtocols(new RemappingEntry(2, 10, new ValueRemapperStringClamp(64)), new RemappingEntry(3, 11))
 		.addProtocols(ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_6_4, ProtocolVersion.MINECRAFT_1_6_2),  //nametag, nametagvisible
 		new RemappingEntriesForProtocols(new RemappingEntry(2, 5, new ValueRemapperStringClamp(64)), new RemappingEntry(3, 6))
-		.addProtocols(ProtocolVersion.MINECRAFT_1_5_2)  //nametag, nametagvisible
-	),
-	LIVING(EType.NONE, -1, SpecificType.ENTITY,
+		.addProtocols(ProtocolVersion.MINECRAFT_1_5_2),  //nametag, nametagvisible
 		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(6))
 		.addProtocols(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_6_2, ProtocolVersion.MINECRAFT_1_6_2), //health
 		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(15)).addProtocols(ProtocolVersion.MINECRAFT_1_8), //noai
@@ -145,7 +145,9 @@ public enum SpecificType {
 	FIREBALL(EType.OBJECT, 63, SpecificType.ENTITY),
 	FIRECHARGE(EType.OBJECT, 64, SpecificType.ENTITY),
 	ENDERPEARL(EType.OBJECT, 65, SpecificType.ENTITY),
-	WITHER_SKULL(EType.OBJECT, 66, SpecificType.ENTITY),
+	WITHER_SKULL(EType.OBJECT, 66, SpecificType.FIREBALL,
+		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(10)).addProtocols(ProtocolVersionsHelper.ALL_BEFORE_19_DW_UPDATE) //is charged
+	),
 	FALLING_OBJECT(EType.OBJECT, 70, SpecificType.ENTITY),
 	ENDEREYE(EType.OBJECT, 72, SpecificType.ENTITY),
 	POTION(EType.OBJECT, 73, SpecificType.ENTITY),
