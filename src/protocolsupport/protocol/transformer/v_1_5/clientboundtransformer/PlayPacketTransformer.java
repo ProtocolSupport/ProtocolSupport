@@ -27,8 +27,6 @@ import protocolsupport.protocol.transformer.utils.ChunkTransformer;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.protocol.transformer.utils.MapTransformer;
 import protocolsupport.protocol.transformer.utils.MapTransformer.ColumnEntry;
-import protocolsupport.protocol.transformer.v_1_5.remappers.EntityIDRemapper;
-import protocolsupport.protocol.transformer.v_1_5.remappers.MapColorRemapper;
 import protocolsupport.protocol.transformer.v_1_5.utils.VillagerTradeTransformer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.RemappingTable;
@@ -44,6 +42,8 @@ public class PlayPacketTransformer implements PacketTransformer {
 
 	private static final RemappingTable blockRemapper = IdRemapper.BLOCK.getTable(ProtocolVersion.MINECRAFT_1_5_2);
 	private static final RemappingTable itemRemapper = IdRemapper.ITEM.getTable(ProtocolVersion.MINECRAFT_1_5_2);
+	private static final RemappingTable entityRemapper = IdRemapper.BLOCK.getTable(ProtocolVersion.MINECRAFT_1_5_2);
+	private static final RemappingTable mapcolorRemapper = IdRemapper.MAPCOLOR.getTable(ProtocolVersion.MINECRAFT_1_5_2);
 
 	private WatchedPlayer player;
 	private LocalStorage storage = new LocalStorage();
@@ -279,7 +279,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				}
 				serializer.writeByte(0x18);
 				serializer.writeInt(entityId);
-				serializer.writeByte(EntityIDRemapper.replaceLivingEntityId(type));
+				serializer.writeByte(entityRemapper.getRemap(type));
 				serializer.writeInt(packetdata.readInt());
 				serializer.writeInt(packetdata.readInt());
 				serializer.writeInt(packetdata.readInt());
@@ -836,7 +836,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 						serializer.writeByte(entry.getY());
 						byte[] colors = entry.getColors();
 						for (int i = 0; i < colors.length; i++) {
-							colors[i] = MapColorRemapper.replaceMapColor(colors[i]);
+							colors[i] = (byte) mapcolorRemapper.getRemap(colors[i]);
 						}
 						serializer.writeBytes(colors);
 					}

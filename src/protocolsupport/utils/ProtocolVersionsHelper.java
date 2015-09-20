@@ -20,4 +20,8 @@ public class ProtocolVersionsHelper {
 		ProtocolVersion.MINECRAFT_1_5_2, ProtocolVersion.MINECRAFT_1_6_2, ProtocolVersion.MINECRAFT_1_6_4
 	};
 
+	public static final ProtocolVersion[] BEFORE_1_6 = new ProtocolVersion[] {
+		ProtocolVersion.MINECRAFT_1_5_2
+	};
+
 }

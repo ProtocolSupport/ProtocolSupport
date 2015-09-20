@@ -31,7 +31,6 @@ import protocolsupport.protocol.transformer.utils.ChunkTransformer;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.protocol.transformer.utils.MapTransformer;
 import protocolsupport.protocol.transformer.utils.MapTransformer.ColumnEntry;
-import protocolsupport.protocol.transformer.v_1_7.remappers.EntityIDRemapper;
 import protocolsupport.protocol.transformer.v_1_7.utils.VillagerTradeTransformer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.RemappingTable;
@@ -50,6 +49,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 
 	private static final RemappingTable blockRemapper = IdRemapper.BLOCK.getTable(ProtocolVersion.MINECRAFT_1_7_10);
 	private static final RemappingTable itemRemapper = IdRemapper.ITEM.getTable(ProtocolVersion.MINECRAFT_1_7_10);
+	private static final RemappingTable entityRemapper = IdRemapper.ENTITY.getTable(ProtocolVersion.MINECRAFT_1_7_10);
 
 	private LocalStorage storage = new LocalStorage();
 
@@ -262,7 +262,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				}
 				serializer.writeVarInt(packetId);
 				serializer.writeVarInt(entityId);
-				serializer.writeByte(EntityIDRemapper.replaceLivingEntityId(type));
+				serializer.writeByte(entityRemapper.getRemap(type));
 				serializer.writeInt(packetdata.readInt());
 				serializer.writeInt(packetdata.readInt());
 				serializer.writeInt(packetdata.readInt());

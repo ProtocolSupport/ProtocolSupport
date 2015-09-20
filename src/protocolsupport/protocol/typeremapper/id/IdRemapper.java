@@ -1,6 +1,5 @@
 package protocolsupport.protocol.typeremapper.id;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.utils.ProtocolVersionsHelper;
 
 public class IdRemapper {
@@ -62,19 +61,19 @@ public class IdRemapper {
 			// dark oak stairs -> oak stairs
 			registerRemapEntry(164, 53, ProtocolVersionsHelper.BEFORE_1_7);
 			// stained clay -> clay
-			registerRemapEntry(159, 82, ProtocolVersion.MINECRAFT_1_5_2);
+			registerRemapEntry(159, 82, ProtocolVersionsHelper.BEFORE_1_6);
 			// hay bale -> stone
-			registerRemapEntry(170, 1, ProtocolVersion.MINECRAFT_1_5_2);
+			registerRemapEntry(170, 1, ProtocolVersionsHelper.BEFORE_1_6);
 			// carpet -> stone pressure plate
-			registerRemapEntry(171, 70, ProtocolVersion.MINECRAFT_1_5_2);
+			registerRemapEntry(171, 70, ProtocolVersionsHelper.BEFORE_1_6);
 			// hardened clay -> clay
-			registerRemapEntry(172, 82, ProtocolVersion.MINECRAFT_1_5_2);
+			registerRemapEntry(172, 82, ProtocolVersionsHelper.BEFORE_1_6);
 			// coal block -> stone
-			registerRemapEntry(173, 1, ProtocolVersion.MINECRAFT_1_5_2);
+			registerRemapEntry(173, 1, ProtocolVersionsHelper.BEFORE_1_6);
 			// packed ice -> snow
-			registerRemapEntry(174, 80, ProtocolVersion.MINECRAFT_1_5_2);
+			registerRemapEntry(174, 80, ProtocolVersionsHelper.BEFORE_1_6);
 			// tall plant -> yellow flower
-			registerRemapEntry(175, 38, ProtocolVersion.MINECRAFT_1_5_2);
+			registerRemapEntry(175, 38, ProtocolVersionsHelper.BEFORE_1_6);
 		}
 		@Override
 		protected RemappingTable createTable() {
@@ -109,15 +108,71 @@ public class IdRemapper {
 			registerRemapEntry(414, 1, ProtocolVersionsHelper.BEFORE_1_8);
 			registerRemapEntry(415, 1, ProtocolVersionsHelper.BEFORE_1_8);
 			registerRemapEntry(416, 1, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(417, 1, ProtocolVersion.MINECRAFT_1_5_2);
-			registerRemapEntry(418, 1, ProtocolVersion.MINECRAFT_1_5_2);
-			registerRemapEntry(419, 1, ProtocolVersion.MINECRAFT_1_5_2);
-			registerRemapEntry(420, 1, ProtocolVersion.MINECRAFT_1_5_2);
-			registerRemapEntry(421, 1, ProtocolVersion.MINECRAFT_1_5_2);
+			registerRemapEntry(417, 1, ProtocolVersionsHelper.BEFORE_1_6);
+			registerRemapEntry(418, 1, ProtocolVersionsHelper.BEFORE_1_6);
+			registerRemapEntry(419, 1, ProtocolVersionsHelper.BEFORE_1_6);
+			registerRemapEntry(420, 1, ProtocolVersionsHelper.BEFORE_1_6);
+			registerRemapEntry(421, 1, ProtocolVersionsHelper.BEFORE_1_6);
 		}
 		@Override
 		protected RemappingTable createTable() {
 			return new RemappingTable(4096);
+		}
+	};
+
+	public static final RemappingReigstry ENTITY = new RemappingReigstry() {
+		{
+			// endermite -> silverfish
+			registerRemapEntry(67, 60, ProtocolVersionsHelper.BEFORE_1_8);
+			// guardian -> sqiud
+			registerRemapEntry(68, 94, ProtocolVersionsHelper.BEFORE_1_8);
+			// rabbit -> chicken
+			registerRemapEntry(101, 93, ProtocolVersionsHelper.BEFORE_1_8);
+			// horse -> cow
+			registerRemapEntry(100, 92, ProtocolVersionsHelper.BEFORE_1_6);
+		}
+		@Override
+		protected RemappingTable createTable() {
+			return new RemappingTable(256);
+		}
+	};
+
+	public static final RemappingReigstry MAPCOLOR = new RemappingReigstry() {
+		{
+			//see http://minecraft.gamepedia.com/Map_item_format (i don't event know a names for half of those colors)
+			registerRemapEntry(14, 8, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(15, 10, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(16, 5, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(17, 5, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(18, 2, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(19, 1, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(20, 4, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(21, 11, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(22, 11, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(23, 5, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(24, 5, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(25, 5, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(26, 10, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(27, 7, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(28, 4, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(29, 11, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(30, 2, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(31, 5, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(32, 5, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(33, 7, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(34, 10, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(35, 4, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(36, 10, ProtocolVersionsHelper.BEFORE_1_7);
+		}
+		@Override
+		protected RemappingTable createTable() {
+			return new RemappingTable(64) {
+				@Override
+				public int getRemap(int id) {
+					int realColor = (id & 0xFF) >> 2;
+					return (byte) ((table[realColor] << 2) + (id & 3));
+				}
+			};
 		}
 	};
 
