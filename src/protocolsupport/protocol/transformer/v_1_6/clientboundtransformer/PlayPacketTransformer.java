@@ -23,24 +23,27 @@ import org.bukkit.event.inventory.InventoryType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage;
+import protocolsupport.protocol.transformer.utils.ChunkTransformer;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.protocol.transformer.utils.MapTransformer;
 import protocolsupport.protocol.transformer.utils.MapTransformer.ColumnEntry;
-import protocolsupport.protocol.transformer.v_1_6.remappers.BlockIDRemapper;
 import protocolsupport.protocol.transformer.v_1_6.remappers.EntityIDRemapper;
-import protocolsupport.protocol.transformer.v_1_6.remappers.ItemIDRemapper;
 import protocolsupport.protocol.transformer.v_1_6.remappers.MapColorRemapper;
 import protocolsupport.protocol.transformer.v_1_6.utils.ChatEncoder;
-import protocolsupport.protocol.transformer.v_1_6.utils.ChunkUtils;
 import protocolsupport.protocol.transformer.v_1_6.utils.VillagerTradeTransformer;
-import protocolsupport.protocol.watchedentity.WatchedDataRemapper;
-import protocolsupport.protocol.watchedentity.types.WatchedLiving;
-import protocolsupport.protocol.watchedentity.types.WatchedObject;
+import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.id.RemappingTable;
+import protocolsupport.protocol.typeremapper.watchedentity.WatchedDataRemapper;
+import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedLiving;
+import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedObject;
 import protocolsupport.utils.Allocator;
 import protocolsupport.utils.DataWatcherSerializer;
 import protocolsupport.utils.Utils;
 
 public class PlayPacketTransformer implements PacketTransformer {
+
+	private static final RemappingTable blockRemapper = IdRemapper.BLOCK.getTable(ProtocolVersion.MINECRAFT_1_6_4);
+	private static final RemappingTable itemRemapper = IdRemapper.ITEM.getTable(ProtocolVersion.MINECRAFT_1_6_4);
 
 	private LocalStorage storage = new LocalStorage();
 
@@ -468,7 +471,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				int bitmap = packetdata.readShort() & 0xFFFF;
 				serializer.writeShort(bitmap);
 				serializer.writeShort(0);
-				byte[] data = ChunkUtils.to16ChunkData(packetdata.readArray(), bitmap);
+				byte[] data = ChunkTransformer.toPRE18Data(packetdata.readArray(), bitmap, ProtocolVersion.MINECRAFT_1_6_4);
 				final Deflater deflater = new Deflater(Deflater.BEST_SPEED);
 				deflater.setInput(data, 0, data.length);
 				deflater.finish();
@@ -490,7 +493,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				for (int i = 0; i < count; i++) {
 					dataoutputstream.writeShort(packetdata.readUnsignedShort());
 					int id = packetdata.readVarInt();
-					dataoutputstream.writeShort((BlockIDRemapper.replaceBlockId(id >> 4) << 4) | (id & 0xF));
+					dataoutputstream.writeShort((blockRemapper.getRemap(id >> 4) << 4) | (id & 0xF));
 				}
 				serializer.writeInt(dataoutputstream.size());
 				serializer.writeBytes(bytearrayoutputstream.toByteArray());
@@ -503,7 +506,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(blockPos.getY());
 				serializer.writeInt(blockPos.getZ());
 				int stateId = packetdata.readVarInt();
-				serializer.writeShort(BlockIDRemapper.replaceBlockId(stateId >> 4));
+				serializer.writeShort(blockRemapper.getRemap(stateId >> 4));
 				serializer.writeByte(stateId & 0xF);
 				break;
 			}
@@ -545,9 +548,9 @@ public class PlayPacketTransformer implements PacketTransformer {
 				byte[] ldata;
 				int pos = 0;
 				for (int i = 0; i < count; i++) {
-					ByteBuf chunkdata = packetdata.readBytes(ChunkUtils.calcDataSize(Integer.bitCount(bitmap[i]), skylight, true));
+					ByteBuf chunkdata = packetdata.readBytes(ChunkTransformer.calcDataSize(Integer.bitCount(bitmap[i]), skylight, true));
 					try {
-						data[i] = ChunkUtils.to16ChunkData(Utils.toArray(chunkdata), bitmap[i]);
+						data[i] = ChunkTransformer.toPRE18Data(Utils.toArray(chunkdata), bitmap[i], ProtocolVersion.MINECRAFT_1_6_4);
 						pos += data[i].length;
 					} finally {
 						chunkdata.release();
@@ -597,7 +600,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeInt(blockPos.getZ());
 				int data = packetdata.readInt();
 				if (type == 2001) {
-					data = BlockIDRemapper.replaceBlockId(data & 0xFFF);
+					data = blockRemapper.getRemap(data & 0xFFF);
 				}
 				serializer.writeInt(data);
 				serializer.writeBoolean(packetdata.readBoolean());
@@ -630,13 +633,13 @@ public class PlayPacketTransformer implements PacketTransformer {
 				switch (particle) {
 					case ITEM_CRACK: {
 						int itemid = packetdata.readVarInt();
-						particlename += ItemIDRemapper.replaceItemId(itemid);
+						particlename += itemRemapper.getRemap(itemid);
 						break;
 					}
 					case BLOCK_CRACK:
 					case BLOCK_DUST: {
 						int blockstateId = packetdata.readVarInt();
-						particlename = "tilecrack_" + BlockIDRemapper.replaceBlockId((blockstateId & 4095)) + "_" + ((blockstateId >> 12) & 0xF);
+						particlename = "tilecrack_" + blockRemapper.getRemap((blockstateId & 4095)) + "_" + ((blockstateId >> 12) & 0xF);
 						break;
 					}
 					default: {

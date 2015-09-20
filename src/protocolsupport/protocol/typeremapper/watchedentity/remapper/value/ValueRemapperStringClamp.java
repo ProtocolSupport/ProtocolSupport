@@ -1,4 +1,4 @@
-package protocolsupport.protocol.watchedentity.remapper.value;
+package protocolsupport.protocol.typeremapper.watchedentity.remapper.value;
 
 import protocolsupport.utils.DataWatcherObject;
 import protocolsupport.utils.Utils;

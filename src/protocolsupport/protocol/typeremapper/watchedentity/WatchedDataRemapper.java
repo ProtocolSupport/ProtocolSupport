@@ -1,9 +1,9 @@
-package protocolsupport.protocol.watchedentity;
+package protocolsupport.protocol.typeremapper.watchedentity;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.watchedentity.remapper.RemappingEntry;
-import protocolsupport.protocol.watchedentity.remapper.SpecificType;
-import protocolsupport.protocol.watchedentity.types.WatchedEntity;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.RemappingEntry;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificType;
+import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.utils.DataWatcherObject;
 import protocolsupport.utils.DataWatcherObject.ValueType;
 import gnu.trove.map.TIntObjectMap;

@@ -1,6 +1,6 @@
-package protocolsupport.protocol.watchedentity.types;
+package protocolsupport.protocol.typeremapper.watchedentity.types;
 
-import protocolsupport.protocol.watchedentity.remapper.SpecificType;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificType;
 
 public abstract class WatchedEntity {
 
