@@ -42,7 +42,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 
 	private static final RemappingTable blockRemapper = IdRemapper.BLOCK.getTable(ProtocolVersion.MINECRAFT_1_5_2);
 	private static final RemappingTable itemRemapper = IdRemapper.ITEM.getTable(ProtocolVersion.MINECRAFT_1_5_2);
-	private static final RemappingTable entityRemapper = IdRemapper.BLOCK.getTable(ProtocolVersion.MINECRAFT_1_5_2);
+	private static final RemappingTable entityRemapper = IdRemapper.ENTITY.getTable(ProtocolVersion.MINECRAFT_1_5_2);
 	private static final RemappingTable mapcolorRemapper = IdRemapper.MAPCOLOR.getTable(ProtocolVersion.MINECRAFT_1_5_2);
 
 	private WatchedPlayer player;
