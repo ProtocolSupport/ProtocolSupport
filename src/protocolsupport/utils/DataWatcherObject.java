@@ -51,7 +51,7 @@ public class DataWatcherObject {
 		STRING(new TypeToProtocolsMappingEntry(4, ProtocolVersionsHelper.ALL)),
 		ITEMSTACK(new TypeToProtocolsMappingEntry(5, ProtocolVersionsHelper.ALL)),
 		VECTOR3I(new TypeToProtocolsMappingEntry(6, ProtocolVersionsHelper.BEFORE_1_9)),
-		VECTOR3F(new TypeToProtocolsMappingEntry(7, ProtocolVersionsHelper.ALL));
+		VECTOR3F(new TypeToProtocolsMappingEntry(7, ProtocolVersion.MINECRAFT_1_8));
 
 		private static final EnumMap<ProtocolVersion, ValueType[]> TYPE_BY_PROTOCOL_AND_ID = new EnumMap<ProtocolVersion, ValueType[]>(ProtocolVersion.class);
 

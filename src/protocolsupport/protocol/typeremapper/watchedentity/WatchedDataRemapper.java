@@ -11,9 +11,14 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 
 public class WatchedDataRemapper {
 
+	private static final TIntObjectMap<DataWatcherObject> FAKE_EMPTY_MAP = new TIntObjectHashMap<DataWatcherObject>();
+	static {
+		FAKE_EMPTY_MAP.put(31, new DataWatcherObject(ValueType.BYTE, (byte) 0));
+	}
+
 	public static TIntObjectMap<DataWatcherObject> transform(WatchedEntity entity, TIntObjectMap<DataWatcherObject> originaldata, ProtocolVersion to) {
 		if (entity == null) {
-			return originaldata;
+			return FAKE_EMPTY_MAP;
 		}
 		TIntObjectHashMap<DataWatcherObject> transformed = new TIntObjectHashMap<DataWatcherObject>();
 		SpecificType stype = entity.getType();
@@ -24,7 +29,7 @@ public class WatchedDataRemapper {
 			}
 		}
 		if (transformed.isEmpty()) {
-			transformed.put(31, new DataWatcherObject(ValueType.BYTE, (byte) 0));
+			return FAKE_EMPTY_MAP;
 		}
 		return transformed;
 	}

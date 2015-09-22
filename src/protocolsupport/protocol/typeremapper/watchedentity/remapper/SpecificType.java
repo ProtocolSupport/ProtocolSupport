@@ -51,7 +51,7 @@ public enum SpecificType {
 		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(16), new RemappingEntryCopyOriginal(17)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9) //tame flags, owner
 	),
 	ARMOR_STAND(EType.NONE, -1, SpecificType.LIVING,
-		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(10, 11, 12, 13, 14, 15, 16)).addProtocols(ProtocolVersionsHelper.ALL) //parts position
+		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(10, 11, 12, 13, 14, 15, 16)).addProtocols(ProtocolVersion.MINECRAFT_1_8) //parts position
 	),
 	COW(EType.MOB, EntityType.COW, SpecificType.AGEABLE),
 	MUSHROOM_COW(EType.MOB, EntityType.MUSHROOM_COW, SpecificType.COW),
