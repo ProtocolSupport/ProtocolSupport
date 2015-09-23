@@ -170,7 +170,7 @@ public class IdRemapper {
 				@Override
 				public int getRemap(int id) {
 					int realColor = (id & 0xFF) >> 2;
-					return (byte) ((table[realColor] << 2) + (id & 3));
+					return ((table[realColor] << 2) + (id & 0b11));
 				}
 			};
 		}

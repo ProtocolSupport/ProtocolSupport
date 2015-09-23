@@ -10,7 +10,7 @@ public abstract class RemappingReigstry {
 
 	public RemappingReigstry() {
 		for (ProtocolVersion version : ProtocolVersion.values()) {
-			remappings.put(version, new RemappingTable(4096));
+			remappings.put(version, createTable());
 		}
 	}
 
