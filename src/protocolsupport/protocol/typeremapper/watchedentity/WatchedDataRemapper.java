@@ -1,9 +1,9 @@
-package protocolsupport.protocol.watchedentity;
+package protocolsupport.protocol.typeremapper.watchedentity;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.watchedentity.remapper.RemappingEntry;
-import protocolsupport.protocol.watchedentity.remapper.SpecificType;
-import protocolsupport.protocol.watchedentity.types.WatchedEntity;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.RemappingEntry;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificType;
+import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.utils.DataWatcherObject;
 import protocolsupport.utils.DataWatcherObject.ValueType;
 import gnu.trove.map.TIntObjectMap;
@@ -11,9 +11,14 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 
 public class WatchedDataRemapper {
 
+	private static final TIntObjectMap<DataWatcherObject> FAKE_EMPTY_MAP = new TIntObjectHashMap<DataWatcherObject>();
+	static {
+		FAKE_EMPTY_MAP.put(31, new DataWatcherObject(ValueType.BYTE, (byte) 0));
+	}
+
 	public static TIntObjectMap<DataWatcherObject> transform(WatchedEntity entity, TIntObjectMap<DataWatcherObject> originaldata, ProtocolVersion to) {
 		if (entity == null) {
-			return originaldata;
+			return FAKE_EMPTY_MAP;
 		}
 		TIntObjectHashMap<DataWatcherObject> transformed = new TIntObjectHashMap<DataWatcherObject>();
 		SpecificType stype = entity.getType();
@@ -24,7 +29,7 @@ public class WatchedDataRemapper {
 			}
 		}
 		if (transformed.isEmpty()) {
-			transformed.put(31, new DataWatcherObject(ValueType.BYTE, (byte) 0));
+			return FAKE_EMPTY_MAP;
 		}
 		return transformed;
 	}

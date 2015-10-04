@@ -1,6 +1,6 @@
-package protocolsupport.protocol.watchedentity.remapper;
+package protocolsupport.protocol.typeremapper.watchedentity.remapper;
 
-import protocolsupport.protocol.watchedentity.remapper.value.ValueRemapper;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapper;
 
 public class RemappingEntry {
 

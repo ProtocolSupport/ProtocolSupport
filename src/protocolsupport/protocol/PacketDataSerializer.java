@@ -38,6 +38,7 @@ import org.spigotmc.SneakyThrow;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
+import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.utils.Allocator;
 import protocolsupport.utils.Utils;
 
@@ -67,26 +68,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 			writeShort(getVersion() != ProtocolVersion.MINECRAFT_PE ? -1 : 0);
 		} else {
 			int itemId = Item.getId(itemstack.getItem());
-			switch (getVersion()) {
-				case MINECRAFT_1_6_4:
-				case MINECRAFT_1_6_2: {
-					writeShort(protocolsupport.protocol.transformer.v_1_6.remappers.ItemIDRemapper.replaceItemId(itemId));
-					break;
-				}
-				case MINECRAFT_1_7_10:
-				case MINECRAFT_1_7_5: {
-					writeShort(protocolsupport.protocol.transformer.v_1_7.remappers.ItemIDRemapper.replaceItemId(itemId));
-					break;
-				}
-				case MINECRAFT_1_5_2: {
-					writeShort(protocolsupport.protocol.transformer.v_1_5.remappers.ItemIDRemapper.replaceItemId(itemId));
-					break;
-				}
-				default: {
-					writeShort(itemId);
-					break;
-				}
-			}
+			writeShort(IdRemapper.ITEM.getTable(getVersion()).getRemap(itemId));
 			writeByte(itemstack.count);
 			writeShort(itemstack.getData());
 			NBTTagCompound nbttagcompound = null;

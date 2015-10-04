@@ -49,7 +49,7 @@ public class StartGamePacket implements ClientboundPEPacket {
 		buf.writeInt(spawnY);
 		buf.writeInt(spawnZ);
 		buf.writeFloat(x);
-		buf.writeFloat(y);
+		buf.writeFloat(y + 1.63F);
 		buf.writeFloat(z);
 		buf.writeBoolean(false);
 		return this;
