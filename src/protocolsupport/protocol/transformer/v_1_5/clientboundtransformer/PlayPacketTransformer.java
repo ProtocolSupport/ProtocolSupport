@@ -124,7 +124,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x08: { // PacketPlayOutPosition
 				serializer.writeByte(0x0D);
-				Player player = Utils.getPlayer(channel);
+				Player player = Utils.getBukkitPlayer(channel);
 				double x = packetdata.readDouble();
 				double y = packetdata.readDouble() + 1.6200000047683716D;
 				double z = packetdata.readDouble();
@@ -702,7 +702,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				byte id = LegacyUtils.getInventoryId(packetdata.readString(32));
 				//fiter out horse inventory
 				if (id == 11) {
-					Utils.getPlayer(channel).closeInventory();
+					Utils.getBukkitPlayer(channel).closeInventory();
 					break;
 				}
 				serializer.writeByte(0x64);
@@ -721,7 +721,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x2F: { //PacketPlayOutSetSlot
 				byte windowId = packetdata.readByte();
 				int slot = packetdata.readShort();
-				if (Utils.getPlayer(channel).getOpenInventory().getType() == InventoryType.ENCHANTING) {
+				if (Utils.getBukkitPlayer(channel).getOpenInventory().getType() == InventoryType.ENCHANTING) {
 					if (slot == 1) {
 						break;
 					}
@@ -737,7 +737,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x30: { //PacketPlayOutWindowItems
 				serializer.writeByte(0x68);
-				boolean isEnchanting = Utils.getPlayer(channel).getOpenInventory().getType() == InventoryType.ENCHANTING;
+				boolean isEnchanting = Utils.getBukkitPlayer(channel).getOpenInventory().getType() == InventoryType.ENCHANTING;
 				serializer.writeByte(packetdata.readByte());
 				int count = packetdata.readShort();
 				serializer.writeShort(isEnchanting ? count - 1 : count);
@@ -754,7 +754,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(0x69);
 				serializer.writeByte(packetdata.readByte());
 				int type = packetdata.readShort();
-				if (Utils.getPlayer(channel).getOpenInventory().getType() == InventoryType.FURNACE) {
+				if (Utils.getBukkitPlayer(channel).getOpenInventory().getType() == InventoryType.FURNACE) {
 					switch (type) {
 						case 0: {
 							type = 1;

@@ -25,14 +25,15 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ChunkPa
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PlayerListPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PongPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetBlocksPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetTimePacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetBlocksPacket.UpdateBlockRecord;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetSpawnPosition;
-import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetTimePacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SpawnPlayerPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.StartGamePacket;
 import protocolsupport.protocol.transformer.mcpe.remapper.BlockIDRemapper;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.utils.Allocator;
+import protocolsupport.utils.Utils;
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.Chunk;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
@@ -40,9 +41,7 @@ import net.minecraft.server.v1_8_R3.EnumProtocol;
 import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R3.Item;
 import net.minecraft.server.v1_8_R3.ItemStack;
-import net.minecraft.server.v1_8_R3.NetworkManager;
 import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PlayerConnection;
 import net.minecraft.server.v1_8_R3.World;
 
 public class ClientboundPacketHandler {
@@ -77,7 +76,7 @@ public class ClientboundPacketHandler {
 				}
 				case 0x01: { //PacketPlayOutLogin
 					//use this packet to sent needed login packets
-					Player bukkitplayer = getPlayer(networkManager).getBukkitEntity();
+					Player bukkitplayer = Utils.getPlayer(networkManager).getBukkitEntity();
 					return Arrays.asList(
 						new ClientboundPEPacket[] {
 							new StartGamePacket(
@@ -88,18 +87,21 @@ public class ClientboundPacketHandler {
 								bukkitplayer.getLocation()
 							),
 							new SetSpawnPosition(bukkitplayer.getLocation()),
-							new SetTimePacket()
 						}
 					);
 				}
 				case 0x02: { //PacketPlayOutChat
 					return Collections.singletonList(new ChatPacket(LegacyUtils.fromComponent(packetdata.d())));
 				}
+				case 0x03: { //PacketPlayOutTime
+					packetdata.readLong();
+					return Collections.singletonList(new SetTimePacket((int) packetdata.readLong()));
+				}
 				case 0x06: { //PacketPlayOutUpdateHealth
 					return Collections.singletonList(new SetHealthPacket((int) packetdata.readFloat()));
 				}
 				case 0x08: { //PacketlayOutPosition
-					Player player = getPlayer(networkManager).getBukkitEntity();
+					Player player = Utils.getPlayer(networkManager).getBukkitEntity();
 					double x = packetdata.readDouble();
 					double y = packetdata.readDouble();
 					double z = packetdata.readDouble();
@@ -135,8 +137,9 @@ public class ClientboundPacketHandler {
 					int z = packetdata.readInt();
 					boolean cont = packetdata.readBoolean();
 					int mask = packetdata.readShort();
-					Chunk chunk = getPlayer(networkManager).getWorld().getChunkIfLoaded(x, z);
+					Chunk chunk = Utils.getPlayer(networkManager).getWorld().getChunkIfLoaded(x, z);
 					if (chunk != null && !(cont && mask == 0)) {
+						loadedChunkCount++;
 						return Collections.singletonList(new ChunkPacket(chunk));
 					} else {
 						return Collections.emptyList();
@@ -145,7 +148,7 @@ public class ClientboundPacketHandler {
 				case 0x22: { //PacketPlayOutMultiBlockChange
 					int chunkX = packetdata.readInt();
 					int chunkZ = packetdata.readInt();
-					int count = packetdata.e();
+					int count = packetdata.readVarInt();
 					UpdateBlockRecord[] records = new UpdateBlockRecord[count];
 					for (int i = 0; i < count; i++) {
 						int xz = packetdata.readUnsignedByte();
@@ -173,7 +176,7 @@ public class ClientboundPacketHandler {
 				}
 				case 0x26: { //PacketPlayOutMapChunkBulk
 					packetdata.readBoolean();
-					World world = getPlayer(networkManager).getWorld();
+					World world = Utils.getPlayer(networkManager).getWorld();
 					ArrayList<ChunkPacket> packets = new ArrayList<ChunkPacket>();
 					int count = packetdata.readVarInt();
 					for (int i = 0; i < count; i++) {
@@ -182,10 +185,10 @@ public class ClientboundPacketHandler {
 						packetdata.readShort();
 						Chunk chunk = world.getChunkIfLoaded(x, z);
 						if (chunk != null) {
+							loadedChunkCount++;
 							packets.add(new ChunkPacket(chunk));
 						}
 					}
-					loadedChunkCount += packets.size();
 					return packets;
 				}
 				case 0x0C: { //PacketPlayOutNamedEntitySpawn
@@ -201,11 +204,13 @@ public class ClientboundPacketHandler {
 					if (username == null) {
 						username = "Unknown";
 					}
-					return Collections.singletonList(new SpawnPlayerPacket(
-						uuid, username, entityId,
-						locX, locY, locZ, yaw, pitch,
-						itemId != 0 ? new ItemStack(Item.getById(itemId)) : null
-					));
+					return Collections.singletonList(
+						new SpawnPlayerPacket(
+							uuid, username, entityId,
+							locX, locY, locZ, yaw, pitch,
+							itemId != 0 ? new ItemStack(Item.getById(itemId)) : null
+						)
+					);
 				}
 				case 0x38: { // PacketPlayOutPlayerInfo
 					int action = packetdata.readVarInt();
@@ -285,10 +290,6 @@ public class ClientboundPacketHandler {
 			packetdata.release();
 		}
 		return Collections.emptyList();
-	}
-
-	private EntityPlayer getPlayer(NetworkManager networkManager) {
-		return ((PlayerConnection) networkManager.getPacketListener()).player;
 	}
 
 }

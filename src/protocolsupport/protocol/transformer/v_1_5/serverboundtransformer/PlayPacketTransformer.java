@@ -45,7 +45,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				//if player interacts with the entity he is riding than he wants to unmount it
 				if (!isLeftClick) {
 					//reading is async so this is potentially dangerous
-					org.bukkit.entity.Entity vehicle = Utils.getPlayer(channel).getVehicle();
+					org.bukkit.entity.Entity vehicle = Utils.getBukkitPlayer(channel).getVehicle();
 					if ((vehicle != null) && (vehicle.getEntityId() == entityId)) {
 						packet = getPacketById(0x0C);
 						packetdata.writeFloat(0);
@@ -149,7 +149,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x66: { //PacketPlayInWindowClick
 				packet = getPacketById(0x0E);
-				if (Utils.getPlayer(channel).getOpenInventory().getType() == InventoryType.ENCHANTING) {
+				if (Utils.getBukkitPlayer(channel).getOpenInventory().getType() == InventoryType.ENCHANTING) {
 					packetdata.writeByte(serializer.readByte());
 					int slot = serializer.readShort();
 					if (slot > 0) {

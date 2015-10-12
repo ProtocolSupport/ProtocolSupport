@@ -4,23 +4,25 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 
-public class SetTimePacket implements ClientboundPEPacket {
+public class AdventureSettingsPacket implements ClientboundPEPacket {
 
-	protected int time;
+	protected int flags;
 
-	public SetTimePacket(int time) {
-		this.time = time;
+	public AdventureSettingsPacket(boolean isCreative) {
+		flags |= 0x20;
+		if (isCreative) {
+			flags |= 0x80;
+		}
 	}
 
 	@Override
 	public int getId() {
-		return PEPacketIDs.SET_TIME_PACKET;
+		return PEPacketIDs.ADVENTURE_SETTINGS_PACKET;
 	}
 
 	@Override
 	public ClientboundPEPacket encode(ByteBuf buf) throws Exception {
-		buf.writeInt(time);
-		buf.writeBoolean(true);
+		buf.writeInt(flags);
 		return this;
 	}
 

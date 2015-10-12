@@ -116,7 +116,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x08: { // PacketPlayOutPosition
 				packet.b(packetdata);
 				serializer.writeVarInt(packetId);
-				Player player = Utils.getPlayer(channel);
+				Player player = Utils.getBukkitPlayer(channel);
 				double x = packetdata.readDouble();
 				double y = packetdata.readDouble() + 1.63;
 				double z = packetdata.readDouble();
@@ -658,7 +658,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				break;
 			}
 			case 0x2F: { //PacketPlayOutSetSlot
-				if (Utils.getPlayer(channel).getOpenInventory().getType() == InventoryType.ENCHANTING) {
+				if (Utils.getBukkitPlayer(channel).getOpenInventory().getType() == InventoryType.ENCHANTING) {
 					packet.b(packetdata);
 					byte windowId = packetdata.readByte();
 					int slot = packetdata.readShort();
@@ -681,7 +681,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x30: { //PacketPlayOutWindowItems
 				serializer.writeVarInt(packetId);
-				if (Utils.getPlayer(channel).getOpenInventory().getType() == InventoryType.ENCHANTING) {
+				if (Utils.getBukkitPlayer(channel).getOpenInventory().getType() == InventoryType.ENCHANTING) {
 					packet.b(packetdata);
 					serializer.writeByte(packetdata.readByte());
 					int count = packetdata.readShort();
@@ -701,7 +701,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x31: { //PacketPlayOutWindowData
 				serializer.writeVarInt(packetId);
-				if (Utils.getPlayer(channel).getOpenInventory().getType() == InventoryType.FURNACE) {
+				if (Utils.getBukkitPlayer(channel).getOpenInventory().getType() == InventoryType.FURNACE) {
 					packet.b(packetdata);
 					serializer.writeByte(packetdata.readByte());
 					int type = packetdata.readShort();

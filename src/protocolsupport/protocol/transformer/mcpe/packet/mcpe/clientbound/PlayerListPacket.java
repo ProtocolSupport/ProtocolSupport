@@ -65,9 +65,9 @@ public class PlayerListPacket implements ClientboundPEPacket {
 	}
 
 	protected static class PlayerListEntry {
-		private UUID uuid;
-		private String name;
-		private int entityId;
+		protected UUID uuid;
+		protected String name;
+		protected int entityId;
 		public PlayerListEntry(UUID uuid, String name, int entityId) {
 			this.uuid = uuid;
 			this.name = name;

@@ -8,6 +8,7 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.io.IOUtils;
+import org.bukkit.GameMode;
 import org.spigotmc.SneakyThrow;
 
 import com.google.common.base.Function;
@@ -19,6 +20,7 @@ import protocolsupport.protocol.transformer.mcpe.handler.PELoginListener;
 import protocolsupport.protocol.transformer.mcpe.handler.ServerboundPacketHandler;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.BatchPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AdventureSettingsPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.KickPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.LoginStatusPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.raknet.ACK;
@@ -31,6 +33,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.raknet.RakNetPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.raknet.ServerInfoPacket;
 import protocolsupport.protocol.transformer.mcpe.pipeline.UDPRouter;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
+import protocolsupport.utils.Utils;
 import net.minecraft.server.v1_8_R3.ChatComponentText;
 import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
@@ -74,16 +77,17 @@ public class UDPNetworkManager extends NetworkManager {
 			close(new ChatComponentText("Timed out"));
 			return;
 		}
-		if (clientboundTransforner.canSpawnPlayer()) {
-			clientboundTransforner.setSpawned();
-			try {
+		try {
+			if (clientboundTransforner.canSpawnPlayer()) {
+				clientboundTransforner.setSpawned();
+				sendPEPacket(new AdventureSettingsPacket(Utils.getPlayer(this).getBukkitEntity().getGameMode() == GameMode.CREATIVE));
 				sendPEPacket(new LoginStatusPacket(LoginStatusPacket.Status.PLAYER_SPAWN));
-			} catch (Exception e) {
-				if (MinecraftServer.getServer().isDebugging()) {
-					e.printStackTrace();
-				}
-				close(new ChatComponentText(e.getMessage()));
 			}
+		} catch (Exception e) {
+			if (MinecraftServer.getServer().isDebugging()) {
+				e.printStackTrace();
+			}
+			close(new ChatComponentText(e.getMessage()));
 		}
 	}
 

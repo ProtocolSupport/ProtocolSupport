@@ -86,7 +86,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x0E: { //PacketPlayInWindowClick
 				packetdata.writeByte(serializer.readByte());
 				int slot = serializer.readShort();
-				if (Utils.getPlayer(channel).getOpenInventory().getType() == InventoryType.ENCHANTING) {
+				if (Utils.getBukkitPlayer(channel).getOpenInventory().getType() == InventoryType.ENCHANTING) {
 					if (slot > 0) {
 						slot++;
 					}

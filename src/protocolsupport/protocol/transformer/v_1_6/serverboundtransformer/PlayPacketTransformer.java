@@ -124,7 +124,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x66: { //PacketPlayInWindowClick
 				packet = getPacketById(0x0E);
-				if (Utils.getPlayer(channel).getOpenInventory().getType() == InventoryType.ENCHANTING) {
+				if (Utils.getBukkitPlayer(channel).getOpenInventory().getType() == InventoryType.ENCHANTING) {
 					packetdata.writeByte(serializer.readByte());
 					int slot = serializer.readShort();
 					if (slot > 0) {

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.NetworkManager;
 import net.minecraft.server.v1_8_R3.PlayerConnection;
 
@@ -36,8 +37,12 @@ public class Utils {
 		setAccessible(field).set(null, newValue);
 	}
 
-	public static Player getPlayer(Channel channel) {
-		return ((PlayerConnection) getNetworkManager(channel).getPacketListener()).player.getBukkitEntity();
+	public static Player getBukkitPlayer(Channel channel) {
+		return getPlayer(getNetworkManager(channel)).getBukkitEntity();
+	}
+
+	public static EntityPlayer getPlayer(NetworkManager networkManager) {
+		return ((PlayerConnection) networkManager.getPacketListener()).player;
 	}
 
 	public static SocketAddress getNetworkManagerSocketAddress(Channel channel) {
