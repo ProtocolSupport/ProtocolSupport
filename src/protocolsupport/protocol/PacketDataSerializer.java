@@ -142,6 +142,20 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 				}
 				nbttagcompound.set("ench", newList);
 			}
+			if ((getVersion() != ProtocolVersion.MINECRAFT_1_8 || getVersion().startsWith("MINECRAFT_1_7")) && nbttagcompound.hasKeyOfType("ench", 9)) {
+				NBTTagList enchList = nbttagcompound.getList("ench", 10);
+				NBTTagList newList = new NBTTagList();
+				for (int i = 0; i < enchList.size(); i++) {
+					NBTTagCompound enchData = enchList.get(i);
+					if ((enchData.getInt("id") & 0xFFFF) != Enchantment.LUCK.id) {
+						newList.add(enchData);
+					}
+					if ((enchData.getInt("id") & 0xFFFF) != Enchantment.LURE.id) {
+						newList.add(enchData);
+					}
+				}
+				nbttagcompound.set("ench", newList);
+			}
 		}
 		ItemStackWriteEvent event = new InternalItemStackWriteEvent(original, itemstack);
 		Bukkit.getPluginManager().callEvent(event);
