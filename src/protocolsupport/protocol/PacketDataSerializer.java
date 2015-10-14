@@ -18,20 +18,23 @@ import java.util.zip.GZIPOutputStream;
 
 import net.minecraft.server.v1_8_R3.GameProfileSerializer;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_8_R3.Enchantment;
 import net.minecraft.server.v1_8_R3.Item;
 import net.minecraft.server.v1_8_R3.ItemStack;
+import net.minecraft.server.v1_8_R3.Items;
 import net.minecraft.server.v1_8_R3.NBTCompressedStreamTools;
 import net.minecraft.server.v1_8_R3.NBTReadLimiter;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.minecraft.server.v1_8_R3.NBTTagList;
 import net.minecraft.server.v1_8_R3.NBTTagString;
 
-import org.bukkit.Material;
+import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.spigotmc.LimitStream;
 import org.spigotmc.SneakyThrow;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.events.ItemStackWriteEvent;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.utils.Allocator;
@@ -56,10 +59,9 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 		this.version = version;
 	}
 
-
-	@SuppressWarnings("deprecation")
 	@Override
 	public void a(ItemStack itemstack) {
+		itemstack = transformItemStack(itemstack);
 		if ((itemstack == null) || (itemstack.getItem() == null)) {
 			writeShort(-1);
 		} else {
@@ -67,47 +69,12 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 			writeShort(IdRemapper.ITEM.getTable(getVersion()).getRemap(itemId));
 			writeByte(itemstack.count);
 			writeShort(itemstack.getData());
-			NBTTagCompound nbttagcompound = null;
-			if (itemstack.getItem().usesDurability() || itemstack.getItem().p()) {
-				itemstack = itemstack.cloneItemStack();
-				CraftItemStack.setItemMeta(itemstack, CraftItemStack.getItemMeta(itemstack));
-				nbttagcompound = itemstack.getTag();
-			}
-			if (getVersion() != ProtocolVersion.MINECRAFT_1_8) {
-				if ((nbttagcompound != null) && (itemId == Material.WRITTEN_BOOK.getId())) {
-					if (nbttagcompound.hasKeyOfType("pages", 9)) {
-						nbttagcompound = (NBTTagCompound) nbttagcompound.clone();
-						NBTTagList pages = nbttagcompound.getList("pages", 8);
-						NBTTagList newpages = new NBTTagList();
-						for (int i = 0; i < pages.size(); i++) {
-							newpages.add(new NBTTagString(LegacyUtils.fromComponent(ChatSerializer.a(pages.getString(i)))));
-						}
-						nbttagcompound.set("pages", newpages);
-					}
-				}
-			}
-			a(nbttagcompound);
+			a(itemstack.getTag());
 		}
 	}
 
 	@Override
 	public void a(NBTTagCompound nbttagcompound) {
-		if (nbttagcompound != null) {
-			switch (getVersion()) {
-				case MINECRAFT_1_7_5:
-				case MINECRAFT_1_6_4:
-				case MINECRAFT_1_6_2:
-				case MINECRAFT_1_5_2: {
-					nbttagcompound = (NBTTagCompound) nbttagcompound.clone();
-					transformSkull(nbttagcompound, "SkullOwner", "SkullOwner");
-					transformSkull(nbttagcompound, "Owner", "ExtraType");
-					break;
-				}
-				default: {
-					break;
-				}
-			}
-		}
 		if (getVersion() != ProtocolVersion.MINECRAFT_1_8) {
 			if (nbttagcompound == null) {
 				writeShort(-1);
@@ -116,19 +83,69 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 				writeShort(abyte.length);
 				writeBytes(abyte);
 			}
-		} else if (nbttagcompound == null) {
-			writeByte(0);
 		} else {
-			ByteBufOutputStream out = new ByteBufOutputStream(Allocator.allocateBuffer());
-			try {
-				NBTCompressedStreamTools.a(nbttagcompound, (DataOutput) new DataOutputStream(out));
-				writeBytes(out.buffer());
-			} catch (Throwable ioexception) {
-				throw new EncoderException(ioexception);
-			} finally {
-				out.buffer().release();
+			if (nbttagcompound == null) {
+				writeByte(0);
+			} else {
+				ByteBufOutputStream out = new ByteBufOutputStream(Allocator.allocateBuffer());
+				try {
+					NBTCompressedStreamTools.a(nbttagcompound, (DataOutput) new DataOutputStream(out));
+					writeBytes(out.buffer());
+				} catch (Throwable ioexception) {
+					throw new EncoderException(ioexception);
+				} finally {
+					out.buffer().release();
+				}
 			}
 		}
+	}
+
+	private ItemStack transformItemStack(ItemStack original) {
+		if (original == null) {
+			return null;
+		}
+		ItemStack itemstack = original.cloneItemStack();
+		Item item = itemstack.getItem();
+		NBTTagCompound nbttagcompound = itemstack.getTag();
+		if (nbttagcompound != null) {
+			if (getVersion() != ProtocolVersion.MINECRAFT_1_8 && item == Items.WRITTEN_BOOK) {
+				if (nbttagcompound.hasKeyOfType("pages", 9)) {
+					NBTTagList pages = nbttagcompound.getList("pages", 8);
+					NBTTagList newpages = new NBTTagList();
+					for (int i = 0; i < pages.size(); i++) {
+						newpages.add(new NBTTagString(LegacyUtils.fromComponent(ChatSerializer.a(pages.getString(i)))));
+					}
+					nbttagcompound.set("pages", newpages);
+				}
+			}
+			switch (getVersion()) {
+				case MINECRAFT_1_7_5:
+				case MINECRAFT_1_6_4:
+				case MINECRAFT_1_6_2:
+				case MINECRAFT_1_5_2: {
+					transformSkull(nbttagcompound, "SkullOwner", "SkullOwner");
+					transformSkull(nbttagcompound, "Owner", "ExtraType");
+					break;
+				}
+				default: {
+					break;
+				}
+			}
+			if (getVersion() != ProtocolVersion.MINECRAFT_1_8 && nbttagcompound.hasKeyOfType("ench", 9)) {
+				NBTTagList enchList = nbttagcompound.getList("ench", 10);
+				NBTTagList newList = new NBTTagList();
+				for (int i = 0; i < enchList.f(); i++) {
+					NBTTagCompound enchData = enchList.get(i);
+					if ((enchData.getInt("id") & 0xFFFF) != Enchantment.DEPTH_STRIDER.id) {
+						newList.add(enchData);
+					}
+				}
+				nbttagcompound.set("ench", newList);
+			}
+		}
+		ItemStackWriteEvent event = new InternalItemStackWriteEvent(original, itemstack);
+		Bukkit.getPluginManager().callEvent(event);
+		return itemstack;
 	}
 
 	private void transformSkull(NBTTagCompound tag, String tagname, String newtagname) {
@@ -284,6 +301,22 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 			SneakyThrow.sneaky(ex);
 			return null;
 		}
+	}
+
+
+	public static class InternalItemStackWriteEvent extends ItemStackWriteEvent {
+
+		private final CraftItemStack wrapped;
+		public InternalItemStackWriteEvent(ItemStack original, ItemStack itemstack) {
+			super(CraftItemStack.asCraftMirror(original));
+			this.wrapped = CraftItemStack.asCraftMirror(itemstack);
+		}
+
+		@Override
+		public org.bukkit.inventory.ItemStack getResult() {
+			return wrapped;
+		}
+		
 	}
 
 }
