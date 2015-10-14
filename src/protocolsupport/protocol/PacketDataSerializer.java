@@ -134,7 +134,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 			if (getVersion() != ProtocolVersion.MINECRAFT_1_8 && nbttagcompound.hasKeyOfType("ench", 9)) {
 				NBTTagList enchList = nbttagcompound.getList("ench", 10);
 				NBTTagList newList = new NBTTagList();
-				for (int i = 0; i < enchList.f(); i++) {
+				for (int i = 0; i < enchList.size(); i++) {
 					NBTTagCompound enchData = enchList.get(i);
 					if ((enchData.getInt("id") & 0xFFFF) != Enchantment.DEPTH_STRIDER.id) {
 						newList.add(enchData);
