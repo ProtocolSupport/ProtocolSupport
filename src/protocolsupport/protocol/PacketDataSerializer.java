@@ -18,7 +18,6 @@ import java.util.zip.GZIPOutputStream;
 
 import net.minecraft.server.v1_8_R3.GameProfileSerializer;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_8_R3.Enchantment;
 import net.minecraft.server.v1_8_R3.Item;
 import net.minecraft.server.v1_8_R3.ItemStack;
 import net.minecraft.server.v1_8_R3.Items;
@@ -37,6 +36,8 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ItemStackWriteEvent;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeskipper.id.IdSkipper;
+import protocolsupport.protocol.typeskipper.id.SkippingTable;
 import protocolsupport.utils.Allocator;
 import protocolsupport.utils.Utils;
 
@@ -131,12 +132,13 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 					break;
 				}
 			}
-			if (getVersion() != ProtocolVersion.MINECRAFT_1_8 && nbttagcompound.hasKeyOfType("ench", 9)) {
+			if (nbttagcompound.hasKeyOfType("ench", 9)) {
+				SkippingTable enchSkip = IdSkipper.ENCHANT.getTable(getVersion());
 				NBTTagList enchList = nbttagcompound.getList("ench", 10);
 				NBTTagList newList = new NBTTagList();
 				for (int i = 0; i < enchList.size(); i++) {
 					NBTTagCompound enchData = enchList.get(i);
-					if ((enchData.getInt("id") & 0xFFFF) != Enchantment.DEPTH_STRIDER.id) {
+					if (!enchSkip.shouldSkip(enchData.getInt("id") & 0xFFFF)) {
 						newList.add(enchData);
 					}
 				}
