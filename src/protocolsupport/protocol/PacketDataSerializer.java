@@ -145,8 +145,10 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 				nbttagcompound.set("ench", newList);
 			}
 		}
-		ItemStackWriteEvent event = new InternalItemStackWriteEvent(original, itemstack);
-		Bukkit.getPluginManager().callEvent(event);
+		if (ItemStackWriteEvent.getHandlerList().getRegisteredListeners().length > 0) {
+			ItemStackWriteEvent event = new InternalItemStackWriteEvent(getVersion(), original, itemstack);
+			Bukkit.getPluginManager().callEvent(event);
+		}
 		CraftItemStack.setItemMeta(itemstack, CraftItemStack.getItemMeta(itemstack));
 		return itemstack;
 	}
@@ -310,8 +312,8 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 	public static class InternalItemStackWriteEvent extends ItemStackWriteEvent {
 
 		private final CraftItemStack wrapped;
-		public InternalItemStackWriteEvent(ItemStack original, ItemStack itemstack) {
-			super(CraftItemStack.asCraftMirror(original));
+		public InternalItemStackWriteEvent(ProtocolVersion version, ItemStack original, ItemStack itemstack) {
+			super(version, CraftItemStack.asCraftMirror(original));
 			this.wrapped = CraftItemStack.asCraftMirror(itemstack);
 		}
 
