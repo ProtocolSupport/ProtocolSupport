@@ -45,8 +45,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 	private static final RemappingTable entityRemapper = IdRemapper.ENTITY.getTable(ProtocolVersion.MINECRAFT_1_5_2);
 	private static final RemappingTable mapcolorRemapper = IdRemapper.MAPCOLOR.getTable(ProtocolVersion.MINECRAFT_1_5_2);
 
-	private WatchedPlayer player;
-	private LocalStorage storage = new LocalStorage();
+	private final LocalStorage storage = new LocalStorage();
 
 	@Override
 	public void tranform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
@@ -61,8 +60,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x01: { //PacketPlayOutLogin
 				serializer.writeByte(0x01);
 				int playerEnityId = packetdata.readInt();
-				player = new WatchedPlayer(playerEnityId);
-				storage.addWatchedEntity(player);
+				storage.addWatchedSelfPlayer(new WatchedPlayer(playerEnityId));
 				serializer.writeInt(playerEnityId);
 				int gamemode = packetdata.readByte();
 				int dimension = packetdata.readByte();
@@ -111,9 +109,6 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x07: { //PacketPlayOutRespawn
 				storage.clearWatchedEntities();
-				if (player != null) {
-					storage.addWatchedEntity(player);
-				}
 				serializer.writeByte(0x09);
 				serializer.writeInt(packetdata.readInt());
 				serializer.writeByte(packetdata.readByte());
@@ -357,9 +352,6 @@ public class PlayPacketTransformer implements PacketTransformer {
 					array[i] = packetdata.readVarInt();
 				}
 				storage.removeWatchedEntities(array);
-				if (player != null) {
-					storage.addWatchedEntity(player);
-				}
 				for (int[] part : Utils.splitArray(array, 120)) {
 					serializer.writeByte(0x1D);
 					serializer.writeByte(part.length);

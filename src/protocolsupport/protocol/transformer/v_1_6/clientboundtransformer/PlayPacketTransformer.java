@@ -34,6 +34,7 @@ import protocolsupport.protocol.typeremapper.id.RemappingTable;
 import protocolsupport.protocol.typeremapper.watchedentity.WatchedDataRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedLiving;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedObject;
+import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
 import protocolsupport.utils.Allocator;
 import protocolsupport.utils.DataWatcherSerializer;
 import protocolsupport.utils.Utils;
@@ -45,7 +46,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 	private static final RemappingTable entityRemapper = IdRemapper.ENTITY.getTable(ProtocolVersion.MINECRAFT_1_6_4);
 	private static final RemappingTable mapcolorRemapper = IdRemapper.MAPCOLOR.getTable(ProtocolVersion.MINECRAFT_1_6_4);
 
-	private LocalStorage storage = new LocalStorage();
+	private final LocalStorage storage = new LocalStorage();
 
 	@Override
 	public void tranform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
@@ -59,7 +60,9 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x01: { //PacketPlayOutLogin
 				serializer.writeByte(0x01);
-				serializer.writeInt(packetdata.readInt());
+				int playerEnityId = packetdata.readInt();
+				storage.addWatchedSelfPlayer(new WatchedPlayer(playerEnityId));
+				serializer.writeInt(playerEnityId);
 				int gamemode = packetdata.readByte();
 				int dimension = packetdata.readByte();
 				int difficulty = packetdata.readByte();
@@ -172,7 +175,9 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case 0x0C: { //PacketPlayOutNamedEntitySpawn
 				serializer.writeByte(0x14);
-				serializer.writeInt(packetdata.readVarInt());
+				int playerEntityId = packetdata.readVarInt();
+				storage.addWatchedEntity(new WatchedPlayer(playerEntityId));
+				serializer.writeVarInt(playerEntityId);
 				UUID uuid = packetdata.g();
 				String playerName = storage.getPlayerListName(uuid);
 				serializer.writeString(playerName != null ? playerName : "Unknown");

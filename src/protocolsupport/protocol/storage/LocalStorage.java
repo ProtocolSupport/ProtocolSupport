@@ -11,12 +11,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
+import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
 
 import com.mojang.authlib.properties.Property;
 
 public class LocalStorage {
 
 	private TIntObjectHashMap<WatchedEntity> watchedEntities = new TIntObjectHashMap<WatchedEntity>();
+	private WatchedPlayer player;
 	private HashMap<UUID, String> playersNames = new HashMap<UUID, String>();
 	@SuppressWarnings("serial")
 	private HashMap<UUID, ArrayList<Property>> properties = new HashMap<UUID, ArrayList<Property>>() {
@@ -33,6 +35,17 @@ public class LocalStorage {
 		watchedEntities.put(entity.getId(), entity);
 	}
 
+	public void addWatchedSelfPlayer(WatchedPlayer player) {
+		this.player = player;
+		addWatchedEntity(player);
+	}
+
+	private void readdSelfPlayer() {
+		if (player != null) {
+			addWatchedEntity(player);
+		}
+	}
+
 	public WatchedEntity getWatchedEntity(int entityId) {
 		return watchedEntities.get(entityId);
 	}
@@ -41,10 +54,12 @@ public class LocalStorage {
 		for (int entityId : entityIds) {
 			watchedEntities.remove(entityId);
 		}
+		readdSelfPlayer();
 	}
 
 	public void clearWatchedEntities() {
 		watchedEntities.clear();
+		readdSelfPlayer();
 	}
 
 	public void addPlayerListName(UUID uuid, String name) {

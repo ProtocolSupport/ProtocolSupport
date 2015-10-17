@@ -39,6 +39,7 @@ import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificType
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedLiving;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedObject;
+import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
 import protocolsupport.utils.Allocator;
 import protocolsupport.utils.DataWatcherSerializer;
 import protocolsupport.utils.Utils;
@@ -51,7 +52,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 	private static final RemappingTable itemRemapper = IdRemapper.ITEM.getTable(ProtocolVersion.MINECRAFT_1_7_10);
 	private static final RemappingTable entityRemapper = IdRemapper.ENTITY.getTable(ProtocolVersion.MINECRAFT_1_7_10);
 
-	private LocalStorage storage = new LocalStorage();
+	private final LocalStorage storage = new LocalStorage();
 
 	@Override
 	public void tranform(ChannelHandlerContext ctx, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
@@ -67,7 +68,9 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x01: { // PacketPlayOutLogin
 				packet.b(packetdata);
 				serializer.writeVarInt(packetId);
-				serializer.writeInt(packetdata.readInt());
+				int playerEnityId = packetdata.readInt();
+				storage.addWatchedSelfPlayer(new WatchedPlayer(playerEnityId));
+				serializer.writeInt(playerEnityId);
 				serializer.writeByte(packetdata.readUnsignedByte());
 				serializer.writeByte(packetdata.readByte());
 				serializer.writeByte(packetdata.readUnsignedByte());
@@ -160,7 +163,9 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x0C: { // PacketPlayOutNamedEntitySpawn
 				packet.b(packetdata);
 				serializer.writeVarInt(packetId);
-				serializer.writeVarInt(packetdata.readVarInt());
+				int playerEntityId = packetdata.readVarInt();
+				storage.addWatchedEntity(new WatchedPlayer(playerEntityId));
+				serializer.writeVarInt(playerEntityId);
 				UUID uuid = packetdata.g();
 				serializer.writeString(serializer.getVersion() == ProtocolVersion.MINECRAFT_1_7_10 ? uuid.toString() : uuid.toString().replace("-", ""));
 				String playerName = storage.getPlayerListName(uuid);
