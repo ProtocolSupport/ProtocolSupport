@@ -142,7 +142,11 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 						newList.add(enchData);
 					}
 				}
-				nbttagcompound.set("ench", newList);
+				if (newList.size() > 0) {
+					nbttagcompound.set("ench", newList);
+				} else {
+					nbttagcompound.remove("ench");
+				}
 			}
 		}
 		if (ItemStackWriteEvent.getHandlerList().getRegisteredListeners().length > 0) {
