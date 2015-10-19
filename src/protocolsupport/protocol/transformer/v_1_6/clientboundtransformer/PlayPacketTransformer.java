@@ -177,7 +177,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(0x14);
 				int playerEntityId = packetdata.readVarInt();
 				storage.addWatchedEntity(new WatchedPlayer(playerEntityId));
-				serializer.writeVarInt(playerEntityId);
+				serializer.writeInt(playerEntityId);
 				UUID uuid = packetdata.g();
 				String playerName = storage.getPlayerListName(uuid);
 				serializer.writeString(playerName != null ? playerName : "Unknown");
