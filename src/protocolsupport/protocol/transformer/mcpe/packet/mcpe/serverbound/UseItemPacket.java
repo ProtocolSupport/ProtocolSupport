@@ -52,7 +52,9 @@ public class UseItemPacket implements ServerboundPEPacket {
 
 	@Override
 	public List<? extends Packet<?>> transfrom() throws Exception {
-		return Collections.singletonList(new PacketPlayInBlockPlace(new BlockPosition(againstX, againstY, againstZ), face, itemstack, cursorX, cursorY, cursorZ));
+		PacketPlayInBlockPlace place = new PacketPlayInBlockPlace(new BlockPosition(againstX, againstY, againstZ), face, itemstack, cursorX, cursorY, cursorZ);
+		place.timestamp = System.currentTimeMillis();
+		return Collections.singletonList(place);
 	}
 
 }
