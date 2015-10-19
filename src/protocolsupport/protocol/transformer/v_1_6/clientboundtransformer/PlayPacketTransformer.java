@@ -187,7 +187,16 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(packetdata.readByte());
 				serializer.writeByte(packetdata.readByte());
 				serializer.writeShort(packetdata.readShort());
-				serializer.writeBytes(packetdata);
+				serializer.writeBytes(
+					DataWatcherSerializer.encodeData(
+						serializer.getVersion(),
+						WatchedDataRemapper.transform(
+							storage.getWatchedEntity(playerEntityId),
+							DataWatcherSerializer.decodeData(ProtocolVersion.MINECRAFT_1_8, Utils.toArray(packetdata)),
+							serializer.getVersion()
+						)
+					)
+				);
 				break;
 			}
 			case 0x0D: { //PacketPlayOutCollect
