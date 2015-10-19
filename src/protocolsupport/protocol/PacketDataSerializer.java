@@ -186,7 +186,6 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 			ItemStackWriteEvent event = new InternalItemStackWriteEvent(getVersion(), original, itemstack);
 			Bukkit.getPluginManager().callEvent(event);
 		}
-		CraftItemStack.setItemMeta(itemstack, CraftItemStack.getItemMeta(itemstack));
 		return itemstack;
 	}
 
