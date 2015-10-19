@@ -230,13 +230,13 @@ public class ClientboundPacketHandler {
 					int slot = packetdata.readShort();
 					ItemStack itemstack = packetdata.readItemStack();
 					//TODO: other inventory types
-					/*if (windowId == 0) {
+					if (windowId == 0) {
 						if (slot >= 9 && slot < 45) {
 							return Collections.singletonList(new ContainerSetSlotPacket(PEPlayerInventory.PLAYER_INVENTORY_WID, slot - 9, itemstack));
 						} else if (slot >= 5 && slot < 9) {
 							return Collections.singletonList(new ContainerSetSlotPacket(PEPlayerInventory.PLAYER_ARMOR_WID, slot - 5, itemstack));
 						}
-					}*/
+					}
 					return Collections.emptyList();
 				}
 				case 0x30: { //PacketPlayOutWindowItems
@@ -248,8 +248,8 @@ public class ClientboundPacketHandler {
 					//TODO: other inventory types
 					if (windowId == 0) {
 						ArrayList<ContainerSetContentsPacket> packets = new ArrayList<ContainerSetContentsPacket>();
-						ItemStack[] inventory = new ItemStack[36];
-						System.arraycopy(packetitems, 9, inventory, 0, inventory.length);
+						ItemStack[] inventory = new ItemStack[45];
+						System.arraycopy(packetitems, 9, inventory, 0, inventory.length - ContainerSetContentsPacket.HOTBAR_SLOTS.length);
 						packets.add(new ContainerSetContentsPacket(PEPlayerInventory.PLAYER_INVENTORY_WID, inventory, ContainerSetContentsPacket.HOTBAR_SLOTS));
 						ItemStack[] armor = new ItemStack[4];
 						System.arraycopy(packetitems, 5, armor, 0, armor.length);
