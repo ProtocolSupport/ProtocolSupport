@@ -6,10 +6,10 @@ import protocolsupport.api.ProtocolVersion;
 
 public class DataWatcherObject {
 
-	public DataWatcherObject.ValueType type;
+	public ValueType type;
 	public Object value;
 
-	public DataWatcherObject(DataWatcherObject.ValueType type, Object value) {
+	public DataWatcherObject(ValueType type, Object value) {
 		this.type = type;
 		this.value = value;
 	}
@@ -45,10 +45,12 @@ public class DataWatcherObject {
 
 	public static enum ValueType {
 		BYTE(new TypeToProtocolsMappingEntry(0, ProtocolVersionsHelper.concat(ProtocolVersionsHelper.ALL, ProtocolVersion.MINECRAFT_PE))),
-		SHORT(new TypeToProtocolsMappingEntry(1, ProtocolVersionsHelper.concat(ProtocolVersionsHelper.ALL, ProtocolVersion.MINECRAFT_PE))),
+		SHORT(new TypeToProtocolsMappingEntry(1, ProtocolVersionsHelper.ALL)),
+		SHORT_PE(new TypeToProtocolsMappingEntry(1, ProtocolVersion.MINECRAFT_PE)),
 		INT(new TypeToProtocolsMappingEntry(2, ProtocolVersionsHelper.concat(ProtocolVersionsHelper.ALL, ProtocolVersion.MINECRAFT_PE))),
 		FLOAT(new TypeToProtocolsMappingEntry(3, ProtocolVersionsHelper.concat(ProtocolVersionsHelper.ALL, ProtocolVersion.MINECRAFT_PE))),
-		STRING(new TypeToProtocolsMappingEntry(4, ProtocolVersionsHelper.concat(ProtocolVersionsHelper.ALL, ProtocolVersion.MINECRAFT_PE))),
+		STRING(new TypeToProtocolsMappingEntry(4, ProtocolVersionsHelper.ALL)),
+		STRING_PE(new TypeToProtocolsMappingEntry(4, ProtocolVersion.MINECRAFT_PE)),
 		ITEMSTACK(new TypeToProtocolsMappingEntry(5, ProtocolVersionsHelper.concat(ProtocolVersionsHelper.ALL, ProtocolVersion.MINECRAFT_PE))),
 		VECTOR3I(new TypeToProtocolsMappingEntry(6, ProtocolVersionsHelper.concat(ProtocolVersionsHelper.BEFORE_1_9, ProtocolVersion.MINECRAFT_PE))),
 		VECTOR3F(new TypeToProtocolsMappingEntry(7, ProtocolVersion.MINECRAFT_1_8)),

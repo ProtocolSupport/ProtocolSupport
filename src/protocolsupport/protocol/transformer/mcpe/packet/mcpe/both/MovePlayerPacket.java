@@ -36,6 +36,7 @@ public class MovePlayerPacket implements DualPEPacket {
 		this.z = z;
 		this.yaw = yaw;
 		this.pitch = pitch;
+		this.mode = (byte) 0x80;
 		this.onGround = onGround;
 	}
 

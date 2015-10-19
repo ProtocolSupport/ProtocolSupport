@@ -16,6 +16,7 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
+import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.zip.GZIPInputStream;
@@ -69,7 +70,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 	public void a(ItemStack itemstack) {
 		itemstack = transformItemStack(itemstack);
 		if ((itemstack == null) || (itemstack.getItem() == null)) {
-			writeShort(getVersion() != ProtocolVersion.MINECRAFT_PE ? -1 : 0);
+			writeShort(getVersion() == ProtocolVersion.MINECRAFT_PE ? 0 : -1);
 		} else {
 			int itemId = Item.getId(itemstack.getItem());
 			writeShort(IdRemapper.ITEM.getTable(getVersion()).getRemap(itemId));
@@ -104,9 +105,13 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 
 	@Override
 	public void a(NBTTagCompound nbttagcompound) {
+		if (getVersion() == ProtocolVersion.MINECRAFT_PE) {
+			writeShort(0);
+			return;
+		}
 		if (getVersion() != ProtocolVersion.MINECRAFT_1_8) {
 			if (nbttagcompound == null) {
-				writeShort(getVersion() != ProtocolVersion.MINECRAFT_PE ? -1 : 0);
+				writeShort(-1);
 			} else {
 				final byte[] abyte = write(nbttagcompound);
 				writeShort(abyte.length);
@@ -339,6 +344,17 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 
 	public void writeUUID(UUID uuid) {
 		a(uuid);
+	}
+
+	public String readLString() {
+		ByteBuf buf = order(ByteOrder.LITTLE_ENDIAN);
+		return new String(Utils.toArray(buf.readBytes(buf.readShort())));
+	}
+
+	public void writeLString(String value) {
+		ByteBuf buf = order(ByteOrder.LITTLE_ENDIAN);
+		buf.writeShort(value.length());
+		buf.writeBytes(value.getBytes(StandardCharsets.UTF_8));
 	}
 
 	public int readLTriad() {

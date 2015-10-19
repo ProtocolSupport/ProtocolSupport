@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -16,20 +17,26 @@ import org.bukkit.entity.Player;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage;
+import protocolsupport.protocol.transformer.mcpe.PEPlayerInventory;
 import protocolsupport.protocol.transformer.mcpe.UDPNetworkManager;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.ChatPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.ContainerSetSlotPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.EntityEquipmentInventoryPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.MovePlayerPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.SetHealthPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AdventureSettingsPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ChunkPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PlayerListPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PongPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetBlocksPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetDifficultyPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetTimePacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetBlocksPacket.UpdateBlockRecord;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetSpawnPosition;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SpawnPlayerPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.StartGamePacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ContainerSetContentsPacket;
 import protocolsupport.protocol.transformer.mcpe.remapper.BlockIDRemapper;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.utils.Allocator;
@@ -78,16 +85,18 @@ public class ClientboundPacketHandler {
 					//use this packet to sent needed login packets
 					Player bukkitplayer = Utils.getPlayer(networkManager).getBukkitEntity();
 					return Arrays.asList(
-						new ClientboundPEPacket[] {
-							new StartGamePacket(
-								bukkitplayer.getWorld().getEnvironment().getId(),
-								bukkitplayer.getGameMode().getValue() & 0x1,
-								bukkitplayer.getEntityId(),
-								bukkitplayer.getWorld().getSpawnLocation(),
-								bukkitplayer.getLocation()
-							),
-							new SetSpawnPosition(bukkitplayer.getLocation()),
-						}
+						new StartGamePacket(
+							bukkitplayer.getWorld().getEnvironment().getId(),
+							bukkitplayer.getGameMode().getValue() & 0x1,
+							bukkitplayer.getEntityId(),
+							bukkitplayer.getWorld().getSpawnLocation(),
+							bukkitplayer.getLocation()
+						),
+						new SetTimePacket((int) bukkitplayer.getWorld().getTime()),
+						new SetSpawnPosition(bukkitplayer.getLocation()),
+						new SetHealthPacket((int) bukkitplayer.getHealth()),
+						new SetDifficultyPacket(bukkitplayer.getWorld().getDifficulty().ordinal()),
+						new AdventureSettingsPacket(bukkitplayer.getGameMode() == GameMode.CREATIVE)
 					);
 				}
 				case 0x02: { //PacketPlayOutChat
@@ -96,6 +105,12 @@ public class ClientboundPacketHandler {
 				case 0x03: { //PacketPlayOutTime
 					packetdata.readLong();
 					return Collections.singletonList(new SetTimePacket((int) packetdata.readLong()));
+				}
+				case 0x04: { //PacketPlayOutEntityEquipment
+					int entityId = packetdata.readVarInt();
+					int slot = packetdata.readShort();
+					ItemStack itemstack = packetdata.readItemStack();
+					return Collections.singletonList(new EntityEquipmentInventoryPacket(entityId, itemstack, slot));
 				}
 				case 0x06: { //PacketPlayOutUpdateHealth
 					return Collections.singletonList(new SetHealthPacket((int) packetdata.readFloat()));
@@ -131,6 +146,25 @@ public class ClientboundPacketHandler {
 							yaw, pitch, false
 						)
 					);
+				}
+				case 0x0C: { //PacketPlayOutNamedEntitySpawn
+					int entityId = packetdata.readVarInt();
+					UUID uuid = packetdata.readUUID();
+					float locX = packetdata.readInt() / 32.0F;
+					float locY = packetdata.readInt() / 32.0F;
+					float locZ = packetdata.readInt() / 32.0F;
+					float yaw = packetdata.readByte() * 360.0F / 256.0F;
+					float pitch = packetdata.readByte() * 360.0F / 256.0F;
+					short itemId = packetdata.readShort();
+					String username = storage.getPlayerListName(uuid);
+					if (username == null) {
+						username = "Unknown";
+					}
+					return Collections.singletonList(new SpawnPlayerPacket(
+						uuid, username, entityId,
+						locX, locY, locZ, yaw, pitch,
+						itemId != 0 ? new ItemStack(Item.getById(itemId)) : null
+					));
 				}
 				case 0x21: { //PacketPlayOutMapChunk
 					int x = packetdata.readInt();
@@ -191,28 +225,40 @@ public class ClientboundPacketHandler {
 					}
 					return packets;
 				}
-				case 0x0C: { //PacketPlayOutNamedEntitySpawn
-					int entityId = packetdata.readVarInt();
-					UUID uuid = packetdata.readUUID();
-					float locX = packetdata.readInt() / 32.0F;
-					float locY = packetdata.readInt() / 32.0F;
-					float locZ = packetdata.readInt() / 32.0F;
-					float yaw = packetdata.readByte() * 360.0F / 256.0F;
-					float pitch = packetdata.readByte() * 360.0F / 256.0F;
-					short itemId = packetdata.readShort();
-					String username = storage.getPlayerListName(uuid);
-					if (username == null) {
-						username = "Unknown";
-					}
-					return Collections.singletonList(
-						new SpawnPlayerPacket(
-							uuid, username, entityId,
-							locX, locY, locZ, yaw, pitch,
-							itemId != 0 ? new ItemStack(Item.getById(itemId)) : null
-						)
-					);
+				case 0x2F: { //PacketPlayOutSetSlot
+					int windowId = packetdata.readByte();
+					int slot = packetdata.readShort();
+					ItemStack itemstack = packetdata.readItemStack();
+					//TODO: other inventory types
+					/*if (windowId == 0) {
+						if (slot >= 9 && slot < 45) {
+							return Collections.singletonList(new ContainerSetSlotPacket(PEPlayerInventory.PLAYER_INVENTORY_WID, slot - 9, itemstack));
+						} else if (slot >= 5 && slot < 9) {
+							return Collections.singletonList(new ContainerSetSlotPacket(PEPlayerInventory.PLAYER_ARMOR_WID, slot - 5, itemstack));
+						}
+					}*/
+					return Collections.emptyList();
 				}
-				case 0x38: { // PacketPlayOutPlayerInfo
+				case 0x30: { //PacketPlayOutWindowItems
+					int windowId = packetdata.readByte();
+					ItemStack[] packetitems = new ItemStack[packetdata.readShort()];
+					for (int i = 0; i < packetitems.length; i++) {
+						packetitems[i] = packetdata.readItemStack();
+					}
+					//TODO: other inventory types
+					if (windowId == 0) {
+						ArrayList<ContainerSetContentsPacket> packets = new ArrayList<ContainerSetContentsPacket>();
+						ItemStack[] inventory = new ItemStack[36];
+						System.arraycopy(packetitems, 9, inventory, 0, inventory.length);
+						packets.add(new ContainerSetContentsPacket(PEPlayerInventory.PLAYER_INVENTORY_WID, inventory, ContainerSetContentsPacket.HOTBAR_SLOTS));
+						ItemStack[] armor = new ItemStack[4];
+						System.arraycopy(packetitems, 5, armor, 0, armor.length);
+						packets.add(new ContainerSetContentsPacket(PEPlayerInventory.PLAYER_ARMOR_WID, armor, ContainerSetContentsPacket.EMPTY_HOTBAR_SLOTS));
+						return packets;
+					}
+					return Collections.emptyList();
+				}
+				case 0x38: { //PacketPlayOutPlayerInfo
 					int action = packetdata.readVarInt();
 					int count = packetdata.readVarInt();
 					HashSet<UUID> uuids = new HashSet<UUID>();
@@ -276,11 +322,12 @@ public class ClientboundPacketHandler {
 							if (uuids.size() != 0) {
 								//TODO: pull entities directly for world players list to support NPC
 							}
-							if (players.size() != 0) {
+							return Collections.emptyList();
+							/*if (players.size() != 0) {
 								return Collections.singletonList(new PlayerListPacket(players.toArray(new EntityPlayer[players.size()])));
 							} else {
 								return Collections.emptyList();
-							}
+							}*/
 						}
 					}
 					break;

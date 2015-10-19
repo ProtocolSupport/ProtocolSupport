@@ -1,16 +1,23 @@
 package protocolsupport.protocol.transformer.mcpe.handler;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.util.Waitable;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerPreLoginEvent;
+import org.spigotmc.SneakyThrow;
 
 import com.mojang.authlib.GameProfile;
 
+import protocolsupport.protocol.transformer.mcpe.PEPlayerInventory;
 import protocolsupport.protocol.transformer.mcpe.UDPNetworkManager;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.LoginStatusPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PongPacket;
@@ -19,7 +26,10 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.LoginSt
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.ClientConnectPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.LoginPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.PingPacket;
+import protocolsupport.utils.Utils;
 import net.minecraft.server.v1_8_R3.ChatComponentText;
+import net.minecraft.server.v1_8_R3.ContainerPlayer;
+import net.minecraft.server.v1_8_R3.Entity;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.LoginListener;
@@ -28,6 +38,17 @@ import net.minecraft.server.v1_8_R3.PacketListener;
 
 @SuppressWarnings("deprecation")
 public class PELoginListener implements PacketListener {
+
+	private static final MethodHandle bukkitEntityFieldMH = getBukkitEntityFieldMH();
+
+	private static MethodHandle getBukkitEntityFieldMH() {
+		try {
+			return MethodHandles.lookup().unreflectSetter(Utils.setAccessible(Entity.class.getDeclaredField("bukkitEntity")));
+		} catch (Throwable t) {
+			SneakyThrow.sneaky(t);
+		}
+		return null;
+	}
 
 	private UDPNetworkManager nm;
 	public PELoginListener(UDPNetworkManager nm) {
@@ -46,6 +67,9 @@ public class PELoginListener implements PacketListener {
 			nm.sendPEPacket(new PongPacket(pingpacket.getKeepAliveId()));
 		} catch (Exception e) {
 			nm.close(new ChatComponentText(e.getMessage()));
+			if (MinecraftServer.getServer().isDebugging()) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -56,6 +80,9 @@ public class PELoginListener implements PacketListener {
 			nm.sendPEPacket(new ServerHandshakePacket(nm.getClientAddress(), packet.getClientId(), packet.getClientId() + 1000L));
 		} catch (Exception e) {
 			nm.close(new ChatComponentText(e.getMessage()));
+			if (MinecraftServer.getServer().isDebugging()) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -72,7 +99,7 @@ public class PELoginListener implements PacketListener {
 			public void run() {
 				try {
 					final String username = loginPacket.getUserName();
-					final UUID uuid = UUID.nameUUIDFromBytes(("MCPE:"+loginPacket.getUserName()).getBytes(StandardCharsets.UTF_8));
+					final UUID uuid = UUID.nameUUIDFromBytes(("OfflinePlayer:"+loginPacket.getUserName()).getBytes(StandardCharsets.UTF_8));
 					AsyncPlayerPreLoginEvent asyncEvent = new AsyncPlayerPreLoginEvent(username, nm.getClientAddress().getAddress(), uuid);
 					Bukkit.getPluginManager().callEvent(asyncEvent);
 					if (asyncEvent.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED) {
@@ -112,13 +139,26 @@ public class PELoginListener implements PacketListener {
 								""
 							);
 							if (player != null) {
-								MinecraftServer.getServer().getPlayerList().a(nm, MinecraftServer.getServer().getPlayerList().processLogin(profile, player));
-								new KickRoutePlayerConnection(MinecraftServer.getServer(), nm, player);
+								try {
+									player.inventory = new PEPlayerInventory(player);
+									player.activeContainer = player.defaultContainer = new ContainerPlayer(player.inventory, true, player);
+									MinecraftServer.getServer().getPlayerList().a(nm, MinecraftServer.getServer().getPlayerList().processLogin(profile, player));
+									new PEPlayerConnection(MinecraftServer.getServer(), nm, player);
+									bukkitEntityFieldMH.invokeExact((Entity) player, (CraftEntity) new CraftPlayer((CraftServer) Bukkit.getServer(), player));
+								} catch (Throwable t) {
+									player.playerConnection.disconnect(t.getMessage());
+									if (MinecraftServer.getServer().isDebugging()) {
+										t.printStackTrace();
+									}
+								}
 							}
 						}
 					});
 				} catch (Throwable t) {
 					nm.close(new ChatComponentText(t.getMessage()));
+					if (MinecraftServer.getServer().isDebugging()) {
+						t.printStackTrace();
+					}
 				}
 			}
 		}.start();

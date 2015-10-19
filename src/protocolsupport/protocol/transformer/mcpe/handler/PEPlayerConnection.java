@@ -6,9 +6,9 @@ import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.NetworkManager;
 import net.minecraft.server.v1_8_R3.PlayerConnection;
 
-public class KickRoutePlayerConnection extends PlayerConnection {
+public class PEPlayerConnection extends PlayerConnection {
 
-	public KickRoutePlayerConnection(MinecraftServer minecraftserver, NetworkManager networkmanager, EntityPlayer entityplayer) {
+	public PEPlayerConnection(MinecraftServer minecraftserver, NetworkManager networkmanager, EntityPlayer entityplayer) {
 		super(minecraftserver, networkmanager, entityplayer);
 	}
 

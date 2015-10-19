@@ -3,6 +3,7 @@ package protocolsupport.utils;
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 
 import java.io.IOException;
@@ -69,6 +70,14 @@ public class DataWatcherSerializer {
 					map.put(key, new DataWatcherObject(type, serializer.readLong()));
 					break;
 				}
+				case SHORT_PE: {
+					map.put(key, new DataWatcherObject(type, ByteBufUtil.swapShort(serializer.readShort())));
+					break;
+				}
+				case STRING_PE: {
+					map.put(key,  new DataWatcherObject(type, serializer.readLString()));
+					break;
+				}
 			}
 		} while (true);
 		return map;
@@ -124,6 +133,14 @@ public class DataWatcherSerializer {
 					}
 					case LONG: {
 						serializer.writeLong((long) object.value);
+						break;
+					}
+					case SHORT_PE: {
+						serializer.writeShort(ByteBufUtil.swapShort((short) object.value));
+						break;
+					}
+					case STRING_PE: {
+						serializer.writeLString((String) object.value);
 						break;
 					}
 				}

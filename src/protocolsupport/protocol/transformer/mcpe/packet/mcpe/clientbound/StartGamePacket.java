@@ -13,7 +13,7 @@ public class StartGamePacket implements ClientboundPEPacket {
 	protected int generator = 1;
 	protected int dimension;
 	protected int gamemode;
-	protected long eid;
+	protected long entityId;
 	protected int spawnX;
 	protected int spawnY;
 	protected int spawnZ;
@@ -24,7 +24,7 @@ public class StartGamePacket implements ClientboundPEPacket {
 	public StartGamePacket(int dimension, int gamemode, long eid, Location worldspawn, Location playerspawn) {
 		this.dimension = dimension;
 		this.gamemode = gamemode;
-		this.eid = eid;
+		this.entityId = eid;
 		this.spawnX = worldspawn.getBlockX();
 		this.spawnY = worldspawn.getBlockY();
 		this.spawnZ = worldspawn.getBlockZ();
@@ -44,7 +44,7 @@ public class StartGamePacket implements ClientboundPEPacket {
 		buf.writeByte(dimension);
 		buf.writeInt(generator);
 		buf.writeInt(gamemode);
-		buf.writeLong(eid);
+		buf.writeLong(entityId);
 		buf.writeInt(spawnX);
 		buf.writeInt(spawnY);
 		buf.writeInt(spawnZ);

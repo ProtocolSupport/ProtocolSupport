@@ -59,14 +59,15 @@ public class SpawnPlayerPacket implements ClientboundPEPacket {
 		serializer.writeFloat(pitch);
 		serializer.writeItemStack(item);
 		//TODO: actual metadata
-		TIntObjectHashMap<DataWatcherObject> metadata = new TIntObjectHashMap<>();
+		serializer.writeByte(127);
+		/*TIntObjectHashMap<DataWatcherObject> metadata = new TIntObjectHashMap<>();
 		metadata.put(0, new DataWatcherObject(ValueType.BYTE, (byte) 0));
-		metadata.put(1, new DataWatcherObject(ValueType.SHORT, (short) 300));
-		metadata.put(2, new DataWatcherObject(ValueType.STRING, name));
+		metadata.put(1, new DataWatcherObject(ValueType.SHORT_PE, (short) 300));
+		metadata.put(2, new DataWatcherObject(ValueType.STRING_PE, ""));
 		metadata.put(3, new DataWatcherObject(ValueType.BYTE, (byte) 1));
 		metadata.put(4, new DataWatcherObject(ValueType.BYTE, (byte) 0));
 		metadata.put(15, new DataWatcherObject(ValueType.BYTE, (byte) 0));
-		serializer.writeBytes(DataWatcherSerializer.encodeData(ProtocolVersion.MINECRAFT_PE, metadata));
+		serializer.writeBytes(DataWatcherSerializer.encodeData(ProtocolVersion.MINECRAFT_PE, metadata));*/
 		return this;
 	}
 

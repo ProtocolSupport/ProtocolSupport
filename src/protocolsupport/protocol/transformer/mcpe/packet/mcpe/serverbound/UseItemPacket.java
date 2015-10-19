@@ -23,7 +23,7 @@ public class UseItemPacket implements ServerboundPEPacket {
 	protected float fx;
 	protected float fy;
 	protected float fz;
-	protected ItemStack item;
+	protected ItemStack itemstack;
 
 	@Override
 	public int getId() {
@@ -43,13 +43,13 @@ public class UseItemPacket implements ServerboundPEPacket {
 		buf.readFloat();
 		buf.readFloat();
 		buf.readFloat();
-		this.item = serializer.readItemStack();
+		this.itemstack = serializer.readItemStack();
 		return this;
 	}
 
 	@Override
 	public List<? extends Packet<?>> transfrom() throws Exception {
-		return Collections.singletonList(new PacketPlayInBlockPlace(new BlockPosition(x, y, z), face, item, fx, fy, fz));
+		return Collections.singletonList(new PacketPlayInBlockPlace(new BlockPosition(x, y, z), face, itemstack, fx, fy, fz));
 	}
 
 }

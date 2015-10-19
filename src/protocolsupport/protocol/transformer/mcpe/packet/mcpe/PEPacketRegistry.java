@@ -6,10 +6,12 @@ import java.lang.reflect.InvocationTargetException;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.AnimatePacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.BatchPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.ChatPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.EntityEquipmentInventoryPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.ContainerSetSlotPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.MovePlayerPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.PlayerActionPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.EntityEquipmentArmorPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.SetHealthPacket;
-import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PlayerEquipmentPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.ClientConnectPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.ClientDisconnectPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.ClientHandshakePacket;
@@ -37,12 +39,13 @@ public class PEPacketRegistry {
 		register(PlayerActionPacket.class);
 		register(AnimatePacket.class);
 		register(SetHealthPacket.class);
-		register(PlayerEquipmentPacket.class);
+		register(EntityEquipmentInventoryPacket.class);
+		register(EntityEquipmentArmorPacket.class);
+		register(ContainerSetSlotPacket.class);
 	}
 
 	public static ServerboundPEPacket getPacket(int id) {
 		try {
-			System.out.println("RECV: "+id+", "+packets.get((byte) id));
 			return packets.get((byte) id).newInstance();
 		} catch (NullPointerException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			throw new IllegalArgumentException("Packet id "+id+" doesn't exist", e);
