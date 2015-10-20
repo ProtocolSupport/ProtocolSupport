@@ -7,7 +7,9 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.CorruptedFrameException;
 import io.netty.util.ReferenceCountUtil;
+import io.netty.util.concurrent.Future;
 
+import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.EnumMap;
 import java.util.concurrent.TimeUnit;
@@ -34,7 +36,33 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 
 	protected ByteBuf receivedData = Unpooled.buffer();
 
+	protected SocketAddress address;
 	protected volatile boolean protocolSet = false;
+
+	protected Future<?> responseTask;
+
+	protected void scheduleTask(ChannelHandlerContext ctx, Runnable task, long delay, TimeUnit tu) {
+		cancelTask();
+		responseTask = ctx.executor().schedule(task, delay, tu);
+	}
+
+	protected void cancelTask() {
+		if (responseTask != null) {
+			responseTask.cancel(true);
+		}
+	}
+
+	@Override
+	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+		super.channelInactive(ctx);
+		cancelTask();
+	}
+
+	@Override
+	public void handlerRemoved(ChannelHandlerContext ctx) throws Exception  {
+		super.handlerRemoved(ctx);
+		cancelTask();
+	}
 
 	@Override
 	public void channelRead(final ChannelHandlerContext ctx, final Object inputObj) throws Exception {
@@ -52,11 +80,11 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 				case 0xFE: { //old ping
 					try {
 						if (receivedData.readableBytes() == 0) { //really old protocol probably
-							ctx.executor().schedule(new OldPingResponseTask(this, channel), 1000, TimeUnit.MILLISECONDS);
+							scheduleTask(ctx, new Ping11ResponseTask(channel), 1000, TimeUnit.MILLISECONDS);
 						} else if (receivedData.readUnsignedByte() == 1) {
 							if (receivedData.readableBytes() == 0) {
 								//1.5.2 probably
-								ctx.executor().schedule(new Minecraft152PingResponseTask(this, channel), 500, TimeUnit.MILLISECONDS);
+								scheduleTask(ctx, new Ping152ResponseTask(this, channel), 500, TimeUnit.MILLISECONDS);
 							} else if (
 								(receivedData.readUnsignedByte() == 0xFA) &&
 								"MC|PingHost".equals(new String(Utils.toArray(receivedData.readBytes(receivedData.readUnsignedShort() * 2)), StandardCharsets.UTF_16BE))
@@ -101,7 +129,7 @@ public class InitialPacketDecoder extends ChannelInboundHandlerAdapter {
 			return;
 		}
 		protocolSet = true;
-		ProtocolStorage.setProtocolVersion(channel.remoteAddress(), version);
+		ProtocolStorage.setProtocolVersion(Utils.getNetworkManagerSocketAddress(channel), version);
 		channel.pipeline().remove(ChannelHandlers.INITIAL_DECODER);
 		pipelineBuilders.get(version).buildPipeLine(channel, version);
 		input.readerIndex(0);
