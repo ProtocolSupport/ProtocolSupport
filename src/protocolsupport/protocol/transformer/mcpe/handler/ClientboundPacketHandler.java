@@ -229,6 +229,7 @@ public class ClientboundPacketHandler {
 					int windowId = packetdata.readByte();
 					int slot = packetdata.readShort();
 					ItemStack itemstack = packetdata.readItemStack();
+					itemstack = PEPlayerInventory.addFakeTag(itemstack);
 					//TODO: other inventory types
 					if (windowId == 0) {
 						if (slot >= 9 && slot < 45) {
@@ -243,7 +244,7 @@ public class ClientboundPacketHandler {
 					int windowId = packetdata.readByte();
 					ItemStack[] packetitems = new ItemStack[packetdata.readShort()];
 					for (int i = 0; i < packetitems.length; i++) {
-						packetitems[i] = packetdata.readItemStack();
+						packetitems[i] = PEPlayerInventory.addFakeTag(packetdata.readItemStack());
 					}
 					//TODO: other inventory types
 					if (windowId == 0) {

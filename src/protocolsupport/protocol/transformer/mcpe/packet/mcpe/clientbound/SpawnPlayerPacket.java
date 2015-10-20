@@ -3,15 +3,11 @@ package protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound;
 import java.util.UUID;
 
 import net.minecraft.server.v1_8_R3.ItemStack;
-import gnu.trove.map.hash.TIntObjectHashMap;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
-import protocolsupport.utils.DataWatcherObject;
-import protocolsupport.utils.DataWatcherObject.ValueType;
-import protocolsupport.utils.DataWatcherSerializer;
 
 public class SpawnPlayerPacket implements ClientboundPEPacket {
 

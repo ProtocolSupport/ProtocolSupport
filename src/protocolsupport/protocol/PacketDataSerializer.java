@@ -16,7 +16,6 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
-import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.zip.GZIPInputStream;
@@ -40,6 +39,7 @@ import org.spigotmc.SneakyThrow;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ItemStackWriteEvent;
+import protocolsupport.protocol.transformer.mcpe.nbt.PENbtWriter;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
@@ -106,7 +106,18 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 	@Override
 	public void a(NBTTagCompound nbttagcompound) {
 		if (getVersion() == ProtocolVersion.MINECRAFT_PE) {
-			writeShort(0);
+			if (nbttagcompound == null) {
+				writeShort(0);
+			} else {
+				PacketDataSerializer tempbuffer = new PacketDataSerializer(Allocator.allocateBuffer(), ProtocolVersion.MINECRAFT_PE);
+				try {
+					PENbtWriter.write(nbttagcompound, tempbuffer);
+					writeShort(tempbuffer.writerIndex());
+					writeBytes(tempbuffer);
+				} finally {
+					tempbuffer.release();
+				}
+			}
 			return;
 		}
 		if (getVersion() != ProtocolVersion.MINECRAFT_1_8) {
@@ -202,6 +213,13 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 
 	@Override
 	public NBTTagCompound h() throws IOException {
+		if (getVersion() == ProtocolVersion.MINECRAFT_PE) {
+			//ignore reading nbt data for client,
+			//we don't need it because all itemstack fields in packets are used only to compare if the item in hand is correct,
+			//and just item id and count should be enough for that
+			readBytes(readShort());
+			return null;
+		}
 		if (getVersion() != ProtocolVersion.MINECRAFT_1_8) {
 			final short length = readShort();
 			if (length < 0 || (getVersion() == ProtocolVersion.MINECRAFT_PE && length == 0)) {
@@ -343,17 +361,6 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 
 	public void writeUUID(UUID uuid) {
 		a(uuid);
-	}
-
-	public String readLString() {
-		ByteBuf buf = order(ByteOrder.LITTLE_ENDIAN);
-		return new String(Utils.toArray(buf.readBytes(buf.readShort())));
-	}
-
-	public void writeLString(String value) {
-		ByteBuf buf = order(ByteOrder.LITTLE_ENDIAN);
-		buf.writeShort(value.length());
-		buf.writeBytes(value.getBytes(StandardCharsets.UTF_8));
 	}
 
 	public int readLTriad() {
