@@ -44,13 +44,13 @@ public class DataWatcherObject {
 	}
 
 	public static enum ValueType {
-		BYTE(new TypeToProtocolsMappingEntry(0, ProtocolVersionsHelper.ALL)),
-		SHORT(new TypeToProtocolsMappingEntry(1, ProtocolVersionsHelper.ALL)),
-		INT(new TypeToProtocolsMappingEntry(2, ProtocolVersionsHelper.ALL)),
-		FLOAT(new TypeToProtocolsMappingEntry(3, ProtocolVersionsHelper.ALL)),
-		STRING(new TypeToProtocolsMappingEntry(4, ProtocolVersionsHelper.ALL)),
-		ITEMSTACK(new TypeToProtocolsMappingEntry(5, ProtocolVersionsHelper.ALL)),
-		VECTOR3I(new TypeToProtocolsMappingEntry(6, ProtocolVersionsHelper.BEFORE_1_9)),
+		BYTE(new TypeToProtocolsMappingEntry(0, ProtocolVersionsHelper.concat(ProtocolVersionsHelper.ALL, ProtocolVersion.MINECRAFT_PE))),
+		SHORT(new TypeToProtocolsMappingEntry(1, ProtocolVersionsHelper.concat(ProtocolVersionsHelper.ALL, ProtocolVersion.MINECRAFT_PE))),
+		INT(new TypeToProtocolsMappingEntry(2, ProtocolVersionsHelper.concat(ProtocolVersionsHelper.ALL, ProtocolVersion.MINECRAFT_PE))),
+		FLOAT(new TypeToProtocolsMappingEntry(3, ProtocolVersionsHelper.concat(ProtocolVersionsHelper.ALL, ProtocolVersion.MINECRAFT_PE))),
+		STRING(new TypeToProtocolsMappingEntry(4, ProtocolVersionsHelper.concat(ProtocolVersionsHelper.ALL, ProtocolVersion.MINECRAFT_PE))),
+		ITEMSTACK(new TypeToProtocolsMappingEntry(5, ProtocolVersionsHelper.concat(ProtocolVersionsHelper.ALL, ProtocolVersion.MINECRAFT_PE))),
+		VECTOR3I(new TypeToProtocolsMappingEntry(6, ProtocolVersionsHelper.concat(ProtocolVersionsHelper.BEFORE_1_9, ProtocolVersion.MINECRAFT_PE))),
 		VECTOR3F(new TypeToProtocolsMappingEntry(7, ProtocolVersion.MINECRAFT_1_8));
 
 		private static final EnumMap<ProtocolVersion, ValueType[]> TYPE_BY_PROTOCOL_AND_ID = new EnumMap<ProtocolVersion, ValueType[]>(ProtocolVersion.class);

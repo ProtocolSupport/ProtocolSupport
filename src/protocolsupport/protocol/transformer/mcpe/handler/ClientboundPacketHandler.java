@@ -31,12 +31,14 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.EntityEquipmen
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.MovePlayerPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.SetHealthPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddItemEntityPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddLivingEntityPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddPaintingPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AdventureSettingsPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ChunkPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PlayerListPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PongPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.RemoveEntityPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.RemovePlayerPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetBlocksPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetDifficultyPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetTimePacket;
@@ -46,10 +48,12 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SpawnPl
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.StartGamePacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ContainerSetContentsPacket;
 import protocolsupport.protocol.transformer.mcpe.remapper.BlockIDRemapper;
+import protocolsupport.protocol.transformer.mcpe.utils.EntityRemapper;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificType;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedObject;
+import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
 import protocolsupport.utils.Allocator;
 import protocolsupport.utils.DataWatcherObject;
 import protocolsupport.utils.DataWatcherSerializer;
@@ -86,8 +90,10 @@ public class ClientboundPacketHandler {
 		spawned = true;
 	}
 
+	//TODO: rework storage
 	private final LocalStorage storage = new LocalStorage();
 	private final ItemInfoStorage itemInfo = new ItemInfoStorage();
+	private final TIntObjectMap<UUID> playerUUIDs = new TIntObjectHashMap<UUID>();
 
 	@SuppressWarnings({ "rawtypes", "deprecation" })
 	public List<? extends ClientboundPEPacket> transform(Packet packet) throws Exception {
@@ -123,12 +129,6 @@ public class ClientboundPacketHandler {
 				case 0x03: { //PacketPlayOutTime
 					packetdata.readLong();
 					return Collections.singletonList(new SetTimePacket((int) packetdata.readLong()));
-				}
-				case 0x04: { //PacketPlayOutEntityEquipment
-					int entityId = packetdata.readVarInt();
-					int slot = packetdata.readShort();
-					ItemStack itemstack = packetdata.readItemStack();
-					return Collections.singletonList(new EntityEquipmentInventoryPacket(entityId, itemstack, slot));
 				}
 				case 0x06: { //PacketPlayOutUpdateHealth
 					return Collections.singletonList(new SetHealthPacket((int) packetdata.readFloat()));
@@ -173,18 +173,18 @@ public class ClientboundPacketHandler {
 					float locZ = packetdata.readInt() / 32.0F;
 					float yaw = packetdata.readByte() * 360.0F / 256.0F;
 					float pitch = packetdata.readByte() * 360.0F / 256.0F;
-					short itemId = packetdata.readShort();
 					String username = storage.getPlayerListName(uuid);
 					if (username == null) {
 						username = "Unknown";
 					}
+					storage.addWatchedEntity(new WatchedPlayer(entityId));
+					playerUUIDs.put(entityId, uuid);
+					return Collections.emptyList();
 					//TODO: figure out why spawning players doesn't work
 					/*return Collections.singletonList(new SpawnPlayerPacket(
 						uuid, username, entityId,
-						locX, locY, locZ, yaw, pitch,
-						itemId != 0 ? new ItemStack(Item.getById(itemId)) : null
+						locX, locY, locZ, yaw, pitch
 					));*/
-					return Collections.emptyList();
 				}
 				case 0x0E: { //PacketPlayOutSpawnObject
 					int entityId = packetdata.readVarInt();
@@ -198,6 +198,17 @@ public class ClientboundPacketHandler {
 						storage.addWatchedEntity(new WatchedObject(entityId, type));
 					}
 					return Collections.emptyList();
+				}
+				case 0x0F: { //PacketPlayOutSpawnLiving
+					int entityId = packetdata.readVarInt();
+					int type = packetdata.readByte() & 0xFF;
+					float x = packetdata.readInt() / 32.0F;
+					float y = packetdata.readInt() / 32.0F;
+					float z = packetdata.readInt() / 32.0F;
+					float yaw = packetdata.readFloat();
+					float pitch = packetdata.readFloat();
+					return Collections.emptyList();
+					//return Collections.singletonList(new AddLivingEntityPacket(entityId, EntityRemapper.REGISTRY.getTable(ProtocolVersion.MINECRAFT_PE).getRemap(type), x, y, z, yaw, pitch));
 				}
 				case 0x10: { //PacketPlayOutSpawnPainting
 					int entityId = packetdata.readVarInt();
@@ -238,7 +249,10 @@ public class ClientboundPacketHandler {
 						if (entity == null || entity.getType() != SpecificType.PLAYER) {
 							packets.add(new RemoveEntityPacket(entityId));
 						} else {
-							//TODO: remove player
+							UUID uuid = playerUUIDs.get(entityId);
+							if (uuid != null) {
+								packets.add(new RemovePlayerPacket(entityId, uuid));
+							}
 						}
 					}
 					storage.removeWatchedEntities(entityIds);
@@ -416,12 +430,11 @@ public class ClientboundPacketHandler {
 							if (uuids.size() != 0) {
 								//TODO: pull entities directly for world players list to support NPC
 							}
-							return Collections.emptyList();
-							/*if (players.size() != 0) {
+							if (players.size() != 0) {
 								return Collections.singletonList(new PlayerListPacket(players.toArray(new EntityPlayer[players.size()])));
 							} else {
 								return Collections.emptyList();
-							}*/
+							}
 						}
 					}
 					break;

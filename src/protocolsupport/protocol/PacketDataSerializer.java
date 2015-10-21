@@ -39,7 +39,7 @@ import org.spigotmc.SneakyThrow;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ItemStackWriteEvent;
-import protocolsupport.protocol.transformer.mcpe.nbt.PENbtWriter;
+import protocolsupport.protocol.transformer.mcpe.utils.PENbtWriter;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;

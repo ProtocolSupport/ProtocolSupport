@@ -1,4 +1,4 @@
-package protocolsupport.protocol.transformer.mcpe.nbt;
+package protocolsupport.protocol.transformer.mcpe.utils;
 
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
