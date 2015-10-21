@@ -1,9 +1,11 @@
 package protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound;
 
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 import net.minecraft.server.v1_8_R3.ItemStack;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
@@ -51,11 +53,34 @@ public class SpawnPlayerPacket implements ClientboundPEPacket {
 		serializer.writeFloat(0);
 		serializer.writeFloat(0);
 		serializer.writeFloat(yaw);
-		serializer.writeFloat(yaw);
+		serializer.writeFloat(0);
 		serializer.writeFloat(pitch);
 		serializer.writeItemStack(item);
 		//TODO: actual metadata
-		serializer.writeByte(127);
+		//flags
+		serializer.writeByte((0 << 5) | (0 & 0x1F));
+		serializer.writeByte(0);
+		//air
+		serializer.writeByte((1 << 5) | (1 & 0x1F));
+		serializer.writeShort(ByteBufUtil.swapShort((short) 300));
+		//nametag
+		serializer.writeByte((4 << 5) | (2 & 0x1F));
+		serializer.writeShort(ByteBufUtil.swapShort((short) name.length()));
+		serializer.writeBytes(name.getBytes(StandardCharsets.UTF_8));
+		//show nametag
+		serializer.writeByte((0 << 5) | (3 & 0x1F));
+		serializer.writeByte(1);
+		//silent
+		serializer.writeByte((0 << 5) | (4 & 0x1F));
+		serializer.writeByte(0);
+		//noai
+		serializer.writeByte((0 << 5) | (15 & 0x1F));
+		serializer.writeByte(0);
+		//asleep
+		serializer.writeByte((0 << 5) | (16 & 0x1F));
+		serializer.writeByte(0);
+		//end
+		serializer.writeByte(0x7F);
 		/*TIntObjectHashMap<DataWatcherObject> metadata = new TIntObjectHashMap<>();
 		metadata.put(0, new DataWatcherObject(ValueType.BYTE, (byte) 0));
 		metadata.put(1, new DataWatcherObject(ValueType.SHORT_PE, (short) 300));

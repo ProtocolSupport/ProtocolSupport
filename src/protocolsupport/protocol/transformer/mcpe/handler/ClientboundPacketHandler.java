@@ -1,5 +1,8 @@
 package protocolsupport.protocol.transformer.mcpe.handler;
 
+import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,10 +16,12 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage;
+import protocolsupport.protocol.transformer.mcpe.ItemInfoStorage;
 import protocolsupport.protocol.transformer.mcpe.PEPlayerInventory;
 import protocolsupport.protocol.transformer.mcpe.UDPNetworkManager;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
@@ -25,10 +30,13 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.ContainerSetSl
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.EntityEquipmentInventoryPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.MovePlayerPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.SetHealthPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddItemEntityPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddPaintingPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AdventureSettingsPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ChunkPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PlayerListPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PongPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.RemoveEntityPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetBlocksPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetDifficultyPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetTimePacket;
@@ -39,15 +47,22 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.StartGa
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ContainerSetContentsPacket;
 import protocolsupport.protocol.transformer.mcpe.remapper.BlockIDRemapper;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificType;
+import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
+import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedObject;
 import protocolsupport.utils.Allocator;
+import protocolsupport.utils.DataWatcherObject;
+import protocolsupport.utils.DataWatcherSerializer;
 import protocolsupport.utils.Utils;
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.Chunk;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
+import net.minecraft.server.v1_8_R3.EnumDirection;
 import net.minecraft.server.v1_8_R3.EnumProtocol;
 import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R3.Item;
 import net.minecraft.server.v1_8_R3.ItemStack;
+import net.minecraft.server.v1_8_R3.Items;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.World;
 
@@ -61,8 +76,10 @@ public class ClientboundPacketHandler {
 	private int loadedChunkCount;
 	private boolean spawned;
 
+	private static final long initialChunkCount = Bukkit.getViewDistance() * Bukkit.getViewDistance() * 4;
+
 	public boolean canSpawnPlayer() {
-		return loadedChunkCount >= 60 && !spawned;
+		return loadedChunkCount >= initialChunkCount && !spawned;
 	}
 
 	public void setSpawned() {
@@ -70,6 +87,7 @@ public class ClientboundPacketHandler {
 	}
 
 	private final LocalStorage storage = new LocalStorage();
+	private final ItemInfoStorage itemInfo = new ItemInfoStorage();
 
 	@SuppressWarnings({ "rawtypes", "deprecation" })
 	public List<? extends ClientboundPEPacket> transform(Packet packet) throws Exception {
@@ -160,11 +178,86 @@ public class ClientboundPacketHandler {
 					if (username == null) {
 						username = "Unknown";
 					}
-					return Collections.singletonList(new SpawnPlayerPacket(
+					//TODO: figure out why spawning players doesn't work
+					/*return Collections.singletonList(new SpawnPlayerPacket(
 						uuid, username, entityId,
 						locX, locY, locZ, yaw, pitch,
 						itemId != 0 ? new ItemStack(Item.getById(itemId)) : null
-					));
+					));*/
+					return Collections.emptyList();
+				}
+				case 0x0E: { //PacketPlayOutSpawnObject
+					int entityId = packetdata.readVarInt();
+					int type = packetdata.readByte();
+					float locX = packetdata.readInt() / 32.0F;
+					float locY = packetdata.readInt() / 32.0F;
+					float locZ = packetdata.readInt() / 32.0F;
+					if (type == 2) {
+						//only store initial item info, we will spawn item later when metadata will tell us which item is it actually
+						itemInfo.addItemInfo(entityId, locX, locY, locZ);
+						storage.addWatchedEntity(new WatchedObject(entityId, type));
+					}
+					return Collections.emptyList();
+				}
+				case 0x10: { //PacketPlayOutSpawnPainting
+					int entityId = packetdata.readVarInt();
+					String name = packetdata.readString(13);
+					BlockPosition location = packetdata.c();
+					int direction = packetdata.readByte();
+					int x = location.getX();
+					int z = location.getZ();
+					switch (direction) {
+						case 0: {
+							--z;
+							break;
+						}
+						case 1: {
+							++x;
+							break;
+						}
+						case 2: {
+							++z;
+							break;
+						}
+						case 3: {
+							--x;
+							break;
+						}
+					}
+					return Collections.singletonList(new AddPaintingPacket(entityId, x, location.getY(), z, direction, name));
+				}
+				case 0x13: { //PacketPlayOutDestroyEntities
+					ArrayList<ClientboundPEPacket> packets = new ArrayList<ClientboundPEPacket>();
+					int count = packetdata.readVarInt();
+					int[] entityIds = new int[count];
+					for (int i = 0; i < count; i++) {
+						entityIds[i] = packetdata.readVarInt();
+					}
+					for (int entityId : entityIds) {
+						WatchedEntity entity = storage.getWatchedEntity(entityId);
+						if (entity == null || entity.getType() != SpecificType.PLAYER) {
+							packets.add(new RemoveEntityPacket(entityId));
+						} else {
+							//TODO: remove player
+						}
+					}
+					storage.removeWatchedEntities(entityIds);
+					itemInfo.removeItemsInfo(entityIds);
+					return packets;
+				}
+				case 0x1C: { //PacketPlayOutMetadata
+					int entityId = packetdata.readVarInt();
+					Vector vect = itemInfo.getItemInfo(entityId);
+					if (vect != null) {
+						TIntObjectMap<DataWatcherObject> metadata = DataWatcherSerializer.decodeData(ProtocolVersion.MINECRAFT_1_8, Utils.toArray(packetdata));
+						if (metadata.containsKey(10)) {
+							return Collections.singletonList(new AddItemEntityPacket(
+								entityId, (float) vect.getX(), (float) vect.getY(), (float) vect.getZ(),
+								0, 0, 0, (ItemStack) metadata.get(10).value
+							));
+						}
+					}
+					return Collections.emptyList();
 				}
 				case 0x21: { //PacketPlayOutMapChunk
 					int x = packetdata.readInt();
