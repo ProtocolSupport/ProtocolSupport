@@ -14,10 +14,12 @@ import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketListener;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.utils.SteerVehicleUtils;
 import protocolsupport.utils.Utils;
 
 public class PlayPacketTransformer implements PacketTransformer {
@@ -97,6 +99,9 @@ public class PlayPacketTransformer implements PacketTransformer {
 					packetdata.writeFloat(yaw);
 					packetdata.writeFloat(pitch);
 					packetdata.writeBoolean(onGroud);
+					
+					Player player = Utils.getPlayer(channel);
+					SteerVehicleUtils.applyVehicle(player, x, z);
 				} else {
 					packetdata.writeDouble(x);
 					packetdata.writeDouble(yfeet);
