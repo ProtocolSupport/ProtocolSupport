@@ -251,8 +251,9 @@ public class UDPNetworkManager extends NetworkManager {
 		if (buf.readableBytes() > mtu + 40) {
 			int orderIndex = getNextOrderIndex();
 			EncapsulatedPacket[] epackets = new EncapsulatedPacket[(buf.readableBytes() / maxsize) + 1];
+			int splitID = getNextSplitID();
 			for (int splitIndex = 0; splitIndex < epackets.length; splitIndex++) {
-				epackets[splitIndex] = new EncapsulatedPacket(buf.readBytes(buf.readableBytes() < maxsize ? buf.readableBytes() : maxsize), getNextMessageID(), orderIndex, getNextSplitID(), epackets.length, splitIndex);
+				epackets[splitIndex] = new EncapsulatedPacket(buf.readBytes(buf.readableBytes() < maxsize ? buf.readableBytes() : maxsize), getNextMessageID(), orderIndex, splitID, epackets.length, splitIndex);
 			}
 			sendEncapsulatedPackets(epackets);
 		} else {

@@ -2,6 +2,7 @@ package protocolsupport.protocol.transformer.mcpe.handler;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,11 +87,7 @@ public class ServerboundPacketHandler {
 		}
 
 		public ByteBuf getData() {
-			ByteBuf result = data[0];
-			for (int i = 1; i < data.length; i++) {
-				result.writeBytes(data[i]);
-			}
-			return result;
+			return Unpooled.wrappedBuffer(data);
 		}
 
 	}
