@@ -67,7 +67,10 @@ public class SpawnPlayerPacket implements ClientboundPEPacket {
 		metadata.put(2, new DataWatcherObject(ValueType.STRING, name));
 		metadata.put(3, new DataWatcherObject(ValueType.BYTE, (byte) 1));
 		metadata.put(4, new DataWatcherObject(ValueType.BYTE, (byte) 0));
+		metadata.put(7, new DataWatcherObject(ValueType.INT, 0));
+		metadata.put(8, new DataWatcherObject(ValueType.BYTE, (byte) 0));
 		metadata.put(15, new DataWatcherObject(ValueType.BYTE, (byte) 0));
+		metadata.put(17, new DataWatcherObject(ValueType.BYTE, (byte) 0));
 		serializer.writeBytes(PEDataWatcherSerializer.encode(metadata));
 		return this;
 	}

@@ -249,14 +249,14 @@ public class UDPNetworkManager extends NetworkManager {
 		}
 		int maxsize = mtu - 40;
 		if (buf.readableBytes() > mtu + 40) {
+			int orderIndex = getNextOrderIndex();
 			EncapsulatedPacket[] epackets = new EncapsulatedPacket[(buf.readableBytes() / maxsize) + 1];
-			int splitID = getNextSplitID();
 			for (int splitIndex = 0; splitIndex < epackets.length; splitIndex++) {
-				epackets[splitIndex] = new EncapsulatedPacket(buf.readBytes(buf.readableBytes() < maxsize ? buf.readableBytes() : maxsize), getNextMessageID(), splitID, epackets.length, splitIndex);
+				epackets[splitIndex] = new EncapsulatedPacket(buf.readBytes(buf.readableBytes() < maxsize ? buf.readableBytes() : maxsize), getNextMessageID(), orderIndex, getNextSplitID(), epackets.length, splitIndex);
 			}
 			sendEncapsulatedPackets(epackets);
 		} else {
-			sendEncapsulatedPackets(new EncapsulatedPacket(buf, getNextMessageID()));
+			sendEncapsulatedPackets(new EncapsulatedPacket(buf, getNextMessageID(), getNextOrderIndex()));
 		}
 	}
 
@@ -295,7 +295,7 @@ public class UDPNetworkManager extends NetworkManager {
 
 	private int currentSplitID = 0;
 	private int getNextSplitID() {
-		return currentSplitID++ & Short.MAX_VALUE;
+		return currentSplitID++ % Short.MAX_VALUE;
 	}
 
 	private int currentMessageID = 0;
@@ -306,6 +306,11 @@ public class UDPNetworkManager extends NetworkManager {
 	private int currentID = 0;
 	private int getNextID() {
 		return currentID++ % Short.MAX_VALUE;
+	}
+
+	private int currentOrderIndex = 0;
+	private int getNextOrderIndex() {
+		return currentOrderIndex++ % Short.MAX_VALUE;
 	}
 
 }

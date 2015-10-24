@@ -12,6 +12,9 @@ public class EncapsulatedPacket {
 
 	public int messageIndex;
 
+	public int orderChannel;
+	public int orderIndex;
+
 	public int splitCount;
 	public int splitID;
 	public int splitIndex;
@@ -21,14 +24,15 @@ public class EncapsulatedPacket {
 	public EncapsulatedPacket() {
 	}
 
-	public EncapsulatedPacket(ByteBuf data, int messageIndex) {
-		this.reliability = 2;
+	public EncapsulatedPacket(ByteBuf data, int messageIndex, int orderIndex) {
+		this.reliability = 3;
 		this.messageIndex = messageIndex;
+		this.orderIndex = orderIndex;
 		this.data.writeBytes(data);
 	}
 
-	public EncapsulatedPacket(ByteBuf data, int messageIndex, int splitID, int splitCount, int splitIndex) {
-		this(data, messageIndex);
+	public EncapsulatedPacket(ByteBuf data, int messageIndex, int orderIndex, int splitID, int splitCount, int splitIndex) {
+		this(data, messageIndex, orderIndex);
 		this.hasSplit = true;
 		this.splitID = splitID;
 		this.splitCount = splitCount;
@@ -50,8 +54,8 @@ public class EncapsulatedPacket {
 				messageIndex = serializer.readLTriad();
 			}
 			if (reliability <= 4 && reliability != 2) {
-				serializer.readLTriad();
-				serializer.readUnsignedByte();
+				orderIndex = serializer.readLTriad();
+				orderChannel = serializer.readUnsignedByte();
 			}
 		}
 
@@ -76,8 +80,10 @@ public class EncapsulatedPacket {
 
 		serializer.writeShort((data.readableBytes() << 3) & 0xFFFF);
 
-		//only support reliability level 2 for sending
+		//only support reliability level 3 for sending
 		serializer.writeLTriad(messageIndex);
+		serializer.writeLTriad(orderIndex);
+		serializer.writeByte(orderChannel);
 
 		if (hasSplit) {
 			serializer.writeInt(splitCount);
