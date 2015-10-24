@@ -3,13 +3,12 @@ package protocolsupport.protocol.transformer.mcpe.utils;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 
-import io.netty.buffer.ByteBufUtil;
+import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.EncoderException;
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.Item;
 import net.minecraft.server.v1_8_R3.ItemStack;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.utils.Allocator;
 import protocolsupport.utils.DataWatcherObject;
 import protocolsupport.utils.Utils;
@@ -19,49 +18,49 @@ import gnu.trove.map.TIntObjectMap;
 public class PEDataWatcherSerializer {
 
 	public static byte[] encode(TIntObjectMap<DataWatcherObject> objects) {
-		PacketDataSerializer serializer = new PacketDataSerializer(Allocator.allocateBuffer(), ProtocolVersion.MINECRAFT_PE);
+		ByteBuf bufferLE = Allocator.allocateBuffer().order(ByteOrder.LITTLE_ENDIAN);
 		try {
 			TIntObjectIterator<DataWatcherObject> iterator = objects.iterator();
 			while (iterator.hasNext()) {
 				iterator.advance();
 				DataWatcherObject object = iterator.value();
 				final int tk = ((object.type.getId(ProtocolVersion.MINECRAFT_PE) << 5) | (iterator.key() & 0x1F)) & 0xFF;
-				serializer.writeByte(tk);
+				bufferLE.writeByte(tk);
 				switch (object.type) {
 					case BYTE: {
-						serializer.writeByte((byte) object.value);
+						bufferLE.writeByte((byte) object.value);
 						break;
 					}
 					case SHORT: {
-						serializer.writeShort(ByteBufUtil.swapShort((short) object.value));
+						bufferLE.writeShort((short) object.value);
 						break;
 					}
 					case INT: {
-						serializer.writeInt(ByteBufUtil.swapInt((int) object.value));
+						bufferLE.writeInt((int) object.value);
 						break;
 					}
 					case FLOAT: {
-						serializer.order(ByteOrder.LITTLE_ENDIAN).writeFloat((float) object.value);
+						bufferLE.writeFloat((float) object.value);
 						break;
 					}
 					case STRING: {
 						byte[] data = ((String) object.value).getBytes(StandardCharsets.UTF_8);
-						serializer.writeShort(ByteBufUtil.swapShort((short) data.length));
-						serializer.writeBytes(data);
+						bufferLE.writeShort((short) data.length);
+						bufferLE.writeBytes(data);
 						break;
 					}
 					case ITEMSTACK: {
 						ItemStack itemstack = (ItemStack) object.value;
-						serializer.writeShort(ByteBufUtil.swapShort((short) Item.getId(itemstack.getItem())));
-						serializer.writeByte(itemstack.count);
-						serializer.writeShort(ByteBufUtil.swapShort((short) itemstack.getData()));
+						bufferLE.writeShort((short) Item.getId(itemstack.getItem()));
+						bufferLE.writeByte(itemstack.count);
+						bufferLE.writeShort((short) itemstack.getData());
 						break;
 					}
 					case VECTOR3I: {
 						BlockPosition blockPos = (BlockPosition) object.value;
-						serializer.writeInt(ByteBufUtil.swapInt(blockPos.getX()));
-						serializer.writeInt(ByteBufUtil.swapInt(blockPos.getY()));
-						serializer.writeInt(ByteBufUtil.swapInt(blockPos.getZ()));
+						bufferLE.writeInt(blockPos.getX());
+						bufferLE.writeInt(blockPos.getY());
+						bufferLE.writeInt(blockPos.getZ());
 						break;
 					}
 					default: {
@@ -69,10 +68,10 @@ public class PEDataWatcherSerializer {
 					}
 				}
 			}
-			serializer.writeByte(127);
-			return Utils.toArray(serializer);
+			bufferLE.writeByte(127);
+			return Utils.toArray(bufferLE);
 		} finally {
-			serializer.release();
+			bufferLE.release();
 		}
 	}
 
