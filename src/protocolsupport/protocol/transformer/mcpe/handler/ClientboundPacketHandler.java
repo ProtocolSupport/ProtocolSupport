@@ -29,6 +29,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.ContainerSetSl
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.MovePlayerPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.SetHealthPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddItemEntityPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddLivingEntityPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddPaintingPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AdventureSettingsPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ChunkPacket;
@@ -47,7 +48,8 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetSpaw
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddPlayerPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.StartGamePacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ContainerSetContentsPacket;
-import protocolsupport.protocol.transformer.mcpe.remapper.BlockIDRemapper;
+import protocolsupport.protocol.transformer.mcpe.utils.BlockIDRemapper;
+import protocolsupport.protocol.transformer.mcpe.utils.EntityRemapper;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificType;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
@@ -214,8 +216,12 @@ public class ClientboundPacketHandler {
 					float z = packetdata.readInt() / 32.0F;
 					float yaw = packetdata.readFloat();
 					float pitch = packetdata.readFloat();
+					/*if (spawned) {
+						return Collections.singletonList(new AddLivingEntityPacket(
+							entityId, 32, x, y, z, yaw, pitch
+						));
+					}*/
 					return Collections.emptyList();
-					//return Collections.singletonList(new AddLivingEntityPacket(entityId, EntityRemapper.REGISTRY.getTable(ProtocolVersion.MINECRAFT_PE).getRemap(type), x, y, z, yaw, pitch));
 				}
 				case 0x10: { //PacketPlayOutSpawnPainting
 					int entityId = packetdata.readVarInt();

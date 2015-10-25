@@ -15,6 +15,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.SetHealthPacke
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.ClientConnectPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.ClientDisconnectPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.ClientHandshakePacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.DropItemPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.LoginPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.PingPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.RemoveBlockPacket;
@@ -42,6 +43,7 @@ public class PEPacketRegistry {
 		register(EntityEquipmentInventoryPacket.class);
 		register(EntityEquipmentArmorPacket.class);
 		register(ContainerSetSlotPacket.class);
+		register(DropItemPacket.class);
 	}
 
 	public static ServerboundPEPacket getPacket(int id) {

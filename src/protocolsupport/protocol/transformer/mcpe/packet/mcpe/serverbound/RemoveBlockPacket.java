@@ -41,7 +41,7 @@ public class RemoveBlockPacket implements ServerboundPEPacket {
 			packetdata.writeByte(2);
 			packetdata.a(new BlockPosition(x, y, z));
 			packetdata.writeByte(1);
-			dig.a(new PacketDataSerializer(packetdata));
+			dig.a(packetdata);
 		} finally {
 			packetdata.release();
 		}

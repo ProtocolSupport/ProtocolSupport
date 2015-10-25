@@ -51,16 +51,15 @@ public class PingPacket implements ServerboundPEPacket {
 	}
 
 	private PacketPlayInKeepAlive getPlayKeepAlive() {
-		ByteBuf packetdata = Allocator.allocateBuffer();
+		PacketPlayInKeepAlive packet = new PacketPlayInKeepAlive();
+		PacketDataSerializer serializer = new PacketDataSerializer(Allocator.allocateBuffer(), ProtocolVersion.MINECRAFT_1_8);
 		try {
-			PacketDataSerializer serializer = new PacketDataSerializer(packetdata, ProtocolVersion.MINECRAFT_1_8);
 			serializer.writeVarInt((int) pingId);
-			PacketPlayInKeepAlive packet = new PacketPlayInKeepAlive();
 			packet.a(serializer);
 			return packet;
 		} catch (IOException e) {
 		} finally {
-			packetdata.release();
+			serializer.release();
 		}
 		return new PacketPlayInKeepAlive();
 	}

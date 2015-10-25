@@ -34,7 +34,9 @@ public class AnimatePacket implements DualPEPacket {
 
 	@Override
 	public List<? extends Packet<?>> transfrom() throws Exception {
-		return Collections.singletonList(new PacketPlayInArmAnimation());
+		PacketPlayInArmAnimation armanim = new PacketPlayInArmAnimation();
+		armanim.timestamp = System.currentTimeMillis();
+		return Collections.singletonList(armanim);
 	}
 
 }

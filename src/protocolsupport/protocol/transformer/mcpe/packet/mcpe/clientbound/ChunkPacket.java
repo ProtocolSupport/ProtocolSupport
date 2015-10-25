@@ -9,7 +9,7 @@ import net.minecraft.server.v1_8_R3.ChunkSection;
 import net.minecraft.server.v1_8_R3.IBlockData;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
-import protocolsupport.protocol.transformer.mcpe.remapper.BlockIDRemapper;
+import protocolsupport.protocol.transformer.mcpe.utils.BlockIDRemapper;
 import protocolsupport.utils.MutableBlockPosition;
 
 public class ChunkPacket implements ClientboundPEPacket {

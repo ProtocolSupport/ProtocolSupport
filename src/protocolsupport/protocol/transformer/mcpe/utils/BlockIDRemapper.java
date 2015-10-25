@@ -1,4 +1,4 @@
-package protocolsupport.protocol.transformer.mcpe.remapper;
+package protocolsupport.protocol.transformer.mcpe.utils;
 
 import java.util.Arrays;
 
