@@ -51,10 +51,10 @@ public class EncapsulatedPacket {
 
 		if (reliability > 0) {
 			if (reliability >= 2 && reliability != 5) {
-				messageIndex = serializer.readLTriad();
+				messageIndex = RakNetDataSerializer.readTriad(buf);
 			}
 			if (reliability <= 4 && reliability != 2) {
-				orderIndex = serializer.readLTriad();
+				orderIndex = RakNetDataSerializer.readTriad(buf);
 				orderChannel = serializer.readUnsignedByte();
 			}
 		}
@@ -81,8 +81,8 @@ public class EncapsulatedPacket {
 		serializer.writeShort((data.readableBytes() << 3) & 0xFFFF);
 
 		//only support reliability level 3 for sending
-		serializer.writeLTriad(messageIndex);
-		serializer.writeLTriad(orderIndex);
+		RakNetDataSerializer.writeTriad(buf, messageIndex);
+		RakNetDataSerializer.writeTriad(buf, orderIndex);
 		serializer.writeByte(orderChannel);
 
 		if (hasSplit) {

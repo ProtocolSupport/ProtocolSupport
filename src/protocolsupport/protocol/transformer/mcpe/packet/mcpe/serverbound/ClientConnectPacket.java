@@ -14,7 +14,7 @@ import net.minecraft.server.v1_8_R3.Packet;
 public class ClientConnectPacket implements ServerboundPEPacket {
 
 	protected long clientID;
-	protected long sessionID;
+	protected long sendPing;
 	protected boolean useSecurity;
 
 	@Override
@@ -25,7 +25,7 @@ public class ClientConnectPacket implements ServerboundPEPacket {
 	@Override
 	public ServerboundPEPacket decode(ByteBuf buf) throws Exception {
 		clientID = buf.readLong();
-		sessionID = buf.readLong();
+		sendPing = buf.readLong();
 		useSecurity = buf.readBoolean();
 		return this;
 	}

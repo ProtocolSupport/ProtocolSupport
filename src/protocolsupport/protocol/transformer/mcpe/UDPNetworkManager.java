@@ -12,8 +12,6 @@ import org.spigotmc.SneakyThrow;
 
 import com.google.common.base.Function;
 
-import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.mcpe.handler.ClientboundPacketHandler;
 import protocolsupport.protocol.transformer.mcpe.handler.PELoginListener;
 import protocolsupport.protocol.transformer.mcpe.handler.ServerboundPacketHandler;
@@ -27,6 +25,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.raknet.Connection2Reply;
 import protocolsupport.protocol.transformer.mcpe.packet.raknet.EncapsulatedPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.raknet.NACK;
 import protocolsupport.protocol.transformer.mcpe.packet.raknet.RakNetConstants;
+import protocolsupport.protocol.transformer.mcpe.packet.raknet.RakNetDataSerializer;
 import protocolsupport.protocol.transformer.mcpe.packet.raknet.RakNetPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.raknet.ServerInfoPacket;
 import protocolsupport.protocol.transformer.mcpe.pipeline.UDPRouter;
@@ -134,6 +133,7 @@ public class UDPNetworkManager extends NetworkManager {
 			return;
 		}
 		lastSentPacket = System.currentTimeMillis();
+		ByteBuf buf = raknetpacket.getData();
 		try {
 			switch (raknetpacket.getId()) {
 				case RakNetConstants.ID_PING_OPEN_CONNECTIONS: {
@@ -141,45 +141,36 @@ public class UDPNetworkManager extends NetworkManager {
 						break;
 					}
 					state = State.INFO;
-					PacketDataSerializer serializer = new PacketDataSerializer(raknetpacket.getData(), ProtocolVersion.MINECRAFT_PE);
-					sendRakNetPacket0(new ServerInfoPacket(getClientAddress(), serializer.readLong()));
+					sendRakNetPacket0(new ServerInfoPacket(getClientAddress(), buf.readLong()));
 					close(new ChatComponentText(""));
 					break;
 				}
-                case RakNetConstants.ID_OPEN_CONNECTION_REQUEST_1: {
+				case RakNetConstants.ID_OPEN_CONNECTION_REQUEST_1: {
 					if (state != State.NONE) {
 						break;
 					}
 					state = State.CONNECTING;
-					sendRakNetPacket0(new Connection1Reply(
-						getClientAddress(),
-						((raknetpacket.getData().readableBytes() + raknetpacket.getData().readerIndex() - 18) & 0xFFFF)
-					));
+					sendRakNetPacket0(new Connection1Reply(getClientAddress(), ((raknetpacket.getData().readableBytes() + raknetpacket.getData().readerIndex() - 18) & 0xFFFF)));
 					break;
 				}
-                case RakNetConstants.ID_OPEN_CONNECTION_REQUEST_2: {
-                	if (state != State.CONNECTING) {
-                		break;
-                	}
-                	state = State.CONNECTED;
-            		PacketDataSerializer serializer = new PacketDataSerializer(raknetpacket.getData(), ProtocolVersion.MINECRAFT_PE);
-					serializer.skipBytes(16);
-					serializer.readByte();
-					serializer.readInt();
-					serializer.readShort();
-                    short clientMTU = serializer.readShort();
-                    serializer.readLong();
-                    this.mtu = clientMTU;
+				case RakNetConstants.ID_OPEN_CONNECTION_REQUEST_2: {
+					if (state != State.CONNECTING) {
+						break;
+					}
+					state = State.CONNECTED;
+					buf.skipBytes(16);
+					RakNetDataSerializer.readAddress(buf);
+					short clientMTU = buf.readShort();
+					this.mtu = clientMTU;
 					sendRakNetPacket0(new Connection2Reply(getClientAddress(), clientMTU));
-                    break;
-                }
-                case RakNetConstants.ACK: {
-            		PacketDataSerializer serializer = new PacketDataSerializer(raknetpacket.getData(), ProtocolVersion.MINECRAFT_PE);
-					int count = serializer.readShort();
-					for (int i = 0; i < count && serializer.isReadable() && i < 4096; ++i) {
-						if (serializer.readByte() == (byte) 0x00) {
-							int start = serializer.readLTriad();
-							int end = serializer.readLTriad();
+					break;
+				}
+				case RakNetConstants.ACK: {
+					int count = buf.readShort();
+					for (int i = 0; i < count && buf.isReadable() && i < 4096; ++i) {
+						if (buf.readByte() == (byte) 0x00) {
+							int start = RakNetDataSerializer.readTriad(buf);
+							int end = RakNetDataSerializer.readTriad(buf);
 							if ((end - start) > 512) {
 								end = start + 512;
 							}
@@ -187,18 +178,17 @@ public class UDPNetworkManager extends NetworkManager {
 								sentPackets.remove(c);
 							}
 						} else {
-							sentPackets.remove(serializer.readLTriad());
+							sentPackets.remove(RakNetDataSerializer.readTriad(buf));
 						}
 					}
-                	break;
-                }
-                case RakNetConstants.NACK: {
-            		PacketDataSerializer serializer = new PacketDataSerializer(raknetpacket.getData(), ProtocolVersion.MINECRAFT_PE);
-					int count = serializer.readShort();
-					for (int i = 0; i < count && serializer.isReadable() && i < 4096; ++i) {
-						if (serializer.readByte() == (byte) 0x00) {
-							int start = serializer.readLTriad();
-							int end = serializer.readLTriad();
+					break;
+				}
+				case RakNetConstants.NACK: {
+					int count = buf.readShort();
+					for (int i = 0; i < count && buf.isReadable() && i < 4096; ++i) {
+						if (buf.readByte() == (byte) 0x00) {
+							int start = RakNetDataSerializer.readTriad(buf);
+							int end = RakNetDataSerializer.readTriad(buf);
 							if ((end - start) > 512) {
 								end = start + 512;
 							}
@@ -209,23 +199,23 @@ public class UDPNetworkManager extends NetworkManager {
 								}
 							}
 						} else {
-							RakNetPacket missedpacket = sentPackets.get(serializer.readLTriad());
+							RakNetPacket missedpacket = sentPackets.get(RakNetDataSerializer.readTriad(buf));
 							if (missedpacket != null) {
 								sendRakNetPacket0(missedpacket);
 							}
 						}
 					}
-                	break;
-                }
-                default: {
-                	if (state == State.CONNECTED) {
-                		raknetpacket.decodeEncapsulated();
-                		for (Packet nativepacket : serverboundTransformer.transform(raknetpacket)) {
-                			channelRead0(null, nativepacket);
-                		}
-                	}
-                	break;
-                }
+					break;
+				}
+				default: {
+					if (state == State.CONNECTED) {
+						raknetpacket.decodeEncapsulated();
+						for (Packet nativepacket : serverboundTransformer.transform(raknetpacket)) {
+							channelRead0(null, nativepacket);
+						}
+					}
+					break;
+				}
 			}
 		} catch (Throwable e) {
 			if (MinecraftServer.getServer().isDebugging()) {
@@ -236,14 +226,17 @@ public class UDPNetworkManager extends NetworkManager {
 	}
 
 	private static enum State {
-		NONE, CONNECTING, CONNECTED, INFO
+		NONE,
+		CONNECTING,
+		CONNECTED,
+		INFO
 	}
 
 	public void sendPEPacket(ClientboundPEPacket pepacket) throws Exception {
 		ByteBuf buf = Unpooled.buffer();
 		buf.writeByte(pepacket.getId());
 		pepacket.encode(buf);
-		if (buf.readableBytes() > 128 && !(pepacket instanceof BatchPacket)) {
+		if (buf.readableBytes() > 1024 && !(pepacket instanceof BatchPacket)) {
 			sendPEPacket(new BatchPacket(pepacket));
 			return;
 		}
@@ -269,7 +262,7 @@ public class UDPNetworkManager extends NetworkManager {
 
 	public void sendACK(int seqNumber) {
 		ACK ack = new ACK((InetSocketAddress) l);
-		ack.id  = seqNumber;
+		ack.id = seqNumber;
 		sendRakNetPacket0(ack);
 	}
 
@@ -295,21 +288,25 @@ public class UDPNetworkManager extends NetworkManager {
 	}
 
 	private int currentSplitID = 0;
+
 	private int getNextSplitID() {
 		return currentSplitID++ % Short.MAX_VALUE;
 	}
 
 	private int currentMessageID = 0;
+
 	private int getNextMessageID() {
 		return currentMessageID++ % Short.MAX_VALUE;
 	}
 
 	private int currentID = 0;
+
 	private int getNextID() {
 		return currentID++ % Short.MAX_VALUE;
 	}
 
 	private int currentOrderIndex = 0;
+
 	private int getNextOrderIndex() {
 		return currentOrderIndex++ % Short.MAX_VALUE;
 	}

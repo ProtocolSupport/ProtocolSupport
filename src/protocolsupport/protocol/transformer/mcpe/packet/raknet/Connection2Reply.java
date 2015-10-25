@@ -4,8 +4,6 @@ import io.netty.buffer.ByteBuf;
 
 import java.net.InetSocketAddress;
 
-import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.mcpe.UDPNetworkManager;
 
 public class Connection2Reply extends RakNetPacket {
@@ -24,12 +22,11 @@ public class Connection2Reply extends RakNetPacket {
 
 	@Override
 	public void encode(ByteBuf buf) {
-		PacketDataSerializer serializer = new PacketDataSerializer(buf, ProtocolVersion.MINECRAFT_PE);
-		serializer.writeBytes(RakNetConstants.MAGIC);
-		serializer.writeLong(UDPNetworkManager.serverID);
-		serializer.writeAddress(getClientAddress());
-		serializer.writeShort(mtu);
-		serializer.writeByte(0);
+		buf.writeBytes(RakNetConstants.MAGIC);
+		buf.writeLong(UDPNetworkManager.serverID);
+		RakNetDataSerializer.writeAddress(buf, getClientAddress());
+		buf.writeShort(mtu);
+		buf.writeByte(0);
 	}
 
 }

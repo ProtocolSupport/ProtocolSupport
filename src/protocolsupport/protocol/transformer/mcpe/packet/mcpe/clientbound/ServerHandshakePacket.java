@@ -5,10 +5,9 @@ import io.netty.buffer.ByteBuf;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
-import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
+import protocolsupport.protocol.transformer.mcpe.packet.raknet.RakNetDataSerializer;
 
 public class ServerHandshakePacket implements ClientboundPEPacket {
 
@@ -29,21 +28,20 @@ public class ServerHandshakePacket implements ClientboundPEPacket {
 
 	@Override
 	public ClientboundPEPacket encode(ByteBuf buf) throws Exception {
-		PacketDataSerializer serializer = new PacketDataSerializer(buf, ProtocolVersion.MINECRAFT_PE);
-		serializer.writeAddress(addr);
-		serializer.writeShort(0);
-		serializer.writeAddress(new InetSocketAddress(InetAddress.getByName("127.0.0.1"), 0));
-		serializer.writeAddress(new InetSocketAddress(InetAddress.getByName("0.0.0.0"), 0));
-		serializer.writeAddress(new InetSocketAddress(InetAddress.getByName("0.0.0.0"), 0));
-		serializer.writeAddress(new InetSocketAddress(InetAddress.getByName("0.0.0.0"), 0));
-		serializer.writeAddress(new InetSocketAddress(InetAddress.getByName("0.0.0.0"), 0));
-		serializer.writeAddress(new InetSocketAddress(InetAddress.getByName("0.0.0.0"), 0));
-		serializer.writeAddress(new InetSocketAddress(InetAddress.getByName("0.0.0.0"), 0));
-		serializer.writeAddress(new InetSocketAddress(InetAddress.getByName("0.0.0.0"), 0));
-		serializer.writeAddress(new InetSocketAddress(InetAddress.getByName("0.0.0.0"), 0));
-		serializer.writeAddress(new InetSocketAddress(InetAddress.getByName("0.0.0.0"), 0));
-		serializer.writeLong(session1);
-		serializer.writeLong(session2);
+		RakNetDataSerializer.writeAddress(buf, addr);
+		buf.writeShort(0);
+		RakNetDataSerializer.writeAddress(buf, new InetSocketAddress(InetAddress.getByName("127.0.0.1"), 0));
+		RakNetDataSerializer.writeAddress(buf, new InetSocketAddress(InetAddress.getByName("0.0.0.0"), 0));
+		RakNetDataSerializer.writeAddress(buf, new InetSocketAddress(InetAddress.getByName("0.0.0.0"), 0));
+		RakNetDataSerializer.writeAddress(buf, new InetSocketAddress(InetAddress.getByName("0.0.0.0"), 0));
+		RakNetDataSerializer.writeAddress(buf, new InetSocketAddress(InetAddress.getByName("0.0.0.0"), 0));
+		RakNetDataSerializer.writeAddress(buf, new InetSocketAddress(InetAddress.getByName("0.0.0.0"), 0));
+		RakNetDataSerializer.writeAddress(buf, new InetSocketAddress(InetAddress.getByName("0.0.0.0"), 0));
+		RakNetDataSerializer.writeAddress(buf, new InetSocketAddress(InetAddress.getByName("0.0.0.0"), 0));
+		RakNetDataSerializer.writeAddress(buf, new InetSocketAddress(InetAddress.getByName("0.0.0.0"), 0));
+		RakNetDataSerializer.writeAddress(buf, new InetSocketAddress(InetAddress.getByName("0.0.0.0"), 0));
+		buf.writeLong(session1);
+		buf.writeLong(session2);
         return this;
 	}
 

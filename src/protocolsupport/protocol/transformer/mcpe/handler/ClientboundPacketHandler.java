@@ -44,7 +44,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetDiff
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetTimePacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetBlocksPacket.UpdateBlockRecord;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetSpawnPosition;
-import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SpawnPlayerPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddPlayerPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.StartGamePacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ContainerSetContentsPacket;
 import protocolsupport.protocol.transformer.mcpe.remapper.BlockIDRemapper;
@@ -179,12 +179,10 @@ public class ClientboundPacketHandler {
 					}
 					storage.addWatchedEntity(new WatchedPlayer(entityId));
 					playerUUIDs.put(entityId, uuid);
-					return Collections.emptyList();
-					//TODO: figure out why spawning players doesn't work
-					/*return Collections.singletonList(new SpawnPlayerPacket(
+					return Collections.singletonList(new AddPlayerPacket(
 						uuid, username, entityId,
 						locX, locY, locZ, yaw, pitch
-					));*/
+					));
 				}
 				case 0x0E: { //PacketPlayOutSpawnObject
 					int entityId = packetdata.readVarInt();
@@ -251,7 +249,7 @@ public class ClientboundPacketHandler {
 						} else {
 							UUID uuid = playerUUIDs.get(entityId);
 							if (uuid != null) {
-								packets.add(new RemovePlayerPacket(entityId, uuid));
+								//packets.add(new RemovePlayerPacket(entityId, uuid));
 							}
 						}
 					}

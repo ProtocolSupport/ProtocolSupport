@@ -7,9 +7,6 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
-
 public class RakNetPacket {
 
 	private InetSocketAddress address;
@@ -33,8 +30,7 @@ public class RakNetPacket {
 	}
 
 	public void encode(ByteBuf buf) {
-		PacketDataSerializer serializer = new PacketDataSerializer(buf, ProtocolVersion.MINECRAFT_PE);
-		serializer.writeLTriad(sequenceNumber);
+		RakNetDataSerializer.writeTriad(buf, sequenceNumber);
 		for (EncapsulatedPacket epacket : encapsulatedPackets) {
 			epacket.encode(buf);
 		}
@@ -46,8 +42,7 @@ public class RakNetPacket {
 	}
 
 	public void decodeEncapsulated() {
-		PacketDataSerializer serializer = new PacketDataSerializer(data, ProtocolVersion.MINECRAFT_PE);
-		sequenceNumber = serializer.readLTriad();
+		sequenceNumber = RakNetDataSerializer.readTriad(data);
 		while (data.isReadable()) {
 			EncapsulatedPacket packet = new EncapsulatedPacket();
 			packet.decode(data);

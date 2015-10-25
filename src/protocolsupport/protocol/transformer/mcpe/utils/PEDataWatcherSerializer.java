@@ -1,19 +1,21 @@
 package protocolsupport.protocol.transformer.mcpe.utils;
 
+import gnu.trove.iterator.TIntObjectIterator;
+import gnu.trove.map.TIntObjectMap;
+import io.netty.buffer.ByteBuf;
+import io.netty.handler.codec.EncoderException;
+
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.handler.codec.EncoderException;
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.Item;
 import net.minecraft.server.v1_8_R3.ItemStack;
+
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.utils.Allocator;
 import protocolsupport.utils.DataWatcherObject;
 import protocolsupport.utils.Utils;
-import gnu.trove.iterator.TIntObjectIterator;
-import gnu.trove.map.TIntObjectMap;
 
 public class PEDataWatcherSerializer {
 

@@ -4,9 +4,6 @@ import io.netty.buffer.ByteBuf;
 
 import java.net.InetSocketAddress;
 
-import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
-
 public class ACK extends RakNetPacket {
 
 	public ACK(InetSocketAddress address) {
@@ -22,10 +19,9 @@ public class ACK extends RakNetPacket {
 
 	@Override
 	public void encode(ByteBuf buf) {
-		PacketDataSerializer serializer = new PacketDataSerializer(buf, ProtocolVersion.MINECRAFT_PE);
-		serializer.writeShort(1);
-		serializer.writeByte(1);
-		serializer.writeLTriad(id);
+		buf.writeShort(1);
+		buf.writeByte(1);
+		RakNetDataSerializer.writeTriad(buf, id);
 	}
 
 }

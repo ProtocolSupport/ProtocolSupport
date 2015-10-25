@@ -3,8 +3,6 @@ package protocolsupport.protocol.transformer.mcpe.packet.raknet;
 import java.net.InetSocketAddress;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
 
 public class NACK extends RakNetPacket {
 
@@ -22,17 +20,16 @@ public class NACK extends RakNetPacket {
 
 	@Override
 	public void encode(ByteBuf buf) {
-		PacketDataSerializer serializer = new PacketDataSerializer(buf, ProtocolVersion.MINECRAFT_PE);
 		int count = getCount();
-		serializer.writeShort(count);
+		buf.writeShort(count);
 		for (int i = 0; i < count; i++) {
 			int current = idstart + i * 4096;
-			serializer.writeByte(0);
-			serializer.writeLTriad(current);
+			buf.writeByte(0);
+			RakNetDataSerializer.writeTriad(buf, current);
 			if (idfinish - current < 4096) {
-				serializer.writeLTriad(idfinish);
+				RakNetDataSerializer.writeTriad(buf, idfinish);
 			} else {
-				serializer.writeLTriad(current + 4096);
+				RakNetDataSerializer.writeTriad(buf, current + 4096);
 			}
 		}
 	}
