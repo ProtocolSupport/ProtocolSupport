@@ -56,6 +56,8 @@ import protocolsupport.utils.DataWatcherSerializer;
 import protocolsupport.utils.Utils;
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.Chunk;
+import net.minecraft.server.v1_8_R3.Entity;
+import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.EnumProtocol;
 import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R3.ItemStack;
@@ -245,6 +247,38 @@ public class ClientboundPacketHandler {
 					storage.removeWatchedEntities(entityIds);
 					itemInfo.removeItemsInfo(entityIds);
 					return packets;
+				}
+				case 0x15:
+				case 0x16:
+				case 0x17: { //PacketPlayOutEntityRelMove, PacketPlayOutEntityLook, PacketPlayOutEntityRelMoveLook 
+					int entityId = packetdata.readVarInt();
+					Entity entity = Utils.getPlayer(networkManager).world.a(entityId);
+					//TODO: support moving normal entities, not only players
+					if (entity instanceof EntityPlayer) {
+						return Collections.singletonList(new MovePlayerPacket(
+							entityId,
+							(float) entity.locX, (float) entity.locY, (float) entity.locZ,
+							entity.yaw, entity.pitch, entity.onGround
+						));
+					} else {
+						return Collections.emptyList();
+					}
+				}
+				case 0x18: { //PacketPlayOutEntityTeleport
+					int entityId = packetdata.readVarInt();
+					float x = packetdata.readInt() / 32.0F;
+					float y = packetdata.readInt() / 32.0F;
+					float z = packetdata.readInt() / 32.0F;
+					float yaw = packetdata.readByte() * 360.0F / 256.0F;
+					float pitch = packetdata.readByte() * 360.0F / 256.0F;
+					boolean onGround = packetdata.readBoolean();
+					WatchedEntity wentity = storage.getWatchedEntity(entityId);
+					//TODO: support moving normal entities, not only players
+					if (wentity != null && wentity.getType() == SpecificType.PLAYER) {
+						return Collections.singletonList(new MovePlayerPacket(entityId, x, y, z, yaw, pitch, onGround));
+					} else {
+						return Collections.emptyList();
+					}
 				}
 				case 0x1C: { //PacketPlayOutMetadata
 					int entityId = packetdata.readVarInt();
