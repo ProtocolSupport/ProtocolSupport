@@ -20,7 +20,7 @@ public class RemovePlayerPacket implements ClientboundPEPacket {
 
 	@Override
 	public int getId() {
-		return PEPacketIDs.REMOVE_ENTITY_PACKET;
+		return PEPacketIDs.REMOVE_PLAYER_PACKET;
 	}
 
 	@Override

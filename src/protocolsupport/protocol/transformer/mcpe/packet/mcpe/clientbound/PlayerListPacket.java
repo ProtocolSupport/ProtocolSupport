@@ -1,10 +1,11 @@
 package protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound;
 
+import io.netty.buffer.ByteBuf;
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.UUID;
 
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.mcpe.UDPNetworkManager;
@@ -16,18 +17,9 @@ public class PlayerListPacket implements ClientboundPEPacket {
 	protected int action; //0 - add, 1 - remove
 	protected ArrayList<PlayerListEntry> entries = new ArrayList<PlayerListEntry>();
 
-	public PlayerListPacket(EntityPlayer... players) {
-		this.action = 0;
-		for (EntityPlayer player : players) {
-			entries.add(new PlayerListEntry(player.getUniqueID(), player.getName(), player.getId()));
-		}
-	}
-
-	public PlayerListPacket(UUID... uuids) {
-		this.action = 1;
-		for (UUID uuid : uuids) {
-			entries.add(new PlayerListEntry(uuid));
-		}
+	public PlayerListPacket(boolean add, Collection<PlayerListEntry> players) {
+		this.action = add ? 0 : 1;
+		entries.addAll(players);
 	}
 
 	@Override
@@ -44,7 +36,7 @@ public class PlayerListPacket implements ClientboundPEPacket {
 			case 0: {
 				for (PlayerListEntry entry : entries) {
 					serializer.writeUUID(entry.uuid);
-					serializer.writeLong(entry.entityId);
+					serializer.writeLong(-1);
 					serializer.writeString(entry.name);
 					serializer.writeBoolean(false);
 					serializer.writeArray(UDPNetworkManager.defaultSkin);
@@ -64,14 +56,12 @@ public class PlayerListPacket implements ClientboundPEPacket {
 		return this;
 	}
 
-	protected static class PlayerListEntry {
+	public static class PlayerListEntry {
 		protected UUID uuid;
 		protected String name;
-		protected int entityId;
-		public PlayerListEntry(UUID uuid, String name, int entityId) {
+		public PlayerListEntry(UUID uuid, String name) {
 			this.uuid = uuid;
 			this.name = name;
-			this.entityId = entityId;
 		}
 		public PlayerListEntry(UUID uuid) {
 			this.uuid = uuid;

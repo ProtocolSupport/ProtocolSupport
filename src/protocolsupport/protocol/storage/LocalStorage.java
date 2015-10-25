@@ -74,6 +74,9 @@ public class LocalStorage {
 				return player.getName();
 			}
 		}
+		if (name == null) {
+			return "Unknown";
+		}
 		return name;
 	}
 

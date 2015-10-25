@@ -7,14 +7,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -27,15 +25,14 @@ import protocolsupport.protocol.transformer.mcpe.UDPNetworkManager;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.ChatPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.ContainerSetSlotPacket;
-import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.EntityEquipmentInventoryPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.MovePlayerPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.SetHealthPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddItemEntityPacket;
-import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddLivingEntityPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddPaintingPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AdventureSettingsPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ChunkPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PlayerListPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PlayerListPacket.PlayerListEntry;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PongPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.RemoveEntityPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.RemovePlayerPacket;
@@ -48,7 +45,6 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddPlay
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.StartGamePacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ContainerSetContentsPacket;
 import protocolsupport.protocol.transformer.mcpe.remapper.BlockIDRemapper;
-import protocolsupport.protocol.transformer.mcpe.utils.EntityRemapper;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificType;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
@@ -60,13 +56,9 @@ import protocolsupport.utils.DataWatcherSerializer;
 import protocolsupport.utils.Utils;
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.Chunk;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.EnumDirection;
 import net.minecraft.server.v1_8_R3.EnumProtocol;
 import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
-import net.minecraft.server.v1_8_R3.Item;
 import net.minecraft.server.v1_8_R3.ItemStack;
-import net.minecraft.server.v1_8_R3.Items;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.World;
 
@@ -174,9 +166,6 @@ public class ClientboundPacketHandler {
 					float yaw = packetdata.readByte() * 360.0F / 256.0F;
 					float pitch = packetdata.readByte() * 360.0F / 256.0F;
 					String username = storage.getPlayerListName(uuid);
-					if (username == null) {
-						username = "Unknown";
-					}
 					storage.addWatchedEntity(new WatchedPlayer(entityId));
 					playerUUIDs.put(entityId, uuid);
 					return Collections.singletonList(new AddPlayerPacket(
@@ -249,7 +238,7 @@ public class ClientboundPacketHandler {
 						} else {
 							UUID uuid = playerUUIDs.get(entityId);
 							if (uuid != null) {
-								//packets.add(new RemovePlayerPacket(entityId, uuid));
+								packets.add(new RemovePlayerPacket(entityId, uuid));
 							}
 						}
 					}
@@ -412,27 +401,18 @@ public class ClientboundPacketHandler {
 					}
 					switch (action) {
 						case 4: {
-							return Collections.singletonList(new PlayerListPacket(uuids.toArray(new UUID[uuids.size()])));
+							ArrayList<PlayerListEntry> entries = new ArrayList<PlayerListEntry>();
+							for (UUID uuid : uuids) {
+								entries.add(new PlayerListEntry(uuid));
+							}
+							return Collections.singletonList(new PlayerListPacket(false, entries));
 						}
 						case 0: {
-							ArrayList<EntityPlayer> players = new ArrayList<EntityPlayer>();
-							Iterator<UUID> iterator = uuids.iterator();
-							while (iterator.hasNext()) {
-								UUID uuid = iterator.next();
-								Player player = Bukkit.getPlayer(uuid);
-								if (player != null) {
-									iterator.remove();
-									players.add(((CraftPlayer) player).getHandle());
-								}
+							ArrayList<PlayerListEntry> entries = new ArrayList<PlayerListEntry>();
+							for (UUID uuid : uuids) {
+								entries.add(new PlayerListEntry(uuid, storage.getPlayerListName(uuid)));
 							}
-							if (uuids.size() != 0) {
-								//TODO: pull entities directly for world players list to support NPC
-							}
-							if (players.size() != 0) {
-								return Collections.singletonList(new PlayerListPacket(players.toArray(new EntityPlayer[players.size()])));
-							} else {
-								return Collections.emptyList();
-							}
+							return Collections.singletonList(new PlayerListPacket(true, entries));
 						}
 					}
 					break;
