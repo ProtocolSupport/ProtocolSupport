@@ -19,6 +19,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.DropIte
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.LoginPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.PingPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.RemoveBlockPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.UseEntityPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.UseItemPacket;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
@@ -44,6 +45,7 @@ public class PEPacketRegistry {
 		register(EntityEquipmentArmorPacket.class);
 		register(ContainerSetSlotPacket.class);
 		register(DropItemPacket.class);
+		register(UseEntityPacket.class);
 	}
 
 	public static ServerboundPEPacket getPacket(int id) {
