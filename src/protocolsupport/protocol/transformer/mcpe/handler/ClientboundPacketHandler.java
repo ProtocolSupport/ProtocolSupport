@@ -128,34 +128,33 @@ public class ClientboundPacketHandler {
 					return Collections.singletonList(new SetHealthPacket((int) packetdata.readFloat()));
 				}
 				case 0x08: { //PacketlayOutPosition
-					Player player = Utils.getPlayer(networkManager).getBukkitEntity();
+					EntityPlayer player = Utils.getPlayer(networkManager);
 					double x = packetdata.readDouble();
 					double y = packetdata.readDouble();
 					double z = packetdata.readDouble();
 					float yaw = packetdata.readFloat();
 					float pitch = packetdata.readFloat();
 					short field = packetdata.readUnsignedByte();
-					Location location = player.getLocation();
 					if ((field & 0x01) != 0) {
-						x += location.getX();
+						x += player.locX;
 					}
 					if ((field & 0x02) != 0) {
-						y += location.getY();
+						y += player.locY;
 					}
 					if ((field & 0x04) != 0) {
-						z += location.getX();
+						z += player.locZ;
 					}
 					if ((field & 0x08) != 0) {
-						yaw += location.getYaw();
+						yaw += player.yaw;
 					}
 					if ((field & 0x10) != 0) {
-						pitch += location.getPitch();
+						pitch += player.pitch;
 					}
 					return Collections.singletonList(
 						new MovePlayerPacket(
-							player.getEntityId(),
+							player.getId(),
 							(float) x, (float) y, (float) z,
-							yaw, pitch, false
+							yaw, player.aK, pitch, false
 						)
 					);
 				}
@@ -258,7 +257,7 @@ public class ClientboundPacketHandler {
 						return Collections.singletonList(new MovePlayerPacket(
 							entityId,
 							(float) entity.locX, (float) entity.locY, (float) entity.locZ,
-							entity.yaw, entity.pitch, entity.onGround
+							entity.yaw, ((EntityPlayer) entity).aK, entity.pitch, entity.onGround
 						));
 					} else {
 						return Collections.emptyList();
@@ -273,9 +272,9 @@ public class ClientboundPacketHandler {
 					float pitch = packetdata.readByte() * 360.0F / 256.0F;
 					boolean onGround = packetdata.readBoolean();
 					WatchedEntity wentity = storage.getWatchedEntity(entityId);
-					//TODO: support moving normal entities, not only players
+					//TODO: support teleporting normal entities, not only players
 					if (wentity != null && wentity.getType() == SpecificType.PLAYER) {
-						return Collections.singletonList(new MovePlayerPacket(entityId, x, y, z, yaw, pitch, onGround));
+						return Collections.singletonList(new MovePlayerPacket(entityId, x, y, z, yaw, yaw, pitch, onGround));
 					} else {
 						return Collections.emptyList();
 					}

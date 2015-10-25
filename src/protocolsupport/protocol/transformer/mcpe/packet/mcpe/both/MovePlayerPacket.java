@@ -22,19 +22,20 @@ public class MovePlayerPacket implements DualPEPacket {
 	protected float z;
 	protected float yaw;
 	protected float pitch;
-	protected float bodyYaw;
+	protected float headYaw;
 	protected byte mode;
 	protected boolean onGround;
 
 	public MovePlayerPacket() {
 	}
 
-	public MovePlayerPacket(int entityId, float x, float y, float z, float yaw, float pitch, boolean onGround) {
+	public MovePlayerPacket(int entityId, float x, float y, float z, float yaw, float headYaw, float pitch, boolean onGround) {
 		this.entityId = entityId;
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		this.yaw = yaw;
+		this.headYaw = headYaw;
 		this.pitch = pitch;
 		this.onGround = onGround;
 	}
@@ -51,7 +52,7 @@ public class MovePlayerPacket implements DualPEPacket {
         this.y = buf.readFloat() - 1.62f;
         this.z = buf.readFloat();
         this.yaw = buf.readFloat();
-        this.bodyYaw = buf.readFloat();
+        this.headYaw = buf.readFloat();
         this.pitch = buf.readFloat();
         this.mode = buf.readByte();
         this.onGround = buf.readBoolean();
@@ -65,7 +66,7 @@ public class MovePlayerPacket implements DualPEPacket {
 		buf.writeFloat(y + 1.62F);
 		buf.writeFloat(z);
 		buf.writeFloat(yaw);
-		buf.writeFloat(0);
+		buf.writeFloat(headYaw);
 		buf.writeFloat(pitch);
 		buf.writeByte(mode);
 		buf.writeBoolean(onGround);
