@@ -20,6 +20,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.transformer.mcpe.ItemInfoStorage;
+import protocolsupport.protocol.transformer.mcpe.ItemInfoStorage.ItemInfo;
 import protocolsupport.protocol.transformer.mcpe.PEPlayerInventory;
 import protocolsupport.protocol.transformer.mcpe.UDPNetworkManager;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
@@ -31,6 +32,8 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddItem
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddPaintingPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AdventureSettingsPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ChunkPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.MoveEntityPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PickupItemEffectPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PlayerListPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PlayerListPacket.PlayerListEntry;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PongPacket;
@@ -174,15 +177,31 @@ public class ClientboundPacketHandler {
 						locX, locY, locZ, yaw, pitch
 					));
 				}
+				case 0x0D: { //PacketPlayOutCollectItem
+					int itemId = packetdata.readVarInt();
+					int entityId = packetdata.readVarInt();
+					return Collections.singletonList(new PickupItemEffectPacket(entityId, itemId));
+				}
 				case 0x0E: { //PacketPlayOutSpawnObject
 					int entityId = packetdata.readVarInt();
 					int type = packetdata.readByte();
 					float locX = packetdata.readInt() / 32.0F;
 					float locY = packetdata.readInt() / 32.0F;
 					float locZ = packetdata.readInt() / 32.0F;
+					packetdata.readByte();
+					packetdata.readByte();
+					int objdata = packetdata.readInt();
+					float speedX = 0;
+					float speedY = 0;
+					float speedZ = 0;
+					if (objdata != 0) {
+						speedX = packetdata.readShort() / 8000.0F;
+						speedY = packetdata.readShort() / 8000.0F;
+						speedZ = packetdata.readShort() / 8000.0F;
+					}
 					if (type == 2) {
 						//only store initial item info, we will spawn item later when metadata will tell us which item is it actually
-						itemInfo.addItemInfo(entityId, locX, locY, locZ);
+						itemInfo.addItemInfo(entityId, locX, locY, locZ, speedX, speedY, speedZ);
 						storage.addWatchedEntity(new WatchedObject(entityId, type));
 					}
 					return Collections.emptyList();
@@ -252,7 +271,6 @@ public class ClientboundPacketHandler {
 				case 0x17: { //PacketPlayOutEntityRelMove, PacketPlayOutEntityLook, PacketPlayOutEntityRelMoveLook 
 					int entityId = packetdata.readVarInt();
 					Entity entity = Utils.getPlayer(networkManager).world.a(entityId);
-					//TODO: support moving normal entities, not only players
 					if (entity instanceof EntityPlayer) {
 						return Collections.singletonList(new MovePlayerPacket(
 							entityId,
@@ -260,7 +278,11 @@ public class ClientboundPacketHandler {
 							entity.yaw, ((EntityPlayer) entity).aK, entity.pitch, entity.onGround
 						));
 					} else {
-						return Collections.emptyList();
+						return Collections.singletonList(new MoveEntityPacket(
+							entityId,
+							(float) entity.locX, (float) entity.locY, (float) entity.locZ,
+							entity.yaw, entity.pitch
+						));
 					}
 				}
 				case 0x18: { //PacketPlayOutEntityTeleport
@@ -272,22 +294,21 @@ public class ClientboundPacketHandler {
 					float pitch = packetdata.readByte() * 360.0F / 256.0F;
 					boolean onGround = packetdata.readBoolean();
 					WatchedEntity wentity = storage.getWatchedEntity(entityId);
-					//TODO: support teleporting normal entities, not only players
 					if (wentity != null && wentity.getType() == SpecificType.PLAYER) {
 						return Collections.singletonList(new MovePlayerPacket(entityId, x, y, z, yaw, yaw, pitch, onGround));
 					} else {
-						return Collections.emptyList();
+						return Collections.singletonList(new MoveEntityPacket(entityId, x, y, z, yaw, pitch));
 					}
 				}
 				case 0x1C: { //PacketPlayOutMetadata
 					int entityId = packetdata.readVarInt();
-					Vector vect = itemInfo.getItemInfo(entityId);
-					if (vect != null) {
+					ItemInfo info = itemInfo.getItemInfo(entityId);
+					if (info != null) {
 						TIntObjectMap<DataWatcherObject> metadata = DataWatcherSerializer.decodeData(ProtocolVersion.MINECRAFT_1_8, Utils.toArray(packetdata));
 						if (metadata.containsKey(10)) {
 							return Collections.singletonList(new AddItemEntityPacket(
-								entityId, (float) vect.getX(), (float) vect.getY(), (float) vect.getZ(),
-								0, 0, 0, (ItemStack) metadata.get(10).value
+								entityId, (float) info.getX(), (float) info.getY(), (float) info.getZ(),
+								info.getSpeedX(), info.getSpeedY(), info.getSpeedZ(), (ItemStack) metadata.get(10).value
 							));
 						}
 					}
