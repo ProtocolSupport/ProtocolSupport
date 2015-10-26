@@ -28,6 +28,7 @@ import protocolsupport.protocol.transformer.mcpe.UDPNetworkManager;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.ChatPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.ContainerSetSlotPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.EntityEquipmentInventoryPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.MovePlayerPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.SetHealthPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddItemEntityPacket;
@@ -75,6 +76,7 @@ import net.minecraft.server.v1_8_R3.PacketListenerPlayOut;
 import net.minecraft.server.v1_8_R3.PacketPlayOutBlockChange;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 import net.minecraft.server.v1_8_R3.PacketPlayOutCollect;
+import net.minecraft.server.v1_8_R3.PacketPlayOutEntityEquipment;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityMetadata;
 import net.minecraft.server.v1_8_R3.PacketPlayOutMapChunk;
 import net.minecraft.server.v1_8_R3.PacketPlayOutMapChunkBulk;
@@ -523,6 +525,18 @@ public class ClientboundPacketHandler {
 						}
 						return Collections.singletonList(new PlayerListPacket(true, entries));
 					}
+				}
+				return Collections.emptyList();
+			}
+		});
+		transformers.register(PacketPlayOutEntityEquipment.class, new TransformFunc() {
+			@Override
+			public List<? extends ClientboundPEPacket> run(ClientboundPacketHandler scope, PacketDataSerializer packetdata) throws Exception {
+				int entityId = packetdata.readVarInt();
+				int slot = packetdata.readShort();
+				if (slot == 0) {
+					ItemStack itemstack = packetdata.readItemStack();
+					return Collections.singletonList(new EntityEquipmentInventoryPacket(entityId, itemstack));
 				}
 				return Collections.emptyList();
 			}

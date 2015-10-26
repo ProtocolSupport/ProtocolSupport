@@ -25,10 +25,9 @@ public class EntityEquipmentInventoryPacket implements DualPEPacket {
 	public EntityEquipmentInventoryPacket() {
 	}
 
-	public EntityEquipmentInventoryPacket(int entityId, ItemStack itemstack, int slot) {
+	public EntityEquipmentInventoryPacket(int entityId, ItemStack itemstack) {
 		this.entityId = entityId;
 		this.itemstack = itemstack;
-		this.invSlot = slot;
 	}
 
 	@Override
