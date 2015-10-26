@@ -1,12 +1,10 @@
 package protocolsupport.protocol.transformer.mcpe.handler;
 
 import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -14,25 +12,23 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage;
-import protocolsupport.protocol.transformer.mcpe.ItemInfoStorage;
-import protocolsupport.protocol.transformer.mcpe.ItemInfoStorage.ItemInfo;
+import protocolsupport.protocol.transformer.mcpe.PEStorage;
+import protocolsupport.protocol.transformer.mcpe.PEStorage.ItemInfo;
 import protocolsupport.protocol.transformer.mcpe.PEPlayerInventory;
 import protocolsupport.protocol.transformer.mcpe.UDPNetworkManager;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.ChatPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.ContainerSetSlotPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.EntityEquipmentArmorPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.EntityEquipmentInventoryPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.MovePlayerPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.SetHealthPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddItemEntityPacket;
-import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddLivingEntityPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddPaintingPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AdventureSettingsPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ChunkPacket;
@@ -52,12 +48,11 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddPlay
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.StartGamePacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ContainerSetContentsPacket;
 import protocolsupport.protocol.transformer.mcpe.utils.BlockIDRemapper;
-import protocolsupport.protocol.transformer.mcpe.utils.EntityRemapper;
+import protocolsupport.protocol.transformer.mcpe.utils.PEWatchedPlayer;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificType;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedObject;
-import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
 import protocolsupport.utils.Allocator;
 import protocolsupport.utils.ClassToFuncMapper;
 import protocolsupport.utils.ClassToFuncMapper.Func;
@@ -68,11 +63,8 @@ import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.Chunk;
 import net.minecraft.server.v1_8_R3.Entity;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.EnumProtocol;
-import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R3.ItemStack;
 import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketListenerPlayOut;
 import net.minecraft.server.v1_8_R3.PacketPlayOutBlockChange;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 import net.minecraft.server.v1_8_R3.PacketPlayOutCollect;
@@ -195,8 +187,7 @@ public class ClientboundPacketHandler {
 				float yaw = packetdata.readByte() * 360.0F / 256.0F;
 				float pitch = packetdata.readByte() * 360.0F / 256.0F;
 				String username = scope.storage.getPlayerListName(uuid);
-				scope.storage.addWatchedEntity(new WatchedPlayer(entityId));
-				scope.playerUUIDs.put(entityId, uuid);
+				scope.storage.addWatchedEntity(new PEWatchedPlayer(entityId, uuid));
 				return Collections.singletonList(new AddPlayerPacket(
 					uuid, username, entityId,
 					locX, locY, locZ, yaw, pitch
@@ -232,7 +223,7 @@ public class ClientboundPacketHandler {
 				}
 				if (type == 2) {
 					//only store initial item info, we will spawn item later when metadata will tell us which item is it actually
-					scope.itemInfo.addItemInfo(entityId, locX, locY, locZ, speedX, speedY, speedZ);
+					scope.pestorage.addItemInfo(entityId, locX, locY, locZ, speedX, speedY, speedZ);
 					scope.storage.addWatchedEntity(new WatchedObject(entityId, type));
 				}
 				return Collections.emptyList();
@@ -300,14 +291,12 @@ public class ClientboundPacketHandler {
 					if (entity == null || entity.getType() != SpecificType.PLAYER) {
 						packets.add(new RemoveEntityPacket(entityId));
 					} else {
-						UUID uuid = scope.playerUUIDs.get(entityId);
-						if (uuid != null) {
-							packets.add(new RemovePlayerPacket(entityId, uuid));
-						}
+						PEWatchedPlayer peplayer = (PEWatchedPlayer) entity;
+						packets.add(new RemovePlayerPacket(entityId, peplayer.getUUID()));
 					}
 				}
 				scope.storage.removeWatchedEntities(entityIds);
-				scope.itemInfo.removeItemsInfo(entityIds);
+				scope.pestorage.removeItemsInfo(entityIds);
 				return packets;
 			}
 		});
@@ -338,7 +327,7 @@ public class ClientboundPacketHandler {
 			@Override
 			public List<? extends ClientboundPEPacket> run(ClientboundPacketHandler scope, PacketDataSerializer packetdata) throws Exception {
 				int entityId = packetdata.readVarInt();
-				ItemInfo info = scope.itemInfo.getItemInfo(entityId);
+				ItemInfo info = scope.pestorage.getItemInfo(entityId);
 				if (info != null) {
 					TIntObjectMap<DataWatcherObject> metadata = DataWatcherSerializer.decodeData(ProtocolVersion.MINECRAFT_1_8, Utils.toArray(packetdata));
 					if (metadata.containsKey(10)) {
@@ -534,11 +523,14 @@ public class ClientboundPacketHandler {
 			public List<? extends ClientboundPEPacket> run(ClientboundPacketHandler scope, PacketDataSerializer packetdata) throws Exception {
 				int entityId = packetdata.readVarInt();
 				int slot = packetdata.readShort();
+				ItemStack itemstack = packetdata.readItemStack();
 				if (slot == 0) {
-					ItemStack itemstack = packetdata.readItemStack();
 					return Collections.singletonList(new EntityEquipmentInventoryPacket(entityId, itemstack));
+				} else {
+					slot = slot - 1;
+					scope.pestorage.setArmorSlot(entityId, slot, itemstack);
+					return Collections.singletonList(new EntityEquipmentArmorPacket(entityId, scope.pestorage.getArmor(entityId)));
 				}
-				return Collections.emptyList();
 			}
 		});
 		transformers.stopAcceptingRegistrations();
@@ -565,10 +557,8 @@ public class ClientboundPacketHandler {
 		spawned = true;
 	}
 
-	//TODO: rework storage
 	protected final LocalStorage storage = new LocalStorage();
-	protected final ItemInfoStorage itemInfo = new ItemInfoStorage();
-	protected final TIntObjectMap<UUID> playerUUIDs = new TIntObjectHashMap<UUID>();
+	protected final PEStorage pestorage = new PEStorage();
 
 	@SuppressWarnings("rawtypes")
 	public List<? extends ClientboundPEPacket> transform(Packet packet) throws Exception {

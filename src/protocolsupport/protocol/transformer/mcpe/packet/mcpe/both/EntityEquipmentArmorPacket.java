@@ -21,9 +21,9 @@ public class EntityEquipmentArmorPacket implements DualPEPacket {
 	public EntityEquipmentArmorPacket() {
 	}
 
-	//TODO: real equipment
-	public EntityEquipmentArmorPacket(int entityId) {
+	public EntityEquipmentArmorPacket(int entityId, ItemStack[] armor) {
 		this.entityId = entityId;
+		System.arraycopy(armor, 0, this.armor, 0, this.armor.length);
 	}
 
 	@Override
