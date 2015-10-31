@@ -66,7 +66,7 @@ public class PEStorage {
 
 	public void setArmorSlot(int entityId, int slot, ItemStack itemstack) {
 		ItemStack[] armorc = getArmor(entityId);
-		armorc[armorc.length - slot - 1] = itemstack;
+		armorc[slot] = itemstack;
 	}
 
 	public ItemStack[] getArmor(int entityId) {

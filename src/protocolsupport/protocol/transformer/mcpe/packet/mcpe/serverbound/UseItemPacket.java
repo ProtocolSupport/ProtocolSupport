@@ -2,17 +2,20 @@ package protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound;
 
 import io.netty.buffer.ByteBuf;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.transformer.mcpe.PEPlayerInventory;
+import protocolsupport.protocol.transformer.mcpe.packet.SynchronizedHandleNMSPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.ItemStack;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketPlayInBlockPlace;
+import net.minecraft.server.v1_8_R3.PlayerConnection;
 
 public class UseItemPacket implements ServerboundPEPacket {
 
@@ -52,9 +55,20 @@ public class UseItemPacket implements ServerboundPEPacket {
 
 	@Override
 	public List<? extends Packet<?>> transfrom() throws Exception {
+		ArrayList<Packet<?>> packets = new ArrayList<Packet<?>>();
+		final int slot = PEPlayerInventory.getSlotNumber(itemstack);
+		if (slot != -1) {
+			packets.add(new SynchronizedHandleNMSPacket<PlayerConnection>() {
+				@Override
+				public void handle(PlayerConnection listener) {
+					((PEPlayerInventory) listener.player.inventory).setSelectedSlot(slot);
+				}
+			});
+		}
 		PacketPlayInBlockPlace place = new PacketPlayInBlockPlace(new BlockPosition(againstX, againstY, againstZ), face, itemstack, cursorX, cursorY, cursorZ);
 		place.timestamp = System.currentTimeMillis();
-		return Collections.singletonList(place);
+		packets.add(place);
+		return packets;
 	}
 
 }

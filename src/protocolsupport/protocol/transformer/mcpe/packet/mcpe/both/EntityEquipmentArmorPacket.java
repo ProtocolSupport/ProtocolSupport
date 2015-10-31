@@ -1,17 +1,24 @@
 package protocolsupport.protocol.transformer.mcpe.packet.mcpe.both;
 
+import io.netty.buffer.ByteBuf;
+
 import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.server.v1_8_R3.ItemStack;
 import net.minecraft.server.v1_8_R3.Packet;
-import io.netty.buffer.ByteBuf;
+import net.minecraft.server.v1_8_R3.PlayerConnection;
+import net.minecraft.server.v1_8_R3.PlayerInventory;
+
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.transformer.mcpe.PEPlayerInventory;
+import protocolsupport.protocol.transformer.mcpe.packet.SynchronizedHandleNMSPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.DualPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
+import protocolsupport.utils.Utils;
 
 public class EntityEquipmentArmorPacket implements DualPEPacket {
 
@@ -51,10 +58,57 @@ public class EntityEquipmentArmorPacket implements DualPEPacket {
 		return this;
 	}
 
-	//Player operates own armor using this packet, TODO: actually implement invetnory handling
 	@Override
 	public List<? extends Packet<?>> transfrom() throws Exception {
-		return Collections.emptyList();
+		return Collections.singletonList(new SynchronizedHandleNMSPacket<PlayerConnection>() {
+			@Override
+			public void handle(PlayerConnection listener) {
+				PlayerInventory inventory = listener.player.inventory;
+				try {
+					ItemStack[] realArmorArr = inventory.armor;
+					ItemStack[] packetArmorArr = Utils.reverseArray(armor);
+					for (int i = 0; i < realArmorArr.length; i++) {
+						ItemStack realArmor = realArmorArr[i];
+						ItemStack packetArmor = packetArmorArr[i];
+						if (packetArmor == null && realArmor != null) { //player unequipped armor
+							int firstEmpty = inventory.getFirstEmptySlotIndex();
+							if (firstEmpty != -1) {
+								inventory.setItem(firstEmpty, realArmor);
+								realArmorArr[i] = null;
+							}
+							return;
+						}
+						if (packetArmor != null && !matches(packetArmor, realArmor)) {//player equipped or swapped armor
+							int slotFrom = PEPlayerInventory.getSlotNumber(packetArmor);
+							if (slotFrom != -1 && slotFrom < inventory.getSize() - 4) {
+								ItemStack armorItemStack = inventory.getItem(slotFrom);
+								//TODO: check if it is an armor itemstack and it can fit in this slot
+								if (armorItemStack != null) {
+									inventory.setItem(slotFrom, realArmor);
+									realArmorArr[i] = armorItemStack;
+								}
+							}
+						}
+					}
+				} finally {
+					listener.player.updateInventory(listener.player.defaultContainer);
+				}
+			}
+		});
+	}
+
+	//compare only using material
+	//swapping between the armor with same material doesn't send the packet so no chance to know about it anyway :(
+	protected static boolean matches(ItemStack itemstack1, ItemStack itemstack2) {
+		boolean null1 = itemstack1 == null;
+		boolean null2 = itemstack2 == null;
+		if (null1 && null2) {
+			return true;
+		}
+		if (null1 | null2) {
+			return false;
+		}
+		return itemstack1.getItem() == itemstack2.getItem();
 	}
 
 }

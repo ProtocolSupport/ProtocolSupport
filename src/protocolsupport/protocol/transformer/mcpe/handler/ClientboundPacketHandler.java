@@ -417,7 +417,7 @@ public class ClientboundPacketHandler {
 				int windowId = packetdata.readByte();
 				int slot = packetdata.readShort();
 				ItemStack itemstack = packetdata.readItemStack();
-				itemstack = PEPlayerInventory.addFakeTag(itemstack);
+				itemstack = PEPlayerInventory.addSlotNumberTag(itemstack, slot);
 				//TODO: other inventory types
 				if (windowId == 0) {
 					if (slot >= 9 && slot < 45) {
@@ -432,17 +432,18 @@ public class ClientboundPacketHandler {
 		transformers.register(PacketPlayOutWindowItems.class, new TransformFunc() {
 			@Override
 			public List<? extends ClientboundPEPacket> run(ClientboundPacketHandler scope, PacketDataSerializer packetdata) throws Exception {
+				EntityPlayer player = Utils.getPlayer(scope.networkManager);
 				int windowId = packetdata.readByte();
 				ItemStack[] packetitems = new ItemStack[packetdata.readShort()];
 				for (int i = 0; i < packetitems.length; i++) {
-					packetitems[i] = PEPlayerInventory.addFakeTag(packetdata.readItemStack());
+					packetitems[i] = PEPlayerInventory.addSlotNumberTag(packetdata.readItemStack(), i);
 				}
 				//TODO: other inventory types
 				if (windowId == 0) {
 					ArrayList<ContainerSetContentsPacket> packets = new ArrayList<ContainerSetContentsPacket>();
 					ItemStack[] inventory = new ItemStack[45];
 					System.arraycopy(packetitems, 9, inventory, 0, inventory.length - ContainerSetContentsPacket.HOTBAR_SLOTS.length);
-					packets.add(new ContainerSetContentsPacket(PEPlayerInventory.PLAYER_INVENTORY_WID, inventory, ContainerSetContentsPacket.HOTBAR_SLOTS));
+					packets.add(new ContainerSetContentsPacket(PEPlayerInventory.PLAYER_INVENTORY_WID, inventory, ((PEPlayerInventory) player.inventory).getHotbarRefs()));
 					ItemStack[] armor = new ItemStack[4];
 					System.arraycopy(packetitems, 5, armor, 0, armor.length);
 					packets.add(new ContainerSetContentsPacket(PEPlayerInventory.PLAYER_ARMOR_WID, armor, ContainerSetContentsPacket.EMPTY_HOTBAR_SLOTS));
@@ -529,7 +530,7 @@ public class ClientboundPacketHandler {
 				} else {
 					slot = slot - 1;
 					scope.pestorage.setArmorSlot(entityId, slot, itemstack);
-					return Collections.singletonList(new EntityEquipmentArmorPacket(entityId, scope.pestorage.getArmor(entityId)));
+					return Collections.singletonList(new EntityEquipmentArmorPacket(entityId, Utils.reverseArray(scope.pestorage.getArmor(entityId))));
 				}
 			}
 		});

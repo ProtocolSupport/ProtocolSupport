@@ -18,7 +18,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 
 public class UDPRouter extends SimpleChannelInboundHandler<RakNetPacket> {
 
-	private static UDPRouter instance;
+	private volatile static UDPRouter instance;
 
 	public static UDPRouter init(List<NetworkManager> managers) {
 		if (instance != null) {
@@ -32,10 +32,9 @@ public class UDPRouter extends SimpleChannelInboundHandler<RakNetPacket> {
 		return instance;
 	}
 
-	private List<NetworkManager> networkManagers;
+	private final ConcurrentHashMap<InetSocketAddress, UDPNetworkManager> nmMap = new ConcurrentHashMap<InetSocketAddress, UDPNetworkManager>();
 
-	private ConcurrentHashMap<InetSocketAddress, UDPNetworkManager> nmMap = new ConcurrentHashMap<InetSocketAddress, UDPNetworkManager>();
-
+	private final List<NetworkManager> networkManagers;
 	private UDPRouter(List<NetworkManager> networkManagers) {
 		this.networkManagers = networkManagers;
 	}

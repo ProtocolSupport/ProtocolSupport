@@ -9,6 +9,7 @@ import net.minecraft.server.v1_8_R3.PlayerConnection;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.transformer.mcpe.PEPlayerInventory;
 import protocolsupport.protocol.transformer.mcpe.packet.SynchronizedHandleNMSPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.DualPEPacket;
@@ -67,8 +68,9 @@ public class EntityEquipmentInventoryPacket implements DualPEPacket {
 					realSlot = invSlot - 36;
 				}
 				if (realSlot != -1) {
-					listener.player.inventory.itemInHandIndex = realSlot;
-					listener.player.resetIdleTimer();
+					PEPlayerInventory inventory = (PEPlayerInventory) listener.player.inventory;
+					inventory.setSelectedSlot(realSlot);
+					inventory.setHotbarRef(realSlot, hotbarSlot);
 				}
 			}
 		});

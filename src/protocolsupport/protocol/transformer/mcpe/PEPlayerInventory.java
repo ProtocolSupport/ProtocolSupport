@@ -1,8 +1,8 @@
 package protocolsupport.protocol.transformer.mcpe;
 
-import java.util.concurrent.ThreadLocalRandom;
-
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ContainerSetContentsPacket;
 import net.minecraft.server.v1_8_R3.EntityHuman;
+import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.ItemStack;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.minecraft.server.v1_8_R3.PlayerInventory;
@@ -16,21 +16,41 @@ public class PEPlayerInventory extends PlayerInventory {
 		super(entityhuman);
 	}
 
+	private int[] hotbar = ContainerSetContentsPacket.HOTBAR_SLOTS;
+
+	public void setHotbarRef(int realSlot, int hotbarSlot) {
+		hotbar[hotbarSlot] = realSlot;
+	}
+
+	public int[] getHotbarRefs() {
+		return hotbar;
+	}
+
+	public void setSelectedSlot(int index) {
+		if (index >= 0 && index < getSize() - 4) {
+			itemInHandIndex = index;
+		}
+	}
+
 	@Override
 	public ItemStack getItemInHand() {
-		if (itemInHandIndex >= 0 && itemInHandIndex < getSize()) {
+		if (itemInHandIndex >= 0 && itemInHandIndex < getSize() - 4) {
 			return items[itemInHandIndex];
 		}
 		return null;
 	}
 
-	//Adds random integer to itemstack tags
-	//This method is always used on sending itemstacks
-	//Why do we do this?
-	//Because switching to the same itemstack in the inventory doesn't send the packet,
-	// so we will think that client uses some slot, but client will actually try to use another
-	//We solve this problem by adding random tag, so itemstacks won't be equal
-	public static ItemStack addFakeTag(ItemStack itemstack) {
+	@Override
+	public boolean pickup(ItemStack itemstack) {
+		boolean result = super.pickup(itemstack);
+		((EntityPlayer) player).updateInventory(player.activeContainer);
+		return result;
+	}
+
+	private static final String SLOT_TAG_NAME = "PSSlotTag";
+
+	//Adds slot number to item nbt, allows us to solve problem with switching between same itemstacks and will also allow to tell us which slot client used
+	public static ItemStack addSlotNumberTag(ItemStack itemstack, int netSlot) {
 		if (itemstack == null) {
 			return null;
 		}
@@ -38,9 +58,31 @@ public class PEPlayerInventory extends PlayerInventory {
 		if (tag == null) {
 			tag = new NBTTagCompound();
 		}
-		tag.setInt("PSFakeTag", ThreadLocalRandom.current().nextInt());
+		tag.setInt(SLOT_TAG_NAME, netSlot);
 		itemstack.setTag(tag);
 		return itemstack;
+	}
+
+	//Returns inventory slot from itemstack
+	public static int getSlotNumber(ItemStack itemstack) {
+		if (itemstack == null) {
+			return -1;
+		}
+		NBTTagCompound tag = itemstack.getTag();
+		if (tag == null) {
+			return -1;
+		}
+		if (!tag.hasKeyOfType(SLOT_TAG_NAME, 99)) {
+			return -1;
+		}
+		int slot = tag.getInt(SLOT_TAG_NAME);
+		if (slot >= 9 && slot < 36) {
+			return slot;
+		}
+		if (slot >= 36 && slot < 45) {
+			return slot - 36;
+		}
+		return -1;
 	}
 
 }

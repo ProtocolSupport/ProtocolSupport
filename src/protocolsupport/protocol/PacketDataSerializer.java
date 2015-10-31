@@ -35,7 +35,8 @@ import org.spigotmc.SneakyThrow;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ItemStackWriteEvent;
-import protocolsupport.protocol.transformer.mcpe.utils.PENbtWriter;
+import protocolsupport.protocol.transformer.mcpe.utils.PEDataInput;
+import protocolsupport.protocol.transformer.mcpe.utils.PEDataOutput;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
@@ -105,11 +106,13 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 			if (nbttagcompound == null) {
 				writeShort(0);
 			} else {
-				PacketDataSerializer tempbuffer = new PacketDataSerializer(Allocator.allocateBuffer(), ProtocolVersion.MINECRAFT_PE);
+				ByteBuf tempbuffer = Allocator.allocateBuffer();
 				try {
-					PENbtWriter.write(nbttagcompound, tempbuffer);
+					NBTCompressedStreamTools.a(nbttagcompound, new PEDataOutput(tempbuffer));
 					writeShort(tempbuffer.writerIndex());
 					writeBytes(tempbuffer);
+				} catch (Throwable ioexception) {
+					throw new EncoderException(ioexception);
 				} finally {
 					tempbuffer.release();
 				}
@@ -210,11 +213,11 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 	@Override
 	public NBTTagCompound h() throws IOException {
 		if (getVersion() == ProtocolVersion.MINECRAFT_PE) {
-			//ignore reading nbt data for client,
-			//we don't need it because all itemstack fields in packets are used only to compare if the item in hand is correct,
-			//and just item id and count should be enough for that
-			readBytes(readShort());
-			return null;
+			int length = readShort();
+			if (length == 0) {
+				return null;
+			}
+			return NBTCompressedStreamTools.a(new PEDataInput(this), new NBTReadLimiter(2097152L));
 		}
 		if (getVersion() != ProtocolVersion.MINECRAFT_1_8) {
 			final short length = readShort();

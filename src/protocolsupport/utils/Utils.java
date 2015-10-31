@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 
 import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.SocketAddress;
@@ -75,6 +76,16 @@ public class Utils {
 		byte[] result = new byte[buf.readableBytes()];
 		buf.readBytes(result);
 		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T[] reverseArray(T[] array) {
+		int length = array.length;
+		T[] newArray = (T[]) Array.newInstance(array.getClass().getComponentType(), length);
+		for (int i = 0; i < length; i++) {
+			newArray[i] = array[length - 1 - i];
+		}
+		return newArray;
 	}
 
 }
