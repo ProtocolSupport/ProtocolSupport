@@ -22,6 +22,7 @@ public class BlockIDRemapper {
 		replacements[89] = 89;
 		putSelf(91, 92);
 		putSelf(95, 96);
+		replacements[95] = 20;
 		putSelf(99, 112);
 		replacements[114] = 114;
 		putSelf(120, 121);
