@@ -149,6 +149,10 @@ public class IdRemapper {
 			// MCPE
 			// banner -> sign
 			registerRemapEntry(425, 323, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			// raw mutton -> chicken raw meat
+			registerRemapEntry(423, 365, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			// cooked mutton -> chicken cooked meat
+			registerRemapEntry(424, 366, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
 		}
 		@Override
 		protected RemappingTable createTable() {
