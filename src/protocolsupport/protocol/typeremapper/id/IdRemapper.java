@@ -104,6 +104,8 @@ public class IdRemapper {
 			registerRemapEntry(195, 64, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
 			registerRemapEntry(196, 64, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
 			registerRemapEntry(197, 64, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			// standing banner -> standing sign
+			registerRemapEntry(176, 63, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
 		}
 		@Override
 		protected RemappingTable createTable() {
@@ -143,6 +145,10 @@ public class IdRemapper {
 			registerRemapEntry(419, 1, ProtocolVersionsHelper.BEFORE_1_6);
 			registerRemapEntry(420, 1, ProtocolVersionsHelper.BEFORE_1_6);
 			registerRemapEntry(421, 1, ProtocolVersionsHelper.BEFORE_1_6);	
+			
+			// MCPE
+			// banner -> sign
+			registerRemapEntry(425, 323, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
 		}
 		@Override
 		protected RemappingTable createTable() {
