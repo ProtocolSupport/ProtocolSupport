@@ -50,8 +50,11 @@ public class IdRemapper {
 			registerRemapEntry(178, 151, ProtocolVersionsHelper.BEFORE_1_8);
 			// stained glass -> glass
 			registerRemapEntry(95, 20, ProtocolVersionsHelper.BEFORE_1_7);
+			// for MCPE too!
+			registerRemapEntry(95, 20, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
 			// stained glass pane -> glass pane
 			registerRemapEntry(160, 102, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(160, 102, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
 			// leaves2 -> leaves
 			registerRemapEntry(161, 18, ProtocolVersionsHelper.BEFORE_1_7);
 			// log2 -> log
