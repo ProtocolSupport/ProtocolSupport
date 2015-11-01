@@ -80,8 +80,10 @@ public class IdRemapper {
 			registerRemapEntry(95, 20, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
 			// stained glass pane -> glass pane
 			registerRemapEntry(160, 102, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
-			// log2 -> log
+			// log2 -> log (remap to MCPE ID)
 			registerRemapEntry(162, 171, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			// redstone -> carpet (remove when MCPE 0.13 is released! && protocolsupport is updated to MCPE 0.13)
+			registerRemapEntry(55, 171, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
 		}
 		@Override
 		protected RemappingTable createTable() {
