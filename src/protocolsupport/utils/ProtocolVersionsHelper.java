@@ -28,7 +28,6 @@ public class ProtocolVersionsHelper {
 	};
 
 	public static final ProtocolVersion[] BEFORE_MINECRAFT_PE_0_13 = new ProtocolVersion[] {
-		// TODO: Change the ProtocolVersion.MINECRAFT_PE to MINECRAFT_PE_0_12
 		ProtocolVersion.MINECRAFT_PE
 	};
 
