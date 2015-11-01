@@ -155,6 +155,22 @@ public class IdRemapper {
 			registerRemapEntry(424, 366, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
 			// nametag -> stone
 			registerRemapEntry(421, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);	
+			// lead -> stone
+			registerRemapEntry(420, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			
+			// all discs -> stone
+			registerRemapEntry(2256, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(2257, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(2258, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(2259, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(2260, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(2261, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(2262, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(2263, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(2264, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(2265, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(2266, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(2267, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
 		}
 		@Override
 		protected RemappingTable createTable() {
