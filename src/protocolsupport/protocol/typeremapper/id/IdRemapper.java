@@ -85,6 +85,11 @@ public class IdRemapper {
 			// redstone torch -> torch (remove when MCPE 0.13 is released! && protocolsupport is updated to MCPE 0.13)
 			registerRemapEntry(75, 50, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
 			registerRemapEntry(76, 50, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			// all pressure plates -> carpet
+			registerRemapEntry(70, 50, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(72, 50, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(147, 50, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(148, 50, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
 		}
 		@Override
 		protected RemappingTable createTable() {
