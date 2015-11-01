@@ -27,6 +27,11 @@ public class ProtocolVersionsHelper {
 		ProtocolVersion.MINECRAFT_1_5_2
 	};
 
+	public static final ProtocolVersion[] BEFORE_MINECRAFT_PE_0_13 = new ProtocolVersion[] {
+		// TODO: Change the ProtocolVersion.MINECRAFT_PE to MINECRAFT_PE_0_12
+		ProtocolVersion.MINECRAFT_PE
+	};
+
 	public static final ProtocolVersion[] concat(ProtocolVersion[] versions1, ProtocolVersion... versions2) {
 		ArrayList<ProtocolVersion> list = new ArrayList<>();
 		list.addAll(Arrays.asList(versions1));
