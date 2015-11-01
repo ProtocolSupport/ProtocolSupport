@@ -50,11 +50,8 @@ public class IdRemapper {
 			registerRemapEntry(178, 151, ProtocolVersionsHelper.BEFORE_1_8);
 			// stained glass -> glass
 			registerRemapEntry(95, 20, ProtocolVersionsHelper.BEFORE_1_7);
-			// for MCPE too!
-			registerRemapEntry(95, 20, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
 			// stained glass pane -> glass pane
 			registerRemapEntry(160, 102, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(160, 102, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
 			// leaves2 -> leaves
 			registerRemapEntry(161, 18, ProtocolVersionsHelper.BEFORE_1_7);
 			// log2 -> log
@@ -77,6 +74,14 @@ public class IdRemapper {
 			registerRemapEntry(174, 80, ProtocolVersionsHelper.BEFORE_1_6);
 			// tall plant -> yellow flower
 			registerRemapEntry(175, 38, ProtocolVersionsHelper.BEFORE_1_6);
+			
+			// MCPE
+			// stained glass -> glass
+			registerRemapEntry(95, 20, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			// stained glass pane -> glass pane
+			registerRemapEntry(160, 102, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			// log2 -> log
+			registerRemapEntry(162, 171, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
 		}
 		@Override
 		protected RemappingTable createTable() {
