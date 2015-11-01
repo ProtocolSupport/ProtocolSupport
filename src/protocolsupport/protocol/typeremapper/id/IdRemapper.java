@@ -153,6 +153,8 @@ public class IdRemapper {
 			registerRemapEntry(423, 365, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
 			// cooked mutton -> chicken cooked meat
 			registerRemapEntry(424, 366, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			// nametag -> stone
+			registerRemapEntry(421, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);	
 		}
 		@Override
 		protected RemappingTable createTable() {
@@ -170,6 +172,16 @@ public class IdRemapper {
 			registerRemapEntry(101, 93, ProtocolVersionsHelper.BEFORE_1_8);
 			// horse -> cow
 			registerRemapEntry(100, 92, ProtocolVersionsHelper.BEFORE_1_6);
+			
+			// MCPE
+			// endermite -> silverfish
+			registerRemapEntry(67, 60, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			// guardian -> sqiud
+			registerRemapEntry(68, 94, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			// rabbit -> chicken
+			registerRemapEntry(101, 93, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			// horse -> cow
+			registerRemapEntry(100, 92, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
 		}
 		@Override
 		protected RemappingTable createTable() {
