@@ -98,6 +98,12 @@ public class IdRemapper {
 			registerRemapEntry(126, 158, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
 			// cake -> cake (mystery) (MCPE ID remap)
 			registerRemapEntry(92, 126, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			// all doors -> door
+			registerRemapEntry(193, 64, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(194, 64, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(195, 64, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(196, 64, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(197, 64, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
 		}
 		@Override
 		protected RemappingTable createTable() {
@@ -136,7 +142,7 @@ public class IdRemapper {
 			registerRemapEntry(418, 1, ProtocolVersionsHelper.BEFORE_1_6);
 			registerRemapEntry(419, 1, ProtocolVersionsHelper.BEFORE_1_6);
 			registerRemapEntry(420, 1, ProtocolVersionsHelper.BEFORE_1_6);
-			registerRemapEntry(421, 1, ProtocolVersionsHelper.BEFORE_1_6);
+			registerRemapEntry(421, 1, ProtocolVersionsHelper.BEFORE_1_6);	
 		}
 		@Override
 		protected RemappingTable createTable() {
