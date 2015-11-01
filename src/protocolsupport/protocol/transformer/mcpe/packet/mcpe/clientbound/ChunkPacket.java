@@ -7,13 +7,18 @@ import net.minecraft.server.v1_8_R3.Block;
 import net.minecraft.server.v1_8_R3.Chunk;
 import net.minecraft.server.v1_8_R3.ChunkSection;
 import net.minecraft.server.v1_8_R3.IBlockData;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
-import protocolsupport.protocol.transformer.mcpe.utils.BlockIDRemapper;
+import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.id.RemappingTable;
 import protocolsupport.utils.MutableBlockPosition;
 
 public class ChunkPacket implements ClientboundPEPacket {
-
+	private static final RemappingTable blockRemapper = IdRemapper.BLOCK.getTable(ProtocolVersion.MINECRAFT_PE);
+	private static final RemappingTable itemRemapper = IdRemapper.ITEM.getTable(ProtocolVersion.MINECRAFT_PE);
+	private static final RemappingTable entityRemapper = IdRemapper.ENTITY.getTable(ProtocolVersion.MINECRAFT_PE);
+	private static final RemappingTable mapcolorRemapper = IdRemapper.MAPCOLOR.getTable(ProtocolVersion.MINECRAFT_PE);
 	protected Chunk chunk;
 
 	public ChunkPacket(Chunk chunk) {
@@ -38,7 +43,7 @@ public class ChunkPacket implements ClientboundPEPacket {
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
 				for (int y = 0; y < 128; y++) {
-					temp.writeByte(BlockIDRemapper.replaceBlockId(Block.getId(getType(x, y, z, pos).getBlock())));
+					temp.writeByte(blockRemapper.getRemap(Block.getId(getType(x, y, z, pos).getBlock())));
 				}
 			}
 		}
