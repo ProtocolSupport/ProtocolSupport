@@ -90,6 +90,14 @@ public class IdRemapper {
 			registerRemapEntry(72, 50, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
 			registerRemapEntry(147, 50, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
 			registerRemapEntry(148, 50, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			// sea lantern -> glowstone
+			registerRemapEntry(169, 89, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			// prismarine -> mossy cobblestone
+			registerRemapEntry(168, 48, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			// wood slab -> wood slab (MCPE ID remap)
+			registerRemapEntry(126, 158, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			// cake -> cake (mystery) (MCPE ID remap)
+			registerRemapEntry(92, 126, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
 		}
 		@Override
 		protected RemappingTable createTable() {
