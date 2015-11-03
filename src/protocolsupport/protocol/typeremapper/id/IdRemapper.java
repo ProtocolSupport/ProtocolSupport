@@ -118,6 +118,8 @@ public class IdRemapper {
 			registerRemapEntry(23, 1, ProtocolVersionsHelper.MCPE);
 			// note block -> wood
 			registerRemapEntry(25, 5, ProtocolVersionsHelper.MCPE);
+			// detector rail -> powered rail
+			registerRemapEntry(28, 27, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
