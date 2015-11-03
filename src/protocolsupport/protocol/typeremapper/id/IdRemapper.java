@@ -167,6 +167,8 @@ public class IdRemapper {
 			registerRemapEntry(166, 95, ProtocolVersionsHelper.MCPE);
 			// iron trapdoor -> trapdoor
 			registerRemapEntry(167, 96, ProtocolVersionsHelper.MCPE);
+			// inverted daylight sensor -> slab
+			registerRemapEntry(178, 158, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
