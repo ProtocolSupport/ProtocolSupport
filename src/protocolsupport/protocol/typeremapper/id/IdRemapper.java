@@ -144,6 +144,8 @@ public class IdRemapper {
 			registerRemapEntry(132, 0, ProtocolVersionsHelper.MCPE);
 			// command block -> stone
 			registerRemapEntry(137, 1, ProtocolVersionsHelper.MCPE);
+			// beacon -> nether reactor core
+			registerRemapEntry(138, 247, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
