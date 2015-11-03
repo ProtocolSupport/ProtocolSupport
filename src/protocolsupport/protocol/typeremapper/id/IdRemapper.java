@@ -122,6 +122,8 @@ public class IdRemapper {
 			registerRemapEntry(28, 27, ProtocolVersionsHelper.MCPE);
 			// lever -> sign (well, I don't know a better replacer for this)
 			registerRemapEntry(69, 63, ProtocolVersionsHelper.MCPE);
+			// jukebox -> wood
+			registerRemapEntry(84, 5, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
