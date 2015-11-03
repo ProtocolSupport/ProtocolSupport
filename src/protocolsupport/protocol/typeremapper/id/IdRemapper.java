@@ -131,6 +131,9 @@ public class IdRemapper {
 			registerRemapEntry(119, 90, ProtocolVersionsHelper.MCPE);
 			// dragon egg -> stone
 			registerRemapEntry(122, 1, ProtocolVersionsHelper.MCPE);
+			// redstone lamp (on/off) to glowstone
+			registerRemapEntry(124, 89, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(123, 89, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
