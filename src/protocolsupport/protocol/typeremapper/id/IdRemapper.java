@@ -159,6 +159,8 @@ public class IdRemapper {
 			registerRemapEntry(151, 158, ProtocolVersionsHelper.MCPE);
 			// hopper -> stone
 			registerRemapEntry(154, 1, ProtocolVersionsHelper.MCPE);
+			// slime block -> stone
+			registerRemapEntry(165, 1, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
