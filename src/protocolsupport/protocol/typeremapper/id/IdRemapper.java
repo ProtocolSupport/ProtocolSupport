@@ -155,6 +155,8 @@ public class IdRemapper {
 			// comparator (on/off) -> carpet
 			registerRemapEntry(149, 171, ProtocolVersionsHelper.MCPE);
 			registerRemapEntry(150, 171, ProtocolVersionsHelper.MCPE);
+			// daylight sensor -> slab
+			registerRemapEntry(151, 158, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
