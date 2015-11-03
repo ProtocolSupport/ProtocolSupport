@@ -47,9 +47,10 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetSpaw
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddPlayerPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.StartGamePacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ContainerSetContentsPacket;
-import protocolsupport.protocol.transformer.mcpe.utils.BlockIDRemapper;
 import protocolsupport.protocol.transformer.mcpe.utils.PEWatchedPlayer;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
+import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.id.RemappingTable;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificType;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedObject;
@@ -92,7 +93,11 @@ import net.minecraft.server.v1_8_R3.PacketPlayOutUpdateTime;
 import net.minecraft.server.v1_8_R3.World;
 
 public class ClientboundPacketHandler {
-
+	protected static final RemappingTable blockRemapper = IdRemapper.BLOCK.getTable(ProtocolVersion.MINECRAFT_PE);
+	protected static final RemappingTable itemRemapper = IdRemapper.ITEM.getTable(ProtocolVersion.MINECRAFT_PE);
+	protected static final RemappingTable entityRemapper = IdRemapper.ENTITY.getTable(ProtocolVersion.MINECRAFT_PE);
+	protected static final RemappingTable mapcolorRemapper = IdRemapper.MAPCOLOR.getTable(ProtocolVersion.MINECRAFT_PE);
+	
 	private static final ClassToFuncMapper<ClientboundPacketHandler, List<? extends ClientboundPEPacket>, PacketDataSerializer> transformers = new ClassToFuncMapper<>();
 	static {
 		transformers.register(PacketPlayOutKeepAlive.class, new TransformFunc() {
@@ -369,7 +374,7 @@ public class ClientboundPacketHandler {
 					int stateId = packetdata.e();
 					records[i] = new UpdateBlockRecord(
 						(chunkX << 4) + (xz >> 4), y, (chunkZ << 4) + (xz & 0xF),
-						BlockIDRemapper.replaceBlockId(stateId >> 4), stateId & 0xF,
+						blockRemapper.getRemap(stateId >> 4), stateId & 0xF,
 						SetBlocksPacket.FLAG_ALL_PRIORITY
 					);
 				}
@@ -385,7 +390,7 @@ public class ClientboundPacketHandler {
 					blockPos.getX(),
 					blockPos.getY(),
 					blockPos.getZ(),
-					BlockIDRemapper.replaceBlockId(stateId >> 4),
+					blockRemapper.getRemap(stateId >> 4),
 					stateId & 0xF,
 					SetBlocksPacket.FLAG_ALL_PRIORITY
 				)));
