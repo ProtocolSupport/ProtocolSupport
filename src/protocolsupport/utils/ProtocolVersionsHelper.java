@@ -27,7 +27,7 @@ public class ProtocolVersionsHelper {
 		ProtocolVersion.MINECRAFT_1_5_2
 	};
 
-	public static final ProtocolVersion[] BEFORE_MINECRAFT_PE_0_13 = new ProtocolVersion[] {
+	public static final ProtocolVersion[] MCPE = new ProtocolVersion[] {
 		ProtocolVersion.MINECRAFT_PE
 	};
 

@@ -77,38 +77,38 @@ public class IdRemapper {
 			
 			// MCPE
 			// stained glass -> glass
-			registerRemapEntry(95, 20, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(95, 20, ProtocolVersionsHelper.MCPE);
 			// stained glass pane -> glass pane
-			registerRemapEntry(160, 102, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(160, 102, ProtocolVersionsHelper.MCPE);
 			// redstone -> carpet (remove when MCPE 0.13 is released! && protocolsupport is updated to MCPE 0.13)
-			registerRemapEntry(55, 171, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(55, 171, ProtocolVersionsHelper.MCPE);
 			// redstone torch -> torch (remove when MCPE 0.13 is released! && protocolsupport is updated to MCPE 0.13)
-			registerRemapEntry(75, 50, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
-			registerRemapEntry(76, 50, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(75, 50, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(76, 50, ProtocolVersionsHelper.MCPE);
 			// all pressure plates -> carpet
-			registerRemapEntry(70, 50, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
-			registerRemapEntry(72, 50, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
-			registerRemapEntry(147, 50, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
-			registerRemapEntry(148, 50, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(70, 50, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(72, 50, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(147, 50, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(148, 50, ProtocolVersionsHelper.MCPE);
 			// sea lantern -> glowstone
-			registerRemapEntry(169, 89, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(169, 89, ProtocolVersionsHelper.MCPE);
 			// prismarine -> mossy cobblestone
-			registerRemapEntry(168, 48, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(168, 48, ProtocolVersionsHelper.MCPE);
 			// wood slab -> wood slab (MCPE ID remap)
-			registerRemapEntry(126, 158, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(126, 158, ProtocolVersionsHelper.MCPE);
 			// cake -> cake (mystery) (MCPE ID remap)
-			registerRemapEntry(92, 126, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(92, 126, ProtocolVersionsHelper.MCPE);
 			// all doors -> door
-			registerRemapEntry(193, 64, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
-			registerRemapEntry(194, 64, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
-			registerRemapEntry(195, 64, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
-			registerRemapEntry(196, 64, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
-			registerRemapEntry(197, 64, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(193, 64, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(194, 64, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(195, 64, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(196, 64, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(197, 64, ProtocolVersionsHelper.MCPE);
 			// standing banner -> standing sign
-			registerRemapEntry(176, 63, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(176, 63, ProtocolVersionsHelper.MCPE);
 			// all buttons -> sign (well, I don't know a better replacer for this)
-			registerRemapEntry(77, 63, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
-			registerRemapEntry(143, 63, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(77, 63, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(143, 63, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
@@ -151,29 +151,29 @@ public class IdRemapper {
 			
 			// MCPE
 			// banner -> sign
-			registerRemapEntry(425, 323, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(425, 323, ProtocolVersionsHelper.MCPE);
 			// raw mutton -> chicken raw meat
-			registerRemapEntry(423, 365, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(423, 365, ProtocolVersionsHelper.MCPE);
 			// cooked mutton -> chicken cooked meat
-			registerRemapEntry(424, 366, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(424, 366, ProtocolVersionsHelper.MCPE);
 			// nametag -> stone
-			registerRemapEntry(421, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);	
+			registerRemapEntry(421, 1, ProtocolVersionsHelper.MCPE);	
 			// lead -> stone
-			registerRemapEntry(420, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(420, 1, ProtocolVersionsHelper.MCPE);
 			
 			// all discs -> stone
-			registerRemapEntry(2256, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
-			registerRemapEntry(2257, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
-			registerRemapEntry(2258, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
-			registerRemapEntry(2259, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
-			registerRemapEntry(2260, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
-			registerRemapEntry(2261, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
-			registerRemapEntry(2262, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
-			registerRemapEntry(2263, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
-			registerRemapEntry(2264, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
-			registerRemapEntry(2265, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
-			registerRemapEntry(2266, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
-			registerRemapEntry(2267, 1, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(2256, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(2257, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(2258, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(2259, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(2260, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(2261, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(2262, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(2263, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(2264, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(2265, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(2266, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(2267, 1, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
@@ -194,13 +194,13 @@ public class IdRemapper {
 			
 			// MCPE
 			// endermite -> silverfish
-			registerRemapEntry(67, 60, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(67, 60, ProtocolVersionsHelper.MCPE);
 			// guardian -> sqiud
-			registerRemapEntry(68, 94, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(68, 94, ProtocolVersionsHelper.MCPE);
 			// rabbit -> chicken
-			registerRemapEntry(101, 93, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(101, 93, ProtocolVersionsHelper.MCPE);
 			// horse -> cow
-			registerRemapEntry(100, 92, ProtocolVersionsHelper.BEFORE_MINECRAFT_PE_0_13);
+			registerRemapEntry(100, 92, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
