@@ -125,6 +125,8 @@ public class IdRemapper {
 			// repeater (on/off) -> carpet
 			registerRemapEntry(93, 171, ProtocolVersionsHelper.MCPE);
 			registerRemapEntry(94, 171, ProtocolVersionsHelper.MCPE);
+			// cauldron -> stone
+			registerRemapEntry(118, 1, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
