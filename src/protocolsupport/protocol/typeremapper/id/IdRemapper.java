@@ -142,6 +142,8 @@ public class IdRemapper {
 			registerRemapEntry(131, 63, ProtocolVersionsHelper.MCPE);
 			// tripwire -> air (Because tripwire is a passable block, and there is no replacement for it in MCPE)
 			registerRemapEntry(132, 0, ProtocolVersionsHelper.MCPE);
+			// command block -> stone
+			registerRemapEntry(137, 1, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
