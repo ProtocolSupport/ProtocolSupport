@@ -169,6 +169,14 @@ public class IdRemapper {
 			registerRemapEntry(167, 96, ProtocolVersionsHelper.MCPE);
 			// inverted daylight sensor -> slab
 			registerRemapEntry(178, 158, ProtocolVersionsHelper.MCPE);
+			// red sandstone -> sandstone
+			registerRemapEntry(179, 24, ProtocolVersionsHelper.MCPE);
+			// red sandstone stairs -> sandstone stairs
+			registerRemapEntry(180, 128, ProtocolVersionsHelper.MCPE);
+			// red sandstone doubleslab -> double step
+			registerRemapEntry(181, 43, ProtocolVersionsHelper.MCPE);
+			// red sandstone slab -> step
+			registerRemapEntry(182, 44, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
