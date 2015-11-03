@@ -93,10 +93,10 @@ import net.minecraft.server.v1_8_R3.PacketPlayOutUpdateTime;
 import net.minecraft.server.v1_8_R3.World;
 
 public class ClientboundPacketHandler {
-	private static final RemappingTable blockRemapper = IdRemapper.BLOCK.getTable(ProtocolVersion.MINECRAFT_PE);
-	private static final RemappingTable itemRemapper = IdRemapper.ITEM.getTable(ProtocolVersion.MINECRAFT_PE);
-	private static final RemappingTable entityRemapper = IdRemapper.ENTITY.getTable(ProtocolVersion.MINECRAFT_PE);
-	private static final RemappingTable mapcolorRemapper = IdRemapper.MAPCOLOR.getTable(ProtocolVersion.MINECRAFT_PE);
+	protected static final RemappingTable blockRemapper = IdRemapper.BLOCK.getTable(ProtocolVersion.MINECRAFT_PE);
+	protected static final RemappingTable itemRemapper = IdRemapper.ITEM.getTable(ProtocolVersion.MINECRAFT_PE);
+	protected static final RemappingTable entityRemapper = IdRemapper.ENTITY.getTable(ProtocolVersion.MINECRAFT_PE);
+	protected static final RemappingTable mapcolorRemapper = IdRemapper.MAPCOLOR.getTable(ProtocolVersion.MINECRAFT_PE);
 	
 	private static final ClassToFuncMapper<ClientboundPacketHandler, List<? extends ClientboundPEPacket>, PacketDataSerializer> transformers = new ClassToFuncMapper<>();
 	static {
