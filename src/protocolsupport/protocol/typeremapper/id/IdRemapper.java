@@ -129,6 +129,8 @@ public class IdRemapper {
 			registerRemapEntry(118, 1, ProtocolVersionsHelper.MCPE);
 			// end portal -> nether portal
 			registerRemapEntry(119, 90, ProtocolVersionsHelper.MCPE);
+			// dragon egg -> stone
+			registerRemapEntry(122, 1, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
