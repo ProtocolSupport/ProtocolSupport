@@ -114,6 +114,8 @@ public class IdRemapper {
 			registerRemapEntry(33, 1, ProtocolVersionsHelper.MCPE);
 			// piston head -> stone
 			registerRemapEntry(34, 1, ProtocolVersionsHelper.MCPE);
+			// dispenser -> stone
+			registerRemapEntry(23, 1, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
