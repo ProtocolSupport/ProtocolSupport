@@ -96,8 +96,6 @@ public class IdRemapper {
 			registerRemapEntry(168, 48, ProtocolVersionsHelper.MCPE);
 			// wood slab -> wood slab (MCPE ID remap)
 			registerRemapEntry(126, 158, ProtocolVersionsHelper.MCPE);
-			// cake -> cake (mystery) (MCPE ID remap)
-			registerRemapEntry(92, 126, ProtocolVersionsHelper.MCPE);
 			// all doors -> door
 			registerRemapEntry(193, 64, ProtocolVersionsHelper.MCPE);
 			registerRemapEntry(194, 64, ProtocolVersionsHelper.MCPE);
@@ -124,6 +122,7 @@ public class IdRemapper {
 			registerRemapEntry(69, 63, ProtocolVersionsHelper.MCPE);
 			// jukebox -> wood
 			registerRemapEntry(84, 5, ProtocolVersionsHelper.MCPE);
+			
 		}
 		@Override
 		protected RemappingTable createTable() {
