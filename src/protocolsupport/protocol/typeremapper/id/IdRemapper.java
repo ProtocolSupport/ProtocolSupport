@@ -122,7 +122,9 @@ public class IdRemapper {
 			registerRemapEntry(69, 63, ProtocolVersionsHelper.MCPE);
 			// jukebox -> wood
 			registerRemapEntry(84, 5, ProtocolVersionsHelper.MCPE);
-			
+			// repeater (on/off) -> carpet
+			registerRemapEntry(93, 171, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(94, 171, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
