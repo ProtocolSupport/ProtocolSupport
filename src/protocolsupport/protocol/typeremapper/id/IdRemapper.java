@@ -134,6 +134,8 @@ public class IdRemapper {
 			// redstone lamp (on/off) to glowstone
 			registerRemapEntry(124, 89, ProtocolVersionsHelper.MCPE);
 			registerRemapEntry(123, 89, ProtocolVersionsHelper.MCPE);
+			// double oak slab -> double oak slab (MCPE ID remap)
+			registerRemapEntry(125, 157, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
