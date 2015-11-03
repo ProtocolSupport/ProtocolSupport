@@ -16,9 +16,6 @@ import protocolsupport.utils.MutableBlockPosition;
 
 public class ChunkPacket implements ClientboundPEPacket {
 	private static final RemappingTable blockRemapper = IdRemapper.BLOCK.getTable(ProtocolVersion.MINECRAFT_PE);
-	private static final RemappingTable itemRemapper = IdRemapper.ITEM.getTable(ProtocolVersion.MINECRAFT_PE);
-	private static final RemappingTable entityRemapper = IdRemapper.ENTITY.getTable(ProtocolVersion.MINECRAFT_PE);
-	private static final RemappingTable mapcolorRemapper = IdRemapper.MAPCOLOR.getTable(ProtocolVersion.MINECRAFT_PE);
 	protected Chunk chunk;
 
 	public ChunkPacket(Chunk chunk) {
