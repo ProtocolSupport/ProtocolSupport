@@ -152,6 +152,9 @@ public class IdRemapper {
 			registerRemapEntry(145, 144, ProtocolVersionsHelper.MCPE);
 			// trapped chest -> chest
 			registerRemapEntry(146, 54, ProtocolVersionsHelper.MCPE);
+			// comparator (on/off) -> carpet
+			registerRemapEntry(149, 171, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(150, 171, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
