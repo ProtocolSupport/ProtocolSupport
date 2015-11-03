@@ -150,6 +150,8 @@ public class IdRemapper {
 			registerRemapEntry(144, 143, ProtocolVersionsHelper.MCPE);
 			// anvil -> anvil (MCPE ID remap)
 			registerRemapEntry(145, 144, ProtocolVersionsHelper.MCPE);
+			// trapped chest -> chest
+			registerRemapEntry(146, 54, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
