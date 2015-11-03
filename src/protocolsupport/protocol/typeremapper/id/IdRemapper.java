@@ -148,6 +148,8 @@ public class IdRemapper {
 			registerRemapEntry(138, 247, ProtocolVersionsHelper.MCPE);
 			// mob head -> mob head (MCPE ID remap)
 			registerRemapEntry(144, 143, ProtocolVersionsHelper.MCPE);
+			// anvil -> anvil (MCPE ID remap)
+			registerRemapEntry(145, 144, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
