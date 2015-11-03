@@ -148,10 +148,6 @@ public class IdRemapper {
 			registerRemapEntry(137, 1, ProtocolVersionsHelper.MCPE);
 			// beacon -> nether reactor core
 			registerRemapEntry(138, 247, ProtocolVersionsHelper.MCPE);
-			// mob head -> mob head (MCPE ID remap)
-			registerRemapEntry(144, 143, ProtocolVersionsHelper.MCPE);
-			// anvil -> anvil (MCPE ID remap)
-			registerRemapEntry(145, 144, ProtocolVersionsHelper.MCPE);
 			// trapped chest -> chest
 			registerRemapEntry(146, 54, ProtocolVersionsHelper.MCPE);
 			// comparator (on/off) -> carpet
