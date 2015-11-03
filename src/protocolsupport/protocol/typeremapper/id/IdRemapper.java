@@ -138,6 +138,8 @@ public class IdRemapper {
 			registerRemapEntry(125, 157, ProtocolVersionsHelper.MCPE);
 			// enderchest -> chest
 			registerRemapEntry(130, 54, ProtocolVersionsHelper.MCPE);
+			// tripwire hook -> sign
+			registerRemapEntry(131, 63, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
