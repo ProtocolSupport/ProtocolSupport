@@ -106,7 +106,7 @@ public class IdRemapper {
 			registerRemapEntry(197, 64, ProtocolVersionsHelper.MCPE);
 			// standing banner -> standing sign
 			registerRemapEntry(176, 63, ProtocolVersionsHelper.MCPE);
-			// all buttons -	> sign (well, I don't know a better replacer for this)
+			// all buttons -> sign (well, I don't know a better replacer for this)
 			registerRemapEntry(77, 63, ProtocolVersionsHelper.MCPE);
 			registerRemapEntry(143, 63, ProtocolVersionsHelper.MCPE);
 			// (sticky) piston -> stone
@@ -120,6 +120,8 @@ public class IdRemapper {
 			registerRemapEntry(25, 5, ProtocolVersionsHelper.MCPE);
 			// detector rail -> powered rail
 			registerRemapEntry(28, 27, ProtocolVersionsHelper.MCPE);
+			// lever -> sign (well, I don't know a better replacer for this)
+			registerRemapEntry(69, 63, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
