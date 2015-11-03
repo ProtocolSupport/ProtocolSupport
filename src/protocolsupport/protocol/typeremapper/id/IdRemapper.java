@@ -163,6 +163,8 @@ public class IdRemapper {
 			registerRemapEntry(165, 1, ProtocolVersionsHelper.MCPE);
 			// barrier -> invisible bedrock
 			registerRemapEntry(166, 95, ProtocolVersionsHelper.MCPE);
+			// iron trapdoor -> trapdoor
+			registerRemapEntry(167, 96, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
