@@ -161,6 +161,8 @@ public class IdRemapper {
 			registerRemapEntry(154, 1, ProtocolVersionsHelper.MCPE);
 			// slime block -> stone
 			registerRemapEntry(165, 1, ProtocolVersionsHelper.MCPE);
+			// barrier -> invisible bedrock
+			registerRemapEntry(166, 95, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
