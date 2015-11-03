@@ -136,6 +136,8 @@ public class IdRemapper {
 			registerRemapEntry(123, 89, ProtocolVersionsHelper.MCPE);
 			// double oak slab -> double oak slab (MCPE ID remap)
 			registerRemapEntry(125, 157, ProtocolVersionsHelper.MCPE);
+			// enderchest -> chest
+			registerRemapEntry(130, 54, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
