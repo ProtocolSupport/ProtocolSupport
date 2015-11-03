@@ -127,6 +127,8 @@ public class IdRemapper {
 			registerRemapEntry(94, 171, ProtocolVersionsHelper.MCPE);
 			// cauldron -> stone
 			registerRemapEntry(118, 1, ProtocolVersionsHelper.MCPE);
+			// end portal -> nether portal
+			registerRemapEntry(119, 90, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
