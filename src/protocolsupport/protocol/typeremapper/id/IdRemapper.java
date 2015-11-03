@@ -157,6 +157,8 @@ public class IdRemapper {
 			registerRemapEntry(150, 171, ProtocolVersionsHelper.MCPE);
 			// daylight sensor -> slab
 			registerRemapEntry(151, 158, ProtocolVersionsHelper.MCPE);
+			// hopper -> stone
+			registerRemapEntry(154, 1, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
