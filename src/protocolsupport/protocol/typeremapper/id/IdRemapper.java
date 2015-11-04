@@ -96,8 +96,6 @@ public class IdRemapper {
 			registerRemapEntry(168, 48, ProtocolVersionsHelper.MCPE);
 			// wood slab -> wood slab (MCPE ID remap)
 			registerRemapEntry(126, 158, ProtocolVersionsHelper.MCPE);
-			// cake -> cake (mystery) (MCPE ID remap)
-			registerRemapEntry(92, 126, ProtocolVersionsHelper.MCPE);
 			// all doors -> door
 			registerRemapEntry(193, 64, ProtocolVersionsHelper.MCPE);
 			registerRemapEntry(194, 64, ProtocolVersionsHelper.MCPE);
@@ -106,9 +104,75 @@ public class IdRemapper {
 			registerRemapEntry(197, 64, ProtocolVersionsHelper.MCPE);
 			// standing banner -> standing sign
 			registerRemapEntry(176, 63, ProtocolVersionsHelper.MCPE);
+			// wall banner -> wall sign
+			registerRemapEntry(177, 68, ProtocolVersionsHelper.MCPE);
 			// all buttons -> sign (well, I don't know a better replacer for this)
 			registerRemapEntry(77, 63, ProtocolVersionsHelper.MCPE);
 			registerRemapEntry(143, 63, ProtocolVersionsHelper.MCPE);
+			// (sticky) piston -> stone
+			registerRemapEntry(29, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(33, 1, ProtocolVersionsHelper.MCPE);
+			// piston head -> stone
+			registerRemapEntry(34, 1, ProtocolVersionsHelper.MCPE);
+			// dispenser -> stone
+			registerRemapEntry(23, 1, ProtocolVersionsHelper.MCPE);
+			// note block -> wood
+			registerRemapEntry(25, 5, ProtocolVersionsHelper.MCPE);
+			// detector rail -> powered rail
+			registerRemapEntry(28, 27, ProtocolVersionsHelper.MCPE);
+			// lever -> sign (well, I don't know a better replacer for this)
+			registerRemapEntry(69, 63, ProtocolVersionsHelper.MCPE);
+			// jukebox -> wood
+			registerRemapEntry(84, 5, ProtocolVersionsHelper.MCPE);
+			// repeater (on/off) -> carpet
+			registerRemapEntry(93, 171, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(94, 171, ProtocolVersionsHelper.MCPE);
+			// cauldron -> stone
+			registerRemapEntry(118, 1, ProtocolVersionsHelper.MCPE);
+			// end portal -> nether portal
+			registerRemapEntry(119, 90, ProtocolVersionsHelper.MCPE);
+			// dragon egg -> stone
+			registerRemapEntry(122, 1, ProtocolVersionsHelper.MCPE);
+			// redstone lamp (on/off) to glowstone
+			registerRemapEntry(124, 89, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(123, 89, ProtocolVersionsHelper.MCPE);
+			// double oak slab -> double oak slab (MCPE ID remap)
+			registerRemapEntry(125, 157, ProtocolVersionsHelper.MCPE);
+			// enderchest -> chest
+			registerRemapEntry(130, 54, ProtocolVersionsHelper.MCPE);
+			// tripwire hook -> sign
+			registerRemapEntry(131, 63, ProtocolVersionsHelper.MCPE);
+			// tripwire -> air (Because tripwire is a passable block, and there is no replacement for it in MCPE)
+			registerRemapEntry(132, 0, ProtocolVersionsHelper.MCPE);
+			// command block -> stone
+			registerRemapEntry(137, 1, ProtocolVersionsHelper.MCPE);
+			// beacon -> nether reactor core
+			registerRemapEntry(138, 247, ProtocolVersionsHelper.MCPE);
+			// trapped chest -> chest
+			registerRemapEntry(146, 54, ProtocolVersionsHelper.MCPE);
+			// comparator (on/off) -> carpet
+			registerRemapEntry(149, 171, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(150, 171, ProtocolVersionsHelper.MCPE);
+			// daylight sensor -> slab
+			registerRemapEntry(151, 158, ProtocolVersionsHelper.MCPE);
+			// hopper -> stone
+			registerRemapEntry(154, 1, ProtocolVersionsHelper.MCPE);
+			// slime block -> stone
+			registerRemapEntry(165, 1, ProtocolVersionsHelper.MCPE);
+			// barrier -> invisible bedrock
+			registerRemapEntry(166, 95, ProtocolVersionsHelper.MCPE);
+			// iron trapdoor -> trapdoor
+			registerRemapEntry(167, 96, ProtocolVersionsHelper.MCPE);
+			// inverted daylight sensor -> slab
+			registerRemapEntry(178, 158, ProtocolVersionsHelper.MCPE);
+			// red sandstone -> sandstone
+			registerRemapEntry(179, 24, ProtocolVersionsHelper.MCPE);
+			// red sandstone stairs -> sandstone stairs
+			registerRemapEntry(180, 128, ProtocolVersionsHelper.MCPE);
+			// red sandstone doubleslab -> double step
+			registerRemapEntry(181, 43, ProtocolVersionsHelper.MCPE);
+			// red sandstone slab -> step
+			registerRemapEntry(182, 44, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
