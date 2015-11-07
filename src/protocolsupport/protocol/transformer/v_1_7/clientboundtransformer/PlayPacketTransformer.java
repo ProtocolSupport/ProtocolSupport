@@ -15,7 +15,6 @@ import java.util.zip.Deflater;
 
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.EnumParticle;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_8_R3.ItemStack;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketListener;
@@ -83,7 +82,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case ClientboundPacket.PLAY_CHAT_ID: {
 				packet.b(packetdata);
 				serializer.writeVarInt(packetId);
-				serializer.a(ChatSerializer.a(packetdata.d()));
+				serializer.writeString(packetdata.readString(32767));
 				break;
 			}
 			case ClientboundPacket.PLAY_ENTITY_EQUIPMENT_ID: {
