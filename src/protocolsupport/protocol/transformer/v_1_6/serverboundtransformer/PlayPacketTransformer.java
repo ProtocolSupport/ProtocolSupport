@@ -4,215 +4,193 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 
-import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
 
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.ChatComponentText;
-import net.minecraft.server.v1_8_R3.EnumProtocol;
-import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketListener;
 
 import org.bukkit.event.inventory.InventoryType;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.ServerboundPacket;
+import protocolsupport.utils.PacketCreator;
 import protocolsupport.utils.Utils;
 
 public class PlayPacketTransformer implements PacketTransformer {
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public Packet<PacketListener>[] tranform(Channel channel, int packetId, PacketDataSerializer serializer, PacketDataSerializer packetdata) throws IOException, IllegalAccessException, InstantiationException {
-		boolean useOriginalStream = false;
-		Packet<PacketListener> packet = null;
+	public Collection<Packet<?>> tranform(Channel channel, int packetId, PacketDataSerializer serializer) throws Exception {
 		switch (packetId) {
-			case 0x00: { //PacketPlayInKeepAlive
-				packet = getPacketById(0x00);
-				packetdata.writeVarInt(serializer.readInt());
-				break;
+			case 0x00: {
+				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_KEEP_ALIVE.get());
+				creator.writeVarInt(serializer.readInt());
+				return Collections.<Packet<?>>singletonList(creator.create());
 			}
-			case 0x03: { //PacketPlayInChat
-				packet = getPacketById(0x01);
-				useOriginalStream = true;
-				break;
+			case 0x03: {
+				return Collections.<Packet<?>>singletonList(PacketCreator.createWithData(ServerboundPacket.PLAY_CHAT.get(), serializer));
 			}
-			case 0x07: { //PacketPlayInUseEntity
-				packet = getPacketById(0x02);
+			case 0x07: {
+				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_USE_ENTITY.get());
 				serializer.readInt();
-				packetdata.writeVarInt(serializer.readInt());
-				packetdata.writeVarInt(serializer.readBoolean() ? 1 : 0);
-				break;
+				creator.writeVarInt(serializer.readInt());
+				creator.writeVarInt(serializer.readBoolean() ? 1 : 0);
+				return Collections.<Packet<?>>singletonList(creator.create());
 			}
-			case 0x0A: { //PacketPlayInFlying
-				packet = getPacketById(0x03);
-				useOriginalStream = true;
-				break;
+			case 0x0A: {
+				return Collections.<Packet<?>>singletonList(PacketCreator.createWithData(ServerboundPacket.PLAY_PLAYER.get(), serializer));
 			}
-			case 0x0B: { //PacketPlayInPosition
-				packet = getPacketById(0x04);
-				packetdata.writeDouble(serializer.readDouble());
-				packetdata.writeDouble(serializer.readDouble());
+			case 0x0B: {
+				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_POSITION.get());
+				creator.writeDouble(serializer.readDouble());
+				creator.writeDouble(serializer.readDouble());
 				serializer.readDouble();
-				packetdata.writeDouble(serializer.readDouble());
-				packetdata.writeBoolean(serializer.readBoolean());
-				break;
+				creator.writeDouble(serializer.readDouble());
+				creator.writeBoolean(serializer.readBoolean());
+				return Collections.<Packet<?>>singletonList(creator.create());
 			}
-			case 0x0C: { //PacketPlayInLook
-				packet = getPacketById(0x05);
-				useOriginalStream = true;
-				break;
+			case 0x0C: {
+				return Collections.<Packet<?>>singletonList(PacketCreator.createWithData(ServerboundPacket.PLAY_LOOK.get(), serializer));
 			}
-			case 0x0D: { //PacketPlayInPositionLook
-				packet = getPacketById(0x06);
-				packetdata.writeDouble(serializer.readDouble());
-				packetdata.writeDouble(serializer.readDouble());
+			case 0x0D: {
+				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_POSITION_LOOK.get());
+				creator.writeDouble(serializer.readDouble());
+				creator.writeDouble(serializer.readDouble());
 				serializer.readDouble();
-				packetdata.writeDouble(serializer.readDouble());
-				packetdata.writeFloat(serializer.readFloat());
-				packetdata.writeFloat(serializer.readFloat());
-				packetdata.writeBoolean(serializer.readBoolean());
-				break;
+				creator.writeDouble(serializer.readDouble());
+				creator.writeFloat(serializer.readFloat());
+				creator.writeFloat(serializer.readFloat());
+				creator.writeBoolean(serializer.readBoolean());
+				return Collections.<Packet<?>>singletonList(creator.create());
 			}
-			case 0x0E: { //PacketPlayInBlockDig
-				packet = getPacketById(0x07);
-				packetdata.writeByte(serializer.readUnsignedByte());
-				packetdata.a(new BlockPosition(serializer.readInt(), serializer.readUnsignedByte(), serializer.readInt()));
-				packetdata.writeByte(serializer.readUnsignedByte());
-				break;
+			case 0x0E: {
+				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_BLOCK_DIG.get());
+				creator.writeByte(serializer.readUnsignedByte());
+				creator.a(new BlockPosition(serializer.readInt(), serializer.readUnsignedByte(), serializer.readInt()));
+				creator.writeByte(serializer.readUnsignedByte());
+				return Collections.<Packet<?>>singletonList(creator.create());
 			}
-			case 0x0F: { //PacketPlayInBlockPlace
-				packet = getPacketById(0x08);
-				packetdata.a(new BlockPosition(serializer.readInt(), serializer.readUnsignedByte(), serializer.readInt()));
-				packetdata.writeByte(serializer.readUnsignedByte());
-				packetdata.writeItemStack(serializer.readItemStack());
-				packetdata.writeByte(serializer.readUnsignedByte());
-				packetdata.writeByte(serializer.readUnsignedByte());
-				packetdata.writeByte(serializer.readUnsignedByte());
-				break;
+			case 0x0F: {
+				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_BLOCK_PLACE.get());
+				creator.a(new BlockPosition(serializer.readInt(), serializer.readUnsignedByte(), serializer.readInt()));
+				creator.writeByte(serializer.readUnsignedByte());
+				creator.writeItemStack(serializer.readItemStack());
+				creator.writeByte(serializer.readUnsignedByte());
+				creator.writeByte(serializer.readUnsignedByte());
+				creator.writeByte(serializer.readUnsignedByte());
+				return Collections.<Packet<?>>singletonList(creator.create());
 			}
-			case 0x10: { //PacketPlayInHeldItemSlot
-				packet = getPacketById(0x09);
-				useOriginalStream = true;
-				break;
+			case 0x10: {
+				return Collections.<Packet<?>>singletonList(PacketCreator.createWithData(ServerboundPacket.PLAY_HELD_SLOT.get(), serializer));
 			}
-			case 0x12: { //PacketPlayInArmAnimation
-				packet = getPacketById(0x0A);
+			case 0x12: {
 				serializer.readInt();
 				serializer.readByte();
-				break;
+				return Collections.<Packet<?>>singletonList(new PacketCreator(ServerboundPacket.PLAY_ANIMATION.get()).create());
 			}
-			case 0x13: { //PacketPlayInEntityAction
-				packet = getPacketById(0x0B);
-				packetdata.writeVarInt(serializer.readInt());
-				packetdata.writeVarInt(serializer.readByte() - 1);
-				packetdata.writeVarInt(serializer.readInt());
-				break;
+			case 0x13: {
+				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_ENTITY_ACTION.get());
+				creator.writeVarInt(serializer.readInt());
+				creator.writeVarInt(serializer.readByte() - 1);
+				creator.writeVarInt(serializer.readInt());
+				return Collections.<Packet<?>>singletonList(creator.create());
 			}
-			case 0x1B: { //PacketPlayInSteerVehicle
-				packet = getPacketById(0x0C);
-				packetdata.writeFloat(serializer.readFloat());
-				packetdata.writeFloat(serializer.readFloat());
-				packetdata.writeByte((serializer.readBoolean() ? 1 : 0) + (serializer.readBoolean() ? 1 << 1 : 0));
-				break;
+			case 0x1B: {
+				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_STEER_VEHICLE.get());
+				creator.writeFloat(serializer.readFloat());
+				creator.writeFloat(serializer.readFloat());
+				creator.writeByte((serializer.readBoolean() ? 1 : 0) + (serializer.readBoolean() ? 1 << 1 : 0));
+				return Collections.<Packet<?>>singletonList(creator.create());
 			}
-			case 0x65: { //PacketPlayInCloseWindow
-				packet = getPacketById(0x0D);
-				useOriginalStream = true;
-				break;
+			case 0x65: {
+				return Collections.<Packet<?>>singletonList(PacketCreator.createWithData(ServerboundPacket.PLAY_CLOSE_WINDOW.get(), serializer));
 			}
-			case 0x66: { //PacketPlayInWindowClick
-				packet = getPacketById(0x0E);
+			case 0x66: { 
 				if (Utils.getPlayer(channel).getOpenInventory().getType() == InventoryType.ENCHANTING) {
-					packetdata.writeByte(serializer.readByte());
+					PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_WINDOW_CLICK.get());
+					creator.writeByte(serializer.readByte());
 					int slot = serializer.readShort();
 					if (slot > 0) {
 						slot++;
 					}
-					packetdata.writeShort(slot);
-					packetdata.writeByte(serializer.readByte());
-					packetdata.writeShort(serializer.readShort());
-					packetdata.writeByte(serializer.readByte());
-					packetdata.writeItemStack(serializer.readItemStack());
+					creator.writeShort(slot);
+					creator.writeByte(serializer.readByte());
+					creator.writeShort(serializer.readShort());
+					creator.writeByte(serializer.readByte());
+					creator.writeItemStack(serializer.readItemStack());
+					return Collections.<Packet<?>>singletonList(creator.create());
 				} else {
-					useOriginalStream = true;
+					return Collections.<Packet<?>>singletonList(PacketCreator.createWithData(ServerboundPacket.PLAY_WINDOW_CLICK.get(), serializer));
 				}
-				break;
 			}
-			case 0x6A: { //PacketPlayInTransaction
-				packet = getPacketById(0x0F);
-				useOriginalStream = true;
-				break;
+			case 0x6A: {
+				return Collections.<Packet<?>>singletonList(PacketCreator.createWithData(ServerboundPacket.PLAY_WINDOW_TRANSACTION.get(), serializer));
 			}
-			case 0x6B: { //PacketPlayInSetCreativeSlot
-				packet = getPacketById(0x10);
-				useOriginalStream = true;
-				break;
+			case 0x6B: {
+				return Collections.<Packet<?>>singletonList(PacketCreator.createWithData(ServerboundPacket.PLAY_CREATIVE_SET_SLOT.get(), serializer));
 			}
-			case 0x6C: { //PacketPlayInEnchantItem
-				packet = getPacketById(0x11);
-				useOriginalStream = true;
-				break;
+			case 0x6C: {
+				return Collections.<Packet<?>>singletonList(PacketCreator.createWithData(ServerboundPacket.PLAY_ENCHANT_SELECT.get(), serializer));
 			}
-			case 0x82: { //PacketPlayInUpdateSign
-				packet = getPacketById(0x12);
-				packetdata.a(new BlockPosition(serializer.readInt(), serializer.readShort(), serializer.readInt()));
+			case 0x82: {
+				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_UPDATE_SIGN.get());
+				creator.a(new BlockPosition(serializer.readInt(), serializer.readShort(), serializer.readInt()));
 				for (int i = 0; i < 4; i++) {
-					packetdata.writeString(ChatSerializer.a(new ChatComponentText(serializer.readString(15))));
+					creator.writeString(ChatSerializer.a(new ChatComponentText(serializer.readString(15))));
 				}
-				break;
+				return Collections.<Packet<?>>singletonList(creator.create());
 			}
-			case 0xCA: { //PacketPlayInAbilities
-				packet = getPacketById(0x13);
-				useOriginalStream = true;
-				break;
+			case 0xCA: {
+				return Collections.<Packet<?>>singletonList(PacketCreator.createWithData(ServerboundPacket.PLAY_ABILITIES.get(), serializer));
 			}
-			case 0xCB: { //PacketPlayInTabComplete
-				packet = getPacketById(0x14);
-				packetdata.writeString(serializer.readString(32767));
-				packetdata.writeBoolean(false);
-				break;
+			case 0xCB: {
+				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_TAB_COMPLETE.get());
+				creator.writeString(serializer.readString(32767));
+				creator.writeBoolean(false);
+				return Collections.<Packet<?>>singletonList(creator.create());
 			}
-			case 0xCC: { //PacketPlayInSettings
-				packet = getPacketById(0x15);
-				packetdata.writeString(serializer.readString(32767));
-				packetdata.writeByte(serializer.readByte());
+			case 0xCC: {
+				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_SETTINGS.get());
+				creator.writeString(serializer.readString(32767));
+				creator.writeByte(serializer.readByte());
 				int chatState = serializer.readByte();
-				packetdata.writeByte(chatState & 7);
-				packetdata.writeBoolean((chatState & 8) == 8);
+				creator.writeByte(chatState & 7);
+				creator.writeBoolean((chatState & 8) == 8);
 				serializer.readByte();
 				serializer.readBoolean();
-				packetdata.writeByte(0);
-				break;
+				creator.writeByte(0);
+				return Collections.<Packet<?>>singletonList(creator.create());
 			}
-			case 0xCD: { //PacketPlayInClientCommand
-				packet = getPacketById(0x16);
-				packetdata.writeVarInt(0);
+			case 0xCD: {
+				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_CLIENT_COMMAND.get());
+				creator.writeVarInt(0);
 				serializer.readByte();
-				break;
+				return Collections.<Packet<?>>singletonList(creator.create());
 			}
-			case 0xFA: { //PacketPlayInCustomPayload
-				packet = getPacketById(0x17);
+			case 0xFA: {
+				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_CUSTOM_PAYLOAD.get());
 				String tag = serializer.readString(20);
-				packetdata.writeString(tag);
+				creator.writeString(tag);
 				ByteBuf buf = serializer.readBytes(serializer.readShort());
 				try {
 					//special handle for anvil renaming, in 1.8 it reads string from serializer, but in 1.7 and before it just reads bytes and converts it to string
 					if (tag.equalsIgnoreCase("MC|ItemName")) {
-						packetdata.writeVarInt(buf.readableBytes());
+						creator.writeVarInt(buf.readableBytes());
 					}
 					//special handle for book sign and book edit, the bytes are written as 1.6 stream, but server will attempt to read bytes as 1.8 stream, so we should rewrite the itemstack
 					else if (tag.equals("MC|BSign") || tag.equals("MC|BEdit")) {
 						PacketDataSerializer data = new PacketDataSerializer(Unpooled.wrappedBuffer(buf), serializer.getVersion());
-						PacketDataSerializer newdata = new PacketDataSerializer(Unpooled.buffer(), ProtocolVersion.MINECRAFT_1_8);
+						PacketDataSerializer newdata = new PacketDataSerializer(Unpooled.buffer(), ProtocolVersion.getLatest());
 						newdata.writeItemStack(data.readItemStack());
 						buf = newdata;
 					}
 					//special handle for command block, reason is almost the same as for books, but also stream in 1.8 should have a last output flag, and cmd block type
 					else if (tag.equals("MC|AdvCdm")) {
 						PacketDataSerializer data = new PacketDataSerializer(Unpooled.wrappedBuffer(buf), serializer.getVersion());
-						PacketDataSerializer newdata = new PacketDataSerializer(Unpooled.buffer(), ProtocolVersion.MINECRAFT_1_8);
+						PacketDataSerializer newdata = new PacketDataSerializer(Unpooled.buffer(), ProtocolVersion.getLatest());
 						newdata.writeByte(0);
 						newdata.writeInt(data.readInt());
 						newdata.writeInt(data.readInt());
@@ -222,27 +200,18 @@ public class PlayPacketTransformer implements PacketTransformer {
 						buf = newdata;
 					}
 					//now write
-					packetdata.writeBytes(buf);
+					creator.writeBytes(buf);
 				} finally {
 					buf.release();
 				}
-				break;
+				return Collections.<Packet<?>>singletonList(creator.create());
 			}
-			case 0xFF: { //No corresponding packet
+			case 0xFF: {
 				serializer.readString(32767);
-				return new Packet[0];
+				return Collections.emptyList();
 			}
-		}
-		if (packet != null) {
-			packet.a(useOriginalStream ? serializer : packetdata);
-			return new Packet[] {packet};
 		}
 		return null;
-	}
-
-	@SuppressWarnings("unchecked")
-	private Packet<PacketListener> getPacketById(int realPacketId) throws IllegalAccessException, InstantiationException {
-		return EnumProtocol.PLAY.a(EnumProtocolDirection.SERVERBOUND, realPacketId);
 	}
 
 }

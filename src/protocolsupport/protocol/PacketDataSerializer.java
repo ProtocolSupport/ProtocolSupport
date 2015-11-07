@@ -45,8 +45,7 @@ import com.mojang.authlib.GameProfile;
 
 public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDataSerializer {
 
-	private ProtocolVersion version;
-
+	private final ProtocolVersion version;
 	public PacketDataSerializer(ByteBuf buf, ProtocolVersion version) {
 		super(buf);
 		this.version = version;
@@ -54,10 +53,6 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 
 	public ProtocolVersion getVersion() {
 		return version;
-	}
-
-	public void setVersion(ProtocolVersion version) {
-		this.version = version;
 	}
 
 	@Override
