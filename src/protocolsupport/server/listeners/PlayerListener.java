@@ -21,9 +21,10 @@ public class PlayerListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onVehicleInteract(PlayerInteractEntityEvent event) {
-		if (event.getPlayer().isInsideVehicle()) {
-			if (event.getPlayer().getVehicle().equals(event.getRightClicked())) {
-				event.getPlayer().leaveVehicle();
+		Player player = event.getPlayer();
+		if (player.isInsideVehicle() && ProtocolSupportAPI.getProtocolVersion(player) == ProtocolVersion.MINECRAFT_1_5_2) {
+			if (player.getVehicle().equals(event.getRightClicked())) {
+				player.leaveVehicle();
 			}
 		}
 	}
