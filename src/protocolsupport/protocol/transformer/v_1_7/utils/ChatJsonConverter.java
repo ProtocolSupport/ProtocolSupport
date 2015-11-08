@@ -21,8 +21,8 @@ public class ChatJsonConverter {
 		BaseComponent[] newcomponents = new BaseComponent[components.length];
 		for (int i = 0; i < components.length; i++) {
 			BaseComponent component = components[i];
+			List<BaseComponent> extra = component.getExtra();
 			BaseComponent newcomponent = fixComponent(component);
-			List<BaseComponent> extra = newcomponent.getExtra();
 			List<BaseComponent> newextra = new ArrayList<BaseComponent>();
 			if (extra != null) {
 				for (BaseComponent child : extra) {
