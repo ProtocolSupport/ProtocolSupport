@@ -31,6 +31,7 @@ import protocolsupport.protocol.transformer.utils.ChunkTransformer;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.protocol.transformer.utils.MapTransformer;
 import protocolsupport.protocol.transformer.utils.MapTransformer.ColumnEntry;
+import protocolsupport.protocol.transformer.v_1_7.utils.ChatJsonConverter;
 import protocolsupport.protocol.transformer.v_1_7.utils.VillagerTradeTransformer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.RemappingTable;
@@ -82,7 +83,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case ClientboundPacket.PLAY_CHAT_ID: {
 				packet.b(packetdata);
 				serializer.writeVarInt(packetId);
-				serializer.writeString(packetdata.readString(32767));
+				serializer.writeString(ChatJsonConverter.convert(packetdata.readString(32767)));
 				break;
 			}
 			case ClientboundPacket.PLAY_ENTITY_EQUIPMENT_ID: {
