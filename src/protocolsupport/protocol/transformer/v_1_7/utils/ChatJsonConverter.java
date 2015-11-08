@@ -32,7 +32,7 @@ public class ChatJsonConverter {
 			}
 			newcomponents[i] = newcomponent;
 		}
-		return ComponentSerializer.toString(components);
+		return ComponentSerializer.toString(newcomponents);
 	}
 
 	private static BaseComponent fixComponent(BaseComponent component) {
