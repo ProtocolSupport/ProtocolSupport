@@ -35,7 +35,8 @@ public class StatusPacketTransformer implements PacketTransformer {
 			PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), ProtocolVersion.getLatest());
 			packet.b(packetdata);
 			ServerPing serverPing = gson.fromJson(packetdata.readString(32767), ServerPing.class);
-			serverPing.setServerInfo(new ServerPing.ServerData(serverPing.c().a(), serializer.getVersion().getId()));
+			int versionId = serverPing.c().b();
+			serverPing.setServerInfo(new ServerPing.ServerData(serverPing.c().a(), versionId == ProtocolVersion.getLatest().getId() ? serializer.getVersion().getId() : versionId));
 			serializer.writeVarInt(packetId);
 			serializer.writeString(gson.toJson(serverPing));
 			packetdata.release();

@@ -24,7 +24,6 @@ import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.NetworkManager;
 import net.minecraft.server.v1_8_R3.PacketHandshakingInSetProtocol;
 import net.minecraft.server.v1_8_R3.PacketLoginOutDisconnect;
-import net.minecraft.server.v1_8_R3.PacketStatusListener;
 
 public abstract class AbstractHandshakeListener extends HandshakeListener {
 
@@ -87,7 +86,7 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 			}
 			case STATUS: {
 				networkManager.a(EnumProtocol.STATUS);
-				networkManager.a(new PacketStatusListener(MinecraftServer.getServer(), networkManager));
+				networkManager.a(new StatusListener(MinecraftServer.getServer(), networkManager));
 				break;
 			}
 			default: {
