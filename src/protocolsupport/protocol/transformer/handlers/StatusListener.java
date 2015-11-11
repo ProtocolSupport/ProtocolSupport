@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
@@ -44,6 +45,8 @@ public class StatusListener extends net.minecraft.server.v1_8_R3.PacketStatusLis
 		this.server = minecraftserver;
 		this.nmanager = networkmanager;
 	}
+
+	private static final UUID profileUUID = UUID.randomUUID();
 
 	@Override
 	public void a(PacketStatusInStart packetstatusinstart) {
@@ -83,7 +86,7 @@ public class StatusListener extends net.minecraft.server.v1_8_R3.PacketStatusLis
 		Collections.shuffle(profiles);
 		GameProfile[] gprofiles = new GameProfile[profiles.size()];
 		for (int i = 0; i < profiles.size(); i++) {
-			gprofiles[i] = new GameProfile(null, profiles.get(i));
+			gprofiles[i] = new GameProfile(profileUUID, profiles.get(i));
 		}
 		gprofiles = Arrays.copyOfRange(gprofiles, 0, Math.min(gprofiles.length, SpigotConfig.playerSample));
 		playerSample.a(gprofiles);
