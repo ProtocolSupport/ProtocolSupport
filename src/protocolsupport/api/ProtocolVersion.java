@@ -32,6 +32,7 @@ public enum ProtocolVersion {
 		return name;
 	}
 
+	@Deprecated
 	public static ProtocolVersion fromId(int id) {
 		switch (id) {
 			case 47: {
@@ -57,6 +58,10 @@ public enum ProtocolVersion {
 			}
 		}
 		return UNKNOWN;
+	}
+
+	public static ProtocolVersion getLatest() {
+		return ProtocolVersion.MINECRAFT_1_8;
 	}
 
 }

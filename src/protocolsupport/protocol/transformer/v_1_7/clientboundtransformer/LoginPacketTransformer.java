@@ -7,6 +7,7 @@ import java.io.IOException;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketListener;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.ClientboundPacket;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.utils.Allocator;
 
@@ -14,9 +15,9 @@ public class LoginPacketTransformer implements PacketTransformer {
 
 	@Override
 	public void tranform(ChannelHandlerContext ctx, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
-		PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), ProtocolVersion.MINECRAFT_1_8);
+		PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), ProtocolVersion.getLatest());
 		switch (packetId) {
-			case 0x02: { //PacketLoginOutSuccess
+			case ClientboundPacket.LOGIN_SUCCESS_ID: {
 				packet.b(packetdata);
 				serializer.writeVarInt(packetId);
 				String uuidstring = packetdata.readString(36);
@@ -27,7 +28,7 @@ public class LoginPacketTransformer implements PacketTransformer {
 				serializer.writeString(packetdata.readString(16));
 				break;
 			}
-			default: { //Any other packet
+			default: {
 				serializer.writeVarInt(packetId);
 				packet.b(serializer);
 				break;
