@@ -5,14 +5,14 @@ import io.netty.buffer.ByteBuf;
 import java.util.Collections;
 import java.util.List;
 
+import protocolsupport.protocol.ServerboundPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.DualPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
-import protocolsupport.utils.Allocator;
+import protocolsupport.utils.PacketCreator;
+
 import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketDataSerializer;
-import net.minecraft.server.v1_8_R3.PacketPlayInFlying.PacketPlayInPositionLook;
 
 public class MovePlayerPacket implements DualPEPacket {
 
@@ -75,20 +75,14 @@ public class MovePlayerPacket implements DualPEPacket {
 
 	@Override
 	public List<? extends Packet<?>> transfrom() throws Exception {
-		PacketPlayInPositionLook mlook = new PacketPlayInPositionLook();
-		ByteBuf packetdata = Allocator.allocateBuffer();
-		try {
-			packetdata.writeDouble(x);
-			packetdata.writeDouble(y);
-			packetdata.writeDouble(z);
-			packetdata.writeFloat(yaw);
-			packetdata.writeFloat(pitch);
-			packetdata.writeBoolean(onGround);
-			mlook.a(new PacketDataSerializer(packetdata));
-		} finally {
-			packetdata.release();
-		}
-		return Collections.singletonList(mlook);
+		PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_POSITION_LOOK.get());
+		creator.writeDouble(x);
+		creator.writeDouble(y);
+		creator.writeDouble(z);
+		creator.writeFloat(yaw);
+		creator.writeFloat(pitch);
+		creator.writeBoolean(onGround);
+		return Collections.singletonList(creator.create());
 	}
 
 }

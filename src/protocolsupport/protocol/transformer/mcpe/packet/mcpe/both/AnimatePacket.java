@@ -6,11 +6,13 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketPlayInArmAnimation;
+
+import protocolsupport.protocol.ServerboundPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.DualPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
+import protocolsupport.utils.PacketCreator;
 
 public class AnimatePacket implements DualPEPacket {
 
@@ -34,9 +36,7 @@ public class AnimatePacket implements DualPEPacket {
 
 	@Override
 	public List<? extends Packet<?>> transfrom() throws Exception {
-		PacketPlayInArmAnimation armanim = new PacketPlayInArmAnimation();
-		armanim.timestamp = System.currentTimeMillis();
-		return Collections.singletonList(armanim);
+		return Collections.singletonList(new PacketCreator(ServerboundPacket.PLAY_ANIMATION.get()).create());
 	}
 
 }

@@ -5,13 +5,13 @@ import io.netty.buffer.ByteBuf;
 import java.util.Collections;
 import java.util.List;
 
+import protocolsupport.protocol.ServerboundPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
-import protocolsupport.utils.Allocator;
+import protocolsupport.utils.PacketCreator;
+
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketDataSerializer;
-import net.minecraft.server.v1_8_R3.PacketPlayInBlockDig;
 
 public class RemoveBlockPacket implements ServerboundPEPacket {
 
@@ -35,17 +35,11 @@ public class RemoveBlockPacket implements ServerboundPEPacket {
 
 	@Override
 	public List<? extends Packet<?>> transfrom() throws Exception {
-		PacketPlayInBlockDig dig = new PacketPlayInBlockDig();
-		PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer());
-		try {
-			packetdata.writeByte(2);
-			packetdata.a(new BlockPosition(x, y, z));
-			packetdata.writeByte(1);
-			dig.a(packetdata);
-		} finally {
-			packetdata.release();
-		}
-		return Collections.singletonList(dig);
+		PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_BLOCK_DIG.get());
+		creator.writeByte(2);
+		creator.a(new BlockPosition(x, y, z));
+		creator.writeByte(1);
+		return Collections.singletonList(creator.create());
 	}
 
 }

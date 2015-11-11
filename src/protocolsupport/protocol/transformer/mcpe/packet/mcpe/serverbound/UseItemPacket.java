@@ -65,6 +65,7 @@ public class UseItemPacket implements ServerboundPEPacket {
 				}
 			});
 		}
+		//TODO: migrate to PacketCreator
 		PacketPlayInBlockPlace place = new PacketPlayInBlockPlace(new BlockPosition(againstX, againstY, againstZ), face, itemstack, cursorX, cursorY, cursorZ);
 		place.timestamp = System.currentTimeMillis();
 		packets.add(place);

@@ -7,12 +7,13 @@ import java.util.List;
 
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketPlayInBlockDig;
+
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.ServerboundPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
-import protocolsupport.utils.Allocator;
+import protocolsupport.utils.PacketCreator;
 
 public class DropItemPacket implements ServerboundPEPacket {
 
@@ -31,17 +32,11 @@ public class DropItemPacket implements ServerboundPEPacket {
 
 	@Override
 	public List<? extends Packet<?>> transfrom() throws Exception {
-		PacketPlayInBlockDig dig = new PacketPlayInBlockDig();
-		PacketDataSerializer serializer = new PacketDataSerializer(Allocator.allocateBuffer(), ProtocolVersion.MINECRAFT_PE);
-		try {
-			serializer.writeByte(3);
-			serializer.a(BlockPosition.ZERO);
-			serializer.writeByte(0);
-			dig.a(serializer);
-		} finally {
-			serializer.release();
-		}
-		return Collections.singletonList(dig);
+		PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_BLOCK_DIG.get());
+		creator.writeByte(3);
+		creator.a(BlockPosition.ZERO);
+		creator.writeByte(0);
+		return Collections.singletonList(creator.create());
 	}
 
 }

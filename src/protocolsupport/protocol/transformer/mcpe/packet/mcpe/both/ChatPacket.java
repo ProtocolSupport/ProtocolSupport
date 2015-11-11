@@ -92,9 +92,9 @@ public class ChatPacket implements DualPEPacket {
 
 	@Override
 	public List<PacketPlayInChat> transfrom() {
+		//TODO: migrate to PacketCreator
 		return Collections.singletonList(new PacketPlayInChat(message));
 	}
-
 
     private static enum TextType {
 

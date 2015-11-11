@@ -6,14 +6,12 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketPlayInUseEntity;
 import net.minecraft.server.v1_8_R3.PacketPlayInUseEntity.EnumEntityUseAction;
 
-import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.ServerboundPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
-import protocolsupport.utils.Allocator;
+import protocolsupport.utils.PacketCreator;
 
 public class UseEntityPacket implements ServerboundPEPacket {
 
@@ -34,16 +32,10 @@ public class UseEntityPacket implements ServerboundPEPacket {
 
 	@Override
 	public List<? extends Packet<?>> transfrom() throws Exception {
-		PacketPlayInUseEntity useent = new PacketPlayInUseEntity();
-		PacketDataSerializer serializer = new PacketDataSerializer(Allocator.allocateBuffer(), ProtocolVersion.MINECRAFT_PE);
-		try {
-			serializer.writeVarInt((int) targetId);
-			serializer.a(EnumEntityUseAction.ATTACK);
-			useent.a(serializer);
-		} finally {
-			serializer.release();
-		}
-		return Collections.singletonList(useent);
+		PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_USE_ENTITY.get());
+		creator.writeVarInt((int) targetId);
+		creator.a(EnumEntityUseAction.ATTACK);
+		return Collections.singletonList(creator.create());
 	}
 
 }

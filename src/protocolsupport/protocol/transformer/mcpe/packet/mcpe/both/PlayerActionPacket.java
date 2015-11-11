@@ -7,16 +7,15 @@ import java.util.List;
 
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketDataSerializer;
-import net.minecraft.server.v1_8_R3.PacketPlayInBlockDig;
 import net.minecraft.server.v1_8_R3.PacketPlayInClientCommand;
 import net.minecraft.server.v1_8_R3.PacketPlayInClientCommand.EnumClientCommand;
-import net.minecraft.server.v1_8_R3.PacketPlayInEntityAction;
+
+import protocolsupport.protocol.ServerboundPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.DualPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
-import protocolsupport.utils.Allocator;
+import protocolsupport.utils.PacketCreator;
 
 public class PlayerActionPacket implements DualPEPacket {
 
@@ -61,33 +60,22 @@ public class PlayerActionPacket implements DualPEPacket {
 			case ACTION_START_BREAK:
 			case ACTION_CANCEL_BREAK:
 			case ACTION_CONSUME_ITEM: {
-				PacketPlayInBlockDig dig = new PacketPlayInBlockDig();
-				PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer());
-				try {
-					packetdata.writeByte(action);
-					packetdata.a(new BlockPosition(x, y, z));
-					packetdata.writeByte(1);
-					dig.a(new PacketDataSerializer(packetdata));
-				} finally {
-					packetdata.release();
-				}
-				return Collections.singletonList(dig);
+				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_BLOCK_DIG.get());
+				creator.writeByte(action);
+				creator.a(new BlockPosition(x, y, z));
+				creator.writeByte(1);
+				return Collections.singletonList(creator.create());
 			}
 			case ACTION_RESPAWN: {
+				//TODO: migrate to PacketCreator
 				return Collections.singletonList(new PacketPlayInClientCommand(EnumClientCommand.PERFORM_RESPAWN));
 			}
 			case ACTION_WAKE_UP: {
-				PacketPlayInEntityAction action = new PacketPlayInEntityAction();
-				PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer());
-				try {
-					packetdata.b(0);
-					packetdata.b(2);
-					packetdata.b(0);
-					action.a(packetdata);
-				} finally {
-					packetdata.release();
-				}
-				return Collections.singletonList(action);
+				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_ENTITY_ACTION.get());
+				creator.writeVarInt(0);
+				creator.writeVarInt(2);
+				creator.writeVarInt(0);
+				return Collections.singletonList(creator.create());
 			}
 			default: {
 				return Collections.emptyList();
