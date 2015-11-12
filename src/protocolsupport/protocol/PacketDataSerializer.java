@@ -260,8 +260,9 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 				break;
 			}
 			case MINECRAFT_PE: {
-				writeShort(string.length());
-				writeBytes(string.getBytes(StandardCharsets.UTF_8));
+				byte[] data = string.getBytes(StandardCharsets.UTF_8);
+				writeShort(data.length);
+				writeBytes(data);
 				break;
 			}
 			default: {

@@ -25,7 +25,7 @@ public class ChatPacket implements DualPEPacket {
 
 	public ChatPacket(String message) {
 		this.type = TextType.RAW;
-		this.message = message + "   ";
+		this.message = message;
 	}
 
 	@Override
