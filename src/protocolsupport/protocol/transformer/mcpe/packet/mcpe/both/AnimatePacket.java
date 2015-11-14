@@ -16,6 +16,17 @@ import protocolsupport.utils.PacketCreator;
 
 public class AnimatePacket implements DualPEPacket {
 
+	protected int action;
+	protected int entityId;
+
+	public AnimatePacket() {
+	}
+
+	public AnimatePacket(int action, int entityId) {
+		this.action = action;
+		this.entityId = entityId;
+	}
+
 	@Override
 	public int getId() {
 		return PEPacketIDs.ANIMATE_PACKET;
@@ -23,15 +34,16 @@ public class AnimatePacket implements DualPEPacket {
 
 	@Override
 	public ServerboundPEPacket decode(ByteBuf buf) throws Exception {
-		buf.readByte();
-		buf.readLong();
+		action = buf.readByte();
+		entityId = (int) buf.readLong();
 		return this;
 	}
 
 	@Override
 	public ClientboundPEPacket encode(ByteBuf buf) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		buf.writeByte(action);
+		buf.writeLong(entityId);
+		return this;
 	}
 
 	@Override
