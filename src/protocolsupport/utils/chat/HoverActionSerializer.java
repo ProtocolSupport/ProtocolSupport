@@ -10,6 +10,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
+import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.modifiers.HoverAction;
 
 public class HoverActionSerializer implements JsonDeserializer<HoverAction>, JsonSerializer<HoverAction> {
@@ -22,7 +23,12 @@ public class HoverActionSerializer implements JsonDeserializer<HoverAction>, Jso
 		}
 		JsonObject clickObject = jsonobject.getAsJsonObject("hoverEvent");
 		HoverAction.Type atype = HoverAction.Type.valueOf(clickObject.getAsJsonPrimitive("action").getAsString().toUpperCase());
-		return new HoverAction(atype, clickObject.getAsJsonPrimitive("value").getAsString());
+		return new HoverAction(atype, extractValue((BaseComponent) ctx.deserialize(clickObject.get("value"), BaseComponent.class)));
+	}
+
+	private static String extractValue(BaseComponent component) {
+		//Currently only root value from component is used, but that may change in the future
+		return component.getValue();
 	}
 
 	@Override
