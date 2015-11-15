@@ -69,6 +69,7 @@ public class ServerPingResponseEvent extends Event {
 	public void setPlayers(List<String> players) {
 		if (players == null) {
 			this.players = new ArrayList<String>();
+			return;
 		}
 		this.players = new ArrayList<String>(players);
 	}

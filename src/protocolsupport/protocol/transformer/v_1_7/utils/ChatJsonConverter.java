@@ -1,61 +1,48 @@
 package protocolsupport.protocol.transformer.v_1_7.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
-
 import net.minecraft.server.v1_8_R3.Item;
 import net.minecraft.server.v1_8_R3.MinecraftKey;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
+import net.minecraft.server.v1_8_R3.MojangsonParseException;
 import net.minecraft.server.v1_8_R3.MojangsonParser;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
+
+import protocolsupport.api.chat.ChatAPI;
+import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.api.chat.modifiers.HoverAction;
 
 public class ChatJsonConverter {
 
 	public static String convert(String message) {
-		BaseComponent[] components = ComponentSerializer.parse(message);
-		BaseComponent[] newcomponents = new BaseComponent[components.length];
-		for (int i = 0; i < components.length; i++) {
-			BaseComponent component = components[i];
-			List<BaseComponent> extra = component.getExtra();
-			BaseComponent newcomponent = fixComponent(component);
-			List<BaseComponent> newextra = new ArrayList<BaseComponent>();
-			if (extra != null) {
-				for (BaseComponent child : extra) {
-					newextra.add(fixComponent(child));
-				}
-				newcomponent.setExtra(newextra);
-			}
-			newcomponents[i] = newcomponent;
-		}
-		return ComponentSerializer.toString(newcomponents);
+		BaseComponent component = ChatAPI.fromJSON(message);
+		walkComponent(component);
+		return ChatAPI.toJSON(component);
 	}
 
-	private static BaseComponent fixComponent(BaseComponent component) {
-		HoverEvent event = component.getHoverEvent();
-		if (event != null) {
-			if (event.getAction() == HoverEvent.Action.SHOW_ITEM) {
-				try {
-					String itemstackjson = event.getValue()[0].toPlainText();
-					NBTTagCompound compound = MojangsonParser.parse(itemstackjson);
-					String itemid = compound.getString("id");
-					Item item = Item.REGISTRY.get(new MinecraftKey(itemid));
-					if (item != null) {
-						compound.setInt("id", Item.getId(item));
-					}
-					component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, new BaseComponent[] { new TextComponent(compound.toString()) } ));
-				} catch (Throwable t) {
-					if (MinecraftServer.getServer().isDebugging()) {
-						t.printStackTrace();
-					}
+	private static void walkComponent(BaseComponent component) {
+		fixComponent(component);
+		for (BaseComponent sibling : component.getSiblings()) {
+			walkComponent(sibling);
+		}
+	}
+
+	private static void fixComponent(BaseComponent component) {
+		HoverAction hover = component.getHoverAction();
+		if (hover != null && hover.getType() == HoverAction.Type.SHOW_ITEM) {
+			try {
+				NBTTagCompound compound = MojangsonParser.parse(hover.getValue());
+				String id = compound.getString("id");
+				Item item = Item.REGISTRY.get(new MinecraftKey(id));
+				if (item != null) {
+					compound.setInt("id", Item.getId(item));
+				}
+				component.setHoverAction(new HoverAction(HoverAction.Type.SHOW_ITEM, compound.toString()));
+			} catch (MojangsonParseException t) {
+				if (MinecraftServer.getServer().isDebugging()) {
+					t.printStackTrace();
 				}
 			}
 		}
-		return component;
 	}
 
 }
