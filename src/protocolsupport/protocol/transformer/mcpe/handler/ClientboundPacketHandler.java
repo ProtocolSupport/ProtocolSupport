@@ -31,6 +31,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.EntityEquipmen
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.MovePlayerPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.SetHealthPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddItemEntityPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddLivingEntityPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddPaintingPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AdventureSettingsPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ChunkPacket;
@@ -56,6 +57,7 @@ import protocolsupport.protocol.typeremapper.id.RemappingTable;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificType;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedObject;
+import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
 import protocolsupport.utils.Allocator;
 import protocolsupport.utils.DataWatcherObject;
 import protocolsupport.utils.DataWatcherSerializer;
@@ -69,31 +71,6 @@ import net.minecraft.server.v1_8_R3.EnumProtocol;
 import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R3.ItemStack;
 import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketPlayOutAnimation;
-import net.minecraft.server.v1_8_R3.PacketPlayOutBlockChange;
-import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
-import net.minecraft.server.v1_8_R3.PacketPlayOutCollect;
-import net.minecraft.server.v1_8_R3.PacketPlayOutEntityEquipment;
-import net.minecraft.server.v1_8_R3.PacketPlayOutEntityMetadata;
-import net.minecraft.server.v1_8_R3.PacketPlayOutMapChunk;
-import net.minecraft.server.v1_8_R3.PacketPlayOutMapChunkBulk;
-import net.minecraft.server.v1_8_R3.PacketPlayOutMultiBlockChange;
-import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
-import net.minecraft.server.v1_8_R3.PacketPlayOutSetSlot;
-import net.minecraft.server.v1_8_R3.PacketPlayOutWindowItems;
-import net.minecraft.server.v1_8_R3.PacketPlayOutEntity.PacketPlayOutEntityLook;
-import net.minecraft.server.v1_8_R3.PacketPlayOutEntity.PacketPlayOutRelEntityMove;
-import net.minecraft.server.v1_8_R3.PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook;
-import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
-import net.minecraft.server.v1_8_R3.PacketPlayOutKeepAlive;
-import net.minecraft.server.v1_8_R3.PacketPlayOutLogin;
-import net.minecraft.server.v1_8_R3.PacketPlayOutNamedEntitySpawn;
-import net.minecraft.server.v1_8_R3.PacketPlayOutPosition;
-import net.minecraft.server.v1_8_R3.PacketPlayOutSpawnEntity;
-import net.minecraft.server.v1_8_R3.PacketPlayOutSpawnEntityLiving;
-import net.minecraft.server.v1_8_R3.PacketPlayOutSpawnEntityPainting;
-import net.minecraft.server.v1_8_R3.PacketPlayOutUpdateHealth;
-import net.minecraft.server.v1_8_R3.PacketPlayOutUpdateTime;
 import net.minecraft.server.v1_8_R3.World;
 
 public class ClientboundPacketHandler {
@@ -135,6 +112,7 @@ public class ClientboundPacketHandler {
 				case ClientboundPacket.PLAY_LOGIN_ID: {
 					//use this packet to sent needed login packets
 					Player bukkitplayer = Utils.getPlayer(networkManager).getBukkitEntity();
+					storage.addWatchedSelfPlayer(new WatchedPlayer(bukkitplayer.getEntityId()));
 					return Arrays.asList(
 						new StartGamePacket(
 							bukkitplayer.getWorld().getEnvironment().getId(),
@@ -241,14 +219,12 @@ public class ClientboundPacketHandler {
 					float x = packetdata.readInt() / 32.0F;
 					float y = packetdata.readInt() / 32.0F;
 					float z = packetdata.readInt() / 32.0F;
-					float yaw = packetdata.readFloat();
-					float pitch = packetdata.readFloat();
-					/*if (spawned) {
-						return Collections.singletonList(new AddLivingEntityPacket(
-							entityId, 32, x, y, z, yaw, pitch
-						));
-					}*/
-					return Collections.emptyList();
+					float yaw = packetdata.readByte() * 360.0F / 256.0F;
+					float pitch = packetdata.readByte() * 360.0F / 256.0F;
+					return Collections.singletonList(new AddLivingEntityPacket(
+						//TODO: not everyone is a zombie
+						entityId, 32, x, y, z, yaw, pitch
+					));
 				}
 				case ClientboundPacket.PLAY_SPAWN_PAINTING_ID: {
 					int entityId = packetdata.readVarInt();
@@ -302,19 +278,22 @@ public class ClientboundPacketHandler {
 				case ClientboundPacket.PLAY_ENTITY_LOOK_ID: {
 					int entityId = packetdata.readVarInt();
 					Entity entity = Utils.getPlayer(networkManager).world.a(entityId);
-					if (entity instanceof EntityPlayer) {
-						return Collections.singletonList(new MovePlayerPacket(
-							entityId,
-							(float) entity.locX, (float) entity.locY, (float) entity.locZ,
-							entity.yaw, ((EntityPlayer) entity).aK, entity.pitch, entity.onGround
-						));
-					} else {
-						return Collections.singletonList(new MoveEntityPacket(
-							entityId,
-							(float) entity.locX, (float) entity.locY, (float) entity.locZ,
-							entity.yaw, entity.pitch
-						));
+					if (entity != null) {
+						if (entity instanceof EntityPlayer) {
+							return Collections.singletonList(new MovePlayerPacket(
+								entityId,
+								(float) entity.locX, (float) entity.locY, (float) entity.locZ,
+								entity.yaw, ((EntityPlayer) entity).aK, entity.pitch, entity.onGround
+							));
+						} else {
+							return Collections.singletonList(new MoveEntityPacket(
+								entityId,
+								(float) entity.locX, (float) entity.locY, (float) entity.locZ,
+								entity.yaw, entity.pitch
+							));
+						}
 					}
+					return Collections.emptyList();
 				}
 				case ClientboundPacket.PLAY_ENTITY_METADATA_ID: {
 					int entityId = packetdata.readVarInt();
