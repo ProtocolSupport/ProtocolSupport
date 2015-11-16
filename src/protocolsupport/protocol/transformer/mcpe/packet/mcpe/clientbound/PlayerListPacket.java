@@ -38,7 +38,7 @@ public class PlayerListPacket implements ClientboundPEPacket {
 					serializer.writeUUID(entry.uuid);
 					serializer.writeLong(-1);
 					serializer.writeString(entry.name);
-					serializer.writeBoolean(false);
+					serializer.writeBoolean(true);
 					serializer.writeArray(UDPNetworkManager.defaultSkin);
 				}
 				break;

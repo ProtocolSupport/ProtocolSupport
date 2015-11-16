@@ -49,6 +49,8 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetSpaw
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddPlayerPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.StartGamePacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ContainerSetContentsPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.EntityStatusPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.EntityVelocityPacket;
 import protocolsupport.protocol.transformer.mcpe.utils.PEWatchedPlayer;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
@@ -344,6 +346,28 @@ public class ClientboundPacketHandler {
 					}
 					return Collections.emptyList();
 				}
+				case ClientboundPacket.PLAY_ENTITY_TELEPORT_ID: {
+					int entityId = packetdata.readVarInt();
+					float x = packetdata.readInt() / 32.0F;
+					float y = packetdata.readInt() / 32.0F;
+					float z = packetdata.readInt() / 32.0F;
+					float yaw = packetdata.readByte() * 360.0F / 256.0F;
+					float pitch = packetdata.readByte() * 360.0F / 256.0F;
+					boolean onGround = packetdata.readBoolean();
+					WatchedEntity wentity = storage.getWatchedEntity(entityId);
+					if (wentity != null && wentity.getType() == SpecificType.PLAYER) {
+						return Collections.singletonList(new MovePlayerPacket(entityId, x, y, z, yaw, yaw, pitch, onGround));
+					} else {
+						return Collections.singletonList(new MoveEntityPacket(entityId, x, y, z, yaw, pitch));
+					}
+				}
+				case ClientboundPacket.PLAY_ENTITY_VELOCITY_ID: {
+					int entityId = packetdata.readVarInt();
+					float motX = packetdata.readShort() / 8000.0F;
+					float motY = packetdata.readShort() / 8000.0F;
+					float motZ = packetdata.readShort() / 8000.0F;
+					return Collections.singletonList(new EntityVelocityPacket(entityId, motX, motY, motZ));
+				}
 				case ClientboundPacket.PLAY_ENTITY_METADATA_ID: {
 					int entityId = packetdata.readVarInt();
 					ItemInfo info = pestorage.getItemInfo(entityId);
@@ -526,6 +550,15 @@ public class ClientboundPacketHandler {
 						pestorage.setArmorSlot(entityId, slot - 1, itemstack);
 						return Collections.singletonList(new EntityEquipmentArmorPacket(entityId, Utils.reverseArray(pestorage.getArmor(entityId))));
 					}
+				}
+				case ClientboundPacket.PLAY_ENTITY_STATUS_ID: {
+					int entityId = packetdata.readInt();
+					int state = packetdata.readByte();
+					//TODO: remap other actions
+					if (state <= 10) {
+						return Collections.singletonList(new EntityStatusPacket(entityId, state));
+					}
+					return Collections.emptyList();
 				}
 				/*case ClientboundPacket.PLAY_ANIMATION_ID: {
 					int entityId = packetdata.readVarInt();
