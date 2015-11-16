@@ -44,7 +44,10 @@ public abstract class BaseComponent {
 	}
 
 	public Modifier getModifier() {
-		return this.modifier != null ? this.modifier : Modifier.EMPTY;
+		if (this.modifier == null) {
+			this.modifier = new Modifier();
+		}
+		return this.modifier;
 	}
 
 	public void setModifier(Modifier modifier) {
