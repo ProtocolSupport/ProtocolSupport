@@ -1,5 +1,8 @@
 package protocolsupport.protocol.typeremapper.id;
 
+import org.bukkit.entity.EntityType;
+
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.utils.ProtocolVersionsHelper;
 
 public class IdRemapper {
@@ -74,7 +77,7 @@ public class IdRemapper {
 			registerRemapEntry(174, 80, ProtocolVersionsHelper.BEFORE_1_6);
 			// tall plant -> yellow flower
 			registerRemapEntry(175, 38, ProtocolVersionsHelper.BEFORE_1_6);
-			
+
 			// MCPE
 			// stained glass -> glass
 			registerRemapEntry(95, 20, ProtocolVersionsHelper.MCPE);
@@ -212,7 +215,7 @@ public class IdRemapper {
 			registerRemapEntry(419, 1, ProtocolVersionsHelper.BEFORE_1_6);
 			registerRemapEntry(420, 1, ProtocolVersionsHelper.BEFORE_1_6);
 			registerRemapEntry(421, 1, ProtocolVersionsHelper.BEFORE_1_6);	
-			
+
 			// MCPE
 			// banner -> sign
 			registerRemapEntry(425, 323, ProtocolVersionsHelper.MCPE);
@@ -224,7 +227,7 @@ public class IdRemapper {
 			registerRemapEntry(421, 1, ProtocolVersionsHelper.MCPE);	
 			// lead -> stone
 			registerRemapEntry(420, 1, ProtocolVersionsHelper.MCPE);
-			
+
 			// all discs -> stone
 			registerRemapEntry(2256, 1, ProtocolVersionsHelper.MCPE);
 			registerRemapEntry(2257, 1, ProtocolVersionsHelper.MCPE);
@@ -245,6 +248,7 @@ public class IdRemapper {
 		}
 	};
 
+	@SuppressWarnings("deprecation")
 	public static final RemappingReigstry ENTITY = new RemappingReigstry() {
 		{
 			// endermite -> silverfish
@@ -255,16 +259,48 @@ public class IdRemapper {
 			registerRemapEntry(101, 93, ProtocolVersionsHelper.BEFORE_1_8);
 			// horse -> cow
 			registerRemapEntry(100, 92, ProtocolVersionsHelper.BEFORE_1_6);
-			
+
 			// MCPE
+			//-1 for not supported entities
+			for (int i = 0; i < 256; i++) {
+				registerRemapEntry(i, -1, ProtocolVersion.MINECRAFT_PE);
+			}
+			//correct entity ids, no remap
+			registerRemapEntry(EntityType.CREEPER.getTypeId(), 33, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(EntityType.SKELETON.getTypeId(), 34, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(EntityType.SPIDER.getTypeId(), 35, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(EntityType.ZOMBIE.getTypeId(), 32, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(EntityType.SLIME.getTypeId(), 37, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(EntityType.GHAST.getTypeId(), 41, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(EntityType.PIG_ZOMBIE.getTypeId(), 36, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(EntityType.ENDERMAN.getTypeId(), 38, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(EntityType.CAVE_SPIDER.getTypeId(), 40, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(EntityType.SILVERFISH.getTypeId(), 39, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(EntityType.BLAZE.getTypeId(), 43, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(EntityType.MAGMA_CUBE.getTypeId(), 42, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(EntityType.BAT.getTypeId(), 19, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(EntityType.PIG.getTypeId(), 12, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(EntityType.SHEEP.getTypeId(), 13, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(EntityType.COW.getTypeId(), 11, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(EntityType.CHICKEN.getTypeId(), 10, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(EntityType.SQUID.getTypeId(), 17, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(EntityType.WOLF.getTypeId(), 14, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(EntityType.MUSHROOM_COW.getTypeId(), 16, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(EntityType.SNOWMAN.getTypeId(), 21, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(EntityType.OCELOT.getTypeId(), 22, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(EntityType.IRON_GOLEM.getTypeId(), 20, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(EntityType.VILLAGER.getTypeId(), 15, ProtocolVersion.MINECRAFT_PE);
+			// witch -> skeleton
+			registerRemapEntry(EntityType.WITCH.getTypeId(), 34, ProtocolVersion.MINECRAFT_PE);
 			// endermite -> silverfish
-			registerRemapEntry(67, 60, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(EntityType.ENDERMITE.getTypeId(), 39, ProtocolVersion.MINECRAFT_PE);
 			// guardian -> sqiud
-			registerRemapEntry(68, 94, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(EntityType.GUARDIAN.getTypeId(), 17, ProtocolVersion.MINECRAFT_PE);
 			// rabbit -> chicken
-			registerRemapEntry(101, 93, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(EntityType.RABBIT.getTypeId(), 10, ProtocolVersion.MINECRAFT_PE);
 			// horse -> cow
-			registerRemapEntry(100, 92, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(EntityType.HORSE.getTypeId(), 11, ProtocolVersion.MINECRAFT_PE);
+
 		}
 		@Override
 		protected RemappingTable createTable() {

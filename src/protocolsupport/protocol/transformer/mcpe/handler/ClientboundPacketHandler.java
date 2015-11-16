@@ -2,7 +2,6 @@ package protocolsupport.protocol.transformer.mcpe.handler;
 
 import gnu.trove.map.TIntObjectMap;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -74,10 +73,10 @@ import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.World;
 
 public class ClientboundPacketHandler {
-	protected static final RemappingTable blockRemapper = IdRemapper.BLOCK.getTable(ProtocolVersion.MINECRAFT_PE);
-	protected static final RemappingTable itemRemapper = IdRemapper.ITEM.getTable(ProtocolVersion.MINECRAFT_PE);
-	protected static final RemappingTable entityRemapper = IdRemapper.ENTITY.getTable(ProtocolVersion.MINECRAFT_PE);
-	protected static final RemappingTable mapcolorRemapper = IdRemapper.MAPCOLOR.getTable(ProtocolVersion.MINECRAFT_PE);
+
+	private static final RemappingTable blockRemapper = IdRemapper.BLOCK.getTable(ProtocolVersion.MINECRAFT_PE);
+	private static final RemappingTable entityRemapper = IdRemapper.ENTITY.getTable(ProtocolVersion.MINECRAFT_PE);
+	private static final RemappingTable mapcolorRemapper = IdRemapper.MAPCOLOR.getTable(ProtocolVersion.MINECRAFT_PE);
 
 	protected UDPNetworkManager networkManager;
 	public ClientboundPacketHandler(UDPNetworkManager networkManager) {
@@ -221,10 +220,14 @@ public class ClientboundPacketHandler {
 					float z = packetdata.readInt() / 32.0F;
 					float yaw = packetdata.readByte() * 360.0F / 256.0F;
 					float pitch = packetdata.readByte() * 360.0F / 256.0F;
-					return Collections.singletonList(new AddLivingEntityPacket(
-						//TODO: not everyone is a zombie
-						entityId, 32, x, y, z, yaw, pitch
-					));
+					int petype = entityRemapper.getRemap(type);
+					if (petype != -1) {
+						return Collections.singletonList(new AddLivingEntityPacket(
+							entityId, petype, x, y, z, yaw, pitch
+						));
+					} else {
+						return Collections.emptyList();
+					}
 				}
 				case ClientboundPacket.PLAY_SPAWN_PAINTING_ID: {
 					int entityId = packetdata.readVarInt();
