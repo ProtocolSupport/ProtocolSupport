@@ -70,7 +70,7 @@ public class EntityEquipmentInventoryPacket implements DualPEPacket {
 				if (realSlot != -1) {
 					PEPlayerInventory inventory = (PEPlayerInventory) listener.player.inventory;
 					inventory.setSelectedSlot(realSlot);
-					inventory.setHotbarRef(realSlot, hotbarSlot);
+					inventory.setHotbarRef(invSlot, hotbarSlot);
 				}
 			}
 		});

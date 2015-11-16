@@ -40,6 +40,10 @@ public class LocalStorage {
 		addWatchedEntity(player);
 	}
 
+	public WatchedPlayer getWatchedSelfPlayer() {
+		return player;
+	}
+
 	private void readdSelfPlayer() {
 		if (player != null) {
 			addWatchedEntity(player);

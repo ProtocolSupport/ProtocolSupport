@@ -1,8 +1,6 @@
 package protocolsupport.protocol.transformer.mcpe;
 
-import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ContainerSetContentsPacket;
 import net.minecraft.server.v1_8_R3.EntityHuman;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.ItemStack;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.minecraft.server.v1_8_R3.PlayerInventory;
@@ -16,7 +14,7 @@ public class PEPlayerInventory extends PlayerInventory {
 		super(entityhuman);
 	}
 
-	private int[] hotbar = ContainerSetContentsPacket.HOTBAR_SLOTS;
+	private int[] hotbar = new int[] {36, 37, 38, 39, 40, 41, 42, 43, 44};
 
 	public void setHotbarRef(int realSlot, int hotbarSlot) {
 		hotbar[hotbarSlot] = realSlot;
@@ -38,13 +36,6 @@ public class PEPlayerInventory extends PlayerInventory {
 			return items[itemInHandIndex];
 		}
 		return null;
-	}
-
-	@Override
-	public boolean pickup(ItemStack itemstack) {
-		boolean result = super.pickup(itemstack);
-		((EntityPlayer) player).updateInventory(player.activeContainer);
-		return result;
 	}
 
 	private static final String SLOT_TAG_NAME = "PSSlotTag";

@@ -9,7 +9,6 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 
 public class ContainerSetContentsPacket implements ClientboundPEPacket {
 
-	public static final int[] HOTBAR_SLOTS = new int[] {36, 37, 38, 39, 40, 41, 42, 43, 44};
 	public static final int[] EMPTY_HOTBAR_SLOTS = new int[0];
 
 	protected int windowId;

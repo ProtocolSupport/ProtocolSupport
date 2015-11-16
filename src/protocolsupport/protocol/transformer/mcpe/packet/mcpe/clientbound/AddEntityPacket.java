@@ -8,7 +8,7 @@ import protocolsupport.protocol.transformer.mcpe.utils.PEDataWatcherSerializer;
 import protocolsupport.utils.DataWatcherObject;
 import protocolsupport.utils.DataWatcherObject.ValueType;
 
-public class AddLivingEntityPacket implements ClientboundPEPacket {
+public class AddEntityPacket implements ClientboundPEPacket {
 
 	protected int entityId;
 	protected int type;
@@ -21,7 +21,7 @@ public class AddLivingEntityPacket implements ClientboundPEPacket {
 	protected float yaw;
 	protected float pitch;
 
-	public AddLivingEntityPacket(int entityId, int type, float x, float y, float z, float yaw, float pitch) {
+	public AddEntityPacket(int entityId, int type, float x, float y, float z, float yaw, float pitch) {
 		this.entityId = entityId;
 		this.type = type;
 		this.x = x;

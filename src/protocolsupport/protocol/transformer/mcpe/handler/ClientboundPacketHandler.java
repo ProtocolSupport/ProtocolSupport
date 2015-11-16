@@ -30,7 +30,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.EntityEquipmen
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.MovePlayerPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.SetHealthPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddItemEntityPacket;
-import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddLivingEntityPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddEntityPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddPaintingPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AdventureSettingsPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ChunkPacket;
@@ -55,6 +55,7 @@ import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.RemappingTable;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificType;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
+import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedLiving;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedObject;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
 import protocolsupport.utils.Allocator;
@@ -76,6 +77,34 @@ public class ClientboundPacketHandler {
 
 	private static final RemappingTable blockRemapper = IdRemapper.BLOCK.getTable(ProtocolVersion.MINECRAFT_PE);
 	private static final RemappingTable entityRemapper = IdRemapper.ENTITY.getTable(ProtocolVersion.MINECRAFT_PE);
+	private static final RemappingTable objectRemapper = new RemappingTable(256) {
+		{
+			for (int i = 0; i < 256; i++) {
+				setRemap(i, -1);
+			}
+			//Correct entity ids
+			//boat
+			setRemap(1, 90);
+			//minecart
+			setRemap(10, 84);
+			//tnt
+			setRemap(50, 65);
+			//arrow
+			setRemap(60, 80);
+			//snowball
+			setRemap(61, 81);
+			//egg
+			setRemap(62, 82);
+			//fireball
+			setRemap(63, 85);
+			setRemap(64, 85);
+			setRemap(66, 85);
+			//falling
+			setRemap(70, 66);
+			//fishing float
+			setRemap(90, 77);
+		}
+	};
 	private static final RemappingTable mapcolorRemapper = IdRemapper.MAPCOLOR.getTable(ProtocolVersion.MINECRAFT_PE);
 
 	protected UDPNetworkManager networkManager;
@@ -186,16 +215,26 @@ public class ClientboundPacketHandler {
 				case ClientboundPacket.PLAY_COLLECT_EFFECT_ID: {
 					int itemId = packetdata.readVarInt();
 					int entityId = packetdata.readVarInt();
-					return Collections.singletonList(new PickupItemEffectPacket(entityId, itemId));
+					if (entityId == storage.getWatchedSelfPlayer().getId()) {
+						return Collections.emptyList();
+					} else {
+						WatchedEntity wentity = storage.getWatchedEntity(itemId);
+						if (wentity != null && wentity.getType() != SpecificType.ARROW) {
+							return Collections.singletonList(new PickupItemEffectPacket(entityId, itemId));
+						} else {
+							return Collections.emptyList();
+						}
+					}
 				}
 				case ClientboundPacket.PLAY_SPAWN_OBJECT_ID: {
 					int entityId = packetdata.readVarInt();
 					int type = packetdata.readByte();
+					storage.addWatchedEntity(new WatchedObject(entityId, type));
 					float locX = packetdata.readInt() / 32.0F;
 					float locY = packetdata.readInt() / 32.0F;
 					float locZ = packetdata.readInt() / 32.0F;
-					packetdata.readByte();
-					packetdata.readByte();
+					float yaw = packetdata.readByte() * 360.0F / 256.0F;
+					float pitch = packetdata.readByte() * 360.0F / 256.0F;
 					int objdata = packetdata.readInt();
 					float speedX = 0;
 					float speedY = 0;
@@ -208,13 +247,20 @@ public class ClientboundPacketHandler {
 					if (type == 2) {
 						//only store initial item info, we will spawn item later when metadata will tell us which item is it actually
 						pestorage.addItemInfo(entityId, locX, locY, locZ, speedX, speedY, speedZ);
-						storage.addWatchedEntity(new WatchedObject(entityId, type));
+						return Collections.emptyList();
+					} else {
+						int petype = objectRemapper.getRemap(type);
+						if (petype != -1) {
+							return Collections.singletonList(new AddEntityPacket(entityId, petype, locX, locY, locZ, yaw, pitch));
+						} else {
+							return Collections.emptyList();
+						}
 					}
-					return Collections.emptyList();
 				}
 				case ClientboundPacket.PLAY_SPAWN_LIVING_ID: {
 					int entityId = packetdata.readVarInt();
 					int type = packetdata.readByte() & 0xFF;
+					storage.addWatchedEntity(new WatchedLiving(entityId, type));
 					float x = packetdata.readInt() / 32.0F;
 					float y = packetdata.readInt() / 32.0F;
 					float z = packetdata.readInt() / 32.0F;
@@ -222,7 +268,7 @@ public class ClientboundPacketHandler {
 					float pitch = packetdata.readByte() * 360.0F / 256.0F;
 					int petype = entityRemapper.getRemap(type);
 					if (petype != -1) {
-						return Collections.singletonList(new AddLivingEntityPacket(
+						return Collections.singletonList(new AddEntityPacket(
 							entityId, petype, x, y, z, yaw, pitch
 						));
 					} else {
@@ -397,7 +443,7 @@ public class ClientboundPacketHandler {
 					if (windowId == 0) {
 						ArrayList<ContainerSetContentsPacket> packets = new ArrayList<ContainerSetContentsPacket>();
 						ItemStack[] inventory = new ItemStack[45];
-						System.arraycopy(packetitems, 9, inventory, 0, inventory.length - ContainerSetContentsPacket.HOTBAR_SLOTS.length);
+						System.arraycopy(packetitems, 9, inventory, 0, inventory.length - 9);
 						packets.add(new ContainerSetContentsPacket(PEPlayerInventory.PLAYER_INVENTORY_WID, inventory, ((PEPlayerInventory) player.inventory).getHotbarRefs()));
 						ItemStack[] armor = new ItemStack[4];
 						System.arraycopy(packetitems, 5, armor, 0, armor.length);
