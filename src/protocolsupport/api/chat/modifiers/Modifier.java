@@ -4,8 +4,6 @@ import org.bukkit.ChatColor;
 
 public class Modifier {
 
-	public static final Modifier EMPTY = new Modifier();
-
 	private ChatColor color;
 	private Boolean bold;
 	private Boolean italic;
