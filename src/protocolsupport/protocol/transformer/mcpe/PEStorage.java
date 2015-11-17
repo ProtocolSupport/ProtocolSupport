@@ -7,6 +7,7 @@ public class PEStorage {
 
 	private final TIntObjectHashMap<ItemInfo> items = new TIntObjectHashMap<>();
 	private final TIntObjectHashMap<ItemStack[]> armor = new TIntObjectHashMap<>();
+	private int vehicleId;
 
 	public void addItemInfo(int entityId, float locX, float locY, float locZ, float speedX, float speedY, float speedZ) {
 		items.put(entityId, new ItemInfo(locX, locY, locZ, speedX, speedY, speedZ));
@@ -20,6 +21,14 @@ public class PEStorage {
 		for (int id : ids) {
 			items.remove(id);
 		}
+	}
+
+	public void setVehicleId(int vehicleId) {
+		this.vehicleId = vehicleId;
+	}
+
+	public int getVehicleId() {
+		return vehicleId;
 	}
 
 	public static class ItemInfo {

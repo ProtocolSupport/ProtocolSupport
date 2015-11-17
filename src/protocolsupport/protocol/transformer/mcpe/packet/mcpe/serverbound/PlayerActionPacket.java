@@ -1,4 +1,4 @@
-package protocolsupport.protocol.transformer.mcpe.packet.mcpe.both;
+package protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound;
 
 import io.netty.buffer.ByteBuf;
 
@@ -11,19 +11,21 @@ import net.minecraft.server.v1_8_R3.PacketPlayInClientCommand;
 import net.minecraft.server.v1_8_R3.PacketPlayInClientCommand.EnumClientCommand;
 
 import protocolsupport.protocol.ServerboundPacket;
-import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
-import protocolsupport.protocol.transformer.mcpe.packet.mcpe.DualPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
 import protocolsupport.utils.PacketCreator;
 
-public class PlayerActionPacket implements DualPEPacket {
+public class PlayerActionPacket implements ServerboundPEPacket {
 
 	private final static int ACTION_START_BREAK = 0;
 	private final static int ACTION_CANCEL_BREAK = 1;
 	private final static int ACTION_CONSUME_ITEM = 5;
 	private final static int ACTION_WAKE_UP = 6;
 	private final static int ACTION_RESPAWN = 7;
+	private final static int ACTION_START_SPRINT = 9;
+	private final static int ACTION_STOP_SPRINT = 10;
+	private final static int ACTION_START_SNEAK = 11;
+	private final static int ACTION_STOP_SNEAK = 12;
 
 	protected long id;
 	protected int action;
@@ -46,12 +48,6 @@ public class PlayerActionPacket implements DualPEPacket {
 		z = buf.readInt();
 		face = buf.readInt();
 		return this;
-	}
-
-	@Override
-	public ClientboundPEPacket encode(ByteBuf buf) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

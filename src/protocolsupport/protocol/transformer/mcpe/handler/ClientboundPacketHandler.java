@@ -33,6 +33,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddItem
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddEntityPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddPaintingPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AdventureSettingsPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AttachEntityPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ChunkPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.MoveEntityPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PickupItemEffectPacket;
@@ -107,7 +108,6 @@ public class ClientboundPacketHandler {
 			setRemap(90, 77);
 		}
 	};
-	private static final RemappingTable mapcolorRemapper = IdRemapper.MAPCOLOR.getTable(ProtocolVersion.MINECRAFT_PE);
 
 	protected UDPNetworkManager networkManager;
 	public ClientboundPacketHandler(UDPNetworkManager networkManager) {
@@ -560,11 +560,27 @@ public class ClientboundPacketHandler {
 					}
 					return Collections.emptyList();
 				}
-				/*case ClientboundPacket.PLAY_ANIMATION_ID: {
+				case ClientboundPacket.PLAY_ANIMATION_ID: {
 					int entityId = packetdata.readVarInt();
 					int action = packetdata.readByte();
-					return Collections.singletonList(new AnimatePacket(action, entityId));
-				}*/
+					return Collections.singletonList(new AnimatePacket(action + 1, entityId));
+				}
+				case ClientboundPacket.PLAY_ENTITY_ATTACH_ID: {
+					int rider = packetdata.readInt();
+					int vehicle = packetdata.readInt();
+					boolean leash = packetdata.readBoolean();
+					boolean attach = vehicle != -1;
+					if (attach) {
+						pestorage.setVehicleId(vehicle);
+					} else {
+						vehicle = pestorage.getVehicleId();
+					}
+					if (!leash) {
+						return Collections.singletonList(new AttachEntityPacket(vehicle, rider, attach));
+					} else {
+						return Collections.emptyList();
+					}
+				}
 				default: {
 					return Collections.emptyList();
 				}
