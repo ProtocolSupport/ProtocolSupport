@@ -17,15 +17,15 @@ import protocolsupport.utils.PacketCreator;
 
 public class PlayerActionPacket implements ServerboundPEPacket {
 
-	private final static int ACTION_START_BREAK = 0;
-	private final static int ACTION_CANCEL_BREAK = 1;
-	private final static int ACTION_CONSUME_ITEM = 5;
-	private final static int ACTION_WAKE_UP = 6;
-	private final static int ACTION_RESPAWN = 7;
-	private final static int ACTION_START_SPRINT = 9;
-	private final static int ACTION_STOP_SPRINT = 10;
-	private final static int ACTION_START_SNEAK = 11;
-	private final static int ACTION_STOP_SNEAK = 12;
+	private final static int START_BREAK = 0;
+	private final static int CANCEL_BREAK = 1;
+	private final static int CONSUME_ITEM = 5;
+	private final static int WAKE_UP = 6;
+	private final static int RESPAWN = 7;
+	private final static int START_SPRINT = 9;
+	private final static int STOP_SPRINT = 10;
+	private final static int START_SNEAK = 11;
+	private final static int STOP_SNEAK = 12;
 
 	protected long id;
 	protected int action;
@@ -53,30 +53,46 @@ public class PlayerActionPacket implements ServerboundPEPacket {
 	@Override
 	public List<? extends Packet<?>> transfrom() throws Exception {
 		switch (action) {
-			case ACTION_START_BREAK:
-			case ACTION_CANCEL_BREAK:
-			case ACTION_CONSUME_ITEM: {
+			case START_BREAK:
+			case CANCEL_BREAK:
+			case CONSUME_ITEM: {
 				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_BLOCK_DIG.get());
 				creator.writeByte(action);
 				creator.a(new BlockPosition(x, y, z));
 				creator.writeByte(1);
 				return Collections.singletonList(creator.create());
 			}
-			case ACTION_RESPAWN: {
+			case RESPAWN: {
 				//TODO: migrate to PacketCreator
 				return Collections.singletonList(new PacketPlayInClientCommand(EnumClientCommand.PERFORM_RESPAWN));
 			}
-			case ACTION_WAKE_UP: {
-				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_ENTITY_ACTION.get());
-				creator.writeVarInt(0);
-				creator.writeVarInt(2);
-				creator.writeVarInt(0);
-				return Collections.singletonList(creator.create());
+			case WAKE_UP: {
+				return getEntityActionPacket(2);
+			}
+			case START_SPRINT: {
+				return getEntityActionPacket(3);
+			}
+			case STOP_SPRINT: {
+				return getEntityActionPacket(4);
+			}
+			case START_SNEAK: {
+				return getEntityActionPacket(0);
+			}
+			case STOP_SNEAK: {
+				return getEntityActionPacket(1);
 			}
 			default: {
 				return Collections.emptyList();
 			}
 		}
+	}
+
+	private static List<? extends Packet<?>> getEntityActionPacket(int action) throws Exception {
+		PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_ENTITY_ACTION.get());
+		creator.writeVarInt(0);
+		creator.writeVarInt(action);
+		creator.writeVarInt(0);
+		return Collections.singletonList(creator.create());
 	}
 
 }
