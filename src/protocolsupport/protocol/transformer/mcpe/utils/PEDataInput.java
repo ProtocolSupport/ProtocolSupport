@@ -27,11 +27,11 @@ public class PEDataInput implements DataInput {
 	}
 
 	@Override
-	public int skipBytes(int n) throws IOException {
+	public int skipBytes(int skip) throws IOException {
 		int readable = buf.readableBytes();
-		n = Math.min(n, readable);
-		buf.skipBytes(readable);
-		return readable;
+		skip = Math.min(skip, readable);
+		buf.skipBytes(skip);
+		return skip;
 	}
 
 	@Override

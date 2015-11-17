@@ -1,8 +1,8 @@
 package protocolsupport.protocol.transformer.mcpe.pipeline;
 
 import java.net.InetSocketAddress;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.storage.ProtocolStorage;
@@ -32,7 +32,8 @@ public class UDPRouter extends SimpleChannelInboundHandler<RakNetPacket> {
 		return instance;
 	}
 
-	private final ConcurrentHashMap<InetSocketAddress, UDPNetworkManager> nmMap = new ConcurrentHashMap<InetSocketAddress, UDPNetworkManager>();
+	private final HashMap<InetSocketAddress, UDPNetworkManager> nmMap = new HashMap<InetSocketAddress, UDPNetworkManager>();
+	private final Object lock = new Object();
 
 	private final List<NetworkManager> networkManagers;
 	private UDPRouter(List<NetworkManager> networkManagers) {
@@ -47,23 +48,27 @@ public class UDPRouter extends SimpleChannelInboundHandler<RakNetPacket> {
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, RakNetPacket packet) throws Exception {
 		InetSocketAddress sender = packet.getClientAddress();
-		UDPNetworkManager networkManager = nmMap.get(sender);
-		if (networkManager == null) {
-			if (packet.getId() != RakNetConstants.ID_PING_OPEN_CONNECTIONS && packet.getId() != RakNetConstants.ID_OPEN_CONNECTION_REQUEST_1) {
-				return;
+		synchronized (lock) {
+			UDPNetworkManager networkManager = nmMap.get(sender);
+			if (networkManager == null) {
+				if (packet.getId() != RakNetConstants.ID_PING_OPEN_CONNECTIONS && packet.getId() != RakNetConstants.ID_OPEN_CONNECTION_REQUEST_1) {
+					return;
+				}
+				networkManager = new UDPNetworkManager(EnumProtocolDirection.SERVERBOUND);
+				networkManager.channelActive(new FakeChannelHandlerContext(new VirtualChannel(ctx.channel(), sender)));
+				nmMap.put(sender, networkManager);
+				networkManagers.add(networkManager);
+				ProtocolStorage.setProtocolVersion(sender, ProtocolVersion.MINECRAFT_PE);
 			}
-			networkManager = new UDPNetworkManager(EnumProtocolDirection.SERVERBOUND);
-			networkManager.channelActive(new FakeChannelHandlerContext(new VirtualChannel(ctx.channel(), sender)));
-			nmMap.put(sender, networkManager);
-			networkManagers.add(networkManager);
-			ProtocolStorage.setProtocolVersion(sender, ProtocolVersion.MINECRAFT_PE);
+			networkManager.handleUDP(packet);	
 		}
-		networkManager.handleUDP(packet);
 	}
 
 	public void remove(InetSocketAddress clientAddress) {
 		ProtocolStorage.clearData(clientAddress);
-		nmMap.remove(clientAddress);
+		synchronized (lock) {
+			nmMap.remove(clientAddress);	
+		}
 	}
 
 }
