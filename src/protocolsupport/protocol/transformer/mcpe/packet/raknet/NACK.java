@@ -20,22 +20,10 @@ public class NACK extends RakNetPacket {
 
 	@Override
 	public void encode(ByteBuf buf) {
-		int count = getCount();
-		buf.writeShort(count);
-		for (int i = 0; i < count; i++) {
-			int current = idstart + i * 4096;
-			buf.writeByte(0);
-			RakNetDataSerializer.writeTriad(buf, current);
-			if (idfinish - current < 4096) {
-				RakNetDataSerializer.writeTriad(buf, idfinish);
-			} else {
-				RakNetDataSerializer.writeTriad(buf, current + 4096);
-			}
-		}
-	}
-
-	private int getCount() {
-		return (idfinish - idstart) / 4096 + 1;
+		buf.writeShort(1);
+		buf.writeByte(0);
+		RakNetDataSerializer.writeTriad(buf, idstart);
+		RakNetDataSerializer.writeTriad(buf, idfinish);
 	}
 
 }

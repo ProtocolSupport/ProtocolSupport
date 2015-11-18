@@ -5,7 +5,6 @@ import io.netty.buffer.Unpooled;
 import io.netty.util.concurrent.GenericFutureListener;
 
 import java.net.InetSocketAddress;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.io.IOUtils;
 import org.spigotmc.SneakyThrow;
@@ -55,7 +54,6 @@ public class UDPNetworkManager extends NetworkManager {
 
 	private final ClientboundPacketHandler clientboundTransforner = new ClientboundPacketHandler(this);
 	private final ServerboundPacketHandler serverboundTransformer = new ServerboundPacketHandler(this);
-	private final ConcurrentHashMap<Integer, RakNetPacket> sentPackets = new ConcurrentHashMap<Integer, RakNetPacket>();
 
 	private long lastSentPacket = System.currentTimeMillis();
 
@@ -166,45 +164,9 @@ public class UDPNetworkManager extends NetworkManager {
 					break;
 				}
 				case RakNetConstants.ACK: {
-					int count = buf.readShort();
-					for (int i = 0; i < count && buf.isReadable() && i < 4096; ++i) {
-						if (buf.readByte() == (byte) 0x00) {
-							int start = RakNetDataSerializer.readTriad(buf);
-							int end = RakNetDataSerializer.readTriad(buf);
-							if ((end - start) > 512) {
-								end = start + 512;
-							}
-							for (int c = start; c <= end; ++c) {
-								sentPackets.remove(c);
-							}
-						} else {
-							sentPackets.remove(RakNetDataSerializer.readTriad(buf));
-						}
-					}
 					break;
 				}
 				case RakNetConstants.NACK: {
-					int count = buf.readShort();
-					for (int i = 0; i < count && buf.isReadable() && i < 4096; ++i) {
-						if (buf.readByte() == (byte) 0x00) {
-							int start = RakNetDataSerializer.readTriad(buf);
-							int end = RakNetDataSerializer.readTriad(buf);
-							if ((end - start) > 512) {
-								end = start + 512;
-							}
-							for (int c = start; c <= end; ++c) {
-								RakNetPacket missedpacket = sentPackets.get(c);
-								if (missedpacket != null) {
-									sendRakNetPacket0(missedpacket);
-								}
-							}
-						} else {
-							RakNetPacket missedpacket = sentPackets.get(RakNetDataSerializer.readTriad(buf));
-							if (missedpacket != null) {
-								sendRakNetPacket0(missedpacket);
-							}
-						}
-					}
 					break;
 				}
 				default: {
@@ -242,15 +204,14 @@ public class UDPNetworkManager extends NetworkManager {
 		}
 		int maxsize = mtu - 40;
 		if (buf.readableBytes() > mtu + 40) {
-			int orderIndex = getNextOrderIndex();
 			EncapsulatedPacket[] epackets = new EncapsulatedPacket[(buf.readableBytes() / maxsize) + 1];
 			int splitID = getNextSplitID();
 			for (int splitIndex = 0; splitIndex < epackets.length; splitIndex++) {
-				epackets[splitIndex] = new EncapsulatedPacket(buf.readBytes(buf.readableBytes() < maxsize ? buf.readableBytes() : maxsize), getNextMessageID(), orderIndex, splitID, epackets.length, splitIndex);
+				epackets[splitIndex] = new EncapsulatedPacket(buf.readBytes(buf.readableBytes() < maxsize ? buf.readableBytes() : maxsize), splitID, epackets.length, splitIndex);
 			}
 			sendEncapsulatedPackets(epackets);
 		} else {
-			sendEncapsulatedPackets(new EncapsulatedPacket(buf, getNextMessageID(), getNextOrderIndex()));
+			sendEncapsulatedPackets(new EncapsulatedPacket(buf));
 		}
 	}
 
@@ -274,8 +235,7 @@ public class UDPNetworkManager extends NetworkManager {
 	}
 
 	public void sendRakNetPacket(RakNetPacket packet) {
-		packet.setSeqNumber(getNextID());
-		sentPackets.put(packet.getSeqNumber(), packet);
+		packet.setSeqNumber(getNextRakSeqID());
 		sendRakNetPacket0(packet);
 	}
 
@@ -288,27 +248,13 @@ public class UDPNetworkManager extends NetworkManager {
 	}
 
 	private int currentSplitID = 0;
-
 	private int getNextSplitID() {
 		return currentSplitID++ % Short.MAX_VALUE;
 	}
 
-	private int currentMessageID = 0;
-
-	private int getNextMessageID() {
-		return currentMessageID++ % Short.MAX_VALUE;
-	}
-
-	private int currentID = 0;
-
-	private int getNextID() {
-		return currentID++ % Short.MAX_VALUE;
-	}
-
-	private int currentOrderIndex = 0;
-
-	private int getNextOrderIndex() {
-		return currentOrderIndex++ % Short.MAX_VALUE;
+	private int currentRakSeqID = 0;
+	private int getNextRakSeqID() {
+		return currentRakSeqID++ % Short.MAX_VALUE;
 	}
 
 }

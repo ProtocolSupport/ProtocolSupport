@@ -123,6 +123,10 @@ public class ClientboundPacketHandler {
 		return loadedChunkCount >= initialChunkCount && !spawned;
 	}
 
+	public boolean isSpawned() {
+		return spawned;
+	}
+
 	public void setSpawned() {
 		spawned = true;
 	}

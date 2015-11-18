@@ -5,6 +5,7 @@ import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 
+//only reliability level 0 for sending is supported
 public class EncapsulatedPacket {
 
 	public int reliability;
@@ -24,15 +25,12 @@ public class EncapsulatedPacket {
 	public EncapsulatedPacket() {
 	}
 
-	public EncapsulatedPacket(ByteBuf data, int messageIndex, int orderIndex) {
-		this.reliability = 3;
-		this.messageIndex = messageIndex;
-		this.orderIndex = orderIndex;
+	public EncapsulatedPacket(ByteBuf data) {
 		this.data.writeBytes(data);
 	}
 
-	public EncapsulatedPacket(ByteBuf data, int messageIndex, int orderIndex, int splitID, int splitCount, int splitIndex) {
-		this(data, messageIndex, orderIndex);
+	public EncapsulatedPacket(ByteBuf data, int splitID, int splitCount, int splitIndex) {
+		this(data);
 		this.hasSplit = true;
 		this.splitID = splitID;
 		this.splitCount = splitCount;
@@ -79,11 +77,6 @@ public class EncapsulatedPacket {
 		serializer.writeByte(flag);
 
 		serializer.writeShort((data.readableBytes() << 3) & 0xFFFF);
-
-		//only support reliability level 3 for sending
-		RakNetDataSerializer.writeTriad(buf, messageIndex);
-		RakNetDataSerializer.writeTriad(buf, orderIndex);
-		serializer.writeByte(orderChannel);
 
 		if (hasSplit) {
 			serializer.writeInt(splitCount);

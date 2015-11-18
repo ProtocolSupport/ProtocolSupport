@@ -1,6 +1,7 @@
 package protocolsupport.protocol.transformer.mcpe.handler;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.server.v1_8_R3.Packet;
+
 import protocolsupport.protocol.transformer.mcpe.UDPNetworkManager;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketRegistry;
 import protocolsupport.protocol.transformer.mcpe.packet.raknet.EncapsulatedPacket;
@@ -21,21 +23,29 @@ public class ServerboundPacketHandler {
 	}
 
 	private int lastReceivedSeqNumber = -1;
-	private final TIntObjectHashMap<NotFullPacket> notFullPackets = new TIntObjectHashMap<NotFullPacket>();
-
 	@SuppressWarnings("rawtypes")
 	public List<Packet> transform(RakNetPacket packet) throws Exception {
-		int prevSeq = lastReceivedSeqNumber;
-		lastReceivedSeqNumber = packet.getSeqNumber();
-		if (packet.getSeqNumber() - prevSeq == 1) {
-			networkManager.sendACK(packet.getSeqNumber());
+		int packetSeqNumber = packet.getSeqNumber();
+		int prevSeqNumber = lastReceivedSeqNumber;
+		lastReceivedSeqNumber = packetSeqNumber;
+		if (packetSeqNumber - prevSeqNumber == 1) {
+			networkManager.sendACK(packetSeqNumber);
 		} else {
-			networkManager.sendNACK(prevSeq + 1, packet.getSeqNumber() - 1);
+			networkManager.sendNACK(lastReceivedSeqNumber + 1, packetSeqNumber - 1);
 		}
-		List<Packet> packets = new ArrayList<Packet>();
-		for (EncapsulatedPacket epacket : packet.getPackets()) {
+		ArrayList<Packet> packets = new ArrayList<Packet>();
+		for (ByteBuf buffer : getFullPackets(packet.getPackets())) {
+			packets.addAll(transformFullPacket(buffer));
+		}
+		return packets;
+	}
+
+	private final TIntObjectHashMap<NotFullPacket> notFullPackets = new TIntObjectHashMap<NotFullPacket>();
+	private List<ByteBuf> getFullPackets(List<EncapsulatedPacket> epackets) {
+		ArrayList<ByteBuf> result = new ArrayList<ByteBuf>();
+		for (EncapsulatedPacket epacket : epackets) {
 			if (!epacket.hasSplit) {
-				packets.addAll(transformFullPacket(epacket.data));
+				result.add(epacket.data);
 			} else {
 				int splitID = epacket.splitID;
 				NotFullPacket partial = notFullPackets.get(splitID);
@@ -45,12 +55,12 @@ public class ServerboundPacketHandler {
 					partial.appendData(epacket);
 					if (partial.isComplete()) {
 						notFullPackets.remove(splitID);
-						packets.addAll(transformFullPacket(partial.getData()));
+						result.add(partial.getData());
 					}
 				}
 			}
 		}
-		return packets;
+		return result;
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -68,7 +78,7 @@ public class ServerboundPacketHandler {
 
 		public NotFullPacket(EncapsulatedPacket startpacket) {
 			if (startpacket.splitCount > maxSplits) {
-				throw new IllegalArgumentException("Too many splits for single packet, max: "+maxSplits+", packet: "+startpacket.splitCount);
+				throw new IllegalStateException("Too many splits for single packet, max: "+maxSplits+", packet: "+startpacket.splitCount);
 			}
 			data = new ByteBuf[startpacket.splitCount];
 			data[0] = startpacket.data;
