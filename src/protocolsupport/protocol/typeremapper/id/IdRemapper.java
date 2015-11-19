@@ -62,6 +62,8 @@ public class IdRemapper {
 			registerRemapEntry(164, 53, ProtocolVersionsHelper.BEFORE_1_7);
 			// tall plant -> yellow flower
 			registerRemapEntry(175, 38, ProtocolVersionsHelper.BEFORE_1_7);
+			// packed ice -> snow
+			registerRemapEntry(174, 80, ProtocolVersionsHelper.BEFORE_1_7);
 			// stained clay -> clay
 			registerRemapEntry(159, 82, ProtocolVersionsHelper.BEFORE_1_6);
 			// hay bale -> stone
@@ -72,8 +74,6 @@ public class IdRemapper {
 			registerRemapEntry(172, 82, ProtocolVersionsHelper.BEFORE_1_6);
 			// coal block -> stone
 			registerRemapEntry(173, 1, ProtocolVersionsHelper.BEFORE_1_6);
-			// packed ice -> snow
-			registerRemapEntry(174, 80, ProtocolVersionsHelper.BEFORE_1_6);
 		}
 		@Override
 		protected RemappingTable createTable() {
