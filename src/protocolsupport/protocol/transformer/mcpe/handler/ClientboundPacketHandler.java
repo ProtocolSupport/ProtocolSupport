@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import protocolsupport.api.ProtocolVersion;
@@ -42,6 +43,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PlayerL
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PongPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.RemoveEntityPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.RemovePlayerPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.RespawnPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetBlocksPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetDifficultyPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetTimePacket;
@@ -49,6 +51,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetBloc
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetSpawnPosition;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddPlayerPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.StartGamePacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.TileEntityDataPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ContainerSetContentsPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.EntityStatusPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.EntityVelocityPacket;
@@ -73,6 +76,7 @@ import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.EnumProtocol;
 import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R3.ItemStack;
+import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.World;
 
@@ -80,59 +84,52 @@ public class ClientboundPacketHandler {
 
 	private static final RemappingTable blockRemapper = IdRemapper.BLOCK.getTable(ProtocolVersion.MINECRAFT_PE);
 	private static final RemappingTable entityRemapper = IdRemapper.ENTITY.getTable(ProtocolVersion.MINECRAFT_PE);
-	private static final RemappingTable objectRemapper = new RemappingTable(256) {
-		{
-			for (int i = 0; i < 256; i++) {
-				setRemap(i, -1);
-			}
-			//Correct entity ids
-			//boat
-			setRemap(1, 90);
-			//minecart
-			setRemap(10, 84);
-			//tnt
-			setRemap(50, 65);
-			//arrow
-			setRemap(60, 80);
-			//snowball
-			setRemap(61, 81);
-			//egg
-			setRemap(62, 82);
-			//fireball
-			setRemap(63, 85);
-			setRemap(64, 85);
-			setRemap(66, 85);
-			//falling
-			setRemap(70, 66);
-			//fishing float
-			setRemap(90, 77);
+	private static final RemappingTable objectRemapper = new RemappingTable(256) {{
+		for (int i = 0; i < 256; i++) {
+			setRemap(i, -1);
 		}
-	};
+		//Correct entity ids
+		//boat
+		setRemap(1, 90);
+		//minecart
+		setRemap(10, 84);
+		//tnt
+		setRemap(50, 65);
+		//arrow
+		setRemap(60, 80);
+		//snowball
+		setRemap(61, 81);
+		//egg
+		setRemap(62, 82);
+		//fireball
+		setRemap(63, 85);
+		setRemap(64, 85);
+		setRemap(66, 85);
+		//falling
+		setRemap(70, 66);
+		//fishing float
+		setRemap(90, 77);
+	}};
 
-	protected UDPNetworkManager networkManager;
+	private final UDPNetworkManager networkManager;
 	public ClientboundPacketHandler(UDPNetworkManager networkManager) {
 		this.networkManager = networkManager;
 	}
 
-	protected int loadedChunkCount;
-
 	private static final long initialChunkCount = Bukkit.getViewDistance() * Bukkit.getViewDistance() * 4;
 
+	private int loadedChunkCount;
 	private boolean spawned;
 	public boolean canSpawnPlayer() {
 		return loadedChunkCount >= initialChunkCount && !spawned;
-	}
-
-	public boolean isSpawned() {
-		return spawned;
 	}
 
 	public void setSpawned() {
 		spawned = true;
 	}
 
-	protected final LocalStorage storage = new LocalStorage();
-	protected final PEStorage pestorage = new PEStorage();
+	private final LocalStorage storage = new LocalStorage();
+	private final PEStorage pestorage = new PEStorage();
 
 	@SuppressWarnings({ "rawtypes", "deprecation" })
 	public List<? extends ClientboundPEPacket> transform(Packet packet) throws Exception {
@@ -147,17 +144,17 @@ public class ClientboundPacketHandler {
 					//use this packet to sent needed login packets
 					Player bukkitplayer = Utils.getPlayer(networkManager).getBukkitEntity();
 					storage.addWatchedSelfPlayer(new WatchedPlayer(bukkitplayer.getEntityId()));
+					Location worldspawn = bukkitplayer.getWorld().getSpawnLocation();
 					return Arrays.asList(
 						new StartGamePacket(
 							bukkitplayer.getWorld().getEnvironment().getId(),
 							bukkitplayer.getGameMode().getValue() & 0x1,
 							bukkitplayer.getEntityId(),
-							bukkitplayer.getWorld().getSpawnLocation(),
+							worldspawn,
 							bukkitplayer.getLocation()
 						),
-						new SetTimePacket((int) bukkitplayer.getWorld().getTime()),
+						new RespawnPacket((float) worldspawn.getX(), (float) worldspawn.getY(), (float) worldspawn.getZ()),
 						new SetSpawnPosition(bukkitplayer.getLocation()),
-						new SetHealthPacket((int) bukkitplayer.getHealth()),
 						new SetDifficultyPacket(bukkitplayer.getWorld().getDifficulty().ordinal()),
 						new AdventureSettingsPacket(bukkitplayer.getGameMode() == GameMode.CREATIVE)
 					);
@@ -584,6 +581,14 @@ public class ClientboundPacketHandler {
 					} else {
 						return Collections.emptyList();
 					}
+				}
+				case ClientboundPacket.PLAY_UPDATE_SIGN_ID: {
+					BlockPosition position = packetdata.c();
+					NBTTagCompound compound = new NBTTagCompound();
+					for (int i = 1; i <= 4; i++) {
+						compound.setString("Text"+i, LegacyUtils.fromComponent(packetdata.d()));
+					}
+					return Collections.singletonList(new TileEntityDataPacket(position.getX(), position.getY(), position.getZ(), compound));
 				}
 				default: {
 					return Collections.emptyList();
