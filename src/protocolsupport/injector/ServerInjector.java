@@ -8,6 +8,7 @@ import net.minecraft.server.v1_8_R3.Block;
 import net.minecraft.server.v1_8_R3.Blocks;
 import net.minecraft.server.v1_8_R3.IBlockData;
 import net.minecraft.server.v1_8_R3.Item;
+import net.minecraft.server.v1_8_R3.ItemAnvil;
 import net.minecraft.server.v1_8_R3.ItemBlock;
 import net.minecraft.server.v1_8_R3.MinecraftKey;
 import net.minecraft.server.v1_8_R3.TileEntity;
@@ -24,7 +25,7 @@ public class ServerInjector {
 	public static void inject() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		registerTileEntity(TileEntityEnchantTable.class, "EnchantTable");
 		registerBlock(116, "enchanting_table", new BlockEnchantTable());
-		registerBlock(145, "anvil", new BlockAnvil());
+		registerBlock(145, "anvil", new ItemAnvil(new BlockAnvil()));
 		fixBlocksRefs();
 		Bukkit.resetRecipes();
 	}
@@ -48,6 +49,20 @@ public class ServerInjector {
 		}
 		Item.REGISTRY.a(id, stringkey, itemblock);
 		((Map<Block, Item>)Utils.setAccessible(Item.class.getDeclaredField("a")).get(null)).put(block, itemblock);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private static void registerBlock(int id, String name, ItemBlock itemblock) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+		MinecraftKey stringkey = new MinecraftKey(name);
+		Block.REGISTRY.a(id, stringkey, itemblock.d());
+		Iterator<IBlockData> blockdataiterator = itemblock.d().P().a().iterator();
+		while (blockdataiterator.hasNext()) {
+			IBlockData blockdata = blockdataiterator.next();
+			final int stateId = (id << 4) | itemblock.d().toLegacyData(blockdata);
+			Block.d.a(blockdata, stateId);
+		}
+		Item.REGISTRY.a(id, stringkey, itemblock);
+		((Map<Block, Item>) Utils.setAccessible(Item.class.getDeclaredField("a")).get(null)).put(itemblock.d(), itemblock);
 	}
 
 	private static void fixBlocksRefs() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
