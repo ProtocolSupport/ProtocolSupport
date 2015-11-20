@@ -14,8 +14,8 @@ import io.netty.buffer.ByteBuf;
 
 public class ServerInfoPacket extends RakNetPacket {
 
-	private static final int MINECRAFT_PE_PROTOCOL = 34;
-	private static final String MINECRAFT_PE_VERSION = "0.12.1";
+	private static final int MINECRAFT_PE_PROTOCOL = 38;
+	private static final String MINECRAFT_PE_VERSION = "0.13.0";
 
 	private long time;
 	private long serverID = UDPNetworkManager.serverID;

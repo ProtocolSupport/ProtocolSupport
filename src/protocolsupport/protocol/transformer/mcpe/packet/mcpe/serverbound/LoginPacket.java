@@ -24,6 +24,7 @@ public class LoginPacket implements ServerboundPEPacket {
 	protected String hostname;
 
 	protected boolean slim;
+	protected boolean transparent;
 	protected byte[] skin;
 
 	@Override
@@ -42,6 +43,7 @@ public class LoginPacket implements ServerboundPEPacket {
 		hostname = serializer.readString();
 		serializer.readArray(); //some sort of key for future auth maybe?
 		slim = serializer.readBoolean();
+		transparent = serializer.readBoolean();
 		skin = serializer.readArray();
 		return this;
 	}

@@ -18,6 +18,7 @@ public class ContainerSetSlotPacket implements DualPEPacket {
 
 	protected int windowId;
 	protected int slot;
+	protected int hotbarslot;
 	protected ItemStack itemstack;
 
 	public ContainerSetSlotPacket() {
@@ -27,6 +28,11 @@ public class ContainerSetSlotPacket implements DualPEPacket {
 		this.windowId = windowId;
 		this.slot = slot;
 		this.itemstack = itemstack;
+	}
+
+	public ContainerSetSlotPacket(int windowId, int slot, int hotbarslot, ItemStack itemstack) {
+		this(windowId, slot, itemstack);
+		this.hotbarslot = hotbarslot;
 	}
 
 	@Override
@@ -39,6 +45,7 @@ public class ContainerSetSlotPacket implements DualPEPacket {
 		PacketDataSerializer serializer = new PacketDataSerializer(buf, ProtocolVersion.MINECRAFT_PE);
 		windowId = serializer.readByte();
 		slot = serializer.readShort();
+		hotbarslot = serializer.readShort();
 		itemstack = serializer.readItemStack();
 		return this;
 	}
@@ -48,6 +55,7 @@ public class ContainerSetSlotPacket implements DualPEPacket {
 		PacketDataSerializer serializer = new PacketDataSerializer(buf, ProtocolVersion.MINECRAFT_PE);
 		serializer.writeByte(windowId);
 		serializer.writeShort(slot);
+		serializer.writeShort(hotbarslot);
 		serializer.writeItemStack(itemstack);
 		return this;
 	}

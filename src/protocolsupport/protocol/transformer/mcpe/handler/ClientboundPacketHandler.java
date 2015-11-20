@@ -455,7 +455,9 @@ public class ClientboundPacketHandler {
 					//TODO: other inventory types
 					if (windowId == 0) {
 						if (slot >= 9 && slot < 45) {
-							return Collections.singletonList(new ContainerSetSlotPacket(PEPlayerInventory.PLAYER_INVENTORY_WID, slot - 9, itemstack));
+							return Collections.singletonList(new ContainerSetSlotPacket(
+								PEPlayerInventory.PLAYER_INVENTORY_WID, slot - 9, slot - 36, itemstack
+							));
 						} else if (slot >= 5 && slot < 9) {
 							return Collections.singletonList(new ContainerSetSlotPacket(PEPlayerInventory.PLAYER_ARMOR_WID, slot - 5, itemstack));
 						}
@@ -587,14 +589,15 @@ public class ClientboundPacketHandler {
 						return Collections.emptyList();
 					}
 				}
-				case ClientboundPacket.PLAY_UPDATE_SIGN_ID: {
+				/*case ClientboundPacket.PLAY_UPDATE_SIGN_ID: {
 					BlockPosition position = packetdata.c();
 					NBTTagCompound compound = new NBTTagCompound();
+					compound.setString("id", "Sign");
 					for (int i = 1; i <= 4; i++) {
 						compound.setString("Text"+i, LegacyUtils.fromComponent(packetdata.d()));
 					}
 					return Collections.singletonList(new TileEntityDataPacket(position.getX(), position.getY(), position.getZ(), compound));
-				}
+				}*/
 				default: {
 					return Collections.emptyList();
 				}

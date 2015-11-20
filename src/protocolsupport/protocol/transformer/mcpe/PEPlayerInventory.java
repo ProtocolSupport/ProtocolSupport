@@ -16,8 +16,8 @@ public class PEPlayerInventory extends PlayerInventory {
 
 	private int[] hotbar = new int[] {36, 37, 38, 39, 40, 41, 42, 43, 44};
 
-	public void setHotbarRef(int realSlot, int hotbarSlot) {
-		hotbar[hotbarSlot] = realSlot;
+	public void setHotbarRef(int peSlot, int hotbarSlot) {
+		hotbar[hotbarSlot] = peSlot;
 	}
 
 	public int[] getHotbarRefs() {
