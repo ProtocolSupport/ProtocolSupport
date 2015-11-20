@@ -144,16 +144,14 @@ public class ClientboundPacketHandler {
 					//use this packet to sent needed login packets
 					Player bukkitplayer = Utils.getPlayer(networkManager).getBukkitEntity();
 					storage.addWatchedSelfPlayer(new WatchedPlayer(bukkitplayer.getEntityId()));
-					Location worldspawn = bukkitplayer.getWorld().getSpawnLocation();
 					return Arrays.asList(
 						new StartGamePacket(
 							bukkitplayer.getWorld().getEnvironment().getId(),
 							bukkitplayer.getGameMode().getValue() & 0x1,
 							bukkitplayer.getEntityId(),
-							worldspawn,
+							bukkitplayer.getWorld().getSpawnLocation(),
 							bukkitplayer.getLocation()
 						),
-						new RespawnPacket((float) worldspawn.getX(), (float) worldspawn.getY(), (float) worldspawn.getZ()),
 						new SetSpawnPosition(bukkitplayer.getLocation()),
 						new SetDifficultyPacket(bukkitplayer.getWorld().getDifficulty().ordinal()),
 						new AdventureSettingsPacket(bukkitplayer.getGameMode() == GameMode.CREATIVE)
@@ -167,7 +165,14 @@ public class ClientboundPacketHandler {
 					return Collections.singletonList(new SetTimePacket((int) packetdata.readLong()));
 				}
 				case ClientboundPacket.PLAY_UPDATE_HEALTH_ID: {
-					return Collections.singletonList(new SetHealthPacket((int) packetdata.readFloat()));
+					float health = packetdata.readFloat();
+					ArrayList<ClientboundPEPacket> packets = new ArrayList<ClientboundPEPacket>();
+					packets.add(new SetHealthPacket((int) health));
+					if (health <= 0.0F) {
+						Location location = Utils.getPlayer(networkManager).getBukkitEntity().getWorld().getSpawnLocation();
+						packets.add(new RespawnPacket((float) location.getX(), (float) location.getY(), (float) location.getZ()));
+					}
+					return packets;
 				}
 				case ClientboundPacket.PLAY_POSITION_ID: {
 					EntityPlayer player = Utils.getPlayer(networkManager);
