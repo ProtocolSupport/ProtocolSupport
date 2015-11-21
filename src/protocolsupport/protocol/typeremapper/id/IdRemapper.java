@@ -91,7 +91,7 @@ public class IdRemapper {
 			registerRemapEntry(126, 158, ProtocolVersionsHelper.MCPE);
 			// standing banner -> standing sign
 			registerRemapEntry(176, 63, ProtocolVersionsHelper.MCPE);
-			// wall banner -> wall signre
+			// wall banner -> wall sign
 			registerRemapEntry(177, 68, ProtocolVersionsHelper.MCPE);
 			// (sticky) piston -> stone
 			registerRemapEntry(29, 1, ProtocolVersionsHelper.MCPE);
