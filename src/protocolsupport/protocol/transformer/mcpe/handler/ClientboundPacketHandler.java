@@ -46,6 +46,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.RemoveP
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.RespawnPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetBlocksPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetDifficultyPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetEntityEffect;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetTimePacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetBlocksPacket.UpdateBlockRecord;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetSpawnPosition;
@@ -601,6 +602,19 @@ public class ClientboundPacketHandler {
 						compound.setString("Text"+i, LegacyUtils.fromComponent(packetdata.d()));
 					}
 					return Collections.singletonList(new TileEntityDataPacket(position.getX(), position.getY(), position.getZ(), compound));
+				}
+				case ClientboundPacket.PLAY_ENTITY_EFFECT_ADD_ID: {
+					int entityId = packetdata.readVarInt();
+					int effectId = packetdata.readByte();
+					int amplifier = packetdata.readByte();
+					int duration = packetdata.readVarInt();
+					boolean hideparticles = packetdata.readBoolean();
+					return Collections.singletonList(new SetEntityEffect(entityId, effectId, amplifier, !hideparticles, duration));
+				}
+				case ClientboundPacket.PLAY_ENTITY_EFFECT_REMOVE_ID: {
+					int entityId = packetdata.readVarInt();
+					int effectId = packetdata.readByte();
+					return Collections.singletonList(new SetEntityEffect(entityId, effectId));
 				}
 				default: {
 					return Collections.emptyList();

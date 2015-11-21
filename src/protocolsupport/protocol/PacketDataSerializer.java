@@ -187,6 +187,9 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 				}
 			}
 		}
+		if (getVersion() == ProtocolVersion.MINECRAFT_PE && item == Items.POTION) {
+			itemstack.setData(0);
+		}
 		if (ItemStackWriteEvent.getHandlerList().getRegisteredListeners().length > 0) {
 			ItemStackWriteEvent event = new InternalItemStackWriteEvent(getVersion(), original, itemstack);
 			Bukkit.getPluginManager().callEvent(event);

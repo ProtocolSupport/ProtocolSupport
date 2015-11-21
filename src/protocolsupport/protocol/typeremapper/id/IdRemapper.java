@@ -214,7 +214,8 @@ public class IdRemapper {
 			registerRemapEntry(418, 1, ProtocolVersionsHelper.BEFORE_1_6);
 			registerRemapEntry(419, 1, ProtocolVersionsHelper.BEFORE_1_6);
 			registerRemapEntry(420, 1, ProtocolVersionsHelper.BEFORE_1_6);
-			registerRemapEntry(421, 1, ProtocolVersionsHelper.BEFORE_1_6);	
+			registerRemapEntry(421, 1, ProtocolVersionsHelper.BEFORE_1_6);
+
 
 			// MCPE
 			// banner -> sign
