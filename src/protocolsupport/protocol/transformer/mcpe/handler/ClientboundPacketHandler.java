@@ -13,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.util.NumberConversions;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientboundPacket;
@@ -81,6 +82,7 @@ import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R3.ItemStack;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.minecraft.server.v1_8_R3.Packet;
+import net.minecraft.server.v1_8_R3.PacketPlayOutMapChunk;
 import net.minecraft.server.v1_8_R3.World;
 
 public class ClientboundPacketHandler {
@@ -207,7 +209,10 @@ public class ClientboundPacketHandler {
 					if ((field & 0x10) != 0) {
 						pitch += player.pitch;
 					}
-					return Collections.singletonList(
+					player.playerConnection.sendPacket(new PacketPlayOutMapChunk(
+						player.world.getChunkAt(NumberConversions.floor(x) >> 4, NumberConversions.floor(z) >> 4), true, 255
+					));
+					return Arrays.asList(
 						new MovePlayerPacket(
 							player.getId(),
 							(float) x, (float) y, (float) z,
