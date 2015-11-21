@@ -83,35 +83,16 @@ public class IdRemapper {
 			registerRemapEntry(95, 20, ProtocolVersionsHelper.MCPE);
 			// stained glass pane -> glass pane
 			registerRemapEntry(160, 102, ProtocolVersionsHelper.MCPE);
-			// redstone -> carpet (remove when MCPE 0.13 is released! && protocolsupport is updated to MCPE 0.13)
-			registerRemapEntry(55, 171, ProtocolVersionsHelper.MCPE);
-			// redstone torch -> torch (remove when MCPE 0.13 is released! && protocolsupport is updated to MCPE 0.13)
-			registerRemapEntry(75, 50, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(76, 50, ProtocolVersionsHelper.MCPE);
-			// all pressure plates -> carpet
-			registerRemapEntry(70, 50, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(72, 50, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(147, 50, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(148, 50, ProtocolVersionsHelper.MCPE);
 			// sea lantern -> glowstone
 			registerRemapEntry(169, 89, ProtocolVersionsHelper.MCPE);
 			// prismarine -> mossy cobblestone
 			registerRemapEntry(168, 48, ProtocolVersionsHelper.MCPE);
 			// wood slab -> wood slab (MCPE ID remap)
 			registerRemapEntry(126, 158, ProtocolVersionsHelper.MCPE);
-			// all doors -> door
-			registerRemapEntry(193, 64, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(194, 64, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(195, 64, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(196, 64, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(197, 64, ProtocolVersionsHelper.MCPE);
 			// standing banner -> standing sign
 			registerRemapEntry(176, 63, ProtocolVersionsHelper.MCPE);
 			// wall banner -> wall sign
 			registerRemapEntry(177, 68, ProtocolVersionsHelper.MCPE);
-			// all buttons -> sign (well, I don't know a better replacer for this)
-			registerRemapEntry(77, 63, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(143, 63, ProtocolVersionsHelper.MCPE);
 			// (sticky) piston -> stone
 			registerRemapEntry(29, 1, ProtocolVersionsHelper.MCPE);
 			registerRemapEntry(33, 1, ProtocolVersionsHelper.MCPE);
@@ -119,14 +100,8 @@ public class IdRemapper {
 			registerRemapEntry(34, 1, ProtocolVersionsHelper.MCPE);
 			// dispenser -> stone
 			registerRemapEntry(23, 1, ProtocolVersionsHelper.MCPE);
-			// note block -> wood
-			registerRemapEntry(25, 5, ProtocolVersionsHelper.MCPE);
-			// detector rail -> powered rail
-			registerRemapEntry(28, 27, ProtocolVersionsHelper.MCPE);
-			// lever -> sign (well, I don't know a better replacer for this)
-			registerRemapEntry(69, 63, ProtocolVersionsHelper.MCPE);
-			// jukebox -> wood
-			registerRemapEntry(84, 5, ProtocolVersionsHelper.MCPE);
+			// jukebox -> noteblock
+			registerRemapEntry(84, 25, ProtocolVersionsHelper.MCPE);
 			// repeater (on/off) -> carpet
 			registerRemapEntry(93, 171, ProtocolVersionsHelper.MCPE);
 			registerRemapEntry(94, 171, ProtocolVersionsHelper.MCPE);
@@ -136,38 +111,23 @@ public class IdRemapper {
 			registerRemapEntry(119, 90, ProtocolVersionsHelper.MCPE);
 			// dragon egg -> stone
 			registerRemapEntry(122, 1, ProtocolVersionsHelper.MCPE);
-			// redstone lamp (on/off) to glowstone
-			registerRemapEntry(124, 89, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(123, 89, ProtocolVersionsHelper.MCPE);
 			// double oak slab -> double oak slab (MCPE ID remap)
 			registerRemapEntry(125, 157, ProtocolVersionsHelper.MCPE);
 			// enderchest -> chest
 			registerRemapEntry(130, 54, ProtocolVersionsHelper.MCPE);
-			// tripwire hook -> sign
-			registerRemapEntry(131, 63, ProtocolVersionsHelper.MCPE);
-			// tripwire -> air (Because tripwire is a passable block, and there is no replacement for it in MCPE)
-			registerRemapEntry(132, 0, ProtocolVersionsHelper.MCPE);
 			// command block -> stone
 			registerRemapEntry(137, 1, ProtocolVersionsHelper.MCPE);
 			// beacon -> nether reactor core
 			registerRemapEntry(138, 247, ProtocolVersionsHelper.MCPE);
-			// trapped chest -> chest
-			registerRemapEntry(146, 54, ProtocolVersionsHelper.MCPE);
 			// comparator (on/off) -> carpet
 			registerRemapEntry(149, 171, ProtocolVersionsHelper.MCPE);
 			registerRemapEntry(150, 171, ProtocolVersionsHelper.MCPE);
-			// daylight sensor -> slab
-			registerRemapEntry(151, 158, ProtocolVersionsHelper.MCPE);
 			// hopper -> stone
 			registerRemapEntry(154, 1, ProtocolVersionsHelper.MCPE);
 			// slime block -> stone
 			registerRemapEntry(165, 1, ProtocolVersionsHelper.MCPE);
 			// barrier -> invisible bedrock
 			registerRemapEntry(166, 95, ProtocolVersionsHelper.MCPE);
-			// iron trapdoor -> trapdoor
-			registerRemapEntry(167, 96, ProtocolVersionsHelper.MCPE);
-			// inverted daylight sensor -> slab
-			registerRemapEntry(178, 158, ProtocolVersionsHelper.MCPE);
 			// red sandstone -> sandstone
 			registerRemapEntry(179, 24, ProtocolVersionsHelper.MCPE);
 			// red sandstone stairs -> sandstone stairs
