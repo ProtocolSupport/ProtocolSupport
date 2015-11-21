@@ -44,6 +44,8 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PongPac
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.RemoveEntityPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.RemovePlayerPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.RespawnPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetAttributesPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetAttributesPacket.AttributeRecord;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetBlocksPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetDifficultyPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetEntityEffect;
@@ -167,8 +169,15 @@ public class ClientboundPacketHandler {
 				}
 				case ClientboundPacket.PLAY_UPDATE_HEALTH_ID: {
 					float health = packetdata.readFloat();
+					int food = packetdata.readVarInt();
+					float saturation = packetdata.readFloat();
 					ArrayList<ClientboundPEPacket> packets = new ArrayList<ClientboundPEPacket>();
 					packets.add(new SetHealthPacket((int) health));
+					packets.add(new SetAttributesPacket(
+						storage.getWatchedSelfPlayer().getId(),
+						new AttributeRecord("player.saturation", 0.0F, 5.0F, saturation),
+						new AttributeRecord("player.hunger", 0.0F, 20.0F, food)
+					));
 					if (health <= 0.0F) {
 						Location location = Utils.getPlayer(networkManager).getBukkitEntity().getWorld().getSpawnLocation();
 						packets.add(new RespawnPacket((float) location.getX(), (float) location.getY(), (float) location.getZ()));
@@ -615,6 +624,15 @@ public class ClientboundPacketHandler {
 					int entityId = packetdata.readVarInt();
 					int effectId = packetdata.readByte();
 					return Collections.singletonList(new SetEntityEffect(entityId, effectId));
+				}
+				case ClientboundPacket.PLAY_EXPERIENCE_ID: {
+					float exp = packetdata.readFloat();
+					int level = packetdata.readVarInt();
+					return Collections.singletonList(new SetAttributesPacket(
+						storage.getWatchedSelfPlayer().getId(),
+						new AttributeRecord("player.experience", 0.0F, 1.0F, exp),
+						new AttributeRecord("player.level", 0.0F, Float.MAX_VALUE, level)
+					));
 				}
 				default: {
 					return Collections.emptyList();
