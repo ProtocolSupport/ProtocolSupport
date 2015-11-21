@@ -1,21 +1,28 @@
 package protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound;
 
+import java.util.ArrayList;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
+
 import net.minecraft.server.v1_8_R3.Block;
 import net.minecraft.server.v1_8_R3.Chunk;
 import net.minecraft.server.v1_8_R3.ChunkSection;
 import net.minecraft.server.v1_8_R3.IBlockData;
+import net.minecraft.server.v1_8_R3.NBTTagCompound;
+
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
+import protocolsupport.protocol.transformer.mcpe.utils.TileEntityUtils;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.RemappingTable;
 import protocolsupport.utils.MutableBlockPosition;
 
 public class ChunkPacket implements ClientboundPEPacket {
+
 	private static final RemappingTable blockRemapper = IdRemapper.BLOCK.getTable(ProtocolVersion.MINECRAFT_PE);
+
 	protected Chunk chunk;
 
 	public ChunkPacket(Chunk chunk) {
@@ -33,14 +40,20 @@ public class ChunkPacket implements ClientboundPEPacket {
 		buf.writeInt(chunk.locZ);
 		buf.writeByte(0); //type, 0 - columns, 1 - layers
 
-		ByteBuf temp = Unpooled.buffer(90000);
+		PacketDataSerializer temp = new PacketDataSerializer(Unpooled.buffer(100000), ProtocolVersion.MINECRAFT_PE);
+
+		ArrayList<NBTTagCompound> tileEntitiesInitData = new ArrayList<NBTTagCompound>();
 
 		MutableBlockPosition pos = new MutableBlockPosition(0, 0, 0);
 
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
 				for (int y = 0; y < 128; y++) {
-					temp.writeByte(blockRemapper.getRemap(Block.getId(getType(x, y, z, pos).getBlock())));
+					int blockId = Block.getId(getType(x, y, z, pos).getBlock());
+					if (TileEntityUtils.isTileEntity(blockId)) {
+						tileEntitiesInitData.add(TileEntityUtils.getInitTileEntityTag((chunk.locX << 4) + x, y, (chunk.locZ << 4) + z, blockId));
+					}
+					temp.writeByte(blockRemapper.getRemap(blockId));
 				}
 			}
 		}
@@ -88,7 +101,11 @@ public class ChunkPacket implements ClientboundPEPacket {
 			temp.writeByte((byte) 0x4A);
 		}
 
-		temp.writeInt(ByteBufUtil.swapInt(0));
+		temp.writeInt(0);
+
+		for (NBTTagCompound tag : tileEntitiesInitData) {
+			temp.writeBytes(TileEntityUtils.toNoLengthPrefixBuf(tag));
+		}
 
 		buf.writeInt(temp.readableBytes());
 		buf.writeBytes(temp);

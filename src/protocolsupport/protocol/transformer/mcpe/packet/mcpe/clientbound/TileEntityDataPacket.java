@@ -4,10 +4,9 @@ import io.netty.buffer.ByteBuf;
 
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 
-import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
+import protocolsupport.protocol.transformer.mcpe.utils.TileEntityUtils;
 
 public class TileEntityDataPacket implements ClientboundPEPacket {
 
@@ -30,11 +29,10 @@ public class TileEntityDataPacket implements ClientboundPEPacket {
 
 	@Override
 	public ClientboundPEPacket encode(ByteBuf buf) throws Exception {
-		PacketDataSerializer serializer = new PacketDataSerializer(buf, ProtocolVersion.MINECRAFT_PE);
-		serializer.writeInt(x);
-		serializer.writeInt(y);
-		serializer.writeInt(z);
-		serializer.a(tag);
+		buf.writeInt(x);
+		buf.writeInt(y);
+		buf.writeInt(z);
+		buf.writeBytes(TileEntityUtils.toNoLengthPrefixBuf(tag));
 		return this;
 	}
 

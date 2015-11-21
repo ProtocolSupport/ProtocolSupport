@@ -433,7 +433,7 @@ public class ClientboundPacketHandler {
 				case ClientboundPacket.PLAY_CHUNK_MULTI_ID: {
 					packetdata.readBoolean();
 					World world = Utils.getPlayer(networkManager).getWorld();
-					ArrayList<ChunkPacket> packets = new ArrayList<ChunkPacket>();
+					ArrayList<ClientboundPEPacket> packets = new ArrayList<ClientboundPEPacket>();
 					int count = packetdata.readVarInt();
 					for (int i = 0; i < count; i++) {
 						int x = packetdata.readInt();
@@ -442,6 +442,7 @@ public class ClientboundPacketHandler {
 						Chunk chunk = world.getChunkIfLoaded(x, z);
 						if (chunk != null) {
 							loadedChunkCount++;
+							//TODO: make chunk packets extract data from sent array
 							packets.add(new ChunkPacket(chunk));
 						}
 					}
@@ -589,15 +590,18 @@ public class ClientboundPacketHandler {
 						return Collections.emptyList();
 					}
 				}
-				/*case ClientboundPacket.PLAY_UPDATE_SIGN_ID: {
+				case ClientboundPacket.PLAY_UPDATE_SIGN_ID: {
 					BlockPosition position = packetdata.c();
 					NBTTagCompound compound = new NBTTagCompound();
 					compound.setString("id", "Sign");
+					compound.setInt("x", position.getX());
+					compound.setInt("y", position.getX());
+					compound.setInt("z", position.getX());
 					for (int i = 1; i <= 4; i++) {
 						compound.setString("Text"+i, LegacyUtils.fromComponent(packetdata.d()));
 					}
 					return Collections.singletonList(new TileEntityDataPacket(position.getX(), position.getY(), position.getZ(), compound));
-				}*/
+				}
 				default: {
 					return Collections.emptyList();
 				}

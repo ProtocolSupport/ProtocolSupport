@@ -11,6 +11,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.ContainerSetSl
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.MovePlayerPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.EntityEquipmentArmorPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.SetHealthPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.AddExpOrbPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.ClientConnectPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.ClientDisconnectPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.ClientHandshakePacket;
@@ -46,6 +47,7 @@ public class PEPacketRegistry {
 		register(ContainerSetSlotPacket.class);
 		register(DropItemPacket.class);
 		register(UseEntityPacket.class);
+		register(AddExpOrbPacket.class);
 	}
 
 	public static ServerboundPEPacket getPacket(int id) {
