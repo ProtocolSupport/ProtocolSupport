@@ -251,14 +251,13 @@ public class IdRemapper {
 			registerRemapEntry(EntityType.OCELOT.getTypeId(), 22, ProtocolVersion.MINECRAFT_PE);
 			registerRemapEntry(EntityType.IRON_GOLEM.getTypeId(), 20, ProtocolVersion.MINECRAFT_PE);
 			registerRemapEntry(EntityType.VILLAGER.getTypeId(), 15, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(EntityType.RABBIT.getTypeId(), 18, ProtocolVersion.MINECRAFT_PE);
 			// witch -> skeleton
 			registerRemapEntry(EntityType.WITCH.getTypeId(), 34, ProtocolVersion.MINECRAFT_PE);
 			// endermite -> silverfish
 			registerRemapEntry(EntityType.ENDERMITE.getTypeId(), 39, ProtocolVersion.MINECRAFT_PE);
 			// guardian -> sqiud
 			registerRemapEntry(EntityType.GUARDIAN.getTypeId(), 17, ProtocolVersion.MINECRAFT_PE);
-			// rabbit -> chicken
-			registerRemapEntry(EntityType.RABBIT.getTypeId(), 10, ProtocolVersion.MINECRAFT_PE);
 			// horse -> cow
 			registerRemapEntry(EntityType.HORSE.getTypeId(), 11, ProtocolVersion.MINECRAFT_PE);
 
