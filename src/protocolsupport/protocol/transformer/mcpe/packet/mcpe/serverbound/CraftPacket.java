@@ -66,15 +66,13 @@ public class CraftPacket implements ServerboundPEPacket {
 					ContainerPlayer containerPlayer = ((ContainerPlayer) active);
 					InventoryCrafting craftingInv = containerPlayer.craftInventory;
 					boolean hasItems = findAndMove(trim(ingredients), player.inventory, craftingInv);
-					if (hasItems) {
-						ItemStack result = containerPlayer.resultInventory.getItem(0);
-						if (result != null) {
-							moveItemStack(player, result);
-							clearCrafting(containerPlayer);
-						} else {
-							moveAll(craftingInv, player.inventory);
-						}
+					ItemStack result = containerPlayer.resultInventory.getItem(0);
+					if (hasItems && result != null) {
+						add(player, result);
+					} else {
+						addAll(player, craftingInv.getContents());
 					}
+					clearCrafting(containerPlayer);
 				}
 				player.updateInventory(player.activeContainer);
 			}
@@ -129,10 +127,19 @@ public class CraftPacket implements ServerboundPEPacket {
 		return (ingr.getData() == -1) || (ingr.getData() == itemstack.getData());
 	}
 
-	protected static void moveItemStack(EntityPlayer player, ItemStack result) {
-		HashMap<Integer, org.bukkit.inventory.ItemStack> left = player.getBukkitEntity().getInventory().addItem(CraftItemStack.asCraftMirror(result));
+	protected static void add(EntityPlayer player, ItemStack itemstack) {
+		if (itemstack == null) {
+			return;
+		}
+		HashMap<Integer, org.bukkit.inventory.ItemStack> left = player.getBukkitEntity().getInventory().addItem(CraftItemStack.asCraftMirror(itemstack));
 		for (org.bukkit.inventory.ItemStack bitemstack : left.values()) {
 			player.getBukkitEntity().getWorld().dropItem(player.getBukkitEntity().getLocation(), bitemstack);
+		}
+	}
+
+	protected void addAll(EntityPlayer player, ItemStack[] itemstacks) {
+		for (ItemStack itemstack : itemstacks) {
+			add(player, itemstack);
 		}
 	}
 
@@ -142,10 +149,6 @@ public class CraftPacket implements ServerboundPEPacket {
 			crafting.setItem(i, null);
 		}
 		containerPlayer.resultInventory.setItem(0, null);
-	}
-
-	protected void moveAll(InventoryCrafting from, PlayerInventory to) {
-		
 	}
 
 	protected static ItemStack takeAmount(ItemStack itemstack, int amount) {
