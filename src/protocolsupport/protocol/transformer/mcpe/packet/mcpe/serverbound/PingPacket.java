@@ -41,7 +41,7 @@ public class PingPacket implements ServerboundPEPacket {
 	public List<? extends Packet<?>> transfrom() throws Exception {
 		return Collections.singletonList(new HandleNMSPacket<PacketListener>() {
 			@Override
-			public void handle(PacketListener listener) {
+			public void handle0(PacketListener listener) {
 				if (listener instanceof PELoginListener) {
 					((PELoginListener) listener).handleKeepALive(PingPacket.this);
 				} else if (listener instanceof PlayerConnection) {

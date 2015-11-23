@@ -60,7 +60,7 @@ public class UseItemPacket implements ServerboundPEPacket {
 		if (slot != -1) {
 			packets.add(new SynchronizedHandleNMSPacket<PlayerConnection>() {
 				@Override
-				public void handle(PlayerConnection listener) {
+				public void handle0(PlayerConnection listener) {
 					((PEPlayerInventory) listener.player.inventory).setSelectedSlot(slot);
 				}
 			});

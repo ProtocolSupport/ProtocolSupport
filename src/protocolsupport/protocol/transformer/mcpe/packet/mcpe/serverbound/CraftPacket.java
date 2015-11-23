@@ -59,7 +59,7 @@ public class CraftPacket implements ServerboundPEPacket {
 	public List<? extends Packet<?>> transfrom() throws Exception {
 		return Collections.singletonList(new SynchronizedHandleNMSPacket<PlayerConnection>() {
 			@Override
-			public void handle(PlayerConnection listener) {
+			public void handle0(PlayerConnection listener) {
 				EntityPlayer player = listener.player;
 				Container active = player.activeContainer;
 				if (active instanceof ContainerPlayer) {

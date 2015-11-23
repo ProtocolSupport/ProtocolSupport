@@ -28,7 +28,7 @@ public class ClientDisconnectPacket implements ServerboundPEPacket {
 	public List<? extends Packet<?>> transfrom() throws Exception {
 		return Collections.singletonList(new SynchronizedHandleNMSPacket<PacketListener>() {
 			@Override
-			public void handle(PacketListener listener) {
+			public void handle0(PacketListener listener) {
 				listener.a(new ChatComponentText("Disconnected"));
 			}
 		});

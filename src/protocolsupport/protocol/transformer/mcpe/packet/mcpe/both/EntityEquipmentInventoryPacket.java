@@ -60,7 +60,7 @@ public class EntityEquipmentInventoryPacket implements DualPEPacket {
 	public List<? extends Packet<?>> transfrom() throws Exception {
 		return Collections.singletonList(new SynchronizedHandleNMSPacket<PlayerConnection>() {
 			@Override
-			public void handle(PlayerConnection listener) {
+			public void handle0(PlayerConnection listener) {
 				int realSlot = -1;
 				if (invSlot >= 9 && invSlot <= 35) {
 					realSlot = invSlot;

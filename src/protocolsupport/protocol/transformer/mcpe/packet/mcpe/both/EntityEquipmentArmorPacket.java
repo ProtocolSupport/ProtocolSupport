@@ -62,7 +62,7 @@ public class EntityEquipmentArmorPacket implements DualPEPacket {
 	public List<? extends Packet<?>> transfrom() throws Exception {
 		return Collections.singletonList(new SynchronizedHandleNMSPacket<PlayerConnection>() {
 			@Override
-			public void handle(PlayerConnection listener) {
+			public void handle0(PlayerConnection listener) {
 				PlayerInventory inventory = listener.player.inventory;
 				try {
 					ItemStack[] realArmorArr = inventory.armor;

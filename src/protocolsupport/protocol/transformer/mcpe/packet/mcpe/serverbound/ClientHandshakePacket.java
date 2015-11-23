@@ -33,7 +33,7 @@ public class ClientHandshakePacket implements ServerboundPEPacket {
 	public List<? extends Packet<?>> transfrom() {
 		return Collections.singletonList(new HandleNMSPacket<PELoginListener>() {
 			@Override
-			public void handle(PELoginListener listener) {
+			public void handle0(PELoginListener listener) {
 				listener.handleHandshake();
 			}
 		});
