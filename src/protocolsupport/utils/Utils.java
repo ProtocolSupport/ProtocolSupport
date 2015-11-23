@@ -3,6 +3,8 @@ package protocolsupport.utils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -16,6 +18,7 @@ import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.NetworkManager;
 import net.minecraft.server.v1_8_R3.PlayerConnection;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import protocolsupport.protocol.core.ChannelHandlers;
@@ -36,6 +39,30 @@ public class Utils {
 		setAccessible(Field.class.getDeclaredField("root")).set(field, null);
 		setAccessible(Field.class.getDeclaredField("overrideFieldAccessor")).set(field, null);
 		setAccessible(field).set(null, newValue);
+	}
+
+	public static MethodHandle getFieldSetter(Class<?> classIn, String fieldName) {
+		try {
+			return MethodHandles
+					.lookup()
+					.unreflectSetter(setAccessible(classIn.getDeclaredField(fieldName)));
+		} catch (Throwable t) {
+			t.printStackTrace();
+			Bukkit.shutdown();
+		}
+		return null;
+	}
+
+	public static MethodHandle getFieldGetter(Class<?> classIn, String fieldName) {
+		try {
+			return MethodHandles
+					.lookup()
+					.unreflectGetter(setAccessible(classIn.getDeclaredField(fieldName)));
+		} catch (Throwable t) {
+			t.printStackTrace();
+			Bukkit.shutdown();
+		}
+		return null;
 	}
 
 	public static Player getBukkitPlayer(Channel channel) {
