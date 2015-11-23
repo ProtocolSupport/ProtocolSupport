@@ -124,6 +124,8 @@ public class IdRemapper {
 			registerRemapEntry(150, 171, ProtocolVersionsHelper.MCPE);
 			// hopper -> stone
 			registerRemapEntry(154, 1, ProtocolVersionsHelper.MCPE);
+			// activator rail -> carpet
+			registerRemapEntry(157, 171, ProtocolVersionsHelper.MCPE);
 			// slime block -> stone
 			registerRemapEntry(165, 1, ProtocolVersionsHelper.MCPE);
 			// barrier -> invisible bedrock
@@ -136,6 +138,12 @@ public class IdRemapper {
 			registerRemapEntry(181, 43, ProtocolVersionsHelper.MCPE);
 			// red sandstone slab -> step
 			registerRemapEntry(182, 44, ProtocolVersionsHelper.MCPE);
+			// fences -> fence
+			registerRemapEntry(188, 85, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(189, 85, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(190, 85, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(191, 85, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(192, 85, ProtocolVersionsHelper.MCPE);
 		}
 		@Override
 		protected RemappingTable createTable() {
@@ -178,16 +186,58 @@ public class IdRemapper {
 
 
 			// MCPE
+			// repeater -> carpet
+			registerRemapEntry(356, 171, ProtocolVersionsHelper.MCPE);
+			// map -> paper
+			registerRemapEntry(358, 339, ProtocolVersionsHelper.MCPE);
+			// empty map -> paper
+			registerRemapEntry(395, 339, ProtocolVersionsHelper.MCPE);
+			// cauldron -> stone
+			registerRemapEntry(380, 1, ProtocolVersionsHelper.MCPE);
+			// carrot stick -> stick
+			registerRemapEntry(398, 280, ProtocolVersionsHelper.MCPE);
+			// nether star -> stone
+			registerRemapEntry(399, 1, ProtocolVersionsHelper.MCPE);
 			// banner -> sign
 			registerRemapEntry(425, 323, ProtocolVersionsHelper.MCPE);
 			// raw mutton -> chicken raw meat
 			registerRemapEntry(423, 365, ProtocolVersionsHelper.MCPE);
 			// cooked mutton -> chicken cooked meat
 			registerRemapEntry(424, 366, ProtocolVersionsHelper.MCPE);
-			// nametag -> stone
-			registerRemapEntry(421, 1, ProtocolVersionsHelper.MCPE);	
-			// lead -> stone
+			// ender pearl -> snowball
+			registerRemapEntry(368, 332, ProtocolVersionsHelper.MCPE);
+			// eye of ender -> snowball
+			registerRemapEntry(381, 332, ProtocolVersionsHelper.MCPE);
+			// item frame -> stone
+			registerRemapEntry(389, 1, ProtocolVersionsHelper.MCPE);
+			// firework -> stone
+			registerRemapEntry(401, 1, ProtocolVersionsHelper.MCPE);
+			// firework charge -> stone
+			registerRemapEntry(402, 1, ProtocolVersionsHelper.MCPE);
+			// redstone comparator -> carpet
+			registerRemapEntry(404, 171, ProtocolVersionsHelper.MCPE);
+			// minecarts -> minecart
+			registerRemapEntry(407, 328, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(408, 328, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(422, 328, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(342, 328, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(343, 328, ProtocolVersionsHelper.MCPE);
+			// buckets -> stone
+			registerRemapEntry(325, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(326, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(327, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(335, 1, ProtocolVersionsHelper.MCPE);
+			// everything else -> stone
+			registerRemapEntry(409, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(410, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(414, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(415, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(416, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(417, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(418, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(419, 1, ProtocolVersionsHelper.MCPE);
 			registerRemapEntry(420, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(421, 1, ProtocolVersionsHelper.MCPE);
 
 			// all discs -> stone
 			registerRemapEntry(2256, 1, ProtocolVersionsHelper.MCPE);

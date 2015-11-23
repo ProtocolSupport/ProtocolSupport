@@ -15,6 +15,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.AddExpO
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.ClientConnectPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.ClientDisconnectPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.ClientHandshakePacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.CraftPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.DropItemPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.LoginPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.PingPacket;
@@ -47,6 +48,7 @@ public class PEPacketRegistry {
 		register(ContainerSetSlotPacket.class);
 		register(DropItemPacket.class);
 		register(UseEntityPacket.class);
+		register(CraftPacket.class);
 		register(AddExpOrbPacket.class);
 	}
 

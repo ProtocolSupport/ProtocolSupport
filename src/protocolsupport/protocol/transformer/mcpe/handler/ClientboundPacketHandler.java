@@ -50,6 +50,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetAttr
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetBlocksPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetDifficultyPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetEntityEffect;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetRecipesPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetTimePacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetBlocksPacket.UpdateBlockRecord;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetSpawnPosition;
@@ -159,7 +160,8 @@ public class ClientboundPacketHandler {
 						),
 						new SetSpawnPosition(bukkitplayer.getLocation()),
 						new SetDifficultyPacket(bukkitplayer.getWorld().getDifficulty().ordinal()),
-						new AdventureSettingsPacket(bukkitplayer.getGameMode() == GameMode.CREATIVE)
+						new AdventureSettingsPacket(bukkitplayer.getGameMode() == GameMode.CREATIVE),
+						new SetRecipesPacket()
 					);
 				}
 				case ClientboundPacket.PLAY_CHAT_ID: {
@@ -177,6 +179,7 @@ public class ClientboundPacketHandler {
 					packets.add(new SetHealthPacket((int) health));
 					packets.add(new SetAttributesPacket(
 						storage.getWatchedSelfPlayer().getId(),
+						new AttributeRecord("generic.health", 0.0F, 20.0F, Math.min(20.0F, health)),
 						new AttributeRecord("player.saturation", 0.0F, 5.0F, saturation),
 						new AttributeRecord("player.hunger", 0.0F, 20.0F, food)
 					));
