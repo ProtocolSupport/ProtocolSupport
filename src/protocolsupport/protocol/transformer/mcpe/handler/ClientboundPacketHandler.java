@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -122,7 +121,7 @@ public class ClientboundPacketHandler {
 		this.networkManager = networkManager;
 	}
 
-	private static final long initialChunkCount = Bukkit.getViewDistance() * Bukkit.getViewDistance() * 4;
+	private static final long initialChunkCount = 21;
 
 	private int loadedChunkCount;
 	private boolean spawned;

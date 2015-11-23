@@ -5,7 +5,6 @@ import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 
-//only reliability level 0 for sending is supported
 public class EncapsulatedPacket {
 
 	public int reliability;
@@ -26,11 +25,41 @@ public class EncapsulatedPacket {
 	}
 
 	public EncapsulatedPacket(ByteBuf data) {
+		this.reliability = 0;
 		this.data.writeBytes(data);
 	}
 
 	public EncapsulatedPacket(ByteBuf data, int splitID, int splitCount, int splitIndex) {
 		this(data);
+		this.hasSplit = true;
+		this.splitID = splitID;
+		this.splitCount = splitCount;
+		this.splitIndex = splitIndex;
+	}
+
+	public EncapsulatedPacket(ByteBuf data, int messageIndex) {
+		this.reliability = 2;
+		this.data.writeBytes(data);
+		this.messageIndex = messageIndex;
+	}
+
+	public EncapsulatedPacket(ByteBuf data, int messageIndex, int splitID, int splitCount, int splitIndex) {
+		this(data, messageIndex);
+		this.hasSplit = true;
+		this.splitID = splitID;
+		this.splitCount = splitCount;
+		this.splitIndex = splitIndex;
+	}
+
+	public EncapsulatedPacket(ByteBuf data, int messageIndex, int orderIndex) {
+		this.reliability = 3;
+		this.data.writeBytes(data);
+		this.messageIndex = messageIndex;
+		this.orderIndex = orderIndex;
+	}
+
+	public EncapsulatedPacket(ByteBuf data, int messageIndex, int orderIndex, int splitID, int splitCount, int splitIndex) {
+		this(data, messageIndex, orderIndex);
 		this.hasSplit = true;
 		this.splitID = splitID;
 		this.splitCount = splitCount;
@@ -67,24 +96,34 @@ public class EncapsulatedPacket {
 	}
 
 	public void encode(ByteBuf buf) {
-		PacketDataSerializer serializer = new PacketDataSerializer(buf, ProtocolVersion.MINECRAFT_PE);
+		data.readerIndex(0);
 
 		byte flag = 0;
 		flag = (byte) (flag | reliability << 5);
 		if (hasSplit) {
 			flag = (byte) ((flag & 0xFF) | 0x10);
 		}
-		serializer.writeByte(flag);
+		buf.writeByte(flag);
 
-		serializer.writeShort((data.readableBytes() << 3) & 0xFFFF);
+		buf.writeShort((data.readableBytes() << 3) & 0xFFFF);
 
-		if (hasSplit) {
-			serializer.writeInt(splitCount);
-			serializer.writeShort(splitID & 0xFFFF);
-			serializer.writeInt(splitIndex);
+		if (reliability > 0) {
+			if (reliability >= 2 && reliability != 5) {
+				RakNetDataSerializer.writeTriad(buf, messageIndex);
+			}
+			if (reliability <= 4 && reliability != 2) {
+				RakNetDataSerializer.writeTriad(buf, orderIndex);
+				buf.writeByte(orderChannel);
+			}
 		}
 
-		serializer.writeBytes(data);
+		if (hasSplit) {
+			buf.writeInt(splitCount);
+			buf.writeShort(splitID & 0xFFFF);
+			buf.writeInt(splitIndex);
+		}
+
+		buf.writeBytes(data);
 	}
 
 }
