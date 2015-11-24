@@ -9,8 +9,10 @@ import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
 
+import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.Container;
 import net.minecraft.server.v1_8_R3.ContainerPlayer;
+import net.minecraft.server.v1_8_R3.ContainerWorkbench;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.IInventory;
 import net.minecraft.server.v1_8_R3.InventoryCrafting;
@@ -18,6 +20,7 @@ import net.minecraft.server.v1_8_R3.ItemStack;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PlayerConnection;
 import net.minecraft.server.v1_8_R3.PlayerInventory;
+import net.minecraft.server.v1_8_R3.BlockWorkbench.TileEntityContainerWorkbench;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
@@ -62,21 +65,51 @@ public class CraftPacket implements ServerboundPEPacket {
 			public void handle0(PlayerConnection listener) {
 				EntityPlayer player = listener.player;
 				Container active = player.activeContainer;
-				if (active instanceof ContainerPlayer) {
+				ItemStack[] ingrs = null;
+				InventoryCrafting craftingInv = null;
+				IInventory resultInventory = null;
+				if (type == 0) {
+					if (!(active instanceof ContainerPlayer)) {
+						player.closeInventory();
+					}
+					active = player.activeContainer;
 					ContainerPlayer containerPlayer = ((ContainerPlayer) active);
-					InventoryCrafting craftingInv = containerPlayer.craftInventory;
-					boolean hasItems = findAndMove(trim(ingredients), player.inventory, craftingInv);
-					ItemStack result = containerPlayer.resultInventory.getItem(0);
+					ingrs = trim(ingredients);
+					craftingInv = containerPlayer.craftInventory;
+					resultInventory = containerPlayer.resultInventory;
+				}
+				if (type == 2) {
+					//player never actually opens workbench, so we have to assign him a temporary one (and we don't have any way to check if player really used ine)
+					createWorkbench(player);
+					active = player.activeContainer;
+					//check just in case opening inventory failed due to cancelled event
+					if (active instanceof ContainerWorkbench) {
+						ContainerWorkbench containerWorkbench = ((ContainerWorkbench) active);
+						ingrs = ingredients;
+						craftingInv = containerWorkbench.craftInventory;
+						resultInventory = containerWorkbench.resultInventory;
+					}
+				}
+				if (craftingInv != null && resultInventory != null && ingrs != null) {
+					boolean hasItems = findAndMove(ingrs, player.inventory, craftingInv);
+					ItemStack result = resultInventory.getItem(0);
 					if (hasItems && result != null) {
 						add(player, result);
 					} else {
 						addAll(player, craftingInv.getContents());
 					}
-					clearCrafting(containerPlayer);
+					clearCrafting(craftingInv, resultInventory);
 				}
-				player.updateInventory(player.activeContainer);
+				player.closeInventory();
+				player.updateInventory(player.defaultContainer);
 			}
 		});
+	}
+
+	protected static void createWorkbench(EntityPlayer player) {
+		TileEntityContainerWorkbench workbench = new TileEntityContainerWorkbench(player.world, BlockPosition.ZERO);
+		player.openTileEntity(workbench);
+		player.activeContainer.checkReachable = false;
 	}
 
 	protected static ItemStack[] trim(ItemStack[] ingrs) {
@@ -143,12 +176,11 @@ public class CraftPacket implements ServerboundPEPacket {
 		}
 	}
 
-	protected static void clearCrafting(ContainerPlayer containerPlayer) {
-		IInventory crafting = containerPlayer.craftInventory;
-		for (int i = 0; i < crafting.getSize(); i++) {
-			crafting.setItem(i, null);
+	protected static void clearCrafting(InventoryCrafting craftingInv, IInventory resultInv) {
+		for (int i = 0; i < craftingInv.getSize(); i++) {
+			craftingInv.setItem(i, null);
 		}
-		containerPlayer.resultInventory.setItem(0, null);
+		resultInv.setItem(0, null);
 	}
 
 	protected static ItemStack takeAmount(ItemStack itemstack, int amount) {
