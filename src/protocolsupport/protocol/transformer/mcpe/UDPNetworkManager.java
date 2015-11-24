@@ -68,6 +68,12 @@ public class UDPNetworkManager extends NetworkManager {
 		preparing = false;
 	}
 
+	private volatile State state = State.NONE;
+
+	private static enum State {
+		NONE, CONNECTING, CONNECTED, INFO
+	}
+
 	@Override
 	public void a() {
 		if (System.currentTimeMillis() - lastSentPacket > 30000) {
@@ -130,12 +136,6 @@ public class UDPNetworkManager extends NetworkManager {
 		}
 	}
 
-	private State state = State.NONE;
-
-	private static enum State {
-		NONE, CONNECTING, CONNECTED, INFO
-	}
-
 	@SuppressWarnings("rawtypes")
 	public void handleUDP(RakNetPacket raknetpacket) {
 		if (!channel.isOpen()) {
@@ -159,7 +159,7 @@ public class UDPNetworkManager extends NetworkManager {
 						break;
 					}
 					state = State.CONNECTING;
-					sendRakNetPacket0(new Connection1Reply(getClientAddress(), ((raknetpacket.getData().readableBytes() + raknetpacket.getData().readerIndex() - 18) & 0xFFFF)));
+					sendRakNetPacket0(new Connection1Reply(getClientAddress(), ((raknetpacket.getData().readableBytes() - 20) & 0xFFFF)));
 					break;
 				}
 				case RakNetConstants.ID_OPEN_CONNECTION_REQUEST_2: {
@@ -223,6 +223,9 @@ public class UDPNetworkManager extends NetworkManager {
 	}
 
 	public void sendPEPacket(ClientboundPEPacket pepacket) throws Exception {
+		if (mtu == 0) {
+			return;
+		}
 		ByteBuf buf = Unpooled.buffer();
 		buf.writeByte(pepacket.getId());
 		pepacket.encode(buf);
@@ -230,13 +233,13 @@ public class UDPNetworkManager extends NetworkManager {
 			sendPEPacket(new BatchPacket(pepacket));
 			return;
 		}
-		int maxsize = mtu - 40;
+		int splitSize = mtu - 200;
 		int orderIndex = getNextOrderIndex();
-		if (buf.readableBytes() > mtu + 40) {
-			EncapsulatedPacket[] epackets = new EncapsulatedPacket[(buf.readableBytes() / maxsize) + 1];
+		if (buf.readableBytes() > mtu - 100) {
+			EncapsulatedPacket[] epackets = new EncapsulatedPacket[(buf.readableBytes() / splitSize) + 1];
 			int splitID = getNextSplitID();
 			for (int splitIndex = 0; splitIndex < epackets.length; splitIndex++) {
-				epackets[splitIndex] = new EncapsulatedPacket(buf.readBytes(buf.readableBytes() < maxsize ? buf.readableBytes() : maxsize), getNextMessageIndex(), orderIndex, splitID, epackets.length, splitIndex);
+				epackets[splitIndex] = new EncapsulatedPacket(buf.readBytes(buf.readableBytes() < splitSize ? buf.readableBytes() : splitSize), getNextMessageIndex(), orderIndex, splitID, epackets.length, splitIndex);
 			}
 			sendEncapsulatedPackets(epackets);
 		} else {
