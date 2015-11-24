@@ -1,17 +1,11 @@
 ProtocolSupport
 ===============
 
-Support 1.7, 1.6, 1.5.2 on spigot
-
-Known issues:
-* [1.5.2, 1.6] Stats are not sent - won't be fixed, no point in it anyway
-* [1.5.2] Can't control vehicle - won't be fixed, probably impossible to do this properly
+Experimental branch for MCPE support
 
 ================
 
-Spigot: http://www.spigotmc.org/resources/protocolsupport.7201/
-
-Jenkins: http://build.true-games.org/job/ProtocolSupport/
+Official testing server: mc.true-games.org:25566
 
 ================
 
