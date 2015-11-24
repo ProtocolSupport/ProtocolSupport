@@ -9,6 +9,8 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.ChatPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.EntityEquipmentInventoryPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.ContainerSetSlotPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.MovePlayerPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.PingPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.PongPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.EntityEquipmentArmorPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.SetHealthPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.AddExpOrbPacket;
@@ -18,7 +20,6 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.ClientH
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.CraftPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.DropItemPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.LoginPacket;
-import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.PingPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.PlayerActionPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.RemoveBlockPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.UseEntityPacket;
@@ -36,6 +37,7 @@ public class PEPacketRegistry {
 		register(ClientHandshakePacket.class);
 		register(LoginPacket.class);
 		register(PingPacket.class);
+		register(PongPacket.class);
 		register(ClientDisconnectPacket.class);
 		register(MovePlayerPacket.class);
 		register(UseItemPacket.class);

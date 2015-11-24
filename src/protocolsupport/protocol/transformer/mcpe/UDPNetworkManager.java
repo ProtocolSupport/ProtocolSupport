@@ -17,6 +17,7 @@ import protocolsupport.protocol.transformer.mcpe.handler.PELoginListener;
 import protocolsupport.protocol.transformer.mcpe.handler.ServerboundPacketHandler;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.BatchPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.PingPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.KickPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.LoginStatusPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.raknet.ACK;
@@ -74,6 +75,7 @@ public class UDPNetworkManager extends NetworkManager {
 			return;
 		}
 		try {
+			sendPEPacket(new PingPacket());
 			if (clientboundTransforner.canSpawnPlayer()) {
 				clientboundTransforner.setSpawned();
 				sendPEPacket(new LoginStatusPacket(LoginStatusPacket.Status.PLAYER_SPAWN));
