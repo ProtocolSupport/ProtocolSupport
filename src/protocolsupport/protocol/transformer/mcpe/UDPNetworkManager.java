@@ -232,7 +232,7 @@ public class UDPNetworkManager extends NetworkManager {
 		}
 		int maxsize = mtu - 40;
 		int orderIndex = getNextOrderIndex();
-		if (buf.readableBytes() > maxsize) {
+		if (buf.readableBytes() > mtu + 40) {
 			EncapsulatedPacket[] epackets = new EncapsulatedPacket[(buf.readableBytes() / maxsize) + 1];
 			int splitID = getNextSplitID();
 			for (int splitIndex = 0; splitIndex < epackets.length; splitIndex++) {
