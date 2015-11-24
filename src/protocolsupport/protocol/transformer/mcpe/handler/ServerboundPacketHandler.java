@@ -23,7 +23,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.raknet.RakNetPacket;
 
 public class ServerboundPacketHandler {
 
-	private UDPNetworkManager networkManager;
+	private final UDPNetworkManager networkManager;
 	public ServerboundPacketHandler(UDPNetworkManager networkManager) {
 		this.networkManager = networkManager;
 	}

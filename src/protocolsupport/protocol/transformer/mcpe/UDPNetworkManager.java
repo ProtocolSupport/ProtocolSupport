@@ -132,6 +132,10 @@ public class UDPNetworkManager extends NetworkManager {
 
 	private State state = State.NONE;
 
+	private static enum State {
+		NONE, CONNECTING, CONNECTED, INFO
+	}
+
 	@SuppressWarnings("rawtypes")
 	public void handleUDP(RakNetPacket raknetpacket) {
 		if (!channel.isOpen()) {
@@ -218,13 +222,6 @@ public class UDPNetworkManager extends NetworkManager {
 		}
 	}
 
-	private static enum State {
-		NONE,
-		CONNECTING,
-		CONNECTED,
-		INFO
-	}
-
 	public void sendPEPacket(ClientboundPEPacket pepacket) throws Exception {
 		ByteBuf buf = Unpooled.buffer();
 		buf.writeByte(pepacket.getId());
@@ -235,7 +232,7 @@ public class UDPNetworkManager extends NetworkManager {
 		}
 		int maxsize = mtu - 40;
 		int orderIndex = getNextOrderIndex();
-		if (buf.readableBytes() > mtu + 40) {
+		if (buf.readableBytes() > maxsize) {
 			EncapsulatedPacket[] epackets = new EncapsulatedPacket[(buf.readableBytes() / maxsize) + 1];
 			int splitID = getNextSplitID();
 			for (int splitIndex = 0; splitIndex < epackets.length; splitIndex++) {
