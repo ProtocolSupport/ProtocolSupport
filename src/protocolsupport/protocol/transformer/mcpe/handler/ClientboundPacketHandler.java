@@ -612,8 +612,8 @@ public class ClientboundPacketHandler {
 					NBTTagCompound compound = new NBTTagCompound();
 					compound.setString("id", "Sign");
 					compound.setInt("x", position.getX());
-					compound.setInt("y", position.getX());
-					compound.setInt("z", position.getX());
+					compound.setInt("y", position.getY());
+					compound.setInt("z", position.getZ());
 					for (int i = 1; i <= 4; i++) {
 						compound.setString("Text"+i, LegacyUtils.fromComponent(packetdata.d()));
 					}
