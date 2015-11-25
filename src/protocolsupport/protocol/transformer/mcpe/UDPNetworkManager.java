@@ -150,7 +150,9 @@ public class UDPNetworkManager extends NetworkManager {
 						break;
 					}
 					state = State.INFO;
-					sendRakNetPacket0(new ServerInfoPacket(getClientAddress(), buf.readLong()));
+					long pingId = buf.readLong();
+					buf.skipBytes(16);
+					sendRakNetPacket0(new ServerInfoPacket(getClientAddress(), pingId));
 					close(new ChatComponentText(""));
 					break;
 				}
