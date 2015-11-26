@@ -25,6 +25,7 @@ import protocolsupport.protocol.transformer.mcpe.UDPNetworkManager;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.AnimatePacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.ChatPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.ContainerClosePacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.ContainerSetSlotPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.EntityEquipmentArmorPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.EntityEquipmentInventoryPacket;
@@ -37,6 +38,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddPain
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AdventureSettingsPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AttachEntityPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ChunkPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ContainerOpenPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.MoveEntityPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PickupItemEffectPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PlayerListPacket;
@@ -59,6 +61,8 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.TileEnt
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ContainerSetContentsPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.EntityStatusPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.EntityVelocityPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.MethodCallPacket;
+import protocolsupport.protocol.transformer.mcpe.utils.InventoryUtils;
 import protocolsupport.protocol.transformer.mcpe.utils.PEWatchedPlayer;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
@@ -73,12 +77,14 @@ import protocolsupport.utils.DataWatcherObject;
 import protocolsupport.utils.DataWatcherSerializer;
 import protocolsupport.utils.Utils;
 
+import net.minecraft.server.v1_8_R3.Block;
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.Chunk;
 import net.minecraft.server.v1_8_R3.Entity;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.EnumProtocol;
 import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
+import net.minecraft.server.v1_8_R3.IBlockData;
 import net.minecraft.server.v1_8_R3.ItemStack;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.minecraft.server.v1_8_R3.Packet;
@@ -469,9 +475,8 @@ public class ClientboundPacketHandler {
 					int windowId = packetdata.readByte();
 					int slot = packetdata.readShort();
 					ItemStack itemstack = packetdata.readItemStack();
-					itemstack = PEPlayerInventory.addSlotNumberTag(itemstack, slot);
-					//TODO: other inventory types
 					if (windowId == 0) {
+						itemstack = PEPlayerInventory.addSlotNumberTag(itemstack, PEPlayerInventory.toInvSlot(slot, 45));
 						if (slot >= 9 && slot < 45) {
 							return Collections.singletonList(new ContainerSetSlotPacket(
 								PEPlayerInventory.PLAYER_INVENTORY_WID, slot - 9, slot - 36, itemstack
@@ -479,6 +484,8 @@ public class ClientboundPacketHandler {
 						} else if (slot >= 5 && slot < 9) {
 							return Collections.singletonList(new ContainerSetSlotPacket(PEPlayerInventory.PLAYER_ARMOR_WID, slot - 5, itemstack));
 						}
+					} else {
+						return Collections.singletonList(new ContainerSetSlotPacket(windowId, slot, 0, itemstack));
 					}
 					return Collections.emptyList();
 				}
@@ -487,9 +494,9 @@ public class ClientboundPacketHandler {
 					int windowId = packetdata.readByte();
 					ItemStack[] packetitems = new ItemStack[packetdata.readShort()];
 					for (int i = 0; i < packetitems.length; i++) {
-						packetitems[i] = PEPlayerInventory.addSlotNumberTag(packetdata.readItemStack(), i);
+						ItemStack itemstack = packetdata.readItemStack();
+						packetitems[i] = PEPlayerInventory.addSlotNumberTag(itemstack, PEPlayerInventory.toInvSlot(i, packetitems.length));
 					}
-					//TODO: other inventory types
 					if (windowId == 0) {
 						ArrayList<ContainerSetContentsPacket> packets = new ArrayList<ContainerSetContentsPacket>();
 						ItemStack[] inventory = new ItemStack[45];
@@ -499,8 +506,60 @@ public class ClientboundPacketHandler {
 						System.arraycopy(packetitems, 5, armor, 0, armor.length);
 						packets.add(new ContainerSetContentsPacket(PEPlayerInventory.PLAYER_ARMOR_WID, armor, ContainerSetContentsPacket.EMPTY_HOTBAR_SLOTS));
 						return packets;
+					} else {
+						ArrayList<ContainerSetContentsPacket> packets = new ArrayList<ContainerSetContentsPacket>();
+						ItemStack[] inventory = new ItemStack[45];
+						System.arraycopy(packetitems, packetitems.length - 36, inventory, 0, inventory.length - 9);
+						packets.add(new ContainerSetContentsPacket(PEPlayerInventory.PLAYER_INVENTORY_WID, inventory, ((PEPlayerInventory) player.inventory).getHotbarRefs()));
+						ItemStack[] contitems = new ItemStack[packetitems.length - 40];
+						System.arraycopy(packetitems, 0, contitems, 0, contitems.length);
+						packets.add(new ContainerSetContentsPacket(windowId, contitems, ContainerSetContentsPacket.EMPTY_HOTBAR_SLOTS));
+						return packets;
 					}
-					return Collections.emptyList();
+				}
+				case ClientboundPacket.PLAY_WINDOW_OPEN_ID: {
+					EntityPlayer player = Utils.getPlayer(networkManager);
+					int x = NumberConversions.floor(player.locX);
+					int z = NumberConversions.floor(player.locZ);
+					int windowId = packetdata.readByte();
+					int type = InventoryUtils.getType(packetdata.readString());
+					if (type != 1) {
+						packetdata.readString();
+						int slots = packetdata.readByte();
+						ArrayList<ClientboundPEPacket> packets = new ArrayList<>();
+						pestorage.setFakeInventoryBlock(new BlockPosition(x, 0, z));
+						packets.add(new SetBlocksPacket(new UpdateBlockRecord(x, 0, z, 54, 0, SetBlocksPacket.FLAG_ALL_PRIORITY)));
+						packets.add(new ContainerOpenPacket(windowId, type, slots, x, 0, z));
+						return packets;
+					} else {
+						Utils.getPlayer(networkManager).closeInventory();
+						return Collections.emptyList();
+					}
+				}
+				case ClientboundPacket.PLAY_WINDOW_CLOSE_ID: {
+					final EntityPlayer player = Utils.getPlayer(networkManager);
+					ArrayList<ClientboundPEPacket> packets = new ArrayList<>();
+					BlockPosition position = pestorage.getFakeInventoryBlock();
+					if (position != null) {
+						pestorage.clearFakeInventoryBlock();
+						World world = Utils.getPlayer(networkManager).getWorld();
+						if (world.isLoaded(position)) {
+							IBlockData block = world.getType(position);
+							packets.add(new SetBlocksPacket(new UpdateBlockRecord(
+								position.getX(), 0, position.getZ(),
+								Block.getId(block.getBlock()), block.getBlock().toLegacyData(block),
+								SetBlocksPacket.FLAG_ALL_PRIORITY
+							)));
+						}
+					}
+					packets.add(new ContainerClosePacket(packetdata.readByte()));
+					packets.add(new MethodCallPacket() {
+						@Override
+						protected void call() {
+							player.updateInventory(player.defaultContainer);
+						}
+					});
+					return packets;
 				}
 				case ClientboundPacket.PLAY_PLAYER_INFO_ID: {
 					int action = packetdata.readVarInt();

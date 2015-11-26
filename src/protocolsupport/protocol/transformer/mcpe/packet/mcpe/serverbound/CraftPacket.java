@@ -1,10 +1,7 @@
 package protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
@@ -27,6 +24,7 @@ import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.mcpe.packet.SynchronizedHandleNMSPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
+import protocolsupport.protocol.transformer.mcpe.utils.InventoryUtils;
 
 public class CraftPacket implements ServerboundPEPacket {
 
@@ -94,7 +92,7 @@ public class CraftPacket implements ServerboundPEPacket {
 					boolean hasItems = findAndMove(ingrs, player.inventory, craftingInv);
 					ItemStack result = resultInventory.getItem(0);
 					if (hasItems && result != null) {
-						add(player, result);
+						InventoryUtils.add(player, result, true);
 					} else {
 						addAll(player, craftingInv.getContents());
 					}
@@ -131,7 +129,7 @@ public class CraftPacket implements ServerboundPEPacket {
 			boolean found = false;
 			for (ItemStack itemstack : items) {
 				if (matchIngr(ingr, itemstack)) {
-					ItemStack fIngr = takeAmount(itemstack, ingr.count);
+					ItemStack fIngr = InventoryUtils.takeAmount(itemstack, ingr.count);
 					crafting.setItem(i, fIngr);
 					found = true;
 					break;
@@ -160,19 +158,9 @@ public class CraftPacket implements ServerboundPEPacket {
 		return (ingr.getData() == -1) || (ingr.getData() == itemstack.getData());
 	}
 
-	protected static void add(EntityPlayer player, ItemStack itemstack) {
-		if (itemstack == null) {
-			return;
-		}
-		HashMap<Integer, org.bukkit.inventory.ItemStack> left = player.getBukkitEntity().getInventory().addItem(CraftItemStack.asCraftMirror(itemstack));
-		for (org.bukkit.inventory.ItemStack bitemstack : left.values()) {
-			player.getBukkitEntity().getWorld().dropItem(player.getBukkitEntity().getLocation(), bitemstack);
-		}
-	}
-
 	protected void addAll(EntityPlayer player, ItemStack[] itemstacks) {
 		for (ItemStack itemstack : itemstacks) {
-			add(player, itemstack);
+			InventoryUtils.add(player, itemstack, true);
 		}
 	}
 
@@ -181,13 +169,6 @@ public class CraftPacket implements ServerboundPEPacket {
 			craftingInv.setItem(i, null);
 		}
 		resultInv.setItem(0, null);
-	}
-
-	protected static ItemStack takeAmount(ItemStack itemstack, int amount) {
-		ItemStack clone = itemstack.cloneItemStack();
-		itemstack.count -= amount;
-		clone.count = amount;
-		return clone;
 	}
 
 }

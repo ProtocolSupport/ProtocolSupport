@@ -1,5 +1,6 @@
 package protocolsupport.protocol.transformer.mcpe;
 
+import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.ItemStack;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
@@ -8,6 +9,7 @@ public class PEStorage {
 	private final TIntObjectHashMap<ItemInfo> items = new TIntObjectHashMap<>();
 	private final TIntObjectHashMap<ItemStack[]> armor = new TIntObjectHashMap<>();
 	private int vehicleId;
+	private BlockPosition fakeInventoryBlock;
 
 	public void addItemInfo(int entityId, float locX, float locY, float locZ, float speedX, float speedY, float speedZ) {
 		items.put(entityId, new ItemInfo(locX, locY, locZ, speedX, speedY, speedZ));
@@ -85,6 +87,18 @@ public class PEStorage {
 			armor.put(entityId, armorc);
 		}
 		return armorc;
+	}
+
+	public void setFakeInventoryBlock(BlockPosition position) {
+		fakeInventoryBlock = position;
+	}
+
+	public BlockPosition getFakeInventoryBlock() {
+		return fakeInventoryBlock;
+	}
+
+	public void clearFakeInventoryBlock() {
+		fakeInventoryBlock = null;
 	}
 
 }

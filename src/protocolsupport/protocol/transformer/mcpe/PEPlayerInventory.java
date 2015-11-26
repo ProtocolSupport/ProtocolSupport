@@ -40,8 +40,26 @@ public class PEPlayerInventory extends PlayerInventory {
 
 	private static final String SLOT_TAG_NAME = "PSSlotTag";
 
+	//convert network slot to player inventory slot
+	public static int toInvSlot(int netSlot, int datalength) {
+		int playerInvStartIndex = datalength - 36;
+		if (netSlot >= playerInvStartIndex) {
+			int netPlayerSlot = netSlot - playerInvStartIndex;
+			if (netPlayerSlot >= 0 && netPlayerSlot < 27) {
+				return netPlayerSlot + 9;
+			}
+			if (netPlayerSlot >= 27 && netPlayerSlot < 35) {
+				return netPlayerSlot - 27;
+			}
+		}
+		return -1;
+	}
+
 	//Adds slot number to item nbt, allows us to solve problem with switching between same itemstacks and will also allow to tell us which slot client used
-	public static ItemStack addSlotNumberTag(ItemStack itemstack, int netSlot) {
+	public static ItemStack addSlotNumberTag(ItemStack itemstack, int invSlot) {
+		if (invSlot == -1) {
+			return itemstack;
+		}
 		if (itemstack == null) {
 			return null;
 		}
@@ -49,7 +67,7 @@ public class PEPlayerInventory extends PlayerInventory {
 		if (tag == null) {
 			tag = new NBTTagCompound();
 		}
-		tag.setInt(SLOT_TAG_NAME, netSlot);
+		tag.setInt(SLOT_TAG_NAME, invSlot);
 		itemstack.setTag(tag);
 		return itemstack;
 	}
@@ -67,13 +85,10 @@ public class PEPlayerInventory extends PlayerInventory {
 			return -1;
 		}
 		int slot = tag.getInt(SLOT_TAG_NAME);
-		if (slot >= 9 && slot < 36) {
-			return slot;
+		if (slot > 35) {
+			return -1;
 		}
-		if (slot >= 36 && slot < 45) {
-			return slot - 36;
-		}
-		return -1;
+		return slot;
 	}
 
 }

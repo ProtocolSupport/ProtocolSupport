@@ -228,6 +228,10 @@ public class UDPNetworkManager extends NetworkManager {
 		if (mtu == 0) {
 			return;
 		}
+		if (pepacket.getId() == -1) {
+			pepacket.encode(null);
+			return;
+		}
 		ByteBuf buf = Unpooled.buffer();
 		buf.writeByte(pepacket.getId());
 		pepacket.encode(buf);

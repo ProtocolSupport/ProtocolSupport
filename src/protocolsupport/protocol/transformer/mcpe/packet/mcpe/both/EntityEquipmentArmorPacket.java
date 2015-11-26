@@ -64,35 +64,30 @@ public class EntityEquipmentArmorPacket implements DualPEPacket {
 			@Override
 			public void handle0(PlayerConnection listener) {
 				PlayerInventory inventory = listener.player.inventory;
-				try {
-					ItemStack[] realArmorArr = inventory.armor;
-					ItemStack[] packetArmorArr = Utils.reverseArray(armor);
-					for (int i = 0; i < realArmorArr.length; i++) {
-						ItemStack realArmor = realArmorArr[i];
-						ItemStack packetArmor = packetArmorArr[i];
-						if (packetArmor == null && realArmor != null) { //player unequipped armor
-							int firstEmpty = inventory.getFirstEmptySlotIndex();
-							if (firstEmpty != -1) {
-								inventory.setItem(firstEmpty, realArmor);
-								realArmorArr[i] = null;
-							}
-							return;
+				ItemStack[] realArmorArr = inventory.armor;
+				ItemStack[] packetArmorArr = Utils.reverseArray(armor);
+				for (int i = 0; i < realArmorArr.length; i++) {
+					ItemStack realArmor = realArmorArr[i];
+					ItemStack packetArmor = packetArmorArr[i];
+					if (packetArmor == null && realArmor != null) { //player unequipped armor
+						int firstEmpty = inventory.getFirstEmptySlotIndex();
+						if (firstEmpty != -1) {
+							inventory.setItem(firstEmpty, realArmor);
+							realArmorArr[i] = null;
 						}
-						if (packetArmor != null && !matches(packetArmor, realArmor)) {//player equipped or swapped armor
-							int slotFrom = PEPlayerInventory.getSlotNumber(packetArmor);
-							if (slotFrom != -1 && slotFrom < inventory.getSize() - 4) {
-								ItemStack armorItemStack = inventory.getItem(slotFrom);
-								//TODO: check if it is an armor itemstack and it can fit in this slot
-								if (armorItemStack != null) {
-									inventory.setItem(slotFrom, realArmor);
-									realArmorArr[i] = armorItemStack;
-								}
+					} else if (packetArmor != null && !matches(packetArmor, realArmor)) {//player equipped or swapped armor
+						int slotFrom = PEPlayerInventory.getSlotNumber(packetArmor);
+						if (slotFrom != -1) {
+							ItemStack armorItemStack = inventory.getItem(slotFrom);
+							//TODO: check if it is an armor itemstack and it can fit in this slot
+							if (armorItemStack != null) {
+								inventory.setItem(slotFrom, realArmor);
+								realArmorArr[i] = armorItemStack;
 							}
 						}
 					}
-				} finally {
-					listener.player.updateInventory(listener.player.defaultContainer);
 				}
+				listener.player.updateInventory(listener.player.defaultContainer);
 			}
 		});
 	}

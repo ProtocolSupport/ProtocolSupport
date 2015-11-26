@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.AnimatePacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.BatchPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.ChatPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.ContainerClosePacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.EntityEquipmentInventoryPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.ContainerSetSlotPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.MovePlayerPacket;
@@ -52,6 +53,7 @@ public class PEPacketRegistry {
 		register(UseEntityPacket.class);
 		register(CraftPacket.class);
 		register(AddExpOrbPacket.class);
+		register(ContainerClosePacket.class);
 	}
 
 	public static ServerboundPEPacket getPacket(int id) {
