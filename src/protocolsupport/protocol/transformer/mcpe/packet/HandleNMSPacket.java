@@ -34,6 +34,6 @@ public abstract class HandleNMSPacket<T extends PacketListener> implements Packe
 		}
 	}
 
-	public abstract void handle0(T listener);
+	public abstract void handle0(T listener) throws Throwable;
 
 }

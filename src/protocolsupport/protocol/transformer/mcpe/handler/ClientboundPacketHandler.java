@@ -511,7 +511,7 @@ public class ClientboundPacketHandler {
 						ItemStack[] inventory = new ItemStack[45];
 						System.arraycopy(packetitems, packetitems.length - 36, inventory, 0, inventory.length - 9);
 						packets.add(new ContainerSetContentsPacket(PEPlayerInventory.PLAYER_INVENTORY_WID, inventory, ((PEPlayerInventory) player.inventory).getHotbarRefs()));
-						ItemStack[] contitems = new ItemStack[packetitems.length - 40];
+						ItemStack[] contitems = new ItemStack[packetitems.length - 36];
 						System.arraycopy(packetitems, 0, contitems, 0, contitems.length);
 						packets.add(new ContainerSetContentsPacket(windowId, contitems, ContainerSetContentsPacket.EMPTY_HOTBAR_SLOTS));
 						return packets;
@@ -523,12 +523,12 @@ public class ClientboundPacketHandler {
 					int z = NumberConversions.floor(player.locZ);
 					int windowId = packetdata.readByte();
 					int type = InventoryUtils.getType(packetdata.readString());
-					if (type != 1) {
+					if (type != -1) {
 						packetdata.readString();
 						int slots = packetdata.readByte();
 						ArrayList<ClientboundPEPacket> packets = new ArrayList<>();
 						pestorage.setFakeInventoryBlock(new BlockPosition(x, 0, z));
-						packets.add(new SetBlocksPacket(new UpdateBlockRecord(x, 0, z, 54, 0, SetBlocksPacket.FLAG_ALL_PRIORITY)));
+						packets.add(new SetBlocksPacket(new UpdateBlockRecord(x, 0, z, InventoryUtils.getFakeBlockForInvType(type), 0, SetBlocksPacket.FLAG_ALL_PRIORITY)));
 						packets.add(new ContainerOpenPacket(windowId, type, slots, x, 0, z));
 						return packets;
 					} else {

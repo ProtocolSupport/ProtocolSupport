@@ -77,7 +77,7 @@ public class CraftPacket implements ServerboundPEPacket {
 					resultInventory = containerPlayer.resultInventory;
 				}
 				if (type == 2) {
-					//player never actually opens workbench, so we have to assign him a temporary one (and we don't have any way to check if player really used ine)
+					//we never actually open workbench serverside to player because client doesn't notify server about workbench close, so we have to create temporary one
 					createWorkbench(player);
 					active = player.activeContainer;
 					//check just in case opening inventory failed due to cancelled event

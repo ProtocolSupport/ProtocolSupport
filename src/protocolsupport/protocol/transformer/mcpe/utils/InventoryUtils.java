@@ -7,6 +7,7 @@ import org.bukkit.inventory.Inventory;
 
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.ItemStack;
+import net.minecraft.server.v1_8_R3.NBTTagCompound;
 
 public class InventoryUtils {
 
@@ -17,8 +18,23 @@ public class InventoryUtils {
 			case "minecraft:container": {
 				return 0;
 			}
+			case "minecraft:anvil": {
+				return 6;
+			}
 		}
 		return -1;
+	}
+
+	public static int getFakeBlockForInvType(int type) {
+		switch (type) {
+			case 0: {
+				return 54;
+			}
+			case 6: {
+				return 145;
+			}
+		}
+		throw new IllegalArgumentException("Unknown inventory type "+type);
 	}
 
 	public static void add(EntityPlayer player, ItemStack itemstack, boolean toPlayer) {
@@ -37,6 +53,18 @@ public class InventoryUtils {
 		itemstack.count -= amount;
 		clone.count = amount;
 		return clone;
+	}
+
+	public static String getName(ItemStack itemstack) {
+		NBTTagCompound tag = itemstack.getTag();
+		if (tag == null) {
+			return "";
+		}
+		if (!tag.hasKeyOfType("display", 10)) {
+			return "";
+		}
+		NBTTagCompound displayTag = tag.getCompound("display");
+		return displayTag.getString("Name");
 	}
 
 }
