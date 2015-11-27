@@ -139,11 +139,13 @@ public class ContainerSetSlotPacket implements DualPEPacket {
 			int slotFrom = PEPlayerInventory.getSlotNumber(itemstack);
 			if (slotFrom != -1) {
 				ItemStack from = player.inventory.getItem(slotFrom);
-				ItemStack toAdd = InventoryUtils.takeAmount(from, toMove);
-				if (from.count == 0) {
-					player.inventory.setItem(slotFrom, null);
+				if (from.count >= toMove) {
+					ItemStack toAdd = InventoryUtils.takeAmount(from, toMove);
+					if (from.count == 0) {
+						player.inventory.setItem(slotFrom, null);
+					}
+					InventoryUtils.add(player, toAdd, false);
 				}
-				InventoryUtils.add(player, toAdd, false);
 			}
 		}
 	}
@@ -153,12 +155,14 @@ public class ContainerSetSlotPacket implements DualPEPacket {
 		if (itemInSlot != null && (itemstack == null || itemInSlot.count > itemstack.count)) {
 			//moved item to player inventory
 			int toMove = itemstack == null ? itemInSlot.count : itemInSlot.count - itemstack.count;
-			ItemStack toAdd = InventoryUtils.takeAmount(itemInSlot, toMove);
-			if (itemInSlot.count == 0) {
-				inventory.setItem(slot, null);
+			if (itemInSlot.count >= toMove) {
+				ItemStack toAdd = InventoryUtils.takeAmount(itemInSlot, toMove);
+				if (itemInSlot.count == 0) {
+					inventory.setItem(slot, null);
+				}
+				InventoryUtils.add(player, toAdd, true);
+				return true;
 			}
-			InventoryUtils.add(player, toAdd, true);
-			return true;
 		}
 		return false;
 	}
