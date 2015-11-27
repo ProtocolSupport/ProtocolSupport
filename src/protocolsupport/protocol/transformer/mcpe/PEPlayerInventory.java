@@ -1,5 +1,7 @@
 package protocolsupport.protocol.transformer.mcpe;
 
+import java.util.Arrays;
+
 import net.minecraft.server.v1_8_R3.EntityHuman;
 import net.minecraft.server.v1_8_R3.ItemStack;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
@@ -14,14 +16,32 @@ public class PEPlayerInventory extends PlayerInventory {
 		super(entityhuman);
 	}
 
-	private int[] hotbar = new int[] {36, 37, 38, 39, 40, 41, 42, 43, 44};
+	private int[] hotbarToSlot = new int[] {36, 37, 38, 39, 40, 41, 42, 43, 44};
+	private int[] slotToHotbar = new int[45]; 
+	{
+		Arrays.fill(slotToHotbar, -1);
+		for (int i = 0; i < 9; i++) {
+			slotToHotbar[36 + i] = i;
+		}
+	}
 
 	public void setHotbarRef(int peSlot, int hotbarSlot) {
-		hotbar[hotbarSlot] = peSlot;
+		int prevPeSlot = hotbarToSlot[hotbarSlot];
+		int prevHotbarSlot = slotToHotbar[peSlot];
+		if (prevHotbarSlot != -1) {
+			hotbarToSlot[prevHotbarSlot] = prevPeSlot;
+		}
+		slotToHotbar[prevPeSlot] = prevHotbarSlot;
+		hotbarToSlot[hotbarSlot] = peSlot;
+		slotToHotbar[peSlot] = hotbarSlot;
 	}
 
 	public int[] getHotbarRefs() {
-		return hotbar;
+		return hotbarToSlot;
+	}
+
+	public int getHotbarSlotFor(int peSlot) {
+		return slotToHotbar[peSlot];
 	}
 
 	public void setSelectedSlot(int index) {

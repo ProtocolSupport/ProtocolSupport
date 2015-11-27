@@ -479,13 +479,14 @@ public class ClientboundPacketHandler {
 						itemstack = PEPlayerInventory.addSlotNumberTag(itemstack, PEPlayerInventory.toInvSlot(slot, 45));
 						if (slot >= 9 && slot < 45) {
 							return Collections.singletonList(new ContainerSetSlotPacket(
-								PEPlayerInventory.PLAYER_INVENTORY_WID, slot - 9, slot - 36, itemstack
+								PEPlayerInventory.PLAYER_INVENTORY_WID, slot - 9,
+								((PEPlayerInventory) Utils.getPlayer(networkManager).inventory).getHotbarSlotFor(slot), itemstack
 							));
 						} else if (slot >= 5 && slot < 9) {
 							return Collections.singletonList(new ContainerSetSlotPacket(PEPlayerInventory.PLAYER_ARMOR_WID, slot - 5, itemstack));
 						}
 					} else {
-						return Collections.singletonList(new ContainerSetSlotPacket(windowId, slot, 0, itemstack));
+						return Collections.singletonList(new ContainerSetSlotPacket(windowId, slot, itemstack));
 					}
 					return Collections.emptyList();
 				}
