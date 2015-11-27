@@ -12,6 +12,7 @@ import java.util.zip.Deflater;
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.EnumParticle;
 import net.minecraft.server.v1_8_R3.ItemStack;
+import net.minecraft.server.v1_8_R3.MathHelper;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketListener;
@@ -103,7 +104,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case ClientboundPacket.PLAY_UPDATE_HEALTH_ID: {
 				serializer.writeByte(0x08);
-				serializer.writeShort((int) packetdata.readFloat());
+				serializer.writeShort(MathHelper.f(packetdata.readFloat()));
 				serializer.writeShort(packetdata.readVarInt());
 				serializer.writeFloat(packetdata.readFloat());
 				break;
