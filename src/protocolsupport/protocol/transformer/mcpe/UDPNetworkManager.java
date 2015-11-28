@@ -77,7 +77,7 @@ public class UDPNetworkManager extends NetworkManager {
 	private long lastSentPingTime = System.currentTimeMillis();
 
 	@Override
-	public void a() {
+	public synchronized void a() {
 		long currentTime = System.currentTimeMillis();
 		if (currentTime - lastReceivedPacketTime > 30000) {
 			close(new ChatComponentText("Timed out"));
@@ -101,7 +101,7 @@ public class UDPNetworkManager extends NetworkManager {
 	}
 
 	@Override
-	public void close(IChatBaseComponent comp) {
+	public synchronized void close(IChatBaseComponent comp) {
 		if (channel.isOpen()) {
 			try {
 				sendPEPacket(new KickPacket(LegacyUtils.fromComponent(comp)));
@@ -115,13 +115,13 @@ public class UDPNetworkManager extends NetworkManager {
 	}
 
 	@Override
-	public boolean g() {
+	public synchronized boolean g() {
 		return channel.isOpen();
 	}
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public void handle(Packet packet) {
+	public synchronized void handle(Packet packet) {
 		a(packet, null);
 	}
 
@@ -129,7 +129,7 @@ public class UDPNetworkManager extends NetworkManager {
 
 	@SuppressWarnings({ "rawtypes" })
 	@Override
-	public void a(Packet packet, GenericFutureListener genericfuturelistener, GenericFutureListener... agenericfuturelistener) {
+	public synchronized void a(Packet packet, GenericFutureListener genericfuturelistener, GenericFutureListener... agenericfuturelistener) {
 		try {
 			for (ClientboundPEPacket pepacket : clientboundTransforner.transform(packet)) {
 				sendPEPacket(pepacket);
