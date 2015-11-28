@@ -6,9 +6,8 @@ import java.util.UUID;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftHumanEntity;
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventoryPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.util.Waitable;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerPreLoginEvent;
@@ -26,9 +25,9 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.LoginSt
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.ClientConnectPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.LoginPacket;
 import protocolsupport.utils.Utils;
+
 import net.minecraft.server.v1_8_R3.ChatComponentText;
 import net.minecraft.server.v1_8_R3.ContainerPlayer;
-import net.minecraft.server.v1_8_R3.Entity;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.LoginListener;
@@ -39,7 +38,7 @@ import net.minecraft.server.v1_8_R3.PlayerInteractManager;
 @SuppressWarnings("deprecation")
 public class PELoginListener implements PacketListener {
 
-	private static final MethodHandle bukkitEntityFieldSetter = Utils.getFieldSetter(Entity.class, "bukkitEntity");
+	private static final MethodHandle playerInventoryFieldSetter = Utils.getFieldSetter(CraftHumanEntity.class, "inventory");
 	private static final MethodHandle playerInteractManagerFieldSetter = Utils.getFieldSetter(EntityPlayer.class, "playerInteractManager");
 
 	private UDPNetworkManager nm;
@@ -134,10 +133,10 @@ public class PELoginListener implements PacketListener {
 								try {
 									player.inventory = new PEPlayerInventory(player);
 									player.activeContainer = player.defaultContainer = new ContainerPlayer(player.inventory, true, player);
+									playerInteractManagerFieldSetter.invokeExact(player, (PlayerInteractManager) new PEPlayerInteractManager(player));
+									playerInventoryFieldSetter.invokeExact((CraftHumanEntity) player.getBukkitEntity(), new CraftInventoryPlayer(player.inventory));
 									MinecraftServer.getServer().getPlayerList().a(nm, MinecraftServer.getServer().getPlayerList().processLogin(profile, player));
 									new PEPlayerConnection(MinecraftServer.getServer(), nm, player);
-									bukkitEntityFieldSetter.invokeExact((Entity) player, (CraftEntity) new CraftPlayer((CraftServer) Bukkit.getServer(), player));
-									playerInteractManagerFieldSetter.invokeExact(player, (PlayerInteractManager) new PEPlayerInteractManager(player));
 								} catch (Throwable t) {
 									player.playerConnection.disconnect("Exception while logging in: "+t.getMessage());
 									if (MinecraftServer.getServer().isDebugging()) {
