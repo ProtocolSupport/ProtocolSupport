@@ -6,14 +6,14 @@ import io.netty.util.concurrent.GenericFutureListener;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map.Entry;
 
 import org.apache.commons.io.IOUtils;
 import org.spigotmc.SneakyThrow;
 
 import com.google.common.base.Function;
+
+import gnu.trove.iterator.TIntObjectIterator;
+import gnu.trove.map.hash.TIntObjectHashMap;
 
 import protocolsupport.protocol.transformer.mcpe.handler.ClientboundPacketHandler;
 import protocolsupport.protocol.transformer.mcpe.handler.PELoginListener;
@@ -78,7 +78,7 @@ public class UDPNetworkManager extends NetworkManager {
 	}
 
 	@Override
-	public synchronized void close(IChatBaseComponent comp) {
+	public void close(IChatBaseComponent comp) {
 		if (channel.isOpen()) {
 			try {
 				sendPEPacket(new KickPacket(LegacyUtils.fromComponent(comp)));
@@ -92,7 +92,7 @@ public class UDPNetworkManager extends NetworkManager {
 	}
 
 	@Override
-	public synchronized boolean g() {
+	public boolean g() {
 		return channel.isOpen();
 	}
 
@@ -102,13 +102,13 @@ public class UDPNetworkManager extends NetworkManager {
 		a(packet, null);
 	}
 
-	private final HashMap<Integer, RakNetPacket> sentPackets = new HashMap<>();
-
+	private final TIntObjectHashMap<RakNetPacket> sentPackets = new TIntObjectHashMap<>(300);
+	private final Object sentPacketsLock = new Object();
 
 	private long lastPerSecActionTime = System.currentTimeMillis();
 
 	@Override
-	public synchronized void a() {
+	public void a() {
 		long currentTime = System.currentTimeMillis();
 		if (currentTime - lastReceivedPacketTime > 30000) {
 			close(new ChatComponentText("Timed out"));
@@ -118,18 +118,20 @@ public class UDPNetworkManager extends NetworkManager {
 			if (currentTime - lastPerSecActionTime > 1000) {
 				lastPerSecActionTime = currentTime;
 				sendPEPacket(new PingPacket());
-				ArrayList<RakNetPacket> toResend = new ArrayList<RakNetPacket>();
-				Iterator<Entry<Integer, RakNetPacket>> iterator = sentPackets.entrySet().iterator();
-				while (iterator.hasNext()) {
-					Entry<Integer, RakNetPacket> entry = iterator.next();
-					RakNetPacket packet = entry.getValue();
-					if (currentTime - packet.getLastSentTime() > 1000) {
-						iterator.remove();
-						toResend.add(packet);
+				synchronized (sentPacketsLock) {
+					ArrayList<RakNetPacket> toResend = new ArrayList<RakNetPacket>();
+					TIntObjectIterator<RakNetPacket> iterator = sentPackets.iterator();
+					while (iterator.hasNext()) {
+						iterator.advance();
+						RakNetPacket packet = iterator.value();
+						if (currentTime - packet.getLastSentTime() > 1000) {
+							iterator.remove();
+							toResend.add(packet);
+						}
 					}
-				}
-				for (RakNetPacket packet : toResend) {
-					sendRakNetPacket(packet);
+					for (RakNetPacket packet : toResend) {
+						sendRakNetPacket(packet);
+					}
 				}
 			}
 			if (clientboundTransforner.canSpawnPlayer()) {
@@ -146,7 +148,7 @@ public class UDPNetworkManager extends NetworkManager {
 
 	@SuppressWarnings({ "rawtypes" })
 	@Override
-	public synchronized void a(Packet packet, GenericFutureListener genericfuturelistener, GenericFutureListener... agenericfuturelistener) {
+	public void a(Packet packet, GenericFutureListener genericfuturelistener, GenericFutureListener... agenericfuturelistener) {
 		try {
 			for (ClientboundPEPacket pepacket : clientboundTransforner.transform(packet)) {
 				sendPEPacket(pepacket);
@@ -160,7 +162,7 @@ public class UDPNetworkManager extends NetworkManager {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public synchronized void handleUDP(RakNetPacket raknetpacket) {
+	public void handleUDP(RakNetPacket raknetpacket) {
 		if (!channel.isOpen()) {
 			return;
 		}
@@ -247,7 +249,7 @@ public class UDPNetworkManager extends NetworkManager {
 		}
 	}
 
-	public synchronized void sendPEPacket(ClientboundPEPacket pepacket) throws Exception {
+	public void sendPEPacket(ClientboundPEPacket pepacket) throws Exception {
 		if (mtu == 0) {
 			return;
 		}
@@ -276,47 +278,53 @@ public class UDPNetworkManager extends NetworkManager {
 		}
 	}
 
-	private synchronized void sendEncapsulatedPackets(EncapsulatedPacket... epackets) {
+	private void sendEncapsulatedPackets(EncapsulatedPacket... epackets) {
 		for (EncapsulatedPacket epacket : epackets) {
 			sendRakNetPacket(new RakNetPacket(epacket, getClientAddress()));
 		}
 	}
 
-	public synchronized void sendACK(int seqNumber) {
-		ACK ack = new ACK((InetSocketAddress) l);
+	public void sendACK(int seqNumber) {
+		ACK ack = new ACK(getClientAddress());
 		ack.id = seqNumber;
 		sendRakNetPacket0(ack);
 	}
 
-	public synchronized void sendNACK(int seqNumberStart, int seqNumberEnd) {
-		NACK nack = new NACK((InetSocketAddress) l);
+	public void sendNACK(int seqNumberStart, int seqNumberEnd) {
+		NACK nack = new NACK(getClientAddress());
 		nack.idstart = seqNumberStart;
 		nack.idfinish = seqNumberEnd;
 		sendRakNetPacket0(nack);
 	}
 
-	private synchronized void removeRakNetPackets(int idstart, int idfinish) {
-		for (int id = idstart; id <= idfinish; id++) {
-			sentPackets.remove(id);
-		}
-	}
-
-	private synchronized void resendRakNetPackets(int idstart, int idfinish) {
-		for (int id = idstart; id <= idfinish; id++) {
-			RakNetPacket packet = sentPackets.remove(id);
-			if (packet != null) {
-				sendRakNetPacket(packet);
+	private void removeRakNetPackets(int idstart, int idfinish) {
+		synchronized (sentPacketsLock) {
+			for (int id = idstart; id <= idfinish; id++) {
+				sentPackets.remove(id);
 			}
 		}
 	}
 
-	public synchronized void sendRakNetPacket(RakNetPacket packet) {
-		packet.setSeqNumber(getNextRakSeqID());
-		sentPackets.put(packet.getSeqNumber(), packet);
+	private void resendRakNetPackets(int idstart, int idfinish) {
+		synchronized (sentPacketsLock) {
+			for (int id = idstart; id <= idfinish; id++) {
+				RakNetPacket packet = sentPackets.remove(id);
+				if (packet != null) {
+					sendRakNetPacket(packet);
+				}
+			}
+		}
+	}
+
+	public void sendRakNetPacket(RakNetPacket packet) {
+		synchronized (sentPacketsLock) {
+			packet.setSeqNumber(getNextRakSeqID());
+			sentPackets.put(packet.getSeqNumber(), packet);
+		}
 		sendRakNetPacket0(packet);
 	}
 
-	private synchronized void sendRakNetPacket0(RakNetPacket packet) {
+	private void sendRakNetPacket0(RakNetPacket packet) {
 		channel.writeAndFlush(packet);
 	}
 
@@ -324,14 +332,14 @@ public class UDPNetworkManager extends NetworkManager {
 		return (InetSocketAddress) l;
 	}
 
-	private int currentSplitID = 0;
-	private int getNextSplitID() {
-		return currentSplitID++ % Short.MAX_VALUE;
-	}
-
 	private int currentRakSeqID = 0;
 	private int getNextRakSeqID() {
 		return currentRakSeqID++ % 16777216;
+	}
+
+	private int currentSplitID = 0;
+	private int getNextSplitID() {
+		return currentSplitID++ % Short.MAX_VALUE;
 	}
 
 	private int currentMessageIndex = 0;

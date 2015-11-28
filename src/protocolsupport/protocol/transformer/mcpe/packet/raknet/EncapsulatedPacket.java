@@ -129,7 +129,7 @@ public class EncapsulatedPacket {
 		return messageIndex;
 	}
 
-	public int getOrederChannel() {
+	public int getOrderChannel() {
 		return orderChannel;
 	}
 
