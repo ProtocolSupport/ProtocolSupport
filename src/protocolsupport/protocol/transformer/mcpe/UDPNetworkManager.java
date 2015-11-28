@@ -126,9 +126,9 @@ public class UDPNetworkManager extends NetworkManager {
 	}
 
 	private final HashMap<Integer, RakNetPacket> sentPackets = new HashMap<>();
-	private final Object lock = new Object();
 
 	@SuppressWarnings({ "rawtypes" })
+	@Override
 	public void a(Packet packet, GenericFutureListener genericfuturelistener, GenericFutureListener... agenericfuturelistener) {
 		try {
 			for (ClientboundPEPacket pepacket : clientboundTransforner.transform(packet)) {
@@ -143,7 +143,7 @@ public class UDPNetworkManager extends NetworkManager {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public void handleUDP(RakNetPacket raknetpacket) {
+	public synchronized void handleUDP(RakNetPacket raknetpacket) {
 		if (!channel.isOpen()) {
 			return;
 		}
@@ -230,7 +230,7 @@ public class UDPNetworkManager extends NetworkManager {
 		}
 	}
 
-	public void sendPEPacket(ClientboundPEPacket pepacket) throws Exception {
+	public synchronized void sendPEPacket(ClientboundPEPacket pepacket) throws Exception {
 		if (mtu == 0) {
 			return;
 		}
@@ -259,53 +259,47 @@ public class UDPNetworkManager extends NetworkManager {
 		}
 	}
 
-	private void sendEncapsulatedPackets(EncapsulatedPacket... epackets) {
+	private synchronized void sendEncapsulatedPackets(EncapsulatedPacket... epackets) {
 		for (EncapsulatedPacket epacket : epackets) {
 			sendRakNetPacket(new RakNetPacket(epacket, getClientAddress()));
 		}
 	}
 
-	public void sendACK(int seqNumber) {
+	public synchronized void sendACK(int seqNumber) {
 		ACK ack = new ACK((InetSocketAddress) l);
 		ack.id = seqNumber;
 		sendRakNetPacket0(ack);
 	}
 
-	public void sendNACK(int seqNumberStart, int seqNumberEnd) {
+	public synchronized void sendNACK(int seqNumberStart, int seqNumberEnd) {
 		NACK nack = new NACK((InetSocketAddress) l);
 		nack.idstart = seqNumberStart;
 		nack.idfinish = seqNumberEnd;
 		sendRakNetPacket0(nack);
 	}
 
-	private void removeRakNetPackets(int idstart, int idfinish) {
-		synchronized (lock) {
-			for (int id = idstart; id <= idfinish; id++) {
-				sentPackets.remove(id);
+	private synchronized void removeRakNetPackets(int idstart, int idfinish) {
+		for (int id = idstart; id <= idfinish; id++) {
+			sentPackets.remove(id);
+		}
+	}
+
+	private synchronized void resendRakNetPackets(int idstart, int idfinish) {
+		for (int id = idstart; id <= idfinish; id++) {
+			RakNetPacket packet = sentPackets.remove(id);
+			if (packet != null) {
+				sendRakNetPacket(packet);
 			}
 		}
 	}
 
-	private void resendRakNetPackets(int idstart, int idfinish) {
-		synchronized (lock) {
-			for (int id = idstart; id <= idfinish; id++) {
-				RakNetPacket packet = sentPackets.remove(id);
-				if (packet != null) {
-					sendRakNetPacket(packet);
-				}
-			}
-		}
-	}
-
-	public void sendRakNetPacket(RakNetPacket packet) {
-		synchronized (lock) {
-			packet.setSeqNumber(getNextRakSeqID());
-			sentPackets.put(packet.getSeqNumber(), packet);
-		}
+	public synchronized void sendRakNetPacket(RakNetPacket packet) {
+		packet.setSeqNumber(getNextRakSeqID());
+		sentPackets.put(packet.getSeqNumber(), packet);
 		sendRakNetPacket0(packet);
 	}
 
-	private void sendRakNetPacket0(RakNetPacket packet) {
+	private synchronized void sendRakNetPacket0(RakNetPacket packet) {
 		channel.writeAndFlush(packet);
 	}
 
@@ -313,22 +307,22 @@ public class UDPNetworkManager extends NetworkManager {
 		return (InetSocketAddress) l;
 	}
 
-	private volatile int currentSplitID = 0;
+	private int currentSplitID = 0;
 	private int getNextSplitID() {
 		return currentSplitID++ % Short.MAX_VALUE;
 	}
 
-	private volatile int currentRakSeqID = 0;
+	private int currentRakSeqID = 0;
 	private int getNextRakSeqID() {
 		return currentRakSeqID++ % 16777216;
 	}
 
-	private volatile int currentMessageIndex = 0;
+	private int currentMessageIndex = 0;
 	private int getNextMessageIndex() {
 		return currentMessageIndex++ % 16777216;
 	}
 
-	private volatile int currentOrderIndex = 0;
+	private int currentOrderIndex = 0;
 	private int getNextOrderIndex() {
 		return currentOrderIndex++ % 16777216;
 	}
