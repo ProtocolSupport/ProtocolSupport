@@ -32,35 +32,32 @@ public class EncapsulatedPacket {
 
 	public EncapsulatedPacket(ByteBuf data, int splitID, int splitCount, int splitIndex) {
 		this(data);
-		this.hasSplit = true;
-		this.splitID = splitID;
-		this.splitCount = splitCount;
-		this.splitIndex = splitIndex;
+		setSplitInfo(splitID, splitCount, splitIndex);
 	}
 
 	public EncapsulatedPacket(ByteBuf data, int messageIndex) {
+		this(data);
 		this.reliability = 2;
-		this.data = Utils.toArray(data);
 		this.messageIndex = messageIndex;
 	}
 
 	public EncapsulatedPacket(ByteBuf data, int messageIndex, int splitID, int splitCount, int splitIndex) {
 		this(data, messageIndex);
-		this.hasSplit = true;
-		this.splitID = splitID;
-		this.splitCount = splitCount;
-		this.splitIndex = splitIndex;
+		setSplitInfo(splitID, splitCount, splitIndex);
 	}
 
 	public EncapsulatedPacket(ByteBuf data, int messageIndex, int orderIndex) {
+		this(data, messageIndex);
 		this.reliability = 3;
-		this.data = Utils.toArray(data);
-		this.messageIndex = messageIndex;
 		this.orderIndex = orderIndex;
 	}
 
 	public EncapsulatedPacket(ByteBuf data, int messageIndex, int orderIndex, int splitID, int splitCount, int splitIndex) {
 		this(data, messageIndex, orderIndex);
+		setSplitInfo(splitID, splitCount, splitIndex);
+	}
+
+	private void setSplitInfo(int splitID, int splitCount, int splitIndex) {
 		this.hasSplit = true;
 		this.splitID = splitID;
 		this.splitCount = splitCount;
@@ -130,6 +127,14 @@ public class EncapsulatedPacket {
 
 	public int getMessageIndex() {
 		return messageIndex;
+	}
+
+	public int getOrederChannel() {
+		return orderChannel;
+	}
+
+	public int getOrderIndex() {
+		return orderIndex;
 	}
 
 	public boolean hasSplit() {

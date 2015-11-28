@@ -5,7 +5,10 @@ import io.netty.buffer.Unpooled;
 import io.netty.util.concurrent.GenericFutureListener;
 
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import org.apache.commons.io.IOUtils;
 import org.spigotmc.SneakyThrow;
@@ -74,32 +77,6 @@ public class UDPNetworkManager extends NetworkManager {
 		NONE, CONNECTING, CONNECTED, INFO
 	}
 
-	private long lastSentPingTime = System.currentTimeMillis();
-
-	@Override
-	public synchronized void a() {
-		long currentTime = System.currentTimeMillis();
-		if (currentTime - lastReceivedPacketTime > 30000) {
-			close(new ChatComponentText("Timed out"));
-			return;
-		}
-		try {
-			if (currentTime - lastSentPingTime > 1000) {
-				lastSentPingTime = currentTime;
-				sendPEPacket(new PingPacket());
-			}
-			if (clientboundTransforner.canSpawnPlayer()) {
-				clientboundTransforner.setSpawned();
-				sendPEPacket(new LoginStatusPacket(LoginStatusPacket.Status.PLAYER_SPAWN));
-			}
-		} catch (Exception e) {
-			if (MinecraftServer.getServer().isDebugging()) {
-				e.printStackTrace();
-			}
-			close(new ChatComponentText(e.getMessage()));
-		}
-	}
-
 	@Override
 	public synchronized void close(IChatBaseComponent comp) {
 		if (channel.isOpen()) {
@@ -126,6 +103,46 @@ public class UDPNetworkManager extends NetworkManager {
 	}
 
 	private final HashMap<Integer, RakNetPacket> sentPackets = new HashMap<>();
+
+
+	private long lastPerSecActionTime = System.currentTimeMillis();
+
+	@Override
+	public synchronized void a() {
+		long currentTime = System.currentTimeMillis();
+		if (currentTime - lastReceivedPacketTime > 30000) {
+			close(new ChatComponentText("Timed out"));
+			return;
+		}
+		try {
+			if (currentTime - lastPerSecActionTime > 1000) {
+				lastPerSecActionTime = currentTime;
+				sendPEPacket(new PingPacket());
+				ArrayList<RakNetPacket> toResend = new ArrayList<RakNetPacket>();
+				Iterator<Entry<Integer, RakNetPacket>> iterator = sentPackets.entrySet().iterator();
+				while (iterator.hasNext()) {
+					Entry<Integer, RakNetPacket> entry = iterator.next();
+					RakNetPacket packet = entry.getValue();
+					if (currentTime - packet.getLastSentTime() > 1000) {
+						iterator.remove();
+						toResend.add(packet);
+					}
+				}
+				for (RakNetPacket packet : toResend) {
+					sendRakNetPacket(packet);
+				}
+			}
+			if (clientboundTransforner.canSpawnPlayer()) {
+				clientboundTransforner.setSpawned();
+				sendPEPacket(new LoginStatusPacket(LoginStatusPacket.Status.PLAYER_SPAWN));
+			}
+		} catch (Exception e) {
+			if (MinecraftServer.getServer().isDebugging()) {
+				e.printStackTrace();
+			}
+			close(new ChatComponentText(e.getMessage()));
+		}
+	}
 
 	@SuppressWarnings({ "rawtypes" })
 	@Override
