@@ -68,7 +68,7 @@ public class PEPlayerInventory extends PlayerInventory {
 			if (netPlayerSlot >= 0 && netPlayerSlot < 27) {
 				return netPlayerSlot + 9;
 			}
-			if (netPlayerSlot >= 27 && netPlayerSlot < 35) {
+			if (netPlayerSlot >= 27 && netPlayerSlot < 36) {
 				return netPlayerSlot - 27;
 			}
 		}
