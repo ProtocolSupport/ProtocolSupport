@@ -15,9 +15,9 @@ import net.minecraft.server.v1_8_R3.Packet;
 
 public class RemoveBlockPacket implements ServerboundPEPacket {
 
-    protected int x;
-    protected int z;
-    protected int y;
+	protected int x;
+	protected int z;
+	protected int y;
 
 	@Override
 	public int getId() {

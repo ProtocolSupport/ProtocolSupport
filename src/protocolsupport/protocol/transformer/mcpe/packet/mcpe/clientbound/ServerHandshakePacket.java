@@ -42,7 +42,7 @@ public class ServerHandshakePacket implements ClientboundPEPacket {
 		RakNetDataSerializer.writeAddress(buf, new InetSocketAddress(InetAddress.getByName("0.0.0.0"), 0));
 		buf.writeLong(session1);
 		buf.writeLong(session2);
-        return this;
+		return this;
 	}
 
 }

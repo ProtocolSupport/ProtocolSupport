@@ -48,15 +48,15 @@ public class MovePlayerPacket implements DualPEPacket {
 	@Override
 	public ServerboundPEPacket decode(ByteBuf buf) throws Exception {
 		this.entityId = buf.readLong();
-        this.x = buf.readFloat();
-        this.y = buf.readFloat() - 1.62f;
-        this.z = buf.readFloat();
-        this.yaw = buf.readFloat();
-        this.headYaw = buf.readFloat();
-        this.pitch = buf.readFloat();
-        this.mode = buf.readByte();
-        this.onGround = buf.readBoolean();
-        return this;
+		this.x = buf.readFloat();
+		this.y = buf.readFloat() - 1.62f;
+		this.z = buf.readFloat();
+		this.yaw = buf.readFloat();
+		this.headYaw = buf.readFloat();
+		this.pitch = buf.readFloat();
+		this.mode = buf.readByte();
+		this.onGround = buf.readBoolean();
+		return this;
 	}
 
 	@Override

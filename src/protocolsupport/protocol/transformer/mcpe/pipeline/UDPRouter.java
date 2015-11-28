@@ -40,10 +40,10 @@ public class UDPRouter extends SimpleChannelInboundHandler<RakNetPacket> {
 		this.networkManagers = networkManagers;
 	}
 
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-    	cause.printStackTrace();
-    }
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+		cause.printStackTrace();
+	}
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, RakNetPacket packet) throws Exception {

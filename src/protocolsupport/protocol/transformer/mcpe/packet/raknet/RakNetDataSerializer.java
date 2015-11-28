@@ -29,7 +29,7 @@ public class RakNetDataSerializer {
 			throw new RuntimeException("IPV6 is not supported yet");
 		}
 		int port = buf.readUnsignedShort();
-        return new InetSocketAddress(InetAddress.getByAddress(addr), port);
+		return new InetSocketAddress(InetAddress.getByAddress(addr), port);
 	}
 
 	public static void writeAddress(ByteBuf buf, InetSocketAddress address) {
