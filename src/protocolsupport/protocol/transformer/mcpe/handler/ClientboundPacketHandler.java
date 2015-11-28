@@ -86,6 +86,7 @@ import net.minecraft.server.v1_8_R3.EnumProtocol;
 import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R3.IBlockData;
 import net.minecraft.server.v1_8_R3.ItemStack;
+import net.minecraft.server.v1_8_R3.MathHelper;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketPlayOutMapChunk;
@@ -181,10 +182,9 @@ public class ClientboundPacketHandler {
 					int food = packetdata.readVarInt();
 					float saturation = packetdata.readFloat();
 					ArrayList<ClientboundPEPacket> packets = new ArrayList<ClientboundPEPacket>();
-					packets.add(new SetHealthPacket((int) health));
+					packets.add(new SetHealthPacket(MathHelper.f(health)));
 					packets.add(new SetAttributesPacket(
 						storage.getWatchedSelfPlayer().getId(),
-						new AttributeRecord("generic.health", 0.0F, 20.0F, Math.min(20.0F, health)),
 						new AttributeRecord("player.saturation", 0.0F, 5.0F, saturation),
 						new AttributeRecord("player.hunger", 0.0F, 20.0F, food)
 					));
