@@ -39,8 +39,10 @@ public class ServerboundPacketHandler {
 		lastReceivedSeqNumber = packetSeqNumber;
 		if (packetSeqNumber - prevSeqNumber == 1) {
 			networkManager.sendACK(packetSeqNumber);
-		} else {
+		} else if (packetSeqNumber - prevSeqNumber > 1) {
 			networkManager.sendNACK(prevSeqNumber + 1, packetSeqNumber - 1);
+		} else {
+			return Collections.emptyList();
 		}
 
 		//order packets or just add based on reliability
