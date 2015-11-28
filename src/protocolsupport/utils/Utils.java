@@ -115,4 +115,14 @@ public class Utils {
 		return newArray;
 	}
 
+	public static int divideAndCeilWithBase(int number, int base) {
+		int fp = number / base;
+		int m = number % base;
+		if (m == 0) {
+			return fp;
+		} else {
+			return fp + 1;
+		}
+	}
+
 }

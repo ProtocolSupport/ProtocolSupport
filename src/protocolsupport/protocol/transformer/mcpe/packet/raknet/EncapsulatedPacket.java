@@ -4,29 +4,30 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.utils.Utils;
 
 public class EncapsulatedPacket {
 
-	public int reliability;
-	public boolean hasSplit;
+	protected int reliability;
+	protected boolean hasSplit;
 
-	public int messageIndex;
+	protected int messageIndex;
 
-	public int orderChannel;
-	public int orderIndex;
+	protected int orderChannel;
+	protected int orderIndex;
 
-	public int splitCount;
-	public int splitID;
-	public int splitIndex;
+	protected int splitCount;
+	protected int splitID;
+	protected int splitIndex;
 
-	public ByteBuf data = Unpooled.buffer();
+	protected byte[] data;
 
 	public EncapsulatedPacket() {
 	}
 
 	public EncapsulatedPacket(ByteBuf data) {
 		this.reliability = 0;
-		this.data.writeBytes(data);
+		this.data = Utils.toArray(data);
 	}
 
 	public EncapsulatedPacket(ByteBuf data, int splitID, int splitCount, int splitIndex) {
@@ -39,7 +40,7 @@ public class EncapsulatedPacket {
 
 	public EncapsulatedPacket(ByteBuf data, int messageIndex) {
 		this.reliability = 2;
-		this.data.writeBytes(data);
+		this.data = Utils.toArray(data);
 		this.messageIndex = messageIndex;
 	}
 
@@ -53,7 +54,7 @@ public class EncapsulatedPacket {
 
 	public EncapsulatedPacket(ByteBuf data, int messageIndex, int orderIndex) {
 		this.reliability = 3;
-		this.data.writeBytes(data);
+		this.data = Utils.toArray(data);
 		this.messageIndex = messageIndex;
 		this.orderIndex = orderIndex;
 	}
@@ -73,8 +74,7 @@ public class EncapsulatedPacket {
 		reliability = (flags & 0b11100000) >> 5;
 		hasSplit = (flags & 0b00010000) > 0;
 
-		//yes, all this shit is important, because you can have a length of 273 bits or so, how does this even happen?
-		int length = (int) Math.ceil(((double) serializer.readUnsignedShort()) / 8.0D);
+		int length = Utils.divideAndCeilWithBase(serializer.readShort(), 8);
 
 		if (reliability > 0) {
 			if (reliability >= 2 && reliability != 5) {
@@ -92,12 +92,10 @@ public class EncapsulatedPacket {
 			splitIndex = serializer.readInt();
 		}
 
-		data.writeBytes(serializer, length);
+		data = Utils.toArray(serializer.readBytes(length));
 	}
 
 	public void encode(ByteBuf buf) {
-		data.readerIndex(0);
-
 		byte flag = 0;
 		flag = (byte) (flag | reliability << 5);
 		if (hasSplit) {
@@ -105,7 +103,7 @@ public class EncapsulatedPacket {
 		}
 		buf.writeByte(flag);
 
-		buf.writeShort((data.readableBytes() << 3) & 0xFFFF);
+		buf.writeShort((data.length << 3) & 0xFFFF);
 
 		if (reliability > 0) {
 			if (reliability >= 2 && reliability != 5) {
@@ -124,6 +122,34 @@ public class EncapsulatedPacket {
 		}
 
 		buf.writeBytes(data);
+	}
+
+	public int getReliability() {
+		return reliability;
+	}
+
+	public int getMessageIndex() {
+		return messageIndex;
+	}
+
+	public boolean hasSplit() {
+		return hasSplit;
+	}
+
+	public int getSplitId() {
+		return splitID;
+	}
+
+	public int getSplitIndex() {
+		return splitIndex;
+	}
+
+	public int getSplitCount() {
+		return splitCount;
+	}
+
+	public ByteBuf getData() {
+		return Unpooled.wrappedBuffer(data.clone());
 	}
 
 }

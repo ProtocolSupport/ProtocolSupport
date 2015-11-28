@@ -58,7 +58,7 @@ public class UDPNetworkManager extends NetworkManager {
 	private final ClientboundPacketHandler clientboundTransforner = new ClientboundPacketHandler(this);
 	private final ServerboundPacketHandler serverboundTransformer = new ServerboundPacketHandler(this);
 
-	private long lastSentPacket = System.currentTimeMillis();
+	private long lastReceivedPacketTime = System.currentTimeMillis();
 
 	private int mtu;
 
@@ -74,14 +74,20 @@ public class UDPNetworkManager extends NetworkManager {
 		NONE, CONNECTING, CONNECTED, INFO
 	}
 
+	private long lastSentPingTime = System.currentTimeMillis();
+
 	@Override
 	public void a() {
-		if (System.currentTimeMillis() - lastSentPacket > 30000) {
+		long currentTime = System.currentTimeMillis();
+		if (currentTime - lastReceivedPacketTime > 30000) {
 			close(new ChatComponentText("Timed out"));
 			return;
 		}
 		try {
-			sendPEPacket(new PingPacket());
+			if (currentTime - lastSentPingTime > 1000) {
+				lastSentPingTime = currentTime;
+				sendPEPacket(new PingPacket());
+			}
 			if (clientboundTransforner.canSpawnPlayer()) {
 				clientboundTransforner.setSpawned();
 				sendPEPacket(new LoginStatusPacket(LoginStatusPacket.Status.PLAYER_SPAWN));
@@ -141,7 +147,7 @@ public class UDPNetworkManager extends NetworkManager {
 		if (!channel.isOpen()) {
 			return;
 		}
-		lastSentPacket = System.currentTimeMillis();
+		lastReceivedPacketTime = System.currentTimeMillis();
 		ByteBuf buf = raknetpacket.getData();
 		try {
 			switch (raknetpacket.getId()) {

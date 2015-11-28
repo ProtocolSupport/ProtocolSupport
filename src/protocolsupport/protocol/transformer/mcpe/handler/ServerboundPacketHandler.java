@@ -3,6 +3,7 @@ package protocolsupport.protocol.transformer.mcpe.handler;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.DecoderException;
 
 import java.util.ArrayList;
@@ -13,7 +14,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
-
 import net.minecraft.server.v1_8_R3.Packet;
 
 import protocolsupport.protocol.transformer.mcpe.UDPNetworkManager;
@@ -46,7 +46,7 @@ public class ServerboundPacketHandler {
 		//order packets or just add based on reliability
 		ArrayList<EncapsulatedPacket> orderedPackets = new ArrayList<>();
 		for (EncapsulatedPacket packet : rpacket.getPackets()) {
-			if (packet.reliability == 2 || packet.reliability == 3) {
+			if (packet.getReliability() == 2 || packet.getReliability() == 3) {
 				orderedPackets.addAll(orderer.getOrdered(packet));
 			} else {
 				orderedPackets.add(packet);
@@ -59,7 +59,7 @@ public class ServerboundPacketHandler {
 		//transform packets
 		ArrayList<Packet> packets = new ArrayList<Packet>();
 		for (EncapsulatedPacket epacket : fullEPackets) {
-			packets.addAll(transformPacketData(epacket.data));
+			packets.addAll(transformPacketData(epacket.getData()));
 		}
 
 		return packets;
@@ -69,10 +69,10 @@ public class ServerboundPacketHandler {
 	private List<EncapsulatedPacket> getFullPackets(List<EncapsulatedPacket> epackets) {
 		ArrayList<EncapsulatedPacket> result = new ArrayList<EncapsulatedPacket>();
 		for (EncapsulatedPacket epacket : epackets) {
-			if (!epacket.hasSplit) {
+			if (!epacket.hasSplit()) {
 				result.add(epacket);
 			} else {
-				int splitID = epacket.splitID;
+				int splitID = epacket.getSplitId();
 				SplittedPacket partial = notFullPackets.get(splitID);
 				if (partial == null) {
 					notFullPackets.put(splitID, new SplittedPacket(epacket));
@@ -101,19 +101,19 @@ public class ServerboundPacketHandler {
 		private EncapsulatedPacket[] packets;
 
 		public SplittedPacket(EncapsulatedPacket startpacket) {
-			if (startpacket.splitCount > maxSplits) {
-				throw new IllegalStateException("Too many splits for single packet, max: "+maxSplits+", packet: "+startpacket.splitCount);
+			if (startpacket.getSplitCount() > maxSplits) {
+				throw new IllegalStateException("Too many splits for single packet, max: "+maxSplits+", packet: "+startpacket.getSplitCount());
 			}
-			packets = new EncapsulatedPacket[startpacket.splitCount];
+			packets = new EncapsulatedPacket[startpacket.getSplitCount()];
 			packets[0] = startpacket;
 		}
 
 		public void appendData(EncapsulatedPacket packet) {
-			if (packets[packet.splitIndex] != null) {
+			if (packets[packet.getSplitIndex()] != null) {
 				return;
 			}
 			receivedSplits++;
-			packets[packet.splitIndex] = packet;
+			packets[packet.getSplitIndex()] = packet;
 		}
 
 		public boolean isComplete() {
@@ -121,18 +121,16 @@ public class ServerboundPacketHandler {
 		}
 
 		public EncapsulatedPacket getFullPacket() {
-			EncapsulatedPacket epacket = new EncapsulatedPacket();
-			epacket.orderChannel = packets[0].orderChannel;
-			epacket.orderIndex = packets[0].orderIndex;
+			ByteBuf fulldata = Unpooled.buffer();
 			for (EncapsulatedPacket bufferpacket : packets) {
-				epacket.data.writeBytes(bufferpacket.data);
+				fulldata.writeBytes(bufferpacket.getData());
 			}
-			return epacket;
+			return new EncapsulatedPacket(fulldata);
 		}
 
 	}
 
-	//ordering is done based on messageIndex and not on orderIndex because for whatever reason login packets are sent unordered
+	//ordering is done based on messageIndex
 	private static final class Orderer {
 		private final HashMap<Integer, EncapsulatedPacket> packets = new HashMap<>();
 		private final HashSet<Integer> missing = new HashSet<>();
@@ -140,7 +138,7 @@ public class ServerboundPacketHandler {
 		private int lastReceivedIndex = -1;
 
 		public Collection<EncapsulatedPacket> getOrdered(EncapsulatedPacket epacket) {
-			int messageIndex = epacket.messageIndex;
+			int messageIndex = epacket.getMessageIndex();
 			if ((missing.size() > 256) || (messageIndex - lastReceivedIndex > 128)) {
 				throw new DecoderException("Too big packet loss");
 			}
