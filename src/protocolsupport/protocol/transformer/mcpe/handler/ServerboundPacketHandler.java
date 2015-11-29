@@ -7,13 +7,10 @@ import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.DecoderException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map.Entry;
+
 import net.minecraft.server.v1_8_R3.Packet;
 
 import protocolsupport.protocol.transformer.mcpe.UDPNetworkManager;
@@ -134,27 +131,23 @@ public class ServerboundPacketHandler {
 
 	//ordering is done based on messageIndex
 	private static final class Orderer {
-		private final HashMap<Integer, EncapsulatedPacket> packets = new HashMap<>();
-		private final HashSet<Integer> missing = new HashSet<>();
-		private int minReceivedIndex = Integer.MAX_VALUE;
+		private final TIntObjectHashMap<EncapsulatedPacket> queue = new TIntObjectHashMap<>(300);
 		private int lastReceivedIndex = -1;
+		private int lastOrderedIndex = -1;
 
 		public Collection<EncapsulatedPacket> getOrdered(EncapsulatedPacket epacket) {
 			int messageIndex = epacket.getMessageIndex();
-			if ((missing.size() > 256) || (messageIndex - lastReceivedIndex > 128)) {
+			if (queue.size() > 256) {
 				throw new DecoderException("Too big packet loss");
 			}
 			//duplicate packet, ignore it, return empty packet list
-			if (messageIndex <= lastReceivedIndex && missing.isEmpty()) {
+			if (messageIndex <= lastOrderedIndex) {
 				return Collections.emptyList();
 			}
 			//in case if received index more than last we put packet to queue and add missing packet ids
 			//return empty packet list
 			if (messageIndex - lastReceivedIndex > 1) {
-				packets.put(messageIndex, epacket);
-				for (int i = (lastReceivedIndex + 1); i < messageIndex; i++) {
-					missing.add(i);
-				}
+				queue.put(messageIndex, epacket);
 				lastReceivedIndex = messageIndex;
 				return Collections.emptyList();
 			}
@@ -163,34 +156,28 @@ public class ServerboundPacketHandler {
 			//2nd - have - missing packets - put packet in queue, return empty packet list
 			if (messageIndex - lastReceivedIndex == 1) {
 				lastReceivedIndex = messageIndex;
-				if (missing.isEmpty()) {
+				if (queue.isEmpty()) {
+					lastOrderedIndex = lastReceivedIndex;
 					return Collections.singletonList(epacket);
 				} else {
-					packets.put(messageIndex, epacket);
+					queue.put(messageIndex, epacket);
 					return Collections.emptyList();
 				}
 			}
-			//duplicate packet or not missing, ignore it, return empty packet list
-			if (packets.containsKey(messageIndex) || !missing.contains(messageIndex)) {
+			//duplicate packet, ignore it, return empty packet list
+			if (queue.containsKey(messageIndex)) {
 				return Collections.emptyList();
 			}
-			//add packet to queue and remove its id from missing list, also update minReceivedIndex
-			minReceivedIndex = Math.min(messageIndex, minReceivedIndex);
-			packets.put(messageIndex, epacket);
-			missing.remove(messageIndex);
-			//if missing list is empty than we return all queued packets in order
-			//if not - just return empty packet list
-			if (missing.isEmpty()) {
-				EncapsulatedPacket[] packetBufs = new EncapsulatedPacket[packets.size()];
-				for (Entry<Integer, EncapsulatedPacket> entry : packets.entrySet()) {
-					packetBufs[entry.getKey() - minReceivedIndex] = entry.getValue();
-				}
-				packets.clear();
-				minReceivedIndex = Integer.MAX_VALUE;
-				return Arrays.asList(packetBufs);
-			} else {
-				return Collections.emptyList();
+			//add packet to queue
+			queue.put(messageIndex, epacket);
+			//return as much ordered packets as we can
+			ArrayList<EncapsulatedPacket> opackets = new ArrayList<EncapsulatedPacket>();
+			EncapsulatedPacket foundPacket = null;
+			while ((foundPacket = queue.remove(lastOrderedIndex + 1)) != null) {
+				opackets.add(foundPacket);
+				lastOrderedIndex++;
 			}
+			return opackets;
 		}
 
 	}
