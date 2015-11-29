@@ -107,14 +107,14 @@ public class SetRecipesPacket implements ClientboundPEPacket {
 			ArrayList<ByteBuf> recipesBufs = new ArrayList<ByteBuf>();
 			for (IRecipe recipe : CraftingManager.getInstance().getRecipes()) {
 				try {
-					/*if (recipe instanceof ShapelessRecipes) {
+					if (recipe instanceof ShapelessRecipes) {
 						ByteBuf recipeBuf = Unpooled.buffer();
 						recipeBuf.writeInt(SHAPELESS);
 						byte[] data = toBuf((ShapelessRecipes) recipe);
 						recipeBuf.writeInt(data.length);
 						recipeBuf.writeBytes(data);
-						recipeBufs.add(recipeBuf);
-					}*/
+						recipesBufs.add(recipeBuf);
+					}
 					if (recipe instanceof ShapedRecipes) {
 						ByteBuf recipeBuf = Unpooled.buffer();
 						recipeBuf.writeInt(SHAPED);

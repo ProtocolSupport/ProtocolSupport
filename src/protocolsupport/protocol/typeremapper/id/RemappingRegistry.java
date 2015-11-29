@@ -4,11 +4,11 @@ import java.util.EnumMap;
 
 import protocolsupport.api.ProtocolVersion;
 
-public abstract class RemappingReigstry {
+public abstract class RemappingRegistry {
 
 	private final EnumMap<ProtocolVersion, RemappingTable> remappings = new EnumMap<>(ProtocolVersion.class);
 
-	public RemappingReigstry() {
+	public RemappingRegistry() {
 		for (ProtocolVersion version : ProtocolVersion.values()) {
 			remappings.put(version, createTable());
 		}
@@ -18,7 +18,7 @@ public abstract class RemappingReigstry {
 		return remappings.get(version);
 	}
 
-	protected void copy(RemappingReigstry other) {
+	protected void copy(RemappingRegistry other) {
 		remappings.clear();
 		remappings.putAll(other.remappings);
 	}

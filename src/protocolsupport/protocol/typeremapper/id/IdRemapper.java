@@ -7,7 +7,7 @@ import protocolsupport.utils.ProtocolVersionsHelper;
 
 public class IdRemapper {
 
-	public static final RemappingReigstry BLOCK = new RemappingReigstry() {
+	public static final RemappingRegistry BLOCK = new RemappingRegistry() {
 		{
 			// slime -> emerald block
 			registerRemapEntry(165, 133, ProtocolVersionsHelper.BEFORE_1_8);
@@ -151,7 +151,7 @@ public class IdRemapper {
 		}
 	};
 
-	public static final RemappingReigstry ITEM = new RemappingReigstry() {
+	public static final RemappingRegistry ITEM = new RemappingRegistry() {
 		{
 			copy(BLOCK);
 			// all doors -> door
@@ -260,7 +260,7 @@ public class IdRemapper {
 	};
 
 	@SuppressWarnings("deprecation")
-	public static final RemappingReigstry ENTITY = new RemappingReigstry() {
+	public static final RemappingRegistry ENTITY = new RemappingRegistry() {
 		{
 			// endermite -> silverfish
 			registerRemapEntry(67, 60, ProtocolVersionsHelper.BEFORE_1_8);
@@ -318,7 +318,7 @@ public class IdRemapper {
 		}
 	};
 
-	public static final RemappingReigstry MAPCOLOR = new RemappingReigstry() {
+	public static final RemappingRegistry MAPCOLOR = new RemappingRegistry() {
 		{
 			//see http://minecraft.gamepedia.com/Map_item_format (i don't event know a names for half of those colors)
 			registerRemapEntry(14, 8, ProtocolVersionsHelper.BEFORE_1_7);
