@@ -62,6 +62,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.TileEnt
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ContainerSetContentsPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.EntityStatusPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.EntityVelocityPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ExplosionPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.MethodCallPacket;
 import protocolsupport.protocol.transformer.mcpe.utils.InventoryUtils;
 import protocolsupport.protocol.transformer.mcpe.utils.PEWatchedPlayer;
@@ -732,6 +733,24 @@ public class ClientboundPacketHandler {
 						new AttributeRecord("player.experience", 0.0F, 1.0F, exp),
 						new AttributeRecord("player.level", 0.0F, Float.MAX_VALUE, level)
 					));
+				}
+				case ClientboundPacket.PLAY_EXPLOSION_ID: {
+					float x = packetdata.readFloat();
+					float y = packetdata.readFloat();
+					float z = packetdata.readFloat();
+					float radius = packetdata.readFloat();
+					int count = packetdata.readInt();
+					ExplosionPacket.AffectedPosition[] positions = new ExplosionPacket.AffectedPosition[count];
+					for (int i = 0; i < count; i++) {
+						positions[i] = new ExplosionPacket.AffectedPosition(packetdata.readByte(), packetdata.readByte(), packetdata.readByte());
+					}
+					float motX = packetdata.readFloat();
+					float motY = packetdata.readFloat();
+					float motZ = packetdata.readFloat();
+					return Arrays.asList(
+						new ExplosionPacket(x, y, z, radius, positions),
+						new EntityVelocityPacket(storage.getWatchedSelfPlayer().getId(), motX, motY, motZ)
+					);
 				}
 				default: {
 					return Collections.emptyList();
