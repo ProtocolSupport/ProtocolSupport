@@ -1,12 +1,13 @@
 package protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
+import gnu.trove.map.TIntObjectMap;
+
 import io.netty.buffer.ByteBuf;
+
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.utils.PEDataWatcherSerializer;
 import protocolsupport.utils.DataWatcherObject;
-import protocolsupport.utils.DataWatcherObject.ValueType;
 
 public class AddEntityPacket implements ClientboundPEPacket {
 
@@ -20,8 +21,9 @@ public class AddEntityPacket implements ClientboundPEPacket {
 	protected float speedZ;
 	protected float yaw;
 	protected float pitch;
+	protected TIntObjectMap<DataWatcherObject> meta;
 
-	public AddEntityPacket(int entityId, int type, float x, float y, float z, float yaw, float pitch) {
+	public AddEntityPacket(int entityId, int type, float x, float y, float z, float yaw, float pitch, float speedX, float speedY, float speedZ, TIntObjectMap<DataWatcherObject> meta) {
 		this.entityId = entityId;
 		this.type = type;
 		this.x = x;
@@ -29,6 +31,10 @@ public class AddEntityPacket implements ClientboundPEPacket {
 		this.z = z;
 		this.yaw = yaw;
 		this.pitch = pitch;
+		this.speedX = speedX;
+		this.speedY = speedY;
+		this.speedZ = speedZ;
+		this.meta = meta;
 	}
 
 	@Override
@@ -48,15 +54,7 @@ public class AddEntityPacket implements ClientboundPEPacket {
 		buf.writeFloat(speedZ);
 		buf.writeFloat(yaw);
 		buf.writeFloat(pitch);
-		//TODO: actual metadata
-		TIntObjectHashMap<DataWatcherObject> metadata = new TIntObjectHashMap<>();
-		metadata.put(0, new DataWatcherObject(ValueType.BYTE, (byte) 0));
-		metadata.put(1, new DataWatcherObject(ValueType.SHORT, (short) 300));
-		metadata.put(2, new DataWatcherObject(ValueType.STRING, ""));
-		metadata.put(3, new DataWatcherObject(ValueType.BYTE, (byte) 0));
-		metadata.put(4, new DataWatcherObject(ValueType.BYTE, (byte) 0));
-		metadata.put(15, new DataWatcherObject(ValueType.BYTE, (byte) 0));
-		buf.writeBytes(PEDataWatcherSerializer.encode(metadata));
+		buf.writeBytes(PEDataWatcherSerializer.encode(meta));
 		//do not bother sending attach entity there, will send them as separate packet later
 		buf.writeShort(0);
 		return this;

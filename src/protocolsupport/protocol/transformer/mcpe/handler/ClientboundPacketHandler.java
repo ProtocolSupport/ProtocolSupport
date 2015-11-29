@@ -50,6 +50,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetAttr
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetAttributesPacket.AttributeRecord;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetBlocksPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetDifficultyPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetEntityDataPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetEntityEffect;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetRecipesPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetTimePacket;
@@ -67,6 +68,7 @@ import protocolsupport.protocol.transformer.mcpe.utils.PEWatchedPlayer;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.RemappingTable;
+import protocolsupport.protocol.typeremapper.watchedentity.WatchedDataRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificType;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedLiving;
@@ -231,16 +233,22 @@ public class ClientboundPacketHandler {
 				case ClientboundPacket.PLAY_SPAWN_NAMED_ID: {
 					int entityId = packetdata.readVarInt();
 					UUID uuid = packetdata.readUUID();
+					storage.addWatchedEntity(new PEWatchedPlayer(entityId, uuid));
 					float locX = packetdata.readInt() / 32.0F;
 					float locY = packetdata.readInt() / 32.0F;
 					float locZ = packetdata.readInt() / 32.0F;
 					float yaw = packetdata.readByte() * 360.0F / 256.0F;
 					float pitch = packetdata.readByte() * 360.0F / 256.0F;
+					packetdata.readShort();
 					String username = storage.getPlayerListName(uuid);
-					storage.addWatchedEntity(new PEWatchedPlayer(entityId, uuid));
 					return Collections.singletonList(new AddPlayerPacket(
 						uuid, username, entityId,
-						locX, locY, locZ, yaw, pitch
+						locX, locY, locZ, yaw, pitch,
+						WatchedDataRemapper.transform(
+							storage.getWatchedEntity(entityId),
+							DataWatcherSerializer.decodeData(ProtocolVersion.getLatest(), Utils.toArray(packetdata)),
+							ProtocolVersion.MINECRAFT_PE
+						)
 					));
 				}
 				case ClientboundPacket.PLAY_COLLECT_EFFECT_ID: {
@@ -282,7 +290,13 @@ public class ClientboundPacketHandler {
 					} else {
 						int petype = objectRemapper.getRemap(type);
 						if (petype != -1) {
-							return Collections.singletonList(new AddEntityPacket(entityId, petype, locX, locY, locZ, yaw, pitch));
+							return Collections.singletonList(new AddEntityPacket(
+								entityId, petype,
+								locX, locY, locZ,
+								yaw, pitch,
+								speedX, speedY, speedZ,
+								WatchedDataRemapper.transform(null, null, null)
+							));
 						} else {
 							return Collections.emptyList();
 						}
@@ -297,10 +311,19 @@ public class ClientboundPacketHandler {
 					float z = packetdata.readInt() / 32.0F;
 					float yaw = packetdata.readByte() * 360.0F / 256.0F;
 					float pitch = packetdata.readByte() * 360.0F / 256.0F;
+					packetdata.readByte();
+					float speedX = packetdata.readShort() / 8000.0F;
+					float speedY = packetdata.readShort() / 8000.0F;
+					float speedZ = packetdata.readShort() / 8000.0F;					
 					int petype = entityRemapper.getRemap(type);
 					if (petype != -1) {
 						return Collections.singletonList(new AddEntityPacket(
-							entityId, petype, x, y, z, yaw, pitch
+							entityId, petype, x, y, z, yaw, pitch, speedX, speedY, speedZ,
+							WatchedDataRemapper.transform(
+								storage.getWatchedEntity(entityId),
+								DataWatcherSerializer.decodeData(ProtocolVersion.getLatest(), Utils.toArray(packetdata)),
+								ProtocolVersion.MINECRAFT_PE
+							)
 						));
 					} else {
 						return Collections.emptyList();
@@ -408,6 +431,15 @@ public class ClientboundPacketHandler {
 								info.getSpeedX(), info.getSpeedY(), info.getSpeedZ(), (ItemStack) metadata.get(10).value
 							));
 						}
+					} else {
+						return Collections.singletonList(new SetEntityDataPacket(
+							entityId,
+							WatchedDataRemapper.transform(
+								storage.getWatchedEntity(entityId),
+								DataWatcherSerializer.decodeData(ProtocolVersion.getLatest(), Utils.toArray(packetdata)),
+								ProtocolVersion.MINECRAFT_PE
+							)
+						));
 					}
 					return Collections.emptyList();
 				}

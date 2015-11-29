@@ -22,11 +22,11 @@ public enum SpecificType {
 	NONE(EType.NONE, -1),
 	ENTITY(EType.NONE, -1,
 		//flags, air
-		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(0, 1)).addProtocols(ProtocolVersionsHelper.ALL)
+		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(0, 1)).addProtocols(ProtocolVersionsHelper.ALL).addProtocols(ProtocolVersion.MINECRAFT_PE)
 	),
 	LIVING(EType.NONE, -1, SpecificType.ENTITY,
 		//nametag, nametagvisible
-		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(2, 3)).addProtocols(ProtocolVersion.MINECRAFT_1_8),
+		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(2, 3)).addProtocols(ProtocolVersion.MINECRAFT_1_8).addProtocols(ProtocolVersion.MINECRAFT_PE),
 		new RemappingEntriesForProtocols(new RemappingEntry(2, 10, new ValueRemapperStringClamp(64)), new RemappingEntry(3, 11))
 		.addProtocols(ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_6_4, ProtocolVersion.MINECRAFT_1_6_2),
 		new RemappingEntriesForProtocols(new RemappingEntry(2, 5, new ValueRemapperStringClamp(64)), new RemappingEntry(3, 6))
@@ -39,8 +39,10 @@ public enum SpecificType {
 		.addProtocols(ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_6_4, ProtocolVersion.MINECRAFT_1_6_2),
 		new RemappingEntriesForProtocols(new RemappingEntry(7, 8), new RemappingEntry(8, 9), new RemappingEntry(9, 10))
 		.addProtocols(ProtocolVersion.MINECRAFT_1_5_2),
+		//pcolor, pambient,
+		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(7), new RemappingEntryCopyOriginal(8)).addProtocols(ProtocolVersion.MINECRAFT_PE),
 		//noai
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(15)).addProtocols(ProtocolVersion.MINECRAFT_1_8)
+		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(15)).addProtocols(ProtocolVersion.MINECRAFT_1_8).addProtocols(ProtocolVersion.MINECRAFT_PE)
 	),
 	PLAYER(EType.NONE, -1, SpecificType.LIVING,
 		//abs hearts, score
@@ -73,7 +75,7 @@ public enum SpecificType {
 	),
 	BAT(EType.MOB, EntityType.BAT, SpecificType.LIVING,
 		//hanging
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(16)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(16)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9).addProtocols(ProtocolVersion.MINECRAFT_PE)
 	),
 	OCELOT(EType.MOB, EntityType.OCELOT, SpecificType.TAMEABLE,
 		//type
