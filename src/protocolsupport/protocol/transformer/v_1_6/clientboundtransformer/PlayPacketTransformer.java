@@ -51,7 +51,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 	private final LocalStorage storage = new LocalStorage();
 
 	@Override
-	public void tranform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
+	public void transform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
 		PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), ProtocolVersion.getLatest());
 		packet.b(packetdata);
 		switch (packetId) {

@@ -11,7 +11,7 @@ import protocolsupport.protocol.PacketDataSerializer;
 public class HandshakePacketTransformer implements PacketTransformer {
 
 	@Override
-	public void tranform(ChannelHandlerContext ctx, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
+	public void transform(ChannelHandlerContext ctx, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
 		serializer.writeVarInt(packetId);
 		packet.b(serializer);
 	}

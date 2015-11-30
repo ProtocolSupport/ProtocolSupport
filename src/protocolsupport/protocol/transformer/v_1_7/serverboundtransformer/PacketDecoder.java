@@ -37,7 +37,7 @@ public class PacketDecoder implements IPacketDecoder {
 		}
 		Channel channel = ctx.channel();
 		PacketDataSerializer serializer = new PacketDataSerializer(input, version);
-		list.addAll(transformers[channel.attr(currentStateAttrKey).get().ordinal()].tranform(channel, serializer.readVarInt(), serializer));
+		list.addAll(transformers[channel.attr(currentStateAttrKey).get().ordinal()].transform(channel, serializer.readVarInt(), serializer));
 	}
 
 }

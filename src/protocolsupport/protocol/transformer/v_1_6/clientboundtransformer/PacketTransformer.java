@@ -10,6 +10,6 @@ import protocolsupport.protocol.PacketDataSerializer;
 
 public interface PacketTransformer {
 
-	public void tranform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException;
+	public void transform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException;
 
 }

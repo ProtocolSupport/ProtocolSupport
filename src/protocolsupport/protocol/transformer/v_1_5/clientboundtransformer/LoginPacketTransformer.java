@@ -15,7 +15,7 @@ import protocolsupport.utils.Allocator;
 public class LoginPacketTransformer implements PacketTransformer {
 
 	@Override
-	public void tranform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
+	public void transform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
 		PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), ProtocolVersion.getLatest());
 		packet.b(packetdata);
 		switch (packetId) {
