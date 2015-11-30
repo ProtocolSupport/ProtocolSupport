@@ -14,7 +14,7 @@ import protocolsupport.utils.Allocator;
 public class LoginPacketTransformer implements PacketTransformer {
 
 	@Override
-	public void tranform(ChannelHandlerContext ctx, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
+	public void transform(ChannelHandlerContext ctx, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
 		PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), ProtocolVersion.getLatest());
 		switch (packetId) {
 			case ClientboundPacket.LOGIN_SUCCESS_ID: {

@@ -15,7 +15,7 @@ import protocolsupport.utils.PacketCreator;
 public class LoginPacketTransformer implements PacketTransformer {
 
 	@Override
-	public Collection<Packet<?>> tranform(Channel channel, int packetId, PacketDataSerializer serializer) throws IOException, IllegalAccessException, InstantiationException {
+	public Collection<Packet<?>> transform(Channel channel, int packetId, PacketDataSerializer serializer) throws IOException, IllegalAccessException, InstantiationException {
 		switch (packetId) {
 			case 0xFC: {
 				return Collections.<Packet<?>>singletonList(PacketCreator.createWithData(ServerboundPacket.LOGIN_ENCRYPTION_BEGIN.get(), serializer));
