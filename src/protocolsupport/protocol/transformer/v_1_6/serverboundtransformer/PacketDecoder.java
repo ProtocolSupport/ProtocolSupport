@@ -48,7 +48,7 @@ public class PacketDecoder implements IPacketDecoder {
 		Channel channel = ctx.channel();
 		try {
 			int packetId = buffer.readUnsignedByte();
-			Collection<Packet<?>> transformedPackets = transformers[channel.attr(currentStateAttrKey).get().ordinal()].tranform(
+			Collection<Packet<?>> transformedPackets = transformers[channel.attr(currentStateAttrKey).get().ordinal()].transform(
 				channel, packetId, new PacketDataSerializer(buffer, version)
 			);
 			if (transformedPackets != null) {

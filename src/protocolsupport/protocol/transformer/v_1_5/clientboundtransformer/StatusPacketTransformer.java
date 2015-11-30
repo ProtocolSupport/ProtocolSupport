@@ -32,7 +32,7 @@ public class StatusPacketTransformer implements PacketTransformer {
 	.registerTypeAdapterFactory(new ChatTypeAdapterFactory()).create();
 
 	@Override
-	public void tranform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
+	public void transform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
 		if (packetId == ClientboundPacket.STATUS_SERVER_INFO_ID) {
 			PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), ProtocolVersion.getLatest());
 			packet.b(packetdata);

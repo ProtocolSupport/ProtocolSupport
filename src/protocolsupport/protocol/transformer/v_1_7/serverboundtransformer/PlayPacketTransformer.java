@@ -25,7 +25,7 @@ import protocolsupport.utils.Utils;
 public class PlayPacketTransformer implements PacketTransformer {
 
 	@Override
-	public Collection<Packet<?>> tranform(Channel channel, int packetId, PacketDataSerializer serializer) throws Exception {
+	public Collection<Packet<?>> transform(Channel channel, int packetId, PacketDataSerializer serializer) throws Exception {
 		switch (packetId) {
 			case 0x00: {
 				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_KEEP_ALIVE.get());

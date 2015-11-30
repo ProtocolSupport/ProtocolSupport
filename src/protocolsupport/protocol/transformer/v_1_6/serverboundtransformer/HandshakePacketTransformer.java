@@ -15,7 +15,7 @@ import protocolsupport.utils.PacketCreator;
 public class HandshakePacketTransformer implements PacketTransformer {
 
 	@Override
-	public Collection<Packet<?>> tranform(Channel channel, int packetId, PacketDataSerializer serializer) throws Exception {
+	public Collection<Packet<?>> transform(Channel channel, int packetId, PacketDataSerializer serializer) throws Exception {
 		switch (packetId) {
 			case 0xFE: {
 				ArrayList<Packet<?>> packets = new ArrayList<Packet<?>>();

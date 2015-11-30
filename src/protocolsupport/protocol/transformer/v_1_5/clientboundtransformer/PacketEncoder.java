@@ -44,7 +44,7 @@ public class PacketEncoder implements IPacketEncoder {
 		}
 		PacketDataSerializer serializer = new PacketDataSerializer(output, version);
 		try {
-			transformers[currentProtocol.ordinal()].tranform(channel, packetId, packet, serializer);
+			transformers[currentProtocol.ordinal()].transform(channel, packetId, packet, serializer);
 		} catch (Throwable t) {
 			if (MinecraftServer.getServer().isDebugging()) {
 				t.printStackTrace();

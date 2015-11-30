@@ -11,7 +11,7 @@ import protocolsupport.protocol.PacketDataSerializer;
 public class StatusPacketTransformer implements PacketTransformer {
 
 	@Override
-	public Collection<Packet<?>> tranform(Channel channel, int packetId, PacketDataSerializer serializer) throws Exception {
+	public Collection<Packet<?>> transform(Channel channel, int packetId, PacketDataSerializer serializer) throws Exception {
 		return null;
 	}
 
