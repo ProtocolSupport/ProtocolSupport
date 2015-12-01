@@ -98,7 +98,7 @@ public class UDPNetworkManager extends NetworkManager {
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public synchronized void handle(Packet packet) {
+	public void handle(Packet packet) {
 		a(packet, null);
 	}
 
