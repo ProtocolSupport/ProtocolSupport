@@ -41,7 +41,7 @@ public class StartGamePacket implements ClientboundPEPacket {
 	@Override
 	public ClientboundPEPacket encode(ByteBuf buf) throws Exception {
 		buf.writeInt(seed);
-		buf.writeByte(dimension);
+		buf.writeByte(0/*dimension*/);
 		buf.writeInt(generator);
 		buf.writeInt(gamemode);
 		buf.writeLong(entityId);

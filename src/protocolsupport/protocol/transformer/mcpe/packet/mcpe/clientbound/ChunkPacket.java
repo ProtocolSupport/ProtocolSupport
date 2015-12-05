@@ -70,12 +70,17 @@ public class ChunkPacket implements ClientboundPEPacket {
 			}
 		}
 
+		boolean noSkyLight = chunk.world.worldProvider.o();
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
 				for (int y = 0; y < 128; y += 2) {
-					byte data = (byte) (getSection(y).d(x, y & 0xF, z) & 0xF);
-					data |= ((getSection(y + 1).d(x, (y + 1) & 0xF, z) & 0xF) << 4);
-					temp.writeByte(data);
+					if (noSkyLight) {
+						temp.writeByte(0);
+					} else {
+						byte data = (byte) (getSection(y).d(x, y & 0xF, z) & 0xF);
+						data |= ((getSection(y + 1).d(x, (y + 1) & 0xF, z) & 0xF) << 4);
+						temp.writeByte(data);
+					}
 				}
 			}
 		}

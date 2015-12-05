@@ -162,7 +162,7 @@ public class ClientboundPacketHandler {
 					return Arrays.asList(
 						new StartGamePacket(
 							bukkitplayer.getWorld().getEnvironment().getId(),
-							bukkitplayer.getGameMode().getValue() & 0x1,
+							bukkitplayer.getGameMode().getValue(),
 							bukkitplayer.getEntityId(),
 							bukkitplayer.getWorld().getSpawnLocation(),
 							bukkitplayer.getLocation()
@@ -751,6 +751,16 @@ public class ClientboundPacketHandler {
 						new ExplosionPacket(x, y, z, radius, positions),
 						new EntityVelocityPacket(storage.getWatchedSelfPlayer().getId(), motX, motY, motZ)
 					);
+				}
+				case ClientboundPacket.PLAY_RESPAWN_ID: {
+					Player bukkitplayer = Utils.getPlayer(networkManager).getBukkitEntity();
+					return Collections.singletonList(new StartGamePacket(
+						bukkitplayer.getWorld().getEnvironment().getId(),
+						bukkitplayer.getGameMode().getValue(),
+						bukkitplayer.getEntityId(),
+						bukkitplayer.getWorld().getSpawnLocation(),
+						bukkitplayer.getLocation()
+					));
 				}
 				default: {
 					return Collections.emptyList();
