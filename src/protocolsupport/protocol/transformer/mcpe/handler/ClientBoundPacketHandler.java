@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.NumberConversions;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.ClientboundPacket;
+import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.transformer.mcpe.PEStorage;
@@ -95,7 +95,7 @@ import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketPlayOutMapChunk;
 import net.minecraft.server.v1_8_R3.World;
 
-public class ClientboundPacketHandler {
+public class ClientBoundPacketHandler {
 
 	private static final RemappingTable blockRemapper = IdRemapper.BLOCK.getTable(ProtocolVersion.MINECRAFT_PE);
 	private static final RemappingTable entityRemapper = IdRemapper.ENTITY.getTable(ProtocolVersion.MINECRAFT_PE);
@@ -127,7 +127,7 @@ public class ClientboundPacketHandler {
 	}};
 
 	private final UDPNetworkManager networkManager;
-	public ClientboundPacketHandler(UDPNetworkManager networkManager) {
+	public ClientBoundPacketHandler(UDPNetworkManager networkManager) {
 		this.networkManager = networkManager;
 	}
 
@@ -152,10 +152,10 @@ public class ClientboundPacketHandler {
 		try {
 			packet.b(packetdata);
 			switch (EnumProtocol.PLAY.a(EnumProtocolDirection.CLIENTBOUND, packet)) {
-				case ClientboundPacket.PLAY_KEEP_ALIVE_ID: {
+				case ClientBoundPacket.PLAY_KEEP_ALIVE_ID: {
 					return Collections.singletonList(new PongPacket(packetdata.readVarInt()));
 				}
-				case ClientboundPacket.PLAY_LOGIN_ID: {
+				case ClientBoundPacket.PLAY_LOGIN_ID: {
 					//use this packet to sent needed login packets
 					Player bukkitplayer = Utils.getPlayer(networkManager).getBukkitEntity();
 					storage.addWatchedSelfPlayer(new WatchedPlayer(bukkitplayer.getEntityId()));
@@ -173,14 +173,14 @@ public class ClientboundPacketHandler {
 						new SetRecipesPacket()
 					);
 				}
-				case ClientboundPacket.PLAY_CHAT_ID: {
+				case ClientBoundPacket.PLAY_CHAT_ID: {
 					return Collections.singletonList(new ChatPacket(LegacyUtils.fromComponent(packetdata.d())));
 				}
-				case ClientboundPacket.PLAY_UPDATE_TIME_ID: {
+				case ClientBoundPacket.PLAY_UPDATE_TIME_ID: {
 					packetdata.readLong();
 					return Collections.singletonList(new SetTimePacket((int) packetdata.readLong()));
 				}
-				case ClientboundPacket.PLAY_UPDATE_HEALTH_ID: {
+				case ClientBoundPacket.PLAY_UPDATE_HEALTH_ID: {
 					float health = packetdata.readFloat();
 					int food = packetdata.readVarInt();
 					float saturation = packetdata.readFloat();
@@ -197,7 +197,7 @@ public class ClientboundPacketHandler {
 					}
 					return packets;
 				}
-				case ClientboundPacket.PLAY_POSITION_ID: {
+				case ClientBoundPacket.PLAY_POSITION_ID: {
 					EntityPlayer player = Utils.getPlayer(networkManager);
 					double x = packetdata.readDouble();
 					double y = packetdata.readDouble();
@@ -231,7 +231,7 @@ public class ClientboundPacketHandler {
 						)
 					);
 				}
-				case ClientboundPacket.PLAY_SPAWN_NAMED_ID: {
+				case ClientBoundPacket.PLAY_SPAWN_NAMED_ID: {
 					int entityId = packetdata.readVarInt();
 					UUID uuid = packetdata.readUUID();
 					storage.addWatchedEntity(new PEWatchedPlayer(entityId, uuid));
@@ -252,7 +252,7 @@ public class ClientboundPacketHandler {
 						)
 					));
 				}
-				case ClientboundPacket.PLAY_COLLECT_EFFECT_ID: {
+				case ClientBoundPacket.PLAY_COLLECT_EFFECT_ID: {
 					int itemId = packetdata.readVarInt();
 					int entityId = packetdata.readVarInt();
 					if (entityId == storage.getWatchedSelfPlayer().getId()) {
@@ -266,7 +266,7 @@ public class ClientboundPacketHandler {
 						}
 					}
 				}
-				case ClientboundPacket.PLAY_SPAWN_OBJECT_ID: {
+				case ClientBoundPacket.PLAY_SPAWN_OBJECT_ID: {
 					int entityId = packetdata.readVarInt();
 					int type = packetdata.readByte();
 					storage.addWatchedEntity(new WatchedObject(entityId, type));
@@ -303,7 +303,7 @@ public class ClientboundPacketHandler {
 						}
 					}
 				}
-				case ClientboundPacket.PLAY_SPAWN_LIVING_ID: {
+				case ClientBoundPacket.PLAY_SPAWN_LIVING_ID: {
 					int entityId = packetdata.readVarInt();
 					int type = packetdata.readByte() & 0xFF;
 					storage.addWatchedEntity(new WatchedLiving(entityId, type));
@@ -330,7 +330,7 @@ public class ClientboundPacketHandler {
 						return Collections.emptyList();
 					}
 				}
-				case ClientboundPacket.PLAY_SPAWN_PAINTING_ID: {
+				case ClientBoundPacket.PLAY_SPAWN_PAINTING_ID: {
 					int entityId = packetdata.readVarInt();
 					String name = packetdata.readString(13);
 					BlockPosition location = packetdata.c();
@@ -357,7 +357,7 @@ public class ClientboundPacketHandler {
 					}
 					return Collections.singletonList(new AddPaintingPacket(entityId, x, location.getY(), z, direction, name));
 				}
-				case ClientboundPacket.PLAY_ENTITY_DESTROY_ID: {
+				case ClientBoundPacket.PLAY_ENTITY_DESTROY_ID: {
 					ArrayList<ClientboundPEPacket> packets = new ArrayList<ClientboundPEPacket>();
 					int count = packetdata.readVarInt();
 					int[] entityIds = new int[count];
@@ -377,9 +377,9 @@ public class ClientboundPacketHandler {
 					pestorage.removeItemsInfo(entityIds);
 					return packets;
 				}
-				case ClientboundPacket.PLAY_ENTITY_REL_MOVE_ID:
-				case ClientboundPacket.PLAY_ENTITY_REL_MOVE_LOOK_ID:
-				case ClientboundPacket.PLAY_ENTITY_LOOK_ID: {
+				case ClientBoundPacket.PLAY_ENTITY_REL_MOVE_ID:
+				case ClientBoundPacket.PLAY_ENTITY_REL_MOVE_LOOK_ID:
+				case ClientBoundPacket.PLAY_ENTITY_LOOK_ID: {
 					int entityId = packetdata.readVarInt();
 					Entity entity = Utils.getPlayer(networkManager).world.a(entityId);
 					if (entity != null) {
@@ -399,7 +399,7 @@ public class ClientboundPacketHandler {
 					}
 					return Collections.emptyList();
 				}
-				case ClientboundPacket.PLAY_ENTITY_TELEPORT_ID: {
+				case ClientBoundPacket.PLAY_ENTITY_TELEPORT_ID: {
 					int entityId = packetdata.readVarInt();
 					float x = packetdata.readInt() / 32.0F;
 					float y = packetdata.readInt() / 32.0F;
@@ -414,14 +414,14 @@ public class ClientboundPacketHandler {
 						return Collections.singletonList(new MoveEntityPacket(entityId, x, y, z, yaw, pitch));
 					}
 				}
-				case ClientboundPacket.PLAY_ENTITY_VELOCITY_ID: {
+				case ClientBoundPacket.PLAY_ENTITY_VELOCITY_ID: {
 					int entityId = packetdata.readVarInt();
 					float motX = packetdata.readShort() / 8000.0F;
 					float motY = packetdata.readShort() / 8000.0F;
 					float motZ = packetdata.readShort() / 8000.0F;
 					return Collections.singletonList(new EntityVelocityPacket(entityId, motX, motY, motZ));
 				}
-				case ClientboundPacket.PLAY_ENTITY_METADATA_ID: {
+				case ClientBoundPacket.PLAY_ENTITY_METADATA_ID: {
 					int entityId = packetdata.readVarInt();
 					ItemInfo info = pestorage.getItemInfo(entityId);
 					if (info != null) {
@@ -444,7 +444,7 @@ public class ClientboundPacketHandler {
 					}
 					return Collections.emptyList();
 				}
-				case ClientboundPacket.PLAY_CHUNK_SINGLE_ID: {
+				case ClientBoundPacket.PLAY_CHUNK_SINGLE_ID: {
 					int x = packetdata.readInt();
 					int z = packetdata.readInt();
 					boolean cont = packetdata.readBoolean();
@@ -457,7 +457,7 @@ public class ClientboundPacketHandler {
 						return Collections.emptyList();
 					}
 				}
-				case ClientboundPacket.PLAY_BLOCK_CHANGE_MULTI_ID: {
+				case ClientBoundPacket.PLAY_BLOCK_CHANGE_MULTI_ID: {
 					int chunkX = packetdata.readInt();
 					int chunkZ = packetdata.readInt();
 					int count = packetdata.readVarInt();
@@ -474,7 +474,7 @@ public class ClientboundPacketHandler {
 					}
 					return Collections.singletonList(new SetBlocksPacket(records));
 				}
-				case ClientboundPacket.PLAY_BLOCK_CHANGE_SINGLE_ID: {
+				case ClientBoundPacket.PLAY_BLOCK_CHANGE_SINGLE_ID: {
 					BlockPosition blockPos = packetdata.c();
 					int stateId = packetdata.readVarInt();
 					return Collections.singletonList(new SetBlocksPacket(new UpdateBlockRecord(
@@ -486,7 +486,7 @@ public class ClientboundPacketHandler {
 						SetBlocksPacket.FLAG_ALL_PRIORITY
 					)));
 				}
-				case ClientboundPacket.PLAY_CHUNK_MULTI_ID: {
+				case ClientBoundPacket.PLAY_CHUNK_MULTI_ID: {
 					packetdata.readBoolean();
 					World world = Utils.getPlayer(networkManager).getWorld();
 					ArrayList<ClientboundPEPacket> packets = new ArrayList<ClientboundPEPacket>();
@@ -504,7 +504,7 @@ public class ClientboundPacketHandler {
 					}
 					return packets;
 				}
-				case ClientboundPacket.PLAY_WINDOW_SET_SLOT_ID: {
+				case ClientBoundPacket.PLAY_WINDOW_SET_SLOT_ID: {
 					int windowId = packetdata.readByte();
 					int slot = packetdata.readShort();
 					ItemStack itemstack = packetdata.readItemStack();
@@ -523,7 +523,7 @@ public class ClientboundPacketHandler {
 					}
 					return Collections.emptyList();
 				}
-				case ClientboundPacket.PLAY_WINDOW_SET_ITEMS_ID: {
+				case ClientBoundPacket.PLAY_WINDOW_SET_ITEMS_ID: {
 					EntityPlayer player = Utils.getPlayer(networkManager);
 					int windowId = packetdata.readByte();
 					ItemStack[] packetitems = new ItemStack[packetdata.readShort()];
@@ -551,7 +551,7 @@ public class ClientboundPacketHandler {
 						return packets;
 					}
 				}
-				case ClientboundPacket.PLAY_WINDOW_OPEN_ID: {
+				case ClientBoundPacket.PLAY_WINDOW_OPEN_ID: {
 					EntityPlayer player = Utils.getPlayer(networkManager);
 					int x = NumberConversions.floor(player.locX);
 					int z = NumberConversions.floor(player.locZ);
@@ -570,7 +570,7 @@ public class ClientboundPacketHandler {
 						return Collections.emptyList();
 					}
 				}
-				case ClientboundPacket.PLAY_WINDOW_CLOSE_ID: {
+				case ClientBoundPacket.PLAY_WINDOW_CLOSE_ID: {
 					final EntityPlayer player = Utils.getPlayer(networkManager);
 					ArrayList<ClientboundPEPacket> packets = new ArrayList<>();
 					BlockPosition position = pestorage.getFakeInventoryBlock();
@@ -595,7 +595,7 @@ public class ClientboundPacketHandler {
 					});
 					return packets;
 				}
-				case ClientboundPacket.PLAY_PLAYER_INFO_ID: {
+				case ClientBoundPacket.PLAY_PLAYER_INFO_ID: {
 					int action = packetdata.readVarInt();
 					int count = packetdata.readVarInt();
 					HashSet<UUID> uuids = new HashSet<UUID>();
@@ -659,7 +659,7 @@ public class ClientboundPacketHandler {
 					}
 					return Collections.emptyList();
 				}
-				case ClientboundPacket.PLAY_ENTITY_EQUIPMENT_ID: {
+				case ClientBoundPacket.PLAY_ENTITY_EQUIPMENT_ID: {
 					int entityId = packetdata.readVarInt();
 					int slot = packetdata.readShort();
 					ItemStack itemstack = packetdata.readItemStack();
@@ -670,7 +670,7 @@ public class ClientboundPacketHandler {
 						return Collections.singletonList(new EntityEquipmentArmorPacket(entityId, Utils.reverseArray(pestorage.getArmor(entityId))));
 					}
 				}
-				case ClientboundPacket.PLAY_ENTITY_STATUS_ID: {
+				case ClientBoundPacket.PLAY_ENTITY_STATUS_ID: {
 					int entityId = packetdata.readInt();
 					int state = packetdata.readByte();
 					//TODO: remap other actions
@@ -679,12 +679,12 @@ public class ClientboundPacketHandler {
 					}
 					return Collections.emptyList();
 				}
-				case ClientboundPacket.PLAY_ANIMATION_ID: {
+				case ClientBoundPacket.PLAY_ANIMATION_ID: {
 					int entityId = packetdata.readVarInt();
 					int action = packetdata.readByte();
 					return Collections.singletonList(new AnimatePacket(action + 1, entityId));
 				}
-				case ClientboundPacket.PLAY_ENTITY_ATTACH_ID: {
+				case ClientBoundPacket.PLAY_ENTITY_ATTACH_ID: {
 					int rider = packetdata.readInt();
 					int vehicle = packetdata.readInt();
 					boolean leash = packetdata.readBoolean();
@@ -700,7 +700,7 @@ public class ClientboundPacketHandler {
 						return Collections.emptyList();
 					}
 				}
-				case ClientboundPacket.PLAY_UPDATE_SIGN_ID: {
+				case ClientBoundPacket.PLAY_UPDATE_SIGN_ID: {
 					BlockPosition position = packetdata.c();
 					NBTTagCompound compound = new NBTTagCompound();
 					compound.setString("id", "Sign");
@@ -712,7 +712,7 @@ public class ClientboundPacketHandler {
 					}
 					return Collections.singletonList(new TileEntityDataPacket(position.getX(), position.getY(), position.getZ(), compound));
 				}
-				case ClientboundPacket.PLAY_ENTITY_EFFECT_ADD_ID: {
+				case ClientBoundPacket.PLAY_ENTITY_EFFECT_ADD_ID: {
 					int entityId = packetdata.readVarInt();
 					int effectId = packetdata.readByte();
 					int amplifier = packetdata.readByte();
@@ -720,12 +720,12 @@ public class ClientboundPacketHandler {
 					boolean hideparticles = packetdata.readBoolean();
 					return Collections.singletonList(new SetEntityEffect(entityId, effectId, amplifier, !hideparticles, duration));
 				}
-				case ClientboundPacket.PLAY_ENTITY_EFFECT_REMOVE_ID: {
+				case ClientBoundPacket.PLAY_ENTITY_EFFECT_REMOVE_ID: {
 					int entityId = packetdata.readVarInt();
 					int effectId = packetdata.readByte();
 					return Collections.singletonList(new SetEntityEffect(entityId, effectId));
 				}
-				case ClientboundPacket.PLAY_EXPERIENCE_ID: {
+				case ClientBoundPacket.PLAY_EXPERIENCE_ID: {
 					float exp = packetdata.readFloat();
 					int level = packetdata.readVarInt();
 					return Collections.singletonList(new SetAttributesPacket(
@@ -734,7 +734,7 @@ public class ClientboundPacketHandler {
 						new AttributeRecord("player.level", 0.0F, Float.MAX_VALUE, level)
 					));
 				}
-				case ClientboundPacket.PLAY_EXPLOSION_ID: {
+				case ClientBoundPacket.PLAY_EXPLOSION_ID: {
 					float x = packetdata.readFloat();
 					float y = packetdata.readFloat();
 					float z = packetdata.readFloat();
@@ -752,7 +752,7 @@ public class ClientboundPacketHandler {
 						new EntityVelocityPacket(storage.getWatchedSelfPlayer().getId(), motX, motY, motZ)
 					);
 				}
-				case ClientboundPacket.PLAY_RESPAWN_ID: {
+				case ClientBoundPacket.PLAY_RESPAWN_ID: {
 					Player bukkitplayer = Utils.getPlayer(networkManager).getBukkitEntity();
 					return Collections.singletonList(new StartGamePacket(
 						bukkitplayer.getWorld().getEnvironment().getId(),

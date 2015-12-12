@@ -10,7 +10,7 @@ import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketPlayInClientCommand;
 import net.minecraft.server.v1_8_R3.PacketPlayInClientCommand.EnumClientCommand;
 
-import protocolsupport.protocol.ServerboundPacket;
+import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
 import protocolsupport.utils.PacketCreator;
@@ -56,7 +56,7 @@ public class PlayerActionPacket implements ServerboundPEPacket {
 			case START_BREAK:
 			case CANCEL_BREAK:
 			case CONSUME_ITEM: {
-				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_BLOCK_DIG.get());
+				PacketCreator creator = new PacketCreator(ServerBoundPacket.PLAY_BLOCK_DIG.get());
 				creator.writeByte(action);
 				creator.a(new BlockPosition(x, y, z));
 				creator.writeByte(1);
@@ -88,7 +88,7 @@ public class PlayerActionPacket implements ServerboundPEPacket {
 	}
 
 	private static List<? extends Packet<?>> getEntityActionPacket(int action) throws Exception {
-		PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_ENTITY_ACTION.get());
+		PacketCreator creator = new PacketCreator(ServerBoundPacket.PLAY_ENTITY_ACTION.get());
 		creator.writeVarInt(0);
 		creator.writeVarInt(action);
 		creator.writeVarInt(0);

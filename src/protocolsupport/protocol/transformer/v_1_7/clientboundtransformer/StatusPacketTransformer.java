@@ -11,7 +11,7 @@ import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketListener;
 import net.minecraft.server.v1_8_R3.ServerPing;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.ClientboundPacket;
+import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.utils.ServerPingSerializers;
 import protocolsupport.utils.Allocator;
@@ -31,7 +31,7 @@ public class StatusPacketTransformer implements PacketTransformer {
 
 	@Override
 	public void transform(ChannelHandlerContext ctx, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
-		if (packetId == ClientboundPacket.STATUS_SERVER_INFO_ID) {
+		if (packetId == ClientBoundPacket.STATUS_SERVER_INFO_ID) {
 			PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), ProtocolVersion.getLatest());
 			packet.b(packetdata);
 			ServerPing serverPing = gson.fromJson(packetdata.readString(32767), ServerPing.class);

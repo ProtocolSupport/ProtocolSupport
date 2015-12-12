@@ -10,7 +10,7 @@ import net.minecraft.server.v1_8_R3.Packet;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.ServerboundPacket;
+import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
 import protocolsupport.utils.PacketCreator;
@@ -32,7 +32,7 @@ public class DropItemPacket implements ServerboundPEPacket {
 
 	@Override
 	public List<? extends Packet<?>> transfrom() throws Exception {
-		PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_BLOCK_DIG.get());
+		PacketCreator creator = new PacketCreator(ServerBoundPacket.PLAY_BLOCK_DIG.get());
 		creator.writeByte(3);
 		creator.a(BlockPosition.ZERO);
 		creator.writeByte(0);

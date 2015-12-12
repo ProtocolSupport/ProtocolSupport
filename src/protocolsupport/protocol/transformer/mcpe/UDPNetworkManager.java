@@ -15,9 +15,9 @@ import com.google.common.base.Function;
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
-import protocolsupport.protocol.transformer.mcpe.handler.ClientboundPacketHandler;
+import protocolsupport.protocol.transformer.mcpe.handler.ClientBoundPacketHandler;
 import protocolsupport.protocol.transformer.mcpe.handler.PELoginListener;
-import protocolsupport.protocol.transformer.mcpe.handler.ServerboundPacketHandler;
+import protocolsupport.protocol.transformer.mcpe.handler.ServerBoundPacketHandler;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.BatchPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.PingPacket;
@@ -58,8 +58,8 @@ public class UDPNetworkManager extends NetworkManager {
 
 	public final static long serverID = 0x0000000012345678L;
 
-	private final ClientboundPacketHandler clientboundTransforner = new ClientboundPacketHandler(this);
-	private final ServerboundPacketHandler serverboundTransformer = new ServerboundPacketHandler(this);
+	private final ClientBoundPacketHandler clientboundTransforner = new ClientBoundPacketHandler(this);
+	private final ServerBoundPacketHandler serverboundTransformer = new ServerBoundPacketHandler(this);
 
 	private long lastReceivedPacketTime = System.currentTimeMillis();
 

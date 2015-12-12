@@ -7,7 +7,7 @@ import java.util.List;
 
 import net.minecraft.server.v1_8_R3.Packet;
 
-import protocolsupport.protocol.ServerboundPacket;
+import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.DualPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
@@ -48,7 +48,7 @@ public class AnimatePacket implements DualPEPacket {
 
 	@Override
 	public List<? extends Packet<?>> transfrom() throws Exception {
-		return Collections.singletonList(new PacketCreator(ServerboundPacket.PLAY_ANIMATION.get()).create());
+		return Collections.singletonList(new PacketCreator(ServerBoundPacket.PLAY_ANIMATION.get()).create());
 	}
 
 }

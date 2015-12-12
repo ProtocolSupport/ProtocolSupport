@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 import java.util.Collections;
 import java.util.List;
 
-import protocolsupport.protocol.ServerboundPacket;
+import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
 import protocolsupport.utils.PacketCreator;
@@ -35,7 +35,7 @@ public class RemoveBlockPacket implements ServerboundPEPacket {
 
 	@Override
 	public List<? extends Packet<?>> transfrom() throws Exception {
-		PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_BLOCK_DIG.get());
+		PacketCreator creator = new PacketCreator(ServerBoundPacket.PLAY_BLOCK_DIG.get());
 		creator.writeByte(2);
 		creator.a(new BlockPosition(x, y, z));
 		creator.writeByte(1);

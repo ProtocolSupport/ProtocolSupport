@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 import java.util.Collections;
 import java.util.List;
 
-import protocolsupport.protocol.ServerboundPacket;
+import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.DualPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
@@ -75,7 +75,7 @@ public class MovePlayerPacket implements DualPEPacket {
 
 	@Override
 	public List<? extends Packet<?>> transfrom() throws Exception {
-		PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_POSITION_LOOK.get());
+		PacketCreator creator = new PacketCreator(ServerBoundPacket.PLAY_POSITION_LOOK.get());
 		creator.writeDouble(x);
 		creator.writeDouble(y);
 		creator.writeDouble(z);

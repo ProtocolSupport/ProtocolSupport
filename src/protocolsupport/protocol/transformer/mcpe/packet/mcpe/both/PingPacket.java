@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.spigotmc.SneakyThrow;
 
-import protocolsupport.protocol.ServerboundPacket;
+import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.transformer.mcpe.handler.PELoginListener;
 import protocolsupport.protocol.transformer.mcpe.packet.HandleNMSPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
@@ -61,7 +61,7 @@ public class PingPacket implements DualPEPacket {
 
 	private PacketPlayInKeepAlive getPlayKeepAlive() {
 		try {
-			PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_KEEP_ALIVE.get());
+			PacketCreator creator = new PacketCreator(ServerBoundPacket.PLAY_KEEP_ALIVE.get());
 			creator.writeVarInt((int) pingId);
 			return (PacketPlayInKeepAlive) creator.create();
 		} catch (Throwable e) {

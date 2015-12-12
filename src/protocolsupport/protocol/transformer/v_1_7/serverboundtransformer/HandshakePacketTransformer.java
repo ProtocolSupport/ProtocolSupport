@@ -10,7 +10,7 @@ import net.minecraft.server.v1_8_R3.Packet;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.ServerboundPacket;
+import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.utils.PacketCreator;
 
 public class HandshakePacketTransformer implements PacketTransformer {
@@ -19,7 +19,7 @@ public class HandshakePacketTransformer implements PacketTransformer {
 	public Collection<Packet<?>> transform(Channel channel, int packetId, PacketDataSerializer serializer) throws Exception {
 		switch (packetId) {
 			case 0x00: {
-				PacketCreator creator = new PacketCreator(ServerboundPacket.HANDSHAKE_START.get());
+				PacketCreator creator = new PacketCreator(ServerBoundPacket.HANDSHAKE_START.get());
 				serializer.readVarInt();
 				creator.writeVarInt(ProtocolVersion.getLatest().getId());
 				creator.writeString(serializer.readString(32767));
@@ -28,7 +28,7 @@ public class HandshakePacketTransformer implements PacketTransformer {
 				return Collections.<Packet<?>>singletonList(creator.create());
 			}
 			default: {
-				return Collections.<Packet<?>>singletonList(PacketCreator.createWithData(ServerboundPacket.get(EnumProtocol.HANDSHAKING, packetId), serializer));
+				return Collections.<Packet<?>>singletonList(PacketCreator.createWithData(ServerBoundPacket.get(EnumProtocol.HANDSHAKING, packetId), serializer));
 			}
 		}
 	}

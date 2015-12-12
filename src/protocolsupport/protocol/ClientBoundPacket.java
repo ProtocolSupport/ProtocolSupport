@@ -1,6 +1,6 @@
 package protocolsupport.protocol;
 
-public class ClientboundPacket {
+public class ClientBoundPacket {
 
 	public static final int LOGIN_DISCONNECT_ID = 0x00;
 	public static final int LOGIN_ENCRYPTION_BEGIN_ID = 0x01;

@@ -18,10 +18,10 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketRegistry;
 import protocolsupport.protocol.transformer.mcpe.packet.raknet.EncapsulatedPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.raknet.RakNetPacket;
 
-public class ServerboundPacketHandler {
+public class ServerBoundPacketHandler {
 
 	private final UDPNetworkManager networkManager;
-	public ServerboundPacketHandler(UDPNetworkManager networkManager) {
+	public ServerBoundPacketHandler(UDPNetworkManager networkManager) {
 		this.networkManager = networkManager;
 	}
 
