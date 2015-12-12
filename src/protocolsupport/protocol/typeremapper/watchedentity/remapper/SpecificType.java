@@ -80,8 +80,17 @@ public enum SpecificType {
 		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(18)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	WOLF(EType.MOB, EntityType.WOLF, SpecificType.TAMEABLE,
-		//begging, collar color
-		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(19, 20)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9),
+		//begging
+		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(19)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9),
+		//collar color
+		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(20)).addProtocols(ProtocolVersion.MINECRAFT_1_8),
+		new RemappingEntriesForProtocols(new RemappingEntry(20, 20, new ValueRemapper() {
+			@Override
+			public DataWatcherObject remap(DataWatcherObject object) {
+				object.value = (byte) (15 - (byte) object.value);
+				return object;
+			}
+		})).addProtocols(ProtocolVersionsHelper.BEFORE_1_8),
 		//health
 		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(18))
 		.addProtocols(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_6_4, ProtocolVersion.MINECRAFT_1_6_2),
