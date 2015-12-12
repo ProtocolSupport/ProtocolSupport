@@ -9,7 +9,7 @@ import net.minecraft.server.v1_8_R3.Packet;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.ServerboundPacket;
+import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.utils.PacketCreator;
 
 public class HandshakePacketTransformer implements PacketTransformer {
@@ -19,7 +19,7 @@ public class HandshakePacketTransformer implements PacketTransformer {
 		switch (packetId) {
 			case 0xFE: {
 				ArrayList<Packet<?>> packets = new ArrayList<Packet<?>>();
-				PacketCreator hsscreator = new PacketCreator(ServerboundPacket.HANDSHAKE_START.get());
+				PacketCreator hsscreator = new PacketCreator(ServerBoundPacket.HANDSHAKE_START.get());
 				serializer.readUnsignedByte();
 				serializer.readUnsignedByte();
 				serializer.readString(32767);
@@ -30,12 +30,12 @@ public class HandshakePacketTransformer implements PacketTransformer {
 				hsscreator.writeShort(serializer.readInt());
 				hsscreator.writeVarInt(1);
 				packets.add(hsscreator.create());
-				packets.add(ServerboundPacket.STATUS_PING.get());
+				packets.add(ServerBoundPacket.STATUS_PING.get());
 				return packets;
 			}
 			case 0x02: {
 				ArrayList<Packet<?>> packets = new ArrayList<Packet<?>>();
-				PacketCreator hsscreator = new PacketCreator(ServerboundPacket.HANDSHAKE_START.get());
+				PacketCreator hsscreator = new PacketCreator(ServerBoundPacket.HANDSHAKE_START.get());
 				serializer.readUnsignedByte();
 				hsscreator.writeVarInt(ProtocolVersion.getLatest().getId());
 				String username = serializer.readString(16);
@@ -43,7 +43,7 @@ public class HandshakePacketTransformer implements PacketTransformer {
 				hsscreator.writeShort(serializer.readInt());
 				hsscreator.writeVarInt(2);
 				packets.add(hsscreator.create());
-				PacketCreator lscreator = new PacketCreator(ServerboundPacket.LOGIN_START.get());
+				PacketCreator lscreator = new PacketCreator(ServerBoundPacket.LOGIN_START.get());
 				lscreator.writeString(username);
 				packets.add(lscreator.create());
 				return packets;

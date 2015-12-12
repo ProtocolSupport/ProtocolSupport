@@ -4,7 +4,7 @@ import net.minecraft.server.v1_8_R3.EnumProtocol;
 import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R3.Packet;
 
-public enum ServerboundPacket {
+public enum ServerBoundPacket {
 
 	HANDSHAKE_START(0x00, EnumProtocol.HANDSHAKING),
 	STATUS_PING(0x00, EnumProtocol.STATUS),
@@ -37,7 +37,7 @@ public enum ServerboundPacket {
 
 	private final int id;
 	private final EnumProtocol protocol;
-	ServerboundPacket(int id, EnumProtocol protocol) {
+	ServerBoundPacket(int id, EnumProtocol protocol) {
 		this.id = id;
 		this.protocol = protocol;
 	}

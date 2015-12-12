@@ -18,7 +18,7 @@ import org.bukkit.event.inventory.InventoryType;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.ServerboundPacket;
+import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.utils.PacketCreator;
 import protocolsupport.utils.Utils;
 
@@ -28,18 +28,18 @@ public class PlayPacketTransformer implements PacketTransformer {
 	public Collection<Packet<?>> transform(Channel channel, int packetId, PacketDataSerializer serializer) throws Exception {
 		switch (packetId) {
 			case 0x00: {
-				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_KEEP_ALIVE.get());
+				PacketCreator creator = new PacketCreator(ServerBoundPacket.PLAY_KEEP_ALIVE.get());
 				creator.writeVarInt(serializer.readInt());
 				return Collections.<Packet<?>>singletonList(creator.create());
 			}
 			case 0x02: {
-				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_USE_ENTITY.get());
+				PacketCreator creator = new PacketCreator(ServerBoundPacket.PLAY_USE_ENTITY.get());
 				creator.writeVarInt(serializer.readInt());
 				creator.writeVarInt(serializer.readByte() % PacketPlayInUseEntity.EnumEntityUseAction.values().length);
 				return Collections.<Packet<?>>singletonList(creator.create());
 			}
 			case 0x04: {
-				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_POSITION.get());
+				PacketCreator creator = new PacketCreator(ServerBoundPacket.PLAY_POSITION.get());
 				creator.writeDouble(serializer.readDouble());
 				creator.writeDouble(serializer.readDouble());
 				serializer.readDouble();
@@ -48,7 +48,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				return Collections.<Packet<?>>singletonList(creator.create());
 			}
 			case 0x06: {
-				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_POSITION_LOOK.get());
+				PacketCreator creator = new PacketCreator(ServerBoundPacket.PLAY_POSITION_LOOK.get());
 				creator.writeDouble(serializer.readDouble());
 				creator.writeDouble(serializer.readDouble());
 				serializer.readDouble();
@@ -59,14 +59,14 @@ public class PlayPacketTransformer implements PacketTransformer {
 				return Collections.<Packet<?>>singletonList(creator.create());
 			}
 			case 0x07: {
-				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_BLOCK_DIG.get());
+				PacketCreator creator = new PacketCreator(ServerBoundPacket.PLAY_BLOCK_DIG.get());
 				creator.writeByte(serializer.readUnsignedByte());
 				creator.a(new BlockPosition(serializer.readInt(), serializer.readUnsignedByte(), serializer.readInt()));
 				creator.writeByte(serializer.readUnsignedByte());
 				return Collections.<Packet<?>>singletonList(creator.create());
 			}
 			case 0x08: {
-				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_BLOCK_PLACE.get());
+				PacketCreator creator = new PacketCreator(ServerBoundPacket.PLAY_BLOCK_PLACE.get());
 				creator.a(new BlockPosition(serializer.readInt(), serializer.readUnsignedByte(), serializer.readInt()));
 				creator.writeByte(serializer.readUnsignedByte());
 				creator.writeItemStack(serializer.readItemStack());
@@ -78,24 +78,24 @@ public class PlayPacketTransformer implements PacketTransformer {
 			case 0x0A: {
 				serializer.readInt();
 				serializer.readByte();
-				return Collections.<Packet<?>>singletonList(new PacketCreator(ServerboundPacket.PLAY_ANIMATION.get()).create());
+				return Collections.<Packet<?>>singletonList(new PacketCreator(ServerBoundPacket.PLAY_ANIMATION.get()).create());
 			}
 			case 0x0B: {
-				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_ENTITY_ACTION.get());
+				PacketCreator creator = new PacketCreator(ServerBoundPacket.PLAY_ENTITY_ACTION.get());
 				creator.writeVarInt(serializer.readInt());
 				creator.writeByte(serializer.readByte() - 1);
 				creator.writeVarInt(serializer.readInt());
 				return Collections.<Packet<?>>singletonList(creator.create());
 			}
 			case 0x0C: {
-				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_STEER_VEHICLE.get());
+				PacketCreator creator = new PacketCreator(ServerBoundPacket.PLAY_STEER_VEHICLE.get());
 				creator.writeFloat(serializer.readFloat());
 				creator.writeFloat(serializer.readFloat());
 				creator.writeByte((serializer.readBoolean() ? 1 : 0) + (serializer.readBoolean() ? 1 << 1 : 0));
 				return Collections.<Packet<?>>singletonList(creator.create());
 			}
 			case 0x0E: {
-				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_WINDOW_CLICK.get());
+				PacketCreator creator = new PacketCreator(ServerBoundPacket.PLAY_WINDOW_CLICK.get());
 				creator.writeByte(serializer.readByte());
 				int slot = serializer.readShort();
 				if (Utils.getPlayer(channel).getOpenInventory().getType() == InventoryType.ENCHANTING) {
@@ -111,7 +111,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				return Collections.<Packet<?>>singletonList(creator.create());
 			}
 			case 0x12: {
-				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_UPDATE_SIGN.get());
+				PacketCreator creator = new PacketCreator(ServerBoundPacket.PLAY_UPDATE_SIGN.get());
 				creator.a(new BlockPosition(serializer.readInt(), serializer.readShort(), serializer.readInt()));
 				for (int i = 0; i < 4; i++) {
 					creator.writeString(ChatSerializer.a(new ChatComponentText(serializer.readString(15))));
@@ -119,13 +119,13 @@ public class PlayPacketTransformer implements PacketTransformer {
 				return Collections.<Packet<?>>singletonList(creator.create());
 			}
 			case 0x14: {
-				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_TAB_COMPLETE.get());
+				PacketCreator creator = new PacketCreator(ServerBoundPacket.PLAY_TAB_COMPLETE.get());
 				creator.writeString(serializer.readString(32767));
 				creator.writeBoolean(false);
 				return Collections.<Packet<?>>singletonList(creator.create());
 			}
 			case 0x15: {
-				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_SETTINGS.get());
+				PacketCreator creator = new PacketCreator(ServerBoundPacket.PLAY_SETTINGS.get());
 				creator.writeString(serializer.readString(7));
 				creator.writeByte(serializer.readByte());
 				creator.writeByte(serializer.readByte());
@@ -136,7 +136,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				return Collections.<Packet<?>>singletonList(creator.create());
 			}
 			case 0x17: {
-				PacketCreator creator = new PacketCreator(ServerboundPacket.PLAY_CUSTOM_PAYLOAD.get());
+				PacketCreator creator = new PacketCreator(ServerBoundPacket.PLAY_CUSTOM_PAYLOAD.get());
 				String tag = serializer.readString(20);
 				creator.writeString(tag);
 				ByteBuf buf = serializer.readBytes(serializer.readShort());
@@ -172,7 +172,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				return Collections.<Packet<?>>singletonList(creator.create());
 			}
 			default: {
-				return Collections.<Packet<?>>singletonList(PacketCreator.createWithData(ServerboundPacket.get(EnumProtocol.PLAY, packetId), serializer));
+				return Collections.<Packet<?>>singletonList(PacketCreator.createWithData(ServerBoundPacket.get(EnumProtocol.PLAY, packetId), serializer));
 			}
 		}
 	}

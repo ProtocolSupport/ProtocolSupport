@@ -9,7 +9,7 @@ import java.util.Collections;
 import net.minecraft.server.v1_8_R3.Packet;
 
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.ServerboundPacket;
+import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.utils.PacketCreator;
 
 public class LoginPacketTransformer implements PacketTransformer {
@@ -18,7 +18,7 @@ public class LoginPacketTransformer implements PacketTransformer {
 	public Collection<Packet<?>> transform(Channel channel, int packetId, PacketDataSerializer serializer) throws IOException, IllegalAccessException, InstantiationException {
 		switch (packetId) {
 			case 0xFC: {
-				return Collections.<Packet<?>>singletonList(PacketCreator.createWithData(ServerboundPacket.LOGIN_ENCRYPTION_BEGIN.get(), serializer));
+				return Collections.<Packet<?>>singletonList(PacketCreator.createWithData(ServerBoundPacket.LOGIN_ENCRYPTION_BEGIN.get(), serializer));
 			}
 		}
 		return null;

@@ -15,7 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.ClientboundPacket;
+import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.protocol.transformer.utils.ServerPingSerializers;
@@ -33,7 +33,7 @@ public class StatusPacketTransformer implements PacketTransformer {
 
 	@Override
 	public void transform(Channel channel, int packetId, Packet<PacketListener> packet, PacketDataSerializer serializer) throws IOException {
-		if (packetId == ClientboundPacket.STATUS_SERVER_INFO_ID) {
+		if (packetId == ClientBoundPacket.STATUS_SERVER_INFO_ID) {
 			PacketDataSerializer packetdata = new PacketDataSerializer(Allocator.allocateBuffer(), ProtocolVersion.getLatest());
 			packet.b(packetdata);
 			ServerPing serverPing = gson.fromJson(packetdata.readString(32767), ServerPing.class);
