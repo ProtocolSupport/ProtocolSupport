@@ -21,7 +21,7 @@ public class LoginPacketTransformer implements PacketTransformer {
 		switch (packetId) {
 			case ClientBoundPacket.LOGIN_DISCONNECT_ID: {
 				serializer.writeByte(0xFF);
-				serializer.writeString(LegacyUtils.fromComponent(packetdata.d()));
+				serializer.writeString(LegacyUtils.toText(packetdata.d()));
 				break;
 			}
 			case ClientBoundPacket.LOGIN_ENCRYPTION_BEGIN_ID: {

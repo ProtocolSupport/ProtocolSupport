@@ -78,7 +78,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case ClientBoundPacket.PLAY_CHAT_ID: {
 				serializer.writeByte(0x03);
-				serializer.writeString(LegacyUtils.fromComponent(packetdata.d()));
+				serializer.writeString(LegacyUtils.toText(packetdata.d()));
 				break;
 			}
 			case ClientBoundPacket.PLAY_UPDATE_TIME_ID: {
@@ -476,7 +476,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				int bitmap = packetdata.readShort() & 0xFFFF;
 				serializer.writeShort(bitmap);
 				serializer.writeShort(0);
-				byte[] data = ChunkTransformer.toPRE18Data(packetdata.readArray(), bitmap, ProtocolVersion.MINECRAFT_1_5_2);
+				byte[] data = ChunkTransformer.toPre18Data(packetdata.readArray(), bitmap, ProtocolVersion.MINECRAFT_1_5_2);
 				final Deflater deflater = new Deflater(Deflater.BEST_SPEED);
 				deflater.setInput(data, 0, data.length);
 				deflater.finish();
@@ -555,7 +555,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				for (int i = 0; i < count; i++) {
 					ByteBuf chunkdata = packetdata.readBytes(ChunkTransformer.calcDataSize(Integer.bitCount(bitmap[i]), skylight, true));
 					try {
-						data[i] = ChunkTransformer.toPRE18Data(Utils.toArray(chunkdata), bitmap[i], ProtocolVersion.MINECRAFT_1_5_2);
+						data[i] = ChunkTransformer.toPre18Data(Utils.toArray(chunkdata), bitmap[i], ProtocolVersion.MINECRAFT_1_5_2);
 						pos += data[i].length;
 					} finally {
 						chunkdata.release();
@@ -702,7 +702,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeByte(0x64);
 				serializer.writeByte(windowId);
 				serializer.writeByte(id);
-				serializer.writeString(LegacyUtils.fromComponent(packetdata.d()));
+				serializer.writeString(LegacyUtils.toText(packetdata.d()));
 				serializer.writeByte(packetdata.readUnsignedByte());
 				serializer.writeBoolean(true);
 				break;
@@ -785,7 +785,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 				serializer.writeShort(blockPos.getY());
 				serializer.writeInt(blockPos.getZ());
 				for (int i = 0; i < 4; i++) {
-					serializer.writeString(Utils.clampString(LegacyUtils.fromComponent(packetdata.d()), 15));
+					serializer.writeString(Utils.clampString(LegacyUtils.toText(packetdata.d()), 15));
 				}
 				break;
 			}
@@ -820,7 +820,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 					packetdata.readBytes(data);
 					MapTransformer maptransformer = new MapTransformer();
 					maptransformer.loadFromNewMapData(columns, rows, xstart, ystart, data);
-					for (ColumnEntry entry : maptransformer.transformToOldMapData()) {
+					for (ColumnEntry entry : maptransformer.toPre18MapData()) {
 						serializer.writeByte(0x83);
 						serializer.writeShort(358);
 						serializer.writeShort(itemData);
@@ -1002,7 +1002,7 @@ public class PlayPacketTransformer implements PacketTransformer {
 			}
 			case ClientBoundPacket.PLAY_KICK_DISCONNECT_ID: {
 				serializer.writeByte(0xFF);
-				serializer.writeString(LegacyUtils.fromComponent(packetdata.d()));
+				serializer.writeString(LegacyUtils.toText(packetdata.d()));
 				break;
 			}
 		}

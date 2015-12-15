@@ -8,7 +8,7 @@ import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 
 public class LegacyUtils {
 
-	public static String fromComponent(final IChatBaseComponent component) {
+	public static String toText(final IChatBaseComponent component) {
 		if (component == null) {
 			return "";
 		}

@@ -43,7 +43,7 @@ public class StatusPacketTransformer implements PacketTransformer {
 				"\u0000" +
 				serverPing.c().a() +
 				"\u0000" +
-				LegacyUtils.fromComponent(serverPing.a()) +
+				LegacyUtils.toText(serverPing.a()) +
 				"\u0000" +
 				serverPing.b().b() +
 				"\u0000" +
