@@ -20,7 +20,7 @@ public class CustomPayload extends MiddleCustomPayload<Collection<PacketData>> {
 		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
 		serializer.writeString(tag);
 		if (tag.equals("MC|TrList")) {
-			data = VillagerTradeTransformer.to15VillagerTradeList(new PacketDataSerializer(Unpooled.wrappedBuffer(data), version), version);
+			data = VillagerTradeTransformer.to15VillagerTradeList(new PacketDataSerializer(Unpooled.wrappedBuffer(data), ProtocolVersion.getLatest()), version);
 		}
 		serializer.writeArray(data);
 		return Collections.singletonList(new PacketData(ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID, serializer));
