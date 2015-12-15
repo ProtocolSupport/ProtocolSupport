@@ -84,7 +84,6 @@ public class PacketEncoder implements IPacketEncoder {
 
 	private static final boolean[] blockedPlayPackets = new boolean[256];
 	static {
-		//packet from 1.8
 		for (int i = 0x41; i < 0x49; i++) {
 			if (i == 0x48) {
 				continue;
@@ -152,7 +151,7 @@ public class PacketEncoder implements IPacketEncoder {
 		}
 	}
 
-	private ProtocolVersion version;
+	private final ProtocolVersion version;
 	public PacketEncoder(ProtocolVersion version) {
 		this.version = version;
 	}
