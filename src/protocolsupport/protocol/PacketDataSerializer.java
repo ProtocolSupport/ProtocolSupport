@@ -296,6 +296,10 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 		return c();
 	}
 
+	public void writePosition(BlockPosition position) {
+		a(position);
+	}
+
 	public UUID readUUID() {
 		return g();
 	}
