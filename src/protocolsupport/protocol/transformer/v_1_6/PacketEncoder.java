@@ -49,7 +49,6 @@ import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.client
 import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.clientbound.play.ScoreboardScore;
 import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.clientbound.play.ScoreboardTeam;
 import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.clientbound.play.SetExperience;
-import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.clientbound.play.SpawnPainting;
 import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.clientbound.play.WorldEvent;
 import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.clientbound.play.WorldParticle;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_5_1_6.clientbound.login.LoginDisconnect;
@@ -71,6 +70,7 @@ import protocolsupport.protocol.transformer.middlepacketimpl.v_1_5_1_6.clientbou
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_5_1_6.clientbound.play.SpawnLiving;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_5_1_6.clientbound.play.SpawnNamed;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_5_1_6.clientbound.play.SpawnObject;
+import protocolsupport.protocol.transformer.middlepacketimpl.v_1_5_1_6.clientbound.play.SpawnPainting;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_5_1_6.clientbound.play.SpawnPosition;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_5_1_6.clientbound.play.TabComplete;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_5_1_6.clientbound.play.UseBed;
