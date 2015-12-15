@@ -51,6 +51,7 @@ import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.client
 import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.clientbound.play.SetExperience;
 import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.clientbound.play.WorldParticle;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_6_1_7.clientbound.play.EntitySetAttributes;
+import protocolsupport.protocol.transformer.middlepacketimpl.v_1_6_1_7.clientbound.play.SetHealth;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_7.clientbound.login.LoginSuccess;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_7.clientbound.play.BlockAction;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_7.clientbound.play.BlockBreakAnimation;
@@ -65,7 +66,6 @@ import protocolsupport.protocol.transformer.middlepacketimpl.v_1_7.clientbound.p
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_7.clientbound.play.Position;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_7.clientbound.play.ResourcePack;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_7.clientbound.play.Respawn;
-import protocolsupport.protocol.transformer.middlepacketimpl.v_1_7.clientbound.play.SetHealth;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_7.clientbound.play.SpawnLiving;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_7.clientbound.play.SpawnNamed;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_7.clientbound.play.SpawnObject;

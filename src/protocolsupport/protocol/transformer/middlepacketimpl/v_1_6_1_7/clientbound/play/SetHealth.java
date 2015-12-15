@@ -1,4 +1,4 @@
-package protocolsupport.protocol.transformer.middlepacketimpl.v_1_7.clientbound.play;
+package protocolsupport.protocol.transformer.middlepacketimpl.v_1_6_1_7.clientbound.play;
 
 import java.util.Collection;
 import java.util.Collections;
