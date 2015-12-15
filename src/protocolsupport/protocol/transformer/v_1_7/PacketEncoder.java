@@ -50,6 +50,7 @@ import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.client
 import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.clientbound.play.ScoreboardTeam;
 import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.clientbound.play.SetExperience;
 import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.clientbound.play.SpawnPainting;
+import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.clientbound.play.WorldEvent;
 import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.clientbound.play.WorldParticle;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_6_1_7.clientbound.play.EntitySetAttributes;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_6_1_7.clientbound.play.SetHealth;
@@ -72,7 +73,6 @@ import protocolsupport.protocol.transformer.middlepacketimpl.v_1_7.clientbound.p
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_7.clientbound.play.SpawnObject;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_7.clientbound.play.SpawnPosition;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_7.clientbound.play.UseBed;
-import protocolsupport.protocol.transformer.middlepacketimpl.v_1_7.clientbound.play.WorldEvent;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_7.clientbound.status.ServerInfo;
 import protocolsupport.protocol.transformer.utils.ClientBoundMiddleTransformerRegistry;
 import protocolsupport.utils.Utils;
