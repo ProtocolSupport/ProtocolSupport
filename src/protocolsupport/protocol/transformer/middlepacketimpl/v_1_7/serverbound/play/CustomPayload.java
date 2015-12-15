@@ -13,13 +13,12 @@ public class CustomPayload extends MiddleCustomPayload {
 	@Override
 	public void readFromClientData(PacketDataSerializer serializer) throws IOException {
 		tag = serializer.readString(20);
-		data = Utils.toArray(serializer);
-		PacketDataSerializer olddata = new PacketDataSerializer(Unpooled.wrappedBuffer(data), serializer.getVersion());
+		PacketDataSerializer olddata = new PacketDataSerializer(Unpooled.wrappedBuffer(serializer.readArray()), serializer.getVersion());
 		PacketDataSerializer newdata = PacketDataSerializer.createNew(ProtocolVersion.getLatest());
 		try {
 			if (tag.equals("MC|ItemName")) {
 				newdata.writeVarInt(olddata.readableBytes());
-				newdata.writeBytes(data);
+				newdata.writeBytes(olddata);
 			} else if (tag.equals("MC|BSign") || tag.equals("MC|BEdit")) {
 				newdata.writeItemStack(olddata.readItemStack());
 			} else if (tag.equals("MC|AdvCdm")) {
@@ -27,8 +26,10 @@ public class CustomPayload extends MiddleCustomPayload {
 				newdata.writeInt(olddata.readInt());
 				newdata.writeInt(olddata.readInt());
 				newdata.writeInt(olddata.readInt());
-				newdata.writeString(olddata.readString(32767));
+				newdata.writeString(olddata.readString(Short.MAX_VALUE));
 				newdata.writeBoolean(true);
+			} else {
+				newdata.writeBytes(olddata);
 			}
 			data = Utils.toArray(newdata);
 		} finally {
