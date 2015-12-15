@@ -1,6 +1,5 @@
 package protocolsupport.protocol.transformer.middlepacketimpl.v_1_7.clientbound.play;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -15,7 +14,7 @@ import protocolsupport.protocol.transformer.utils.MapTransformer.ColumnEntry;
 public class Map extends MiddleMap<Collection<PacketData>> {
 
 	@Override
-	public Collection<PacketData> toData(ProtocolVersion version) throws IOException {
+	public Collection<PacketData> toData(ProtocolVersion version) {
 		Collection<PacketData> datas = new ArrayList<PacketData>();
 		PacketDataSerializer scaledata = PacketDataSerializer.createNew(version);
 		scaledata.writeVarInt(itemData);

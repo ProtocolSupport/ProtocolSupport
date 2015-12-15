@@ -22,7 +22,7 @@ public class BlockSignUpdate extends MiddleBlockSignUpdate<Collection<PacketData
 		serializer.writeShort(position.getY());
 		serializer.writeInt(position.getZ());
 		for (String lineJson : linesJson) {
-			serializer.writeString(Utils.clampString(LegacyUtils.toText(ChatSerializer.a(lineJson)), 16));
+			serializer.writeString(Utils.clampString(LegacyUtils.toText(ChatSerializer.a(lineJson)), 15));
 		}
 		return Collections.singletonList(new PacketData(ClientBoundPacket.PLAY_UPDATE_SIGN_ID, serializer));
 	}

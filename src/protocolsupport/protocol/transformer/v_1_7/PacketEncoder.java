@@ -74,7 +74,7 @@ import protocolsupport.protocol.transformer.middlepacketimpl.v_1_7.clientbound.p
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_7.clientbound.play.SpawnPosition;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_7.clientbound.play.UseBed;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_7.clientbound.status.ServerInfo;
-import protocolsupport.protocol.transformer.utils.ClientBoundMiddleTransformerRegistry;
+import protocolsupport.protocol.transformer.utils.registry.ClientBoundMiddleTransformerRegistry;
 import protocolsupport.utils.Utils;
 
 public class PacketEncoder implements IPacketEncoder {

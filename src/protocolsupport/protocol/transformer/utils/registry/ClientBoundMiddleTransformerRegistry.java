@@ -1,4 +1,4 @@
-package protocolsupport.protocol.transformer.utils;
+package protocolsupport.protocol.transformer.utils.registry;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
