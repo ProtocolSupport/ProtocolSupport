@@ -1,13 +1,7 @@
 package protocolsupport.utils;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import java.util.Arrays;
 import java.util.zip.Deflater;
-import java.util.zip.DeflaterInputStream;
-import java.util.zip.Inflater;
-import java.util.zip.InflaterInputStream;
-
-import org.apache.commons.io.IOUtils;
 
 public class CompressionUtils {
 
@@ -15,37 +9,22 @@ public class CompressionUtils {
 
 	private static int getCompressionLevel() {
 		try {
-			return Integer.parseInt(System.getProperty("protocolsupport.compressionlevel", "3"));
+			return Integer.parseInt(System.getProperty("protocolsupport.compressionlevel", "1"));
 		} catch (Throwable t) {
 		}
-		return 3;
+		return 1;
 	}
 
-	private static final int compressionBuffer = getCompressionBuffer();
-
-	private static int getCompressionBuffer() {
-		try {
-			return Integer.parseInt(System.getProperty("protocolsupport.compressionbuffer", "10240"));
-		} catch (Throwable t) {
-		}
-		return 10240;
-	}
-
-	public static byte[] compress(byte[] input) throws IOException {
+	public static byte[] compress(byte[] input) {
 		Deflater deflater = new Deflater(compressionLevel);
 		try {
-			return IOUtils.toByteArray(new DeflaterInputStream(new ByteArrayInputStream(input), new Deflater(compressionLevel), compressionBuffer));
+			deflater.setInput(input);
+			deflater.finish();
+			byte[] compressedBuf = new byte[input.length * 11 / 10 + 6];
+			int size = deflater.deflate(compressedBuf);
+			return Arrays.copyOf(compressedBuf, size);
 		} finally {
 			deflater.end();
-		}
-	}
-
-	public static byte[] uncompress(byte[] input) throws IOException {
-		Inflater inflater = new Inflater();
-		try {
-			return IOUtils.toByteArray(new InflaterInputStream(new ByteArrayInputStream(input), inflater, compressionBuffer));
-		} finally {
-			inflater.end();
 		}
 	}
 
