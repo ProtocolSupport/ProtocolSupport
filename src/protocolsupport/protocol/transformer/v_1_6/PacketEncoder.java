@@ -82,8 +82,8 @@ import protocolsupport.protocol.transformer.middlepacketimpl.v_1_6.clientbound.p
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_6.clientbound.play.Position;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_6_1_7.clientbound.play.EntitySetAttributes;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_6_1_7.clientbound.play.SetHealth;
-import protocolsupport.protocol.transformer.utils.registry.ClientBoundMiddleTransformerRegistry;
-import protocolsupport.protocol.transformer.utils.registry.ClientBoundPacketIdTransformerRegistry;
+import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry;
+import protocolsupport.protocol.transformer.utils.registry.PacketIdTransformerRegistry;
 import protocolsupport.utils.Utils;
 
 public class PacketEncoder implements IPacketEncoder {
@@ -91,7 +91,7 @@ public class PacketEncoder implements IPacketEncoder {
 	private static final EnumProtocolDirection direction = EnumProtocolDirection.CLIENTBOUND;
 	private static final AttributeKey<EnumProtocol> currentStateAttrKey = NetworkManager.c;
 
-	private static final ClientBoundPacketIdTransformerRegistry packetIdRegistry = new ClientBoundPacketIdTransformerRegistry();
+	private static final PacketIdTransformerRegistry packetIdRegistry = new PacketIdTransformerRegistry();
 	static {
 		packetIdRegistry.register(EnumProtocol.LOGIN, ClientBoundPacket.LOGIN_DISCONNECT_ID, 0xFF);
 		packetIdRegistry.register(EnumProtocol.LOGIN, ClientBoundPacket.LOGIN_ENCRYPTION_BEGIN_ID, 0xFD);
@@ -161,7 +161,7 @@ public class PacketEncoder implements IPacketEncoder {
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID, 0xFA);
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_KICK_DISCONNECT_ID, 0xFF);
 	}
-	private static final ClientBoundMiddleTransformerRegistry<Collection<PacketData>> dataRemapperRegistry = new ClientBoundMiddleTransformerRegistry<>();
+	private static final MiddleTransformerRegistry<ClientBoundMiddlePacket<Collection<PacketData>>> dataRemapperRegistry = new MiddleTransformerRegistry<>();
 	static {
 		try {
 			dataRemapperRegistry.register(EnumProtocol.LOGIN, ClientBoundPacket.LOGIN_DISCONNECT_ID, LoginDisconnect.class);

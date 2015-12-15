@@ -5,7 +5,7 @@ import java.util.EnumMap;
 
 import net.minecraft.server.v1_8_R3.EnumProtocol;
 
-public class ClientBoundPacketIdTransformerRegistry {
+public class PacketIdTransformerRegistry {
 
 	private final EnumMap<EnumProtocol, int[]> registry = new EnumMap<>(EnumProtocol.class);
 

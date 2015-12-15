@@ -74,7 +74,7 @@ import protocolsupport.protocol.transformer.middlepacketimpl.v_1_7.clientbound.p
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_7.clientbound.play.SpawnPosition;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_7.clientbound.play.UseBed;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_7.clientbound.status.ServerInfo;
-import protocolsupport.protocol.transformer.utils.registry.ClientBoundMiddleTransformerRegistry;
+import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry;
 import protocolsupport.utils.Utils;
 
 public class PacketEncoder implements IPacketEncoder {
@@ -92,7 +92,7 @@ public class PacketEncoder implements IPacketEncoder {
 		}
 	}
 
-	private static final ClientBoundMiddleTransformerRegistry<Collection<PacketData>> registry = new ClientBoundMiddleTransformerRegistry<>();
+	private static final MiddleTransformerRegistry<ClientBoundMiddlePacket<Collection<PacketData>>> registry = new MiddleTransformerRegistry<>();
 	static {
 		try {
 			registry.register(EnumProtocol.LOGIN, ClientBoundPacket.LOGIN_SUCCESS_ID, LoginSuccess.class);
