@@ -21,7 +21,8 @@ public abstract class MiddleInventorySetItems<T> extends ClientBoundMiddlePacket
 	@Override
 	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
 		windowId = serializer.readUnsignedByte();
-		for (int i = 0; i < serializer.readShort(); i++) {
+		int count = serializer.readShort();
+		for (int i = 0; i < count; i++) {
 			itemstacks.add(serializer.readItemStack());
 		}
 	}
