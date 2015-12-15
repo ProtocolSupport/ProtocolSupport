@@ -15,7 +15,7 @@ public class WorldEvent extends MiddleWorldEvent<Collection<PacketData>> {
 
 	@Override
 	public Collection<PacketData> toData(ProtocolVersion version) throws IOException {
-		if (data == 2001) {
+		if (effectId == 2001) {
 			data = IdRemapper.BLOCK.getTable(version).getRemap(data & 0xFFF);
 		}
 		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
