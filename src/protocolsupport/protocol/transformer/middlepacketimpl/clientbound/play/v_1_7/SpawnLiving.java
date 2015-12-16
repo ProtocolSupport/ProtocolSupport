@@ -12,7 +12,9 @@ import protocolsupport.protocol.transformer.middlepacketimpl.SupportedVersions;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.WatchedDataRemapper;
 import protocolsupport.utils.DataWatcherSerializer;
+import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
+@NeedsNoArgConstructor
 @SupportedVersions({ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_7_5})
 public class SpawnLiving extends MiddleSpawnLiving<Collection<PacketData>> {
 

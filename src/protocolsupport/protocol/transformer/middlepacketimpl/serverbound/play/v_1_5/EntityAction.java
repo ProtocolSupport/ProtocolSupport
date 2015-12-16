@@ -4,7 +4,9 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.serverbound.play.MiddleEntityAction;
 import protocolsupport.protocol.transformer.middlepacketimpl.SupportedVersions;
+import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
+@NeedsNoArgConstructor
 @SupportedVersions({ProtocolVersion.MINECRAFT_1_5_2})
 public class EntityAction extends MiddleEntityAction {
 

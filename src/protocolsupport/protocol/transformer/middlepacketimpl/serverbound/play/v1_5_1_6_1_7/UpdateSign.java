@@ -7,7 +7,9 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.serverbound.play.MiddleUpdateSign;
 import protocolsupport.protocol.transformer.middlepacketimpl.SupportedVersions;
+import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
+@NeedsNoArgConstructor
 @SupportedVersions({ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_6_4, ProtocolVersion.MINECRAFT_1_6_2, ProtocolVersion.MINECRAFT_1_5_2})
 public class UpdateSign extends MiddleUpdateSign {
 

@@ -4,7 +4,7 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -21,11 +21,11 @@ public class LocalStorage {
 	private WatchedPlayer player;
 	private HashMap<UUID, String> playersNames = new HashMap<UUID, String>();
 	@SuppressWarnings("serial")
-	private HashMap<UUID, ArrayList<Property>> properties = new HashMap<UUID, ArrayList<Property>>() {
+	private HashMap<UUID, PropertiesStorage> properties = new HashMap<UUID, PropertiesStorage>() {
 		@Override
-		public ArrayList<Property> get(Object uuid) {
+		public PropertiesStorage get(Object uuid) {
 			if (!super.containsKey(uuid)) {
-				super.put((UUID) uuid, new ArrayList<Property>());
+				super.put((UUID) uuid, new PropertiesStorage());
 			}
 			return super.get(uuid);
 		}
@@ -89,33 +89,39 @@ public class LocalStorage {
 	}
 
 	public void addPropertyData(UUID uuid, Property property) {
-		ArrayList<Property> lproperties = properties.get(uuid);
-		Iterator<Property> iterator = lproperties.iterator();
-		while (iterator.hasNext()) {
-			if (iterator.next().getName().equals(property.getName())) {
-				iterator.remove();
-			}
-		}
-		lproperties.add(property);
+		properties.get(uuid).addProperty(property);
 	}
 
-	public ArrayList<Property> getPropertyData(UUID uuid, boolean filterNonSigned) {
-		ArrayList<Property> lproperties = properties.get(uuid);
-		if (!filterNonSigned) {
-			return lproperties;
-		} else {
-			Iterator<Property> iterator = lproperties.iterator();
-			while (iterator.hasNext()) {
-				if (!iterator.next().hasSignature()) {
-					iterator.remove();
-				}
-			}
-			return lproperties;
-		}
+	public List<Property> getPropertyData(UUID uuid, boolean signedOnly) {
+		return properties.get(uuid).getProperties(signedOnly);
 	}
 
 	public void removePropertyData(UUID uuid) {
 		properties.remove(uuid);
+	}
+
+	private static class PropertiesStorage {
+		private final HashMap<String, Property> signed = new HashMap<String, Property>();
+		private final HashMap<String, Property> unsigned = new HashMap<String, Property>();
+
+		public void addProperty(Property property) {
+			if (property.hasSignature()) {
+				signed.put(property.getName(), property);
+			} else {
+				unsigned.put(property.getName(), property);
+			}
+		}
+
+		public List<Property> getProperties(boolean signedOnly) {
+			if (signedOnly) {
+				return new ArrayList<Property>(signed.values());
+			} else {
+				ArrayList<Property> properties = new ArrayList<>();
+				properties.addAll(signed.values());
+				properties.addAll(unsigned.values());
+				return properties;
+			}
+		}
 	}
 
 }

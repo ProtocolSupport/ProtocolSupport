@@ -9,7 +9,9 @@ import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleAnimation;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.transformer.middlepacketimpl.SupportedVersions;
+import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
+@NeedsNoArgConstructor
 @SupportedVersions({ProtocolVersion.MINECRAFT_1_6_4, ProtocolVersion.MINECRAFT_1_6_2, ProtocolVersion.MINECRAFT_1_5_2})
 public class Animation extends MiddleAnimation<Collection<PacketData>> {
 
