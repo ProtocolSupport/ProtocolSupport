@@ -12,7 +12,9 @@ import protocolsupport.protocol.transformer.middlepacket.clientbound.play.Middle
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.transformer.middlepacketimpl.SupportedVersions;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
+import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
+@NeedsNoArgConstructor
 @SupportedVersions({ProtocolVersion.MINECRAFT_1_5_2})
 public class Chat extends MiddleChat<Collection<PacketData>> {
 
