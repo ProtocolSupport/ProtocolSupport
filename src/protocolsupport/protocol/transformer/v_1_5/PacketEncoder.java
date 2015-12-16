@@ -53,6 +53,7 @@ import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.client
 import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.clientbound.play.WorldParticle;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_5.clientbound.play.Chat;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_5.clientbound.play.CustomPayload;
+import protocolsupport.protocol.transformer.middlepacketimpl.v_1_5.clientbound.play.EntityAttach;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_5.clientbound.play.PlayerAbilities;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_5.clientbound.play.Position;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_5.clientbound.play.SetHealth;
@@ -188,6 +189,7 @@ public class PacketEncoder implements IPacketEncoder {
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_REL_MOVE_LOOK_ID, EntityRelMove.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_TELEPORT_ID, EntityTeleport.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_HEAD_ROTATION_ID, EntityHeadRotation.class);
+			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_ATTACH_ID, EntityAttach.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_METADATA_ID, EntityMetadata.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_EFFECT_ADD_ID, EntityEffectAdd.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_EFFECT_REMOVE_ID, EntityEffectRemove.class);
