@@ -13,9 +13,9 @@ public abstract class MiddleClientSettings extends ServerBoundMiddlePacket {
 
 	protected String locale;
 	protected int viewDist;
-	protected byte chatMode;
+	protected int chatMode;
 	protected boolean chatColors;
-	protected byte skinFlags;
+	protected int skinFlags;
 
 	@Override
 	public Collection<Packet<?>> toNative() throws Exception {
