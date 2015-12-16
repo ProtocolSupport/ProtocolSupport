@@ -30,6 +30,7 @@ import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v1
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v1_5_1_6_1_7.ChunkMulti;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v1_5_1_6_1_7.ChunkSingle;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v1_5_1_6_1_7.CollectEffect;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v1_5_1_6_1_7.CustomPayload;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v1_5_1_6_1_7.Entity;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v1_5_1_6_1_7.EntityDestroy;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v1_5_1_6_1_7.EntityEffectAdd;
@@ -60,7 +61,6 @@ import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_7.BlockOpenSignEditor;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_7.BlockTileUpdate;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_7.Chat;
-import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_7.CustomPayload;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_7.EntityTeleport;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_7.Login;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_7.Map;
