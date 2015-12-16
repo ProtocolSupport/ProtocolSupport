@@ -17,6 +17,7 @@ import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.GameProfileSerializer;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_8_R3.Item;
@@ -47,6 +48,10 @@ import protocolsupport.utils.Utils;
 import com.mojang.authlib.GameProfile;
 
 public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDataSerializer {
+
+	public static PacketDataSerializer createNew(ProtocolVersion version) {
+		return new PacketDataSerializer(Allocator.allocateBuffer(), version);
+	}
 
 	private final ProtocolVersion version;
 	public PacketDataSerializer(ByteBuf buf, ProtocolVersion version) {
@@ -152,7 +157,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 					NBTTagList pages = nbttagcompound.getList("pages", 8);
 					NBTTagList newpages = new NBTTagList();
 					for (int i = 0; i < pages.size(); i++) {
-						newpages.add(new NBTTagString(LegacyUtils.fromComponent(ChatSerializer.a(pages.getString(i)))));
+						newpages.add(new NBTTagString(LegacyUtils.toText(ChatSerializer.a(pages.getString(i)))));
 					}
 					nbttagcompound.set("pages", newpages);
 				}
@@ -354,6 +359,14 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 		a(array);
 	}
 
+	public BlockPosition readPosition() {
+		return c();
+	}
+
+	public void writePosition(BlockPosition position) {
+		a(position);
+	}
+
 	public UUID readUUID() {
 		return g();
 	}
@@ -361,6 +374,14 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 	public void writeUUID(UUID uuid) {
 		a(uuid);
 	}
+
+	public NBTTagCompound readTag() throws IOException {
+		return h();
+	}
+
+	public void writeTag(NBTTagCompound tag) {
+		a(tag);
+	} 
 
 	private static NBTTagCompound read(final byte[] data, final NBTReadLimiter nbtreadlimiter) {
 		try {

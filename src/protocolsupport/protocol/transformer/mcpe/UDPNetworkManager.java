@@ -81,7 +81,7 @@ public class UDPNetworkManager extends NetworkManager {
 	public void close(IChatBaseComponent comp) {
 		if (channel.isOpen()) {
 			try {
-				sendPEPacket(new KickPacket(LegacyUtils.fromComponent(comp)));
+				sendPEPacket(new KickPacket(LegacyUtils.toText(comp)));
 				super.close(comp);
 			} catch (Throwable e) {
 			} finally {

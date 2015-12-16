@@ -174,7 +174,7 @@ public class ClientBoundPacketHandler {
 					);
 				}
 				case ClientBoundPacket.PLAY_CHAT_ID: {
-					return Collections.singletonList(new ChatPacket(LegacyUtils.fromComponent(packetdata.d())));
+					return Collections.singletonList(new ChatPacket(LegacyUtils.toText(packetdata.d())));
 				}
 				case ClientBoundPacket.PLAY_UPDATE_TIME_ID: {
 					packetdata.readLong();
@@ -708,7 +708,7 @@ public class ClientBoundPacketHandler {
 					compound.setInt("y", position.getY());
 					compound.setInt("z", position.getZ());
 					for (int i = 1; i <= 4; i++) {
-						compound.setString("Text"+i, LegacyUtils.fromComponent(packetdata.d()));
+						compound.setString("Text"+i, LegacyUtils.toText(packetdata.d()));
 					}
 					return Collections.singletonList(new TileEntityDataPacket(position.getX(), position.getY(), position.getZ(), compound));
 				}

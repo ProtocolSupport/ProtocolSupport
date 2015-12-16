@@ -6,8 +6,6 @@ import net.minecraft.server.v1_8_R3.NetworkManager;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.core.ChannelHandlers;
 import protocolsupport.protocol.core.IPipeLineBuilder;
-import protocolsupport.protocol.transformer.v_1_7.clientboundtransformer.PacketEncoder;
-import protocolsupport.protocol.transformer.v_1_7.serverboundtransformer.PacketDecoder;
 
 public class PipeLineBuilder implements IPipeLineBuilder {
 

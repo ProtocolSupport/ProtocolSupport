@@ -46,6 +46,10 @@ public enum ServerBoundPacket {
 		return protocol.a(EnumProtocolDirection.SERVERBOUND, id);
 	}
 
+	public int getId() {
+		return id;
+	}
+
 	public static Packet<?> get(EnumProtocol protocol, int packetId) throws IllegalAccessException, InstantiationException {
 		return protocol.a(EnumProtocolDirection.SERVERBOUND, packetId);
 	} 

@@ -6,15 +6,15 @@ import protocolsupport.protocol.typeremapper.id.RemappingTable;
 
 public class ChunkTransformer {
 
-	public static int calcDataSize(final int bitmap, final boolean light, final boolean sendBiomes) {
-		final int j = bitmap * 2 * 16 * 16 * 16;
-		final int k = (bitmap * 16 * 16 * 16) / 2;
-		final int l = light ? ((bitmap * 16 * 16 * 16) / 2) : 0;
-		final int i2 = sendBiomes ? 256 : 0;
-		return j + k + l + i2;
+	public static int calcDataSize(final int count, final boolean light, final boolean sendBiomes) {
+		int idlength = count * 2 * 16 * 16 * 16;
+		int blocklightlength = (count * 16 * 16 * 16) / 2;
+		int skylightlength = light ? ((count * 16 * 16 * 16) / 2) : 0;
+		int biomeslength = sendBiomes ? 256 : 0;
+		return idlength + blocklightlength + skylightlength + biomeslength;
 	}
 
-	public static byte[] toPRE18Data(byte[] data18, int bitmap, ProtocolVersion version) {
+	public static byte[] toPre18Data(byte[] data18, int bitmap, ProtocolVersion version) {
 		int count = 0;
 		for (int i = 0; i < 16; i++) {
 			if ((bitmap & (1 << i)) != 0) {

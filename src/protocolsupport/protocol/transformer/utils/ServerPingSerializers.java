@@ -4,9 +4,15 @@ import java.lang.reflect.Type;
 import java.util.UUID;
 
 import net.minecraft.server.v1_8_R3.ChatDeserializer;
+import net.minecraft.server.v1_8_R3.ChatModifier;
+import net.minecraft.server.v1_8_R3.ChatTypeAdapterFactory;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent;
+import net.minecraft.server.v1_8_R3.ServerPing;
 import net.minecraft.server.v1_8_R3.ServerPing.ServerData;
 import net.minecraft.server.v1_8_R3.ServerPing.ServerPingPlayerSample;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -18,6 +24,14 @@ import com.google.gson.JsonSerializer;
 import com.mojang.authlib.GameProfile;
 
 public class ServerPingSerializers {
+
+	public static final Gson PING_GSON = new GsonBuilder()
+	.registerTypeAdapter(ServerData.class, new ServerDataSerializer())
+	.registerTypeAdapter(ServerPingPlayerSample.class, new PlayerSampleSerializer())
+	.registerTypeAdapter(ServerPing.class, new ServerPing.Serializer())
+	.registerTypeHierarchyAdapter(IChatBaseComponent.class, new IChatBaseComponent.ChatSerializer())
+	.registerTypeHierarchyAdapter(ChatModifier.class, new ChatModifier.ChatModifierSerializer())
+	.registerTypeAdapterFactory(new ChatTypeAdapterFactory()).create();
 
 	public static class ServerDataSerializer implements JsonDeserializer<ServerData>, JsonSerializer<ServerData> {
 		@Override
