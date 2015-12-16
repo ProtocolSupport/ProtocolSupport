@@ -25,7 +25,7 @@ public class EntityEffectAdd extends MiddleEntityEffectAdd<Collection<PacketData
 		serializer.writeInt(entityId);
 		serializer.writeByte(effectId);
 		serializer.writeByte(amplifier);
-		serializer.writeInt(duration);
+		serializer.writeShort(duration);
 		return Collections.singletonList(new PacketData(ClientBoundPacket.PLAY_ENTITY_EFFECT_ADD_ID, serializer));
 	}
 
