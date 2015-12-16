@@ -23,7 +23,6 @@ import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.server
 import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.serverbound.play.InventoryClick;
 import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.serverbound.play.KeepAlive;
 import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.serverbound.play.Position;
-import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.serverbound.play.SteerVehicle;
 import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.serverbound.play.TabComplete;
 import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.serverbound.play.UpdateSign;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_5_1_6.serverbound.handshake.ClientLogin;
@@ -35,6 +34,7 @@ import protocolsupport.protocol.transformer.middlepacketimpl.v_1_5_1_6.serverbou
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_6.serverbound.handshake.Ping;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_6_1_7.serverbound.play.EntityAction;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_6_1_7.serverbound.play.PositionLook;
+import protocolsupport.protocol.transformer.middlepacketimpl.v_1_6_1_7.serverbound.play.SteerVehicle;
 import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry;
 import protocolsupport.protocol.transformer.utils.registry.PacketIdTransformerRegistry;
 import protocolsupport.utils.PacketCreator;
