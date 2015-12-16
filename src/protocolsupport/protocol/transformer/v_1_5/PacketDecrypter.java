@@ -1,4 +1,4 @@
-package protocolsupport.protocol.transformer.v_1_5.serverboundtransformer;
+package protocolsupport.protocol.transformer.v_1_5;
 
 import java.util.List;
 
