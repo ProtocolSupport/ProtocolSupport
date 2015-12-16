@@ -13,7 +13,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 import protocolsupport.api.chat.modifiers.Modifier;
-import protocolsupport.api.utils.JsonUtils;
+import protocolsupport.utils.JsonUtils;
 
 public class ModifierSerializer implements JsonDeserializer<Modifier>, JsonSerializer<Modifier> {
 

@@ -1,4 +1,4 @@
-package protocolsupport.api.utils;
+package protocolsupport.utils;
 
 import org.apache.commons.lang3.StringUtils;
 
