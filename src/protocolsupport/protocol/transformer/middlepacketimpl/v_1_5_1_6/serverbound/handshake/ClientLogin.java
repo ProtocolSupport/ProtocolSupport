@@ -1,4 +1,4 @@
-package protocolsupport.protocol.transformer.middlepacketimpl.v_1_6.serverbound.handshake;
+package protocolsupport.protocol.transformer.middlepacketimpl.v_1_5_1_6.serverbound.handshake;
 
 import java.util.ArrayList;
 import java.util.Collection;

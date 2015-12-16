@@ -26,12 +26,12 @@ import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.server
 import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.serverbound.play.SteerVehicle;
 import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.serverbound.play.TabComplete;
 import protocolsupport.protocol.transformer.middlepacketimpl.v1_5_1_6_1_7.serverbound.play.UpdateSign;
+import protocolsupport.protocol.transformer.middlepacketimpl.v_1_5_1_6.serverbound.handshake.ClientLogin;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_5_1_6.serverbound.play.ClientCommand;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_5_1_6.serverbound.play.ClientSettings;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_5_1_6.serverbound.play.CustomPayload;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_5_1_6.serverbound.play.KickDisconnect;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_5_1_6.serverbound.play.UseEntity;
-import protocolsupport.protocol.transformer.middlepacketimpl.v_1_6.serverbound.handshake.ClientLogin;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_6.serverbound.handshake.Ping;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_6_1_7.serverbound.play.EntityAction;
 import protocolsupport.protocol.transformer.middlepacketimpl.v_1_6_1_7.serverbound.play.PositionLook;
