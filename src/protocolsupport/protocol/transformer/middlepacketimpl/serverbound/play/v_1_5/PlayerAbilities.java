@@ -2,9 +2,12 @@ package protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v
 
 import java.io.IOException;
 
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.serverbound.play.MiddlePlayerAbilities;
+import protocolsupport.protocol.transformer.middlepacketimpl.SupportedVersions;
 
+@SupportedVersions({ProtocolVersion.MINECRAFT_1_5_2})
 public class PlayerAbilities extends MiddlePlayerAbilities {
 
 	@Override

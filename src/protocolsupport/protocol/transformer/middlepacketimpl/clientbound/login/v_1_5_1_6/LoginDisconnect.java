@@ -10,8 +10,10 @@ import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.login.MiddleLoginDisconnect;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
+import protocolsupport.protocol.transformer.middlepacketimpl.SupportedVersions;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 
+@SupportedVersions({ProtocolVersion.MINECRAFT_1_6_4, ProtocolVersion.MINECRAFT_1_6_2, ProtocolVersion.MINECRAFT_1_5_2})
 public class LoginDisconnect extends MiddleLoginDisconnect<Collection<PacketData>> {
 
 	@Override

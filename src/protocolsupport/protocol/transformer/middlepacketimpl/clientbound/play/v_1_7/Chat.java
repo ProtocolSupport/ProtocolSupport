@@ -8,8 +8,10 @@ import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleChat;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
+import protocolsupport.protocol.transformer.middlepacketimpl.SupportedVersions;
 import protocolsupport.protocol.transformer.v_1_7.utils.ChatJsonConverter;
 
+@SupportedVersions({ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_7_5})
 public class Chat extends MiddleChat<Collection<PacketData>> {
 
 	@Override

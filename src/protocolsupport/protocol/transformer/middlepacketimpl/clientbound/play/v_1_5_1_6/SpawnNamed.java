@@ -8,9 +8,11 @@ import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleSpawnNamed;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
+import protocolsupport.protocol.transformer.middlepacketimpl.SupportedVersions;
 import protocolsupport.protocol.typeremapper.watchedentity.WatchedDataRemapper;
 import protocolsupport.utils.DataWatcherSerializer;
 
+@SupportedVersions({ProtocolVersion.MINECRAFT_1_6_4, ProtocolVersion.MINECRAFT_1_6_2, ProtocolVersion.MINECRAFT_1_5_2})
 public class SpawnNamed extends MiddleSpawnNamed<Collection<PacketData>> {
 
 	@Override

@@ -58,7 +58,7 @@ public class PacketDecoder implements IPacketDecoder {
 		packetIdRegistry.register(EnumProtocol.PLAY, 0x6C, ServerBoundPacket.PLAY_ENCHANT_SELECT.getId());
 	}
 
-	private static final MiddleTransformerRegistry<ServerBoundMiddlePacket> dataRemapperRegistry = new MiddleTransformerRegistry<>();
+	private static final MiddleTransformerRegistry<ServerBoundMiddlePacket> dataRemapperRegistry = new MiddleTransformerRegistry<>(ProtocolVersion.MINECRAFT_1_5_2);
 	static {
 		try {
 			dataRemapperRegistry.register(EnumProtocol.HANDSHAKING, 0x02, ClientLogin.class);

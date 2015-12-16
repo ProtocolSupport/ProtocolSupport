@@ -161,7 +161,7 @@ public class PacketEncoder implements IPacketEncoder {
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID, 0xFA);
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_KICK_DISCONNECT_ID, 0xFF);
 	}
-	private static final MiddleTransformerRegistry<ClientBoundMiddlePacket<Collection<PacketData>>> dataRemapperRegistry = new MiddleTransformerRegistry<>();
+	private static final MiddleTransformerRegistry<ClientBoundMiddlePacket<Collection<PacketData>>> dataRemapperRegistry = new MiddleTransformerRegistry<>(ProtocolVersion.MINECRAFT_1_6_4, ProtocolVersion.MINECRAFT_1_6_2);
 	static {
 		try {
 			dataRemapperRegistry.register(EnumProtocol.LOGIN, ClientBoundPacket.LOGIN_DISCONNECT_ID, LoginDisconnect.class);
