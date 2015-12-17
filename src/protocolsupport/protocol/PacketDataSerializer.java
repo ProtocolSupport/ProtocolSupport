@@ -77,7 +77,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 
 	@Override
 	public void a(NBTTagCompound nbttagcompound) {
-		if (getVersion() != ProtocolVersion.MINECRAFT_1_8) {
+		if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_8)) {
 			if (nbttagcompound == null) {
 				writeShort(-1);
 			} else {
@@ -110,7 +110,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 		Item item = itemstack.getItem();
 		NBTTagCompound nbttagcompound = itemstack.getTag();
 		if (nbttagcompound != null) {
-			if (getVersion() != ProtocolVersion.MINECRAFT_1_8 && item == Items.WRITTEN_BOOK) {
+			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_8) && item == Items.WRITTEN_BOOK) {
 				if (nbttagcompound.hasKeyOfType("pages", 9)) {
 					NBTTagList pages = nbttagcompound.getList("pages", 8);
 					NBTTagList newpages = new NBTTagList();
@@ -120,18 +120,9 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 					nbttagcompound.set("pages", newpages);
 				}
 			}
-			switch (getVersion()) {
-				case MINECRAFT_1_7_5:
-				case MINECRAFT_1_6_4:
-				case MINECRAFT_1_6_2:
-				case MINECRAFT_1_5_2: {
-					transformSkull(nbttagcompound, "SkullOwner", "SkullOwner");
-					transformSkull(nbttagcompound, "Owner", "ExtraType");
-					break;
-				}
-				default: {
-					break;
-				}
+			if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_5)) {
+				transformSkull(nbttagcompound, "SkullOwner", "SkullOwner");
+				transformSkull(nbttagcompound, "Owner", "ExtraType");
 			}
 			if (nbttagcompound.hasKeyOfType("ench", 9)) {
 				SkippingTable enchSkip = IdSkipper.ENCHANT.getTable(getVersion());
@@ -170,7 +161,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 
 	@Override
 	public NBTTagCompound h() throws IOException {
-		if (getVersion() != ProtocolVersion.MINECRAFT_1_8) {
+		if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_8)) {
 			final short length = readShort();
 			if (length < 0) {
 				return null;
@@ -190,73 +181,45 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 
 	@Override
 	public String c(int limit) {
-		switch (getVersion()) {
-			case MINECRAFT_1_6_4:
-			case MINECRAFT_1_6_2:
-			case MINECRAFT_1_5_2: {
-				return new String(Utils.toArray(readBytes(readUnsignedShort() * 2)), StandardCharsets.UTF_16BE);
-			}
-			default: {
-				return super.c(limit);
-			}
+		if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4)) {
+			return new String(Utils.toArray(readBytes(readUnsignedShort() * 2)), StandardCharsets.UTF_16BE);
+		} else {
+			return super.c(limit);
 		}
 	}
 
 	@Override
 	public PacketDataSerializer a(String string) {
-		switch (getVersion()) {
-			case MINECRAFT_1_6_4:
-			case MINECRAFT_1_6_2:
-			case MINECRAFT_1_5_2: {
-				writeShort(string.length());
-				writeBytes(string.getBytes(StandardCharsets.UTF_16BE));
-				break;
-			}
-			default: {
-				super.a(string);
-				break;
-			}
+		if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4)) {
+			writeShort(string.length());
+			writeBytes(string.getBytes(StandardCharsets.UTF_16BE));
+		} else {
+			super.a(string);
 		}
 		return this;
 	}
 
 	@Override
 	public byte[] a() {
-		switch (getVersion()) {
-			case MINECRAFT_1_7_10:
-			case MINECRAFT_1_7_5:
-			case MINECRAFT_1_6_4:
-			case MINECRAFT_1_6_2:
-			case MINECRAFT_1_5_2: {
-				byte[] array = new byte[readShort()];
-				readBytes(array);
-				return array;
-			}
-			default: {
-				return super.a();
-			}
+		if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10)) {
+			byte[] array = new byte[readShort()];
+			readBytes(array);
+			return array;
+		} else {
+			return super.a();
 		}
 	}
 
 	@Override
 	public void a(byte[] array) {
-		switch (getVersion()) {
-			case MINECRAFT_1_7_10:
-			case MINECRAFT_1_7_5:
-			case MINECRAFT_1_6_4:
-			case MINECRAFT_1_6_2:
-			case MINECRAFT_1_5_2: {
-				if (array.length > 32767) {
-					throw new IllegalArgumentException("Too big array length of "+array.length);
-				}
-				writeShort(array.length);
-				writeBytes(array);
-				break;
+		if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10)) {
+			if (array.length > 32767) {
+				throw new IllegalArgumentException("Too big array length of "+array.length);
 			}
-			default: {
-				super.a(array);
-				break;
-			}
+			writeShort(array.length);
+			writeBytes(array);
+		} else {
+			super.a(array);
 		}
 	}
 

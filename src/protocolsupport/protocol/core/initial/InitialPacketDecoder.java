@@ -7,6 +7,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.CorruptedFrameException;
 import io.netty.util.concurrent.Future;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
 
 import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
@@ -29,6 +30,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		put(ProtocolVersion.MINECRAFT_1_6_4, new protocolsupport.protocol.transformer.v_1_6.PipeLineBuilder());
 		put(ProtocolVersion.MINECRAFT_1_6_2, new protocolsupport.protocol.transformer.v_1_6.PipeLineBuilder());
 		put(ProtocolVersion.MINECRAFT_1_5_2, new protocolsupport.protocol.transformer.v_1_5.PipeLineBuilder());
+		put(ProtocolVersion.MINECRAFT_1_4_7, new protocolsupport.protocol.transformer.v_1_4.PipeLineBuilder());
 		put(ProtocolVersion.UNKNOWN, new protocolsupport.protocol.transformer.v_1_8.PipeLineBuilder());
 	}};
 
@@ -122,6 +124,9 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 			return;
 		}
 		protocolSet = true;
+		if (MinecraftServer.getServer().isDebugging()) {
+			System.out.println(Utils.getNetworkManagerSocketAddress(channel)+ " connected with protocol version "+version);
+		}
 		ProtocolStorage.setProtocolVersion(Utils.getNetworkManagerSocketAddress(channel), version);
 		channel.pipeline().remove(ChannelHandlers.INITIAL_DECODER);
 		pipelineBuilders.get(version).buildPipeLine(channel, version);

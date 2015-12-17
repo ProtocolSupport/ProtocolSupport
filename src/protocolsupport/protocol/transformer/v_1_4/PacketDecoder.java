@@ -1,4 +1,4 @@
-package protocolsupport.protocol.transformer.v_1_5;
+package protocolsupport.protocol.transformer.v_1_4;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
@@ -18,7 +18,6 @@ import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.core.IPacketDecoder;
 import protocolsupport.protocol.transformer.middlepacket.ServerBoundMiddlePacket;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.handshake.v_1_4_1_5_1_6.ClientLogin;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.handshake.v_1_5.Ping;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5.EntityAction;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5.PlayerAbilities;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5.PositionLook;
@@ -58,11 +57,10 @@ public class PacketDecoder implements IPacketDecoder {
 		packetIdRegistry.register(EnumProtocol.PLAY, 0x6C, ServerBoundPacket.PLAY_ENCHANT_SELECT.getId());
 	}
 
-	private static final MiddleTransformerRegistry<ServerBoundMiddlePacket> dataRemapperRegistry = new MiddleTransformerRegistry<>(ProtocolVersion.MINECRAFT_1_5_2);
+	private static final MiddleTransformerRegistry<ServerBoundMiddlePacket> dataRemapperRegistry = new MiddleTransformerRegistry<>(ProtocolVersion.MINECRAFT_1_4_7);
 	static {
 		try {
 			dataRemapperRegistry.register(EnumProtocol.HANDSHAKING, 0x02, ClientLogin.class);
-			dataRemapperRegistry.register(EnumProtocol.HANDSHAKING, 0xFE, Ping.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, 0x00, KeepAlive.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, 0x07, UseEntity.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, 0x0B, Position.class);
