@@ -2,13 +2,14 @@ package protocolsupport.api;
 
 public enum ProtocolVersion {
 
-	MINECRAFT_1_8(47, 7, "1.8"),
-	MINECRAFT_1_7_10(5, 6, "1.7.10"),
-	MINECRAFT_1_7_5(4, 5, "1.7.5"),
-	MINECRAFT_1_6_4(78, 4, "1.6.4"),
-	MINECRAFT_1_6_2(74, 3, "1.6.2"),
-	MINECRAFT_1_6_1(73, 2, "1.6.1"),
-	MINECRAFT_1_5_2(61, 1, "1.5.2"),
+	MINECRAFT_1_8(47, 8, "1.8"),
+	MINECRAFT_1_7_10(5, 7, "1.7.10"),
+	MINECRAFT_1_7_5(4, 6, "1.7.5"),
+	MINECRAFT_1_6_4(78, 5, "1.6.4"),
+	MINECRAFT_1_6_2(74, 4, "1.6.2"),
+	MINECRAFT_1_6_1(73, 3, "1.6.1"),
+	MINECRAFT_1_5_2(61, 2, "1.5.2"),
+	MINECRAFT_1_5_1(60, 1, "1.5.1"),
 	MINECRAFT_1_4_7(51, 0, "1.4.7"),
 	UNKNOWN(-1),
 	NOT_SET(0);
@@ -90,6 +91,9 @@ public enum ProtocolVersion {
 			}
 			case 61: {
 				return MINECRAFT_1_5_2;
+			}
+			case 60: {
+				return MINECRAFT_1_5_1;
 			}
 			case 51: {
 				return MINECRAFT_1_4_7;
