@@ -12,7 +12,7 @@ public abstract class MiddleEntitySetAttributes<T> extends MiddleEntity<T> {
 	@Override
 	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
 		super.readFromServerData(serializer);
-		attributes = new Attribute[serializer.readVarInt()];
+		attributes = new Attribute[serializer.readInt()];
 		for (int i = 0; i < attributes.length; i++) {
 			Attribute attribute = new Attribute();
 			attribute.key = serializer.readString(64);

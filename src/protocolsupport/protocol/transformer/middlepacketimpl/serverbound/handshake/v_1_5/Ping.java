@@ -7,17 +7,14 @@ import java.util.Collection;
 import org.bukkit.Bukkit;
 
 import net.minecraft.server.v1_8_R3.Packet;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.ServerBoundMiddlePacket;
-import protocolsupport.protocol.transformer.middlepacketimpl.SupportedVersions;
 import protocolsupport.utils.PacketCreator;
 import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
 @NeedsNoArgConstructor
-@SupportedVersions({ProtocolVersion.MINECRAFT_1_5_2})
 public class Ping extends ServerBoundMiddlePacket {
 
 	@Override

@@ -8,14 +8,12 @@ import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleSpawnLiving;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
-import protocolsupport.protocol.transformer.middlepacketimpl.SupportedVersions;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.WatchedDataRemapper;
 import protocolsupport.utils.DataWatcherSerializer;
 import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
 @NeedsNoArgConstructor
-@SupportedVersions({ProtocolVersion.MINECRAFT_1_6_4, ProtocolVersion.MINECRAFT_1_6_2, ProtocolVersion.MINECRAFT_1_5_2, ProtocolVersion.MINECRAFT_1_4_7})
 public class SpawnLiving extends MiddleSpawnLiving<Collection<PacketData>> {
 
 	@Override

@@ -40,7 +40,7 @@ public class PacketDecoder implements IPacketDecoder {
 
 	private static final AttributeKey<EnumProtocol> currentStateAttrKey = NetworkManager.c;
 
-	private static final MiddleTransformerRegistry<ServerBoundMiddlePacket> registry = new MiddleTransformerRegistry<>(ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_7_5);
+	private static final MiddleTransformerRegistry<ServerBoundMiddlePacket> registry = new MiddleTransformerRegistry<>();
 	static {
 		try {
 			registry.register(EnumProtocol.HANDSHAKING, 0x00, SetProtocol.class);

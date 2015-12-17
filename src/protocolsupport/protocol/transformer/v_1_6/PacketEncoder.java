@@ -162,7 +162,7 @@ public class PacketEncoder implements IPacketEncoder {
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID, 0xFA);
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_KICK_DISCONNECT_ID, 0xFF);
 	}
-	private static final MiddleTransformerRegistry<ClientBoundMiddlePacket<Collection<PacketData>>> dataRemapperRegistry = new MiddleTransformerRegistry<>(ProtocolVersion.MINECRAFT_1_6_4, ProtocolVersion.MINECRAFT_1_6_2);
+	private static final MiddleTransformerRegistry<ClientBoundMiddlePacket<Collection<PacketData>>> dataRemapperRegistry = new MiddleTransformerRegistry<>();
 	static {
 		try {
 			dataRemapperRegistry.register(EnumProtocol.LOGIN, ClientBoundPacket.LOGIN_DISCONNECT_ID, LoginDisconnect.class);
@@ -243,6 +243,13 @@ public class PacketEncoder implements IPacketEncoder {
 		final Integer packetId = currentProtocol.a(direction, packet);
 		if (packetId == null) {
 			throw new IOException("Can't serialize unregistered packet");
+		}
+		if (
+			currentProtocol == EnumProtocol.PLAY &&
+			version == ProtocolVersion.MINECRAFT_1_6_1 &&
+			packetId == ClientBoundPacket.PLAY_SIGN_EDITOR_ID
+		) {
+			return;
 		}
 		ClientBoundMiddlePacket<Collection<PacketData>> packetTransformer = dataRemapperRegistry.getTransformer(currentProtocol, packetId);
 		try {

@@ -10,12 +10,10 @@ import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
-import protocolsupport.protocol.transformer.middlepacketimpl.SupportedVersions;
 import protocolsupport.protocol.typeremapper.nbt.CustomPayloadSerializer;
 import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
 @NeedsNoArgConstructor
-@SupportedVersions({ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_6_4, ProtocolVersion.MINECRAFT_1_6_2, ProtocolVersion.MINECRAFT_1_5_2, ProtocolVersion.MINECRAFT_1_4_7})
 public class CustomPayload extends MiddleCustomPayload<Collection<PacketData>> {
 
 	@Override

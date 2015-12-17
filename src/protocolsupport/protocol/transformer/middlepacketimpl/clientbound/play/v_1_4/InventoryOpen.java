@@ -5,19 +5,16 @@ import java.util.Collection;
 import java.util.Collections;
 
 import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleInventoryOpen;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
-import protocolsupport.protocol.transformer.middlepacketimpl.SupportedVersions;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
 import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
 @NeedsNoArgConstructor
-@SupportedVersions({ProtocolVersion.MINECRAFT_1_4_7})
 public class InventoryOpen extends MiddleInventoryOpen<Collection<PacketData>> {
 
 	@Override

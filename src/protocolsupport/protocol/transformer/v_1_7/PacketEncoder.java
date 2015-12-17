@@ -93,7 +93,7 @@ public class PacketEncoder implements IPacketEncoder {
 		}
 	}
 
-	private static final MiddleTransformerRegistry<ClientBoundMiddlePacket<Collection<PacketData>>> registry = new MiddleTransformerRegistry<>(ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_7_5);
+	private static final MiddleTransformerRegistry<ClientBoundMiddlePacket<Collection<PacketData>>> registry = new MiddleTransformerRegistry<>();
 	static {
 		try {
 			registry.register(EnumProtocol.LOGIN, ClientBoundPacket.LOGIN_SUCCESS_ID, LoginSuccess.class);
