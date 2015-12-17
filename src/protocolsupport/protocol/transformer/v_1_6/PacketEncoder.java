@@ -244,13 +244,6 @@ public class PacketEncoder implements IPacketEncoder {
 		if (packetId == null) {
 			throw new IOException("Can't serialize unregistered packet");
 		}
-		if (
-			currentProtocol == EnumProtocol.PLAY &&
-			version == ProtocolVersion.MINECRAFT_1_6_1 &&
-			packetId == ClientBoundPacket.PLAY_SIGN_EDITOR_ID
-		) {
-			return;
-		}
 		ClientBoundMiddlePacket<Collection<PacketData>> packetTransformer = dataRemapperRegistry.getTransformer(currentProtocol, packetId);
 		try {
 			if (packetTransformer != null) {

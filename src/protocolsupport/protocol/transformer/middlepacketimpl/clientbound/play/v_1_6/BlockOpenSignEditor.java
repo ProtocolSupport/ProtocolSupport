@@ -15,6 +15,9 @@ public class BlockOpenSignEditor extends MiddleBlockOpenSignEditor<Collection<Pa
 
 	@Override
 	public Collection<PacketData> toData(ProtocolVersion version) {
+		if (version == ProtocolVersion.MINECRAFT_1_6_1) {
+			return Collections.emptyList();
+		}
 		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
 		serializer.writeByte(0);
 		serializer.writeInt(position.getX());
