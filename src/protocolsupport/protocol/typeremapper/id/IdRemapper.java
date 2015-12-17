@@ -74,6 +74,34 @@ public class IdRemapper {
 			registerRemapEntry(172, 82, ProtocolVersionsHelper.BEFORE_1_6);
 			// coal block -> stone
 			registerRemapEntry(173, 1, ProtocolVersionsHelper.BEFORE_1_6);
+			// dropper -> stone
+			registerRemapEntry(178, 1, ProtocolVersionsHelper.BEFORE_1_5);
+			// hopper -> stone
+			registerRemapEntry(154, 1, ProtocolVersionsHelper.BEFORE_1_5);			
+			// quartz -> snow
+			registerRemapEntry(155, 80, ProtocolVersionsHelper.BEFORE_1_5);
+			// quartz stairs -> stairs
+			registerRemapEntry(156, 109, ProtocolVersionsHelper.BEFORE_1_5);
+			// quartz slab -> slab
+			registerRemapEntry(156, 44, ProtocolVersionsHelper.BEFORE_1_5);
+			// inverted daylight detector -> stone
+			registerRemapEntry(178, 1, ProtocolVersionsHelper.BEFORE_1_5);
+			// daylight detector -> slab
+			registerRemapEntry(151, 44, ProtocolVersionsHelper.BEFORE_1_5);
+			// trapped chest -> chest
+			registerRemapEntry(146, 54, ProtocolVersionsHelper.BEFORE_1_5);
+			// redstone block -> glowing redstone ore
+			registerRemapEntry(146, 73, ProtocolVersionsHelper.BEFORE_1_5);
+			// activator rail -> some other rail
+			registerRemapEntry(157, 28, ProtocolVersionsHelper.BEFORE_1_5);
+			// nether quartz ore -> nettherrack
+			registerRemapEntry(153, 87, ProtocolVersionsHelper.BEFORE_1_5);
+			// wpressure plate light -> wood pressure plate
+			registerRemapEntry(147, 72, ProtocolVersionsHelper.BEFORE_1_5);
+			// wpressure plate heavy -> stone pressure plate
+			registerRemapEntry(148, 70, ProtocolVersionsHelper.BEFORE_1_5);
+			// redstone comparator -> repeater
+			registerRemapEntry(149, 93, ProtocolVersionsHelper.BEFORE_1_5);
 		}
 		@Override
 		protected RemappingTable createTable() {
@@ -113,6 +141,15 @@ public class IdRemapper {
 			registerRemapEntry(419, 1, ProtocolVersionsHelper.BEFORE_1_6);
 			registerRemapEntry(420, 1, ProtocolVersionsHelper.BEFORE_1_6);
 			registerRemapEntry(421, 1, ProtocolVersionsHelper.BEFORE_1_6);
+			// minecarts -> default minecart
+			registerRemapEntry(407, 328, ProtocolVersionsHelper.BEFORE_1_5);
+			registerRemapEntry(408, 328, ProtocolVersionsHelper.BEFORE_1_5);
+			// comparator -> repeater
+			registerRemapEntry(404, 356, ProtocolVersionsHelper.BEFORE_1_5);
+			// nether brick -> brick
+			registerRemapEntry(405, 336, ProtocolVersionsHelper.BEFORE_1_5);
+			// quartz -> feather
+			registerRemapEntry(406, 288, ProtocolVersionsHelper.BEFORE_1_5);
 		}
 		@Override
 		protected RemappingTable createTable() {
