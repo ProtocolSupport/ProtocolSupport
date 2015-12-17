@@ -28,15 +28,15 @@ public enum SpecificType {
 		//nametag, nametagvisible
 		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(2, 3)).addProtocols(ProtocolVersion.MINECRAFT_1_8),
 		new RemappingEntriesForProtocols(new RemappingEntry(2, 10, new ValueRemapperStringClamp(64)), new RemappingEntry(3, 11))
-		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_6_2)),
+		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_6_1)),
 		new RemappingEntriesForProtocols(new RemappingEntry(2, 5, new ValueRemapperStringClamp(64)), new RemappingEntry(3, 6))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_6),
 		//health
 		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(6))
-		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_2)),
+		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1)),
 		//pcolor, pambient, arrowsn
 		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(7), new RemappingEntryCopyOriginal(8), new RemappingEntryCopyOriginal(9))
-		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_6_2)),
+		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_6_1)),
 		new RemappingEntriesForProtocols(new RemappingEntry(7, 8), new RemappingEntry(8, 9), new RemappingEntry(9, 10))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_6),
 		//noai
@@ -47,7 +47,7 @@ public enum SpecificType {
 		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(17, 18)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9),
 		//skin flags(cape enabled for some protocols)
 		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(10))
-		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_2))
+		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1))
 	),
 	AGEABLE(EType.NONE, -1, SpecificType.LIVING,
 		//age
@@ -93,7 +93,7 @@ public enum SpecificType {
 		})).addProtocols(ProtocolVersionsHelper.BEFORE_1_8),
 		//health
 		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(18))
-		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_2)),
+		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1)),
 		new RemappingEntriesForProtocols(new RemappingEntry(18, 18, new ValueRemapperToInt()))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_6)
 	),
@@ -179,7 +179,7 @@ public enum SpecificType {
 		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(17, 18)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9),
 		//damage taken
 		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(19))
-		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_2)),
+		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1)),
 		new RemappingEntriesForProtocols(new RemappingEntry(19, 19, new ValueRemapperToInt()))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_6)
 	),
@@ -209,7 +209,7 @@ public enum SpecificType {
 		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(16, 17, 18, 21, 22)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9), 
 		//damage taken
 		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(19))
-		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_2)),
+		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1)),
 		new RemappingEntriesForProtocols(new RemappingEntry(19, 19, new ValueRemapperToInt())).addProtocols(ProtocolVersionsHelper.BEFORE_1_6),
 		//block
 		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(20)).addProtocols(ProtocolVersion.MINECRAFT_1_8),
