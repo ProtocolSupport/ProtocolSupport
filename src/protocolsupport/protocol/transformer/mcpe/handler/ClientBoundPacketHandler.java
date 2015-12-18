@@ -52,6 +52,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetBloc
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetDifficultyPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetEntityDataPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetEntityEffect;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetGameModePacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetRecipesPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetTimePacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetBlocksPacket.UpdateBlockRecord;
@@ -761,6 +762,15 @@ public class ClientBoundPacketHandler {
 						bukkitplayer.getWorld().getSpawnLocation(),
 						bukkitplayer.getLocation()
 					));
+				}
+				case ClientBoundPacket.PLAY_GAME_STATE_CHANGE_ID: {
+					int reason = packetdata.readUnsignedByte();
+					float value = packetdata.readFloat();
+					if (reason == 3) {
+						return Collections.singletonList(new SetGameModePacket((int) value));
+					} else {
+						return Collections.emptyList();
+					}
 				}
 				default: {
 					return Collections.emptyList();
