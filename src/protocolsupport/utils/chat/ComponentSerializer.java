@@ -21,7 +21,7 @@ import protocolsupport.api.chat.components.TranslateComponent;
 import protocolsupport.api.chat.modifiers.ClickAction;
 import protocolsupport.api.chat.modifiers.HoverAction;
 import protocolsupport.api.chat.modifiers.Modifier;
-import protocolsupport.api.utils.JsonUtils;
+import protocolsupport.utils.JsonUtils;
 
 public class ComponentSerializer implements JsonDeserializer<BaseComponent>, JsonSerializer<BaseComponent> {
 

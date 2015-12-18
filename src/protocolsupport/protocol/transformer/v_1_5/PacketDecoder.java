@@ -17,24 +17,24 @@ import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.core.IPacketDecoder;
 import protocolsupport.protocol.transformer.middlepacket.ServerBoundMiddlePacket;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.handshake.v_1_4_1_5_1_6.ClientLogin;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.handshake.v_1_5.Ping;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.handshake.v_1_5_1_6.ClientLogin;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v1_5_1_6_1_7.Animation;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v1_5_1_6_1_7.BlockDig;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v1_5_1_6_1_7.BlockPlace;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v1_5_1_6_1_7.InventoryClick;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v1_5_1_6_1_7.KeepAlive;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v1_5_1_6_1_7.Position;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v1_5_1_6_1_7.TabComplete;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v1_5_1_6_1_7.UpdateSign;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_5.EntityAction;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_5.PlayerAbilities;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_5.PositionLook;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_5_1_6.ClientCommand;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_5_1_6.ClientSettings;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_5_1_6.CustomPayload;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_5_1_6.KickDisconnect;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_5_1_6.UseEntity;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5.EntityAction;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5.PlayerAbilities;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5.PositionLook;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6.ClientCommand;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6.ClientSettings;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6.CustomPayload;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6.KickDisconnect;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6.UseEntity;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.Animation;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.BlockDig;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.BlockPlace;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.InventoryClick;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.KeepAlive;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.Position;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.TabComplete;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.UpdateSign;
 import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry;
 import protocolsupport.protocol.transformer.utils.registry.PacketIdTransformerRegistry;
 import protocolsupport.utils.PacketCreator;
@@ -58,7 +58,7 @@ public class PacketDecoder implements IPacketDecoder {
 		packetIdRegistry.register(EnumProtocol.PLAY, 0x6C, ServerBoundPacket.PLAY_ENCHANT_SELECT.getId());
 	}
 
-	private static final MiddleTransformerRegistry<ServerBoundMiddlePacket> dataRemapperRegistry = new MiddleTransformerRegistry<>(ProtocolVersion.MINECRAFT_1_5_2);
+	private static final MiddleTransformerRegistry<ServerBoundMiddlePacket> dataRemapperRegistry = new MiddleTransformerRegistry<>();
 	static {
 		try {
 			dataRemapperRegistry.register(EnumProtocol.HANDSHAKING, 0x02, ClientLogin.class);

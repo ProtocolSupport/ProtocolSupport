@@ -7,6 +7,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.CorruptedFrameException;
 import io.netty.util.concurrent.Future;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
 
 import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
@@ -23,13 +24,20 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
 	@SuppressWarnings("serial")
 	private static final EnumMap<ProtocolVersion, IPipeLineBuilder> pipelineBuilders = new EnumMap<ProtocolVersion, IPipeLineBuilder>(ProtocolVersion.class) {{
-		put(ProtocolVersion.MINECRAFT_1_8, new protocolsupport.protocol.transformer.v_1_8.PipeLineBuilder());
-		put(ProtocolVersion.MINECRAFT_1_7_10, new protocolsupport.protocol.transformer.v_1_7.PipeLineBuilder());
-		put(ProtocolVersion.MINECRAFT_1_7_5, new protocolsupport.protocol.transformer.v_1_7.PipeLineBuilder());
-		put(ProtocolVersion.MINECRAFT_1_6_4, new protocolsupport.protocol.transformer.v_1_6.PipeLineBuilder());
-		put(ProtocolVersion.MINECRAFT_1_6_2, new protocolsupport.protocol.transformer.v_1_6.PipeLineBuilder());
-		put(ProtocolVersion.MINECRAFT_1_5_2, new protocolsupport.protocol.transformer.v_1_5.PipeLineBuilder());
-		put(ProtocolVersion.UNKNOWN, new protocolsupport.protocol.transformer.v_1_8.PipeLineBuilder());
+		IPipeLineBuilder builder = new protocolsupport.protocol.transformer.v_1_8.PipeLineBuilder();
+		put(ProtocolVersion.MINECRAFT_1_8, builder);
+		IPipeLineBuilder builder17 = new protocolsupport.protocol.transformer.v_1_7.PipeLineBuilder();
+		put(ProtocolVersion.MINECRAFT_1_7_10, builder17);
+		put(ProtocolVersion.MINECRAFT_1_7_5, builder17);
+		IPipeLineBuilder builder16 = new protocolsupport.protocol.transformer.v_1_6.PipeLineBuilder();
+		put(ProtocolVersion.MINECRAFT_1_6_4, builder16);
+		put(ProtocolVersion.MINECRAFT_1_6_2, builder16);
+		put(ProtocolVersion.MINECRAFT_1_6_1, builder16);
+		IPipeLineBuilder builder15 = new protocolsupport.protocol.transformer.v_1_5.PipeLineBuilder();
+		put(ProtocolVersion.MINECRAFT_1_5_2, builder15);
+		put(ProtocolVersion.MINECRAFT_1_5_1, builder15);
+		put(ProtocolVersion.MINECRAFT_1_4_7, new protocolsupport.protocol.transformer.v_1_4.PipeLineBuilder());
+		put(ProtocolVersion.UNKNOWN, builder);
 	}};
 
 
@@ -122,6 +130,9 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 			return;
 		}
 		protocolSet = true;
+		if (MinecraftServer.getServer().isDebugging()) {
+			System.out.println(Utils.getNetworkManagerSocketAddress(channel)+ " connected with protocol version "+version);
+		}
 		ProtocolStorage.setProtocolVersion(Utils.getNetworkManagerSocketAddress(channel), version);
 		channel.pipeline().remove(ChannelHandlers.INITIAL_DECODER);
 		pipelineBuilders.get(version).buildPipeLine(channel, version);

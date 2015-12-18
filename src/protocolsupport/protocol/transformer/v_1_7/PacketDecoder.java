@@ -18,14 +18,14 @@ import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.core.IPacketDecoder;
 import protocolsupport.protocol.transformer.middlepacket.ServerBoundMiddlePacket;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.handshake.v_1_7.SetProtocol;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v1_5_1_6_1_7.Animation;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v1_5_1_6_1_7.BlockDig;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v1_5_1_6_1_7.BlockPlace;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v1_5_1_6_1_7.InventoryClick;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v1_5_1_6_1_7.KeepAlive;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v1_5_1_6_1_7.Position;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v1_5_1_6_1_7.TabComplete;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v1_5_1_6_1_7.UpdateSign;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.Animation;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.BlockDig;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.BlockPlace;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.InventoryClick;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.KeepAlive;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.Position;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.TabComplete;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.UpdateSign;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_6_1_7.EntityAction;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_6_1_7.PositionLook;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_6_1_7.SteerVehicle;
@@ -40,7 +40,7 @@ public class PacketDecoder implements IPacketDecoder {
 
 	private static final AttributeKey<EnumProtocol> currentStateAttrKey = NetworkManager.c;
 
-	private static final MiddleTransformerRegistry<ServerBoundMiddlePacket> registry = new MiddleTransformerRegistry<>(ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_7_5);
+	private static final MiddleTransformerRegistry<ServerBoundMiddlePacket> registry = new MiddleTransformerRegistry<>();
 	static {
 		try {
 			registry.register(EnumProtocol.HANDSHAKING, 0x00, SetProtocol.class);

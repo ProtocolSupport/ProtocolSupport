@@ -8,11 +8,9 @@ import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleSpawnPosition;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
-import protocolsupport.protocol.transformer.middlepacketimpl.SupportedVersions;
 import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
 @NeedsNoArgConstructor
-@SupportedVersions({ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_7_5})
 public class SpawnPosition extends MiddleSpawnPosition<Collection<PacketData>> {
 
 	@Override

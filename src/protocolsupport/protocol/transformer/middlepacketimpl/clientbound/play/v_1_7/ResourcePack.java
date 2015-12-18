@@ -9,11 +9,9 @@ import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleResourcePack;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
-import protocolsupport.protocol.transformer.middlepacketimpl.SupportedVersions;
 import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
 @NeedsNoArgConstructor
-@SupportedVersions({ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_7_5})
 public class ResourcePack extends MiddleResourcePack<Collection<PacketData>> {
 
 	@Override

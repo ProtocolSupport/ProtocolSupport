@@ -77,73 +77,101 @@ public class IdRemapper {
 			registerRemapEntry(172, 82, ProtocolVersionsHelper.BEFORE_1_6);
 			// coal block -> stone
 			registerRemapEntry(173, 1, ProtocolVersionsHelper.BEFORE_1_6);
+			// dropper -> stone
+			registerRemapEntry(178, 1, ProtocolVersionsHelper.BEFORE_1_5);
+			// hopper -> stone
+			registerRemapEntry(154, 1, ProtocolVersionsHelper.BEFORE_1_5);			
+			// quartz -> snow
+			registerRemapEntry(155, 80, ProtocolVersionsHelper.BEFORE_1_5);
+			// quartz stairs -> stairs
+			registerRemapEntry(156, 109, ProtocolVersionsHelper.BEFORE_1_5);
+			// quartz slab -> slab
+			registerRemapEntry(156, 44, ProtocolVersionsHelper.BEFORE_1_5);
+			// inverted daylight detector -> stone
+			registerRemapEntry(178, 1, ProtocolVersionsHelper.BEFORE_1_5);
+			// daylight detector -> slab
+			registerRemapEntry(151, 44, ProtocolVersionsHelper.BEFORE_1_5);
+			// trapped chest -> chest
+			registerRemapEntry(146, 54, ProtocolVersionsHelper.BEFORE_1_5);
+			// redstone block -> glowing redstone ore
+			registerRemapEntry(146, 73, ProtocolVersionsHelper.BEFORE_1_5);
+			// activator rail -> some other rail
+			registerRemapEntry(157, 28, ProtocolVersionsHelper.BEFORE_1_5);
+			// nether quartz ore -> nettherrack
+			registerRemapEntry(153, 87, ProtocolVersionsHelper.BEFORE_1_5);
+			// wpressure plate light -> wood pressure plate
+			registerRemapEntry(147, 72, ProtocolVersionsHelper.BEFORE_1_5);
+			// wpressure plate heavy -> stone pressure plate
+			registerRemapEntry(148, 70, ProtocolVersionsHelper.BEFORE_1_5);
+			// redstone comparator -> repeater
+			registerRemapEntry(149, 93, ProtocolVersionsHelper.BEFORE_1_5);
 
 			// MCPE
 			// stained glass -> glass
-			registerRemapEntry(95, 20, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(95, 20, ProtocolVersion.MINECRAFT_PE);
 			// stained glass pane -> glass pane
-			registerRemapEntry(160, 102, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(160, 102, ProtocolVersion.MINECRAFT_PE);
 			// sea lantern -> glowstone
-			registerRemapEntry(169, 89, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(169, 89, ProtocolVersion.MINECRAFT_PE);
 			// prismarine -> mossy cobblestone
-			registerRemapEntry(168, 48, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(168, 48, ProtocolVersion.MINECRAFT_PE);
 			// wood slab -> wood slab (MCPE ID remap)
-			registerRemapEntry(126, 158, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(126, 158, ProtocolVersion.MINECRAFT_PE);
 			// standing banner -> standing sign
-			registerRemapEntry(176, 63, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(176, 63, ProtocolVersion.MINECRAFT_PE);
 			// wall banner -> wall sign
-			registerRemapEntry(177, 68, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(177, 68, ProtocolVersion.MINECRAFT_PE);
 			// (sticky) piston -> stone
-			registerRemapEntry(29, 1, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(33, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(29, 1, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(33, 1, ProtocolVersion.MINECRAFT_PE);
 			// piston head -> stone
-			registerRemapEntry(34, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(34, 1, ProtocolVersion.MINECRAFT_PE);
 			// dispenser -> stone
-			registerRemapEntry(23, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(23, 1, ProtocolVersion.MINECRAFT_PE);
 			// jukebox -> noteblock
-			registerRemapEntry(84, 25, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(84, 25, ProtocolVersion.MINECRAFT_PE);
 			// repeater (on/off) -> carpet
-			registerRemapEntry(93, 171, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(94, 171, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(93, 171, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(94, 171, ProtocolVersion.MINECRAFT_PE);
 			// cauldron -> stone
-			registerRemapEntry(118, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(118, 1, ProtocolVersion.MINECRAFT_PE);
 			// end portal -> nether portal
-			registerRemapEntry(119, 90, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(119, 90, ProtocolVersion.MINECRAFT_PE);
 			// dragon egg -> stone
-			registerRemapEntry(122, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(122, 1, ProtocolVersion.MINECRAFT_PE);
 			// double oak slab -> double oak slab (MCPE ID remap)
-			registerRemapEntry(125, 157, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(125, 157, ProtocolVersion.MINECRAFT_PE);
 			// enderchest -> chest
-			registerRemapEntry(130, 54, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(130, 54, ProtocolVersion.MINECRAFT_PE);
 			// command block -> stone
-			registerRemapEntry(137, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(137, 1, ProtocolVersion.MINECRAFT_PE);
 			// beacon -> nether reactor core
-			registerRemapEntry(138, 247, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(138, 247, ProtocolVersion.MINECRAFT_PE);
 			// comparator (on/off) -> carpet
-			registerRemapEntry(149, 171, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(150, 171, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(149, 171, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(150, 171, ProtocolVersion.MINECRAFT_PE);
 			// hopper -> stone
-			registerRemapEntry(154, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(154, 1, ProtocolVersion.MINECRAFT_PE);
 			// activator rail -> carpet
-			registerRemapEntry(157, 171, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(157, 171, ProtocolVersion.MINECRAFT_PE);
 			// slime block -> stone
-			registerRemapEntry(165, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(165, 1, ProtocolVersion.MINECRAFT_PE);
 			// barrier -> invisible bedrock
-			registerRemapEntry(166, 95, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(166, 95, ProtocolVersion.MINECRAFT_PE);
 			// red sandstone -> sandstone
-			registerRemapEntry(179, 24, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(179, 24, ProtocolVersion.MINECRAFT_PE);
 			// red sandstone stairs -> sandstone stairs
-			registerRemapEntry(180, 128, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(180, 128, ProtocolVersion.MINECRAFT_PE);
 			// red sandstone doubleslab -> double step
-			registerRemapEntry(181, 43, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(181, 43, ProtocolVersion.MINECRAFT_PE);
 			// red sandstone slab -> step
-			registerRemapEntry(182, 44, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(182, 44, ProtocolVersion.MINECRAFT_PE);
 			// fences -> fence
-			registerRemapEntry(188, 85, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(189, 85, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(190, 85, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(191, 85, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(192, 85, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(188, 85, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(189, 85, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(190, 85, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(191, 85, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(192, 85, ProtocolVersion.MINECRAFT_PE);
 		}
 		@Override
 		protected RemappingTable createTable() {
@@ -183,75 +211,82 @@ public class IdRemapper {
 			registerRemapEntry(419, 1, ProtocolVersionsHelper.BEFORE_1_6);
 			registerRemapEntry(420, 1, ProtocolVersionsHelper.BEFORE_1_6);
 			registerRemapEntry(421, 1, ProtocolVersionsHelper.BEFORE_1_6);
-
+			// minecarts -> default minecart
+			registerRemapEntry(407, 328, ProtocolVersionsHelper.BEFORE_1_5);
+			registerRemapEntry(408, 328, ProtocolVersionsHelper.BEFORE_1_5);
+			// comparator -> repeater
+			registerRemapEntry(404, 356, ProtocolVersionsHelper.BEFORE_1_5);
+			// nether brick -> brick
+			registerRemapEntry(405, 336, ProtocolVersionsHelper.BEFORE_1_5);
+			// quartz -> feather
+			registerRemapEntry(406, 288, ProtocolVersionsHelper.BEFORE_1_5);
 
 			// MCPE
 			// repeater -> carpet
-			registerRemapEntry(356, 171, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(356, 171, ProtocolVersion.MINECRAFT_PE);
 			// map -> paper
-			registerRemapEntry(358, 339, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(358, 339, ProtocolVersion.MINECRAFT_PE);
 			// empty map -> paper
-			registerRemapEntry(395, 339, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(395, 339, ProtocolVersion.MINECRAFT_PE);
 			// cauldron -> stone
-			registerRemapEntry(380, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(380, 1, ProtocolVersion.MINECRAFT_PE);
 			// carrot stick -> stick
-			registerRemapEntry(398, 280, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(398, 280, ProtocolVersion.MINECRAFT_PE);
 			// nether star -> stone
-			registerRemapEntry(399, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(399, 1, ProtocolVersion.MINECRAFT_PE);
 			// banner -> sign
-			registerRemapEntry(425, 323, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(425, 323, ProtocolVersion.MINECRAFT_PE);
 			// raw mutton -> chicken raw meat
-			registerRemapEntry(423, 365, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(423, 365, ProtocolVersion.MINECRAFT_PE);
 			// cooked mutton -> chicken cooked meat
-			registerRemapEntry(424, 366, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(424, 366, ProtocolVersion.MINECRAFT_PE);
 			// ender pearl -> snowball
-			registerRemapEntry(368, 332, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(368, 332, ProtocolVersion.MINECRAFT_PE);
 			// eye of ender -> snowball
-			registerRemapEntry(381, 332, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(381, 332, ProtocolVersion.MINECRAFT_PE);
 			// item frame -> stone
-			registerRemapEntry(389, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(389, 1, ProtocolVersion.MINECRAFT_PE);
 			// firework -> stone
-			registerRemapEntry(401, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(401, 1, ProtocolVersion.MINECRAFT_PE);
 			// firework charge -> stone
-			registerRemapEntry(402, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(402, 1, ProtocolVersion.MINECRAFT_PE);
 			// redstone comparator -> carpet
-			registerRemapEntry(404, 171, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(404, 171, ProtocolVersion.MINECRAFT_PE);
 			// minecarts -> minecart
-			registerRemapEntry(407, 328, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(408, 328, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(422, 328, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(342, 328, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(343, 328, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(407, 328, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(408, 328, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(422, 328, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(342, 328, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(343, 328, ProtocolVersion.MINECRAFT_PE);
 			// buckets -> stone
-			registerRemapEntry(325, 1, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(326, 1, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(327, 1, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(335, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(325, 1, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(326, 1, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(327, 1, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(335, 1, ProtocolVersion.MINECRAFT_PE);
 			// everything else -> stone
-			registerRemapEntry(409, 1, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(410, 1, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(414, 1, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(415, 1, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(416, 1, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(417, 1, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(418, 1, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(419, 1, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(420, 1, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(421, 1, ProtocolVersionsHelper.MCPE);
-
+			registerRemapEntry(409, 1, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(410, 1, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(414, 1, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(415, 1, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(416, 1, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(417, 1, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(418, 1, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(419, 1, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(420, 1, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(421, 1, ProtocolVersion.MINECRAFT_PE);
 			// all discs -> stone
-			registerRemapEntry(2256, 1, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(2257, 1, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(2258, 1, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(2259, 1, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(2260, 1, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(2261, 1, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(2262, 1, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(2263, 1, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(2264, 1, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(2265, 1, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(2266, 1, ProtocolVersionsHelper.MCPE);
-			registerRemapEntry(2267, 1, ProtocolVersionsHelper.MCPE);
+			registerRemapEntry(2256, 1, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(2257, 1, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(2258, 1, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(2259, 1, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(2260, 1, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(2261, 1, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(2262, 1, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(2263, 1, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(2264, 1, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(2265, 1, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(2266, 1, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(2267, 1, ProtocolVersion.MINECRAFT_PE);
 		}
 		@Override
 		protected RemappingTable createTable() {

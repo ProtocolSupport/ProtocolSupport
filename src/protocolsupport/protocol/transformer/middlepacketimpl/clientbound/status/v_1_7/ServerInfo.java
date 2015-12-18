@@ -6,16 +6,13 @@ import java.util.Collections;
 
 import net.minecraft.server.v1_8_R3.ServerPing;
 import net.minecraft.server.v1_8_R3.ServerPing.ServerData;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.status.MiddleServerInfo;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
-import protocolsupport.protocol.transformer.middlepacketimpl.SupportedVersions;
 import protocolsupport.protocol.transformer.utils.ServerPingSerializers;
 
-@SupportedVersions({ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_7_5})
 public class ServerInfo extends MiddleServerInfo<Collection<PacketData>> {
 
 	@Override
