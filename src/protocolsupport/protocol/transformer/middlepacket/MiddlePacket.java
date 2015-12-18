@@ -2,7 +2,10 @@ package protocolsupport.protocol.transformer.middlepacket;
 
 import org.bukkit.entity.Player;
 
-public class HasPlayer {
+import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
+
+@NeedsNoArgConstructor
+public abstract class MiddlePacket {
 
 	protected Player player;
 

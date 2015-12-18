@@ -1,5 +1,6 @@
 package protocolsupport.protocol.transformer.middlepacket.clientbound.play;
 
+import protocolsupport.api.tab.TabAPI;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
@@ -20,7 +21,8 @@ public abstract class MiddleLogin<T> extends ClientBoundMiddlePacket<T> {
 		gamemode = serializer.readByte();
 		dimension = serializer.readByte();
 		difficulty = serializer.readByte();
-		maxplayers = serializer.readByte();
+		serializer.readByte();
+		maxplayers = TabAPI.getMaxTabSize();
 		leveltype = serializer.readString(16);
 	}
 

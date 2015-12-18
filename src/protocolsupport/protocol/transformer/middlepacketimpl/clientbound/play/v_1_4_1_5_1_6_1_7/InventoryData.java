@@ -11,9 +11,7 @@ import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleInventoryData;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
-import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
-@NeedsNoArgConstructor
 public class InventoryData extends MiddleInventoryData<Collection<PacketData>> {
 
 	private static final int[] furTypeTr = {1, 2, 0};

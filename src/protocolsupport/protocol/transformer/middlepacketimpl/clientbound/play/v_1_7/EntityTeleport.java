@@ -9,9 +9,7 @@ import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleEntityTeleport;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificType;
-import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
-@NeedsNoArgConstructor
 public class EntityTeleport extends MiddleEntityTeleport<Collection<PacketData>> {
 
 	@Override

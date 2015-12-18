@@ -6,7 +6,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage;
 
-public abstract class ClientBoundMiddlePacket<T> extends HasPlayer {
+public abstract class ClientBoundMiddlePacket<T> extends MiddlePacket {
 
 	public abstract void readFromServerData(PacketDataSerializer serializer) throws IOException;
 

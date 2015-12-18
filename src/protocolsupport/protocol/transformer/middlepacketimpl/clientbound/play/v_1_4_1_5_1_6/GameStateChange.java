@@ -9,9 +9,7 @@ import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleGameStateChange;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
-import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
-@NeedsNoArgConstructor
 public class GameStateChange extends MiddleGameStateChange<Collection<PacketData>> {
 
 	@Override

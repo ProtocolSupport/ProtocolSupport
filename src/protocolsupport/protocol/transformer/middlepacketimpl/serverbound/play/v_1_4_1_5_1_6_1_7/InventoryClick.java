@@ -6,9 +6,7 @@ import org.bukkit.event.inventory.InventoryType;
 
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.serverbound.play.MiddleInventoryClick;
-import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
-@NeedsNoArgConstructor
 public class InventoryClick extends MiddleInventoryClick {
 
 	@Override

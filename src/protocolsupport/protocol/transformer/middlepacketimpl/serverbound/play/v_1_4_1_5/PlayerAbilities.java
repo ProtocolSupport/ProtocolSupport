@@ -4,9 +4,7 @@ import java.io.IOException;
 
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.serverbound.play.MiddlePlayerAbilities;
-import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
-@NeedsNoArgConstructor
 public class PlayerAbilities extends MiddlePlayerAbilities {
 
 	@Override

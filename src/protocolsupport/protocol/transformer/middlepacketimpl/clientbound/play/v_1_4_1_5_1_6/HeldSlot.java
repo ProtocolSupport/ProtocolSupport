@@ -8,9 +8,7 @@ import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleHeldSlot;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
-import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
-@NeedsNoArgConstructor
 public class HeldSlot extends MiddleHeldSlot<Collection<PacketData>> {
 
 	@Override

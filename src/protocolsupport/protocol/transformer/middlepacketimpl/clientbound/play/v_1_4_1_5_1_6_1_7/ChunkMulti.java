@@ -12,9 +12,7 @@ import protocolsupport.protocol.transformer.middlepacket.clientbound.play.Middle
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.transformer.utils.ChunkTransformer;
 import protocolsupport.utils.CompressionUtils;
-import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
-@NeedsNoArgConstructor
 public class ChunkMulti extends MiddleChunkMulti<Collection<PacketData>> {
 
 	@Override

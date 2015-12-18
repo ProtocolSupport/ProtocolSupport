@@ -4,9 +4,7 @@ import java.io.IOException;
 
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.serverbound.handshake.MiddleSetProtocol;
-import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
-@NeedsNoArgConstructor
 public class SetProtocol extends MiddleSetProtocol {
 
 	@Override

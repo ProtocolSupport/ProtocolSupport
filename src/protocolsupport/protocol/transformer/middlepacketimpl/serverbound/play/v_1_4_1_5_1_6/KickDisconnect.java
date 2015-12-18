@@ -6,9 +6,7 @@ import java.util.Collections;
 import net.minecraft.server.v1_8_R3.Packet;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.ServerBoundMiddlePacket;
-import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
-@NeedsNoArgConstructor
 public class KickDisconnect extends ServerBoundMiddlePacket {
 
 	@Override
