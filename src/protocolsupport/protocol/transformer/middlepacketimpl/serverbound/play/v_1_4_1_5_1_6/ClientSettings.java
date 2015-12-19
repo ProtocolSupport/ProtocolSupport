@@ -14,6 +14,7 @@ public class ClientSettings extends MiddleClientSettings {
 		chatColors = (chatState & 8) == 8;
 		serializer.readByte();
 		serializer.readBoolean();
+		skinFlags = 255;
 	}
 
 }
