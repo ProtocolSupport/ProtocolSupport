@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.nbt;
+package protocolsupport.protocol.typeremapper.nbt.custompayload;
 
 import java.io.IOException;
 
@@ -6,7 +6,7 @@ import net.minecraft.server.v1_8_R3.ItemStack;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.typeremapper.nbt.MerchantData.TradeOffer;
+import protocolsupport.protocol.typeremapper.nbt.custompayload.MerchantData.TradeOffer;
 import protocolsupport.utils.Allocator;
 import protocolsupport.utils.Utils;
 
