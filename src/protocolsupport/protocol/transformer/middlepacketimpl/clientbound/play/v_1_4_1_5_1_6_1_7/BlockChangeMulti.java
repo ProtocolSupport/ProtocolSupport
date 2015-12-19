@@ -10,9 +10,7 @@ import protocolsupport.protocol.transformer.middlepacket.clientbound.play.Middle
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.RemappingTable;
-import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
-@NeedsNoArgConstructor
 public class BlockChangeMulti extends MiddleBlockChangeMulti<Collection<PacketData>> {
 
 	@Override

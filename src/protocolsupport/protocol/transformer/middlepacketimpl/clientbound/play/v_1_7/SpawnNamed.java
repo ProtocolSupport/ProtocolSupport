@@ -12,9 +12,7 @@ import protocolsupport.protocol.transformer.middlepacket.clientbound.play.Middle
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.typeremapper.watchedentity.WatchedDataRemapper;
 import protocolsupport.utils.DataWatcherSerializer;
-import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
-@NeedsNoArgConstructor
 public class SpawnNamed extends MiddleSpawnNamed<Collection<PacketData>> {
 
 	@Override

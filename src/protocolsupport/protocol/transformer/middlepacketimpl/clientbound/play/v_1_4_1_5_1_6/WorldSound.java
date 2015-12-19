@@ -9,9 +9,7 @@ import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleWorldSound;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
-import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
-@NeedsNoArgConstructor
 public class WorldSound extends MiddleWorldSound<Collection<PacketData>> {
 
 	@Override

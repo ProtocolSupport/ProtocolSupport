@@ -4,15 +4,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import net.minecraft.server.v1_8_R3.Packet;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.ServerBoundMiddlePacket;
 import protocolsupport.utils.PacketCreator;
-import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
-@NeedsNoArgConstructor
 public class ClientLogin extends ServerBoundMiddlePacket {
 
 	protected String username;

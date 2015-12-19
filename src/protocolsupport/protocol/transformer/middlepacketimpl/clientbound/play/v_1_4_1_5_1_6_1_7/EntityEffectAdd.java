@@ -9,9 +9,7 @@ import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleEntityEffectAdd;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
-import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
-@NeedsNoArgConstructor
 public class EntityEffectAdd extends MiddleEntityEffectAdd<Collection<PacketData>> {
 
 	@Override

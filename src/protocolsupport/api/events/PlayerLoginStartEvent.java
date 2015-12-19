@@ -14,6 +14,7 @@ public class PlayerLoginStartEvent extends Event {
 	private boolean onlinemode;
 	private boolean useonlinemodeuuid;
 	private UUID uuid;
+	private String denyLoginMessage;
 
 	public PlayerLoginStartEvent(InetSocketAddress address, String username, boolean onlinemode, boolean useonlinemodeuuid, String hostname) {
 		this.address = address;
@@ -62,6 +63,20 @@ public class PlayerLoginStartEvent extends Event {
 	public UUID getForcedUUID() {
 		return uuid;
 	}
+
+
+	public boolean isLoginDenied() {
+		return denyLoginMessage != null;
+	}
+
+	public String getDenyLoginMessage() {
+		return denyLoginMessage;
+	}
+
+	public void denyLogin(String message) {
+		this.denyLoginMessage = message;
+	}
+
 
 	private static final HandlerList list = new HandlerList();
 

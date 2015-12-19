@@ -31,7 +31,7 @@ public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {
 						if (serializer.readBoolean()) {
 							signature = serializer.readString(32767);
 						}
-						info.properties[j] = signature != null ? new Property(name, value, signature) : new Property(value, name);
+						info.properties[j] = new Property(name, value, signature);
 					}
 					info.gamemode = serializer.readVarInt();
 					info.ping = serializer.readVarInt();

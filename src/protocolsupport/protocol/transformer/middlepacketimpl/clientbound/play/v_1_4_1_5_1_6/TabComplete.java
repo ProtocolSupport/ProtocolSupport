@@ -11,9 +11,7 @@ import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleTabComplete;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.utils.Utils;
-import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
-@NeedsNoArgConstructor
 public class TabComplete extends MiddleTabComplete<Collection<PacketData>> {
 
 	@Override

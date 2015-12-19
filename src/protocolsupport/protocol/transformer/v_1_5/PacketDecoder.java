@@ -48,6 +48,7 @@ public class PacketDecoder implements IPacketDecoder {
 
 	private static final PacketIdTransformerRegistry packetIdRegistry = new PacketIdTransformerRegistry();
 	static {
+		packetIdRegistry.register(EnumProtocol.LOGIN, 0xFC, ServerBoundPacket.LOGIN_ENCRYPTION_BEGIN.getId());
 		packetIdRegistry.register(EnumProtocol.PLAY, 0x03, ServerBoundPacket.PLAY_CHAT.getId());
 		packetIdRegistry.register(EnumProtocol.PLAY, 0x0A, ServerBoundPacket.PLAY_PLAYER.getId());
 		packetIdRegistry.register(EnumProtocol.PLAY, 0x0C, ServerBoundPacket.PLAY_LOOK.getId());
@@ -84,6 +85,11 @@ public class PacketDecoder implements IPacketDecoder {
 		}
 	}
 
+	private final ProtocolVersion version;
+	public PacketDecoder(ProtocolVersion version) {
+		this.version = version;
+	}
+
 	private final ReplayingDecoderBuffer buffer = new ReplayingDecoderBuffer();
 
 	@Override
@@ -94,7 +100,7 @@ public class PacketDecoder implements IPacketDecoder {
 		buffer.setCumulation(input);
 		buffer.markReaderIndex();
 		Channel channel = ctx.channel();
-		PacketDataSerializer serializer = new PacketDataSerializer(buffer, ProtocolVersion.MINECRAFT_1_5_2);
+		PacketDataSerializer serializer = new PacketDataSerializer(buffer, version);
 		EnumProtocol currentProtocol = channel.attr(currentStateAttrKey).get();
 		try {
 			int packetId = serializer.readUnsignedByte();

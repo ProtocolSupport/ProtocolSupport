@@ -5,9 +5,7 @@ import java.io.IOException;
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.serverbound.play.MiddleUpdateSign;
-import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
-@NeedsNoArgConstructor
 public class UpdateSign extends MiddleUpdateSign {
 
 	@Override

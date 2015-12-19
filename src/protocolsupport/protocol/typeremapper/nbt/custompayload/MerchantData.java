@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.nbt;
+package protocolsupport.protocol.typeremapper.nbt.custompayload;
 
 import java.util.ArrayList;
 import java.util.Collections;

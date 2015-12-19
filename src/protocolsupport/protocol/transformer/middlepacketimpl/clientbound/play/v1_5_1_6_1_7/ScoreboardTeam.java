@@ -10,9 +10,7 @@ import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleScoreboardTeam;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.utils.Utils;
-import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
-@NeedsNoArgConstructor
 public class ScoreboardTeam extends MiddleScoreboardTeam<Collection<PacketData>> {
 
 	@Override

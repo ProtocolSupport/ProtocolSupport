@@ -8,9 +8,7 @@ import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleSpawnPainting;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
-import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
-@NeedsNoArgConstructor
 public class SpawnPainting extends MiddleSpawnPainting<Collection<PacketData>> {
 
 	@Override

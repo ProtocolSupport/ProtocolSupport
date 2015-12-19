@@ -10,9 +10,7 @@ import protocolsupport.protocol.transformer.middlepacket.clientbound.play.Middle
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.transformer.utils.MapTransformer;
 import protocolsupport.protocol.transformer.utils.MapTransformer.ColumnEntry;
-import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
-@NeedsNoArgConstructor
 public class Map extends MiddleMap<Collection<PacketData>> {
 
 	@Override

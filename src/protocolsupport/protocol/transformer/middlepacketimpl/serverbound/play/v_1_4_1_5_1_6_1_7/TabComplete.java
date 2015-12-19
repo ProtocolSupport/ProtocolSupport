@@ -2,9 +2,7 @@ package protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v
 
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.serverbound.play.MiddleTabComplete;
-import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
-@NeedsNoArgConstructor
 public class TabComplete extends MiddleTabComplete {
 
 	@Override

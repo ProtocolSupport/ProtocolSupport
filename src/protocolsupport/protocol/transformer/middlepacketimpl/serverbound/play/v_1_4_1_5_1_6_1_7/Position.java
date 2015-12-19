@@ -2,9 +2,7 @@ package protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v
 
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.serverbound.play.MiddlePosition;
-import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
-@NeedsNoArgConstructor
 public class Position extends MiddlePosition {
 
 	@Override

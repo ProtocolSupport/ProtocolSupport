@@ -19,6 +19,9 @@ public class WrappedPrepender extends MessageToByteEncoder<ByteBuf> {
 
 	@Override
 	protected void encode(ChannelHandlerContext ctx, ByteBuf input, ByteBuf output) throws Exception {
+		if (!input.isReadable()) {
+			return;
+		}
 		realPrepender.prepend(ctx, input, output);
 	}
 

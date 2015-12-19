@@ -9,9 +9,7 @@ import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleEntityDestroy;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.utils.Utils;
-import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
-@NeedsNoArgConstructor
 public class EntityDestroy extends MiddleEntityDestroy<Collection<PacketData>> {
 
 	@Override

@@ -12,9 +12,7 @@ import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.ServerBoundMiddlePacket;
 import protocolsupport.utils.PacketCreator;
-import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
-@NeedsNoArgConstructor
 public class Ping extends ServerBoundMiddlePacket {
 
 	@Override

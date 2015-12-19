@@ -8,7 +8,9 @@ import java.security.PrivateKey;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 import javax.crypto.SecretKey;
 
@@ -37,14 +39,22 @@ import com.mojang.authlib.properties.Property;
 
 public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3.LoginListener implements ILoginListener {
 
+	private static final Executor loginprocessor = Executors.newCachedThreadPool(new ThreadFactory() {
+		@Override
+		public Thread newThread(Runnable r) {
+			Thread thread = new Thread(r);
+			thread.setName("LoginProcessingThread");
+			return thread;
+		}
+	});
+
 	protected static final Logger logger = LogManager.getLogger();
-	protected static final AtomicInteger authThreadsCounter = new AtomicInteger(0);
 	protected static final Random random = new Random();
 
 	protected final byte[] randomBytes = new byte[4];
 	protected int loginTicks;
 	protected SecretKey loginKey;
-	protected LoginState state = LoginState.HELLO;
+	protected volatile LoginState state = LoginState.HELLO;
 	protected GameProfile profile;
 
 	protected boolean isOnlineMode;
@@ -147,37 +157,65 @@ public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3
 	public void a(final PacketLoginInStart packetlogininstart) {
 		Validate.validState(state == LoginState.HELLO, "Unexpected hello packet");
 		state = LoginState.ONLINEMODERESOLVE;
-		profile = packetlogininstart.a();
-		PlayerLoginStartEvent event = new PlayerLoginStartEvent(
-			(InetSocketAddress) networkManager.getSocketAddress(),
-			profile.getName(),
-			isOnlineMode,
-			useOnlineModeUUID,
-			hostname
-		);
-		Bukkit.getPluginManager().callEvent(event);
-		isOnlineMode = event.isOnlineMode();
-		useOnlineModeUUID = event.useOnlineModeUUID();
-		forcedUUID = event.getForcedUUID();
-		if (isOnlineMode) {
-			state = LoginState.KEY;
-			networkManager.handle(new PacketLoginOutEncryptionBegin("", MinecraftServer.getServer().Q().getPublic(), randomBytes));
-		} else {
-			new ThreadPlayerLookupUUID(this, "User Authenticator #" + authThreadsCounter.incrementAndGet(), isOnlineMode).start();
-		}
+		loginprocessor.execute(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					profile = packetlogininstart.a();
+					PlayerLoginStartEvent event = new PlayerLoginStartEvent(
+						(InetSocketAddress) networkManager.getSocketAddress(),
+						profile.getName(),
+						isOnlineMode,
+						useOnlineModeUUID,
+						hostname
+					);
+					Bukkit.getPluginManager().callEvent(event);
+					if (event.isLoginDenied()) {
+						AbstractLoginListener.this.disconnect(event.getDenyLoginMessage());
+						return;
+					}
+					isOnlineMode = event.isOnlineMode();
+					useOnlineModeUUID = event.useOnlineModeUUID();
+					forcedUUID = event.getForcedUUID();
+					if (isOnlineMode) {
+						state = LoginState.KEY;
+						networkManager.handle(new PacketLoginOutEncryptionBegin("", MinecraftServer.getServer().Q().getPublic(), randomBytes));
+					} else {
+						new PlayerLookupUUID(AbstractLoginListener.this, isOnlineMode).run();
+					}
+				} catch (Throwable t) {
+					AbstractLoginListener.this.disconnect("Error occured while logging in");
+					if (MinecraftServer.getServer().isDebugging()) {
+						t.printStackTrace();
+					}
+				}
+			}
+		});
 	}
 
 	@Override
 	public void a(final PacketLoginInEncryptionBegin packetlogininencryptionbegin) {
 		Validate.validState(state == LoginState.KEY, "Unexpected key packet");
 		state = LoginState.AUTHENTICATING;
-		final PrivateKey privatekey = MinecraftServer.getServer().Q().getPrivate();
-		if (!Arrays.equals(randomBytes, packetlogininencryptionbegin.b(privatekey))) {
-			throw new IllegalStateException("Invalid nonce!");
-		}
-		loginKey = packetlogininencryptionbegin.a(privatekey);
-		enableEncryption(loginKey);
-		new ThreadPlayerLookupUUID(this, "User Authenticator #" + authThreadsCounter.incrementAndGet(), isOnlineMode).start();
+		loginprocessor.execute(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					final PrivateKey privatekey = MinecraftServer.getServer().Q().getPrivate();
+					if (!Arrays.equals(randomBytes, packetlogininencryptionbegin.b(privatekey))) {
+						throw new IllegalStateException("Invalid nonce!");
+					}
+					loginKey = packetlogininencryptionbegin.a(privatekey);
+					enableEncryption(loginKey);
+					new PlayerLookupUUID(AbstractLoginListener.this, isOnlineMode).run();
+				} catch (Throwable t) {
+					AbstractLoginListener.this.disconnect("Error occured while logging in");
+					if (MinecraftServer.getServer().isDebugging()) {
+						t.printStackTrace();
+					}
+				}					
+			}
+		});
 	}
 
 	protected abstract void enableEncryption(SecretKey key);

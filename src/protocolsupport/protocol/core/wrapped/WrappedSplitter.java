@@ -21,6 +21,9 @@ public class WrappedSplitter extends ByteToMessageDecoder {
 
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
+		if (!input.isReadable()) {
+			return;
+		}
 		realSplitter.split(ctx, input, list);
 	}
 

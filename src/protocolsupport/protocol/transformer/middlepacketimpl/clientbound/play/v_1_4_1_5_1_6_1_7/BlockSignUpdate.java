@@ -12,9 +12,7 @@ import protocolsupport.protocol.transformer.middlepacket.clientbound.play.Middle
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.utils.Utils;
-import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
-@NeedsNoArgConstructor
 public class BlockSignUpdate extends MiddleBlockSignUpdate<Collection<PacketData>> {
 
 	@Override
