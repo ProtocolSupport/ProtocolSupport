@@ -3,12 +3,17 @@ package protocolsupport.protocol.transformer.handlers;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 
 import net.minecraft.server.v1_8_R3.MinecraftEncryption;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
+import protocolsupport.api.events.PlayerPropertiesResolveEvent;
+import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 
+import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_8_R3.util.Waitable;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
@@ -16,20 +21,20 @@ import org.bukkit.event.player.PlayerPreLoginEvent;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.exceptions.AuthenticationUnavailableException;
+import com.mojang.authlib.properties.Property;
+import com.mojang.authlib.properties.PropertyMap;
 
 @SuppressWarnings("deprecation")
-public class ThreadPlayerLookupUUID extends Thread {
+public class PlayerLookupUUID {
 
 	private boolean isOnlineMode;
 	private final ILoginListener listener;
 
-	public ThreadPlayerLookupUUID(ILoginListener loginlistener, String threadName, boolean isOnlineMode) {
-		super(threadName);
+	public PlayerLookupUUID(ILoginListener loginlistener, boolean isOnlineMode) {
 		listener = loginlistener;
 		this.isOnlineMode = isOnlineMode;
 	}
 
-	@Override
 	public void run() {
 		final GameProfile gameprofile = listener.getProfile();
 		try {
@@ -69,9 +74,21 @@ public class ThreadPlayerLookupUUID extends Thread {
 		if (!listener.getNetworkManager().g()) {
 			return;
 		}
-		final String playerName = listener.getProfile().getName();
-		final InetAddress address = ((InetSocketAddress) listener.getNetworkManager().getSocketAddress()).getAddress();
-		final UUID uniqueId = listener.getProfile().getId();
+		String playerName = listener.getProfile().getName();
+		InetSocketAddress saddress = (InetSocketAddress) listener.getNetworkManager().getSocketAddress();
+		InetAddress address = saddress.getAddress();
+		List<ProfileProperty> properties = new ArrayList<ProfileProperty>();
+		PropertyMap propertymap = listener.getProfile().getProperties();
+		for (Property property : propertymap.values()) {
+			properties.add(new ProfileProperty(property.getName(), property.getValue(), property.getSignature()));
+		}
+		PlayerPropertiesResolveEvent propResolve = new PlayerPropertiesResolveEvent(saddress, playerName, properties);
+		Bukkit.getPluginManager().callEvent(propResolve);
+		propertymap.clear();
+		for (ProfileProperty profileproperty : propResolve.getProperties().values()) {
+			propertymap.put(profileproperty.getName(), new Property(profileproperty.getName(), profileproperty.getValue(), profileproperty.getSignature()));
+		}
+		UUID uniqueId = listener.getProfile().getId();
 		final CraftServer server = MinecraftServer.getServer().server;
 		final AsyncPlayerPreLoginEvent asyncEvent = new AsyncPlayerPreLoginEvent(playerName, address, uniqueId);
 		server.getPluginManager().callEvent(asyncEvent);

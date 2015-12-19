@@ -96,6 +96,7 @@ public class ServerPingResponseEvent extends Event {
 		}
 	}
 
+
 	private static final HandlerList list = new HandlerList();
 
 	@Override
