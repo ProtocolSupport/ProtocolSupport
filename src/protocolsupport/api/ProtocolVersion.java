@@ -110,8 +110,20 @@ public enum ProtocolVersion {
 		return between;
 	}
 
+	public static ProtocolVersion[] getAllBefore(ProtocolVersion version) {
+		return getAllBetween(getOldest(), version);
+	}
+
+	public static ProtocolVersion[] getAllAfter(ProtocolVersion version) {
+		return getAllBetween(version, getLatest());
+	}
+
 	public static ProtocolVersion getLatest() {
 		return ProtocolVersion.MINECRAFT_1_8;
+	}
+
+	public static ProtocolVersion getOldest() {
+		return ProtocolVersion.MINECRAFT_1_4_7;
 	}
 
 }
