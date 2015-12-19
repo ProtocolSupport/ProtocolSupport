@@ -36,6 +36,10 @@ public class PlayerPropertiesResolveEvent extends Event {
 		return Collections.unmodifiableMap(properties);
 	}
 
+	public boolean hasProperty(String name) {
+		return properties.containsKey(name);
+	}
+
 	public void removeProperty(String name) {
 		properties.remove(name);
 	}
