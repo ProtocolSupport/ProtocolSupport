@@ -47,6 +47,7 @@ public class PacketDecoder implements IPacketDecoder {
 
 	private static final PacketIdTransformerRegistry packetIdRegistry = new PacketIdTransformerRegistry();
 	static {
+		packetIdRegistry.register(EnumProtocol.LOGIN, 0xFC, ServerBoundPacket.LOGIN_ENCRYPTION_BEGIN.getId());
 		packetIdRegistry.register(EnumProtocol.PLAY, 0x03, ServerBoundPacket.PLAY_CHAT.getId());
 		packetIdRegistry.register(EnumProtocol.PLAY, 0x0A, ServerBoundPacket.PLAY_PLAYER.getId());
 		packetIdRegistry.register(EnumProtocol.PLAY, 0x0C, ServerBoundPacket.PLAY_LOOK.getId());
