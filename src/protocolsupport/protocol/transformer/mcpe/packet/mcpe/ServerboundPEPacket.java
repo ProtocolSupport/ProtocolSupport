@@ -5,7 +5,9 @@ import io.netty.buffer.ByteBuf;
 import java.util.List;
 
 import net.minecraft.server.v1_8_R3.Packet;
+import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
+@NeedsNoArgConstructor
 public interface ServerboundPEPacket extends PEPacket {
 
 	public ServerboundPEPacket decode(ByteBuf buf) throws Exception;

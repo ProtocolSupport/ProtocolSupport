@@ -12,6 +12,7 @@ import protocolsupport.protocol.transformer.mcpe.UDPNetworkManager;
 import protocolsupport.protocol.transformer.mcpe.packet.raknet.RakNetConstants;
 import protocolsupport.protocol.transformer.mcpe.packet.raknet.RakNetPacket;
 import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.NetworkManager;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -42,7 +43,9 @@ public class UDPRouter extends SimpleChannelInboundHandler<RakNetPacket> {
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-		cause.printStackTrace();
+		if (MinecraftServer.getServer().isDebugging()) {
+			cause.printStackTrace();
+		}
 	}
 
 	@Override
