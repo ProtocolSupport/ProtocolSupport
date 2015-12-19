@@ -120,9 +120,8 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 					nbttagcompound.set("pages", newpages);
 				}
 			}
-			if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_5)) {
-				transformSkull(nbttagcompound, "SkullOwner", "SkullOwner");
-				transformSkull(nbttagcompound, "Owner", "ExtraType");
+			if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_5) && item == Items.SKULL) {
+				transformSkull(nbttagcompound);
 			}
 			if (nbttagcompound.hasKeyOfType("ench", 9)) {
 				SkippingTable enchSkip = IdSkipper.ENCHANT.getTable(getVersion());
@@ -148,7 +147,12 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 		return itemstack;
 	}
 
-	private void transformSkull(NBTTagCompound tag, String tagname, String newtagname) {
+	public static void transformSkull(NBTTagCompound nbttagcompound) {
+		transformSkull(nbttagcompound, "SkullOwner", "SkullOwner");
+		transformSkull(nbttagcompound, "Owner", "ExtraType");
+	}
+
+	private static void transformSkull(NBTTagCompound tag, String tagname, String newtagname) {
 		if (tag.hasKeyOfType(tagname, 10)) {
 			GameProfile gameprofile = GameProfileSerializer.deserialize(tag.getCompound(tagname));
 			if (gameprofile.getName() != null) {

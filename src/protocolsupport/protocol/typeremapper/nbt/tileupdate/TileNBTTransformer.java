@@ -5,6 +5,7 @@ import java.util.EnumMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.utils.ProtocolVersionsHelper;
 
 public class TileNBTTransformer {
@@ -31,6 +32,17 @@ public class TileNBTTransformer {
 				}
 			},
 			ProtocolVersionsHelper.BEFORE_1_7
+		);
+		register(
+			4,
+			new SpecificTransformer() {
+				@Override
+				public NBTTagCompound transform(NBTTagCompound input) {
+					PacketDataSerializer.transformSkull(input);
+					return input;
+				}
+			},
+			ProtocolVersion.getAllBefore(ProtocolVersion.MINECRAFT_1_7_5)
 		);
 	}
 
