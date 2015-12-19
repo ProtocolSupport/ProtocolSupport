@@ -7,9 +7,9 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.CorruptedFrameException;
 import io.netty.util.concurrent.Future;
+
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 
-import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.EnumMap;
 import java.util.concurrent.TimeUnit;
@@ -21,6 +21,26 @@ import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.utils.Utils;
 
 public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
+
+	private static final int ping152delay = getPing152Delay();
+
+	private static int getPing152Delay() {
+		try {
+			return Integer.parseInt(System.getProperty("protocolsupport.ping152delay", "500"));
+		} catch (Throwable t) {
+		}
+		return 500;
+	}
+
+	private static final int pingLegacyDelay = getPingLegacyDelay();
+
+	private static int getPingLegacyDelay() {
+		try {
+			return Integer.parseInt(System.getProperty("protocolsupport.pinglegacydelay", "1000"));
+		} catch (Throwable t) {
+		}
+		return 500;
+	}
 
 	@SuppressWarnings("serial")
 	private static final EnumMap<ProtocolVersion, IPipeLineBuilder> pipelineBuilders = new EnumMap<ProtocolVersion, IPipeLineBuilder>(ProtocolVersion.class) {{
@@ -43,10 +63,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
 	protected final ByteBuf receivedData = Unpooled.buffer();
 
-	protected SocketAddress address;
-	protected volatile boolean protocolSet = false;
-
-	protected Future<?> responseTask;
+	protected volatile Future<?> responseTask;
 
 	protected void scheduleTask(ChannelHandlerContext ctx, Runnable task, long delay, TimeUnit tu) {
 		cancelTask();
@@ -86,11 +103,11 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 			case 0xFE: { //old ping
 				try {
 					if (receivedData.readableBytes() == 0) { //really old protocol probably
-						scheduleTask(ctx, new Ping11ResponseTask(channel), 1000, TimeUnit.MILLISECONDS);
+						scheduleTask(ctx, new Ping11ResponseTask(channel), pingLegacyDelay, TimeUnit.MILLISECONDS);
 					} else if (receivedData.readUnsignedByte() == 1) {
 						if (receivedData.readableBytes() == 0) {
 							//1.5.2 probably
-							scheduleTask(ctx, new Ping152ResponseTask(this, channel), 500, TimeUnit.MILLISECONDS);
+							scheduleTask(ctx, new Ping152ResponseTask(this, channel), ping152delay, TimeUnit.MILLISECONDS);
 						} else if (
 							(receivedData.readUnsignedByte() == 0xFA) &&
 							"MC|PingHost".equals(new String(Utils.toArray(receivedData.readBytes(receivedData.readUnsignedShort() * 2)), StandardCharsets.UTF_16BE))
@@ -124,6 +141,8 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 			setProtocol(channel, receivedData, handshakeversion);
 		}
 	}
+
+	protected volatile boolean protocolSet = false;
 
 	protected void setProtocol(final Channel channel, final ByteBuf input, ProtocolVersion version) throws Exception {
 		if (protocolSet) {

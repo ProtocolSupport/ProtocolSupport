@@ -50,14 +50,18 @@ public class TabAPI {
 
 	public static void sendHeaderFooter(Player player, BaseComponent header, BaseComponent footer) {
 		PacketDataSerializer serializer = PacketDataSerializer.createNew(ProtocolVersion.getLatest());
-		serializer.writeString(ChatAPI.toJSON(header != null ? header : empty));
-		serializer.writeString(ChatAPI.toJSON(footer != null ? footer : empty));
-		PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
 		try {
-			packet.a(serializer);
-		} catch (IOException e) {
+			serializer.writeString(ChatAPI.toJSON(header != null ? header : empty));
+			serializer.writeString(ChatAPI.toJSON(footer != null ? footer : empty));
+			PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
+			try {
+				packet.a(serializer);
+			} catch (IOException e) {
+			}
+			((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+		} finally {
+			serializer.release();
 		}
-		((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
 	}
 
 }
