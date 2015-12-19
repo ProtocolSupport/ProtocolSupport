@@ -11,6 +11,10 @@ import protocolsupport.protocol.core.IPacketEncoder;
 
 public class WrappedEncoder extends MessageToByteEncoder<Packet<PacketListener>> {
 
+	public WrappedEncoder() {
+		super(true);
+	}
+
 	private IPacketEncoder realEncoder = new IPacketEncoder() {
 		@Override
 		public void encode(ChannelHandlerContext ctx, Packet<PacketListener> packet, ByteBuf output) throws Exception {
