@@ -1,6 +1,7 @@
 package protocolsupport.protocol.core.initial;
 
 import io.netty.channel.Channel;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
 import protocolsupport.api.ProtocolVersion;
 
 public class Ping152ResponseTask implements Runnable {
@@ -18,6 +19,9 @@ public class Ping152ResponseTask implements Runnable {
 		try {
 			initialDecoder.setProtocol(channel, initialDecoder.receivedData, ProtocolVersion.MINECRAFT_1_5_2);
 		} catch (Throwable t) {
+			if (MinecraftServer.getServer().isDebugging()) {
+				t.printStackTrace();
+			}
 			channel.close();
 		}
 	}
