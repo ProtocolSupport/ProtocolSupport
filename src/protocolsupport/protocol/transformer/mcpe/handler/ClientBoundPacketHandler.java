@@ -784,6 +784,14 @@ public class ClientBoundPacketHandler {
 					float z = packetdata.readInt() / 32.0F;
 					return Collections.singletonList(new AddEntityPacket(entityId, 69, x, y, z, 0, 0, 0, 0, 0, new TIntObjectHashMap<DataWatcherObject>()));
 				}
+				case ClientBoundPacket.PLAY_SPAWN_WEATHER_ID: {
+					int entityId = packetdata.readVarInt();
+					packetdata.readByte();
+					float x = packetdata.readInt() / 32.0F;
+					float y = packetdata.readInt() / 32.0F;
+					float z = packetdata.readInt() / 32.0F;
+					return Collections.singletonList(new AddEntityPacket(entityId, 93, x, y, z, 0, 0, 0, 0, 0, new TIntObjectHashMap<DataWatcherObject>()));
+				}
 				default: {
 					return Collections.emptyList();
 				}
