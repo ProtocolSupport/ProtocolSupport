@@ -1,6 +1,7 @@
 package protocolsupport.protocol.transformer.mcpe.handler;
 
 import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -125,6 +126,10 @@ public class ClientBoundPacketHandler {
 		setRemap(70, 66);
 		//fishing float
 		setRemap(90, 77);
+		//potion
+		setRemap(73, 86);
+		//exp potion
+		setRemap(75, 68);
 	}};
 
 	private final UDPNetworkManager networkManager;
@@ -771,6 +776,13 @@ public class ClientBoundPacketHandler {
 					} else {
 						return Collections.emptyList();
 					}
+				}
+				case ClientBoundPacket.PLAY_SPAWN_EXP_ORB_ID: {
+					int entityId = packetdata.readVarInt();
+					float x = packetdata.readInt() / 32.0F;
+					float y = packetdata.readInt() / 32.0F;
+					float z = packetdata.readInt() / 32.0F;
+					return Collections.singletonList(new AddEntityPacket(entityId, 69, x, y, z, 0, 0, 0, 0, 0, new TIntObjectHashMap<DataWatcherObject>()));
 				}
 				default: {
 					return Collections.emptyList();
