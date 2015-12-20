@@ -10,6 +10,7 @@ import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket
 public abstract class MiddleWorldParticle<T> extends ClientBoundMiddlePacket<T> {
 
 	protected int type;
+	protected boolean longdist;
 	protected float x;
 	protected float y;
 	protected float z;
@@ -23,6 +24,7 @@ public abstract class MiddleWorldParticle<T> extends ClientBoundMiddlePacket<T> 
 	@Override
 	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
 		type = serializer.readInt();
+		longdist = serializer.readBoolean();
 		x = serializer.readFloat();
 		y = serializer.readFloat();
 		z = serializer.readFloat();
