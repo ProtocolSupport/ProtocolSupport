@@ -8,7 +8,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.ServerBoundMiddlePacket;
-import protocolsupport.utils.PacketCreator;
+import protocolsupport.protocol.transformer.middlepacketimpl.PacketCreator;
 
 public class ClientLogin extends ServerBoundMiddlePacket {
 
@@ -27,13 +27,13 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 	@Override
 	public Collection<Packet<?>> toNative() throws Exception {
 		ArrayList<Packet<?>> packets = new ArrayList<Packet<?>>();
-		PacketCreator hsscreator = new PacketCreator(ServerBoundPacket.HANDSHAKE_START.get());
+		PacketCreator hsscreator = PacketCreator.create(ServerBoundPacket.HANDSHAKE_START.get());
 		hsscreator.writeVarInt(ProtocolVersion.getLatest().getId());
 		hsscreator.writeString(hostname);
 		hsscreator.writeShort(port);
 		hsscreator.writeVarInt(2);
 		packets.add(hsscreator.create());
-		PacketCreator lscreator = new PacketCreator(ServerBoundPacket.LOGIN_START.get());
+		PacketCreator lscreator = PacketCreator.create(ServerBoundPacket.LOGIN_START.get());
 		lscreator.writeString(username);
 		packets.add(lscreator.create());
 		return packets;

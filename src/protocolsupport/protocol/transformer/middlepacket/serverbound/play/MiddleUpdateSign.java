@@ -9,7 +9,7 @@ import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
 import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.ServerBoundMiddlePacket;
-import protocolsupport.utils.PacketCreator;
+import protocolsupport.protocol.transformer.middlepacketimpl.PacketCreator;
 
 public abstract class MiddleUpdateSign extends ServerBoundMiddlePacket {
 
@@ -18,7 +18,7 @@ public abstract class MiddleUpdateSign extends ServerBoundMiddlePacket {
 
 	@Override
 	public Collection<Packet<?>> toNative() throws Exception {
-		PacketCreator creator = new PacketCreator(ServerBoundPacket.PLAY_UPDATE_SIGN.get());
+		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_UPDATE_SIGN.get());
 		creator.writePosition(position);
 		for (int i = 0; i < lines.length; i++) {
 			creator.writeString(ChatSerializer.a(new ChatComponentText(lines[i])));

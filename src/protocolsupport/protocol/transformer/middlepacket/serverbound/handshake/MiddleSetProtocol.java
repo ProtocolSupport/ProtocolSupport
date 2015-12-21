@@ -7,7 +7,7 @@ import net.minecraft.server.v1_8_R3.Packet;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.ServerBoundMiddlePacket;
-import protocolsupport.utils.PacketCreator;
+import protocolsupport.protocol.transformer.middlepacketimpl.PacketCreator;
 
 public abstract class MiddleSetProtocol extends ServerBoundMiddlePacket {
 
@@ -17,7 +17,7 @@ public abstract class MiddleSetProtocol extends ServerBoundMiddlePacket {
 
 	@Override
 	public Collection<Packet<?>> toNative() throws Exception {
-		PacketCreator creator = new PacketCreator(ServerBoundPacket.HANDSHAKE_START.get());
+		PacketCreator creator = PacketCreator.create(ServerBoundPacket.HANDSHAKE_START.get());
 		creator.writeVarInt(ProtocolVersion.getLatest().getId());
 		creator.writeString(hostname);
 		creator.writeShort(port);

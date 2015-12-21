@@ -9,7 +9,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.ServerBoundMiddlePacket;
-import protocolsupport.utils.PacketCreator;
+import protocolsupport.protocol.transformer.middlepacketimpl.PacketCreator;
 
 public class Ping extends ServerBoundMiddlePacket {
 
@@ -30,7 +30,7 @@ public class Ping extends ServerBoundMiddlePacket {
 	@Override
 	public Collection<Packet<?>> toNative() throws Exception {
 		ArrayList<Packet<?>> packets = new ArrayList<Packet<?>>();
-		PacketCreator hsscreator = new PacketCreator(ServerBoundPacket.HANDSHAKE_START.get());
+		PacketCreator hsscreator = PacketCreator.create(ServerBoundPacket.HANDSHAKE_START.get());
 		hsscreator.writeVarInt(ProtocolVersion.getLatest().getId());
 		hsscreator.writeString(hostname);
 		hsscreator.writeShort(port);

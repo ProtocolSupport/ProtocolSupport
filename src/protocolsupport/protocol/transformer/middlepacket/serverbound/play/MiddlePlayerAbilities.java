@@ -6,7 +6,7 @@ import java.util.Collections;
 import net.minecraft.server.v1_8_R3.Packet;
 import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.ServerBoundMiddlePacket;
-import protocolsupport.utils.PacketCreator;
+import protocolsupport.protocol.transformer.middlepacketimpl.PacketCreator;
 
 public abstract class MiddlePlayerAbilities extends ServerBoundMiddlePacket {
 
@@ -16,7 +16,7 @@ public abstract class MiddlePlayerAbilities extends ServerBoundMiddlePacket {
 
 	@Override
 	public Collection<Packet<?>> toNative() throws Exception {
-		PacketCreator creator = new PacketCreator(ServerBoundPacket.PLAY_ABILITIES.get());
+		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_ABILITIES.get());
 		creator.writeByte(flags);
 		creator.writeFloat(flySpeed);
 		creator.writeFloat(walkSpeed);

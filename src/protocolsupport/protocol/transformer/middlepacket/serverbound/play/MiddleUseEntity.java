@@ -7,7 +7,7 @@ import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketPlayInUseEntity;
 import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.ServerBoundMiddlePacket;
-import protocolsupport.utils.PacketCreator;
+import protocolsupport.protocol.transformer.middlepacketimpl.PacketCreator;
 
 public abstract class MiddleUseEntity extends ServerBoundMiddlePacket {
 
@@ -16,7 +16,7 @@ public abstract class MiddleUseEntity extends ServerBoundMiddlePacket {
 
 	@Override
 	public Collection<Packet<?>> toNative() throws Exception {
-		PacketCreator creator = new PacketCreator(ServerBoundPacket.PLAY_USE_ENTITY.get());
+		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_USE_ENTITY.get());
 		creator.writeVarInt(entityId);
 		creator.writeVarInt(action % PacketPlayInUseEntity.EnumEntityUseAction.values().length);
 		return Collections.<Packet<?>>singletonList(creator.create());

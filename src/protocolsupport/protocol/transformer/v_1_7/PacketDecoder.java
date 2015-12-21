@@ -17,6 +17,7 @@ import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.core.IPacketDecoder;
 import protocolsupport.protocol.transformer.middlepacket.ServerBoundMiddlePacket;
+import protocolsupport.protocol.transformer.middlepacketimpl.PacketCreator;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.handshake.v_1_7.SetProtocol;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.Animation;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.BlockDig;
@@ -33,7 +34,6 @@ import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_7.CustomPayload;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_7.UseEntity;
 import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry;
-import protocolsupport.utils.PacketCreator;
 import protocolsupport.utils.Utils;
 
 public class PacketDecoder implements IPacketDecoder {
