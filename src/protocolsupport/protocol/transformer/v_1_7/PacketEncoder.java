@@ -211,13 +211,12 @@ public class PacketEncoder implements IPacketEncoder {
 					for (PacketData packetdata : data) {
 						PacketDataSerializer singlepacketdata = PacketDataSerializer.createNew(version);
 						singlepacketdata.writeVarInt(packetdata.getPacketId());
-						singlepacketdata.writeBytes(packetdata.getData());
+						singlepacketdata.writeBytes(packetdata);
 						ctx.write(singlepacketdata);
 					}
 					ctx.flush();
 				} finally {
 					for (PacketData packetdata : data) {
-						packetdata.getData().release();
 						packetdata.recycle();
 					}
 					data.recycle();

@@ -8,7 +8,6 @@ import net.minecraft.server.v1_8_R3.ItemStack;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleInventorySetItems;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -21,13 +20,13 @@ public class InventorySetItems extends MiddleInventorySetItems<RecyclableCollect
 		if (player.getOpenInventory().getType() == InventoryType.ENCHANTING) {
 			itemstacks.remove(1);
 		}
-		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_WINDOW_SET_ITEMS_ID, version);
 		serializer.writeByte(windowId);
 		serializer.writeShort(itemstacks.size());
 		for (ItemStack itemstack : itemstacks) {
 			serializer.writeItemStack(itemstack);
 		}
-		return RecyclableSingletonList.<PacketData>create(PacketData.create(ClientBoundPacket.PLAY_WINDOW_SET_ITEMS_ID, serializer));
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

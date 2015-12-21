@@ -51,14 +51,23 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 		return new PacketDataSerializer(Allocator.allocateBuffer(), version);
 	}
 
-	private final ProtocolVersion version;
-	public PacketDataSerializer(ByteBuf buf, ProtocolVersion version) {
+	private ProtocolVersion version;
+
+	public PacketDataSerializer(ByteBuf buf) {
 		super(buf);
+	}
+
+	public PacketDataSerializer(ByteBuf buf, ProtocolVersion version) {
+		this(buf);
 		this.version = version;
 	}
 
 	public ProtocolVersion getVersion() {
 		return version;
+	}
+
+	protected void setVersion(ProtocolVersion version) {
+		this.version = version;
 	}
 
 	@Override

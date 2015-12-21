@@ -2,7 +2,6 @@ package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleSpawnPosition;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -12,11 +11,11 @@ public class SpawnPosition extends MiddleSpawnPosition<RecyclableCollection<Pack
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
-		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_SPAWN_POSITION_ID, version);
 		serializer.writeInt(position.getX());
 		serializer.writeInt(position.getY());
 		serializer.writeInt(position.getZ());
-		return RecyclableSingletonList.<PacketData>create(PacketData.create(ClientBoundPacket.PLAY_SPAWN_POSITION_ID, serializer));
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

@@ -6,7 +6,6 @@ import org.bukkit.event.inventory.InventoryType;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleInventorySetSlot;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -25,11 +24,11 @@ public class InventorySetSlot extends MiddleInventorySetSlot<RecyclableCollectio
 				slot--;
 			}
 		}
-		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_WINDOW_SET_SLOT_ID, version);
 		serializer.writeByte(windowId);
 		serializer.writeShort(slot);
 		serializer.writeItemStack(itemstack);
-		return RecyclableSingletonList.<PacketData>create(PacketData.create(ClientBoundPacket.PLAY_WINDOW_SET_SLOT_ID, serializer));
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

@@ -2,7 +2,6 @@ package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleSpawnNamed;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.typeremapper.watchedentity.WatchedDataRemapper;
@@ -14,7 +13,7 @@ public class SpawnNamed extends MiddleSpawnNamed<RecyclableCollection<PacketData
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
-		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_SPAWN_NAMED_ID, version);
 		serializer.writeInt(playerEntityId);
 		serializer.writeString(name);
 		serializer.writeInt(x);
@@ -24,7 +23,7 @@ public class SpawnNamed extends MiddleSpawnNamed<RecyclableCollection<PacketData
 		serializer.writeByte(pitch);
 		serializer.writeShort(itemId);
 		serializer.writeBytes(DataWatcherSerializer.encodeData(version, WatchedDataRemapper.transform(wplayer, metadata, version)));
-		return RecyclableSingletonList.<PacketData>create(PacketData.create(ClientBoundPacket.PLAY_SPAWN_NAMED_ID, serializer));
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

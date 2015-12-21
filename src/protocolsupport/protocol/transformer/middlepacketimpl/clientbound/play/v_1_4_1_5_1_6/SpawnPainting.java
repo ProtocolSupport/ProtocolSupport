@@ -2,7 +2,6 @@ package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleSpawnPainting;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -32,14 +31,14 @@ public class SpawnPainting extends MiddleSpawnPainting<RecyclableCollection<Pack
 				break;
 			}
 		}
-		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_SPAWN_PAINTING_ID, version);
 		serializer.writeInt(entityId);
 		serializer.writeString(type);
 		serializer.writeInt(x);
 		serializer.writeInt(position.getY());
 		serializer.writeInt(z);
 		serializer.writeInt(direction);
-		return RecyclableSingletonList.<PacketData>create(PacketData.create(ClientBoundPacket.PLAY_SPAWN_PAINTING_ID, serializer));
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

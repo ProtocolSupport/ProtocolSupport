@@ -17,7 +17,7 @@ public class CustomPayload extends MiddleCustomPayload<RecyclableCollection<Pack
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
-		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID, version);
 		serializer.writeString(tag);
 		CustomPayloadSerializer serverdata = new CustomPayloadSerializer(new PacketDataSerializer(Unpooled.wrappedBuffer(data), ProtocolVersion.getLatest()));
 		CustomPayloadSerializer clientdata = new CustomPayloadSerializer(version);
@@ -27,7 +27,7 @@ public class CustomPayload extends MiddleCustomPayload<RecyclableCollection<Pack
 			clientdata.copyAll(serverdata);
 		}
 		serializer.writeArray(clientdata.toData());
-		return RecyclableSingletonList.<PacketData>create(PacketData.create(ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID, serializer));
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

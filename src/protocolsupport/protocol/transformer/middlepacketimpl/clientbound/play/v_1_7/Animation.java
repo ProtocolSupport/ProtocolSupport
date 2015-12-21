@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleAnimation;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -14,10 +13,10 @@ public class Animation extends MiddleAnimation<RecyclableCollection<PacketData>>
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
-		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_ANIMATION_ID, version);
 		serializer.writeVarInt(entityId);
 		serializer.writeByte(animation);
-		return RecyclableSingletonList.<PacketData>create(PacketData.create(ClientBoundPacket.PLAY_ANIMATION_ID, serializer));
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

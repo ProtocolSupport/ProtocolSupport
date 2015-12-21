@@ -2,7 +2,6 @@ package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleExplosion;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -12,7 +11,7 @@ public class Explosion extends MiddleExplosion<RecyclableCollection<PacketData>>
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
-		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_EXPLOSION_ID, version);
 		serializer.writeDouble(x);
 		serializer.writeDouble(y);
 		serializer.writeDouble(z);
@@ -26,7 +25,7 @@ public class Explosion extends MiddleExplosion<RecyclableCollection<PacketData>>
 		serializer.writeFloat(pMotX);
 		serializer.writeFloat(pMotY);
 		serializer.writeFloat(pMotZ);
-		return RecyclableSingletonList.<PacketData>create(PacketData.create(ClientBoundPacket.PLAY_EXPLOSION_ID, serializer));
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

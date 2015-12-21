@@ -2,7 +2,6 @@ package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleEntityEffectRemove;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
@@ -17,10 +16,10 @@ public class EntityEffectRemove extends MiddleEntityEffectRemove<RecyclableColle
 		if (IdSkipper.EFFECT.getTable(version).shouldSkip(effectId)) {
 			return RecyclableEmptyList.get();
 		}
-		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_ENTITY_EFFECT_REMOVE_ID, version);
 		serializer.writeInt(entityId);
 		serializer.writeByte(effectId);
-		return RecyclableSingletonList.<PacketData>create(PacketData.create(ClientBoundPacket.PLAY_ENTITY_EFFECT_REMOVE_ID, serializer));
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

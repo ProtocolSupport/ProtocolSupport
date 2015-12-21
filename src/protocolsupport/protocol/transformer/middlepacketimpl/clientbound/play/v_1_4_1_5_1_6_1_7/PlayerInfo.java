@@ -2,7 +2,6 @@ package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddlePlayerInfo;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
@@ -13,25 +12,25 @@ public class PlayerInfo extends MiddlePlayerInfo<RecyclableCollection<PacketData
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
 		RecyclableArrayList<PacketData> datas = RecyclableArrayList.create();
-		for (Info info : infos) {			
+		for (Info info : infos) {	
+			PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_PLAYER_INFO_ID, version);
 			switch (action) {
 				case ADD: {
-					PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
 					serializer.writeString(info.username);
 					serializer.writeBoolean(true);
 					serializer.writeShort(0);
-					datas.add(PacketData.create(ClientBoundPacket.PLAY_PLAYER_INFO_ID, serializer));
+					datas.add(serializer);
 					break;
 				}
 				case REMOVE: {
-					PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
 					serializer.writeString(info.username);
 					serializer.writeBoolean(false);
 					serializer.writeShort(0);
-					datas.add(PacketData.create(ClientBoundPacket.PLAY_PLAYER_INFO_ID, serializer));
+					datas.add(serializer);
 					break;
 				}
 				default: {
+					serializer.release();
 					break;
 				}
 			}

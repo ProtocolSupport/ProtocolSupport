@@ -6,7 +6,6 @@ import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleKickDisconnect;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
@@ -17,9 +16,9 @@ public class KickDisconnect extends MiddleKickDisconnect<RecyclableCollection<Pa
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
-		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_KICK_DISCONNECT_ID, version);
 		serializer.writeString(LegacyUtils.toText(ChatSerializer.a(messageJson)));
-		return RecyclableSingletonList.<PacketData>create(PacketData.create(ClientBoundPacket.PLAY_KICK_DISCONNECT_ID, serializer));
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

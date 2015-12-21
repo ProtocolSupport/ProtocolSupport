@@ -2,7 +2,6 @@ package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleEntityRelMoveLook;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -12,14 +11,14 @@ public class EntityRelMoveLook extends MiddleEntityRelMoveLook<RecyclableCollect
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
-		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_ENTITY_REL_MOVE_LOOK_ID, version);
 		serializer.writeInt(entityId);
 		serializer.writeByte(relX);
 		serializer.writeByte(relY);
 		serializer.writeByte(relZ);
 		serializer.writeByte(yaw);
 		serializer.writeByte(pitch);
-		return RecyclableSingletonList.<PacketData>create(PacketData.create(ClientBoundPacket.PLAY_ENTITY_REL_MOVE_LOOK_ID, serializer));
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

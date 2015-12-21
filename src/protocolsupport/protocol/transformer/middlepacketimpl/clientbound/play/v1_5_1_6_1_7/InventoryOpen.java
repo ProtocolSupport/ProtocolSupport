@@ -6,7 +6,6 @@ import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleInventoryOpen;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
@@ -24,7 +23,7 @@ public class InventoryOpen extends MiddleInventoryOpen<RecyclableCollection<Pack
 			player.closeInventory();
 			return RecyclableEmptyList.get();
 		}
-		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_WINDOW_OPEN_ID, version);
 		serializer.writeByte(windowId);
 		serializer.writeByte(id);
 		serializer.writeString(LegacyUtils.toText(ChatSerializer.a(titleJson)));
@@ -33,7 +32,7 @@ public class InventoryOpen extends MiddleInventoryOpen<RecyclableCollection<Pack
 		if (id == 11) {
 			serializer.writeInt(horseId);
 		}
-		return RecyclableSingletonList.<PacketData>create(PacketData.create(ClientBoundPacket.PLAY_WINDOW_OPEN_ID, serializer));
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

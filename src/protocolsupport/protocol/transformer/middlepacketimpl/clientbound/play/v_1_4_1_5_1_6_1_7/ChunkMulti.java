@@ -5,7 +5,6 @@ import java.io.IOException;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleChunkMulti;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.transformer.utils.ChunkTransformer;
@@ -17,7 +16,7 @@ public class ChunkMulti extends MiddleChunkMulti<RecyclableCollection<PacketData
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
-		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_CHUNK_MULTI_ID, version);
 		ByteArrayOutputStream stream = new ByteArrayOutputStream(23000);
 		for (int i = 0; i < data.length; i++) {
 			stream.write(ChunkTransformer.toPre18Data(data[i], bitmap[i], version));
@@ -33,7 +32,7 @@ public class ChunkMulti extends MiddleChunkMulti<RecyclableCollection<PacketData
 			serializer.writeShort(bitmap[i]);
 			serializer.writeShort(0);
 		}
-		return RecyclableSingletonList.<PacketData>create(PacketData.create(ClientBoundPacket.PLAY_CHUNK_MULTI_ID, serializer));
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

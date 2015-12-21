@@ -2,7 +2,6 @@ package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleEntityDestroy;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.utils.Utils;
@@ -15,12 +14,12 @@ public class EntityDestroy extends MiddleEntityDestroy<RecyclableCollection<Pack
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
 		RecyclableCollection<PacketData> datas = RecyclableArrayList.create();
 		for (int[] part : Utils.splitArray(entityIds, 120)) {
-			PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
+			PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_ENTITY_DESTROY_ID, version);
 			serializer.writeByte(part.length);
 			for (int i = 0; i < part.length; i++) {
 				serializer.writeInt(part[i]);
 			}
-			datas.add(PacketData.create(ClientBoundPacket.PLAY_ENTITY_DESTROY_ID, serializer));
+			datas.add(serializer);
 		}
 		return datas;
 	}

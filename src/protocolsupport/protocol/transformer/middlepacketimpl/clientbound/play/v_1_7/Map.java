@@ -2,7 +2,6 @@ package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleMap;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.transformer.utils.MapTransformer;
@@ -15,14 +14,14 @@ public class Map extends MiddleMap<RecyclableCollection<PacketData>> {
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
 		RecyclableCollection<PacketData> datas = RecyclableArrayList.create();
-		PacketDataSerializer scaledata = PacketDataSerializer.createNew(version);
+		PacketData scaledata = PacketData.create(ClientBoundPacket.PLAY_MAP_ID, version);
 		scaledata.writeVarInt(itemData);
 		scaledata.writeShort(2);
 		scaledata.writeByte(2);
 		scaledata.writeByte(scale);
-		datas.add(PacketData.create(ClientBoundPacket.PLAY_MAP_ID, scaledata));
+		datas.add(scaledata);
 		if (icons.length > 0) {
-			PacketDataSerializer iconsdata = PacketDataSerializer.createNew(version);
+			PacketData iconsdata = PacketData.create(ClientBoundPacket.PLAY_MAP_ID, version);
 			iconsdata.writeVarInt(itemData);
 			iconsdata.writeShort(icons.length * 3 + 1);
 			iconsdata.writeByte(1);
@@ -31,20 +30,20 @@ public class Map extends MiddleMap<RecyclableCollection<PacketData>> {
 				iconsdata.writeByte(icon.x);
 				iconsdata.writeByte(icon.z);
 			}
-			datas.add(PacketData.create(ClientBoundPacket.PLAY_MAP_ID, iconsdata));
+			datas.add(iconsdata);
 		}
 		if (columns > 0) {
 			MapTransformer maptransformer = new MapTransformer();
 			maptransformer.loadFromNewMapData(columns, rows, xstart, zstart, data);
 			for (ColumnEntry entry : maptransformer.toPre18MapData()) {
-				PacketDataSerializer mapdata = PacketDataSerializer.createNew(version);
+				PacketData mapdata = PacketData.create(ClientBoundPacket.PLAY_MAP_ID, version);
 				mapdata.writeVarInt(itemData);
 				mapdata.writeShort(3 + entry.getColors().length);
 				mapdata.writeByte(0);
 				mapdata.writeByte(entry.getX());
 				mapdata.writeByte(entry.getY());
 				mapdata.writeBytes(entry.getColors());
-				datas.add(PacketData.create(ClientBoundPacket.PLAY_MAP_ID, mapdata));
+				datas.add(mapdata);
 			}
 		}
 		return datas;

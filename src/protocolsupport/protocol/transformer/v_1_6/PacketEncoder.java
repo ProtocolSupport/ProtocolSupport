@@ -11,7 +11,6 @@ import org.spigotmc.SneakyThrow;
 
 import net.minecraft.server.v1_8_R3.EnumProtocol;
 import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
-import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.NetworkManager;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketListener;
@@ -245,48 +244,40 @@ public class PacketEncoder implements IPacketEncoder {
 			throw new IOException("Can't serialize unregistered packet");
 		}
 		ClientBoundMiddlePacket<RecyclableCollection<PacketData>> packetTransformer = dataRemapperRegistry.getTransformer(currentProtocol, packetId);
-		try {
-			if (packetTransformer != null) {
-				PacketDataSerializer serverdata = PacketDataSerializer.createNew(ProtocolVersion.getLatest());
-				packet.b(serverdata);
+		if (packetTransformer != null) {
+			PacketDataSerializer serverdata = PacketDataSerializer.createNew(ProtocolVersion.getLatest());
+			packet.b(serverdata);
+			try {
+				if (packetTransformer.needsPlayer()) {
+					packetTransformer.setPlayer(Utils.getPlayer(channel));
+				}
+				packetTransformer.readFromServerData(serverdata);
+				packetTransformer.handle(storage);
+				RecyclableCollection<PacketData> data = packetTransformer.toData(version);
 				try {
-					if (packetTransformer.needsPlayer()) {
-						packetTransformer.setPlayer(Utils.getPlayer(channel));
+					for (PacketData packetdata : data) {
+						PacketDataSerializer singlepacketdata = PacketDataSerializer.createNew(version);
+						singlepacketdata.writeByte(packetIdRegistry.getNewPacketId(currentProtocol, packetdata.getPacketId()));
+						singlepacketdata.writeBytes(packetdata);
+						ctx.write(singlepacketdata);
 					}
-					packetTransformer.readFromServerData(serverdata);
-					packetTransformer.handle(storage);
-					RecyclableCollection<PacketData> data = packetTransformer.toData(version);
-					try {
-						for (PacketData packetdata : data) {
-							PacketDataSerializer singlepacketdata = PacketDataSerializer.createNew(version);
-							singlepacketdata.writeByte(packetIdRegistry.getNewPacketId(currentProtocol, packetdata.getPacketId()));
-							singlepacketdata.writeBytes(packetdata.getData());
-							ctx.write(singlepacketdata);
-						}
-						ctx.flush();
-					} finally {
-						for (PacketData packetdata : data) {
-							packetdata.getData().release();
-							packetdata.recycle();
-						}
-						data.recycle();
-					}
+					ctx.flush();
 				} finally {
-					serverdata.release();
+					for (PacketData packetdata : data) {
+						packetdata.recycle();
+					}
+					data.recycle();
 				}
-			} else {
-				int newPacketId = packetIdRegistry.getNewPacketId(currentProtocol, packetId);
-				if (newPacketId != -1) {
-					PacketDataSerializer outserializer = new PacketDataSerializer(output, version);
-					outserializer.writeByte(newPacketId);
-					packet.b(outserializer);
-				}
+			} finally {
+				serverdata.release();
 			}
-		} catch (Throwable t) {
-			if (MinecraftServer.getServer().isDebugging()) {
-				t.printStackTrace();
+		} else {
+			int newPacketId = packetIdRegistry.getNewPacketId(currentProtocol, packetId);
+			if (newPacketId != -1) {
+				PacketDataSerializer outserializer = new PacketDataSerializer(output, version);
+				outserializer.writeByte(newPacketId);
+				packet.b(outserializer);
 			}
-			throw t;
 		}
 	}
 

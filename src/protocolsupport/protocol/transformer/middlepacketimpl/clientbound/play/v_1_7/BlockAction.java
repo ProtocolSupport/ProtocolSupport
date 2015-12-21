@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleBlockAction;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -14,14 +13,14 @@ public class BlockAction extends MiddleBlockAction<RecyclableCollection<PacketDa
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
-		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_BLOCK_ACTION_ID, version);
 		serializer.writeInt(position.getX());
 		serializer.writeShort(position.getY());
 		serializer.writeInt(position.getZ());
 		serializer.writeByte(info1);
 		serializer.writeByte(info2);
 		serializer.writeVarInt(type);
-		return RecyclableSingletonList.<PacketData>create(PacketData.create(ClientBoundPacket.PLAY_BLOCK_ACTION_ID, serializer));
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

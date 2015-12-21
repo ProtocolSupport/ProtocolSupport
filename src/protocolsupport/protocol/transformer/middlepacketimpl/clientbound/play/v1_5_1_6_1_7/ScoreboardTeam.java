@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleScoreboardTeam;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.utils.Utils;
@@ -15,7 +14,7 @@ public class ScoreboardTeam extends MiddleScoreboardTeam<RecyclableCollection<Pa
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
-		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_SCOREBOARD_TEAM_ID, version);
 		serializer.writeString(name);
 		serializer.writeByte(mode);
 		if (mode == 0 || mode == 2) {
@@ -30,7 +29,7 @@ public class ScoreboardTeam extends MiddleScoreboardTeam<RecyclableCollection<Pa
 				serializer.writeString(Utils.clampString(player, 16));
 			}
 		}
-		return RecyclableSingletonList.<PacketData>create(PacketData.create(ClientBoundPacket.PLAY_SCOREBOARD_TEAM_ID, serializer));
+		return RecyclableSingletonList.<PacketData>create(serializer);
 	}
 
 }

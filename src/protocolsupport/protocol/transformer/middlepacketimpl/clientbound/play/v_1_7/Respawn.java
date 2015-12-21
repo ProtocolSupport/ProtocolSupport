@@ -2,7 +2,6 @@ package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleRespawn;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -12,12 +11,12 @@ public class Respawn extends MiddleRespawn<RecyclableCollection<PacketData>> {
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
-		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_RESPAWN_ID, version);
 		serializer.writeInt(dimension);
 		serializer.writeByte(difficulty);
 		serializer.writeByte(gamemode);
 		serializer.writeString(leveltype);
-		return RecyclableSingletonList.<PacketData>create(PacketData.create(ClientBoundPacket.PLAY_RESPAWN_ID, serializer));
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

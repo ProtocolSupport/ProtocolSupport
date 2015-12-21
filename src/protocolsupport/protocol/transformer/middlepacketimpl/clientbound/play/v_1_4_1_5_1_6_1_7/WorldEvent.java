@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleWorldEvent;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
@@ -18,14 +17,14 @@ public class WorldEvent extends MiddleWorldEvent<RecyclableCollection<PacketData
 		if (effectId == 2001) {
 			data = IdRemapper.BLOCK.getTable(version).getRemap(data & 0xFFF);
 		}
-		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_WORLD_EVENT_ID, version);
 		serializer.writeInt(effectId);
 		serializer.writeInt(position.getX());
 		serializer.writeByte(position.getY());
 		serializer.writeInt(position.getZ());
 		serializer.writeInt(data);
 		serializer.writeBoolean(disableRelative);
-		return RecyclableSingletonList.<PacketData>create(PacketData.create(ClientBoundPacket.PLAY_WORLD_EVENT_ID, serializer));
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

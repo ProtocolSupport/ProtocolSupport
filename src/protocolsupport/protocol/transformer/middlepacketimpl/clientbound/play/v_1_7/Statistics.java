@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleStatistics;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -14,13 +13,13 @@ public class Statistics extends MiddleStatistics<RecyclableCollection<PacketData
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
-		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_STATISTICS, version);
 		serializer.writeVarInt(statistics.length);
 		for (Statistic stat : statistics) {
 			serializer.writeString(stat.name);
 			serializer.writeVarInt(stat.value);
 		}
-		return RecyclableSingletonList.<PacketData>create(PacketData.create(ClientBoundPacket.PLAY_STATISTICS, serializer));
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

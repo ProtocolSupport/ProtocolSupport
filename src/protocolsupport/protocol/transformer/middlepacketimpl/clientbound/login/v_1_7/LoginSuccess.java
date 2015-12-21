@@ -2,7 +2,6 @@ package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.login.
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.login.MiddleLoginSuccess;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -15,10 +14,10 @@ public class LoginSuccess extends MiddleLoginSuccess<RecyclableCollection<Packet
 		if (version == ProtocolVersion.MINECRAFT_1_7_5) {
 			uuidstring = uuidstring.replace("-", "");
 		}
-		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
+		PacketData serializer = PacketData.create(ClientBoundPacket.LOGIN_SUCCESS_ID, version);
 		serializer.writeString(uuidstring);
 		serializer.writeString(name);
-		return RecyclableSingletonList.<PacketData>create(PacketData.create(ClientBoundPacket.LOGIN_SUCCESS_ID, serializer));
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

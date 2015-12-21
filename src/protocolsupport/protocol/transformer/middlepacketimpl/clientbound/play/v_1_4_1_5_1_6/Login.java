@@ -2,7 +2,6 @@ package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleLogin;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -12,7 +11,7 @@ public class Login extends MiddleLogin<RecyclableCollection<PacketData>> {
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
-		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_LOGIN_ID, version);
 		serializer.writeInt(playerEntityId);
 		serializer.writeString(leveltype);
 		serializer.writeByte(gamemode);
@@ -20,7 +19,7 @@ public class Login extends MiddleLogin<RecyclableCollection<PacketData>> {
 		serializer.writeByte(difficulty);
 		serializer.writeByte(0);
 		serializer.writeByte(Math.min(maxplayers, 60));
-		return RecyclableSingletonList.<PacketData>create(PacketData.create(ClientBoundPacket.PLAY_LOGIN_ID, serializer));
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

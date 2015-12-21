@@ -2,7 +2,6 @@ package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleWorldSound;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
@@ -13,14 +12,14 @@ public class WorldSound extends MiddleWorldSound<RecyclableCollection<PacketData
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
-		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_WORLD_SOUND_ID, version);
 		serializer.writeString(LegacyUtils.getSound(name));
 		serializer.writeInt(x);
 		serializer.writeInt(y);
 		serializer.writeInt(z);
 		serializer.writeFloat(volume);
 		serializer.writeByte(pitch);
-		return RecyclableSingletonList.<PacketData>create(PacketData.create(ClientBoundPacket.PLAY_WORLD_SOUND_ID, serializer));
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

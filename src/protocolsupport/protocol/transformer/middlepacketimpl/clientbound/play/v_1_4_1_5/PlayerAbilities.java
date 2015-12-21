@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddlePlayerAbilities;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -14,11 +13,11 @@ public class PlayerAbilities extends MiddlePlayerAbilities<RecyclableCollection<
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
-		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_ABILITIES_ID, version);
 		serializer.writeByte(flags);
 		serializer.writeByte((int) (flyspeed * 255.0F));
 		serializer.writeByte((int) (walkspeed * 255.0F));
-		return RecyclableSingletonList.<PacketData>create(PacketData.create(ClientBoundPacket.PLAY_ABILITIES_ID, serializer));
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

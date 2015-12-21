@@ -1,9 +1,11 @@
 package protocolsupport.protocol.transformer.middlepacketimpl;
 
 import io.netty.util.Recycler;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.utils.Allocator;
 
-public class PacketData {
+public class PacketData extends PacketDataSerializer {
 
 	private static final Recycler<PacketData> RECYCLER = new Recycler<PacketData>() {
 		protected PacketData newObject(Recycler.Handle handle) {
@@ -11,33 +13,34 @@ public class PacketData {
 		}
 	};
 
-	public static PacketData create(int packetId, PacketDataSerializer data) {
+	public static PacketData create(int packetId, ProtocolVersion version) {
 		PacketData packetdata = RECYCLER.get();
 		packetdata.packetId = packetId;
-		packetdata.data = data;
+		packetdata.setVersion(version);
 		return packetdata;
 	}
 
 	private final Recycler.Handle handle;
 	private PacketData(Recycler.Handle handle) {
+		super(Allocator.allocateUnpooledBuffer());
 		this.handle = handle;
 	}
 
 	public void recycle() {
 		packetId = 0;
-		data = null;
+		clear();
 		RECYCLER.recycle(this, handle);
 	}
 
 	private int packetId;
-	private PacketDataSerializer data;
 
 	public int getPacketId() {
 		return packetId;
 	}
 
-	public PacketDataSerializer getData() {
-		return data;
+	@Override
+	protected void finalize() {
+		release();
 	}
 
 }
