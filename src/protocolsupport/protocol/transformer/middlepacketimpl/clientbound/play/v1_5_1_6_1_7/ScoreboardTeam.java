@@ -1,8 +1,6 @@
 package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v1_5_1_6_1_7;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
@@ -10,11 +8,13 @@ import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleScoreboardTeam;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.utils.Utils;
+import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class ScoreboardTeam extends MiddleScoreboardTeam<Collection<PacketData>> {
+public class ScoreboardTeam extends MiddleScoreboardTeam<RecyclableCollection<PacketData>> {
 
 	@Override
-	public Collection<PacketData> toData(ProtocolVersion version) throws IOException {
+	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
 		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
 		serializer.writeString(name);
 		serializer.writeByte(mode);
@@ -30,7 +30,7 @@ public class ScoreboardTeam extends MiddleScoreboardTeam<Collection<PacketData>>
 				serializer.writeString(Utils.clampString(player, 16));
 			}
 		}
-		return Collections.singletonList(new PacketData(ClientBoundPacket.PLAY_SCOREBOARD_TEAM_ID, serializer));
+		return RecyclableSingletonList.<PacketData>create(PacketData.create(ClientBoundPacket.PLAY_SCOREBOARD_TEAM_ID, serializer));
 	}
 
 }

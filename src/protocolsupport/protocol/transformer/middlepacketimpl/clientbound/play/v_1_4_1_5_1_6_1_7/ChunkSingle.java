@@ -1,8 +1,6 @@
 package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
@@ -11,11 +9,13 @@ import protocolsupport.protocol.transformer.middlepacket.clientbound.play.Middle
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.transformer.utils.ChunkTransformer;
 import protocolsupport.utils.CompressionUtils;
+import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class ChunkSingle extends MiddleChunkSingle<Collection<PacketData>> {
+public class ChunkSingle extends MiddleChunkSingle<RecyclableCollection<PacketData>> {
 
 	@Override
-	public Collection<PacketData> toData(ProtocolVersion version) throws IOException {
+	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
 		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
 		serializer.writeInt(chunkX);
 		serializer.writeInt(chunkZ);
@@ -25,7 +25,7 @@ public class ChunkSingle extends MiddleChunkSingle<Collection<PacketData>> {
 		byte[] compressed = CompressionUtils.compress(ChunkTransformer.toPre18Data(data, bitmask, version));
 		serializer.writeInt(compressed.length);
 		serializer.writeBytes(compressed);
-		return Collections.singletonList(new PacketData(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID, serializer));
+		return RecyclableSingletonList.<PacketData>create(PacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID, serializer));
 	}
 
 }

@@ -1,8 +1,5 @@
 package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_7;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.PacketDataSerializer;
@@ -11,13 +8,16 @@ import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.WatchedDataRemapper;
 import protocolsupport.utils.DataWatcherSerializer;
+import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableEmptyList;
+import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class SpawnLiving extends MiddleSpawnLiving<Collection<PacketData>> {
+public class SpawnLiving extends MiddleSpawnLiving<RecyclableCollection<PacketData>> {
 
 	@Override
-	public Collection<PacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
 		if (type == 30) { //skip armor stand
-			return Collections.emptyList();
+			return RecyclableEmptyList.get();
 		}
 		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
 		serializer.writeVarInt(entityId);
@@ -32,7 +32,7 @@ public class SpawnLiving extends MiddleSpawnLiving<Collection<PacketData>> {
 		serializer.writeShort(motY);
 		serializer.writeShort(motZ);
 		serializer.writeBytes(DataWatcherSerializer.encodeData(version, WatchedDataRemapper.transform(wentity, metadata, version)));
-		return Collections.singletonList(new PacketData(ClientBoundPacket.PLAY_SPAWN_LIVING_ID, serializer));
+		return RecyclableSingletonList.<PacketData>create(PacketData.create(ClientBoundPacket.PLAY_SPAWN_LIVING_ID, serializer));
 	}
 
 }

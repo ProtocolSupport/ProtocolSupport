@@ -1,25 +1,24 @@
 package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_7;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleBlockBreakAnimation;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
+import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class BlockBreakAnimation extends MiddleBlockBreakAnimation<Collection<PacketData>> {
+public class BlockBreakAnimation extends MiddleBlockBreakAnimation<RecyclableCollection<PacketData>> {
 
 	@Override
-	public Collection<PacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
 		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
 		serializer.writeVarInt(entityId);
 		serializer.writeInt(position.getX());
 		serializer.writeInt(position.getY());
 		serializer.writeInt(position.getZ());
 		serializer.writeByte(stage);
-		return Collections.singletonList(new PacketData(ClientBoundPacket.PLAY_BLOCK_BREAK_ANIMATION_ID, serializer));
+		return RecyclableSingletonList.<PacketData>create(PacketData.create(ClientBoundPacket.PLAY_BLOCK_BREAK_ANIMATION_ID, serializer));
 	}
 
 }

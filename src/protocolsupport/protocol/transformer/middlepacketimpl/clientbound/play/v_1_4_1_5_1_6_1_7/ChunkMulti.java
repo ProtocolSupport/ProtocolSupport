@@ -2,8 +2,6 @@ package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
@@ -12,11 +10,13 @@ import protocolsupport.protocol.transformer.middlepacket.clientbound.play.Middle
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.transformer.utils.ChunkTransformer;
 import protocolsupport.utils.CompressionUtils;
+import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class ChunkMulti extends MiddleChunkMulti<Collection<PacketData>> {
+public class ChunkMulti extends MiddleChunkMulti<RecyclableCollection<PacketData>> {
 
 	@Override
-	public Collection<PacketData> toData(ProtocolVersion version) throws IOException {
+	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
 		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
 		ByteArrayOutputStream stream = new ByteArrayOutputStream(23000);
 		for (int i = 0; i < data.length; i++) {
@@ -33,7 +33,7 @@ public class ChunkMulti extends MiddleChunkMulti<Collection<PacketData>> {
 			serializer.writeShort(bitmap[i]);
 			serializer.writeShort(0);
 		}
-		return Collections.singletonList(new PacketData(ClientBoundPacket.PLAY_CHUNK_MULTI_ID, serializer));
+		return RecyclableSingletonList.<PacketData>create(PacketData.create(ClientBoundPacket.PLAY_CHUNK_MULTI_ID, serializer));
 	}
 
 }

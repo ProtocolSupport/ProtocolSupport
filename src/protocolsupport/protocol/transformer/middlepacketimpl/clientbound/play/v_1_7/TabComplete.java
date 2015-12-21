@@ -1,24 +1,23 @@
 package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_7;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleTabComplete;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
+import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class TabComplete extends MiddleTabComplete<Collection<PacketData>> {
+public class TabComplete extends MiddleTabComplete<RecyclableCollection<PacketData>> {
 
 	@Override
-	public Collection<PacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
 		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
 		serializer.writeVarInt(matches.length);
 		for (String match : matches) {
 			serializer.writeString(match);
 		}
-		return Collections.singletonList(new PacketData(ClientBoundPacket.PLAY_TAB_COMPLETE_ID, serializer));
+		return RecyclableSingletonList.<PacketData>create(PacketData.create(ClientBoundPacket.PLAY_TAB_COMPLETE_ID, serializer));
 	}
 
 }

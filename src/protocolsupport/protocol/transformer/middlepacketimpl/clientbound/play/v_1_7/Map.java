@@ -1,8 +1,5 @@
 package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_7;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.PacketDataSerializer;
@@ -10,18 +7,20 @@ import protocolsupport.protocol.transformer.middlepacket.clientbound.play.Middle
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.transformer.utils.MapTransformer;
 import protocolsupport.protocol.transformer.utils.MapTransformer.ColumnEntry;
+import protocolsupport.utils.recyclable.RecyclableArrayList;
+import protocolsupport.utils.recyclable.RecyclableCollection;
 
-public class Map extends MiddleMap<Collection<PacketData>> {
+public class Map extends MiddleMap<RecyclableCollection<PacketData>> {
 
 	@Override
-	public Collection<PacketData> toData(ProtocolVersion version) {
-		Collection<PacketData> datas = new ArrayList<PacketData>();
+	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
+		RecyclableCollection<PacketData> datas = RecyclableArrayList.create();
 		PacketDataSerializer scaledata = PacketDataSerializer.createNew(version);
 		scaledata.writeVarInt(itemData);
 		scaledata.writeShort(2);
 		scaledata.writeByte(2);
 		scaledata.writeByte(scale);
-		datas.add(new PacketData(ClientBoundPacket.PLAY_MAP_ID, scaledata));
+		datas.add(PacketData.create(ClientBoundPacket.PLAY_MAP_ID, scaledata));
 		if (icons.length > 0) {
 			PacketDataSerializer iconsdata = PacketDataSerializer.createNew(version);
 			iconsdata.writeVarInt(itemData);
@@ -32,7 +31,7 @@ public class Map extends MiddleMap<Collection<PacketData>> {
 				iconsdata.writeByte(icon.x);
 				iconsdata.writeByte(icon.z);
 			}
-			datas.add(new PacketData(ClientBoundPacket.PLAY_MAP_ID, iconsdata));
+			datas.add(PacketData.create(ClientBoundPacket.PLAY_MAP_ID, iconsdata));
 		}
 		if (columns > 0) {
 			MapTransformer maptransformer = new MapTransformer();
@@ -45,7 +44,7 @@ public class Map extends MiddleMap<Collection<PacketData>> {
 				mapdata.writeByte(entry.getX());
 				mapdata.writeByte(entry.getY());
 				mapdata.writeBytes(entry.getColors());
-				datas.add(new PacketData(ClientBoundPacket.PLAY_MAP_ID, mapdata));
+				datas.add(PacketData.create(ClientBoundPacket.PLAY_MAP_ID, mapdata));
 			}
 		}
 		return datas;

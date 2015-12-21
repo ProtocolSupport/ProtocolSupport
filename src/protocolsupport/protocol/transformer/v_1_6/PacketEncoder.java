@@ -6,7 +6,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.AttributeKey;
 
 import java.io.IOException;
-import java.util.Collection;
 
 import org.spigotmc.SneakyThrow;
 
@@ -86,6 +85,7 @@ import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.status.
 import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry;
 import protocolsupport.protocol.transformer.utils.registry.PacketIdTransformerRegistry;
 import protocolsupport.utils.Utils;
+import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class PacketEncoder implements IPacketEncoder {
 
@@ -162,7 +162,7 @@ public class PacketEncoder implements IPacketEncoder {
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID, 0xFA);
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_KICK_DISCONNECT_ID, 0xFF);
 	}
-	private static final MiddleTransformerRegistry<ClientBoundMiddlePacket<Collection<PacketData>>> dataRemapperRegistry = new MiddleTransformerRegistry<>();
+	private static final MiddleTransformerRegistry<ClientBoundMiddlePacket<RecyclableCollection<PacketData>>> dataRemapperRegistry = new MiddleTransformerRegistry<>();
 	static {
 		try {
 			dataRemapperRegistry.register(EnumProtocol.LOGIN, ClientBoundPacket.LOGIN_DISCONNECT_ID, LoginDisconnect.class);
@@ -244,7 +244,7 @@ public class PacketEncoder implements IPacketEncoder {
 		if (packetId == null) {
 			throw new IOException("Can't serialize unregistered packet");
 		}
-		ClientBoundMiddlePacket<Collection<PacketData>> packetTransformer = dataRemapperRegistry.getTransformer(currentProtocol, packetId);
+		ClientBoundMiddlePacket<RecyclableCollection<PacketData>> packetTransformer = dataRemapperRegistry.getTransformer(currentProtocol, packetId);
 		try {
 			if (packetTransformer != null) {
 				PacketDataSerializer serverdata = PacketDataSerializer.createNew(ProtocolVersion.getLatest());
@@ -255,7 +255,7 @@ public class PacketEncoder implements IPacketEncoder {
 					}
 					packetTransformer.readFromServerData(serverdata);
 					packetTransformer.handle(storage);
-					Collection<PacketData> data = packetTransformer.toData(version);
+					RecyclableCollection<PacketData> data = packetTransformer.toData(version);
 					try {
 						for (PacketData packetdata : data) {
 							PacketDataSerializer singlepacketdata = PacketDataSerializer.createNew(version);
@@ -267,7 +267,9 @@ public class PacketEncoder implements IPacketEncoder {
 					} finally {
 						for (PacketData packetdata : data) {
 							packetdata.getData().release();
+							packetdata.recycle();
 						}
+						data.recycle();
 					}
 				} finally {
 					serverdata.release();
