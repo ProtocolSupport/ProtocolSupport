@@ -6,6 +6,7 @@ public class ClientBoundPacket {
 	public static final int LOGIN_ENCRYPTION_BEGIN_ID = 0x01;
 	public static final int LOGIN_SUCCESS_ID = 0x02;
 	public static final int STATUS_SERVER_INFO_ID = 0x00;
+	public static final int STATUS_PONG_ID = 0x01;
 	public static final int PLAY_KEEP_ALIVE_ID = 0x00;
 	public static final int PLAY_LOGIN_ID = 0x01;
 	public static final int PLAY_CHAT_ID = 0x02;
@@ -61,6 +62,7 @@ public class ClientBoundPacket {
 	public static final int PLAY_MAP_ID = 0x34;
 	public static final int PLAY_UPDATE_TILE_ID = 0x35;
 	public static final int PLAY_SIGN_EDITOR_ID = 0x36;
+	public static final int PLAY_STATISTICS = 0x37;
 	public static final int PLAY_PLAYER_INFO_ID = 0x38;
 	public static final int PLAY_ABILITIES_ID = 0x39;
 	public static final int PLAY_TAB_COMPLETE_ID = 0x3A;
