@@ -1,6 +1,7 @@
 package protocolsupport.protocol.transformer.v_1_4;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.AttributeKey;
@@ -216,6 +217,7 @@ public class PacketEncoder implements IPacketEncoder {
 	}
 
 	private final LocalStorage storage = new LocalStorage();
+	private final PacketDataSerializer serverdata = new PacketDataSerializer(Unpooled.buffer(), ProtocolVersion.getLatest());
 
 	@Override
 	public void encode(ChannelHandlerContext ctx, Packet<PacketListener> packet, ByteBuf output) throws Exception {
@@ -227,31 +229,27 @@ public class PacketEncoder implements IPacketEncoder {
 		}
 		ClientBoundMiddlePacket<RecyclableCollection<PacketData>> packetTransformer = dataRemapperRegistry.getTransformer(currentProtocol, packetId);
 		if (packetTransformer != null) {
-			PacketDataSerializer serverdata = PacketDataSerializer.createNew(ProtocolVersion.getLatest());
+			serverdata.clear();
 			packet.b(serverdata);
+			if (packetTransformer.needsPlayer()) {
+				packetTransformer.setPlayer(Utils.getPlayer(channel));
+			}
+			packetTransformer.readFromServerData(serverdata);
+			packetTransformer.handle(storage);
+			RecyclableCollection<PacketData> data = packetTransformer.toData(version);
 			try {
-				if (packetTransformer.needsPlayer()) {
-					packetTransformer.setPlayer(Utils.getPlayer(channel));
+				for (PacketData packetdata : data) {
+					PacketDataSerializer singlepacketdata = PacketDataSerializer.createNew(version);
+					singlepacketdata.writeByte(packetIdRegistry.getNewPacketId(currentProtocol, packetdata.getPacketId()));
+					singlepacketdata.writeBytes(packetdata);
+					ctx.write(singlepacketdata);
 				}
-				packetTransformer.readFromServerData(serverdata);
-				packetTransformer.handle(storage);
-				RecyclableCollection<PacketData> data = packetTransformer.toData(version);
-				try {
-					for (PacketData packetdata : data) {
-						PacketDataSerializer singlepacketdata = PacketDataSerializer.createNew(version);
-						singlepacketdata.writeByte(packetIdRegistry.getNewPacketId(currentProtocol, packetdata.getPacketId()));
-						singlepacketdata.writeBytes(packetdata);
-						ctx.write(singlepacketdata);
-					}
-					ctx.flush();
-				} finally {
-					for (PacketData packetdata : data) {
-						packetdata.recycle();
-					}
-					data.recycle();
-				}
+				ctx.flush();
 			} finally {
-				serverdata.release();
+				for (PacketData packetdata : data) {
+					packetdata.recycle();
+				}
+				data.recycle();
 			}
 		} else {
 			int newPacketId = packetIdRegistry.getNewPacketId(currentProtocol, packetId);
