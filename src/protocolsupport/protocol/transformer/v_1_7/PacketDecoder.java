@@ -41,8 +41,8 @@ public class PacketDecoder implements IPacketDecoder {
 
 	private static final AttributeKey<EnumProtocol> currentStateAttrKey = NetworkManager.c;
 
-	private static final MiddleTransformerRegistry<ServerBoundMiddlePacket> registry = new MiddleTransformerRegistry<>();
-	static {
+	private final MiddleTransformerRegistry<ServerBoundMiddlePacket> registry = new MiddleTransformerRegistry<>();
+	{
 		try {
 			registry.register(EnumProtocol.HANDSHAKING, 0x00, SetProtocol.class);
 			registry.register(EnumProtocol.PLAY, 0x00, KeepAlive.class);

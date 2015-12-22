@@ -104,8 +104,8 @@ public class PacketEncoder implements IPacketEncoder {
 	private static final EnumProtocolDirection direction = EnumProtocolDirection.CLIENTBOUND;
 	private static final AttributeKey<EnumProtocol> currentStateAttrKey = NetworkManager.c;
 
-	private static final MiddleTransformerRegistry<ClientBoundMiddlePacket<RecyclableCollection<PacketData>>> registry = new MiddleTransformerRegistry<>();
-	static {
+	private final MiddleTransformerRegistry<ClientBoundMiddlePacket<RecyclableCollection<PacketData>>> registry = new MiddleTransformerRegistry<>();
+	{
 		try {
 			registry.register(EnumProtocol.LOGIN, ClientBoundPacket.LOGIN_SUCCESS_ID, LoginSuccess.class);
 			registry.register(EnumProtocol.LOGIN, ClientBoundPacket.LOGIN_ENCRYPTION_BEGIN_ID, EncryptionRequest.class);

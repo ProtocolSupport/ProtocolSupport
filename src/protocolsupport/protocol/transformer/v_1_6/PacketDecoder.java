@@ -60,8 +60,8 @@ public class PacketDecoder implements IPacketDecoder {
 		packetIdRegistry.register(EnumProtocol.PLAY, 0xCA, ServerBoundPacket.PLAY_ABILITIES.getId());
 	}
 
-	private static final MiddleTransformerRegistry<ServerBoundMiddlePacket> dataRemapperRegistry = new MiddleTransformerRegistry<>();
-	static {
+	private final MiddleTransformerRegistry<ServerBoundMiddlePacket> dataRemapperRegistry = new MiddleTransformerRegistry<>();
+	{
 		try {
 			dataRemapperRegistry.register(EnumProtocol.HANDSHAKING, 0x02, ClientLogin.class);
 			dataRemapperRegistry.register(EnumProtocol.HANDSHAKING, 0xFE, Ping.class);
