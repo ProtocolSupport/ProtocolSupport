@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import io.netty.util.Recycler;
-import io.netty.util.ReferenceCounted;
 
 public class RecyclableSingletonList<E> extends AbstractCollection<E> implements RecyclableCollection<E> {
 
@@ -17,7 +16,7 @@ public class RecyclableSingletonList<E> extends AbstractCollection<E> implements
 	};
 
 	@SuppressWarnings("unchecked")
-	public static <T extends ReferenceCounted> RecyclableSingletonList<T> create(T singleValue) {
+	public static <T> RecyclableSingletonList<T> create(T singleValue) {
 		RecyclableSingletonList<T> list = RECYCLER.get();
 		list.singleValue = singleValue;
 		return list;

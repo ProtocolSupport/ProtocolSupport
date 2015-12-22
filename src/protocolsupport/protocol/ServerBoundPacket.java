@@ -7,7 +7,8 @@ import net.minecraft.server.v1_8_R3.Packet;
 public enum ServerBoundPacket {
 
 	HANDSHAKE_START(0x00, EnumProtocol.HANDSHAKING),
-	STATUS_PING(0x00, EnumProtocol.STATUS),
+	STATUS_REQUEST(0x00, EnumProtocol.STATUS),
+	STATUS_PING(0x01, EnumProtocol.STATUS),
 	LOGIN_START(0x00, EnumProtocol.LOGIN),
 	LOGIN_ENCRYPTION_BEGIN(0x01, EnumProtocol.LOGIN),
 	PLAY_KEEP_ALIVE(0x00, EnumProtocol.PLAY),
@@ -23,7 +24,7 @@ public enum ServerBoundPacket {
 	PLAY_ANIMATION(0x0A, EnumProtocol.PLAY),
 	PLAY_ENTITY_ACTION(0x0B, EnumProtocol.PLAY),
 	PLAY_STEER_VEHICLE(0x0C, EnumProtocol.PLAY),
-	PLAY_CLOSE_WINDOW(0x0D, EnumProtocol.PLAY),
+	PLAY_WINDOW_CLOSE(0x0D, EnumProtocol.PLAY),
 	PLAY_WINDOW_CLICK(0x0E, EnumProtocol.PLAY),
 	PLAY_WINDOW_TRANSACTION(0x0F, EnumProtocol.PLAY),
 	PLAY_CREATIVE_SET_SLOT(0x10, EnumProtocol.PLAY),

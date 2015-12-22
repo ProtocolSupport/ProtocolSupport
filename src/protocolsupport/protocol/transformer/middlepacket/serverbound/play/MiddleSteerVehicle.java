@@ -1,13 +1,12 @@
 package protocolsupport.protocol.transformer.middlepacket.serverbound.play;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import net.minecraft.server.v1_8_R3.Packet;
 
 import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.ServerBoundMiddlePacket;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketCreator;
+import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public abstract class MiddleSteerVehicle extends ServerBoundMiddlePacket {
 
@@ -16,12 +15,12 @@ public abstract class MiddleSteerVehicle extends ServerBoundMiddlePacket {
 	protected int flags;
 
 	@Override
-	public Collection<Packet<?>> toNative() throws Exception {
+	public RecyclableCollection<Packet<?>> toNative() throws Exception {
 		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_STEER_VEHICLE.get());
 		creator.writeFloat(sideForce);
 		creator.writeFloat(forwardForce);
 		creator.writeByte(flags);
-		return Collections.<Packet<?>>singletonList(creator.create());
+		return RecyclableSingletonList.<Packet<?>>create(creator.create());
 	}
 
 }

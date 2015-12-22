@@ -1,14 +1,14 @@
 package protocolsupport.protocol.transformer.middlepacketimpl.serverbound.handshake.v_1_4_1_5_1_6;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import net.minecraft.server.v1_8_R3.Packet;
+
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.ServerBoundMiddlePacket;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketCreator;
+import protocolsupport.utils.recyclable.RecyclableArrayList;
+import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class ClientLogin extends ServerBoundMiddlePacket {
 
@@ -25,8 +25,8 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 	}
 
 	@Override
-	public Collection<Packet<?>> toNative() throws Exception {
-		ArrayList<Packet<?>> packets = new ArrayList<Packet<?>>();
+	public RecyclableCollection<Packet<?>> toNative() throws Exception {
+		RecyclableArrayList<Packet<?>> packets = RecyclableArrayList.create();
 		PacketCreator hsscreator = PacketCreator.create(ServerBoundPacket.HANDSHAKE_START.get());
 		hsscreator.writeVarInt(ProtocolVersion.getLatest().getId());
 		hsscreator.writeString(hostname);

@@ -1,8 +1,5 @@
 package protocolsupport.protocol.transformer.middlepacket.serverbound.play;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.ItemStack;
 import net.minecraft.server.v1_8_R3.Packet;
@@ -10,6 +7,8 @@ import net.minecraft.server.v1_8_R3.Packet;
 import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.ServerBoundMiddlePacket;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketCreator;
+import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public abstract class MiddleBlockPlace extends ServerBoundMiddlePacket {
 
@@ -21,7 +20,7 @@ public abstract class MiddleBlockPlace extends ServerBoundMiddlePacket {
 	protected int cZ;
 
 	@Override
-	public Collection<Packet<?>> toNative() throws Exception {
+	public RecyclableCollection<Packet<?>> toNative() throws Exception {
 		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_BLOCK_PLACE.get());
 		creator.writePosition(position);
 		creator.writeByte(face);
@@ -29,7 +28,7 @@ public abstract class MiddleBlockPlace extends ServerBoundMiddlePacket {
 		creator.writeByte(cX);
 		creator.writeByte(cY);
 		creator.writeByte(cZ);
-		return Collections.<Packet<?>>singletonList(creator.create());
+		return RecyclableSingletonList.<Packet<?>>create(creator.create());
 	}
 
 }

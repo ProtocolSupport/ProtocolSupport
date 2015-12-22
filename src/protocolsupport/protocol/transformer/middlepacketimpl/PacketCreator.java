@@ -1,10 +1,10 @@
 package protocolsupport.protocol.transformer.middlepacketimpl;
 
-import java.io.IOException;
-
 import io.netty.util.Recycler;
+
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketListener;
+
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.utils.Allocator;
@@ -29,9 +29,9 @@ public class PacketCreator extends PacketDataSerializer {
 		this.handle = handle;
 	}
 
-	private Packet<? extends PacketListener> packet;
+	private Packet<?> packet;
 
-	public Packet<? extends PacketListener> create() throws Exception {
+	public Packet<?> create() throws Exception {
 		try {
 			packet.a(this);
 			return packet;
@@ -45,11 +45,6 @@ public class PacketCreator extends PacketDataSerializer {
 	@Override
 	protected void finalize() {
 		release();
-	}
-
-	public static Packet<? extends PacketListener> createWithData(Packet<? extends PacketListener> packet, PacketDataSerializer serializer) throws IOException {
-		packet.a(serializer);
-		return packet;
 	}
 
 }
