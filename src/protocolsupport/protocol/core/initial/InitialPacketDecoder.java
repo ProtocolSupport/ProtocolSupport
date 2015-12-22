@@ -161,8 +161,8 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
 	@SuppressWarnings("deprecation")
 	private static ProtocolVersion readNPHandshake(ByteBuf data) {
-		if (readVarInt(data) == 0x00) {
-			return ProtocolVersion.fromId(readVarInt(data));
+		if (Utils.readVarInt(data) == 0x00) {
+			return ProtocolVersion.fromId(Utils.readVarInt(data));
 		}
 		return ProtocolVersion.UNKNOWN;
 	}
@@ -175,7 +175,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 			}
 			array[i] = byteBuf.readByte();
 			if (array[i] >= 0) {
-				final int length = readVarInt(Unpooled.wrappedBuffer(array));
+				final int length = Utils.readVarInt(Unpooled.wrappedBuffer(array));
 				if (byteBuf.readableBytes() < length) {
 					return null;
 				}
@@ -183,20 +183,6 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 			}
 		}
 		throw new CorruptedFrameException("Packet length is wider than 21 bit");
-	}
-
-	private static int readVarInt(ByteBuf data) {
-		int value = 0;
-		int length = 0;
-		byte b0;
-		do {
-			b0 = data.readByte();
-			value |= (b0 & 0x7F) << (length++ * 7);
-			if (length > 5) {
-				throw new RuntimeException("VarInt too big");
-			}
-		} while ((b0 & 0x80) == 0x80);
-		return value;
 	}
 
 }

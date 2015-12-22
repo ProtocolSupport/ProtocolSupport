@@ -85,12 +85,11 @@ public class PacketDecoder implements IPacketDecoder {
 		}
 	}
 
-	private final ProtocolVersion version;
-	public PacketDecoder(ProtocolVersion version) {
-		this.version = version;
-	}
-
 	private final ReplayingDecoderBuffer buffer = new ReplayingDecoderBuffer();
+	private final PacketDataSerializer serializer;
+	public PacketDecoder(ProtocolVersion version) {
+		serializer = new PacketDataSerializer(buffer, version);
+	}
 
 	@Override
 	public void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
@@ -98,9 +97,8 @@ public class PacketDecoder implements IPacketDecoder {
 			return;
 		}
 		buffer.setCumulation(input);
-		buffer.markReaderIndex();
+		serializer.markReaderIndex();
 		Channel channel = ctx.channel();
-		PacketDataSerializer serializer = new PacketDataSerializer(buffer, version);
 		EnumProtocol currentProtocol = channel.attr(currentStateAttrKey).get();
 		try {
 			int packetId = serializer.readUnsignedByte();
@@ -116,7 +114,7 @@ public class PacketDecoder implements IPacketDecoder {
 				list.add(PacketCreator.createWithData(ServerBoundPacket.get(currentProtocol, realPacketId), serializer));
 			}
 		} catch (EOFSignal ex) {
-			buffer.resetReaderIndex();
+			serializer.resetReaderIndex();
 		}
 	}
 

@@ -84,6 +84,7 @@ public class PacketDecoder implements IPacketDecoder {
 	}
 
 	private final ReplayingDecoderBuffer buffer = new ReplayingDecoderBuffer();
+	private final PacketDataSerializer serializer = new PacketDataSerializer(buffer, ProtocolVersion.MINECRAFT_1_4_7);
 
 	@Override
 	public void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
@@ -91,9 +92,8 @@ public class PacketDecoder implements IPacketDecoder {
 			return;
 		}
 		buffer.setCumulation(input);
-		buffer.markReaderIndex();
+		serializer.markReaderIndex();
 		Channel channel = ctx.channel();
-		PacketDataSerializer serializer = new PacketDataSerializer(buffer, ProtocolVersion.MINECRAFT_1_5_2);
 		EnumProtocol currentProtocol = channel.attr(currentStateAttrKey).get();
 		try {
 			int packetId = serializer.readUnsignedByte();
@@ -109,7 +109,7 @@ public class PacketDecoder implements IPacketDecoder {
 				list.add(PacketCreator.createWithData(ServerBoundPacket.get(currentProtocol, realPacketId), serializer));
 			}
 		} catch (EOFSignal ex) {
-			buffer.resetReaderIndex();
+			serializer.resetReaderIndex();
 		}
 	}
 

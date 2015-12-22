@@ -1,8 +1,5 @@
 package protocolsupport.utils;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.Channel;
-
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -11,11 +8,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import net.minecraft.server.v1_8_R3.NetworkManager;
-import net.minecraft.server.v1_8_R3.PlayerConnection;
-
 import org.bukkit.entity.Player;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
+import net.minecraft.server.v1_8_R3.NetworkManager;
+import net.minecraft.server.v1_8_R3.PlayerConnection;
 import protocolsupport.protocol.core.ChannelHandlers;
 
 public class Utils {
@@ -70,6 +68,28 @@ public class Utils {
 		byte[] result = new byte[buf.readableBytes()];
 		buf.readBytes(result);
 		return result;
+	}
+
+	public static int readVarInt(ByteBuf from) {
+		int value = 0;
+		int length = 0;
+		byte b0;
+		do {
+			b0 = from.readByte();
+			value |= (b0 & 0x7F) << (length++ * 7);
+			if (length > 5) {
+				throw new RuntimeException("VarInt too big");
+			}
+		} while ((b0 & 0x80) == 0x80);
+		return value;
+	}
+
+	public static void writeVarInt(ByteBuf to, int i) {
+        while ((i & 0xFFFFFF80) != 0x0) {
+            to.writeByte((i & 0x7F) | 0x80);
+            i >>>= 7;
+        }
+        to.writeByte(i);
 	}
 
 }

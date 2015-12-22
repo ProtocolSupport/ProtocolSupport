@@ -35,6 +35,7 @@ import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_7.UseEntity;
 import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry;
 import protocolsupport.utils.Utils;
+import protocolsupport.utils.WrappingBuffer;
 
 public class PacketDecoder implements IPacketDecoder {
 
@@ -63,9 +64,10 @@ public class PacketDecoder implements IPacketDecoder {
 		}
 	}
 
-	private final ProtocolVersion version;
+	private final WrappingBuffer buffer = new WrappingBuffer();
+	private final PacketDataSerializer serializer;
 	public PacketDecoder(ProtocolVersion version) {
-		this.version = version;
+		this.serializer = new PacketDataSerializer(buffer, version);
 	}
 
 	@Override
@@ -74,8 +76,8 @@ public class PacketDecoder implements IPacketDecoder {
 			return;
 		}
 		Channel channel = ctx.channel();
-		PacketDataSerializer serializer = new PacketDataSerializer(input, version);
 		EnumProtocol currentProtocol = channel.attr(currentStateAttrKey).get();
+		buffer.setBuf(input);
 		int packetId = serializer.readVarInt();
 		ServerBoundMiddlePacket packetTransformer = registry.getTransformer(currentProtocol, packetId);
 		if (packetTransformer != null) {

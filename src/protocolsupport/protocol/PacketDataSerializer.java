@@ -53,10 +53,6 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 
 	private ProtocolVersion version;
 
-	public PacketDataSerializer(ByteBuf buf) {
-		super(buf);
-	}
-
 	public PacketDataSerializer(ByteBuf buf, ProtocolVersion version) {
 		this(buf);
 		this.version = version;
@@ -64,6 +60,10 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 
 	public ProtocolVersion getVersion() {
 		return version;
+	}
+
+	protected PacketDataSerializer(ByteBuf buf) {
+		super(buf);
 	}
 
 	protected void setVersion(ProtocolVersion version) {
@@ -290,7 +290,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 
 	public void writeTag(NBTTagCompound tag) {
 		a(tag);
-	} 
+	}
 
 	private static NBTTagCompound read(final byte[] data, final NBTReadLimiter nbtreadlimiter) {
 		try {
