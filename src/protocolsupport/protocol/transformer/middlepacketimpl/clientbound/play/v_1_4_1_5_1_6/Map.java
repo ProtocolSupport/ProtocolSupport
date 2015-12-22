@@ -9,6 +9,8 @@ import protocolsupport.protocol.transformer.middlepacket.clientbound.play.Middle
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.transformer.utils.MapTransformer;
 import protocolsupport.protocol.transformer.utils.MapTransformer.ColumnEntry;
+import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.id.RemappingTable;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -20,7 +22,7 @@ public class Map extends MiddleMap<RecyclableCollection<PacketData>> {
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
 		RecyclableCollection<PacketData> datas = RecyclableArrayList.create();
 		PacketData scaledata = PacketData.create(ClientBoundPacket.PLAY_MAP_ID, version);
-		scaledata.writeShort(mapId);
+		scaledata.writeShort(358);
 		scaledata.writeShort(itemData);
 		scaledata.writeShort(2);
 		scaledata.writeByte(2);
@@ -42,6 +44,7 @@ public class Map extends MiddleMap<RecyclableCollection<PacketData>> {
 		if (columns > 0) {
 			MapTransformer maptransformer = new MapTransformer();
 			maptransformer.loadFromNewMapData(columns, rows, xstart, zstart, data);
+			RemappingTable colorRemapper = IdRemapper.MAPCOLOR.getTable(version);
 			for (ColumnEntry entry : maptransformer.toPre18MapData()) {
 				PacketData mapdata = PacketData.create(ClientBoundPacket.PLAY_MAP_ID, version);
 				mapdata.writeShort(mapId);
@@ -50,7 +53,11 @@ public class Map extends MiddleMap<RecyclableCollection<PacketData>> {
 				mapdata.writeByte(0);
 				mapdata.writeByte(entry.getX());
 				mapdata.writeByte(entry.getY());
-				mapdata.writeBytes(entry.getColors());
+				byte[] colors = entry.getColors();
+				for (int i = 0; i < colors.length; i++) {
+					colors[i] = (byte) colorRemapper.getRemap(colors[i]);
+				}
+				mapdata.writeBytes(colors);
 				datas.add(mapdata);
 			}
 		}
