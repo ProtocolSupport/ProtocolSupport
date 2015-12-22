@@ -95,6 +95,7 @@ import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.status.v_1_7.Pong;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.status.v_1_7.ServerInfo;
 import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry;
+import protocolsupport.utils.Allocator;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -210,10 +211,10 @@ public class PacketEncoder implements IPacketEncoder {
 			RecyclableCollection<PacketData> data = packetTransformer.toData(version);
 			try {
 				for (PacketData packetdata : data) {
-					PacketDataSerializer singlepacketdata = PacketDataSerializer.createNew(version);
-					singlepacketdata.writeVarInt(packetdata.getPacketId());
-					singlepacketdata.writeBytes(packetdata);
-					ctx.write(singlepacketdata);
+					ByteBuf senddata = Allocator.allocateBuffer();
+					Utils.writeVarInt(senddata, packetdata.getPacketId());
+					senddata.writeBytes(packetdata);
+					ctx.write(senddata);
 				}
 				ctx.flush();
 			} finally {

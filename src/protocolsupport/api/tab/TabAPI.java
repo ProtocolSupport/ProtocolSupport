@@ -12,7 +12,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
-import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.RecyclablePacketDataSerializer;
 
 public class TabAPI {
 
@@ -49,7 +49,7 @@ public class TabAPI {
 	private static final BaseComponent empty = new TextComponent("");
 
 	public static void sendHeaderFooter(Player player, BaseComponent header, BaseComponent footer) {
-		PacketDataSerializer serializer = PacketDataSerializer.createNew(ProtocolVersion.getLatest());
+		RecyclablePacketDataSerializer serializer = RecyclablePacketDataSerializer.create(ProtocolVersion.getLatest());
 		try {
 			serializer.writeString(ChatAPI.toJSON(header != null ? header : empty));
 			serializer.writeString(ChatAPI.toJSON(footer != null ? footer : empty));

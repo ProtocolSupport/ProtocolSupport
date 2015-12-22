@@ -47,10 +47,6 @@ import com.mojang.authlib.GameProfile;
 
 public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDataSerializer {
 
-	public static PacketDataSerializer createNew(ProtocolVersion version) {
-		return new PacketDataSerializer(Allocator.allocateBuffer(), version);
-	}
-
 	private ProtocolVersion version;
 
 	public PacketDataSerializer(ByteBuf buf, ProtocolVersion version) {
