@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import io.netty.util.Recycler;
+import io.netty.util.ReferenceCounted;
 
 public class RecyclableSingletonList<E> extends AbstractCollection<E> implements RecyclableCollection<E> {
 
@@ -16,7 +17,7 @@ public class RecyclableSingletonList<E> extends AbstractCollection<E> implements
 	};
 
 	@SuppressWarnings("unchecked")
-	public static <T> RecyclableSingletonList<T> create(T singleValue) {
+	public static <T extends ReferenceCounted> RecyclableSingletonList<T> create(T singleValue) {
 		RecyclableSingletonList<T> list = RECYCLER.get();
 		list.singleValue = singleValue;
 		return list;
@@ -27,7 +28,7 @@ public class RecyclableSingletonList<E> extends AbstractCollection<E> implements
 		this.handle = handle;
 	}
 
-	private E singleValue;
+	protected E singleValue;
 
 	@Override
 	public void recycle() {
@@ -50,34 +51,34 @@ public class RecyclableSingletonList<E> extends AbstractCollection<E> implements
 		return singleValue.equals(o);
 	}
 
+	private final ResetableIterator iterator = new ResetableIterator();
+
 	@Override
 	public Iterator<E> iterator() {
-		return singletonIterator(singleValue);
+		iterator.reset();
+		return iterator;
 	}
 
-	static <E> Iterator<E> singletonIterator(final E e) {
-		return new Iterator<E>() {
-			private boolean hasNext = true;
+	protected class ResetableIterator implements Iterator<E> {
+		private boolean hasNext = true;
 
-			@Override
-			public boolean hasNext() {
-				return hasNext;
-			}
+		@Override
+		public boolean hasNext() {
+			return hasNext;
+		}
 
-			@Override
-			public E next() {
-				if (hasNext) {
-					hasNext = false;
-					return e;
-				}
-				throw new NoSuchElementException();
+		@Override
+		public E next() {
+			if (hasNext) {
+				hasNext = false;
+				return singleValue;
 			}
+			throw new NoSuchElementException();
+		}	
 
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
-		};
+		public void reset() {
+			hasNext = true;
+		}
 	}
 
 }
