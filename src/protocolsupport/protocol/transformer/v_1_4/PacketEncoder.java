@@ -242,7 +242,7 @@ public class PacketEncoder implements IPacketEncoder {
 			serverdata.clear();
 			packet.b(serverdata);
 			if (packetTransformer.needsPlayer()) {
-				packetTransformer.setPlayer(Utils.getPlayer(channel));
+				packetTransformer.setPlayer(Utils.getBukkitPlayer(channel));
 			}
 			packetTransformer.readFromServerData(serverdata);
 			packetTransformer.handle(storage);

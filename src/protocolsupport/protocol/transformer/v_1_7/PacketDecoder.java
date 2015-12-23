@@ -110,7 +110,7 @@ public class PacketDecoder implements IPacketDecoder {
 		ServerBoundMiddlePacket packetTransformer = registry.getTransformer(currentProtocol, packetId);
 		if (packetTransformer != null) {
 			if (packetTransformer.needsPlayer()) {
-				packetTransformer.setPlayer(Utils.getPlayer(channel));
+				packetTransformer.setPlayer(Utils.getBukkitPlayer(channel));
 			}
 			packetTransformer.readFromClientData(serializer);
 			RecyclableCollection<Packet<?>> collection = packetTransformer.toNative();

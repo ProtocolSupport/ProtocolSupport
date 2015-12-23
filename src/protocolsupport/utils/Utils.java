@@ -34,7 +34,7 @@ public class Utils {
 		setAccessible(field).set(null, newValue);
 	}
 
-	public static Player getPlayer(Channel channel) {
+	public static Player getBukkitPlayer(Channel channel) {
 		return ((PlayerConnection) getNetworkManager(channel).getPacketListener()).player.getBukkitEntity();
 	}
 

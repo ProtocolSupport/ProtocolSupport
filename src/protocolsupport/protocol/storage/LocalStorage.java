@@ -7,9 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
 
@@ -66,14 +63,12 @@ public class LocalStorage {
 		playersNames.put(uuid, name);
 	}
 
+	public boolean hasPlayerListName(UUID uuid) {
+		return playersNames.containsKey(uuid);
+	}
+
 	public String getPlayerListName(UUID uuid) {
 		String name = playersNames.get(uuid);
-		if (name == null) {
-			Player player = Bukkit.getPlayer(uuid);
-			if (player != null) {
-				return player.getName();
-			}
-		}
 		if (name == null) {
 			return "Unknown";
 		}
