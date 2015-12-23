@@ -10,13 +10,17 @@ import net.minecraft.server.v1_8_R3.IBlockData;
 import net.minecraft.server.v1_8_R3.Item;
 import net.minecraft.server.v1_8_R3.ItemAnvil;
 import net.minecraft.server.v1_8_R3.ItemBlock;
+import net.minecraft.server.v1_8_R3.ItemCloth;
 import net.minecraft.server.v1_8_R3.MinecraftKey;
 import net.minecraft.server.v1_8_R3.TileEntity;
 
 import org.bukkit.Bukkit;
 
 import protocolsupport.server.block.BlockAnvil;
+import protocolsupport.server.block.BlockCarpet;
 import protocolsupport.server.block.BlockEnchantTable;
+import protocolsupport.server.block.BlockSnow;
+import protocolsupport.server.item.ItemSnow;
 import protocolsupport.server.tileentity.TileEntityEnchantTable;
 import protocolsupport.utils.Utils;
 
@@ -25,7 +29,9 @@ public class ServerInjector {
 	public static void inject() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		registerTileEntity(TileEntityEnchantTable.class, "EnchantTable");
 		registerBlock(116, "enchanting_table", new BlockEnchantTable());
-		registerBlock(145, "anvil", new ItemAnvil(new BlockAnvil()));
+		registerBlock(145, "anvil", new ItemAnvil(new BlockAnvil()).b("anvil"));
+		registerBlock(171, "carpet", new ItemCloth(new BlockCarpet()).b("woolCarpet"));
+		registerBlock(78, "snow_layer", new ItemSnow(new BlockSnow()));
 		fixBlocksRefs();
 		Bukkit.resetRecipes();
 	}
