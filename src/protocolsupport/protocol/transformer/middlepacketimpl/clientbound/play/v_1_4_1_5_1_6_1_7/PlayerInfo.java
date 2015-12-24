@@ -15,22 +15,26 @@ public class PlayerInfo extends MiddlePlayerInfo<RecyclableCollection<PacketData
 		for (Info info : infos) {	
 			switch (action) {
 				case ADD: {
-					if (info.existingentry != null) {
-						datas.add(createData(info.existingentry.getName(), false, version));
+					if (info.previousinfo != null) {
+						datas.add(createData(info.previousinfo.getName(), false, version));
 					}
 					datas.add(createData(info.getName(), true, version));
 					break;
 				}
 				case REMOVE: {
-					if (info.existingentry != null) {
-						datas.add(createData(info.existingentry.getName(), false, version));
+					if (info.previousinfo != null) {
+						datas.add(createData(info.previousinfo.getName(), false, version));
 					}
 					break;
 				}
 				case DISPLAY_NAME: {
-					if (info.existingentry != null) {
-						datas.add(createData(info.existingentry.getName(), false, version));
-						datas.add(createData(info.getName(), true, version));
+					if (info.previousinfo != null) {
+						datas.add(createData(info.previousinfo.getName(), false, version));
+						if (info.displayNameJson != null) {
+							datas.add(createData(info.getName(), true, version));
+						} else {
+							datas.add(createData(info.previousinfo.getUserName(), true, version));
+						}
 					}
 					break;
 				}

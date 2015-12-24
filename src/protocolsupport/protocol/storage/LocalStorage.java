@@ -80,6 +80,10 @@ public class LocalStorage {
 			return propstorage;
 		}
 
+		public String getUserName() {
+			return name;
+		}
+
 		public String getName() {
 			return displayNameJson == null ? name : LegacyUtils.toText(ChatSerializer.a(displayNameJson));
 		}

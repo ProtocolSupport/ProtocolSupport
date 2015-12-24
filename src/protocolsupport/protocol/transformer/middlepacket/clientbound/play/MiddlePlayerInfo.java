@@ -68,9 +68,9 @@ public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {
 	@Override
 	public void handle(LocalStorage storage) {
 		for (Info info : infos) {
-			info.existingentry = storage.getPlayerListEntry(info.uuid);
-			if (info.existingentry != null) {
-				info.existingentry = info.existingentry.clone();
+			info.previousinfo = storage.getPlayerListEntry(info.uuid);
+			if (info.previousinfo != null) {
+				info.previousinfo = info.previousinfo.clone();
 			}
 			switch (action) {
 				case ADD: {
@@ -83,7 +83,10 @@ public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {
 					break;
 				}
 				case DISPLAY_NAME: {
-					storage.getPlayerListEntry(info.uuid).setDisplayNameJson(info.displayNameJson);
+					PlayerListEntry entry = storage.getPlayerListEntry(info.uuid);
+					if (entry != null) {
+						entry.setDisplayNameJson(info.displayNameJson);
+					}
 					break;
 				}
 				case REMOVE: {
@@ -103,7 +106,7 @@ public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {
 
 	protected static class Info {
 		public UUID uuid;
-		public PlayerListEntry existingentry;
+		public PlayerListEntry previousinfo;
 		public String username;
 		public int ping;
 		public int gamemode;
