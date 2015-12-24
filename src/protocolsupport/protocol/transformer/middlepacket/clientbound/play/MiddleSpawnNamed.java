@@ -50,8 +50,8 @@ public abstract class MiddleSpawnNamed<T> extends ClientBoundMiddlePacket<T> {
 	public void handle(LocalStorage storage) {
 		wplayer = new WatchedPlayer(playerEntityId);
 		storage.addWatchedEntity(wplayer);
-		name = storage.getPlayerListName(uuid);
-		properties = storage.getPropertyData(uuid, true);
-	}
+		name = storage.getPlayerListEntry(uuid).getName();
+		properties = storage.getPlayerListEntry(uuid).getProperties().getAll(true);
+	}	
 
 }

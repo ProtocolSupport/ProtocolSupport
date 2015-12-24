@@ -1,12 +1,14 @@
 package protocolsupport.protocol.storage;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
 
@@ -16,17 +18,7 @@ public class LocalStorage {
 
 	private TIntObjectHashMap<WatchedEntity> watchedEntities = new TIntObjectHashMap<WatchedEntity>();
 	private WatchedPlayer player;
-	private HashMap<UUID, String> playersNames = new HashMap<UUID, String>();
-	@SuppressWarnings("serial")
-	private HashMap<UUID, PropertiesStorage> properties = new HashMap<UUID, PropertiesStorage>() {
-		@Override
-		public PropertiesStorage get(Object uuid) {
-			if (!super.containsKey(uuid)) {
-				super.put((UUID) uuid, new PropertiesStorage());
-			}
-			return super.get(uuid);
-		}
-	};
+	private final HashMap<UUID, PlayerListEntry> playerlist = new HashMap<>();
 
 	public void addWatchedEntity(WatchedEntity entity) {
 		watchedEntities.put(entity.getId(), entity);
@@ -59,43 +51,55 @@ public class LocalStorage {
 		readdSelfPlayer();
 	}
 
-	public void addPlayerListName(UUID uuid, String name) {
-		playersNames.put(uuid, name);
+	public void addPlayerListEntry(UUID uuid, PlayerListEntry entry) {
+		playerlist.put(uuid, entry);
 	}
 
-	public boolean hasPlayerListName(UUID uuid) {
-		return playersNames.containsKey(uuid);
+	public PlayerListEntry getPlayerListEntry(UUID uuid) {
+		return playerlist.get(uuid);
 	}
 
-	public String getPlayerListName(UUID uuid) {
-		String name = playersNames.get(uuid);
-		if (name == null) {
-			return "Unknown";
+	public void removePlayerListEntry(UUID uuid) {
+		playerlist.remove(uuid);
+	}
+
+	public static class PlayerListEntry implements Cloneable {
+		private final String name;
+		private String displayNameJson;
+		private final PropertiesStorage propstorage = new PropertiesStorage();
+
+		public PlayerListEntry(String name) {
+			this.name = name;
 		}
-		return name;
+
+		public void setDisplayNameJson(String displayNameJson) {
+			this.displayNameJson = displayNameJson;
+		}
+
+		public PropertiesStorage getProperties() {
+			return propstorage;
+		}
+
+		public String getName() {
+			return displayNameJson == null ? name : LegacyUtils.toText(ChatSerializer.a(displayNameJson));
+		}
+
+		@Override
+		public PlayerListEntry clone() {
+			PlayerListEntry clone = new PlayerListEntry(name);
+			clone.displayNameJson = displayNameJson;
+			for (Property property : propstorage.getAll(false)) {
+				clone.propstorage.add(property);
+			}
+			return clone;
+		}
 	}
 
-	public void removePlayerListName(UUID uuid) {
-		playersNames.remove(uuid);
-	}
-
-	public void addPropertyData(UUID uuid, Property property) {
-		properties.get(uuid).addProperty(property);
-	}
-
-	public List<Property> getPropertyData(UUID uuid, boolean signedOnly) {
-		return properties.get(uuid).getProperties(signedOnly);
-	}
-
-	public void removePropertyData(UUID uuid) {
-		properties.remove(uuid);
-	}
-
-	private static class PropertiesStorage {
+	public static class PropertiesStorage {
 		private final HashMap<String, Property> signed = new HashMap<String, Property>();
 		private final HashMap<String, Property> unsigned = new HashMap<String, Property>();
 
-		public void addProperty(Property property) {
+		public void add(Property property) {
 			if (property.hasSignature()) {
 				signed.put(property.getName(), property);
 			} else {
@@ -103,7 +107,7 @@ public class LocalStorage {
 			}
 		}
 
-		public List<Property> getProperties(boolean signedOnly) {
+		public List<Property> getAll(boolean signedOnly) {
 			if (signedOnly) {
 				return new ArrayList<Property>(signed.values());
 			} else {

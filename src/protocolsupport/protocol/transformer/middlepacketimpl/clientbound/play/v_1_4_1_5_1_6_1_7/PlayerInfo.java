@@ -13,29 +13,41 @@ public class PlayerInfo extends MiddlePlayerInfo<RecyclableCollection<PacketData
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
 		RecyclableArrayList<PacketData> datas = RecyclableArrayList.create();
 		for (Info info : infos) {	
-			PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_PLAYER_INFO_ID, version);
 			switch (action) {
 				case ADD: {
-					serializer.writeString(info.username);
-					serializer.writeBoolean(true);
-					serializer.writeShort(0);
-					datas.add(serializer);
+					if (info.existingentry != null) {
+						datas.add(createData(info.existingentry.getName(), false, version));
+					}
+					datas.add(createData(info.getName(), true, version));
 					break;
 				}
 				case REMOVE: {
-					serializer.writeString(info.username);
-					serializer.writeBoolean(false);
-					serializer.writeShort(0);
-					datas.add(serializer);
+					if (info.existingentry != null) {
+						datas.add(createData(info.existingentry.getName(), false, version));
+					}
+					break;
+				}
+				case DISPLAY_NAME: {
+					if (info.existingentry != null) {
+						datas.add(createData(info.existingentry.getName(), false, version));
+						datas.add(createData(info.getName(), true, version));
+					}
 					break;
 				}
 				default: {
-					serializer.release();
 					break;
 				}
 			}
 		}
 		return datas;
+	}
+
+	static PacketData createData(String name, boolean add, ProtocolVersion version) {
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_PLAYER_INFO_ID, version);
+		serializer.writeString(name);
+		serializer.writeBoolean(add);
+		serializer.writeShort(0);
+		return serializer;
 	}
 
 }
