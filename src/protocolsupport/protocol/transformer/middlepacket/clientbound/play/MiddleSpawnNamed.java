@@ -1,6 +1,7 @@
 package protocolsupport.protocol.transformer.middlepacket.clientbound.play;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -52,8 +53,13 @@ public abstract class MiddleSpawnNamed<T> extends ClientBoundMiddlePacket<T> {
 		wplayer = new WatchedPlayer(playerEntityId);
 		storage.addWatchedEntity(wplayer);
 		PlayerListEntry entry = storage.getPlayerListEntry(uuid);
-		name = entry != null ? entry.getName() : "Unknown";
-		properties = storage.getPlayerListEntry(uuid).getProperties().getAll(true);
+		if (entry != null) {
+			name = entry.getName();
+			properties = storage.getPlayerListEntry(uuid).getProperties().getAll(true);
+		} else {
+			name = "Unknown";
+			properties = Collections.emptyList();
+		}
 	}
 
 }
