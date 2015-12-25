@@ -55,7 +55,7 @@ public abstract class MiddleSpawnNamed<T> extends ClientBoundMiddlePacket<T> {
 		PlayerListEntry entry = storage.getPlayerListEntry(uuid);
 		if (entry != null) {
 			name = entry.getName();
-			properties = storage.getPlayerListEntry(uuid).getProperties().getAll(true);
+			properties = entry.getProperties().getAll(true);
 		} else {
 			name = "Unknown";
 			properties = Collections.emptyList();
