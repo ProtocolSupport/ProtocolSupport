@@ -11,6 +11,7 @@ import gnu.trove.map.TIntObjectMap;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage;
+import protocolsupport.protocol.storage.LocalStorage.PlayerListEntry;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
@@ -50,8 +51,9 @@ public abstract class MiddleSpawnNamed<T> extends ClientBoundMiddlePacket<T> {
 	public void handle(LocalStorage storage) {
 		wplayer = new WatchedPlayer(playerEntityId);
 		storage.addWatchedEntity(wplayer);
-		name = storage.getPlayerListEntry(uuid).getName();
+		PlayerListEntry entry = storage.getPlayerListEntry(uuid);
+		name = entry != null ? entry.getName() : "Unknown";
 		properties = storage.getPlayerListEntry(uuid).getProperties().getAll(true);
-	}	
+	}
 
 }
