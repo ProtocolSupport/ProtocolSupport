@@ -15,7 +15,6 @@ import net.minecraft.server.v1_8_R3.Packet;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.core.IPacketDecoder;
 import protocolsupport.protocol.transformer.middlepacket.ServerBoundMiddlePacket;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.handshake.v_1_4_1_5_1_6.ClientLogin;
@@ -46,7 +45,6 @@ import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.TabComplete;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.UpdateSign;
 import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry;
-import protocolsupport.protocol.transformer.utils.registry.PacketIdTransformerRegistry;
 import protocolsupport.utils.ChannelUtils;
 import protocolsupport.utils.ReplayingDecoderBuffer;
 import protocolsupport.utils.ReplayingDecoderBuffer.EOFSignal;
@@ -55,19 +53,6 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 public class PacketDecoder implements IPacketDecoder {
 
 	private static final AttributeKey<EnumProtocol> currentStateAttrKey = NetworkManager.c;
-
-	private static final PacketIdTransformerRegistry packetIdRegistry = new PacketIdTransformerRegistry();
-	static {
-		packetIdRegistry.register(EnumProtocol.LOGIN, 0xFC, ServerBoundPacket.LOGIN_ENCRYPTION_BEGIN.getId());
-		packetIdRegistry.register(EnumProtocol.PLAY, 0x03, ServerBoundPacket.PLAY_CHAT.getId());
-		packetIdRegistry.register(EnumProtocol.PLAY, 0x0A, ServerBoundPacket.PLAY_PLAYER.getId());
-		packetIdRegistry.register(EnumProtocol.PLAY, 0x0C, ServerBoundPacket.PLAY_LOOK.getId());
-		packetIdRegistry.register(EnumProtocol.PLAY, 0x10, ServerBoundPacket.PLAY_HELD_SLOT.getId());
-		packetIdRegistry.register(EnumProtocol.PLAY, 0x65, ServerBoundPacket.PLAY_WINDOW_CLOSE.getId());
-		packetIdRegistry.register(EnumProtocol.PLAY, 0x6A, ServerBoundPacket.PLAY_WINDOW_TRANSACTION.getId());
-		packetIdRegistry.register(EnumProtocol.PLAY, 0x6B, ServerBoundPacket.PLAY_CREATIVE_SET_SLOT.getId());
-		packetIdRegistry.register(EnumProtocol.PLAY, 0x6C, ServerBoundPacket.PLAY_ENCHANT_SELECT.getId());
-	}
 
 	private final MiddleTransformerRegistry<ServerBoundMiddlePacket> dataRemapperRegistry = new MiddleTransformerRegistry<>();
 	{
