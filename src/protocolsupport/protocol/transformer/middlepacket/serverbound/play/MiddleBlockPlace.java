@@ -20,7 +20,7 @@ public abstract class MiddleBlockPlace extends ServerBoundMiddlePacket {
 	protected int cZ;
 
 	@Override
-	public RecyclableCollection<Packet<?>> toNative() throws Exception {
+	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
 		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_BLOCK_PLACE.get());
 		creator.writePosition(position);
 		creator.writeByte(face);
@@ -28,7 +28,7 @@ public abstract class MiddleBlockPlace extends ServerBoundMiddlePacket {
 		creator.writeByte(cX);
 		creator.writeByte(cY);
 		creator.writeByte(cZ);
-		return RecyclableSingletonList.<Packet<?>>create(creator.create());
+		return RecyclableSingletonList.create(creator.create());
 	}
 
 }

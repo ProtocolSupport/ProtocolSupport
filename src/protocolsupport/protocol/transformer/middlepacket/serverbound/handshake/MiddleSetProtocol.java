@@ -16,13 +16,13 @@ public abstract class MiddleSetProtocol extends ServerBoundMiddlePacket {
 	protected int nextState;
 
 	@Override
-	public RecyclableCollection<Packet<?>> toNative() throws Exception {
+	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
 		PacketCreator creator = PacketCreator.create(ServerBoundPacket.HANDSHAKE_START.get());
 		creator.writeVarInt(ProtocolVersion.getLatest().getId());
 		creator.writeString(hostname);
 		creator.writeShort(port);
 		creator.writeVarInt(nextState);
-		return RecyclableSingletonList.<Packet<?>>create(creator.create());
+		return RecyclableSingletonList.create(creator.create());
 	}
 
 }

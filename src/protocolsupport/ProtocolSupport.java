@@ -6,6 +6,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import protocolsupport.commands.CommandHandler;
 import protocolsupport.injector.NettyInjector;
 import protocolsupport.injector.ServerInjector;
+import protocolsupport.protocol.ClientBoundPacket;
+import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.server.listeners.PlayerListener;
 import protocolsupport.utils.Allocator;
 
@@ -15,6 +17,8 @@ public class ProtocolSupport extends JavaPlugin {
 	public void onLoad() {
 		try {
 			Allocator.init();
+			ServerBoundPacket.init();
+			ClientBoundPacket.init();
 			NettyInjector.inject();
 			ServerInjector.inject();
 		} catch (Throwable t) {

@@ -17,14 +17,14 @@ public abstract class MiddleClientSettings extends ServerBoundMiddlePacket {
 	protected int skinFlags;
 
 	@Override
-	public RecyclableCollection<Packet<?>> toNative() throws Exception {
+	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
 		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_SETTINGS.get());
 		creator.writeString(locale);
 		creator.writeByte(viewDist);
 		creator.writeByte(chatMode);
 		creator.writeBoolean(chatColors);
 		creator.writeByte(skinFlags);
-		return RecyclableSingletonList.<Packet<?>>create(creator.create());
+		return RecyclableSingletonList.create(creator.create());
 	}
 
 }

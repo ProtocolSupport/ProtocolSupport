@@ -113,7 +113,7 @@ public class PacketDecoder implements IPacketDecoder {
 				packetTransformer.setPlayer(ChannelUtils.getBukkitPlayer(channel));
 			}
 			packetTransformer.readFromClientData(serializer);
-			RecyclableCollection<Packet<?>> collection = packetTransformer.toNative();
+			RecyclableCollection<? extends Packet<?>> collection = packetTransformer.toNative();
 			try {
 				list.addAll(collection);
 			} finally {

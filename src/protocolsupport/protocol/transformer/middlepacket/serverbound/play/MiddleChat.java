@@ -13,10 +13,10 @@ public abstract class MiddleChat extends ServerBoundMiddlePacket {
 	protected String message;
 
 	@Override
-	public RecyclableCollection<Packet<?>> toNative() throws Exception {
+	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
 		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_CHAT.get());
 		creator.writeString(message);
-		return RecyclableSingletonList.<Packet<?>>create(creator.create());
+		return RecyclableSingletonList.create(creator.create());
 	}
 
 }

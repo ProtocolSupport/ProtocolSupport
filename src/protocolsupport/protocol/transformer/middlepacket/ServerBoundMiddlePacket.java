@@ -11,6 +11,6 @@ public abstract class ServerBoundMiddlePacket extends MiddlePacket {
 
 	public abstract void readFromClientData(PacketDataSerializer serializer) throws IOException;
 
-	public abstract RecyclableCollection<Packet<?>> toNative() throws Exception;
+	public abstract RecyclableCollection<? extends Packet<?>> toNative() throws Exception;
 
 }

@@ -12,10 +12,10 @@ public abstract class MiddlePing extends ServerBoundMiddlePacket {
 	protected long pingId;
 
 	@Override
-	public RecyclableCollection<Packet<?>> toNative() throws Exception {
+	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
 		PacketCreator creator = PacketCreator.create(ServerBoundPacket.STATUS_PING.get());
 		creator.writeLong(pingId);
-		return RecyclableSingletonList.<Packet<?>>create(creator.create());
+		return RecyclableSingletonList.create(creator.create());
 	}
 
 }

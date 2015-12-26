@@ -14,11 +14,11 @@ public abstract class MiddleEncryptionResponse extends ServerBoundMiddlePacket {
 	protected byte[] verifyToken;
 
 	@Override
-	public RecyclableCollection<Packet<?>> toNative() throws Exception {
+	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
 		PacketCreator creator = PacketCreator.create(ServerBoundPacket.LOGIN_ENCRYPTION_BEGIN.get());
 		creator.writeArray(sharedSecret);
 		creator.writeArray(verifyToken);
-		return RecyclableSingletonList.<Packet<?>>create(creator.create());
+		return RecyclableSingletonList.create(creator.create());
 	}
 
 }

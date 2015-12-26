@@ -12,10 +12,10 @@ public abstract class MiddleInventoryClose extends ServerBoundMiddlePacket {
 	protected int windowId;
 
 	@Override
-	public RecyclableCollection<Packet<?>> toNative() throws Exception {
+	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
 		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_WINDOW_CLOSE.get());
 		creator.writeByte(windowId);
-		return RecyclableSingletonList.<Packet<?>>create(creator.create());
+		return RecyclableSingletonList.create(creator.create());
 	}
 
 }
