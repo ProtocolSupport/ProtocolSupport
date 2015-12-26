@@ -71,11 +71,11 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 					}
 					packethandshakinginsetprotocol.hostname = split[0];
 					SocketAddress oldaddress = networkManager.getSocketAddress();
+					ProtocolStorage.clearData(oldaddress);
 					ProtocolVersion version = ProtocolStorage.getProtocolVersion(oldaddress);
 					SocketAddress newaddress = new InetSocketAddress(split[1], ((InetSocketAddress) oldaddress).getPort());
-					ProtocolStorage.setProtocolVersion(newaddress, version);
 					networkManager.l = newaddress;
-					ProtocolStorage.clearData(oldaddress);
+					ProtocolStorage.setProtocolVersion(newaddress, version);
 					networkManager.spoofedUUID = UUIDTypeAdapter.fromString(split[2]);
 					if (split.length == 4) {
 						networkManager.spoofedProfile = gson.fromJson(split[3], Property[].class);
