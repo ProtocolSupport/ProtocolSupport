@@ -44,8 +44,8 @@ import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.TabComplete;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.UpdateSign;
 import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry;
+import protocolsupport.utils.ChannelUtils;
 import protocolsupport.utils.ReplayingDecoderBuffer;
-import protocolsupport.utils.Utils;
 import protocolsupport.utils.ReplayingDecoderBuffer.EOFSignal;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -104,7 +104,7 @@ public class PacketDecoder implements IPacketDecoder {
 			ServerBoundMiddlePacket packetTransformer = dataRemapperRegistry.getTransformer(currentProtocol, packetId);
 			if (packetTransformer != null) {
 				if (packetTransformer.needsPlayer()) {
-					packetTransformer.setPlayer(Utils.getBukkitPlayer(channel));
+					packetTransformer.setPlayer(ChannelUtils.getBukkitPlayer(channel));
 				}
 				packetTransformer.readFromClientData(serializer);
 				RecyclableCollection<Packet<?>> collection = packetTransformer.toNative();

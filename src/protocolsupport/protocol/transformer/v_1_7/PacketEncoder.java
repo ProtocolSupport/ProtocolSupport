@@ -96,7 +96,7 @@ import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.status.
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.status.v_1_7.ServerInfo;
 import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry;
 import protocolsupport.utils.Allocator;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ChannelUtils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class PacketEncoder implements IPacketEncoder {
@@ -204,7 +204,7 @@ public class PacketEncoder implements IPacketEncoder {
 			serverdata.clear();
 			packet.b(serverdata);
 			if (packetTransformer.needsPlayer()) {
-				packetTransformer.setPlayer(Utils.getBukkitPlayer(channel));
+				packetTransformer.setPlayer(ChannelUtils.getBukkitPlayer(channel));
 			}
 			packetTransformer.readFromServerData(serverdata);
 			packetTransformer.handle(storage);
@@ -212,7 +212,7 @@ public class PacketEncoder implements IPacketEncoder {
 			try {
 				for (PacketData packetdata : data) {
 					ByteBuf senddata = Allocator.allocateBuffer();
-					Utils.writeVarInt(senddata, packetdata.getPacketId());
+					ChannelUtils.writeVarInt(senddata, packetdata.getPacketId());
 					senddata.writeBytes(packetdata);
 					ctx.write(senddata);
 				}

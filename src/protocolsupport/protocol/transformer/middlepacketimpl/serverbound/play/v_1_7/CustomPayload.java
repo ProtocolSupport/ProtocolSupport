@@ -7,7 +7,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.RecyclablePacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.serverbound.play.MiddleCustomPayload;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ChannelUtils;
 
 public class CustomPayload extends MiddleCustomPayload {
 
@@ -32,7 +32,7 @@ public class CustomPayload extends MiddleCustomPayload {
 			} else {
 				newdata.writeBytes(olddata);
 			}
-			data = Utils.toArray(newdata);
+			data = ChannelUtils.toArray(newdata);
 		} finally {
 			newdata.release();
 		}

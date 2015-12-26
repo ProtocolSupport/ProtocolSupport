@@ -10,9 +10,9 @@ import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedLiving;
+import protocolsupport.utils.ChannelUtils;
 import protocolsupport.utils.DataWatcherObject;
 import protocolsupport.utils.DataWatcherSerializer;
-import protocolsupport.utils.Utils;
 
 public abstract class MiddleSpawnLiving<T> extends ClientBoundMiddlePacket<T> {
 
@@ -43,7 +43,7 @@ public abstract class MiddleSpawnLiving<T> extends ClientBoundMiddlePacket<T> {
 		motX = serializer.readShort();
 		motY = serializer.readShort();
 		motZ = serializer.readShort();
-		metadata = DataWatcherSerializer.decodeData(ProtocolVersion.MINECRAFT_1_8, Utils.toArray(serializer));
+		metadata = DataWatcherSerializer.decodeData(ProtocolVersion.MINECRAFT_1_8, ChannelUtils.toArray(serializer));
 	}
 
 	@Override

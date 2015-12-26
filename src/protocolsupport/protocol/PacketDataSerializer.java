@@ -41,7 +41,7 @@ import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
 import protocolsupport.protocol.typeskipper.id.SkippingTable;
 import protocolsupport.utils.Allocator;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ChannelUtils;
 
 import com.mojang.authlib.GameProfile;
 
@@ -191,7 +191,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 	@Override
 	public String c(int limit) {
 		if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4)) {
-			return new String(Utils.toArray(readBytes(readUnsignedShort() * 2)), StandardCharsets.UTF_16BE);
+			return new String(ChannelUtils.toArray(readBytes(readUnsignedShort() * 2)), StandardCharsets.UTF_16BE);
 		} else {
 			return super.c(limit);
 		}

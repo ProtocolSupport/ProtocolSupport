@@ -84,7 +84,7 @@ import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_
 import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry;
 import protocolsupport.protocol.transformer.utils.registry.PacketIdTransformerRegistry;
 import protocolsupport.utils.Allocator;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ChannelUtils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class PacketEncoder implements IPacketEncoder {
@@ -242,7 +242,7 @@ public class PacketEncoder implements IPacketEncoder {
 			serverdata.clear();
 			packet.b(serverdata);
 			if (packetTransformer.needsPlayer()) {
-				packetTransformer.setPlayer(Utils.getBukkitPlayer(channel));
+				packetTransformer.setPlayer(ChannelUtils.getBukkitPlayer(channel));
 			}
 			packetTransformer.readFromServerData(serverdata);
 			packetTransformer.handle(storage);

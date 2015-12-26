@@ -16,9 +16,9 @@ import protocolsupport.protocol.storage.LocalStorage.PlayerListEntry;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
+import protocolsupport.utils.ChannelUtils;
 import protocolsupport.utils.DataWatcherObject;
 import protocolsupport.utils.DataWatcherSerializer;
-import protocolsupport.utils.Utils;
 
 public abstract class MiddleSpawnNamed<T> extends ClientBoundMiddlePacket<T> {
 
@@ -45,7 +45,7 @@ public abstract class MiddleSpawnNamed<T> extends ClientBoundMiddlePacket<T> {
 		yaw = serializer.readUnsignedByte();
 		pitch = serializer.readUnsignedByte();
 		itemId = serializer.readUnsignedShort();
-		metadata = DataWatcherSerializer.decodeData(ProtocolVersion.MINECRAFT_1_8, Utils.toArray(serializer));
+		metadata = DataWatcherSerializer.decodeData(ProtocolVersion.MINECRAFT_1_8, ChannelUtils.toArray(serializer));
 	}
 
 	@Override

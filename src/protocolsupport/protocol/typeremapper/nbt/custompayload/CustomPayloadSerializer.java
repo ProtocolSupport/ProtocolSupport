@@ -8,7 +8,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.RecyclablePacketDataSerializer;
 import protocolsupport.protocol.typeremapper.nbt.custompayload.MerchantData.TradeOffer;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ChannelUtils;
 
 public class CustomPayloadSerializer {
 
@@ -68,7 +68,7 @@ public class CustomPayloadSerializer {
 
 	public byte[] toData() {
 		try {
-			return Utils.toArray(serializer);
+			return ChannelUtils.toArray(serializer);
 		} finally {
 			serializer.release();
 		}

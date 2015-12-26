@@ -125,7 +125,7 @@ public class DataWatcherSerializer {
 				}
 			}
 			serializer.writeByte(127);
-			return Utils.toArray(serializer);
+			return ChannelUtils.toArray(serializer);
 		} finally {
 			serializer.release();
 		}

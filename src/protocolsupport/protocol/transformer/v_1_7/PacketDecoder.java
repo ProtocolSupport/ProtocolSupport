@@ -47,7 +47,7 @@ import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.status.v_1_7.Ping;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.status.v_1_7.ServerInfoRequest;
 import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ChannelUtils;
 import protocolsupport.utils.WrappingBuffer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -110,7 +110,7 @@ public class PacketDecoder implements IPacketDecoder {
 		ServerBoundMiddlePacket packetTransformer = registry.getTransformer(currentProtocol, packetId);
 		if (packetTransformer != null) {
 			if (packetTransformer.needsPlayer()) {
-				packetTransformer.setPlayer(Utils.getBukkitPlayer(channel));
+				packetTransformer.setPlayer(ChannelUtils.getBukkitPlayer(channel));
 			}
 			packetTransformer.readFromClientData(serializer);
 			RecyclableCollection<Packet<?>> collection = packetTransformer.toNative();

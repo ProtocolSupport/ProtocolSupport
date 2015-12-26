@@ -7,7 +7,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.CorruptedFrameException;
 import protocolsupport.protocol.core.IPacketSplitter;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ChannelUtils;
 
 public class PacketSplitter implements IPacketSplitter {
 
@@ -23,7 +23,7 @@ public class PacketSplitter implements IPacketSplitter {
             }
             array[i] = input.readByte();
             if (array[i] >= 0) {
-                int length = Utils.readVarInt(Unpooled.wrappedBuffer(array));
+                int length = ChannelUtils.readVarInt(Unpooled.wrappedBuffer(array));
                 if (input.readableBytes() < length) {
                 	input.resetReaderIndex();
                     return;

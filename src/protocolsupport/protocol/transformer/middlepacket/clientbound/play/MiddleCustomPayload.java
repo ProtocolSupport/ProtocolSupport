@@ -3,7 +3,7 @@ package protocolsupport.protocol.transformer.middlepacket.clientbound.play;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ChannelUtils;
 
 public abstract class MiddleCustomPayload<T> extends ClientBoundMiddlePacket<T> {
 
@@ -13,7 +13,7 @@ public abstract class MiddleCustomPayload<T> extends ClientBoundMiddlePacket<T> 
 	@Override
 	public void readFromServerData(PacketDataSerializer serializer) {
 		tag = serializer.readString(20);
-		data = Utils.toArray(serializer);
+		data = ChannelUtils.toArray(serializer);
 	}
 
 	@Override

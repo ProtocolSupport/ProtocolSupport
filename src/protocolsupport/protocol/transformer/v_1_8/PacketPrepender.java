@@ -5,7 +5,7 @@ import io.netty.channel.ChannelHandlerContext;
 
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.core.IPacketPrepender;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ChannelUtils;
 
 public class PacketPrepender implements IPacketPrepender {
 
@@ -17,7 +17,7 @@ public class PacketPrepender implements IPacketPrepender {
 			throw new IllegalArgumentException("unable to fit " + readableBytes + " into " + 3);
 		}
 		output.ensureWritable(varIntLength + readableBytes);
-		Utils.writeVarInt(output, readableBytes);
+		ChannelUtils.writeVarInt(output, readableBytes);
 		output.writeBytes(input, input.readerIndex(), readableBytes);
 	}
 
