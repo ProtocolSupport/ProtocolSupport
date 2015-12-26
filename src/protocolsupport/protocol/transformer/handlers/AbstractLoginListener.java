@@ -39,7 +39,7 @@ import com.mojang.authlib.properties.Property;
 
 public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3.LoginListener implements ILoginListener {
 
-	private static final Executor loginprocessor = Executors.newCachedThreadPool(new ThreadFactory() {
+	private static final Executor loginprocessor = Executors.newSingleThreadExecutor(new ThreadFactory() {
 		@Override
 		public Thread newThread(Runnable r) {
 			Thread thread = new Thread(r);
