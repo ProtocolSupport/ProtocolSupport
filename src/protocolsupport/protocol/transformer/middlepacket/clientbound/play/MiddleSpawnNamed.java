@@ -1,6 +1,7 @@
 package protocolsupport.protocol.transformer.middlepacket.clientbound.play;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,12 +12,13 @@ import gnu.trove.map.TIntObjectMap;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage;
+import protocolsupport.protocol.storage.LocalStorage.PlayerListEntry;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
+import protocolsupport.utils.ChannelUtils;
 import protocolsupport.utils.DataWatcherObject;
 import protocolsupport.utils.DataWatcherSerializer;
-import protocolsupport.utils.Utils;
 
 public abstract class MiddleSpawnNamed<T> extends ClientBoundMiddlePacket<T> {
 
@@ -43,15 +45,21 @@ public abstract class MiddleSpawnNamed<T> extends ClientBoundMiddlePacket<T> {
 		yaw = serializer.readUnsignedByte();
 		pitch = serializer.readUnsignedByte();
 		itemId = serializer.readUnsignedShort();
-		metadata = DataWatcherSerializer.decodeData(ProtocolVersion.MINECRAFT_1_8, Utils.toArray(serializer));
+		metadata = DataWatcherSerializer.decodeData(ProtocolVersion.MINECRAFT_1_8, ChannelUtils.toArray(serializer));
 	}
 
 	@Override
 	public void handle(LocalStorage storage) {
 		wplayer = new WatchedPlayer(playerEntityId);
 		storage.addWatchedEntity(wplayer);
-		name = storage.getPlayerListName(uuid);
-		properties = storage.getPropertyData(uuid, true);
+		PlayerListEntry entry = storage.getPlayerListEntry(uuid);
+		if (entry != null) {
+			name = entry.getName();
+			properties = entry.getProperties().getAll(true);
+		} else {
+			name = "Unknown";
+			properties = Collections.emptyList();
+		}
 	}
 
 }

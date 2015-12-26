@@ -16,7 +16,7 @@ import io.netty.channel.ChannelFutureListener;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 
 import protocolsupport.api.events.LegacyServerPingResponseEvent;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ChannelUtils;
 
 public class Ping11ResponseTask implements Runnable {
 
@@ -29,7 +29,7 @@ public class Ping11ResponseTask implements Runnable {
 	@Override
 	public void run() {
 		try {
-			InetSocketAddress remoteAddress = (InetSocketAddress) Utils.getNetworkManagerSocketAddress(channel);
+			InetSocketAddress remoteAddress = (InetSocketAddress) ChannelUtils.getNetworkManagerSocketAddress(channel);
 			ServerListPingEvent bevent = new ServerListPingEvent(
 				remoteAddress.getAddress(),
 				Bukkit.getMotd(), Bukkit.getOnlinePlayers().size(),

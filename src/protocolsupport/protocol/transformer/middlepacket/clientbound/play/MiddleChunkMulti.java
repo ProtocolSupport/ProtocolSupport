@@ -6,7 +6,7 @@ import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 import protocolsupport.protocol.transformer.utils.ChunkTransformer;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ChannelUtils;
 
 public abstract class MiddleChunkMulti<T> extends ClientBoundMiddlePacket<T> {
 
@@ -30,7 +30,7 @@ public abstract class MiddleChunkMulti<T> extends ClientBoundMiddlePacket<T> {
 			bitmap[i] = serializer.readUnsignedShort();
 		}
 		for (int i = 0; i < count; i++) {
-			data[i] = Utils.toArray(serializer.readBytes(ChunkTransformer.calcDataSize(Integer.bitCount(bitmap[i]), hasSkyLight, true)));
+			data[i] = ChannelUtils.toArray(serializer.readBytes(ChunkTransformer.calcDataSize(Integer.bitCount(bitmap[i]), hasSkyLight, true)));
 		}
 	}
 

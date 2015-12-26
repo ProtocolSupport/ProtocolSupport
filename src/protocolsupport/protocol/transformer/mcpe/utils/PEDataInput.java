@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ChannelUtils;
 
 public class PEDataInput implements DataInput {
 
@@ -91,7 +91,7 @@ public class PEDataInput implements DataInput {
 
 	@Override
 	public String readUTF() throws IOException {
-		return new String(Utils.toArray(buf.readBytes(buf.readShort())), StandardCharsets.UTF_8);
+		return new String(ChannelUtils.toArray(buf.readBytes(buf.readShort())), StandardCharsets.UTF_8);
 	}
 
 }

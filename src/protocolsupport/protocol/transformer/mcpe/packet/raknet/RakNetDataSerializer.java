@@ -5,7 +5,8 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ChannelUtils;
+
 import io.netty.buffer.ByteBuf;
 
 public class RakNetDataSerializer {
@@ -24,7 +25,7 @@ public class RakNetDataSerializer {
 		byte[] addr = null;
 		int type = buf.readByte();
 		if ((type & 0xFF) == 4) {
-			addr = Utils.toArray(buf.readBytes(4));
+			addr = ChannelUtils.toArray(buf.readBytes(4));
 		} else {
 			throw new RuntimeException("IPV6 is not supported yet");
 		}

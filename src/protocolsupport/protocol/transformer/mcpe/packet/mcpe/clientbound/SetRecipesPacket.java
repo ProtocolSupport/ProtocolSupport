@@ -21,7 +21,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.RemappingTable;
 import protocolsupport.utils.Allocator;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ChannelUtils;
 
 public class SetRecipesPacket implements ClientboundPEPacket {
 
@@ -46,7 +46,7 @@ public class SetRecipesPacket implements ClientboundPEPacket {
 			serializer.writeInt(1);
 			serializer.writeItemStack(validate(recipe.result));
 			serializer.writeUUID(UUID.randomUUID());
-			return Utils.toArray(serializer);
+			return ChannelUtils.toArray(serializer);
 		} finally {
 			serializer.release();
 		}
@@ -69,7 +69,7 @@ public class SetRecipesPacket implements ClientboundPEPacket {
 			serializer.writeInt(1);
 			serializer.writeItemStack(validate(recipe.result));
 			serializer.writeUUID(UUID.randomUUID());
-			return Utils.toArray(serializer);
+			return ChannelUtils.toArray(serializer);
 		} finally {
 			serializer.release();
 		}
@@ -132,7 +132,7 @@ public class SetRecipesPacket implements ClientboundPEPacket {
 				recipesData.writeBytes(recipeBuf);
 			}
 			recipesData.writeBoolean(true);
-			cachedRecipes = Utils.toArray(recipesData);
+			cachedRecipes = ChannelUtils.toArray(recipesData);
 		}
 		return cachedRecipes;
 	}

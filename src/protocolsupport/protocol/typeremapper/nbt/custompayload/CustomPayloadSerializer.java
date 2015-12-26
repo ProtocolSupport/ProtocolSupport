@@ -6,9 +6,9 @@ import net.minecraft.server.v1_8_R3.ItemStack;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.RecyclablePacketDataSerializer;
 import protocolsupport.protocol.typeremapper.nbt.custompayload.MerchantData.TradeOffer;
-import protocolsupport.utils.Allocator;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ChannelUtils;
 
 public class CustomPayloadSerializer {
 
@@ -19,7 +19,7 @@ public class CustomPayloadSerializer {
 	}
 
 	public CustomPayloadSerializer(ProtocolVersion version) {
-		this.serializer = new PacketDataSerializer(Allocator.allocateBuffer(), version);
+		this.serializer = RecyclablePacketDataSerializer.create(version);
 	}
 
 	public void copyAll(CustomPayloadSerializer another) {
@@ -68,7 +68,7 @@ public class CustomPayloadSerializer {
 
 	public byte[] toData() {
 		try {
-			return Utils.toArray(serializer);
+			return ChannelUtils.toArray(serializer);
 		} finally {
 			serializer.release();
 		}

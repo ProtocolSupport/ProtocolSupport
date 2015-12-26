@@ -8,8 +8,7 @@ import java.util.List;
 import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
-import protocolsupport.utils.PacketCreator;
-
+import protocolsupport.protocol.transformer.middlepacketimpl.PacketCreator;
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.Packet;
 
@@ -35,7 +34,7 @@ public class RemoveBlockPacket implements ServerboundPEPacket {
 
 	@Override
 	public List<? extends Packet<?>> transfrom() throws Exception {
-		PacketCreator creator = new PacketCreator(ServerBoundPacket.PLAY_BLOCK_DIG.get());
+		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_BLOCK_DIG.get());
 		creator.writeByte(2);
 		creator.a(new BlockPosition(x, y, z));
 		creator.writeByte(1);

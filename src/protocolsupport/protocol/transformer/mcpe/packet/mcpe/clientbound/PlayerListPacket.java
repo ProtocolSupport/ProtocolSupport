@@ -15,9 +15,9 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 public class PlayerListPacket implements ClientboundPEPacket {
 
 	protected int action; //0 - add, 1 - remove
-	protected ArrayList<PlayerListEntry> entries = new ArrayList<PlayerListEntry>();
+	protected ArrayList<PEPlayerListEntry> entries = new ArrayList<PEPlayerListEntry>();
 
-	public PlayerListPacket(boolean add, Collection<PlayerListEntry> players) {
+	public PlayerListPacket(boolean add, Collection<PEPlayerListEntry> players) {
 		this.action = add ? 0 : 1;
 		entries.addAll(players);
 	}
@@ -34,7 +34,7 @@ public class PlayerListPacket implements ClientboundPEPacket {
 		serializer.writeInt(entries.size());
 		switch (action) {
 			case 0: {
-				for (PlayerListEntry entry : entries) {
+				for (PEPlayerListEntry entry : entries) {
 					serializer.writeUUID(entry.uuid);
 					serializer.writeLong(-1);
 					serializer.writeString(entry.name);
@@ -44,7 +44,7 @@ public class PlayerListPacket implements ClientboundPEPacket {
 				break;
 			}
 			case 1: {
-				for (PlayerListEntry entry : entries) {
+				for (PEPlayerListEntry entry : entries) {
 					serializer.writeUUID(entry.uuid);
 				}
 				break;
@@ -56,14 +56,14 @@ public class PlayerListPacket implements ClientboundPEPacket {
 		return this;
 	}
 
-	public static class PlayerListEntry {
+	public static class PEPlayerListEntry {
 		protected UUID uuid;
 		protected String name;
-		public PlayerListEntry(UUID uuid, String name) {
+		public PEPlayerListEntry(UUID uuid, String name) {
 			this.uuid = uuid;
 			this.name = name;
 		}
-		public PlayerListEntry(UUID uuid) {
+		public PEPlayerListEntry(UUID uuid) {
 			this.uuid = uuid;
 		}
 	}

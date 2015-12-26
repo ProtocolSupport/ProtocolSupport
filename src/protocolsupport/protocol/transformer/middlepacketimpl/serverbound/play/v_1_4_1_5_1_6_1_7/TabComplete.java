@@ -8,6 +8,7 @@ public class TabComplete extends MiddleTabComplete {
 	@Override
 	public void readFromClientData(PacketDataSerializer serializer) {
 		string = serializer.readString(Short.MAX_VALUE);
+		position = null;
 	}
 
 }

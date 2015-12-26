@@ -11,7 +11,7 @@ import net.minecraft.server.v1_8_R3.PacketPlayInUseEntity.EnumEntityUseAction;
 import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
-import protocolsupport.utils.PacketCreator;
+import protocolsupport.protocol.transformer.middlepacketimpl.PacketCreator;
 
 public class UseEntityPacket implements ServerboundPEPacket {
 
@@ -32,7 +32,7 @@ public class UseEntityPacket implements ServerboundPEPacket {
 
 	@Override
 	public List<? extends Packet<?>> transfrom() throws Exception {
-		PacketCreator creator = new PacketCreator(ServerBoundPacket.PLAY_USE_ENTITY.get());
+		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_USE_ENTITY.get());
 		creator.writeVarInt((int) targetId);
 		creator.a(EnumEntityUseAction.ATTACK);
 		return Collections.singletonList(creator.create());

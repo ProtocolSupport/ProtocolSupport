@@ -8,13 +8,15 @@ import net.minecraft.server.v1_8_R3.EnumProtocol;
 public class PacketIdTransformerRegistry {
 
 	private final EnumMap<EnumProtocol, int[]> registry = new EnumMap<>(EnumProtocol.class);
-
-	public void register(EnumProtocol protocol, int packetId, int newPacketId) {
-		if (!registry.containsKey(protocol)) {
+	{
+		for (EnumProtocol protocol : EnumProtocol.values()) {
 			int[] newIds = new int[256];
 			Arrays.fill(newIds, -1);
 			registry.put(protocol, newIds);
 		}
+	}
+
+	public void register(EnumProtocol protocol, int packetId, int newPacketId) {
 		registry.get(protocol)[packetId] = newPacketId;
 	}
 

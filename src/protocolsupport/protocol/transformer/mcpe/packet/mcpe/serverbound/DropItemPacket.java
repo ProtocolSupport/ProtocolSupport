@@ -13,7 +13,7 @@ import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
-import protocolsupport.utils.PacketCreator;
+import protocolsupport.protocol.transformer.middlepacketimpl.PacketCreator;
 
 public class DropItemPacket implements ServerboundPEPacket {
 
@@ -32,7 +32,7 @@ public class DropItemPacket implements ServerboundPEPacket {
 
 	@Override
 	public List<? extends Packet<?>> transfrom() throws Exception {
-		PacketCreator creator = new PacketCreator(ServerBoundPacket.PLAY_BLOCK_DIG.get());
+		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_BLOCK_DIG.get());
 		creator.writeByte(3);
 		creator.a(BlockPosition.ZERO);
 		creator.writeByte(0);

@@ -12,7 +12,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.DualPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
-import protocolsupport.utils.PacketCreator;
+import protocolsupport.protocol.transformer.middlepacketimpl.PacketCreator;
 
 public class AnimatePacket implements DualPEPacket {
 
@@ -48,7 +48,7 @@ public class AnimatePacket implements DualPEPacket {
 
 	@Override
 	public List<? extends Packet<?>> transfrom() throws Exception {
-		return Collections.singletonList(new PacketCreator(ServerBoundPacket.PLAY_ANIMATION.get()).create());
+		return Collections.singletonList(PacketCreator.create(ServerBoundPacket.PLAY_ANIMATION.get()).create());
 	}
 
 }

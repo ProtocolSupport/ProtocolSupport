@@ -1,20 +1,19 @@
 package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_7;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleSpawnObject;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
+import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableEmptyList;
+import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class SpawnObject extends MiddleSpawnObject<Collection<PacketData>> {
+public class SpawnObject extends MiddleSpawnObject<RecyclableCollection<PacketData>> {
 
 	@Override
-	public Collection<PacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
 		if (type == 78) { //skip armor stands
-			return Collections.emptyList();
+			return RecyclableEmptyList.get();
 		}
 		if (type == 71) {
 			switch (objectdata) {
@@ -48,7 +47,7 @@ public class SpawnObject extends MiddleSpawnObject<Collection<PacketData>> {
 		if ((type == 50) || (type == 70) || (type == 74)) {
 			y += 16;
 		}
-		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_SPAWN_OBJECT_ID, version);
 		serializer.writeVarInt(entityId);
 		serializer.writeByte(type);
 		serializer.writeInt(x);
@@ -62,7 +61,7 @@ public class SpawnObject extends MiddleSpawnObject<Collection<PacketData>> {
 			serializer.writeShort(motY);
 			serializer.writeShort(motZ);
 		}
-		return Collections.singletonList(new PacketData(ClientBoundPacket.PLAY_SPAWN_OBJECT_ID, serializer));
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

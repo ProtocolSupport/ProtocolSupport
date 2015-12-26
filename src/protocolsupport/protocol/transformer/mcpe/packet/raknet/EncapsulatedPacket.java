@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.utils.ChannelUtils;
 import protocolsupport.utils.Utils;
 
 public class EncapsulatedPacket {
@@ -27,7 +28,7 @@ public class EncapsulatedPacket {
 
 	public EncapsulatedPacket(ByteBuf data) {
 		this.reliability = 0;
-		this.data = Utils.toArray(data);
+		this.data = ChannelUtils.toArray(data);
 	}
 
 	public EncapsulatedPacket(ByteBuf data, int splitID, int splitCount, int splitIndex) {
@@ -89,7 +90,7 @@ public class EncapsulatedPacket {
 			splitIndex = serializer.readInt();
 		}
 
-		data = Utils.toArray(serializer.readBytes(length));
+		data = ChannelUtils.toArray(serializer.readBytes(length));
 	}
 
 	public void encode(ByteBuf buf) {

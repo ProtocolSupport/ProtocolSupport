@@ -9,7 +9,7 @@ import java.util.List;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import protocolsupport.protocol.core.IPacketDecoder;
 import protocolsupport.protocol.storage.ProtocolStorage;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ChannelUtils;
 
 public class WrappedDecoder extends ByteToMessageDecoder {
 
@@ -32,7 +32,7 @@ public class WrappedDecoder extends ByteToMessageDecoder {
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		super.channelInactive(ctx);
 		try {
-			ProtocolStorage.clearData(Utils.getNetworkManagerSocketAddress(ctx.channel()));
+			ProtocolStorage.clearData(ChannelUtils.getNetworkManagerSocketAddress(ctx.channel()));
 		} catch (Throwable t) {
 			if (MinecraftServer.getServer().isDebugging()) {
 				t.printStackTrace();

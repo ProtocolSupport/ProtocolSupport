@@ -1,18 +1,17 @@
 package protocolsupport.protocol.transformer.v_1_5;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.AttributeKey;
 
 import java.io.IOException;
-import java.util.Collection;
 
 import org.spigotmc.SneakyThrow;
 
 import net.minecraft.server.v1_8_R3.EnumProtocol;
 import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
-import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.NetworkManager;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketListener;
@@ -25,6 +24,7 @@ import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.login.v_1_4_1_5_1_6.LoginDisconnect;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.login.v_1_4_1_5_1_6_1_7.EncryptionRequest;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v1_5_1_6_1_7.InventoryOpen;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v1_5_1_6_1_7.ScoreboardObjective;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v1_5_1_6_1_7.ScoreboardScore;
@@ -74,18 +74,25 @@ import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.EntityMetadata;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.EntityRelMove;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.EntityRelMoveLook;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.EntityStatus;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.EntityVelocity;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.InventoryClose;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.InventoryConfirmTransaction;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.InventoryData;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.InventorySetItems;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.InventorySetSlot;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.KeepAlive;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.PlayerInfo;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.ScoreboardDisplay;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.SetExperience;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.TimeUpdate;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.WorldEvent;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.status.v_1_5_1_6.ServerInfo;
 import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry;
 import protocolsupport.protocol.transformer.utils.registry.PacketIdTransformerRegistry;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.Allocator;
+import protocolsupport.utils.ChannelUtils;
+import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class PacketEncoder implements IPacketEncoder {
 
@@ -160,14 +167,17 @@ public class PacketEncoder implements IPacketEncoder {
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID, 0xFA);
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_KICK_DISCONNECT_ID, 0xFF);
 	}
-	private static final MiddleTransformerRegistry<ClientBoundMiddlePacket<Collection<PacketData>>> dataRemapperRegistry = new MiddleTransformerRegistry<>();
-	static {
+
+	private final MiddleTransformerRegistry<ClientBoundMiddlePacket<RecyclableCollection<PacketData>>> dataRemapperRegistry = new MiddleTransformerRegistry<>();
+	{
 		try {
 			dataRemapperRegistry.register(EnumProtocol.LOGIN, ClientBoundPacket.LOGIN_DISCONNECT_ID, LoginDisconnect.class);
+			dataRemapperRegistry.register(EnumProtocol.LOGIN, ClientBoundPacket.LOGIN_ENCRYPTION_BEGIN_ID, EncryptionRequest.class);
 			dataRemapperRegistry.register(EnumProtocol.STATUS, ClientBoundPacket.STATUS_SERVER_INFO_ID, ServerInfo.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_KEEP_ALIVE_ID, KeepAlive.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_LOGIN_ID, Login.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CHAT_ID, Chat.class);
+			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_UPDATE_TIME_ID, TimeUpdate.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_EQUIPMENT_ID, EntityEquipment.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SPAWN_POSITION_ID, SpawnPosition.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_UPDATE_HEALTH_ID, SetHealth.class);
@@ -190,6 +200,7 @@ public class PacketEncoder implements IPacketEncoder {
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_REL_MOVE_LOOK_ID, EntityRelMoveLook.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_TELEPORT_ID, EntityTeleport.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_HEAD_ROTATION_ID, EntityHeadRotation.class);
+			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_STATUS_ID, EntityStatus.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_ATTACH_ID, EntityAttach.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_METADATA_ID, EntityMetadata.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_EFFECT_ADD_ID, EntityEffectAdd.class);
@@ -208,9 +219,11 @@ public class PacketEncoder implements IPacketEncoder {
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_GAME_STATE_CHANGE_ID, GameStateChange.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SPAWN_WEATHER_ID, SpawnGlobal.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_WINDOW_OPEN_ID, InventoryOpen.class);
+			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_WINDOW_CLOSE_ID, InventoryClose.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_WINDOW_SET_SLOT_ID, InventorySetSlot.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_WINDOW_SET_ITEMS_ID, InventorySetItems.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_WINDOW_DATA_ID, InventoryData.class);
+			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_WINDOW_TRANSACTION_ID, InventoryConfirmTransaction.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_UPDATE_SIGN_ID, BlockSignUpdate.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_MAP_ID, Map.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_UPDATE_TILE_ID, BlockTileUpdate.class);
@@ -219,6 +232,7 @@ public class PacketEncoder implements IPacketEncoder {
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_TAB_COMPLETE_ID, TabComplete.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SCOREBOARD_OBJECTIVE_ID, ScoreboardObjective.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SCOREBOARD_SCORE_ID, ScoreboardScore.class);
+			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SCOREBOARD_DISPLAY_SLOT_ID, ScoreboardDisplay.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SCOREBOARD_TEAM_ID, ScoreboardTeam.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID, CustomPayload.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_KICK_DISCONNECT_ID, KickDisconnect.class);
@@ -233,6 +247,7 @@ public class PacketEncoder implements IPacketEncoder {
 	}
 
 	private final LocalStorage storage = new LocalStorage();
+	private final PacketDataSerializer serverdata = new PacketDataSerializer(Unpooled.buffer(), ProtocolVersion.getLatest());
 
 	@Override
 	public void encode(ChannelHandlerContext ctx, Packet<PacketListener> packet, ByteBuf output) throws Exception {
@@ -242,47 +257,30 @@ public class PacketEncoder implements IPacketEncoder {
 		if (packetId == null) {
 			throw new IOException("Can't serialize unregistered packet");
 		}
-		ClientBoundMiddlePacket<Collection<PacketData>> packetTransformer = dataRemapperRegistry.getTransformer(currentProtocol, packetId);
-		try {
-			if (packetTransformer != null) {
-				PacketDataSerializer serverdata = PacketDataSerializer.createNew(ProtocolVersion.getLatest());
-				packet.b(serverdata);
-				try {
-					if (packetTransformer.needsPlayer()) {
-						packetTransformer.setPlayer(Utils.getBukkitPlayer(channel));
-					}
-					packetTransformer.readFromServerData(serverdata);
-					packetTransformer.handle(storage);
-					Collection<PacketData> data = packetTransformer.toData(version);
-					try {
-						for (PacketData packetdata : data) {
-							PacketDataSerializer singlepacketdata = PacketDataSerializer.createNew(version);
-							singlepacketdata.writeByte(packetIdRegistry.getNewPacketId(currentProtocol, packetdata.getPacketId()));
-							singlepacketdata.writeBytes(packetdata.getData());
-							ctx.write(singlepacketdata);
-						}
-						ctx.flush();
-					} finally {
-						for (PacketData packetdata : data) {
-							packetdata.getData().release();
-						}
-					}
-				} finally {
-					serverdata.release();
-				}
-			} else {
-				int newPacketId = packetIdRegistry.getNewPacketId(currentProtocol, packetId);
-				if (newPacketId != -1) {
-					PacketDataSerializer outserializer = new PacketDataSerializer(output, version);
-					outserializer.writeByte(newPacketId);
-					packet.b(outserializer);
-				}
+		ClientBoundMiddlePacket<RecyclableCollection<PacketData>> packetTransformer = dataRemapperRegistry.getTransformer(currentProtocol, packetId);
+		if (packetTransformer != null) {
+			serverdata.clear();
+			packet.b(serverdata);
+			if (packetTransformer.needsPlayer()) {
+				packetTransformer.setPlayer(ChannelUtils.getBukkitPlayer(channel));
 			}
-		} catch (Throwable t) {
-			if (MinecraftServer.getServer().isDebugging()) {
-				t.printStackTrace();
+			packetTransformer.readFromServerData(serverdata);
+			packetTransformer.handle(storage);
+			RecyclableCollection<PacketData> data = packetTransformer.toData(version);
+			try {
+				for (PacketData packetdata : data) {
+					ByteBuf senddata = Allocator.allocateBuffer();
+					senddata.writeByte(packetIdRegistry.getNewPacketId(currentProtocol, packetdata.getPacketId()));
+					senddata.writeBytes(packetdata);
+					ctx.write(senddata);
+				}
+				ctx.flush();
+			} finally {
+				for (PacketData packetdata : data) {
+					packetdata.recycle();
+				}
+				data.recycle();
 			}
-			throw t;
 		}
 	}
 

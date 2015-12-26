@@ -7,7 +7,7 @@ import net.minecraft.server.v1_8_R3.NBTCompressedStreamTools;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 
 import protocolsupport.utils.Allocator;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ChannelUtils;
 
 public class TileEntityUtils {
 
@@ -42,7 +42,7 @@ public class TileEntityUtils {
 		ByteBuf buf = Allocator.allocateBuffer();
 		try {
 			NBTCompressedStreamTools.a(tag, new PEDataOutput(buf));
-			return Utils.toArray(buf);
+			return ChannelUtils.toArray(buf);
 		} catch (Throwable ioexception) {
 			throw new EncoderException(ioexception);
 		} finally {

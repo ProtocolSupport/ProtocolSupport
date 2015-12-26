@@ -14,8 +14,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.DualPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
-import protocolsupport.utils.PacketCreator;
-
+import protocolsupport.protocol.transformer.middlepacketimpl.PacketCreator;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketListener;
 import net.minecraft.server.v1_8_R3.PacketPlayInKeepAlive;
@@ -61,7 +60,7 @@ public class PingPacket implements DualPEPacket {
 
 	private PacketPlayInKeepAlive getPlayKeepAlive() {
 		try {
-			PacketCreator creator = new PacketCreator(ServerBoundPacket.PLAY_KEEP_ALIVE.get());
+			PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_KEEP_ALIVE.get());
 			creator.writeVarInt((int) pingId);
 			return (PacketPlayInKeepAlive) creator.create();
 		} catch (Throwable e) {

@@ -1,22 +1,20 @@
 package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleAnimation;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
+import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class Animation extends MiddleAnimation<Collection<PacketData>> {
+public class Animation extends MiddleAnimation<RecyclableCollection<PacketData>> {
 
 	@Override
-	public Collection<PacketData> toData(ProtocolVersion version) {
-		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
+	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_ANIMATION_ID, version);
 		serializer.writeInt(entityId);
 		serializer.writeByte(animation + 1);
-		return Collections.singletonList(new PacketData(ClientBoundPacket.PLAY_ANIMATION_ID, serializer));
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

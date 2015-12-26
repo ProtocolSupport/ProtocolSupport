@@ -42,7 +42,7 @@ public class CompressionUtils {
 	}
 
 	public static ByteBuf compress(ByteBuf input) throws IOException {
-		return Unpooled.wrappedBuffer(compress(Utils.toArray(input)));
+		return Unpooled.wrappedBuffer(compress(ChannelUtils.toArray(input)));
 	}
 
 }

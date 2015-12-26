@@ -14,8 +14,8 @@ import net.minecraft.server.v1_8_R3.ItemStack;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.utils.Allocator;
+import protocolsupport.utils.ChannelUtils;
 import protocolsupport.utils.DataWatcherObject;
-import protocolsupport.utils.Utils;
 
 public class PEDataWatcherSerializer {
 
@@ -71,7 +71,7 @@ public class PEDataWatcherSerializer {
 				}
 			}
 			bufferLE.writeByte(127);
-			return Utils.toArray(bufferLE);
+			return ChannelUtils.toArray(bufferLE);
 		} finally {
 			bufferLE.release();
 		}

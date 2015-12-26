@@ -18,7 +18,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.core.ChannelHandlers;
 import protocolsupport.protocol.core.IPipeLineBuilder;
 import protocolsupport.protocol.storage.ProtocolStorage;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ChannelUtils;
 
 public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
@@ -110,7 +110,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 							scheduleTask(ctx, new Ping152ResponseTask(this, channel), ping152delay, TimeUnit.MILLISECONDS);
 						} else if (
 							(receivedData.readUnsignedByte() == 0xFA) &&
-							"MC|PingHost".equals(new String(Utils.toArray(receivedData.readBytes(receivedData.readUnsignedShort() * 2)), StandardCharsets.UTF_16BE))
+							"MC|PingHost".equals(new String(ChannelUtils.toArray(receivedData.readBytes(receivedData.readUnsignedShort() * 2)), StandardCharsets.UTF_16BE))
 						) { //1.6.*
 							receivedData.readUnsignedShort();
 							handshakeversion = ProtocolVersion.fromId(receivedData.readUnsignedByte());
@@ -150,9 +150,9 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		}
 		protocolSet = true;
 		if (MinecraftServer.getServer().isDebugging()) {
-			System.out.println(Utils.getNetworkManagerSocketAddress(channel)+ " connected with protocol version "+version);
+			System.out.println(ChannelUtils.getNetworkManagerSocketAddress(channel)+ " connected with protocol version "+version);
 		}
-		ProtocolStorage.setProtocolVersion(Utils.getNetworkManagerSocketAddress(channel), version);
+		ProtocolStorage.setProtocolVersion(ChannelUtils.getNetworkManagerSocketAddress(channel), version);
 		channel.pipeline().remove(ChannelHandlers.INITIAL_DECODER);
 		pipelineBuilders.get(version).buildPipeLine(channel, version);
 		input.readerIndex(0);
@@ -161,8 +161,8 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
 	@SuppressWarnings("deprecation")
 	private static ProtocolVersion readNPHandshake(ByteBuf data) {
-		if (readVarInt(data) == 0x00) {
-			return ProtocolVersion.fromId(readVarInt(data));
+		if (ChannelUtils.readVarInt(data) == 0x00) {
+			return ProtocolVersion.fromId(ChannelUtils.readVarInt(data));
 		}
 		return ProtocolVersion.UNKNOWN;
 	}
@@ -175,7 +175,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 			}
 			array[i] = byteBuf.readByte();
 			if (array[i] >= 0) {
-				final int length = readVarInt(Unpooled.wrappedBuffer(array));
+				final int length = ChannelUtils.readVarInt(Unpooled.wrappedBuffer(array));
 				if (byteBuf.readableBytes() < length) {
 					return null;
 				}
@@ -183,20 +183,6 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 			}
 		}
 		throw new CorruptedFrameException("Packet length is wider than 21 bit");
-	}
-
-	private static int readVarInt(ByteBuf data) {
-		int value = 0;
-		int length = 0;
-		byte b0;
-		do {
-			b0 = data.readByte();
-			value |= (b0 & 0x7F) << (length++ * 7);
-			if (length > 5) {
-				throw new RuntimeException("VarInt too big");
-			}
-		} while ((b0 & 0x80) == 0x80);
-		return value;
 	}
 
 }

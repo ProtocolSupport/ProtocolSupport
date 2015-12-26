@@ -43,24 +43,27 @@ import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
 import protocolsupport.protocol.typeskipper.id.SkippingTable;
 import protocolsupport.utils.Allocator;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ChannelUtils;
 
 import com.mojang.authlib.GameProfile;
 
-public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDataSerializer {
+public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDataSerializer {	private ProtocolVersion version;
 
-	public static PacketDataSerializer createNew(ProtocolVersion version) {
-		return new PacketDataSerializer(Allocator.allocateBuffer(), version);
-	}
-
-	private final ProtocolVersion version;
 	public PacketDataSerializer(ByteBuf buf, ProtocolVersion version) {
-		super(buf);
+		this(buf);
 		this.version = version;
 	}
 
 	public ProtocolVersion getVersion() {
 		return version;
+	}
+
+	protected PacketDataSerializer(ByteBuf buf) {
+		super(buf);
+	}
+
+	protected void setVersion(ProtocolVersion version) {
+		this.version = version;
 	}
 
 	@Override
@@ -123,7 +126,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 			if (nbttagcompound == null) {
 				writeShort(-1);
 			} else {
-				final byte[] abyte = write(nbttagcompound);
+				byte[] abyte = write(nbttagcompound);
 				writeShort(abyte.length);
 				writeBytes(abyte);
 			}
@@ -238,9 +241,9 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 	@Override
 	public String c(int limit) {
 		if (getVersion() == ProtocolVersion.MINECRAFT_PE) {
-			return new String(Utils.toArray(readBytes(readUnsignedShort())), StandardCharsets.UTF_8);
+			return new String(ChannelUtils.toArray(readBytes(readUnsignedShort())), StandardCharsets.UTF_8);
 		} else if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4)) {
-			return new String(Utils.toArray(readBytes(readUnsignedShort() * 2)), StandardCharsets.UTF_16BE);
+			return new String(ChannelUtils.toArray(readBytes(readUnsignedShort() * 2)), StandardCharsets.UTF_16BE);
 		} else {
 			return super.c(limit);
 		}
@@ -343,7 +346,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 
 	public void writeTag(NBTTagCompound tag) {
 		a(tag);
-	} 
+	}
 
 	private static NBTTagCompound read(final byte[] data, final NBTReadLimiter nbtreadlimiter) {
 		try {

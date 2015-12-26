@@ -19,6 +19,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage;
+import protocolsupport.protocol.storage.LocalStorage.PlayerListEntry;
 import protocolsupport.protocol.transformer.mcpe.PEStorage;
 import protocolsupport.protocol.transformer.mcpe.PEStorage.ItemInfo;
 import protocolsupport.protocol.transformer.mcpe.PEPlayerInventory;
@@ -43,7 +44,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.Contain
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.MoveEntityPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PickupItemEffectPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PlayerListPacket;
-import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PlayerListPacket.PlayerListEntry;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PlayerListPacket.PEPlayerListEntry;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.RemoveEntityPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.RemovePlayerPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.RespawnPacket;
@@ -78,6 +79,7 @@ import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedLiving;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedObject;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
 import protocolsupport.utils.Allocator;
+import protocolsupport.utils.ChannelUtils;
 import protocolsupport.utils.DataWatcherObject;
 import protocolsupport.utils.DataWatcherSerializer;
 import protocolsupport.utils.Utils;
@@ -163,7 +165,7 @@ public class ClientBoundPacketHandler {
 				}
 				case ClientBoundPacket.PLAY_LOGIN_ID: {
 					//use this packet to sent needed login packets
-					Player bukkitplayer = Utils.getPlayer(networkManager).getBukkitEntity();
+					Player bukkitplayer = ChannelUtils.getPlayer(networkManager).getBukkitEntity();
 					storage.addWatchedSelfPlayer(new WatchedPlayer(bukkitplayer.getEntityId()));
 					return Arrays.asList(
 						new StartGamePacket(
@@ -198,13 +200,13 @@ public class ClientBoundPacketHandler {
 						new AttributeRecord("player.hunger", 0.0F, 20.0F, food)
 					));
 					if (health <= 0.0F) {
-						Location location = Utils.getPlayer(networkManager).getBukkitEntity().getWorld().getSpawnLocation();
+						Location location = ChannelUtils.getPlayer(networkManager).getBukkitEntity().getWorld().getSpawnLocation();
 						packets.add(new RespawnPacket((float) location.getX(), (float) location.getY(), (float) location.getZ()));
 					}
 					return packets;
 				}
 				case ClientBoundPacket.PLAY_POSITION_ID: {
-					EntityPlayer player = Utils.getPlayer(networkManager);
+					EntityPlayer player = ChannelUtils.getPlayer(networkManager);
 					double x = packetdata.readDouble();
 					double y = packetdata.readDouble();
 					double z = packetdata.readDouble();
@@ -247,13 +249,19 @@ public class ClientBoundPacketHandler {
 					float yaw = packetdata.readByte() * 360.0F / 256.0F;
 					float pitch = packetdata.readByte() * 360.0F / 256.0F;
 					packetdata.readShort();
-					String username = storage.getPlayerListName(uuid);
+					String username = null;
+					PlayerListEntry entry = storage.getPlayerListEntry(uuid);
+					if (entry != null) {
+						username = entry.getName();
+					} else {
+						username = "Unknown";
+					}
 					return Collections.singletonList(new AddPlayerPacket(
 						uuid, username, entityId,
 						locX, locY, locZ, yaw, pitch,
 						WatchedDataRemapper.transform(
 							storage.getWatchedEntity(entityId),
-							DataWatcherSerializer.decodeData(ProtocolVersion.getLatest(), Utils.toArray(packetdata)),
+							DataWatcherSerializer.decodeData(ProtocolVersion.getLatest(), ChannelUtils.toArray(packetdata)),
 							ProtocolVersion.MINECRAFT_PE
 						)
 					));
@@ -328,7 +336,7 @@ public class ClientBoundPacketHandler {
 							entityId, petype, x, y, z, yaw, pitch, speedX, speedY, speedZ,
 							WatchedDataRemapper.transform(
 								storage.getWatchedEntity(entityId),
-								DataWatcherSerializer.decodeData(ProtocolVersion.getLatest(), Utils.toArray(packetdata)),
+								DataWatcherSerializer.decodeData(ProtocolVersion.getLatest(), ChannelUtils.toArray(packetdata)),
 								ProtocolVersion.MINECRAFT_PE
 							)
 						));
@@ -387,7 +395,7 @@ public class ClientBoundPacketHandler {
 				case ClientBoundPacket.PLAY_ENTITY_REL_MOVE_LOOK_ID:
 				case ClientBoundPacket.PLAY_ENTITY_LOOK_ID: {
 					int entityId = packetdata.readVarInt();
-					Entity entity = Utils.getPlayer(networkManager).world.a(entityId);
+					Entity entity = ChannelUtils.getPlayer(networkManager).world.a(entityId);
 					if (entity != null) {
 						if (entity instanceof EntityPlayer) {
 							return Collections.singletonList(new MovePlayerPacket(
@@ -431,7 +439,7 @@ public class ClientBoundPacketHandler {
 					int entityId = packetdata.readVarInt();
 					ItemInfo info = pestorage.getItemInfo(entityId);
 					if (info != null) {
-						TIntObjectMap<DataWatcherObject> metadata = DataWatcherSerializer.decodeData(ProtocolVersion.MINECRAFT_1_8, Utils.toArray(packetdata));
+						TIntObjectMap<DataWatcherObject> metadata = DataWatcherSerializer.decodeData(ProtocolVersion.MINECRAFT_1_8, ChannelUtils.toArray(packetdata));
 						if (metadata.containsKey(10)) {
 							return Collections.singletonList(new AddItemEntityPacket(
 								entityId, (float) info.getX(), (float) info.getY(), (float) info.getZ(),
@@ -443,7 +451,7 @@ public class ClientBoundPacketHandler {
 							entityId,
 							WatchedDataRemapper.transform(
 								storage.getWatchedEntity(entityId),
-								DataWatcherSerializer.decodeData(ProtocolVersion.getLatest(), Utils.toArray(packetdata)),
+								DataWatcherSerializer.decodeData(ProtocolVersion.getLatest(), ChannelUtils.toArray(packetdata)),
 								ProtocolVersion.MINECRAFT_PE
 							)
 						));
@@ -455,7 +463,7 @@ public class ClientBoundPacketHandler {
 					int z = packetdata.readInt();
 					boolean cont = packetdata.readBoolean();
 					int mask = packetdata.readShort();
-					Chunk chunk = Utils.getPlayer(networkManager).getWorld().getChunkIfLoaded(x, z);
+					Chunk chunk = ChannelUtils.getPlayer(networkManager).getWorld().getChunkIfLoaded(x, z);
 					if (chunk != null && !(cont && mask == 0)) {
 						loadedChunkCount++;
 						return Collections.singletonList(new ChunkPacket(chunk));
@@ -494,7 +502,7 @@ public class ClientBoundPacketHandler {
 				}
 				case ClientBoundPacket.PLAY_CHUNK_MULTI_ID: {
 					packetdata.readBoolean();
-					World world = Utils.getPlayer(networkManager).getWorld();
+					World world = ChannelUtils.getPlayer(networkManager).getWorld();
 					ArrayList<ClientboundPEPacket> packets = new ArrayList<ClientboundPEPacket>();
 					int count = packetdata.readVarInt();
 					for (int i = 0; i < count; i++) {
@@ -519,7 +527,7 @@ public class ClientBoundPacketHandler {
 						if (slot >= 9 && slot < 45) {
 							return Collections.singletonList(new ContainerSetSlotPacket(
 								PEPlayerInventory.PLAYER_INVENTORY_WID, slot - 9,
-								((PEPlayerInventory) Utils.getPlayer(networkManager).inventory).getHotbarSlotFor(slot), itemstack
+								((PEPlayerInventory) ChannelUtils.getPlayer(networkManager).inventory).getHotbarSlotFor(slot), itemstack
 							));
 						} else if (slot >= 5 && slot < 9) {
 							return Collections.singletonList(new ContainerSetSlotPacket(PEPlayerInventory.PLAYER_ARMOR_WID, slot - 5, itemstack));
@@ -530,7 +538,7 @@ public class ClientBoundPacketHandler {
 					return Collections.emptyList();
 				}
 				case ClientBoundPacket.PLAY_WINDOW_SET_ITEMS_ID: {
-					EntityPlayer player = Utils.getPlayer(networkManager);
+					EntityPlayer player = ChannelUtils.getPlayer(networkManager);
 					int windowId = packetdata.readByte();
 					ItemStack[] packetitems = new ItemStack[packetdata.readShort()];
 					for (int i = 0; i < packetitems.length; i++) {
@@ -558,7 +566,7 @@ public class ClientBoundPacketHandler {
 					}
 				}
 				case ClientBoundPacket.PLAY_WINDOW_OPEN_ID: {
-					EntityPlayer player = Utils.getPlayer(networkManager);
+					EntityPlayer player = ChannelUtils.getPlayer(networkManager);
 					int x = NumberConversions.floor(player.locX);
 					int z = NumberConversions.floor(player.locZ);
 					int windowId = packetdata.readByte();
@@ -572,17 +580,17 @@ public class ClientBoundPacketHandler {
 						packets.add(new ContainerOpenPacket(windowId, type, slots, x, 0, z));
 						return packets;
 					} else {
-						Utils.getPlayer(networkManager).closeInventory();
+						ChannelUtils.getPlayer(networkManager).closeInventory();
 						return Collections.emptyList();
 					}
 				}
 				case ClientBoundPacket.PLAY_WINDOW_CLOSE_ID: {
-					final EntityPlayer player = Utils.getPlayer(networkManager);
+					final EntityPlayer player = ChannelUtils.getPlayer(networkManager);
 					ArrayList<ClientboundPEPacket> packets = new ArrayList<>();
 					BlockPosition position = pestorage.getFakeInventoryBlock();
 					if (position != null) {
 						pestorage.clearFakeInventoryBlock();
-						World world = Utils.getPlayer(networkManager).getWorld();
+						World world = ChannelUtils.getPlayer(networkManager).getWorld();
 						if (world.isLoaded(position)) {
 							IBlockData block = world.getType(position);
 							packets.add(new SetBlocksPacket(new UpdateBlockRecord(
@@ -611,7 +619,8 @@ public class ClientBoundPacketHandler {
 						switch (action) {
 							case 0: {
 								String username = packetdata.readString(16);
-								storage.addPlayerListName(uuid, username);
+								PlayerListEntry entry = new PlayerListEntry(username);
+								storage.addPlayerListEntry(uuid, entry);
 								int props = packetdata.readVarInt();
 								for (int p = 0; p < props; p++) {
 									packetdata.readString(32767);
@@ -628,7 +637,7 @@ public class ClientBoundPacketHandler {
 								break;
 							}
 							case 4: {
-								storage.removePlayerListName(uuid);
+								storage.removePlayerListEntry(uuid);
 								break;
 							}
 							case 1: {
@@ -649,16 +658,23 @@ public class ClientBoundPacketHandler {
 					}
 					switch (action) {
 						case 4: {
-							ArrayList<PlayerListEntry> entries = new ArrayList<PlayerListEntry>();
+							ArrayList<PEPlayerListEntry> entries = new ArrayList<PEPlayerListEntry>();
 							for (UUID uuid : uuids) {
-								entries.add(new PlayerListEntry(uuid));
+								entries.add(new PEPlayerListEntry(uuid));
 							}
 							return Collections.singletonList(new PlayerListPacket(false, entries));
 						}
 						case 0: {
-							ArrayList<PlayerListEntry> entries = new ArrayList<PlayerListEntry>();
+							ArrayList<PEPlayerListEntry> entries = new ArrayList<PEPlayerListEntry>();
 							for (UUID uuid : uuids) {
-								entries.add(new PlayerListEntry(uuid, storage.getPlayerListName(uuid)));
+								String username = null;
+								PlayerListEntry entry = storage.getPlayerListEntry(uuid);
+								if (entry != null) {
+									username = entry.getName();
+								} else {
+									username = "Unknown";
+								}
+								entries.add(new PEPlayerListEntry(uuid, username));
 							}
 							return Collections.singletonList(new PlayerListPacket(true, entries));
 						}
@@ -759,7 +775,7 @@ public class ClientBoundPacketHandler {
 					);
 				}
 				case ClientBoundPacket.PLAY_RESPAWN_ID: {
-					Player bukkitplayer = Utils.getPlayer(networkManager).getBukkitEntity();
+					Player bukkitplayer = ChannelUtils.getPlayer(networkManager).getBukkitEntity();
 					return Collections.singletonList(new StartGamePacket(
 						bukkitplayer.getWorld().getEnvironment().getId(),
 						bukkitplayer.getGameMode().getValue(),

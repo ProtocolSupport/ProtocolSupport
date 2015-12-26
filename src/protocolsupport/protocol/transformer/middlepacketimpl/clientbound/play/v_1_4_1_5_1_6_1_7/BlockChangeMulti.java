@@ -1,22 +1,20 @@
 package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleBlockChangeMulti;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.RemappingTable;
+import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class BlockChangeMulti extends MiddleBlockChangeMulti<Collection<PacketData>> {
+public class BlockChangeMulti extends MiddleBlockChangeMulti<RecyclableCollection<PacketData>> {
 
 	@Override
-	public Collection<PacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
 		RemappingTable remapper = IdRemapper.BLOCK.getTable(version);
-		PacketDataSerializer serializer = PacketDataSerializer.createNew(version);
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_BLOCK_CHANGE_MULTI_ID, version);
 		serializer.writeInt(chunkX);
 		serializer.writeInt(chunkZ);
 		serializer.writeShort(records.length);
@@ -26,7 +24,7 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti<Collection<PacketDa
 			int id = record.id;
 			serializer.writeShort((remapper.getRemap(id >> 4) << 4) | (id & 0xF));
 		}
-		return Collections.singletonList(new PacketData(ClientBoundPacket.PLAY_BLOCK_CHANGE_MULTI_ID, serializer));
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

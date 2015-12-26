@@ -4,9 +4,12 @@ import java.util.UUID;
 
 import com.mojang.authlib.properties.Property;
 
+import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage;
+import protocolsupport.protocol.storage.LocalStorage.PlayerListEntry;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
+import protocolsupport.protocol.transformer.utils.LegacyUtils;
 
 public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {
 
@@ -65,13 +68,34 @@ public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {
 	@Override
 	public void handle(LocalStorage storage) {
 		for (Info info : infos) {
-			if (action == Action.ADD) {
-				storage.addPlayerListName(info.uuid, info.username);
-				for (Property property : info.properties) {
-					storage.addPropertyData(info.uuid, property);
+			info.previousinfo = storage.getPlayerListEntry(info.uuid);
+			if (info.previousinfo != null) {
+				info.previousinfo = info.previousinfo.clone();
+			}
+			switch (action) {
+				case ADD: {
+					PlayerListEntry entry = new PlayerListEntry(info.username);
+					entry.setDisplayNameJson(info.displayNameJson);
+					for (Property property : info.properties) {
+						entry.getProperties().add(property);
+					}
+					storage.addPlayerListEntry(info.uuid, entry);
+					break;
 				}
-			} else {
-				info.username = storage.getPlayerListName(info.uuid);
+				case DISPLAY_NAME: {
+					PlayerListEntry entry = storage.getPlayerListEntry(info.uuid);
+					if (entry != null) {
+						entry.setDisplayNameJson(info.displayNameJson);
+					}
+					break;
+				}
+				case REMOVE: {
+					storage.removePlayerListEntry(info.uuid);
+					break;
+				}
+				default: {
+					break;
+				}
 			}
 		}
 	}
@@ -82,11 +106,16 @@ public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {
 
 	protected static class Info {
 		public UUID uuid;
+		public PlayerListEntry previousinfo;
 		public String username;
-		public Property[] properties;
-		public int gamemode;
 		public int ping;
+		public int gamemode;
 		public String displayNameJson;
+		public Property[] properties;
+
+		public String getName() {
+			return displayNameJson == null ? username : LegacyUtils.toText(ChatSerializer.a(displayNameJson));
+		}
 	}
 
 }

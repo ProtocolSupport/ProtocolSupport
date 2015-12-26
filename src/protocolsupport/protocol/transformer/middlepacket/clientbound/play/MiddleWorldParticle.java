@@ -33,6 +33,7 @@ public abstract class MiddleWorldParticle<T> extends ClientBoundMiddlePacket<T> 
 		offZ = serializer.readFloat();
 		speed = serializer.readFloat();
 		count = serializer.readInt();
+		adddata.clear();
 		while (serializer.isReadable()) {
 			adddata.add(serializer.readVarInt());
 		}

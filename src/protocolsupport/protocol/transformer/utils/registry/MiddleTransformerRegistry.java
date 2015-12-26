@@ -1,35 +1,43 @@
 package protocolsupport.protocol.transformer.utils.registry;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.EnumMap;
-
 import net.minecraft.server.v1_8_R3.EnumProtocol;
 
-import protocolsupport.utils.Utils;
-
+@SuppressWarnings("unchecked")
 public class MiddleTransformerRegistry<T> {
 
-	private final EnumMap<EnumProtocol, Constructor<? extends T>[]> registry = new EnumMap<>(EnumProtocol.class);
+	private static final int enumProtocolLength = EnumProtocol.values().length;
 
-	@SuppressWarnings("unchecked")
-	public void register(EnumProtocol protocol, int packetId, Class<? extends T> packetTransformer) throws NoSuchMethodException, SecurityException {
-		if (!registry.containsKey(protocol)) {
-			registry.put(protocol, new Constructor[256]);
-		}
-		registry.get(protocol)[packetId] = Utils.setAccessible(packetTransformer.getConstructor());
+	private final LazyNewInstance<T>[] registry = new LazyNewInstance[enumProtocolLength * 256];
+
+	public void register(EnumProtocol protocol, int packetId, Class<? extends T> packetTransformer) {
+		registry[toKey(protocol, packetId)] = new LazyNewInstance<T>(packetTransformer);
 	}
 
-	public T getTransformer(EnumProtocol protocol, int packetId) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		Constructor<? extends T>[] transformers = registry.get(protocol);
-		if (transformers == null) {
+	public T getTransformer(EnumProtocol protocol, int packetId) throws InstantiationException, IllegalAccessException {
+		LazyNewInstance<T> transformer = registry[toKey(protocol, packetId)];
+		if (transformer == null) {
 			return null;
 		}
-		Constructor<? extends T> constructor = transformers[packetId];
-		if (constructor == null) {
-			return null;
+		return transformer.getInstance();
+	}
+
+	private static class LazyNewInstance<T> {
+		private final Class<? extends T> clazz;
+		public LazyNewInstance(Class<? extends T> clazz) {
+			this.clazz = clazz;
 		}
-		return constructor.newInstance();
+
+		private T instance;
+		public T getInstance() throws InstantiationException, IllegalAccessException {
+			if (instance == null) {
+				instance = clazz.newInstance();
+			}
+			return instance;
+		}
+	}
+
+	static int toKey(EnumProtocol protocol, int packetId) {
+		return (protocol.ordinal() << 8) | packetId;
 	}
 
 }
