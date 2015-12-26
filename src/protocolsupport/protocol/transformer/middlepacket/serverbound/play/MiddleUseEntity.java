@@ -15,11 +15,11 @@ public abstract class MiddleUseEntity extends ServerBoundMiddlePacket {
 	protected int action;
 
 	@Override
-	public RecyclableCollection<Packet<?>> toNative() throws Exception {
+	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
 		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_USE_ENTITY.get());
 		creator.writeVarInt(entityId);
 		creator.writeVarInt(action % PacketPlayInUseEntity.EnumEntityUseAction.values().length);
-		return RecyclableSingletonList.<Packet<?>>create(creator.create());
+		return RecyclableSingletonList.create(creator.create());
 	}
 
 }

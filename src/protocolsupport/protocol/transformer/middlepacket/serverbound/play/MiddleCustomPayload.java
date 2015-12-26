@@ -14,11 +14,11 @@ public abstract class MiddleCustomPayload extends ServerBoundMiddlePacket {
 	protected byte[] data;
 
 	@Override
-	public RecyclableCollection<Packet<?>> toNative() throws Exception {
+	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
 		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_CUSTOM_PAYLOAD.get());
 		creator.writeString(tag);
 		creator.writeBytes(data);
-		return RecyclableSingletonList.<Packet<?>>create(creator.create());
+		return RecyclableSingletonList.create(creator.create());
 	}
 
 }

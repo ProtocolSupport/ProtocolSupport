@@ -18,7 +18,7 @@ public abstract class MiddlePositionLook extends ServerBoundMiddlePacket {
 	protected boolean onGround;
 
 	@Override
-	public RecyclableCollection<Packet<?>> toNative() throws Exception {
+	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
 		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_POSITION_LOOK.get());
 		creator.writeDouble(x);
 		creator.writeDouble(y);
@@ -26,7 +26,7 @@ public abstract class MiddlePositionLook extends ServerBoundMiddlePacket {
 		creator.writeFloat(yaw);
 		creator.writeFloat(pitch);
 		creator.writeBoolean(onGround);
-		return RecyclableSingletonList.<Packet<?>>create(creator.create());
+		return RecyclableSingletonList.create(creator.create());
 	}
 
 }

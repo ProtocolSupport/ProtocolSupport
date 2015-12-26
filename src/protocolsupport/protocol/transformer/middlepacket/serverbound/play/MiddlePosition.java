@@ -16,13 +16,13 @@ public abstract class MiddlePosition extends ServerBoundMiddlePacket {
 	protected boolean onGround;
 
 	@Override
-	public RecyclableCollection<Packet<?>> toNative() throws Exception {
+	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
 		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_POSITION.get());
 		creator.writeDouble(x);
 		creator.writeDouble(y);
 		creator.writeDouble(z);
 		creator.writeBoolean(onGround);
-		return RecyclableSingletonList.<Packet<?>>create(creator.create());
+		return RecyclableSingletonList.create(creator.create());
 	}
 
 }

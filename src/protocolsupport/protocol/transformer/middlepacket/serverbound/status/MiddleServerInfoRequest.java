@@ -11,8 +11,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public abstract class MiddleServerInfoRequest extends ServerBoundMiddlePacket {
 
 	@Override
-	public RecyclableCollection<Packet<?>> toNative() throws Exception {
-		return RecyclableSingletonList.<Packet<?>>create(PacketCreator.create(ServerBoundPacket.STATUS_REQUEST.get()).create());
+	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
+		return RecyclableSingletonList.create(PacketCreator.create(ServerBoundPacket.STATUS_REQUEST.get()).create());
 	}
 
 }

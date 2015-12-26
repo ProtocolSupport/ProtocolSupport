@@ -13,12 +13,12 @@ public abstract class MiddleInventoryTransaction extends ServerBoundMiddlePacket
 	protected int actionNumber;
 	protected boolean accepted;
 
-	public RecyclableCollection<Packet<?>> toNative() throws Exception {
+	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
 		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_WINDOW_TRANSACTION.get());
 		creator.writeByte(windowId);
 		creator.writeShort(actionNumber);
 		creator.writeBoolean(accepted);
-		return RecyclableSingletonList.<Packet<?>>create(creator.create());
+		return RecyclableSingletonList.create(creator.create());
 	}
 
 }

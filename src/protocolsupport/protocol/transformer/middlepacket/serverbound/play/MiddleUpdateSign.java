@@ -17,13 +17,13 @@ public abstract class MiddleUpdateSign extends ServerBoundMiddlePacket {
 	protected String[] lines = new String[4];
 
 	@Override
-	public RecyclableCollection<Packet<?>> toNative() throws Exception {
+	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
 		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_UPDATE_SIGN.get());
 		creator.writePosition(position);
 		for (int i = 0; i < lines.length; i++) {
 			creator.writeString(ChatSerializer.a(new ChatComponentText(lines[i])));
 		}
-		return RecyclableSingletonList.<Packet<?>>create(creator.create());
+		return RecyclableSingletonList.create(creator.create());
 	}
 
 }

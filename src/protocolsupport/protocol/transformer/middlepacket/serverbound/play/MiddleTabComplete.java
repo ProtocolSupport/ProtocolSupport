@@ -14,7 +14,7 @@ public abstract class MiddleTabComplete extends ServerBoundMiddlePacket {
 	protected BlockPosition position;
 
 	@Override
-	public RecyclableCollection<Packet<?>> toNative() throws Exception {
+	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
 		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_TAB_COMPLETE.get());
 		creator.writeString(string);
 		if (position != null) {
@@ -24,7 +24,7 @@ public abstract class MiddleTabComplete extends ServerBoundMiddlePacket {
 			creator.writeBoolean(false);
 		}
 		creator.writeBoolean(false);
-		return RecyclableSingletonList.<Packet<?>>create(creator.create());
+		return RecyclableSingletonList.create(creator.create());
 	}
 
 }

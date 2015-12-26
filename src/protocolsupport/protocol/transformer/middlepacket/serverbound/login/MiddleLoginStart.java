@@ -12,10 +12,10 @@ public abstract class MiddleLoginStart extends ServerBoundMiddlePacket {
 	protected String name;
 
 	@Override
-	public RecyclableCollection<Packet<?>> toNative() throws Exception {
+	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
 		PacketCreator creator = PacketCreator.create(ServerBoundPacket.LOGIN_START.get());
 		creator.writeString(name);
-		return RecyclableSingletonList.<Packet<?>>create(creator.create());
+		return RecyclableSingletonList.create(creator.create());
 	}
 
 }

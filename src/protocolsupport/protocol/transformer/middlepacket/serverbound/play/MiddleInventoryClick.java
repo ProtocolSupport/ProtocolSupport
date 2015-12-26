@@ -24,7 +24,7 @@ public abstract class MiddleInventoryClick extends ServerBoundMiddlePacket {
 	}
 
 	@Override
-	public RecyclableCollection<Packet<?>> toNative() throws Exception {
+	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
 		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_WINDOW_CLICK.get());
 		creator.writeByte(windowId);
 		creator.writeShort(slot);
@@ -32,7 +32,7 @@ public abstract class MiddleInventoryClick extends ServerBoundMiddlePacket {
 		creator.writeShort(actionNumber);
 		creator.writeByte(mode);
 		creator.writeItemStack(itemstack);
-		return RecyclableSingletonList.<Packet<?>>create(creator.create());
+		return RecyclableSingletonList.create(creator.create());
 	}
 
 }
