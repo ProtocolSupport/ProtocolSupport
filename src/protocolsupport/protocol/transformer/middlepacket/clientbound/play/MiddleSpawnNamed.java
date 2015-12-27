@@ -8,10 +8,8 @@ import java.util.UUID;
 import com.mojang.authlib.properties.Property;
 
 import gnu.trove.map.TIntObjectMap;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.storage.LocalStorage.PlayerListEntry;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
@@ -49,7 +47,7 @@ public abstract class MiddleSpawnNamed<T> extends ClientBoundMiddlePacket<T> {
 	}
 
 	@Override
-	public void handle(LocalStorage storage) {
+	public void handle() {
 		wplayer = new WatchedPlayer(playerEntityId);
 		storage.addWatchedEntity(wplayer);
 		PlayerListEntry entry = storage.getPlayerListEntry(uuid);

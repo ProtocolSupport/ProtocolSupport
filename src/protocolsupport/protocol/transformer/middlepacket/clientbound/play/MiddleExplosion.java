@@ -1,7 +1,6 @@
 package protocolsupport.protocol.transformer.middlepacket.clientbound.play;
 
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 
 public abstract class MiddleExplosion<T> extends ClientBoundMiddlePacket<T> {
@@ -32,10 +31,6 @@ public abstract class MiddleExplosion<T> extends ClientBoundMiddlePacket<T> {
 		pMotX = serializer.readFloat();
 		pMotY = serializer.readFloat();
 		pMotZ = serializer.readFloat();
-	}
-
-	@Override
-	public void handle(LocalStorage storage) {
 	}
 
 	protected static class AffectedBlock {

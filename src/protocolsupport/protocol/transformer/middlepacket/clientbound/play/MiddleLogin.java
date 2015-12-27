@@ -2,7 +2,6 @@ package protocolsupport.protocol.transformer.middlepacket.clientbound.play;
 
 import protocolsupport.api.tab.TabAPI;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
 
@@ -27,7 +26,7 @@ public abstract class MiddleLogin<T> extends ClientBoundMiddlePacket<T> {
 	}
 
 	@Override
-	public void handle(LocalStorage storage) {
+	public void handle() {
 		storage.addWatchedSelfPlayer(new WatchedPlayer(playerEntityId));
 	}
 

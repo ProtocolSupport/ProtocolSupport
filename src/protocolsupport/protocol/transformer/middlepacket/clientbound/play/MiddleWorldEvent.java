@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 
 public abstract class MiddleWorldEvent<T> extends ClientBoundMiddlePacket<T> {
@@ -20,10 +19,6 @@ public abstract class MiddleWorldEvent<T> extends ClientBoundMiddlePacket<T> {
 		position = serializer.readPosition();
 		data = serializer.readInt();
 		disableRelative = serializer.readBoolean();
-	}
-
-	@Override
-	public void handle(LocalStorage storage) {
 	}
 
 }

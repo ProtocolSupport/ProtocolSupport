@@ -3,7 +3,6 @@ package protocolsupport.protocol.transformer.middlepacket.clientbound.play;
 import java.io.IOException;
 
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 
 public abstract class MiddleInventoryConfirmTransaction<T> extends ClientBoundMiddlePacket<T> {
@@ -17,10 +16,6 @@ public abstract class MiddleInventoryConfirmTransaction<T> extends ClientBoundMi
 		windowId = serializer.readUnsignedByte();
 		actionNumber = serializer.readShort();
 		accepted = serializer.readBoolean();
-	}
-
-	@Override
-	public void handle(LocalStorage storage) {
 	}
 
 }

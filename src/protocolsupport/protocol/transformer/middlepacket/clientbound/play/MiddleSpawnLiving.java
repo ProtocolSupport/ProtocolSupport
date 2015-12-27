@@ -3,10 +3,8 @@ package protocolsupport.protocol.transformer.middlepacket.clientbound.play;
 import java.io.IOException;
 
 import gnu.trove.map.TIntObjectMap;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedLiving;
@@ -47,7 +45,7 @@ public abstract class MiddleSpawnLiving<T> extends ClientBoundMiddlePacket<T> {
 	}
 
 	@Override
-	public void handle(LocalStorage storage) {
+	public void handle() {
 		wentity = new WatchedLiving(entityId, type);
 		storage.addWatchedEntity(wentity);
 	}

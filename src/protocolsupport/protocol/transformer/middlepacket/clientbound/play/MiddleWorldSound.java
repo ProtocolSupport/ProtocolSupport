@@ -1,7 +1,6 @@
 package protocolsupport.protocol.transformer.middlepacket.clientbound.play;
 
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 
 public abstract class MiddleWorldSound<T> extends ClientBoundMiddlePacket<T> {
@@ -21,10 +20,6 @@ public abstract class MiddleWorldSound<T> extends ClientBoundMiddlePacket<T> {
 		z = serializer.readInt();
 		volume = serializer.readFloat();
 		pitch = serializer.readUnsignedByte();
-	}
-
-	@Override
-	public void handle(LocalStorage storage) {	
 	}
 
 }

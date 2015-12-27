@@ -3,7 +3,6 @@ package protocolsupport.protocol.transformer.middlepacket.clientbound.play;
 import java.io.IOException;
 
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedObject;
 
@@ -39,7 +38,7 @@ public abstract class MiddleSpawnObject<T> extends ClientBoundMiddlePacket<T> {
 	}
 
 	@Override
-	public void handle(LocalStorage storage) {
+	public void handle() {
 		storage.addWatchedEntity(new WatchedObject(entityId, type));
 	}
 

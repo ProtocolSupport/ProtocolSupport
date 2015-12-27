@@ -3,7 +3,6 @@ package protocolsupport.protocol.transformer.middlepacket.clientbound.play;
 import java.io.IOException;
 
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage;
 
 public abstract class MiddleEntityLook<T> extends MiddleEntity<T> {
 
@@ -15,10 +14,6 @@ public abstract class MiddleEntityLook<T> extends MiddleEntity<T> {
 		super.readFromServerData(serializer);
 		yaw = serializer.readByte();
 		pitch = serializer.readByte();
-	}
-
-	@Override
-	public void handle(LocalStorage storage) {
 	}
 
 }
