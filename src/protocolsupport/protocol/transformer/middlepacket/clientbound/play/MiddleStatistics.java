@@ -3,7 +3,6 @@ package protocolsupport.protocol.transformer.middlepacket.clientbound.play;
 import java.io.IOException;
 
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 
 public abstract class MiddleStatistics<T> extends ClientBoundMiddlePacket<T> {
@@ -19,10 +18,6 @@ public abstract class MiddleStatistics<T> extends ClientBoundMiddlePacket<T> {
 			stat.value = serializer.readVarInt();
 			statistics[i] = stat;
 		}
-	}
-
-	@Override
-	public void handle(LocalStorage storage) {
 	}
 
 	protected static class Statistic { 

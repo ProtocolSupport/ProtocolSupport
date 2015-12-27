@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import net.minecraft.server.v1_8_R3.ItemStack;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 
 public abstract class MiddleInventorySetItems<T> extends ClientBoundMiddlePacket<T> {
@@ -26,10 +25,6 @@ public abstract class MiddleInventorySetItems<T> extends ClientBoundMiddlePacket
 		for (int i = 0; i < count; i++) {
 			itemstacks.add(serializer.readItemStack());
 		}
-	}
-
-	@Override
-	public void handle(LocalStorage storage) {
 	}
 
 }

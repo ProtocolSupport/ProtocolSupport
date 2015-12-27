@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 
 public abstract class MiddleWorldParticle<T> extends ClientBoundMiddlePacket<T> {
@@ -37,10 +36,6 @@ public abstract class MiddleWorldParticle<T> extends ClientBoundMiddlePacket<T> 
 		while (serializer.isReadable()) {
 			adddata.add(serializer.readVarInt());
 		}
-	}
-
-	@Override
-	public void handle(LocalStorage storage) {
 	}
 
 }

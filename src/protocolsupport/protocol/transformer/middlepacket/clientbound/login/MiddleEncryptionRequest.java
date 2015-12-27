@@ -3,7 +3,6 @@ package protocolsupport.protocol.transformer.middlepacket.clientbound.login;
 import java.io.IOException;
 
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 
 public abstract class MiddleEncryptionRequest<T> extends ClientBoundMiddlePacket<T> {
@@ -17,10 +16,6 @@ public abstract class MiddleEncryptionRequest<T> extends ClientBoundMiddlePacket
 		serverId = serializer.readString(Short.MAX_VALUE);
 		publicKey = serializer.readArray();
 		verifyToken = serializer.readArray();
-	}
-
-	@Override
-	public void handle(LocalStorage storage) {
 	}
 
 }

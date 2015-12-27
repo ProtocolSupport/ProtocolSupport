@@ -3,7 +3,6 @@ package protocolsupport.protocol.transformer.middlepacket.clientbound.login;
 import java.io.IOException;
 
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 
 public abstract class MiddleLoginDisconnect<T> extends ClientBoundMiddlePacket<T> {
@@ -13,10 +12,6 @@ public abstract class MiddleLoginDisconnect<T> extends ClientBoundMiddlePacket<T
 	@Override
 	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
 		messageJson = serializer.readString(Short.MAX_VALUE);
-	}
-
-	@Override
-	public void handle(LocalStorage storage) {
 	}
 
 }

@@ -207,7 +207,8 @@ public class PacketEncoder implements IPacketEncoder {
 				packetTransformer.setPlayer(ChannelUtils.getBukkitPlayer(channel));
 			}
 			packetTransformer.readFromServerData(serverdata);
-			packetTransformer.handle(storage);
+			packetTransformer.setLocalStorage(storage);
+			packetTransformer.handle();
 			RecyclableCollection<PacketData> data = packetTransformer.toData(version);
 			try {
 				for (PacketData packetdata : data) {

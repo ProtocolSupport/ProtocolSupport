@@ -8,9 +8,16 @@ import protocolsupport.protocol.storage.LocalStorage;
 
 public abstract class ClientBoundMiddlePacket<T> extends MiddlePacket {
 
-	public abstract void readFromServerData(PacketDataSerializer serializer) throws IOException;
+	protected LocalStorage storage;
 
-	public abstract void handle(LocalStorage storage);
+	public void setLocalStorage(LocalStorage storage) {
+		this.storage = storage;
+	}
+
+	public void handle() {
+	}
+
+	public abstract void readFromServerData(PacketDataSerializer serializer) throws IOException;
 
 	public abstract T toData(ProtocolVersion version) throws IOException;
 

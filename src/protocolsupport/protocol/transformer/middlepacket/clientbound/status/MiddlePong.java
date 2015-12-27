@@ -3,7 +3,6 @@ package protocolsupport.protocol.transformer.middlepacket.clientbound.status;
 import java.io.IOException;
 
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 
 public abstract class MiddlePong<T> extends ClientBoundMiddlePacket<T> {
@@ -13,10 +12,6 @@ public abstract class MiddlePong<T> extends ClientBoundMiddlePacket<T> {
 	@Override
 	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
 		pingId = serializer.readLong();
-	}
-
-	@Override
-	public void handle(LocalStorage storage) {
 	}
 
 }

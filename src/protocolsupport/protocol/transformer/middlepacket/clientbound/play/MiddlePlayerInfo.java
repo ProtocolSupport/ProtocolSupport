@@ -5,8 +5,8 @@ import java.util.UUID;
 import com.mojang.authlib.properties.Property;
 
 import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
+
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.storage.LocalStorage.PlayerListEntry;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
@@ -66,7 +66,7 @@ public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {
 	}
 
 	@Override
-	public void handle(LocalStorage storage) {
+	public void handle() {
 		for (Info info : infos) {
 			info.previousinfo = storage.getPlayerListEntry(info.uuid);
 			if (info.previousinfo != null) {

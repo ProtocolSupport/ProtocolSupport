@@ -3,7 +3,6 @@ package protocolsupport.protocol.transformer.middlepacket.clientbound.play;
 import java.io.IOException;
 
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 
 public abstract class MiddleBlockChangeMulti<T> extends ClientBoundMiddlePacket<T> {
@@ -23,10 +22,6 @@ public abstract class MiddleBlockChangeMulti<T> extends ClientBoundMiddlePacket<
 			record.id = serializer.readVarInt();
 			records[i] = record;
 		}
-	}
-
-	@Override
-	public void handle(LocalStorage storage) {
 	}
 
 	protected static class Record {

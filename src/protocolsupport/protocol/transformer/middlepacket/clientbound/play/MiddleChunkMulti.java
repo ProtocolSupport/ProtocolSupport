@@ -3,7 +3,6 @@ package protocolsupport.protocol.transformer.middlepacket.clientbound.play;
 import java.io.IOException;
 
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 import protocolsupport.protocol.transformer.utils.ChunkTransformer;
 import protocolsupport.utils.ChannelUtils;
@@ -32,10 +31,6 @@ public abstract class MiddleChunkMulti<T> extends ClientBoundMiddlePacket<T> {
 		for (int i = 0; i < count; i++) {
 			data[i] = ChannelUtils.toArray(serializer.readBytes(ChunkTransformer.calcDataSize(Integer.bitCount(bitmap[i]), hasSkyLight, true)));
 		}
-	}
-
-	@Override
-	public void handle(LocalStorage storage) {
 	}
 
 }

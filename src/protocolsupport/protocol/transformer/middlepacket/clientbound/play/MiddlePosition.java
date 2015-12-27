@@ -3,7 +3,6 @@ package protocolsupport.protocol.transformer.middlepacket.clientbound.play;
 import org.bukkit.Location;
 
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 
 public abstract class MiddlePosition<T> extends ClientBoundMiddlePacket<T> {
@@ -43,10 +42,6 @@ public abstract class MiddlePosition<T> extends ClientBoundMiddlePacket<T> {
 		if ((field & 0x10) != 0) {
 			pitch += location.getPitch();
 		}
-	}
-
-	@Override
-	public void handle(LocalStorage storage) {
 	}
 
 }

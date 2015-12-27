@@ -1,7 +1,6 @@
 package protocolsupport.protocol.transformer.middlepacket.clientbound.play;
 
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 
 public abstract class MiddleMap<T> extends ClientBoundMiddlePacket<T> {
@@ -34,10 +33,6 @@ public abstract class MiddleMap<T> extends ClientBoundMiddlePacket<T> {
 			zstart = serializer.readUnsignedByte();
 			data = serializer.readArray();
 		}
-	}
-
-	@Override
-	public void handle(LocalStorage storage) {
 	}
 
 	protected static class Icon {

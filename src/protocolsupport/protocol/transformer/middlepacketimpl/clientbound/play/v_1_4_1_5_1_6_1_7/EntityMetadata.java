@@ -15,7 +15,7 @@ public class EntityMetadata extends MiddleEntityMetadata<RecyclableCollection<Pa
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_ENTITY_METADATA_ID, version);
 		serializer.writeInt(entityId);
-		serializer.writeBytes(DataWatcherSerializer.encodeData(version, WatchedDataRemapper.transform(wentity, metadata, version)));
+		serializer.writeBytes(DataWatcherSerializer.encodeData(version, WatchedDataRemapper.transform(storage.getWatchedEntity(entityId), metadata, version)));
 		return RecyclableSingletonList.create(serializer);
 	}
 

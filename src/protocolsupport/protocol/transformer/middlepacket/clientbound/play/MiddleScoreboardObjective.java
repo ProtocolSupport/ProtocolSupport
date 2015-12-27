@@ -1,7 +1,6 @@
 package protocolsupport.protocol.transformer.middlepacket.clientbound.play;
 
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 
 public abstract class MiddleScoreboardObjective<T> extends ClientBoundMiddlePacket<T> {
@@ -19,10 +18,6 @@ public abstract class MiddleScoreboardObjective<T> extends ClientBoundMiddlePack
 			value = serializer.readString(32);
 			type = serializer.readString(32);
 		}
-	}
-
-	@Override
-	public void handle(LocalStorage storage) {
 	}
 
 }
