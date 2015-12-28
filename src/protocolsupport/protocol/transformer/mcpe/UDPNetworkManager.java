@@ -34,6 +34,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.raknet.RakNetPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.raknet.ServerInfoPacket;
 import protocolsupport.protocol.transformer.mcpe.pipeline.UDPRouter;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
+import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import net.minecraft.server.v1_8_R3.ChatComponentText;
 import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
@@ -266,14 +267,14 @@ public class UDPNetworkManager extends NetworkManager {
 		ByteBuf buf = Unpooled.buffer();
 		buf.writeByte(pepacket.getId());
 		pepacket.encode(buf);
-		/*if (buf.readableBytes() > 256 && !(pepacket instanceof BatchPacket)) {
+		if (buf.readableBytes() > 256 && !(pepacket instanceof BatchPacket)) {
 			sendPEPacket(new BatchPacket(pepacket));
 			return;
-		}*/
+		}
 		int splitSize = mtu - 200;
 		int orderIndex = getNextOrderIndex();
 		if (buf.readableBytes() > mtu - 100) {
-			EncapsulatedPacket[] epackets = new EncapsulatedPacket[(buf.readableBytes() / splitSize) + 1];
+			EncapsulatedPacket[] epackets = new EncapsulatedPacket[Utils.getSplitCount(buf.readableBytes(), splitSize)];
 			int splitID = getNextSplitID();
 			for (int splitIndex = 0; splitIndex < epackets.length; splitIndex++) {
 				epackets[splitIndex] = new EncapsulatedPacket(buf.readBytes(buf.readableBytes() < splitSize ? buf.readableBytes() : splitSize), getNextMessageIndex(), orderIndex, splitID, epackets.length, splitIndex);

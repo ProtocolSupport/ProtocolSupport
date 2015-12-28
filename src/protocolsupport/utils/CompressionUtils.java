@@ -41,8 +41,4 @@ public class CompressionUtils {
 		return Unpooled.wrappedBuffer(IOUtils.toByteArray(new InflaterInputStream(new ByteBufInputStream(payload), new Inflater(), 8192)));
 	}
 
-	public static ByteBuf compress(ByteBuf input) throws IOException {
-		return Unpooled.wrappedBuffer(compress(ChannelUtils.toArray(input)));
-	}
-
 }

@@ -9,9 +9,12 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketRegistry;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
+import protocolsupport.utils.ChannelUtils;
 import protocolsupport.utils.CompressionUtils;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+
 import net.minecraft.server.v1_8_R3.Packet;
 
 public class BatchPacket implements DualPEPacket {
@@ -50,9 +53,9 @@ public class BatchPacket implements DualPEPacket {
 			temporal.writeInt(packetData.readableBytes());
 			temporal.writeBytes(packetData);
 		}
-		ByteBuf compressed = CompressionUtils.compress(temporal);
-		buf.writeInt(compressed.readableBytes());
-		buf.writeBytes(compressed);
+		byte[] data = CompressionUtils.compress(ChannelUtils.toArray(temporal));
+		buf.writeInt(data.length);
+		buf.writeBytes(data);
 		return this;
 	}
 

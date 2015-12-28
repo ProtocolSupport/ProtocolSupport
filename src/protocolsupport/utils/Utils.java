@@ -60,16 +60,21 @@ public class Utils {
 			list.add(array);
 			return list;
 		}
+		int count = getSplitCount(array.length, limit);
 		int copied = 0;
-		int count = array.length / limit;
-		if ((array.length % limit) != 0) {
-			count++;
-		}
 		for (int i = 0; i < count; i++) {
 			list.add(Arrays.copyOfRange(array, copied, Math.min(array.length, copied + limit)));
-			copied+= limit;
+			copied += limit;
 		}
 		return list;
+	}
+
+	public static int getSplitCount(int length, int maxlength) {
+		int count = length / maxlength;
+		if ((length % maxlength) != 0) {
+			count++;
+		}
+		return count;
 	}
 
 	@SuppressWarnings("unchecked")
