@@ -34,7 +34,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.raknet.RakNetPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.raknet.ServerInfoPacket;
 import protocolsupport.protocol.transformer.mcpe.pipeline.UDPRouter;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
-
+import protocolsupport.utils.recyclable.RecyclableCollection;
 import net.minecraft.server.v1_8_R3.ChatComponentText;
 import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
@@ -150,8 +150,13 @@ public class UDPNetworkManager extends NetworkManager {
 	@Override
 	public void a(Packet packet, GenericFutureListener genericfuturelistener, GenericFutureListener... agenericfuturelistener) {
 		try {
-			for (ClientboundPEPacket pepacket : clientboundTransforner.transform(packet)) {
-				sendPEPacket(pepacket);
+			RecyclableCollection<? extends ClientboundPEPacket> pepackets = clientboundTransforner.transform(packet);
+			try {
+				for (ClientboundPEPacket pepacket : pepackets) {
+					sendPEPacket(pepacket);
+				}
+			} finally {
+				pepackets.recycle();
 			}
 		} catch (Throwable t) {
 			if (MinecraftServer.getServer().isDebugging()) {

@@ -1,10 +1,20 @@
-package protocolsupport.protocol.transformer.mcpe;
+package protocolsupport.protocol.storage;
 
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.ItemStack;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
 public class PEStorage {
+
+	private int loadedChunkCount;
+
+	public void incLoadedChunkCount() {
+		loadedChunkCount++;
+	}
+
+	public int getLoadedChunkCount() {
+		return loadedChunkCount;
+	}
 
 	private final TIntObjectHashMap<ItemInfo> items = new TIntObjectHashMap<>();
 	private final TIntObjectHashMap<ItemStack[]> armor = new TIntObjectHashMap<>();
@@ -19,7 +29,7 @@ public class PEStorage {
 		return items.get(entityId);
 	}
 
-	public void removeItemsInfo(int[] ids) {
+	public void removeItemsInfo(int... ids) {
 		for (int id : ids) {
 			items.remove(id);
 		}

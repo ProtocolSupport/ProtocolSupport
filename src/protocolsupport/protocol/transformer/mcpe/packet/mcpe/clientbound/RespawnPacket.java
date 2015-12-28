@@ -10,12 +10,6 @@ public class RespawnPacket implements ClientboundPEPacket {
 	protected float y;
 	protected float z;
 
-	public RespawnPacket(float x, float y, float z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-	}
-
 	@Override
 	public int getId() {
 		return PEPacketIDs.RESPAWN_PACKET;

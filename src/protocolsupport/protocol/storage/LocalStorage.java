@@ -127,4 +127,10 @@ public class LocalStorage {
 		}
 	}
 
+	private final PEStorage pestorage = new PEStorage();
+
+	public PEStorage getPEStorage() {
+		return pestorage;
+	}
+
 }

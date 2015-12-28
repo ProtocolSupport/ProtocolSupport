@@ -7,11 +7,11 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 public class PickupItemEffectPacket implements ClientboundPEPacket {
 
 	protected int entityId;
-	protected int itemId;
+	protected int collectorId;
 
-	public PickupItemEffectPacket(int entityId, int itemId) {
+	public PickupItemEffectPacket(int collectorId, int entityId) {
+		this.collectorId = collectorId;
 		this.entityId = entityId;
-		this.itemId = itemId;
 	}
 
 	@Override
@@ -21,8 +21,8 @@ public class PickupItemEffectPacket implements ClientboundPEPacket {
 
 	@Override
 	public ClientboundPEPacket encode(ByteBuf buf) throws Exception {
-		buf.writeLong(itemId);
 		buf.writeLong(entityId);
+		buf.writeLong(collectorId);
 		return this;
 	}
 
