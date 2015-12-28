@@ -9,9 +9,10 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
-
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import javax.crypto.SecretKey;
 
 import net.minecraft.server.v1_8_R3.ChatComponentText;
@@ -39,14 +40,29 @@ import com.mojang.authlib.properties.Property;
 
 public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3.LoginListener implements ILoginListener {
 
-	private static final Executor loginprocessor = Executors.newSingleThreadExecutor(new ThreadFactory() {
-		@Override
-		public Thread newThread(Runnable r) {
-			Thread thread = new Thread(r);
-			thread.setName("LoginProcessingThread");
-			return thread;
+	private static final int loginThreads = getLoginThreads();
+
+	private static int getLoginThreads() {
+		try {
+			Integer.parseInt(System.getProperty("protocolsupport.loginthreads", "8"));
+		} catch (Throwable t) {
 		}
-	});
+		return 8;
+	}
+
+	private static final Executor loginprocessor = new ThreadPoolExecutor(
+		1, loginThreads,
+		60L, TimeUnit.SECONDS,
+		new LinkedBlockingQueue<Runnable>(),
+		new ThreadFactory() {
+			@Override
+			public Thread newThread(Runnable r) {
+				Thread thread = new Thread(r);
+				thread.setName("LoginProcessingThread");
+				return thread;
+			}
+		}
+	);
 
 	protected static final Logger logger = LogManager.getLogger();
 	protected static final Random random = new Random();
