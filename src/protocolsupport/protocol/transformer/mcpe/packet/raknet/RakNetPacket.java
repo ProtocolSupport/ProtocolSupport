@@ -13,9 +13,6 @@ public class RakNetPacket {
 	private int id;
 	private int sequenceNumber;
 	private ArrayList<EncapsulatedPacket> encapsulatedPackets = new ArrayList<>();
-	private ByteBuf data = Unpooled.buffer();
-
-	private long lastSentTime;
 
 	public RakNetPacket(InetSocketAddress address) {
 		this.address = address;
@@ -32,23 +29,24 @@ public class RakNetPacket {
 	}
 
 	public void encode(ByteBuf buf) {
-		lastSentTime = System.currentTimeMillis();
 		RakNetDataSerializer.writeTriad(buf, sequenceNumber);
 		for (EncapsulatedPacket epacket : encapsulatedPackets) {
 			epacket.encode(buf);
 		}
 	}
 
+	private ByteBuf rdata = Unpooled.buffer();
+
 	public void decode(ByteBuf buf) {
-		data.writeBytes(buf);
-		id = data.readUnsignedByte();
+		rdata.writeBytes(buf);
+		id = rdata.readUnsignedByte();
 	}
 
 	public void decodeEncapsulated() {
-		sequenceNumber = RakNetDataSerializer.readTriad(data);
-		while (data.isReadable()) {
+		sequenceNumber = RakNetDataSerializer.readTriad(rdata);
+		while (rdata.isReadable()) {
 			EncapsulatedPacket packet = new EncapsulatedPacket();
-			packet.decode(data);
+			packet.decode(rdata);
 			encapsulatedPackets.add(packet);
 		}
 	}
@@ -70,11 +68,7 @@ public class RakNetPacket {
 	}
 
 	public ByteBuf getData() {
-		return data;
-	}
-
-	public long getLastSentTime() {
-		return lastSentTime;
+		return rdata;
 	}
 
 }

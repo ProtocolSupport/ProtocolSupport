@@ -102,10 +102,11 @@ public class UDPNetworkManager extends NetworkManager {
 		a(packet, null);
 	}
 
+	private int lastReceivedACK = -1;
 	private final TIntObjectHashMap<RakNetPacket> sentPackets = new TIntObjectHashMap<>(300);
 	private final Object sentPacketsLock = new Object();
 
-	private long lastPerSecActionTime = System.currentTimeMillis();
+	private long lastPingTime = System.currentTimeMillis();
 
 	@Override
 	public void a() {
@@ -115,24 +116,24 @@ public class UDPNetworkManager extends NetworkManager {
 			return;
 		}
 		try {
-			if (currentTime - lastPerSecActionTime > 1000) {
-				lastPerSecActionTime = currentTime;
-				sendPEPacket(new PingPacket());
-				synchronized (sentPacketsLock) {
-					ArrayList<RakNetPacket> toResend = new ArrayList<RakNetPacket>();
-					TIntObjectIterator<RakNetPacket> iterator = sentPackets.iterator();
-					while (iterator.hasNext()) {
-						iterator.advance();
-						RakNetPacket packet = iterator.value();
-						if (currentTime - packet.getLastSentTime() > 1000) {
-							iterator.remove();
-							toResend.add(packet);
-						}
-					}
-					for (RakNetPacket packet : toResend) {
-						sendRakNetPacket(packet);
+			synchronized (sentPacketsLock) {
+				ArrayList<RakNetPacket> toResend = new ArrayList<RakNetPacket>();
+				TIntObjectIterator<RakNetPacket> iterator = sentPackets.iterator();
+				while (iterator.hasNext()) {
+					iterator.advance();
+					RakNetPacket packet = iterator.value();
+					if (packet.getSeqNumber() < lastReceivedACK) {
+						iterator.remove();
+						toResend.add(packet);
 					}
 				}
+				for (RakNetPacket packet : toResend) {
+					sendRakNetPacket(packet);
+				}
+			}
+			if (currentTime - lastPingTime > 1000) {
+				lastPingTime = currentTime;
+				sendPEPacket(new PingPacket());
 			}
 			if (clientboundTransforner.canSpawnPlayer()) {
 				clientboundTransforner.setSpawned();
@@ -254,7 +255,7 @@ public class UDPNetworkManager extends NetworkManager {
 		}
 	}
 
-	public void sendPEPacket(ClientboundPEPacket pepacket) throws Exception {
+	public synchronized void sendPEPacket(ClientboundPEPacket pepacket) throws Exception {
 		if (mtu == 0) {
 			return;
 		}
@@ -265,10 +266,10 @@ public class UDPNetworkManager extends NetworkManager {
 		ByteBuf buf = Unpooled.buffer();
 		buf.writeByte(pepacket.getId());
 		pepacket.encode(buf);
-		if (buf.readableBytes() > 256 && !(pepacket instanceof BatchPacket)) {
+		/*if (buf.readableBytes() > 256 && !(pepacket instanceof BatchPacket)) {
 			sendPEPacket(new BatchPacket(pepacket));
 			return;
-		}
+		}*/
 		int splitSize = mtu - 200;
 		int orderIndex = getNextOrderIndex();
 		if (buf.readableBytes() > mtu - 100) {
@@ -307,6 +308,7 @@ public class UDPNetworkManager extends NetworkManager {
 			for (int id = idstart; id <= idfinish; id++) {
 				sentPackets.remove(id);
 			}
+			lastReceivedACK = idfinish;
 		}
 	}
 
