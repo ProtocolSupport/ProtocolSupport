@@ -11,6 +11,11 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class Respawn extends MiddleRespawn<RecyclableCollection<? extends ClientboundPEPacket>> {
 
+	@Override
+	public boolean needsPlayer() {
+		return true;
+	}
+
 	@SuppressWarnings("deprecation")
 	@Override
 	public RecyclableCollection<? extends ClientboundPEPacket> toData(ProtocolVersion version) throws IOException {
