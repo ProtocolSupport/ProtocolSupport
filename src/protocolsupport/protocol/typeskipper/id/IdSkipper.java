@@ -15,7 +15,7 @@ public class IdSkipper {
 		}
 		@Override
 		protected SkippingTable createTable() {
-			return new SkippingTable(128);
+			return new SkippingTable(256);
 		}
 	};
 
@@ -27,7 +27,7 @@ public class IdSkipper {
 		}
 		@Override
 		protected SkippingTable createTable() {
-			return new SkippingTable(64);
+			return new SkippingTable(32);
 		}
 	};
 
