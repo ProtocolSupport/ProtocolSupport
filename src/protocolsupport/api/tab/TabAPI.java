@@ -2,6 +2,7 @@ package protocolsupport.api.tab;
 
 import java.io.IOException;
 
+import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -49,6 +50,7 @@ public class TabAPI {
 	private static final BaseComponent empty = new TextComponent("");
 
 	public static void sendHeaderFooter(Player player, BaseComponent header, BaseComponent footer) {
+		Validate.notNull(player, "Player can't be null");
 		RecyclablePacketDataSerializer serializer = RecyclablePacketDataSerializer.create(ProtocolVersion.getLatest());
 		try {
 			serializer.writeString(ChatAPI.toJSON(header != null ? header : empty));
