@@ -4,11 +4,18 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
+import java.net.InetSocketAddress;
 import java.util.List;
 
+import org.bukkit.Bukkit;
+
 import net.minecraft.server.v1_8_R3.MinecraftServer;
+import net.minecraft.server.v1_8_R3.PacketListener;
+import net.minecraft.server.v1_8_R3.PlayerConnection;
+import protocolsupport.api.events.PlayerDisconnectEvent;
 import protocolsupport.protocol.core.IPacketDecoder;
 import protocolsupport.protocol.storage.ProtocolStorage;
+import protocolsupport.protocol.transformer.handlers.AbstractLoginListener;
 import protocolsupport.utils.ChannelUtils;
 
 public class WrappedDecoder extends ByteToMessageDecoder {
@@ -32,7 +39,19 @@ public class WrappedDecoder extends ByteToMessageDecoder {
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		super.channelInactive(ctx);
 		try {
-			ProtocolStorage.clearData(ChannelUtils.getNetworkManagerSocketAddress(ctx.channel()));
+			InetSocketAddress addr = (InetSocketAddress) ChannelUtils.getNetworkManagerSocketAddress(ctx.channel());
+			String username = null;
+			PacketListener listener = ChannelUtils.getNetworkManager(ctx.channel()).getPacketListener();
+			if (listener instanceof AbstractLoginListener) {
+				username = ((AbstractLoginListener) listener).getProfile().getName();
+			} else if (listener instanceof PlayerConnection) {
+				username = ((PlayerConnection) listener).player.getProfile().getName();
+			}
+			if (username != null) {
+				PlayerDisconnectEvent event = new PlayerDisconnectEvent(addr, username);
+				Bukkit.getPluginManager().callEvent(event);
+			}
+			ProtocolStorage.clearData(addr);
 		} catch (Throwable t) {
 			if (MinecraftServer.getServer().isDebugging()) {
 				t.printStackTrace();

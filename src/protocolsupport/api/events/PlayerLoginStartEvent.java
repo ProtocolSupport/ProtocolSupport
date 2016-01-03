@@ -3,33 +3,21 @@ package protocolsupport.api.events;
 import java.net.InetSocketAddress;
 import java.util.UUID;
 
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class PlayerLoginStartEvent extends Event {
+public class PlayerLoginStartEvent extends PlayerEvent {
 
-	private InetSocketAddress address;
-	private String hostname;
-	private String username;
+	private final String hostname;
 	private boolean onlinemode;
 	private boolean useonlinemodeuuid;
 	private UUID uuid;
 	private String denyLoginMessage;
 
 	public PlayerLoginStartEvent(InetSocketAddress address, String username, boolean onlinemode, boolean useonlinemodeuuid, String hostname) {
-		this.address = address;
-		this.username = username;
+		super(address, username);
 		this.onlinemode = onlinemode;
 		this.useonlinemodeuuid = useonlinemodeuuid;
 		this.hostname = hostname;
-	}
-
-	public InetSocketAddress getAddress() {
-		return address;
-	}
-
-	public String getName() {
-		return username;
 	}
 
 	public String getHostname() {
