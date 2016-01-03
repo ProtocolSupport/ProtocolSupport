@@ -27,11 +27,11 @@ import com.mojang.authlib.properties.PropertyMap;
 @SuppressWarnings("deprecation")
 public class PlayerLookupUUID {
 
-	private boolean isOnlineMode;
-	private final ILoginListener listener;
+	private final AbstractLoginListener listener;
+	private final boolean isOnlineMode;
 
-	public PlayerLookupUUID(ILoginListener loginlistener, boolean isOnlineMode) {
-		listener = loginlistener;
+	public PlayerLookupUUID(AbstractLoginListener listener, boolean isOnlineMode) {
+		this.listener = listener;
 		this.isOnlineMode = isOnlineMode;
 	}
 
@@ -74,9 +74,11 @@ public class PlayerLookupUUID {
 		if (!listener.getNetworkManager().g()) {
 			return;
 		}
+
 		String playerName = listener.getProfile().getName();
 		InetSocketAddress saddress = (InetSocketAddress) listener.getNetworkManager().getSocketAddress();
 		InetAddress address = saddress.getAddress();
+
 		List<ProfileProperty> properties = new ArrayList<ProfileProperty>();
 		PropertyMap propertymap = listener.getProfile().getProperties();
 		for (Property property : propertymap.values()) {
@@ -88,6 +90,7 @@ public class PlayerLookupUUID {
 		for (ProfileProperty profileproperty : propResolve.getProperties().values()) {
 			propertymap.put(profileproperty.getName(), new Property(profileproperty.getName(), profileproperty.getValue(), profileproperty.getSignature()));
 		}
+
 		UUID uniqueId = listener.getProfile().getId();
 		final CraftServer server = MinecraftServer.getServer().server;
 		final AsyncPlayerPreLoginEvent asyncEvent = new AsyncPlayerPreLoginEvent(playerName, address, uniqueId);

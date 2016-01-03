@@ -7,9 +7,11 @@ import org.bukkit.event.HandlerList;
 
 public class LegacyServerPingResponseEvent extends Event {
 
-	private InetSocketAddress address;
+	private final InetSocketAddress address;
+
 	private String motd;
 	private int maxPlayers;
+
 	public LegacyServerPingResponseEvent(InetSocketAddress address, String motd, int maxPlayers) {
 		this.address = address;
 		this.motd = motd;

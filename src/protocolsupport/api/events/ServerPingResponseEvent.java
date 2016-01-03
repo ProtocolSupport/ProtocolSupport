@@ -11,12 +11,14 @@ import protocolsupport.api.ProtocolVersion;
 
 public class ServerPingResponseEvent extends Event {
 
-	private InetSocketAddress address;
+	private final InetSocketAddress address;
+
 	private ProtocolInfo info;
 	private String motd;
 	private String icon;
 	private int maxPlayers;
 	private List<String> players;
+
 	public ServerPingResponseEvent(InetSocketAddress address, ProtocolInfo info, String icon, String motd, int maxPlayers, List<String> players) {
 		this.address = address;
 		this.info = info;
@@ -67,11 +69,7 @@ public class ServerPingResponseEvent extends Event {
 	}
 
 	public void setPlayers(List<String> players) {
-		if (players == null) {
-			this.players = new ArrayList<String>();
-			return;
-		}
-		this.players = new ArrayList<String>(players);
+		this.players = players != null ? new ArrayList<String>(players) : new ArrayList<String>();
 	}
 
 	public static class ProtocolInfo {
@@ -95,7 +93,6 @@ public class ServerPingResponseEvent extends Event {
 			return name;
 		}
 	}
-
 
 	private static final HandlerList list = new HandlerList();
 

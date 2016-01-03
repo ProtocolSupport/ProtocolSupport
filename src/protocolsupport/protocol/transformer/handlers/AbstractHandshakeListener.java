@@ -71,8 +71,8 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 					}
 					packethandshakinginsetprotocol.hostname = split[0];
 					SocketAddress oldaddress = networkManager.getSocketAddress();
-					ProtocolStorage.clearData(oldaddress);
 					ProtocolVersion version = ProtocolStorage.getProtocolVersion(oldaddress);
+					ProtocolStorage.clearData(oldaddress);
 					SocketAddress newaddress = new InetSocketAddress(split[1], ((InetSocketAddress) oldaddress).getPort());
 					networkManager.l = newaddress;
 					ProtocolStorage.setProtocolVersion(newaddress, version);

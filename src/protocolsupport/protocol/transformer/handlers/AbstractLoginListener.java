@@ -38,7 +38,7 @@ import com.google.common.base.Charsets;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 
-public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3.LoginListener implements ILoginListener {
+public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3.LoginListener {
 
 	private static final int loginThreads = getLoginThreads();
 
@@ -236,37 +236,37 @@ public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3
 
 	protected abstract void enableEncryption(SecretKey key);
 
-	@Override
+
 	public Logger getLogger() {
 		return logger;
 	}
 
-	@Override
+
 	public GameProfile getProfile() {
 		return profile;
 	}
 
-	@Override
+
 	public void setProfile(GameProfile profile) {
 		this.profile = profile;
 	}
 
-	@Override
+
 	public GameProfile generateOfflineProfile(GameProfile current) {
 		return a(current);
 	}
 
-	@Override
+
 	public void setLoginState(LoginState state) {
 		this.state = state;
 	}
 
-	@Override
+
 	public SecretKey getLoginKey() {
 		return loginKey;
 	}
 
-	@Override
+
 	public NetworkManager getNetworkManager() {
 		return networkManager;
 	}
