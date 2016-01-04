@@ -9,6 +9,7 @@ import io.netty.handler.timeout.ReadTimeoutHandler;
 import java.util.List;
 
 import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.NetworkManager;
 import protocolsupport.protocol.core.initial.InitialPacketDecoder;
 import protocolsupport.protocol.core.wrapped.WrappedDecoder;
@@ -24,15 +25,24 @@ public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 		this.networkManagers = networkManagers;
 	}
 
+	private static final int IPTOS_THROUGHPUT = 0x08;
+	private static final int IPTOS_LOWDELAY = 0x10;
+
 	@Override
 	protected void initChannel(Channel channel) {
 		try {
-			channel.config().setOption(ChannelOption.IP_TOS, 24);
+			channel.config().setOption(ChannelOption.IP_TOS, IPTOS_THROUGHPUT | IPTOS_LOWDELAY);
 		} catch (ChannelException channelexception) {
+			if (MinecraftServer.getServer().isDebugging()) {
+				System.err.println("Unable to set IP_TOS option: " + channelexception.getMessage());
+			}
 		}
 		try {
-			channel.config().setOption(ChannelOption.TCP_NODELAY, false);
+			channel.config().setOption(ChannelOption.TCP_NODELAY, true);
 		} catch (ChannelException channelexception) {
+			if (MinecraftServer.getServer().isDebugging()) {
+				System.err.println("Unable to set TCP_NODELAY option: " + channelexception.getMessage());
+			}
 		}
 		channel.pipeline()
 		.addLast("timeout", new ReadTimeoutHandler(30))
