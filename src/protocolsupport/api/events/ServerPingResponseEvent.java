@@ -21,11 +21,11 @@ public class ServerPingResponseEvent extends Event {
 
 	public ServerPingResponseEvent(InetSocketAddress address, ProtocolInfo info, String icon, String motd, int maxPlayers, List<String> players) {
 		this.address = address;
-		this.info = info;
-		this.icon = icon;
-		this.motd = motd;
-		this.maxPlayers = maxPlayers;
-		this.players = new ArrayList<String>(players);
+		setProtocolInfo(info);
+		setIcon(icon);
+		setMotd(motd);
+		setMaxPlayers(maxPlayers);
+		setPlayers(players);
 	}
 
 	public InetSocketAddress getAddress() {
@@ -37,7 +37,7 @@ public class ServerPingResponseEvent extends Event {
 	}
 
 	public void setProtocolInfo(ProtocolInfo info) {
-		this.info = info;
+		this.info = info != null ? info : new ProtocolInfo(-1, "ProtocolSupport");
 	}
 
 	public String getIcon() {
@@ -53,7 +53,7 @@ public class ServerPingResponseEvent extends Event {
 	}
 
 	public void setMotd(String motd) {
-		this.motd = motd;
+		this.motd = motd != null ? motd : "A minecraft server (ProtocolSupport)";
 	}
 
 	public int getMaxPlayers() {

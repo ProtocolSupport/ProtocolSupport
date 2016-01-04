@@ -20,6 +20,7 @@ import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.RecyclablePacketDataSerializer;
 import protocolsupport.utils.ChannelUtils;
 
+@SuppressWarnings("deprecation")
 @Sharable
 public class LegacyLoginAndPingHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
