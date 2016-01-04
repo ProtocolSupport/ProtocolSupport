@@ -4,20 +4,22 @@ import io.netty.channel.Channel;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import protocolsupport.api.ProtocolVersion;
 
-public class Ping152ResponseTask implements Runnable {
+public class SetProtocolTask implements Runnable {
 
-	private InitialPacketDecoder initialDecoder;
-	private Channel channel;
+	private final InitialPacketDecoder initialDecoder;
+	private final Channel channel;
+	private final ProtocolVersion version;
 
-	public Ping152ResponseTask(InitialPacketDecoder initialDecoder, Channel channel) {
+	public SetProtocolTask(InitialPacketDecoder initialDecoder, Channel channel, ProtocolVersion version) {
 		this.initialDecoder = initialDecoder;
 		this.channel = channel;
+		this.version = version;
 	}
 
 	@Override
 	public void run() {
 		try {
-			initialDecoder.setProtocol(channel, initialDecoder.receivedData, ProtocolVersion.MINECRAFT_1_5_2);
+			initialDecoder.setProtocol(channel, initialDecoder.receivedData, version);
 		} catch (Throwable t) {
 			if (MinecraftServer.getServer().isDebugging()) {
 				t.printStackTrace();

@@ -45,6 +45,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 	@SuppressWarnings("serial")
 	private static final EnumMap<ProtocolVersion, IPipeLineBuilder> pipelineBuilders = new EnumMap<ProtocolVersion, IPipeLineBuilder>(ProtocolVersion.class) {{
 		IPipeLineBuilder builder = new protocolsupport.protocol.transformer.v_1_8.PipeLineBuilder();
+		put(ProtocolVersion.MINERCAFT_FUTURE, builder);
 		put(ProtocolVersion.MINECRAFT_1_8, builder);
 		IPipeLineBuilder builder17 = new protocolsupport.protocol.transformer.v_1_7.PipeLineBuilder();
 		put(ProtocolVersion.MINECRAFT_1_7_10, builder17);
@@ -57,7 +58,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		put(ProtocolVersion.MINECRAFT_1_5_2, builder15);
 		put(ProtocolVersion.MINECRAFT_1_5_1, builder15);
 		put(ProtocolVersion.MINECRAFT_1_4_7, new protocolsupport.protocol.transformer.v_1_4.PipeLineBuilder());
-		put(ProtocolVersion.UNKNOWN, builder);
+		put(ProtocolVersion.MINERCAFT_LEGACY, new protocolsupport.protocol.transformer.v_legacy.PipeLineBuilder());
 	}};
 
 
@@ -103,11 +104,11 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 			case 0xFE: { //old ping
 				try {
 					if (receivedData.readableBytes() == 0) { //really old protocol probably
-						scheduleTask(ctx, new Ping11ResponseTask(channel), pingLegacyDelay, TimeUnit.MILLISECONDS);
+						scheduleTask(ctx, new SetProtocolTask(this, channel, ProtocolVersion.MINERCAFT_LEGACY), pingLegacyDelay, TimeUnit.MILLISECONDS);
 					} else if (receivedData.readUnsignedByte() == 1) {
 						if (receivedData.readableBytes() == 0) {
 							//1.5.2 probably
-							scheduleTask(ctx, new Ping152ResponseTask(this, channel), ping152delay, TimeUnit.MILLISECONDS);
+							scheduleTask(ctx, new SetProtocolTask(this, channel, ProtocolVersion.MINECRAFT_1_5_2), ping152delay, TimeUnit.MILLISECONDS);
 						} else if (
 							(receivedData.readUnsignedByte() == 0xFA) &&
 							"MC|PingHost".equals(new String(ChannelUtils.toArray(receivedData.readBytes(receivedData.readUnsignedShort() * 2)), StandardCharsets.UTF_16BE))
@@ -120,18 +121,18 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 				}
 				break;
 			}
-			case 0x02: { //1.6 or 1.5.2 handshake
+			case 0x02: { // <= 1.6.4 handshake
 				try {
-					handshakeversion = ProtocolVersion.fromId(receivedData.readUnsignedByte());
+					handshakeversion = readOldHandshake(receivedData);
 				} catch (IndexOutOfBoundsException ex) {
 				}
 				break;
 			}
-			default: { //1.7 or 1.8 handshake
+			default: { // >= 1.7 handshake
 				receivedData.readerIndex(0);
 				ByteBuf data = getVarIntPrefixedData(receivedData);
 				if (data != null) {
-					handshakeversion = readNPHandshake(data);
+					handshakeversion = readNettyHandshake(data);
 				}
 				break;
 			}
@@ -160,9 +161,16 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 	}
 
 	@SuppressWarnings("deprecation")
-	private static ProtocolVersion readNPHandshake(ByteBuf data) {
+	private static ProtocolVersion readOldHandshake(ByteBuf data) {
+		ProtocolVersion version = ProtocolVersion.fromId(data.readUnsignedByte());
+		return version != ProtocolVersion.UNKNOWN ? version : ProtocolVersion.MINERCAFT_LEGACY;
+	}
+
+	@SuppressWarnings("deprecation")
+	private static ProtocolVersion readNettyHandshake(ByteBuf data) {
 		if (ChannelUtils.readVarInt(data) == 0x00) {
-			return ProtocolVersion.fromId(ChannelUtils.readVarInt(data));
+			ProtocolVersion version = ProtocolVersion.fromId(ChannelUtils.readVarInt(data));
+			return version != ProtocolVersion.UNKNOWN ? version : ProtocolVersion.MINERCAFT_FUTURE;
 		}
 		return ProtocolVersion.UNKNOWN;
 	}
