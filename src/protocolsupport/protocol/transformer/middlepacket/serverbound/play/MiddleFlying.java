@@ -7,7 +7,7 @@ import protocolsupport.protocol.transformer.middlepacketimpl.PacketCreator;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public abstract class MiddlePlayer extends ServerBoundMiddlePacket {
+public abstract class MiddleFlying extends ServerBoundMiddlePacket {
 
 	protected boolean onGround;
 

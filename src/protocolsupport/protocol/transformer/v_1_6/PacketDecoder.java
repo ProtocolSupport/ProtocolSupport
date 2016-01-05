@@ -37,7 +37,7 @@ import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.InventoryTransaction;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.KeepAlive;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.Look;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.Player;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.Flying;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.Position;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.TabComplete;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.UpdateSign;
@@ -64,7 +64,7 @@ public class PacketDecoder implements IPacketDecoder {
 			dataRemapperRegistry.register(EnumProtocol.PLAY, 0x00, KeepAlive.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, 0x03, Chat.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, 0x07, UseEntity.class);
-			dataRemapperRegistry.register(EnumProtocol.PLAY, 0x0A, Player.class);
+			dataRemapperRegistry.register(EnumProtocol.PLAY, 0x0A, Flying.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, 0x0B, Position.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, 0x0C, Look.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, 0x0D, PositionLook.class);

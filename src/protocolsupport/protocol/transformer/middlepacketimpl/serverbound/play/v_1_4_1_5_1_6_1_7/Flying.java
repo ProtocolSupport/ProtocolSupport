@@ -3,9 +3,9 @@ package protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v
 import java.io.IOException;
 
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.transformer.middlepacket.serverbound.play.MiddlePlayer;
+import protocolsupport.protocol.transformer.middlepacket.serverbound.play.MiddleFlying;
 
-public class Player extends MiddlePlayer {
+public class Flying extends MiddleFlying {
 
 	@Override
 	public void readFromClientData(PacketDataSerializer serializer) throws IOException {
