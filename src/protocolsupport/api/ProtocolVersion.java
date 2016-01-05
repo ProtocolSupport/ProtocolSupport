@@ -2,7 +2,7 @@ package protocolsupport.api;
 
 public enum ProtocolVersion {
 
-	MINERCAFT_FUTURE(-1, 10, "> 1.8"),
+	MINERCAFT_FUTURE(-1, 10),
 	MINECRAFT_1_8(47, 9, "1.8"),
 	MINECRAFT_1_7_10(5, 8, "1.7.10"),
 	MINECRAFT_1_7_5(4, 7, "1.7.5"),
@@ -12,21 +12,24 @@ public enum ProtocolVersion {
 	MINECRAFT_1_5_2(61, 3, "1.5.2"),
 	MINECRAFT_1_5_1(60, 2, "1.5.1"),
 	MINECRAFT_1_4_7(51, 1, "1.4.7"),
-	MINERCAFT_LEGACY(-1, 0, "< 1.4.7"),
+	MINERCAFT_LEGACY(-1, 0),
 	UNKNOWN(-1),
 	NOT_SET(0);
 
-	private int id;
-	private int orderId;
-	private String name;
+	private final int id;
+	private final int orderId;
+	private final String name;
 
 	ProtocolVersion(int id) {
-		this.id = id;
-		this.orderId = -1;
+		this(id, -1);
+	}
+
+	ProtocolVersion(int id, int orderId) {
+		this(id, orderId, null);
 	}
 
 	ProtocolVersion(int id, int orderId, String name) {
-		this(id);
+		this.id = id;
 		this.orderId = orderId;
 		this.name = name;
 	}
