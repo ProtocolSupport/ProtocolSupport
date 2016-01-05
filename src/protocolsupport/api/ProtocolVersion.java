@@ -42,6 +42,10 @@ public enum ProtocolVersion {
 		return name;
 	}
 
+	public boolean isSupported() {
+		return name != null;
+	}
+
 	public boolean isAfter(ProtocolVersion another) {
 		return orderId > another.orderId;
 	}
