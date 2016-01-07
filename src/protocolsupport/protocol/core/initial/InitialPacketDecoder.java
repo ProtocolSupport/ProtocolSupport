@@ -45,7 +45,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 	@SuppressWarnings("serial")
 	private static final EnumMap<ProtocolVersion, IPipeLineBuilder> pipelineBuilders = new EnumMap<ProtocolVersion, IPipeLineBuilder>(ProtocolVersion.class) {{
 		IPipeLineBuilder builder = new protocolsupport.protocol.transformer.v_1_8.PipeLineBuilder();
-		put(ProtocolVersion.MINERCAFT_FUTURE, builder);
+		put(ProtocolVersion.MINECRAFT_FUTURE, builder);
 		put(ProtocolVersion.MINECRAFT_1_8, builder);
 		IPipeLineBuilder builder17 = new protocolsupport.protocol.transformer.v_1_7.PipeLineBuilder();
 		put(ProtocolVersion.MINECRAFT_1_7_10, builder17);
@@ -58,7 +58,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		put(ProtocolVersion.MINECRAFT_1_5_2, builder15);
 		put(ProtocolVersion.MINECRAFT_1_5_1, builder15);
 		put(ProtocolVersion.MINECRAFT_1_4_7, new protocolsupport.protocol.transformer.v_1_4.PipeLineBuilder());
-		put(ProtocolVersion.MINERCAFT_LEGACY, new protocolsupport.protocol.transformer.v_legacy.PipeLineBuilder());
+		put(ProtocolVersion.MINECRAFT_LEGACY, new protocolsupport.protocol.transformer.v_legacy.PipeLineBuilder());
 	}};
 
 
@@ -104,7 +104,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 			case 0xFE: { //old ping
 				try {
 					if (receivedData.readableBytes() == 0) { //really old protocol probably
-						scheduleTask(ctx, new SetProtocolTask(this, channel, ProtocolVersion.MINERCAFT_LEGACY), pingLegacyDelay, TimeUnit.MILLISECONDS);
+						scheduleTask(ctx, new SetProtocolTask(this, channel, ProtocolVersion.MINECRAFT_LEGACY), pingLegacyDelay, TimeUnit.MILLISECONDS);
 					} else if (receivedData.readUnsignedByte() == 1) {
 						if (receivedData.readableBytes() == 0) {
 							//1.5.2 probably
@@ -163,14 +163,14 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 	@SuppressWarnings("deprecation")
 	private static ProtocolVersion readOldHandshake(ByteBuf data) {
 		ProtocolVersion version = ProtocolVersion.fromId(data.readUnsignedByte());
-		return version != ProtocolVersion.UNKNOWN ? version : ProtocolVersion.MINERCAFT_LEGACY;
+		return version != ProtocolVersion.UNKNOWN ? version : ProtocolVersion.MINECRAFT_LEGACY;
 	}
 
 	@SuppressWarnings("deprecation")
 	private static ProtocolVersion readNettyHandshake(ByteBuf data) {
 		if (ChannelUtils.readVarInt(data) == 0x00) {
 			ProtocolVersion version = ProtocolVersion.fromId(ChannelUtils.readVarInt(data));
-			return version != ProtocolVersion.UNKNOWN ? version : ProtocolVersion.MINERCAFT_FUTURE;
+			return version != ProtocolVersion.UNKNOWN ? version : ProtocolVersion.MINECRAFT_FUTURE;
 		}
 		return ProtocolVersion.UNKNOWN;
 	}
