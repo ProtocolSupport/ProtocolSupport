@@ -19,7 +19,7 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 	@Override
 	public void readFromClientData(PacketDataSerializer serializer) {
 		serializer.readUnsignedByte();
-		username = serializer.readString(Short.MAX_VALUE);
+		username = serializer.readString(16);
 		hostname = serializer.readString(Short.MAX_VALUE);
 		port = serializer.readInt();
 	}
