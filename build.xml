@@ -1,22 +1,22 @@
 <project name="ProtocolSupport" default="build" basedir=".">
 
-    <path id="libs">
-    	<filelist>
-    		<file name="${basedir}/libs/spigot.jar"/>
-    		<file name="${basedir}/buildprocessor/BuildProcessor.jar"/>
-    	</filelist>
-    </path>
+	<path id="libs">
+		<filelist>
+			<file name="${basedir}/libs/spigot.jar" />
+			<file name="${basedir}/buildprocessor/BuildProcessor.jar" />
+		</filelist>
+	</path>
 
 	<target name="build">
 		<mkdir dir="libs"/>
 		<get src="http://download.true-games.org/minecraft/libs/ProtocolSupport/spigot.jar" dest="libs/spigot.jar" usetimestamp="true"/>
-        <mkdir dir="build/classes"/>
-        <javac source="1.7" target="1.7" encoding="UTF-8" srcdir="src" destdir="build/classes" classpathref="libs" debug="on"/>
+		<mkdir dir="build/classes"/>
+		<javac source="1.7" target="1.7" encoding="UTF-8" srcdir="src" destdir="build/classes" classpathref="libs" debug="on"/>
 		<copy todir="build/classes">
-     		<fileset file="src/plugin.yml"/>
+			<fileset file="src/plugin.yml"/>
 		</copy>
-        <jar destfile="target/ProtocolSupport.jar" basedir="build/classes"/>
+		<jar destfile="target/ProtocolSupport.jar" basedir="build/classes"/>
 		<delete dir="build"/>
-    </target>
+	</target>
 
 </project>
