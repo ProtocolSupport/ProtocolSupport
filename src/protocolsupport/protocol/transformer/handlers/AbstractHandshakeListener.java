@@ -48,6 +48,7 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 							final ChatComponentText chatcomponenttext = new ChatComponentText("Connection throttled! Please wait before reconnecting.");
 							networkManager.handle(new PacketLoginOutDisconnect(chatcomponenttext));
 							networkManager.close(chatcomponenttext);
+							return;
 						}
 						ThrottleTracker.track(address, System.currentTimeMillis());
 					}
