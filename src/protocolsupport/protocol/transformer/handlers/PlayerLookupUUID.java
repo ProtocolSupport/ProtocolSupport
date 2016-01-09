@@ -47,23 +47,13 @@ public class PlayerLookupUUID {
 			listener.setProfile(MinecraftServer.getServer().aD().hasJoinedServer(new GameProfile(null, gameprofile.getName()), hash));
 			if (listener.getProfile() != null) {
 				fireLoginEvents();
-			} else if (MinecraftServer.getServer().T()) {
-				listener.getLogger().warn("Failed to verify username but will let them in anyway!");
-				listener.setProfile(listener.generateOfflineProfile(gameprofile));
-				listener.setLoginState(LoginState.READY_TO_ACCEPT);
 			} else {
 				listener.disconnect("Failed to verify username!");
 				listener.getLogger().error("Username '" + gameprofile.getName() + "' tried to join with an invalid session");
 			}
 		} catch (AuthenticationUnavailableException authenticationunavailableexception) {
-			if (MinecraftServer.getServer().T()) {
-				listener.getLogger().warn("Authentication servers are down but will let them in anyway!");
-				listener.setProfile(listener.generateOfflineProfile(gameprofile));
-				listener.setLoginState(LoginState.READY_TO_ACCEPT);
-			} else {
-				listener.disconnect("Authentication servers are down. Please try again later, sorry!");
-				listener.getLogger().error("Couldn't verify username because servers are unavailable");
-			}
+			listener.disconnect("Authentication servers are down. Please try again later, sorry!");
+			listener.getLogger().error("Couldn't verify username because servers are unavailable");
 		} catch (Exception exception) {
 			listener.disconnect("Failed to verify username!");
 			MinecraftServer.getServer().server.getLogger().log(Level.WARNING, "Exception verifying " + gameprofile.getName(), exception);
