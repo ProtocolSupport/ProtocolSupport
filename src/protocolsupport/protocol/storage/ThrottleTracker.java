@@ -20,10 +20,11 @@ public class ThrottleTracker {
 		synchronized (tracker) {
 			tracker.put(address, time);
 			if (tracker.size() > 100) {
+				long currentTime = System.currentTimeMillis();
 				TObjectLongIterator<InetAddress> iterator = tracker.iterator();
 				while (iterator.hasNext()) {
 					iterator.advance();
-					if ((System.currentTimeMillis() - iterator.value()) < time) {
+					if ((currentTime - iterator.value()) < time) {
 						iterator.remove();
 					}
 				}

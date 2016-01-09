@@ -43,7 +43,7 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 				networkManager.a(EnumProtocol.LOGIN);
 				try {
 					final InetAddress address = ((InetSocketAddress) networkManager.getSocketAddress()).getAddress();
-					if (ThrottleTracker.isEnabled() && !"127.0.0.1".equals(address.getHostAddress())) {
+					if (ThrottleTracker.isEnabled()) {
 						if (ThrottleTracker.isThrottled(address)) {
 							final ChatComponentText chatcomponenttext = new ChatComponentText("Connection throttled! Please wait before reconnecting.");
 							networkManager.handle(new PacketLoginOutDisconnect(chatcomponenttext));
