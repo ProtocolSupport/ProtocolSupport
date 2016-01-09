@@ -74,19 +74,20 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 	protected void cancelTask() {
 		if (responseTask != null) {
 			responseTask.cancel(true);
+			responseTask = null;
 		}
 	}
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-		super.channelInactive(ctx);
 		cancelTask();
+		super.channelInactive(ctx);
 	}
 
 	@Override
 	public void handlerRemoved(ChannelHandlerContext ctx) throws Exception  {
-		super.handlerRemoved(ctx);
 		cancelTask();
+		super.handlerRemoved(ctx);
 	}
 
 	@SuppressWarnings("deprecation")

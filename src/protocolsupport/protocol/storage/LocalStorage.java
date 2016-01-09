@@ -16,7 +16,7 @@ import com.mojang.authlib.properties.Property;
 
 public class LocalStorage {
 
-	private TIntObjectHashMap<WatchedEntity> watchedEntities = new TIntObjectHashMap<WatchedEntity>();
+	private final TIntObjectHashMap<WatchedEntity> watchedEntities = new TIntObjectHashMap<WatchedEntity>();
 	private WatchedPlayer player;
 	private final HashMap<UUID, PlayerListEntry> playerlist = new HashMap<>();
 
