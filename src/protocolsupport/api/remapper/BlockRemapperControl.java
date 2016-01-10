@@ -15,8 +15,7 @@ public class BlockRemapperControl {
 			case MINECRAFT_1_8: {
 				throw new IllegalArgumentException("Remapper for version "+version+" doesn't exist");
 			}
-			case UNKNOWN:
-			case NOT_SET: {
+			case UNKNOWN: {
 				throw new IllegalArgumentException(version+" is not a valid protocol version");
 			}
 			default: {

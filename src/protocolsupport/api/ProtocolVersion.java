@@ -13,8 +13,7 @@ public enum ProtocolVersion {
 	MINECRAFT_1_5_1(60, 2, "1.5.1"),
 	MINECRAFT_1_4_7(51, 1, "1.4.7"),
 	MINECRAFT_LEGACY(-1, 0),
-	UNKNOWN(-1),
-	NOT_SET(0);
+	UNKNOWN(-1);
 
 	private final int id;
 	private final int orderId;
@@ -68,7 +67,7 @@ public enum ProtocolVersion {
 		return orderId >= startId && orderId <= endId;
 	}
 
-	private static final ProtocolVersion[] byOrderId = new ProtocolVersion[ProtocolVersion.values().length - 2];
+	private static final ProtocolVersion[] byOrderId = new ProtocolVersion[ProtocolVersion.values().length - 1];
 	static {
 		for (ProtocolVersion version : ProtocolVersion.values()) {
 			if (version.orderId != -1) {
