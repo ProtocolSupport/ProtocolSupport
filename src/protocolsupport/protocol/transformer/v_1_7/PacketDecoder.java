@@ -32,7 +32,7 @@ import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.InventoryTransaction;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.KeepAlive;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.Look;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.Player;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.Flying;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.Position;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.TabComplete;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.UpdateSign;
@@ -66,7 +66,7 @@ public class PacketDecoder implements IPacketDecoder {
 			registry.register(EnumProtocol.PLAY, 0x00, KeepAlive.class);
 			registry.register(EnumProtocol.PLAY, 0x01, Chat.class);
 			registry.register(EnumProtocol.PLAY, 0x02, UseEntity.class);
-			registry.register(EnumProtocol.PLAY, 0x03, Player.class);
+			registry.register(EnumProtocol.PLAY, 0x03, Flying.class);
 			registry.register(EnumProtocol.PLAY, 0x04, Position.class);
 			registry.register(EnumProtocol.PLAY, 0x05, Look.class);
 			registry.register(EnumProtocol.PLAY, 0x06, PositionLook.class);

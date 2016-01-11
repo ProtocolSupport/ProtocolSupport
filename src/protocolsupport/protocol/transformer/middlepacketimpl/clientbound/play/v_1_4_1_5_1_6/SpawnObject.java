@@ -4,6 +4,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleSpawnObject;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
+import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -40,8 +41,8 @@ public class SpawnObject extends MiddleSpawnObject<RecyclableCollection<PacketDa
 			}
 		}
 		if (type == 70) {
-			int id = objectdata & 0xFFFF;
-			int data = objectdata >> 12;
+			int id = IdRemapper.BLOCK.getTable(version).getRemap(objectdata & 4095);
+			int data = (objectdata >> 12) & 0xF;
 			objectdata = (id | (data << 16));
 		}
 		if ((type == 50) || (type == 70) || (type == 74)) {

@@ -9,6 +9,8 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 
+import com.mojang.authlib.GameProfile;
+
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.PacketListener;
 import net.minecraft.server.v1_8_R3.PlayerConnection;
@@ -43,7 +45,10 @@ public class WrappedDecoder extends ByteToMessageDecoder {
 			String username = null;
 			PacketListener listener = ChannelUtils.getNetworkManager(ctx.channel()).getPacketListener();
 			if (listener instanceof AbstractLoginListener) {
-				username = ((AbstractLoginListener) listener).getProfile().getName();
+				GameProfile profile = ((AbstractLoginListener) listener).getProfile();
+				if (profile != null) {
+					username = profile.getName();
+				}
 			} else if (listener instanceof PlayerConnection) {
 				username = ((PlayerConnection) listener).player.getProfile().getName();
 			}

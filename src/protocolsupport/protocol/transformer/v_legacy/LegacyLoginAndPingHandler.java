@@ -26,7 +26,7 @@ public class LegacyLoginAndPingHandler extends SimpleChannelInboundHandler<ByteB
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf input) throws Exception {
-		RecyclablePacketDataSerializer serializer = RecyclablePacketDataSerializer.create(ProtocolVersion.MINERCAFT_LEGACY);
+		RecyclablePacketDataSerializer serializer = RecyclablePacketDataSerializer.create(ProtocolVersion.MINECRAFT_LEGACY);
 		try {
 			int packetId = input.readUnsignedByte();
 			if (packetId == 0xFE) {

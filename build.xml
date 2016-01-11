@@ -2,8 +2,8 @@
 
 	<path id="libs">
 		<filelist>
-    		<file name="${basedir}/libs/spigot.jar"/>
-    		<file name="${basedir}/buildprocessor/BuildProcessor.jar"/>
+			<file name="${basedir}/libs/spigot.jar"/>
+			<file name="${basedir}/buildprocessor/BuildProcessor.jar"/>
 		</filelist>
 	</path>
 
@@ -18,8 +18,8 @@
 		<copy todir="build/classes/protocolsupport/protocol/transformer/mcpe">
 			<fileset file="src/protocolsupport/protocol/transformer/mcpe/SKIN.bin" />
 		</copy>
-		<jar destfile="target/ProtocolSupport.jar" basedir="build/classes" />
-		<delete dir="build" />
+		<jar destfile="target/ProtocolSupport.jar" basedir="build/classes"/>
+		<delete dir="build"/>
 	</target>
 
 </project>

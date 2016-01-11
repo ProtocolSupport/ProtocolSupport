@@ -9,7 +9,7 @@ public class LoginStart extends MiddleLoginStart {
 
 	@Override
 	public void readFromClientData(PacketDataSerializer serializer) throws IOException {
-		name = serializer.readString(Short.MAX_VALUE);
+		name = serializer.readString(16);
 	}
 
 }
