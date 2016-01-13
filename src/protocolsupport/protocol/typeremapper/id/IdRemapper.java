@@ -130,11 +130,12 @@ public class IdRemapper {
 			registerRemapEntry(424, 366, ProtocolVersionsHelper.BEFORE_1_8);
 			// banner -> sign
 			registerRemapEntry(425, 323, ProtocolVersionsHelper.BEFORE_1_8);
+			// rabbit hide -> leather
+			registerRemapEntry(415, 334, ProtocolVersionsHelper.BEFORE_1_8);
 			// everything else -> stone
 			registerRemapEntry(409, 1, ProtocolVersionsHelper.BEFORE_1_8);
 			registerRemapEntry(410, 1, ProtocolVersionsHelper.BEFORE_1_8);
 			registerRemapEntry(414, 1, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(415, 1, ProtocolVersionsHelper.BEFORE_1_8);
 			registerRemapEntry(416, 1, ProtocolVersionsHelper.BEFORE_1_8);
 			registerRemapEntry(417, 1, ProtocolVersionsHelper.BEFORE_1_6);
 			registerRemapEntry(418, 1, ProtocolVersionsHelper.BEFORE_1_6);
