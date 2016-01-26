@@ -52,7 +52,7 @@ public abstract class MiddleSpawnNamed<T> extends ClientBoundMiddlePacket<T> {
 		storage.addWatchedEntity(wplayer);
 		PlayerListEntry entry = storage.getPlayerListEntry(uuid);
 		if (entry != null) {
-			name = entry.getName();
+			name = entry.getUserName();
 			properties = entry.getProperties().getAll(true);
 		} else {
 			name = "Unknown";
