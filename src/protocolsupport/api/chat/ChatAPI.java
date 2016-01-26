@@ -40,19 +40,19 @@ public class ChatAPI {
 		sendMessage(player, message, MessagePosition.CHAT);
 	}
 
-	public static void sendMessage(Player player, String json) {
-		sendMessage(player, json, MessagePosition.CHAT);
+	public static void sendMessage(Player player, String messageJson) {
+		sendMessage(player, messageJson, MessagePosition.CHAT);
 	}
 
 	public static void sendMessage(Player player, BaseComponent message, MessagePosition position) {
 		sendMessage(player, toJSON(message), position);
 	}
 
-	public static void sendMessage(Player player, String json, MessagePosition position) {
+	public static void sendMessage(Player player, String messageJson, MessagePosition position) {
 		Validate.notNull(player, "Player can't be null");
-		Validate.notNull(json, "Message can't be null");
+		Validate.notNull(messageJson, "Message can't be null");
 		Validate.notNull(position, "Message position can't be null");		
-		((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutChat(ChatSerializer.a(json), (byte) position.ordinal()));
+		((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutChat(ChatSerializer.a(messageJson), (byte) position.ordinal()));
 	}
 
 	public static enum MessagePosition {

@@ -17,17 +17,17 @@ public class TitleAPI {
 		sendSimpleTitle(player, ChatAPI.toJSON(title), ChatAPI.toJSON(subtitle), fadeIn, stay, fadeOut);
 	}
 
-	public static void sendSimpleTitle(Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+	public static void sendSimpleTitle(Player player, String titleJson, String subtitleJson, int fadeIn, int stay, int fadeOut) {
 		Validate.notNull(player, "Player can't be null");
-		if (title == null && subtitle == null) {
+		if (titleJson == null && subtitleJson == null) {
 			throw new IllegalArgumentException("Title and subtitle can't be both null");
 		}
 		PlayerConnection connection = ((CraftPlayer) player).getHandle().playerConnection;
-		if (title != null) {
-			connection.sendPacket(new PacketPlayOutTitle(EnumTitleAction.TITLE, ChatSerializer.a(title)));
+		if (titleJson != null) {
+			connection.sendPacket(new PacketPlayOutTitle(EnumTitleAction.TITLE, ChatSerializer.a(titleJson)));
 		}
-		if (subtitle != null) {
-			connection.sendPacket(new PacketPlayOutTitle(EnumTitleAction.SUBTITLE, ChatSerializer.a(subtitle)));
+		if (subtitleJson != null) {
+			connection.sendPacket(new PacketPlayOutTitle(EnumTitleAction.SUBTITLE, ChatSerializer.a(subtitleJson)));
 		}
 		connection.sendPacket(new PacketPlayOutTitle(fadeIn, stay, fadeOut));
 	}
