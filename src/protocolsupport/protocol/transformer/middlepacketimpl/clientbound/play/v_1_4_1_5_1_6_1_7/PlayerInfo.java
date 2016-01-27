@@ -4,6 +4,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddlePlayerInfo;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
+import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -48,7 +49,7 @@ public class PlayerInfo extends MiddlePlayerInfo<RecyclableCollection<PacketData
 
 	static PacketData createData(String name, boolean add, ProtocolVersion version) {
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_PLAYER_INFO_ID, version);
-		serializer.writeString(name);
+		serializer.writeString(Utils.clampString(name, 16));
 		serializer.writeBoolean(add);
 		serializer.writeShort(0);
 		return serializer;
