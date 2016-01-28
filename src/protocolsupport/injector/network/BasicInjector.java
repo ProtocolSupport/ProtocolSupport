@@ -68,11 +68,38 @@ public class BasicInjector {
 			return result;
 		}
 
+		@Override
+		public boolean addAll(Collection<? extends ChannelFuture> c) {
+			boolean result = originalList.addAll(c);
+			for (ChannelFuture future : c) {
+				inject(future);
+			}
+			return result;
+		}
+
+		@Override
+		public boolean addAll(int index, Collection<? extends ChannelFuture> c) {
+			boolean result = originalList.addAll(index, c);
+			for (ChannelFuture future : c) {
+				inject(future);
+			}
+			return result;
+		}
+
 		protected void inject(ChannelFuture future) {
 			Channel channel = future.channel();
-			ChannelHandler serverHandler = future.channel().pipeline().first();
 			try {
-				Utils.setAccessible(serverHandler.getClass().getDeclaredField("childHandler")).set(serverHandler, new ServerConnectionChannel(networkManagersList));
+				ChannelHandler serverMainHandler = null;
+				for (ChannelHandler handler : channel.pipeline().toMap().values()) {
+					if (handler.getClass().getSimpleName().equals("ServerBootstrapAcceptor")) {
+						serverMainHandler = handler;
+						break;
+					}
+				}
+				if (serverMainHandler == null) {
+					throw new IllegalStateException("Unable to find default netty channel initializer");
+				}
+				Utils.setAccessible(serverMainHandler.getClass().getDeclaredField("childHandler")).set(serverMainHandler, new ServerConnectionChannel(networkManagersList));
 			} catch (Exception e) {
 				SneakyThrow.sneaky(e);
 			}
@@ -123,16 +150,6 @@ public class BasicInjector {
 		@Override
 		public boolean containsAll(Collection<?> c) {
 			return originalList.contains(c);
-		}
-
-		@Override
-		public boolean addAll(Collection<? extends ChannelFuture> c) {
-			return originalList.addAll(c);
-		}
-
-		@Override
-		public boolean addAll(int index, Collection<? extends ChannelFuture> c) {
-			return originalList.addAll(index, c);
 		}
 
 		@Override
