@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import net.minecraft.server.v1_8_R3.MojangsonParseException;
 import net.minecraft.server.v1_8_R3.MojangsonParser;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
+
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.utils.Any;
@@ -22,8 +23,8 @@ public class HoverAction {
 	private Type type;
 	private String value;
 
-	public HoverAction(Type action, String value) {
-		this.type = action;
+	public HoverAction(Type type, String value) {
+		this.type = type;
 		this.value = value;
 	}
 
@@ -80,7 +81,7 @@ public class HoverAction {
 	public ItemStack getItemStack() {
 		validateAction(type, Type.SHOW_ITEM);
 		try {
-			return CraftItemStack.asCraftMirror(net.minecraft.server.v1_8_R3.ItemStack.createStack(MojangsonParser.parse(value)));
+			return CraftItemStack.asCraftMirror(net.minecraft.server.v1_8_R3.ItemStack.createStack(MojangsonParser.parse(getValue())));
 		} catch (MojangsonParseException e) {
 			throw new IllegalStateException("Unable to parse value to itemstack");
 		}
@@ -90,7 +91,7 @@ public class HoverAction {
 	public EntityInfo getEntity() {
 		validateAction(type, Type.SHOW_ENTITY);
 		try {
-			NBTTagCompound compound = MojangsonParser.parse(value);
+			NBTTagCompound compound = MojangsonParser.parse(getValue());
 			return new EntityInfo(EntityType.fromName(compound.getString("type")), UUID.fromString(compound.getString("id")), compound.getString("name"));
 		} catch (MojangsonParseException e) {
 			throw new IllegalStateException("Unable to parse value to entity info");
@@ -99,8 +100,8 @@ public class HoverAction {
 
 	public Any<Achievement, Statistic> getAchievmentOrStat() {
 		validateAction(type, Type.SHOW_ACHIEVEMENT);
-		Achievement achievement = CraftStatistic.getBukkitAchievementByName(value);
-		Statistic stat = CraftStatistic.getBukkitStatisticByName(value);
+		Achievement achievement = CraftStatistic.getBukkitAchievementByName(getValue());
+		Statistic stat = CraftStatistic.getBukkitStatisticByName(getValue());
 		return new Any<>(achievement, stat);
 	}
 
