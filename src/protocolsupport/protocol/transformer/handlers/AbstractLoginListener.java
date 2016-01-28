@@ -118,18 +118,6 @@ public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3
 	@SuppressWarnings("unchecked")
 	@Override
 	public void b() {
-		UUID newUUID = null;
-		if (isOnlineMode && !useOnlineModeUUID) {
-			newUUID = generateOffileModeUUID();
-		}
-		if (forcedUUID != null) {
-			newUUID = forcedUUID;
-		}
-		if (newUUID != null) {
-			GameProfile newProfile = new GameProfile(newUUID, profile.getName());
-			newProfile.getProperties().putAll(profile.getProperties());
-			profile = newProfile;
-		}
 		EntityPlayer entityPlayer = MinecraftServer.getServer().getPlayerList().attemptLogin(this, profile, hostname);
 		if (entityPlayer != null) {
 			state = LoginState.ACCEPTED;
@@ -230,7 +218,6 @@ public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3
 
 	protected abstract void enableEncryption(SecretKey key);
 
-
 	public Logger getLogger() {
 		return logger;
 	}
@@ -240,21 +227,29 @@ public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3
 		return profile;
 	}
 
-
 	public void setProfile(GameProfile profile) {
 		this.profile = profile;
 	}
-
 
 	public GameProfile generateOfflineProfile(GameProfile current) {
 		return a(current);
 	}
 
-
-	public void setLoginState(LoginState state) {
-		this.state = state;
+	public void setReadyToAccept() {
+		UUID newUUID = null;
+		if (isOnlineMode && !useOnlineModeUUID) {
+			newUUID = generateOffileModeUUID();
+		}
+		if (forcedUUID != null) {
+			newUUID = forcedUUID;
+		}
+		if (newUUID != null) {
+			GameProfile newProfile = new GameProfile(newUUID, profile.getName());
+			newProfile.getProperties().putAll(profile.getProperties());
+			profile = newProfile;
+		}
+		this.state = LoginState.READY_TO_ACCEPT;
 	}
-
 
 	public SecretKey getLoginKey() {
 		return loginKey;
