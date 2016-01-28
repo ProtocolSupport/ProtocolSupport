@@ -4,8 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import protocolsupport.commands.CommandHandler;
-import protocolsupport.injector.NettyInjector;
 import protocolsupport.injector.ServerInjector;
+import protocolsupport.injector.network.NettyInjector;
 import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.server.listeners.PlayerListener;

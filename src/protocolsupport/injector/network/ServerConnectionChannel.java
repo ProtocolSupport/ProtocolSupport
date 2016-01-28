@@ -1,4 +1,4 @@
-package protocolsupport.protocol.core;
+package protocolsupport.injector.network;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelException;
@@ -11,6 +11,8 @@ import java.util.List;
 import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.NetworkManager;
+import protocolsupport.protocol.core.ChannelHandlers;
+import protocolsupport.protocol.core.FakePacketListener;
 import protocolsupport.protocol.core.initial.InitialPacketDecoder;
 import protocolsupport.protocol.core.wrapped.WrappedDecoder;
 import protocolsupport.protocol.core.wrapped.WrappedEncoder;
