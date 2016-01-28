@@ -1,14 +1,20 @@
 package protocolsupport.injector.network;
 
-import org.spigotmc.SpigotConfig;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
+import net.minecraft.server.v1_8_R3.ServerConnection;
+import protocolsupport.utils.Utils;
+import protocolsupport.utils.Utils.Converter;
 
 public class NettyInjector {
 
+	private static final boolean useNonBlockingServerConnection = Utils.getJavaPropertyValue("protocolsupport.nonblockingconection", false, Converter.STRING_TO_BOOLEAN);
+
 	public static void inject() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		if (!SpigotConfig.lateBind) {
-			BasicInjector.inject();
-		} else {
+		ServerConnection connection = MinecraftServer.getServer().getServerConnection();
+		if (connection == null && useNonBlockingServerConnection) {
 			NonBlockingServerConnection.inject();
+		} else {
+			BasicInjector.inject();
 		}
 	}
 

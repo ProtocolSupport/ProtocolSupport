@@ -61,6 +61,12 @@ public class Utils {
 				return Integer.parseInt(t);
 			}
 		};
+		public static final Converter<String, Boolean> STRING_TO_BOOLEAN = new Converter<String, Boolean>() {
+			@Override
+			public Boolean convert(String t) {
+				return Boolean.getBoolean(t);
+			}
+		};
 		public R convert(T t);
 	}
 

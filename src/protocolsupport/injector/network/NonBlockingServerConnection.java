@@ -1,7 +1,6 @@
 package protocolsupport.injector.network;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.util.Collection;
 import java.util.Collections;
@@ -66,12 +65,7 @@ public class NonBlockingServerConnection extends ServerConnection {
 	}
 
 	public static void inject() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		Field serverConnectionField = Utils.setAccessible(MinecraftServer.class.getDeclaredField("q"));
-		if (serverConnectionField.get(MinecraftServer.getServer()) != null) {
-			throw new IllegalStateException("ServerConnection field already initialized");
-		};
-		NonBlockingServerConnection connection = new NonBlockingServerConnection();
-		serverConnectionField.set(MinecraftServer.getServer(), connection);
+		Utils.setAccessible(MinecraftServer.class.getDeclaredField("q")).set(MinecraftServer.getServer(), new NonBlockingServerConnection());
 	}
 
 	@Override
