@@ -81,7 +81,7 @@ public class HoverAction {
 	public ItemStack getItemStack() {
 		validateAction(type, Type.SHOW_ITEM);
 		try {
-			return CraftItemStack.asCraftMirror(net.minecraft.server.v1_8_R3.ItemStack.createStack(MojangsonParser.parse(getValue())));
+			return CraftItemStack.asCraftMirror(net.minecraft.server.v1_8_R3.ItemStack.createStack(MojangsonParser.parse(value)));
 		} catch (MojangsonParseException e) {
 			throw new IllegalStateException("Unable to parse value to itemstack");
 		}
@@ -91,7 +91,7 @@ public class HoverAction {
 	public EntityInfo getEntity() {
 		validateAction(type, Type.SHOW_ENTITY);
 		try {
-			NBTTagCompound compound = MojangsonParser.parse(getValue());
+			NBTTagCompound compound = MojangsonParser.parse(value);
 			return new EntityInfo(EntityType.fromName(compound.getString("type")), UUID.fromString(compound.getString("id")), compound.getString("name"));
 		} catch (MojangsonParseException e) {
 			throw new IllegalStateException("Unable to parse value to entity info");
@@ -100,8 +100,8 @@ public class HoverAction {
 
 	public Any<Achievement, Statistic> getAchievmentOrStat() {
 		validateAction(type, Type.SHOW_ACHIEVEMENT);
-		Achievement achievement = CraftStatistic.getBukkitAchievementByName(getValue());
-		Statistic stat = CraftStatistic.getBukkitStatisticByName(getValue());
+		Achievement achievement = CraftStatistic.getBukkitAchievementByName(value);
+		Statistic stat = CraftStatistic.getBukkitStatisticByName(value);
 		return new Any<>(achievement, stat);
 	}
 
