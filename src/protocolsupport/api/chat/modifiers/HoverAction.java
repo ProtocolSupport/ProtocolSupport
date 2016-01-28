@@ -143,9 +143,4 @@ public class HoverAction {
 		}
 	}
 
-	@Override
-	public String toString() {
-		return "{type: " + type.name().toLowerCase() +", value: " + getValue() + "}";
-	}
-
 }
