@@ -33,6 +33,8 @@ import org.apache.logging.log4j.Logger;
 import org.bukkit.Bukkit;
 
 import protocolsupport.api.events.PlayerLoginStartEvent;
+import protocolsupport.utils.Utils;
+import protocolsupport.utils.Utils.Converter;
 
 import com.google.common.base.Charsets;
 import com.mojang.authlib.GameProfile;
@@ -40,15 +42,7 @@ import com.mojang.authlib.properties.Property;
 
 public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3.LoginListener {
 
-	private static final int loginThreads = getLoginThreads();
-
-	private static int getLoginThreads() {
-		try {
-			Integer.parseInt(System.getProperty("protocolsupport.loginthreads", "8"));
-		} catch (Throwable t) {
-		}
-		return 8;
-	}
+	private static final int loginThreads = Utils.getJavaPropertyValue("protocolsupport.loginthreads", 8, Converter.STRING_TO_INT);
 
 	private static final Executor loginprocessor = new ThreadPoolExecutor(
 		1, loginThreads,

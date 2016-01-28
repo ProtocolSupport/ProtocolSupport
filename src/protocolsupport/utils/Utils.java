@@ -43,4 +43,25 @@ public class Utils {
 		return list;
 	}
 
+	public static <T> T getJavaPropertyValue(String property, T defaultValue, Converter<String, T> converter) {
+		try {
+			String value = System.getProperty(property);
+			if (value != null) {
+				return converter.convert(value);
+			}
+		} catch (Throwable t) {
+		}
+		return defaultValue;
+	}
+
+	public static interface Converter<T, R> {
+		public static final Converter<String, Integer> STRING_TO_INT = new Converter<String, Integer>() {
+			@Override
+			public Integer convert(String t) {
+				return Integer.parseInt(t);
+			}
+		};
+		public R convert(T t);
+	}
+
 }

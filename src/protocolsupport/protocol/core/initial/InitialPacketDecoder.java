@@ -20,29 +20,14 @@ import protocolsupport.protocol.core.IPipeLineBuilder;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.utils.ChannelUtils;
 import protocolsupport.utils.ReplayingDecoderBuffer;
+import protocolsupport.utils.Utils;
 import protocolsupport.utils.ReplayingDecoderBuffer.EOFSignal;
+import protocolsupport.utils.Utils.Converter;
 
 public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
-	private static final int ping152delay = getPing152Delay();
-
-	private static int getPing152Delay() {
-		try {
-			return Integer.parseInt(System.getProperty("protocolsupport.ping152delay", "500"));
-		} catch (Throwable t) {
-		}
-		return 500;
-	}
-
-	private static final int pingLegacyDelay = getPingLegacyDelay();
-
-	private static int getPingLegacyDelay() {
-		try {
-			return Integer.parseInt(System.getProperty("protocolsupport.pinglegacydelay", "1000"));
-		} catch (Throwable t) {
-		}
-		return 500;
-	}
+	private static final int ping152delay = Utils.getJavaPropertyValue("protocolsupport.ping152delay", 500, Converter.STRING_TO_INT);
+	private static final int pingLegacyDelay = Utils.getJavaPropertyValue("protocolsupport.pinglegacydelay", 1000, Converter.STRING_TO_INT);
 
 	@SuppressWarnings("serial")
 	private static final EnumMap<ProtocolVersion, IPipeLineBuilder> pipelineBuilders = new EnumMap<ProtocolVersion, IPipeLineBuilder>(ProtocolVersion.class) {{

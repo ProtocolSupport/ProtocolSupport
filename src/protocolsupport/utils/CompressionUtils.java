@@ -3,17 +3,11 @@ package protocolsupport.utils;
 import java.util.Arrays;
 import java.util.zip.Deflater;
 
+import protocolsupport.utils.Utils.Converter;
+
 public class CompressionUtils {
 
-	private static final int compressionLevel = getCompressionLevel();
-
-	private static int getCompressionLevel() {
-		try {
-			return Integer.parseInt(System.getProperty("protocolsupport.compressionlevel", "1"));
-		} catch (Throwable t) {
-		}
-		return 1;
-	}
+	private static final int compressionLevel = Utils.getJavaPropertyValue("protocolsupport.compressionlevel", 1, Converter.STRING_TO_INT);
 
 	public static byte[] compress(byte[] input) {
 		Deflater deflater = new Deflater(compressionLevel);
