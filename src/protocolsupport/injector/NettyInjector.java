@@ -6,6 +6,7 @@ import io.netty.channel.ChannelHandler;
 
 import java.util.List;
 
+import net.minecraft.server.v1_8_R3.ChatComponentText;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.NetworkManager;
 import net.minecraft.server.v1_8_R3.ServerConnection;
@@ -21,6 +22,12 @@ public class NettyInjector {
 		Channel channel = ((List<ChannelFuture>) Utils.setAccessible(serverConnection.getClass().getDeclaredField("g")).get(serverConnection)).get(0).channel();
 		ChannelHandler serverHandler = channel.pipeline().first();
 		Utils.setAccessible(serverHandler.getClass().getDeclaredField("childHandler")).set(serverHandler, new ServerConnectionChannel(networkManagersList));
+		synchronized (networkManagersList) {
+			for (NetworkManager nm : networkManagersList) {
+				nm.getPacketListener().a(new ChatComponentText("ProtocolSupport channel reset"));
+				nm.close(new ChatComponentText("ProtocolSupport channel reset"));
+			}
+		}
 	}
 
 }
