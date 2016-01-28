@@ -24,7 +24,6 @@ public class NettyInjector {
 		Utils.setAccessible(serverHandler.getClass().getDeclaredField("childHandler")).set(serverHandler, new ServerConnectionChannel(networkManagersList));
 		synchronized (networkManagersList) {
 			for (NetworkManager nm : networkManagersList) {
-				nm.getPacketListener().a(new ChatComponentText("ProtocolSupport channel reset"));
 				nm.close(new ChatComponentText("ProtocolSupport channel reset"));
 			}
 		}
