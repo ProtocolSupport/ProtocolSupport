@@ -93,8 +93,7 @@ public class NonBlockingServerConnection extends ServerConnection {
 		}
 	}
 
-	//We use CLQ so we no longer need to synchronize, so netty channel synchronized no longer wastes time waiting for list to unlock
-	//This should speed processing 
+	//We use CLQ, so we no longer need to synchronize, so netty channel initializer no longer wastes time waiting for network manager list to unlock
 	@SuppressWarnings("unchecked")
 	@Override
 	public void c() {
