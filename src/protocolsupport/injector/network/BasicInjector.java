@@ -149,7 +149,7 @@ public class BasicInjector {
 
 		@Override
 		public boolean containsAll(Collection<?> c) {
-			return originalList.contains(c);
+			return originalList.containsAll(c);
 		}
 
 		@Override
