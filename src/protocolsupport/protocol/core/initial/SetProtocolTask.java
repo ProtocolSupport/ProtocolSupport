@@ -1,7 +1,7 @@
 package protocolsupport.protocol.core.initial;
 
 import io.netty.channel.Channel;
-import net.minecraft.server.v1_8_R3.MinecraftServer;
+
 import protocolsupport.api.ProtocolVersion;
 
 public class SetProtocolTask implements Runnable {
@@ -20,11 +20,8 @@ public class SetProtocolTask implements Runnable {
 	public void run() {
 		try {
 			initialDecoder.setProtocol(channel, initialDecoder.receivedData, version);
-		} catch (Throwable t) {
-			if (MinecraftServer.getServer().isDebugging()) {
-				t.printStackTrace();
-			}
-			channel.close();
+		} catch (Exception t) {
+			channel.pipeline().firstContext().fireExceptionCaught(t);
 		}
 	}
 
