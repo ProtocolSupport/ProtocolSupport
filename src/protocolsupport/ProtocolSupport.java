@@ -12,7 +12,7 @@ import protocolsupport.protocol.core.initial.InitialPacketDecoder;
 import protocolsupport.protocol.transformer.handlers.AbstractLoginListener;
 import protocolsupport.server.listeners.PlayerListener;
 import protocolsupport.utils.Allocator;
-import protocolsupport.utils.CompressionUtils;
+import protocolsupport.utils.Compressor;
 
 public class ProtocolSupport extends JavaPlugin {
 
@@ -20,7 +20,7 @@ public class ProtocolSupport extends JavaPlugin {
 	public void onLoad() {
 		try {
 			Allocator.init();
-			CompressionUtils.init();
+			Compressor.init();
 			ServerBoundPacket.init();
 			ClientBoundPacket.init();
 			InitialPacketDecoder.init();

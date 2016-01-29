@@ -1,5 +1,6 @@
 package protocolsupport.protocol.transformer.handlers;
 
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 
@@ -128,13 +129,14 @@ public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3
 		if (entityPlayer != null) {
 			state = LoginState.ACCEPTED;
 			if (hasCompression()) {
-				if (MinecraftServer.getServer().aK() >= 0 && !this.networkManager.c()) {
+				final int threshold = MinecraftServer.getServer().aK();
+				if (threshold >= 0 && !this.networkManager.c()) {
 					this.networkManager.a(
-						new PacketLoginOutSetCompression(MinecraftServer.getServer().aK()),
+						new PacketLoginOutSetCompression(threshold),
 						new ChannelFutureListener() {
 							@Override
 							public void operationComplete(ChannelFuture future) throws Exception {
-								networkManager.a(MinecraftServer.getServer().aK());
+								enableCompresssion(threshold);
 							}
 						}
 					);
@@ -146,6 +148,14 @@ public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3
 	}
 
 	protected abstract boolean hasCompression();
+
+	protected void enableCompresssion(int compressionLevel) {
+		Channel channel = networkManager.channel;
+		if (compressionLevel >= 0) {
+			channel.pipeline().addBefore("decoder", "decompress", new PacketDecompressor(compressionLevel));
+			channel.pipeline().addBefore("encoder", "compress", new PacketCompressor(compressionLevel));
+		}
+	}
 
 	@Override
 	public void a(final IChatBaseComponent ichatbasecomponent) {
