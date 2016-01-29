@@ -32,6 +32,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.Bukkit;
 
+import protocolsupport.ProtocolSupport;
 import protocolsupport.api.events.PlayerLoginStartEvent;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
@@ -43,10 +44,15 @@ import com.mojang.authlib.properties.Property;
 public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3.LoginListener {
 
 	private static final int loginThreads = Utils.getJavaPropertyValue("protocolsupport.loginthreads", 8, Converter.STRING_TO_INT);
+	private static final int loginThreadKeepAlive = Utils.getJavaPropertyValue("protocolsupport.loginthreadskeepalive", 60, Converter.STRING_TO_INT);
+
+	public static void init() {
+		ProtocolSupport.logInfo("Login threads max count: "+loginThreads+", keep alive time: "+loginThreadKeepAlive);
+	}
 
 	private static final Executor loginprocessor = new ThreadPoolExecutor(
 		1, loginThreads,
-		60L, TimeUnit.SECONDS,
+		loginThreadKeepAlive, TimeUnit.SECONDS,
 		new LinkedBlockingQueue<Runnable>(),
 		new ThreadFactory() {
 			@Override

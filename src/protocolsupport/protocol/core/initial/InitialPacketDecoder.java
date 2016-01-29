@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.EnumMap;
 import java.util.concurrent.TimeUnit;
 
+import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.core.ChannelHandlers;
 import protocolsupport.protocol.core.IPipeLineBuilder;
@@ -28,6 +29,11 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
 	private static final int ping152delay = Utils.getJavaPropertyValue("protocolsupport.ping152delay", 500, Converter.STRING_TO_INT);
 	private static final int pingLegacyDelay = Utils.getJavaPropertyValue("protocolsupport.pinglegacydelay", 1000, Converter.STRING_TO_INT);
+
+	public static void init() {
+		ProtocolSupport.logInfo("Assume 1.5.2 ping delay: "+ping152delay);
+		ProtocolSupport.logInfo("Assume legacy ping dealy: "+pingLegacyDelay);
+	}
 
 	@SuppressWarnings("serial")
 	private static final EnumMap<ProtocolVersion, IPipeLineBuilder> pipelineBuilders = new EnumMap<ProtocolVersion, IPipeLineBuilder>(ProtocolVersion.class) {{

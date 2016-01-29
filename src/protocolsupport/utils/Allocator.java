@@ -4,11 +4,13 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.buffer.UnpooledByteBufAllocator;
+import protocolsupport.ProtocolSupport;
 import protocolsupport.utils.Utils.Converter;
 
 public class Allocator {
 
 	public static void init() {
+		ProtocolSupport.logInfo("Allocator: "+allocator + ", direct: "+direct);
 	}
 
 	private static final boolean direct = Utils.getJavaPropertyValue("protocolsupport.buffer", true, new Converter<String, Boolean>() {
