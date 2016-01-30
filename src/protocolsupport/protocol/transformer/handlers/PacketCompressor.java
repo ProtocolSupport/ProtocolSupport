@@ -4,9 +4,8 @@ import java.util.zip.Deflater;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-
-import protocolsupport.utils.ChannelUtils;
-import protocolsupport.utils.Compressor;
+import protocolsupport.utils.netty.ChannelUtils;
+import protocolsupport.utils.netty.Compressor;
 
 public class PacketCompressor extends net.minecraft.server.v1_8_R3.PacketCompressor {
 

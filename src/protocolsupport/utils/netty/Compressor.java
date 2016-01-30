@@ -1,9 +1,10 @@
-package protocolsupport.utils;
+package protocolsupport.utils.netty;
 
 import java.util.Arrays;
 import java.util.zip.Deflater;
 
 import protocolsupport.ProtocolSupport;
+import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
 
 public class Compressor {

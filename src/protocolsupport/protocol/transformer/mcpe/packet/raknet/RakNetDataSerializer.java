@@ -5,9 +5,8 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 
-import protocolsupport.utils.ChannelUtils;
-
 import io.netty.buffer.ByteBuf;
+import protocolsupport.utils.netty.ChannelUtils;
 
 public class RakNetDataSerializer {
 

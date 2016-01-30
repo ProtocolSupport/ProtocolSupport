@@ -8,7 +8,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.RecyclablePacketDataSerializer;
 import protocolsupport.protocol.typeremapper.nbt.custompayload.MerchantData.TradeOffer;
-import protocolsupport.utils.ChannelUtils;
+import protocolsupport.utils.netty.ChannelUtils;
 
 public class CustomPayloadSerializer {
 

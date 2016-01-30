@@ -45,7 +45,7 @@ import protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound.Sp
 import protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound.TimeUpdate;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
-import protocolsupport.utils.ChannelUtils;
+import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 

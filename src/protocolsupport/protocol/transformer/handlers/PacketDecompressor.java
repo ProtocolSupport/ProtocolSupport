@@ -6,8 +6,7 @@ import java.util.zip.Inflater;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
-
-import protocolsupport.utils.ChannelUtils;
+import protocolsupport.utils.netty.ChannelUtils;
 
 public class PacketDecompressor extends net.minecraft.server.v1_8_R3.PacketDecompressor {
 

@@ -16,7 +16,7 @@ import net.minecraft.server.v1_8_R3.PacketListener;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.core.IPacketDecoder;
-import protocolsupport.utils.WrappingBuffer;
+import protocolsupport.utils.netty.WrappingBuffer;
 
 public class PacketDecoder implements IPacketDecoder {
 

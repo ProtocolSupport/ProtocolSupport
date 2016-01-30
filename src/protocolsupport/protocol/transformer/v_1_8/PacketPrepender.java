@@ -5,7 +5,7 @@ import io.netty.channel.ChannelHandlerContext;
 
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.core.IPacketPrepender;
-import protocolsupport.utils.ChannelUtils;
+import protocolsupport.utils.netty.ChannelUtils;
 
 public class PacketPrepender implements IPacketPrepender {
 

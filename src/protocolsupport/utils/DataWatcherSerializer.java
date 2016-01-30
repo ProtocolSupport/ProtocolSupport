@@ -13,6 +13,7 @@ import net.minecraft.server.v1_8_R3.Vector3f;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.RecyclablePacketDataSerializer;
 import protocolsupport.utils.DataWatcherObject.ValueType;
+import protocolsupport.utils.netty.ChannelUtils;
 
 public class DataWatcherSerializer {
 

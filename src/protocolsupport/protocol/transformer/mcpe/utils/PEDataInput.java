@@ -1,13 +1,12 @@
 package protocolsupport.protocol.transformer.mcpe.utils;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.utils.netty.ChannelUtils;
 
 import java.io.DataInput;
 import java.io.IOException;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
-
-import protocolsupport.utils.ChannelUtils;
 
 public class PEDataInput implements DataInput {
 

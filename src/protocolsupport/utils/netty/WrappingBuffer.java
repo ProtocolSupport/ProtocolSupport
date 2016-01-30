@@ -1,4 +1,4 @@
-package protocolsupport.utils;
+package protocolsupport.utils.netty;
 
 import java.io.IOException;
 import java.io.InputStream;

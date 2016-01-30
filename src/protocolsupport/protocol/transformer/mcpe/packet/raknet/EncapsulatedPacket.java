@@ -4,8 +4,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.utils.ChannelUtils;
 import protocolsupport.utils.Utils;
+import protocolsupport.utils.netty.ChannelUtils;
 
 public class EncapsulatedPacket {
 

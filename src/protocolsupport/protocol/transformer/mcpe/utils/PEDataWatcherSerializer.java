@@ -13,9 +13,9 @@ import net.minecraft.server.v1_8_R3.Item;
 import net.minecraft.server.v1_8_R3.ItemStack;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.utils.Allocator;
-import protocolsupport.utils.ChannelUtils;
 import protocolsupport.utils.DataWatcherObject;
+import protocolsupport.utils.netty.Allocator;
+import protocolsupport.utils.netty.ChannelUtils;
 
 public class PEDataWatcherSerializer {
 

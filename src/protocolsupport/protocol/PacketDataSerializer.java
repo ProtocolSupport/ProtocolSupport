@@ -42,8 +42,8 @@ import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
 import protocolsupport.protocol.typeskipper.id.SkippingTable;
-import protocolsupport.utils.Allocator;
-import protocolsupport.utils.ChannelUtils;
+import protocolsupport.utils.netty.Allocator;
+import protocolsupport.utils.netty.ChannelUtils;
 
 import com.mojang.authlib.GameProfile;
 

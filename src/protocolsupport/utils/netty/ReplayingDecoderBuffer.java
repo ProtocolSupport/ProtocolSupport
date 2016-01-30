@@ -1,4 +1,4 @@
-package protocolsupport.utils;
+package protocolsupport.utils.netty;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;

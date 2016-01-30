@@ -9,10 +9,9 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketRegistry;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
-import protocolsupport.utils.ChannelUtils;
 import protocolsupport.utils.CompressionUtils;
-import protocolsupport.utils.Compressor;
-
+import protocolsupport.utils.netty.ChannelUtils;
+import protocolsupport.utils.netty.Compressor;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 

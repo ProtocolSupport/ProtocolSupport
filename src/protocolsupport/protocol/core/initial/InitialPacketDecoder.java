@@ -19,11 +19,11 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.core.ChannelHandlers;
 import protocolsupport.protocol.core.IPipeLineBuilder;
 import protocolsupport.protocol.storage.ProtocolStorage;
-import protocolsupport.utils.ChannelUtils;
-import protocolsupport.utils.ReplayingDecoderBuffer;
 import protocolsupport.utils.Utils;
-import protocolsupport.utils.ReplayingDecoderBuffer.EOFSignal;
 import protocolsupport.utils.Utils.Converter;
+import protocolsupport.utils.netty.ChannelUtils;
+import protocolsupport.utils.netty.ReplayingDecoderBuffer;
+import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
 
 public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 

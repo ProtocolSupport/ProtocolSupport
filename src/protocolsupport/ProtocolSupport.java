@@ -11,8 +11,8 @@ import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.core.initial.InitialPacketDecoder;
 import protocolsupport.protocol.transformer.handlers.AbstractLoginListener;
 import protocolsupport.server.listeners.PlayerListener;
-import protocolsupport.utils.Allocator;
-import protocolsupport.utils.Compressor;
+import protocolsupport.utils.netty.Allocator;
+import protocolsupport.utils.netty.Compressor;
 
 public class ProtocolSupport extends JavaPlugin {
 

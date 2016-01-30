@@ -7,7 +7,7 @@ import net.minecraft.server.v1_8_R3.PacketListener;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.utils.Allocator;
+import protocolsupport.utils.netty.Allocator;
 
 public class PacketCreator extends PacketDataSerializer {
 

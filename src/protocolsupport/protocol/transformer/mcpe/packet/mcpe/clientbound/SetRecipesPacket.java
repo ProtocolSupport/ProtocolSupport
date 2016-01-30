@@ -20,8 +20,8 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.RemappingTable;
-import protocolsupport.utils.Allocator;
-import protocolsupport.utils.ChannelUtils;
+import protocolsupport.utils.netty.Allocator;
+import protocolsupport.utils.netty.ChannelUtils;
 
 public class SetRecipesPacket implements ClientboundPEPacket {
 

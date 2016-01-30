@@ -3,7 +3,7 @@ package protocolsupport.protocol.transformer.mcpe.pipeline;
 import java.util.List;
 
 import protocolsupport.protocol.transformer.mcpe.packet.raknet.RakNetPacket;
-import protocolsupport.utils.Allocator;
+import protocolsupport.utils.netty.Allocator;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;

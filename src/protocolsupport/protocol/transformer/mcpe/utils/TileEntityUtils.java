@@ -5,9 +5,8 @@ import io.netty.handler.codec.EncoderException;
 
 import net.minecraft.server.v1_8_R3.NBTCompressedStreamTools;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
-
-import protocolsupport.utils.Allocator;
-import protocolsupport.utils.ChannelUtils;
+import protocolsupport.utils.netty.Allocator;
+import protocolsupport.utils.netty.ChannelUtils;
 
 public class TileEntityUtils {
 

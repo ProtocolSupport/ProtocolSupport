@@ -30,30 +30,6 @@ public class Utils {
 		setAccessible(field).set(null, newValue);
 	}
 
-	public static MethodHandle getFieldSetter(Class<?> classIn, String fieldName) {
-		try {
-			return MethodHandles
-					.lookup()
-					.unreflectSetter(setAccessible(classIn.getDeclaredField(fieldName)));
-		} catch (Throwable t) {
-			t.printStackTrace();
-			Bukkit.shutdown();
-		}
-		return null;
-	}
-
-	public static MethodHandle getFieldGetter(Class<?> classIn, String fieldName) {
-		try {
-			return MethodHandles
-					.lookup()
-					.unreflectGetter(setAccessible(classIn.getDeclaredField(fieldName)));
-		} catch (Throwable t) {
-			t.printStackTrace();
-			Bukkit.shutdown();
-		}
-		return null;
-	}
-
 	public static List<int[]> splitArray(int[] array, int limit) {
 		List<int[]> list = new ArrayList<int[]>();
 		if (array.length <= limit) {
@@ -75,26 +51,6 @@ public class Utils {
 			count++;
 		}
 		return count;
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <T> T[] reverseArray(T[] array) {
-		int length = array.length;
-		T[] newArray = (T[]) Array.newInstance(array.getClass().getComponentType(), length);
-		for (int i = 0; i < length; i++) {
-			newArray[i] = array[length - 1 - i];
-		}
-		return newArray;
-	}
-
-	public static int divideAndCeilWithBase(int number, int base) {
-		int fp = number / base;
-		int m = number % base;
-		if (m == 0) {
-			return fp;
-		} else {
-			return fp + 1;
-		}
 	}
 
 	public static <T> T getJavaPropertyValue(String property, T defaultValue, Converter<String, T> converter) {
@@ -122,6 +78,50 @@ public class Utils {
 			}
 		};
 		public R convert(T t);
+	}
+
+	public static MethodHandle getFieldSetter(Class<?> classIn, String fieldName) {
+		try {
+			return MethodHandles
+					.lookup()
+					.unreflectSetter(setAccessible(classIn.getDeclaredField(fieldName)));
+		} catch (Throwable t) {
+			t.printStackTrace();
+			Bukkit.shutdown();
+		}
+		return null;
+	}
+
+	public static MethodHandle getFieldGetter(Class<?> classIn, String fieldName) {
+		try {
+			return MethodHandles
+					.lookup()
+					.unreflectGetter(setAccessible(classIn.getDeclaredField(fieldName)));
+		} catch (Throwable t) {
+			t.printStackTrace();
+			Bukkit.shutdown();
+		}
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T[] reverseArray(T[] array) {
+		int length = array.length;
+		T[] newArray = (T[]) Array.newInstance(array.getClass().getComponentType(), length);
+		for (int i = 0; i < length; i++) {
+			newArray[i] = array[length - 1 - i];
+		}
+		return newArray;
+	}
+
+	public static int divideAndCeilWithBase(int number, int base) {
+		int fp = number / base;
+		int m = number % base;
+		if (m == 0) {
+			return fp;
+		} else {
+			return fp + 1;
+		}
 	}
 
 }

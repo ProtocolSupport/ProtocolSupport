@@ -44,9 +44,9 @@ import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.TabComplete;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.UpdateSign;
 import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry;
-import protocolsupport.utils.ChannelUtils;
-import protocolsupport.utils.ReplayingDecoderBuffer;
-import protocolsupport.utils.ReplayingDecoderBuffer.EOFSignal;
+import protocolsupport.utils.netty.ChannelUtils;
+import protocolsupport.utils.netty.ReplayingDecoderBuffer;
+import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class PacketDecoder implements IPacketDecoder {
