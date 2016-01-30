@@ -2,7 +2,7 @@ package protocolsupport.protocol;
 
 import io.netty.util.Recycler;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.utils.Allocator;
+import protocolsupport.utils.netty.Allocator;
 
 public class RecyclablePacketDataSerializer extends PacketDataSerializer {
 

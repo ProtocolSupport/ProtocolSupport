@@ -14,9 +14,9 @@ import protocolsupport.protocol.storage.LocalStorage.PlayerListEntry;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
-import protocolsupport.utils.ChannelUtils;
 import protocolsupport.utils.DataWatcherObject;
 import protocolsupport.utils.DataWatcherSerializer;
+import protocolsupport.utils.netty.ChannelUtils;
 
 public abstract class MiddleSpawnNamed<T> extends ClientBoundMiddlePacket<T> {
 

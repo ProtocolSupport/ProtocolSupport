@@ -6,9 +6,9 @@ import gnu.trove.map.TIntObjectMap;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.utils.ChannelUtils;
 import protocolsupport.utils.DataWatcherObject;
 import protocolsupport.utils.DataWatcherSerializer;
+import protocolsupport.utils.netty.ChannelUtils;
 
 public abstract class MiddleEntityMetadata<T> extends MiddleEntity<T> {
 

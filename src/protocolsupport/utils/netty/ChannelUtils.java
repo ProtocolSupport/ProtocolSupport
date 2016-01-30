@@ -1,4 +1,4 @@
-package protocolsupport.utils;
+package protocolsupport.utils.netty;
 
 import java.net.SocketAddress;
 

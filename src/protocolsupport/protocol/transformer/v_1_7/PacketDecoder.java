@@ -47,8 +47,8 @@ import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.status.v_1_7.Ping;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.status.v_1_7.ServerInfoRequest;
 import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry;
-import protocolsupport.utils.ChannelUtils;
-import protocolsupport.utils.WrappingBuffer;
+import protocolsupport.utils.netty.ChannelUtils;
+import protocolsupport.utils.netty.WrappingBuffer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class PacketDecoder implements IPacketDecoder {

@@ -7,7 +7,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.RecyclablePacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.serverbound.play.MiddleCustomPayload;
-import protocolsupport.utils.ChannelUtils;
+import protocolsupport.utils.netty.ChannelUtils;
 
 public class CustomPayload extends MiddleCustomPayload {
 

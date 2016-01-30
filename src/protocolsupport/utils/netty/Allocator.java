@@ -1,10 +1,11 @@
-package protocolsupport.utils;
+package protocolsupport.utils.netty;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.buffer.UnpooledByteBufAllocator;
 import protocolsupport.ProtocolSupport;
+import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
 
 public class Allocator {

@@ -18,7 +18,7 @@ import protocolsupport.api.events.PlayerDisconnectEvent;
 import protocolsupport.protocol.core.IPacketDecoder;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.protocol.transformer.handlers.AbstractLoginListener;
-import protocolsupport.utils.ChannelUtils;
+import protocolsupport.utils.netty.ChannelUtils;
 
 public class WrappedDecoder extends ByteToMessageDecoder {
 

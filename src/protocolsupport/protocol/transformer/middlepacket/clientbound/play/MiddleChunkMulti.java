@@ -5,7 +5,7 @@ import java.io.IOException;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 import protocolsupport.protocol.transformer.utils.ChunkTransformer;
-import protocolsupport.utils.ChannelUtils;
+import protocolsupport.utils.netty.ChannelUtils;
 
 public abstract class MiddleChunkMulti<T> extends ClientBoundMiddlePacket<T> {
 
