@@ -107,7 +107,7 @@ public class PlayerLookupUUID {
 			return;
 		}
 		listener.getLogger().info("UUID of player " + listener.getProfile().getName() + " is " + listener.getProfile().getId());
-		listener.setLoginState(LoginState.READY_TO_ACCEPT);
+		listener.setReadyToAccept();
 	}
 
 }

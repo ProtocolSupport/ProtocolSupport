@@ -1,5 +1,6 @@
 package protocolsupport.protocol.transformer.handlers;
 
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 
@@ -32,7 +33,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.Bukkit;
 
+import protocolsupport.ProtocolSupport;
 import protocolsupport.api.events.PlayerLoginStartEvent;
+import protocolsupport.utils.Utils;
+import protocolsupport.utils.Utils.Converter;
 
 import com.google.common.base.Charsets;
 import com.mojang.authlib.GameProfile;
@@ -40,19 +44,16 @@ import com.mojang.authlib.properties.Property;
 
 public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3.LoginListener {
 
-	private static final int loginThreads = getLoginThreads();
+	private static final int loginThreads = Utils.getJavaPropertyValue("protocolsupport.loginthreads", 8, Converter.STRING_TO_INT);
+	private static final int loginThreadKeepAlive = Utils.getJavaPropertyValue("protocolsupport.loginthreadskeepalive", 60, Converter.STRING_TO_INT);
 
-	private static int getLoginThreads() {
-		try {
-			Integer.parseInt(System.getProperty("protocolsupport.loginthreads", "8"));
-		} catch (Throwable t) {
-		}
-		return 8;
+	public static void init() {
+		ProtocolSupport.logInfo("Login threads max count: "+loginThreads+", keep alive time: "+loginThreadKeepAlive);
 	}
 
 	private static final Executor loginprocessor = new ThreadPoolExecutor(
 		1, loginThreads,
-		60L, TimeUnit.SECONDS,
+		loginThreadKeepAlive, TimeUnit.SECONDS,
 		new LinkedBlockingQueue<Runnable>(),
 		new ThreadFactory() {
 			@Override
@@ -124,29 +125,18 @@ public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3
 	@SuppressWarnings("unchecked")
 	@Override
 	public void b() {
-		UUID newUUID = null;
-		if (isOnlineMode && !useOnlineModeUUID) {
-			newUUID = generateOffileModeUUID();
-		}
-		if (forcedUUID != null) {
-			newUUID = forcedUUID;
-		}
-		if (newUUID != null) {
-			GameProfile newProfile = new GameProfile(newUUID, profile.getName());
-			newProfile.getProperties().putAll(profile.getProperties());
-			profile = newProfile;
-		}
 		EntityPlayer entityPlayer = MinecraftServer.getServer().getPlayerList().attemptLogin(this, profile, hostname);
 		if (entityPlayer != null) {
 			state = LoginState.ACCEPTED;
 			if (hasCompression()) {
-				if (MinecraftServer.getServer().aK() >= 0 && !this.networkManager.c()) {
+				final int threshold = MinecraftServer.getServer().aK();
+				if (threshold >= 0 && !this.networkManager.c()) {
 					this.networkManager.a(
-						new PacketLoginOutSetCompression(MinecraftServer.getServer().aK()),
+						new PacketLoginOutSetCompression(threshold),
 						new ChannelFutureListener() {
 							@Override
 							public void operationComplete(ChannelFuture future) throws Exception {
-								networkManager.a(MinecraftServer.getServer().aK());
+								enableCompresssion(threshold);
 							}
 						}
 					);
@@ -158,6 +148,14 @@ public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3
 	}
 
 	protected abstract boolean hasCompression();
+
+	protected void enableCompresssion(int compressionLevel) {
+		Channel channel = networkManager.channel;
+		if (compressionLevel >= 0) {
+			channel.pipeline().addBefore("decoder", "decompress", new PacketDecompressor(compressionLevel));
+			channel.pipeline().addBefore("encoder", "compress", new PacketCompressor(compressionLevel));
+		}
+	}
 
 	@Override
 	public void a(final IChatBaseComponent ichatbasecomponent) {
@@ -236,7 +234,6 @@ public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3
 
 	protected abstract void enableEncryption(SecretKey key);
 
-
 	public Logger getLogger() {
 		return logger;
 	}
@@ -246,21 +243,29 @@ public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3
 		return profile;
 	}
 
-
 	public void setProfile(GameProfile profile) {
 		this.profile = profile;
 	}
-
 
 	public GameProfile generateOfflineProfile(GameProfile current) {
 		return a(current);
 	}
 
-
-	public void setLoginState(LoginState state) {
-		this.state = state;
+	public void setReadyToAccept() {
+		UUID newUUID = null;
+		if (isOnlineMode && !useOnlineModeUUID) {
+			newUUID = generateOffileModeUUID();
+		}
+		if (forcedUUID != null) {
+			newUUID = forcedUUID;
+		}
+		if (newUUID != null) {
+			GameProfile newProfile = new GameProfile(newUUID, profile.getName());
+			newProfile.getProperties().putAll(profile.getProperties());
+			profile = newProfile;
+		}
+		this.state = LoginState.READY_TO_ACCEPT;
 	}
-
 
 	public SecretKey getLoginKey() {
 		return loginKey;

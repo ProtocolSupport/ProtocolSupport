@@ -97,4 +97,31 @@ public class Utils {
 		}
 	}
 
+	public static <T> T getJavaPropertyValue(String property, T defaultValue, Converter<String, T> converter) {
+		try {
+			String value = System.getProperty(property);
+			if (value != null) {
+				return converter.convert(value);
+			}
+		} catch (Throwable t) {
+		}
+		return defaultValue;
+	}
+
+	public static interface Converter<T, R> {
+		public static final Converter<String, Integer> STRING_TO_INT = new Converter<String, Integer>() {
+			@Override
+			public Integer convert(String t) {
+				return Integer.parseInt(t);
+			}
+		};
+		public static final Converter<String, Boolean> STRING_TO_BOOLEAN = new Converter<String, Boolean>() {
+			@Override
+			public Boolean convert(String t) {
+				return Boolean.parseBoolean(t);
+			}
+		};
+		public R convert(T t);
+	}
+
 }

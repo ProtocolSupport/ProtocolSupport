@@ -9,6 +9,7 @@ import net.minecraft.server.v1_8_R3.NBTTagCompound;
 
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.api.chat.modifiers.ClickAction;
 import protocolsupport.api.chat.modifiers.HoverAction;
 
 public class ChatJsonConverter {
@@ -42,6 +43,14 @@ public class ChatJsonConverter {
 					t.printStackTrace();
 				}
 			}
+		}
+		ClickAction click = component.getClickAction();
+		if (click != null && click.getType() == ClickAction.Type.OPEN_URL) {
+			String url = click.getValue();
+			if (!url.startsWith("http://") && !url.startsWith("https://")) {
+				url = "http://"+url;
+			}
+			component.setClickAction(new ClickAction(ClickAction.Type.OPEN_URL, url));
 		}
 	}
 

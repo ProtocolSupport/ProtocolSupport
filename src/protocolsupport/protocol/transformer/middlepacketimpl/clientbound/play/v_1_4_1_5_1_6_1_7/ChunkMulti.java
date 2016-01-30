@@ -8,7 +8,7 @@ import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleChunkMulti;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.transformer.utils.ChunkTransformer;
-import protocolsupport.utils.CompressionUtils;
+import protocolsupport.utils.Compressor;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -21,7 +21,7 @@ public class ChunkMulti extends MiddleChunkMulti<RecyclableCollection<PacketData
 		for (int i = 0; i < data.length; i++) {
 			stream.write(ChunkTransformer.toPre18Data(data[i], bitmap[i], version));
 		}
-		byte[] compressed = CompressionUtils.compress(stream.toByteArray());
+		byte[] compressed = Compressor.compress(stream.toByteArray());
 		serializer.writeShort(data.length);
 		serializer.writeInt(compressed.length);
 		serializer.writeBoolean(hasSkyLight);

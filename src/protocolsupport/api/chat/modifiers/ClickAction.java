@@ -37,9 +37,4 @@ public class ClickAction {
 		OPEN_URL, OPEN_FILE, RUN_COMMAND, TWITCH_USER_INFO, SUGGEST_COMMAND, CHANGE_PAGE;
 	}
 
-	@Override
-	public String toString() {
-		return "{action: " + type.name().toLowerCase() +", value: " + getValue() + "}";
-	}
-
 }

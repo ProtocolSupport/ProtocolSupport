@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import net.minecraft.server.v1_8_R3.MojangsonParseException;
 import net.minecraft.server.v1_8_R3.MojangsonParser;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
+
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.utils.Any;
@@ -22,8 +23,8 @@ public class HoverAction {
 	private Type type;
 	private String value;
 
-	public HoverAction(Type action, String value) {
-		this.type = action;
+	public HoverAction(Type type, String value) {
+		this.type = type;
 		this.value = value;
 	}
 
@@ -140,11 +141,6 @@ public class HoverAction {
 		public String getName() {
 			return name;
 		}
-	}
-
-	@Override
-	public String toString() {
-		return "{type: " + type.name().toLowerCase() +", value: " + getValue() + "}";
 	}
 
 }

@@ -20,7 +20,8 @@ import net.minecraft.server.v1_8_R3.LazyInitVar;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.NetworkManager;
 import net.minecraft.server.v1_8_R3.ServerConnection;
-import protocolsupport.protocol.core.ServerConnectionChannel;
+
+import protocolsupport.injector.network.ServerConnectionChannel;
 import protocolsupport.protocol.core.UDPServerConnectionChannel;
 import protocolsupport.utils.Utils;
 

@@ -11,6 +11,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketRegistry;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
 import protocolsupport.utils.ChannelUtils;
 import protocolsupport.utils.CompressionUtils;
+import protocolsupport.utils.Compressor;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -53,7 +54,7 @@ public class BatchPacket implements DualPEPacket {
 			temporal.writeInt(packetData.readableBytes());
 			temporal.writeBytes(packetData);
 		}
-		byte[] data = CompressionUtils.compress(ChannelUtils.toArray(temporal));
+		byte[] data = Compressor.compress(ChannelUtils.toArray(temporal));
 		buf.writeInt(data.length);
 		buf.writeBytes(data);
 		return this;
