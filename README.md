@@ -20,4 +20,4 @@ Jenkins: http://build.true-games.org/job/ProtocolSupport/
 
 ================
 
-Licensed under the terms of GNU GPLv3
+Licensed under the terms of GNU AGPLv3
