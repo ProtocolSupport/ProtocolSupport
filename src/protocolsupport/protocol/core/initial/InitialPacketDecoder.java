@@ -84,7 +84,6 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		super.handlerRemoved(ctx);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void channelRead0(ChannelHandlerContext ctx, ByteBuf buf) throws Exception {
 		if (!buf.isReadable()) {
@@ -110,7 +109,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 							"MC|PingHost".equals(new String(ChannelUtils.toArray(replayingBuffer.readBytes(replayingBuffer.readUnsignedShort() * 2)), StandardCharsets.UTF_16BE))
 						) { //1.6.*
 							replayingBuffer.readUnsignedShort();
-							handshakeversion = ProtocolVersion.fromId(replayingBuffer.readUnsignedByte());
+							handshakeversion = ProtocolUtils.get16PingVersion(replayingBuffer.readUnsignedByte());
 						}
 					}
 				} catch (EOFSignal ex) {
@@ -119,7 +118,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 			}
 			case 0x02: { // <= 1.6.4 handshake
 				try {
-					handshakeversion = readOldHandshake(replayingBuffer);
+					handshakeversion = ProtocolUtils.readOldHandshake(replayingBuffer);
 				} catch (EOFSignal ex) {
 				}
 				break;
@@ -128,7 +127,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 				replayingBuffer.readerIndex(0);
 				ByteBuf data = getVarIntPrefixedData(replayingBuffer);
 				if (data != null) {
-					handshakeversion = readNettyHandshake(data);
+					handshakeversion = ProtocolUtils.readNettyHandshake(data);
 				}
 				break;
 			}
@@ -154,21 +153,6 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		pipelineBuilders.get(version).buildPipeLine(channel, version);
 		input.readerIndex(0);
 		channel.pipeline().firstContext().fireChannelRead(input);
-	}
-
-	@SuppressWarnings("deprecation")
-	private static ProtocolVersion readOldHandshake(ByteBuf data) {
-		ProtocolVersion version = ProtocolVersion.fromId(data.readUnsignedByte());
-		return version != ProtocolVersion.UNKNOWN ? version : ProtocolVersion.MINECRAFT_LEGACY;
-	}
-
-	@SuppressWarnings("deprecation")
-	private static ProtocolVersion readNettyHandshake(ByteBuf data) {
-		if (ChannelUtils.readVarInt(data) == 0x00) {
-			ProtocolVersion version = ProtocolVersion.fromId(ChannelUtils.readVarInt(data));
-			return version != ProtocolVersion.UNKNOWN ? version : ProtocolVersion.MINECRAFT_FUTURE;
-		}
-		return ProtocolVersion.UNKNOWN;
 	}
 
 	private static ByteBuf getVarIntPrefixedData(final ByteBuf byteBuf) {
