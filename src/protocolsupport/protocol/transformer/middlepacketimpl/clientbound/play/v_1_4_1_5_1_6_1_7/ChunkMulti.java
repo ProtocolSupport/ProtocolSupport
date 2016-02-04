@@ -21,7 +21,7 @@ public class ChunkMulti extends MiddleChunkMulti<RecyclableCollection<PacketData
 		for (int i = 0; i < data.length; i++) {
 			stream.write(ChunkTransformer.toPre18Data(data[i], bitmap[i], version));
 		}
-		byte[] compressed = Compressor.compress(stream.toByteArray());
+		byte[] compressed = Compressor.compressStatic(stream.toByteArray());
 		serializer.writeShort(data.length);
 		serializer.writeInt(compressed.length);
 		serializer.writeBoolean(hasSkyLight);
