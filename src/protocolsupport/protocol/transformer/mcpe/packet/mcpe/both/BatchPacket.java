@@ -53,7 +53,7 @@ public class BatchPacket implements DualPEPacket {
 			temporal.writeInt(packetData.readableBytes());
 			temporal.writeBytes(packetData);
 		}
-		byte[] data = Compressor.compress(ChannelUtils.toArray(temporal));
+		byte[] data = Compressor.compressStatic(ChannelUtils.toArray(temporal));
 		buf.writeInt(data.length);
 		buf.writeBytes(data);
 		return this;
