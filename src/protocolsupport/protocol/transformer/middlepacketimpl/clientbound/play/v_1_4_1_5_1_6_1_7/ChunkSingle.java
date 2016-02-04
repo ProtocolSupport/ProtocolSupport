@@ -21,7 +21,7 @@ public class ChunkSingle extends MiddleChunkSingle<RecyclableCollection<PacketDa
 		serializer.writeBoolean(cont);
 		serializer.writeShort(bitmask);
 		serializer.writeShort(0);
-		byte[] compressed = Compressor.compress(ChunkTransformer.toPre18Data(data, bitmask, version));
+		byte[] compressed = Compressor.compressStatic(ChunkTransformer.toPre18Data(data, bitmask, version));
 		serializer.writeInt(compressed.length);
 		serializer.writeBytes(compressed);
 		return RecyclableSingletonList.create(serializer);

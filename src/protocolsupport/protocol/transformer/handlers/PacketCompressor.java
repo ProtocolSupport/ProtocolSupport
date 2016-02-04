@@ -1,15 +1,14 @@
 package protocolsupport.protocol.transformer.handlers;
 
-import java.util.zip.Deflater;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+
 import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.netty.Compressor;
 
 public class PacketCompressor extends net.minecraft.server.v1_8_R3.PacketCompressor {
 
-	private final Deflater deflater = Compressor.createDeflater();
+	private final Compressor compressor = Compressor.create();
 	private final int threshold;
 
 	public PacketCompressor(int threshold) {
@@ -20,7 +19,7 @@ public class PacketCompressor extends net.minecraft.server.v1_8_R3.PacketCompres
 	@Override
 	public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
 		super.handlerRemoved(ctx);
-		deflater.end();
+		compressor.recycle();
 	}
 
 	@Override
@@ -31,8 +30,7 @@ public class PacketCompressor extends net.minecraft.server.v1_8_R3.PacketCompres
 			to.writeBytes(from);
 		} else {
 			ChannelUtils.writeVarInt(to, readable);	
-			to.writeBytes(Compressor.compress(ChannelUtils.toArray(from.readSlice(readable)), deflater));
-			deflater.reset();
+			to.writeBytes(compressor.compress(ChannelUtils.toArray(from.readSlice(readable))));
 		}
 	}
 
