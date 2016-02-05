@@ -9,6 +9,8 @@ import protocolsupport.protocol.core.wrapped.WrappedSplitter;
 public class ChannelHandlers {
 
 	public static final String INITIAL_DECODER = "initial_decoder";
+	public static final String LEGACY_KICK = "legacy_kick";
+	public static final String TIMEOUT = "timeout";
 	public static final String SPLITTER = "splitter";
 	public static final String PREPENDER = "prepender";
 	public static final String DECODER = "decoder";

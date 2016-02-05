@@ -7,6 +7,10 @@ import protocolsupport.protocol.core.IPacketPrepender;
 
 public class WrappedPrepender extends MessageToByteEncoder<ByteBuf> {
 
+	public WrappedPrepender() {
+		super(true);
+	}
+
 	private IPacketPrepender realPrepender = new IPacketPrepender() {
 		@Override
 		public void prepend(ChannelHandlerContext ctx, ByteBuf input, ByteBuf output) throws Exception {
@@ -19,6 +23,9 @@ public class WrappedPrepender extends MessageToByteEncoder<ByteBuf> {
 
 	@Override
 	protected void encode(ChannelHandlerContext ctx, ByteBuf input, ByteBuf output) throws Exception {
+		if (!input.isReadable()) {
+			return;
+		}
 		realPrepender.prepend(ctx, input, output);
 	}
 

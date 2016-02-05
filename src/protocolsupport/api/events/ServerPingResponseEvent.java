@@ -7,23 +7,26 @@ import java.util.List;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import net.minecraft.server.v1_8_R3.MinecraftServer;
 import protocolsupport.api.ProtocolVersion;
 
 public class ServerPingResponseEvent extends Event {
 
-	private InetSocketAddress address;
+	private final InetSocketAddress address;
+
 	private ProtocolInfo info;
 	private String motd;
 	private String icon;
 	private int maxPlayers;
 	private List<String> players;
+
 	public ServerPingResponseEvent(InetSocketAddress address, ProtocolInfo info, String icon, String motd, int maxPlayers, List<String> players) {
 		this.address = address;
-		this.info = info;
-		this.icon = icon;
-		this.motd = motd;
-		this.maxPlayers = maxPlayers;
-		this.players = new ArrayList<String>(players);
+		setProtocolInfo(info);
+		setIcon(icon);
+		setMotd(motd);
+		setMaxPlayers(maxPlayers);
+		setPlayers(players);
 	}
 
 	public InetSocketAddress getAddress() {
@@ -35,7 +38,7 @@ public class ServerPingResponseEvent extends Event {
 	}
 
 	public void setProtocolInfo(ProtocolInfo info) {
-		this.info = info;
+		this.info = info != null ? info : new ProtocolInfo(-1, "ProtocolSupport");
 	}
 
 	public String getIcon() {
@@ -51,7 +54,7 @@ public class ServerPingResponseEvent extends Event {
 	}
 
 	public void setMotd(String motd) {
-		this.motd = motd;
+		this.motd = motd != null ? motd : "A minecraft server (ProtocolSupport)";
 	}
 
 	public int getMaxPlayers() {
@@ -67,11 +70,7 @@ public class ServerPingResponseEvent extends Event {
 	}
 
 	public void setPlayers(List<String> players) {
-		if (players == null) {
-			this.players = new ArrayList<String>();
-			return;
-		}
-		this.players = new ArrayList<String>(players);
+		this.players = players != null ? new ArrayList<String>(players) : new ArrayList<String>();
 	}
 
 	public static class ProtocolInfo {
@@ -105,6 +104,14 @@ public class ServerPingResponseEvent extends Event {
 
 	public static HandlerList getHandlerList() {
 		return list;
+	}
+
+	public static String getServerModName() {
+		return MinecraftServer.getServer().getServerModName();
+	}
+
+	public static String getServerVersionName() {
+		return MinecraftServer.getServer().getVersion();
 	}
 
 }

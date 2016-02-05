@@ -24,7 +24,7 @@ public class MapTransformer {
 		rowEnd = ystart + rows;
 	}
 
-	public ArrayList<ColumnEntry> transformToOldMapData() {
+	public ArrayList<ColumnEntry> toPre18MapData() {
 		ArrayList<ColumnEntry> entries = new ArrayList<ColumnEntry>();
 		for (int column = columnStart; column < columnEnd; column++) {
 			ColumnEntry entry = new ColumnEntry(column, rowStart, rowEnd - rowStart);

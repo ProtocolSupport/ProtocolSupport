@@ -8,3 +8,5 @@ libs/
 *.project
 *.classpath
 *.prefs
+/.apt_generated/
+*.factorypath

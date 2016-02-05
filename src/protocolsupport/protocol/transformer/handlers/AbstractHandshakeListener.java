@@ -43,11 +43,12 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 				networkManager.a(EnumProtocol.LOGIN);
 				try {
 					final InetAddress address = ((InetSocketAddress) networkManager.getSocketAddress()).getAddress();
-					if (ThrottleTracker.isEnabled() && !"127.0.0.1".equals(address.getHostAddress())) {
+					if (ThrottleTracker.isEnabled() && !SpigotConfig.bungee) {
 						if (ThrottleTracker.isThrottled(address)) {
 							final ChatComponentText chatcomponenttext = new ChatComponentText("Connection throttled! Please wait before reconnecting.");
 							networkManager.handle(new PacketLoginOutDisconnect(chatcomponenttext));
 							networkManager.close(chatcomponenttext);
+							return;
 						}
 						ThrottleTracker.track(address, System.currentTimeMillis());
 					}
@@ -72,10 +73,10 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 					packethandshakinginsetprotocol.hostname = split[0];
 					SocketAddress oldaddress = networkManager.getSocketAddress();
 					ProtocolVersion version = ProtocolStorage.getProtocolVersion(oldaddress);
-					SocketAddress newaddress = new InetSocketAddress(split[1], ((InetSocketAddress) oldaddress).getPort());
-					ProtocolStorage.setProtocolVersion(newaddress, version);
-					networkManager.l = newaddress;
 					ProtocolStorage.clearData(oldaddress);
+					SocketAddress newaddress = new InetSocketAddress(split[1], ((InetSocketAddress) oldaddress).getPort());
+					networkManager.l = newaddress;
+					ProtocolStorage.setProtocolVersion(newaddress, version);
 					networkManager.spoofedUUID = UUIDTypeAdapter.fromString(split[2]);
 					if (split.length == 4) {
 						networkManager.spoofedProfile = gson.fromJson(split[3], Property[].class);

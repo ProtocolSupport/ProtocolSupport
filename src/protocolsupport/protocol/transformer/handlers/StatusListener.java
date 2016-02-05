@@ -58,6 +58,7 @@ public class StatusListener extends net.minecraft.server.v1_8_R3.PacketStatusLis
 		int maxPlayers = server.getPlayerList().getMaxPlayers();
 
 		InternalServerListPingEvent bevent = new InternalServerListPingEvent(addr.getAddress(), motd, maxPlayers, players);
+		bevent.setServerIcon(Bukkit.getServerIcon());
 		Bukkit.getPluginManager().callEvent(bevent);
 
 		String icon = bevent.getIcon() != null ? bevent.getIcon().value : null;
@@ -121,7 +122,7 @@ public class StatusListener extends net.minecraft.server.v1_8_R3.PacketStatusLis
 		}
 
 		public void setServerIcon(CachedServerIcon icon) {
-			if (!(icon instanceof CraftIconCache)) {
+			if (icon != null && !(icon instanceof CraftIconCache)) {
 				throw new IllegalArgumentException(icon + " was not created by " + CraftServer.class);
 			}
 			this.icon = ((CraftIconCache) icon);

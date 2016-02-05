@@ -1,5 +1,6 @@
 package protocolsupport.protocol.transformer.handlers;
 
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 
@@ -8,8 +9,11 @@ import java.security.PrivateKey;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
-
+import java.util.concurrent.Executor;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import javax.crypto.SecretKey;
 
 import net.minecraft.server.v1_8_R3.ChatComponentText;
@@ -29,22 +33,45 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.Bukkit;
 
+import protocolsupport.ProtocolSupport;
 import protocolsupport.api.events.PlayerLoginStartEvent;
+import protocolsupport.utils.Utils;
+import protocolsupport.utils.Utils.Converter;
 
 import com.google.common.base.Charsets;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 
-public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3.LoginListener implements ILoginListener {
+public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3.LoginListener {
+
+	private static final int loginThreads = Utils.getJavaPropertyValue("protocolsupport.loginthreads", 8, Converter.STRING_TO_INT);
+	private static final int loginThreadKeepAlive = Utils.getJavaPropertyValue("protocolsupport.loginthreadskeepalive", 60, Converter.STRING_TO_INT);
+
+	public static void init() {
+		ProtocolSupport.logInfo("Login threads max count: "+loginThreads+", keep alive time: "+loginThreadKeepAlive);
+	}
+
+	private static final Executor loginprocessor = new ThreadPoolExecutor(
+		1, loginThreads,
+		loginThreadKeepAlive, TimeUnit.SECONDS,
+		new LinkedBlockingQueue<Runnable>(),
+		new ThreadFactory() {
+			@Override
+			public Thread newThread(Runnable r) {
+				Thread thread = new Thread(r);
+				thread.setName("LoginProcessingThread");
+				return thread;
+			}
+		}
+	);
 
 	protected static final Logger logger = LogManager.getLogger();
-	protected static final AtomicInteger authThreadsCounter = new AtomicInteger(0);
 	protected static final Random random = new Random();
 
 	protected final byte[] randomBytes = new byte[4];
 	protected int loginTicks;
 	protected SecretKey loginKey;
-	protected LoginState state = LoginState.HELLO;
+	protected volatile LoginState state = LoginState.HELLO;
 	protected GameProfile profile;
 
 	protected boolean isOnlineMode;
@@ -98,29 +125,18 @@ public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3
 	@SuppressWarnings("unchecked")
 	@Override
 	public void b() {
-		UUID newUUID = null;
-		if (isOnlineMode && !useOnlineModeUUID) {
-			newUUID = generateOffileModeUUID();
-		}
-		if (forcedUUID != null) {
-			newUUID = forcedUUID;
-		}
-		if (newUUID != null) {
-			GameProfile newProfile = new GameProfile(newUUID, profile.getName());
-			newProfile.getProperties().putAll(profile.getProperties());
-			profile = newProfile;
-		}
 		EntityPlayer entityPlayer = MinecraftServer.getServer().getPlayerList().attemptLogin(this, profile, hostname);
 		if (entityPlayer != null) {
 			state = LoginState.ACCEPTED;
 			if (hasCompression()) {
-				if (MinecraftServer.getServer().aK() >= 0 && !this.networkManager.c()) {
+				final int threshold = MinecraftServer.getServer().aK();
+				if (threshold >= 0 && !this.networkManager.c()) {
 					this.networkManager.a(
-						new PacketLoginOutSetCompression(MinecraftServer.getServer().aK()),
+						new PacketLoginOutSetCompression(threshold),
 						new ChannelFutureListener() {
 							@Override
 							public void operationComplete(ChannelFuture future) throws Exception {
-								networkManager.a(MinecraftServer.getServer().aK());
+								enableCompresssion(threshold);
 							}
 						}
 					);
@@ -132,6 +148,14 @@ public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3
 	}
 
 	protected abstract boolean hasCompression();
+
+	protected void enableCompresssion(int compressionLevel) {
+		Channel channel = networkManager.channel;
+		if (compressionLevel >= 0) {
+			channel.pipeline().addBefore("decoder", "decompress", new PacketDecompressor(compressionLevel));
+			channel.pipeline().addBefore("encoder", "compress", new PacketCompressor(compressionLevel));
+		}
+	}
 
 	@Override
 	public void a(final IChatBaseComponent ichatbasecomponent) {
@@ -147,72 +171,107 @@ public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3
 	public void a(final PacketLoginInStart packetlogininstart) {
 		Validate.validState(state == LoginState.HELLO, "Unexpected hello packet");
 		state = LoginState.ONLINEMODERESOLVE;
-		profile = packetlogininstart.a();
-		PlayerLoginStartEvent event = new PlayerLoginStartEvent(
-			(InetSocketAddress) networkManager.getSocketAddress(),
-			profile.getName(),
-			isOnlineMode,
-			useOnlineModeUUID,
-			hostname
-		);
-		Bukkit.getPluginManager().callEvent(event);
-		isOnlineMode = event.isOnlineMode();
-		useOnlineModeUUID = event.useOnlineModeUUID();
-		forcedUUID = event.getForcedUUID();
-		if (isOnlineMode) {
-			state = LoginState.KEY;
-			networkManager.handle(new PacketLoginOutEncryptionBegin("", MinecraftServer.getServer().Q().getPublic(), randomBytes));
-		} else {
-			new ThreadPlayerLookupUUID(this, "User Authenticator #" + authThreadsCounter.incrementAndGet(), isOnlineMode).start();
-		}
+		loginprocessor.execute(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					profile = packetlogininstart.a();
+					PlayerLoginStartEvent event = new PlayerLoginStartEvent(
+						(InetSocketAddress) networkManager.getSocketAddress(),
+						profile.getName(),
+						isOnlineMode,
+						useOnlineModeUUID,
+						hostname
+					);
+					Bukkit.getPluginManager().callEvent(event);
+					if (event.isLoginDenied()) {
+						AbstractLoginListener.this.disconnect(event.getDenyLoginMessage());
+						return;
+					}
+					isOnlineMode = event.isOnlineMode();
+					useOnlineModeUUID = event.useOnlineModeUUID();
+					forcedUUID = event.getForcedUUID();
+					if (isOnlineMode) {
+						state = LoginState.KEY;
+						networkManager.handle(new PacketLoginOutEncryptionBegin("", MinecraftServer.getServer().Q().getPublic(), randomBytes));
+					} else {
+						new PlayerLookupUUID(AbstractLoginListener.this, isOnlineMode).run();
+					}
+				} catch (Throwable t) {
+					AbstractLoginListener.this.disconnect("Error occured while logging in");
+					if (MinecraftServer.getServer().isDebugging()) {
+						t.printStackTrace();
+					}
+				}
+			}
+		});
 	}
 
 	@Override
 	public void a(final PacketLoginInEncryptionBegin packetlogininencryptionbegin) {
 		Validate.validState(state == LoginState.KEY, "Unexpected key packet");
 		state = LoginState.AUTHENTICATING;
-		final PrivateKey privatekey = MinecraftServer.getServer().Q().getPrivate();
-		if (!Arrays.equals(randomBytes, packetlogininencryptionbegin.b(privatekey))) {
-			throw new IllegalStateException("Invalid nonce!");
-		}
-		loginKey = packetlogininencryptionbegin.a(privatekey);
-		enableEncryption(loginKey);
-		new ThreadPlayerLookupUUID(this, "User Authenticator #" + authThreadsCounter.incrementAndGet(), isOnlineMode).start();
+		loginprocessor.execute(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					final PrivateKey privatekey = MinecraftServer.getServer().Q().getPrivate();
+					if (!Arrays.equals(randomBytes, packetlogininencryptionbegin.b(privatekey))) {
+						throw new IllegalStateException("Invalid nonce!");
+					}
+					loginKey = packetlogininencryptionbegin.a(privatekey);
+					enableEncryption(loginKey);
+					new PlayerLookupUUID(AbstractLoginListener.this, isOnlineMode).run();
+				} catch (Throwable t) {
+					AbstractLoginListener.this.disconnect("Error occured while logging in");
+					if (MinecraftServer.getServer().isDebugging()) {
+						t.printStackTrace();
+					}
+				}					
+			}
+		});
 	}
 
 	protected abstract void enableEncryption(SecretKey key);
 
-	@Override
 	public Logger getLogger() {
 		return logger;
 	}
 
-	@Override
+
 	public GameProfile getProfile() {
 		return profile;
 	}
 
-	@Override
 	public void setProfile(GameProfile profile) {
 		this.profile = profile;
 	}
 
-	@Override
 	public GameProfile generateOfflineProfile(GameProfile current) {
 		return a(current);
 	}
 
-	@Override
-	public void setLoginState(LoginState state) {
-		this.state = state;
+	public void setReadyToAccept() {
+		UUID newUUID = null;
+		if (isOnlineMode && !useOnlineModeUUID) {
+			newUUID = generateOffileModeUUID();
+		}
+		if (forcedUUID != null) {
+			newUUID = forcedUUID;
+		}
+		if (newUUID != null) {
+			GameProfile newProfile = new GameProfile(newUUID, profile.getName());
+			newProfile.getProperties().putAll(profile.getProperties());
+			profile = newProfile;
+		}
+		this.state = LoginState.READY_TO_ACCEPT;
 	}
 
-	@Override
 	public SecretKey getLoginKey() {
 		return loginKey;
 	}
 
-	@Override
+
 	public NetworkManager getNetworkManager() {
 		return networkManager;
 	}

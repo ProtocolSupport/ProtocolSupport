@@ -1,5 +1,6 @@
 package protocolsupport.api.chat;
 
+import org.apache.commons.lang3.Validate;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
@@ -28,27 +29,30 @@ public class ChatAPI {
 	.create();
 
 	public static BaseComponent fromJSON(String json) {
-		return gson.fromJson(json, BaseComponent.class);
+		return json != null ? gson.fromJson(json, BaseComponent.class) : null;
 	}
 
 	public static String toJSON(BaseComponent component) {
-		return gson.toJson(component);
+		return component != null ? gson.toJson(component) : null;
 	}
 
 	public static void sendMessage(Player player, BaseComponent message) {
 		sendMessage(player, message, MessagePosition.CHAT);
 	}
 
-	public static void sendMessage(Player player, String json) {
-		sendMessage(player, json, MessagePosition.CHAT);
+	public static void sendMessage(Player player, String messageJson) {
+		sendMessage(player, messageJson, MessagePosition.CHAT);
 	}
 
 	public static void sendMessage(Player player, BaseComponent message, MessagePosition position) {
 		sendMessage(player, toJSON(message), position);
 	}
 
-	public static void sendMessage(Player player, String json, MessagePosition position) {
-		((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutChat(ChatSerializer.a(json), (byte) position.ordinal()));
+	public static void sendMessage(Player player, String messageJson, MessagePosition position) {
+		Validate.notNull(player, "Player can't be null");
+		Validate.notNull(messageJson, "Message can't be null");
+		Validate.notNull(position, "Message position can't be null");		
+		((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutChat(ChatSerializer.a(messageJson), (byte) position.ordinal()));
 	}
 
 	public static enum MessagePosition {

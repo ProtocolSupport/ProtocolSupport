@@ -6,8 +6,6 @@ import net.minecraft.server.v1_8_R3.NetworkManager;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.core.ChannelHandlers;
 import protocolsupport.protocol.core.IPipeLineBuilder;
-import protocolsupport.protocol.transformer.v_1_5.clientboundtransformer.PacketEncoder;
-import protocolsupport.protocol.transformer.v_1_5.serverboundtransformer.PacketDecoder;
 
 public class PipeLineBuilder implements IPipeLineBuilder {
 
@@ -18,7 +16,7 @@ public class PipeLineBuilder implements IPipeLineBuilder {
 		networkmanager.a(new HandshakeListener(networkmanager));
 		ChannelHandlers.getSplitter(pipeline).setRealSplitter(new PacketSplitter());
 		ChannelHandlers.getPrepender(pipeline).setRealPrepender(new PacketPrepender());
-		ChannelHandlers.getDecoder(pipeline).setRealDecoder(new PacketDecoder());
+		ChannelHandlers.getDecoder(pipeline).setRealDecoder(new PacketDecoder(version));
 		ChannelHandlers.getEncoder(pipeline).setRealEncoder(new PacketEncoder(version));
 	}
 
