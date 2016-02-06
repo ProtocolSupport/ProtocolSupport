@@ -1,6 +1,6 @@
 name: ProtocolSupport
 main: protocolsupport.ProtocolSupport
-version: 4.23
+version: 4.22
 author: _Shevchik_
 load: STARTUP
 commands:
