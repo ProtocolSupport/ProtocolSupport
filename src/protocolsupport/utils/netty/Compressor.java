@@ -44,6 +44,7 @@ public class Compressor {
 	}
 
 	public void recycle() {
+		deflater.reset();
 		recycler.recycle(this, handle);
 	}
 
