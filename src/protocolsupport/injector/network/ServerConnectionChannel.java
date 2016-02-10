@@ -21,8 +21,7 @@ import protocolsupport.protocol.core.wrapped.WrappedSplitter;
 
 public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 
-	private List<NetworkManager> networkManagers;
-
+	private final List<NetworkManager> networkManagers;
 	public ServerConnectionChannel(List<NetworkManager> networkManagers) {
 		this.networkManagers = networkManagers;
 	}

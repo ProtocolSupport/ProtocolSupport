@@ -91,7 +91,7 @@ public class BasicInjector {
 			try {
 				ChannelHandler serverMainHandler = null;
 				for (ChannelHandler handler : channel.pipeline().toMap().values()) {
-					if (handler.getClass().getSimpleName().equals("ServerBootstrapAcceptor")) {
+					if (handler.getClass().getName().equals("io.netty.bootstrap.ServerBootstrap$ServerBootstrapAcceptor")) {
 						serverMainHandler = handler;
 						break;
 					}
