@@ -5,7 +5,6 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.handler.codec.CorruptedFrameException;
 import io.netty.util.concurrent.Future;
 
 import net.minecraft.server.v1_8_R3.MinecraftServer;
@@ -161,22 +160,16 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		channel.pipeline().firstContext().fireChannelRead(input);
 	}
 
+	//handshake packet has more than 3 bytes for sure, so we can simplify splitting logic
 	private static ByteBuf getVarIntPrefixedData(final ByteBuf byteBuf) {
-		final byte[] array = new byte[3];
-		for (int i = 0; i < array.length; ++i) {
-			if (!byteBuf.isReadable()) {
-				return null;
-			}
-			array[i] = byteBuf.readByte();
-			if (array[i] >= 0) {
-				final int length = ChannelUtils.readVarInt(Unpooled.wrappedBuffer(array));
-				if (byteBuf.readableBytes() < length) {
-					return null;
-				}
-				return byteBuf.readBytes(length);
-			}
+		if (byteBuf.readableBytes() < 3) {
+			return null;
 		}
-		throw new CorruptedFrameException("Packet length is wider than 21 bit");
+		int length = ChannelUtils.readVarInt(byteBuf);
+		if (byteBuf.readableBytes() < length) {
+			return null;
+		}
+		return byteBuf.readBytes(length);
 	}
 
 }
