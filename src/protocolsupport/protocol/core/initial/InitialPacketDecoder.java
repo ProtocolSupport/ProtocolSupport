@@ -11,6 +11,7 @@ import io.netty.util.concurrent.Future;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.concurrent.TimeUnit;
 
@@ -91,6 +92,13 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		receivedData.writeBytes(buf);
 		receivedData.readerIndex(0);
 		final Channel channel = ctx.channel();
+		if (MinecraftServer.getServer().isDebugging()) {
+			System.out.println(
+				ChannelUtils.getNetworkManagerSocketAddress(channel) +
+				" data: " +
+				Arrays.toString(Arrays.copyOf(receivedData.array(), receivedData.readableBytes()))
+			);
+		}
 		ProtocolVersion handshakeversion = null;
 		int firstbyte = replayingBuffer.readUnsignedByte();
 		switch (firstbyte) {
