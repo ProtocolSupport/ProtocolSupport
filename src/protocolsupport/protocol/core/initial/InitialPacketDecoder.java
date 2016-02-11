@@ -57,7 +57,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 	protected final ByteBuf receivedData = Unpooled.buffer();
 	protected final ReplayingDecoderBuffer replayingBuffer = new ReplayingDecoderBuffer(receivedData);
 
-	protected volatile Future<?> responseTask;
+	protected Future<?> responseTask;
 
 	protected void scheduleTask(ChannelHandlerContext ctx, Runnable task, long delay, TimeUnit tu) {
 		cancelTask();
@@ -101,21 +101,33 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		ProtocolVersion handshakeversion = null;
 		int firstbyte = replayingBuffer.readUnsignedByte();
 		switch (firstbyte) {
-			case 0xFE: { //old ping
+			case 0xFE: { //old ping or a part of varint length
 				try {
-					if (replayingBuffer.readableBytes() == 0) { //really old protocol probably
+					if (replayingBuffer.readableBytes() == 0) {
+						//no more data received, it may be old protocol, or we just not received all data yet, so delay assuming as really old protocol for some time
 						scheduleTask(ctx, new SetProtocolTask(this, channel, ProtocolVersion.MINECRAFT_LEGACY), pingLegacyDelay, TimeUnit.MILLISECONDS);
 					} else if (replayingBuffer.readUnsignedByte() == 1) {
+						//1.5-1.6 ping or maybe a finishing byte for 1.7+ packet length
 						if (replayingBuffer.readableBytes() == 0) {
-							//1.5.2 probably
+							//no more data received, it may be 1.5.2 or we just didn't receive 1.6 or 1.7+ data yet, so delay assuming as 1.5.2 for some time
 							scheduleTask(ctx, new SetProtocolTask(this, channel, ProtocolVersion.MINECRAFT_1_5_2), ping152delay, TimeUnit.MILLISECONDS);
 						} else if (
 							(replayingBuffer.readUnsignedByte() == 0xFA) &&
 							"MC|PingHost".equals(new String(ChannelUtils.toArray(replayingBuffer.readBytes(replayingBuffer.readUnsignedShort() * 2)), StandardCharsets.UTF_16BE))
-						) { //1.6.*
+						) {
+							//definitely 1.6
 							replayingBuffer.readUnsignedShort();
 							handshakeversion = ProtocolUtils.get16PingVersion(replayingBuffer.readUnsignedByte());
+						} else {
+							//it was 1.7+ handshake after all
+							//hope that there won't be any handshake packet with id 0xFA in future because it will be more difficult to support it
+							cancelTask();
+							handshakeversion = attemptDecodeNettyHandshake(buf);
 						}
+					} else {
+						//1.7+ handshake
+						cancelTask();
+						handshakeversion = attemptDecodeNettyHandshake(buf);
 					}
 				} catch (EOFSignal ex) {
 				}
@@ -129,11 +141,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 				break;
 			}
 			default: { // >= 1.7 handshake
-				replayingBuffer.readerIndex(0);
-				ByteBuf data = getVarIntPrefixedData(replayingBuffer);
-				if (data != null) {
-					handshakeversion = ProtocolUtils.readNettyHandshake(data);
-				}
+				handshakeversion = attemptDecodeNettyHandshake(buf);
 				break;
 			}
 		}
@@ -158,6 +166,16 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		pipelineBuilders.get(version).buildPipeLine(channel, version);
 		input.readerIndex(0);
 		channel.pipeline().firstContext().fireChannelRead(input);
+	}
+
+
+	private static ProtocolVersion attemptDecodeNettyHandshake(ByteBuf bytebuf) {
+		bytebuf.readerIndex(0);
+		ByteBuf data = getVarIntPrefixedData(bytebuf);
+		if (data != null) {
+			return ProtocolUtils.readNettyHandshake(data);
+		}
+		return null;
 	}
 
 	//handshake packet has more than 3 bytes for sure, so we can simplify splitting logic
