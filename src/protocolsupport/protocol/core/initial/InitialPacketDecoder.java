@@ -94,6 +94,11 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		if (MinecraftServer.getServer().isDebugging()) {
 			System.out.println(
 				ChannelUtils.getNetworkManagerSocketAddress(channel) +
+				" channel pipeline: " +
+				channel.pipeline().toMap()
+			);
+			System.out.println(
+				ChannelUtils.getNetworkManagerSocketAddress(channel) +
 				" data: " +
 				Arrays.toString(Arrays.copyOf(receivedData.array(), receivedData.readableBytes()))
 			);
