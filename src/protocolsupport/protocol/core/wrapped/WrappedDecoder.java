@@ -1,9 +1,5 @@
 package protocolsupport.protocol.core.wrapped;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.ByteToMessageDecoder;
-
 import java.net.InetSocketAddress;
 import java.util.List;
 
@@ -11,6 +7,9 @@ import org.bukkit.Bukkit;
 
 import com.mojang.authlib.GameProfile;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.ByteToMessageDecoder;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.PacketListener;
 import net.minecraft.server.v1_8_R3.PlayerConnection;

@@ -3,7 +3,6 @@ package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.status
 import java.io.IOException;
 
 import net.minecraft.server.v1_8_R3.ServerPing;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.status.MiddleServerInfo;

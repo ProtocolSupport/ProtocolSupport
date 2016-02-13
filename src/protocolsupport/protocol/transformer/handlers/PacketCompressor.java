@@ -2,7 +2,6 @@ package protocolsupport.protocol.transformer.handlers;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-
 import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.netty.Compressor;
 
@@ -29,7 +28,7 @@ public class PacketCompressor extends net.minecraft.server.v1_8_R3.PacketCompres
 			ChannelUtils.writeVarInt(to, 0);
 			to.writeBytes(from);
 		} else {
-			ChannelUtils.writeVarInt(to, readable);	
+			ChannelUtils.writeVarInt(to, readable);
 			to.writeBytes(compressor.compress(ChannelUtils.toArray(from.readSlice(readable))));
 		}
 	}

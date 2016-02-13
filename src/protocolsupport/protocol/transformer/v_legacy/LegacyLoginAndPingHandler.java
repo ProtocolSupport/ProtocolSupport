@@ -9,11 +9,10 @@ import org.bukkit.util.CachedServerIcon;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.handler.codec.DecoderException;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.LegacyServerPingResponseEvent;
 import protocolsupport.protocol.PacketDataSerializer;

@@ -23,6 +23,9 @@ import net.minecraft.server.v1_8_R3.PacketPlayInCustomPayload;
 import net.minecraft.server.v1_8_R3.PacketPlayInEnchantItem;
 import net.minecraft.server.v1_8_R3.PacketPlayInEntityAction;
 import net.minecraft.server.v1_8_R3.PacketPlayInFlying;
+import net.minecraft.server.v1_8_R3.PacketPlayInFlying.PacketPlayInLook;
+import net.minecraft.server.v1_8_R3.PacketPlayInFlying.PacketPlayInPosition;
+import net.minecraft.server.v1_8_R3.PacketPlayInFlying.PacketPlayInPositionLook;
 import net.minecraft.server.v1_8_R3.PacketPlayInHeldItemSlot;
 import net.minecraft.server.v1_8_R3.PacketPlayInKeepAlive;
 import net.minecraft.server.v1_8_R3.PacketPlayInSetCreativeSlot;
@@ -35,9 +38,6 @@ import net.minecraft.server.v1_8_R3.PacketPlayInUseEntity;
 import net.minecraft.server.v1_8_R3.PacketPlayInWindowClick;
 import net.minecraft.server.v1_8_R3.PacketStatusInPing;
 import net.minecraft.server.v1_8_R3.PacketStatusInStart;
-import net.minecraft.server.v1_8_R3.PacketPlayInFlying.PacketPlayInLook;
-import net.minecraft.server.v1_8_R3.PacketPlayInFlying.PacketPlayInPosition;
-import net.minecraft.server.v1_8_R3.PacketPlayInFlying.PacketPlayInPositionLook;
 import protocolsupport.utils.Utils;
 
 public enum ServerBoundPacket {

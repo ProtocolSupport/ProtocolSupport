@@ -22,7 +22,7 @@ public class TileNBTTransformer {
 
 	static {
 		register(
-			1, 
+			1,
 			new SpecificTransformer() {
 				@Override
 				public NBTTagCompound transform(NBTTagCompound input) {

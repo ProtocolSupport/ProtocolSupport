@@ -3,10 +3,8 @@ package protocolsupport.protocol.core.wrapped;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
-
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketListener;
-
 import protocolsupport.protocol.core.IPacketEncoder;
 
 public class WrappedEncoder extends MessageToByteEncoder<Packet<PacketListener>> {

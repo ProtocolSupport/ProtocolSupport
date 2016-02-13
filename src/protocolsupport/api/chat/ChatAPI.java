@@ -7,13 +7,12 @@ import org.bukkit.entity.Player;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.modifiers.ClickAction;
 import protocolsupport.api.chat.modifiers.HoverAction;
 import protocolsupport.api.chat.modifiers.Modifier;
-
 import protocolsupport.utils.chat.ClickActionSerializer;
 import protocolsupport.utils.chat.ComponentSerializer;
 import protocolsupport.utils.chat.HoverActionSerializer;
@@ -51,7 +50,7 @@ public class ChatAPI {
 	public static void sendMessage(Player player, String messageJson, MessagePosition position) {
 		Validate.notNull(player, "Player can't be null");
 		Validate.notNull(messageJson, "Message can't be null");
-		Validate.notNull(position, "Message position can't be null");		
+		Validate.notNull(position, "Message position can't be null");
 		((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutChat(ChatSerializer.a(messageJson), (byte) position.ordinal()));
 	}
 

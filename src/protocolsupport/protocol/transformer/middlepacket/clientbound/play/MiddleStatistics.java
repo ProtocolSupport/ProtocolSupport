@@ -20,7 +20,7 @@ public abstract class MiddleStatistics<T> extends ClientBoundMiddlePacket<T> {
 		}
 	}
 
-	protected static class Statistic { 
+	protected static class Statistic {
 		public String name;
 		public int value;
 	}

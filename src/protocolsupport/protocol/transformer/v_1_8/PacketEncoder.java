@@ -1,12 +1,11 @@
 package protocolsupport.protocol.transformer.v_1_8;
 
+import java.io.IOException;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.AttributeKey;
-
-import java.io.IOException;
-
 import net.minecraft.server.v1_8_R3.EnumProtocol;
 import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R3.NetworkManager;

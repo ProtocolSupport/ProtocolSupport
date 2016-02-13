@@ -5,7 +5,6 @@ import java.util.UUID;
 import com.mojang.authlib.properties.Property;
 
 import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
-
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage.PlayerListEntry;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;

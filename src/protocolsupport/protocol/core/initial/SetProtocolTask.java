@@ -1,7 +1,6 @@
 package protocolsupport.protocol.core.initial;
 
 import io.netty.channel.Channel;
-
 import protocolsupport.api.ProtocolVersion;
 
 public class SetProtocolTask implements Runnable {

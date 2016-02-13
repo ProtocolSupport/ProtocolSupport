@@ -13,7 +13,7 @@ public class PlayerInfo extends MiddlePlayerInfo<RecyclableCollection<PacketData
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
 		RecyclableArrayList<PacketData> datas = RecyclableArrayList.create();
-		for (Info info : infos) {	
+		for (Info info : infos) {
 			switch (action) {
 				case ADD: {
 					if (info.previousinfo != null) {

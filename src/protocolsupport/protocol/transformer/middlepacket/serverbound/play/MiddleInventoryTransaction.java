@@ -13,6 +13,7 @@ public abstract class MiddleInventoryTransaction extends ServerBoundMiddlePacket
 	protected int actionNumber;
 	protected boolean accepted;
 
+	@Override
 	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
 		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_WINDOW_TRANSACTION.get());
 		creator.writeByte(windowId);

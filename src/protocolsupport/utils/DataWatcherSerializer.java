@@ -1,15 +1,13 @@
 package protocolsupport.utils;
 
+import java.io.IOException;
+
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
-
-import java.io.IOException;
-
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.ItemStack;
 import net.minecraft.server.v1_8_R3.Vector3f;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.RecyclablePacketDataSerializer;
 import protocolsupport.utils.DataWatcherObject.ValueType;

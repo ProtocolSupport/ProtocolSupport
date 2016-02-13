@@ -1,12 +1,11 @@
 package protocolsupport.injector.network;
 
+import java.util.List;
+
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelException;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
-
-import java.util.List;
-
 import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.NetworkManager;

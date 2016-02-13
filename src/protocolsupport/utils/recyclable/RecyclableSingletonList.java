@@ -10,6 +10,7 @@ public class RecyclableSingletonList<E> extends AbstractCollection<E> implements
 
 	@SuppressWarnings("rawtypes")
 	private static final Recycler<RecyclableSingletonList> RECYCLER = new Recycler<RecyclableSingletonList>() {
+		@Override
 		protected RecyclableSingletonList newObject(Recycler.Handle handle) {
 			return new RecyclableSingletonList(handle);
 		}
@@ -73,7 +74,7 @@ public class RecyclableSingletonList<E> extends AbstractCollection<E> implements
 				return singleValue;
 			}
 			throw new NoSuchElementException();
-		}	
+		}
 
 		public void reset() {
 			hasNext = true;

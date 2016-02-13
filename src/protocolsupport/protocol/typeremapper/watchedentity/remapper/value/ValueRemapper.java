@@ -8,7 +8,7 @@ public interface ValueRemapper {
 		@Override
 		public DataWatcherObject remap(DataWatcherObject object) {
 			return object;
-		}	
+		}
 	};
 
 	public DataWatcherObject remap(DataWatcherObject object);

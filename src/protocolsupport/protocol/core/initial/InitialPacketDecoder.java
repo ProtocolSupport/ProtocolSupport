@@ -1,19 +1,17 @@
 package protocolsupport.protocol.core.initial;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.concurrent.TimeUnit;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.concurrent.Future;
-
 import net.minecraft.server.v1_8_R3.MinecraftServer;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.concurrent.TimeUnit;
-
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.core.ChannelHandlers;

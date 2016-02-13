@@ -1,13 +1,13 @@
 package protocolsupport.protocol.typeremapper.watchedentity;
 
+import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.RemappingEntry;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificType;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.utils.DataWatcherObject;
 import protocolsupport.utils.DataWatcherObject.ValueType;
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
 
 public class WatchedDataRemapper {
 

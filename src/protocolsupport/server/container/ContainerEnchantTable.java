@@ -6,6 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
+import org.bukkit.event.enchantment.EnchantItemEvent;
+import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
+
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.Blocks;
 import net.minecraft.server.v1_8_R3.EnchantmentManager;
@@ -16,13 +22,6 @@ import net.minecraft.server.v1_8_R3.PlayerInventory;
 import net.minecraft.server.v1_8_R3.StatisticList;
 import net.minecraft.server.v1_8_R3.WeightedRandomEnchant;
 import net.minecraft.server.v1_8_R3.World;
-
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
-import org.bukkit.event.enchantment.EnchantItemEvent;
-import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
-
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
 

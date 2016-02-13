@@ -142,7 +142,7 @@ public enum SpecificType {
 	CAVE_SPIDER(EType.MOB, EntityType.CAVE_SPIDER, SpecificType.SPIDER),
 	CREEPER(EType.MOB, EntityType.CREEPER, SpecificType.LIVING,
 		//state, is powered, ignited
-		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(16, 17, 18)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9) 
+		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(16, 17, 18)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	GHAST(EType.MOB, EntityType.GHAST, SpecificType.LIVING,
 		//is attacking
@@ -170,7 +170,7 @@ public enum SpecificType {
 		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(17, 18, 19, 20)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	GUARDIAN(EType.MOB, EntityType.GUARDIAN, SpecificType.LIVING,
-		//info flags(elder, spikes), target id	
+		//info flags(elder, spikes), target id
 		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(16, 17)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	ARMOR_STAND_MOB(EType.MOB, EntityType.ARMOR_STAND, SpecificType.ARMOR_STAND),
@@ -190,7 +190,7 @@ public enum SpecificType {
 	FIRECHARGE(EType.OBJECT, 64, SpecificType.ENTITY),
 	ENDERPEARL(EType.OBJECT, 65, SpecificType.ENTITY),
 	WITHER_SKULL(EType.OBJECT, 66, SpecificType.FIREBALL,
-		//is charged	
+		//is charged
 		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(10)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	FALLING_OBJECT(EType.OBJECT, 70, SpecificType.ENTITY),
@@ -206,7 +206,7 @@ public enum SpecificType {
 	),
 	MINECART(EType.OBJECT, 10, SpecificType.ENTITY,
 		//is powered, shaking power, shaking direction, show block
-		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(16, 17, 18, 21, 22)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9), 
+		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(16, 17, 18, 21, 22)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9),
 		//damage taken
 		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(19))
 		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1)),
@@ -248,7 +248,7 @@ public enum SpecificType {
 		//health
 		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(8)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	ARMOR_STAND_OBJECT(EType.OBJECT, 78, SpecificType.ARMOR_STAND);	
+	ARMOR_STAND_OBJECT(EType.OBJECT, 78, SpecificType.ARMOR_STAND);
 
 
 	private static final SpecificType[] OBJECT_BY_TYPE_ID = new SpecificType[256];

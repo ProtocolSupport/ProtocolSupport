@@ -3,7 +3,6 @@ package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v
 import java.io.IOException;
 
 import io.netty.buffer.Unpooled;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.PacketDataSerializer;

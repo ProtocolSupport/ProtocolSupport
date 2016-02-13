@@ -2,7 +2,6 @@ package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v
 
 import net.minecraft.server.v1_8_R3.Item;
 import net.minecraft.server.v1_8_R3.Items;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleMap;

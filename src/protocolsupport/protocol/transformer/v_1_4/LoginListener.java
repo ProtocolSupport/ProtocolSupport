@@ -2,10 +2,10 @@ package protocolsupport.protocol.transformer.v_1_4;
 
 import javax.crypto.SecretKey;
 
-import protocolsupport.protocol.core.ChannelHandlers;
-import protocolsupport.protocol.transformer.handlers.AbstractLoginListener;
 import net.minecraft.server.v1_8_R3.MinecraftEncryption;
 import net.minecraft.server.v1_8_R3.NetworkManager;
+import protocolsupport.protocol.core.ChannelHandlers;
+import protocolsupport.protocol.transformer.handlers.AbstractLoginListener;
 
 public class LoginListener extends AbstractLoginListener {
 

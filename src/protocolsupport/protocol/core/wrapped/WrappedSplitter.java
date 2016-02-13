@@ -2,10 +2,10 @@ package protocolsupport.protocol.core.wrapped;
 
 import java.util.List;
 
-import protocolsupport.protocol.core.IPacketSplitter;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
+import protocolsupport.protocol.core.IPacketSplitter;
 
 public class WrappedSplitter extends ByteToMessageDecoder {
 

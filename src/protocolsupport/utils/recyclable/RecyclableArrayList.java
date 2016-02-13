@@ -9,6 +9,7 @@ public class RecyclableArrayList<E> extends ArrayList<E> implements RecyclableCo
 
 	@SuppressWarnings("rawtypes")
 	private static final Recycler<RecyclableArrayList> RECYCLER = new Recycler<RecyclableArrayList>() {
+		@Override
 		protected RecyclableArrayList newObject(Recycler.Handle handle) {
 			return new RecyclableArrayList(handle);
 		}
