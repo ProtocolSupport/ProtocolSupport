@@ -118,12 +118,12 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 							//it was 1.7+ handshake after all
 							//hope that there won't be any handshake packet with id 0xFA in future because it will be more difficult to support it
 							cancelTask();
-							handshakeversion = attemptDecodeNettyHandshake(channel, replayingBuffer);
+							handshakeversion = attemptDecodeNettyHandshake(replayingBuffer);
 						}
 					} else {
 						//1.7+ handshake
 						cancelTask();
-						handshakeversion = attemptDecodeNettyHandshake(channel, replayingBuffer);
+						handshakeversion = attemptDecodeNettyHandshake(replayingBuffer);
 					}
 				} catch (EOFSignal ex) {
 				}
@@ -137,19 +137,18 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 				break;
 			}
 			default: { // >= 1.7 handshake
-				handshakeversion = attemptDecodeNettyHandshake(channel, replayingBuffer);
+				handshakeversion = attemptDecodeNettyHandshake(replayingBuffer);
 				break;
 			}
 		}
 		//if we detected the protocol than we save it and process data
 		if (handshakeversion != null) {
-			setProtocol(channel, receivedData, handshakeversion);
+			setProtocol(channel, handshakeversion);
 		}
 	}
 
-	protected volatile boolean protocolSet = false;
-
-	protected void setProtocol(final Channel channel, final ByteBuf input, ProtocolVersion version) throws Exception {
+	protected boolean protocolSet = false;
+	protected void setProtocol(final Channel channel, ProtocolVersion version) throws Exception {
 		if (protocolSet) {
 			return;
 		}
@@ -160,12 +159,12 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		ProtocolStorage.setProtocolVersion(ChannelUtils.getNetworkManagerSocketAddress(channel), version);
 		channel.pipeline().remove(ChannelHandlers.INITIAL_DECODER);
 		pipelineBuilders.get(version).buildPipeLine(channel, version);
-		input.readerIndex(0);
-		channel.pipeline().firstContext().fireChannelRead(input);
+		receivedData.readerIndex(0);
+		channel.pipeline().firstContext().fireChannelRead(receivedData);
 	}
 
 	//handshake packet has more than 3 bytes for sure, so we can simplify splitting logic
-	private static ProtocolVersion attemptDecodeNettyHandshake(Channel channel, ByteBuf bytebuf) {
+	private static ProtocolVersion attemptDecodeNettyHandshake(ByteBuf bytebuf) {
 		bytebuf.readerIndex(0);
 		if (bytebuf.readableBytes() < 3) {
 			return null;

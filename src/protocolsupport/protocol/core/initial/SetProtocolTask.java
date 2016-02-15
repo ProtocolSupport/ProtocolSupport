@@ -18,7 +18,7 @@ public class SetProtocolTask implements Runnable {
 	@Override
 	public void run() {
 		try {
-			initialDecoder.setProtocol(channel, initialDecoder.receivedData, version);
+			initialDecoder.setProtocol(channel, version);
 		} catch (Exception t) {
 			channel.pipeline().firstContext().fireExceptionCaught(t);
 		}
