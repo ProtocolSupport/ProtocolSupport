@@ -147,12 +147,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		}
 	}
 
-	protected boolean protocolSet = false;
 	protected void setProtocol(final Channel channel, ProtocolVersion version) throws Exception {
-		if (protocolSet) {
-			return;
-		}
-		protocolSet = true;
 		if (MinecraftServer.getServer().isDebugging()) {
 			System.out.println(ChannelUtils.getNetworkManagerSocketAddress(channel)+ " connected with protocol version "+version);
 		}
