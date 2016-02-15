@@ -11,6 +11,7 @@ public class SimpleReadTimeoutHandler extends ChannelInboundHandlerAdapter {
 	private volatile ScheduledFuture<?> timeoutTask;
 	protected final long timeoutTime;
 	protected long lastReadTime;
+	protected boolean hasRead;
 
 	public SimpleReadTimeoutHandler(int timeout) {
 		this(timeout, TimeUnit.SECONDS);
@@ -35,6 +36,7 @@ public class SimpleReadTimeoutHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object message) throws Exception {
 		this.lastReadTime = System.currentTimeMillis();
+		this.hasRead = true;
 		ctx.fireChannelRead(message);
 	}
 
@@ -47,7 +49,12 @@ public class SimpleReadTimeoutHandler extends ChannelInboundHandlerAdapter {
 					long untilTimeout = timeoutTime - (System.currentTimeMillis() - lastReadTime);
 					if (untilTimeout <= 0) {
 						try {
-							readTimedOut(ctx);
+							if (hasRead) {
+								ctx.fireExceptionCaught(IntervalReadTimeoutException.getInstance(lastReadTime));
+							} else {
+								ctx.fireExceptionCaught(FirstReadTimeoutException.getInstance(lastReadTime));
+							}
+							ctx.close();
 						} catch (Throwable e) {
 							ctx.fireExceptionCaught(e);
 						}
@@ -64,11 +71,6 @@ public class SimpleReadTimeoutHandler extends ChannelInboundHandlerAdapter {
 			this.timeoutTask.cancel(false);
 			this.timeoutTask = null;
 		}
-	}
-
-	protected void readTimedOut(ChannelHandlerContext ctx) throws Exception {
-		ctx.fireExceptionCaught(ReadTimeoutException.getInstance());
-		ctx.close();
 	}
 
 }
