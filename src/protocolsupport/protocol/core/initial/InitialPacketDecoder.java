@@ -1,7 +1,6 @@
 package protocolsupport.protocol.core.initial;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.concurrent.TimeUnit;
 
@@ -11,7 +10,9 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.concurrent.Future;
+
 import net.minecraft.server.v1_8_R3.MinecraftServer;
+
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.core.ChannelHandlers;
@@ -88,19 +89,11 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		}
 		receivedData.writeBytes(buf);
 		receivedData.readerIndex(0);
+		decode(ctx);
+	}
+
+	private void decode(ChannelHandlerContext ctx) throws Exception {
 		final Channel channel = ctx.channel();
-		if (MinecraftServer.getServer().isDebugging()) {
-			System.out.println(
-				ChannelUtils.getNetworkManagerSocketAddress(channel) +
-				" channel pipeline: " +
-				channel.pipeline().toMap()
-			);
-			System.out.println(
-				ChannelUtils.getNetworkManagerSocketAddress(channel) +
-				" data: " +
-				Arrays.toString(Arrays.copyOf(receivedData.array(), receivedData.readableBytes()))
-			);
-		}
 		ProtocolVersion handshakeversion = null;
 		int firstbyte = replayingBuffer.readUnsignedByte();
 		switch (firstbyte) {
@@ -108,71 +101,35 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 				try {
 					if (replayingBuffer.readableBytes() == 0) {
 						//no more data received, it may be old protocol, or we just not received all data yet, so delay assuming as really old protocol for some time
-						if (MinecraftServer.getServer().isDebugging()) {
-							System.out.println(
-								ChannelUtils.getNetworkManagerSocketAddress(channel) +
-								" is probably 1.1"
-							);
-						}
 						scheduleTask(ctx, new SetProtocolTask(this, channel, ProtocolVersion.MINECRAFT_LEGACY), pingLegacyDelay, TimeUnit.MILLISECONDS);
 					} else if (replayingBuffer.readUnsignedByte() == 1) {
 						//1.5-1.6 ping or maybe a finishing byte for 1.7+ packet length
 						if (replayingBuffer.readableBytes() == 0) {
 							//no more data received, it may be 1.5.2 or we just didn't receive 1.6 or 1.7+ data yet, so delay assuming as 1.5.2 for some time
-							if (MinecraftServer.getServer().isDebugging()) {
-								System.out.println(
-									ChannelUtils.getNetworkManagerSocketAddress(channel) +
-									" is probably 1.5.2"
-								);
-							}
 							scheduleTask(ctx, new SetProtocolTask(this, channel, ProtocolVersion.MINECRAFT_1_5_2), ping152delay, TimeUnit.MILLISECONDS);
 						} else if (
 							(replayingBuffer.readUnsignedByte() == 0xFA) &&
 							"MC|PingHost".equals(new String(ChannelUtils.toArray(replayingBuffer.readBytes(replayingBuffer.readUnsignedShort() * 2)), StandardCharsets.UTF_16BE))
 						) {
 							//definitely 1.6
-							if (MinecraftServer.getServer().isDebugging()) {
-								System.out.println(
-									ChannelUtils.getNetworkManagerSocketAddress(channel) +
-									" is 1.6"
-								);
-							}
 							replayingBuffer.readUnsignedShort();
 							handshakeversion = ProtocolUtils.get16PingVersion(replayingBuffer.readUnsignedByte());
 						} else {
 							//it was 1.7+ handshake after all
 							//hope that there won't be any handshake packet with id 0xFA in future because it will be more difficult to support it
-							if (MinecraftServer.getServer().isDebugging()) {
-								System.out.println(
-									ChannelUtils.getNetworkManagerSocketAddress(channel) +
-									" is >= 1.7, checking data"
-								);
-							}
 							cancelTask();
-							handshakeversion = attemptDecodeNettyHandshake(channel, buf);
+							handshakeversion = attemptDecodeNettyHandshake(channel, replayingBuffer);
 						}
 					} else {
 						//1.7+ handshake
-						if (MinecraftServer.getServer().isDebugging()) {
-							System.out.println(
-								ChannelUtils.getNetworkManagerSocketAddress(channel) +
-								" is >= 1.7, checking data"
-							);
-						}
 						cancelTask();
-						handshakeversion = attemptDecodeNettyHandshake(channel, buf);
+						handshakeversion = attemptDecodeNettyHandshake(channel, replayingBuffer);
 					}
 				} catch (EOFSignal ex) {
 				}
 				break;
 			}
 			case 0x02: { // <= 1.6.4 handshake
-				if (MinecraftServer.getServer().isDebugging()) {
-					System.out.println(
-						ChannelUtils.getNetworkManagerSocketAddress(channel) +
-						" is probably < 1.7"
-					);
-				}
 				try {
 					handshakeversion = ProtocolUtils.readOldHandshake(replayingBuffer);
 				} catch (EOFSignal ex) {
@@ -180,13 +137,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 				break;
 			}
 			default: { // >= 1.7 handshake
-				if (MinecraftServer.getServer().isDebugging()) {
-					System.out.println(
-						ChannelUtils.getNetworkManagerSocketAddress(channel) +
-						" is >= 1.7, checking data"
-					);
-				}
-				handshakeversion = attemptDecodeNettyHandshake(channel, buf);
+				handshakeversion = attemptDecodeNettyHandshake(channel, replayingBuffer);
 				break;
 			}
 		}
@@ -216,40 +167,14 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 	//handshake packet has more than 3 bytes for sure, so we can simplify splitting logic
 	private static ProtocolVersion attemptDecodeNettyHandshake(Channel channel, ByteBuf bytebuf) {
 		bytebuf.readerIndex(0);
-		if (MinecraftServer.getServer().isDebugging()) {
-			System.out.println(
-				ChannelUtils.getNetworkManagerSocketAddress(channel) +
-				" data readable: "+bytebuf.readableBytes()
-			);
-		}
 		if (bytebuf.readableBytes() < 3) {
 			return null;
 		}
 		int length = ChannelUtils.readVarInt(bytebuf);
-		if (MinecraftServer.getServer().isDebugging()) {
-			System.out.println(
-				ChannelUtils.getNetworkManagerSocketAddress(channel) +
-				" data need length: "+length
-			);
-		}
-		if (MinecraftServer.getServer().isDebugging()) {
-			System.out.println(
-				ChannelUtils.getNetworkManagerSocketAddress(channel) +
-				" data readable: "+bytebuf.readableBytes()
-			);
-		}
 		if (bytebuf.readableBytes() < length) {
 			return null;
 		}
-		ByteBuf data = bytebuf.readBytes(length);
-		if (MinecraftServer.getServer().isDebugging()) {
-			System.out.println(
-				ChannelUtils.getNetworkManagerSocketAddress(channel) +
-				" HS data: " +
-				Arrays.toString(Arrays.copyOf(data.array(), data.readableBytes()))
-			);
-		}
-		return ProtocolUtils.readNettyHandshake(data);
+		return ProtocolUtils.readNettyHandshake(bytebuf.readSlice(length));
 	}
 
 }
