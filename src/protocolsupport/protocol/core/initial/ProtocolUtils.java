@@ -1,6 +1,7 @@
 package protocolsupport.protocol.core.initial;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.utils.netty.ChannelUtils;
 
@@ -31,11 +32,13 @@ public class ProtocolUtils {
 
 	@SuppressWarnings("deprecation")
 	protected static ProtocolVersion readNettyHandshake(ByteBuf data) {
-		if (ChannelUtils.readVarInt(data) == 0x00) {
+		int packetId = ChannelUtils.readVarInt(data);
+		if (packetId == 0x00) {
 			ProtocolVersion version = ProtocolVersion.fromId(ChannelUtils.readVarInt(data));
 			return version != ProtocolVersion.UNKNOWN ? version : ProtocolVersion.MINECRAFT_FUTURE;
+		} else {
+			throw new DecoderException(packetId + "is not a valid packet id");
 		}
-		return null;
 	}
 
 }
