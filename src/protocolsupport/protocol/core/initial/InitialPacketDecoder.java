@@ -26,8 +26,8 @@ import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
 
 public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
-	private static final int ping152delay = Utils.getJavaPropertyValue("protocolsupport.ping152delay", 500, Converter.STRING_TO_INT);
-	private static final int pingLegacyDelay = Utils.getJavaPropertyValue("protocolsupport.pinglegacydelay", 1000, Converter.STRING_TO_INT);
+	private static final int ping152delay = Utils.getJavaPropertyValue("protocolsupport.ping152delay", 100, Converter.STRING_TO_INT);
+	private static final int pingLegacyDelay = Utils.getJavaPropertyValue("protocolsupport.pinglegacydelay", 200, Converter.STRING_TO_INT);
 
 	public static void init() {
 		ProtocolSupport.logInfo("Assume 1.5.2 ping delay: "+ping152delay);
@@ -94,11 +94,11 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
 	private void decode(ChannelHandlerContext ctx) throws Exception {
 		final Channel channel = ctx.channel();
-		ProtocolVersion handshakeversion = null;
 		int firstbyte = replayingBuffer.readUnsignedByte();
-		switch (firstbyte) {
-			case 0xFE: { //old ping or a part of varint length
-				try {
+		try {
+			ProtocolVersion handshakeversion = null;
+			switch (firstbyte) {
+				case 0xFE: { //old ping or a part of varint length
 					if (replayingBuffer.readableBytes() == 0) {
 						//no more data received, it may be old protocol, or we just not received all data yet, so delay assuming as really old protocol for some time
 						scheduleTask(ctx, new SetProtocolTask(this, channel, ProtocolVersion.MINECRAFT_LEGACY), pingLegacyDelay, TimeUnit.MILLISECONDS);
@@ -125,25 +125,22 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 						cancelTask();
 						handshakeversion = attemptDecodeNettyHandshake(replayingBuffer);
 					}
-				} catch (EOFSignal ex) {
+					break;
 				}
-				break;
-			}
-			case 0x02: { // <= 1.6.4 handshake
-				try {
+				case 0x02: { // <= 1.6.4 handshake
 					handshakeversion = ProtocolUtils.readOldHandshake(replayingBuffer);
-				} catch (EOFSignal ex) {
+					break;
 				}
-				break;
+				default: { // >= 1.7 handshake
+					handshakeversion = attemptDecodeNettyHandshake(replayingBuffer);
+					break;
+				}
 			}
-			default: { // >= 1.7 handshake
-				handshakeversion = attemptDecodeNettyHandshake(replayingBuffer);
-				break;
+			//if we detected the protocol than we save it and process data
+			if (handshakeversion != null) {
+				setProtocol(channel, handshakeversion);
 			}
-		}
-		//if we detected the protocol than we save it and process data
-		if (handshakeversion != null) {
-			setProtocol(channel, handshakeversion);
+		} catch (EOFSignal ex) {
 		}
 	}
 
@@ -158,17 +155,9 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		channel.pipeline().firstContext().fireChannelRead(receivedData);
 	}
 
-	//handshake packet has more than 3 bytes for sure, so we can simplify splitting logic
 	private static ProtocolVersion attemptDecodeNettyHandshake(ByteBuf bytebuf) {
 		bytebuf.readerIndex(0);
-		if (bytebuf.readableBytes() < 3) {
-			return null;
-		}
-		int length = ChannelUtils.readVarInt(bytebuf);
-		if (bytebuf.readableBytes() < length) {
-			return null;
-		}
-		return ProtocolUtils.readNettyHandshake(bytebuf.readSlice(length));
+		return ProtocolUtils.readNettyHandshake(bytebuf.readSlice(ChannelUtils.readVarInt(bytebuf)));
 	}
 
 }
