@@ -59,7 +59,6 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 	protected Future<?> responseTask;
 
 	protected void scheduleTask(ChannelHandlerContext ctx, Runnable task, long delay, TimeUnit tu) {
-		cancelTask();
 		responseTask = ctx.executor().schedule(task, delay, tu);
 	}
 
@@ -93,7 +92,8 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 	}
 
 	private void decode(ChannelHandlerContext ctx) throws Exception {
-		final Channel channel = ctx.channel();
+		cancelTask();
+		Channel channel = ctx.channel();
 		int firstbyte = replayingBuffer.readUnsignedByte();
 		try {
 			ProtocolVersion handshakeversion = null;
@@ -117,12 +117,10 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 						} else {
 							//it was 1.7+ handshake after all
 							//hope that there won't be any handshake packet with id 0xFA in future because it will be more difficult to support it
-							cancelTask();
 							handshakeversion = attemptDecodeNettyHandshake(replayingBuffer);
 						}
 					} else {
 						//1.7+ handshake
-						cancelTask();
 						handshakeversion = attemptDecodeNettyHandshake(replayingBuffer);
 					}
 					break;
