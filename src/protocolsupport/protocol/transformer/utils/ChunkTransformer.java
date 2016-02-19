@@ -15,12 +15,7 @@ public class ChunkTransformer {
 	}
 
 	public static byte[] toPre18Data(byte[] data18, int bitmap, ProtocolVersion version) {
-		int count = 0;
-		for (int i = 0; i < 16; i++) {
-			if ((bitmap & (1 << i)) != 0) {
-				count++;
-			}
-		}
+		int count = Integer.bitCount(bitmap);
 		byte[] newdata = new byte[(count * (4096 + 2048)) + (data18.length - (count * 8192))];
 		int tIndex = 0;
 		int mIndex = count * 4096;
