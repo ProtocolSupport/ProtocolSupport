@@ -8,10 +8,14 @@ import protocolsupport.utils.Utils.Converter;
 
 public class NettyInjector {
 
+	private static final boolean allowUseEpollChannel = Utils.getJavaPropertyValue("protocolsupport.allowepoll", false, Converter.STRING_TO_BOOLEAN);
 	private static final boolean useNonBlockingServerConnection = Utils.getJavaPropertyValue("protocolsupport.nonblockingconection", false, Converter.STRING_TO_BOOLEAN);
 
 	public static void inject() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		ServerConnection connection = MinecraftServer.getServer().getServerConnection();
+		if (!allowUseEpollChannel) {
+			MinecraftServer.getServer().getPropertyManager().setProperty("use-native-transport", false);
+		}
 		if (connection == null && useNonBlockingServerConnection) {
 			NonBlockingServerConnection.inject();
 			ProtocolSupport.logInfo("Using NonBlockingServerConnection");
