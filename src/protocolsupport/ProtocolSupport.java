@@ -44,6 +44,10 @@ public class ProtocolSupport extends JavaPlugin {
 		Bukkit.shutdown();
 	}
 
+	public static void logWarning(String message) {
+		JavaPlugin.getPlugin(ProtocolSupport.class).getLogger().warning(message);
+	}
+
 	public static void logInfo(String message) {
 		JavaPlugin.getPlugin(ProtocolSupport.class).getLogger().info(message);
 	}
