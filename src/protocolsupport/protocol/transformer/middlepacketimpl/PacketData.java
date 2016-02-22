@@ -8,6 +8,7 @@ import protocolsupport.utils.netty.Allocator;
 public class PacketData extends PacketDataSerializer {
 
 	private static final Recycler<PacketData> RECYCLER = new Recycler<PacketData>() {
+		@Override
 		protected PacketData newObject(Recycler.Handle handle) {
 			return new PacketData(handle);
 		}

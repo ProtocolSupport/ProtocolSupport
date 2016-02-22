@@ -7,10 +7,6 @@ import java.net.SocketAddress;
 import org.apache.logging.log4j.LogManager;
 import org.spigotmc.SpigotConfig;
 
-import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.storage.ProtocolStorage;
-import protocolsupport.protocol.storage.ThrottleTracker;
-
 import com.google.gson.Gson;
 import com.mojang.authlib.properties.Property;
 import com.mojang.util.UUIDTypeAdapter;
@@ -24,6 +20,9 @@ import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.NetworkManager;
 import net.minecraft.server.v1_8_R3.PacketHandshakingInSetProtocol;
 import net.minecraft.server.v1_8_R3.PacketLoginOutDisconnect;
+import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.storage.ProtocolStorage;
+import protocolsupport.protocol.storage.ThrottleTracker;
 
 public abstract class AbstractHandshakeListener extends HandshakeListener {
 

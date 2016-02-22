@@ -174,7 +174,7 @@ public enum SpecificType {
 		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(17, 18, 19, 20)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	GUARDIAN(EType.MOB, EntityType.GUARDIAN, SpecificType.LIVING,
-		//info flags(elder, spikes), target id	
+		//info flags(elder, spikes), target id
 		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(16, 17)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	ARMOR_STAND_MOB(EType.MOB, EntityType.ARMOR_STAND, SpecificType.ARMOR_STAND),
@@ -194,7 +194,7 @@ public enum SpecificType {
 	FIRECHARGE(EType.OBJECT, 64, SpecificType.ENTITY),
 	ENDERPEARL(EType.OBJECT, 65, SpecificType.ENTITY),
 	WITHER_SKULL(EType.OBJECT, 66, SpecificType.FIREBALL,
-		//is charged	
+		//is charged
 		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(10)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	FALLING_OBJECT(EType.OBJECT, 70, SpecificType.ENTITY),
@@ -252,7 +252,7 @@ public enum SpecificType {
 		//health
 		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(8)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	ARMOR_STAND_OBJECT(EType.OBJECT, 78, SpecificType.ARMOR_STAND);	
+	ARMOR_STAND_OBJECT(EType.OBJECT, 78, SpecificType.ARMOR_STAND);
 
 
 	private static final SpecificType[] OBJECT_BY_TYPE_ID = new SpecificType[256];

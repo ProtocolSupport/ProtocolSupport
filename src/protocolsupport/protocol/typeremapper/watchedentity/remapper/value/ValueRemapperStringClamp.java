@@ -16,6 +16,6 @@ public class ValueRemapperStringClamp implements ValueRemapper {
 		return object;
 	}
 
-	
+
 
 }

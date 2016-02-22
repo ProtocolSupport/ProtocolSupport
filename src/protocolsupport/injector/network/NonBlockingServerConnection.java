@@ -22,7 +22,6 @@ import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-
 import net.minecraft.server.v1_8_R3.ChatComponentText;
 import net.minecraft.server.v1_8_R3.CrashReport;
 import net.minecraft.server.v1_8_R3.CrashReportSystemDetails;
@@ -115,7 +114,7 @@ public class NonBlockingServerConnection extends ServerConnection {
 						networkmanager.a();
 					} catch (Exception exception) {
 						if (networkmanager.c()) {
-							final CrashReport crashreport = CrashReport.a((Throwable) exception, "Ticking memory connection");
+							final CrashReport crashreport = CrashReport.a(exception, "Ticking memory connection");
 							final CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Ticking connection");
 							crashreportsystemdetails.a("Connection", new Callable<String>() {
 								@Override
@@ -125,7 +124,7 @@ public class NonBlockingServerConnection extends ServerConnection {
 							});
 							throw new ReportedException(crashreport);
 						}
-						e.warn("Failed to handle packet for " + networkmanager.getSocketAddress(), (Throwable) exception);
+						e.warn("Failed to handle packet for " + networkmanager.getSocketAddress(), exception);
 						final ChatComponentText chatcomponenttext = new ChatComponentText("Internal server error");
 						networkmanager.a(new PacketPlayOutKickDisconnect(chatcomponenttext), new GenericFutureListener<Future<? super Void>>() {
 							@Override

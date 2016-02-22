@@ -1,10 +1,5 @@
 package protocolsupport.protocol;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufInputStream;
-import io.netty.buffer.ByteBufOutputStream;
-import io.netty.handler.codec.EncoderException;
-
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -17,6 +12,17 @@ import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
+import org.spigotmc.LimitStream;
+import org.spigotmc.SneakyThrow;
+
+import com.mojang.authlib.GameProfile;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufInputStream;
+import io.netty.buffer.ByteBufOutputStream;
+import io.netty.handler.codec.EncoderException;
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.GameProfileSerializer;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
@@ -28,12 +34,6 @@ import net.minecraft.server.v1_8_R3.NBTReadLimiter;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.minecraft.server.v1_8_R3.NBTTagList;
 import net.minecraft.server.v1_8_R3.NBTTagString;
-
-import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
-import org.spigotmc.LimitStream;
-import org.spigotmc.SneakyThrow;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ItemStackWriteEvent;
 import protocolsupport.protocol.transformer.mcpe.utils.PEDataInput;
@@ -44,8 +44,6 @@ import protocolsupport.protocol.typeskipper.id.IdSkipper;
 import protocolsupport.protocol.typeskipper.id.SkippingTable;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.ChannelUtils;
-
-import com.mojang.authlib.GameProfile;
 
 public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDataSerializer {	private ProtocolVersion version;
 
@@ -384,7 +382,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 		public org.bukkit.inventory.ItemStack getResult() {
 			return wrapped;
 		}
-		
+
 	}
 
 }

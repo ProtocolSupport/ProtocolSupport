@@ -4,7 +4,7 @@ import java.net.InetSocketAddress;
 
 import org.bukkit.event.HandlerList;
 
-public class PlayerDisconnectEvent extends PlayerEvent {	
+public class PlayerDisconnectEvent extends PlayerEvent {
 
 	public PlayerDisconnectEvent(InetSocketAddress address, String username) {
 		super(address, username);

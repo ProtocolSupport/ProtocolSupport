@@ -1,18 +1,17 @@
 package protocolsupport.protocol.storage;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import com.mojang.authlib.properties.Property;
+
+import gnu.trove.map.hash.TIntObjectHashMap;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
-
-import com.mojang.authlib.properties.Property;
 
 public class LocalStorage {
 

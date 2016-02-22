@@ -3,7 +3,6 @@ package protocolsupport.protocol.transformer.middlepacket;
 import java.io.IOException;
 
 import net.minecraft.server.v1_8_R3.Packet;
-
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 

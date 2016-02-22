@@ -7,6 +7,7 @@ import protocolsupport.utils.netty.Allocator;
 public class RecyclablePacketDataSerializer extends PacketDataSerializer {
 
 	private static final Recycler<RecyclablePacketDataSerializer> RECYCLER = new Recycler<RecyclablePacketDataSerializer>() {
+		@Override
 		protected RecyclablePacketDataSerializer newObject(Recycler.Handle handle) {
 			return new RecyclablePacketDataSerializer(handle);
 		}

@@ -80,7 +80,7 @@ public class IdRemapper {
 			// dropper -> stone
 			registerRemapEntry(178, 1, ProtocolVersionsHelper.BEFORE_1_5);
 			// hopper -> stone
-			registerRemapEntry(154, 1, ProtocolVersionsHelper.BEFORE_1_5);			
+			registerRemapEntry(154, 1, ProtocolVersionsHelper.BEFORE_1_5);
 			// quartz -> snow
 			registerRemapEntry(155, 80, ProtocolVersionsHelper.BEFORE_1_5);
 			// quartz stairs -> stairs

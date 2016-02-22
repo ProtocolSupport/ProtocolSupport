@@ -1,10 +1,9 @@
 package protocolsupport.protocol.storage;
 
-import gnu.trove.iterator.TObjectLongIterator;
-import gnu.trove.map.hash.TObjectLongHashMap;
-
 import java.net.InetAddress;
 
+import gnu.trove.iterator.TObjectLongIterator;
+import gnu.trove.map.hash.TObjectLongHashMap;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 
 public class ThrottleTracker {

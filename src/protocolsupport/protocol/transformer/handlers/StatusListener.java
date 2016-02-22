@@ -121,6 +121,7 @@ public class StatusListener extends net.minecraft.server.v1_8_R3.PacketStatusLis
 			return icon;
 		}
 
+		@Override
 		public void setServerIcon(CachedServerIcon icon) {
 			if (icon != null && !(icon instanceof CraftIconCache)) {
 				throw new IllegalArgumentException(icon + " was not created by " + CraftServer.class);
@@ -128,6 +129,7 @@ public class StatusListener extends net.minecraft.server.v1_8_R3.PacketStatusLis
 			this.icon = ((CraftIconCache) icon);
 		}
 
+		@Override
 		public Iterator<Player> iterator() throws UnsupportedOperationException {
 			return new Iterator<Player>() {
 				Iterator<EntityPlayer> iterator = players.iterator();

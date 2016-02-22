@@ -1,9 +1,8 @@
 package protocolsupport.protocol.typeskipper.id;
 
-import protocolsupport.utils.ProtocolVersionsHelper;
-
 import net.minecraft.server.v1_8_R3.Enchantment;
 import net.minecraft.server.v1_8_R3.MobEffectList;
+import protocolsupport.utils.ProtocolVersionsHelper;
 
 public class IdSkipper {
 

@@ -2,12 +2,12 @@ package protocolsupport.protocol.transformer.v_1_5;
 
 import java.util.List;
 
+import javax.crypto.Cipher;
+import javax.crypto.ShortBufferException;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
-
-import javax.crypto.Cipher;
-import javax.crypto.ShortBufferException;
 
 public class PacketDecrypter extends ByteToMessageDecoder {
 

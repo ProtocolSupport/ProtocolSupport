@@ -29,6 +29,9 @@ public class NettyInjector {
 	@SuppressWarnings("unchecked")
 	public static void inject() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		ServerConnection connection = MinecraftServer.getServer().getServerConnection();
+		if (MinecraftServer.getServer().ai()) {
+			ProtocolSupport.logWarning("Native transport is enabled, this may causes issues. Disable it by setting use-native-transport in server.properties to false.");
+		}
 		if (connection == null && useNonBlockingServerConnection) {
 			NonBlockingServerConnection.inject();
 			ProtocolSupport.logInfo("Using NonBlockingServerConnection");

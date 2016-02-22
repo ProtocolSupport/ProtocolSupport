@@ -1,9 +1,5 @@
 package protocolsupport.protocol.transformer.handlers;
 
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
-
 import java.net.InetSocketAddress;
 import java.security.PrivateKey;
 import java.util.Arrays;
@@ -14,8 +10,21 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
 import javax.crypto.SecretKey;
 
+import org.apache.commons.lang3.Validate;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.bukkit.Bukkit;
+
+import com.google.common.base.Charsets;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
+
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import net.minecraft.server.v1_8_R3.ChatComponentText;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
@@ -27,20 +36,10 @@ import net.minecraft.server.v1_8_R3.PacketLoginOutDisconnect;
 import net.minecraft.server.v1_8_R3.PacketLoginOutEncryptionBegin;
 import net.minecraft.server.v1_8_R3.PacketLoginOutSetCompression;
 import net.minecraft.server.v1_8_R3.PacketLoginOutSuccess;
-
-import org.apache.commons.lang3.Validate;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.bukkit.Bukkit;
-
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.events.PlayerLoginStartEvent;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
-
-import com.google.common.base.Charsets;
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
 
 public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3.LoginListener {
 
@@ -227,7 +226,7 @@ public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3
 					if (MinecraftServer.getServer().isDebugging()) {
 						t.printStackTrace();
 					}
-				}					
+				}
 			}
 		});
 	}

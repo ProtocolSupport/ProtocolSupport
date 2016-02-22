@@ -7,6 +7,7 @@ import java.util.List;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import net.minecraft.server.v1_8_R3.MinecraftServer;
 import protocolsupport.api.ProtocolVersion;
 
 public class ServerPingResponseEvent extends Event {
@@ -103,6 +104,14 @@ public class ServerPingResponseEvent extends Event {
 
 	public static HandlerList getHandlerList() {
 		return list;
+	}
+
+	public static String getServerModName() {
+		return MinecraftServer.getServer().getServerModName();
+	}
+
+	public static String getServerVersionName() {
+		return MinecraftServer.getServer().getVersion();
 	}
 
 }

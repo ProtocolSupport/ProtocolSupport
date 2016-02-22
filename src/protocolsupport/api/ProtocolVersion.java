@@ -96,7 +96,7 @@ public enum ProtocolVersion {
 				return MINECRAFT_1_6_2;
 			}
 			case 73: {
-				return MINECRAFT_1_6_1; 
+				return MINECRAFT_1_6_1;
 			}
 			case 61: {
 				return MINECRAFT_1_5_2;
@@ -113,7 +113,7 @@ public enum ProtocolVersion {
 		int endId = Math.max(start.orderId, end.orderId);
 		ProtocolVersion[] between = new ProtocolVersion[endId - startId + 1];
 		for (int i = startId; i <= endId; i++) {
-			between[i - startId] = byOrderId[i]; 
+			between[i - startId] = byOrderId[i];
 		}
 		return between;
 	}

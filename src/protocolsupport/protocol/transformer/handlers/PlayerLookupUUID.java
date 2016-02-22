@@ -8,11 +8,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 
-import net.minecraft.server.v1_8_R3.MinecraftEncryption;
-import net.minecraft.server.v1_8_R3.MinecraftServer;
-import protocolsupport.api.events.PlayerPropertiesResolveEvent;
-import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
-
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_8_R3.util.Waitable;
@@ -23,6 +18,11 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.exceptions.AuthenticationUnavailableException;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
+
+import net.minecraft.server.v1_8_R3.MinecraftEncryption;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
+import protocolsupport.api.events.PlayerPropertiesResolveEvent;
+import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 
 @SuppressWarnings("deprecation")
 public class PlayerLookupUUID {

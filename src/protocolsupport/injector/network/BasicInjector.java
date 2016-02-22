@@ -11,12 +11,10 @@ import org.spigotmc.SneakyThrow;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandler;
-
 import net.minecraft.server.v1_8_R3.ChatComponentText;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.NetworkManager;
 import net.minecraft.server.v1_8_R3.ServerConnection;
-
 import protocolsupport.utils.Utils;
 
 public class BasicInjector {
@@ -91,7 +89,7 @@ public class BasicInjector {
 			try {
 				ChannelHandler serverMainHandler = null;
 				for (ChannelHandler handler : channel.pipeline().toMap().values()) {
-					if (handler.getClass().getSimpleName().equals("ServerBootstrapAcceptor")) {
+					if (handler.getClass().getName().equals("io.netty.bootstrap.ServerBootstrap$ServerBootstrapAcceptor")) {
 						serverMainHandler = handler;
 						break;
 					}

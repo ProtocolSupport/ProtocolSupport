@@ -1,7 +1,6 @@
 package protocolsupport.protocol.transformer.middlepacket.serverbound.handshake;
 
 import net.minecraft.server.v1_8_R3.Packet;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.ServerBoundMiddlePacket;

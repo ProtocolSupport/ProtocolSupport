@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
+
 import net.minecraft.server.v1_8_R3.Block;
 import net.minecraft.server.v1_8_R3.Blocks;
 import net.minecraft.server.v1_8_R3.IBlockData;
@@ -15,9 +17,6 @@ import net.minecraft.server.v1_8_R3.ItemCloth;
 import net.minecraft.server.v1_8_R3.ItemSpade;
 import net.minecraft.server.v1_8_R3.MinecraftKey;
 import net.minecraft.server.v1_8_R3.TileEntity;
-
-import org.bukkit.Bukkit;
-
 import protocolsupport.server.block.BlockAnvil;
 import protocolsupport.server.block.BlockCarpet;
 import protocolsupport.server.block.BlockEnchantTable;
@@ -59,7 +58,7 @@ public class ServerInjector {
 		Item.REGISTRY.a(id, stringkey, itemblock);
 		((Map<Block, Item>)Utils.setAccessible(Item.class.getDeclaredField("a")).get(null)).put(block, itemblock);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private static void registerBlock(int id, String name, ItemBlock itemblock) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		MinecraftKey stringkey = new MinecraftKey(name);

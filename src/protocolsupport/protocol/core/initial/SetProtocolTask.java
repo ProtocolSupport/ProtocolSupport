@@ -1,7 +1,6 @@
 package protocolsupport.protocol.core.initial;
 
 import io.netty.channel.Channel;
-
 import protocolsupport.api.ProtocolVersion;
 
 public class SetProtocolTask implements Runnable {
@@ -19,7 +18,7 @@ public class SetProtocolTask implements Runnable {
 	@Override
 	public void run() {
 		try {
-			initialDecoder.setProtocol(channel, initialDecoder.receivedData, version);
+			initialDecoder.setProtocol(channel, version);
 		} catch (Exception t) {
 			channel.pipeline().firstContext().fireExceptionCaught(t);
 		}

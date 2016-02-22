@@ -8,7 +8,6 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerListHeaderFooter;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
