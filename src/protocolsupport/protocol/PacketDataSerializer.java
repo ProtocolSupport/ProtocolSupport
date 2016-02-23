@@ -22,6 +22,7 @@ import com.mojang.authlib.GameProfile;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.handler.codec.EncoderException;
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.GameProfileSerializer;
@@ -110,7 +111,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 				ByteBuf tempbuffer = Allocator.allocateBuffer();
 				try {
 					NBTCompressedStreamTools.a(nbttagcompound, new PEDataOutput(tempbuffer));
-					writeShort(tempbuffer.writerIndex());
+					writeShort(ByteBufUtil.swapShort((short) tempbuffer.writerIndex()));
 					writeBytes(tempbuffer);
 				} catch (Throwable ioexception) {
 					throw new EncoderException(ioexception);
@@ -212,7 +213,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 	@Override
 	public NBTTagCompound h() throws IOException {
 		if (getVersion() == ProtocolVersion.MINECRAFT_PE) {
-			int length = readShort();
+			int length = ByteBufUtil.swapShort(readShort());
 			if (length == 0) {
 				return null;
 			}

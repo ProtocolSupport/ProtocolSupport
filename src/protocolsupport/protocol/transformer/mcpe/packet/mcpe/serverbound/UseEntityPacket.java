@@ -34,8 +34,22 @@ public class UseEntityPacket implements ServerboundPEPacket {
 	public List<? extends Packet<?>> transfrom() throws Exception {
 		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_USE_ENTITY.get());
 		creator.writeVarInt((int) targetId);
-		creator.a(EnumEntityUseAction.ATTACK);
+		creator.a(getAction(action));
 		return Collections.singletonList(creator.create());
+	}
+
+	protected EnumEntityUseAction getAction(int actionId) {
+		switch (action) {
+			case 1: {
+				return EnumEntityUseAction.ATTACK;
+			}
+			case 2: {
+				return EnumEntityUseAction.INTERACT;
+			}
+			default: {
+				return EnumEntityUseAction.ATTACK;
+			}
+		}
 	}
 
 }

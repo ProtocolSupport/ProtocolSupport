@@ -41,23 +41,23 @@ public class PELoginListener implements PacketListener {
 	private static final MethodHandle playerInventoryFieldSetter = Utils.getFieldSetter(CraftHumanEntity.class, "inventory");
 	private static final MethodHandle playerInteractManagerFieldSetter = Utils.getFieldSetter(EntityPlayer.class, "playerInteractManager");
 
-	private UDPNetworkManager nm;
+	private UDPNetworkManager networkManager;
 	public PELoginListener(UDPNetworkManager nm) {
-		this.nm = nm;
+		this.networkManager = nm;
 	}
 
 	private State state = State.INITIAL;
 
 	@Override
 	public void a(IChatBaseComponent msg) {
-		nm.close(msg);
+		networkManager.close(msg);
 	}
 
 	public void handleKeepALive(PingPacket pingpacket) {
 		try {
-			nm.sendPEPacket(new PongPacket(pingpacket.getKeepAliveId()));
+			networkManager.sendPEPacket(new PongPacket(pingpacket.getKeepAliveId()));
 		} catch (Exception e) {
-			nm.close(new ChatComponentText(e.getMessage()));
+			networkManager.close(new ChatComponentText(e.getMessage()));
 			if (MinecraftServer.getServer().isDebugging()) {
 				e.printStackTrace();
 			}
@@ -68,9 +68,9 @@ public class PELoginListener implements PacketListener {
 		Validate.isTrue(state == State.INITIAL, "Unexpected state, got: "+state+", expected: "+State.INITIAL);
 		state = State.CONNECT;
 		try {
-			nm.sendPEPacket(new ServerHandshakePacket(nm.getClientAddress(), packet.getClientId(), packet.getClientId() + 1000L));
+			networkManager.sendPEPacket(new ServerHandshakePacket(networkManager.getClientAddress(), packet.getClientId(), packet.getClientId() + 1000L));
 		} catch (Exception e) {
-			nm.close(new ChatComponentText(e.getMessage()));
+			networkManager.close(new ChatComponentText(e.getMessage()));
 			if (MinecraftServer.getServer().isDebugging()) {
 				e.printStackTrace();
 			}
@@ -91,13 +91,13 @@ public class PELoginListener implements PacketListener {
 				try {
 					final String username = loginPacket.getUserName();
 					final UUID uuid = UUID.nameUUIDFromBytes(("OfflinePlayer:"+loginPacket.getUserName()).getBytes(StandardCharsets.UTF_8));
-					AsyncPlayerPreLoginEvent asyncEvent = new AsyncPlayerPreLoginEvent(username, nm.getClientAddress().getAddress(), uuid);
+					AsyncPlayerPreLoginEvent asyncEvent = new AsyncPlayerPreLoginEvent(username, networkManager.getClientAddress().getAddress(), uuid);
 					Bukkit.getPluginManager().callEvent(asyncEvent);
 					if (asyncEvent.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED) {
-						nm.close(new ChatComponentText(asyncEvent.getKickMessage()));
+						networkManager.close(new ChatComponentText(asyncEvent.getKickMessage()));
 					}
 					if (PlayerPreLoginEvent.getHandlerList().getRegisteredListeners().length != 0) {
-						final PlayerPreLoginEvent event = new PlayerPreLoginEvent(username, nm.getClientAddress().getAddress(), uuid);
+						final PlayerPreLoginEvent event = new PlayerPreLoginEvent(username, networkManager.getClientAddress().getAddress(), uuid);
 						if (asyncEvent.getResult() != PlayerPreLoginEvent.Result.ALLOWED) {
 							event.disallow(asyncEvent.getResult(), asyncEvent.getKickMessage());
 						}
@@ -110,20 +110,20 @@ public class PELoginListener implements PacketListener {
 						};
 						MinecraftServer.getServer().processQueue.add(waitable);
 						if (waitable.get() != PlayerPreLoginEvent.Result.ALLOWED) {
-							nm.close(new ChatComponentText(event.getKickMessage()));
+							networkManager.close(new ChatComponentText(event.getKickMessage()));
 							return;
 						}
 					}
-					nm.sendPEPacket(new LoginStatusPacket(Status.LOGIN_SUCCESS));
+					networkManager.sendPEPacket(new LoginStatusPacket(Status.LOGIN_SUCCESS));
 					MinecraftServer.getServer().processQueue.add(new Runnable() {
 						@Override
 						public void run() {
 							GameProfile profile = new GameProfile(uuid, username);
 							EntityPlayer player = MinecraftServer.getServer().getPlayerList().attemptLogin(
-								new LoginListener(MinecraftServer.getServer(), nm) {
+								new LoginListener(MinecraftServer.getServer(), networkManager) {
 									@Override
 									public void disconnect(String message) {
-										nm.close(new ChatComponentText(message));
+										networkManager.close(new ChatComponentText(message));
 									}
 								},
 								profile,
@@ -135,8 +135,8 @@ public class PELoginListener implements PacketListener {
 									player.activeContainer = player.defaultContainer = new ContainerPlayer(player.inventory, true, player);
 									playerInteractManagerFieldSetter.invokeExact(player, (PlayerInteractManager) new PEPlayerInteractManager(player));
 									playerInventoryFieldSetter.invokeExact((CraftHumanEntity) player.getBukkitEntity(), new CraftInventoryPlayer(player.inventory));
-									MinecraftServer.getServer().getPlayerList().a(nm, MinecraftServer.getServer().getPlayerList().processLogin(profile, player));
-									new PEPlayerConnection(MinecraftServer.getServer(), nm, player);
+									MinecraftServer.getServer().getPlayerList().a(networkManager, MinecraftServer.getServer().getPlayerList().processLogin(profile, player));
+									new PEPlayerConnection(MinecraftServer.getServer(), networkManager, player);
 								} catch (Throwable t) {
 									player.playerConnection.disconnect("Exception while logging in: "+t.getMessage());
 									if (MinecraftServer.getServer().isDebugging()) {
@@ -147,7 +147,7 @@ public class PELoginListener implements PacketListener {
 						}
 					});
 				} catch (Throwable t) {
-					nm.close(new ChatComponentText(t.getMessage()));
+					networkManager.close(new ChatComponentText(t.getMessage()));
 					if (MinecraftServer.getServer().isDebugging()) {
 						t.printStackTrace();
 					}

@@ -19,6 +19,7 @@ import protocolsupport.protocol.transformer.mcpe.handler.ClientBoundPacketHandle
 import protocolsupport.protocol.transformer.mcpe.handler.PELoginListener;
 import protocolsupport.protocol.transformer.mcpe.handler.ServerBoundPacketHandler;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.BatchPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.PingPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.KickPacket;
@@ -265,6 +266,10 @@ public class UDPNetworkManager extends NetworkManager {
 			return;
 		}
 		ByteBuf buf = Unpooled.buffer();
+		//after logging in client prefixes data with 142 except for pong packets
+		if (pepacket.getId() != PEPacketIDs.PONG && pepacket.getId() != PEPacketIDs.SERVER_HANDSHAKE) {
+			buf.writeByte(142);
+		}
 		buf.writeByte(pepacket.getId());
 		pepacket.encode(buf);
 		if (buf.readableBytes() > 256 && !(pepacket instanceof BatchPacket)) {

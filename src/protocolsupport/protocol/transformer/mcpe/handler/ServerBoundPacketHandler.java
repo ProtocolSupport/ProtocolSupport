@@ -58,7 +58,15 @@ public class ServerBoundPacketHandler {
 		//transform packets
 		ArrayList<Packet> packets = new ArrayList<Packet>();
 		for (EncapsulatedPacket epacket : fullEPackets) {
-			packets.addAll(transformPacketData(epacket.getData()));
+			ByteBuf data = epacket.getData();
+			//after logging in client prefixes data with 142 except for ping packets
+			//there is no packet id 142 right now, so we can just ignore first byte if it's value is 142
+			data.markReaderIndex();
+			int b = data.readUnsignedByte();
+			if (b != 142) {
+				data.resetReaderIndex();
+			}
+			packets.addAll(transformPacketData(data));
 		}
 
 		return packets;

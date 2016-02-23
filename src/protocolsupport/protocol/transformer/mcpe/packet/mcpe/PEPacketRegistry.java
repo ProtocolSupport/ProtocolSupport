@@ -23,6 +23,7 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.DropIte
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.LoginPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.PlayerActionPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.RemoveBlockPacket;
+import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.RequestChunkRadius;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.UseEntityPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.UseItemPacket;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -54,6 +55,7 @@ public class PEPacketRegistry {
 		register(CraftPacket.class);
 		register(AddExpOrbPacket.class);
 		register(ContainerClosePacket.class);
+		register(RequestChunkRadius.class);
 	}
 
 	public static ServerboundPEPacket getPacket(int id) {
