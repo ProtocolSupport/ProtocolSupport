@@ -66,6 +66,7 @@ public class PEPacketIDs {
 	public static final int PLAYER_LIST_PACKET = 195;
 	public static final int TELEMETRY_EVENT_PACKET = 196;
 	public static final int ADD_EXP_ORB_PACKET = 197;
-	public static final int REQUEST_CHUNK_RADIUS = 200;
+	public static final int CHUNK_RADIUS_REQUEST = 200;
+	public static final int CHUNK_RADIUS_RESPONSE = 201;
 
 }
