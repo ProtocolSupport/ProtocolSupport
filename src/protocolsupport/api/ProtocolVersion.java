@@ -2,7 +2,7 @@ package protocolsupport.api;
 
 public enum ProtocolVersion {
 
-	MINECRAFT_FUTURE(-1, 10),
+	MINECRAFT_FUTURE(-1, 11),
 	MINECRAFT_1_9(-1, 10, "1.9"),
 	MINECRAFT_1_8(47, 9, "1.8"),
 	MINECRAFT_1_7_10(5, 8, "1.7.10"),
