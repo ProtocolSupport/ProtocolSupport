@@ -130,7 +130,7 @@ public enum ProtocolVersion {
 	}
 
 	public static ProtocolVersion getLatest() {
-		return ProtocolVersion.MINECRAFT_1_8;
+		return ProtocolVersion.MINECRAFT_1_9;
 	}
 
 	public static ProtocolVersion getOldest() {
