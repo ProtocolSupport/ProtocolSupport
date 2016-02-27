@@ -8,14 +8,13 @@ import java.util.UUID;
 import com.mojang.authlib.properties.Property;
 
 import gnu.trove.map.TIntObjectMap;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage.PlayerListEntry;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
-import protocolsupport.utils.DataWatcherObject;
-import protocolsupport.utils.DataWatcherSerializer;
+import protocolsupport.utils.datawatcher.DataWatcherDeserializer;
+import protocolsupport.utils.datawatcher.DataWatcherObject;
 import protocolsupport.utils.netty.ChannelUtils;
 
 public abstract class MiddleSpawnNamed<T> extends ClientBoundMiddlePacket<T> {
@@ -31,7 +30,7 @@ public abstract class MiddleSpawnNamed<T> extends ClientBoundMiddlePacket<T> {
 	protected int itemId;
 	protected List<Property> properties;
 	protected WatchedEntity wplayer;
-	protected TIntObjectMap<DataWatcherObject> metadata;
+	protected TIntObjectMap<DataWatcherObject<?>> metadata;
 
 	@Override
 	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
@@ -43,7 +42,7 @@ public abstract class MiddleSpawnNamed<T> extends ClientBoundMiddlePacket<T> {
 		yaw = serializer.readUnsignedByte();
 		pitch = serializer.readUnsignedByte();
 		itemId = serializer.readUnsignedShort();
-		metadata = DataWatcherSerializer.decodeData(ProtocolVersion.MINECRAFT_1_8, ChannelUtils.toArray(serializer));
+		metadata = DataWatcherDeserializer.decodeData(ChannelUtils.toArray(serializer));
 	}
 
 	@Override

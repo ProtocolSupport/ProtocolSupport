@@ -3,13 +3,12 @@ package protocolsupport.protocol.transformer.middlepacket.clientbound.play;
 import java.io.IOException;
 
 import gnu.trove.map.TIntObjectMap;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedLiving;
-import protocolsupport.utils.DataWatcherObject;
-import protocolsupport.utils.DataWatcherSerializer;
+import protocolsupport.utils.datawatcher.DataWatcherDeserializer;
+import protocolsupport.utils.datawatcher.DataWatcherObject;
 import protocolsupport.utils.netty.ChannelUtils;
 
 public abstract class MiddleSpawnLiving<T> extends ClientBoundMiddlePacket<T> {
@@ -26,7 +25,7 @@ public abstract class MiddleSpawnLiving<T> extends ClientBoundMiddlePacket<T> {
 	protected int motY;
 	protected int motZ;
 	protected WatchedEntity wentity;
-	protected TIntObjectMap<DataWatcherObject> metadata;
+	protected TIntObjectMap<DataWatcherObject<?>> metadata;
 
 	@Override
 	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
@@ -41,7 +40,7 @@ public abstract class MiddleSpawnLiving<T> extends ClientBoundMiddlePacket<T> {
 		motX = serializer.readShort();
 		motY = serializer.readShort();
 		motZ = serializer.readShort();
-		metadata = DataWatcherSerializer.decodeData(ProtocolVersion.MINECRAFT_1_8, ChannelUtils.toArray(serializer));
+		metadata = DataWatcherDeserializer.decodeData(ChannelUtils.toArray(serializer));
 	}
 
 	@Override

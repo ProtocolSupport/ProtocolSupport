@@ -12,10 +12,12 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.RemappingEntry.RemappingEntryCopyOriginal;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperStringClamp;
-import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperToByte;
-import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperToInt;
-import protocolsupport.utils.DataWatcherObject;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperNumberToByte;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperNumberToInt;
 import protocolsupport.utils.ProtocolVersionsHelper;
+import protocolsupport.utils.datawatcher.DataWatcherObject;
+import protocolsupport.utils.datawatcher.objects.DataWatcherObjectByte;
+import protocolsupport.utils.datawatcher.objects.DataWatcherObjectInt;
 
 public enum SpecificType {
 
@@ -52,7 +54,7 @@ public enum SpecificType {
 	AGEABLE(EType.NONE, -1, SpecificType.LIVING,
 		//age
 		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(12)).addProtocols(ProtocolVersion.MINECRAFT_1_8),
-		new RemappingEntriesForProtocols(new RemappingEntry(12, 12, new ValueRemapperToInt()))
+		new RemappingEntriesForProtocols(new RemappingEntry(12, 12, new ValueRemapperNumberToInt()))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_8)
 	),
 	TAMEABLE(EType.NONE, -1, SpecificType.AGEABLE,
@@ -84,17 +86,16 @@ public enum SpecificType {
 		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(19)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9),
 		//collar color
 		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(20)).addProtocols(ProtocolVersion.MINECRAFT_1_8),
-		new RemappingEntriesForProtocols(new RemappingEntry(20, 20, new ValueRemapper() {
+		new RemappingEntriesForProtocols(new RemappingEntry(20, 20, new ValueRemapper<DataWatcherObjectByte>() {
 			@Override
-			public DataWatcherObject remap(DataWatcherObject object) {
-				object.value = (byte) (15 - (byte) object.value);
-				return object;
+			public DataWatcherObject<?> remap(DataWatcherObjectByte object) {
+				return new DataWatcherObjectByte((byte) (15 - object.getValue()));
 			}
 		})).addProtocols(ProtocolVersionsHelper.BEFORE_1_8),
 		//health
 		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(18))
 		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1)),
-		new RemappingEntriesForProtocols(new RemappingEntry(18, 18, new ValueRemapperToInt()))
+		new RemappingEntriesForProtocols(new RemappingEntry(18, 18, new ValueRemapperNumberToInt()))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_6)
 	),
 	PIG(EType.MOB, EntityType.PIG, SpecificType.AGEABLE,
@@ -118,7 +119,7 @@ public enum SpecificType {
 		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(17, 18)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9),
 		//carried block id
 		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(16)).addProtocols(ProtocolVersion.MINECRAFT_1_8),
-		new RemappingEntriesForProtocols(new RemappingEntry(16, 16, new ValueRemapperToByte()))
+		new RemappingEntriesForProtocols(new RemappingEntry(16, 16, new ValueRemapperNumberToByte()))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_8)
 	),
 	GIANT(EType.MOB, EntityType.GIANT, SpecificType.LIVING),
@@ -180,7 +181,7 @@ public enum SpecificType {
 		//damage taken
 		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(19))
 		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1)),
-		new RemappingEntriesForProtocols(new RemappingEntry(19, 19, new ValueRemapperToInt()))
+		new RemappingEntriesForProtocols(new RemappingEntry(19, 19, new ValueRemapperNumberToInt()))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_6)
 	),
 	TNT(EType.OBJECT, 50, SpecificType.ENTITY),
@@ -210,17 +211,16 @@ public enum SpecificType {
 		//damage taken
 		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(19))
 		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1)),
-		new RemappingEntriesForProtocols(new RemappingEntry(19, 19, new ValueRemapperToInt())).addProtocols(ProtocolVersionsHelper.BEFORE_1_6),
+		new RemappingEntriesForProtocols(new RemappingEntry(19, 19, new ValueRemapperNumberToInt())).addProtocols(ProtocolVersionsHelper.BEFORE_1_6),
 		//block
 		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(20)).addProtocols(ProtocolVersion.MINECRAFT_1_8),
-		new RemappingEntriesForProtocols(new RemappingEntry(20, 20, new ValueRemapper() {
+		new RemappingEntriesForProtocols(new RemappingEntry(20, 20, new ValueRemapper<DataWatcherObjectInt>() {
 			@Override
-			public DataWatcherObject remap(DataWatcherObject object) {
-				int value = (int) object.value;
+			public DataWatcherObject<?> remap(DataWatcherObjectInt object) {
+				int value = object.getValue();
 				int id = value & 0xFFFF;
 				int data = value >> 12;
-				object.value = (data << 16) | id;
-				return object;
+				return new DataWatcherObjectInt((data << 16) | id);
 			}
 		})).addProtocols(ProtocolVersionsHelper.BEFORE_1_6)
 	),
@@ -235,12 +235,10 @@ public enum SpecificType {
 	ITEM_FRAME(EType.OBJECT, 71, SpecificType.ENTITY,
 		//item, rotation
 		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(8, 9)).addProtocols(ProtocolVersion.MINECRAFT_1_8),
-		new RemappingEntriesForProtocols(new RemappingEntry(8, 2), new RemappingEntry(9, 3, new ValueRemapper() {
+		new RemappingEntriesForProtocols(new RemappingEntry(8, 2), new RemappingEntry(9, 3, new ValueRemapper<DataWatcherObjectByte>() {
 			@Override
-			public DataWatcherObject remap(DataWatcherObject object) {
-				int rotation = (byte) object.value;
-				object.value = (byte) (rotation >>= 1);
-				return object;
+			public DataWatcherObject<?> remap(DataWatcherObjectByte object) {
+				return new DataWatcherObjectByte((byte) (object.getValue() >> 1));
 			}
 		})).addProtocols(ProtocolVersionsHelper.BEFORE_1_8)
 	),

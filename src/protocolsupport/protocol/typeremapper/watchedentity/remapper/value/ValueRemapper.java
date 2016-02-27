@@ -1,16 +1,16 @@
 package protocolsupport.protocol.typeremapper.watchedentity.remapper.value;
 
-import protocolsupport.utils.DataWatcherObject;
+import protocolsupport.utils.datawatcher.DataWatcherObject;
 
-public interface ValueRemapper {
+public interface ValueRemapper<T extends DataWatcherObject<?>> {
 
-	public static final ValueRemapper NO_OP = new ValueRemapper() {
+	public static final ValueRemapper<DataWatcherObject<?>> NO_OP = new ValueRemapper<DataWatcherObject<?>>() {
 		@Override
-		public DataWatcherObject remap(DataWatcherObject object) {
+		public DataWatcherObject<?> remap(DataWatcherObject<?> object) {
 			return object;
 		}
 	};
 
-	public DataWatcherObject remap(DataWatcherObject object);
+	public DataWatcherObject<?> remap(T object);
 
 }
