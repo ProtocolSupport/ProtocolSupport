@@ -64,8 +64,8 @@ public class IdRemapper {
 			registerRemapEntry(175, 38, ProtocolVersionsHelper.BEFORE_1_7);
 			// packed ice -> snow
 			registerRemapEntry(174, 80, ProtocolVersionsHelper.BEFORE_1_7);
-			// stained clay -> clay
-			registerRemapEntry(159, 82, ProtocolVersionsHelper.BEFORE_1_6);
+			// stained clay -> stone
+			registerRemapEntry(159, 1, ProtocolVersionsHelper.BEFORE_1_6);
 			// hay bale -> stone
 			registerRemapEntry(170, 1, ProtocolVersionsHelper.BEFORE_1_6);
 			// carpet -> stone pressure plate
