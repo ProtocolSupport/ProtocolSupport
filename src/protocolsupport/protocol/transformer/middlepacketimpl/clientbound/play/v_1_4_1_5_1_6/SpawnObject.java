@@ -50,7 +50,7 @@ public class SpawnObject extends MiddleSpawnObject<RecyclableCollection<PacketDa
 		}
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_SPAWN_OBJECT_ID, version);
 		serializer.writeInt(entityId);
-		serializer.writeByte(type);
+		serializer.writeByte(IdRemapper.ENTITY_OBJECT.getTable(version).getRemap(type));
 		serializer.writeInt(x);
 		serializer.writeInt(y);
 		serializer.writeInt(z);

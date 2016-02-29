@@ -157,8 +157,10 @@ public class IdRemapper {
 		}
 	};
 
-	public static final RemappingRegistry ENTITY = new RemappingRegistry() {
+	public static final RemappingRegistry ENTITY_LIVING = new RemappingRegistry() {
 		{
+			// sulker -> blaze
+			registerRemapEntry(69, 61, ProtocolVersionsHelper.BEFORE_1_9);
 			// endermite -> silverfish
 			registerRemapEntry(67, 60, ProtocolVersionsHelper.BEFORE_1_8);
 			// guardian -> sqiud
@@ -167,6 +169,23 @@ public class IdRemapper {
 			registerRemapEntry(101, 93, ProtocolVersionsHelper.BEFORE_1_8);
 			// horse -> cow
 			registerRemapEntry(100, 92, ProtocolVersionsHelper.BEFORE_1_6);
+		}
+		@Override
+		protected RemappingTable createTable() {
+			return new RemappingTable(256);
+		}
+	};
+
+	public static final RemappingRegistry ENTITY_OBJECT = new RemappingRegistry() {
+		{
+			//shulker bullet -> firecharge
+			registerRemapEntry(67, 64, ProtocolVersionsHelper.BEFORE_1_9);
+			//dragon fireball -> firecharge
+			registerRemapEntry(93, 64, ProtocolVersionsHelper.BEFORE_1_9);
+			//spectral arrow -> arrow
+			registerRemapEntry(91, 60, ProtocolVersionsHelper.BEFORE_1_9);
+			//tipped arrow -> arrow
+			registerRemapEntry(92, 60, ProtocolVersionsHelper.BEFORE_1_9);
 		}
 		@Override
 		protected RemappingTable createTable() {

@@ -398,7 +398,8 @@ public enum SpecificType {
 	ENDER_CRYSTAL(EType.OBJECT, 51, SpecificType.ENTITY),
 	ARMOR_STAND_OBJECT(EType.OBJECT, 78, SpecificType.ARMOR_STAND),
 	AREA_EFFECT_CLOUD(EType.OBJECT, 3, SpecificType.ENTITY),
-	SHULKER_BULLET(EType.OBJECT, 67, SpecificType.ENTITY);
+	SHULKER_BULLET(EType.OBJECT, 67, SpecificType.ENTITY),
+	DRAGON_FIREBALL(EType.OBJECT, 93, SpecificType.ENTITY);
 
 
 	private static final SpecificType[] OBJECT_BY_TYPE_ID = new SpecificType[256];
