@@ -13,9 +13,9 @@ public class EntityRelMoveLook extends MiddleEntityRelMoveLook<RecyclableCollect
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_ENTITY_REL_MOVE_LOOK_ID, version);
 		serializer.writeInt(entityId);
-		serializer.writeByte(relX);
-		serializer.writeByte(relY);
-		serializer.writeByte(relZ);
+		serializer.writeByte(relX / 128);
+		serializer.writeByte(relY / 128);
+		serializer.writeByte(relZ / 128);
 		serializer.writeByte(yaw);
 		serializer.writeByte(pitch);
 		return RecyclableSingletonList.create(serializer);

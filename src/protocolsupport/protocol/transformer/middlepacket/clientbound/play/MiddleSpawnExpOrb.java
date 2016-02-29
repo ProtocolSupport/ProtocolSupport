@@ -6,17 +6,17 @@ import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket
 public abstract class MiddleSpawnExpOrb<T> extends ClientBoundMiddlePacket<T> {
 
 	protected int entityId;
-	protected int x;
-	protected int y;
-	protected int z;
+	protected double x;
+	protected double y;
+	protected double z;
 	protected int count;
 
 	@Override
 	public void readFromServerData(PacketDataSerializer serializer) {
 		entityId = serializer.readVarInt();
-		x = serializer.readInt();
-		y = serializer.readInt();
-		z = serializer.readInt();
+		x = serializer.readDouble();
+		y = serializer.readDouble();
+		z = serializer.readDouble();
 		count = serializer.readShort();
 	}
 

@@ -6,6 +6,7 @@ import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket
 public abstract class MiddleWorldSound<T> extends ClientBoundMiddlePacket<T> {
 
 	protected String name;
+	protected int category;
 	protected int x;
 	protected int y;
 	protected int z;
@@ -15,6 +16,7 @@ public abstract class MiddleWorldSound<T> extends ClientBoundMiddlePacket<T> {
 	@Override
 	public void readFromServerData(PacketDataSerializer serializer) {
 		name = serializer.readString(Short.MAX_VALUE);
+		category = serializer.readVarInt();
 		x = serializer.readInt();
 		y = serializer.readInt();
 		z = serializer.readInt();

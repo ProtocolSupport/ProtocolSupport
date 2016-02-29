@@ -22,12 +22,11 @@ public abstract class MiddleSpawnNamed<T> extends ClientBoundMiddlePacket<T> {
 	protected int playerEntityId;
 	protected UUID uuid;
 	protected String name;
-	protected int x;
-	protected int y;
-	protected int z;
+	protected double x;
+	protected double y;
+	protected double z;
 	protected int yaw;
 	protected int pitch;
-	protected int itemId;
 	protected List<Property> properties;
 	protected WatchedEntity wplayer;
 	protected TIntObjectMap<DataWatcherObject<?>> metadata;
@@ -36,12 +35,11 @@ public abstract class MiddleSpawnNamed<T> extends ClientBoundMiddlePacket<T> {
 	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
 		playerEntityId = serializer.readVarInt();
 		uuid = serializer.g();
-		x = serializer.readInt();
-		y = serializer.readInt();
-		z = serializer.readInt();
+		x = serializer.readDouble();
+		y = serializer.readDouble();
+		z = serializer.readDouble();
 		yaw = serializer.readUnsignedByte();
 		pitch = serializer.readUnsignedByte();
-		itemId = serializer.readUnsignedShort();
 		metadata = DataWatcherDeserializer.decodeData(ChannelUtils.toArray(serializer));
 	}
 

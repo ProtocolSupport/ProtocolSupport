@@ -13,9 +13,9 @@ public class SpawnExpOrb extends MiddleSpawnExpOrb<RecyclableCollection<PacketDa
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_SPAWN_EXP_ORB_ID, version);
 		serializer.writeInt(entityId);
-		serializer.writeInt(x);
-		serializer.writeInt(y);
-		serializer.writeInt(z);
+		serializer.writeInt((int) (x * 32));
+		serializer.writeInt((int) (y * 32));
+		serializer.writeInt((int) (z * 32));
 		serializer.writeShort(count);
 		return RecyclableSingletonList.create(serializer);
 	}

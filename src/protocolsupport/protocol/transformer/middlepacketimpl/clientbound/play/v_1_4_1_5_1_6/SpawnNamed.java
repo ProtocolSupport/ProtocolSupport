@@ -16,12 +16,12 @@ public class SpawnNamed extends MiddleSpawnNamed<RecyclableCollection<PacketData
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_SPAWN_NAMED_ID, version);
 		serializer.writeInt(playerEntityId);
 		serializer.writeString(name);
-		serializer.writeInt(x);
-		serializer.writeInt(y);
-		serializer.writeInt(z);
+		serializer.writeInt((int) (x * 32));
+		serializer.writeInt((int) (y * 32));
+		serializer.writeInt((int) (z * 32));
 		serializer.writeByte(yaw);
 		serializer.writeByte(pitch);
-		serializer.writeShort(itemId);
+		serializer.writeShort(0);
 		serializer.writeBytes(LegacyDataWatcherSerializer.encodeData(version, WatchedDataRemapper.transform(wplayer, metadata, version)));
 		return RecyclableSingletonList.create(serializer);
 	}

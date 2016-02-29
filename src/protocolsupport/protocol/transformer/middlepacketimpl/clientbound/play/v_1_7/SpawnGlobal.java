@@ -14,9 +14,9 @@ public class SpawnGlobal extends MiddleSpawnGlobal<RecyclableCollection<PacketDa
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_SPAWN_WEATHER_ID, version);
 		serializer.writeVarInt(entityId);
 		serializer.writeByte(type);
-		serializer.writeInt(x);
-		serializer.writeInt(y);
-		serializer.writeInt(z);
+		serializer.writeInt((int) (x * 32));
+		serializer.writeInt((int) (y * 32));
+		serializer.writeInt((int) (z * 32));
 		return RecyclableSingletonList.create(serializer);
 	}
 

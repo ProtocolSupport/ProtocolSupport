@@ -1,6 +1,7 @@
 package protocolsupport.protocol.transformer.middlepacket.clientbound.play;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
@@ -9,10 +10,11 @@ import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedObject;
 public abstract class MiddleSpawnObject<T> extends ClientBoundMiddlePacket<T> {
 
 	protected int entityId;
+	protected UUID uuid;
 	protected int type;
-	protected int x;
-	protected int y;
-	protected int z;
+	protected double x;
+	protected double y;
+	protected double z;
 	protected int pitch;
 	protected int yaw;
 	protected int objectdata;
@@ -23,18 +25,17 @@ public abstract class MiddleSpawnObject<T> extends ClientBoundMiddlePacket<T> {
 	@Override
 	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
 		entityId = serializer.readVarInt();
+		uuid = serializer.readUUID();
 		type = serializer.readUnsignedByte();
-		x = serializer.readInt();
-		y = serializer.readInt();
-		z = serializer.readInt();
+		x = serializer.readDouble();
+		y = serializer.readDouble();
+		z = serializer.readDouble();
 		pitch = serializer.readUnsignedByte();
 		yaw = serializer.readUnsignedByte();
 		objectdata = serializer.readInt();
-		if (objectdata > 0) {
-			motX = serializer.readShort();
-			motY = serializer.readShort();
-			motZ = serializer.readShort();
-		}
+		motX = serializer.readShort();
+		motY = serializer.readShort();
+		motZ = serializer.readShort();
 	}
 
 	@Override

@@ -12,6 +12,7 @@ public abstract class MiddleScoreboardTeam<T> extends ClientBoundMiddlePacket<T>
 	protected String suffix;
 	protected int friendlyFire;
 	protected String nameTagVisibility;
+	protected String collisionRule;
 	protected int color;
 	protected String[] players;
 
@@ -25,6 +26,7 @@ public abstract class MiddleScoreboardTeam<T> extends ClientBoundMiddlePacket<T>
 			suffix = serializer.readString(16);
 			friendlyFire = serializer.readUnsignedByte();
 			nameTagVisibility = serializer.readString(32);
+			collisionRule = serializer.readString(32);
 			color = serializer.readUnsignedByte();
 		}
 		if (mode == 0 || mode == 3 || mode == 4) {

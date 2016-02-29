@@ -12,6 +12,7 @@ public abstract class MiddlePosition<T> extends ClientBoundMiddlePacket<T> {
 	protected double z;
 	protected float yaw;
 	protected float pitch;
+	protected int teleportConfirmId;
 
 	@Override
 	public boolean needsPlayer() {
@@ -42,6 +43,8 @@ public abstract class MiddlePosition<T> extends ClientBoundMiddlePacket<T> {
 		if ((field & 0x10) != 0) {
 			pitch += location.getPitch();
 		}
+		//TODO: fake receive teleport confirm packet for versions < 1.9
+		teleportConfirmId = serializer.readVarInt();
 	}
 
 }

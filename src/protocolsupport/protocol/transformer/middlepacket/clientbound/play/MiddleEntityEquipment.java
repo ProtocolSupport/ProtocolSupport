@@ -15,7 +15,7 @@ public abstract class MiddleEntityEquipment<T> extends ClientBoundMiddlePacket<T
 	@Override
 	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
 		entityId = serializer.readVarInt();
-		slot = serializer.readShort();
+		slot = serializer.readVarInt();
 		itemstack = serializer.readItemStack();
 	}
 

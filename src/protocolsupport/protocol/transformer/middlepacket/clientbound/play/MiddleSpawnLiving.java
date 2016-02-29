@@ -1,6 +1,7 @@
 package protocolsupport.protocol.transformer.middlepacket.clientbound.play;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import gnu.trove.map.TIntObjectMap;
 import protocolsupport.protocol.PacketDataSerializer;
@@ -14,10 +15,11 @@ import protocolsupport.utils.netty.ChannelUtils;
 public abstract class MiddleSpawnLiving<T> extends ClientBoundMiddlePacket<T> {
 
 	protected int entityId;
+	protected UUID uuid;
 	protected int type;
-	protected int x;
-	protected int y;
-	protected int z;
+	protected double x;
+	protected double y;
+	protected double z;
 	protected int yaw;
 	protected int pitch;
 	protected int headPitch;
@@ -30,10 +32,11 @@ public abstract class MiddleSpawnLiving<T> extends ClientBoundMiddlePacket<T> {
 	@Override
 	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
 		entityId = serializer.readVarInt();
+		uuid = serializer.readUUID();
 		type = serializer.readUnsignedByte();
-		x = serializer.readInt();
-		y = serializer.readInt();
-		z = serializer.readInt();
+		x = serializer.readDouble();
+		y = serializer.readDouble();
+		z = serializer.readDouble();
 		yaw = serializer.readUnsignedByte();
 		pitch = serializer.readUnsignedByte();
 		headPitch = serializer.readUnsignedByte();

@@ -5,7 +5,7 @@ import java.io.IOException;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 
-public abstract class MiddleChunkSingle<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleChunk<T> extends ClientBoundMiddlePacket<T> {
 
 	protected int chunkX;
 	protected int chunkZ;
@@ -18,7 +18,7 @@ public abstract class MiddleChunkSingle<T> extends ClientBoundMiddlePacket<T> {
 		chunkX = serializer.readInt();
 		chunkZ = serializer.readInt();
 		cont = serializer.readBoolean();
-		bitmask = serializer.readUnsignedShort();
+		bitmask = serializer.readVarInt();
 		data = serializer.readArray();
 	}
 

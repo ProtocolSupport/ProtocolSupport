@@ -4,14 +4,14 @@ import java.io.IOException;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleChunkSingle;
+import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.transformer.utils.ChunkTransformer;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class ChunkSingle extends MiddleChunkSingle<RecyclableCollection<PacketData>> {
+public class Chunk extends MiddleChunk<RecyclableCollection<PacketData>> {
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
