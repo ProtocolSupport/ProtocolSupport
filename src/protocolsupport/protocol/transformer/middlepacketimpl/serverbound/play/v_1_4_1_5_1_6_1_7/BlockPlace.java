@@ -12,7 +12,6 @@ public class BlockPlace extends MiddleBlockPlace {
 	public void readFromClientData(PacketDataSerializer serializer) throws IOException {
 		position = new BlockPosition(serializer.readInt(), serializer.readUnsignedByte(), serializer.readInt());
 		face = serializer.readUnsignedByte();
-		itemstack = serializer.readItemStack();
 		cX = serializer.readUnsignedByte();
 		cY = serializer.readUnsignedByte();
 		cZ = serializer.readUnsignedByte();

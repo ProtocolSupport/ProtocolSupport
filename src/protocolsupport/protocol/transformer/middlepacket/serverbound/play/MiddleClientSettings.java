@@ -14,6 +14,7 @@ public abstract class MiddleClientSettings extends ServerBoundMiddlePacket {
 	protected int chatMode;
 	protected boolean chatColors;
 	protected int skinFlags;
+	protected int mainHand;
 
 	@Override
 	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
@@ -23,6 +24,7 @@ public abstract class MiddleClientSettings extends ServerBoundMiddlePacket {
 		creator.writeByte(chatMode);
 		creator.writeBoolean(chatColors);
 		creator.writeByte(skinFlags);
+		creator.writeVarInt(mainHand);
 		return RecyclableSingletonList.create(creator.create());
 	}
 
