@@ -13,13 +13,19 @@ public class LegacyDataWatcherSerializer {
 	public static byte[] encodeData(ProtocolVersion version, TIntObjectMap<DataWatcherObject<?>> objects) {
 		RecyclablePacketDataSerializer serializer = RecyclablePacketDataSerializer.create(version);
 		try {
-			TIntObjectIterator<DataWatcherObject<?>> iterator = objects.iterator();
-			while (iterator.hasNext()) {
-				iterator.advance();
-				DataWatcherObject<?> object = iterator.value();
-				final int tk = ((object.getTypeId(version) << 5) | (iterator.key() & 0x1F)) & 0xFF;
-				serializer.writeByte(tk);
-				object.writeToStream(serializer);
+			if (!objects.isEmpty()) {
+				TIntObjectIterator<DataWatcherObject<?>> iterator = objects.iterator();
+				while (iterator.hasNext()) {
+					iterator.advance();
+					DataWatcherObject<?> object = iterator.value();
+					int tk = ((object.getTypeId(version) << 5) | (iterator.key() & 0x1F)) & 0xFF;
+					serializer.writeByte(tk);
+					object.writeToStream(serializer);
+				}
+			} else {
+				//write fake entry with type byte and index 31
+				serializer.writeByte(31);
+				serializer.writeByte(0);
 			}
 			serializer.writeByte(127);
 			return ChannelUtils.toArray(serializer);

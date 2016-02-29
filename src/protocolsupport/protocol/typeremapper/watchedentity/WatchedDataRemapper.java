@@ -8,19 +8,15 @@ import protocolsupport.protocol.typeremapper.watchedentity.remapper.MappingEntry
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificType;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.utils.datawatcher.DataWatcherObject;
-import protocolsupport.utils.datawatcher.objects.DataWatcherObjectByte;
 
 public class WatchedDataRemapper {
 
-	private static final TIntObjectMap<DataWatcherObject<?>> FAKE_EMPTY_MAP = new TIntObjectHashMap<DataWatcherObject<?>>();
-	static {
-		FAKE_EMPTY_MAP.put(31, new DataWatcherObjectByte((byte) 0));
-	}
+	private static final TIntObjectMap<DataWatcherObject<?>> EMPTY_MAP = new TIntObjectHashMap<DataWatcherObject<?>>();
 
 	@SuppressWarnings("unchecked")
 	public static TIntObjectMap<DataWatcherObject<?>> transform(WatchedEntity entity, TIntObjectMap<DataWatcherObject<?>> originaldata, ProtocolVersion to) {
 		if (entity == null) {
-			return FAKE_EMPTY_MAP;
+			return EMPTY_MAP;
 		}
 		TIntObjectHashMap<DataWatcherObject<?>> transformed = new TIntObjectHashMap<DataWatcherObject<?>>();
 		SpecificType stype = entity.getType();
@@ -29,9 +25,6 @@ public class WatchedDataRemapper {
 			if (object != null) {
 				transformed.put(entry.getIdTo(), entry.getValueRemapper().remap(object));
 			}
-		}
-		if (transformed.isEmpty()) {
-			return FAKE_EMPTY_MAP;
 		}
 		return transformed;
 	}
