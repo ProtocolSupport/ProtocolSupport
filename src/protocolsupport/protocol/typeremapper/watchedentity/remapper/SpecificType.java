@@ -32,7 +32,7 @@ public enum SpecificType {
 		.addProtocols(ProtocolVersionsHelper.ALL),
 		//air
 		new Mapping()
-		.addEntries(new MappingEntry(1, new ValueRemapperNumberToInt()))
+		.addEntries(new MappingEntry(1, ValueRemapperNumberToInt.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	LIVING(EType.NONE, -1, SpecificType.ENTITY,
@@ -50,13 +50,13 @@ public enum SpecificType {
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_6),
 		//nametag visible
 		new Mapping()
-		.addEntries(new MappingEntry(3, 3, new ValueRemapperBooleanToByte()))
+		.addEntries(new MappingEntry(3, 3, ValueRemapperBooleanToByte.INSTANCE))
 		.addProtocols(ProtocolVersion.MINECRAFT_1_8),
 		new Mapping()
-		.addEntries(new MappingEntry(3, 11, new ValueRemapperBooleanToByte()))
+		.addEntries(new MappingEntry(3, 11, ValueRemapperBooleanToByte.INSTANCE))
 		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_6_1)),
 		new Mapping()
-		.addEntries(new MappingEntry(3, 6, new ValueRemapperBooleanToByte()))
+		.addEntries(new MappingEntry(3, 6, ValueRemapperBooleanToByte.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_6),
 		//health
 		new Mapping()
@@ -64,14 +64,14 @@ public enum SpecificType {
 		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1)),
 		//pcolor, pambient, arrowsn
 		new Mapping()
-		.addEntries(new MappingEntry(7, 7, new ValueRemapperNumberToInt()))
+		.addEntries(new MappingEntry(7, 7, ValueRemapperNumberToInt.INSTANCE))
 		.addEntries(new MappingEntryOriginal(8))
-		.addEntries(new MappingEntry(9, 9, new ValueRemapperNumberToByte()))
+		.addEntries(new MappingEntry(9, 9, ValueRemapperNumberToByte.INSTANCE))
 		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_6_1)),
 		new Mapping()
-		.addEntries(new MappingEntry(7, 8, new ValueRemapperNumberToInt()))
+		.addEntries(new MappingEntry(7, 8, ValueRemapperNumberToInt.INSTANCE))
 		.addEntries(new MappingEntry(8, 9))
-		.addEntries(new MappingEntry(9, 10, new ValueRemapperNumberToByte()))
+		.addEntries(new MappingEntry(9, 10, ValueRemapperNumberToByte.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_6),
 		//noai
 		new Mapping()
@@ -92,7 +92,7 @@ public enum SpecificType {
 		.addEntries(new MappingEntry(11, 12))
 		.addProtocols(ProtocolVersion.MINECRAFT_1_8),
 		new Mapping()
-		.addEntries(new MappingEntry(11, 12, new ValueRemapperNumberToInt()))
+		.addEntries(new MappingEntry(11, 12, ValueRemapperNumberToInt.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_8)
 	),
 	TAMEABLE(EType.NONE, -1, SpecificType.AGEABLE,
@@ -114,10 +114,10 @@ public enum SpecificType {
 	HORSE(EType.MOB, EntityType.HORSE, SpecificType.AGEABLE,
 		//info flags, type, color/variant, armor
 		new Mapping()
-		.addEntries(new MappingEntry(12, 16, new ValueRemapperNumberToInt()))
-		.addEntries(new MappingEntry(13, 19, new ValueRemapperNumberToByte()))
-		.addEntries(new MappingEntry(14, 20, new ValueRemapperNumberToInt()))
-		.addEntries(new MappingEntry(16, 22, new ValueRemapperNumberToInt()))
+		.addEntries(new MappingEntry(12, 16, ValueRemapperNumberToInt.INSTANCE))
+		.addEntries(new MappingEntry(13, 19, ValueRemapperNumberToByte.INSTANCE))
+		.addEntries(new MappingEntry(14, 20, ValueRemapperNumberToInt.INSTANCE))
+		.addEntries(new MappingEntry(16, 22, ValueRemapperNumberToInt.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	BAT(EType.MOB, EntityType.BAT, SpecificType.LIVING,
@@ -129,7 +129,7 @@ public enum SpecificType {
 	OCELOT(EType.MOB, EntityType.OCELOT, SpecificType.TAMEABLE,
 		//type
 		new Mapping()
-		.addEntries(new MappingEntry(14, 18, new ValueRemapperNumberToByte()))
+		.addEntries(new MappingEntry(14, 18, ValueRemapperNumberToByte.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	WOLF(EType.MOB, EntityType.WOLF, SpecificType.TAMEABLE,
@@ -138,15 +138,15 @@ public enum SpecificType {
 		.addEntries(new MappingEntry(14, 18))
 		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1)),
 		new Mapping()
-		.addEntries(new MappingEntry(14, 18, new ValueRemapperNumberToInt()))
+		.addEntries(new MappingEntry(14, 18, ValueRemapperNumberToInt.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_6),
 		//begging
 		new Mapping()
-		.addEntries(new MappingEntry(15, 19, new ValueRemapperBooleanToByte()))
+		.addEntries(new MappingEntry(15, 19, ValueRemapperBooleanToByte.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9),
 		//collar color
 		new Mapping()
-		.addEntries(new MappingEntry(16, 20, new ValueRemapperNumberToByte()))
+		.addEntries(new MappingEntry(16, 20, ValueRemapperNumberToByte.INSTANCE))
 		.addProtocols(ProtocolVersion.MINECRAFT_1_8),
 		new Mapping()
 		.addEntries(new MappingEntry(16, 20, new ValueRemapper<DataWatcherObjectByte>() {
@@ -160,13 +160,13 @@ public enum SpecificType {
 	PIG(EType.MOB, EntityType.PIG, SpecificType.AGEABLE,
 		//has saddle
 		new Mapping()
-		.addEntries(new MappingEntry(12, 16, new ValueRemapperBooleanToByte()))
+		.addEntries(new MappingEntry(12, 16, ValueRemapperBooleanToByte.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	RABBIT(EType.MOB, EntityType.RABBIT, SpecificType.AGEABLE,
 		//type
 		new Mapping()
-		.addEntries(new MappingEntry(12, 18, new ValueRemapperNumberToByte()))
+		.addEntries(new MappingEntry(12, 18, ValueRemapperNumberToByte.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	SHEEP(EType.MOB, EntityType.SHEEP, SpecificType.AGEABLE,
@@ -178,7 +178,7 @@ public enum SpecificType {
 	VILLAGER(EType.MOB, EntityType.VILLAGER, SpecificType.AGEABLE,
 		//profession
 		new Mapping()
-		.addEntries(new MappingEntry(12, 16, new ValueRemapperNumberToInt()))
+		.addEntries(new MappingEntry(12, 16, ValueRemapperNumberToInt.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	ENDERMAN(EType.MOB, EntityType.ENDERMAN, SpecificType.LIVING,
@@ -209,7 +209,7 @@ public enum SpecificType {
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9),
 		//screaming
 		new Mapping()
-		.addEntries(new MappingEntry(12, 18, new ValueRemapperBooleanToByte()))
+		.addEntries(new MappingEntry(12, 18, ValueRemapperBooleanToByte.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	GIANT(EType.MOB, EntityType.GIANT, SpecificType.LIVING),
@@ -220,9 +220,9 @@ public enum SpecificType {
 	ZOMBIE(EType.MOB, EntityType.ZOMBIE, SpecificType.LIVING,
 		//is baby, is villager, is converting
 		new Mapping()
-		.addEntries(new MappingEntry(11, 12, new ValueRemapperBooleanToByte()))
-		.addEntries(new MappingEntry(12, 13, new ValueRemapperNumberToByte()))
-		.addEntries(new MappingEntry(13, 14, new ValueRemapperBooleanToByte()))
+		.addEntries(new MappingEntry(11, 12, ValueRemapperBooleanToByte.INSTANCE))
+		.addEntries(new MappingEntry(12, 13, ValueRemapperNumberToByte.INSTANCE))
+		.addEntries(new MappingEntry(13, 14, ValueRemapperBooleanToByte.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	ZOMBIE_PIGMAN(EType.MOB, EntityType.PIG_ZOMBIE, SpecificType.ZOMBIE),
@@ -242,34 +242,34 @@ public enum SpecificType {
 	CREEPER(EType.MOB, EntityType.CREEPER, SpecificType.LIVING,
 		//state, is powered, ignited
 		new Mapping()
-		.addEntries(new MappingEntry(11, 16, new ValueRemapperNumberToByte()))
-		.addEntries(new MappingEntry(12, 17, new ValueRemapperBooleanToByte()))
-		.addEntries(new MappingEntry(13, 18, new ValueRemapperBooleanToByte()))
+		.addEntries(new MappingEntry(11, 16, ValueRemapperNumberToByte.INSTANCE))
+		.addEntries(new MappingEntry(12, 17, ValueRemapperBooleanToByte.INSTANCE))
+		.addEntries(new MappingEntry(13, 18, ValueRemapperBooleanToByte.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	GHAST(EType.MOB, EntityType.GHAST, SpecificType.LIVING,
 		//is attacking
 		new Mapping()
-		.addEntries(new MappingEntry(11, 16, new ValueRemapperBooleanToByte()))
+		.addEntries(new MappingEntry(11, 16, ValueRemapperBooleanToByte.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	SLIME(EType.MOB, EntityType.SLIME, SpecificType.LIVING,
 		//size
 		new Mapping()
-		.addEntries(new MappingEntry(11, 16, new ValueRemapperNumberToByte()))
+		.addEntries(new MappingEntry(11, 16, ValueRemapperNumberToByte.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	MAGMA_CUBE(EType.MOB, EntityType.MAGMA_CUBE, SpecificType.SLIME),
 	SKELETON(EType.MOB, EntityType.SKELETON, SpecificType.LIVING,
 		//type
 		new Mapping()
-		.addEntries(new MappingEntry(11, 13, new ValueRemapperNumberToByte()))
+		.addEntries(new MappingEntry(11, 13, ValueRemapperNumberToByte.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	WITCH(EType.MOB, EntityType.WITCH, SpecificType.LIVING,
 		//agressive
 		new Mapping()
-		.addEntries(new MappingEntry(11, 21, new ValueRemapperBooleanToByte()))
+		.addEntries(new MappingEntry(11, 21, ValueRemapperBooleanToByte.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	//TODO: More remap
@@ -292,7 +292,7 @@ public enum SpecificType {
 		//damage taken
 		new Mapping(new MappingEntryOriginal(19))
 		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1)),
-		new Mapping(new MappingEntry(19, 19, new ValueRemapperNumberToInt()))
+		new Mapping(new MappingEntry(19, 19, ValueRemapperNumberToInt.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_6)
 	),
 	TNT(EType.OBJECT, 50, SpecificType.ENTITY),
@@ -322,7 +322,7 @@ public enum SpecificType {
 		//damage taken
 		new Mapping(new MappingEntryOriginal(19))
 		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1)),
-		new Mapping(new MappingEntry(19, 19, new ValueRemapperNumberToInt())).addProtocols(ProtocolVersionsHelper.BEFORE_1_6),
+		new Mapping(new MappingEntry(19, 19, ValueRemapperNumberToInt.INSTANCE)).addProtocols(ProtocolVersionsHelper.BEFORE_1_6),
 		//block
 		new Mapping(new MappingEntryOriginal(20)).addProtocols(ProtocolVersion.MINECRAFT_1_8),
 		new Mapping(new MappingEntry(20, 20, new ValueRemapper<DataWatcherObjectInt>() {
