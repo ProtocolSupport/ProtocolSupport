@@ -57,7 +57,8 @@ public enum SpecificType {
 		.addEntries(new MappingEntry(3, 6, new ValueRemapperBooleanToByte()))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_6),
 		//health
-		new Mapping(new MappingEntryOriginal(6))
+		new Mapping()
+		.addEntries(new MappingEntryOriginal(6))
 		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1)),
 		//pcolor, pambient, arrowsn
 		new Mapping()
@@ -75,7 +76,7 @@ public enum SpecificType {
 		.addEntries(new MappingEntry(15, 10))
 		.addProtocols(ProtocolVersion.MINECRAFT_1_8)
 	),
-	//TODO:
+	//TODO: No info for player, update when spigot 1.9 is out
 	PLAYER(EType.NONE, -1, SpecificType.LIVING,
 		//abs hearts, score
 		new Mapping(MappingEntryOriginal.of(17, 18)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9),
@@ -85,51 +86,76 @@ public enum SpecificType {
 	),
 	AGEABLE(EType.NONE, -1, SpecificType.LIVING,
 		//age
-		new Mapping(new MappingEntryOriginal(12)).addProtocols(ProtocolVersion.MINECRAFT_1_8),
-		new Mapping(new MappingEntry(12, 12, new ValueRemapperNumberToInt()))
+		new Mapping()
+		.addEntries(new MappingEntry(11, 12))
+		.addProtocols(ProtocolVersion.MINECRAFT_1_8),
+		new Mapping()
+		.addEntries(new MappingEntry(11, 12, new ValueRemapperNumberToInt()))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_8)
 	),
 	TAMEABLE(EType.NONE, -1, SpecificType.AGEABLE,
-		//tame flags, owner
-		new Mapping(new MappingEntryOriginal(16), new MappingEntryOriginal(17)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		//tame flags
+		new Mapping()
+		.addEntries(new MappingEntry(12, 16))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	ARMOR_STAND(EType.NONE, -1, SpecificType.LIVING,
 		//parts position
-		new Mapping(MappingEntryOriginal.of(10, 11, 12, 13, 14, 15, 16)).addProtocols(ProtocolVersion.MINECRAFT_1_8)
+		new Mapping()
+		.addEntries(MappingEntryOriginal.of(10, 11, 12, 13, 14, 15, 16))
+		.addProtocols(ProtocolVersion.MINECRAFT_1_8)
 	),
 	COW(EType.MOB, EntityType.COW, SpecificType.AGEABLE),
 	MUSHROOM_COW(EType.MOB, EntityType.MUSHROOM_COW, SpecificType.COW),
 	CHICKEN(EType.MOB, EntityType.CHICKEN, SpecificType.AGEABLE),
 	SQUID(EType.MOB, EntityType.SQUID, SpecificType.LIVING),
 	HORSE(EType.MOB, EntityType.HORSE, SpecificType.AGEABLE,
-		//info flags, type, color/variant, owner, armor
-		new Mapping(MappingEntryOriginal.of(16, 19, 20, 21, 22)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		//info flags, type, color/variant, armor
+		new Mapping()
+		.addEntries(new MappingEntry(12, 16, new ValueRemapperNumberToInt()))
+		.addEntries(new MappingEntry(13, 19, new ValueRemapperNumberToByte()))
+		.addEntries(new MappingEntry(14, 20, new ValueRemapperNumberToInt()))
+		.addEntries(new MappingEntry(16, 22, new ValueRemapperNumberToInt()))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	BAT(EType.MOB, EntityType.BAT, SpecificType.LIVING,
 		//hanging
-		new Mapping(new MappingEntryOriginal(16)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		new Mapping()
+		.addEntries(new MappingEntry(11, 16))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	OCELOT(EType.MOB, EntityType.OCELOT, SpecificType.TAMEABLE,
 		//type
-		new Mapping(new MappingEntryOriginal(18)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		new Mapping()
+		.addEntries(new MappingEntry(14, 18, new ValueRemapperNumberToByte()))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	WOLF(EType.MOB, EntityType.WOLF, SpecificType.TAMEABLE,
+		//health
+		new Mapping()
+		.addEntries(new MappingEntry(14, 18))
+		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1)),
+		new Mapping()
+		.addEntries(new MappingEntry(14, 18, new ValueRemapperNumberToInt()))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_6),
 		//begging
-		new Mapping(new MappingEntryOriginal(19)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9),
+		new Mapping()
+		.addEntries(new MappingEntry(15, 19, new ValueRemapperBooleanToByte()))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9),
 		//collar color
-		new Mapping(new MappingEntryOriginal(20)).addProtocols(ProtocolVersion.MINECRAFT_1_8),
-		new Mapping(new MappingEntry(20, 20, new ValueRemapper<DataWatcherObjectByte>() {
+		new Mapping()
+		.addEntries(new MappingEntry(16, 20, new ValueRemapperNumberToByte()))
+		.addProtocols(ProtocolVersion.MINECRAFT_1_8),
+		new Mapping()
+		.addEntries(new MappingEntry(16, 20, new ValueRemapper<DataWatcherObjectByte>() {
 			@Override
 			public DataWatcherObject<?> remap(DataWatcherObjectByte object) {
 				return new DataWatcherObjectByte((byte) (15 - object.getValue()));
 			}
-		})).addProtocols(ProtocolVersionsHelper.BEFORE_1_8),
-		//health
-		new Mapping(new MappingEntryOriginal(18))
-		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1)),
-		new Mapping(new MappingEntry(18, 18, new ValueRemapperNumberToInt()))
-		.addProtocols(ProtocolVersionsHelper.BEFORE_1_6)
+		}))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_8)
 	),
+	//TODO: new remap
 	PIG(EType.MOB, EntityType.PIG, SpecificType.AGEABLE,
 		//has saddle
 		new Mapping(new MappingEntryOriginal(16)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
