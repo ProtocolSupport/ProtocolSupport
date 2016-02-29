@@ -6,6 +6,13 @@ import protocolsupport.utils.datawatcher.DataWatcherObject;
 
 public class DataWatcherObjectShort extends DataWatcherObject<Short> {
 
+	public DataWatcherObjectShort() {
+	}
+
+	public DataWatcherObjectShort(short s) {
+		value = s;
+	}
+
 	@Override
 	public int getTypeId(ProtocolVersion version) {
 		if (version.isAfter(ProtocolVersion.MINECRAFT_1_8)) {

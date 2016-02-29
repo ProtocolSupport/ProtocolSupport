@@ -17,8 +17,10 @@ import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueR
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperNumberToInt;
 import protocolsupport.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.datawatcher.DataWatcherObject;
+import protocolsupport.utils.datawatcher.objects.DataWatcherObjectBlockState;
 import protocolsupport.utils.datawatcher.objects.DataWatcherObjectByte;
 import protocolsupport.utils.datawatcher.objects.DataWatcherObjectInt;
+import protocolsupport.utils.datawatcher.objects.DataWatcherObjectShort;
 
 public enum SpecificType {
 
@@ -155,30 +157,60 @@ public enum SpecificType {
 		}))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_8)
 	),
-	//TODO: new remap
 	PIG(EType.MOB, EntityType.PIG, SpecificType.AGEABLE,
 		//has saddle
-		new Mapping(new MappingEntryOriginal(16)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		new Mapping()
+		.addEntries(new MappingEntry(12, 16, new ValueRemapperBooleanToByte()))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	RABBIT(EType.MOB, EntityType.RABBIT, SpecificType.AGEABLE,
 		//type
-		new Mapping(new MappingEntryOriginal(18)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		new Mapping()
+		.addEntries(new MappingEntry(12, 18, new ValueRemapperNumberToByte()))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	SHEEP(EType.MOB, EntityType.SHEEP, SpecificType.AGEABLE,
 		//info flags (color + sheared)
-		new Mapping(new MappingEntryOriginal(16)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		new Mapping()
+		.addEntries(new MappingEntry(12, 16))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	VILLAGER(EType.MOB, EntityType.VILLAGER, SpecificType.AGEABLE,
 		//profession
-		new Mapping(new MappingEntryOriginal(16)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		new Mapping()
+		.addEntries(new MappingEntry(12, 16, new ValueRemapperNumberToInt()))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	ENDERMAN(EType.MOB, EntityType.ENDERMAN, SpecificType.LIVING,
-		//carried data id, screaming
-		new Mapping(MappingEntryOriginal.of(17, 18)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9),
-		//carried block id
-		new Mapping(new MappingEntryOriginal(16)).addProtocols(ProtocolVersion.MINECRAFT_1_8),
-		new Mapping(new MappingEntry(16, 16, new ValueRemapperNumberToByte()))
-		.addProtocols(ProtocolVersionsHelper.BEFORE_1_8)
+		//carried block
+		new Mapping()
+		.addEntries(new MappingEntry(11, 16, new ValueRemapper<DataWatcherObjectBlockState>() {
+			@Override
+			public DataWatcherObject<?> remap(DataWatcherObjectBlockState object) {
+				return new DataWatcherObjectShort((short) (object.getValue() >> 4));
+			}
+		}))
+		.addProtocols(ProtocolVersion.MINECRAFT_1_8),
+		new Mapping()
+		.addEntries(new MappingEntry(11, 16, new ValueRemapper<DataWatcherObjectBlockState>() {
+			@Override
+			public DataWatcherObject<?> remap(DataWatcherObjectBlockState object) {
+				return new DataWatcherObjectByte((byte) (object.getValue() >> 4));
+			}
+		}))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_8),
+		new Mapping()
+		.addEntries(new MappingEntry(11, 17, new ValueRemapper<DataWatcherObjectBlockState>() {
+			@Override
+			public DataWatcherObject<?> remap(DataWatcherObjectBlockState object) {
+				return new DataWatcherObjectByte((byte) (object.getValue() & 0xF));
+			}
+		}))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9),
+		//screaming
+		new Mapping()
+		.addEntries(new MappingEntry(12, 18, new ValueRemapperBooleanToByte()))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	GIANT(EType.MOB, EntityType.GIANT, SpecificType.LIVING),
 	SILVERFISH(EType.MOB, EntityType.SILVERFISH, SpecificType.LIVING),
@@ -187,39 +219,60 @@ public enum SpecificType {
 	SNOWMAN(EType.MOB, EntityType.SNOWMAN, SpecificType.LIVING),
 	ZOMBIE(EType.MOB, EntityType.ZOMBIE, SpecificType.LIVING,
 		//is baby, is villager, is converting
-		new Mapping(MappingEntryOriginal.of(12, 13, 14)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		new Mapping()
+		.addEntries(new MappingEntry(11, 12, new ValueRemapperBooleanToByte()))
+		.addEntries(new MappingEntry(12, 13, new ValueRemapperNumberToByte()))
+		.addEntries(new MappingEntry(13, 14, new ValueRemapperBooleanToByte()))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	ZOMBIE_PIGMAN(EType.MOB, EntityType.PIG_ZOMBIE, SpecificType.ZOMBIE),
 	BLAZE(EType.MOB, EntityType.BLAZE, SpecificType.LIVING,
 		//on fire
-		new Mapping(new MappingEntryOriginal(16)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		new Mapping()
+		.addEntries(new MappingEntry(11, 16))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	SPIDER(EType.MOB, EntityType.SPIDER, SpecificType.LIVING,
 		//is climbing
-		new Mapping(new MappingEntryOriginal(16)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		new Mapping()
+		.addEntries(new MappingEntry(11, 16))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	CAVE_SPIDER(EType.MOB, EntityType.CAVE_SPIDER, SpecificType.SPIDER),
 	CREEPER(EType.MOB, EntityType.CREEPER, SpecificType.LIVING,
 		//state, is powered, ignited
-		new Mapping(MappingEntryOriginal.of(16, 17, 18)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		new Mapping()
+		.addEntries(new MappingEntry(11, 16, new ValueRemapperNumberToByte()))
+		.addEntries(new MappingEntry(12, 17, new ValueRemapperBooleanToByte()))
+		.addEntries(new MappingEntry(13, 18, new ValueRemapperBooleanToByte()))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	GHAST(EType.MOB, EntityType.GHAST, SpecificType.LIVING,
 		//is attacking
-		new Mapping(new MappingEntryOriginal(16)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		new Mapping()
+		.addEntries(new MappingEntry(11, 16, new ValueRemapperBooleanToByte()))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	SLIME(EType.MOB, EntityType.SLIME, SpecificType.LIVING,
 		//size
-		new Mapping(new MappingEntryOriginal(16)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		new Mapping()
+		.addEntries(new MappingEntry(11, 16, new ValueRemapperNumberToByte()))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	MAGMA_CUBE(EType.MOB, EntityType.MAGMA_CUBE, SpecificType.SLIME),
 	SKELETON(EType.MOB, EntityType.SKELETON, SpecificType.LIVING,
 		//type
-		new Mapping(new MappingEntryOriginal(13)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		new Mapping()
+		.addEntries(new MappingEntry(11, 13, new ValueRemapperNumberToByte()))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	WITCH(EType.MOB, EntityType.WITCH, SpecificType.LIVING,
 		//agressive
-		new Mapping(new MappingEntryOriginal(21)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		new Mapping()
+		.addEntries(new MappingEntry(11, 21, new ValueRemapperBooleanToByte()))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
+	//TODO: More remap
 	IRON_GOLEM(EType.MOB, EntityType.IRON_GOLEM, SpecificType.LIVING,
 		//player created
 		new Mapping(new MappingEntryOriginal(16)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
