@@ -18,10 +18,6 @@ public class ProtocolSupport extends JavaPlugin {
 
 	@Override
 	public void onLoad() {
-		if (true) {
-			new RuntimeException("This branch is not working yet");
-			Bukkit.shutdown();
-		}
 		try {
 			Allocator.init();
 			Compressor.init();
