@@ -18,6 +18,7 @@ import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueR
 import protocolsupport.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.datawatcher.DataWatcherObject;
 import protocolsupport.utils.datawatcher.objects.DataWatcherObjectBlockState;
+import protocolsupport.utils.datawatcher.objects.DataWatcherObjectBoolean;
 import protocolsupport.utils.datawatcher.objects.DataWatcherObjectByte;
 import protocolsupport.utils.datawatcher.objects.DataWatcherObjectInt;
 import protocolsupport.utils.datawatcher.objects.DataWatcherObjectShort;
@@ -43,11 +44,9 @@ public enum SpecificType {
 		.addProtocols(ProtocolVersion.MINECRAFT_1_8),
 		new Mapping()
 		.addEntries(new MappingEntry(2, 10, new ValueRemapperStringClamp(64)))
-		.addEntries(new MappingEntry(3, 11))
 		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_6_1)),
 		new Mapping()
 		.addEntries(new MappingEntry(2, 5, new ValueRemapperStringClamp(64)))
-		.addEntries(new MappingEntry(3, 6))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_6),
 		//nametag visible
 		new Mapping()
@@ -66,12 +65,12 @@ public enum SpecificType {
 		//pcolor, pambient, arrowsn
 		new Mapping()
 		.addEntries(new MappingEntry(7, 7, ValueRemapperNumberToInt.INSTANCE))
-		.addEntries(new MappingEntryOriginal(8))
+		.addEntries(new MappingEntry(8, ValueRemapperBooleanToByte.INSTANCE))
 		.addEntries(new MappingEntry(9, 9, ValueRemapperNumberToByte.INSTANCE))
 		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_6_1)),
 		new Mapping()
 		.addEntries(new MappingEntry(7, 8, ValueRemapperNumberToInt.INSTANCE))
-		.addEntries(new MappingEntry(8, 9))
+		.addEntries(new MappingEntry(8, 9, ValueRemapperBooleanToByte.INSTANCE))
 		.addEntries(new MappingEntry(9, 10, ValueRemapperNumberToByte.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_6),
 		//noai
@@ -90,10 +89,20 @@ public enum SpecificType {
 	AGEABLE(EType.NONE, -1, SpecificType.LIVING,
 		//age
 		new Mapping()
-		.addEntries(new MappingEntry(11, 12))
+		.addEntries(new MappingEntry(11, 12, new ValueRemapper<DataWatcherObjectBoolean>() {
+			@Override
+			public DataWatcherObject<?> remap(DataWatcherObjectBoolean object) {
+				return new DataWatcherObjectByte((byte) (object.getValue() ? -1 : 0));
+			}
+		}))
 		.addProtocols(ProtocolVersion.MINECRAFT_1_8),
 		new Mapping()
-		.addEntries(new MappingEntry(11, 12, ValueRemapperNumberToInt.INSTANCE))
+		.addEntries(new MappingEntry(11, 12, new ValueRemapper<DataWatcherObjectBoolean>() {
+			@Override
+			public DataWatcherObject<?> remap(DataWatcherObjectBoolean object) {
+				return new DataWatcherObjectInt((object.getValue() ? -1 : 0));
+			}
+		}))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_8)
 	),
 	TAMEABLE(EType.NONE, -1, SpecificType.AGEABLE,

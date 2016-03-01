@@ -2,6 +2,8 @@ package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v
 
 import java.io.IOException;
 
+import org.bukkit.World.Environment;
+
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleChunk;
@@ -21,7 +23,7 @@ public class Chunk extends MiddleChunk<RecyclableCollection<PacketData>> {
 		serializer.writeBoolean(cont);
 		serializer.writeShort(bitmask);
 		serializer.writeShort(0);
-		byte[] compressed = Compressor.compressStatic(new ChunkTransformer(data, bitmask).toPre18Data(version));
+		byte[] compressed = Compressor.compressStatic(new ChunkTransformer(data, bitmask, player.getWorld().getEnvironment() == Environment.NORMAL).toPre18Data(version));
 		serializer.writeInt(compressed.length);
 		serializer.writeBytes(compressed);
 		return RecyclableSingletonList.create(serializer);

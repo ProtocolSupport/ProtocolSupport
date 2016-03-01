@@ -5,12 +5,16 @@ import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleEntitySetAttributes;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class EntitySetAttributes extends MiddleEntitySetAttributes<RecyclableCollection<PacketData>> {
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
+		if (true) {
+			return RecyclableEmptyList.get();
+		}
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_ENTITY_ATTRIBUTES_ID, version);
 		serializer.writeInt(entityId);
 		serializer.writeInt(attributes.length);

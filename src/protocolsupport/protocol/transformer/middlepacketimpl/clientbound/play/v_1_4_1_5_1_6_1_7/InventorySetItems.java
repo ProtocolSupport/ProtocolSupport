@@ -16,6 +16,7 @@ public class InventorySetItems extends MiddleInventorySetItems<RecyclableCollect
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
+		itemstacks.remove(40);
 		if (player.getOpenInventory().getType() == InventoryType.ENCHANTING) {
 			itemstacks.remove(1);
 		}

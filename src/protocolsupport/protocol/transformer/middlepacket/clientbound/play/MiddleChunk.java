@@ -14,6 +14,11 @@ public abstract class MiddleChunk<T> extends ClientBoundMiddlePacket<T> {
 	protected byte[] data;
 
 	@Override
+	public boolean needsPlayer() {
+		return true;
+	}
+
+	@Override
 	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
 		chunkX = serializer.readInt();
 		chunkZ = serializer.readInt();

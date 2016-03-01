@@ -20,7 +20,7 @@ public class SpawnLiving extends MiddleSpawnLiving<RecyclableCollection<PacketDa
 		}
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_SPAWN_LIVING_ID, version);
 		serializer.writeInt(entityId);
-		serializer.writeByte(IdRemapper.ENTITY_OBJECT.getTable(version).getRemap(type));
+		serializer.writeByte(IdRemapper.ENTITY_LIVING.getTable(version).getRemap(type));
 		serializer.writeInt((int) (x * 32));
 		serializer.writeInt((int) (y * 32));
 		serializer.writeInt((int) (z * 32));

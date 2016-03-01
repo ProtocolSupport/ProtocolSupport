@@ -6,20 +6,23 @@ import protocolsupport.protocol.transformer.middlepacket.clientbound.play.Middle
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class WorldSound extends MiddleWorldSound<RecyclableCollection<PacketData>> {
 
+	//TODO: map sounds
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
-		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_WORLD_SOUND_ID, version);
+		return RecyclableEmptyList.get();
+		/*PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_WORLD_SOUND_ID, version);
 		serializer.writeString(LegacyUtils.getSound(name));
 		serializer.writeInt(x);
 		serializer.writeInt(y);
 		serializer.writeInt(z);
 		serializer.writeFloat(volume);
 		serializer.writeByte(pitch);
-		return RecyclableSingletonList.create(serializer);
+		return RecyclableSingletonList.create(serializer);*/
 	}
 
 }
