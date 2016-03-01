@@ -44,7 +44,6 @@ import net.minecraft.server.v1_8_R3.PacketPlayOutKickDisconnect;
 import net.minecraft.server.v1_8_R3.PacketPlayOutLogin;
 import net.minecraft.server.v1_8_R3.PacketPlayOutMap;
 import net.minecraft.server.v1_8_R3.PacketPlayOutMapChunk;
-import net.minecraft.server.v1_8_R3.PacketPlayOutMapChunkBulk;
 import net.minecraft.server.v1_8_R3.PacketPlayOutMultiBlockChange;
 import net.minecraft.server.v1_8_R3.PacketPlayOutNamedEntitySpawn;
 import net.minecraft.server.v1_8_R3.PacketPlayOutNamedSoundEffect;
@@ -130,7 +129,6 @@ public class ClientBoundPacket {
 	public static final int PLAY_BLOCK_CHANGE_SINGLE_ID = getId(PacketPlayOutBlockChange.class);
 	public static final int PLAY_BLOCK_ACTION_ID = getId(PacketPlayOutBlockAction.class);
 	public static final int PLAY_BLOCK_BREAK_ANIMATION_ID = getId(PacketPlayOutBlockBreakAnimation.class);
-	public static final int PLAY_CHUNK_MULTI_ID = getId(PacketPlayOutMapChunkBulk.class);
 	public static final int PLAY_EXPLOSION_ID = getId(PacketPlayOutExplosion.class);
 	public static final int PLAY_WORLD_EVENT_ID = getId(PacketPlayOutWorldEvent.class);
 	public static final int PLAY_WORLD_SOUND_ID = getId(PacketPlayOutNamedSoundEffect.class);

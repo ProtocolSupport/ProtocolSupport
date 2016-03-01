@@ -1,41 +1,117 @@
 package protocolsupport.protocol.transformer.utils;
 
+import io.netty.buffer.ByteBuf;
+
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.RecyclablePacketDataSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.RemappingTable;
+import protocolsupport.utils.netty.ChannelUtils;
 
 public class ChunkTransformer {
 
-	public static int calcDataSize(final int count, final boolean light, final boolean sendBiomes) {
-		int idlength = count * 2 * 16 * 16 * 16;
-		int blocklightlength = (count * 16 * 16 * 16) / 2;
-		int skylightlength = light ? ((count * 16 * 16 * 16) / 2) : 0;
-		int biomeslength = sendBiomes ? 256 : 0;
-		return idlength + blocklightlength + skylightlength + biomeslength;
+	protected int coulmnsCount;
+	protected Palette palette;
+	protected int[] blockdata;
+	protected byte[] otherdata;
+
+	public ChunkTransformer(byte[] data19, int bitmap) {
+		this.coulmnsCount = Integer.bitCount(bitmap);
+		RecyclablePacketDataSerializer chunkdata = RecyclablePacketDataSerializer.create(ProtocolVersion.getLatest(), data19);
+		try {
+			byte bitsPerBlock = chunkdata.readByte();
+			if (bitsPerBlock != 0) {
+				int[] paletted = new int[chunkdata.readVarInt()];
+				for (int i = 0; i < paletted.length; i++) {
+					paletted[i] = chunkdata.readVarInt();
+				}
+				this.palette = new Palette(paletted);
+			} else {
+				this.palette = GlobalPalette.INSTANCE;
+			}
+			int singleblockbytes = chunkdata.readVarInt() * 8 / 4096;
+			switch (singleblockbytes) {
+				case 1: {
+					blockdata = readByteArray(chunkdata);
+					break;
+				}
+				case 2: {
+					blockdata = readShortArray(chunkdata);
+					break;
+				}
+				default: {
+					throw new IllegalArgumentException(singleblockbytes + " bytes per block is not supported at the moment");
+				}
+			}
+			otherdata = ChannelUtils.toArray(chunkdata);
+		} finally {
+			chunkdata.release();
+		}
 	}
 
-	public static byte[] toPre18Data(byte[] data18, int bitmap, ProtocolVersion version) {
-		int count = Integer.bitCount(bitmap);
-		byte[] newdata = new byte[(count * (4096 + 2048)) + (data18.length - (count * 8192))];
-		int tIndex = 0;
-		int mIndex = count * 4096;
+	public byte[] toPre18Data(ProtocolVersion version) {
 		RemappingTable table = IdRemapper.BLOCK.getTable(version);
-		for (int i = 0; i < (8192 * count); i += 2) {
-			int state = ((data18[i + 1] & 0xFF) << 8) | (data18[i] & 0xFF);
-			newdata[tIndex] = (byte) table.getRemap(state >> 4);
-			byte data = (byte) (state & 0xF);
-			if ((tIndex & 1) == 0) {
-				newdata[mIndex] = data;
+		byte[] data = new byte[(4096 + 2048) * coulmnsCount + otherdata.length];
+		int tIndex = 0;
+		int mIndex = coulmnsCount * 4096;
+		for (int blockinfo : blockdata) {
+			int blockstate = palette.getBlockState(blockdata[blockinfo]);
+			int blockid = blockstate >> 4;
+			byte blockdata = (byte) (blockstate & 0xF);
+			data[tIndex] = (byte) table.getRemap(blockid);
+			if ((mIndex & 1) == 0) {
+				data[mIndex] = blockdata;
 			} else {
-				newdata[mIndex] |= (data << 4);
+				data[mIndex] |= (blockdata << 4);
 			}
 			if ((tIndex & 1) == 1) {
 				mIndex++;
 			}
 			tIndex++;
 		}
-		System.arraycopy(data18, 8192 * count, newdata, count * (4096 + 2048), data18.length - (8192 * count));
-		return newdata;
+		System.arraycopy(otherdata, 0, data, (4096 + 2048) * coulmnsCount, otherdata.length);
+		return data;
+	}
+
+	private static int[] readByteArray(ByteBuf buf) {
+		int[] data = new int[4096];
+		for (int i = 0; i < data.length; i++) {
+			data[i] = buf.readUnsignedByte();
+		}
+		return data;
+	}
+
+	private static int[] readShortArray(ByteBuf buf) {
+		int[] data = new int[4096];
+		for (int i = 0; i < data.length; i++) {
+			data[i] = buf.readUnsignedShort();
+		}
+		return data;
+	}
+
+	private static class Palette {
+		protected int[] palette;
+		public Palette(int[] palette) {
+			this.palette = palette;
+		}
+
+		public int getBlockState(int index) {
+			return palette[index];
+		}
+	}
+
+	private static class GlobalPalette extends Palette {
+
+		public static final GlobalPalette INSTANCE = new GlobalPalette();
+
+		private GlobalPalette() {
+			super(new int[0]);
+		}
+
+		@Override
+		public int getBlockState(int index) {
+			return index;
+		}  
 	}
 
 }
