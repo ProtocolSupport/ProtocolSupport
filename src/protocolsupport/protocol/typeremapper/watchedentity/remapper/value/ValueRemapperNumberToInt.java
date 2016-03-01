@@ -13,7 +13,7 @@ public class ValueRemapperNumberToInt implements ValueRemapper<DataWatcherObject
 	@Override
 	public DataWatcherObject<?> remap(DataWatcherObject<?> object) {
 		Number number = (Number) object.getValue();
-		return new DataWatcherObjectInt(number.byteValue());
+		return new DataWatcherObjectInt(number.intValue());
 	}
 
 }

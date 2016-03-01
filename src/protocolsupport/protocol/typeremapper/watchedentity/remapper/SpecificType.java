@@ -15,6 +15,7 @@ import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueR
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperStringClamp;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperNumberToByte;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperNumberToInt;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperNumberToShort;
 import protocolsupport.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.datawatcher.DataWatcherObject;
 import protocolsupport.utils.datawatcher.objects.DataWatcherObjectBlockState;
@@ -34,7 +35,7 @@ public enum SpecificType {
 		.addProtocols(ProtocolVersionsHelper.ALL),
 		//air
 		new Mapping()
-		.addEntries(new MappingEntry(1, ValueRemapperNumberToInt.INSTANCE))
+		.addEntries(new MappingEntry(1, ValueRemapperNumberToShort.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	LIVING(EType.NONE, -1, SpecificType.ENTITY,
