@@ -1,6 +1,6 @@
 package protocolsupport.protocol.transformer.utils.registry;
 
-import net.minecraft.server.v1_8_R3.EnumProtocol;
+import net.minecraft.server.v1_9_R1.EnumProtocol;
 
 @SuppressWarnings("unchecked")
 public class MiddleTransformerRegistry<T> {

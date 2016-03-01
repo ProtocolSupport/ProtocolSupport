@@ -1,11 +1,11 @@
 package protocolsupport.protocol.transformer.v_1_7.utils;
 
-import net.minecraft.server.v1_8_R3.Item;
-import net.minecraft.server.v1_8_R3.MinecraftKey;
-import net.minecraft.server.v1_8_R3.MinecraftServer;
-import net.minecraft.server.v1_8_R3.MojangsonParseException;
-import net.minecraft.server.v1_8_R3.MojangsonParser;
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
+import net.minecraft.server.v1_9_R1.Item;
+import net.minecraft.server.v1_9_R1.MinecraftKey;
+import net.minecraft.server.v1_9_R1.MinecraftServer;
+import net.minecraft.server.v1_9_R1.MojangsonParseException;
+import net.minecraft.server.v1_9_R1.MojangsonParser;
+import net.minecraft.server.v1_9_R1.NBTTagCompound;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.modifiers.ClickAction;
@@ -26,6 +26,7 @@ public class ChatJsonConverter {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private static void fixComponent(BaseComponent component) {
 		HoverAction hover = component.getHoverAction();
 		if (hover != null && hover.getType() == HoverAction.Type.SHOW_ITEM) {

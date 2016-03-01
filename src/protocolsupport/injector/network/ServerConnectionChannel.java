@@ -6,9 +6,9 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelException;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
-import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
-import net.minecraft.server.v1_8_R3.MinecraftServer;
-import net.minecraft.server.v1_8_R3.NetworkManager;
+import net.minecraft.server.v1_9_R1.EnumProtocolDirection;
+import net.minecraft.server.v1_9_R1.MinecraftServer;
+import net.minecraft.server.v1_9_R1.NetworkManager;
 import protocolsupport.protocol.core.ChannelHandlers;
 import protocolsupport.protocol.core.FakePacketListener;
 import protocolsupport.protocol.core.initial.InitialPacketDecoder;
@@ -28,6 +28,7 @@ public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 	private static final int IPTOS_THROUGHPUT = 0x08;
 	private static final int IPTOS_LOWDELAY = 0x10;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void initChannel(Channel channel) {
 		try {
@@ -52,7 +53,7 @@ public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 		.addLast(ChannelHandlers.PREPENDER, new WrappedPrepender())
 		.addLast(ChannelHandlers.ENCODER, new WrappedEncoder());
 		NetworkManager networkmanager = new NetworkManager(EnumProtocolDirection.SERVERBOUND);
-		networkmanager.a(new FakePacketListener());
+		networkmanager.setPacketListener(new FakePacketListener());
 		networkManagers.add(networkmanager);
 		channel.pipeline().addLast(ChannelHandlers.NETWORK_MANAGER, networkmanager);
 	}

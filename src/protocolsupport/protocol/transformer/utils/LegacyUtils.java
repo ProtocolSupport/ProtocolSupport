@@ -2,9 +2,9 @@ package protocolsupport.protocol.transformer.utils;
 
 import java.util.Iterator;
 
-import net.minecraft.server.v1_8_R3.ChatModifier;
-import net.minecraft.server.v1_8_R3.EnumChatFormat;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent;
+import net.minecraft.server.v1_9_R1.ChatModifier;
+import net.minecraft.server.v1_9_R1.EnumChatFormat;
+import net.minecraft.server.v1_9_R1.IChatBaseComponent;
 
 public class LegacyUtils {
 

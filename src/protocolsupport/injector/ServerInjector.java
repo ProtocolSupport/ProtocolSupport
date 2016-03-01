@@ -7,16 +7,16 @@ import java.util.Set;
 
 import org.bukkit.Bukkit;
 
-import net.minecraft.server.v1_8_R3.Block;
-import net.minecraft.server.v1_8_R3.Blocks;
-import net.minecraft.server.v1_8_R3.IBlockData;
-import net.minecraft.server.v1_8_R3.Item;
-import net.minecraft.server.v1_8_R3.ItemAnvil;
-import net.minecraft.server.v1_8_R3.ItemBlock;
-import net.minecraft.server.v1_8_R3.ItemCloth;
-import net.minecraft.server.v1_8_R3.ItemSpade;
-import net.minecraft.server.v1_8_R3.MinecraftKey;
-import net.minecraft.server.v1_8_R3.TileEntity;
+import net.minecraft.server.v1_9_R1.Block;
+import net.minecraft.server.v1_9_R1.Blocks;
+import net.minecraft.server.v1_9_R1.IBlockData;
+import net.minecraft.server.v1_9_R1.Item;
+import net.minecraft.server.v1_9_R1.ItemAnvil;
+import net.minecraft.server.v1_9_R1.ItemBlock;
+import net.minecraft.server.v1_9_R1.ItemCloth;
+import net.minecraft.server.v1_9_R1.ItemSpade;
+import net.minecraft.server.v1_9_R1.MinecraftKey;
+import net.minecraft.server.v1_9_R1.TileEntity;
 import protocolsupport.server.block.BlockAnvil;
 import protocolsupport.server.block.BlockCarpet;
 import protocolsupport.server.block.BlockEnchantTable;
@@ -44,30 +44,19 @@ public class ServerInjector {
 		((Map<Class<? extends TileEntity>, String>) Utils.setAccessible(TileEntity.class.getDeclaredField("g")).get(null)).put(entityClass, name);
 	}
 
-	@SuppressWarnings("unchecked")
 	private static void registerBlock(int id, String name, Block block) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		MinecraftKey stringkey = new MinecraftKey(name);
-		ItemBlock itemblock = new ItemBlock(block);
-		Block.REGISTRY.a(id, stringkey, block);
-		Iterator<IBlockData> blockdataiterator = block.P().a().iterator();
-		while (blockdataiterator.hasNext()) {
-			IBlockData blockdata = blockdataiterator.next();
-			final int stateId = (id << 4) | block.toLegacyData(blockdata);
-			Block.d.a(blockdata, stateId);
-		}
-		Item.REGISTRY.a(id, stringkey, itemblock);
-		((Map<Block, Item>)Utils.setAccessible(Item.class.getDeclaredField("a")).get(null)).put(block, itemblock);
+		registerBlock(id, name, new ItemBlock(block));
 	}
 
 	@SuppressWarnings("unchecked")
 	private static void registerBlock(int id, String name, ItemBlock itemblock) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		MinecraftKey stringkey = new MinecraftKey(name);
 		Block.REGISTRY.a(id, stringkey, itemblock.d());
-		Iterator<IBlockData> blockdataiterator = itemblock.d().P().a().iterator();
+		Iterator<IBlockData> blockdataiterator = itemblock.d().t().a().iterator();
 		while (blockdataiterator.hasNext()) {
 			IBlockData blockdata = blockdataiterator.next();
 			final int stateId = (id << 4) | itemblock.d().toLegacyData(blockdata);
-			Block.d.a(blockdata, stateId);
+			Block.REGISTRY_ID.a(blockdata, stateId);
 		}
 		Item.REGISTRY.a(id, stringkey, itemblock);
 		((Map<Block, Item>) Utils.setAccessible(Item.class.getDeclaredField("a")).get(null)).put(itemblock.d(), itemblock);

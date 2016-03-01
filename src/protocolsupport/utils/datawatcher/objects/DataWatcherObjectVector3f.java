@@ -1,6 +1,6 @@
 package protocolsupport.utils.datawatcher.objects;
 
-import net.minecraft.server.v1_8_R3.Vector3f;
+import net.minecraft.server.v1_9_R1.Vector3f;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;

@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.bukkit.event.inventory.InventoryType;
 
-import net.minecraft.server.v1_8_R3.ItemStack;
+import net.minecraft.server.v1_9_R1.ItemStack;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleInventorySetItems;

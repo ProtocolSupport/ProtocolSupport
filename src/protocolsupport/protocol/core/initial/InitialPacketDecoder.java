@@ -11,7 +11,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.concurrent.Future;
 
-import net.minecraft.server.v1_8_R3.MinecraftServer;
+import net.minecraft.server.v1_9_R1.MinecraftServer;
 
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolVersion;
@@ -142,6 +142,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	protected void setProtocol(final Channel channel, ProtocolVersion version) throws Exception {
 		if (MinecraftServer.getServer().isDebugging()) {
 			System.out.println(ChannelUtils.getNetworkManagerSocketAddress(channel)+ " connected with protocol version "+version);

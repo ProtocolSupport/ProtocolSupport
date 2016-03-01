@@ -12,8 +12,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import net.minecraft.server.v1_8_R3.MinecraftServer;
-import net.minecraft.server.v1_8_R3.PropertyManager;
+import net.minecraft.server.v1_9_R1.MinecraftServer;
+import net.minecraft.server.v1_9_R1.PropertyManager;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
 
@@ -36,6 +36,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			return true;
 		}
 		if (args.length == 1 && args[0].equalsIgnoreCase("debug")) {
+			@SuppressWarnings("deprecation")
 			PropertyManager manager = MinecraftServer.getServer().getPropertyManager();
 			if (!manager.getBoolean(DEBUG_PROPERTY, false)) {
 				manager.setProperty(DEBUG_PROPERTY, Boolean.TRUE);

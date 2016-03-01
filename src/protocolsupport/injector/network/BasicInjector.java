@@ -11,17 +11,18 @@ import org.spigotmc.SneakyThrow;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandler;
-import net.minecraft.server.v1_8_R3.ChatComponentText;
-import net.minecraft.server.v1_8_R3.MinecraftServer;
-import net.minecraft.server.v1_8_R3.NetworkManager;
-import net.minecraft.server.v1_8_R3.ServerConnection;
+import net.minecraft.server.v1_9_R1.ChatComponentText;
+import net.minecraft.server.v1_9_R1.MinecraftServer;
+import net.minecraft.server.v1_9_R1.NetworkManager;
+import net.minecraft.server.v1_9_R1.ServerConnection;
 import protocolsupport.utils.Utils;
 
 public class BasicInjector {
 
 	@SuppressWarnings("unchecked")
 	public static void inject() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		ServerConnection serverConnection = MinecraftServer.getServer().aq();
+		@SuppressWarnings("deprecation")
+		ServerConnection serverConnection = MinecraftServer.getServer().am();
 		Field connectionsListField = Utils.setAccessible(ServerConnection.class.getDeclaredField("g"));
 		ChannelInjectList connectionsList = new ChannelInjectList(
 			((List<NetworkManager>) Utils.setAccessible(ServerConnection.class.getDeclaredField("h")).get(serverConnection)),

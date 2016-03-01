@@ -1,6 +1,6 @@
 package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v1_5_1_6_1_7;
 
-import net.minecraft.server.v1_8_R3.EnumParticle;
+import net.minecraft.server.v1_9_R1.EnumParticle;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleWorldParticle;

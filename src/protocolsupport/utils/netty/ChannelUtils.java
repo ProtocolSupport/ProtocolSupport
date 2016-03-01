@@ -6,9 +6,9 @@ import org.bukkit.entity.Player;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.NetworkManager;
-import net.minecraft.server.v1_8_R3.PlayerConnection;
+import net.minecraft.server.v1_9_R1.EntityPlayer;
+import net.minecraft.server.v1_9_R1.NetworkManager;
+import net.minecraft.server.v1_9_R1.PlayerConnection;
 import protocolsupport.protocol.core.ChannelHandlers;
 
 public class ChannelUtils {
@@ -18,7 +18,7 @@ public class ChannelUtils {
 	}
 
 	public static EntityPlayer getPlayer(NetworkManager networkManager) {
-		return ((PlayerConnection) networkManager.getPacketListener()).player;
+		return ((PlayerConnection) networkManager.i()).player;
 	}
 
 	public static SocketAddress getNetworkManagerSocketAddress(Channel channel) {

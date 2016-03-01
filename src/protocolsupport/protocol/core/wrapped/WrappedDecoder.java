@@ -10,9 +10,9 @@ import com.mojang.authlib.GameProfile;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import net.minecraft.server.v1_8_R3.MinecraftServer;
-import net.minecraft.server.v1_8_R3.PacketListener;
-import net.minecraft.server.v1_8_R3.PlayerConnection;
+import net.minecraft.server.v1_9_R1.MinecraftServer;
+import net.minecraft.server.v1_9_R1.PacketListener;
+import net.minecraft.server.v1_9_R1.PlayerConnection;
 import protocolsupport.api.events.PlayerDisconnectEvent;
 import protocolsupport.protocol.core.IPacketDecoder;
 import protocolsupport.protocol.storage.ProtocolStorage;
@@ -36,13 +36,14 @@ public class WrappedDecoder extends ByteToMessageDecoder {
 		realDecoder.decode(ctx, input, list);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		super.channelInactive(ctx);
 		try {
 			InetSocketAddress addr = (InetSocketAddress) ChannelUtils.getNetworkManagerSocketAddress(ctx.channel());
 			String username = null;
-			PacketListener listener = ChannelUtils.getNetworkManager(ctx.channel()).getPacketListener();
+			PacketListener listener = ChannelUtils.getNetworkManager(ctx.channel()).i();
 			if (listener instanceof AbstractLoginListener) {
 				GameProfile profile = ((AbstractLoginListener) listener).getProfile();
 				if (profile != null) {

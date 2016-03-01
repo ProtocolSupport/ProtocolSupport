@@ -34,7 +34,7 @@ public abstract class MiddleSpawnNamed<T> extends ClientBoundMiddlePacket<T> {
 	@Override
 	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
 		playerEntityId = serializer.readVarInt();
-		uuid = serializer.g();
+		uuid = serializer.i();
 		x = serializer.readDouble();
 		y = serializer.readDouble();
 		z = serializer.readDouble();

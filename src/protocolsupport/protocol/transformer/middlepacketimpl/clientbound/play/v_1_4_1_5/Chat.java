@@ -1,6 +1,6 @@
 package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5;
 
-import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_9_R1.IChatBaseComponent.ChatSerializer;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleChat;

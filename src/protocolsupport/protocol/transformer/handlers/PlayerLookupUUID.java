@@ -9,8 +9,8 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_8_R3.util.Waitable;
+import org.bukkit.craftbukkit.v1_9_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_9_R1.util.Waitable;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerPreLoginEvent;
 
@@ -19,8 +19,8 @@ import com.mojang.authlib.exceptions.AuthenticationUnavailableException;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
 
-import net.minecraft.server.v1_8_R3.MinecraftEncryption;
-import net.minecraft.server.v1_8_R3.MinecraftServer;
+import net.minecraft.server.v1_9_R1.MinecraftEncryption;
+import net.minecraft.server.v1_9_R1.MinecraftServer;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 
@@ -43,8 +43,8 @@ public class PlayerLookupUUID {
 				fireLoginEvents();
 				return;
 			}
-			final String hash = new BigInteger(MinecraftEncryption.a("", MinecraftServer.getServer().Q().getPublic(), listener.getLoginKey())).toString(16);
-			listener.setProfile(MinecraftServer.getServer().aD().hasJoinedServer(new GameProfile(null, gameprofile.getName()), hash));
+			final String hash = new BigInteger(MinecraftEncryption.a("", MinecraftServer.getServer().O().getPublic(), listener.getLoginKey())).toString(16);
+			listener.setProfile(MinecraftServer.getServer().ay().hasJoinedServer(new GameProfile(null, gameprofile.getName()), hash));
 			if (listener.getProfile() != null) {
 				fireLoginEvents();
 			} else {
@@ -61,7 +61,7 @@ public class PlayerLookupUUID {
 	}
 
 	private void fireLoginEvents() throws Exception {
-		if (!listener.getNetworkManager().g()) {
+		if (!listener.getNetworkManager().isConnected()) {
 			return;
 		}
 

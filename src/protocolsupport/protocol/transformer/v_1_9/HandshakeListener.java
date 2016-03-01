@@ -1,6 +1,6 @@
 package protocolsupport.protocol.transformer.v_1_9;
 
-import net.minecraft.server.v1_8_R3.NetworkManager;
+import net.minecraft.server.v1_9_R1.NetworkManager;
 import protocolsupport.protocol.transformer.handlers.AbstractHandshakeListener;
 
 public class HandshakeListener extends AbstractHandshakeListener {

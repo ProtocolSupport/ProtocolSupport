@@ -1,6 +1,6 @@
 package protocolsupport.protocol.core.timeout;
 
-import net.minecraft.server.v1_8_R3.MinecraftServer;
+import net.minecraft.server.v1_9_R1.MinecraftServer;
 
 public class FirstReadTimeoutException extends RuntimeException {
 
@@ -14,6 +14,7 @@ public class FirstReadTimeoutException extends RuntimeException {
 		}
 	};
 
+	@SuppressWarnings("deprecation")
 	public static FirstReadTimeoutException getInstance(long lastReadTime) {
 		return MinecraftServer.getServer().isDebugging() ? new FirstReadTimeoutException(lastReadTime) : notraceinstance;
 	}

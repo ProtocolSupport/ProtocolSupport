@@ -25,23 +25,24 @@ import com.mojang.authlib.properties.Property;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
-import net.minecraft.server.v1_8_R3.ChatComponentText;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent;
-import net.minecraft.server.v1_8_R3.MinecraftServer;
-import net.minecraft.server.v1_8_R3.NetworkManager;
-import net.minecraft.server.v1_8_R3.PacketLoginInEncryptionBegin;
-import net.minecraft.server.v1_8_R3.PacketLoginInStart;
-import net.minecraft.server.v1_8_R3.PacketLoginOutDisconnect;
-import net.minecraft.server.v1_8_R3.PacketLoginOutEncryptionBegin;
-import net.minecraft.server.v1_8_R3.PacketLoginOutSetCompression;
-import net.minecraft.server.v1_8_R3.PacketLoginOutSuccess;
+import net.minecraft.server.v1_9_R1.ChatComponentText;
+import net.minecraft.server.v1_9_R1.EntityPlayer;
+import net.minecraft.server.v1_9_R1.IChatBaseComponent;
+import net.minecraft.server.v1_9_R1.LoginListener;
+import net.minecraft.server.v1_9_R1.MinecraftServer;
+import net.minecraft.server.v1_9_R1.NetworkManager;
+import net.minecraft.server.v1_9_R1.PacketLoginInEncryptionBegin;
+import net.minecraft.server.v1_9_R1.PacketLoginInStart;
+import net.minecraft.server.v1_9_R1.PacketLoginOutDisconnect;
+import net.minecraft.server.v1_9_R1.PacketLoginOutEncryptionBegin;
+import net.minecraft.server.v1_9_R1.PacketLoginOutSetCompression;
+import net.minecraft.server.v1_9_R1.PacketLoginOutSuccess;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.events.PlayerLoginStartEvent;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
 
-public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3.LoginListener {
+public abstract class AbstractLoginListener extends LoginListener {
 
 	private static final int loginThreads = Utils.getJavaPropertyValue("protocolsupport.loginthreads", 8, Converter.STRING_TO_INT);
 	private static final int loginThreadKeepAlive = Utils.getJavaPropertyValue("protocolsupport.loginthreadskeepalive", 60, Converter.STRING_TO_INT);
@@ -77,10 +78,11 @@ public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3
 	protected boolean useOnlineModeUUID;
 	protected UUID forcedUUID;
 
+	@SuppressWarnings("deprecation")
 	public AbstractLoginListener(final NetworkManager networkmanager) {
 		super(MinecraftServer.getServer(), networkmanager);
 		random.nextBytes(randomBytes);
-		isOnlineMode = MinecraftServer.getServer().getOnlineMode() && !networkManager.c();
+		isOnlineMode = MinecraftServer.getServer().getOnlineMode();
 		useOnlineModeUUID = isOnlineMode;
 		forcedUUID = null;
 	}
@@ -100,7 +102,7 @@ public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3
 		try {
 			logger.info("Disconnecting " + d() + ": " + s);
 			ChatComponentText chatcomponenttext = new ChatComponentText(s);
-			networkManager.handle(new PacketLoginOutDisconnect(chatcomponenttext));
+			networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext));
 			networkManager.close(chatcomponenttext);
 		} catch (Exception exception) {
 			logger.error("Error whilst disconnecting player", exception);
@@ -121,16 +123,16 @@ public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3
 		return UUID.nameUUIDFromBytes(("OfflinePlayer:" + profile.getName()).getBytes(Charsets.UTF_8));
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	@Override
 	public void b() {
 		EntityPlayer entityPlayer = MinecraftServer.getServer().getPlayerList().attemptLogin(this, profile, hostname);
 		if (entityPlayer != null) {
 			state = LoginState.ACCEPTED;
 			if (hasCompression()) {
-				final int threshold = MinecraftServer.getServer().aK();
-				if (threshold >= 0 && !this.networkManager.c()) {
-					this.networkManager.a(
+				final int threshold = MinecraftServer.getServer().aF();
+				if (threshold >= 0) {
+					this.networkManager.sendPacket(
 						new PacketLoginOutSetCompression(threshold),
 						new ChannelFutureListener() {
 							@Override
@@ -141,7 +143,7 @@ public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3
 					);
 				}
 			}
-			networkManager.handle(new PacketLoginOutSuccess(profile));
+			networkManager.sendPacket(new PacketLoginOutSuccess(profile));
 			MinecraftServer.getServer().getPlayerList().a(networkManager, MinecraftServer.getServer().getPlayerList().processLogin(profile, entityPlayer));
 		}
 	}
@@ -158,7 +160,7 @@ public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3
 
 	@Override
 	public void a(final IChatBaseComponent ichatbasecomponent) {
-		logger.info(d() + " lost connection: " + ichatbasecomponent.c());
+		logger.info(d() + " lost connection: " + ichatbasecomponent.getText());
 	}
 
 	@Override
@@ -171,6 +173,7 @@ public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3
 		Validate.validState(state == LoginState.HELLO, "Unexpected hello packet");
 		state = LoginState.ONLINEMODERESOLVE;
 		loginprocessor.execute(new Runnable() {
+			@SuppressWarnings("deprecation")
 			@Override
 			public void run() {
 				try {
@@ -192,7 +195,7 @@ public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3
 					forcedUUID = event.getForcedUUID();
 					if (isOnlineMode) {
 						state = LoginState.KEY;
-						networkManager.handle(new PacketLoginOutEncryptionBegin("", MinecraftServer.getServer().Q().getPublic(), randomBytes));
+						networkManager.sendPacket(new PacketLoginOutEncryptionBegin("", MinecraftServer.getServer().O().getPublic(), randomBytes));
 					} else {
 						new PlayerLookupUUID(AbstractLoginListener.this, isOnlineMode).run();
 					}
@@ -211,10 +214,11 @@ public abstract class AbstractLoginListener extends net.minecraft.server.v1_8_R3
 		Validate.validState(state == LoginState.KEY, "Unexpected key packet");
 		state = LoginState.AUTHENTICATING;
 		loginprocessor.execute(new Runnable() {
+			@SuppressWarnings("deprecation")
 			@Override
 			public void run() {
 				try {
-					final PrivateKey privatekey = MinecraftServer.getServer().Q().getPrivate();
+					final PrivateKey privatekey = MinecraftServer.getServer().O().getPrivate();
 					if (!Arrays.equals(randomBytes, packetlogininencryptionbegin.b(privatekey))) {
 						throw new IllegalStateException("Invalid nonce!");
 					}

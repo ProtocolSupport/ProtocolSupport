@@ -2,7 +2,7 @@ package protocolsupport.protocol.transformer.middlepacketimpl.serverbound.handsh
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_8_R3.Packet;
+import net.minecraft.server.v1_9_R1.Packet;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.ServerBoundPacket;

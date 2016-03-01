@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_8_R3.util.CraftIconCache;
+import org.bukkit.craftbukkit.v1_9_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_9_R1.util.CraftIconCache;
 import org.bukkit.entity.Player;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.util.CachedServerIcon;
@@ -20,22 +20,23 @@ import org.spigotmc.SpigotConfig;
 import com.mojang.authlib.GameProfile;
 
 import io.netty.channel.ChannelFutureListener;
-import net.minecraft.server.v1_8_R3.ChatComponentText;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.MinecraftServer;
-import net.minecraft.server.v1_8_R3.NetworkManager;
-import net.minecraft.server.v1_8_R3.PacketStatusInPing;
-import net.minecraft.server.v1_8_R3.PacketStatusInStart;
-import net.minecraft.server.v1_8_R3.PacketStatusOutPong;
-import net.minecraft.server.v1_8_R3.PacketStatusOutServerInfo;
-import net.minecraft.server.v1_8_R3.ServerPing;
-import net.minecraft.server.v1_8_R3.ServerPing.ServerData;
-import net.minecraft.server.v1_8_R3.ServerPing.ServerPingPlayerSample;
+import net.minecraft.server.v1_9_R1.ChatComponentText;
+import net.minecraft.server.v1_9_R1.EntityPlayer;
+import net.minecraft.server.v1_9_R1.MinecraftServer;
+import net.minecraft.server.v1_9_R1.NetworkManager;
+import net.minecraft.server.v1_9_R1.PacketStatusInPing;
+import net.minecraft.server.v1_9_R1.PacketStatusInStart;
+import net.minecraft.server.v1_9_R1.PacketStatusListener;
+import net.minecraft.server.v1_9_R1.PacketStatusOutPong;
+import net.minecraft.server.v1_9_R1.PacketStatusOutServerInfo;
+import net.minecraft.server.v1_9_R1.ServerPing;
+import net.minecraft.server.v1_9_R1.ServerPing.ServerData;
+import net.minecraft.server.v1_9_R1.ServerPing.ServerPingPlayerSample;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
 
-public class StatusListener extends net.minecraft.server.v1_8_R3.PacketStatusListener {
+public class StatusListener extends PacketStatusListener {
 
 	private MinecraftServer server;
 	private NetworkManager nmanager;
@@ -98,13 +99,13 @@ public class StatusListener extends net.minecraft.server.v1_8_R3.PacketStatusLis
 		serverping.setPlayerSample(playerSample);
 		serverping.setServerInfo(new ServerData(info.getName(), info.getId()));
 
-		nmanager.handle(new PacketStatusOutServerInfo(serverping));
+		nmanager.sendPacket(new PacketStatusOutServerInfo(serverping));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void a(PacketStatusInPing packetstatusinping) {
-		nmanager.a(new PacketStatusOutPong(packetstatusinping.a()), ChannelFutureListener.CLOSE);
+		nmanager.sendPacket(new PacketStatusOutPong(packetstatusinping.a()), ChannelFutureListener.CLOSE);
 	}
 
 	public static class InternalServerListPingEvent extends ServerListPingEvent {
