@@ -26,12 +26,19 @@ public class TileNBTTransformer {
 			new SpecificTransformer() {
 				@Override
 				public NBTTagCompound transform(NBTTagCompound input) {
+					NBTTagCompound spawndata = input.getCompound("SpawnData");
 					input.remove("SpawnPotentials");
 					input.remove("SpawnData");
+					if (spawndata != null) {
+						String mobname = spawndata.getString("Id");
+						if (!mobname.isEmpty()) {
+							input.setString("EntityId", mobname);
+						}
+					}
 					return input;
 				}
 			},
-			ProtocolVersionsHelper.BEFORE_1_7
+			ProtocolVersionsHelper.BEFORE_1_9
 		);
 		register(
 			4,
