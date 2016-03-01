@@ -77,7 +77,7 @@ public class ServerInjector {
 
 	@SuppressWarnings("unchecked")
 	public static void fixShovel() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		Set<Block> blocks = (Set<Block>) Utils.setAccessible(ItemSpade.class.getDeclaredField("c")).get(null);
+		Set<Block> blocks = (Set<Block>) Utils.setAccessible(ItemSpade.class.getDeclaredField("e")).get(null);
 		blocks.add(Blocks.SNOW_LAYER);
 	}
 
