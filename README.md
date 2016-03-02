@@ -8,11 +8,11 @@ ProtocolSupport
 
 Support 1.8, 1.7, 1.6, 1.5, 1.4.7 on spigot 1.9
 
-Known issues:
-* [1.8] 1.8 packets are not supported (spectating, worldborder and such)
-* [1.8 and earlier] No sound - working on it
-* [1.6 and earlier] Stats are not sent - won't be fixed
-* [1.5 and earlier] Can't control vehicle - won't be fixed, probably impossible to do this properly
+Not complete yet, use with caution.
+
+Wontfix issues:
+* [1.6 and earlier] Stats are not sent
+* [1.5 and earlier] Can't control vehicle
 
 ================
 
