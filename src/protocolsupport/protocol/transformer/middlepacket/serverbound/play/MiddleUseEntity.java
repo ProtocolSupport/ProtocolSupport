@@ -1,7 +1,6 @@
 package protocolsupport.protocol.transformer.middlepacket.serverbound.play;
 
 import net.minecraft.server.v1_9_R1.Packet;
-import net.minecraft.server.v1_9_R1.PacketPlayInUseEntity;
 import net.minecraft.server.v1_9_R1.Vector3f;
 import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.ServerBoundMiddlePacket;
@@ -20,9 +19,8 @@ public abstract class MiddleUseEntity extends ServerBoundMiddlePacket {
 	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
 		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_USE_ENTITY.get());
 		creator.writeVarInt(entityId);
-		action = action % PacketPlayInUseEntity.EnumEntityUseAction.values().length;
 		creator.writeVarInt(action);
-		if (action == 3) {
+		if (action == 2) {
 			creator.writeFloat(interactedAt.getX());
 			creator.writeFloat(interactedAt.getY());
 			creator.writeFloat(interactedAt.getZ());

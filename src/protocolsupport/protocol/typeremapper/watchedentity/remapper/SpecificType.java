@@ -73,21 +73,26 @@ public enum SpecificType {
 		.addEntries(new MappingEntry(7, 8, ValueRemapperNumberToInt.INSTANCE))
 		.addEntries(new MappingEntry(8, 9, ValueRemapperBooleanToByte.INSTANCE))
 		.addEntries(new MappingEntry(9, 10, ValueRemapperNumberToByte.INSTANCE))
-		.addProtocols(ProtocolVersionsHelper.BEFORE_1_6),
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_6)
+	),
+	INSENTIENT(EType.NONE, -1, SpecificType.LIVING,
 		//noai
 		new Mapping()
 		.addEntries(new MappingEntry(10, 15))
 		.addProtocols(ProtocolVersion.MINECRAFT_1_8)
 	),
-	//TODO: No info for player, update when spigot 1.9 is out
 	PLAYER(EType.NONE, -1, SpecificType.LIVING,
 		//abs hearts, score
-		new Mapping(MappingEntryOriginal.of(17, 18)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9),
+		new Mapping()
+		.addEntries(new MappingEntry(10, 17))
+		.addEntries(new MappingEntry(11, 18, ValueRemapperNumberToInt.INSTANCE))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9),
 		//skin flags(cape enabled for some protocols)
-		new Mapping(new MappingEntryOriginal(10))
+		new Mapping()
+		.addEntries(new MappingEntry(12, 10))
 		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1))
 	),
-	AGEABLE(EType.NONE, -1, SpecificType.LIVING,
+	AGEABLE(EType.NONE, -1, SpecificType.INSENTIENT,
 		//age
 		new Mapping()
 		.addEntries(new MappingEntry(11, 12, new ValueRemapper<DataWatcherObjectBoolean>() {
@@ -121,7 +126,7 @@ public enum SpecificType {
 	COW(EType.MOB, EntityType.COW, SpecificType.AGEABLE),
 	MUSHROOM_COW(EType.MOB, EntityType.MUSHROOM_COW, SpecificType.COW),
 	CHICKEN(EType.MOB, EntityType.CHICKEN, SpecificType.AGEABLE),
-	SQUID(EType.MOB, EntityType.SQUID, SpecificType.LIVING),
+	SQUID(EType.MOB, EntityType.SQUID, SpecificType.INSENTIENT),
 	HORSE(EType.MOB, EntityType.HORSE, SpecificType.AGEABLE,
 		//info flags, type, color/variant, armor
 		new Mapping()
@@ -131,7 +136,7 @@ public enum SpecificType {
 		.addEntries(new MappingEntry(16, 22, ValueRemapperNumberToInt.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	BAT(EType.MOB, EntityType.BAT, SpecificType.LIVING,
+	BAT(EType.MOB, EntityType.BAT, SpecificType.INSENTIENT,
 		//hanging
 		new Mapping()
 		.addEntries(new MappingEntry(11, 16))
@@ -192,7 +197,7 @@ public enum SpecificType {
 		.addEntries(new MappingEntry(12, 16, ValueRemapperNumberToInt.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	ENDERMAN(EType.MOB, EntityType.ENDERMAN, SpecificType.LIVING,
+	ENDERMAN(EType.MOB, EntityType.ENDERMAN, SpecificType.INSENTIENT,
 		//carried block
 		new Mapping()
 		.addEntries(new MappingEntry(11, 16, new ValueRemapper<DataWatcherObjectBlockState>() {
@@ -223,12 +228,12 @@ public enum SpecificType {
 		.addEntries(new MappingEntry(12, 18, ValueRemapperBooleanToByte.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	GIANT(EType.MOB, EntityType.GIANT, SpecificType.LIVING),
-	SILVERFISH(EType.MOB, EntityType.SILVERFISH, SpecificType.LIVING),
-	ENDERMITE(EType.MOB, EntityType.ENDERMITE, SpecificType.SILVERFISH),
-	ENDER_DRAGON(EType.MOB, EntityType.ENDER_DRAGON, SpecificType.LIVING),
-	SNOWMAN(EType.MOB, EntityType.SNOWMAN, SpecificType.LIVING),
-	ZOMBIE(EType.MOB, EntityType.ZOMBIE, SpecificType.LIVING,
+	GIANT(EType.MOB, EntityType.GIANT, SpecificType.INSENTIENT),
+	SILVERFISH(EType.MOB, EntityType.SILVERFISH, SpecificType.INSENTIENT),
+	ENDERMITE(EType.MOB, EntityType.ENDERMITE, SpecificType.INSENTIENT),
+	ENDER_DRAGON(EType.MOB, EntityType.ENDER_DRAGON, SpecificType.INSENTIENT),
+	SNOWMAN(EType.MOB, EntityType.SNOWMAN, SpecificType.INSENTIENT),
+	ZOMBIE(EType.MOB, EntityType.ZOMBIE, SpecificType.INSENTIENT,
 		//is baby, is villager, is converting
 		new Mapping()
 		.addEntries(new MappingEntry(11, 12, ValueRemapperBooleanToByte.INSTANCE))
@@ -237,7 +242,7 @@ public enum SpecificType {
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	ZOMBIE_PIGMAN(EType.MOB, EntityType.PIG_ZOMBIE, SpecificType.ZOMBIE),
-	BLAZE(EType.MOB, EntityType.BLAZE, SpecificType.LIVING,
+	BLAZE(EType.MOB, EntityType.BLAZE, SpecificType.INSENTIENT,
 		//on fire
 		new Mapping()
 		.addEntries(new MappingEntry(11, 16))
@@ -250,7 +255,7 @@ public enum SpecificType {
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	CAVE_SPIDER(EType.MOB, EntityType.CAVE_SPIDER, SpecificType.SPIDER),
-	CREEPER(EType.MOB, EntityType.CREEPER, SpecificType.LIVING,
+	CREEPER(EType.MOB, EntityType.CREEPER, SpecificType.INSENTIENT,
 		//state, is powered, ignited
 		new Mapping()
 		.addEntries(new MappingEntry(11, 16, ValueRemapperNumberToByte.INSTANCE))
@@ -258,39 +263,39 @@ public enum SpecificType {
 		.addEntries(new MappingEntry(13, 18, ValueRemapperBooleanToByte.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	GHAST(EType.MOB, EntityType.GHAST, SpecificType.LIVING,
+	GHAST(EType.MOB, EntityType.GHAST, SpecificType.INSENTIENT,
 		//is attacking
 		new Mapping()
 		.addEntries(new MappingEntry(11, 16, ValueRemapperBooleanToByte.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	SLIME(EType.MOB, EntityType.SLIME, SpecificType.LIVING,
+	SLIME(EType.MOB, EntityType.SLIME, SpecificType.INSENTIENT,
 		//size
 		new Mapping()
 		.addEntries(new MappingEntry(11, 16, ValueRemapperNumberToByte.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	MAGMA_CUBE(EType.MOB, EntityType.MAGMA_CUBE, SpecificType.SLIME),
-	SKELETON(EType.MOB, EntityType.SKELETON, SpecificType.LIVING,
+	SKELETON(EType.MOB, EntityType.SKELETON, SpecificType.INSENTIENT,
 		//type
 		new Mapping()
 		.addEntries(new MappingEntry(11, 13, ValueRemapperNumberToByte.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	WITCH(EType.MOB, EntityType.WITCH, SpecificType.LIVING,
+	WITCH(EType.MOB, EntityType.WITCH, SpecificType.INSENTIENT,
 		//agressive
 		new Mapping()
 		.addEntries(new MappingEntry(11, 21, ValueRemapperBooleanToByte.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	IRON_GOLEM(EType.MOB, EntityType.IRON_GOLEM, SpecificType.LIVING,
+	IRON_GOLEM(EType.MOB, EntityType.IRON_GOLEM, SpecificType.INSENTIENT,
 		//player created
 		new Mapping()
 		.addEntries(new MappingEntry(11, 16))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	SHULKER(EType.MOB, 69, SpecificType.LIVING),
-	WITHER(EType.MOB, EntityType.WITHER, SpecificType.LIVING,
+	SHULKER(EType.MOB, 69, SpecificType.INSENTIENT),
+	WITHER(EType.MOB, EntityType.WITHER, SpecificType.INSENTIENT,
 		//target 1-3, invulnerable time
 		new Mapping()
 		.addEntries(new MappingEntry(11, 17, ValueRemapperNumberToInt.INSTANCE))
@@ -299,7 +304,7 @@ public enum SpecificType {
 		.addEntries(new MappingEntry(14, 20, ValueRemapperNumberToInt.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	GUARDIAN(EType.MOB, EntityType.GUARDIAN, SpecificType.LIVING,
+	GUARDIAN(EType.MOB, EntityType.GUARDIAN, SpecificType.INSENTIENT,
 		//info flags(elder, spikes), target id
 		new Mapping()
 		.addEntries(new MappingEntry(11, 16))

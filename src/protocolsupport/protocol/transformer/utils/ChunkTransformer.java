@@ -15,6 +15,7 @@ public class ChunkTransformer {
 	protected final int coulmnsCount;
 	protected final boolean hasSkyLight;
 	protected final ArrayList<ChunkSection> sections = new ArrayList<ChunkSection>();
+	protected byte[] biomeData;
 
 	public ChunkTransformer(byte[] data19, int bitmap, boolean hasSkyLight) {
 		this.coulmnsCount = Integer.bitCount(bitmap);
@@ -24,6 +25,9 @@ public class ChunkTransformer {
 			for (int i = 0; i < this.coulmnsCount; i++) {
 				sections.add(new ChunkSection(chunkdata, hasSkyLight));
 			}
+			biomeData = new byte[256];
+			chunkdata.readBytes(biomeData);
+			//TODO: figure why there is a garbage data that is not needed
 		} finally {
 			chunkdata.release();
 		}
@@ -61,6 +65,31 @@ public class ChunkTransformer {
 				data.write(section.skylight);
 			}
 		}
+		data.write(biomeData);
+		return data.toByteArray();
+	}
+
+	//TODO: speed up this shit
+	public byte[] to18Data() throws IOException {
+		RemappingTable table = IdRemapper.BLOCK.getTable(ProtocolVersion.MINECRAFT_1_8);
+		ByteArrayOutputStream data = new ByteArrayOutputStream();
+		for (ChunkSection section : this.sections) {
+			for (int i = 0; i < 4096; i++) {
+				int blockstate = section.palette.getBlockState(section.blockdata.getBlockInfo(i));
+				blockstate = (table.getRemap(blockstate >> 4) << 4) | (blockstate & 0xF);
+				data.write(blockstate);
+				data.write(blockstate >> 8);
+			}
+		}
+		for (ChunkSection section : this.sections) {
+			data.write(section.blocklight);
+		}
+		if (this.hasSkyLight) {
+			for (ChunkSection section : this.sections) {
+				data.write(section.skylight);
+			}
+		}
+		data.write(biomeData);
 		return data.toByteArray();
 	}
 

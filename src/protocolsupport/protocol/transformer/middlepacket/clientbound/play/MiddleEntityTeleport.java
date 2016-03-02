@@ -11,6 +11,7 @@ public abstract class MiddleEntityTeleport<T> extends MiddleEntity<T> {
 	protected double z;
 	protected byte yaw;
 	protected byte pitch;
+	protected boolean onGround;
 
 	@Override
 	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
@@ -20,6 +21,7 @@ public abstract class MiddleEntityTeleport<T> extends MiddleEntity<T> {
 		z = serializer.readDouble();
 		yaw = serializer.readByte();
 		pitch = serializer.readByte();
+		onGround = serializer.readBoolean();
 	}
 
 }

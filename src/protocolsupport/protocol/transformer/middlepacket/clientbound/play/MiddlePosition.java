@@ -12,11 +12,17 @@ import protocolsupport.protocol.transformer.middlepacketimpl.PacketCreator;
 
 public abstract class MiddlePosition<T> extends ClientBoundMiddlePacket<T> {
 
+	protected double xOrig;
+	protected double yOrig;
+	protected double zOrig;
+	protected float yawOrig;
+	protected float pitchOrig;
 	protected double x;
 	protected double y;
 	protected double z;
 	protected float yaw;
 	protected float pitch;
+	protected int flags;
 	protected int teleportConfirmId;
 
 	@Override
@@ -26,26 +32,26 @@ public abstract class MiddlePosition<T> extends ClientBoundMiddlePacket<T> {
 
 	@Override
 	public void readFromServerData(PacketDataSerializer serializer) {
-		x = serializer.readDouble();
-		y = serializer.readDouble();
-		z = serializer.readDouble();
-		yaw = serializer.readFloat();
-		pitch = serializer.readFloat();
-		short field = serializer.readByte();
+		xOrig = x = serializer.readDouble();
+		yOrig = y = serializer.readDouble();
+		zOrig = z = serializer.readDouble();
+		yawOrig = yaw = serializer.readFloat();
+		pitchOrig = pitch = serializer.readFloat();
+		flags = serializer.readByte();
 		Location location = player.getLocation();
-		if ((field & 0x01) != 0) {
+		if ((flags & 0x01) != 0) {
 			x += location.getX();
 		}
-		if ((field & 0x02) != 0) {
+		if ((flags & 0x02) != 0) {
 			y += location.getY();
 		}
-		if ((field & 0x04) != 0) {
+		if ((flags & 0x04) != 0) {
 			z += location.getX();
 		}
-		if ((field & 0x08) != 0) {
+		if ((flags & 0x08) != 0) {
 			yaw += location.getYaw();
 		}
-		if ((field & 0x10) != 0) {
+		if ((flags & 0x10) != 0) {
 			pitch += location.getPitch();
 		}
 		teleportConfirmId = serializer.readVarInt();
