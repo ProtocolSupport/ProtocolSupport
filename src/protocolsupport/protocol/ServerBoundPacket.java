@@ -35,6 +35,7 @@ import net.minecraft.server.v1_9_R1.PacketPlayInTabComplete;
 import net.minecraft.server.v1_9_R1.PacketPlayInTransaction;
 import net.minecraft.server.v1_9_R1.PacketPlayInUpdateSign;
 import net.minecraft.server.v1_9_R1.PacketPlayInUseEntity;
+import net.minecraft.server.v1_9_R1.PacketPlayInUseItem;
 import net.minecraft.server.v1_9_R1.PacketPlayInWindowClick;
 import net.minecraft.server.v1_9_R1.PacketStatusInPing;
 import net.minecraft.server.v1_9_R1.PacketStatusInStart;
@@ -70,7 +71,8 @@ public enum ServerBoundPacket {
 	PLAY_TAB_COMPLETE(PacketPlayInTabComplete.class),
 	PLAY_SETTINGS(PacketPlayInSettings.class),
 	PLAY_CLIENT_COMMAND(PacketPlayInClientCommand.class),
-	PLAY_CUSTOM_PAYLOAD(PacketPlayInCustomPayload.class);
+	PLAY_CUSTOM_PAYLOAD(PacketPlayInCustomPayload.class),
+	PLAY_USE_ITEM(PacketPlayInUseItem.class);
 
 	public static void init() {
 	}

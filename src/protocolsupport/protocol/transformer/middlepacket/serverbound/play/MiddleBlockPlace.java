@@ -17,16 +17,23 @@ public abstract class MiddleBlockPlace extends ServerBoundMiddlePacket {
 	protected int cY;
 	protected int cZ;
 
+	//TODO: Recheck mappings in case spigot fixes them
 	@Override
 	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
-		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_BLOCK_PLACE.get());
-		creator.writePosition(position);
-		creator.writeVarInt(face);
-		creator.writeVarInt(usedHand);
-		creator.writeByte(cX);
-		creator.writeByte(cY);
-		creator.writeByte(cZ);
-		return RecyclableSingletonList.create(creator.create());
+		if (face != -1) {
+			PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_USE_ITEM.get());
+			creator.writePosition(position);
+			creator.writeVarInt(face);
+			creator.writeVarInt(usedHand);
+			creator.writeByte(cX);
+			creator.writeByte(cY);
+			creator.writeByte(cZ);
+			return RecyclableSingletonList.create(creator.create());
+		} else {
+			PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_BLOCK_PLACE.get());
+			creator.writeVarInt(usedHand);
+			return RecyclableSingletonList.create(creator.create());
+		}
 	}
 
 }
