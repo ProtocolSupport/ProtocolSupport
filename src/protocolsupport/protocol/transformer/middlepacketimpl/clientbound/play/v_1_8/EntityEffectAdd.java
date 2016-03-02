@@ -22,7 +22,7 @@ public class EntityEffectAdd extends MiddleEntityEffectAdd<RecyclableCollection<
 		serializer.writeVarInt(entityId);
 		serializer.writeByte(effectId);
 		serializer.writeByte(amplifier);
-		serializer.writeShort(duration);
+		serializer.writeVarInt(duration);
 		serializer.writeBoolean(hideParticles);
 		return RecyclableSingletonList.create(serializer);
 	}
