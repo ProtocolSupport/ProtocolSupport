@@ -16,6 +16,9 @@ public class InventorySetSlot extends MiddleInventorySetSlot<RecyclableCollectio
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
+		if (slot == 40 + player.getOpenInventory().getTopInventory().getSize()) {
+			return RecyclableEmptyList.get();
+		}
 		if (player.getOpenInventory().getType() == InventoryType.ENCHANTING) {
 			if (slot == 1) {
 				return RecyclableEmptyList.get();
