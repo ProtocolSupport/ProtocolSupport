@@ -75,4 +75,8 @@ public class Utils {
 		public R convert(T t);
 	}
 
+	public static boolean isTrue(Boolean b) {
+		return b != null && b;
+	}
+
 }

@@ -2,8 +2,8 @@ package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.login.
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_9_R1.IChatBaseComponent.ChatSerializer;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.login.MiddleLoginDisconnect;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
@@ -16,7 +16,7 @@ public class LoginDisconnect extends MiddleLoginDisconnect<RecyclableCollection<
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
 		PacketData serializer = PacketData.create(ClientBoundPacket.LOGIN_DISCONNECT_ID, version);
-		serializer.writeString(LegacyUtils.toText(ChatSerializer.a(messageJson)));
+		serializer.writeString(LegacyUtils.toText(ChatAPI.fromJSON(messageJson)));
 		return RecyclableSingletonList.create(serializer);
 	}
 

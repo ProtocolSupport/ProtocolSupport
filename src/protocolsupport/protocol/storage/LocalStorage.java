@@ -8,7 +8,7 @@ import java.util.UUID;
 import com.mojang.authlib.properties.Property;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
-import net.minecraft.server.v1_9_R1.IChatBaseComponent.ChatSerializer;
+import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
@@ -84,7 +84,7 @@ public class LocalStorage {
 		}
 
 		public String getName() {
-			return displayNameJson == null ? name : LegacyUtils.toText(ChatSerializer.a(displayNameJson));
+			return displayNameJson == null ? name : LegacyUtils.toText(ChatAPI.fromJSON(displayNameJson));
 		}
 
 		@Override

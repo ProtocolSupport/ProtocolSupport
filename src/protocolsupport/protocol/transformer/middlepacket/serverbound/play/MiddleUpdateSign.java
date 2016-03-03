@@ -1,8 +1,6 @@
 package protocolsupport.protocol.transformer.middlepacket.serverbound.play;
 
 import net.minecraft.server.v1_9_R1.BlockPosition;
-import net.minecraft.server.v1_9_R1.ChatComponentText;
-import net.minecraft.server.v1_9_R1.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_9_R1.Packet;
 import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.ServerBoundMiddlePacket;
@@ -20,7 +18,7 @@ public abstract class MiddleUpdateSign extends ServerBoundMiddlePacket {
 		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_UPDATE_SIGN.get());
 		creator.writePosition(position);
 		for (int i = 0; i < lines.length; i++) {
-			creator.writeString(ChatSerializer.a(new ChatComponentText(lines[i])));
+			creator.writeString(lines[i]);
 		}
 		return RecyclableSingletonList.create(creator.create());
 	}

@@ -2,8 +2,8 @@ package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_9_R1.IChatBaseComponent.ChatSerializer;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleBlockSignUpdate;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
@@ -21,7 +21,7 @@ public class BlockSignUpdate extends MiddleBlockSignUpdate<RecyclableCollection<
 		serializer.writeShort(position.getY());
 		serializer.writeInt(position.getZ());
 		for (String lineJson : linesJson) {
-			serializer.writeString(Utils.clampString(LegacyUtils.toText(ChatSerializer.a(lineJson)), 15));
+			serializer.writeString(Utils.clampString(LegacyUtils.toText(ChatAPI.fromJSON(lineJson)), 15));
 		}
 		return RecyclableSingletonList.create(serializer);
 	}

@@ -11,7 +11,7 @@ public class UpdateSign extends MiddleUpdateSign {
 	public void readFromClientData(PacketDataSerializer serializer) throws IOException {
 		position = serializer.readPosition();
 		for (int i = 0; i < 4; i++) {
-			lines[i] = serializer.readString(15);
+			lines[i] = serializer.readString(15).replace("\"", "");
 		}
 	}
 

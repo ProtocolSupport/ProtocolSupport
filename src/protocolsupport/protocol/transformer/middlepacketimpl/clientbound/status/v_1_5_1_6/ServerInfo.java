@@ -2,8 +2,10 @@ package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.status
 
 import java.io.IOException;
 
+import net.minecraft.server.v1_9_R1.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_9_R1.ServerPing;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.status.MiddleServerInfo;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
@@ -25,7 +27,7 @@ public class ServerInfo extends MiddleServerInfo<RecyclableCollection<PacketData
 			"\u0000" +
 			serverPing.getServerData().a() +
 			"\u0000" +
-			LegacyUtils.toText(serverPing.a()) +
+			LegacyUtils.toText(ChatAPI.fromJSON(ChatSerializer.a(serverPing.a()))) +
 			"\u0000" +
 			serverPing.b().b() +
 			"\u0000" +

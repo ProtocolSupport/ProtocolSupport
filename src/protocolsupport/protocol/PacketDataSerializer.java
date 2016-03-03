@@ -25,7 +25,6 @@ import io.netty.buffer.ByteBufOutputStream;
 import io.netty.handler.codec.EncoderException;
 import net.minecraft.server.v1_9_R1.BlockPosition;
 import net.minecraft.server.v1_9_R1.GameProfileSerializer;
-import net.minecraft.server.v1_9_R1.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_9_R1.Item;
 import net.minecraft.server.v1_9_R1.ItemStack;
 import net.minecraft.server.v1_9_R1.Items;
@@ -35,6 +34,7 @@ import net.minecraft.server.v1_9_R1.NBTTagCompound;
 import net.minecraft.server.v1_9_R1.NBTTagList;
 import net.minecraft.server.v1_9_R1.NBTTagString;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.ItemStackWriteEvent;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
@@ -120,7 +120,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_9_R1.PacketDat
 					NBTTagList pages = nbttagcompound.getList("pages", 8);
 					NBTTagList newpages = new NBTTagList();
 					for (int i = 0; i < pages.size(); i++) {
-						newpages.add(new NBTTagString(LegacyUtils.toText(ChatSerializer.a(pages.getString(i)))));
+						newpages.add(new NBTTagString(LegacyUtils.toText(ChatAPI.fromJSON(pages.getString(i)))));
 					}
 					nbttagcompound.set("pages", newpages);
 				}
