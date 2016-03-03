@@ -1,5 +1,6 @@
 package protocolsupport.server.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -8,11 +9,17 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 
+import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.tab.TabAPI;
 
 public class PlayerListener implements Listener {
+
+	private final ProtocolSupport plugin;
+	public PlayerListener(ProtocolSupport plugin) {
+		this.plugin = plugin;
+	}
 
 	@EventHandler
 	public void onShift(PlayerToggleSneakEvent event) {
@@ -40,8 +47,13 @@ public class PlayerListener implements Listener {
 	}
 
 	@EventHandler
-	public void onJoin(PlayerJoinEvent event) {
-		TabAPI.sendHeaderFooter(event.getPlayer(), TabAPI.getDefaultHeader(), TabAPI.getDefaultFooter());
+	public void onJoin(final PlayerJoinEvent event) {
+		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+			@Override
+			public void run() {
+				TabAPI.sendHeaderFooter(event.getPlayer(), TabAPI.getDefaultHeader(), TabAPI.getDefaultFooter());
+			}
+		}, 1);
 	}
 
 }
