@@ -20,7 +20,7 @@ public class PacketDecoder implements IPacketDecoder {
 	private static final AttributeKey<EnumProtocol> currentStateAttrKey = NetworkManager.c;
 
 	private final WrappingBuffer buffer = new WrappingBuffer();
-	private final PacketDataSerializer serializer = new PacketDataSerializer(buffer, ProtocolVersion.MINECRAFT_1_8);
+	private final PacketDataSerializer serializer = new PacketDataSerializer(buffer, ProtocolVersion.getLatest());
 
 	@Override
 	public void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
