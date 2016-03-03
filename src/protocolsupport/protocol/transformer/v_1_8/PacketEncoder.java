@@ -53,6 +53,7 @@ import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8.BlockOpenSignEditor;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8.BlockSignUpdate;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8.BlockTileUpdate;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8.Camera;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8.Chat;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8.Chunk;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8.CollectEffect;
@@ -75,6 +76,7 @@ import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8.Login;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8.Map;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8.PlayerInfo;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8.PlayerListHeaderFooter;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8.Position;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8.ResourcePack;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8.ScoreboardObjective;
@@ -178,8 +180,7 @@ public class PacketEncoder implements IPacketEncoder {
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_WORLD_BORDER_ID, 0x44);
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_TITLE, 0x45);
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_PLAYER_LIST_HEADER_FOOTER, 0x47);
-		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_RESOURCE_PACK_ID, 0x48);
-		
+		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_RESOURCE_PACK_ID, 0x48);	
 	}
 
 	private final MiddleTransformerRegistry<ClientBoundMiddlePacket<RecyclableCollection<PacketData>>> registry = new MiddleTransformerRegistry<>();
@@ -255,6 +256,8 @@ public class PacketEncoder implements IPacketEncoder {
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID, CustomPayload.class);
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_RESOURCE_PACK_ID, ResourcePack.class);
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_KICK_DISCONNECT_ID, KickDisconnect.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CAMERA_ID, Camera.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_PLAYER_LIST_HEADER_FOOTER, PlayerListHeaderFooter.class);
 		} catch (Throwable t) {
 			SneakyThrow.sneaky(t);
 		}

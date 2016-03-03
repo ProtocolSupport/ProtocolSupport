@@ -51,7 +51,6 @@ import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.netty.WrappingBuffer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
-//TODO: 1.8 packets
 public class PacketDecoder implements IPacketDecoder {
 
 	private static final AttributeKey<EnumProtocol> currentStateAttrKey = NetworkManager.c;
