@@ -34,6 +34,7 @@ import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7_1_8.TimeUpdate;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_6_1_7_1_8.EntityAttach;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_6_1_7_1_8.PlayerAbilities;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_6_1_7_1_8.SetPassengers;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_7_1_8.Animation;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_7_1_8.Explosion;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_7_1_8.GameStateChange;
@@ -258,6 +259,7 @@ public class PacketEncoder implements IPacketEncoder {
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_KICK_DISCONNECT_ID, KickDisconnect.class);
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CAMERA_ID, Camera.class);
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_PLAYER_LIST_HEADER_FOOTER, PlayerListHeaderFooter.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SET_PASSENGERS, SetPassengers.class);
 		} catch (Throwable t) {
 			SneakyThrow.sneaky(t);
 		}

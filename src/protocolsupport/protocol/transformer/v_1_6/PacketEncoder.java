@@ -86,6 +86,7 @@ import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_6_1_7.SetHealth;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_6_1_7_1_8.EntityAttach;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_6_1_7_1_8.PlayerAbilities;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_6_1_7_1_8.SetPassengers;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.status.v_1_5_1_6.ServerInfo;
 import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry;
 import protocolsupport.protocol.transformer.utils.registry.PacketIdTransformerRegistry;
@@ -237,6 +238,7 @@ public class PacketEncoder implements IPacketEncoder {
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SCOREBOARD_TEAM_ID, ScoreboardTeam.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID, CustomPayload.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_KICK_DISCONNECT_ID, KickDisconnect.class);
+			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SET_PASSENGERS, SetPassengers.class);
 		} catch (Throwable t) {
 			SneakyThrow.sneaky(t);
 		}

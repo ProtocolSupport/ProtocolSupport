@@ -62,6 +62,7 @@ import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_6_1_7.SetHealth;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_6_1_7_1_8.EntityAttach;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_6_1_7_1_8.PlayerAbilities;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_6_1_7_1_8.SetPassengers;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_7.BlockAction;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_7.BlockBreakAnimation;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_7.BlockChangeSingle;
@@ -248,6 +249,7 @@ public class PacketEncoder implements IPacketEncoder {
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID, CustomPayload.class);
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_RESOURCE_PACK_ID, ResourcePack.class);
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_KICK_DISCONNECT_ID, KickDisconnect.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SET_PASSENGERS, SetPassengers.class);
 		} catch (Throwable t) {
 			SneakyThrow.sneaky(t);
 		}

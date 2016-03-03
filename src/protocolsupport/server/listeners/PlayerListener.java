@@ -6,6 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.event.vehicle.VehicleEnterEvent;
 
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
@@ -28,6 +29,13 @@ public class PlayerListener implements Listener {
 			if (player.getVehicle().equals(event.getRightClicked())) {
 				player.leaveVehicle();
 			}
+		}
+	}
+
+	@EventHandler(ignoreCancelled = true)
+	public void onVehicleEnter(VehicleEnterEvent event) {
+		if (event.getVehicle().getPassenger() != null) {
+			event.setCancelled(true);
 		}
 	}
 

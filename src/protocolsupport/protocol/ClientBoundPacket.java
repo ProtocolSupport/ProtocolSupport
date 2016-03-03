@@ -45,6 +45,7 @@ import net.minecraft.server.v1_9_R1.PacketPlayOutKickDisconnect;
 import net.minecraft.server.v1_9_R1.PacketPlayOutLogin;
 import net.minecraft.server.v1_9_R1.PacketPlayOutMap;
 import net.minecraft.server.v1_9_R1.PacketPlayOutMapChunk;
+import net.minecraft.server.v1_9_R1.PacketPlayOutMount;
 import net.minecraft.server.v1_9_R1.PacketPlayOutMultiBlockChange;
 import net.minecraft.server.v1_9_R1.PacketPlayOutNamedEntitySpawn;
 import net.minecraft.server.v1_9_R1.PacketPlayOutNamedSoundEffect;
@@ -164,6 +165,7 @@ public class ClientBoundPacket {
 	public static final int PLAY_WORLD_BORDER_ID = getId(PacketPlayOutWorldBorder.class);
 	public static final int PLAY_TITLE = getId(PacketPlayOutTitle.class);
 	public static final int PLAY_PLAYER_LIST_HEADER_FOOTER = getId(PacketPlayOutPlayerListHeaderFooter.class);
+	public static final int PLAY_SET_PASSENGERS = getId(PacketPlayOutMount.class);
 
 	@SuppressWarnings("unchecked")
 	private static final int getId(Class<?> packetClass) {
