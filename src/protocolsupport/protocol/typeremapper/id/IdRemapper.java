@@ -1,11 +1,26 @@
 package protocolsupport.protocol.typeremapper.id;
 
+import org.bukkit.Material;
+
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.utils.ProtocolVersionsHelper;
 
 public class IdRemapper {
 
 	public static final RemappingRegistry BLOCK = new RemappingRegistry() {
 		{
+			registerRemapEntry(Material.CHORUS_FLOWER, Material.WOOD, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.CHORUS_PLANT, Material.WOOD, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.END_GATEWAY, Material.ENDER_PORTAL, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.END_ROD, Material.GLOWSTONE, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.END_BRICKS, Material.ENDER_STONE, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.FROSTED_ICE, Material.ICE, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.GRASS_PATH, Material.GRASS, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.PURPUR_BLOCK, Material.STONE, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.PURPUR_STAIRS, Material.COBBLESTONE_STAIRS, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.PURPUR_SLAB, Material.COBBLESTONE_STAIRS, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.STRUCTURE_BLOCK, Material.BEDROCK, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.BEETROOT_BLOCK, Material.CROPS, ProtocolVersionsHelper.BEFORE_1_9);
 			// slime -> emerald block
 			registerRemapEntry(165, 133, ProtocolVersionsHelper.BEFORE_1_8);
 			// barrier -> glass
@@ -103,6 +118,10 @@ public class IdRemapper {
 			// redstone comparator -> repeater
 			registerRemapEntry(149, 93, ProtocolVersionsHelper.BEFORE_1_5);
 		}
+		@SuppressWarnings("deprecation")
+		private void registerRemapEntry(Material from, Material to, ProtocolVersion... versions) {
+			registerRemapEntry(from.getId(), to.getId(), versions);
+		}
 		@Override
 		protected RemappingTable createTable() {
 			return new RemappingTable(4096);
@@ -112,6 +131,18 @@ public class IdRemapper {
 	public static final RemappingRegistry ITEM = new RemappingRegistry() {
 		{
 			copy(BLOCK);
+			registerRemapEntry(Material.BEETROOT, Material.BROWN_MUSHROOM, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.BEETROOT_SOUP, Material.MUSHROOM_SOUP, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.BEETROOT_SEEDS, Material.SEEDS, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.CHORUS_FRUIT, Material.POTATO_ITEM, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.CHORUS_FRUIT_POPPED, Material.BAKED_POTATO, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.DRAGONS_BREATH, Material.POTION, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.LINGERING_POTION, Material.SPLASH_POTION, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.ELYTRA, Material.LEATHER_CHESTPLATE, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.END_CRYSTAL, Material.STONE, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.SHIELD, Material.WOOD_SWORD, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.SPECTRAL_ARROW, Material.ARROW, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.TIPPED_ARROW, Material.ARROW, ProtocolVersionsHelper.BEFORE_1_9);
 			// all doors -> door
 			registerRemapEntry(427, 324, ProtocolVersionsHelper.BEFORE_1_8);
 			registerRemapEntry(428, 324, ProtocolVersionsHelper.BEFORE_1_8);
@@ -150,6 +181,10 @@ public class IdRemapper {
 			registerRemapEntry(405, 336, ProtocolVersionsHelper.BEFORE_1_5);
 			// quartz -> feather
 			registerRemapEntry(406, 288, ProtocolVersionsHelper.BEFORE_1_5);
+		}
+		@SuppressWarnings("deprecation")
+		private void registerRemapEntry(Material from, Material to, ProtocolVersion... versions) {
+			registerRemapEntry(from.getId(), to.getId(), versions);
 		}
 		@Override
 		protected RemappingTable createTable() {
