@@ -109,7 +109,12 @@ public enum SpecificType {
 				return new DataWatcherObjectInt((object.getValue() ? -1 : 0));
 			}
 		}))
-		.addProtocols(ProtocolVersionsHelper.BEFORE_1_8)
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_8),
+		//age - special hack for hologram plugins that want to set int age
+		//datawatcher index 30 will be remapped to age datawatcher index
+		new Mapping()
+		.addEntries(new MappingEntry(30, 12, ValueRemapperNumberToInt.INSTANCE))
+		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_6_1))
 	),
 	TAMEABLE(EType.NONE, -1, SpecificType.AGEABLE,
 		//tame flags
