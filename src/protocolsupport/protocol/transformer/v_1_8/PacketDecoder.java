@@ -38,6 +38,8 @@ import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_8.KeepAlive;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_8.Position;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_8.PositionLook;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_8.ResourcePackStatus;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_8.Spectate;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_8.SteerVehicle;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_8.TabComplete;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_8.UpdateSign;
@@ -86,6 +88,8 @@ public class PacketDecoder implements IPacketDecoder {
 			registry.register(EnumProtocol.PLAY, 0x15, ClientSettings.class);
 			registry.register(EnumProtocol.PLAY, 0x16, ClientCommand.class);
 			registry.register(EnumProtocol.PLAY, 0x17, CustomPayload.class);
+			registry.register(EnumProtocol.PLAY, 0x18, Spectate.class);
+			registry.register(EnumProtocol.PLAY, 0x18, ResourcePackStatus.class);
 		} catch (Throwable t) {
 			SneakyThrow.sneaky(t);
 		}

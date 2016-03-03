@@ -28,8 +28,10 @@ import net.minecraft.server.v1_9_R1.PacketPlayInFlying.PacketPlayInPosition;
 import net.minecraft.server.v1_9_R1.PacketPlayInFlying.PacketPlayInPositionLook;
 import net.minecraft.server.v1_9_R1.PacketPlayInHeldItemSlot;
 import net.minecraft.server.v1_9_R1.PacketPlayInKeepAlive;
+import net.minecraft.server.v1_9_R1.PacketPlayInResourcePackStatus;
 import net.minecraft.server.v1_9_R1.PacketPlayInSetCreativeSlot;
 import net.minecraft.server.v1_9_R1.PacketPlayInSettings;
+import net.minecraft.server.v1_9_R1.PacketPlayInSpectate;
 import net.minecraft.server.v1_9_R1.PacketPlayInSteerVehicle;
 import net.minecraft.server.v1_9_R1.PacketPlayInTabComplete;
 import net.minecraft.server.v1_9_R1.PacketPlayInTransaction;
@@ -72,7 +74,9 @@ public enum ServerBoundPacket {
 	PLAY_SETTINGS(PacketPlayInSettings.class),
 	PLAY_CLIENT_COMMAND(PacketPlayInClientCommand.class),
 	PLAY_CUSTOM_PAYLOAD(PacketPlayInCustomPayload.class),
-	PLAY_USE_ITEM(PacketPlayInUseItem.class);
+	PLAY_USE_ITEM(PacketPlayInUseItem.class),
+	PLAY_SPECTATE(PacketPlayInSpectate.class),
+	PLAY_RESOURCE_PACK_STATUS(PacketPlayInResourcePackStatus.class);
 
 	public static void init() {
 	}
