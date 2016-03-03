@@ -19,6 +19,7 @@ import net.minecraft.server.v1_9_R1.PacketPlayOutBed;
 import net.minecraft.server.v1_9_R1.PacketPlayOutBlockAction;
 import net.minecraft.server.v1_9_R1.PacketPlayOutBlockBreakAnimation;
 import net.minecraft.server.v1_9_R1.PacketPlayOutBlockChange;
+import net.minecraft.server.v1_9_R1.PacketPlayOutCamera;
 import net.minecraft.server.v1_9_R1.PacketPlayOutChat;
 import net.minecraft.server.v1_9_R1.PacketPlayOutCloseWindow;
 import net.minecraft.server.v1_9_R1.PacketPlayOutCollect;
@@ -50,6 +51,7 @@ import net.minecraft.server.v1_9_R1.PacketPlayOutNamedSoundEffect;
 import net.minecraft.server.v1_9_R1.PacketPlayOutOpenSignEditor;
 import net.minecraft.server.v1_9_R1.PacketPlayOutOpenWindow;
 import net.minecraft.server.v1_9_R1.PacketPlayOutPlayerInfo;
+import net.minecraft.server.v1_9_R1.PacketPlayOutPlayerListHeaderFooter;
 import net.minecraft.server.v1_9_R1.PacketPlayOutPosition;
 import net.minecraft.server.v1_9_R1.PacketPlayOutRemoveEntityEffect;
 import net.minecraft.server.v1_9_R1.PacketPlayOutResourcePackSend;
@@ -68,6 +70,7 @@ import net.minecraft.server.v1_9_R1.PacketPlayOutSpawnPosition;
 import net.minecraft.server.v1_9_R1.PacketPlayOutStatistic;
 import net.minecraft.server.v1_9_R1.PacketPlayOutTabComplete;
 import net.minecraft.server.v1_9_R1.PacketPlayOutTileEntityData;
+import net.minecraft.server.v1_9_R1.PacketPlayOutTitle;
 import net.minecraft.server.v1_9_R1.PacketPlayOutTransaction;
 import net.minecraft.server.v1_9_R1.PacketPlayOutUpdateAttributes;
 import net.minecraft.server.v1_9_R1.PacketPlayOutUpdateHealth;
@@ -75,6 +78,7 @@ import net.minecraft.server.v1_9_R1.PacketPlayOutUpdateSign;
 import net.minecraft.server.v1_9_R1.PacketPlayOutUpdateTime;
 import net.minecraft.server.v1_9_R1.PacketPlayOutWindowData;
 import net.minecraft.server.v1_9_R1.PacketPlayOutWindowItems;
+import net.minecraft.server.v1_9_R1.PacketPlayOutWorldBorder;
 import net.minecraft.server.v1_9_R1.PacketPlayOutWorldEvent;
 import net.minecraft.server.v1_9_R1.PacketPlayOutWorldParticles;
 import net.minecraft.server.v1_9_R1.PacketStatusOutPong;
@@ -156,6 +160,10 @@ public class ClientBoundPacket {
 	public static final int PLAY_CUSTOM_PAYLOAD_ID = getId(PacketPlayOutCustomPayload.class);
 	public static final int PLAY_KICK_DISCONNECT_ID = getId(PacketPlayOutKickDisconnect.class);
 	public static final int PLAY_RESOURCE_PACK_ID = getId(PacketPlayOutResourcePackSend.class);
+	public static final int PLAY_CAMERA_ID = getId(PacketPlayOutCamera.class);
+	public static final int PLAY_WORLD_BORDER_ID = getId(PacketPlayOutWorldBorder.class);
+	public static final int PLAY_TITLE = getId(PacketPlayOutTitle.class);
+	public static final int PLAY_PLAYER_LIST_HEADER_FOOTER = getId(PacketPlayOutPlayerListHeaderFooter.class);
 
 	@SuppressWarnings("unchecked")
 	private static final int getId(Class<?> packetClass) {
