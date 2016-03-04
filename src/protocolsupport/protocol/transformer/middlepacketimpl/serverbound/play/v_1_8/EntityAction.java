@@ -12,6 +12,9 @@ public class EntityAction extends MiddleEntityAction {
 		entityId = serializer.readVarInt();
 		actionId = serializer.readVarInt();
 		jumpBoost = serializer.readVarInt();
+		if (actionId == 6) {
+			actionId = 7;
+		}
 	}
 
 }
