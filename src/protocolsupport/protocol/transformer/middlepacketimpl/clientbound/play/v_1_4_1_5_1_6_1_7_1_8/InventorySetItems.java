@@ -16,7 +16,9 @@ public class InventorySetItems extends MiddleInventorySetItems<RecyclableCollect
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
-		itemstacks.remove(itemstacks.size() - 1);
+		if (windowId == 0) {
+			itemstacks.remove(itemstacks.size() - 1);
+		}
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_8) && player.getOpenInventory().getType() == InventoryType.ENCHANTING) {
 			itemstacks.remove(1);
 		}
