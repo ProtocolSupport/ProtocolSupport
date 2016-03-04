@@ -1,6 +1,5 @@
 package protocolsupport.protocol.transformer.utils;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -27,46 +26,44 @@ public class ChunkTransformer {
 			}
 			biomeData = new byte[256];
 			chunkdata.readBytes(biomeData);
-			//TODO: figure why there is a garbage data that is not needed
+			//TODO: figure why there is a garbage data that is not needed (after biome data there are only 0)
 		} finally {
 			chunkdata.release();
 		}
 	}
 
-	//TODO: speed up this shit
 	public byte[] toPre18Data(ProtocolVersion version) throws IOException {
 		RemappingTable table = IdRemapper.BLOCK.getTable(version);
-		ByteArrayOutputStream data = new ByteArrayOutputStream();
-		for (ChunkSection section : this.sections) {
-			for (int i = 0; i < 4096; i++) {
-				int blockstate = section.palette.getBlockState(section.blockdata.getBlockInfo(i));
-				int blockid = blockstate >> 4;
-				data.write(table.getRemap(blockid));
-			}
-		}
+		byte[] data = new byte[(4096 + 2048 + 2048 + (hasSkyLight ? 2048 : 0)) * columnsCount + 256];
+		int blockIndex = 0;
+		int blockDataIndex = 4096 * columnsCount;
+		int blockLightIndex = (4096 + 2048) * columnsCount;
+		int skyLightIndex = (4096 + 2048 + 2048) * columnsCount;
 		for (ChunkSection section : this.sections) {
 			int blockdataacc = 0;
 			for (int i = 0; i < 4096; i++) {
 				int blockstate = section.palette.getBlockState(section.blockdata.getBlockInfo(i));
+				int blockid = table.getRemap(blockstate >> 4);
+				data[blockIndex + i] = (byte) blockid;
 				byte blockdata = (byte) (blockstate & 0xF);
 				if ((i & 1) == 0) {
 					blockdataacc = blockdata;
 				} else {
 					blockdataacc |= (blockdata << 4);
-					data.write(blockdataacc);
+					data[(i >> 1) + blockDataIndex] = (byte) blockdataacc;
 				}
 			}
-		}
-		for (ChunkSection section : this.sections) {
-			data.write(section.blocklight);
-		}
-		if (this.hasSkyLight) {
-			for (ChunkSection section : this.sections) {
-				data.write(section.skylight);
+			blockIndex += 4096;
+			blockDataIndex += 2048;
+			System.arraycopy(section.blocklight, 0, data, blockLightIndex, 2048);
+			blockLightIndex += 2048;
+			if (hasSkyLight) {
+				System.arraycopy(section.skylight, 0, data, skyLightIndex, 2048);
+				skyLightIndex += 2048;
 			}
 		}
-		data.write(biomeData);
-		return data.toByteArray();
+		System.arraycopy(biomeData, 0, data, skyLightIndex, 256);
+		return data;
 	}
 
 	public byte[] to18Data() throws IOException {
