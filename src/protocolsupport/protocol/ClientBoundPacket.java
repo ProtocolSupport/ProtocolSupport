@@ -73,6 +73,7 @@ import net.minecraft.server.v1_9_R1.PacketPlayOutTabComplete;
 import net.minecraft.server.v1_9_R1.PacketPlayOutTileEntityData;
 import net.minecraft.server.v1_9_R1.PacketPlayOutTitle;
 import net.minecraft.server.v1_9_R1.PacketPlayOutTransaction;
+import net.minecraft.server.v1_9_R1.PacketPlayOutUnloadChunk;
 import net.minecraft.server.v1_9_R1.PacketPlayOutUpdateAttributes;
 import net.minecraft.server.v1_9_R1.PacketPlayOutUpdateHealth;
 import net.minecraft.server.v1_9_R1.PacketPlayOutUpdateSign;
@@ -166,6 +167,7 @@ public class ClientBoundPacket {
 	public static final int PLAY_TITLE = getId(PacketPlayOutTitle.class);
 	public static final int PLAY_PLAYER_LIST_HEADER_FOOTER = getId(PacketPlayOutPlayerListHeaderFooter.class);
 	public static final int PLAY_SET_PASSENGERS = getId(PacketPlayOutMount.class);
+	public static final int PLAY_CHUNK_UNLOAD = getId(PacketPlayOutUnloadChunk.class);
 
 	@SuppressWarnings("unchecked")
 	private static final int getId(Class<?> packetClass) {

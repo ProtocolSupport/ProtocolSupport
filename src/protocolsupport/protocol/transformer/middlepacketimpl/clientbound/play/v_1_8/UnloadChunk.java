@@ -1,4 +1,4 @@
-package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7;
+package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8;
 
 import java.io.IOException;
 
@@ -18,8 +18,7 @@ public class UnloadChunk extends MiddleUnloadChunk<RecyclableCollection<PacketDa
 		serializer.writeInt(chunkZ);
 		serializer.writeBoolean(true);
 		serializer.writeShort(0);
-		serializer.writeShort(0);
-		serializer.writeInt(0);
+		serializer.writeVarInt(0);
 		return RecyclableSingletonList.create(serializer);
 	}
 

@@ -90,6 +90,7 @@ import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8.SpawnPainting;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8.SpawnPosition;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8.Title;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8.UnloadChunk;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8.UseBed;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8.WorldBorder;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8.WorldEvent;
@@ -263,6 +264,7 @@ public class PacketEncoder implements IPacketEncoder {
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SET_PASSENGERS, SetPassengers.class);
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_TITLE, Title.class);
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_WORLD_BORDER_ID, WorldBorder.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CHUNK_UNLOAD, UnloadChunk.class);
 		} catch (Throwable t) {
 			SneakyThrow.sneaky(t);
 		}
