@@ -53,42 +53,6 @@ public class LegacyUtils {
 		}
 	}
 
-	public static String getSound(String newSound) {
-		switch (newSound) {
-			case "game.player.hurt.fall.big":
-			case "game.neutral.hurt.fall.big":
-			case "game.hostile.hurt.fall.big": {
-				return "damage.fallbig";
-			}
-			case "game.player.hurt.fall.small":
-			case "game.neutral.hurt.fall.small":
-			case "game.hostile.hurt.fall.small": {
-				return "damage.fallsmall";
-			}
-			case "game.player.hurt":
-			case "game.player.die":
-			case "game.neutral.hurt":
-			case "game.neutral.die":
-			case "game.hostile.hurt":
-			case "game.hostile.die": {
-				return "damage.hit";
-			}
-			case "game.player.swim":
-			case "game.neutral.swim":
-			case "game.hostile.swim": {
-				return "liquid.swim";
-			}
-			case "game.player.swim.splash":
-			case "game.neutral.swim.splash":
-			case "game.hostile.swim.splash": {
-				return "liquid.splash";
-			}
-			default: {
-				return newSound;
-			}
-		}
-	}
-
 	public static byte getInventoryId(String inventoryid) {
 		switch (inventoryid) {
 			case "minecraft:chest":
