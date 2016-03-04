@@ -238,6 +238,14 @@ public class PacketDataSerializer extends net.minecraft.server.v1_9_R1.PacketDat
 		return this;
 	}
 
+	public long readVarLong() {
+		return h();
+	}
+
+	public void writeVarLong(long varLong) {
+		b(varLong);
+	}
+
 	public int readVarInt() {
 		return g();
 	}

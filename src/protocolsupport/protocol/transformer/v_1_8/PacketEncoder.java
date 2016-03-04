@@ -91,6 +91,7 @@ import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8.SpawnPosition;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8.Title;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8.UseBed;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8.WorldBorder;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8.WorldEvent;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8.WorldParticle;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.status.v_1_7_1_8.Pong;
@@ -101,7 +102,6 @@ import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
-//TODO: 1.8 packets
 public class PacketEncoder implements IPacketEncoder {
 
 	private static final EnumProtocolDirection direction = EnumProtocolDirection.CLIENTBOUND;
@@ -262,6 +262,7 @@ public class PacketEncoder implements IPacketEncoder {
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_PLAYER_LIST_HEADER_FOOTER, PlayerListHeaderFooter.class);
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SET_PASSENGERS, SetPassengers.class);
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_TITLE, Title.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_WORLD_BORDER_ID, WorldBorder.class);
 		} catch (Throwable t) {
 			SneakyThrow.sneaky(t);
 		}
