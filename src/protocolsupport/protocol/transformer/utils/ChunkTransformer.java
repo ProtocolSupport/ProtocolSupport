@@ -12,17 +12,17 @@ import protocolsupport.protocol.typeremapper.id.RemappingTable;
 
 public class ChunkTransformer {
 
-	protected final int coulmnsCount;
+	protected final int columnsCount;
 	protected final boolean hasSkyLight;
 	protected final ArrayList<ChunkSection> sections = new ArrayList<ChunkSection>();
 	protected byte[] biomeData;
 
 	public ChunkTransformer(byte[] data19, int bitmap, boolean hasSkyLight) {
-		this.coulmnsCount = Integer.bitCount(bitmap);
+		this.columnsCount = Integer.bitCount(bitmap);
 		this.hasSkyLight = hasSkyLight;
 		RecyclablePacketDataSerializer chunkdata = RecyclablePacketDataSerializer.create(ProtocolVersion.getLatest(), data19);
 		try {
-			for (int i = 0; i < this.coulmnsCount; i++) {
+			for (int i = 0; i < this.columnsCount; i++) {
 				sections.add(new ChunkSection(chunkdata, hasSkyLight));
 			}
 			biomeData = new byte[256];
@@ -69,28 +69,30 @@ public class ChunkTransformer {
 		return data.toByteArray();
 	}
 
-	//TODO: speed up this shit
 	public byte[] to18Data() throws IOException {
 		RemappingTable table = IdRemapper.BLOCK.getTable(ProtocolVersion.MINECRAFT_1_8);
-		ByteArrayOutputStream data = new ByteArrayOutputStream();
+		byte[] data = new byte[(8192 + 2048 + (hasSkyLight ? 2048 : 0)) * columnsCount + 256];
+		int blockIndex = 0;
+		int blockLightIndex = 8192 * columnsCount;
+		int skyLightIndex = (8192 + 2048) * columnsCount;
 		for (ChunkSection section : this.sections) {
 			for (int i = 0; i < 4096; i++) {
+				int dataindex = blockIndex + (i << 1);
 				int blockstate = section.palette.getBlockState(section.blockdata.getBlockInfo(i));
 				blockstate = (table.getRemap(blockstate >> 4) << 4) | (blockstate & 0xF);
-				data.write(blockstate);
-				data.write(blockstate >> 8);
+				data[dataindex] = (byte) blockstate;
+				data[dataindex + 1] = (byte) (blockstate >> 8);
+			}
+			blockIndex += 8192;
+			System.arraycopy(section.blocklight, 0, data, blockLightIndex, 2048);
+			blockLightIndex += 2048;
+			if (hasSkyLight) {
+				System.arraycopy(section.skylight, 0, data, skyLightIndex, 2048);
+				skyLightIndex += 2048;
 			}
 		}
-		for (ChunkSection section : this.sections) {
-			data.write(section.blocklight);
-		}
-		if (this.hasSkyLight) {
-			for (ChunkSection section : this.sections) {
-				data.write(section.skylight);
-			}
-		}
-		data.write(biomeData);
-		return data.toByteArray();
+		System.arraycopy(biomeData, 0, data, skyLightIndex, 256);
+		return data;
 	}
 
 	private static class ChunkSection {
