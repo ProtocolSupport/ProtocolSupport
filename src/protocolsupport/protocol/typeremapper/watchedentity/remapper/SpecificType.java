@@ -373,12 +373,12 @@ public enum SpecificType {
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_6),
 		//block, TODO: check real type
 		new Mapping()
-		.addEntries(new MappingEntry(8, 20))
+		.addEntries(new MappingEntry(8, 20, ValueRemapperNumberToInt.INSTANCE))
 		.addProtocols(ProtocolVersion.MINECRAFT_1_8),
 		new Mapping()
-		.addEntries(new MappingEntry(8, 20, new ValueRemapper<DataWatcherObjectInt>() {
+		.addEntries(new MappingEntry(8, 20, new ValueRemapper<DataWatcherObjectVarInt>() {
 			@Override
-			public DataWatcherObject<?> remap(DataWatcherObjectInt object) {
+			public DataWatcherObject<?> remap(DataWatcherObjectVarInt object) {
 				int value = object.getValue();
 				int id = value & 0xFFFF;
 				int data = value >> 12;
