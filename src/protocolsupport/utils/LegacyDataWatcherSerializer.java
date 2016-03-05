@@ -18,8 +18,12 @@ public class LegacyDataWatcherSerializer {
 				while (iterator.hasNext()) {
 					iterator.advance();
 					DataWatcherObject<?> object = iterator.value();
-					int tk = ((object.getTypeId(version) << 5) | (iterator.key() & 0x1F)) & 0xFF;
-					serializer.writeByte(tk);
+					try {
+						int tk = ((object.getTypeId(version) << 5) | (iterator.key() & 0x1F)) & 0xFF;
+						serializer.writeByte(tk);
+					} catch (IllegalStateException e) {
+						throw new IllegalStateException("Unable to serialize datawathcer object at index "+ iterator.key(), e);
+					}
 					object.writeToStream(serializer);
 				}
 			} else {
