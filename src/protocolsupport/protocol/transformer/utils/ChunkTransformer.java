@@ -3,42 +3,37 @@ package protocolsupport.protocol.transformer.utils;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.RecyclablePacketDataSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.RemappingTable;
 
 public class ChunkTransformer {
 
-	protected final int columnsCount;
-	protected final boolean hasSkyLight;
-	protected final ArrayList<ChunkSection> sections = new ArrayList<ChunkSection>();
-	protected byte[] biomeData;
+	protected int columnsCount;
+	protected boolean hasSkyLight;
+	protected final ArrayList<ChunkSection> sections = new ArrayList<ChunkSection>(32);
+	protected final byte[] biomeData = new byte[256];
 
-	public ChunkTransformer(byte[] data19, int bitmap, boolean hasSkyLight) {
+	public void loadData(byte[] data19, int bitmap, boolean hasSkyLight) {
 		this.columnsCount = Integer.bitCount(bitmap);
 		this.hasSkyLight = hasSkyLight;
-		RecyclablePacketDataSerializer chunkdata = RecyclablePacketDataSerializer.create(ProtocolVersion.getLatest(), data19);
-		try {
-			for (int i = 0; i < this.columnsCount; i++) {
-				sections.add(new ChunkSection(chunkdata, hasSkyLight));
-			}
-			biomeData = new byte[256];
-			chunkdata.readBytes(biomeData);
-			//TODO: figure why there is a garbage data that is not needed (after biome data there are only 0)
-		} finally {
-			chunkdata.release();
+		this.sections.clear();
+		PacketDataSerializer chunkdata = new PacketDataSerializer(Unpooled.wrappedBuffer(data19), ProtocolVersion.getLatest());
+		for (int i = 0; i < this.columnsCount; i++) {
+			this.sections.add(new ChunkSection(chunkdata, hasSkyLight));
 		}
+		chunkdata.readBytes(biomeData);
 	}
 
 	public byte[] toPre18Data(ProtocolVersion version) throws IOException {
 		RemappingTable table = IdRemapper.BLOCK.getTable(version);
-		byte[] data = new byte[(4096 + 2048 + 2048 + (hasSkyLight ? 2048 : 0)) * columnsCount + 256];
+		byte[] data = new byte[(hasSkyLight ? 10240 : 8192) * columnsCount + 256];
 		int blockIndex = 0;
 		int blockDataIndex = 4096 * columnsCount;
-		int blockLightIndex = (4096 + 2048) * columnsCount;
-		int skyLightIndex = (4096 + 2048 + 2048) * columnsCount;
+		int blockLightIndex = 6144 * columnsCount;
+		int skyLightIndex = 8192 * columnsCount;
 		for (ChunkSection section : this.sections) {
 			int blockdataacc = 0;
 			for (int i = 0; i < 4096; i++) {
@@ -68,10 +63,10 @@ public class ChunkTransformer {
 
 	public byte[] to18Data() throws IOException {
 		RemappingTable table = IdRemapper.BLOCK.getTable(ProtocolVersion.MINECRAFT_1_8);
-		byte[] data = new byte[(8192 + 2048 + (hasSkyLight ? 2048 : 0)) * columnsCount + 256];
+		byte[] data = new byte[(hasSkyLight ? 11264 : 10240) * columnsCount + 256];
 		int blockIndex = 0;
 		int blockLightIndex = 8192 * columnsCount;
-		int skyLightIndex = (8192 + 2048) * columnsCount;
+		int skyLightIndex = 10240 * columnsCount;
 		for (ChunkSection section : this.sections) {
 			for (int i = 0; i < 4096; i++) {
 				int dataindex = blockIndex + (i << 1);
@@ -93,10 +88,10 @@ public class ChunkTransformer {
 	}
 
 	private static class ChunkSection {
-		protected Palette palette;
-		protected BlockStorage blockdata;
-		protected byte[] blocklight;
-		protected byte[] skylight;
+		protected final Palette palette;
+		protected final BlockStorage blockdata;
+		protected final byte[] blocklight = new byte[2048];
+		protected final byte[] skylight = new byte[2048];
 		public ChunkSection(PacketDataSerializer datastream, boolean hasSkyLight) {
 			byte bitsPerBlock = datastream.readByte();
 			if (bitsPerBlock != 0) {
@@ -113,10 +108,8 @@ public class ChunkTransformer {
 				blockdata[i] = datastream.readLong();
 			}
 			this.blockdata = new BlockStorage(blockdata, bitsPerBlock);
-			this.blocklight = new byte[2048];
 			datastream.readBytes(blocklight);
 			if (hasSkyLight) {
-				this.skylight = new byte[2048];
 				datastream.readBytes(skylight);
 			}
 		}

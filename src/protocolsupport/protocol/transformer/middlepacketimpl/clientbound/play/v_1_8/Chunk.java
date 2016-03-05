@@ -14,6 +14,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class Chunk extends MiddleChunk<RecyclableCollection<PacketData>>  {
 
+	private final ChunkTransformer transformer = new ChunkTransformer();
+
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID, version);
@@ -21,7 +23,8 @@ public class Chunk extends MiddleChunk<RecyclableCollection<PacketData>>  {
 		serializer.writeInt(chunkZ);
 		serializer.writeBoolean(cont);
 		serializer.writeShort(bitmask);
-		serializer.writeArray(new ChunkTransformer(data, bitmask, player.getWorld().getEnvironment() == Environment.NORMAL).to18Data());
+		transformer.loadData(data, bitmask, player.getWorld().getEnvironment() == Environment.NORMAL);
+		serializer.writeArray(transformer.to18Data());
 		return RecyclableSingletonList.create(serializer);
 	}
 
