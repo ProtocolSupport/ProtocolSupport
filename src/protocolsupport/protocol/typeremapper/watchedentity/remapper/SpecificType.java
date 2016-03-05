@@ -170,9 +170,9 @@ public enum SpecificType {
 		.addEntries(new MappingEntry(16, 20, ValueRemapperNumberToByte.INSTANCE))
 		.addProtocols(ProtocolVersion.MINECRAFT_1_8),
 		new Mapping()
-		.addEntries(new MappingEntry(16, 20, new ValueRemapper<DataWatcherObjectByte>() {
+		.addEntries(new MappingEntry(16, 20, new ValueRemapper<DataWatcherObjectVarInt>() {
 			@Override
-			public DataWatcherObject<?> remap(DataWatcherObjectByte object) {
+			public DataWatcherObject<?> remap(DataWatcherObjectVarInt object) {
 				return new DataWatcherObjectByte((byte) (15 - object.getValue()));
 			}
 		}))
