@@ -63,7 +63,7 @@ public class NonBlockingServerConnection extends ServerConnection {
 
 	@SuppressWarnings("deprecation")
 	public static void inject() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		Utils.setAccessible(MinecraftServer.class.getDeclaredField("q")).set(MinecraftServer.getServer(), new NonBlockingServerConnection());
+		Utils.setAccessible(MinecraftServer.class.getDeclaredField("p")).set(MinecraftServer.getServer(), new NonBlockingServerConnection());
 	}
 
 	@SuppressWarnings("deprecation")
