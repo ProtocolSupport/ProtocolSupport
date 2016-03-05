@@ -312,7 +312,7 @@ public enum SpecificType {
 	GUARDIAN(EType.MOB, EntityType.GUARDIAN, SpecificType.INSENTIENT,
 		//info flags(elder, spikes), target id
 		new Mapping()
-		.addEntries(new MappingEntry(11, 16))
+		.addEntries(new MappingEntry(11, 16, ValueRemapperNumberToInt.INSTANCE))
 		.addEntries(new MappingEntry(12, 17, ValueRemapperNumberToInt.INSTANCE))
 		.addProtocols(ProtocolVersion.MINECRAFT_1_8)
 	),
