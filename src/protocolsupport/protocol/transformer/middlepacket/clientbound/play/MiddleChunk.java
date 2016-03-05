@@ -9,7 +9,7 @@ public abstract class MiddleChunk<T> extends ClientBoundMiddlePacket<T> {
 
 	protected int chunkX;
 	protected int chunkZ;
-	protected boolean cont;
+	protected boolean full;
 	protected int bitmask;
 	protected byte[] data;
 
@@ -22,7 +22,7 @@ public abstract class MiddleChunk<T> extends ClientBoundMiddlePacket<T> {
 	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
 		chunkX = serializer.readInt();
 		chunkZ = serializer.readInt();
-		cont = serializer.readBoolean();
+		full = serializer.readBoolean();
 		bitmask = serializer.readVarInt();
 		data = serializer.readArray();
 	}

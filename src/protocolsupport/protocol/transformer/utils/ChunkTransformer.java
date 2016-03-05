@@ -13,18 +13,22 @@ public class ChunkTransformer {
 
 	protected int columnsCount;
 	protected boolean hasSkyLight;
+	protected boolean hasBiomeData;
 	protected final ArrayList<ChunkSection> sections = new ArrayList<ChunkSection>(32);
 	protected final byte[] biomeData = new byte[256];
 
-	public void loadData(byte[] data19, int bitmap, boolean hasSkyLight) {
+	public void loadData(byte[] data19, int bitmap, boolean hasSkyLight, boolean hasBiomeData) {
 		this.columnsCount = Integer.bitCount(bitmap);
 		this.hasSkyLight = hasSkyLight;
+		this.hasBiomeData = hasBiomeData;
 		this.sections.clear();
 		PacketDataSerializer chunkdata = new PacketDataSerializer(Unpooled.wrappedBuffer(data19), ProtocolVersion.getLatest());
 		for (int i = 0; i < this.columnsCount; i++) {
 			this.sections.add(new ChunkSection(chunkdata, hasSkyLight));
 		}
-		chunkdata.readBytes(biomeData);
+		if (hasBiomeData) {
+			chunkdata.readBytes(biomeData);
+		}
 	}
 
 	public byte[] toPre18Data(ProtocolVersion version) throws IOException {
@@ -57,7 +61,9 @@ public class ChunkTransformer {
 				skyLightIndex += 2048;
 			}
 		}
-		System.arraycopy(biomeData, 0, data, skyLightIndex, 256);
+		if (hasBiomeData) {
+			System.arraycopy(biomeData, 0, data, skyLightIndex, 256);
+		}
 		return data;
 	}
 
@@ -83,7 +89,9 @@ public class ChunkTransformer {
 				skyLightIndex += 2048;
 			}
 		}
-		System.arraycopy(biomeData, 0, data, skyLightIndex, 256);
+		if (hasBiomeData) {
+			System.arraycopy(biomeData, 0, data, skyLightIndex, 256);
+		}
 		return data;
 	}
 

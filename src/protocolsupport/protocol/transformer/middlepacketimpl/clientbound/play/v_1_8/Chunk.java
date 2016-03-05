@@ -21,9 +21,9 @@ public class Chunk extends MiddleChunk<RecyclableCollection<PacketData>>  {
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID, version);
 		serializer.writeInt(chunkX);
 		serializer.writeInt(chunkZ);
-		serializer.writeBoolean(cont);
+		serializer.writeBoolean(full);
 		serializer.writeShort(bitmask);
-		transformer.loadData(data, bitmask, player.getWorld().getEnvironment() == Environment.NORMAL);
+		transformer.loadData(data, bitmask, player.getWorld().getEnvironment() == Environment.NORMAL, full);
 		serializer.writeArray(transformer.to18Data());
 		return RecyclableSingletonList.create(serializer);
 	}
