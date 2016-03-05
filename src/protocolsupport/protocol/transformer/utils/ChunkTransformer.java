@@ -63,7 +63,7 @@ public class ChunkTransformer {
 
 	public byte[] to18Data() throws IOException {
 		RemappingTable table = IdRemapper.BLOCK.getTable(ProtocolVersion.MINECRAFT_1_8);
-		byte[] data = new byte[(hasSkyLight ? 11264 : 10240) * columnsCount + 256];
+		byte[] data = new byte[(hasSkyLight ? 12288 : 10240) * columnsCount + 256];
 		int blockIndex = 0;
 		int blockLightIndex = 8192 * columnsCount;
 		int skyLightIndex = 10240 * columnsCount;
