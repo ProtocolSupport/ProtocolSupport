@@ -10,6 +10,7 @@ import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.core.initial.InitialPacketDecoder;
 import protocolsupport.protocol.transformer.handlers.AbstractLoginListener;
+import protocolsupport.protocol.transformer.utils.LegacySound;
 import protocolsupport.server.listeners.PlayerListener;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
@@ -25,6 +26,7 @@ public class ProtocolSupport extends JavaPlugin {
 			ClientBoundPacket.init();
 			InitialPacketDecoder.init();
 			AbstractLoginListener.init();
+			LegacySound.init();
 			NettyInjector.inject();
 			ServerInjector.inject();
 		} catch (Throwable t) {
