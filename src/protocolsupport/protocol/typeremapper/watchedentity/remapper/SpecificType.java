@@ -371,7 +371,7 @@ public enum SpecificType {
 		new Mapping()
 		.addEntries(new MappingEntry(7, 19, ValueRemapperNumberToInt.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_6),
-		//block, TODO: check real type
+		//block
 		new Mapping()
 		.addEntries(new MappingEntry(8, 20, ValueRemapperNumberToInt.INSTANCE))
 		.addProtocols(ProtocolVersion.MINECRAFT_1_8),

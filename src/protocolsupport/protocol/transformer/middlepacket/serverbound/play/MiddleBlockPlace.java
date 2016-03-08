@@ -17,7 +17,6 @@ public abstract class MiddleBlockPlace extends ServerBoundMiddlePacket {
 	protected int cY;
 	protected int cZ;
 
-	//TODO: Recheck mappings in case spigot fixes them
 	@Override
 	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
 		if (face != -1) {
