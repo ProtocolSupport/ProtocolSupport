@@ -14,6 +14,7 @@ import net.minecraft.server.v1_9_R1.Packet;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.core.IPacketDecoder;
+import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.middlepacket.ServerBoundMiddlePacket;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.handshake.v_1_4_1_5_1_6.ClientLogin;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.handshake.v_1_6.Ping;
@@ -44,6 +45,7 @@ import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_6_1_7.SteerVehicle;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_6_1_7_1_8.PlayerAbilities;
 import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry;
+import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry.InitCallBack;
 import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
@@ -84,15 +86,23 @@ public class PacketDecoder implements IPacketDecoder {
 			dataRemapperRegistry.register(EnumProtocol.PLAY, 0xCD, ClientCommand.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, 0xFA, CustomPayload.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, 0xFF, KickDisconnect.class);
+			dataRemapperRegistry.setCallBack(new InitCallBack<ServerBoundMiddlePacket>() {
+				@Override
+				public void onInit(ServerBoundMiddlePacket object) {
+					object.setSharedStorage(sharedstorage);
+				}
+			});
 		} catch (Throwable t) {
 			SneakyThrow.sneaky(t);
 		}
 	}
 
+	protected final SharedStorage sharedstorage;
 	private final ReplayingDecoderBuffer buffer = new ReplayingDecoderBuffer();
 	private final PacketDataSerializer serializer;
-	public PacketDecoder(ProtocolVersion version) {
-		serializer = new PacketDataSerializer(buffer, version);
+	public PacketDecoder(ProtocolVersion version, SharedStorage sharedstorage) {
+		this.serializer = new PacketDataSerializer(buffer, version);
+		this.sharedstorage = sharedstorage;
 	}
 
 	@Override

@@ -14,6 +14,7 @@ import net.minecraft.server.v1_9_R1.Packet;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.core.IPacketDecoder;
+import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.middlepacket.ServerBoundMiddlePacket;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.handshake.v_1_7_1_8.SetProtocol;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.login.v_1_4_1_5_1_6_1_7_1_8.EncryptionResponse;
@@ -47,6 +48,7 @@ import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.status.v_1_7_1_8.Ping;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.status.v_1_7_1_8.ServerInfoRequest;
 import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry;
+import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry.InitCallBack;
 import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.netty.WrappingBuffer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -89,13 +91,23 @@ public class PacketDecoder implements IPacketDecoder {
 			registry.register(EnumProtocol.PLAY, 0x17, CustomPayload.class);
 			registry.register(EnumProtocol.PLAY, 0x18, Spectate.class);
 			registry.register(EnumProtocol.PLAY, 0x18, ResourcePackStatus.class);
+			registry.setCallBack(new InitCallBack<ServerBoundMiddlePacket>() {
+				@Override
+				public void onInit(ServerBoundMiddlePacket object) {
+					object.setSharedStorage(sharedstorage);
+				}
+			});
 		} catch (Throwable t) {
 			SneakyThrow.sneaky(t);
 		}
 	}
 
+	protected final SharedStorage sharedstorage;
 	private final WrappingBuffer buffer = new WrappingBuffer();
 	private final PacketDataSerializer serializer = new PacketDataSerializer(buffer, ProtocolVersion.MINECRAFT_1_8);
+	public PacketDecoder(SharedStorage sharedstorage) {
+		this.sharedstorage = sharedstorage;
+	}
 
 	@Override
 	public void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {

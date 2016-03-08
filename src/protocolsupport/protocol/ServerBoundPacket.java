@@ -34,6 +34,7 @@ import net.minecraft.server.v1_9_R1.PacketPlayInSettings;
 import net.minecraft.server.v1_9_R1.PacketPlayInSpectate;
 import net.minecraft.server.v1_9_R1.PacketPlayInSteerVehicle;
 import net.minecraft.server.v1_9_R1.PacketPlayInTabComplete;
+import net.minecraft.server.v1_9_R1.PacketPlayInTeleportAccept;
 import net.minecraft.server.v1_9_R1.PacketPlayInTransaction;
 import net.minecraft.server.v1_9_R1.PacketPlayInUpdateSign;
 import net.minecraft.server.v1_9_R1.PacketPlayInUseEntity;
@@ -76,7 +77,8 @@ public enum ServerBoundPacket {
 	PLAY_CUSTOM_PAYLOAD(PacketPlayInCustomPayload.class),
 	PLAY_USE_ITEM(PacketPlayInUseItem.class),
 	PLAY_SPECTATE(PacketPlayInSpectate.class),
-	PLAY_RESOURCE_PACK_STATUS(PacketPlayInResourcePackStatus.class);
+	PLAY_RESOURCE_PACK_STATUS(PacketPlayInResourcePackStatus.class),
+	PLAY_TELEPORT_ACCEPT(PacketPlayInTeleportAccept.class);
 
 	public static void init() {
 	}

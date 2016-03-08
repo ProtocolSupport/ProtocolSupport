@@ -6,6 +6,7 @@ import net.minecraft.server.v1_9_R1.NetworkManager;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.core.ChannelHandlers;
 import protocolsupport.protocol.core.IPipeLineBuilder;
+import protocolsupport.protocol.storage.SharedStorage;
 
 public class PipeLineBuilder implements IPipeLineBuilder {
 
@@ -16,8 +17,9 @@ public class PipeLineBuilder implements IPipeLineBuilder {
 		networkmanager.setPacketListener(new HandshakeListener(networkmanager));
 		ChannelHandlers.getSplitter(pipeline).setRealSplitter(new PacketSplitter());
 		ChannelHandlers.getPrepender(pipeline).setRealPrepender(new PacketPrepender());
-		ChannelHandlers.getDecoder(pipeline).setRealDecoder(new PacketDecoder());
-		ChannelHandlers.getEncoder(pipeline).setRealEncoder(new PacketEncoder());
+		SharedStorage sharedstorage = new SharedStorage();
+		ChannelHandlers.getDecoder(pipeline).setRealDecoder(new PacketDecoder(sharedstorage));
+		ChannelHandlers.getEncoder(pipeline).setRealEncoder(new PacketEncoder(sharedstorage));
 	}
 
 }

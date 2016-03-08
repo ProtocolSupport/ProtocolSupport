@@ -19,6 +19,7 @@ import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.core.IPacketEncoder;
 import protocolsupport.protocol.storage.LocalStorage;
+import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.login.v_1_4_1_5_1_6_1_7_1_8.EncryptionRequest;
@@ -99,6 +100,7 @@ import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.status.
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.status.v_1_7_1_8.ServerInfo;
 import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry;
 import protocolsupport.protocol.transformer.utils.registry.PacketIdTransformerRegistry;
+import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry.InitCallBack;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -265,13 +267,24 @@ public class PacketEncoder implements IPacketEncoder {
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_TITLE, Title.class);
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_WORLD_BORDER_ID, WorldBorder.class);
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CHUNK_UNLOAD, UnloadChunk.class);
+			registry.setCallBack(new InitCallBack<ClientBoundMiddlePacket<RecyclableCollection<PacketData>>>() {
+				@Override
+				public void onInit(ClientBoundMiddlePacket<RecyclableCollection<PacketData>> object) {
+					object.setSharedStorage(sharedstorage);
+					object.setLocalStorage(storage);
+				}
+			});
 		} catch (Throwable t) {
 			SneakyThrow.sneaky(t);
 		}
 	}
 
-	private final LocalStorage storage = new LocalStorage();
+	protected final SharedStorage sharedstorage;
+	protected final LocalStorage storage = new LocalStorage();
 	private final PacketDataSerializer serverdata = new PacketDataSerializer(Unpooled.buffer(), ProtocolVersion.getLatest());
+	public PacketEncoder(SharedStorage sharedstorage) {
+		this.sharedstorage = sharedstorage;
+	}
 
 	@Override
 	public void encode(ChannelHandlerContext ctx, Packet<PacketListener> packet, ByteBuf output) throws Exception {
@@ -289,7 +302,6 @@ public class PacketEncoder implements IPacketEncoder {
 				packetTransformer.setPlayer(ChannelUtils.getBukkitPlayer(channel));
 			}
 			packetTransformer.readFromServerData(serverdata);
-			packetTransformer.setLocalStorage(storage);
 			packetTransformer.handle();
 			RecyclableCollection<PacketData> data = packetTransformer.toData(ProtocolVersion.MINECRAFT_1_8);
 			try {

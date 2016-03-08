@@ -27,6 +27,14 @@ public class InventorySetSlot extends MiddleInventorySetSlot<RecyclableCollectio
 				slot--;
 			}
 		}
+		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && player.getOpenInventory().getType() == InventoryType.BREWING) {
+			if (slot == 1) {
+				return RecyclableEmptyList.get();
+			}
+			if (slot > 0) {
+				slot--;
+			}
+		}
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_WINDOW_SET_SLOT_ID, version);
 		serializer.writeByte(windowId);
 		serializer.writeShort(slot);

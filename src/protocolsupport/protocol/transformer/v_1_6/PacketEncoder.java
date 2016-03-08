@@ -19,6 +19,7 @@ import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.core.IPacketEncoder;
 import protocolsupport.protocol.storage.LocalStorage;
+import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.login.v_1_4_1_5_1_6.LoginDisconnect;
@@ -91,6 +92,7 @@ import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.status.v_1_5_1_6.ServerInfo;
 import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry;
 import protocolsupport.protocol.transformer.utils.registry.PacketIdTransformerRegistry;
+import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry.InitCallBack;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -241,18 +243,26 @@ public class PacketEncoder implements IPacketEncoder {
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_KICK_DISCONNECT_ID, KickDisconnect.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SET_PASSENGERS, SetPassengers.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CHUNK_UNLOAD, UnloadChunk.class);
+			dataRemapperRegistry.setCallBack(new InitCallBack<ClientBoundMiddlePacket<RecyclableCollection<PacketData>>>() {
+				@Override
+				public void onInit(ClientBoundMiddlePacket<RecyclableCollection<PacketData>> object) {
+					object.setSharedStorage(sharedstorage);
+					object.setLocalStorage(storage);
+				}
+			});
 		} catch (Throwable t) {
 			SneakyThrow.sneaky(t);
 		}
 	}
 
-	private final ProtocolVersion version;
-	public PacketEncoder(ProtocolVersion version) {
-		this.version = version;
-	}
-
-	private final LocalStorage storage = new LocalStorage();
+	protected final SharedStorage sharedstorage;
+	protected final LocalStorage storage = new LocalStorage();
 	private final PacketDataSerializer serverdata = new PacketDataSerializer(Unpooled.buffer(), ProtocolVersion.getLatest());
+	private final ProtocolVersion version;
+	public PacketEncoder(ProtocolVersion version, SharedStorage sharedstorage) {
+		this.version = version;
+		this.sharedstorage = sharedstorage;
+	}
 
 	@Override
 	public void encode(ChannelHandlerContext ctx, Packet<PacketListener> packet, ByteBuf output) throws Exception {
@@ -270,7 +280,6 @@ public class PacketEncoder implements IPacketEncoder {
 				packetTransformer.setPlayer(ChannelUtils.getBukkitPlayer(channel));
 			}
 			packetTransformer.readFromServerData(serverdata);
-			packetTransformer.setLocalStorage(storage);
 			packetTransformer.handle();
 			RecyclableCollection<PacketData> data = packetTransformer.toData(version);
 			try {
