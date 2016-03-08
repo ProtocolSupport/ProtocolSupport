@@ -1,7 +1,6 @@
 package protocolsupport.commands;
 
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -102,16 +101,20 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
-		if (args[0].isEmpty()) {
-			return Arrays.asList("list", "debug");
-		}
+		ArrayList<String> completions = new ArrayList<String>();
 		if ("list".startsWith(args[0])) {
-			return Collections.singletonList("list");
+			completions.add("list");
 		}
 		if ("debug".startsWith(args[0])) {
-			return Collections.singletonList("debug");
+			completions.add("debug");
 		}
-		return Collections.emptyList();
+		if ("testtitle".startsWith(args[0])) {
+			completions.add("testtitle");
+		}
+		if ("testtab".startsWith(args[0])) {
+			completions.add("testtab");
+		}
+		return completions;
 	}
 
 }
