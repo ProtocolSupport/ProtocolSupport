@@ -12,9 +12,6 @@ public class BlockRemapperControl {
 
 	public BlockRemapperControl(ProtocolVersion version) {
 		switch (version) {
-			case MINECRAFT_1_8: {
-				throw new IllegalArgumentException("Remapper for version "+version+" doesn't exist");
-			}
 			case UNKNOWN: {
 				throw new IllegalArgumentException(version+" is not a valid protocol version");
 			}
@@ -31,7 +28,9 @@ public class BlockRemapperControl {
 	}
 
 	public void setRemap(int from, int to) {
-		table.setRemap(from, to);
+		for (int i = 0; i < 16; i++) {
+			table.setRemap((from << 4) + i, (to << 4) + i);
+		}
 	}
 
 	@SuppressWarnings("deprecation")
@@ -40,7 +39,7 @@ public class BlockRemapperControl {
 	}
 
 	public int getRemap(int id) {
-		return table.getRemap(id);
+		return table.getRemap(id << 4) >> 4;
 	}
 
 }

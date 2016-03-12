@@ -12,9 +12,6 @@ public class ItemRemapperControl {
 
 	public ItemRemapperControl(ProtocolVersion version) {
 		switch (version) {
-			case MINECRAFT_1_8: {
-				throw new IllegalArgumentException("Remapper for version "+version+" doesn't exist");
-			}
 			case UNKNOWN: {
 				throw new IllegalArgumentException(version+" is not a valid protocol version");
 			}

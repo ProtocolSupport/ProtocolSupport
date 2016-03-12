@@ -16,7 +16,8 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle<RecyclableCollect
 		serializer.writeInt(position.getX());
 		serializer.writeByte(position.getY());
 		serializer.writeInt(position.getZ());
-		serializer.writeVarInt(IdRemapper.BLOCK.getTable(version).getRemap(id >> 4));
+		id = IdRemapper.BLOCK.getTable(version).getRemap(id);
+		serializer.writeVarInt(id >> 4);
 		serializer.writeByte(id & 0xF);
 		return RecyclableSingletonList.create(serializer);
 	}

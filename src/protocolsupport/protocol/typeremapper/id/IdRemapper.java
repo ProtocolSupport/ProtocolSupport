@@ -2,10 +2,15 @@ package protocolsupport.protocol.typeremapper.id;
 
 import org.bukkit.Material;
 
+import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.remapper.BlockRemapperControl;
 import protocolsupport.utils.ProtocolVersionsHelper;
 
 public class IdRemapper {
+
+	public static void init() {
+	}
 
 	public static final RemappingRegistry BLOCK = new RemappingRegistry() {
 		{
@@ -121,18 +126,30 @@ public class IdRemapper {
 			registerRemapEntry(149, 93, ProtocolVersionsHelper.BEFORE_1_5);
 		}
 		@SuppressWarnings("deprecation")
-		private void registerRemapEntry(Material from, Material to, ProtocolVersion... versions) {
+		protected void registerRemapEntry(Material from, Material to, ProtocolVersion... versions) {
 			registerRemapEntry(from.getId(), to.getId(), versions);
+		}
+		public void registerRemapEntry(int from, int to, ProtocolVersion... versions) {
+			for (int i = 0; i < 16; i++) {
+				super.registerRemapEntry((from << 4) + i, (to << 4) + i, versions);
+			}
 		}
 		@Override
 		protected RemappingTable createTable() {
-			return new RemappingTable(4096);
+			return new RemappingTable(4096 * 16);
 		}
 	};
 
 	public static final RemappingRegistry ITEM = new RemappingRegistry() {
 		{
-			copy(BLOCK);
+			for (ProtocolVersion version : ProtocolVersion.values()) {
+				if (version.isSupported()) {
+					BlockRemapperControl ctrl = ProtocolSupportAPI.getBlockRemapper(version);
+					for (int i = 0; i < 4096; i++) {
+						registerRemapEntry(i, ctrl.getRemap(i), version);
+					}
+				}
+			}
 			registerRemapEntry(Material.BEETROOT, Material.BROWN_MUSHROOM, ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry(Material.BEETROOT_SOUP, Material.MUSHROOM_SOUP, ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry(Material.BEETROOT_SEEDS, Material.SEEDS, ProtocolVersionsHelper.BEFORE_1_9);

@@ -15,7 +15,7 @@ public class SpawnObject extends MiddleSpawnObject<RecyclableCollection<PacketDa
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
 		if (type == 70) {
-			int id = IdRemapper.BLOCK.getTable(version).getRemap(objectdata & 4095);
+			int id = IdRemapper.BLOCK.getTable(version).getRemap((objectdata & 4095) << 4) >> 4;
 			int data = (objectdata >> 12) & 0xF;
 			objectdata = (data << 12) | id;
 		}

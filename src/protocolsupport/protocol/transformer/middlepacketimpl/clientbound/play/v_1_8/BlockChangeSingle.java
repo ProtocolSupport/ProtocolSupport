@@ -14,7 +14,7 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle<RecyclableCollect
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_BLOCK_CHANGE_SINGLE_ID, version);
 		serializer.writePosition(position);
-		serializer.writeVarInt((IdRemapper.BLOCK.getTable(version).getRemap(id >> 4) << 4) | (id & 0xF));
+		serializer.writeVarInt(IdRemapper.BLOCK.getTable(version).getRemap(id));
 		return RecyclableSingletonList.create(serializer);
 	}
 

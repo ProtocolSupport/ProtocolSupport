@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import io.netty.buffer.Unpooled;
+
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
@@ -42,8 +43,8 @@ public class ChunkTransformer {
 			int blockdataacc = 0;
 			for (int i = 0; i < 4096; i++) {
 				int blockstate = section.palette.getBlockState(section.blockdata.getBlockInfo(i));
-				int blockid = table.getRemap(blockstate >> 4);
-				data[blockIndex + i] = (byte) blockid;
+				blockstate = table.getRemap(blockstate);
+				data[blockIndex + i] = (byte) (blockstate >> 4);
 				byte blockdata = (byte) (blockstate & 0xF);
 				if ((i & 1) == 0) {
 					blockdataacc = blockdata;
@@ -77,7 +78,7 @@ public class ChunkTransformer {
 			for (int i = 0; i < 4096; i++) {
 				int dataindex = blockIndex + (i << 1);
 				int blockstate = section.palette.getBlockState(section.blockdata.getBlockInfo(i));
-				blockstate = (table.getRemap(blockstate >> 4) << 4) | (blockstate & 0xF);
+				blockstate = table.getRemap(blockstate);
 				data[dataindex] = (byte) blockstate;
 				data[dataindex + 1] = (byte) (blockstate >> 8);
 			}

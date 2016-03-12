@@ -11,6 +11,8 @@ import protocolsupport.protocol.ServerBoundPacket;
 import protocolsupport.protocol.core.initial.InitialPacketDecoder;
 import protocolsupport.protocol.transformer.handlers.AbstractLoginListener;
 import protocolsupport.protocol.transformer.utils.LegacySound;
+import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificType;
 import protocolsupport.server.listeners.PlayerListener;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
@@ -27,6 +29,8 @@ public class ProtocolSupport extends JavaPlugin {
 			InitialPacketDecoder.init();
 			AbstractLoginListener.init();
 			LegacySound.init();
+			IdRemapper.init();
+			SpecificType.values();
 			NettyInjector.inject();
 			ServerInjector.inject();
 		} catch (Throwable t) {

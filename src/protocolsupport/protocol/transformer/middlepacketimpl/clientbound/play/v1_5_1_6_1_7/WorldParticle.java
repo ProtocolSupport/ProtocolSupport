@@ -24,7 +24,7 @@ public class WorldParticle extends MiddleWorldParticle<RecyclableCollection<Pack
 			case BLOCK_CRACK:
 			case BLOCK_DUST: {
 				int blockstateId = adddata.get(0);
-				name += IdRemapper.BLOCK.getTable(version).getRemap((blockstateId & 4095)) + "_" + ((blockstateId >> 12) & 0xF);
+				name += "_" + (IdRemapper.BLOCK.getTable(version).getRemap((blockstateId & 4095) << 4) >> 4) + "_" + ((blockstateId >> 12) & 0xF);
 				break;
 			}
 			default: {
