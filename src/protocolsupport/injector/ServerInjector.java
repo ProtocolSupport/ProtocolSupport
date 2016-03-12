@@ -13,15 +13,12 @@ import net.minecraft.server.v1_9_R1.IBlockData;
 import net.minecraft.server.v1_9_R1.Item;
 import net.minecraft.server.v1_9_R1.ItemAnvil;
 import net.minecraft.server.v1_9_R1.ItemBlock;
-import net.minecraft.server.v1_9_R1.ItemCloth;
 import net.minecraft.server.v1_9_R1.ItemSpade;
 import net.minecraft.server.v1_9_R1.MinecraftKey;
 import net.minecraft.server.v1_9_R1.TileEntity;
+
 import protocolsupport.server.block.BlockAnvil;
-import protocolsupport.server.block.BlockCarpet;
 import protocolsupport.server.block.BlockEnchantTable;
-import protocolsupport.server.block.BlockSnow;
-import protocolsupport.server.item.ItemSnow;
 import protocolsupport.server.tileentity.TileEntityEnchantTable;
 import protocolsupport.utils.Utils;
 
@@ -31,8 +28,6 @@ public class ServerInjector {
 		registerTileEntity(TileEntityEnchantTable.class, "EnchantTable");
 		registerBlock(116, "enchanting_table", new BlockEnchantTable());
 		registerBlock(145, "anvil", new ItemAnvil(new BlockAnvil()).b("anvil"));
-		registerBlock(171, "carpet", new ItemCloth(new BlockCarpet()).b("woolCarpet"));
-		registerBlock(78, "snow_layer", new ItemSnow(new BlockSnow()));
 		fixBlocksRefs();
 		fixShovel();
 		Bukkit.resetRecipes();
