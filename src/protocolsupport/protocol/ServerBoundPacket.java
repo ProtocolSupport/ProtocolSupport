@@ -80,9 +80,6 @@ public enum ServerBoundPacket {
 	PLAY_RESOURCE_PACK_STATUS(PacketPlayInResourcePackStatus.class),
 	PLAY_TELEPORT_ACCEPT(PacketPlayInTeleportAccept.class);
 
-	public static void init() {
-	}
-
 	private final int id;
 	private final EnumProtocol protocol;
 	@SuppressWarnings("unchecked")

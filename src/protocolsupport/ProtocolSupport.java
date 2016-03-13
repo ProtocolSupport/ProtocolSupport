@@ -13,6 +13,8 @@ import protocolsupport.protocol.transformer.handlers.AbstractLoginListener;
 import protocolsupport.protocol.transformer.utils.LegacySound;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificType;
+import protocolsupport.protocol.typeskipper.id.IdSkipper;
+import protocolsupport.protocol.typeskipper.string.StringSkipper;
 import protocolsupport.server.listeners.PlayerListener;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
@@ -24,15 +26,17 @@ public class ProtocolSupport extends JavaPlugin {
 		try {
 			Allocator.init();
 			Compressor.init();
-			ServerBoundPacket.init();
-			ClientBoundPacket.init();
+			ServerBoundPacket.class.getName();
+			ClientBoundPacket.class.getName();
 			InitialPacketDecoder.init();
 			AbstractLoginListener.init();
-			LegacySound.init();
-			IdRemapper.init();
-			SpecificType.values();
-			NettyInjector.inject();
+			LegacySound.class.getName();
+			IdRemapper.class.getName();
+			IdSkipper.class.getName();
+			StringSkipper.class.getName();
+			SpecificType.class.getName();
 			ServerInjector.inject();
+			NettyInjector.inject();
 		} catch (Throwable t) {
 			t.printStackTrace();
 			Bukkit.shutdown();

@@ -6,9 +6,6 @@ import net.minecraft.server.v1_9_R1.SoundEffect;
 
 public class LegacySound {
 
-	public static void init() {
-	}
-
 	private static final HashMap<String, String> legacySounds = new HashMap<>();
 
 	//return new sound if legacy not found, so launcher will print a warning with that new sound name

@@ -89,9 +89,6 @@ import protocolsupport.utils.Utils;
 
 public class ClientBoundPacket {
 
-	public static void init() {
-	}
-
 	public static final int LOGIN_DISCONNECT_ID = getId(PacketLoginOutDisconnect.class);
 	public static final int LOGIN_ENCRYPTION_BEGIN_ID = getId(PacketLoginOutEncryptionBegin.class);
 	public static final int LOGIN_SUCCESS_ID = getId(PacketLoginOutSuccess.class);
