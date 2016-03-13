@@ -17,7 +17,7 @@ public class PipeLineBuilder implements IPipeLineBuilder {
 		ChannelHandlers.getSplitter(pipeline).setRealSplitter(new PacketSplitter());
 		ChannelHandlers.getPrepender(pipeline).setRealPrepender(new PacketPrepender());
 		ChannelHandlers.getDecoder(pipeline).setRealDecoder(new PacketDecoder());
-		ChannelHandlers.getEncoder(pipeline).setRealEncoder(new PacketEncoder());
+		ChannelHandlers.getEncoder(pipeline).setRealEncoder(new PacketEncoder(version));
 	}
 
 }

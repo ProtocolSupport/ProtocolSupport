@@ -1,4 +1,4 @@
-package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_8;
+package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_9;
 
 import java.io.IOException;
 
@@ -16,12 +16,20 @@ public class Login extends MiddleLogin<RecyclableCollection<PacketData>> {
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_LOGIN_ID, version);
 		serializer.writeInt(playerEntityId);
 		serializer.writeByte(gamemode);
-		serializer.writeByte(dimension);
+		if (version.isAfter(ProtocolVersion.MINECRAFT_1_9)) {
+			serializer.writeInt(dimension);
+		} else {
+			serializer.writeByte(dimension);
+		}
 		serializer.writeByte(difficulty);
 		serializer.writeByte(maxplayers);
 		serializer.writeString(leveltype);
 		serializer.writeBoolean(reducedDebugInfo);
 		return RecyclableSingletonList.create(serializer);
+	}
+
+	@Override
+	public void handle() {
 	}
 
 }

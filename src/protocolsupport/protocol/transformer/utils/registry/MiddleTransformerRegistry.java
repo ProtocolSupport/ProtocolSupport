@@ -24,7 +24,9 @@ public class MiddleTransformerRegistry<T> {
 			return null;
 		}
 		T object = transformer.getInstance();
-		callback.onInit(object);
+		if (callback != null && object != null) {
+			callback.onInit(object);
+		}
 		return object;
 	}
 

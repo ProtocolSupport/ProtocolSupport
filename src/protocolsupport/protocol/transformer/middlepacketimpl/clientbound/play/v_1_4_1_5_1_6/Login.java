@@ -18,7 +18,7 @@ public class Login extends MiddleLogin<RecyclableCollection<PacketData>> {
 		serializer.writeByte(dimension);
 		serializer.writeByte(difficulty);
 		serializer.writeByte(0);
-		serializer.writeByte(Math.min(maxplayers, 60));
+		serializer.writeByte(maxplayers);
 		return RecyclableSingletonList.create(serializer);
 	}
 
