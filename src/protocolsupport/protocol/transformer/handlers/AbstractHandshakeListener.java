@@ -11,6 +11,8 @@ import com.google.gson.Gson;
 import com.mojang.authlib.properties.Property;
 import com.mojang.util.UUIDTypeAdapter;
 
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
 import net.minecraft.server.v1_9_R1.ChatComponentText;
 import net.minecraft.server.v1_9_R1.EnumProtocol;
 import net.minecraft.server.v1_9_R1.HandshakeListener;
@@ -36,7 +38,7 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 		this.networkManager = networkmanager;
 	}
 
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	@Override
 	public void a(final PacketHandshakingInSetProtocol packethandshakinginsetprotocol) {
 		switch (packethandshakinginsetprotocol.a()) {
@@ -47,8 +49,12 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 					if (ThrottleTracker.isEnabled() && !SpigotConfig.bungee) {
 						if (ThrottleTracker.isThrottled(address)) {
 							final ChatComponentText chatcomponenttext = new ChatComponentText("Connection throttled! Please wait before reconnecting.");
-							networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext));
-							networkManager.close(chatcomponenttext);
+							networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext), new GenericFutureListener<Future<? super Void>>() {
+								@Override
+								public void operationComplete(Future<? super Void> arg0) throws Exception {
+									networkManager.close(chatcomponenttext);
+								}
+							});
 							return;
 						}
 						ThrottleTracker.track(address, System.currentTimeMillis());
@@ -58,8 +64,12 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 				}
 				if (packethandshakinginsetprotocol.b() != ProtocolVersion.getLatest().getId()) {
 					final ChatComponentText chatcomponenttext = new ChatComponentText("Unsupported protocol version "+packethandshakinginsetprotocol.b());
-					this.networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext));
-					this.networkManager.close(chatcomponenttext);
+					this.networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext), new GenericFutureListener<Future<? super Void>>() {
+						@Override
+						public void operationComplete(Future<? super Void> arg0) throws Exception {
+							networkManager.close(chatcomponenttext);
+						}
+					});
 					break;
 				}
 				networkManager.setPacketListener(getLoginListener(networkManager));
@@ -67,8 +77,12 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 					final String[] split = packethandshakinginsetprotocol.hostname.split("\u0000");
 					if ((split.length != 3) && (split.length != 4)) {
 						final ChatComponentText chatcomponenttext = new ChatComponentText("If you wish to use IP forwarding, please enable it in your BungeeCord config as well!");
-						networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext));
-						networkManager.close(chatcomponenttext);
+						networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext), new GenericFutureListener<Future<? super Void>>() {
+							@Override
+							public void operationComplete(Future<? super Void> arg0) throws Exception {
+								networkManager.close(chatcomponenttext);
+							}
+						});
 						return;
 					}
 					packethandshakinginsetprotocol.hostname = split[0];
