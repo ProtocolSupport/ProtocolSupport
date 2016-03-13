@@ -30,7 +30,7 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 
 	private static final Gson gson = new Gson();
 
-	private final NetworkManager networkManager;
+	protected final NetworkManager networkManager;
 
 	@SuppressWarnings("deprecation")
 	public AbstractHandshakeListener(NetworkManager networkmanager) {
