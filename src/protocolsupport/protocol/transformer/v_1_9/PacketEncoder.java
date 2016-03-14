@@ -48,7 +48,7 @@ public class PacketEncoder implements IPacketEncoder {
 		if (packetId == null) {
 			throw new IOException("Can't serialize unregistered packet");
 		}
-		ClientBoundMiddlePacket<RecyclableCollection<PacketData>> packetTransformer = registry.getTransformer(currentProtocol, packetId);
+		/*ClientBoundMiddlePacket<RecyclableCollection<PacketData>> packetTransformer = registry.getTransformer(currentProtocol, packetId);
 		if (packetTransformer != null) {
 			serverdata.clear();
 			packet.b(serverdata);
@@ -76,7 +76,10 @@ public class PacketEncoder implements IPacketEncoder {
 			PacketDataSerializer serializer = new PacketDataSerializer(output, ProtocolVersion.getLatest());
 			ChannelUtils.writeVarInt(serializer, packetId);
 			packet.b(serializer);
-		}
+		}*/
+		PacketDataSerializer serializer = new PacketDataSerializer(output, ProtocolVersion.getLatest());
+		ChannelUtils.writeVarInt(serializer, packetId);
+		packet.b(serializer);
 	}
 
 }
