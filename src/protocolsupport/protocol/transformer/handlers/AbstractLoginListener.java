@@ -67,6 +67,8 @@ public abstract class AbstractLoginListener extends LoginListener {
 
 	protected static final Logger logger = LogManager.getLogger();
 	protected static final Random random = new Random();
+	@SuppressWarnings("deprecation")
+	protected final static MinecraftServer server = MinecraftServer.getServer();
 
 	protected final byte[] randomBytes = new byte[4];
 	protected int loginTicks;
@@ -78,22 +80,22 @@ public abstract class AbstractLoginListener extends LoginListener {
 	protected boolean useOnlineModeUUID;
 	protected UUID forcedUUID;
 
-	@SuppressWarnings("deprecation")
 	public AbstractLoginListener(final NetworkManager networkmanager) {
-		super(MinecraftServer.getServer(), networkmanager);
+		super(server, networkmanager);
 		random.nextBytes(randomBytes);
-		isOnlineMode = MinecraftServer.getServer().getOnlineMode();
+		isOnlineMode = server.getOnlineMode();
 		useOnlineModeUUID = isOnlineMode;
 		forcedUUID = null;
 	}
 
 	@Override
 	public void c() {
-		if (state == LoginState.READY_TO_ACCEPT) {
-			b();
-		}
 		if (loginTicks++ == 600) {
 			disconnect("Took too long to log in");
+			return;
+		}
+		if (state == LoginState.READY_TO_ACCEPT) {
+			b();
 		}
 	}
 
@@ -126,8 +128,8 @@ public abstract class AbstractLoginListener extends LoginListener {
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	@Override
 	public void b() {
-		EntityPlayer entityPlayer = MinecraftServer.getServer().getPlayerList().attemptLogin(this, profile, hostname);
-		if (entityPlayer != null) {
+		EntityPlayer loginplayer = server.getPlayerList().attemptLogin(this, profile, hostname);
+		if (loginplayer != null) {
 			state = LoginState.ACCEPTED;
 			if (hasCompression()) {
 				final int threshold = MinecraftServer.getServer().aF();
@@ -144,7 +146,7 @@ public abstract class AbstractLoginListener extends LoginListener {
 				}
 			}
 			networkManager.sendPacket(new PacketLoginOutSuccess(profile));
-			MinecraftServer.getServer().getPlayerList().a(networkManager, MinecraftServer.getServer().getPlayerList().processLogin(profile, entityPlayer));
+			server.getPlayerList().a(this.networkManager, loginplayer);
 		}
 	}
 
