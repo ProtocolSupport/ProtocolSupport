@@ -25,6 +25,8 @@ import com.mojang.authlib.properties.Property;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
 import net.minecraft.server.v1_9_R1.ChatComponentText;
 import net.minecraft.server.v1_9_R1.EntityPlayer;
 import net.minecraft.server.v1_9_R1.IChatBaseComponent;
@@ -99,13 +101,18 @@ public abstract class AbstractLoginListener extends LoginListener {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void disconnect(final String s) {
 		try {
 			logger.info("Disconnecting " + d() + ": " + s);
-			ChatComponentText chatcomponenttext = new ChatComponentText(s);
-			networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext));
-			networkManager.close(chatcomponenttext);
+			final ChatComponentText chatcomponenttext = new ChatComponentText(s);
+			networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext), new GenericFutureListener<Future<? super Void>>() {
+				@Override
+				public void operationComplete(Future<? super Void> future) throws Exception {
+					networkManager.close(chatcomponenttext);
+				}
+			});
 		} catch (Exception exception) {
 			logger.error("Error whilst disconnecting player", exception);
 		}
