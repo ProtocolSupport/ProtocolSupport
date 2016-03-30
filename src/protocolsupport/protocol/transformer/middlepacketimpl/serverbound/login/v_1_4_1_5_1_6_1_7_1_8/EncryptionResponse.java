@@ -9,8 +9,8 @@ public class EncryptionResponse extends MiddleEncryptionResponse {
 
 	@Override
 	public void readFromClientData(PacketDataSerializer serializer) throws IOException {
-		sharedSecret = serializer.readArray();
-		verifyToken = serializer.readArray();
+		sharedSecret = serializer.readArray(256);
+		verifyToken = serializer.readArray(256);
 	}
 
 }

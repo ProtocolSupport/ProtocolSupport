@@ -271,7 +271,11 @@ public class PacketDataSerializer extends net.minecraft.server.v1_9_R1.PacketDat
 	}
 
 	public byte[] readArray() {
-		return a();
+		return readByteArray(Integer.MAX_VALUE);
+	}
+
+	public byte[] readArray(int limit) {
+		return readByteArray(limit);
 	}
 
 	public void writeArray(byte[] array) {
