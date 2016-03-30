@@ -20,7 +20,7 @@ import net.minecraft.server.v1_9_R1.TileEntity;
 import protocolsupport.server.block.BlockAnvil;
 import protocolsupport.server.block.BlockEnchantTable;
 import protocolsupport.server.tileentity.TileEntityEnchantTable;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ReflectionUtils;
 
 public class ServerInjector {
 
@@ -35,8 +35,8 @@ public class ServerInjector {
 
 	@SuppressWarnings("unchecked")
 	private static void registerTileEntity(Class<? extends TileEntity> entityClass, String name) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		((Map<String, Class<? extends TileEntity>>) Utils.setAccessible(TileEntity.class.getDeclaredField("f")).get(null)).put(name, entityClass);
-		((Map<Class<? extends TileEntity>, String>) Utils.setAccessible(TileEntity.class.getDeclaredField("g")).get(null)).put(entityClass, name);
+		((Map<String, Class<? extends TileEntity>>) ReflectionUtils.setAccessible(TileEntity.class.getDeclaredField("f")).get(null)).put(name, entityClass);
+		((Map<Class<? extends TileEntity>, String>) ReflectionUtils.setAccessible(TileEntity.class.getDeclaredField("g")).get(null)).put(entityClass, name);
 	}
 
 	private static void registerBlock(int id, String name, Block block) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
@@ -54,7 +54,7 @@ public class ServerInjector {
 			Block.REGISTRY_ID.a(blockdata, stateId);
 		}
 		Item.REGISTRY.a(id, stringkey, itemblock);
-		((Map<Block, Item>) Utils.setAccessible(Item.class.getDeclaredField("a")).get(null)).put(itemblock.d(), itemblock);
+		((Map<Block, Item>) ReflectionUtils.setAccessible(Item.class.getDeclaredField("a")).get(null)).put(itemblock.d(), itemblock);
 	}
 
 	private static void fixBlocksRefs() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
@@ -64,7 +64,7 @@ public class ServerInjector {
 				Block block = (Block) field.get(null);
 				Block newblock = Block.getById(Block.getId(block));
 				if (block != newblock) {
-					Utils.setStaticFinalField(field, newblock);
+					ReflectionUtils.setStaticFinalField(field, newblock);
 				}
 			}
 		}
@@ -72,7 +72,7 @@ public class ServerInjector {
 
 	@SuppressWarnings("unchecked")
 	public static void fixShovel() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		Set<Block> blocks = (Set<Block>) Utils.setAccessible(ItemSpade.class.getDeclaredField("e")).get(null);
+		Set<Block> blocks = (Set<Block>) ReflectionUtils.setAccessible(ItemSpade.class.getDeclaredField("e")).get(null);
 		blocks.add(Blocks.SNOW_LAYER);
 	}
 

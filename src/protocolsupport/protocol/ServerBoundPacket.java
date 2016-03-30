@@ -42,7 +42,7 @@ import net.minecraft.server.v1_9_R1.PacketPlayInUseItem;
 import net.minecraft.server.v1_9_R1.PacketPlayInWindowClick;
 import net.minecraft.server.v1_9_R1.PacketStatusInPing;
 import net.minecraft.server.v1_9_R1.PacketStatusInStart;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ReflectionUtils;
 
 public enum ServerBoundPacket {
 
@@ -86,14 +86,14 @@ public enum ServerBoundPacket {
 	ServerBoundPacket(Class<? extends Packet<?>> packetClass) {
 		Map<Class<? extends Packet<?>>, EnumProtocol> protocolMap = null;
 		try {
-			protocolMap = (Map<Class<? extends Packet<?>>, EnumProtocol>) Utils.setAccessible(EnumProtocol.class.getDeclaredField("h")).get(null);
+			protocolMap = (Map<Class<? extends Packet<?>>, EnumProtocol>) ReflectionUtils.setAccessible(EnumProtocol.class.getDeclaredField("h")).get(null);
 		} catch (Throwable t) {
 			SneakyThrow.sneaky(t);
 		}
 		this.protocol = protocolMap.get(packetClass);
 		Map<EnumProtocolDirection, BiMap<Integer, Class<? extends Packet<?>>>> idMap = null;
 		try {
-			idMap = (Map<EnumProtocolDirection, BiMap<Integer, Class<? extends Packet<?>>>>) Utils.setAccessible(EnumProtocol.class.getDeclaredField("j")).get(protocol);
+			idMap = (Map<EnumProtocolDirection, BiMap<Integer, Class<? extends Packet<?>>>>) ReflectionUtils.setAccessible(EnumProtocol.class.getDeclaredField("j")).get(protocol);
 		} catch (Throwable t) {
 			SneakyThrow.sneaky(t);
 		}

@@ -2,7 +2,8 @@ package protocolsupport.api;
 
 public enum ProtocolVersion {
 
-	MINECRAFT_FUTURE(-1, 12),
+	MINECRAFT_FUTURE(-1, 13),
+	MINECRAFT_1_9_2(109, 12, "1.9.2"),
 	MINECRAFT_1_9_1(108, 11, "1.9.1"),
 	MINECRAFT_1_9(107, 10, "1.9"),
 	MINECRAFT_1_8(47, 9, "1.8"),
@@ -81,6 +82,9 @@ public enum ProtocolVersion {
 	@Deprecated
 	public static ProtocolVersion fromId(int id) {
 		switch (id) {
+			case 109: {
+				return MINECRAFT_1_9_2;
+			}
 			case 108: {
 				return MINECRAFT_1_9_1;
 			}
@@ -137,7 +141,7 @@ public enum ProtocolVersion {
 	}
 
 	public static ProtocolVersion getLatest() {
-		return ProtocolVersion.MINECRAFT_1_9;
+		return ProtocolVersion.MINECRAFT_1_9_2;
 	}
 
 	public static ProtocolVersion getOldest() {

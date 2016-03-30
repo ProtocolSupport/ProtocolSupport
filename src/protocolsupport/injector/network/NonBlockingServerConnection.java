@@ -27,7 +27,7 @@ import net.minecraft.server.v1_9_R1.MinecraftServer;
 import net.minecraft.server.v1_9_R1.NetworkManager;
 import net.minecraft.server.v1_9_R1.PacketPlayOutKickDisconnect;
 import net.minecraft.server.v1_9_R1.ServerConnection;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ReflectionUtils;
 
 public class NonBlockingServerConnection extends ServerConnection {
 
@@ -55,15 +55,15 @@ public class NonBlockingServerConnection extends ServerConnection {
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public NonBlockingServerConnection() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		super(MinecraftServer.getServer());
-		e = (Logger) Utils.setAccessible(ServerConnection.class.getDeclaredField("e")).get(null);
-		g = (List<ChannelFuture>) Utils.setAccessible(ServerConnection.class.getDeclaredField("g")).get(this);
+		e = (Logger) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("e")).get(null);
+		g = (List<ChannelFuture>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("g")).get(this);
 		h = new ConcurrentLinkedQueueFakeListImpl<NetworkManager>();
-		Utils.setAccessible(ServerConnection.class.getDeclaredField("h")).set(this, h);
+		ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("h")).set(this, h);
 	}
 
 	@SuppressWarnings("deprecation")
 	public static void inject() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		Utils.setAccessible(MinecraftServer.class.getDeclaredField("p")).set(MinecraftServer.getServer(), new NonBlockingServerConnection());
+		ReflectionUtils.setAccessible(MinecraftServer.class.getDeclaredField("p")).set(MinecraftServer.getServer(), new NonBlockingServerConnection());
 	}
 
 	@SuppressWarnings("deprecation")
