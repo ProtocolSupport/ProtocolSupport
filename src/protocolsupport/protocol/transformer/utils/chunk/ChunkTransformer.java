@@ -1,4 +1,4 @@
-package protocolsupport.protocol.transformer.utils;
+package protocolsupport.protocol.transformer.utils.chunk;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,6 +7,8 @@ import io.netty.buffer.Unpooled;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.transformer.utils.chunk.Palette.GlobalPalette;
+import protocolsupport.protocol.transformer.utils.chunk.blockstorage.BlockStorage;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.RemappingTable;
 
@@ -42,7 +44,7 @@ public class ChunkTransformer {
 		for (ChunkSection section : this.sections) {
 			int blockdataacc = 0;
 			for (int i = 0; i < 4096; i++) {
-				int blockstate = section.palette.getBlockState(section.blockdata.getBlockInfo(i));
+				int blockstate = section.palette.getBlockState(section.blockdata.getPaletteIndex(i));
 				blockstate = table.getRemap(blockstate);
 				data[blockIndex + i] = (byte) (blockstate >> 4);
 				byte blockdata = (byte) (blockstate & 0xF);
@@ -77,7 +79,7 @@ public class ChunkTransformer {
 		for (ChunkSection section : this.sections) {
 			for (int i = 0; i < 4096; i++) {
 				int dataindex = blockIndex + (i << 1);
-				int blockstate = section.palette.getBlockState(section.blockdata.getBlockInfo(i));
+				int blockstate = section.palette.getBlockState(section.blockdata.getPaletteIndex(i));
 				blockstate = table.getRemap(blockstate);
 				data[dataindex] = (byte) blockstate;
 				data[dataindex + 1] = (byte) (blockstate >> 8);
@@ -112,70 +114,14 @@ public class ChunkTransformer {
 			} else {
 				this.palette = GlobalPalette.INSTANCE;
 			}
-			long[] blockdata = new long[datastream.readVarInt()];
-			for (int i = 0; i < blockdata.length; i++) {
-				blockdata[i] = datastream.readLong();
-			}
-			this.blockdata = new BlockStorage(blockdata, bitsPerBlock);
+			this.blockdata = BlockStorage.create(bitsPerBlock);
+			datastream.readVarInt();
+			this.blockdata.readFromStream(datastream);
 			datastream.readBytes(blocklight);
 			if (hasSkyLight) {
 				datastream.readBytes(skylight);
 			}
 		}
-	}
-
-	private static class Palette {
-		protected int[] palette;
-		public Palette(int[] palette) {
-			this.palette = palette;
-		}
-
-		public int getBlockState(int index) {
-			return palette[index];
-		}
-	}
-
-	private static class GlobalPalette extends Palette {
-
-		public static final GlobalPalette INSTANCE = new GlobalPalette();
-
-		private GlobalPalette() {
-			super(new int[0]);
-		}
-
-		@Override
-		public int getBlockState(int index) {
-			return index;
-		}  
-	}
-
-	private static class BlockStorage {
-
-		private long[] blocks;
-		private int bitsPerBlock;
-
-		private int singleValMask;
-
-		public BlockStorage(long[] blocks, int bitsPerBlock) {
-			this.blocks = blocks;
-			this.bitsPerBlock = bitsPerBlock;
-			this.singleValMask = (1 << bitsPerBlock) - 1;
-		}
-
-		public int getBlockInfo(int index) {
-			int bitStartIndex = index * bitsPerBlock;
-			int arrStartIndex = bitStartIndex / Long.SIZE;
-			int bitEndIndex = bitStartIndex + bitsPerBlock - 1;
-			int arrEndIndex = bitEndIndex / Long.SIZE;
-			int localStartBitIndex = bitStartIndex % 64;
-			if (arrStartIndex == arrEndIndex) {
-				return (int) (this.blocks[arrStartIndex] >>> localStartBitIndex & this.singleValMask);
-			} else {
-				int endBitSubIndex = 64 - bitStartIndex;
-				return (int) ((this.blocks[arrStartIndex] >>> localStartBitIndex | this.blocks[arrEndIndex] << endBitSubIndex) & this.singleValMask);
-			}
-		}
-
 	}
 
 }
