@@ -32,14 +32,16 @@ import net.minecraft.server.v1_9_R1.PacketStatusOutServerInfo;
 import net.minecraft.server.v1_9_R1.ServerPing;
 import net.minecraft.server.v1_9_R1.ServerPing.ServerData;
 import net.minecraft.server.v1_9_R1.ServerPing.ServerPingPlayerSample;
+import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
+import protocolsupport.utils.netty.ChannelUtils;
 
 public class StatusListener extends PacketStatusListener {
 
-	private MinecraftServer server;
-	private NetworkManager nmanager;
+	private final MinecraftServer server;
+	private final NetworkManager nmanager;
 
 	public StatusListener(MinecraftServer minecraftserver, NetworkManager networkmanager) {
 		super(minecraftserver, networkmanager);
@@ -48,6 +50,15 @@ public class StatusListener extends PacketStatusListener {
 	}
 
 	private static final UUID profileUUID = UUID.randomUUID();
+
+	public ProtocolVersion getClientVersionToWrite() {
+		ProtocolVersion version = ProtocolSupportAPI.getProtocolVersion(ChannelUtils.getNetworkManagerSocketAddress(nmanager.channel));
+		if (version.isBetween(ProtocolVersion.MINECRAFT_1_9, ProtocolVersion.MINECRAFT_1_9_2)) {
+			return version;
+		} else {
+			return ProtocolVersion.getLatest();
+		}
+	}
 
 	@Override
 	public void a(PacketStatusInStart packetstatusinstart) {
@@ -72,7 +83,7 @@ public class StatusListener extends PacketStatusListener {
 		}
 
 		ServerPingResponseEvent revent = new ServerPingResponseEvent(
-			addr, new ProtocolInfo(ProtocolVersion.getLatest(), server.getServerModName() + " " + server.getVersion()),
+			addr, new ProtocolInfo(getClientVersionToWrite(), server.getServerModName() + " " + server.getVersion()),
 			icon, motd, maxPlayers, profiles
 		);
 		Bukkit.getPluginManager().callEvent(revent);
