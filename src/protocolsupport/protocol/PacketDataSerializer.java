@@ -194,11 +194,11 @@ public class PacketDataSerializer extends net.minecraft.server.v1_9_R1.PacketDat
 	}
 
 	@Override
-	public String c(int limit) {
+	public String e(int limit) {
 		if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4)) {
 			return new String(ChannelUtils.toArray(readBytes(readUnsignedShort() * 2)), StandardCharsets.UTF_16BE);
 		} else {
-			return super.c(limit);
+			return super.e(limit);
 		}
 	}
 
@@ -251,11 +251,11 @@ public class PacketDataSerializer extends net.minecraft.server.v1_9_R1.PacketDat
 	}
 
 	public void writeVarInt(int varInt) {
-		b(varInt);
+		d(varInt);
 	}
 
 	public String readString(int limit) {
-		return c(limit);
+		return e(limit);
 	}
 
 	public void writeString(String string) {
@@ -271,11 +271,11 @@ public class PacketDataSerializer extends net.minecraft.server.v1_9_R1.PacketDat
 	}
 
 	public byte[] readArray() {
-		return readByteArray(Integer.MAX_VALUE);
+		return b(readableBytes());
 	}
 
 	public byte[] readArray(int limit) {
-		return readByteArray(limit);
+		return b(limit);
 	}
 
 	public void writeArray(byte[] array) {
