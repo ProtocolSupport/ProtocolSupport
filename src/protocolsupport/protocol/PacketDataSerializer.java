@@ -22,6 +22,7 @@ import com.mojang.authlib.GameProfile;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
+import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 import net.minecraft.server.v1_9_R1.BlockPosition;
 import net.minecraft.server.v1_9_R1.GameProfileSerializer;
@@ -214,13 +215,17 @@ public class PacketDataSerializer extends net.minecraft.server.v1_9_R1.PacketDat
 	}
 
 	@Override
-	public byte[] a() {
+	public byte[] b(int limit) {
 		if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10)) {
-			byte[] array = new byte[readShort()];
+			int size = readShort();
+			if (size > limit) {
+				throw new DecoderException("ByteArray with size " + size + " is bigger than allowed " + limit);
+			}
+			byte[] array = new byte[size];
 			readBytes(array);
 			return array;
 		} else {
-			return super.a();
+			return super.b(limit);
 		}
 	}
 
