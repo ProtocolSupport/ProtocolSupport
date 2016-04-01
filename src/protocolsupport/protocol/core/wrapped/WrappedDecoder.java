@@ -11,6 +11,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import net.minecraft.server.v1_9_R1.MinecraftServer;
+import net.minecraft.server.v1_9_R1.NetworkManager;
 import net.minecraft.server.v1_9_R1.PacketListener;
 import net.minecraft.server.v1_9_R1.PlayerConnection;
 import protocolsupport.api.events.PlayerDisconnectEvent;
@@ -41,9 +42,10 @@ public class WrappedDecoder extends ByteToMessageDecoder {
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		super.channelInactive(ctx);
 		try {
-			InetSocketAddress addr = (InetSocketAddress) ChannelUtils.getNetworkManagerSocketAddress(ctx.channel());
+			NetworkManager networkManager = ChannelUtils.getNetworkManager(ctx.channel());
+			InetSocketAddress addr = (InetSocketAddress) networkManager.getSocketAddress();
 			String username = null;
-			PacketListener listener = ChannelUtils.getNetworkManager(ctx.channel()).i();
+			PacketListener listener = networkManager.i();
 			if (listener instanceof AbstractLoginListener) {
 				GameProfile profile = ((AbstractLoginListener) listener).getProfile();
 				if (profile != null) {
