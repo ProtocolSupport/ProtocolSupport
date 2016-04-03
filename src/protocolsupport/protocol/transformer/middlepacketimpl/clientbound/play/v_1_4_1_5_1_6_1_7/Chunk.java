@@ -2,13 +2,12 @@ package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v
 
 import java.io.IOException;
 
-import org.bukkit.World.Environment;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.transformer.utils.chunk.ChunkTransformer;
+import protocolsupport.protocol.transformer.utils.chunk.ChunkUtils;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -25,7 +24,7 @@ public class Chunk extends MiddleChunk<RecyclableCollection<PacketData>> {
 		serializer.writeBoolean(full);
 		serializer.writeShort(bitmask);
 		serializer.writeShort(0);
-		transformer.loadData(data, bitmask, player.getWorld().getEnvironment() == Environment.NORMAL, full);
+		transformer.loadData(data, bitmask, ChunkUtils.hasSkyLight(player.getWorld()), full);
 		byte[] compressed = Compressor.compressStatic(transformer.toPre18Data(version));
 		serializer.writeInt(compressed.length);
 		serializer.writeBytes(compressed);
