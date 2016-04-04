@@ -4,10 +4,10 @@ import io.netty.buffer.ByteBuf;
 
 public abstract class BlockStorage {
 
-	public static BlockStorage create(int bitsPerBlock) {
+	public static BlockStorage create(int bitsPerBlock, int dataLength) {
 		switch (bitsPerBlock) {
 			case 4: {
-				return new NibbleBlockStorage();
+				return new NibbleBlockStorage(dataLength);
 			}
 			//TODO: find a way to test it
 			/*case 8: {
@@ -18,12 +18,12 @@ public abstract class BlockStorage {
 				return new ShortBlockStorage();
 			}*/
 			default: {
-				return new BitsBlockStorage(bitsPerBlock);
+				return new BitsBlockStorage(bitsPerBlock, dataLength);
 			}
 		}
 	}
 
-	public final int bitsPerBlock;
+	protected final int bitsPerBlock;
 	protected BlockStorage(int bitsPerBlock) {
 		this.bitsPerBlock = bitsPerBlock;
 	}

@@ -114,8 +114,7 @@ public class ChunkTransformer {
 			} else {
 				this.palette = GlobalPalette.INSTANCE;
 			}
-			this.blockdata = BlockStorage.create(bitsPerBlock);
-			datastream.readVarInt();
+			this.blockdata = BlockStorage.create(bitsPerBlock, datastream.readVarInt());
 			this.blockdata.readFromStream(datastream);
 			datastream.readBytes(blocklight);
 			if (hasSkyLight) {

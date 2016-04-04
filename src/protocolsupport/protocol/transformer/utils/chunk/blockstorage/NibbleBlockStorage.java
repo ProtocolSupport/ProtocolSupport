@@ -4,10 +4,11 @@ import io.netty.buffer.ByteBuf;
 
 public class NibbleBlockStorage extends BlockStorage {
 
-	private final byte[] blocks = new byte[2048];
+	private final byte[] blocks;
 
-	protected NibbleBlockStorage() {
+	protected NibbleBlockStorage(int dataLength) {
 		super(-1);
+		blocks = new byte[dataLength << 3];
 	}
 
 	@Override

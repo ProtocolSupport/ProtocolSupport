@@ -7,9 +7,9 @@ public class BitsBlockStorage extends BlockStorage {
 	private final long[] blocks;
 	private final int singleValMask;
 
-	public BitsBlockStorage(int bitsPerBlock) {
+	public BitsBlockStorage(int bitsPerBlock, int dataLength) {
 		super(bitsPerBlock);
-		this.blocks = new long[bitsPerBlock << 6];
+		this.blocks = new long[dataLength];
 		this.singleValMask = (1 << bitsPerBlock) - 1;
 	}
 
