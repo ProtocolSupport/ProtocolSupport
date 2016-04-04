@@ -14,14 +14,15 @@ public class EntityTeleport extends MiddleEntityTeleport<RecyclableCollection<Pa
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
 		WatchedEntity wentity = storage.getWatchedEntity(entityId);
+		y *= 32;
 		if ((wentity != null) && (wentity.getType() == SpecificType.TNT || wentity.getType() == SpecificType.FALLING_OBJECT)) {
 			y += 16;
 		}
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_ENTITY_TELEPORT_ID, version);
 		serializer.writeInt(entityId);
-		serializer.writeInt(x);
-		serializer.writeInt(y);
-		serializer.writeInt(z);
+		serializer.writeInt((int) (x * 32));
+		serializer.writeInt((int) y);
+		serializer.writeInt((int) (z * 32));
 		serializer.writeByte(yaw);
 		serializer.writeByte(pitch);
 		return RecyclableSingletonList.create(serializer);

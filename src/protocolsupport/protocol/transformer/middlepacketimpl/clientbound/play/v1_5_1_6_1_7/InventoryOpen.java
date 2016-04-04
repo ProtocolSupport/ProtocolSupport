@@ -2,8 +2,8 @@ package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleInventoryOpen;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
@@ -25,7 +25,7 @@ public class InventoryOpen extends MiddleInventoryOpen<RecyclableCollection<Pack
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_WINDOW_OPEN_ID, version);
 		serializer.writeByte(windowId);
 		serializer.writeByte(id);
-		serializer.writeString(LegacyUtils.toText(ChatSerializer.a(titleJson)));
+		serializer.writeString(LegacyUtils.toText(ChatAPI.fromJSON(titleJson)));
 		serializer.writeByte(slots);
 		serializer.writeBoolean(true);
 		if (id == 11) {

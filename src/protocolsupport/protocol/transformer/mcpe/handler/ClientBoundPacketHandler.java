@@ -6,12 +6,12 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.RecyclablePacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage;
+import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.mcpe.UDPNetworkManager;
 import protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound.BlockChangeMulti;
 import protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound.BlockChangeSingle;
 import protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound.BlockSignUpdate;
 import protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound.Chat;
-import protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound.ChunkMulti;
 import protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound.ChunkSingle;
 import protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound.CollectEffect;
 import protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound.EntityAttach;
@@ -49,28 +49,33 @@ import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
-import net.minecraft.server.v1_8_R3.EnumProtocol;
-import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
-import net.minecraft.server.v1_8_R3.Packet;
+import net.minecraft.server.v1_9_R1.EnumProtocol;
+import net.minecraft.server.v1_9_R1.EnumProtocolDirection;
+import net.minecraft.server.v1_9_R1.Packet;
 
 public class ClientBoundPacketHandler {
 
+	private final SharedStorage sharedstorage;
 	private final UDPNetworkManager networkManager;
-	public ClientBoundPacketHandler(UDPNetworkManager networkManager) {
+	public ClientBoundPacketHandler(UDPNetworkManager networkManager, SharedStorage sharedstorage) {
 		this.networkManager = networkManager;
+		this.sharedstorage = sharedstorage;
 	}
-
-	private static final long initialChunkCount = 21;
 
 	private final LocalStorage storage = new LocalStorage();
 
 	private boolean spawned;
+
 	public boolean canSpawnPlayer() {
-		return storage.getPEStorage().getLoadedChunkCount() >= initialChunkCount && !spawned;
+		return !isSpawned() && storage.getPEStorage().hasPlayerChunkMatch();
 	}
 
 	public void setSpawned() {
 		spawned = true;
+	}
+
+	public boolean isSpawned() {
+		return spawned;
 	}
 
 	private static final TIntObjectHashMap<Class<? extends ClientBoundMiddlePacket<RecyclableCollection<? extends ClientboundPEPacket>>>> registry = new TIntObjectHashMap<>();
@@ -79,7 +84,6 @@ public class ClientBoundPacketHandler {
 		registry.put(ClientBoundPacket.PLAY_BLOCK_CHANGE_SINGLE_ID, BlockChangeSingle.class);
 		registry.put(ClientBoundPacket.PLAY_UPDATE_SIGN_ID, BlockSignUpdate.class);
 		registry.put(ClientBoundPacket.PLAY_CHAT_ID, Chat.class);
-		registry.put(ClientBoundPacket.PLAY_CHUNK_MULTI_ID, ChunkMulti.class);
 		registry.put(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID, ChunkSingle.class);
 		registry.put(ClientBoundPacket.PLAY_COLLECT_EFFECT_ID, CollectEffect.class);
 		registry.put(ClientBoundPacket.PLAY_ENTITY_ATTACH_ID, EntityAttach.class);
@@ -129,6 +133,7 @@ public class ClientBoundPacketHandler {
 				}
 				packetTransformer.readFromServerData(serverdata);
 				packetTransformer.setLocalStorage(storage);
+				packetTransformer.setSharedStorage(sharedstorage);
 				packetTransformer.handle();
 				return packetTransformer.toData(ProtocolVersion.MINECRAFT_PE);
 			} else {

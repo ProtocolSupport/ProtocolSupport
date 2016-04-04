@@ -48,7 +48,7 @@ public class SpawnObject extends MiddleSpawnObject<RecyclableCollection<? extend
 	@Override
 	public RecyclableCollection<? extends ClientboundPEPacket> toData(ProtocolVersion version) throws IOException {
 		if (type == 2) {
-			storage.getPEStorage().addItemInfo(entityId, x, y, z, motX, motY, motZ);
+			storage.getPEStorage().addItemInfo(entityId, (float) x, (float) y, (float) z, motX, motY, motZ);
 			return RecyclableEmptyList.get();
 		}
 		int remappedId = objectRemapper.getRemap(type);
@@ -57,7 +57,7 @@ public class SpawnObject extends MiddleSpawnObject<RecyclableCollection<? extend
 		} else {
 			return RecyclableSingletonList.create(new AddEntityPacket(
 				entityId, remappedId,
-				x / 32.0F, y / 32.0F, z / 32.0F,
+				(float) x, (float) y, (float) z,
 				yaw / 256.0F * 360.0F, pitch / 256.0F * 360.0F,
 				motX / 8000.0F, motY / 8000F, motZ / 8000.0F,
 				WatchedDataRemapper.transform(null, null, null)

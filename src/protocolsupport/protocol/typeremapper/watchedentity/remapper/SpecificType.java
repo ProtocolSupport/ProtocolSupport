@@ -9,182 +9,356 @@ import java.util.Map.Entry;
 import org.bukkit.entity.EntityType;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.watchedentity.remapper.RemappingEntry.RemappingEntryCopyOriginal;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.MappingEntry.MappingEntryOriginal;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapper;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperBooleanToByte;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperStringClamp;
-import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperToByte;
-import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperToInt;
-import protocolsupport.utils.DataWatcherObject;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperNumberToByte;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperNumberToInt;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperNumberToShort;
 import protocolsupport.utils.ProtocolVersionsHelper;
+import protocolsupport.utils.datawatcher.DataWatcherObject;
+import protocolsupport.utils.datawatcher.objects.DataWatcherObjectBlockState;
+import protocolsupport.utils.datawatcher.objects.DataWatcherObjectBoolean;
+import protocolsupport.utils.datawatcher.objects.DataWatcherObjectByte;
+import protocolsupport.utils.datawatcher.objects.DataWatcherObjectInt;
+import protocolsupport.utils.datawatcher.objects.DataWatcherObjectShort;
+import protocolsupport.utils.datawatcher.objects.DataWatcherObjectVarInt;
 
 public enum SpecificType {
 
 	NONE(EType.NONE, -1),
 	ENTITY(EType.NONE, -1,
-		//flags, air
-		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(0, 1)).addProtocols(ProtocolVersionsHelper.ALL).addProtocols(ProtocolVersion.MINECRAFT_PE)
+		//flags
+		new Mapping()
+		.addEntries(new MappingEntryOriginal(0))
+		.addProtocols(ProtocolVersionsHelper.ALL)
+		.addProtocols(ProtocolVersion.MINECRAFT_PE),
+		//air
+		new Mapping()
+		.addEntries(new MappingEntry(1, ValueRemapperNumberToShort.INSTANCE))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		.addProtocols(ProtocolVersion.MINECRAFT_PE)
 	),
 	LIVING(EType.NONE, -1, SpecificType.ENTITY,
-		//nametag, nametagvisible
-		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(2, 3)).addProtocols(ProtocolVersion.MINECRAFT_1_8).addProtocols(ProtocolVersion.MINECRAFT_PE),
-		new RemappingEntriesForProtocols(new RemappingEntry(2, 10, new ValueRemapperStringClamp(64)), new RemappingEntry(3, 11))
+		//nametag
+		new Mapping()
+		.addEntries(new MappingEntryOriginal(2))
+		.addProtocols(ProtocolVersion.MINECRAFT_1_8)
+		.addProtocols(ProtocolVersion.MINECRAFT_PE),
+		new Mapping()
+		.addEntries(new MappingEntry(2, 10, new ValueRemapperStringClamp(64)))
 		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_6_1)),
-		new RemappingEntriesForProtocols(new RemappingEntry(2, 5, new ValueRemapperStringClamp(64)), new RemappingEntry(3, 6))
+		new Mapping()
+		.addEntries(new MappingEntry(2, 5, new ValueRemapperStringClamp(64)))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_6),
+		//nametag visible
+		new Mapping()
+		.addEntries(new MappingEntry(3, 3, ValueRemapperBooleanToByte.INSTANCE))
+		.addProtocols(ProtocolVersion.MINECRAFT_1_8)
+		.addProtocols(ProtocolVersion.MINECRAFT_PE),
+		new Mapping()
+		.addEntries(new MappingEntry(3, 11, ValueRemapperBooleanToByte.INSTANCE))
+		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_6_1)),
+		new Mapping()
+		.addEntries(new MappingEntry(3, 6, ValueRemapperBooleanToByte.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_6),
 		//health
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(6))
+		new Mapping()
+		.addEntries(new MappingEntryOriginal(6))
 		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1)),
 		//pcolor, pambient, arrowsn
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(7), new RemappingEntryCopyOriginal(8), new RemappingEntryCopyOriginal(9))
+		new Mapping()
+		.addEntries(new MappingEntry(7, 7, ValueRemapperNumberToInt.INSTANCE))
+		.addEntries(new MappingEntry(8, ValueRemapperBooleanToByte.INSTANCE))
+		.addEntries(new MappingEntry(9, 9, ValueRemapperNumberToByte.INSTANCE))
 		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_6_1)),
-		new RemappingEntriesForProtocols(new RemappingEntry(7, 8), new RemappingEntry(8, 9), new RemappingEntry(9, 10))
+		new Mapping()
+		.addEntries(new MappingEntry(7, 8, ValueRemapperNumberToInt.INSTANCE))
+		.addEntries(new MappingEntry(8, 9, ValueRemapperBooleanToByte.INSTANCE))
+		.addEntries(new MappingEntry(9, 10, ValueRemapperNumberToByte.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_6),
-		//pcolor, pambient,
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(7), new RemappingEntryCopyOriginal(8)).addProtocols(ProtocolVersion.MINECRAFT_PE),
+		//pcolor, pambient
+		new Mapping()
+		.addEntries(new MappingEntry(7, 7, ValueRemapperNumberToInt.INSTANCE))
+		.addEntries(new MappingEntry(8, ValueRemapperBooleanToByte.INSTANCE))
+		.addProtocols(ProtocolVersion.MINECRAFT_PE)
+	),
+	INSENTIENT(EType.NONE, -1, SpecificType.LIVING,
 		//noai
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(15)).addProtocols(ProtocolVersion.MINECRAFT_1_8).addProtocols(ProtocolVersion.MINECRAFT_PE)
+		new Mapping()
+		.addEntries(new MappingEntry(10, 15))
+		.addProtocols(ProtocolVersion.MINECRAFT_1_8)
+		.addProtocols(ProtocolVersion.MINECRAFT_PE)		
 	),
 	PLAYER(EType.NONE, -1, SpecificType.LIVING,
 		//abs hearts, score
-		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(17, 18)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9),
+		new Mapping()
+		.addEntries(new MappingEntry(10, 17))
+		.addEntries(new MappingEntry(11, 18, ValueRemapperNumberToInt.INSTANCE))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9),
 		//skin flags(cape enabled for some protocols)
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(10))
+		new Mapping()
+		.addEntries(new MappingEntry(12, 10))
 		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1))
 	),
-	AGEABLE(EType.NONE, -1, SpecificType.LIVING,
+	AGEABLE(EType.NONE, -1, SpecificType.INSENTIENT,
 		//age
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(12)).addProtocols(ProtocolVersion.MINECRAFT_1_8),
-		new RemappingEntriesForProtocols(new RemappingEntry(12, 12, new ValueRemapperToInt()))
-		.addProtocols(ProtocolVersionsHelper.BEFORE_1_8)
+		new Mapping()
+		.addEntries(new MappingEntry(11, 12, new ValueRemapper<DataWatcherObjectBoolean>() {
+			@Override
+			public DataWatcherObject<?> remap(DataWatcherObjectBoolean object) {
+				return new DataWatcherObjectByte((byte) (object.getValue() ? -1 : 0));
+			}
+		}))
+		.addProtocols(ProtocolVersion.MINECRAFT_1_8),
+		new Mapping()
+		.addEntries(new MappingEntry(11, 12, new ValueRemapper<DataWatcherObjectBoolean>() {
+			@Override
+			public DataWatcherObject<?> remap(DataWatcherObjectBoolean object) {
+				return new DataWatcherObjectInt((object.getValue() ? -1 : 0));
+			}
+		}))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_8),
+		//age - special hack for hologram plugins that want to set int age
+		//datawatcher index 30 will be remapped to age datawatcher index
+		new Mapping()
+		.addEntries(new MappingEntry(30, 12, ValueRemapperNumberToInt.INSTANCE))
+		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_6_1))
 	),
 	TAMEABLE(EType.NONE, -1, SpecificType.AGEABLE,
-		//tame flags, owner
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(16), new RemappingEntryCopyOriginal(17)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		//tame flags
+		new Mapping()
+		.addEntries(new MappingEntry(12, 16))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	ARMOR_STAND(EType.NONE, -1, SpecificType.LIVING,
 		//parts position
-		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(10, 11, 12, 13, 14, 15, 16)).addProtocols(ProtocolVersion.MINECRAFT_1_8)
+		new Mapping()
+		.addEntries(MappingEntryOriginal.of(10, 11, 12, 13, 14, 15, 16))
+		.addProtocols(ProtocolVersion.MINECRAFT_1_8)
 	),
 	COW(EType.MOB, EntityType.COW, SpecificType.AGEABLE),
 	MUSHROOM_COW(EType.MOB, EntityType.MUSHROOM_COW, SpecificType.COW),
 	CHICKEN(EType.MOB, EntityType.CHICKEN, SpecificType.AGEABLE),
-	SQUID(EType.MOB, EntityType.SQUID, SpecificType.LIVING),
+	SQUID(EType.MOB, EntityType.SQUID, SpecificType.INSENTIENT),
 	HORSE(EType.MOB, EntityType.HORSE, SpecificType.AGEABLE,
-		//info flags, type, color/variant, owner, armor
-		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(16, 19, 20, 21, 22)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		//info flags, type, color/variant, armor
+		new Mapping()
+		.addEntries(new MappingEntry(12, 16, ValueRemapperNumberToInt.INSTANCE))
+		.addEntries(new MappingEntry(13, 19, ValueRemapperNumberToByte.INSTANCE))
+		.addEntries(new MappingEntry(14, 20, ValueRemapperNumberToInt.INSTANCE))
+		.addEntries(new MappingEntry(16, 22, ValueRemapperNumberToInt.INSTANCE))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	BAT(EType.MOB, EntityType.BAT, SpecificType.LIVING,
+	BAT(EType.MOB, EntityType.BAT, SpecificType.INSENTIENT,
 		//hanging
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(16)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9).addProtocols(ProtocolVersion.MINECRAFT_PE)
+		new Mapping()
+		.addEntries(new MappingEntry(11, 16))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		.addProtocols(ProtocolVersion.MINECRAFT_PE)
 	),
 	OCELOT(EType.MOB, EntityType.OCELOT, SpecificType.TAMEABLE,
 		//type
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(18)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9).addProtocols(ProtocolVersion.MINECRAFT_PE)
+		new Mapping()
+		.addEntries(new MappingEntry(14, 18, ValueRemapperNumberToByte.INSTANCE))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		.addProtocols(ProtocolVersion.MINECRAFT_PE)
 	),
 	WOLF(EType.MOB, EntityType.WOLF, SpecificType.TAMEABLE,
-		//begging
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(19)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9),
-		//collar color
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(20)).addProtocols(ProtocolVersion.MINECRAFT_1_8),
-		new RemappingEntriesForProtocols(new RemappingEntry(20, 20, new ValueRemapper() {
-			@Override
-			public DataWatcherObject remap(DataWatcherObject object) {
-				object.value = (byte) (15 - (byte) object.value);
-				return object;
-			}
-		})).addProtocols(ProtocolVersionsHelper.BEFORE_1_8),
 		//health
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(18))
+		new Mapping()
+		.addEntries(new MappingEntry(14, 18))
 		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1)),
-		new RemappingEntriesForProtocols(new RemappingEntry(18, 18, new ValueRemapperToInt()))
-		.addProtocols(ProtocolVersionsHelper.BEFORE_1_6)
+		new Mapping()
+		.addEntries(new MappingEntry(14, 18, ValueRemapperNumberToInt.INSTANCE))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_6),
+		//begging
+		new Mapping()
+		.addEntries(new MappingEntry(15, 19, ValueRemapperBooleanToByte.INSTANCE))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9),
+		//collar color
+		new Mapping()
+		.addEntries(new MappingEntry(16, 20, ValueRemapperNumberToByte.INSTANCE))
+		.addProtocols(ProtocolVersion.MINECRAFT_1_8),
+		new Mapping()
+		.addEntries(new MappingEntry(16, 20, new ValueRemapper<DataWatcherObjectVarInt>() {
+			@Override
+			public DataWatcherObject<?> remap(DataWatcherObjectVarInt object) {
+				return new DataWatcherObjectByte((byte) (15 - object.getValue()));
+			}
+		}))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_8)
 	),
 	PIG(EType.MOB, EntityType.PIG, SpecificType.AGEABLE,
 		//has saddle
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(16)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9).addProtocols(ProtocolVersion.MINECRAFT_PE)
+		new Mapping()
+		.addEntries(new MappingEntry(12, 16, ValueRemapperBooleanToByte.INSTANCE))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		.addProtocols(ProtocolVersion.MINECRAFT_PE)
 	),
 	RABBIT(EType.MOB, EntityType.RABBIT, SpecificType.AGEABLE,
 		//type
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(18)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9).addProtocols(ProtocolVersion.MINECRAFT_PE)
+		new Mapping()
+		.addEntries(new MappingEntry(12, 18, ValueRemapperNumberToByte.INSTANCE))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		.addProtocols(ProtocolVersion.MINECRAFT_PE)
 	),
 	SHEEP(EType.MOB, EntityType.SHEEP, SpecificType.AGEABLE,
 		//info flags (color + sheared)
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(16)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9).addProtocols(ProtocolVersion.MINECRAFT_PE)
+		new Mapping()
+		.addEntries(new MappingEntry(12, 16))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		.addProtocols(ProtocolVersion.MINECRAFT_PE)
 	),
 	VILLAGER(EType.MOB, EntityType.VILLAGER, SpecificType.AGEABLE,
 		//profession
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(16)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9).addProtocols(ProtocolVersion.MINECRAFT_PE)
+		new Mapping()
+		.addEntries(new MappingEntry(12, 16, ValueRemapperNumberToInt.INSTANCE))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		.addProtocols(ProtocolVersion.MINECRAFT_PE)
 	),
-	ENDERMAN(EType.MOB, EntityType.ENDERMAN, SpecificType.LIVING,
-		//carried data id, screaming
-		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(17, 18)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9).addProtocols(ProtocolVersion.MINECRAFT_PE),
-		//carried block id
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(16)).addProtocols(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_PE),
-		new RemappingEntriesForProtocols(new RemappingEntry(16, 16, new ValueRemapperToByte()))
-		.addProtocols(ProtocolVersionsHelper.BEFORE_1_8)
+	ENDERMAN(EType.MOB, EntityType.ENDERMAN, SpecificType.INSENTIENT,
+		//carried block
+		new Mapping()
+		.addEntries(new MappingEntry(11, 16, new ValueRemapper<DataWatcherObjectBlockState>() {
+			@Override
+			public DataWatcherObject<?> remap(DataWatcherObjectBlockState object) {
+				return new DataWatcherObjectShort((short) (object.getValue() >> 4));
+			}
+		}))
+		.addProtocols(ProtocolVersion.MINECRAFT_1_8)
+		.addProtocols(ProtocolVersion.MINECRAFT_PE),
+		new Mapping()
+		.addEntries(new MappingEntry(11, 16, new ValueRemapper<DataWatcherObjectBlockState>() {
+			@Override
+			public DataWatcherObject<?> remap(DataWatcherObjectBlockState object) {
+				return new DataWatcherObjectByte((byte) (object.getValue() >> 4));
+			}
+		}))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_8),
+		new Mapping()
+		.addEntries(new MappingEntry(11, 17, new ValueRemapper<DataWatcherObjectBlockState>() {
+			@Override
+			public DataWatcherObject<?> remap(DataWatcherObjectBlockState object) {
+				return new DataWatcherObjectByte((byte) (object.getValue() & 0xF));
+			}
+		}))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9),
+		//screaming
+		new Mapping()
+		.addEntries(new MappingEntry(12, 18, ValueRemapperBooleanToByte.INSTANCE))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	GIANT(EType.MOB, EntityType.GIANT, SpecificType.LIVING),
-	SILVERFISH(EType.MOB, EntityType.SILVERFISH, SpecificType.LIVING),
-	ENDERMITE(EType.MOB, EntityType.ENDERMITE, SpecificType.SILVERFISH),
-	ENDER_DRAGON(EType.MOB, EntityType.ENDER_DRAGON, SpecificType.LIVING),
-	SNOWMAN(EType.MOB, EntityType.SNOWMAN, SpecificType.LIVING),
-	ZOMBIE(EType.MOB, EntityType.ZOMBIE, SpecificType.LIVING,
+	GIANT(EType.MOB, EntityType.GIANT, SpecificType.INSENTIENT),
+	SILVERFISH(EType.MOB, EntityType.SILVERFISH, SpecificType.INSENTIENT),
+	ENDERMITE(EType.MOB, EntityType.ENDERMITE, SpecificType.INSENTIENT),
+	ENDER_DRAGON(EType.MOB, EntityType.ENDER_DRAGON, SpecificType.INSENTIENT),
+	SNOWMAN(EType.MOB, EntityType.SNOWMAN, SpecificType.INSENTIENT),
+	ZOMBIE(EType.MOB, EntityType.ZOMBIE, SpecificType.INSENTIENT,
 		//is baby, is villager, is converting
-		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(12, 13, 14)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9).addProtocols(ProtocolVersion.MINECRAFT_PE)
+		new Mapping()
+		.addEntries(new MappingEntry(11, 12, ValueRemapperBooleanToByte.INSTANCE))
+		.addEntries(new MappingEntry(12, 13, ValueRemapperNumberToByte.INSTANCE))
+		.addEntries(new MappingEntry(13, 14, ValueRemapperBooleanToByte.INSTANCE))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	ZOMBIE_PIGMAN(EType.MOB, EntityType.PIG_ZOMBIE, SpecificType.ZOMBIE),
-	BLAZE(EType.MOB, EntityType.BLAZE, SpecificType.LIVING,
+	BLAZE(EType.MOB, EntityType.BLAZE, SpecificType.INSENTIENT,
 		//on fire
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(16)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9).addProtocols(ProtocolVersion.MINECRAFT_PE)
+		new Mapping()
+		.addEntries(new MappingEntry(11, 16))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		.addProtocols(ProtocolVersion.MINECRAFT_PE)
 	),
 	SPIDER(EType.MOB, EntityType.SPIDER, SpecificType.LIVING,
 		//is climbing
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(16)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9).addProtocols(ProtocolVersion.MINECRAFT_PE)
+		new Mapping()
+		.addEntries(new MappingEntry(11, 16))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		.addProtocols(ProtocolVersion.MINECRAFT_PE)
 	),
 	CAVE_SPIDER(EType.MOB, EntityType.CAVE_SPIDER, SpecificType.SPIDER),
-	CREEPER(EType.MOB, EntityType.CREEPER, SpecificType.LIVING,
+	CREEPER(EType.MOB, EntityType.CREEPER, SpecificType.INSENTIENT,
 		//state, is powered, ignited
-		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(16, 17, 18)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9),
-		//is powered, ignited
-		new RemappingEntriesForProtocols(new RemappingEntry(17, 19), new RemappingEntry(18, 20)).addProtocols(ProtocolVersion.MINECRAFT_PE)
+		new Mapping()
+		.addEntries(new MappingEntry(11, 16, ValueRemapperNumberToByte.INSTANCE))
+		.addEntries(new MappingEntry(12, 17, ValueRemapperBooleanToByte.INSTANCE))
+		.addEntries(new MappingEntry(13, 18, ValueRemapperBooleanToByte.INSTANCE))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9),
+		//is powered ignited
+		new Mapping()
+		.addEntries(new MappingEntry(12, 19, ValueRemapperBooleanToByte.INSTANCE))
+		.addEntries(new MappingEntry(13, 20, ValueRemapperBooleanToByte.INSTANCE))
+		.addProtocols(ProtocolVersion.MINECRAFT_PE)
 	),
-	GHAST(EType.MOB, EntityType.GHAST, SpecificType.LIVING,
+	GHAST(EType.MOB, EntityType.GHAST, SpecificType.INSENTIENT,
 		//is attacking
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(16)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9).addProtocols(ProtocolVersion.MINECRAFT_PE)
+		new Mapping()
+		.addEntries(new MappingEntry(11, 16, ValueRemapperBooleanToByte.INSTANCE))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		.addProtocols(ProtocolVersion.MINECRAFT_PE)
 	),
-	SLIME(EType.MOB, EntityType.SLIME, SpecificType.LIVING,
+	SLIME(EType.MOB, EntityType.SLIME, SpecificType.INSENTIENT,
 		//size
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(16)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9).addProtocols(ProtocolVersion.MINECRAFT_PE)
+		new Mapping()
+		.addEntries(new MappingEntry(11, 16, ValueRemapperNumberToByte.INSTANCE))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		.addProtocols(ProtocolVersion.MINECRAFT_PE)
 	),
 	MAGMA_CUBE(EType.MOB, EntityType.MAGMA_CUBE, SpecificType.SLIME),
-	SKELETON(EType.MOB, EntityType.SKELETON, SpecificType.LIVING,
+	SKELETON(EType.MOB, EntityType.SKELETON, SpecificType.INSENTIENT,
 		//type
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(13)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9).addProtocols(ProtocolVersion.MINECRAFT_PE)
+		new Mapping()
+		.addEntries(new MappingEntry(11, 13, ValueRemapperNumberToByte.INSTANCE))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		.addProtocols(ProtocolVersion.MINECRAFT_PE)
 	),
-	WITCH(EType.MOB, EntityType.WITCH, SpecificType.LIVING,
+	WITCH(EType.MOB, EntityType.WITCH, SpecificType.INSENTIENT,
 		//agressive
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(21)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		new Mapping()
+		.addEntries(new MappingEntry(11, 21, ValueRemapperBooleanToByte.INSTANCE))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	IRON_GOLEM(EType.MOB, EntityType.IRON_GOLEM, SpecificType.LIVING,
+	IRON_GOLEM(EType.MOB, EntityType.IRON_GOLEM, SpecificType.INSENTIENT,
 		//player created
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(16)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9).addProtocols(ProtocolVersion.MINECRAFT_PE)
+		new Mapping()
+		.addEntries(new MappingEntry(11, 16))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		.addProtocols(ProtocolVersion.MINECRAFT_PE)
 	),
-	WITHER(EType.MOB, EntityType.WITHER, SpecificType.LIVING,
+	SHULKER(EType.MOB, 69, SpecificType.INSENTIENT),
+	WITHER(EType.MOB, EntityType.WITHER, SpecificType.INSENTIENT,
 		//target 1-3, invulnerable time
-		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(17, 18, 19, 20)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		new Mapping()
+		.addEntries(new MappingEntry(11, 17, ValueRemapperNumberToInt.INSTANCE))
+		.addEntries(new MappingEntry(12, 18, ValueRemapperNumberToInt.INSTANCE))
+		.addEntries(new MappingEntry(13, 19, ValueRemapperNumberToInt.INSTANCE))
+		.addEntries(new MappingEntry(14, 20, ValueRemapperNumberToInt.INSTANCE))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	GUARDIAN(EType.MOB, EntityType.GUARDIAN, SpecificType.LIVING,
+	GUARDIAN(EType.MOB, EntityType.GUARDIAN, SpecificType.INSENTIENT,
 		//info flags(elder, spikes), target id
-		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(16, 17)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		new Mapping()
+		.addEntries(new MappingEntry(11, 16, ValueRemapperNumberToInt.INSTANCE))
+		.addEntries(new MappingEntry(12, 17, ValueRemapperNumberToInt.INSTANCE))
+		.addProtocols(ProtocolVersion.MINECRAFT_1_8)
 	),
 	ARMOR_STAND_MOB(EType.MOB, EntityType.ARMOR_STAND, SpecificType.ARMOR_STAND),
 	BOAT(EType.OBJECT, 1,
 		//time since hit, forward direction
-		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(17, 18)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9).addProtocols(ProtocolVersion.MINECRAFT_PE),
+		new Mapping()
+		.addEntries(new MappingEntry(5, 17, ValueRemapperNumberToInt.INSTANCE))
+		.addEntries(new MappingEntry(6, 18, ValueRemapperNumberToInt.INSTANCE))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		.addProtocols(ProtocolVersion.MINECRAFT_PE),
 		//damage taken
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(19))
-		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1)).addProtocols(ProtocolVersion.MINECRAFT_PE),
-		new RemappingEntriesForProtocols(new RemappingEntry(19, 19, new ValueRemapperToInt()))
+		new Mapping()
+		.addEntries(new MappingEntry(7, 19))
+		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1))
+		.addProtocols(ProtocolVersion.MINECRAFT_PE),
+		new Mapping()
+		.addEntries(new MappingEntry(7, 19, ValueRemapperNumberToInt.INSTANCE))
 		.addProtocols(ProtocolVersionsHelper.BEFORE_1_6)
 	),
 	TNT(EType.OBJECT, 50, SpecificType.ENTITY),
@@ -195,7 +369,9 @@ public enum SpecificType {
 	ENDERPEARL(EType.OBJECT, 65, SpecificType.ENTITY),
 	WITHER_SKULL(EType.OBJECT, 66, SpecificType.FIREBALL,
 		//is charged
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(10)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		new Mapping()
+		.addEntries(new MappingEntry(5, 10, ValueRemapperBooleanToByte.INSTANCE))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	FALLING_OBJECT(EType.OBJECT, 70, SpecificType.ENTITY),
 	ENDEREYE(EType.OBJECT, 72, SpecificType.ENTITY),
@@ -206,53 +382,78 @@ public enum SpecificType {
 	FISHING_FLOAT(EType.OBJECT, 90, SpecificType.ENTITY),
 	ITEM(EType.OBJECT, 2, SpecificType.ENTITY,
 		//item
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(10)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		new Mapping()
+		.addEntries(new MappingEntry(5, 10))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	MINECART(EType.OBJECT, 10, SpecificType.ENTITY,
-		//is powered, shaking power, shaking direction, show block
-		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(16, 17, 18, 21, 22)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9).addProtocols(ProtocolVersion.MINECRAFT_PE), 
+		//shaking power, shaking direction, block y, show block
+		new Mapping()
+		.addEntries(new MappingEntry(5, 17, ValueRemapperNumberToInt.INSTANCE))
+		.addEntries(new MappingEntry(6, 18, ValueRemapperNumberToInt.INSTANCE))
+		.addEntries(new MappingEntry(9, 21, ValueRemapperNumberToInt.INSTANCE))
+		.addEntries(new MappingEntry(10, 22, ValueRemapperBooleanToByte.INSTANCE))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		.addProtocols(ProtocolVersion.MINECRAFT_PE),
 		//damage taken
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(19))
-		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1)).addProtocols(ProtocolVersion.MINECRAFT_PE),
-		new RemappingEntriesForProtocols(new RemappingEntry(19, 19, new ValueRemapperToInt())).addProtocols(ProtocolVersionsHelper.BEFORE_1_6),
+		new Mapping()
+		.addEntries(new MappingEntry(7, 19))
+		.addProtocols(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1))
+		.addProtocols(ProtocolVersion.MINECRAFT_PE),
+		new Mapping()
+		.addEntries(new MappingEntry(7, 19, ValueRemapperNumberToInt.INSTANCE))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_6),
 		//block
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(20)).addProtocols(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_PE),
-		new RemappingEntriesForProtocols(new RemappingEntry(20, 20, new ValueRemapper() {
+		new Mapping()
+		.addEntries(new MappingEntry(8, 20, ValueRemapperNumberToInt.INSTANCE))
+		.addProtocols(ProtocolVersion.MINECRAFT_1_8)
+		.addProtocols(ProtocolVersion.MINECRAFT_PE),
+		new Mapping()
+		.addEntries(new MappingEntry(8, 20, new ValueRemapper<DataWatcherObjectVarInt>() {
 			@Override
-			public DataWatcherObject remap(DataWatcherObject object) {
-				int value = (int) object.value;
+			public DataWatcherObject<?> remap(DataWatcherObjectVarInt object) {
+				int value = object.getValue();
 				int id = value & 0xFFFF;
 				int data = value >> 12;
-				object.value = (data << 16) | id;
-				return object;
+				return new DataWatcherObjectInt((data << 16) | id);
 			}
 		})).addProtocols(ProtocolVersionsHelper.BEFORE_1_6)
 	),
 	ARROW(EType.OBJECT, 60, SpecificType.ENTITY,
 		//is critical
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(16)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9).addProtocols(ProtocolVersion.MINECRAFT_PE)
+		new Mapping()
+		.addEntries(new MappingEntry(5, 16))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		.addProtocols(ProtocolVersion.MINECRAFT_PE)
 	),
+	SPECTRAL_ARROW(EType.OBJECT, 91, SpecificType.ARROW),
+	TIPPED_ARROW(EType.OBJECT, 92, SpecificType.ARROW),
 	FIREWORK(EType.OBJECT, 76, SpecificType.ENTITY,
 		//info
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(8)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
+		new Mapping()
+		.addEntries(new MappingEntry(5, 8))
+		.addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	ITEM_FRAME(EType.OBJECT, 71, SpecificType.ENTITY,
 		//item, rotation
-		new RemappingEntriesForProtocols(RemappingEntryCopyOriginal.of(8, 9)).addProtocols(ProtocolVersion.MINECRAFT_1_8),
-		new RemappingEntriesForProtocols(new RemappingEntry(8, 2), new RemappingEntry(9, 3, new ValueRemapper() {
+		new Mapping()
+		.addEntries(new MappingEntry(5, 8))
+		.addEntries(new MappingEntry(6, 9, ValueRemapperNumberToByte.INSTANCE))
+		.addProtocols(ProtocolVersion.MINECRAFT_1_8),
+		new Mapping()
+		.addEntries(new MappingEntry(5, 2))
+		.addEntries(new MappingEntry(6, 3, new ValueRemapper<DataWatcherObjectVarInt>() {
 			@Override
-			public DataWatcherObject remap(DataWatcherObject object) {
-				int rotation = (byte) object.value;
-				object.value = (byte) (rotation >>= 1);
-				return object;
+			public DataWatcherObject<?> remap(DataWatcherObjectVarInt object) {
+				return new DataWatcherObjectByte((byte) (object.getValue() >> 1));
 			}
 		})).addProtocols(ProtocolVersionsHelper.BEFORE_1_8)
 	),
-	ENDER_CRYSTAL(EType.OBJECT, 51, SpecificType.ENTITY,
-		//health
-		new RemappingEntriesForProtocols(new RemappingEntryCopyOriginal(8)).addProtocols(ProtocolVersionsHelper.BEFORE_1_9)
-	),
-	ARMOR_STAND_OBJECT(EType.OBJECT, 78, SpecificType.ARMOR_STAND);
+	ENDER_CRYSTAL(EType.OBJECT, 51, SpecificType.ENTITY),
+	ARMOR_STAND_OBJECT(EType.OBJECT, 78, SpecificType.ARMOR_STAND),
+	AREA_EFFECT_CLOUD(EType.OBJECT, 3, SpecificType.ENTITY),
+	SHULKER_BULLET(EType.OBJECT, 67, SpecificType.ENTITY),
+	DRAGON_FIREBALL(EType.OBJECT, 93, SpecificType.ENTITY);
 
 
 	private static final SpecificType[] OBJECT_BY_TYPE_ID = new SpecificType[256];
@@ -288,47 +489,47 @@ public enum SpecificType {
 
 	private final EType etype;
 	private final int typeId;
-	private final EnumMap<ProtocolVersion, ArrayList<RemappingEntry>> entries = new EnumMap<ProtocolVersion, ArrayList<RemappingEntry>>(ProtocolVersion.class);
+	private final EnumMap<ProtocolVersion, ArrayList<MappingEntry>> entries = new EnumMap<ProtocolVersion, ArrayList<MappingEntry>>(ProtocolVersion.class);
 	{
 		for (ProtocolVersion version : ProtocolVersion.values()) {
-			entries.put(version, new ArrayList<RemappingEntry>());
+			entries.put(version, new ArrayList<MappingEntry>());
 		}
 	}
 
 	@SuppressWarnings("deprecation")
-	SpecificType(EType etype, EntityType type, RemappingEntriesForProtocols... entries) {
+	SpecificType(EType etype, EntityType type, Mapping... entries) {
 		this(etype, type.getTypeId(), entries);
 	}
 
-	SpecificType(EType etype, int typeId, RemappingEntriesForProtocols... entries) {
+	SpecificType(EType etype, int typeId, Mapping... entries) {
 		this.etype = etype;
 		this.typeId = typeId;
-		for (RemappingEntriesForProtocols rp : entries) {
+		for (Mapping rp : entries) {
 			for (ProtocolVersion version : rp.versions) {
-				this.entries.get(version).addAll(Arrays.asList(rp.entries));
+				this.entries.get(version).addAll(rp.entries);
 			}
 		}
 	}
 
 	@SuppressWarnings("deprecation")
-	SpecificType(EType etype, EntityType type, SpecificType superType, RemappingEntriesForProtocols... entries) {
+	SpecificType(EType etype, EntityType type, SpecificType superType, Mapping... entries) {
 		this(etype, type.getTypeId(), superType, entries);
 	}
 
-	SpecificType(EType etype, int typeId, SpecificType superType, RemappingEntriesForProtocols... entries) {
+	SpecificType(EType etype, int typeId, SpecificType superType, Mapping... entries) {
 		this.etype = etype;
 		this.typeId = typeId;
-		for (Entry<ProtocolVersion, ArrayList<RemappingEntry>> entry : superType.entries.entrySet()) {
+		for (Entry<ProtocolVersion, ArrayList<MappingEntry>> entry : superType.entries.entrySet()) {
 			this.entries.get(entry.getKey()).addAll(entry.getValue());
 		}
-		for (RemappingEntriesForProtocols rp : entries) {
+		for (Mapping rp : entries) {
 			for (ProtocolVersion version : rp.versions) {
-				this.entries.get(version).addAll(Arrays.asList(rp.entries));
+				this.entries.get(version).addAll(rp.entries);
 			}
 		}
 	}
 
-	public List<RemappingEntry> getRemaps(ProtocolVersion version) {
+	public List<MappingEntry> getRemaps(ProtocolVersion version) {
 		return entries.get(version);
 	}
 
@@ -336,13 +537,17 @@ public enum SpecificType {
 		NONE, OBJECT, MOB
 	}
 
-	private static class RemappingEntriesForProtocols {
-		private ArrayList<ProtocolVersion> versions = new ArrayList<ProtocolVersion>();
-		private RemappingEntry[] entries;
-		protected RemappingEntriesForProtocols(RemappingEntry... entries) {
-			this.entries = entries;
+	private static class Mapping {
+		private final ArrayList<ProtocolVersion> versions = new ArrayList<>();
+		private final ArrayList<MappingEntry> entries = new ArrayList<>();
+		protected Mapping(MappingEntry... entries) {
+			this.entries.addAll(Arrays.asList(entries));
 		}
-		protected RemappingEntriesForProtocols addProtocols(ProtocolVersion... versions) {
+		protected Mapping addEntries(MappingEntry... entries) {
+			this.entries.addAll(Arrays.asList(entries));
+			return this;
+		}
+		protected Mapping addProtocols(ProtocolVersion... versions) {
 			this.versions.addAll(Arrays.asList(versions));
 			return this;
 		}

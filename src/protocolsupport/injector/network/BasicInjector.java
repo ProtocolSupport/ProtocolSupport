@@ -11,20 +11,21 @@ import org.spigotmc.SneakyThrow;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandler;
-import net.minecraft.server.v1_8_R3.ChatComponentText;
-import net.minecraft.server.v1_8_R3.MinecraftServer;
-import net.minecraft.server.v1_8_R3.NetworkManager;
-import net.minecraft.server.v1_8_R3.ServerConnection;
-import protocolsupport.utils.Utils;
+import net.minecraft.server.v1_9_R1.ChatComponentText;
+import net.minecraft.server.v1_9_R1.MinecraftServer;
+import net.minecraft.server.v1_9_R1.NetworkManager;
+import net.minecraft.server.v1_9_R1.ServerConnection;
+import protocolsupport.utils.ReflectionUtils;
 
 public class BasicInjector {
 
 	@SuppressWarnings("unchecked")
 	public static void inject() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		ServerConnection serverConnection = MinecraftServer.getServer().aq();
-		Field connectionsListField = Utils.setAccessible(ServerConnection.class.getDeclaredField("g"));
+		@SuppressWarnings("deprecation")
+		ServerConnection serverConnection = MinecraftServer.getServer().am();
+		Field connectionsListField = ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("g"));
 		ChannelInjectList connectionsList = new ChannelInjectList(
-			((List<NetworkManager>) Utils.setAccessible(ServerConnection.class.getDeclaredField("h")).get(serverConnection)),
+			((List<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("h")).get(serverConnection)),
 			(List<ChannelFuture>) connectionsListField.get(serverConnection)
 		);
 		connectionsListField.set(serverConnection, connectionsList);
@@ -97,7 +98,7 @@ public class BasicInjector {
 				if (serverMainHandler == null) {
 					throw new IllegalStateException("Unable to find default netty channel initializer");
 				}
-				Utils.setAccessible(serverMainHandler.getClass().getDeclaredField("childHandler")).set(serverMainHandler, new ServerConnectionChannel(networkManagersList));
+				ReflectionUtils.setAccessible(serverMainHandler.getClass().getDeclaredField("childHandler")).set(serverMainHandler, new ServerConnectionChannel(networkManagersList));
 			} catch (Exception e) {
 				SneakyThrow.sneaky(e);
 			}

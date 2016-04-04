@@ -15,6 +15,7 @@ public class ClientSettings extends MiddleClientSettings {
 		serializer.readByte();
 		serializer.readBoolean();
 		skinFlags = 255;
+		mainHand = 1;
 	}
 
 }

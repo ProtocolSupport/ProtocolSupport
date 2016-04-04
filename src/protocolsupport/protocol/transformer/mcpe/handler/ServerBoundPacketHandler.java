@@ -11,8 +11,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.server.v1_8_R3.Packet;
-
+import net.minecraft.server.v1_9_R1.Packet;
+import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.mcpe.UDPNetworkManager;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketRegistry;
 import protocolsupport.protocol.transformer.mcpe.packet.raknet.EncapsulatedPacket;
@@ -20,9 +20,11 @@ import protocolsupport.protocol.transformer.mcpe.packet.raknet.RakNetPacket;
 
 public class ServerBoundPacketHandler {
 
+	private final SharedStorage sharedstorage;
 	private final UDPNetworkManager networkManager;
-	public ServerBoundPacketHandler(UDPNetworkManager networkManager) {
+	public ServerBoundPacketHandler(UDPNetworkManager networkManager, SharedStorage sharedstorage) {
 		this.networkManager = networkManager;
+		this.sharedstorage = sharedstorage;
 	}
 
 	private final Orderer orderer = new Orderer();
@@ -97,7 +99,7 @@ public class ServerBoundPacketHandler {
 
 	@SuppressWarnings("rawtypes")
 	private List<? extends Packet> transformPacketData(ByteBuf fullpacket) throws Exception {
-		return PEPacketRegistry.getPacket(fullpacket.readUnsignedByte()).decode(fullpacket).transfrom();
+		return PEPacketRegistry.getPacket(fullpacket.readUnsignedByte()).decode(fullpacket).transfrom(sharedstorage);
 	}
 
 	private static final class SplittedPacket {

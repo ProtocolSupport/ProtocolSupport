@@ -1,9 +1,13 @@
 package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_6_1_7;
 
+import java.util.ArrayList;
+
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleEntitySetAttributes;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
+import protocolsupport.protocol.typeskipper.string.SkippingTable;
+import protocolsupport.protocol.typeskipper.string.StringSkipper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -12,9 +16,16 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes<RecyclableCol
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_ENTITY_ATTRIBUTES_ID, version);
-		serializer.writeInt(entityId);
-		serializer.writeInt(attributes.length);
+		SkippingTable table = StringSkipper.ATTRIBUTES.getTable(version);
+		ArrayList<Attribute> sendattrs = new ArrayList<Attribute>();
 		for (Attribute attribute : attributes) {
+			if (!table.shouldSkip(attribute.key)) {
+				sendattrs.add(attribute);
+			}
+		}
+		serializer.writeInt(entityId);
+		serializer.writeInt(sendattrs.size());
+		for (Attribute attribute : sendattrs) {
 			serializer.writeString(attribute.key);
 			serializer.writeDouble(attribute.value);
 			if (version != ProtocolVersion.MINECRAFT_1_6_1) {

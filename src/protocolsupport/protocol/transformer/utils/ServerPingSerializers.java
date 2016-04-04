@@ -15,13 +15,13 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.mojang.authlib.GameProfile;
 
-import net.minecraft.server.v1_8_R3.ChatDeserializer;
-import net.minecraft.server.v1_8_R3.ChatModifier;
-import net.minecraft.server.v1_8_R3.ChatTypeAdapterFactory;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent;
-import net.minecraft.server.v1_8_R3.ServerPing;
-import net.minecraft.server.v1_8_R3.ServerPing.ServerData;
-import net.minecraft.server.v1_8_R3.ServerPing.ServerPingPlayerSample;
+import net.minecraft.server.v1_9_R1.ChatDeserializer;
+import net.minecraft.server.v1_9_R1.ChatModifier;
+import net.minecraft.server.v1_9_R1.ChatTypeAdapterFactory;
+import net.minecraft.server.v1_9_R1.IChatBaseComponent;
+import net.minecraft.server.v1_9_R1.ServerPing;
+import net.minecraft.server.v1_9_R1.ServerPing.ServerData;
+import net.minecraft.server.v1_9_R1.ServerPing.ServerPingPlayerSample;
 
 public class ServerPingSerializers {
 
@@ -36,15 +36,15 @@ public class ServerPingSerializers {
 	public static class ServerDataSerializer implements JsonDeserializer<ServerData>, JsonSerializer<ServerData> {
 		@Override
 		public ServerData deserialize(final JsonElement element, final Type type, final JsonDeserializationContext ctx) throws JsonParseException {
-			final JsonObject l = ChatDeserializer.l(element, "version");
-			return new ServerData(ChatDeserializer.h(l, "name"), ChatDeserializer.m(l, "protocol"));
+			final JsonObject l = ChatDeserializer.m(element, "version");
+			return new ServerData(ChatDeserializer.h(l, "name"), ChatDeserializer.n(l, "protocol"));
 		}
 
 		@Override
 		public JsonElement serialize(final ServerData data, final Type type, final JsonSerializationContext ctx) {
 			final JsonObject jsonObject = new JsonObject();
 			jsonObject.addProperty("name", data.a());
-			jsonObject.addProperty("protocol", data.b());
+			jsonObject.addProperty("protocol", data.getProtocolVersion());
 			return jsonObject;
 		}
 	}
@@ -53,14 +53,14 @@ public class ServerPingSerializers {
 	public static class PlayerSampleSerializer implements JsonDeserializer<ServerPingPlayerSample>, JsonSerializer<ServerPingPlayerSample> {
 		@Override
 		public ServerPingPlayerSample deserialize(final JsonElement element, final Type type, final JsonDeserializationContext ctx) throws JsonParseException {
-			final JsonObject players = ChatDeserializer.l(element, "players");
-			final ServerPingPlayerSample serverPingPlayerSample = new ServerPingPlayerSample(ChatDeserializer.m(players, "max"), ChatDeserializer.m(players, "online"));
+			final JsonObject players = ChatDeserializer.m(element, "players");
+			final ServerPingPlayerSample serverPingPlayerSample = new ServerPingPlayerSample(ChatDeserializer.n(players, "max"), ChatDeserializer.n(players, "online"));
 			if (ChatDeserializer.d(players, "sample")) {
-				final JsonArray sample = ChatDeserializer.t(players, "sample");
+				final JsonArray sample = ChatDeserializer.u(players, "sample");
 				if (sample.size() > 0) {
 					final GameProfile[] array = new GameProfile[sample.size()];
 					for (int i = 0; i < array.length; ++i) {
-						final JsonObject j = ChatDeserializer.l(sample.get(i), "player[" + i + "]");
+						final JsonObject j = ChatDeserializer.m(sample.get(i), "player[" + i + "]");
 						final String h = ChatDeserializer.h(j, "id");
 						array[i] = new GameProfile(UUID.fromString(h), ChatDeserializer.h(j, "name"));
 					}

@@ -11,8 +11,8 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.Validate;
-import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_8_R3.util.CraftIconCache;
+import org.bukkit.craftbukkit.v1_9_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_9_R1.util.CraftIconCache;
 import org.bukkit.util.CachedServerIcon;
 
 public class IconUtils {

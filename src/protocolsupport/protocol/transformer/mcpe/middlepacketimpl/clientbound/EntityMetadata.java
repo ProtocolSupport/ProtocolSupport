@@ -2,7 +2,7 @@ package protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound;
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_8_R3.ItemStack;
+import net.minecraft.server.v1_9_R1.ItemStack;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.storage.PEStorage.ItemInfo;
@@ -25,7 +25,7 @@ public class EntityMetadata extends MiddleEntityMetadata<RecyclableCollection<? 
 				storage.getPEStorage().removeItemsInfo(entityId);
 				return RecyclableSingletonList.create(new AddItemEntityPacket(
 					entityId, (float) info.getX(), (float) info.getY(), (float) info.getZ(),
-					info.getSpeedX(), info.getSpeedY(), info.getSpeedZ(), (ItemStack) metadata.get(10).value
+					info.getSpeedX(), info.getSpeedY(), info.getSpeedZ(), (ItemStack) metadata.get(5).getValue()
 				));
 			}
 		} else {

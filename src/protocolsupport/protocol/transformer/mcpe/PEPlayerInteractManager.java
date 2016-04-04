@@ -4,13 +4,13 @@ import java.lang.invoke.MethodHandle;
 
 import org.spigotmc.SneakyThrow;
 
-import net.minecraft.server.v1_8_R3.Block;
-import net.minecraft.server.v1_8_R3.BlockPosition;
-import net.minecraft.server.v1_8_R3.Blocks;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.Material;
-import net.minecraft.server.v1_8_R3.PacketPlayOutBlockChange;
-import net.minecraft.server.v1_8_R3.PlayerInteractManager;
+import net.minecraft.server.v1_9_R1.Block;
+import net.minecraft.server.v1_9_R1.BlockPosition;
+import net.minecraft.server.v1_9_R1.Blocks;
+import net.minecraft.server.v1_9_R1.EntityPlayer;
+import net.minecraft.server.v1_9_R1.Material;
+import net.minecraft.server.v1_9_R1.PacketPlayOutBlockChange;
+import net.minecraft.server.v1_9_R1.PlayerInteractManager;
 
 import protocolsupport.utils.Utils;
 
@@ -25,7 +25,7 @@ public class PEPlayerInteractManager extends PlayerInteractManager {
 	public void a(BlockPosition blockposition) {
 		if (blockposition.equals(getLastInteractBlockPosition())) {
 			Block block = this.world.getType(blockposition).getBlock();
-			if (block.getMaterial() != Material.AIR && block != Blocks.BEDROCK) {
+			if (block.getBlockData().getMaterial() != Material.AIR && block != Blocks.BEDROCK) {
 				setBreakingStateValue(false);
 				world.c(this.player.getId(), blockposition, -1);
 				breakBlock(blockposition);

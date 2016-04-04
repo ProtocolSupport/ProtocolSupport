@@ -38,7 +38,8 @@ public class Login extends MiddleLogin<RecyclableCollection<? extends Clientboun
 		list.add(new SetSpawnPosition(player.getLocation()));
 		list.add(new SetDifficultyPacket(player.getWorld().getDifficulty().ordinal()));
 		list.add(new AdventureSettingsPacket(player.getGameMode() == GameMode.CREATIVE));
-		list.add(new SetRecipesPacket());
+		//TODO: Readd after fixing remap table
+		//list.add(new SetRecipesPacket());
 		return list;
 	}
 

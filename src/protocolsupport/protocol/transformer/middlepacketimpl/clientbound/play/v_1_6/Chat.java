@@ -1,7 +1,7 @@
 package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_6;
 
-import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleChat;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
@@ -15,7 +15,7 @@ public class Chat extends MiddleChat<RecyclableCollection<PacketData>> {
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_CHAT_ID, version);
-		serializer.writeString(ChatEncoder.encode(LegacyUtils.toText(ChatSerializer.a(chatJson))));
+		serializer.writeString(ChatEncoder.encode(LegacyUtils.toText(ChatAPI.fromJSON(chatJson))));
 		return RecyclableSingletonList.create(serializer);
 	}
 

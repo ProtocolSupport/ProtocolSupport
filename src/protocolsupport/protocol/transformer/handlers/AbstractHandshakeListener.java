@@ -1,52 +1,73 @@
 package protocolsupport.protocol.transformer.handlers;
 
+import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
 import org.apache.logging.log4j.LogManager;
+import org.spigotmc.SneakyThrow;
 import org.spigotmc.SpigotConfig;
 
 import com.google.gson.Gson;
 import com.mojang.authlib.properties.Property;
 import com.mojang.util.UUIDTypeAdapter;
 
-import net.minecraft.server.v1_8_R3.ChatComponentText;
-import net.minecraft.server.v1_8_R3.EnumProtocol;
-import net.minecraft.server.v1_8_R3.HandshakeListener;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent;
-import net.minecraft.server.v1_8_R3.LoginListener;
-import net.minecraft.server.v1_8_R3.MinecraftServer;
-import net.minecraft.server.v1_8_R3.NetworkManager;
-import net.minecraft.server.v1_8_R3.PacketHandshakingInSetProtocol;
-import net.minecraft.server.v1_8_R3.PacketLoginOutDisconnect;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
+import net.minecraft.server.v1_9_R1.ChatComponentText;
+import net.minecraft.server.v1_9_R1.EnumProtocol;
+import net.minecraft.server.v1_9_R1.HandshakeListener;
+import net.minecraft.server.v1_9_R1.IChatBaseComponent;
+import net.minecraft.server.v1_9_R1.LoginListener;
+import net.minecraft.server.v1_9_R1.MinecraftServer;
+import net.minecraft.server.v1_9_R1.NetworkManager;
+import net.minecraft.server.v1_9_R1.PacketHandshakingInSetProtocol;
+import net.minecraft.server.v1_9_R1.PacketLoginOutDisconnect;
+import net.minecraft.server.v1_9_R1.PacketEncoder;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.core.ChannelHandlers;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.protocol.storage.ThrottleTracker;
+import protocolsupport.utils.ReflectionUtils;
 
 public abstract class AbstractHandshakeListener extends HandshakeListener {
 
+	private static final Field versionField = ReflectionUtils.getField(PacketEncoder.class, "version");
+
 	private static final Gson gson = new Gson();
 
-	private final NetworkManager networkManager;
+	protected final NetworkManager networkManager;
 
+	@SuppressWarnings("deprecation")
 	public AbstractHandshakeListener(NetworkManager networkmanager) {
 		super(MinecraftServer.getServer(), networkmanager);
 		this.networkManager = networkmanager;
 	}
 
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	@Override
 	public void a(final PacketHandshakingInSetProtocol packethandshakinginsetprotocol) {
+		int iversion = packethandshakinginsetprotocol.b();
+		try {
+			versionField.set(networkManager.channel.pipeline().get(ChannelHandlers.ENCODER), iversion);
+		} catch (Throwable t) {
+			SneakyThrow.sneaky(t);
+		}
 		switch (packethandshakinginsetprotocol.a()) {
 			case LOGIN: {
-				networkManager.a(EnumProtocol.LOGIN);
+				networkManager.setProtocol(EnumProtocol.LOGIN);
 				try {
 					final InetAddress address = ((InetSocketAddress) networkManager.getSocketAddress()).getAddress();
 					if (ThrottleTracker.isEnabled() && !SpigotConfig.bungee) {
 						if (ThrottleTracker.isThrottled(address)) {
 							final ChatComponentText chatcomponenttext = new ChatComponentText("Connection throttled! Please wait before reconnecting.");
-							networkManager.handle(new PacketLoginOutDisconnect(chatcomponenttext));
-							networkManager.close(chatcomponenttext);
+							networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext), new GenericFutureListener<Future<? super Void>>() {
+								@Override
+								public void operationComplete(Future<? super Void> arg0) throws Exception {
+									networkManager.close(chatcomponenttext);
+								}
+							});
 							return;
 						}
 						ThrottleTracker.track(address, System.currentTimeMillis());
@@ -54,19 +75,30 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 				} catch (Throwable t) {
 					LogManager.getLogger().debug("Failed to check connection throttle", t);
 				}
-				if (packethandshakinginsetprotocol.b() != ProtocolVersion.getLatest().getId()) {
+				if (iversion != ProtocolVersion.MINECRAFT_1_9.getId() &&
+					iversion != ProtocolVersion.MINECRAFT_1_9_1.getId() &&
+					iversion != ProtocolVersion.MINECRAFT_1_9_2.getId()
+				) {
 					final ChatComponentText chatcomponenttext = new ChatComponentText("Unsupported protocol version "+packethandshakinginsetprotocol.b());
-					this.networkManager.handle(new PacketLoginOutDisconnect(chatcomponenttext));
-					this.networkManager.close(chatcomponenttext);
+					this.networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext), new GenericFutureListener<Future<? super Void>>() {
+						@Override
+						public void operationComplete(Future<? super Void> arg0) throws Exception {
+							networkManager.close(chatcomponenttext);
+						}
+					});
 					break;
 				}
-				networkManager.a(getLoginListener(networkManager));
+				networkManager.setPacketListener(getLoginListener(networkManager));
 				if (SpigotConfig.bungee) {
 					final String[] split = packethandshakinginsetprotocol.hostname.split("\u0000");
 					if ((split.length != 3) && (split.length != 4)) {
 						final ChatComponentText chatcomponenttext = new ChatComponentText("If you wish to use IP forwarding, please enable it in your BungeeCord config as well!");
-						networkManager.handle(new PacketLoginOutDisconnect(chatcomponenttext));
-						networkManager.close(chatcomponenttext);
+						networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext), new GenericFutureListener<Future<? super Void>>() {
+							@Override
+							public void operationComplete(Future<? super Void> arg0) throws Exception {
+								networkManager.close(chatcomponenttext);
+							}
+						});
 						return;
 					}
 					packethandshakinginsetprotocol.hostname = split[0];
@@ -81,12 +113,12 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 						networkManager.spoofedProfile = gson.fromJson(split[3], Property[].class);
 					}
 				}
-				((LoginListener) networkManager.getPacketListener()).hostname = packethandshakinginsetprotocol.hostname + ":" + packethandshakinginsetprotocol.port;
+				((LoginListener) networkManager.i()).hostname = packethandshakinginsetprotocol.hostname + ":" + packethandshakinginsetprotocol.port;
 				break;
 			}
 			case STATUS: {
-				networkManager.a(EnumProtocol.STATUS);
-				networkManager.a(new StatusListener(MinecraftServer.getServer(), networkManager));
+				networkManager.setProtocol(EnumProtocol.STATUS);
+				networkManager.setPacketListener(new StatusListener(MinecraftServer.getServer(), networkManager));
 				break;
 			}
 			default: {

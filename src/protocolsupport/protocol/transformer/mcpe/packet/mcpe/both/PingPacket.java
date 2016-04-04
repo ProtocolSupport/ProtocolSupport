@@ -8,6 +8,7 @@ import java.util.List;
 import org.spigotmc.SneakyThrow;
 
 import protocolsupport.protocol.ServerBoundPacket;
+import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.mcpe.handler.PELoginListener;
 import protocolsupport.protocol.transformer.mcpe.packet.HandleNMSPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
@@ -15,10 +16,10 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.DualPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketCreator;
-import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketListener;
-import net.minecraft.server.v1_8_R3.PacketPlayInKeepAlive;
-import net.minecraft.server.v1_8_R3.PlayerConnection;
+import net.minecraft.server.v1_9_R1.Packet;
+import net.minecraft.server.v1_9_R1.PacketListener;
+import net.minecraft.server.v1_9_R1.PacketPlayInKeepAlive;
+import net.minecraft.server.v1_9_R1.PlayerConnection;
 
 public class PingPacket implements DualPEPacket {
 
@@ -45,7 +46,7 @@ public class PingPacket implements DualPEPacket {
 	}
 
 	@Override
-	public List<? extends Packet<?>> transfrom() throws Exception {
+	public List<? extends Packet<?>> transfrom(SharedStorage storage) throws Exception {
 		return Collections.singletonList(new HandleNMSPacket<PacketListener>() {
 			@Override
 			public void handle0(PacketListener listener) {

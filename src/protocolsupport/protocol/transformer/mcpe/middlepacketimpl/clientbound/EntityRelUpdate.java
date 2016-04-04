@@ -2,10 +2,10 @@ package protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound;
 
 import java.io.IOException;
 
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_9_R1.CraftWorld;
 
-import net.minecraft.server.v1_8_R3.Entity;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
+import net.minecraft.server.v1_9_R1.Entity;
+import net.minecraft.server.v1_9_R1.EntityPlayer;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
@@ -33,7 +33,7 @@ public class EntityRelUpdate extends ClientBoundMiddlePacket<RecyclableCollectio
 
 	@Override
 	public RecyclableCollection<? extends ClientboundPEPacket> toData(ProtocolVersion version) throws IOException {
-		Entity entity = ((CraftWorld) player.getWorld()).getHandle().a(entityId);
+		Entity entity = ((CraftWorld) player.getWorld()).getHandle().getEntity(entityId);
 		if (entity != null) {
 			if (entity instanceof EntityPlayer) {
 				return RecyclableSingletonList.create(new MovePlayerPacket(

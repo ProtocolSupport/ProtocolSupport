@@ -9,20 +9,21 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.AttributeKey;
-import net.minecraft.server.v1_8_R3.EnumProtocol;
-import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
-import net.minecraft.server.v1_8_R3.NetworkManager;
-import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketListener;
+import net.minecraft.server.v1_9_R1.EnumProtocol;
+import net.minecraft.server.v1_9_R1.EnumProtocolDirection;
+import net.minecraft.server.v1_9_R1.NetworkManager;
+import net.minecraft.server.v1_9_R1.Packet;
+import net.minecraft.server.v1_9_R1.PacketListener;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.core.IPacketEncoder;
 import protocolsupport.protocol.storage.LocalStorage;
+import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.login.v_1_4_1_5_1_6.LoginDisconnect;
-import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.login.v_1_4_1_5_1_6_1_7.EncryptionRequest;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.login.v_1_4_1_5_1_6_1_7_1_8.EncryptionRequest;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v1_5_1_6_1_7.InventoryOpen;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v1_5_1_6_1_7.ScoreboardObjective;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v1_5_1_6_1_7.ScoreboardScore;
@@ -49,12 +50,10 @@ import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6.SpawnPosition;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6.TabComplete;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6.UseBed;
-import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6.WorldSound;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.BlockChangeMulti;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.BlockSignUpdate;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.BlockTileUpdate;
-import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.ChunkMulti;
-import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.ChunkSingle;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.Chunk;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.CollectEffect;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.CustomPayload;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.Entity;
@@ -67,29 +66,33 @@ import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.EntityMetadata;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.EntityRelMove;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.EntityRelMoveLook;
-import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.EntityStatus;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.EntityVelocity;
-import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.InventoryClose;
-import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.InventoryConfirmTransaction;
-import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.InventoryData;
-import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.InventorySetItems;
-import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.InventorySetSlot;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.KeepAlive;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.PlayerInfo;
-import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.ScoreboardDisplay;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.SetExperience;
-import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.TimeUpdate;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.UnloadChunk;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7.WorldEvent;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7_1_8.EntityStatus;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7_1_8.InventoryClose;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7_1_8.InventoryConfirmTransaction;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7_1_8.InventoryData;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7_1_8.InventorySetItems;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7_1_8.InventorySetSlot;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7_1_8.ScoreboardDisplay;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7_1_8.TimeUpdate;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6_1_7_1_8.WorldSound;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_6.BlockOpenSignEditor;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_6.Chat;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_6.Position;
-import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_6_1_7.EntityAttach;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_6_1_7.EntitySetAttributes;
-import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_6_1_7.PlayerAbilities;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_6_1_7.SetHealth;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_6_1_7_1_8.EntityAttach;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_6_1_7_1_8.PlayerAbilities;
+import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v_1_6_1_7_1_8.SetPassengers;
 import protocolsupport.protocol.transformer.middlepacketimpl.clientbound.status.v_1_5_1_6.ServerInfo;
 import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry;
 import protocolsupport.protocol.transformer.utils.registry.PacketIdTransformerRegistry;
+import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry.InitCallBack;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -142,7 +145,6 @@ public class PacketEncoder implements IPacketEncoder {
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_BLOCK_CHANGE_SINGLE_ID, 0x35);
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_BLOCK_ACTION_ID, 0x36);
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_BLOCK_BREAK_ANIMATION_ID, 0x37);
-		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CHUNK_MULTI_ID, 0x38);
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_EXPLOSION_ID, 0x3C);
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_WORLD_EVENT_ID, 0x3D);
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_WORLD_SOUND_ID, 0x3E);
@@ -209,12 +211,11 @@ public class PacketEncoder implements IPacketEncoder {
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_EFFECT_REMOVE_ID, EntityEffectRemove.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_EXPERIENCE_ID, SetExperience.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_ATTRIBUTES_ID, EntitySetAttributes.class);
-			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CHUNK_SINGLE_ID, ChunkSingle.class);
+			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CHUNK_SINGLE_ID, Chunk.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_BLOCK_CHANGE_MULTI_ID, BlockChangeMulti.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_BLOCK_CHANGE_SINGLE_ID, BlockChangeSingle.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_BLOCK_ACTION_ID, BlockAction.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_BLOCK_BREAK_ANIMATION_ID, BlockBreakAnimation.class);
-			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CHUNK_MULTI_ID, ChunkMulti.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_EXPLOSION_ID, Explosion.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_WORLD_EVENT_ID, WorldEvent.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_WORLD_SOUND_ID, WorldSound.class);
@@ -240,18 +241,28 @@ public class PacketEncoder implements IPacketEncoder {
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SCOREBOARD_TEAM_ID, ScoreboardTeam.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID, CustomPayload.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_KICK_DISCONNECT_ID, KickDisconnect.class);
+			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SET_PASSENGERS, SetPassengers.class);
+			dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CHUNK_UNLOAD, UnloadChunk.class);
+			dataRemapperRegistry.setCallBack(new InitCallBack<ClientBoundMiddlePacket<RecyclableCollection<PacketData>>>() {
+				@Override
+				public void onInit(ClientBoundMiddlePacket<RecyclableCollection<PacketData>> object) {
+					object.setSharedStorage(sharedstorage);
+					object.setLocalStorage(storage);
+				}
+			});
 		} catch (Throwable t) {
 			SneakyThrow.sneaky(t);
 		}
 	}
 
-	private final ProtocolVersion version;
-	public PacketEncoder(ProtocolVersion version) {
-		this.version = version;
-	}
-
-	private final LocalStorage storage = new LocalStorage();
+	protected final SharedStorage sharedstorage;
+	protected final LocalStorage storage = new LocalStorage();
 	private final PacketDataSerializer serverdata = new PacketDataSerializer(Unpooled.buffer(), ProtocolVersion.getLatest());
+	private final ProtocolVersion version;
+	public PacketEncoder(ProtocolVersion version, SharedStorage sharedstorage) {
+		this.version = version;
+		this.sharedstorage = sharedstorage;
+	}
 
 	@Override
 	public void encode(ChannelHandlerContext ctx, Packet<PacketListener> packet, ByteBuf output) throws Exception {
@@ -269,7 +280,6 @@ public class PacketEncoder implements IPacketEncoder {
 				packetTransformer.setPlayer(ChannelUtils.getBukkitPlayer(channel));
 			}
 			packetTransformer.readFromServerData(serverdata);
-			packetTransformer.setLocalStorage(storage);
 			packetTransformer.handle();
 			RecyclableCollection<PacketData> data = packetTransformer.toData(version);
 			try {

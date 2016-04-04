@@ -7,15 +7,17 @@ import java.util.List;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.ServerBoundPacket;
+import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.mcpe.PEPlayerInventory;
 import protocolsupport.protocol.transformer.mcpe.packet.SynchronizedHandleNMSPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
-import net.minecraft.server.v1_8_R3.BlockPosition;
-import net.minecraft.server.v1_8_R3.ItemStack;
-import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketPlayInBlockPlace;
-import net.minecraft.server.v1_8_R3.PlayerConnection;
+import protocolsupport.protocol.transformer.middlepacketimpl.PacketCreator;
+import net.minecraft.server.v1_9_R1.BlockPosition;
+import net.minecraft.server.v1_9_R1.ItemStack;
+import net.minecraft.server.v1_9_R1.Packet;
+import net.minecraft.server.v1_9_R1.PlayerConnection;
 
 public class UseItemPacket implements ServerboundPEPacket {
 
@@ -54,7 +56,7 @@ public class UseItemPacket implements ServerboundPEPacket {
 	}
 
 	@Override
-	public List<? extends Packet<?>> transfrom() throws Exception {
+	public List<? extends Packet<?>> transfrom(SharedStorage storage) throws Exception {
 		ArrayList<Packet<?>> packets = new ArrayList<Packet<?>>();
 		final int slot = PEPlayerInventory.getSlotNumber(itemstack);
 		if (slot != -1) {
@@ -65,10 +67,14 @@ public class UseItemPacket implements ServerboundPEPacket {
 				}
 			});
 		}
-		//TODO: migrate to PacketCreator
-		PacketPlayInBlockPlace place = new PacketPlayInBlockPlace(new BlockPosition(againstX, againstY, againstZ), face, itemstack, cursorX, cursorY, cursorZ);
-		place.timestamp = System.currentTimeMillis();
-		packets.add(place);
+		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_USE_ITEM.get());
+		creator.writePosition(new BlockPosition(againstX, againstY, againstZ));
+		creator.writeVarInt(face);
+		creator.writeVarInt(0);
+		creator.writeByte((int) (cursorX / 16.0F));
+		creator.writeByte((int) (cursorY / 16.0F));
+		creator.writeByte((int) (cursorZ / 16.0F));
+		packets.add(creator.create());
 		return packets;
 	}
 

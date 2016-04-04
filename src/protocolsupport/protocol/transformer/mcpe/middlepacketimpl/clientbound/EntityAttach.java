@@ -7,7 +7,6 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AttachEntityPacket;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleEntityAttach;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class EntityAttach extends MiddleEntityAttach<RecyclableCollection<? extends ClientboundPEPacket>> {
@@ -20,11 +19,7 @@ public class EntityAttach extends MiddleEntityAttach<RecyclableCollection<? exte
 		} else {
 			vehicleId = storage.getPEStorage().getVehicleId();
 		}
-		if (!leash) {
-			return RecyclableSingletonList.create(new AttachEntityPacket(vehicleId, entityId, attach));
-		} else {
-			return RecyclableEmptyList.get();
-		}
+		return RecyclableSingletonList.create(new AttachEntityPacket(vehicleId, entityId, attach));
 	}
 
 }

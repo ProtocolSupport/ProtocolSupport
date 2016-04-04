@@ -16,13 +16,13 @@ public class SpawnLiving extends MiddleSpawnLiving<RecyclableCollection<? extend
 
 	@Override
 	public RecyclableCollection<? extends ClientboundPEPacket> toData(ProtocolVersion version) throws IOException {
-		int remappedId = IdRemapper.ENTITY.getTable(version).getRemap(type);
+		int remappedId = IdRemapper.ENTITY_LIVING.getTable(version).getRemap(type);
 		if (remappedId == -1) {
 			return RecyclableEmptyList.get();
 		} else {
 			return RecyclableSingletonList.create(new AddEntityPacket(
 				entityId, remappedId,
-				x / 32.0F, y / 32.0F, z / 32.0F,
+				(float) x, (float) y, (float) z,
 				yaw / 256.0F * 360.0F, pitch / 256.0F * 360.0F,
 				motX / 8000.0F, motY / 8000.0F, motZ / 8000.F,
 				WatchedDataRemapper.transform(wentity, metadata, version)

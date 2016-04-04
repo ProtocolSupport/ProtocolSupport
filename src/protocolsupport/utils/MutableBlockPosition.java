@@ -1,6 +1,6 @@
 package protocolsupport.utils;
 
-import net.minecraft.server.v1_8_R3.BlockPosition;
+import net.minecraft.server.v1_9_R1.BlockPosition;
 
 public class MutableBlockPosition extends BlockPosition {
 

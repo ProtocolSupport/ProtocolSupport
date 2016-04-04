@@ -2,13 +2,13 @@ package protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound;
 
 import java.io.IOException;
 
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
 
-import net.minecraft.server.v1_8_R3.Block;
-import net.minecraft.server.v1_8_R3.BlockPosition;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.IBlockData;
-import net.minecraft.server.v1_8_R3.World;
+import net.minecraft.server.v1_9_R1.Block;
+import net.minecraft.server.v1_9_R1.BlockPosition;
+import net.minecraft.server.v1_9_R1.EntityPlayer;
+import net.minecraft.server.v1_9_R1.IBlockData;
+import net.minecraft.server.v1_9_R1.World;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.ContainerClosePacket;

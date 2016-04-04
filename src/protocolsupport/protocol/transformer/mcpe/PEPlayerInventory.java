@@ -2,10 +2,10 @@ package protocolsupport.protocol.transformer.mcpe;
 
 import java.util.Arrays;
 
-import net.minecraft.server.v1_8_R3.EntityHuman;
-import net.minecraft.server.v1_8_R3.ItemStack;
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
-import net.minecraft.server.v1_8_R3.PlayerInventory;
+import net.minecraft.server.v1_9_R1.EntityHuman;
+import net.minecraft.server.v1_9_R1.ItemStack;
+import net.minecraft.server.v1_9_R1.NBTTagCompound;
+import net.minecraft.server.v1_9_R1.PlayerInventory;
 
 public class PEPlayerInventory extends PlayerInventory {
 

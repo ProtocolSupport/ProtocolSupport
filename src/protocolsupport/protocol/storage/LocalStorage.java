@@ -7,8 +7,9 @@ import java.util.UUID;
 
 import com.mojang.authlib.properties.Property;
 
+import gnu.trove.map.hash.TIntIntHashMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
+import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
@@ -18,6 +19,7 @@ public class LocalStorage {
 	private final TIntObjectHashMap<WatchedEntity> watchedEntities = new TIntObjectHashMap<WatchedEntity>();
 	private WatchedPlayer player;
 	private final HashMap<UUID, PlayerListEntry> playerlist = new HashMap<>();
+	private TIntIntHashMap vehiclePassenger = new TIntIntHashMap();
 
 	public void addWatchedEntity(WatchedEntity entity) {
 		watchedEntities.put(entity.getId(), entity);
@@ -66,6 +68,18 @@ public class LocalStorage {
 		playerlist.remove(uuid);
 	}
 
+	public void setVehiclePassenger(int vehicleId, int passengerId) {
+		vehiclePassenger.put(vehicleId, passengerId);
+	}
+
+	public int getVehiclePassenger(int vehicleId) {
+		return vehiclePassenger.get(vehicleId);
+	}
+
+	public void removeVehiclePassenger(int vehicleId) {
+		vehiclePassenger.remove(vehicleId);
+	}
+
 	public static class PlayerListEntry implements Cloneable {
 		private final String name;
 		private String displayNameJson;
@@ -88,7 +102,7 @@ public class LocalStorage {
 		}
 
 		public String getName() {
-			return displayNameJson == null ? name : LegacyUtils.toText(ChatSerializer.a(displayNameJson));
+			return displayNameJson == null ? name : LegacyUtils.toText(ChatAPI.fromJSON(displayNameJson));
 		}
 
 		@Override

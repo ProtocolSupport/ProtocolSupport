@@ -7,11 +7,12 @@ import java.util.List;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.DualPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
-import net.minecraft.server.v1_8_R3.PacketPlayInChat;
+import net.minecraft.server.v1_9_R1.PacketPlayInChat;
 
 public class ChatPacket implements DualPEPacket {
 
@@ -91,7 +92,7 @@ public class ChatPacket implements DualPEPacket {
 	}
 
 	@Override
-	public List<PacketPlayInChat> transfrom() {
+	public List<PacketPlayInChat> transfrom(SharedStorage storage) {
 		//TODO: migrate to PacketCreator
 		return Collections.singletonList(new PacketPlayInChat(message));
 	}

@@ -2,10 +2,7 @@ package protocolsupport.utils;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
-import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,18 +13,6 @@ public class Utils {
 
 	public static String clampString(String string, int limit) {
 		return string.substring(0, string.length() > limit ? limit : string.length());
-	}
-
-	public static <T extends AccessibleObject> T setAccessible(T object) {
-		object.setAccessible(true);
-		return object;
-	}
-
-	public static void setStaticFinalField(Field field, Object newValue) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		setAccessible(Field.class.getDeclaredField("modifiers")).setInt(field, field.getModifiers() & ~Modifier.FINAL);
-		setAccessible(Field.class.getDeclaredField("root")).set(field, null);
-		setAccessible(Field.class.getDeclaredField("overrideFieldAccessor")).set(field, null);
-		setAccessible(field).set(null, newValue);
 	}
 
 	public static List<int[]> splitArray(int[] array, int limit) {
@@ -84,7 +69,7 @@ public class Utils {
 		try {
 			return MethodHandles
 					.lookup()
-					.unreflectSetter(setAccessible(classIn.getDeclaredField(fieldName)));
+					.unreflectSetter(ReflectionUtils.setAccessible(classIn.getDeclaredField(fieldName)));
 		} catch (Throwable t) {
 			t.printStackTrace();
 			Bukkit.shutdown();
@@ -96,7 +81,7 @@ public class Utils {
 		try {
 			return MethodHandles
 					.lookup()
-					.unreflectGetter(setAccessible(classIn.getDeclaredField(fieldName)));
+					.unreflectGetter(ReflectionUtils.setAccessible(classIn.getDeclaredField(fieldName)));
 		} catch (Throwable t) {
 			t.printStackTrace();
 			Bukkit.shutdown();
@@ -122,6 +107,10 @@ public class Utils {
 		} else {
 			return fp + 1;
 		}
+	}
+	
+	public static boolean isTrue(Boolean b) {
+		return b != null && b;
 	}
 
 }

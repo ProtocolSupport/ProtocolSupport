@@ -5,9 +5,10 @@ import io.netty.buffer.ByteBuf;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.server.v1_8_R3.Packet;
+import net.minecraft.server.v1_9_R1.Packet;
 
 import protocolsupport.protocol.ServerBoundPacket;
+import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.DualPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
@@ -47,8 +48,10 @@ public class AnimatePacket implements DualPEPacket {
 	}
 
 	@Override
-	public List<? extends Packet<?>> transfrom() throws Exception {
-		return Collections.singletonList(PacketCreator.create(ServerBoundPacket.PLAY_ANIMATION.get()).create());
+	public List<? extends Packet<?>> transfrom(SharedStorage storage) throws Exception {
+		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_ANIMATION.get());
+		creator.writeVarInt(0);
+		return Collections.singletonList(creator.create());
 	}
 
 }

@@ -6,11 +6,12 @@ import java.util.Collections;
 import java.util.List;
 
 import protocolsupport.protocol.ServerBoundPacket;
+import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketCreator;
-import net.minecraft.server.v1_8_R3.BlockPosition;
-import net.minecraft.server.v1_8_R3.Packet;
+import net.minecraft.server.v1_9_R1.BlockPosition;
+import net.minecraft.server.v1_9_R1.Packet;
 
 public class RemoveBlockPacket implements ServerboundPEPacket {
 
@@ -33,7 +34,7 @@ public class RemoveBlockPacket implements ServerboundPEPacket {
 	}
 
 	@Override
-	public List<? extends Packet<?>> transfrom() throws Exception {
+	public List<? extends Packet<?>> transfrom(SharedStorage storage) throws Exception {
 		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_BLOCK_DIG.get());
 		creator.writeByte(2);
 		creator.a(new BlockPosition(x, y, z));

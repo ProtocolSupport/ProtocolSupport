@@ -6,14 +6,14 @@ import io.netty.buffer.ByteBuf;
 
 import java.util.UUID;
 
-import net.minecraft.server.v1_8_R3.ItemStack;
+import net.minecraft.server.v1_9_R1.ItemStack;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.utils.PEDataWatcherSerializer;
-import protocolsupport.utils.DataWatcherObject;
+import protocolsupport.utils.datawatcher.DataWatcherObject;
 
 public class AddPlayerPacket implements ClientboundPEPacket {
 
@@ -26,9 +26,9 @@ public class AddPlayerPacket implements ClientboundPEPacket {
 	protected float yaw;
 	protected float pitch;
 	protected ItemStack item;
-	protected TIntObjectMap<DataWatcherObject> meta;
+	protected TIntObjectMap<DataWatcherObject<?>> meta;
 
-	public AddPlayerPacket(UUID uuid, String name, int entityId, float locX, float locY, float locZ, float yaw, float pitch, TIntObjectMap<DataWatcherObject> meta) {
+	public AddPlayerPacket(UUID uuid, String name, int entityId, float locX, float locY, float locZ, float yaw, float pitch, TIntObjectMap<DataWatcherObject<?>> meta) {
 		this.uuid = uuid;
 		this.name = name;
 		this.entityId = entityId;

@@ -5,12 +5,13 @@ import io.netty.buffer.ByteBuf;
 import java.util.Collections;
 import java.util.List;
 
+import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.mcpe.handler.PELoginListener;
 import protocolsupport.protocol.transformer.mcpe.packet.HandleNMSPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.raknet.RakNetDataSerializer;
-import net.minecraft.server.v1_8_R3.Packet;
+import net.minecraft.server.v1_9_R1.Packet;
 
 public class ClientHandshakePacket implements ServerboundPEPacket {
 
@@ -30,7 +31,7 @@ public class ClientHandshakePacket implements ServerboundPEPacket {
 	}
 
 	@Override
-	public List<? extends Packet<?>> transfrom() {
+	public List<? extends Packet<?>> transfrom(SharedStorage storage) {
 		return Collections.singletonList(new HandleNMSPacket<PELoginListener>() {
 			@Override
 			public void handle0(PELoginListener listener) {

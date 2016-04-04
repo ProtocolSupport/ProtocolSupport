@@ -1,6 +1,6 @@
 package protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound;
 
-import net.minecraft.server.v1_8_R3.ItemStack;
+import net.minecraft.server.v1_9_R1.ItemStack;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;

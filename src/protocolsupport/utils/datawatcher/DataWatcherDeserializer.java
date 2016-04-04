@@ -1,0 +1,81 @@
+package protocolsupport.utils.datawatcher;
+
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
+import org.spigotmc.SneakyThrow;
+
+import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
+
+import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.RecyclablePacketDataSerializer;
+import protocolsupport.utils.datawatcher.objects.DataWatcherObjectBlockState;
+import protocolsupport.utils.datawatcher.objects.DataWatcherObjectBoolean;
+import protocolsupport.utils.datawatcher.objects.DataWatcherObjectByte;
+import protocolsupport.utils.datawatcher.objects.DataWatcherObjectChat;
+import protocolsupport.utils.datawatcher.objects.DataWatcherObjectDirection;
+import protocolsupport.utils.datawatcher.objects.DataWatcherObjectFloat;
+import protocolsupport.utils.datawatcher.objects.DataWatcherObjectItemStack;
+import protocolsupport.utils.datawatcher.objects.DataWatcherObjectOptionalPosition;
+import protocolsupport.utils.datawatcher.objects.DataWatcherObjectOptionalUUID;
+import protocolsupport.utils.datawatcher.objects.DataWatcherObjectPosition;
+import protocolsupport.utils.datawatcher.objects.DataWatcherObjectString;
+import protocolsupport.utils.datawatcher.objects.DataWatcherObjectVarInt;
+import protocolsupport.utils.datawatcher.objects.DataWatcherObjectVector3f;
+
+public class DataWatcherDeserializer {
+
+	@SuppressWarnings("unchecked")
+	private static final Constructor<? extends DataWatcherObject<?>>[] registry = new Constructor[256];
+	static {
+		try {
+			register(DataWatcherObjectByte.class);
+			register(DataWatcherObjectVarInt.class);
+			register(DataWatcherObjectFloat.class);
+			register(DataWatcherObjectString.class);
+			register(DataWatcherObjectChat.class);
+			register(DataWatcherObjectItemStack.class);
+			register(DataWatcherObjectBoolean.class);
+			register(DataWatcherObjectVector3f.class);
+			register(DataWatcherObjectPosition.class);
+			register(DataWatcherObjectOptionalPosition.class);
+			register(DataWatcherObjectDirection.class);
+			register(DataWatcherObjectOptionalUUID.class);
+			register(DataWatcherObjectBlockState.class);
+		} catch (Exception e) {
+			SneakyThrow.sneaky(e);
+		}
+	}
+
+	private static void register(Class<? extends DataWatcherObject<?>> clazz) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		Constructor<? extends DataWatcherObject<?>> constr = clazz.getConstructor();
+		registry[constr.newInstance().getTypeId(ProtocolVersion.getLatest())] = constr;
+	}
+
+	public static TIntObjectMap<DataWatcherObject<?>> decodeData(byte[] data) throws IOException {
+		TIntObjectMap<DataWatcherObject<?>> map = new TIntObjectHashMap<DataWatcherObject<?>>(10, 0.5f, -1);
+		RecyclablePacketDataSerializer serializer = RecyclablePacketDataSerializer.create(ProtocolVersion.getLatest(), data);
+		try {
+			do {
+				int key = serializer.readUnsignedByte();
+				if (key == 0xFF) {
+					break;
+				}
+				int type = serializer.readUnsignedByte();
+				try {
+					DataWatcherObject<?> object = registry[type].newInstance();
+					object.readFromStream(serializer);
+					map.put(key, object);
+				} catch (Exception e) {
+					throw new IOException("Unable to decode datawatcher object", e);
+				}
+			} while (true);
+			return map;
+		} finally {
+			serializer.release();
+		}
+	}
+
+}

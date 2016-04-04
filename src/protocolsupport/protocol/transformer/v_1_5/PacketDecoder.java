@@ -8,16 +8,17 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.AttributeKey;
-import net.minecraft.server.v1_8_R3.EnumProtocol;
-import net.minecraft.server.v1_8_R3.NetworkManager;
-import net.minecraft.server.v1_8_R3.Packet;
+import net.minecraft.server.v1_9_R1.EnumProtocol;
+import net.minecraft.server.v1_9_R1.NetworkManager;
+import net.minecraft.server.v1_9_R1.Packet;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.core.IPacketDecoder;
+import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.middlepacket.ServerBoundMiddlePacket;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.handshake.v_1_4_1_5_1_6.ClientLogin;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.handshake.v_1_5.Ping;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.login.v_1_4_1_5_1_6_1_7.EncryptionResponse;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.login.v_1_4_1_5_1_6_1_7_1_8.EncryptionResponse;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5.EntityAction;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5.PlayerAbilities;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5.PositionLook;
@@ -29,20 +30,21 @@ import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.Animation;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.BlockDig;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.BlockPlace;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.Chat;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.CreativeSetSlot;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.Flying;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.HeldSlot;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.InventoryClick;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.InventoryClose;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.InventoryEnchant;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.InventoryTransaction;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.KeepAlive;
-import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.Look;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.Position;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.TabComplete;
 import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7.UpdateSign;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7_1_8.Chat;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7_1_8.CreativeSetSlot;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7_1_8.Flying;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7_1_8.HeldSlot;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7_1_8.InventoryClick;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7_1_8.InventoryClose;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7_1_8.InventoryEnchant;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7_1_8.InventoryTransaction;
+import protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v_1_4_1_5_1_6_1_7_1_8.Look;
 import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry;
+import protocolsupport.protocol.transformer.utils.registry.MiddleTransformerRegistry.InitCallBack;
 import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
@@ -82,15 +84,23 @@ public class PacketDecoder implements IPacketDecoder {
 			dataRemapperRegistry.register(EnumProtocol.PLAY, 0xCD, ClientCommand.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, 0xFA, CustomPayload.class);
 			dataRemapperRegistry.register(EnumProtocol.PLAY, 0xFF, KickDisconnect.class);
+			dataRemapperRegistry.setCallBack(new InitCallBack<ServerBoundMiddlePacket>() {
+				@Override
+				public void onInit(ServerBoundMiddlePacket object) {
+					object.setSharedStorage(sharedstorage);
+				}
+			});
 		} catch (Throwable t) {
 			SneakyThrow.sneaky(t);
 		}
 	}
 
+	protected final SharedStorage sharedstorage;
 	private final ReplayingDecoderBuffer buffer = new ReplayingDecoderBuffer();
 	private final PacketDataSerializer serializer;
-	public PacketDecoder(ProtocolVersion version) {
-		serializer = new PacketDataSerializer(buffer, version);
+	public PacketDecoder(ProtocolVersion version, SharedStorage sharedstorage) {
+		this.serializer = new PacketDataSerializer(buffer, version);
+		this.sharedstorage = sharedstorage;
 	}
 
 	@Override

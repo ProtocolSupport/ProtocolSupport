@@ -1,24 +1,25 @@
 package protocolsupport.protocol.transformer.middlepacket.clientbound.play;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import gnu.trove.map.TIntObjectMap;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedLiving;
-import protocolsupport.utils.DataWatcherObject;
-import protocolsupport.utils.DataWatcherSerializer;
+import protocolsupport.utils.datawatcher.DataWatcherDeserializer;
+import protocolsupport.utils.datawatcher.DataWatcherObject;
 import protocolsupport.utils.netty.ChannelUtils;
 
 public abstract class MiddleSpawnLiving<T> extends ClientBoundMiddlePacket<T> {
 
 	protected int entityId;
+	protected UUID uuid;
 	protected int type;
-	protected int x;
-	protected int y;
-	protected int z;
+	protected double x;
+	protected double y;
+	protected double z;
 	protected int yaw;
 	protected int pitch;
 	protected int headPitch;
@@ -26,22 +27,23 @@ public abstract class MiddleSpawnLiving<T> extends ClientBoundMiddlePacket<T> {
 	protected int motY;
 	protected int motZ;
 	protected WatchedEntity wentity;
-	protected TIntObjectMap<DataWatcherObject> metadata;
+	protected TIntObjectMap<DataWatcherObject<?>> metadata;
 
 	@Override
 	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
 		entityId = serializer.readVarInt();
+		uuid = serializer.readUUID();
 		type = serializer.readUnsignedByte();
-		x = serializer.readInt();
-		y = serializer.readInt();
-		z = serializer.readInt();
+		x = serializer.readDouble();
+		y = serializer.readDouble();
+		z = serializer.readDouble();
 		yaw = serializer.readUnsignedByte();
 		pitch = serializer.readUnsignedByte();
 		headPitch = serializer.readUnsignedByte();
 		motX = serializer.readShort();
 		motY = serializer.readShort();
 		motZ = serializer.readShort();
-		metadata = DataWatcherSerializer.decodeData(ProtocolVersion.MINECRAFT_1_8, ChannelUtils.toArray(serializer));
+		metadata = DataWatcherDeserializer.decodeData(ChannelUtils.toArray(serializer));
 	}
 
 	@Override

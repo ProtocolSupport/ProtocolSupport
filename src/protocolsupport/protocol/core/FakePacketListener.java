@@ -1,7 +1,7 @@
 package protocolsupport.protocol.core;
 
-import net.minecraft.server.v1_8_R3.IChatBaseComponent;
-import net.minecraft.server.v1_8_R3.PacketListener;
+import net.minecraft.server.v1_9_R1.IChatBaseComponent;
+import net.minecraft.server.v1_9_R1.PacketListener;
 
 public class FakePacketListener implements PacketListener {
 

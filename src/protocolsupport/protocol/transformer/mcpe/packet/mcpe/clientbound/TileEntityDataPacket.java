@@ -2,7 +2,7 @@ package protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound;
 
 import io.netty.buffer.ByteBuf;
 
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
+import net.minecraft.server.v1_9_R1.NBTTagCompound;
 
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;

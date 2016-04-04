@@ -1,7 +1,6 @@
 package protocolsupport.commands;
 
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -12,10 +11,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import net.minecraft.server.v1_8_R3.MinecraftServer;
-import net.minecraft.server.v1_8_R3.PropertyManager;
+import net.minecraft.server.v1_9_R1.MinecraftServer;
+import net.minecraft.server.v1_9_R1.PropertyManager;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.components.TextComponent;
+import protocolsupport.api.chat.modifiers.Modifier;
+import protocolsupport.api.tab.TabAPI;
+import protocolsupport.api.title.TitleAPI;
 
 public class CommandHandler implements CommandExecutor, TabCompleter {
 
@@ -36,6 +39,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			return true;
 		}
 		if (args.length == 1 && args[0].equalsIgnoreCase("debug")) {
+			@SuppressWarnings("deprecation")
 			PropertyManager manager = MinecraftServer.getServer().getPropertyManager();
 			if (!manager.getBoolean(DEBUG_PROPERTY, false)) {
 				manager.setProperty(DEBUG_PROPERTY, Boolean.TRUE);
@@ -43,6 +47,38 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			} else {
 				manager.setProperty(DEBUG_PROPERTY, Boolean.FALSE);
 				sender.sendMessage(ChatColor.GOLD + "Disabled debug");
+			}
+			return true;
+		}
+		if (args.length == 1 && args[0].equalsIgnoreCase("testtitle")) {
+			TextComponent title = new TextComponent("Test title");
+			Modifier titlemodifier = new Modifier();
+			titlemodifier.setColor(ChatColor.AQUA);
+			titlemodifier.setBold(true);
+			title.setModifier(titlemodifier);
+			TextComponent subtitle = new TextComponent("Test subtitle");
+			Modifier subtitlemodifier = new Modifier();
+			subtitlemodifier.setColor(ChatColor.BLUE);
+			subtitlemodifier.setUnderlined(true);
+			subtitle.setModifier(subtitlemodifier);
+			for (Player player : Bukkit.getOnlinePlayers()) {
+				TitleAPI.sendSimpleTitle(player, title, subtitle, 20, 60, 20);
+			}
+			return true;
+		}
+		if (args.length == 1 && args[0].equalsIgnoreCase("testtab")) {
+			TextComponent header = new TextComponent("Test header");
+			Modifier headermodifier = new Modifier();
+			headermodifier.setColor(ChatColor.AQUA);
+			headermodifier.setBold(true);
+			header.setModifier(headermodifier);
+			TextComponent footer = new TextComponent("Test footer");
+			Modifier footermodifier = new Modifier();
+			footermodifier.setColor(ChatColor.BLUE);
+			footermodifier.setUnderlined(true);
+			footer.setModifier(footermodifier);
+			for (Player player : Bukkit.getOnlinePlayers()) {
+				TabAPI.sendHeaderFooter(player, header, footer);
 			}
 			return true;
 		}
@@ -65,16 +101,20 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
-		if (args[0].isEmpty()) {
-			return Arrays.asList("list", "debug");
-		}
+		ArrayList<String> completions = new ArrayList<String>();
 		if ("list".startsWith(args[0])) {
-			return Collections.singletonList("list");
+			completions.add("list");
 		}
 		if ("debug".startsWith(args[0])) {
-			return Collections.singletonList("debug");
+			completions.add("debug");
 		}
-		return Collections.emptyList();
+		if ("testtitle".startsWith(args[0])) {
+			completions.add("testtitle");
+		}
+		if ("testtab".startsWith(args[0])) {
+			completions.add("testtab");
+		}
+		return completions;
 	}
 
 }

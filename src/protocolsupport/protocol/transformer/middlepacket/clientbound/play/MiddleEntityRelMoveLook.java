@@ -16,9 +16,9 @@ public abstract class MiddleEntityRelMoveLook<T> extends MiddleEntity<T> {
 	@Override
 	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
 		super.readFromServerData(serializer);
-		relX = serializer.readByte();
-		relY = serializer.readByte();
-		relZ = serializer.readByte();
+		relX = serializer.readShort();
+		relY = serializer.readShort();
+		relZ = serializer.readShort();
 		yaw = serializer.readByte();
 		pitch = serializer.readByte();
 		onGround = serializer.readBoolean();

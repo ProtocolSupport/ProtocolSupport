@@ -2,13 +2,31 @@ package protocolsupport.protocol.typeremapper.id;
 
 import org.bukkit.entity.EntityType;
 
+import org.bukkit.Material;
+
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.ProtocolSupportAPI;
+import protocolsupport.api.remapper.BlockRemapperControl;
 import protocolsupport.utils.ProtocolVersionsHelper;
 
 public class IdRemapper {
 
 	public static final RemappingRegistry BLOCK = new RemappingRegistry() {
 		{
+			registerRemapEntry(Material.CHORUS_FLOWER, Material.WOOD, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.CHORUS_PLANT, Material.WOOD, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.END_GATEWAY, Material.ENDER_PORTAL, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.END_ROD, Material.GLOWSTONE, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.END_BRICKS, Material.ENDER_STONE, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.FROSTED_ICE, Material.ICE, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.GRASS_PATH, Material.GRASS, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.PURPUR_BLOCK, Material.STONE, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.PURPUR_PILLAR, Material.STONE, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.PURPUR_STAIRS, Material.COBBLESTONE_STAIRS, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.PURPUR_SLAB, Material.STONE_SLAB2, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.PURPUR_DOUBLE_SLAB, Material.DOUBLE_STONE_SLAB2, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.STRUCTURE_BLOCK, Material.BEDROCK, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.BEETROOT_BLOCK, Material.CROPS, ProtocolVersionsHelper.BEFORE_1_9);
 			// slime -> emerald block
 			registerRemapEntry(165, 133, ProtocolVersionsHelper.BEFORE_1_8);
 			// barrier -> glass
@@ -67,8 +85,8 @@ public class IdRemapper {
 			registerRemapEntry(175, 38, ProtocolVersionsHelper.BEFORE_1_7);
 			// packed ice -> snow
 			registerRemapEntry(174, 80, ProtocolVersionsHelper.BEFORE_1_7);
-			// stained clay -> clay
-			registerRemapEntry(159, 82, ProtocolVersionsHelper.BEFORE_1_6);
+			// stained clay -> stone
+			registerRemapEntry(159, 1, ProtocolVersionsHelper.BEFORE_1_6);
 			// hay bale -> stone
 			registerRemapEntry(170, 1, ProtocolVersionsHelper.BEFORE_1_6);
 			// carpet -> stone pressure plate
@@ -145,15 +163,49 @@ public class IdRemapper {
 			registerRemapEntry(191, 85, ProtocolVersion.MINECRAFT_PE);
 			registerRemapEntry(192, 85, ProtocolVersion.MINECRAFT_PE);
 		}
+		@SuppressWarnings("deprecation")
+		protected void registerRemapEntry(Material from, Material to, ProtocolVersion... versions) {
+			registerRemapEntry(from.getId(), to.getId(), versions);
+		}
+		public void registerRemapEntry(int from, int to, ProtocolVersion... versions) {
+			for (int i = 0; i < 16; i++) {
+				super.registerRemapEntry((from << 4) + i, (to << 4) + i, versions);
+			}
+		}
 		@Override
 		protected RemappingTable createTable() {
-			return new RemappingTable(4096);
+			return new RemappingTable(4096 * 16);
 		}
 	};
 
 	public static final RemappingRegistry ITEM = new RemappingRegistry() {
 		{
-			copy(BLOCK);
+			for (ProtocolVersion version : ProtocolVersion.values()) {
+				if (version.isSupported()) {
+					BlockRemapperControl ctrl = ProtocolSupportAPI.getBlockRemapper(version);
+					for (int i = 0; i < 4096; i++) {
+						registerRemapEntry(i, ctrl.getRemap(i), version);
+					}
+				}
+			}
+			registerRemapEntry(Material.BEETROOT, Material.BROWN_MUSHROOM, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.BEETROOT_SOUP, Material.MUSHROOM_SOUP, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.BEETROOT_SEEDS, Material.SEEDS, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.CHORUS_FRUIT, Material.POTATO_ITEM, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.CHORUS_FRUIT_POPPED, Material.BAKED_POTATO, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.DRAGONS_BREATH, Material.POTION, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.SPLASH_POTION, Material.POTION, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.LINGERING_POTION, Material.POTION, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.ELYTRA, Material.LEATHER_CHESTPLATE, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.END_CRYSTAL, Material.STONE, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.SHIELD, Material.WOOD_SWORD, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.SPECTRAL_ARROW, Material.ARROW, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.TIPPED_ARROW, Material.ARROW, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.BOAT_ACACIA, Material.BOAT, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.BOAT_BIRCH, Material.BOAT, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.BOAT_DARK_OAK, Material.BOAT, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.BOAT_JUNGLE, Material.BOAT, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.BOAT_SPRUCE, Material.BOAT, ProtocolVersionsHelper.BEFORE_1_9);
 			// all doors -> door
 			registerRemapEntry(427, 324, ProtocolVersionsHelper.BEFORE_1_8);
 			registerRemapEntry(428, 324, ProtocolVersionsHelper.BEFORE_1_8);
@@ -248,6 +300,10 @@ public class IdRemapper {
 			registerRemapEntry(2266, 1, ProtocolVersion.MINECRAFT_PE);
 			registerRemapEntry(2267, 1, ProtocolVersion.MINECRAFT_PE);
 		}
+		@SuppressWarnings("deprecation")
+		private void registerRemapEntry(Material from, Material to, ProtocolVersion... versions) {
+			registerRemapEntry(from.getId(), to.getId(), versions);
+		}
 		@Override
 		protected RemappingTable createTable() {
 			return new RemappingTable(4096);
@@ -255,8 +311,10 @@ public class IdRemapper {
 	};
 
 	@SuppressWarnings("deprecation")
-	public static final RemappingRegistry ENTITY = new RemappingRegistry() {
+	public static final RemappingRegistry ENTITY_LIVING = new RemappingRegistry() {
 		{
+			// sulker -> blaze
+			registerRemapEntry(69, 61, ProtocolVersionsHelper.BEFORE_1_9);
 			// endermite -> silverfish
 			registerRemapEntry(67, 60, ProtocolVersionsHelper.BEFORE_1_8);
 			// guardian -> sqiud
@@ -306,6 +364,23 @@ public class IdRemapper {
 			// horse -> cow
 			registerRemapEntry(EntityType.HORSE.getTypeId(), 11, ProtocolVersion.MINECRAFT_PE);
 
+		}
+		@Override
+		protected RemappingTable createTable() {
+			return new RemappingTable(256);
+		}
+	};
+
+	public static final RemappingRegistry ENTITY_OBJECT = new RemappingRegistry() {
+		{
+			//shulker bullet -> firecharge
+			registerRemapEntry(67, 64, ProtocolVersionsHelper.BEFORE_1_9);
+			//dragon fireball -> firecharge
+			registerRemapEntry(93, 64, ProtocolVersionsHelper.BEFORE_1_9);
+			//spectral arrow -> arrow
+			registerRemapEntry(91, 60, ProtocolVersionsHelper.BEFORE_1_9);
+			//tipped arrow -> arrow
+			registerRemapEntry(92, 60, ProtocolVersionsHelper.BEFORE_1_9);
 		}
 		@Override
 		protected RemappingTable createTable() {

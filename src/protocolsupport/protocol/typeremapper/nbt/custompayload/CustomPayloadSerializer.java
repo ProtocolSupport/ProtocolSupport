@@ -2,7 +2,7 @@ package protocolsupport.protocol.typeremapper.nbt.custompayload;
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_8_R3.ItemStack;
+import net.minecraft.server.v1_9_R1.ItemStack;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.RecyclablePacketDataSerializer;

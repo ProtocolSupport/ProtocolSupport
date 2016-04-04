@@ -5,10 +5,11 @@ import io.netty.buffer.ByteBuf;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketPlayInUseEntity.EnumEntityUseAction;
+import net.minecraft.server.v1_9_R1.Packet;
+import net.minecraft.server.v1_9_R1.PacketPlayInUseEntity.EnumEntityUseAction;
 
 import protocolsupport.protocol.ServerBoundPacket;
+import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketCreator;
@@ -31,10 +32,11 @@ public class UseEntityPacket implements ServerboundPEPacket {
 	}
 
 	@Override
-	public List<? extends Packet<?>> transfrom() throws Exception {
+	public List<? extends Packet<?>> transfrom(SharedStorage storage) throws Exception {
 		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_USE_ENTITY.get());
 		creator.writeVarInt((int) targetId);
 		creator.a(getAction(action));
+		creator.writeVarInt(0);
 		return Collections.singletonList(creator.create());
 	}
 

@@ -1,6 +1,6 @@
 package protocolsupport.protocol.transformer.utils.registry;
 
-import net.minecraft.server.v1_8_R3.EnumProtocol;
+import net.minecraft.server.v1_9_R1.EnumProtocol;
 
 @SuppressWarnings("unchecked")
 public class MiddleTransformerRegistry<T> {
@@ -8,9 +8,14 @@ public class MiddleTransformerRegistry<T> {
 	private static final int enumProtocolLength = EnumProtocol.values().length;
 
 	private final LazyNewInstance<T>[] registry = new LazyNewInstance[enumProtocolLength * 256];
+	private InitCallBack<T> callback;
 
 	public void register(EnumProtocol protocol, int packetId, Class<? extends T> packetTransformer) {
 		registry[toKey(protocol, packetId)] = new LazyNewInstance<T>(packetTransformer);
+	}
+
+	public void setCallBack(InitCallBack<T> callback) {
+		this.callback = callback;
 	}
 
 	public T getTransformer(EnumProtocol protocol, int packetId) throws InstantiationException, IllegalAccessException {
@@ -18,7 +23,11 @@ public class MiddleTransformerRegistry<T> {
 		if (transformer == null) {
 			return null;
 		}
-		return transformer.getInstance();
+		T object = transformer.getInstance();
+		if (callback != null && object != null) {
+			callback.onInit(object);
+		}
+		return object;
 	}
 
 	private static class LazyNewInstance<T> {
@@ -38,6 +47,10 @@ public class MiddleTransformerRegistry<T> {
 
 	static int toKey(EnumProtocol protocol, int packetId) {
 		return (protocol.ordinal() << 8) | packetId;
+	}
+
+	public static interface InitCallBack<T> {
+		public void onInit(T object);
 	}
 
 }

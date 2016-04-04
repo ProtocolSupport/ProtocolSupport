@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
-import net.minecraft.server.v1_8_R3.Block;
-import net.minecraft.server.v1_8_R3.Chunk;
-import net.minecraft.server.v1_8_R3.ChunkSection;
-import net.minecraft.server.v1_8_R3.IBlockData;
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
+import net.minecraft.server.v1_9_R1.Block;
+import net.minecraft.server.v1_9_R1.Chunk;
+import net.minecraft.server.v1_9_R1.ChunkSection;
+import net.minecraft.server.v1_9_R1.IBlockData;
+import net.minecraft.server.v1_9_R1.NBTTagCompound;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
@@ -70,15 +70,15 @@ public class ChunkPacket implements ClientboundPEPacket {
 			}
 		}
 
-		boolean noSkyLight = chunk.world.worldProvider.o();
+		boolean noSkyLight = chunk.world.worldProvider.m();
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
 				for (int y = 0; y < 128; y += 2) {
 					if (noSkyLight) {
 						temp.writeByte(0);
 					} else {
-						byte data = (byte) (getSection(y).d(x, y & 0xF, z) & 0xF);
-						data |= ((getSection(y + 1).d(x, (y + 1) & 0xF, z) & 0xF) << 4);
+						byte data = (byte) (getSection(y).b(x, y & 0xF, z) & 0xF);
+						data |= ((getSection(y + 1).b(x, (y + 1) & 0xF, z) & 0xF) << 4);
 						temp.writeByte(data);
 					}
 				}
@@ -88,8 +88,8 @@ public class ChunkPacket implements ClientboundPEPacket {
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
 				for (int y = 0; y < 128; y += 2) {
-					byte data = (byte) (getSection(y).e(x, y & 0xF, z) & 0xF);
-					data |= ((getSection(y + 1).e(x, (y + 1) & 0xF, z) & 0xF) << 4);
+					byte data = (byte) (getSection(y).c(x, y & 0xF, z) & 0xF);
+					data |= ((getSection(y + 1).c(x, (y + 1) & 0xF, z) & 0xF) << 4);
 					temp.writeByte(data);
 				}
 			}
@@ -137,12 +137,12 @@ public class ChunkPacket implements ClientboundPEPacket {
 		}
 
 		@Override
-		public int d(int x, int y, int z) {
+		public int b(int x, int y, int z) {
 			return 0;
 		}
 
 		@Override
-		public int e(int x, int y, int z) {
+		public int c(int x, int y, int z) {
 			return 0;
 		}
 		

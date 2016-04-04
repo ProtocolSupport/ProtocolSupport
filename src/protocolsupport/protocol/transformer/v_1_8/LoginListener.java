@@ -2,7 +2,7 @@ package protocolsupport.protocol.transformer.v_1_8;
 
 import javax.crypto.SecretKey;
 
-import net.minecraft.server.v1_8_R3.NetworkManager;
+import net.minecraft.server.v1_9_R1.NetworkManager;
 import protocolsupport.protocol.transformer.handlers.AbstractLoginListener;
 
 public class LoginListener extends AbstractLoginListener {
@@ -13,7 +13,7 @@ public class LoginListener extends AbstractLoginListener {
 
 	@Override
 	protected boolean hasCompression() {
-		return true;
+		return false;
 	}
 
 	@Override

@@ -3,7 +3,7 @@ package protocolsupport.protocol.typeremapper.nbt.tileupdate;
 import java.util.EnumMap;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
+import net.minecraft.server.v1_9_R1.NBTTagCompound;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.utils.ProtocolVersionsHelper;
@@ -26,12 +26,19 @@ public class TileNBTTransformer {
 			new SpecificTransformer() {
 				@Override
 				public NBTTagCompound transform(NBTTagCompound input) {
+					NBTTagCompound spawndata = input.getCompound("SpawnData");
 					input.remove("SpawnPotentials");
 					input.remove("SpawnData");
+					if (spawndata != null) {
+						String mobname = spawndata.getString("Id");
+						if (!mobname.isEmpty()) {
+							input.setString("EntityId", mobname);
+						}
+					}
 					return input;
 				}
 			},
-			ProtocolVersionsHelper.BEFORE_1_7
+			ProtocolVersionsHelper.BEFORE_1_9
 		);
 		register(
 			4,

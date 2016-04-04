@@ -3,8 +3,8 @@ package protocolsupport.protocol.transformer.mcpe.utils;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.EncoderException;
 
-import net.minecraft.server.v1_8_R3.NBTCompressedStreamTools;
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
+import net.minecraft.server.v1_9_R1.NBTCompressedStreamTools;
+import net.minecraft.server.v1_9_R1.NBTTagCompound;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.ChannelUtils;
 

@@ -2,11 +2,11 @@ package protocolsupport.protocol.transformer.mcpe.packet;
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_8_R3.ChatComponentText;
-import net.minecraft.server.v1_8_R3.MinecraftServer;
-import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketDataSerializer;
-import net.minecraft.server.v1_8_R3.PacketListener;
+import net.minecraft.server.v1_9_R1.ChatComponentText;
+import net.minecraft.server.v1_9_R1.MinecraftServer;
+import net.minecraft.server.v1_9_R1.Packet;
+import net.minecraft.server.v1_9_R1.PacketDataSerializer;
+import net.minecraft.server.v1_9_R1.PacketListener;
 
 public abstract class HandleNMSPacket<T extends PacketListener> implements Packet<T> {
 
@@ -23,6 +23,7 @@ public abstract class HandleNMSPacket<T extends PacketListener> implements Packe
 		handle(listener);
 	}
 
+	@SuppressWarnings("deprecation")
 	protected void handle(T listener) {
 		try {
 			handle0(listener);

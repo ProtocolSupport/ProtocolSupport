@@ -10,17 +10,14 @@ public abstract class RemappingRegistry {
 
 	public RemappingRegistry() {
 		for (ProtocolVersion version : ProtocolVersion.values()) {
-			remappings.put(version, createTable());
+			if (version.isSupported()) {
+				remappings.put(version, createTable());
+			}
 		}
 	}
 
 	public RemappingTable getTable(ProtocolVersion version) {
 		return remappings.get(version);
-	}
-
-	protected void copy(RemappingRegistry other) {
-		remappings.clear();
-		remappings.putAll(other.remappings);
 	}
 
 	protected abstract RemappingTable createTable();

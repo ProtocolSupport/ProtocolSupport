@@ -7,6 +7,7 @@ public abstract class MiddleMap<T> extends ClientBoundMiddlePacket<T> {
 
 	protected int itemData;
 	protected int scale;
+	protected boolean showIcons;
 	protected Icon[] icons;
 	protected int columns;
 	protected int rows;
@@ -18,6 +19,7 @@ public abstract class MiddleMap<T> extends ClientBoundMiddlePacket<T> {
 	public void readFromServerData(PacketDataSerializer serializer) {
 		itemData = serializer.readVarInt();
 		scale = serializer.readUnsignedByte();
+		showIcons = serializer.readBoolean();
 		icons = new Icon[serializer.readVarInt()];
 		for (int i = 0; i < icons.length; i++) {
 			Icon icon = new Icon();

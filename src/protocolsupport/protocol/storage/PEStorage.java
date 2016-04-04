@@ -1,19 +1,29 @@
 package protocolsupport.protocol.storage;
 
-import net.minecraft.server.v1_8_R3.BlockPosition;
-import net.minecraft.server.v1_8_R3.ItemStack;
+import net.minecraft.server.v1_9_R1.BlockPosition;
+import net.minecraft.server.v1_9_R1.ItemStack;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
 public class PEStorage {
 
-	private int loadedChunkCount;
+	private int playerChunkX;
+	private int playerChunkZ;
+	private boolean matched;
 
-	public void incLoadedChunkCount() {
-		loadedChunkCount++;
+	public void setPlayerChunkCoords(int playerChunkX, int playerChunkZ) {
+		this.matched = false;
+		this.playerChunkX = playerChunkX;
+		this.playerChunkZ = playerChunkZ;
 	}
 
-	public int getLoadedChunkCount() {
-		return loadedChunkCount;
+	public void attemptPlayerChunkMatch(int chunkX, int chunkZ) {
+		if (this.playerChunkX == chunkX && this.playerChunkZ == chunkZ) {
+			matched = true;
+		}
+	}
+
+	public boolean hasPlayerChunkMatch() {
+		return matched;
 	}
 
 	private final TIntObjectHashMap<ItemInfo> items = new TIntObjectHashMap<>();

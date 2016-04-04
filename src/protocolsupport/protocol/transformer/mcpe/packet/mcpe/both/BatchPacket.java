@@ -3,6 +3,7 @@ package protocolsupport.protocol.transformer.mcpe.packet.mcpe.both;
 import java.util.ArrayList;
 import java.util.List;
 
+import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.DualPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacket;
@@ -15,7 +16,7 @@ import protocolsupport.utils.netty.Compressor;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
-import net.minecraft.server.v1_8_R3.Packet;
+import net.minecraft.server.v1_9_R1.Packet;
 
 public class BatchPacket implements DualPEPacket {
 
@@ -60,10 +61,10 @@ public class BatchPacket implements DualPEPacket {
 	}
 
 	@Override
-	public List<Packet<?>> transfrom() throws Exception {
+	public List<Packet<?>> transfrom(SharedStorage storage) throws Exception {
 		ArrayList<Packet<?>> result = new ArrayList<Packet<?>>();
 		for (PEPacket pepacket : packets) {
-			result.addAll(((ServerboundPEPacket) pepacket).transfrom());
+			result.addAll(((ServerboundPEPacket) pepacket).transfrom(storage));
 		}
 		return result;
 	}

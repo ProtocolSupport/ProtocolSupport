@@ -4,11 +4,12 @@ import java.net.InetAddress;
 
 import gnu.trove.iterator.TObjectLongIterator;
 import gnu.trove.map.hash.TObjectLongHashMap;
-import net.minecraft.server.v1_8_R3.MinecraftServer;
+import net.minecraft.server.v1_9_R1.MinecraftServer;
 
 public class ThrottleTracker {
 
 	private static final TObjectLongHashMap<InetAddress> tracker = new TObjectLongHashMap<InetAddress>();
+	@SuppressWarnings("deprecation")
 	private static final long time = MinecraftServer.getServer().server.getConnectionThrottle();
 
 	public static boolean isEnabled() {

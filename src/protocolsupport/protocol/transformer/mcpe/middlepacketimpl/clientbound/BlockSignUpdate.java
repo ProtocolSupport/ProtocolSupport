@@ -2,10 +2,10 @@ package protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound;
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_9_R1.NBTTagCompound;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.TileEntityDataPacket;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleBlockSignUpdate;
@@ -23,7 +23,7 @@ public class BlockSignUpdate extends MiddleBlockSignUpdate<RecyclableCollection<
 		compound.setInt("y", position.getY());
 		compound.setInt("z", position.getZ());
 		for (int i = 0; i < 4; i++) {
-			compound.setString("Text"+(i + 1), LegacyUtils.toText(ChatSerializer.a(linesJson[i])));
+			compound.setString("Text"+(i + 1), LegacyUtils.toText(ChatAPI.fromJSON(linesJson[i])));
 		}
 		return RecyclableSingletonList.create(new TileEntityDataPacket(position.getX(), position.getY(), position.getZ(), compound));
 	}

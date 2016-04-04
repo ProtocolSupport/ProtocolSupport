@@ -5,14 +5,14 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.utils.PEDataWatcherSerializer;
-import protocolsupport.utils.DataWatcherObject;
+import protocolsupport.utils.datawatcher.DataWatcherObject;
 
 public class SetEntityDataPacket implements ClientboundPEPacket {
 
 	protected int entityId;
-	protected TIntObjectMap<DataWatcherObject> meta;
+	protected TIntObjectMap<DataWatcherObject<?>> meta;
 
-	public SetEntityDataPacket(int entityId, TIntObjectMap<DataWatcherObject> meta) {
+	public SetEntityDataPacket(int entityId, TIntObjectMap<DataWatcherObject<?>> meta) {
 		this.entityId = entityId;
 		this.meta = meta;
 	}

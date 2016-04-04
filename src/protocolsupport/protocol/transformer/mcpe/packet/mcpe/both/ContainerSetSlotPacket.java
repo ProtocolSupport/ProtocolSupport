@@ -6,17 +6,18 @@ import java.lang.invoke.MethodHandle;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.server.v1_8_R3.Container;
-import net.minecraft.server.v1_8_R3.ContainerAnvil;
-import net.minecraft.server.v1_8_R3.ContainerChest;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.IInventory;
-import net.minecraft.server.v1_8_R3.ItemStack;
-import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PlayerConnection;
+import net.minecraft.server.v1_9_R1.Container;
+import net.minecraft.server.v1_9_R1.ContainerAnvil;
+import net.minecraft.server.v1_9_R1.ContainerChest;
+import net.minecraft.server.v1_9_R1.EntityPlayer;
+import net.minecraft.server.v1_9_R1.IInventory;
+import net.minecraft.server.v1_9_R1.ItemStack;
+import net.minecraft.server.v1_9_R1.Packet;
+import net.minecraft.server.v1_9_R1.PlayerConnection;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.mcpe.PEPlayerInventory;
 import protocolsupport.protocol.transformer.mcpe.packet.SynchronizedHandleNMSPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
@@ -76,7 +77,7 @@ public class ContainerSetSlotPacket implements DualPEPacket {
 	protected static final MethodHandle anvilResultInventoryGetter = Utils.getFieldGetter(ContainerAnvil.class, "g");
 
 	@Override
-	public List<? extends Packet<?>> transfrom() throws Exception {
+	public List<? extends Packet<?>> transfrom(SharedStorage storage) throws Exception {
 		if (windowId != 0) {
 			return Collections.singletonList(new SynchronizedHandleNMSPacket<PlayerConnection>() {
 				@Override

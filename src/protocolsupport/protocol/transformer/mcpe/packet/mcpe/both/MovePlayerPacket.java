@@ -6,12 +6,13 @@ import java.util.Collections;
 import java.util.List;
 
 import protocolsupport.protocol.ServerBoundPacket;
+import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.DualPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketCreator;
-import net.minecraft.server.v1_8_R3.Packet;
+import net.minecraft.server.v1_9_R1.Packet;
 
 public class MovePlayerPacket implements DualPEPacket {
 
@@ -73,15 +74,26 @@ public class MovePlayerPacket implements DualPEPacket {
 	}
 
 	@Override
-	public List<? extends Packet<?>> transfrom() throws Exception {
-		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_POSITION_LOOK.get());
-		creator.writeDouble(x);
-		creator.writeDouble(y);
-		creator.writeDouble(z);
-		creator.writeFloat(yaw);
-		creator.writeFloat(pitch);
-		creator.writeBoolean(onGround);
-		return Collections.singletonList(creator.create());
+	public List<? extends Packet<?>> transfrom(SharedStorage storage) throws Exception {
+		if (!storage.isTeleportConfirmNeeded()) {
+			PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_POSITION_LOOK.get());
+			creator.writeDouble(x);
+			creator.writeDouble(y);
+			creator.writeDouble(z);
+			creator.writeFloat(yaw);
+			creator.writeFloat(pitch);
+			creator.writeBoolean(onGround);
+			return Collections.singletonList(creator.create());
+		} else {
+			int teleportId = storage.tryTeleportConfirmPE(x, y, z);
+			if (teleportId == -1) {
+				return Collections.emptyList();
+			} else {
+				PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_TELEPORT_ACCEPT.get());
+				creator.writeVarInt(teleportId);
+				return Collections.singletonList(creator.create());
+			}
+		}
 	}
 
 }

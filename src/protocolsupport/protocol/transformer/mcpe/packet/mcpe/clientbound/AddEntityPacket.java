@@ -3,11 +3,10 @@ package protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound;
 import gnu.trove.map.TIntObjectMap;
 
 import io.netty.buffer.ByteBuf;
-
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.utils.PEDataWatcherSerializer;
-import protocolsupport.utils.DataWatcherObject;
+import protocolsupport.utils.datawatcher.DataWatcherObject;
 
 public class AddEntityPacket implements ClientboundPEPacket {
 
@@ -21,9 +20,9 @@ public class AddEntityPacket implements ClientboundPEPacket {
 	protected float speedZ;
 	protected float yaw;
 	protected float pitch;
-	protected TIntObjectMap<DataWatcherObject> meta;
+	protected TIntObjectMap<DataWatcherObject<?>> meta;
 
-	public AddEntityPacket(int entityId, int type, float x, float y, float z, float yaw, float pitch, float speedX, float speedY, float speedZ, TIntObjectMap<DataWatcherObject> meta) {
+	public AddEntityPacket(int entityId, int type, float x, float y, float z, float yaw, float pitch, float speedX, float speedY, float speedZ, TIntObjectMap<DataWatcherObject<?>> meta) {
 		this.entityId = entityId;
 		this.type = type;
 		this.x = x;

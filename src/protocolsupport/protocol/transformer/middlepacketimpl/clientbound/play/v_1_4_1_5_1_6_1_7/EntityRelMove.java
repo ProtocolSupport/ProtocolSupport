@@ -13,9 +13,9 @@ public class EntityRelMove extends MiddleEntityRelMove<RecyclableCollection<Pack
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_ENTITY_REL_MOVE_ID, version);
 		serializer.writeInt(entityId);
-		serializer.writeByte(relX);
-		serializer.writeByte(relY);
-		serializer.writeByte(relZ);
+		serializer.writeByte(relX / 128);
+		serializer.writeByte(relY / 128);
+		serializer.writeByte(relZ / 128);
 		return RecyclableSingletonList.create(serializer);
 	}
 

@@ -14,7 +14,8 @@ import com.google.common.base.Function;
 
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.hash.TIntObjectHashMap;
-
+import protocolsupport.api.chat.ChatAPI;
+import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.mcpe.handler.ClientBoundPacketHandler;
 import protocolsupport.protocol.transformer.mcpe.handler.PELoginListener;
 import protocolsupport.protocol.transformer.mcpe.handler.ServerBoundPacketHandler;
@@ -37,12 +38,14 @@ import protocolsupport.protocol.transformer.mcpe.pipeline.UDPRouter;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import net.minecraft.server.v1_8_R3.ChatComponentText;
-import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent;
-import net.minecraft.server.v1_8_R3.MinecraftServer;
-import net.minecraft.server.v1_8_R3.NetworkManager;
-import net.minecraft.server.v1_8_R3.Packet;
+import net.minecraft.server.v1_9_R1.ChatComponentText;
+import net.minecraft.server.v1_9_R1.EnumProtocolDirection;
+import net.minecraft.server.v1_9_R1.IChatBaseComponent;
+import net.minecraft.server.v1_9_R1.ITickable;
+import net.minecraft.server.v1_9_R1.MinecraftServer;
+import net.minecraft.server.v1_9_R1.NetworkManager;
+import net.minecraft.server.v1_9_R1.Packet;
+import net.minecraft.server.v1_9_R1.IChatBaseComponent.ChatSerializer;
 
 public class UDPNetworkManager extends NetworkManager {
 
@@ -60,8 +63,9 @@ public class UDPNetworkManager extends NetworkManager {
 
 	public final static long serverID = 0x0000000012345678L;
 
-	private final ClientBoundPacketHandler clientboundTransforner = new ClientBoundPacketHandler(this);
-	private final ServerBoundPacketHandler serverboundTransformer = new ServerBoundPacketHandler(this);
+	private final SharedStorage sharedStorage = new SharedStorage();
+	private final ClientBoundPacketHandler clientboundTransforner = new ClientBoundPacketHandler(this, sharedStorage);
+	private final ServerBoundPacketHandler serverboundTransformer = new ServerBoundPacketHandler(this, sharedStorage);
 
 	private long lastReceivedPacketTime = System.currentTimeMillis();
 
@@ -69,7 +73,7 @@ public class UDPNetworkManager extends NetworkManager {
 
 	public UDPNetworkManager(EnumProtocolDirection enumprotocoldirection) {
 		super(enumprotocoldirection);
-		a(new PELoginListener(this));
+		setPacketListener(new PELoginListener(this));
 		preparing = false;
 	}
 
@@ -83,7 +87,7 @@ public class UDPNetworkManager extends NetworkManager {
 	public void close(IChatBaseComponent comp) {
 		if (channel.isOpen()) {
 			try {
-				sendPEPacket(new KickPacket(LegacyUtils.toText(comp)));
+				sendPEPacket(new KickPacket(LegacyUtils.toText(ChatAPI.fromJSON(ChatSerializer.a(comp)))));
 				super.close(comp);
 			} catch (Throwable e) {
 			} finally {
@@ -93,15 +97,10 @@ public class UDPNetworkManager extends NetworkManager {
 		}
 	}
 
-	@Override
-	public boolean g() {
-		return channel.isOpen();
-	}
-
 	@SuppressWarnings("rawtypes")
 	@Override
-	public void handle(Packet packet) {
-		a(packet, null);
+	public void sendPacket(Packet packet) {
+		sendPacket(packet, null);
 	}
 
 	private int lastReceivedACK = -1;
@@ -110,6 +109,7 @@ public class UDPNetworkManager extends NetworkManager {
 
 	private long lastPingTime = System.currentTimeMillis();
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void a() {
 		long currentTime = System.currentTimeMillis();
@@ -141,6 +141,11 @@ public class UDPNetworkManager extends NetworkManager {
 				clientboundTransforner.setSpawned();
 				sendPEPacket(new LoginStatusPacket(LoginStatusPacket.Status.PLAYER_SPAWN));
 			}
+			if (clientboundTransforner.isSpawned()) {
+				if (i() instanceof ITickable) {
+					((ITickable) i()).c();
+				}	
+			}
 		} catch (Exception e) {
 			if (MinecraftServer.getServer().isDebugging()) {
 				e.printStackTrace();
@@ -149,9 +154,9 @@ public class UDPNetworkManager extends NetworkManager {
 		}
 	}
 
-	@SuppressWarnings({ "rawtypes" })
+	@SuppressWarnings({ "rawtypes", "deprecation" })
 	@Override
-	public void a(Packet packet, GenericFutureListener genericfuturelistener, GenericFutureListener... agenericfuturelistener) {
+	public void sendPacket(Packet packet, GenericFutureListener genericfuturelistener, GenericFutureListener... agenericfuturelistener) {
 		try {
 			RecyclableCollection<? extends ClientboundPEPacket> pepackets = clientboundTransforner.transform(packet);
 			try {
@@ -169,7 +174,7 @@ public class UDPNetworkManager extends NetworkManager {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "deprecation" })
 	public void handleUDP(RakNetPacket raknetpacket) {
 		if (!channel.isOpen()) {
 			return;
@@ -257,7 +262,7 @@ public class UDPNetworkManager extends NetworkManager {
 		}
 	}
 
-	public synchronized void sendPEPacket(ClientboundPEPacket pepacket) throws Exception {
+	public void sendPEPacket(ClientboundPEPacket pepacket) throws Exception {
 		if (mtu == 0) {
 			return;
 		}

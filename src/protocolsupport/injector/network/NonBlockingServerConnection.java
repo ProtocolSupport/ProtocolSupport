@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.apache.logging.log4j.Logger;
@@ -22,16 +21,13 @@ import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import net.minecraft.server.v1_8_R3.ChatComponentText;
-import net.minecraft.server.v1_8_R3.CrashReport;
-import net.minecraft.server.v1_8_R3.CrashReportSystemDetails;
-import net.minecraft.server.v1_8_R3.LazyInitVar;
-import net.minecraft.server.v1_8_R3.MinecraftServer;
-import net.minecraft.server.v1_8_R3.NetworkManager;
-import net.minecraft.server.v1_8_R3.PacketPlayOutKickDisconnect;
-import net.minecraft.server.v1_8_R3.ReportedException;
-import net.minecraft.server.v1_8_R3.ServerConnection;
-import protocolsupport.utils.Utils;
+import net.minecraft.server.v1_9_R1.ChatComponentText;
+import net.minecraft.server.v1_9_R1.LazyInitVar;
+import net.minecraft.server.v1_9_R1.MinecraftServer;
+import net.minecraft.server.v1_9_R1.NetworkManager;
+import net.minecraft.server.v1_9_R1.PacketPlayOutKickDisconnect;
+import net.minecraft.server.v1_9_R1.ServerConnection;
+import protocolsupport.utils.ReflectionUtils;
 
 public class NonBlockingServerConnection extends ServerConnection {
 
@@ -46,33 +42,37 @@ public class NonBlockingServerConnection extends ServerConnection {
 	static List<NetworkManager> access$0(NonBlockingServerConnection connection) {
 		return connection.h;
 	}
+	@SuppressWarnings("deprecation")
 	static MinecraftServer access$1(ServerConnection connection) {
 		return MinecraftServer.getServer();
 	}
+	@SuppressWarnings("deprecation")
 	static MinecraftServer access$1(NonBlockingServerConnection connection) {
 		return MinecraftServer.getServer();
 	}
 
 	//constructor that is used when initalizing server connection in case there wasn't one before
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	public NonBlockingServerConnection() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		super(MinecraftServer.getServer());
-		e = (Logger) Utils.setAccessible(ServerConnection.class.getDeclaredField("e")).get(null);
-		g = (List<ChannelFuture>) Utils.setAccessible(ServerConnection.class.getDeclaredField("g")).get(this);
+		e = (Logger) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("e")).get(null);
+		g = (List<ChannelFuture>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("g")).get(this);
 		h = new ConcurrentLinkedQueueFakeListImpl<NetworkManager>();
-		Utils.setAccessible(ServerConnection.class.getDeclaredField("h")).set(this, h);
+		ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("h")).set(this, h);
 	}
 
+	@SuppressWarnings("deprecation")
 	public static void inject() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		Utils.setAccessible(MinecraftServer.class.getDeclaredField("q")).set(MinecraftServer.getServer(), new NonBlockingServerConnection());
+		ReflectionUtils.setAccessible(MinecraftServer.class.getDeclaredField("p")).set(MinecraftServer.getServer(), new NonBlockingServerConnection());
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void a(InetAddress inetaddress, int port) throws IOException {
 		synchronized (this.g) {
 			Class<? extends ServerSocketChannel> oclass;
 			LazyInitVar<? extends EventLoopGroup> lazyinitvar;
-			if (Epoll.isAvailable() && MinecraftServer.getServer().ai()) {
+			if (Epoll.isAvailable() && MinecraftServer.getServer().ae()) {
 				oclass = EpollServerSocketChannel.class;
 				lazyinitvar = ServerConnection.b;
 				e.info("Using epoll channel type");
@@ -103,36 +103,25 @@ public class NonBlockingServerConnection extends ServerConnection {
 		while (iterator.hasNext()) {
 			final NetworkManager networkmanager = iterator.next();
 			if (!networkmanager.h()) {
-				if (!networkmanager.g()) {
+				if (!networkmanager.isConnected()) {
 					if (networkmanager.preparing) {
 						continue;
 					}
 					iterator.remove();
-					networkmanager.l();
+					networkmanager.handleDisconnection();
 				} else {
 					try {
 						networkmanager.a();
 					} catch (Exception exception) {
-						if (networkmanager.c()) {
-							final CrashReport crashreport = CrashReport.a(exception, "Ticking memory connection");
-							final CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Ticking connection");
-							crashreportsystemdetails.a("Connection", new Callable<String>() {
-								@Override
-								public String call() throws Exception {
-									return networkmanager.toString();
-								}
-							});
-							throw new ReportedException(crashreport);
-						}
 						e.warn("Failed to handle packet for " + networkmanager.getSocketAddress(), exception);
 						final ChatComponentText chatcomponenttext = new ChatComponentText("Internal server error");
-						networkmanager.a(new PacketPlayOutKickDisconnect(chatcomponenttext), new GenericFutureListener<Future<? super Void>>() {
+						networkmanager.sendPacket(new PacketPlayOutKickDisconnect(chatcomponenttext), new GenericFutureListener<Future<? super Void>>() {
 							@Override
 							public void operationComplete(Future<? super Void> future) throws Exception {
 								networkmanager.close(chatcomponenttext);
 							}
 						});
-						networkmanager.k();
+						networkmanager.stopReading();
 					}
 				}
 			}

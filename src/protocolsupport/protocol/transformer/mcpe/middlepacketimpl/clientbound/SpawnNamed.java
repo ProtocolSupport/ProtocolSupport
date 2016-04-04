@@ -26,7 +26,7 @@ public class SpawnNamed extends MiddleSpawnNamed<RecyclableCollection<? extends 
 	public RecyclableCollection<? extends ClientboundPEPacket> toData(ProtocolVersion version) throws IOException {
 		return RecyclableSingletonList.create(new AddPlayerPacket(
 			uuid, name, playerEntityId,
-			x / 32.0F, y / 32.0F, z / 32.0F,
+			(float) x, (float) y, (float) z,
 			yaw / 256.0F * 360.0F, pitch / 256.0F * 360.0F,
 			WatchedDataRemapper.transform(wplayer, metadata, version)
 		));

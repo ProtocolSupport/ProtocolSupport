@@ -20,14 +20,14 @@ public class EntityTeleport extends MiddleEntityTeleport<RecyclableCollection<? 
 		if (wentity != null && wentity.getType() == SpecificType.PLAYER) {
 			return RecyclableSingletonList.create(new MovePlayerPacket(
 				entityId,
-				x / 32.0F, y / 32.0F, z / 32.0F,
+				(float) x, (float) y, (float) z,
 				yaw / 256.0F * 360.0F, yaw / 256.0F * 360.0F, pitch / 256.0F * 360.0F,
 				false
 			));
 		} else {
 			return RecyclableSingletonList.create(new MoveEntityPacket(
 				entityId,
-				x / 32.0F, y / 32.0F, z / 32.0F,
+				(float) x, (float) y, (float) z,
 				yaw / 256.0F * 360.0F, pitch / 256.0F * 360.0F
 			));
 		}

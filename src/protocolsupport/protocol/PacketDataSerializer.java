@@ -13,7 +13,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack;
 import org.spigotmc.LimitStream;
 import org.spigotmc.SneakyThrow;
 
@@ -23,19 +23,20 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.ByteBufUtil;
+import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
-import net.minecraft.server.v1_8_R3.BlockPosition;
-import net.minecraft.server.v1_8_R3.GameProfileSerializer;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_8_R3.Item;
-import net.minecraft.server.v1_8_R3.ItemStack;
-import net.minecraft.server.v1_8_R3.Items;
-import net.minecraft.server.v1_8_R3.NBTCompressedStreamTools;
-import net.minecraft.server.v1_8_R3.NBTReadLimiter;
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
-import net.minecraft.server.v1_8_R3.NBTTagList;
-import net.minecraft.server.v1_8_R3.NBTTagString;
+import net.minecraft.server.v1_9_R1.BlockPosition;
+import net.minecraft.server.v1_9_R1.GameProfileSerializer;
+import net.minecraft.server.v1_9_R1.Item;
+import net.minecraft.server.v1_9_R1.ItemStack;
+import net.minecraft.server.v1_9_R1.Items;
+import net.minecraft.server.v1_9_R1.NBTCompressedStreamTools;
+import net.minecraft.server.v1_9_R1.NBTReadLimiter;
+import net.minecraft.server.v1_9_R1.NBTTagCompound;
+import net.minecraft.server.v1_9_R1.NBTTagList;
+import net.minecraft.server.v1_9_R1.NBTTagString;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.ItemStackWriteEvent;
 import protocolsupport.protocol.transformer.mcpe.utils.PEDataInput;
 import protocolsupport.protocol.transformer.mcpe.utils.PEDataOutput;
@@ -46,7 +47,9 @@ import protocolsupport.protocol.typeskipper.id.SkippingTable;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.ChannelUtils;
 
-public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDataSerializer {	private ProtocolVersion version;
+public class PacketDataSerializer extends net.minecraft.server.v1_9_R1.PacketDataSerializer {
+
+	private ProtocolVersion version;
 
 	public PacketDataSerializer(ByteBuf buf, ProtocolVersion version) {
 		this(buf);
@@ -66,7 +69,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 	}
 
 	@Override
-	public void a(ItemStack itemstack) {
+	public PacketDataSerializer a(ItemStack itemstack) {
 		itemstack = transformItemStack(itemstack);
 		if ((itemstack == null) || (itemstack.getItem() == null)) {
 			writeShort(getVersion() == ProtocolVersion.MINECRAFT_PE ? 0 : -1);
@@ -77,10 +80,11 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 			writeShort(itemstack.getData());
 			a(itemstack.getTag());
 		}
+		return this;
 	}
 
 	@Override
-	public ItemStack i() throws IOException {
+	public ItemStack k() {
 		switch (getVersion()) {
 			case MINECRAFT_PE: {
 				int id = readShort();
@@ -90,20 +94,20 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 				int count = readByte();
 				int data = readShort();
 				ItemStack itemstack = new ItemStack(Item.getById(id), count, data);
-				itemstack.setTag(h());
+				itemstack.setTag(j());
 				if (itemstack.getTag() != null) {
 					CraftItemStack.setItemMeta(itemstack, CraftItemStack.getItemMeta(itemstack));
 				}
 				return itemstack;
 			}
 			default: {
-				return super.i();
+				return super.k();
 			}
 		}
 	}
 
 	@Override
-	public void a(NBTTagCompound nbttagcompound) {
+	public PacketDataSerializer a(NBTTagCompound nbttagcompound) {
 		if (getVersion() == ProtocolVersion.MINECRAFT_PE) {
 			if (nbttagcompound == null) {
 				writeShort(0);
@@ -119,7 +123,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 					tempbuffer.release();
 				}
 			}
-			return;
+			return this;
 		}
 		if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_8)) {
 			if (nbttagcompound == null) {
@@ -144,6 +148,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 				}
 			}
 		}
+		return this;
 	}
 
 	private ItemStack transformItemStack(ItemStack original) {
@@ -159,7 +164,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 					NBTTagList pages = nbttagcompound.getList("pages", 8);
 					NBTTagList newpages = new NBTTagList();
 					for (int i = 0; i < pages.size(); i++) {
-						newpages.add(new NBTTagString(LegacyUtils.toText(ChatSerializer.a(pages.getString(i)))));
+						newpages.add(new NBTTagString(LegacyUtils.toText(ChatAPI.fromJSON(pages.getString(i)))));
 					}
 					nbttagcompound.set("pages", newpages);
 				}
@@ -211,17 +216,22 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 	}
 
 	@Override
-	public NBTTagCompound h() throws IOException {
+	public NBTTagCompound j() {
 		if (getVersion() == ProtocolVersion.MINECRAFT_PE) {
 			int length = ByteBufUtil.swapShort(readShort());
 			if (length == 0) {
 				return null;
 			}
-			return NBTCompressedStreamTools.a(new PEDataInput(this), new NBTReadLimiter(2097152L));
+			try {
+				return NBTCompressedStreamTools.a(new PEDataInput(this), new NBTReadLimiter(2097152L));
+			} catch (IOException e) {
+				SneakyThrow.sneaky(e);
+				return null;
+			}
 		}
 		if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_8)) {
 			final short length = readShort();
-			if (length < 0 || (getVersion() == ProtocolVersion.MINECRAFT_PE && length == 0)) {
+			if (length < 0) {
 				return null;
 			}
 			final byte[] abyte = new byte[length];
@@ -233,18 +243,23 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 				return null;
 			}
 			this.readerIndex(index);
-			return NBTCompressedStreamTools.a(new DataInputStream(new ByteBufInputStream(this)), new NBTReadLimiter(2097152L));
+			try {
+				return NBTCompressedStreamTools.a(new DataInputStream(new ByteBufInputStream(this)), new NBTReadLimiter(2097152L));
+			} catch (IOException e) {
+				SneakyThrow.sneaky(e);
+				return null;
+			}
 		}
 	}
 
 	@Override
-	public String c(int limit) {
+	public String e(int limit) {
 		if (getVersion() == ProtocolVersion.MINECRAFT_PE) {
 			return new String(ChannelUtils.toArray(readBytes(readUnsignedShort())), StandardCharsets.UTF_8);
 		} else if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4)) {
 			return new String(ChannelUtils.toArray(readBytes(readUnsignedShort() * 2)), StandardCharsets.UTF_16BE);
 		} else {
-			return super.c(limit);
+			return super.e(limit);
 		}
 	}
 
@@ -264,18 +279,22 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 	}
 
 	@Override
-	public byte[] a() {
+	public byte[] b(int limit) {
 		if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10) || getVersion() == ProtocolVersion.MINECRAFT_PE) {
-			byte[] array = new byte[readShort()];
+			int size = readShort();
+			if (size > limit) {
+				throw new DecoderException("ByteArray with size " + size + " is bigger than allowed " + limit);
+			}
+			byte[] array = new byte[size];
 			readBytes(array);
 			return array;
 		} else {
-			return super.a();
+			return super.b(limit);
 		}
 	}
 
 	@Override
-	public void a(byte[] array) {
+	public PacketDataSerializer a(byte[] array) {
 		if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10) || getVersion() == ProtocolVersion.MINECRAFT_PE) {
 			if (array.length > 32767) {
 				throw new IllegalArgumentException("Too big array length of "+array.length);
@@ -285,14 +304,23 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 		} else {
 			super.a(array);
 		}
+		return this;
+	}
+
+	public long readVarLong() {
+		return h();
+	}
+
+	public void writeVarLong(long varLong) {
+		b(varLong);
 	}
 
 	public int readVarInt() {
-		return e();
+		return g();
 	}
 
 	public void writeVarInt(int varInt) {
-		b(varInt);
+		d(varInt);
 	}
 
 	public String readString() {
@@ -300,7 +328,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 	}
 
 	public String readString(int limit) {
-		return c(limit);
+		return e(limit);
 	}
 
 	public void writeString(String string) {
@@ -308,7 +336,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 	}
 
 	public ItemStack readItemStack() throws IOException {
-		return i();
+		return k();
 	}
 
 	public void writeItemStack(ItemStack itemstack) {
@@ -316,7 +344,11 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 	}
 
 	public byte[] readArray() {
-		return a();
+		return b(readableBytes());
+	}
+
+	public byte[] readArray(int limit) {
+		return b(limit);
 	}
 
 	public void writeArray(byte[] array) {
@@ -324,7 +356,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 	}
 
 	public BlockPosition readPosition() {
-		return c();
+		return e();
 	}
 
 	public void writePosition(BlockPosition position) {
@@ -332,7 +364,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 	}
 
 	public UUID readUUID() {
-		return g();
+		return i();
 	}
 
 	public void writeUUID(UUID uuid) {
@@ -340,7 +372,7 @@ public class PacketDataSerializer extends net.minecraft.server.v1_8_R3.PacketDat
 	}
 
 	public NBTTagCompound readTag() throws IOException {
-		return h();
+		return j();
 	}
 
 	public void writeTag(NBTTagCompound tag) {

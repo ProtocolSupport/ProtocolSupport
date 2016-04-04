@@ -3,12 +3,13 @@ package protocolsupport.protocol.transformer.mcpe.packet.mcpe.both;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.server.v1_8_R3.ItemStack;
-import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PlayerConnection;
+import net.minecraft.server.v1_9_R1.ItemStack;
+import net.minecraft.server.v1_9_R1.Packet;
+import net.minecraft.server.v1_9_R1.PlayerConnection;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.mcpe.PEPlayerInventory;
 import protocolsupport.protocol.transformer.mcpe.packet.SynchronizedHandleNMSPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
@@ -57,7 +58,7 @@ public class EntityEquipmentInventoryPacket implements DualPEPacket {
 	}
 
 	@Override
-	public List<? extends Packet<?>> transfrom() throws Exception {
+	public List<? extends Packet<?>> transfrom(SharedStorage storage) throws Exception {
 		return Collections.singletonList(new SynchronizedHandleNMSPacket<PlayerConnection>() {
 			@Override
 			public void handle0(PlayerConnection listener) {

@@ -13,6 +13,7 @@ public abstract class MiddleLogin<T> extends ClientBoundMiddlePacket<T> {
 	protected int difficulty;
 	protected int maxplayers;
 	protected String leveltype;
+	protected boolean reducedDebugInfo;
 
 	@Override
 	public void readFromServerData(PacketDataSerializer serializer) {
@@ -23,6 +24,7 @@ public abstract class MiddleLogin<T> extends ClientBoundMiddlePacket<T> {
 		serializer.readByte();
 		maxplayers = TabAPI.getMaxTabSize();
 		leveltype = serializer.readString(16);
+		reducedDebugInfo = serializer.readBoolean();
 	}
 
 	@Override

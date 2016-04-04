@@ -2,9 +2,8 @@ package protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound;
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
-
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.ChatPacket;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleChat;
@@ -16,7 +15,7 @@ public class Chat extends MiddleChat<RecyclableCollection<? extends ClientboundP
 
 	@Override
 	public RecyclableCollection<? extends ClientboundPEPacket> toData(ProtocolVersion version) throws IOException {
-		return RecyclableSingletonList.create(new ChatPacket(LegacyUtils.toText(ChatSerializer.a(chatJson))));
+		return RecyclableSingletonList.create(new ChatPacket(LegacyUtils.toText(ChatAPI.fromJSON(chatJson))));
 	}
 
 }

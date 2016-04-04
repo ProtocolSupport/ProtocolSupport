@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import com.mojang.authlib.properties.Property;
 
-import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
+import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage.PlayerListEntry;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
@@ -113,7 +113,7 @@ public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {
 		public Property[] properties;
 
 		public String getName() {
-			return displayNameJson == null ? username : LegacyUtils.toText(ChatSerializer.a(displayNameJson));
+			return displayNameJson == null ? username : LegacyUtils.toText(ChatAPI.fromJSON(displayNameJson));
 		}
 	}
 

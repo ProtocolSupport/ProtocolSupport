@@ -8,11 +8,12 @@ import java.util.UUID;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.mcpe.handler.PELoginListener;
 import protocolsupport.protocol.transformer.mcpe.packet.HandleNMSPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
-import net.minecraft.server.v1_8_R3.Packet;
+import net.minecraft.server.v1_9_R1.Packet;
 
 public class LoginPacket implements ServerboundPEPacket {
 
@@ -47,7 +48,7 @@ public class LoginPacket implements ServerboundPEPacket {
 	}
 
 	@Override
-	public List<? extends Packet<?>> transfrom() {
+	public List<? extends Packet<?>> transfrom(SharedStorage storage) {
 		return Collections.singletonList(new HandleNMSPacket<PELoginListener>() {
 			@Override
 			public void handle0(PELoginListener listener) {

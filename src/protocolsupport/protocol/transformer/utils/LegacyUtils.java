@@ -1,82 +1,55 @@
 package protocolsupport.protocol.transformer.utils;
 
-import java.util.Iterator;
+import org.bukkit.ChatColor;
 
-import net.minecraft.server.v1_8_R3.ChatModifier;
-import net.minecraft.server.v1_8_R3.EnumChatFormat;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent;
+import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.api.chat.modifiers.Modifier;
+import protocolsupport.utils.Utils;
 
 public class LegacyUtils {
 
-	public static String toText(final IChatBaseComponent component) {
+	public static String toText(BaseComponent component) {
 		if (component == null) {
 			return "";
 		}
 		final StringBuilder out = new StringBuilder();
-		Iterator<IChatBaseComponent> iterator = component.iterator();
-		while (iterator.hasNext()) {
-			IChatBaseComponent c = iterator.next();
-			final ChatModifier modi = c.getChatModifier();
-			if (modi.getColor() != null) {
-				out.append(modi.getColor());
-			} else {
-				if (out.length() != 0) {
-					out.append(EnumChatFormat.RESET);
-				}
-			}
-			if (modi.isBold()) {
-				out.append(EnumChatFormat.BOLD);
-			}
-			if (modi.isItalic()) {
-				out.append(EnumChatFormat.ITALIC);
-			}
-			if (modi.isUnderlined()) {
-				out.append(EnumChatFormat.UNDERLINE);
-			}
-			if (modi.isStrikethrough()) {
-				out.append(EnumChatFormat.STRIKETHROUGH);
-			}
-			if (modi.isRandom()) {
-				out.append(EnumChatFormat.OBFUSCATED);
-			}
-			out.append(c.getText());
-		}
+		toTextSingle(out, component, component.getModifier());
 		return out.toString();
 	}
 
-	public static String getSound(String newSound) {
-		switch (newSound) {
-			case "game.player.hurt.fall.big":
-			case "game.neutral.hurt.fall.big":
-			case "game.hostile.hurt.fall.big": {
-				return "damage.fallbig";
+	private static void toTextSingle(StringBuilder out, BaseComponent component, Modifier modifier) {
+		if (Utils.isTrue(modifier.hasColor())) {
+			out.append(modifier.getColor());
+		}
+		if (Utils.isTrue(modifier.isBold())) {
+			out.append(ChatColor.BOLD);
+		}
+		if (Utils.isTrue(modifier.isItalic())) {
+			out.append(ChatColor.ITALIC);
+		}
+		if (Utils.isTrue(modifier.isUnderlined())) {
+			out.append(ChatColor.UNDERLINE);
+		}
+		if (Utils.isTrue(modifier.isStrikethrough())) {
+			out.append(ChatColor.STRIKETHROUGH);
+		}
+		if (Utils.isTrue(modifier.isRandom())) {
+			out.append(ChatColor.MAGIC);
+		}
+		out.append(component.getValue());
+		for (BaseComponent child : component.getSiblings()) {
+			if (out.length() > 0) {
+				out.append(ChatColor.RESET);
 			}
-			case "game.player.hurt.fall.small":
-			case "game.neutral.hurt.fall.small":
-			case "game.hostile.hurt.fall.small": {
-				return "damage.fallsmall";
-			}
-			case "game.player.hurt":
-			case "game.player.die":
-			case "game.neutral.hurt":
-			case "game.neutral.die":
-			case "game.hostile.hurt":
-			case "game.hostile.die": {
-				return "damage.hit";
-			}
-			case "game.player.swim":
-			case "game.neutral.swim":
-			case "game.hostile.swim": {
-				return "liquid.swim";
-			}
-			case "game.player.swim.splash":
-			case "game.neutral.swim.splash":
-			case "game.hostile.swim.splash": {
-				return "liquid.splash";
-			}
-			default: {
-				return newSound;
-			}
+			Modifier childmodifier = child.getModifier();
+			Modifier combinedmodifier = new Modifier();
+			combinedmodifier.setColor(childmodifier.hasColor() ? childmodifier.getColor() : modifier.getColor());
+			combinedmodifier.setBold(childmodifier.isBold() != null ? childmodifier.isBold() : modifier.isBold());
+			combinedmodifier.setBold(childmodifier.isItalic() != null ? childmodifier.isItalic() : modifier.isItalic());
+			combinedmodifier.setBold(childmodifier.isUnderlined() != null ? childmodifier.isUnderlined() : modifier.isUnderlined());
+			combinedmodifier.setBold(childmodifier.isStrikethrough() != null ? childmodifier.isStrikethrough() : modifier.isStrikethrough());
+			combinedmodifier.setBold(childmodifier.isRandom() != null ? childmodifier.isRandom() : modifier.isRandom());
+			toTextSingle(out, child, combinedmodifier);
 		}
 	}
 

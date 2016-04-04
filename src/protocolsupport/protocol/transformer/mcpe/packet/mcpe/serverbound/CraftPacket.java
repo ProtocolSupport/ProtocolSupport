@@ -6,21 +6,22 @@ import java.util.List;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
 
-import net.minecraft.server.v1_8_R3.BlockPosition;
-import net.minecraft.server.v1_8_R3.Container;
-import net.minecraft.server.v1_8_R3.ContainerPlayer;
-import net.minecraft.server.v1_8_R3.ContainerWorkbench;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.IInventory;
-import net.minecraft.server.v1_8_R3.InventoryCrafting;
-import net.minecraft.server.v1_8_R3.ItemStack;
-import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PlayerConnection;
-import net.minecraft.server.v1_8_R3.PlayerInventory;
-import net.minecraft.server.v1_8_R3.BlockWorkbench.TileEntityContainerWorkbench;
+import net.minecraft.server.v1_9_R1.BlockPosition;
+import net.minecraft.server.v1_9_R1.Container;
+import net.minecraft.server.v1_9_R1.ContainerPlayer;
+import net.minecraft.server.v1_9_R1.ContainerWorkbench;
+import net.minecraft.server.v1_9_R1.EntityPlayer;
+import net.minecraft.server.v1_9_R1.IInventory;
+import net.minecraft.server.v1_9_R1.InventoryCrafting;
+import net.minecraft.server.v1_9_R1.ItemStack;
+import net.minecraft.server.v1_9_R1.Packet;
+import net.minecraft.server.v1_9_R1.PlayerConnection;
+import net.minecraft.server.v1_9_R1.PlayerInventory;
+import net.minecraft.server.v1_9_R1.BlockWorkbench.TileEntityContainerWorkbench;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.mcpe.packet.SynchronizedHandleNMSPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
@@ -57,7 +58,7 @@ public class CraftPacket implements ServerboundPEPacket {
 	}
 
 	@Override
-	public List<? extends Packet<?>> transfrom() throws Exception {
+	public List<? extends Packet<?>> transfrom(SharedStorage storage) throws Exception {
 		return Collections.singletonList(new SynchronizedHandleNMSPacket<PlayerConnection>() {
 			@Override
 			public void handle0(PlayerConnection listener) {

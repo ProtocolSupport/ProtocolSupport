@@ -5,12 +5,13 @@ import io.netty.buffer.ByteBuf;
 import java.util.Collections;
 import java.util.List;
 
+import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.mcpe.packet.SynchronizedHandleNMSPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
-import net.minecraft.server.v1_8_R3.ChatComponentText;
-import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketListener;
+import net.minecraft.server.v1_9_R1.ChatComponentText;
+import net.minecraft.server.v1_9_R1.Packet;
+import net.minecraft.server.v1_9_R1.PacketListener;
 
 public class ClientDisconnectPacket implements ServerboundPEPacket {
 
@@ -25,7 +26,7 @@ public class ClientDisconnectPacket implements ServerboundPEPacket {
 	}
 
 	@Override
-	public List<? extends Packet<?>> transfrom() throws Exception {
+	public List<? extends Packet<?>> transfrom(SharedStorage storage) throws Exception {
 		return Collections.singletonList(new SynchronizedHandleNMSPacket<PacketListener>() {
 			@Override
 			public void handle0(PacketListener listener) {

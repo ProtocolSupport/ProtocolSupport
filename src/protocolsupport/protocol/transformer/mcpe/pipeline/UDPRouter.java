@@ -11,9 +11,9 @@ import protocolsupport.protocol.transformer.mcpe.VirtualChannel;
 import protocolsupport.protocol.transformer.mcpe.UDPNetworkManager;
 import protocolsupport.protocol.transformer.mcpe.packet.raknet.RakNetConstants;
 import protocolsupport.protocol.transformer.mcpe.packet.raknet.RakNetPacket;
-import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
-import net.minecraft.server.v1_8_R3.MinecraftServer;
-import net.minecraft.server.v1_8_R3.NetworkManager;
+import net.minecraft.server.v1_9_R1.EnumProtocolDirection;
+import net.minecraft.server.v1_9_R1.MinecraftServer;
+import net.minecraft.server.v1_9_R1.NetworkManager;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -41,6 +41,7 @@ public class UDPRouter extends SimpleChannelInboundHandler<RakNetPacket> {
 		this.networkManagers = networkManagers;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
 		if (MinecraftServer.getServer().isDebugging()) {
