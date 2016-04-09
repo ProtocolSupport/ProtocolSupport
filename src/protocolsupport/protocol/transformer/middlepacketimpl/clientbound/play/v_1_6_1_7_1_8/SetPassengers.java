@@ -12,8 +12,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class SetPassengers extends MiddleSetPassengers<RecyclableCollection<PacketData>> {
 
-	protected final TIntIntHashMap vehiclePassenger = new TIntIntHashMap();
-	protected int passengerId;
+	private final TIntIntHashMap vehiclePassenger = new TIntIntHashMap();
+	private int passengerId;
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
