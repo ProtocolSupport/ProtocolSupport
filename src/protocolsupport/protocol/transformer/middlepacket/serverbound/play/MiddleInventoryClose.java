@@ -13,6 +13,7 @@ public abstract class MiddleInventoryClose extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
+		sharedstorage.closeWindow();
 		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_WINDOW_CLOSE.get());
 		creator.writeByte(windowId);
 		return RecyclableSingletonList.create(creator.create());

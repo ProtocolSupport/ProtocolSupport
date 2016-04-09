@@ -13,11 +13,6 @@ public abstract class MiddleInventorySetItems<T> extends ClientBoundMiddlePacket
 	protected ArrayList<ItemStack> itemstacks = new ArrayList<ItemStack>();
 
 	@Override
-	public boolean needsPlayer() {
-		return true;
-	}
-
-	@Override
 	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
 		windowId = serializer.readUnsignedByte();
 		int count = serializer.readShort();

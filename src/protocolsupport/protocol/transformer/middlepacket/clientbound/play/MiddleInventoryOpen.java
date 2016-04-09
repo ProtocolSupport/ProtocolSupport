@@ -1,6 +1,7 @@
 package protocolsupport.protocol.transformer.middlepacket.clientbound.play;
 
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.storage.SharedStorage.WindowType;
 import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 
 public abstract class MiddleInventoryOpen<T> extends ClientBoundMiddlePacket<T> {
@@ -12,11 +13,6 @@ public abstract class MiddleInventoryOpen<T> extends ClientBoundMiddlePacket<T> 
 	protected int horseId;
 
 	@Override
-	public boolean needsPlayer() {
-		return true;
-	}
-
-	@Override
 	public void readFromServerData(PacketDataSerializer serializer) {
 		windowId = serializer.readUnsignedByte();
 		invname = serializer.readString(32);
@@ -25,6 +21,11 @@ public abstract class MiddleInventoryOpen<T> extends ClientBoundMiddlePacket<T> 
 		if (invname.equals("EntityHorse")) {
 			horseId = serializer.readInt();
 		}
+	}
+
+	@Override
+	public void handle() {
+		sharedstorage.setOpenedWindow(WindowType.fromName(invname));
 	}
 
 }
