@@ -13,7 +13,11 @@ public class InventoryClick extends MiddleInventoryClick {
 	public void readFromClientData(PacketDataSerializer serializer) throws IOException {
 		windowId = serializer.readUnsignedByte();
 		slot = serializer.readShort();
-		if (serializer.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_8) && sharedstorage.getOpenedWindow() == WindowType.ENCHANT) {
+		if (serializer.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9) && sharedstorage.getOpenedWindow() == WindowType.BREING) {
+			if (slot > 3) {
+				slot++;
+			}
+		} else if (serializer.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_8) && sharedstorage.getOpenedWindow() == WindowType.ENCHANT) {
 			if (slot > 0) {
 				slot++;
 			}

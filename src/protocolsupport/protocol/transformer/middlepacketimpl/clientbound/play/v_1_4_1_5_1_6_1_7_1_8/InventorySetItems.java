@@ -19,7 +19,7 @@ public class InventorySetItems extends MiddleInventorySetItems<RecyclableCollect
 			itemstacks.remove(itemstacks.size() - 1);
 		}
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && sharedstorage.getOpenedWindow() == WindowType.BREING) {
-			itemstacks.remove(1);
+			itemstacks.remove(4);
 		} else if (version.isBefore(ProtocolVersion.MINECRAFT_1_8) && sharedstorage.getOpenedWindow() == WindowType.ENCHANT) {
 			itemstacks.remove(1);
 		}

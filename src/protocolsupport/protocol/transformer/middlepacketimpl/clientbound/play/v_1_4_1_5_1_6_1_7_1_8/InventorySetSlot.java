@@ -19,17 +19,17 @@ public class InventorySetSlot extends MiddleInventorySetSlot<RecyclableCollectio
 			return RecyclableEmptyList.get();
 		}
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && sharedstorage.getOpenedWindow() == WindowType.BREING) {
-			if (slot == 1) {
+			if (slot == 4) {
 				return RecyclableEmptyList.get();
 			}
-			if (slot > 0) {
+			if (slot > 4) {
 				slot--;
 			}
 		} else if (version.isBefore(ProtocolVersion.MINECRAFT_1_8) && sharedstorage.getOpenedWindow() == WindowType.ENCHANT) {
 			if (slot == 1) {
 				return RecyclableEmptyList.get();
 			}
-			if (slot > 0) {
+			if (slot > 1) {
 				slot--;
 			}
 		}
