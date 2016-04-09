@@ -7,7 +7,6 @@ import java.util.UUID;
 
 import com.mojang.authlib.properties.Property;
 
-import gnu.trove.map.hash.TIntIntHashMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
@@ -19,7 +18,6 @@ public class LocalStorage {
 	private final TIntObjectHashMap<WatchedEntity> watchedEntities = new TIntObjectHashMap<WatchedEntity>();
 	private WatchedPlayer player;
 	private final HashMap<UUID, PlayerListEntry> playerlist = new HashMap<>();
-	private TIntIntHashMap vehiclePassenger = new TIntIntHashMap();
 
 	public void addWatchedEntity(WatchedEntity entity) {
 		watchedEntities.put(entity.getId(), entity);
@@ -62,18 +60,6 @@ public class LocalStorage {
 
 	public void removePlayerListEntry(UUID uuid) {
 		playerlist.remove(uuid);
-	}
-
-	public void setVehiclePassenger(int vehicleId, int passengerId) {
-		vehiclePassenger.put(vehicleId, passengerId);
-	}
-
-	public int getVehiclePassenger(int vehicleId) {
-		return vehiclePassenger.get(vehicleId);
-	}
-
-	public void removeVehiclePassenger(int vehicleId) {
-		vehiclePassenger.remove(vehicleId);
 	}
 
 	public static class PlayerListEntry implements Cloneable {

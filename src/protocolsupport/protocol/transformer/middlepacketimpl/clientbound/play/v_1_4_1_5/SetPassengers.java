@@ -2,6 +2,7 @@ package protocolsupport.protocol.transformer.middlepacketimpl.clientbound.play.v
 
 import java.io.IOException;
 
+import gnu.trove.map.hash.TIntIntHashMap;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleSetPassengers;
@@ -11,6 +12,7 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class SetPassengers extends MiddleSetPassengers<RecyclableCollection<PacketData>> {
 
+	protected final TIntIntHashMap vehiclePassenger = new TIntIntHashMap();
 	protected int passengerId;
 
 	@Override
@@ -24,11 +26,10 @@ public class SetPassengers extends MiddleSetPassengers<RecyclableCollection<Pack
 	@Override
 	public void handle() {
 		if (passengersIds.length == 0) {
-			passengerId = storage.getVehiclePassenger(vehicleId);
-			storage.removeVehiclePassenger(vehicleId);
+			passengerId = vehiclePassenger.remove(vehicleId);
 		} else {
 			passengerId = passengersIds[0];
-			storage.setVehiclePassenger(vehicleId, passengerId);
+			vehiclePassenger.put(vehicleId, passengerId);
 		}
 	}
 
