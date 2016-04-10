@@ -8,6 +8,7 @@ import protocolsupport.protocol.transformer.middlepacket.clientbound.play.Middle
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.transformer.utils.chunk.ChunkTransformer;
 import protocolsupport.protocol.transformer.utils.chunk.ChunkUtils;
+import protocolsupport.protocol.transformer.utils.chunk.EmptyChunk;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -21,9 +22,15 @@ public class Chunk extends MiddleChunk<RecyclableCollection<PacketData>>  {
 		serializer.writeInt(chunkX);
 		serializer.writeInt(chunkZ);
 		serializer.writeBoolean(full);
-		serializer.writeShort(bitmask);
-		transformer.loadData(data, bitmask, ChunkUtils.hasSkyLight(player.getWorld()), full);
-		serializer.writeArray(transformer.to18Data());
+		boolean hasSkyLight = ChunkUtils.hasSkyLight(player.getWorld());
+		if (bitmask == 0 && full) {
+			serializer.writeShort(1);
+			serializer.writeArray(EmptyChunk.get18ChunkData(hasSkyLight));
+		} else {
+			serializer.writeShort(bitmask);
+			transformer.loadData(data, bitmask, hasSkyLight, full);
+			serializer.writeArray(transformer.to18Data());
+		}
 		return RecyclableSingletonList.create(serializer);
 	}
 
