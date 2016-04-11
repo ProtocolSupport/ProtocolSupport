@@ -6,8 +6,8 @@ public class NibbleBlockStorage extends BlockStorage {
 
 	private final byte[] blocks;
 
-	protected NibbleBlockStorage(int dataLength) {
-		super(-1);
+	protected NibbleBlockStorage(int[] palette, int dataLength) {
+		super(palette, -1);
 		blocks = new byte[dataLength << 3];
 	}
 

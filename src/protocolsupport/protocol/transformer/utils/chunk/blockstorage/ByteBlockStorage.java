@@ -6,8 +6,8 @@ public class ByteBlockStorage extends BlockStorage {
 
 	private final byte[] blocks = new byte[4096];
 
-	protected ByteBlockStorage() {
-		super(-1);
+	protected ByteBlockStorage(int[] palette) {
+		super(palette, -1);
 	}
 
 	@Override

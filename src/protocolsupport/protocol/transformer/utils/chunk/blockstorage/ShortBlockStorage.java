@@ -6,8 +6,8 @@ public class ShortBlockStorage extends BlockStorage {
 
 	private final byte[] blocks = new byte[8192];
 
-	protected ShortBlockStorage() {
-		super(-1);
+	protected ShortBlockStorage(int[] palette) {
+		super(palette, -1);
 	}
 
 	@Override
