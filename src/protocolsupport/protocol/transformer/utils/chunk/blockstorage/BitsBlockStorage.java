@@ -29,7 +29,7 @@ public class BitsBlockStorage extends BlockStorage {
 		if (arrStartIndex == arrEndIndex) {
 			return (int) ((this.blocks[arrStartIndex] >>> localStartBitIndex) & this.singleValMask);
 		} else {
-			return (int) (((this.blocks[arrStartIndex] >>> localStartBitIndex) | (this.blocks[arrEndIndex] << (64 - bitStartIndex))) & this.singleValMask);
+			return (int) (((this.blocks[arrStartIndex] >>> localStartBitIndex) | (this.blocks[arrEndIndex] << (64 - localStartBitIndex))) & this.singleValMask);
 		}
 	}
 
