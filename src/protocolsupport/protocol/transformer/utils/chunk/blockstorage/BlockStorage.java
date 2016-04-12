@@ -9,11 +9,10 @@ public abstract class BlockStorage {
 			case 4: {
 				return new NibbleBlockStorage(palette, dataLength);
 			}
-			//TODO: find a way to test it
-			/*case 8: {
-				return new ByteBlockStorage();
+			case 8: {
+				return new ByteBlockStorage(palette);
 			}
-			case 0:
+			/*case 0:
 			case 16: {
 				return new ShortBlockStorage(palette, dataLength);
 			}*/

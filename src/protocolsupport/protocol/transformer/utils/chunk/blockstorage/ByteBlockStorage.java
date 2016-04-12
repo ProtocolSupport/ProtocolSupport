@@ -17,7 +17,7 @@ public class ByteBlockStorage extends BlockStorage {
 
 	@Override
 	public int getPaletteIndex(int blockIndex) {
-		return blocks[blockIndex ^ 0b111];
+		return blocks[blockIndex ^ 0b111] & 0xFF;
 	}
 
 }
