@@ -12,10 +12,6 @@ public abstract class BlockStorage {
 			case 8: {
 				return new ByteBlockStorage(palette);
 			}
-			/*case 0:
-			case 16: {
-				return new ShortBlockStorage(palette, dataLength);
-			}*/
 			default: {
 				return new BitsBlockStorage(palette, bitsPerBlock, dataLength);
 			}

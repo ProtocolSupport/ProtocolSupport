@@ -101,7 +101,7 @@ public class ChunkTransformer {
 
 	private static class ChunkSection {
 
-		private static final int[] globalpalette = new int[Short.MAX_VALUE];
+		private static final int[] globalpalette = new int[Short.MAX_VALUE * 2];
 		static {
 			for (int i = 0; i < globalpalette.length; i++) {
 				globalpalette[i] = i;
@@ -111,11 +111,13 @@ public class ChunkTransformer {
 		protected final BlockStorage blockdata;
 		protected final byte[] blocklight = new byte[2048];
 		protected final byte[] skylight = new byte[2048];
+
 		public ChunkSection(PacketDataSerializer datastream, boolean hasSkyLight) {
-			int[] palette = globalpalette;
 			byte bitsPerBlock = datastream.readByte();
-			if (bitsPerBlock != 0) {
-				palette = new int[datastream.readVarInt()];
+			int[] palette = globalpalette;
+			int palettelength = datastream.readVarInt();
+			if (palettelength != 0) {
+				palette = new int[palettelength];
 				for (int i = 0; i < palette.length; i++) {
 					palette[i] = datastream.readVarInt();
 				}
@@ -127,6 +129,7 @@ public class ChunkTransformer {
 				datastream.readBytes(skylight);
 			}
 		}
+
 	}
 
 }
