@@ -4,22 +4,26 @@ import io.netty.buffer.ByteBuf;
 
 public class ShortBlockStorage extends BlockStorage {
 
-	private final byte[] blocks = new byte[8192];
+	private static final int singleValMask = (1 << Short.SIZE) - 1;
 
-	protected ShortBlockStorage(int[] palette) {
-		super(palette, -1);
+	private final long[] blocks;
+
+	public ShortBlockStorage(int[] palette, int dataLength) {
+		super(palette, Short.SIZE);
+		this.blocks = new long[dataLength];
 	}
 
 	@Override
 	public void readFromStream(ByteBuf stream) {
-		stream.readBytes(blocks);
+		for (int i = 0; i < blocks.length; i++) {
+			blocks[i] = stream.readLong();
+		}
 	}
 
 	@Override
 	public int getPaletteIndex(int blockIndex) {
-		int sIndex = blockIndex << 1;
-		int index = (((sIndex >> 4) << 4) | (15 - (sIndex & 15)));
-		return (blocks[index] << 8) | blocks[index];
+		int bitStartIndex = blockIndex << 4;
+		return (int) ((this.blocks[bitStartIndex >> 6] >>> (bitStartIndex & 63)) & singleValMask);
 	}
 
 }

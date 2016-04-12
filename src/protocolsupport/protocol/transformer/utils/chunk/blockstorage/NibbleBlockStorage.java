@@ -7,7 +7,7 @@ public class NibbleBlockStorage extends BlockStorage {
 	private final byte[] blocks;
 
 	protected NibbleBlockStorage(int[] palette, int dataLength) {
-		super(palette, -1);
+		super(palette, 4);
 		blocks = new byte[dataLength << 3];
 	}
 
@@ -19,7 +19,7 @@ public class NibbleBlockStorage extends BlockStorage {
 	@Override
 	public int getPaletteIndex(int blockIndex) {
 		int sIndex = blockIndex >> 1;
-		int index = (((sIndex >> 3) << 3) | (7 - (sIndex & 7)));
+		int index = sIndex ^ 0b111;
 		if ((blockIndex & 1) == 0) {
 			return blocks[index] & 0xF;
 		} else {

@@ -7,7 +7,7 @@ public class ByteBlockStorage extends BlockStorage {
 	private final byte[] blocks = new byte[4096];
 
 	protected ByteBlockStorage(int[] palette) {
-		super(palette, -1);
+		super(palette, Byte.SIZE);
 	}
 
 	@Override
@@ -17,7 +17,7 @@ public class ByteBlockStorage extends BlockStorage {
 
 	@Override
 	public int getPaletteIndex(int blockIndex) {
-		return blocks[((blockIndex >> 3) << 3) | (7 - (blockIndex & 7))];
+		return blocks[blockIndex ^ 0b111];
 	}
 
 }
