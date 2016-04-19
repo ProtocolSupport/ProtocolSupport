@@ -12,6 +12,7 @@ import org.bukkit.event.vehicle.VehicleEnterEvent;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.tab.TabAPI;
 
 public class PlayerListener implements Listener {
@@ -51,7 +52,11 @@ public class PlayerListener implements Listener {
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
-				TabAPI.sendHeaderFooter(event.getPlayer(), TabAPI.getDefaultHeader(), TabAPI.getDefaultFooter());
+				BaseComponent header = TabAPI.getDefaultHeader();
+				BaseComponent footer = TabAPI.getDefaultFooter();
+				if (header != null || footer != null) {
+					TabAPI.sendHeaderFooter(event.getPlayer(), header, footer);
+				}
 			}
 		}, 1);
 	}
