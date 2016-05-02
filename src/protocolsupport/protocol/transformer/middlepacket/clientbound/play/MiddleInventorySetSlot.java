@@ -13,11 +13,6 @@ public abstract class MiddleInventorySetSlot<T> extends ClientBoundMiddlePacket<
 	protected ItemStack itemstack;
 
 	@Override
-	public boolean needsPlayer() {
-		return true;
-	}
-
-	@Override
 	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
 		windowId = serializer.readUnsignedByte();
 		slot = serializer.readShort();

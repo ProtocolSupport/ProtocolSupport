@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import protocolsupport.commands.CommandHandler;
+import protocolsupport.commands.ReloadCommandRemover;
 import protocolsupport.injector.ServerInjector;
 import protocolsupport.injector.network.NettyInjector;
 import protocolsupport.protocol.ClientBoundPacket;
@@ -37,6 +38,7 @@ public class ProtocolSupport extends JavaPlugin {
 			SpecificType.class.getName();
 			ServerInjector.inject();
 			NettyInjector.inject();
+			ReloadCommandRemover.remove();
 		} catch (Throwable t) {
 			t.printStackTrace();
 			Bukkit.shutdown();

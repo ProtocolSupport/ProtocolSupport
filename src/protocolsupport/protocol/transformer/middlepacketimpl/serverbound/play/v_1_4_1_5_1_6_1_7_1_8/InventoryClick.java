@@ -2,10 +2,9 @@ package protocolsupport.protocol.transformer.middlepacketimpl.serverbound.play.v
 
 import java.io.IOException;
 
-import org.bukkit.event.inventory.InventoryType;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.storage.SharedStorage.WindowType;
 import protocolsupport.protocol.transformer.middlepacket.serverbound.play.MiddleInventoryClick;
 
 public class InventoryClick extends MiddleInventoryClick {
@@ -14,7 +13,11 @@ public class InventoryClick extends MiddleInventoryClick {
 	public void readFromClientData(PacketDataSerializer serializer) throws IOException {
 		windowId = serializer.readUnsignedByte();
 		slot = serializer.readShort();
-		if (serializer.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_8) && player.getOpenInventory().getType() == InventoryType.ENCHANTING) {
+		if (serializer.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9) && sharedstorage.getOpenedWindow() == WindowType.BREING) {
+			if (slot > 3) {
+				slot++;
+			}
+		} else if (serializer.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_8) && sharedstorage.getOpenedWindow() == WindowType.ENCHANT) {
 			if (slot > 0) {
 				slot++;
 			}

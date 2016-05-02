@@ -4,32 +4,33 @@ import io.netty.buffer.ByteBuf;
 
 public abstract class BlockStorage {
 
-	public static BlockStorage create(int bitsPerBlock, int dataLength) {
+	public static BlockStorage create(int[] palette, int bitsPerBlock, int dataLength) {
 		switch (bitsPerBlock) {
 			case 4: {
-				return new NibbleBlockStorage(dataLength);
+				return new NibbleBlockStorage(palette, dataLength);
 			}
-			//TODO: find a way to test it
-			/*case 8: {
-				return new ByteBlockStorage();
+			case 8: {
+				return new ByteBlockStorage(palette);
 			}
-			case 0:
-			case 16: {
-				return new ShortBlockStorage();
-			}*/
 			default: {
-				return new BitsBlockStorage(bitsPerBlock, dataLength);
+				return new BitsBlockStorage(palette, bitsPerBlock, dataLength);
 			}
 		}
 	}
 
 	protected final int bitsPerBlock;
-	protected BlockStorage(int bitsPerBlock) {
+	private final int[] palette;
+	protected BlockStorage(int[] palette, int bitsPerBlock) {
+		this.palette = palette;
 		this.bitsPerBlock = bitsPerBlock;
 	}
 
 	public abstract void readFromStream(ByteBuf stream);
 
-	public abstract int getPaletteIndex(int blockIndex);
+	public int getBlockState(int blockindex) {
+		return palette[getPaletteIndex(blockindex)];
+	}
+
+	protected abstract int getPaletteIndex(int blockIndex);
 
 }

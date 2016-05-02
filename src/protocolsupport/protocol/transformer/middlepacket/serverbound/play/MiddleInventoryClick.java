@@ -18,11 +18,6 @@ public abstract class MiddleInventoryClick extends ServerBoundMiddlePacket {
 	protected ItemStack itemstack;
 
 	@Override
-	public boolean needsPlayer() {
-		return true;
-	}
-
-	@Override
 	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
 		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_WINDOW_CLICK.get());
 		creator.writeByte(windowId);

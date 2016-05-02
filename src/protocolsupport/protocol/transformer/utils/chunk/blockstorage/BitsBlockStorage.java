@@ -7,8 +7,8 @@ public class BitsBlockStorage extends BlockStorage {
 	private final long[] blocks;
 	private final int singleValMask;
 
-	public BitsBlockStorage(int bitsPerBlock, int dataLength) {
-		super(bitsPerBlock);
+	public BitsBlockStorage(int[] palette, int bitsPerBlock, int dataLength) {
+		super(palette, bitsPerBlock);
 		this.blocks = new long[dataLength];
 		this.singleValMask = (1 << bitsPerBlock) - 1;
 	}
@@ -29,7 +29,7 @@ public class BitsBlockStorage extends BlockStorage {
 		if (arrStartIndex == arrEndIndex) {
 			return (int) ((this.blocks[arrStartIndex] >>> localStartBitIndex) & this.singleValMask);
 		} else {
-			return (int) (((this.blocks[arrStartIndex] >>> localStartBitIndex) | (this.blocks[arrEndIndex] << (64 - bitStartIndex))) & this.singleValMask);
+			return (int) (((this.blocks[arrStartIndex] >>> localStartBitIndex) | (this.blocks[arrEndIndex] << (64 - localStartBitIndex))) & this.singleValMask);
 		}
 	}
 

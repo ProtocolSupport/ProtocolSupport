@@ -14,4 +14,9 @@ public abstract class MiddleInventoryClose<T> extends ClientBoundMiddlePacket<T>
 		windowId = serializer.readUnsignedByte();
 	}
 
+	@Override
+	public void handle() {
+		sharedstorage.closeWindow();
+	}
+
 }

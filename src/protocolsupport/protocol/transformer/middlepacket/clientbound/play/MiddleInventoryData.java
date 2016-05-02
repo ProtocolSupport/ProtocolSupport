@@ -12,11 +12,6 @@ public abstract class MiddleInventoryData<T> extends ClientBoundMiddlePacket<T> 
 	protected int value;
 
 	@Override
-	public boolean needsPlayer() {
-		return true;
-	}
-
-	@Override
 	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
 		windowId = serializer.readUnsignedByte();
 		type = serializer.readShort();
