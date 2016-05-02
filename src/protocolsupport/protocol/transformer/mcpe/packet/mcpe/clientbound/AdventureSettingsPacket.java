@@ -6,10 +6,11 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 
 public class AdventureSettingsPacket implements ClientboundPEPacket {
 
-	protected int flags;
+	protected int flags = 0x20;
+	protected int userPermissions = 2;
+	protected int globalPermissions = 2;
 
 	public AdventureSettingsPacket(boolean isCreative) {
-		flags |= 0x20;
 		if (isCreative) {
 			flags |= 0x80;
 		}
@@ -23,6 +24,8 @@ public class AdventureSettingsPacket implements ClientboundPEPacket {
 	@Override
 	public ClientboundPEPacket encode(ByteBuf buf) throws Exception {
 		buf.writeInt(flags);
+		buf.writeInt(userPermissions);
+		buf.writeInt(globalPermissions);
 		return this;
 	}
 

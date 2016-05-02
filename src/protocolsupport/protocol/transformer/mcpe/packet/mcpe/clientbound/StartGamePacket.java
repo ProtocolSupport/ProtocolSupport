@@ -20,6 +20,9 @@ public class StartGamePacket implements ClientboundPEPacket {
 	protected float x;
 	protected float y;
 	protected float z;
+	protected boolean loadedInCreative;
+	protected int dayLightCycleStopTime = -1;
+	protected boolean isMinecraftEdu;
 
 	public StartGamePacket(int dimension, int gamemode, long eid, Location worldspawn, Location playerspawn) {
 		this.dimension = dimension;
@@ -51,7 +54,9 @@ public class StartGamePacket implements ClientboundPEPacket {
 		buf.writeFloat(x);
 		buf.writeFloat(y + 1.63F);
 		buf.writeFloat(z);
-		buf.writeBoolean(false);
+		buf.writeBoolean(loadedInCreative);
+		buf.writeByte(dayLightCycleStopTime);
+		buf.writeBoolean(isMinecraftEdu);
 		return this;
 	}
 
