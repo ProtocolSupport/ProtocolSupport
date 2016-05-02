@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
 import net.minecraft.server.v1_9_R1.Block;
+import net.minecraft.server.v1_9_R1.BlockPosition;
 import net.minecraft.server.v1_9_R1.Chunk;
 import net.minecraft.server.v1_9_R1.ChunkSection;
 import net.minecraft.server.v1_9_R1.IBlockData;
@@ -17,7 +18,6 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.utils.TileEntityUtils;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.RemappingTable;
-import protocolsupport.utils.MutableBlockPosition;
 
 public class ChunkPacket implements ClientboundPEPacket {
 
@@ -44,12 +44,10 @@ public class ChunkPacket implements ClientboundPEPacket {
 
 		ArrayList<NBTTagCompound> tileEntitiesInitData = new ArrayList<NBTTagCompound>();
 
-		MutableBlockPosition pos = new MutableBlockPosition(0, 0, 0);
-
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
 				for (int y = 0; y < 128; y++) {
-					int blockId = Block.getId(getType(x, y, z, pos).getBlock());
+					int blockId = Block.getId(getType(x, y, z).getBlock());
 					if (TileEntityUtils.isTileEntity(blockId)) {
 						tileEntitiesInitData.add(TileEntityUtils.getInitTileEntityTag((chunk.locX << 4) + x, y, (chunk.locZ << 4) + z, blockId));
 					}
@@ -61,9 +59,9 @@ public class ChunkPacket implements ClientboundPEPacket {
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
 				for (int y = 0; y < 128; y += 2) {
-					IBlockData data1 = getType(x, y, z, pos);
+					IBlockData data1 = getType(x, y, z);
 					byte data = (byte) (data1.getBlock().toLegacyData(data1) & 0xF);
-					IBlockData data2 = getType(x, y + 1, z, pos);
+					IBlockData data2 = getType(x, y + 1, z);
 					data |= ((data2.getBlock().toLegacyData(data2) & 0xF) << 4);
 					temp.writeByte(data);
 				}
@@ -118,9 +116,8 @@ public class ChunkPacket implements ClientboundPEPacket {
 		return this;
 	}
 
-	private IBlockData getType(int x, int y, int z, MutableBlockPosition pos) {
-		pos.setCoords(x, y, z);
-		return chunk.getBlockData(pos);
+	private IBlockData getType(int x, int y, int z) {
+		return chunk.getBlockData(new BlockPosition(x, y, z));
 	}
 
 	private ChunkSection getSection(int y) {
