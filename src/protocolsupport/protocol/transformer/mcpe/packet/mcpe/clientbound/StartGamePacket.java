@@ -4,6 +4,8 @@ import io.netty.buffer.ByteBuf;
 
 import org.bukkit.Location;
 
+import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 
@@ -23,6 +25,7 @@ public class StartGamePacket implements ClientboundPEPacket {
 	protected boolean loadedInCreative;
 	protected int dayLightCycleStopTime = -1;
 	protected boolean isMinecraftEdu;
+	protected String levelName = "Default";
 
 	public StartGamePacket(int dimension, int gamemode, long eid, Location worldspawn, Location playerspawn) {
 		this.dimension = dimension;
@@ -43,20 +46,22 @@ public class StartGamePacket implements ClientboundPEPacket {
 
 	@Override
 	public ClientboundPEPacket encode(ByteBuf buf) throws Exception {
-		buf.writeInt(seed);
-		buf.writeByte(0/*dimension*/);
-		buf.writeInt(generator);
-		buf.writeInt(gamemode);
-		buf.writeLong(entityId);
-		buf.writeInt(spawnX);
-		buf.writeInt(spawnY);
-		buf.writeInt(spawnZ);
-		buf.writeFloat(x);
-		buf.writeFloat(y + 1.63F);
-		buf.writeFloat(z);
-		buf.writeBoolean(loadedInCreative);
-		buf.writeByte(dayLightCycleStopTime);
-		buf.writeBoolean(isMinecraftEdu);
+		PacketDataSerializer serializer = new PacketDataSerializer(buf, ProtocolVersion.MINECRAFT_PE);
+		serializer.writeInt(seed);
+		serializer.writeByte(0/*dimension*/);
+		serializer.writeInt(generator);
+		serializer.writeInt(gamemode);
+		serializer.writeLong(entityId);
+		serializer.writeInt(spawnX);
+		serializer.writeInt(spawnY);
+		serializer.writeInt(spawnZ);
+		serializer.writeFloat(x);
+		serializer.writeFloat(y + 1.63F);
+		serializer.writeFloat(z);
+		serializer.writeBoolean(loadedInCreative);
+		serializer.writeByte(dayLightCycleStopTime);
+		serializer.writeBoolean(isMinecraftEdu);
+		serializer.writeString(levelName);
 		return this;
 	}
 
