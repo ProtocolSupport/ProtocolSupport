@@ -44,7 +44,7 @@ public class UseItemPacket implements ServerboundPEPacket {
 		this.againstX = buf.readInt();
 		this.againstY = buf.readInt();
 		this.againstZ = buf.readInt();
-		this.face = buf.readByte() & 0xFF;
+		this.face = buf.readByte();
 		this.cursorX = buf.readFloat();
 		this.cursorY = buf.readFloat();
 		this.cursorZ = buf.readFloat();
@@ -67,14 +67,20 @@ public class UseItemPacket implements ServerboundPEPacket {
 				}
 			});
 		}
-		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_USE_ITEM.get());
-		creator.writePosition(new BlockPosition(againstX, againstY, againstZ));
-		creator.writeVarInt(face);
-		creator.writeVarInt(0);
-		creator.writeByte((int) (cursorX / 16.0F));
-		creator.writeByte((int) (cursorY / 16.0F));
-		creator.writeByte((int) (cursorZ / 16.0F));
-		packets.add(creator.create());
+		if (face != -1) {
+			PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_USE_ITEM.get());
+			creator.writePosition(new BlockPosition(againstX, againstY, againstZ));
+			creator.writeVarInt(face);
+			creator.writeVarInt(0);
+			creator.writeByte((int) (cursorX / 16.0F));
+			creator.writeByte((int) (cursorY / 16.0F));
+			creator.writeByte((int) (cursorZ / 16.0F));
+			packets.add(creator.create());
+		} else {
+			PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_BLOCK_PLACE.get());
+			creator.writeVarInt(0);
+			packets.add(creator.create());
+		}
 		return packets;
 	}
 
