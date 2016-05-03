@@ -90,7 +90,7 @@ public class PacketDecoder implements IPacketDecoder {
 			registry.register(EnumProtocol.PLAY, 0x16, ClientCommand.class);
 			registry.register(EnumProtocol.PLAY, 0x17, CustomPayload.class);
 			registry.register(EnumProtocol.PLAY, 0x18, Spectate.class);
-			registry.register(EnumProtocol.PLAY, 0x18, ResourcePackStatus.class);
+			registry.register(EnumProtocol.PLAY, 0x19, ResourcePackStatus.class);
 			registry.setCallBack(new InitCallBack<ServerBoundMiddlePacket>() {
 				@Override
 				public void onInit(ServerBoundMiddlePacket object) {
