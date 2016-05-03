@@ -6,14 +6,39 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 
 public class AdventureSettingsPacket implements ClientboundPEPacket {
 
-	protected int flags = 0x20;
+	protected int flags = 0;
 	protected int userPermissions = 2;
 	protected int globalPermissions = 2;
 
 	public AdventureSettingsPacket(boolean isCreative) {
+		enableAutoJump();
 		if (isCreative) {
-			flags |= 0x80;
+			setMayFly();
 		}
+	}
+
+	public void setAdventureMode() {
+		flags |= 0x1;
+	}
+
+	public void setCantAttackPlayers() {
+		flags |= 0x2;
+	}
+
+	public void setCantAttackMobs() {
+		flags |= 0x4;
+	}
+
+	public void dontTickTime() {
+		flags |= 0x10;
+	}
+
+	public void enableAutoJump() {
+		flags |= 0x40;
+	}
+
+	public void setMayFly() {
+		flags |= 0x80;
 	}
 
 	@Override
