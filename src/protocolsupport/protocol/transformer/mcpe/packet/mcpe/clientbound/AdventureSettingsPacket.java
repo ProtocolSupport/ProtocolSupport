@@ -21,11 +21,11 @@ public class AdventureSettingsPacket implements ClientboundPEPacket {
 		flags |= 0x1;
 	}
 
-	public void setCantAttackPlayers() {
+	public void setCantAttackMobs() {
 		flags |= 0x2;
 	}
 
-	public void setCantAttackMobs() {
+	public void setCantAttackPlayers() {
 		flags |= 0x4;
 	}
 
@@ -39,6 +39,10 @@ public class AdventureSettingsPacket implements ClientboundPEPacket {
 
 	public void setMayFly() {
 		flags |= 0x80;
+	}
+
+	public void setFlying() {
+		flags |= 0x100;
 	}
 
 	@Override
