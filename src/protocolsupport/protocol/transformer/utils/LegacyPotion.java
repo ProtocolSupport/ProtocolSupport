@@ -41,11 +41,18 @@ public class LegacyPotion {
 	}
 
 	public static Integer toLegacyId(String nbttag, boolean isThrowable) {
-		return isThrowable ? null : potionToLegacyIds.get(nbttag);
+		Integer value = potionToLegacyIds.get(nbttag);
+		if (value != null && isThrowable) {
+			value += 8192;
+		}
+		return value;
 	}
 
 	public static String toNBTTag(int legacyId, boolean isThrowable) {
-		return isThrowable ? null : potionToLegacyIds.inverse().get(potionToLegacyIds);
+		if (isThrowable) {
+			legacyId -= 8192;
+		}
+		return potionToLegacyIds.inverse().get(legacyId);
 	}
 
 }

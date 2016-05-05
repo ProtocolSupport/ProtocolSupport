@@ -27,6 +27,7 @@ import io.netty.handler.codec.EncoderException;
 import net.minecraft.server.v1_9_R1.BlockPosition;
 import net.minecraft.server.v1_9_R1.GameProfileSerializer;
 import net.minecraft.server.v1_9_R1.Item;
+import net.minecraft.server.v1_9_R1.ItemPotion;
 import net.minecraft.server.v1_9_R1.ItemStack;
 import net.minecraft.server.v1_9_R1.Items;
 import net.minecraft.server.v1_9_R1.NBTCompressedStreamTools;
@@ -130,14 +131,11 @@ public class PacketDataSerializer extends net.minecraft.server.v1_9_R1.PacketDat
 			if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_5) && item == Items.SKULL) {
 				transformSkull(nbttagcompound);
 			}
-			if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_9)) {
-				if (item == Items.POTION) {
-					String potionType = nbttagcompound.getString("Potion");
-					Integer pdata = LegacyPotion.toLegacyId(potionType, false);
-					if (pdata != null) {
-						itemstack.setData(pdata);
-					}
-				} else if (item == Items.SPLASH_POTION || item == Items.LINGERING_POTION) {
+			if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_9) && item instanceof ItemPotion) {
+				String potionType = nbttagcompound.getString("Potion");
+				Integer pdata = LegacyPotion.toLegacyId(potionType, item != Items.POTION);
+				if (pdata != null) {
+					itemstack.setData(pdata);
 				}
 			}
 			if (nbttagcompound.hasKeyOfType("ench", 9)) {
