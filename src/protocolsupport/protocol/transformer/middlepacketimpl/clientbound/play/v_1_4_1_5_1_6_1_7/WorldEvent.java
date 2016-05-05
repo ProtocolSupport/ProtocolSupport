@@ -14,6 +14,7 @@ public class WorldEvent extends MiddleWorldEvent<RecyclableCollection<PacketData
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
+		effectId = IdRemapper.EFFECT.getTable(version).getRemap(effectId);
 		if (effectId == 2001) {
 			data = IdRemapper.BLOCK.getTable(version).getRemap((data & 0xFFF) << 4) >> 4;
 		}
