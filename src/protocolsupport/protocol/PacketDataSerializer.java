@@ -37,6 +37,7 @@ import net.minecraft.server.v1_9_R1.NBTTagString;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.ItemStackWriteEvent;
+import protocolsupport.protocol.transformer.utils.LegacyPotion;
 import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
@@ -128,6 +129,16 @@ public class PacketDataSerializer extends net.minecraft.server.v1_9_R1.PacketDat
 			}
 			if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_5) && item == Items.SKULL) {
 				transformSkull(nbttagcompound);
+			}
+			if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_9)) {
+				if (item == Items.POTION) {
+					String potionType = nbttagcompound.getString("Potion");
+					Integer pdata = LegacyPotion.toLegacyId(potionType, false);
+					if (pdata != null) {
+						itemstack.setData(pdata);
+					}
+				} else if (item == Items.SPLASH_POTION || item == Items.LINGERING_POTION) {
+				}
 			}
 			if (nbttagcompound.hasKeyOfType("ench", 9)) {
 				SkippingTable enchSkip = IdSkipper.ENCHANT.getTable(getVersion());
