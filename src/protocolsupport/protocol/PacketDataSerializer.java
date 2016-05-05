@@ -131,12 +131,8 @@ public class PacketDataSerializer extends net.minecraft.server.v1_9_R1.PacketDat
 			if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_5) && item == Items.SKULL) {
 				transformSkull(nbttagcompound);
 			}
-			if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_9) && item instanceof ItemPotion) {
-				String potionType = nbttagcompound.getString("Potion");
-				Integer pdata = LegacyPotion.toLegacyId(potionType, item != Items.POTION);
-				if (pdata != null) {
-					itemstack.setData(pdata);
-				}
+			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9) && item instanceof ItemPotion) {
+				itemstack.setData(LegacyPotion.toLegacyId(nbttagcompound.getString("Potion"), item != Items.POTION));
 			}
 			if (nbttagcompound.hasKeyOfType("ench", 9)) {
 				SkippingTable enchSkip = IdSkipper.ENCHANT.getTable(getVersion());

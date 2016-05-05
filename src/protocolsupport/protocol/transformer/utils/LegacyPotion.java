@@ -1,11 +1,11 @@
 package protocolsupport.protocol.transformer.utils;
 
-import com.google.common.collect.HashBiMap;
+import gnu.trove.map.hash.TObjectIntHashMap;
 
 //TODO: throwable
 public class LegacyPotion {
 
-	private static final HashBiMap<String, Integer> potionToLegacyIds = HashBiMap.create();
+	private static final TObjectIntHashMap<String> potionToLegacyIds = new TObjectIntHashMap<String>();
 	static {
 		potionToLegacyIds.put("minecraft:night_vision", 8198);
 		potionToLegacyIds.put("minecraft:long_night_vision", 8262);
@@ -40,19 +40,9 @@ public class LegacyPotion {
         potionToLegacyIds.put("minecraft:long_weakness", 8264);
 	}
 
-	public static Integer toLegacyId(String nbttag, boolean isThrowable) {
-		Integer value = potionToLegacyIds.get(nbttag);
-		if (value != null && isThrowable) {
-			value += 8192;
-		}
-		return value;
-	}
-
-	public static String toNBTTag(int legacyId, boolean isThrowable) {
-		if (isThrowable) {
-			legacyId -= 8192;
-		}
-		return potionToLegacyIds.inverse().get(legacyId);
+	public static int toLegacyId(String nbttag, boolean isThrowable) {
+		int value = potionToLegacyIds.get(nbttag);
+		return isThrowable ? value + 8192 : value;
 	}
 
 }
