@@ -45,4 +45,21 @@ public class LegacyPotion {
 		return isThrowable ? value + 8192 : value;
 	}
 
+	public static String getBasicTypeName(String nbttag) {
+		switch (nbttag) {
+			case "minecraft:mundane": {
+				return "Mundane Potion";
+			}
+			case "minecraft:thick": {
+				return "Thick Potion";
+			}
+			case "minecraft:awkward": {
+				return "Awkward Potion";
+			}
+			default: {
+				return null;
+			}
+		}
+	}
+
 }
