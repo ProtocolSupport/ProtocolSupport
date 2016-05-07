@@ -13,7 +13,7 @@
 		<javac source="1.7" target="1.7" encoding="UTF-8" srcdir="src" destdir="build/classes" classpathref="libs" debug="on"/>
 		<copy todir="build/classes">
 			<fileset file="src/plugin.yml"/>
-     		<fileset file="LICENSE"/>
+			<fileset file="LICENSE"/>
 		</copy>
 		<jar destfile="target/ProtocolSupport.jar" basedir="build/classes"/>
 		<delete dir="build"/>
