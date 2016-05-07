@@ -1,6 +1,6 @@
 package protocolsupport.protocol.typeremapper.id;
 
-import java.util.HashMap;
+import gnu.trove.map.hash.TIntIntHashMap;
 
 public class RemappingTable {
 
@@ -26,15 +26,15 @@ public class RemappingTable {
 			super(0);
 		}
 
-		protected final HashMap<Integer, Integer> table = new HashMap<>();
+		protected final TIntIntHashMap table = new TIntIntHashMap(16, 0.75F, -1, -1);
 
 		public void setRemap(int from, int to) {
 			table.put(from, to);
 		}
 
 		public int getRemap(int id) {
-			Integer r = table.get(id);
-			return r != null ? r : id;
+			int r = table.get(id);
+			return r != -1 ? r : id;
 		}
 		
 	}

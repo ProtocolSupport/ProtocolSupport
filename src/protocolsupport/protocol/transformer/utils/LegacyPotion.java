@@ -2,7 +2,6 @@ package protocolsupport.protocol.transformer.utils;
 
 import gnu.trove.map.hash.TObjectIntHashMap;
 
-//TODO: throwable
 public class LegacyPotion {
 
 	private static final TObjectIntHashMap<String> potionToLegacyIds = new TObjectIntHashMap<String>();

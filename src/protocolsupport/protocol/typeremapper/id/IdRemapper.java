@@ -6,7 +6,6 @@ import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.remapper.BlockRemapperControl;
 import protocolsupport.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.typeremapper.id.RemappingTable.HashRemappingTable;
 
 public class IdRemapper {
 
@@ -329,7 +328,7 @@ public class IdRemapper {
 		}
 		@Override
 		protected RemappingTable createTable() {
-			return new HashRemappingTable();
+			return new RemappingTable.HashRemappingTable();
 		}
 	};
 

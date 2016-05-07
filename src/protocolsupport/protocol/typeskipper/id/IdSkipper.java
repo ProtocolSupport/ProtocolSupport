@@ -17,7 +17,7 @@ public class IdSkipper {
 		}
 		@Override
 		protected SkippingTable createTable() {
-			return new SkippingTable(256);
+			return new SkippingTable.HashSkippingTable();
 		}
 	};
 
