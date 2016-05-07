@@ -7,6 +7,7 @@ import org.spigotmc.SneakyThrow;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.DecoderException;
 import io.netty.util.AttributeKey;
 import net.minecraft.server.v1_9_R1.EnumProtocol;
 import net.minecraft.server.v1_9_R1.NetworkManager;
@@ -130,6 +131,9 @@ public class PacketDecoder implements IPacketDecoder {
 			} finally {
 				collection.recycle();
 			}
+		}
+		if (serializer.isReadable()) {
+			throw new DecoderException("Did not read all data from packet " + packetId+ ", bytes left: " + serializer.readableBytes());
 		}
 	}
 

@@ -5,6 +5,7 @@ import java.util.List;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.DecoderException;
 import io.netty.util.AttributeKey;
 import net.minecraft.server.v1_9_R1.EnumProtocol;
 import net.minecraft.server.v1_9_R1.EnumProtocolDirection;
@@ -36,6 +37,9 @@ public class PacketDecoder implements IPacketDecoder {
 		}
 		packet.a(serializer);
 		list.add(packet);
+		if (serializer.isReadable()) {
+			throw new DecoderException("Did not read all data from packet " + packetId+ ", bytes left: " + serializer.readableBytes());
+		}
 	}
 
 }
