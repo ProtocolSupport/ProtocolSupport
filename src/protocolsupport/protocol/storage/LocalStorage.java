@@ -15,9 +15,10 @@ import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
 
 public class LocalStorage {
 
-	private final TIntObjectHashMap<WatchedEntity> watchedEntities = new TIntObjectHashMap<WatchedEntity>();
+	private final TIntObjectHashMap<WatchedEntity> watchedEntities = new TIntObjectHashMap<>();
 	private WatchedPlayer player;
 	private final HashMap<UUID, PlayerListEntry> playerlist = new HashMap<>();
+	private int dimensionId;
 
 	public void addWatchedEntity(WatchedEntity entity) {
 		watchedEntities.put(entity.getId(), entity);
@@ -60,6 +61,14 @@ public class LocalStorage {
 
 	public void removePlayerListEntry(UUID uuid) {
 		playerlist.remove(uuid);
+	}
+
+	public void setDimensionId(int dimensionId) {
+		this.dimensionId = dimensionId;
+	}
+
+	public boolean hasSkyLightInCurrentDimension() {
+		return dimensionId == 0;
 	}
 
 	public static class PlayerListEntry implements Cloneable {

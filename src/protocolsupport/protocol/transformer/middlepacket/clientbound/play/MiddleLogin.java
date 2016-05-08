@@ -30,6 +30,7 @@ public abstract class MiddleLogin<T> extends ClientBoundMiddlePacket<T> {
 	@Override
 	public void handle() {
 		storage.addWatchedSelfPlayer(new WatchedPlayer(playerEntityId));
+		storage.setDimensionId(dimension);
 	}
 
 }

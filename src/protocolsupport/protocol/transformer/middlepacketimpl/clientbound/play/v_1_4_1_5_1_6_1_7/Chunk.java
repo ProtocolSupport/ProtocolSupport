@@ -7,7 +7,6 @@ import protocolsupport.protocol.ClientBoundPacket;
 import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.transformer.middlepacketimpl.PacketData;
 import protocolsupport.protocol.transformer.utils.chunk.ChunkTransformer;
-import protocolsupport.protocol.transformer.utils.chunk.ChunkUtils;
 import protocolsupport.protocol.transformer.utils.chunk.EmptyChunk;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -23,7 +22,7 @@ public class Chunk extends MiddleChunk<RecyclableCollection<PacketData>> {
 		serializer.writeInt(chunkX);
 		serializer.writeInt(chunkZ);
 		serializer.writeBoolean(full);
-		boolean hasSkyLight = ChunkUtils.hasSkyLight(player.getWorld());
+		boolean hasSkyLight = storage.hasSkyLightInCurrentDimension();
 		if (bitmask == 0 && full) {
 			serializer.writeShort(1);
 			serializer.writeShort(0);
@@ -33,7 +32,7 @@ public class Chunk extends MiddleChunk<RecyclableCollection<PacketData>> {
 		} else {
 			serializer.writeShort(bitmask);
 			serializer.writeShort(0);
-			transformer.loadData(data, bitmask, ChunkUtils.hasSkyLight(player.getWorld()), full);
+			transformer.loadData(data, bitmask, hasSkyLight, full);
 			byte[] compressed = Compressor.compressStatic(transformer.toPre18Data(version));
 			serializer.writeInt(compressed.length);
 			serializer.writeBytes(compressed);

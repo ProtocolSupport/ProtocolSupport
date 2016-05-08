@@ -21,6 +21,7 @@ public abstract class MiddleRespawn<T> extends ClientBoundMiddlePacket<T> {
 	@Override
 	public void handle() {
 		storage.clearWatchedEntities();
+		storage.setDimensionId(dimension);
 	}
 
 }
