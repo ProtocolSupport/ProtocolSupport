@@ -1,0 +1,25 @@
+package protocolsupport.protocol.packet.middlepacketimpl.clientbound.play.v_1_4_1_5_1_6;
+
+import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.middlepacket.clientbound.play.MiddleBlockChangeSingle;
+import protocolsupport.protocol.packet.middlepacketimpl.PacketData;
+import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableSingletonList;
+
+public class BlockChangeSingle extends MiddleBlockChangeSingle<RecyclableCollection<PacketData>> {
+
+	@Override
+	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_BLOCK_CHANGE_SINGLE_ID, version);
+		serializer.writeInt(position.getX());
+		serializer.writeByte(position.getY());
+		serializer.writeInt(position.getZ());
+		id = IdRemapper.BLOCK.getTable(version).getRemap(id);
+		serializer.writeShort(id >> 4);
+		serializer.writeByte(id & 0xF);
+		return RecyclableSingletonList.create(serializer);
+	}
+
+}

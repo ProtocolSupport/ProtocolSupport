@@ -1,8 +1,8 @@
 package protocolsupport.protocol.typeremapper.watchedentity.remapper.value;
 
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
 import protocolsupport.utils.Utils;
-import protocolsupport.utils.datawatcher.DataWatcherObject;
-import protocolsupport.utils.datawatcher.objects.DataWatcherObjectString;
 
 public class ValueRemapperStringClamp implements ValueRemapper<DataWatcherObjectString> {
 

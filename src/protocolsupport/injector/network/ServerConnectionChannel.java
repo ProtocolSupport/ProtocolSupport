@@ -9,14 +9,14 @@ import io.netty.channel.ChannelOption;
 import net.minecraft.server.v1_9_R1.EnumProtocolDirection;
 import net.minecraft.server.v1_9_R1.MinecraftServer;
 import net.minecraft.server.v1_9_R1.NetworkManager;
-import protocolsupport.protocol.core.ChannelHandlers;
-import protocolsupport.protocol.core.FakePacketListener;
-import protocolsupport.protocol.core.initial.InitialPacketDecoder;
-import protocolsupport.protocol.core.timeout.SimpleReadTimeoutHandler;
-import protocolsupport.protocol.core.wrapped.WrappedDecoder;
-import protocolsupport.protocol.core.wrapped.WrappedEncoder;
-import protocolsupport.protocol.core.wrapped.WrappedPrepender;
-import protocolsupport.protocol.core.wrapped.WrappedSplitter;
+import protocolsupport.protocol.pipeline.ChannelHandlers;
+import protocolsupport.protocol.pipeline.FakePacketListener;
+import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
+import protocolsupport.protocol.pipeline.timeout.SimpleReadTimeoutHandler;
+import protocolsupport.protocol.pipeline.wrapped.WrappedDecoder;
+import protocolsupport.protocol.pipeline.wrapped.WrappedEncoder;
+import protocolsupport.protocol.pipeline.wrapped.WrappedPrepender;
+import protocolsupport.protocol.pipeline.wrapped.WrappedSplitter;
 
 public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 

@@ -7,7 +7,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.MappingEntry;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificType;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
-import protocolsupport.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 
 public class WatchedDataRemapper {
 

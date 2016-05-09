@@ -8,7 +8,7 @@ import java.util.List;
 import protocolsupport.api.chat.modifiers.ClickAction;
 import protocolsupport.api.chat.modifiers.HoverAction;
 import protocolsupport.api.chat.modifiers.Modifier;
-import protocolsupport.protocol.transformer.utils.LegacyUtils;
+import protocolsupport.protocol.legacyremapper.LegacyUtils;
 
 public abstract class BaseComponent {
 

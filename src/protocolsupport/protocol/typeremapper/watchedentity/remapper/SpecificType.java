@@ -13,17 +13,17 @@ import protocolsupport.protocol.typeremapper.watchedentity.remapper.MappingEntry
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperBooleanToByte;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperStringClamp;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBlockState;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectInt;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectShort;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperNumberToByte;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperNumberToInt;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperNumberToShort;
 import protocolsupport.utils.ProtocolVersionsHelper;
-import protocolsupport.utils.datawatcher.DataWatcherObject;
-import protocolsupport.utils.datawatcher.objects.DataWatcherObjectBlockState;
-import protocolsupport.utils.datawatcher.objects.DataWatcherObjectBoolean;
-import protocolsupport.utils.datawatcher.objects.DataWatcherObjectByte;
-import protocolsupport.utils.datawatcher.objects.DataWatcherObjectInt;
-import protocolsupport.utils.datawatcher.objects.DataWatcherObjectShort;
-import protocolsupport.utils.datawatcher.objects.DataWatcherObjectVarInt;
 
 public enum SpecificType {
 

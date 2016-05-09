@@ -9,7 +9,7 @@ import com.mojang.authlib.properties.Property;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
 import protocolsupport.api.chat.ChatAPI;
-import protocolsupport.protocol.transformer.utils.LegacyUtils;
+import protocolsupport.protocol.legacyremapper.LegacyUtils;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
 
