@@ -4,7 +4,7 @@ import javax.crypto.SecretKey;
 
 import net.minecraft.server.v1_9_R1.MinecraftEncryption;
 import net.minecraft.server.v1_9_R1.NetworkManager;
-import protocolsupport.protocol.packet.handlers.AbstractLoginListener;
+import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 
 public class LoginListener extends AbstractLoginListener {

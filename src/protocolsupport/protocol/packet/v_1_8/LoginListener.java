@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.v_1_8;
 import javax.crypto.SecretKey;
 
 import net.minecraft.server.v1_9_R1.NetworkManager;
-import protocolsupport.protocol.packet.handlers.AbstractLoginListener;
+import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 
 public class LoginListener extends AbstractLoginListener {
 

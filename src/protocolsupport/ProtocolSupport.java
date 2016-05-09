@@ -10,7 +10,7 @@ import protocolsupport.injector.network.NettyInjector;
 import protocolsupport.protocol.legacyremapper.LegacySound;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.ServerBoundPacket;
-import protocolsupport.protocol.packet.handlers.AbstractLoginListener;
+import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificType;
