@@ -12,18 +12,18 @@ public class PlayPacketReorderer {
 
 	protected Packet<?> animatePacket;
 
+	private final ArrayList<Packet<?>> ordered = new ArrayList<>();
+
 	public List<Packet<?>> orderPackets(Collection<? extends Packet<?>> packets) {
-		ArrayList<Packet<?>> ordered = new ArrayList<>();
+		ordered.clear();
 		for (Packet<?> curPacket : packets) {
 			int packetId = ServerBoundPacket.getId(EnumProtocol.PLAY, curPacket);
 			//if the packet is use entity, we attempt to add a cached animate packet after it
 			if (packetId == ServerBoundPacket.PLAY_USE_ENTITY.getId()) {
+				ordered.add(curPacket);
 				if (animatePacket != null) {
-					ordered.add(curPacket);
 					ordered.add(animatePacket);
 					animatePacket = null;
-				} else {
-					ordered.add(curPacket);
 				}
 			}
 			//handle other packet types
