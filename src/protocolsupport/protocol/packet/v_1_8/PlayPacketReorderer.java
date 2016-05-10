@@ -14,9 +14,6 @@ public class PlayPacketReorderer {
 
 	public List<Packet<?>> orderPackets(Collection<? extends Packet<?>> packets) {
 		ArrayList<Packet<?>> ordered = new ArrayList<>();
-		if (packets.isEmpty()) {
-			return ordered;
-		}
 		for (Packet<?> curPacket : packets) {
 			int packetId = ServerBoundPacket.getId(EnumProtocol.PLAY, curPacket);
 			//if the packet is use entity, we attempt to add a cached animate packet after it
