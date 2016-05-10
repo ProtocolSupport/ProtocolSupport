@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.v_1_8;
+package protocolsupport.protocol.legacyremapper;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,7 +8,7 @@ import net.minecraft.server.v1_9_R1.EnumProtocol;
 import net.minecraft.server.v1_9_R1.Packet;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 
-public class PlayPacketReorderer {
+public class LegacyAnimatePacketReorderer {
 
 	protected Packet<?> animatePacket;
 

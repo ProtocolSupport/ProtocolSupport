@@ -13,6 +13,7 @@ import net.minecraft.server.v1_9_R1.NetworkManager;
 import net.minecraft.server.v1_9_R1.Packet;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.legacyremapper.LegacyAnimatePacketReorderer;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_1_4_1_5_1_6.ClientLogin;
 import protocolsupport.protocol.packet.middleimpl.serverbound.login.v_1_4_1_5_1_6_1_7_1_8.EncryptionResponse;
@@ -100,6 +101,8 @@ public class PacketDecoder implements IPacketDecoder {
 		this.sharedstorage = sharedstorage;
 	}
 
+	private final LegacyAnimatePacketReorderer reorderer = new LegacyAnimatePacketReorderer();
+
 	@Override
 	public void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
 		if (!input.isReadable()) {
@@ -119,7 +122,11 @@ public class PacketDecoder implements IPacketDecoder {
 				packetTransformer.readFromClientData(serializer);
 				RecyclableCollection<? extends Packet<?>> collection = packetTransformer.toNative();
 				try {
-					list.addAll(collection);
+					if (currentProtocol == EnumProtocol.PLAY) {
+						list.addAll(reorderer.orderPackets(collection));
+					} else {
+						list.addAll(collection);
+					}
 				} finally {
 					collection.recycle();
 				}
