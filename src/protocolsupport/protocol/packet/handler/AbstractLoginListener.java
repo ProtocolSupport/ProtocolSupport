@@ -41,7 +41,6 @@ import net.minecraft.server.v1_9_R1.PacketLoginOutSetCompression;
 import net.minecraft.server.v1_9_R1.PacketLoginOutSuccess;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.events.PlayerLoginStartEvent;
-import protocolsupport.protocol.packet.ProtocolSupportPlayerConnection;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
 
@@ -155,7 +154,6 @@ public abstract class AbstractLoginListener extends LoginListener {
 			}
 			networkManager.sendPacket(new PacketLoginOutSuccess(profile));
 			server.getPlayerList().a(this.networkManager, loginplayer);
-			loginplayer.playerConnection = new ProtocolSupportPlayerConnection(server, networkManager, loginplayer);
 		}
 	}
 

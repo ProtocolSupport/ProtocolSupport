@@ -110,6 +110,8 @@ public class PacketDecoder implements IPacketDecoder {
 		this.sharedstorage = sharedstorage;
 	}
 
+	private final PlayPacketReorderer reorderer = new PlayPacketReorderer();
+
 	@Override
 	public void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
 		if (!input.isReadable()) {
@@ -127,7 +129,11 @@ public class PacketDecoder implements IPacketDecoder {
 			packetTransformer.readFromClientData(serializer);
 			RecyclableCollection<? extends Packet<?>> collection = packetTransformer.toNative();
 			try {
-				list.addAll(collection);
+				if (currentProtocol == EnumProtocol.PLAY) {
+					list.addAll(reorderer.orderPackets(collection));
+				} else {
+					list.addAll(collection);
+				}
 			} finally {
 				collection.recycle();
 			}

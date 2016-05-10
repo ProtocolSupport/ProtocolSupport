@@ -108,4 +108,8 @@ public enum ServerBoundPacket {
 		return id;
 	}
 
+	public static int getId(EnumProtocol protocol, Packet<?> packet) {
+		return protocol.a(EnumProtocolDirection.SERVERBOUND, packet);
+	}
+
 }
