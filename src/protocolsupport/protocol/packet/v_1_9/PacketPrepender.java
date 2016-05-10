@@ -10,7 +10,7 @@ public class PacketPrepender implements IPacketPrepender {
 	@Override
 	public void prepend(ChannelHandlerContext ctx, ByteBuf input, ByteBuf output) throws Exception {
 		final int readableBytes = input.readableBytes();
-		final int varIntLength = net.minecraft.server.v1_9_R1.PacketDataSerializer.a(readableBytes);
+		final int varIntLength = net.minecraft.server.v1_9_R2.PacketDataSerializer.a(readableBytes);
 		if (varIntLength > 3) {
 			throw new IllegalArgumentException("unable to fit " + readableBytes + " into " + 3);
 		}

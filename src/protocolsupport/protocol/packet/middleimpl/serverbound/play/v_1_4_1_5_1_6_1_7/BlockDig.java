@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_4_1_5_1_
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_9_R1.BlockPosition;
+import net.minecraft.server.v1_9_R2.BlockPosition;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockDig;
 

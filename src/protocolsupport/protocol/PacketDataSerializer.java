@@ -13,7 +13,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack;
 import org.spigotmc.LimitStream;
 import org.spigotmc.SneakyThrow;
 
@@ -24,17 +24,17 @@ import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
-import net.minecraft.server.v1_9_R1.BlockPosition;
-import net.minecraft.server.v1_9_R1.GameProfileSerializer;
-import net.minecraft.server.v1_9_R1.Item;
-import net.minecraft.server.v1_9_R1.ItemPotion;
-import net.minecraft.server.v1_9_R1.ItemStack;
-import net.minecraft.server.v1_9_R1.Items;
-import net.minecraft.server.v1_9_R1.NBTCompressedStreamTools;
-import net.minecraft.server.v1_9_R1.NBTReadLimiter;
-import net.minecraft.server.v1_9_R1.NBTTagCompound;
-import net.minecraft.server.v1_9_R1.NBTTagList;
-import net.minecraft.server.v1_9_R1.NBTTagString;
+import net.minecraft.server.v1_9_R2.BlockPosition;
+import net.minecraft.server.v1_9_R2.GameProfileSerializer;
+import net.minecraft.server.v1_9_R2.Item;
+import net.minecraft.server.v1_9_R2.ItemPotion;
+import net.minecraft.server.v1_9_R2.ItemStack;
+import net.minecraft.server.v1_9_R2.Items;
+import net.minecraft.server.v1_9_R2.NBTCompressedStreamTools;
+import net.minecraft.server.v1_9_R2.NBTReadLimiter;
+import net.minecraft.server.v1_9_R2.NBTTagCompound;
+import net.minecraft.server.v1_9_R2.NBTTagList;
+import net.minecraft.server.v1_9_R2.NBTTagString;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.ItemStackWriteEvent;
@@ -46,7 +46,7 @@ import protocolsupport.protocol.typeskipper.id.SkippingTable;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.ChannelUtils;
 
-public class PacketDataSerializer extends net.minecraft.server.v1_9_R1.PacketDataSerializer {
+public class PacketDataSerializer extends net.minecraft.server.v1_9_R2.PacketDataSerializer {
 
 	private ProtocolVersion version;
 

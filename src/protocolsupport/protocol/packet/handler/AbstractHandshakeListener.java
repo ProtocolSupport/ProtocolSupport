@@ -1,12 +1,10 @@
 package protocolsupport.protocol.packet.handler;
 
-import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
 import org.apache.logging.log4j.LogManager;
-import org.spigotmc.SneakyThrow;
 import org.spigotmc.SpigotConfig;
 
 import com.google.gson.Gson;
@@ -15,25 +13,22 @@ import com.mojang.util.UUIDTypeAdapter;
 
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import net.minecraft.server.v1_9_R1.ChatComponentText;
-import net.minecraft.server.v1_9_R1.EnumProtocol;
-import net.minecraft.server.v1_9_R1.HandshakeListener;
-import net.minecraft.server.v1_9_R1.IChatBaseComponent;
-import net.minecraft.server.v1_9_R1.LoginListener;
-import net.minecraft.server.v1_9_R1.MinecraftServer;
-import net.minecraft.server.v1_9_R1.NetworkManager;
-import net.minecraft.server.v1_9_R1.PacketHandshakingInSetProtocol;
-import net.minecraft.server.v1_9_R1.PacketLoginOutDisconnect;
-import net.minecraft.server.v1_9_R1.PacketEncoder;
+
+import net.minecraft.server.v1_9_R2.ChatComponentText;
+import net.minecraft.server.v1_9_R2.EnumProtocol;
+import net.minecraft.server.v1_9_R2.HandshakeListener;
+import net.minecraft.server.v1_9_R2.IChatBaseComponent;
+import net.minecraft.server.v1_9_R2.LoginListener;
+import net.minecraft.server.v1_9_R2.MinecraftServer;
+import net.minecraft.server.v1_9_R2.NetworkManager;
+import net.minecraft.server.v1_9_R2.PacketHandshakingInSetProtocol;
+import net.minecraft.server.v1_9_R2.PacketLoginOutDisconnect;
+
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.protocol.storage.ThrottleTracker;
-import protocolsupport.utils.ReflectionUtils;
 
 public abstract class AbstractHandshakeListener extends HandshakeListener {
-
-	private static final Field versionField = ReflectionUtils.getField(PacketEncoder.class, "version");
 
 	private static final Gson gson = new Gson();
 
@@ -48,12 +43,6 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	@Override
 	public void a(final PacketHandshakingInSetProtocol packethandshakinginsetprotocol) {
-		int iversion = packethandshakinginsetprotocol.b();
-		try {
-			versionField.set(networkManager.channel.pipeline().get(ChannelHandlers.ENCODER), iversion);
-		} catch (Throwable t) {
-			SneakyThrow.sneaky(t);
-		}
 		switch (packethandshakinginsetprotocol.a()) {
 			case LOGIN: {
 				networkManager.setProtocol(EnumProtocol.LOGIN);
@@ -75,10 +64,7 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 				} catch (Throwable t) {
 					LogManager.getLogger().debug("Failed to check connection throttle", t);
 				}
-				if (iversion != ProtocolVersion.MINECRAFT_1_9.getId() &&
-					iversion != ProtocolVersion.MINECRAFT_1_9_1.getId() &&
-					iversion != ProtocolVersion.MINECRAFT_1_9_2.getId()
-				) {
+				if (packethandshakinginsetprotocol.b() != ProtocolVersion.getLatest().getId()) {
 					final ChatComponentText chatcomponenttext = new ChatComponentText("Unsupported protocol version "+packethandshakinginsetprotocol.b());
 					this.networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext), new GenericFutureListener<Future<? super Void>>() {
 						@Override

@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.bukkit.Bukkit;
 
-import net.minecraft.server.v1_9_R1.Packet;
+import net.minecraft.server.v1_9_R2.Packet;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.packet.ServerBoundPacket;

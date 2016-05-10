@@ -2,7 +2,7 @@ package protocolsupport.protocol.utils.datawatcher.objects;
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_9_R1.ItemStack;
+import net.minecraft.server.v1_9_R2.ItemStack;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;

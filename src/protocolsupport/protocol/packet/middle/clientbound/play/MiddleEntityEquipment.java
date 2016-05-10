@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_9_R1.ItemStack;
+import net.minecraft.server.v1_9_R2.ItemStack;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 

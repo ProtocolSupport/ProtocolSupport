@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_9_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_9_R1.util.CraftIconCache;
+import org.bukkit.craftbukkit.v1_9_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_9_R2.util.CraftIconCache;
 import org.bukkit.entity.Player;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.util.CachedServerIcon;
@@ -20,23 +20,22 @@ import org.spigotmc.SpigotConfig;
 import com.mojang.authlib.GameProfile;
 
 import io.netty.channel.ChannelFutureListener;
-import net.minecraft.server.v1_9_R1.ChatComponentText;
-import net.minecraft.server.v1_9_R1.EntityPlayer;
-import net.minecraft.server.v1_9_R1.MinecraftServer;
-import net.minecraft.server.v1_9_R1.NetworkManager;
-import net.minecraft.server.v1_9_R1.PacketStatusInPing;
-import net.minecraft.server.v1_9_R1.PacketStatusInStart;
-import net.minecraft.server.v1_9_R1.PacketStatusListener;
-import net.minecraft.server.v1_9_R1.PacketStatusOutPong;
-import net.minecraft.server.v1_9_R1.PacketStatusOutServerInfo;
-import net.minecraft.server.v1_9_R1.ServerPing;
-import net.minecraft.server.v1_9_R1.ServerPing.ServerData;
-import net.minecraft.server.v1_9_R1.ServerPing.ServerPingPlayerSample;
-import protocolsupport.api.ProtocolSupportAPI;
+import net.minecraft.server.v1_9_R2.ChatComponentText;
+import net.minecraft.server.v1_9_R2.EntityPlayer;
+import net.minecraft.server.v1_9_R2.MinecraftServer;
+import net.minecraft.server.v1_9_R2.NetworkManager;
+import net.minecraft.server.v1_9_R2.PacketStatusInPing;
+import net.minecraft.server.v1_9_R2.PacketStatusInStart;
+import net.minecraft.server.v1_9_R2.PacketStatusListener;
+import net.minecraft.server.v1_9_R2.PacketStatusOutPong;
+import net.minecraft.server.v1_9_R2.PacketStatusOutServerInfo;
+import net.minecraft.server.v1_9_R2.ServerPing;
+import net.minecraft.server.v1_9_R2.ServerPing.ServerData;
+import net.minecraft.server.v1_9_R2.ServerPing.ServerPingPlayerSample;
+
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
-import protocolsupport.utils.netty.ChannelUtils;
 
 public class StatusListener extends PacketStatusListener {
 
@@ -50,15 +49,6 @@ public class StatusListener extends PacketStatusListener {
 	}
 
 	private static final UUID profileUUID = UUID.randomUUID();
-
-	public ProtocolVersion getClientVersionToWrite() {
-		ProtocolVersion version = ProtocolSupportAPI.getProtocolVersion(ChannelUtils.getNetworkManagerSocketAddress(nmanager.channel));
-		if (version.isBetween(ProtocolVersion.MINECRAFT_1_9, ProtocolVersion.MINECRAFT_1_9_2)) {
-			return version;
-		} else {
-			return ProtocolVersion.getLatest();
-		}
-	}
 
 	@Override
 	public void a(PacketStatusInStart packetstatusinstart) {
@@ -83,7 +73,7 @@ public class StatusListener extends PacketStatusListener {
 		}
 
 		ServerPingResponseEvent revent = new ServerPingResponseEvent(
-			addr, new ProtocolInfo(getClientVersionToWrite(), server.getServerModName() + " " + server.getVersion()),
+			addr, new ProtocolInfo(ProtocolVersion.getLatest(), server.getServerModName() + " " + server.getVersion()),
 			icon, motd, maxPlayers, profiles
 		);
 		Bukkit.getPluginManager().callEvent(revent);

@@ -6,9 +6,9 @@ import org.bukkit.entity.Player;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
-import net.minecraft.server.v1_9_R1.EntityPlayer;
-import net.minecraft.server.v1_9_R1.NetworkManager;
-import net.minecraft.server.v1_9_R1.PlayerConnection;
+import net.minecraft.server.v1_9_R2.EntityPlayer;
+import net.minecraft.server.v1_9_R2.NetworkManager;
+import net.minecraft.server.v1_9_R2.PlayerConnection;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 
 public class ChannelUtils {

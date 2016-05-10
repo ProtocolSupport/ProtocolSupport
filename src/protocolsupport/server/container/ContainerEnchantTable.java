@@ -7,27 +7,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 
-import net.minecraft.server.v1_9_R1.BlockPosition;
-import net.minecraft.server.v1_9_R1.Blocks;
-import net.minecraft.server.v1_9_R1.Enchantment;
-import net.minecraft.server.v1_9_R1.EnchantmentManager;
-import net.minecraft.server.v1_9_R1.EntityHuman;
-import net.minecraft.server.v1_9_R1.IInventory;
-import net.minecraft.server.v1_9_R1.ItemStack;
-import net.minecraft.server.v1_9_R1.Items;
-import net.minecraft.server.v1_9_R1.PlayerInventory;
-import net.minecraft.server.v1_9_R1.StatisticList;
-import net.minecraft.server.v1_9_R1.WeightedRandomEnchant;
-import net.minecraft.server.v1_9_R1.World;
+import net.minecraft.server.v1_9_R2.BlockPosition;
+import net.minecraft.server.v1_9_R2.Blocks;
+import net.minecraft.server.v1_9_R2.Enchantment;
+import net.minecraft.server.v1_9_R2.EnchantmentManager;
+import net.minecraft.server.v1_9_R2.EntityHuman;
+import net.minecraft.server.v1_9_R2.IInventory;
+import net.minecraft.server.v1_9_R2.ItemStack;
+import net.minecraft.server.v1_9_R2.Items;
+import net.minecraft.server.v1_9_R2.PlayerInventory;
+import net.minecraft.server.v1_9_R2.StatisticList;
+import net.minecraft.server.v1_9_R2.WeightedRandomEnchant;
+import net.minecraft.server.v1_9_R2.World;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
 
-public class ContainerEnchantTable extends net.minecraft.server.v1_9_R1.ContainerEnchantTable {
+public class ContainerEnchantTable extends net.minecraft.server.v1_9_R2.ContainerEnchantTable {
 
 	private final Random random = new Random();
 
@@ -167,9 +167,9 @@ public class ContainerEnchantTable extends net.minecraft.server.v1_9_R1.Containe
 					enchantSlots.setItem(1, null);
 				}
 			}
-			entityhuman.b(StatisticList.W);
+			entityhuman.b(StatisticList.Y);
 			enchantSlots.update();
-			f = entityhuman.cQ();
+			f = entityhuman.cR();
 			this.a(enchantSlots);
 			return true;
 		}

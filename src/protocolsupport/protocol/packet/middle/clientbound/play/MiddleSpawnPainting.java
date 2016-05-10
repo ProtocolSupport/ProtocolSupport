@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import java.io.IOException;
 import java.util.UUID;
 
-import net.minecraft.server.v1_9_R1.BlockPosition;
+import net.minecraft.server.v1_9_R2.BlockPosition;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 

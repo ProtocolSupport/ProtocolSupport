@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middle;
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_9_R1.Packet;
+import net.minecraft.server.v1_9_R2.Packet;
 import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.utils.recyclable.RecyclableCollection;

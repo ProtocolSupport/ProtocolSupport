@@ -1,7 +1,7 @@
 package protocolsupport.injector.network;
 
-import net.minecraft.server.v1_9_R1.MinecraftServer;
-import net.minecraft.server.v1_9_R1.ServerConnection;
+import net.minecraft.server.v1_9_R2.MinecraftServer;
+import net.minecraft.server.v1_9_R2.ServerConnection;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;

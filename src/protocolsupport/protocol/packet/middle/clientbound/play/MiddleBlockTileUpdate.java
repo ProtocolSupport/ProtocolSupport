@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_9_R1.NBTTagCompound;
+import net.minecraft.server.v1_9_R2.NBTTagCompound;
 import protocolsupport.protocol.PacketDataSerializer;
 
 public abstract class MiddleBlockTileUpdate<T> extends MiddleBlock<T> {

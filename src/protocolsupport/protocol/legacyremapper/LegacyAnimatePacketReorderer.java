@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import net.minecraft.server.v1_9_R1.EnumProtocol;
-import net.minecraft.server.v1_9_R1.Packet;
+import net.minecraft.server.v1_9_R2.EnumProtocol;
+import net.minecraft.server.v1_9_R2.Packet;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 
 public class LegacyAnimatePacketReorderer {

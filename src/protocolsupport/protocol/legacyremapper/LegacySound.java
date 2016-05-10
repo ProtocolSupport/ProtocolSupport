@@ -2,7 +2,7 @@ package protocolsupport.protocol.legacyremapper;
 
 import java.util.HashMap;
 
-import net.minecraft.server.v1_9_R1.SoundEffect;
+import net.minecraft.server.v1_9_R2.SoundEffect;
 
 public class LegacySound {
 

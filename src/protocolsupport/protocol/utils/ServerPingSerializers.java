@@ -15,13 +15,13 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.mojang.authlib.GameProfile;
 
-import net.minecraft.server.v1_9_R1.ChatDeserializer;
-import net.minecraft.server.v1_9_R1.ChatModifier;
-import net.minecraft.server.v1_9_R1.ChatTypeAdapterFactory;
-import net.minecraft.server.v1_9_R1.IChatBaseComponent;
-import net.minecraft.server.v1_9_R1.ServerPing;
-import net.minecraft.server.v1_9_R1.ServerPing.ServerData;
-import net.minecraft.server.v1_9_R1.ServerPing.ServerPingPlayerSample;
+import net.minecraft.server.v1_9_R2.ChatDeserializer;
+import net.minecraft.server.v1_9_R2.ChatModifier;
+import net.minecraft.server.v1_9_R2.ChatTypeAdapterFactory;
+import net.minecraft.server.v1_9_R2.IChatBaseComponent;
+import net.minecraft.server.v1_9_R2.ServerPing;
+import net.minecraft.server.v1_9_R2.ServerPing.ServerData;
+import net.minecraft.server.v1_9_R2.ServerPing.ServerPingPlayerSample;
 
 public class ServerPingSerializers {
 

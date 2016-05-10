@@ -2,16 +2,15 @@ package protocolsupport.protocol.pipeline.wrapped;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import net.minecraft.server.v1_9_R1.EnumProtocolDirection;
-import net.minecraft.server.v1_9_R1.Packet;
-import net.minecraft.server.v1_9_R1.PacketEncoder;
-import net.minecraft.server.v1_9_R1.PacketListener;
+import io.netty.handler.codec.MessageToByteEncoder;
+import net.minecraft.server.v1_9_R2.Packet;
+import net.minecraft.server.v1_9_R2.PacketListener;
 import protocolsupport.protocol.pipeline.IPacketEncoder;
 
-public class WrappedEncoder extends PacketEncoder {
+public class WrappedEncoder extends MessageToByteEncoder<Packet<PacketListener>> {
 
 	public WrappedEncoder() {
-		super(EnumProtocolDirection.CLIENTBOUND);
+		super(true);
 	}
 
 	private IPacketEncoder realEncoder = new IPacketEncoder() {

@@ -7,15 +7,15 @@ import java.util.Set;
 
 import org.bukkit.Bukkit;
 
-import net.minecraft.server.v1_9_R1.Block;
-import net.minecraft.server.v1_9_R1.Blocks;
-import net.minecraft.server.v1_9_R1.IBlockData;
-import net.minecraft.server.v1_9_R1.Item;
-import net.minecraft.server.v1_9_R1.ItemAnvil;
-import net.minecraft.server.v1_9_R1.ItemBlock;
-import net.minecraft.server.v1_9_R1.ItemSpade;
-import net.minecraft.server.v1_9_R1.MinecraftKey;
-import net.minecraft.server.v1_9_R1.TileEntity;
+import net.minecraft.server.v1_9_R2.Block;
+import net.minecraft.server.v1_9_R2.Blocks;
+import net.minecraft.server.v1_9_R2.IBlockData;
+import net.minecraft.server.v1_9_R2.Item;
+import net.minecraft.server.v1_9_R2.ItemAnvil;
+import net.minecraft.server.v1_9_R2.ItemBlock;
+import net.minecraft.server.v1_9_R2.ItemSpade;
+import net.minecraft.server.v1_9_R2.MinecraftKey;
+import net.minecraft.server.v1_9_R2.TileEntity;
 
 import protocolsupport.server.block.BlockAnvil;
 import protocolsupport.server.block.BlockEnchantTable;
