@@ -30,7 +30,7 @@ public class TileNBTTransformer {
 					input.remove("SpawnPotentials");
 					input.remove("SpawnData");
 					if (spawndata != null) {
-						String mobname = spawndata.getString("Id");
+						String mobname = spawndata.getString("id");
 						if (!mobname.isEmpty()) {
 							input.setString("EntityId", mobname);
 						}

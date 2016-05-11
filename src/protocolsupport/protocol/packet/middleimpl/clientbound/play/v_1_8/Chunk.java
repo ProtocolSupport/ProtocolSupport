@@ -2,14 +2,16 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8;
 
 import java.io.IOException;
 
+import net.minecraft.server.v1_9_R2.NBTTagCompound;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.legacyremapper.LegacyTileEntityUpdate;
 import protocolsupport.protocol.legacyremapper.chunk.ChunkTransformer;
 import protocolsupport.protocol.legacyremapper.chunk.EmptyChunk;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.PacketData;
+import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class Chunk extends MiddleChunk<RecyclableCollection<PacketData>>  {
 
@@ -17,20 +19,30 @@ public class Chunk extends MiddleChunk<RecyclableCollection<PacketData>>  {
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
-		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID, version);
-		serializer.writeInt(chunkX);
-		serializer.writeInt(chunkZ);
-		serializer.writeBoolean(full);
+		RecyclableArrayList<PacketData> packets = RecyclableArrayList.create();
+		PacketData chunkdata = PacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID, version);
+		chunkdata.writeInt(chunkX);
+		chunkdata.writeInt(chunkZ);
+		chunkdata.writeBoolean(full);
 		boolean hasSkyLight = storage.hasSkyLightInCurrentDimension();
 		if (bitmask == 0 && full) {
-			serializer.writeShort(1);
-			serializer.writeArray(EmptyChunk.get18ChunkData(hasSkyLight));
+			chunkdata.writeShort(1);
+			chunkdata.writeArray(EmptyChunk.get18ChunkData(hasSkyLight));
 		} else {
-			serializer.writeShort(bitmask);
+			chunkdata.writeShort(bitmask);
 			transformer.loadData(data, bitmask, hasSkyLight, full);
-			serializer.writeArray(transformer.to18Data());
+			chunkdata.writeArray(transformer.to18Data());
 		}
-		return RecyclableSingletonList.create(serializer);
+		packets.add(chunkdata);
+		for (NBTTagCompound tile : tiles) {
+			packets.add(BlockTileUpdate.createPacketData(
+				version,
+				LegacyTileEntityUpdate.getPosition(tile),
+				LegacyTileEntityUpdate.getUpdateType(tile).ordinal(),
+				tile
+			));
+		}
+		return packets;
 	}
 
 }
