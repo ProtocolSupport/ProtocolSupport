@@ -6,7 +6,6 @@ import net.minecraft.server.v1_9_R2.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_9_R2.ServerPing;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
-import protocolsupport.protocol.legacyremapper.LegacyUtils;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.status.MiddleServerInfo;
 import protocolsupport.protocol.packet.middleimpl.PacketData;
@@ -27,7 +26,7 @@ public class ServerInfo extends MiddleServerInfo<RecyclableCollection<PacketData
 			"\u0000" +
 			serverPing.getServerData().a() +
 			"\u0000" +
-			LegacyUtils.toText(ChatAPI.fromJSON(ChatSerializer.a(serverPing.a()))) +
+			ChatAPI.fromJSON(ChatSerializer.a(serverPing.a())).toLegacyText() +
 			"\u0000" +
 			serverPing.b().b() +
 			"\u0000" +

@@ -30,7 +30,7 @@ public class InventoryOpen extends MiddleInventoryOpen<RecyclableCollection<Pack
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_WINDOW_OPEN_ID, version);
 		serializer.writeByte(windowId);
 		serializer.writeByte(id);
-		serializer.writeString(LegacyUtils.toText(ChatAPI.fromJSON(titleJson)));
+		serializer.writeString(ChatAPI.fromJSON(titleJson).toLegacyText());
 		serializer.writeByte(slots);
 		serializer.writeBoolean(true);
 		if (id == 11) {

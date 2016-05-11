@@ -7,7 +7,6 @@ import net.minecraft.server.v1_9_R2.NBTTagCompound;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.legacyremapper.LegacyTileEntityUpdate;
-import protocolsupport.protocol.legacyremapper.LegacyUtils;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockTileUpdate;
 import protocolsupport.protocol.packet.middleimpl.PacketData;
@@ -30,7 +29,7 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate<RecyclableCollection<
 			serializer.writeShort(position.getY());
 			serializer.writeInt(position.getZ());
 			for (String line : LegacyTileEntityUpdate.getSignLines(tag)) {
-				serializer.writeString(Utils.clampString(LegacyUtils.toText(ChatAPI.fromJSON(line)), 15));
+				serializer.writeString(Utils.clampString(ChatAPI.fromJSON(line).toLegacyText(), 15));
 			}
 			return serializer;
 		} else {

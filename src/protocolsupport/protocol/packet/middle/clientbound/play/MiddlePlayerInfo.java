@@ -5,7 +5,6 @@ import java.util.UUID;
 import com.mojang.authlib.properties.Property;
 
 import protocolsupport.api.chat.ChatAPI;
-import protocolsupport.protocol.legacyremapper.LegacyUtils;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage.PlayerListEntry;
@@ -113,7 +112,7 @@ public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {
 		public Property[] properties;
 
 		public String getName() {
-			return displayNameJson == null ? username : LegacyUtils.toText(ChatAPI.fromJSON(displayNameJson));
+			return displayNameJson == null ? username : ChatAPI.fromJSON(displayNameJson).toLegacyText();
 		}
 	}
 

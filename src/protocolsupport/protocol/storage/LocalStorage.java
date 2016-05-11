@@ -9,7 +9,6 @@ import com.mojang.authlib.properties.Property;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
 import protocolsupport.api.chat.ChatAPI;
-import protocolsupport.protocol.legacyremapper.LegacyUtils;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
 
@@ -93,7 +92,7 @@ public class LocalStorage {
 		}
 
 		public String getName() {
-			return displayNameJson == null ? name : LegacyUtils.toText(ChatAPI.fromJSON(displayNameJson));
+			return displayNameJson == null ? name : ChatAPI.fromJSON(displayNameJson).toLegacyText();
 		}
 
 		@Override
