@@ -6,12 +6,16 @@ import org.bukkit.entity.Player;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
+import io.netty.util.AttributeKey;
 import net.minecraft.server.v1_9_R2.EntityPlayer;
+import net.minecraft.server.v1_9_R2.EnumProtocol;
 import net.minecraft.server.v1_9_R2.NetworkManager;
 import net.minecraft.server.v1_9_R2.PlayerConnection;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 
 public class ChannelUtils {
+
+	public static final AttributeKey<EnumProtocol> CURRENT_PROTOCOL_KEY = NetworkManager.c;
 
 	public static Player getBukkitPlayer(Channel channel) {
 		return getPlayer(getNetworkManager(channel)).getBukkitEntity();

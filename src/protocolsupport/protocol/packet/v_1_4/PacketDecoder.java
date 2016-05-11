@@ -7,9 +7,7 @@ import org.spigotmc.SneakyThrow;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.util.AttributeKey;
 import net.minecraft.server.v1_9_R2.EnumProtocol;
-import net.minecraft.server.v1_9_R2.NetworkManager;
 import net.minecraft.server.v1_9_R2.Packet;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.legacyremapper.LegacyAnimatePacketReorderer;
@@ -50,8 +48,6 @@ import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class PacketDecoder implements IPacketDecoder {
-
-	private static final AttributeKey<EnumProtocol> currentStateAttrKey = NetworkManager.c;
 
 	private final MiddleTransformerRegistry<ServerBoundMiddlePacket> dataRemapperRegistry = new MiddleTransformerRegistry<>();
 	{
@@ -109,7 +105,7 @@ public class PacketDecoder implements IPacketDecoder {
 		serializer.setBuf(input);
 		serializer.markReaderIndex();
 		Channel channel = ctx.channel();
-		EnumProtocol currentProtocol = channel.attr(currentStateAttrKey).get();
+		EnumProtocol currentProtocol = channel.attr(ChannelUtils.CURRENT_PROTOCOL_KEY).get();
 		try {
 			int packetId = serializer.readUnsignedByte();
 			ServerBoundMiddlePacket packetTransformer = dataRemapperRegistry.getTransformer(currentProtocol, packetId);
