@@ -13,7 +13,7 @@ import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
-import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificType;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
 import protocolsupport.protocol.typeskipper.string.StringSkipper;
 import protocolsupport.server.listeners.PlayerListener;
@@ -35,7 +35,7 @@ public class ProtocolSupport extends JavaPlugin {
 			IdRemapper.class.getName();
 			IdSkipper.class.getName();
 			StringSkipper.class.getName();
-			SpecificType.class.getName();
+			SpecificRemapper.class.getName();
 			ServerInjector.inject();
 			NettyInjector.inject();
 			ReloadCommandRemover.remove();
