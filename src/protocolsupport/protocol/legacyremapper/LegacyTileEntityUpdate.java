@@ -2,44 +2,41 @@ package protocolsupport.protocol.legacyremapper;
 
 import net.minecraft.server.v1_9_R2.BlockPosition;
 import net.minecraft.server.v1_9_R2.NBTTagCompound;
+import protocolsupport.protocol.typeremapper.nbt.tileupdate.TileNBTTransformer;
 
 public class LegacyTileEntityUpdate {
 
-	public static enum TileEntityUpdateType {
-		UNKNOWN, MOB_SPAWNER, COMMAND_BLOCK, BEACON, SKULL, FLOWER_POT, BANNER, STRUCTURE, END_GATEWAY, SIGN; 
-	}
-
-	public static TileEntityUpdateType getUpdateType(NBTTagCompound tag) {
+	public static TileNBTTransformer.TileEntityUpdateType getUpdateType(NBTTagCompound tag) {
 		switch (tag.getString("id")) {
 			case "MobSpawner": {
-				return TileEntityUpdateType.MOB_SPAWNER;
+				return TileNBTTransformer.TileEntityUpdateType.MOB_SPAWNER;
 			}
 			case "Control": {
-				return TileEntityUpdateType.COMMAND_BLOCK;
+				return TileNBTTransformer.TileEntityUpdateType.COMMAND_BLOCK;
 			}
 			case "Beacon": {
-				return TileEntityUpdateType.BEACON;
+				return TileNBTTransformer.TileEntityUpdateType.BEACON;
 			}
 			case "Skull": {
-				return TileEntityUpdateType.SKULL;
+				return TileNBTTransformer.TileEntityUpdateType.SKULL;
 			}
 			case "FlowerPot": {
-				return TileEntityUpdateType.FLOWER_POT;
+				return TileNBTTransformer.TileEntityUpdateType.FLOWER_POT;
 			}
 			case "Banner": {
-				return TileEntityUpdateType.BANNER;
+				return TileNBTTransformer.TileEntityUpdateType.BANNER;
 			}
 			case "Structure": {
-				return TileEntityUpdateType.STRUCTURE;
+				return TileNBTTransformer.TileEntityUpdateType.STRUCTURE;
 			}
 			case "EndGateway": {
-				return TileEntityUpdateType.END_GATEWAY;
+				return TileNBTTransformer.TileEntityUpdateType.END_GATEWAY;
 			}
 			case "Sign": {
-				return TileEntityUpdateType.SIGN;
+				return TileNBTTransformer.TileEntityUpdateType.SIGN;
 			}
 			default: {
-				return TileEntityUpdateType.UNKNOWN;
+				return TileNBTTransformer.TileEntityUpdateType.UNKNOWN;
 			}
 		}
 	}

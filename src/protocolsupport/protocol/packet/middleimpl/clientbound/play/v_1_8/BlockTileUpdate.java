@@ -21,7 +21,7 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate<RecyclableCollection<
 	}
 
 	public static PacketData createPacketData(ProtocolVersion version, BlockPosition position, int type, NBTTagCompound tag) {
-		if (type == LegacyTileEntityUpdate.TileEntityUpdateType.SIGN.ordinal()) {
+		if (type == TileNBTTransformer.TileEntityUpdateType.SIGN.ordinal()) {
 			PacketData serializer = PacketData.create(ClientBoundPacket.LEGACY_PLAY_UPDATE_SIGN_ID, version);
 			serializer.writePosition(position);
 			for (String line : LegacyTileEntityUpdate.getSignLines(tag)) {
