@@ -12,7 +12,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
-import protocolsupport.protocol.RecyclablePacketDataSerializer;
+import protocolsupport.protocol.serializer.RecyclablePacketDataSerializer;
 
 public class TabAPI {
 

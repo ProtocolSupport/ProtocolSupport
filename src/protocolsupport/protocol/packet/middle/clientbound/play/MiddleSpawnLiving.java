@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.UUID;
 
 import gnu.trove.map.TIntObjectMap;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedLiving;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;

@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import net.minecraft.server.v1_9_R2.ItemStack;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.RecyclablePacketDataSerializer;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.RecyclablePacketDataSerializer;
 import protocolsupport.protocol.typeremapper.nbt.custompayload.MerchantData.TradeOffer;
 import protocolsupport.utils.netty.ChannelUtils;
 

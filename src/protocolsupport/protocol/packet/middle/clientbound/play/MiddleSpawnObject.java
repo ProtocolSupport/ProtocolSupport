@@ -3,8 +3,8 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import java.io.IOException;
 import java.util.UUID;
 
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedObject;
 
 public abstract class MiddleSpawnObject<T> extends ClientBoundMiddlePacket<T> {

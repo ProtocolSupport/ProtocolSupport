@@ -13,7 +13,6 @@ import net.minecraft.server.v1_9_R2.EnumProtocol;
 import net.minecraft.server.v1_9_R2.NetworkManager;
 import net.minecraft.server.v1_9_R2.Packet;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.legacyremapper.LegacyAnimatePacketReorderer;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_1_7_1_8.SetProtocol;
@@ -46,11 +45,11 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_7_1_8.Cli
 import protocolsupport.protocol.packet.middleimpl.serverbound.status.v_1_7_1_8.Ping;
 import protocolsupport.protocol.packet.middleimpl.serverbound.status.v_1_7_1_8.ServerInfoRequest;
 import protocolsupport.protocol.pipeline.IPacketDecoder;
+import protocolsupport.protocol.serializer.WrappingBufferPacketDataSerializer;
 import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry.InitCallBack;
 import protocolsupport.utils.netty.ChannelUtils;
-import protocolsupport.utils.netty.WrappingBuffer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class PacketDecoder implements IPacketDecoder {
@@ -101,10 +100,9 @@ public class PacketDecoder implements IPacketDecoder {
 	}
 
 	protected final SharedStorage sharedstorage;
-	private final WrappingBuffer buffer = new WrappingBuffer();
-	private final PacketDataSerializer serializer;
+	private final WrappingBufferPacketDataSerializer serializer;
 	public PacketDecoder(ProtocolVersion version, SharedStorage sharedstorage) {
-		this.serializer = new PacketDataSerializer(buffer, version);
+		this.serializer = WrappingBufferPacketDataSerializer.create(version);
 		this.sharedstorage = sharedstorage;
 	}
 
@@ -117,7 +115,7 @@ public class PacketDecoder implements IPacketDecoder {
 		}
 		Channel channel = ctx.channel();
 		EnumProtocol currentProtocol = channel.attr(currentStateAttrKey).get();
-		buffer.setBuf(input);
+		serializer.setBuf(input);
 		int packetId = serializer.readVarInt();
 		ServerBoundMiddlePacket packetTransformer = registry.getTransformer(currentProtocol, packetId);
 		if (packetTransformer != null) {

@@ -12,23 +12,21 @@ import net.minecraft.server.v1_9_R2.EnumProtocolDirection;
 import net.minecraft.server.v1_9_R2.NetworkManager;
 import net.minecraft.server.v1_9_R2.Packet;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.pipeline.IPacketDecoder;
-import protocolsupport.utils.netty.WrappingBuffer;
+import protocolsupport.protocol.serializer.WrappingBufferPacketDataSerializer;
 
 public class PacketDecoder implements IPacketDecoder {
 
 	private static final AttributeKey<EnumProtocol> currentStateAttrKey = NetworkManager.c;
 
-	private final WrappingBuffer buffer = new WrappingBuffer();
-	private final PacketDataSerializer serializer = new PacketDataSerializer(buffer, ProtocolVersion.getLatest());
+	private final WrappingBufferPacketDataSerializer serializer = WrappingBufferPacketDataSerializer.create(ProtocolVersion.getLatest());
 
 	@Override
 	public void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
 		if (!input.isReadable()) {
 			return;
 		}
-		buffer.setBuf(input);
+		serializer.setBuf(input);
 		EnumProtocol currentProtocol = ctx.channel().attr(currentStateAttrKey).get();
 		int packetId = serializer.readVarInt();
 		Packet<?> packet = currentProtocol.a(EnumProtocolDirection.SERVERBOUND, packetId);

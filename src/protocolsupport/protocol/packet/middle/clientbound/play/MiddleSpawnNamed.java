@@ -8,8 +8,8 @@ import java.util.UUID;
 import com.mojang.authlib.properties.Property;
 
 import gnu.trove.map.TIntObjectMap;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage.PlayerListEntry;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;

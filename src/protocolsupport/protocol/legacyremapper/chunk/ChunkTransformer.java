@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import io.netty.buffer.Unpooled;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.legacyremapper.chunk.blockstorage.BlockStorage;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.RemappingTable;
 

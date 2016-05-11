@@ -1,10 +1,10 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_4_1_5;
 
 import net.minecraft.server.v1_9_R2.Packet;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.PacketCreator;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;

@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_7;
 
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUseEntity;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 
 public class UseEntity extends MiddleUseEntity {
 

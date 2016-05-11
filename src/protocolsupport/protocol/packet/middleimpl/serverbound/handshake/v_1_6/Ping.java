@@ -4,10 +4,10 @@ import java.io.IOException;
 
 import net.minecraft.server.v1_9_R2.Packet;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.PacketCreator;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 

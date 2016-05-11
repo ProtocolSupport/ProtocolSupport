@@ -1,4 +1,4 @@
-package protocolsupport.protocol;
+package protocolsupport.protocol.serializer;
 
 import io.netty.util.Recycler;
 import protocolsupport.api.ProtocolVersion;

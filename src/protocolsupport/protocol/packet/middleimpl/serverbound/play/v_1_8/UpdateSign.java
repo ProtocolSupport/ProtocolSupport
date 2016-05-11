@@ -5,8 +5,8 @@ import java.io.IOException;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateSign;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 
 public class UpdateSign extends MiddleUpdateSign {
 

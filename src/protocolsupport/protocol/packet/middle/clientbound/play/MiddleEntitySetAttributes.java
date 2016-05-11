@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import java.io.IOException;
 import java.util.UUID;
 
-import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 
 public abstract class MiddleEntitySetAttributes<T> extends MiddleEntity<T> {
 

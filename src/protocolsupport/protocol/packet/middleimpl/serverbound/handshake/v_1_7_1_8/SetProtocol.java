@@ -2,8 +2,8 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_1_7_1
 
 import java.io.IOException;
 
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.packet.middle.serverbound.handshake.MiddleSetProtocol;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 
 public class SetProtocol extends MiddleSetProtocol {
 

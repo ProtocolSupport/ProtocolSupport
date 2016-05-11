@@ -3,8 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import java.io.IOException;
 
 import gnu.trove.map.TIntObjectMap;
-
-import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.utils.netty.ChannelUtils;

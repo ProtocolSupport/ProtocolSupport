@@ -2,8 +2,8 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import org.bukkit.Location;
 
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 
 public abstract class MiddlePosition<T> extends ClientBoundMiddlePacket<T> {
 

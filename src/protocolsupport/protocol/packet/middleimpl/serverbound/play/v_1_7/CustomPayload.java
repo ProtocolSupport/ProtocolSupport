@@ -4,9 +4,9 @@ import java.io.IOException;
 
 import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.RecyclablePacketDataSerializer;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.RecyclablePacketDataSerializer;
 import protocolsupport.utils.netty.ChannelUtils;
 
 public class CustomPayload extends MiddleCustomPayload {

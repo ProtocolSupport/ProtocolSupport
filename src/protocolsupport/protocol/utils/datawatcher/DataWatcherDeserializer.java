@@ -10,7 +10,7 @@ import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.RecyclablePacketDataSerializer;
+import protocolsupport.protocol.serializer.RecyclablePacketDataSerializer;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBlockState;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;

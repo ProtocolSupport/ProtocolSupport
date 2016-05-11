@@ -15,8 +15,8 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.LegacyServerPingResponseEvent;
-import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.protocol.RecyclablePacketDataSerializer;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.RecyclablePacketDataSerializer;
 import protocolsupport.utils.netty.ChannelUtils;
 
 @SuppressWarnings("deprecation")

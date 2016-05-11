@@ -4,10 +4,10 @@ import java.io.IOException;
 
 import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middleimpl.PacketData;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.protocol.typeremapper.nbt.custompayload.CustomPayloadSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;

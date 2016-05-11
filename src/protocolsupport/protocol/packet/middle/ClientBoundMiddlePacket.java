@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle;
 import java.io.IOException;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.storage.SharedStorage;
 

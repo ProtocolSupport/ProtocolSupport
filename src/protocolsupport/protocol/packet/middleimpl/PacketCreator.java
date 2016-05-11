@@ -4,7 +4,7 @@ import io.netty.util.Recycler;
 import net.minecraft.server.v1_9_R2.Packet;
 import net.minecraft.server.v1_9_R2.PacketListener;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.utils.netty.Allocator;
 
 public class PacketCreator extends PacketDataSerializer {

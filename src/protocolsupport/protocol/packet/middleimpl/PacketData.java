@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middleimpl;
 
 import io.netty.util.Recycler;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.utils.netty.Allocator;
 
 public class PacketData extends PacketDataSerializer {

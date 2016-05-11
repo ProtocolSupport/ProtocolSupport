@@ -6,7 +6,7 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.server.v1_9_R2.Item;
 import net.minecraft.server.v1_9_R2.NBTTagCompound;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.utils.ProtocolVersionsHelper;
 

@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import net.minecraft.server.v1_9_R2.ItemStack;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 
 public abstract class MiddleInventorySetItems<T> extends ClientBoundMiddlePacket<T> {
 

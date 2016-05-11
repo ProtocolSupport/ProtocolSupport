@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.protocol.storage.SharedStorage.WindowType;
 
 public abstract class MiddleInventoryOpen<T> extends ClientBoundMiddlePacket<T> {

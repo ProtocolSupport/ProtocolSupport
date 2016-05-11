@@ -5,9 +5,9 @@ import java.util.UUID;
 import com.mojang.authlib.properties.Property;
 
 import protocolsupport.api.chat.ChatAPI;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.legacyremapper.LegacyUtils;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage.PlayerListEntry;
 
 public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {

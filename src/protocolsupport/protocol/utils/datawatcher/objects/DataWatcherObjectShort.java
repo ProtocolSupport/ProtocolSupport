@@ -1,7 +1,7 @@
 package protocolsupport.protocol.utils.datawatcher.objects;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 
 public class DataWatcherObjectShort extends DataWatcherObject<Short> {

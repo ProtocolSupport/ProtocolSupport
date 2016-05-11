@@ -12,7 +12,6 @@ import net.minecraft.server.v1_9_R2.EnumProtocol;
 import net.minecraft.server.v1_9_R2.NetworkManager;
 import net.minecraft.server.v1_9_R2.Packet;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.legacyremapper.LegacyAnimatePacketReorderer;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_1_4_1_5_1_6.ClientLogin;
@@ -44,11 +43,11 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_6_1_7.Pos
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_6_1_7.SteerVehicle;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_6_1_7_1_8.PlayerAbilities;
 import protocolsupport.protocol.pipeline.IPacketDecoder;
+import protocolsupport.protocol.serializer.ReplayingBufferPacketDataSerializer;
 import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry.InitCallBack;
 import protocolsupport.utils.netty.ChannelUtils;
-import protocolsupport.utils.netty.ReplayingDecoderBuffer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -99,10 +98,9 @@ public class PacketDecoder implements IPacketDecoder {
 	}
 
 	protected final SharedStorage sharedstorage;
-	private final ReplayingDecoderBuffer buffer = new ReplayingDecoderBuffer();
-	private final PacketDataSerializer serializer;
+	private final ReplayingBufferPacketDataSerializer serializer;
 	public PacketDecoder(ProtocolVersion version, SharedStorage sharedstorage) {
-		this.serializer = new PacketDataSerializer(buffer, version);
+		this.serializer = ReplayingBufferPacketDataSerializer.create(version);
 		this.sharedstorage = sharedstorage;
 	}
 
@@ -113,12 +111,12 @@ public class PacketDecoder implements IPacketDecoder {
 		if (!input.isReadable()) {
 			return;
 		}
-		buffer.setCumulation(input);
+		serializer.setBuf(input);
 		serializer.markReaderIndex();
 		Channel channel = ctx.channel();
 		EnumProtocol currentProtocol = channel.attr(currentStateAttrKey).get();
 		try {
-			int packetId = buffer.readUnsignedByte();
+			int packetId = serializer.readUnsignedByte();
 			ServerBoundMiddlePacket packetTransformer = dataRemapperRegistry.getTransformer(currentProtocol, packetId);
 			if (packetTransformer != null) {
 				if (packetTransformer.needsPlayer()) {

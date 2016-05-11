@@ -3,7 +3,7 @@ package protocolsupport.protocol.utils.datawatcher;
 import java.io.IOException;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
 @NeedsNoArgConstructor

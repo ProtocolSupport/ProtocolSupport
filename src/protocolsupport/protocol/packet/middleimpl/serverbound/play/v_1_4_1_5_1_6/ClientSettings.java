@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_4_1_5_1_6;
 
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleClientSettings;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 
 public class ClientSettings extends MiddleClientSettings {
 

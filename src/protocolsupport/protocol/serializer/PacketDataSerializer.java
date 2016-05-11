@@ -1,4 +1,4 @@
-package protocolsupport.protocol;
+package protocolsupport.protocol.serializer;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;

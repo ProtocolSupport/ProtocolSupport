@@ -1,8 +1,8 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import protocolsupport.api.tab.TabAPI;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
 
 public abstract class MiddleLogin<T> extends ClientBoundMiddlePacket<T> {

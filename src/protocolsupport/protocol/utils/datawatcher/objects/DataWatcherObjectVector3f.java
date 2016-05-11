@@ -3,7 +3,7 @@ package protocolsupport.protocol.utils.datawatcher.objects;
 import net.minecraft.server.v1_9_R2.Vector3f;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 
 public class DataWatcherObjectVector3f extends DataWatcherObject<Vector3f> {

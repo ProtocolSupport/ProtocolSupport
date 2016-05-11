@@ -2,8 +2,8 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_8;
 
 import java.io.IOException;
 
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.utils.netty.ChannelUtils;
 
 public class CustomPayload extends MiddleCustomPayload {

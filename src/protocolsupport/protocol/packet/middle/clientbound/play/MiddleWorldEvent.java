@@ -3,8 +3,8 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import java.io.IOException;
 
 import net.minecraft.server.v1_9_R2.BlockPosition;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 
 public abstract class MiddleWorldEvent<T> extends ClientBoundMiddlePacket<T> {
 

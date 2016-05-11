@@ -2,8 +2,8 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.login.v_1_4_1_5_1
 
 import java.io.IOException;
 
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.packet.middle.serverbound.login.MiddleEncryptionResponse;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 
 public class EncryptionResponse extends MiddleEncryptionResponse {
 

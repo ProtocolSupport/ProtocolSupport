@@ -4,7 +4,7 @@ import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.TIntObjectMap;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.RecyclablePacketDataSerializer;
+import protocolsupport.protocol.serializer.RecyclablePacketDataSerializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.utils.netty.ChannelUtils;
 

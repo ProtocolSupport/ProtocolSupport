@@ -15,7 +15,6 @@ import net.minecraft.server.v1_9_R2.NetworkManager;
 import net.minecraft.server.v1_9_R2.Packet;
 import net.minecraft.server.v1_9_R2.PacketListener;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.PacketData;
@@ -91,6 +90,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_7_1_8.Tab
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7_1_8.Pong;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7_1_8.ServerInfo;
 import protocolsupport.protocol.pipeline.IPacketEncoder;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry;

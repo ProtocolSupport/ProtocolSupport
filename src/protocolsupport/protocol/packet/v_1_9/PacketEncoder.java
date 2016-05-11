@@ -11,19 +11,16 @@ import net.minecraft.server.v1_9_R2.NetworkManager;
 import net.minecraft.server.v1_9_R2.Packet;
 import net.minecraft.server.v1_9_R2.PacketListener;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
 import protocolsupport.protocol.pipeline.IPacketEncoder;
-import protocolsupport.utils.netty.WrappingBuffer;
+import protocolsupport.protocol.serializer.WrappingBufferPacketDataSerializer;
 
 public class PacketEncoder implements IPacketEncoder {
 
 	private static final EnumProtocolDirection direction = EnumProtocolDirection.CLIENTBOUND;
 	private static final AttributeKey<EnumProtocol> currentStateAttrKey = NetworkManager.c;
 
-	private final WrappingBuffer wrappingBuffer = new WrappingBuffer();
-	private final PacketDataSerializer serializer;
+	private final WrappingBufferPacketDataSerializer serializer = WrappingBufferPacketDataSerializer.create(ProtocolVersion.getLatest());
 	public PacketEncoder(ProtocolVersion version) {
-		serializer = new PacketDataSerializer(wrappingBuffer, version);
 	}
 
 	@Override
@@ -34,7 +31,7 @@ public class PacketEncoder implements IPacketEncoder {
 		if (packetId == null) {
 			throw new IOException("Can't serialize unregistered packet");
 		}
-		wrappingBuffer.setBuf(output);
+		serializer.setBuf(output);
 		serializer.writeVarInt(packetId);
 		packet.b(serializer);
 	}
