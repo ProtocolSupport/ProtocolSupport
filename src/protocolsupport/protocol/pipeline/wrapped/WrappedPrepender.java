@@ -7,10 +7,6 @@ import protocolsupport.protocol.pipeline.IPacketPrepender;
 
 public class WrappedPrepender extends MessageToByteEncoder<ByteBuf> {
 
-	public WrappedPrepender() {
-		super(true);
-	}
-
 	private IPacketPrepender realPrepender = new IPacketPrepender() {
 		@Override
 		public void prepend(ChannelHandlerContext ctx, ByteBuf input, ByteBuf output) throws Exception {
