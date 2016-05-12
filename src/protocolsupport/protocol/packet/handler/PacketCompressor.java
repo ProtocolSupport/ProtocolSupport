@@ -24,12 +24,15 @@ public class PacketCompressor extends net.minecraft.server.v1_9_R2.PacketCompres
 	@Override
 	protected void a(ChannelHandlerContext ctx, ByteBuf from, ByteBuf to) throws Exception {
 		int readable = from.readableBytes();
+		if (readable == 0) {
+			return;
+		}
 		if (readable < this.threshold) {
 			ChannelUtils.writeVarInt(to, 0);
 			to.writeBytes(from);
 		} else {
 			ChannelUtils.writeVarInt(to, readable);
-			to.writeBytes(compressor.compress(ChannelUtils.toArray(from.readSlice(readable))));
+			to.writeBytes(compressor.compress(ChannelUtils.toArray(from)));
 		}
 	}
 
