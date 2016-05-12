@@ -41,6 +41,7 @@ import net.minecraft.server.v1_9_R2.PacketLoginOutSetCompression;
 import net.minecraft.server.v1_9_R2.PacketLoginOutSuccess;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.events.PlayerLoginStartEvent;
+import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
 
@@ -162,8 +163,8 @@ public abstract class AbstractLoginListener extends LoginListener {
 	protected void enableCompresssion(int compressionLevel) {
 		Channel channel = networkManager.channel;
 		if (compressionLevel >= 0) {
-			channel.pipeline().addBefore("decoder", "decompress", new PacketDecompressor(compressionLevel));
-			channel.pipeline().addBefore("encoder", "compress", new PacketCompressor(compressionLevel));
+			channel.pipeline().addBefore(ChannelHandlers.DECODER, "decompress", new PacketDecompressor(compressionLevel));
+			channel.pipeline().addBefore(ChannelHandlers.ENCODER, "compress", new PacketCompressor(compressionLevel));
 		}
 	}
 
