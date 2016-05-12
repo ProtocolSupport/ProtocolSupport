@@ -28,4 +28,8 @@ public class Login extends MiddleLogin<RecyclableCollection<PacketData>> {
 		return RecyclableSingletonList.create(serializer);
 	}
 
+	@Override
+	public void handle() {
+	}
+
 }
