@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8;
+package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8_1_9;
 
 import java.io.IOException;
 

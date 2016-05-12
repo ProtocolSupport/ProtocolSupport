@@ -85,8 +85,8 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_7_1_8.Spa
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_7_1_8.SpawnLiving;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_7_1_8.Statistics;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_7_1_8.TabComplete;
-import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7_1_8.Pong;
-import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7_1_8.ServerInfo;
+import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7_1_8_1_9.Pong;
+import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7_1_8_1_9.ServerInfo;
 import protocolsupport.protocol.pipeline.IPacketEncoder;
 import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage;

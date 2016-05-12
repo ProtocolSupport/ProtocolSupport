@@ -64,8 +64,10 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 				} catch (Throwable t) {
 					LogManager.getLogger().debug("Failed to check connection throttle", t);
 				}
-				if (packethandshakinginsetprotocol.b() != ProtocolVersion.getLatest().getId()) {
-					final ChatComponentText chatcomponenttext = new ChatComponentText("Unsupported protocol version "+packethandshakinginsetprotocol.b());
+				//TODO: actually make 1.9 decoder push fake version to packet
+				ProtocolVersion clientversion = ProtocolVersion.fromId(packethandshakinginsetprotocol.b());
+				if (!clientversion.isBetween(ProtocolVersion.MINECRAFT_1_9, ProtocolVersion.MINECRAFT_1_9_4)) {
+					final ChatComponentText chatcomponenttext = new ChatComponentText("Outdated server, max supported version: " + ProtocolVersion.getLatest());
 					this.networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext), new GenericFutureListener<Future<? super Void>>() {
 						@Override
 						public void operationComplete(Future<? super Void> arg0) throws Exception {
