@@ -19,7 +19,7 @@ public abstract class MiddleLogin<T> extends ClientBoundMiddlePacket<T> {
 	public void readFromServerData(PacketDataSerializer serializer) {
 		playerEntityId = serializer.readInt();
 		gamemode = serializer.readByte();
-		dimension = serializer.readByte();
+		dimension = serializer.readInt();
 		difficulty = serializer.readByte();
 		serializer.readByte();
 		maxplayers = TabAPI.getMaxTabSize();
