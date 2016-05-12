@@ -15,6 +15,7 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.PacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8_1_9.BlockTileUpdate;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9.Chunk;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9.Login;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9.WorldSound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7_1_8_1_9.ServerInfo;
 import protocolsupport.protocol.pipeline.IPacketEncoder;
@@ -46,6 +47,7 @@ public class PacketEncoder implements IPacketEncoder {
 		dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_UPDATE_TILE_ID, BlockTileUpdate.class);
 		dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CHUNK_SINGLE_ID, Chunk.class);
 		dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_WORLD_SOUND_ID, WorldSound.class);
+		dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_LOGIN_ID, Login.class);
 	}
 
 	private final ProtocolVersion version;
