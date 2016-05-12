@@ -15,6 +15,7 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.PacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8_1_9.BlockTileUpdate;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9.Chunk;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9.WorldSound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7_1_8_1_9.ServerInfo;
 import protocolsupport.protocol.pipeline.IPacketEncoder;
 import protocolsupport.protocol.serializer.PacketDataSerializer;
@@ -39,12 +40,12 @@ public class PacketEncoder implements IPacketEncoder {
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_EFFECT_ADD_ID, 0x4C);
 	}
 
-	//TODO: Sound
 	private final MiddleTransformerRegistry<ClientBoundMiddlePacket<RecyclableCollection<PacketData>>> dataRemapperRegistry = new MiddleTransformerRegistry<>();
 	{
 		dataRemapperRegistry.register(EnumProtocol.STATUS, ClientBoundPacket.STATUS_SERVER_INFO_ID, ServerInfo.class);
 		dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_UPDATE_TILE_ID, BlockTileUpdate.class);
 		dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CHUNK_SINGLE_ID, Chunk.class);
+		dataRemapperRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_WORLD_SOUND_ID, WorldSound.class);
 	}
 
 	private final ProtocolVersion version;
