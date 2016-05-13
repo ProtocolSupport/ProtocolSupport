@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.server.v1_9_R1.Packet;
+import net.minecraft.server.v1_9_R2.Packet;
 import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.mcpe.UDPNetworkManager;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketRegistry;

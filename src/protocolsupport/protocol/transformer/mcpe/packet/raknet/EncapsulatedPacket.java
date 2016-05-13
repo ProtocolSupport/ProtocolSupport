@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.netty.ChannelUtils;
 

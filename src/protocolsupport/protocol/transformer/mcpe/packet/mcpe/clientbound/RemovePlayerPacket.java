@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 

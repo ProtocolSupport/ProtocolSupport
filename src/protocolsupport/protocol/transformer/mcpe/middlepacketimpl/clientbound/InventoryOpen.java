@@ -2,19 +2,19 @@ package protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound;
 
 import java.io.IOException;
 
-import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.util.NumberConversions;
 
-import net.minecraft.server.v1_9_R1.BlockPosition;
-import net.minecraft.server.v1_9_R1.EntityPlayer;
+import net.minecraft.server.v1_9_R2.BlockPosition;
+import net.minecraft.server.v1_9_R2.EntityPlayer;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryOpen;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ContainerOpenPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetBlocksPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetBlocksPacket.UpdateBlockRecord;
 import protocolsupport.protocol.transformer.mcpe.utils.InventoryUtils;
-import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleInventoryOpen;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;

@@ -3,11 +3,11 @@ package protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound;
 import java.io.IOException;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityTeleport;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.MovePlayerPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.MoveEntityPacket;
-import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleEntityTeleport;
-import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificType;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -17,7 +17,7 @@ public class EntityTeleport extends MiddleEntityTeleport<RecyclableCollection<? 
 	@Override
 	public RecyclableCollection<? extends ClientboundPEPacket> toData(ProtocolVersion version) throws IOException {
 		WatchedEntity wentity = storage.getWatchedEntity(entityId);
-		if (wentity != null && wentity.getType() == SpecificType.PLAYER) {
+		if (wentity != null && wentity.getType() == SpecificRemapper.PLAYER) {
 			return RecyclableSingletonList.create(new MovePlayerPacket(
 				entityId,
 				(float) x, (float) y, (float) z,

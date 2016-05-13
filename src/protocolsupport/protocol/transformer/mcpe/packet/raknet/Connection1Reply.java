@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 import java.net.InetSocketAddress;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.protocol.transformer.mcpe.UDPNetworkManager;
 
 public class Connection1Reply extends RakNetPacket {

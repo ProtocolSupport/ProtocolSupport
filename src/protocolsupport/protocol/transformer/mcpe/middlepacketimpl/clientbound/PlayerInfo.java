@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.packet.middle.clientbound.play.MiddlePlayerInfo;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PlayerListPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.PlayerListPacket.PEPlayerListEntry;
-import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddlePlayerInfo;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;

@@ -3,9 +3,9 @@ package protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound;
 import java.io.IOException;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityVelocity;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.EntityVelocityPacket;
-import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleEntityVelocity;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 

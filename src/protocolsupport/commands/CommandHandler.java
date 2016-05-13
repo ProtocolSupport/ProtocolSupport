@@ -11,8 +11,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import net.minecraft.server.v1_9_R1.MinecraftServer;
-import net.minecraft.server.v1_9_R1.PropertyManager;
+import net.minecraft.server.v1_9_R2.MinecraftServer;
+import net.minecraft.server.v1_9_R2.PropertyManager;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.TextComponent;

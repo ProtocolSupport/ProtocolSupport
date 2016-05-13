@@ -3,14 +3,14 @@ package protocolsupport.protocol.transformer.mcpe.handler;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.RecyclablePacketDataSerializer;
+import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
+import protocolsupport.protocol.serializer.RecyclablePacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.mcpe.UDPNetworkManager;
 import protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound.BlockChangeMulti;
 import protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound.BlockChangeSingle;
-import protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound.BlockSignUpdate;
 import protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound.Chat;
 import protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound.ChunkSingle;
 import protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound.CollectEffect;
@@ -44,14 +44,13 @@ import protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound.Sp
 import protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound.SpawnPainting;
 import protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound.TimeUpdate;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
-import protocolsupport.protocol.transformer.middlepacket.ClientBoundMiddlePacket;
 import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
-import net.minecraft.server.v1_9_R1.EnumProtocol;
-import net.minecraft.server.v1_9_R1.EnumProtocolDirection;
-import net.minecraft.server.v1_9_R1.Packet;
+import net.minecraft.server.v1_9_R2.EnumProtocol;
+import net.minecraft.server.v1_9_R2.EnumProtocolDirection;
+import net.minecraft.server.v1_9_R2.Packet;
 
 public class ClientBoundPacketHandler {
 
@@ -82,7 +81,6 @@ public class ClientBoundPacketHandler {
 	static {
 		registry.put(ClientBoundPacket.PLAY_BLOCK_CHANGE_MULTI_ID, BlockChangeMulti.class);
 		registry.put(ClientBoundPacket.PLAY_BLOCK_CHANGE_SINGLE_ID, BlockChangeSingle.class);
-		registry.put(ClientBoundPacket.PLAY_UPDATE_SIGN_ID, BlockSignUpdate.class);
 		registry.put(ClientBoundPacket.PLAY_CHAT_ID, Chat.class);
 		registry.put(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID, ChunkSingle.class);
 		registry.put(ClientBoundPacket.PLAY_COLLECT_EFFECT_ID, CollectEffect.class);

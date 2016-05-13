@@ -2,15 +2,15 @@ package protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound;
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_9_R1.MathHelper;
+import net.minecraft.server.v1_9_R2.MathHelper;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetHealth;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.SetHealthPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.RespawnPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetAttributesPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetAttributesPacket.AttributeRecord;
-import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleSetHealth;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 

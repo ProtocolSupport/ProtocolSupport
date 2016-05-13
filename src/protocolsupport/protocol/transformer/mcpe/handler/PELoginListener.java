@@ -6,9 +6,9 @@ import java.util.UUID;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_9_R1.entity.CraftHumanEntity;
-import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftInventoryPlayer;
-import org.bukkit.craftbukkit.v1_9_R1.util.Waitable;
+import org.bukkit.craftbukkit.v1_9_R2.entity.CraftHumanEntity;
+import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftInventoryPlayer;
+import org.bukkit.craftbukkit.v1_9_R2.util.Waitable;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerPreLoginEvent;
 
@@ -26,14 +26,14 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.ClientC
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.serverbound.LoginPacket;
 import protocolsupport.utils.Utils;
 
-import net.minecraft.server.v1_9_R1.ChatComponentText;
-import net.minecraft.server.v1_9_R1.ContainerPlayer;
-import net.minecraft.server.v1_9_R1.EntityPlayer;
-import net.minecraft.server.v1_9_R1.IChatBaseComponent;
-import net.minecraft.server.v1_9_R1.LoginListener;
-import net.minecraft.server.v1_9_R1.MinecraftServer;
-import net.minecraft.server.v1_9_R1.PacketListener;
-import net.minecraft.server.v1_9_R1.PlayerInteractManager;
+import net.minecraft.server.v1_9_R2.ChatComponentText;
+import net.minecraft.server.v1_9_R2.ContainerPlayer;
+import net.minecraft.server.v1_9_R2.EntityPlayer;
+import net.minecraft.server.v1_9_R2.IChatBaseComponent;
+import net.minecraft.server.v1_9_R2.LoginListener;
+import net.minecraft.server.v1_9_R2.MinecraftServer;
+import net.minecraft.server.v1_9_R2.PacketListener;
+import net.minecraft.server.v1_9_R2.PlayerInteractManager;
 
 @SuppressWarnings("deprecation")
 public class PELoginListener implements PacketListener {

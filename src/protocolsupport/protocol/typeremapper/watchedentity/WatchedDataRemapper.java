@@ -5,9 +5,9 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.MappingEntry;
-import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificType;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
-import protocolsupport.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 
 public class WatchedDataRemapper {
 
@@ -19,7 +19,7 @@ public class WatchedDataRemapper {
 			return EMPTY_MAP;
 		}
 		TIntObjectHashMap<DataWatcherObject<?>> transformed = new TIntObjectHashMap<DataWatcherObject<?>>();
-		SpecificType stype = entity.getType();
+		SpecificRemapper stype = entity.getType();
 		for (MappingEntry entry : stype.getRemaps(to)) {
 			DataWatcherObject<?> object = originaldata.get(entry.getIdFrom());
 			if (object != null) {

@@ -1,15 +1,15 @@
 package protocolsupport.server.block;
 
-import net.minecraft.server.v1_9_R1.BlockPosition;
-import net.minecraft.server.v1_9_R1.EntityHuman;
-import net.minecraft.server.v1_9_R1.EnumDirection;
-import net.minecraft.server.v1_9_R1.EnumHand;
-import net.minecraft.server.v1_9_R1.IBlockData;
-import net.minecraft.server.v1_9_R1.ItemStack;
-import net.minecraft.server.v1_9_R1.SoundEffectType;
-import net.minecraft.server.v1_9_R1.World;
+import net.minecraft.server.v1_9_R2.BlockPosition;
+import net.minecraft.server.v1_9_R2.EntityHuman;
+import net.minecraft.server.v1_9_R2.EnumDirection;
+import net.minecraft.server.v1_9_R2.EnumHand;
+import net.minecraft.server.v1_9_R2.IBlockData;
+import net.minecraft.server.v1_9_R2.ItemStack;
+import net.minecraft.server.v1_9_R2.SoundEffectType;
+import net.minecraft.server.v1_9_R2.World;
 
-public class BlockAnvil extends net.minecraft.server.v1_9_R1.BlockAnvil {
+public class BlockAnvil extends net.minecraft.server.v1_9_R2.BlockAnvil {
 
 	public BlockAnvil() {
 		super();

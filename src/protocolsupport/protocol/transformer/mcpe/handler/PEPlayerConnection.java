@@ -1,10 +1,10 @@
 package protocolsupport.protocol.transformer.mcpe.handler;
 
-import net.minecraft.server.v1_9_R1.EntityPlayer;
-import net.minecraft.server.v1_9_R1.IChatBaseComponent;
-import net.minecraft.server.v1_9_R1.MinecraftServer;
-import net.minecraft.server.v1_9_R1.NetworkManager;
-import net.minecraft.server.v1_9_R1.PlayerConnection;
+import net.minecraft.server.v1_9_R2.EntityPlayer;
+import net.minecraft.server.v1_9_R2.IChatBaseComponent;
+import net.minecraft.server.v1_9_R2.MinecraftServer;
+import net.minecraft.server.v1_9_R2.NetworkManager;
+import net.minecraft.server.v1_9_R2.PlayerConnection;
 
 public class PEPlayerConnection extends PlayerConnection {
 

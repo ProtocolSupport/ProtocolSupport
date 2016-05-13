@@ -7,7 +7,7 @@ import protocolsupport.protocol.transformer.mcpe.pipeline.RakNetEncoder;
 import protocolsupport.protocol.transformer.mcpe.pipeline.UDPRouter;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
-import net.minecraft.server.v1_9_R1.NetworkManager;
+import net.minecraft.server.v1_9_R2.NetworkManager;
 
 public class UDPServerConnectionChannel extends ChannelInitializer<Channel> {
 

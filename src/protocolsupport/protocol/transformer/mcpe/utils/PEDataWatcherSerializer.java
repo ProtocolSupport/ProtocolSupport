@@ -5,8 +5,8 @@ import java.nio.ByteOrder;
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.TIntObjectMap;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
-import protocolsupport.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.ChannelUtils;
 

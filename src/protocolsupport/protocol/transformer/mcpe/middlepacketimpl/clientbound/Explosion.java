@@ -3,10 +3,10 @@ package protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound;
 import java.io.IOException;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.packet.middle.clientbound.play.MiddleExplosion;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.EntityVelocityPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.ExplosionPacket;
-import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleExplosion;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 

@@ -5,7 +5,7 @@ import java.util.List;
 
 import io.netty.buffer.ByteBuf;
 
-import net.minecraft.server.v1_9_R1.Packet;
+import net.minecraft.server.v1_9_R2.Packet;
 import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.DualPEPacket;

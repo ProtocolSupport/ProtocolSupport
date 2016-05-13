@@ -4,13 +4,13 @@ import java.lang.invoke.MethodHandle;
 
 import org.spigotmc.SneakyThrow;
 
-import net.minecraft.server.v1_9_R1.Block;
-import net.minecraft.server.v1_9_R1.BlockPosition;
-import net.minecraft.server.v1_9_R1.Blocks;
-import net.minecraft.server.v1_9_R1.EntityPlayer;
-import net.minecraft.server.v1_9_R1.Material;
-import net.minecraft.server.v1_9_R1.PacketPlayOutBlockChange;
-import net.minecraft.server.v1_9_R1.PlayerInteractManager;
+import net.minecraft.server.v1_9_R2.Block;
+import net.minecraft.server.v1_9_R2.BlockPosition;
+import net.minecraft.server.v1_9_R2.Blocks;
+import net.minecraft.server.v1_9_R2.EntityPlayer;
+import net.minecraft.server.v1_9_R2.Material;
+import net.minecraft.server.v1_9_R2.PacketPlayOutBlockChange;
+import net.minecraft.server.v1_9_R2.PlayerInteractManager;
 
 import protocolsupport.utils.Utils;
 

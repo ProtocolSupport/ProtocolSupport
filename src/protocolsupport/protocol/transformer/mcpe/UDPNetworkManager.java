@@ -15,6 +15,7 @@ import com.google.common.base.Function;
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import protocolsupport.api.chat.ChatAPI;
+import protocolsupport.protocol.legacyremapper.LegacyUtils;
 import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.mcpe.handler.ClientBoundPacketHandler;
 import protocolsupport.protocol.transformer.mcpe.handler.PELoginListener;
@@ -35,17 +36,16 @@ import protocolsupport.protocol.transformer.mcpe.packet.raknet.RakNetDataSeriali
 import protocolsupport.protocol.transformer.mcpe.packet.raknet.RakNetPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.raknet.ServerInfoPacket;
 import protocolsupport.protocol.transformer.mcpe.pipeline.UDPRouter;
-import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import net.minecraft.server.v1_9_R1.ChatComponentText;
-import net.minecraft.server.v1_9_R1.EnumProtocolDirection;
-import net.minecraft.server.v1_9_R1.IChatBaseComponent;
-import net.minecraft.server.v1_9_R1.ITickable;
-import net.minecraft.server.v1_9_R1.MinecraftServer;
-import net.minecraft.server.v1_9_R1.NetworkManager;
-import net.minecraft.server.v1_9_R1.Packet;
-import net.minecraft.server.v1_9_R1.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_9_R2.ChatComponentText;
+import net.minecraft.server.v1_9_R2.EnumProtocolDirection;
+import net.minecraft.server.v1_9_R2.IChatBaseComponent;
+import net.minecraft.server.v1_9_R2.ITickable;
+import net.minecraft.server.v1_9_R2.MinecraftServer;
+import net.minecraft.server.v1_9_R2.NetworkManager;
+import net.minecraft.server.v1_9_R2.Packet;
+import net.minecraft.server.v1_9_R2.IChatBaseComponent.ChatSerializer;
 
 public class UDPNetworkManager extends NetworkManager {
 

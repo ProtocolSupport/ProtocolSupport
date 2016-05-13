@@ -4,10 +4,10 @@ import java.io.IOException;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnGlobal;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddEntityPacket;
-import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleSpawnGlobal;
-import protocolsupport.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 

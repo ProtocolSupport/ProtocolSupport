@@ -1,5 +1,7 @@
 package protocolsupport.protocol.typeskipper.id;
 
+import gnu.trove.map.hash.TIntByteHashMap;
+
 public class SkippingTable {
 
 	protected final boolean[] table;
@@ -16,6 +18,24 @@ public class SkippingTable {
 
 	public boolean shouldSkip(int id) {
 		return table[id];
+	}
+
+	public static class HashSkippingTable extends SkippingTable {
+
+		public HashSkippingTable() {
+			super(0);
+		}
+
+		protected final TIntByteHashMap table = new TIntByteHashMap(16, 0.75F);
+
+		public void setSkip(int id) {
+			table.put(id, (byte) 1);
+		}
+
+		public boolean shouldSkip(int id) {
+			return table.containsKey(id);
+		}
+		
 	}
 
 }

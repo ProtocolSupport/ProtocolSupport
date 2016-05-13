@@ -4,10 +4,9 @@ import java.io.IOException;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
+import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChat;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.both.ChatPacket;
-import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleChat;
-import protocolsupport.protocol.transformer.utils.LegacyUtils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -15,7 +14,7 @@ public class Chat extends MiddleChat<RecyclableCollection<? extends ClientboundP
 
 	@Override
 	public RecyclableCollection<? extends ClientboundPEPacket> toData(ProtocolVersion version) throws IOException {
-		return RecyclableSingletonList.create(new ChatPacket(LegacyUtils.toText(ChatAPI.fromJSON(chatJson))));
+		return RecyclableSingletonList.create(new ChatPacket(ChatAPI.fromJSON(chatJson).toLegacyText()));
 	}
 
 }

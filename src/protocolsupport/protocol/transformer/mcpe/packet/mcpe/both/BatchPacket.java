@@ -16,7 +16,7 @@ import protocolsupport.utils.netty.Compressor;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
-import net.minecraft.server.v1_9_R1.Packet;
+import net.minecraft.server.v1_9_R2.Packet;
 
 public class BatchPacket implements DualPEPacket {
 

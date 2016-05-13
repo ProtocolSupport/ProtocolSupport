@@ -10,7 +10,7 @@ import protocolsupport.protocol.transformer.mcpe.handler.PELoginListener;
 import protocolsupport.protocol.transformer.mcpe.packet.HandleNMSPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
-import net.minecraft.server.v1_9_R1.Packet;
+import net.minecraft.server.v1_9_R2.Packet;
 
 public class ClientConnectPacket implements ServerboundPEPacket {
 

@@ -5,13 +5,13 @@ import java.io.IOException;
 import org.bukkit.GameMode;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.packet.middle.clientbound.play.MiddleLogin;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AdventureSettingsPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetDifficultyPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetRecipesPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetSpawnPosition;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.StartGamePacket;
-import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleLogin;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 

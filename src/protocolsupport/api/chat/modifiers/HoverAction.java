@@ -4,15 +4,15 @@ import java.util.UUID;
 
 import org.bukkit.Achievement;
 import org.bukkit.Statistic;
-import org.bukkit.craftbukkit.v1_9_R1.CraftStatistic;
-import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_9_R2.CraftStatistic;
+import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
-import net.minecraft.server.v1_9_R1.MojangsonParseException;
-import net.minecraft.server.v1_9_R1.MojangsonParser;
-import net.minecraft.server.v1_9_R1.NBTTagCompound;
+import net.minecraft.server.v1_9_R2.MojangsonParseException;
+import net.minecraft.server.v1_9_R2.MojangsonParser;
+import net.minecraft.server.v1_9_R2.NBTTagCompound;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.utils.Any;
@@ -34,7 +34,7 @@ public class HoverAction {
 
 	public HoverAction(ItemStack itemstack) {
 		this.type = Type.SHOW_ITEM;
-		net.minecraft.server.v1_9_R1.ItemStack nmsitemstack = CraftItemStack.asNMSCopy(itemstack);
+		net.minecraft.server.v1_9_R2.ItemStack nmsitemstack = CraftItemStack.asNMSCopy(itemstack);
 		NBTTagCompound compound = new NBTTagCompound();
 		nmsitemstack.save(compound);
 		this.value = compound.toString();
@@ -80,7 +80,7 @@ public class HoverAction {
 	public ItemStack getItemStack() {
 		validateAction(type, Type.SHOW_ITEM);
 		try {
-			return CraftItemStack.asCraftMirror(net.minecraft.server.v1_9_R1.ItemStack.createStack(MojangsonParser.parse(value)));
+			return CraftItemStack.asCraftMirror(net.minecraft.server.v1_9_R2.ItemStack.createStack(MojangsonParser.parse(value)));
 		} catch (MojangsonParseException e) {
 			throw new IllegalStateException("Unable to parse value to itemstack");
 		}

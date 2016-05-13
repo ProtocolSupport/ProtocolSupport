@@ -2,14 +2,14 @@ package protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound;
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_9_R1.ItemStack;
+import net.minecraft.server.v1_9_R2.ItemStack;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityMetadata;
 import protocolsupport.protocol.storage.PEStorage.ItemInfo;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddItemEntityPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetEntityDataPacket;
-import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleEntityMetadata;
 import protocolsupport.protocol.typeremapper.watchedentity.WatchedDataRemapper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;

@@ -6,13 +6,13 @@ import java.util.Collections;
 import java.util.List;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.DualPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
-import net.minecraft.server.v1_9_R1.PacketPlayInChat;
+import net.minecraft.server.v1_9_R2.PacketPlayInChat;
 
 public class ChatPacket implements DualPEPacket {
 

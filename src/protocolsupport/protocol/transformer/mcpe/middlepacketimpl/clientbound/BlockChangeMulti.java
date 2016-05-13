@@ -3,10 +3,10 @@ package protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound;
 import java.io.IOException;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChangeMulti;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetBlocksPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetBlocksPacket.UpdateBlockRecord;
-import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleBlockChangeMulti;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.RemappingTable;
 import protocolsupport.utils.recyclable.RecyclableCollection;

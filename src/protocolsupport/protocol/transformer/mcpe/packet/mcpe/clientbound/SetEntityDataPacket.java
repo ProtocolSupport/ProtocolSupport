@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.utils.PEDataWatcherSerializer;
-import protocolsupport.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 
 public class SetEntityDataPacket implements ClientboundPEPacket {
 

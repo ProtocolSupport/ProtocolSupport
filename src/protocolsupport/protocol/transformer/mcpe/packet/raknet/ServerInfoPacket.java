@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.protocol.transformer.mcpe.UDPNetworkManager;
 import io.netty.buffer.ByteBuf;
 

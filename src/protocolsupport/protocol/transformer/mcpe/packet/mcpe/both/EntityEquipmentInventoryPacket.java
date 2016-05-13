@@ -3,12 +3,12 @@ package protocolsupport.protocol.transformer.mcpe.packet.mcpe.both;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.server.v1_9_R1.ItemStack;
-import net.minecraft.server.v1_9_R1.Packet;
-import net.minecraft.server.v1_9_R1.PlayerConnection;
+import net.minecraft.server.v1_9_R2.ItemStack;
+import net.minecraft.server.v1_9_R2.Packet;
+import net.minecraft.server.v1_9_R2.PlayerConnection;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.mcpe.PEPlayerInventory;
 import protocolsupport.protocol.transformer.mcpe.packet.SynchronizedHandleNMSPacket;

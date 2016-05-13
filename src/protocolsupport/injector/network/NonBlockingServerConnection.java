@@ -21,12 +21,12 @@ import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import net.minecraft.server.v1_9_R1.ChatComponentText;
-import net.minecraft.server.v1_9_R1.LazyInitVar;
-import net.minecraft.server.v1_9_R1.MinecraftServer;
-import net.minecraft.server.v1_9_R1.NetworkManager;
-import net.minecraft.server.v1_9_R1.PacketPlayOutKickDisconnect;
-import net.minecraft.server.v1_9_R1.ServerConnection;
+import net.minecraft.server.v1_9_R2.ChatComponentText;
+import net.minecraft.server.v1_9_R2.LazyInitVar;
+import net.minecraft.server.v1_9_R2.MinecraftServer;
+import net.minecraft.server.v1_9_R2.NetworkManager;
+import net.minecraft.server.v1_9_R2.PacketPlayOutKickDisconnect;
+import net.minecraft.server.v1_9_R2.ServerConnection;
 import protocolsupport.utils.ReflectionUtils;
 
 public class NonBlockingServerConnection extends ServerConnection {

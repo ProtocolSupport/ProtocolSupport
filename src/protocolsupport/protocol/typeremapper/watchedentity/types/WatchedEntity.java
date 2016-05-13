@@ -1,6 +1,6 @@
 package protocolsupport.protocol.typeremapper.watchedentity.types;
 
-import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificType;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
 
 public abstract class WatchedEntity {
 
@@ -14,7 +14,7 @@ public abstract class WatchedEntity {
 		return id;
 	}
 
-	public abstract SpecificType getType();
+	public abstract SpecificRemapper getType();
 
 	@Override
 	public String toString() {

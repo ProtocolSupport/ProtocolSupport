@@ -3,11 +3,11 @@ package protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound;
 import java.io.IOException;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnNamed;
 import protocolsupport.protocol.storage.LocalStorage.PlayerListEntry;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddPlayerPacket;
 import protocolsupport.protocol.transformer.mcpe.utils.PEWatchedPlayer;
-import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleSpawnNamed;
 import protocolsupport.protocol.typeremapper.watchedentity.WatchedDataRemapper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;

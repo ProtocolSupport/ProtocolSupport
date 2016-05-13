@@ -1,7 +1,7 @@
 package protocolsupport.protocol.typeremapper.watchedentity.remapper.value;
 
-import protocolsupport.utils.datawatcher.DataWatcherObject;
-import protocolsupport.utils.datawatcher.objects.DataWatcherObjectShort;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectShort;
 
 public class ValueRemapperNumberToShort implements ValueRemapper<DataWatcherObject<?>> {
 

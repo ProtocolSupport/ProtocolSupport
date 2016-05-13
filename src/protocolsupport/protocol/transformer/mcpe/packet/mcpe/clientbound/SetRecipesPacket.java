@@ -7,15 +7,15 @@ import java.util.UUID;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
-import net.minecraft.server.v1_9_R1.CraftingManager;
-import net.minecraft.server.v1_9_R1.IRecipe;
-import net.minecraft.server.v1_9_R1.Item;
-import net.minecraft.server.v1_9_R1.ItemStack;
-import net.minecraft.server.v1_9_R1.ShapedRecipes;
-import net.minecraft.server.v1_9_R1.ShapelessRecipes;
+import net.minecraft.server.v1_9_R2.CraftingManager;
+import net.minecraft.server.v1_9_R2.IRecipe;
+import net.minecraft.server.v1_9_R2.Item;
+import net.minecraft.server.v1_9_R2.ItemStack;
+import net.minecraft.server.v1_9_R2.ShapedRecipes;
+import net.minecraft.server.v1_9_R2.ShapelessRecipes;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;

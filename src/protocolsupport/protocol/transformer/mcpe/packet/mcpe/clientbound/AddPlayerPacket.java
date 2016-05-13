@@ -6,14 +6,14 @@ import io.netty.buffer.ByteBuf;
 
 import java.util.UUID;
 
-import net.minecraft.server.v1_9_R1.ItemStack;
+import net.minecraft.server.v1_9_R2.ItemStack;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.PacketDataSerializer;
+import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.utils.PEDataWatcherSerializer;
-import protocolsupport.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 
 public class AddPlayerPacket implements ClientboundPEPacket {
 

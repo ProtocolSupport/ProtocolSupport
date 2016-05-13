@@ -3,9 +3,9 @@ package protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound;
 import java.io.IOException;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnLiving;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.AddEntityPacket;
-import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleSpawnLiving;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.WatchedDataRemapper;
 import protocolsupport.utils.recyclable.RecyclableCollection;

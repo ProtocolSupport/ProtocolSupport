@@ -3,10 +3,10 @@ package protocolsupport.protocol.transformer.mcpe.middlepacketimpl.clientbound;
 import java.io.IOException;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetExperience;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetAttributesPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.SetAttributesPacket.AttributeRecord;
-import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleSetExperience;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 

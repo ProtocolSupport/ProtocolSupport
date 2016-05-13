@@ -6,12 +6,12 @@ import java.util.UUID;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityDestroy;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.RemoveEntityPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.clientbound.RemovePlayerPacket;
 import protocolsupport.protocol.transformer.mcpe.utils.PEWatchedPlayer;
-import protocolsupport.protocol.transformer.middlepacket.clientbound.play.MiddleEntityDestroy;
-import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificType;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -27,7 +27,7 @@ public class EntityDestroy extends MiddleEntityDestroy<RecyclableCollection<? ex
 		players.clear();
 		for (int id : entityIds) {
 			WatchedEntity wentity = storage.getWatchedEntity(id);
-			if (wentity != null && wentity.getType() == SpecificType.PLAYER) {
+			if (wentity != null && wentity.getType() == SpecificRemapper.PLAYER) {
 				players.put(id, ((PEWatchedPlayer) wentity).getUUID());
 			}
 		}

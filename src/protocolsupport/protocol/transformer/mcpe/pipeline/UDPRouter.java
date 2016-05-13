@@ -11,9 +11,9 @@ import protocolsupport.protocol.transformer.mcpe.VirtualChannel;
 import protocolsupport.protocol.transformer.mcpe.UDPNetworkManager;
 import protocolsupport.protocol.transformer.mcpe.packet.raknet.RakNetConstants;
 import protocolsupport.protocol.transformer.mcpe.packet.raknet.RakNetPacket;
-import net.minecraft.server.v1_9_R1.EnumProtocolDirection;
-import net.minecraft.server.v1_9_R1.MinecraftServer;
-import net.minecraft.server.v1_9_R1.NetworkManager;
+import net.minecraft.server.v1_9_R2.EnumProtocolDirection;
+import net.minecraft.server.v1_9_R2.MinecraftServer;
+import net.minecraft.server.v1_9_R2.NetworkManager;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 

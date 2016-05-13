@@ -2,11 +2,11 @@ package protocolsupport.protocol.transformer.mcpe.packet;
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_9_R1.ChatComponentText;
-import net.minecraft.server.v1_9_R1.MinecraftServer;
-import net.minecraft.server.v1_9_R1.Packet;
-import net.minecraft.server.v1_9_R1.PacketDataSerializer;
-import net.minecraft.server.v1_9_R1.PacketListener;
+import net.minecraft.server.v1_9_R2.ChatComponentText;
+import net.minecraft.server.v1_9_R2.MinecraftServer;
+import net.minecraft.server.v1_9_R2.Packet;
+import net.minecraft.server.v1_9_R2.PacketDataSerializer;
+import net.minecraft.server.v1_9_R2.PacketListener;
 
 public abstract class HandleNMSPacket<T extends PacketListener> implements Packet<T> {
 

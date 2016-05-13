@@ -2,12 +2,12 @@ package protocolsupport.protocol.transformer.mcpe.utils;
 
 import java.util.HashMap;
 
-import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack;
 import org.bukkit.inventory.Inventory;
 
-import net.minecraft.server.v1_9_R1.EntityPlayer;
-import net.minecraft.server.v1_9_R1.ItemStack;
-import net.minecraft.server.v1_9_R1.NBTTagCompound;
+import net.minecraft.server.v1_9_R2.EntityPlayer;
+import net.minecraft.server.v1_9_R2.ItemStack;
+import net.minecraft.server.v1_9_R2.NBTTagCompound;
 
 public class InventoryUtils {
 

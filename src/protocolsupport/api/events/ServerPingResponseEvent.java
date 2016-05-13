@@ -7,7 +7,7 @@ import java.util.List;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import net.minecraft.server.v1_9_R1.MinecraftServer;
+import net.minecraft.server.v1_9_R2.MinecraftServer;
 import protocolsupport.api.ProtocolVersion;
 
 public class ServerPingResponseEvent extends Event {

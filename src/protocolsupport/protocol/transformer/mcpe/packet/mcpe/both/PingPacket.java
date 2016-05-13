@@ -7,7 +7,8 @@ import java.util.List;
 
 import org.spigotmc.SneakyThrow;
 
-import protocolsupport.protocol.ServerBoundPacket;
+import protocolsupport.protocol.packet.ServerBoundPacket;
+import protocolsupport.protocol.packet.middleimpl.PacketCreator;
 import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.transformer.mcpe.handler.PELoginListener;
 import protocolsupport.protocol.transformer.mcpe.packet.HandleNMSPacket;
@@ -15,11 +16,10 @@ import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ClientboundPEPacket
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.DualPEPacket;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.PEPacketIDs;
 import protocolsupport.protocol.transformer.mcpe.packet.mcpe.ServerboundPEPacket;
-import protocolsupport.protocol.transformer.middlepacketimpl.PacketCreator;
-import net.minecraft.server.v1_9_R1.Packet;
-import net.minecraft.server.v1_9_R1.PacketListener;
-import net.minecraft.server.v1_9_R1.PacketPlayInKeepAlive;
-import net.minecraft.server.v1_9_R1.PlayerConnection;
+import net.minecraft.server.v1_9_R2.Packet;
+import net.minecraft.server.v1_9_R2.PacketListener;
+import net.minecraft.server.v1_9_R2.PacketPlayInKeepAlive;
+import net.minecraft.server.v1_9_R2.PlayerConnection;
 
 public class PingPacket implements DualPEPacket {
 
