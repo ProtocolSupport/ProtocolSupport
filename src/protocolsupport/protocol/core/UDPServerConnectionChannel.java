@@ -2,12 +2,12 @@ package protocolsupport.protocol.core;
 
 import java.util.List;
 
-import protocolsupport.protocol.transformer.mcpe.pipeline.RakNetDecoder;
-import protocolsupport.protocol.transformer.mcpe.pipeline.RakNetEncoder;
-import protocolsupport.protocol.transformer.mcpe.pipeline.UDPRouter;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import net.minecraft.server.v1_9_R2.NetworkManager;
+import protocolsupport.protocol.packet.mcpe.pipeline.RakNetDecoder;
+import protocolsupport.protocol.packet.mcpe.pipeline.RakNetEncoder;
+import protocolsupport.protocol.packet.mcpe.pipeline.UDPRouter;
 
 public class UDPServerConnectionChannel extends ChannelInitializer<Channel> {
 
