@@ -2,9 +2,27 @@ package protocolsupport.protocol.legacyremapper;
 
 import java.util.HashMap;
 
+import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
+import org.bukkit.entity.Player;
+
+import net.minecraft.server.v1_9_R2.Block;
+import net.minecraft.server.v1_9_R2.PacketPlayOutNamedSoundEffect;
+import net.minecraft.server.v1_9_R2.SoundCategory;
 import net.minecraft.server.v1_9_R2.SoundEffect;
+import net.minecraft.server.v1_9_R2.SoundEffectType;
 
 public class LegacySound {
+
+	@SuppressWarnings("deprecation")
+	public static void sendBlockBreakPlace(Player player, org.bukkit.block.Block block) {
+		SoundEffectType blocksound = Block.getById(block.getType().getId()).w();
+		((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutNamedSoundEffect(
+			blocksound.e(), SoundCategory.BLOCKS,
+			block.getX(), block.getY(), block.getZ(),
+			(blocksound.a() + 1.0F) / 2.0F,
+			blocksound.b() * 0.8F
+		));
+	}
 
 	private static final HashMap<String, String> legacySounds = new HashMap<>();
 
