@@ -15,8 +15,8 @@ public class EncryptionRequest extends MiddleEncryptionRequest<RecyclableCollect
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
 		PacketData serializer = PacketData.create(ClientBoundPacket.LOGIN_ENCRYPTION_BEGIN_ID, version);
 		serializer.writeString(serverId);
-		serializer.writeArray(publicKey);
-		serializer.writeArray(verifyToken);
+		serializer.writeByteArray(publicKey);
+		serializer.writeByteArray(verifyToken);
 		return RecyclableSingletonList.create(serializer);
 	}
 

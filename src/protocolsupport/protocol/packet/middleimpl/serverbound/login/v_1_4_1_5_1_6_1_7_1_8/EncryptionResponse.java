@@ -3,14 +3,14 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.login.v_1_4_1_5_1
 import java.io.IOException;
 
 import protocolsupport.protocol.packet.middle.serverbound.login.MiddleEncryptionResponse;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public class EncryptionResponse extends MiddleEncryptionResponse {
 
 	@Override
-	public void readFromClientData(PacketDataSerializer serializer) throws IOException {
-		sharedSecret = serializer.readArray(256);
-		verifyToken = serializer.readArray(256);
+	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
+		sharedSecret = serializer.readByteArray(256);
+		verifyToken = serializer.readByteArray(256);
 	}
 
 }

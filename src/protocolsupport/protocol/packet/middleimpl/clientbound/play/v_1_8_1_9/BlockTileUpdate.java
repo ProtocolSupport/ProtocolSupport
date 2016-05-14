@@ -2,14 +2,14 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8_1_9;
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_9_R2.BlockPosition;
-import net.minecraft.server.v1_9_R2.NBTTagCompound;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.legacyremapper.LegacyTileEntityUpdate;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockTileUpdate;
 import protocolsupport.protocol.packet.middleimpl.PacketData;
 import protocolsupport.protocol.typeremapper.nbt.tileupdate.TileNBTTransformer;
+import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
+import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -20,7 +20,7 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate<RecyclableCollection<
 		return RecyclableSingletonList.create(createPacketData(version, position, type, tag));
 	}
 
-	public static PacketData createPacketData(ProtocolVersion version, BlockPosition position, int type, NBTTagCompound tag) {
+	public static PacketData createPacketData(ProtocolVersion version, Position position, int type, NBTTagCompoundWrapper tag) {
 		if (type == TileNBTTransformer.TileEntityUpdateType.SIGN.ordinal()) {
 			PacketData serializer = PacketData.create(ClientBoundPacket.LEGACY_PLAY_UPDATE_SIGN_ID, version);
 			serializer.writePosition(position);

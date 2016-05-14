@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import java.io.IOException;
 
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public abstract class MiddleTimeUpdate<T> extends ClientBoundMiddlePacket<T> {
 
@@ -11,7 +11,7 @@ public abstract class MiddleTimeUpdate<T> extends ClientBoundMiddlePacket<T> {
 	protected long timeOfDay;
 
 	@Override
-	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
 		worldAge = serializer.readLong();
 		timeOfDay = serializer.readLong();
 	}

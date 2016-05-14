@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.login;
 import java.io.IOException;
 
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public abstract class MiddleEncryptionRequest<T> extends ClientBoundMiddlePacket<T> {
 
@@ -12,10 +12,10 @@ public abstract class MiddleEncryptionRequest<T> extends ClientBoundMiddlePacket
 	protected byte[] verifyToken;
 
 	@Override
-	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
 		serverId = serializer.readString(Short.MAX_VALUE);
-		publicKey = serializer.readArray();
-		verifyToken = serializer.readArray();
+		publicKey = serializer.readByteArray();
+		verifyToken = serializer.readByteArray();
 	}
 
 }

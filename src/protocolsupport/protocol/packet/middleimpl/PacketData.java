@@ -2,10 +2,10 @@ package protocolsupport.protocol.packet.middleimpl;
 
 import io.netty.util.Recycler;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.utils.netty.Allocator;
 
-public class PacketData extends PacketDataSerializer {
+public class PacketData extends ProtocolSupportPacketDataSerializer {
 
 	private static final Recycler<PacketData> RECYCLER = new Recycler<PacketData>() {
 		@Override
@@ -17,13 +17,13 @@ public class PacketData extends PacketDataSerializer {
 	public static PacketData create(int packetId, ProtocolVersion version) {
 		PacketData packetdata = RECYCLER.get();
 		packetdata.packetId = packetId;
-		packetdata.setVersion(version);
+		packetdata.version = version;
 		return packetdata;
 	}
 
 	private final Recycler.Handle handle;
 	private PacketData(Recycler.Handle handle) {
-		super(Allocator.allocateUnpooledBuffer());
+		super(Allocator.allocateUnpooledBuffer(), null);
 		this.handle = handle;
 	}
 

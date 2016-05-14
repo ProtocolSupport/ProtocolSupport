@@ -9,7 +9,7 @@ import com.mojang.authlib.properties.Property;
 
 import gnu.trove.map.TIntObjectMap;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage.PlayerListEntry;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
@@ -32,9 +32,9 @@ public abstract class MiddleSpawnNamed<T> extends ClientBoundMiddlePacket<T> {
 	protected TIntObjectMap<DataWatcherObject<?>> metadata;
 
 	@Override
-	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
 		playerEntityId = serializer.readVarInt();
-		uuid = serializer.i();
+		uuid = serializer.readUUID();
 		x = serializer.readDouble();
 		y = serializer.readDouble();
 		z = serializer.readDouble();

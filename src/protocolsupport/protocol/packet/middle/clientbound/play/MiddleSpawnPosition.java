@@ -2,16 +2,16 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_9_R2.BlockPosition;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.utils.types.Position;
 
 public abstract class MiddleSpawnPosition<T> extends ClientBoundMiddlePacket<T> {
 
-	protected BlockPosition position;
+	protected Position position;
 
 	@Override
-	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
 		position = serializer.readPosition();
 	}
 

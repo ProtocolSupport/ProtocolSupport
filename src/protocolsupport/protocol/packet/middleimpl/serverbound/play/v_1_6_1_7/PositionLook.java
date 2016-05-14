@@ -1,12 +1,12 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_6_1_7;
 
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddlePositionLook;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public class PositionLook extends MiddlePositionLook {
 
 	@Override
-	public void readFromClientData(PacketDataSerializer serializer) {
+	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) {
 		 x = serializer.readDouble();
 		 y = serializer.readDouble();
 		 serializer.readDouble();

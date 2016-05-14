@@ -4,13 +4,13 @@ import java.io.IOException;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClick;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.storage.SharedStorage.WindowType;
 
 public class InventoryClick extends MiddleInventoryClick {
 
 	@Override
-	public void readFromClientData(PacketDataSerializer serializer) throws IOException {
+	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
 		windowId = serializer.readUnsignedByte();
 		slot = serializer.readShort();
 		if (serializer.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9) && sharedstorage.getOpenedWindow() == WindowType.BREING) {

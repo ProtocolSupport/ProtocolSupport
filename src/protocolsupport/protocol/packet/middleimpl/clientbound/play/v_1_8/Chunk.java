@@ -2,7 +2,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8;
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_9_R2.NBTTagCompound;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.legacyremapper.LegacyTileEntityUpdate;
 import protocolsupport.protocol.legacyremapper.chunk.ChunkTransformer;
@@ -11,6 +10,7 @@ import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.PacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8_1_9.BlockTileUpdate;
+import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -28,14 +28,14 @@ public class Chunk extends MiddleChunk<RecyclableCollection<PacketData>>  {
 		boolean hasSkyLight = storage.hasSkyLightInCurrentDimension();
 		if (bitmask == 0 && full) {
 			chunkdata.writeShort(1);
-			chunkdata.writeArray(EmptyChunk.get18ChunkData(hasSkyLight));
+			chunkdata.writeByteArray(EmptyChunk.get18ChunkData(hasSkyLight));
 		} else {
 			chunkdata.writeShort(bitmask);
 			transformer.loadData(data, bitmask, hasSkyLight, full);
-			chunkdata.writeArray(transformer.to18Data());
+			chunkdata.writeByteArray(transformer.to18Data());
 		}
 		packets.add(chunkdata);
-		for (NBTTagCompound tile : tiles) {
+		for (NBTTagCompoundWrapper tile : tiles) {
 			packets.add(BlockTileUpdate.createPacketData(
 				version,
 				LegacyTileEntityUpdate.getPosition(tile),

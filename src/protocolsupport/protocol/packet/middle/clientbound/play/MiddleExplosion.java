@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public abstract class MiddleExplosion<T> extends ClientBoundMiddlePacket<T> {
 
@@ -15,7 +15,7 @@ public abstract class MiddleExplosion<T> extends ClientBoundMiddlePacket<T> {
 	protected float pMotZ;
 
 	@Override
-	public void readFromServerData(PacketDataSerializer serializer) {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		x = serializer.readFloat();
 		y = serializer.readFloat();
 		z = serializer.readFloat();

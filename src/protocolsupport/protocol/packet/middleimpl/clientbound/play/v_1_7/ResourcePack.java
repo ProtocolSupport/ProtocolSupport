@@ -15,7 +15,7 @@ public class ResourcePack extends MiddleResourcePack<RecyclableCollection<Packet
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID, version);
 		serializer.writeString("MC|RPack");
-		serializer.writeArray(url.getBytes(StandardCharsets.UTF_8));
+		serializer.writeByteArray(url.getBytes(StandardCharsets.UTF_8));
 		return RecyclableSingletonList.create(serializer);
 	}
 

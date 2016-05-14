@@ -2,16 +2,16 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_9_R2.NBTTagCompound;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
 
 public abstract class MiddleBlockTileUpdate<T> extends MiddleBlock<T> {
 
 	protected int type;
-	protected NBTTagCompound tag;
+	protected NBTTagCompoundWrapper tag;
 
 	@Override
-	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
 		super.readFromServerData(serializer);
 		type = serializer.readUnsignedByte();
 		tag = serializer.readTag();

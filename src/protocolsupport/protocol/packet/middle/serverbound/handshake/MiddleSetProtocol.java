@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middle.serverbound.handshake;
 
-import net.minecraft.server.v1_9_R2.Packet;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
@@ -15,13 +14,13 @@ public abstract class MiddleSetProtocol extends ServerBoundMiddlePacket {
 	protected int nextState;
 
 	@Override
-	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
-		PacketCreator creator = PacketCreator.create(ServerBoundPacket.HANDSHAKE_START.get());
+	public RecyclableCollection<PacketCreator> toNative() throws Exception {
+		PacketCreator creator = PacketCreator.create(ServerBoundPacket.HANDSHAKE_START);
 		creator.writeVarInt(ProtocolVersion.getLatest().getId());
 		creator.writeString(hostname);
 		creator.writeShort(port);
 		creator.writeVarInt(nextState);
-		return RecyclableSingletonList.create(creator.create());
+		return RecyclableSingletonList.create(creator);
 	}
 
 }

@@ -3,13 +3,13 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_4_1_5_1_
 import java.io.IOException;
 
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleChat;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public class Chat extends MiddleChat {
 
 	@Override
-	public void readFromClientData(PacketDataSerializer serializer) throws IOException {
-		message = serializer.readString(Short.MAX_VALUE);
+	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
+		message = serializer.readString();
 	}
 
 }

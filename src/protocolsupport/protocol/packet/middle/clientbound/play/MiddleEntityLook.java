@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import java.io.IOException;
 
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public abstract class MiddleEntityLook<T> extends MiddleEntity<T> {
 
@@ -11,7 +11,7 @@ public abstract class MiddleEntityLook<T> extends MiddleEntity<T> {
 	protected boolean onGround;
 
 	@Override
-	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
 		super.readFromServerData(serializer);
 		yaw = serializer.readByte();
 		pitch = serializer.readByte();

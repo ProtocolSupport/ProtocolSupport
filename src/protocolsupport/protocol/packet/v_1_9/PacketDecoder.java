@@ -9,31 +9,30 @@ import io.netty.handler.codec.DecoderException;
 import net.minecraft.server.v1_9_R2.EnumProtocol;
 import net.minecraft.server.v1_9_R2.EnumProtocolDirection;
 import net.minecraft.server.v1_9_R2.Packet;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.pipeline.IPacketDecoder;
-import protocolsupport.protocol.serializer.WrappingBufferPacketDataSerializer;
+import protocolsupport.protocol.serializer.ChainedProtocolSupportPacketDataSerializer;
 import protocolsupport.utils.netty.ChannelUtils;
 
 public class PacketDecoder implements IPacketDecoder {
 
-	private final WrappingBufferPacketDataSerializer serializer = WrappingBufferPacketDataSerializer.create(ProtocolVersion.getLatest());
+	private final ChainedProtocolSupportPacketDataSerializer middlebuffer = new ChainedProtocolSupportPacketDataSerializer();
 
 	@Override
 	public void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
 		if (!input.isReadable()) {
 			return;
 		}
-		serializer.setBuf(input);
+		middlebuffer.setBuf(input);
 		EnumProtocol currentProtocol = ctx.channel().attr(ChannelUtils.CURRENT_PROTOCOL_KEY).get();
-		int packetId = serializer.readVarInt();
+		int packetId = ChannelUtils.readVarInt(input);
 		Packet<?> packet = currentProtocol.a(EnumProtocolDirection.SERVERBOUND, packetId);
 		if (packet == null) {
 			throw new IOException("Bad packet id " + packetId);
 		}
-		packet.a(serializer);
+		packet.a(middlebuffer.getNativeSerializer());
 		list.add(packet);
-		if (serializer.isReadable()) {
-			throw new DecoderException("Did not read all data from packet " + packetId+ ", bytes left: " + serializer.readableBytes());
+		if (middlebuffer.isReadable()) {
+			throw new DecoderException("Did not read all data from packet " + packetId+ ", bytes left: " + middlebuffer.readableBytes());
 		}
 	}
 

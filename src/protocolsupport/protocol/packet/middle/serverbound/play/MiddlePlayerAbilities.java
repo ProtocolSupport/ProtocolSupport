@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import net.minecraft.server.v1_9_R2.Packet;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.PacketCreator;
@@ -14,12 +13,12 @@ public abstract class MiddlePlayerAbilities extends ServerBoundMiddlePacket {
 	protected float walkSpeed;
 
 	@Override
-	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
-		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_ABILITIES.get());
+	public RecyclableCollection<PacketCreator> toNative() throws Exception {
+		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_ABILITIES);
 		creator.writeByte(flags);
 		creator.writeFloat(flySpeed);
 		creator.writeFloat(walkSpeed);
-		return RecyclableSingletonList.create(creator.create());
+		return RecyclableSingletonList.create(creator);
 	}
 
 }

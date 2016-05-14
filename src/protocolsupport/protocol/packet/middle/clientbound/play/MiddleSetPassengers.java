@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import java.io.IOException;
 
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public abstract class MiddleSetPassengers<T> extends ClientBoundMiddlePacket<T> {
 
@@ -11,7 +11,7 @@ public abstract class MiddleSetPassengers<T> extends ClientBoundMiddlePacket<T> 
 	protected int[] passengersIds;
 
 	@Override
-	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
 		vehicleId = serializer.readVarInt();
 		passengersIds = new int[serializer.readVarInt()];
 		for (int i = 0; i < passengersIds.length; i++) {

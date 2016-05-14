@@ -6,7 +6,7 @@ import com.mojang.authlib.properties.Property;
 
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage.PlayerListEntry;
 
 public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {
@@ -15,7 +15,7 @@ public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {
 	protected Info[] infos;
 
 	@Override
-	public void readFromServerData(PacketDataSerializer serializer) {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		action = Action.values()[serializer.readVarInt()];
 		infos = new Info[serializer.readVarInt()];
 		for (int i = 0; i < infos.length; i++) {
@@ -26,18 +26,18 @@ public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {
 					info.username = serializer.readString(16);
 					info.properties = new Property[serializer.readVarInt()];
 					for (int j = 0; j < info.properties.length; j++) {
-						String name = serializer.readString(32767);
-						String value = serializer.readString(32767);
+						String name = serializer.readString();
+						String value = serializer.readString();
 						String signature = null;
 						if (serializer.readBoolean()) {
-							signature = serializer.readString(32767);
+							signature = serializer.readString();
 						}
 						info.properties[j] = new Property(name, value, signature);
 					}
 					info.gamemode = serializer.readVarInt();
 					info.ping = serializer.readVarInt();
 					if (serializer.readBoolean()) {
-						info.displayNameJson = serializer.readString(Short.MAX_VALUE);
+						info.displayNameJson = serializer.readString();
 					}
 					break;
 				}

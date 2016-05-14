@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public abstract class MiddleScoreboardTeam<T> extends ClientBoundMiddlePacket<T> {
 
@@ -17,7 +17,7 @@ public abstract class MiddleScoreboardTeam<T> extends ClientBoundMiddlePacket<T>
 	protected String[] players;
 
 	@Override
-	public void readFromServerData(PacketDataSerializer serializer) {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		name = serializer.readString(16);
 		mode = serializer.readUnsignedByte();
 		if (mode == 0 || mode == 2) {

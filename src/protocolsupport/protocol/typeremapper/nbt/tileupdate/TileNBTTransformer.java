@@ -4,10 +4,10 @@ import java.util.EnumMap;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.server.v1_9_R2.Item;
-import net.minecraft.server.v1_9_R2.NBTTagCompound;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
 import protocolsupport.utils.ProtocolVersionsHelper;
 
 public class TileNBTTransformer {
@@ -31,11 +31,11 @@ public class TileNBTTransformer {
 			TileEntityUpdateType.MOB_SPAWNER,
 			new SpecificTransformer() {
 				@Override
-				public NBTTagCompound transform(ProtocolVersion version, NBTTagCompound input) {
-					NBTTagCompound spawndata = input.getCompound("SpawnData");
+				public NBTTagCompoundWrapper transform(ProtocolVersion version, NBTTagCompoundWrapper input) {
+					NBTTagCompoundWrapper spawndata = input.getCompound("SpawnData");
 					input.remove("SpawnPotentials");
 					input.remove("SpawnData");
-					if (spawndata != null) {
+					if (!spawndata.isNull()) {
 						String mobname = spawndata.getString("id");
 						if (!mobname.isEmpty()) {
 							input.setString("EntityId", mobname);
@@ -50,8 +50,8 @@ public class TileNBTTransformer {
 			TileEntityUpdateType.SKULL,
 			new SpecificTransformer() {
 				@Override
-				public NBTTagCompound transform(ProtocolVersion version, NBTTagCompound input) {
-					PacketDataSerializer.transformSkull(input);
+				public NBTTagCompoundWrapper transform(ProtocolVersion version, NBTTagCompoundWrapper input) {
+					PacketDataSerializer.transformSkull(input.unwrap());
 					return input;
 				}
 			},
@@ -61,7 +61,7 @@ public class TileNBTTransformer {
 			TileEntityUpdateType.FLOWER_POT,
 			new SpecificTransformer() {
 				@Override
-				public NBTTagCompound transform(ProtocolVersion version, NBTTagCompound input) {
+				public NBTTagCompoundWrapper transform(ProtocolVersion version, NBTTagCompoundWrapper input) {
 					String itemId = input.getString("Item");
 					if (!itemId.isEmpty()) {
 						input.setInt("Item", IdRemapper.ITEM.getTable(version).getRemap(Item.getId(Item.d(itemId))));
@@ -73,7 +73,7 @@ public class TileNBTTransformer {
 		);
 	}
 
-	public static NBTTagCompound transform(int type, ProtocolVersion version, NBTTagCompound compound) {
+	public static NBTTagCompoundWrapper transform(int type, ProtocolVersion version, NBTTagCompoundWrapper compound) {
 		EnumMap<ProtocolVersion, SpecificTransformer> map = registry.get(type);
 		if (map != null) {
 			SpecificTransformer transformer = map.get(version);

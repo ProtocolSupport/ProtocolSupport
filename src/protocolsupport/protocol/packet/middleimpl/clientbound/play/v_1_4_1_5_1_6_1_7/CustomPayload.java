@@ -25,7 +25,7 @@ public class CustomPayload extends MiddleCustomPayload<RecyclableCollection<Pack
 		} else {
 			clientdata.copyAll(serverdata);
 		}
-		serializer.writeArray(clientdata.toData());
+		serializer.writeByteArray(clientdata.toData());
 		return RecyclableSingletonList.create(serializer);
 	}
 

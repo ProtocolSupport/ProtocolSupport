@@ -8,6 +8,7 @@ import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.server.v1_9_R2.EnumProtocol;
 import net.minecraft.server.v1_9_R2.EnumProtocolDirection;
 import net.minecraft.server.v1_9_R2.Packet;
+import net.minecraft.server.v1_9_R2.PacketDataSerializer;
 import net.minecraft.server.v1_9_R2.PacketListener;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
@@ -19,8 +20,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9.Login;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9.WorldSound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7_1_8_1_9.ServerInfo;
 import protocolsupport.protocol.pipeline.IPacketEncoder;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
-import protocolsupport.protocol.serializer.WrappingBufferPacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry;
 import protocolsupport.protocol.utils.registry.PacketIdTransformerRegistry;
 import protocolsupport.utils.netty.Allocator;
@@ -51,8 +51,8 @@ public class PacketEncoder implements IPacketEncoder {
 	}
 
 	private final ProtocolVersion version;
-	private final WrappingBufferPacketDataSerializer serializer = WrappingBufferPacketDataSerializer.create(ProtocolVersion.getLatest());
-	private final PacketDataSerializer serverdata = new PacketDataSerializer(Unpooled.buffer(), ProtocolVersion.getLatest());
+	private final PacketDataSerializer serverdata = new PacketDataSerializer(Unpooled.buffer());
+	private final ProtocolSupportPacketDataSerializer middlebuffer = new ProtocolSupportPacketDataSerializer(serverdata, ProtocolVersion.getLatest());
 	public PacketEncoder(ProtocolVersion version) {
 		this.version = version;
 	}
@@ -65,43 +65,47 @@ public class PacketEncoder implements IPacketEncoder {
 		if (packetId == null) {
 			throw new IOException("Can't serialize unregistered packet");
 		}
-		if (version != ProtocolVersion.getLatest()) {
-			serverdata.clear();
-			packet.b(serverdata);
-			ClientBoundMiddlePacket<RecyclableCollection<PacketData>> packetTransformer = dataRemapperRegistry.getTransformer(currentProtocol, packetId);
-			if (packetTransformer != null) {
-				if (packetTransformer.needsPlayer()) {
-					packetTransformer.setPlayer(ChannelUtils.getBukkitPlayer(channel));
+		serverdata.clear();
+		packet.b(serverdata);
+		ClientBoundMiddlePacket<RecyclableCollection<PacketData>> packetTransformer = dataRemapperRegistry.getTransformer(currentProtocol, packetId);
+		if (version != ProtocolVersion.getLatest() && packetTransformer != null) {
+			if (packetTransformer.needsPlayer()) {
+				packetTransformer.setPlayer(ChannelUtils.getBukkitPlayer(channel));
+			}
+			packetTransformer.readFromServerData(middlebuffer);
+			packetTransformer.handle();
+			RecyclableCollection<PacketData> data = packetTransformer.toData(version);
+			try {
+				for (PacketData packetdata : data) {
+					ByteBuf senddata = Allocator.allocateBuffer();
+					ChannelUtils.writeVarInt(senddata, getPacketId(currentProtocol, packetdata.getPacketId(), version));
+					senddata.writeBytes(packetdata);
+					ctx.write(senddata);
 				}
-				packetTransformer.readFromServerData(serverdata);
-				packetTransformer.handle();
-				RecyclableCollection<PacketData> data = packetTransformer.toData(version);
-				try {
-					for (PacketData packetdata : data) {
-						int newPacketId = packetIdRegistry.getNewPacketId(currentProtocol, packetdata.getPacketId());
-						ByteBuf senddata = Allocator.allocateBuffer();
-						ChannelUtils.writeVarInt(senddata, newPacketId != -1 ? newPacketId : packetdata.getPacketId());
-						senddata.writeBytes(packetdata);
-						ctx.write(senddata);
-					}
-					ctx.flush();
-				} finally {
-					for (PacketData packetdata : data) {
-						packetdata.recycle();
-					}
-					data.recycle();
+				ctx.flush();
+			} finally {
+				for (PacketData packetdata : data) {
+					packetdata.recycle();
 				}
-			} else {
-				int newPacketId = packetIdRegistry.getNewPacketId(currentProtocol, packetId);
-				ByteBuf senddata = Allocator.allocateBuffer();
-				ChannelUtils.writeVarInt(senddata, newPacketId != -1 ? newPacketId : packetId);
-				senddata.writeBytes(serverdata);
-				ctx.writeAndFlush(senddata);
+				data.recycle();
 			}
 		} else {
-			serializer.setBuf(output);
-			serializer.writeVarInt(packetId);
-			packet.b(serializer);
+			ByteBuf senddata = Allocator.allocateBuffer();
+			ChannelUtils.writeVarInt(senddata, getPacketId(currentProtocol, packetId, version));
+			senddata.writeBytes(serverdata);
+			ctx.writeAndFlush(senddata);
+		}
+	}
+
+	private int getPacketId(EnumProtocol protocol, int oldId, ProtocolVersion version) {
+		if (version == ProtocolVersion.getLatest()) {
+			return oldId;
+		} else {
+			int newId = packetIdRegistry.getNewPacketId(protocol, oldId);
+			if (newId == -1) {
+				newId = oldId;
+			}
+			return newId;
 		}
 	}
 

@@ -25,7 +25,7 @@ public class Map extends MiddleMap<RecyclableCollection<PacketData>> {
 			serializer.writeByte(rows);
 			serializer.writeByte(xstart);
 			serializer.writeByte(zstart);
-			serializer.writeArray(data);
+			serializer.writeByteArray(data);
 		}
 		return RecyclableSingletonList.create(serializer);
 	}

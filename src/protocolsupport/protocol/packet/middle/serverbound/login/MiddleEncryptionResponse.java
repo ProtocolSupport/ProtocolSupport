@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middle.serverbound.login;
 
-import net.minecraft.server.v1_9_R2.Packet;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.PacketCreator;
@@ -13,11 +12,11 @@ public abstract class MiddleEncryptionResponse extends ServerBoundMiddlePacket {
 	protected byte[] verifyToken;
 
 	@Override
-	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
-		PacketCreator creator = PacketCreator.create(ServerBoundPacket.LOGIN_ENCRYPTION_BEGIN.get());
-		creator.writeArray(sharedSecret);
-		creator.writeArray(verifyToken);
-		return RecyclableSingletonList.create(creator.create());
+	public RecyclableCollection<PacketCreator> toNative() throws Exception {
+		PacketCreator creator = PacketCreator.create(ServerBoundPacket.LOGIN_ENCRYPTION_BEGIN);
+		creator.writeByteArray(sharedSecret);
+		creator.writeByteArray(verifyToken);
+		return RecyclableSingletonList.create(creator);
 	}
 
 }

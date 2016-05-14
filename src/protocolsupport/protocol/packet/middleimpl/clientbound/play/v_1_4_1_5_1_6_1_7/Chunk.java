@@ -2,7 +2,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4_1_5_1_
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_9_R2.NBTTagCompound;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.legacyremapper.LegacyTileEntityUpdate;
 import protocolsupport.protocol.legacyremapper.chunk.ChunkTransformer;
@@ -10,6 +9,7 @@ import protocolsupport.protocol.legacyremapper.chunk.EmptyChunk;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.PacketData;
+import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -41,7 +41,7 @@ public class Chunk extends MiddleChunk<RecyclableCollection<PacketData>> {
 			chunkdata.writeBytes(compressed);
 		}
 		packets.add(chunkdata);
-		for (NBTTagCompound tile : tiles) {
+		for (NBTTagCompoundWrapper tile : tiles) {
 			packets.add(BlockTileUpdate.createPacketData(
 				version,
 				LegacyTileEntityUpdate.getPosition(tile),

@@ -9,6 +9,7 @@ import protocolsupport.protocol.serializer.RecyclablePacketDataSerializer;
 import protocolsupport.protocol.typeremapper.nbt.custompayload.MerchantData.TradeOffer;
 import protocolsupport.utils.netty.ChannelUtils;
 
+//TODO: Migrat to new packet data serializer
 public class CustomPayloadSerializer {
 
 	private final PacketDataSerializer serializer;

@@ -1,12 +1,12 @@
 package protocolsupport.protocol.legacyremapper;
 
-import net.minecraft.server.v1_9_R2.BlockPosition;
-import net.minecraft.server.v1_9_R2.NBTTagCompound;
 import protocolsupport.protocol.typeremapper.nbt.tileupdate.TileNBTTransformer;
+import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
+import protocolsupport.protocol.utils.types.Position;
 
 public class LegacyTileEntityUpdate {
 
-	public static TileNBTTransformer.TileEntityUpdateType getUpdateType(NBTTagCompound tag) {
+	public static TileNBTTransformer.TileEntityUpdateType getUpdateType(NBTTagCompoundWrapper tag) {
 		switch (tag.getString("id")) {
 			case "MobSpawner": {
 				return TileNBTTransformer.TileEntityUpdateType.MOB_SPAWNER;
@@ -41,11 +41,11 @@ public class LegacyTileEntityUpdate {
 		}
 	}
 
-	public static BlockPosition getPosition(NBTTagCompound tag) {
-		return new BlockPosition(tag.getInt("x"), tag.getInt("y"), tag.getInt("z"));
+	public static Position getPosition(NBTTagCompoundWrapper tag) {
+		return new Position(tag.getNumberAsInt("x"), tag.getNumberAsInt("y"), tag.getNumberAsInt("z"));
 	}
 
-	public static String[] getSignLines(NBTTagCompound tag) {
+	public static String[] getSignLines(NBTTagCompoundWrapper tag) {
 		String[] lines = new String[4];
 		for (int i = 0; i < lines.length; i++) {
 			lines[i] = tag.getString("Text" + (i + 1));

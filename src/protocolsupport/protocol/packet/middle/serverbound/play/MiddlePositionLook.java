@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import net.minecraft.server.v1_9_R2.Packet;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.PacketCreator;
@@ -18,24 +17,24 @@ public abstract class MiddlePositionLook extends ServerBoundMiddlePacket {
 	protected boolean onGround;
 
 	@Override
-	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
+	public RecyclableCollection<PacketCreator> toNative() throws Exception {
 		if (!sharedstorage.isTeleportConfirmNeeded()) {
-			PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_POSITION_LOOK.get());
+			PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_POSITION_LOOK);
 			creator.writeDouble(x);
 			creator.writeDouble(y);
 			creator.writeDouble(z);
 			creator.writeFloat(yaw);
 			creator.writeFloat(pitch);
 			creator.writeBoolean(onGround);
-			return RecyclableSingletonList.create(creator.create());
+			return RecyclableSingletonList.create(creator);
 		} else {
 			int teleportId = sharedstorage.tryTeleportConfirm(x, y, z);
 			if (teleportId == -1) {
 				return RecyclableEmptyList.get();
 			} else {
-				PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_TELEPORT_ACCEPT.get());
+				PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_TELEPORT_ACCEPT);
 				creator.writeVarInt(teleportId);
-				return RecyclableSingletonList.create(creator.create());
+				return RecyclableSingletonList.create(creator);
 			}
 		}
 	}

@@ -1,12 +1,12 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_4_1_5_1_6;
 
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleClientSettings;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public class ClientSettings extends MiddleClientSettings {
 
 	@Override
-	public void readFromClientData(PacketDataSerializer serializer) {
+	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) {
 		locale = serializer.readString(7);
 		viewDist = serializer.readByte();
 		int chatState = serializer.readByte();

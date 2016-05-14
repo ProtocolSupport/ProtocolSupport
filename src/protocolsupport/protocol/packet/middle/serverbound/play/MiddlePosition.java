@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import net.minecraft.server.v1_9_R2.Packet;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.PacketCreator;
@@ -16,14 +15,14 @@ public abstract class MiddlePosition extends ServerBoundMiddlePacket {
 	protected boolean onGround;
 
 	@Override
-	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
+	public RecyclableCollection<PacketCreator> toNative() throws Exception {
 		if (!sharedstorage.isTeleportConfirmNeeded()) {
-			PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_POSITION.get());
+			PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_POSITION);
 			creator.writeDouble(x);
 			creator.writeDouble(y);
 			creator.writeDouble(z);
 			creator.writeBoolean(onGround);
-			return RecyclableSingletonList.create(creator.create());
+			return RecyclableSingletonList.create(creator);
 		} else {
 			return RecyclableEmptyList.get();
 		}

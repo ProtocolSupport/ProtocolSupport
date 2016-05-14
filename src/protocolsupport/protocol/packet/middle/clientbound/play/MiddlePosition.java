@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import org.bukkit.Location;
 
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public abstract class MiddlePosition<T> extends ClientBoundMiddlePacket<T> {
 
@@ -26,7 +26,7 @@ public abstract class MiddlePosition<T> extends ClientBoundMiddlePacket<T> {
 	}
 
 	@Override
-	public void readFromServerData(PacketDataSerializer serializer) {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		xOrig = x = serializer.readDouble();
 		yOrig = y = serializer.readDouble();
 		zOrig = z = serializer.readDouble();

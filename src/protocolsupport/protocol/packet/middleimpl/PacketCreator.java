@@ -1,13 +1,16 @@
 package protocolsupport.protocol.packet.middleimpl;
 
+import java.util.Collection;
+
 import io.netty.util.Recycler;
 import net.minecraft.server.v1_9_R2.Packet;
-import net.minecraft.server.v1_9_R2.PacketListener;
+import net.minecraft.server.v1_9_R2.PacketDataSerializer;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.packet.ServerBoundPacket;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.utils.netty.Allocator;
 
-public class PacketCreator extends PacketDataSerializer {
+public class PacketCreator extends ProtocolSupportPacketDataSerializer {
 
 	private static final Recycler<PacketCreator> RECYCLER = new Recycler<PacketCreator>() {
 		@Override
@@ -16,7 +19,7 @@ public class PacketCreator extends PacketDataSerializer {
 		}
 	};
 
-	public static PacketCreator create(Packet<? extends PacketListener> packet) {
+	public static PacketCreator create(ServerBoundPacket packet) {
 		PacketCreator packetdata = RECYCLER.get();
 		packetdata.packet = packet;
 		return packetdata;
@@ -28,12 +31,19 @@ public class PacketCreator extends PacketDataSerializer {
 		this.handle = handle;
 	}
 
-	private Packet<?> packet;
+	private final PacketDataSerializer nativeSerializer = new PacketDataSerializer(this);
+
+	private ServerBoundPacket packet;
+
+	public ServerBoundPacket getPacketType() {
+		return packet;
+	}
 
 	public Packet<?> create() throws Exception {
 		try {
-			packet.a(this);
-			return packet;
+			Packet<?> npacket = packet.get();
+			npacket.a(nativeSerializer);
+			return npacket;
 		} finally {
 			clear();
 			packet = null;
@@ -44,6 +54,12 @@ public class PacketCreator extends PacketDataSerializer {
 	@Override
 	protected void finalize() {
 		release();
+	}
+
+	public static void addAllTo(Collection<PacketCreator> creators, Collection<Object> to) throws Exception {
+		for (PacketCreator creator : creators) {
+			to.add(creator.create());
+		}
 	}
 
 }

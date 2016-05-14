@@ -16,7 +16,7 @@ public class PlayerInfo extends MiddlePlayerInfo<RecyclableCollection<PacketData
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_PLAYER_INFO_ID, version);
-		serializer.a(action);
+		serializer.writeVarInt(action.ordinal());
 		serializer.writeVarInt(infos.length);
 		for (Info info : infos) {
 			serializer.writeUUID(info.uuid);

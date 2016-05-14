@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import gnu.trove.map.TIntObjectMap;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedLiving;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
@@ -30,7 +30,7 @@ public abstract class MiddleSpawnLiving<T> extends ClientBoundMiddlePacket<T> {
 	protected TIntObjectMap<DataWatcherObject<?>> metadata;
 
 	@Override
-	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
 		entityId = serializer.readVarInt();
 		uuid = serializer.readUUID();
 		type = serializer.readUnsignedByte();

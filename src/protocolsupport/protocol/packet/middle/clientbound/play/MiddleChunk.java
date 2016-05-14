@@ -2,9 +2,9 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_9_R2.NBTTagCompound;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
 
 public abstract class MiddleChunk<T> extends ClientBoundMiddlePacket<T> {
 
@@ -13,16 +13,16 @@ public abstract class MiddleChunk<T> extends ClientBoundMiddlePacket<T> {
 	protected boolean full;
 	protected int bitmask;
 	protected byte[] data;
-	protected NBTTagCompound[] tiles;
+	protected NBTTagCompoundWrapper[] tiles;
 
 	@Override
-	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
 		chunkX = serializer.readInt();
 		chunkZ = serializer.readInt();
 		full = serializer.readBoolean();
 		bitmask = serializer.readVarInt();
-		data = serializer.readArray();
-		tiles = new NBTTagCompound[serializer.readVarInt()];
+		data = serializer.readByteArray();
+		tiles = new NBTTagCompoundWrapper[serializer.readVarInt()];
 		for (int i = 0; i < tiles.length; i++) {
 			tiles[i] = serializer.readTag();
 		}

@@ -4,22 +4,30 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import net.minecraft.server.v1_9_R2.EnumProtocol;
-import net.minecraft.server.v1_9_R2.Packet;
 import protocolsupport.protocol.packet.ServerBoundPacket;
+import protocolsupport.protocol.packet.middleimpl.PacketCreator;
+import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class LegacyAnimatePacketReorderer {
 
-	protected Packet<?> animatePacket;
+	protected PacketCreator animatePacket;
 
-	private final ArrayList<Packet<?>> ordered = new ArrayList<>();
+	private final ArrayList<PacketCreator> ordered = new ArrayList<>();
 
-	public List<Packet<?>> orderPackets(Collection<? extends Packet<?>> packets) {
+	public List<PacketCreator> orderPackets(RecyclableCollection<PacketCreator> packetsR) {
+		try {
+			return orderPackets((Collection<PacketCreator>) packetsR);
+		} finally {
+			packetsR.recycle();
+		}
+	}
+
+	public List<PacketCreator> orderPackets(Collection<PacketCreator> packets) {
 		ordered.clear();
-		for (Packet<?> curPacket : packets) {
-			int packetId = ServerBoundPacket.getId(EnumProtocol.PLAY, curPacket);
+		for (PacketCreator curPacket : packets) {
+			ServerBoundPacket packetType = curPacket.getPacketType();
 			//if the packet is use entity, we attempt to add a cached animate packet after it
-			if (packetId == ServerBoundPacket.PLAY_USE_ENTITY.getId()) {
+			if (packetType == ServerBoundPacket.PLAY_USE_ENTITY) {
 				ordered.add(curPacket);
 				if (animatePacket != null) {
 					ordered.add(animatePacket);
@@ -34,7 +42,7 @@ public class LegacyAnimatePacketReorderer {
 					animatePacket = null;
 				}
 				//if it is animate packet, we cache it
-				if (packetId == ServerBoundPacket.PLAY_ANIMATION.getId()) {
+				if (packetType == ServerBoundPacket.PLAY_ANIMATION) {
 					animatePacket = curPacket;
 				}
 				//any other type just gets added to ordered list

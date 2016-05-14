@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public abstract class MiddleResourcePack<T> extends ClientBoundMiddlePacket<T> {
 
@@ -9,9 +9,9 @@ public abstract class MiddleResourcePack<T> extends ClientBoundMiddlePacket<T> {
 	protected String hash;
 
 	@Override
-	public void readFromServerData(PacketDataSerializer serializer) {
-		url = serializer.readString(Short.MAX_VALUE);
-		hash = serializer.readString(Short.MAX_VALUE);
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
+		url = serializer.readString();
+		hash = serializer.readString();
 	}
 
 }

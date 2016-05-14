@@ -7,11 +7,12 @@ import org.spigotmc.SneakyThrow;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.DecoderException;
 import net.minecraft.server.v1_9_R2.EnumProtocol;
-import net.minecraft.server.v1_9_R2.Packet;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.legacyremapper.LegacyAnimatePacketReorderer;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
+import protocolsupport.protocol.packet.middleimpl.PacketCreator;
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_1_4_1_5_1_6.ClientLogin;
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_1_6.Ping;
 import protocolsupport.protocol.packet.middleimpl.serverbound.login.v_1_4_1_5_1_6_1_7_1_8.EncryptionResponse;
@@ -41,13 +42,12 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_6_1_7.Pos
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_6_1_7.SteerVehicle;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_6_1_7_1_8.PlayerAbilities;
 import protocolsupport.protocol.pipeline.IPacketDecoder;
-import protocolsupport.protocol.serializer.ReplayingBufferPacketDataSerializer;
+import protocolsupport.protocol.serializer.ReplayingSupportPacketDataSerializer;
 import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry.InitCallBack;
 import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
-import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class PacketDecoder implements IPacketDecoder {
 
@@ -94,9 +94,9 @@ public class PacketDecoder implements IPacketDecoder {
 	}
 
 	protected final SharedStorage sharedstorage;
-	private final ReplayingBufferPacketDataSerializer serializer;
+	private final ReplayingSupportPacketDataSerializer serializer;
 	public PacketDecoder(ProtocolVersion version, SharedStorage sharedstorage) {
-		this.serializer = ReplayingBufferPacketDataSerializer.create(version);
+		this.serializer = new ReplayingSupportPacketDataSerializer(version);
 		this.sharedstorage = sharedstorage;
 	}
 
@@ -110,25 +110,17 @@ public class PacketDecoder implements IPacketDecoder {
 		serializer.setBuf(input);
 		serializer.markReaderIndex();
 		Channel channel = ctx.channel();
-		EnumProtocol currentProtocol = channel.attr(ChannelUtils.CURRENT_PROTOCOL_KEY).get();
 		try {
 			int packetId = serializer.readUnsignedByte();
-			ServerBoundMiddlePacket packetTransformer = dataRemapperRegistry.getTransformer(currentProtocol, packetId);
+			ServerBoundMiddlePacket packetTransformer = dataRemapperRegistry.getTransformer(channel.attr(ChannelUtils.CURRENT_PROTOCOL_KEY).get(), packetId);
 			if (packetTransformer != null) {
 				if (packetTransformer.needsPlayer()) {
 					packetTransformer.setPlayer(ChannelUtils.getBukkitPlayer(channel));
 				}
 				packetTransformer.readFromClientData(serializer);
-				RecyclableCollection<? extends Packet<?>> collection = packetTransformer.toNative();
-				try {
-					if (currentProtocol == EnumProtocol.PLAY) {
-						list.addAll(reorderer.orderPackets(collection));
-					} else {
-						list.addAll(collection);
-					}
-				} finally {
-					collection.recycle();
-				}
+				PacketCreator.addAllTo(reorderer.orderPackets(packetTransformer.toNative()), list);
+			} else {
+				throw new DecoderException("Missing packet decoder for packet " + packetId);
 			}
 		} catch (EOFSignal ex) {
 			serializer.resetReaderIndex();

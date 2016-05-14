@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import java.io.IOException;
 
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public abstract class MiddlePlayerListHeaderFooter<T> extends ClientBoundMiddlePacket<T> {
 
@@ -11,9 +11,9 @@ public abstract class MiddlePlayerListHeaderFooter<T> extends ClientBoundMiddleP
 	protected String footerJson;
 
 	@Override
-	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
-		headerJson = serializer.readString(Short.MAX_VALUE);
-		footerJson = serializer.readString(Short.MAX_VALUE);
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
+		headerJson = serializer.readString();
+		footerJson = serializer.readString();
 	}
 
 }

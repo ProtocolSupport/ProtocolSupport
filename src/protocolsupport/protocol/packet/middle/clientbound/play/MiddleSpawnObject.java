@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedObject;
 
 public abstract class MiddleSpawnObject<T> extends ClientBoundMiddlePacket<T> {
@@ -23,7 +23,7 @@ public abstract class MiddleSpawnObject<T> extends ClientBoundMiddlePacket<T> {
 	protected int motZ;
 
 	@Override
-	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
 		entityId = serializer.readVarInt();
 		uuid = serializer.readUUID();
 		type = serializer.readUnsignedByte();

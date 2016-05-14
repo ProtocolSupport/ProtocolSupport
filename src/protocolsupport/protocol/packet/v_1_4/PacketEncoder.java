@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.spigotmc.SneakyThrow;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.server.v1_9_R2.EnumProtocol;
@@ -75,12 +74,12 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4_1_5_1_6
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4_1_5_1_6_1_7_1_8.TimeUpdate;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4_1_5_1_6_1_7_1_8.WorldSound;
 import protocolsupport.protocol.pipeline.IPacketEncoder;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ChainedProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry;
-import protocolsupport.protocol.utils.registry.PacketIdTransformerRegistry;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry.InitCallBack;
+import protocolsupport.protocol.utils.registry.PacketIdTransformerRegistry;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -224,10 +223,11 @@ public class PacketEncoder implements IPacketEncoder {
 
 	protected final SharedStorage sharedstorage;
 	protected final LocalStorage storage = new LocalStorage();
-	private final PacketDataSerializer serverdata = new PacketDataSerializer(Unpooled.buffer(), ProtocolVersion.getLatest());
 	public PacketEncoder(SharedStorage sharedstorage) {
 		this.sharedstorage = sharedstorage;
 	}
+
+	private final ChainedProtocolSupportPacketDataSerializer middlebuffer = new ChainedProtocolSupportPacketDataSerializer();
 
 	@Override
 	public void encode(ChannelHandlerContext ctx, Packet<PacketListener> packet, ByteBuf output) throws Exception {
@@ -239,12 +239,12 @@ public class PacketEncoder implements IPacketEncoder {
 		}
 		ClientBoundMiddlePacket<RecyclableCollection<PacketData>> packetTransformer = dataRemapperRegistry.getTransformer(currentProtocol, packetId);
 		if (packetTransformer != null) {
-			serverdata.clear();
-			packet.b(serverdata);
+			middlebuffer.clear();
+			packet.b(middlebuffer.getNativeSerializer());
 			if (packetTransformer.needsPlayer()) {
 				packetTransformer.setPlayer(ChannelUtils.getBukkitPlayer(channel));
 			}
-			packetTransformer.readFromServerData(serverdata);
+			packetTransformer.readFromServerData(middlebuffer);
 			packetTransformer.handle();
 			RecyclableCollection<PacketData> data = packetTransformer.toData(ProtocolVersion.MINECRAFT_1_4_7);
 			try {
