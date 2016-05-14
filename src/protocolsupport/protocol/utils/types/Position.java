@@ -1,7 +1,5 @@
 package protocolsupport.protocol.utils.types;
 
-import net.minecraft.server.v1_9_R2.MathHelper;
-
 public class Position {
 
 	protected int x;
@@ -27,20 +25,11 @@ public class Position {
 	}
 
 	public long asLong() {
-		return ((getX() & i) << h) | ((getY() & j) << g) | (getZ() & k);
+		return ((getX() & 0x3FFFFFFL) << 38) | ((getY() & 0xFFFL) << 26) | (getZ() & 0x3FFFFFFL);
 	}
 
 	public static Position fromLong(long n) {
-		return new Position((int) ((n << (64 - h - c)) >> (64 - c)), (int) ((n << (64 - g - f)) >> (64 - f)), (int) ((n << (64 - d)) >> (64 - d)));
+		return new Position((int) (n >> 38), (int) ((n >> 26) & 0xFFF), (int) ((n << 38) >> 38));
 	}
-
-	private static int c = 1 + MathHelper.e(MathHelper.c(30000000));
-	private static int d = c;
-	private static int f = 64 - c - d;
-	private static int g = d;
-	private static int h = g + f;
-	private static long i = (1L << c) - 1L;
-	private static long j = (1L << f) - 1L;
-	private static long k = (1L << d) - 1L;
 
 }
