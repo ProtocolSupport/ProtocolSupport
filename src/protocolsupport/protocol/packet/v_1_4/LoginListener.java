@@ -6,6 +6,7 @@ import net.minecraft.server.v1_9_R2.MinecraftEncryption;
 import net.minecraft.server.v1_9_R2.NetworkManager;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
+import protocolsupport.protocol.pipeline.common.PacketDecrypter;
 
 public class LoginListener extends AbstractLoginListener {
 

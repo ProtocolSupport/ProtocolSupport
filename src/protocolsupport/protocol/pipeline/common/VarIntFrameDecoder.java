@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.v_1_8;
+package protocolsupport.protocol.pipeline.common;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import io.netty.handler.codec.CorruptedFrameException;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
 import protocolsupport.utils.netty.ChannelUtils;
 
-public class PacketSplitter implements IPacketSplitter {
+public class VarIntFrameDecoder implements IPacketSplitter {
 
 	private final byte[] array = new byte[3];
 

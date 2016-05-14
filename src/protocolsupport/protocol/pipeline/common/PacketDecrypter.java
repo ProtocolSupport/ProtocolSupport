@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.v_1_6;
+package protocolsupport.protocol.pipeline.common;
 
 import java.util.List;
 
@@ -11,11 +11,12 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 
 public class PacketDecrypter extends ByteToMessageDecoder {
 
-	private Cipher cipher;
-	private byte[] buffer;
+	private static final byte[] empty = new byte[0];
 
-	public PacketDecrypter(final Cipher cipher) {
-		buffer = new byte[0];
+	private Cipher cipher;
+	private byte[] buffer = empty;
+
+	public PacketDecrypter(Cipher cipher) {
 		this.cipher = cipher;
 	}
 
@@ -33,10 +34,10 @@ public class PacketDecrypter extends ByteToMessageDecoder {
 		return buffer;
 	}
 
-	protected ByteBuf decrypt(final ChannelHandlerContext ctx, final ByteBuf input) throws ShortBufferException {
-		final int readableBytes = input.readableBytes();
-		final byte[] bytes = readToBuffer(input);
-		final ByteBuf heapBuffer = ctx.alloc().heapBuffer(cipher.getOutputSize(readableBytes));
+	protected ByteBuf decrypt(ChannelHandlerContext ctx, ByteBuf input) throws ShortBufferException {
+		int readableBytes = input.readableBytes();
+		byte[] bytes = readToBuffer(input);
+		ByteBuf heapBuffer = ctx.alloc().heapBuffer(cipher.getOutputSize(readableBytes));
 		heapBuffer.writerIndex(cipher.update(bytes, 0, readableBytes, heapBuffer.array(), heapBuffer.arrayOffset()));
 		return heapBuffer;
 	}

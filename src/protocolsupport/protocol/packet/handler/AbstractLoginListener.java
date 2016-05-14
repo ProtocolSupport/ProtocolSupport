@@ -42,6 +42,8 @@ import net.minecraft.server.v1_9_R2.PacketLoginOutSuccess;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.events.PlayerLoginStartEvent;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
+import protocolsupport.protocol.pipeline.compression.PacketCompressor;
+import protocolsupport.protocol.pipeline.compression.PacketDecompressor;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
 
