@@ -20,9 +20,7 @@ public class WorldEvent extends MiddleWorldEvent<RecyclableCollection<PacketData
 		}
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_WORLD_EVENT_ID, version);
 		serializer.writeInt(effectId);
-		serializer.writeInt(position.getX());
-		serializer.writeByte(position.getY());
-		serializer.writeInt(position.getZ());
+		serializer.writeLegacyPositionB(position);
 		serializer.writeInt(data);
 		serializer.writeBoolean(disableRelative);
 		return RecyclableSingletonList.create(serializer);

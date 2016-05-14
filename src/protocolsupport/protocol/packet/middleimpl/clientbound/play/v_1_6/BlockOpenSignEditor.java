@@ -17,9 +17,7 @@ public class BlockOpenSignEditor extends MiddleBlockOpenSignEditor<RecyclableCol
 		}
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_SIGN_EDITOR_ID, version);
 		serializer.writeByte(0);
-		serializer.writeInt(position.getX());
-		serializer.writeInt(position.getY());
-		serializer.writeInt(position.getZ());
+		serializer.writeLegacyPositionI(position);
 		return RecyclableSingletonList.create(serializer);
 	}
 

@@ -159,6 +159,12 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 		writeInt(position.getZ());
 	}
 
+	public void writeLegacyPositionS(Position position) {
+		writeInt(position.getX());
+		writeShort(position.getY());
+		writeInt(position.getZ());
+	}
+
 	public void writeLegacyPositionI(Position position) {
 		writeInt(position.getX());
 		writeInt(position.getY());

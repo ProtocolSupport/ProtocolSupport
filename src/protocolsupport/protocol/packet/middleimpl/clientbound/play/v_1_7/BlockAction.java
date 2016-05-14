@@ -14,9 +14,7 @@ public class BlockAction extends MiddleBlockAction<RecyclableCollection<PacketDa
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_BLOCK_ACTION_ID, version);
-		serializer.writeInt(position.getX());
-		serializer.writeShort(position.getY());
-		serializer.writeInt(position.getZ());
+		serializer.writeLegacyPositionS(position);
 		serializer.writeByte(info1);
 		serializer.writeByte(info2);
 		serializer.writeVarInt(type);

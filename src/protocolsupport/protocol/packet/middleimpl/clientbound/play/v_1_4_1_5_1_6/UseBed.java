@@ -14,9 +14,7 @@ public class UseBed extends MiddleUseBed<RecyclableCollection<PacketData>> {
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_BED_ID, version);
 		serializer.writeInt(entityId);
 		serializer.writeByte(0);
-		serializer.writeInt(bed.getX());
-		serializer.writeByte(bed.getY());
-		serializer.writeInt(bed.getZ());
+		serializer.writeLegacyPositionB(bed);
 		return RecyclableSingletonList.create(serializer);
 	}
 
