@@ -7,6 +7,7 @@ import org.spigotmc.SneakyThrow;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.DecoderException;
 import net.minecraft.server.v1_9_R2.EnumProtocol;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.legacyremapper.LegacyAnimatePacketReorderer;
@@ -114,6 +115,8 @@ public class PacketDecoder implements IPacketDecoder {
 				}
 				packetTransformer.readFromClientData(serializer);
 				PacketCreator.addAllTo(reorderer.orderPackets(packetTransformer.toNative()), list);
+			} else {
+				throw new DecoderException("Missing packet decoder for packet " + packetId);
 			}
 		} catch (EOFSignal ex) {
 			serializer.resetReaderIndex();
