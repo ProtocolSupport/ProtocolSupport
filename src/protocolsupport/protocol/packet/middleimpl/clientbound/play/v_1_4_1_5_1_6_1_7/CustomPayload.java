@@ -7,7 +7,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middleimpl.PacketData;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.typeremapper.nbt.custompayload.CustomPayloadSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -18,7 +18,7 @@ public class CustomPayload extends MiddleCustomPayload<RecyclableCollection<Pack
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID, version);
 		serializer.writeString(tag);
-		CustomPayloadSerializer serverdata = new CustomPayloadSerializer(new PacketDataSerializer(Unpooled.wrappedBuffer(data), ProtocolVersion.getLatest()));
+		CustomPayloadSerializer serverdata = new CustomPayloadSerializer(new ProtocolSupportPacketDataSerializer(Unpooled.wrappedBuffer(data), ProtocolVersion.getLatest()));
 		CustomPayloadSerializer clientdata = new CustomPayloadSerializer(version);
 		if (tag.equals("MC|TrList")) {
 			clientdata.writeMerchantData(serverdata.readMerchantData());

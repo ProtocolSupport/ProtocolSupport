@@ -5,7 +5,7 @@ import java.util.EnumMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.server.v1_9_R2.Item;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
 import protocolsupport.utils.ProtocolVersionsHelper;
@@ -51,7 +51,7 @@ public class TileNBTTransformer {
 			new SpecificTransformer() {
 				@Override
 				public NBTTagCompoundWrapper transform(ProtocolVersion version, NBTTagCompoundWrapper input) {
-					PacketDataSerializer.transformSkull(input.unwrap());
+					ProtocolSupportPacketDataSerializer.transformSkull(input.unwrap());
 					return input;
 				}
 			},

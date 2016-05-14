@@ -15,8 +15,8 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.LegacyServerPingResponseEvent;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
-import protocolsupport.protocol.serializer.RecyclablePacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.RecyclableProtocolSupportPacketDataSerializer;
 import protocolsupport.utils.netty.ChannelUtils;
 
 @SuppressWarnings("deprecation")
@@ -25,7 +25,7 @@ public class LegacyLoginAndPingHandler extends SimpleChannelInboundHandler<ByteB
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf input) throws Exception {
-		RecyclablePacketDataSerializer serializer = RecyclablePacketDataSerializer.create(ProtocolVersion.MINECRAFT_LEGACY);
+		RecyclableProtocolSupportPacketDataSerializer serializer = RecyclableProtocolSupportPacketDataSerializer.create(ProtocolVersion.MINECRAFT_LEGACY);
 		try {
 			int packetId = input.readUnsignedByte();
 			if (packetId == 0xFE) {
@@ -36,17 +36,20 @@ public class LegacyLoginAndPingHandler extends SimpleChannelInboundHandler<ByteB
 				throw new DecoderException("Unknown packet id "+packetId + " in legacy login and ping handler");
 			}
 			ctx.channel().pipeline().firstContext().writeAndFlush(serializer).addListener(ChannelFutureListener.CLOSE);
+			serializer = null;
 		} finally {
-			serializer.release();
+			if (serializer != null) {
+				serializer.release();
+			}
 		}
 	}
 
-	private static void writeLoginKick(PacketDataSerializer serializer) {
+	private static void writeLoginKick(ProtocolSupportPacketDataSerializer serializer) {
 		serializer.writeByte(0xFF);
 		serializer.writeString("Outdated client");
 	}
 
-	private static void writePing(InetSocketAddress remoteAddress, PacketDataSerializer serializer) {
+	private static void writePing(InetSocketAddress remoteAddress, ProtocolSupportPacketDataSerializer serializer) {
 		ServerListPingEvent bevent = new ServerListPingEvent(
 			remoteAddress.getAddress(),
 			Bukkit.getMotd(), Bukkit.getOnlinePlayers().size(),

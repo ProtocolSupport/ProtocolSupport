@@ -8,11 +8,10 @@ import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import net.minecraft.server.v1_9_R2.PacketPlayOutPlayerListHeaderFooter;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
-import protocolsupport.protocol.serializer.RecyclablePacketDataSerializer;
+import protocolsupport.protocol.serializer.ChainedProtocolSupportPacketDataSerializer;
 
 public class TabAPI {
 
@@ -50,19 +49,15 @@ public class TabAPI {
 
 	public static void sendHeaderFooter(Player player, BaseComponent header, BaseComponent footer) {
 		Validate.notNull(player, "Player can't be null");
-		RecyclablePacketDataSerializer serializer = RecyclablePacketDataSerializer.create(ProtocolVersion.getLatest());
+		ChainedProtocolSupportPacketDataSerializer serializer = new ChainedProtocolSupportPacketDataSerializer();
+		serializer.writeString(ChatAPI.toJSON(header != null ? header : empty));
+		serializer.writeString(ChatAPI.toJSON(footer != null ? footer : empty));
+		PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
 		try {
-			serializer.writeString(ChatAPI.toJSON(header != null ? header : empty));
-			serializer.writeString(ChatAPI.toJSON(footer != null ? footer : empty));
-			PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
-			try {
-				packet.a(serializer);
-			} catch (IOException e) {
-			}
-			((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
-		} finally {
-			serializer.release();
+			packet.a(serializer.getNativeSerializer());
+		} catch (IOException e) {
 		}
+		((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
 	}
 
 }

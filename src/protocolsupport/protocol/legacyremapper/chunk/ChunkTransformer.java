@@ -3,13 +3,13 @@ package protocolsupport.protocol.legacyremapper.chunk;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.legacyremapper.chunk.blockstorage.BlockStorage;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.RemappingTable;
+import protocolsupport.utils.netty.ChannelUtils;
 
 public class ChunkTransformer {
 
@@ -24,7 +24,7 @@ public class ChunkTransformer {
 		this.hasSkyLight = hasSkyLight;
 		this.hasBiomeData = hasBiomeData;
 		this.sections.clear();
-		PacketDataSerializer chunkdata = new PacketDataSerializer(Unpooled.wrappedBuffer(data19), ProtocolVersion.getLatest());
+		ByteBuf chunkdata = Unpooled.wrappedBuffer(data19);
 		for (int i = 0; i < this.columnsCount; i++) {
 			this.sections.add(new ChunkSection(chunkdata, hasSkyLight));
 		}
@@ -112,17 +112,17 @@ public class ChunkTransformer {
 		protected final byte[] blocklight = new byte[2048];
 		protected final byte[] skylight = new byte[2048];
 
-		public ChunkSection(PacketDataSerializer datastream, boolean hasSkyLight) {
+		public ChunkSection(ByteBuf datastream, boolean hasSkyLight) {
 			byte bitsPerBlock = datastream.readByte();
 			int[] palette = globalpalette;
-			int palettelength = datastream.readVarInt();
+			int palettelength = ChannelUtils.readVarInt(datastream);
 			if (palettelength != 0) {
 				palette = new int[palettelength];
 				for (int i = 0; i < palette.length; i++) {
-					palette[i] = datastream.readVarInt();
+					palette[i] = ChannelUtils.readVarInt(datastream);
 				}
 			}
-			this.blockdata = BlockStorage.create(palette, bitsPerBlock, datastream.readVarInt());
+			this.blockdata = BlockStorage.create(palette, bitsPerBlock, ChannelUtils.readVarInt(datastream));
 			this.blockdata.readFromStream(datastream);
 			datastream.readBytes(blocklight);
 			if (hasSkyLight) {

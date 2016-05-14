@@ -8,9 +8,9 @@ import org.spigotmc.SneakyThrow;
 
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
-
+import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.RecyclablePacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBlockState;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
@@ -56,26 +56,22 @@ public class DataWatcherDeserializer {
 
 	public static TIntObjectMap<DataWatcherObject<?>> decodeData(byte[] data) throws IOException {
 		TIntObjectMap<DataWatcherObject<?>> map = new TIntObjectHashMap<DataWatcherObject<?>>(10, 0.5f, -1);
-		RecyclablePacketDataSerializer serializer = RecyclablePacketDataSerializer.create(ProtocolVersion.getLatest(), data);
-		try {
-			do {
-				int key = serializer.readUnsignedByte();
-				if (key == 0xFF) {
-					break;
-				}
-				int type = serializer.readUnsignedByte();
-				try {
-					DataWatcherObject<?> object = registry[type].newInstance();
-					object.readFromStream(serializer);
-					map.put(key, object);
-				} catch (Exception e) {
-					throw new IOException("Unable to decode datawatcher object", e);
-				}
-			} while (true);
-			return map;
-		} finally {
-			serializer.release();
-		}
+		ProtocolSupportPacketDataSerializer serializer = new ProtocolSupportPacketDataSerializer(Unpooled.wrappedBuffer(data), ProtocolVersion.getLatest());
+		do {
+			int key = serializer.readUnsignedByte();
+			if (key == 0xFF) {
+				break;
+			}
+			int type = serializer.readUnsignedByte();
+			try {
+				DataWatcherObject<?> object = registry[type].newInstance();
+				object.readFromStream(serializer);
+				map.put(key, object);
+			} catch (Exception e) {
+				throw new IOException("Unable to decode datawatcher object", e);
+			}
+		} while (true);
+		return map;
 	}
 
 }

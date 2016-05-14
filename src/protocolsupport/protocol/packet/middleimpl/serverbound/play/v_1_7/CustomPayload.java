@@ -5,9 +5,8 @@ import java.io.IOException;
 import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
-import protocolsupport.protocol.serializer.RecyclablePacketDataSerializer;
+import protocolsupport.protocol.serializer.RecyclableProtocolSupportPacketDataSerializer;
 import protocolsupport.utils.netty.ChannelUtils;
 
 public class CustomPayload extends MiddleCustomPayload {
@@ -15,8 +14,8 @@ public class CustomPayload extends MiddleCustomPayload {
 	@Override
 	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
 		tag = serializer.readString(20);
-		PacketDataSerializer olddata = new PacketDataSerializer(Unpooled.wrappedBuffer(serializer.readByteArray()), serializer.getVersion());
-		RecyclablePacketDataSerializer newdata = RecyclablePacketDataSerializer.create(ProtocolVersion.getLatest());
+		ProtocolSupportPacketDataSerializer olddata = new ProtocolSupportPacketDataSerializer(Unpooled.wrappedBuffer(serializer.readByteArray()), serializer.getVersion());
+		RecyclableProtocolSupportPacketDataSerializer newdata = RecyclableProtocolSupportPacketDataSerializer.create(ProtocolVersion.getLatest());
 		try {
 			if (tag.equals("MC|ItemName")) {
 				newdata.writeVarInt(olddata.readableBytes());

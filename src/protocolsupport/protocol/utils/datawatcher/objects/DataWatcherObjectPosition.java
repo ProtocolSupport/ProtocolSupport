@@ -1,12 +1,11 @@
 package protocolsupport.protocol.utils.datawatcher.objects;
 
-import net.minecraft.server.v1_9_R2.BlockPosition;
-
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.types.Position;
 
-public class DataWatcherObjectPosition extends DataWatcherObject<BlockPosition> {
+public class DataWatcherObjectPosition extends DataWatcherObject<Position> {
 
 	@Override
 	public int getTypeId(ProtocolVersion version) {
@@ -17,13 +16,13 @@ public class DataWatcherObjectPosition extends DataWatcherObject<BlockPosition> 
 	}
 
 	@Override
-	public void readFromStream(PacketDataSerializer serializer) {
-		value = BlockPosition.fromLong(serializer.readLong());
+	public void readFromStream(ProtocolSupportPacketDataSerializer serializer) {
+		value = serializer.readPosition();
 	}
 
 	@Override
-	public void writeToStream(PacketDataSerializer serializer) {
-		serializer.writeLong(value.asLong());
+	public void writeToStream(ProtocolSupportPacketDataSerializer serializer) {
+		serializer.writePosition(value);
 	}
 
 }

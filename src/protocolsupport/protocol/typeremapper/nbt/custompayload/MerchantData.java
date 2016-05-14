@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.server.v1_9_R2.ItemStack;
+import protocolsupport.protocol.utils.types.ItemStackWrapper;
 
 public class MerchantData {
 
@@ -28,13 +28,13 @@ public class MerchantData {
 	}
 
 	public static class TradeOffer {
-		private ItemStack itemstack1;
-		private ItemStack itemstack2;
-		private ItemStack result;
+		private ItemStackWrapper itemstack1;
+		private ItemStackWrapper itemstack2;
+		private ItemStackWrapper result;
 		private int uses;
 		private int maxuses;
 
-		public TradeOffer(ItemStack itemstack1, ItemStack itemstack2, ItemStack result, int uses, int maxuses) {
+		public TradeOffer(ItemStackWrapper itemstack1, ItemStackWrapper itemstack2, ItemStackWrapper result, int uses, int maxuses) {
 			this.itemstack1 = itemstack1;
 			this.result = result;
 			this.uses = uses;
@@ -42,19 +42,19 @@ public class MerchantData {
 			this.itemstack2 = itemstack2;
 		}
 
-		public ItemStack getItemStack1() {
+		public ItemStackWrapper getItemStack1() {
 			return itemstack1;
 		}
 
 		public boolean hasItemStack2() {
-			return itemstack2 != null;
+			return !itemstack2.isNull();
 		}
 
-		public ItemStack getItemStack2() {
+		public ItemStackWrapper getItemStack2() {
 			return itemstack2;
 		}
 
-		public ItemStack getResult() {
+		public ItemStackWrapper getResult() {
 			return result;
 		}
 

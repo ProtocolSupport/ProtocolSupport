@@ -1,12 +1,12 @@
 package protocolsupport.protocol.utils.datawatcher.objects;
 
-import net.minecraft.server.v1_9_R2.Vector3f;
+import org.bukkit.util.Vector;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 
-public class DataWatcherObjectVector3f extends DataWatcherObject<Vector3f> {
+public class DataWatcherObjectVector3f extends DataWatcherObject<Vector> {
 
 	@Override
 	public int getTypeId(ProtocolVersion version) {
@@ -14,15 +14,15 @@ public class DataWatcherObjectVector3f extends DataWatcherObject<Vector3f> {
 	}
 
 	@Override
-	public void readFromStream(PacketDataSerializer serializer) {
-		value = new Vector3f(serializer.readFloat(), serializer.readFloat(), serializer.readFloat());
+	public void readFromStream(ProtocolSupportPacketDataSerializer serializer) {
+		value = new Vector(serializer.readFloat(), serializer.readFloat(), serializer.readFloat());
 	}
 
 	@Override
-	public void writeToStream(PacketDataSerializer serializer) {
-		serializer.writeFloat(value.getX());
-		serializer.writeFloat(value.getY());
-		serializer.writeFloat(value.getZ());
+	public void writeToStream(ProtocolSupportPacketDataSerializer serializer) {
+		serializer.writeFloat((float) value.getX());
+		serializer.writeFloat((float) value.getY());
+		serializer.writeFloat((float) value.getZ());
 	}
 
 }

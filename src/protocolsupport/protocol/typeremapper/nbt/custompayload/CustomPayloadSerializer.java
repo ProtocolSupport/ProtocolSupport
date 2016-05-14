@@ -2,24 +2,23 @@ package protocolsupport.protocol.typeremapper.nbt.custompayload;
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_9_R2.ItemStack;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
-import protocolsupport.protocol.serializer.RecyclablePacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.RecyclableProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.typeremapper.nbt.custompayload.MerchantData.TradeOffer;
+import protocolsupport.protocol.utils.types.ItemStackWrapper;
 import protocolsupport.utils.netty.ChannelUtils;
 
-//TODO: Migrat to new packet data serializer
 public class CustomPayloadSerializer {
 
-	private final PacketDataSerializer serializer;
+	private final ProtocolSupportPacketDataSerializer serializer;
 
-	public CustomPayloadSerializer(PacketDataSerializer serializer) {
+	public CustomPayloadSerializer(ProtocolSupportPacketDataSerializer serializer) {
 		this.serializer = serializer;
 	}
 
 	public CustomPayloadSerializer(ProtocolVersion version) {
-		this.serializer = RecyclablePacketDataSerializer.create(version);
+		this.serializer = RecyclableProtocolSupportPacketDataSerializer.create(version);
 	}
 
 	public void copyAll(CustomPayloadSerializer another) {
@@ -30,9 +29,9 @@ public class CustomPayloadSerializer {
 		MerchantData merchdata = new MerchantData(serializer.readInt());
 		int count = serializer.readUnsignedByte();
 		for (int i = 0; i < count; i++) {
-			ItemStack itemstack1 = serializer.readItemStack();
-			ItemStack result = serializer.readItemStack();
-			ItemStack itemstack2 = null;
+			ItemStackWrapper itemstack1 = serializer.readItemStack();
+			ItemStackWrapper result = serializer.readItemStack();
+			ItemStackWrapper itemstack2 = new ItemStackWrapper();
 			if (serializer.readBoolean()) {
 				itemstack2 = serializer.readItemStack();
 			}

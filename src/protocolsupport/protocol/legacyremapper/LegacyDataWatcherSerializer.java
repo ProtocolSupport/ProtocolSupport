@@ -4,14 +4,14 @@ import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.TIntObjectMap;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.RecyclablePacketDataSerializer;
+import protocolsupport.protocol.serializer.RecyclableProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.utils.netty.ChannelUtils;
 
 public class LegacyDataWatcherSerializer {
 
 	public static byte[] encodeData(ProtocolVersion version, TIntObjectMap<DataWatcherObject<?>> objects) {
-		RecyclablePacketDataSerializer serializer = RecyclablePacketDataSerializer.create(version);
+		RecyclableProtocolSupportPacketDataSerializer serializer = RecyclableProtocolSupportPacketDataSerializer.create(version);
 		try {
 			if (!objects.isEmpty()) {
 				TIntObjectIterator<DataWatcherObject<?>> iterator = objects.iterator();

@@ -36,7 +36,6 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.ItemStackWriteEvent;
 import protocolsupport.protocol.legacyremapper.LegacyPotion;
-import protocolsupport.protocol.serializer.PacketDataSerializer.InternalItemStackWriteEvent;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
 import protocolsupport.protocol.typeskipper.id.SkippingTable;
@@ -88,6 +87,14 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 			varlong >>>= 7;
 		}
 		this.writeByte((int) varlong);
+	}
+
+	public <T extends Enum<T>> T readEnum(Class<T> clazz) {
+		return clazz.getEnumConstants()[readVarInt()];
+	}
+
+	public void writeEnum(Enum<?> e) {
+		writeVarInt(e.ordinal());
 	}
 
 	public UUID readUUID() {
@@ -341,6 +348,21 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 		try (DataOutputStream dataoutputstream = new DataOutputStream(new GZIPOutputStream(new ByteBufOutputStream(to)))) {
 			NBTCompressedStreamTools.a(nbttagcompound, (DataOutput) dataoutputstream);
 		}
+	}
+
+	public static class InternalItemStackWriteEvent extends ItemStackWriteEvent {
+
+		private final CraftItemStack wrapped;
+		public InternalItemStackWriteEvent(ProtocolVersion version, ItemStack original, ItemStack itemstack) {
+			super(version, CraftItemStack.asCraftMirror(original));
+			this.wrapped = CraftItemStack.asCraftMirror(itemstack);
+		}
+
+		@Override
+		public org.bukkit.inventory.ItemStack getResult() {
+			return wrapped;
+		}
+
 	}
 
 }
