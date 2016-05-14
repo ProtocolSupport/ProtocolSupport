@@ -1,5 +1,6 @@
 package protocolsupport.protocol.serializer;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.util.Recycler;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.utils.netty.Allocator;
@@ -23,6 +24,10 @@ public class RecyclableProtocolSupportPacketDataSerializer extends ProtocolSuppo
 	private RecyclableProtocolSupportPacketDataSerializer(Recycler.Handle handle) {
 		super(Allocator.allocateUnpooledBuffer(), null);
 		this.handle = handle;
+	}
+
+	@Override
+	public void setBuf(ByteBuf buf) {
 	}
 
 	@Override

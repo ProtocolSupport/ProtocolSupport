@@ -8,7 +8,6 @@ import org.spigotmc.SneakyThrow;
 
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
-import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBlockState;
@@ -54,9 +53,8 @@ public class DataWatcherDeserializer {
 		registry[constr.newInstance().getTypeId(ProtocolVersion.getLatest())] = constr;
 	}
 
-	public static TIntObjectMap<DataWatcherObject<?>> decodeData(byte[] data) throws IOException {
+	public static TIntObjectMap<DataWatcherObject<?>> decodeData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
 		TIntObjectMap<DataWatcherObject<?>> map = new TIntObjectHashMap<DataWatcherObject<?>>(10, 0.5f, -1);
-		ProtocolSupportPacketDataSerializer serializer = new ProtocolSupportPacketDataSerializer(Unpooled.wrappedBuffer(data), ProtocolVersion.getLatest());
 		do {
 			int key = serializer.readUnsignedByte();
 			if (key == 0xFF) {

@@ -2,6 +2,7 @@ package protocolsupport.protocol.packet.middleimpl;
 
 import java.util.Collection;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.util.Recycler;
 import net.minecraft.server.v1_9_R2.Packet;
 import net.minecraft.server.v1_9_R2.PacketDataSerializer;
@@ -49,6 +50,10 @@ public class PacketCreator extends ProtocolSupportPacketDataSerializer {
 			packet = null;
 			RECYCLER.recycle(this, handle);
 		}
+	}
+
+	@Override
+	public void setBuf(ByteBuf buf) {
 	}
 
 	@Override

@@ -10,7 +10,6 @@ import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedLiving;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.utils.netty.ChannelUtils;
 
 public abstract class MiddleSpawnLiving<T> extends ClientBoundMiddlePacket<T> {
 
@@ -43,7 +42,7 @@ public abstract class MiddleSpawnLiving<T> extends ClientBoundMiddlePacket<T> {
 		motX = serializer.readShort();
 		motY = serializer.readShort();
 		motZ = serializer.readShort();
-		metadata = DataWatcherDeserializer.decodeData(ChannelUtils.toArray(serializer));
+		metadata = DataWatcherDeserializer.decodeData(serializer);
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.util.Recycler;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
@@ -37,6 +38,10 @@ public class PacketData extends ProtocolSupportPacketDataSerializer {
 
 	public int getPacketId() {
 		return packetId;
+	}
+
+	@Override
+	public void setBuf(ByteBuf buf) {
 	}
 
 	@Override

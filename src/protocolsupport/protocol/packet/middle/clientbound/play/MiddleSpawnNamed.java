@@ -15,7 +15,6 @@ import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.utils.netty.ChannelUtils;
 
 public abstract class MiddleSpawnNamed<T> extends ClientBoundMiddlePacket<T> {
 
@@ -40,7 +39,7 @@ public abstract class MiddleSpawnNamed<T> extends ClientBoundMiddlePacket<T> {
 		z = serializer.readDouble();
 		yaw = serializer.readUnsignedByte();
 		pitch = serializer.readUnsignedByte();
-		metadata = DataWatcherDeserializer.decodeData(ChannelUtils.toArray(serializer));
+		metadata = DataWatcherDeserializer.decodeData(serializer);
 	}
 
 	@Override
