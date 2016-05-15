@@ -231,7 +231,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 				if (length < 0) {
 					return new NBTTagCompoundWrapper();
 				}
-				return new NBTTagCompoundWrapper(readLegacyNBT(new ByteBufInputStream(this), new NBTReadLimiter(2097152L)));
+				return new NBTTagCompoundWrapper(readLegacyNBT(new ByteBufInputStream(this, length), new NBTReadLimiter(2097152L)));
 			} else {
 				markReaderIndex();
 				if (readByte() == 0) {
