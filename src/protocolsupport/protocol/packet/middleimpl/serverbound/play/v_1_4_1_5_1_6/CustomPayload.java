@@ -14,7 +14,7 @@ public class CustomPayload extends MiddleCustomPayload {
 	@Override
 	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
 		tag = serializer.readString(20);
-		ProtocolSupportPacketDataSerializer olddata = new ProtocolSupportPacketDataSerializer(Unpooled.wrappedBuffer(serializer.readByteArray()), serializer.getVersion());
+		ProtocolSupportPacketDataSerializer olddata = new ProtocolSupportPacketDataSerializer(Unpooled.wrappedBuffer(serializer.readByteArray(Short.MAX_VALUE)), serializer.getVersion());
 		RecyclableProtocolSupportPacketDataSerializer newdata = RecyclableProtocolSupportPacketDataSerializer.create(ProtocolVersion.getLatest());
 		try {
 			if (tag.equals("MC|ItemName")) {
