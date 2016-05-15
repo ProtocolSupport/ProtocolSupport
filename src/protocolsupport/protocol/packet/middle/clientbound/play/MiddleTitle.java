@@ -19,11 +19,11 @@ public abstract class MiddleTitle<T> extends ClientBoundMiddlePacket<T> {
 		action = Action.values()[serializer.readVarInt()];
 		switch (action) {
 			case SET_TITLE: {
-				titleJson = serializer.readString(Short.MAX_VALUE);
+				titleJson = serializer.readString();
 				break;
 			}
 			case SET_SUBTITLE: {
-				subtitleJson = serializer.readString(Short.MAX_VALUE);
+				subtitleJson = serializer.readString();
 				break;
 			}
 			case SET_TIMES: {

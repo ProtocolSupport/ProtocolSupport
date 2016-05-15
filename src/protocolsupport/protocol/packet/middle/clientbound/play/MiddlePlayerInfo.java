@@ -51,7 +51,7 @@ public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {
 				}
 				case DISPLAY_NAME: {
 					if (serializer.readBoolean()) {
-						info.displayNameJson = serializer.readString(Short.MAX_VALUE);
+						info.displayNameJson = serializer.readString();
 					}
 					break;
 				}

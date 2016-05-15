@@ -16,7 +16,7 @@ public abstract class MiddleInventoryOpen<T> extends ClientBoundMiddlePacket<T> 
 	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		windowId = serializer.readUnsignedByte();
 		invname = serializer.readString(32);
-		titleJson = serializer.readString(Short.MAX_VALUE);
+		titleJson = serializer.readString();
 		slots = serializer.readUnsignedByte();
 		if (invname.equals("EntityHorse")) {
 			horseId = serializer.readInt();

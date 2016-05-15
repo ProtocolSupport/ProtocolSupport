@@ -13,7 +13,7 @@ public abstract class MiddleEncryptionRequest<T> extends ClientBoundMiddlePacket
 
 	@Override
 	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
-		serverId = serializer.readString(Short.MAX_VALUE);
+		serverId = serializer.readString();
 		publicKey = serializer.readByteArray();
 		verifyToken = serializer.readByteArray();
 	}

@@ -27,7 +27,7 @@ public class CustomPayload extends MiddleCustomPayload {
 				newdata.writeInt(olddata.readInt());
 				newdata.writeInt(olddata.readInt());
 				newdata.writeInt(olddata.readInt());
-				newdata.writeString(olddata.readString(Short.MAX_VALUE));
+				newdata.writeString(olddata.readString());
 				newdata.writeBoolean(true);
 			} else {
 				newdata.writeBytes(olddata);

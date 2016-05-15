@@ -9,7 +9,7 @@ public abstract class MiddleServerInfo<T> extends ClientBoundMiddlePacket<T> {
 
 	@Override
 	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		pingJson = serializer.readString(Short.MAX_VALUE);
+		pingJson = serializer.readString();
 	}
 
 }

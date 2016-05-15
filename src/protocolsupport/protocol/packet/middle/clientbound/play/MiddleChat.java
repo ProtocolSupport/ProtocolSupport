@@ -10,7 +10,7 @@ public abstract class MiddleChat<T> extends ClientBoundMiddlePacket<T> {
 
 	@Override
 	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		chatJson = serializer.readString(Short.MAX_VALUE);
+		chatJson = serializer.readString();
 		position = serializer.readByte();
 	}
 

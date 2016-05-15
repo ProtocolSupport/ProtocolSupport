@@ -13,7 +13,7 @@ public abstract class MiddleTabComplete<T> extends ClientBoundMiddlePacket<T> {
 	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
 		matches = new String[serializer.readVarInt()];
 		for (int i = 0; i < matches.length; i++) {
-			matches[i] = serializer.readString(Short.MAX_VALUE);
+			matches[i] = serializer.readString();
 		}
 	}
 

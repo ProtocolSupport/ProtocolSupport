@@ -14,7 +14,7 @@ public abstract class MiddleStatistics<T> extends ClientBoundMiddlePacket<T> {
 		statistics = new Statistic[serializer.readVarInt()];
 		for (int i = 0; i < statistics.length; i++) {
 			Statistic stat = new Statistic();
-			stat.name = serializer.readString(Short.MAX_VALUE);
+			stat.name = serializer.readString();
 			stat.value = serializer.readVarInt();
 			statistics[i] = stat;
 		}
