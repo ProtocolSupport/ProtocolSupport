@@ -42,20 +42,20 @@ public class ChannelUtils {
 	public static int readVarInt(ByteBuf from) {
 		int value = 0;
 		int length = 0;
-		byte b0;
+		byte part;
 		do {
-			b0 = from.readByte();
-			value |= (b0 & 0x7F) << (length++ * 7);
+			part = from.readByte();
+			value |= (part & 0x7F) << (length++ * 7);
 			if (length > 5) {
 				throw new RuntimeException("VarInt too big");
 			}
-		} while ((b0 & 0x80) == 0x80);
+		} while (part < 0);
 		return value;
 	}
 
 	public static void writeVarInt(ByteBuf to, int i) {
 		while ((i & 0xFFFFFF80) != 0x0) {
-			to.writeByte((i & 0x7F) | 0x80);
+			to.writeByte(i | 0x80);
 			i >>>= 7;
 		}
 		to.writeByte(i);
