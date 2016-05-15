@@ -12,9 +12,8 @@ public class SpawnPosition extends MiddleSpawnPosition<RecyclableCollection<Pack
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_SPAWN_POSITION_ID, version);
-		serializer.writeInt(position.getX());
-		serializer.writeInt(position.getY() + 1);
-		serializer.writeInt(position.getZ());
+		position.modifyY(1);
+		serializer.writeLegacyPositionI(position);
 		return RecyclableSingletonList.create(serializer);
 	}
 

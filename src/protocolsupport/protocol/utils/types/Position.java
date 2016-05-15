@@ -32,4 +32,16 @@ public class Position {
 		return new Position((int) (n >> 38), (int) ((n >> 26) & 0xFFF), (int) ((n << 38) >> 38));
 	}
 
+	public void modifyX(int cnt) {
+		x += cnt;
+	}
+
+	public void modifyY(int cnt) {
+		y += cnt;
+	}
+
+	public void modifyZ(int cnt) {
+		z += cnt;
+	}
+
 }
