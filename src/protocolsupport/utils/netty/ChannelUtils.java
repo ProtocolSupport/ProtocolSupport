@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
+import io.netty.handler.codec.DecoderException;
 import io.netty.util.AttributeKey;
 import net.minecraft.server.v1_9_R2.EntityPlayer;
 import net.minecraft.server.v1_9_R2.EnumProtocol;
@@ -47,7 +48,7 @@ public class ChannelUtils {
 			part = from.readByte();
 			value |= (part & 0x7F) << (length++ * 7);
 			if (length > 5) {
-				throw new RuntimeException("VarInt too big");
+				throw new DecoderException("VarInt too big");
 			}
 		} while (part < 0);
 		return value;

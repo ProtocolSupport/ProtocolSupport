@@ -3,37 +3,38 @@ package protocolsupport.protocol.pipeline.common;
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.CorruptedFrameException;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
-import protocolsupport.utils.netty.ChannelUtils;
 
 public class VarIntFrameDecoder implements IPacketSplitter {
 
-	private final byte[] array = new byte[3];
+	private int packetLength = -1;
 
 	@Override
 	public void split(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
-		input.markReaderIndex();
-        for (int i = 0; i < array.length; ++i) {
-            if (!input.isReadable()) {
-            	input.resetReaderIndex();
-                return;
-            }
-            array[i] = input.readByte();
-            if (array[i] >= 0) {
-                int length = ChannelUtils.readVarInt(Unpooled.wrappedBuffer(array));
-                if (input.readableBytes() < length) {
-                	input.resetReaderIndex();
-                    return;
-                } else {
-	                list.add(input.readBytes(length));
-	                return;
-                }
-            }
+		if (packetLength == -1) {
+			input.markReaderIndex();
+			int tmpPacketLength = 0;
+			for (int i = 0; i < 3; ++i) {
+				if (!input.isReadable()) {
+					input.resetReaderIndex();
+					return;
+				}
+				int part = input.readByte();
+				tmpPacketLength |= (part & 0x7F) << (i * 7);
+				if (part >= 0) {
+					packetLength = tmpPacketLength;
+					return;
+				}
+			}
+			throw new CorruptedFrameException("Packet length varint length is more than 21 bits");
+		}
+        if (input.readableBytes() < packetLength) {
+            return;
         }
-        throw new CorruptedFrameException("length wider than 21-bit");
+        list.add(input.readBytes(packetLength));
+        packetLength = -1;
 	}
 
 }
