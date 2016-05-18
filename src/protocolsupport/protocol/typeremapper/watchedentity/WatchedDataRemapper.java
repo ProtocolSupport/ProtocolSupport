@@ -23,10 +23,34 @@ public class WatchedDataRemapper {
 		for (MappingEntry entry : stype.getRemaps(to)) {
 			DataWatcherObject<?> object = originaldata.get(entry.getIdFrom());
 			if (object != null) {
-				transformed.put(entry.getIdTo(), entry.getValueRemapper().remap(object));
+				try {
+					DataWatcherObject<?> remapped = entry.getValueRemapper().remap(object);
+					remapped.getTypeId(to);
+					transformed.put(entry.getIdTo(), remapped);
+				} catch (Exception e) {
+					throw new MetadataRemapException(
+						"Unable to remap "+
+						"metadata(index: " + entry.getIdFrom() + ") "+
+						"for entity "+
+						"(id: " + entity.getId()+
+						", type: " + entity.getType() + ")"+
+						" to protocol version " + to
+						,e
+					);
+				}
 			}
 		}
 		return transformed;
+	}
+
+	public static class MetadataRemapException extends RuntimeException {
+
+		public MetadataRemapException(String string, Exception e) {
+			super(string, e);
+		}
+
+		private static final long serialVersionUID = 1L;
+		
 	}
 
 }
