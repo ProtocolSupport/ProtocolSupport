@@ -23,11 +23,14 @@ public class BasicInjector {
 	public static void inject() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		@SuppressWarnings("deprecation")
 		ServerConnection serverConnection = MinecraftServer.getServer().am();
+		List<NetworkManager> nmList = null;
+		try {
+			nmList = (List<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("pending")).get(serverConnection);
+		} catch (NoSuchFieldException e) {
+			nmList = (List<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("h")).get(serverConnection);
+		}
 		Field connectionsListField = ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("g"));
-		ChannelInjectList connectionsList = new ChannelInjectList(
-			((List<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("h")).get(serverConnection)),
-			(List<ChannelFuture>) connectionsListField.get(serverConnection)
-		);
+		ChannelInjectList connectionsList = new ChannelInjectList(nmList, (List<ChannelFuture>) connectionsListField.get(serverConnection));
 		connectionsListField.set(serverConnection, connectionsList);
 		connectionsList.injectExisting();
 	}
@@ -98,7 +101,9 @@ public class BasicInjector {
 				if (serverMainHandler == null) {
 					throw new IllegalStateException("Unable to find default netty channel initializer");
 				}
-				ReflectionUtils.setAccessible(serverMainHandler.getClass().getDeclaredField("childHandler")).set(serverMainHandler, new ServerConnectionChannel(networkManagersList));
+				ReflectionUtils
+				.setAccessible(serverMainHandler.getClass().getDeclaredField("childHandler"))
+				.set(serverMainHandler, new ServerConnectionChannel(new NetworkManagerList(networkManagersList)));
 			} catch (Exception e) {
 				SneakyThrow.sneaky(e);
 			}

@@ -1,7 +1,5 @@
 package protocolsupport.injector.network;
 
-import java.util.List;
-
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelException;
 import io.netty.channel.ChannelInitializer;
@@ -20,8 +18,8 @@ import protocolsupport.protocol.pipeline.wrapped.WrappedSplitter;
 
 public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 
-	private final List<NetworkManager> networkManagers;
-	public ServerConnectionChannel(List<NetworkManager> networkManagers) {
+	private final NetworkManagerList networkManagers;
+	public ServerConnectionChannel(NetworkManagerList networkManagers) {
 		this.networkManagers = networkManagers;
 	}
 
