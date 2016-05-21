@@ -8,11 +8,10 @@ ProtocolSupport
 
 Support 1.9, 1.8, 1.7, 1.6, 1.5, 1.4.7 on spigot 1.9.4
 
-Not complete yet, use with caution.
-
 Wontfix issues:
+* [Anything that is not latest] Items in creative mode may not work as expected, or may not work at all
+* [1.8 and earlier] Can't control vehicle
 * [1.6 and earlier] Stats are not sent
-* [1.5 and earlier] Can't control vehicle
 
 ================
 
