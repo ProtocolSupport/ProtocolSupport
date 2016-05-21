@@ -1,7 +1,6 @@
 package protocolsupport.protocol.legacyremapper.chunk;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -16,17 +15,16 @@ public class ChunkTransformer {
 	protected int columnsCount;
 	protected boolean hasSkyLight;
 	protected boolean hasBiomeData;
-	protected final ArrayList<ChunkSection> sections = new ArrayList<ChunkSection>(32);
+	protected final ChunkSection[] sections = new ChunkSection[16];
 	protected final byte[] biomeData = new byte[256];
 
 	public void loadData(byte[] data19, int bitmap, boolean hasSkyLight, boolean hasBiomeData) {
 		this.columnsCount = Integer.bitCount(bitmap);
 		this.hasSkyLight = hasSkyLight;
 		this.hasBiomeData = hasBiomeData;
-		this.sections.clear();
 		ByteBuf chunkdata = Unpooled.wrappedBuffer(data19);
 		for (int i = 0; i < this.columnsCount; i++) {
-			this.sections.add(new ChunkSection(chunkdata, hasSkyLight));
+			sections[i] = new ChunkSection(chunkdata, hasSkyLight);
 		}
 		if (hasBiomeData) {
 			chunkdata.readBytes(biomeData);
@@ -40,7 +38,8 @@ public class ChunkTransformer {
 		int blockDataIndex = 4096 * columnsCount;
 		int blockLightIndex = 6144 * columnsCount;
 		int skyLightIndex = 8192 * columnsCount;
-		for (ChunkSection section : this.sections) {
+		for (int i = 0; i < columnsCount; i++) {
+			ChunkSection section = sections[i];
 			BlockStorage storage = section.blockdata;
 			int blockdataacc = 0;
 			for (int block = 0; block < 4096; block++) {
@@ -76,7 +75,8 @@ public class ChunkTransformer {
 		int blockIdIndex = 0;
 		int blockLightIndex = 8192 * columnsCount;
 		int skyLightIndex = 10240 * columnsCount;
-		for (ChunkSection section : this.sections) {
+		for (int i = 0; i < columnsCount; i++) {
+			ChunkSection section = sections[i];
 			BlockStorage storage = section.blockdata;
 			for (int block = 0; block < 4096; block++) {
 				int dataindex = blockIdIndex + (block << 1);

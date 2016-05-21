@@ -299,10 +299,12 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 			}
 			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9) && item instanceof ItemPotion) {
 				String potion = nbttagcompound.getString("Potion");
-				itemstack.setData(LegacyPotion.toLegacyId(potion, item != Items.POTION));
-				String basicTypeName = LegacyPotion.getBasicTypeName(potion);
-				if (basicTypeName != null) {
-					itemstack.c(basicTypeName);
+				if (!potion.isEmpty()) {
+					itemstack.setData(LegacyPotion.toLegacyId(potion, item != Items.POTION));
+					String basicTypeName = LegacyPotion.getBasicTypeName(potion);
+					if (basicTypeName != null) {
+						itemstack.c(basicTypeName);
+					}
 				}
 			}
 			if (nbttagcompound.hasKeyOfType("ench", 9)) {
