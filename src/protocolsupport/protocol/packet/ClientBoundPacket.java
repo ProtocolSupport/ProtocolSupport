@@ -11,6 +11,7 @@ import net.minecraft.server.v1_9_R2.EnumProtocolDirection;
 import net.minecraft.server.v1_9_R2.Packet;
 import net.minecraft.server.v1_9_R2.PacketLoginOutDisconnect;
 import net.minecraft.server.v1_9_R2.PacketLoginOutEncryptionBegin;
+import net.minecraft.server.v1_9_R2.PacketLoginOutSetCompression;
 import net.minecraft.server.v1_9_R2.PacketLoginOutSuccess;
 import net.minecraft.server.v1_9_R2.PacketPlayOutAbilities;
 import net.minecraft.server.v1_9_R2.PacketPlayOutAnimation;
@@ -91,6 +92,7 @@ public class ClientBoundPacket {
 	public static final int LOGIN_DISCONNECT_ID = getId(PacketLoginOutDisconnect.class);
 	public static final int LOGIN_ENCRYPTION_BEGIN_ID = getId(PacketLoginOutEncryptionBegin.class);
 	public static final int LOGIN_SUCCESS_ID = getId(PacketLoginOutSuccess.class);
+	public static final int LOGIN_SET_COMPRESSION_ID = getId(PacketLoginOutSetCompression.class);
 	public static final int STATUS_SERVER_INFO_ID = getId(PacketStatusOutServerInfo.class);
 	public static final int STATUS_PONG_ID = getId(PacketStatusOutPong.class);
 	public static final int PLAY_KEEP_ALIVE_ID = getId(PacketPlayOutKeepAlive.class);

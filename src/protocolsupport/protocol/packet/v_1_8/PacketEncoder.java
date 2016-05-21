@@ -18,6 +18,7 @@ import protocolsupport.protocol.packet.middleimpl.PacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_1_4_1_5_1_6_1_7_1_8.EncryptionRequest;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_1_7_1_8.LoginDisconnect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_1_7_1_8.LoginSuccess;
+import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_1_8.SetCompression;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4_1_5_1_6_1_7_1_8.EntityStatus;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4_1_5_1_6_1_7_1_8.InventoryClose;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4_1_5_1_6_1_7_1_8.InventoryConfirmTransaction;
@@ -108,6 +109,7 @@ public class PacketEncoder implements IPacketEncoder {
 		packetIdRegistry.register(EnumProtocol.LOGIN, ClientBoundPacket.LOGIN_DISCONNECT_ID, 0x00);
 		packetIdRegistry.register(EnumProtocol.LOGIN, ClientBoundPacket.LOGIN_ENCRYPTION_BEGIN_ID, 0x01);
 		packetIdRegistry.register(EnumProtocol.LOGIN, ClientBoundPacket.LOGIN_SUCCESS_ID, 0x02);
+		packetIdRegistry.register(EnumProtocol.LOGIN, ClientBoundPacket.LOGIN_SET_COMPRESSION_ID, 0x03);
 		packetIdRegistry.register(EnumProtocol.STATUS, ClientBoundPacket.STATUS_SERVER_INFO_ID, 0x00);
 		packetIdRegistry.register(EnumProtocol.STATUS, ClientBoundPacket.STATUS_PONG_ID, 0x01);
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_KEEP_ALIVE_ID, 0x00);
@@ -187,6 +189,7 @@ public class PacketEncoder implements IPacketEncoder {
 			registry.register(EnumProtocol.LOGIN, ClientBoundPacket.LOGIN_SUCCESS_ID, LoginSuccess.class);
 			registry.register(EnumProtocol.LOGIN, ClientBoundPacket.LOGIN_ENCRYPTION_BEGIN_ID, EncryptionRequest.class);
 			registry.register(EnumProtocol.LOGIN, ClientBoundPacket.LOGIN_DISCONNECT_ID, LoginDisconnect.class);
+			registry.register(EnumProtocol.LOGIN, ClientBoundPacket.LOGIN_SET_COMPRESSION_ID, SetCompression.class);
 			registry.register(EnumProtocol.STATUS, ClientBoundPacket.STATUS_SERVER_INFO_ID, ServerInfo.class);
 			registry.register(EnumProtocol.STATUS, ClientBoundPacket.STATUS_PONG_ID, Pong.class);
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_KEEP_ALIVE_ID, KeepAlive.class);
