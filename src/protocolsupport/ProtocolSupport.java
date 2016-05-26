@@ -27,18 +27,18 @@ public class ProtocolSupport extends JavaPlugin {
 		try {
 			Allocator.init();
 			Compressor.init();
-			ServerBoundPacket.class.getName();
-			ClientBoundPacket.class.getName();
+			ServerBoundPacket.init();
+			ClientBoundPacket.init();
 			InitialPacketDecoder.init();
 			AbstractLoginListener.init();
-			LegacySound.class.getName();
-			IdRemapper.class.getName();
-			IdSkipper.class.getName();
-			StringSkipper.class.getName();
-			SpecificRemapper.class.getName();
+			LegacySound.init();
+			IdSkipper.init();
+			StringSkipper.init();
+			SpecificRemapper.init();
 			ServerInjector.inject();
 			NettyInjector.inject();
 			ReloadCommandRemover.remove();
+			IdRemapper.init();
 		} catch (Throwable t) {
 			t.printStackTrace();
 			Bukkit.shutdown();

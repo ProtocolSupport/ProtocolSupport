@@ -2,141 +2,135 @@ package protocolsupport.protocol.typeremapper.id;
 
 import org.bukkit.Material;
 
+import net.minecraft.server.v1_9_R2.Block;
+import net.minecraft.server.v1_9_R2.MinecraftServer;
+import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.remapper.BlockRemapperControl;
 import protocolsupport.utils.ProtocolVersionsHelper;
+import protocolsupport.utils.ReflectionUtils;
 
 public class IdRemapper {
-
-	public static void init() {
-	}
 
 	public static final RemappingRegistry BLOCK = new RemappingRegistry() {
 		{
 			registerRemapEntry(Material.CHORUS_FLOWER, Material.WOOD, ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry(Material.CHORUS_PLANT, Material.WOOD, ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry(Material.END_GATEWAY, Material.ENDER_PORTAL, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(Material.END_ROD, Material.GLOWSTONE, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.END_ROD, Material.GLOWSTONE, 0, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Material.PURPUR_PILLAR, Material.STONE, 0, ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry(Material.END_BRICKS, Material.ENDER_STONE, ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry(Material.FROSTED_ICE, Material.ICE, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(Material.GRASS_PATH, Material.GRASS, ProtocolVersionsHelper.BEFORE_1_9);
+			//TODO: change grass path strength
+			registerRemapEntry(Material.GRASS_PATH, Material.SOIL, ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry(Material.PURPUR_BLOCK, Material.STONE, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(Material.PURPUR_PILLAR, Material.STONE, ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry(Material.PURPUR_STAIRS, Material.COBBLESTONE_STAIRS, ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry(Material.PURPUR_SLAB, Material.STONE_SLAB2, ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry(Material.PURPUR_DOUBLE_SLAB, Material.DOUBLE_STONE_SLAB2, ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry(Material.STRUCTURE_BLOCK, Material.BEDROCK, ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry(Material.BEETROOT_BLOCK, Material.CROPS, ProtocolVersionsHelper.BEFORE_1_9);
-			// slime -> emerald block
-			registerRemapEntry(165, 133, ProtocolVersionsHelper.BEFORE_1_8);
-			// barrier -> glass
-			registerRemapEntry(166, 20, ProtocolVersionsHelper.BEFORE_1_8);
-			// iron trapdoor -> trapdoor
-			registerRemapEntry(167, 96, ProtocolVersionsHelper.BEFORE_1_8);
-			// prismarine -> mossy cobblestone
-			registerRemapEntry(168, 48, ProtocolVersionsHelper.BEFORE_1_8);
-			// sea lantern -> glowstone
-			registerRemapEntry(169, 89, ProtocolVersionsHelper.BEFORE_1_8);
-			// standing banner -> standing sign
-			registerRemapEntry(176, 63, ProtocolVersionsHelper.BEFORE_1_8);
-			// wall banner -> wall sign
-			registerRemapEntry(177, 68, ProtocolVersionsHelper.BEFORE_1_8);
-			// red sandstone -> sandstone
-			registerRemapEntry(179, 24, ProtocolVersionsHelper.BEFORE_1_8);
-			// red sandstone stairs -> sandstone stairs
-			registerRemapEntry(180, 128, ProtocolVersionsHelper.BEFORE_1_8);
-			// red sandstone doubleslab -> double step
-			registerRemapEntry(181, 43, ProtocolVersionsHelper.BEFORE_1_8);
-			// red sandstone slab -> step
-			registerRemapEntry(182, 44, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.SLIME_BLOCK, Material.EMERALD_BLOCK, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.BARRIER, Material.GLASS, ProtocolVersionsHelper.BEFORE_1_8);
+			//TODO: remap with something that has more strength
+			registerRemapEntry(Material.IRON_TRAPDOOR, Material.TRAP_DOOR, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.PRISMARINE, Material.MOSSY_COBBLESTONE, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.SEA_LANTERN, Material.GLOWSTONE, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.STANDING_BANNER, Material.SIGN_POST, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.WALL_BANNER, Material.WALL_SIGN, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.RED_SANDSTONE, Material.SANDSTONE, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.RED_SANDSTONE_STAIRS, Material.SANDSTONE_STAIRS, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.DOUBLE_STONE_SLAB2, Material.DOUBLE_STEP, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.STONE_SLAB2, Material.STEP, ProtocolVersionsHelper.BEFORE_1_8);
 			// all fence gates -> fence gate
-			registerRemapEntry(183, 107, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(184, 107, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(185, 107, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(186, 107, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(187, 107, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.SPRUCE_FENCE_GATE, Material.FENCE_GATE, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.BIRCH_FENCE_GATE, Material.FENCE_GATE, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.JUNGLE_FENCE_GATE, Material.FENCE_GATE, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.DARK_OAK_FENCE_GATE, Material.FENCE_GATE, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.ACACIA_FENCE_GATE, Material.FENCE_GATE, ProtocolVersionsHelper.BEFORE_1_8);
 			// all fences -> fence
-			registerRemapEntry(188, 85, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(189, 85, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(190, 85, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(191, 85, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(192, 85, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.SPRUCE_FENCE, Material.FENCE, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.BIRCH_FENCE, Material.FENCE, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.JUNGLE_FENCE, Material.FENCE, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.DARK_OAK_FENCE, Material.FENCE, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.ACACIA_FENCE, Material.FENCE, ProtocolVersionsHelper.BEFORE_1_8);
 			// all doors -> door
-			registerRemapEntry(193, 64, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(194, 64, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(195, 64, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(196, 64, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(197, 64, ProtocolVersionsHelper.BEFORE_1_8);
-			// inverted daylight detector -> daylight detector
-			registerRemapEntry(178, 151, ProtocolVersionsHelper.BEFORE_1_8);
-			// stained glass -> glass
-			registerRemapEntry(95, 20, ProtocolVersionsHelper.BEFORE_1_7);
-			// stained glass pane -> glass pane
-			registerRemapEntry(160, 102, ProtocolVersionsHelper.BEFORE_1_7);
-			// leaves2 -> leaves
-			registerRemapEntry(161, 18, ProtocolVersionsHelper.BEFORE_1_7);
-			// log2 -> log
-			registerRemapEntry(162, 17, ProtocolVersionsHelper.BEFORE_1_7);
-			// acacia stairs -> oak stairs
-			registerRemapEntry(163, 53, ProtocolVersionsHelper.BEFORE_1_7);
-			// dark oak stairs -> oak stairs
-			registerRemapEntry(164, 53, ProtocolVersionsHelper.BEFORE_1_7);
-			// tall plant -> yellow flower
-			registerRemapEntry(175, 38, ProtocolVersionsHelper.BEFORE_1_7);
-			// packed ice -> snow
-			registerRemapEntry(174, 80, ProtocolVersionsHelper.BEFORE_1_7);
-			// stained clay -> stone
-			registerRemapEntry(159, 1, ProtocolVersionsHelper.BEFORE_1_6);
-			// hay bale -> stone
-			registerRemapEntry(170, 1, ProtocolVersionsHelper.BEFORE_1_6);
-			// carpet -> stone pressure plate
-			registerRemapEntry(171, 70, ProtocolVersionsHelper.BEFORE_1_6);
-			// hardened clay -> clay
-			registerRemapEntry(172, 82, ProtocolVersionsHelper.BEFORE_1_6);
-			// coal block -> stone
-			registerRemapEntry(173, 1, ProtocolVersionsHelper.BEFORE_1_6);
-			// dropper -> stone
-			registerRemapEntry(178, 1, ProtocolVersionsHelper.BEFORE_1_5);
-			// hopper -> stone
-			registerRemapEntry(154, 1, ProtocolVersionsHelper.BEFORE_1_5);
-			// quartz -> snow
-			registerRemapEntry(155, 80, ProtocolVersionsHelper.BEFORE_1_5);
-			// quartz stairs -> stairs
-			registerRemapEntry(156, 109, ProtocolVersionsHelper.BEFORE_1_5);
-			// quartz slab -> slab
-			registerRemapEntry(156, 44, ProtocolVersionsHelper.BEFORE_1_5);
-			// inverted daylight detector -> stone
-			registerRemapEntry(178, 1, ProtocolVersionsHelper.BEFORE_1_5);
-			// daylight detector -> slab
-			registerRemapEntry(151, 44, ProtocolVersionsHelper.BEFORE_1_5);
-			// trapped chest -> chest
-			registerRemapEntry(146, 54, ProtocolVersionsHelper.BEFORE_1_5);
-			// redstone block -> glowing redstone ore
-			registerRemapEntry(146, 73, ProtocolVersionsHelper.BEFORE_1_5);
-			// activator rail -> some other rail
-			registerRemapEntry(157, 28, ProtocolVersionsHelper.BEFORE_1_5);
-			// nether quartz ore -> nettherrack
-			registerRemapEntry(153, 87, ProtocolVersionsHelper.BEFORE_1_5);
-			// wpressure plate light -> wood pressure plate
-			registerRemapEntry(147, 72, ProtocolVersionsHelper.BEFORE_1_5);
-			// wpressure plate heavy -> stone pressure plate
-			registerRemapEntry(148, 70, ProtocolVersionsHelper.BEFORE_1_5);
-			// redstone comparator -> repeater
-			registerRemapEntry(149, 93, ProtocolVersionsHelper.BEFORE_1_5);
+			registerRemapEntry(Material.SPRUCE_DOOR, Material.WOODEN_DOOR, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.BIRCH_DOOR, Material.WOODEN_DOOR, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.JUNGLE_DOOR, Material.WOODEN_DOOR, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.ACACIA_DOOR, Material.WOODEN_DOOR, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.DARK_OAK_DOOR, Material.WOODEN_DOOR, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.DAYLIGHT_DETECTOR_INVERTED, Material.DAYLIGHT_DETECTOR, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.STAINED_GLASS, Material.GLASS, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(Material.STAINED_GLASS_PANE, Material.THIN_GLASS, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(Material.LEAVES_2, Material.LEAVES, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(Material.LOG_2, Material.LOG, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(Material.ACACIA_STAIRS, Material.WOOD_STAIRS, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(Material.DARK_OAK_STAIRS, Material.WOOD_STAIRS, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(Material.DOUBLE_PLANT, Material.YELLOW_FLOWER, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(Material.PACKED_ICE, Material.WOOL, 3, ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry(Material.STAINED_CLAY, Material.STONE, ProtocolVersionsHelper.BEFORE_1_6);
+			registerRemapEntry(Material.HAY_BLOCK, Material.STONE, ProtocolVersionsHelper.BEFORE_1_6);
+			//TODO: see if remapping to trapdoor is better
+			registerRemapEntry(Material.CARPET, Material.STONE_PLATE, ProtocolVersionsHelper.BEFORE_1_6);
+			registerRemapEntry(Material.HARD_CLAY, Material.STONE, ProtocolVersionsHelper.BEFORE_1_6);
+			registerRemapEntry(Material.COAL_BLOCK, Material.STONE, ProtocolVersionsHelper.BEFORE_1_6);
+			//TODO: remap with something that has more strength
+			registerRemapEntry(Material.DROPPER, Material.STONE, ProtocolVersionsHelper.BEFORE_1_5);
+			//TODO: remap with something that has more strength
+			registerRemapEntry(Material.HOPPER, Material.STONE, ProtocolVersionsHelper.BEFORE_1_5);
+			registerRemapEntry(Material.QUARTZ, Material.STONE, ProtocolVersionsHelper.BEFORE_1_5);
+			registerRemapEntry(Material.QUARTZ_STAIRS, Material.SMOOTH_STAIRS, ProtocolVersionsHelper.BEFORE_1_5);
+			//TODO: why the fuck it is mapped to stone instead of step?
+			registerRemapEntry(Material.DAYLIGHT_DETECTOR_INVERTED, Material.STONE, ProtocolVersionsHelper.BEFORE_1_5);
+			registerRemapEntry(Material.DAYLIGHT_DETECTOR, Material.STEP, ProtocolVersionsHelper.BEFORE_1_5);
+			registerRemapEntry(Material.TRAPPED_CHEST, Material.CHEST, ProtocolVersionsHelper.BEFORE_1_5);
+			//TODO: remap with something that has more strength
+			registerRemapEntry(Material.REDSTONE_BLOCK, Material.GLOWING_REDSTONE_ORE, ProtocolVersionsHelper.BEFORE_1_5);
+			registerRemapEntry(Material.ACTIVATOR_RAIL, Material.DETECTOR_RAIL, ProtocolVersionsHelper.BEFORE_1_5);
+			//TODO: remap with something that has more strength
+			registerRemapEntry(Material.QUARTZ_ORE, Material.NETHERRACK, ProtocolVersionsHelper.BEFORE_1_5);
+			registerRemapEntry(Material.GOLD_PLATE, Material.STONE_PLATE, ProtocolVersionsHelper.BEFORE_1_5);
+			registerRemapEntry(Material.IRON_PLATE, Material.STONE_PLATE, ProtocolVersionsHelper.BEFORE_1_5);
+			registerRemapEntry(Material.REDSTONE_COMPARATOR_OFF, Material.DIODE_BLOCK_OFF, ProtocolVersionsHelper.BEFORE_1_5);
+			registerRemapEntry(Material.REDSTONE_COMPARATOR_ON, Material.DIODE_BLOCK_ON, ProtocolVersionsHelper.BEFORE_1_5);
 		}
 		@SuppressWarnings("deprecation")
 		protected void registerRemapEntry(Material from, Material to, ProtocolVersion... versions) {
-			registerRemapEntry(from.getId(), to.getId(), versions);
-		}
-		public void registerRemapEntry(int from, int to, ProtocolVersion... versions) {
 			for (int i = 0; i < 16; i++) {
-				super.registerRemapEntry((from << 4) + i, (to << 4) + i, versions);
+				registerRemapEntry((from.getId() << 4) + i, (to.getId() << 4) + i, versions);
+			}
+		}
+		@SuppressWarnings("deprecation")
+		protected void registerRemapEntry(Material matFrom, Material matTo, int dataTo, ProtocolVersion... versions) {
+			for (int i = 0; i < 16; i++) {
+				registerRemapEntry((matFrom.getId() << 4), (matTo.getId() << 4) + (dataTo & 0xF), versions);
 			}
 		}
 		@Override
 		protected RemappingTable createTable() {
-			return new RemappingTable(4096 * 16);
+			return new RemappingTable(4096 * 16) {
+				@SuppressWarnings("deprecation")
+				@Override
+				public void setRemap(int from, int to) {
+					super.setRemap(from, to);
+					int blockIdFrom = from >> 4;
+					int blockIdTo = to >> 4;
+					Block blockFrom = Block.getById(blockIdFrom);
+					Block blockTo = Block.getById(blockIdTo);
+					try {
+						float strengthFrom = ReflectionUtils.getField(Block.class, "strength").getFloat(blockFrom);
+						float strengthTo = ReflectionUtils.getField(Block.class, "strength").getFloat(blockTo);
+						if (strengthTo < strengthFrom) {
+							ProtocolSupport.logWarning("Block remapper warning: strength of block " + Material.getMaterial(blockIdTo) + " is less than strength of block with id " +  Material.getMaterial(blockIdFrom));
+						}
+					} catch (IllegalArgumentException | IllegalAccessException e) {
+						if (MinecraftServer.getServer().isDebugging()) {
+							e.printStackTrace();
+						}
+					}
+				}
+			};
 		}
 	};
 
@@ -331,5 +325,8 @@ public class IdRemapper {
 			return new RemappingTable.HashRemappingTable();
 		}
 	};
+
+	public static void init() {
+	}
 
 }

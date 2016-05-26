@@ -13,4 +13,7 @@ public class StringSkipper {
 		}
 	};
 
+	public static void init() {
+	}
+
 }

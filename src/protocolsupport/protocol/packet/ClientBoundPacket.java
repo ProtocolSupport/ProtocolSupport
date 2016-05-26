@@ -186,4 +186,7 @@ public class ClientBoundPacket {
 		return idMap.get(EnumProtocolDirection.CLIENTBOUND).inverse().get(packetClass);
 	}
 
+	public static void init() {
+	}
+
 }
