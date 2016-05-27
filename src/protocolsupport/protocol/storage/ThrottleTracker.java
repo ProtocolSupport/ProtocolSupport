@@ -1,41 +1,32 @@
 package protocolsupport.protocol.storage;
 
 import java.net.InetAddress;
+import java.util.concurrent.TimeUnit;
 
-import gnu.trove.iterator.TObjectLongIterator;
-import gnu.trove.map.hash.TObjectLongHashMap;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+
 import net.minecraft.server.v1_9_R2.MinecraftServer;
+import protocolsupport.utils.Utils;
 
 public class ThrottleTracker {
 
-	private static final TObjectLongHashMap<InetAddress> tracker = new TObjectLongHashMap<InetAddress>();
 	@SuppressWarnings("deprecation")
 	private static final long time = MinecraftServer.getServer().server.getConnectionThrottle();
+
+	private static final Cache<InetAddress, Boolean> tracker = CacheBuilder.newBuilder()
+	.concurrencyLevel(Utils.getJavaPropertyValue("io.netty.eventLoopThreads", Runtime.getRuntime().availableProcessors(), Utils.Converter.STRING_TO_INT))
+	.expireAfterWrite(time, TimeUnit.MILLISECONDS)
+	.build();
 
 	public static boolean isEnabled() {
 		return time > 0;
 	}
 
-	public static void track(InetAddress address, long time) {
-		synchronized (tracker) {
-			tracker.put(address, time);
-			if (tracker.size() > 100) {
-				long currentTime = System.currentTimeMillis();
-				TObjectLongIterator<InetAddress> iterator = tracker.iterator();
-				while (iterator.hasNext()) {
-					iterator.advance();
-					if ((currentTime - iterator.value()) < time) {
-						iterator.remove();
-					}
-				}
-			}
-		}
-	}
-
-	public static boolean isThrottled(InetAddress address) {
-		synchronized (tracker) {
-			return tracker.containsKey(address) && ((System.currentTimeMillis() - tracker.get(address)) < time);
-		}
+	public static boolean throttle(InetAddress address) {
+		boolean result = tracker.getIfPresent(address) != null;
+		tracker.put(address, Boolean.TRUE);
+		return result;
 	}
 
 }

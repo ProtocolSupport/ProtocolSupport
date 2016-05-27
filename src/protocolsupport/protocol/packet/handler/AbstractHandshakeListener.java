@@ -49,7 +49,7 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 				try {
 					final InetAddress address = ((InetSocketAddress) networkManager.getSocketAddress()).getAddress();
 					if (ThrottleTracker.isEnabled() && !SpigotConfig.bungee) {
-						if (ThrottleTracker.isThrottled(address)) {
+						if (ThrottleTracker.throttle(address)) {
 							final ChatComponentText chatcomponenttext = new ChatComponentText("Connection throttled! Please wait before reconnecting.");
 							networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext), new GenericFutureListener<Future<? super Void>>() {
 								@Override
@@ -59,7 +59,6 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 							});
 							return;
 						}
-						ThrottleTracker.track(address, System.currentTimeMillis());
 					}
 				} catch (Throwable t) {
 					LogManager.getLogger().debug("Failed to check connection throttle", t);
