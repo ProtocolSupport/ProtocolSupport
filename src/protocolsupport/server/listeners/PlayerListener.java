@@ -54,7 +54,7 @@ public class PlayerListener implements Listener {
 	public void onBlockPlace(BlockPlaceEvent event) {
 		Player player = event.getPlayer();
 		if (ProtocolSupportAPI.getProtocolVersion(player).isBefore(ProtocolVersion.MINECRAFT_1_9)) {
-			LegacySound.sendBlockBreakPlace(player, event.getBlock());
+			LegacySound.sendBlockPlaceSound(player, event.getBlock());
 		}
 	}
 

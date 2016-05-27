@@ -14,7 +14,7 @@ import net.minecraft.server.v1_9_R2.SoundEffectType;
 public class LegacySound {
 
 	@SuppressWarnings("deprecation")
-	public static void sendBlockBreakPlace(Player player, org.bukkit.block.Block block) {
+	public static void sendBlockPlaceSound(Player player, org.bukkit.block.Block block) {
 		SoundEffectType blocksound = Block.getById(block.getType().getId()).w();
 		((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutNamedSoundEffect(
 			blocksound.e(), SoundCategory.BLOCKS,
