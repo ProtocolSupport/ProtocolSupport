@@ -134,6 +134,7 @@ public class IdRemapper {
 		}
 	};
 
+	@SuppressWarnings("deprecation")
 	public static final RemappingRegistry ITEM = new RemappingRegistry() {
 		{
 			for (ProtocolVersion version : ProtocolVersion.values()) {
@@ -201,7 +202,6 @@ public class IdRemapper {
 			// quartz -> feather
 			registerRemapEntry(406, 288, ProtocolVersionsHelper.BEFORE_1_5);
 		}
-		@SuppressWarnings("deprecation")
 		private void registerRemapEntry(Material from, Material to, ProtocolVersion... versions) {
 			registerRemapEntry(from.getId(), to.getId(), versions);
 		}
