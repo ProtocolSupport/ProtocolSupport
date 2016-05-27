@@ -16,7 +16,7 @@ public class EntityAttach extends MiddleEntityAttach<RecyclableCollection<Packet
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_ENTITY_ATTACH_ID, version);
 		serializer.writeInt(entityId);
 		serializer.writeInt(vehicleId);
-		serializer.writeBoolean(false);
+		serializer.writeBoolean(true);
 		return RecyclableSingletonList.create(serializer);
 	}
 
