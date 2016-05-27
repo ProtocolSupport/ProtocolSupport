@@ -1,5 +1,7 @@
 package protocolsupport.protocol.utils.types;
 
+import java.util.Objects;
+
 import net.minecraft.server.v1_9_R2.NBTTagCompound;
 
 public class NBTTagCompoundWrapper {
@@ -49,6 +51,20 @@ public class NBTTagCompoundWrapper {
 
 	public void setInt(String key, int i) {
 		tag.setInt(key, i);
+	}
+
+	@Override
+	public int hashCode() {
+		return tag != null ? tag.hashCode() : 0;
+	}
+
+	@Override
+	public boolean equals(Object otherObj) {
+		if (!(otherObj instanceof NBTTagCompoundWrapper)) {
+			return false;
+		}
+		NBTTagCompoundWrapper other = (NBTTagCompoundWrapper) otherObj;
+		return Objects.equals(tag, other.tag);
 	}
 
 }

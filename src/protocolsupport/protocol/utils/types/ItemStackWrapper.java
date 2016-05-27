@@ -1,5 +1,7 @@
 package protocolsupport.protocol.utils.types;
 
+import java.util.Objects;
+
 import org.bukkit.Material;
 
 import net.minecraft.server.v1_9_R2.Item;
@@ -78,6 +80,20 @@ public class ItemStackWrapper {
 
 	public void setTag(NBTTagCompoundWrapper tag) {
 		itemstack.setTag(tag.unwrap());
+	}
+
+	@Override
+	public int hashCode() {
+		return itemstack != null ? itemstack.hashCode() : 0;
+	}
+
+	@Override
+	public boolean equals(Object otherObj) {
+		if (!(otherObj instanceof ItemStackWrapper)) {
+			return false;
+		}
+		ItemStackWrapper other = (ItemStackWrapper) otherObj;
+		return Objects.equals(itemstack, other.itemstack);
 	}
 
 }
