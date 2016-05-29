@@ -82,8 +82,8 @@ public class IdRemapper {
 			registerRemapEntry(Material.QUARTZ, Material.STONE, ProtocolVersionsHelper.BEFORE_1_5);
 			registerRemapEntry(Material.QUARTZ_STAIRS, Material.SMOOTH_STAIRS, ProtocolVersionsHelper.BEFORE_1_5);
 			//TODO: why the fuck it is mapped to stone instead of step?
-			registerRemapEntry(Material.DAYLIGHT_DETECTOR_INVERTED, Material.STONE, ProtocolVersionsHelper.BEFORE_1_5);
-			registerRemapEntry(Material.DAYLIGHT_DETECTOR, Material.STEP, ProtocolVersionsHelper.BEFORE_1_5);
+			registerRemapEntry(Material.DAYLIGHT_DETECTOR_INVERTED, Material.STEP, 0, ProtocolVersionsHelper.BEFORE_1_5);
+			registerRemapEntry(Material.DAYLIGHT_DETECTOR, Material.STEP, 0, ProtocolVersionsHelper.BEFORE_1_5);
 			registerRemapEntry(Material.TRAPPED_CHEST, Material.CHEST, ProtocolVersionsHelper.BEFORE_1_5);
 			//TODO: remap with something that has more strength
 			registerRemapEntry(Material.REDSTONE_BLOCK, Material.GLOWING_REDSTONE_ORE, ProtocolVersionsHelper.BEFORE_1_5);
@@ -98,13 +98,13 @@ public class IdRemapper {
 		@SuppressWarnings("deprecation")
 		protected void registerRemapEntry(Material from, Material to, ProtocolVersion... versions) {
 			for (int i = 0; i < 16; i++) {
-				registerRemapEntry((from.getId() << 4) + i, (to.getId() << 4) + i, versions);
+				registerRemapEntry((from.getId() << 4) | i, (to.getId() << 4) | i, versions);
 			}
 		}
 		@SuppressWarnings("deprecation")
 		protected void registerRemapEntry(Material matFrom, Material matTo, int dataTo, ProtocolVersion... versions) {
 			for (int i = 0; i < 16; i++) {
-				registerRemapEntry((matFrom.getId() << 4), (matTo.getId() << 4) + (dataTo & 0xF), versions);
+				registerRemapEntry((matFrom.getId() << 4) | i, (matTo.getId() << 4) | (dataTo & 0xF), versions);
 			}
 		}
 		@Override
