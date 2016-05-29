@@ -74,22 +74,17 @@ public class IdRemapper {
 			//TODO: see if remapping to trapdoor is better
 			registerRemapEntry(Material.CARPET, Material.STONE_PLATE, ProtocolVersionsHelper.BEFORE_1_6);
 			registerRemapEntry(Material.HARD_CLAY, Material.STONE, ProtocolVersionsHelper.BEFORE_1_6);
-			registerRemapEntry(Material.COAL_BLOCK, Material.STONE, ProtocolVersionsHelper.BEFORE_1_6);
-			//TODO: remap with something that has more strength
-			registerRemapEntry(Material.DROPPER, Material.STONE, ProtocolVersionsHelper.BEFORE_1_5);
-			//TODO: remap with something that has more strength
-			registerRemapEntry(Material.HOPPER, Material.STONE, ProtocolVersionsHelper.BEFORE_1_5);
+			registerRemapEntry(Material.COAL_BLOCK, Material.OBSIDIAN, ProtocolVersionsHelper.BEFORE_1_6);
+			registerRemapEntry(Material.DROPPER, Material.FURNACE, 0, ProtocolVersionsHelper.BEFORE_1_5);
+			registerRemapEntry(Material.HOPPER, Material.FURNACE, 0, ProtocolVersionsHelper.BEFORE_1_5);
 			registerRemapEntry(Material.QUARTZ, Material.STONE, ProtocolVersionsHelper.BEFORE_1_5);
 			registerRemapEntry(Material.QUARTZ_STAIRS, Material.SMOOTH_STAIRS, ProtocolVersionsHelper.BEFORE_1_5);
-			//TODO: why the fuck it is mapped to stone instead of step?
 			registerRemapEntry(Material.DAYLIGHT_DETECTOR_INVERTED, Material.STEP, 0, ProtocolVersionsHelper.BEFORE_1_5);
 			registerRemapEntry(Material.DAYLIGHT_DETECTOR, Material.STEP, 0, ProtocolVersionsHelper.BEFORE_1_5);
 			registerRemapEntry(Material.TRAPPED_CHEST, Material.CHEST, ProtocolVersionsHelper.BEFORE_1_5);
-			//TODO: remap with something that has more strength
-			registerRemapEntry(Material.REDSTONE_BLOCK, Material.GLOWING_REDSTONE_ORE, ProtocolVersionsHelper.BEFORE_1_5);
+			registerRemapEntry(Material.REDSTONE_BLOCK, Material.DIAMOND_BLOCK, ProtocolVersionsHelper.BEFORE_1_5);
 			registerRemapEntry(Material.ACTIVATOR_RAIL, Material.DETECTOR_RAIL, ProtocolVersionsHelper.BEFORE_1_5);
-			//TODO: remap with something that has more strength
-			registerRemapEntry(Material.QUARTZ_ORE, Material.NETHERRACK, ProtocolVersionsHelper.BEFORE_1_5);
+			registerRemapEntry(Material.QUARTZ_ORE, Material.COAL_ORE, ProtocolVersionsHelper.BEFORE_1_5);
 			registerRemapEntry(Material.GOLD_PLATE, Material.STONE_PLATE, ProtocolVersionsHelper.BEFORE_1_5);
 			registerRemapEntry(Material.IRON_PLATE, Material.STONE_PLATE, ProtocolVersionsHelper.BEFORE_1_5);
 			registerRemapEntry(Material.REDSTONE_COMPARATOR_OFF, Material.DIODE_BLOCK_OFF, ProtocolVersionsHelper.BEFORE_1_5);
