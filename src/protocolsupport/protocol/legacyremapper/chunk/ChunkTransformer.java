@@ -7,7 +7,7 @@ import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.legacyremapper.chunk.blockstorage.BlockStorage;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
-import protocolsupport.protocol.typeremapper.id.RemappingTable;
+import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.utils.netty.ChannelUtils;
 
 public class ChunkTransformer {
@@ -32,7 +32,7 @@ public class ChunkTransformer {
 	}
 
 	public byte[] toPre18Data(ProtocolVersion version) throws IOException {
-		RemappingTable table = IdRemapper.BLOCK.getTable(version);
+		ArrayBasedIdRemappingTable table = IdRemapper.BLOCK.getTable(version);
 		byte[] data = new byte[(hasSkyLight ? 10240 : 8192) * columnsCount + 256];
 		int blockIdIndex = 0;
 		int blockDataIndex = 4096 * columnsCount;
@@ -70,7 +70,7 @@ public class ChunkTransformer {
 	}
 
 	public byte[] to18Data() throws IOException {
-		RemappingTable table = IdRemapper.BLOCK.getTable(ProtocolVersion.MINECRAFT_1_8);
+		ArrayBasedIdRemappingTable table = IdRemapper.BLOCK.getTable(ProtocolVersion.MINECRAFT_1_8);
 		byte[] data = new byte[(hasSkyLight ? 12288 : 10240) * columnsCount + 256];
 		int blockIdIndex = 0;
 		int blockLightIndex = 8192 * columnsCount;

@@ -1,5 +1,6 @@
 package protocolsupport.protocol.typeremapper.id;
 
+import org.bukkit.Effect;
 import org.bukkit.Material;
 
 import net.minecraft.server.v1_9_R2.Block;
@@ -8,12 +9,15 @@ import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.remapper.BlockRemapperControl;
+import protocolsupport.protocol.typeremapper.id.RemappingRegistry.IdRemappingRegistry;
+import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.typeremapper.id.RemappingTable.HashMapBasedIdRemappingTable;
 import protocolsupport.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.ReflectionUtils;
 
 public class IdRemapper {
 
-	public static final RemappingRegistry BLOCK = new RemappingRegistry() {
+	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> BLOCK = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
 		{
 			registerRemapEntry(Material.CHORUS_FLOWER, Material.WOOD, ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry(Material.CHORUS_PLANT, Material.WOOD, ProtocolVersionsHelper.BEFORE_1_9);
@@ -103,8 +107,8 @@ public class IdRemapper {
 			}
 		}
 		@Override
-		protected RemappingTable createTable() {
-			return new RemappingTable(4096 * 16) {
+		protected ArrayBasedIdRemappingTable createTable() {
+			return new ArrayBasedIdRemappingTable(4096 * 16) {
 				@SuppressWarnings("deprecation")
 				@Override
 				public void setRemap(int from, int to) {
@@ -130,7 +134,7 @@ public class IdRemapper {
 	};
 
 	@SuppressWarnings("deprecation")
-	public static final RemappingRegistry ITEM = new RemappingRegistry() {
+	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> ITEM = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
 		{
 			for (ProtocolVersion version : ProtocolVersion.values()) {
 				if (version.isSupported()) {
@@ -201,12 +205,12 @@ public class IdRemapper {
 			registerRemapEntry(from.getId(), to.getId(), versions);
 		}
 		@Override
-		protected RemappingTable createTable() {
-			return new RemappingTable(4096);
+		protected ArrayBasedIdRemappingTable createTable() {
+			return new ArrayBasedIdRemappingTable(4096);
 		}
 	};
 
-	public static final RemappingRegistry ENTITY_LIVING = new RemappingRegistry() {
+	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> ENTITY_LIVING = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
 		{
 			// sulker -> blaze
 			registerRemapEntry(69, 61, ProtocolVersionsHelper.BEFORE_1_9);
@@ -220,12 +224,12 @@ public class IdRemapper {
 			registerRemapEntry(100, 92, ProtocolVersionsHelper.BEFORE_1_6);
 		}
 		@Override
-		protected RemappingTable createTable() {
-			return new RemappingTable(256);
+		protected ArrayBasedIdRemappingTable createTable() {
+			return new ArrayBasedIdRemappingTable(256);
 		}
 	};
 
-	public static final RemappingRegistry ENTITY_OBJECT = new RemappingRegistry() {
+	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> ENTITY_OBJECT = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
 		{
 			//shulker bullet -> firecharge
 			registerRemapEntry(67, 64, ProtocolVersionsHelper.BEFORE_1_9);
@@ -237,12 +241,12 @@ public class IdRemapper {
 			registerRemapEntry(92, 60, ProtocolVersionsHelper.BEFORE_1_9);
 		}
 		@Override
-		protected RemappingTable createTable() {
-			return new RemappingTable(256);
+		protected ArrayBasedIdRemappingTable createTable() {
+			return new ArrayBasedIdRemappingTable(256);
 		}
 	};
 
-	public static final RemappingRegistry MAPCOLOR = new RemappingRegistry() {
+	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> MAPCOLOR = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
 		{
 			//see http://minecraft.gamepedia.com/Map_item_format (i don't event know a names for half of those colors)
 			registerRemapEntry(14, 8, ProtocolVersionsHelper.BEFORE_1_7);
@@ -270,8 +274,8 @@ public class IdRemapper {
 			registerRemapEntry(36, 10, ProtocolVersionsHelper.BEFORE_1_7);
 		}
 		@Override
-		protected RemappingTable createTable() {
-			return new RemappingTable(64) {
+		protected ArrayBasedIdRemappingTable createTable() {
+			return new ArrayBasedIdRemappingTable(64) {
 				@Override
 				public int getRemap(int id) {
 					int realColor = (id & 0xFF) >> 2;
@@ -281,43 +285,17 @@ public class IdRemapper {
 		}
 	};
 
-	public static final RemappingRegistry EFFECT = new RemappingRegistry() {
+	public static final IdRemappingRegistry<HashMapBasedIdRemappingTable> EFFECT = new IdRemappingRegistry<HashMapBasedIdRemappingTable>() {
 		{
-			registerRemapEntry(1003, 1002, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1004, 1002, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1005, 1003, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1006, 1003, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1007, 1003, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1008, 1003, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1009, 1004, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1010, 1005, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1011, 1006, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1012, 1006, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1013, 1006, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1014, 1006, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1015, 1007, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1016, 1008, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1017, 1008, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1018, 1009, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1019, 1010, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1020, 1011, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1021, 1012, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1022, 1012, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1023, 1013, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1024, 1014, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1025, 1015, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1026, 1016, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1027, 1017, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1028, 1018, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1029, 1020, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1030, 1021, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1031, 1022, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1036, 1003, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(1037, 1006, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(Effect.DRAGON_BREATH, Effect.COLOURED_DUST, ProtocolVersionsHelper.BEFORE_1_9);
+		}
+		@SuppressWarnings("deprecation")
+		public void registerRemapEntry(Effect from, Effect to, ProtocolVersion... versions) {
+			registerRemapEntry(from.getId(), to.getId(), versions);
 		}
 		@Override
-		protected RemappingTable createTable() {
-			return new RemappingTable.HashRemappingTable();
+		protected HashMapBasedIdRemappingTable createTable() {
+			return new HashMapBasedIdRemappingTable();
 		}
 	};
 

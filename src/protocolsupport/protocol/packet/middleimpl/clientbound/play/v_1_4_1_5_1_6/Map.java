@@ -9,7 +9,7 @@ import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleMap;
 import protocolsupport.protocol.packet.middleimpl.PacketData;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
-import protocolsupport.protocol.typeremapper.id.RemappingTable;
+import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -43,7 +43,7 @@ public class Map extends MiddleMap<RecyclableCollection<PacketData>> {
 		if (columns > 0) {
 			MapTransformer maptransformer = new MapTransformer();
 			maptransformer.loadFromNewMapData(columns, rows, xstart, zstart, data);
-			RemappingTable colorRemapper = IdRemapper.MAPCOLOR.getTable(version);
+			ArrayBasedIdRemappingTable colorRemapper = IdRemapper.MAPCOLOR.getTable(version);
 			for (ColumnEntry entry : maptransformer.toPre18MapData()) {
 				PacketData mapdata = PacketData.create(ClientBoundPacket.PLAY_MAP_ID, version);
 				mapdata.writeShort(mapId);

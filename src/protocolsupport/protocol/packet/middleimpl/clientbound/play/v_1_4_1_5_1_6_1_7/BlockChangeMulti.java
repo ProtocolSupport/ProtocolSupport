@@ -5,7 +5,7 @@ import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChangeMulti;
 import protocolsupport.protocol.packet.middleimpl.PacketData;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
-import protocolsupport.protocol.typeremapper.id.RemappingTable;
+import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -13,7 +13,7 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti<RecyclableCollectio
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
-		RemappingTable remapper = IdRemapper.BLOCK.getTable(version);
+		ArrayBasedIdRemappingTable remapper = IdRemapper.BLOCK.getTable(version);
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_BLOCK_CHANGE_MULTI_ID, version);
 		serializer.writeInt(chunkX);
 		serializer.writeInt(chunkZ);
