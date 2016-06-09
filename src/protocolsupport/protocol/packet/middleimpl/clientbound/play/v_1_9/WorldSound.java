@@ -31,7 +31,7 @@ public class WorldSound extends MiddleWorldSound<RecyclableCollection<PacketData
 		serializer.writeInt(y);
 		serializer.writeInt(z);
 		serializer.writeFloat(volume);
-		serializer.writeByte(pitch);
+		serializer.writeByte((int) (pitch * 63.5));
 		return RecyclableSingletonList.create(serializer);
 	}
 

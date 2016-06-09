@@ -14,7 +14,7 @@ public abstract class MiddleWorldCustomSound<T> extends ClientBoundMiddlePacket<
 	protected int y;
 	protected int z;
 	protected float volume;
-	protected int pitch;
+	protected float pitch;
 
 	@Override
 	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
@@ -24,7 +24,7 @@ public abstract class MiddleWorldCustomSound<T> extends ClientBoundMiddlePacket<
 		y = serializer.readInt();
 		z = serializer.readInt();
 		volume = serializer.readFloat();
-		pitch = serializer.readUnsignedByte();
+		pitch = serializer.readFloat();
 	}
 
 }

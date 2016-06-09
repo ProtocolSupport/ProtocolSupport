@@ -9,7 +9,7 @@ public class ResourcePackStatus extends MiddleResourcePackStatus {
 
 	@Override
 	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
-		hash = serializer.readString(40);
+		serializer.readString(40);
 		result = serializer.readVarInt();
 	}
 
