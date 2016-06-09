@@ -3,7 +3,7 @@ package protocolsupport.api.chat.components;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.server.v1_9_R2.LocaleI18n;
+import net.minecraft.server.v1_10_R1.LocaleI18n;
 
 public class TranslateComponent extends BaseComponent {
 

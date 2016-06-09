@@ -14,15 +14,15 @@ import com.mojang.util.UUIDTypeAdapter;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 
-import net.minecraft.server.v1_9_R2.ChatComponentText;
-import net.minecraft.server.v1_9_R2.EnumProtocol;
-import net.minecraft.server.v1_9_R2.HandshakeListener;
-import net.minecraft.server.v1_9_R2.IChatBaseComponent;
-import net.minecraft.server.v1_9_R2.LoginListener;
-import net.minecraft.server.v1_9_R2.MinecraftServer;
-import net.minecraft.server.v1_9_R2.NetworkManager;
-import net.minecraft.server.v1_9_R2.PacketHandshakingInSetProtocol;
-import net.minecraft.server.v1_9_R2.PacketLoginOutDisconnect;
+import net.minecraft.server.v1_10_R1.ChatComponentText;
+import net.minecraft.server.v1_10_R1.EnumProtocol;
+import net.minecraft.server.v1_10_R1.HandshakeListener;
+import net.minecraft.server.v1_10_R1.IChatBaseComponent;
+import net.minecraft.server.v1_10_R1.LoginListener;
+import net.minecraft.server.v1_10_R1.MinecraftServer;
+import net.minecraft.server.v1_10_R1.NetworkManager;
+import net.minecraft.server.v1_10_R1.PacketHandshakingInSetProtocol;
+import net.minecraft.server.v1_10_R1.PacketLoginOutDisconnect;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.storage.ProtocolStorage;

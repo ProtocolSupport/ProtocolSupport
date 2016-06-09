@@ -3,7 +3,7 @@ package protocolsupport.protocol.typeremapper.nbt.tileupdate;
 import java.util.EnumMap;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
-import net.minecraft.server.v1_9_R2.Item;
+import net.minecraft.server.v1_10_R1.Item;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;

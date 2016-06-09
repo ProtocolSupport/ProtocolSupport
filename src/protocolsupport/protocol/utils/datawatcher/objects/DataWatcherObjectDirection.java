@@ -1,6 +1,6 @@
 package protocolsupport.protocol.utils.datawatcher.objects;
 
-import net.minecraft.server.v1_9_R2.EnumDirection;
+import net.minecraft.server.v1_10_R1.EnumDirection;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;

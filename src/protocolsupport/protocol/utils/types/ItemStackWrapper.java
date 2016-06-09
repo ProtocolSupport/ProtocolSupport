@@ -4,8 +4,8 @@ import java.util.Objects;
 
 import org.bukkit.Material;
 
-import net.minecraft.server.v1_9_R2.Item;
-import net.minecraft.server.v1_9_R2.ItemStack;
+import net.minecraft.server.v1_10_R1.Item;
+import net.minecraft.server.v1_10_R1.ItemStack;
 
 public class ItemStackWrapper {
 

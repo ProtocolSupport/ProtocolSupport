@@ -3,7 +3,7 @@ package protocolsupport.protocol.utils.registry;
 import java.util.Arrays;
 import java.util.EnumMap;
 
-import net.minecraft.server.v1_9_R2.EnumProtocol;
+import net.minecraft.server.v1_10_R1.EnumProtocol;
 
 public class PacketIdTransformerRegistry {
 

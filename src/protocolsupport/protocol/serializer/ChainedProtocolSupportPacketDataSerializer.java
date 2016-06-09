@@ -1,7 +1,7 @@
 package protocolsupport.protocol.serializer;
 
 import io.netty.buffer.Unpooled;
-import net.minecraft.server.v1_9_R2.PacketDataSerializer;
+import net.minecraft.server.v1_10_R1.PacketDataSerializer;
 import protocolsupport.api.ProtocolVersion;
 
 public class ChainedProtocolSupportPacketDataSerializer extends ProtocolSupportPacketDataSerializer {

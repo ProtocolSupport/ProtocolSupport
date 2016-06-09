@@ -4,8 +4,8 @@ import java.util.Collection;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.util.Recycler;
-import net.minecraft.server.v1_9_R2.Packet;
-import net.minecraft.server.v1_9_R2.PacketDataSerializer;
+import net.minecraft.server.v1_10_R1.Packet;
+import net.minecraft.server.v1_10_R1.PacketDataSerializer;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;

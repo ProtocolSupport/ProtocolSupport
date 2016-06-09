@@ -2,8 +2,8 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9;
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_9_R2.SoundEffect;
-import net.minecraft.server.v1_9_R2.SoundEffects;
+import net.minecraft.server.v1_10_R1.SoundEffect;
+import net.minecraft.server.v1_10_R1.SoundEffects;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldSound;

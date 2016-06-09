@@ -3,8 +3,8 @@ package protocolsupport.protocol.typeremapper.id;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 
-import net.minecraft.server.v1_9_R2.Block;
-import net.minecraft.server.v1_9_R2.MinecraftServer;
+import net.minecraft.server.v1_10_R1.Block;
+import net.minecraft.server.v1_10_R1.MinecraftServer;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;

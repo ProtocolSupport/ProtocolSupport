@@ -1,11 +1,11 @@
 package protocolsupport.protocol.packet.v_1_7.utils;
 
-import net.minecraft.server.v1_9_R2.Item;
-import net.minecraft.server.v1_9_R2.MinecraftKey;
-import net.minecraft.server.v1_9_R2.MinecraftServer;
-import net.minecraft.server.v1_9_R2.MojangsonParseException;
-import net.minecraft.server.v1_9_R2.MojangsonParser;
-import net.minecraft.server.v1_9_R2.NBTTagCompound;
+import net.minecraft.server.v1_10_R1.Item;
+import net.minecraft.server.v1_10_R1.MinecraftKey;
+import net.minecraft.server.v1_10_R1.MinecraftServer;
+import net.minecraft.server.v1_10_R1.MojangsonParseException;
+import net.minecraft.server.v1_10_R1.MojangsonParser;
+import net.minecraft.server.v1_10_R1.NBTTagCompound;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.modifiers.ClickAction;

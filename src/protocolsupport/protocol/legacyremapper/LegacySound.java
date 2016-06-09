@@ -2,14 +2,14 @@ package protocolsupport.protocol.legacyremapper;
 
 import java.util.HashMap;
 
-import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_10_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import net.minecraft.server.v1_9_R2.Block;
-import net.minecraft.server.v1_9_R2.PacketPlayOutNamedSoundEffect;
-import net.minecraft.server.v1_9_R2.SoundCategory;
-import net.minecraft.server.v1_9_R2.SoundEffect;
-import net.minecraft.server.v1_9_R2.SoundEffectType;
+import net.minecraft.server.v1_10_R1.Block;
+import net.minecraft.server.v1_10_R1.PacketPlayOutNamedSoundEffect;
+import net.minecraft.server.v1_10_R1.SoundCategory;
+import net.minecraft.server.v1_10_R1.SoundEffect;
+import net.minecraft.server.v1_10_R1.SoundEffectType;
 
 public class LegacySound {
 

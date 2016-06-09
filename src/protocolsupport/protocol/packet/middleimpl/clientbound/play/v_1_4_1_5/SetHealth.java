@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4_1_5;
 
-import net.minecraft.server.v1_9_R2.MathHelper;
+import net.minecraft.server.v1_10_R1.MathHelper;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetHealth;

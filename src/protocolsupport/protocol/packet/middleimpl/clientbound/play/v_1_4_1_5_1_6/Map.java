@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4_1_5_1_6;
 
-import net.minecraft.server.v1_9_R2.Item;
-import net.minecraft.server.v1_9_R2.Items;
+import net.minecraft.server.v1_10_R1.Item;
+import net.minecraft.server.v1_10_R1.Items;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.legacyremapper.MapTransformer;
 import protocolsupport.protocol.legacyremapper.MapTransformer.ColumnEntry;

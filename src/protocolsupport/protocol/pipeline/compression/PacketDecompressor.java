@@ -8,7 +8,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import protocolsupport.utils.netty.ChannelUtils;
 
-public class PacketDecompressor extends net.minecraft.server.v1_9_R2.PacketDecompressor {
+public class PacketDecompressor extends net.minecraft.server.v1_10_R1.PacketDecompressor {
 
 	private final Inflater inflater = new Inflater();
 

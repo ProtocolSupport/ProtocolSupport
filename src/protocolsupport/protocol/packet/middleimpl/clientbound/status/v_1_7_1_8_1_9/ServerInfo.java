@@ -2,8 +2,8 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7_1_8_
 
 import java.io.IOException;
 
-import net.minecraft.server.v1_9_R2.ServerPing;
-import net.minecraft.server.v1_9_R2.ServerPing.ServerData;
+import net.minecraft.server.v1_10_R1.ServerPing;
+import net.minecraft.server.v1_10_R1.ServerPing.ServerData;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.status.MiddleServerInfo;
