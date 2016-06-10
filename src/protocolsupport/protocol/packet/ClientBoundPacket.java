@@ -172,14 +172,14 @@ public class ClientBoundPacket {
 	private static final int getId(Class<?> packetClass) {
 		Map<Class<? extends Packet<?>>, EnumProtocol> protocolMap = null;
 		try {
-			protocolMap = (Map<Class<? extends Packet<?>>, EnumProtocol>) ReflectionUtils.setAccessible(EnumProtocol.class.getDeclaredField("h")).get(null);
+			protocolMap = (Map<Class<? extends Packet<?>>, EnumProtocol>) ReflectionUtils.setAccessible(EnumProtocol.class.getDeclaredField("f")).get(null);
 		} catch (Throwable t) {
 			SneakyThrow.sneaky(t);
 		}
 		EnumProtocol protocol = protocolMap.get(packetClass);
 		Map<EnumProtocolDirection, BiMap<Integer, Class<? extends Packet<?>>>> idMap = null;
 		try {
-			idMap = (Map<EnumProtocolDirection, BiMap<Integer, Class<? extends Packet<?>>>>) ReflectionUtils.setAccessible(EnumProtocol.class.getDeclaredField("j")).get(protocol);
+			idMap = (Map<EnumProtocolDirection, BiMap<Integer, Class<? extends Packet<?>>>>) ReflectionUtils.setAccessible(EnumProtocol.class.getDeclaredField("h")).get(protocol);
 		} catch (Throwable t) {
 			SneakyThrow.sneaky(t);
 		}
