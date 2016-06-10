@@ -1,4 +1,4 @@
-package protocolsupport.protocol.pipeline.compression;
+package protocolsupport.protocol.pipeline.common;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

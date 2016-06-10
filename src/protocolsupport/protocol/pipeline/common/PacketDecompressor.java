@@ -1,4 +1,4 @@
-package protocolsupport.protocol.pipeline.compression;
+package protocolsupport.protocol.pipeline.common;
 
 import java.util.List;
 import java.util.zip.Inflater;

@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.v_1_6;
+package protocolsupport.protocol.packet.handler.common;
 
 import javax.crypto.SecretKey;
 
@@ -8,9 +8,9 @@ import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.common.PacketDecrypter;
 
-public class LoginListener extends AbstractLoginListener {
+public class LegacyLoginListener extends AbstractLoginListener {
 
-	public LoginListener(NetworkManager networkmanager) {
+	public LegacyLoginListener(NetworkManager networkmanager) {
 		super(networkmanager);
 	}
 

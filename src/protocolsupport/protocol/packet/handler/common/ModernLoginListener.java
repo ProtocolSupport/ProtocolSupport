@@ -1,19 +1,21 @@
-package protocolsupport.protocol.packet.v_1_8;
+package protocolsupport.protocol.packet.handler.common;
 
 import javax.crypto.SecretKey;
 
 import net.minecraft.server.v1_10_R1.NetworkManager;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 
-public class LoginListener extends AbstractLoginListener {
+public class ModernLoginListener extends AbstractLoginListener {
 
-	public LoginListener(NetworkManager networkmanager) {
+	private boolean hasCompression;
+	public ModernLoginListener(NetworkManager networkmanager, boolean hasCompression) {
 		super(networkmanager);
+		this.hasCompression = hasCompression;
 	}
 
 	@Override
 	protected boolean hasCompression() {
-		return true;
+		return hasCompression;
 	}
 
 	@Override
