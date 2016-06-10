@@ -13,6 +13,10 @@ public class MappingEntry {
 		this.to = to;
 	}
 
+	protected MappingEntry(int id) {
+		this(id, id);
+	}
+
 	protected MappingEntry(int from, int to, ValueRemapper<?> vremap) {
 		this(from, to);
 		this.vremap = vremap;
@@ -33,20 +37,6 @@ public class MappingEntry {
 	@SuppressWarnings("rawtypes")
 	public ValueRemapper getValueRemapper() {
 		return vremap;
-	}
-
-	public static class MappingEntryOriginal extends MappingEntry {
-		public MappingEntryOriginal(int id) {
-			super(id, id);
-		}
-
-		public static MappingEntryOriginal[] of(int... ids) {
-			MappingEntryOriginal[] entries = new MappingEntryOriginal[ids.length];
-			for (int i = 0; i < entries.length; i++) {
-				entries[i] = new MappingEntryOriginal(ids[i]);
-			}
-			return entries;
-		}
 	}
 
 }
