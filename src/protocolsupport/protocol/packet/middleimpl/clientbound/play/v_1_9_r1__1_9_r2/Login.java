@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r2;
+package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9_r2;
 
 import java.io.IOException;
 
@@ -26,10 +26,6 @@ public class Login extends MiddleLogin<RecyclableCollection<PacketData>> {
 		serializer.writeString(leveltype);
 		serializer.writeBoolean(reducedDebugInfo);
 		return RecyclableSingletonList.create(serializer);
-	}
-
-	@Override
-	public void handle() {
 	}
 
 }

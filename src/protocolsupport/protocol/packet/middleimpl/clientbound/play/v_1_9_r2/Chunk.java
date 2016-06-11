@@ -7,26 +7,24 @@ import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.PacketData;
 import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
-import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class Chunk extends MiddleChunk<RecyclableCollection<PacketData>> {
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
-		RecyclableArrayList<PacketData> packets = RecyclableArrayList.create();
-		PacketData chunkdata = PacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID, version);
-		chunkdata.writeInt(chunkX);
-		chunkdata.writeInt(chunkZ);
-		chunkdata.writeBoolean(full);
-		chunkdata.writeVarInt(bitmask);
-		chunkdata.writeVarInt(data.length);
-		chunkdata.writeBytes(data);
-		chunkdata.writeVarInt(tiles.length);
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID, version);
+		serializer.writeInt(chunkX);
+		serializer.writeInt(chunkZ);
+		serializer.writeBoolean(full);
+		serializer.writeVarInt(bitmask);
+		serializer.writeByteArray(data);
+		serializer.writeVarInt(tiles.length);
 		for (NBTTagCompoundWrapper tile : tiles) {
-			chunkdata.writeTag(tile);
+			serializer.writeTag(tile);
 		}
-		return packets;
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

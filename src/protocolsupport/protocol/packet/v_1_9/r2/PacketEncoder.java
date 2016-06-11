@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.v_1_9.r1;
+package protocolsupport.protocol.packet.v_1_9.r2;
 
 import java.io.IOException;
 
@@ -13,14 +13,13 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.PacketData;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1.BlockTileUpdate;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1.Chunk;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9_r2.EntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9_r2.Login;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9_r2.SpawnLiving;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9_r2.SpawnNamed;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9_r2.SpawnObject;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9_r2.WorldSound;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r2.Chunk;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7__1_8__1_9_r1.ServerInfo;
 import protocolsupport.protocol.pipeline.IPacketEncoder;
 import protocolsupport.protocol.serializer.ChainedProtocolSupportPacketDataSerializer;
@@ -28,7 +27,6 @@ import protocolsupport.protocol.storage.LocalStorage;
 import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry.InitCallBack;
-import protocolsupport.protocol.utils.registry.PacketIdTransformerRegistry;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -36,21 +34,9 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 //TODO: Full remapping rewrite table
 public class PacketEncoder implements IPacketEncoder {
 
-	private static final PacketIdTransformerRegistry packetIdRegistry = new PacketIdTransformerRegistry();
-	static {
-		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.LEGACY_PLAY_UPDATE_SIGN_ID, 0x46);
-		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_WORLD_SOUND_ID, 0x47);
-		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_PLAYER_LIST_HEADER_FOOTER, 0x48);
-		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_COLLECT_EFFECT_ID, 0x49);
-		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_TELEPORT_ID, 0x4A);
-		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_ATTRIBUTES_ID, 0x4B);
-		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_EFFECT_ADD_ID, 0x4C);
-	}
-
 	private final MiddleTransformerRegistry<ClientBoundMiddlePacket<RecyclableCollection<PacketData>>> registry = new MiddleTransformerRegistry<>();
 	{
 		registry.register(EnumProtocol.STATUS, ClientBoundPacket.STATUS_SERVER_INFO_ID, ServerInfo.class);
-		registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_UPDATE_TILE_ID, BlockTileUpdate.class);
 		registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CHUNK_SINGLE_ID, Chunk.class);
 		registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_WORLD_SOUND_ID, WorldSound.class);
 		registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_LOGIN_ID, Login.class);
@@ -69,9 +55,7 @@ public class PacketEncoder implements IPacketEncoder {
 
 	protected final SharedStorage sharedstorage;
 	protected final LocalStorage storage = new LocalStorage();
-	private final ProtocolVersion version;
-	public PacketEncoder(ProtocolVersion version, SharedStorage storage) {
-		this.version = version;
+	public PacketEncoder(SharedStorage storage) {
 		this.sharedstorage = storage;
 	}
 
@@ -94,11 +78,11 @@ public class PacketEncoder implements IPacketEncoder {
 			}
 			packetTransformer.readFromServerData(middlebuffer);
 			packetTransformer.handle();
-			RecyclableCollection<PacketData> data = packetTransformer.toData(version);
+			RecyclableCollection<PacketData> data = packetTransformer.toData(ProtocolVersion.MINECRAFT_1_9_4);
 			try {
 				for (PacketData packetdata : data) {
 					ByteBuf senddata = Allocator.allocateBuffer();
-					ChannelUtils.writeVarInt(senddata, getPacketId(currentProtocol, packetdata.getPacketId()));
+					ChannelUtils.writeVarInt(senddata, packetdata.getPacketId());
 					senddata.writeBytes(packetdata);
 					ctx.write(senddata);
 				}
@@ -111,15 +95,10 @@ public class PacketEncoder implements IPacketEncoder {
 			}
 		} else {
 			ByteBuf senddata = Allocator.allocateBuffer();
-			ChannelUtils.writeVarInt(senddata, getPacketId(currentProtocol, packetId));
+			ChannelUtils.writeVarInt(senddata, packetId);
 			senddata.writeBytes(middlebuffer);
 			ctx.writeAndFlush(senddata);
 		}
-	}
-
-	private static int getPacketId(EnumProtocol currentProtocol, int packetId) {
-		int newId = packetIdRegistry.getNewPacketId(currentProtocol, packetId);
-		return newId != -1 ? newId : packetId;
 	}
 
 }
