@@ -44,8 +44,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_7__1_8.St
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_7__1_8.TabComplete;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8.BlockAction;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8.BlockBreakAnimation;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8.BlockChangeMulti;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8.BlockChangeSingle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8.BlockOpenSignEditor;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8.Camera;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8.Chat;
@@ -89,6 +87,8 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8.WorldBo
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8.WorldEvent;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8.WorldParticle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1.BlockTileUpdate;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1__1_9_r2.BlockChangeMulti;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1__1_9_r2.BlockChangeSingle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7__1_8__1_9_r1.Pong;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7__1_8__1_9_r1.ServerInfo;
 import protocolsupport.protocol.pipeline.IPacketEncoder;
