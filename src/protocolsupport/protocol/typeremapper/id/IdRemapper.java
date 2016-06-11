@@ -2,6 +2,7 @@ package protocolsupport.protocol.typeremapper.id;
 
 import org.bukkit.Effect;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 
 import net.minecraft.server.v1_10_R1.Block;
 import net.minecraft.server.v1_10_R1.MinecraftServer;
@@ -19,6 +20,11 @@ public class IdRemapper {
 
 	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> BLOCK = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
 		{
+			registerRemapEntry(Material.STRUCTURE_VOID, Material.AIR, ProtocolVersionsHelper.BEFORE_1_10);
+			registerRemapEntry(Material.NETHER_WART_BLOCK, Material.STONE, ProtocolVersionsHelper.BEFORE_1_10);
+			registerRemapEntry(Material.RED_NETHER_BRICK, Material.NETHER_BRICK, ProtocolVersionsHelper.BEFORE_1_10);
+			registerRemapEntry(Material.MAGMA, Material.NETHERRACK, ProtocolVersionsHelper.BEFORE_1_10);
+			registerRemapEntry(Material.BONE_BLOCK, Material.BRICK, ProtocolVersionsHelper.BEFORE_1_10);
 			registerRemapEntry(Material.CHORUS_FLOWER, Material.WOOD, ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry(Material.CHORUS_PLANT, Material.WOOD, ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry(Material.END_GATEWAY, Material.ENDER_PORTAL, ProtocolVersionsHelper.BEFORE_1_9);
@@ -212,16 +218,16 @@ public class IdRemapper {
 
 	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> ENTITY_LIVING = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
 		{
-			// sulker -> blaze
-			registerRemapEntry(69, 61, ProtocolVersionsHelper.BEFORE_1_9);
-			// endermite -> silverfish
-			registerRemapEntry(67, 60, ProtocolVersionsHelper.BEFORE_1_8);
-			// guardian -> sqiud
-			registerRemapEntry(68, 94, ProtocolVersionsHelper.BEFORE_1_8);
-			// rabbit -> chicken
-			registerRemapEntry(101, 93, ProtocolVersionsHelper.BEFORE_1_8);
-			// horse -> cow
-			registerRemapEntry(100, 92, ProtocolVersionsHelper.BEFORE_1_6);
+			registerRemapEntry(EntityType.POLAR_BEAR, EntityType.SPIDER, ProtocolVersionsHelper.BEFORE_1_10);
+			registerRemapEntry(EntityType.SHULKER, EntityType.BLAZE, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(EntityType.ENDERMITE, EntityType.SILVERFISH, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(EntityType.GUARDIAN, EntityType.SQUID, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(EntityType.RABBIT, EntityType.CHICKEN, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(EntityType.HORSE, EntityType.COW, ProtocolVersionsHelper.BEFORE_1_6);
+		}
+		@SuppressWarnings("deprecation")
+		private void registerRemapEntry(EntityType from, EntityType to, ProtocolVersion... versions) {
+			registerRemapEntry(from.getTypeId(), to.getTypeId(), versions);
 		}
 		@Override
 		protected ArrayBasedIdRemappingTable createTable() {
