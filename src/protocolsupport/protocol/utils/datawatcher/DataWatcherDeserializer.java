@@ -6,10 +6,12 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.spigotmc.SneakyThrow;
 
+import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.RecyclableProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBlockState;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
@@ -23,6 +25,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectPosit
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3f;
+import protocolsupport.utils.netty.ChannelUtils;
 
 public class DataWatcherDeserializer {
 
@@ -70,6 +73,30 @@ public class DataWatcherDeserializer {
 			}
 		} while (true);
 		return map;
+	}
+
+	public static byte[] encodeData(ProtocolVersion version, TIntObjectMap<DataWatcherObject<?>> objects) {
+		RecyclableProtocolSupportPacketDataSerializer serializer = RecyclableProtocolSupportPacketDataSerializer.create(version);
+		try {
+			if (!objects.isEmpty()) {
+				TIntObjectIterator<DataWatcherObject<?>> iterator = objects.iterator();
+				while (iterator.hasNext()) {
+					iterator.advance();
+					DataWatcherObject<?> object = iterator.value();
+					serializer.writeByte(iterator.key());
+					serializer.writeByte(object.getTypeId(version));
+					object.writeToStream(serializer);
+				}
+			} else {
+				serializer.writeByte(31);
+				serializer.writeByte(0);
+				serializer.writeByte(0);
+			}
+			serializer.writeByte(0xFF);
+			return ChannelUtils.toArray(serializer);
+		} finally {
+			serializer.release();
+		}
 	}
 
 }

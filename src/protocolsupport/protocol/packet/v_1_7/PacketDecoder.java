@@ -13,7 +13,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.legacyremapper.LegacyAnimatePacketReorderer;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.PacketCreator;
-import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_1_7__1_8.SetProtocol;
+import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_1_7__1_8__1_9_r1__1_9_r2.SetProtocol;
 import protocolsupport.protocol.packet.middleimpl.serverbound.login.v_1_4__1_5__1_6__1_7__1_8.EncryptionResponse;
 import protocolsupport.protocol.packet.middleimpl.serverbound.login.v_1_7__1_8.LoginStart;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_4__1_5__1_6__1_7.Animation;

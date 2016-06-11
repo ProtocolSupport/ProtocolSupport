@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_1_7__1_8;
+package protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_1_7__1_8__1_9_r1__1_9_r2;
 
 import java.io.IOException;
 

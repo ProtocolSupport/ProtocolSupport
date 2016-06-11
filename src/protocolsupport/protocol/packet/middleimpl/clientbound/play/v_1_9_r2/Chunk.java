@@ -1,13 +1,11 @@
-package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1;
+package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r2;
 
 import java.io.IOException;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.legacyremapper.LegacyTileEntityUpdate;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.PacketData;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1.BlockTileUpdate;
 import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -22,15 +20,11 @@ public class Chunk extends MiddleChunk<RecyclableCollection<PacketData>> {
 		chunkdata.writeInt(chunkZ);
 		chunkdata.writeBoolean(full);
 		chunkdata.writeVarInt(bitmask);
-		chunkdata.writeByteArray(data);
-		packets.add(chunkdata);
+		chunkdata.writeVarInt(data.length);
+		chunkdata.writeBytes(data);
+		chunkdata.writeVarInt(tiles.length);
 		for (NBTTagCompoundWrapper tile : tiles) {
-			packets.add(BlockTileUpdate.createPacketData(
-				version,
-				LegacyTileEntityUpdate.getPosition(tile),
-				LegacyTileEntityUpdate.getUpdateType(tile).ordinal(),
-				tile
-			));
+			chunkdata.writeTag(tile);
 		}
 		return packets;
 	}
