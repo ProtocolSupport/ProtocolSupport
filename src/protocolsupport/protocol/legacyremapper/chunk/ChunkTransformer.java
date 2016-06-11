@@ -4,10 +4,12 @@ import java.io.IOException;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import net.minecraft.server.v1_10_R1.DataBits;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.legacyremapper.chunk.blockstorage.BlockStorage;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.ChannelUtils;
 
 public class ChunkTransformer {
@@ -31,6 +33,42 @@ public class ChunkTransformer {
 		}
 	}
 
+	protected static final int blocksInSection = 16 * 16 * 16;
+
+	//TODO: create own implementation of DataBits to reduce nms imports, and speed up transformation by avoiding index check
+	protected static final int bitsPerBlock19 = 13;
+	public byte[] to19Data(ProtocolVersion version) throws IOException {
+		ArrayBasedIdRemappingTable table = IdRemapper.BLOCK.getTable(version);
+		ByteBuf chunkdata = Allocator.allocateBuffer();
+		try {
+			for (int i = 0; i < columnsCount; i++) {
+				ChunkSection section = sections[i];
+				chunkdata.writeByte(bitsPerBlock19);
+				ChannelUtils.writeVarInt(chunkdata, 0);
+				BlockStorage storage = section.blockdata;
+				DataBits databits = new DataBits(bitsPerBlock19, blocksInSection);
+				for (int block = 0; block < blocksInSection; block++) {
+					databits.a(block, table.getRemap(storage.getBlockState(block)));
+				}
+				long[] ldata = databits.a();
+				ChannelUtils.writeVarInt(chunkdata, ldata.length);
+				for (long l : ldata) {
+					chunkdata.writeLong(l);
+				}
+				chunkdata.writeBytes(section.blocklight);
+				if (hasSkyLight) {
+					chunkdata.writeBytes(section.skylight);
+				}
+			}
+			if (hasBiomeData) {
+				chunkdata.writeBytes(biomeData);
+			}
+			return ChannelUtils.toArray(chunkdata);
+		} finally {
+			chunkdata.release();
+		}
+	}
+
 	public byte[] toPre18Data(ProtocolVersion version) throws IOException {
 		ArrayBasedIdRemappingTable table = IdRemapper.BLOCK.getTable(version);
 		byte[] data = new byte[(hasSkyLight ? 10240 : 8192) * columnsCount + 256];
@@ -42,7 +80,7 @@ public class ChunkTransformer {
 			ChunkSection section = sections[i];
 			BlockStorage storage = section.blockdata;
 			int blockdataacc = 0;
-			for (int block = 0; block < 4096; block++) {
+			for (int block = 0; block < blocksInSection; block++) {
 				int blockstate = storage.getBlockState(block);
 				blockstate = table.getRemap(blockstate);
 				data[blockIdIndex + block] = (byte) (blockstate >> 4);
@@ -78,7 +116,7 @@ public class ChunkTransformer {
 		for (int i = 0; i < columnsCount; i++) {
 			ChunkSection section = sections[i];
 			BlockStorage storage = section.blockdata;
-			for (int block = 0; block < 4096; block++) {
+			for (int block = 0; block < blocksInSection; block++) {
 				int dataindex = blockIdIndex + (block << 1);
 				int blockstate = storage.getBlockState(block);
 				blockstate = table.getRemap(blockstate);
@@ -99,7 +137,7 @@ public class ChunkTransformer {
 		return data;
 	}
 
-	private static class ChunkSection {
+	protected static class ChunkSection {
 
 		private static final int[] globalpalette = new int[Short.MAX_VALUE * 2];
 		static {
