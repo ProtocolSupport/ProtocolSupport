@@ -20,14 +20,14 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_1_7__1_8.L
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_1_7__1_8.LoginSuccess;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_1_8.SetCompression;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__1_6__1_7__1_8.EntityStatus;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__1_6__1_7__1_8.InventoryClose;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__1_6__1_7__1_8.InventoryConfirmTransaction;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__1_6__1_7__1_8.InventoryData;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__1_6__1_7__1_8.InventorySetItems;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__1_6__1_7__1_8.InventorySetSlot;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__1_6__1_7__1_8.ScoreboardDisplay;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__1_6__1_7__1_8.TimeUpdate;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__1_6__1_7__1_8.WorldSound;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__1_6__1_7__1_8__1_9_r1__1_9_r2.InventoryClose;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__1_6__1_7__1_8__1_9_r1__1_9_r2.InventorySetItems;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__1_6__1_7__1_8__1_9_r1__1_9_r2.InventorySetSlot;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_6__1_7__1_8.EntityAttach;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_6__1_7__1_8.PlayerAbilities;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_6__1_7__1_8.SetPassengers;
@@ -63,7 +63,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8.EntityR
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8.EntitySetAttributes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8.EntityTeleport;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8.EntityVelocity;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8.InventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8.KeepAlive;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8.Login;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8.Map;
@@ -89,6 +88,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8.WorldPa
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1.BlockTileUpdate;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1__1_9_r2.BlockChangeMulti;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1__1_9_r2.BlockChangeSingle;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1__1_9_r2.InventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7__1_8__1_9_r1.Pong;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7__1_8__1_9_r1.ServerInfo;
 import protocolsupport.protocol.pipeline.IPacketEncoder;
