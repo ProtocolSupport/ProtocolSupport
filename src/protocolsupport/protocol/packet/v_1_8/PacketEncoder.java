@@ -51,7 +51,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8.Chunk;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8.CollectEffect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8.CustomPayload;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8.Entity;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8.EntityDestroy;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8.EntityEffectAdd;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8.EntityEffectRemove;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8.EntityEquipment;
@@ -88,6 +87,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8.WorldPa
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1.BlockTileUpdate;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1__1_9_r2.BlockChangeMulti;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1__1_9_r2.BlockChangeSingle;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1__1_9_r2.EntityDestroy;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1__1_9_r2.InventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7__1_8__1_9_r1.Pong;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7__1_8__1_9_r1.ServerInfo;
