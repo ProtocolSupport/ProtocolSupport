@@ -5,7 +5,6 @@ import java.io.IOException;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-//TODO: implement it
 public abstract class MiddleWorldCustomSound<T> extends ClientBoundMiddlePacket<T>  {
 
 	protected String id;

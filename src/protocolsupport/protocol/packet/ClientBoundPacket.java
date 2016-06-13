@@ -25,6 +25,7 @@ import net.minecraft.server.v1_10_R1.PacketPlayOutChat;
 import net.minecraft.server.v1_10_R1.PacketPlayOutCloseWindow;
 import net.minecraft.server.v1_10_R1.PacketPlayOutCollect;
 import net.minecraft.server.v1_10_R1.PacketPlayOutCustomPayload;
+import net.minecraft.server.v1_10_R1.PacketPlayOutCustomSoundEffect;
 import net.minecraft.server.v1_10_R1.PacketPlayOutEntity;
 import net.minecraft.server.v1_10_R1.PacketPlayOutEntity.PacketPlayOutEntityLook;
 import net.minecraft.server.v1_10_R1.PacketPlayOutEntity.PacketPlayOutRelEntityMove;
@@ -165,6 +166,7 @@ public class ClientBoundPacket {
 	public static final int PLAY_PLAYER_LIST_HEADER_FOOTER = getId(PacketPlayOutPlayerListHeaderFooter.class);
 	public static final int PLAY_SET_PASSENGERS = getId(PacketPlayOutMount.class);
 	public static final int PLAY_CHUNK_UNLOAD = getId(PacketPlayOutUnloadChunk.class);
+	public static final int PLAY_WORLD_CUSTOM_SOUND = getId(PacketPlayOutCustomSoundEffect.class);
 	
 	public static final int LEGACY_PLAY_UPDATE_SIGN_ID = 100;
 
