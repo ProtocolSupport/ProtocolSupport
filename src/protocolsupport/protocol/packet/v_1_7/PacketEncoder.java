@@ -78,12 +78,12 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_7__1_8.Ex
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_7__1_8.GameStateChange;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_7__1_8.HeldSlot;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_7__1_8.KickDisconnect;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_7__1_8.Respawn;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_7__1_8.SpawnExpOrb;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_7__1_8.SpawnGlobal;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_7__1_8.SpawnLiving;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_7__1_8.Statistics;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_7__1_8.TabComplete;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_7__1_8__1_9_r1__1_9_r2.Respawn;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7__1_8__1_9_r1.Pong;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7__1_8__1_9_r1.ServerInfo;
 import protocolsupport.protocol.pipeline.IPacketEncoder;
