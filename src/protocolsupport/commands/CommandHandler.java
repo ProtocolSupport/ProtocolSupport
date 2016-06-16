@@ -15,10 +15,6 @@ import net.minecraft.server.v1_10_R1.MinecraftServer;
 import net.minecraft.server.v1_10_R1.PropertyManager;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.api.chat.components.TextComponent;
-import protocolsupport.api.chat.modifiers.Modifier;
-import protocolsupport.api.tab.TabAPI;
-import protocolsupport.api.title.TitleAPI;
 
 public class CommandHandler implements CommandExecutor, TabCompleter {
 
@@ -50,38 +46,6 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			}
 			return true;
 		}
-		if (args.length == 1 && args[0].equalsIgnoreCase("testtitle")) {
-			TextComponent title = new TextComponent("Test title");
-			Modifier titlemodifier = new Modifier();
-			titlemodifier.setColor(ChatColor.AQUA);
-			titlemodifier.setBold(true);
-			title.setModifier(titlemodifier);
-			TextComponent subtitle = new TextComponent("Test subtitle");
-			Modifier subtitlemodifier = new Modifier();
-			subtitlemodifier.setColor(ChatColor.BLUE);
-			subtitlemodifier.setUnderlined(true);
-			subtitle.setModifier(subtitlemodifier);
-			for (Player player : Bukkit.getOnlinePlayers()) {
-				TitleAPI.sendSimpleTitle(player, title, subtitle, 20, 60, 20);
-			}
-			return true;
-		}
-		if (args.length == 1 && args[0].equalsIgnoreCase("testtab")) {
-			TextComponent header = new TextComponent("Test header");
-			Modifier headermodifier = new Modifier();
-			headermodifier.setColor(ChatColor.AQUA);
-			headermodifier.setBold(true);
-			header.setModifier(headermodifier);
-			TextComponent footer = new TextComponent("Test footer");
-			Modifier footermodifier = new Modifier();
-			footermodifier.setColor(ChatColor.BLUE);
-			footermodifier.setUnderlined(true);
-			footer.setModifier(footermodifier);
-			for (Player player : Bukkit.getOnlinePlayers()) {
-				TabAPI.sendHeaderFooter(player, header, footer);
-			}
-			return true;
-		}
 		return false;
 	}
 
@@ -107,12 +71,6 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 		}
 		if ("debug".startsWith(args[0])) {
 			completions.add("debug");
-		}
-		if ("testtitle".startsWith(args[0])) {
-			completions.add("testtitle");
-		}
-		if ("testtab".startsWith(args[0])) {
-			completions.add("testtab");
 		}
 		return completions;
 	}
