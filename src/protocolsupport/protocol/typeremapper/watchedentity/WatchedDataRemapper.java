@@ -6,6 +6,7 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.MappingEntry;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 
@@ -23,10 +24,13 @@ public class WatchedDataRemapper {
 		for (MappingEntry entry : stype.getRemaps(to)) {
 			DataWatcherObject<?> object = originaldata.get(entry.getIdFrom());
 			if (object != null) {
+				ValueRemapper<DataWatcherObject<?>> remapper = entry.getValueRemapper();
 				try {
-					DataWatcherObject<?> remapped = entry.getValueRemapper().remap(object);
-					remapped.getTypeId(to);
-					transformed.put(entry.getIdTo(), remapped);
+					if (remapper.isValid(object)) {
+						DataWatcherObject<?> remapped = remapper.remap(object);
+						remapped.getTypeId(to);
+						transformed.put(entry.getIdTo(), remapped);
+					}
 				} catch (Exception e) {
 					throw new MetadataRemapException(
 						"Unable to remap "+

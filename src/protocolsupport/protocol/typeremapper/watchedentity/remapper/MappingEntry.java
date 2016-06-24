@@ -4,26 +4,14 @@ import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueR
 
 public class MappingEntry {
 
-	protected int from;
-	protected int to;
-	protected ValueRemapper<?> vremap = ValueRemapper.NO_OP;
-
-	protected MappingEntry(int from, int to) {
-		this.from = from;
-		this.to = to;
-	}
-
-	protected MappingEntry(int id) {
-		this(id, id);
-	}
+	protected final int from;
+	protected final int to;
+	protected final ValueRemapper<?> vremap;
 
 	protected MappingEntry(int from, int to, ValueRemapper<?> vremap) {
-		this(from, to);
+		this.from = from;
+		this.to = to;
 		this.vremap = vremap;
-	}
-
-	protected MappingEntry(int id, ValueRemapper<?> vremap) {
-		this(id, id, vremap);
 	}
 
 	public int getIdFrom() {
