@@ -6,19 +6,24 @@ import org.bukkit.entity.Player;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.NetworkManager;
-import net.minecraft.server.v1_8_R3.PlayerConnection;
-import protocolsupport.protocol.core.ChannelHandlers;
+import io.netty.handler.codec.DecoderException;
+import io.netty.util.AttributeKey;
+import net.minecraft.server.v1_10_R1.EntityPlayer;
+import net.minecraft.server.v1_10_R1.EnumProtocol;
+import net.minecraft.server.v1_10_R1.NetworkManager;
+import net.minecraft.server.v1_10_R1.PlayerConnection;
+import protocolsupport.protocol.pipeline.ChannelHandlers;
 
 public class ChannelUtils {
+
+	public static final AttributeKey<EnumProtocol> CURRENT_PROTOCOL_KEY = NetworkManager.c;
 
 	public static Player getBukkitPlayer(Channel channel) {
 		return getPlayer(getNetworkManager(channel)).getBukkitEntity();
 	}
 
 	public static EntityPlayer getPlayer(NetworkManager networkManager) {
-		return ((PlayerConnection) networkManager.getPacketListener()).player;
+		return ((PlayerConnection) networkManager.i()).player;
 	}
 
 	public static SocketAddress getNetworkManagerSocketAddress(Channel channel) {
@@ -38,20 +43,20 @@ public class ChannelUtils {
 	public static int readVarInt(ByteBuf from) {
 		int value = 0;
 		int length = 0;
-		byte b0;
+		byte part;
 		do {
-			b0 = from.readByte();
-			value |= (b0 & 0x7F) << (length++ * 7);
+			part = from.readByte();
+			value |= (part & 0x7F) << (length++ * 7);
 			if (length > 5) {
-				throw new RuntimeException("VarInt too big");
+				throw new DecoderException("VarInt too big");
 			}
-		} while ((b0 & 0x80) == 0x80);
+		} while (part < 0);
 		return value;
 	}
 
 	public static void writeVarInt(ByteBuf to, int i) {
 		while ((i & 0xFFFFFF80) != 0x0) {
-			to.writeByte((i & 0x7F) | 0x80);
+			to.writeByte(i | 0x80);
 			i >>>= 7;
 		}
 		to.writeByte(i);

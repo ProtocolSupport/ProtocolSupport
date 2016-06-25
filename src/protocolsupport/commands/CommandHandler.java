@@ -1,11 +1,7 @@
 package protocolsupport.commands;
 
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.server.v1_8_R3.MinecraftServer;
-import net.minecraft.server.v1_8_R3.PropertyManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -15,6 +11,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
+import net.minecraft.server.v1_10_R1.MinecraftServer;
+import net.minecraft.server.v1_10_R1.PropertyManager;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
 
@@ -37,6 +35,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			return true;
 		}
 		if (args.length == 1 && args[0].equalsIgnoreCase("debug")) {
+			@SuppressWarnings("deprecation")
 			PropertyManager manager = MinecraftServer.getServer().getPropertyManager();
 			if (!manager.getBoolean(DEBUG_PROPERTY, false)) {
 				manager.setProperty(DEBUG_PROPERTY, Boolean.TRUE);
@@ -66,16 +65,14 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
-		if (args[0].isEmpty()) {
-			return Arrays.asList("list", "debug");
-		}
+		ArrayList<String> completions = new ArrayList<String>();
 		if ("list".startsWith(args[0])) {
-			return Collections.singletonList("list");
+			completions.add("list");
 		}
 		if ("debug".startsWith(args[0])) {
-			return Collections.singletonList("debug");
+			completions.add("debug");
 		}
-		return Collections.emptyList();
+		return completions;
 	}
 
 }

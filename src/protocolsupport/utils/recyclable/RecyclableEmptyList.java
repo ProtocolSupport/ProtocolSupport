@@ -11,7 +11,7 @@ public class RecyclableEmptyList<E> implements RecyclableCollection<E> {
 
 	@SuppressWarnings("unchecked")
 	public static <T> RecyclableEmptyList<T> get() {
-		return (RecyclableEmptyList<T>) instance;
+		return instance;
 	}
 
 	private RecyclableEmptyList() {
@@ -95,14 +95,17 @@ public class RecyclableEmptyList<E> implements RecyclableCollection<E> {
 	private static class EmptyIterator<E> implements Iterator<E> {
 		static final EmptyIterator<Object> EMPTY_ITERATOR = new EmptyIterator<>();
 
+		@Override
 		public boolean hasNext() {
 			return false;
 		}
 
+		@Override
 		public E next() {
 			throw new NoSuchElementException();
 		}
 
+		@Override
 		public void remove() {
 			throw new IllegalStateException();
 		}

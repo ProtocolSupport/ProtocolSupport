@@ -1,37 +1,60 @@
 package protocolsupport.protocol.typeremapper.watchedentity;
 
-import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.watchedentity.remapper.RemappingEntry;
-import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificType;
-import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
-import protocolsupport.utils.DataWatcherObject;
-import protocolsupport.utils.DataWatcherObject.ValueType;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
+import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.MappingEntry;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapper;
+import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+
 public class WatchedDataRemapper {
 
-	private static final TIntObjectMap<DataWatcherObject> FAKE_EMPTY_MAP = new TIntObjectHashMap<DataWatcherObject>();
-	static {
-		FAKE_EMPTY_MAP.put(31, new DataWatcherObject(ValueType.BYTE, (byte) 0));
-	}
+	private static final TIntObjectMap<DataWatcherObject<?>> EMPTY_MAP = new TIntObjectHashMap<DataWatcherObject<?>>();
 
-	public static TIntObjectMap<DataWatcherObject> transform(WatchedEntity entity, TIntObjectMap<DataWatcherObject> originaldata, ProtocolVersion to) {
+	@SuppressWarnings("unchecked")
+	public static TIntObjectMap<DataWatcherObject<?>> transform(WatchedEntity entity, TIntObjectMap<DataWatcherObject<?>> originaldata, ProtocolVersion to) {
 		if (entity == null) {
-			return FAKE_EMPTY_MAP;
+			return EMPTY_MAP;
 		}
-		TIntObjectHashMap<DataWatcherObject> transformed = new TIntObjectHashMap<DataWatcherObject>();
-		SpecificType stype = entity.getType();
-		for (RemappingEntry entry : stype.getRemaps(to)) {
-			DataWatcherObject object = originaldata.get(entry.getIdFrom());
+		TIntObjectHashMap<DataWatcherObject<?>> transformed = new TIntObjectHashMap<DataWatcherObject<?>>();
+		SpecificRemapper stype = entity.getType();
+		for (MappingEntry entry : stype.getRemaps(to)) {
+			DataWatcherObject<?> object = originaldata.get(entry.getIdFrom());
 			if (object != null) {
-				transformed.put(entry.getIdTo(), entry.getValueRemapper().remap(object));
+				ValueRemapper<DataWatcherObject<?>> remapper = entry.getValueRemapper();
+				try {
+					if (remapper.isValid(object)) {
+						DataWatcherObject<?> remapped = remapper.remap(object);
+						remapped.getTypeId(to);
+						transformed.put(entry.getIdTo(), remapped);
+					}
+				} catch (Exception e) {
+					throw new MetadataRemapException(
+						"Unable to remap "+
+						"metadata(index: " + entry.getIdFrom() + ") "+
+						"for entity "+
+						"(id: " + entity.getId()+
+						", type: " + entity.getType() + ")"+
+						" to protocol version " + to
+						,e
+					);
+				}
 			}
 		}
-		if (transformed.isEmpty()) {
-			return FAKE_EMPTY_MAP;
-		}
 		return transformed;
+	}
+
+	public static class MetadataRemapException extends RuntimeException {
+
+		public MetadataRemapException(String string, Exception e) {
+			super(string, e);
+		}
+
+		private static final long serialVersionUID = 1L;
+		
 	}
 
 }

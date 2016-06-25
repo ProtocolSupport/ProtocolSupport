@@ -4,17 +4,14 @@ import org.bukkit.Material;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
-import protocolsupport.protocol.typeremapper.id.RemappingTable;
+import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
 
 public class ItemRemapperControl {
 
-	private final RemappingTable table;
+	private final ArrayBasedIdRemappingTable table;
 
 	public ItemRemapperControl(ProtocolVersion version) {
 		switch (version) {
-			case MINECRAFT_1_8: {
-				throw new IllegalArgumentException("Remapper for version "+version+" doesn't exist");
-			}
 			case UNKNOWN: {
 				throw new IllegalArgumentException(version+" is not a valid protocol version");
 			}

@@ -68,6 +68,10 @@ public class Modifier {
 		}
 	}
 
+	public boolean hasColor() {
+		return color != null;
+	}
+
 	public ChatColor getColor() {
 		return color;
 	}

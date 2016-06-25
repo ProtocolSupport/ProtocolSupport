@@ -101,9 +101,6 @@ public class ComponentSerializer implements JsonDeserializer<BaseComponent>, Jso
 
 	@Override
 	public JsonElement serialize(BaseComponent component, Type type, JsonSerializationContext ctx) {
-		if (component instanceof TextComponent && component.isSimple()) {
-			return new JsonPrimitive(component.getValue());
-		}
 		JsonObject jsonObject = new JsonObject();
 		if (!component.getModifier().isEmpty()) {
 			serializeAndAdd(component.getModifier(), jsonObject, ctx);

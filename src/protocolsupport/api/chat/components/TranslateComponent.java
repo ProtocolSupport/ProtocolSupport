@@ -3,6 +3,8 @@ package protocolsupport.api.chat.components;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.server.v1_10_R1.LocaleI18n;
+
 public class TranslateComponent extends BaseComponent {
 
 	private String translationKey;
@@ -25,7 +27,7 @@ public class TranslateComponent extends BaseComponent {
 
 	@Override
 	public String getValue() {
-		return "";
+		return LocaleI18n.a(translationKey, args.toArray());
 	}
 
 }

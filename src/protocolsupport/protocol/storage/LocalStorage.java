@@ -1,24 +1,23 @@
 package protocolsupport.protocol.storage;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import protocolsupport.protocol.transformer.utils.LegacyUtils;
+import com.mojang.authlib.properties.Property;
+
+import gnu.trove.map.hash.TIntObjectHashMap;
+import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
 
-import com.mojang.authlib.properties.Property;
-
 public class LocalStorage {
 
-	private final TIntObjectHashMap<WatchedEntity> watchedEntities = new TIntObjectHashMap<WatchedEntity>();
+	private final TIntObjectHashMap<WatchedEntity> watchedEntities = new TIntObjectHashMap<>();
 	private WatchedPlayer player;
 	private final HashMap<UUID, PlayerListEntry> playerlist = new HashMap<>();
+	private int dimensionId;
 
 	public void addWatchedEntity(WatchedEntity entity) {
 		watchedEntities.put(entity.getId(), entity);
@@ -63,6 +62,14 @@ public class LocalStorage {
 		playerlist.remove(uuid);
 	}
 
+	public void setDimensionId(int dimensionId) {
+		this.dimensionId = dimensionId;
+	}
+
+	public boolean hasSkyLightInCurrentDimension() {
+		return dimensionId == 0;
+	}
+
 	public static class PlayerListEntry implements Cloneable {
 		private final String name;
 		private String displayNameJson;
@@ -85,7 +92,7 @@ public class LocalStorage {
 		}
 
 		public String getName() {
-			return displayNameJson == null ? name : LegacyUtils.toText(ChatSerializer.a(displayNameJson));
+			return displayNameJson == null ? name : ChatAPI.fromJSON(displayNameJson).toLegacyText();
 		}
 
 		@Override

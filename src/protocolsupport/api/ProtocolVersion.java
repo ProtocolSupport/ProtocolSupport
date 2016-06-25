@@ -2,7 +2,12 @@ package protocolsupport.api;
 
 public enum ProtocolVersion {
 
-	MINECRAFT_FUTURE(-1, 10),
+	MINECRAFT_FUTURE(-1, 15),
+	MINECRAFT_1_10(210, 14, "1.10"),
+	MINECRAFT_1_9_4(110, 13, "1.9.4"),
+	MINECRAFT_1_9_2(109, 12, "1.9.2"),
+	MINECRAFT_1_9_1(108, 11, "1.9.1"),
+	MINECRAFT_1_9(107, 10, "1.9"),
 	MINECRAFT_1_8(47, 9, "1.8"),
 	MINECRAFT_1_7_10(5, 8, "1.7.10"),
 	MINECRAFT_1_7_5(4, 7, "1.7.5"),
@@ -79,6 +84,21 @@ public enum ProtocolVersion {
 	@Deprecated
 	public static ProtocolVersion fromId(int id) {
 		switch (id) {
+			case 210: {
+				return MINECRAFT_1_10;
+			}
+			case 110: {
+				return MINECRAFT_1_9_4;
+			}
+			case 109: {
+				return MINECRAFT_1_9_2;
+			}
+			case 108: {
+				return MINECRAFT_1_9_1;
+			}
+			case 107: {
+				return MINECRAFT_1_9;
+			}
 			case 47: {
 				return MINECRAFT_1_8;
 			}
@@ -95,7 +115,7 @@ public enum ProtocolVersion {
 				return MINECRAFT_1_6_2;
 			}
 			case 73: {
-				return MINECRAFT_1_6_1; 
+				return MINECRAFT_1_6_1;
 			}
 			case 61: {
 				return MINECRAFT_1_5_2;
@@ -115,7 +135,7 @@ public enum ProtocolVersion {
 		int endId = Math.max(start.orderId, end.orderId);
 		ProtocolVersion[] between = new ProtocolVersion[endId - startId + 1];
 		for (int i = startId; i <= endId; i++) {
-			between[i - startId] = byOrderId[i]; 
+			between[i - startId] = byOrderId[i];
 		}
 		return between;
 	}
@@ -129,7 +149,7 @@ public enum ProtocolVersion {
 	}
 
 	public static ProtocolVersion getLatest() {
-		return ProtocolVersion.MINECRAFT_1_8;
+		return ProtocolVersion.MINECRAFT_1_10;
 	}
 
 	public static ProtocolVersion getOldest() {

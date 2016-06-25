@@ -3,32 +3,34 @@ package protocolsupport.protocol.typeremapper.id;
 import java.util.EnumMap;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.typeremapper.id.RemappingTable.IdRemappingTable;
 
-public abstract class RemappingRegistry {
+public abstract class RemappingRegistry<T extends RemappingTable> {
 
-	private final EnumMap<ProtocolVersion, RemappingTable> remappings = new EnumMap<>(ProtocolVersion.class);
+	private final EnumMap<ProtocolVersion, T> remappings = new EnumMap<>(ProtocolVersion.class);
 
 	public RemappingRegistry() {
 		for (ProtocolVersion version : ProtocolVersion.values()) {
-			remappings.put(version, createTable());
+			if (version.isSupported()) {
+				remappings.put(version, createTable());
+			}
 		}
 	}
 
-	public RemappingTable getTable(ProtocolVersion version) {
+	public T getTable(ProtocolVersion version) {
 		return remappings.get(version);
 	}
 
-	protected void copy(RemappingRegistry other) {
-		remappings.clear();
-		remappings.putAll(other.remappings);
-	}
+	protected abstract T createTable();
 
-	protected abstract RemappingTable createTable();
+	public static abstract class IdRemappingRegistry<T extends IdRemappingTable> extends RemappingRegistry<T> {
 
-	protected void registerRemapEntry(int from, int to, ProtocolVersion... versions) {
-		for (ProtocolVersion version : versions) {
-			remappings.get(version).setRemap(from, to);
+		public void registerRemapEntry(int from, int to, ProtocolVersion... versions) {
+			for (ProtocolVersion version : versions) {
+				getTable(version).setRemap(from, to);
+			}
 		}
+
 	}
 
 }

@@ -28,9 +28,17 @@ public class ProtocolVersionsHelper {
 
 	public static final ProtocolVersion[] BEFORE_1_9 = concat(BEFORE_1_8, ProtocolVersion.MINECRAFT_1_8);
 
-	public static final ProtocolVersion[] ALL = BEFORE_1_9;
+	public static final ProtocolVersion[] BEFORE_1_9_1 = concat(BEFORE_1_9, ProtocolVersion.MINECRAFT_1_9_1);
 
+	public static final ProtocolVersion[] BEFORE_1_10 = concat(BEFORE_1_9_1, ProtocolVersion.MINECRAFT_1_9_2, ProtocolVersion.MINECRAFT_1_9_4);
 
+	public static final ProtocolVersion[] ALL = concat(BEFORE_1_10, ProtocolVersion.MINECRAFT_1_10);
+
+	public static final ProtocolVersion[] ALL_1_9 = ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_9_4, ProtocolVersion.MINECRAFT_1_9);
+
+	public static final ProtocolVersion[] RANGE_1_6_1_7 = ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_6_1);
+
+	public static final ProtocolVersion[] RANGE_1_8_1_9 = ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_9_4, ProtocolVersion.MINECRAFT_1_8);
 
 	public static final ProtocolVersion[] concat(ProtocolVersion[] versions, ProtocolVersion... moreVersions) {
 		ArrayList<ProtocolVersion> all = new ArrayList<ProtocolVersion>();

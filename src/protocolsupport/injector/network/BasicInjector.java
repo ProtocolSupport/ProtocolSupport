@@ -11,24 +11,26 @@ import org.spigotmc.SneakyThrow;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandler;
-
-import net.minecraft.server.v1_8_R3.ChatComponentText;
-import net.minecraft.server.v1_8_R3.MinecraftServer;
-import net.minecraft.server.v1_8_R3.NetworkManager;
-import net.minecraft.server.v1_8_R3.ServerConnection;
-
-import protocolsupport.utils.Utils;
+import net.minecraft.server.v1_10_R1.ChatComponentText;
+import net.minecraft.server.v1_10_R1.MinecraftServer;
+import net.minecraft.server.v1_10_R1.NetworkManager;
+import net.minecraft.server.v1_10_R1.ServerConnection;
+import protocolsupport.utils.ReflectionUtils;
 
 public class BasicInjector {
 
 	@SuppressWarnings("unchecked")
 	public static void inject() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		ServerConnection serverConnection = MinecraftServer.getServer().aq();
-		Field connectionsListField = Utils.setAccessible(ServerConnection.class.getDeclaredField("g"));
-		ChannelInjectList connectionsList = new ChannelInjectList(
-			((List<NetworkManager>) Utils.setAccessible(ServerConnection.class.getDeclaredField("h")).get(serverConnection)),
-			(List<ChannelFuture>) connectionsListField.get(serverConnection)
-		);
+		@SuppressWarnings("deprecation")
+		ServerConnection serverConnection = MinecraftServer.getServer().am();
+		List<NetworkManager> nmList = null;
+		try {
+			nmList = (List<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("pending")).get(serverConnection);
+		} catch (NoSuchFieldException e) {
+			nmList = (List<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("h")).get(serverConnection);
+		}
+		Field connectionsListField = ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("g"));
+		ChannelInjectList connectionsList = new ChannelInjectList(nmList, (List<ChannelFuture>) connectionsListField.get(serverConnection));
 		connectionsListField.set(serverConnection, connectionsList);
 		connectionsList.injectExisting();
 	}
@@ -91,7 +93,7 @@ public class BasicInjector {
 			try {
 				ChannelHandler serverMainHandler = null;
 				for (ChannelHandler handler : channel.pipeline().toMap().values()) {
-					if (handler.getClass().getSimpleName().equals("ServerBootstrapAcceptor")) {
+					if (handler.getClass().getName().equals("io.netty.bootstrap.ServerBootstrap$ServerBootstrapAcceptor")) {
 						serverMainHandler = handler;
 						break;
 					}
@@ -99,7 +101,9 @@ public class BasicInjector {
 				if (serverMainHandler == null) {
 					throw new IllegalStateException("Unable to find default netty channel initializer");
 				}
-				Utils.setAccessible(serverMainHandler.getClass().getDeclaredField("childHandler")).set(serverMainHandler, new ServerConnectionChannel(networkManagersList));
+				ReflectionUtils
+				.setAccessible(serverMainHandler.getClass().getDeclaredField("childHandler"))
+				.set(serverMainHandler, new ServerConnectionChannel(new NetworkManagerList(networkManagersList)));
 			} catch (Exception e) {
 				SneakyThrow.sneaky(e);
 			}

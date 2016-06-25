@@ -4,12 +4,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import protocolsupport.commands.CommandHandler;
+import protocolsupport.commands.ReloadCommandRemover;
 import protocolsupport.injector.ServerInjector;
 import protocolsupport.injector.network.NettyInjector;
-import protocolsupport.protocol.ClientBoundPacket;
-import protocolsupport.protocol.ServerBoundPacket;
-import protocolsupport.protocol.core.initial.InitialPacketDecoder;
-import protocolsupport.protocol.transformer.handlers.AbstractLoginListener;
+import protocolsupport.protocol.legacyremapper.LegacySound;
+import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.ServerBoundPacket;
+import protocolsupport.protocol.packet.handler.AbstractLoginListener;
+import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
+import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
+import protocolsupport.protocol.typeskipper.id.IdSkipper;
+import protocolsupport.protocol.typeskipper.string.StringSkipper;
 import protocolsupport.server.listeners.PlayerListener;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
@@ -25,8 +31,14 @@ public class ProtocolSupport extends JavaPlugin {
 			ClientBoundPacket.init();
 			InitialPacketDecoder.init();
 			AbstractLoginListener.init();
-			NettyInjector.inject();
+			LegacySound.init();
+			IdSkipper.init();
+			StringSkipper.init();
+			SpecificRemapper.init();
 			ServerInjector.inject();
+			NettyInjector.inject();
+			ReloadCommandRemover.remove();
+			IdRemapper.init();
 		} catch (Throwable t) {
 			t.printStackTrace();
 			Bukkit.shutdown();
@@ -36,12 +48,16 @@ public class ProtocolSupport extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		getCommand("protocolsupport").setExecutor(new CommandHandler());
-		getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+		getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 	}
 
 	@Override
 	public void onDisable() {
 		Bukkit.shutdown();
+	}
+
+	public static void logWarning(String message) {
+		JavaPlugin.getPlugin(ProtocolSupport.class).getLogger().warning(message);
 	}
 
 	public static void logInfo(String message) {
