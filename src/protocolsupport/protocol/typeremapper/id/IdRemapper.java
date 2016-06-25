@@ -20,7 +20,7 @@ public class IdRemapper {
 
 	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> BLOCK = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
 		{
-			registerRemapEntry(Material.STRUCTURE_VOID, Material.AIR, ProtocolVersionsHelper.BEFORE_1_10);
+			registerRemapEntry(Material.STRUCTURE_VOID, Material.COBBLESTONE, ProtocolVersionsHelper.BEFORE_1_10);
 			registerRemapEntry(Material.NETHER_WART_BLOCK, Material.STONE, ProtocolVersionsHelper.BEFORE_1_10);
 			registerRemapEntry(Material.RED_NETHER_BRICK, Material.NETHER_BRICK, ProtocolVersionsHelper.BEFORE_1_10);
 			registerRemapEntry(Material.MAGMA, Material.NETHERRACK, ProtocolVersionsHelper.BEFORE_1_10);
