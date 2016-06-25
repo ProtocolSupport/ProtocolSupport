@@ -5,7 +5,8 @@ import io.netty.buffer.ByteBuf;
 public abstract class BlockStorage {
 
 	public static BlockStorage create(int[] palette, int bitsPerBlock, int dataLength) {
-		switch (bitsPerBlock) {
+		return new DataBitsBlockStorage(palette, bitsPerBlock);
+		/*switch (bitsPerBlock) {
 			case 4: {
 				return new NibbleBlockStorage(palette, dataLength);
 			}
@@ -15,7 +16,7 @@ public abstract class BlockStorage {
 			default: {
 				return new BitsBlockStorage(palette, bitsPerBlock, dataLength);
 			}
-		}
+		}*/
 	}
 
 	protected final int bitsPerBlock;
