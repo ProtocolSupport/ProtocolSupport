@@ -7,6 +7,7 @@ import protocolsupport.commands.CommandHandler;
 import protocolsupport.commands.ReloadCommandRemover;
 import protocolsupport.injector.ServerInjector;
 import protocolsupport.injector.network.NettyInjector;
+import protocolsupport.logger.AsyncErrorLogger;
 import protocolsupport.protocol.legacyremapper.LegacySound;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.ServerBoundPacket;
@@ -39,6 +40,7 @@ public class ProtocolSupport extends JavaPlugin {
 			NettyInjector.inject();
 			ReloadCommandRemover.remove();
 			IdRemapper.init();
+			AsyncErrorLogger.INSTANCE.start();
 		} catch (Throwable t) {
 			t.printStackTrace();
 			Bukkit.shutdown();
@@ -54,6 +56,7 @@ public class ProtocolSupport extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		Bukkit.shutdown();
+		AsyncErrorLogger.INSTANCE.stop();
 	}
 
 	public static void logWarning(String message) {

@@ -51,10 +51,22 @@ public class Utils {
 				return Integer.parseInt(t);
 			}
 		};
+		public static final Converter<String, Long> STRING_TO_LONG = new Converter<String, Long>() {
+			@Override
+			public Long convert(String t){
+				return Long.parseLong(t);
+			}
+		};
 		public static final Converter<String, Boolean> STRING_TO_BOOLEAN = new Converter<String, Boolean>() {
 			@Override
 			public Boolean convert(String t) {
 				return Boolean.parseBoolean(t);
+			}
+		};
+		public static final Converter<String, String> NONE = new Converter<String, String>() {
+			@Override
+			public String convert(String t) {
+				return t;
 			}
 		};
 		public R convert(T t);

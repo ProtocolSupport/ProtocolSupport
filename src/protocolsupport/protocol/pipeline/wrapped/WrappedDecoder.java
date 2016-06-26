@@ -1,6 +1,8 @@
 package protocolsupport.protocol.pipeline.wrapped;
 
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.nio.channels.ClosedChannelException;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -10,11 +12,12 @@ import com.mojang.authlib.GameProfile;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import net.minecraft.server.v1_10_R1.MinecraftServer;
 import net.minecraft.server.v1_10_R1.NetworkManager;
 import net.minecraft.server.v1_10_R1.PacketListener;
 import net.minecraft.server.v1_10_R1.PlayerConnection;
+import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.events.PlayerDisconnectEvent;
+import protocolsupport.logger.AsyncErrorLogger;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.protocol.pipeline.IPacketDecoder;
 import protocolsupport.protocol.storage.ProtocolStorage;
@@ -37,33 +40,35 @@ public class WrappedDecoder extends ByteToMessageDecoder {
 		realDecoder.decode(ctx, input, list);
 	}
 
-	@SuppressWarnings("deprecation")
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable e) throws Exception {
+		super.exceptionCaught(ctx, e);
+		if (!(e instanceof ClosedChannelException)) {
+			SocketAddress remoteaddr = ctx.channel().remoteAddress();
+			AsyncErrorLogger.INSTANCE.log(e, remoteaddr, ProtocolSupportAPI.getProtocolVersion(remoteaddr));
+		}
+	}
+
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		super.channelInactive(ctx);
-		try {
-			NetworkManager networkManager = ChannelUtils.getNetworkManager(ctx.channel());
-			InetSocketAddress addr = (InetSocketAddress) networkManager.getSocketAddress();
-			String username = null;
-			PacketListener listener = networkManager.i();
-			if (listener instanceof AbstractLoginListener) {
-				GameProfile profile = ((AbstractLoginListener) listener).getProfile();
-				if (profile != null) {
-					username = profile.getName();
-				}
-			} else if (listener instanceof PlayerConnection) {
-				username = ((PlayerConnection) listener).player.getProfile().getName();
+		NetworkManager networkManager = ChannelUtils.getNetworkManager(ctx.channel());
+		InetSocketAddress addr = (InetSocketAddress) networkManager.getSocketAddress();
+		String username = null;
+		PacketListener listener = networkManager.i();
+		if (listener instanceof AbstractLoginListener) {
+			GameProfile profile = ((AbstractLoginListener) listener).getProfile();
+			if (profile != null) {
+				username = profile.getName();
 			}
-			if (username != null) {
-				PlayerDisconnectEvent event = new PlayerDisconnectEvent(addr, username);
-				Bukkit.getPluginManager().callEvent(event);
-			}
-			ProtocolStorage.clearData(addr);
-		} catch (Throwable t) {
-			if (MinecraftServer.getServer().isDebugging()) {
-				t.printStackTrace();
-			}
+		} else if (listener instanceof PlayerConnection) {
+			username = ((PlayerConnection) listener).player.getProfile().getName();
 		}
+		if (username != null) {
+			PlayerDisconnectEvent event = new PlayerDisconnectEvent(addr, username);
+			Bukkit.getPluginManager().callEvent(event);
+		}
+		ProtocolStorage.clearData(addr);
 	}
 
 }
