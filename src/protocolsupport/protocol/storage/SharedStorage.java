@@ -31,7 +31,7 @@ public class SharedStorage {
 		this.teleportConfirmId = teleportConfirmId;
 	}
 
-	private WindowType windowType;
+	private WindowType windowType = WindowType.PLAYER;
 
 	public void setOpenedWindow(WindowType windowType) {
 		this.windowType = windowType;
@@ -42,11 +42,11 @@ public class SharedStorage {
 	}
 
 	public void closeWindow() {
-		this.windowType = null;
+		this.windowType = WindowType.PLAYER;
 	}
 
 	public static enum WindowType {
-		CHEST, CRAFTING_TABLE, FURNACE, DISPENSER, ENCHANT, BREING, VILLAGER, BEACON, ANVIL, HOPPER, DROPPER, HORSE;
+		CHEST, CRAFTING_TABLE, FURNACE, DISPENSER, ENCHANT, BREING, VILLAGER, BEACON, ANVIL, HOPPER, DROPPER, HORSE, PLAYER;
 
 		public static WindowType fromName(String inventoryid) {
 			switch (inventoryid) {
