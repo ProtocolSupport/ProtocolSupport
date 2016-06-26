@@ -6,7 +6,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.server.v1_10_R1.DataBits;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.legacyremapper.chunk.blockstorage.BlockStorage;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.utils.netty.Allocator;
@@ -35,7 +34,6 @@ public class ChunkTransformer {
 
 	protected static final int blocksInSection = 16 * 16 * 16;
 
-	//TODO: create own implementation of DataBits to reduce nms imports, and speed up transformation by avoiding index check
 	protected static final int bitsPerBlock19 = 13;
 	public byte[] to19Data(ProtocolVersion version) throws IOException {
 		ArrayBasedIdRemappingTable table = IdRemapper.BLOCK.getTable(version);
@@ -160,7 +158,8 @@ public class ChunkTransformer {
 					palette[i] = ChannelUtils.readVarInt(datastream);
 				}
 			}
-			this.blockdata = BlockStorage.create(palette, bitsPerBlock, ChannelUtils.readVarInt(datastream));
+			ChannelUtils.readVarInt(datastream);
+			this.blockdata = new BlockStorage(palette, bitsPerBlock);
 			this.blockdata.readFromStream(datastream);
 			datastream.readBytes(blocklight);
 			if (hasSkyLight) {
