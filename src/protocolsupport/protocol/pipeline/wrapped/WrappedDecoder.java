@@ -1,8 +1,10 @@
 package protocolsupport.protocol.pipeline.wrapped;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.ClosedChannelException;
+import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -12,6 +14,7 @@ import com.mojang.authlib.GameProfile;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
+import io.netty.handler.timeout.ReadTimeoutException;
 import net.minecraft.server.v1_10_R1.NetworkManager;
 import net.minecraft.server.v1_10_R1.PacketListener;
 import net.minecraft.server.v1_10_R1.PlayerConnection;
@@ -40,10 +43,18 @@ public class WrappedDecoder extends ByteToMessageDecoder {
 		realDecoder.decode(ctx, input, list);
 	}
 
+	private static final HashMap<Class<? extends Throwable>, String> ignoreExceptions = new HashMap<>();
+	static {
+		ignoreExceptions.put(ClosedChannelException.class, "");
+		ignoreExceptions.put(ReadTimeoutException.class, "");
+		ignoreExceptions.put(IOException.class, "Connection reset by peer");
+	}
+
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable e) throws Exception {
 		super.exceptionCaught(ctx, e);
-		if (!(e instanceof ClosedChannelException)) {
+		String ignoreMSG = ignoreExceptions.get(e.getClass());
+		if (ignoreMSG == null || !ignoreMSG.equals(e.getMessage())) {
 			SocketAddress remoteaddr = ctx.channel().remoteAddress();
 			AsyncErrorLogger.INSTANCE.log(e, remoteaddr, ProtocolSupportAPI.getProtocolVersion(remoteaddr));
 		}
