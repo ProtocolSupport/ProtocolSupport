@@ -80,6 +80,8 @@ public class AsyncErrorLogger {
 					synchronized (writer) {
 						writer.println("Error occured at " + new SimpleDateFormat("yyyy-MM-dd-HH-mm", Locale.ROOT).format(new Date()));
 						writer.println("Additional info: " + StringUtils.join(info, ", "));
+						writer.println("Exception class: " + t.getClass().getName());
+						writer.println("Exception message: " + t.getMessage());
 						writer.println("Exception log:");
 						t.printStackTrace(writer);
 						writer.println();

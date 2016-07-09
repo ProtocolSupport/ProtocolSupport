@@ -4,8 +4,12 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.ClosedChannelException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 
@@ -43,18 +47,18 @@ public class WrappedDecoder extends ByteToMessageDecoder {
 		realDecoder.decode(ctx, input, list);
 	}
 
-	private static final HashMap<Class<? extends Throwable>, String> ignoreExceptions = new HashMap<>();
+	private static final HashMap<Class<? extends Throwable>, Set<?>> ignoreExceptions = new HashMap<>();
 	static {
-		ignoreExceptions.put(ClosedChannelException.class, "");
-		ignoreExceptions.put(ReadTimeoutException.class, "");
-		ignoreExceptions.put(IOException.class, "Connection reset by peer");
+		ignoreExceptions.put(ClosedChannelException.class, Collections.emptySet());
+		ignoreExceptions.put(ReadTimeoutException.class, Collections.emptySet());
+		ignoreExceptions.put(IOException.class, new HashSet<String>(Arrays.asList("Connection reset by peer", "Broken pipe")));
 	}
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable e) throws Exception {
 		super.exceptionCaught(ctx, e);
-		String ignoreMSG = ignoreExceptions.get(e.getClass());
-		if (ignoreMSG == null || !ignoreMSG.equals(e.getMessage())) {
+		Set<?> ignore = ignoreExceptions.get(e.getClass());
+		if (ignore == null || (!ignore.isEmpty() && !ignore.contains(e.getMessage()))) {
 			SocketAddress remoteaddr = ctx.channel().remoteAddress();
 			AsyncErrorLogger.INSTANCE.log(e, remoteaddr, ProtocolSupportAPI.getProtocolVersion(remoteaddr));
 		}
