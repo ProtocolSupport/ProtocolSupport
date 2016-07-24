@@ -26,9 +26,13 @@ public class LegacySound {
 
 	private static final HashMap<String, String> legacySounds = new HashMap<>();
 
-	//return new sound if legacy not found, so launcher will print a warning with that new sound name
 	public static String getSoundName(int soundType) {
-		String newSound = SoundEffect.a.b(SoundEffect.a.getId(soundType)).a();
+		return SoundEffect.a.b(SoundEffect.a.getId(soundType)).a();
+	}
+
+	//return new sound if legacy not found, so launcher will print a warning with that new sound name
+	public static String getLegacySoundName(int soundType) {
+		String newSound = getSoundName(soundType);
 		String legacySound = legacySounds.get(newSound);
 		return legacySound != null ? legacySound : newSound;
 	}
