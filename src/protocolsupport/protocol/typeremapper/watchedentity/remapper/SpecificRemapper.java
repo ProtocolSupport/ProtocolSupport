@@ -249,8 +249,16 @@ public enum SpecificRemapper {
 	GIANT(EType.MOB, EntityType.GIANT, SpecificRemapper.INSENTIENT),
 	SILVERFISH(EType.MOB, EntityType.SILVERFISH, SpecificRemapper.INSENTIENT),
 	ENDERMITE(EType.MOB, EntityType.ENDERMITE, SpecificRemapper.INSENTIENT),
-	ENDER_DRAGON(EType.MOB, EntityType.ENDER_DRAGON, SpecificRemapper.INSENTIENT),
-	SNOWMAN(EType.MOB, EntityType.SNOWMAN, SpecificRemapper.INSENTIENT),
+	ENDER_DRAGON(EType.MOB, EntityType.ENDER_DRAGON, SpecificRemapper.INSENTIENT,
+		//phase
+		new Mapping(12)
+		.addRemap(11, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
+	),
+	SNOWMAN(EType.MOB, EntityType.SNOWMAN, SpecificRemapper.INSENTIENT,
+		//no hat
+		new Mapping(12)
+		.addRemap(11, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
+	),
 	ZOMBIE(EType.MOB, EntityType.ZOMBIE, SpecificRemapper.INSENTIENT,
 		//is baby
 		new Mapping(12)
@@ -324,7 +332,17 @@ public enum SpecificRemapper {
 		.addRemap(11, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	SHULKER(EType.MOB, 69, SpecificRemapper.INSENTIENT),
+	SHULKER(EType.MOB, 69, SpecificRemapper.INSENTIENT,
+		//direction
+		new Mapping(12)
+		.addRemap(11, ValueRemapperNoOp.DIRECTION, ProtocolVersionsHelper.ALL_1_9),
+		//attachment pos
+		new Mapping(13)
+		.addRemap(12, ValueRemapperNoOp.OPTIONAL_POSITION, ProtocolVersionsHelper.ALL_1_9),
+		//shield h
+		new Mapping(14)
+		.addRemap(13, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
+	),
 	WITHER(EType.MOB, EntityType.WITHER, SpecificRemapper.INSENTIENT,
 		//target 1
 		new Mapping(12)
@@ -369,7 +387,11 @@ public enum SpecificRemapper {
 		.addRemap(19, ValueRemapperNoOp.FLOAT, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1))
 		.addRemap(19, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_6)
 	),
-	TNT(EType.OBJECT, 50, SpecificRemapper.ENTITY),
+	TNT(EType.OBJECT, 50, SpecificRemapper.ENTITY,
+		//fuse ticks
+		new Mapping(6)
+		.addRemap(5, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)			
+	),
 	SNOWBALL(EType.OBJECT, 61, SpecificRemapper.ENTITY),
 	EGG(EType.OBJECT, 62, SpecificRemapper.ENTITY),
 	FIREBALL(EType.OBJECT, 63, SpecificRemapper.ENTITY),
@@ -383,11 +405,19 @@ public enum SpecificRemapper {
 	),
 	FALLING_OBJECT(EType.OBJECT, 70, SpecificRemapper.ENTITY),
 	ENDEREYE(EType.OBJECT, 72, SpecificRemapper.ENTITY),
-	POTION(EType.OBJECT, 73, SpecificRemapper.ENTITY),
+	POTION(EType.OBJECT, 73, SpecificRemapper.ENTITY,
+		//potion item
+		new Mapping(7)
+		.addRemap(6, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.ALL_1_9)
+	),
 	DRAGON_EGG(EType.OBJECT, 74, SpecificRemapper.ENTITY),
 	EXP_BOTTLE(EType.OBJECT, 75, SpecificRemapper.ENTITY),
 	LEASH_KNOT(EType.OBJECT, 77, SpecificRemapper.ENTITY),
-	FISHING_FLOAT(EType.OBJECT, 90, SpecificRemapper.ENTITY),
+	FISHING_FLOAT(EType.OBJECT, 90, SpecificRemapper.ENTITY,
+		//hooked entity id
+		new Mapping(6)
+		.addRemap(5, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
+	),
 	ITEM(EType.OBJECT, 2, SpecificRemapper.ENTITY,
 		//item
 		new Mapping(6)
@@ -437,7 +467,11 @@ public enum SpecificRemapper {
 		.addRemap(15, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	SPECTRAL_ARROW(EType.OBJECT, 91, SpecificRemapper.ARROW),
-	TIPPED_ARROW(EType.OBJECT, 92, SpecificRemapper.ARROW),
+	TIPPED_ARROW(EType.OBJECT, 92, SpecificRemapper.ARROW,
+		//color
+		new Mapping(7)
+		.addRemap(6, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
+	),
 	FIREWORK(EType.OBJECT, 76, SpecificRemapper.ENTITY,
 		//info
 		new Mapping(6)
@@ -463,7 +497,26 @@ public enum SpecificRemapper {
 	),
 	ENDER_CRYSTAL(EType.OBJECT, 51, SpecificRemapper.ENTITY),
 	ARMOR_STAND_OBJECT(EType.OBJECT, 78, SpecificRemapper.ARMOR_STAND),
-	AREA_EFFECT_CLOUD(EType.OBJECT, 3, SpecificRemapper.ENTITY),
+	AREA_EFFECT_CLOUD(EType.OBJECT, 3, SpecificRemapper.ENTITY,
+		//radius
+		new Mapping(6)
+		.addRemap(5, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.ALL_1_9),
+		//color
+		new Mapping(7)
+		.addRemap(6, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9),
+		//single point
+		new Mapping(8)
+		.addRemap(7, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9),
+		//particle id
+		new Mapping(9)
+		.addRemap(8, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9),
+		//particle param 1
+		new Mapping(10)
+		.addRemap(9, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9),
+		//particle param 2
+		new Mapping(11)
+		.addRemap(10, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
+	),
 	SHULKER_BULLET(EType.OBJECT, 67, SpecificRemapper.ENTITY),
 	DRAGON_FIREBALL(EType.OBJECT, 93, SpecificRemapper.ENTITY);
 
