@@ -59,7 +59,7 @@ public class WrappedDecoder extends ByteToMessageDecoder {
 		super.exceptionCaught(ctx, e);
 		Set<?> ignore = ignoreExceptions.get(e.getClass());
 		if (ignore == null || (!ignore.isEmpty() && !ignore.contains(e.getMessage()))) {
-			SocketAddress remoteaddr = ctx.channel().remoteAddress();
+			SocketAddress remoteaddr = ChannelUtils.getNetworkManagerSocketAddress(ctx.channel());
 			AsyncErrorLogger.INSTANCE.log(e, remoteaddr, ProtocolSupportAPI.getProtocolVersion(remoteaddr));
 		}
 	}
