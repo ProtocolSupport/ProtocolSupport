@@ -48,7 +48,7 @@ public class WatchedDataRemapper {
 				String.format("Metadata index: %d", index),
 				String.format("Entity id: %d", entityId),
 				String.format("Entity type: %s", type),
-				String.format("To protocol version: ", to)
+				String.format("To protocol version: %s", to)
 			), e);
 		}
 
