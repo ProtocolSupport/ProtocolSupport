@@ -151,7 +151,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 	@SuppressWarnings("deprecation")
 	protected void setProtocol(final Channel channel, ProtocolVersion version) throws Exception {
 		if (MinecraftServer.getServer().isDebugging()) {
-			System.out.println(ChannelUtils.getNetworkManagerSocketAddress(channel)+ " connected with protocol version "+version);
+			System.err.println(ChannelUtils.getNetworkManagerSocketAddress(channel)+ " connected with protocol version "+version);
 		}
 		ProtocolStorage.setProtocolVersion(ChannelUtils.getNetworkManagerSocketAddress(channel), version);
 		channel.pipeline().remove(ChannelHandlers.INITIAL_DECODER);

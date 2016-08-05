@@ -6,6 +6,18 @@ import java.util.List;
 
 public class Utils {
 
+	public static String exceptionMessage(Object... strings) {
+		StringBuilder msg = new StringBuilder(String.valueOf(strings[0]));
+		msg.append(strings[0]).append(System.lineSeparator());
+		msg.append("Additional exception info:").append(System.lineSeparator());
+		for (int i = 1; i < strings.length; i++) {
+			msg.append("\t").append(strings[i]).append(System.lineSeparator());
+		}
+		msg.append("Stacktrace:");
+		return msg.toString();
+	}
+
+
 	public static String clampString(String string, int limit) {
 		return string.substring(0, string.length() > limit ? limit : string.length());
 	}

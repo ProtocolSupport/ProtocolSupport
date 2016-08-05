@@ -9,6 +9,7 @@ import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRema
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.utils.Utils;
 
 public class WatchedDataRemapper {
 
@@ -31,16 +32,15 @@ public class WatchedDataRemapper {
 						remapped.getTypeId(to);
 						transformed.put(entry.getIdTo(), remapped);
 					}
+					throw new RuntimeException("test");
 				} catch (Exception e) {
-					throw new MetadataRemapException(
-						"Unable to remap "+
-						"metadata(index: " + entry.getIdFrom() + ") "+
-						"for entity "+
-						"(id: " + entity.getId()+
-						", type: " + entity.getType() + ")"+
-						" to protocol version " + to
-						,e
-					);
+					throw new MetadataRemapException(Utils.exceptionMessage(
+						"Unable to remap entity metadata",
+						"Metadata index: "+entry.getIdFrom(),
+						"Entity id: "+entity.getId(),
+						"Entity type: "+entity.getType(),
+						"To protocol version: " + to
+					), e);
 				}
 			}
 		}

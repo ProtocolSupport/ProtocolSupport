@@ -37,7 +37,7 @@ public class ProtocolUtils {
 			ProtocolVersion version = ProtocolVersion.fromId(ChannelUtils.readVarInt(data));
 			return version != ProtocolVersion.UNKNOWN ? version : ProtocolVersion.MINECRAFT_FUTURE;
 		} else {
-			throw new DecoderException(packetId + "is not a valid packet id");
+			throw new DecoderException(packetId + " is not a valid packet id");
 		}
 	}
 
