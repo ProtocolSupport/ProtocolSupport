@@ -1,6 +1,7 @@
 package protocolsupport.protocol.legacyremapper.chunk;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -8,6 +9,7 @@ import net.minecraft.server.v1_10_R1.DataBits;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.utils.Utils;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.ChannelUtils;
 
@@ -20,15 +22,19 @@ public class ChunkTransformer {
 	protected final byte[] biomeData = new byte[256];
 
 	public void loadData(byte[] data19, int bitmap, boolean hasSkyLight, boolean hasBiomeData) {
-		this.columnsCount = Integer.bitCount(bitmap);
-		this.hasSkyLight = hasSkyLight;
-		this.hasBiomeData = hasBiomeData;
-		ByteBuf chunkdata = Unpooled.wrappedBuffer(data19);
-		for (int i = 0; i < this.columnsCount; i++) {
-			sections[i] = new ChunkSection(chunkdata, hasSkyLight);
-		}
-		if (hasBiomeData) {
-			chunkdata.readBytes(biomeData);
+		try {
+			this.columnsCount = Integer.bitCount(bitmap);
+			this.hasSkyLight = hasSkyLight;
+			this.hasBiomeData = hasBiomeData;
+			ByteBuf chunkdata = Unpooled.wrappedBuffer(data19);
+			for (int i = 0; i < this.columnsCount; i++) {
+				sections[i] = new ChunkSection(chunkdata, hasSkyLight);
+			}
+			if (hasBiomeData) {
+				chunkdata.readBytes(biomeData);
+			}
+		} catch (Exception e) {
+			throw new ChunkDataParseException(data19, bitmap, hasSkyLight, hasBiomeData, e);
 		}
 	}
 
@@ -167,6 +173,20 @@ public class ChunkTransformer {
 			}
 		}
 
+	}
+
+	public static final class ChunkDataParseException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
+
+		public ChunkDataParseException(byte[] data, int bitmap, boolean hasSkyLight, boolean hasBiomeData, Exception e) {
+			super(Utils.exceptionMessage(
+				"Failed to parse chunk data",
+				String.format("Column bitmap: %s (Column count: %d)", Integer.toBinaryString(bitmap), Integer.bitCount(bitmap)),
+				String.format("Has sky light: %b", hasSkyLight),
+				String.format("Has biome data: %b", hasBiomeData),
+				String.format("Chun data: %s", Arrays.toString(data))
+			), e);
+		}
 	}
 
 }
