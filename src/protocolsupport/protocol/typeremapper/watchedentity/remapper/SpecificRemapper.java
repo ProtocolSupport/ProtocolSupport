@@ -128,17 +128,17 @@ public enum SpecificRemapper {
 		new Mapping(11)
 		.addRemap(10, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE_1_8_1_9),
 		new Mapping(12)
-		.addRemap(11, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.RANGE_1_8_1_9),
+		.addRemap(11, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE_1_8_1_9),
 		new Mapping(13)
-		.addRemap(12, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.RANGE_1_8_1_9),
+		.addRemap(12, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE_1_8_1_9),
 		new Mapping(14)
-		.addRemap(13, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.RANGE_1_8_1_9),
+		.addRemap(13, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE_1_8_1_9),
 		new Mapping(15)
-		.addRemap(14, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.RANGE_1_8_1_9),
+		.addRemap(14, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE_1_8_1_9),
 		new Mapping(16)
-		.addRemap(15, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.RANGE_1_8_1_9),
+		.addRemap(15, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE_1_8_1_9),
 		new Mapping(17)
-		.addRemap(16, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.RANGE_1_8_1_9)
+		.addRemap(16, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE_1_8_1_9)
 	),
 	COW(EType.MOB, EntityType.COW, SpecificRemapper.AGEABLE),
 	MUSHROOM_COW(EType.MOB, EntityType.MUSHROOM_COW, SpecificRemapper.COW),
