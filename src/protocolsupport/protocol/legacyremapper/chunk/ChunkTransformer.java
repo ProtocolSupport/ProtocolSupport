@@ -1,19 +1,40 @@
 package protocolsupport.protocol.legacyremapper.chunk;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import net.minecraft.server.v1_10_R1.DataBits;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.id.IdRemapper;
-import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.utils.Utils;
-import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.ChannelUtils;
 
-public class ChunkTransformer {
+public abstract class ChunkTransformer {
+
+	public static enum BlockFormat {
+		VARIES, //format for 1.9+
+		SHORT, //format for 1.8
+		BYTE, //format for 1.7-
+	}
+
+	public static ChunkTransformer create(BlockFormat format) {
+		switch (format) {
+			case VARIES: {
+				return new ChunkTransformerVaries();
+			}
+			case SHORT: {
+				return new ChunkTransformerShort();
+			}
+			case BYTE: {
+				return new ChunkTransformerByte();
+			}
+			default: {
+				throw new IllegalArgumentException();
+			}
+		}
+	}
+
+	protected byte[] data19;
+	protected int bitmap;
 
 	protected int columnsCount;
 	protected boolean hasSkyLight;
@@ -23,6 +44,8 @@ public class ChunkTransformer {
 
 	public void loadData(byte[] data19, int bitmap, boolean hasSkyLight, boolean hasBiomeData) {
 		try {
+			this.data19 = data19;
+			this.bitmap = bitmap;
 			this.columnsCount = Integer.bitCount(bitmap);
 			this.hasSkyLight = hasSkyLight;
 			this.hasBiomeData = hasBiomeData;
@@ -33,113 +56,22 @@ public class ChunkTransformer {
 			if (hasBiomeData) {
 				chunkdata.readBytes(biomeData);
 			}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			throw new ChunkDataParseException(data19, bitmap, hasSkyLight, hasBiomeData, e);
 		}
 	}
 
-	protected static final int blocksInSection = 16 * 16 * 16;
-
-	protected static final int bitsPerBlock19 = 13;
-	public byte[] to19Data(ProtocolVersion version) throws IOException {
-		ArrayBasedIdRemappingTable table = IdRemapper.BLOCK.getTable(version);
-		ByteBuf chunkdata = Allocator.allocateBuffer();
+	public byte[] toLegacyData(ProtocolVersion version) {
 		try {
-			for (int i = 0; i < columnsCount; i++) {
-				ChunkSection section = sections[i];
-				chunkdata.writeByte(bitsPerBlock19);
-				ChannelUtils.writeVarInt(chunkdata, 0);
-				BlockStorage storage = section.blockdata;
-				DataBits databits = new DataBits(bitsPerBlock19, blocksInSection);
-				for (int block = 0; block < blocksInSection; block++) {
-					databits.a(block, table.getRemap(storage.getBlockState(block)));
-				}
-				long[] ldata = databits.a();
-				ChannelUtils.writeVarInt(chunkdata, ldata.length);
-				for (long l : ldata) {
-					chunkdata.writeLong(l);
-				}
-				chunkdata.writeBytes(section.blocklight);
-				if (hasSkyLight) {
-					chunkdata.writeBytes(section.skylight);
-				}
-			}
-			if (hasBiomeData) {
-				chunkdata.writeBytes(biomeData);
-			}
-			return ChannelUtils.toArray(chunkdata);
-		} finally {
-			chunkdata.release();
+			return toLegacyData0(version);
+		} catch (Throwable t) {
+			throw new ChunkDataParseException(data19, bitmap, hasSkyLight, hasBiomeData, t);
 		}
 	}
 
-	public byte[] toPre18Data(ProtocolVersion version) throws IOException {
-		ArrayBasedIdRemappingTable table = IdRemapper.BLOCK.getTable(version);
-		byte[] data = new byte[(hasSkyLight ? 10240 : 8192) * columnsCount + 256];
-		int blockIdIndex = 0;
-		int blockDataIndex = 4096 * columnsCount;
-		int blockLightIndex = 6144 * columnsCount;
-		int skyLightIndex = 8192 * columnsCount;
-		for (int i = 0; i < columnsCount; i++) {
-			ChunkSection section = sections[i];
-			BlockStorage storage = section.blockdata;
-			int blockdataacc = 0;
-			for (int block = 0; block < blocksInSection; block++) {
-				int blockstate = storage.getBlockState(block);
-				blockstate = table.getRemap(blockstate);
-				data[blockIdIndex + block] = (byte) (blockstate >> 4);
-				byte blockdata = (byte) (blockstate & 0xF);
-				if ((block & 1) == 0) {
-					blockdataacc = blockdata;
-				} else {
-					blockdataacc |= (blockdata << 4);
-					data[(block >> 1) + blockDataIndex] = (byte) blockdataacc;
-				}
-			}
-			blockIdIndex += 4096;
-			blockDataIndex += 2048;
-			System.arraycopy(section.blocklight, 0, data, blockLightIndex, 2048);
-			blockLightIndex += 2048;
-			if (hasSkyLight) {
-				System.arraycopy(section.skylight, 0, data, skyLightIndex, 2048);
-				skyLightIndex += 2048;
-			}
-		}
-		if (hasBiomeData) {
-			System.arraycopy(biomeData, 0, data, skyLightIndex, 256);
-		}
-		return data;
-	}
+	protected abstract byte[] toLegacyData0(ProtocolVersion version);
 
-	public byte[] to18Data() throws IOException {
-		ArrayBasedIdRemappingTable table = IdRemapper.BLOCK.getTable(ProtocolVersion.MINECRAFT_1_8);
-		byte[] data = new byte[(hasSkyLight ? 12288 : 10240) * columnsCount + 256];
-		int blockIdIndex = 0;
-		int blockLightIndex = 8192 * columnsCount;
-		int skyLightIndex = 10240 * columnsCount;
-		for (int i = 0; i < columnsCount; i++) {
-			ChunkSection section = sections[i];
-			BlockStorage storage = section.blockdata;
-			for (int block = 0; block < blocksInSection; block++) {
-				int dataindex = blockIdIndex + (block << 1);
-				int blockstate = storage.getBlockState(block);
-				blockstate = table.getRemap(blockstate);
-				data[dataindex] = (byte) blockstate;
-				data[dataindex + 1] = (byte) (blockstate >> 8);
-			}
-			blockIdIndex += 8192;
-			System.arraycopy(section.blocklight, 0, data, blockLightIndex, 2048);
-			blockLightIndex += 2048;
-			if (hasSkyLight) {
-				System.arraycopy(section.skylight, 0, data, skyLightIndex, 2048);
-				skyLightIndex += 2048;
-			}
-		}
-		if (hasBiomeData) {
-			System.arraycopy(biomeData, 0, data, skyLightIndex, 256);
-		}
-		return data;
-	}
+	protected static final int blocksInSection = 16 * 16 * 16;
 
 	protected static class ChunkSection {
 
@@ -178,7 +110,7 @@ public class ChunkTransformer {
 	public static final class ChunkDataParseException extends RuntimeException {
 		private static final long serialVersionUID = 1L;
 
-		public ChunkDataParseException(byte[] data, int bitmap, boolean hasSkyLight, boolean hasBiomeData, Exception e) {
+		public ChunkDataParseException(byte[] data, int bitmap, boolean hasSkyLight, boolean hasBiomeData, Throwable e) {
 			super(Utils.exceptionMessage(
 				"Failed to parse chunk data",
 				String.format("Column bitmap: %s (Column count: %d)", Integer.toBinaryString(bitmap), Integer.bitCount(bitmap)),

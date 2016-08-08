@@ -5,6 +5,7 @@ import java.io.IOException;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.legacyremapper.LegacyTileEntityUpdate;
 import protocolsupport.protocol.legacyremapper.chunk.ChunkTransformer;
+import protocolsupport.protocol.legacyremapper.chunk.ChunkTransformer.BlockFormat;
 import protocolsupport.protocol.legacyremapper.chunk.EmptyChunk;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
@@ -16,7 +17,7 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class Chunk extends MiddleChunk<RecyclableCollection<PacketData>>  {
 
-	private final ChunkTransformer transformer = new ChunkTransformer();
+	private final ChunkTransformer transformer = ChunkTransformer.create(BlockFormat.SHORT);
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
@@ -32,7 +33,7 @@ public class Chunk extends MiddleChunk<RecyclableCollection<PacketData>>  {
 		} else {
 			chunkdata.writeShort(bitmask);
 			transformer.loadData(data, bitmask, hasSkyLight, full);
-			chunkdata.writeByteArray(transformer.to18Data());
+			chunkdata.writeByteArray(transformer.toLegacyData(ProtocolVersion.MINECRAFT_1_8));
 		}
 		packets.add(chunkdata);
 		for (NBTTagCompoundWrapper tile : tiles) {
