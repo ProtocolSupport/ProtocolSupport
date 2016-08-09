@@ -116,7 +116,7 @@ public abstract class ChunkTransformer {
 				String.format("Column bitmap: %s (Column count: %d)", Integer.toBinaryString(bitmap), Integer.bitCount(bitmap)),
 				String.format("Has sky light: %b", hasSkyLight),
 				String.format("Has biome data: %b", hasBiomeData),
-				String.format("Chun data: %s", Arrays.toString(data))
+				String.format("Chunk data: %s", Arrays.toString(data))
 			), e);
 		}
 	}
