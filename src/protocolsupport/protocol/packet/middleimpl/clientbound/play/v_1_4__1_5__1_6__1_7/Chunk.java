@@ -17,7 +17,7 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class Chunk extends MiddleChunk<RecyclableCollection<PacketData>> {
 
-	private final ChunkTransformer transformer = ChunkTransformer.create(BlockFormat.VARIES);
+	private final ChunkTransformer transformer = ChunkTransformer.create(BlockFormat.BYTE);
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
