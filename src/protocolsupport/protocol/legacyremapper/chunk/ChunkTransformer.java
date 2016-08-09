@@ -96,8 +96,7 @@ public abstract class ChunkTransformer {
 					palette[i] = ChannelUtils.readVarInt(datastream);
 				}
 			}
-			ChannelUtils.readVarInt(datastream);
-			this.blockdata = new BlockStorage(palette, bitsPerBlock);
+			this.blockdata = new BlockStorage(palette, bitsPerBlock, ChannelUtils.readVarInt(datastream));
 			this.blockdata.readFromStream(datastream);
 			datastream.readBytes(blocklight);
 			if (hasSkyLight) {

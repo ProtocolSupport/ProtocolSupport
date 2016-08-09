@@ -3,8 +3,8 @@ package protocolsupport.protocol.legacyremapper.chunk;
 import java.util.Iterator;
 
 import io.netty.buffer.ByteBuf;
+
 import net.minecraft.server.v1_10_R1.Block;
-import net.minecraft.server.v1_10_R1.DataBits;
 import net.minecraft.server.v1_10_R1.IBlockData;
 
 public class BlockStorage {
@@ -25,26 +25,42 @@ public class BlockStorage {
 	public static void init() {
 	}
 
-	private final DataBits databits;
 	private final int[] palette;
-	public BlockStorage(int[] palette, int bitsPerBlock) {
+	private final long[] blockdata;
+	private final int bitsPerBlock;
+	private final int singleValMask;
+
+	public BlockStorage(int[] palette, int bitsPerBlock, int datalength) {
 		this.palette = palette;
-		this.databits = new DataBits(bitsPerBlock, ChunkTransformer.blocksInSection);
+		this.blockdata = new long[datalength];
+		this.bitsPerBlock = bitsPerBlock;
+		this.singleValMask = (1 << bitsPerBlock) - 1;
 	}
 
 	public void readFromStream(ByteBuf stream) {
-		long[] data = databits.a();
-		for (int i = 0; i < data.length; i++) {
-			data[i] = stream.readLong();
+		for (int i = 0; i < blockdata.length; i++) {
+			blockdata[i] = stream.readLong();
 		}
 	}
 
 	public int getBlockState(int blockindex) {
-		int blockState = palette[databits.a(blockindex)];
+		int blockState = palette[getPaletteIndex(blockindex)];
 		if (blockState > 0 && blockState < validBlockState.length && validBlockState[blockState]) {
 			return blockState;
 		} else {
 			return 0;
+		}
+	}
+
+	private int getPaletteIndex(int blockIndex) {
+		int bitStartIndex = blockIndex * bitsPerBlock;
+		int arrStartIndex = bitStartIndex >> 6;
+		int arrEndIndex = ((bitStartIndex + bitsPerBlock) - 1) >> 6;
+		int localStartBitIndex = bitStartIndex & 63;
+		if (arrStartIndex == arrEndIndex) {
+			return (int) ((this.blockdata[arrStartIndex] >>> localStartBitIndex) & this.singleValMask);
+		} else {
+			return (int) (((this.blockdata[arrStartIndex] >>> localStartBitIndex) | (this.blockdata[arrEndIndex] << (64 - localStartBitIndex))) & this.singleValMask);
 		}
 	}
 
