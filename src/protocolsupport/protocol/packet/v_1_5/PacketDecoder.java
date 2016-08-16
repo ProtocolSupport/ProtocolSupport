@@ -41,7 +41,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_4__1_5__1
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_4__1_5__1_6__1_7__1_8.InventoryTransaction;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_4__1_5__1_6__1_7__1_8.Look;
 import protocolsupport.protocol.pipeline.IPacketDecoder;
-import protocolsupport.protocol.serializer.ReplayingSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.ReplayingProtocolSupportSupportPacketDataSerializer;
 import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry.InitCallBack;
@@ -92,9 +92,9 @@ public class PacketDecoder implements IPacketDecoder {
 	}
 
 	protected final SharedStorage sharedstorage;
-	private final ReplayingSupportPacketDataSerializer serializer;
+	private final ReplayingProtocolSupportSupportPacketDataSerializer serializer;
 	public PacketDecoder(ProtocolVersion version, SharedStorage sharedstorage) {
-		this.serializer = new ReplayingSupportPacketDataSerializer(version);
+		this.serializer = new ReplayingProtocolSupportSupportPacketDataSerializer(version);
 		this.sharedstorage = sharedstorage;
 	}
 

@@ -4,11 +4,11 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer;
 
-public class ReplayingSupportPacketDataSerializer extends ProtocolSupportPacketDataSerializer {
+public class ReplayingProtocolSupportSupportPacketDataSerializer extends ProtocolSupportPacketDataSerializer {
 
 	protected final ReplayingDecoderBuffer replaying;
 
-	public ReplayingSupportPacketDataSerializer(ProtocolVersion version) {
+	public ReplayingProtocolSupportSupportPacketDataSerializer(ProtocolVersion version) {
 		super(new ReplayingDecoderBuffer(), version);
 		replaying = (ReplayingDecoderBuffer) this.buf;
 	}

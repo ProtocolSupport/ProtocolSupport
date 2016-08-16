@@ -42,7 +42,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_6__1_7.Po
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_6__1_7.SteerVehicle;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_6__1_7__1_8.PlayerAbilities;
 import protocolsupport.protocol.pipeline.IPacketDecoder;
-import protocolsupport.protocol.serializer.ReplayingSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.ReplayingProtocolSupportSupportPacketDataSerializer;
 import protocolsupport.protocol.storage.SharedStorage;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry.InitCallBack;
@@ -94,9 +94,9 @@ public class PacketDecoder implements IPacketDecoder {
 	}
 
 	protected final SharedStorage sharedstorage;
-	private final ReplayingSupportPacketDataSerializer serializer;
+	private final ReplayingProtocolSupportSupportPacketDataSerializer serializer;
 	public PacketDecoder(ProtocolVersion version, SharedStorage sharedstorage) {
-		this.serializer = new ReplayingSupportPacketDataSerializer(version);
+		this.serializer = new ReplayingProtocolSupportSupportPacketDataSerializer(version);
 		this.sharedstorage = sharedstorage;
 	}
 
