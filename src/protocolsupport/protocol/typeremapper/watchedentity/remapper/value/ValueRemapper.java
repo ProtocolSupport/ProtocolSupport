@@ -14,7 +14,7 @@ public abstract class ValueRemapper<T extends DataWatcherObject<?>> {
 		ParameterizedType ptype = (ParameterizedType) this.getClass().getGenericSuperclass();
 		Type type = ptype.getActualTypeArguments()[0];
 		try {
-			return Class.forName(extractRawType(type).getTypeName());
+			return Class.forName(((Class<?>) extractRawType(type)).getName());
 		} catch (ClassNotFoundException e) {
 			SneakyThrow.sneaky(e);
 			return null;

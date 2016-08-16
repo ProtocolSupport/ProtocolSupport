@@ -9,6 +9,7 @@ import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRema
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.utils.Utils;
 
 public class WatchedDataRemapper {
 
@@ -32,15 +33,7 @@ public class WatchedDataRemapper {
 						transformed.put(entry.getIdTo(), remapped);
 					}
 				} catch (Exception e) {
-					throw new MetadataRemapException(
-						"Unable to remap "+
-						"metadata(index: " + entry.getIdFrom() + ") "+
-						"for entity "+
-						"(id: " + entity.getId()+
-						", type: " + entity.getType() + ")"+
-						" to protocol version " + to
-						,e
-					);
+					throw new MetadataRemapException(entry.getIdFrom(), entity.getId(), entity.getType(), to, e);
 				}
 			}
 		}
@@ -49,8 +42,14 @@ public class WatchedDataRemapper {
 
 	public static class MetadataRemapException extends RuntimeException {
 
-		public MetadataRemapException(String string, Exception e) {
-			super(string, e);
+		public MetadataRemapException(int index, int entityId, SpecificRemapper type, ProtocolVersion to, Exception e) {
+			super(Utils.exceptionMessage(
+				"Unable to remap entity metadata",
+				String.format("Metadata index: %d", index),
+				String.format("Entity id: %d", entityId),
+				String.format("Entity type: %s", type),
+				String.format("To protocol version: %s", to)
+			), e);
 		}
 
 		private static final long serialVersionUID = 1L;

@@ -6,6 +6,17 @@ import java.util.List;
 
 public class Utils {
 
+	public static String exceptionMessage(Object... strings) {
+		StringBuilder msg = new StringBuilder();
+		msg.append(strings[0]).append(System.lineSeparator());
+		msg.append("Additional exception info:").append(System.lineSeparator());
+		for (int i = 1; i < strings.length; i++) {
+			msg.append("\t").append(strings[i]).append(System.lineSeparator());
+		}
+		msg.append("Stacktrace:");
+		return msg.toString();
+	}
+
 	public static String clampString(String string, int limit) {
 		return string.substring(0, string.length() > limit ? limit : string.length());
 	}
@@ -51,10 +62,22 @@ public class Utils {
 				return Integer.parseInt(t);
 			}
 		};
+		public static final Converter<String, Long> STRING_TO_LONG = new Converter<String, Long>() {
+			@Override
+			public Long convert(String t){
+				return Long.parseLong(t);
+			}
+		};
 		public static final Converter<String, Boolean> STRING_TO_BOOLEAN = new Converter<String, Boolean>() {
 			@Override
 			public Boolean convert(String t) {
 				return Boolean.parseBoolean(t);
+			}
+		};
+		public static final Converter<String, String> NONE = new Converter<String, String>() {
+			@Override
+			public String convert(String t) {
+				return t;
 			}
 		};
 		public R convert(T t);

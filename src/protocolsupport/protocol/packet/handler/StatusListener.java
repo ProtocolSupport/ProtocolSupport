@@ -22,6 +22,7 @@ import com.mojang.authlib.GameProfile;
 import io.netty.channel.ChannelFutureListener;
 import net.minecraft.server.v1_10_R1.ChatComponentText;
 import net.minecraft.server.v1_10_R1.EntityPlayer;
+import net.minecraft.server.v1_10_R1.IChatBaseComponent;
 import net.minecraft.server.v1_10_R1.MinecraftServer;
 import net.minecraft.server.v1_10_R1.NetworkManager;
 import net.minecraft.server.v1_10_R1.PacketStatusInPing;
@@ -39,6 +40,8 @@ import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
 
 public class StatusListener extends PacketStatusListener {
 
+	private static final IChatBaseComponent infoAlreadySent = new ChatComponentText("Status request has already been handled.");
+
 	private final MinecraftServer server;
 	private final NetworkManager nmanager;
 
@@ -50,8 +53,15 @@ public class StatusListener extends PacketStatusListener {
 
 	private static final UUID profileUUID = UUID.randomUUID();
 
+	private boolean sentInfo = false;
+
 	@Override
 	public void a(PacketStatusInStart packetstatusinstart) {
+		if (sentInfo) {
+			nmanager.close(infoAlreadySent);
+		}
+		sentInfo = true;
+
 		InetSocketAddress addr = (InetSocketAddress) nmanager.getSocketAddress();
 
 		ArrayList<EntityPlayer> players = new ArrayList<EntityPlayer>(server.getPlayerList().players);

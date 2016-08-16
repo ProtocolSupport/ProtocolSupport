@@ -5,6 +5,7 @@ import java.io.IOException;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.legacyremapper.LegacyTileEntityUpdate;
 import protocolsupport.protocol.legacyremapper.chunk.ChunkTransformer;
+import protocolsupport.protocol.legacyremapper.chunk.ChunkTransformer.BlockFormat;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.PacketData;
@@ -15,7 +16,7 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class Chunk extends MiddleChunk<RecyclableCollection<PacketData>> {
 
-	private final ChunkTransformer transformer = new ChunkTransformer();
+	private final ChunkTransformer transformer = ChunkTransformer.create(BlockFormat.VARIES);
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
@@ -26,7 +27,7 @@ public class Chunk extends MiddleChunk<RecyclableCollection<PacketData>> {
 		chunkdata.writeBoolean(full);
 		chunkdata.writeVarInt(bitmask);
 		transformer.loadData(data, bitmask, storage.hasSkyLightInCurrentDimension(), full);
-		chunkdata.writeByteArray(transformer.to19Data(version));
+		chunkdata.writeByteArray(transformer.toLegacyData(version));
 		packets.add(chunkdata);
 		for (NBTTagCompoundWrapper tile : tiles) {
 			packets.add(BlockTileUpdate.createPacketData(
