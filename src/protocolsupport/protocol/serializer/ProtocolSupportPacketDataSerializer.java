@@ -23,6 +23,7 @@ import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
+import net.minecraft.server.v1_10_R1.EntityTypes;
 import net.minecraft.server.v1_10_R1.GameProfileSerializer;
 import net.minecraft.server.v1_10_R1.Item;
 import net.minecraft.server.v1_10_R1.ItemPotion;
@@ -302,6 +303,12 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 					if (basicTypeName != null) {
 						itemstack.c(basicTypeName);
 					}
+				}
+			}
+			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9) && item == Items.SPAWN_EGG) {
+				String entityId = nbttagcompound.getCompound("EntityTag").getString("id");
+				if (!entityId.isEmpty()) {
+					itemstack.setData(EntityTypes.a(entityId));
 				}
 			}
 			if (nbttagcompound.hasKeyOfType("ench", 9)) {
