@@ -1,11 +1,11 @@
 package protocolsupport.protocol.typeremapper.id;
 
-import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 
 import net.minecraft.server.v1_10_R1.Block;
 import net.minecraft.server.v1_10_R1.MinecraftServer;
+
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
@@ -294,13 +294,6 @@ public class IdRemapper {
 	};
 
 	public static final IdRemappingRegistry<HashMapBasedIdRemappingTable> EFFECT = new IdRemappingRegistry<HashMapBasedIdRemappingTable>() {
-		{
-			registerRemapEntry(Effect.DRAGON_BREATH, Effect.COLOURED_DUST, ProtocolVersionsHelper.BEFORE_1_9);
-		}
-		@SuppressWarnings("deprecation")
-		public void registerRemapEntry(Effect from, Effect to, ProtocolVersion... versions) {
-			registerRemapEntry(from.getId(), to.getId(), versions);
-		}
 		@Override
 		protected HashMapBasedIdRemappingTable createTable() {
 			return new HashMapBasedIdRemappingTable();

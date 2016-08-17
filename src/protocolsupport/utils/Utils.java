@@ -3,8 +3,18 @@ package protocolsupport.utils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class Utils {
+
+	public static <K, V> V getOrCreateDefault(Map<K, V> map, K key, V defaultValue) {
+		if (map.containsKey(key)) {
+			return map.get(key);
+		} else {
+			map.put(key, defaultValue);
+			return defaultValue;
+		}
+	}
 
 	public static String exceptionMessage(Object... strings) {
 		StringBuilder msg = new StringBuilder();

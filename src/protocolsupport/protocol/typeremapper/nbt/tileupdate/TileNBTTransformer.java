@@ -1,14 +1,17 @@
 package protocolsupport.protocol.typeremapper.nbt.tileupdate;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.List;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.server.v1_10_R1.Item;
+
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
 import protocolsupport.utils.ProtocolVersionsHelper;
+import protocolsupport.utils.Utils;
 
 public class TileNBTTransformer {
 
@@ -16,13 +19,12 @@ public class TileNBTTransformer {
 		UNKNOWN, MOB_SPAWNER, COMMAND_BLOCK, BEACON, SKULL, FLOWER_POT, BANNER, STRUCTURE, END_GATEWAY, SIGN; 
 	}
 
-	private static final TIntObjectHashMap<EnumMap<ProtocolVersion, SpecificTransformer>> registry = new TIntObjectHashMap<>();
+	private static final EnumMap<TileEntityUpdateType, EnumMap<ProtocolVersion, List<SpecificTransformer>>> registry = new EnumMap<>(TileEntityUpdateType.class);
 
 	private static void register(TileEntityUpdateType type, SpecificTransformer transformer, ProtocolVersion... versions) {
-		registry.putIfAbsent(type.ordinal(), new EnumMap<ProtocolVersion, SpecificTransformer>(ProtocolVersion.class));
-		EnumMap<ProtocolVersion, SpecificTransformer> map = registry.get(type.ordinal());
+		EnumMap<ProtocolVersion, List<SpecificTransformer>> map = Utils.getOrCreateDefault(registry, type, new EnumMap<ProtocolVersion, List<SpecificTransformer>>(ProtocolVersion.class));
 		for (ProtocolVersion version : versions) {
-			map.put(version, transformer);
+			Utils.getOrCreateDefault(map, version, new ArrayList<SpecificTransformer>()).add(transformer);
 		}
 	}
 
@@ -45,6 +47,20 @@ public class TileNBTTransformer {
 				}
 			},
 			ProtocolVersionsHelper.BEFORE_1_9
+		);
+		register(
+			TileEntityUpdateType.SKULL,
+			new SpecificTransformer() {
+				@Override
+				public NBTTagCompoundWrapper transform(ProtocolVersion version, NBTTagCompoundWrapper input) {
+					if (input.getNumberAsInt("SkullType") == 5) {
+						input.setInt("SkullType", 3);
+						input.unwrap().set("Owner", ProtocolSupportPacketDataSerializer.createDragonHeadSkullTag());
+					}
+					return input;
+				}
+			},
+			ProtocolVersion.getAllBefore(ProtocolVersion.MINECRAFT_1_9)
 		);
 		register(
 			TileEntityUpdateType.SKULL,
@@ -74,11 +90,14 @@ public class TileNBTTransformer {
 	}
 
 	public static NBTTagCompoundWrapper transform(int type, ProtocolVersion version, NBTTagCompoundWrapper compound) {
-		EnumMap<ProtocolVersion, SpecificTransformer> map = registry.get(type);
+		EnumMap<ProtocolVersion, List<SpecificTransformer>> map = registry.get(TileEntityUpdateType.values()[type]);
 		if (map != null) {
-			SpecificTransformer transformer = map.get(version);
-			if (transformer != null) {
-				return transformer.transform(version, compound);
+			List<SpecificTransformer> transformers = map.get(version);
+			if (transformers != null) {
+				for (SpecificTransformer transformer : transformers) {
+					compound = transformer.transform(version, compound);
+				}
+				return compound;
 			}
 		}
 		return compound;

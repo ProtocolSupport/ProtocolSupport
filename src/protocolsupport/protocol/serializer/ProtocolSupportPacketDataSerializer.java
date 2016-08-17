@@ -17,6 +17,8 @@ import org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack;
 import org.spigotmc.LimitStream;
 
 import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
+import com.mojang.util.UUIDTypeAdapter;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
@@ -280,6 +282,12 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 	private ItemStack transformItemStack(ItemStack original) {
 		ItemStack itemstack = original.cloneItemStack();
 		Item item = itemstack.getItem();
+		if (item == Items.SKULL && itemstack.getData() == 5) {
+			itemstack.setData(3);
+			NBTTagCompound rootTag = new NBTTagCompound();
+			rootTag.set("SkullOwner", createDragonHeadSkullTag());
+			itemstack.setTag(rootTag);
+		}
 		NBTTagCompound nbttagcompound = itemstack.getTag();
 		if (nbttagcompound != null) {
 			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_8) && item == Items.WRITTEN_BOOK) {
@@ -333,6 +341,18 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 			Bukkit.getPluginManager().callEvent(event);
 		}
 		return itemstack;
+	}
+
+	private static final GameProfile dragonHeadGameProfile = new GameProfile(UUIDTypeAdapter.fromString("d34aa2b831da4d269655e33c143f096c"), "EnderDragon");
+	static {
+		dragonHeadGameProfile.getProperties().put("textures", new Property(
+			"textures", "eyJ0aW1lc3RhbXAiOjE0NzE0Mzg3NTEzMjYsInByb2ZpbGVJZCI6ImQzNGFhMmI4MzFkYTRkMjY5NjU1ZTMzYzE0M2YwOTZjIiwicHJvZmlsZU5hbWUiOiJFbmRlckRyYWdvbiIsInNpZ25hdHVyZVJlcXVpcmVkIjp0cnVlLCJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWRlYzdhNGRlMDdiN2VkZWFjZTliOWI5OTY2NDRlMjFkNThjYmRhYzM5MmViZWIyNDdhY2NkMTg1MzRiNTQifX19",
+			"I/XY6is7j0RTGFwuVhc4PVuWUl5RRNToNUpw6jCF+V4TzXYzsBreiLQ6IM4NSJqlPXBmSlqibblDKVQL/4LnXt24/nRNVzChZv68HXB1quGxmYcSEvOLpoUk1cmXgqWJYHA68C+r1ytoJVerGWuIwuBzQZ9GpH0yb+qg7erFQgB24cbH6hh6uB6KYLwIYLQAg3TFjILv9sVJtC3FakXmtkCV3VfRUdjhigpfKP0JR3VhLVIWeW/7E+C4QCXnGlffc3Lz8PNahXtD4qRitVokId0t1qBcL8mM1qnZ/rHlNPLST61ycY9WNlRr6P83yDw2ha8QMiRH1vI5tvdXIwV7Dkn+JxfhOOeHtGunLBVe7ZEWBZfjePr/HqZGR6F7/cwZU32uH5MdTXQ+oKWUlb6HJOXxj7DfMr/uZWjrwjzmKpSDAinwvQM/8Sf96prufvcSfhZ0yopkumpnTjivgPxsJhwFXThIyFZ3ijTClMgm5NSzmB6hJ+HsBnVkDs7eyE5eI72/ES/6SksFezmBzDOqU31QbPA2mWoOYWdyZngtnf45oFnZ7NNpDW7ZKxY7FTsPEXoON/VX516KbnQ5OERI9YUpGzyKCjyMnf0L99gwgHpx5LpawdzIwk04sqFoy796BkGJf7xH6+h+AurMIenMt4on7T4FUE1ZaJvvaqexQME="
+		));
+	}
+
+	public static NBTTagCompound createDragonHeadSkullTag() {
+		return GameProfileSerializer.serialize(new NBTTagCompound(), dragonHeadGameProfile);
 	}
 
 	public static void transformSkull(NBTTagCompound nbttagcompound) {
