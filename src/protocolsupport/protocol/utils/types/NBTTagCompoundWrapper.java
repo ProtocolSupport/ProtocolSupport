@@ -45,12 +45,16 @@ public class NBTTagCompoundWrapper {
 		tag.setString(key, value);
 	}
 
-	public int getNumberAsInt(String key) {
+	public int getNumber(String key) {
 		return tag.getInt(key);
 	}
 
 	public void setInt(String key, int i) {
 		tag.setInt(key, i);
+	}
+
+	public void setByte(String key, int value) {
+		tag.setByte(key, (byte) value);
 	}
 
 	@Override

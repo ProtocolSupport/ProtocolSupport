@@ -53,8 +53,8 @@ public class TileNBTTransformer {
 			new SpecificTransformer() {
 				@Override
 				public NBTTagCompoundWrapper transform(ProtocolVersion version, NBTTagCompoundWrapper input) {
-					if (input.getNumberAsInt("SkullType") == 5) {
-						input.setInt("SkullType", 3);
+					if (input.getNumber("SkullType") == 5) {
+						input.setByte("SkullType", 3);
 						input.unwrap().set("Owner", ProtocolSupportPacketDataSerializer.createDragonHeadSkullTag());
 					}
 					return input;
