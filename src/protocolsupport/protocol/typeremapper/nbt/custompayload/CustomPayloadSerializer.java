@@ -38,7 +38,7 @@ public class CustomPayloadSerializer {
 			boolean disabled = serializer.readBoolean();
 			int uses = 0;
 			int maxuses = 7;
-			if (serializer.getVersion() == ProtocolVersion.MINECRAFT_1_8) {
+			if (serializer.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_1_8)) {
 				uses = serializer.readInt();
 				maxuses = serializer.readInt();
 			}
@@ -58,7 +58,7 @@ public class CustomPayloadSerializer {
 				serializer.writeItemStack(offer.getItemStack2());
 			}
 			serializer.writeBoolean(offer.isDisabled());
-			if (serializer.getVersion() == ProtocolVersion.MINECRAFT_1_8) {
+			if (serializer.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_1_8)) {
 				serializer.writeInt(offer.getUses());
 				serializer.writeInt(offer.getMaxUses());
 			}
