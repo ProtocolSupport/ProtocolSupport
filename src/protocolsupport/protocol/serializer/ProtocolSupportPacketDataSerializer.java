@@ -282,7 +282,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 	private ItemStack transformItemStack(ItemStack original) {
 		ItemStack itemstack = original.cloneItemStack();
 		Item item = itemstack.getItem();
-		if (item == Items.SKULL && itemstack.getData() == 5) {
+		if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9) && item == Items.SKULL && itemstack.getData() == 5) {
 			itemstack.setData(3);
 			NBTTagCompound rootTag = new NBTTagCompound();
 			rootTag.set("SkullOwner", createDragonHeadSkullTag());
