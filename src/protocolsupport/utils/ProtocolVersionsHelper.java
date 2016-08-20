@@ -28,7 +28,7 @@ public class ProtocolVersionsHelper {
 
 	public static final ProtocolVersion[] BEFORE_1_9 = concat(BEFORE_1_8, ProtocolVersion.MINECRAFT_1_8);
 
-	public static final ProtocolVersion[] BEFORE_1_9_1 = concat(BEFORE_1_9, ProtocolVersion.MINECRAFT_1_9_1);
+	public static final ProtocolVersion[] BEFORE_1_9_1 = concat(BEFORE_1_9, ProtocolVersion.MINECRAFT_1_9);
 
 	public static final ProtocolVersion[] BEFORE_1_10 = concat(BEFORE_1_9_1, ProtocolVersion.MINECRAFT_1_9_2, ProtocolVersion.MINECRAFT_1_9_4);
 
