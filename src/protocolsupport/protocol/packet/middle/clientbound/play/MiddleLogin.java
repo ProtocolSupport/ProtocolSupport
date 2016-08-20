@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import protocolsupport.api.tab.TabAPI;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
 
 public abstract class MiddleLogin<T> extends ClientBoundMiddlePacket<T> {
@@ -19,7 +20,7 @@ public abstract class MiddleLogin<T> extends ClientBoundMiddlePacket<T> {
 	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		playerEntityId = serializer.readInt();
 		gamemode = serializer.readByte();
-		dimension = serializer.readInt();
+		dimension = IdRemapper.fixDimensionId(serializer.readInt());
 		difficulty = serializer.readByte();
 		serializer.readByte();
 		maxplayers = TabAPI.getMaxTabSize();

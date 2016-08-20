@@ -121,19 +121,21 @@ public class IdRemapper {
 				@Override
 				public void setRemap(int from, int to) {
 					super.setRemap(from, to);
-					int blockIdFrom = from >> 4;
-					int blockIdTo = to >> 4;
-					Block blockFrom = Block.getById(blockIdFrom);
-					Block blockTo = Block.getById(blockIdTo);
-					try {
-						float strengthFrom = ReflectionUtils.getField(Block.class, "strength").getFloat(blockFrom);
-						float strengthTo = ReflectionUtils.getField(Block.class, "strength").getFloat(blockTo);
-						if (strengthTo < strengthFrom) {
-							ProtocolSupport.logWarning("Block remapper warning: strength of block " + Material.getMaterial(blockIdTo) + " is less than strength of block with id " +  Material.getMaterial(blockIdFrom));
-						}
-					} catch (IllegalArgumentException | IllegalAccessException e) {
-						if (MinecraftServer.getServer().isDebugging()) {
-							e.printStackTrace();
+					if (MinecraftServer.getServer().isDebugging()) {
+						int blockIdFrom = from >> 4;
+						int blockIdTo = to >> 4;
+						Block blockFrom = Block.getById(blockIdFrom);
+						Block blockTo = Block.getById(blockIdTo);
+						try {
+							float strengthFrom = ReflectionUtils.getField(Block.class, "strength").getFloat(blockFrom);
+							float strengthTo = ReflectionUtils.getField(Block.class, "strength").getFloat(blockTo);
+							if (strengthTo < strengthFrom) {
+								ProtocolSupport.logWarning("Block remapper warning: strength of block " + Material.getMaterial(blockIdTo) + " is less than strength of block with id " +  Material.getMaterial(blockIdFrom));
+							}
+						} catch (IllegalArgumentException | IllegalAccessException e) {
+							if (MinecraftServer.getServer().isDebugging()) {
+								e.printStackTrace();
+							}
 						}
 					}
 				}
@@ -299,6 +301,14 @@ public class IdRemapper {
 			return new HashMapBasedIdRemappingTable();
 		}
 	};
+
+	public static int fixDimensionId(int dimensionId) {
+		if (dimensionId > 1 || dimensionId < -1) {
+			return 0;
+		}
+		return dimensionId;
+	}
+
 
 	public static void init() {
 	}
