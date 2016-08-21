@@ -12,17 +12,16 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandler;
 import net.minecraft.server.v1_10_R1.ChatComponentText;
-import net.minecraft.server.v1_10_R1.MinecraftServer;
 import net.minecraft.server.v1_10_R1.NetworkManager;
 import net.minecraft.server.v1_10_R1.ServerConnection;
 import protocolsupport.utils.ReflectionUtils;
+import protocolsupport.utils.Utils;
 
 public class BasicInjector {
 
 	@SuppressWarnings("unchecked")
 	public static void inject() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		@SuppressWarnings("deprecation")
-		ServerConnection serverConnection = MinecraftServer.getServer().am();
+		ServerConnection serverConnection = Utils.getServer().am();
 		List<NetworkManager> nmList = null;
 		try {
 			nmList = (List<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("pending")).get(serverConnection);

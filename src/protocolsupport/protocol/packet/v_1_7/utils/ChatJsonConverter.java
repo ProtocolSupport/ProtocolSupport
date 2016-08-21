@@ -2,7 +2,6 @@ package protocolsupport.protocol.packet.v_1_7.utils;
 
 import net.minecraft.server.v1_10_R1.Item;
 import net.minecraft.server.v1_10_R1.MinecraftKey;
-import net.minecraft.server.v1_10_R1.MinecraftServer;
 import net.minecraft.server.v1_10_R1.MojangsonParseException;
 import net.minecraft.server.v1_10_R1.MojangsonParser;
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
@@ -10,6 +9,7 @@ import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.modifiers.ClickAction;
 import protocolsupport.api.chat.modifiers.HoverAction;
+import protocolsupport.utils.Utils;
 
 public class ChatJsonConverter {
 
@@ -26,7 +26,6 @@ public class ChatJsonConverter {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	private static void fixComponent(BaseComponent component) {
 		HoverAction hover = component.getHoverAction();
 		if (hover != null && hover.getType() == HoverAction.Type.SHOW_ITEM) {
@@ -39,7 +38,7 @@ public class ChatJsonConverter {
 				}
 				component.setHoverAction(new HoverAction(HoverAction.Type.SHOW_ITEM, compound.toString()));
 			} catch (MojangsonParseException t) {
-				if (MinecraftServer.getServer().isDebugging()) {
+				if (Utils.getServer().isDebugging()) {
 					t.printStackTrace();
 				}
 			}

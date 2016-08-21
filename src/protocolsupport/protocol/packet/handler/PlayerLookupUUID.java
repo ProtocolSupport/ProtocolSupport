@@ -20,9 +20,9 @@ import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
 
 import net.minecraft.server.v1_10_R1.MinecraftEncryption;
-import net.minecraft.server.v1_10_R1.MinecraftServer;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
+import protocolsupport.utils.Utils;
 
 @SuppressWarnings("deprecation")
 public class PlayerLookupUUID {
@@ -43,8 +43,8 @@ public class PlayerLookupUUID {
 				fireLoginEvents();
 				return;
 			}
-			final String hash = new BigInteger(MinecraftEncryption.a("", MinecraftServer.getServer().O().getPublic(), listener.getLoginKey())).toString(16);
-			listener.setProfile(MinecraftServer.getServer().ay().hasJoinedServer(new GameProfile(null, gameprofile.getName()), hash));
+			final String hash = new BigInteger(MinecraftEncryption.a("", Utils.getServer().O().getPublic(), listener.getLoginKey())).toString(16);
+			listener.setProfile(Utils.getServer().ay().hasJoinedServer(new GameProfile(null, gameprofile.getName()), hash));
 			if (listener.getProfile() != null) {
 				fireLoginEvents();
 			} else {
@@ -56,7 +56,7 @@ public class PlayerLookupUUID {
 			listener.getLogger().error("Couldn't verify username because servers are unavailable");
 		} catch (Exception exception) {
 			listener.disconnect("Failed to verify username!");
-			MinecraftServer.getServer().server.getLogger().log(Level.WARNING, "Exception verifying " + gameprofile.getName(), exception);
+			Utils.getServer().server.getLogger().log(Level.WARNING, "Exception verifying " + gameprofile.getName(), exception);
 		}
 	}
 
@@ -82,7 +82,7 @@ public class PlayerLookupUUID {
 		}
 
 		UUID uniqueId = listener.getProfile().getId();
-		final CraftServer server = MinecraftServer.getServer().server;
+		final CraftServer server = Utils.getServer().server;
 		final AsyncPlayerPreLoginEvent asyncEvent = new AsyncPlayerPreLoginEvent(playerName, address, uniqueId);
 		server.getPluginManager().callEvent(asyncEvent);
 		if (PlayerPreLoginEvent.getHandlerList().getRegisteredListeners().length != 0) {
@@ -97,7 +97,7 @@ public class PlayerLookupUUID {
 					return event.getResult();
 				}
 			};
-			MinecraftServer.getServer().processQueue.add(waitable);
+			Utils.getServer().processQueue.add(waitable);
 			if (waitable.get() != PlayerPreLoginEvent.Result.ALLOWED) {
 				listener.disconnect(event.getKickMessage());
 				return;
