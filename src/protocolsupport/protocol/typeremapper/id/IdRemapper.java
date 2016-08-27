@@ -222,7 +222,7 @@ public class IdRemapper {
 
 	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> ENTITY_LIVING = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
 		{
-			registerRemapEntry(EntityType.POLAR_BEAR, EntityType.SPIDER, ProtocolVersionsHelper.BEFORE_1_10);
+			registerRemapEntry(EntityType.POLAR_BEAR, EntityType.SHEEP, ProtocolVersionsHelper.BEFORE_1_10);
 			registerRemapEntry(EntityType.SHULKER, EntityType.BLAZE, ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry(EntityType.ENDERMITE, EntityType.SILVERFISH, ProtocolVersionsHelper.BEFORE_1_8);
 			registerRemapEntry(EntityType.GUARDIAN, EntityType.SQUID, ProtocolVersionsHelper.BEFORE_1_8);
