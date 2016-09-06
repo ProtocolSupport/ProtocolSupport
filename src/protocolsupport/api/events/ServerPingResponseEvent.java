@@ -21,6 +21,7 @@ public class ServerPingResponseEvent extends Event {
 	private List<String> players;
 
 	public ServerPingResponseEvent(InetSocketAddress address, ProtocolInfo info, String icon, String motd, int maxPlayers, List<String> players) {
+		super(true);
 		this.address = address;
 		setProtocolInfo(info);
 		setIcon(icon);
