@@ -20,7 +20,7 @@ public abstract class MiddleClientSettings extends ServerBoundMiddlePacket {
 		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_SETTINGS);
 		creator.writeString(locale);
 		creator.writeByte(viewDist);
-		creator.writeByte(chatMode);
+		creator.writeVarInt(chatMode);
 		creator.writeBoolean(chatColors);
 		creator.writeByte(skinFlags);
 		creator.writeVarInt(mainHand);
