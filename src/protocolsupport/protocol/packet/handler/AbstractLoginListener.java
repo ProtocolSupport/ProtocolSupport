@@ -70,8 +70,7 @@ public abstract class AbstractLoginListener extends LoginListener {
 
 	protected static final Logger logger = LogManager.getLogger();
 	protected static final Random random = new Random();
-	@SuppressWarnings("deprecation")
-	protected final static MinecraftServer server = MinecraftServer.getServer();
+	protected final static MinecraftServer server = Utils.getServer();
 
 	protected final byte[] randomBytes = new byte[4];
 	protected int loginTicks;
@@ -159,7 +158,6 @@ public abstract class AbstractLoginListener extends LoginListener {
 		Validate.validState(state == LoginState.HELLO, "Unexpected hello packet");
 		state = LoginState.ONLINEMODERESOLVE;
 		loginprocessor.execute(new Runnable() {
-			@SuppressWarnings("deprecation")
 			@Override
 			public void run() {
 				try {
@@ -183,13 +181,13 @@ public abstract class AbstractLoginListener extends LoginListener {
 					forcedUUID = event.getForcedUUID();
 					if (isOnlineMode) {
 						state = LoginState.KEY;
-						networkManager.sendPacket(new PacketLoginOutEncryptionBegin("", MinecraftServer.getServer().O().getPublic(), randomBytes));
+						networkManager.sendPacket(new PacketLoginOutEncryptionBegin("", server.O().getPublic(), randomBytes));
 					} else {
 						new PlayerLookupUUID(AbstractLoginListener.this, isOnlineMode).run();
 					}
 				} catch (Throwable t) {
 					AbstractLoginListener.this.disconnect("Error occured while logging in");
-					if (MinecraftServer.getServer().isDebugging()) {
+					if (server.isDebugging()) {
 						t.printStackTrace();
 					}
 				}
@@ -202,11 +200,10 @@ public abstract class AbstractLoginListener extends LoginListener {
 		Validate.validState(state == LoginState.KEY, "Unexpected key packet");
 		state = LoginState.AUTHENTICATING;
 		loginprocessor.execute(new Runnable() {
-			@SuppressWarnings("deprecation")
 			@Override
 			public void run() {
 				try {
-					final PrivateKey privatekey = MinecraftServer.getServer().O().getPrivate();
+					final PrivateKey privatekey = server.O().getPrivate();
 					if (!Arrays.equals(randomBytes, packetlogininencryptionbegin.b(privatekey))) {
 						throw new IllegalStateException("Invalid nonce!");
 					}
@@ -215,7 +212,7 @@ public abstract class AbstractLoginListener extends LoginListener {
 					new PlayerLookupUUID(AbstractLoginListener.this, isOnlineMode).run();
 				} catch (Throwable t) {
 					AbstractLoginListener.this.disconnect("Error occured while logging in");
-					if (MinecraftServer.getServer().isDebugging()) {
+					if (server.isDebugging()) {
 						t.printStackTrace();
 					}
 				}
