@@ -5,7 +5,6 @@ import io.netty.channel.ChannelException;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import net.minecraft.server.v1_10_R1.EnumProtocolDirection;
-import net.minecraft.server.v1_10_R1.MinecraftServer;
 import net.minecraft.server.v1_10_R1.NetworkManager;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.FakePacketListener;
@@ -15,6 +14,7 @@ import protocolsupport.protocol.pipeline.wrapped.WrappedDecoder;
 import protocolsupport.protocol.pipeline.wrapped.WrappedEncoder;
 import protocolsupport.protocol.pipeline.wrapped.WrappedPrepender;
 import protocolsupport.protocol.pipeline.wrapped.WrappedSplitter;
+import protocolsupport.utils.Utils;
 
 public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 
@@ -26,20 +26,19 @@ public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 	private static final int IPTOS_THROUGHPUT = 0x08;
 	private static final int IPTOS_LOWDELAY = 0x10;
 
-	@SuppressWarnings("deprecation")
 	@Override
 	protected void initChannel(Channel channel) {
 		try {
 			channel.config().setOption(ChannelOption.IP_TOS, IPTOS_THROUGHPUT | IPTOS_LOWDELAY);
 		} catch (ChannelException channelexception) {
-			if (MinecraftServer.getServer().isDebugging()) {
+			if (Utils.getServer().isDebugging()) {
 				System.err.println("Unable to set IP_TOS option: " + channelexception.getMessage());
 			}
 		}
 		try {
 			channel.config().setOption(ChannelOption.TCP_NODELAY, true);
 		} catch (ChannelException channelexception) {
-			if (MinecraftServer.getServer().isDebugging()) {
+			if (Utils.getServer().isDebugging()) {
 				System.err.println("Unable to set TCP_NODELAY option: " + channelexception.getMessage());
 			}
 		}
