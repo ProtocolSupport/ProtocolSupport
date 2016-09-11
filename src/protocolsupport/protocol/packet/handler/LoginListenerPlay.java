@@ -51,12 +51,12 @@ import net.minecraft.server.v1_10_R1.PacketPlayInWindowClick;
 import net.minecraft.server.v1_10_R1.PacketPlayOutKeepAlive;
 import net.minecraft.server.v1_10_R1.PacketPlayOutKickDisconnect;
 import protocolsupport.api.events.PlayerLoginFinishEvent;
+import protocolsupport.utils.Utils;
 
 public class LoginListenerPlay extends LoginListener implements PacketListenerPlayIn, ITickable {
 
 	protected static final Logger logger = LogManager.getLogger();
-	@SuppressWarnings("deprecation")
-	protected static final MinecraftServer server = MinecraftServer.getServer();
+	protected static final MinecraftServer server = Utils.getServer();
 
 	private final GameProfile profile;
 
