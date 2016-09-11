@@ -28,7 +28,6 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.minecraft.server.v1_10_R1.ChatComponentText;
-import net.minecraft.server.v1_10_R1.EntityPlayer;
 import net.minecraft.server.v1_10_R1.IChatBaseComponent;
 import net.minecraft.server.v1_10_R1.LoginListener;
 import net.minecraft.server.v1_10_R1.MinecraftServer;
@@ -38,7 +37,6 @@ import net.minecraft.server.v1_10_R1.PacketLoginInStart;
 import net.minecraft.server.v1_10_R1.PacketLoginOutDisconnect;
 import net.minecraft.server.v1_10_R1.PacketLoginOutEncryptionBegin;
 import net.minecraft.server.v1_10_R1.PacketLoginOutSetCompression;
-import net.minecraft.server.v1_10_R1.PacketLoginOutSuccess;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.events.PlayerLoginStartEvent;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
@@ -78,7 +76,7 @@ public abstract class AbstractLoginListener extends LoginListener {
 	protected final byte[] randomBytes = new byte[4];
 	protected int loginTicks;
 	protected SecretKey loginKey;
-	protected volatile LoginState state = LoginState.HELLO;
+	protected LoginState state = LoginState.HELLO;
 	protected GameProfile profile;
 
 	protected boolean isOnlineMode;
@@ -97,10 +95,6 @@ public abstract class AbstractLoginListener extends LoginListener {
 	public void E_() {
 		if (loginTicks++ == 600) {
 			disconnect("Took too long to log in");
-			return;
-		}
-		if (state == LoginState.READY_TO_ACCEPT) {
-			b();
 		}
 	}
 
@@ -135,29 +129,9 @@ public abstract class AbstractLoginListener extends LoginListener {
 		return UUID.nameUUIDFromBytes(("OfflinePlayer:" + profile.getName()).getBytes(Charsets.UTF_8));
 	}
 
-	@SuppressWarnings({ "unchecked", "deprecation" })
 	@Override
 	public void b() {
-		EntityPlayer loginplayer = server.getPlayerList().attemptLogin(this, profile, hostname);
-		if (loginplayer != null) {
-			state = LoginState.ACCEPTED;
-			if (hasCompression()) {
-				final int threshold = MinecraftServer.getServer().aF();
-				if (threshold >= 0) {
-					this.networkManager.sendPacket(
-						new PacketLoginOutSetCompression(threshold),
-						new ChannelFutureListener() {
-							@Override
-							public void operationComplete(ChannelFuture future) throws Exception {
-								enableCompresssion(threshold);
-							}
-						}
-					);
-				}
-			}
-			networkManager.sendPacket(new PacketLoginOutSuccess(profile));
-			server.getPlayerList().a(this.networkManager, loginplayer);
-		}
+		throw new IllegalStateException("Should not reach here");
 	}
 
 	protected abstract boolean hasCompression();
@@ -190,6 +164,7 @@ public abstract class AbstractLoginListener extends LoginListener {
 			public void run() {
 				try {
 					profile = packetlogininstart.a();
+
 					PlayerLoginStartEvent event = new PlayerLoginStartEvent(
 						(InetSocketAddress) networkManager.getSocketAddress(),
 						profile.getName(),
@@ -202,6 +177,7 @@ public abstract class AbstractLoginListener extends LoginListener {
 						AbstractLoginListener.this.disconnect(event.getDenyLoginMessage());
 						return;
 					}
+
 					isOnlineMode = event.isOnlineMode();
 					useOnlineModeUUID = event.useOnlineModeUUID();
 					forcedUUID = event.getForcedUUID();
@@ -266,6 +242,7 @@ public abstract class AbstractLoginListener extends LoginListener {
 		return a(current);
 	}
 
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	public void setReadyToAccept() {
 		UUID newUUID = null;
 		if (isOnlineMode && !useOnlineModeUUID) {
@@ -279,7 +256,24 @@ public abstract class AbstractLoginListener extends LoginListener {
 			newProfile.getProperties().putAll(profile.getProperties());
 			profile = newProfile;
 		}
-		this.state = LoginState.READY_TO_ACCEPT;
+		if (hasCompression()) {
+			final int threshold = MinecraftServer.getServer().aF();
+			if (threshold >= 0) {
+				this.networkManager.sendPacket(
+					new PacketLoginOutSetCompression(threshold),
+					new ChannelFutureListener() {
+						@Override
+						public void operationComplete(ChannelFuture future) throws Exception {
+							enableCompresssion(threshold);
+						}
+					}
+				);
+			}
+		}
+
+		LoginListenerPlay listener = new LoginListenerPlay(networkManager, profile, hostname);
+		networkManager.setPacketListener(listener);
+		listener.finishLogin();
 	}
 
 	public SecretKey getLoginKey() {
@@ -289,6 +283,10 @@ public abstract class AbstractLoginListener extends LoginListener {
 
 	public NetworkManager getNetworkManager() {
 		return networkManager;
+	}
+
+	public enum LoginState {
+		HELLO, ONLINEMODERESOLVE, KEY, AUTHENTICATING;
 	}
 
 }
