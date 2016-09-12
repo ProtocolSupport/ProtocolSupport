@@ -39,6 +39,9 @@ dependencies {
 jar {
     from "LICENSE"
     from "src/plugin.yml"
+
+    destinationDir = file("$rootDir/target/")
+    version = null
 }
 
 task updateSpigot(type: Download) {
