@@ -8,15 +8,22 @@ import org.bukkit.event.HandlerList;
 public class PlayerLoginFinishEvent extends PlayerEvent {
 
 	private final UUID uuid;
+	private final boolean onlineMode;
 
-	public PlayerLoginFinishEvent(InetSocketAddress address, String username, UUID uuid) {
+	public PlayerLoginFinishEvent(InetSocketAddress address, String username, UUID uuid, boolean onlineMode) {
 		super(address, username);
 		this.uuid = uuid;
+		this.onlineMode = onlineMode;
 	}
 
 	public UUID getUUID() {
 		return uuid;
 	}
+
+	public boolean isOnlineMode() {
+		return onlineMode;
+	}
+
 
 	private String denyLoginMessage;
 

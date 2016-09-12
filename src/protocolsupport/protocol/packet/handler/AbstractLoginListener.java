@@ -268,7 +268,7 @@ public abstract class AbstractLoginListener extends LoginListener {
 			}
 		}
 
-		LoginListenerPlay listener = new LoginListenerPlay(networkManager, profile, hostname);
+		LoginListenerPlay listener = new LoginListenerPlay(networkManager, profile, isOnlineMode, hostname);
 		networkManager.setPacketListener(listener);
 		listener.finishLogin();
 	}

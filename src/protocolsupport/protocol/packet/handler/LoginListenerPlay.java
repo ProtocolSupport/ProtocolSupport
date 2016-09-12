@@ -59,19 +59,21 @@ public class LoginListenerPlay extends LoginListener implements PacketListenerPl
 	protected static final MinecraftServer server = Utils.getServer();
 
 	private final GameProfile profile;
+	private final boolean onlineMode;
 
 	protected boolean ready;
 
-	public LoginListenerPlay(NetworkManager networkmanager, GameProfile profile, String hostname) {
+	public LoginListenerPlay(NetworkManager networkmanager, GameProfile profile, boolean onlineMode, String hostname) {
 		super(server, networkmanager);
 		this.profile = profile;
+		this.onlineMode = onlineMode;
 		this.hostname = hostname;
 	}
 
 	public void finishLogin() {
 		networkManager.sendPacket(new PacketLoginOutSuccess(profile));
 
-		PlayerLoginFinishEvent event = new PlayerLoginFinishEvent((InetSocketAddress) networkManager.getSocketAddress(), profile.getName(), profile.getId());
+		PlayerLoginFinishEvent event = new PlayerLoginFinishEvent((InetSocketAddress) networkManager.getSocketAddress(), profile.getName(), profile.getId(), onlineMode);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.isLoginDenied()) {
 			disconnect(event.getDenyLoginMessage());
