@@ -6,8 +6,9 @@ plugins {
 group 'protocolsupport'
 version '4.25.dev'
 
-import de.undercouch.gradle.tasks.download.Download
 sourceCompatibility = 1.7
+
+compileJava.dependsOn("updateSpigot")
 
 sourceSets {
     main {
@@ -19,14 +20,6 @@ sourceSets {
 
 repositories {
     mavenCentral()
-
-//    maven {
-//        url "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
-//    }
-//
-//    maven {
-//        url "https://oss.sonatype.org/content/groups/public/"
-//    }
 }
 
 dependencies {
@@ -44,8 +37,10 @@ jar {
     version = null
 }
 
+import de.undercouch.gradle.tasks.download.Download
 task updateSpigot(type: Download) {
     src 'http://download.true-games.org/minecraft/libs/ProtocolSupport/spigot.jar'
     dest buildDir
+    onlyIfNewer true
     overwrite true
 }
