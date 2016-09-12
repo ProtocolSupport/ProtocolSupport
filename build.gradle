@@ -9,6 +9,14 @@ version '4.25.dev'
 import de.undercouch.gradle.tasks.download.Download
 sourceCompatibility = 1.7
 
+sourceSets {
+    main {
+        java {
+            srcDirs = ["src"]
+        }
+    }
+}
+
 repositories {
     mavenCentral()
 
@@ -29,8 +37,8 @@ dependencies {
 }
 
 jar {
-    //add license file (outside of src/main/resources) to the final jar file
     from "LICENSE"
+    from "src/plugin.yml"
 }
 
 task updateSpigot(type: Download) {
