@@ -79,6 +79,11 @@ public class RecyclableSingletonList<E> extends AbstractCollection<E> implements
 		public void reset() {
 			hasNext = true;
 		}
+
+        @Override
+        public void remove() {
+            // TODO Auto-generated method stub
+        }
 	}
 
 }
