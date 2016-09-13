@@ -11,6 +11,7 @@ import io.netty.util.AttributeKey;
 import net.minecraft.server.v1_10_R1.EntityPlayer;
 import net.minecraft.server.v1_10_R1.EnumProtocol;
 import net.minecraft.server.v1_10_R1.NetworkManager;
+import net.minecraft.server.v1_10_R1.PacketListener;
 import net.minecraft.server.v1_10_R1.PlayerConnection;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 
@@ -19,11 +20,16 @@ public class ChannelUtils {
 	public static final AttributeKey<EnumProtocol> CURRENT_PROTOCOL_KEY = NetworkManager.c;
 
 	public static Player getBukkitPlayer(Channel channel) {
-		return getPlayer(getNetworkManager(channel)).getBukkitEntity();
+		EntityPlayer player = getPlayer(getNetworkManager(channel));
+		return player != null ? player.getBukkitEntity() : null;
 	}
 
 	public static EntityPlayer getPlayer(NetworkManager networkManager) {
-		return ((PlayerConnection) networkManager.i()).player;
+		PacketListener listener = networkManager.i();
+		if (listener instanceof PlayerConnection) {
+			return ((PlayerConnection) networkManager.i()).player;
+		}
+		return null;
 	}
 
 	public static SocketAddress getNetworkManagerSocketAddress(Channel channel) {
