@@ -239,7 +239,7 @@ public abstract class AbstractLoginListener extends LoginListener {
 		return a(current);
 	}
 
-	@SuppressWarnings({ "unchecked", "deprecation" })
+	@SuppressWarnings("unchecked")
 	public void setReadyToAccept() {
 		UUID newUUID = null;
 		if (isOnlineMode && !useOnlineModeUUID) {
@@ -254,7 +254,7 @@ public abstract class AbstractLoginListener extends LoginListener {
 			profile = newProfile;
 		}
 		if (hasCompression()) {
-			final int threshold = MinecraftServer.getServer().aF();
+			final int threshold = Utils.getServer().aF();
 			if (threshold >= 0) {
 				this.networkManager.sendPacket(
 					new PacketLoginOutSetCompression(threshold),
