@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__1_6__1_7__1_8__1_9_r1__1_9_r2;
+package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9_r2;
 
 import java.io.IOException;
 
@@ -13,8 +13,9 @@ public class WorldCustomSound extends MiddleWorldCustomSound<RecyclableCollectio
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
-		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_WORLD_SOUND_ID, version);
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_WORLD_CUSTOM_SOUND, version);
 		serializer.writeString(id);
+		serializer.writeVarInt(category);
 		serializer.writeInt(x);
 		serializer.writeInt(y);
 		serializer.writeInt(z);
