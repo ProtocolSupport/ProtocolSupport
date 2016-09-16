@@ -86,9 +86,9 @@ public class LoginListenerPlay extends LoginListener implements PacketListenerPl
 
 	@Override
 	public void E_() {
-		if (keepAliveTicks++ % 20 == 0) {
-			networkManager.sendPacket(new PacketPlayOutKeepAlive(0));
-		}
+//		if (keepAliveTicks++ % 20 == 0) {
+//			networkManager.sendPacket(new PacketPlayOutKeepAlive(0));
+//		}
 		if (ready) {
 			ready = false;
 			b();
