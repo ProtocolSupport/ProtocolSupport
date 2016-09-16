@@ -43,7 +43,7 @@ public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 			}
 		}
 		channel.pipeline()
-		.addLast("timeout", new SimpleReadTimeoutHandler(30))
+		.addLast(ChannelHandlers.READ_TIMEOUT, new SimpleReadTimeoutHandler(30))
 		.addLast(ChannelHandlers.INITIAL_DECODER, new InitialPacketDecoder())
 		.addLast(ChannelHandlers.SPLITTER, new WrappedSplitter())
 		.addLast(ChannelHandlers.DECODER, new WrappedDecoder())

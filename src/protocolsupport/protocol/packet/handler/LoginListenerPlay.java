@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 
 import com.mojang.authlib.GameProfile;
 
+import io.netty.buffer.Unpooled;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.minecraft.server.v1_10_R1.ChatComponentText;
@@ -17,6 +18,7 @@ import net.minecraft.server.v1_10_R1.ITickable;
 import net.minecraft.server.v1_10_R1.LoginListener;
 import net.minecraft.server.v1_10_R1.MinecraftServer;
 import net.minecraft.server.v1_10_R1.NetworkManager;
+import net.minecraft.server.v1_10_R1.PacketDataSerializer;
 import net.minecraft.server.v1_10_R1.PacketListenerPlayIn;
 import net.minecraft.server.v1_10_R1.PacketLoginInEncryptionBegin;
 import net.minecraft.server.v1_10_R1.PacketLoginInStart;
@@ -48,9 +50,10 @@ import net.minecraft.server.v1_10_R1.PacketPlayInUseEntity;
 import net.minecraft.server.v1_10_R1.PacketPlayInUseItem;
 import net.minecraft.server.v1_10_R1.PacketPlayInVehicleMove;
 import net.minecraft.server.v1_10_R1.PacketPlayInWindowClick;
-import net.minecraft.server.v1_10_R1.PacketPlayOutKeepAlive;
+import net.minecraft.server.v1_10_R1.PacketPlayOutCustomPayload;
 import net.minecraft.server.v1_10_R1.PacketPlayOutKickDisconnect;
 import protocolsupport.api.events.PlayerLoginFinishEvent;
+import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.utils.Utils;
 
 public class LoginListenerPlay extends LoginListener implements PacketListenerPlayIn, ITickable {
@@ -71,8 +74,11 @@ public class LoginListenerPlay extends LoginListener implements PacketListenerPl
 	}
 
 	public void finishLogin() {
+		//send login success
 		networkManager.sendPacket(new PacketLoginOutSuccess(profile));
-
+		//tick connection keep now
+		keepConnection();
+		//now fire login event
 		PlayerLoginFinishEvent event = new PlayerLoginFinishEvent((InetSocketAddress) networkManager.getSocketAddress(), profile.getName(), profile.getId(), onlineMode);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.isLoginDenied()) {
@@ -82,17 +88,25 @@ public class LoginListenerPlay extends LoginListener implements PacketListenerPl
 		ready = true;
 	}
 
-	protected int keepAliveTicks = 0;
+	protected int keepAliveTicks = 1;
 
 	@Override
 	public void E_() {
-//		if (keepAliveTicks++ % 20 == 0) {
-//			networkManager.sendPacket(new PacketPlayOutKeepAlive(0));
-//		}
+		if (keepAliveTicks++ % 80 == 0) {
+			keepConnection();
+		}
 		if (ready) {
 			ready = false;
 			b();
 		}
+	}
+
+	private static final PacketDataSerializer fake = new PacketDataSerializer(Unpooled.EMPTY_BUFFER);
+	private void keepConnection() {
+		//custom payload does nothing on a client when sent with invalid tag, but it resets client readtimeouthandler, and that is exactly what we need
+		networkManager.sendPacket(new PacketPlayOutCustomPayload("PSFake", fake));
+		//we also need to reset server readtimeouthandler
+		ChannelHandlers.getTimeoutHandler(networkManager.channel.pipeline()).setLastRead();
 	}
 
 	@Override
