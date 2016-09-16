@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.handler;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,6 +14,8 @@ import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.minecraft.server.v1_10_R1.ChatComponentText;
 import net.minecraft.server.v1_10_R1.EntityPlayer;
+import net.minecraft.server.v1_10_R1.EnumDifficulty;
+import net.minecraft.server.v1_10_R1.EnumGamemode;
 import net.minecraft.server.v1_10_R1.IChatBaseComponent;
 import net.minecraft.server.v1_10_R1.ITickable;
 import net.minecraft.server.v1_10_R1.LoginListener;
@@ -52,6 +55,10 @@ import net.minecraft.server.v1_10_R1.PacketPlayInVehicleMove;
 import net.minecraft.server.v1_10_R1.PacketPlayInWindowClick;
 import net.minecraft.server.v1_10_R1.PacketPlayOutCustomPayload;
 import net.minecraft.server.v1_10_R1.PacketPlayOutKickDisconnect;
+import net.minecraft.server.v1_10_R1.PacketPlayOutLogin;
+import net.minecraft.server.v1_10_R1.WorldType;
+import protocolsupport.api.ProtocolSupportAPI;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.PlayerLoginFinishEvent;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.utils.Utils;
@@ -128,21 +135,37 @@ public class LoginListenerPlay extends LoginListener implements PacketListenerPl
 		return profile + " (" + networkManager.getSocketAddress() + ")";
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void disconnect(final String s) {
 		try {
 			logger.info("Disconnecting " + d() + ": " + s);
-			final ChatComponentText chatcomponenttext = new ChatComponentText(s);
-			networkManager.sendPacket(new PacketPlayOutKickDisconnect(chatcomponenttext), new GenericFutureListener<Future<? super Void>>() {
-				@Override
-				public void operationComplete(Future<? super Void> future) throws Exception {
-					networkManager.close(chatcomponenttext);
-				}
-			});
+			if (ProtocolSupportAPI.getProtocolVersion(networkManager.getSocketAddress()).isBetween(ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_10)) {
+				//first send join game that will make client actually switch to game state
+				networkManager.sendPacket(new PacketPlayOutLogin(0, EnumGamemode.NOT_SET, false, 0, EnumDifficulty.EASY, 60, WorldType.NORMAL, false));
+				//send disconnect with a little delay
+				networkManager.channel.eventLoop().schedule(new Runnable() {
+					@Override
+					public void run() {
+						disconnect0(s);
+					}
+				}, 50, TimeUnit.MILLISECONDS);
+			} else {
+				disconnect0(s);
+			}
 		} catch (Exception exception) {
 			logger.error("Error whilst disconnecting player", exception);
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	protected void disconnect0(String s) {
+		final ChatComponentText chatcomponenttext = new ChatComponentText(s);
+		networkManager.sendPacket(new PacketPlayOutKickDisconnect(chatcomponenttext), new GenericFutureListener<Future<? super Void>>() {
+			@Override
+			public void operationComplete(Future<? super Void> future) throws Exception {
+				networkManager.close(chatcomponenttext);
+			}
+		});
 	}
 
 	@Override
