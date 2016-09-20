@@ -26,6 +26,7 @@ import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.events.PlayerDisconnectEvent;
 import protocolsupport.logger.AsyncErrorLogger;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
+import protocolsupport.protocol.packet.handler.LoginListenerPlay;
 import protocolsupport.protocol.pipeline.IPacketDecoder;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.utils.netty.ChannelUtils;
@@ -76,6 +77,8 @@ public class WrappedDecoder extends ByteToMessageDecoder {
 			if (profile != null) {
 				username = profile.getName();
 			}
+		} else if (listener instanceof LoginListenerPlay) {
+			username = ((LoginListenerPlay) listener).getProfile().getName();
 		} else if (listener instanceof PlayerConnection) {
 			username = ((PlayerConnection) listener).player.getProfile().getName();
 		}

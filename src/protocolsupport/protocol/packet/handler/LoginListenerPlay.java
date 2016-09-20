@@ -168,6 +168,10 @@ public class LoginListenerPlay extends LoginListener implements PacketListenerPl
 		});
 	}
 
+	public GameProfile getProfile() {
+		return profile;
+	}
+
 	@Override
 	public void a(final PacketLoginInStart packetlogininstart) {
 	}
