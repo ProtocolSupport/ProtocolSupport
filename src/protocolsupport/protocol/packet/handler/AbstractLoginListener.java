@@ -68,7 +68,7 @@ public abstract class AbstractLoginListener extends LoginListener {
 		}
 	);
 
-	protected static final Logger logger = LogManager.getLogger();
+	protected static final Logger logger = LogManager.getLogger(LoginListener.class);
 	protected static final Random random = new Random();
 	protected final static MinecraftServer server = Utils.getServer();
 

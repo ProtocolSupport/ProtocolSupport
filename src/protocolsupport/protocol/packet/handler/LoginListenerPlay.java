@@ -65,7 +65,7 @@ import protocolsupport.utils.Utils;
 
 public class LoginListenerPlay extends LoginListener implements PacketListenerPlayIn, ITickable {
 
-	protected static final Logger logger = LogManager.getLogger();
+	protected static final Logger logger = LogManager.getLogger(LoginListener.class);
 	protected static final MinecraftServer server = Utils.getServer();
 
 	private final GameProfile profile;
@@ -139,7 +139,7 @@ public class LoginListenerPlay extends LoginListener implements PacketListenerPl
 	public void disconnect(final String s) {
 		try {
 			logger.info("Disconnecting " + d() + ": " + s);
-			if (ProtocolSupportAPI.getProtocolVersion(networkManager.getSocketAddress()).isBetween(ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_10)) {
+			if (ProtocolSupportAPI.getProtocolVersion(networkManager.getSocketAddress()).isBetween(ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_7_10)) {
 				//first send join game that will make client actually switch to game state
 				networkManager.sendPacket(new PacketPlayOutLogin(0, EnumGamemode.NOT_SET, false, 0, EnumDifficulty.EASY, 60, WorldType.NORMAL, false));
 				//send disconnect with a little delay
