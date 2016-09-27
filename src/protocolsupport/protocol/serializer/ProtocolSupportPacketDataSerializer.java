@@ -320,20 +320,10 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 				}
 			}
 			if (nbttagcompound.hasKeyOfType("ench", 9)) {
-				SkippingTable enchSkip = IdSkipper.ENCHANT.getTable(getVersion());
-				NBTTagList enchList = nbttagcompound.getList("ench", 10);
-				NBTTagList newList = new NBTTagList();
-				for (int i = 0; i < enchList.size(); i++) {
-					NBTTagCompound enchData = enchList.get(i);
-					if (!enchSkip.shouldSkip(enchData.getInt("id") & 0xFFFF)) {
-						newList.add(enchData);
-					}
-				}
-				if (newList.size() > 0) {
-					nbttagcompound.set("ench", newList);
-				} else {
-					nbttagcompound.remove("ench");
-				}
+				nbttagcompound.set("ench", filterEnchantList(nbttagcompound.getList("ench", 10)));
+			}
+			if (nbttagcompound.hasKeyOfType("stored-enchants", 9)) {
+				nbttagcompound.set("stored-enchants", filterEnchantList(nbttagcompound.getList("stored-enchants", 10)));
 			}
 		}
 		if (ItemStackWriteEvent.getHandlerList().getRegisteredListeners().length > 0) {
@@ -341,6 +331,18 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 			Bukkit.getPluginManager().callEvent(event);
 		}
 		return itemstack;
+	}
+
+	private NBTTagList filterEnchantList(NBTTagList enchList) {
+		SkippingTable enchSkip = IdSkipper.ENCHANT.getTable(getVersion());
+		NBTTagList newList = new NBTTagList();
+		for (int i = 0; i < enchList.size(); i++) {
+			NBTTagCompound enchData = enchList.get(i);
+			if (!enchSkip.shouldSkip(enchData.getInt("id") & 0xFFFF)) {
+				newList.add(enchData);
+			}
+		}
+		return enchList;
 	}
 
 	private static final GameProfile dragonHeadGameProfile = new GameProfile(UUIDTypeAdapter.fromString("d34aa2b831da4d269655e33c143f096c"), "EnderDragon");
