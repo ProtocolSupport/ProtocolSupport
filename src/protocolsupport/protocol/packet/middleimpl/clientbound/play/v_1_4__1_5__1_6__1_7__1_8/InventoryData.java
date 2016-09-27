@@ -17,22 +17,22 @@ public class InventoryData extends MiddleInventoryData<RecyclableCollection<Pack
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
-		if (version == ProtocolVersion.MINECRAFT_1_8 && sharedstorage.getOpenedWindow() == WindowType.ENCHANT) {
+		if ((version == ProtocolVersion.MINECRAFT_1_8) && (sharedstorage.getOpenedWindow() == WindowType.ENCHANT)) {
 			enchTypeVal[type] = value;
-			if (type >= 7 && type <= 9) {
+			if ((type >= 7) && (type <= 9)) {
 				PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_WINDOW_DATA_ID, version);
 				serializer.writeByte(windowId);
 				serializer.writeShort(type - 3);
 				serializer.writeShort((value << 8) | enchTypeVal[type - 3]);
 				return RecyclableSingletonList.<PacketData>create(serializer);
-			} else if (type >= 4 && type <= 6) {
+			} else if ((type >= 4) && (type <= 6)) {
 				PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_WINDOW_DATA_ID, version);
 				serializer.writeByte(windowId);
 				serializer.writeShort(type);
 				serializer.writeShort(((enchTypeVal[type + 3]) << 8) | value);
 				return RecyclableSingletonList.<PacketData>create(serializer);
 			}
-		} else if (version.isBefore(ProtocolVersion.MINECRAFT_1_8) && sharedstorage.getOpenedWindow() == WindowType.FURNACE) {
+		} else if (version.isBefore(ProtocolVersion.MINECRAFT_1_8) && (sharedstorage.getOpenedWindow() == WindowType.FURNACE)) {
 			if (type < furTypeTr.length) {
 				type = furTypeTr[type];
 			}

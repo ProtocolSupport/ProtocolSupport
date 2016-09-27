@@ -34,7 +34,7 @@ public class LegacyChatJson {
 
 	private static void fixComponent(BaseComponent component) {
 		HoverAction hover = component.getHoverAction();
-		if (hover != null && hover.getType() == HoverAction.Type.SHOW_ITEM) {
+		if ((hover != null) && (hover.getType() == HoverAction.Type.SHOW_ITEM)) {
 			try {
 				NBTTagCompound compound = MojangsonParser.parse(hover.getValue());
 				String id = compound.getString("id");
@@ -50,7 +50,7 @@ public class LegacyChatJson {
 			}
 		}
 		ClickAction click = component.getClickAction();
-		if (click != null && click.getType() == ClickAction.Type.OPEN_URL) {
+		if ((click != null) && (click.getType() == ClickAction.Type.OPEN_URL)) {
 			String url = click.getValue();
 			if (!url.startsWith("http://") && !url.startsWith("https://")) {
 				url = "http://"+url;

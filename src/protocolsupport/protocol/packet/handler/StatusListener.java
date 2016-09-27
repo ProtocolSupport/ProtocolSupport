@@ -33,7 +33,6 @@ import net.minecraft.server.v1_10_R1.PacketStatusOutServerInfo;
 import net.minecraft.server.v1_10_R1.ServerPing;
 import net.minecraft.server.v1_10_R1.ServerPing.ServerData;
 import net.minecraft.server.v1_10_R1.ServerPing.ServerPingPlayerSample;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
@@ -64,7 +63,7 @@ public class StatusListener extends PacketStatusListener {
 
 		InetSocketAddress addr = (InetSocketAddress) nmanager.getSocketAddress();
 
-		ArrayList<EntityPlayer> players = new ArrayList<EntityPlayer>(server.getPlayerList().players);
+		ArrayList<EntityPlayer> players = new ArrayList<>(server.getPlayerList().players);
 
 		String motd = server.getMotd();
 		int maxPlayers = server.getPlayerList().getMaxPlayers();
@@ -77,7 +76,7 @@ public class StatusListener extends PacketStatusListener {
 		motd = bevent.getMotd();
 		maxPlayers = bevent.getMaxPlayers();
 
-		List<String> profiles = new ArrayList<String>(players.size());
+		List<String> profiles = new ArrayList<>(players.size());
 		for (EntityPlayer player : players) {
 			profiles.add(player.getProfile().getName());
 		}
@@ -135,7 +134,7 @@ public class StatusListener extends PacketStatusListener {
 
 		@Override
 		public void setServerIcon(CachedServerIcon icon) {
-			if (icon != null && !(icon instanceof CraftIconCache)) {
+			if ((icon != null) && !(icon instanceof CraftIconCache)) {
 				throw new IllegalArgumentException(icon + " was not created by " + CraftServer.class);
 			}
 			this.icon = ((CraftIconCache) icon);

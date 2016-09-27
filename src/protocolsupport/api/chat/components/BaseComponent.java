@@ -12,14 +12,14 @@ import protocolsupport.protocol.legacyremapper.LegacyUtils;
 
 public abstract class BaseComponent {
 
-	private List<BaseComponent> siblings = new ArrayList<BaseComponent>();
+	private List<BaseComponent> siblings = new ArrayList<>();
 	private Modifier modifier;
 	private ClickAction clickAction;
 	private HoverAction hoverAction;
 	private String clickInsertion;
 
 	public boolean isSimple() {
-		return siblings.isEmpty() && getModifier().isEmpty() && clickAction == null && hoverAction == null && clickInsertion == null;
+		return siblings.isEmpty() && getModifier().isEmpty() && (clickAction == null) && (hoverAction == null) && (clickInsertion == null);
 	}
 
 	public List<BaseComponent> getSiblings() {

@@ -99,7 +99,7 @@ public class LoginListenerPlay extends LoginListener implements PacketListenerPl
 
 	@Override
 	public void E_() {
-		if (keepAliveTicks++ % 80 == 0) {
+		if ((keepAliveTicks++ % 80) == 0) {
 			keepConnection();
 		}
 		if (ready) {

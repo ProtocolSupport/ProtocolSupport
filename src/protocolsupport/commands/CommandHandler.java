@@ -34,7 +34,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			}
 			return true;
 		}
-		if (args.length == 1 && args[0].equalsIgnoreCase("debug")) {
+		if ((args.length == 1) && args[0].equalsIgnoreCase("debug")) {
 			PropertyManager manager = Utils.getServer().getPropertyManager();
 			if (!manager.getBoolean(DEBUG_PROPERTY, false)) {
 				manager.setProperty(DEBUG_PROPERTY, Boolean.TRUE);
@@ -64,7 +64,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
-		ArrayList<String> completions = new ArrayList<String>();
+		ArrayList<String> completions = new ArrayList<>();
 		if ("list".startsWith(args[0])) {
 			completions.add("list");
 		}

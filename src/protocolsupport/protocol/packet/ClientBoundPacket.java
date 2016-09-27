@@ -167,7 +167,7 @@ public class ClientBoundPacket {
 	public static final int PLAY_SET_PASSENGERS = getId(PacketPlayOutMount.class);
 	public static final int PLAY_CHUNK_UNLOAD = getId(PacketPlayOutUnloadChunk.class);
 	public static final int PLAY_WORLD_CUSTOM_SOUND = getId(PacketPlayOutCustomSoundEffect.class);
-	
+
 	public static final int LEGACY_PLAY_UPDATE_SIGN_ID = 100;
 
 	@SuppressWarnings("unchecked")

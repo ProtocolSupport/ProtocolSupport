@@ -28,7 +28,7 @@ public class ItemStackWrapper {
 	}
 
 	public boolean isNull() {
-		return itemstack == null || itemstack.getItem() == null;
+		return (itemstack == null) || (itemstack.getItem() == null);
 	}
 
 	public int getTypeId() {

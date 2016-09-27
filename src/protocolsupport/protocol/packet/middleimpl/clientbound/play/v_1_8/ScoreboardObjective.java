@@ -16,7 +16,7 @@ public class ScoreboardObjective extends MiddleScoreboardObjective<RecyclableCol
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_SCOREBOARD_OBJECTIVE_ID, version);
 		serializer.writeString(name);
 		serializer.writeByte(mode);
-		if (mode == 0 || mode == 2) {
+		if ((mode == 0) || (mode == 2)) {
 			serializer.writeString(value);
 			serializer.writeString(type);
 		}

@@ -77,7 +77,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 		byte part;
 		do {
 			part = this.readByte();
-			varlong |= (part & 0x7F) << length++ * 7;
+			varlong |= (part & 0x7F) << (length++ * 7);
 			if (length > 10) {
 				throw new RuntimeException("VarLong too big");
 			}
@@ -282,7 +282,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 	private ItemStack transformItemStack(ItemStack original) {
 		ItemStack itemstack = original.cloneItemStack();
 		Item item = itemstack.getItem();
-		if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9) && item == Items.SKULL && itemstack.getData() == 5) {
+		if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9) && (item == Items.SKULL) && (itemstack.getData() == 5)) {
 			itemstack.setData(3);
 			NBTTagCompound rootTag = new NBTTagCompound();
 			rootTag.set("SkullOwner", createDragonHeadSkullTag());
@@ -290,7 +290,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 		}
 		NBTTagCompound nbttagcompound = itemstack.getTag();
 		if (nbttagcompound != null) {
-			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_8) && item == Items.WRITTEN_BOOK) {
+			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_8) && (item == Items.WRITTEN_BOOK)) {
 				if (nbttagcompound.hasKeyOfType("pages", 9)) {
 					NBTTagList pages = nbttagcompound.getList("pages", 8);
 					NBTTagList newpages = new NBTTagList();
@@ -300,10 +300,10 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 					nbttagcompound.set("pages", newpages);
 				}
 			}
-			if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_5) && item == Items.SKULL) {
+			if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_5) && (item == Items.SKULL)) {
 				transformSkull(nbttagcompound);
 			}
-			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9) && item instanceof ItemPotion) {
+			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9) && (item instanceof ItemPotion)) {
 				String potion = nbttagcompound.getString("Potion");
 				if (!potion.isEmpty()) {
 					itemstack.setData(LegacyPotion.toLegacyId(potion, item != Items.POTION));
@@ -313,7 +313,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 					}
 				}
 			}
-			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9) && item == Items.SPAWN_EGG) {
+			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9) && (item == Items.SPAWN_EGG)) {
 				String entityId = nbttagcompound.getCompound("EntityTag").getString("id");
 				if (!entityId.isEmpty()) {
 					itemstack.setData(EntityTypes.a(entityId));

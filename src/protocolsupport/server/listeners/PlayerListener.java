@@ -65,7 +65,7 @@ public class PlayerListener implements Listener {
 			public void run() {
 				BaseComponent header = TabAPI.getDefaultHeader();
 				BaseComponent footer = TabAPI.getDefaultFooter();
-				if (header != null || footer != null) {
+				if ((header != null) || (footer != null)) {
 					TabAPI.sendHeaderFooter(event.getPlayer(), header, footer);
 				}
 			}

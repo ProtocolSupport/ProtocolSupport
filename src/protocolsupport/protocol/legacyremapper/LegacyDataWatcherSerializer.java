@@ -2,7 +2,6 @@ package protocolsupport.protocol.legacyremapper;
 
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.TIntObjectMap;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.RecyclableProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;

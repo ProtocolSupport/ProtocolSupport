@@ -37,7 +37,7 @@ public class Compressor {
 	public byte[] compress(byte[] input) {
 		deflater.setInput(input);
 		deflater.finish();
-		byte[] compressedBuf = new byte[input.length * 11 / 10 + 6];
+		byte[] compressedBuf = new byte[((input.length * 11) / 10) + 6];
 		int size = deflater.deflate(compressedBuf);
 		deflater.reset();
 		return Arrays.copyOf(compressedBuf, size);

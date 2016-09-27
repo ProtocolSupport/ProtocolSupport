@@ -302,7 +302,7 @@ public class IdRemapper {
 	};
 
 	public static int fixDimensionId(int dimensionId) {
-		if (dimensionId > 1 || dimensionId < -1) {
+		if ((dimensionId > 1) || (dimensionId < -1)) {
 			return 0;
 		}
 		return dimensionId;

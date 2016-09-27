@@ -12,6 +12,9 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperBooleanToByte;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperNoOp;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperNumberToByte;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperNumberToInt;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperNumberToShort;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperStringClamp;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBlockState;
@@ -20,9 +23,6 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectShort;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
-import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperNumberToByte;
-import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperNumberToInt;
-import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperNumberToShort;
 import protocolsupport.utils.ProtocolVersionsHelper;
 
 public enum SpecificRemapper {
@@ -390,7 +390,7 @@ public enum SpecificRemapper {
 	TNT(EType.OBJECT, 50, SpecificRemapper.ENTITY,
 		//fuse ticks
 		new Mapping(6)
-		.addRemap(5, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)			
+		.addRemap(5, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 	),
 	SNOWBALL(EType.OBJECT, 61, SpecificRemapper.ENTITY),
 	EGG(EType.OBJECT, 62, SpecificRemapper.ENTITY),
@@ -554,7 +554,7 @@ public enum SpecificRemapper {
 
 	private final EType etype;
 	private final int typeId;
-	private final EnumMap<ProtocolVersion, ArrayList<MappingEntry>> entries = new EnumMap<ProtocolVersion, ArrayList<MappingEntry>>(ProtocolVersion.class);
+	private final EnumMap<ProtocolVersion, ArrayList<MappingEntry>> entries = new EnumMap<>(ProtocolVersion.class);
 	{
 		for (ProtocolVersion version : ProtocolVersion.values()) {
 			entries.put(version, new ArrayList<MappingEntry>());
@@ -600,7 +600,7 @@ public enum SpecificRemapper {
 
 	private static class Mapping {
 		private int idFrom;
-		private final List<Entry> entries = new ArrayList<Entry>();
+		private final List<Entry> entries = new ArrayList<>();
 		public Mapping(int idFrom) {
 			this.idFrom = idFrom;
 		}

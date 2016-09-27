@@ -11,7 +11,7 @@ public class MiddleTransformerRegistry<T> {
 	private InitCallBack<T> callback;
 
 	public void register(EnumProtocol protocol, int packetId, Class<? extends T> packetTransformer) {
-		registry[toKey(protocol, packetId)] = new LazyNewInstance<T>(packetTransformer);
+		registry[toKey(protocol, packetId)] = new LazyNewInstance<>(packetTransformer);
 	}
 
 	public void setCallBack(InitCallBack<T> callback) {
@@ -24,7 +24,7 @@ public class MiddleTransformerRegistry<T> {
 			return null;
 		}
 		T object = transformer.getInstance();
-		if (callback != null && object != null) {
+		if ((callback != null) && (object != null)) {
 			callback.onInit(object);
 		}
 		return object;

@@ -41,7 +41,7 @@ public class ProtocolVersionsHelper {
 	public static final ProtocolVersion[] RANGE_1_8_1_9 = ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_9_4, ProtocolVersion.MINECRAFT_1_8);
 
 	public static final ProtocolVersion[] concat(ProtocolVersion[] versions, ProtocolVersion... moreVersions) {
-		ArrayList<ProtocolVersion> all = new ArrayList<ProtocolVersion>();
+		ArrayList<ProtocolVersion> all = new ArrayList<>();
 		all.addAll(Arrays.asList(versions));
 		all.addAll(Arrays.asList(moreVersions));
 		return all.toArray(new ProtocolVersion[all.size()]);

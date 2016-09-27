@@ -69,7 +69,7 @@ public enum ProtocolVersion {
 	public boolean isBetween(ProtocolVersion start, ProtocolVersion end) {
 		int startId = Math.min(start.orderId, end.orderId);
 		int endId = Math.max(start.orderId, end.orderId);
-		return orderId >= startId && orderId <= endId;
+		return (orderId >= startId) && (orderId <= endId);
 	}
 
 	private static final ProtocolVersion[] byOrderId = new ProtocolVersion[ProtocolVersion.values().length - 1];
@@ -133,7 +133,7 @@ public enum ProtocolVersion {
 	public static ProtocolVersion[] getAllBetween(ProtocolVersion start, ProtocolVersion end) {
 		int startId = Math.min(start.orderId, end.orderId);
 		int endId = Math.max(start.orderId, end.orderId);
-		ProtocolVersion[] between = new ProtocolVersion[endId - startId + 1];
+		ProtocolVersion[] between = new ProtocolVersion[(endId - startId) + 1];
 		for (int i = startId; i <= endId; i++) {
 			between[i - startId] = byOrderId[i];
 		}

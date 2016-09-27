@@ -6,7 +6,7 @@ import protocolsupport.api.ProtocolVersion;
 
 public abstract class SkippingRegistry {
 
-	private final EnumMap<ProtocolVersion, SkippingTable> registry = new EnumMap<ProtocolVersion, SkippingTable>(ProtocolVersion.class);
+	private final EnumMap<ProtocolVersion, SkippingTable> registry = new EnumMap<>(ProtocolVersion.class);
 
 	public SkippingRegistry() {
 		for (ProtocolVersion version : ProtocolVersion.values()) {

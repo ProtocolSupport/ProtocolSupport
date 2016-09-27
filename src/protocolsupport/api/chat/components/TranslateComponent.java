@@ -13,7 +13,7 @@ import protocolsupport.protocol.legacyremapper.LegacyUtils;
 public class TranslateComponent extends BaseComponent {
 
 	private String translationKey;
-	private List<BaseComponent> args = new ArrayList<BaseComponent>();
+	private List<BaseComponent> args = new ArrayList<>();
 
 	@Deprecated
 	public TranslateComponent(String translationKey, Object... values) {

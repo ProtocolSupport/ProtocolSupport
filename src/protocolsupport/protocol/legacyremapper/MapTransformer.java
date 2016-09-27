@@ -15,7 +15,7 @@ public class MapTransformer {
 	public void loadFromNewMapData(int columns, int rows, int xstart, int ystart, byte[] data) {
 		for (int column = 0; column < columns; ++column) {
 			for (int row = 0; row < rows; ++row) {
-				colors[xstart + column + (ystart + row) * 128] = data[column + row * columns];
+				colors[xstart + column + ((ystart + row) * 128)] = data[column + (row * columns)];
 			}
 		}
 		columnStart = xstart;
@@ -25,11 +25,11 @@ public class MapTransformer {
 	}
 
 	public ArrayList<ColumnEntry> toPre18MapData() {
-		ArrayList<ColumnEntry> entries = new ArrayList<ColumnEntry>();
+		ArrayList<ColumnEntry> entries = new ArrayList<>();
 		for (int column = columnStart; column < columnEnd; column++) {
 			ColumnEntry entry = new ColumnEntry(column, rowStart, rowEnd - rowStart);
 			for (int row = rowStart; row < rowEnd; row++) {
-				entry.colors[row - rowStart] = colors[row * 128 + column];
+				entry.colors[row - rowStart] = colors[(row * 128) + column];
 			}
 			entries.add(entry);
 		}

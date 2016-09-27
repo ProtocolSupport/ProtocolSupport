@@ -31,7 +31,7 @@ public class Map extends MiddleMap<RecyclableCollection<PacketData>> {
 			PacketData iconsdata = PacketData.create(ClientBoundPacket.PLAY_MAP_ID, version);
 			iconsdata.writeShort(mapId);
 			iconsdata.writeShort(itemData);
-			iconsdata.writeShort(icons.length * 3 + 1);
+			iconsdata.writeShort((icons.length * 3) + 1);
 			iconsdata.writeByte(1);
 			for (Icon icon : icons) {
 				iconsdata.writeByte(icon.dirtype);

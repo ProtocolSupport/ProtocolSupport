@@ -57,7 +57,7 @@ public class DataWatcherDeserializer {
 	}
 
 	public static TIntObjectMap<DataWatcherObject<?>> decodeData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
-		TIntObjectMap<DataWatcherObject<?>> map = new TIntObjectHashMap<DataWatcherObject<?>>(10, 0.5f, -1);
+		TIntObjectMap<DataWatcherObject<?>> map = new TIntObjectHashMap<>(10, 0.5f, -1);
 		do {
 			int key = serializer.readUnsignedByte();
 			if (key == 0xFF) {

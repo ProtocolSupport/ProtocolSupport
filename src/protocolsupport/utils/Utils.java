@@ -37,7 +37,7 @@ public class Utils {
 	}
 
 	public static List<int[]> splitArray(int[] array, int limit) {
-		List<int[]> list = new ArrayList<int[]>();
+		List<int[]> list = new ArrayList<>();
 		if (array.length <= limit) {
 			list.add(array);
 			return list;
@@ -99,7 +99,7 @@ public class Utils {
 	}
 
 	public static boolean isTrue(Boolean b) {
-		return b != null && b;
+		return (b != null) && b;
 	}
 
 	public static MinecraftServer getServer() {

@@ -67,11 +67,11 @@ public class ServerPingResponseEvent extends Event {
 	}
 
 	public List<String> getPlayers() {
-		return new ArrayList<String>(players);
+		return new ArrayList<>(players);
 	}
 
 	public void setPlayers(List<String> players) {
-		this.players = players != null ? new ArrayList<String>(players) : new ArrayList<String>();
+		this.players = players != null ? new ArrayList<>(players) : new ArrayList<>();
 	}
 
 	public static class ProtocolInfo {

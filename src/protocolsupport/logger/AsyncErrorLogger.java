@@ -47,7 +47,7 @@ public class AsyncErrorLogger {
 		}
 		synchronized (lock) {
 			if (writer != null) {
-				writer.close();	
+				writer.close();
 			}
 		}
 	}

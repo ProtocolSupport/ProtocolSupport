@@ -9,7 +9,7 @@ import protocolsupport.protocol.utils.types.ItemStackWrapper;
 public class MerchantData {
 
 	private int windowId;
-	private List<TradeOffer> offers = new ArrayList<TradeOffer>(10);
+	private List<TradeOffer> offers = new ArrayList<>(10);
 
 	public MerchantData(int windowId) {
 		this.windowId = windowId;

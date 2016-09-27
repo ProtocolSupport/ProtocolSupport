@@ -10,7 +10,6 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.concurrent.Future;
-
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
@@ -32,7 +31,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		ProtocolSupport.logInfo("Assume legacy ping dealy: "+pingLegacyDelay);
 	}
 
-	private static final EnumMap<ProtocolVersion, IPipeLineBuilder> pipelineBuilders = new EnumMap<ProtocolVersion, IPipeLineBuilder>(ProtocolVersion.class);
+	private static final EnumMap<ProtocolVersion, IPipeLineBuilder> pipelineBuilders = new EnumMap<>(ProtocolVersion.class);
 	static {
 		IPipeLineBuilder builder = new protocolsupport.protocol.packet.v_1_10.PipeLineBuilder();
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_FUTURE, builder);

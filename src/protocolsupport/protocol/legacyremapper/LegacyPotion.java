@@ -4,7 +4,7 @@ import gnu.trove.map.hash.TObjectIntHashMap;
 
 public class LegacyPotion {
 
-	private static final TObjectIntHashMap<String> potionToLegacyIds = new TObjectIntHashMap<String>();
+	private static final TObjectIntHashMap<String> potionToLegacyIds = new TObjectIntHashMap<>();
 	static {
 		register("night_vision", 8198);
 		register("long_night_vision", 8262);

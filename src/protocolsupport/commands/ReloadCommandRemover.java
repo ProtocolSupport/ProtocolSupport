@@ -3,11 +3,13 @@ package protocolsupport.commands;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.defaults.ReloadCommand;
 import org.bukkit.plugin.PluginManager;
+
 import protocolsupport.utils.ReflectionUtils;
 
 public class ReloadCommandRemover {
@@ -18,7 +20,7 @@ public class ReloadCommandRemover {
 			PluginManager pluginmanager = Bukkit.getPluginManager();
 			CommandMap commandMap = (CommandMap) ReflectionUtils.getField(pluginmanager.getClass(), "commandMap").get(pluginmanager);
 			Collection<Command> commands = (Collection<Command>) ReflectionUtils.getMethod(commandMap.getClass(), "getCommands", 0).invoke(commandMap);
-			for (Command cmd : new ArrayList<Command>(commands)) {
+			for (Command cmd : new ArrayList<>(commands)) {
 				if (cmd instanceof ReloadCommand) {
 					removeCommand(commandMap, commands, cmd);
 				}

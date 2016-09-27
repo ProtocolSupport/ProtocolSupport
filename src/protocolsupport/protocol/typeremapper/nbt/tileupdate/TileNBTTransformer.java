@@ -5,7 +5,6 @@ import java.util.EnumMap;
 import java.util.List;
 
 import net.minecraft.server.v1_10_R1.Item;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
@@ -16,7 +15,7 @@ import protocolsupport.utils.Utils;
 public class TileNBTTransformer {
 
 	public static enum TileEntityUpdateType {
-		UNKNOWN, MOB_SPAWNER, COMMAND_BLOCK, BEACON, SKULL, FLOWER_POT, BANNER, STRUCTURE, END_GATEWAY, SIGN; 
+		UNKNOWN, MOB_SPAWNER, COMMAND_BLOCK, BEACON, SKULL, FLOWER_POT, BANNER, STRUCTURE, END_GATEWAY, SIGN;
 	}
 
 	private static final EnumMap<TileEntityUpdateType, EnumMap<ProtocolVersion, List<SpecificTransformer>>> registry = new EnumMap<>(TileEntityUpdateType.class);

@@ -69,7 +69,7 @@ public class PlayerLookupUUID {
 		InetSocketAddress saddress = (InetSocketAddress) listener.getNetworkManager().getSocketAddress();
 		InetAddress address = saddress.getAddress();
 
-		List<ProfileProperty> properties = new ArrayList<ProfileProperty>();
+		List<ProfileProperty> properties = new ArrayList<>();
 		PropertyMap propertymap = listener.getProfile().getProperties();
 		for (Property property : propertymap.values()) {
 			properties.add(new ProfileProperty(property.getName(), property.getValue(), property.getSignature()));

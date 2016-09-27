@@ -13,9 +13,9 @@ public class SharedStorage {
 
 	public int tryTeleportConfirm(double x, double y, double z) {
 		if (
-			Double.doubleToLongBits(this.x) == Double.doubleToLongBits(x) &&
-			Double.doubleToLongBits(this.y) == Double.doubleToLongBits(y) &&
-			Double.doubleToLongBits(this.z) == Double.doubleToLongBits(z)
+			(Double.doubleToLongBits(this.x) == Double.doubleToLongBits(x)) &&
+			(Double.doubleToLongBits(this.y) == Double.doubleToLongBits(y)) &&
+			(Double.doubleToLongBits(this.z) == Double.doubleToLongBits(z))
 		) {
 			int r = teleportConfirmId;
 			teleportConfirmId = -1;

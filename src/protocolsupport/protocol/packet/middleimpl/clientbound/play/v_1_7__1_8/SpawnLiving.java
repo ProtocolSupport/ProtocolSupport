@@ -15,7 +15,7 @@ public class SpawnLiving extends MiddleSpawnLiving<RecyclableCollection<PacketDa
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
-		if (version.isBefore(ProtocolVersion.MINECRAFT_1_8) && type == 30) { //skip armor stand, TODO: move to id skipper
+		if (version.isBefore(ProtocolVersion.MINECRAFT_1_8) && (type == 30)) { //skip armor stand, TODO: move to id skipper
 			return RecyclableEmptyList.get();
 		}
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_SPAWN_LIVING_ID, version);

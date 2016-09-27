@@ -3,7 +3,6 @@ package protocolsupport.protocol.legacyremapper.chunk;
 import java.util.Iterator;
 
 import io.netty.buffer.ByteBuf;
-
 import net.minecraft.server.v1_10_R1.Block;
 import net.minecraft.server.v1_10_R1.IBlockData;
 
@@ -45,7 +44,7 @@ public class BlockStorage {
 
 	public int getBlockState(int blockindex) {
 		int blockState = palette[getPaletteIndex(blockindex)];
-		if (blockState > 0 && blockState < validBlockState.length && validBlockState[blockState]) {
+		if ((blockState > 0) && (blockState < validBlockState.length) && validBlockState[blockState]) {
 			return blockState;
 		} else {
 			return 0;
