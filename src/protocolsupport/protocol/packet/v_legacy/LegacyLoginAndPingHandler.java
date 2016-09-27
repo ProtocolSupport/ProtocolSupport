@@ -1,9 +1,12 @@
 package protocolsupport.protocol.packet.v_legacy;
 
 import java.net.InetSocketAddress;
+import java.util.Collections;
+import java.util.Iterator;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.util.CachedServerIcon;
 
@@ -57,6 +60,10 @@ public class LegacyLoginAndPingHandler extends SimpleChannelInboundHandler<ByteB
 		) {
 			@Override
 			public void setServerIcon(CachedServerIcon icon) {
+			}
+			@Override
+			public Iterator<Player> iterator() {
+				return Collections.emptyIterator();
 			}
 		};
 		Bukkit.getPluginManager().callEvent(bevent);
