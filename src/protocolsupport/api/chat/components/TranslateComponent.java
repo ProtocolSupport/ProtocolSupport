@@ -1,33 +1,62 @@
 package protocolsupport.api.chat.components;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+
 import net.minecraft.server.v1_10_R1.LocaleI18n;
+import protocolsupport.protocol.legacyremapper.LegacyUtils;
 
 public class TranslateComponent extends BaseComponent {
 
 	private String translationKey;
-	private List<Object> args = new ArrayList<Object>();
+	private List<BaseComponent> args = new ArrayList<BaseComponent>();
 
+	@Deprecated
 	public TranslateComponent(String translationKey, Object... values) {
 		this.translationKey = translationKey;
-		for (Object v : values) {
-			this.args.add(v);
-		}
+		this.args.addAll(Lists.transform(Arrays.asList(values), new Function<Object, BaseComponent>() {
+			@Override
+			public BaseComponent apply(Object v) {
+				return v instanceof BaseComponent ? (BaseComponent) v : new TextComponent(v.toString());
+			}
+		}));
+	}
+
+	public TranslateComponent(String translationKey, BaseComponent... values) {
+		this.translationKey = translationKey;
+		this.args.addAll(Arrays.asList(values));
 	}
 
 	public String getTranslationKey() {
 		return translationKey;
 	}
 
+	@Deprecated
 	public List<Object> getArgs() {
+		return Lists.transform(args, new Function<BaseComponent, Object>() {
+			@Override
+			public Object apply(BaseComponent v) {
+				return v;
+			}
+		});
+	}
+
+	public List<BaseComponent> getTranslationArgs() {
 		return args;
 	}
 
 	@Override
 	public String getValue() {
-		return LocaleI18n.a(translationKey, args.toArray());
+		return LocaleI18n.a(translationKey, Lists.transform(args, new Function<BaseComponent, String>() {
+			@Override
+			public String apply(BaseComponent v) {
+				return LegacyUtils.toText(v);
+			}
+		}).toArray());
 	}
 
 }

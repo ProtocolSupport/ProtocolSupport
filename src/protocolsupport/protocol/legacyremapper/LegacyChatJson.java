@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.v_1_7.utils;
+package protocolsupport.protocol.legacyremapper;
 
 import net.minecraft.server.v1_10_R1.Item;
 import net.minecraft.server.v1_10_R1.MinecraftKey;
@@ -7,11 +7,12 @@ import net.minecraft.server.v1_10_R1.MojangsonParser;
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.api.chat.components.TranslateComponent;
 import protocolsupport.api.chat.modifiers.ClickAction;
 import protocolsupport.api.chat.modifiers.HoverAction;
 import protocolsupport.utils.Utils;
 
-public class ChatJsonConverter {
+public class LegacyChatJson {
 
 	public static String convert(String message) {
 		BaseComponent component = ChatAPI.fromJSON(message);
@@ -21,6 +22,11 @@ public class ChatJsonConverter {
 
 	private static void walkComponent(BaseComponent component) {
 		fixComponent(component);
+		if (component instanceof TranslateComponent) {
+			for (BaseComponent arg : ((TranslateComponent) component).getTranslationArgs()) {
+				walkComponent(arg);
+			}
+		}
 		for (BaseComponent sibling : component.getSiblings()) {
 			walkComponent(sibling);
 		}

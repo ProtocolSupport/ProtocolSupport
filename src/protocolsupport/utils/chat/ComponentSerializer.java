@@ -9,7 +9,6 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
@@ -51,15 +50,9 @@ public class ComponentSerializer implements JsonDeserializer<BaseComponent>, Jso
 				String translate = jsonObject.get("translate").getAsString();
 				if (jsonObject.has("with")) {
 					JsonArray withJsonArray = jsonObject.getAsJsonArray("with");
-					Object[] array = new Object[withJsonArray.size()];
+					BaseComponent[] array = new BaseComponent[withJsonArray.size()];
 					for (int i = 0; i < array.length; ++i) {
 						array[i] = deserialize(withJsonArray.get(i), type, ctx);
-						if (array[i] instanceof TextComponent) {
-							final TextComponent text = (TextComponent) array[i];
-							if (text.isSimple()) {
-								array[i] = text.getValue();
-							}
-						}
 					}
 					component = new TranslateComponent(translate, array);
 				} else {
@@ -126,15 +119,10 @@ public class ComponentSerializer implements JsonDeserializer<BaseComponent>, Jso
 		} else if (component instanceof TranslateComponent) {
 			TranslateComponent translate = (TranslateComponent) component;
 			jsonObject.addProperty("translate", translate.getTranslationKey());
-			if (!translate.getArgs().isEmpty()) {
+			if (!translate.getTranslationArgs().isEmpty()) {
 				JsonArray argsJson = new JsonArray();
-				for (Object arg : translate.getArgs()) {
-					if (arg instanceof BaseComponent) {
-						BaseComponent argText = (BaseComponent) arg;
-						argsJson.add(serialize(argText, argText.getClass(), ctx));
-					} else {
-						argsJson.add(new JsonPrimitive(String.valueOf(arg)));
-					}
+				for (BaseComponent arg : translate.getTranslationArgs()) {
+					argsJson.add(serialize(arg, arg.getClass(), ctx));
 				}
 				jsonObject.add("with", argsJson);
 			}
