@@ -13,7 +13,7 @@ public class WorldCustomSound extends MiddleWorldCustomSound<RecyclableCollectio
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
-		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_WORLD_SOUND_ID, version);
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_WORLD_CUSTOM_SOUND, version);
 		serializer.writeString(id);
 		serializer.writeInt(x);
 		serializer.writeInt(y);

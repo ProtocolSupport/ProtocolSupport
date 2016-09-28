@@ -17,8 +17,4 @@ public abstract class MiddleUseBed<T> extends ClientBoundMiddlePacket<T> {
 		bed = serializer.readPosition();
 	}
 
-	@Override
-	public void handle() {
-	}
-
 }
