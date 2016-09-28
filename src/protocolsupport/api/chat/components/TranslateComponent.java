@@ -8,7 +8,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
 import net.minecraft.server.v1_10_R1.LocaleI18n;
-import protocolsupport.protocol.legacyremapper.LegacyUtils;
+import protocolsupport.protocol.legacyremapper.LegacyChat;
 
 public class TranslateComponent extends BaseComponent {
 
@@ -54,7 +54,7 @@ public class TranslateComponent extends BaseComponent {
 		return LocaleI18n.a(translationKey, Lists.transform(args, new Function<BaseComponent, String>() {
 			@Override
 			public String apply(BaseComponent v) {
-				return LegacyUtils.toText(v);
+				return LegacyChat.toText(v);
 			}
 		}).toArray());
 	}

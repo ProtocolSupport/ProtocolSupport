@@ -8,7 +8,7 @@ import java.util.List;
 import protocolsupport.api.chat.modifiers.ClickAction;
 import protocolsupport.api.chat.modifiers.HoverAction;
 import protocolsupport.api.chat.modifiers.Modifier;
-import protocolsupport.protocol.legacyremapper.LegacyUtils;
+import protocolsupport.protocol.legacyremapper.LegacyChat;
 
 public abstract class BaseComponent {
 
@@ -82,7 +82,7 @@ public abstract class BaseComponent {
 	public abstract String getValue();
 
 	public String toLegacyText() {
-		return LegacyUtils.toText(this);
+		return LegacyChat.toText(this);
 	}
 
 }

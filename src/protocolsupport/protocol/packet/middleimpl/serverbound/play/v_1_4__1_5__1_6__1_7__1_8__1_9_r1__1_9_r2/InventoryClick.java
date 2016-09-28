@@ -5,7 +5,7 @@ import java.io.IOException;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClick;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
-import protocolsupport.protocol.storage.SharedStorage.WindowType;
+import protocolsupport.protocol.utils.types.WindowType;
 
 public class InventoryClick extends MiddleInventoryClick {
 

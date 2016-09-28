@@ -6,7 +6,7 @@ import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.modifiers.Modifier;
 import protocolsupport.utils.Utils;
 
-public class LegacyUtils {
+public class LegacyChat {
 
 	public static String toText(BaseComponent component) {
 		if (component == null) {
@@ -56,49 +56,6 @@ public class LegacyUtils {
 			combinedmodifier.setRandom(childmodifier.isRandom() != null ? childmodifier.isRandom() : modifier.isRandom());
 			toTextSingle(out, child, combinedmodifier);
 		}
-	}
-
-	public static byte getInventoryId(String inventoryid) {
-		switch (inventoryid) {
-			case "minecraft:chest":
-			case "minecraft:container": {
-				return 0;
-			}
-			case "minecraft:crafting_table": {
-				return 1;
-			}
-			case "minecraft:furnace": {
-				return 2;
-			}
-			case "minecraft:dispenser": {
-				return 3;
-			}
-			case "minecraft:enchanting_table": {
-				return 4;
-			}
-			case "minecraft:brewing_stand": {
-				return 5;
-			}
-			case "minecraft:villager": {
-				return 6;
-			}
-			case "minecraft:beacon": {
-				return 7;
-			}
-			case "minecraft:anvil": {
-				return 8;
-			}
-			case "minecraft:hopper": {
-				return 9;
-			}
-			case "minecraft:dropper": {
-				return 10;
-			}
-			case "EntityHorse": {
-				return 11;
-			}
-		}
-		throw new IllegalArgumentException("Don't know how to convert " + inventoryid);
 	}
 
 }
