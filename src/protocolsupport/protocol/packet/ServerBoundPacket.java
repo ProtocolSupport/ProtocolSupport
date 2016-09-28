@@ -16,6 +16,7 @@ import net.minecraft.server.v1_10_R1.PacketPlayInAbilities;
 import net.minecraft.server.v1_10_R1.PacketPlayInArmAnimation;
 import net.minecraft.server.v1_10_R1.PacketPlayInBlockDig;
 import net.minecraft.server.v1_10_R1.PacketPlayInBlockPlace;
+import net.minecraft.server.v1_10_R1.PacketPlayInBoatMove;
 import net.minecraft.server.v1_10_R1.PacketPlayInChat;
 import net.minecraft.server.v1_10_R1.PacketPlayInClientCommand;
 import net.minecraft.server.v1_10_R1.PacketPlayInCloseWindow;
@@ -39,6 +40,7 @@ import net.minecraft.server.v1_10_R1.PacketPlayInTransaction;
 import net.minecraft.server.v1_10_R1.PacketPlayInUpdateSign;
 import net.minecraft.server.v1_10_R1.PacketPlayInUseEntity;
 import net.minecraft.server.v1_10_R1.PacketPlayInUseItem;
+import net.minecraft.server.v1_10_R1.PacketPlayInVehicleMove;
 import net.minecraft.server.v1_10_R1.PacketPlayInWindowClick;
 import net.minecraft.server.v1_10_R1.PacketStatusInPing;
 import net.minecraft.server.v1_10_R1.PacketStatusInStart;
@@ -63,6 +65,8 @@ public enum ServerBoundPacket {
 	PLAY_HELD_SLOT(PacketPlayInHeldItemSlot.class),
 	PLAY_ANIMATION(PacketPlayInArmAnimation.class),
 	PLAY_ENTITY_ACTION(PacketPlayInEntityAction.class),
+	PLAY_MOVE_VEHICLE(PacketPlayInVehicleMove.class),
+	PLAY_STEER_BOAT(PacketPlayInBoatMove.class),
 	PLAY_STEER_VEHICLE(PacketPlayInSteerVehicle.class),
 	PLAY_WINDOW_CLOSE(PacketPlayInCloseWindow.class),
 	PLAY_WINDOW_CLICK(PacketPlayInWindowClick.class),
