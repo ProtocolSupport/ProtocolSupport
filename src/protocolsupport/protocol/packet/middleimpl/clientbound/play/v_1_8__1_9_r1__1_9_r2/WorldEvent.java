@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8;
+package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1__1_9_r2;
 
 import java.io.IOException;
 
@@ -16,9 +16,11 @@ public class WorldEvent extends MiddleWorldEvent<RecyclableCollection<PacketData
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
 		effectId = IdRemapper.EFFECT.getTable(version).getRemap(effectId);
-		effectId = LegacyEffect.getLegacyId(version, effectId);
-		if (effectId == 2001) {
-			data = IdRemapper.BLOCK.getTable(version).getRemap((data & 0xFFF) << 4) >> 4;
+		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9)) {
+			effectId = LegacyEffect.getLegacyId(version, effectId);
+			if (effectId == 2001) {
+				data = IdRemapper.BLOCK.getTable(version).getRemap((data & 0xFFF) << 4) >> 4;
+			}
 		}
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_WORLD_EVENT_ID, version);
 		serializer.writeInt(effectId);

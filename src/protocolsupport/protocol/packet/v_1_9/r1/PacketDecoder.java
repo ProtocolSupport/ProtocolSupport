@@ -15,9 +15,14 @@ import protocolsupport.protocol.packet.middleimpl.PacketCreator;
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_1_7__1_8__1_9_r1__1_9_r2.SetProtocol;
 import protocolsupport.protocol.packet.middleimpl.serverbound.login.v_1_4__1_5__1_6__1_7__1_8__1_9_r1__1_9_r2.EncryptionResponse;
 import protocolsupport.protocol.packet.middleimpl.serverbound.login.v_1_7__1_8__1_9_r1__1_9_r2.LoginStart;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v1_9_r1__1_9_r2.Animation;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v1_9_r1__1_9_r2.BlockPlace;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v1_9_r1__1_9_r2.ClientSettings;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v1_9_r1__1_9_r2.MoveVehicle;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v1_9_r1__1_9_r2.SteerBoat;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v1_9_r1__1_9_r2.TabComplete;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v1_9_r1__1_9_r2.TeleportAccept;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v1_9_r1__1_9_r2.UseEntity;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v1_9_r1__1_9_r2.UseItem;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_4__1_5__1_6__1_7__1_8__1_9_r1__1_9_r2.Chat;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_4__1_5__1_6__1_7__1_8__1_9_r1__1_9_r2.CreativeSetSlot;
@@ -30,10 +35,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_4__1_5__1
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_4__1_5__1_6__1_7__1_8__1_9_r1__1_9_r2.Look;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_6__1_7__1_8__1_9_r1__1_9_r2.PlayerAbilities;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_7__1_8__1_9_r1__1_9_r2.ClientCommand;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_8__1_9_r1__1_9_r2.Animation;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_8__1_9_r1__1_9_r2.BlockDig;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_8__1_9_r1__1_9_r2.BlockPlace;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_8__1_9_r1__1_9_r2.ClientSettings;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_8__1_9_r1__1_9_r2.CustomPayload;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_8__1_9_r1__1_9_r2.EntityAction;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_8__1_9_r1__1_9_r2.KeepAlive;
@@ -42,9 +44,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_8__1_9_r1
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_8__1_9_r1__1_9_r2.ResourcePackStatus;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_8__1_9_r1__1_9_r2.Spectate;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_8__1_9_r1__1_9_r2.SteerVehicle;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_8__1_9_r1__1_9_r2.TabComplete;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_8__1_9_r1__1_9_r2.UpdateSign;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_8__1_9_r1__1_9_r2.UseEntity;
 import protocolsupport.protocol.packet.middleimpl.serverbound.status.v_1_7__1_8__1_9_r1__1_9_r2.Ping;
 import protocolsupport.protocol.packet.middleimpl.serverbound.status.v_1_7__1_8__1_9_r1__1_9_r2.ServerInfoRequest;
 import protocolsupport.protocol.pipeline.IPacketDecoder;
@@ -121,15 +121,11 @@ public class PacketDecoder implements IPacketDecoder {
 		int packetId = serializer.readVarInt();
 		Channel channel = ctx.channel();
 		ServerBoundMiddlePacket packetTransformer = registry.getTransformer(channel.attr(ChannelUtils.CURRENT_PROTOCOL_KEY).get(), packetId);
-		if (packetTransformer != null) {
-			if (packetTransformer.needsPlayer()) {
-				packetTransformer.setPlayer(ChannelUtils.getBukkitPlayer(channel));
-			}
-			packetTransformer.readFromClientData(serializer);
-			PacketCreator.addAllToR(packetTransformer.toNative(), list);
-		} else {
-			throw new DecoderException("Missing packet decoder for packet " + packetId);
+		if (packetTransformer.needsPlayer()) {
+			packetTransformer.setPlayer(ChannelUtils.getBukkitPlayer(channel));
 		}
+		packetTransformer.readFromClientData(serializer);
+		PacketCreator.addAllToR(packetTransformer.toNative(), list);
 		if (serializer.isReadable()) {
 			throw new DecoderException("Did not read all data from packet " + packetId+ ", bytes left: " + serializer.readableBytes());
 		}

@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1__1_9_r2;
+package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9_r2;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
@@ -14,6 +14,7 @@ public class Map extends MiddleMap<RecyclableCollection<PacketData>> {
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_MAP_ID, version);
 		serializer.writeVarInt(itemData);
 		serializer.writeByte(scale);
+		serializer.writeBoolean(showIcons);
 		serializer.writeVarInt(icons.length);
 		for (Icon icon : icons) {
 			serializer.writeByte(icon.dirtype);

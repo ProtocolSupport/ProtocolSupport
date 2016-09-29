@@ -5,7 +5,7 @@ import java.io.IOException;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-public abstract class MiddleEntityAttach<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleEntityLeash<T> extends ClientBoundMiddlePacket<T> {
 
 	protected int entityId;
 	protected int vehicleId;

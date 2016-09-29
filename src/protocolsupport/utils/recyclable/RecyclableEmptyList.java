@@ -1,5 +1,6 @@
 package protocolsupport.utils.recyclable;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -109,6 +110,10 @@ public class RecyclableEmptyList<E> implements RecyclableCollection<E> {
 		public void remove() {
 			throw new IllegalStateException();
 		}
+	}
+
+	@Override
+	public void close() throws IOException {
 	}
 
 }

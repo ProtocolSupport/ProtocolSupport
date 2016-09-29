@@ -9,7 +9,7 @@ public class TeleportAccept extends MiddleTeleportAccept {
 
 	@Override
 	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
-		teleportAcceptId = serializer.readVarInt();
+		teleportConfirmId = serializer.readVarInt();
 	}
 
 }

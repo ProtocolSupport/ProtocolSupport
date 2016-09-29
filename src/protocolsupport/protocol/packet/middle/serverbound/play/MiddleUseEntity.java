@@ -11,7 +11,7 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public abstract class MiddleUseEntity extends ServerBoundMiddlePacket {
 
 	protected int entityId;
-	protected int action;
+	protected Action action;
 	protected Vector interactedAt;
 	protected int usedHand;
 
@@ -19,14 +19,28 @@ public abstract class MiddleUseEntity extends ServerBoundMiddlePacket {
 	public RecyclableCollection<PacketCreator> toNative() throws Exception {
 		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_USE_ENTITY);
 		creator.writeVarInt(entityId);
-		creator.writeVarInt(action);
-		if (action == 2) {
-			creator.writeFloat((float) interactedAt.getX());
-			creator.writeFloat((float) interactedAt.getY());
-			creator.writeFloat((float) interactedAt.getZ());
+		creator.writeEnum(action);
+		switch (action) {
+			case INTERACT: {
+				creator.writeVarInt(usedHand);
+				break;
+			}
+			case INTERACT_AT: {
+				creator.writeFloat((float) interactedAt.getX());
+				creator.writeFloat((float) interactedAt.getY());
+				creator.writeFloat((float) interactedAt.getZ());
+				creator.writeVarInt(usedHand);
+				break;
+			}
+			case ATTACK: {
+				break;
+			}
 		}
-		creator.writeVarInt(usedHand);
 		return RecyclableSingletonList.create(creator);
+	}
+
+	protected enum Action {
+		INTERACT, ATTACK, INTERACT_AT
 	}
 
 }

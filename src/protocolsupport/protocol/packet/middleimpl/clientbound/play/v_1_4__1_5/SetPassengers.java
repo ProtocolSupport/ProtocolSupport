@@ -17,7 +17,7 @@ public class SetPassengers extends MiddleSetPassengers<RecyclableCollection<Pack
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
-		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_ENTITY_ATTACH_ID, version);
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_ENTITY_LEASH_ID, version);
 		serializer.writeInt(passengerId);
 		serializer.writeInt(passengersIds.length == 0 ? -1 : vehicleId);
 		return RecyclableSingletonList.create(serializer);

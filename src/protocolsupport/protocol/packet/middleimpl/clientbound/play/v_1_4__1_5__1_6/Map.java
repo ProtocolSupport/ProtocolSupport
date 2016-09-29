@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__1_6;
 
-import net.minecraft.server.v1_10_R1.Item;
-import net.minecraft.server.v1_10_R1.Items;
+import org.bukkit.Material;
+
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.legacyremapper.MapTransformer;
 import protocolsupport.protocol.legacyremapper.MapTransformer.ColumnEntry;
@@ -15,7 +15,8 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class Map extends MiddleMap<RecyclableCollection<PacketData>> {
 
-	private static final int mapId = Item.getId(Items.FILLED_MAP);
+	@SuppressWarnings("deprecation")
+	private static final int mapId = Material.MAP.getId();
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {

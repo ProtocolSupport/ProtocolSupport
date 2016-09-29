@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_8__1_9_r1__1_9_r2;
+package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_8;
 
 import java.io.IOException;
 
@@ -14,6 +14,7 @@ public class ClientSettings extends MiddleClientSettings {
 		chatMode = serializer.readByte();
 		chatColors = serializer.readBoolean();
 		skinFlags = serializer.readUnsignedByte();
+		mainHand = 1;
 	}
 
 }

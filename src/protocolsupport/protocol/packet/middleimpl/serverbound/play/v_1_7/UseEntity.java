@@ -8,7 +8,7 @@ public class UseEntity extends MiddleUseEntity {
 	@Override
 	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) {
 		entityId = serializer.readInt();
-		action = serializer.readByte();
+		action = Action.values()[serializer.readByte()];
 	}
 
 }

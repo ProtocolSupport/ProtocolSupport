@@ -14,13 +14,12 @@ public class EntityEquipment extends MiddleEntityEquipment<RecyclableCollection<
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
 		if (slot == 1) {
 			return RecyclableEmptyList.get();
-		} else {
-			PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_ENTITY_EQUIPMENT_ID, version);
-			serializer.writeVarInt(entityId);
-			serializer.writeShort(slot == 0 ? slot : slot - 1);
-			serializer.writeItemStack(itemstack);
-			return RecyclableSingletonList.create(serializer);
 		}
+		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_ENTITY_EQUIPMENT_ID, version);
+		serializer.writeVarInt(entityId);
+		serializer.writeShort(slot == 0 ? slot : slot - 1);
+		serializer.writeItemStack(itemstack);
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

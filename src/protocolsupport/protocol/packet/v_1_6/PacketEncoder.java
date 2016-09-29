@@ -79,7 +79,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_6.Chat;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_6.Position;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_6__1_7.EntitySetAttributes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_6__1_7.SetHealth;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_6__1_7__1_8.EntityAttach;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_6__1_7__1_8.EntityLeash;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_6__1_7__1_8.SetPassengers;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_6__1_7__1_8__1_9_r1__1_9_r2.PlayerAbilities;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_5__1_6.ServerInfo;
@@ -128,7 +128,7 @@ public class PacketEncoder implements IPacketEncoder {
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_TELEPORT_ID, 0x22);
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_HEAD_ROTATION_ID, 0x23);
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_STATUS_ID, 0x26);
-		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_ATTACH_ID, 0x27);
+		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_LEASH_ID, 0x27);
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_METADATA_ID, 0x28);
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_EFFECT_ADD_ID, 0x29);
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_EFFECT_REMOVE_ID, 0x2A);
@@ -199,7 +199,7 @@ public class PacketEncoder implements IPacketEncoder {
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_TELEPORT_ID, EntityTeleport.class);
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_HEAD_ROTATION_ID, EntityHeadRotation.class);
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_STATUS_ID, EntityStatus.class);
-			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_ATTACH_ID, EntityAttach.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_LEASH_ID, EntityLeash.class);
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_METADATA_ID, EntityMetadata.class);
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_EFFECT_ADD_ID, EntityEffectAdd.class);
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_EFFECT_REMOVE_ID, EntityEffectRemove.class);

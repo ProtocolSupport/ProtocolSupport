@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1__1_9_r2;
+package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9_r2;
 
 import java.io.IOException;
 
@@ -23,6 +23,7 @@ public class ScoreboardTeam extends MiddleScoreboardTeam<RecyclableCollection<Pa
 			serializer.writeString(suffix);
 			serializer.writeByte(friendlyFire);
 			serializer.writeString(nameTagVisibility);
+			serializer.writeString(collisionRule);
 			serializer.writeByte(color);
 		}
 		if ((mode == 0) || (mode == 3) || (mode == 4)) {

@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8;
+package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1__1_9_r2;
 
 import java.io.IOException;
 
@@ -14,7 +14,7 @@ public class WorldParticle extends MiddleWorldParticle<RecyclableCollection<Pack
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
-		if (type > 41) {
+		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && type > 41) {
 			return RecyclableEmptyList.get();
 		}
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_WORLD_PARTICLES_ID, version);
@@ -28,7 +28,6 @@ public class WorldParticle extends MiddleWorldParticle<RecyclableCollection<Pack
 		serializer.writeFloat(offZ);
 		serializer.writeFloat(speed);
 		serializer.writeInt(count);
-		//TODO: remap
 		for (int additional : adddata) {
 			serializer.writeVarInt(additional);
 		}

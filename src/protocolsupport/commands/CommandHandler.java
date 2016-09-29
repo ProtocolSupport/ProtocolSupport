@@ -11,6 +11,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
+import io.netty.util.ResourceLeakDetector;
+import io.netty.util.ResourceLeakDetector.Level;
 import net.minecraft.server.v1_10_R1.PropertyManager;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
@@ -45,6 +47,16 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			}
 			return true;
 		}
+		if ((args.length == 1) && args[0].equalsIgnoreCase("leakdetector")) {
+			if (ResourceLeakDetector.isEnabled()) {
+				ResourceLeakDetector.setLevel(Level.DISABLED);
+				sender.sendMessage(ChatColor.GOLD + "Disabled leak detector");
+			} else {
+				ResourceLeakDetector.setLevel(Level.PARANOID);
+				sender.sendMessage(ChatColor.GOLD + "Enabled leak detector");
+			}
+			return true;
+		}
 		return false;
 	}
 
@@ -70,6 +82,9 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 		}
 		if ("debug".startsWith(args[0])) {
 			completions.add("debug");
+		}
+		if ("leakdetector".startsWith(args[0])) {
+			completions.add("leakdetector");
 		}
 		return completions;
 	}

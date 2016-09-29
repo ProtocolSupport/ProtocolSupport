@@ -112,15 +112,11 @@ public class PacketDecoder implements IPacketDecoder {
 		int packetId = serializer.readVarInt();
 		Channel channel = ctx.channel();
 		ServerBoundMiddlePacket packetTransformer = registry.getTransformer(channel.attr(ChannelUtils.CURRENT_PROTOCOL_KEY).get(), packetId);
-		if (packetTransformer != null) {
-			if (packetTransformer.needsPlayer()) {
-				packetTransformer.setPlayer(ChannelUtils.getBukkitPlayer(channel));
-			}
-			packetTransformer.readFromClientData(serializer);
-			PacketCreator.addAllTo(reorderer.orderPackets(packetTransformer.toNative()), list);
-		} else {
-			throw new DecoderException("Missing packet decoder for packet " + packetId);
+		if (packetTransformer.needsPlayer()) {
+			packetTransformer.setPlayer(ChannelUtils.getBukkitPlayer(channel));
 		}
+		packetTransformer.readFromClientData(serializer);
+		PacketCreator.addAllTo(reorderer.orderPackets(packetTransformer.toNative()), list);
 		if (serializer.isReadable()) {
 			throw new DecoderException("Did not read all data from packet " + packetId+ ", bytes left: " + serializer.readableBytes());
 		}

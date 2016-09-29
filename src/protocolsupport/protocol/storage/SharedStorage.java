@@ -26,6 +26,14 @@ public class SharedStorage {
 		return -1;
 	}
 
+	public boolean tryTeleportConfirm(int teleportId) {
+		if (teleportId == teleportConfirmId) {
+			teleportConfirmId = -1;
+			return true;
+		}
+		return false;
+	}
+
 	public void setTeleportLocation(double x, double y, double z, int teleportConfirmId) {
 		this.x = x;
 		this.y = y;

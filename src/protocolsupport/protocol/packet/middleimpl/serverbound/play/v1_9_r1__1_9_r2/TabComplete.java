@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_8__1_9_r1__1_9_r2;
+package protocolsupport.protocol.packet.middleimpl.serverbound.play.v1_9_r1__1_9_r2;
 
 import java.io.IOException;
 
@@ -10,6 +10,7 @@ public class TabComplete extends MiddleTabComplete {
 	@Override
 	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
 		string = serializer.readString();
+		assumecommand = serializer.readBoolean();
 		if (serializer.readBoolean()) {
 			position = serializer.readPosition();
 		}

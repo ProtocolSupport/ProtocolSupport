@@ -9,7 +9,7 @@ public class UseEntity extends MiddleUseEntity {
 	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) {
 		serializer.readInt();
 		entityId = serializer.readInt();
-		action = serializer.readBoolean() ? 1 : 0;
+		action = serializer.readBoolean() ? Action.ATTACK : Action.INTERACT;
 	}
 
 }
