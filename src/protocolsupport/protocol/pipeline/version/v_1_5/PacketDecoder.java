@@ -7,7 +7,6 @@ import org.spigotmc.SneakyThrow;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.DecoderException;
 import net.minecraft.server.v1_10_R1.EnumProtocol;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.legacyremapper.LegacyAnimatePacketReorderer;
@@ -111,15 +110,11 @@ public class PacketDecoder implements IPacketDecoder {
 		try {
 			int packetId = serializer.readUnsignedByte();
 			ServerBoundMiddlePacket packetTransformer = dataRemapperRegistry.getTransformer(channel.attr(ChannelUtils.CURRENT_PROTOCOL_KEY).get(), packetId);
-			if (packetTransformer != null) {
-				if (packetTransformer.needsPlayer()) {
-					packetTransformer.setPlayer(ChannelUtils.getBukkitPlayer(channel));
-				}
-				packetTransformer.readFromClientData(serializer);
-				PacketCreator.addAllTo(reorderer.orderPackets(packetTransformer.toNative()), list);
-			} else {
-				throw new DecoderException("Missing packet decoder for packet " + packetId);
+			if (packetTransformer.needsPlayer()) {
+				packetTransformer.setPlayer(ChannelUtils.getBukkitPlayer(channel));
 			}
+			packetTransformer.readFromClientData(serializer);
+			PacketCreator.addAllTo(reorderer.orderPackets(packetTransformer.toNative()), list);
 		} catch (EOFSignal ex) {
 			serializer.resetReaderIndex();
 		}
