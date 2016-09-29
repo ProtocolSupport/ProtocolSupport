@@ -18,11 +18,14 @@ import protocolsupport.protocol.packet.middleimpl.PacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_1_4__1_5__1_6__1_7__1_8__1_9_r1__1_9_r2.EncryptionRequest;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_1_7__1_8__1_9_r1__1_9_r2.LoginDisconnect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_1_7__1_8__1_9_r1__1_9_r2.LoginSuccess;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopBossBar;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopCamera;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopCombatEvent;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopPlayerListHeaderFooter;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopServerDifficulty;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopSetCooldown;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopTitle;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopVehicleMove;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopWorldBorder;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__1_6__1_7.BlockChangeMulti;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__1_6__1_7.BlockTileUpdate;
@@ -260,6 +263,9 @@ public class PacketEncoder implements IPacketEncoder {
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_TITLE, NoopTitle.class);
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_PLAYER_LIST_HEADER_FOOTER, NoopPlayerListHeaderFooter.class);
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CAMERA_ID, NoopCamera.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SET_COOLDOWN, NoopSetCooldown.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_BOSS_BAR, NoopBossBar.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_VEHICLE_MOVE, NoopVehicleMove.class);
 			registry.setCallBack(new InitCallBack<ClientBoundMiddlePacket<RecyclableCollection<PacketData>>>() {
 				@Override
 				public void onInit(ClientBoundMiddlePacket<RecyclableCollection<PacketData>> object) {

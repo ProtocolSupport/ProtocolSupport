@@ -19,6 +19,9 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_1_4__1_5__
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_1_7__1_8__1_9_r1__1_9_r2.LoginDisconnect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_1_7__1_8__1_9_r1__1_9_r2.LoginSuccess;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_1_8__1_9_r1__1_9_r2.SetCompression;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopBossBar;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopSetCooldown;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopVehicleMove;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__1_6__1_7__1_8.WorldCustomSound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__1_6__1_7__1_8.WorldSound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__1_6__1_7__1_8__1_9_r1__1_9_r2.EntityStatus;
@@ -270,6 +273,9 @@ public class PacketEncoder implements IPacketEncoder {
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CHUNK_UNLOAD, UnloadChunk.class);
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SERVER_DIFFICULTY, ServerDifficulty.class);
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_COMBAT_EVENT, CombatEvent.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SET_COOLDOWN, NoopSetCooldown.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_BOSS_BAR, NoopBossBar.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_VEHICLE_MOVE, NoopVehicleMove.class);
 			registry.setCallBack(new InitCallBack<ClientBoundMiddlePacket<RecyclableCollection<PacketData>>>() {
 				@Override
 				public void onInit(ClientBoundMiddlePacket<RecyclableCollection<PacketData>> object) {
