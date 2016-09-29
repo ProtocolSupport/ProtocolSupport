@@ -71,6 +71,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1__1_9_r2.WorldBorder;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1__1_9_r2.WorldEvent;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1__1_9_r2.WorldParticle;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9_r2.BossBar;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9_r2.EntityEquipment;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9_r2.EntityLeash;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9_r2.EntityMetadata;
@@ -80,6 +81,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9_r2.Map;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9_r2.Position;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9_r2.ScoreboardTeam;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9_r2.SetCooldown;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9_r2.SetPassengers;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9_r2.SpawnExpOrb;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9_r2.SpawnGlobal;
@@ -88,6 +90,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9_r2.SpawnObject;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9_r2.SpawnPainting;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9_r2.UnloadChunk;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9_r2.VehicleMove;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9_r2.WorldCustomSound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9_r2.WorldSound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r2.Chunk;
@@ -186,6 +189,9 @@ public class PacketEncoder implements IPacketEncoder {
 		registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CHUNK_UNLOAD, UnloadChunk.class);
 		registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SERVER_DIFFICULTY, ServerDifficulty.class);
 		registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_COMBAT_EVENT, CombatEvent.class);
+		registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SET_COOLDOWN, SetCooldown.class);
+		registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_BOSS_BAR, BossBar.class);
+		registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_VEHICLE_MOVE, VehicleMove.class);
 		registry.setCallBack(new InitCallBack<ClientBoundMiddlePacket<RecyclableCollection<PacketData>>>() {
 			@Override
 			public void onInit(ClientBoundMiddlePacket<RecyclableCollection<PacketData>> object) {
