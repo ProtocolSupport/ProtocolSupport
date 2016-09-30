@@ -14,7 +14,7 @@ public class ScoreboardScore extends MiddleScoreboardScore<RecyclableCollection<
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_SCOREBOARD_SCORE_ID, version);
-		serializer.writeString(name); //TODO: check if 1.8 could use 40 symbol name
+		serializer.writeString(name);
 		serializer.writeByte(mode);
 		serializer.writeString(objectiveName);
 		if (mode != 1) {
