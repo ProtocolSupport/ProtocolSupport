@@ -15,7 +15,28 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.PacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.login.noop.NoopLoginSuccess;
+import protocolsupport.protocol.packet.middleimpl.clientbound.login.noop.NoopSetCompression;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_1_4__1_5__1_6.LoginDisconnect;
+import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_1_4__1_5__1_6__1_7__1_8__1_9_r1__1_9_r2.EncryptionRequest;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopBlockOpenSignEditor;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopBossBar;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopCamera;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopCombatEvent;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopEntitySetAttributes;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopPlayerListHeaderFooter;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopResourcePack;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopScoreboardDisplay;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopScoreboardObjective;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopScoreboardScore;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopScoreboardTeam;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopServerDifficulty;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopSetCooldown;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopStatistics;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopTitle;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopVehicleMove;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopWorldBorder;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopWorldParticle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4.InventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5.Chat;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5.EntityLeash;
@@ -153,6 +174,9 @@ public class PacketEncoder implements IPacketEncoder {
 	{
 		try {
 			registry.register(EnumProtocol.LOGIN, ClientBoundPacket.LOGIN_DISCONNECT_ID, LoginDisconnect.class);
+			registry.register(EnumProtocol.LOGIN, ClientBoundPacket.LOGIN_ENCRYPTION_BEGIN_ID, EncryptionRequest.class);
+			registry.register(EnumProtocol.LOGIN, ClientBoundPacket.LOGIN_SET_COMPRESSION_ID, NoopSetCompression.class);
+			registry.register(EnumProtocol.LOGIN, ClientBoundPacket.LOGIN_SUCCESS_ID, NoopLoginSuccess.class);
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_KEEP_ALIVE_ID, KeepAlive.class);
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_LOGIN_ID, Login.class);
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CHAT_ID, Chat.class);
@@ -211,6 +235,24 @@ public class PacketEncoder implements IPacketEncoder {
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_KICK_DISCONNECT_ID, KickDisconnect.class);
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SET_PASSENGERS, SetPassengers.class);
 			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CHUNK_UNLOAD, UnloadChunk.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SERVER_DIFFICULTY, NoopServerDifficulty.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_COMBAT_EVENT, NoopCombatEvent.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_WORLD_BORDER_ID, NoopWorldBorder.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_TITLE, NoopTitle.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_PLAYER_LIST_HEADER_FOOTER, NoopPlayerListHeaderFooter.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CAMERA_ID, NoopCamera.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SET_COOLDOWN, NoopSetCooldown.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_BOSS_BAR, NoopBossBar.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_VEHICLE_MOVE, NoopVehicleMove.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_STATISTICS, NoopStatistics.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_RESOURCE_PACK_ID, NoopResourcePack.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SIGN_EDITOR_ID, NoopBlockOpenSignEditor.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_ENTITY_ATTRIBUTES_ID, NoopEntitySetAttributes.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_WORLD_PARTICLES_ID, NoopWorldParticle.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SCOREBOARD_DISPLAY_SLOT_ID, NoopScoreboardDisplay.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SCOREBOARD_SCORE_ID, NoopScoreboardScore.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SCOREBOARD_OBJECTIVE_ID, NoopScoreboardObjective.class);
+			registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SCOREBOARD_TEAM_ID, NoopScoreboardTeam.class);
 			registry.setCallBack(new InitCallBack<ClientBoundMiddlePacket<RecyclableCollection<PacketData>>>() {
 				@Override
 				public void onInit(ClientBoundMiddlePacket<RecyclableCollection<PacketData>> object) {
@@ -240,29 +282,20 @@ public class PacketEncoder implements IPacketEncoder {
 			throw new IOException("Can't serialize unregistered packet");
 		}
 		ClientBoundMiddlePacket<RecyclableCollection<PacketData>> packetTransformer = registry.getTransformer(currentProtocol, packetId);
-		if (packetTransformer != null) {
-			middlebuffer.clear();
-			packet.b(middlebuffer.getNativeSerializer());
-			if (packetTransformer.needsPlayer()) {
-				packetTransformer.setPlayer(ChannelUtils.getBukkitPlayer(channel));
+		packet.b(middlebuffer.prepareNativeSerializer());
+		if (packetTransformer.needsPlayer()) {
+			packetTransformer.setPlayer(ChannelUtils.getBukkitPlayer(channel));
+		}
+		packetTransformer.readFromServerData(middlebuffer);
+		packetTransformer.handle();
+		try (RecyclableCollection<PacketData> data = packetTransformer.toData(ProtocolVersion.MINECRAFT_1_4_7)) {
+			for (PacketData packetdata : data) {
+				ByteBuf senddata = Allocator.allocateBuffer();
+				senddata.writeByte(packetIdRegistry.getNewPacketId(currentProtocol, packetdata.getPacketId()));
+				senddata.writeBytes(packetdata);
+				ctx.write(senddata);
 			}
-			packetTransformer.readFromServerData(middlebuffer);
-			packetTransformer.handle();
-			RecyclableCollection<PacketData> data = packetTransformer.toData(ProtocolVersion.MINECRAFT_1_4_7);
-			try {
-				for (PacketData packetdata : data) {
-					ByteBuf senddata = Allocator.allocateBuffer();
-					senddata.writeByte(packetIdRegistry.getNewPacketId(currentProtocol, packetdata.getPacketId()));
-					senddata.writeBytes(packetdata);
-					ctx.write(senddata);
-				}
-				ctx.flush();
-			} finally {
-				for (PacketData packetdata : data) {
-					packetdata.recycle();
-				}
-				data.recycle();
-			}
+			ctx.flush();
 		}
 	}
 
