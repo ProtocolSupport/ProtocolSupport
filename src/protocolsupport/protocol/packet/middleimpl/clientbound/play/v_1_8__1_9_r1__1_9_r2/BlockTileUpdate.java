@@ -21,7 +21,7 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate<RecyclableCollection<
 	}
 
 	public static PacketData createPacketData(ProtocolVersion version, Position position, int type, NBTTagCompoundWrapper tag) {
-		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9_4) && type == TileNBTTransformer.TileEntityUpdateType.SIGN.ordinal()) {
+		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9_4) && (type == TileNBTTransformer.TileEntityUpdateType.SIGN.ordinal())) {
 			PacketData serializer = PacketData.create(ClientBoundPacket.LEGACY_PLAY_UPDATE_SIGN_ID, version);
 			serializer.writePosition(position);
 			for (String line : LegacyTileEntityUpdate.getSignLines(tag)) {

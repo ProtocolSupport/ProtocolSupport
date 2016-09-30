@@ -14,7 +14,7 @@ public abstract class MiddleTeleportAccept extends ServerBoundMiddlePacket {
 	@Override
 	public RecyclableCollection<PacketCreator> toNative() throws Exception {
 		if (sharedstorage.tryTeleportConfirm(teleportConfirmId)) {
-			return create(teleportConfirmId);	
+			return create(teleportConfirmId);
 		} else {
 			return RecyclableEmptyList.get();
 		}

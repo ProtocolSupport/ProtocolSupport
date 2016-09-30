@@ -71,7 +71,7 @@ public class ServerPingResponseEvent extends Event {
 	}
 
 	public void setPlayers(List<String> players) {
-		this.players = players != null ? new ArrayList<String>(players) : new ArrayList<String>();
+		this.players = players != null ? new ArrayList<>(players) : new ArrayList<String>();
 	}
 
 	public static class ProtocolInfo {

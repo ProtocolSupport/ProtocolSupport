@@ -14,7 +14,7 @@ public class WorldParticle extends MiddleWorldParticle<RecyclableCollection<Pack
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
-		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && type > 41) {
+		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && (type > 41)) {
 			return RecyclableEmptyList.get();
 		}
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_WORLD_PARTICLES_ID, version);
