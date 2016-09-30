@@ -11,7 +11,6 @@ import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
-import protocolsupport.protocol.serializer.RecyclableProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBlockState;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
@@ -25,7 +24,6 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectPosit
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3f;
-import protocolsupport.utils.netty.ChannelUtils;
 
 public class DataWatcherDeserializer {
 
@@ -75,28 +73,22 @@ public class DataWatcherDeserializer {
 		return map;
 	}
 
-	public static byte[] encodeData(ProtocolVersion version, TIntObjectMap<DataWatcherObject<?>> objects) {
-		RecyclableProtocolSupportPacketDataSerializer serializer = RecyclableProtocolSupportPacketDataSerializer.create(version);
-		try {
-			if (!objects.isEmpty()) {
-				TIntObjectIterator<DataWatcherObject<?>> iterator = objects.iterator();
-				while (iterator.hasNext()) {
-					iterator.advance();
-					DataWatcherObject<?> object = iterator.value();
-					serializer.writeByte(iterator.key());
-					serializer.writeByte(object.getTypeId(version));
-					object.writeToStream(serializer);
-				}
-			} else {
-				serializer.writeByte(31);
-				serializer.writeByte(0);
-				serializer.writeByte(0);
+	public static void encodeData(TIntObjectMap<DataWatcherObject<?>> objects, ProtocolSupportPacketDataSerializer serializer) {
+		if (!objects.isEmpty()) {
+			TIntObjectIterator<DataWatcherObject<?>> iterator = objects.iterator();
+			while (iterator.hasNext()) {
+				iterator.advance();
+				DataWatcherObject<?> object = iterator.value();
+				serializer.writeByte(iterator.key());
+				serializer.writeByte(object.getTypeId(serializer.getVersion()));
+				object.writeToStream(serializer);
 			}
-			serializer.writeByte(0xFF);
-			return ChannelUtils.toArray(serializer);
-		} finally {
-			serializer.release();
+		} else {
+			serializer.writeByte(31);
+			serializer.writeByte(0);
+			serializer.writeByte(0);
 		}
+		serializer.writeByte(0xFF);
 	}
 
 }

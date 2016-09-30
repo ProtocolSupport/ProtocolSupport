@@ -29,7 +29,7 @@ public class SpawnLiving extends MiddleSpawnLiving<RecyclableCollection<PacketDa
 		serializer.writeShort(motX);
 		serializer.writeShort(motY);
 		serializer.writeShort(motZ);
-		serializer.writeBytes(DataWatcherDeserializer.encodeData(version, WatchedDataRemapper.transform(wentity, metadata, version)));
+		DataWatcherDeserializer.encodeData(WatchedDataRemapper.transform(wentity, metadata, version), serializer);
 		return RecyclableSingletonList.create(serializer);
 	}
 
