@@ -34,17 +34,17 @@ public enum SpecificRemapper {
 		.addRemap(0, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL),
 		//air
 		new Mapping(1)
-		.addRemap(1, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
+		.addRemap(1, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE_1_9_1_1_10)
 		.addRemap(1, ValueRemapperNumberToShort.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//nametag
 		new Mapping(2)
-		.addRemap(2, ValueRemapperNoOp.STRING, ProtocolVersionsHelper.ALL_1_9),
+		.addRemap(2, ValueRemapperNoOp.STRING, ProtocolVersionsHelper.RANGE_1_9_1_1_10),
 		//nametag visible
 		new Mapping(3)
-		.addRemap(3, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9),
+		.addRemap(3, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE_1_9_1_1_10),
 		//silent
 		new Mapping(4)
-		.addRemap(4, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
+		.addRemap(4, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE_1_9_1_1_10)
 	),
 	LIVING(EType.NONE, -1, SpecificRemapper.ENTITY,
 		//nametag
@@ -62,16 +62,19 @@ public enum SpecificRemapper {
 		.addRemap(6, ValueRemapperNoOp.FLOAT, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_9_4, ProtocolVersion.MINECRAFT_1_6_1)),
 		//pcolor
 		new Mapping(8)
+		.addRemap(8, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(7, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(7, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.RANGE_1_6_1_7)
 		.addRemap(8, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_6),
 		//pambient
 		new Mapping(9)
+		.addRemap(9, ValueRemapperNoOp.BOOLEAN, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(8, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(8, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.RANGE_1_6_1_7)
 		.addRemap(9, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_6),
 		//arrowsn
 		new Mapping(10)
+		.addRemap(10, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(9, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(9, ValueRemapperNumberToByte.INSTANCE, ProtocolVersionsHelper.RANGE_1_6_1_7)
 		.addRemap(10, ValueRemapperNumberToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_6)
@@ -79,26 +82,31 @@ public enum SpecificRemapper {
 	INSENTIENT(EType.NONE, -1, SpecificRemapper.LIVING,
 		//noai
 		new Mapping(11)
+		.addRemap(11, ValueRemapperNoOp.BYTE, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(10, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(15, ValueRemapperNoOp.BYTE, ProtocolVersion.MINECRAFT_1_8)
 	),
 	PLAYER(EType.NONE, -1, SpecificRemapper.LIVING,
 		//additional hearts
 		new Mapping(11)
+		.addRemap(11, ValueRemapperNoOp.FLOAT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(10, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(17, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.BEFORE_1_9),
 		//score
 		new Mapping(12)
+		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(11, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(18, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//skin flags(cape enabled for some protocols)
 		new Mapping(13)
+		.addRemap(13, ValueRemapperNoOp.BYTE, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(10, ValueRemapperNoOp.BYTE, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1))
 	),
 	AGEABLE(EType.NONE, -1, SpecificRemapper.INSENTIENT,
 		//age
 		new Mapping(12)
+		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(11, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(12, new ValueRemapper<DataWatcherObjectBoolean>() {
 			@Override
@@ -120,24 +128,32 @@ public enum SpecificRemapper {
 	TAMEABLE(EType.NONE, -1, SpecificRemapper.AGEABLE,
 		//tame flags
 		new Mapping(13)
+		.addRemap(13, ValueRemapperNoOp.BYTE, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	ARMOR_STAND(EType.NONE, -1, SpecificRemapper.LIVING,
 		//parts position
 		new Mapping(11)
+		.addRemap(11, ValueRemapperNoOp.BYTE, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(10, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE_1_8_1_9),
 		new Mapping(12)
+		.addRemap(12, ValueRemapperNoOp.VECTOR3F, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(11, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE_1_8_1_9),
 		new Mapping(13)
+		.addRemap(13, ValueRemapperNoOp.VECTOR3F, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(12, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE_1_8_1_9),
 		new Mapping(14)
+		.addRemap(14, ValueRemapperNoOp.VECTOR3F, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(13, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE_1_8_1_9),
 		new Mapping(15)
+		.addRemap(15, ValueRemapperNoOp.VECTOR3F, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(14, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE_1_8_1_9),
 		new Mapping(16)
+		.addRemap(16, ValueRemapperNoOp.VECTOR3F, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(15, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE_1_8_1_9),
 		new Mapping(17)
+		.addRemap(17, ValueRemapperNoOp.VECTOR3F, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(16, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE_1_8_1_9)
 	),
 	COW(EType.MOB, EntityType.COW, SpecificRemapper.AGEABLE),
@@ -147,45 +163,54 @@ public enum SpecificRemapper {
 	HORSE(EType.MOB, EntityType.HORSE, SpecificRemapper.AGEABLE,
 		//info flags
 		new Mapping(13)
+		.addRemap(13, ValueRemapperNoOp.BYTE, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(17, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//type
 		new Mapping(14)
+		.addRemap(14, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(13, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(19, ValueRemapperNumberToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//color/variant
 		new Mapping(15)
+		.addRemap(15, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(14, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(20, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//armor
 		new Mapping(17)
+		.addRemap(17, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(16, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(22, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	BAT(EType.MOB, EntityType.BAT, SpecificRemapper.INSENTIENT,
 		//hanging
 		new Mapping(12)
+		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(11, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	OCELOT(EType.MOB, EntityType.OCELOT, SpecificRemapper.TAMEABLE,
 		//type
 		new Mapping(15)
+		.addRemap(15, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(14, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(18, ValueRemapperNumberToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	WOLF(EType.MOB, EntityType.WOLF, SpecificRemapper.TAMEABLE,
 		//health
 		new Mapping(15)
+		.addRemap(15, ValueRemapperNoOp.FLOAT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(14, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(18, ValueRemapperNoOp.FLOAT, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1))
 		.addRemap(18, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_6),
 		//begging
 		new Mapping(16)
+		.addRemap(16, ValueRemapperNoOp.BOOLEAN, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(15, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(19, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//collar color
 		new Mapping(17)
+		.addRemap(17, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(16, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(20, ValueRemapperNumberToByte.INSTANCE, ProtocolVersion.MINECRAFT_1_8)
 		.addRemap(20, new ValueRemapper<DataWatcherObjectVarInt>() {
@@ -198,30 +223,35 @@ public enum SpecificRemapper {
 	PIG(EType.MOB, EntityType.PIG, SpecificRemapper.AGEABLE,
 		//has saddle
 		new Mapping(13)
+		.addRemap(13, ValueRemapperNoOp.BOOLEAN, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	RABBIT(EType.MOB, EntityType.RABBIT, SpecificRemapper.AGEABLE,
 		//type
 		new Mapping(13)
+		.addRemap(13, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(18, ValueRemapperNumberToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	SHEEP(EType.MOB, EntityType.SHEEP, SpecificRemapper.AGEABLE,
 		//info flags (color + sheared)
 		new Mapping(13)
+		.addRemap(13, ValueRemapperNoOp.BYTE, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	VILLAGER(EType.MOB, EntityType.VILLAGER, SpecificRemapper.AGEABLE,
 		//profession
 		new Mapping(13)
+		.addRemap(13, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	ENDERMAN(EType.MOB, EntityType.ENDERMAN, SpecificRemapper.INSENTIENT,
 		//carried block
 		new Mapping(12)
+		.addRemap(12, ValueRemapperNoOp.BLOCKSTATE, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(11, ValueRemapperNoOp.BLOCKSTATE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, new ValueRemapper<DataWatcherObjectBlockState>() {
 			@Override
@@ -243,6 +273,7 @@ public enum SpecificRemapper {
 		}, ProtocolVersionsHelper.BEFORE_1_9),
 		//screaming
 		new Mapping(13)
+		.addRemap(13, ValueRemapperNoOp.BOOLEAN, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(18, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
@@ -252,24 +283,29 @@ public enum SpecificRemapper {
 	ENDER_DRAGON(EType.MOB, EntityType.ENDER_DRAGON, SpecificRemapper.INSENTIENT,
 		//phase
 		new Mapping(12)
+		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(11, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 	),
 	SNOWMAN(EType.MOB, EntityType.SNOWMAN, SpecificRemapper.INSENTIENT,
 		//no hat
 		new Mapping(12)
+		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(11, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 	),
 	ZOMBIE(EType.MOB, EntityType.ZOMBIE, SpecificRemapper.INSENTIENT,
 		//is baby
 		new Mapping(12)
+		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(11, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(12, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//profession
 		new Mapping(13)
+		.addRemap(13, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(13, ValueRemapperNumberToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//is converting
 		new Mapping(14)
+		.addRemap(14, ValueRemapperNoOp.BOOLEAN, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(13, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(14, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
@@ -277,12 +313,14 @@ public enum SpecificRemapper {
 	BLAZE(EType.MOB, EntityType.BLAZE, SpecificRemapper.INSENTIENT,
 		//on fire
 		new Mapping(12)
+		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(11, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	SPIDER(EType.MOB, EntityType.SPIDER, SpecificRemapper.LIVING,
 		//is climbing
 		new Mapping(12)
+		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(11, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
@@ -290,26 +328,31 @@ public enum SpecificRemapper {
 	CREEPER(EType.MOB, EntityType.CREEPER, SpecificRemapper.INSENTIENT,
 		//state
 		new Mapping(12)
+		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(11, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNumberToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//is powered
 		new Mapping(13)
+		.addRemap(13, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(17, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//ignited
 		new Mapping(14)
+		.addRemap(14, ValueRemapperNoOp.BOOLEAN, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(13, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(18, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	GHAST(EType.MOB, EntityType.GHAST, SpecificRemapper.INSENTIENT,
 		//is attacking
 		new Mapping(12)
+		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(11, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	SLIME(EType.MOB, EntityType.SLIME, SpecificRemapper.INSENTIENT,
 		//size
 		new Mapping(12)
+		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(11, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNumberToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
@@ -317,57 +360,69 @@ public enum SpecificRemapper {
 	SKELETON(EType.MOB, EntityType.SKELETON, SpecificRemapper.INSENTIENT,
 		//type
 		new Mapping(12)
+		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(11, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNumberToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	WITCH(EType.MOB, EntityType.WITCH, SpecificRemapper.INSENTIENT,
 		//agressive
 		new Mapping(12)
+		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(11, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	IRON_GOLEM(EType.MOB, EntityType.IRON_GOLEM, SpecificRemapper.INSENTIENT,
 		//player created
 		new Mapping(12)
+		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(11, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	SHULKER(EType.MOB, 69, SpecificRemapper.INSENTIENT,
 		//direction
 		new Mapping(12)
+		.addRemap(12, ValueRemapperNoOp.DIRECTION, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(11, ValueRemapperNoOp.DIRECTION, ProtocolVersionsHelper.ALL_1_9),
 		//attachment pos
 		new Mapping(13)
+		.addRemap(13, ValueRemapperNoOp.OPTIONAL_POSITION, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(12, ValueRemapperNoOp.OPTIONAL_POSITION, ProtocolVersionsHelper.ALL_1_9),
 		//shield h
 		new Mapping(14)
+		.addRemap(14, ValueRemapperNoOp.BYTE, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(13, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 	),
 	WITHER(EType.MOB, EntityType.WITHER, SpecificRemapper.INSENTIENT,
 		//target 1
 		new Mapping(12)
+		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(11, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(17, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//target 2
 		new Mapping(13)
+		.addRemap(13, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(18, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//target 3
 		new Mapping(14)
+		.addRemap(14, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(13, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(19, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//invulnerable time
 		new Mapping(15)
+		.addRemap(15, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(14, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(20, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	GUARDIAN(EType.MOB, EntityType.GUARDIAN, SpecificRemapper.INSENTIENT,
 		//info flags(elder, spikes)
 		new Mapping(12)
+		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(11, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNumberToInt.INSTANCE, ProtocolVersion.MINECRAFT_1_8),
 		//target id
 		new Mapping(13)
+		.addRemap(13, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(17, ValueRemapperNumberToInt.INSTANCE, ProtocolVersion.MINECRAFT_1_8)
 	),
@@ -375,14 +430,17 @@ public enum SpecificRemapper {
 	BOAT(EType.OBJECT, 1,
 		//time since hit
 		new Mapping(6)
+		.addRemap(6, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(5, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(17, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//forward direction
 		new Mapping(7)
+		.addRemap(7, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(6, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(18, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//damage taken
 		new Mapping(8)
+		.addRemap(8, ValueRemapperNoOp.FLOAT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(7, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(19, ValueRemapperNoOp.FLOAT, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1))
 		.addRemap(19, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_6)
@@ -390,6 +448,7 @@ public enum SpecificRemapper {
 	TNT(EType.OBJECT, 50, SpecificRemapper.ENTITY,
 		//fuse ticks
 		new Mapping(6)
+		.addRemap(6, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(5, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 	),
 	SNOWBALL(EType.OBJECT, 61, SpecificRemapper.ENTITY),
@@ -400,6 +459,7 @@ public enum SpecificRemapper {
 	WITHER_SKULL(EType.OBJECT, 66, SpecificRemapper.FIREBALL,
 		//is charged
 		new Mapping(6)
+		.addRemap(6, ValueRemapperNoOp.BOOLEAN, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(5, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(10, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
@@ -408,6 +468,7 @@ public enum SpecificRemapper {
 	POTION(EType.OBJECT, 73, SpecificRemapper.ENTITY,
 		//potion item
 		new Mapping(7)
+		.addRemap(7, ValueRemapperNoOp.ITEMSTACK, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(6, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.ALL_1_9)
 	),
 	DRAGON_EGG(EType.OBJECT, 74, SpecificRemapper.ENTITY),
@@ -416,38 +477,46 @@ public enum SpecificRemapper {
 	FISHING_FLOAT(EType.OBJECT, 90, SpecificRemapper.ENTITY,
 		//hooked entity id
 		new Mapping(6)
+		.addRemap(6, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(5, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 	),
 	ITEM(EType.OBJECT, 2, SpecificRemapper.ENTITY,
 		//item
 		new Mapping(6)
+		.addRemap(6, ValueRemapperNoOp.ITEMSTACK, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(5, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(10, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	MINECART(EType.OBJECT, 10, SpecificRemapper.ENTITY,
 		//shaking power
 		new Mapping(6)
+		.addRemap(6, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(5, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(17, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//shaking direction
 		new Mapping(7)
+		.addRemap(7, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(6, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(18, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//block y
 		new Mapping(10)
+		.addRemap(10, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(9, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(21, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//show block
 		new Mapping(11)
+		.addRemap(11, ValueRemapperNoOp.BOOLEAN, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(10, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(22, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//damage taken
 		new Mapping(8)
+		.addRemap(8, ValueRemapperNoOp.FLOAT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(7, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(19, ValueRemapperNoOp.FLOAT, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1))
 		.addRemap(19, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_6),
 		//block
 		new Mapping(9)
+		.addRemap(9, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(8, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(20, ValueRemapperNumberToInt.INSTANCE, ProtocolVersion.MINECRAFT_1_8)
 		.addRemap(20, new ValueRemapper<DataWatcherObjectVarInt>() {
@@ -463,6 +532,7 @@ public enum SpecificRemapper {
 	ARROW(EType.OBJECT, 60, SpecificRemapper.ENTITY,
 		//is critical
 		new Mapping(6)
+		.addRemap(6, ValueRemapperNoOp.BYTE, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(5, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(15, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
@@ -470,22 +540,26 @@ public enum SpecificRemapper {
 	TIPPED_ARROW(EType.OBJECT, 92, SpecificRemapper.ARROW,
 		//color
 		new Mapping(7)
+		.addRemap(7, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(6, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 	),
 	FIREWORK(EType.OBJECT, 76, SpecificRemapper.ENTITY,
 		//info
 		new Mapping(6)
+		.addRemap(6, ValueRemapperNoOp.ITEMSTACK, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(5, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(8, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	ITEM_FRAME(EType.OBJECT, 71, SpecificRemapper.ENTITY,
 		//item
 		new Mapping(6)
+		.addRemap(6, ValueRemapperNoOp.ITEMSTACK, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(5, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(8, ValueRemapperNoOp.ITEMSTACK, ProtocolVersion.MINECRAFT_1_8)
 		.addRemap(2, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.BEFORE_1_8),
 		//rotation
 		new Mapping(7)
+		.addRemap(7, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(6, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(9, ValueRemapperNumberToByte.INSTANCE, ProtocolVersion.MINECRAFT_1_8)
 		.addRemap(3, new ValueRemapper<DataWatcherObjectVarInt>() {
@@ -500,21 +574,27 @@ public enum SpecificRemapper {
 	AREA_EFFECT_CLOUD(EType.OBJECT, 3, SpecificRemapper.ENTITY,
 		//radius
 		new Mapping(6)
+		.addRemap(6, ValueRemapperNoOp.FLOAT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(5, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.ALL_1_9),
 		//color
 		new Mapping(7)
+		.addRemap(7, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(6, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9),
 		//single point
 		new Mapping(8)
+		.addRemap(8, ValueRemapperNoOp.BOOLEAN, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(7, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9),
 		//particle id
 		new Mapping(9)
+		.addRemap(9, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(8, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9),
 		//particle param 1
 		new Mapping(10)
+		.addRemap(10, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(9, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9),
 		//particle param 2
 		new Mapping(11)
+		.addRemap(11, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(10, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 	),
 	SHULKER_BULLET(EType.OBJECT, 67, SpecificRemapper.ENTITY),
