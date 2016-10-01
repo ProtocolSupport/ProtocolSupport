@@ -2,11 +2,12 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__
 
 import java.io.IOException;
 
+import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middleimpl.PacketData;
-import protocolsupport.protocol.serializer.RecyclableProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -16,17 +17,13 @@ public class CustomPayload extends MiddleCustomPayload<RecyclableCollection<Pack
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID, version);
 		serializer.writeString(tag);
+		ProtocolSupportPacketDataSerializer newdata = new ProtocolSupportPacketDataSerializer(Unpooled.buffer(), version);
 		if (tag.equals("MC|TrList")) {
-			RecyclableProtocolSupportPacketDataSerializer tempdata = RecyclableProtocolSupportPacketDataSerializer.create(version);
-			try {
-				tempdata.writeMerchantData(data.readMerchantData());
-				serializer.writeByteArray(tempdata);
-			} finally {
-				tempdata.release();
-			}
+			newdata.writeMerchantData(data.readMerchantData());
 		} else {
-			serializer.writeByteArray(data);
+			newdata.writeBytes(data);
 		}
+		serializer.writeByteArray(newdata);
 		return RecyclableSingletonList.create(serializer);
 	}
 

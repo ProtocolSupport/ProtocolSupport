@@ -19,7 +19,7 @@ import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.LegacyServerPingResponseEvent;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
-import protocolsupport.protocol.serializer.RecyclableProtocolSupportPacketDataSerializer;
+import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.ChannelUtils;
 
 @SuppressWarnings("deprecation")
@@ -28,7 +28,7 @@ public class LegacyLoginAndPingHandler extends SimpleChannelInboundHandler<ByteB
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf input) throws Exception {
-		RecyclableProtocolSupportPacketDataSerializer serializer = RecyclableProtocolSupportPacketDataSerializer.create(ProtocolVersion.MINECRAFT_LEGACY);
+		ProtocolSupportPacketDataSerializer serializer = new ProtocolSupportPacketDataSerializer(Allocator.allocateBuffer(), ProtocolVersion.MINECRAFT_LEGACY);
 		try {
 			int packetId = input.readUnsignedByte();
 			if (packetId == 0xFE) {
