@@ -2,7 +2,9 @@ package protocolsupport;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.spigotmc.SpigotConfig;
 
+import net.minecraft.server.v1_10_R1.NetworkManager;
 import protocolsupport.commands.CommandHandler;
 import protocolsupport.commands.ReloadCommandRemover;
 import protocolsupport.injector.ServerInjector;
@@ -26,6 +28,14 @@ public class ProtocolSupport extends JavaPlugin {
 
 	@Override
 	public void onLoad() {
+		try {
+			NetworkManager.a.getName();
+			SpigotConfig.config.contains("test");
+		} catch (NoClassDefFoundError e) {
+			getLogger().severe("Unsupported server version, shutting down");
+			Bukkit.shutdown();
+			return;
+		}
 		try {
 			Allocator.init();
 			Compressor.init();
