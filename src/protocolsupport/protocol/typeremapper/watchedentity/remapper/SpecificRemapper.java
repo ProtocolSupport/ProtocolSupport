@@ -44,7 +44,10 @@ public enum SpecificRemapper {
 		.addRemap(3, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE_1_9_1_1_10),
 		//silent
 		new Mapping(4)
-		.addRemap(4, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE_1_9_1_1_10)
+		.addRemap(4, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE_1_9_1_1_10),
+		//no gravity
+		new Mapping(5)
+		.addRemap(5, ValueRemapperNoOp.BOOLEAN, ProtocolVersion.MINECRAFT_1_10)
 	),
 	LIVING(EType.NONE, -1, SpecificRemapper.ENTITY,
 		//nametag
