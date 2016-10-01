@@ -469,8 +469,9 @@ public enum SpecificRemapper {
 	FALLING_OBJECT(EType.OBJECT, 70, SpecificRemapper.ENTITY),
 	ENDEREYE(EType.OBJECT, 72, SpecificRemapper.ENTITY),
 	POTION(EType.OBJECT, 73, SpecificRemapper.ENTITY,
-		//potion item
-		new Mapping(7)
+		//potion item (remap to 2 ids for 1.10.*, because 1.10.2 uses id 6, and 1.10 uses id 7)
+		new Mapping(6)
+		.addRemap(6, ValueRemapperNoOp.ITEMSTACK, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(7, ValueRemapperNoOp.ITEMSTACK, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(6, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.ALL_1_9)
 	),
