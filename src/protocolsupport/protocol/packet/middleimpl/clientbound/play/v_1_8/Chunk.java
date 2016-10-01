@@ -10,7 +10,7 @@ import protocolsupport.protocol.legacyremapper.chunk.EmptyChunk;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.PacketData;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1__1_9_r2.BlockTileUpdate;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1__1_9_r2__1_10.BlockTileUpdate;
 import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
