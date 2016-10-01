@@ -21,7 +21,7 @@ public class PipeLineBuilder implements IPipeLineBuilder {
 		ChannelHandlers.getSplitter(pipeline).setRealSplitter(new VarIntFrameDecoder());
 		ChannelHandlers.getPrepender(pipeline).setRealPrepender(new VarIntFrameEncoder());
 		SharedStorage sharedstorage = new SharedStorage();
-		ChannelHandlers.getDecoder(pipeline).setRealDecoder(new PacketDecoder());
+		ChannelHandlers.getDecoder(pipeline).setRealDecoder(new PacketDecoder(sharedstorage));
 		ChannelHandlers.getEncoder(pipeline).setRealEncoder(new PacketEncoder(sharedstorage));
 	}
 
