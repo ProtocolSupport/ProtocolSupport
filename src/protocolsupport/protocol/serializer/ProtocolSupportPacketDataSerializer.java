@@ -44,8 +44,10 @@ import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
 import protocolsupport.protocol.typeskipper.id.SkippingTable;
 import protocolsupport.protocol.utils.types.ItemStackWrapper;
+import protocolsupport.protocol.utils.types.MerchantData;
 import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
 import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.utils.types.MerchantData.TradeOffer;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.netty.WrappingBuffer;
@@ -192,6 +194,15 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 		return array;
 	}
 
+	public void writeByteArray(ByteBuf data) {
+		if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10)) {
+			writeShort(data.readableBytes());
+		} else {
+			writeVarInt(data.readableBytes());
+		}
+		writeBytes(data);
+	}
+
 	public void writeByteArray(byte[] data) {
 		if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10)) {
 			writeShort(data.length);
@@ -269,6 +280,46 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 			throw new EncoderException(ioexception);
 		} finally {
 			buffer.release();
+		}
+	}
+
+	public MerchantData readMerchantData() throws IOException {
+		MerchantData merchdata = new MerchantData(readInt());
+		int count = readUnsignedByte();
+		for (int i = 0; i < count; i++) {
+			ItemStackWrapper itemstack1 = readItemStack();
+			ItemStackWrapper result = readItemStack();
+			ItemStackWrapper itemstack2 = new ItemStackWrapper();
+			if (readBoolean()) {
+				itemstack2 = readItemStack();
+			}
+			boolean disabled = readBoolean();
+			int uses = 0;
+			int maxuses = 7;
+			if (getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_1_8)) {
+				uses = readInt();
+				maxuses = readInt();
+			}
+			merchdata.addOffer(new TradeOffer(itemstack1, itemstack2, result, disabled ? maxuses : uses, maxuses));
+		}
+		return merchdata;
+	}
+
+	public void writeMerchantData(MerchantData merchdata) {
+		writeInt(merchdata.getWindowId());
+		writeByte(merchdata.getOffers().size());
+		for (TradeOffer offer : merchdata.getOffers()) {
+			writeItemStack(offer.getItemStack1());
+			writeItemStack(offer.getResult());
+			writeBoolean(offer.hasItemStack2());
+			if (offer.hasItemStack2()) {
+				writeItemStack(offer.getItemStack2());
+			}
+			writeBoolean(offer.isDisabled());
+			if (getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_1_8)) {
+				writeInt(offer.getUses());
+				writeInt(offer.getMaxUses());
+			}
 		}
 	}
 

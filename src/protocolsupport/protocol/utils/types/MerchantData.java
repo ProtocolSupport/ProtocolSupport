@@ -1,10 +1,8 @@
-package protocolsupport.protocol.typeremapper.nbt.custompayload;
+package protocolsupport.protocol.utils.types;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import protocolsupport.protocol.utils.types.ItemStackWrapper;
 
 public class MerchantData {
 

@@ -18,8 +18,7 @@ public class CustomPayload extends MiddleCustomPayload {
 		RecyclableProtocolSupportPacketDataSerializer newdata = RecyclableProtocolSupportPacketDataSerializer.create(ProtocolVersion.getLatest());
 		try {
 			if (tag.equals("MC|ItemName")) {
-				newdata.writeVarInt(olddata.readableBytes());
-				newdata.writeBytes(olddata);
+				newdata.writeByteArray(olddata);
 			} else if (tag.equals("MC|BSign") || tag.equals("MC|BEdit")) {
 				newdata.writeItemStack(olddata.readItemStack());
 			} else if (tag.equals("MC|AdvCdm")) {
