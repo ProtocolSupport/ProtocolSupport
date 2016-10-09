@@ -18,7 +18,7 @@ public class CustomPayload extends MiddleCustomPayload<RecyclableCollection<Pack
 		if (tag.equals("MC|TrList")) {
 			serializer.writeMerchantData(data.readMerchantData());
 		} else {
-			serializer.writeByteArray(data);
+			serializer.writeBytes(data);
 		}
 		return RecyclableSingletonList.create(serializer);
 	}
