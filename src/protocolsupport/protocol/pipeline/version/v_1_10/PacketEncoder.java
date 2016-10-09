@@ -232,6 +232,7 @@ public class PacketEncoder implements IPacketEncoder {
 				ByteBuf senddata = Allocator.allocateBuffer();
 				ChannelUtils.writeVarInt(senddata, packetdata.getPacketId());
 				senddata.writeBytes(packetdata);
+				output.writeBytes(senddata);
 				ctx.write(senddata);
 			}
 			ctx.flush();
