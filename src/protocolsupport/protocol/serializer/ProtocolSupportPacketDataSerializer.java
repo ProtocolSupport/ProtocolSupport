@@ -362,7 +362,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 				String potion = nbttagcompound.getString("Potion");
 				if (!potion.isEmpty()) {
 					NBTTagList tagList = nbttagcompound.getList("CustomPotionEffects", 10);
-					if(!tagList.isEmpty()){
+					if (!tagList.isEmpty()) {
 						NBTTagCompound nbtTag = tagList.get(0);
 						Integer potionId = nbtTag.getInt("Id");
 						PotionEffectType effectType =  PotionEffectType.getById(potionId);
