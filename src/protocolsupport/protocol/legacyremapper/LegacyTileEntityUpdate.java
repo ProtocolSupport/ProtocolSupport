@@ -42,7 +42,7 @@ public class LegacyTileEntityUpdate {
 	}
 
 	public static Position getPosition(NBTTagCompoundWrapper tag) {
-		return new Position(tag.getNumberAsInt("x"), tag.getNumberAsInt("y"), tag.getNumberAsInt("z"));
+		return new Position(tag.getNumber("x"), tag.getNumber("y"), tag.getNumber("z"));
 	}
 
 	public static String[] getSignLines(NBTTagCompoundWrapper tag) {

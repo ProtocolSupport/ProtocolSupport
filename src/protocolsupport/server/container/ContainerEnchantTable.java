@@ -127,10 +127,10 @@ public class ContainerEnchantTable extends net.minecraft.server.v1_10_R1.Contain
 		if ((costs[slot] > 0) && (itemstack != null) && (((entityhuman.expLevel >= cost) && (entityhuman.expLevel >= costs[slot])) || entityhuman.abilities.canInstantlyBuild)) {
 			List<WeightedRandomEnchant> enchantments = getEnchantments(itemstack, slot, costs[slot]);
 			if (enchantments == null) {
-				enchantments = new ArrayList<WeightedRandomEnchant>();
+				enchantments = new ArrayList<>();
 			}
 			final boolean isBook = itemstack.getItem() == Items.BOOK;
-			final Map<org.bukkit.enchantments.Enchantment, Integer> enchants = new HashMap<org.bukkit.enchantments.Enchantment, Integer>();
+			final Map<org.bukkit.enchantments.Enchantment, Integer> enchants = new HashMap<>();
 			for (final WeightedRandomEnchant enchantment : enchantments) {
 				enchants.put(org.bukkit.enchantments.Enchantment.getById(Enchantment.getId(enchantment.enchantment)), enchantment.level);
 			}

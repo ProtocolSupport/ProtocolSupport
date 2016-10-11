@@ -1,6 +1,7 @@
 package protocolsupport.protocol.pipeline;
 
 import io.netty.channel.ChannelPipeline;
+import protocolsupport.protocol.pipeline.timeout.SimpleReadTimeoutHandler;
 import protocolsupport.protocol.pipeline.wrapped.WrappedDecoder;
 import protocolsupport.protocol.pipeline.wrapped.WrappedEncoder;
 import protocolsupport.protocol.pipeline.wrapped.WrappedPrepender;
@@ -9,6 +10,7 @@ import protocolsupport.protocol.pipeline.wrapped.WrappedSplitter;
 public class ChannelHandlers {
 
 	public static final String INITIAL_DECODER = "initial_decoder";
+	public static final String READ_TIMEOUT = "timeout";
 	public static final String LEGACY_KICK = "legacy_kick";
 	public static final String TIMEOUT = "timeout";
 	public static final String SPLITTER = "splitter";
@@ -32,6 +34,10 @@ public class ChannelHandlers {
 
 	public static WrappedPrepender getPrepender(ChannelPipeline pipeline) {
 		return (WrappedPrepender) pipeline.get(PREPENDER);
+	}
+
+	public static SimpleReadTimeoutHandler getTimeoutHandler(ChannelPipeline pipeline) {
+		return (SimpleReadTimeoutHandler) pipeline.get(READ_TIMEOUT);
 	}
 
 }

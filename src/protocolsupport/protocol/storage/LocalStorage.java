@@ -107,8 +107,8 @@ public class LocalStorage {
 	}
 
 	public static class PropertiesStorage {
-		private final HashMap<String, Property> signed = new HashMap<String, Property>();
-		private final HashMap<String, Property> unsigned = new HashMap<String, Property>();
+		private final HashMap<String, Property> signed = new HashMap<>();
+		private final HashMap<String, Property> unsigned = new HashMap<>();
 
 		public void add(Property property) {
 			if (property.hasSignature()) {
@@ -120,7 +120,7 @@ public class LocalStorage {
 
 		public List<Property> getAll(boolean signedOnly) {
 			if (signedOnly) {
-				return new ArrayList<Property>(signed.values());
+				return new ArrayList<>(signed.values());
 			} else {
 				ArrayList<Property> properties = new ArrayList<>();
 				properties.addAll(signed.values());

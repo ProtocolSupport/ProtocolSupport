@@ -1,11 +1,9 @@
 package protocolsupport.protocol.typeremapper.id;
 
-import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 
 import net.minecraft.server.v1_10_R1.Block;
-import net.minecraft.server.v1_10_R1.MinecraftServer;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
@@ -15,6 +13,7 @@ import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemap
 import protocolsupport.protocol.typeremapper.id.RemappingTable.HashMapBasedIdRemappingTable;
 import protocolsupport.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.ReflectionUtils;
+import protocolsupport.utils.Utils;
 
 public class IdRemapper {
 
@@ -121,19 +120,21 @@ public class IdRemapper {
 				@Override
 				public void setRemap(int from, int to) {
 					super.setRemap(from, to);
-					int blockIdFrom = from >> 4;
-					int blockIdTo = to >> 4;
-					Block blockFrom = Block.getById(blockIdFrom);
-					Block blockTo = Block.getById(blockIdTo);
-					try {
-						float strengthFrom = ReflectionUtils.getField(Block.class, "strength").getFloat(blockFrom);
-						float strengthTo = ReflectionUtils.getField(Block.class, "strength").getFloat(blockTo);
-						if (strengthTo < strengthFrom) {
-							ProtocolSupport.logWarning("Block remapper warning: strength of block " + Material.getMaterial(blockIdTo) + " is less than strength of block with id " +  Material.getMaterial(blockIdFrom));
-						}
-					} catch (IllegalArgumentException | IllegalAccessException e) {
-						if (MinecraftServer.getServer().isDebugging()) {
-							e.printStackTrace();
+					if (Utils.getServer().isDebugging()) {
+						int blockIdFrom = from >> 4;
+						int blockIdTo = to >> 4;
+						Block blockFrom = Block.getById(blockIdFrom);
+						Block blockTo = Block.getById(blockIdTo);
+						try {
+							float strengthFrom = ReflectionUtils.getField(Block.class, "strength").getFloat(blockFrom);
+							float strengthTo = ReflectionUtils.getField(Block.class, "strength").getFloat(blockTo);
+							if (strengthTo < strengthFrom) {
+								ProtocolSupport.logWarning("Block remapper warning: strength of block " + Material.getMaterial(blockIdTo) + " is less than strength of block with id " +  Material.getMaterial(blockIdFrom));
+							}
+						} catch (IllegalArgumentException | IllegalAccessException e) {
+							if (Utils.getServer().isDebugging()) {
+								e.printStackTrace();
+							}
 						}
 					}
 				}
@@ -294,18 +295,19 @@ public class IdRemapper {
 	};
 
 	public static final IdRemappingRegistry<HashMapBasedIdRemappingTable> EFFECT = new IdRemappingRegistry<HashMapBasedIdRemappingTable>() {
-		{
-			registerRemapEntry(Effect.DRAGON_BREATH, Effect.COLOURED_DUST, ProtocolVersionsHelper.BEFORE_1_9);
-		}
-		@SuppressWarnings("deprecation")
-		public void registerRemapEntry(Effect from, Effect to, ProtocolVersion... versions) {
-			registerRemapEntry(from.getId(), to.getId(), versions);
-		}
 		@Override
 		protected HashMapBasedIdRemappingTable createTable() {
 			return new HashMapBasedIdRemappingTable();
 		}
 	};
+
+	public static int fixDimensionId(int dimensionId) {
+		if ((dimensionId > 1) || (dimensionId < -1)) {
+			return 0;
+		}
+		return dimensionId;
+	}
+
 
 	public static void init() {
 	}

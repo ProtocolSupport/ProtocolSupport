@@ -17,7 +17,7 @@ public class ScoreboardTeam extends MiddleScoreboardTeam<RecyclableCollection<Pa
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_SCOREBOARD_TEAM_ID, version);
 		serializer.writeString(name);
 		serializer.writeByte(mode);
-		if (mode == 0 || mode == 2) {
+		if ((mode == 0) || (mode == 2)) {
 			serializer.writeString(displayName);
 			serializer.writeString(prefix);
 			serializer.writeString(suffix);
@@ -25,10 +25,10 @@ public class ScoreboardTeam extends MiddleScoreboardTeam<RecyclableCollection<Pa
 			serializer.writeString(nameTagVisibility);
 			serializer.writeByte(color);
 		}
-		if (mode == 0 || mode == 3 || mode == 4) {
+		if ((mode == 0) || (mode == 3) || (mode == 4)) {
 			serializer.writeVarInt(players.length);
 			for (String player : players) {
-				serializer.writeString(Utils.clampString(player, 16));
+				serializer.writeString(version.isBefore(ProtocolVersion.MINECRAFT_1_9) ? Utils.clampString(player, 16) : player);
 			}
 		}
 		return RecyclableSingletonList.<PacketData>create(serializer);

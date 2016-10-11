@@ -18,7 +18,7 @@ public abstract class MiddleWorldParticle<T> extends ClientBoundMiddlePacket<T> 
 	protected float offZ;
 	protected float speed;
 	protected int count;
-	protected ArrayList<Integer> adddata = new ArrayList<Integer>();
+	protected ArrayList<Integer> adddata = new ArrayList<>();
 
 	@Override
 	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) throws IOException {

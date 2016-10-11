@@ -20,7 +20,7 @@ public abstract class MiddleScoreboardTeam<T> extends ClientBoundMiddlePacket<T>
 	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		name = serializer.readString(16);
 		mode = serializer.readUnsignedByte();
-		if (mode == 0 || mode == 2) {
+		if ((mode == 0) || (mode == 2)) {
 			displayName = serializer.readString(32);
 			prefix = serializer.readString(16);
 			suffix = serializer.readString(16);
@@ -29,7 +29,7 @@ public abstract class MiddleScoreboardTeam<T> extends ClientBoundMiddlePacket<T>
 			collisionRule = serializer.readString(32);
 			color = serializer.readUnsignedByte();
 		}
-		if (mode == 0 || mode == 3 || mode == 4) {
+		if ((mode == 0) || (mode == 3) || (mode == 4)) {
 			players = new String[serializer.readVarInt()];
 			for (int i = 0; i < players.length; i++) {
 				players[i] = serializer.readString(40);

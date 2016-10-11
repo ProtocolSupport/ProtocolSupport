@@ -28,14 +28,16 @@ public class SkippingTable {
 
 		protected final TIntByteHashMap table = new TIntByteHashMap(16, 0.75F);
 
+		@Override
 		public void setSkip(int id) {
 			table.put(id, (byte) 1);
 		}
 
+		@Override
 		public boolean shouldSkip(int id) {
 			return table.containsKey(id);
 		}
-		
+
 	}
 
 }

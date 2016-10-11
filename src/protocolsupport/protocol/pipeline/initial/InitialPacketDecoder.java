@@ -10,9 +10,6 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.concurrent.Future;
-
-import net.minecraft.server.v1_10_R1.MinecraftServer;
-
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
@@ -34,29 +31,29 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		ProtocolSupport.logInfo("Assume legacy ping dealy: "+pingLegacyDelay);
 	}
 
-	private static final EnumMap<ProtocolVersion, IPipeLineBuilder> pipelineBuilders = new EnumMap<ProtocolVersion, IPipeLineBuilder>(ProtocolVersion.class);
+	private static final EnumMap<ProtocolVersion, IPipeLineBuilder> pipelineBuilders = new EnumMap<>(ProtocolVersion.class);
 	static {
-		IPipeLineBuilder builder = new protocolsupport.protocol.packet.v_1_10.PipeLineBuilder();
+		IPipeLineBuilder builder = new protocolsupport.protocol.pipeline.version.v_1_10.PipeLineBuilder();
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_FUTURE, builder);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_10, builder);
-		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_9_4, new protocolsupport.protocol.packet.v_1_9.r2.PipeLineBuilder());
-		IPipeLineBuilder builder19r1 = new protocolsupport.protocol.packet.v_1_9.r1.PipeLineBuilder();
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_9_4, new protocolsupport.protocol.pipeline.version.v_1_9.r2.PipeLineBuilder());
+		IPipeLineBuilder builder19r1 = new protocolsupport.protocol.pipeline.version.v_1_9.r1.PipeLineBuilder();
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_9_2, builder19r1);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_9_1, builder19r1);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_9, builder19r1);
-		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_8, new protocolsupport.protocol.packet.v_1_8.PipeLineBuilder());
-		IPipeLineBuilder builder17 = new protocolsupport.protocol.packet.v_1_7.PipeLineBuilder();
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_8, new protocolsupport.protocol.pipeline.version.v_1_8.PipeLineBuilder());
+		IPipeLineBuilder builder17 = new protocolsupport.protocol.pipeline.version.v_1_7.PipeLineBuilder();
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_7_10, builder17);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_7_5, builder17);
-		IPipeLineBuilder builder16 = new protocolsupport.protocol.packet.v_1_6.PipeLineBuilder();
+		IPipeLineBuilder builder16 = new protocolsupport.protocol.pipeline.version.v_1_6.PipeLineBuilder();
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_6_4, builder16);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_6_2, builder16);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_6_1, builder16);
-		IPipeLineBuilder builder15 = new protocolsupport.protocol.packet.v_1_5.PipeLineBuilder();
+		IPipeLineBuilder builder15 = new protocolsupport.protocol.pipeline.version.v_1_5.PipeLineBuilder();
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_5_2, builder15);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_5_1, builder15);
-		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_4_7, new protocolsupport.protocol.packet.v_1_4.PipeLineBuilder());
-		pipelineBuilders.put(ProtocolVersion.MINECRAFT_LEGACY, new protocolsupport.protocol.packet.v_legacy.PipeLineBuilder());
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_4_7, new protocolsupport.protocol.pipeline.version.v_1_4.PipeLineBuilder());
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_LEGACY, new protocolsupport.protocol.pipeline.version.v_legacy.PipeLineBuilder());
 	}
 
 	protected final ByteBuf receivedData = Unpooled.buffer();
@@ -148,9 +145,8 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	protected void setProtocol(final Channel channel, ProtocolVersion version) throws Exception {
-		if (MinecraftServer.getServer().isDebugging()) {
+		if (Utils.getServer().isDebugging()) {
 			System.err.println(ChannelUtils.getNetworkManagerSocketAddress(channel)+ " connected with protocol version "+version);
 		}
 		ProtocolStorage.setProtocolVersion(ChannelUtils.getNetworkManagerSocketAddress(channel), version);

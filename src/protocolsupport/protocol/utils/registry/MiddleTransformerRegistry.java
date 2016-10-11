@@ -1,5 +1,7 @@
 package protocolsupport.protocol.utils.registry;
 
+import java.util.NoSuchElementException;
+
 import net.minecraft.server.v1_10_R1.EnumProtocol;
 
 @SuppressWarnings("unchecked")
@@ -11,7 +13,7 @@ public class MiddleTransformerRegistry<T> {
 	private InitCallBack<T> callback;
 
 	public void register(EnumProtocol protocol, int packetId, Class<? extends T> packetTransformer) {
-		registry[toKey(protocol, packetId)] = new LazyNewInstance<T>(packetTransformer);
+		registry[toKey(protocol, packetId)] = new LazyNewInstance<>(packetTransformer);
 	}
 
 	public void setCallBack(InitCallBack<T> callback) {
@@ -21,10 +23,10 @@ public class MiddleTransformerRegistry<T> {
 	public T getTransformer(EnumProtocol protocol, int packetId) throws InstantiationException, IllegalAccessException {
 		LazyNewInstance<T> transformer = registry[toKey(protocol, packetId)];
 		if (transformer == null) {
-			return null;
+			throw new NoSuchElementException("No transformer found for state " + protocol + " and packet id " + packetId);
 		}
 		T object = transformer.getInstance();
-		if (callback != null && object != null) {
+		if (callback != null) {
 			callback.onInit(object);
 		}
 		return object;

@@ -10,7 +10,7 @@ import protocolsupport.protocol.legacyremapper.chunk.EmptyChunk;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.PacketData;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1.BlockTileUpdate;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1__1_9_r2__1_10.BlockTileUpdate;
 import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -27,7 +27,7 @@ public class Chunk extends MiddleChunk<RecyclableCollection<PacketData>>  {
 		chunkdata.writeInt(chunkZ);
 		chunkdata.writeBoolean(full);
 		boolean hasSkyLight = storage.hasSkyLightInCurrentDimension();
-		if (bitmask == 0 && full) {
+		if ((bitmask == 0) && full) {
 			chunkdata.writeShort(1);
 			chunkdata.writeByteArray(EmptyChunk.get18ChunkData(hasSkyLight));
 		} else {

@@ -7,8 +7,8 @@ import java.util.List;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import net.minecraft.server.v1_10_R1.MinecraftServer;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.utils.Utils;
 
 public class ServerPingResponseEvent extends Event {
 
@@ -21,6 +21,7 @@ public class ServerPingResponseEvent extends Event {
 	private List<String> players;
 
 	public ServerPingResponseEvent(InetSocketAddress address, ProtocolInfo info, String icon, String motd, int maxPlayers, List<String> players) {
+		super(true);
 		this.address = address;
 		setProtocolInfo(info);
 		setIcon(icon);
@@ -66,11 +67,11 @@ public class ServerPingResponseEvent extends Event {
 	}
 
 	public List<String> getPlayers() {
-		return new ArrayList<String>(players);
+		return new ArrayList<>(players);
 	}
 
 	public void setPlayers(List<String> players) {
-		this.players = players != null ? new ArrayList<String>(players) : new ArrayList<String>();
+		this.players = players != null ? new ArrayList<>(players) : new ArrayList<String>();
 	}
 
 	public static class ProtocolInfo {
@@ -106,14 +107,12 @@ public class ServerPingResponseEvent extends Event {
 		return list;
 	}
 
-	@SuppressWarnings("deprecation")
 	public static String getServerModName() {
-		return MinecraftServer.getServer().getServerModName();
+		return Utils.getServer().getServerModName();
 	}
 
-	@SuppressWarnings("deprecation")
 	public static String getServerVersionName() {
-		return MinecraftServer.getServer().getVersion();
+		return Utils.getServer().getVersion();
 	}
 
 }

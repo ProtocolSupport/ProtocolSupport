@@ -3,8 +3,23 @@ package protocolsupport.utils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+
+import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_10_R1.CraftServer;
+
+import net.minecraft.server.v1_10_R1.MinecraftServer;
 
 public class Utils {
+
+	public static <K, V> V getOrCreateDefault(Map<K, V> map, K key, V defaultValue) {
+		if (map.containsKey(key)) {
+			return map.get(key);
+		} else {
+			map.put(key, defaultValue);
+			return defaultValue;
+		}
+	}
 
 	public static String exceptionMessage(Object... strings) {
 		StringBuilder msg = new StringBuilder();
@@ -22,7 +37,7 @@ public class Utils {
 	}
 
 	public static List<int[]> splitArray(int[] array, int limit) {
-		List<int[]> list = new ArrayList<int[]>();
+		List<int[]> list = new ArrayList<>();
 		if (array.length <= limit) {
 			list.add(array);
 			return list;
@@ -84,7 +99,11 @@ public class Utils {
 	}
 
 	public static boolean isTrue(Boolean b) {
-		return b != null && b;
+		return (b != null) && b;
+	}
+
+	public static MinecraftServer getServer() {
+		return ((CraftServer) Bukkit.getServer()).getServer();
 	}
 
 }

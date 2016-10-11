@@ -7,7 +7,7 @@ import protocolsupport.api.ProtocolVersion;
 
 public class ProtocolStorage {
 
-	private static final ConcurrentHashMap<SocketAddress, ProtocolVersion> versions = new ConcurrentHashMap<SocketAddress, ProtocolVersion>(1000);
+	private static final ConcurrentHashMap<SocketAddress, ProtocolVersion> versions = new ConcurrentHashMap<>(1000);
 
 	public static final void setProtocolVersion(SocketAddress address, ProtocolVersion version) {
 		versions.put(address, version);

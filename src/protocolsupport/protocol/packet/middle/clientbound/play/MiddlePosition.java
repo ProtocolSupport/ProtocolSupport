@@ -33,21 +33,23 @@ public abstract class MiddlePosition<T> extends ClientBoundMiddlePacket<T> {
 		yawOrig = yaw = serializer.readFloat();
 		pitchOrig = pitch = serializer.readFloat();
 		flags = serializer.readByte();
-		Location location = player.getLocation();
-		if ((flags & 0x01) != 0) {
-			x += location.getX();
-		}
-		if ((flags & 0x02) != 0) {
-			y += location.getY();
-		}
-		if ((flags & 0x04) != 0) {
-			z += location.getX();
-		}
-		if ((flags & 0x08) != 0) {
-			yaw += location.getYaw();
-		}
-		if ((flags & 0x10) != 0) {
-			pitch += location.getPitch();
+		if (flags != 0) {
+			Location location = player.getLocation();
+			if ((flags & 0x01) != 0) {
+				x += location.getX();
+			}
+			if ((flags & 0x02) != 0) {
+				y += location.getY();
+			}
+			if ((flags & 0x04) != 0) {
+				z += location.getX();
+			}
+			if ((flags & 0x08) != 0) {
+				yaw += location.getYaw();
+			}
+			if ((flags & 0x10) != 0) {
+				pitch += location.getPitch();
+			}
 		}
 		teleportConfirmId = serializer.readVarInt();
 	}

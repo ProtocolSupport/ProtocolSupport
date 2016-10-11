@@ -17,7 +17,7 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes<RecyclableCol
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_ENTITY_ATTRIBUTES_ID, version);
 		SkippingTable table = StringSkipper.ATTRIBUTES.getTable(version);
-		ArrayList<Attribute> sendattrs = new ArrayList<Attribute>();
+		ArrayList<Attribute> sendattrs = new ArrayList<>();
 		for (Attribute attribute : attributes) {
 			if (!table.shouldSkip(attribute.key)) {
 				sendattrs.add(attribute);

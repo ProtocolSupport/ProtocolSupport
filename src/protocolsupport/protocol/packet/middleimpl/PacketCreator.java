@@ -10,6 +10,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.utils.netty.Allocator;
+import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class PacketCreator extends ProtocolSupportPacketDataSerializer {
 
@@ -66,5 +67,11 @@ public class PacketCreator extends ProtocolSupportPacketDataSerializer {
 			to.add(creator.create());
 		}
 	}
+
+	public static void addAllToR(RecyclableCollection<PacketCreator> creators, Collection<Object> to) throws Exception {
+		addAllTo(creators, to);
+		creators.recycle();
+	}
+
 
 }

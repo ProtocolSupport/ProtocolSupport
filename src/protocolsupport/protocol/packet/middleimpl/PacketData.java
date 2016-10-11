@@ -1,12 +1,15 @@
 package protocolsupport.protocol.packet.middleimpl;
 
+import java.io.IOException;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.util.Recycler;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.utils.netty.Allocator;
+import protocolsupport.utils.recyclable.Recyclable;
 
-public class PacketData extends ProtocolSupportPacketDataSerializer {
+public class PacketData extends ProtocolSupportPacketDataSerializer implements Recyclable {
 
 	private static final Recycler<PacketData> RECYCLER = new Recycler<PacketData>() {
 		@Override
@@ -28,6 +31,7 @@ public class PacketData extends ProtocolSupportPacketDataSerializer {
 		this.handle = handle;
 	}
 
+	@Override
 	public void recycle() {
 		packetId = 0;
 		clear();
@@ -47,6 +51,11 @@ public class PacketData extends ProtocolSupportPacketDataSerializer {
 	@Override
 	protected void finalize() {
 		release();
+	}
+
+	@Override
+	public void close() throws IOException {
+		recycle();
 	}
 
 }

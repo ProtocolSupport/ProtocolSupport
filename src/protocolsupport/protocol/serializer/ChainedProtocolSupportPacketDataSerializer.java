@@ -16,4 +16,9 @@ public class ChainedProtocolSupportPacketDataSerializer extends ProtocolSupportP
 		return nativeserializer;
 	}
 
+	public PacketDataSerializer prepareNativeSerializer() {
+		clear();
+		return nativeserializer;
+	}
+
 }

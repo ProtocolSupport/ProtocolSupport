@@ -33,6 +33,7 @@ public class SpawnPainting extends MiddleSpawnPainting<RecyclableCollection<Pack
 		serializer.writeInt(entityId);
 		serializer.writeString(type);
 		serializer.writeLegacyPositionI(position);
+		serializer.writeInt(direction);
 		return RecyclableSingletonList.create(serializer);
 	}
 

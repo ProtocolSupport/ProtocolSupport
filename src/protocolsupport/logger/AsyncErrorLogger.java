@@ -34,6 +34,8 @@ public class AsyncErrorLogger {
 		}
 	});
 
+	private final Object lock = new Object();
+
 	public void start() {
 	}
 
@@ -43,9 +45,9 @@ public class AsyncErrorLogger {
 			executor.awaitTermination(10, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
 		}
-		synchronized (writer) {
+		synchronized (lock) {
 			if (writer != null) {
-				writer.close();	
+				writer.close();
 			}
 		}
 	}
@@ -77,7 +79,7 @@ public class AsyncErrorLogger {
 			executor.submit(new Runnable() {
 				@Override
 				public void run() {
-					synchronized (writer) {
+					synchronized (lock) {
 						writer.println("Error occured at " + new SimpleDateFormat("yyyy-MM-dd-HH-mm", Locale.ROOT).format(new Date()));
 						writer.println("Additional info: " + StringUtils.join(info, ", "));
 						writer.println("Exception class: " + t.getClass().getName());

@@ -26,6 +26,7 @@ import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.events.PlayerDisconnectEvent;
 import protocolsupport.logger.AsyncErrorLogger;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
+import protocolsupport.protocol.packet.handler.LoginListenerPlay;
 import protocolsupport.protocol.pipeline.IPacketDecoder;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.utils.netty.ChannelUtils;
@@ -51,14 +52,14 @@ public class WrappedDecoder extends ByteToMessageDecoder {
 	static {
 		ignoreExceptions.put(ClosedChannelException.class, Collections.emptySet());
 		ignoreExceptions.put(ReadTimeoutException.class, Collections.emptySet());
-		ignoreExceptions.put(IOException.class, new HashSet<String>(Arrays.asList("Connection reset by peer", "Broken pipe")));
+		ignoreExceptions.put(IOException.class, new HashSet<>(Arrays.asList("Connection reset by peer", "Broken pipe")));
 	}
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable e) throws Exception {
 		super.exceptionCaught(ctx, e);
 		Set<?> ignore = ignoreExceptions.get(e.getClass());
-		if (ignore == null || (!ignore.isEmpty() && !ignore.contains(e.getMessage()))) {
+		if ((ignore == null) || (!ignore.isEmpty() && !ignore.contains(e.getMessage()))) {
 			SocketAddress remoteaddr = ChannelUtils.getNetworkManagerSocketAddress(ctx.channel());
 			AsyncErrorLogger.INSTANCE.log(e, remoteaddr, ProtocolSupportAPI.getProtocolVersion(remoteaddr));
 		}
@@ -76,6 +77,8 @@ public class WrappedDecoder extends ByteToMessageDecoder {
 			if (profile != null) {
 				username = profile.getName();
 			}
+		} else if (listener instanceof LoginListenerPlay) {
+			username = ((LoginListenerPlay) listener).getProfile().getName();
 		} else if (listener instanceof PlayerConnection) {
 			username = ((PlayerConnection) listener).player.getProfile().getName();
 		}

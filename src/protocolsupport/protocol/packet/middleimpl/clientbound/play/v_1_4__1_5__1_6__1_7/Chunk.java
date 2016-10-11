@@ -5,8 +5,8 @@ import java.io.IOException;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.legacyremapper.LegacyTileEntityUpdate;
 import protocolsupport.protocol.legacyremapper.chunk.ChunkTransformer;
-import protocolsupport.protocol.legacyremapper.chunk.EmptyChunk;
 import protocolsupport.protocol.legacyremapper.chunk.ChunkTransformer.BlockFormat;
+import protocolsupport.protocol.legacyremapper.chunk.EmptyChunk;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.PacketData;
@@ -27,7 +27,7 @@ public class Chunk extends MiddleChunk<RecyclableCollection<PacketData>> {
 		chunkdata.writeInt(chunkZ);
 		chunkdata.writeBoolean(full);
 		boolean hasSkyLight = storage.hasSkyLightInCurrentDimension();
-		if (bitmask == 0 && full) {
+		if ((bitmask == 0) && full) {
 			chunkdata.writeShort(1);
 			chunkdata.writeShort(0);
 			byte[] compressed = EmptyChunk.getPre18ChunkData(hasSkyLight);

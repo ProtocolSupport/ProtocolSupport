@@ -14,6 +14,7 @@ public class ClientSettings extends MiddleClientSettings {
 		chatMode = serializer.readByte();
 		chatColors = serializer.readBoolean();
 		skinFlags = serializer.readUnsignedByte();
+		mainHand = 1;
 	}
 
 }

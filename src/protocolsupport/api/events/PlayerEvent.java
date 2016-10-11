@@ -10,6 +10,7 @@ public abstract class PlayerEvent extends Event {
 	private final String username;
 
 	public PlayerEvent(InetSocketAddress address, String username) {
+		super(true);
 		this.address = address;
 		this.username = username;
 	}

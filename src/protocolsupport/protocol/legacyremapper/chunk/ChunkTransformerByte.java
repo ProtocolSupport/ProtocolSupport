@@ -9,7 +9,7 @@ public class ChunkTransformerByte extends ChunkTransformer {
 	@Override
 	protected byte[] toLegacyData0(ProtocolVersion version) {
 		ArrayBasedIdRemappingTable table = IdRemapper.BLOCK.getTable(version);
-		byte[] data = new byte[(hasSkyLight ? 10240 : 8192) * columnsCount + 256];
+		byte[] data = new byte[((hasSkyLight ? 10240 : 8192) * columnsCount) + 256];
 		int blockIdIndex = 0;
 		int blockDataIndex = 4096 * columnsCount;
 		int blockLightIndex = 6144 * columnsCount;

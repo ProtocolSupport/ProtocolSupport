@@ -19,7 +19,7 @@ public class TitleAPI {
 
 	public static void sendSimpleTitle(Player player, String titleJson, String subtitleJson, int fadeIn, int stay, int fadeOut) {
 		Validate.notNull(player, "Player can't be null");
-		if (titleJson == null && subtitleJson == null) {
+		if ((titleJson == null) && (subtitleJson == null)) {
 			throw new IllegalArgumentException("Title and subtitle can't be both null");
 		}
 		PlayerConnection connection = ((CraftPlayer) player).getHandle().playerConnection;

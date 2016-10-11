@@ -22,10 +22,12 @@ public class RemappingTable {
 			}
 		}
 
+		@Override
 		public void setRemap(int from, int to) {
 			table[from] = to;
 		}
 
+		@Override
 		public int getRemap(int id) {
 			return table[id];
 		}
@@ -36,10 +38,12 @@ public class RemappingTable {
 
 		protected final TIntIntHashMap table = new TIntIntHashMap(16, 0.75F, -1, -1);
 
+		@Override
 		public void setRemap(int from, int to) {
 			table.put(from, to);
 		}
 
+		@Override
 		public int getRemap(int id) {
 			int r = table.get(id);
 			return r != -1 ? r : id;

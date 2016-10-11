@@ -11,10 +11,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import net.minecraft.server.v1_10_R1.MinecraftServer;
+import io.netty.util.ResourceLeakDetector;
+import io.netty.util.ResourceLeakDetector.Level;
 import net.minecraft.server.v1_10_R1.PropertyManager;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.utils.Utils;
 
 public class CommandHandler implements CommandExecutor, TabCompleter {
 
@@ -34,15 +36,24 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			}
 			return true;
 		}
-		if (args.length == 1 && args[0].equalsIgnoreCase("debug")) {
-			@SuppressWarnings("deprecation")
-			PropertyManager manager = MinecraftServer.getServer().getPropertyManager();
+		if ((args.length == 1) && args[0].equalsIgnoreCase("debug")) {
+			PropertyManager manager = Utils.getServer().getPropertyManager();
 			if (!manager.getBoolean(DEBUG_PROPERTY, false)) {
 				manager.setProperty(DEBUG_PROPERTY, Boolean.TRUE);
 				sender.sendMessage(ChatColor.GOLD + "Enabled debug");
 			} else {
 				manager.setProperty(DEBUG_PROPERTY, Boolean.FALSE);
 				sender.sendMessage(ChatColor.GOLD + "Disabled debug");
+			}
+			return true;
+		}
+		if ((args.length == 1) && args[0].equalsIgnoreCase("leakdetector")) {
+			if (ResourceLeakDetector.isEnabled()) {
+				ResourceLeakDetector.setLevel(Level.DISABLED);
+				sender.sendMessage(ChatColor.GOLD + "Disabled leak detector");
+			} else {
+				ResourceLeakDetector.setLevel(Level.PARANOID);
+				sender.sendMessage(ChatColor.GOLD + "Enabled leak detector");
 			}
 			return true;
 		}
@@ -65,12 +76,15 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
-		ArrayList<String> completions = new ArrayList<String>();
+		ArrayList<String> completions = new ArrayList<>();
 		if ("list".startsWith(args[0])) {
 			completions.add("list");
 		}
 		if ("debug".startsWith(args[0])) {
 			completions.add("debug");
+		}
+		if ("leakdetector".startsWith(args[0])) {
+			completions.add("leakdetector");
 		}
 		return completions;
 	}

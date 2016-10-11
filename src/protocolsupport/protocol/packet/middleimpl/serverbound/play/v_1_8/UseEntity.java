@@ -12,8 +12,8 @@ public class UseEntity extends MiddleUseEntity {
 	@Override
 	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
 		entityId = serializer.readVarInt();
-		action = serializer.readVarInt();
-		if (action == 2) {
+		action = serializer.readEnum(Action.class);
+		if (action == Action.INTERACT_AT) {
 			interactedAt = new Vector(serializer.readFloat(), serializer.readFloat(), serializer.readFloat());
 		}
 	}

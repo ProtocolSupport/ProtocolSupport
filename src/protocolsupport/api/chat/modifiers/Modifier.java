@@ -12,7 +12,7 @@ public class Modifier {
 	private Boolean obfuscated;
 
 	public boolean isEmpty() {
-		return color == null && bold == null && italic == null && underlined == null && strikethrough == null && obfuscated == null;
+		return (color == null) && (bold == null) && (italic == null) && (underlined == null) && (strikethrough == null) && (obfuscated == null);
 	}
 
 	public void clear() {

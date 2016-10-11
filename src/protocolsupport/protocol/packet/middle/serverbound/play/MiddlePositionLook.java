@@ -32,9 +32,7 @@ public abstract class MiddlePositionLook extends ServerBoundMiddlePacket {
 			if (teleportId == -1) {
 				return RecyclableEmptyList.get();
 			} else {
-				PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_TELEPORT_ACCEPT);
-				creator.writeVarInt(teleportId);
-				return RecyclableSingletonList.create(creator);
+				return MiddleTeleportAccept.create(teleportId);
 			}
 		}
 	}

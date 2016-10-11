@@ -2,6 +2,7 @@ package protocolsupport.protocol.utils.registry;
 
 import java.util.Arrays;
 import java.util.EnumMap;
+import java.util.NoSuchElementException;
 
 import net.minecraft.server.v1_10_R1.EnumProtocol;
 
@@ -25,7 +26,11 @@ public class PacketIdTransformerRegistry {
 		if (newIds == null) {
 			return -1;
 		}
-		return newIds[packetId];
+		int id = newIds[packetId];
+		if (id == -1) {
+			throw new NoSuchElementException("No packet id found for state " + protocol + " and packet id " + packetId);
+		}
+		return id;
 	}
 
 }

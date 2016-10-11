@@ -1,5 +1,6 @@
 package protocolsupport.utils.recyclable;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import io.netty.util.Recycler;
@@ -27,8 +28,18 @@ public class RecyclableArrayList<E> extends ArrayList<E> implements RecyclableCo
 
 	@Override
 	public void recycle() {
+		for (E element : this) {
+			if (element instanceof Recyclable) {
+				((Recyclable) element).recycle();
+			}
+		}
 		clear();
 		RECYCLER.recycle(this, handle);
+	}
+
+	@Override
+	public void close() throws IOException {
+		recycle();
 	}
 
 }

@@ -13,20 +13,18 @@ import com.mojang.util.UUIDTypeAdapter;
 
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-
 import net.minecraft.server.v1_10_R1.ChatComponentText;
 import net.minecraft.server.v1_10_R1.EnumProtocol;
 import net.minecraft.server.v1_10_R1.HandshakeListener;
 import net.minecraft.server.v1_10_R1.IChatBaseComponent;
 import net.minecraft.server.v1_10_R1.LoginListener;
-import net.minecraft.server.v1_10_R1.MinecraftServer;
 import net.minecraft.server.v1_10_R1.NetworkManager;
 import net.minecraft.server.v1_10_R1.PacketHandshakingInSetProtocol;
 import net.minecraft.server.v1_10_R1.PacketLoginOutDisconnect;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.protocol.storage.ThrottleTracker;
+import protocolsupport.utils.Utils;
 
 public abstract class AbstractHandshakeListener extends HandshakeListener {
 
@@ -34,9 +32,8 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 
 	protected final NetworkManager networkManager;
 
-	@SuppressWarnings("deprecation")
 	public AbstractHandshakeListener(NetworkManager networkmanager) {
-		super(MinecraftServer.getServer(), networkmanager);
+		super(Utils.getServer(), networkmanager);
 		this.networkManager = networkmanager;
 	}
 
@@ -104,7 +101,7 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 			}
 			case STATUS: {
 				networkManager.setProtocol(EnumProtocol.STATUS);
-				networkManager.setPacketListener(new StatusListener(MinecraftServer.getServer(), networkManager));
+				networkManager.setPacketListener(new StatusListener(Utils.getServer(), networkManager));
 				break;
 			}
 			default: {
