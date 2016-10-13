@@ -363,11 +363,17 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 				if (!potion.isEmpty()) {
 					NBTTagList tagList = nbttagcompound.getList("CustomPotionEffects", 10);
 					if (!tagList.isEmpty()) {
-						NBTTagCompound nbtTag = tagList.get(0);
-						Integer potionId = nbtTag.getInt("Id");
-						PotionEffectType effectType =  PotionEffectType.getById(potionId);
-						PotionType type = PotionType.getByEffect(effectType);
-						potion = CraftPotionUtil.fromBukkit(new PotionData(type, false, false));
+						for (int i = 0; i < tagList.size(); i++) {
+							NBTTagCompound nbtTag = tagList.get(i);
+							Integer potionId = nbtTag.getInt("Id");
+							PotionEffectType effectType = PotionEffectType.getById(potionId);
+							PotionType type = PotionType.getByEffect(effectType);
+							if (type != null) {
+								PotionData data = new PotionData(type, false, false);
+								potion = CraftPotionUtil.fromBukkit(data);
+								break;
+							}
+						}
 					}
 					Integer data = LegacyPotion.toLegacyId(potion, item != Items.POTION);
 					itemstack.setData(data);
