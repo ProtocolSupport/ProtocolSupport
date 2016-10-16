@@ -23,11 +23,11 @@ public class SetHealth extends MiddleSetHealth<RecyclableCollection<PacketData>>
 		Integer hp = MathHelper.f(health);
 		UUID uuid = player.getUniqueId();
 		Double maxHealth = storage.getMaxHealth(uuid);
-		if((maxHealth != null && !maxHealth.equals(player.getMaxHealth())) ||
-				maxHealth == null){
+		if ((maxHealth != null && !maxHealth.equals(player.getMaxHealth())) ||
+				maxHealth == null) {
 			storage.addMaxHealth(uuid, maxHealth = player.getMaxHealth());
 		}
-		if(maxHealth > 20) {
+		if (maxHealth > 20) {
 			hp = MathHelper.f(health / (player.getMaxHealth() / 20));
 		}
 		serializer.writeShort(hp);

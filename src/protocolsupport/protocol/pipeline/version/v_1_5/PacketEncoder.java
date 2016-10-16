@@ -2,7 +2,6 @@ package protocolsupport.protocol.pipeline.version.v_1_5;
 
 import java.io.IOException;
 
-import io.netty.buffer.UnpooledHeapByteBuf;
 import org.spigotmc.SneakyThrow;
 
 import io.netty.buffer.ByteBuf;
@@ -294,7 +293,7 @@ public class PacketEncoder implements IPacketEncoder {
 		if (packetId == null) {
 			throw new IOException("Can't serialize unregistered packet");
 		}
- 		ClientBoundMiddlePacket<RecyclableCollection<PacketData>> packetTransformer = registry.getTransformer(currentProtocol, packetId);
+		ClientBoundMiddlePacket<RecyclableCollection<PacketData>> packetTransformer = registry.getTransformer(currentProtocol, packetId);
 		packet.b(middlebuffer.prepareNativeSerializer());
 		if (packetTransformer.needsPlayer()) {
 			packetTransformer.setPlayer(ChannelUtils.getBukkitPlayer(channel));
