@@ -8,6 +8,8 @@ import protocolsupport.protocol.packet.middleimpl.PacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
+import java.util.UUID;
+
 public class SetHealth extends MiddleSetHealth<RecyclableCollection<PacketData>> {
 
 	@Override
@@ -18,10 +20,15 @@ public class SetHealth extends MiddleSetHealth<RecyclableCollection<PacketData>>
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_UPDATE_HEALTH_ID, version);
-		Double maxHealth = player.getMaxHealth();
 		Integer hp = MathHelper.f(health);
-		if (maxHealth > 20) {
-			hp = MathHelper.f(health / (maxHealth / 20));
+		UUID uuid = player.getUniqueId();
+		Double maxHealth = storage.getMaxHealth(uuid);
+		if((maxHealth != null && !maxHealth.equals(player.getMaxHealth())) ||
+				maxHealth == null){
+			storage.addMaxHealth(uuid, maxHealth = player.getMaxHealth());
+		}
+		if(maxHealth > 20) {
+			hp = MathHelper.f(health / (player.getMaxHealth() / 20));
 		}
 		serializer.writeShort(hp);
 		serializer.writeShort(food);
