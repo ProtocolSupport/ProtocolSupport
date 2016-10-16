@@ -18,6 +18,7 @@ public class LocalStorage {
 	private WatchedPlayer player;
 	private final HashMap<UUID, PlayerListEntry> playerlist = new HashMap<>();
 	private int dimensionId;
+	private final HashMap<UUID, Double> maxHealthList = new HashMap<>();
 
 	public void addWatchedEntity(WatchedEntity entity) {
 		watchedEntities.put(entity.getId(), entity);
@@ -68,6 +69,14 @@ public class LocalStorage {
 
 	public boolean hasSkyLightInCurrentDimension() {
 		return dimensionId == 0;
+	}
+
+	public void addMaxHealth(UUID uuid, Double maxHealth) {
+		maxHealthList.put(uuid, maxHealth);
+	}
+
+	public Double getMaxHealth(UUID uuid){
+		return maxHealthList.get(uuid);
 	}
 
 	public static class PlayerListEntry implements Cloneable {
