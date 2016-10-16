@@ -22,6 +22,7 @@ import net.minecraft.server.v1_10_R1.NetworkManager;
 import net.minecraft.server.v1_10_R1.PacketHandshakingInSetProtocol;
 import net.minecraft.server.v1_10_R1.PacketLoginOutDisconnect;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.unsafe.Connection;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.protocol.storage.ThrottleTracker;
 import protocolsupport.utils.Utils;
@@ -86,11 +87,10 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 					}
 					packethandshakinginsetprotocol.hostname = split[0];
 					SocketAddress oldaddress = networkManager.getSocketAddress();
-					ProtocolVersion version = ProtocolStorage.getProtocolVersion(oldaddress);
-					ProtocolStorage.clearData(oldaddress);
+					Connection connection = ProtocolStorage.removeConnection(oldaddress);
 					SocketAddress newaddress = new InetSocketAddress(split[1], ((InetSocketAddress) oldaddress).getPort());
 					networkManager.l = newaddress;
-					ProtocolStorage.setProtocolVersion(newaddress, version);
+					ProtocolStorage.setConnection(newaddress, connection);
 					networkManager.spoofedUUID = UUIDTypeAdapter.fromString(split[2]);
 					if (split.length == 4) {
 						networkManager.spoofedProfile = gson.fromJson(split[3], Property[].class);

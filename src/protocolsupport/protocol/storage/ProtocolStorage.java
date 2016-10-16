@@ -1,25 +1,29 @@
 package protocolsupport.protocol.storage;
 
 import java.net.SocketAddress;
+import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 
-import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.unsafe.Connection;
 
 public class ProtocolStorage {
 
-	private static final ConcurrentHashMap<SocketAddress, ProtocolVersion> versions = new ConcurrentHashMap<>(1000);
+	private static final ConcurrentHashMap<SocketAddress, Connection> versions = new ConcurrentHashMap<>(1000);
 
-	public static final void setProtocolVersion(SocketAddress address, ProtocolVersion version) {
-		versions.put(address, version);
+	public static final void setConnection(SocketAddress address, Connection connection) {
+		versions.put(address, connection);
 	}
 
-	public static ProtocolVersion getProtocolVersion(SocketAddress address) {
-		ProtocolVersion version = versions.get(address);
-		return version != null ? version : ProtocolVersion.UNKNOWN;
+	public static Connection getConnection(SocketAddress address) {
+		return versions.get(address);
 	}
 
-	public static void clearData(SocketAddress socketAddress) {
-		versions.remove(socketAddress);
+	public static Connection removeConnection(SocketAddress socketAddress) {
+		return versions.remove(socketAddress);
+	}
+
+	public static Collection<Connection> getConnections() {
+		return versions.values();
 	}
 
 }

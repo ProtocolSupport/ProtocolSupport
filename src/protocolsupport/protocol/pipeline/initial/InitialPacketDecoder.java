@@ -12,6 +12,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.concurrent.Future;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.unsafe.Connection;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.IPipeLineBuilder;
 import protocolsupport.protocol.storage.ProtocolStorage;
@@ -149,7 +150,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		if (Utils.getServer().isDebugging()) {
 			System.err.println(ChannelUtils.getNetworkManagerSocketAddress(channel)+ " connected with protocol version "+version);
 		}
-		ProtocolStorage.setProtocolVersion(ChannelUtils.getNetworkManagerSocketAddress(channel), version);
+		ProtocolStorage.setConnection(ChannelUtils.getNetworkManagerSocketAddress(channel), new Connection(ChannelUtils.getNetworkManager(channel), version));
 		channel.pipeline().remove(ChannelHandlers.INITIAL_DECODER);
 		pipelineBuilders.get(version).buildPipeLine(channel, version);
 		receivedData.readerIndex(0);
