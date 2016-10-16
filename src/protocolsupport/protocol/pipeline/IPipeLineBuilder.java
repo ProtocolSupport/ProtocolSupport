@@ -1,10 +1,10 @@
 package protocolsupport.protocol.pipeline;
 
 import io.netty.channel.Channel;
-import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.unsafe.Connection;
 
 public interface IPipeLineBuilder {
 
-	public void buildPipeLine(Channel channel, ProtocolVersion version);
+	public void buildPipeLine(Channel channel, Connection connection);
 
 }

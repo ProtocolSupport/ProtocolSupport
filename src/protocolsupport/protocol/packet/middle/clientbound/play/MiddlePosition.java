@@ -21,11 +21,6 @@ public abstract class MiddlePosition<T> extends ClientBoundMiddlePacket<T> {
 	protected int teleportConfirmId;
 
 	@Override
-	public boolean needsPlayer() {
-		return true;
-	}
-
-	@Override
 	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		xOrig = x = serializer.readDouble();
 		yOrig = y = serializer.readDouble();
@@ -34,7 +29,7 @@ public abstract class MiddlePosition<T> extends ClientBoundMiddlePacket<T> {
 		pitchOrig = pitch = serializer.readFloat();
 		flags = serializer.readByte();
 		if (flags != 0) {
-			Location location = player.getLocation();
+			Location location = connection.getPlayer().getLocation();
 			if ((flags & 0x01) != 0) {
 				x += location.getX();
 			}

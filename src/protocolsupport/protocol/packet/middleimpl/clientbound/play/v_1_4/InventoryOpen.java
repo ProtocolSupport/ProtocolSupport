@@ -16,15 +16,10 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class InventoryOpen extends MiddleInventoryOpen<RecyclableCollection<PacketData>> {
 
 	@Override
-	public boolean needsPlayer() {
-		return true;
-	}
-
-	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
 		int id = WindowType.fromName(invname).ordinal();
 		if (IdSkipper.INVENTORY.getTable(version).shouldSkip(id)) {
-			player.closeInventory();
+			connection.getPlayer().closeInventory();
 			return RecyclableEmptyList.get();
 		}
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_WINDOW_OPEN_ID, version);

@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl;
 
-import java.util.Collection;
+import java.io.IOException;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.util.Recycler;
@@ -10,9 +10,9 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.utils.netty.Allocator;
-import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.Recyclable;
 
-public class PacketCreator extends ProtocolSupportPacketDataSerializer {
+public class PacketCreator extends ProtocolSupportPacketDataSerializer implements Recyclable {
 
 	private static final Recycler<PacketCreator> RECYCLER = new Recycler<PacketCreator>() {
 		@Override
@@ -42,15 +42,9 @@ public class PacketCreator extends ProtocolSupportPacketDataSerializer {
 	}
 
 	public Packet<?> create() throws Exception {
-		try {
-			Packet<?> npacket = packet.get();
-			npacket.a(nativeSerializer);
-			return npacket;
-		} finally {
-			clear();
-			packet = null;
-			RECYCLER.recycle(this, handle);
-		}
+		Packet<?> npacket = packet.get();
+		npacket.a(nativeSerializer);
+		return npacket;
 	}
 
 	@Override
@@ -62,16 +56,16 @@ public class PacketCreator extends ProtocolSupportPacketDataSerializer {
 		release();
 	}
 
-	public static void addAllTo(Collection<PacketCreator> creators, Collection<Object> to) throws Exception {
-		for (PacketCreator creator : creators) {
-			to.add(creator.create());
-		}
+	@Override
+	public void close() throws IOException {
+		recycle();
 	}
 
-	public static void addAllToR(RecyclableCollection<PacketCreator> creators, Collection<Object> to) throws Exception {
-		addAllTo(creators, to);
-		creators.recycle();
+	@Override
+	public void recycle() {
+		clear();
+		packet = null;
+		RECYCLER.recycle(this, handle);
 	}
-
 
 }

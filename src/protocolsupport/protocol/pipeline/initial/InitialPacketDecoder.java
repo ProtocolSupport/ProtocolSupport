@@ -150,9 +150,10 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		if (Utils.getServer().isDebugging()) {
 			System.err.println(ChannelUtils.getNetworkManagerSocketAddress(channel)+ " connected with protocol version "+version);
 		}
-		ProtocolStorage.setConnection(ChannelUtils.getNetworkManagerSocketAddress(channel), new Connection(ChannelUtils.getNetworkManager(channel), version));
+		Connection connection = new Connection(ChannelUtils.getNetworkManager(channel), version);
+		ProtocolStorage.setConnection(ChannelUtils.getNetworkManagerSocketAddress(channel), connection);
 		channel.pipeline().remove(ChannelHandlers.INITIAL_DECODER);
-		pipelineBuilders.get(version).buildPipeLine(channel, version);
+		pipelineBuilders.get(version).buildPipeLine(channel, connection);
 		receivedData.readerIndex(0);
 		channel.pipeline().firstContext().fireChannelRead(receivedData);
 	}

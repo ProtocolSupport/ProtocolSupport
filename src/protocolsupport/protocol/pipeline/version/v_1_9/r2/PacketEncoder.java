@@ -1,19 +1,8 @@
 package protocolsupport.protocol.pipeline.version.v_1_9.r2;
 
-import java.io.IOException;
-
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.EncoderException;
 import net.minecraft.server.v1_10_R1.EnumProtocol;
-import net.minecraft.server.v1_10_R1.EnumProtocolDirection;
-import net.minecraft.server.v1_10_R1.Packet;
-import net.minecraft.server.v1_10_R1.PacketListener;
-import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.unsafe.Connection;
 import protocolsupport.protocol.packet.ClientBoundPacket;
-import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.packet.middleimpl.PacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_1_4__1_5__1_6__1_7__1_8__1_9_r1__1_9_r2__1_10.EncryptionRequest;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_1_7__1_8__1_9_r1__1_9_r2__1_10.LoginDisconnect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_1_7__1_8__1_9_r1__1_9_r2__1_10.LoginSuccess;
@@ -96,19 +85,20 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r2__1_10.Chunk;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7__1_8__1_9_r1__1_9_r2__1_10.Pong;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7__1_8__1_9_r1__1_9_r2__1_10.ServerInfo;
-import protocolsupport.protocol.pipeline.IPacketEncoder;
-import protocolsupport.protocol.serializer.ChainedProtocolSupportPacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage;
+import protocolsupport.protocol.pipeline.version.AbstractPacketEncoder;
 import protocolsupport.protocol.storage.SharedStorage;
-import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry;
-import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry.InitCallBack;
-import protocolsupport.utils.netty.Allocator;
-import protocolsupport.utils.netty.ChannelUtils;
-import protocolsupport.utils.recyclable.RecyclableCollection;
 
-public class PacketEncoder implements IPacketEncoder {
+public class PacketEncoder extends AbstractPacketEncoder {
 
-	private final MiddleTransformerRegistry<ClientBoundMiddlePacket<RecyclableCollection<PacketData>>> registry = new MiddleTransformerRegistry<>();
+	static {
+		//TODO: remapping table with ClientBoundPacket ids
+		for (EnumProtocol protocol : EnumProtocol.values()) {
+			for (int i = 0; i < 255; i++) {
+				packetIdRegistry.register(protocol, i, i);
+			}
+		}
+	}
+
 	{
 		registry.register(EnumProtocol.LOGIN, ClientBoundPacket.LOGIN_SUCCESS_ID, LoginSuccess.class);
 		registry.register(EnumProtocol.LOGIN, ClientBoundPacket.LOGIN_ENCRYPTION_BEGIN_ID, EncryptionRequest.class);
@@ -192,50 +182,10 @@ public class PacketEncoder implements IPacketEncoder {
 		registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SET_COOLDOWN, SetCooldown.class);
 		registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_BOSS_BAR, BossBar.class);
 		registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_VEHICLE_MOVE, VehicleMove.class);
-		registry.setCallBack(new InitCallBack<ClientBoundMiddlePacket<RecyclableCollection<PacketData>>>() {
-			@Override
-			public void onInit(ClientBoundMiddlePacket<RecyclableCollection<PacketData>> object) {
-				object.setSharedStorage(sharedstorage);
-				object.setLocalStorage(storage);
-			}
-		});
 	}
 
-	protected final SharedStorage sharedstorage;
-	protected final LocalStorage storage = new LocalStorage();
-	public PacketEncoder(SharedStorage storage) {
-		this.sharedstorage = storage;
-	}
-
-	private final ChainedProtocolSupportPacketDataSerializer middlebuffer = new ChainedProtocolSupportPacketDataSerializer();
-
-	@Override
-	public void encode(ChannelHandlerContext ctx, Packet<PacketListener> packet, ByteBuf output) throws Exception {
-		Channel channel = ctx.channel();
-		EnumProtocol currentProtocol = channel.attr(ChannelUtils.CURRENT_PROTOCOL_KEY).get();
-		final Integer packetId = currentProtocol.a(EnumProtocolDirection.CLIENTBOUND, packet);
-		if (packetId == null) {
-			throw new IOException("Can't serialize unregistered packet");
-		}
-		ClientBoundMiddlePacket<RecyclableCollection<PacketData>> packetTransformer = registry.getTransformer(currentProtocol, packetId);
-		if (packetTransformer == null) {
-			throw new EncoderException("Missing packet encoder for packet " + packetId);
-		}
-		packet.b(middlebuffer.prepareNativeSerializer());
-		if (packetTransformer.needsPlayer()) {
-			packetTransformer.setPlayer(ChannelUtils.getBukkitPlayer(channel));
-		}
-		packetTransformer.readFromServerData(middlebuffer);
-		packetTransformer.handle();
-		try (RecyclableCollection<PacketData> data = packetTransformer.toData(ProtocolVersion.MINECRAFT_1_9_4)) {
-			for (PacketData packetdata : data) {
-				ByteBuf senddata = Allocator.allocateBuffer();
-				ChannelUtils.writeVarInt(senddata, packetdata.getPacketId());
-				senddata.writeBytes(packetdata);
-				ctx.write(senddata);
-			}
-			ctx.flush();
-		}
+	public PacketEncoder(Connection connection, SharedStorage storage) {
+		super(connection, storage);
 	}
 
 }
