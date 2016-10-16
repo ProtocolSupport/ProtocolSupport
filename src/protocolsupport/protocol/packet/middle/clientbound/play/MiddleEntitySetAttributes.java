@@ -29,6 +29,17 @@ public abstract class MiddleEntitySetAttributes<T> extends MiddleEntity<T> {
 		}
 	}
 
+	@Override
+	public void handle() {
+		if (entityId == storage.getSelfPlayerEntityId()) {
+			for (Attribute attr : attributes) {
+				if (attr.key.equals("generic.maxHealth")) {
+					storage.setMaxHealth((float) attr.value);
+				}
+			}
+		}
+	}
+
 	protected static class Attribute {
 		public String key;
 		public double value;

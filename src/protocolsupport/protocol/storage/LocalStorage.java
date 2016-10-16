@@ -18,6 +18,7 @@ public class LocalStorage {
 	private WatchedPlayer player;
 	private final HashMap<UUID, PlayerListEntry> playerlist = new HashMap<>();
 	private int dimensionId;
+	private float maxHealth = 20.0F;
 
 	public void addWatchedEntity(WatchedEntity entity) {
 		watchedEntities.put(entity.getId(), entity);
@@ -26,6 +27,10 @@ public class LocalStorage {
 	public void addWatchedSelfPlayer(WatchedPlayer player) {
 		this.player = player;
 		addWatchedEntity(player);
+	}
+
+	public int getSelfPlayerEntityId() {
+		return player != null ? player.getId() : -1;
 	}
 
 	private void readdSelfPlayer() {
@@ -68,6 +73,14 @@ public class LocalStorage {
 
 	public boolean hasSkyLightInCurrentDimension() {
 		return dimensionId == 0;
+	}
+
+	public void setMaxHealth(float maxHealth) {
+		this.maxHealth = maxHealth;
+	}
+
+	public float getMaxHealth() {
+		return maxHealth;
 	}
 
 	public static class PlayerListEntry implements Cloneable {
