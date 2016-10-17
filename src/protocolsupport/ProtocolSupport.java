@@ -28,6 +28,7 @@ public class ProtocolSupport extends JavaPlugin {
 
 	@Override
 	public void onLoad() {
+		AsyncErrorLogger.INSTANCE.start();
 		try {
 			NetworkManager.a.getName();
 			SpigotConfig.config.contains("test");
@@ -52,7 +53,6 @@ public class ProtocolSupport extends JavaPlugin {
 			ReloadCommandRemover.remove();
 			IdRemapper.init();
 			BlockStorage.init();
-			AsyncErrorLogger.INSTANCE.start();
 		} catch (Throwable t) {
 			t.printStackTrace();
 			Bukkit.shutdown();
