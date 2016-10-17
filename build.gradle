@@ -6,7 +6,7 @@ plugins {
 group 'protocolsupport'
 version '4.25.dev'
 
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 
 compileJava.dependsOn("updateSpigot")
 
