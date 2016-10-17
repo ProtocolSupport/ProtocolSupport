@@ -13,7 +13,7 @@ import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemap
 import protocolsupport.protocol.typeremapper.id.RemappingTable.HashMapBasedIdRemappingTable;
 import protocolsupport.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.ReflectionUtils;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ServerPlatformUtils;
 
 public class IdRemapper {
 
@@ -120,7 +120,7 @@ public class IdRemapper {
 				@Override
 				public void setRemap(int from, int to) {
 					super.setRemap(from, to);
-					if (Utils.getServer().isDebugging()) {
+					if (ServerPlatformUtils.getServer().isDebugging()) {
 						int blockIdFrom = from >> 4;
 						int blockIdTo = to >> 4;
 						Block blockFrom = Block.getById(blockIdFrom);
@@ -132,7 +132,7 @@ public class IdRemapper {
 								ProtocolSupport.logWarning("Block remapper warning: strength of block " + Material.getMaterial(blockIdTo) + " is less than strength of block with id " +  Material.getMaterial(blockIdFrom));
 							}
 						} catch (IllegalArgumentException | IllegalAccessException e) {
-							if (Utils.getServer().isDebugging()) {
+							if (ServerPlatformUtils.getServer().isDebugging()) {
 								e.printStackTrace();
 							}
 						}

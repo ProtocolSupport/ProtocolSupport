@@ -10,7 +10,7 @@ import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TranslateComponent;
 import protocolsupport.api.chat.modifiers.ClickAction;
 import protocolsupport.api.chat.modifiers.HoverAction;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ServerPlatformUtils;
 
 public class LegacyChatJson {
 
@@ -44,7 +44,7 @@ public class LegacyChatJson {
 				}
 				component.setHoverAction(new HoverAction(HoverAction.Type.SHOW_ITEM, compound.toString()));
 			} catch (MojangsonParseException t) {
-				if (Utils.getServer().isDebugging()) {
+				if (ServerPlatformUtils.getServer().isDebugging()) {
 					t.printStackTrace();
 				}
 			}

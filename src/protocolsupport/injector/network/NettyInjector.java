@@ -16,16 +16,16 @@ import net.minecraft.server.v1_10_R1.NetworkManager;
 import net.minecraft.server.v1_10_R1.ServerConnection;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.utils.ReflectionUtils;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ServerPlatformUtils;
 
 public class NettyInjector {
 
 	@SuppressWarnings("unchecked")
 	public static void inject() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		if (Utils.getServer().ae()) {
+		if (ServerPlatformUtils.getServer().ae()) {
 			ProtocolSupport.logWarning("Native transport is enabled, this may cause issues. Disable it by setting use-native-transport in server.properties to false.");
 		}
-		ServerConnection serverConnection = Utils.getServer().am();
+		ServerConnection serverConnection = ServerPlatformUtils.getServer().am();
 		List<NetworkManager> nmList = null;
 		try {
 			nmList = (List<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("pending")).get(serverConnection);

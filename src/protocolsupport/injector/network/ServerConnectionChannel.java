@@ -14,7 +14,7 @@ import protocolsupport.protocol.pipeline.wrapped.WrappedDecoder;
 import protocolsupport.protocol.pipeline.wrapped.WrappedEncoder;
 import protocolsupport.protocol.pipeline.wrapped.WrappedPrepender;
 import protocolsupport.protocol.pipeline.wrapped.WrappedSplitter;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ServerPlatformUtils;
 
 public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 
@@ -31,14 +31,14 @@ public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 		try {
 			channel.config().setOption(ChannelOption.IP_TOS, IPTOS_THROUGHPUT | IPTOS_LOWDELAY);
 		} catch (ChannelException channelexception) {
-			if (Utils.getServer().isDebugging()) {
+			if (ServerPlatformUtils.getServer().isDebugging()) {
 				System.err.println("Unable to set IP_TOS option: " + channelexception.getMessage());
 			}
 		}
 		try {
 			channel.config().setOption(ChannelOption.TCP_NODELAY, true);
 		} catch (ChannelException channelexception) {
-			if (Utils.getServer().isDebugging()) {
+			if (ServerPlatformUtils.getServer().isDebugging()) {
 				System.err.println("Unable to set TCP_NODELAY option: " + channelexception.getMessage());
 			}
 		}

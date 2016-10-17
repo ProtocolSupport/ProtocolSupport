@@ -25,7 +25,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.unsafe.Connection;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.protocol.storage.ThrottleTracker;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ServerPlatformUtils;
 
 public abstract class AbstractHandshakeListener extends HandshakeListener {
 
@@ -34,7 +34,7 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 	protected final NetworkManager networkManager;
 
 	public AbstractHandshakeListener(NetworkManager networkmanager) {
-		super(Utils.getServer(), networkmanager);
+		super(ServerPlatformUtils.getServer(), networkmanager);
 		this.networkManager = networkmanager;
 	}
 
@@ -101,7 +101,7 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 			}
 			case STATUS: {
 				networkManager.setProtocol(EnumProtocol.STATUS);
-				networkManager.setPacketListener(new StatusListener(Utils.getServer(), networkManager));
+				networkManager.setPacketListener(new StatusListener(ServerPlatformUtils.getServer(), networkManager));
 				break;
 			}
 			default: {

@@ -8,7 +8,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ServerPlatformUtils;
 
 public class ServerPingResponseEvent extends Event {
 
@@ -108,11 +108,11 @@ public class ServerPingResponseEvent extends Event {
 	}
 
 	public static String getServerModName() {
-		return Utils.getServer().getServerModName();
+		return ServerPlatformUtils.getServer().getServerModName();
 	}
 
 	public static String getServerVersionName() {
-		return Utils.getServer().getVersion();
+		return ServerPlatformUtils.getServer().getVersion();
 	}
 
 }

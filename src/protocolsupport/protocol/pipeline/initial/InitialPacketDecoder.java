@@ -16,6 +16,7 @@ import protocolsupport.api.unsafe.Connection;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.IPipeLineBuilder;
 import protocolsupport.protocol.storage.ProtocolStorage;
+import protocolsupport.utils.ServerPlatformUtils;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
 import protocolsupport.utils.netty.ChannelUtils;
@@ -147,7 +148,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 	}
 
 	protected void setProtocol(final Channel channel, ProtocolVersion version) throws Exception {
-		if (Utils.getServer().isDebugging()) {
+		if (ServerPlatformUtils.getServer().isDebugging()) {
 			System.err.println(ChannelUtils.getNetworkManagerSocketAddress(channel)+ " connected with protocol version "+version);
 		}
 		Connection connection = new Connection(ChannelUtils.getNetworkManager(channel), version);

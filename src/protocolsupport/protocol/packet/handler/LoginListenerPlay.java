@@ -61,12 +61,12 @@ import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.PlayerLoginFinishEvent;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ServerPlatformUtils;
 
 public class LoginListenerPlay extends LoginListener implements PacketListenerPlayIn, ITickable {
 
 	protected static final Logger logger = LogManager.getLogger(LoginListener.class);
-	protected static final MinecraftServer server = Utils.getServer();
+	protected static final MinecraftServer server = ServerPlatformUtils.getServer();
 
 	private final GameProfile profile;
 	private final boolean onlineMode;

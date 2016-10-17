@@ -6,11 +6,12 @@ import java.util.concurrent.TimeUnit;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
+import protocolsupport.utils.ServerPlatformUtils;
 import protocolsupport.utils.Utils;
 
 public class ThrottleTracker {
 
-	private static final long time = Utils.getServer().server.getConnectionThrottle();
+	private static final long time = ServerPlatformUtils.getServer().server.getConnectionThrottle();
 
 	private static final Cache<InetAddress, Boolean> tracker = CacheBuilder.newBuilder()
 	.concurrencyLevel(Utils.getJavaPropertyValue("io.netty.eventLoopThreads", Runtime.getRuntime().availableProcessors(), Utils.Converter.STRING_TO_INT))

@@ -42,6 +42,7 @@ import protocolsupport.api.events.PlayerLoginStartEvent;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.common.PacketCompressor;
 import protocolsupport.protocol.pipeline.common.PacketDecompressor;
+import protocolsupport.utils.ServerPlatformUtils;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
 
@@ -70,7 +71,7 @@ public abstract class AbstractLoginListener extends LoginListener {
 
 	protected static final Logger logger = LogManager.getLogger(LoginListener.class);
 	protected static final Random random = new Random();
-	protected final static MinecraftServer server = Utils.getServer();
+	protected final static MinecraftServer server = ServerPlatformUtils.getServer();
 
 	protected final byte[] randomBytes = new byte[4];
 	protected int loginTicks;
@@ -254,7 +255,7 @@ public abstract class AbstractLoginListener extends LoginListener {
 			profile = newProfile;
 		}
 		if (hasCompression()) {
-			final int threshold = Utils.getServer().aF();
+			final int threshold = ServerPlatformUtils.getServer().aF();
 			if (threshold >= 0) {
 				this.networkManager.sendPacket(
 					new PacketLoginOutSetCompression(threshold),
