@@ -16,7 +16,7 @@ public abstract class MiddlePosition extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<PacketCreator> toNative() throws Exception {
-		if (!sharedstorage.isTeleportConfirmNeeded()) {
+		if (!cache.isTeleportConfirmNeeded()) {
 			PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_POSITION);
 			creator.writeDouble(x);
 			creator.writeDouble(y);

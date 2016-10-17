@@ -18,7 +18,7 @@ public abstract class MiddlePositionLook extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<PacketCreator> toNative() throws Exception {
-		if (!sharedstorage.isTeleportConfirmNeeded()) {
+		if (!cache.isTeleportConfirmNeeded()) {
 			PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_POSITION_LOOK);
 			creator.writeDouble(x);
 			creator.writeDouble(y);
@@ -28,7 +28,7 @@ public abstract class MiddlePositionLook extends ServerBoundMiddlePacket {
 			creator.writeBoolean(onGround);
 			return RecyclableSingletonList.create(creator);
 		} else {
-			int teleportId = sharedstorage.tryTeleportConfirm(x, y, z);
+			int teleportId = cache.tryTeleportConfirm(x, y, z);
 			if (teleportId == -1) {
 				return RecyclableEmptyList.get();
 			} else {
