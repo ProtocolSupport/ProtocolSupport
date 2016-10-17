@@ -48,7 +48,7 @@ public abstract class MiddleSpawnLiving<T> extends ClientBoundMiddlePacket<T> {
 	@Override
 	public void handle() {
 		wentity = new WatchedLiving(entityId, type);
-		storage.addWatchedEntity(wentity);
+		cache.addWatchedEntity(wentity);
 	}
 
 }

@@ -8,12 +8,12 @@ import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.unsafe.Connection;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
-import protocolsupport.protocol.storage.SharedStorage;
+import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.utils.netty.ChannelUtils;
 
 public class AbstractModernWithoutReorderPacketDecoder extends AbstractPacketDecoder  {
 
-	public AbstractModernWithoutReorderPacketDecoder(Connection connection, SharedStorage sharedstorage) {
+	public AbstractModernWithoutReorderPacketDecoder(Connection connection, NetworkDataCache sharedstorage) {
 		super(connection, sharedstorage);
 	}
 

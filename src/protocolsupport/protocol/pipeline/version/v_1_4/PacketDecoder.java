@@ -29,7 +29,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_4__1_5__1
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_4__1_5__1_6__1_7__1_8__1_9_r1__1_9_r2__1_10.InventoryTransaction;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_4__1_5__1_6__1_7__1_8__1_9_r1__1_9_r2__1_10.Look;
 import protocolsupport.protocol.pipeline.version.AbstractLegacyPacketDecoder;
-import protocolsupport.protocol.storage.SharedStorage;
+import protocolsupport.protocol.storage.NetworkDataCache;
 
 public class PacketDecoder extends AbstractLegacyPacketDecoder {
 
@@ -62,7 +62,7 @@ public class PacketDecoder extends AbstractLegacyPacketDecoder {
 		registry.register(EnumProtocol.PLAY, 0xFF, KickDisconnect.class);
 	}
 
-	public PacketDecoder(Connection connection, SharedStorage storage) {
+	public PacketDecoder(Connection connection, NetworkDataCache storage) {
 		super(connection, storage);
 	}
 

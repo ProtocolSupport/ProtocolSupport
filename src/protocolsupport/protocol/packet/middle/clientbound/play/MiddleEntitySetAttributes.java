@@ -31,10 +31,10 @@ public abstract class MiddleEntitySetAttributes<T> extends MiddleEntity<T> {
 
 	@Override
 	public void handle() {
-		if (entityId == storage.getSelfPlayerEntityId()) {
+		if (entityId == cache.getSelfPlayerEntityId()) {
 			for (Attribute attr : attributes) {
 				if (attr.key.equals("generic.maxHealth")) {
-					storage.setMaxHealth((float) attr.value);
+					cache.setMaxHealth((float) attr.value);
 				}
 			}
 		}

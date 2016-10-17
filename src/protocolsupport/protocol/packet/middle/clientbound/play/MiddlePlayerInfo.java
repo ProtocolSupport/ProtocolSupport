@@ -7,7 +7,7 @@ import com.mojang.authlib.properties.Property;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage.PlayerListEntry;
+import protocolsupport.protocol.storage.NetworkDataCache;
 
 public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {
 
@@ -66,29 +66,29 @@ public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {
 	@Override
 	public void handle() {
 		for (Info info : infos) {
-			info.previousinfo = storage.getPlayerListEntry(info.uuid);
+			info.previousinfo = cache.getPlayerListEntry(info.uuid);
 			if (info.previousinfo != null) {
 				info.previousinfo = info.previousinfo.clone();
 			}
 			switch (action) {
 				case ADD: {
-					PlayerListEntry entry = new PlayerListEntry(info.username);
+					NetworkDataCache.PlayerListEntry entry = new NetworkDataCache.PlayerListEntry(info.username);
 					entry.setDisplayNameJson(info.displayNameJson);
 					for (Property property : info.properties) {
 						entry.getProperties().add(property);
 					}
-					storage.addPlayerListEntry(info.uuid, entry);
+					cache.addPlayerListEntry(info.uuid, entry);
 					break;
 				}
 				case DISPLAY_NAME: {
-					PlayerListEntry entry = storage.getPlayerListEntry(info.uuid);
+					NetworkDataCache.PlayerListEntry entry = cache.getPlayerListEntry(info.uuid);
 					if (entry != null) {
 						entry.setDisplayNameJson(info.displayNameJson);
 					}
 					break;
 				}
 				case REMOVE: {
-					storage.removePlayerListEntry(info.uuid);
+					cache.removePlayerListEntry(info.uuid);
 					break;
 				}
 				default: {
@@ -104,7 +104,7 @@ public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {
 
 	protected static class Info {
 		public UUID uuid;
-		public PlayerListEntry previousinfo;
+		public NetworkDataCache.PlayerListEntry previousinfo;
 		public String username;
 		public int ping;
 		public int gamemode;

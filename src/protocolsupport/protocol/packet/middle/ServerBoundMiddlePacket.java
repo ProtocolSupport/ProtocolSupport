@@ -4,14 +4,14 @@ import java.io.IOException;
 
 import protocolsupport.protocol.packet.middleimpl.PacketCreator;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
-import protocolsupport.protocol.storage.SharedStorage;
+import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public abstract class ServerBoundMiddlePacket extends MiddlePacket {
 
-	protected SharedStorage sharedstorage;
+	protected NetworkDataCache sharedstorage;
 
-	public void setSharedStorage(SharedStorage sharedstorage) {
+	public void setSharedStorage(NetworkDataCache sharedstorage) {
 		this.sharedstorage = sharedstorage;
 	}
 

@@ -13,7 +13,7 @@ public class EntityTeleport extends MiddleEntityTeleport<RecyclableCollection<Pa
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
-		WatchedEntity wentity = storage.getWatchedEntity(entityId);
+		WatchedEntity wentity = cache.getWatchedEntity(entityId);
 		y *= 32;
 		if ((wentity != null) && ((wentity.getType() == SpecificRemapper.TNT) || (wentity.getType() == SpecificRemapper.FALLING_OBJECT))) {
 			y += 16;

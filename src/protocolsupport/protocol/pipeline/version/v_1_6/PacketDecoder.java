@@ -31,7 +31,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_6__1_7.Po
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_6__1_7.SteerVehicle;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_6__1_7__1_8__1_9_r1__1_9_r2__1_10.PlayerAbilities;
 import protocolsupport.protocol.pipeline.version.AbstractLegacyPacketDecoder;
-import protocolsupport.protocol.storage.SharedStorage;
+import protocolsupport.protocol.storage.NetworkDataCache;
 
 public class PacketDecoder extends AbstractLegacyPacketDecoder {
 
@@ -66,7 +66,7 @@ public class PacketDecoder extends AbstractLegacyPacketDecoder {
 		registry.register(EnumProtocol.PLAY, 0xFF, KickDisconnect.class);
 	}
 
-	public PacketDecoder(Connection connection, SharedStorage storage) {
+	public PacketDecoder(Connection connection, NetworkDataCache storage) {
 		super(connection, storage);
 	}
 

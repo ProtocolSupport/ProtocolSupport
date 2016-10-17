@@ -15,17 +15,17 @@ public class InventorySetSlot extends MiddleInventorySetSlot<RecyclableCollectio
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
-		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && ((sharedstorage.getOpenedWindow() == WindowType.PLAYER) || (windowId == 0)) && (slot == 45)) {
+		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && ((cache.getOpenedWindow() == WindowType.PLAYER) || (windowId == 0)) && (slot == 45)) {
 			return RecyclableEmptyList.get();
 		}
-		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && (sharedstorage.getOpenedWindow() == WindowType.BREING)) {
+		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && (cache.getOpenedWindow() == WindowType.BREING)) {
 			if (slot == 4) {
 				return RecyclableEmptyList.get();
 			}
 			if (slot > 4) {
 				slot--;
 			}
-		} else if (version.isBefore(ProtocolVersion.MINECRAFT_1_8) && (sharedstorage.getOpenedWindow() == WindowType.ENCHANT)) {
+		} else if (version.isBefore(ProtocolVersion.MINECRAFT_1_8) && (cache.getOpenedWindow() == WindowType.ENCHANT)) {
 			if (slot == 1) {
 				return RecyclableEmptyList.get();
 			}

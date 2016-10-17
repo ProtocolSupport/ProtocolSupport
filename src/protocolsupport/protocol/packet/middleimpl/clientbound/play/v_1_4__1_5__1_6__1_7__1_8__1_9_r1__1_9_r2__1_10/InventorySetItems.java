@@ -15,12 +15,12 @@ public class InventorySetItems extends MiddleInventorySetItems<RecyclableCollect
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
-		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && ((sharedstorage.getOpenedWindow() == WindowType.PLAYER) || (windowId == 0))) {
+		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && ((cache.getOpenedWindow() == WindowType.PLAYER) || (windowId == 0))) {
 			itemstacks.remove(itemstacks.size() - 1);
 		}
-		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && (sharedstorage.getOpenedWindow() == WindowType.BREING)) {
+		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && (cache.getOpenedWindow() == WindowType.BREING)) {
 			itemstacks.remove(4);
-		} else if (version.isBefore(ProtocolVersion.MINECRAFT_1_8) && (sharedstorage.getOpenedWindow() == WindowType.ENCHANT)) {
+		} else if (version.isBefore(ProtocolVersion.MINECRAFT_1_8) && (cache.getOpenedWindow() == WindowType.ENCHANT)) {
 			itemstacks.remove(1);
 		}
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_WINDOW_SET_ITEMS_ID, version);

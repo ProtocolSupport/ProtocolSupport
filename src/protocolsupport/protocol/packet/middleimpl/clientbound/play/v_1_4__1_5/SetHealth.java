@@ -12,7 +12,7 @@ public class SetHealth extends MiddleSetHealth<RecyclableCollection<PacketData>>
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
 		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_UPDATE_HEALTH_ID, version);
-		serializer.writeShort((int) Math.ceil(health * 20.0F / storage.getMaxHealth()));
+		serializer.writeShort((int) Math.ceil(health * 20.0F / cache.getMaxHealth()));
 		serializer.writeShort(food);
 		serializer.writeFloat(saturation);
 		return RecyclableSingletonList.create(serializer);

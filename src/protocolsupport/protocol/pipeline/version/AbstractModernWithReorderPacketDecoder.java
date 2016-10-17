@@ -9,12 +9,12 @@ import protocolsupport.api.unsafe.Connection;
 import protocolsupport.protocol.legacyremapper.LegacyAnimatePacketReorderer;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
-import protocolsupport.protocol.storage.SharedStorage;
+import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.utils.netty.ChannelUtils;
 
 public class AbstractModernWithReorderPacketDecoder extends AbstractPacketDecoder  {
 
-	public AbstractModernWithReorderPacketDecoder(Connection connection, SharedStorage sharedstorage) {
+	public AbstractModernWithReorderPacketDecoder(Connection connection, NetworkDataCache sharedstorage) {
 		super(connection, sharedstorage);
 	}
 

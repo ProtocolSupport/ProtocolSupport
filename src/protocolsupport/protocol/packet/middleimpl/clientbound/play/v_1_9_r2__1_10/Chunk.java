@@ -23,7 +23,7 @@ public class Chunk extends MiddleChunk<RecyclableCollection<PacketData>> {
 		serializer.writeInt(chunkZ);
 		serializer.writeBoolean(full);
 		serializer.writeVarInt(bitmask);
-		transformer.loadData(data, bitmask, storage.hasSkyLightInCurrentDimension(), full);
+		transformer.loadData(data, bitmask, cache.hasSkyLightInCurrentDimension(), full);
 		serializer.writeByteArray(transformer.toLegacyData(version));
 		serializer.writeVarInt(tiles.length);
 		for (NBTTagCompoundWrapper tile : tiles) {

@@ -18,7 +18,7 @@ public class EntityMetadata extends MiddleEntityMetadata<RecyclableCollection<Pa
 
 	@Override
 	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
-		TIntObjectMap<DataWatcherObject<?>> remapped = WatchedDataRemapper.transform(storage.getWatchedEntity(entityId), metadata, version);
+		TIntObjectMap<DataWatcherObject<?>> remapped = WatchedDataRemapper.transform(cache.getWatchedEntity(entityId), metadata, version);
 		if (remapped.isEmpty()) {
 			return RecyclableEmptyList.get();
 		} else {

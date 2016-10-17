@@ -17,7 +17,7 @@ public abstract class MiddleEntityDestroy<T> extends ClientBoundMiddlePacket<T> 
 
 	@Override
 	public void handle() {
-		storage.removeWatchedEntities(entityIds);
+		cache.removeWatchedEntities(entityIds);
 	}
 
 }

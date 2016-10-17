@@ -34,7 +34,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_8__1_9_r1
 import protocolsupport.protocol.packet.middleimpl.serverbound.status.v_1_7__1_8__1_9_r1__1_9_r2__1_10.Ping;
 import protocolsupport.protocol.packet.middleimpl.serverbound.status.v_1_7__1_8__1_9_r1__1_9_r2__1_10.ServerInfoRequest;
 import protocolsupport.protocol.pipeline.version.AbstractModernWithReorderPacketDecoder;
-import protocolsupport.protocol.storage.SharedStorage;
+import protocolsupport.protocol.storage.NetworkDataCache;
 
 public class PacketDecoder extends AbstractModernWithReorderPacketDecoder {
 
@@ -72,7 +72,7 @@ public class PacketDecoder extends AbstractModernWithReorderPacketDecoder {
 		registry.register(EnumProtocol.PLAY, 0x19, ResourcePackStatus.class);
 	}
 
-	public PacketDecoder(Connection connection, SharedStorage sharedstorage) {
+	public PacketDecoder(Connection connection, NetworkDataCache sharedstorage) {
 		super(connection, sharedstorage);
 	}
 

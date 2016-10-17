@@ -26,7 +26,7 @@ public class Chunk extends MiddleChunk<RecyclableCollection<PacketData>> {
 		chunkdata.writeInt(chunkZ);
 		chunkdata.writeBoolean(full);
 		chunkdata.writeVarInt(bitmask);
-		transformer.loadData(data, bitmask, storage.hasSkyLightInCurrentDimension(), full);
+		transformer.loadData(data, bitmask, cache.hasSkyLightInCurrentDimension(), full);
 		chunkdata.writeByteArray(transformer.toLegacyData(version));
 		packets.add(chunkdata);
 		for (NBTTagCompoundWrapper tile : tiles) {

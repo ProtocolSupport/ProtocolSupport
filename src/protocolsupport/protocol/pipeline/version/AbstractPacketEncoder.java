@@ -15,8 +15,7 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.PacketData;
 import protocolsupport.protocol.pipeline.IPacketEncoder;
 import protocolsupport.protocol.serializer.ChainedProtocolSupportPacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage;
-import protocolsupport.protocol.storage.SharedStorage;
+import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry;
 import protocolsupport.protocol.utils.registry.PacketIdTransformerRegistry;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry.InitCallBack;
@@ -27,17 +26,15 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 public abstract class AbstractPacketEncoder implements IPacketEncoder {
 
 	protected final Connection connection;
-	protected final SharedStorage sharedstorage;
-	protected final LocalStorage storage = new LocalStorage();
-	public AbstractPacketEncoder(Connection connection, SharedStorage storage) {
+	protected final NetworkDataCache cache;
+	public AbstractPacketEncoder(Connection connection, NetworkDataCache storage) {
 		this.connection = connection;
-		this.sharedstorage = storage;
+		this.cache = storage;
 		registry.setCallBack(new InitCallBack<ClientBoundMiddlePacket<RecyclableCollection<PacketData>>>() {
 			@Override
 			public void onInit(ClientBoundMiddlePacket<RecyclableCollection<PacketData>> object) {
 				object.setConnection(AbstractPacketEncoder.this.connection);
-				object.setSharedStorage(AbstractPacketEncoder.this.sharedstorage);
-				object.setLocalStorage(AbstractPacketEncoder.this.storage);
+				object.setSharedStorage(AbstractPacketEncoder.this.cache);
 			}
 		});
 		varintPacketId = connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_1_7_5);

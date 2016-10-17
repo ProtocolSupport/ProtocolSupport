@@ -25,7 +25,7 @@ public abstract class MiddleInventoryOpen<T> extends ClientBoundMiddlePacket<T> 
 
 	@Override
 	public void handle() {
-		sharedstorage.setOpenedWindow(WindowType.fromName(invname));
+		cache.setOpenedWindow(WindowType.fromName(invname));
 	}
 
 }

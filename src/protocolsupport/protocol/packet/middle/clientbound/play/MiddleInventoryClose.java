@@ -16,7 +16,7 @@ public abstract class MiddleInventoryClose<T> extends ClientBoundMiddlePacket<T>
 
 	@Override
 	public void handle() {
-		sharedstorage.closeWindow();
+		cache.closeWindow();
 	}
 
 }

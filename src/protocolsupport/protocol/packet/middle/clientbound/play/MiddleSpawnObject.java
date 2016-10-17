@@ -40,7 +40,7 @@ public abstract class MiddleSpawnObject<T> extends ClientBoundMiddlePacket<T> {
 
 	@Override
 	public void handle() {
-		storage.addWatchedEntity(new WatchedObject(entityId, type));
+		cache.addWatchedEntity(new WatchedObject(entityId, type));
 	}
 
 }

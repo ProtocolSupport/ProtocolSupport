@@ -9,7 +9,7 @@ import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.IPipeLineBuilder;
 import protocolsupport.protocol.pipeline.common.VarIntFrameDecoder;
 import protocolsupport.protocol.pipeline.common.VarIntFrameEncoder;
-import protocolsupport.protocol.storage.SharedStorage;
+import protocolsupport.protocol.storage.NetworkDataCache;
 
 public class PipeLineBuilder implements IPipeLineBuilder {
 
@@ -20,7 +20,7 @@ public class PipeLineBuilder implements IPipeLineBuilder {
 		networkmanager.setPacketListener(new ModernHandshakeListener(networkmanager, false));
 		ChannelHandlers.getSplitter(pipeline).setRealSplitter(new VarIntFrameDecoder());
 		ChannelHandlers.getPrepender(pipeline).setRealPrepender(new VarIntFrameEncoder());
-		SharedStorage sharedstorage = new SharedStorage();
+		NetworkDataCache sharedstorage = new NetworkDataCache();
 		ChannelHandlers.getDecoder(pipeline).setRealDecoder(new PacketDecoder(connection, sharedstorage));
 		ChannelHandlers.getEncoder(pipeline).setRealEncoder(new PacketEncoder(connection, sharedstorage));
 	}

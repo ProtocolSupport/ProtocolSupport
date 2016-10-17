@@ -11,12 +11,65 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
+import protocolsupport.protocol.utils.types.WindowType;
 
-public class LocalStorage {
+public class NetworkDataCache {
+
+	private double x;
+	private double y;
+	private double z;
+	private int teleportConfirmId;
+
+	public boolean isTeleportConfirmNeeded() {
+		return teleportConfirmId != -1;
+	}
+
+	public int tryTeleportConfirm(double x, double y, double z) {
+		if (
+			(Double.doubleToLongBits(this.x) == Double.doubleToLongBits(x)) &&
+			(Double.doubleToLongBits(this.y) == Double.doubleToLongBits(y)) &&
+			(Double.doubleToLongBits(this.z) == Double.doubleToLongBits(z))
+		) {
+			int r = teleportConfirmId;
+			teleportConfirmId = -1;
+			return r;
+		}
+		return -1;
+	}
+
+	public boolean tryTeleportConfirm(int teleportId) {
+		if (teleportId == teleportConfirmId) {
+			teleportConfirmId = -1;
+			return true;
+		}
+		return false;
+	}
+
+	public void setTeleportLocation(double x, double y, double z, int teleportConfirmId) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.teleportConfirmId = teleportConfirmId;
+	}
+
+	private WindowType windowType = WindowType.PLAYER;
+
+	public void setOpenedWindow(WindowType windowType) {
+		this.windowType = windowType;
+	}
+
+	public WindowType getOpenedWindow() {
+		return this.windowType;
+	}
+
+	public void closeWindow() {
+		this.windowType = WindowType.PLAYER;
+	}
+
 
 	private final TIntObjectHashMap<WatchedEntity> watchedEntities = new TIntObjectHashMap<>();
 	private WatchedPlayer player;
-	private final HashMap<UUID, PlayerListEntry> playerlist = new HashMap<>();
+	private final HashMap<UUID, NetworkDataCache.PlayerListEntry> playerlist = new HashMap<>();
 	private int dimensionId;
 	private float maxHealth = 20.0F;
 
@@ -55,11 +108,11 @@ public class LocalStorage {
 		readdSelfPlayer();
 	}
 
-	public void addPlayerListEntry(UUID uuid, PlayerListEntry entry) {
+	public void addPlayerListEntry(UUID uuid, NetworkDataCache.PlayerListEntry entry) {
 		playerlist.put(uuid, entry);
 	}
 
-	public PlayerListEntry getPlayerListEntry(UUID uuid) {
+	public NetworkDataCache.PlayerListEntry getPlayerListEntry(UUID uuid) {
 		return playerlist.get(uuid);
 	}
 
@@ -83,46 +136,10 @@ public class LocalStorage {
 		return maxHealth;
 	}
 
-	public static class PlayerListEntry implements Cloneable {
-		private final String name;
-		private String displayNameJson;
-		private final PropertiesStorage propstorage = new PropertiesStorage();
-
-		public PlayerListEntry(String name) {
-			this.name = name;
-		}
-
-		public void setDisplayNameJson(String displayNameJson) {
-			this.displayNameJson = displayNameJson;
-		}
-
-		public PropertiesStorage getProperties() {
-			return propstorage;
-		}
-
-		public String getUserName() {
-			return name;
-		}
-
-		public String getName() {
-			return displayNameJson == null ? name : ChatAPI.fromJSON(displayNameJson).toLegacyText();
-		}
-
-		@Override
-		public PlayerListEntry clone() {
-			PlayerListEntry clone = new PlayerListEntry(name);
-			clone.displayNameJson = displayNameJson;
-			for (Property property : propstorage.getAll(false)) {
-				clone.propstorage.add(property);
-			}
-			return clone;
-		}
-	}
-
 	public static class PropertiesStorage {
 		private final HashMap<String, Property> signed = new HashMap<>();
 		private final HashMap<String, Property> unsigned = new HashMap<>();
-
+	
 		public void add(Property property) {
 			if (property.hasSignature()) {
 				signed.put(property.getName(), property);
@@ -130,7 +147,7 @@ public class LocalStorage {
 				unsigned.put(property.getName(), property);
 			}
 		}
-
+	
 		public List<Property> getAll(boolean signedOnly) {
 			if (signedOnly) {
 				return new ArrayList<>(signed.values());
@@ -140,6 +157,42 @@ public class LocalStorage {
 				properties.addAll(unsigned.values());
 				return properties;
 			}
+		}
+	}
+
+	public static class PlayerListEntry implements Cloneable {
+		private final String name;
+		private String displayNameJson;
+		private final PropertiesStorage propstorage = new PropertiesStorage();
+	
+		public PlayerListEntry(String name) {
+			this.name = name;
+		}
+	
+		public void setDisplayNameJson(String displayNameJson) {
+			this.displayNameJson = displayNameJson;
+		}
+	
+		public PropertiesStorage getProperties() {
+			return propstorage;
+		}
+	
+		public String getUserName() {
+			return name;
+		}
+	
+		public String getName() {
+			return displayNameJson == null ? name : ChatAPI.fromJSON(displayNameJson).toLegacyText();
+		}
+	
+		@Override
+		public PlayerListEntry clone() {
+			PlayerListEntry clone = new PlayerListEntry(name);
+			clone.displayNameJson = displayNameJson;
+			for (Property property : propstorage.getAll(false)) {
+				clone.propstorage.add(property);
+			}
+			return clone;
 		}
 	}
 

@@ -52,7 +52,7 @@ public abstract class MiddlePosition<T> extends ClientBoundMiddlePacket<T> {
 	@Override
 	public void handle() {
 		if (teleportConfirmId != 0) {
-			sharedstorage.setTeleportLocation(x, y, z, teleportConfirmId);
+			cache.setTeleportLocation(x, y, z, teleportConfirmId);
 		}
 	}
 

@@ -86,7 +86,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_9
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7__1_8__1_9_r1__1_9_r2__1_10.Pong;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7__1_8__1_9_r1__1_9_r2__1_10.ServerInfo;
 import protocolsupport.protocol.pipeline.version.AbstractPacketEncoder;
-import protocolsupport.protocol.storage.SharedStorage;
+import protocolsupport.protocol.storage.NetworkDataCache;
 
 public class PacketEncoder extends AbstractPacketEncoder {
 
@@ -260,7 +260,7 @@ public class PacketEncoder extends AbstractPacketEncoder {
 		registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_VEHICLE_MOVE, VehicleMove.class);
 	}
 
-	public PacketEncoder(Connection connection, SharedStorage storage) {
+	public PacketEncoder(Connection connection, NetworkDataCache storage) {
 		super(connection, storage);
 	}
 

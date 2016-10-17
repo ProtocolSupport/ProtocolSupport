@@ -10,7 +10,7 @@ import com.mojang.authlib.properties.Property;
 import gnu.trove.map.TIntObjectMap;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage.PlayerListEntry;
+import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
@@ -45,8 +45,8 @@ public abstract class MiddleSpawnNamed<T> extends ClientBoundMiddlePacket<T> {
 	@Override
 	public void handle() {
 		wplayer = new WatchedPlayer(playerEntityId);
-		storage.addWatchedEntity(wplayer);
-		PlayerListEntry entry = storage.getPlayerListEntry(uuid);
+		cache.addWatchedEntity(wplayer);
+		NetworkDataCache.PlayerListEntry entry = cache.getPlayerListEntry(uuid);
 		if (entry != null) {
 			name = entry.getUserName();
 			properties = entry.getProperties().getAll(true);

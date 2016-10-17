@@ -26,7 +26,7 @@ public class Chunk extends MiddleChunk<RecyclableCollection<PacketData>>  {
 		chunkdata.writeInt(chunkX);
 		chunkdata.writeInt(chunkZ);
 		chunkdata.writeBoolean(full);
-		boolean hasSkyLight = storage.hasSkyLightInCurrentDimension();
+		boolean hasSkyLight = cache.hasSkyLightInCurrentDimension();
 		if ((bitmask == 0) && full) {
 			chunkdata.writeShort(1);
 			chunkdata.writeByteArray(EmptyChunk.get18ChunkData(hasSkyLight));

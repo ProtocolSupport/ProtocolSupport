@@ -86,7 +86,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_6__1_7__1
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.noop.NoopPong;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_5__1_6.ServerInfo;
 import protocolsupport.protocol.pipeline.version.AbstractPacketEncoder;
-import protocolsupport.protocol.storage.SharedStorage;
+import protocolsupport.protocol.storage.NetworkDataCache;
 
 public class PacketEncoder extends AbstractPacketEncoder {
 
@@ -244,7 +244,7 @@ public class PacketEncoder extends AbstractPacketEncoder {
 		registry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_RESOURCE_PACK_ID, NoopResourcePack.class);
 	}
 
-	public PacketEncoder(Connection connection, SharedStorage storage) {
+	public PacketEncoder(Connection connection, NetworkDataCache storage) {
 		super(connection, storage);
 	}
 

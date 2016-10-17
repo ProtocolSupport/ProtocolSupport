@@ -8,13 +8,13 @@ import protocolsupport.api.unsafe.Connection;
 import protocolsupport.protocol.legacyremapper.LegacyAnimatePacketReorderer;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ReplayingProtocolSupportSupportPacketDataSerializer;
-import protocolsupport.protocol.storage.SharedStorage;
+import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
 
 public class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
 
-	public AbstractLegacyPacketDecoder(Connection connection, SharedStorage storage) {
+	public AbstractLegacyPacketDecoder(Connection connection, NetworkDataCache storage) {
 		super(connection, storage);
 	}
 
