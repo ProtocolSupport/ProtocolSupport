@@ -11,6 +11,7 @@ public abstract class ServerBoundMiddlePacket extends MiddlePacket {
 
 	protected NetworkDataCache sharedstorage;
 
+	@Override
 	public void setSharedStorage(NetworkDataCache sharedstorage) {
 		this.sharedstorage = sharedstorage;
 	}

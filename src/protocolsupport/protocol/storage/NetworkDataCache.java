@@ -139,7 +139,7 @@ public class NetworkDataCache {
 	public static class PropertiesStorage {
 		private final HashMap<String, Property> signed = new HashMap<>();
 		private final HashMap<String, Property> unsigned = new HashMap<>();
-	
+
 		public void add(Property property) {
 			if (property.hasSignature()) {
 				signed.put(property.getName(), property);
@@ -147,7 +147,7 @@ public class NetworkDataCache {
 				unsigned.put(property.getName(), property);
 			}
 		}
-	
+
 		public List<Property> getAll(boolean signedOnly) {
 			if (signedOnly) {
 				return new ArrayList<>(signed.values());
@@ -164,27 +164,27 @@ public class NetworkDataCache {
 		private final String name;
 		private String displayNameJson;
 		private final PropertiesStorage propstorage = new PropertiesStorage();
-	
+
 		public PlayerListEntry(String name) {
 			this.name = name;
 		}
-	
+
 		public void setDisplayNameJson(String displayNameJson) {
 			this.displayNameJson = displayNameJson;
 		}
-	
+
 		public PropertiesStorage getProperties() {
 			return propstorage;
 		}
-	
+
 		public String getUserName() {
 			return name;
 		}
-	
+
 		public String getName() {
 			return displayNameJson == null ? name : ChatAPI.fromJSON(displayNameJson).toLegacyText();
 		}
-	
+
 		@Override
 		public PlayerListEntry clone() {
 			PlayerListEntry clone = new PlayerListEntry(name);

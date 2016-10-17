@@ -22,7 +22,7 @@ public class ProtocolSupportAPI {
 	}
 
 	public static List<Connection> getConnections() {
-		return new ArrayList<Connection>(ProtocolStorage.getConnections());
+		return new ArrayList<>(ProtocolStorage.getConnections());
 	}
 
 	public static Connection getConnection(Player player) {

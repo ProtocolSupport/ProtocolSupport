@@ -8,6 +8,7 @@ import org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.spigotmc.SpigotConfig;
 
+import net.minecraft.server.v1_10_R1.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_10_R1.LocaleI18n;
 import net.minecraft.server.v1_10_R1.MinecraftServer;
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
@@ -16,7 +17,6 @@ import net.minecraft.server.v1_10_R1.PacketPlayInCloseWindow;
 import net.minecraft.server.v1_10_R1.PacketPlayOutChat;
 import net.minecraft.server.v1_10_R1.PacketPlayOutPlayerListHeaderFooter;
 import net.minecraft.server.v1_10_R1.PacketPlayOutTitle;
-import net.minecraft.server.v1_10_R1.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_10_R1.PacketPlayOutTitle.EnumTitleAction;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
