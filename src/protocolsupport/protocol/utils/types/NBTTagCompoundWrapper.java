@@ -2,9 +2,22 @@ package protocolsupport.protocol.utils.types;
 
 import java.util.Objects;
 
+import org.spigotmc.SneakyThrow;
+
+import net.minecraft.server.v1_10_R1.MojangsonParseException;
+import net.minecraft.server.v1_10_R1.MojangsonParser;
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
 
 public class NBTTagCompoundWrapper {
+
+	public static NBTTagCompoundWrapper fromJson(String json) {
+		try {
+			return new NBTTagCompoundWrapper(MojangsonParser.parse(json));
+		} catch (MojangsonParseException e) {
+			SneakyThrow.sneaky(e);
+		}
+		return null;
+	}
 
 	private NBTTagCompound tag;
 
@@ -69,6 +82,11 @@ public class NBTTagCompoundWrapper {
 		}
 		NBTTagCompoundWrapper other = (NBTTagCompoundWrapper) otherObj;
 		return Objects.equals(tag, other.tag);
+	}
+
+	@Override
+	public String toString() {
+		return tag.toString();
 	}
 
 }

@@ -5,17 +5,15 @@ import java.util.UUID;
 import org.bukkit.Achievement;
 import org.bukkit.Statistic;
 import org.bukkit.craftbukkit.v1_10_R1.CraftStatistic;
-import org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
-import net.minecraft.server.v1_10_R1.MojangsonParseException;
-import net.minecraft.server.v1_10_R1.MojangsonParser;
-import net.minecraft.server.v1_10_R1.NBTTagCompound;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.utils.Any;
+import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
+import protocolsupport.utils.ServerPlatformUtils;
 
 public class HoverAction {
 
@@ -34,10 +32,7 @@ public class HoverAction {
 
 	public HoverAction(ItemStack itemstack) {
 		this.type = Type.SHOW_ITEM;
-		net.minecraft.server.v1_10_R1.ItemStack nmsitemstack = CraftItemStack.asNMSCopy(itemstack);
-		NBTTagCompound compound = new NBTTagCompound();
-		nmsitemstack.save(compound);
-		this.value = compound.toString();
+		this.value = ServerPlatformUtils.createNBTTagFromItemStack(itemstack).toString();
 	}
 
 	public HoverAction(Entity entity) {
@@ -47,7 +42,7 @@ public class HoverAction {
 	@SuppressWarnings("deprecation")
 	public HoverAction(EntityInfo entityinfo) {
 		this.type = Type.SHOW_ENTITY;
-		NBTTagCompound compound = new NBTTagCompound();
+		NBTTagCompoundWrapper compound = new NBTTagCompoundWrapper(true);
 		compound.setString("type", entityinfo.getType().getName());
 		compound.setString("id", entityinfo.getUUID().toString());
 		compound.setString("name", entityinfo.getName());
@@ -79,22 +74,14 @@ public class HoverAction {
 
 	public ItemStack getItemStack() {
 		validateAction(type, Type.SHOW_ITEM);
-		try {
-			return CraftItemStack.asCraftMirror(net.minecraft.server.v1_10_R1.ItemStack.createStack(MojangsonParser.parse(value)));
-		} catch (MojangsonParseException e) {
-			throw new IllegalStateException("Unable to parse value to itemstack");
-		}
+		return ServerPlatformUtils.createItemStackFromNBTTag(NBTTagCompoundWrapper.fromJson(value));
 	}
 
 	@SuppressWarnings("deprecation")
 	public EntityInfo getEntity() {
 		validateAction(type, Type.SHOW_ENTITY);
-		try {
-			NBTTagCompound compound = MojangsonParser.parse(value);
-			return new EntityInfo(EntityType.fromName(compound.getString("type")), UUID.fromString(compound.getString("id")), compound.getString("name"));
-		} catch (MojangsonParseException e) {
-			throw new IllegalStateException("Unable to parse value to entity info");
-		}
+		NBTTagCompoundWrapper compound = NBTTagCompoundWrapper.fromJson(value);
+		return new EntityInfo(EntityType.fromName(compound.getString("type")), UUID.fromString(compound.getString("id")), compound.getString("name"));
 	}
 
 	public Any<Achievement, Statistic> getAchievmentOrStat() {

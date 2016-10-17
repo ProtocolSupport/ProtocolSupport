@@ -1,15 +1,13 @@
 package protocolsupport.api.title;
 
 import org.apache.commons.lang3.Validate;
-import org.bukkit.craftbukkit.v1_10_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import net.minecraft.server.v1_10_R1.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_10_R1.PacketPlayOutTitle;
-import net.minecraft.server.v1_10_R1.PacketPlayOutTitle.EnumTitleAction;
-import net.minecraft.server.v1_10_R1.PlayerConnection;
+import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.api.unsafe.Connection;
+import protocolsupport.utils.ServerPlatformUtils;
 
 public class TitleAPI {
 
@@ -22,20 +20,20 @@ public class TitleAPI {
 		if ((titleJson == null) && (subtitleJson == null)) {
 			throw new IllegalArgumentException("Title and subtitle can't be both null");
 		}
-		PlayerConnection connection = ((CraftPlayer) player).getHandle().playerConnection;
+		Connection connection = ProtocolSupportAPI.getConnection(player);
 		if (titleJson != null) {
-			connection.sendPacket(new PacketPlayOutTitle(EnumTitleAction.TITLE, ChatSerializer.a(titleJson)));
+			connection.sendPacket(ServerPlatformUtils.createTitleMainPacket(titleJson));
 		}
 		if (subtitleJson != null) {
-			connection.sendPacket(new PacketPlayOutTitle(EnumTitleAction.SUBTITLE, ChatSerializer.a(subtitleJson)));
+			connection.sendPacket(ServerPlatformUtils.createTitleSubPacket(subtitleJson));
 		}
-		connection.sendPacket(new PacketPlayOutTitle(fadeIn, stay, fadeOut));
+		connection.sendPacket(ServerPlatformUtils.createTitleParamsPacket(fadeIn, stay, fadeOut));
 	}
 
 	public static void removeSimpleTitle(Player player) {
-		PlayerConnection connection = ((CraftPlayer) player).getHandle().playerConnection;
-		connection.sendPacket(new PacketPlayOutTitle(EnumTitleAction.CLEAR, null));
-		connection.sendPacket(new PacketPlayOutTitle(EnumTitleAction.RESET, null));
+		Connection connection = ProtocolSupportAPI.getConnection(player);
+		connection.sendPacket(ServerPlatformUtils.createTitleClearPacket());
+		connection.sendPacket(ServerPlatformUtils.createTitleResetPacket());
 	}
 
 }

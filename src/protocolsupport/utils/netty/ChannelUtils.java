@@ -8,7 +8,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.DecoderException;
 import io.netty.util.AttributeKey;
-import net.minecraft.server.v1_10_R1.EntityPlayer;
 import net.minecraft.server.v1_10_R1.EnumProtocol;
 import net.minecraft.server.v1_10_R1.NetworkManager;
 import net.minecraft.server.v1_10_R1.PacketListener;
@@ -20,14 +19,10 @@ public class ChannelUtils {
 	public static final AttributeKey<EnumProtocol> CURRENT_PROTOCOL_KEY = NetworkManager.c;
 
 	public static Player getBukkitPlayer(Channel channel) {
-		EntityPlayer player = getPlayer(getNetworkManager(channel));
-		return player != null ? player.getBukkitEntity() : null;
-	}
-
-	public static EntityPlayer getPlayer(NetworkManager networkManager) {
+		NetworkManager networkManager = getNetworkManager(channel);
 		PacketListener listener = networkManager.i();
 		if (listener instanceof PlayerConnection) {
-			return ((PlayerConnection) networkManager.i()).player;
+			return ((PlayerConnection) networkManager.i()).player.getBukkitEntity();
 		}
 		return null;
 	}
