@@ -1,7 +1,7 @@
 package protocolsupport.protocol.pipeline.version.v_1_5;
 
 import net.minecraft.server.v1_10_R1.EnumProtocol;
-import protocolsupport.api.unsafe.Connection;
+import protocolsupport.api.Connection;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.noop.NoopLoginSuccess;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.noop.NoopSetCompression;

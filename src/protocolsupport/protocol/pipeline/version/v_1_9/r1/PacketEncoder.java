@@ -1,7 +1,7 @@
 package protocolsupport.protocol.pipeline.version.v_1_9.r1;
 
 import net.minecraft.server.v1_10_R1.EnumProtocol;
-import protocolsupport.api.unsafe.Connection;
+import protocolsupport.api.Connection;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_1_4__1_5__1_6__1_7__1_8__1_9_r1__1_9_r2__1_10.EncryptionRequest;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_1_7__1_8__1_9_r1__1_9_r2__1_10.LoginDisconnect;

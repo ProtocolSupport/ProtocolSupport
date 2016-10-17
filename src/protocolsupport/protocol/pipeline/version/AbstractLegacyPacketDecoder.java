@@ -4,7 +4,7 @@ import java.util.List;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import protocolsupport.api.unsafe.Connection;
+import protocolsupport.api.Connection;
 import protocolsupport.protocol.legacyremapper.LegacyAnimatePacketReorderer;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ReplayingProtocolSupportSupportPacketDataSerializer;

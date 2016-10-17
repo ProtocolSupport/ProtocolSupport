@@ -3,7 +3,7 @@ package protocolsupport.protocol.pipeline.version.v_1_5;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import net.minecraft.server.v1_10_R1.NetworkManager;
-import protocolsupport.api.unsafe.Connection;
+import protocolsupport.api.Connection;
 import protocolsupport.protocol.packet.handler.common.LegacyHandshakeListener;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.IPipeLineBuilder;

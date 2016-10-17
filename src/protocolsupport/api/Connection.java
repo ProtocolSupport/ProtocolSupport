@@ -1,4 +1,4 @@
-package protocolsupport.api.unsafe;
+package protocolsupport.api;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.ExecutionException;
@@ -9,7 +9,6 @@ import net.minecraft.server.v1_10_R1.CancelledPacketHandleException;
 import net.minecraft.server.v1_10_R1.NetworkManager;
 import net.minecraft.server.v1_10_R1.Packet;
 import net.minecraft.server.v1_10_R1.PacketListener;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.utils.netty.ChannelUtils;
 
 public class Connection {

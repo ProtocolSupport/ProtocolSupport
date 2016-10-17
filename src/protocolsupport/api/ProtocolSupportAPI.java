@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 
 import protocolsupport.api.remapper.BlockRemapperControl;
 import protocolsupport.api.remapper.ItemRemapperControl;
-import protocolsupport.api.unsafe.Connection;
 import protocolsupport.protocol.storage.ProtocolStorage;
 
 public class ProtocolSupportAPI {

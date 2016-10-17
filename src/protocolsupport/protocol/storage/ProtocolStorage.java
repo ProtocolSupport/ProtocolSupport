@@ -4,7 +4,7 @@ import java.net.SocketAddress;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 
-import protocolsupport.api.unsafe.Connection;
+import protocolsupport.api.Connection;
 
 public class ProtocolStorage {
 

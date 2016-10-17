@@ -1,7 +1,7 @@
 package protocolsupport.protocol.pipeline;
 
 import io.netty.channel.Channel;
-import protocolsupport.api.unsafe.Connection;
+import protocolsupport.api.Connection;
 
 public interface IPipeLineBuilder {
 

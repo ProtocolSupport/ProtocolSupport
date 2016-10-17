@@ -3,10 +3,10 @@ package protocolsupport.api.title;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.entity.Player;
 
+import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
-import protocolsupport.api.unsafe.Connection;
 import protocolsupport.utils.ServerPlatformUtils;
 
 public class TitleAPI {

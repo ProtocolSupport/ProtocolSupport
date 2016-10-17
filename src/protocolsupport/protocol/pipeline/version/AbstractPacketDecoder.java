@@ -2,7 +2,7 @@ package protocolsupport.protocol.pipeline.version;
 
 import java.util.List;
 
-import protocolsupport.api.unsafe.Connection;
+import protocolsupport.api.Connection;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.PacketCreator;
 import protocolsupport.protocol.pipeline.IPacketDecoder;

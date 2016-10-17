@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middle;
 
-import protocolsupport.api.unsafe.Connection;
+import protocolsupport.api.Connection;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
