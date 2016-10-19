@@ -4,6 +4,7 @@ import java.util.List;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import net.minecraft.server.v1_10_R1.EnumProtocol;
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.legacyremapper.LegacyAnimatePacketReorderer;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
@@ -29,9 +30,10 @@ public class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
 		serializer.setBuf(input);
 		serializer.markReaderIndex();
 		try {
-			ServerBoundMiddlePacket packetTransformer = registry.getTransformer(ctx.channel().attr(ChannelUtils.CURRENT_PROTOCOL_KEY).get(), serializer.readUnsignedByte());
+			EnumProtocol protocol = ctx.channel().attr(ChannelUtils.CURRENT_PROTOCOL_KEY).get();
+			ServerBoundMiddlePacket packetTransformer = registry.getTransformer(protocol, serializer.readUnsignedByte());
 			packetTransformer.readFromClientData(serializer);
-			addPackets(animateReorderer.orderPackets(packetTransformer.toNative()), list);
+			addPackets(protocol, animateReorderer.orderPackets(packetTransformer.toNative()), list);
 		} catch (EOFSignal ex) {
 			serializer.resetReaderIndex();
 		}

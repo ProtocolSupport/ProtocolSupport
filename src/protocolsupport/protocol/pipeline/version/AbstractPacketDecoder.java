@@ -2,6 +2,10 @@ package protocolsupport.protocol.pipeline.version;
 
 import java.util.List;
 
+import net.minecraft.server.v1_10_R1.EnumProtocol;
+import net.minecraft.server.v1_10_R1.EnumProtocolDirection;
+import net.minecraft.server.v1_10_R1.Packet;
+
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.PacketCreator;
@@ -29,10 +33,12 @@ public abstract class AbstractPacketDecoder implements IPacketDecoder {
 		});
 	}
 
-	protected void addPackets(RecyclableCollection<PacketCreator> packets, List<Object> to) throws Exception {
+	protected void addPackets(EnumProtocol protocol, RecyclableCollection<PacketCreator> packets, List<Object> to) throws Exception {
 		try {
 			for (PacketCreator creator : packets) {
-				to.add(creator.create());
+				Packet<?> packet = protocol.a(EnumProtocolDirection.SERVERBOUND, creator.readVarInt());
+				packet.a(creator.getNativeSerializer());
+				to.add(packet);
 			}
 		} finally {
 			packets.recycle();
