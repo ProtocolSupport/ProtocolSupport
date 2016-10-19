@@ -8,10 +8,10 @@ import net.minecraft.server.v1_10_R1.EnumProtocolDirection;
 import net.minecraft.server.v1_10_R1.NetworkManager;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.FakePacketListener;
+import protocolsupport.protocol.pipeline.common.PacketDecoder;
+import protocolsupport.protocol.pipeline.common.PacketEncoder;
 import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
 import protocolsupport.protocol.pipeline.timeout.SimpleReadTimeoutHandler;
-import protocolsupport.protocol.pipeline.wrapped.WrappedDecoder;
-import protocolsupport.protocol.pipeline.wrapped.WrappedEncoder;
 import protocolsupport.protocol.pipeline.wrapped.WrappedPrepender;
 import protocolsupport.protocol.pipeline.wrapped.WrappedSplitter;
 import protocolsupport.utils.ServerPlatformUtils;
@@ -46,9 +46,9 @@ public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 		.addLast(ChannelHandlers.READ_TIMEOUT, new SimpleReadTimeoutHandler(30))
 		.addLast(ChannelHandlers.INITIAL_DECODER, new InitialPacketDecoder())
 		.addLast(ChannelHandlers.SPLITTER, new WrappedSplitter())
-		.addLast(ChannelHandlers.DECODER, new WrappedDecoder())
+		.addLast(ChannelHandlers.DECODER, new PacketDecoder())
 		.addLast(ChannelHandlers.PREPENDER, new WrappedPrepender())
-		.addLast(ChannelHandlers.ENCODER, new WrappedEncoder());
+		.addLast(ChannelHandlers.ENCODER, new PacketEncoder());
 		NetworkManager networkmanager = new NetworkManager(EnumProtocolDirection.SERVERBOUND);
 		networkmanager.setPacketListener(new FakePacketListener());
 		networkManagers.add(networkmanager);

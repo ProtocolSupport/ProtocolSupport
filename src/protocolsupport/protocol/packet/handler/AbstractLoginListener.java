@@ -139,8 +139,9 @@ public abstract class AbstractLoginListener extends LoginListener {
 	protected void enableCompresssion(int compressionLevel) {
 		Channel channel = networkManager.channel;
 		if (compressionLevel >= 0) {
-			channel.pipeline().addBefore(ChannelHandlers.DECODER, "decompress", new PacketDecompressor(compressionLevel));
-			channel.pipeline().addBefore(ChannelHandlers.ENCODER, "compress", new PacketCompressor(compressionLevel));
+			channel.pipeline()
+			.addAfter(ChannelHandlers.SPLITTER, "decompress", new PacketDecompressor(compressionLevel))
+			.addAfter(ChannelHandlers.PREPENDER, "compress", new PacketCompressor(compressionLevel));
 		}
 	}
 

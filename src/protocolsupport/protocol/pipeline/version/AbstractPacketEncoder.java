@@ -1,29 +1,25 @@
 package protocolsupport.protocol.pipeline.version;
 
-import java.io.IOException;
+import java.util.List;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.server.v1_10_R1.EnumProtocol;
-import net.minecraft.server.v1_10_R1.EnumProtocolDirection;
-import net.minecraft.server.v1_10_R1.Packet;
-import net.minecraft.server.v1_10_R1.PacketListener;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.pipeline.IPacketEncoder;
-import protocolsupport.protocol.serializer.ChainedProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry.InitCallBack;
 import protocolsupport.protocol.utils.registry.PacketIdTransformerRegistry;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.ChannelUtils;
+import protocolsupport.utils.netty.MessageToMessageEncoder;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
-public abstract class AbstractPacketEncoder implements IPacketEncoder {
+public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<ByteBuf> {
 
 	protected final Connection connection;
 	protected final NetworkDataCache cache;
@@ -43,19 +39,15 @@ public abstract class AbstractPacketEncoder implements IPacketEncoder {
 	protected final MiddleTransformerRegistry<ClientBoundMiddlePacket<RecyclableCollection<ClientBoundPacketData>>> registry = new MiddleTransformerRegistry<>();
 	protected static final PacketIdTransformerRegistry packetIdRegistry = new PacketIdTransformerRegistry();
 
-	private final ChainedProtocolSupportPacketDataSerializer middlebuffer = new ChainedProtocolSupportPacketDataSerializer();
+	private final ProtocolSupportPacketDataSerializer middlebuffer = new ProtocolSupportPacketDataSerializer(null, ProtocolVersion.getLatest());
 	private final boolean varintPacketId;
 
 	@Override
-	public void encode(ChannelHandlerContext ctx, Packet<PacketListener> packet, ByteBuf output) throws Exception {
-		Channel channel = ctx.channel();
-		EnumProtocol currentProtocol = channel.attr(ChannelUtils.CURRENT_PROTOCOL_KEY).get();
-		final Integer packetId = currentProtocol.a(EnumProtocolDirection.CLIENTBOUND, packet);
-		if (packetId == null) {
-			throw new IOException("Can't serialize unregistered packet " + packet.getClass().getName());
-		}
+	public void encode(ChannelHandlerContext ctx, ByteBuf packet, List<Object> output) throws Exception {
+		EnumProtocol currentProtocol = ctx.channel().attr(ChannelUtils.CURRENT_PROTOCOL_KEY).get();
+		middlebuffer.setBuf(packet);
+		int packetId = middlebuffer.readVarInt();
 		ClientBoundMiddlePacket<RecyclableCollection<ClientBoundPacketData>> packetTransformer = registry.getTransformer(currentProtocol, packetId);
-		packet.b(middlebuffer.prepareNativeSerializer());
 		packetTransformer.readFromServerData(middlebuffer);
 		packetTransformer.handle();
 		try (RecyclableCollection<ClientBoundPacketData> data = packetTransformer.toData(connection.getVersion())) {
@@ -68,9 +60,8 @@ public abstract class AbstractPacketEncoder implements IPacketEncoder {
 					senddata.writeByte(newPacketId);
 				}
 				senddata.writeBytes(packetdata);
-				ctx.write(senddata);
+				output.add(senddata);
 			}
-			ctx.flush();
 		}
 	}
 

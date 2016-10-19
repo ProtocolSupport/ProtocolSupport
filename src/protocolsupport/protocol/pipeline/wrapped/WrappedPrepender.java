@@ -3,7 +3,6 @@ package protocolsupport.protocol.pipeline.wrapped;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
-import protocolsupport.protocol.pipeline.IPacketPrepender;
 
 public class WrappedPrepender extends MessageToByteEncoder<ByteBuf> {
 

@@ -5,7 +5,7 @@ import java.util.List;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.CorruptedFrameException;
-import protocolsupport.protocol.pipeline.IPacketSplitter;
+import protocolsupport.protocol.pipeline.wrapped.IPacketSplitter;
 
 public class VarIntFrameDecoder implements IPacketSplitter {
 

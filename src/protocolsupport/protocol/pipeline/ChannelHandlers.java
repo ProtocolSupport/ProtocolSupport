@@ -2,8 +2,6 @@ package protocolsupport.protocol.pipeline;
 
 import io.netty.channel.ChannelPipeline;
 import protocolsupport.protocol.pipeline.timeout.SimpleReadTimeoutHandler;
-import protocolsupport.protocol.pipeline.wrapped.WrappedDecoder;
-import protocolsupport.protocol.pipeline.wrapped.WrappedEncoder;
 import protocolsupport.protocol.pipeline.wrapped.WrappedPrepender;
 import protocolsupport.protocol.pipeline.wrapped.WrappedSplitter;
 
@@ -19,14 +17,8 @@ public class ChannelHandlers {
 	public static final String ENCODER = "encoder";
 	public static final String NETWORK_MANAGER = "packet_handler";
 	public static final String DECRYPT = "decrypt";
-
-	public static WrappedDecoder getDecoder(ChannelPipeline pipeline) {
-		return (WrappedDecoder) pipeline.get(DECODER);
-	}
-
-	public static WrappedEncoder getEncoder(ChannelPipeline pipeline) {
-		return (WrappedEncoder) pipeline.get(ENCODER);
-	}
+	public static final String DECODER_TRANSFORMER = "decoder_transformer";
+	public static final String ENCODER_TRANSFORMER = "encoder_transformer";
 
 	public static WrappedSplitter getSplitter(ChannelPipeline pipeline) {
 		return (WrappedSplitter) pipeline.get(SPLITTER);

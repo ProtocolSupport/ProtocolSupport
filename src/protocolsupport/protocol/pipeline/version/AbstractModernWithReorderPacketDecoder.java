@@ -5,7 +5,6 @@ import java.util.List;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.DecoderException;
-import net.minecraft.server.v1_10_R1.EnumProtocol;
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.legacyremapper.LegacyAnimatePacketReorderer;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
@@ -28,13 +27,12 @@ public class AbstractModernWithReorderPacketDecoder extends AbstractPacketDecode
 			return;
 		}
 		serializer.setBuf(input);
-		EnumProtocol protocol = ctx.channel().attr(ChannelUtils.CURRENT_PROTOCOL_KEY).get();
-		ServerBoundMiddlePacket packetTransformer = registry.getTransformer(protocol, serializer.readVarInt());
+		ServerBoundMiddlePacket packetTransformer = registry.getTransformer(ctx.channel().attr(ChannelUtils.CURRENT_PROTOCOL_KEY).get(), serializer.readVarInt());
 		packetTransformer.readFromClientData(serializer);
 		if (serializer.isReadable()) {
 			throw new DecoderException("Did not read all data from packet " + packetTransformer.getClass().getName() + ", bytes left: " + serializer.readableBytes());
 		}
-		addPackets(protocol, animateReorderer.orderPackets(packetTransformer.toNative()), list);
+		addPackets(animateReorderer.orderPackets(packetTransformer.toNative()), list);
 	}
 
 }

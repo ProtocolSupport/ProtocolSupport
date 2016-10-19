@@ -4,7 +4,7 @@ import java.util.List;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import protocolsupport.protocol.pipeline.IPacketSplitter;
+import protocolsupport.protocol.pipeline.wrapped.IPacketSplitter;
 
 public class NoOpFrameDecoder implements IPacketSplitter {
 
