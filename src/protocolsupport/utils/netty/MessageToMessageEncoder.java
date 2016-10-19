@@ -15,7 +15,7 @@ public abstract class MessageToMessageEncoder<I> extends ChannelOutboundHandlerA
 	private final TypeParameterMatcher matcher;
 
 	protected MessageToMessageEncoder() {
-		this.matcher = TypeParameterMatcher.find((Object) this, MessageToMessageEncoder.class, "I");
+		this.matcher = TypeParameterMatcher.find(this, MessageToMessageEncoder.class, "I");
 	}
 
 	protected MessageToMessageEncoder(final Class<? extends I> clazz) {
@@ -26,6 +26,7 @@ public abstract class MessageToMessageEncoder<I> extends ChannelOutboundHandlerA
 		return this.matcher.match(o);
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public void write(final ChannelHandlerContext channelHandlerContext, final Object o, final ChannelPromise channelPromise) throws Exception {
 		RecyclableArrayList instance = null;
