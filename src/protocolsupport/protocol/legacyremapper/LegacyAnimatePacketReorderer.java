@@ -39,11 +39,9 @@ public class LegacyAnimatePacketReorderer {
 					}
 				}
 			}
-			//clear old packets list, so packets packet creators do not recycle
-			packets.clear();
 			return ordered;
 		} finally {
-			packets.recycle();
+			packets.recycleObjectOnly();
 		}
 	}
 

@@ -33,6 +33,11 @@ public class RecyclableArrayList<E> extends ArrayList<E> implements RecyclableCo
 				((Recyclable) element).recycle();
 			}
 		}
+		recycleObjectOnly();
+	}
+
+	@Override
+	public void recycleObjectOnly() {
 		clear();
 		RECYCLER.recycle(this, handle);
 	}

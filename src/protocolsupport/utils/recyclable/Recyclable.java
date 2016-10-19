@@ -6,4 +6,6 @@ public interface Recyclable extends Closeable {
 
 	public void recycle();
 
+	public void recycleObjectOnly();
+
 }

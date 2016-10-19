@@ -33,6 +33,14 @@ public class RecyclableSingletonList<E> extends AbstractCollection<E> implements
 
 	@Override
 	public void recycle() {
+		if (singleValue instanceof Recyclable) {
+			((Recyclable) singleValue).recycle();
+		}
+		recycleObjectOnly();
+	}
+
+	@Override
+	public void recycleObjectOnly() {
 		singleValue = null;
 		RECYCLER.recycle(this, handle);
 	}
@@ -84,9 +92,7 @@ public class RecyclableSingletonList<E> extends AbstractCollection<E> implements
 
 	@Override
 	public void close() throws IOException {
-		if (singleValue instanceof Recyclable) {
-			((Recyclable) singleValue).recycle();
-		}
+		recycle();
 	}
 
 }

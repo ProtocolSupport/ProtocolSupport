@@ -62,4 +62,9 @@ public class ServerBoundPacketData extends ProtocolSupportPacketDataSerializer i
 		RECYCLER.recycle(this, handle);
 	}
 
+	@Override
+	public void recycleObjectOnly() {
+		recycle();
+	}
+
 }
