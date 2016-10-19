@@ -82,7 +82,7 @@ public abstract class ChunkTransformer {
 			}
 		}
 
-		protected final BlockStorage blockdata;
+		protected final BlockStorageReader blockdata;
 		protected final byte[] blocklight = new byte[2048];
 		protected final byte[] skylight = new byte[2048];
 
@@ -96,7 +96,7 @@ public abstract class ChunkTransformer {
 					palette[i] = ChannelUtils.readVarInt(datastream);
 				}
 			}
-			this.blockdata = new BlockStorage(palette, bitsPerBlock, ChannelUtils.readVarInt(datastream));
+			this.blockdata = new BlockStorageReader(palette, bitsPerBlock, ChannelUtils.readVarInt(datastream));
 			this.blockdata.readFromStream(datastream);
 			datastream.readBytes(blocklight);
 			if (hasSkyLight) {

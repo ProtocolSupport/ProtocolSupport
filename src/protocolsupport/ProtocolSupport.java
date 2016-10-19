@@ -9,7 +9,7 @@ import protocolsupport.injector.ServerInjector;
 import protocolsupport.injector.network.NettyInjector;
 import protocolsupport.logger.AsyncErrorLogger;
 import protocolsupport.protocol.legacyremapper.LegacySound;
-import protocolsupport.protocol.legacyremapper.chunk.BlockStorage;
+import protocolsupport.protocol.legacyremapper.chunk.BlockStorageReader;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
@@ -47,7 +47,7 @@ public class ProtocolSupport extends JavaPlugin {
 			NettyInjector.inject();
 			ReloadCommandRemover.remove();
 			IdRemapper.init();
-			BlockStorage.init();
+			BlockStorageReader.init();
 		} catch (Throwable t) {
 			t.printStackTrace();
 			Bukkit.shutdown();

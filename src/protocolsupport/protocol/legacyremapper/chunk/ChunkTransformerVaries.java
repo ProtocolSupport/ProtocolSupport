@@ -1,7 +1,6 @@
 package protocolsupport.protocol.legacyremapper.chunk;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.server.v1_10_R1.DataBits;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
@@ -10,7 +9,7 @@ import protocolsupport.utils.netty.ChannelUtils;
 
 public class ChunkTransformerVaries extends ChunkTransformer {
 
-	protected static final int bitsPerBlock19 = 13;
+	protected static final int bitsPerBlock_19_110 = 13;
 
 	@Override
 	protected byte[] toLegacyData0(ProtocolVersion version) {
@@ -19,14 +18,14 @@ public class ChunkTransformerVaries extends ChunkTransformer {
 		try {
 			for (int i = 0; i < columnsCount; i++) {
 				ChunkSection section = sections[i];
-				chunkdata.writeByte(bitsPerBlock19);
+				chunkdata.writeByte(bitsPerBlock_19_110);
 				ChannelUtils.writeVarInt(chunkdata, 0);
-				BlockStorage storage = section.blockdata;
-				DataBits databits = new DataBits(bitsPerBlock19, blocksInSection);
+				BlockStorageReader storage = section.blockdata;
+				BlockStorageWriter blockstorage = new BlockStorageWriter(bitsPerBlock_19_110, blocksInSection);
 				for (int block = 0; block < blocksInSection; block++) {
-					databits.a(block, table.getRemap(storage.getBlockState(block)));
+					blockstorage.setBlockState(block, table.getRemap(storage.getBlockState(block)));
 				}
-				long[] ldata = databits.a();
+				long[] ldata = blockstorage.getBlockData();
 				ChannelUtils.writeVarInt(chunkdata, ldata.length);
 				for (long l : ldata) {
 					chunkdata.writeLong(l);

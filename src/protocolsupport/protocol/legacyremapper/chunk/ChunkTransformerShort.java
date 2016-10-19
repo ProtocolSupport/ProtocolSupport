@@ -15,7 +15,7 @@ public class ChunkTransformerShort extends ChunkTransformer {
 		int skyLightIndex = 10240 * columnsCount;
 		for (int i = 0; i < columnsCount; i++) {
 			ChunkSection section = sections[i];
-			BlockStorage storage = section.blockdata;
+			BlockStorageReader storage = section.blockdata;
 			for (int block = 0; block < blocksInSection; block++) {
 				int dataindex = blockIdIndex + (block << 1);
 				int blockstate = storage.getBlockState(block);

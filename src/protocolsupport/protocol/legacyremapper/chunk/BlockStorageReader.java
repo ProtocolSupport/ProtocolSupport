@@ -6,7 +6,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.server.v1_10_R1.Block;
 import net.minecraft.server.v1_10_R1.IBlockData;
 
-public class BlockStorage {
+public class BlockStorageReader {
 
 	private static final boolean[] validBlockState = new boolean[Short.MAX_VALUE * 2];
 	static {
@@ -29,7 +29,7 @@ public class BlockStorage {
 	private final int bitsPerBlock;
 	private final int singleValMask;
 
-	public BlockStorage(int[] palette, int bitsPerBlock, int datalength) {
+	public BlockStorageReader(int[] palette, int bitsPerBlock, int datalength) {
 		this.palette = palette;
 		this.blockdata = new long[datalength];
 		this.bitsPerBlock = bitsPerBlock;

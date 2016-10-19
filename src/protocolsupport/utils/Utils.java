@@ -54,6 +54,23 @@ public class Utils {
 		return count;
 	}
 
+	public static int ceilToBase(int number, int base) {
+		if (base == 0) {
+			return 0;
+		}
+		if (number == 0) {
+			return base;
+		}
+		if (number < 0) {
+			base *= -1;
+		}
+		final int mod = number % base;
+		if (mod == 0) {
+			return number;
+		}
+		return number + base - mod;
+	}
+
 	public static <T> T getJavaPropertyValue(String property, T defaultValue, Converter<String, T> converter) {
 		try {
 			String value = System.getProperty(property);
