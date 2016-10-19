@@ -8,11 +8,13 @@ import org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.spigotmc.SpigotConfig;
 
+import io.netty.buffer.Unpooled;
 import net.minecraft.server.v1_10_R1.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_10_R1.LocaleI18n;
 import net.minecraft.server.v1_10_R1.MinecraftServer;
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
 import net.minecraft.server.v1_10_R1.NetworkManager;
+import net.minecraft.server.v1_10_R1.PacketDataSerializer;
 import net.minecraft.server.v1_10_R1.PacketPlayInCloseWindow;
 import net.minecraft.server.v1_10_R1.PacketPlayOutChat;
 import net.minecraft.server.v1_10_R1.PacketPlayOutPlayerListHeaderFooter;
@@ -21,7 +23,6 @@ import net.minecraft.server.v1_10_R1.PacketPlayOutTitle.EnumTitleAction;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
-import protocolsupport.protocol.serializer.ChainedProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
 
 public class ServerPlatformUtils {
@@ -46,12 +47,12 @@ public class ServerPlatformUtils {
 
 	private static final BaseComponent empty = new TextComponent("");
 	public static Object createTabHeaderFooterPacket(BaseComponent header, BaseComponent footer) {
-		ChainedProtocolSupportPacketDataSerializer serializer = new ChainedProtocolSupportPacketDataSerializer();
-		serializer.writeString(ChatAPI.toJSON(header != null ? header : empty));
-		serializer.writeString(ChatAPI.toJSON(footer != null ? footer : empty));
+		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer());
+		serializer.a(ChatAPI.toJSON(header != null ? header : empty));
+		serializer.a(ChatAPI.toJSON(footer != null ? footer : empty));
 		PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
 		try {
-			packet.a(serializer.getNativeSerializer());
+			packet.a(serializer);
 		} catch (IOException e) {
 		}
 		return packet;
