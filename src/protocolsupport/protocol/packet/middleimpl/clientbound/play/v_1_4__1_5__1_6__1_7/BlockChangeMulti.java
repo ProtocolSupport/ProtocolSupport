@@ -3,18 +3,18 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChangeMulti;
-import protocolsupport.protocol.packet.middleimpl.PacketData;
+import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class BlockChangeMulti extends MiddleBlockChangeMulti<RecyclableCollection<PacketData>> {
+public class BlockChangeMulti extends MiddleBlockChangeMulti<RecyclableCollection<ClientBoundPacketData>> {
 
 	@Override
-	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ArrayBasedIdRemappingTable remapper = IdRemapper.BLOCK.getTable(version);
-		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_BLOCK_CHANGE_MULTI_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BLOCK_CHANGE_MULTI_ID, version);
 		serializer.writeInt(chunkX);
 		serializer.writeInt(chunkZ);
 		serializer.writeShort(records.length);

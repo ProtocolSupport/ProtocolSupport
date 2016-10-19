@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middle.serverbound.play;
 
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middleimpl.PacketCreator;
+import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -17,9 +17,9 @@ public abstract class MiddlePositionLook extends ServerBoundMiddlePacket {
 	protected boolean onGround;
 
 	@Override
-	public RecyclableCollection<PacketCreator> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
 		if (!cache.isTeleportConfirmNeeded()) {
-			PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_POSITION_LOOK);
+			ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_POSITION_LOOK);
 			creator.writeDouble(x);
 			creator.writeDouble(y);
 			creator.writeDouble(z);

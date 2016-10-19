@@ -5,15 +5,15 @@ import java.io.IOException;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldBorder;
-import protocolsupport.protocol.packet.middleimpl.PacketData;
+import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class WorldBorder extends MiddleWorldBorder<RecyclableCollection<PacketData>> {
+public class WorldBorder extends MiddleWorldBorder<RecyclableCollection<ClientBoundPacketData>> {
 
 	@Override
-	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
-		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_WORLD_BORDER_ID, version);
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) throws IOException {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_BORDER_ID, version);
 		serializer.writeVarInt(action.ordinal());
 		switch (action) {
 			case SET_SIZE: {

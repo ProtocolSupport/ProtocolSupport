@@ -7,15 +7,15 @@ import com.mojang.authlib.properties.Property;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddlePlayerInfo;
-import protocolsupport.protocol.packet.middleimpl.PacketData;
+import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class PlayerInfo extends MiddlePlayerInfo<RecyclableCollection<PacketData>> {
+public class PlayerInfo extends MiddlePlayerInfo<RecyclableCollection<ClientBoundPacketData>> {
 
 	@Override
-	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
-		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_PLAYER_INFO_ID, version);
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) throws IOException {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_PLAYER_INFO_ID, version);
 		serializer.writeVarInt(action.ordinal());
 		serializer.writeVarInt(infos.length);
 		for (Info info : infos) {

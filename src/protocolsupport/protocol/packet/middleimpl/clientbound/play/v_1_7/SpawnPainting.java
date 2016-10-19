@@ -3,14 +3,14 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_7;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnPainting;
-import protocolsupport.protocol.packet.middleimpl.PacketData;
+import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class SpawnPainting extends MiddleSpawnPainting<RecyclableCollection<PacketData>> {
+public class SpawnPainting extends MiddleSpawnPainting<RecyclableCollection<ClientBoundPacketData>> {
 
 	@Override
-	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		switch (direction) {
 			case 0: {
 				position.modifyZ(-1);
@@ -29,7 +29,7 @@ public class SpawnPainting extends MiddleSpawnPainting<RecyclableCollection<Pack
 				break;
 			}
 		}
-		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_SPAWN_PAINTING_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_PAINTING_ID, version);
 		serializer.writeVarInt(entityId);
 		serializer.writeString(type);
 		serializer.writeLegacyPositionI(position);

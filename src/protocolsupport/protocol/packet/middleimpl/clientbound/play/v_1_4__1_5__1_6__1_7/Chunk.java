@@ -9,20 +9,20 @@ import protocolsupport.protocol.legacyremapper.chunk.ChunkTransformer.BlockForma
 import protocolsupport.protocol.legacyremapper.chunk.EmptyChunk;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
-import protocolsupport.protocol.packet.middleimpl.PacketData;
+import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
-public class Chunk extends MiddleChunk<RecyclableCollection<PacketData>> {
+public class Chunk extends MiddleChunk<RecyclableCollection<ClientBoundPacketData>> {
 
 	private final ChunkTransformer transformer = ChunkTransformer.create(BlockFormat.BYTE);
 
 	@Override
-	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
-		RecyclableArrayList<PacketData> packets = RecyclableArrayList.create();
-		PacketData chunkdata = PacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID, version);
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) throws IOException {
+		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
+		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID, version);
 		chunkdata.writeInt(chunkX);
 		chunkdata.writeInt(chunkZ);
 		chunkdata.writeBoolean(full);

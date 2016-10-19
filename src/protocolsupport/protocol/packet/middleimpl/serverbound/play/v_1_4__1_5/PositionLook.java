@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_4__1_5;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleTeleportAccept;
-import protocolsupport.protocol.packet.middleimpl.PacketCreator;
+import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -31,16 +31,16 @@ public class PositionLook extends ServerBoundMiddlePacket {
 	}
 
 	@Override
-	public RecyclableCollection<PacketCreator> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
 		if ((y == -999.0D) && (yhead == -999.0D)) {
-			PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_LOOK);
+			ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_LOOK);
 			creator.writeFloat(yaw);
 			creator.writeFloat(pitch);
 			creator.writeBoolean(onGround);
 			return RecyclableSingletonList.create(creator);
 		} else {
 			if (!cache.isTeleportConfirmNeeded()) {
-				PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_POSITION_LOOK);
+				ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_POSITION_LOOK);
 				creator.writeDouble(x);
 				creator.writeDouble(y);
 				creator.writeDouble(z);

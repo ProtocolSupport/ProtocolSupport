@@ -1,18 +1,18 @@
 package protocolsupport.protocol.legacyremapper;
 
 import protocolsupport.protocol.packet.ServerBoundPacket;
-import protocolsupport.protocol.packet.middleimpl.PacketCreator;
+import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class LegacyAnimatePacketReorderer {
 
-	protected PacketCreator animatePacket;
+	protected ServerBoundPacketData animatePacket;
 
-	public RecyclableCollection<PacketCreator> orderPackets(RecyclableCollection<PacketCreator> packets) {
+	public RecyclableCollection<ServerBoundPacketData> orderPackets(RecyclableCollection<ServerBoundPacketData> packets) {
 		try {
-			RecyclableArrayList<PacketCreator> ordered = RecyclableArrayList.create();
-			for (PacketCreator curPacket : packets) {
+			RecyclableArrayList<ServerBoundPacketData> ordered = RecyclableArrayList.create();
+			for (ServerBoundPacketData curPacket : packets) {
 				ServerBoundPacket packetType = curPacket.getPacketType();
 				//if the packet is use entity, we attempt to add a cached animate packet after it
 				if (packetType == ServerBoundPacket.PLAY_USE_ENTITY) {

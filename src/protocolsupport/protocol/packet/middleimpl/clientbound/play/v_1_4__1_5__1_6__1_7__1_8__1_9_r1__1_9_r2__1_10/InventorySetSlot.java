@@ -5,16 +5,16 @@ import java.io.IOException;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventorySetSlot;
-import protocolsupport.protocol.packet.middleimpl.PacketData;
+import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class InventorySetSlot extends MiddleInventorySetSlot<RecyclableCollection<PacketData>> {
+public class InventorySetSlot extends MiddleInventorySetSlot<RecyclableCollection<ClientBoundPacketData>> {
 
 	@Override
-	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) throws IOException {
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && ((cache.getOpenedWindow() == WindowType.PLAYER) || (windowId == 0)) && (slot == 45)) {
 			return RecyclableEmptyList.get();
 		}
@@ -33,7 +33,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot<RecyclableCollectio
 				slot--;
 			}
 		}
-		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_WINDOW_SET_SLOT_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_SET_SLOT_ID, version);
 		serializer.writeByte(windowId);
 		serializer.writeShort(slot);
 		serializer.writeItemStack(itemstack);

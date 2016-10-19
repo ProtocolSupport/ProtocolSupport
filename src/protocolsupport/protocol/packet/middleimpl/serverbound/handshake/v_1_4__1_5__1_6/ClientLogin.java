@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_1_4__
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middleimpl.PacketCreator;
+import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -23,15 +23,15 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 	}
 
 	@Override
-	public RecyclableCollection<PacketCreator> toNative() throws Exception {
-		RecyclableArrayList<PacketCreator> packets = RecyclableArrayList.create();
-		PacketCreator hsscreator = PacketCreator.create(ServerBoundPacket.HANDSHAKE_START);
+	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
+		ServerBoundPacketData hsscreator = ServerBoundPacketData.create(ServerBoundPacket.HANDSHAKE_START);
 		hsscreator.writeVarInt(ProtocolVersion.getLatest().getId());
 		hsscreator.writeString(hostname);
 		hsscreator.writeShort(port);
 		hsscreator.writeVarInt(2);
 		packets.add(hsscreator);
-		PacketCreator lscreator = PacketCreator.create(ServerBoundPacket.LOGIN_START);
+		ServerBoundPacketData lscreator = ServerBoundPacketData.create(ServerBoundPacket.LOGIN_START);
 		lscreator.writeString(username);
 		packets.add(lscreator);
 		return packets;

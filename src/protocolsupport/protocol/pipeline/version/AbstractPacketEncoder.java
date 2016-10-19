@@ -12,7 +12,7 @@ import net.minecraft.server.v1_10_R1.PacketListener;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.packet.middleimpl.PacketData;
+import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.pipeline.IPacketEncoder;
 import protocolsupport.protocol.serializer.ChainedProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
@@ -30,9 +30,9 @@ public abstract class AbstractPacketEncoder implements IPacketEncoder {
 	public AbstractPacketEncoder(Connection connection, NetworkDataCache storage) {
 		this.connection = connection;
 		this.cache = storage;
-		registry.setCallBack(new InitCallBack<ClientBoundMiddlePacket<RecyclableCollection<PacketData>>>() {
+		registry.setCallBack(new InitCallBack<ClientBoundMiddlePacket<RecyclableCollection<ClientBoundPacketData>>>() {
 			@Override
-			public void onInit(ClientBoundMiddlePacket<RecyclableCollection<PacketData>> object) {
+			public void onInit(ClientBoundMiddlePacket<RecyclableCollection<ClientBoundPacketData>> object) {
 				object.setConnection(AbstractPacketEncoder.this.connection);
 				object.setSharedStorage(AbstractPacketEncoder.this.cache);
 			}
@@ -40,7 +40,7 @@ public abstract class AbstractPacketEncoder implements IPacketEncoder {
 		varintPacketId = connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_1_7_5);
 	}
 
-	protected final MiddleTransformerRegistry<ClientBoundMiddlePacket<RecyclableCollection<PacketData>>> registry = new MiddleTransformerRegistry<>();
+	protected final MiddleTransformerRegistry<ClientBoundMiddlePacket<RecyclableCollection<ClientBoundPacketData>>> registry = new MiddleTransformerRegistry<>();
 	protected static final PacketIdTransformerRegistry packetIdRegistry = new PacketIdTransformerRegistry();
 
 	private final ChainedProtocolSupportPacketDataSerializer middlebuffer = new ChainedProtocolSupportPacketDataSerializer();
@@ -54,12 +54,12 @@ public abstract class AbstractPacketEncoder implements IPacketEncoder {
 		if (packetId == null) {
 			throw new IOException("Can't serialize unregistered packet " + packet.getClass().getName());
 		}
-		ClientBoundMiddlePacket<RecyclableCollection<PacketData>> packetTransformer = registry.getTransformer(currentProtocol, packetId);
+		ClientBoundMiddlePacket<RecyclableCollection<ClientBoundPacketData>> packetTransformer = registry.getTransformer(currentProtocol, packetId);
 		packet.b(middlebuffer.prepareNativeSerializer());
 		packetTransformer.readFromServerData(middlebuffer);
 		packetTransformer.handle();
-		try (RecyclableCollection<PacketData> data = packetTransformer.toData(connection.getVersion())) {
-			for (PacketData packetdata : data) {
+		try (RecyclableCollection<ClientBoundPacketData> data = packetTransformer.toData(connection.getVersion())) {
+			for (ClientBoundPacketData packetdata : data) {
 				ByteBuf senddata = Allocator.allocateBuffer();
 				int newPacketId = packetIdRegistry.getNewPacketId(currentProtocol, packetdata.getPacketId());
 				if (varintPacketId) {

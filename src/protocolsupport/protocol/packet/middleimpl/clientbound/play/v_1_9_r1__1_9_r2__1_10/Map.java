@@ -3,15 +3,15 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r1__1_
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleMap;
-import protocolsupport.protocol.packet.middleimpl.PacketData;
+import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class Map extends MiddleMap<RecyclableCollection<PacketData>> {
+public class Map extends MiddleMap<RecyclableCollection<ClientBoundPacketData>> {
 
 	@Override
-	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
-		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_MAP_ID, version);
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_MAP_ID, version);
 		serializer.writeVarInt(itemData);
 		serializer.writeByte(scale);
 		serializer.writeBoolean(showIcons);

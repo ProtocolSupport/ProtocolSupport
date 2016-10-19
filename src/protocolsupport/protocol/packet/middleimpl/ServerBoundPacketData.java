@@ -9,24 +9,24 @@ import protocolsupport.protocol.serializer.ChainedProtocolSupportPacketDataSeria
 import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.recyclable.Recyclable;
 
-public class PacketCreator extends ChainedProtocolSupportPacketDataSerializer implements Recyclable {
+public class ServerBoundPacketData extends ChainedProtocolSupportPacketDataSerializer implements Recyclable {
 
-	private static final Recycler<PacketCreator> RECYCLER = new Recycler<PacketCreator>() {
+	private static final Recycler<ServerBoundPacketData> RECYCLER = new Recycler<ServerBoundPacketData>() {
 		@Override
-		protected PacketCreator newObject(Recycler.Handle handle) {
-			return new PacketCreator(handle);
+		protected ServerBoundPacketData newObject(Recycler.Handle handle) {
+			return new ServerBoundPacketData(handle);
 		}
 	};
 
-	public static PacketCreator create(ServerBoundPacket packet) {
-		PacketCreator packetdata = RECYCLER.get();
+	public static ServerBoundPacketData create(ServerBoundPacket packet) {
+		ServerBoundPacketData packetdata = RECYCLER.get();
 		packetdata.packet = packet;
 		ChannelUtils.writeVarInt(packetdata, packet.getId());
 		return packetdata;
 	}
 
 	private final Recycler.Handle handle;
-	private PacketCreator(Recycler.Handle handle) {
+	private ServerBoundPacketData(Recycler.Handle handle) {
 		this.handle = handle;
 	}
 

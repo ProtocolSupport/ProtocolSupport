@@ -5,14 +5,14 @@ import java.io.IOException;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleGameStateChange;
-import protocolsupport.protocol.packet.middleimpl.PacketData;
+import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class GameStateChange extends MiddleGameStateChange<RecyclableCollection<PacketData>> {
+public class GameStateChange extends MiddleGameStateChange<RecyclableCollection<ClientBoundPacketData>> {
 
 	@Override
-	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) throws IOException {
 		switch (type) {
 			case 1: {
 				type = 2;
@@ -26,7 +26,7 @@ public class GameStateChange extends MiddleGameStateChange<RecyclableCollection<
 				break;
 			}
 		}
-		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_GAME_STATE_CHANGE_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_GAME_STATE_CHANGE_ID, version);
 		serializer.writeByte(type);
 		serializer.writeByte((int) value);
 		return RecyclableSingletonList.create(serializer);

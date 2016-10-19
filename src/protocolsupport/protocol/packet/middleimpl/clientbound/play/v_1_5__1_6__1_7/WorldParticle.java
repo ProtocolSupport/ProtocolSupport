@@ -4,16 +4,16 @@ import net.minecraft.server.v1_10_R1.EnumParticle;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldParticle;
-import protocolsupport.protocol.packet.middleimpl.PacketData;
+import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class WorldParticle extends MiddleWorldParticle<RecyclableCollection<PacketData>> {
+public class WorldParticle extends MiddleWorldParticle<RecyclableCollection<ClientBoundPacketData>> {
 
 	@Override
-	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
-		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_WORLD_PARTICLES_ID, version);
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_PARTICLES_ID, version);
 		EnumParticle particle = EnumParticle.values()[type];
 		String name = particle.b();
 		switch (particle) {

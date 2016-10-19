@@ -3,20 +3,20 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityEffectRemove;
-import protocolsupport.protocol.packet.middleimpl.PacketData;
+import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class EntityEffectRemove extends MiddleEntityEffectRemove<RecyclableCollection<PacketData>> {
+public class EntityEffectRemove extends MiddleEntityEffectRemove<RecyclableCollection<ClientBoundPacketData>> {
 
 	@Override
-	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		if (IdSkipper.EFFECT.getTable(version).shouldSkip(effectId)) {
 			return RecyclableEmptyList.get();
 		}
-		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_ENTITY_EFFECT_REMOVE_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_EFFECT_REMOVE_ID, version);
 		serializer.writeInt(entityId);
 		serializer.writeByte(effectId);
 		return RecyclableSingletonList.create(serializer);

@@ -6,18 +6,18 @@ import gnu.trove.map.hash.TIntIntHashMap;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetPassengers;
-import protocolsupport.protocol.packet.middleimpl.PacketData;
+import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class SetPassengers extends MiddleSetPassengers<RecyclableCollection<PacketData>> {
+public class SetPassengers extends MiddleSetPassengers<RecyclableCollection<ClientBoundPacketData>> {
 
 	private final TIntIntHashMap vehiclePassenger = new TIntIntHashMap();
 	private int passengerId;
 
 	@Override
-	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
-		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_ENTITY_LEASH_ID, version);
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) throws IOException {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_LEASH_ID, version);
 		serializer.writeInt(passengerId);
 		serializer.writeInt(passengersIds.length == 0 ? -1 : vehicleId);
 		return RecyclableSingletonList.create(serializer);

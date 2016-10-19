@@ -8,7 +8,7 @@ import net.minecraft.server.v1_10_R1.Packet;
 
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middleimpl.PacketCreator;
+import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.pipeline.IPacketDecoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry;
@@ -33,9 +33,9 @@ public abstract class AbstractPacketDecoder implements IPacketDecoder {
 		});
 	}
 
-	protected void addPackets(EnumProtocol protocol, RecyclableCollection<PacketCreator> packets, List<Object> to) throws Exception {
+	protected void addPackets(EnumProtocol protocol, RecyclableCollection<ServerBoundPacketData> packets, List<Object> to) throws Exception {
 		try {
-			for (PacketCreator creator : packets) {
+			for (ServerBoundPacketData creator : packets) {
 				Packet<?> packet = protocol.a(EnumProtocolDirection.SERVERBOUND, creator.readVarInt());
 				packet.a(creator.getNativeSerializer());
 				to.add(packet);

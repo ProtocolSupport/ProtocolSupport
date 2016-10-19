@@ -7,21 +7,21 @@ import protocolsupport.protocol.legacyremapper.MapTransformer;
 import protocolsupport.protocol.legacyremapper.MapTransformer.ColumnEntry;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleMap;
-import protocolsupport.protocol.packet.middleimpl.PacketData;
+import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
-public class Map extends MiddleMap<RecyclableCollection<PacketData>> {
+public class Map extends MiddleMap<RecyclableCollection<ClientBoundPacketData>> {
 
 	@SuppressWarnings("deprecation")
 	private static final int mapId = Material.MAP.getId();
 
 	@Override
-	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
-		RecyclableCollection<PacketData> datas = RecyclableArrayList.create();
-		PacketData scaledata = PacketData.create(ClientBoundPacket.PLAY_MAP_ID, version);
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+		RecyclableCollection<ClientBoundPacketData> datas = RecyclableArrayList.create();
+		ClientBoundPacketData scaledata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_MAP_ID, version);
 		scaledata.writeShort(358);
 		scaledata.writeShort(itemData);
 		scaledata.writeShort(2);
@@ -29,7 +29,7 @@ public class Map extends MiddleMap<RecyclableCollection<PacketData>> {
 		scaledata.writeByte(scale);
 		datas.add(scaledata);
 		if (icons.length > 0) {
-			PacketData iconsdata = PacketData.create(ClientBoundPacket.PLAY_MAP_ID, version);
+			ClientBoundPacketData iconsdata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_MAP_ID, version);
 			iconsdata.writeShort(mapId);
 			iconsdata.writeShort(itemData);
 			iconsdata.writeShort((icons.length * 3) + 1);
@@ -46,7 +46,7 @@ public class Map extends MiddleMap<RecyclableCollection<PacketData>> {
 			maptransformer.loadFromNewMapData(columns, rows, xstart, zstart, data);
 			ArrayBasedIdRemappingTable colorRemapper = IdRemapper.MAPCOLOR.getTable(version);
 			for (ColumnEntry entry : maptransformer.toPre18MapData()) {
-				PacketData mapdata = PacketData.create(ClientBoundPacket.PLAY_MAP_ID, version);
+				ClientBoundPacketData mapdata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_MAP_ID, version);
 				mapdata.writeShort(mapId);
 				mapdata.writeShort(itemData);
 				mapdata.writeShort(3 + entry.getColors().length);

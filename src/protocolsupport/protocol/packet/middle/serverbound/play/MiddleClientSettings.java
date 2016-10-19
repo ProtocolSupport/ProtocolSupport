@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middle.serverbound.play;
 
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middleimpl.PacketCreator;
+import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -16,8 +16,8 @@ public abstract class MiddleClientSettings extends ServerBoundMiddlePacket {
 	protected int mainHand;
 
 	@Override
-	public RecyclableCollection<PacketCreator> toNative() throws Exception {
-		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_SETTINGS);
+	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_SETTINGS);
 		creator.writeString(locale);
 		creator.writeByte(viewDist);
 		creator.writeVarInt(chatMode);

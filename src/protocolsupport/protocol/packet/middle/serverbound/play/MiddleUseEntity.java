@@ -4,7 +4,7 @@ import org.bukkit.util.Vector;
 
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middleimpl.PacketCreator;
+import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -16,8 +16,8 @@ public abstract class MiddleUseEntity extends ServerBoundMiddlePacket {
 	protected int usedHand;
 
 	@Override
-	public RecyclableCollection<PacketCreator> toNative() throws Exception {
-		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_USE_ENTITY);
+	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_USE_ENTITY);
 		creator.writeVarInt(entityId);
 		creator.writeEnum(action);
 		switch (action) {
