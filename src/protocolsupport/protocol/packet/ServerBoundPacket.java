@@ -104,10 +104,6 @@ public enum ServerBoundPacket {
 		this.id = idMap.get(EnumProtocolDirection.SERVERBOUND).inverse().get(packetClass);
 	}
 
-	public Packet<?> get() throws IllegalAccessException, InstantiationException {
-		return protocol.a(EnumProtocolDirection.SERVERBOUND, id);
-	}
-
 	public int getId() {
 		return id;
 	}
