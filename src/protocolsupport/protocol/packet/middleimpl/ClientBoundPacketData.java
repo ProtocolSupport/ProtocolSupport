@@ -58,9 +58,4 @@ public class ClientBoundPacketData extends ProtocolSupportPacketDataSerializer i
 		recycle();
 	}
 
-	@Override
-	public void recycleObjectOnly() {
-		recycle();
-	}
-
 }
