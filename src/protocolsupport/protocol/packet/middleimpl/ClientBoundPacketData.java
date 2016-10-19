@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl;
 
-import java.io.IOException;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.util.Recycler;
 import protocolsupport.api.ProtocolVersion;
@@ -51,11 +49,6 @@ public class ClientBoundPacketData extends ProtocolSupportPacketDataSerializer i
 	@Override
 	protected void finalize() {
 		release();
-	}
-
-	@Override
-	public void close() throws IOException {
-		recycle();
 	}
 
 }

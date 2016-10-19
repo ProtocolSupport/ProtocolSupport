@@ -1,6 +1,5 @@
 package protocolsupport.utils.recyclable;
 
-import java.io.IOException;
 import java.util.AbstractCollection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -88,11 +87,6 @@ public class RecyclableSingletonList<E> extends AbstractCollection<E> implements
 		public void reset() {
 			hasNext = true;
 		}
-	}
-
-	@Override
-	public void close() throws IOException {
-		recycle();
 	}
 
 }
