@@ -55,7 +55,9 @@ public class ConnectionImpl extends Connection {
 
 	@Override
 	public void sendPacket(Object packet) {
-		Runnable packetSend = () -> networkmanager.channel.pipeline().context(ChannelHandlers.ENCODER).write(packet);
+		@SuppressWarnings("unchecked")
+		final Packet<PacketListener> packetInst = (Packet<PacketListener>) packet;
+		Runnable packetSend = () -> networkmanager.channel.pipeline().context(ChannelHandlers.ENCODER).write(packetInst);
 		if (networkmanager.channel.eventLoop().inEventLoop()) {
 			packetSend.run();
 		} else {
