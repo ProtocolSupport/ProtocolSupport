@@ -11,6 +11,7 @@ import net.minecraft.server.v1_10_R1.Packet;
 import net.minecraft.server.v1_10_R1.PacketListener;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.utils.netty.ChannelUtils;
 
 public class ConnectionImpl extends Connection {
@@ -68,8 +69,20 @@ public class ConnectionImpl extends Connection {
 	}
 
 	@Override
-	public void sendPacket(Object packet) {
-		networkmanager.sendPacket((Packet<?>) packet);
+	public void sendPacket(Object packet) throws ExecutionException {
+		Runnable packetSend = () -> networkmanager.channel.pipeline().context(ChannelHandlers.ENCODER).write(packet);
+		if (networkmanager.channel.eventLoop().inEventLoop()) {
+			try {
+				packetSend.run();
+			} catch (Throwable t) {
+				throw new ExecutionException(t);
+			}
+		} else {
+			try {
+				networkmanager.channel.eventLoop().submit(packetSend).get();
+			} catch (InterruptedException e) {
+			}
+		}
 	}
 
 	public void setProtocolVersion(ProtocolVersion version) {

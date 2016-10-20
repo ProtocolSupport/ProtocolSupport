@@ -1,5 +1,7 @@
 package protocolsupport.api.title;
 
+import java.util.concurrent.ExecutionException;
+
 import org.apache.commons.lang3.Validate;
 import org.bukkit.entity.Player;
 
@@ -20,20 +22,26 @@ public class TitleAPI {
 		if ((titleJson == null) && (subtitleJson == null)) {
 			throw new IllegalArgumentException("Title and subtitle can't be both null");
 		}
-		Connection connection = ProtocolSupportAPI.getConnection(player);
-		if (titleJson != null) {
-			connection.sendPacket(ServerPlatformUtils.createTitleMainPacket(titleJson));
+		try {
+			Connection connection = ProtocolSupportAPI.getConnection(player);
+			if (titleJson != null) {
+				connection.sendPacket(ServerPlatformUtils.createTitleMainPacket(titleJson));
+			}
+			if (subtitleJson != null) {
+				connection.sendPacket(ServerPlatformUtils.createTitleSubPacket(subtitleJson));
+			}
+			connection.sendPacket(ServerPlatformUtils.createTitleParamsPacket(fadeIn, stay, fadeOut));
+		} catch (ExecutionException t) {
 		}
-		if (subtitleJson != null) {
-			connection.sendPacket(ServerPlatformUtils.createTitleSubPacket(subtitleJson));
-		}
-		connection.sendPacket(ServerPlatformUtils.createTitleParamsPacket(fadeIn, stay, fadeOut));
 	}
 
 	public static void removeSimpleTitle(Player player) {
-		Connection connection = ProtocolSupportAPI.getConnection(player);
-		connection.sendPacket(ServerPlatformUtils.createTitleClearPacket());
-		connection.sendPacket(ServerPlatformUtils.createTitleResetPacket());
+		try {
+			Connection connection = ProtocolSupportAPI.getConnection(player);
+			connection.sendPacket(ServerPlatformUtils.createTitleClearPacket());
+			connection.sendPacket(ServerPlatformUtils.createTitleResetPacket());
+		} catch (ExecutionException t) {
+		}
 	}
 
 }

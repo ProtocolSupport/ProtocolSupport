@@ -1,5 +1,7 @@
 package protocolsupport.api.tab;
 
+import java.util.concurrent.ExecutionException;
+
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -42,7 +44,10 @@ public class TabAPI {
 
 	public static void sendHeaderFooter(Player player, BaseComponent header, BaseComponent footer) {
 		Validate.notNull(player, "Player can't be null");
-		ProtocolSupportAPI.getConnection(player).sendPacket(ServerPlatformUtils.createTabHeaderFooterPacket(header, footer));
+		try {
+			ProtocolSupportAPI.getConnection(player).sendPacket(ServerPlatformUtils.createTabHeaderFooterPacket(header, footer));
+		} catch (ExecutionException e) {
+		}
 	}
 
 }

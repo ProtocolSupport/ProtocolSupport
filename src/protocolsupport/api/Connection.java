@@ -27,7 +27,7 @@ public abstract class Connection {
 
 	public abstract void receivePacket(Object packet) throws ExecutionException;
 
-	public abstract void sendPacket(Object packet);
+	public abstract void sendPacket(Object packet) throws ExecutionException;
 
 	protected final ArrayList<PacketSendListener> sendListeners = new ArrayList<>();
 	protected final ArrayList<PacketReceiveListener> receiveListeners = new ArrayList<>();
