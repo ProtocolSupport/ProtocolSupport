@@ -4,6 +4,8 @@ import java.net.InetSocketAddress;
 
 import org.bukkit.entity.Player;
 
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelOutboundHandler;
 import net.minecraft.server.v1_10_R1.CancelledPacketHandleException;
 import net.minecraft.server.v1_10_R1.NetworkManager;
 import net.minecraft.server.v1_10_R1.Packet;
@@ -57,7 +59,13 @@ public class ConnectionImpl extends Connection {
 	public void sendPacket(Object packet) {
 		@SuppressWarnings("unchecked")
 		final Packet<PacketListener> packetInst = (Packet<PacketListener>) packet;
-		Runnable packetSend = () -> networkmanager.channel.pipeline().context(ChannelHandlers.ENCODER).write(packetInst);
+		Runnable packetSend = () -> {
+			try {
+				encoderChannelHandler.write(encoderContext, packetInst, encoderContext.voidPromise());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		};
 		if (networkmanager.channel.eventLoop().inEventLoop()) {
 			packetSend.run();
 		} else {
@@ -65,8 +73,13 @@ public class ConnectionImpl extends Connection {
 		}
 	}
 
+	private ChannelHandlerContext encoderContext;
+	private ChannelOutboundHandler encoderChannelHandler;
+
 	public void setProtocolVersion(ProtocolVersion version) {
 		this.version = version;
+		this.encoderContext = networkmanager.channel.pipeline().context(ChannelHandlers.ENCODER);
+		this.encoderChannelHandler = (ChannelOutboundHandler) encoderContext.handler();
 	}
 
 	public boolean handlePacketSend(Object packet) {
