@@ -1,7 +1,8 @@
 package protocolsupport.api;
 
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 
 import org.bukkit.entity.Player;
@@ -29,8 +30,8 @@ public abstract class Connection {
 
 	public abstract void sendPacket(Object packet) throws ExecutionException;
 
-	protected final ArrayList<PacketSendListener> sendListeners = new ArrayList<>();
-	protected final ArrayList<PacketReceiveListener> receiveListeners = new ArrayList<>();
+	protected final CopyOnWriteArrayList<PacketSendListener> sendListeners = new CopyOnWriteArrayList<>();
+	protected final CopyOnWriteArrayList<PacketReceiveListener> receiveListeners = new CopyOnWriteArrayList<>();
 
 	public void addPacketSendListener(PacketSendListener listener) {
 		sendListeners.add(listener);
@@ -46,6 +47,20 @@ public abstract class Connection {
 
 	public void removePacketReceiveListener(PacketReceiveListener listener) {
 		receiveListeners.remove(listener);
+	}
+
+	private final ConcurrentHashMap<String, Object> metadata = new ConcurrentHashMap<>();
+
+	public void addMetadata(String key, Object obj) {
+		metadata.put(key, obj);
+	}
+
+	public Object removeMetadata(String key) {
+		return metadata.remove(key);
+	}
+
+	public boolean hasMetadata(String key) {
+		return metadata.containsKey(key);
 	}
 
 	@FunctionalInterface
