@@ -3,7 +3,6 @@ package protocolsupport.api;
 import java.net.InetSocketAddress;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutionException;
 
 import org.bukkit.entity.Player;
 
@@ -26,9 +25,9 @@ public abstract class Connection {
 		return version;
 	}
 
-	public abstract void receivePacket(Object packet) throws ExecutionException;
+	public abstract void receivePacket(Object packet);
 
-	public abstract void sendPacket(Object packet) throws ExecutionException;
+	public abstract void sendPacket(Object packet);
 
 	protected final CopyOnWriteArrayList<PacketSendListener> sendListeners = new CopyOnWriteArrayList<>();
 	protected final CopyOnWriteArrayList<PacketReceiveListener> receiveListeners = new CopyOnWriteArrayList<>();

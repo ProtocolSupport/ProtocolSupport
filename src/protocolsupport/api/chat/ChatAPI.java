@@ -1,7 +1,5 @@
 package protocolsupport.api.chat;
 
-import java.util.concurrent.ExecutionException;
-
 import org.apache.commons.lang3.Validate;
 import org.bukkit.entity.Player;
 
@@ -52,10 +50,7 @@ public class ChatAPI {
 		Validate.notNull(player, "Player can't be null");
 		Validate.notNull(messageJson, "Message can't be null");
 		Validate.notNull(position, "Message position can't be null");
-		try {
-			ProtocolSupportAPI.getConnection(player).sendPacket(ServerPlatformUtils.createOutboundChatPacket(messageJson, position.ordinal()));
-		} catch (ExecutionException e) {
-		}
+		ProtocolSupportAPI.getConnection(player).sendPacket(ServerPlatformUtils.createOutboundChatPacket(messageJson, position.ordinal()));
 	}
 
 	public static enum MessagePosition {

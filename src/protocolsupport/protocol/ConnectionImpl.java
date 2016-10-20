@@ -1,7 +1,6 @@
 package protocolsupport.protocol;
 
 import java.net.InetSocketAddress;
-import java.util.concurrent.ExecutionException;
 
 import org.bukkit.entity.Player;
 
@@ -43,45 +42,24 @@ public class ConnectionImpl extends Connection {
 	}
 
 	@Override
-	public void receivePacket(Object packet) throws ExecutionException {
+	public void receivePacket(Object packet) {
 		@SuppressWarnings("unchecked")
 		final Packet<PacketListener> packetInst = (Packet<PacketListener>) packet;
-		Runnable packetReceive = () -> {
-			if (networkmanager.channel.isOpen()) {
-				try {
-					packetInst.a(networkmanager.i());
-				} catch (CancelledPacketHandleException ex) {
-				}
-			}
-		};
-		if (networkmanager.channel.eventLoop().inEventLoop()) {
+		if (networkmanager.channel.isOpen()) {
 			try {
-				packetReceive.run();
-			} catch (Throwable t) {
-				throw new ExecutionException(t);
-			}
-		} else {
-			try {
-				networkmanager.channel.eventLoop().submit(packetReceive).get();
-			} catch (InterruptedException e) {
+				packetInst.a(networkmanager.i());
+			} catch (CancelledPacketHandleException ex) {
 			}
 		}
 	}
 
 	@Override
-	public void sendPacket(Object packet) throws ExecutionException {
+	public void sendPacket(Object packet) {
 		Runnable packetSend = () -> networkmanager.channel.pipeline().context(ChannelHandlers.ENCODER).write(packet);
 		if (networkmanager.channel.eventLoop().inEventLoop()) {
-			try {
-				packetSend.run();
-			} catch (Throwable t) {
-				throw new ExecutionException(t);
-			}
+			packetSend.run();
 		} else {
-			try {
-				networkmanager.channel.eventLoop().submit(packetSend).get();
-			} catch (InterruptedException e) {
-			}
+			networkmanager.channel.eventLoop().submit(packetSend);
 		}
 	}
 
