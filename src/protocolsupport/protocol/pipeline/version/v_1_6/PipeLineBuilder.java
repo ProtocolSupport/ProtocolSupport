@@ -10,13 +10,14 @@ import protocolsupport.protocol.pipeline.IPipeLineBuilder;
 import protocolsupport.protocol.pipeline.common.NoOpFrameDecoder;
 import protocolsupport.protocol.pipeline.common.NoOpFrameEncoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.utils.netty.ChannelUtils;
 
 public class PipeLineBuilder implements IPipeLineBuilder {
 
 	@Override
 	public void buildPipeLine(Channel channel, Connection connection) {
 		ChannelPipeline pipeline = channel.pipeline();
-		NetworkManager networkmanager = (NetworkManager) pipeline.get(ChannelHandlers.NETWORK_MANAGER);
+		NetworkManager networkmanager = ChannelUtils.getNetworkManager(channel);
 		networkmanager.setPacketListener(new LegacyHandshakeListener(networkmanager));
 		ChannelHandlers.getSplitter(pipeline).setRealSplitter(new NoOpFrameDecoder());
 		ChannelHandlers.getPrepender(pipeline).setRealPrepender(new NoOpFrameEncoder());
