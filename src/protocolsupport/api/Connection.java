@@ -55,6 +55,10 @@ public abstract class Connection {
 		metadata.put(key, obj);
 	}
 
+	public Object getMetadata(String key) {
+		return metadata.get(key);
+	}
+
 	public Object removeMetadata(String key) {
 		return metadata.remove(key);
 	}
