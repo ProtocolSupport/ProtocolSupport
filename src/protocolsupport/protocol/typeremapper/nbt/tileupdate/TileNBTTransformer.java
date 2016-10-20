@@ -30,59 +30,47 @@ public class TileNBTTransformer {
 	static {
 		register(
 			TileEntityUpdateType.MOB_SPAWNER,
-			new SpecificTransformer() {
-				@Override
-				public NBTTagCompoundWrapper transform(ProtocolVersion version, NBTTagCompoundWrapper input) {
-					NBTTagCompoundWrapper spawndata = input.getCompound("SpawnData");
-					input.remove("SpawnPotentials");
-					input.remove("SpawnData");
-					if (!spawndata.isNull()) {
-						String mobname = spawndata.getString("id");
-						if (!mobname.isEmpty()) {
-							input.setString("EntityId", mobname);
-						}
+			(version, input) -> {
+				NBTTagCompoundWrapper spawndata = input.getCompound("SpawnData");
+				input.remove("SpawnPotentials");
+				input.remove("SpawnData");
+				if (!spawndata.isNull()) {
+					String mobname = spawndata.getString("id");
+					if (!mobname.isEmpty()) {
+						input.setString("EntityId", mobname);
 					}
-					return input;
 				}
+				return input;
 			},
 			ProtocolVersionsHelper.BEFORE_1_9
 		);
 		register(
 			TileEntityUpdateType.SKULL,
-			new SpecificTransformer() {
-				@Override
-				public NBTTagCompoundWrapper transform(ProtocolVersion version, NBTTagCompoundWrapper input) {
-					if (input.getNumber("SkullType") == 5) {
-						input.setByte("SkullType", 3);
-						input.unwrap().set("Owner", ProtocolSupportPacketDataSerializer.createDragonHeadSkullTag());
-					}
-					return input;
+			(version, input) -> {
+				if (input.getNumber("SkullType") == 5) {
+					input.setByte("SkullType", 3);
+					input.unwrap().set("Owner", ProtocolSupportPacketDataSerializer.createDragonHeadSkullTag());
 				}
+				return input;
 			},
 			ProtocolVersion.getAllBefore(ProtocolVersion.MINECRAFT_1_9)
 		);
 		register(
 			TileEntityUpdateType.SKULL,
-			new SpecificTransformer() {
-				@Override
-				public NBTTagCompoundWrapper transform(ProtocolVersion version, NBTTagCompoundWrapper input) {
-					ProtocolSupportPacketDataSerializer.transformSkull(input.unwrap());
-					return input;
-				}
+			(version, input) -> {
+				ProtocolSupportPacketDataSerializer.transformSkull(input.unwrap());
+				return input;
 			},
 			ProtocolVersion.getAllBefore(ProtocolVersion.MINECRAFT_1_7_5)
 		);
 		register(
 			TileEntityUpdateType.FLOWER_POT,
-			new SpecificTransformer() {
-				@Override
-				public NBTTagCompoundWrapper transform(ProtocolVersion version, NBTTagCompoundWrapper input) {
-					String itemId = input.getString("Item");
-					if (!itemId.isEmpty()) {
-						input.setInt("Item", IdRemapper.ITEM.getTable(version).getRemap(Item.getId(Item.d(itemId))));
-					}
-					return input;
+			(version, input) -> {
+				String itemId = input.getString("Item");
+				if (!itemId.isEmpty()) {
+					input.setInt("Item", IdRemapper.ITEM.getTable(version).getRemap(Item.getId(Item.d(itemId))));
 				}
+				return input;
 			},
 			ProtocolVersionsHelper.BEFORE_1_8
 		);

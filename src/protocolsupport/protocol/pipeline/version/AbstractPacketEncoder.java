@@ -12,7 +12,6 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry;
-import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry.InitCallBack;
 import protocolsupport.protocol.utils.registry.PacketIdTransformerRegistry;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.ChannelUtils;
@@ -23,15 +22,13 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 
 	protected final Connection connection;
 	protected final NetworkDataCache cache;
+
 	public AbstractPacketEncoder(Connection connection, NetworkDataCache storage) {
 		this.connection = connection;
 		this.cache = storage;
-		registry.setCallBack(new InitCallBack<ClientBoundMiddlePacket<RecyclableCollection<ClientBoundPacketData>>>() {
-			@Override
-			public void onInit(ClientBoundMiddlePacket<RecyclableCollection<ClientBoundPacketData>> object) {
-				object.setConnection(AbstractPacketEncoder.this.connection);
-				object.setSharedStorage(AbstractPacketEncoder.this.cache);
-			}
+		registry.setCallBack(object -> {
+			object.setConnection(AbstractPacketEncoder.this.connection);
+			object.setSharedStorage(AbstractPacketEncoder.this.cache);
 		});
 		varintPacketId = connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_1_7_5);
 	}

@@ -82,31 +82,12 @@ public class Utils {
 		return defaultValue;
 	}
 
+	@FunctionalInterface
 	public static interface Converter<T, R> {
-		public static final Converter<String, Integer> STRING_TO_INT = new Converter<String, Integer>() {
-			@Override
-			public Integer convert(String t) {
-				return Integer.parseInt(t);
-			}
-		};
-		public static final Converter<String, Long> STRING_TO_LONG = new Converter<String, Long>() {
-			@Override
-			public Long convert(String t){
-				return Long.parseLong(t);
-			}
-		};
-		public static final Converter<String, Boolean> STRING_TO_BOOLEAN = new Converter<String, Boolean>() {
-			@Override
-			public Boolean convert(String t) {
-				return Boolean.parseBoolean(t);
-			}
-		};
-		public static final Converter<String, String> NONE = new Converter<String, String>() {
-			@Override
-			public String convert(String t) {
-				return t;
-			}
-		};
+		public static final Converter<String, Integer> STRING_TO_INT = Integer::parseInt;
+		public static final Converter<String, Long> STRING_TO_LONG = Long::parseLong;
+		public static final Converter<String, Boolean> STRING_TO_BOOLEAN = Boolean::parseBoolean;
+		public static final Converter<String, String> NONE = t -> t;
 		public R convert(T t);
 	}
 

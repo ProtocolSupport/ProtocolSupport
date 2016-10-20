@@ -9,7 +9,6 @@ import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry;
-import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry.InitCallBack;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -19,16 +18,13 @@ public abstract class AbstractPacketDecoder extends ByteToMessageDecoder {
 	protected final MiddleTransformerRegistry<ServerBoundMiddlePacket> registry = new MiddleTransformerRegistry<>();
 
 	protected final Connection connection;
-	protected final NetworkDataCache sharedstorage;
-	public AbstractPacketDecoder(Connection connection, NetworkDataCache sharedstorage) {
+	protected final NetworkDataCache cache;
+	public AbstractPacketDecoder(Connection connection, NetworkDataCache cache) {
 		this.connection = connection;
-		this.sharedstorage = sharedstorage;
-		registry.setCallBack(new InitCallBack<ServerBoundMiddlePacket>() {
-			@Override
-			public void onInit(ServerBoundMiddlePacket object) {
-				object.setConnection(AbstractPacketDecoder.this.connection);
-				object.setSharedStorage(AbstractPacketDecoder.this.sharedstorage);
-			}
+		this.cache = cache;
+		registry.setCallBack(object -> {
+			object.setConnection(AbstractPacketDecoder.this.connection);
+			object.setSharedStorage(AbstractPacketDecoder.this.cache);
 		});
 	}
 
