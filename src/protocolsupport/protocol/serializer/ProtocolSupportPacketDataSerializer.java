@@ -14,6 +14,10 @@ import java.util.zip.GZIPOutputStream;
 
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_10_R1.potion.CraftPotionUtil;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 import org.spigotmc.LimitStream;
 
 import com.mojang.authlib.GameProfile;
@@ -357,7 +361,22 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9) && (item instanceof ItemPotion)) {
 				String potion = nbttagcompound.getString("Potion");
 				if (!potion.isEmpty()) {
-					itemstack.setData(LegacyPotion.toLegacyId(potion, item != Items.POTION));
+					NBTTagList tagList = nbttagcompound.getList("CustomPotionEffects", 10);
+					if (!tagList.isEmpty()) {
+						for (int i = 0; i < tagList.size(); i++) {
+							NBTTagCompound nbtTag = tagList.get(i);
+							Integer potionId = nbtTag.getInt("Id");
+							PotionEffectType effectType = PotionEffectType.getById(potionId);
+							PotionType type = PotionType.getByEffect(effectType);
+							if (type != null) {
+								PotionData data = new PotionData(type, false, false);
+								potion = CraftPotionUtil.fromBukkit(data);
+								break;
+							}
+						}
+					}
+					Integer data = LegacyPotion.toLegacyId(potion, item != Items.POTION);
+					itemstack.setData(data);
 					String basicTypeName = LegacyPotion.getBasicTypeName(potion);
 					if (basicTypeName != null) {
 						itemstack.c(basicTypeName);
