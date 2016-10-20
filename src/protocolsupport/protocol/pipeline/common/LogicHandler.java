@@ -22,6 +22,8 @@ import net.minecraft.server.v1_10_R1.NetworkManager;
 import net.minecraft.server.v1_10_R1.PacketListener;
 import net.minecraft.server.v1_10_R1.PlayerConnection;
 import protocolsupport.api.ProtocolSupportAPI;
+import protocolsupport.api.events.ConnectionCloseEvent;
+import protocolsupport.api.events.ConnectionOpenEvent;
 import protocolsupport.api.events.PlayerDisconnectEvent;
 import protocolsupport.logger.AsyncErrorLogger;
 import protocolsupport.protocol.ConnectionImpl;
@@ -71,6 +73,12 @@ public class LogicHandler extends ChannelDuplexHandler {
 	}
 
 	@Override
+	public void channelActive(ChannelHandlerContext ctx) throws Exception {
+		super.channelActive(ctx);
+		Bukkit.getPluginManager().callEvent(new ConnectionOpenEvent(connection));
+	}
+
+	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		super.channelInactive(ctx);
 		NetworkManager networkManager = ChannelUtils.getNetworkManager(ctx.channel());
@@ -88,9 +96,9 @@ public class LogicHandler extends ChannelDuplexHandler {
 			username = ((PlayerConnection) listener).player.getProfile().getName();
 		}
 		if (username != null) {
-			PlayerDisconnectEvent event = new PlayerDisconnectEvent(addr, username);
-			Bukkit.getPluginManager().callEvent(event);
+			Bukkit.getPluginManager().callEvent(new PlayerDisconnectEvent(addr, username));
 		}
+		Bukkit.getPluginManager().callEvent(new ConnectionCloseEvent(ProtocolStorage.getConnection(addr)));
 		ProtocolStorage.removeConnection(addr);
 	}
 
