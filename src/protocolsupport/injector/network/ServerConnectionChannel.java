@@ -6,15 +6,18 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import net.minecraft.server.v1_10_R1.EnumProtocolDirection;
 import net.minecraft.server.v1_10_R1.NetworkManager;
+import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.FakePacketListener;
-import protocolsupport.protocol.pipeline.common.ChannelCloseCleanup;
+import protocolsupport.protocol.pipeline.common.LogicHandler;
 import protocolsupport.protocol.pipeline.common.PacketDecoder;
 import protocolsupport.protocol.pipeline.common.PacketEncoder;
 import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
 import protocolsupport.protocol.pipeline.timeout.SimpleReadTimeoutHandler;
 import protocolsupport.protocol.pipeline.wrapped.WrappedPrepender;
 import protocolsupport.protocol.pipeline.wrapped.WrappedSplitter;
+import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.utils.ServerPlatformUtils;
 
 public class ServerConnectionChannel extends ChannelInitializer<Channel> {
@@ -43,6 +46,9 @@ public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 				System.err.println("Unable to set TCP_NODELAY option: " + channelexception.getMessage());
 			}
 		}
+		NetworkManager networkmanager = new NetworkManager(EnumProtocolDirection.SERVERBOUND);
+		ConnectionImpl connection = new ConnectionImpl(networkmanager, ProtocolVersion.UNKNOWN);
+		ProtocolStorage.setConnection(channel.remoteAddress(), connection);
 		channel.pipeline()
 		.addLast(ChannelHandlers.READ_TIMEOUT, new SimpleReadTimeoutHandler(30))
 		.addLast(ChannelHandlers.INITIAL_DECODER, new InitialPacketDecoder())
@@ -50,8 +56,7 @@ public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 		.addLast(ChannelHandlers.DECODER, new PacketDecoder())
 		.addLast(ChannelHandlers.PREPENDER, new WrappedPrepender())
 		.addLast(ChannelHandlers.ENCODER, new PacketEncoder())
-		.addLast(ChannelHandlers.CLOSE, new ChannelCloseCleanup());
-		NetworkManager networkmanager = new NetworkManager(EnumProtocolDirection.SERVERBOUND);
+		.addLast(ChannelHandlers.LOGIC, new LogicHandler(connection));
 		networkmanager.setPacketListener(new FakePacketListener());
 		networkManagers.add(networkmanager);
 		channel.pipeline().addLast(ChannelHandlers.NETWORK_MANAGER, networkmanager);

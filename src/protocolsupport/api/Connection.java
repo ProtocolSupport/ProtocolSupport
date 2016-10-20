@@ -1,75 +1,61 @@
 package protocolsupport.api;
 
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import org.bukkit.entity.Player;
 
-import net.minecraft.server.v1_10_R1.CancelledPacketHandleException;
-import net.minecraft.server.v1_10_R1.NetworkManager;
-import net.minecraft.server.v1_10_R1.Packet;
-import net.minecraft.server.v1_10_R1.PacketListener;
-import protocolsupport.utils.netty.ChannelUtils;
+public abstract class Connection {
 
-public class Connection {
-
-	private final NetworkManager networkmanager;
-	private final ProtocolVersion version;
-	public Connection(Object networkmanager, ProtocolVersion version) {
-		this.networkmanager = (NetworkManager) networkmanager;
+	protected ProtocolVersion version;
+	public Connection(ProtocolVersion version) {
 		this.version = version;
 	}
 
-	public Object getNetworkManager() {
-		return networkmanager;
-	}
+	public abstract Object getNetworkManager();
 
-	public boolean isConnected() {
-		return networkmanager.isConnected();
-	}
+	public abstract boolean isConnected();
 
-	public InetSocketAddress getAddress() {
-		return (InetSocketAddress) networkmanager.getSocketAddress();
-	}
+	public abstract InetSocketAddress getAddress();
 
-	public Player getPlayer() {
-		return ChannelUtils.getBukkitPlayer(networkmanager.channel);
-	}
+	public abstract Player getPlayer();
 
 	public ProtocolVersion getVersion() {
 		return version;
 	}
 
-	public void receivePacket(Object packet) throws ExecutionException {
-		@SuppressWarnings("unchecked")
-		final Packet<PacketListener> packetInst = (Packet<PacketListener>) packet;
-		Runnable packetReceive = new Runnable() {
-			@Override
-			public void run() {
-				if (networkmanager.channel.isOpen()) {
-					try {
-						packetInst.a(networkmanager.i());
-					} catch (CancelledPacketHandleException ex) {
-					}
-				}
-			}
-		};
-		if (networkmanager.channel.eventLoop().inEventLoop()) {
-			try {
-				packetReceive.run();
-			} catch (Throwable t) {
-				throw new ExecutionException(t);
-			}
-		} else {
-			try {
-				networkmanager.channel.eventLoop().submit(packetReceive).get();
-			} catch (InterruptedException e) {
-			}
-		}
+	public abstract void receivePacket(Object packet) throws ExecutionException;
+
+	public abstract void sendPacket(Object packet);
+
+	protected final ArrayList<PacketSendListener> sendListeners = new ArrayList<>();
+	protected final ArrayList<PacketReceiveListener> receiveListeners = new ArrayList<>();
+
+	public void addPacketSendListener(PacketSendListener listener) {
+		sendListeners.add(listener);
 	}
 
-	public void sendPacket(Object packet) {
-		networkmanager.sendPacket((Packet<?>) packet);
+	public void removePacketSendListener(PacketSendListener listener) {
+		sendListeners.remove(listener);
+	}
+
+	public void addPacketReceiveListener(PacketReceiveListener listener) {
+		receiveListeners.add(listener);
+	}
+
+	public void removePacketReceiveListener(PacketReceiveListener listener) {
+		receiveListeners.remove(listener);
+	}
+
+	@FunctionalInterface
+	public static interface PacketSendListener {
+		public boolean onPacketSending(Object packet);
+	}
+
+	@FunctionalInterface
+	public static interface PacketReceiveListener {
+		public boolean onPacketReceiving(Object packet);
 	}
 
 }

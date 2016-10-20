@@ -21,8 +21,8 @@ import net.minecraft.server.v1_10_R1.LoginListener;
 import net.minecraft.server.v1_10_R1.NetworkManager;
 import net.minecraft.server.v1_10_R1.PacketHandshakingInSetProtocol;
 import net.minecraft.server.v1_10_R1.PacketLoginOutDisconnect;
-import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.protocol.storage.ThrottleTracker;
 import protocolsupport.utils.ServerPlatformUtils;
@@ -87,7 +87,7 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 					}
 					packethandshakinginsetprotocol.hostname = split[0];
 					SocketAddress oldaddress = networkManager.getSocketAddress();
-					Connection connection = ProtocolStorage.removeConnection(oldaddress);
+					ConnectionImpl connection = ProtocolStorage.removeConnection(oldaddress);
 					SocketAddress newaddress = new InetSocketAddress(split[1], ((InetSocketAddress) oldaddress).getPort());
 					networkManager.l = newaddress;
 					ProtocolStorage.setConnection(newaddress, connection);

@@ -7,9 +7,7 @@ import protocolsupport.protocol.pipeline.wrapped.WrappedSplitter;
 
 public class ChannelHandlers {
 
-	public static final String INITIAL_DECODER = "initial_decoder";
 	public static final String READ_TIMEOUT = "timeout";
-	public static final String LEGACY_KICK = "legacy_kick";
 	public static final String TIMEOUT = "timeout";
 	public static final String SPLITTER = "splitter";
 	public static final String PREPENDER = "prepender";
@@ -17,9 +15,11 @@ public class ChannelHandlers {
 	public static final String ENCODER = "encoder";
 	public static final String NETWORK_MANAGER = "packet_handler";
 	public static final String DECRYPT = "decrypt";
-	public static final String DECODER_TRANSFORMER = "decoder_transformer";
-	public static final String ENCODER_TRANSFORMER = "encoder_transformer";
-	public static final String CLOSE = "close_cleanup";
+	public static final String INITIAL_DECODER = "ps_initial_decoder";
+	public static final String LEGACY_KICK = "ps_legacy_kick";
+	public static final String DECODER_TRANSFORMER = "ps_decoder_transformer";
+	public static final String ENCODER_TRANSFORMER = "ps_ncoder_transformer";
+	public static final String LOGIC = "ps_logic";
 
 	public static WrappedSplitter getSplitter(ChannelPipeline pipeline) {
 		return (WrappedSplitter) pipeline.get(SPLITTER);

@@ -18,8 +18,7 @@ public class ChannelUtils {
 
 	public static final AttributeKey<EnumProtocol> CURRENT_PROTOCOL_KEY = NetworkManager.c;
 
-	public static Player getBukkitPlayer(Channel channel) {
-		NetworkManager networkManager = getNetworkManager(channel);
+	public static Player getBukkitPlayer(NetworkManager networkManager) {
 		PacketListener listener = networkManager.i();
 		if (listener instanceof PlayerConnection) {
 			return ((PlayerConnection) networkManager.i()).player.getBukkitEntity();

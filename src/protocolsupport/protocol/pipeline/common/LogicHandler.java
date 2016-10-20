@@ -14,8 +14,9 @@ import org.bukkit.Bukkit;
 
 import com.mojang.authlib.GameProfile;
 
+import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.ChannelPromise;
 import io.netty.handler.timeout.ReadTimeoutException;
 import net.minecraft.server.v1_10_R1.NetworkManager;
 import net.minecraft.server.v1_10_R1.PacketListener;
@@ -23,18 +24,40 @@ import net.minecraft.server.v1_10_R1.PlayerConnection;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.events.PlayerDisconnectEvent;
 import protocolsupport.logger.AsyncErrorLogger;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.protocol.packet.handler.LoginListenerPlay;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.utils.netty.ChannelUtils;
 
-public class ChannelCloseCleanup extends ChannelInboundHandlerAdapter {
+public class LogicHandler extends ChannelDuplexHandler {
 
 	private static final HashMap<Class<? extends Throwable>, Set<?>> ignoreExceptions = new HashMap<>();
 	static {
 		ignoreExceptions.put(ClosedChannelException.class, Collections.emptySet());
 		ignoreExceptions.put(ReadTimeoutException.class, Collections.emptySet());
 		ignoreExceptions.put(IOException.class, new HashSet<>(Arrays.asList("Connection reset by peer", "Broken pipe")));
+	}
+
+	private final ConnectionImpl connection;
+	public LogicHandler(ConnectionImpl connection) {
+		this.connection = connection;
+	}
+
+	@Override
+	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+		if (connection.handlePacketReceive(msg)) {
+			super.channelRead(ctx, msg);
+		}
+	}
+
+	@Override
+	public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
+		if (connection.handlePacketSend(msg)) {
+			super.write(ctx, msg, promise);
+		} else {
+			promise.setSuccess();
+		}
 	}
 
 	@Override

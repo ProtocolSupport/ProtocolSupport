@@ -4,25 +4,25 @@ import java.net.SocketAddress;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 
-import protocolsupport.api.Connection;
+import protocolsupport.protocol.ConnectionImpl;
 
 public class ProtocolStorage {
 
-	private static final ConcurrentHashMap<SocketAddress, Connection> versions = new ConcurrentHashMap<>(1000);
+	private static final ConcurrentHashMap<SocketAddress, ConnectionImpl> versions = new ConcurrentHashMap<>(1000);
 
-	public static final void setConnection(SocketAddress address, Connection connection) {
+	public static final void setConnection(SocketAddress address, ConnectionImpl connection) {
 		versions.put(address, connection);
 	}
 
-	public static Connection getConnection(SocketAddress address) {
+	public static ConnectionImpl getConnection(SocketAddress address) {
 		return versions.get(address);
 	}
 
-	public static Connection removeConnection(SocketAddress socketAddress) {
+	public static ConnectionImpl removeConnection(SocketAddress socketAddress) {
 		return versions.remove(socketAddress);
 	}
 
-	public static Collection<Connection> getConnections() {
+	public static Collection<ConnectionImpl> getConnections() {
 		return versions.values();
 	}
 
