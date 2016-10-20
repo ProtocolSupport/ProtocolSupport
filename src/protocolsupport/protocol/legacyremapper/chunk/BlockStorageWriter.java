@@ -19,11 +19,11 @@ public class BlockStorageWriter {
 		final int arrStartIndex = bitStartIndex >> 6;
 		final int arrEndIndex = ((bitStartIndex + bitsPerBlock) - 1) >> 6;
 		final int localStartBitIndex = bitStartIndex & 63;
-		this.blockdata[arrStartIndex] = ((this.blockdata[arrStartIndex] & ~(this.singleValMask << localStartBitIndex)) | (blockstate & this.singleValMask) << localStartBitIndex);
+		this.blockdata[arrStartIndex] = ((this.blockdata[arrStartIndex] & ~(this.singleValMask << localStartBitIndex)) | ((blockstate & this.singleValMask) << localStartBitIndex));
 		if (arrStartIndex != arrEndIndex) {
 			final int thisPartSift = 64 - localStartBitIndex;
 			final int otherPartShift = this.bitsPerBlock - thisPartSift;
-			this.blockdata[arrEndIndex] = (this.blockdata[arrEndIndex] >>> otherPartShift << otherPartShift | (blockstate & this.singleValMask) >> thisPartSift);
+			this.blockdata[arrEndIndex] = (((this.blockdata[arrEndIndex] >>> otherPartShift) << otherPartShift) | ((blockstate & this.singleValMask) >> thisPartSift));
 		}
 	}
 

@@ -68,7 +68,7 @@ public class Utils {
 		if (mod == 0) {
 			return number;
 		}
-		return number + base - mod;
+		return (number + base) - mod;
 	}
 
 	public static <T> T getJavaPropertyValue(String property, T defaultValue, Converter<String, T> converter) {
