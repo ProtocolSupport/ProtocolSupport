@@ -8,6 +8,7 @@ import net.minecraft.server.v1_10_R1.EnumProtocolDirection;
 import net.minecraft.server.v1_10_R1.NetworkManager;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.FakePacketListener;
+import protocolsupport.protocol.pipeline.common.ChannelCloseCleanup;
 import protocolsupport.protocol.pipeline.common.PacketDecoder;
 import protocolsupport.protocol.pipeline.common.PacketEncoder;
 import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
@@ -48,7 +49,8 @@ public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 		.addLast(ChannelHandlers.SPLITTER, new WrappedSplitter())
 		.addLast(ChannelHandlers.DECODER, new PacketDecoder())
 		.addLast(ChannelHandlers.PREPENDER, new WrappedPrepender())
-		.addLast(ChannelHandlers.ENCODER, new PacketEncoder());
+		.addLast(ChannelHandlers.ENCODER, new PacketEncoder())
+		.addLast(ChannelHandlers.CLOSE, new ChannelCloseCleanup());
 		NetworkManager networkmanager = new NetworkManager(EnumProtocolDirection.SERVERBOUND);
 		networkmanager.setPacketListener(new FakePacketListener());
 		networkManagers.add(networkmanager);

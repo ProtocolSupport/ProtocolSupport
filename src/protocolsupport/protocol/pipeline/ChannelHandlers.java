@@ -19,6 +19,7 @@ public class ChannelHandlers {
 	public static final String DECRYPT = "decrypt";
 	public static final String DECODER_TRANSFORMER = "decoder_transformer";
 	public static final String ENCODER_TRANSFORMER = "encoder_transformer";
+	public static final String CLOSE = "close_cleanup";
 
 	public static WrappedSplitter getSplitter(ChannelPipeline pipeline) {
 		return (WrappedSplitter) pipeline.get(SPLITTER);
