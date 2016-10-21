@@ -61,6 +61,8 @@ public class ConnectionImpl extends Connection {
 		final Packet<PacketListener> packetInst = (Packet<PacketListener>) packet;
 		Runnable packetSend = () -> {
 			try {
+				ChannelHandlerContext encoderContext = networkmanager.channel.pipeline().context(ChannelHandlers.ENCODER);
+				ChannelOutboundHandler encoderChannelHandler = (ChannelOutboundHandler) encoderContext.handler();
 				encoderChannelHandler.write(encoderContext, packetInst, encoderContext.voidPromise());
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -73,13 +75,8 @@ public class ConnectionImpl extends Connection {
 		}
 	}
 
-	private ChannelHandlerContext encoderContext;
-	private ChannelOutboundHandler encoderChannelHandler;
-
-	public void setProtocolVersion(ProtocolVersion version) {
+	public void setVersion(ProtocolVersion version) {
 		this.version = version;
-		this.encoderContext = networkmanager.channel.pipeline().context(ChannelHandlers.ENCODER);
-		this.encoderChannelHandler = (ChannelOutboundHandler) encoderContext.handler();
 	}
 
 	public boolean handlePacketSend(Object packet) {

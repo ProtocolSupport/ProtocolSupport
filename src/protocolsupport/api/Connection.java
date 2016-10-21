@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 public abstract class Connection {
 
-	protected ProtocolVersion version;
+	protected volatile ProtocolVersion version;
 	public Connection(ProtocolVersion version) {
 		this.version = version;
 	}
