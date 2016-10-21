@@ -87,9 +87,11 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7__1_8_
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7__1_8__1_9_r1__1_9_r2__1_10.ServerInfo;
 import protocolsupport.protocol.pipeline.version.AbstractPacketEncoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.utils.registry.PacketIdTransformerRegistry;
 
 public class PacketEncoder extends AbstractPacketEncoder {
 
+	private static final PacketIdTransformerRegistry packetIdRegistry = new PacketIdTransformerRegistry();
 	static {
 		packetIdRegistry.register(EnumProtocol.LOGIN, ClientBoundPacket.LOGIN_DISCONNECT_ID, 0x00);
 		packetIdRegistry.register(EnumProtocol.LOGIN, ClientBoundPacket.LOGIN_ENCRYPTION_BEGIN_ID, 0x01);
@@ -160,6 +162,11 @@ public class PacketEncoder extends AbstractPacketEncoder {
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_SCOREBOARD_TEAM_ID, 0x3E);
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID, 0x3F);
 		packetIdRegistry.register(EnumProtocol.PLAY, ClientBoundPacket.PLAY_KICK_DISCONNECT_ID, 0x40);
+	}
+
+	@Override
+	protected int getNewPacketId(EnumProtocol currentProtocol, int oldPacketId) {
+		return packetIdRegistry.getNewPacketId(currentProtocol, oldPacketId);
 	}
 
 	{

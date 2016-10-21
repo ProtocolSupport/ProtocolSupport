@@ -87,9 +87,11 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7__1_8_
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7__1_8__1_9_r1__1_9_r2__1_10.ServerInfo;
 import protocolsupport.protocol.pipeline.version.AbstractPacketEncoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.utils.registry.PacketIdTransformerRegistry;
 
 public class PacketEncoder extends AbstractPacketEncoder {
 
+	private static final PacketIdTransformerRegistry packetIdRegistry = new PacketIdTransformerRegistry();
 	static {
 		//TODO: remapping table with ClientBoundPacket ids
 		for (EnumProtocol protocol : EnumProtocol.values()) {
@@ -97,6 +99,11 @@ public class PacketEncoder extends AbstractPacketEncoder {
 				packetIdRegistry.register(protocol, i, i);
 			}
 		}
+	}
+
+	@Override
+	protected int getNewPacketId(EnumProtocol currentProtocol, int oldPacketId) {
+		return packetIdRegistry.getNewPacketId(currentProtocol, oldPacketId);
 	}
 
 	{

@@ -12,7 +12,6 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry;
-import protocolsupport.protocol.utils.registry.PacketIdTransformerRegistry;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.netty.MessageToMessageEncoder;
@@ -34,7 +33,6 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 	}
 
 	protected final MiddleTransformerRegistry<ClientBoundMiddlePacket<RecyclableCollection<ClientBoundPacketData>>> registry = new MiddleTransformerRegistry<>();
-	protected static final PacketIdTransformerRegistry packetIdRegistry = new PacketIdTransformerRegistry();
 
 	private final ProtocolSupportPacketDataSerializer middlebuffer = new ProtocolSupportPacketDataSerializer(null, ProtocolVersion.getLatest());
 	private final boolean varintPacketId;
@@ -50,7 +48,7 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 		try (RecyclableCollection<ClientBoundPacketData> data = packetTransformer.toData(connection.getVersion())) {
 			for (ClientBoundPacketData packetdata : data) {
 				ByteBuf senddata = Allocator.allocateBuffer();
-				int newPacketId = packetIdRegistry.getNewPacketId(currentProtocol, packetdata.getPacketId());
+				int newPacketId = getNewPacketId(currentProtocol, packetdata.getPacketId());
 				if (varintPacketId) {
 					ChannelUtils.writeVarInt(senddata, newPacketId);
 				} else {
@@ -61,5 +59,7 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 			}
 		}
 	}
+
+	protected abstract int getNewPacketId(EnumProtocol currentProtocol, int oldPacketId);
 
 }
