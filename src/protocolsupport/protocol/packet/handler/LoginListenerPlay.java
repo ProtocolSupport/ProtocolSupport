@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.handler;
 
-import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.LogManager;
@@ -86,7 +85,7 @@ public class LoginListenerPlay extends LoginListener implements PacketListenerPl
 		//tick connection keep now
 		keepConnection();
 		//now fire login event
-		PlayerLoginFinishEvent event = new PlayerLoginFinishEvent((InetSocketAddress) networkManager.getSocketAddress(), profile.getName(), profile.getId(), onlineMode);
+		PlayerLoginFinishEvent event = new PlayerLoginFinishEvent(ProtocolSupportAPI.getConnection(networkManager.getSocketAddress()), profile.getName(), profile.getId(), onlineMode);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.isLoginDenied()) {
 			disconnect(event.getDenyLoginMessage());

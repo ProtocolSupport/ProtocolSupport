@@ -5,6 +5,9 @@ import java.util.UUID;
 
 import org.bukkit.event.HandlerList;
 
+import protocolsupport.api.Connection;
+import protocolsupport.api.ProtocolSupportAPI;
+
 public class PlayerLoginStartEvent extends PlayerEvent {
 
 	private final String hostname;
@@ -13,11 +16,16 @@ public class PlayerLoginStartEvent extends PlayerEvent {
 	private UUID uuid;
 	private String denyLoginMessage;
 
-	public PlayerLoginStartEvent(InetSocketAddress address, String username, boolean onlinemode, boolean useonlinemodeuuid, String hostname) {
-		super(address, username);
+	public PlayerLoginStartEvent(Connection connection, String username, boolean onlinemode, boolean useonlinemodeuuid, String hostname) {
+		super(connection, username);
 		this.onlinemode = onlinemode;
 		this.useonlinemodeuuid = useonlinemodeuuid;
 		this.hostname = hostname;
+	}
+
+	@Deprecated
+	public PlayerLoginStartEvent(InetSocketAddress address, String username, boolean onlinemode, boolean useonlinemodeuuid, String hostname) {
+		this(ProtocolSupportAPI.getConnection(address), username, onlinemode, useonlinemodeuuid, hostname);
 	}
 
 	public String getHostname() {

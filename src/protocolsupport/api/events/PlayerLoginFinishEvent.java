@@ -5,15 +5,23 @@ import java.util.UUID;
 
 import org.bukkit.event.HandlerList;
 
+import protocolsupport.api.Connection;
+import protocolsupport.api.ProtocolSupportAPI;
+
 public class PlayerLoginFinishEvent extends PlayerEvent {
 
 	private final UUID uuid;
 	private final boolean onlineMode;
 
-	public PlayerLoginFinishEvent(InetSocketAddress address, String username, UUID uuid, boolean onlineMode) {
-		super(address, username);
+	public PlayerLoginFinishEvent(Connection connection, String username, UUID uuid, boolean onlineMode) {
+		super(connection, username);
 		this.uuid = uuid;
 		this.onlineMode = onlineMode;
+	}
+
+	@Deprecated
+	public PlayerLoginFinishEvent(InetSocketAddress address, String username, UUID uuid, boolean onlineMode) {
+		this(ProtocolSupportAPI.getConnection(address), username, uuid, onlineMode);
 	}
 
 	public UUID getUUID() {

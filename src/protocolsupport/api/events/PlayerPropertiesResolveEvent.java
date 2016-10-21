@@ -8,15 +8,22 @@ import java.util.Map;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.event.HandlerList;
 
+import protocolsupport.api.Connection;
+import protocolsupport.api.ProtocolSupportAPI;
+
 public class PlayerPropertiesResolveEvent extends PlayerEvent {
 
 	private final HashMap<String, ProfileProperty> properties = new HashMap<>();
 
-	public PlayerPropertiesResolveEvent(InetSocketAddress address, String username, List<ProfileProperty> properties) {
-		super(address, username);
+	public PlayerPropertiesResolveEvent(Connection connection, String username, List<ProfileProperty> properties) {
+		super(connection, username);
 		for (ProfileProperty property : properties) {
 			addProperty(property);
 		}
+	}
+
+	public PlayerPropertiesResolveEvent(InetSocketAddress address, String username, List<ProfileProperty> properties) {
+		this(ProtocolSupportAPI.getConnection(address), username, properties);
 	}
 
 	public Map<String, ProfileProperty> getProperties() {

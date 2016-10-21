@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.handler;
 
-import java.net.InetSocketAddress;
 import java.security.PrivateKey;
 import java.util.Arrays;
 import java.util.Random;
@@ -38,6 +37,7 @@ import net.minecraft.server.v1_10_R1.PacketLoginOutDisconnect;
 import net.minecraft.server.v1_10_R1.PacketLoginOutEncryptionBegin;
 import net.minecraft.server.v1_10_R1.PacketLoginOutSetCompression;
 import protocolsupport.ProtocolSupport;
+import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.events.PlayerLoginStartEvent;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.common.PacketCompressor;
@@ -166,7 +166,7 @@ public abstract class AbstractLoginListener extends LoginListener {
 					profile = packetlogininstart.a();
 
 					PlayerLoginStartEvent event = new PlayerLoginStartEvent(
-						(InetSocketAddress) networkManager.getSocketAddress(),
+						ProtocolSupportAPI.getConnection(networkManager.getSocketAddress()),
 						profile.getName(),
 						isOnlineMode,
 						useOnlineModeUUID,

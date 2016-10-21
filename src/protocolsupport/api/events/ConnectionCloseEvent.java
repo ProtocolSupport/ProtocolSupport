@@ -1,20 +1,13 @@
 package protocolsupport.api.events;
 
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import protocolsupport.api.Connection;
 
-public class ConnectionCloseEvent extends Event {
+public class ConnectionCloseEvent extends ConnectionEvent {
 
-	private final Connection connection;
 	public ConnectionCloseEvent(Connection connection) {
-		super(true);
-		this.connection = connection;
-	}
-
-	public Connection getConnection() {
-		return this.connection;
+		super(connection);
 	}
 
 	private static final HandlerList list = new HandlerList();

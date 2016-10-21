@@ -21,6 +21,7 @@ import io.netty.handler.timeout.ReadTimeoutException;
 import net.minecraft.server.v1_10_R1.NetworkManager;
 import net.minecraft.server.v1_10_R1.PacketListener;
 import net.minecraft.server.v1_10_R1.PlayerConnection;
+import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.events.ConnectionCloseEvent;
 import protocolsupport.api.events.ConnectionOpenEvent;
@@ -95,10 +96,11 @@ public class LogicHandler extends ChannelDuplexHandler {
 		} else if (listener instanceof PlayerConnection) {
 			username = ((PlayerConnection) listener).player.getProfile().getName();
 		}
+		Connection connection = ProtocolStorage.getConnection(addr);
 		if (username != null) {
-			Bukkit.getPluginManager().callEvent(new PlayerDisconnectEvent(addr, username));
+			Bukkit.getPluginManager().callEvent(new PlayerDisconnectEvent(connection, username));
 		}
-		Bukkit.getPluginManager().callEvent(new ConnectionCloseEvent(ProtocolStorage.getConnection(addr)));
+		Bukkit.getPluginManager().callEvent(new ConnectionCloseEvent(connection));
 		ProtocolStorage.removeConnection(addr);
 	}
 
