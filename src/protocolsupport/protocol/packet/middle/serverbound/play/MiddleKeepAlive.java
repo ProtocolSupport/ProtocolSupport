@@ -11,7 +11,7 @@ public abstract class MiddleKeepAlive extends ServerBoundMiddlePacket {
 	protected int keepAliveId;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_KEEP_ALIVE);
 		creator.writeVarInt(keepAliveId);
 		return RecyclableSingletonList.create(creator);

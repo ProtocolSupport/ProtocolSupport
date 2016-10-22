@@ -4,11 +4,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.ClosedChannelException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
 
 import org.bukkit.Bukkit;
 
@@ -35,11 +31,11 @@ import protocolsupport.utils.netty.ChannelUtils;
 
 public class LogicHandler extends ChannelDuplexHandler {
 
-	private static final HashMap<Class<? extends Throwable>, Set<?>> ignoreExceptions = new HashMap<>();
+	private static final HashSet<Class<? extends Throwable>> ignoreExceptions = new HashSet<>();
 	static {
-		ignoreExceptions.put(ClosedChannelException.class, Collections.emptySet());
-		ignoreExceptions.put(ReadTimeoutException.class, Collections.emptySet());
-		ignoreExceptions.put(IOException.class, new HashSet<>(Arrays.asList("Connection reset by peer", "Broken pipe")));
+		ignoreExceptions.add(ClosedChannelException.class);
+		ignoreExceptions.add(ReadTimeoutException.class);
+		ignoreExceptions.add(IOException.class);
 	}
 
 	private final ConnectionImpl connection;
@@ -66,8 +62,7 @@ public class LogicHandler extends ChannelDuplexHandler {
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable e) throws Exception {
 		super.exceptionCaught(ctx, e);
-		Set<?> ignore = ignoreExceptions.get(e.getClass());
-		if ((ignore == null) || (!ignore.isEmpty() && !ignore.contains(e.getMessage()))) {
+		if (!ignoreExceptions.contains(e.getClass())) {
 			SocketAddress remoteaddr = ChannelUtils.getNetworkManagerSocketAddress(ctx.channel());
 			AsyncErrorLogger.INSTANCE.log(e, remoteaddr, ProtocolSupportAPI.getProtocolVersion(remoteaddr));
 		}

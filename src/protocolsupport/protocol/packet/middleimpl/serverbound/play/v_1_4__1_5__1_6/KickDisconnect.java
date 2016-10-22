@@ -14,7 +14,7 @@ public class KickDisconnect extends ServerBoundMiddlePacket {
 	}
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		return RecyclableEmptyList.get();
 	}
 

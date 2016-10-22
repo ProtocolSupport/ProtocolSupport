@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8;
 
-import java.io.IOException;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnObject;
@@ -13,7 +11,7 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class SpawnObject extends MiddleSpawnObject<RecyclableCollection<ClientBoundPacketData>> {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) throws IOException {
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		if (type == 70) {
 			int id = IdRemapper.BLOCK.getTable(version).getRemap((objectdata & 4095) << 4) >> 4;
 			int data = (objectdata >> 12) & 0xF;

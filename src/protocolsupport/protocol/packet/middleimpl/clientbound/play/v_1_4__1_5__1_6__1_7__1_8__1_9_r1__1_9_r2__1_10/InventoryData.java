@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__1_6__1_7__1_8__1_9_r1__1_9_r2__1_10;
 
-import java.io.IOException;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryData;
@@ -12,11 +10,11 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class InventoryData extends MiddleInventoryData<RecyclableCollection<ClientBoundPacketData>> {
 
-	private static final int[] furTypeTr = {1, 2, 0};
+	private static final int[] furTypeTr = { 1, 2, 0 };
 	private final int[] enchTypeVal = new int[10];
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) throws IOException {
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		if ((version == ProtocolVersion.MINECRAFT_1_8) && (cache.getOpenedWindow() == WindowType.ENCHANT)) {
 			enchTypeVal[type] = value;
 			if ((type >= 7) && (type <= 9)) {

@@ -17,7 +17,7 @@ public abstract class MiddlePositionLook extends ServerBoundMiddlePacket {
 	protected boolean onGround;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		if (!cache.isTeleportConfirmNeeded()) {
 			ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_POSITION_LOOK);
 			creator.writeDouble(x);

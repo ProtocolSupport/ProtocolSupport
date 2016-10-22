@@ -27,7 +27,7 @@ import protocolsupport.utils.netty.ChannelUtils;
 public class LegacyLoginAndPingHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
 	@Override
-	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf input) throws Exception {
+	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf input)  {
 		ProtocolSupportPacketDataSerializer serializer = new ProtocolSupportPacketDataSerializer(Allocator.allocateBuffer(), ProtocolVersion.MINECRAFT_LEGACY);
 		try {
 			int packetId = input.readUnsignedByte();

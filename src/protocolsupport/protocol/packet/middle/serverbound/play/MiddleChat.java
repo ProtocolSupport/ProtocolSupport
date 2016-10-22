@@ -11,7 +11,7 @@ public abstract class MiddleChat extends ServerBoundMiddlePacket {
 	protected String message;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_CHAT);
 		creator.writeString(message);
 		return RecyclableSingletonList.create(creator);

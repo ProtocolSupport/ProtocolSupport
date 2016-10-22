@@ -16,7 +16,7 @@ public abstract class MiddleUseEntity extends ServerBoundMiddlePacket {
 	protected int usedHand;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_USE_ENTITY);
 		creator.writeVarInt(entityId);
 		creator.writeEnum(action);

@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1__1_9_r2__1_10;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import protocolsupport.api.ProtocolVersion;
@@ -15,7 +14,7 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class EntitySetAttributes extends MiddleEntitySetAttributes<RecyclableCollection<ClientBoundPacketData>> {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) throws IOException {
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_ATTRIBUTES_ID, version);
 		SkippingTable table = StringSkipper.ATTRIBUTES.getTable(version);
 		ArrayList<Attribute> sendattrs = new ArrayList<>();

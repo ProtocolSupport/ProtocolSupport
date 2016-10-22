@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -31,7 +30,7 @@ public abstract class MiddleSpawnNamed<T> extends ClientBoundMiddlePacket<T> {
 	protected TIntObjectMap<DataWatcherObject<?>> metadata;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		playerEntityId = serializer.readVarInt();
 		uuid = serializer.readUUID();
 		x = serializer.readDouble();

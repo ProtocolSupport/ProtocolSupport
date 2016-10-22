@@ -6,6 +6,7 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -60,7 +61,7 @@ public class PlayerLookupUUID {
 		}
 	}
 
-	private void fireLoginEvents() throws Exception {
+	private void fireLoginEvents() throws InterruptedException, ExecutionException  {
 		if (!listener.getNetworkManager().isConnected()) {
 			return;
 		}

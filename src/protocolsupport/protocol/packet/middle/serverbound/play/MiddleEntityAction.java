@@ -13,7 +13,7 @@ public abstract class MiddleEntityAction extends ServerBoundMiddlePacket {
 	protected int jumpBoost;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_ENTITY_ACTION);
 		creator.writeVarInt(entityId);
 		creator.writeVarInt(actionId);

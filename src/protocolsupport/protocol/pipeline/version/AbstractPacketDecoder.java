@@ -28,7 +28,7 @@ public abstract class AbstractPacketDecoder extends ByteToMessageDecoder {
 		});
 	}
 
-	protected void addPackets(RecyclableCollection<ServerBoundPacketData> packets, List<Object> to) throws Exception {
+	protected void addPackets(RecyclableCollection<ServerBoundPacketData> packets, List<Object> to)  {
 		try {
 			for (ServerBoundPacketData packetdata : packets) {
 				ByteBuf receivedata = Allocator.allocateBuffer();

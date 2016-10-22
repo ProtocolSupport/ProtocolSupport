@@ -1,6 +1,7 @@
 package protocolsupport.protocol.pipeline.common;
 
 import java.util.List;
+import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
 import io.netty.buffer.ByteBuf;
@@ -23,7 +24,7 @@ public class PacketDecompressor extends net.minecraft.server.v1_10_R1.PacketDeco
 	}
 
 	@Override
-	protected void decode(ChannelHandlerContext ctx, ByteBuf from, List<Object> list) throws Exception {
+	protected void decode(ChannelHandlerContext ctx, ByteBuf from, List<Object> list) throws DataFormatException {
 		if (!from.isReadable()) {
 			return;
 		}

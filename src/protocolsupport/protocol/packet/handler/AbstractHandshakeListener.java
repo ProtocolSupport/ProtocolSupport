@@ -51,7 +51,7 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 							final ChatComponentText chatcomponenttext = new ChatComponentText("Connection throttled! Please wait before reconnecting.");
 							networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext), new GenericFutureListener<Future<? super Void>>() {
 								@Override
-								public void operationComplete(Future<? super Void> arg0) throws Exception {
+								public void operationComplete(Future<? super Void> arg0)  {
 									networkManager.close(chatcomponenttext);
 								}
 							});
@@ -66,7 +66,7 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 					final ChatComponentText chatcomponenttext = new ChatComponentText("Outdated server, max supported version: " + ProtocolVersion.getLatest());
 					this.networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext), new GenericFutureListener<Future<? super Void>>() {
 						@Override
-						public void operationComplete(Future<? super Void> arg0) throws Exception {
+						public void operationComplete(Future<? super Void> arg0)  {
 							networkManager.close(chatcomponenttext);
 						}
 					});
@@ -79,7 +79,7 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 						final ChatComponentText chatcomponenttext = new ChatComponentText("If you wish to use IP forwarding, please enable it in your BungeeCord config as well!");
 						networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext), new GenericFutureListener<Future<? super Void>>() {
 							@Override
-							public void operationComplete(Future<? super Void> arg0) throws Exception {
+							public void operationComplete(Future<? super Void> arg0)  {
 								networkManager.close(chatcomponenttext);
 							}
 						});

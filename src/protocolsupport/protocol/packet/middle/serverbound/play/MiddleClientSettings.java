@@ -16,7 +16,7 @@ public abstract class MiddleClientSettings extends ServerBoundMiddlePacket {
 	protected int mainHand;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_SETTINGS);
 		creator.writeString(locale);
 		creator.writeByte(viewDist);

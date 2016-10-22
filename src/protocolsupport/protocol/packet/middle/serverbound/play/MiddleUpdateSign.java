@@ -13,7 +13,7 @@ public abstract class MiddleUpdateSign extends ServerBoundMiddlePacket {
 	protected String[] lines = new String[4];
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_UPDATE_SIGN);
 		creator.writePosition(position);
 		for (int i = 0; i < lines.length; i++) {

@@ -12,7 +12,7 @@ public abstract class MiddleEncryptionResponse extends ServerBoundMiddlePacket {
 	protected byte[] verifyToken;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.LOGIN_ENCRYPTION_BEGIN);
 		creator.writeByteArray(sharedSecret);
 		creator.writeByteArray(verifyToken);

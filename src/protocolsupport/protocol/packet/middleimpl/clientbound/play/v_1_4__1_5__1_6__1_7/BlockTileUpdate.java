@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__1_6__1_7;
 
-import java.io.IOException;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.legacyremapper.LegacyTileEntityUpdate;
@@ -18,7 +16,7 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class BlockTileUpdate extends MiddleBlockTileUpdate<RecyclableCollection<ClientBoundPacketData>> {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) throws IOException {
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		return RecyclableSingletonList.create(createPacketData(version, position, type, tag));
 	}
 

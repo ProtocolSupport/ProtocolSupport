@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1__1_9_r2__1_10;
 
-import java.io.IOException;
-
 import com.mojang.authlib.properties.Property;
 
 import protocolsupport.api.ProtocolVersion;
@@ -14,7 +12,7 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class PlayerInfo extends MiddlePlayerInfo<RecyclableCollection<ClientBoundPacketData>> {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) throws IOException {
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_PLAYER_INFO_ID, version);
 		serializer.writeVarInt(action.ordinal());
 		serializer.writeVarInt(infos.length);

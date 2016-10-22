@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import java.io.IOException;
 import java.util.UUID;
 
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
@@ -17,7 +16,7 @@ public abstract class MiddleBossBar<T> extends ClientBoundMiddlePacket<T> {
 	protected int flags;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		uuid = serializer.readUUID();
 		action = serializer.readEnum(Action.class);
 		switch (action) {

@@ -21,17 +21,17 @@ public class PositionLook extends ServerBoundMiddlePacket {
 
 	@Override
 	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) {
-		 x = serializer.readDouble();
-		 y = serializer.readDouble();
-		 yhead = serializer.readDouble();
-		 z = serializer.readDouble();
-		 yaw = serializer.readFloat();
-		 pitch = serializer.readFloat();
-		 onGround = serializer.readBoolean();
+		x = serializer.readDouble();
+		y = serializer.readDouble();
+		yhead = serializer.readDouble();
+		z = serializer.readDouble();
+		yaw = serializer.readFloat();
+		pitch = serializer.readFloat();
+		onGround = serializer.readBoolean();
 	}
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		if ((y == -999.0D) && (yhead == -999.0D)) {
 			ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_LOOK);
 			creator.writeFloat(yaw);

@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8;
 
-import java.io.IOException;
-
 import gnu.trove.map.TIntObjectMap;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.legacyremapper.LegacyDataWatcherSerializer;
@@ -17,7 +15,7 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class EntityMetadata extends MiddleEntityMetadata<RecyclableCollection<ClientBoundPacketData>> {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) throws IOException {
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		TIntObjectMap<DataWatcherObject<?>> remapped = WatchedDataRemapper.transform(cache.getWatchedEntity(entityId), metadata, version);
 		if (remapped.isEmpty()) {
 			return RecyclableEmptyList.get();

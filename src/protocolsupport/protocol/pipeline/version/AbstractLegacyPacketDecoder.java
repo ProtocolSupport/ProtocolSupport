@@ -22,7 +22,7 @@ public class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
 	private final LegacyAnimatePacketReorderer animateReorderer = new LegacyAnimatePacketReorderer();
 
 	@Override
-	public void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
+	public void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws InstantiationException, IllegalAccessException  {
 		if (!input.isReadable()) {
 			return;
 		}

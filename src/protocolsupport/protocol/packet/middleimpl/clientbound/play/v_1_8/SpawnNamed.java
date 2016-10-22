@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8;
 
-import java.io.IOException;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.legacyremapper.LegacyDataWatcherSerializer;
 import protocolsupport.protocol.packet.ClientBoundPacket;
@@ -14,7 +12,7 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class SpawnNamed extends MiddleSpawnNamed<RecyclableCollection<ClientBoundPacketData>> {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) throws IOException {
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_NAMED_ID, version);
 		serializer.writeVarInt(playerEntityId);
 		serializer.writeUUID(uuid);

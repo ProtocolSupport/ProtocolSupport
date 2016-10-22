@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import java.io.IOException;
-
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public abstract class MiddleEntityEffectAdd<T> extends MiddleEntity<T> {
@@ -12,7 +10,7 @@ public abstract class MiddleEntityEffectAdd<T> extends MiddleEntity<T> {
 	protected boolean hideParticles;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		super.readFromServerData(serializer);
 		effectId = serializer.readByte();
 		amplifier = serializer.readByte();

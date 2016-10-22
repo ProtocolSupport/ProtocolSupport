@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_6__1_7__1_8;
 
-import java.io.IOException;
-
 import gnu.trove.map.hash.TIntIntHashMap;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
@@ -16,7 +14,7 @@ public class SetPassengers extends MiddleSetPassengers<RecyclableCollection<Clie
 	private int passengerId;
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) throws IOException {
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_LEASH_ID, version);
 		serializer.writeInt(passengerId);
 		serializer.writeInt(passengersIds.length == 0 ? -1 : vehicleId);

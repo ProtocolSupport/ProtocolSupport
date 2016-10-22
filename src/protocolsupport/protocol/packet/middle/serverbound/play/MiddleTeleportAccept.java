@@ -12,7 +12,7 @@ public abstract class MiddleTeleportAccept extends ServerBoundMiddlePacket {
 	protected int teleportConfirmId;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		if (cache.tryTeleportConfirm(teleportConfirmId)) {
 			return create(teleportConfirmId);
 		} else {

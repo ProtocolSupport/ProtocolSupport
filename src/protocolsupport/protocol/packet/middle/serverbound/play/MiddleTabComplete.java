@@ -14,7 +14,7 @@ public abstract class MiddleTabComplete extends ServerBoundMiddlePacket {
 	protected Position position;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_TAB_COMPLETE);
 		creator.writeString(string);
 		creator.writeBoolean(assumecommand);

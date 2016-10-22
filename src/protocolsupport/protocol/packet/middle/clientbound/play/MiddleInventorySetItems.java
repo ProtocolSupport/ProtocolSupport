@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
@@ -13,7 +12,7 @@ public abstract class MiddleInventorySetItems<T> extends ClientBoundMiddlePacket
 	protected ArrayList<ItemStackWrapper> itemstacks = new ArrayList<>();
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		windowId = serializer.readUnsignedByte();
 		int count = serializer.readShort();
 		itemstacks.clear();

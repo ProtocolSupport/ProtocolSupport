@@ -106,7 +106,7 @@ public abstract class AbstractLoginListener extends LoginListener {
 			final ChatComponentText chatcomponenttext = new ChatComponentText(s);
 			networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext), new GenericFutureListener<Future<? super Void>>() {
 				@Override
-				public void operationComplete(Future<? super Void> future) throws Exception {
+				public void operationComplete(Future<? super Void> future)  {
 					networkManager.close(chatcomponenttext);
 				}
 			});
@@ -262,7 +262,7 @@ public abstract class AbstractLoginListener extends LoginListener {
 					new PacketLoginOutSetCompression(threshold),
 					new ChannelFutureListener() {
 						@Override
-						public void operationComplete(ChannelFuture future) throws Exception {
+						public void operationComplete(ChannelFuture future)  {
 							enableCompresssion(threshold);
 						}
 					}

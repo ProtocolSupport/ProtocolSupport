@@ -1,6 +1,5 @@
 package protocolsupport.protocol.utils.datawatcher;
 
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -9,6 +8,7 @@ import org.spigotmc.SneakyThrow;
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
+import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBlockState;
@@ -54,7 +54,7 @@ public class DataWatcherDeserializer {
 		registry[constr.newInstance().getTypeId(ProtocolVersion.getLatest())] = constr;
 	}
 
-	public static TIntObjectMap<DataWatcherObject<?>> decodeData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
+	public static TIntObjectMap<DataWatcherObject<?>> decodeData(ProtocolSupportPacketDataSerializer serializer) {
 		TIntObjectMap<DataWatcherObject<?>> map = new TIntObjectHashMap<>(10, 0.5f, -1);
 		do {
 			int key = serializer.readUnsignedByte();
@@ -67,7 +67,7 @@ public class DataWatcherDeserializer {
 				object.readFromStream(serializer);
 				map.put(key, object);
 			} catch (Exception e) {
-				throw new IOException("Unable to decode datawatcher object", e);
+				throw new DecoderException("Unable to decode datawatcher object", e);
 			}
 		} while (true);
 		return map;

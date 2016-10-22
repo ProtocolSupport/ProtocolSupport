@@ -22,13 +22,13 @@ public abstract class MessageToMessageEncoder<I> extends ChannelOutboundHandlerA
 		this.matcher = TypeParameterMatcher.get(clazz);
 	}
 
-	public boolean acceptOutboundMessage(final Object o) throws Exception {
+	public boolean acceptOutboundMessage(final Object o)  {
 		return this.matcher.match(o);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public void write(final ChannelHandlerContext channelHandlerContext, final Object o, final ChannelPromise channelPromise) throws Exception {
+	public void write(final ChannelHandlerContext channelHandlerContext, final Object o, final ChannelPromise channelPromise)  {
 		RecyclableArrayList instance = null;
 		try {
 			if (this.acceptOutboundMessage(o)) {

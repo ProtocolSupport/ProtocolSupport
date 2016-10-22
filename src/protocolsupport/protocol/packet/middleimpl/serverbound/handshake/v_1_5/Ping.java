@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_1_5;
 
-import java.io.IOException;
-
 import org.bukkit.Bukkit;
 
 import protocolsupport.api.ProtocolVersion;
@@ -15,12 +13,12 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 public class Ping extends ServerBoundMiddlePacket {
 
 	@Override
-	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
+	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) {
 		serializer.readUnsignedByte();
 	}
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative()  {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 		ServerBoundPacketData hsscreator = ServerBoundPacketData.create(ServerBoundPacket.HANDSHAKE_START);
 		hsscreator.writeVarInt(ProtocolVersion.getLatest().getId());

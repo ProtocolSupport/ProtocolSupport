@@ -5,6 +5,6 @@ import io.netty.channel.ChannelHandlerContext;
 
 public interface IPacketPrepender {
 
-	public void prepend(ChannelHandlerContext ctx, ByteBuf input, ByteBuf output) throws Exception;
+	public void prepend(ChannelHandlerContext ctx, ByteBuf input, ByteBuf output) ;
 
 }

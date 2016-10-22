@@ -1,7 +1,5 @@
 package protocolsupport.protocol.utils.datawatcher.objects;
 
-import java.io.IOException;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
@@ -15,7 +13,7 @@ public class DataWatcherObjectItemStack extends DataWatcherObject<ItemStackWrapp
 	}
 
 	@Override
-	public void readFromStream(ProtocolSupportPacketDataSerializer serializer) throws IOException {
+	public void readFromStream(ProtocolSupportPacketDataSerializer serializer) {
 		value = serializer.readItemStack();
 	}
 

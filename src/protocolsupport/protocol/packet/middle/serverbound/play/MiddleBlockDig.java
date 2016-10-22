@@ -14,7 +14,7 @@ public abstract class MiddleBlockDig extends ServerBoundMiddlePacket {
 	protected int face;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_BLOCK_DIG);
 		creator.writeByte(status);
 		creator.writePosition(position);

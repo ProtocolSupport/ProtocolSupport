@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8;
 
-import java.io.IOException;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.legacyremapper.LegacyTileEntityUpdate;
 import protocolsupport.protocol.legacyremapper.chunk.ChunkTransformer;
@@ -15,12 +13,12 @@ import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
-public class Chunk extends MiddleChunk<RecyclableCollection<ClientBoundPacketData>>  {
+public class Chunk extends MiddleChunk<RecyclableCollection<ClientBoundPacketData>> {
 
 	private final ChunkTransformer transformer = ChunkTransformer.create(BlockFormat.SHORT);
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) throws IOException {
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID, version);
 		chunkdata.writeInt(chunkX);
@@ -37,12 +35,7 @@ public class Chunk extends MiddleChunk<RecyclableCollection<ClientBoundPacketDat
 		}
 		packets.add(chunkdata);
 		for (NBTTagCompoundWrapper tile : tiles) {
-			packets.add(BlockTileUpdate.createPacketData(
-				version,
-				LegacyTileEntityUpdate.getPosition(tile),
-				LegacyTileEntityUpdate.getUpdateType(tile).ordinal(),
-				tile
-			));
+			packets.add(BlockTileUpdate.createPacketData(version, LegacyTileEntityUpdate.getPosition(tile), LegacyTileEntityUpdate.getUpdateType(tile).ordinal(), tile));
 		}
 		return packets;
 	}

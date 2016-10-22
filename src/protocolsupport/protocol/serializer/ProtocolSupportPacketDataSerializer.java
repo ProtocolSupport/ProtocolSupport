@@ -287,7 +287,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 		}
 	}
 
-	public MerchantData readMerchantData() throws IOException {
+	public MerchantData readMerchantData() {
 		MerchantData merchdata = new MerchantData(readInt());
 		int count = readUnsignedByte();
 		for (int i = 0; i < count; i++) {
@@ -443,15 +443,23 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 		}
 	}
 
-	private static NBTTagCompound readLegacyNBT(InputStream is, NBTReadLimiter nbtreadlimiter) throws IOException {
-		try (DataInputStream datainputstream = new DataInputStream(new BufferedInputStream(new LimitStream(new GZIPInputStream(is), nbtreadlimiter)))) {
-			return NBTCompressedStreamTools.a(datainputstream, nbtreadlimiter);
+	private static NBTTagCompound readLegacyNBT(InputStream is, NBTReadLimiter nbtreadlimiter) {
+		try {
+			try (DataInputStream datainputstream = new DataInputStream(new BufferedInputStream(new LimitStream(new GZIPInputStream(is), nbtreadlimiter)))) {
+				return NBTCompressedStreamTools.a(datainputstream, nbtreadlimiter);
+			}
+		} catch (IOException e) {
+			throw new DecoderException(e);
 		}
 	}
 
-	private static void encodeLegacyNBT(NBTTagCompound nbttagcompound, ByteBuf to) throws IOException {
-		try (DataOutputStream dataoutputstream = new DataOutputStream(new GZIPOutputStream(new ByteBufOutputStream(to)))) {
-			NBTCompressedStreamTools.a(nbttagcompound, (DataOutput) dataoutputstream);
+	private static void encodeLegacyNBT(NBTTagCompound nbttagcompound, ByteBuf to) {
+		try {
+			try (DataOutputStream dataoutputstream = new DataOutputStream(new GZIPOutputStream(new ByteBufOutputStream(to)))) {
+				NBTCompressedStreamTools.a(nbttagcompound, (DataOutput) dataoutputstream);
+			}
+		} catch (IOException e) {
+			throw new EncoderException(e);
 		}
 	}
 

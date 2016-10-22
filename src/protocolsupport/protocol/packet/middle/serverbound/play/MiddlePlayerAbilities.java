@@ -13,7 +13,7 @@ public abstract class MiddlePlayerAbilities extends ServerBoundMiddlePacket {
 	protected float walkSpeed;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_ABILITIES);
 		creator.writeByte(flags);
 		creator.writeFloat(flySpeed);

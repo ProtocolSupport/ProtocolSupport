@@ -11,7 +11,7 @@ public abstract class MiddleInventoryClose extends ServerBoundMiddlePacket {
 	protected int windowId;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		cache.closeWindow();
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_WINDOW_CLOSE);
 		creator.writeByte(windowId);

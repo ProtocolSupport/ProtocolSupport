@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_5__1_6__1_7;
 
-import java.io.IOException;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.packet.ClientBoundPacket;
@@ -17,7 +15,7 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class InventoryOpen extends MiddleInventoryOpen<RecyclableCollection<ClientBoundPacketData>> {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) throws IOException {
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		int id = WindowType.fromName(invname).ordinal();
 		if (IdSkipper.INVENTORY.getTable(version).shouldSkip(id)) {
 			connection.receivePacket(ServerPlatformUtils.createInboundInventoryClosePacket());

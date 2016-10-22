@@ -11,7 +11,7 @@ public abstract class MiddleAnimation extends ServerBoundMiddlePacket {
 	protected int usedHand;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_ANIMATION);
 		creator.writeVarInt(usedHand);
 		return RecyclableSingletonList.create(creator);

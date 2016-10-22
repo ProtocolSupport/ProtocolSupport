@@ -1,5 +1,7 @@
 package protocolsupport.protocol.pipeline.common;
 
+import java.io.IOException;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.EncoderException;
@@ -18,7 +20,7 @@ public class PacketEncoder extends MessageToByteEncoder<Packet<PacketListener>> 
 	private final PacketDataSerializer nativeSerializer = new PacketDataSerializer(wrapper);
 
 	@Override
-	protected void encode(ChannelHandlerContext ctx, Packet<PacketListener> packet, ByteBuf data) throws Exception {
+	protected void encode(ChannelHandlerContext ctx, Packet<PacketListener> packet, ByteBuf data) {
 		EnumProtocol currentProtocol = ctx.channel().attr(ChannelUtils.CURRENT_PROTOCOL_KEY).get();
 		final Integer packetId = currentProtocol.a(EnumProtocolDirection.CLIENTBOUND, packet);
 		if (packetId == null) {
@@ -26,7 +28,11 @@ public class PacketEncoder extends MessageToByteEncoder<Packet<PacketListener>> 
 		}
 		wrapper.setBuf(data);
 		ChannelUtils.writeVarInt(wrapper, packetId);
-		packet.b(nativeSerializer);
+		try {
+			packet.b(nativeSerializer);
+		} catch (IOException e) {
+			throw new EncoderException(e);
+		}
 	}
 
 }

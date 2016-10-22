@@ -12,7 +12,7 @@ public abstract class MiddleSteerBoat extends ServerBoundMiddlePacket {
 	protected boolean leftPaddleTurning;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_STEER_BOAT);
 		creator.writeBoolean(rightPaddleTurning);
 		creator.writeBoolean(leftPaddleTurning);

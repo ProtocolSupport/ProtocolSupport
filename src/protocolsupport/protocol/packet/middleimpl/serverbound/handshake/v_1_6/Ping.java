@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_1_6;
 
-import java.io.IOException;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
@@ -16,7 +14,7 @@ public class Ping extends ServerBoundMiddlePacket {
 	protected int port;
 
 	@Override
-	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
+	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) {
 		serializer.readUnsignedByte();
 		serializer.readUnsignedByte();
 		serializer.readString();
@@ -27,7 +25,7 @@ public class Ping extends ServerBoundMiddlePacket {
 	}
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative()  {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 		ServerBoundPacketData hsscreator = ServerBoundPacketData.create(ServerBoundPacket.HANDSHAKE_START);
 		hsscreator.writeVarInt(ProtocolVersion.getLatest().getId());

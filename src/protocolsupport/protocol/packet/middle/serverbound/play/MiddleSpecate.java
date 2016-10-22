@@ -13,7 +13,7 @@ public abstract class MiddleSpecate extends ServerBoundMiddlePacket {
 	protected UUID entityUUID;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_SPECTATE);
 		creator.writeUUID(entityUUID);
 		return RecyclableSingletonList.create(creator);

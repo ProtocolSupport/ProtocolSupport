@@ -15,7 +15,7 @@ public abstract class MiddlePosition extends ServerBoundMiddlePacket {
 	protected boolean onGround;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		if (!cache.isTeleportConfirmNeeded()) {
 			ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_POSITION);
 			creator.writeDouble(x);

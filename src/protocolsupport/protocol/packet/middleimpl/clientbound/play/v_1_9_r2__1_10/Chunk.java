@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r2__1_10;
 
-import java.io.IOException;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.legacyremapper.chunk.ChunkTransformer;
 import protocolsupport.protocol.legacyremapper.chunk.ChunkTransformer.BlockFormat;
@@ -17,7 +15,7 @@ public class Chunk extends MiddleChunk<RecyclableCollection<ClientBoundPacketDat
 	private final ChunkTransformer transformer = ChunkTransformer.create(BlockFormat.VARIES);
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) throws IOException {
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID, version);
 		serializer.writeInt(chunkX);
 		serializer.writeInt(chunkZ);

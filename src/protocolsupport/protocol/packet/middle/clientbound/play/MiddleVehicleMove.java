@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import java.io.IOException;
-
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
@@ -15,7 +13,7 @@ public abstract class MiddleVehicleMove<T> extends ClientBoundMiddlePacket<T> {
 	protected float pitch;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		x = serializer.readDouble();
 		y = serializer.readDouble();
 		z = serializer.readDouble();

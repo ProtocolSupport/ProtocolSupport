@@ -38,7 +38,7 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 	private final boolean varintPacketId;
 
 	@Override
-	public void encode(ChannelHandlerContext ctx, ByteBuf packet, List<Object> output) throws Exception {
+	public void encode(ChannelHandlerContext ctx, ByteBuf packet, List<Object> output) throws InstantiationException, IllegalAccessException  {
 		EnumProtocol currentProtocol = ctx.channel().attr(ChannelUtils.CURRENT_PROTOCOL_KEY).get();
 		middlebuffer.setBuf(packet);
 		int packetId = middlebuffer.readVarInt();

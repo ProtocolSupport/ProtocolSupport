@@ -161,7 +161,7 @@ public class LoginListenerPlay extends LoginListener implements PacketListenerPl
 		final ChatComponentText chatcomponenttext = new ChatComponentText(s);
 		networkManager.sendPacket(new PacketPlayOutKickDisconnect(chatcomponenttext), new GenericFutureListener<Future<? super Void>>() {
 			@Override
-			public void operationComplete(Future<? super Void> future) throws Exception {
+			public void operationComplete(Future<? super Void> future)  {
 				networkManager.close(chatcomponenttext);
 			}
 		});

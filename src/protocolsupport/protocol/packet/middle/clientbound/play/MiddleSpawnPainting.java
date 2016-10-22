@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import java.io.IOException;
 import java.util.UUID;
 
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
@@ -16,7 +15,7 @@ public abstract class MiddleSpawnPainting<T> extends ClientBoundMiddlePacket<T> 
 	protected int direction;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		entityId = serializer.readVarInt();
 		uuid = serializer.readUUID();
 		type = serializer.readString(13);

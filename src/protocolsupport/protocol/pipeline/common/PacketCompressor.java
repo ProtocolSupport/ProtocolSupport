@@ -22,7 +22,7 @@ public class PacketCompressor extends net.minecraft.server.v1_10_R1.PacketCompre
 	}
 
 	@Override
-	protected void a(ChannelHandlerContext ctx, ByteBuf from, ByteBuf to) throws Exception {
+	protected void a(ChannelHandlerContext ctx, ByteBuf from, ByteBuf to)  {
 		int readable = from.readableBytes();
 		if (readable == 0) {
 			return;

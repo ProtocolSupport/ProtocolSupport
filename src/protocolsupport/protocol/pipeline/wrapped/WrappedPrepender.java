@@ -8,7 +8,7 @@ public class WrappedPrepender extends MessageToByteEncoder<ByteBuf> {
 
 	private IPacketPrepender realPrepender = new IPacketPrepender() {
 		@Override
-		public void prepend(ChannelHandlerContext ctx, ByteBuf input, ByteBuf output) throws Exception {
+		public void prepend(ChannelHandlerContext ctx, ByteBuf input, ByteBuf output)  {
 		}
 	};
 
@@ -17,7 +17,7 @@ public class WrappedPrepender extends MessageToByteEncoder<ByteBuf> {
 	}
 
 	@Override
-	protected void encode(ChannelHandlerContext ctx, ByteBuf input, ByteBuf output) throws Exception {
+	protected void encode(ChannelHandlerContext ctx, ByteBuf input, ByteBuf output)  {
 		if (!input.isReadable()) {
 			return;
 		}

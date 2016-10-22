@@ -11,7 +11,7 @@ public abstract class MiddleResourcePackStatus extends ServerBoundMiddlePacket {
 	protected int result;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_RESOURCE_PACK_STATUS);
 		creator.writeVarInt(result);
 		return RecyclableSingletonList.create(creator);

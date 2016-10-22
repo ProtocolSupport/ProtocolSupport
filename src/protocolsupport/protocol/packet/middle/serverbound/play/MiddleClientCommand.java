@@ -11,7 +11,7 @@ public abstract class MiddleClientCommand extends ServerBoundMiddlePacket {
 	protected int command;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_CLIENT_COMMAND);
 		creator.writeVarInt(command);
 		return RecyclableSingletonList.create(creator);

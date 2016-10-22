@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__1_6__1_7;
 
-import java.io.IOException;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.legacyremapper.LegacyEffect;
 import protocolsupport.protocol.packet.ClientBoundPacket;
@@ -14,7 +12,7 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class WorldEvent extends MiddleWorldEvent<RecyclableCollection<ClientBoundPacketData>> {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) throws IOException {
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		effectId = IdRemapper.EFFECT.getTable(version).getRemap(effectId);
 		effectId = LegacyEffect.getLegacyId(version, effectId);
 		if (effectId == 2001) {

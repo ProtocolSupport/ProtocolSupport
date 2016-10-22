@@ -17,7 +17,7 @@ public abstract class MiddleInventoryClick extends ServerBoundMiddlePacket {
 	protected ItemStackWrapper itemstack;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_WINDOW_CLICK);
 		creator.writeByte(windowId);
 		creator.writeShort(slot);

@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
@@ -21,7 +20,7 @@ public abstract class MiddleWorldParticle<T> extends ClientBoundMiddlePacket<T> 
 	protected ArrayList<Integer> adddata = new ArrayList<>();
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		type = serializer.readInt();
 		longdist = serializer.readBoolean();
 		x = serializer.readFloat();

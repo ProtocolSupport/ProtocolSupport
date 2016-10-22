@@ -14,7 +14,7 @@ public abstract class MiddleSetProtocol extends ServerBoundMiddlePacket {
 	protected int nextState;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.HANDSHAKE_START);
 		creator.writeVarInt(ProtocolVersion.getLatest().getId());
 		creator.writeString(hostname);

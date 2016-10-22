@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import java.io.IOException;
-
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public abstract class MiddleEntityRelMove<T> extends MiddleEntity<T> {
@@ -12,7 +10,7 @@ public abstract class MiddleEntityRelMove<T> extends MiddleEntity<T> {
 	protected boolean onGround;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		super.readFromServerData(serializer);
 		relX = serializer.readShort();
 		relY = serializer.readShort();

@@ -9,7 +9,7 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public abstract class MiddleServerInfoRequest extends ServerBoundMiddlePacket {
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		return RecyclableSingletonList.create(ServerBoundPacketData.create(ServerBoundPacket.STATUS_REQUEST));
 	}
 

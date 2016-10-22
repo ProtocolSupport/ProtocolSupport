@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_4__1_5__1_6__1_7__1_8__1_9_r1__1_9_r2__1_10;
 
-import java.io.IOException;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClick;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
@@ -10,7 +8,7 @@ import protocolsupport.protocol.utils.types.WindowType;
 public class InventoryClick extends MiddleInventoryClick {
 
 	@Override
-	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
+	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) {
 		windowId = serializer.readUnsignedByte();
 		slot = serializer.readShort();
 		if (serializer.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9) && (cache.getOpenedWindow() == WindowType.BREING)) {

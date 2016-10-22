@@ -23,7 +23,7 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 	}
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative()  {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 		ServerBoundPacketData hsscreator = ServerBoundPacketData.create(ServerBoundPacket.HANDSHAKE_START);
 		hsscreator.writeVarInt(ProtocolVersion.getLatest().getId());

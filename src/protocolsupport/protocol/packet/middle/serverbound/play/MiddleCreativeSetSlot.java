@@ -13,7 +13,7 @@ public abstract class MiddleCreativeSetSlot extends ServerBoundMiddlePacket {
 	protected ItemStackWrapper itemstack;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_CREATIVE_SET_SLOT);
 		creator.writeShort(slot);
 		creator.writeItemStack(itemstack);

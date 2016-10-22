@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import java.io.IOException;
-
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
@@ -14,7 +12,7 @@ public abstract class MiddleCombatEvent<T> extends ClientBoundMiddlePacket<T> {
 	protected String message;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		type = serializer.readEnum(Type.class);
 		switch (type) {
 			case ENTER_COMBAT: {

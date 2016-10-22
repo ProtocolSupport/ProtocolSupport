@@ -12,7 +12,7 @@ public abstract class MiddleInventoryEnchant extends ServerBoundMiddlePacket {
 	protected int enchantment;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_ENCHANT_SELECT);
 		creator.writeByte(windowId);
 		creator.writeByte(enchantment);

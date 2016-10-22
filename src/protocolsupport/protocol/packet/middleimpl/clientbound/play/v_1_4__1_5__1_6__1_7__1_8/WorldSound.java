@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__1_6__1_7__1_8;
 
-import java.io.IOException;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.legacyremapper.LegacySound;
 import protocolsupport.protocol.packet.ClientBoundPacket;
@@ -13,7 +11,7 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class WorldSound extends MiddleWorldSound<RecyclableCollection<ClientBoundPacketData>> {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) throws IOException {
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_CUSTOM_SOUND, version);
 		String soundname = LegacySound.getLegacySoundName(id);
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_7_5)) {

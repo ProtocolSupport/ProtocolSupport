@@ -15,7 +15,7 @@ public abstract class MiddleMoveVehicle extends ServerBoundMiddlePacket {
 	protected float pitch;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_MOVE_VEHICLE);
 		creator.writeDouble(x);
 		creator.writeDouble(y);

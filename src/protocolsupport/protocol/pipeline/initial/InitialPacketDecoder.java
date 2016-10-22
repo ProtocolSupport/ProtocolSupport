@@ -80,13 +80,13 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 	}
 
 	@Override
-	public void handlerRemoved(ChannelHandlerContext ctx) throws Exception  {
+	public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
 		cancelTask();
 		super.handlerRemoved(ctx);
 	}
 
 	@Override
-	public void channelRead0(ChannelHandlerContext ctx, ByteBuf buf) throws Exception {
+	public void channelRead0(ChannelHandlerContext ctx, ByteBuf buf)  {
 		if (!buf.isReadable()) {
 			return;
 		}
@@ -95,7 +95,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		decode(ctx);
 	}
 
-	private void decode(ChannelHandlerContext ctx) throws Exception {
+	private void decode(ChannelHandlerContext ctx) {
 		cancelTask();
 		Channel channel = ctx.channel();
 		int firstbyte = replayingBuffer.readUnsignedByte();
@@ -146,7 +146,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		}
 	}
 
-	protected void setProtocol(final Channel channel, ProtocolVersion version) throws Exception {
+	protected void setProtocol(final Channel channel, ProtocolVersion version) {
 		if (ServerPlatformUtils.getServer().isDebugging()) {
 			System.err.println(ChannelUtils.getNetworkManagerSocketAddress(channel)+ " connected with protocol version "+version);
 		}

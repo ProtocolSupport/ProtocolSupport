@@ -1,5 +1,6 @@
 package protocolsupport.protocol.pipeline.common;
 
+import java.io.IOException;
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
@@ -19,7 +20,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
 	private final PacketDataSerializer nativeSerializer = new PacketDataSerializer(wrapper);
 
 	@Override
-	protected void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
+	protected void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws IllegalAccessException, InstantiationException {
 		if (!input.isReadable()) {
 			return;
 		}
@@ -30,7 +31,11 @@ public class PacketDecoder extends ByteToMessageDecoder {
 		if (packet == null) {
 			throw new DecoderException("Bad packet id " + packetId);
 		}
-		packet.a(nativeSerializer);
+		try {
+			packet.a(nativeSerializer);
+		} catch (IOException e) {
+			throw new DecoderException(e);
+		}
 		if (nativeSerializer.isReadable()) {
 			throw new DecoderException("Did not read all data from packet " + packet.getClass().getName() + ", bytes left: " + nativeSerializer.readableBytes());
 		}

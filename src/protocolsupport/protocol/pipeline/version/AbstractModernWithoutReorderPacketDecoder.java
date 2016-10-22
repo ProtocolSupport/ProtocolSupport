@@ -20,7 +20,7 @@ public class AbstractModernWithoutReorderPacketDecoder extends AbstractPacketDec
 	private final ProtocolSupportPacketDataSerializer serializer = new ProtocolSupportPacketDataSerializer(null, connection.getVersion());
 
 	@Override
-	public void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
+	public void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws InstantiationException, IllegalAccessException  {
 		if (!input.isReadable()) {
 			return;
 		}

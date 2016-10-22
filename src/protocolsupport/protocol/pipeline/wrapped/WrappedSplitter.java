@@ -10,7 +10,7 @@ public class WrappedSplitter extends ByteToMessageDecoder {
 
 	private IPacketSplitter realSplitter = new IPacketSplitter() {
 		@Override
-		public void split(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
+		public void split(ChannelHandlerContext ctx, ByteBuf input, List<Object> list)  {
 		}
 	};
 
@@ -19,7 +19,7 @@ public class WrappedSplitter extends ByteToMessageDecoder {
 	}
 
 	@Override
-	protected void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
+	protected void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list)  {
 		if (!input.isReadable()) {
 			return;
 		}

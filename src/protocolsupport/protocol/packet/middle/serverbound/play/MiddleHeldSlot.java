@@ -11,7 +11,7 @@ public abstract class MiddleHeldSlot extends ServerBoundMiddlePacket {
 	protected int slot;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_HELD_SLOT);
 		creator.writeShort(slot);
 		return RecyclableSingletonList.create(creator);

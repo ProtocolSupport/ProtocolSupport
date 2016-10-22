@@ -13,7 +13,7 @@ public abstract class MiddleSteerVehicle extends ServerBoundMiddlePacket {
 	protected int flags;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() throws Exception {
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_STEER_VEHICLE);
 		creator.writeFloat(sideForce);
 		creator.writeFloat(forwardForce);

@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_7;
 
-import java.io.IOException;
-
 import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
@@ -13,7 +11,7 @@ public class CustomPayload extends MiddleCustomPayload {
 	private final ProtocolSupportPacketDataSerializer newdata = new ProtocolSupportPacketDataSerializer(Unpooled.buffer(), ProtocolVersion.getLatest());
 
 	@Override
-	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) throws IOException {
+	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) {
 		tag = serializer.readString(20);
 		ProtocolSupportPacketDataSerializer olddata = new ProtocolSupportPacketDataSerializer(Unpooled.wrappedBuffer(serializer.readByteArray()), serializer.getVersion());
 		newdata.clear();
