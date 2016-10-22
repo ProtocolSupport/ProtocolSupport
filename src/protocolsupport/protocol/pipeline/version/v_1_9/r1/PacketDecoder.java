@@ -1,6 +1,5 @@
 package protocolsupport.protocol.pipeline.version.v_1_9.r1;
 
-import net.minecraft.server.v1_10_R1.EnumProtocol;
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_1_7__1_8__1_9_r1__1_9_r2__1_10.SetProtocol;
 import protocolsupport.protocol.packet.middleimpl.serverbound.login.v_1_4__1_5__1_6__1_7__1_8__1_9_r1__1_9_r2__1_10.EncryptionResponse;
@@ -39,45 +38,46 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.status.v_1_7__1_8_
 import protocolsupport.protocol.packet.middleimpl.serverbound.status.v_1_7__1_8__1_9_r1__1_9_r2__1_10.ServerInfoRequest;
 import protocolsupport.protocol.pipeline.version.AbstractModernWithoutReorderPacketDecoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.utils.types.NetworkListenerState;
 
 public class PacketDecoder extends AbstractModernWithoutReorderPacketDecoder {
 
 	{
-		registry.register(EnumProtocol.HANDSHAKING, 0x00, SetProtocol.class);
-		registry.register(EnumProtocol.LOGIN, 0x00, LoginStart.class);
-		registry.register(EnumProtocol.LOGIN, 0x01, EncryptionResponse.class);
-		registry.register(EnumProtocol.STATUS, 0x00, ServerInfoRequest.class);
-		registry.register(EnumProtocol.STATUS, 0x01, Ping.class);
-		registry.register(EnumProtocol.PLAY, 0x00, TeleportAccept.class);
-		registry.register(EnumProtocol.PLAY, 0x01, TabComplete.class);
-		registry.register(EnumProtocol.PLAY, 0x02, Chat.class);
-		registry.register(EnumProtocol.PLAY, 0x03, ClientCommand.class);
-		registry.register(EnumProtocol.PLAY, 0x04, ClientSettings.class);
-		registry.register(EnumProtocol.PLAY, 0x05, InventoryTransaction.class);
-		registry.register(EnumProtocol.PLAY, 0x06, InventoryEnchant.class);
-		registry.register(EnumProtocol.PLAY, 0x07, InventoryClick.class);
-		registry.register(EnumProtocol.PLAY, 0x08, InventoryClose.class);
-		registry.register(EnumProtocol.PLAY, 0x09, CustomPayload.class);
-		registry.register(EnumProtocol.PLAY, 0x0A, UseEntity.class);
-		registry.register(EnumProtocol.PLAY, 0x0B, KeepAlive.class);
-		registry.register(EnumProtocol.PLAY, 0x0C, Position.class);
-		registry.register(EnumProtocol.PLAY, 0x0D, PositionLook.class);
-		registry.register(EnumProtocol.PLAY, 0x0E, Look.class);
-		registry.register(EnumProtocol.PLAY, 0x0F, Flying.class);
-		registry.register(EnumProtocol.PLAY, 0x10, MoveVehicle.class);
-		registry.register(EnumProtocol.PLAY, 0x11, SteerBoat.class);
-		registry.register(EnumProtocol.PLAY, 0x12, PlayerAbilities.class);
-		registry.register(EnumProtocol.PLAY, 0x13, BlockDig.class);
-		registry.register(EnumProtocol.PLAY, 0x14, EntityAction.class);
-		registry.register(EnumProtocol.PLAY, 0x15, SteerVehicle.class);
-		registry.register(EnumProtocol.PLAY, 0x16, ResourcePackStatus.class);
-		registry.register(EnumProtocol.PLAY, 0x17, HeldSlot.class);
-		registry.register(EnumProtocol.PLAY, 0x18, CreativeSetSlot.class);
-		registry.register(EnumProtocol.PLAY, 0x19, UpdateSign.class);
-		registry.register(EnumProtocol.PLAY, 0x1A, Animation.class);
-		registry.register(EnumProtocol.PLAY, 0x1B, Spectate.class);
-		registry.register(EnumProtocol.PLAY, 0x1C, BlockPlace.class);
-		registry.register(EnumProtocol.PLAY, 0x1D, UseItem.class);
+		registry.register(NetworkListenerState.HANDSHAKING, 0x00, SetProtocol.class);
+		registry.register(NetworkListenerState.LOGIN, 0x00, LoginStart.class);
+		registry.register(NetworkListenerState.LOGIN, 0x01, EncryptionResponse.class);
+		registry.register(NetworkListenerState.STATUS, 0x00, ServerInfoRequest.class);
+		registry.register(NetworkListenerState.STATUS, 0x01, Ping.class);
+		registry.register(NetworkListenerState.PLAY, 0x00, TeleportAccept.class);
+		registry.register(NetworkListenerState.PLAY, 0x01, TabComplete.class);
+		registry.register(NetworkListenerState.PLAY, 0x02, Chat.class);
+		registry.register(NetworkListenerState.PLAY, 0x03, ClientCommand.class);
+		registry.register(NetworkListenerState.PLAY, 0x04, ClientSettings.class);
+		registry.register(NetworkListenerState.PLAY, 0x05, InventoryTransaction.class);
+		registry.register(NetworkListenerState.PLAY, 0x06, InventoryEnchant.class);
+		registry.register(NetworkListenerState.PLAY, 0x07, InventoryClick.class);
+		registry.register(NetworkListenerState.PLAY, 0x08, InventoryClose.class);
+		registry.register(NetworkListenerState.PLAY, 0x09, CustomPayload.class);
+		registry.register(NetworkListenerState.PLAY, 0x0A, UseEntity.class);
+		registry.register(NetworkListenerState.PLAY, 0x0B, KeepAlive.class);
+		registry.register(NetworkListenerState.PLAY, 0x0C, Position.class);
+		registry.register(NetworkListenerState.PLAY, 0x0D, PositionLook.class);
+		registry.register(NetworkListenerState.PLAY, 0x0E, Look.class);
+		registry.register(NetworkListenerState.PLAY, 0x0F, Flying.class);
+		registry.register(NetworkListenerState.PLAY, 0x10, MoveVehicle.class);
+		registry.register(NetworkListenerState.PLAY, 0x11, SteerBoat.class);
+		registry.register(NetworkListenerState.PLAY, 0x12, PlayerAbilities.class);
+		registry.register(NetworkListenerState.PLAY, 0x13, BlockDig.class);
+		registry.register(NetworkListenerState.PLAY, 0x14, EntityAction.class);
+		registry.register(NetworkListenerState.PLAY, 0x15, SteerVehicle.class);
+		registry.register(NetworkListenerState.PLAY, 0x16, ResourcePackStatus.class);
+		registry.register(NetworkListenerState.PLAY, 0x17, HeldSlot.class);
+		registry.register(NetworkListenerState.PLAY, 0x18, CreativeSetSlot.class);
+		registry.register(NetworkListenerState.PLAY, 0x19, UpdateSign.class);
+		registry.register(NetworkListenerState.PLAY, 0x1A, Animation.class);
+		registry.register(NetworkListenerState.PLAY, 0x1B, Spectate.class);
+		registry.register(NetworkListenerState.PLAY, 0x1C, BlockPlace.class);
+		registry.register(NetworkListenerState.PLAY, 0x1D, UseItem.class);
 	}
 
 	public PacketDecoder(Connection connection, NetworkDataCache sharedstorage) {

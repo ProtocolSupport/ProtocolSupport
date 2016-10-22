@@ -9,6 +9,7 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.DecoderException;
 import net.minecraft.server.v1_10_R1.EnumProtocol;
 import net.minecraft.server.v1_10_R1.EnumProtocolDirection;
+import net.minecraft.server.v1_10_R1.NetworkManager;
 import net.minecraft.server.v1_10_R1.Packet;
 import net.minecraft.server.v1_10_R1.PacketDataSerializer;
 import protocolsupport.utils.netty.ChannelUtils;
@@ -24,10 +25,10 @@ public class PacketDecoder extends ByteToMessageDecoder {
 		if (!input.isReadable()) {
 			return;
 		}
-		EnumProtocol protocol = ctx.channel().attr(ChannelUtils.CURRENT_PROTOCOL_KEY).get();
+		EnumProtocol protocol = ctx.channel().attr(NetworkManager.c).get();
 		wrapper.setBuf(input);
 		int packetId = ChannelUtils.readVarInt(wrapper);
-		final Packet<?> packet = protocol.a(EnumProtocolDirection.SERVERBOUND, packetId);
+		Packet<?> packet = protocol.a(EnumProtocolDirection.SERVERBOUND, packetId);
 		if (packet == null) {
 			throw new DecoderException("Bad packet id " + packetId);
 		}

@@ -8,6 +8,7 @@ import io.netty.handler.codec.EncoderException;
 import io.netty.handler.codec.MessageToByteEncoder;
 import net.minecraft.server.v1_10_R1.EnumProtocol;
 import net.minecraft.server.v1_10_R1.EnumProtocolDirection;
+import net.minecraft.server.v1_10_R1.NetworkManager;
 import net.minecraft.server.v1_10_R1.Packet;
 import net.minecraft.server.v1_10_R1.PacketDataSerializer;
 import net.minecraft.server.v1_10_R1.PacketListener;
@@ -21,7 +22,7 @@ public class PacketEncoder extends MessageToByteEncoder<Packet<PacketListener>> 
 
 	@Override
 	protected void encode(ChannelHandlerContext ctx, Packet<PacketListener> packet, ByteBuf data) {
-		EnumProtocol currentProtocol = ctx.channel().attr(ChannelUtils.CURRENT_PROTOCOL_KEY).get();
+		EnumProtocol currentProtocol = ctx.channel().attr(NetworkManager.c).get();
 		final Integer packetId = currentProtocol.a(EnumProtocolDirection.CLIENTBOUND, packet);
 		if (packetId == null) {
 			throw new EncoderException("Can't serialize unregistered packet " + packet.getClass().getName());

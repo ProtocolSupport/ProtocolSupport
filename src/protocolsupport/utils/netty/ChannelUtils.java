@@ -9,8 +9,6 @@ import com.mojang.authlib.GameProfile;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.DecoderException;
-import io.netty.util.AttributeKey;
-import net.minecraft.server.v1_10_R1.EnumProtocol;
 import net.minecraft.server.v1_10_R1.NetworkManager;
 import net.minecraft.server.v1_10_R1.PacketListener;
 import net.minecraft.server.v1_10_R1.PlayerConnection;
@@ -19,8 +17,6 @@ import protocolsupport.protocol.packet.handler.LoginListenerPlay;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 
 public class ChannelUtils {
-
-	public static final AttributeKey<EnumProtocol> CURRENT_PROTOCOL_KEY = NetworkManager.c;
 
 	public static Player getBukkitPlayer(NetworkManager networkManager) {
 		PacketListener listener = networkManager.i();

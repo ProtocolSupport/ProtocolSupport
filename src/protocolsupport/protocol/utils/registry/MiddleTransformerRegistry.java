@@ -2,28 +2,28 @@ package protocolsupport.protocol.utils.registry;
 
 import java.util.NoSuchElementException;
 
-import net.minecraft.server.v1_10_R1.EnumProtocol;
+import protocolsupport.protocol.utils.types.NetworkListenerState;
 
 @SuppressWarnings("unchecked")
 public class MiddleTransformerRegistry<T> {
 
-	private static final int enumProtocolLength = EnumProtocol.values().length;
+	private static final int listenerStateLength = NetworkListenerState.values().length;
 
-	private final LazyNewInstance<T>[] registry = new LazyNewInstance[enumProtocolLength * 256];
+	private final LazyNewInstance<T>[] registry = new LazyNewInstance[listenerStateLength * 256];
 	private InitCallBack<T> callback;
 
-	public void register(EnumProtocol protocol, int packetId, Class<? extends T> packetTransformer) {
-		registry[toKey(protocol, packetId)] = new LazyNewInstance<>(packetTransformer);
+	public void register(NetworkListenerState state, int packetId, Class<? extends T> packetTransformer) {
+		registry[toKey(state, packetId)] = new LazyNewInstance<>(packetTransformer);
 	}
 
 	public void setCallBack(InitCallBack<T> callback) {
 		this.callback = callback;
 	}
 
-	public T getTransformer(EnumProtocol protocol, int packetId) throws InstantiationException, IllegalAccessException {
-		LazyNewInstance<T> transformer = registry[toKey(protocol, packetId)];
+	public T getTransformer(NetworkListenerState state, int packetId) throws InstantiationException, IllegalAccessException {
+		LazyNewInstance<T> transformer = registry[toKey(state, packetId)];
 		if (transformer == null) {
-			throw new NoSuchElementException("No transformer found for state " + protocol + " and packet id " + packetId);
+			throw new NoSuchElementException("No transformer found for state " + state + " and packet id " + packetId);
 		}
 		T object = transformer.getInstance();
 		if (callback != null) {
@@ -47,7 +47,7 @@ public class MiddleTransformerRegistry<T> {
 		}
 	}
 
-	static int toKey(EnumProtocol protocol, int packetId) {
+	static int toKey(NetworkListenerState protocol, int packetId) {
 		return (protocol.ordinal() << 8) | packetId;
 	}
 

@@ -4,24 +4,24 @@ import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.NoSuchElementException;
 
-import net.minecraft.server.v1_10_R1.EnumProtocol;
+import protocolsupport.protocol.utils.types.NetworkListenerState;
 
 public class PacketIdTransformerRegistry {
 
-	private final EnumMap<EnumProtocol, int[]> registry = new EnumMap<>(EnumProtocol.class);
+	private final EnumMap<NetworkListenerState, int[]> registry = new EnumMap<>(NetworkListenerState.class);
 	{
-		for (EnumProtocol protocol : EnumProtocol.values()) {
+		for (NetworkListenerState state : NetworkListenerState.values()) {
 			int[] newIds = new int[256];
 			Arrays.fill(newIds, -1);
-			registry.put(protocol, newIds);
+			registry.put(state, newIds);
 		}
 	}
 
-	public void register(EnumProtocol protocol, int packetId, int newPacketId) {
+	public void register(NetworkListenerState protocol, int packetId, int newPacketId) {
 		registry.get(protocol)[packetId] = newPacketId;
 	}
 
-	public int getNewPacketId(EnumProtocol protocol, int packetId) {
+	public int getNewPacketId(NetworkListenerState protocol, int packetId) {
 		int[] newIds = registry.get(protocol);
 		if (newIds == null) {
 			return -1;

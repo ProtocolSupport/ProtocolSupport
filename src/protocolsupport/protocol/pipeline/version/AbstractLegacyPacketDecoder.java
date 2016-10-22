@@ -9,7 +9,7 @@ import protocolsupport.protocol.legacyremapper.LegacyAnimatePacketReorderer;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ReplayingProtocolSupportSupportPacketDataSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
-import protocolsupport.utils.netty.ChannelUtils;
+import protocolsupport.protocol.utils.types.NetworkListenerState;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
 
 public class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
@@ -29,7 +29,7 @@ public class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
 		serializer.setBuf(input);
 		serializer.markReaderIndex();
 		try {
-			ServerBoundMiddlePacket packetTransformer = registry.getTransformer(ctx.channel().attr(ChannelUtils.CURRENT_PROTOCOL_KEY).get(), serializer.readUnsignedByte());
+			ServerBoundMiddlePacket packetTransformer = registry.getTransformer(NetworkListenerState.getFromChannel(ctx.channel()), serializer.readUnsignedByte());
 			packetTransformer.readFromClientData(serializer);
 			addPackets(animateReorderer.orderPackets(packetTransformer.toNative()), list);
 		} catch (EOFSignal ex) {

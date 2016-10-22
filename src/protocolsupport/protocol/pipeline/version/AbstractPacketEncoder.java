@@ -4,7 +4,6 @@ import java.util.List;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import net.minecraft.server.v1_10_R1.EnumProtocol;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
@@ -12,6 +11,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry;
+import protocolsupport.protocol.utils.types.NetworkListenerState;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.netty.MessageToMessageEncoder;
@@ -39,7 +39,7 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 
 	@Override
 	public void encode(ChannelHandlerContext ctx, ByteBuf packet, List<Object> output) throws InstantiationException, IllegalAccessException  {
-		EnumProtocol currentProtocol = ctx.channel().attr(ChannelUtils.CURRENT_PROTOCOL_KEY).get();
+		NetworkListenerState currentProtocol = NetworkListenerState.getFromChannel(ctx.channel());
 		middlebuffer.setBuf(packet);
 		int packetId = middlebuffer.readVarInt();
 		ClientBoundMiddlePacket<RecyclableCollection<ClientBoundPacketData>> packetTransformer = registry.getTransformer(currentProtocol, packetId);
@@ -60,6 +60,6 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 		}
 	}
 
-	protected abstract int getNewPacketId(EnumProtocol currentProtocol, int oldPacketId);
+	protected abstract int getNewPacketId(NetworkListenerState currentProtocol, int oldPacketId);
 
 }
