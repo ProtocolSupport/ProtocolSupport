@@ -10,6 +10,7 @@ import org.spigotmc.SpigotConfig;
 
 import io.netty.buffer.Unpooled;
 import net.minecraft.server.v1_10_R1.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_10_R1.Item;
 import net.minecraft.server.v1_10_R1.LocaleI18n;
 import net.minecraft.server.v1_10_R1.MinecraftServer;
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
@@ -95,6 +96,14 @@ public class ServerPlatformUtils {
 		NBTTagCompound compound = new NBTTagCompound();
 		nmsitemstack.save(compound);
 		return NBTTagCompoundWrapper.wrap(compound);
+	}
+
+	public static Integer getItemIdByName(String registryname) {
+		Item item = Item.d(registryname);
+		if (item != null) {
+			return Item.getId(item);
+		}
+		return null;
 	}
 
 }

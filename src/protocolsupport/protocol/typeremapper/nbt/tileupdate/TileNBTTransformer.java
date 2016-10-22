@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 
-import net.minecraft.server.v1_10_R1.Item;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
 import protocolsupport.utils.ProtocolVersionsHelper;
+import protocolsupport.utils.ServerPlatformUtils;
 import protocolsupport.utils.Utils;
 
 public class TileNBTTransformer {
@@ -66,9 +66,9 @@ public class TileNBTTransformer {
 		register(
 			TileEntityUpdateType.FLOWER_POT,
 			(version, input) -> {
-				String itemId = input.getString("Item");
-				if (!itemId.isEmpty()) {
-					input.setInt("Item", IdRemapper.ITEM.getTable(version).getRemap(Item.getId(Item.d(itemId))));
+				Integer id = ServerPlatformUtils.getItemIdByName(input.getString("Item"));
+				if (id != null) {
+					input.setInt("Item", IdRemapper.ITEM.getTable(version).getRemap(id));
 				}
 				return input;
 			},

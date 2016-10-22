@@ -1,15 +1,11 @@
 package protocolsupport.protocol.legacyremapper;
 
-import net.minecraft.server.v1_10_R1.Item;
-import net.minecraft.server.v1_10_R1.MinecraftKey;
-import net.minecraft.server.v1_10_R1.MojangsonParseException;
-import net.minecraft.server.v1_10_R1.MojangsonParser;
-import net.minecraft.server.v1_10_R1.NBTTagCompound;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TranslateComponent;
 import protocolsupport.api.chat.modifiers.ClickAction;
 import protocolsupport.api.chat.modifiers.HoverAction;
+import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
 import protocolsupport.utils.ServerPlatformUtils;
 
 public class LegacyChatJson {
@@ -35,19 +31,12 @@ public class LegacyChatJson {
 	private static void fixComponent(BaseComponent component) {
 		HoverAction hover = component.getHoverAction();
 		if ((hover != null) && (hover.getType() == HoverAction.Type.SHOW_ITEM)) {
-			try {
-				NBTTagCompound compound = MojangsonParser.parse(hover.getValue());
-				String id = compound.getString("id");
-				Item item = Item.REGISTRY.get(new MinecraftKey(id));
-				if (item != null) {
-					compound.setInt("id", Item.getId(item));
-				}
-				component.setHoverAction(new HoverAction(HoverAction.Type.SHOW_ITEM, compound.toString()));
-			} catch (MojangsonParseException t) {
-				if (ServerPlatformUtils.getServer().isDebugging()) {
-					t.printStackTrace();
-				}
+			NBTTagCompoundWrapper compound = NBTTagCompoundWrapper.fromJson(hover.getValue());
+			Integer id = ServerPlatformUtils.getItemIdByName(compound.getString("id"));
+			if (id != null) {
+				compound.setInt("id", id);
 			}
+			component.setHoverAction(new HoverAction(HoverAction.Type.SHOW_ITEM, compound.toString()));
 		}
 		ClickAction click = component.getClickAction();
 		if ((click != null) && (click.getType() == ClickAction.Type.OPEN_URL)) {
