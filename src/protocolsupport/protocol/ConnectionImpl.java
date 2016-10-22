@@ -82,8 +82,13 @@ public class ConnectionImpl extends Connection {
 	public boolean handlePacketSend(Object packet) {
 		boolean canSend = true;
 		for (PacketSendListener listener : sendListeners) {
-			if (!listener.onPacketSending(packet)) {
-				canSend = false;
+			try {
+				if (!listener.onPacketSending(packet)) {
+					canSend = false;
+				}
+			} catch (Throwable t) {
+				System.err.println("Error occured while handling packet sending");
+				t.printStackTrace();
 			}
 		}
 		return canSend;
@@ -92,8 +97,13 @@ public class ConnectionImpl extends Connection {
 	public boolean handlePacketReceive(Object packet) {
 		boolean canReceive = true;
 		for (PacketReceiveListener listener : receiveListeners) {
-			if (!listener.onPacketReceiving(packet)) {
-				canReceive = false;
+			try {
+				if (!listener.onPacketReceiving(packet)) {
+					canReceive = false;
+				}
+			} catch (Throwable t) {
+				System.err.println("Error occured while handling packet receiving");
+				t.printStackTrace();
 			}
 		}
 		return canReceive;
