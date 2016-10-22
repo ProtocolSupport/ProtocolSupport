@@ -49,8 +49,29 @@ public class NBTTagCompoundWrapper {
 		tag.remove(key);
 	}
 
+	public static final int TYPE_STRING = 8;
+	public static final int TYPE_COMPOUND = 10;
+	public static final int TYPE_LIST = 9;
+	public static final int TYPE_NUMBER = 99;
+
+	public boolean hasKeyOfType(String tagname, int i) {
+		return tag.hasKeyOfType(tagname, i);
+	}
+
 	public NBTTagCompoundWrapper getCompound(String key) {
 		return new NBTTagCompoundWrapper(tag.getCompound(key));
+	}
+
+	public void setCompound(String key, NBTTagCompoundWrapper compound) {
+		tag.set(key, compound.unwrap());
+	}
+
+	public NBTTagListWrapper getList(String key, int type) {
+		return NBTTagListWrapper.wrap(tag.getList(key, type));
+	}
+
+	public void setList(String key, NBTTagListWrapper list) {
+		tag.set(key, list.unwrap());
 	}
 
 	public String getString(String key) {

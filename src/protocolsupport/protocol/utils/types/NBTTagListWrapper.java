@@ -27,7 +27,11 @@ public class NBTTagListWrapper {
 		return this.tag;
 	}
 
-	public int getSize() {
+	public boolean isEmpty() {
+		return tag.isEmpty();
+	}
+
+	public int size() {
 		return tag.size();
 	}
 
@@ -35,7 +39,7 @@ public class NBTTagListWrapper {
 		return NBTTagCompoundWrapper.wrap(tag.get(index));
 	}
 
-	public void addCompund(NBTTagCompoundWrapper wrapper) {
+	public void addCompound(NBTTagCompoundWrapper wrapper) {
 		tag.add(wrapper.unwrap());
 	}
 

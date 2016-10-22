@@ -13,6 +13,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_10_R1.potion.CraftPotionUtil;
 import org.bukkit.potion.PotionData;
@@ -31,15 +32,8 @@ import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 import net.minecraft.server.v1_10_R1.EntityTypes;
 import net.minecraft.server.v1_10_R1.GameProfileSerializer;
-import net.minecraft.server.v1_10_R1.Item;
-import net.minecraft.server.v1_10_R1.ItemPotion;
-import net.minecraft.server.v1_10_R1.ItemStack;
-import net.minecraft.server.v1_10_R1.Items;
 import net.minecraft.server.v1_10_R1.NBTCompressedStreamTools;
 import net.minecraft.server.v1_10_R1.NBTReadLimiter;
-import net.minecraft.server.v1_10_R1.NBTTagCompound;
-import net.minecraft.server.v1_10_R1.NBTTagList;
-import net.minecraft.server.v1_10_R1.NBTTagString;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.ItemStackWriteEvent;
@@ -51,6 +45,7 @@ import protocolsupport.protocol.utils.types.ItemStackWrapper;
 import protocolsupport.protocol.utils.types.MerchantData;
 import protocolsupport.protocol.utils.types.MerchantData.TradeOffer;
 import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
+import protocolsupport.protocol.utils.types.NBTTagListWrapper;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.ChannelUtils;
@@ -217,15 +212,15 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 	}
 
 	public ItemStackWrapper readItemStack() {
-		ItemStack itemstack = null;
 		short type = this.readShort();
 		if (type >= 0) {
-			byte count = readByte();
-			short data = readShort();
-			itemstack = new ItemStack(Item.getById(type), count, data);
-			itemstack.setTag(readTag().unwrap());
+			ItemStackWrapper itemstack = new ItemStackWrapper(Material.STONE);
+			itemstack.setTypeId(type);
+			itemstack.setAmount(readByte());
+			itemstack.setData(readShort());
+			itemstack.setTag(readTag());
 		}
-		return new ItemStackWrapper(itemstack);
+		return new ItemStackWrapper();
 	}
 
 	public void writeItemStack(ItemStackWrapper itemstack) {
@@ -233,7 +228,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 			writeShort(-1);
 			return;
 		}
-		itemstack = new ItemStackWrapper(transformItemStack(itemstack.unwrap()));
+		itemstack = transformItemStack(itemstack);
 		writeShort(IdRemapper.ITEM.getTable(version).getRemap(itemstack.getTypeId()));
 		writeByte(itemstack.getAmount());
 		writeShort(itemstack.getData());
@@ -247,7 +242,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 				if (length < 0) {
 					return NBTTagCompoundWrapper.createNull();
 				}
-				return NBTTagCompoundWrapper.wrap(readLegacyNBT(new ByteArrayInputStream(ChannelUtils.toArray(readBytes(length))), new NBTReadLimiter(2097152L)));
+				return readLegacyNBT(new ByteArrayInputStream(ChannelUtils.toArray(readBytes(length))), new NBTReadLimiter(2097152L));
 			} else {
 				markReaderIndex();
 				if (readByte() == 0) {
@@ -268,7 +263,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 				if (tag.isNull()) {
 					writeShort(-1);
 				} else {
-					encodeLegacyNBT(tag.unwrap(), buffer);
+					encodeLegacyNBT(tag, buffer);
 					writeShort(buffer.readableBytes());
 					writeBytes(buffer);
 				}
@@ -333,39 +328,38 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 		}
 	}
 
-	//TODO: use wrapper
-	private ItemStack transformItemStack(ItemStack original) {
-		ItemStack itemstack = original.cloneItemStack();
-		Item item = itemstack.getItem();
-		if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9) && (item == Items.SKULL) && (itemstack.getData() == 5)) {
+	private ItemStackWrapper transformItemStack(ItemStackWrapper original) {
+		ItemStackWrapper itemstack = original.cloneItemStack();
+		Material item = itemstack.getType();
+		if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9) && (item == Material.SKULL_ITEM) && (itemstack.getData() == 5)) {
 			itemstack.setData(3);
-			NBTTagCompound rootTag = new NBTTagCompound();
-			rootTag.set("SkullOwner", createDragonHeadSkullTag());
-			itemstack.setTag(rootTag);
+			NBTTagCompoundWrapper wrapper = NBTTagCompoundWrapper.createEmpty();
+			wrapper.setCompound("SkullOwner", createDragonHeadSkullTag());
+			itemstack.setTag(wrapper);
 		}
-		NBTTagCompound nbttagcompound = itemstack.getTag();
+		NBTTagCompoundWrapper nbttagcompound = itemstack.getTag();
 		if (nbttagcompound != null) {
-			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_8) && (item == Items.WRITTEN_BOOK)) {
-				if (nbttagcompound.hasKeyOfType("pages", 9)) {
-					NBTTagList pages = nbttagcompound.getList("pages", 8);
-					NBTTagList newpages = new NBTTagList();
+			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_8) && (item == Material.WRITTEN_BOOK)) {
+				if (nbttagcompound.hasKeyOfType("pages", NBTTagCompoundWrapper.TYPE_LIST)) {
+					NBTTagListWrapper pages = nbttagcompound.getList("pages", NBTTagCompoundWrapper.TYPE_STRING);
+					NBTTagListWrapper newpages = NBTTagListWrapper.create();
 					for (int i = 0; i < pages.size(); i++) {
-						newpages.add(new NBTTagString(ChatAPI.fromJSON(pages.getString(i)).toLegacyText()));
+						newpages.addString(ChatAPI.fromJSON(pages.getString(i)).toLegacyText());
 					}
-					nbttagcompound.set("pages", newpages);
+					nbttagcompound.setList("pages", newpages);
 				}
 			}
-			if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_5) && (item == Items.SKULL)) {
+			if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_5) && (item == Material.SKULL_ITEM)) {
 				transformSkull(nbttagcompound);
 			}
-			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9) && (item instanceof ItemPotion)) {
+			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9) && (item == Material.POTION || item == Material.SPLASH_POTION || item == Material.LINGERING_POTION)) {
 				String potion = nbttagcompound.getString("Potion");
 				if (!potion.isEmpty()) {
-					NBTTagList tagList = nbttagcompound.getList("CustomPotionEffects", 10);
+					NBTTagListWrapper tagList = nbttagcompound.getList("CustomPotionEffects", NBTTagCompoundWrapper.TYPE_COMPOUND);
 					if (!tagList.isEmpty()) {
 						for (int i = 0; i < tagList.size(); i++) {
-							NBTTagCompound nbtTag = tagList.get(i);
-							Integer potionId = nbtTag.getInt("Id");
+							NBTTagCompoundWrapper nbtTag = tagList.getCompound(i);
+							int potionId = nbtTag.getNumber("Id");
 							PotionEffectType effectType = PotionEffectType.getById(potionId);
 							PotionType type = PotionType.getByEffect(effectType);
 							if (type != null) {
@@ -375,25 +369,25 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 							}
 						}
 					}
-					Integer data = LegacyPotion.toLegacyId(potion, item != Items.POTION);
+					Integer data = LegacyPotion.toLegacyId(potion, item != Material.POTION);
 					itemstack.setData(data);
 					String basicTypeName = LegacyPotion.getBasicTypeName(potion);
 					if (basicTypeName != null) {
-						itemstack.c(basicTypeName);
+						itemstack.setDisplayName(basicTypeName);
 					}
 				}
 			}
-			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9) && (item == Items.SPAWN_EGG)) {
+			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9) && (item == Material.MONSTER_EGG)) {
 				String entityId = nbttagcompound.getCompound("EntityTag").getString("id");
 				if (!entityId.isEmpty()) {
 					itemstack.setData(EntityTypes.a(entityId));
 				}
 			}
 			if (nbttagcompound.hasKeyOfType("ench", 9)) {
-				nbttagcompound.set("ench", filterEnchantList(nbttagcompound.getList("ench", 10)));
+				nbttagcompound.setList("ench", filterEnchantList(nbttagcompound.getList("ench", 10)));
 			}
 			if (nbttagcompound.hasKeyOfType("stored-enchants", 9)) {
-				nbttagcompound.set("stored-enchants", filterEnchantList(nbttagcompound.getList("stored-enchants", 10)));
+				nbttagcompound.setList("stored-enchants", filterEnchantList(nbttagcompound.getList("stored-enchants", 10)));
 			}
 		}
 		if (ItemStackWriteEvent.getHandlerList().getRegisteredListeners().length > 0) {
@@ -403,13 +397,13 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 		return itemstack;
 	}
 
-	private NBTTagList filterEnchantList(NBTTagList enchList) {
+	private NBTTagListWrapper filterEnchantList(NBTTagListWrapper enchList) {
 		SkippingTable enchSkip = IdSkipper.ENCHANT.getTable(getVersion());
-		NBTTagList newList = new NBTTagList();
+		NBTTagListWrapper newList = NBTTagListWrapper.create();
 		for (int i = 0; i < enchList.size(); i++) {
-			NBTTagCompound enchData = enchList.get(i);
-			if (!enchSkip.shouldSkip(enchData.getInt("id") & 0xFFFF)) {
-				newList.add(enchData);
+			NBTTagCompoundWrapper enchData = enchList.getCompound(i);
+			if (!enchSkip.shouldSkip(enchData.getNumber("id") & 0xFFFF)) {
+				newList.addCompound(enchData);
 			}
 		}
 		return enchList;
@@ -423,40 +417,40 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 		));
 	}
 
-	public static NBTTagCompound createDragonHeadSkullTag() {
-		return GameProfileSerializer.serialize(new NBTTagCompound(), dragonHeadGameProfile);
+	public static NBTTagCompoundWrapper createDragonHeadSkullTag() {
+		return NBTTagCompoundWrapper.wrap(GameProfileSerializer.serialize(NBTTagCompoundWrapper.createEmpty().unwrap(), dragonHeadGameProfile));
 	}
 
-	public static void transformSkull(NBTTagCompound nbttagcompound) {
+	public static void transformSkull(NBTTagCompoundWrapper nbttagcompound) {
 		transformSkull(nbttagcompound, "SkullOwner", "SkullOwner");
 		transformSkull(nbttagcompound, "Owner", "ExtraType");
 	}
 
-	private static void transformSkull(NBTTagCompound tag, String tagname, String newtagname) {
+	private static void transformSkull(NBTTagCompoundWrapper tag, String tagname, String newtagname) {
 		if (tag.hasKeyOfType(tagname, 10)) {
-			GameProfile gameprofile = GameProfileSerializer.deserialize(tag.getCompound(tagname));
+			GameProfile gameprofile = GameProfileSerializer.deserialize(tag.getCompound(tagname).unwrap());
 			if (gameprofile.getName() != null) {
-				tag.set(newtagname, new NBTTagString(gameprofile.getName()));
+				tag.setString(newtagname, gameprofile.getName());
 			} else {
 				tag.remove(tagname);
 			}
 		}
 	}
 
-	private static NBTTagCompound readLegacyNBT(InputStream is, NBTReadLimiter nbtreadlimiter) {
+	private static NBTTagCompoundWrapper readLegacyNBT(InputStream is, NBTReadLimiter nbtreadlimiter) {
 		try {
 			try (DataInputStream datainputstream = new DataInputStream(new BufferedInputStream(new LimitStream(new GZIPInputStream(is), nbtreadlimiter)))) {
-				return NBTCompressedStreamTools.a(datainputstream, nbtreadlimiter);
+				return NBTTagCompoundWrapper.wrap(NBTCompressedStreamTools.a(datainputstream, nbtreadlimiter));
 			}
 		} catch (IOException e) {
 			throw new DecoderException(e);
 		}
 	}
 
-	private static void encodeLegacyNBT(NBTTagCompound nbttagcompound, ByteBuf to) {
+	private static void encodeLegacyNBT(NBTTagCompoundWrapper nbttagcompound, ByteBuf to) {
 		try {
 			try (DataOutputStream dataoutputstream = new DataOutputStream(new GZIPOutputStream(new ByteBufOutputStream(to)))) {
-				NBTCompressedStreamTools.a(nbttagcompound, (DataOutput) dataoutputstream);
+				NBTCompressedStreamTools.a(nbttagcompound.unwrap(), (DataOutput) dataoutputstream);
 			}
 		} catch (IOException e) {
 			throw new EncoderException(e);
@@ -466,9 +460,9 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 	public static class InternalItemStackWriteEvent extends ItemStackWriteEvent {
 
 		private final CraftItemStack wrapped;
-		public InternalItemStackWriteEvent(ProtocolVersion version, ItemStack original, ItemStack itemstack) {
-			super(version, CraftItemStack.asCraftMirror(original));
-			this.wrapped = CraftItemStack.asCraftMirror(itemstack);
+		public InternalItemStackWriteEvent(ProtocolVersion version, ItemStackWrapper original, ItemStackWrapper itemstack) {
+			super(version, CraftItemStack.asCraftMirror(original.unwrap()));
+			this.wrapped = CraftItemStack.asCraftMirror(itemstack.unwrap());
 		}
 
 		@Override

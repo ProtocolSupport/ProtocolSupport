@@ -82,6 +82,10 @@ public class ItemStackWrapper {
 		itemstack.setTag(tag.unwrap());
 	}
 
+	public ItemStackWrapper cloneItemStack() {
+		return new ItemStackWrapper(itemstack.cloneItemStack());
+	}
+
 	@Override
 	public int hashCode() {
 		return itemstack != null ? itemstack.hashCode() : 0;
@@ -94,6 +98,11 @@ public class ItemStackWrapper {
 		}
 		ItemStackWrapper other = (ItemStackWrapper) otherObj;
 		return Objects.equals(itemstack, other.itemstack);
+	}
+
+	@Override
+	public String toString() {
+		return String.valueOf(itemstack);
 	}
 
 }

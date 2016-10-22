@@ -49,7 +49,7 @@ public class TileNBTTransformer {
 			(version, input) -> {
 				if (input.getNumber("SkullType") == 5) {
 					input.setByte("SkullType", 3);
-					input.unwrap().set("Owner", ProtocolSupportPacketDataSerializer.createDragonHeadSkullTag());
+					input.setCompound("Owner", ProtocolSupportPacketDataSerializer.createDragonHeadSkullTag());
 				}
 				return input;
 			},
@@ -58,7 +58,7 @@ public class TileNBTTransformer {
 		register(
 			TileEntityUpdateType.SKULL,
 			(version, input) -> {
-				ProtocolSupportPacketDataSerializer.transformSkull(input.unwrap());
+				ProtocolSupportPacketDataSerializer.transformSkull(input);
 				return input;
 			},
 			ProtocolVersion.getAllBefore(ProtocolVersion.MINECRAFT_1_7_5)
