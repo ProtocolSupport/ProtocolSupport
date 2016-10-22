@@ -212,15 +212,15 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 	}
 
 	public ItemStackWrapper readItemStack() {
-		short type = this.readShort();
+		int type = readShort();
 		if (type >= 0) {
-			ItemStackWrapper itemstack = new ItemStackWrapper(Material.STONE);
+			ItemStackWrapper itemstack = ItemStackWrapper.create(type);
 			itemstack.setTypeId(type);
 			itemstack.setAmount(readByte());
 			itemstack.setData(readShort());
 			itemstack.setTag(readTag());
 		}
-		return new ItemStackWrapper();
+		return ItemStackWrapper.createNull();
 	}
 
 	public void writeItemStack(ItemStackWrapper itemstack) {
@@ -288,7 +288,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 		for (int i = 0; i < count; i++) {
 			ItemStackWrapper itemstack1 = readItemStack();
 			ItemStackWrapper result = readItemStack();
-			ItemStackWrapper itemstack2 = new ItemStackWrapper();
+			ItemStackWrapper itemstack2 = ItemStackWrapper.createNull();
 			if (readBoolean()) {
 				itemstack2 = readItemStack();
 			}

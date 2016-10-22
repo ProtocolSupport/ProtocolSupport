@@ -11,20 +11,25 @@ public class ItemStackWrapper {
 
 	private ItemStack itemstack;
 
-	public final ItemStack unwrap() {
-		return itemstack;
-	}
-
-	public ItemStackWrapper() {
-	}
-
-	public ItemStackWrapper(ItemStack itemstack) {
+	private ItemStackWrapper(ItemStack itemstack) {
 		this.itemstack = itemstack;
 	}
 
+	public static ItemStackWrapper createNull() {
+		return new ItemStackWrapper(null);
+	}
+
 	@SuppressWarnings("deprecation")
-	public ItemStackWrapper(Material material) {
-		this(new ItemStack(Item.getById(material.getId())));
+	public static ItemStackWrapper create(Material material) {
+		return ItemStackWrapper.create(material.getId());
+	}
+
+	public static ItemStackWrapper create(int typeId) {
+		return new ItemStackWrapper(new ItemStack(Item.getById(typeId)));
+	}
+
+	public final ItemStack unwrap() {
+		return itemstack;
 	}
 
 	public boolean isNull() {
