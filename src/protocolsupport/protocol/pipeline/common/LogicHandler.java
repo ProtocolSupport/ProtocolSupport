@@ -1,22 +1,16 @@
 package protocolsupport.protocol.pipeline.common;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.ClosedChannelException;
 import java.util.HashSet;
 
 import org.bukkit.Bukkit;
 
-import com.mojang.authlib.GameProfile;
-
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import io.netty.handler.timeout.ReadTimeoutException;
-import net.minecraft.server.v1_10_R1.NetworkManager;
-import net.minecraft.server.v1_10_R1.PacketListener;
-import net.minecraft.server.v1_10_R1.PlayerConnection;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.events.ConnectionCloseEvent;
@@ -24,8 +18,6 @@ import protocolsupport.api.events.ConnectionOpenEvent;
 import protocolsupport.api.events.PlayerDisconnectEvent;
 import protocolsupport.logger.AsyncErrorLogger;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.handler.AbstractLoginListener;
-import protocolsupport.protocol.packet.handler.LoginListenerPlay;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.utils.netty.ChannelUtils;
 
@@ -77,21 +69,9 @@ public class LogicHandler extends ChannelDuplexHandler {
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		super.channelInactive(ctx);
-		NetworkManager networkManager = ChannelUtils.getNetworkManager(ctx.channel());
-		InetSocketAddress addr = (InetSocketAddress) networkManager.getSocketAddress();
-		String username = null;
-		PacketListener listener = networkManager.i();
-		if (listener instanceof AbstractLoginListener) {
-			GameProfile profile = ((AbstractLoginListener) listener).getProfile();
-			if (profile != null) {
-				username = profile.getName();
-			}
-		} else if (listener instanceof LoginListenerPlay) {
-			username = ((LoginListenerPlay) listener).getProfile().getName();
-		} else if (listener instanceof PlayerConnection) {
-			username = ((PlayerConnection) listener).player.getProfile().getName();
-		}
+		SocketAddress addr = ChannelUtils.getNetworkManagerSocketAddress(ctx.channel());
 		Connection connection = ProtocolStorage.getConnection(addr);
+		String username = ChannelUtils.getUserName(ctx.channel());
 		if (username != null) {
 			Bukkit.getPluginManager().callEvent(new PlayerDisconnectEvent(connection, username));
 		}

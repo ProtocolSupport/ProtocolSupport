@@ -147,7 +147,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 	}
 
 	protected void setProtocol(final Channel channel, ProtocolVersion version) {
-		if (ServerPlatformUtils.getServer().isDebugging()) {
+		if (ServerPlatformUtils.isDebugging()) {
 			System.err.println(ChannelUtils.getNetworkManagerSocketAddress(channel)+ " connected with protocol version "+version);
 		}
 		ConnectionImpl connection = ProtocolStorage.getConnection(ChannelUtils.getNetworkManagerSocketAddress(channel));

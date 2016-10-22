@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.spigotmc.SpigotConfig;
 
 import io.netty.buffer.Unpooled;
+import net.minecraft.server.v1_10_R1.EntityTypes;
 import net.minecraft.server.v1_10_R1.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_10_R1.Item;
 import net.minecraft.server.v1_10_R1.LocaleI18n;
@@ -104,6 +105,24 @@ public class ServerPlatformUtils {
 			return Item.getId(item);
 		}
 		return null;
+	}
+
+	public static int getEntityIdByName(String registryname) {
+		return EntityTypes.a(registryname);
+	}
+
+	public static boolean isDebugging() {
+		return getServer().isDebugging();
+	}
+
+	private static final String DEBUG_PROPERTY = "debug";
+
+	public static void enableDebug() {
+		getServer().getPropertyManager().setProperty(DEBUG_PROPERTY, Boolean.TRUE);
+	}
+
+	public static void disableDebug() {
+		getServer().getPropertyManager().setProperty(DEBUG_PROPERTY, Boolean.FALSE);
 	}
 
 }

@@ -1,11 +1,11 @@
 package protocolsupport.protocol.utils.datawatcher.objects;
 
-import net.minecraft.server.v1_10_R1.EnumDirection;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.types.BlockDirection;
 
-public class DataWatcherObjectDirection extends DataWatcherObject<EnumDirection> {
+public class DataWatcherObjectDirection extends DataWatcherObject<BlockDirection> {
 
 	@Override
 	public int getTypeId(ProtocolVersion version) {
@@ -17,7 +17,7 @@ public class DataWatcherObjectDirection extends DataWatcherObject<EnumDirection>
 
 	@Override
 	public void readFromStream(ProtocolSupportPacketDataSerializer serializer) {
-		value = serializer.readEnum(EnumDirection.class);
+		value = serializer.readEnum(BlockDirection.class);
 	}
 
 	@Override

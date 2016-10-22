@@ -189,7 +189,7 @@ public abstract class AbstractLoginListener extends LoginListener {
 					}
 				} catch (Throwable t) {
 					AbstractLoginListener.this.disconnect("Error occured while logging in");
-					if (server.isDebugging()) {
+					if (ServerPlatformUtils.isDebugging()) {
 						t.printStackTrace();
 					}
 				}
@@ -214,7 +214,7 @@ public abstract class AbstractLoginListener extends LoginListener {
 					new PlayerLookupUUID(AbstractLoginListener.this, isOnlineMode).run();
 				} catch (Throwable t) {
 					AbstractLoginListener.this.disconnect("Error occured while logging in");
-					if (server.isDebugging()) {
+					if (ServerPlatformUtils.isDebugging()) {
 						t.printStackTrace();
 					}
 				}

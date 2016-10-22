@@ -3,8 +3,6 @@ package protocolsupport.protocol.typeremapper.id;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 
-import net.minecraft.server.v1_10_R1.Block;
-import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.remapper.BlockRemapperControl;
@@ -12,8 +10,6 @@ import protocolsupport.protocol.typeremapper.id.RemappingRegistry.IdRemappingReg
 import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.HashMapBasedIdRemappingTable;
 import protocolsupport.utils.ProtocolVersionsHelper;
-import protocolsupport.utils.ReflectionUtils;
-import protocolsupport.utils.ServerPlatformUtils;
 
 public class IdRemapper {
 
@@ -115,30 +111,7 @@ public class IdRemapper {
 		}
 		@Override
 		protected ArrayBasedIdRemappingTable createTable() {
-			return new ArrayBasedIdRemappingTable(4096 * 16) {
-				@SuppressWarnings("deprecation")
-				@Override
-				public void setRemap(int from, int to) {
-					super.setRemap(from, to);
-					if (ServerPlatformUtils.getServer().isDebugging()) {
-						int blockIdFrom = from >> 4;
-						int blockIdTo = to >> 4;
-						Block blockFrom = Block.getById(blockIdFrom);
-						Block blockTo = Block.getById(blockIdTo);
-						try {
-							float strengthFrom = ReflectionUtils.getField(Block.class, "strength").getFloat(blockFrom);
-							float strengthTo = ReflectionUtils.getField(Block.class, "strength").getFloat(blockTo);
-							if (strengthTo < strengthFrom) {
-								ProtocolSupport.logWarning("Block remapper warning: strength of block " + Material.getMaterial(blockIdTo) + " is less than strength of block with id " +  Material.getMaterial(blockIdFrom));
-							}
-						} catch (IllegalArgumentException | IllegalAccessException e) {
-							if (ServerPlatformUtils.getServer().isDebugging()) {
-								e.printStackTrace();
-							}
-						}
-					}
-				}
-			};
+			return new ArrayBasedIdRemappingTable(4096 * 16);
 		}
 	};
 

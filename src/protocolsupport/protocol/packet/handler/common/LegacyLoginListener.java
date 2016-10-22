@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.handler.common;
 
+import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 
 import net.minecraft.server.v1_10_R1.MinecraftEncryption;
@@ -21,7 +22,7 @@ public class LegacyLoginListener extends AbstractLoginListener {
 
 	@Override
 	protected void enableEncryption(SecretKey key) {
-		networkManager.channel.pipeline().addBefore(ChannelHandlers.SPLITTER, ChannelHandlers.DECRYPT, new PacketDecrypter(MinecraftEncryption.a(2, loginKey)));
+		networkManager.channel.pipeline().addBefore(ChannelHandlers.SPLITTER, ChannelHandlers.DECRYPT, new PacketDecrypter(MinecraftEncryption.a(Cipher.DECRYPT_MODE, key)));
 	}
 
 }

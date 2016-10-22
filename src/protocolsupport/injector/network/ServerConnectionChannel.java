@@ -35,14 +35,14 @@ public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 		try {
 			channel.config().setOption(ChannelOption.IP_TOS, IPTOS_THROUGHPUT | IPTOS_LOWDELAY);
 		} catch (ChannelException channelexception) {
-			if (ServerPlatformUtils.getServer().isDebugging()) {
+			if (ServerPlatformUtils.isDebugging()) {
 				System.err.println("Unable to set IP_TOS option: " + channelexception.getMessage());
 			}
 		}
 		try {
 			channel.config().setOption(ChannelOption.TCP_NODELAY, true);
 		} catch (ChannelException channelexception) {
-			if (ServerPlatformUtils.getServer().isDebugging()) {
+			if (ServerPlatformUtils.isDebugging()) {
 				System.err.println("Unable to set TCP_NODELAY option: " + channelexception.getMessage());
 			}
 		}

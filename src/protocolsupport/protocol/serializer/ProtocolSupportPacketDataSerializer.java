@@ -30,7 +30,6 @@ import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
-import net.minecraft.server.v1_10_R1.EntityTypes;
 import net.minecraft.server.v1_10_R1.GameProfileSerializer;
 import net.minecraft.server.v1_10_R1.NBTCompressedStreamTools;
 import net.minecraft.server.v1_10_R1.NBTReadLimiter;
@@ -47,6 +46,7 @@ import protocolsupport.protocol.utils.types.MerchantData.TradeOffer;
 import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
 import protocolsupport.protocol.utils.types.NBTTagListWrapper;
 import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.utils.ServerPlatformUtils;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.netty.WrappingBuffer;
@@ -380,7 +380,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9) && (item == Material.MONSTER_EGG)) {
 				String entityId = nbttagcompound.getCompound("EntityTag").getString("id");
 				if (!entityId.isEmpty()) {
-					itemstack.setData(EntityTypes.a(entityId));
+					itemstack.setData(ServerPlatformUtils.getEntityIdByName(entityId));
 				}
 			}
 			if (nbttagcompound.hasKeyOfType("ench", 9)) {

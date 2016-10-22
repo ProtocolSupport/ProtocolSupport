@@ -114,6 +114,6 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 	public void a(final IChatBaseComponent ichatbasecomponent) {
 	}
 
-	public abstract LoginListener getLoginListener(NetworkManager networkManager);
+	public abstract AbstractLoginListener getLoginListener(NetworkManager networkManager);
 
 }

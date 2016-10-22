@@ -4,6 +4,8 @@ import java.net.SocketAddress;
 
 import org.bukkit.entity.Player;
 
+import com.mojang.authlib.GameProfile;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.DecoderException;
@@ -12,6 +14,8 @@ import net.minecraft.server.v1_10_R1.EnumProtocol;
 import net.minecraft.server.v1_10_R1.NetworkManager;
 import net.minecraft.server.v1_10_R1.PacketListener;
 import net.minecraft.server.v1_10_R1.PlayerConnection;
+import protocolsupport.protocol.packet.handler.AbstractLoginListener;
+import protocolsupport.protocol.packet.handler.LoginListenerPlay;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 
 public class ChannelUtils {
@@ -28,6 +32,23 @@ public class ChannelUtils {
 
 	public static SocketAddress getNetworkManagerSocketAddress(Channel channel) {
 		return ChannelUtils.getNetworkManager(channel).getSocketAddress();
+	}
+
+	public static String getUserName(Channel channel) {
+		NetworkManager networkManager = ChannelUtils.getNetworkManager(channel);
+		String username = null;
+		PacketListener listener = networkManager.i();
+		if (listener instanceof AbstractLoginListener) {
+			GameProfile profile = ((AbstractLoginListener) listener).getProfile();
+			if (profile != null) {
+				username = profile.getName();
+			}
+		} else if (listener instanceof LoginListenerPlay) {
+			username = ((LoginListenerPlay) listener).getProfile().getName();
+		} else if (listener instanceof PlayerConnection) {
+			username = ((PlayerConnection) listener).player.getProfile().getName();
+		}
+		return username;
 	}
 
 	public static NetworkManager getNetworkManager(Channel channel) {

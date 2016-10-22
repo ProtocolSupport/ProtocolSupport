@@ -13,14 +13,11 @@ import org.bukkit.entity.Player;
 
 import io.netty.util.ResourceLeakDetector;
 import io.netty.util.ResourceLeakDetector.Level;
-import net.minecraft.server.v1_10_R1.PropertyManager;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.utils.ServerPlatformUtils;
 
 public class CommandHandler implements CommandExecutor, TabCompleter {
-
-	private static final String DEBUG_PROPERTY = "debug";
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -37,13 +34,12 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			return true;
 		}
 		if ((args.length == 1) && args[0].equalsIgnoreCase("debug")) {
-			PropertyManager manager = ServerPlatformUtils.getServer().getPropertyManager();
-			if (!manager.getBoolean(DEBUG_PROPERTY, false)) {
-				manager.setProperty(DEBUG_PROPERTY, Boolean.TRUE);
-				sender.sendMessage(ChatColor.GOLD + "Enabled debug");
-			} else {
-				manager.setProperty(DEBUG_PROPERTY, Boolean.FALSE);
+			if (ServerPlatformUtils.isDebugging()) {
+				ServerPlatformUtils.disableDebug();
 				sender.sendMessage(ChatColor.GOLD + "Disabled debug");
+			} else {
+				ServerPlatformUtils.enableDebug();
+				sender.sendMessage(ChatColor.GOLD + "Enabled debug");
 			}
 			return true;
 		}
