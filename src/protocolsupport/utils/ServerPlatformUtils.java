@@ -94,7 +94,7 @@ public class ServerPlatformUtils {
 		net.minecraft.server.v1_10_R1.ItemStack nmsitemstack = CraftItemStack.asNMSCopy(itemstack);
 		NBTTagCompound compound = new NBTTagCompound();
 		nmsitemstack.save(compound);
-		return new NBTTagCompoundWrapper(compound);
+		return NBTTagCompoundWrapper.wrap(compound);
 	}
 
 }

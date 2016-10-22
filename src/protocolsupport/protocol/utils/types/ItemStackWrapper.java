@@ -75,7 +75,7 @@ public class ItemStackWrapper {
 	}
 
 	public NBTTagCompoundWrapper getTag() {
-		return new NBTTagCompoundWrapper(itemstack.getTag());
+		return NBTTagCompoundWrapper.wrap(itemstack.getTag());
 	}
 
 	public void setTag(NBTTagCompoundWrapper tag) {

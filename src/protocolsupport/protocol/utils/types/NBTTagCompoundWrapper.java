@@ -10,6 +10,12 @@ import net.minecraft.server.v1_10_R1.NBTTagCompound;
 
 public class NBTTagCompoundWrapper {
 
+	private NBTTagCompound tag;
+
+	private NBTTagCompoundWrapper(NBTTagCompound tag) {
+		this.tag = tag;
+	}
+
 	public static NBTTagCompoundWrapper fromJson(String json) {
 		try {
 			return new NBTTagCompoundWrapper(MojangsonParser.parse(json));
@@ -19,23 +25,20 @@ public class NBTTagCompoundWrapper {
 		return null;
 	}
 
-	private NBTTagCompound tag;
+	public static NBTTagCompoundWrapper wrap(NBTTagCompound tag) {
+		return new NBTTagCompoundWrapper(tag);
+	}
+
+	public static NBTTagCompoundWrapper createEmpty() {
+		return new NBTTagCompoundWrapper(new NBTTagCompound());
+	}
+
+	public static NBTTagCompoundWrapper createNull() {
+		return new NBTTagCompoundWrapper(null);
+	}
 
 	public final NBTTagCompound unwrap() {
 		return tag;
-	}
-
-	public NBTTagCompoundWrapper() {
-	}
-
-	public NBTTagCompoundWrapper(NBTTagCompound tag) {
-		this.tag = tag;
-	}
-
-	public NBTTagCompoundWrapper(boolean createTag) {
-		if (createTag) {
-			tag = new NBTTagCompound();
-		}
 	}
 
 	public boolean isNull() {

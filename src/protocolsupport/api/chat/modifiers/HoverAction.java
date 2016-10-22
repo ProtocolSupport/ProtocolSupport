@@ -42,7 +42,7 @@ public class HoverAction {
 	@SuppressWarnings("deprecation")
 	public HoverAction(EntityInfo entityinfo) {
 		this.type = Type.SHOW_ENTITY;
-		NBTTagCompoundWrapper compound = new NBTTagCompoundWrapper(true);
+		NBTTagCompoundWrapper compound = NBTTagCompoundWrapper.createEmpty();
 		compound.setString("type", entityinfo.getType().getName());
 		compound.setString("id", entityinfo.getUUID().toString());
 		compound.setString("name", entityinfo.getName());

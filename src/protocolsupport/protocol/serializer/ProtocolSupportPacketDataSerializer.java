@@ -245,16 +245,16 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_8)) {
 				final short length = readShort();
 				if (length < 0) {
-					return new NBTTagCompoundWrapper();
+					return NBTTagCompoundWrapper.createNull();
 				}
-				return new NBTTagCompoundWrapper(readLegacyNBT(new ByteArrayInputStream(ChannelUtils.toArray(readBytes(length))), new NBTReadLimiter(2097152L)));
+				return NBTTagCompoundWrapper.wrap(readLegacyNBT(new ByteArrayInputStream(ChannelUtils.toArray(readBytes(length))), new NBTReadLimiter(2097152L)));
 			} else {
 				markReaderIndex();
 				if (readByte() == 0) {
-					return new NBTTagCompoundWrapper();
+					return NBTTagCompoundWrapper.createNull();
 				}
 				resetReaderIndex();
-				return new NBTTagCompoundWrapper(NBTCompressedStreamTools.a(new DataInputStream(new ByteBufInputStream(this)), new NBTReadLimiter(2097152L)));
+				return NBTTagCompoundWrapper.wrap(NBTCompressedStreamTools.a(new DataInputStream(new ByteBufInputStream(this)), new NBTReadLimiter(2097152L)));
 			}
 		} catch (IOException e) {
 			throw new DecoderException(e);
