@@ -219,6 +219,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 			itemstack.setAmount(readByte());
 			itemstack.setData(readShort());
 			itemstack.setTag(readTag());
+			return itemstack;
 		}
 		return ItemStackWrapper.createNull();
 	}
