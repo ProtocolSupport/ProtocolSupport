@@ -339,7 +339,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 			itemstack.setTag(wrapper);
 		}
 		NBTTagCompoundWrapper nbttagcompound = itemstack.getTag();
-		if (nbttagcompound != null) {
+		if (!nbttagcompound.isNull()) {
 			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_8) && (item == Material.WRITTEN_BOOK)) {
 				if (nbttagcompound.hasKeyOfType("pages", NBTTagCompoundWrapper.TYPE_LIST)) {
 					NBTTagListWrapper pages = nbttagcompound.getList("pages", NBTTagCompoundWrapper.TYPE_STRING);
