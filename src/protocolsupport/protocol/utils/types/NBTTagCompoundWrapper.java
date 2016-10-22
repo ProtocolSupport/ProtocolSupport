@@ -52,7 +52,6 @@ public class NBTTagCompoundWrapper {
 	public static final int TYPE_STRING = 8;
 	public static final int TYPE_COMPOUND = 10;
 	public static final int TYPE_LIST = 9;
-	public static final int TYPE_NUMBER = 99;
 
 	public boolean hasKeyOfType(String tagname, int i) {
 		return tag.hasKeyOfType(tagname, i);

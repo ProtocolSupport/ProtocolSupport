@@ -384,11 +384,11 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 					itemstack.setData(ServerPlatformUtils.getEntityIdByName(entityId));
 				}
 			}
-			if (nbttagcompound.hasKeyOfType("ench", 9)) {
-				nbttagcompound.setList("ench", filterEnchantList(nbttagcompound.getList("ench", 10)));
+			if (nbttagcompound.hasKeyOfType("ench", NBTTagCompoundWrapper.TYPE_LIST)) {
+				nbttagcompound.setList("ench", filterEnchantList(nbttagcompound.getList("ench", NBTTagCompoundWrapper.TYPE_COMPOUND)));
 			}
-			if (nbttagcompound.hasKeyOfType("stored-enchants", 9)) {
-				nbttagcompound.setList("stored-enchants", filterEnchantList(nbttagcompound.getList("stored-enchants", 10)));
+			if (nbttagcompound.hasKeyOfType("stored-enchants", NBTTagCompoundWrapper.TYPE_LIST)) {
+				nbttagcompound.setList("stored-enchants", filterEnchantList(nbttagcompound.getList("stored-enchants", NBTTagCompoundWrapper.TYPE_COMPOUND)));
 			}
 		}
 		if (ItemStackWriteEvent.getHandlerList().getRegisteredListeners().length > 0) {
@@ -428,7 +428,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 	}
 
 	private static void transformSkull(NBTTagCompoundWrapper tag, String tagname, String newtagname) {
-		if (tag.hasKeyOfType(tagname, 10)) {
+		if (tag.hasKeyOfType(tagname, NBTTagCompoundWrapper.TYPE_COMPOUND)) {
 			GameProfile gameprofile = GameProfileSerializer.deserialize(tag.getCompound(tagname).unwrap());
 			if (gameprofile.getName() != null) {
 				tag.setString(newtagname, gameprofile.getName());
