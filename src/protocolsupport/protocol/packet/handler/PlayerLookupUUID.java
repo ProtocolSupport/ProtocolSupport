@@ -20,9 +20,9 @@ import com.mojang.authlib.exceptions.AuthenticationUnavailableException;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
 
-import net.minecraft.server.v1_10_R1.MinecraftEncryption;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
+import protocolsupport.protocol.utils.MinecraftEncryption;
 import protocolsupport.utils.ServerPlatformUtils;
 
 @SuppressWarnings("deprecation")
@@ -44,7 +44,7 @@ public class PlayerLookupUUID {
 				fireLoginEvents();
 				return;
 			}
-			final String hash = new BigInteger(MinecraftEncryption.a("", ServerPlatformUtils.getServer().O().getPublic(), listener.getLoginKey())).toString(16);
+			final String hash = new BigInteger(MinecraftEncryption.createHash(ServerPlatformUtils.getServer().O().getPublic(), listener.getLoginKey())).toString(16);
 			listener.setProfile(ServerPlatformUtils.getServer().ay().hasJoinedServer(new GameProfile(null, gameprofile.getName()), hash));
 			if (listener.getProfile() != null) {
 				fireLoginEvents();
