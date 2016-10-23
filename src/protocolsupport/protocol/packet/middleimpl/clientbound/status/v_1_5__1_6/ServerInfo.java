@@ -1,13 +1,12 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_5__1_6;
 
-import net.minecraft.server.v1_10_R1.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_10_R1.ServerPing;
+import java.util.StringJoiner;
+
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.status.MiddleServerInfo;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.utils.ServerPingSerializers;
+import protocolsupport.protocol.utils.pingresponse.PingResponse;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -16,14 +15,16 @@ public class ServerInfo extends MiddleServerInfo<RecyclableCollection<ClientBoun
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.STATUS_SERVER_INFO_ID, version);
-		ServerPing serverPing = ServerPingSerializers.PING_GSON.fromJson(pingJson, ServerPing.class);
-		int versionId = serverPing.getServerData().getProtocolVersion();
-		String response =
-		"§1\u0000" + (versionId == ProtocolVersion.getLatest().getId() ? serializer.getVersion().getId() : versionId) +
-		"\u0000" + serverPing.getServerData().a() +
-		"\u0000" + ChatAPI.fromJSON(ChatSerializer.a(serverPing.a())).toLegacyText() +
-		"\u0000" + serverPing.b().b() +
-		"\u0000" + serverPing.b().a();
+		PingResponse ping = PingResponse.fromJson(pingJson);
+		int versionId = ping.getProtocolData().getVersion();
+		String response = new StringJoiner("\u0000")
+		.add("§1")
+		.add(String.valueOf(versionId == ProtocolVersion.getLatest().getId() ? serializer.getVersion().getId() : versionId))
+		.add(ping.getProtocolData().getName())
+		.add(ping.getMotd().toLegacyText())
+		.add(String.valueOf(ping.getPlayers().getOnline()))
+		.add(String.valueOf(ping.getPlayers().getMax()))
+		.toString();
 		serializer.writeString(response);
 		return RecyclableSingletonList.create(serializer);
 	}
