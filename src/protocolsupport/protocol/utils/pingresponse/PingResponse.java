@@ -91,6 +91,7 @@ public class PingResponse {
 
 	public static class Serializer implements JsonDeserializer<PingResponse>, JsonSerializer<PingResponse> {
 
+		@Override
 		public PingResponse deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext ctx) throws JsonParseException {
 			JsonObject jsonObject = JsonUtils.getObject(jsonElement, "status");
 			PingResponse ping = new PingResponse();
@@ -109,6 +110,7 @@ public class PingResponse {
 			return ping;
 		}
 
+		@Override
 		public JsonElement serialize(PingResponse ping, Type type, JsonSerializationContext ctx) {
 			final JsonObject jsonObject = new JsonObject();
 			if (ping.getProtocolData() != null) {

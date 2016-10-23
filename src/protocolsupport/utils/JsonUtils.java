@@ -17,7 +17,7 @@ public class JsonUtils {
 	}
 
 	public static boolean hasObject(JsonObject jsonObject, String name) {
-		return jsonObject != null && jsonObject.get(name) != null;
+		return (jsonObject != null) && (jsonObject.get(name) != null);
 	}
 
 	public static boolean isJsonArray(JsonObject jsonObject, String name) {

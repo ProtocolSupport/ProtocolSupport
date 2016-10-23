@@ -46,7 +46,7 @@ public class PingResponsePlayers {
 	}
 
 	public boolean hasPlayers() {
-		return players != null && players.length > 0;
+		return (players != null) && (players.length > 0);
 	}
 
 	public GameProfile[] getPlayers() {
@@ -58,6 +58,7 @@ public class PingResponsePlayers {
 	}
 
 	public static class Serializer implements JsonDeserializer<PingResponsePlayers>, JsonSerializer<PingResponsePlayers> {
+		@Override
 		public PingResponsePlayers deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
 			JsonObject jsonObject = JsonUtils.getObject(jsonElement, "players");
 			PingResponsePlayers players = new PingResponsePlayers(JsonUtils.getInt(jsonObject, "max"), JsonUtils.getInt(jsonObject, "online"));
@@ -75,6 +76,7 @@ public class PingResponsePlayers {
 			return players;
 		}
 
+		@Override
 		public JsonElement serialize(PingResponsePlayers players, Type type, JsonSerializationContext jsonSerializationContext) {
 			JsonObject jsonObject = new JsonObject();
 			jsonObject.addProperty("max", players.getMax());

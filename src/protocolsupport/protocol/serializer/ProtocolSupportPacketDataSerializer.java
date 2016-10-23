@@ -353,7 +353,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 			if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_5) && (item == Material.SKULL_ITEM)) {
 				transformSkull(nbttagcompound);
 			}
-			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9) && (item == Material.POTION || item == Material.SPLASH_POTION || item == Material.LINGERING_POTION)) {
+			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9) && ((item == Material.POTION) || (item == Material.SPLASH_POTION) || (item == Material.LINGERING_POTION))) {
 				String potion = nbttagcompound.getString("Potion");
 				if (!potion.isEmpty()) {
 					NBTTagListWrapper tagList = nbttagcompound.getList("CustomPotionEffects", NBTTagCompoundWrapper.TYPE_COMPOUND);

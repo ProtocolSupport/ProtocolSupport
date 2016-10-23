@@ -43,11 +43,13 @@ public class PingResponseProtocolData {
 
 	public static class Serializer implements JsonDeserializer<PingResponseProtocolData>, JsonSerializer<PingResponseProtocolData> {
 
+		@Override
 		public PingResponseProtocolData deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
 			JsonObject jsonObject = JsonUtils.getObject(jsonElement, "version");
 			return new PingResponseProtocolData(JsonUtils.getString(jsonObject, "name"), JsonUtils.getInt(jsonObject, "protocol"));
 		}
 
+		@Override
 		public JsonElement serialize(PingResponseProtocolData serverData, Type type, JsonSerializationContext jsonSerializationContext) {
 			JsonObject jsonObject = new JsonObject();
 			jsonObject.addProperty("name", serverData.getName());
