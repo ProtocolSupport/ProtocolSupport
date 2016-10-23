@@ -17,7 +17,8 @@ public class ProtocolSupportAPI {
 	}
 
 	public static ProtocolVersion getProtocolVersion(SocketAddress address) {
-		return getConnection(address).getVersion();
+		Connection connection = getConnection(address);
+		return connection != null ? connection.getVersion() : ProtocolVersion.UNKNOWN;
 	}
 
 	public static List<Connection> getConnections() {
