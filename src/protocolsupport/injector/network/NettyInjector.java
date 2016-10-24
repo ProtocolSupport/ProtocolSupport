@@ -6,11 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-import org.spigotmc.SneakyThrow;
-
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelHandler;
 import net.minecraft.server.v1_10_R1.ChatComponentText;
 import net.minecraft.server.v1_10_R1.NetworkManager;
 import net.minecraft.server.v1_10_R1.ServerConnection;
@@ -93,23 +90,7 @@ public class NettyInjector {
 
 		protected void inject(ChannelFuture future) {
 			Channel channel = future.channel();
-			try {
-				ChannelHandler serverMainHandler = null;
-				for (ChannelHandler handler : channel.pipeline().toMap().values()) {
-					if (handler.getClass().getName().equals("io.netty.bootstrap.ServerBootstrap$ServerBootstrapAcceptor")) {
-						serverMainHandler = handler;
-						break;
-					}
-				}
-				if (serverMainHandler == null) {
-					throw new IllegalStateException("Unable to find default netty channel initializer");
-				}
-				ReflectionUtils
-				.setAccessible(serverMainHandler.getClass().getDeclaredField("childHandler"))
-				.set(serverMainHandler, new ServerConnectionChannel(new NetworkManagerList(networkManagersList)));
-			} catch (Exception e) {
-				SneakyThrow.sneaky(e);
-			}
+			channel.pipeline().addFirst(new NettyServerChannelHandler());
 			synchronized (networkManagersList) {
 				for (NetworkManager nm : networkManagersList) {
 					if (nm.channel.localAddress().equals(channel.localAddress())) {

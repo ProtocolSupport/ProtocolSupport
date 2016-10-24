@@ -1,10 +1,8 @@
 package protocolsupport.injector.network;
 
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelException;
 import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import net.minecraft.server.v1_10_R1.EnumProtocolDirection;
+import io.netty.channel.ChannelPipeline;
 import net.minecraft.server.v1_10_R1.NetworkManager;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
@@ -18,48 +16,35 @@ import protocolsupport.protocol.pipeline.timeout.SimpleReadTimeoutHandler;
 import protocolsupport.protocol.pipeline.wrapped.WrappedPrepender;
 import protocolsupport.protocol.pipeline.wrapped.WrappedSplitter;
 import protocolsupport.protocol.storage.ProtocolStorage;
-import protocolsupport.utils.ServerPlatformUtils;
+import protocolsupport.utils.Utils;
+import protocolsupport.utils.Utils.Converter;
+import protocolsupport.utils.netty.ChannelUtils;
 
 public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 
-	private final NetworkManagerList networkManagers;
-	public ServerConnectionChannel(NetworkManagerList networkManagers) {
-		this.networkManagers = networkManagers;
-	}
-
-	private static final int IPTOS_THROUGHPUT = 0x08;
-	private static final int IPTOS_LOWDELAY = 0x10;
+	private static final boolean replaceDecoderEncoder = Utils.getJavaPropertyValue("protocolsupport.replaceencoderdecoder", false, Converter.STRING_TO_BOOLEAN);
 
 	@Override
 	protected void initChannel(Channel channel) {
-		try {
-			channel.config().setOption(ChannelOption.IP_TOS, IPTOS_THROUGHPUT | IPTOS_LOWDELAY);
-		} catch (ChannelException channelexception) {
-			if (ServerPlatformUtils.isDebugging()) {
-				System.err.println("Unable to set IP_TOS option: " + channelexception.getMessage());
-			}
-		}
-		try {
-			channel.config().setOption(ChannelOption.TCP_NODELAY, true);
-		} catch (ChannelException channelexception) {
-			if (ServerPlatformUtils.isDebugging()) {
-				System.err.println("Unable to set TCP_NODELAY option: " + channelexception.getMessage());
-			}
-		}
-		NetworkManager networkmanager = new NetworkManager(EnumProtocolDirection.SERVERBOUND);
+		NetworkManager networkmanager = ChannelUtils.getNetworkManager(channel);
+		networkmanager.setPacketListener(new FakePacketListener());
 		ConnectionImpl connection = new ConnectionImpl(networkmanager, ProtocolVersion.UNKNOWN);
 		ProtocolStorage.setConnection(channel.remoteAddress(), connection);
-		channel.pipeline()
-		.addLast(ChannelHandlers.READ_TIMEOUT, new SimpleReadTimeoutHandler(30))
-		.addLast(ChannelHandlers.INITIAL_DECODER, new InitialPacketDecoder())
-		.addLast(ChannelHandlers.SPLITTER, new WrappedSplitter())
-		.addLast(ChannelHandlers.DECODER, new PacketDecoder())
-		.addLast(ChannelHandlers.PREPENDER, new WrappedPrepender())
-		.addLast(ChannelHandlers.ENCODER, new PacketEncoder())
-		.addLast(ChannelHandlers.LOGIC, new LogicHandler(connection));
-		networkmanager.setPacketListener(new FakePacketListener());
-		networkManagers.add(networkmanager);
-		channel.pipeline().addLast(ChannelHandlers.NETWORK_MANAGER, networkmanager);
+		ChannelPipeline pipeline = channel.pipeline();
+		pipeline.addAfter(ChannelHandlers.READ_TIMEOUT, ChannelHandlers.INITIAL_DECODER, new InitialPacketDecoder());
+		pipeline.addBefore(ChannelHandlers.NETWORK_MANAGER, ChannelHandlers.LOGIC, new LogicHandler(connection));
+		pipeline.remove("legacy_query");
+		pipeline.replace(ChannelHandlers.READ_TIMEOUT, ChannelHandlers.READ_TIMEOUT, new SimpleReadTimeoutHandler(30));
+		pipeline.replace(ChannelHandlers.SPLITTER, ChannelHandlers.SPLITTER, new WrappedSplitter());
+		pipeline.replace(ChannelHandlers.PREPENDER, ChannelHandlers.PREPENDER, new WrappedPrepender());
+		if (replaceDecoderEncoder) {
+			if (pipeline.get(ChannelHandlers.DECODER).getClass().equals(net.minecraft.server.v1_10_R1.PacketDecoder.class)) {
+				pipeline.replace(ChannelHandlers.DECODER, ChannelHandlers.DECODER, new PacketDecoder());
+			}
+			if (pipeline.get(ChannelHandlers.ENCODER).getClass().equals(net.minecraft.server.v1_10_R1.PacketEncoder.class)) {
+				pipeline.replace(ChannelHandlers.ENCODER, ChannelHandlers.ENCODER, new PacketEncoder());
+			}
+		}
 	}
 
 }
