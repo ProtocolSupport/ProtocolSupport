@@ -25,8 +25,8 @@ import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
 
 public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
-	private static final int ping152delay = Utils.getJavaPropertyValue("protocolsupport.ping152delay", 100, Converter.STRING_TO_INT);
-	private static final int pingLegacyDelay = Utils.getJavaPropertyValue("protocolsupport.pinglegacydelay", 200, Converter.STRING_TO_INT);
+	private static final int ping152delay = Utils.getJavaPropertyValue("ping152delay", 100, Converter.STRING_TO_INT);
+	private static final int pingLegacyDelay = Utils.getJavaPropertyValue("pinglegacydelay", 200, Converter.STRING_TO_INT);
 
 	public static void init() {
 		ProtocolSupport.logInfo("Assume 1.5.2 ping delay: "+ping152delay);

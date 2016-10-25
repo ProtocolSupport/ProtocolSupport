@@ -72,6 +72,10 @@ public class Utils {
 	}
 
 	public static <T> T getJavaPropertyValue(String property, T defaultValue, Converter<String, T> converter) {
+		return getRawJavaPropertyValue("protocolsupport."+property, defaultValue, converter);
+	}
+
+	public static <T> T getRawJavaPropertyValue(String property, T defaultValue, Converter<String, T> converter) {
 		try {
 			String value = System.getProperty(property);
 			if (value != null) {

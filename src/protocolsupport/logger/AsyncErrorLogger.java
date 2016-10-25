@@ -21,9 +21,9 @@ import protocolsupport.utils.Utils.Converter;
 
 public class AsyncErrorLogger {
 
-	private static final boolean enabled = Utils.getJavaPropertyValue("protocolsupport.errlog.errlog", true, Converter.STRING_TO_BOOLEAN);
-	private static final long maxFileSize = Utils.getJavaPropertyValue("protocolsupport.errlog.maxsize", 1024L * 1024L * 20L, Converter.STRING_TO_LONG);
-	private static final String filePath = Utils.getJavaPropertyValue("protocolsupport.errlog.path", JavaPlugin.getPlugin(ProtocolSupport.class).getName()+"-errlog", Converter.NONE);
+	private static final boolean enabled = Utils.getJavaPropertyValue("errlog.enabled", true, Converter.STRING_TO_BOOLEAN);
+	private static final long maxFileSize = Utils.getJavaPropertyValue("errlog.maxsize", 1024L * 1024L * 20L, Converter.STRING_TO_LONG);
+	private static final String filePath = Utils.getJavaPropertyValue("errlog.path", JavaPlugin.getPlugin(ProtocolSupport.class).getName()+"-errlog", Converter.NONE);
 
 	public static final AsyncErrorLogger INSTANCE = new AsyncErrorLogger();
 

@@ -14,7 +14,7 @@ public class ThrottleTracker {
 	private static final long time = ServerPlatformUtils.getServer().server.getConnectionThrottle();
 
 	private static final Cache<InetAddress, Boolean> tracker = CacheBuilder.newBuilder()
-	.concurrencyLevel(Utils.getJavaPropertyValue("io.netty.eventLoopThreads", Runtime.getRuntime().availableProcessors(), Utils.Converter.STRING_TO_INT))
+	.concurrencyLevel(Utils.getRawJavaPropertyValue("io.netty.eventLoopThreads", Runtime.getRuntime().availableProcessors(), Utils.Converter.STRING_TO_INT))
 	.expireAfterWrite(time, TimeUnit.MILLISECONDS)
 	.build();
 

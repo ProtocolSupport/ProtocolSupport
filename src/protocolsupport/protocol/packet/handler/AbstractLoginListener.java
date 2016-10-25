@@ -48,8 +48,8 @@ import protocolsupport.utils.Utils.Converter;
 
 public abstract class AbstractLoginListener extends LoginListener {
 
-	private static final int loginThreads = Utils.getJavaPropertyValue("protocolsupport.loginthreads", Integer.MAX_VALUE, Converter.STRING_TO_INT);
-	private static final int loginThreadKeepAlive = Utils.getJavaPropertyValue("protocolsupport.loginthreadskeepalive", 60, Converter.STRING_TO_INT);
+	private static final int loginThreads = Utils.getJavaPropertyValue("loginthreads", Integer.MAX_VALUE, Converter.STRING_TO_INT);
+	private static final int loginThreadKeepAlive = Utils.getJavaPropertyValue("loginthreadskeepalive", 60, Converter.STRING_TO_INT);
 
 	public static void init() {
 		ProtocolSupport.logInfo("Login threads max count: "+loginThreads+", keep alive time: "+loginThreadKeepAlive);

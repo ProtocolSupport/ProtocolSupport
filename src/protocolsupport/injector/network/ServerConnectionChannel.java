@@ -22,7 +22,7 @@ import protocolsupport.utils.netty.ChannelUtils;
 
 public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 
-	private static final boolean replaceDecoderEncoder = Utils.getJavaPropertyValue("protocolsupport.replaceencoderdecoder", false, Converter.STRING_TO_BOOLEAN);
+	private static final boolean replaceDecoderEncoder = Utils.getJavaPropertyValue("replaceencoderdecoder", false, Converter.STRING_TO_BOOLEAN);
 
 	@Override
 	protected void initChannel(Channel channel) {
