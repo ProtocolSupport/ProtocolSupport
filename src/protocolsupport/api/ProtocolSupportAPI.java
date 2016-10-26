@@ -40,7 +40,7 @@ public class ProtocolSupportAPI {
 				return ConnectionImpl.getFromChannel(nmsplayer.playerConnection.networkManager.channel);
 			}
 		}
-		return ProtocolStorage.getConnection(player.getAddress());
+		return getConnection(player.getAddress());
 	}
 
 	public static Connection getConnection(SocketAddress address) {
