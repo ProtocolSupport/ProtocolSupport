@@ -113,7 +113,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 							scheduleTask(ctx, new SetProtocolTask(this, channel, ProtocolVersion.MINECRAFT_1_5_2), ping152delay, TimeUnit.MILLISECONDS);
 						} else if (
 							(replayingBuffer.readUnsignedByte() == 0xFA) &&
-							"MC|PingHost".equals(new String(ChannelUtils.toArray(replayingBuffer.readBytes(replayingBuffer.readUnsignedShort() * 2)), StandardCharsets.UTF_16BE))
+							"MC|PingHost".equals(new String(ChannelUtils.toArray(replayingBuffer.readSlice(replayingBuffer.readUnsignedShort() * 2)), StandardCharsets.UTF_16BE))
 						) {
 							//definitely 1.6
 							replayingBuffer.readUnsignedShort();

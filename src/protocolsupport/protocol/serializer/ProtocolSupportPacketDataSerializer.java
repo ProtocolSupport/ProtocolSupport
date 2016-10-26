@@ -119,11 +119,11 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 		if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4)) {
 			int length = readUnsignedShort() * 2;
 			checkLimit(length, limit * 4);
-			return new String(ChannelUtils.toArray(readBytes(length)), StandardCharsets.UTF_16BE);
+			return new String(ChannelUtils.toArray(readSlice(length)), StandardCharsets.UTF_16BE);
 		} else {
 			int length = readVarInt();
 			checkLimit(length, limit * 4);
-			return new String(ChannelUtils.toArray(readBytes(length)), StandardCharsets.UTF_8);
+			return new String(ChannelUtils.toArray(readSlice(length)), StandardCharsets.UTF_8);
 		}
 	}
 
@@ -243,7 +243,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 				if (length < 0) {
 					return NBTTagCompoundWrapper.createNull();
 				}
-				return readLegacyNBT(new ByteArrayInputStream(ChannelUtils.toArray(readBytes(length))), new NBTReadLimiter(2097152L));
+				return readLegacyNBT(new ByteBufInputStream(readSlice(length)), new NBTReadLimiter(2097152L));
 			} else {
 				markReaderIndex();
 				if (readByte() == 0) {
