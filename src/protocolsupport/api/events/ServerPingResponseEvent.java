@@ -4,15 +4,14 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import protocolsupport.api.Connection;
+import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.utils.ServerPlatformUtils;
 
-public class ServerPingResponseEvent extends Event {
-
-	private final InetSocketAddress address;
+public class ServerPingResponseEvent extends ConnectionEvent {
 
 	private ProtocolInfo info;
 	private String motd;
@@ -20,9 +19,8 @@ public class ServerPingResponseEvent extends Event {
 	private int maxPlayers;
 	private List<String> players;
 
-	public ServerPingResponseEvent(InetSocketAddress address, ProtocolInfo info, String icon, String motd, int maxPlayers, List<String> players) {
-		super(true);
-		this.address = address;
+	public ServerPingResponseEvent(Connection connection, ProtocolInfo info, String icon, String motd, int maxPlayers, List<String> players) {
+		super(connection);
 		setProtocolInfo(info);
 		setIcon(icon);
 		setMotd(motd);
@@ -30,8 +28,13 @@ public class ServerPingResponseEvent extends Event {
 		setPlayers(players);
 	}
 
+	@Deprecated
+	public ServerPingResponseEvent(InetSocketAddress address, ProtocolInfo info, String icon, String motd, int maxPlayers, List<String> players) {
+		this(ProtocolSupportAPI.getConnection(address), info, icon, motd, maxPlayers, players);
+	}
+
 	public InetSocketAddress getAddress() {
-		return address;
+		return getConnection().getAddress();
 	}
 
 	public ProtocolInfo getProtocolInfo() {

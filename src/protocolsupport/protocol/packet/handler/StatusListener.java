@@ -33,6 +33,7 @@ import net.minecraft.server.v1_10_R1.PacketStatusOutServerInfo;
 import net.minecraft.server.v1_10_R1.ServerPing;
 import net.minecraft.server.v1_10_R1.ServerPing.ServerData;
 import net.minecraft.server.v1_10_R1.ServerPing.ServerPingPlayerSample;
+import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
@@ -82,7 +83,7 @@ public class StatusListener extends PacketStatusListener {
 		}
 
 		ServerPingResponseEvent revent = new ServerPingResponseEvent(
-			addr, new ProtocolInfo(ProtocolVersion.getLatest(), server.getServerModName() + " " + server.getVersion()),
+			ProtocolSupportAPI.getConnection(addr), new ProtocolInfo(ProtocolVersion.getLatest(), server.getServerModName() + " " + server.getVersion()),
 			icon, motd, maxPlayers, profiles
 		);
 		Bukkit.getPluginManager().callEvent(revent);

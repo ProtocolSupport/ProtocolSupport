@@ -16,6 +16,7 @@ import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.DecoderException;
+import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.LegacyServerPingResponseEvent;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
@@ -68,7 +69,7 @@ public class LegacyLoginAndPingHandler extends SimpleChannelInboundHandler<ByteB
 		};
 		Bukkit.getPluginManager().callEvent(bevent);
 
-		LegacyServerPingResponseEvent revent = new LegacyServerPingResponseEvent(remoteAddress, bevent.getMotd(), bevent.getMaxPlayers());
+		LegacyServerPingResponseEvent revent = new LegacyServerPingResponseEvent(ProtocolSupportAPI.getConnection(remoteAddress), bevent.getMotd(), bevent.getMaxPlayers());
 		Bukkit.getPluginManager().callEvent(revent);
 
 		String response = ChatColor.stripColor(revent.getMotd())+"§"+bevent.getNumPlayers()+"§"+revent.getMaxPlayers();
