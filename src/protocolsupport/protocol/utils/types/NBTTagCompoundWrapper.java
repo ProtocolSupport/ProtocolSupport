@@ -1,5 +1,6 @@
 package protocolsupport.protocol.utils.types;
 
+import java.util.Collection;
 import java.util.Objects;
 
 import org.spigotmc.SneakyThrow;
@@ -52,6 +53,10 @@ public class NBTTagCompoundWrapper {
 	public static final int TYPE_STRING = 8;
 	public static final int TYPE_COMPOUND = 10;
 	public static final int TYPE_LIST = 9;
+
+	public Collection<String> getKeys() {
+		return tag.c();
+	}
 
 	public boolean hasKeyOfType(String tagname, int i) {
 		return tag.hasKeyOfType(tagname, i);

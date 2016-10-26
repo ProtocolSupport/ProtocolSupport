@@ -30,7 +30,6 @@ import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
-import net.minecraft.server.v1_10_R1.GameProfileSerializer;
 import net.minecraft.server.v1_10_R1.NBTCompressedStreamTools;
 import net.minecraft.server.v1_10_R1.NBTReadLimiter;
 import protocolsupport.api.ProtocolVersion;
@@ -40,6 +39,7 @@ import protocolsupport.protocol.legacyremapper.LegacyPotion;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
 import protocolsupport.protocol.typeskipper.id.SkippingTable;
+import protocolsupport.protocol.utils.GameProfileSerializer;
 import protocolsupport.protocol.utils.types.ItemStackWrapper;
 import protocolsupport.protocol.utils.types.MerchantData;
 import protocolsupport.protocol.utils.types.MerchantData.TradeOffer;
@@ -419,7 +419,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 	}
 
 	public static NBTTagCompoundWrapper createDragonHeadSkullTag() {
-		return NBTTagCompoundWrapper.wrap(GameProfileSerializer.serialize(NBTTagCompoundWrapper.createEmpty().unwrap(), dragonHeadGameProfile));
+		return GameProfileSerializer.serialize(dragonHeadGameProfile);
 	}
 
 	public static void transformSkull(NBTTagCompoundWrapper nbttagcompound) {
@@ -429,7 +429,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 
 	private static void transformSkull(NBTTagCompoundWrapper tag, String tagname, String newtagname) {
 		if (tag.hasKeyOfType(tagname, NBTTagCompoundWrapper.TYPE_COMPOUND)) {
-			GameProfile gameprofile = GameProfileSerializer.deserialize(tag.getCompound(tagname).unwrap());
+			GameProfile gameprofile = GameProfileSerializer.deserialize(tag.getCompound(tagname));
 			if (gameprofile.getName() != null) {
 				tag.setString(newtagname, gameprofile.getName());
 			} else {
