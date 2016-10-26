@@ -4,8 +4,10 @@ import java.net.InetSocketAddress;
 
 import org.bukkit.entity.Player;
 
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelOutboundHandler;
+import io.netty.util.AttributeKey;
 import net.minecraft.server.v1_10_R1.CancelledPacketHandleException;
 import net.minecraft.server.v1_10_R1.NetworkManager;
 import net.minecraft.server.v1_10_R1.Packet;
@@ -17,10 +19,20 @@ import protocolsupport.utils.netty.ChannelUtils;
 
 public class ConnectionImpl extends Connection {
 
+	private static final AttributeKey<ConnectionImpl> key = AttributeKey.valueOf("PSConnectionImpl");
+
+	public static ConnectionImpl getFromChannel(Channel channel) {
+		return channel.attr(key).get();
+	}
+
 	private final NetworkManager networkmanager;
 	public ConnectionImpl(NetworkManager networkmanager, ProtocolVersion version) {
 		super(version);
 		this.networkmanager = networkmanager;
+	}
+
+	public void storeInChannel(Channel channel) {
+		channel.attr(key).set(this);
 	}
 
 	@Override

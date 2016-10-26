@@ -56,9 +56,9 @@ import net.minecraft.server.v1_10_R1.PacketPlayOutCustomPayload;
 import net.minecraft.server.v1_10_R1.PacketPlayOutKickDisconnect;
 import net.minecraft.server.v1_10_R1.PacketPlayOutLogin;
 import net.minecraft.server.v1_10_R1.WorldType;
-import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.PlayerLoginFinishEvent;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.utils.ServerPlatformUtils;
 
@@ -85,7 +85,7 @@ public class LoginListenerPlay extends LoginListener implements PacketListenerPl
 		//tick connection keep now
 		keepConnection();
 		//now fire login event
-		PlayerLoginFinishEvent event = new PlayerLoginFinishEvent(ProtocolSupportAPI.getConnection(networkManager.getSocketAddress()), profile.getName(), profile.getId(), onlineMode);
+		PlayerLoginFinishEvent event = new PlayerLoginFinishEvent(ConnectionImpl.getFromChannel(networkManager.channel), profile.getName(), profile.getId(), onlineMode);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.isLoginDenied()) {
 			disconnect(event.getDenyLoginMessage());
@@ -138,7 +138,7 @@ public class LoginListenerPlay extends LoginListener implements PacketListenerPl
 	public void disconnect(final String s) {
 		try {
 			logger.info("Disconnecting " + d() + ": " + s);
-			if (ProtocolSupportAPI.getProtocolVersion(networkManager.getSocketAddress()).isBetween(ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_7_10)) {
+			if (ConnectionImpl.getFromChannel(networkManager.channel).getVersion().isBetween(ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_7_10)) {
 				//first send join game that will make client actually switch to game state
 				networkManager.sendPacket(new PacketPlayOutLogin(0, EnumGamemode.NOT_SET, false, 0, EnumDifficulty.EASY, 60, WorldType.NORMAL, false));
 				//send disconnect with a little delay

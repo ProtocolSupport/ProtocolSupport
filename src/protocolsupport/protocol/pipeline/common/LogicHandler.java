@@ -12,7 +12,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import io.netty.handler.timeout.ReadTimeoutException;
 import protocolsupport.api.Connection;
-import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.events.ConnectionCloseEvent;
 import protocolsupport.api.events.ConnectionOpenEvent;
 import protocolsupport.api.events.PlayerDisconnectEvent;
@@ -56,7 +55,7 @@ public class LogicHandler extends ChannelDuplexHandler {
 		super.exceptionCaught(ctx, e);
 		if (!ignoreExceptions.contains(e.getClass())) {
 			SocketAddress remoteaddr = ChannelUtils.getNetworkManagerSocketAddress(ctx.channel());
-			AsyncErrorLogger.INSTANCE.log(e, remoteaddr, ProtocolSupportAPI.getProtocolVersion(remoteaddr));
+			AsyncErrorLogger.INSTANCE.log(e, remoteaddr, ConnectionImpl.getFromChannel(ctx.channel()).getVersion());
 		}
 	}
 

@@ -37,8 +37,8 @@ import net.minecraft.server.v1_10_R1.PacketLoginOutDisconnect;
 import net.minecraft.server.v1_10_R1.PacketLoginOutEncryptionBegin;
 import net.minecraft.server.v1_10_R1.PacketLoginOutSetCompression;
 import protocolsupport.ProtocolSupport;
-import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.events.PlayerLoginStartEvent;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.common.PacketCompressor;
 import protocolsupport.protocol.pipeline.common.PacketDecompressor;
@@ -166,7 +166,7 @@ public abstract class AbstractLoginListener extends LoginListener {
 					profile = packetlogininstart.a();
 
 					PlayerLoginStartEvent event = new PlayerLoginStartEvent(
-						ProtocolSupportAPI.getConnection(networkManager.getSocketAddress()),
+						ConnectionImpl.getFromChannel(networkManager.channel),
 						profile.getName(),
 						isOnlineMode,
 						useOnlineModeUUID,

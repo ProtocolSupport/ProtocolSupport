@@ -29,6 +29,7 @@ public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 		NetworkManager networkmanager = ChannelUtils.getNetworkManager(channel);
 		networkmanager.setPacketListener(new FakePacketListener());
 		ConnectionImpl connection = new ConnectionImpl(networkmanager, ProtocolVersion.UNKNOWN);
+		connection.storeInChannel(channel);
 		ProtocolStorage.setConnection(channel.remoteAddress(), connection);
 		ChannelPipeline pipeline = channel.pipeline();
 		pipeline.addAfter(ChannelHandlers.READ_TIMEOUT, ChannelHandlers.INITIAL_DECODER, new InitialPacketDecoder());

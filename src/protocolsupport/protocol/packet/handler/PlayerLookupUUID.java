@@ -22,6 +22,7 @@ import com.mojang.authlib.properties.PropertyMap;
 
 import protocolsupport.api.events.PlayerPropertiesResolveEvent;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.utils.MinecraftEncryption;
 import protocolsupport.utils.ServerPlatformUtils;
 
@@ -75,7 +76,7 @@ public class PlayerLookupUUID {
 		for (Property property : propertymap.values()) {
 			properties.add(new ProfileProperty(property.getName(), property.getValue(), property.getSignature()));
 		}
-		PlayerPropertiesResolveEvent propResolve = new PlayerPropertiesResolveEvent(saddress, playerName, properties);
+		PlayerPropertiesResolveEvent propResolve = new PlayerPropertiesResolveEvent(ConnectionImpl.getFromChannel(listener.getNetworkManager().channel), playerName, properties);
 		Bukkit.getPluginManager().callEvent(propResolve);
 		propertymap.clear();
 		for (ProfileProperty profileproperty : propResolve.getProperties().values()) {
