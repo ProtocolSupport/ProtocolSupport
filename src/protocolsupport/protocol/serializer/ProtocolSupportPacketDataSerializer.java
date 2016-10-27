@@ -397,16 +397,16 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 		return itemstack;
 	}
 
-	private NBTTagListWrapper filterEnchantList(NBTTagListWrapper enchList) {
+	private NBTTagListWrapper filterEnchantList(NBTTagListWrapper oldList) {
 		SkippingTable enchSkip = IdSkipper.ENCHANT.getTable(getVersion());
 		NBTTagListWrapper newList = NBTTagListWrapper.create();
-		for (int i = 0; i < enchList.size(); i++) {
-			NBTTagCompoundWrapper enchData = enchList.getCompound(i);
+		for (int i = 0; i < oldList.size(); i++) {
+			NBTTagCompoundWrapper enchData = oldList.getCompound(i);
 			if (!enchSkip.shouldSkip(enchData.getNumber("id") & 0xFFFF)) {
 				newList.addCompound(enchData);
 			}
 		}
-		return enchList;
+		return newList;
 	}
 
 	private static final GameProfile dragonHeadGameProfile = new GameProfile(UUIDTypeAdapter.fromString("d34aa2b831da4d269655e33c143f096c"), "EnderDragon");
