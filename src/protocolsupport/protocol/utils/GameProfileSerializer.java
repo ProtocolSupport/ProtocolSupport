@@ -14,8 +14,8 @@ import protocolsupport.protocol.utils.types.NBTTagListWrapper;
 
 public class GameProfileSerializer {
 
-	private static final String NAME_KEY = "name";
-	private static final String UUID_KEY = "id";
+	private static final String NAME_KEY = "Name";
+	private static final String UUID_KEY = "Id";
 	private static final String PROPERTIES_KEY = "Properties";
 	private static final String PROPERTY_VALUE_KEY = "Value";
 	private static final String PROPERTY_SIGNATURE_KEY = "Signature";
