@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import protocolsupport.commands.CommandHandler;
-import protocolsupport.commands.ReloadCommandRemover;
 import protocolsupport.injector.ServerInjector;
 import protocolsupport.injector.network.NettyInjector;
 import protocolsupport.logger.AsyncErrorLogger;
@@ -18,6 +17,7 @@ import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
 import protocolsupport.protocol.typeskipper.string.StringSkipper;
+import protocolsupport.server.listeners.CommandListener;
 import protocolsupport.server.listeners.PlayerListener;
 import protocolsupport.utils.ServerPlatformUtils;
 import protocolsupport.utils.netty.Allocator;
@@ -45,7 +45,6 @@ public class ProtocolSupport extends JavaPlugin {
 			SpecificRemapper.init();
 			ServerInjector.inject();
 			NettyInjector.inject();
-			ReloadCommandRemover.remove();
 			IdRemapper.init();
 			BlockStorageReader.init();
 		} catch (Throwable t) {
@@ -58,6 +57,7 @@ public class ProtocolSupport extends JavaPlugin {
 	public void onEnable() {
 		getCommand("protocolsupport").setExecutor(new CommandHandler());
 		getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+		getServer().getPluginManager().registerEvents(new CommandListener(), this);
 	}
 
 	@Override
