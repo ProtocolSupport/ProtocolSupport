@@ -60,6 +60,10 @@ public enum SpecificRemapper {
 		.addRemap(3, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersion.MINECRAFT_1_8)
 		.addRemap(11, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.RANGE_1_6_1_7)
 		.addRemap(6, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_6),
+		//hand use
+		new Mapping(6)
+		.addRemap(6, ValueRemapperNoOp.BYTE, ProtocolVersion.MINECRAFT_1_10)
+		.addRemap(5, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9),
 		//health
 		new Mapping(7)
 		.addRemap(6, ValueRemapperNoOp.FLOAT, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_9_4, ProtocolVersion.MINECRAFT_1_6_1)),
