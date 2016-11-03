@@ -6,6 +6,7 @@ import java.net.SocketAddress;
 import java.text.MessageFormat;
 
 import org.apache.logging.log4j.LogManager;
+import org.bukkit.Bukkit;
 import org.spigotmc.SpigotConfig;
 
 import com.google.gson.Gson;
@@ -22,6 +23,7 @@ import net.minecraft.server.v1_10_R1.PacketHandshakingInListener;
 import net.minecraft.server.v1_10_R1.PacketHandshakingInSetProtocol;
 import net.minecraft.server.v1_10_R1.PacketLoginOutDisconnect;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.events.ConnectionHandshakeEvent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.protocol.storage.ThrottleTracker;
@@ -72,7 +74,8 @@ public abstract class AbstractHandshakeListener implements PacketHandshakingInLi
 					});
 					break;
 				}
-				//bungee login handling
+				ConnectionImpl connection = ConnectionImpl.getFromChannel(networkManager.channel);
+				//bungee spoofed data handling
 				if (SpigotConfig.bungee) {
 					final String[] split = packethandshakinginsetprotocol.hostname.split("\u0000");
 					if ((split.length != 3) && (split.length != 4)) {
@@ -86,15 +89,17 @@ public abstract class AbstractHandshakeListener implements PacketHandshakingInLi
 						return;
 					}
 					packethandshakinginsetprotocol.hostname = split[0];
-					SocketAddress oldaddress = networkManager.getSocketAddress();
-					ConnectionImpl connection = ProtocolStorage.removeConnection(oldaddress);
-					SocketAddress newaddress = new InetSocketAddress(split[1], ((InetSocketAddress) oldaddress).getPort());
-					networkManager.l = newaddress;
-					ProtocolStorage.setConnection(newaddress, connection);
+					changeRemoteAddress(connection, new InetSocketAddress(split[1], connection.getAddress().getPort()));
 					networkManager.spoofedUUID = UUIDTypeAdapter.fromString(split[2]);
 					if (split.length == 4) {
 						networkManager.spoofedProfile = gson.fromJson(split[3], Property[].class);
 					}
+				}
+				//ps handshake event
+				ConnectionHandshakeEvent event = new ConnectionHandshakeEvent(connection, packethandshakinginsetprotocol.hostname);
+				Bukkit.getPluginManager().callEvent(event);
+				if (event.getSpoofedAddress() != null) {
+					changeRemoteAddress(connection, event.getSpoofedAddress());
 				}
 				//switch to login stage
 				networkManager.setPacketListener(getLoginListener(networkManager, packethandshakinginsetprotocol.hostname + ":" + packethandshakinginsetprotocol.port));
@@ -110,6 +115,13 @@ public abstract class AbstractHandshakeListener implements PacketHandshakingInLi
 				throw new UnsupportedOperationException("Invalid intention " + packethandshakinginsetprotocol.a());
 			}
 		}
+	}
+
+	protected void changeRemoteAddress(ConnectionImpl connection, InetSocketAddress newRemote) {
+		SocketAddress oldaddress = networkManager.getSocketAddress();
+		ProtocolStorage.removeConnection(oldaddress);
+		networkManager.l = newRemote;
+		ProtocolStorage.setConnection(newRemote, connection);
 	}
 
 	@Override
