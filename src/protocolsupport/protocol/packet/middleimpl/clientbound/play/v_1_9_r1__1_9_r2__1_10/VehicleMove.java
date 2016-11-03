@@ -14,7 +14,7 @@ public class VehicleMove extends MiddleVehicleMove<RecyclableCollection<ClientBo
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_VEHICLE_MOVE, version);
 		serializer.writeDouble(x);
 		serializer.writeDouble(y);
-		serializer.writeDouble(y);
+		serializer.writeDouble(z);
 		serializer.writeFloat(yaw);
 		serializer.writeFloat(pitch);
 		return RecyclableSingletonList.create(serializer);
