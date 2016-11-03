@@ -11,7 +11,7 @@ public class EntityAction extends MiddleEntityAction {
 		entityId = serializer.readVarInt();
 		actionId = serializer.readVarInt();
 		jumpBoost = serializer.readVarInt();
-		if (serializer.getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_8) && actionId == 6) {
+		if (serializer.getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_8) && (actionId == 6)) {
 			actionId = 7;
 		}
 	}

@@ -96,6 +96,7 @@ public class LoginListenerPlay implements PacketLoginInListener, PacketListenerP
 		this.hostname = hostname;
 	}
 
+	@Override
 	public GameProfile getProfile() {
 		return profile;
 	}
@@ -204,7 +205,7 @@ public class LoginListenerPlay implements PacketLoginInListener, PacketListenerP
 			if (!hasExpired(ipban)) {
 				event.disallow(PlayerLoginEvent.Result.KICK_BANNED, reason);
 			}
-		} else if (playerlist.players.size() >= playerlist.getMaxPlayers() && !playerlist.f(gameprofile)) {
+		} else if ((playerlist.players.size() >= playerlist.getMaxPlayers()) && !playerlist.f(gameprofile)) {
 			event.disallow(PlayerLoginEvent.Result.KICK_FULL, SpigotConfig.serverFullMessage);
 		}
 		Bukkit.getServer().getPluginManager().callEvent(event);
@@ -216,9 +217,9 @@ public class LoginListenerPlay implements PacketLoginInListener, PacketListenerP
 		return entity;
 	}
 
-	private static boolean hasExpired(ExpirableListEntry<?> entry) {                   
+	private static boolean hasExpired(ExpirableListEntry<?> entry) {
 		Date expireDate = entry.getExpires();
-		return expireDate != null && expireDate.before(new Date());
+		return (expireDate != null) && expireDate.before(new Date());
 	}
 
 	@Override

@@ -1,11 +1,11 @@
 package protocolsupport.server.listeners;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class CommandListener implements Listener {
 	private final Set<String> blacklist = new HashSet<>();

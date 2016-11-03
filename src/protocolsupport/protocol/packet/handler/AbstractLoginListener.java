@@ -92,6 +92,7 @@ public abstract class AbstractLoginListener implements PacketLoginInListener, IT
 		ThreadLocalRandom.current().nextBytes(randomBytes);
 	}
 
+	@Override
 	public GameProfile getProfile() {
 		return profile;
 	}

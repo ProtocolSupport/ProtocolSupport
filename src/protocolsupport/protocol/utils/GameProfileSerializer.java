@@ -1,8 +1,8 @@
 package protocolsupport.protocol.utils;
 
 import java.util.Collection;
-import java.util.UUID;
 import java.util.Map.Entry;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -59,7 +59,7 @@ public class GameProfileSerializer {
 			}
 		} catch (Throwable t) {
 		}
-		if (StringUtils.isEmpty(name) && uuid == null) {
+		if (StringUtils.isEmpty(name) && (uuid == null)) {
 			return null;
 		}
 		GameProfile gameProfile = new GameProfile(uuid, name);
