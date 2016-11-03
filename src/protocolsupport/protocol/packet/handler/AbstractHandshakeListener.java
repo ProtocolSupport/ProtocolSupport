@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.handler;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.text.MessageFormat;
 
 import org.apache.logging.log4j.LogManager;
 import org.spigotmc.SpigotConfig;
@@ -15,26 +16,23 @@ import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.minecraft.server.v1_10_R1.ChatComponentText;
 import net.minecraft.server.v1_10_R1.EnumProtocol;
-import net.minecraft.server.v1_10_R1.HandshakeListener;
 import net.minecraft.server.v1_10_R1.IChatBaseComponent;
-import net.minecraft.server.v1_10_R1.LoginListener;
 import net.minecraft.server.v1_10_R1.NetworkManager;
+import net.minecraft.server.v1_10_R1.PacketHandshakingInListener;
 import net.minecraft.server.v1_10_R1.PacketHandshakingInSetProtocol;
 import net.minecraft.server.v1_10_R1.PacketLoginOutDisconnect;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.protocol.storage.ThrottleTracker;
-import protocolsupport.utils.ServerPlatformUtils;
 
-public abstract class AbstractHandshakeListener extends HandshakeListener {
+public abstract class AbstractHandshakeListener implements PacketHandshakingInListener {
 
 	private static final Gson gson = new Gson();
 
 	protected final NetworkManager networkManager;
 
 	public AbstractHandshakeListener(NetworkManager networkmanager) {
-		super(ServerPlatformUtils.getServer(), networkmanager);
 		this.networkManager = networkmanager;
 	}
 
@@ -44,6 +42,7 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 		switch (packethandshakinginsetprotocol.a()) {
 			case LOGIN: {
 				networkManager.setProtocol(EnumProtocol.LOGIN);
+				//check connection throttle
 				try {
 					final InetAddress address = ((InetSocketAddress) networkManager.getSocketAddress()).getAddress();
 					if (ThrottleTracker.isEnabled() && !SpigotConfig.bungee) {
@@ -61,9 +60,10 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 				} catch (Throwable t) {
 					LogManager.getLogger().debug("Failed to check connection throttle", t);
 				}
+				//check client version (may be not latest if connection was from snapshot)
 				ProtocolVersion clientversion = ProtocolVersion.fromId(packethandshakinginsetprotocol.b());
 				if (clientversion != ProtocolVersion.getLatest()) {
-					final ChatComponentText chatcomponenttext = new ChatComponentText("Outdated server, max supported version: " + ProtocolVersion.getLatest());
+					final ChatComponentText chatcomponenttext = new ChatComponentText(MessageFormat.format(SpigotConfig.outdatedServerMessage.replaceAll("'", "''"), "1.10.2"));
 					this.networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext), new GenericFutureListener<Future<? super Void>>() {
 						@Override
 						public void operationComplete(Future<? super Void> arg0)  {
@@ -72,7 +72,7 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 					});
 					break;
 				}
-				networkManager.setPacketListener(getLoginListener(networkManager));
+				//bungee login handling
 				if (SpigotConfig.bungee) {
 					final String[] split = packethandshakinginsetprotocol.hostname.split("\u0000");
 					if ((split.length != 3) && (split.length != 4)) {
@@ -96,12 +96,14 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 						networkManager.spoofedProfile = gson.fromJson(split[3], Property[].class);
 					}
 				}
-				((LoginListener) networkManager.i()).hostname = packethandshakinginsetprotocol.hostname + ":" + packethandshakinginsetprotocol.port;
+				//switch to login stage
+				networkManager.setPacketListener(getLoginListener(networkManager, packethandshakinginsetprotocol.hostname + ":" + packethandshakinginsetprotocol.port));
 				break;
 			}
 			case STATUS: {
+				//switch to status stage
 				networkManager.setProtocol(EnumProtocol.STATUS);
-				networkManager.setPacketListener(new StatusListener(ServerPlatformUtils.getServer(), networkManager));
+				networkManager.setPacketListener(new StatusListener(networkManager));
 				break;
 			}
 			default: {
@@ -114,6 +116,6 @@ public abstract class AbstractHandshakeListener extends HandshakeListener {
 	public void a(final IChatBaseComponent ichatbasecomponent) {
 	}
 
-	public abstract AbstractLoginListener getLoginListener(NetworkManager networkManager);
+	public abstract AbstractLoginListener getLoginListener(NetworkManager networkManager, String hostname);
 
 }

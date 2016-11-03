@@ -25,9 +25,9 @@ import net.minecraft.server.v1_10_R1.EntityPlayer;
 import net.minecraft.server.v1_10_R1.IChatBaseComponent;
 import net.minecraft.server.v1_10_R1.MinecraftServer;
 import net.minecraft.server.v1_10_R1.NetworkManager;
+import net.minecraft.server.v1_10_R1.PacketStatusInListener;
 import net.minecraft.server.v1_10_R1.PacketStatusInPing;
 import net.minecraft.server.v1_10_R1.PacketStatusInStart;
-import net.minecraft.server.v1_10_R1.PacketStatusListener;
 import net.minecraft.server.v1_10_R1.PacketStatusOutPong;
 import net.minecraft.server.v1_10_R1.PacketStatusOutServerInfo;
 import net.minecraft.server.v1_10_R1.ServerPing;
@@ -37,18 +37,17 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.utils.ServerPlatformUtils;
 
-public class StatusListener extends PacketStatusListener {
+public class StatusListener implements PacketStatusInListener {
 
 	private static final IChatBaseComponent infoAlreadySent = new ChatComponentText("Status request has already been handled.");
+	private static final MinecraftServer server = ServerPlatformUtils.getServer();
 
-	private final MinecraftServer server;
-	private final NetworkManager nmanager;
+	private final NetworkManager networkManager;
 
-	public StatusListener(MinecraftServer minecraftserver, NetworkManager networkmanager) {
-		super(minecraftserver, networkmanager);
-		this.server = minecraftserver;
-		this.nmanager = networkmanager;
+	public StatusListener(NetworkManager networkmanager) {
+		this.networkManager = networkmanager;
 	}
 
 	private static final UUID profileUUID = UUID.randomUUID();
@@ -58,11 +57,11 @@ public class StatusListener extends PacketStatusListener {
 	@Override
 	public void a(PacketStatusInStart packetstatusinstart) {
 		if (sentInfo) {
-			nmanager.close(infoAlreadySent);
+			networkManager.close(infoAlreadySent);
 		}
 		sentInfo = true;
 
-		InetSocketAddress addr = (InetSocketAddress) nmanager.getSocketAddress();
+		InetSocketAddress addr = (InetSocketAddress) networkManager.getSocketAddress();
 
 		ArrayList<EntityPlayer> players = new ArrayList<>(server.getPlayerList().players);
 
@@ -83,7 +82,7 @@ public class StatusListener extends PacketStatusListener {
 		}
 
 		ServerPingResponseEvent revent = new ServerPingResponseEvent(
-			ConnectionImpl.getFromChannel(nmanager.channel), new ProtocolInfo(ProtocolVersion.getLatest(), server.getServerModName() + " " + server.getVersion()),
+			ConnectionImpl.getFromChannel(networkManager.channel), new ProtocolInfo(ProtocolVersion.getLatest(), server.getServerModName() + " " + server.getVersion()),
 			icon, motd, maxPlayers, profiles
 		);
 		Bukkit.getPluginManager().callEvent(revent);
@@ -110,13 +109,17 @@ public class StatusListener extends PacketStatusListener {
 		serverping.setPlayerSample(playerSample);
 		serverping.setServerInfo(new ServerData(info.getName(), info.getId()));
 
-		nmanager.sendPacket(new PacketStatusOutServerInfo(serverping));
+		networkManager.sendPacket(new PacketStatusOutServerInfo(serverping));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void a(PacketStatusInPing packetstatusinping) {
-		nmanager.sendPacket(new PacketStatusOutPong(packetstatusinping.a()), ChannelFutureListener.CLOSE);
+		networkManager.sendPacket(new PacketStatusOutPong(packetstatusinping.a()), ChannelFutureListener.CLOSE);
+	}
+
+	@Override
+	public void a(IChatBaseComponent msg) {
 	}
 
 	public static class InternalServerListPingEvent extends ServerListPingEvent {

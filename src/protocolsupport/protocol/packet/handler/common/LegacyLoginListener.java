@@ -10,8 +10,8 @@ import protocolsupport.protocol.utils.MinecraftEncryption;
 
 public class LegacyLoginListener extends AbstractLoginListener {
 
-	public LegacyLoginListener(NetworkManager networkmanager) {
-		super(networkmanager);
+	public LegacyLoginListener(NetworkManager networkmanager, String hostname) {
+		super(networkmanager, hostname);
 	}
 
 	@Override

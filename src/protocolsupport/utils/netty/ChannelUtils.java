@@ -12,8 +12,7 @@ import io.netty.handler.codec.DecoderException;
 import net.minecraft.server.v1_10_R1.NetworkManager;
 import net.minecraft.server.v1_10_R1.PacketListener;
 import net.minecraft.server.v1_10_R1.PlayerConnection;
-import protocolsupport.protocol.packet.handler.AbstractLoginListener;
-import protocolsupport.protocol.packet.handler.LoginListenerPlay;
+import protocolsupport.protocol.packet.handler.IHasProfile;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 
 public class ChannelUtils {
@@ -34,13 +33,11 @@ public class ChannelUtils {
 		NetworkManager networkManager = ChannelUtils.getNetworkManager(channel);
 		String username = null;
 		PacketListener listener = networkManager.i();
-		if (listener instanceof AbstractLoginListener) {
-			GameProfile profile = ((AbstractLoginListener) listener).getProfile();
+		if (listener instanceof IHasProfile) {
+			GameProfile profile = ((IHasProfile) listener).getProfile();
 			if (profile != null) {
 				username = profile.getName();
 			}
-		} else if (listener instanceof LoginListenerPlay) {
-			username = ((LoginListenerPlay) listener).getProfile().getName();
 		} else if (listener instanceof PlayerConnection) {
 			username = ((PlayerConnection) listener).player.getProfile().getName();
 		}

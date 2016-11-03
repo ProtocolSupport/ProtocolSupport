@@ -11,8 +11,8 @@ public class LegacyHandshakeListener extends AbstractHandshakeListener {
 	}
 
 	@Override
-	public AbstractLoginListener getLoginListener(NetworkManager networkManager) {
-		return new LegacyLoginListener(networkManager);
+	public AbstractLoginListener getLoginListener(NetworkManager networkManager, String hostname) {
+		return new LegacyLoginListener(networkManager, hostname);
 	}
 
 }

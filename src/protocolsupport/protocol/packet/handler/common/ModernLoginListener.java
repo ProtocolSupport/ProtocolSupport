@@ -8,8 +8,8 @@ import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 public class ModernLoginListener extends AbstractLoginListener {
 
 	private boolean hasCompression;
-	public ModernLoginListener(NetworkManager networkmanager, boolean hasCompression) {
-		super(networkmanager);
+	public ModernLoginListener(NetworkManager networkmanager, String hostname, boolean hasCompression) {
+		super(networkmanager, hostname);
 		this.hasCompression = hasCompression;
 	}
 

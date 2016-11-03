@@ -13,8 +13,8 @@ public class ModernHandshakeListener extends AbstractHandshakeListener {
 	}
 
 	@Override
-	public AbstractLoginListener getLoginListener(NetworkManager networkManager) {
-		return new ModernLoginListener(networkManager, hasCompression);
+	public AbstractLoginListener getLoginListener(NetworkManager networkManager, String hostname) {
+		return new ModernLoginListener(networkManager, hostname, hasCompression);
 	}
 
 }

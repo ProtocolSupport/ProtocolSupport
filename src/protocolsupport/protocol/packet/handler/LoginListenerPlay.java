@@ -20,7 +20,6 @@ import io.netty.buffer.Unpooled;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.minecraft.server.v1_10_R1.ChatComponentText;
-import net.minecraft.server.v1_10_R1.EntityHuman;
 import net.minecraft.server.v1_10_R1.EntityPlayer;
 import net.minecraft.server.v1_10_R1.EnumDifficulty;
 import net.minecraft.server.v1_10_R1.EnumGamemode;
@@ -78,15 +77,15 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.utils.ServerPlatformUtils;
 
-public class LoginListenerPlay implements PacketLoginInListener, PacketListenerPlayIn, ITickable {
+public class LoginListenerPlay implements PacketLoginInListener, PacketListenerPlayIn, ITickable, IHasProfile {
 
 	protected static final Logger logger = LogManager.getLogger(LoginListener.class);
 	protected static final MinecraftServer server = ServerPlatformUtils.getServer();
 
-	private final NetworkManager networkManager;
-	private final GameProfile profile;
-	private final boolean onlineMode;
-	private final String hostname;
+	protected final NetworkManager networkManager;
+	protected final GameProfile profile;
+	protected final boolean onlineMode;
+	protected final String hostname;
 
 	protected boolean ready;
 
@@ -151,7 +150,9 @@ public class LoginListenerPlay implements PacketLoginInListener, PacketListenerP
 	private static final SimpleDateFormat banDateFormat = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
 	public EntityPlayer attemptLogin(GameProfile gameprofile, String hostname) {
 		PlayerList playerlist = server.getPlayerList();
-		UUID uuid = EntityHuman.a(gameprofile);
+		UUID uuid = gameprofile.getId();
+
+		//find players with same uuid
 		ArrayList<EntityPlayer> toKick = Lists.newArrayList();
 		for (int i = 0; i < playerlist.players.size(); ++i) {
 			EntityPlayer entityplayer = playerlist.players.get(i);
@@ -159,6 +160,8 @@ public class LoginListenerPlay implements PacketLoginInListener, PacketListenerP
 				toKick.add(entityplayer);
 			}
 		}
+
+		//kick them
 		if (!toKick.isEmpty()) {
 			for (EntityPlayer entityplayer : toKick) {
 				playerlist.playerFileData.save(entityplayer);
@@ -166,13 +169,19 @@ public class LoginListenerPlay implements PacketLoginInListener, PacketListenerP
 			}
 			return null;
 		}
+
+		//prepare player entity
 		EntityPlayer entity = new EntityPlayer(server, server.getWorldServer(0), gameprofile, new PlayerInteractManager(server.getWorldServer(0)));
+
+		//ps sync login event
 		PlayerSyncLoginEvent syncloginevent = new PlayerSyncLoginEvent(ConnectionImpl.getFromChannel(networkManager.channel), entity.getBukkitEntity());
 		Bukkit.getPluginManager().callEvent(syncloginevent);
 		if (syncloginevent.isLoginDenied()) {
 			disconnect(syncloginevent.getDenyLoginMessage());
 			return null;
 		}
+
+		//bukkit sync login event
 		InetSocketAddress socketaddress = (InetSocketAddress) networkManager.getSocketAddress();
 		PlayerLoginEvent event = new PlayerLoginEvent(entity.getBukkitEntity(), hostname, socketaddress.getAddress(), ((InetSocketAddress) networkManager.getRawAddress()).getAddress());
 		GameProfileBanEntry profileban = playerlist.getProfileBans().get(gameprofile);
@@ -203,6 +212,7 @@ public class LoginListenerPlay implements PacketLoginInListener, PacketListenerP
 			disconnect(event.getKickMessage());
 			return null;
 		}
+
 		return entity;
 	}
 
@@ -224,8 +234,7 @@ public class LoginListenerPlay implements PacketLoginInListener, PacketListenerP
 		try {
 			logger.info("Disconnecting " + getConnectionRepr() + ": " + s);
 			if (ConnectionImpl.getFromChannel(networkManager.channel).getVersion().isBetween(ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_7_10)) {
-				// first send join game that will make client actually switch to
-				// game state
+				// first send join game that will make client actually switch to game state
 				networkManager.sendPacket(new PacketPlayOutLogin(0, EnumGamemode.NOT_SET, false, 0, EnumDifficulty.EASY, 60, WorldType.NORMAL, false));
 				// send disconnect with a little delay
 				networkManager.channel.eventLoop().schedule(new Runnable() {

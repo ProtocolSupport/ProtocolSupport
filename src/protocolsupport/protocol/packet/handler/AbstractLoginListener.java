@@ -2,11 +2,11 @@ package protocolsupport.protocol.packet.handler;
 
 import java.security.PrivateKey;
 import java.util.Arrays;
-import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -28,10 +28,12 @@ import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.minecraft.server.v1_10_R1.ChatComponentText;
 import net.minecraft.server.v1_10_R1.IChatBaseComponent;
+import net.minecraft.server.v1_10_R1.ITickable;
 import net.minecraft.server.v1_10_R1.LoginListener;
 import net.minecraft.server.v1_10_R1.MinecraftServer;
 import net.minecraft.server.v1_10_R1.NetworkManager;
 import net.minecraft.server.v1_10_R1.PacketLoginInEncryptionBegin;
+import net.minecraft.server.v1_10_R1.PacketLoginInListener;
 import net.minecraft.server.v1_10_R1.PacketLoginInStart;
 import net.minecraft.server.v1_10_R1.PacketLoginOutDisconnect;
 import net.minecraft.server.v1_10_R1.PacketLoginOutEncryptionBegin;
@@ -46,7 +48,7 @@ import protocolsupport.utils.ServerPlatformUtils;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
 
-public abstract class AbstractLoginListener extends LoginListener {
+public abstract class AbstractLoginListener implements PacketLoginInListener, ITickable, IHasProfile {
 
 	private static final int loginThreads = Utils.getJavaPropertyValue("loginthreads", Integer.MAX_VALUE, Converter.STRING_TO_INT);
 	private static final int loginThreadKeepAlive = Utils.getJavaPropertyValue("loginthreadskeepalive", 60, Converter.STRING_TO_INT);
@@ -70,25 +72,28 @@ public abstract class AbstractLoginListener extends LoginListener {
 	);
 
 	protected static final Logger logger = LogManager.getLogger(LoginListener.class);
-	protected static final Random random = new Random();
 	protected final static MinecraftServer server = ServerPlatformUtils.getServer();
 
+	protected final NetworkManager networkManager;
+	protected final String hostname;
 	protected final byte[] randomBytes = new byte[4];
 	protected int loginTicks;
 	protected SecretKey loginKey;
 	protected LoginState state = LoginState.HELLO;
 	protected GameProfile profile;
 
-	protected boolean isOnlineMode;
-	protected boolean useOnlineModeUUID;
-	protected UUID forcedUUID;
+	protected boolean isOnlineMode = server.getOnlineMode();
+	protected boolean useOnlineModeUUID = isOnlineMode;
+	protected UUID forcedUUID = null;
 
-	public AbstractLoginListener(final NetworkManager networkmanager) {
-		super(server, networkmanager);
-		random.nextBytes(randomBytes);
-		isOnlineMode = server.getOnlineMode();
-		useOnlineModeUUID = isOnlineMode;
-		forcedUUID = null;
+	public AbstractLoginListener(NetworkManager networkmanager, String hostname) {
+		this.networkManager = networkmanager;
+		this.hostname = hostname;
+		ThreadLocalRandom.current().nextBytes(randomBytes);
+	}
+
+	public GameProfile getProfile() {
+		return profile;
 	}
 
 	@Override
@@ -99,11 +104,10 @@ public abstract class AbstractLoginListener extends LoginListener {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
-	public void disconnect(final String s) {
+	public void disconnect(String s) {
 		try {
-			logger.info("Disconnecting " + d() + ": " + s);
-			final ChatComponentText chatcomponenttext = new ChatComponentText(s);
+			logger.info("Disconnecting " + getConnectionRepr() + ": " + s);
+			ChatComponentText chatcomponenttext = new ChatComponentText(s);
 			networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext), new GenericFutureListener<Future<? super Void>>() {
 				@Override
 				public void operationComplete(Future<? super Void> future)  {
@@ -115,8 +119,7 @@ public abstract class AbstractLoginListener extends LoginListener {
 		}
 	}
 
-	@Override
-	public void initUUID() {
+	public void initOfflineModeGameProfile() {
 		profile = new GameProfile(networkManager.spoofedUUID != null ? networkManager.spoofedUUID : generateOffileModeUUID(), profile.getName());
 		if (networkManager.spoofedProfile != null) {
 			for (Property property : networkManager.spoofedProfile) {
@@ -127,11 +130,6 @@ public abstract class AbstractLoginListener extends LoginListener {
 
 	protected UUID generateOffileModeUUID() {
 		return UUID.nameUUIDFromBytes(("OfflinePlayer:" + profile.getName()).getBytes(Charsets.UTF_8));
-	}
-
-	@Override
-	public void b() {
-		throw new IllegalStateException("Should not reach here");
 	}
 
 	protected abstract boolean hasCompression();
@@ -147,11 +145,10 @@ public abstract class AbstractLoginListener extends LoginListener {
 
 	@Override
 	public void a(final IChatBaseComponent ichatbasecomponent) {
-		logger.info(d() + " lost connection: " + ichatbasecomponent.getText());
+		logger.info(getConnectionRepr() + " lost connection: " + ichatbasecomponent.getText());
 	}
 
-	@Override
-	public String d() {
+	public String getConnectionRepr() {
 		return (profile != null) ? (profile + " (" + networkManager.getSocketAddress() + ")") : networkManager.getSocketAddress().toString();
 	}
 
@@ -228,19 +225,6 @@ public abstract class AbstractLoginListener extends LoginListener {
 		return logger;
 	}
 
-
-	public GameProfile getProfile() {
-		return profile;
-	}
-
-	public void setProfile(GameProfile profile) {
-		this.profile = profile;
-	}
-
-	public GameProfile generateOfflineProfile(GameProfile current) {
-		return a(current);
-	}
-
 	@SuppressWarnings("unchecked")
 	public void setReadyToAccept() {
 		UUID newUUID = null;
@@ -273,15 +257,6 @@ public abstract class AbstractLoginListener extends LoginListener {
 		LoginListenerPlay listener = new LoginListenerPlay(networkManager, profile, isOnlineMode, hostname);
 		networkManager.setPacketListener(listener);
 		listener.finishLogin();
-	}
-
-	public SecretKey getLoginKey() {
-		return loginKey;
-	}
-
-
-	public NetworkManager getNetworkManager() {
-		return networkManager;
 	}
 
 	public enum LoginState {

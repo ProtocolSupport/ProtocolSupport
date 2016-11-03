@@ -7,11 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
+import java.util.concurrent.FutureTask;
 
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_10_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_10_R1.util.Waitable;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerPreLoginEvent;
 
@@ -38,77 +36,79 @@ public class PlayerLookupUUID {
 	}
 
 	public void run() {
-		final GameProfile gameprofile = listener.getProfile();
+		String joinName = listener.profile.getName();
 		try {
 			if (!isOnlineMode) {
-				listener.initUUID();
+				listener.initOfflineModeGameProfile();
 				fireLoginEvents();
 				return;
 			}
-			final String hash = new BigInteger(MinecraftEncryption.createHash(ServerPlatformUtils.getServer().O().getPublic(), listener.getLoginKey())).toString(16);
-			listener.setProfile(ServerPlatformUtils.getServer().ay().hasJoinedServer(new GameProfile(null, gameprofile.getName()), hash));
-			if (listener.getProfile() != null) {
+			String hash = new BigInteger(MinecraftEncryption.createHash(ServerPlatformUtils.getServer().O().getPublic(), listener.loginKey)).toString(16);
+			listener.profile = ServerPlatformUtils.getServer().ay().hasJoinedServer(new GameProfile(null, joinName), hash);
+			if (listener.profile != null) {
 				fireLoginEvents();
 			} else {
 				listener.disconnect("Failed to verify username!");
-				listener.getLogger().error("Username '" + gameprofile.getName() + "' tried to join with an invalid session");
+				listener.getLogger().error("Username '" + joinName + "' tried to join with an invalid session");
 			}
 		} catch (AuthenticationUnavailableException authenticationunavailableexception) {
 			listener.disconnect("Authentication servers are down. Please try again later, sorry!");
 			listener.getLogger().error("Couldn't verify username because servers are unavailable");
 		} catch (Exception exception) {
 			listener.disconnect("Failed to verify username!");
-			ServerPlatformUtils.getServer().server.getLogger().log(Level.WARNING, "Exception verifying " + gameprofile.getName(), exception);
+			listener.getLogger().error("Exception verifying " + joinName, exception);
 		}
 	}
 
 	private void fireLoginEvents() throws InterruptedException, ExecutionException  {
-		if (!listener.getNetworkManager().isConnected()) {
+		if (!listener.networkManager.isConnected()) {
 			return;
 		}
 
-		String playerName = listener.getProfile().getName();
-		InetSocketAddress saddress = (InetSocketAddress) listener.getNetworkManager().getSocketAddress();
+		String playerName = listener.profile.getName();
+		InetSocketAddress saddress = (InetSocketAddress) listener.networkManager.getSocketAddress();
 		InetAddress address = saddress.getAddress();
 
 		List<ProfileProperty> properties = new ArrayList<>();
-		PropertyMap propertymap = listener.getProfile().getProperties();
+		PropertyMap propertymap = listener.profile.getProperties();
 		for (Property property : propertymap.values()) {
 			properties.add(new ProfileProperty(property.getName(), property.getValue(), property.getSignature()));
 		}
-		PlayerPropertiesResolveEvent propResolve = new PlayerPropertiesResolveEvent(ConnectionImpl.getFromChannel(listener.getNetworkManager().channel), playerName, properties);
+		PlayerPropertiesResolveEvent propResolve = new PlayerPropertiesResolveEvent(ConnectionImpl.getFromChannel(listener.networkManager.channel), playerName, properties);
 		Bukkit.getPluginManager().callEvent(propResolve);
 		propertymap.clear();
 		for (ProfileProperty profileproperty : propResolve.getProperties().values()) {
 			propertymap.put(profileproperty.getName(), new Property(profileproperty.getName(), profileproperty.getValue(), profileproperty.getSignature()));
 		}
 
-		UUID uniqueId = listener.getProfile().getId();
-		final CraftServer server = ServerPlatformUtils.getServer().server;
-		final AsyncPlayerPreLoginEvent asyncEvent = new AsyncPlayerPreLoginEvent(playerName, address, uniqueId);
-		server.getPluginManager().callEvent(asyncEvent);
+		UUID uniqueId = listener.profile.getId();
+
+		AsyncPlayerPreLoginEvent asyncEvent = new AsyncPlayerPreLoginEvent(playerName, address, uniqueId);
+		Bukkit.getPluginManager().callEvent(asyncEvent);
+
+		PlayerPreLoginEvent syncEvent = new PlayerPreLoginEvent(playerName, address, uniqueId);
+		if (asyncEvent.getResult() != PlayerPreLoginEvent.Result.ALLOWED) {
+			syncEvent.disallow(asyncEvent.getResult(), asyncEvent.getKickMessage());
+		}
+
 		if (PlayerPreLoginEvent.getHandlerList().getRegisteredListeners().length != 0) {
-			final PlayerPreLoginEvent event = new PlayerPreLoginEvent(playerName, address, uniqueId);
-			if (asyncEvent.getResult() != PlayerPreLoginEvent.Result.ALLOWED) {
-				event.disallow(asyncEvent.getResult(), asyncEvent.getKickMessage());
-			}
-			final Waitable<PlayerPreLoginEvent.Result> waitable = new Waitable<PlayerPreLoginEvent.Result>() {
-				@Override
-				protected PlayerPreLoginEvent.Result evaluate() {
-					server.getPluginManager().callEvent(event);
-					return event.getResult();
-				}
-			};
-			ServerPlatformUtils.getServer().processQueue.add(waitable);
-			if (waitable.get() != PlayerPreLoginEvent.Result.ALLOWED) {
-				listener.disconnect(event.getKickMessage());
+			FutureTask<PlayerPreLoginEvent.Result> task = new FutureTask<>(() -> {
+				Bukkit.getPluginManager().callEvent(syncEvent);
+				return syncEvent.getResult();
+			});
+			ServerPlatformUtils.getServer().processQueue.add(task);
+			if (task.get() != PlayerPreLoginEvent.Result.ALLOWED) {
+				listener.disconnect(syncEvent.getKickMessage());
 				return;
 			}
-		} else if (asyncEvent.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED) {
-			listener.disconnect(asyncEvent.getKickMessage());
+		}
+
+		if (syncEvent.getResult() != PlayerPreLoginEvent.Result.ALLOWED) {
+			listener.disconnect(syncEvent.getKickMessage());
 			return;
 		}
-		listener.getLogger().info("UUID of player " + listener.getProfile().getName() + " is " + listener.getProfile().getId());
+
+		listener.getLogger().info("UUID of player " + listener.profile.getName() + " is " + listener.profile.getId());
 		listener.setReadyToAccept();
 	}
 
