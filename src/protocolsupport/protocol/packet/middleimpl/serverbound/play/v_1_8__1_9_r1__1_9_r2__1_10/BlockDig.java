@@ -7,7 +7,7 @@ public class BlockDig extends MiddleBlockDig {
 
 	@Override
 	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) {
-		status = serializer.readUnsignedByte();
+		status = serializer.readVarInt();
 		position = serializer.readPosition();
 		face = serializer.readUnsignedByte();
 	}
