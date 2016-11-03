@@ -9,9 +9,13 @@ public abstract class PlayerEvent extends ConnectionEvent {
 
 	private final String username;
 
-	public PlayerEvent(Connection connection, String username) {
-		super(connection);
+	public PlayerEvent(Connection connection, String username, boolean async) {
+		super(connection, async);
 		this.username = username;
+	}
+
+	public PlayerEvent(Connection connection, String username) {
+		this(connection, username, true);
 	}
 
 	@Deprecated

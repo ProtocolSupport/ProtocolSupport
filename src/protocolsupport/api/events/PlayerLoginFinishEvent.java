@@ -8,7 +8,7 @@ import org.bukkit.event.HandlerList;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
 
-public class PlayerLoginFinishEvent extends PlayerEvent {
+public class PlayerLoginFinishEvent extends PlayerAbstractLoginEvent {
 
 	private final UUID uuid;
 	private final boolean onlineMode;
@@ -30,21 +30,6 @@ public class PlayerLoginFinishEvent extends PlayerEvent {
 
 	public boolean isOnlineMode() {
 		return onlineMode;
-	}
-
-
-	private String denyLoginMessage;
-
-	public boolean isLoginDenied() {
-		return denyLoginMessage != null;
-	}
-
-	public String getDenyLoginMessage() {
-		return denyLoginMessage;
-	}
-
-	public void denyLogin(String message) {
-		this.denyLoginMessage = message;
 	}
 
 

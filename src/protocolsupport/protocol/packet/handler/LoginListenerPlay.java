@@ -1,28 +1,41 @@
 package protocolsupport.protocol.packet.handler;
 
+import java.net.InetSocketAddress;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.Bukkit;
+import org.bukkit.event.player.PlayerLoginEvent;
+import org.spigotmc.SpigotConfig;
 
+import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 
 import io.netty.buffer.Unpooled;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.minecraft.server.v1_10_R1.ChatComponentText;
+import net.minecraft.server.v1_10_R1.EntityHuman;
 import net.minecraft.server.v1_10_R1.EntityPlayer;
 import net.minecraft.server.v1_10_R1.EnumDifficulty;
 import net.minecraft.server.v1_10_R1.EnumGamemode;
+import net.minecraft.server.v1_10_R1.ExpirableListEntry;
+import net.minecraft.server.v1_10_R1.GameProfileBanEntry;
 import net.minecraft.server.v1_10_R1.IChatBaseComponent;
 import net.minecraft.server.v1_10_R1.ITickable;
+import net.minecraft.server.v1_10_R1.IpBanEntry;
 import net.minecraft.server.v1_10_R1.LoginListener;
 import net.minecraft.server.v1_10_R1.MinecraftServer;
 import net.minecraft.server.v1_10_R1.NetworkManager;
 import net.minecraft.server.v1_10_R1.PacketDataSerializer;
 import net.minecraft.server.v1_10_R1.PacketListenerPlayIn;
 import net.minecraft.server.v1_10_R1.PacketLoginInEncryptionBegin;
+import net.minecraft.server.v1_10_R1.PacketLoginInListener;
 import net.minecraft.server.v1_10_R1.PacketLoginInStart;
 import net.minecraft.server.v1_10_R1.PacketLoginOutSuccess;
 import net.minecraft.server.v1_10_R1.PacketPlayInAbilities;
@@ -55,36 +68,45 @@ import net.minecraft.server.v1_10_R1.PacketPlayInWindowClick;
 import net.minecraft.server.v1_10_R1.PacketPlayOutCustomPayload;
 import net.minecraft.server.v1_10_R1.PacketPlayOutKickDisconnect;
 import net.minecraft.server.v1_10_R1.PacketPlayOutLogin;
+import net.minecraft.server.v1_10_R1.PlayerInteractManager;
+import net.minecraft.server.v1_10_R1.PlayerList;
 import net.minecraft.server.v1_10_R1.WorldType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.PlayerLoginFinishEvent;
+import protocolsupport.api.events.PlayerSyncLoginEvent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.utils.ServerPlatformUtils;
 
-public class LoginListenerPlay extends LoginListener implements PacketListenerPlayIn, ITickable {
+public class LoginListenerPlay implements PacketLoginInListener, PacketListenerPlayIn, ITickable {
 
 	protected static final Logger logger = LogManager.getLogger(LoginListener.class);
 	protected static final MinecraftServer server = ServerPlatformUtils.getServer();
 
+	private final NetworkManager networkManager;
 	private final GameProfile profile;
 	private final boolean onlineMode;
+	private final String hostname;
 
 	protected boolean ready;
 
 	public LoginListenerPlay(NetworkManager networkmanager, GameProfile profile, boolean onlineMode, String hostname) {
-		super(server, networkmanager);
+		this.networkManager = networkmanager;
 		this.profile = profile;
 		this.onlineMode = onlineMode;
 		this.hostname = hostname;
 	}
 
+	public GameProfile getProfile() {
+		return profile;
+	}
+
 	public void finishLogin() {
-		//send login success
+		// send login success
 		networkManager.sendPacket(new PacketLoginOutSuccess(profile));
-		//tick connection keep now
+		// tick connection keep now
 		keepConnection();
-		//now fire login event
+		// now fire login event
 		PlayerLoginFinishEvent event = new PlayerLoginFinishEvent(ConnectionImpl.getFromChannel(networkManager.channel), profile.getName(), profile.getId(), onlineMode);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.isLoginDenied()) {
@@ -102,46 +124,110 @@ public class LoginListenerPlay extends LoginListener implements PacketListenerPl
 			keepConnection();
 		}
 		if (ready) {
-			ready = false;
-			b();
+			tryJoin();
 		}
 	}
 
 	private static final PacketDataSerializer fake = new PacketDataSerializer(Unpooled.EMPTY_BUFFER);
+
 	private void keepConnection() {
-		//custom payload does nothing on a client when sent with invalid tag, but it resets client readtimeouthandler, and that is exactly what we need
+		// custom payload does nothing on a client when sent with invalid tag,
+		// but it resets client readtimeouthandler, and that is exactly what we need
 		networkManager.sendPacket(new PacketPlayOutCustomPayload("PSFake", fake));
-		//we also need to reset server readtimeouthandler
+		// we also need to reset server readtimeouthandler
 		ChannelHandlers.getTimeoutHandler(networkManager.channel.pipeline()).setLastRead();
 	}
 
-	@Override
-	public void b() {
-		EntityPlayer loginplayer = server.getPlayerList().attemptLogin(this, profile, hostname);
+	private void tryJoin() {
+		EntityPlayer loginplayer = attemptLogin(profile, hostname);
 		if (loginplayer != null) {
-			server.getPlayerList().a(this.networkManager, loginplayer);
+			server.getPlayerList().a(networkManager, loginplayer);
 			ready = false;
 		}
 	}
 
-	@Override
-	public void a(final IChatBaseComponent ichatbasecomponent) {
-		logger.info(d() + " lost connection: " + ichatbasecomponent.getText());
+	//reimplement PlayerList login attempt logic to fire PlayerSyncLoginEvent before PlayerLognEvent
+	//also delay login if there was a player with same uuid which was kicked when handling this
+	private static final SimpleDateFormat banDateFormat = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+	public EntityPlayer attemptLogin(GameProfile gameprofile, String hostname) {
+		PlayerList playerlist = server.getPlayerList();
+		UUID uuid = EntityHuman.a(gameprofile);
+		ArrayList<EntityPlayer> toKick = Lists.newArrayList();
+		for (int i = 0; i < playerlist.players.size(); ++i) {
+			EntityPlayer entityplayer = playerlist.players.get(i);
+			if (entityplayer.getUniqueID().equals(uuid)) {
+				toKick.add(entityplayer);
+			}
+		}
+		if (!toKick.isEmpty()) {
+			for (EntityPlayer entityplayer : toKick) {
+				playerlist.playerFileData.save(entityplayer);
+				entityplayer.playerConnection.disconnect("You logged in from another location");
+			}
+			return null;
+		}
+		EntityPlayer entity = new EntityPlayer(server, server.getWorldServer(0), gameprofile, new PlayerInteractManager(server.getWorldServer(0)));
+		PlayerSyncLoginEvent syncloginevent = new PlayerSyncLoginEvent(ConnectionImpl.getFromChannel(networkManager.channel), entity.getBukkitEntity());
+		Bukkit.getPluginManager().callEvent(syncloginevent);
+		if (syncloginevent.isLoginDenied()) {
+			disconnect(syncloginevent.getDenyLoginMessage());
+			return null;
+		}
+		InetSocketAddress socketaddress = (InetSocketAddress) networkManager.getSocketAddress();
+		PlayerLoginEvent event = new PlayerLoginEvent(entity.getBukkitEntity(), hostname, socketaddress.getAddress(), ((InetSocketAddress) networkManager.getRawAddress()).getAddress());
+		GameProfileBanEntry profileban = playerlist.getProfileBans().get(gameprofile);
+		if (playerlist.getProfileBans().isBanned(gameprofile)) {
+			String reason = "You are banned from this server!\nReason: " + profileban.getReason();
+			if (profileban.getExpires() != null) {
+				reason = reason + "\nYour ban will be removed on " + banDateFormat.format(profileban.getExpires());
+			}
+			if (!hasExpired(profileban)) {
+				event.disallow(PlayerLoginEvent.Result.KICK_BANNED, reason);
+			}
+		} else if (!playerlist.isWhitelisted(gameprofile)) {
+			event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, SpigotConfig.whitelistMessage);
+		} else if (playerlist.getIPBans().isBanned(socketaddress)) {
+			IpBanEntry ipban = playerlist.getIPBans().get(socketaddress);
+			String reason = "Your IP address is banned from this server!\nReason: " + ipban.getReason();
+			if (ipban.getExpires() != null) {
+				reason = reason + "\nYour ban will be removed on " + banDateFormat.format(ipban.getExpires());
+			}
+			if (!hasExpired(ipban)) {
+				event.disallow(PlayerLoginEvent.Result.KICK_BANNED, reason);
+			}
+		} else if (playerlist.players.size() >= playerlist.getMaxPlayers() && !playerlist.f(gameprofile)) {
+			event.disallow(PlayerLoginEvent.Result.KICK_FULL, SpigotConfig.serverFullMessage);
+		}
+		Bukkit.getServer().getPluginManager().callEvent(event);
+		if (event.getResult() != PlayerLoginEvent.Result.ALLOWED) {
+			disconnect(event.getKickMessage());
+			return null;
+		}
+		return entity;
+	}
+
+	private static boolean hasExpired(ExpirableListEntry<?> entry) {                   
+		Date expireDate = entry.getExpires();
+		return expireDate != null && expireDate.before(new Date());
 	}
 
 	@Override
-	public String d() {
+	public void a(final IChatBaseComponent ichatbasecomponent) {
+		logger.info(getConnectionRepr() + " lost connection: " + ichatbasecomponent.getText());
+	}
+
+	private String getConnectionRepr() {
 		return profile + " (" + networkManager.getSocketAddress() + ")";
 	}
 
-	@Override
 	public void disconnect(final String s) {
 		try {
-			logger.info("Disconnecting " + d() + ": " + s);
+			logger.info("Disconnecting " + getConnectionRepr() + ": " + s);
 			if (ConnectionImpl.getFromChannel(networkManager.channel).getVersion().isBetween(ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_7_10)) {
-				//first send join game that will make client actually switch to game state
+				// first send join game that will make client actually switch to
+				// game state
 				networkManager.sendPacket(new PacketPlayOutLogin(0, EnumGamemode.NOT_SET, false, 0, EnumDifficulty.EASY, 60, WorldType.NORMAL, false));
-				//send disconnect with a little delay
+				// send disconnect with a little delay
 				networkManager.channel.eventLoop().schedule(new Runnable() {
 					@Override
 					public void run() {
@@ -161,14 +247,10 @@ public class LoginListenerPlay extends LoginListener implements PacketListenerPl
 		final ChatComponentText chatcomponenttext = new ChatComponentText(s);
 		networkManager.sendPacket(new PacketPlayOutKickDisconnect(chatcomponenttext), new GenericFutureListener<Future<? super Void>>() {
 			@Override
-			public void operationComplete(Future<? super Void> future)  {
+			public void operationComplete(Future<? super Void> future) {
 				networkManager.close(chatcomponenttext);
 			}
 		});
-	}
-
-	public GameProfile getProfile() {
-		return profile;
 	}
 
 	@Override
