@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.UUID;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -61,14 +60,7 @@ public abstract class AbstractLoginListener implements PacketLoginInListener, IT
 		1, loginThreads,
 		loginThreadKeepAlive, TimeUnit.SECONDS,
 		new LinkedBlockingQueue<Runnable>(),
-		new ThreadFactory() {
-			@Override
-			public Thread newThread(Runnable r) {
-				Thread thread = new Thread(r);
-				thread.setName("LoginProcessingThread");
-				return thread;
-			}
-		}
+		r -> new Thread(r, "LoginProcessingThread")
 	);
 
 	protected static final Logger logger = LogManager.getLogger(LoginListener.class);

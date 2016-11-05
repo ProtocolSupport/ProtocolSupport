@@ -2,10 +2,11 @@ package protocolsupport.protocol.packet.handler;
 
 import java.net.InetSocketAddress;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,7 +14,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.spigotmc.SpigotConfig;
 
-import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 
 import io.netty.buffer.Unpooled;
@@ -154,20 +154,13 @@ public class LoginListenerPlay implements PacketLoginInListener, PacketListenerP
 		UUID uuid = gameprofile.getId();
 
 		//find players with same uuid
-		ArrayList<EntityPlayer> toKick = Lists.newArrayList();
-		for (int i = 0; i < playerlist.players.size(); ++i) {
-			EntityPlayer entityplayer = playerlist.players.get(i);
-			if (entityplayer.getUniqueID().equals(uuid)) {
-				toKick.add(entityplayer);
-			}
-		}
-
+		List<EntityPlayer> toKick = playerlist.players.stream().filter(entityplayer -> entityplayer.getUniqueID().equals(uuid)).collect(Collectors.toList());
 		//kick them
 		if (!toKick.isEmpty()) {
-			for (EntityPlayer entityplayer : toKick) {
+			toKick.forEach(entityplayer -> {
 				playerlist.playerFileData.save(entityplayer);
 				entityplayer.playerConnection.disconnect("You logged in from another location");
-			}
+			});
 			return null;
 		}
 
@@ -238,12 +231,7 @@ public class LoginListenerPlay implements PacketLoginInListener, PacketListenerP
 				// first send join game that will make client actually switch to game state
 				networkManager.sendPacket(new PacketPlayOutLogin(0, EnumGamemode.NOT_SET, false, 0, EnumDifficulty.EASY, 60, WorldType.NORMAL, false));
 				// send disconnect with a little delay
-				networkManager.channel.eventLoop().schedule(new Runnable() {
-					@Override
-					public void run() {
-						disconnect0(s);
-					}
-				}, 50, TimeUnit.MILLISECONDS);
+				networkManager.channel.eventLoop().schedule(() -> disconnect0(s), 50, TimeUnit.MILLISECONDS);
 			} else {
 				disconnect0(s);
 			}

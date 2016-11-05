@@ -3,11 +3,10 @@ package protocolsupport.protocol.packet.handler;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
@@ -69,13 +68,14 @@ public class PlayerLookupUUID {
 		InetSocketAddress saddress = (InetSocketAddress) listener.networkManager.getSocketAddress();
 		InetAddress address = saddress.getAddress();
 
-		List<ProfileProperty> properties = new ArrayList<>();
-		PropertyMap propertymap = listener.profile.getProperties();
-		for (Property property : propertymap.values()) {
-			properties.add(new ProfileProperty(property.getName(), property.getValue(), property.getSignature()));
-		}
-		PlayerPropertiesResolveEvent propResolve = new PlayerPropertiesResolveEvent(ConnectionImpl.getFromChannel(listener.networkManager.channel), playerName, properties);
+		PlayerPropertiesResolveEvent propResolve = new PlayerPropertiesResolveEvent(
+			ConnectionImpl.getFromChannel(listener.networkManager.channel), playerName,
+			listener.profile.getProperties().values().stream()
+			.map(property -> new ProfileProperty(property.getName(), property.getValue(), property.getSignature()))
+			.collect(Collectors.toList())
+		);
 		Bukkit.getPluginManager().callEvent(propResolve);
+		PropertyMap propertymap = listener.profile.getProperties();
 		propertymap.clear();
 		for (ProfileProperty profileproperty : propResolve.getProperties().values()) {
 			propertymap.put(profileproperty.getName(), new Property(profileproperty.getName(), profileproperty.getValue(), profileproperty.getSignature()));
