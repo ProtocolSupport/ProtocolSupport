@@ -21,7 +21,7 @@ public class SpawnNamed extends MiddleSpawnNamed<RecyclableCollection<ClientBoun
 		serializer.writeDouble(z);
 		serializer.writeByte(yaw);
 		serializer.writeByte(pitch);
-		DataWatcherDeserializer.encodeData(WatchedDataRemapper.transform(wplayer, metadata, version), serializer);
+		DataWatcherDeserializer.encodeData(WatchedDataRemapper.transform(cache, playerEntityId, metadata, version), serializer);
 		return RecyclableSingletonList.create(serializer);
 	}
 

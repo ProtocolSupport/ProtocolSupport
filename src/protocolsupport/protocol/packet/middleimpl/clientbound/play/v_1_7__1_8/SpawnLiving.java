@@ -30,7 +30,7 @@ public class SpawnLiving extends MiddleSpawnLiving<RecyclableCollection<ClientBo
 		serializer.writeShort(motX);
 		serializer.writeShort(motY);
 		serializer.writeShort(motZ);
-		LegacyDataWatcherSerializer.encodeData(WatchedDataRemapper.transform(wentity, metadata, version), serializer);
+		LegacyDataWatcherSerializer.encodeData(WatchedDataRemapper.transform(cache, entityId, metadata, version), serializer);
 		return RecyclableSingletonList.create(serializer);
 	}
 
