@@ -27,7 +27,7 @@ public class WatchedDataRemapper {
 			DataWatcherObject<?> baseflags = originaldata.get(0);
 			if (baseflags != null) {
 				if (baseflags.getValue() instanceof Number) {
-					cache.addWatchedEntityBaseMeta(entityId, ((Number) baseflags.getValue()).byteValue());	
+					cache.addWatchedEntityBaseMeta(entityId, ((Number) baseflags.getValue()).byteValue());
 				}
 			}
 			DataWatcherObject<?> activehandflags = originaldata.get(6);

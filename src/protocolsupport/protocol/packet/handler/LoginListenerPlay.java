@@ -178,24 +178,24 @@ public class LoginListenerPlay implements PacketLoginInListener, PacketListenerP
 		//bukkit sync login event
 		InetSocketAddress socketaddress = (InetSocketAddress) networkManager.getSocketAddress();
 		PlayerLoginEvent event = new PlayerLoginEvent(entity.getBukkitEntity(), hostname, socketaddress.getAddress(), ((InetSocketAddress) networkManager.getRawAddress()).getAddress());
-		GameProfileBanEntry profileban = playerlist.getProfileBans().get(gameprofile);
 		if (playerlist.getProfileBans().isBanned(gameprofile)) {
-			String reason = "You are banned from this server!\nReason: " + profileban.getReason();
-			if (profileban.getExpires() != null) {
-				reason = reason + "\nYour ban will be removed on " + banDateFormat.format(profileban.getExpires());
-			}
+			GameProfileBanEntry profileban = playerlist.getProfileBans().get(gameprofile);
 			if (!hasExpired(profileban)) {
+				String reason = "You are banned from this server!\nReason: " + profileban.getReason();
+				if (profileban.getExpires() != null) {
+					reason = reason + "\nYour ban will be removed on " + banDateFormat.format(profileban.getExpires());
+				}
 				event.disallow(PlayerLoginEvent.Result.KICK_BANNED, reason);
 			}
 		} else if (!playerlist.isWhitelisted(gameprofile)) {
 			event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, SpigotConfig.whitelistMessage);
 		} else if (playerlist.getIPBans().isBanned(socketaddress)) {
 			IpBanEntry ipban = playerlist.getIPBans().get(socketaddress);
-			String reason = "Your IP address is banned from this server!\nReason: " + ipban.getReason();
-			if (ipban.getExpires() != null) {
-				reason = reason + "\nYour ban will be removed on " + banDateFormat.format(ipban.getExpires());
-			}
 			if (!hasExpired(ipban)) {
+				String reason = "Your IP address is banned from this server!\nReason: " + ipban.getReason();
+				if (ipban.getExpires() != null) {
+					reason = reason + "\nYour ban will be removed on " + banDateFormat.format(ipban.getExpires());
+				}
 				event.disallow(PlayerLoginEvent.Result.KICK_BANNED, reason);
 			}
 		} else if ((playerlist.players.size() >= playerlist.getMaxPlayers()) && !playerlist.f(gameprofile)) {

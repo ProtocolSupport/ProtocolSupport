@@ -119,11 +119,11 @@ public class NetworkDataCache {
 		readdSelfPlayer();
 	}
 
-	public void addPlayerListEntry(UUID uuid, NetworkDataCache.PlayerListEntry entry) {
+	public void addPlayerListEntry(UUID uuid, PlayerListEntry entry) {
 		playerlist.put(uuid, entry);
 	}
 
-	public NetworkDataCache.PlayerListEntry getPlayerListEntry(UUID uuid) {
+	public PlayerListEntry getPlayerListEntry(UUID uuid) {
 		return playerlist.get(uuid);
 	}
 
