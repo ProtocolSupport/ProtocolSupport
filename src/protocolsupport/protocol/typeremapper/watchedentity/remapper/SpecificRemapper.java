@@ -248,6 +248,11 @@ public enum SpecificRemapper {
 		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
+	POLAR_BEAR(EType.MOB, EntityType.POLAR_BEAR, SpecificRemapper.AGEABLE,
+		//standing up
+		new Mapping(13)
+		.addRemap(13, ValueRemapperNoOp.BOOLEAN, ProtocolVersion.MINECRAFT_1_10)
+	),
 	VILLAGER(EType.MOB, EntityType.VILLAGER, SpecificRemapper.AGEABLE,
 		//profession
 		new Mapping(13)
