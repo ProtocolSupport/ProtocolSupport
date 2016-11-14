@@ -10,9 +10,9 @@ public class BlockPlace extends MiddleBlockPlace {
 		position = serializer.readLegacyPositionB();
 		face = serializer.readByte();
 		serializer.readItemStack();
-		cX = serializer.readUnsignedByte();
-		cY = serializer.readUnsignedByte();
-		cZ = serializer.readUnsignedByte();
+		cX = serializer.readUnsignedByte() / 16.0F;
+		cY = serializer.readUnsignedByte() / 16.0F;
+		cZ = serializer.readUnsignedByte() / 16.0F;
 	}
 
 }
