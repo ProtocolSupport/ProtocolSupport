@@ -7,11 +7,13 @@ public abstract class MiddleCollectEffect<T> extends ClientBoundMiddlePacket<T> 
 
 	protected int entityId;
 	protected int collectorId;
+	protected int itemCount;
 
 	@Override
 	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		entityId = serializer.readVarInt();
 		collectorId = serializer.readVarInt();
+		itemCount = serializer.readVarInt();
 	}
 
 }

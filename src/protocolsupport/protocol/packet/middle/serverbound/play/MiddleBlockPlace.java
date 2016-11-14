@@ -12,9 +12,9 @@ public abstract class MiddleBlockPlace extends ServerBoundMiddlePacket {
 	protected Position position;
 	protected int face;
 	protected int usedHand;
-	protected int cX;
-	protected int cY;
-	protected int cZ;
+	protected float cX;
+	protected float cY;
+	protected float cZ;
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
@@ -23,9 +23,9 @@ public abstract class MiddleBlockPlace extends ServerBoundMiddlePacket {
 			creator.writePosition(position);
 			creator.writeVarInt(face);
 			creator.writeVarInt(usedHand);
-			creator.writeByte(cX);
-			creator.writeByte(cY);
-			creator.writeByte(cZ);
+			creator.writeFloat(cX);
+			creator.writeFloat(cY);
+			creator.writeFloat(cZ);
 			return RecyclableSingletonList.create(creator);
 		} else {
 			ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_BLOCK_PLACE);

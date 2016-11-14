@@ -31,7 +31,7 @@ public abstract class MiddleSpawnLiving<T> extends ClientBoundMiddlePacket<T> {
 	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		entityId = serializer.readVarInt();
 		uuid = serializer.readUUID();
-		type = serializer.readUnsignedByte();
+		type = serializer.readVarInt();
 		x = serializer.readDouble();
 		y = serializer.readDouble();
 		z = serializer.readDouble();

@@ -24,6 +24,10 @@ public abstract class MiddleTitle<T> extends ClientBoundMiddlePacket<T> {
 				subtitleJson = serializer.readString();
 				break;
 			}
+			case SET_ACTION_BAR: {
+				titleJson = serializer.readString();
+				break;
+			}
 			case SET_TIMES: {
 				fadeIn = serializer.readInt();
 				stay = serializer.readInt();
@@ -38,7 +42,7 @@ public abstract class MiddleTitle<T> extends ClientBoundMiddlePacket<T> {
 	}
 
 	protected static enum Action {
-		SET_TITLE, SET_SUBTITLE, SET_TIMES, HIDE, RESET
+		SET_TITLE, SET_SUBTITLE, SET_ACTION_BAR, SET_TIMES, HIDE, RESET
 	}
 
 }
