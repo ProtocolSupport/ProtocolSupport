@@ -17,7 +17,8 @@ public class Title extends MiddleTitle<RecyclableCollection<ClientBoundPacketDat
 			return RecyclableEmptyList.get();
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_TITLE, version);
-		serializer.writeVarInt(action.ordinal());
+		int actionId = action.ordinal();
+		serializer.writeVarInt(actionId > 2 ? actionId - 1 : actionId);
 		switch (action) {
 			case SET_TITLE: {
 				serializer.writeString(titleJson);
