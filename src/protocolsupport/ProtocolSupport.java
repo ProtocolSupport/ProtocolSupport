@@ -28,6 +28,11 @@ public class ProtocolSupport extends JavaPlugin {
 	@Override
 	public void onLoad() {
 		AsyncErrorLogger.INSTANCE.start();
+		if (true) {
+			System.err.println("This branch is a work-in-progress for updating protocolsupport to spigot 1.11, it doesn't work yet");
+			Bukkit.shutdown();
+			return;
+		}
 		if (!ServerPlatformUtils.checkServerSupported()) {
 			getLogger().severe("Unsupported server version, shutting down");
 			Bukkit.shutdown();
