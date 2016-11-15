@@ -32,8 +32,6 @@ public class IdRemapper {
 			registerRemapEntry(Material.GREEN_SHULKER_BOX, Material.ENDER_CHEST, ProtocolVersionsHelper.BEFORE_1_11);
 			registerRemapEntry(Material.RED_SHULKER_BOX, Material.ENDER_CHEST, ProtocolVersionsHelper.BEFORE_1_11);
 			registerRemapEntry(Material.BLACK_SHULKER_BOX, Material.ENDER_CHEST, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(Material.SHULKER_SHELL, Material.COBBLESTONE, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(Material.TOTEM, Material.COBBLESTONE, ProtocolVersionsHelper.BEFORE_1_11);
 			registerRemapEntry(Material.STRUCTURE_VOID, Material.COBBLESTONE, ProtocolVersionsHelper.BEFORE_1_10);
 			registerRemapEntry(Material.NETHER_WART_BLOCK, Material.STONE, ProtocolVersionsHelper.BEFORE_1_10);
 			registerRemapEntry(Material.RED_NETHER_BRICK, Material.NETHER_BRICK, ProtocolVersionsHelper.BEFORE_1_10);
@@ -145,6 +143,8 @@ public class IdRemapper {
 					}
 				}
 			}
+			registerRemapEntry(Material.SHULKER_SHELL, Material.COBBLESTONE, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(Material.TOTEM, Material.COBBLESTONE, ProtocolVersionsHelper.BEFORE_1_11);
 			registerRemapEntry(Material.BEETROOT, Material.BROWN_MUSHROOM, ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry(Material.BEETROOT_SOUP, Material.MUSHROOM_SOUP, ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry(Material.BEETROOT_SEEDS, Material.SEEDS, ProtocolVersionsHelper.BEFORE_1_9);
