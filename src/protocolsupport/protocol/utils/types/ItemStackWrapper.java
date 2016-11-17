@@ -16,7 +16,7 @@ public class ItemStackWrapper {
 	}
 
 	public static ItemStackWrapper createNull() {
-		return new ItemStackWrapper(null);
+		return new ItemStackWrapper(ItemStack.a);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -33,7 +33,7 @@ public class ItemStackWrapper {
 	}
 
 	public boolean isNull() {
-		return (itemstack == null) || (itemstack.getItem() == null);
+		return itemstack.isEmpty();
 	}
 
 	public int getTypeId() {

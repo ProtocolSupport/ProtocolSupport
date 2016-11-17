@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_11_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_11_R1.inventory.CraftItemStack;
-import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.spigotmc.SpigotConfig;
 
