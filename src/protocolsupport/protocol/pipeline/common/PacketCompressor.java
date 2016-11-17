@@ -5,7 +5,7 @@ import io.netty.channel.ChannelHandlerContext;
 import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.netty.Compressor;
 
-public class PacketCompressor extends net.minecraft.server.v1_10_R1.PacketCompressor {
+public class PacketCompressor extends net.minecraft.server.v1_11_R1.PacketCompressor {
 
 	private final Compressor compressor = Compressor.create();
 	private final int threshold;

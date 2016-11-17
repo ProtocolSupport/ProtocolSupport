@@ -1,7 +1,7 @@
 package protocolsupport.protocol.utils.types;
 
 import io.netty.channel.Channel;
-import net.minecraft.server.v1_10_R1.NetworkManager;
+import net.minecraft.server.v1_11_R1.NetworkManager;
 
 public enum NetworkListenerState {
 	HANDSHAKING, PLAY, STATUS, LOGIN;

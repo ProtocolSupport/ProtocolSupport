@@ -9,9 +9,9 @@ import com.mojang.authlib.GameProfile;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.DecoderException;
-import net.minecraft.server.v1_10_R1.NetworkManager;
-import net.minecraft.server.v1_10_R1.PacketListener;
-import net.minecraft.server.v1_10_R1.PlayerConnection;
+import net.minecraft.server.v1_11_R1.NetworkManager;
+import net.minecraft.server.v1_11_R1.PacketListener;
+import net.minecraft.server.v1_11_R1.PlayerConnection;
 import protocolsupport.protocol.packet.handler.IHasProfile;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 

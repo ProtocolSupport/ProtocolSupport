@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.handler.common;
 
-import net.minecraft.server.v1_10_R1.NetworkManager;
+import net.minecraft.server.v1_11_R1.NetworkManager;
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 

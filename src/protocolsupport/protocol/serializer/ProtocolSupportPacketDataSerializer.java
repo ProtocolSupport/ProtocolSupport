@@ -13,8 +13,9 @@ import java.util.zip.GZIPOutputStream;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_10_R1.potion.CraftPotionUtil;
+import org.bukkit.craftbukkit.v1_11_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_11_R1.potion.CraftPotionUtil;
+import org.bukkit.entity.EntityType;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
@@ -29,8 +30,8 @@ import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
-import net.minecraft.server.v1_10_R1.NBTCompressedStreamTools;
-import net.minecraft.server.v1_10_R1.NBTReadLimiter;
+import net.minecraft.server.v1_11_R1.NBTCompressedStreamTools;
+import net.minecraft.server.v1_11_R1.NBTReadLimiter;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.ItemStackWriteEvent;
@@ -45,7 +46,6 @@ import protocolsupport.protocol.utils.types.MerchantData.TradeOffer;
 import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
 import protocolsupport.protocol.utils.types.NBTTagListWrapper;
 import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.utils.ServerPlatformUtils;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.netty.WrappingBuffer;
@@ -328,6 +328,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private ItemStackWrapper transformItemStack(ItemStackWrapper original) {
 		ItemStackWrapper itemstack = original.cloneItemStack();
 		Material item = itemstack.getType();
@@ -380,7 +381,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9) && (item == Material.MONSTER_EGG)) {
 				String entityId = nbttagcompound.getCompound("EntityTag").getString("id");
 				if (!entityId.isEmpty()) {
-					itemstack.setData(ServerPlatformUtils.getEntityIdByName(entityId));
+					itemstack.setData(EntityType.fromName(entityId).getTypeId());
 				}
 			}
 			if (nbttagcompound.hasKeyOfType("ench", NBTTagCompoundWrapper.TYPE_LIST)) {

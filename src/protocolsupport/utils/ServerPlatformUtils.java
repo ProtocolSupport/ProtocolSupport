@@ -3,25 +3,25 @@ package protocolsupport.utils;
 import java.io.IOException;
 
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_10_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_11_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_11_R1.inventory.CraftItemStack;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.spigotmc.SpigotConfig;
 
 import io.netty.buffer.Unpooled;
-import net.minecraft.server.v1_10_R1.EntityTypes;
-import net.minecraft.server.v1_10_R1.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_10_R1.Item;
-import net.minecraft.server.v1_10_R1.LocaleI18n;
-import net.minecraft.server.v1_10_R1.MinecraftServer;
-import net.minecraft.server.v1_10_R1.NBTTagCompound;
-import net.minecraft.server.v1_10_R1.NetworkManager;
-import net.minecraft.server.v1_10_R1.PacketDataSerializer;
-import net.minecraft.server.v1_10_R1.PacketPlayInCloseWindow;
-import net.minecraft.server.v1_10_R1.PacketPlayOutChat;
-import net.minecraft.server.v1_10_R1.PacketPlayOutPlayerListHeaderFooter;
-import net.minecraft.server.v1_10_R1.PacketPlayOutTitle;
-import net.minecraft.server.v1_10_R1.PacketPlayOutTitle.EnumTitleAction;
+import net.minecraft.server.v1_11_R1.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_11_R1.Item;
+import net.minecraft.server.v1_11_R1.LocaleI18n;
+import net.minecraft.server.v1_11_R1.MinecraftServer;
+import net.minecraft.server.v1_11_R1.NBTTagCompound;
+import net.minecraft.server.v1_11_R1.NetworkManager;
+import net.minecraft.server.v1_11_R1.PacketDataSerializer;
+import net.minecraft.server.v1_11_R1.PacketPlayInCloseWindow;
+import net.minecraft.server.v1_11_R1.PacketPlayOutChat;
+import net.minecraft.server.v1_11_R1.PacketPlayOutPlayerListHeaderFooter;
+import net.minecraft.server.v1_11_R1.PacketPlayOutTitle;
+import net.minecraft.server.v1_11_R1.PacketPlayOutTitle.EnumTitleAction;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
@@ -89,26 +89,22 @@ public class ServerPlatformUtils {
 	}
 
 	public static ItemStack createItemStackFromNBTTag(NBTTagCompoundWrapper tag) {
-		return CraftItemStack.asCraftMirror(net.minecraft.server.v1_10_R1.ItemStack.createStack(tag.unwrap()));
+		return CraftItemStack.asCraftMirror(new net.minecraft.server.v1_11_R1.ItemStack(tag.unwrap()));
 	}
 
 	public static NBTTagCompoundWrapper createNBTTagFromItemStack(ItemStack itemstack) {
-		net.minecraft.server.v1_10_R1.ItemStack nmsitemstack = CraftItemStack.asNMSCopy(itemstack);
+		net.minecraft.server.v1_11_R1.ItemStack nmsitemstack = CraftItemStack.asNMSCopy(itemstack);
 		NBTTagCompound compound = new NBTTagCompound();
 		nmsitemstack.save(compound);
 		return NBTTagCompoundWrapper.wrap(compound);
 	}
 
 	public static Integer getItemIdByName(String registryname) {
-		Item item = Item.d(registryname);
+		Item item = Item.b(registryname);
 		if (item != null) {
 			return Item.getId(item);
 		}
 		return null;
-	}
-
-	public static int getEntityIdByName(String registryname) {
-		return EntityTypes.a(registryname);
 	}
 
 	public static boolean isDebugging() {

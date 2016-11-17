@@ -2,7 +2,7 @@ package protocolsupport.protocol.pipeline.version.v_1_10;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
-import net.minecraft.server.v1_10_R1.NetworkManager;
+import net.minecraft.server.v1_11_R1.NetworkManager;
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.packet.handler.common.ModernHandshakeListener;
 import protocolsupport.protocol.pipeline.ChannelHandlers;

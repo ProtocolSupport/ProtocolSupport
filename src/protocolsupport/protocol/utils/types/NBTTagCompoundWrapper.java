@@ -5,9 +5,9 @@ import java.util.Objects;
 
 import org.spigotmc.SneakyThrow;
 
-import net.minecraft.server.v1_10_R1.MojangsonParseException;
-import net.minecraft.server.v1_10_R1.MojangsonParser;
-import net.minecraft.server.v1_10_R1.NBTTagCompound;
+import net.minecraft.server.v1_11_R1.MojangsonParseException;
+import net.minecraft.server.v1_11_R1.MojangsonParser;
+import net.minecraft.server.v1_11_R1.NBTTagCompound;
 
 public class NBTTagCompoundWrapper {
 

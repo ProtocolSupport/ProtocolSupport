@@ -1,14 +1,14 @@
 package protocolsupport.server.container;
 
-import net.minecraft.server.v1_10_R1.BlockPosition;
-import net.minecraft.server.v1_10_R1.EntityHuman;
-import net.minecraft.server.v1_10_R1.ICrafting;
-import net.minecraft.server.v1_10_R1.PlayerInventory;
-import net.minecraft.server.v1_10_R1.World;
+import net.minecraft.server.v1_11_R1.BlockPosition;
+import net.minecraft.server.v1_11_R1.EntityHuman;
+import net.minecraft.server.v1_11_R1.ICrafting;
+import net.minecraft.server.v1_11_R1.PlayerInventory;
+import net.minecraft.server.v1_11_R1.World;
 
-public class ContainerAnvil extends net.minecraft.server.v1_10_R1.ContainerAnvil {
+public class ContainerAnvil extends net.minecraft.server.v1_11_R1.ContainerAnvil {
 
-	public ContainerAnvil(final PlayerInventory playerinventory, final World world, final BlockPosition blockposition, final EntityHuman entityhuman) {
+	public ContainerAnvil(PlayerInventory playerinventory, World world, BlockPosition blockposition, EntityHuman entityhuman) {
 		super(playerinventory, world, blockposition, entityhuman);
 	}
 

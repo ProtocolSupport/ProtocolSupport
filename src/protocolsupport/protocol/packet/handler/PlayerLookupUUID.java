@@ -43,7 +43,7 @@ public class PlayerLookupUUID {
 				return;
 			}
 			String hash = new BigInteger(MinecraftEncryption.createHash(ServerPlatformUtils.getServer().O().getPublic(), listener.loginKey)).toString(16);
-			listener.profile = ServerPlatformUtils.getServer().ay().hasJoinedServer(new GameProfile(null, joinName), hash);
+			listener.profile = ServerPlatformUtils.getServer().az().hasJoinedServer(new GameProfile(null, joinName), hash, null);
 			if (listener.profile != null) {
 				fireLoginEvents();
 			} else {

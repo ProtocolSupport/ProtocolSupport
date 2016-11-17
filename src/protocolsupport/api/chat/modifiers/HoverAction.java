@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import org.bukkit.Achievement;
 import org.bukkit.Statistic;
-import org.bukkit.craftbukkit.v1_10_R1.CraftStatistic;
+import org.bukkit.craftbukkit.v1_11_R1.CraftStatistic;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;

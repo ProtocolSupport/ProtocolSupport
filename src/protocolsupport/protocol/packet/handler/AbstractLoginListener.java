@@ -25,18 +25,18 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import net.minecraft.server.v1_10_R1.ChatComponentText;
-import net.minecraft.server.v1_10_R1.IChatBaseComponent;
-import net.minecraft.server.v1_10_R1.ITickable;
-import net.minecraft.server.v1_10_R1.LoginListener;
-import net.minecraft.server.v1_10_R1.MinecraftServer;
-import net.minecraft.server.v1_10_R1.NetworkManager;
-import net.minecraft.server.v1_10_R1.PacketLoginInEncryptionBegin;
-import net.minecraft.server.v1_10_R1.PacketLoginInListener;
-import net.minecraft.server.v1_10_R1.PacketLoginInStart;
-import net.minecraft.server.v1_10_R1.PacketLoginOutDisconnect;
-import net.minecraft.server.v1_10_R1.PacketLoginOutEncryptionBegin;
-import net.minecraft.server.v1_10_R1.PacketLoginOutSetCompression;
+import net.minecraft.server.v1_11_R1.ChatComponentText;
+import net.minecraft.server.v1_11_R1.IChatBaseComponent;
+import net.minecraft.server.v1_11_R1.ITickable;
+import net.minecraft.server.v1_11_R1.LoginListener;
+import net.minecraft.server.v1_11_R1.MinecraftServer;
+import net.minecraft.server.v1_11_R1.NetworkManager;
+import net.minecraft.server.v1_11_R1.PacketLoginInEncryptionBegin;
+import net.minecraft.server.v1_11_R1.PacketLoginInListener;
+import net.minecraft.server.v1_11_R1.PacketLoginInStart;
+import net.minecraft.server.v1_11_R1.PacketLoginOutDisconnect;
+import net.minecraft.server.v1_11_R1.PacketLoginOutEncryptionBegin;
+import net.minecraft.server.v1_11_R1.PacketLoginOutSetCompression;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.events.PlayerLoginStartEvent;
 import protocolsupport.protocol.ConnectionImpl;
@@ -90,7 +90,7 @@ public abstract class AbstractLoginListener implements PacketLoginInListener, IT
 	}
 
 	@Override
-	public void E_() {
+	public void F_() {
 		if (loginTicks++ == 600) {
 			disconnect("Took too long to log in");
 		}
@@ -233,7 +233,7 @@ public abstract class AbstractLoginListener implements PacketLoginInListener, IT
 			profile = newProfile;
 		}
 		if (hasCompression()) {
-			final int threshold = ServerPlatformUtils.getServer().aF();
+			final int threshold = ServerPlatformUtils.getServer().aG();
 			if (threshold >= 0) {
 				this.networkManager.sendPacket(
 					new PacketLoginOutSetCompression(threshold),

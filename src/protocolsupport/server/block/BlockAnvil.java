@@ -1,18 +1,16 @@
 package protocolsupport.server.block;
 
-import net.minecraft.server.v1_10_R1.BlockPosition;
-import net.minecraft.server.v1_10_R1.EntityHuman;
-import net.minecraft.server.v1_10_R1.EnumDirection;
-import net.minecraft.server.v1_10_R1.EnumHand;
-import net.minecraft.server.v1_10_R1.IBlockData;
-import net.minecraft.server.v1_10_R1.ItemStack;
-import net.minecraft.server.v1_10_R1.SoundEffectType;
-import net.minecraft.server.v1_10_R1.World;
+import net.minecraft.server.v1_11_R1.BlockPosition;
+import net.minecraft.server.v1_11_R1.EntityHuman;
+import net.minecraft.server.v1_11_R1.EnumDirection;
+import net.minecraft.server.v1_11_R1.EnumHand;
+import net.minecraft.server.v1_11_R1.IBlockData;
+import net.minecraft.server.v1_11_R1.SoundEffectType;
+import net.minecraft.server.v1_11_R1.World;
 
-public class BlockAnvil extends net.minecraft.server.v1_10_R1.BlockAnvil {
+public class BlockAnvil extends net.minecraft.server.v1_11_R1.BlockAnvil {
 
 	public BlockAnvil() {
-		super();
 		c(5.0F);
 		a(SoundEffectType.k);
 		b(2000.0F);
@@ -20,8 +18,8 @@ public class BlockAnvil extends net.minecraft.server.v1_10_R1.BlockAnvil {
 	}
 
 	@Override
-	public boolean interact(final World world, final BlockPosition blockposition, final IBlockData iblockdata, final EntityHuman entityhuman, final EnumHand enumhand, final ItemStack itemstack, final EnumDirection enumdirection, final float f, final float f1, final float f2) {
-		entityhuman.openTileEntity(new protocolsupport.server.tileentity.TileEntityContainerAnvil(world, blockposition));
+	public boolean interact(World world, BlockPosition blockPosition, IBlockData blockData, EntityHuman entityHuman, EnumHand enumHand, EnumDirection enumDirection, float n, float n2, float n3) {
+		entityHuman.openTileEntity(new protocolsupport.server.tileentity.TileEntityContainerAnvil(world, blockPosition));
 		return true;
 	}
 

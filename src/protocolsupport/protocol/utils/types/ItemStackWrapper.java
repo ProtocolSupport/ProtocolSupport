@@ -4,8 +4,8 @@ import java.util.Objects;
 
 import org.bukkit.Material;
 
-import net.minecraft.server.v1_10_R1.Item;
-import net.minecraft.server.v1_10_R1.ItemStack;
+import net.minecraft.server.v1_11_R1.Item;
+import net.minecraft.server.v1_11_R1.ItemStack;
 
 public class ItemStackWrapper {
 
@@ -64,11 +64,11 @@ public class ItemStackWrapper {
 	}
 
 	public int getAmount() {
-		return itemstack.count;
+		return itemstack.getCount();
 	}
 
 	public void setAmount(int amount) {
-		itemstack.count = amount;
+		itemstack.setCount(amount);
 	}
 
 	public String getDisplayName() {

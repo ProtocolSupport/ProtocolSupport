@@ -7,27 +7,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_11_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 
-import net.minecraft.server.v1_10_R1.BlockPosition;
-import net.minecraft.server.v1_10_R1.Blocks;
-import net.minecraft.server.v1_10_R1.Enchantment;
-import net.minecraft.server.v1_10_R1.EnchantmentManager;
-import net.minecraft.server.v1_10_R1.EntityHuman;
-import net.minecraft.server.v1_10_R1.IInventory;
-import net.minecraft.server.v1_10_R1.ItemStack;
-import net.minecraft.server.v1_10_R1.Items;
-import net.minecraft.server.v1_10_R1.PlayerInventory;
-import net.minecraft.server.v1_10_R1.StatisticList;
-import net.minecraft.server.v1_10_R1.WeightedRandomEnchant;
-import net.minecraft.server.v1_10_R1.World;
+import net.minecraft.server.v1_11_R1.BlockPosition;
+import net.minecraft.server.v1_11_R1.Blocks;
+import net.minecraft.server.v1_11_R1.Enchantment;
+import net.minecraft.server.v1_11_R1.EnchantmentManager;
+import net.minecraft.server.v1_11_R1.EntityHuman;
+import net.minecraft.server.v1_11_R1.IInventory;
+import net.minecraft.server.v1_11_R1.ItemStack;
+import net.minecraft.server.v1_11_R1.Items;
+import net.minecraft.server.v1_11_R1.PlayerInventory;
+import net.minecraft.server.v1_11_R1.StatisticList;
+import net.minecraft.server.v1_11_R1.WeightedRandomEnchant;
+import net.minecraft.server.v1_11_R1.World;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
 
-public class ContainerEnchantTable extends net.minecraft.server.v1_10_R1.ContainerEnchantTable {
+public class ContainerEnchantTable extends net.minecraft.server.v1_11_R1.ContainerEnchantTable {
 
 	private final Random random = new Random();
 
@@ -46,7 +46,7 @@ public class ContainerEnchantTable extends net.minecraft.server.v1_10_R1.Contain
 	public void a(final IInventory iinventory) {
 		if (iinventory == enchantSlots) {
 			final ItemStack itemstack = iinventory.getItem(0);
-			if (itemstack != null) {
+			if (itemstack.isEmpty()) {
 				int bookShelfs = 0;
 				for (int z = -1; z <= 1; ++z) {
 					for (int x = -1; x <= 1; ++x) {
@@ -88,7 +88,7 @@ public class ContainerEnchantTable extends net.minecraft.server.v1_10_R1.Contain
 					world.getWorld().getBlockAt(position.getX(), position.getY(), position.getZ()),
 					CraftItemStack.asCraftMirror(itemstack), costs, bookShelfs
 				);
-				event.setCancelled(!itemstack.v());
+				event.setCancelled(!itemstack.canEnchant());
 				world.getServer().getPluginManager().callEvent(event);
 				if (event.isCancelled()) {
 					Arrays.fill(this.costs, 0);
@@ -121,7 +121,7 @@ public class ContainerEnchantTable extends net.minecraft.server.v1_10_R1.Contain
 		ItemStack itemstack = enchantSlots.getItem(0);
 		ItemStack lapis = enchantSlots.getItem(1);
 		final int cost = slot + 1;
-		if (supportsLapisSlot && ((lapis == null) || (lapis.count < cost)) && !entityhuman.abilities.canInstantlyBuild) { //ignore lapis check for clients that don't support that slot
+		if (supportsLapisSlot && ((lapis.isEmpty()) || (lapis.getCount() < cost)) && !entityhuman.abilities.canInstantlyBuild) { //ignore lapis check for clients that don't support that slot
 			return false;
 		}
 		if ((costs[slot] > 0) && (itemstack != null) && (((entityhuman.expLevel >= cost) && (entityhuman.expLevel >= costs[slot])) || entityhuman.abilities.canInstantlyBuild)) {
@@ -161,15 +161,14 @@ public class ContainerEnchantTable extends net.minecraft.server.v1_10_R1.Contain
 			}
 			entityhuman.enchantDone(supportsLapisSlot ? cost : costs[slot]); //take old levels count from clients that don't support lapis slot
 			if (!entityhuman.abilities.canInstantlyBuild && supportsLapisSlot) { //ignore lapis remove for clients that don't support this slot
-				final ItemStack itemStack = lapis;
-				itemStack.count -= cost;
-				if (lapis.count <= 0) {
+				lapis.subtract(cost);
+				if (lapis.getCount() <= 0) {
 					enchantSlots.setItem(1, null);
 				}
 			}
 			entityhuman.b(StatisticList.Y);
 			enchantSlots.update();
-			f = entityhuman.cV();
+			f = entityhuman.cY();
 			this.a(enchantSlots);
 			return true;
 		}

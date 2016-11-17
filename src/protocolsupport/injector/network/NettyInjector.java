@@ -8,10 +8,9 @@ import java.util.ListIterator;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
-import net.minecraft.server.v1_10_R1.ChatComponentText;
-import net.minecraft.server.v1_10_R1.NetworkManager;
-import net.minecraft.server.v1_10_R1.ServerConnection;
-import protocolsupport.ProtocolSupport;
+import net.minecraft.server.v1_11_R1.ChatComponentText;
+import net.minecraft.server.v1_11_R1.NetworkManager;
+import net.minecraft.server.v1_11_R1.ServerConnection;
 import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.utils.ServerPlatformUtils;
 
@@ -19,10 +18,7 @@ public class NettyInjector {
 
 	@SuppressWarnings("unchecked")
 	public static void inject() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		if (ServerPlatformUtils.getServer().ae()) {
-			ProtocolSupport.logWarning("Native transport is enabled, this may cause issues. Disable it by setting use-native-transport in server.properties to false.");
-		}
-		ServerConnection serverConnection = ServerPlatformUtils.getServer().am();
+		ServerConnection serverConnection = ServerPlatformUtils.getServer().an();
 		List<NetworkManager> nmList = null;
 		try {
 			nmList = (List<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("pending")).get(serverConnection);

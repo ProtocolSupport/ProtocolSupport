@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.handler.common;
 
 import javax.crypto.SecretKey;
 
-import net.minecraft.server.v1_10_R1.NetworkManager;
+import net.minecraft.server.v1_11_R1.NetworkManager;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.common.PacketDecrypter;

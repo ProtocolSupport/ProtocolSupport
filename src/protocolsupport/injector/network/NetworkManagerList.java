@@ -2,7 +2,7 @@ package protocolsupport.injector.network;
 
 import java.util.List;
 
-import net.minecraft.server.v1_10_R1.NetworkManager;
+import net.minecraft.server.v1_11_R1.NetworkManager;
 
 public class NetworkManagerList {
 
