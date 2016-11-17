@@ -1,7 +1,7 @@
 package protocolsupport.protocol.utils.types;
 
 public enum WindowType {
-	CHEST, CRAFTING_TABLE, FURNACE, DISPENSER, ENCHANT, BREING, VILLAGER, BEACON, ANVIL, HOPPER, DROPPER, HORSE, PLAYER;
+	CHEST, CRAFTING_TABLE, FURNACE, DISPENSER, ENCHANT, BREING, VILLAGER, BEACON, ANVIL, HOPPER, DROPPER, SHULKER, HORSE, PLAYER;
 
 	public static WindowType fromName(String inventoryid) {
 		switch (inventoryid) {
@@ -38,6 +38,9 @@ public enum WindowType {
 			}
 			case "minecraft:dropper": {
 				return DROPPER;
+			}
+			case "minecraft:shulker_box": {
+				return SHULKER;
 			}
 			case "EntityHorse": {
 				return HORSE;

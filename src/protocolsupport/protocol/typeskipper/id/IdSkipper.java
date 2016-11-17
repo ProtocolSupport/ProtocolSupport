@@ -1,5 +1,6 @@
 package protocolsupport.protocol.typeskipper.id;
 
+import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.ProtocolVersionsHelper;
 
 public class IdSkipper {
@@ -41,9 +42,9 @@ public class IdSkipper {
 
 	public static final SkippingRegistry INVENTORY = new SkippingRegistry() {
 		{
-			registerSkipEntry(11, ProtocolVersionsHelper.BEFORE_1_6);
-			registerSkipEntry(9, ProtocolVersionsHelper.BEFORE_1_5);
-			registerSkipEntry(10, ProtocolVersionsHelper.BEFORE_1_5);
+			registerSkipEntry(WindowType.HORSE.ordinal(), ProtocolVersionsHelper.BEFORE_1_11);
+			registerSkipEntry(WindowType.HOPPER.ordinal(), ProtocolVersionsHelper.BEFORE_1_5);
+			registerSkipEntry(WindowType.DROPPER.ordinal(), ProtocolVersionsHelper.BEFORE_1_5);
 		}
 		@Override
 		protected SkippingTable createTable() {
