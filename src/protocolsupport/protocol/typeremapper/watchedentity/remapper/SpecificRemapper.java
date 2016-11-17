@@ -169,14 +169,14 @@ public enum SpecificRemapper {
 	MUSHROOM_COW(EType.MOB, EntityType.MUSHROOM_COW, SpecificRemapper.COW),
 	CHICKEN(EType.MOB, EntityType.CHICKEN, SpecificRemapper.AGEABLE),
 	SQUID(EType.MOB, EntityType.SQUID, SpecificRemapper.INSENTIENT),
-	BASE_HORSE(EType.MOB, -1, SpecificRemapper.AGEABLE,
+	BASE_HORSE(EType.NONE, -1, SpecificRemapper.AGEABLE,
 		//info flags
 		new Mapping(13)
 		.addRemap(13, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_11)
 		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(17, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	BATTLE_HORSE(EType.MOB, -1, SpecificRemapper.BASE_HORSE,
+	BATTLE_HORSE(EType.NONE, -1, SpecificRemapper.BASE_HORSE,
 		//color/variant
 		new Mapping(15)
 		.addRemap(15, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
@@ -189,7 +189,7 @@ public enum SpecificRemapper {
 		.addRemap(16, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(22, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	CARGO_HORSE(EType.MOB, -1, SpecificRemapper.BASE_HORSE,
+	CARGO_HORSE(EType.NONE, -1, SpecificRemapper.BASE_HORSE,
 		//has chest
 		new Mapping(15)
 		.addRemap(15, ValueRemapperNoOp.BOOLEAN, ProtocolVersion.MINECRAFT_1_11)
@@ -390,7 +390,7 @@ public enum SpecificRemapper {
 		.addRemap(16, ValueRemapperNumberToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	MAGMA_CUBE(EType.MOB, EntityType.MAGMA_CUBE, SpecificRemapper.SLIME),
-	BASE_SKELETON(EType.MOB, -1, SpecificRemapper.INSENTIENT,
+	BASE_SKELETON(EType.NONE, -1, SpecificRemapper.INSENTIENT,
 		//type
 		new Mapping(12)
 		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
