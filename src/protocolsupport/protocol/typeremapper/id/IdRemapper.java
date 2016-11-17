@@ -211,8 +211,16 @@ public class IdRemapper {
 		}
 	};
 
+	//TODO: remap new mobs
 	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> ENTITY_LIVING = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
 		{
+			registerRemapEntry(EntityType.SKELETON_HORSE, EntityType.HORSE, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(EntityType.ZOMBIE_HORSE, EntityType.HORSE, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(EntityType.DONKEY, EntityType.HORSE, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(EntityType.MULE, EntityType.HORSE, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(EntityType.LLAMA, EntityType.LLAMA, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(EntityType.WITHER_SKELETON, EntityType.SKELETON, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(EntityType.STRAY, EntityType.SKELETON, ProtocolVersionsHelper.BEFORE_1_11);
 			registerRemapEntry(EntityType.POLAR_BEAR, EntityType.SPIDER, ProtocolVersionsHelper.BEFORE_1_10);
 			registerRemapEntry(EntityType.SHULKER, EntityType.BLAZE, ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry(EntityType.ENDERMITE, EntityType.SILVERFISH, ProtocolVersionsHelper.BEFORE_1_8);
