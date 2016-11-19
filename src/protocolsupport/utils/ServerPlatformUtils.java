@@ -6,7 +6,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_11_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_11_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
-import org.spigotmc.SpigotConfig;
 
 import io.netty.buffer.Unpooled;
 import net.minecraft.server.v1_11_R1.IChatBaseComponent.ChatSerializer;
@@ -14,7 +13,6 @@ import net.minecraft.server.v1_11_R1.Item;
 import net.minecraft.server.v1_11_R1.LocaleI18n;
 import net.minecraft.server.v1_11_R1.MinecraftServer;
 import net.minecraft.server.v1_11_R1.NBTTagCompound;
-import net.minecraft.server.v1_11_R1.NetworkManager;
 import net.minecraft.server.v1_11_R1.PacketDataSerializer;
 import net.minecraft.server.v1_11_R1.PacketPlayInCloseWindow;
 import net.minecraft.server.v1_11_R1.PacketPlayOutChat;
@@ -27,16 +25,6 @@ import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
 
 public class ServerPlatformUtils {
-
-	public static boolean checkServerSupported() {
-		try {
-			NetworkManager.a.getName();
-			SpigotConfig.config.contains("test");
-			return true;
-		} catch (NoClassDefFoundError e) {
-		}
-		return false;
-	}
 
 	public static Object createInboundInventoryClosePacket() {
 		return new PacketPlayInCloseWindow();
