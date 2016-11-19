@@ -469,6 +469,21 @@ public enum SpecificRemapper {
 		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(17, ValueRemapperNumberToInt.INSTANCE, ProtocolVersion.MINECRAFT_1_8)
 	),
+	VINDICATOR(EType.MOB, EntityType.VINDICATOR, SpecificRemapper.INSENTIENT,
+		//agressive
+		new Mapping(12)
+		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersion.MINECRAFT_1_11)
+	),
+	EVOKER(EType.MOB, EntityType.EVOKER, SpecificRemapper.INSENTIENT,
+		//spell
+		new Mapping(12)
+		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersion.MINECRAFT_1_11)
+	),
+	VEX(EType.MOB, EntityType.VEX, SpecificRemapper.INSENTIENT,
+		//vex
+		new Mapping(12)
+		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersion.MINECRAFT_1_11)
+	),
 	ARMOR_STAND_MOB(EType.MOB, EntityType.ARMOR_STAND, SpecificRemapper.ARMOR_STAND),
 	BOAT(EType.OBJECT, 1,
 		//time since hit
@@ -671,7 +686,8 @@ public enum SpecificRemapper {
 		.addRemap(10, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 	),
 	SHULKER_BULLET(EType.OBJECT, 67, SpecificRemapper.ENTITY),
-	DRAGON_FIREBALL(EType.OBJECT, 93, SpecificRemapper.ENTITY);
+	DRAGON_FIREBALL(EType.OBJECT, 93, SpecificRemapper.ENTITY),
+	EVOCATOR_FANGS(EType.OBJECT, 79, SpecificRemapper.ENTITY);
 
 
 	private static final SpecificRemapper[] OBJECT_BY_TYPE_ID = new SpecificRemapper[256];

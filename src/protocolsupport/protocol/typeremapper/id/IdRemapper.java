@@ -211,9 +211,11 @@ public class IdRemapper {
 		}
 	};
 
-	//TODO: remap new mobs
 	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> ENTITY_LIVING = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
 		{
+			registerRemapEntry(EntityType.VINDICATOR, EntityType.WITCH, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(EntityType.EVOKER, EntityType.WITCH, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(EntityType.VEX, EntityType.BLAZE, ProtocolVersionsHelper.BEFORE_1_11);
 			registerRemapEntry(EntityType.SKELETON_HORSE, EntityType.HORSE, ProtocolVersionsHelper.BEFORE_1_11);
 			registerRemapEntry(EntityType.ZOMBIE_HORSE, EntityType.HORSE, ProtocolVersionsHelper.BEFORE_1_11);
 			registerRemapEntry(EntityType.DONKEY, EntityType.HORSE, ProtocolVersionsHelper.BEFORE_1_11);
@@ -240,6 +242,10 @@ public class IdRemapper {
 
 	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> ENTITY_OBJECT = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
 		{
+			//evocation fangs -> firecharge
+			registerRemapEntry(79, 64, ProtocolVersionsHelper.BEFORE_1_11);
+			//lama spit -> snowball
+			registerRemapEntry(68, 61, ProtocolVersionsHelper.BEFORE_1_11);
 			//shulker bullet -> firecharge
 			registerRemapEntry(67, 64, ProtocolVersionsHelper.BEFORE_1_9);
 			//dragon fireball -> firecharge
