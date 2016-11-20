@@ -381,7 +381,13 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9) && (item == Material.MONSTER_EGG)) {
 				String entityId = nbttagcompound.getCompound("EntityTag").getString("id");
 				if (!entityId.isEmpty()) {
-					itemstack.setData(EntityType.fromName(entityId).getTypeId());
+					if (entityId.startsWith("minecraft:")) {
+						entityId = entityId.substring("minecraft:".length());
+					}
+					EntityType type = EntityType.fromName(entityId);
+					if (type != null) {
+						itemstack.setData(type.getTypeId());
+					}
 				}
 			}
 			if (nbttagcompound.hasKeyOfType("ench", NBTTagCompoundWrapper.TYPE_LIST)) {
