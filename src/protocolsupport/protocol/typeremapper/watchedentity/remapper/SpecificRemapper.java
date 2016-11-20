@@ -391,14 +391,10 @@ public enum SpecificRemapper {
 	),
 	MAGMA_CUBE(EType.MOB, EntityType.MAGMA_CUBE, SpecificRemapper.SLIME),
 	BASE_SKELETON(EType.NONE, -1, SpecificRemapper.INSENTIENT,
-		//type
-		new Mapping(12)
-		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
-		.addRemap(11, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
-		.addRemap(13, ValueRemapperNumberToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_8),
 		//is attacking
-		new Mapping(13)
-		.addRemap(13, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		new Mapping(12)
+		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersion.MINECRAFT_1_11)
+		.addRemap(13, ValueRemapperNoOp.BOOLEAN, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 	),
 	SKELETON(EType.MOB, EntityType.SKELETON, SpecificRemapper.BASE_SKELETON),
