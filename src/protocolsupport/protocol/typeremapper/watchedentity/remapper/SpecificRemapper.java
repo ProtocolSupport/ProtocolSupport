@@ -458,17 +458,34 @@ public enum SpecificRemapper {
 		.addRemap(20, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	GUARDIAN(EType.MOB, EntityType.GUARDIAN, SpecificRemapper.INSENTIENT,
-		//info flags(elder, spikes)
+		//spikes
 		new Mapping(12)
-		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_11)
-		.addRemap(11, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
-		.addRemap(16, ValueRemapperNumberToInt.INSTANCE, ProtocolVersion.MINECRAFT_1_8),
+		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersion.MINECRAFT_1_11)
+		.addRemap(12, new ValueRemapper<DataWatcherObjectBoolean>() {
+			@Override
+			public DataWatcherObject<?> remap(DataWatcherObjectBoolean object) {
+				return new DataWatcherObjectByte(object.getValue() ? (byte) 2 : (byte) 0);
+			}
+		}, ProtocolVersion.MINECRAFT_1_10)
+		.addRemap(11, new ValueRemapper<DataWatcherObjectBoolean>() {
+			@Override
+			public DataWatcherObject<?> remap(DataWatcherObjectBoolean object) {
+				return new DataWatcherObjectByte(object.getValue() ? (byte) 2 : (byte) 0);
+			}
+		}, ProtocolVersionsHelper.ALL_1_9)
+		.addRemap(16, new ValueRemapper<DataWatcherObjectBoolean>() {
+			@Override
+			public DataWatcherObject<?> remap(DataWatcherObjectBoolean object) {
+				return new DataWatcherObjectInt(object.getValue() ? (byte) 2 : (byte) 0);
+			}
+		}, ProtocolVersion.MINECRAFT_1_8),
 		//target id
 		new Mapping(13)
 		.addRemap(13, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
 		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(17, ValueRemapperNumberToInt.INSTANCE, ProtocolVersion.MINECRAFT_1_8)
 	),
+	ELDER_GUARDIAN(EType.MOB, EntityType.ELDER_GUARDIAN, SpecificRemapper.GUARDIAN),
 	VINDICATOR(EType.MOB, EntityType.VINDICATOR, SpecificRemapper.INSENTIENT,
 		//agressive
 		new Mapping(12)
