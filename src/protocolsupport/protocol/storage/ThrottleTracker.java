@@ -16,7 +16,7 @@ public class ThrottleTracker {
 
 	private static final Cache<InetAddress, Boolean> tracker = CacheBuilder.newBuilder()
 	.concurrencyLevel(Utils.getRawJavaPropertyValue("io.netty.eventLoopThreads", Runtime.getRuntime().availableProcessors(), Utils.Converter.STRING_TO_INT))
-	.expireAfterWrite(time, TimeUnit.MILLISECONDS)
+	.expireAfterWrite(time > 0 ? time : 1, TimeUnit.MILLISECONDS)
 	.build();
 
 	public static boolean isEnabled() {
