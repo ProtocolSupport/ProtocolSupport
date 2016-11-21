@@ -1,5 +1,7 @@
 package protocolsupport.api;
 
+import gnu.trove.map.hash.TIntObjectHashMap;
+
 public enum ProtocolVersion {
 
 	MINECRAFT_FUTURE(-1, 16),
@@ -73,6 +75,21 @@ public enum ProtocolVersion {
 		return (orderId >= startId) && (orderId <= endId);
 	}
 
+	private static final TIntObjectHashMap<ProtocolVersion> byProtocolId = new TIntObjectHashMap<>();
+	static {
+		for (ProtocolVersion version : ProtocolVersion.values()) {
+			if (version.id != -1) {
+				byProtocolId.put(version.id, version);
+			}
+		}
+	}
+
+	@Deprecated
+	public static ProtocolVersion fromId(int id) {
+		ProtocolVersion version = byProtocolId.get(id);
+		return version != null ? version : UNKNOWN;
+	}
+
 	private static final ProtocolVersion[] byOrderId = new ProtocolVersion[ProtocolVersion.values().length - 1];
 	static {
 		for (ProtocolVersion version : ProtocolVersion.values()) {
@@ -80,58 +97,6 @@ public enum ProtocolVersion {
 				byOrderId[version.orderId] = version;
 			}
 		}
-	}
-
-	@Deprecated
-	public static ProtocolVersion fromId(int id) {
-		switch (id) {
-			case 315: {
-				return MINECRAFT_1_11;
-			}
-			case 210: {
-				return MINECRAFT_1_10;
-			}
-			case 110: {
-				return MINECRAFT_1_9_4;
-			}
-			case 109: {
-				return MINECRAFT_1_9_2;
-			}
-			case 108: {
-				return MINECRAFT_1_9_1;
-			}
-			case 107: {
-				return MINECRAFT_1_9;
-			}
-			case 47: {
-				return MINECRAFT_1_8;
-			}
-			case 5: {
-				return MINECRAFT_1_7_10;
-			}
-			case 4: {
-				return MINECRAFT_1_7_5;
-			}
-			case 78: {
-				return MINECRAFT_1_6_4;
-			}
-			case 74: {
-				return MINECRAFT_1_6_2;
-			}
-			case 73: {
-				return MINECRAFT_1_6_1;
-			}
-			case 61: {
-				return MINECRAFT_1_5_2;
-			}
-			case 60: {
-				return MINECRAFT_1_5_1;
-			}
-			case 51: {
-				return MINECRAFT_1_4_7;
-			}
-		}
-		return UNKNOWN;
 	}
 
 	public static ProtocolVersion[] getAllBetween(ProtocolVersion start, ProtocolVersion end) {
