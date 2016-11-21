@@ -25,7 +25,7 @@ import protocolsupport.utils.ReflectionUtils;
 public class ServerInjector {
 
 	public static void inject() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		registerTileEntity(TileEntityEnchantTable.class, "EnchantTable");
+		registerTileEntity(TileEntityEnchantTable.class, "enchanting_table");
 		registerBlock(116, "enchanting_table", new BlockEnchantTable());
 		ItemBlock itemanvil = new ItemAnvil(new BlockAnvil());
 		itemanvil.c("anvil");
