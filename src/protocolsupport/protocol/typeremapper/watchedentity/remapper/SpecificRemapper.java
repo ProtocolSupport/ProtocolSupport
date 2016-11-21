@@ -336,9 +336,17 @@ public enum SpecificRemapper {
 		.addRemap(13, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
 		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(13, ValueRemapperNumberToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
-		//is converting
+		//hands up
 		new Mapping(14)
-		.addRemap(14, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(14, ValueRemapperNoOp.BOOLEAN, ProtocolVersion.MINECRAFT_1_11)
+		.addRemap(15, ValueRemapperNoOp.BOOLEAN, ProtocolVersion.MINECRAFT_1_10)
+		.addRemap(14, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
+	),
+	ZOMBIE_VILLAGER(EType.MOB, EntityType.ZOMBIE_VILLAGER, SpecificRemapper.ZOMBIE,
+		//is converting
+		new Mapping(15)
+		.addRemap(15, ValueRemapperNoOp.BOOLEAN, ProtocolVersion.MINECRAFT_1_11)
+		.addRemap(14, ValueRemapperNoOp.BOOLEAN, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(13, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(14, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
