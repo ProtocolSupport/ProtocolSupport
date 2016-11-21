@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_9_r2__1_10__1_11;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.legacyremapper.LegacyTileEntityUpdate;
 import protocolsupport.protocol.legacyremapper.chunk.ChunkTransformer;
 import protocolsupport.protocol.legacyremapper.chunk.ChunkTransformer.BlockFormat;
 import protocolsupport.protocol.packet.ClientBoundPacket;
@@ -25,6 +26,9 @@ public class Chunk extends MiddleChunk<RecyclableCollection<ClientBoundPacketDat
 		serializer.writeByteArray(transformer.toLegacyData(version));
 		serializer.writeVarInt(tiles.length);
 		for (NBTTagCompoundWrapper tile : tiles) {
+			if (version.isBefore(ProtocolVersion.MINECRAFT_1_11)) {
+				LegacyTileEntityUpdate.setLegacyType(tile);
+			}
 			serializer.writeTag(tile);
 		}
 		return RecyclableSingletonList.create(serializer);

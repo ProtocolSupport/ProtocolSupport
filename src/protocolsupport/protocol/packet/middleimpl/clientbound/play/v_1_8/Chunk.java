@@ -35,6 +35,7 @@ public class Chunk extends MiddleChunk<RecyclableCollection<ClientBoundPacketDat
 		}
 		packets.add(chunkdata);
 		for (NBTTagCompoundWrapper tile : tiles) {
+			LegacyTileEntityUpdate.setLegacyType(tile);
 			packets.add(BlockTileUpdate.createPacketData(version, LegacyTileEntityUpdate.getPosition(tile), LegacyTileEntityUpdate.getUpdateType(tile).ordinal(), tile));
 		}
 		return packets;
