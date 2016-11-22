@@ -9,7 +9,7 @@ import protocolsupport.utils.netty.ChannelUtils;
 
 public class ChunkTransformerVaries extends ChunkTransformer {
 
-	protected static final int bitsPerBlock_19_110 = 13;
+	protected static final int bitsPerBlock__1_9__1_11 = 13;
 
 	@Override
 	protected byte[] toLegacyData0(ProtocolVersion version) {
@@ -18,10 +18,10 @@ public class ChunkTransformerVaries extends ChunkTransformer {
 		try {
 			for (int i = 0; i < columnsCount; i++) {
 				ChunkSection section = sections[i];
-				chunkdata.writeByte(bitsPerBlock_19_110);
+				chunkdata.writeByte(bitsPerBlock__1_9__1_11);
 				ChannelUtils.writeVarInt(chunkdata, 0);
 				BlockStorageReader storage = section.blockdata;
-				BlockStorageWriter blockstorage = new BlockStorageWriter(bitsPerBlock_19_110, blocksInSection);
+				BlockStorageWriter blockstorage = new BlockStorageWriter(bitsPerBlock__1_9__1_11, blocksInSection);
 				for (int block = 0; block < blocksInSection; block++) {
 					blockstorage.setBlockState(block, table.getRemap(storage.getBlockState(block)));
 				}
