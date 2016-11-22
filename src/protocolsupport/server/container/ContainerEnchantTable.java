@@ -46,7 +46,7 @@ public class ContainerEnchantTable extends net.minecraft.server.v1_11_R1.Contain
 	public void a(final IInventory iinventory) {
 		if (iinventory == enchantSlots) {
 			final ItemStack itemstack = iinventory.getItem(0);
-			if (itemstack.isEmpty()) {
+			if (!itemstack.isEmpty()) {
 				int bookShelfs = 0;
 				for (int z = -1; z <= 1; ++z) {
 					for (int x = -1; x <= 1; ++x) {
