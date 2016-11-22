@@ -350,6 +350,7 @@ public enum SpecificRemapper {
 		.addRemap(13, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(14, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
+	HUSK(EType.MOB, EntityType.HUSK, SpecificRemapper.ZOMBIE),
 	ZOMBIE_PIGMAN(EType.MOB, EntityType.PIG_ZOMBIE, SpecificRemapper.ZOMBIE),
 	BLAZE(EType.MOB, EntityType.BLAZE, SpecificRemapper.INSENTIENT,
 		//on fire

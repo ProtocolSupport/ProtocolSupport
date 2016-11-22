@@ -217,6 +217,7 @@ public class IdRemapper {
 			registerRemapEntry(EntityType.EVOKER, EntityType.WITCH, ProtocolVersionsHelper.BEFORE_1_11);
 			registerRemapEntry(EntityType.VEX, EntityType.BLAZE, ProtocolVersionsHelper.BEFORE_1_11);
 			registerRemapEntry(EntityType.ZOMBIE_VILLAGER, EntityType.ZOMBIE, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(EntityType.HUSK, EntityType.ZOMBIE, ProtocolVersionsHelper.BEFORE_1_11);
 			registerRemapEntry(EntityType.SKELETON_HORSE, EntityType.HORSE, ProtocolVersionsHelper.BEFORE_1_11);
 			registerRemapEntry(EntityType.ZOMBIE_HORSE, EntityType.HORSE, ProtocolVersionsHelper.BEFORE_1_11);
 			registerRemapEntry(EntityType.DONKEY, EntityType.HORSE, ProtocolVersionsHelper.BEFORE_1_11);
