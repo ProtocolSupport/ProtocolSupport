@@ -33,7 +33,7 @@ public abstract class ChunkTransformer {
 		}
 	}
 
-	protected byte[] data19;
+	protected byte[] data;
 	protected int bitmap;
 
 	protected int columnsCount;
@@ -42,14 +42,14 @@ public abstract class ChunkTransformer {
 	protected final ChunkSection[] sections = new ChunkSection[16];
 	protected final byte[] biomeData = new byte[256];
 
-	public void loadData(byte[] data19, int bitmap, boolean hasSkyLight, boolean hasBiomeData) {
+	public void loadData(byte[] data, int bitmap, boolean hasSkyLight, boolean hasBiomeData) {
 		try {
-			this.data19 = data19;
+			this.data = data;
 			this.bitmap = bitmap;
 			this.columnsCount = Integer.bitCount(bitmap);
 			this.hasSkyLight = hasSkyLight;
 			this.hasBiomeData = hasBiomeData;
-			ByteBuf chunkdata = Unpooled.wrappedBuffer(data19);
+			ByteBuf chunkdata = Unpooled.wrappedBuffer(data);
 			for (int i = 0; i < this.columnsCount; i++) {
 				sections[i] = new ChunkSection(chunkdata, hasSkyLight);
 			}
@@ -57,7 +57,7 @@ public abstract class ChunkTransformer {
 				chunkdata.readBytes(biomeData);
 			}
 		} catch (Throwable e) {
-			throw new ChunkDataParseException(data19, bitmap, hasSkyLight, hasBiomeData, e);
+			throw new ChunkDataParseException(data, bitmap, hasSkyLight, hasBiomeData, e);
 		}
 	}
 
@@ -65,7 +65,7 @@ public abstract class ChunkTransformer {
 		try {
 			return toLegacyData0(version);
 		} catch (Throwable t) {
-			throw new ChunkDataParseException(data19, bitmap, hasSkyLight, hasBiomeData, t);
+			throw new ChunkDataParseException(data, bitmap, hasSkyLight, hasBiomeData, t);
 		}
 	}
 

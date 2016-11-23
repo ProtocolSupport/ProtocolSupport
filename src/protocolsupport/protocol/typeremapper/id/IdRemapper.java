@@ -15,25 +15,25 @@ public class IdRemapper {
 
 	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> BLOCK = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
 		{
-			registerRemapEntry(Material.OBSERVER, Material.FURNACE, 0, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(Material.WHITE_SHULKER_BOX, Material.ENDER_CHEST, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(Material.ORANGE_SHULKER_BOX, Material.ENDER_CHEST, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(Material.MAGENTA_SHULKER_BOX, Material.ENDER_CHEST, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(Material.LIGHT_BLUE_SHULKER_BOX, Material.ENDER_CHEST, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(Material.YELLOW_SHULKER_BOX, Material.ENDER_CHEST, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(Material.LIME_SHULKER_BOX, Material.ENDER_CHEST, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(Material.PINK_SHULKER_BOX, Material.ENDER_CHEST, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(Material.GRAY_SHULKER_BOX, Material.ENDER_CHEST, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(Material.SILVER_SHULKER_BOX, Material.ENDER_CHEST, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(Material.CYAN_SHULKER_BOX, Material.ENDER_CHEST, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(Material.PURPLE_SHULKER_BOX, Material.ENDER_CHEST, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(Material.BLUE_SHULKER_BOX, Material.ENDER_CHEST, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(Material.BROWN_SHULKER_BOX, Material.ENDER_CHEST, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(Material.GREEN_SHULKER_BOX, Material.ENDER_CHEST, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(Material.RED_SHULKER_BOX, Material.ENDER_CHEST, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(Material.BLACK_SHULKER_BOX, Material.ENDER_CHEST, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(Material.STRUCTURE_VOID, Material.COBBLESTONE, ProtocolVersionsHelper.BEFORE_1_10);
-			registerRemapEntry(Material.NETHER_WART_BLOCK, Material.STONE, ProtocolVersionsHelper.BEFORE_1_10);
+			registerRemapEntry(Material.OBSERVER, Material.FURNACE, 2, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(Material.WHITE_SHULKER_BOX, Material.STONE, 0, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(Material.ORANGE_SHULKER_BOX, Material.STONE, 0, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(Material.MAGENTA_SHULKER_BOX, Material.STONE, 0, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(Material.LIGHT_BLUE_SHULKER_BOX, Material.STONE, 0, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(Material.YELLOW_SHULKER_BOX, Material.STONE, 0, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(Material.LIME_SHULKER_BOX, Material.STONE, 0, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(Material.PINK_SHULKER_BOX, Material.STONE, 0, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(Material.GRAY_SHULKER_BOX, Material.STONE, 0, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(Material.SILVER_SHULKER_BOX, Material.STONE, 0, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(Material.CYAN_SHULKER_BOX, Material.STONE, 0, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(Material.PURPLE_SHULKER_BOX, Material.STONE, 0, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(Material.BLUE_SHULKER_BOX, Material.STONE, 0, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(Material.BROWN_SHULKER_BOX, Material.STONE, 0, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(Material.GREEN_SHULKER_BOX, Material.STONE, 0, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(Material.RED_SHULKER_BOX, Material.STONE, 0, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(Material.BLACK_SHULKER_BOX, Material.STONE, 0, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(Material.STRUCTURE_VOID, Material.GLASS, ProtocolVersionsHelper.BEFORE_1_10);
+			registerRemapEntry(Material.NETHER_WART_BLOCK, Material.COBBLESTONE, ProtocolVersionsHelper.BEFORE_1_10);
 			registerRemapEntry(Material.RED_NETHER_BRICK, Material.NETHER_BRICK, ProtocolVersionsHelper.BEFORE_1_10);
 			registerRemapEntry(Material.MAGMA, Material.NETHERRACK, ProtocolVersionsHelper.BEFORE_1_10);
 			registerRemapEntry(Material.BONE_BLOCK, Material.BRICK, ProtocolVersionsHelper.BEFORE_1_10);
