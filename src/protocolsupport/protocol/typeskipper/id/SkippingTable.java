@@ -1,30 +1,42 @@
 package protocolsupport.protocol.typeskipper.id;
 
+import java.util.HashSet;
+
 import gnu.trove.map.hash.TIntByteHashMap;
 
 public class SkippingTable {
 
-	protected final boolean[] table;
-	public SkippingTable(int size) {
-		table = new boolean[size];
-		for (int i = 0; i < table.length; i++) {
-			table[i] = false;
+	public static abstract class IntSkippingTable extends SkippingTable {
+
+		public abstract void setSkip(int id);
+
+		public abstract boolean shouldSkip(int id);
+		
+	}
+
+	public static class ArrayBasedIntSkippingTable extends IntSkippingTable {
+
+		protected final boolean[] table;
+		public ArrayBasedIntSkippingTable(int size) {
+			table = new boolean[size];
+			for (int i = 0; i < table.length; i++) {
+				table[i] = false;
+			}
 		}
-	}
 
-	public void setSkip(int id) {
-		table[id] = true;
-	}
-
-	public boolean shouldSkip(int id) {
-		return table[id];
-	}
-
-	public static class HashSkippingTable extends SkippingTable {
-
-		public HashSkippingTable() {
-			super(0);
+		@Override
+		public void setSkip(int id) {
+			table[id] = true;
 		}
+
+		@Override
+		public boolean shouldSkip(int id) {
+			return table[id];
+		}
+		
+	}
+
+	public static class HashMapBasedIntSkippingTable extends IntSkippingTable {
 
 		protected final TIntByteHashMap table = new TIntByteHashMap(16, 0.75F);
 
@@ -36,6 +48,20 @@ public class SkippingTable {
 		@Override
 		public boolean shouldSkip(int id) {
 			return table.containsKey(id);
+		}
+
+	}
+
+	public static class GenericSkippingTable<T> extends SkippingTable {
+
+		protected final HashSet<T> set = new HashSet<>();
+
+		public void setSkip(T id) {
+			set.add(id);
+		}
+
+		public boolean shouldSkip(T id) {
+			return set.contains(id);
 		}
 
 	}

@@ -18,7 +18,6 @@ import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
-import protocolsupport.protocol.typeskipper.string.StringSkipper;
 import protocolsupport.server.listeners.CommandListener;
 import protocolsupport.server.listeners.PlayerListener;
 import protocolsupport.utils.netty.Allocator;
@@ -42,7 +41,6 @@ public class ProtocolSupport extends JavaPlugin {
 			AbstractLoginListener.init();
 			LegacySound.init();
 			IdSkipper.init();
-			StringSkipper.init();
 			SpecificRemapper.init();
 			ServerInjector.inject();
 			NettyInjector.inject();

@@ -38,7 +38,7 @@ import protocolsupport.api.events.ItemStackWriteEvent;
 import protocolsupport.protocol.legacyremapper.LegacyPotion;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
-import protocolsupport.protocol.typeskipper.id.SkippingTable;
+import protocolsupport.protocol.typeskipper.id.SkippingTable.IntSkippingTable;
 import protocolsupport.protocol.utils.GameProfileSerializer;
 import protocolsupport.protocol.utils.types.ItemStackWrapper;
 import protocolsupport.protocol.utils.types.MerchantData;
@@ -405,7 +405,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 	}
 
 	private NBTTagListWrapper filterEnchantList(NBTTagListWrapper oldList) {
-		SkippingTable enchSkip = IdSkipper.ENCHANT.getTable(getVersion());
+		IntSkippingTable enchSkip = IdSkipper.ENCHANT.getTable(getVersion());
 		NBTTagListWrapper newList = NBTTagListWrapper.create();
 		for (int i = 0; i < oldList.size(); i++) {
 			NBTTagCompoundWrapper enchData = oldList.getCompound(i);

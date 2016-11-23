@@ -6,8 +6,8 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntitySetAttributes;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.typeskipper.string.SkippingTable;
-import protocolsupport.protocol.typeskipper.string.StringSkipper;
+import protocolsupport.protocol.typeskipper.id.IdSkipper;
+import protocolsupport.protocol.typeskipper.id.SkippingTable.GenericSkippingTable;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -16,7 +16,7 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes<RecyclableCol
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_ATTRIBUTES_ID, version);
-		SkippingTable table = StringSkipper.ATTRIBUTES.getTable(version);
+		GenericSkippingTable<String> table = IdSkipper.ATTRIBUTES.getTable(version);
 		ArrayList<Attribute> sendattrs = new ArrayList<>();
 		for (Attribute attribute : attributes) {
 			if (!table.shouldSkip(attribute.key)) {

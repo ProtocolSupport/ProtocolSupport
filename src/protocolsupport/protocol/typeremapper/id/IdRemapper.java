@@ -6,8 +6,10 @@ import org.bukkit.entity.EntityType;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.remapper.BlockRemapperControl;
+import protocolsupport.protocol.typeremapper.id.RemappingRegistry.GenericRemappingRegistry;
 import protocolsupport.protocol.typeremapper.id.RemappingRegistry.IdRemappingRegistry;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.typeremapper.id.RemappingTable.GenericRemappingTable;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.HashMapBasedIdRemappingTable;
 import protocolsupport.utils.ProtocolVersionsHelper;
 
@@ -308,6 +310,16 @@ public class IdRemapper {
 		@Override
 		protected HashMapBasedIdRemappingTable createTable() {
 			return new HashMapBasedIdRemappingTable();
+		}
+	};
+
+	public static final GenericRemappingRegistry<String, GenericRemappingTable<String>> INVENTORY = new GenericRemappingRegistry<String, GenericRemappingTable<String>>() {
+		{
+			registerRemapEntry("minecraft:shulker_box", "minecraft:chest", ProtocolVersionsHelper.BEFORE_1_11);
+		}
+		@Override
+		protected GenericRemappingTable<String> createTable() {
+			return new GenericRemappingTable<>();
 		}
 	};
 
