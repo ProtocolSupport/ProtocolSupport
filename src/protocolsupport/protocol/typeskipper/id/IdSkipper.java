@@ -61,7 +61,6 @@ public class IdSkipper {
 		{
 			registerSkipEntry("EntityHorse", ProtocolVersionsHelper.BEFORE_1_11);
 			registerSkipEntry("minecraft:hopper", ProtocolVersionsHelper.BEFORE_1_5);
-			registerSkipEntry("minecraft:dropper", ProtocolVersionsHelper.BEFORE_1_5);
 		}
 		@Override
 		protected GenericSkippingTable<String> createTable() {
