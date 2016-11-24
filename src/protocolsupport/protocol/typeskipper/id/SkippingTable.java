@@ -11,7 +11,7 @@ public class SkippingTable {
 		public abstract void setSkip(int id);
 
 		public abstract boolean shouldSkip(int id);
-		
+
 	}
 
 	public static class ArrayBasedIntSkippingTable extends IntSkippingTable {
@@ -33,7 +33,7 @@ public class SkippingTable {
 		public boolean shouldSkip(int id) {
 			return table[id];
 		}
-		
+
 	}
 
 	public static class HashMapBasedIntSkippingTable extends IntSkippingTable {

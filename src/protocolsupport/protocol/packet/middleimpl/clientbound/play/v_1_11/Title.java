@@ -24,7 +24,7 @@ public class Title extends MiddleTitle<RecyclableCollection<ClientBoundPacketDat
 			}
 			case SET_ACTION_BAR: {
 				serializer.writeString(titleJson);
-				break;	
+				break;
 			}
 			case SET_TIMES: {
 				serializer.writeInt(fadeIn);
