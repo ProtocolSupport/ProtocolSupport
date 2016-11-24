@@ -3,6 +3,7 @@ package protocolsupport.protocol.pipeline.version;
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.legacyremapper.LegacyAnimatePacketReorderer;
@@ -18,20 +19,29 @@ public class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
 		super(connection, storage);
 	}
 
+	private final ByteBuf cumulation = Unpooled.buffer();
 	private final ReplayingProtocolSupportSupportPacketDataSerializer serializer = new ReplayingProtocolSupportSupportPacketDataSerializer(connection.getVersion());
+	{
+		serializer.setBuf(cumulation);
+	}
 	private final LegacyAnimatePacketReorderer animateReorderer = new LegacyAnimatePacketReorderer();
+
+	private ServerBoundMiddlePacket packetTransformer = null;
 
 	@Override
 	public void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws InstantiationException, IllegalAccessException  {
 		if (!input.isReadable()) {
 			return;
 		}
-		serializer.setBuf(input);
+		cumulation.writeBytes(input);
+		if (packetTransformer == null) {
+			packetTransformer = registry.getTransformer(NetworkListenerState.getFromChannel(ctx.channel()), serializer.readUnsignedByte());
+		}
 		serializer.markReaderIndex();
 		try {
-			ServerBoundMiddlePacket packetTransformer = registry.getTransformer(NetworkListenerState.getFromChannel(ctx.channel()), serializer.readUnsignedByte());
 			packetTransformer.readFromClientData(serializer);
 			addPackets(animateReorderer.orderPackets(packetTransformer.toNative()), list);
+			packetTransformer = null;
 		} catch (EOFSignal ex) {
 			serializer.resetReaderIndex();
 		}
