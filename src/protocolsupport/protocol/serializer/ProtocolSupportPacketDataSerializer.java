@@ -35,6 +35,7 @@ import net.minecraft.server.v1_11_R1.NBTReadLimiter;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.ItemStackWriteEvent;
+import protocolsupport.protocol.legacyremapper.LegacyEntityType;
 import protocolsupport.protocol.legacyremapper.LegacyPotion;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
@@ -376,6 +377,13 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 					if (basicTypeName != null) {
 						itemstack.setDisplayName(basicTypeName);
 					}
+				}
+			}
+			if (getVersion().isBetween(ProtocolVersion.MINECRAFT_1_10, ProtocolVersion.MINECRAFT_1_9)) {
+				NBTTagCompoundWrapper entitytag = nbttagcompound.getCompound("EntityTag");
+				String entityId = entitytag.getString("id");
+				if (!entityId.isEmpty()) {
+					entitytag.setString("id", LegacyEntityType.getLegacyName(entityId));
 				}
 			}
 			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9) && (item == Material.MONSTER_EGG)) {

@@ -5,6 +5,7 @@ import java.util.EnumMap;
 import java.util.List;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.legacyremapper.LegacyEntityType;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
@@ -28,6 +29,20 @@ public class TileNBTTransformer {
 	}
 
 	static {
+		register(
+			TileEntityUpdateType.MOB_SPAWNER,
+			(version, input) -> {
+				NBTTagCompoundWrapper spawndata = input.getCompound("SpawnData");
+				if (!spawndata.isNull()) {
+					String mobname = spawndata.getString("id");
+					if (!mobname.isEmpty()) {
+						spawndata.setString("id", LegacyEntityType.getLegacyName("id"));
+					}
+				}
+				return input;
+			},
+			ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_9, ProtocolVersion.MINECRAFT_1_10)
+		);
 		register(
 			TileEntityUpdateType.MOB_SPAWNER,
 			(version, input) -> {
