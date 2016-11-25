@@ -37,7 +37,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.utils.ServerPlatformUtils;
+import protocolsupport.utils.nms.ServerPlatformUtils;
 
 public class StatusListener implements PacketStatusInListener {
 

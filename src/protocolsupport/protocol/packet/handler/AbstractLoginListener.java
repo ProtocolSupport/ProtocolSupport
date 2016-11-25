@@ -43,9 +43,9 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.common.PacketCompressor;
 import protocolsupport.protocol.pipeline.common.PacketDecompressor;
-import protocolsupport.utils.ServerPlatformUtils;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
+import protocolsupport.utils.nms.ServerPlatformUtils;
 
 public abstract class AbstractLoginListener implements PacketLoginInListener, ITickable, IHasProfile {
 

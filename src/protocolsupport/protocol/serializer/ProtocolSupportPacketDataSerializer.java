@@ -41,15 +41,15 @@ import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
 import protocolsupport.protocol.typeskipper.id.SkippingTable.IntSkippingTable;
 import protocolsupport.protocol.utils.GameProfileSerializer;
-import protocolsupport.protocol.utils.types.ItemStackWrapper;
 import protocolsupport.protocol.utils.types.MerchantData;
 import protocolsupport.protocol.utils.types.MerchantData.TradeOffer;
-import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
-import protocolsupport.protocol.utils.types.NBTTagListWrapper;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.netty.WrappingBuffer;
+import protocolsupport.utils.nms.ItemStackWrapper;
+import protocolsupport.utils.nms.NBTTagCompoundWrapper;
+import protocolsupport.utils.nms.NBTTagListWrapper;
 
 public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 

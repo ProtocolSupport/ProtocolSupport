@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
-import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
+import protocolsupport.utils.nms.NBTTagCompoundWrapper;
 
 public abstract class MiddleBlockTileUpdate<T> extends MiddleBlock<T> {
 

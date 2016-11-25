@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import protocolsupport.utils.nms.ItemStackWrapper;
+
 public class MerchantData {
 
 	private int windowId;

@@ -21,7 +21,7 @@ import protocolsupport.api.events.PlayerPropertiesResolveEvent;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.utils.MinecraftEncryption;
-import protocolsupport.utils.ServerPlatformUtils;
+import protocolsupport.utils.nms.ServerPlatformUtils;
 
 @SuppressWarnings("deprecation")
 public class PlayerLookupUUID {

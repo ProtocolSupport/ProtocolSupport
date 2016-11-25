@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
-import protocolsupport.protocol.utils.types.ItemStackWrapper;
+import protocolsupport.utils.nms.ItemStackWrapper;
 
 public abstract class MiddleInventorySetSlot<T> extends ClientBoundMiddlePacket<T> {
 

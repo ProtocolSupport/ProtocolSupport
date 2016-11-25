@@ -8,7 +8,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
 import protocolsupport.protocol.legacyremapper.LegacyChat;
-import protocolsupport.utils.ServerPlatformUtils;
+import protocolsupport.utils.nms.ServerPlatformUtils;
 
 public class TranslateComponent extends BaseComponent {
 

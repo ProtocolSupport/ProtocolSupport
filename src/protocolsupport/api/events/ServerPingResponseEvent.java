@@ -9,7 +9,7 @@ import org.bukkit.event.HandlerList;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.utils.ServerPlatformUtils;
+import protocolsupport.utils.nms.ServerPlatformUtils;
 
 public class ServerPingResponseEvent extends ConnectionEvent {
 

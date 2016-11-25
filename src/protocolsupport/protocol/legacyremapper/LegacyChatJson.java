@@ -5,8 +5,8 @@ import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TranslateComponent;
 import protocolsupport.api.chat.modifiers.ClickAction;
 import protocolsupport.api.chat.modifiers.HoverAction;
-import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
-import protocolsupport.utils.ServerPlatformUtils;
+import protocolsupport.utils.nms.NBTTagCompoundWrapper;
+import protocolsupport.utils.nms.ServerPlatformUtils;
 
 public class LegacyChatJson {
 

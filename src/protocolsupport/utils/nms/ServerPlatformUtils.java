@@ -1,4 +1,4 @@
-package protocolsupport.utils;
+package protocolsupport.utils.nms;
 
 import java.io.IOException;
 
@@ -22,7 +22,6 @@ import net.minecraft.server.v1_11_R1.PacketPlayOutTitle.EnumTitleAction;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
-import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
 
 public class ServerPlatformUtils {
 

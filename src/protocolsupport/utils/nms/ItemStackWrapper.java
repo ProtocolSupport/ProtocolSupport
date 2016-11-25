@@ -1,4 +1,4 @@
-package protocolsupport.protocol.utils.types;
+package protocolsupport.utils.nms;
 
 import java.util.Objects;
 

@@ -8,10 +8,10 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.legacyremapper.LegacyEntityType;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
-import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
 import protocolsupport.utils.ProtocolVersionsHelper;
-import protocolsupport.utils.ServerPlatformUtils;
 import protocolsupport.utils.Utils;
+import protocolsupport.utils.nms.NBTTagCompoundWrapper;
+import protocolsupport.utils.nms.ServerPlatformUtils;
 
 public class TileNBTTransformer {
 

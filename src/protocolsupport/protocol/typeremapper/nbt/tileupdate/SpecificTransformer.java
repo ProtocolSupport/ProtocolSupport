@@ -1,7 +1,7 @@
 package protocolsupport.protocol.typeremapper.nbt.tileupdate;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
+import protocolsupport.utils.nms.NBTTagCompoundWrapper;
 
 @FunctionalInterface
 public interface SpecificTransformer {

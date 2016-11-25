@@ -11,11 +11,11 @@ import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.modifiers.ClickAction;
 import protocolsupport.api.chat.modifiers.HoverAction;
 import protocolsupport.api.chat.modifiers.Modifier;
-import protocolsupport.utils.ServerPlatformUtils;
 import protocolsupport.utils.chat.ClickActionSerializer;
 import protocolsupport.utils.chat.ComponentSerializer;
 import protocolsupport.utils.chat.HoverActionSerializer;
 import protocolsupport.utils.chat.ModifierSerializer;
+import protocolsupport.utils.nms.ServerPlatformUtils;
 
 public class ChatAPI {
 

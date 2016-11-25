@@ -3,8 +3,8 @@ package protocolsupport.protocol.legacyremapper;
 import java.util.HashMap;
 
 import protocolsupport.protocol.typeremapper.nbt.tileupdate.TileNBTTransformer.TileEntityUpdateType;
-import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
 import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.utils.nms.NBTTagCompoundWrapper;
 
 public class LegacyTileEntityUpdate {
 

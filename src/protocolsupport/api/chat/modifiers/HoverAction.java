@@ -12,8 +12,8 @@ import org.bukkit.inventory.ItemStack;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.utils.Any;
-import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
-import protocolsupport.utils.ServerPlatformUtils;
+import protocolsupport.utils.nms.NBTTagCompoundWrapper;
+import protocolsupport.utils.nms.ServerPlatformUtils;
 
 public class HoverAction {
 

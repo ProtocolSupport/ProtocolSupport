@@ -7,9 +7,9 @@ import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockTileUpdate;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.nbt.tileupdate.TileNBTTransformer;
-import protocolsupport.protocol.utils.types.NBTTagCompoundWrapper;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.Utils;
+import protocolsupport.utils.nms.NBTTagCompoundWrapper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
