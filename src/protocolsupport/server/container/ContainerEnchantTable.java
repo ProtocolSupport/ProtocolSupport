@@ -163,7 +163,7 @@ public class ContainerEnchantTable extends net.minecraft.server.v1_11_R1.Contain
 			if (!entityhuman.abilities.canInstantlyBuild && supportsLapisSlot) { //ignore lapis remove for clients that don't support this slot
 				lapis.subtract(cost);
 				if (lapis.getCount() <= 0) {
-					enchantSlots.setItem(1, null);
+					enchantSlots.setItem(1, ItemStack.a);
 				}
 			}
 			entityhuman.b(StatisticList.Y);
