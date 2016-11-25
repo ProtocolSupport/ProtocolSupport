@@ -175,7 +175,7 @@ public class LoginListenerPlay implements PacketLoginInListener, PacketListenerP
 		}
 
 		//bukkit sync login event
-		InetSocketAddress socketaddress = (InetSocketAddress) networkManager.getAddress();
+		InetSocketAddress socketaddress = networkManager.getAddress();
 		PlayerLoginEvent event = new PlayerLoginEvent(entity.getBukkitEntity(), hostname, socketaddress.getAddress(), networkManager.getRawAddress().getAddress());
 		if (playerlist.getProfileBans().isBanned(gameprofile)) {
 			GameProfileBanEntry profileban = playerlist.getProfileBans().get(gameprofile);

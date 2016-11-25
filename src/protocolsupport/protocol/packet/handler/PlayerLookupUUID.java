@@ -64,7 +64,7 @@ public class PlayerLookupUUID {
 		}
 
 		String playerName = listener.profile.getName();
-		InetSocketAddress saddress = (InetSocketAddress) listener.networkManager.getAddress();
+		InetSocketAddress saddress = listener.networkManager.getAddress();
 		InetAddress address = saddress.getAddress();
 
 		PlayerPropertiesResolveEvent propResolve = new PlayerPropertiesResolveEvent(

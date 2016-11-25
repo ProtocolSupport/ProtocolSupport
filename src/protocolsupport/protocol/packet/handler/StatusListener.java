@@ -55,7 +55,7 @@ public class StatusListener implements PacketStatusInListener {
 		}
 		sentInfo = true;
 
-		InetSocketAddress addr = (InetSocketAddress) networkManager.getAddress();
+		InetSocketAddress addr = networkManager.getAddress();
 
 		ArrayList<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
 
