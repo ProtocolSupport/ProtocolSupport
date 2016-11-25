@@ -19,7 +19,6 @@ import com.mojang.authlib.GameProfile;
 import io.netty.buffer.Unpooled;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import net.minecraft.server.v1_11_R1.ChatComponentText;
 import net.minecraft.server.v1_11_R1.EntityPlayer;
 import net.minecraft.server.v1_11_R1.EnumDifficulty;
 import net.minecraft.server.v1_11_R1.EnumGamemode;
@@ -30,7 +29,6 @@ import net.minecraft.server.v1_11_R1.ITickable;
 import net.minecraft.server.v1_11_R1.IpBanEntry;
 import net.minecraft.server.v1_11_R1.LoginListener;
 import net.minecraft.server.v1_11_R1.MinecraftServer;
-import net.minecraft.server.v1_11_R1.NetworkManager;
 import net.minecraft.server.v1_11_R1.PacketDataSerializer;
 import net.minecraft.server.v1_11_R1.PacketListenerPlayIn;
 import net.minecraft.server.v1_11_R1.PacketLoginInEncryptionBegin;
@@ -65,7 +63,6 @@ import net.minecraft.server.v1_11_R1.PacketPlayInUseItem;
 import net.minecraft.server.v1_11_R1.PacketPlayInVehicleMove;
 import net.minecraft.server.v1_11_R1.PacketPlayInWindowClick;
 import net.minecraft.server.v1_11_R1.PacketPlayOutCustomPayload;
-import net.minecraft.server.v1_11_R1.PacketPlayOutKickDisconnect;
 import net.minecraft.server.v1_11_R1.PacketPlayOutLogin;
 import net.minecraft.server.v1_11_R1.PlayerInteractManager;
 import net.minecraft.server.v1_11_R1.PlayerList;
@@ -76,20 +73,22 @@ import protocolsupport.api.events.PlayerSyncLoginEvent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.utils.nms.MinecraftServerWrapper;
+import protocolsupport.utils.nms.NMSUtils;
+import protocolsupport.utils.nms.NetworkManagerWrapper;
 
 public class LoginListenerPlay implements PacketLoginInListener, PacketListenerPlayIn, ITickable, IHasProfile {
 
 	protected static final Logger logger = LogManager.getLogger(LoginListener.class);
 	protected static final MinecraftServer server = MinecraftServerWrapper.getServer();
 
-	protected final NetworkManager networkManager;
+	protected final NetworkManagerWrapper networkManager;
 	protected final GameProfile profile;
 	protected final boolean onlineMode;
 	protected final String hostname;
 
 	protected boolean ready;
 
-	public LoginListenerPlay(NetworkManager networkmanager, GameProfile profile, boolean onlineMode, String hostname) {
+	public LoginListenerPlay(NetworkManagerWrapper networkmanager, GameProfile profile, boolean onlineMode, String hostname) {
 		this.networkManager = networkmanager;
 		this.profile = profile;
 		this.onlineMode = onlineMode;
@@ -107,7 +106,7 @@ public class LoginListenerPlay implements PacketLoginInListener, PacketListenerP
 		// tick connection keep now
 		keepConnection();
 		// now fire login event
-		PlayerLoginFinishEvent event = new PlayerLoginFinishEvent(ConnectionImpl.getFromChannel(networkManager.channel), profile.getName(), profile.getId(), onlineMode);
+		PlayerLoginFinishEvent event = new PlayerLoginFinishEvent(ConnectionImpl.getFromChannel(networkManager.getChannel()), profile.getName(), profile.getId(), onlineMode);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.isLoginDenied()) {
 			disconnect(event.getDenyLoginMessage());
@@ -135,13 +134,13 @@ public class LoginListenerPlay implements PacketLoginInListener, PacketListenerP
 		// but it resets client readtimeouthandler, and that is exactly what we need
 		networkManager.sendPacket(new PacketPlayOutCustomPayload("PSFake", fake));
 		// we also need to reset server readtimeouthandler
-		ChannelHandlers.getTimeoutHandler(networkManager.channel.pipeline()).setLastRead();
+		ChannelHandlers.getTimeoutHandler(networkManager.getChannel().pipeline()).setLastRead();
 	}
 
 	private void tryJoin() {
 		EntityPlayer loginplayer = attemptLogin(profile, hostname);
 		if (loginplayer != null) {
-			server.getPlayerList().a(networkManager, loginplayer);
+			server.getPlayerList().a(networkManager.unwrap(), loginplayer);
 			ready = false;
 		}
 	}
@@ -168,7 +167,7 @@ public class LoginListenerPlay implements PacketLoginInListener, PacketListenerP
 		EntityPlayer entity = new EntityPlayer(server, server.getWorldServer(0), gameprofile, new PlayerInteractManager(server.getWorldServer(0)));
 
 		//ps sync login event
-		PlayerSyncLoginEvent syncloginevent = new PlayerSyncLoginEvent(ConnectionImpl.getFromChannel(networkManager.channel), entity.getBukkitEntity());
+		PlayerSyncLoginEvent syncloginevent = new PlayerSyncLoginEvent(ConnectionImpl.getFromChannel(networkManager.getChannel()), entity.getBukkitEntity());
 		Bukkit.getPluginManager().callEvent(syncloginevent);
 		if (syncloginevent.isLoginDenied()) {
 			disconnect(syncloginevent.getDenyLoginMessage());
@@ -176,8 +175,8 @@ public class LoginListenerPlay implements PacketLoginInListener, PacketListenerP
 		}
 
 		//bukkit sync login event
-		InetSocketAddress socketaddress = (InetSocketAddress) networkManager.getSocketAddress();
-		PlayerLoginEvent event = new PlayerLoginEvent(entity.getBukkitEntity(), hostname, socketaddress.getAddress(), ((InetSocketAddress) networkManager.getRawAddress()).getAddress());
+		InetSocketAddress socketaddress = (InetSocketAddress) networkManager.getAddress();
+		PlayerLoginEvent event = new PlayerLoginEvent(entity.getBukkitEntity(), hostname, socketaddress.getAddress(), networkManager.getRawAddress().getAddress());
 		if (playerlist.getProfileBans().isBanned(gameprofile)) {
 			GameProfileBanEntry profileban = playerlist.getProfileBans().get(gameprofile);
 			if (!hasExpired(profileban)) {
@@ -221,17 +220,17 @@ public class LoginListenerPlay implements PacketLoginInListener, PacketListenerP
 	}
 
 	private String getConnectionRepr() {
-		return profile + " (" + networkManager.getSocketAddress() + ")";
+		return profile + " (" + networkManager.getAddress() + ")";
 	}
 
 	public void disconnect(final String s) {
 		try {
 			logger.info("Disconnecting " + getConnectionRepr() + ": " + s);
-			if (ConnectionImpl.getFromChannel(networkManager.channel).getVersion().isBetween(ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_7_10)) {
+			if (ConnectionImpl.getFromChannel(networkManager.getChannel()).getVersion().isBetween(ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_7_10)) {
 				// first send join game that will make client actually switch to game state
 				networkManager.sendPacket(new PacketPlayOutLogin(0, EnumGamemode.NOT_SET, false, 0, EnumDifficulty.EASY, 60, WorldType.NORMAL, false));
 				// send disconnect with a little delay
-				networkManager.channel.eventLoop().schedule(() -> disconnect0(s), 50, TimeUnit.MILLISECONDS);
+				networkManager.getChannel().eventLoop().schedule(() -> disconnect0(s), 50, TimeUnit.MILLISECONDS);
 			} else {
 				disconnect0(s);
 			}
@@ -242,11 +241,10 @@ public class LoginListenerPlay implements PacketLoginInListener, PacketListenerP
 
 	@SuppressWarnings("unchecked")
 	protected void disconnect0(String s) {
-		final ChatComponentText chatcomponenttext = new ChatComponentText(s);
-		networkManager.sendPacket(new PacketPlayOutKickDisconnect(chatcomponenttext), new GenericFutureListener<Future<? super Void>>() {
+		networkManager.sendPacket(NMSUtils.createPlayDisconnectPacket(s), new GenericFutureListener<Future<? super Void>>() {
 			@Override
 			public void operationComplete(Future<? super Void> future) {
-				networkManager.close(chatcomponenttext);
+				networkManager.close(s);
 			}
 		});
 	}

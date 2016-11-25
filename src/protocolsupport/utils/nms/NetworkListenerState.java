@@ -1,4 +1,4 @@
-package protocolsupport.protocol.utils.types;
+package protocolsupport.utils.nms;
 
 import io.netty.channel.Channel;
 import net.minecraft.server.v1_11_R1.NetworkManager;
@@ -9,4 +9,5 @@ public enum NetworkListenerState {
 	public static NetworkListenerState getFromChannel(Channel channel) {
 		return NetworkListenerState.values()[channel.attr(NetworkManager.c).get().ordinal()];
 	}
+
 }

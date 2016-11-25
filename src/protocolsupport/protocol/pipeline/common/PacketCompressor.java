@@ -2,7 +2,7 @@ package protocolsupport.protocol.pipeline.common;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import protocolsupport.utils.netty.ChannelUtils;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.utils.netty.Compressor;
 
 public class PacketCompressor extends net.minecraft.server.v1_11_R1.PacketCompressor {
@@ -28,11 +28,11 @@ public class PacketCompressor extends net.minecraft.server.v1_11_R1.PacketCompre
 			return;
 		}
 		if (readable < this.threshold) {
-			ChannelUtils.writeVarInt(to, 0);
+			ProtocolSupportPacketDataSerializer.writeVarInt(to, 0);
 			to.writeBytes(from);
 		} else {
-			ChannelUtils.writeVarInt(to, readable);
-			to.writeBytes(compressor.compress(ChannelUtils.toArray(from)));
+			ProtocolSupportPacketDataSerializer.writeVarInt(to, readable);
+			to.writeBytes(compressor.compress(ProtocolSupportPacketDataSerializer.toArray(from)));
 		}
 	}
 

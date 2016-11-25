@@ -45,7 +45,6 @@ import protocolsupport.protocol.utils.types.MerchantData;
 import protocolsupport.protocol.utils.types.MerchantData.TradeOffer;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.netty.Allocator;
-import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.netty.WrappingBuffer;
 import protocolsupport.utils.nms.ItemStackWrapper;
 import protocolsupport.utils.nms.NBTTagCompoundWrapper;
@@ -65,11 +64,11 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 	}
 
 	public int readVarInt() {
-		return ChannelUtils.readVarInt(this);
+		return readVarInt(this);
 	}
 
 	public void writeVarInt(int varint) {
-		ChannelUtils.writeVarInt(this, varint);
+		writeVarInt(this, varint);
 	}
 
 	public long readVarLong() {
@@ -119,11 +118,11 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 		if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4)) {
 			int length = readUnsignedShort() * 2;
 			checkLimit(length, limit * 4);
-			return new String(ChannelUtils.toArray(readSlice(length)), StandardCharsets.UTF_16BE);
+			return new String(ProtocolSupportPacketDataSerializer.toArray(readSlice(length)), StandardCharsets.UTF_16BE);
 		} else {
 			int length = readVarInt();
 			checkLimit(length, limit * 4);
-			return new String(ChannelUtils.toArray(readSlice(length)), StandardCharsets.UTF_8);
+			return new String(ProtocolSupportPacketDataSerializer.toArray(readSlice(length)), StandardCharsets.UTF_8);
 		}
 	}
 
@@ -485,6 +484,34 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 			return wrapped;
 		}
 
+	}
+
+	public static byte[] toArray(ByteBuf buf) {
+		byte[] result = new byte[buf.readableBytes()];
+		buf.readBytes(result);
+		return result;
+	}
+
+	public static int readVarInt(ByteBuf from) {
+		int value = 0;
+		int length = 0;
+		byte part;
+		do {
+			part = from.readByte();
+			value |= (part & 0x7F) << (length++ * 7);
+			if (length > 5) {
+				throw new DecoderException("VarInt too big");
+			}
+		} while (part < 0);
+		return value;
+	}
+
+	public static void writeVarInt(ByteBuf to, int i) {
+		while ((i & 0xFFFFFF80) != 0x0) {
+			to.writeByte(i | 0x80);
+			i >>>= 7;
+		}
+		to.writeByte(i);
 	}
 
 }

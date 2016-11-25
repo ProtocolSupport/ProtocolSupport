@@ -25,15 +25,12 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import net.minecraft.server.v1_11_R1.ChatComponentText;
 import net.minecraft.server.v1_11_R1.IChatBaseComponent;
 import net.minecraft.server.v1_11_R1.ITickable;
 import net.minecraft.server.v1_11_R1.LoginListener;
-import net.minecraft.server.v1_11_R1.NetworkManager;
 import net.minecraft.server.v1_11_R1.PacketLoginInEncryptionBegin;
 import net.minecraft.server.v1_11_R1.PacketLoginInListener;
 import net.minecraft.server.v1_11_R1.PacketLoginInStart;
-import net.minecraft.server.v1_11_R1.PacketLoginOutDisconnect;
 import net.minecraft.server.v1_11_R1.PacketLoginOutEncryptionBegin;
 import net.minecraft.server.v1_11_R1.PacketLoginOutSetCompression;
 import protocolsupport.ProtocolSupport;
@@ -45,6 +42,8 @@ import protocolsupport.protocol.pipeline.common.PacketDecompressor;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
 import protocolsupport.utils.nms.MinecraftServerWrapper;
+import protocolsupport.utils.nms.NMSUtils;
+import protocolsupport.utils.nms.NetworkManagerWrapper;
 
 public abstract class AbstractLoginListener implements PacketLoginInListener, ITickable, IHasProfile {
 
@@ -64,7 +63,7 @@ public abstract class AbstractLoginListener implements PacketLoginInListener, IT
 
 	protected static final Logger logger = LogManager.getLogger(LoginListener.class);
 
-	protected final NetworkManager networkManager;
+	protected final NetworkManagerWrapper networkManager;
 	protected final String hostname;
 	protected final byte[] randomBytes = new byte[4];
 	protected int loginTicks;
@@ -76,7 +75,7 @@ public abstract class AbstractLoginListener implements PacketLoginInListener, IT
 	protected boolean useOnlineModeUUID = isOnlineMode;
 	protected UUID forcedUUID = null;
 
-	public AbstractLoginListener(NetworkManager networkmanager, String hostname) {
+	public AbstractLoginListener(NetworkManagerWrapper networkmanager, String hostname) {
 		this.networkManager = networkmanager;
 		this.hostname = hostname;
 		ThreadLocalRandom.current().nextBytes(randomBytes);
@@ -98,11 +97,10 @@ public abstract class AbstractLoginListener implements PacketLoginInListener, IT
 	public void disconnect(String s) {
 		try {
 			logger.info("Disconnecting " + getConnectionRepr() + ": " + s);
-			ChatComponentText chatcomponenttext = new ChatComponentText(s);
-			networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext), new GenericFutureListener<Future<? super Void>>() {
+			networkManager.sendPacket(NMSUtils.createLoginDisconnectPacket(s), new GenericFutureListener<Future<? super Void>>() {
 				@Override
 				public void operationComplete(Future<? super Void> future)  {
-					networkManager.close(chatcomponenttext);
+					networkManager.close(s);
 				}
 			});
 		} catch (Exception exception) {
@@ -111,9 +109,9 @@ public abstract class AbstractLoginListener implements PacketLoginInListener, IT
 	}
 
 	public void initOfflineModeGameProfile() {
-		profile = new GameProfile(networkManager.spoofedUUID != null ? networkManager.spoofedUUID : generateOffileModeUUID(), profile.getName());
-		if (networkManager.spoofedProfile != null) {
-			for (Property property : networkManager.spoofedProfile) {
+		profile = new GameProfile(networkManager.getSpoofedUUID() != null ? networkManager.getSpoofedUUID() : generateOffileModeUUID(), profile.getName());
+		if (networkManager.getSpoofedProperties() != null) {
+			for (Property property : networkManager.getSpoofedProperties()) {
 				profile.getProperties().put(property.getName(), property);
 			}
 		}
@@ -126,7 +124,7 @@ public abstract class AbstractLoginListener implements PacketLoginInListener, IT
 	protected abstract boolean hasCompression();
 
 	protected void enableCompresssion(int compressionLevel) {
-		Channel channel = networkManager.channel;
+		Channel channel = networkManager.getChannel();
 		if (compressionLevel >= 0) {
 			channel.pipeline()
 			.addAfter(ChannelHandlers.SPLITTER, "decompress", new PacketDecompressor(compressionLevel))
@@ -140,7 +138,7 @@ public abstract class AbstractLoginListener implements PacketLoginInListener, IT
 	}
 
 	public String getConnectionRepr() {
-		return (profile != null) ? (profile + " (" + networkManager.getSocketAddress() + ")") : networkManager.getSocketAddress().toString();
+		return (profile != null) ? (profile + " (" + networkManager.getAddress() + ")") : networkManager.getAddress().toString();
 	}
 
 	@Override
@@ -154,7 +152,7 @@ public abstract class AbstractLoginListener implements PacketLoginInListener, IT
 					profile = packetlogininstart.a();
 
 					PlayerLoginStartEvent event = new PlayerLoginStartEvent(
-						ConnectionImpl.getFromChannel(networkManager.channel),
+						ConnectionImpl.getFromChannel(networkManager.getChannel()),
 						profile.getName(),
 						isOnlineMode,
 						useOnlineModeUUID,

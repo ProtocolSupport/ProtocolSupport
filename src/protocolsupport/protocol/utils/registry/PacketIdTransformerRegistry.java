@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.NoSuchElementException;
 
-import protocolsupport.protocol.utils.types.NetworkListenerState;
+import protocolsupport.utils.nms.NetworkListenerState;
 
 public class PacketIdTransformerRegistry {
 

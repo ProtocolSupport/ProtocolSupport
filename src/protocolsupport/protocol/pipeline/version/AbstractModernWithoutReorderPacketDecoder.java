@@ -9,7 +9,7 @@ import protocolsupport.api.Connection;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
-import protocolsupport.protocol.utils.types.NetworkListenerState;
+import protocolsupport.utils.nms.NetworkListenerState;
 
 public class AbstractModernWithoutReorderPacketDecoder extends AbstractPacketDecoder {
 

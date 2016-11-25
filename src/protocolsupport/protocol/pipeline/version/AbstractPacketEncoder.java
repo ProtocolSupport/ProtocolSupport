@@ -11,10 +11,9 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry;
-import protocolsupport.protocol.utils.types.NetworkListenerState;
 import protocolsupport.utils.netty.Allocator;
-import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.netty.MessageToMessageEncoder;
+import protocolsupport.utils.nms.NetworkListenerState;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<ByteBuf> {
@@ -50,7 +49,7 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 				ByteBuf senddata = Allocator.allocateBuffer();
 				int newPacketId = getNewPacketId(currentProtocol, packetdata.getPacketId());
 				if (varintPacketId) {
-					ChannelUtils.writeVarInt(senddata, newPacketId);
+					ProtocolSupportPacketDataSerializer.writeVarInt(senddata, newPacketId);
 				} else {
 					senddata.writeByte(newPacketId);
 				}

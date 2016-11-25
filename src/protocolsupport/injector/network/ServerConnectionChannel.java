@@ -3,7 +3,6 @@ package protocolsupport.injector.network;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
-import net.minecraft.server.v1_11_R1.NetworkManager;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
@@ -18,7 +17,7 @@ import protocolsupport.protocol.pipeline.wrapped.WrappedSplitter;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
-import protocolsupport.utils.netty.ChannelUtils;
+import protocolsupport.utils.nms.NetworkManagerWrapper;
 
 public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 
@@ -26,7 +25,7 @@ public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 
 	@Override
 	protected void initChannel(Channel channel) {
-		NetworkManager networkmanager = ChannelUtils.getNetworkManager(channel);
+		NetworkManagerWrapper networkmanager = NetworkManagerWrapper.getFromChannel(channel);
 		networkmanager.setPacketListener(new FakePacketListener());
 		ConnectionImpl connection = new ConnectionImpl(networkmanager, ProtocolVersion.UNKNOWN);
 		connection.storeInChannel(channel);

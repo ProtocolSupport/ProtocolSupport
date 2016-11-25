@@ -1,7 +1,7 @@
 package protocolsupport.protocol.pipeline.common;
 
 import java.io.IOException;
-import java.net.SocketAddress;
+import java.net.InetSocketAddress;
 import java.nio.channels.ClosedChannelException;
 import java.util.HashSet;
 
@@ -18,7 +18,7 @@ import protocolsupport.api.events.PlayerDisconnectEvent;
 import protocolsupport.logger.AsyncErrorLogger;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.storage.ProtocolStorage;
-import protocolsupport.utils.netty.ChannelUtils;
+import protocolsupport.utils.nms.NetworkManagerWrapper;
 
 public class LogicHandler extends ChannelDuplexHandler {
 
@@ -54,8 +54,8 @@ public class LogicHandler extends ChannelDuplexHandler {
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable e) throws Exception {
 		super.exceptionCaught(ctx, e);
 		if (!ignoreExceptions.contains(e.getClass())) {
-			SocketAddress remoteaddr = ChannelUtils.getNetworkManagerSocketAddress(ctx.channel());
-			AsyncErrorLogger.INSTANCE.log(e, remoteaddr, ConnectionImpl.getFromChannel(ctx.channel()).getVersion());
+			Connection connecion = ConnectionImpl.getFromChannel(ctx.channel());
+			AsyncErrorLogger.INSTANCE.log(e, connecion.getAddress(), connecion.getVersion());
 		}
 	}
 
@@ -68,9 +68,10 @@ public class LogicHandler extends ChannelDuplexHandler {
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		super.channelInactive(ctx);
-		SocketAddress addr = ChannelUtils.getNetworkManagerSocketAddress(ctx.channel());
+		NetworkManagerWrapper networkmanager = NetworkManagerWrapper.getFromChannel(ctx.channel());
+		InetSocketAddress addr = networkmanager.getAddress();
 		Connection connection = ProtocolStorage.getConnection(addr);
-		String username = ChannelUtils.getUserName(ctx.channel());
+		String username = networkmanager.getUserName();
 		if (username != null) {
 			Bukkit.getPluginManager().callEvent(new PlayerDisconnectEvent(connection, username));
 		}

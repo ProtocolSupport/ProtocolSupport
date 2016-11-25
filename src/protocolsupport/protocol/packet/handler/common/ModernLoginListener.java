@@ -2,13 +2,13 @@ package protocolsupport.protocol.packet.handler.common;
 
 import javax.crypto.SecretKey;
 
-import net.minecraft.server.v1_11_R1.NetworkManager;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
+import protocolsupport.utils.nms.NetworkManagerWrapper;
 
 public class ModernLoginListener extends AbstractLoginListener {
 
 	private boolean hasCompression;
-	public ModernLoginListener(NetworkManager networkmanager, String hostname, boolean hasCompression) {
+	public ModernLoginListener(NetworkManagerWrapper networkmanager, String hostname, boolean hasCompression) {
 		super(networkmanager, hostname);
 		this.hasCompression = hasCompression;
 	}
@@ -20,7 +20,7 @@ public class ModernLoginListener extends AbstractLoginListener {
 
 	@Override
 	protected void enableEncryption(SecretKey key) {
-		networkManager.a(loginKey);
+		networkManager.enableEncryption(loginKey);
 	}
 
 }

@@ -38,7 +38,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.status.v_1_7__1_8_
 import protocolsupport.protocol.packet.middleimpl.serverbound.status.v_1_7__1_8__1_9_r1__1_9_r2__1_10__1_11.ServerInfoRequest;
 import protocolsupport.protocol.pipeline.version.AbstractModernWithoutReorderPacketDecoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
-import protocolsupport.protocol.utils.types.NetworkListenerState;
+import protocolsupport.utils.nms.NetworkListenerState;
 
 public class PacketDecoder extends AbstractModernWithoutReorderPacketDecoder {
 

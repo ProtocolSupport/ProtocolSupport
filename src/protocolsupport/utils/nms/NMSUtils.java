@@ -6,13 +6,16 @@ import org.bukkit.craftbukkit.v1_11_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 
 import io.netty.buffer.Unpooled;
+import net.minecraft.server.v1_11_R1.ChatComponentText;
 import net.minecraft.server.v1_11_R1.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_11_R1.Item;
 import net.minecraft.server.v1_11_R1.LocaleI18n;
 import net.minecraft.server.v1_11_R1.NBTTagCompound;
 import net.minecraft.server.v1_11_R1.PacketDataSerializer;
+import net.minecraft.server.v1_11_R1.PacketLoginOutDisconnect;
 import net.minecraft.server.v1_11_R1.PacketPlayInCloseWindow;
 import net.minecraft.server.v1_11_R1.PacketPlayOutChat;
+import net.minecraft.server.v1_11_R1.PacketPlayOutKickDisconnect;
 import net.minecraft.server.v1_11_R1.PacketPlayOutPlayerListHeaderFooter;
 import net.minecraft.server.v1_11_R1.PacketPlayOutTitle;
 import net.minecraft.server.v1_11_R1.PacketPlayOutTitle.EnumTitleAction;
@@ -63,6 +66,13 @@ public class NMSUtils {
 		return new PacketPlayOutTitle(fadeIn, stay, fadeOut);
 	}
 
+	public static Object createLoginDisconnectPacket(String message) {
+		return new PacketLoginOutDisconnect(new ChatComponentText(message));
+	}
+
+	public static Object createPlayDisconnectPacket(String message) {
+		return new PacketPlayOutKickDisconnect(new ChatComponentText(message));
+	}
 
 	public static String localize(String key, Object... args) {
 		return LocaleI18n.a(key, args);

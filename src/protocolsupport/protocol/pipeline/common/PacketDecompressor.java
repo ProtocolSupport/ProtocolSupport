@@ -7,7 +7,7 @@ import java.util.zip.Inflater;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
-import protocolsupport.utils.netty.ChannelUtils;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public class PacketDecompressor extends net.minecraft.server.v1_11_R1.PacketDecompressor {
 
@@ -28,11 +28,11 @@ public class PacketDecompressor extends net.minecraft.server.v1_11_R1.PacketDeco
 		if (!from.isReadable()) {
 			return;
 		}
-		int uncompressedlength = ChannelUtils.readVarInt(from);
+		int uncompressedlength = ProtocolSupportPacketDataSerializer.readVarInt(from);
 		if (uncompressedlength == 0) {
 			list.add(from.readBytes(from.readableBytes()));
 		} else {
-			this.inflater.setInput(ChannelUtils.toArray(from));
+			this.inflater.setInput(ProtocolSupportPacketDataSerializer.toArray(from));
 			byte[] uncompressed = new byte[uncompressedlength];
 			this.inflater.inflate(uncompressed);
 			list.add(Unpooled.wrappedBuffer(uncompressed));

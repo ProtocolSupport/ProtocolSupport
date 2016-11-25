@@ -9,13 +9,12 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelOutboundHandler;
 import io.netty.util.AttributeKey;
 import net.minecraft.server.v1_11_R1.CancelledPacketHandleException;
-import net.minecraft.server.v1_11_R1.NetworkManager;
 import net.minecraft.server.v1_11_R1.Packet;
 import net.minecraft.server.v1_11_R1.PacketListener;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
-import protocolsupport.utils.netty.ChannelUtils;
+import protocolsupport.utils.nms.NetworkManagerWrapper;
 
 public class ConnectionImpl extends Connection {
 
@@ -25,8 +24,8 @@ public class ConnectionImpl extends Connection {
 		return channel.attr(key).get();
 	}
 
-	private final NetworkManager networkmanager;
-	public ConnectionImpl(NetworkManager networkmanager, ProtocolVersion version) {
+	private final NetworkManagerWrapper networkmanager;
+	public ConnectionImpl(NetworkManagerWrapper networkmanager, ProtocolVersion version) {
 		super(version);
 		this.networkmanager = networkmanager;
 	}
@@ -37,7 +36,7 @@ public class ConnectionImpl extends Connection {
 
 	@Override
 	public Object getNetworkManager() {
-		return networkmanager;
+		return networkmanager.unwrap();
 	}
 
 	@Override
@@ -47,21 +46,21 @@ public class ConnectionImpl extends Connection {
 
 	@Override
 	public InetSocketAddress getAddress() {
-		return (InetSocketAddress) networkmanager.getSocketAddress();
+		return networkmanager.getAddress();
 	}
 
 	@Override
 	public Player getPlayer() {
-		return ChannelUtils.getBukkitPlayer(networkmanager);
+		return networkmanager.getBukkitPlayer();
 	}
 
 	@Override
 	public void receivePacket(Object packet) {
 		@SuppressWarnings("unchecked")
 		final Packet<PacketListener> packetInst = (Packet<PacketListener>) packet;
-		if (networkmanager.channel.isOpen()) {
+		if (networkmanager.getChannel().isOpen()) {
 			try {
-				packetInst.a(networkmanager.i());
+				packetInst.a(networkmanager.getPacketListener());
 			} catch (CancelledPacketHandleException ex) {
 			}
 		}
@@ -73,17 +72,17 @@ public class ConnectionImpl extends Connection {
 		final Packet<PacketListener> packetInst = (Packet<PacketListener>) packet;
 		Runnable packetSend = () -> {
 			try {
-				ChannelHandlerContext encoderContext = networkmanager.channel.pipeline().context(ChannelHandlers.ENCODER);
+				ChannelHandlerContext encoderContext = networkmanager.getChannel().pipeline().context(ChannelHandlers.ENCODER);
 				ChannelOutboundHandler encoderChannelHandler = (ChannelOutboundHandler) encoderContext.handler();
 				encoderChannelHandler.write(encoderContext, packetInst, encoderContext.voidPromise());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		};
-		if (networkmanager.channel.eventLoop().inEventLoop()) {
+		if (networkmanager.getChannel().eventLoop().inEventLoop()) {
 			packetSend.run();
 		} else {
-			networkmanager.channel.eventLoop().submit(packetSend);
+			networkmanager.getChannel().eventLoop().submit(packetSend);
 		}
 	}
 

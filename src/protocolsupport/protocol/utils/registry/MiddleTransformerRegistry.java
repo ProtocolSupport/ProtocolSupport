@@ -2,7 +2,7 @@ package protocolsupport.protocol.utils.registry;
 
 import java.util.NoSuchElementException;
 
-import protocolsupport.protocol.utils.types.NetworkListenerState;
+import protocolsupport.utils.nms.NetworkListenerState;
 
 @SuppressWarnings("unchecked")
 public class MiddleTransformerRegistry<T> {

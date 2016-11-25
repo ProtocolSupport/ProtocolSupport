@@ -5,8 +5,8 @@ import java.util.Arrays;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.utils.Utils;
-import protocolsupport.utils.netty.ChannelUtils;
 
 public abstract class ChunkTransformer {
 
@@ -89,14 +89,14 @@ public abstract class ChunkTransformer {
 		public ChunkSection(ByteBuf datastream, boolean hasSkyLight) {
 			byte bitsPerBlock = datastream.readByte();
 			int[] palette = globalpalette;
-			int palettelength = ChannelUtils.readVarInt(datastream);
+			int palettelength = ProtocolSupportPacketDataSerializer.readVarInt(datastream);
 			if (palettelength != 0) {
 				palette = new int[palettelength];
 				for (int i = 0; i < palette.length; i++) {
-					palette[i] = ChannelUtils.readVarInt(datastream);
+					palette[i] = ProtocolSupportPacketDataSerializer.readVarInt(datastream);
 				}
 			}
-			this.blockdata = new BlockStorageReader(palette, bitsPerBlock, ChannelUtils.readVarInt(datastream));
+			this.blockdata = new BlockStorageReader(palette, bitsPerBlock, ProtocolSupportPacketDataSerializer.readVarInt(datastream));
 			this.blockdata.readFromStream(datastream);
 			datastream.readBytes(blocklight);
 			if (hasSkyLight) {

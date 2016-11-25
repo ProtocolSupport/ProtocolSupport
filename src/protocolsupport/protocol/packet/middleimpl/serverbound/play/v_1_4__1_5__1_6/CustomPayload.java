@@ -4,7 +4,6 @@ import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
-import protocolsupport.utils.netty.ChannelUtils;
 
 public class CustomPayload extends MiddleCustomPayload {
 
@@ -29,7 +28,7 @@ public class CustomPayload extends MiddleCustomPayload {
 		} else {
 			newdata.writeBytes(olddata);
 		}
-		data = ChannelUtils.toArray(newdata);
+		data = ProtocolSupportPacketDataSerializer.toArray(newdata);
 	}
 
 }

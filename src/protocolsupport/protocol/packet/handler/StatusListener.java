@@ -22,7 +22,6 @@ import com.mojang.authlib.GameProfile;
 import io.netty.channel.ChannelFutureListener;
 import net.minecraft.server.v1_11_R1.ChatComponentText;
 import net.minecraft.server.v1_11_R1.IChatBaseComponent;
-import net.minecraft.server.v1_11_R1.NetworkManager;
 import net.minecraft.server.v1_11_R1.PacketStatusInListener;
 import net.minecraft.server.v1_11_R1.PacketStatusInPing;
 import net.minecraft.server.v1_11_R1.PacketStatusInStart;
@@ -36,14 +35,12 @@ import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.utils.nms.MinecraftServerWrapper;
+import protocolsupport.utils.nms.NetworkManagerWrapper;
 
 public class StatusListener implements PacketStatusInListener {
 
-	private static final IChatBaseComponent infoAlreadySent = new ChatComponentText("Status request has already been handled.");
-
-	private final NetworkManager networkManager;
-
-	public StatusListener(NetworkManager networkmanager) {
+	private final NetworkManagerWrapper networkManager;
+	public StatusListener(NetworkManagerWrapper networkmanager) {
 		this.networkManager = networkmanager;
 	}
 
@@ -54,11 +51,11 @@ public class StatusListener implements PacketStatusInListener {
 	@Override
 	public void a(PacketStatusInStart packetstatusinstart) {
 		if (sentInfo) {
-			networkManager.close(infoAlreadySent);
+			networkManager.close("Status request has already been handled.");
 		}
 		sentInfo = true;
 
-		InetSocketAddress addr = (InetSocketAddress) networkManager.getSocketAddress();
+		InetSocketAddress addr = (InetSocketAddress) networkManager.getAddress();
 
 		ArrayList<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
 
@@ -79,7 +76,7 @@ public class StatusListener implements PacketStatusInListener {
 		}
 
 		ServerPingResponseEvent revent = new ServerPingResponseEvent(
-			ConnectionImpl.getFromChannel(networkManager.channel), new ProtocolInfo(ProtocolVersion.getLatest(), MinecraftServerWrapper.getModName() + " " + MinecraftServerWrapper.getVersionName()),
+			ConnectionImpl.getFromChannel(networkManager.getChannel()), new ProtocolInfo(ProtocolVersion.getLatest(), MinecraftServerWrapper.getModName() + " " + MinecraftServerWrapper.getVersionName()),
 			icon, motd, maxPlayers, profiles
 		);
 		Bukkit.getPluginManager().callEvent(revent);

@@ -64,11 +64,11 @@ public class PlayerLookupUUID {
 		}
 
 		String playerName = listener.profile.getName();
-		InetSocketAddress saddress = (InetSocketAddress) listener.networkManager.getSocketAddress();
+		InetSocketAddress saddress = (InetSocketAddress) listener.networkManager.getAddress();
 		InetAddress address = saddress.getAddress();
 
 		PlayerPropertiesResolveEvent propResolve = new PlayerPropertiesResolveEvent(
-			ConnectionImpl.getFromChannel(listener.networkManager.channel), playerName,
+			ConnectionImpl.getFromChannel(listener.networkManager.getChannel()), playerName,
 			listener.profile.getProperties().values().stream()
 			.map(property -> new ProfileProperty(property.getName(), property.getValue(), property.getSignature()))
 			.collect(Collectors.toList())

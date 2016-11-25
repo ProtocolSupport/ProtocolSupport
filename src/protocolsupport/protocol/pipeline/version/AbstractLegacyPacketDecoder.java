@@ -10,8 +10,8 @@ import protocolsupport.protocol.legacyremapper.LegacyAnimatePacketReorderer;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ReplayingProtocolSupportSupportPacketDataSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
-import protocolsupport.protocol.utils.types.NetworkListenerState;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
+import protocolsupport.utils.nms.NetworkListenerState;
 
 public class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
 
