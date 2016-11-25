@@ -29,7 +29,6 @@ import net.minecraft.server.v1_11_R1.ChatComponentText;
 import net.minecraft.server.v1_11_R1.IChatBaseComponent;
 import net.minecraft.server.v1_11_R1.ITickable;
 import net.minecraft.server.v1_11_R1.LoginListener;
-import net.minecraft.server.v1_11_R1.MinecraftServer;
 import net.minecraft.server.v1_11_R1.NetworkManager;
 import net.minecraft.server.v1_11_R1.PacketLoginInEncryptionBegin;
 import net.minecraft.server.v1_11_R1.PacketLoginInListener;
@@ -45,7 +44,7 @@ import protocolsupport.protocol.pipeline.common.PacketCompressor;
 import protocolsupport.protocol.pipeline.common.PacketDecompressor;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
-import protocolsupport.utils.nms.ServerPlatformUtils;
+import protocolsupport.utils.nms.MinecraftServerWrapper;
 
 public abstract class AbstractLoginListener implements PacketLoginInListener, ITickable, IHasProfile {
 
@@ -64,7 +63,6 @@ public abstract class AbstractLoginListener implements PacketLoginInListener, IT
 	);
 
 	protected static final Logger logger = LogManager.getLogger(LoginListener.class);
-	protected final static MinecraftServer server = ServerPlatformUtils.getServer();
 
 	protected final NetworkManager networkManager;
 	protected final String hostname;
@@ -74,7 +72,7 @@ public abstract class AbstractLoginListener implements PacketLoginInListener, IT
 	protected LoginState state = LoginState.HELLO;
 	protected GameProfile profile;
 
-	protected boolean isOnlineMode = server.getOnlineMode();
+	protected boolean isOnlineMode = Bukkit.getOnlineMode();
 	protected boolean useOnlineModeUUID = isOnlineMode;
 	protected UUID forcedUUID = null;
 
@@ -173,13 +171,13 @@ public abstract class AbstractLoginListener implements PacketLoginInListener, IT
 					forcedUUID = event.getForcedUUID();
 					if (isOnlineMode) {
 						state = LoginState.KEY;
-						networkManager.sendPacket(new PacketLoginOutEncryptionBegin("", server.O().getPublic(), randomBytes));
+						networkManager.sendPacket(new PacketLoginOutEncryptionBegin("", MinecraftServerWrapper.getEncryptionKeyPair().getPublic(), randomBytes));
 					} else {
 						new PlayerLookupUUID(AbstractLoginListener.this, isOnlineMode).run();
 					}
 				} catch (Throwable t) {
 					AbstractLoginListener.this.disconnect("Error occured while logging in");
-					if (ServerPlatformUtils.isDebugging()) {
+					if (MinecraftServerWrapper.isDebugging()) {
 						t.printStackTrace();
 					}
 				}
@@ -195,7 +193,7 @@ public abstract class AbstractLoginListener implements PacketLoginInListener, IT
 			@Override
 			public void run() {
 				try {
-					final PrivateKey privatekey = server.O().getPrivate();
+					final PrivateKey privatekey = MinecraftServerWrapper.getEncryptionKeyPair().getPrivate();
 					if (!Arrays.equals(randomBytes, packetlogininencryptionbegin.b(privatekey))) {
 						throw new IllegalStateException("Invalid nonce!");
 					}
@@ -204,7 +202,7 @@ public abstract class AbstractLoginListener implements PacketLoginInListener, IT
 					new PlayerLookupUUID(AbstractLoginListener.this, isOnlineMode).run();
 				} catch (Throwable t) {
 					AbstractLoginListener.this.disconnect("Error occured while logging in");
-					if (ServerPlatformUtils.isDebugging()) {
+					if (MinecraftServerWrapper.isDebugging()) {
 						t.printStackTrace();
 					}
 				}
@@ -233,7 +231,7 @@ public abstract class AbstractLoginListener implements PacketLoginInListener, IT
 			profile = newProfile;
 		}
 		if (hasCompression()) {
-			final int threshold = ServerPlatformUtils.getServer().aG();
+			final int threshold = MinecraftServerWrapper.getCompressionThreshold();
 			if (threshold >= 0) {
 				this.networkManager.sendPacket(
 					new PacketLoginOutSetCompression(threshold),

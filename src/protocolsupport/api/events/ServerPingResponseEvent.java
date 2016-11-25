@@ -9,7 +9,7 @@ import org.bukkit.event.HandlerList;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.utils.nms.ServerPlatformUtils;
+import protocolsupport.utils.nms.MinecraftServerWrapper;
 
 public class ServerPingResponseEvent extends ConnectionEvent {
 
@@ -111,11 +111,11 @@ public class ServerPingResponseEvent extends ConnectionEvent {
 	}
 
 	public static String getServerModName() {
-		return ServerPlatformUtils.getServer().getServerModName();
+		return MinecraftServerWrapper.getModName();
 	}
 
 	public static String getServerVersionName() {
-		return ServerPlatformUtils.getServer().getVersion();
+		return MinecraftServerWrapper.getVersionName();
 	}
 
 }

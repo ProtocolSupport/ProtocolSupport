@@ -13,7 +13,7 @@ import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.utils.Any;
 import protocolsupport.utils.nms.NBTTagCompoundWrapper;
-import protocolsupport.utils.nms.ServerPlatformUtils;
+import protocolsupport.utils.nms.NMSUtils;
 
 public class HoverAction {
 
@@ -32,7 +32,7 @@ public class HoverAction {
 
 	public HoverAction(ItemStack itemstack) {
 		this.type = Type.SHOW_ITEM;
-		this.value = ServerPlatformUtils.createNBTTagFromItemStack(itemstack).toString();
+		this.value = NMSUtils.createNBTTagFromItemStack(itemstack).toString();
 	}
 
 	public HoverAction(Entity entity) {
@@ -74,7 +74,7 @@ public class HoverAction {
 
 	public ItemStack getItemStack() {
 		validateAction(type, Type.SHOW_ITEM);
-		return ServerPlatformUtils.createItemStackFromNBTTag(NBTTagCompoundWrapper.fromJson(value));
+		return NMSUtils.createItemStackFromNBTTag(NBTTagCompoundWrapper.fromJson(value));
 	}
 
 	@SuppressWarnings("deprecation")

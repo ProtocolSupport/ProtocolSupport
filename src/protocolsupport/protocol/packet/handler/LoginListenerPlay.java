@@ -75,12 +75,12 @@ import protocolsupport.api.events.PlayerLoginFinishEvent;
 import protocolsupport.api.events.PlayerSyncLoginEvent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
-import protocolsupport.utils.nms.ServerPlatformUtils;
+import protocolsupport.utils.nms.MinecraftServerWrapper;
 
 public class LoginListenerPlay implements PacketLoginInListener, PacketListenerPlayIn, ITickable, IHasProfile {
 
 	protected static final Logger logger = LogManager.getLogger(LoginListener.class);
-	protected static final MinecraftServer server = ServerPlatformUtils.getServer();
+	protected static final MinecraftServer server = MinecraftServerWrapper.getServer();
 
 	protected final NetworkManager networkManager;
 	protected final GameProfile profile;

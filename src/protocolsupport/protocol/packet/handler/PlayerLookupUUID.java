@@ -5,7 +5,6 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
@@ -21,7 +20,7 @@ import protocolsupport.api.events.PlayerPropertiesResolveEvent;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.utils.MinecraftEncryption;
-import protocolsupport.utils.nms.ServerPlatformUtils;
+import protocolsupport.utils.nms.MinecraftServerWrapper;
 
 @SuppressWarnings("deprecation")
 public class PlayerLookupUUID {
@@ -42,8 +41,8 @@ public class PlayerLookupUUID {
 				fireLoginEvents();
 				return;
 			}
-			String hash = new BigInteger(MinecraftEncryption.createHash(ServerPlatformUtils.getServer().O().getPublic(), listener.loginKey)).toString(16);
-			listener.profile = ServerPlatformUtils.getServer().az().hasJoinedServer(new GameProfile(null, joinName), hash, null);
+			String hash = new BigInteger(MinecraftEncryption.createHash(MinecraftServerWrapper.getEncryptionKeyPair().getPublic(), listener.loginKey)).toString(16);
+			listener.profile = MinecraftServerWrapper.getSessionService().hasJoinedServer(new GameProfile(null, joinName), hash, null);
 			if (listener.profile != null) {
 				fireLoginEvents();
 			} else {
@@ -92,12 +91,10 @@ public class PlayerLookupUUID {
 		}
 
 		if (PlayerPreLoginEvent.getHandlerList().getRegisteredListeners().length != 0) {
-			FutureTask<PlayerPreLoginEvent.Result> task = new FutureTask<>(() -> {
+			if (MinecraftServerWrapper.callSyncTask(() -> {
 				Bukkit.getPluginManager().callEvent(syncEvent);
 				return syncEvent.getResult();
-			});
-			ServerPlatformUtils.getServer().processQueue.add(task);
-			if (task.get() != PlayerPreLoginEvent.Result.ALLOWED) {
+			}).get() != PlayerPreLoginEvent.Result.ALLOWED) {
 				listener.disconnect(syncEvent.getKickMessage());
 				return;
 			}

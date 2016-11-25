@@ -21,7 +21,7 @@ import protocolsupport.utils.Utils.Converter;
 import protocolsupport.utils.netty.ChannelUtils;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
-import protocolsupport.utils.nms.ServerPlatformUtils;
+import protocolsupport.utils.nms.MinecraftServerWrapper;
 
 public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
@@ -148,7 +148,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 	}
 
 	protected void setProtocol(final Channel channel, ProtocolVersion version) {
-		if (ServerPlatformUtils.isDebugging()) {
+		if (MinecraftServerWrapper.isDebugging()) {
 			System.err.println(ChannelUtils.getNetworkManagerSocketAddress(channel)+ " connected with protocol version "+version);
 		}
 		ConnectionImpl connection = ProtocolStorage.getConnection(ChannelUtils.getNetworkManagerSocketAddress(channel));

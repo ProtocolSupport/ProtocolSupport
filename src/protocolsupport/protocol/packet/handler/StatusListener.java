@@ -21,9 +21,7 @@ import com.mojang.authlib.GameProfile;
 
 import io.netty.channel.ChannelFutureListener;
 import net.minecraft.server.v1_11_R1.ChatComponentText;
-import net.minecraft.server.v1_11_R1.EntityPlayer;
 import net.minecraft.server.v1_11_R1.IChatBaseComponent;
-import net.minecraft.server.v1_11_R1.MinecraftServer;
 import net.minecraft.server.v1_11_R1.NetworkManager;
 import net.minecraft.server.v1_11_R1.PacketStatusInListener;
 import net.minecraft.server.v1_11_R1.PacketStatusInPing;
@@ -37,12 +35,11 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.utils.nms.ServerPlatformUtils;
+import protocolsupport.utils.nms.MinecraftServerWrapper;
 
 public class StatusListener implements PacketStatusInListener {
 
 	private static final IChatBaseComponent infoAlreadySent = new ChatComponentText("Status request has already been handled.");
-	private static final MinecraftServer server = ServerPlatformUtils.getServer();
 
 	private final NetworkManager networkManager;
 
@@ -63,10 +60,10 @@ public class StatusListener implements PacketStatusInListener {
 
 		InetSocketAddress addr = (InetSocketAddress) networkManager.getSocketAddress();
 
-		ArrayList<EntityPlayer> players = new ArrayList<>(server.getPlayerList().players);
+		ArrayList<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
 
-		String motd = server.getMotd();
-		int maxPlayers = server.getPlayerList().getMaxPlayers();
+		String motd = Bukkit.getMotd();
+		int maxPlayers = Bukkit.getMaxPlayers();
 
 		InternalServerListPingEvent bevent = new InternalServerListPingEvent(addr.getAddress(), motd, maxPlayers, players);
 		bevent.setServerIcon(Bukkit.getServerIcon());
@@ -77,12 +74,12 @@ public class StatusListener implements PacketStatusInListener {
 		maxPlayers = bevent.getMaxPlayers();
 
 		List<String> profiles = new ArrayList<>(players.size());
-		for (EntityPlayer player : players) {
-			profiles.add(player.getProfile().getName());
+		for (Player player : players) {
+			profiles.add(player.getName());
 		}
 
 		ServerPingResponseEvent revent = new ServerPingResponseEvent(
-			ConnectionImpl.getFromChannel(networkManager.channel), new ProtocolInfo(ProtocolVersion.getLatest(), server.getServerModName() + " " + server.getVersion()),
+			ConnectionImpl.getFromChannel(networkManager.channel), new ProtocolInfo(ProtocolVersion.getLatest(), MinecraftServerWrapper.getModName() + " " + MinecraftServerWrapper.getVersionName()),
 			icon, motd, maxPlayers, profiles
 		);
 		Bukkit.getPluginManager().callEvent(revent);
@@ -124,8 +121,8 @@ public class StatusListener implements PacketStatusInListener {
 
 	public static class InternalServerListPingEvent extends ServerListPingEvent {
 
-		private List<EntityPlayer> players;
-		protected InternalServerListPingEvent(InetAddress address, String motd, int maxPlayers, List<EntityPlayer> players) {
+		private List<Player> players;
+		protected InternalServerListPingEvent(InetAddress address, String motd, int maxPlayers, List<Player> players) {
 			super(address, motd, maxPlayers);
 			this.players = players;
 		}
@@ -146,23 +143,7 @@ public class StatusListener implements PacketStatusInListener {
 
 		@Override
 		public Iterator<Player> iterator() throws UnsupportedOperationException {
-			return new Iterator<Player>() {
-				Iterator<EntityPlayer> iterator = players.iterator();
-				@Override
-				public boolean hasNext() {
-					return iterator.hasNext();
-				}
-
-				@Override
-				public Player next() {
-					return iterator.next().getBukkitEntity();
-				}
-
-				@Override
-				public void remove() {
-					iterator.remove();
-				}
-			};
+			return players.iterator();
 		}
 
 	}

@@ -15,7 +15,7 @@ import protocolsupport.utils.chat.ClickActionSerializer;
 import protocolsupport.utils.chat.ComponentSerializer;
 import protocolsupport.utils.chat.HoverActionSerializer;
 import protocolsupport.utils.chat.ModifierSerializer;
-import protocolsupport.utils.nms.ServerPlatformUtils;
+import protocolsupport.utils.nms.NMSUtils;
 
 public class ChatAPI {
 
@@ -50,7 +50,7 @@ public class ChatAPI {
 		Validate.notNull(player, "Player can't be null");
 		Validate.notNull(messageJson, "Message can't be null");
 		Validate.notNull(position, "Message position can't be null");
-		ProtocolSupportAPI.getConnection(player).sendPacket(ServerPlatformUtils.createOutboundChatPacket(messageJson, position.ordinal()));
+		ProtocolSupportAPI.getConnection(player).sendPacket(NMSUtils.createOutboundChatPacket(messageJson, position.ordinal()));
 	}
 
 	public static enum MessagePosition {

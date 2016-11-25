@@ -2,8 +2,6 @@ package protocolsupport.utils.nms;
 
 import java.io.IOException;
 
-import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_11_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_11_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 
@@ -11,7 +9,6 @@ import io.netty.buffer.Unpooled;
 import net.minecraft.server.v1_11_R1.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_11_R1.Item;
 import net.minecraft.server.v1_11_R1.LocaleI18n;
-import net.minecraft.server.v1_11_R1.MinecraftServer;
 import net.minecraft.server.v1_11_R1.NBTTagCompound;
 import net.minecraft.server.v1_11_R1.PacketDataSerializer;
 import net.minecraft.server.v1_11_R1.PacketPlayInCloseWindow;
@@ -23,7 +20,7 @@ import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
 
-public class ServerPlatformUtils {
+public class NMSUtils {
 
 	public static Object createInboundInventoryClosePacket() {
 		return new PacketPlayInCloseWindow();
@@ -66,9 +63,6 @@ public class ServerPlatformUtils {
 		return new PacketPlayOutTitle(fadeIn, stay, fadeOut);
 	}
 
-	public static MinecraftServer getServer() {
-		return ((CraftServer) Bukkit.getServer()).getServer();
-	}
 
 	public static String localize(String key, Object... args) {
 		return LocaleI18n.a(key, args);
@@ -91,20 +85,6 @@ public class ServerPlatformUtils {
 			return Item.getId(item);
 		}
 		return null;
-	}
-
-	public static boolean isDebugging() {
-		return getServer().isDebugging();
-	}
-
-	private static final String DEBUG_PROPERTY = "debug";
-
-	public static void enableDebug() {
-		getServer().getPropertyManager().setProperty(DEBUG_PROPERTY, Boolean.TRUE);
-	}
-
-	public static void disableDebug() {
-		getServer().getPropertyManager().setProperty(DEBUG_PROPERTY, Boolean.FALSE);
 	}
 
 }

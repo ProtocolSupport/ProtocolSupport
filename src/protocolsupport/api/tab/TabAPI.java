@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.chat.components.BaseComponent;
-import protocolsupport.utils.nms.ServerPlatformUtils;
+import protocolsupport.utils.nms.NMSUtils;
 
 public class TabAPI {
 
@@ -42,7 +42,7 @@ public class TabAPI {
 
 	public static void sendHeaderFooter(Player player, BaseComponent header, BaseComponent footer) {
 		Validate.notNull(player, "Player can't be null");
-		ProtocolSupportAPI.getConnection(player).sendPacket(ServerPlatformUtils.createTabHeaderFooterPacket(header, footer));
+		ProtocolSupportAPI.getConnection(player).sendPacket(NMSUtils.createTabHeaderFooterPacket(header, footer));
 	}
 
 }

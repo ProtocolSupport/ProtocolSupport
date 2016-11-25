@@ -12,13 +12,13 @@ import net.minecraft.server.v1_11_R1.ChatComponentText;
 import net.minecraft.server.v1_11_R1.NetworkManager;
 import net.minecraft.server.v1_11_R1.ServerConnection;
 import protocolsupport.utils.ReflectionUtils;
-import protocolsupport.utils.nms.ServerPlatformUtils;
+import protocolsupport.utils.nms.MinecraftServerWrapper;
 
 public class NettyInjector {
 
 	@SuppressWarnings("unchecked")
 	public static void inject() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		ServerConnection serverConnection = ServerPlatformUtils.getServer().an();
+		ServerConnection serverConnection = MinecraftServerWrapper.getServer().an();
 		List<NetworkManager> nmList = null;
 		try {
 			nmList = (List<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("pending")).get(serverConnection);
