@@ -34,8 +34,8 @@ public class IdRemapper {
 			registerRemapEntry(Material.GREEN_SHULKER_BOX, Material.WORKBENCH, 0, ProtocolVersionsHelper.BEFORE_1_11);
 			registerRemapEntry(Material.RED_SHULKER_BOX, Material.WORKBENCH, 0, ProtocolVersionsHelper.BEFORE_1_11);
 			registerRemapEntry(Material.BLACK_SHULKER_BOX, Material.WORKBENCH, 0, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(Material.STRUCTURE_VOID, Material.WOOL, 14, ProtocolVersionsHelper.BEFORE_1_10);
-			registerRemapEntry(Material.NETHER_WART_BLOCK, Material.CROPS, ProtocolVersionsHelper.BEFORE_1_10);
+			registerRemapEntry(Material.STRUCTURE_VOID, Material.GLASS, ProtocolVersionsHelper.BEFORE_1_10);
+			registerRemapEntry(Material.NETHER_WART_BLOCK, Material.WOOL, 14, ProtocolVersionsHelper.BEFORE_1_10);
 			registerRemapEntry(Material.RED_NETHER_BRICK, Material.NETHER_BRICK, ProtocolVersionsHelper.BEFORE_1_10);
 			registerRemapEntry(Material.MAGMA, Material.NETHERRACK, ProtocolVersionsHelper.BEFORE_1_10);
 			registerRemapEntry(Material.BONE_BLOCK, Material.BRICK, ProtocolVersionsHelper.BEFORE_1_10);
