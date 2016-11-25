@@ -31,6 +31,7 @@ public class ProtocolSupport extends JavaPlugin {
 		if (!checkServerSupported()) {
 			getLogger().severe("Unsupported server version, shutting down");
 			Bukkit.shutdown();
+			return;
 		}
 		try {
 			Allocator.init();
