@@ -36,7 +36,7 @@ public class TileNBTTransformer {
 				if (!spawndata.isNull()) {
 					String mobname = spawndata.getString("id");
 					if (!mobname.isEmpty()) {
-						spawndata.setString("id", LegacyEntityType.getLegacyName("id"));
+						spawndata.setString("id", LegacyEntityType.getLegacyName(mobname));
 					}
 				}
 				return input;
