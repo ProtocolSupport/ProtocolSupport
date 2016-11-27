@@ -1,5 +1,8 @@
 package protocolsupport.protocol.typeremapper.id;
 
+import java.util.ArrayList;
+
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 
@@ -209,27 +212,86 @@ public class IdRemapper {
 	};
 
 	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> ENTITY_LIVING = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
+		final class Mapping {
+			private final EntityType from;
+			private final ArrayList<ImmutablePair<EntityType, ProtocolVersion[]>> remaps = new ArrayList<>();
+			public Mapping(EntityType from) {
+				this.from = from;
+			}
+			public Mapping addMapping(EntityType to, ProtocolVersion... versions) {
+				remaps.add(ImmutablePair.of(to, versions));
+				return this;
+			}
+			public void register() {
+				for (ImmutablePair<EntityType, ProtocolVersion[]> pair : remaps) {
+					registerRemapEntry(from, pair.getLeft(), pair.getRight());
+				}
+			}
+		}
 		{
-			registerRemapEntry(EntityType.VINDICATOR, EntityType.WITCH, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(EntityType.EVOKER, EntityType.WITCH, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(EntityType.VEX, EntityType.BLAZE, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(EntityType.ZOMBIE_VILLAGER, EntityType.ZOMBIE, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(EntityType.HUSK, EntityType.ZOMBIE, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(EntityType.SKELETON_HORSE, EntityType.HORSE, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(EntityType.ZOMBIE_HORSE, EntityType.HORSE, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(EntityType.DONKEY, EntityType.HORSE, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(EntityType.MULE, EntityType.HORSE, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(EntityType.LLAMA, EntityType.HORSE, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(EntityType.ELDER_GUARDIAN, EntityType.GUARDIAN, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(EntityType.WITHER_SKELETON, EntityType.SKELETON, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(EntityType.STRAY, EntityType.SKELETON, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(EntityType.POLAR_BEAR, EntityType.SPIDER, ProtocolVersionsHelper.BEFORE_1_10);
-			registerRemapEntry(EntityType.SHULKER, EntityType.BLAZE, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(EntityType.ENDERMITE, EntityType.SILVERFISH, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(EntityType.GUARDIAN, EntityType.SQUID, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(EntityType.ELDER_GUARDIAN, EntityType.SQUID, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(EntityType.RABBIT, EntityType.CHICKEN, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(EntityType.HORSE, EntityType.COW, ProtocolVersionsHelper.BEFORE_1_6);
+			new Mapping(EntityType.VINDICATOR)
+			.addMapping(EntityType.WITCH, ProtocolVersionsHelper.BEFORE_1_11)
+			.register();
+			new Mapping(EntityType.EVOKER)
+			.addMapping(EntityType.WITCH, ProtocolVersionsHelper.BEFORE_1_11)
+			.register();
+			new Mapping(EntityType.VEX)
+			.addMapping(EntityType.BLAZE, ProtocolVersionsHelper.BEFORE_1_11)
+			.register();
+			new Mapping(EntityType.ZOMBIE_VILLAGER)
+			.addMapping(EntityType.ZOMBIE, ProtocolVersionsHelper.BEFORE_1_11)
+			.register();
+			new Mapping(EntityType.HUSK)
+			.addMapping(EntityType.ZOMBIE, ProtocolVersionsHelper.BEFORE_1_11)
+			.register();
+			new Mapping(EntityType.SKELETON_HORSE)
+			.addMapping(EntityType.HORSE, ProtocolVersionsHelper.RANGE__1_6__1_10)
+			.addMapping(EntityType.COW, ProtocolVersionsHelper.BEFORE_1_6)
+			.register();
+			new Mapping(EntityType.ZOMBIE_HORSE)
+			.addMapping(EntityType.HORSE, ProtocolVersionsHelper.RANGE__1_6__1_10)
+			.addMapping(EntityType.COW, ProtocolVersionsHelper.BEFORE_1_6)
+			.register();
+			new Mapping(EntityType.DONKEY)
+			.addMapping(EntityType.HORSE, ProtocolVersionsHelper.RANGE__1_6__1_10)
+			.addMapping(EntityType.COW, ProtocolVersionsHelper.BEFORE_1_6)
+			.register();
+			new Mapping(EntityType.MULE)
+			.addMapping(EntityType.HORSE, ProtocolVersionsHelper.RANGE__1_6__1_10)
+			.addMapping(EntityType.COW, ProtocolVersionsHelper.BEFORE_1_6)
+			.register();
+			new Mapping(EntityType.LLAMA)
+			.addMapping(EntityType.HORSE, ProtocolVersionsHelper.RANGE__1_6__1_10)
+			.addMapping(EntityType.COW, ProtocolVersionsHelper.BEFORE_1_6)
+			.register();
+			new Mapping(EntityType.WITHER_SKELETON)
+			.addMapping(EntityType.SKELETON, ProtocolVersionsHelper.BEFORE_1_11)
+			.register();
+			new Mapping(EntityType.STRAY)
+			.addMapping(EntityType.SKELETON, ProtocolVersionsHelper.BEFORE_1_11)
+			.register();
+			new Mapping(EntityType.POLAR_BEAR)
+			.addMapping(EntityType.SPIDER, ProtocolVersionsHelper.BEFORE_1_10)
+			.register();
+			new Mapping(EntityType.SHULKER)
+			.addMapping(EntityType.BLAZE, ProtocolVersionsHelper.BEFORE_1_9)
+			.register();
+			new Mapping(EntityType.ENDERMITE)
+			.addMapping(EntityType.SILVERFISH, ProtocolVersionsHelper.BEFORE_1_8)
+			.register();
+			new Mapping(EntityType.RABBIT)
+			.addMapping(EntityType.CHICKEN, ProtocolVersionsHelper.BEFORE_1_8)
+			.register();
+			new Mapping(EntityType.ELDER_GUARDIAN)
+			.addMapping(EntityType.GUARDIAN, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_10))
+			.addMapping(EntityType.SQUID, ProtocolVersionsHelper.BEFORE_1_8)
+			.register();
+			new Mapping(EntityType.GUARDIAN)
+			.addMapping(EntityType.SQUID, ProtocolVersionsHelper.BEFORE_1_8)
+			.register();
+			new Mapping(EntityType.HORSE)
+			.addMapping(EntityType.COW, ProtocolVersionsHelper.BEFORE_1_6)
+			.register();
 		}
 		@SuppressWarnings("deprecation")
 		private void registerRemapEntry(EntityType from, EntityType to, ProtocolVersion... versions) {
