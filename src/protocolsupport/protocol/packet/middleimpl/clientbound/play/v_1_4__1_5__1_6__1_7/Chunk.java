@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__1_6__1_7;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.legacyremapper.LegacyTileEntityUpdate;
 import protocolsupport.protocol.legacyremapper.chunk.ChunkTransformer;
 import protocolsupport.protocol.legacyremapper.chunk.ChunkTransformer.BlockFormat;
 import protocolsupport.protocol.legacyremapper.chunk.EmptyChunk;
@@ -41,8 +40,7 @@ public class Chunk extends MiddleChunk<RecyclableCollection<ClientBoundPacketDat
 		}
 		packets.add(chunkdata);
 		for (NBTTagCompoundWrapper tile : tiles) {
-			LegacyTileEntityUpdate.setLegacyType(tile);
-			packets.add(BlockTileUpdate.createPacketData(version, LegacyTileEntityUpdate.getPosition(tile), LegacyTileEntityUpdate.getUpdateType(tile).ordinal(), tile));
+			packets.add(BlockTileUpdate.createPacketData(version, tile));
 		}
 		return packets;
 	}

@@ -1,10 +1,10 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1__1_9_r2__1_10__1_11;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.legacyremapper.LegacyTileEntityUpdate;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockTileUpdate;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.typeremapper.nbt.tileupdate.TileEntityUpdateType;
 import protocolsupport.protocol.typeremapper.nbt.tileupdate.TileNBTTransformer;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.nms.NBTTagCompoundWrapper;
@@ -15,22 +15,24 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate<RecyclableCollection<
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		return RecyclableSingletonList.create(createPacketData(version, position, type, tag));
+		return RecyclableSingletonList.create(createPacketData(version, tag));
 	}
 
-	public static ClientBoundPacketData createPacketData(ProtocolVersion version, Position position, int type, NBTTagCompoundWrapper tag) {
-		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9_4) && (type == TileNBTTransformer.TileEntityUpdateType.SIGN.ordinal())) {
+	public static ClientBoundPacketData createPacketData(ProtocolVersion version, NBTTagCompoundWrapper tag) {
+		TileEntityUpdateType type = TileEntityUpdateType.fromType(TileNBTTransformer.getTileType(tag));
+		Position position = TileNBTTransformer.getPosition(tag);
+		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9_4) && (type == TileEntityUpdateType.SIGN)) {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.LEGACY_PLAY_UPDATE_SIGN_ID, version);
 			serializer.writePosition(position);
-			for (String line : LegacyTileEntityUpdate.getSignLines(tag)) {
+			for (String line : TileNBTTransformer.getSignLines(tag)) {
 				serializer.writeString(line);
 			}
 			return serializer;
 		} else {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_UPDATE_TILE_ID, version);
 			serializer.writePosition(position);
-			serializer.writeByte(type);
-			serializer.writeTag(TileNBTTransformer.transform(type, version, tag));
+			serializer.writeByte(type.getId());
+			serializer.writeTag(TileNBTTransformer.transform(version, tag));
 			return serializer;
 		}
 	}
