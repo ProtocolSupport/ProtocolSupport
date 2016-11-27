@@ -4,6 +4,7 @@ import java.util.List;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.legacyremapper.LegacyAnimatePacketReorderer;
@@ -34,16 +35,27 @@ public class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
 			return;
 		}
 		cumulation.writeBytes(input);
-		if (packetTransformer == null) {
-			packetTransformer = registry.getTransformer(NetworkListenerState.getFromChannel(ctx.channel()), serializer.readUnsignedByte());
+		while (serializer.isReadable()) {
+			if (!decode0(ctx.channel(), list)) {
+				break;
+			}
 		}
+		cumulation.discardSomeReadBytes();
+	}
+
+	private boolean decode0(Channel channel, List<Object> list) throws InstantiationException, IllegalAccessException {
 		serializer.markReaderIndex();
 		try {
+			if (packetTransformer == null) {
+				packetTransformer = registry.getTransformer(NetworkListenerState.getFromChannel(channel), serializer.readUnsignedByte());
+			}
 			packetTransformer.readFromClientData(serializer);
 			addPackets(animateReorderer.orderPackets(packetTransformer.toNative()), list);
 			packetTransformer = null;
+			return true;
 		} catch (EOFSignal ex) {
 			serializer.resetReaderIndex();
+			return false;
 		}
 	}
 
