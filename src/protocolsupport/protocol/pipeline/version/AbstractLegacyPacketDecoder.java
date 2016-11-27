@@ -27,8 +27,6 @@ public class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
 	}
 	private final LegacyAnimatePacketReorderer animateReorderer = new LegacyAnimatePacketReorderer();
 
-	private ServerBoundMiddlePacket packetTransformer = null;
-
 	@Override
 	public void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws InstantiationException, IllegalAccessException  {
 		if (!input.isReadable()) {
@@ -46,9 +44,7 @@ public class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
 	private boolean decode0(Channel channel, List<Object> list) throws InstantiationException, IllegalAccessException {
 		serializer.markReaderIndex();
 		try {
-			if (packetTransformer == null) {
-				packetTransformer = registry.getTransformer(NetworkListenerState.getFromChannel(channel), serializer.readUnsignedByte());
-			}
+			ServerBoundMiddlePacket packetTransformer = registry.getTransformer(NetworkListenerState.getFromChannel(channel), serializer.readUnsignedByte());
 			packetTransformer.readFromClientData(serializer);
 			addPackets(animateReorderer.orderPackets(packetTransformer.toNative()), list);
 			packetTransformer = null;
