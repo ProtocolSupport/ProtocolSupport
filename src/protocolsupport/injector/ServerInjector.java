@@ -10,13 +10,11 @@ import net.minecraft.server.v1_11_R1.Block;
 import net.minecraft.server.v1_11_R1.Blocks;
 import net.minecraft.server.v1_11_R1.IBlockData;
 import net.minecraft.server.v1_11_R1.Item;
-import net.minecraft.server.v1_11_R1.ItemAnvil;
 import net.minecraft.server.v1_11_R1.ItemBlock;
 import net.minecraft.server.v1_11_R1.ItemWaterLily;
 import net.minecraft.server.v1_11_R1.MinecraftKey;
 import net.minecraft.server.v1_11_R1.RegistryMaterials;
 import net.minecraft.server.v1_11_R1.TileEntity;
-import protocolsupport.server.block.BlockAnvil;
 import protocolsupport.server.block.BlockEnchantTable;
 import protocolsupport.server.block.BlockWaterLily;
 import protocolsupport.server.tileentity.TileEntityEnchantTable;
@@ -27,9 +25,6 @@ public class ServerInjector {
 	public static void inject() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		registerTileEntity(TileEntityEnchantTable.class, "enchanting_table");
 		registerBlock(116, "enchanting_table", new BlockEnchantTable());
-		ItemBlock itemanvil = new ItemAnvil(new BlockAnvil());
-		itemanvil.c("anvil");
-		registerBlock(145, "anvil", itemanvil);
 		registerBlock(111, "waterlily", new ItemWaterLily(new BlockWaterLily()));
 		fixBlocksRefs();
 		Bukkit.resetRecipes();
