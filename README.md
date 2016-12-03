@@ -7,6 +7,11 @@ ProtocolSupport
 
 Support 1.10, 1.9, 1.8, 1.7, 1.6, 1.5, 1.4.7 on spigot 1.11
 
+Important notes:
+* Only latest version of this plugin is supported
+* This plugin can't be reloaded or loaded not at server startup
+* This plugin doesn't work with netty native transport
+
 Wontfix issues:
 * [Anything that is not latest] Items in creative mode may not work as expected, or may not work at all
 * [1.8 and earlier] Thrown potion texture is invalid
