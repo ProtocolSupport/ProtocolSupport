@@ -13,31 +13,15 @@ import net.minecraft.server.v1_11_R1.Item;
 import net.minecraft.server.v1_11_R1.ItemBlock;
 import net.minecraft.server.v1_11_R1.ItemWaterLily;
 import net.minecraft.server.v1_11_R1.MinecraftKey;
-import net.minecraft.server.v1_11_R1.RegistryMaterials;
-import net.minecraft.server.v1_11_R1.TileEntity;
-import protocolsupport.server.block.BlockEnchantTable;
 import protocolsupport.server.block.BlockWaterLily;
-import protocolsupport.server.tileentity.TileEntityEnchantTable;
 import protocolsupport.utils.ReflectionUtils;
 
 public class ServerInjector {
 
 	public static void inject() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		registerTileEntity(TileEntityEnchantTable.class, "enchanting_table");
-		registerBlock(116, "enchanting_table", new BlockEnchantTable());
 		registerBlock(111, "waterlily", new ItemWaterLily(new BlockWaterLily()));
 		fixBlocksRefs();
 		Bukkit.resetRecipes();
-	}
-
-	@SuppressWarnings("unchecked")
-	private static void registerTileEntity(Class<? extends TileEntity> entityClass, String name) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		RegistryMaterials<MinecraftKey, Class<? extends TileEntity>> registry = (RegistryMaterials<MinecraftKey, Class<? extends TileEntity>>) ReflectionUtils.getField(TileEntity.class, "f").get(null);
-		registry.a(new MinecraftKey(name), entityClass);
-	}
-
-	private static void registerBlock(int id, String name, Block block) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		registerBlock(id, name, new ItemBlock(block));
 	}
 
 	@SuppressWarnings("unchecked")
