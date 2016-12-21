@@ -4,7 +4,8 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 
 public enum ProtocolVersion {
 
-	MINECRAFT_FUTURE(-1, 16),
+	MINECRAFT_FUTURE(-1, 17),
+	MINECRAFT_1_11_1(316, 16, "1.11.1"),
 	MINECRAFT_1_11(315, 15, "1.11"),
 	MINECRAFT_1_10(210, 14, "1.10"),
 	MINECRAFT_1_9_4(110, 13, "1.9.4"),
@@ -118,7 +119,7 @@ public enum ProtocolVersion {
 	}
 
 	public static ProtocolVersion getLatest() {
-		return ProtocolVersion.MINECRAFT_1_11;
+		return ProtocolVersion.MINECRAFT_1_11_1;
 	}
 
 	public static ProtocolVersion getOldest() {

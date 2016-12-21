@@ -63,7 +63,7 @@ public abstract class AbstractHandshakeListener implements PacketHandshakingInLi
 				//check client version (may be not latest if connection was from snapshot)
 				ProtocolVersion clientversion = ProtocolVersion.fromId(packethandshakinginsetprotocol.b());
 				if (clientversion != ProtocolVersion.getLatest()) {
-					String message = MessageFormat.format(SpigotConfig.outdatedServerMessage.replaceAll("'", "''"), "1.11");
+					String message = MessageFormat.format(SpigotConfig.outdatedServerMessage.replaceAll("'", "''"), "1.11.1");
 					this.networkManager.sendPacket(NMSUtils.createLoginDisconnectPacket(message), new GenericFutureListener<Future<? super Void>>() {
 						@Override
 						public void operationComplete(Future<? super Void> arg0)  {
