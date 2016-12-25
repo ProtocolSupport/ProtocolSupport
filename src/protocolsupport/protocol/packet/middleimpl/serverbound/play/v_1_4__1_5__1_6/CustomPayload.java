@@ -19,6 +19,7 @@ public class CustomPayload extends MiddleCustomPayload {
 		} else if (tag.equals("MC|BSign") || tag.equals("MC|BEdit")) {
 			newdata.writeItemStack(olddata.readItemStack());
 		} else if (tag.equals("MC|AdvCdm")) {
+			tag = "MC|AdvCmd";
 			newdata.writeByte(0);
 			newdata.writeInt(olddata.readInt());
 			newdata.writeInt(olddata.readInt());

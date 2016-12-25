@@ -9,6 +9,9 @@ public class CustomPayload extends MiddleCustomPayload {
 	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) {
 		tag = serializer.readString(20);
 		data = ProtocolSupportPacketDataSerializer.toArray(serializer);
+		if (tag.equals("MC|AdvCdm")) {
+			tag = "MC|AdvCmd";
+		}
 	}
 
 }
