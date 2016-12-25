@@ -24,7 +24,7 @@ public class BlockWaterLily extends net.minecraft.server.v1_11_R1.BlockWaterLily
 	private static final AxisAlignedBB bounds = new AxisAlignedBB(0.0625, 0.0, 0.0625, 0.9375, 0.015625, 0.9375);
 
 	@Override
-	public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {
+	public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity, boolean flag) {
 		if (!(entity instanceof EntityBoat)) {
 			a(blockposition, axisalignedbb, list, bounds);
 		}

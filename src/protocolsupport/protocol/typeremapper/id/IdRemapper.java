@@ -20,6 +20,7 @@ public class IdRemapper {
 
 	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> BLOCK = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
 		{
+			registerRemapEntry(Material.IRON_NUGGET, Material.GOLD_NUGGET, ProtocolVersionsHelper.BEFORE_1_11_1);
 			registerRemapEntry(Material.OBSERVER, Material.FURNACE, 2, ProtocolVersionsHelper.BEFORE_1_11);
 			registerRemapEntry(Material.WHITE_SHULKER_BOX, Material.WORKBENCH, 0, ProtocolVersionsHelper.BEFORE_1_11);
 			registerRemapEntry(Material.ORANGE_SHULKER_BOX, Material.WORKBENCH, 0, ProtocolVersionsHelper.BEFORE_1_11);
