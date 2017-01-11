@@ -1,0 +1,13 @@
+package protocolsupport.server.block;
+
+import net.minecraft.server.v1_11_R1.AxisAlignedBB;
+import net.minecraft.server.v1_11_R1.BlockWaterLily;
+import protocolsupport.utils.ReflectionUtils;
+
+public class BlockWaterLilyBoundsFixer {
+
+	public static void inject() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		ReflectionUtils.setStaticFinalField(ReflectionUtils.getField(BlockWaterLily.class, "a"), new AxisAlignedBB(0.0625, 0.0, 0.0625, 0.9375, 0.015625, 0.9375));
+	}
+
+}
