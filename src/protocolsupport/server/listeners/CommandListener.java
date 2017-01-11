@@ -13,8 +13,12 @@ public class CommandListener implements Listener {
 	public CommandListener() {
 		blacklist.add("/reload");
 		blacklist.add("/reload confirm");
+		blacklist.add("/rl");
+		blacklist.add("/rl confirm");
 		blacklist.add("/bukkit:reload");
 		blacklist.add("/bukkit:reload confirm");
+		blacklist.add("/bukkit:rl");
+		blacklist.add("/bukkit:rl confirm");
 	}
 
 	@EventHandler
