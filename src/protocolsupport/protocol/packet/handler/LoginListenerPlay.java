@@ -127,18 +127,19 @@ public class LoginListenerPlay implements PacketLoginInListener, PacketListenerP
 		}
 	}
 
-	private static final PacketDataSerializer fake = new PacketDataSerializer(Unpooled.EMPTY_BUFFER);
+	private static final PacketDataSerializer empty = new PacketDataSerializer(Unpooled.EMPTY_BUFFER);
 
 	private void keepConnection() {
 		// custom payload does nothing on a client when sent with invalid tag,
 		// but it resets client readtimeouthandler, and that is exactly what we need
-		networkManager.sendPacket(new PacketPlayOutCustomPayload("PSFake", fake));
+		networkManager.sendPacket(new PacketPlayOutCustomPayload("PS|KeepAlive", empty));
 		// we also need to reset server readtimeouthandler
 		ChannelHandlers.getTimeoutHandler(networkManager.getChannel().pipeline()).setLastRead();
 	}
 
 	private void tryJoin() {
 		EntityPlayer loginplayer = attemptLogin(profile, hostname);
+		networkManager.sendPacket(new PacketPlayOutCustomPayload("PS|FinishLogin", empty));
 		if (loginplayer != null) {
 			server.getPlayerList().a(networkManager.unwrap(), loginplayer);
 			ready = false;
