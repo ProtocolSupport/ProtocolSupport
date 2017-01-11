@@ -139,8 +139,8 @@ public class LoginListenerPlay implements PacketLoginInListener, PacketListenerP
 
 	private void tryJoin() {
 		EntityPlayer loginplayer = attemptLogin(profile, hostname);
-		networkManager.sendPacket(new PacketPlayOutCustomPayload("PS|FinishLogin", empty));
 		if (loginplayer != null) {
+			networkManager.sendPacket(new PacketPlayOutCustomPayload("PS|FinishLogin", empty));
 			server.getPlayerList().a(networkManager.unwrap(), loginplayer);
 			ready = false;
 		}
