@@ -1,9 +1,12 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_4__1_5__1_6;
 
+import org.bukkit.Material;
+
 import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.utils.nms.ItemStackWrapper;
 
 public class CustomPayload extends MiddleCustomPayload {
 
@@ -17,7 +20,9 @@ public class CustomPayload extends MiddleCustomPayload {
 		if (tag.equals("MC|ItemName")) {
 			newdata.writeByteArray(olddata);
 		} else if (tag.equals("MC|BSign") || tag.equals("MC|BEdit")) {
-			newdata.writeItemStack(olddata.readItemStack());
+			ItemStackWrapper book = olddata.readItemStack();
+			book.setType(Material.BOOK_AND_QUILL);
+			newdata.writeItemStack(book);
 		} else if (tag.equals("MC|AdvCdm")) {
 			tag = "MC|AdvCmd";
 			newdata.writeByte(0);
