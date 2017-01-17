@@ -8,10 +8,10 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
 import protocolsupport.protocol.utils.types.WindowType;
-import protocolsupport.utils.nms.NMSUtils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
+import protocolsupport.zplatform.MiscImplUtils;
 
 public class InventoryOpen extends MiddleInventoryOpen<RecyclableCollection<ClientBoundPacketData>> {
 
@@ -19,7 +19,7 @@ public class InventoryOpen extends MiddleInventoryOpen<RecyclableCollection<Clie
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		if (IdSkipper.INVENTORY.getTable(version).shouldSkip(invname)) {
 			cache.closeWindow();
-			connection.receivePacket(NMSUtils.createInboundInventoryClosePacket());
+			connection.receivePacket(MiscImplUtils.createInboundInventoryClosePacket());
 			return RecyclableEmptyList.get();
 		}
 		int id = WindowType.fromName(IdRemapper.INVENTORY.getTable(version).getRemap(invname)).ordinal();

@@ -20,7 +20,7 @@ import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
-import protocolsupport.utils.nms.MinecraftServerWrapper;
+import protocolsupport.zplatform.server.MinecraftServerWrapper;
 
 public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 

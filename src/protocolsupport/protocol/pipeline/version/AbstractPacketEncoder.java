@@ -13,8 +13,8 @@ import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.MessageToMessageEncoder;
-import protocolsupport.utils.nms.NetworkListenerState;
 import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.zplatform.network.NetworkListenerState;
 
 public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<ByteBuf> {
 

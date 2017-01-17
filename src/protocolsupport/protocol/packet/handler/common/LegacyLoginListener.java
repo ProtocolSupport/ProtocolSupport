@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.common.PacketDecrypter;
 import protocolsupport.protocol.utils.MinecraftEncryption;
-import protocolsupport.utils.nms.NetworkManagerWrapper;
+import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class LegacyLoginListener extends AbstractLoginListener {
 

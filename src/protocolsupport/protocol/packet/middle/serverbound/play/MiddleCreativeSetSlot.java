@@ -3,9 +3,9 @@ package protocolsupport.protocol.packet.middle.serverbound.play;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.utils.nms.ItemStackWrapper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
+import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 public abstract class MiddleCreativeSetSlot extends ServerBoundMiddlePacket {
 

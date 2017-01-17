@@ -17,7 +17,7 @@ import protocolsupport.protocol.pipeline.wrapped.WrappedSplitter;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
-import protocolsupport.utils.nms.NetworkManagerWrapper;
+import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 

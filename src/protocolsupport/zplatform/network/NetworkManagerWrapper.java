@@ -1,4 +1,4 @@
-package protocolsupport.utils.nms;
+package protocolsupport.zplatform.network;
 
 import java.net.InetSocketAddress;
 import java.util.UUID;

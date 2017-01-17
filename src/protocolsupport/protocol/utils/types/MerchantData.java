@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import protocolsupport.utils.nms.ItemStackWrapper;
+import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 public class MerchantData {
 

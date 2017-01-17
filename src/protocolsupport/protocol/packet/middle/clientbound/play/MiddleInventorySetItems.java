@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
-import protocolsupport.utils.nms.ItemStackWrapper;
+import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 public abstract class MiddleInventorySetItems<T> extends ClientBoundMiddlePacket<T> {
 

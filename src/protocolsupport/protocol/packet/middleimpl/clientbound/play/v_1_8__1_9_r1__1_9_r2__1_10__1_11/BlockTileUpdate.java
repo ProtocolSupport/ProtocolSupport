@@ -7,9 +7,9 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.nbt.tileupdate.TileEntityUpdateType;
 import protocolsupport.protocol.typeremapper.nbt.tileupdate.TileNBTTransformer;
 import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.utils.nms.NBTTagCompoundWrapper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
+import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class BlockTileUpdate extends MiddleBlockTileUpdate<RecyclableCollection<ClientBoundPacketData>> {
 

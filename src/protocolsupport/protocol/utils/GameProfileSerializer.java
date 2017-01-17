@@ -9,8 +9,8 @@ import org.apache.commons.lang3.StringUtils;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 
-import protocolsupport.utils.nms.NBTTagCompoundWrapper;
-import protocolsupport.utils.nms.NBTTagListWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 
 public class GameProfileSerializer {
 

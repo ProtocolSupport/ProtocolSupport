@@ -1,10 +1,10 @@
 package protocolsupport;
 
+import java.text.MessageFormat;
+
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.spigotmc.SpigotConfig;
 
-import net.minecraft.server.v1_11_R1.NetworkManager;
 import protocolsupport.commands.CommandHandler;
 import protocolsupport.injector.ServerInjector;
 import protocolsupport.injector.network.NettyInjector;
@@ -22,16 +22,20 @@ import protocolsupport.server.listeners.CommandListener;
 import protocolsupport.server.listeners.PlayerListener;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
+import protocolsupport.zplatform.ServerImplementationType;
 
 public class ProtocolSupport extends JavaPlugin {
 
 	@Override
 	public void onLoad() {
 		AsyncErrorLogger.INSTANCE.start();
-		if (!checkServerSupported()) {
-			getLogger().severe("Unsupported server version, shutting down");
+		ServerImplementationType.detect();
+		if (ServerImplementationType.get() == ServerImplementationType.UNKNOWN) {
+			getLogger().severe("Unsupported server implementation type, shutting down");
 			Bukkit.shutdown();
 			return;
+		} else {
+			getLogger().info(MessageFormat.format("Detected {0} server implementation type", ServerImplementationType.get()));
 		}
 		try {
 			Allocator.init();
@@ -51,16 +55,6 @@ public class ProtocolSupport extends JavaPlugin {
 			t.printStackTrace();
 			Bukkit.shutdown();
 		}
-	}
-
-	private static boolean checkServerSupported() {
-		try {
-			NetworkManager.a.getName();
-			SpigotConfig.config.contains("test");
-			return true;
-		} catch (NoClassDefFoundError e) {
-		}
-		return false;
 	}
 
 	@Override

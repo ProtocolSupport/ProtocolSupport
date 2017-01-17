@@ -7,7 +7,7 @@ import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
-import protocolsupport.utils.nms.NMSUtils;
+import protocolsupport.zplatform.MiscImplUtils;
 
 public class TitleAPI {
 
@@ -22,18 +22,18 @@ public class TitleAPI {
 		}
 		Connection connection = ProtocolSupportAPI.getConnection(player);
 		if (titleJson != null) {
-			connection.sendPacket(NMSUtils.createTitleMainPacket(titleJson));
+			connection.sendPacket(MiscImplUtils.createTitleMainPacket(titleJson));
 		}
 		if (subtitleJson != null) {
-			connection.sendPacket(NMSUtils.createTitleSubPacket(subtitleJson));
+			connection.sendPacket(MiscImplUtils.createTitleSubPacket(subtitleJson));
 		}
-		connection.sendPacket(NMSUtils.createTitleParamsPacket(fadeIn, stay, fadeOut));
+		connection.sendPacket(MiscImplUtils.createTitleParamsPacket(fadeIn, stay, fadeOut));
 	}
 
 	public static void removeSimpleTitle(Player player) {
 		Connection connection = ProtocolSupportAPI.getConnection(player);
-		connection.sendPacket(NMSUtils.createTitleClearPacket());
-		connection.sendPacket(NMSUtils.createTitleResetPacket());
+		connection.sendPacket(MiscImplUtils.createTitleClearPacket());
+		connection.sendPacket(MiscImplUtils.createTitleResetPacket());
 	}
 
 }

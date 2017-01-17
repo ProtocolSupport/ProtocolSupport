@@ -14,7 +14,7 @@ import net.minecraft.server.v1_11_R1.PacketListener;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
-import protocolsupport.utils.nms.NetworkManagerWrapper;
+import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class ConnectionImpl extends Connection {
 

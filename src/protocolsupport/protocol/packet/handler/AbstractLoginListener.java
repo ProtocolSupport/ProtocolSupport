@@ -41,9 +41,9 @@ import protocolsupport.protocol.pipeline.common.PacketCompressor;
 import protocolsupport.protocol.pipeline.common.PacketDecompressor;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
-import protocolsupport.utils.nms.MinecraftServerWrapper;
-import protocolsupport.utils.nms.NMSUtils;
-import protocolsupport.utils.nms.NetworkManagerWrapper;
+import protocolsupport.zplatform.MiscImplUtils;
+import protocolsupport.zplatform.network.NetworkManagerWrapper;
+import protocolsupport.zplatform.server.MinecraftServerWrapper;
 
 public abstract class AbstractLoginListener implements PacketLoginInListener, ITickable, IHasProfile {
 
@@ -97,7 +97,7 @@ public abstract class AbstractLoginListener implements PacketLoginInListener, IT
 	public void disconnect(String s) {
 		try {
 			logger.info("Disconnecting " + getConnectionRepr() + ": " + s);
-			networkManager.sendPacket(NMSUtils.createLoginDisconnectPacket(s), new GenericFutureListener<Future<? super Void>>() {
+			networkManager.sendPacket(MiscImplUtils.createLoginDisconnectPacket(s), new GenericFutureListener<Future<? super Void>>() {
 				@Override
 				public void operationComplete(Future<? super Void> future)  {
 					networkManager.close(s);

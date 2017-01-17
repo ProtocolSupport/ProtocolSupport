@@ -15,7 +15,7 @@ import io.netty.util.ResourceLeakDetector;
 import io.netty.util.ResourceLeakDetector.Level;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.utils.nms.MinecraftServerWrapper;
+import protocolsupport.zplatform.server.MinecraftServerWrapper;
 
 public class CommandHandler implements CommandExecutor, TabCompleter {
 

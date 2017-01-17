@@ -1,4 +1,4 @@
-package protocolsupport.utils.nms;
+package protocolsupport.zplatform.network;
 
 import io.netty.channel.Channel;
 import net.minecraft.server.v1_11_R1.NetworkManager;

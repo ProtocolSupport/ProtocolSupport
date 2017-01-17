@@ -12,7 +12,7 @@ import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ReplayingProtocolSupportSupportPacketDataSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
-import protocolsupport.utils.nms.NetworkListenerState;
+import protocolsupport.zplatform.network.NetworkListenerState;
 
 public class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
 

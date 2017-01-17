@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
-import protocolsupport.utils.nms.NBTTagCompoundWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public abstract class MiddleChunk<T> extends ClientBoundMiddlePacket<T> {
 

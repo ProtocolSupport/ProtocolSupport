@@ -10,7 +10,7 @@ import protocolsupport.protocol.legacyremapper.LegacyAnimatePacketReorderer;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
-import protocolsupport.utils.nms.NetworkListenerState;
+import protocolsupport.zplatform.network.NetworkListenerState;
 
 public class AbstractModernWithReorderPacketDecoder extends AbstractPacketDecoder  {
 

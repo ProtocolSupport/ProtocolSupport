@@ -30,7 +30,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_4__1_5__1
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_4__1_5__1_6__1_7__1_8__1_9_r1__1_9_r2__1_10__1_11.Look;
 import protocolsupport.protocol.pipeline.version.AbstractLegacyPacketDecoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
-import protocolsupport.utils.nms.NetworkListenerState;
+import protocolsupport.zplatform.network.NetworkListenerState;
 
 public class PacketDecoder extends AbstractLegacyPacketDecoder {
 

@@ -1,94 +1,106 @@
-package protocolsupport.utils.nms;
+package protocolsupport.zplatform.impl.spigot.itemstack;
 
 import java.util.Objects;
 
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_11_R1.inventory.CraftItemStack;
 
 import net.minecraft.server.v1_11_R1.Item;
 import net.minecraft.server.v1_11_R1.ItemStack;
+import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
-public class ItemStackWrapper {
+public class SpigotItemStackWrapper extends ItemStackWrapper {
 
-	private ItemStack itemstack;
-
-	private ItemStackWrapper(ItemStack itemstack) {
+	protected final ItemStack itemstack;
+	protected SpigotItemStackWrapper(ItemStack itemstack) {
 		this.itemstack = itemstack;
 	}
 
 	public static ItemStackWrapper createNull() {
-		return new ItemStackWrapper(ItemStack.a);
-	}
-
-	@SuppressWarnings("deprecation")
-	public static ItemStackWrapper create(Material material) {
-		return ItemStackWrapper.create(material.getId());
+		return new SpigotItemStackWrapper(ItemStack.a);
 	}
 
 	public static ItemStackWrapper create(int typeId) {
-		return new ItemStackWrapper(new ItemStack(Item.getById(typeId)));
+		return new SpigotItemStackWrapper(new ItemStack(Item.getById(typeId)));
 	}
 
-	public final ItemStack unwrap() {
-		return itemstack;
+	@Override
+	public org.bukkit.inventory.ItemStack asBukkitMirror() {
+		return CraftItemStack.asCraftMirror(itemstack);
 	}
 
+	@Override
 	public boolean isNull() {
 		return itemstack.isEmpty();
 	}
 
+	@Override
 	public int getTypeId() {
 		return Item.getId(itemstack.getItem());
 	}
 
+	@Override
 	@SuppressWarnings("deprecation")
 	public Material getType() {
 		return Material.getMaterial(getTypeId());
 	}
 
+	@Override
 	@SuppressWarnings("deprecation")
 	public void setTypeId(int typeId) {
 		itemstack.setItem(Item.getById(typeId));
 	}
 
+	@Override
 	@SuppressWarnings("deprecation")
 	public void setType(Material material) {
 		setTypeId(material.getId());
 	}
 
+	@Override
 	public int getData() {
 		return itemstack.getData();
 	}
 
+	@Override
 	public void setData(int data) {
 		itemstack.setData(data);
 	}
 
+	@Override
 	public int getAmount() {
 		return itemstack.getCount();
 	}
 
+	@Override
 	public void setAmount(int amount) {
 		itemstack.setCount(amount);
 	}
 
+	@Override
 	public String getDisplayName() {
 		return itemstack.getName();
 	}
 
+	@Override
 	public void setDisplayName(String displayName) {
 		itemstack.c(displayName);
 	}
 
-	public NBTTagCompoundWrapper getTag() {
-		return NBTTagCompoundWrapper.wrap(itemstack.getTag());
+	@Override
+	public SpigotNBTTagCompoundWrapper getTag() {
+		return new SpigotNBTTagCompoundWrapper(itemstack.getTag());
 	}
 
+	@Override
 	public void setTag(NBTTagCompoundWrapper tag) {
-		itemstack.setTag(tag.unwrap());
+		itemstack.setTag(((SpigotNBTTagCompoundWrapper) tag).tag);
 	}
 
+	@Override
 	public ItemStackWrapper cloneItemStack() {
-		return new ItemStackWrapper(itemstack.cloneItemStack());
+		return new SpigotItemStackWrapper(itemstack.cloneItemStack());
 	}
 
 	@Override
@@ -98,10 +110,10 @@ public class ItemStackWrapper {
 
 	@Override
 	public boolean equals(Object otherObj) {
-		if (!(otherObj instanceof ItemStackWrapper)) {
+		if (!(otherObj instanceof SpigotItemStackWrapper)) {
 			return false;
 		}
-		ItemStackWrapper other = (ItemStackWrapper) otherObj;
+		SpigotItemStackWrapper other = (SpigotItemStackWrapper) otherObj;
 		return Objects.equals(itemstack, other.itemstack);
 	}
 

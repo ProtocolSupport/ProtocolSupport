@@ -8,7 +8,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
 import protocolsupport.protocol.legacyremapper.LegacyChat;
-import protocolsupport.utils.nms.NMSUtils;
+import protocolsupport.zplatform.MiscImplUtils;
 
 public class TranslateComponent extends BaseComponent {
 
@@ -51,7 +51,7 @@ public class TranslateComponent extends BaseComponent {
 
 	@Override
 	public String getValue() {
-		return NMSUtils.localize(translationKey, Lists.transform(args, new Function<BaseComponent, String>() {
+		return MiscImplUtils.localize(translationKey, Lists.transform(args, new Function<BaseComponent, String>() {
 			@Override
 			public String apply(BaseComponent v) {
 				return LegacyChat.toText(v);

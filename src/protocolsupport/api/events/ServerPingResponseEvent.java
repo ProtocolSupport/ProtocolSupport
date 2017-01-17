@@ -9,7 +9,7 @@ import org.bukkit.event.HandlerList;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.utils.nms.MinecraftServerWrapper;
+import protocolsupport.zplatform.server.MinecraftServerWrapper;
 
 public class ServerPingResponseEvent extends ConnectionEvent {
 

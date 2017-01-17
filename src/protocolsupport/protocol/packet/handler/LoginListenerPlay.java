@@ -72,9 +72,9 @@ import protocolsupport.api.events.PlayerLoginFinishEvent;
 import protocolsupport.api.events.PlayerSyncLoginEvent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
-import protocolsupport.utils.nms.MinecraftServerWrapper;
-import protocolsupport.utils.nms.NMSUtils;
-import protocolsupport.utils.nms.NetworkManagerWrapper;
+import protocolsupport.zplatform.MiscImplUtils;
+import protocolsupport.zplatform.network.NetworkManagerWrapper;
+import protocolsupport.zplatform.server.MinecraftServerWrapper;
 
 public class LoginListenerPlay implements PacketLoginInListener, PacketListenerPlayIn, ITickable, IHasProfile {
 
@@ -242,7 +242,7 @@ public class LoginListenerPlay implements PacketLoginInListener, PacketListenerP
 
 	@SuppressWarnings("unchecked")
 	protected void disconnect0(String s) {
-		networkManager.sendPacket(NMSUtils.createPlayDisconnectPacket(s), new GenericFutureListener<Future<? super Void>>() {
+		networkManager.sendPacket(MiscImplUtils.createPlayDisconnectPacket(s), new GenericFutureListener<Future<? super Void>>() {
 			@Override
 			public void operationComplete(Future<? super Void> future) {
 				networkManager.close(s);

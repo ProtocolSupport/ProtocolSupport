@@ -9,7 +9,7 @@ import protocolsupport.protocol.pipeline.IPipeLineBuilder;
 import protocolsupport.protocol.pipeline.common.NoOpFrameDecoder;
 import protocolsupport.protocol.pipeline.common.NoOpFrameEncoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
-import protocolsupport.utils.nms.NetworkManagerWrapper;
+import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class PipeLineBuilder implements IPipeLineBuilder {
 

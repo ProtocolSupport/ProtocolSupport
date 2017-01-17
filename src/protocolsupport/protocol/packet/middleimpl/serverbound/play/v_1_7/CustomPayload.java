@@ -6,7 +6,7 @@ import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
-import protocolsupport.utils.nms.ItemStackWrapper;
+import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 public class CustomPayload extends MiddleCustomPayload {
 

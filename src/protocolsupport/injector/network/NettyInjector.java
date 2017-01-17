@@ -12,7 +12,7 @@ import net.minecraft.server.v1_11_R1.ChatComponentText;
 import net.minecraft.server.v1_11_R1.NetworkManager;
 import net.minecraft.server.v1_11_R1.ServerConnection;
 import protocolsupport.utils.ReflectionUtils;
-import protocolsupport.utils.nms.MinecraftServerWrapper;
+import protocolsupport.zplatform.server.MinecraftServerWrapper;
 
 public class NettyInjector {
 

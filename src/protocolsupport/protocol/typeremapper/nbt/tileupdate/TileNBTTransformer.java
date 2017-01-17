@@ -12,8 +12,8 @@ import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.Utils;
-import protocolsupport.utils.nms.NBTTagCompoundWrapper;
-import protocolsupport.utils.nms.NMSUtils;
+import protocolsupport.zplatform.MiscImplUtils;
+import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class TileNBTTransformer {
 
@@ -115,7 +115,7 @@ public class TileNBTTransformer {
 		register(
 			TileEntityUpdateType.FLOWER_POT,
 			(version, input) -> {
-				Integer id = NMSUtils.getItemIdByName(input.getString("Item"));
+				Integer id = MiscImplUtils.getItemIdByName(input.getString("Item"));
 				if (id != null) {
 					input.setInt("Item", IdRemapper.ITEM.getTable(version).getRemap(id));
 				}

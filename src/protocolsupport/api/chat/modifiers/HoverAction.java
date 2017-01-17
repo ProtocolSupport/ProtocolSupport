@@ -12,8 +12,8 @@ import org.bukkit.inventory.ItemStack;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.utils.Any;
-import protocolsupport.utils.nms.NBTTagCompoundWrapper;
-import protocolsupport.utils.nms.NMSUtils;
+import protocolsupport.zplatform.MiscImplUtils;
+import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class HoverAction {
 
@@ -32,7 +32,7 @@ public class HoverAction {
 
 	public HoverAction(ItemStack itemstack) {
 		this.type = Type.SHOW_ITEM;
-		this.value = NMSUtils.createNBTTagFromItemStack(itemstack).toString();
+		this.value = MiscImplUtils.createNBTTagFromItemStack(itemstack).toString();
 	}
 
 	public HoverAction(Entity entity) {
@@ -74,7 +74,7 @@ public class HoverAction {
 
 	public ItemStack getItemStack() {
 		validateAction(type, Type.SHOW_ITEM);
-		return NMSUtils.createItemStackFromNBTTag(NBTTagCompoundWrapper.fromJson(value));
+		return MiscImplUtils.createItemStackFromNBTTag(NBTTagCompoundWrapper.fromJson(value));
 	}
 
 	@SuppressWarnings("deprecation")

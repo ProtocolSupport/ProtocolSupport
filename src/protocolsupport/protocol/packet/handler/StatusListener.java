@@ -34,8 +34,8 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.utils.nms.MinecraftServerWrapper;
-import protocolsupport.utils.nms.NetworkManagerWrapper;
+import protocolsupport.zplatform.network.NetworkManagerWrapper;
+import protocolsupport.zplatform.server.MinecraftServerWrapper;
 
 public class StatusListener implements PacketStatusInListener {
 

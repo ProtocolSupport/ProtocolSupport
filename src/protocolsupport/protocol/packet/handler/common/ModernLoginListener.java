@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.handler.common;
 import javax.crypto.SecretKey;
 
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
-import protocolsupport.utils.nms.NetworkManagerWrapper;
+import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class ModernLoginListener extends AbstractLoginListener {
 

@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.handler.common;
 
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
-import protocolsupport.utils.nms.NetworkManagerWrapper;
+import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class LegacyHandshakeListener extends AbstractHandshakeListener {
 

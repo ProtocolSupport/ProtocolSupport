@@ -87,7 +87,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7__1_8_
 import protocolsupport.protocol.pipeline.version.AbstractPacketEncoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.utils.registry.PacketIdTransformerRegistry;
-import protocolsupport.utils.nms.NetworkListenerState;
+import protocolsupport.zplatform.network.NetworkListenerState;
 
 public class PacketEncoder extends AbstractPacketEncoder {
 

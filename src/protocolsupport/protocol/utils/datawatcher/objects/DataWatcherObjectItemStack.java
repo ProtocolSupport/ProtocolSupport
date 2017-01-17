@@ -3,7 +3,7 @@ package protocolsupport.protocol.utils.datawatcher.objects;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.utils.nms.ItemStackWrapper;
+import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 public class DataWatcherObjectItemStack extends DataWatcherObject<ItemStackWrapper> {
 

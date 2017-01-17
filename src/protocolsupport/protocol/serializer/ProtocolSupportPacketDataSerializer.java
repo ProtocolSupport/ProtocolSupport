@@ -1,11 +1,8 @@
 package protocolsupport.protocol.serializer;
 
-import java.io.BufferedInputStream;
 import java.io.DataInputStream;
-import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.zip.GZIPInputStream;
@@ -13,13 +10,11 @@ import java.util.zip.GZIPOutputStream;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_11_R1.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_11_R1.potion.CraftPotionUtil;
 import org.bukkit.entity.EntityType;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
-import org.spigotmc.LimitStream;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
@@ -30,8 +25,6 @@ import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
-import net.minecraft.server.v1_11_R1.NBTCompressedStreamTools;
-import net.minecraft.server.v1_11_R1.NBTReadLimiter;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.ItemStackWriteEvent;
@@ -44,11 +37,10 @@ import protocolsupport.protocol.utils.GameProfileSerializer;
 import protocolsupport.protocol.utils.types.MerchantData;
 import protocolsupport.protocol.utils.types.MerchantData.TradeOffer;
 import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.WrappingBuffer;
-import protocolsupport.utils.nms.ItemStackWrapper;
-import protocolsupport.utils.nms.NBTTagCompoundWrapper;
-import protocolsupport.utils.nms.NBTTagListWrapper;
+import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 
 public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 
@@ -242,14 +234,18 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 				if (length < 0) {
 					return NBTTagCompoundWrapper.createNull();
 				}
-				return readLegacyNBT(new ByteBufInputStream(readSlice(length)), new NBTReadLimiter(2097152L));
+				try (DataInputStream datainputstream = new DataInputStream(new GZIPInputStream(new ByteBufInputStream(readSlice(length))))) {
+					return NBTTagCompoundWrapper.fromStream(datainputstream);
+				}
 			} else {
 				markReaderIndex();
 				if (readByte() == 0) {
 					return NBTTagCompoundWrapper.createNull();
 				}
 				resetReaderIndex();
-				return NBTTagCompoundWrapper.wrap(NBTCompressedStreamTools.a(new DataInputStream(new ByteBufInputStream(this)), new NBTReadLimiter(2097152L)));
+				try (DataInputStream datainputstream = new DataInputStream(new ByteBufInputStream(this))) {
+					return NBTTagCompoundWrapper.fromStream(datainputstream);
+				}
 			}
 		} catch (IOException e) {
 			throw new DecoderException(e);
@@ -257,28 +253,32 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 	}
 
 	public void writeTag(NBTTagCompoundWrapper tag) {
-		ByteBuf buffer = Allocator.allocateBuffer();
 		try {
 			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_8)) {
 				if (tag.isNull()) {
 					writeShort(-1);
 				} else {
-					encodeLegacyNBT(tag, buffer);
-					writeShort(buffer.readableBytes());
-					writeBytes(buffer);
+					int writerIndex = writerIndex();
+					//fake length
+					writeShort(0);
+					//actual nbt
+					try (DataOutputStream dataoutputstream = new DataOutputStream(new GZIPOutputStream(new ByteBufOutputStream(this)))) {
+						tag.writeToStream(dataoutputstream);
+					}
+					//now replace fake length with real length
+					setShort(writerIndex, writerIndex() - writerIndex - Short.BYTES);
 				}
 			} else {
 				if (tag.isNull()) {
 					writeByte(0);
 				} else {
-					NBTCompressedStreamTools.a(tag.unwrap(), (DataOutput) new DataOutputStream(new ByteBufOutputStream(buffer)));
-					writeBytes(buffer);
+					try (DataOutputStream dataoutputstream = new DataOutputStream(new ByteBufOutputStream(this))) {
+						tag.writeToStream(dataoutputstream);
+					}
 				}
 			}
 		} catch (Throwable ioexception) {
 			throw new EncoderException(ioexception);
-		} finally {
-			buffer.release();
 		}
 	}
 
@@ -451,32 +451,12 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 		}
 	}
 
-	private static NBTTagCompoundWrapper readLegacyNBT(InputStream is, NBTReadLimiter nbtreadlimiter) {
-		try {
-			try (DataInputStream datainputstream = new DataInputStream(new BufferedInputStream(new LimitStream(new GZIPInputStream(is), nbtreadlimiter)))) {
-				return NBTTagCompoundWrapper.wrap(NBTCompressedStreamTools.a(datainputstream, nbtreadlimiter));
-			}
-		} catch (IOException e) {
-			throw new DecoderException(e);
-		}
-	}
-
-	private static void encodeLegacyNBT(NBTTagCompoundWrapper nbttagcompound, ByteBuf to) {
-		try {
-			try (DataOutputStream dataoutputstream = new DataOutputStream(new GZIPOutputStream(new ByteBufOutputStream(to)))) {
-				NBTCompressedStreamTools.a(nbttagcompound.unwrap(), (DataOutput) dataoutputstream);
-			}
-		} catch (IOException e) {
-			throw new EncoderException(e);
-		}
-	}
-
 	public static class InternalItemStackWriteEvent extends ItemStackWriteEvent {
 
-		private final CraftItemStack wrapped;
+		private final org.bukkit.inventory.ItemStack wrapped;
 		public InternalItemStackWriteEvent(ProtocolVersion version, ItemStackWrapper original, ItemStackWrapper itemstack) {
-			super(version, CraftItemStack.asCraftMirror(original.unwrap()));
-			this.wrapped = CraftItemStack.asCraftMirror(itemstack.unwrap());
+			super(version, original.asBukkitMirror());
+			this.wrapped = itemstack.asBukkitMirror();
 		}
 
 		@Override

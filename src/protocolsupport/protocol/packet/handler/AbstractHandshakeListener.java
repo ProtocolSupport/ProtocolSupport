@@ -23,9 +23,9 @@ import protocolsupport.api.events.ConnectionHandshakeEvent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.protocol.storage.ThrottleTracker;
-import protocolsupport.utils.nms.NMSUtils;
-import protocolsupport.utils.nms.NetworkListenerState;
-import protocolsupport.utils.nms.NetworkManagerWrapper;
+import protocolsupport.zplatform.MiscImplUtils;
+import protocolsupport.zplatform.network.NetworkListenerState;
+import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public abstract class AbstractHandshakeListener implements PacketHandshakingInListener {
 
@@ -48,7 +48,7 @@ public abstract class AbstractHandshakeListener implements PacketHandshakingInLi
 					if (ThrottleTracker.isEnabled() && !SpigotConfig.bungee) {
 						if (ThrottleTracker.throttle(address)) {
 							String message = "Connection throttled! Please wait before reconnecting.";
-							networkManager.sendPacket(NMSUtils.createLoginDisconnectPacket(message), new GenericFutureListener<Future<? super Void>>() {
+							networkManager.sendPacket(MiscImplUtils.createLoginDisconnectPacket(message), new GenericFutureListener<Future<? super Void>>() {
 								@Override
 								public void operationComplete(Future<? super Void> arg0)  {
 									networkManager.close(message);
@@ -64,7 +64,7 @@ public abstract class AbstractHandshakeListener implements PacketHandshakingInLi
 				ProtocolVersion clientversion = ProtocolVersion.fromId(packethandshakinginsetprotocol.b());
 				if (clientversion != ProtocolVersion.getLatest()) {
 					String message = MessageFormat.format(SpigotConfig.outdatedServerMessage.replaceAll("'", "''"), "1.11.1");
-					this.networkManager.sendPacket(NMSUtils.createLoginDisconnectPacket(message), new GenericFutureListener<Future<? super Void>>() {
+					this.networkManager.sendPacket(MiscImplUtils.createLoginDisconnectPacket(message), new GenericFutureListener<Future<? super Void>>() {
 						@Override
 						public void operationComplete(Future<? super Void> arg0)  {
 							networkManager.close(message);
@@ -78,7 +78,7 @@ public abstract class AbstractHandshakeListener implements PacketHandshakingInLi
 					final String[] split = packethandshakinginsetprotocol.hostname.split("\u0000");
 					if ((split.length != 3) && (split.length != 4)) {
 						String message = "If you wish to use IP forwarding, please enable it in your BungeeCord config as well!";
-						networkManager.sendPacket(NMSUtils.createLoginDisconnectPacket(message), new GenericFutureListener<Future<? super Void>>() {
+						networkManager.sendPacket(MiscImplUtils.createLoginDisconnectPacket(message), new GenericFutureListener<Future<? super Void>>() {
 							@Override
 							public void operationComplete(Future<? super Void> arg0)  {
 								networkManager.close(message);
