@@ -6,8 +6,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import protocolsupport.commands.CommandHandler;
-import protocolsupport.injector.ServerInjector;
-import protocolsupport.injector.network.NettyInjector;
+import protocolsupport.listeners.CommandListener;
+import protocolsupport.listeners.PlayerListener;
 import protocolsupport.logger.AsyncErrorLogger;
 import protocolsupport.protocol.legacyremapper.LegacySound;
 import protocolsupport.protocol.legacyremapper.chunk.BlockStorageReader;
@@ -18,11 +18,11 @@ import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
-import protocolsupport.server.listeners.CommandListener;
-import protocolsupport.server.listeners.PlayerListener;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.zplatform.ServerImplementationType;
+import protocolsupport.zplatform.impl.spigot.injector.ServerInjector;
+import protocolsupport.zplatform.impl.spigot.injector.network.NettyInjector;
 
 public class ProtocolSupport extends JavaPlugin {
 
@@ -47,10 +47,9 @@ public class ProtocolSupport extends JavaPlugin {
 			LegacySound.init();
 			IdSkipper.init();
 			SpecificRemapper.init();
-			ServerInjector.inject();
-			NettyInjector.inject();
 			IdRemapper.init();
 			BlockStorageReader.init();
+			ServerImplementationType.get().inject();
 		} catch (Throwable t) {
 			t.printStackTrace();
 			Bukkit.shutdown();

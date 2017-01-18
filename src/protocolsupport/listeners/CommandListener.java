@@ -1,4 +1,4 @@
-package protocolsupport.server.listeners;
+package protocolsupport.listeners;
 
 import java.util.HashSet;
 import java.util.Set;

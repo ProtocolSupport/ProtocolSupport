@@ -3,10 +3,13 @@ package protocolsupport.zplatform;
 import org.spigotmc.SpigotConfig;
 
 import net.minecraft.server.v1_11_R1.NetworkManager;
+import protocolsupport.zplatform.impl.spigot.injector.SpigotPlatformInjector;
 
 public enum ServerImplementationType {
 
-	SPIGOT, GLOWSTONE, UNKNOWN;
+	SPIGOT(new SpigotPlatformInjector()),
+	GLOWSTONE(null),
+	UNKNOWN(null);
 
 	private static ServerImplementationType current;
 
@@ -26,6 +29,15 @@ public enum ServerImplementationType {
 
 	public static ServerImplementationType get() {
 		return current;
+	}
+
+	private final PlatformInjector injector;
+	ServerImplementationType(PlatformInjector injector) {
+		this.injector = injector;
+	}
+
+	public void inject() {
+		injector.inject();
 	}
 
 }

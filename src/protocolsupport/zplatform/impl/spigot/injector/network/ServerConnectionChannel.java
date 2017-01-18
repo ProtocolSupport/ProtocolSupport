@@ -1,4 +1,4 @@
-package protocolsupport.injector.network;
+package protocolsupport.zplatform.impl.spigot.injector.network;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
