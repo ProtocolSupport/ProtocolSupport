@@ -1,4 +1,4 @@
-package protocolsupport.protocol.pipeline.common;
+package protocolsupport.zplatform.impl.spigot.network.pipeline;
 
 import java.util.List;
 import java.util.zip.DataFormatException;
@@ -9,11 +9,11 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-public class PacketDecompressor extends net.minecraft.server.v1_11_R1.PacketDecompressor {
+public class SpigotPacketDecompressor extends net.minecraft.server.v1_11_R1.PacketDecompressor {
 
 	private final Inflater inflater = new Inflater();
 
-	public PacketDecompressor(int threshold) {
+	public SpigotPacketDecompressor(int threshold) {
 		super(threshold);
 	}
 

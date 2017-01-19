@@ -4,7 +4,7 @@ import org.apache.commons.lang3.NotImplementedException;
 
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.zplatform.ServerImplementationType;
-import protocolsupport.zplatform.impl.spigot.network.SpigotModernHandshakeListener;
+import protocolsupport.zplatform.impl.spigot.network.handler.SpigotModernHandshakeListener;
 
 public abstract class ModernHandshakeListener extends AbstractHandshakeListener {
 

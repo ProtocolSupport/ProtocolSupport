@@ -1,4 +1,4 @@
-package protocolsupport.zplatform.impl.spigot.network;
+package protocolsupport.zplatform.impl.spigot.network.handler;
 
 import java.net.InetSocketAddress;
 import java.text.SimpleDateFormat;

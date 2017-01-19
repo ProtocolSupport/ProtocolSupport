@@ -1,16 +1,16 @@
-package protocolsupport.protocol.pipeline.common;
+package protocolsupport.zplatform.impl.spigot.network.pipeline;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.utils.netty.Compressor;
 
-public class PacketCompressor extends net.minecraft.server.v1_11_R1.PacketCompressor {
+public class SpigotPacketCompressor extends net.minecraft.server.v1_11_R1.PacketCompressor {
 
 	private final Compressor compressor = Compressor.create();
 	private final int threshold;
 
-	public PacketCompressor(int threshold) {
+	public SpigotPacketCompressor(int threshold) {
 		super(threshold);
 		this.threshold = threshold;
 	}

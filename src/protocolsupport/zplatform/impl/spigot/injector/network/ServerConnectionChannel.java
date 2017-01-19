@@ -4,10 +4,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
-import protocolsupport.protocol.pipeline.FakePacketListener;
 import protocolsupport.protocol.pipeline.common.LogicHandler;
-import protocolsupport.protocol.pipeline.common.PacketDecoder;
-import protocolsupport.protocol.pipeline.common.PacketEncoder;
 import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
 import protocolsupport.protocol.pipeline.timeout.SimpleReadTimeoutHandler;
 import protocolsupport.protocol.pipeline.wrapped.WrappedPrepender;
@@ -16,6 +13,9 @@ import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
 import protocolsupport.zplatform.impl.spigot.SpigotConnectionImpl;
+import protocolsupport.zplatform.impl.spigot.network.handler.FakePacketListener;
+import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketDecoder;
+import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketEncoder;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class ServerConnectionChannel extends ChannelInitializer<Channel> {
@@ -38,10 +38,10 @@ public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 		pipeline.replace(ChannelHandlers.PREPENDER, ChannelHandlers.PREPENDER, new WrappedPrepender());
 		if (replaceDecoderEncoder) {
 			if (pipeline.get(ChannelHandlers.DECODER).getClass().equals(net.minecraft.server.v1_11_R1.PacketDecoder.class)) {
-				pipeline.replace(ChannelHandlers.DECODER, ChannelHandlers.DECODER, new PacketDecoder());
+				pipeline.replace(ChannelHandlers.DECODER, ChannelHandlers.DECODER, new SpigotPacketDecoder());
 			}
 			if (pipeline.get(ChannelHandlers.ENCODER).getClass().equals(net.minecraft.server.v1_11_R1.PacketEncoder.class)) {
-				pipeline.replace(ChannelHandlers.ENCODER, ChannelHandlers.ENCODER, new PacketEncoder());
+				pipeline.replace(ChannelHandlers.ENCODER, ChannelHandlers.ENCODER, new SpigotPacketEncoder());
 			}
 		}
 	}

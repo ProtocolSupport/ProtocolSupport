@@ -3,8 +3,6 @@ package protocolsupport.protocol.utils.datawatcher;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import org.spigotmc.SneakyThrow;
-
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -45,7 +43,7 @@ public class DataWatcherDeserializer {
 			register(DataWatcherObjectOptionalUUID.class);
 			register(DataWatcherObjectBlockState.class);
 		} catch (Exception e) {
-			SneakyThrow.sneaky(e);
+			throw new RuntimeException("Exception in datawatcher init", e);
 		}
 	}
 

@@ -1,4 +1,4 @@
-package protocolsupport.protocol.pipeline.common;
+package protocolsupport.zplatform.impl.spigot.network.pipeline;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,7 +15,7 @@ import net.minecraft.server.v1_11_R1.PacketDataSerializer;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.utils.netty.WrappingBuffer;
 
-public class PacketDecoder extends ByteToMessageDecoder {
+public class SpigotPacketDecoder extends ByteToMessageDecoder {
 
 	private final WrappingBuffer wrapper = new WrappingBuffer();
 	private final PacketDataSerializer nativeSerializer = new PacketDataSerializer(wrapper);

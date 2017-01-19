@@ -19,7 +19,6 @@ import com.google.common.base.Charsets;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.util.concurrent.Future;
@@ -27,9 +26,6 @@ import io.netty.util.concurrent.GenericFutureListener;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.events.PlayerLoginStartEvent;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.pipeline.ChannelHandlers;
-import protocolsupport.protocol.pipeline.common.PacketCompressor;
-import protocolsupport.protocol.pipeline.common.PacketDecompressor;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
 import protocolsupport.zplatform.MiscPlatformUtils;
@@ -112,14 +108,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 
 	protected abstract boolean hasCompression();
 
-	protected void enableCompresssion(int compressionLevel) {
-		Channel channel = networkManager.getChannel();
-		if (compressionLevel >= 0) {
-			channel.pipeline()
-			.addAfter(ChannelHandlers.SPLITTER, "decompress", new PacketDecompressor(compressionLevel))
-			.addAfter(ChannelHandlers.PREPENDER, "compress", new PacketCompressor(compressionLevel));
-		}
-	}
+	protected abstract void enableCompression(int compressionLevel);
 
 	public String getConnectionRepr() {
 		return (profile != null) ? (profile + " (" + networkManager.getAddress() + ")") : networkManager.getAddress().toString();
@@ -222,7 +211,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 					new ChannelFutureListener() {
 						@Override
 						public void operationComplete(ChannelFuture future)  {
-							enableCompresssion(threshold);
+							enableCompression(threshold);
 						}
 					}
 				);
