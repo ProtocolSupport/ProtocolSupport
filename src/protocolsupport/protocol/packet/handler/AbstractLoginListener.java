@@ -33,10 +33,10 @@ import protocolsupport.protocol.pipeline.common.PacketCompressor;
 import protocolsupport.protocol.pipeline.common.PacketDecompressor;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
+import protocolsupport.zplatform.MiscPlatformUtils;
 import protocolsupport.zplatform.network.LoginListenerPlay;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 import protocolsupport.zplatform.network.PlatformPacketFactory;
-import protocolsupport.zplatform.server.MinecraftServerWrapper;
 
 public abstract class AbstractLoginListener implements IHasProfile {
 
@@ -155,13 +155,13 @@ public abstract class AbstractLoginListener implements IHasProfile {
 					forcedUUID = event.getForcedUUID();
 					if (isOnlineMode) {
 						state = LoginState.KEY;
-						networkManager.sendPacket(PlatformPacketFactory.createLoginEncryptionBeginPacket(MinecraftServerWrapper.getEncryptionKeyPair().getPublic(), randomBytes));
+						networkManager.sendPacket(PlatformPacketFactory.createLoginEncryptionBeginPacket(MiscPlatformUtils.getEncryptionKeyPair().getPublic(), randomBytes));
 					} else {
 						new PlayerLookupUUID(AbstractLoginListener.this, isOnlineMode).run();
 					}
 				} catch (Throwable t) {
 					AbstractLoginListener.this.disconnect("Error occured while logging in");
-					if (MinecraftServerWrapper.isDebugging()) {
+					if (MiscPlatformUtils.isDebugging()) {
 						t.printStackTrace();
 					}
 				}
@@ -184,7 +184,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 			@Override
 			public void run() {
 				try {
-					final PrivateKey privatekey = MinecraftServerWrapper.getEncryptionKeyPair().getPrivate();
+					final PrivateKey privatekey = MiscPlatformUtils.getEncryptionKeyPair().getPrivate();
 					if (!Arrays.equals(randomBytes, encryptionpakcet.getNonce(privatekey))) {
 						throw new IllegalStateException("Invalid nonce!");
 					}
@@ -193,7 +193,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 					new PlayerLookupUUID(AbstractLoginListener.this, isOnlineMode).run();
 				} catch (Throwable t) {
 					AbstractLoginListener.this.disconnect("Error occured while logging in");
-					if (MinecraftServerWrapper.isDebugging()) {
+					if (MiscPlatformUtils.isDebugging()) {
 						t.printStackTrace();
 					}
 				}
@@ -222,7 +222,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 			profile = newProfile;
 		}
 		if (hasCompression()) {
-			final int threshold = MinecraftServerWrapper.getCompressionThreshold();
+			final int threshold = MiscPlatformUtils.getCompressionThreshold();
 			if (threshold >= 0) {
 				this.networkManager.sendPacket(
 					PlatformPacketFactory.createSetCompressionPacket(threshold),

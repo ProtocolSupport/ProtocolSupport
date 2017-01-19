@@ -73,15 +73,15 @@ import protocolsupport.api.events.PlayerLoginFinishEvent;
 import protocolsupport.api.events.PlayerSyncLoginEvent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
+import protocolsupport.zplatform.impl.spigot.SpigotImplUtils;
 import protocolsupport.zplatform.network.LoginListenerPlay;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 import protocolsupport.zplatform.network.PlatformPacketFactory;
-import protocolsupport.zplatform.server.MinecraftServerWrapper;
 
 public class SpigotLoginListenerPlay extends LoginListenerPlay implements PacketLoginInListener, PacketListenerPlayIn, ITickable {
 
 	protected static final Logger logger = LogManager.getLogger(LoginListener.class);
-	protected static final MinecraftServer server = MinecraftServerWrapper.getServer();
+	protected static final MinecraftServer server = SpigotImplUtils.getServer();
 
 	protected boolean ready;
 

@@ -1,6 +1,10 @@
 package protocolsupport.zplatform.impl.spigot;
 
+import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_11_R1.CraftServer;
+
 import net.minecraft.server.v1_11_R1.EnumProtocol;
+import net.minecraft.server.v1_11_R1.MinecraftServer;
 import protocolsupport.zplatform.network.NetworkListenerState;
 
 public class SpigotImplUtils {
@@ -23,6 +27,10 @@ public class SpigotImplUtils {
 				throw new IllegalArgumentException("Unknown state " + state);
 			}
 		}
+	}
+
+	public static MinecraftServer getServer() {
+		return ((CraftServer) Bukkit.getServer()).getServer();
 	}
 
 }

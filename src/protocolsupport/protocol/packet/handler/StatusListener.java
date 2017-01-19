@@ -34,8 +34,8 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.zplatform.MiscPlatformUtils;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
-import protocolsupport.zplatform.server.MinecraftServerWrapper;
 
 public class StatusListener implements PacketStatusInListener {
 
@@ -76,7 +76,7 @@ public class StatusListener implements PacketStatusInListener {
 		}
 
 		ServerPingResponseEvent revent = new ServerPingResponseEvent(
-			ConnectionImpl.getFromChannel(networkManager.getChannel()), new ProtocolInfo(ProtocolVersion.getLatest(), MinecraftServerWrapper.getModName() + " " + MinecraftServerWrapper.getVersionName()),
+			ConnectionImpl.getFromChannel(networkManager.getChannel()), new ProtocolInfo(ProtocolVersion.getLatest(), MiscPlatformUtils.getModName() + " " + MiscPlatformUtils.getVersionName()),
 			icon, motd, maxPlayers, profiles
 		);
 		Bukkit.getPluginManager().callEvent(revent);

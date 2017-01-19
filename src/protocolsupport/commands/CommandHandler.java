@@ -15,7 +15,7 @@ import io.netty.util.ResourceLeakDetector;
 import io.netty.util.ResourceLeakDetector.Level;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.zplatform.server.MinecraftServerWrapper;
+import protocolsupport.zplatform.MiscPlatformUtils;
 
 public class CommandHandler implements CommandExecutor, TabCompleter {
 
@@ -34,11 +34,11 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			return true;
 		}
 		if ((args.length == 1) && args[0].equalsIgnoreCase("debug")) {
-			if (MinecraftServerWrapper.isDebugging()) {
-				MinecraftServerWrapper.disableDebug();
+			if (MiscPlatformUtils.isDebugging()) {
+				MiscPlatformUtils.disableDebug();
 				sender.sendMessage(ChatColor.GOLD + "Disabled debug");
 			} else {
-				MinecraftServerWrapper.enableDebug();
+				MiscPlatformUtils.enableDebug();
 				sender.sendMessage(ChatColor.GOLD + "Enabled debug");
 			}
 			return true;

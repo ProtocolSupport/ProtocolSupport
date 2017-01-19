@@ -20,7 +20,7 @@ import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
-import protocolsupport.zplatform.server.MinecraftServerWrapper;
+import protocolsupport.zplatform.MiscPlatformUtils;
 
 public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
@@ -150,7 +150,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
 	protected void setProtocol(final Channel channel, ProtocolVersion version) {
 		ConnectionImpl connection = ConnectionImpl.getFromChannel(channel);
-		if (MinecraftServerWrapper.isDebugging()) {
+		if (MiscPlatformUtils.isDebugging()) {
 			System.err.println(connection.getAddress() + " connected with protocol version " + version);
 		}
 		connection.setVersion(version);

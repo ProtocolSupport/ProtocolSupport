@@ -20,7 +20,7 @@ import protocolsupport.api.events.PlayerPropertiesResolveEvent;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.utils.MinecraftEncryption;
-import protocolsupport.zplatform.server.MinecraftServerWrapper;
+import protocolsupport.zplatform.MiscPlatformUtils;
 
 @SuppressWarnings("deprecation")
 public class PlayerLookupUUID {
@@ -41,8 +41,8 @@ public class PlayerLookupUUID {
 				fireLoginEvents();
 				return;
 			}
-			String hash = new BigInteger(MinecraftEncryption.createHash(MinecraftServerWrapper.getEncryptionKeyPair().getPublic(), listener.loginKey)).toString(16);
-			listener.profile = MinecraftServerWrapper.getSessionService().hasJoinedServer(new GameProfile(null, joinName), hash, null);
+			String hash = new BigInteger(MinecraftEncryption.createHash(MiscPlatformUtils.getEncryptionKeyPair().getPublic(), listener.loginKey)).toString(16);
+			listener.profile = MiscPlatformUtils.getSessionService().hasJoinedServer(new GameProfile(null, joinName), hash, null);
 			if (listener.profile != null) {
 				fireLoginEvents();
 			} else {
@@ -91,7 +91,7 @@ public class PlayerLookupUUID {
 		}
 
 		if (PlayerPreLoginEvent.getHandlerList().getRegisteredListeners().length != 0) {
-			if (MinecraftServerWrapper.callSyncTask(() -> {
+			if (MiscPlatformUtils.callSyncTask(() -> {
 				Bukkit.getPluginManager().callEvent(syncEvent);
 				return syncEvent.getResult();
 			}).get() != PlayerPreLoginEvent.Result.ALLOWED) {
