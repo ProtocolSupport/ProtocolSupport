@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.handler;
+package protocolsupport.zplatform.impl.spigot.network;
 
 import java.net.InetSocketAddress;
 import java.text.SimpleDateFormat;
@@ -29,6 +29,7 @@ import net.minecraft.server.v1_11_R1.ITickable;
 import net.minecraft.server.v1_11_R1.IpBanEntry;
 import net.minecraft.server.v1_11_R1.LoginListener;
 import net.minecraft.server.v1_11_R1.MinecraftServer;
+import net.minecraft.server.v1_11_R1.NetworkManager;
 import net.minecraft.server.v1_11_R1.PacketDataSerializer;
 import net.minecraft.server.v1_11_R1.PacketListenerPlayIn;
 import net.minecraft.server.v1_11_R1.PacketLoginInEncryptionBegin;
@@ -72,34 +73,23 @@ import protocolsupport.api.events.PlayerLoginFinishEvent;
 import protocolsupport.api.events.PlayerSyncLoginEvent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
-import protocolsupport.zplatform.MiscImplUtils;
+import protocolsupport.zplatform.network.LoginListenerPlay;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
+import protocolsupport.zplatform.network.PlatformPacketFactory;
 import protocolsupport.zplatform.server.MinecraftServerWrapper;
 
-public class LoginListenerPlay implements PacketLoginInListener, PacketListenerPlayIn, ITickable, IHasProfile {
+public class SpigotLoginListenerPlay extends LoginListenerPlay implements PacketLoginInListener, PacketListenerPlayIn, ITickable {
 
 	protected static final Logger logger = LogManager.getLogger(LoginListener.class);
 	protected static final MinecraftServer server = MinecraftServerWrapper.getServer();
 
-	protected final NetworkManagerWrapper networkManager;
-	protected final GameProfile profile;
-	protected final boolean onlineMode;
-	protected final String hostname;
-
 	protected boolean ready;
 
-	public LoginListenerPlay(NetworkManagerWrapper networkmanager, GameProfile profile, boolean onlineMode, String hostname) {
-		this.networkManager = networkmanager;
-		this.profile = profile;
-		this.onlineMode = onlineMode;
-		this.hostname = hostname;
+	public SpigotLoginListenerPlay(NetworkManagerWrapper networkmanager, GameProfile profile, boolean onlineMode, String hostname) {
+		super(networkmanager, profile, onlineMode, hostname);
 	}
 
 	@Override
-	public GameProfile getProfile() {
-		return profile;
-	}
-
 	public void finishLogin() {
 		// send login success
 		networkManager.sendPacket(new PacketLoginOutSuccess(profile));
@@ -141,7 +131,7 @@ public class LoginListenerPlay implements PacketLoginInListener, PacketListenerP
 		EntityPlayer loginplayer = attemptLogin(profile, hostname);
 		if (loginplayer != null) {
 			networkManager.sendPacket(new PacketPlayOutCustomPayload("PS|FinishLogin", empty));
-			server.getPlayerList().a(networkManager.unwrap(), loginplayer);
+			server.getPlayerList().a((NetworkManager) networkManager.unwrap(), loginplayer);
 			ready = false;
 		}
 	}
@@ -242,7 +232,7 @@ public class LoginListenerPlay implements PacketLoginInListener, PacketListenerP
 
 	@SuppressWarnings("unchecked")
 	protected void disconnect0(String s) {
-		networkManager.sendPacket(MiscImplUtils.createPlayDisconnectPacket(s), new GenericFutureListener<Future<? super Void>>() {
+		networkManager.sendPacket(PlatformPacketFactory.createPlayDisconnectPacket(s), new GenericFutureListener<Future<? super Void>>() {
 			@Override
 			public void operationComplete(Future<? super Void> future) {
 				networkManager.close(s);

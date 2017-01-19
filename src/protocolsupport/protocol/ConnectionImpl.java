@@ -60,7 +60,7 @@ public class ConnectionImpl extends Connection {
 		final Packet<PacketListener> packetInst = (Packet<PacketListener>) packet;
 		if (networkmanager.getChannel().isOpen()) {
 			try {
-				packetInst.a(networkmanager.getPacketListener());
+				packetInst.a((PacketListener) networkmanager.getPacketListener());
 			} catch (CancelledPacketHandleException ex) {
 			}
 		}

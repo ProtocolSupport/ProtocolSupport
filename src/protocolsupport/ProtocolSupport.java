@@ -21,8 +21,6 @@ import protocolsupport.protocol.typeskipper.id.IdSkipper;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.zplatform.ServerImplementationType;
-import protocolsupport.zplatform.impl.spigot.injector.ServerInjector;
-import protocolsupport.zplatform.impl.spigot.injector.network.NettyInjector;
 
 public class ProtocolSupport extends JavaPlugin {
 

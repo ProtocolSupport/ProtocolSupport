@@ -1,19 +1,17 @@
-package protocolsupport.zplatform;
+package protocolsupport.zplatform.network;
 
 import java.io.IOException;
+import java.security.PublicKey;
 
 import org.apache.commons.lang3.NotImplementedException;
-import org.bukkit.craftbukkit.v1_11_R1.inventory.CraftItemStack;
-import org.bukkit.inventory.ItemStack;
 
 import io.netty.buffer.Unpooled;
 import net.minecraft.server.v1_11_R1.ChatComponentText;
 import net.minecraft.server.v1_11_R1.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_11_R1.Item;
-import net.minecraft.server.v1_11_R1.LocaleI18n;
-import net.minecraft.server.v1_11_R1.NBTTagCompound;
 import net.minecraft.server.v1_11_R1.PacketDataSerializer;
 import net.minecraft.server.v1_11_R1.PacketLoginOutDisconnect;
+import net.minecraft.server.v1_11_R1.PacketLoginOutEncryptionBegin;
+import net.minecraft.server.v1_11_R1.PacketLoginOutSetCompression;
 import net.minecraft.server.v1_11_R1.PacketPlayInCloseWindow;
 import net.minecraft.server.v1_11_R1.PacketPlayOutChat;
 import net.minecraft.server.v1_11_R1.PacketPlayOutKickDisconnect;
@@ -23,10 +21,9 @@ import net.minecraft.server.v1_11_R1.PacketPlayOutTitle.EnumTitleAction;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
-import protocolsupport.zplatform.impl.spigot.itemstack.SpigotNBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
+import protocolsupport.zplatform.ServerImplementationType;
 
-public class MiscImplUtils {
+public class PlatformPacketFactory {
 
 	public static Object createInboundInventoryClosePacket() {
 		switch (ServerImplementationType.get()) {
@@ -52,14 +49,12 @@ public class MiscImplUtils {
 		}
 	}
 
-	private static final BaseComponent empty = new TextComponent("");
-
 	public static Object createTabHeaderFooterPacket(BaseComponent header, BaseComponent footer) {
 		switch (ServerImplementationType.get()) {
 			case SPIGOT: {
 				PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer());
-				serializer.a(ChatAPI.toJSON(header != null ? header : empty));
-				serializer.a(ChatAPI.toJSON(footer != null ? footer : empty));
+				serializer.a(ChatAPI.toJSON(header != null ? header : PlatformPacketFactory.empty));
+				serializer.a(ChatAPI.toJSON(footer != null ? footer : PlatformPacketFactory.empty));
 				PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
 				try {
 					packet.a(serializer);
@@ -73,6 +68,8 @@ public class MiscImplUtils {
 			}
 		}
 	}
+
+	public static final BaseComponent empty = new TextComponent("");
 
 	public static Object createTitleResetPacket() {
 		switch (ServerImplementationType.get()) {
@@ -158,10 +155,10 @@ public class MiscImplUtils {
 		}
 	}
 
-	public static String localize(String key, Object... args) {
+	public static Object createLoginEncryptionBeginPacket(PublicKey publicKey, byte[] randomBytes) {
 		switch (ServerImplementationType.get()) {
 			case SPIGOT: {
-				return LocaleI18n.a(key, args);
+				return new PacketLoginOutEncryptionBegin("", publicKey, randomBytes);
 			}
 			default: {
 				// TODO: implement for glowstone
@@ -170,41 +167,10 @@ public class MiscImplUtils {
 		}
 	}
 
-	public static ItemStack createItemStackFromNBTTag(NBTTagCompoundWrapper tag) {
+	public static Object createSetCompressionPacket(int threshold) {
 		switch (ServerImplementationType.get()) {
 			case SPIGOT: {
-				return CraftItemStack.asCraftMirror(new net.minecraft.server.v1_11_R1.ItemStack(((SpigotNBTTagCompoundWrapper) tag).unwrap()));
-			}
-			default: {
-				// TODO: implement for glowstone
-				throw new NotImplementedException("Not implemented yet");
-			}
-		}
-	}
-
-	public static NBTTagCompoundWrapper createNBTTagFromItemStack(ItemStack itemstack) {
-		switch (ServerImplementationType.get()) {
-			case SPIGOT: {
-				net.minecraft.server.v1_11_R1.ItemStack nmsitemstack = CraftItemStack.asNMSCopy(itemstack);
-				NBTTagCompound compound = new NBTTagCompound();
-				nmsitemstack.save(compound);
-				return SpigotNBTTagCompoundWrapper.wrap(compound);
-			}
-			default: {
-				// TODO: implement for glowstone
-				throw new NotImplementedException("Not implemented yet");
-			}
-		}
-	}
-
-	public static Integer getItemIdByName(String registryname) {
-		switch (ServerImplementationType.get()) {
-			case SPIGOT: {
-				Item item = Item.b(registryname);
-				if (item != null) {
-					return Item.getId(item);
-				}
-				return null;
+				return new PacketLoginOutSetCompression(threshold);
 			}
 			default: {
 				// TODO: implement for glowstone

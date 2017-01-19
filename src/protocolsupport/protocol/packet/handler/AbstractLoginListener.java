@@ -25,14 +25,6 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import net.minecraft.server.v1_11_R1.IChatBaseComponent;
-import net.minecraft.server.v1_11_R1.ITickable;
-import net.minecraft.server.v1_11_R1.LoginListener;
-import net.minecraft.server.v1_11_R1.PacketLoginInEncryptionBegin;
-import net.minecraft.server.v1_11_R1.PacketLoginInListener;
-import net.minecraft.server.v1_11_R1.PacketLoginInStart;
-import net.minecraft.server.v1_11_R1.PacketLoginOutEncryptionBegin;
-import net.minecraft.server.v1_11_R1.PacketLoginOutSetCompression;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.events.PlayerLoginStartEvent;
 import protocolsupport.protocol.ConnectionImpl;
@@ -41,11 +33,12 @@ import protocolsupport.protocol.pipeline.common.PacketCompressor;
 import protocolsupport.protocol.pipeline.common.PacketDecompressor;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
-import protocolsupport.zplatform.MiscImplUtils;
+import protocolsupport.zplatform.network.LoginListenerPlay;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
+import protocolsupport.zplatform.network.PlatformPacketFactory;
 import protocolsupport.zplatform.server.MinecraftServerWrapper;
 
-public abstract class AbstractLoginListener implements PacketLoginInListener, ITickable, IHasProfile {
+public abstract class AbstractLoginListener implements IHasProfile {
 
 	private static final int loginThreads = Utils.getJavaPropertyValue("loginthreads", Integer.MAX_VALUE, Converter.STRING_TO_INT);
 	private static final int loginThreadKeepAlive = Utils.getJavaPropertyValue("loginthreadskeepalive", 60, Converter.STRING_TO_INT);
@@ -61,7 +54,7 @@ public abstract class AbstractLoginListener implements PacketLoginInListener, IT
 		r -> new Thread(r, "LoginProcessingThread")
 	);
 
-	protected static final Logger logger = LogManager.getLogger(LoginListener.class);
+	protected static final Logger logger = LogManager.getLogger();
 
 	protected final NetworkManagerWrapper networkManager;
 	protected final String hostname;
@@ -86,8 +79,7 @@ public abstract class AbstractLoginListener implements PacketLoginInListener, IT
 		return profile;
 	}
 
-	@Override
-	public void F_() {
+	public void tick() {
 		if (loginTicks++ == 600) {
 			disconnect("Took too long to log in");
 		}
@@ -97,7 +89,7 @@ public abstract class AbstractLoginListener implements PacketLoginInListener, IT
 	public void disconnect(String s) {
 		try {
 			logger.info("Disconnecting " + getConnectionRepr() + ": " + s);
-			networkManager.sendPacket(MiscImplUtils.createLoginDisconnectPacket(s), new GenericFutureListener<Future<? super Void>>() {
+			networkManager.sendPacket(PlatformPacketFactory.createLoginDisconnectPacket(s), new GenericFutureListener<Future<? super Void>>() {
 				@Override
 				public void operationComplete(Future<? super Void> future)  {
 					networkManager.close(s);
@@ -132,24 +124,18 @@ public abstract class AbstractLoginListener implements PacketLoginInListener, IT
 		}
 	}
 
-	@Override
-	public void a(final IChatBaseComponent ichatbasecomponent) {
-		logger.info(getConnectionRepr() + " lost connection: " + ichatbasecomponent.getText());
-	}
-
 	public String getConnectionRepr() {
 		return (profile != null) ? (profile + " (" + networkManager.getAddress() + ")") : networkManager.getAddress().toString();
 	}
 
-	@Override
-	public void a(final PacketLoginInStart packetlogininstart) {
+	public void handleLoginStart(GameProfile packetprofile) {
 		Validate.validState(state == LoginState.HELLO, "Unexpected hello packet");
 		state = LoginState.ONLINEMODERESOLVE;
 		loginprocessor.execute(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					profile = packetlogininstart.a();
+					profile = packetprofile;
 
 					PlayerLoginStartEvent event = new PlayerLoginStartEvent(
 						ConnectionImpl.getFromChannel(networkManager.getChannel()),
@@ -169,7 +155,7 @@ public abstract class AbstractLoginListener implements PacketLoginInListener, IT
 					forcedUUID = event.getForcedUUID();
 					if (isOnlineMode) {
 						state = LoginState.KEY;
-						networkManager.sendPacket(new PacketLoginOutEncryptionBegin("", MinecraftServerWrapper.getEncryptionKeyPair().getPublic(), randomBytes));
+						networkManager.sendPacket(PlatformPacketFactory.createLoginEncryptionBeginPacket(MinecraftServerWrapper.getEncryptionKeyPair().getPublic(), randomBytes));
 					} else {
 						new PlayerLookupUUID(AbstractLoginListener.this, isOnlineMode).run();
 					}
@@ -183,8 +169,15 @@ public abstract class AbstractLoginListener implements PacketLoginInListener, IT
 		});
 	}
 
-	@Override
-	public void a(final PacketLoginInEncryptionBegin packetlogininencryptionbegin) {
+	public static interface EncryptionPacketWrapper {
+
+		public byte[] getNonce(PrivateKey key);
+
+		public SecretKey getSecretKey(PrivateKey key);
+
+	}
+
+	public void handleEncryption(EncryptionPacketWrapper encryptionpakcet) {
 		Validate.validState(state == LoginState.KEY, "Unexpected key packet");
 		state = LoginState.AUTHENTICATING;
 		loginprocessor.execute(new Runnable() {
@@ -192,10 +185,10 @@ public abstract class AbstractLoginListener implements PacketLoginInListener, IT
 			public void run() {
 				try {
 					final PrivateKey privatekey = MinecraftServerWrapper.getEncryptionKeyPair().getPrivate();
-					if (!Arrays.equals(randomBytes, packetlogininencryptionbegin.b(privatekey))) {
+					if (!Arrays.equals(randomBytes, encryptionpakcet.getNonce(privatekey))) {
 						throw new IllegalStateException("Invalid nonce!");
 					}
-					loginKey = packetlogininencryptionbegin.a(privatekey);
+					loginKey = encryptionpakcet.getSecretKey(privatekey);
 					enableEncryption(loginKey);
 					new PlayerLookupUUID(AbstractLoginListener.this, isOnlineMode).run();
 				} catch (Throwable t) {
@@ -232,7 +225,7 @@ public abstract class AbstractLoginListener implements PacketLoginInListener, IT
 			final int threshold = MinecraftServerWrapper.getCompressionThreshold();
 			if (threshold >= 0) {
 				this.networkManager.sendPacket(
-					new PacketLoginOutSetCompression(threshold),
+					PlatformPacketFactory.createSetCompressionPacket(threshold),
 					new ChannelFutureListener() {
 						@Override
 						public void operationComplete(ChannelFuture future)  {
@@ -243,7 +236,7 @@ public abstract class AbstractLoginListener implements PacketLoginInListener, IT
 			}
 		}
 
-		LoginListenerPlay listener = new LoginListenerPlay(networkManager, profile, isOnlineMode, hostname);
+		LoginListenerPlay listener = LoginListenerPlay.create(networkManager, profile, isOnlineMode, hostname);
 		networkManager.setPacketListener(listener);
 		listener.finishLogin();
 	}

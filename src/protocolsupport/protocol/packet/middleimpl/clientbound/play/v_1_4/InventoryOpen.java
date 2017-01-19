@@ -11,7 +11,7 @@ import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
-import protocolsupport.zplatform.MiscImplUtils;
+import protocolsupport.zplatform.network.PlatformPacketFactory;
 
 public class InventoryOpen extends MiddleInventoryOpen<RecyclableCollection<ClientBoundPacketData>> {
 
@@ -19,7 +19,7 @@ public class InventoryOpen extends MiddleInventoryOpen<RecyclableCollection<Clie
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		if (IdSkipper.INVENTORY.getTable(version).shouldSkip(invname)) {
 			cache.closeWindow();
-			connection.receivePacket(MiscImplUtils.createInboundInventoryClosePacket());
+			connection.receivePacket(PlatformPacketFactory.createInboundInventoryClosePacket());
 			return RecyclableEmptyList.get();
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_OPEN_ID, version);

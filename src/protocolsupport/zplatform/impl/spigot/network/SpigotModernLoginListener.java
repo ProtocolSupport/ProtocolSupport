@@ -1,14 +1,13 @@
-package protocolsupport.protocol.packet.handler.common;
+package protocolsupport.zplatform.impl.spigot.network;
 
 import javax.crypto.SecretKey;
 
-import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
-public class ModernLoginListener extends AbstractLoginListener {
+public class SpigotModernLoginListener extends SpigotLoginListener {
 
-	private boolean hasCompression;
-	public ModernLoginListener(NetworkManagerWrapper networkmanager, String hostname, boolean hasCompression) {
+	private final boolean hasCompression;
+	public SpigotModernLoginListener(NetworkManagerWrapper networkmanager, String hostname, boolean hasCompression) {
 		super(networkmanager, hostname);
 		this.hasCompression = hasCompression;
 	}
