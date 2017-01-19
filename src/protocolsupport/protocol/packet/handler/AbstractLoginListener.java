@@ -236,10 +236,12 @@ public abstract class AbstractLoginListener implements IHasProfile {
 			}
 		}
 
-		LoginListenerPlay listener = LoginListenerPlay.create(networkManager, profile, isOnlineMode, hostname);
+		LoginListenerPlay listener = getLoginListenerPlay();
 		networkManager.setPacketListener(listener);
 		listener.finishLogin();
 	}
+
+	protected abstract LoginListenerPlay getLoginListenerPlay();
 
 	public enum LoginState {
 		HELLO, ONLINEMODERESOLVE, KEY, AUTHENTICATING;

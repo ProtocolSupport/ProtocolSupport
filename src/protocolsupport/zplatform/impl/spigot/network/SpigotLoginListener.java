@@ -47,4 +47,9 @@ public abstract class SpigotLoginListener extends AbstractLoginListener implemen
 		});
 	}
 
+	@Override
+	protected SpigotLoginListenerPlay getLoginListenerPlay() {
+		return new SpigotLoginListenerPlay(networkManager, profile, isOnlineMode, hostname);
+	}
+
 }
