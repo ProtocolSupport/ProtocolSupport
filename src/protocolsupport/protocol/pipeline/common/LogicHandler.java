@@ -18,6 +18,7 @@ import protocolsupport.api.events.PlayerDisconnectEvent;
 import protocolsupport.logger.AsyncErrorLogger;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.storage.ProtocolStorage;
+import protocolsupport.zplatform.impl.spigot.SpigotConnectionImpl;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class LogicHandler extends ChannelDuplexHandler {
@@ -29,8 +30,8 @@ public class LogicHandler extends ChannelDuplexHandler {
 		ignoreExceptions.add(IOException.class);
 	}
 
-	private final ConnectionImpl connection;
-	public LogicHandler(ConnectionImpl connection) {
+	private final SpigotConnectionImpl connection;
+	public LogicHandler(SpigotConnectionImpl connection) {
 		this.connection = connection;
 	}
 

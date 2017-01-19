@@ -76,7 +76,8 @@ public class StatusListener implements PacketStatusInListener {
 		}
 
 		ServerPingResponseEvent revent = new ServerPingResponseEvent(
-			ConnectionImpl.getFromChannel(networkManager.getChannel()), new ProtocolInfo(ProtocolVersion.getLatest(), MiscPlatformUtils.getModName() + " " + MiscPlatformUtils.getVersionName()),
+			ConnectionImpl.getFromChannel(networkManager.getChannel()),
+			new ProtocolInfo(ProtocolVersion.getLatest(), MiscPlatformUtils.getModName() + " " + MiscPlatformUtils.getVersionName()),
 			icon, motd, maxPlayers, profiles
 		);
 		Bukkit.getPluginManager().callEvent(revent);

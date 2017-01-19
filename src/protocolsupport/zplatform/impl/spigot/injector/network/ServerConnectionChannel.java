@@ -3,8 +3,6 @@ package protocolsupport.zplatform.impl.spigot.injector.network;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
-import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.FakePacketListener;
 import protocolsupport.protocol.pipeline.common.LogicHandler;
@@ -17,6 +15,7 @@ import protocolsupport.protocol.pipeline.wrapped.WrappedSplitter;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
+import protocolsupport.zplatform.impl.spigot.SpigotConnectionImpl;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class ServerConnectionChannel extends ChannelInitializer<Channel> {
@@ -27,7 +26,7 @@ public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 	protected void initChannel(Channel channel) {
 		NetworkManagerWrapper networkmanager = NetworkManagerWrapper.getFromChannel(channel);
 		networkmanager.setPacketListener(new FakePacketListener());
-		ConnectionImpl connection = new ConnectionImpl(networkmanager, ProtocolVersion.UNKNOWN);
+		SpigotConnectionImpl connection = new SpigotConnectionImpl(networkmanager);
 		connection.storeInChannel(channel);
 		ProtocolStorage.setConnection(channel.remoteAddress(), connection);
 		ChannelPipeline pipeline = channel.pipeline();
