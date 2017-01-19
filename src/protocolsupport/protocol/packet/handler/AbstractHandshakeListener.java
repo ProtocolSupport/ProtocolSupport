@@ -102,7 +102,7 @@ public abstract class AbstractHandshakeListener {
 			case STATUS: {
 				//switch to status stage
 				networkManager.setProtocol(NetworkListenerState.STATUS);
-				networkManager.setPacketListener(new StatusListener(networkManager));
+				networkManager.setPacketListener(getStatusListener(networkManager));
 				break;
 			}
 			default: {
@@ -118,6 +118,8 @@ public abstract class AbstractHandshakeListener {
 		ProtocolStorage.setConnection(newRemote, connection);
 	}
 
-	public abstract AbstractLoginListener getLoginListener(NetworkManagerWrapper networkManager, String hostname);
+	protected abstract AbstractLoginListener getLoginListener(NetworkManagerWrapper networkManager, String hostname);
+
+	protected abstract AbstractStatusListener getStatusListener(NetworkManagerWrapper networkManager);
 
 }

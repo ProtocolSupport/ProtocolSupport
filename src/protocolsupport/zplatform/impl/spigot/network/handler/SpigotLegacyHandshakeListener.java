@@ -4,6 +4,7 @@ import net.minecraft.server.v1_11_R1.IChatBaseComponent;
 import net.minecraft.server.v1_11_R1.PacketHandshakingInListener;
 import net.minecraft.server.v1_11_R1.PacketHandshakingInSetProtocol;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
+import protocolsupport.protocol.packet.handler.AbstractStatusListener;
 import protocolsupport.zplatform.impl.spigot.SpigotImplUtils;
 import protocolsupport.zplatform.network.LegacyHandshakeListener;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
@@ -26,6 +27,11 @@ public class SpigotLegacyHandshakeListener extends LegacyHandshakeListener imple
 	@Override
 	public AbstractLoginListener getLoginListener(NetworkManagerWrapper networkManager, String hostname) {
 		return new SpigotLegacyLoginListener(networkManager, hostname);
+	}
+
+	@Override
+	protected AbstractStatusListener getStatusListener(NetworkManagerWrapper networkManager) {
+		return new SpigotStatusListener(networkManager);
 	}
 
 }

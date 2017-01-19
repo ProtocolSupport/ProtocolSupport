@@ -2,9 +2,16 @@ package protocolsupport.zplatform.network;
 
 import java.io.IOException;
 import java.security.PublicKey;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.bukkit.Material;
+import org.spigotmc.SpigotConfig;
+
+import com.mojang.authlib.GameProfile;
 
 import io.netty.buffer.Unpooled;
 import net.minecraft.server.v1_11_R1.Block;
@@ -23,9 +30,15 @@ import net.minecraft.server.v1_11_R1.PacketPlayOutTitle;
 import net.minecraft.server.v1_11_R1.SoundCategory;
 import net.minecraft.server.v1_11_R1.SoundEffectType;
 import net.minecraft.server.v1_11_R1.PacketPlayOutTitle.EnumTitleAction;
+import net.minecraft.server.v1_11_R1.PacketStatusOutPong;
+import net.minecraft.server.v1_11_R1.PacketStatusOutServerInfo;
+import net.minecraft.server.v1_11_R1.ServerPing;
+import net.minecraft.server.v1_11_R1.ServerPing.ServerData;
+import net.minecraft.server.v1_11_R1.ServerPing.ServerPingPlayerSample;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
+import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.zplatform.ServerImplementationType;
 
@@ -196,6 +209,47 @@ public class PlatformPacketFactory {
 					(blocksound.a() + 1.0F) / 2.0F,
 					blocksound.b() * 0.8F
 				);
+			}
+			default: {
+				// TODO: implement for glowstone
+				throw new NotImplementedException("Not implemented yet");
+			}
+		}
+	}
+
+	public static Object createStatusPongPacket(long pingId) {
+		switch (ServerImplementationType.get()) {
+			case SPIGOT: {
+				return new PacketStatusOutPong(pingId);
+			}
+			default: {
+				// TODO: implement for glowstone
+				throw new NotImplementedException("Not implemented yet");
+			}
+		}
+	}
+
+	private static final UUID profileUUID = UUID.randomUUID();
+	public static Object createStausServerInfoPacket(List<String> profiles, ProtocolInfo info, String icon, String motd, int maxPlayers) {
+		switch (ServerImplementationType.get()) {
+			case SPIGOT: {
+				ServerPingPlayerSample playerSample = new ServerPingPlayerSample(maxPlayers, profiles.size());
+
+				Collections.shuffle(profiles);
+				GameProfile[] gprofiles = new GameProfile[profiles.size()];
+				for (int i = 0; i < profiles.size(); i++) {
+					gprofiles[i] = new GameProfile(profileUUID, profiles.get(i));
+				}
+				gprofiles = Arrays.copyOfRange(gprofiles, 0, Math.min(gprofiles.length, SpigotConfig.playerSample));
+				playerSample.a(gprofiles);
+
+				ServerPing serverping = new ServerPing();
+				serverping.setFavicon(icon);
+				serverping.setMOTD(new ChatComponentText(motd));
+				serverping.setPlayerSample(playerSample);
+				serverping.setServerInfo(new ServerData(info.getName(), info.getId()));
+
+				return new PacketStatusOutServerInfo(serverping);
 			}
 			default: {
 				// TODO: implement for glowstone
