@@ -4,6 +4,8 @@ import java.security.PrivateKey;
 
 import javax.crypto.SecretKey;
 
+import org.bukkit.Bukkit;
+
 import net.minecraft.server.v1_11_R1.IChatBaseComponent;
 import net.minecraft.server.v1_11_R1.ITickable;
 import net.minecraft.server.v1_11_R1.PacketLoginInEncryptionBegin;
@@ -25,7 +27,7 @@ public abstract class SpigotLoginListener extends AbstractLoginListener implemen
 
 	@Override
 	public void a(IChatBaseComponent msg) {
-		logger.info(getConnectionRepr() + " lost connection: " + msg.getText());
+		Bukkit.getLogger().info(getConnectionRepr() + " lost connection: " + msg.getText());
 	}
 
 	@Override

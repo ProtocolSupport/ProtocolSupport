@@ -8,12 +8,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 import javax.crypto.SecretKey;
 
 import org.apache.commons.lang3.Validate;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.bukkit.Bukkit;
 
 import com.google.common.base.Charsets;
@@ -54,8 +53,6 @@ public abstract class AbstractLoginListener implements IHasProfile {
 		r -> new Thread(r, "LoginProcessingThread")
 	);
 
-	protected static final Logger logger = LogManager.getLogger();
-
 	protected final NetworkManagerWrapper networkManager;
 	protected final String hostname;
 	protected final byte[] randomBytes = new byte[4];
@@ -88,7 +85,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 	@SuppressWarnings("unchecked")
 	public void disconnect(String s) {
 		try {
-			logger.info("Disconnecting " + getConnectionRepr() + ": " + s);
+			Bukkit.getLogger().info("Disconnecting " + getConnectionRepr() + ": " + s);
 			networkManager.sendPacket(PlatformPacketFactory.createLoginDisconnectPacket(s), new GenericFutureListener<Future<? super Void>>() {
 				@Override
 				public void operationComplete(Future<? super Void> future)  {
@@ -96,7 +93,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 				}
 			});
 		} catch (Exception exception) {
-			logger.error("Error whilst disconnecting player", exception);
+			Bukkit.getLogger().log(Level.SEVERE, "Error whilst disconnecting player", exception);
 		}
 	}
 
@@ -202,10 +199,6 @@ public abstract class AbstractLoginListener implements IHasProfile {
 	}
 
 	protected abstract void enableEncryption(SecretKey key);
-
-	public Logger getLogger() {
-		return logger;
-	}
 
 	@SuppressWarnings("unchecked")
 	public void setReadyToAccept() {

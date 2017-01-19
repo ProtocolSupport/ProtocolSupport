@@ -4,8 +4,8 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.text.MessageFormat;
+import java.util.logging.Level;
 
-import org.apache.logging.log4j.LogManager;
 import org.bukkit.Bukkit;
 
 import com.google.gson.Gson;
@@ -54,7 +54,7 @@ public abstract class AbstractHandshakeListener {
 						}
 					}
 				} catch (Throwable t) {
-					LogManager.getLogger().debug("Failed to check connection throttle", t);
+					Bukkit.getLogger().log(Level.WARNING, "Failed to check connection throttle", t);
 				}
 				//check client version (may be not latest if connection was from snapshot)
 				ProtocolVersion clientversion = ProtocolVersion.fromId(clientVersion);

@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
@@ -47,14 +48,14 @@ public class PlayerLookupUUID {
 				fireLoginEvents();
 			} else {
 				listener.disconnect("Failed to verify username!");
-				listener.getLogger().error("Username '" + joinName + "' tried to join with an invalid session");
+				Bukkit.getLogger().severe("Username '" + joinName + "' tried to join with an invalid session");
 			}
 		} catch (AuthenticationUnavailableException authenticationunavailableexception) {
 			listener.disconnect("Authentication servers are down. Please try again later, sorry!");
-			listener.getLogger().error("Couldn't verify username because servers are unavailable");
+			Bukkit.getLogger().severe("Couldn't verify username because servers are unavailable");
 		} catch (Exception exception) {
 			listener.disconnect("Failed to verify username!");
-			listener.getLogger().error("Exception verifying " + joinName, exception);
+			Bukkit.getLogger().log(Level.SEVERE, "Exception verifying " + joinName, exception);
 		}
 	}
 
@@ -105,7 +106,7 @@ public class PlayerLookupUUID {
 			return;
 		}
 
-		listener.getLogger().info("UUID of player " + listener.profile.getName() + " is " + listener.profile.getId());
+		Bukkit.getLogger().info("UUID of player " + listener.profile.getName() + " is " + listener.profile.getId());
 		listener.setReadyToAccept();
 	}
 

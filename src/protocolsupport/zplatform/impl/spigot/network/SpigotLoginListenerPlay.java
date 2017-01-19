@@ -6,10 +6,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.spigotmc.SpigotConfig;
@@ -27,7 +26,6 @@ import net.minecraft.server.v1_11_R1.GameProfileBanEntry;
 import net.minecraft.server.v1_11_R1.IChatBaseComponent;
 import net.minecraft.server.v1_11_R1.ITickable;
 import net.minecraft.server.v1_11_R1.IpBanEntry;
-import net.minecraft.server.v1_11_R1.LoginListener;
 import net.minecraft.server.v1_11_R1.MinecraftServer;
 import net.minecraft.server.v1_11_R1.NetworkManager;
 import net.minecraft.server.v1_11_R1.PacketDataSerializer;
@@ -80,7 +78,6 @@ import protocolsupport.zplatform.network.PlatformPacketFactory;
 
 public class SpigotLoginListenerPlay extends LoginListenerPlay implements PacketLoginInListener, PacketListenerPlayIn, ITickable {
 
-	protected static final Logger logger = LogManager.getLogger(LoginListener.class);
 	protected static final MinecraftServer server = SpigotImplUtils.getServer();
 
 	protected boolean ready;
@@ -207,7 +204,7 @@ public class SpigotLoginListenerPlay extends LoginListenerPlay implements Packet
 
 	@Override
 	public void a(final IChatBaseComponent ichatbasecomponent) {
-		logger.info(getConnectionRepr() + " lost connection: " + ichatbasecomponent.getText());
+		Bukkit.getLogger().info(getConnectionRepr() + " lost connection: " + ichatbasecomponent.getText());
 	}
 
 	private String getConnectionRepr() {
@@ -216,7 +213,7 @@ public class SpigotLoginListenerPlay extends LoginListenerPlay implements Packet
 
 	public void disconnect(final String s) {
 		try {
-			logger.info("Disconnecting " + getConnectionRepr() + ": " + s);
+			Bukkit.getLogger().info("Disconnecting " + getConnectionRepr() + ": " + s);
 			if (ConnectionImpl.getFromChannel(networkManager.getChannel()).getVersion().isBetween(ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_7_10)) {
 				// first send join game that will make client actually switch to game state
 				networkManager.sendPacket(new PacketPlayOutLogin(0, EnumGamemode.NOT_SET, false, 0, EnumDifficulty.EASY, 60, WorldType.NORMAL, false));
@@ -226,7 +223,7 @@ public class SpigotLoginListenerPlay extends LoginListenerPlay implements Packet
 				disconnect0(s);
 			}
 		} catch (Exception exception) {
-			logger.error("Error whilst disconnecting player", exception);
+			Bukkit.getLogger().log(Level.SEVERE, "Error whilst disconnecting player", exception);
 		}
 	}
 
