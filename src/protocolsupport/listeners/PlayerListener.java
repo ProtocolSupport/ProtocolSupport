@@ -1,6 +1,7 @@
 package protocolsupport.listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -12,11 +13,13 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 
 import protocolsupport.ProtocolSupport;
+import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.tab.TabAPI;
-import protocolsupport.protocol.legacyremapper.LegacySound;
+import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.zplatform.network.PlatformPacketFactory;
 
 public class PlayerListener implements Listener {
 
@@ -45,16 +48,17 @@ public class PlayerListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onVehicleEnter(VehicleEnterEvent event) {
-		if (event.getVehicle().getPassenger() != null) {
+		if (!event.getVehicle().getPassengers().isEmpty()) {
 			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
-		Player player = event.getPlayer();
-		if (ProtocolSupportAPI.getProtocolVersion(player).isBefore(ProtocolVersion.MINECRAFT_1_9)) {
-			LegacySound.sendBlockPlaceSound(player, event.getBlock());
+		Connection connection = ProtocolSupportAPI.getConnection(event.getPlayer());
+		if (connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9)) {
+			Block block = event.getBlock();
+			connection.sendPacket(PlatformPacketFactory.createBlockBreakSoundPacket(new Position(block.getX(), block.getY(), block.getZ()), block.getType()));
 		}
 	}
 

@@ -2,32 +2,14 @@ package protocolsupport.protocol.legacyremapper;
 
 import java.util.HashMap;
 
-import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
-import org.bukkit.entity.Player;
-
-import net.minecraft.server.v1_11_R1.Block;
-import net.minecraft.server.v1_11_R1.PacketPlayOutNamedSoundEffect;
-import net.minecraft.server.v1_11_R1.SoundCategory;
-import net.minecraft.server.v1_11_R1.SoundEffect;
-import net.minecraft.server.v1_11_R1.SoundEffectType;
+import protocolsupport.zplatform.MiscPlatformUtils;
 
 public class LegacySound {
 
-	@SuppressWarnings("deprecation")
-	public static void sendBlockPlaceSound(Player player, org.bukkit.block.Block block) {
-		SoundEffectType blocksound = Block.getById(block.getType().getId()).getStepSound();
-		((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutNamedSoundEffect(
-			blocksound.e(), SoundCategory.BLOCKS,
-			block.getX(), block.getY(), block.getZ(),
-			(blocksound.a() + 1.0F) / 2.0F,
-			blocksound.b() * 0.8F
-		));
-	}
-
 	private static final HashMap<String, String> legacySounds = new HashMap<>();
 
-	public static String getSoundName(int soundType) {
-		return SoundEffect.a.b(SoundEffect.a.getId(soundType)).a();
+	public static String getSoundName(int soundId) {
+		return MiscPlatformUtils.getSoundName(soundId);
 	}
 
 	//return new sound if legacy not found, so launcher will print a warning with that new sound name

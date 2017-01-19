@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.security.PublicKey;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.bukkit.Material;
 
 import io.netty.buffer.Unpooled;
+import net.minecraft.server.v1_11_R1.Block;
 import net.minecraft.server.v1_11_R1.ChatComponentText;
 import net.minecraft.server.v1_11_R1.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_11_R1.PacketDataSerializer;
@@ -15,12 +17,16 @@ import net.minecraft.server.v1_11_R1.PacketLoginOutSetCompression;
 import net.minecraft.server.v1_11_R1.PacketPlayInCloseWindow;
 import net.minecraft.server.v1_11_R1.PacketPlayOutChat;
 import net.minecraft.server.v1_11_R1.PacketPlayOutKickDisconnect;
+import net.minecraft.server.v1_11_R1.PacketPlayOutNamedSoundEffect;
 import net.minecraft.server.v1_11_R1.PacketPlayOutPlayerListHeaderFooter;
 import net.minecraft.server.v1_11_R1.PacketPlayOutTitle;
+import net.minecraft.server.v1_11_R1.SoundCategory;
+import net.minecraft.server.v1_11_R1.SoundEffectType;
 import net.minecraft.server.v1_11_R1.PacketPlayOutTitle.EnumTitleAction;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
+import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.zplatform.ServerImplementationType;
 
 public class PlatformPacketFactory {
@@ -171,6 +177,25 @@ public class PlatformPacketFactory {
 		switch (ServerImplementationType.get()) {
 			case SPIGOT: {
 				return new PacketLoginOutSetCompression(threshold);
+			}
+			default: {
+				// TODO: implement for glowstone
+				throw new NotImplementedException("Not implemented yet");
+			}
+		}
+	}
+
+	@SuppressWarnings("deprecation")
+	public static Object createBlockBreakSoundPacket(Position pos, Material type) {
+		switch (ServerImplementationType.get()) {
+			case SPIGOT: {
+				SoundEffectType blocksound = Block.getById(type.getId()).getStepSound();
+				return new PacketPlayOutNamedSoundEffect(
+					blocksound.e(), SoundCategory.BLOCKS,
+					pos.getX(), pos.getY(), pos.getZ(),
+					(blocksound.a() + 1.0F) / 2.0F,
+					blocksound.b() * 0.8F
+				);
 			}
 			default: {
 				// TODO: implement for glowstone

@@ -20,6 +20,7 @@ import com.mojang.authlib.minecraft.MinecraftSessionService;
 import net.minecraft.server.v1_11_R1.Item;
 import net.minecraft.server.v1_11_R1.LocaleI18n;
 import net.minecraft.server.v1_11_R1.NBTTagCompound;
+import net.minecraft.server.v1_11_R1.SoundEffect;
 import protocolsupport.zplatform.impl.spigot.SpigotImplUtils;
 import protocolsupport.zplatform.impl.spigot.itemstack.SpigotNBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -276,6 +277,18 @@ public class MiscPlatformUtils {
 					throw new IllegalArgumentException(icon + " was not created by " + CraftServer.class);
 				}
 				return ((CraftIconCache) icon).value;
+			}
+			default: {
+				// TODO: implement for glowstone
+				throw new NotImplementedException("Not implemented yet");
+			}
+		}
+	}
+
+	public static String getSoundName(int soundId) {
+		switch (ServerImplementationType.get()) {
+			case SPIGOT: {
+				return SoundEffect.a.b(SoundEffect.a.getId(soundId)).a();
 			}
 			default: {
 				// TODO: implement for glowstone
