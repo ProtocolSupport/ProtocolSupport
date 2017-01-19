@@ -9,8 +9,6 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 
-import org.spigotmc.SneakyThrow;
-
 public class MinecraftEncryption {
 
 	public static Cipher getDecrypter(SecretKey key) {
@@ -18,9 +16,8 @@ public class MinecraftEncryption {
 			Cipher instance = Cipher.getInstance("AES/CFB8/NoPadding");
 			instance.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(key.getEncoded()));
 			return instance;
-		} catch (GeneralSecurityException ex) {
-			SneakyThrow.sneaky(ex);
-			return null;
+		} catch (GeneralSecurityException e) {
+			throw new RuntimeException("Unable to get decrypter", e);
 		}
 	}
 
@@ -35,9 +32,8 @@ public class MinecraftEncryption {
 				instance.update(data[i]);
 			}
 			return instance.digest();
-		} catch (NoSuchAlgorithmException ex) {
-			SneakyThrow.sneaky(ex);
-			return null;
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException("Unable to create hash", e);
 		}
 	}
 

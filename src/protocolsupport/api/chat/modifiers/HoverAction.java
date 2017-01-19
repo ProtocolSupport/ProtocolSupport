@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import org.bukkit.Achievement;
 import org.bukkit.Statistic;
-import org.bukkit.craftbukkit.v1_11_R1.CraftStatistic;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
@@ -51,12 +50,12 @@ public class HoverAction {
 
 	public HoverAction(Achievement achievment) {
 		this.type = Type.SHOW_ACHIEVEMENT;
-		this.value = CraftStatistic.getNMSAchievement(achievment).name;
+		this.value = MiscPlatformUtils.getAchievmentName(achievment);
 	}
 
 	public HoverAction(Statistic stat) {
 		this.type = Type.SHOW_ACHIEVEMENT;
-		this.value = CraftStatistic.getNMSStatistic(stat).name;
+		this.value = MiscPlatformUtils.getStatisticName(stat);
 	}
 
 	public Type getType() {
@@ -86,8 +85,8 @@ public class HoverAction {
 
 	public Any<Achievement, Statistic> getAchievmentOrStat() {
 		validateAction(type, Type.SHOW_ACHIEVEMENT);
-		Achievement achievement = CraftStatistic.getBukkitAchievementByName(value);
-		Statistic stat = CraftStatistic.getBukkitStatisticByName(value);
+		Achievement achievement = MiscPlatformUtils.getAchievmentByName(value);
+		Statistic stat = MiscPlatformUtils.getStatisticByName(value);
 		return new Any<>(achievement, stat);
 	}
 

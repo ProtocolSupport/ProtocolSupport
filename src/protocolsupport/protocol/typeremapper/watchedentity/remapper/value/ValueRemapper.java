@@ -3,8 +3,6 @@ package protocolsupport.protocol.typeremapper.watchedentity.remapper.value;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-import org.spigotmc.SneakyThrow;
-
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 
 public abstract class ValueRemapper<T extends DataWatcherObject<?>> {
@@ -16,8 +14,7 @@ public abstract class ValueRemapper<T extends DataWatcherObject<?>> {
 		try {
 			return Class.forName(((Class<?>) extractRawType(type)).getName());
 		} catch (ClassNotFoundException e) {
-			SneakyThrow.sneaky(e);
-			return null;
+			throw new RuntimeException("Unable to get generic type", e);
 		}
 	}
 

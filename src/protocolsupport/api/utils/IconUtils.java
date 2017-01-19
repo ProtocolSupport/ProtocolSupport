@@ -11,9 +11,9 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.Validate;
-import org.bukkit.craftbukkit.v1_11_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_11_R1.util.CraftIconCache;
 import org.bukkit.util.CachedServerIcon;
+
+import protocolsupport.zplatform.MiscPlatformUtils;
 
 public class IconUtils {
 
@@ -34,13 +34,7 @@ public class IconUtils {
 	}
 
 	public static String fromBukkit(CachedServerIcon icon) {
-		if (icon == null) {
-			return null;
-		}
-		if (!(icon instanceof CraftIconCache)) {
-			throw new IllegalArgumentException(icon + " was not created by " + CraftServer.class);
-		}
-		return ((CraftIconCache) icon).value;
+		return MiscPlatformUtils.convertBukkitIconToBase64(icon);
 	}
 
 }

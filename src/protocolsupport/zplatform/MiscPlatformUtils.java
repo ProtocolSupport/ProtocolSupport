@@ -5,8 +5,14 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.bukkit.Achievement;
+import org.bukkit.Statistic;
+import org.bukkit.craftbukkit.v1_11_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_11_R1.CraftStatistic;
 import org.bukkit.craftbukkit.v1_11_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_11_R1.util.CraftIconCache;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.CachedServerIcon;
 import org.spigotmc.SpigotConfig;
 
 import com.mojang.authlib.minecraft.MinecraftSessionService;
@@ -204,6 +210,72 @@ public class MiscPlatformUtils {
 		switch (ServerImplementationType.get()) {
 			case SPIGOT: {
 				return SpigotImplUtils.getServer().getVersion();
+			}
+			default: {
+				// TODO: implement for glowstone
+				throw new NotImplementedException("Not implemented yet");
+			}
+		}
+	}
+
+	public static Statistic getStatisticByName(String value) {
+		switch (ServerImplementationType.get()) {
+			case SPIGOT: {
+				return CraftStatistic.getBukkitStatisticByName(value);
+			}
+			default: {
+				// TODO: implement for glowstone
+				throw new NotImplementedException("Not implemented yet");
+			}
+		}
+	}
+
+	public static String getStatisticName(Statistic stat) {
+		switch (ServerImplementationType.get()) {
+			case SPIGOT: {
+				return CraftStatistic.getNMSStatistic(stat).name;
+			}
+			default: {
+				// TODO: implement for glowstone
+				throw new NotImplementedException("Not implemented yet");
+			}
+		}
+	}
+
+	public static Achievement getAchievmentByName(String value) {
+		switch (ServerImplementationType.get()) {
+			case SPIGOT: {
+				return CraftStatistic.getBukkitAchievementByName(value);
+			}
+			default: {
+				// TODO: implement for glowstone
+				throw new NotImplementedException("Not implemented yet");
+			}
+		}
+	}
+
+	public static String getAchievmentName(Achievement achievement) {
+		switch (ServerImplementationType.get()) {
+			case SPIGOT: {
+				return CraftStatistic.getNMSAchievement(achievement).name;
+			}
+			default: {
+				// TODO: implement for glowstone
+				throw new NotImplementedException("Not implemented yet");
+			}
+		}
+	}
+
+	public static String convertBukkitIconToBase64(CachedServerIcon icon) {
+		if (icon == null) {
+			return null;
+		}
+		switch (ServerImplementationType.get()) {
+			case SPIGOT: {
+				if (!(icon instanceof CraftIconCache)) {
+					throw new IllegalArgumentException(icon + " was not created by " + CraftServer.class);
+				}
+				return ((CraftIconCache) icon).value;
 			}
 			default: {
 				// TODO: implement for glowstone
