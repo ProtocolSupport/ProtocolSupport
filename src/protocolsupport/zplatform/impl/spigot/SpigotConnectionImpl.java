@@ -72,6 +72,7 @@ public class SpigotConnectionImpl extends ConnectionImpl {
 		}
 	}
 
+	@Override
 	public boolean handlePacketSend(Object packet) {
 		boolean canSend = true;
 		for (PacketSendListener listener : sendListeners) {
@@ -87,6 +88,7 @@ public class SpigotConnectionImpl extends ConnectionImpl {
 		return canSend;
 	}
 
+	@Override
 	public boolean handlePacketReceive(Object packet) {
 		boolean canReceive = true;
 		for (PacketReceiveListener listener : receiveListeners) {

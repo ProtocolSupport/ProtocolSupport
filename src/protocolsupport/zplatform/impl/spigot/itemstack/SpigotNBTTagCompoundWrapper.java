@@ -52,6 +52,7 @@ public class SpigotNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 		return new SpigotNBTTagCompoundWrapper(tag);
 	}
 
+	@Override
 	public void writeToStream(DataOutput dataoutput) throws IOException {
 		NBTCompressedStreamTools.a(tag, dataoutput);
 	}
