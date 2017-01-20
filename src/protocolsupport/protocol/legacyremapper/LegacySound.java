@@ -2,14 +2,14 @@ package protocolsupport.protocol.legacyremapper;
 
 import java.util.HashMap;
 
-import protocolsupport.zplatform.ServerImplementationType;
+import protocolsupport.zplatform.ServerPlatform;
 
 public class LegacySound {
 
 	private static final HashMap<String, String> legacySounds = new HashMap<>();
 
 	public static String getSoundName(int soundId) {
-		return ServerImplementationType.get().getMiscUtils().getSoundNameById(soundId);
+		return ServerPlatform.get().getMiscUtils().getSoundNameById(soundId);
 	}
 
 	//return new sound if legacy not found, so launcher will print a warning with that new sound name

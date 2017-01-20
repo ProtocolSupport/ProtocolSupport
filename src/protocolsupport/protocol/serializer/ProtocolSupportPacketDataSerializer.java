@@ -34,7 +34,7 @@ import protocolsupport.protocol.utils.types.MerchantData;
 import protocolsupport.protocol.utils.types.MerchantData.TradeOffer;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.netty.WrappingBuffer;
-import protocolsupport.zplatform.ServerImplementationType;
+import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
@@ -355,7 +355,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 				if (!potion.isEmpty()) {
 					NBTTagListWrapper tagList = nbttagcompound.getList("CustomPotionEffects", NBTTagCompoundWrapper.TYPE_COMPOUND);
 					for (int i = 0; i < tagList.size(); i++) {
-						potion = ServerImplementationType.get().getMiscUtils().getPotionEffectNameById(tagList.getCompound(i).getNumber("Id"));
+						potion = ServerPlatform.get().getMiscUtils().getPotionEffectNameById(tagList.getCompound(i).getNumber("Id"));
 					}
 					Integer data = LegacyPotion.toLegacyId(potion, item != Material.POTION);
 					itemstack.setData(data);

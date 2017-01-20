@@ -2,13 +2,13 @@ package protocolsupport.zplatform.itemstack;
 
 import org.apache.commons.lang3.NotImplementedException;
 
-import protocolsupport.zplatform.ServerImplementationType;
+import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.impl.spigot.itemstack.SpigotNBTTagListWrapper;
 
 public abstract class NBTTagListWrapper {
 
 	public static NBTTagListWrapper create() {
-		switch (ServerImplementationType.get()) {
+		switch (ServerPlatform.get()) {
 			case SPIGOT: {
 				return SpigotNBTTagListWrapper.create();
 			}

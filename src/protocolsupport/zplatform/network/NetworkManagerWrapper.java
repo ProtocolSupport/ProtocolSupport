@@ -13,13 +13,13 @@ import com.mojang.authlib.properties.Property;
 import io.netty.channel.Channel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import protocolsupport.zplatform.ServerImplementationType;
+import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.impl.spigot.network.SpigotNetworkManagerWrapper;
 
 public abstract class NetworkManagerWrapper {
 
 	public static NetworkManagerWrapper getFromChannel(Channel channel) {
-		switch (ServerImplementationType.get()) {
+		switch (ServerPlatform.get()) {
 			case SPIGOT: {
 				return SpigotNetworkManagerWrapper.getFromChannel(channel);
 			}

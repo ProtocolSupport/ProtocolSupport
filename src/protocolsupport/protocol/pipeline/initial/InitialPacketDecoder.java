@@ -21,7 +21,7 @@ import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
-import protocolsupport.zplatform.ServerImplementationType;
+import protocolsupport.zplatform.ServerPlatform;
 
 public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
@@ -151,7 +151,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
 	protected void setProtocol(final Channel channel, ProtocolVersion version) {
 		ConnectionImpl connection = ConnectionImpl.getFromChannel(channel);
-		if (ServerImplementationType.get().getMiscUtils().isDebugging()) {
+		if (ServerPlatform.get().getMiscUtils().isDebugging()) {
 			ProtocolSupport.logInfo(MessageFormat.format("{0} connected with protocol version {1}", connection.getAddress(), version));
 		}
 		connection.setVersion(version);

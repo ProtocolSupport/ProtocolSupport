@@ -7,14 +7,14 @@ import java.util.Collection;
 
 import org.apache.commons.lang3.NotImplementedException;
 
-import protocolsupport.zplatform.ServerImplementationType;
+import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.impl.spigot.itemstack.SpigotNBTTagCompoundWrapper;
 
 public abstract class NBTTagCompoundWrapper {
 
 
 	public static NBTTagCompoundWrapper fromJson(String json) {
-		switch (ServerImplementationType.get()) {
+		switch (ServerPlatform.get()) {
 			case SPIGOT: {
 				return SpigotNBTTagCompoundWrapper.fromJson(json);
 			}
@@ -26,7 +26,7 @@ public abstract class NBTTagCompoundWrapper {
 	}
 
 	public static NBTTagCompoundWrapper fromStream(DataInput datainput) throws IOException {
-		switch (ServerImplementationType.get()) {
+		switch (ServerPlatform.get()) {
 			case SPIGOT: {
 				return SpigotNBTTagCompoundWrapper.fromStream(datainput);
 			}
@@ -38,7 +38,7 @@ public abstract class NBTTagCompoundWrapper {
 	}
 
 	public static NBTTagCompoundWrapper createEmpty() {
-		switch (ServerImplementationType.get()) {
+		switch (ServerPlatform.get()) {
 			case SPIGOT: {
 				return SpigotNBTTagCompoundWrapper.createEmpty();
 			}
@@ -50,7 +50,7 @@ public abstract class NBTTagCompoundWrapper {
 	}
 
 	public static NBTTagCompoundWrapper createNull() {
-		switch (ServerImplementationType.get()) {
+		switch (ServerPlatform.get()) {
 			case SPIGOT: {
 				return SpigotNBTTagCompoundWrapper.createNull();
 			}

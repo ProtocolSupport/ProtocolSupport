@@ -6,13 +6,13 @@ import net.minecraft.server.v1_11_R1.NetworkManager;
 import protocolsupport.zplatform.impl.spigot.SpigotPlatformUtils;
 import protocolsupport.zplatform.impl.spigot.injector.SpigotPlatformInjector;
 
-public enum ServerImplementationType {
+public enum ServerPlatform {
 
 	SPIGOT(new SpigotPlatformInjector(), new SpigotPlatformUtils()),
 	GLOWSTONE(null, null),
 	UNKNOWN(null, null);
 
-	private static ServerImplementationType current;
+	private static ServerPlatform current;
 
 	public static void detect() {
 		if (current != null) {
@@ -28,7 +28,7 @@ public enum ServerImplementationType {
 		current = UNKNOWN;
 	}
 
-	public static ServerImplementationType get() {
+	public static ServerPlatform get() {
 		if (current == null) {
 			throw new IllegalStateException("Access to implementation before detect");
 		}
@@ -37,7 +37,7 @@ public enum ServerImplementationType {
 
 	private final PlatformInjector injector;
 	private final PlatformUtils miscutils;
-	ServerImplementationType(PlatformInjector injector, PlatformUtils miscutils) {
+	ServerPlatform(PlatformInjector injector, PlatformUtils miscutils) {
 		this.injector = injector;
 		this.miscutils = miscutils;
 	}

@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.utils.Any;
-import protocolsupport.zplatform.ServerImplementationType;
+import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class HoverAction {
@@ -31,7 +31,7 @@ public class HoverAction {
 
 	public HoverAction(ItemStack itemstack) {
 		this.type = Type.SHOW_ITEM;
-		this.value = ServerImplementationType.get().getMiscUtils().createNBTTagFromItemStack(itemstack).toString();
+		this.value = ServerPlatform.get().getMiscUtils().createNBTTagFromItemStack(itemstack).toString();
 	}
 
 	public HoverAction(Entity entity) {
@@ -50,12 +50,12 @@ public class HoverAction {
 
 	public HoverAction(Achievement achievment) {
 		this.type = Type.SHOW_ACHIEVEMENT;
-		this.value = ServerImplementationType.get().getMiscUtils().getAchievmentName(achievment);
+		this.value = ServerPlatform.get().getMiscUtils().getAchievmentName(achievment);
 	}
 
 	public HoverAction(Statistic stat) {
 		this.type = Type.SHOW_ACHIEVEMENT;
-		this.value = ServerImplementationType.get().getMiscUtils().getStatisticName(stat);
+		this.value = ServerPlatform.get().getMiscUtils().getStatisticName(stat);
 	}
 
 	public Type getType() {
@@ -73,7 +73,7 @@ public class HoverAction {
 
 	public ItemStack getItemStack() {
 		validateAction(type, Type.SHOW_ITEM);
-		return ServerImplementationType.get().getMiscUtils().createItemStackFromNBTTag(NBTTagCompoundWrapper.fromJson(value));
+		return ServerPlatform.get().getMiscUtils().createItemStackFromNBTTag(NBTTagCompoundWrapper.fromJson(value));
 	}
 
 	@SuppressWarnings("deprecation")
@@ -85,8 +85,8 @@ public class HoverAction {
 
 	public Any<Achievement, Statistic> getAchievmentOrStat() {
 		validateAction(type, Type.SHOW_ACHIEVEMENT);
-		Achievement achievement = ServerImplementationType.get().getMiscUtils().getAchievmentByName(value);
-		Statistic stat = ServerImplementationType.get().getMiscUtils().getStatisticByName(value);
+		Achievement achievement = ServerPlatform.get().getMiscUtils().getAchievmentByName(value);
+		Statistic stat = ServerPlatform.get().getMiscUtils().getStatisticByName(value);
 		return new Any<>(achievement, stat);
 	}
 

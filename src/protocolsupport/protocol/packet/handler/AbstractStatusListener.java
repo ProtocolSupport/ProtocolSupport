@@ -16,7 +16,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.zplatform.ServerImplementationType;
+import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 import protocolsupport.zplatform.network.PlatformPacketFactory;
 
@@ -46,7 +46,7 @@ public abstract class AbstractStatusListener {
 		bevent.setServerIcon(Bukkit.getServerIcon());
 		Bukkit.getPluginManager().callEvent(bevent);
 
-		String icon = bevent.getIcon() != null ? ServerImplementationType.get().getMiscUtils().convertBukkitIconToBase64(bevent.getIcon()) : null;
+		String icon = bevent.getIcon() != null ? ServerPlatform.get().getMiscUtils().convertBukkitIconToBase64(bevent.getIcon()) : null;
 		motd = bevent.getMotd();
 		maxPlayers = bevent.getMaxPlayers();
 
@@ -57,7 +57,7 @@ public abstract class AbstractStatusListener {
 
 		ServerPingResponseEvent revent = new ServerPingResponseEvent(
 			ConnectionImpl.getFromChannel(networkManager.getChannel()),
-			new ProtocolInfo(ProtocolVersion.getLatest(), ServerImplementationType.get().getMiscUtils().getModName() + " " + ServerImplementationType.get().getMiscUtils().getVersionName()),
+			new ProtocolInfo(ProtocolVersion.getLatest(), ServerPlatform.get().getMiscUtils().getModName() + " " + ServerPlatform.get().getMiscUtils().getVersionName()),
 			icon, motd, maxPlayers, profiles
 		);
 		Bukkit.getPluginManager().callEvent(revent);

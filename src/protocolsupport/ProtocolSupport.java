@@ -20,20 +20,20 @@ import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRema
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
-import protocolsupport.zplatform.ServerImplementationType;
+import protocolsupport.zplatform.ServerPlatform;
 
 public class ProtocolSupport extends JavaPlugin {
 
 	@Override
 	public void onLoad() {
 		AsyncErrorLogger.INSTANCE.start();
-		ServerImplementationType.detect();
-		if (ServerImplementationType.get() == ServerImplementationType.UNKNOWN) {
+		ServerPlatform.detect();
+		if (ServerPlatform.get() == ServerPlatform.UNKNOWN) {
 			getLogger().severe("Unsupported server implementation type, shutting down");
 			Bukkit.shutdown();
 			return;
 		} else {
-			getLogger().info(MessageFormat.format("Detected {0} server implementation type", ServerImplementationType.get()));
+			getLogger().info(MessageFormat.format("Detected {0} server implementation type", ServerPlatform.get()));
 		}
 		try {
 			Allocator.init();
@@ -47,7 +47,7 @@ public class ProtocolSupport extends JavaPlugin {
 			SpecificRemapper.init();
 			IdRemapper.init();
 			BlockStorageReader.init();
-			ServerImplementationType.get().inject();
+			ServerPlatform.get().inject();
 		} catch (Throwable t) {
 			t.printStackTrace();
 			Bukkit.shutdown();

@@ -19,7 +19,7 @@ import protocolsupport.api.events.ConnectionHandshakeEvent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.protocol.storage.ThrottleTracker;
-import protocolsupport.zplatform.ServerImplementationType;
+import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkListenerState;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 import protocolsupport.zplatform.network.PlatformPacketFactory;
@@ -41,7 +41,7 @@ public abstract class AbstractHandshakeListener {
 				//check connection throttle
 				try {
 					final InetAddress address = networkManager.getAddress().getAddress();
-					if (ThrottleTracker.isEnabled() && !ServerImplementationType.get().getMiscUtils().isBungeeEnabled()) {
+					if (ThrottleTracker.isEnabled() && !ServerPlatform.get().getMiscUtils().isBungeeEnabled()) {
 						if (ThrottleTracker.throttle(address)) {
 							String message = "Connection throttled! Please wait before reconnecting.";
 							networkManager.sendPacket(PlatformPacketFactory.createLoginDisconnectPacket(message), new GenericFutureListener<Future<? super Void>>() {
@@ -59,7 +59,7 @@ public abstract class AbstractHandshakeListener {
 				//check client version (may be not latest if connection was from snapshot)
 				ProtocolVersion clientversion = ProtocolVersion.fromId(clientVersion);
 				if (clientversion != ProtocolVersion.getLatest()) {
-					String message = MessageFormat.format(ServerImplementationType.get().getMiscUtils().getOutdatedServerMessage().replaceAll("'", "''"), "1.11.1");
+					String message = MessageFormat.format(ServerPlatform.get().getMiscUtils().getOutdatedServerMessage().replaceAll("'", "''"), "1.11.1");
 					this.networkManager.sendPacket(PlatformPacketFactory.createLoginDisconnectPacket(message), new GenericFutureListener<Future<? super Void>>() {
 						@Override
 						public void operationComplete(Future<? super Void> arg0)  {
@@ -70,7 +70,7 @@ public abstract class AbstractHandshakeListener {
 				}
 				ConnectionImpl connection = ConnectionImpl.getFromChannel(networkManager.getChannel());
 				//bungee spoofed data handling
-				if (ServerImplementationType.get().getMiscUtils().isBungeeEnabled()) {
+				if (ServerPlatform.get().getMiscUtils().isBungeeEnabled()) {
 					final String[] split = hostname.split("\u0000");
 					if ((split.length != 3) && (split.length != 4)) {
 						String message = "If you wish to use IP forwarding, please enable it in your BungeeCord config as well!";

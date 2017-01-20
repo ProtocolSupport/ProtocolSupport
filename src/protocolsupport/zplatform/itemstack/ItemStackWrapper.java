@@ -4,13 +4,13 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import protocolsupport.zplatform.ServerImplementationType;
+import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.impl.spigot.itemstack.SpigotItemStackWrapper;
 
 public abstract class ItemStackWrapper {
 
 	public static ItemStackWrapper createNull() {
-		switch (ServerImplementationType.get()) {
+		switch (ServerPlatform.get()) {
 			case SPIGOT: {
 				return SpigotItemStackWrapper.createNull();
 			}
@@ -27,7 +27,7 @@ public abstract class ItemStackWrapper {
 	}
 
 	public static ItemStackWrapper create(int typeId) {
-		switch (ServerImplementationType.get()) {
+		switch (ServerPlatform.get()) {
 			case SPIGOT: {
 				return SpigotItemStackWrapper.create(typeId);
 			}

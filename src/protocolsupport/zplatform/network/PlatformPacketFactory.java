@@ -40,12 +40,12 @@ import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
 import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.zplatform.ServerImplementationType;
+import protocolsupport.zplatform.ServerPlatform;
 
 public class PlatformPacketFactory {
 
 	public static Object createInboundInventoryClosePacket() {
-		switch (ServerImplementationType.get()) {
+		switch (ServerPlatform.get()) {
 			case SPIGOT: {
 				return new PacketPlayInCloseWindow();
 			}
@@ -57,7 +57,7 @@ public class PlatformPacketFactory {
 	}
 
 	public static Object createOutboundChatPacket(String message, int position) {
-		switch (ServerImplementationType.get()) {
+		switch (ServerPlatform.get()) {
 			case SPIGOT: {
 				return new PacketPlayOutChat(ChatSerializer.a(message), (byte) position);
 			}
@@ -69,7 +69,7 @@ public class PlatformPacketFactory {
 	}
 
 	public static Object createTabHeaderFooterPacket(BaseComponent header, BaseComponent footer) {
-		switch (ServerImplementationType.get()) {
+		switch (ServerPlatform.get()) {
 			case SPIGOT: {
 				PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer());
 				serializer.a(ChatAPI.toJSON(header != null ? header : PlatformPacketFactory.empty));
@@ -91,7 +91,7 @@ public class PlatformPacketFactory {
 	public static final BaseComponent empty = new TextComponent("");
 
 	public static Object createTitleResetPacket() {
-		switch (ServerImplementationType.get()) {
+		switch (ServerPlatform.get()) {
 			case SPIGOT: {
 				return new PacketPlayOutTitle(EnumTitleAction.CLEAR, null);
 			}
@@ -103,7 +103,7 @@ public class PlatformPacketFactory {
 	}
 
 	public static Object createTitleClearPacket() {
-		switch (ServerImplementationType.get()) {
+		switch (ServerPlatform.get()) {
 			case SPIGOT: {
 				return new PacketPlayOutTitle(EnumTitleAction.RESET, null);
 			}
@@ -115,7 +115,7 @@ public class PlatformPacketFactory {
 	}
 
 	public static Object createTitleMainPacket(String title) {
-		switch (ServerImplementationType.get()) {
+		switch (ServerPlatform.get()) {
 			case SPIGOT: {
 				return new PacketPlayOutTitle(EnumTitleAction.TITLE, ChatSerializer.a(title));
 			}
@@ -127,7 +127,7 @@ public class PlatformPacketFactory {
 	}
 
 	public static Object createTitleSubPacket(String title) {
-		switch (ServerImplementationType.get()) {
+		switch (ServerPlatform.get()) {
 			case SPIGOT: {
 				return new PacketPlayOutTitle(EnumTitleAction.SUBTITLE, ChatSerializer.a(title));
 			}
@@ -139,7 +139,7 @@ public class PlatformPacketFactory {
 	}
 
 	public static Object createTitleParamsPacket(int fadeIn, int stay, int fadeOut) {
-		switch (ServerImplementationType.get()) {
+		switch (ServerPlatform.get()) {
 			case SPIGOT: {
 				return new PacketPlayOutTitle(fadeIn, stay, fadeOut);
 			}
@@ -151,7 +151,7 @@ public class PlatformPacketFactory {
 	}
 
 	public static Object createLoginDisconnectPacket(String message) {
-		switch (ServerImplementationType.get()) {
+		switch (ServerPlatform.get()) {
 			case SPIGOT: {
 				return new PacketLoginOutDisconnect(new ChatComponentText(message));
 			}
@@ -163,7 +163,7 @@ public class PlatformPacketFactory {
 	}
 
 	public static Object createPlayDisconnectPacket(String message) {
-		switch (ServerImplementationType.get()) {
+		switch (ServerPlatform.get()) {
 			case SPIGOT: {
 				return new PacketPlayOutKickDisconnect(new ChatComponentText(message));
 			}
@@ -175,7 +175,7 @@ public class PlatformPacketFactory {
 	}
 
 	public static Object createLoginEncryptionBeginPacket(PublicKey publicKey, byte[] randomBytes) {
-		switch (ServerImplementationType.get()) {
+		switch (ServerPlatform.get()) {
 			case SPIGOT: {
 				return new PacketLoginOutEncryptionBegin("", publicKey, randomBytes);
 			}
@@ -187,7 +187,7 @@ public class PlatformPacketFactory {
 	}
 
 	public static Object createSetCompressionPacket(int threshold) {
-		switch (ServerImplementationType.get()) {
+		switch (ServerPlatform.get()) {
 			case SPIGOT: {
 				return new PacketLoginOutSetCompression(threshold);
 			}
@@ -200,7 +200,7 @@ public class PlatformPacketFactory {
 
 	@SuppressWarnings("deprecation")
 	public static Object createBlockBreakSoundPacket(Position pos, Material type) {
-		switch (ServerImplementationType.get()) {
+		switch (ServerPlatform.get()) {
 			case SPIGOT: {
 				SoundEffectType blocksound = Block.getById(type.getId()).getStepSound();
 				return new PacketPlayOutNamedSoundEffect(
@@ -218,7 +218,7 @@ public class PlatformPacketFactory {
 	}
 
 	public static Object createStatusPongPacket(long pingId) {
-		switch (ServerImplementationType.get()) {
+		switch (ServerPlatform.get()) {
 			case SPIGOT: {
 				return new PacketStatusOutPong(pingId);
 			}
@@ -231,7 +231,7 @@ public class PlatformPacketFactory {
 
 	private static final UUID profileUUID = UUID.randomUUID();
 	public static Object createStausServerInfoPacket(List<String> profiles, ProtocolInfo info, String icon, String motd, int maxPlayers) {
-		switch (ServerImplementationType.get()) {
+		switch (ServerPlatform.get()) {
 			case SPIGOT: {
 				ServerPingPlayerSample playerSample = new ServerPingPlayerSample(maxPlayers, profiles.size());
 

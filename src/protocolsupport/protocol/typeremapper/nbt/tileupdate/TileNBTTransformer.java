@@ -12,7 +12,7 @@ import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.Utils;
-import protocolsupport.zplatform.ServerImplementationType;
+import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class TileNBTTransformer {
@@ -115,7 +115,7 @@ public class TileNBTTransformer {
 		register(
 			TileEntityUpdateType.FLOWER_POT,
 			(version, input) -> {
-				Integer id = ServerImplementationType.get().getMiscUtils().getItemIdByName(input.getString("Item"));
+				Integer id = ServerPlatform.get().getMiscUtils().getItemIdByName(input.getString("Item"));
 				if (id != null) {
 					input.setInt("Item", IdRemapper.ITEM.getTable(version).getRemap(id));
 				}
