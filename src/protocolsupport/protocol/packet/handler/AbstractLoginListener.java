@@ -28,7 +28,7 @@ import protocolsupport.api.events.PlayerLoginStartEvent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
-import protocolsupport.zplatform.MiscPlatformUtils;
+import protocolsupport.zplatform.ServerImplementationType;
 import protocolsupport.zplatform.network.LoginListenerPlay;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 import protocolsupport.zplatform.network.PlatformPacketFactory;
@@ -141,13 +141,13 @@ public abstract class AbstractLoginListener implements IHasProfile {
 					forcedUUID = event.getForcedUUID();
 					if (isOnlineMode) {
 						state = LoginState.KEY;
-						networkManager.sendPacket(PlatformPacketFactory.createLoginEncryptionBeginPacket(MiscPlatformUtils.getEncryptionKeyPair().getPublic(), randomBytes));
+						networkManager.sendPacket(PlatformPacketFactory.createLoginEncryptionBeginPacket(ServerImplementationType.get().getMiscUtils().getEncryptionKeyPair().getPublic(), randomBytes));
 					} else {
 						new PlayerLookupUUID(AbstractLoginListener.this, isOnlineMode).run();
 					}
 				} catch (Throwable t) {
 					AbstractLoginListener.this.disconnect("Error occured while logging in");
-					if (MiscPlatformUtils.isDebugging()) {
+					if (ServerImplementationType.get().getMiscUtils().isDebugging()) {
 						t.printStackTrace();
 					}
 				}
@@ -170,7 +170,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 			@Override
 			public void run() {
 				try {
-					final PrivateKey privatekey = MiscPlatformUtils.getEncryptionKeyPair().getPrivate();
+					final PrivateKey privatekey = ServerImplementationType.get().getMiscUtils().getEncryptionKeyPair().getPrivate();
 					if (!Arrays.equals(randomBytes, encryptionpakcet.getNonce(privatekey))) {
 						throw new IllegalStateException("Invalid nonce!");
 					}
@@ -179,7 +179,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 					new PlayerLookupUUID(AbstractLoginListener.this, isOnlineMode).run();
 				} catch (Throwable t) {
 					AbstractLoginListener.this.disconnect("Error occured while logging in");
-					if (MiscPlatformUtils.isDebugging()) {
+					if (ServerImplementationType.get().getMiscUtils().isDebugging()) {
 						t.printStackTrace();
 					}
 				}
@@ -204,7 +204,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 			profile = newProfile;
 		}
 		if (hasCompression()) {
-			final int threshold = MiscPlatformUtils.getCompressionThreshold();
+			final int threshold = ServerImplementationType.get().getMiscUtils().getCompressionThreshold();
 			if (threshold >= 0) {
 				this.networkManager.sendPacket(
 					PlatformPacketFactory.createSetCompressionPacket(threshold),

@@ -13,7 +13,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.util.CachedServerIcon;
 
-import protocolsupport.zplatform.MiscPlatformUtils;
+import protocolsupport.zplatform.ServerImplementationType;
 
 public class IconUtils {
 
@@ -34,7 +34,7 @@ public class IconUtils {
 	}
 
 	public static String fromBukkit(CachedServerIcon icon) {
-		return MiscPlatformUtils.convertBukkitIconToBase64(icon);
+		return ServerImplementationType.get().getMiscUtils().convertBukkitIconToBase64(icon);
 	}
 
 }

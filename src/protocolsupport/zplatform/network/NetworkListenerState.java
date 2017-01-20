@@ -1,13 +1,24 @@
 package protocolsupport.zplatform.network;
 
+import org.apache.commons.lang3.NotImplementedException;
+
 import io.netty.channel.Channel;
-import net.minecraft.server.v1_11_R1.NetworkManager;
+import protocolsupport.zplatform.ServerImplementationType;
+import protocolsupport.zplatform.impl.spigot.SpigotPlatformUtils;
 
 public enum NetworkListenerState {
 	HANDSHAKING, PLAY, STATUS, LOGIN;
 
 	public static NetworkListenerState getFromChannel(Channel channel) {
-		return NetworkListenerState.values()[channel.attr(NetworkManager.c).get().ordinal()];
+		switch (ServerImplementationType.get()) {
+			case SPIGOT: {
+				return SpigotPlatformUtils.getNetStateFromChannel(channel);
+			}
+			default: {
+				// TODO: implement for glowstone
+				throw new NotImplementedException("Not implemented yet");
+			}
+		}
 	}
 
 }

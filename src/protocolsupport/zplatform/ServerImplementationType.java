@@ -3,13 +3,14 @@ package protocolsupport.zplatform;
 import org.spigotmc.SpigotConfig;
 
 import net.minecraft.server.v1_11_R1.NetworkManager;
+import protocolsupport.zplatform.impl.spigot.SpigotPlatformUtils;
 import protocolsupport.zplatform.impl.spigot.injector.SpigotPlatformInjector;
 
 public enum ServerImplementationType {
 
-	SPIGOT(new SpigotPlatformInjector()),
-	GLOWSTONE(null),
-	UNKNOWN(null);
+	SPIGOT(new SpigotPlatformInjector(), new SpigotPlatformUtils()),
+	GLOWSTONE(null, null),
+	UNKNOWN(null, null);
 
 	private static ServerImplementationType current;
 
@@ -28,16 +29,25 @@ public enum ServerImplementationType {
 	}
 
 	public static ServerImplementationType get() {
+		if (current == null) {
+			throw new IllegalStateException("Access to implementation before detect");
+		}
 		return current;
 	}
 
 	private final PlatformInjector injector;
-	ServerImplementationType(PlatformInjector injector) {
+	private final PlatformUtils miscutils;
+	ServerImplementationType(PlatformInjector injector, PlatformUtils miscutils) {
 		this.injector = injector;
+		this.miscutils = miscutils;
 	}
 
 	public void inject() {
 		injector.inject();
+	}
+
+	public PlatformUtils getMiscUtils() {
+		return miscutils;
 	}
 
 }

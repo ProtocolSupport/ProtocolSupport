@@ -9,7 +9,7 @@ import org.bukkit.event.HandlerList;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.zplatform.MiscPlatformUtils;
+import protocolsupport.zplatform.ServerImplementationType;
 
 public class ServerPingResponseEvent extends ConnectionEvent {
 
@@ -111,11 +111,11 @@ public class ServerPingResponseEvent extends ConnectionEvent {
 	}
 
 	public static String getServerModName() {
-		return MiscPlatformUtils.getModName();
+		return ServerImplementationType.get().getMiscUtils().getModName();
 	}
 
 	public static String getServerVersionName() {
-		return MiscPlatformUtils.getVersionName();
+		return ServerImplementationType.get().getMiscUtils().getVersionName();
 	}
 
 }

@@ -15,7 +15,7 @@ import io.netty.util.ResourceLeakDetector;
 import io.netty.util.ResourceLeakDetector.Level;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.zplatform.MiscPlatformUtils;
+import protocolsupport.zplatform.ServerImplementationType;
 
 public class CommandHandler implements CommandExecutor, TabCompleter {
 
@@ -34,11 +34,11 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			return true;
 		}
 		if ((args.length == 1) && args[0].equalsIgnoreCase("debug")) {
-			if (MiscPlatformUtils.isDebugging()) {
-				MiscPlatformUtils.disableDebug();
+			if (ServerImplementationType.get().getMiscUtils().isDebugging()) {
+				ServerImplementationType.get().getMiscUtils().disableDebug();
 				sender.sendMessage(ChatColor.GOLD + "Disabled debug");
 			} else {
-				MiscPlatformUtils.enableDebug();
+				ServerImplementationType.get().getMiscUtils().enableDebug();
 				sender.sendMessage(ChatColor.GOLD + "Enabled debug");
 			}
 			return true;

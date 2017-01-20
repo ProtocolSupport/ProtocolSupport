@@ -10,11 +10,7 @@ import java.util.zip.GZIPOutputStream;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_11_R1.potion.CraftPotionUtil;
 import org.bukkit.entity.EntityType;
-import org.bukkit.potion.PotionData;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionType;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
@@ -38,6 +34,7 @@ import protocolsupport.protocol.utils.types.MerchantData;
 import protocolsupport.protocol.utils.types.MerchantData.TradeOffer;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.netty.WrappingBuffer;
+import protocolsupport.zplatform.ServerImplementationType;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
@@ -357,18 +354,8 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 				String potion = nbttagcompound.getString("Potion");
 				if (!potion.isEmpty()) {
 					NBTTagListWrapper tagList = nbttagcompound.getList("CustomPotionEffects", NBTTagCompoundWrapper.TYPE_COMPOUND);
-					if (!tagList.isEmpty()) {
-						for (int i = 0; i < tagList.size(); i++) {
-							NBTTagCompoundWrapper nbtTag = tagList.getCompound(i);
-							int potionId = nbtTag.getNumber("Id");
-							PotionEffectType effectType = PotionEffectType.getById(potionId);
-							PotionType type = PotionType.getByEffect(effectType);
-							if (type != null) {
-								PotionData data = new PotionData(type, false, false);
-								potion = CraftPotionUtil.fromBukkit(data);
-								break;
-							}
-						}
+					for (int i = 0; i < tagList.size(); i++) {
+						potion = ServerImplementationType.get().getMiscUtils().getPotionEffectNameById(tagList.getCompound(i).getNumber("Id"));
 					}
 					Integer data = LegacyPotion.toLegacyId(potion, item != Material.POTION);
 					itemstack.setData(data);

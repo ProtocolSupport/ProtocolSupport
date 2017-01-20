@@ -71,14 +71,14 @@ import protocolsupport.api.events.PlayerLoginFinishEvent;
 import protocolsupport.api.events.PlayerSyncLoginEvent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
-import protocolsupport.zplatform.impl.spigot.SpigotImplUtils;
+import protocolsupport.zplatform.impl.spigot.SpigotPlatformUtils;
 import protocolsupport.zplatform.network.LoginListenerPlay;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 import protocolsupport.zplatform.network.PlatformPacketFactory;
 
 public class SpigotLoginListenerPlay extends LoginListenerPlay implements PacketLoginInListener, PacketListenerPlayIn, ITickable {
 
-	protected static final MinecraftServer server = SpigotImplUtils.getServer();
+	protected static final MinecraftServer server = SpigotPlatformUtils.getServer();
 
 	protected boolean ready;
 

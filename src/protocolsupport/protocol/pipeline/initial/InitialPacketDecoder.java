@@ -1,6 +1,7 @@
 package protocolsupport.protocol.pipeline.initial;
 
 import java.nio.charset.StandardCharsets;
+import java.text.MessageFormat;
 import java.util.EnumMap;
 import java.util.concurrent.TimeUnit;
 
@@ -20,7 +21,7 @@ import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
-import protocolsupport.zplatform.MiscPlatformUtils;
+import protocolsupport.zplatform.ServerImplementationType;
 
 public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
@@ -150,8 +151,8 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
 	protected void setProtocol(final Channel channel, ProtocolVersion version) {
 		ConnectionImpl connection = ConnectionImpl.getFromChannel(channel);
-		if (MiscPlatformUtils.isDebugging()) {
-			System.err.println(connection.getAddress() + " connected with protocol version " + version);
+		if (ServerImplementationType.get().getMiscUtils().isDebugging()) {
+			ProtocolSupport.logInfo(MessageFormat.format("{0} connected with protocol version {1}", connection.getAddress(), version));
 		}
 		connection.setVersion(version);
 		channel.pipeline().remove(ChannelHandlers.INITIAL_DECODER);
