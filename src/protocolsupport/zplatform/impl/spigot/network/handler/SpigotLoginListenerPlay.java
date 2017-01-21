@@ -11,8 +11,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.spigotmc.SpigotConfig;
 
-import com.mojang.authlib.GameProfile;
-
 import net.minecraft.server.v1_11_R1.EntityPlayer;
 import net.minecraft.server.v1_11_R1.ExpirableListEntry;
 import net.minecraft.server.v1_11_R1.GameProfileBanEntry;
@@ -57,6 +55,7 @@ import net.minecraft.server.v1_11_R1.PlayerList;
 import protocolsupport.api.events.PlayerSyncLoginEvent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.handler.AbstractLoginListenerPlay;
+import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
@@ -78,7 +77,7 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 	private static final SimpleDateFormat banDateFormat = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
 	public EntityPlayer attemptLogin() {
 		PlayerList playerlist = server.getPlayerList();
-		UUID uuid = profile.getId();
+		UUID uuid = profile.getUUID();
 
 		//find players with same uuid
 		List<EntityPlayer> toKick = playerlist.players.stream().filter(entityplayer -> entityplayer.getUniqueID().equals(uuid)).collect(Collectors.toList());
@@ -91,8 +90,10 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 			return null;
 		}
 
+		com.mojang.authlib.GameProfile mojangGameProfile = SpigotMiscUtils.toMojangGameProfile(profile);
+
 		//prepare player entity
-		EntityPlayer entity = new EntityPlayer(server, server.getWorldServer(0), profile, new PlayerInteractManager(server.getWorldServer(0)));
+		EntityPlayer entity = new EntityPlayer(server, server.getWorldServer(0), mojangGameProfile, new PlayerInteractManager(server.getWorldServer(0)));
 
 		//ps sync login event
 		PlayerSyncLoginEvent syncloginevent = new PlayerSyncLoginEvent(ConnectionImpl.getFromChannel(networkManager.getChannel()), entity.getBukkitEntity());
@@ -105,8 +106,8 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 		//bukkit sync login event
 		InetSocketAddress socketaddress = networkManager.getAddress();
 		PlayerLoginEvent event = new PlayerLoginEvent(entity.getBukkitEntity(), hostname, socketaddress.getAddress(), networkManager.getRawAddress().getAddress());
-		if (playerlist.getProfileBans().isBanned(profile)) {
-			GameProfileBanEntry profileban = playerlist.getProfileBans().get(profile);
+		if (playerlist.getProfileBans().isBanned(mojangGameProfile)) {
+			GameProfileBanEntry profileban = playerlist.getProfileBans().get(mojangGameProfile);
 			if (!hasExpired(profileban)) {
 				String reason = "You are banned from this server!\nReason: " + profileban.getReason();
 				if (profileban.getExpires() != null) {
@@ -114,7 +115,7 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 				}
 				event.disallow(PlayerLoginEvent.Result.KICK_BANNED, reason);
 			}
-		} else if (!playerlist.isWhitelisted(profile)) {
+		} else if (!playerlist.isWhitelisted(mojangGameProfile)) {
 			event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, SpigotConfig.whitelistMessage);
 		} else if (playerlist.getIPBans().isBanned(socketaddress)) {
 			IpBanEntry ipban = playerlist.getIPBans().get(socketaddress);
@@ -125,7 +126,7 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 				}
 				event.disallow(PlayerLoginEvent.Result.KICK_BANNED, reason);
 			}
-		} else if ((playerlist.players.size() >= playerlist.getMaxPlayers()) && !playerlist.f(profile)) {
+		} else if ((playerlist.players.size() >= playerlist.getMaxPlayers()) && !playerlist.f(mojangGameProfile)) {
 			event.disallow(PlayerLoginEvent.Result.KICK_FULL, SpigotConfig.serverFullMessage);
 		}
 		Bukkit.getServer().getPluginManager().callEvent(event);

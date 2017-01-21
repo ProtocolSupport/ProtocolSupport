@@ -4,9 +4,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import com.mojang.authlib.properties.Property;
-
 import gnu.trove.map.TIntObjectMap;
+import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
@@ -25,7 +24,7 @@ public abstract class MiddleSpawnNamed<T> extends ClientBoundMiddlePacket<T> {
 	protected double z;
 	protected int yaw;
 	protected int pitch;
-	protected List<Property> properties;
+	protected List<ProfileProperty> properties;
 	protected WatchedEntity wplayer;
 	protected TIntObjectMap<DataWatcherObject<?>> metadata;
 

@@ -6,21 +6,17 @@ import java.net.InetSocketAddress;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerPreLoginEvent;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.exceptions.AuthenticationUnavailableException;
-import com.mojang.authlib.properties.Property;
-import com.mojang.authlib.properties.PropertyMap;
-
 import protocolsupport.api.events.PlayerPropertiesResolveEvent;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.utils.MinecraftEncryption;
+import protocolsupport.protocol.utils.authlib.MinecraftSessionService;
+import protocolsupport.protocol.utils.authlib.MinecraftSessionService.AuthenticationUnavailableException;
 import protocolsupport.zplatform.ServerPlatform;
 
 @SuppressWarnings("deprecation")
@@ -43,7 +39,7 @@ public class PlayerLookupUUID {
 				return;
 			}
 			String hash = new BigInteger(MinecraftEncryption.createHash(ServerPlatform.get().getMiscUtils().getEncryptionKeyPair().getPublic(), listener.loginKey)).toString(16);
-			listener.profile = ServerPlatform.get().getMiscUtils().getSessionService().hasJoinedServer(new GameProfile(null, joinName), hash, null);
+			listener.profile = MinecraftSessionService.hasJoinedServer(listener.profile, hash);
 			if (listener.profile != null) {
 				fireLoginEvents();
 			} else {
@@ -70,18 +66,14 @@ public class PlayerLookupUUID {
 
 		PlayerPropertiesResolveEvent propResolve = new PlayerPropertiesResolveEvent(
 			ConnectionImpl.getFromChannel(listener.networkManager.getChannel()), playerName,
-			listener.profile.getProperties().values().stream()
-			.map(property -> new ProfileProperty(property.getName(), property.getValue(), property.getSignature()))
-			.collect(Collectors.toList())
+			listener.profile.getProperties().values()
 		);
 		Bukkit.getPluginManager().callEvent(propResolve);
-		PropertyMap propertymap = listener.profile.getProperties();
-		propertymap.clear();
-		for (ProfileProperty profileproperty : propResolve.getProperties().values()) {
-			propertymap.put(profileproperty.getName(), new Property(profileproperty.getName(), profileproperty.getValue(), profileproperty.getSignature()));
+		listener.profile.clearProperties();
+		for (ProfileProperty property : propResolve.getProperties().values()) {
+			listener.profile.addProperty(property);
 		}
-
-		UUID uniqueId = listener.profile.getId();
+		UUID uniqueId = listener.profile.getUUID();
 
 		AsyncPlayerPreLoginEvent asyncEvent = new AsyncPlayerPreLoginEvent(playerName, address, uniqueId);
 		Bukkit.getPluginManager().callEvent(asyncEvent);
@@ -106,7 +98,7 @@ public class PlayerLookupUUID {
 			return;
 		}
 
-		Bukkit.getLogger().info("UUID of player " + listener.profile.getName() + " is " + listener.profile.getId());
+		Bukkit.getLogger().info("UUID of player " + listener.profile.getName() + " is " + listener.profile.getUUID());
 		listener.setReadyToAccept();
 	}
 

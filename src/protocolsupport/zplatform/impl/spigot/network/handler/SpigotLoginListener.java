@@ -46,7 +46,7 @@ public abstract class SpigotLoginListener extends AbstractLoginListener implemen
 
 	@Override
 	public void a(PacketLoginInStart packet) {
-		handleLoginStart(packet.a());
+		handleLoginStart(packet.a().getName());
 	}
 
 	@Override

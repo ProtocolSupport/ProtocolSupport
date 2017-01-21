@@ -7,11 +7,10 @@ import javax.crypto.SecretKey;
 
 import org.bukkit.entity.Player;
 
-import com.mojang.authlib.properties.Property;
-
 import io.netty.channel.Channel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 
 public abstract class NetworkManagerWrapper {
 
@@ -45,9 +44,9 @@ public abstract class NetworkManagerWrapper {
 
 	public abstract void setSpoofedUUID(UUID uuid);
 
-	public abstract Property[] getSpoofedProperties();
+	public abstract ProfileProperty[] getSpoofedProperties();
 
-	public abstract void setSpoofedProperties(Property[] properties);
+	public abstract void setSpoofedProperties(ProfileProperty[] properties);
 
 	public abstract Player getBukkitPlayer();
 

@@ -15,8 +15,6 @@ import javax.crypto.SecretKey;
 import org.bukkit.Bukkit;
 
 import com.google.common.base.Charsets;
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
 
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -24,7 +22,9 @@ import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.events.PlayerLoginStartEvent;
+import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.utils.ApacheCommonsUtils;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
@@ -94,8 +94,8 @@ public abstract class AbstractLoginListener implements IHasProfile {
 	public void initOfflineModeGameProfile() {
 		profile = new GameProfile(networkManager.getSpoofedUUID() != null ? networkManager.getSpoofedUUID() : generateOffileModeUUID(), profile.getName());
 		if (networkManager.getSpoofedProperties() != null) {
-			for (Property property : networkManager.getSpoofedProperties()) {
-				profile.getProperties().put(property.getName(), property);
+			for (ProfileProperty property : networkManager.getSpoofedProperties()) {
+				profile.addProperty(property);
 			}
 		}
 	}
@@ -112,14 +112,14 @@ public abstract class AbstractLoginListener implements IHasProfile {
 		return (profile != null) ? (profile + " (" + networkManager.getAddress() + ")") : networkManager.getAddress().toString();
 	}
 
-	public void handleLoginStart(GameProfile packetprofile) {
+	public void handleLoginStart(String name) {
 		ApacheCommonsUtils.isTrue(state == LoginState.HELLO, "Unexpected hello packet");
 		state = LoginState.ONLINEMODERESOLVE;
 		loginprocessor.execute(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					profile = packetprofile;
+					profile = new GameProfile(null, name);
 
 					PlayerLoginStartEvent event = new PlayerLoginStartEvent(
 						ConnectionImpl.getFromChannel(networkManager.getChannel()),

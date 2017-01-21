@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.handler;
 
-import com.mojang.authlib.GameProfile;
+import protocolsupport.protocol.utils.authlib.GameProfile;
 
 public interface IHasProfile {
 

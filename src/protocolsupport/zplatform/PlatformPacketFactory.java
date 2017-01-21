@@ -5,10 +5,9 @@ import java.util.List;
 
 import org.bukkit.Material;
 
-import com.mojang.authlib.GameProfile;
-
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
+import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.protocol.utils.types.Position;
 
 public interface PlatformPacketFactory {

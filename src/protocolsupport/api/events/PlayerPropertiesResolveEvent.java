@@ -1,8 +1,8 @@
 package protocolsupport.api.events;
 
 import java.net.InetSocketAddress;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.bukkit.event.HandlerList;
@@ -15,7 +15,7 @@ public class PlayerPropertiesResolveEvent extends PlayerEvent {
 
 	private final HashMap<String, ProfileProperty> properties = new HashMap<>();
 
-	public PlayerPropertiesResolveEvent(Connection connection, String username, List<ProfileProperty> properties) {
+	public PlayerPropertiesResolveEvent(Connection connection, String username, Collection<ProfileProperty> properties) {
 		super(connection, username);
 		for (ProfileProperty property : properties) {
 			addProperty(property);
@@ -23,7 +23,7 @@ public class PlayerPropertiesResolveEvent extends PlayerEvent {
 	}
 
 	@Deprecated
-	public PlayerPropertiesResolveEvent(InetSocketAddress address, String username, List<ProfileProperty> properties) {
+	public PlayerPropertiesResolveEvent(InetSocketAddress address, String username, Collection<ProfileProperty> properties) {
 		this(ProtocolSupportAPI.getConnection(address), username, properties);
 	}
 

@@ -1,13 +1,14 @@
 package protocolsupport.zplatform.impl.spigot.network;
 
 import java.net.InetSocketAddress;
+import java.util.Arrays;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.crypto.SecretKey;
 
 import org.bukkit.entity.Player;
 
-import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 
 import io.netty.channel.Channel;
@@ -19,10 +20,12 @@ import net.minecraft.server.v1_11_R1.NetworkManager;
 import net.minecraft.server.v1_11_R1.Packet;
 import net.minecraft.server.v1_11_R1.PacketListener;
 import net.minecraft.server.v1_11_R1.PlayerConnection;
+import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.packet.handler.IHasProfile;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
-import protocolsupport.zplatform.network.NetworkState;
+import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
+import protocolsupport.zplatform.network.NetworkState;
 
 public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 
@@ -111,13 +114,23 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 	}
 
 	@Override
-	public Property[] getSpoofedProperties() {
-		return internal.spoofedProfile;
+	public ProfileProperty[] getSpoofedProperties() {
+		return
+			Arrays.asList(internal.spoofedProfile)
+			.stream()
+			.map(prop -> new ProfileProperty(prop.getName(), prop.getValue(), prop.getSignature()))
+			.collect(Collectors.toList())
+			.toArray(new ProfileProperty[0]);
 	}
 
 	@Override
-	public void setSpoofedProperties(Property[] properties) {
-		internal.spoofedProfile = properties;
+	public void setSpoofedProperties(ProfileProperty[] properties) {
+		internal.spoofedProfile =
+			Arrays.asList(properties)
+			.stream()
+			.map(prop -> new Property(prop.getName(), prop.getValue(), prop.getSignature()))
+			.collect(Collectors.toList())
+			.toArray(new Property[0]);
 	}
 
 	@Override

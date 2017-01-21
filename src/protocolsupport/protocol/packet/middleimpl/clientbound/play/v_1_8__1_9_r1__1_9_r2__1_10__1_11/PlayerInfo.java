@@ -1,8 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1__1_9_r2__1_10__1_11;
 
-import com.mojang.authlib.properties.Property;
-
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddlePlayerInfo;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -22,7 +21,7 @@ public class PlayerInfo extends MiddlePlayerInfo<RecyclableCollection<ClientBoun
 				case ADD: {
 					serializer.writeString(info.username);
 					serializer.writeVarInt(info.properties.length);
-					for (Property property : info.properties) {
+					for (ProfileProperty property : info.properties) {
 						serializer.writeString(property.getName());
 						serializer.writeString(property.getValue());
 						serializer.writeBoolean(property.hasSignature());

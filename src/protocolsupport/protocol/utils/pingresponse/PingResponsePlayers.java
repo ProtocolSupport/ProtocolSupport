@@ -11,8 +11,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import com.mojang.authlib.GameProfile;
 
+import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.utils.JsonUtils;
 
 public class PingResponsePlayers {
@@ -86,7 +86,7 @@ public class PingResponsePlayers {
 				for (int i = 0; i < players.getPlayers().length; ++i) {
 					GameProfile player = players.getPlayers()[i];
 					JsonObject playerJsonObject = new JsonObject();
-					playerJsonObject.addProperty("id", (player.getId() == null) ? "" : player.getId().toString());
+					playerJsonObject.addProperty("id", (player.getUUID() == null) ? "" : player.getUUID().toString());
 					playerJsonObject.addProperty("name", player.getName());
 					jsonArray.add(playerJsonObject);
 				}

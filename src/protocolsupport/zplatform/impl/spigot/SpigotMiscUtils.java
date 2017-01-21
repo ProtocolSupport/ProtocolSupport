@@ -1,6 +1,7 @@
 package protocolsupport.zplatform.impl.spigot;
 
 import java.security.KeyPair;
+import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
@@ -15,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
 import org.spigotmc.SpigotConfig;
 
-import com.mojang.authlib.minecraft.MinecraftSessionService;
+import com.mojang.authlib.properties.Property;
 
 import io.netty.channel.Channel;
 import net.minecraft.server.v1_11_R1.EnumProtocol;
@@ -26,6 +27,8 @@ import net.minecraft.server.v1_11_R1.MobEffectList;
 import net.minecraft.server.v1_11_R1.NBTTagCompound;
 import net.minecraft.server.v1_11_R1.NetworkManager;
 import net.minecraft.server.v1_11_R1.SoundEffect;
+import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
+import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.zplatform.PlatformUtils;
 import protocolsupport.zplatform.impl.spigot.itemstack.SpigotNBTTagCompoundWrapper;
 import protocolsupport.zplatform.impl.spigot.network.SpigotNetworkManagerWrapper;
@@ -57,6 +60,15 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	public static MinecraftServer getServer() {
 		return ((CraftServer) Bukkit.getServer()).getServer();
+	}
+
+	public static com.mojang.authlib.GameProfile toMojangGameProfile(GameProfile profile) {
+		com.mojang.authlib.GameProfile mojangGameProfile = new com.mojang.authlib.GameProfile(profile.getUUID(), profile.getName());
+		for (Entry<String, ProfileProperty> entry : profile.getProperties().entrySet()) {
+			ProfileProperty property = entry.getValue();
+			mojangGameProfile.getProperties().put(entry.getKey(), new Property(property.getName(), property.getValue(), property.getSignature()));
+		}
+		return mojangGameProfile;
 	}
 
 	public String localize(String key, Object... args) {
@@ -108,10 +120,6 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	public KeyPair getEncryptionKeyPair() {
 		return getServer().O();
-	}
-
-	public MinecraftSessionService getSessionService() {
-		return getServer().az();
 	}
 
 	public <V> FutureTask<V> callSyncTask(Callable<V> call) {

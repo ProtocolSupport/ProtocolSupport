@@ -9,8 +9,6 @@ import org.bukkit.Statistic;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
 
-import com.mojang.authlib.minecraft.MinecraftSessionService;
-
 import io.netty.channel.Channel;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
@@ -39,8 +37,6 @@ public interface PlatformUtils {
 	public int getCompressionThreshold();
 
 	public KeyPair getEncryptionKeyPair();
-
-	public MinecraftSessionService getSessionService();
 
 	public <V> FutureTask<V> callSyncTask(Callable<V> call);
 

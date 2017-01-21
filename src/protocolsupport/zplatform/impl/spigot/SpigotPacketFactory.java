@@ -12,7 +12,6 @@ import org.bukkit.Material;
 import org.spigotmc.SpigotConfig;
 
 import com.google.common.collect.BiMap;
-import com.mojang.authlib.GameProfile;
 
 import io.netty.buffer.Unpooled;
 import net.minecraft.server.v1_11_R1.*;
@@ -30,6 +29,7 @@ import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
+import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.zplatform.PlatformPacketFactory;
@@ -114,9 +114,9 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 		ServerPingPlayerSample playerSample = new ServerPingPlayerSample(maxPlayers, profiles.size());
 
 		Collections.shuffle(profiles);
-		GameProfile[] gprofiles = new GameProfile[profiles.size()];
+		com.mojang.authlib.GameProfile[] gprofiles = new com.mojang.authlib.GameProfile[profiles.size()];
 		for (int i = 0; i < profiles.size(); i++) {
-			gprofiles[i] = new GameProfile(profileUUID, profiles.get(i));
+			gprofiles[i] = new com.mojang.authlib.GameProfile(profileUUID, profiles.get(i));
 		}
 		gprofiles = Arrays.copyOfRange(gprofiles, 0, Math.min(gprofiles.length, SpigotConfig.playerSample));
 		playerSample.a(gprofiles);
@@ -131,7 +131,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	public Object createLoginSuccessPacket(GameProfile profile) {
-		return new PacketLoginOutSuccess(profile);
+		return new PacketLoginOutSuccess(SpigotMiscUtils.toMojangGameProfile(profile));
 	}
 
 	private static final PacketDataSerializer emptyPDS = new PacketDataSerializer(Unpooled.EMPTY_BUFFER);

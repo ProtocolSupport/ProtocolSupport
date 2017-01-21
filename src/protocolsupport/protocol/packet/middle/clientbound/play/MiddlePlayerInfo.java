@@ -2,9 +2,8 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import java.util.UUID;
 
-import com.mojang.authlib.properties.Property;
-
 import protocolsupport.api.chat.ChatAPI;
+import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
@@ -24,7 +23,7 @@ public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {
 			switch (action) {
 				case ADD: {
 					info.username = serializer.readString(16);
-					info.properties = new Property[serializer.readVarInt()];
+					info.properties = new ProfileProperty[serializer.readVarInt()];
 					for (int j = 0; j < info.properties.length; j++) {
 						String name = serializer.readString();
 						String value = serializer.readString();
@@ -32,7 +31,7 @@ public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {
 						if (serializer.readBoolean()) {
 							signature = serializer.readString();
 						}
-						info.properties[j] = new Property(name, value, signature);
+						info.properties[j] = new ProfileProperty(name, value, signature);
 					}
 					info.gamemode = serializer.readVarInt();
 					info.ping = serializer.readVarInt();
@@ -74,7 +73,7 @@ public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {
 				case ADD: {
 					NetworkDataCache.PlayerListEntry entry = new NetworkDataCache.PlayerListEntry(info.username);
 					entry.setDisplayNameJson(info.displayNameJson);
-					for (Property property : info.properties) {
+					for (ProfileProperty property : info.properties) {
 						entry.getProperties().add(property);
 					}
 					cache.addPlayerListEntry(info.uuid, entry);
@@ -109,7 +108,7 @@ public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {
 		public int ping;
 		public int gamemode;
 		public String displayNameJson;
-		public Property[] properties;
+		public ProfileProperty[] properties;
 
 		public String getName() {
 			return displayNameJson == null ? username : ChatAPI.fromJSON(displayNameJson).toLegacyText();

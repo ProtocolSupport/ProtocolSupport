@@ -1,12 +1,10 @@
 package protocolsupport.protocol.utils;
 
-import java.util.Collection;
 import java.util.Map.Entry;
 import java.util.UUID;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
-
+import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
+import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.utils.ApacheCommonsUtils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -25,22 +23,21 @@ public class GameProfileSerializer {
 		if (!ApacheCommonsUtils.isEmpty(gameProfile.getName())) {
 			tag.setString(NAME_KEY, gameProfile.getName());
 		}
-		if (gameProfile.getId() != null) {
-			tag.setString(UUID_KEY, gameProfile.getId().toString());
+		if (gameProfile.getUUID() != null) {
+			tag.setString(UUID_KEY, gameProfile.getUUID().toString());
 		}
 		if (!gameProfile.getProperties().isEmpty()) {
 			NBTTagCompoundWrapper propertiesTag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-			for (Entry<String, Collection<Property>> entry : gameProfile.getProperties().asMap().entrySet()) {
-				NBTTagListWrapper keyNamePropertiesTag = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
-				for (Property property : entry.getValue()) {
-					NBTTagCompoundWrapper propertyTag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-					propertyTag.setString(PROPERTY_VALUE_KEY, property.getValue());
-					if (property.hasSignature()) {
-						propertyTag.setString(PROPERTY_SIGNATURE_KEY, property.getSignature());
-					}
-					keyNamePropertiesTag.addCompound(propertyTag);
+			for (Entry<String, ProfileProperty> entry : gameProfile.getProperties().entrySet()) {
+				NBTTagListWrapper propertiesListTag = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
+				ProfileProperty property = entry.getValue();
+				NBTTagCompoundWrapper propertyTag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+				propertyTag.setString(PROPERTY_VALUE_KEY, property.getValue());
+				if (property.hasSignature()) {
+					propertyTag.setString(PROPERTY_SIGNATURE_KEY, property.getSignature());
 				}
-				propertiesTag.setList(entry.getKey(), keyNamePropertiesTag);
+				propertiesListTag.addCompound(propertyTag);
+				propertiesTag.setList(entry.getKey(), propertiesListTag);
 			}
 			tag.setCompound(PROPERTIES_KEY, propertiesTag);
 		}
@@ -71,9 +68,9 @@ public class GameProfileSerializer {
 					NBTTagCompoundWrapper value = list.getCompound(i);
 					String propertyValue = value.getString(PROPERTY_VALUE_KEY);
 					if (value.hasKeyOfType(PROPERTY_SIGNATURE_KEY, NBTTagCompoundWrapper.TYPE_STRING)) {
-						gameProfile.getProperties().put(propertyName, new Property(propertyName, propertyValue, value.getString(PROPERTY_SIGNATURE_KEY)));
+						gameProfile.getProperties().put(propertyName, new ProfileProperty(propertyName, propertyValue, value.getString(PROPERTY_SIGNATURE_KEY)));
 					} else {
-						gameProfile.getProperties().put(propertyName, new Property(propertyName, propertyValue));
+						gameProfile.getProperties().put(propertyName, new ProfileProperty(propertyName, propertyValue));
 					}
 				}
 			}

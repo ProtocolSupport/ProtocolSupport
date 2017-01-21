@@ -5,10 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import com.mojang.authlib.properties.Property;
-
 import gnu.trove.map.hash.TIntObjectHashMap;
 import protocolsupport.api.chat.ChatAPI;
+import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
 import protocolsupport.protocol.utils.types.WindowType;
@@ -148,10 +147,10 @@ public class NetworkDataCache {
 	}
 
 	public static class PropertiesStorage {
-		private final HashMap<String, Property> signed = new HashMap<>();
-		private final HashMap<String, Property> unsigned = new HashMap<>();
+		private final HashMap<String, ProfileProperty> signed = new HashMap<>();
+		private final HashMap<String, ProfileProperty> unsigned = new HashMap<>();
 
-		public void add(Property property) {
+		public void add(ProfileProperty property) {
 			if (property.hasSignature()) {
 				signed.put(property.getName(), property);
 			} else {
@@ -159,11 +158,11 @@ public class NetworkDataCache {
 			}
 		}
 
-		public List<Property> getAll(boolean signedOnly) {
+		public List<ProfileProperty> getAll(boolean signedOnly) {
 			if (signedOnly) {
 				return new ArrayList<>(signed.values());
 			} else {
-				ArrayList<Property> properties = new ArrayList<>();
+				ArrayList<ProfileProperty> properties = new ArrayList<>();
 				properties.addAll(signed.values());
 				properties.addAll(unsigned.values());
 				return properties;
@@ -200,7 +199,7 @@ public class NetworkDataCache {
 		public PlayerListEntry clone() {
 			PlayerListEntry clone = new PlayerListEntry(name);
 			clone.displayNameJson = displayNameJson;
-			for (Property property : propstorage.getAll(false)) {
+			for (ProfileProperty property : propstorage.getAll(false)) {
 				clone.propstorage.add(property);
 			}
 			return clone;

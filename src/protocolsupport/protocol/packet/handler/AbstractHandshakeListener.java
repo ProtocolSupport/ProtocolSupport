@@ -9,16 +9,16 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 
 import com.google.gson.Gson;
-import com.mojang.authlib.properties.Property;
-import com.mojang.util.UUIDTypeAdapter;
 
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ConnectionHandshakeEvent;
+import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.protocol.storage.ThrottleTracker;
+import protocolsupport.protocol.utils.authlib.UUIDTypeAdapter;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkState;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
@@ -85,7 +85,7 @@ public abstract class AbstractHandshakeListener {
 					changeRemoteAddress(connection, new InetSocketAddress(split[1], connection.getAddress().getPort()));
 					networkManager.setSpoofedUUID(UUIDTypeAdapter.fromString(split[2]));
 					if (split.length == 4) {
-						networkManager.setSpoofedProperties(gson.fromJson(split[3], Property[].class));
+						networkManager.setSpoofedProperties(gson.fromJson(split[3], ProfileProperty[].class));
 					}
 				}
 				//ps handshake event

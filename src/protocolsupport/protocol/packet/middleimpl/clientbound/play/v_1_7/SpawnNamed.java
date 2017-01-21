@@ -1,8 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_7;
 
-import com.mojang.authlib.properties.Property;
-
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.legacyremapper.LegacyDataWatcherSerializer;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnNamed;
@@ -21,7 +20,7 @@ public class SpawnNamed extends MiddleSpawnNamed<RecyclableCollection<ClientBoun
 		serializer.writeString(name);
 		if (version == ProtocolVersion.MINECRAFT_1_7_10) {
 			serializer.writeVarInt(properties.size());
-			for (Property property : properties) {
+			for (ProfileProperty property : properties) {
 				serializer.writeString(property.getName());
 				serializer.writeString(property.getValue());
 				serializer.writeString(property.getSignature());

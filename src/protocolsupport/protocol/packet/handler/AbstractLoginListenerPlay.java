@@ -5,14 +5,13 @@ import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 
-import com.mojang.authlib.GameProfile;
-
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.PlayerLoginFinishEvent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
+import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
@@ -41,7 +40,7 @@ public abstract class AbstractLoginListenerPlay implements IHasProfile {
 		// tick connection keep now
 		keepConnection();
 		// now fire login event
-		PlayerLoginFinishEvent event = new PlayerLoginFinishEvent(ConnectionImpl.getFromChannel(networkManager.getChannel()), profile.getName(), profile.getId(), onlineMode);
+		PlayerLoginFinishEvent event = new PlayerLoginFinishEvent(ConnectionImpl.getFromChannel(networkManager.getChannel()), profile.getName(), profile.getUUID(), onlineMode);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.isLoginDenied()) {
 			disconnect(event.getDenyLoginMessage());
