@@ -3,14 +3,15 @@ package protocolsupport.zplatform;
 import org.spigotmc.SpigotConfig;
 
 import net.minecraft.server.v1_11_R1.NetworkManager;
-import protocolsupport.zplatform.impl.spigot.SpigotPlatformUtils;
+import protocolsupport.zplatform.impl.spigot.SpigotPacketFactory;
+import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
 import protocolsupport.zplatform.impl.spigot.injector.SpigotPlatformInjector;
 
 public enum ServerPlatform {
 
-	SPIGOT(new SpigotPlatformInjector(), new SpigotPlatformUtils()),
-	GLOWSTONE(null, null),
-	UNKNOWN(null, null);
+	SPIGOT(new SpigotPlatformInjector(), new SpigotMiscUtils(), new SpigotPacketFactory()),
+	GLOWSTONE(null, null, null),
+	UNKNOWN(null, null, null);
 
 	private static ServerPlatform current;
 
@@ -37,9 +38,11 @@ public enum ServerPlatform {
 
 	private final PlatformInjector injector;
 	private final PlatformUtils miscutils;
-	ServerPlatform(PlatformInjector injector, PlatformUtils miscutils) {
+	private final PlatformPacketFactory packetfactory;
+	ServerPlatform(PlatformInjector injector, PlatformUtils miscutils, PlatformPacketFactory packetfactory) {
 		this.injector = injector;
 		this.miscutils = miscutils;
+		this.packetfactory = packetfactory;
 	}
 
 	public void inject() {
@@ -48,6 +51,10 @@ public enum ServerPlatform {
 
 	public PlatformUtils getMiscUtils() {
 		return miscutils;
+	}
+
+	public PlatformPacketFactory getPacketFactory() {
+		return packetfactory;
 	}
 
 }

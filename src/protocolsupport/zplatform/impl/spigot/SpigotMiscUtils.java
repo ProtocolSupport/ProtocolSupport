@@ -31,7 +31,7 @@ import protocolsupport.zplatform.impl.spigot.itemstack.SpigotNBTTagCompoundWrapp
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.network.NetworkListenerState;
 
-public class SpigotPlatformUtils implements PlatformUtils {
+public class SpigotMiscUtils implements PlatformUtils {
 
 	public static NetworkListenerState netStateFromEnumProtocol(EnumProtocol state) {
 		switch (state) {
@@ -93,41 +93,41 @@ public class SpigotPlatformUtils implements PlatformUtils {
 	}
 
 	public boolean isDebugging() {
-		return SpigotPlatformUtils.getServer().isDebugging();
+		return getServer().isDebugging();
 	}
 
 	public void enableDebug() {
-		SpigotPlatformUtils.getServer().getPropertyManager().setProperty("debug", Boolean.TRUE);
+		getServer().getPropertyManager().setProperty("debug", Boolean.TRUE);
 	}
 
 	public void disableDebug() {
-		SpigotPlatformUtils.getServer().getPropertyManager().setProperty("debug", Boolean.FALSE);
+		getServer().getPropertyManager().setProperty("debug", Boolean.FALSE);
 	}
 
 	public int getCompressionThreshold() {
-		return SpigotPlatformUtils.getServer().aG();
+		return getServer().aG();
 	}
 
 	public KeyPair getEncryptionKeyPair() {
-		return SpigotPlatformUtils.getServer().O();
+		return getServer().O();
 	}
 
 	public MinecraftSessionService getSessionService() {
-		return SpigotPlatformUtils.getServer().az();
+		return getServer().az();
 	}
 
 	public <V> FutureTask<V> callSyncTask(Callable<V> call) {
 		FutureTask<V> task = new FutureTask<>(call);
-		SpigotPlatformUtils.getServer().processQueue.add(task);
+		getServer().processQueue.add(task);
 		return task;
 	}
 
 	public String getModName() {
-		return SpigotPlatformUtils.getServer().getServerModName();
+		return getServer().getServerModName();
 	}
 
 	public String getVersionName() {
-		return SpigotPlatformUtils.getServer().getVersion();
+		return getServer().getVersion();
 	}
 
 	public Statistic getStatisticByName(String value) {

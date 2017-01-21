@@ -31,7 +31,6 @@ import protocolsupport.utils.Utils.Converter;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.LoginListenerPlay;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
-import protocolsupport.zplatform.network.PlatformPacketFactory;
 
 public abstract class AbstractLoginListener implements IHasProfile {
 
@@ -82,7 +81,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 	public void disconnect(String s) {
 		try {
 			Bukkit.getLogger().info("Disconnecting " + getConnectionRepr() + ": " + s);
-			networkManager.sendPacket(PlatformPacketFactory.createLoginDisconnectPacket(s), new GenericFutureListener<Future<? super Void>>() {
+			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(s), new GenericFutureListener<Future<? super Void>>() {
 				@Override
 				public void operationComplete(Future<? super Void> future)  {
 					networkManager.close(s);
@@ -141,7 +140,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 					forcedUUID = event.getForcedUUID();
 					if (isOnlineMode) {
 						state = LoginState.KEY;
-						networkManager.sendPacket(PlatformPacketFactory.createLoginEncryptionBeginPacket(ServerPlatform.get().getMiscUtils().getEncryptionKeyPair().getPublic(), randomBytes));
+						networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginEncryptionBeginPacket(ServerPlatform.get().getMiscUtils().getEncryptionKeyPair().getPublic(), randomBytes));
 					} else {
 						new PlayerLookupUUID(AbstractLoginListener.this, isOnlineMode).run();
 					}
@@ -207,7 +206,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 			final int threshold = ServerPlatform.get().getMiscUtils().getCompressionThreshold();
 			if (threshold >= 0) {
 				this.networkManager.sendPacket(
-					PlatformPacketFactory.createSetCompressionPacket(threshold),
+					ServerPlatform.get().getPacketFactory().createSetCompressionPacket(threshold),
 					new ChannelFutureListener() {
 						@Override
 						public void operationComplete(ChannelFuture future)  {

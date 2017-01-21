@@ -22,7 +22,6 @@ import protocolsupport.protocol.storage.ThrottleTracker;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkListenerState;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
-import protocolsupport.zplatform.network.PlatformPacketFactory;
 
 public abstract class AbstractHandshakeListener {
 
@@ -44,7 +43,7 @@ public abstract class AbstractHandshakeListener {
 					if (ThrottleTracker.isEnabled() && !ServerPlatform.get().getMiscUtils().isBungeeEnabled()) {
 						if (ThrottleTracker.throttle(address)) {
 							String message = "Connection throttled! Please wait before reconnecting.";
-							networkManager.sendPacket(PlatformPacketFactory.createLoginDisconnectPacket(message), new GenericFutureListener<Future<? super Void>>() {
+							networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), new GenericFutureListener<Future<? super Void>>() {
 								@Override
 								public void operationComplete(Future<? super Void> arg0)  {
 									networkManager.close(message);
@@ -60,7 +59,7 @@ public abstract class AbstractHandshakeListener {
 				ProtocolVersion clientversion = ProtocolVersion.fromId(clientVersion);
 				if (clientversion != ProtocolVersion.getLatest()) {
 					String message = MessageFormat.format(ServerPlatform.get().getMiscUtils().getOutdatedServerMessage().replaceAll("'", "''"), "1.11.1");
-					this.networkManager.sendPacket(PlatformPacketFactory.createLoginDisconnectPacket(message), new GenericFutureListener<Future<? super Void>>() {
+					this.networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), new GenericFutureListener<Future<? super Void>>() {
 						@Override
 						public void operationComplete(Future<? super Void> arg0)  {
 							networkManager.close(message);
@@ -74,7 +73,7 @@ public abstract class AbstractHandshakeListener {
 					final String[] split = hostname.split("\u0000");
 					if ((split.length != 3) && (split.length != 4)) {
 						String message = "If you wish to use IP forwarding, please enable it in your BungeeCord config as well!";
-						networkManager.sendPacket(PlatformPacketFactory.createLoginDisconnectPacket(message), new GenericFutureListener<Future<? super Void>>() {
+						networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), new GenericFutureListener<Future<? super Void>>() {
 							@Override
 							public void operationComplete(Future<? super Void> arg0)  {
 								networkManager.close(message);

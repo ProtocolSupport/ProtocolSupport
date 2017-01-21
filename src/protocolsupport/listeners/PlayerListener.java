@@ -19,7 +19,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.tab.TabAPI;
 import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.zplatform.network.PlatformPacketFactory;
+import protocolsupport.zplatform.ServerPlatform;
 
 public class PlayerListener implements Listener {
 
@@ -58,7 +58,7 @@ public class PlayerListener implements Listener {
 		Connection connection = ProtocolSupportAPI.getConnection(event.getPlayer());
 		if (connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9)) {
 			Block block = event.getBlock();
-			connection.sendPacket(PlatformPacketFactory.createBlockBreakSoundPacket(new Position(block.getX(), block.getY(), block.getZ()), block.getType()));
+			connection.sendPacket(ServerPlatform.get().getPacketFactory().createBlockBreakSoundPacket(new Position(block.getX(), block.getY(), block.getZ()), block.getType()));
 		}
 	}
 

@@ -71,14 +71,14 @@ import protocolsupport.api.events.PlayerLoginFinishEvent;
 import protocolsupport.api.events.PlayerSyncLoginEvent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
-import protocolsupport.zplatform.impl.spigot.SpigotPlatformUtils;
+import protocolsupport.zplatform.ServerPlatform;
+import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
 import protocolsupport.zplatform.network.LoginListenerPlay;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
-import protocolsupport.zplatform.network.PlatformPacketFactory;
 
 public class SpigotLoginListenerPlay extends LoginListenerPlay implements PacketLoginInListener, PacketListenerPlayIn, ITickable {
 
-	protected static final MinecraftServer server = SpigotPlatformUtils.getServer();
+	protected static final MinecraftServer server = SpigotMiscUtils.getServer();
 
 	protected boolean ready;
 
@@ -229,7 +229,7 @@ public class SpigotLoginListenerPlay extends LoginListenerPlay implements Packet
 
 	@SuppressWarnings("unchecked")
 	protected void disconnect0(String s) {
-		networkManager.sendPacket(PlatformPacketFactory.createPlayDisconnectPacket(s), new GenericFutureListener<Future<? super Void>>() {
+		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createPlayDisconnectPacket(s), new GenericFutureListener<Future<? super Void>>() {
 			@Override
 			public void operationComplete(Future<? super Void> future) {
 				networkManager.close(s);

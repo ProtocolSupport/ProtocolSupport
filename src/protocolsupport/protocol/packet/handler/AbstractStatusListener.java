@@ -18,7 +18,6 @@ import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
-import protocolsupport.zplatform.network.PlatformPacketFactory;
 
 public abstract class AbstractStatusListener {
 
@@ -62,7 +61,7 @@ public abstract class AbstractStatusListener {
 		);
 		Bukkit.getPluginManager().callEvent(revent);
 
-		networkManager.sendPacket(PlatformPacketFactory.createStausServerInfoPacket(
+		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createStausServerInfoPacket(
 			revent.getPlayers(), revent.getProtocolInfo(),
 			revent.getIcon(), revent.getMotd(), revent.getMaxPlayers()
 		));
@@ -70,7 +69,7 @@ public abstract class AbstractStatusListener {
 
 	@SuppressWarnings("unchecked")
 	public void handlePing(long pingId) {
-		networkManager.sendPacket(PlatformPacketFactory.createStatusPongPacket(pingId), ChannelFutureListener.CLOSE);
+		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createStatusPongPacket(pingId), ChannelFutureListener.CLOSE);
 	}
 
 	public static class InternalServerListPingEvent extends ServerListPingEvent {
