@@ -12,7 +12,6 @@ import java.util.logging.Level;
 
 import javax.crypto.SecretKey;
 
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 
 import com.google.common.base.Charsets;
@@ -26,6 +25,7 @@ import io.netty.util.concurrent.GenericFutureListener;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.events.PlayerLoginStartEvent;
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.utils.ApacheCommonsUtils;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
 import protocolsupport.zplatform.ServerPlatform;
@@ -113,7 +113,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 	}
 
 	public void handleLoginStart(GameProfile packetprofile) {
-		Validate.validState(state == LoginState.HELLO, "Unexpected hello packet");
+		ApacheCommonsUtils.isTrue(state == LoginState.HELLO, "Unexpected hello packet");
 		state = LoginState.ONLINEMODERESOLVE;
 		loginprocessor.execute(new Runnable() {
 			@Override
@@ -162,7 +162,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 	}
 
 	public void handleEncryption(EncryptionPacketWrapper encryptionpakcet) {
-		Validate.validState(state == LoginState.KEY, "Unexpected key packet");
+		ApacheCommonsUtils.isTrue(state == LoginState.KEY, "Unexpected key packet");
 		state = LoginState.AUTHENTICATING;
 		loginprocessor.execute(new Runnable() {
 			@Override

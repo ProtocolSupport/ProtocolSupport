@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
@@ -11,8 +12,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import protocolsupport.ProtocolSupport;
@@ -81,7 +82,7 @@ public class AsyncErrorLogger {
 				public void run() {
 					synchronized (lock) {
 						writer.println("Error occured at " + new SimpleDateFormat("yyyy-MM-dd-HH-mm", Locale.ROOT).format(new Date()));
-						writer.println("Additional info: " + StringUtils.join(info, ", "));
+						writer.println("Additional info: " + String.join(", ", Arrays.asList(info).stream().map(obj -> String.valueOf(obj)).collect(Collectors.toList())));
 						writer.println("Exception class: " + t.getClass().getName());
 						writer.println("Exception message: " + t.getMessage());
 						writer.println("Exception log:");

@@ -1,7 +1,5 @@
 package protocolsupport.utils;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -74,7 +72,7 @@ public class JsonUtils {
 	}
 
 	private static String toString(JsonElement jsonElement) {
-		String abbreviateMiddle = StringUtils.abbreviateMiddle(String.valueOf(jsonElement), "...", 10);
+		String abbreviateMiddle = String.valueOf(jsonElement);
 		if (jsonElement == null) {
 			return "null (missing)";
 		}

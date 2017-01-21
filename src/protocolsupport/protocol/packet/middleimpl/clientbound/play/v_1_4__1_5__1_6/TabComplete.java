@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__1_6;
 
-import org.apache.commons.lang3.StringUtils;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleTabComplete;
@@ -19,7 +17,7 @@ public class TabComplete extends MiddleTabComplete<RecyclableCollection<ClientBo
 			return RecyclableEmptyList.get();
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_TAB_COMPLETE_ID, version);
-		serializer.writeString(Utils.clampString(StringUtils.join(matches, '\u0000'), Short.MAX_VALUE));
+		serializer.writeString(Utils.clampString(String.join("\u0000", matches), Short.MAX_VALUE));
 		return RecyclableSingletonList.create(serializer);
 	}
 
