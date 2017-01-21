@@ -15,6 +15,8 @@ import com.mojang.authlib.GameProfile;
 import io.netty.buffer.Unpooled;
 import net.minecraft.server.v1_11_R1.Block;
 import net.minecraft.server.v1_11_R1.ChatComponentText;
+import net.minecraft.server.v1_11_R1.EnumDifficulty;
+import net.minecraft.server.v1_11_R1.EnumGamemode;
 import net.minecraft.server.v1_11_R1.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_11_R1.PacketDataSerializer;
 import net.minecraft.server.v1_11_R1.PacketLoginOutDisconnect;
@@ -22,7 +24,9 @@ import net.minecraft.server.v1_11_R1.PacketLoginOutEncryptionBegin;
 import net.minecraft.server.v1_11_R1.PacketLoginOutSetCompression;
 import net.minecraft.server.v1_11_R1.PacketPlayInCloseWindow;
 import net.minecraft.server.v1_11_R1.PacketPlayOutChat;
+import net.minecraft.server.v1_11_R1.PacketPlayOutCustomPayload;
 import net.minecraft.server.v1_11_R1.PacketPlayOutKickDisconnect;
+import net.minecraft.server.v1_11_R1.PacketPlayOutLogin;
 import net.minecraft.server.v1_11_R1.PacketPlayOutNamedSoundEffect;
 import net.minecraft.server.v1_11_R1.PacketPlayOutPlayerListHeaderFooter;
 import net.minecraft.server.v1_11_R1.PacketPlayOutTitle;
@@ -34,6 +38,7 @@ import net.minecraft.server.v1_11_R1.ServerPing.ServerData;
 import net.minecraft.server.v1_11_R1.ServerPing.ServerPingPlayerSample;
 import net.minecraft.server.v1_11_R1.SoundCategory;
 import net.minecraft.server.v1_11_R1.SoundEffectType;
+import net.minecraft.server.v1_11_R1.WorldType;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
@@ -135,6 +140,17 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 		serverping.setServerInfo(new ServerData(info.getName(), info.getId()));
 
 		return new PacketStatusOutServerInfo(serverping);
+	}
+
+	private static final PacketDataSerializer emptyPDS = new PacketDataSerializer(Unpooled.EMPTY_BUFFER);
+	@Override
+	public Object createEmptyCustomPayloadPacket(String tag) {
+		return new PacketPlayOutCustomPayload(tag, emptyPDS);
+	}
+
+	@Override
+	public Object createFakeJoinGamePacket() {
+		return new PacketPlayOutLogin(0, EnumGamemode.NOT_SET, false, 0, EnumDifficulty.EASY, 60, WorldType.NORMAL, false);
 	}
 
 }

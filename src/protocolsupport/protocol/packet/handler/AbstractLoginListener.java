@@ -29,7 +29,6 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.network.LoginListenerPlay;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public abstract class AbstractLoginListener implements IHasProfile {
@@ -217,12 +216,12 @@ public abstract class AbstractLoginListener implements IHasProfile {
 			}
 		}
 
-		LoginListenerPlay listener = getLoginListenerPlay();
+		AbstractLoginListenerPlay listener = getLoginListenerPlay();
 		networkManager.setPacketListener(listener);
 		listener.finishLogin();
 	}
 
-	protected abstract LoginListenerPlay getLoginListenerPlay();
+	protected abstract AbstractLoginListenerPlay getLoginListenerPlay();
 
 	public enum LoginState {
 		HELLO, ONLINEMODERESOLVE, KEY, AUTHENTICATING;

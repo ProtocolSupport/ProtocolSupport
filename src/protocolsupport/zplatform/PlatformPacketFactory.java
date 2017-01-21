@@ -41,4 +41,8 @@ public interface PlatformPacketFactory {
 
 	public Object createStausServerInfoPacket(List<String> profiles, ProtocolInfo info, String icon, String motd, int maxPlayers);
 
+	public Object createEmptyCustomPayloadPacket(String tag);
+
+	public Object createFakeJoinGamePacket();
+
 }
