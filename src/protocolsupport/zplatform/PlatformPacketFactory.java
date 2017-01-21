@@ -210,4 +210,75 @@ public interface PlatformPacketFactory {
 
 	public int getOutPlayVehicleMovePacketId();
 
+
+	public int getInHandshakeStartPacketId();
+
+	public int getInStatusRequestPacketId();
+
+	public int getInStatusPingPacketId();
+
+	public int getInLoginStartPacketId();
+
+	public int getInLoginEncryptionBeginPacketId();
+
+	public int getInPlayKeepAlivePacketId();
+
+	public int getInPlayChatPacketId();
+
+	public int getInPlayUseEntityPacketId();
+
+	public int getInPlayPlayerPacketId();
+
+	public int getInPlayPositionPacketId();
+
+	public int getInPlayLookPacketId();
+
+	public int getInPlayPositionLookPacketId();
+
+	public int getInPlayBlockDigPacketId();
+
+	public int getInPlayBlockPlacePacketId();
+
+	public int getInPlayHeldSlotPacketId();
+
+	public int getInPlayAnimationPacketId();
+
+	public int getInPlayEntityActionPacketId();
+
+	public int getInPlayMoveVehiclePacketId();
+
+	public int getInPlaySteerBoatPacketId();
+
+	public int getInPlaySteerVehiclePacketId();
+
+	public int getInPlayWindowClosePacketId();
+
+	public int getInPlayWindowClickPacketId();
+
+	public int getInPlayWindowTransactionPacketId();
+
+	public int getInPlayCreativeSetSlotPacketId();
+
+	public int getInPlayEnchantSelectPacketId();
+
+	public int getInPlayUpdateSignPacketId();
+
+	public int getInPlayAbilitiesPacketId();
+
+	public int getInPlayTabCompletePacketId();
+
+	public int getInPlaySettingsPacketId();
+
+	public int getInPlayClientCommandPacketId();
+
+	public int getInPlayCustomPayloadPacketId();
+
+	public int getInPlayUseItemPacketId();
+
+	public int getInPlaySpectatePacketId();
+
+	public int getInPlayResourcePackStatusPacketId();
+
+	public int getInPlayTeleportAcceptPacketId();
+
 }

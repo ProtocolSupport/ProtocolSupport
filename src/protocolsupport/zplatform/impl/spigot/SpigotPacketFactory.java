@@ -9,112 +9,23 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Material;
-import org.spigotmc.SneakyThrow;
 import org.spigotmc.SpigotConfig;
 
 import com.google.common.collect.BiMap;
 import com.mojang.authlib.GameProfile;
 
 import io.netty.buffer.Unpooled;
-import net.minecraft.server.v1_11_R1.Block;
-import net.minecraft.server.v1_11_R1.ChatComponentText;
-import net.minecraft.server.v1_11_R1.EnumDifficulty;
-import net.minecraft.server.v1_11_R1.EnumGamemode;
-import net.minecraft.server.v1_11_R1.EnumProtocol;
-import net.minecraft.server.v1_11_R1.EnumProtocolDirection;
-import net.minecraft.server.v1_11_R1.Packet;
+import net.minecraft.server.v1_11_R1.*;
 import net.minecraft.server.v1_11_R1.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_11_R1.PacketPlayInFlying.PacketPlayInLook;
+import net.minecraft.server.v1_11_R1.PacketPlayInFlying.PacketPlayInPosition;
+import net.minecraft.server.v1_11_R1.PacketPlayInFlying.PacketPlayInPositionLook;
 import net.minecraft.server.v1_11_R1.PacketPlayOutEntity.PacketPlayOutEntityLook;
 import net.minecraft.server.v1_11_R1.PacketPlayOutEntity.PacketPlayOutRelEntityMove;
 import net.minecraft.server.v1_11_R1.PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook;
-import net.minecraft.server.v1_11_R1.PacketDataSerializer;
-import net.minecraft.server.v1_11_R1.PacketLoginOutDisconnect;
-import net.minecraft.server.v1_11_R1.PacketLoginOutEncryptionBegin;
-import net.minecraft.server.v1_11_R1.PacketLoginOutSetCompression;
-import net.minecraft.server.v1_11_R1.PacketLoginOutSuccess;
-import net.minecraft.server.v1_11_R1.PacketPlayInCloseWindow;
-import net.minecraft.server.v1_11_R1.PacketPlayOutAbilities;
-import net.minecraft.server.v1_11_R1.PacketPlayOutAnimation;
-import net.minecraft.server.v1_11_R1.PacketPlayOutAttachEntity;
-import net.minecraft.server.v1_11_R1.PacketPlayOutBed;
-import net.minecraft.server.v1_11_R1.PacketPlayOutBlockAction;
-import net.minecraft.server.v1_11_R1.PacketPlayOutBlockBreakAnimation;
-import net.minecraft.server.v1_11_R1.PacketPlayOutBlockChange;
-import net.minecraft.server.v1_11_R1.PacketPlayOutBoss;
-import net.minecraft.server.v1_11_R1.PacketPlayOutCamera;
-import net.minecraft.server.v1_11_R1.PacketPlayOutChat;
-import net.minecraft.server.v1_11_R1.PacketPlayOutCloseWindow;
-import net.minecraft.server.v1_11_R1.PacketPlayOutCollect;
-import net.minecraft.server.v1_11_R1.PacketPlayOutCombatEvent;
-import net.minecraft.server.v1_11_R1.PacketPlayOutCustomPayload;
-import net.minecraft.server.v1_11_R1.PacketPlayOutCustomSoundEffect;
-import net.minecraft.server.v1_11_R1.PacketPlayOutEntity;
-import net.minecraft.server.v1_11_R1.PacketPlayOutEntityDestroy;
-import net.minecraft.server.v1_11_R1.PacketPlayOutEntityEffect;
-import net.minecraft.server.v1_11_R1.PacketPlayOutEntityEquipment;
-import net.minecraft.server.v1_11_R1.PacketPlayOutEntityHeadRotation;
-import net.minecraft.server.v1_11_R1.PacketPlayOutEntityMetadata;
-import net.minecraft.server.v1_11_R1.PacketPlayOutEntityStatus;
-import net.minecraft.server.v1_11_R1.PacketPlayOutEntityTeleport;
-import net.minecraft.server.v1_11_R1.PacketPlayOutEntityVelocity;
-import net.minecraft.server.v1_11_R1.PacketPlayOutExperience;
-import net.minecraft.server.v1_11_R1.PacketPlayOutExplosion;
-import net.minecraft.server.v1_11_R1.PacketPlayOutGameStateChange;
-import net.minecraft.server.v1_11_R1.PacketPlayOutHeldItemSlot;
-import net.minecraft.server.v1_11_R1.PacketPlayOutKeepAlive;
-import net.minecraft.server.v1_11_R1.PacketPlayOutKickDisconnect;
-import net.minecraft.server.v1_11_R1.PacketPlayOutLogin;
-import net.minecraft.server.v1_11_R1.PacketPlayOutMap;
-import net.minecraft.server.v1_11_R1.PacketPlayOutMapChunk;
-import net.minecraft.server.v1_11_R1.PacketPlayOutMount;
-import net.minecraft.server.v1_11_R1.PacketPlayOutMultiBlockChange;
-import net.minecraft.server.v1_11_R1.PacketPlayOutNamedEntitySpawn;
-import net.minecraft.server.v1_11_R1.PacketPlayOutNamedSoundEffect;
-import net.minecraft.server.v1_11_R1.PacketPlayOutOpenSignEditor;
-import net.minecraft.server.v1_11_R1.PacketPlayOutOpenWindow;
-import net.minecraft.server.v1_11_R1.PacketPlayOutPlayerInfo;
-import net.minecraft.server.v1_11_R1.PacketPlayOutPlayerListHeaderFooter;
-import net.minecraft.server.v1_11_R1.PacketPlayOutPosition;
-import net.minecraft.server.v1_11_R1.PacketPlayOutRemoveEntityEffect;
-import net.minecraft.server.v1_11_R1.PacketPlayOutResourcePackSend;
-import net.minecraft.server.v1_11_R1.PacketPlayOutRespawn;
-import net.minecraft.server.v1_11_R1.PacketPlayOutScoreboardDisplayObjective;
-import net.minecraft.server.v1_11_R1.PacketPlayOutScoreboardObjective;
-import net.minecraft.server.v1_11_R1.PacketPlayOutScoreboardScore;
-import net.minecraft.server.v1_11_R1.PacketPlayOutScoreboardTeam;
-import net.minecraft.server.v1_11_R1.PacketPlayOutServerDifficulty;
-import net.minecraft.server.v1_11_R1.PacketPlayOutSetCooldown;
-import net.minecraft.server.v1_11_R1.PacketPlayOutSetSlot;
-import net.minecraft.server.v1_11_R1.PacketPlayOutSpawnEntity;
-import net.minecraft.server.v1_11_R1.PacketPlayOutSpawnEntityExperienceOrb;
-import net.minecraft.server.v1_11_R1.PacketPlayOutSpawnEntityLiving;
-import net.minecraft.server.v1_11_R1.PacketPlayOutSpawnEntityPainting;
-import net.minecraft.server.v1_11_R1.PacketPlayOutSpawnEntityWeather;
-import net.minecraft.server.v1_11_R1.PacketPlayOutSpawnPosition;
-import net.minecraft.server.v1_11_R1.PacketPlayOutStatistic;
-import net.minecraft.server.v1_11_R1.PacketPlayOutTabComplete;
-import net.minecraft.server.v1_11_R1.PacketPlayOutTileEntityData;
-import net.minecraft.server.v1_11_R1.PacketPlayOutTitle;
-import net.minecraft.server.v1_11_R1.PacketPlayOutTransaction;
-import net.minecraft.server.v1_11_R1.PacketPlayOutUnloadChunk;
-import net.minecraft.server.v1_11_R1.PacketPlayOutUpdateAttributes;
-import net.minecraft.server.v1_11_R1.PacketPlayOutUpdateHealth;
-import net.minecraft.server.v1_11_R1.PacketPlayOutUpdateTime;
-import net.minecraft.server.v1_11_R1.PacketPlayOutVehicleMove;
-import net.minecraft.server.v1_11_R1.PacketPlayOutWindowData;
-import net.minecraft.server.v1_11_R1.PacketPlayOutWindowItems;
-import net.minecraft.server.v1_11_R1.PacketPlayOutWorldBorder;
-import net.minecraft.server.v1_11_R1.PacketPlayOutWorldEvent;
-import net.minecraft.server.v1_11_R1.PacketPlayOutWorldParticles;
 import net.minecraft.server.v1_11_R1.PacketPlayOutTitle.EnumTitleAction;
-import net.minecraft.server.v1_11_R1.PacketStatusOutPong;
-import net.minecraft.server.v1_11_R1.PacketStatusOutServerInfo;
-import net.minecraft.server.v1_11_R1.ServerPing;
 import net.minecraft.server.v1_11_R1.ServerPing.ServerData;
 import net.minecraft.server.v1_11_R1.ServerPing.ServerPingPlayerSample;
-import net.minecraft.server.v1_11_R1.SoundCategory;
-import net.minecraft.server.v1_11_R1.SoundEffectType;
-import net.minecraft.server.v1_11_R1.WorldType;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
@@ -641,22 +552,205 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 		return getOutId(PacketPlayOutVehicleMove.class);
 	}
 
+
+	@Override
+	public int getInHandshakeStartPacketId() {
+		return getInId(PacketHandshakingInSetProtocol.class);
+	}
+
+	@Override
+	public int getInStatusRequestPacketId() {
+		return getInId(PacketStatusInStart.class);
+	}
+
+	@Override
+	public int getInStatusPingPacketId() {
+		return getInId(PacketStatusInPing.class);
+	}
+
+	@Override
+	public int getInLoginStartPacketId() {
+		return getInId(PacketLoginInStart.class);
+	}
+
+	@Override
+	public int getInLoginEncryptionBeginPacketId() {
+		return getInId(PacketLoginInEncryptionBegin.class);
+	}
+
+	@Override
+	public int getInPlayKeepAlivePacketId() {
+		return getInId(PacketPlayInKeepAlive.class);
+	}
+
+	@Override
+	public int getInPlayChatPacketId() {
+		return getInId(PacketPlayInChat.class);
+	}
+
+	@Override
+	public int getInPlayUseEntityPacketId() {
+		return getInId(PacketPlayInUseEntity.class);
+	}
+
+	@Override
+	public int getInPlayPlayerPacketId() {
+		return getInId(PacketPlayInFlying.class);
+	}
+
+	@Override
+	public int getInPlayPositionPacketId() {
+		return getInId(PacketPlayInPosition.class);
+	}
+
+	@Override
+	public int getInPlayLookPacketId() {
+		return getInId(PacketPlayInLook.class);
+	}
+
+	@Override
+	public int getInPlayPositionLookPacketId() {
+		return getInId(PacketPlayInPositionLook.class);
+	}
+
+	@Override
+	public int getInPlayBlockDigPacketId() {
+		return getInId(PacketPlayInBlockDig.class);
+	}
+
+	@Override
+	public int getInPlayBlockPlacePacketId() {
+		return getInId(PacketPlayInBlockPlace.class);
+	}
+
+	@Override
+	public int getInPlayHeldSlotPacketId() {
+		return getInId(PacketPlayInHeldItemSlot.class);
+	}
+
+	@Override
+	public int getInPlayAnimationPacketId() {
+		return getInId(PacketPlayInArmAnimation.class);
+	}
+
+	@Override
+	public int getInPlayEntityActionPacketId() {
+		return getInId(PacketPlayInEntityAction.class);
+	}
+
+	@Override
+	public int getInPlayMoveVehiclePacketId() {
+		return getInId(PacketPlayInVehicleMove.class);
+	}
+
+	@Override
+	public int getInPlaySteerBoatPacketId() {
+		return getInId(PacketPlayInBoatMove.class);
+	}
+
+	@Override
+	public int getInPlaySteerVehiclePacketId() {
+		return getInId(PacketPlayInSteerVehicle.class);
+	}
+
+	@Override
+	public int getInPlayWindowClosePacketId() {
+		return getInId(PacketPlayInCloseWindow.class);
+	}
+
+	@Override
+	public int getInPlayWindowClickPacketId() {
+		return getInId(PacketPlayInWindowClick.class);
+	}
+
+	@Override
+	public int getInPlayWindowTransactionPacketId() {
+		return getInId(PacketPlayInTransaction.class);
+	}
+
+	@Override
+	public int getInPlayCreativeSetSlotPacketId() {
+		return getInId(PacketPlayInSetCreativeSlot.class);
+	}
+
+	@Override
+	public int getInPlayEnchantSelectPacketId() {
+		return getInId(PacketPlayInEnchantItem.class);
+	}
+
+	@Override
+	public int getInPlayUpdateSignPacketId() {
+		return getInId(PacketPlayInUpdateSign.class);
+	}
+
+	@Override
+	public int getInPlayAbilitiesPacketId() {
+		return getInId(PacketPlayInAbilities.class);
+	}
+
+	@Override
+	public int getInPlayTabCompletePacketId() {
+		return getInId(PacketPlayInTabComplete.class);
+	}
+
+	@Override
+	public int getInPlaySettingsPacketId() {
+		return getInId(PacketPlayInSettings.class);
+	}
+
+	@Override
+	public int getInPlayClientCommandPacketId() {
+		return getInId(PacketPlayInClientCommand.class);
+	}
+
+	@Override
+	public int getInPlayCustomPayloadPacketId() {
+		return getInId(PacketPlayInCustomPayload.class);
+	}
+
+	@Override
+	public int getInPlayUseItemPacketId() {
+		return getInId(PacketPlayInUseItem.class);
+	}
+
+	@Override
+	public int getInPlaySpectatePacketId() {
+		return getInId(PacketPlayInSpectate.class);
+	}
+
+	@Override
+	public int getInPlayResourcePackStatusPacketId() {
+		return getInId(PacketPlayInResourcePackStatus.class);
+	}
+
+	@Override
+	public int getInPlayTeleportAcceptPacketId() {
+		return getInId(PacketPlayInTeleportAccept.class);
+	}
+
+
 	@SuppressWarnings("unchecked")
-	private static final int getOutId(Class<?> packetClass) {
+	private static Map<EnumProtocolDirection, BiMap<Integer, Class<? extends Packet<?>>>> getPacketIdMap(Class<?> packetClass) {
 		Map<Class<? extends Packet<?>>, EnumProtocol> protocolMap = null;
 		try {
 			protocolMap = (Map<Class<? extends Packet<?>>, EnumProtocol>) ReflectionUtils.setAccessible(EnumProtocol.class.getDeclaredField("f")).get(null);
 		} catch (Throwable t) {
-			SneakyThrow.sneaky(t);
+			throw new RuntimeException("Unable to get packet id map", t);
 		}
 		EnumProtocol protocol = protocolMap.get(packetClass);
-		Map<EnumProtocolDirection, BiMap<Integer, Class<? extends Packet<?>>>> idMap = null;
 		try {
-			idMap = (Map<EnumProtocolDirection, BiMap<Integer, Class<? extends Packet<?>>>>) ReflectionUtils.setAccessible(EnumProtocol.class.getDeclaredField("h")).get(protocol);
+			return (Map<EnumProtocolDirection, BiMap<Integer, Class<? extends Packet<?>>>>) ReflectionUtils.setAccessible(EnumProtocol.class.getDeclaredField("h")).get(protocol);
 		} catch (Throwable t) {
-			SneakyThrow.sneaky(t);
+			throw new RuntimeException("Unable to get packet id map", t);
 		}
-		return idMap.get(EnumProtocolDirection.CLIENTBOUND).inverse().get(packetClass);
+	}
+
+	private static final int getOutId(Class<?> packetClass) {
+		return getPacketIdMap(packetClass).get(EnumProtocolDirection.CLIENTBOUND).inverse().get(packetClass);
+	}
+
+	private static final int getInId(Class<?> packetClass) {
+		return getPacketIdMap(packetClass).get(EnumProtocolDirection.SERVERBOUND).inverse().get(packetClass);
 	}
 
 }
