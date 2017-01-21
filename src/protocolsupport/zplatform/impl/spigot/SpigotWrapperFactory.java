@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import org.bukkit.Material;
 
+import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.zplatform.PlatformWrapperFactory;
 import protocolsupport.zplatform.impl.spigot.itemstack.SpigotItemStackWrapper;
 import protocolsupport.zplatform.impl.spigot.itemstack.SpigotNBTTagCompoundWrapper;
@@ -14,8 +15,6 @@ import protocolsupport.zplatform.impl.spigot.network.handler.SpigotModernHandsha
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
-import protocolsupport.zplatform.network.LegacyHandshakeListener;
-import protocolsupport.zplatform.network.ModernHandshakeListener;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class SpigotWrapperFactory implements PlatformWrapperFactory {
@@ -62,12 +61,12 @@ public class SpigotWrapperFactory implements PlatformWrapperFactory {
 	}
 
 	@Override
-	public ModernHandshakeListener createModernHandshakeListener(NetworkManagerWrapper networkmanager, boolean hasCompression) {
+	public AbstractHandshakeListener createModernHandshakeListener(NetworkManagerWrapper networkmanager, boolean hasCompression) {
 		return new SpigotModernHandshakeListener(networkmanager, hasCompression);
 	}
 
 	@Override
-	public LegacyHandshakeListener createLegacyHandshakeListener(NetworkManagerWrapper networkmanager) {
+	public AbstractHandshakeListener createLegacyHandshakeListener(NetworkManagerWrapper networkmanager) {
 		return new SpigotLegacyHandshakeListener(networkmanager);
 	}
 
