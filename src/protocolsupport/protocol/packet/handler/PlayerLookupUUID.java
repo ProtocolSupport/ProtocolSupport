@@ -39,13 +39,8 @@ public class PlayerLookupUUID {
 				return;
 			}
 			String hash = new BigInteger(MinecraftEncryption.createHash(ServerPlatform.get().getMiscUtils().getEncryptionKeyPair().getPublic(), listener.loginKey)).toString(16);
-			listener.profile = MinecraftSessionService.hasJoinedServer(listener.profile, hash);
-			if (listener.profile != null) {
-				fireLoginEvents();
-			} else {
-				listener.disconnect("Failed to verify username!");
-				Bukkit.getLogger().severe("Username '" + joinName + "' tried to join with an invalid session");
-			}
+			listener.profile = MinecraftSessionService.hasJoinedServer(joinName, hash);
+			fireLoginEvents();
 		} catch (AuthenticationUnavailableException authenticationunavailableexception) {
 			listener.disconnect("Authentication servers are down. Please try again later, sorry!");
 			Bukkit.getLogger().severe("Couldn't verify username because servers are unavailable");
