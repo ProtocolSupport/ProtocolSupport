@@ -11,7 +11,7 @@ public class Title extends MiddleTitle<RecyclableCollection<ClientBoundPacketDat
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_TITLE, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_TITLE_ID, version);
 		serializer.writeVarInt(action.ordinal());
 		switch (action) {
 			case SET_TITLE: {

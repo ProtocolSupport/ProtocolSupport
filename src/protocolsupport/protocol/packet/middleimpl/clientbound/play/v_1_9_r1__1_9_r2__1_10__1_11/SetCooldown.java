@@ -11,7 +11,7 @@ public class SetCooldown extends MiddleSetCooldown<RecyclableCollection<ClientBo
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SET_COOLDOWN, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SET_COOLDOWN_ID, version);
 		serializer.writeVarInt(itemId);
 		serializer.writeVarInt(cooldown);
 		return RecyclableSingletonList.create(serializer);

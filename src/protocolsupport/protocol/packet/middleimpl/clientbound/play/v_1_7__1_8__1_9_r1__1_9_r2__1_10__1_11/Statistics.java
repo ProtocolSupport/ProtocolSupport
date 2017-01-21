@@ -11,7 +11,7 @@ public class Statistics extends MiddleStatistics<RecyclableCollection<ClientBoun
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_STATISTICS, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_STATISTICS_ID, version);
 		serializer.writeVarInt(statistics.length);
 		for (Statistic stat : statistics) {
 			serializer.writeString(stat.name);

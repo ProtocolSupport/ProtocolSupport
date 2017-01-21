@@ -12,7 +12,7 @@ public class WorldSound extends MiddleWorldSound<RecyclableCollection<ClientBoun
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_CUSTOM_SOUND, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_CUSTOM_SOUND_ID, version);
 		String soundname = LegacySound.getLegacySoundName(id);
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_7_5)) {
 			soundname = LegacySound.getLegacySoundName(soundname);

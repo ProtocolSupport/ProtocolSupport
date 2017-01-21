@@ -11,7 +11,7 @@ public class UnloadChunk extends MiddleUnloadChunk<RecyclableCollection<ClientBo
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_UNLOAD, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_UNLOAD_ID, version);
 		serializer.writeInt(chunkX);
 		serializer.writeInt(chunkZ);
 		return RecyclableSingletonList.create(serializer);

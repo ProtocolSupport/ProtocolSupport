@@ -11,7 +11,7 @@ public class BossBar extends MiddleBossBar<RecyclableCollection<ClientBoundPacke
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BOSS_BAR, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BOSS_BAR_ID, version);
 		serializer.writeUUID(uuid);
 		serializer.writeEnum(action);
 		switch (action) {

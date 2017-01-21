@@ -16,7 +16,7 @@ public class Title extends MiddleTitle<RecyclableCollection<ClientBoundPacketDat
 		if (action == Action.SET_ACTION_BAR) {
 			return RecyclableEmptyList.get();
 		}
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_TITLE, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_TITLE_ID, version);
 		int actionId = action.ordinal();
 		serializer.writeVarInt(actionId > 2 ? actionId - 1 : actionId);
 		switch (action) {

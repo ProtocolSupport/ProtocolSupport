@@ -11,7 +11,7 @@ public class VehicleMove extends MiddleVehicleMove<RecyclableCollection<ClientBo
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_VEHICLE_MOVE, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_VEHICLE_MOVE_ID, version);
 		serializer.writeDouble(x);
 		serializer.writeDouble(y);
 		serializer.writeDouble(z);

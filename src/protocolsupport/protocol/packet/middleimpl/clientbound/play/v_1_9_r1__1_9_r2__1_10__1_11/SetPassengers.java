@@ -11,7 +11,7 @@ public class SetPassengers extends MiddleSetPassengers<RecyclableCollection<Clie
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SET_PASSENGERS, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SET_PASSENGERS_ID, version);
 		serializer.writeVarInt(vehicleId);
 		serializer.writeVarInt(passengersIds.length);
 		for (int passengerId : passengersIds) {

@@ -11,7 +11,7 @@ public class CombatEvent extends MiddleCombatEvent<RecyclableCollection<ClientBo
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_COMBAT_EVENT, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_COMBAT_EVENT_ID, version);
 		serializer.writeEnum(type);
 		switch (type) {
 			case ENTER_COMBAT: {

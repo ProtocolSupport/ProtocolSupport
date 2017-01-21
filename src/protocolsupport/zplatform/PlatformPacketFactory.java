@@ -45,4 +45,169 @@ public interface PlatformPacketFactory {
 
 	public Object createFakeJoinGamePacket();
 
+
+	public int getOutLoginDisconnectPacketId();
+
+	public int getOutLoginEncryptionBeginPacketId();
+
+	public int getOutLoginSuccessPacketId();
+
+	public int getOutLoginSetCompressionPacketId();
+
+	public int getOutStatusServerInfoPacketId();
+
+	public int getOutStatusPongPacketId();
+
+	public int getOutPlayKeepAlivePacketId();
+
+	public int getOutPlayLoginPacketId();
+
+	public int getOutPlayChatPacketId();
+
+	public int getOutPlayUpdateTimePacketId();
+
+	public int getOutPlayEntityEquipmentPacketId();
+
+	public int getOutPlaySpawnPositionPacketId();
+
+	public int getOutPlayUpdateHealthPacketId();
+
+	public int getOutPlayRespawnPacketId();
+
+	public int getOutPlayPositionPacketId();
+
+	public int getOutPlayHeldSlotPacketId();
+
+	public int getOutPlayBedPacketId();
+
+	public int getOutPlayAnimationPacketId();
+
+	public int getOutPlaySpawnNamedPacketId();
+
+	public int getOutPlayCollectEffectPacketId();
+
+	public int getOutPlaySpawnObjectPacketId();
+
+	public int getOutPlaySpawnLivingPacketId();
+
+	public int getOutPlaySpawnPaintingPacketId();
+
+	public int getOutPlaySpawnExpOrbPacketId();
+
+	public int getOutPlayEntityVelocityPacketId();
+
+	public int getOutPlayEntityDestroyPacketId();
+
+	public int getOutPlayEntityPacketId();
+
+	public int getOutPlayEntityRelMovePacketId();
+
+	public int getOutPlayEntityLookPacketId();
+
+	public int getOutPlayEntityRelMoveLookPacketId();
+
+	public int getOutPlayEntityTeleportPacketId();
+
+	public int getOutPlayEntityHeadRotationPacketId();
+
+	public int getOutPlayEntityStatusPacketId();
+
+	public int getOutPlayEntityLeashPacketId();
+
+	public int getOutPlayEntityMetadataPacketId();
+
+	public int getOutPlayEntityEffectAddPacketId();
+
+	public int getOutPlayEntityEffectRemovePacketId();
+
+	public int getOutPlayExperiencePacketId();
+
+	public int getOutPlayEntityAttributesPacketId();
+
+	public int getOutPlayChunkSinglePacketId();
+
+	public int getOutPlayBlockChangeMultiPacketId();
+
+	public int getOutPlayBlockChangeSinglePacketId();
+
+	public int getOutPlayBlockActionPacketId();
+
+	public int getOutPlayBlockBreakAnimationPacketId();
+
+	public int getOutPlayExplosionPacketId();
+
+	public int getOutPlayWorldEventPacketId();
+
+	public int getOutPlayWorldSoundPacketId();
+
+	public int getOutPlayWorldParticlesPacketId();
+
+	public int getOutPlayGameStateChangePacketId();
+
+	public int getOutPlaySpawnWeatherPacketId();
+
+	public int getOutPlayWindowOpenPacketId();
+
+	public int getOutPlayWindowClosePacketId();
+
+	public int getOutPlayWindowSetSlotPacketId();
+
+	public int getOutPlayWindowSetItemsPacketId();
+
+	public int getOutPlayWindowDataPacketId();
+
+	public int getOutPlayWindowTransactionPacketId();
+
+	public int getOutPlayMapPacketId();
+
+	public int getOutPlayUpdateTilePacketId();
+
+	public int getOutPlaySignEditorPacketId();
+
+	public int getOutPlayStatisticsPacketId();
+
+	public int getOutPlayPlayerInfoPacketId();
+
+	public int getOutPlayAbilitiesPacketId();
+
+	public int getOutPlayTabCompletePacketId();
+
+	public int getOutPlayScoreboardObjectivePacketId();
+
+	public int getOutPlayScoreboardScorePacketId();
+
+	public int getOutPlayScoreboardDisplaySlotPacketId();
+
+	public int getOutPlayScoreboardTeamPacketId();
+
+	public int getOutPlayCustomPayloadPacketId();
+
+	public int getOutPlayKickDisconnectPacketId();
+
+	public int getOutPlayResourcePackPacketId();
+
+	public int getOutPlayCameraPacketId();
+
+	public int getOutPlayWorldBorderPacketId();
+
+	public int getOutPlayTitlePacketId();
+
+	public int getOutPlayPlayerListHeaderFooterPacketId();
+
+	public int getOutPlaySetPassengersPacketId();
+
+	public int getOutPlayChunkUnloadPacketId();
+
+	public int getOutPlayWorldCustomSoundPacketId();
+
+	public int getOutPlayServerDifficultyPacketId();
+
+	public int getOutPlayCombatEventPacketId();
+
+	public int getOutPlayBossBarPacketId();
+
+	public int getOutPlaySetCooldownPacketId();
+
+	public int getOutPlayVehicleMovePacketId();
+
 }
