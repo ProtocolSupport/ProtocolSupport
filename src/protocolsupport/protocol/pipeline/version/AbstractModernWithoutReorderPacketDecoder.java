@@ -9,7 +9,7 @@ import protocolsupport.api.Connection;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
-import protocolsupport.zplatform.network.NetworkListenerState;
+import protocolsupport.zplatform.ServerPlatform;
 
 public class AbstractModernWithoutReorderPacketDecoder extends AbstractPacketDecoder {
 
@@ -25,7 +25,7 @@ public class AbstractModernWithoutReorderPacketDecoder extends AbstractPacketDec
 			return;
 		}
 		serializer.setBuf(input);
-		ServerBoundMiddlePacket packetTransformer = registry.getTransformer(NetworkListenerState.getFromChannel(ctx.channel()), serializer.readVarInt());
+		ServerBoundMiddlePacket packetTransformer = registry.getTransformer(ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(ctx.channel()), serializer.readVarInt());
 		packetTransformer.readFromClientData(serializer);
 		if (serializer.isReadable()) {
 			throw new DecoderException("Did not read all data from packet " + packetTransformer.getClass().getName() + ", bytes left: " + serializer.readableBytes());

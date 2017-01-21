@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 
+import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 
@@ -21,7 +22,7 @@ public class GameProfileSerializer {
 	private static final String PROPERTY_SIGNATURE_KEY = "Signature";
 
 	public static NBTTagCompoundWrapper serialize(GameProfile gameProfile) {
-		NBTTagCompoundWrapper tag = NBTTagCompoundWrapper.createEmpty();
+		NBTTagCompoundWrapper tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
 		if (!StringUtils.isEmpty(gameProfile.getName())) {
 			tag.setString(NAME_KEY, gameProfile.getName());
 		}
@@ -29,11 +30,11 @@ public class GameProfileSerializer {
 			tag.setString(UUID_KEY, gameProfile.getId().toString());
 		}
 		if (!gameProfile.getProperties().isEmpty()) {
-			NBTTagCompoundWrapper propertiesTag = NBTTagCompoundWrapper.createEmpty();
+			NBTTagCompoundWrapper propertiesTag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
 			for (Entry<String, Collection<Property>> entry : gameProfile.getProperties().asMap().entrySet()) {
-				NBTTagListWrapper keyNamePropertiesTag = NBTTagListWrapper.create();
+				NBTTagListWrapper keyNamePropertiesTag = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
 				for (Property property : entry.getValue()) {
-					NBTTagCompoundWrapper propertyTag = NBTTagCompoundWrapper.createEmpty();
+					NBTTagCompoundWrapper propertyTag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
 					propertyTag.setString(PROPERTY_VALUE_KEY, property.getValue());
 					if (property.hasSignature()) {
 						propertyTag.setString(PROPERTY_SIGNATURE_KEY, property.getSignature());

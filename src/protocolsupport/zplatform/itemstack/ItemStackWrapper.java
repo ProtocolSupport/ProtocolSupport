@@ -1,42 +1,9 @@
 package protocolsupport.zplatform.itemstack;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.impl.spigot.itemstack.SpigotItemStackWrapper;
-
 public abstract class ItemStackWrapper {
-
-	public static ItemStackWrapper createNull() {
-		switch (ServerPlatform.get()) {
-			case SPIGOT: {
-				return SpigotItemStackWrapper.createNull();
-			}
-			default: {
-				//TODO: implement for glowstone
-				throw new NotImplementedException("Not implemented yet");
-			}
-		}
-	}
-
-	@SuppressWarnings("deprecation")
-	public static ItemStackWrapper create(Material material) {
-		return ItemStackWrapper.create(material.getId());
-	}
-
-	public static ItemStackWrapper create(int typeId) {
-		switch (ServerPlatform.get()) {
-			case SPIGOT: {
-				return SpigotItemStackWrapper.create(typeId);
-			}
-			default: {
-				//TODO: implement for glowstone
-				throw new NotImplementedException("Not implemented yet");
-			}
-		}
-	}
 
 	public abstract ItemStack asBukkitMirror();
 

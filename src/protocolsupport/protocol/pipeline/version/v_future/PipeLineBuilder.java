@@ -7,7 +7,7 @@ import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.IPipeLineBuilder;
 import protocolsupport.protocol.pipeline.common.VarIntFrameDecoder;
 import protocolsupport.protocol.pipeline.common.VarIntFrameEncoder;
-import protocolsupport.zplatform.network.ModernHandshakeListener;
+import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class PipeLineBuilder implements IPipeLineBuilder {
@@ -15,8 +15,8 @@ public class PipeLineBuilder implements IPipeLineBuilder {
 	@Override
 	public void buildPipeLine(Channel channel, Connection connection) {
 		ChannelPipeline pipeline = channel.pipeline();
-		NetworkManagerWrapper networkmanager = NetworkManagerWrapper.getFromChannel(channel);
-		networkmanager.setPacketListener(ModernHandshakeListener.create(networkmanager, true));
+		NetworkManagerWrapper networkmanager = ServerPlatform.get().getMiscUtils().getNetworkManagerFromChannel(channel);
+		networkmanager.setPacketListener(ServerPlatform.get().getWrapperFactory().createModernHandshakeListener(networkmanager, true));
 		ChannelHandlers.getSplitter(pipeline).setRealSplitter(new VarIntFrameDecoder());
 		ChannelHandlers.getPrepender(pipeline).setRealPrepender(new VarIntFrameEncoder());
 	}

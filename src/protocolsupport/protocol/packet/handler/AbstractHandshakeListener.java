@@ -20,7 +20,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.protocol.storage.ThrottleTracker;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.network.NetworkListenerState;
+import protocolsupport.zplatform.network.NetworkState;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public abstract class AbstractHandshakeListener {
@@ -33,10 +33,10 @@ public abstract class AbstractHandshakeListener {
 	}
 
 	@SuppressWarnings({ "unchecked", "deprecation" })
-	public void handleSetProtocol(int clientVersion, NetworkListenerState nextState, String hostname, int port) {
+	public void handleSetProtocol(int clientVersion, NetworkState nextState, String hostname, int port) {
 		switch (nextState) {
 			case LOGIN: {
-				networkManager.setProtocol(NetworkListenerState.LOGIN);
+				networkManager.setProtocol(NetworkState.LOGIN);
 				//check connection throttle
 				try {
 					final InetAddress address = networkManager.getAddress().getAddress();
@@ -100,7 +100,7 @@ public abstract class AbstractHandshakeListener {
 			}
 			case STATUS: {
 				//switch to status stage
-				networkManager.setProtocol(NetworkListenerState.STATUS);
+				networkManager.setProtocol(NetworkState.STATUS);
 				networkManager.setPacketListener(getStatusListener(networkManager));
 				break;
 			}

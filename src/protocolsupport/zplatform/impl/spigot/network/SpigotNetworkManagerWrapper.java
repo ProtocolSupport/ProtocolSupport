@@ -21,7 +21,7 @@ import net.minecraft.server.v1_11_R1.PacketListener;
 import net.minecraft.server.v1_11_R1.PlayerConnection;
 import protocolsupport.protocol.packet.handler.IHasProfile;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
-import protocolsupport.zplatform.network.NetworkListenerState;
+import protocolsupport.zplatform.network.NetworkState;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
@@ -81,7 +81,7 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 	}
 
 	@Override
-	public void setProtocol(NetworkListenerState state) {
+	public void setProtocol(NetworkState state) {
 		internal.setProtocol(EnumProtocol.values()[state.ordinal()]);
 	}
 

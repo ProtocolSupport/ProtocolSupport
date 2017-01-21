@@ -14,7 +14,8 @@ import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.MessageToMessageEncoder;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.zplatform.network.NetworkListenerState;
+import protocolsupport.zplatform.ServerPlatform;
+import protocolsupport.zplatform.network.NetworkState;
 
 public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<ByteBuf> {
 
@@ -38,7 +39,7 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 
 	@Override
 	public void encode(ChannelHandlerContext ctx, ByteBuf packet, List<Object> output) throws InstantiationException, IllegalAccessException  {
-		NetworkListenerState currentProtocol = NetworkListenerState.getFromChannel(ctx.channel());
+		NetworkState currentProtocol = ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(ctx.channel());
 		middlebuffer.setBuf(packet);
 		int packetId = middlebuffer.readVarInt();
 		ClientBoundMiddlePacket<RecyclableCollection<ClientBoundPacketData>> packetTransformer = registry.getTransformer(currentProtocol, packetId);
@@ -59,6 +60,6 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 		}
 	}
 
-	protected abstract int getNewPacketId(NetworkListenerState currentProtocol, int oldPacketId);
+	protected abstract int getNewPacketId(NetworkState currentProtocol, int oldPacketId);
 
 }

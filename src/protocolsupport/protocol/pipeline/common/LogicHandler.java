@@ -18,6 +18,7 @@ import protocolsupport.api.events.PlayerDisconnectEvent;
 import protocolsupport.logger.AsyncErrorLogger;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.storage.ProtocolStorage;
+import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class LogicHandler extends ChannelDuplexHandler {
@@ -68,7 +69,7 @@ public class LogicHandler extends ChannelDuplexHandler {
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		super.channelInactive(ctx);
-		NetworkManagerWrapper networkmanager = NetworkManagerWrapper.getFromChannel(ctx.channel());
+		NetworkManagerWrapper networkmanager = ServerPlatform.get().getMiscUtils().getNetworkManagerFromChannel(ctx.channel());
 		InetSocketAddress addr = networkmanager.getAddress();
 		Connection connection = ProtocolStorage.getConnection(addr);
 		String username = networkmanager.getUserName();

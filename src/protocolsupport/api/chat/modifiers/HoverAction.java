@@ -41,7 +41,7 @@ public class HoverAction {
 	@SuppressWarnings("deprecation")
 	public HoverAction(EntityInfo entityinfo) {
 		this.type = Type.SHOW_ENTITY;
-		NBTTagCompoundWrapper compound = NBTTagCompoundWrapper.createEmpty();
+		NBTTagCompoundWrapper compound = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
 		compound.setString("type", entityinfo.getType().getName());
 		compound.setString("id", entityinfo.getUUID().toString());
 		compound.setString("name", entityinfo.getName());
@@ -73,13 +73,13 @@ public class HoverAction {
 
 	public ItemStack getItemStack() {
 		validateAction(type, Type.SHOW_ITEM);
-		return ServerPlatform.get().getMiscUtils().createItemStackFromNBTTag(NBTTagCompoundWrapper.fromJson(value));
+		return ServerPlatform.get().getMiscUtils().createItemStackFromNBTTag(ServerPlatform.get().getWrapperFactory().createNBTCompoundFromJson(value));
 	}
 
 	@SuppressWarnings("deprecation")
 	public EntityInfo getEntity() {
 		validateAction(type, Type.SHOW_ENTITY);
-		NBTTagCompoundWrapper compound = NBTTagCompoundWrapper.fromJson(value);
+		NBTTagCompoundWrapper compound = ServerPlatform.get().getWrapperFactory().createNBTCompoundFromJson(value);
 		return new EntityInfo(EntityType.fromName(compound.getString("type")), UUID.fromString(compound.getString("id")), compound.getString("name"));
 	}
 

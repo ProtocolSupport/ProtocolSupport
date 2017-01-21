@@ -12,6 +12,7 @@ import protocolsupport.protocol.pipeline.wrapped.WrappedSplitter;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
+import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.impl.spigot.SpigotConnectionImpl;
 import protocolsupport.zplatform.impl.spigot.network.handler.SpigotFakePacketListener;
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketDecoder;
@@ -24,7 +25,7 @@ public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 
 	@Override
 	protected void initChannel(Channel channel) {
-		NetworkManagerWrapper networkmanager = NetworkManagerWrapper.getFromChannel(channel);
+		NetworkManagerWrapper networkmanager = ServerPlatform.get().getMiscUtils().getNetworkManagerFromChannel(channel);
 		networkmanager.setPacketListener(new SpigotFakePacketListener());
 		SpigotConnectionImpl connection = new SpigotConnectionImpl(networkmanager);
 		connection.storeInChannel(channel);

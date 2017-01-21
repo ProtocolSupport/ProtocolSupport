@@ -1,23 +1,6 @@
 package protocolsupport.zplatform.itemstack;
 
-import org.apache.commons.lang3.NotImplementedException;
-
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.impl.spigot.itemstack.SpigotNBTTagListWrapper;
-
 public abstract class NBTTagListWrapper {
-
-	public static NBTTagListWrapper create() {
-		switch (ServerPlatform.get()) {
-			case SPIGOT: {
-				return SpigotNBTTagListWrapper.create();
-			}
-			default: {
-				//TODO: implement for glowstone
-				throw new NotImplementedException("Not implemented yet");
-			}
-		}
-	}
 
 	public abstract boolean isEmpty();
 

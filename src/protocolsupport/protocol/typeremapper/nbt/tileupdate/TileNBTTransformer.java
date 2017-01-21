@@ -55,7 +55,7 @@ public class TileNBTTransformer {
 		register(TileEntityUpdateType.MOB_SPAWNER,
 			(version, input) -> {
 				if (!input.hasKeyOfType("SpawnData", NBTTagCompoundWrapper.TYPE_COMPOUND)) {
-					NBTTagCompoundWrapper spawndata = NBTTagCompoundWrapper.createEmpty();
+					NBTTagCompoundWrapper spawndata = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
 					spawndata.setString("id", "minecraft:pig");
 					input.setCompound("SpawnData", spawndata);
 				}

@@ -12,7 +12,7 @@ import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ReplayingProtocolSupportSupportPacketDataSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
-import protocolsupport.zplatform.network.NetworkListenerState;
+import protocolsupport.zplatform.ServerPlatform;
 
 public class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
 
@@ -44,7 +44,7 @@ public class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
 	private boolean decode0(Channel channel, List<Object> list) throws InstantiationException, IllegalAccessException {
 		serializer.markReaderIndex();
 		try {
-			ServerBoundMiddlePacket packetTransformer = registry.getTransformer(NetworkListenerState.getFromChannel(channel), serializer.readUnsignedByte());
+			ServerBoundMiddlePacket packetTransformer = registry.getTransformer(ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(channel), serializer.readUnsignedByte());
 			packetTransformer.readFromClientData(serializer);
 			addPackets(animateReorderer.orderPackets(packetTransformer.toNative()), list);
 			packetTransformer = null;

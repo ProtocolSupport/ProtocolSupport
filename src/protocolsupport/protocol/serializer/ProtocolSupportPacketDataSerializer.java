@@ -202,14 +202,14 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 	public ItemStackWrapper readItemStack() {
 		int type = readShort();
 		if (type >= 0) {
-			ItemStackWrapper itemstack = ItemStackWrapper.create(type);
+			ItemStackWrapper itemstack = ServerPlatform.get().getWrapperFactory().createItemStack(type);
 			itemstack.setTypeId(type);
 			itemstack.setAmount(readByte());
 			itemstack.setData(readShort());
 			itemstack.setTag(readTag());
 			return itemstack;
 		}
-		return ItemStackWrapper.createNull();
+		return ServerPlatform.get().getWrapperFactory().createNullItemStack();
 	}
 
 	public void writeItemStack(ItemStackWrapper itemstack) {
@@ -229,19 +229,19 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_8)) {
 				final short length = readShort();
 				if (length < 0) {
-					return NBTTagCompoundWrapper.createNull();
+					return ServerPlatform.get().getWrapperFactory().createNullNBTCompound();
 				}
 				try (DataInputStream datainputstream = new DataInputStream(new GZIPInputStream(new ByteBufInputStream(readSlice(length))))) {
-					return NBTTagCompoundWrapper.fromStream(datainputstream);
+					return ServerPlatform.get().getWrapperFactory().createNBTCompoundFromStream(datainputstream);
 				}
 			} else {
 				markReaderIndex();
 				if (readByte() == 0) {
-					return NBTTagCompoundWrapper.createNull();
+					return ServerPlatform.get().getWrapperFactory().createNullNBTCompound();
 				}
 				resetReaderIndex();
 				try (DataInputStream datainputstream = new DataInputStream(new ByteBufInputStream(this))) {
-					return NBTTagCompoundWrapper.fromStream(datainputstream);
+					return ServerPlatform.get().getWrapperFactory().createNBTCompoundFromStream(datainputstream);
 				}
 			}
 		} catch (IOException e) {
@@ -285,7 +285,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 		for (int i = 0; i < count; i++) {
 			ItemStackWrapper itemstack1 = readItemStack();
 			ItemStackWrapper result = readItemStack();
-			ItemStackWrapper itemstack2 = ItemStackWrapper.createNull();
+			ItemStackWrapper itemstack2 = ServerPlatform.get().getWrapperFactory().createNullItemStack();
 			if (readBoolean()) {
 				itemstack2 = readItemStack();
 			}
@@ -331,7 +331,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 		Material item = itemstack.getType();
 		if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9) && (item == Material.SKULL_ITEM) && (itemstack.getData() == 5)) {
 			itemstack.setData(3);
-			NBTTagCompoundWrapper wrapper = NBTTagCompoundWrapper.createEmpty();
+			NBTTagCompoundWrapper wrapper = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
 			wrapper.setCompound("SkullOwner", createDragonHeadSkullTag());
 			itemstack.setTag(wrapper);
 		}
@@ -340,7 +340,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_8) && (item == Material.WRITTEN_BOOK)) {
 				if (nbttagcompound.hasKeyOfType("pages", NBTTagCompoundWrapper.TYPE_LIST)) {
 					NBTTagListWrapper pages = nbttagcompound.getList("pages", NBTTagCompoundWrapper.TYPE_STRING);
-					NBTTagListWrapper newpages = NBTTagListWrapper.create();
+					NBTTagListWrapper newpages = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
 					for (int i = 0; i < pages.size(); i++) {
 						newpages.addString(ChatAPI.fromJSON(pages.getString(i)).toLegacyText());
 					}
@@ -400,7 +400,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 
 	private NBTTagListWrapper filterEnchantList(NBTTagListWrapper oldList) {
 		IntSkippingTable enchSkip = IdSkipper.ENCHANT.getTable(getVersion());
-		NBTTagListWrapper newList = NBTTagListWrapper.create();
+		NBTTagListWrapper newList = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
 		for (int i = 0; i < oldList.size(); i++) {
 			NBTTagCompoundWrapper enchData = oldList.getCompound(i);
 			if (!enchSkip.shouldSkip(enchData.getNumber("id") & 0xFFFF)) {

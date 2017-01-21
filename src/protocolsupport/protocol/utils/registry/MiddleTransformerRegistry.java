@@ -2,17 +2,17 @@ package protocolsupport.protocol.utils.registry;
 
 import java.util.NoSuchElementException;
 
-import protocolsupport.zplatform.network.NetworkListenerState;
+import protocolsupport.zplatform.network.NetworkState;
 
 @SuppressWarnings("unchecked")
 public class MiddleTransformerRegistry<T> {
 
-	private static final int listenerStateLength = NetworkListenerState.values().length;
+	private static final int listenerStateLength = NetworkState.values().length;
 
 	private final LazyNewInstance<T>[] registry = new LazyNewInstance[listenerStateLength * 256];
 	private InitCallBack<T> callback;
 
-	public void register(NetworkListenerState state, int packetId, Class<? extends T> packetTransformer) {
+	public void register(NetworkState state, int packetId, Class<? extends T> packetTransformer) {
 		registry[toKey(state, packetId)] = new LazyNewInstance<>(packetTransformer);
 	}
 
@@ -20,7 +20,7 @@ public class MiddleTransformerRegistry<T> {
 		this.callback = callback;
 	}
 
-	public T getTransformer(NetworkListenerState state, int packetId) throws InstantiationException, IllegalAccessException {
+	public T getTransformer(NetworkState state, int packetId) throws InstantiationException, IllegalAccessException {
 		LazyNewInstance<T> transformer = registry[toKey(state, packetId)];
 		if (transformer == null) {
 			throw new NoSuchElementException("No transformer found for state " + state + " and packet id " + packetId);
@@ -47,7 +47,7 @@ public class MiddleTransformerRegistry<T> {
 		}
 	}
 
-	static int toKey(NetworkListenerState protocol, int packetId) {
+	static int toKey(NetworkState protocol, int packetId) {
 		return (protocol.ordinal() << 8) | packetId;
 	}
 

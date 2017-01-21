@@ -28,33 +28,31 @@ import net.minecraft.server.v1_11_R1.NetworkManager;
 import net.minecraft.server.v1_11_R1.SoundEffect;
 import protocolsupport.zplatform.PlatformUtils;
 import protocolsupport.zplatform.impl.spigot.itemstack.SpigotNBTTagCompoundWrapper;
+import protocolsupport.zplatform.impl.spigot.network.SpigotNetworkManagerWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.network.NetworkListenerState;
+import protocolsupport.zplatform.network.NetworkManagerWrapper;
+import protocolsupport.zplatform.network.NetworkState;
 
 public class SpigotMiscUtils implements PlatformUtils {
 
-	public static NetworkListenerState netStateFromEnumProtocol(EnumProtocol state) {
+	public static NetworkState netStateFromEnumProtocol(EnumProtocol state) {
 		switch (state) {
 			case HANDSHAKING: {
-				return NetworkListenerState.HANDSHAKING;
+				return NetworkState.HANDSHAKING;
 			}
 			case PLAY: {
-				return NetworkListenerState.PLAY;
+				return NetworkState.PLAY;
 			}
 			case LOGIN: {
-				return NetworkListenerState.LOGIN;
+				return NetworkState.LOGIN;
 			}
 			case STATUS: {
-				return NetworkListenerState.STATUS;
+				return NetworkState.STATUS;
 			}
 			default: {
 				throw new IllegalArgumentException("Unknown state " + state);
 			}
 		}
-	}
-
-	public static NetworkListenerState getNetStateFromChannel(Channel channel) {
-		return netStateFromEnumProtocol(channel.attr(NetworkManager.c).get());
 	}
 
 	public static MinecraftServer getServer() {
@@ -162,6 +160,16 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	public String getPotionEffectNameById(int id) {
 		return MobEffectList.REGISTRY.b(MobEffectList.fromId(id)).toString();
+	}
+
+	@Override
+	public NetworkState getNetworkStateFromChannel(Channel channel) {
+		return netStateFromEnumProtocol(channel.attr(NetworkManager.c).get());
+	}
+
+	@Override
+	public NetworkManagerWrapper getNetworkManagerFromChannel(Channel channel) {
+		return SpigotNetworkManagerWrapper.getFromChannel(channel);
 	}
 
 }

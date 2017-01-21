@@ -8,7 +8,7 @@ import protocolsupport.protocol.pipeline.IPipeLineBuilder;
 import protocolsupport.protocol.pipeline.common.NoOpFrameDecoder;
 import protocolsupport.protocol.pipeline.common.NoOpFrameEncoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
-import protocolsupport.zplatform.network.LegacyHandshakeListener;
+import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class PipeLineBuilder implements IPipeLineBuilder {
@@ -16,8 +16,8 @@ public class PipeLineBuilder implements IPipeLineBuilder {
 	@Override
 	public void buildPipeLine(Channel channel, Connection connection) {
 		ChannelPipeline pipeline = channel.pipeline();
-		NetworkManagerWrapper networkmanager = NetworkManagerWrapper.getFromChannel(channel);
-		networkmanager.setPacketListener(LegacyHandshakeListener.create(networkmanager));
+		NetworkManagerWrapper networkmanager = ServerPlatform.get().getMiscUtils().getNetworkManagerFromChannel(channel);
+		networkmanager.setPacketListener(ServerPlatform.get().getWrapperFactory().createLegacyHandshakeListener(networkmanager));
 		ChannelHandlers.getSplitter(pipeline).setRealSplitter(new NoOpFrameDecoder());
 		ChannelHandlers.getPrepender(pipeline).setRealPrepender(new NoOpFrameEncoder());
 		NetworkDataCache sharedstorage = new NetworkDataCache();

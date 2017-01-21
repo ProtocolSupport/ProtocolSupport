@@ -4,14 +4,15 @@ import org.spigotmc.SpigotConfig;
 
 import net.minecraft.server.v1_11_R1.NetworkManager;
 import protocolsupport.zplatform.impl.spigot.SpigotPacketFactory;
+import protocolsupport.zplatform.impl.spigot.SpigotWrapperFactory;
 import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
 import protocolsupport.zplatform.impl.spigot.injector.SpigotPlatformInjector;
 
 public enum ServerPlatform {
 
-	SPIGOT(new SpigotPlatformInjector(), new SpigotMiscUtils(), new SpigotPacketFactory()),
-	GLOWSTONE(null, null, null),
-	UNKNOWN(null, null, null);
+	SPIGOT(new SpigotPlatformInjector(), new SpigotMiscUtils(), new SpigotPacketFactory(), new SpigotWrapperFactory()),
+	GLOWSTONE(null, null, null, null), //TODO: implement for GlowStone
+	UNKNOWN(null, null, null, null);
 
 	private static ServerPlatform current;
 
@@ -39,10 +40,12 @@ public enum ServerPlatform {
 	private final PlatformInjector injector;
 	private final PlatformUtils miscutils;
 	private final PlatformPacketFactory packetfactory;
-	ServerPlatform(PlatformInjector injector, PlatformUtils miscutils, PlatformPacketFactory packetfactory) {
+	private final PlatformWrapperFactory wrapperfactory;
+	ServerPlatform(PlatformInjector injector, PlatformUtils miscutils, PlatformPacketFactory packetfactory, PlatformWrapperFactory wrapperfactory) {
 		this.injector = injector;
 		this.miscutils = miscutils;
 		this.packetfactory = packetfactory;
+		this.wrapperfactory = wrapperfactory;
 	}
 
 	public void inject() {
@@ -55,6 +58,10 @@ public enum ServerPlatform {
 
 	public PlatformPacketFactory getPacketFactory() {
 		return packetfactory;
+	}
+
+	public PlatformWrapperFactory getWrapperFactory() {
+		return wrapperfactory;
 	}
 
 }

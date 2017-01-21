@@ -31,7 +31,7 @@ public class LegacyChatJson {
 	private static void fixComponent(BaseComponent component) {
 		HoverAction hover = component.getHoverAction();
 		if ((hover != null) && (hover.getType() == HoverAction.Type.SHOW_ITEM)) {
-			NBTTagCompoundWrapper compound = NBTTagCompoundWrapper.fromJson(hover.getValue());
+			NBTTagCompoundWrapper compound = ServerPlatform.get().getWrapperFactory().createNBTCompoundFromJson(hover.getValue());
 			Integer id = ServerPlatform.get().getMiscUtils().getItemIdByName(compound.getString("id"));
 			if (id != null) {
 				compound.setInt("id", id);

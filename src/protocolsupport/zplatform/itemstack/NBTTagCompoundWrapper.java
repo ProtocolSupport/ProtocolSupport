@@ -1,65 +1,10 @@
 package protocolsupport.zplatform.itemstack;
 
-import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Collection;
 
-import org.apache.commons.lang3.NotImplementedException;
-
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.impl.spigot.itemstack.SpigotNBTTagCompoundWrapper;
-
 public abstract class NBTTagCompoundWrapper {
-
-
-	public static NBTTagCompoundWrapper fromJson(String json) {
-		switch (ServerPlatform.get()) {
-			case SPIGOT: {
-				return SpigotNBTTagCompoundWrapper.fromJson(json);
-			}
-			default: {
-				//TODO: implement for glowstone
-				throw new NotImplementedException("Not implemented yet");
-			}
-		}
-	}
-
-	public static NBTTagCompoundWrapper fromStream(DataInput datainput) throws IOException {
-		switch (ServerPlatform.get()) {
-			case SPIGOT: {
-				return SpigotNBTTagCompoundWrapper.fromStream(datainput);
-			}
-			default: {
-				//TODO: implement for glowstone
-				throw new NotImplementedException("Not implemented yet");
-			}
-		}
-	}
-
-	public static NBTTagCompoundWrapper createEmpty() {
-		switch (ServerPlatform.get()) {
-			case SPIGOT: {
-				return SpigotNBTTagCompoundWrapper.createEmpty();
-			}
-			default: {
-				//TODO: implement for glowstone
-				throw new NotImplementedException("Not implemented yet");
-			}
-		}
-	}
-
-	public static NBTTagCompoundWrapper createNull() {
-		switch (ServerPlatform.get()) {
-			case SPIGOT: {
-				return SpigotNBTTagCompoundWrapper.createNull();
-			}
-			default: {
-				//TODO: implement for glowstone
-				throw new NotImplementedException("Not implemented yet");
-			}
-		}
-	}
 
 	public abstract void writeToStream(DataOutput dataoutput) throws IOException;
 

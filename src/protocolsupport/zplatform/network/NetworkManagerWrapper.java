@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import javax.crypto.SecretKey;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.bukkit.entity.Player;
 
 import com.mojang.authlib.properties.Property;
@@ -13,22 +12,8 @@ import com.mojang.authlib.properties.Property;
 import io.netty.channel.Channel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.impl.spigot.network.SpigotNetworkManagerWrapper;
 
 public abstract class NetworkManagerWrapper {
-
-	public static NetworkManagerWrapper getFromChannel(Channel channel) {
-		switch (ServerPlatform.get()) {
-			case SPIGOT: {
-				return SpigotNetworkManagerWrapper.getFromChannel(channel);
-			}
-			default: {
-				// TODO: implement for glowstone
-				throw new NotImplementedException("Not implemented yet");
-			}
-		}
-	}
 
 	public abstract Object unwrap();
 
@@ -48,7 +33,7 @@ public abstract class NetworkManagerWrapper {
 
 	public abstract void sendPacket(Object packet, GenericFutureListener<? extends Future<? super Void>> genericListener, @SuppressWarnings("unchecked") GenericFutureListener<? extends Future<? super Void>>... futureListeners);
 
-	public abstract void setProtocol(NetworkListenerState state);
+	public abstract void setProtocol(NetworkState state);
 
 	public abstract Object getPacketListener();
 
