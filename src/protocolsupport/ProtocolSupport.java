@@ -27,13 +27,12 @@ public class ProtocolSupport extends JavaPlugin {
 	@Override
 	public void onLoad() {
 		AsyncErrorLogger.INSTANCE.start();
-		ServerPlatform.detect();
-		if (ServerPlatform.get() == ServerPlatform.UNKNOWN) {
+		if (!ServerPlatform.detect()) {
 			getLogger().severe("Unsupported server implementation type, shutting down");
 			Bukkit.shutdown();
 			return;
 		} else {
-			getLogger().info(MessageFormat.format("Detected {0} server implementation type", ServerPlatform.get()));
+			getLogger().info(MessageFormat.format("Detected {0} server implementation type", ServerPlatform.get().getName()));
 		}
 		try {
 			Allocator.init();
