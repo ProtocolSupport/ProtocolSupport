@@ -9,7 +9,6 @@ import com.mojang.authlib.GameProfile;
 
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import net.minecraft.server.v1_11_R1.PacketLoginOutSuccess;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.PlayerLoginFinishEvent;
 import protocolsupport.protocol.ConnectionImpl;
@@ -38,7 +37,7 @@ public abstract class AbstractLoginListenerPlay implements IHasProfile {
 
 	public void finishLogin() {
 		// send login success
-		networkManager.sendPacket(new PacketLoginOutSuccess(profile));
+		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginSuccessPacket(profile));
 		// tick connection keep now
 		keepConnection();
 		// now fire login event

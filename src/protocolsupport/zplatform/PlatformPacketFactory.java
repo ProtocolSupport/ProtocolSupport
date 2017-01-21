@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.bukkit.Material;
 
+import com.mojang.authlib.GameProfile;
+
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
 import protocolsupport.protocol.utils.types.Position;
@@ -40,6 +42,8 @@ public interface PlatformPacketFactory {
 	public Object createStatusPongPacket(long pingId);
 
 	public Object createStausServerInfoPacket(List<String> profiles, ProtocolInfo info, String icon, String motd, int maxPlayers);
+
+	public Object createLoginSuccessPacket(GameProfile profile);
 
 	public Object createEmptyCustomPayloadPacket(String tag);
 

@@ -130,6 +130,10 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 		return new PacketStatusOutServerInfo(serverping);
 	}
 
+	public Object createLoginSuccessPacket(GameProfile profile) {
+		return new PacketLoginOutSuccess(profile);
+	}
+
 	private static final PacketDataSerializer emptyPDS = new PacketDataSerializer(Unpooled.EMPTY_BUFFER);
 	@Override
 	public Object createEmptyCustomPayloadPacket(String tag) {
