@@ -99,4 +99,11 @@ public class Utils {
 		return (b != null) && b;
 	}
 
+	@FunctionalInterface
+	public static interface LazyLoad<T> {
+
+		public T create();
+
+	}
+
 }
