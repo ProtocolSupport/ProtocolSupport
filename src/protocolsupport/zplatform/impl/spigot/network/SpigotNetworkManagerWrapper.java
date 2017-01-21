@@ -115,6 +115,9 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 
 	@Override
 	public ProfileProperty[] getSpoofedProperties() {
+		if (internal.spoofedProfile == null) {
+			return null;
+		}
 		return
 			Arrays.asList(internal.spoofedProfile)
 			.stream()
