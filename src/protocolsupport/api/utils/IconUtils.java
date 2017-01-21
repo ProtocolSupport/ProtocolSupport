@@ -6,10 +6,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Base64;
 
 import javax.imageio.ImageIO;
 
-import org.apache.commons.codec.binary.Base64;
 import org.bukkit.util.CachedServerIcon;
 
 import protocolsupport.utils.ApacheCommonsUtils;
@@ -30,7 +30,7 @@ public class IconUtils {
 		ApacheCommonsUtils.isTrue(image.getHeight() == 64, "Must be 64 pixels high");
 		ByteArrayOutputStream data = new ByteArrayOutputStream();
 		ImageIO.write(image, "PNG", data);
-		return "data:image/png;base64," + Base64.encodeBase64String(data.toByteArray());
+		return "data:image/png;base64," + Base64.getEncoder().encodeToString(data.toByteArray());
 	}
 
 	public static String fromBukkit(CachedServerIcon icon) {
