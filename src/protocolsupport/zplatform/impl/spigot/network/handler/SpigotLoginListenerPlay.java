@@ -3,9 +3,6 @@ package protocolsupport.zplatform.impl.spigot.network.handler;
 import java.net.InetSocketAddress;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.player.PlayerLoginEvent;
@@ -77,18 +74,6 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 	private static final SimpleDateFormat banDateFormat = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
 	public EntityPlayer attemptLogin() {
 		PlayerList playerlist = server.getPlayerList();
-		UUID uuid = profile.getUUID();
-
-		//find players with same uuid
-		List<EntityPlayer> toKick = playerlist.players.stream().filter(entityplayer -> entityplayer.getUniqueID().equals(uuid)).collect(Collectors.toList());
-		//kick them
-		if (!toKick.isEmpty()) {
-			toKick.forEach(entityplayer -> {
-				playerlist.playerFileData.save(entityplayer);
-				entityplayer.playerConnection.disconnect("You logged in from another location");
-			});
-			return null;
-		}
 
 		com.mojang.authlib.GameProfile mojangGameProfile = SpigotMiscUtils.toMojangGameProfile(profile);
 
