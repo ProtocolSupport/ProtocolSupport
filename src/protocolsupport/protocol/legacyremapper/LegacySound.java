@@ -12,11 +12,9 @@ public class LegacySound {
 		return ServerPlatform.get().getMiscUtils().getSoundNameById(soundId);
 	}
 
-	//return new sound if legacy not found, so launcher will print a warning with that new sound name
 	public static String getLegacySoundName(int soundType) {
 		String newSound = getSoundName(soundType);
-		String legacySound = legacySounds.get(newSound);
-		return legacySound != null ? legacySound : newSound;
+		return legacySounds.get(newSound);
 	}
 
 	public static String getLegacySoundName(String soundName) {
