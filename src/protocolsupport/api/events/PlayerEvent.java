@@ -2,20 +2,29 @@ package protocolsupport.api.events;
 
 import java.net.InetSocketAddress;
 
-import org.bukkit.event.Event;
+import protocolsupport.api.Connection;
+import protocolsupport.api.ProtocolSupportAPI;
 
-public abstract class PlayerEvent extends Event {
+public abstract class PlayerEvent extends ConnectionEvent {
 
-	private final InetSocketAddress address;
 	private final String username;
 
-	public PlayerEvent(InetSocketAddress address, String username) {
-		this.address = address;
+	public PlayerEvent(Connection connection, String username, boolean async) {
+		super(connection, async);
 		this.username = username;
 	}
 
+	public PlayerEvent(Connection connection, String username) {
+		this(connection, username, true);
+	}
+
+	@Deprecated
+	public PlayerEvent(InetSocketAddress address, String username) {
+		this(ProtocolSupportAPI.getConnection(address), username);
+	}
+
 	public InetSocketAddress getAddress() {
-		return address;
+		return getConnection().getAddress();
 	}
 
 	public String getName() {

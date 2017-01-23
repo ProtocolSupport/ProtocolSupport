@@ -1,13 +1,11 @@
 package protocolsupport.protocol.utils.datawatcher.objects;
 
-import java.io.IOException;
-
-import net.minecraft.server.v1_9_R2.ItemStack;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
-public class DataWatcherObjectItemStack extends DataWatcherObject<ItemStack> {
+public class DataWatcherObjectItemStack extends DataWatcherObject<ItemStackWrapper> {
 
 	@Override
 	public int getTypeId(ProtocolVersion version) {
@@ -15,12 +13,12 @@ public class DataWatcherObjectItemStack extends DataWatcherObject<ItemStack> {
 	}
 
 	@Override
-	public void readFromStream(PacketDataSerializer serializer) throws IOException {
+	public void readFromStream(ProtocolSupportPacketDataSerializer serializer) {
 		value = serializer.readItemStack();
 	}
 
 	@Override
-	public void writeToStream(PacketDataSerializer serializer) {
+	public void writeToStream(ProtocolSupportPacketDataSerializer serializer) {
 		serializer.writeItemStack(value);
 	}
 

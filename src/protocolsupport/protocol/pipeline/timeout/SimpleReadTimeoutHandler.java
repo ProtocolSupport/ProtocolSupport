@@ -34,9 +34,13 @@ public class SimpleReadTimeoutHandler extends ChannelInboundHandlerAdapter {
 	}
 
 	@Override
-	public void channelRead(ChannelHandlerContext ctx, Object message) throws Exception {
-		this.lastReadTime = System.currentTimeMillis();
+	public void channelRead(ChannelHandlerContext ctx, Object message) {
+		setLastRead();
 		ctx.fireChannelRead(message);
+	}
+
+	public void setLastRead() {
+		this.lastReadTime = System.currentTimeMillis();
 	}
 
 	private void initialize(final ChannelHandlerContext ctx) {

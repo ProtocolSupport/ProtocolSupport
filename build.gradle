@@ -1,0 +1,40 @@
+plugins {
+    id 'java'
+    id 'de.undercouch.download' version '3.1.1'
+}
+
+group 'protocolsupport'
+version '4.25.dev'
+
+sourceCompatibility = 1.8
+
+compileJava.dependsOn("updateSpigot")
+
+sourceSets {
+	main {
+		java {
+			srcDirs = ["src"]
+		}
+	}
+}
+
+dependencies {
+	compile files('buildprocessor/BuildProcessor.jar')
+	compile files('build/spigot-1.11.2-R0.1-SNAPSHOT.jar')
+}
+
+jar {
+	from "LICENSE"
+	from "src/plugin.yml"
+
+	destinationDir = file("$rootDir/target/")
+	version = null
+}
+
+import de.undercouch.gradle.tasks.download.Download
+task updateSpigot(type: Download) {
+	src 'http://yivesmirror.com/files/spigot/spigot-1.11.2-R0.1-SNAPSHOT.jar'
+	dest buildDir
+	onlyIfNewer true
+	overwrite true
+}

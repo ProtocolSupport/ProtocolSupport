@@ -1,15 +1,13 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import java.io.IOException;
-
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public abstract class MiddleBlockChangeSingle<T> extends MiddleBlock<T> {
 
 	protected int id;
 
 	@Override
-	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		super.readFromServerData(serializer);
 		id = serializer.readVarInt();
 	}

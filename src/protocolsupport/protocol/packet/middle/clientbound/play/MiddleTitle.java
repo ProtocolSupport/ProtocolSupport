@@ -1,9 +1,7 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import java.io.IOException;
-
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public abstract class MiddleTitle<T> extends ClientBoundMiddlePacket<T> {
 
@@ -15,15 +13,19 @@ public abstract class MiddleTitle<T> extends ClientBoundMiddlePacket<T> {
 	protected int fadeOut;
 
 	@Override
-	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		action = Action.values()[serializer.readVarInt()];
 		switch (action) {
 			case SET_TITLE: {
-				titleJson = serializer.readString(Short.MAX_VALUE);
+				titleJson = serializer.readString();
 				break;
 			}
 			case SET_SUBTITLE: {
-				subtitleJson = serializer.readString(Short.MAX_VALUE);
+				subtitleJson = serializer.readString();
+				break;
+			}
+			case SET_ACTION_BAR: {
+				titleJson = serializer.readString();
 				break;
 			}
 			case SET_TIMES: {
@@ -40,7 +42,7 @@ public abstract class MiddleTitle<T> extends ClientBoundMiddlePacket<T> {
 	}
 
 	protected static enum Action {
-		SET_TITLE, SET_SUBTITLE, SET_TIMES, HIDE, RESET
+		SET_TITLE, SET_SUBTITLE, SET_ACTION_BAR, SET_TIMES, HIDE, RESET
 	}
 
 }

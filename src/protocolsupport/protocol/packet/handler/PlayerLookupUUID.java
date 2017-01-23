@@ -3,26 +3,21 @@ package protocolsupport.protocol.packet.handler;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_9_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_9_R2.util.Waitable;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerPreLoginEvent;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.exceptions.AuthenticationUnavailableException;
-import com.mojang.authlib.properties.Property;
-import com.mojang.authlib.properties.PropertyMap;
-
-import net.minecraft.server.v1_9_R2.MinecraftEncryption;
-import net.minecraft.server.v1_9_R2.MinecraftServer;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
+import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.utils.MinecraftEncryption;
+import protocolsupport.protocol.utils.authlib.MinecraftSessionService;
+import protocolsupport.protocol.utils.authlib.MinecraftSessionService.AuthenticationUnavailableException;
+import protocolsupport.zplatform.ServerPlatform;
 
 @SuppressWarnings("deprecation")
 public class PlayerLookupUUID {
@@ -36,77 +31,69 @@ public class PlayerLookupUUID {
 	}
 
 	public void run() {
-		final GameProfile gameprofile = listener.getProfile();
+		String joinName = listener.profile.getName();
 		try {
 			if (!isOnlineMode) {
-				listener.initUUID();
+				listener.initOfflineModeGameProfile();
 				fireLoginEvents();
 				return;
 			}
-			final String hash = new BigInteger(MinecraftEncryption.a("", MinecraftServer.getServer().O().getPublic(), listener.getLoginKey())).toString(16);
-			listener.setProfile(MinecraftServer.getServer().ay().hasJoinedServer(new GameProfile(null, gameprofile.getName()), hash));
-			if (listener.getProfile() != null) {
-				fireLoginEvents();
-			} else {
-				listener.disconnect("Failed to verify username!");
-				listener.getLogger().error("Username '" + gameprofile.getName() + "' tried to join with an invalid session");
-			}
+			String hash = new BigInteger(MinecraftEncryption.createHash(ServerPlatform.get().getMiscUtils().getEncryptionKeyPair().getPublic(), listener.loginKey)).toString(16);
+			listener.profile = MinecraftSessionService.hasJoinedServer(joinName, hash);
+			fireLoginEvents();
 		} catch (AuthenticationUnavailableException authenticationunavailableexception) {
 			listener.disconnect("Authentication servers are down. Please try again later, sorry!");
-			listener.getLogger().error("Couldn't verify username because servers are unavailable");
+			Bukkit.getLogger().severe("Couldn't verify username because servers are unavailable");
 		} catch (Exception exception) {
 			listener.disconnect("Failed to verify username!");
-			MinecraftServer.getServer().server.getLogger().log(Level.WARNING, "Exception verifying " + gameprofile.getName(), exception);
+			Bukkit.getLogger().log(Level.SEVERE, "Exception verifying " + joinName, exception);
 		}
 	}
 
-	private void fireLoginEvents() throws Exception {
-		if (!listener.getNetworkManager().isConnected()) {
+	private void fireLoginEvents() throws InterruptedException, ExecutionException  {
+		if (!listener.networkManager.isConnected()) {
 			return;
 		}
 
-		String playerName = listener.getProfile().getName();
-		InetSocketAddress saddress = (InetSocketAddress) listener.getNetworkManager().getSocketAddress();
+		String playerName = listener.profile.getName();
+		InetSocketAddress saddress = listener.networkManager.getAddress();
 		InetAddress address = saddress.getAddress();
 
-		List<ProfileProperty> properties = new ArrayList<ProfileProperty>();
-		PropertyMap propertymap = listener.getProfile().getProperties();
-		for (Property property : propertymap.values()) {
-			properties.add(new ProfileProperty(property.getName(), property.getValue(), property.getSignature()));
-		}
-		PlayerPropertiesResolveEvent propResolve = new PlayerPropertiesResolveEvent(saddress, playerName, properties);
+		PlayerPropertiesResolveEvent propResolve = new PlayerPropertiesResolveEvent(
+			ConnectionImpl.getFromChannel(listener.networkManager.getChannel()), playerName,
+			listener.profile.getProperties().values()
+		);
 		Bukkit.getPluginManager().callEvent(propResolve);
-		propertymap.clear();
-		for (ProfileProperty profileproperty : propResolve.getProperties().values()) {
-			propertymap.put(profileproperty.getName(), new Property(profileproperty.getName(), profileproperty.getValue(), profileproperty.getSignature()));
+		listener.profile.clearProperties();
+		for (ProfileProperty property : propResolve.getProperties().values()) {
+			listener.profile.addProperty(property);
+		}
+		UUID uniqueId = listener.profile.getUUID();
+
+		AsyncPlayerPreLoginEvent asyncEvent = new AsyncPlayerPreLoginEvent(playerName, address, uniqueId);
+		Bukkit.getPluginManager().callEvent(asyncEvent);
+
+		PlayerPreLoginEvent syncEvent = new PlayerPreLoginEvent(playerName, address, uniqueId);
+		if (asyncEvent.getResult() != PlayerPreLoginEvent.Result.ALLOWED) {
+			syncEvent.disallow(asyncEvent.getResult(), asyncEvent.getKickMessage());
 		}
 
-		UUID uniqueId = listener.getProfile().getId();
-		final CraftServer server = MinecraftServer.getServer().server;
-		final AsyncPlayerPreLoginEvent asyncEvent = new AsyncPlayerPreLoginEvent(playerName, address, uniqueId);
-		server.getPluginManager().callEvent(asyncEvent);
 		if (PlayerPreLoginEvent.getHandlerList().getRegisteredListeners().length != 0) {
-			final PlayerPreLoginEvent event = new PlayerPreLoginEvent(playerName, address, uniqueId);
-			if (asyncEvent.getResult() != PlayerPreLoginEvent.Result.ALLOWED) {
-				event.disallow(asyncEvent.getResult(), asyncEvent.getKickMessage());
-			}
-			final Waitable<PlayerPreLoginEvent.Result> waitable = new Waitable<PlayerPreLoginEvent.Result>() {
-				@Override
-				protected PlayerPreLoginEvent.Result evaluate() {
-					server.getPluginManager().callEvent(event);
-					return event.getResult();
-				}
-			};
-			MinecraftServer.getServer().processQueue.add(waitable);
-			if (waitable.get() != PlayerPreLoginEvent.Result.ALLOWED) {
-				listener.disconnect(event.getKickMessage());
+			if (ServerPlatform.get().getMiscUtils().callSyncTask(() -> {
+				Bukkit.getPluginManager().callEvent(syncEvent);
+				return syncEvent.getResult();
+			}).get() != PlayerPreLoginEvent.Result.ALLOWED) {
+				listener.disconnect(syncEvent.getKickMessage());
 				return;
 			}
-		} else if (asyncEvent.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED) {
-			listener.disconnect(asyncEvent.getKickMessage());
+		}
+
+		if (syncEvent.getResult() != PlayerPreLoginEvent.Result.ALLOWED) {
+			listener.disconnect(syncEvent.getKickMessage());
 			return;
 		}
-		listener.getLogger().info("UUID of player " + listener.getProfile().getName() + " is " + listener.getProfile().getId());
+
+		Bukkit.getLogger().info("UUID of player " + listener.profile.getName() + " is " + listener.profile.getUUID());
 		listener.setReadyToAccept();
 	}
 

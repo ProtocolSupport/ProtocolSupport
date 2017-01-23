@@ -14,7 +14,7 @@ public class Allocator {
 		ProtocolSupport.logInfo("Allocator: "+allocator + ", direct: "+direct);
 	}
 
-	private static final boolean direct = Utils.getJavaPropertyValue("protocolsupport.buffer", true, new Converter<String, Boolean>() {
+	private static final boolean direct = Utils.getJavaPropertyValue("buffer", true, new Converter<String, Boolean>() {
 		@Override
 		public Boolean convert(String t) {
 			switch (t.toLowerCase()) {
@@ -30,7 +30,7 @@ public class Allocator {
 			}
 		}
 	});
-	private static final ByteBufAllocator allocator = Utils.getJavaPropertyValue("protocolsupport.allocator", PooledByteBufAllocator.DEFAULT, new Converter<String, ByteBufAllocator>() {
+	private static final ByteBufAllocator allocator = Utils.getJavaPropertyValue("allocator", PooledByteBufAllocator.DEFAULT, new Converter<String, ByteBufAllocator>() {
 		@Override
 		public ByteBufAllocator convert(String t) {
 			switch (t.toLowerCase()) {

@@ -12,6 +12,8 @@ import java.nio.charset.Charset;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufProcessor;
+import io.netty.handler.codec.DecoderException;
+import io.netty.handler.codec.EncoderException;
 
 public class WrappingBuffer extends ByteBuf {
 
@@ -262,13 +264,21 @@ public class WrappingBuffer extends ByteBuf {
 	}
 
 	@Override
-	public ByteBuf getBytes(final int index, final OutputStream outputstream, final int length) throws IOException {
-		return this.buf.getBytes(index, outputstream, length);
+	public ByteBuf getBytes(final int index, final OutputStream outputstream, final int length) {
+		try {
+			return this.buf.getBytes(index, outputstream, length);
+		} catch (IOException e) {
+			throw new DecoderException(e);
+		}
 	}
 
 	@Override
-	public int getBytes(final int index, final GatheringByteChannel gatheringbytechannel, final int length) throws IOException {
-		return this.buf.getBytes(index, gatheringbytechannel, length);
+	public int getBytes(final int index, final GatheringByteChannel gatheringbytechannel, final int length) {
+		try {
+			return this.buf.getBytes(index, gatheringbytechannel, length);
+		} catch (IOException e) {
+			throw new DecoderException(e);
+		}
 	}
 
 	@Override
@@ -347,13 +357,21 @@ public class WrappingBuffer extends ByteBuf {
 	}
 
 	@Override
-	public int setBytes(final int index, final InputStream inputstream, final int length) throws IOException {
-		return this.buf.setBytes(index, inputstream, length);
+	public int setBytes(final int index, final InputStream inputstream, final int length) {
+		try {
+			return this.buf.setBytes(index, inputstream, length);
+		} catch (IOException e) {
+			throw new EncoderException(e);
+		}
 	}
 
 	@Override
-	public int setBytes(final int index, final ScatteringByteChannel scatteringbytechannel, final int length) throws IOException {
-		return this.buf.setBytes(index, scatteringbytechannel, length);
+	public int setBytes(final int index, final ScatteringByteChannel scatteringbytechannel, final int length) {
+		try {
+			return this.buf.setBytes(index, scatteringbytechannel, length);
+		} catch (IOException e) {
+			throw new EncoderException(e);
+		}
 	}
 
 	@Override
@@ -467,13 +485,21 @@ public class WrappingBuffer extends ByteBuf {
 	}
 
 	@Override
-	public ByteBuf readBytes(final OutputStream outputstream, final int length) throws IOException {
-		return this.buf.readBytes(outputstream, length);
+	public ByteBuf readBytes(final OutputStream outputstream, final int length)  {
+		try {
+			return this.buf.readBytes(outputstream, length);
+		} catch (IOException e) {
+			throw new DecoderException(e);
+		}
 	}
 
 	@Override
-	public int readBytes(final GatheringByteChannel gatheringbytechannel, final int length) throws IOException {
-		return this.buf.readBytes(gatheringbytechannel, length);
+	public int readBytes(final GatheringByteChannel gatheringbytechannel, final int length) {
+		try {
+			return this.buf.readBytes(gatheringbytechannel, length);
+		} catch (IOException e) {
+			throw new DecoderException(e);
+		}
 	}
 
 	@Override
@@ -557,13 +583,21 @@ public class WrappingBuffer extends ByteBuf {
 	}
 
 	@Override
-	public int writeBytes(final InputStream inputstream, final int length) throws IOException {
-		return this.buf.writeBytes(inputstream, length);
+	public int writeBytes(final InputStream inputstream, final int length) {
+		try {
+			return this.buf.writeBytes(inputstream, length);
+		} catch (IOException e) {
+			throw new EncoderException(e);
+		}
 	}
 
 	@Override
-	public int writeBytes(final ScatteringByteChannel scatteringbytechannel, final int length) throws IOException {
-		return this.buf.writeBytes(scatteringbytechannel, length);
+	public int writeBytes(final ScatteringByteChannel scatteringbytechannel, final int length) {
+		try {
+			return this.buf.writeBytes(scatteringbytechannel, length);
+		} catch (IOException e) {
+			throw new EncoderException(e);
+		}
 	}
 
 	@Override

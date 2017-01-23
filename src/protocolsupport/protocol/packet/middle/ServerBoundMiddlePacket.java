@@ -1,22 +1,13 @@
 package protocolsupport.protocol.packet.middle;
 
-import java.io.IOException;
-
-import net.minecraft.server.v1_9_R2.Packet;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
-import protocolsupport.protocol.storage.SharedStorage;
+import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public abstract class ServerBoundMiddlePacket extends MiddlePacket {
 
-	protected SharedStorage sharedstorage;
+	public abstract void readFromClientData(ProtocolSupportPacketDataSerializer serializer);
 
-	public void setSharedStorage(SharedStorage sharedstorage) {
-		this.sharedstorage = sharedstorage;
-	}
-
-	public abstract void readFromClientData(PacketDataSerializer serializer) throws IOException;
-
-	public abstract RecyclableCollection<? extends Packet<?>> toNative() throws Exception;
+	public abstract RecyclableCollection<ServerBoundPacketData> toNative();
 
 }

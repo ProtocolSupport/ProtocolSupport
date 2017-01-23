@@ -1,47 +1,40 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8;
 
-import java.io.IOException;
-
-import net.minecraft.server.v1_9_R2.NBTTagCompound;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.legacyremapper.LegacyTileEntityUpdate;
 import protocolsupport.protocol.legacyremapper.chunk.ChunkTransformer;
+import protocolsupport.protocol.legacyremapper.chunk.ChunkTransformer.BlockFormat;
 import protocolsupport.protocol.legacyremapper.chunk.EmptyChunk;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
-import protocolsupport.protocol.packet.middleimpl.PacketData;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8_1_9.BlockTileUpdate;
+import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1__1_9_r2__1_10__1_11.BlockTileUpdate;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
-public class Chunk extends MiddleChunk<RecyclableCollection<PacketData>>  {
+public class Chunk extends MiddleChunk<RecyclableCollection<ClientBoundPacketData>> {
 
-	private final ChunkTransformer transformer = new ChunkTransformer();
+	private final ChunkTransformer transformer = ChunkTransformer.create(BlockFormat.SHORT);
 
 	@Override
-	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
-		RecyclableArrayList<PacketData> packets = RecyclableArrayList.create();
-		PacketData chunkdata = PacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID, version);
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
+		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID, version);
 		chunkdata.writeInt(chunkX);
 		chunkdata.writeInt(chunkZ);
 		chunkdata.writeBoolean(full);
-		boolean hasSkyLight = storage.hasSkyLightInCurrentDimension();
-		if (bitmask == 0 && full) {
+		boolean hasSkyLight = cache.hasSkyLightInCurrentDimension();
+		if ((bitmask == 0) && full) {
 			chunkdata.writeShort(1);
-			chunkdata.writeArray(EmptyChunk.get18ChunkData(hasSkyLight));
+			chunkdata.writeByteArray(EmptyChunk.get18ChunkData(hasSkyLight));
 		} else {
 			chunkdata.writeShort(bitmask);
 			transformer.loadData(data, bitmask, hasSkyLight, full);
-			chunkdata.writeArray(transformer.to18Data());
+			chunkdata.writeByteArray(transformer.toLegacyData(ProtocolVersion.MINECRAFT_1_8));
 		}
 		packets.add(chunkdata);
-		for (NBTTagCompound tile : tiles) {
-			packets.add(BlockTileUpdate.createPacketData(
-				version,
-				LegacyTileEntityUpdate.getPosition(tile),
-				LegacyTileEntityUpdate.getUpdateType(tile).ordinal(),
-				tile
-			));
+		for (NBTTagCompoundWrapper tile : tiles) {
+			packets.add(BlockTileUpdate.createPacketData(version, tile));
 		}
 		return packets;
 	}

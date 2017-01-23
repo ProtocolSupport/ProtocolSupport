@@ -1,10 +1,15 @@
 package protocolsupport.protocol.typeskipper.id;
 
+import protocolsupport.protocol.typeskipper.id.SkippingRegistry.GenericSkippingRegistry;
+import protocolsupport.protocol.typeskipper.id.SkippingRegistry.IntSkippingRegistry;
+import protocolsupport.protocol.typeskipper.id.SkippingTable.ArrayBasedIntSkippingTable;
+import protocolsupport.protocol.typeskipper.id.SkippingTable.GenericSkippingTable;
+import protocolsupport.protocol.typeskipper.id.SkippingTable.HashMapBasedIntSkippingTable;
 import protocolsupport.utils.ProtocolVersionsHelper;
 
 public class IdSkipper {
 
-	public static final SkippingRegistry ENCHANT = new SkippingRegistry() {
+	public static final IntSkippingRegistry<HashMapBasedIntSkippingTable> ENCHANT = new IntSkippingRegistry<HashMapBasedIntSkippingTable>() {
 		{
 			//frost walker, mending
 			registerSkipEntry(9, ProtocolVersionsHelper.BEFORE_1_9);
@@ -16,12 +21,12 @@ public class IdSkipper {
 			registerSkipEntry(61, ProtocolVersionsHelper.BEFORE_1_7);
 		}
 		@Override
-		protected SkippingTable createTable() {
-			return new SkippingTable.HashSkippingTable();
+		protected HashMapBasedIntSkippingTable createTable() {
+			return new HashMapBasedIntSkippingTable();
 		}
 	};
 
-	public static final SkippingRegistry EFFECT = new SkippingRegistry() {
+	public static final IntSkippingRegistry<ArrayBasedIntSkippingTable> EFFECT = new IntSkippingRegistry<ArrayBasedIntSkippingTable>() {
 		{
 			//glowing, levitation, luck, unluck
 			registerSkipEntry(24, ProtocolVersionsHelper.BEFORE_1_9);
@@ -34,21 +39,36 @@ public class IdSkipper {
 			registerSkipEntry(23, ProtocolVersionsHelper.BEFORE_1_6);
 		}
 		@Override
-		protected SkippingTable createTable() {
-			return new SkippingTable(32);
+		protected ArrayBasedIntSkippingTable createTable() {
+			return new ArrayBasedIntSkippingTable(32);
 		}
 	};
 
-	public static final SkippingRegistry INVENTORY = new SkippingRegistry() {
+	public static final GenericSkippingRegistry<String, GenericSkippingTable<String>> ATTRIBUTES = new GenericSkippingRegistry<String, GenericSkippingTable<String>>() {
 		{
-			registerSkipEntry(11, ProtocolVersionsHelper.BEFORE_1_6);
-			registerSkipEntry(9, ProtocolVersionsHelper.BEFORE_1_5);
-			registerSkipEntry(10, ProtocolVersionsHelper.BEFORE_1_5);
+			registerSkipEntry("generic.armorToughness", ProtocolVersionsHelper.BEFORE_1_9_1);
+			registerSkipEntry("generic.luck", ProtocolVersionsHelper.BEFORE_1_9);
+			registerSkipEntry("generic.armor", ProtocolVersionsHelper.BEFORE_1_9);
+			registerSkipEntry("generic.attackSpeed", ProtocolVersionsHelper.BEFORE_1_9);
 		}
 		@Override
-		protected SkippingTable createTable() {
-			return new SkippingTable(16);
+		protected GenericSkippingTable<String> createTable() {
+			return new GenericSkippingTable<>();
 		}
 	};
+
+	public static final GenericSkippingRegistry<String, GenericSkippingTable<String>> INVENTORY = new GenericSkippingRegistry<String, GenericSkippingTable<String>>() {
+		{
+			registerSkipEntry("EntityHorse", ProtocolVersionsHelper.BEFORE_1_11);
+			registerSkipEntry("minecraft:hopper", ProtocolVersionsHelper.BEFORE_1_5);
+		}
+		@Override
+		protected GenericSkippingTable<String> createTable() {
+			return new GenericSkippingTable<>();
+		}
+	};
+
+	public static void init() {
+	}
 
 }

@@ -1,27 +1,26 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_7;
 
-import com.mojang.authlib.properties.Property;
-
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.legacyremapper.LegacyDataWatcherSerializer;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnNamed;
-import protocolsupport.protocol.packet.middleimpl.PacketData;
+import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.watchedentity.WatchedDataRemapper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class SpawnNamed extends MiddleSpawnNamed<RecyclableCollection<PacketData>> {
+public class SpawnNamed extends MiddleSpawnNamed<RecyclableCollection<ClientBoundPacketData>> {
 
 	@Override
-	public RecyclableCollection<PacketData> toData(ProtocolVersion version) {
-		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_SPAWN_NAMED_ID, version);
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_NAMED_ID, version);
 		serializer.writeVarInt(playerEntityId);
 		serializer.writeString(version == ProtocolVersion.MINECRAFT_1_7_10 ? uuid.toString() : uuid.toString().replace("-", ""));
 		serializer.writeString(name);
 		if (version == ProtocolVersion.MINECRAFT_1_7_10) {
 			serializer.writeVarInt(properties.size());
-			for (Property property : properties) {
+			for (ProfileProperty property : properties) {
 				serializer.writeString(property.getName());
 				serializer.writeString(property.getValue());
 				serializer.writeString(property.getSignature());
@@ -33,7 +32,7 @@ public class SpawnNamed extends MiddleSpawnNamed<RecyclableCollection<PacketData
 		serializer.writeByte(yaw);
 		serializer.writeByte(pitch);
 		serializer.writeShort(0);
-		serializer.writeBytes(LegacyDataWatcherSerializer.encodeData(version, WatchedDataRemapper.transform(wplayer, metadata, version)));
+		LegacyDataWatcherSerializer.encodeData(WatchedDataRemapper.transform(cache, playerEntityId, metadata, version), serializer);
 		return RecyclableSingletonList.create(serializer);
 	}
 

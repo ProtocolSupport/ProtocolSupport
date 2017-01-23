@@ -1,21 +1,18 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import com.mojang.authlib.properties.Property;
-
 import gnu.trove.map.TIntObjectMap;
+import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage.PlayerListEntry;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.utils.netty.ChannelUtils;
 
 public abstract class MiddleSpawnNamed<T> extends ClientBoundMiddlePacket<T> {
 
@@ -27,27 +24,27 @@ public abstract class MiddleSpawnNamed<T> extends ClientBoundMiddlePacket<T> {
 	protected double z;
 	protected int yaw;
 	protected int pitch;
-	protected List<Property> properties;
+	protected List<ProfileProperty> properties;
 	protected WatchedEntity wplayer;
 	protected TIntObjectMap<DataWatcherObject<?>> metadata;
 
 	@Override
-	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		playerEntityId = serializer.readVarInt();
-		uuid = serializer.i();
+		uuid = serializer.readUUID();
 		x = serializer.readDouble();
 		y = serializer.readDouble();
 		z = serializer.readDouble();
 		yaw = serializer.readUnsignedByte();
 		pitch = serializer.readUnsignedByte();
-		metadata = DataWatcherDeserializer.decodeData(ChannelUtils.toArray(serializer));
+		metadata = DataWatcherDeserializer.decodeData(serializer);
 	}
 
 	@Override
 	public void handle() {
 		wplayer = new WatchedPlayer(playerEntityId);
-		storage.addWatchedEntity(wplayer);
-		PlayerListEntry entry = storage.getPlayerListEntry(uuid);
+		cache.addWatchedEntity(wplayer);
+		NetworkDataCache.PlayerListEntry entry = cache.getPlayerListEntry(uuid);
 		if (entry != null) {
 			name = entry.getUserName();
 			properties = entry.getProperties().getAll(true);

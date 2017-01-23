@@ -8,18 +8,18 @@ import java.util.List;
 import protocolsupport.api.chat.modifiers.ClickAction;
 import protocolsupport.api.chat.modifiers.HoverAction;
 import protocolsupport.api.chat.modifiers.Modifier;
-import protocolsupport.protocol.legacyremapper.LegacyUtils;
+import protocolsupport.protocol.legacyremapper.LegacyChat;
 
 public abstract class BaseComponent {
 
-	private List<BaseComponent> siblings = new ArrayList<BaseComponent>();
+	private List<BaseComponent> siblings = new ArrayList<>();
 	private Modifier modifier;
 	private ClickAction clickAction;
 	private HoverAction hoverAction;
 	private String clickInsertion;
 
 	public boolean isSimple() {
-		return siblings.isEmpty() && getModifier().isEmpty() && clickAction == null && hoverAction == null && clickInsertion == null;
+		return siblings.isEmpty() && getModifier().isEmpty() && (clickAction == null) && (hoverAction == null) && (clickInsertion == null);
 	}
 
 	public List<BaseComponent> getSiblings() {
@@ -82,7 +82,7 @@ public abstract class BaseComponent {
 	public abstract String getValue();
 
 	public String toLegacyText() {
-		return LegacyUtils.toText(this);
+		return LegacyChat.toText(this);
 	}
 
 }

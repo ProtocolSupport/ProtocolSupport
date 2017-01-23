@@ -6,14 +6,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Base64;
 
 import javax.imageio.ImageIO;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang3.Validate;
-import org.bukkit.craftbukkit.v1_9_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_9_R2.util.CraftIconCache;
 import org.bukkit.util.CachedServerIcon;
+
+import protocolsupport.utils.ApacheCommonsUtils;
+import protocolsupport.zplatform.ServerPlatform;
 
 public class IconUtils {
 
@@ -26,21 +26,15 @@ public class IconUtils {
 	}
 
 	public static String loadIcon(BufferedImage image) throws IOException {
-        Validate.isTrue(image.getWidth() == 64, "Must be 64 pixels wide");
-        Validate.isTrue(image.getHeight() == 64, "Must be 64 pixels high");
+		ApacheCommonsUtils.isTrue(image.getWidth() == 64, "Must be 64 pixels wide");
+		ApacheCommonsUtils.isTrue(image.getHeight() == 64, "Must be 64 pixels high");
 		ByteArrayOutputStream data = new ByteArrayOutputStream();
 		ImageIO.write(image, "PNG", data);
-		return "data:image/png;base64," + Base64.encodeBase64String(data.toByteArray());
+		return "data:image/png;base64," + Base64.getEncoder().encodeToString(data.toByteArray());
 	}
 
 	public static String fromBukkit(CachedServerIcon icon) {
-		if (icon == null) {
-			return null;
-		}
-		if (!(icon instanceof CraftIconCache)) {
-			throw new IllegalArgumentException(icon + " was not created by " + CraftServer.class);
-		}
-		return ((CraftIconCache) icon).value;
+		return ServerPlatform.get().getMiscUtils().convertBukkitIconToBase64(icon);
 	}
 
 }

@@ -2,12 +2,11 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import java.util.UUID;
 
-import com.mojang.authlib.properties.Property;
-
 import protocolsupport.api.chat.ChatAPI;
+import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage.PlayerListEntry;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.storage.NetworkDataCache;
 
 public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {
 
@@ -15,7 +14,7 @@ public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {
 	protected Info[] infos;
 
 	@Override
-	public void readFromServerData(PacketDataSerializer serializer) {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		action = Action.values()[serializer.readVarInt()];
 		infos = new Info[serializer.readVarInt()];
 		for (int i = 0; i < infos.length; i++) {
@@ -24,20 +23,20 @@ public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {
 			switch (action) {
 				case ADD: {
 					info.username = serializer.readString(16);
-					info.properties = new Property[serializer.readVarInt()];
+					info.properties = new ProfileProperty[serializer.readVarInt()];
 					for (int j = 0; j < info.properties.length; j++) {
-						String name = serializer.readString(32767);
-						String value = serializer.readString(32767);
+						String name = serializer.readString();
+						String value = serializer.readString();
 						String signature = null;
 						if (serializer.readBoolean()) {
-							signature = serializer.readString(32767);
+							signature = serializer.readString();
 						}
-						info.properties[j] = new Property(name, value, signature);
+						info.properties[j] = new ProfileProperty(name, value, signature);
 					}
 					info.gamemode = serializer.readVarInt();
 					info.ping = serializer.readVarInt();
 					if (serializer.readBoolean()) {
-						info.displayNameJson = serializer.readString(Short.MAX_VALUE);
+						info.displayNameJson = serializer.readString();
 					}
 					break;
 				}
@@ -51,7 +50,7 @@ public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {
 				}
 				case DISPLAY_NAME: {
 					if (serializer.readBoolean()) {
-						info.displayNameJson = serializer.readString(Short.MAX_VALUE);
+						info.displayNameJson = serializer.readString();
 					}
 					break;
 				}
@@ -66,29 +65,29 @@ public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {
 	@Override
 	public void handle() {
 		for (Info info : infos) {
-			info.previousinfo = storage.getPlayerListEntry(info.uuid);
+			info.previousinfo = cache.getPlayerListEntry(info.uuid);
 			if (info.previousinfo != null) {
 				info.previousinfo = info.previousinfo.clone();
 			}
 			switch (action) {
 				case ADD: {
-					PlayerListEntry entry = new PlayerListEntry(info.username);
+					NetworkDataCache.PlayerListEntry entry = new NetworkDataCache.PlayerListEntry(info.username);
 					entry.setDisplayNameJson(info.displayNameJson);
-					for (Property property : info.properties) {
+					for (ProfileProperty property : info.properties) {
 						entry.getProperties().add(property);
 					}
-					storage.addPlayerListEntry(info.uuid, entry);
+					cache.addPlayerListEntry(info.uuid, entry);
 					break;
 				}
 				case DISPLAY_NAME: {
-					PlayerListEntry entry = storage.getPlayerListEntry(info.uuid);
+					NetworkDataCache.PlayerListEntry entry = cache.getPlayerListEntry(info.uuid);
 					if (entry != null) {
 						entry.setDisplayNameJson(info.displayNameJson);
 					}
 					break;
 				}
 				case REMOVE: {
-					storage.removePlayerListEntry(info.uuid);
+					cache.removePlayerListEntry(info.uuid);
 					break;
 				}
 				default: {
@@ -104,12 +103,12 @@ public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {
 
 	protected static class Info {
 		public UUID uuid;
-		public PlayerListEntry previousinfo;
+		public NetworkDataCache.PlayerListEntry previousinfo;
 		public String username;
 		public int ping;
 		public int gamemode;
 		public String displayNameJson;
-		public Property[] properties;
+		public ProfileProperty[] properties;
 
 		public String getName() {
 			return displayNameJson == null ? username : ChatAPI.fromJSON(displayNameJson).toLegacyText();

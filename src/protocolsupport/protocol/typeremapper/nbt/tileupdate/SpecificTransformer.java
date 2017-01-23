@@ -1,10 +1,11 @@
 package protocolsupport.protocol.typeremapper.nbt.tileupdate;
 
-import net.minecraft.server.v1_9_R2.NBTTagCompound;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
+@FunctionalInterface
 public interface SpecificTransformer {
 
-	public NBTTagCompound transform(ProtocolVersion version, NBTTagCompound input);
+	public NBTTagCompoundWrapper transform(ProtocolVersion version, NBTTagCompoundWrapper input);
 
 }

@@ -1,19 +1,18 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
-import net.minecraft.server.v1_9_R2.ItemStack;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 public abstract class MiddleInventorySetItems<T> extends ClientBoundMiddlePacket<T> {
 
 	protected int windowId;
-	protected ArrayList<ItemStack> itemstacks = new ArrayList<ItemStack>();
+	protected ArrayList<ItemStackWrapper> itemstacks = new ArrayList<>();
 
 	@Override
-	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		windowId = serializer.readUnsignedByte();
 		int count = serializer.readShort();
 		itemstacks.clear();

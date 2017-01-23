@@ -1,17 +1,19 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public abstract class MiddleCollectEffect<T> extends ClientBoundMiddlePacket<T> {
 
 	protected int entityId;
 	protected int collectorId;
+	protected int itemCount;
 
 	@Override
-	public void readFromServerData(PacketDataSerializer serializer) {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		entityId = serializer.readVarInt();
 		collectorId = serializer.readVarInt();
+		itemCount = serializer.readVarInt();
 	}
 
 }

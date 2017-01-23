@@ -1,30 +1,15 @@
 package protocolsupport.protocol.packet.middle;
 
-import java.io.IOException;
-
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
-import protocolsupport.protocol.storage.LocalStorage;
-import protocolsupport.protocol.storage.SharedStorage;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public abstract class ClientBoundMiddlePacket<T> extends MiddlePacket {
-
-	protected LocalStorage storage;
-	protected SharedStorage sharedstorage;
-
-	public void setLocalStorage(LocalStorage storage) {
-		this.storage = storage;
-	}
-
-	public void setSharedStorage(SharedStorage sharedstorage) {
-		this.sharedstorage = sharedstorage;
-	}
 
 	public void handle() {
 	}
 
-	public abstract void readFromServerData(PacketDataSerializer serializer) throws IOException;
+	public abstract void readFromServerData(ProtocolSupportPacketDataSerializer serializer);
 
-	public abstract T toData(ProtocolVersion version) throws IOException;
+	public abstract T toData(ProtocolVersion version);
 
 }

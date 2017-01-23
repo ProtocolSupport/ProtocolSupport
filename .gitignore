@@ -10,3 +10,14 @@ libs/
 *.prefs
 /.apt_generated/
 *.factorypath
+
+# Gradle
+.gradle
+.gradletasknamecache
+
+# Netbeans
+/.nb-gradle/
+
+# IntelliJ
+.idea/
+*.iml

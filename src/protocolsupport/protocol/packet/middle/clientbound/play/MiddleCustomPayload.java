@@ -1,18 +1,17 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
-import protocolsupport.utils.netty.ChannelUtils;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public abstract class MiddleCustomPayload<T> extends ClientBoundMiddlePacket<T> {
 
 	protected String tag;
-	protected byte[] data;
+	protected ProtocolSupportPacketDataSerializer data;
 
 	@Override
-	public void readFromServerData(PacketDataSerializer serializer) {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		tag = serializer.readString(20);
-		data = ChannelUtils.toArray(serializer);
+		data = serializer;
 	}
 
 }

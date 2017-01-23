@@ -1,6 +1,8 @@
 package protocolsupport.api;
 
 import java.net.SocketAddress;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.entity.Player;
 
@@ -11,11 +13,25 @@ import protocolsupport.protocol.storage.ProtocolStorage;
 public class ProtocolSupportAPI {
 
 	public static ProtocolVersion getProtocolVersion(Player player) {
-		return ProtocolStorage.getProtocolVersion(player.getAddress());
+		Connection connection = getConnection(player);
+		return connection != null ? connection.getVersion() : ProtocolVersion.UNKNOWN;
 	}
 
 	public static ProtocolVersion getProtocolVersion(SocketAddress address) {
-		return ProtocolStorage.getProtocolVersion(address);
+		Connection connection = getConnection(address);
+		return connection != null ? connection.getVersion() : ProtocolVersion.UNKNOWN;
+	}
+
+	public static List<Connection> getConnections() {
+		return new ArrayList<>(ProtocolStorage.getConnections());
+	}
+
+	public static Connection getConnection(Player player) {
+		return getConnection(player.getAddress());
+	}
+
+	public static Connection getConnection(SocketAddress address) {
+		return ProtocolStorage.getConnection(address);
 	}
 
 	public static ItemRemapperControl getItemRemapper(ProtocolVersion version) {

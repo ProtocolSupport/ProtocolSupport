@@ -1,35 +1,30 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4;
 
-import java.io.IOException;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
-import protocolsupport.protocol.legacyremapper.LegacyUtils;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryOpen;
-import protocolsupport.protocol.packet.middleimpl.PacketData;
+import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
+import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
+import protocolsupport.zplatform.ServerPlatform;
 
-public class InventoryOpen extends MiddleInventoryOpen<RecyclableCollection<PacketData>> {
-
-	@Override
-	public boolean needsPlayer() {
-		return true;
-	}
+public class InventoryOpen extends MiddleInventoryOpen<RecyclableCollection<ClientBoundPacketData>> {
 
 	@Override
-	public RecyclableCollection<PacketData> toData(ProtocolVersion version) throws IOException {
-		int id = LegacyUtils.getInventoryId(invname);
-		if (IdSkipper.INVENTORY.getTable(version).shouldSkip(id)) {
-			player.closeInventory();
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+		if (IdSkipper.INVENTORY.getTable(version).shouldSkip(invname)) {
+			cache.closeWindow();
+			connection.receivePacket(ServerPlatform.get().getPacketFactory().createInboundInventoryClosePacket());
 			return RecyclableEmptyList.get();
 		}
-		PacketData serializer = PacketData.create(ClientBoundPacket.PLAY_WINDOW_OPEN_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_OPEN_ID, version);
 		serializer.writeByte(windowId);
-		serializer.writeByte(id);
+		serializer.writeByte(WindowType.fromName(IdRemapper.INVENTORY.getTable(version).getRemap(invname)).ordinal());
 		serializer.writeString(ChatAPI.fromJSON(titleJson).toLegacyText());
 		serializer.writeByte(slots);
 		return RecyclableSingletonList.create(serializer);
