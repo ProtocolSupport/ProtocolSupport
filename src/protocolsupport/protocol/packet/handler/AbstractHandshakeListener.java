@@ -3,122 +3,122 @@ package protocolsupport.protocol.packet.handler;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.text.MessageFormat;
+import java.util.logging.Level;
 
-import org.apache.logging.log4j.LogManager;
-import org.spigotmc.SpigotConfig;
+import org.bukkit.Bukkit;
 
 import com.google.gson.Gson;
-import com.mojang.authlib.properties.Property;
-import com.mojang.util.UUIDTypeAdapter;
 
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-
-import net.minecraft.server.v1_9_R2.ChatComponentText;
-import net.minecraft.server.v1_9_R2.EnumProtocol;
-import net.minecraft.server.v1_9_R2.HandshakeListener;
-import net.minecraft.server.v1_9_R2.IChatBaseComponent;
-import net.minecraft.server.v1_9_R2.LoginListener;
-import net.minecraft.server.v1_9_R2.MinecraftServer;
-import net.minecraft.server.v1_9_R2.NetworkManager;
-import net.minecraft.server.v1_9_R2.PacketHandshakingInSetProtocol;
-import net.minecraft.server.v1_9_R2.PacketLoginOutDisconnect;
-
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.events.ConnectionHandshakeEvent;
+import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.protocol.storage.ThrottleTracker;
+import protocolsupport.protocol.utils.authlib.UUIDTypeAdapter;
+import protocolsupport.zplatform.ServerPlatform;
+import protocolsupport.zplatform.network.NetworkState;
+import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
-public abstract class AbstractHandshakeListener extends HandshakeListener {
+public abstract class AbstractHandshakeListener {
 
 	private static final Gson gson = new Gson();
 
-	protected final NetworkManager networkManager;
-
-	@SuppressWarnings("deprecation")
-	public AbstractHandshakeListener(NetworkManager networkmanager) {
-		super(MinecraftServer.getServer(), networkmanager);
+	protected final NetworkManagerWrapper networkManager;
+	protected AbstractHandshakeListener(NetworkManagerWrapper networkmanager) {
 		this.networkManager = networkmanager;
 	}
 
-	@SuppressWarnings({ "deprecation", "unchecked" })
-	@Override
-	public void a(final PacketHandshakingInSetProtocol packethandshakinginsetprotocol) {
-		switch (packethandshakinginsetprotocol.a()) {
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public void handleSetProtocol(int clientVersion, NetworkState nextState, String hostname, int port) {
+		switch (nextState) {
 			case LOGIN: {
-				networkManager.setProtocol(EnumProtocol.LOGIN);
+				networkManager.setProtocol(NetworkState.LOGIN);
+				//check connection throttle
 				try {
-					final InetAddress address = ((InetSocketAddress) networkManager.getSocketAddress()).getAddress();
-					if (ThrottleTracker.isEnabled() && !SpigotConfig.bungee) {
-						if (ThrottleTracker.isThrottled(address)) {
-							final ChatComponentText chatcomponenttext = new ChatComponentText("Connection throttled! Please wait before reconnecting.");
-							networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext), new GenericFutureListener<Future<? super Void>>() {
+					final InetAddress address = networkManager.getAddress().getAddress();
+					if (ThrottleTracker.isEnabled() && !ServerPlatform.get().getMiscUtils().isBungeeEnabled()) {
+						if (ThrottleTracker.throttle(address)) {
+							String message = "Connection throttled! Please wait before reconnecting.";
+							networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), new GenericFutureListener<Future<? super Void>>() {
 								@Override
-								public void operationComplete(Future<? super Void> arg0) throws Exception {
-									networkManager.close(chatcomponenttext);
+								public void operationComplete(Future<? super Void> arg0)  {
+									networkManager.close(message);
 								}
 							});
 							return;
 						}
-						ThrottleTracker.track(address, System.currentTimeMillis());
 					}
 				} catch (Throwable t) {
-					LogManager.getLogger().debug("Failed to check connection throttle", t);
+					Bukkit.getLogger().log(Level.WARNING, "Failed to check connection throttle", t);
 				}
-				//TODO: actually make 1.9 decoder push fake version to packet
-				ProtocolVersion clientversion = ProtocolVersion.fromId(packethandshakinginsetprotocol.b());
-				if (!clientversion.isBetween(ProtocolVersion.MINECRAFT_1_9, ProtocolVersion.MINECRAFT_1_9_4)) {
-					final ChatComponentText chatcomponenttext = new ChatComponentText("Outdated server, max supported version: " + ProtocolVersion.getLatest());
-					this.networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext), new GenericFutureListener<Future<? super Void>>() {
+				//check client version (may be not latest if connection was from snapshot)
+				ProtocolVersion clientversion = ProtocolVersion.fromId(clientVersion);
+				if (clientversion != ProtocolVersion.getLatest()) {
+					String message = MessageFormat.format(ServerPlatform.get().getMiscUtils().getOutdatedServerMessage().replaceAll("'", "''"), "1.11.1");
+					this.networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), new GenericFutureListener<Future<? super Void>>() {
 						@Override
-						public void operationComplete(Future<? super Void> arg0) throws Exception {
-							networkManager.close(chatcomponenttext);
+						public void operationComplete(Future<? super Void> arg0)  {
+							networkManager.close(message);
 						}
 					});
 					break;
 				}
-				networkManager.setPacketListener(getLoginListener(networkManager));
-				if (SpigotConfig.bungee) {
-					final String[] split = packethandshakinginsetprotocol.hostname.split("\u0000");
+				ConnectionImpl connection = ConnectionImpl.getFromChannel(networkManager.getChannel());
+				//bungee spoofed data handling
+				if (ServerPlatform.get().getMiscUtils().isBungeeEnabled()) {
+					final String[] split = hostname.split("\u0000");
 					if ((split.length != 3) && (split.length != 4)) {
-						final ChatComponentText chatcomponenttext = new ChatComponentText("If you wish to use IP forwarding, please enable it in your BungeeCord config as well!");
-						networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext), new GenericFutureListener<Future<? super Void>>() {
+						String message = "If you wish to use IP forwarding, please enable it in your BungeeCord config as well!";
+						networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), new GenericFutureListener<Future<? super Void>>() {
 							@Override
-							public void operationComplete(Future<? super Void> arg0) throws Exception {
-								networkManager.close(chatcomponenttext);
+							public void operationComplete(Future<? super Void> arg0)  {
+								networkManager.close(message);
 							}
 						});
 						return;
 					}
-					packethandshakinginsetprotocol.hostname = split[0];
-					SocketAddress oldaddress = networkManager.getSocketAddress();
-					ProtocolVersion version = ProtocolStorage.getProtocolVersion(oldaddress);
-					ProtocolStorage.clearData(oldaddress);
-					SocketAddress newaddress = new InetSocketAddress(split[1], ((InetSocketAddress) oldaddress).getPort());
-					networkManager.l = newaddress;
-					ProtocolStorage.setProtocolVersion(newaddress, version);
-					networkManager.spoofedUUID = UUIDTypeAdapter.fromString(split[2]);
+					hostname = split[0];
+					changeRemoteAddress(connection, new InetSocketAddress(split[1], connection.getAddress().getPort()));
+					networkManager.setSpoofedUUID(UUIDTypeAdapter.fromString(split[2]));
 					if (split.length == 4) {
-						networkManager.spoofedProfile = gson.fromJson(split[3], Property[].class);
+						networkManager.setSpoofedProperties(gson.fromJson(split[3], ProfileProperty[].class));
 					}
 				}
-				((LoginListener) networkManager.i()).hostname = packethandshakinginsetprotocol.hostname + ":" + packethandshakinginsetprotocol.port;
+				//ps handshake event
+				ConnectionHandshakeEvent event = new ConnectionHandshakeEvent(connection, hostname);
+				Bukkit.getPluginManager().callEvent(event);
+				if (event.getSpoofedAddress() != null) {
+					changeRemoteAddress(connection, event.getSpoofedAddress());
+				}
+				//switch to login stage
+				networkManager.setPacketListener(getLoginListener(networkManager, hostname + ":" + port));
 				break;
 			}
 			case STATUS: {
-				networkManager.setProtocol(EnumProtocol.STATUS);
-				networkManager.setPacketListener(new StatusListener(MinecraftServer.getServer(), networkManager));
+				//switch to status stage
+				networkManager.setProtocol(NetworkState.STATUS);
+				networkManager.setPacketListener(getStatusListener(networkManager));
 				break;
 			}
 			default: {
-				throw new UnsupportedOperationException("Invalid intention " + packethandshakinginsetprotocol.a());
+				throw new UnsupportedOperationException("Invalid intention " + nextState);
 			}
 		}
 	}
 
-	@Override
-	public void a(final IChatBaseComponent ichatbasecomponent) {
+	protected void changeRemoteAddress(ConnectionImpl connection, InetSocketAddress newRemote) {
+		SocketAddress oldaddress = networkManager.getAddress();
+		ProtocolStorage.removeConnection(oldaddress);
+		networkManager.setAddress(newRemote);
+		ProtocolStorage.setConnection(newRemote, connection);
 	}
 
-	public abstract LoginListener getLoginListener(NetworkManager networkManager);
+	protected abstract AbstractLoginListener getLoginListener(NetworkManagerWrapper networkManager, String hostname);
+
+	protected abstract AbstractStatusListener getStatusListener(NetworkManagerWrapper networkManager);
 
 }

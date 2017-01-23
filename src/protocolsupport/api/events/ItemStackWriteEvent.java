@@ -11,6 +11,7 @@ public abstract class ItemStackWriteEvent extends Event {
 	private final ProtocolVersion version;
 	private final ItemStack original;
 	public ItemStackWriteEvent(ProtocolVersion version, ItemStack original) {
+		super(true);
 		this.version = version;
 		this.original = original.clone();
 	}

@@ -27,6 +27,16 @@ public class RecyclableArrayList<E> extends ArrayList<E> implements RecyclableCo
 
 	@Override
 	public void recycle() {
+		for (E element : this) {
+			if (element instanceof Recyclable) {
+				((Recyclable) element).recycle();
+			}
+		}
+		recycleObjectOnly();
+	}
+
+	@Override
+	public void recycleObjectOnly() {
 		clear();
 		RECYCLER.recycle(this, handle);
 	}

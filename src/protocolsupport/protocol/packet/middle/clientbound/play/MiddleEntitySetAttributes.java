@@ -1,16 +1,15 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import java.io.IOException;
 import java.util.UUID;
 
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public abstract class MiddleEntitySetAttributes<T> extends MiddleEntity<T> {
 
 	protected Attribute[] attributes;
 
 	@Override
-	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		super.readFromServerData(serializer);
 		attributes = new Attribute[serializer.readInt()];
 		for (int i = 0; i < attributes.length; i++) {
@@ -26,6 +25,17 @@ public abstract class MiddleEntitySetAttributes<T> extends MiddleEntity<T> {
 				attribute.modifiers[j] = modifier;
 			}
 			attributes[i] = attribute;
+		}
+	}
+
+	@Override
+	public void handle() {
+		if (entityId == cache.getSelfPlayerEntityId()) {
+			for (Attribute attr : attributes) {
+				if (attr.key.equals("generic.maxHealth")) {
+					cache.setMaxHealth((float) attr.value);
+				}
+			}
 		}
 	}
 

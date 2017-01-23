@@ -22,6 +22,10 @@ public class RecyclableEmptyList<E> implements RecyclableCollection<E> {
 	}
 
 	@Override
+	public void recycleObjectOnly() {
+	}
+
+	@Override
 	public int size() {
 		return 0;
 	}

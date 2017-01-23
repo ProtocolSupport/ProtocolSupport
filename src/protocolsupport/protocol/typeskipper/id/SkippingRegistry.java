@@ -3,10 +3,12 @@ package protocolsupport.protocol.typeskipper.id;
 import java.util.EnumMap;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.typeskipper.id.SkippingTable.GenericSkippingTable;
+import protocolsupport.protocol.typeskipper.id.SkippingTable.IntSkippingTable;
 
-public abstract class SkippingRegistry {
+public abstract class SkippingRegistry<T extends SkippingTable> {
 
-	private final EnumMap<ProtocolVersion, SkippingTable> registry = new EnumMap<ProtocolVersion, SkippingTable>(ProtocolVersion.class);
+	private final EnumMap<ProtocolVersion, T> registry = new EnumMap<>(ProtocolVersion.class);
 
 	public SkippingRegistry() {
 		for (ProtocolVersion version : ProtocolVersion.values()) {
@@ -14,17 +16,30 @@ public abstract class SkippingRegistry {
 		}
 	}
 
-	public SkippingTable getTable(ProtocolVersion version) {
+	public T getTable(ProtocolVersion version) {
 		return registry.get(version);
 	}
 
-	protected abstract SkippingTable createTable();
+	protected abstract T createTable();
 
-	protected void registerSkipEntry(int id, ProtocolVersion... versions) {
-		for (ProtocolVersion version : versions) {
-			registry.get(version).setSkip(id);
+	public static abstract class IntSkippingRegistry<T extends IntSkippingTable> extends SkippingRegistry<T> {
+
+		public void registerSkipEntry(int id, ProtocolVersion... versions) {
+			for (ProtocolVersion version : versions) {
+				getTable(version).setSkip(id);
+			}
 		}
+
 	}
 
+	public static abstract class GenericSkippingRegistry<T, R extends GenericSkippingTable<T>> extends SkippingRegistry<R> {
+
+		public void registerSkipEntry(T id, ProtocolVersion... versions) {
+			for (ProtocolVersion version : versions) {
+				getTable(version).setSkip(id);
+			}
+		}
+
+	}
 
 }

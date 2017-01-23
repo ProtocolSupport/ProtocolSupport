@@ -4,11 +4,11 @@ import org.bukkit.Material;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
-import protocolsupport.protocol.typeremapper.id.RemappingTable;
+import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
 
 public class ItemRemapperControl {
 
-	private final RemappingTable table;
+	private final ArrayBasedIdRemappingTable table;
 
 	public ItemRemapperControl(ProtocolVersion version) {
 		switch (version) {

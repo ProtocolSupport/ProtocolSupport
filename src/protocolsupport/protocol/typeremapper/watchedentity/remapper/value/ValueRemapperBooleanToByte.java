@@ -4,7 +4,7 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
 
-public class ValueRemapperBooleanToByte implements ValueRemapper<DataWatcherObjectBoolean> {
+public class ValueRemapperBooleanToByte extends ValueRemapper<DataWatcherObjectBoolean> {
 
 	public static final ValueRemapperBooleanToByte INSTANCE = new ValueRemapperBooleanToByte();
 

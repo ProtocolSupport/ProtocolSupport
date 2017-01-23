@@ -1,22 +1,30 @@
 package protocolsupport.api.events;
 
 import java.net.InetSocketAddress;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.Validate;
 import org.bukkit.event.HandlerList;
+
+import protocolsupport.api.Connection;
+import protocolsupport.api.ProtocolSupportAPI;
+import protocolsupport.utils.ApacheCommonsUtils;
 
 public class PlayerPropertiesResolveEvent extends PlayerEvent {
 
 	private final HashMap<String, ProfileProperty> properties = new HashMap<>();
 
-	public PlayerPropertiesResolveEvent(InetSocketAddress address, String username, List<ProfileProperty> properties) {
-		super(address, username);
+	public PlayerPropertiesResolveEvent(Connection connection, String username, Collection<ProfileProperty> properties) {
+		super(connection, username);
 		for (ProfileProperty property : properties) {
 			addProperty(property);
 		}
+	}
+
+	@Deprecated
+	public PlayerPropertiesResolveEvent(InetSocketAddress address, String username, Collection<ProfileProperty> properties) {
+		this(ProtocolSupportAPI.getConnection(address), username, properties);
 	}
 
 	public Map<String, ProfileProperty> getProperties() {
@@ -41,8 +49,8 @@ public class PlayerPropertiesResolveEvent extends PlayerEvent {
 		private final String signature;
 
 		public ProfileProperty(String name, String value, String signature) {
-			Validate.notNull(name, "Name cannot be null");
-			Validate.notNull(value, "Value cannot be null");
+			ApacheCommonsUtils.notNull(name, "Name cannot be null");
+			ApacheCommonsUtils.notNull(value, "Value cannot be null");
 			this.name = name;
 			this.value = value;
 			this.signature = signature;

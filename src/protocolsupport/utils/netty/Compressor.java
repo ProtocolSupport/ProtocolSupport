@@ -15,7 +15,7 @@ public class Compressor {
 		ProtocolSupport.logInfo("Compression level: "+compressionLevel);
 	}
 
-	private static final int compressionLevel = Utils.getJavaPropertyValue("protocolsupport.compressionlevel", 3, Converter.STRING_TO_INT);
+	private static final int compressionLevel = Utils.getJavaPropertyValue("compressionlevel", 3, Converter.STRING_TO_INT);
 
 	private static final Recycler<Compressor> recycler = new Recycler<Compressor>() {
 		@Override
@@ -37,7 +37,7 @@ public class Compressor {
 	public byte[] compress(byte[] input) {
 		deflater.setInput(input);
 		deflater.finish();
-		byte[] compressedBuf = new byte[input.length * 11 / 10 + 6];
+		byte[] compressedBuf = new byte[((input.length * 11) / 10) + 6];
 		int size = deflater.deflate(compressedBuf);
 		deflater.reset();
 		return Arrays.copyOf(compressedBuf, size);

@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public abstract class MiddleChat<T> extends ClientBoundMiddlePacket<T> {
 
@@ -9,8 +9,8 @@ public abstract class MiddleChat<T> extends ClientBoundMiddlePacket<T> {
 	protected byte position;
 
 	@Override
-	public void readFromServerData(PacketDataSerializer serializer) {
-		chatJson = serializer.readString(Short.MAX_VALUE);
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
+		chatJson = serializer.readString();
 		position = serializer.readByte();
 	}
 

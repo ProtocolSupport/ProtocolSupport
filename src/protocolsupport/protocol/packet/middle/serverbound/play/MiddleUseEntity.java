@@ -1,32 +1,46 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import net.minecraft.server.v1_9_R2.Packet;
-import net.minecraft.server.v1_9_R2.Vector3f;
+import org.bukkit.util.Vector;
+
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middleimpl.PacketCreator;
+import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public abstract class MiddleUseEntity extends ServerBoundMiddlePacket {
 
 	protected int entityId;
-	protected int action;
-	protected Vector3f interactedAt;
+	protected Action action;
+	protected Vector interactedAt;
 	protected int usedHand;
 
 	@Override
-	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
-		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_USE_ENTITY.get());
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_USE_ENTITY);
 		creator.writeVarInt(entityId);
-		creator.writeVarInt(action);
-		if (action == 2) {
-			creator.writeFloat(interactedAt.getX());
-			creator.writeFloat(interactedAt.getY());
-			creator.writeFloat(interactedAt.getZ());
+		creator.writeEnum(action);
+		switch (action) {
+			case INTERACT: {
+				creator.writeVarInt(usedHand);
+				break;
+			}
+			case INTERACT_AT: {
+				creator.writeFloat((float) interactedAt.getX());
+				creator.writeFloat((float) interactedAt.getY());
+				creator.writeFloat((float) interactedAt.getZ());
+				creator.writeVarInt(usedHand);
+				break;
+			}
+			case ATTACK: {
+				break;
+			}
 		}
-		creator.writeVarInt(usedHand);
-		return RecyclableSingletonList.create(creator.create());
+		return RecyclableSingletonList.create(creator);
+	}
+
+	protected enum Action {
+		INTERACT, ATTACK, INTERACT_AT
 	}
 
 }

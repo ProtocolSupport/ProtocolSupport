@@ -11,18 +11,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import net.minecraft.server.v1_9_R2.MinecraftServer;
-import net.minecraft.server.v1_9_R2.PropertyManager;
+import io.netty.util.ResourceLeakDetector;
+import io.netty.util.ResourceLeakDetector.Level;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.api.chat.components.TextComponent;
-import protocolsupport.api.chat.modifiers.Modifier;
-import protocolsupport.api.tab.TabAPI;
-import protocolsupport.api.title.TitleAPI;
+import protocolsupport.zplatform.ServerPlatform;
 
 public class CommandHandler implements CommandExecutor, TabCompleter {
-
-	private static final String DEBUG_PROPERTY = "debug";
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -38,47 +33,23 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			}
 			return true;
 		}
-		if (args.length == 1 && args[0].equalsIgnoreCase("debug")) {
-			@SuppressWarnings("deprecation")
-			PropertyManager manager = MinecraftServer.getServer().getPropertyManager();
-			if (!manager.getBoolean(DEBUG_PROPERTY, false)) {
-				manager.setProperty(DEBUG_PROPERTY, Boolean.TRUE);
-				sender.sendMessage(ChatColor.GOLD + "Enabled debug");
-			} else {
-				manager.setProperty(DEBUG_PROPERTY, Boolean.FALSE);
+		if ((args.length == 1) && args[0].equalsIgnoreCase("debug")) {
+			if (ServerPlatform.get().getMiscUtils().isDebugging()) {
+				ServerPlatform.get().getMiscUtils().disableDebug();
 				sender.sendMessage(ChatColor.GOLD + "Disabled debug");
+			} else {
+				ServerPlatform.get().getMiscUtils().enableDebug();
+				sender.sendMessage(ChatColor.GOLD + "Enabled debug");
 			}
 			return true;
 		}
-		if (args.length == 1 && args[0].equalsIgnoreCase("testtitle")) {
-			TextComponent title = new TextComponent("Test title");
-			Modifier titlemodifier = new Modifier();
-			titlemodifier.setColor(ChatColor.AQUA);
-			titlemodifier.setBold(true);
-			title.setModifier(titlemodifier);
-			TextComponent subtitle = new TextComponent("Test subtitle");
-			Modifier subtitlemodifier = new Modifier();
-			subtitlemodifier.setColor(ChatColor.BLUE);
-			subtitlemodifier.setUnderlined(true);
-			subtitle.setModifier(subtitlemodifier);
-			for (Player player : Bukkit.getOnlinePlayers()) {
-				TitleAPI.sendSimpleTitle(player, title, subtitle, 20, 60, 20);
-			}
-			return true;
-		}
-		if (args.length == 1 && args[0].equalsIgnoreCase("testtab")) {
-			TextComponent header = new TextComponent("Test header");
-			Modifier headermodifier = new Modifier();
-			headermodifier.setColor(ChatColor.AQUA);
-			headermodifier.setBold(true);
-			header.setModifier(headermodifier);
-			TextComponent footer = new TextComponent("Test footer");
-			Modifier footermodifier = new Modifier();
-			footermodifier.setColor(ChatColor.BLUE);
-			footermodifier.setUnderlined(true);
-			footer.setModifier(footermodifier);
-			for (Player player : Bukkit.getOnlinePlayers()) {
-				TabAPI.sendHeaderFooter(player, header, footer);
+		if ((args.length == 1) && args[0].equalsIgnoreCase("leakdetector")) {
+			if (ResourceLeakDetector.isEnabled()) {
+				ResourceLeakDetector.setLevel(Level.DISABLED);
+				sender.sendMessage(ChatColor.GOLD + "Disabled leak detector");
+			} else {
+				ResourceLeakDetector.setLevel(Level.PARANOID);
+				sender.sendMessage(ChatColor.GOLD + "Enabled leak detector");
 			}
 			return true;
 		}
@@ -101,18 +72,15 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
-		ArrayList<String> completions = new ArrayList<String>();
+		ArrayList<String> completions = new ArrayList<>();
 		if ("list".startsWith(args[0])) {
 			completions.add("list");
 		}
 		if ("debug".startsWith(args[0])) {
 			completions.add("debug");
 		}
-		if ("testtitle".startsWith(args[0])) {
-			completions.add("testtitle");
-		}
-		if ("testtab".startsWith(args[0])) {
-			completions.add("testtab");
+		if ("leakdetector".startsWith(args[0])) {
+			completions.add("leakdetector");
 		}
 		return completions;
 	}

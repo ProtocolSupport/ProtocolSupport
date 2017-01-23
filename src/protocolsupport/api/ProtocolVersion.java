@@ -1,9 +1,14 @@
 package protocolsupport.api;
 
+import gnu.trove.map.hash.TIntObjectHashMap;
+
 public enum ProtocolVersion {
 
-	MINECRAFT_FUTURE(-1, 14),
-	MINECRAFT_1_9_4(110, 12, "1.9.4"),
+	MINECRAFT_FUTURE(-1, 17),
+	MINECRAFT_1_11_1(316, 16, "1.11.1"),
+	MINECRAFT_1_11(315, 15, "1.11"),
+	MINECRAFT_1_10(210, 14, "1.10"),
+	MINECRAFT_1_9_4(110, 13, "1.9.4"),
 	MINECRAFT_1_9_2(109, 12, "1.9.2"),
 	MINECRAFT_1_9_1(108, 11, "1.9.1"),
 	MINECRAFT_1_9(107, 10, "1.9"),
@@ -69,7 +74,22 @@ public enum ProtocolVersion {
 	public boolean isBetween(ProtocolVersion start, ProtocolVersion end) {
 		int startId = Math.min(start.orderId, end.orderId);
 		int endId = Math.max(start.orderId, end.orderId);
-		return orderId >= startId && orderId <= endId;
+		return (orderId >= startId) && (orderId <= endId);
+	}
+
+	private static final TIntObjectHashMap<ProtocolVersion> byProtocolId = new TIntObjectHashMap<>();
+	static {
+		for (ProtocolVersion version : ProtocolVersion.values()) {
+			if (version.id != -1) {
+				byProtocolId.put(version.id, version);
+			}
+		}
+	}
+
+	@Deprecated
+	public static ProtocolVersion fromId(int id) {
+		ProtocolVersion version = byProtocolId.get(id);
+		return version != null ? version : UNKNOWN;
 	}
 
 	private static final ProtocolVersion[] byOrderId = new ProtocolVersion[ProtocolVersion.values().length - 1];
@@ -77,15 +97,6 @@ public enum ProtocolVersion {
 		for (ProtocolVersion version : ProtocolVersion.values()) {
 			if (version.orderId != -1) {
 				byOrderId[version.orderId] = version;
-			}
-		}
-	}
-
-	@Deprecated
-	public static ProtocolVersion fromId(int id) {
-		switch (id) {
-			case 110: {
-				return MINECRAFT_1_9_4;
 			}
 			case 109: {
 				return MINECRAFT_1_9_2;
@@ -121,13 +132,12 @@ public enum ProtocolVersion {
 				return MINECRAFT_PE;
 			}
 		}
-		return UNKNOWN;
 	}
 
 	public static ProtocolVersion[] getAllBetween(ProtocolVersion start, ProtocolVersion end) {
 		int startId = Math.min(start.orderId, end.orderId);
 		int endId = Math.max(start.orderId, end.orderId);
-		ProtocolVersion[] between = new ProtocolVersion[endId - startId + 1];
+		ProtocolVersion[] between = new ProtocolVersion[(endId - startId) + 1];
 		for (int i = startId; i <= endId; i++) {
 			between[i - startId] = byOrderId[i];
 		}
@@ -143,7 +153,7 @@ public enum ProtocolVersion {
 	}
 
 	public static ProtocolVersion getLatest() {
-		return ProtocolVersion.MINECRAFT_1_9_4;
+		return ProtocolVersion.MINECRAFT_1_11_1;
 	}
 
 	public static ProtocolVersion getOldest() {

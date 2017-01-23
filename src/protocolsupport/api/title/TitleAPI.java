@@ -1,15 +1,13 @@
 package protocolsupport.api.title;
 
-import org.apache.commons.lang3.Validate;
-import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import net.minecraft.server.v1_9_R2.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_9_R2.PacketPlayOutTitle;
-import net.minecraft.server.v1_9_R2.PacketPlayOutTitle.EnumTitleAction;
-import net.minecraft.server.v1_9_R2.PlayerConnection;
+import protocolsupport.api.Connection;
+import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.utils.ApacheCommonsUtils;
+import protocolsupport.zplatform.ServerPlatform;
 
 public class TitleAPI {
 
@@ -18,24 +16,24 @@ public class TitleAPI {
 	}
 
 	public static void sendSimpleTitle(Player player, String titleJson, String subtitleJson, int fadeIn, int stay, int fadeOut) {
-		Validate.notNull(player, "Player can't be null");
-		if (titleJson == null && subtitleJson == null) {
+		ApacheCommonsUtils.notNull(player, "Player can't be null");
+		if ((titleJson == null) && (subtitleJson == null)) {
 			throw new IllegalArgumentException("Title and subtitle can't be both null");
 		}
-		PlayerConnection connection = ((CraftPlayer) player).getHandle().playerConnection;
+		Connection connection = ProtocolSupportAPI.getConnection(player);
 		if (titleJson != null) {
-			connection.sendPacket(new PacketPlayOutTitle(EnumTitleAction.TITLE, ChatSerializer.a(titleJson)));
+			connection.sendPacket(ServerPlatform.get().getPacketFactory().createTitleMainPacket(titleJson));
 		}
 		if (subtitleJson != null) {
-			connection.sendPacket(new PacketPlayOutTitle(EnumTitleAction.SUBTITLE, ChatSerializer.a(subtitleJson)));
+			connection.sendPacket(ServerPlatform.get().getPacketFactory().createTitleSubPacket(subtitleJson));
 		}
-		connection.sendPacket(new PacketPlayOutTitle(fadeIn, stay, fadeOut));
+		connection.sendPacket(ServerPlatform.get().getPacketFactory().createTitleParamsPacket(fadeIn, stay, fadeOut));
 	}
 
 	public static void removeSimpleTitle(Player player) {
-		PlayerConnection connection = ((CraftPlayer) player).getHandle().playerConnection;
-		connection.sendPacket(new PacketPlayOutTitle(EnumTitleAction.CLEAR, null));
-		connection.sendPacket(new PacketPlayOutTitle(EnumTitleAction.RESET, null));
+		Connection connection = ProtocolSupportAPI.getConnection(player);
+		connection.sendPacket(ServerPlatform.get().getPacketFactory().createTitleClearPacket());
+		connection.sendPacket(ServerPlatform.get().getPacketFactory().createTitleResetPacket());
 	}
 
 }

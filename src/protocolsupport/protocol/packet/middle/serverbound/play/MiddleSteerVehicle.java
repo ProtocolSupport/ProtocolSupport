@@ -1,9 +1,8 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import net.minecraft.server.v1_9_R2.Packet;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middleimpl.PacketCreator;
+import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -14,12 +13,12 @@ public abstract class MiddleSteerVehicle extends ServerBoundMiddlePacket {
 	protected int flags;
 
 	@Override
-	public RecyclableCollection<? extends Packet<?>> toNative() throws Exception {
-		PacketCreator creator = PacketCreator.create(ServerBoundPacket.PLAY_STEER_VEHICLE.get());
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_STEER_VEHICLE);
 		creator.writeFloat(sideForce);
 		creator.writeFloat(forwardForce);
 		creator.writeByte(flags);
-		return RecyclableSingletonList.create(creator.create());
+		return RecyclableSingletonList.create(creator);
 	}
 
 }

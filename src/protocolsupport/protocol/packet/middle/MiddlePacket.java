@@ -1,20 +1,22 @@
 package protocolsupport.protocol.packet.middle;
 
-import org.bukkit.entity.Player;
-
+import protocolsupport.api.Connection;
+import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
 @NeedsNoArgConstructor
 public abstract class MiddlePacket {
 
-	protected Player player;
+	protected Connection connection;
 
-	public boolean needsPlayer() {
-		return false;
+	public final void setConnection(Connection connection) {
+		this.connection = connection;
 	}
 
-	public final void setPlayer(Player player) {
-		this.player = player;
+	protected NetworkDataCache cache;
+
+	public void setSharedStorage(NetworkDataCache sharedstorage) {
+		this.cache = sharedstorage;
 	}
 
 }

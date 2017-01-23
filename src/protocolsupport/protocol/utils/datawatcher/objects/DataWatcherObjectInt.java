@@ -1,7 +1,7 @@
 package protocolsupport.protocol.utils.datawatcher.objects;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 
 public class DataWatcherObjectInt extends DataWatcherObject<Integer> {
@@ -22,12 +22,12 @@ public class DataWatcherObjectInt extends DataWatcherObject<Integer> {
 	}
 
 	@Override
-	public void readFromStream(PacketDataSerializer serializer) {
+	public void readFromStream(ProtocolSupportPacketDataSerializer serializer) {
 		value = serializer.readInt();
 	}
 
 	@Override
-	public void writeToStream(PacketDataSerializer serializer) {
+	public void writeToStream(ProtocolSupportPacketDataSerializer serializer) {
 		serializer.writeInt(value);
 	}
 

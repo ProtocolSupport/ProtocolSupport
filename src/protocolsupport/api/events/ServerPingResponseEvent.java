@@ -4,15 +4,14 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import net.minecraft.server.v1_9_R2.MinecraftServer;
+import protocolsupport.api.Connection;
+import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.zplatform.ServerPlatform;
 
-public class ServerPingResponseEvent extends Event {
-
-	private final InetSocketAddress address;
+public class ServerPingResponseEvent extends ConnectionEvent {
 
 	private ProtocolInfo info;
 	private String motd;
@@ -20,8 +19,8 @@ public class ServerPingResponseEvent extends Event {
 	private int maxPlayers;
 	private List<String> players;
 
-	public ServerPingResponseEvent(InetSocketAddress address, ProtocolInfo info, String icon, String motd, int maxPlayers, List<String> players) {
-		this.address = address;
+	public ServerPingResponseEvent(Connection connection, ProtocolInfo info, String icon, String motd, int maxPlayers, List<String> players) {
+		super(connection);
 		setProtocolInfo(info);
 		setIcon(icon);
 		setMotd(motd);
@@ -29,8 +28,13 @@ public class ServerPingResponseEvent extends Event {
 		setPlayers(players);
 	}
 
+	@Deprecated
+	public ServerPingResponseEvent(InetSocketAddress address, ProtocolInfo info, String icon, String motd, int maxPlayers, List<String> players) {
+		this(ProtocolSupportAPI.getConnection(address), info, icon, motd, maxPlayers, players);
+	}
+
 	public InetSocketAddress getAddress() {
-		return address;
+		return getConnection().getAddress();
 	}
 
 	public ProtocolInfo getProtocolInfo() {
@@ -66,11 +70,11 @@ public class ServerPingResponseEvent extends Event {
 	}
 
 	public List<String> getPlayers() {
-		return new ArrayList<String>(players);
+		return new ArrayList<>(players);
 	}
 
 	public void setPlayers(List<String> players) {
-		this.players = players != null ? new ArrayList<String>(players) : new ArrayList<String>();
+		this.players = players != null ? new ArrayList<>(players) : new ArrayList<>();
 	}
 
 	public static class ProtocolInfo {
@@ -106,14 +110,12 @@ public class ServerPingResponseEvent extends Event {
 		return list;
 	}
 
-	@SuppressWarnings("deprecation")
 	public static String getServerModName() {
-		return MinecraftServer.getServer().getServerModName();
+		return ServerPlatform.get().getMiscUtils().getModName();
 	}
 
-	@SuppressWarnings("deprecation")
 	public static String getServerVersionName() {
-		return MinecraftServer.getServer().getVersion();
+		return ServerPlatform.get().getMiscUtils().getVersionName();
 	}
 
 }

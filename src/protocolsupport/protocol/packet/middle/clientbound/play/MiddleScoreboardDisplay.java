@@ -1,9 +1,7 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import java.io.IOException;
-
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public abstract class MiddleScoreboardDisplay<T> extends ClientBoundMiddlePacket<T> {
 
@@ -11,7 +9,7 @@ public abstract class MiddleScoreboardDisplay<T> extends ClientBoundMiddlePacket
 	protected String name;
 
 	@Override
-	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		position = serializer.readUnsignedByte();
 		name = serializer.readString(16);
 	}

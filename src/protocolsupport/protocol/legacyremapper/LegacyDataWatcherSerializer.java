@@ -2,40 +2,26 @@ package protocolsupport.protocol.legacyremapper;
 
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.TIntObjectMap;
-
-import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.RecyclablePacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.utils.netty.ChannelUtils;
 
 public class LegacyDataWatcherSerializer {
 
-	public static byte[] encodeData(ProtocolVersion version, TIntObjectMap<DataWatcherObject<?>> objects) {
-		RecyclablePacketDataSerializer serializer = RecyclablePacketDataSerializer.create(version);
-		try {
-			if (!objects.isEmpty()) {
-				TIntObjectIterator<DataWatcherObject<?>> iterator = objects.iterator();
-				while (iterator.hasNext()) {
-					iterator.advance();
-					DataWatcherObject<?> object = iterator.value();
-					try {
-						int tk = ((object.getTypeId(version) << 5) | (iterator.key() & 0x1F)) & 0xFF;
-						serializer.writeByte(tk);
-					} catch (IllegalStateException e) {
-						throw new IllegalStateException("Unable to serialize datawathcer object at index "+ iterator.key(), e);
-					}
-					object.writeToStream(serializer);
-				}
-			} else {
-				//write fake entry with type byte and index 31
-				serializer.writeByte(31);
-				serializer.writeByte(0);
+	public static void encodeData(TIntObjectMap<DataWatcherObject<?>> objects, ProtocolSupportPacketDataSerializer serializer) {
+		if (!objects.isEmpty()) {
+			TIntObjectIterator<DataWatcherObject<?>> iterator = objects.iterator();
+			while (iterator.hasNext()) {
+				iterator.advance();
+				DataWatcherObject<?> object = iterator.value();
+				int tk = ((object.getTypeId(serializer.getVersion()) << 5) | (iterator.key() & 0x1F)) & 0xFF;
+				serializer.writeByte(tk);
+				object.writeToStream(serializer);
 			}
-			serializer.writeByte(127);
-			return ChannelUtils.toArray(serializer);
-		} finally {
-			serializer.release();
+		} else {
+			serializer.writeByte(31);
+			serializer.writeByte(0);
 		}
+		serializer.writeByte(127);
 	}
 
 }

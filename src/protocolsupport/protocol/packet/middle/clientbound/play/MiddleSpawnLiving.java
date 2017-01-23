@@ -1,16 +1,14 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import java.io.IOException;
 import java.util.UUID;
 
 import gnu.trove.map.TIntObjectMap;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.PacketDataSerializer;
+import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedLiving;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.utils.netty.ChannelUtils;
 
 public abstract class MiddleSpawnLiving<T> extends ClientBoundMiddlePacket<T> {
 
@@ -30,10 +28,10 @@ public abstract class MiddleSpawnLiving<T> extends ClientBoundMiddlePacket<T> {
 	protected TIntObjectMap<DataWatcherObject<?>> metadata;
 
 	@Override
-	public void readFromServerData(PacketDataSerializer serializer) throws IOException {
+	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		entityId = serializer.readVarInt();
 		uuid = serializer.readUUID();
-		type = serializer.readUnsignedByte();
+		type = serializer.readVarInt();
 		x = serializer.readDouble();
 		y = serializer.readDouble();
 		z = serializer.readDouble();
@@ -43,13 +41,13 @@ public abstract class MiddleSpawnLiving<T> extends ClientBoundMiddlePacket<T> {
 		motX = serializer.readShort();
 		motY = serializer.readShort();
 		motZ = serializer.readShort();
-		metadata = DataWatcherDeserializer.decodeData(ChannelUtils.toArray(serializer));
+		metadata = DataWatcherDeserializer.decodeData(serializer);
 	}
 
 	@Override
 	public void handle() {
 		wentity = new WatchedLiving(entityId, type);
-		storage.addWatchedEntity(wentity);
+		cache.addWatchedEntity(wentity);
 	}
 
 }
