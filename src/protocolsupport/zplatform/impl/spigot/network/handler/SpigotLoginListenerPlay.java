@@ -72,6 +72,7 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 	//reimplement PlayerList login attempt logic to fire PlayerSyncLoginEvent before PlayerLognEvent
 	//also delay login if there was a player with same uuid which was kicked when handling this
 	private static final SimpleDateFormat banDateFormat = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+	@Override
 	public EntityPlayer attemptLogin() {
 		PlayerList playerlist = server.getPlayerList();
 

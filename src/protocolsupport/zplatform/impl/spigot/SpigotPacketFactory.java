@@ -36,16 +36,19 @@ import protocolsupport.zplatform.PlatformPacketFactory;
 
 public class SpigotPacketFactory implements PlatformPacketFactory {
 
+	@Override
 	public Object createInboundInventoryClosePacket() {
 		return new PacketPlayInCloseWindow();
 	}
 
+	@Override
 	public Object createOutboundChatPacket(String message, int position) {
 		return new PacketPlayOutChat(ChatSerializer.a(message), (byte) position);
 	}
 
 	private static final BaseComponent empty = new TextComponent("");
 
+	@Override
 	public Object createTabHeaderFooterPacket(BaseComponent header, BaseComponent footer) {
 		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer());
 		serializer.a(ChatAPI.toJSON(header != null ? header : empty));
@@ -58,42 +61,52 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 		return packet;
 	}
 
+	@Override
 	public Object createTitleResetPacket() {
 		return new PacketPlayOutTitle(EnumTitleAction.CLEAR, null);
 	}
 
+	@Override
 	public Object createTitleClearPacket() {
 		return new PacketPlayOutTitle(EnumTitleAction.RESET, null);
 	}
 
+	@Override
 	public Object createTitleMainPacket(String title) {
 		return new PacketPlayOutTitle(EnumTitleAction.TITLE, ChatSerializer.a(title));
 	}
 
+	@Override
 	public Object createTitleSubPacket(String title) {
 		return new PacketPlayOutTitle(EnumTitleAction.SUBTITLE, ChatSerializer.a(title));
 	}
 
+	@Override
 	public Object createTitleParamsPacket(int fadeIn, int stay, int fadeOut) {
 		return new PacketPlayOutTitle(fadeIn, stay, fadeOut);
 	}
 
+	@Override
 	public Object createLoginDisconnectPacket(String message) {
 		return new PacketLoginOutDisconnect(new ChatComponentText(message));
 	}
 
+	@Override
 	public Object createPlayDisconnectPacket(String message) {
 		return new PacketPlayOutKickDisconnect(new ChatComponentText(message));
 	}
 
+	@Override
 	public Object createLoginEncryptionBeginPacket(PublicKey publicKey, byte[] randomBytes) {
 		return new PacketLoginOutEncryptionBegin("", publicKey, randomBytes);
 	}
 
+	@Override
 	public Object createSetCompressionPacket(int threshold) {
 		return new PacketLoginOutSetCompression(threshold);
 	}
 
+	@Override
 	@SuppressWarnings("deprecation")
 	public Object createBlockBreakSoundPacket(Position pos, Material type) {
 		SoundEffectType blocksound = Block.getById(type.getId()).getStepSound();
@@ -105,11 +118,13 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 		);
 	}
 
+	@Override
 	public Object createStatusPongPacket(long pingId) {
 		return new PacketStatusOutPong(pingId);
 	}
 
 	private final UUID profileUUID = UUID.randomUUID();
+	@Override
 	public Object createStausServerInfoPacket(List<String> profiles, ProtocolInfo info, String icon, String motd, int maxPlayers) {
 		ServerPingPlayerSample playerSample = new ServerPingPlayerSample(maxPlayers, profiles.size());
 
@@ -130,6 +145,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 		return new PacketStatusOutServerInfo(serverping);
 	}
 
+	@Override
 	public Object createLoginSuccessPacket(GameProfile profile) {
 		return new PacketLoginOutSuccess(SpigotMiscUtils.toMojangGameProfile(profile));
 	}

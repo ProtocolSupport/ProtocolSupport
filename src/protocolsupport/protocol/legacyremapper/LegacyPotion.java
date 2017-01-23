@@ -51,12 +51,15 @@ public class LegacyPotion {
 
 	public static String getBasicTypeName(String nbttag) {
 		switch (nbttag) {
+			case "mundane":
 			case "minecraft:mundane": {
 				return "Mundane Potion";
 			}
+			case "thick":
 			case "minecraft:thick": {
 				return "Thick Potion";
 			}
+			case "awkward":
 			case "minecraft:awkward": {
 				return "Awkward Potion";
 			}
