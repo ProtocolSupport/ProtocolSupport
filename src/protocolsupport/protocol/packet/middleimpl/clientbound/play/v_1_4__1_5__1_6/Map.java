@@ -3,8 +3,8 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_4__1_5__
 import org.bukkit.Material;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.legacyremapper.MapTransformer;
-import protocolsupport.protocol.legacyremapper.MapTransformer.ColumnEntry;
+import protocolsupport.protocol.legacyremapper.LegacyMap;
+import protocolsupport.protocol.legacyremapper.LegacyMap.ColumnEntry;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleMap;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -42,7 +42,7 @@ public class Map extends MiddleMap<RecyclableCollection<ClientBoundPacketData>> 
 			datas.add(iconsdata);
 		}
 		if (columns > 0) {
-			MapTransformer maptransformer = new MapTransformer();
+			LegacyMap maptransformer = new LegacyMap();
 			maptransformer.loadFromNewMapData(columns, rows, xstart, zstart, data);
 			ArrayBasedIdRemappingTable colorRemapper = IdRemapper.MAPCOLOR.getTable(version);
 			for (ColumnEntry entry : maptransformer.toPre18MapData()) {

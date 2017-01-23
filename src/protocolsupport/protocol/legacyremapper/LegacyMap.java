@@ -2,7 +2,7 @@ package protocolsupport.protocol.legacyremapper;
 
 import java.util.ArrayList;
 
-public class MapTransformer {
+public class LegacyMap {
 
 	private byte[] colors = new byte[16384];
 
