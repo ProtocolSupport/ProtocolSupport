@@ -94,7 +94,7 @@ public abstract class AbstractLoginListenerPlay implements IHasProfile {
 	}
 
 	protected String getConnectionRepr() {
-		return profile + " (" + networkManager.getAddress() + ")";
+		return (profile != null) ? (profile + " (" + networkManager.getAddress() + ")") : networkManager.getAddress().toString();
 	}
 
 	public void disconnect(final String s) {
