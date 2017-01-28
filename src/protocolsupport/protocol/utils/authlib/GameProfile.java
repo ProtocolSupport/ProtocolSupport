@@ -1,5 +1,6 @@
 package protocolsupport.protocol.utils.authlib;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -46,6 +47,11 @@ public class GameProfile {
 
 	public void clearProperties() {
 		properties.clear();
+	}
+
+	@Override
+	public String toString() {
+		return MessageFormat.format("GameProfile(id={0},name={1})", uuid, name);
 	}
 
 }
