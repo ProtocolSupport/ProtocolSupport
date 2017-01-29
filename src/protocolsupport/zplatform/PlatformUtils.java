@@ -62,4 +62,10 @@ public interface PlatformUtils {
 
 	public NetworkManagerWrapper getNetworkManagerFromChannel(Channel channel);
 
+	public String getReadTimeoutHandlerName();
+
+	public String getSplitterHandlerName();
+
+	public String getPrependerHandlerName();
+
 }

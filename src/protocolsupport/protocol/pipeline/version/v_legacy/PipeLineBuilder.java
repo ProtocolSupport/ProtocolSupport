@@ -4,6 +4,7 @@ import io.netty.channel.Channel;
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.IPipeLineBuilder;
+import protocolsupport.zplatform.ServerPlatform;
 
 public class PipeLineBuilder implements IPipeLineBuilder {
 
@@ -11,7 +12,7 @@ public class PipeLineBuilder implements IPipeLineBuilder {
 
 	@Override
 	public void buildPipeLine(Channel channel, Connection connection) {
-		channel.pipeline().addAfter(ChannelHandlers.TIMEOUT, ChannelHandlers.LEGACY_KICK, legacyHandler);
+		channel.pipeline().addAfter(ServerPlatform.get().getMiscUtils().getReadTimeoutHandlerName(), ChannelHandlers.LEGACY_KICK, legacyHandler);
 	}
 
 }

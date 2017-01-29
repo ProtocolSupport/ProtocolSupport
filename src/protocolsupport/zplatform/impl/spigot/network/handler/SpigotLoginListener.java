@@ -13,7 +13,7 @@ import net.minecraft.server.v1_11_R1.PacketLoginInEncryptionBegin;
 import net.minecraft.server.v1_11_R1.PacketLoginInListener;
 import net.minecraft.server.v1_11_R1.PacketLoginInStart;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
-import protocolsupport.protocol.pipeline.ChannelHandlers;
+import protocolsupport.zplatform.impl.spigot.network.SpigotChannelHandlers;
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketCompressor;
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketDecompressor;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
@@ -34,8 +34,8 @@ public abstract class SpigotLoginListener extends AbstractLoginListener implemen
 		Channel channel = networkManager.getChannel();
 		if (compressionLevel >= 0) {
 			channel.pipeline()
-			.addAfter(ChannelHandlers.SPLITTER, "decompress", new SpigotPacketDecompressor(compressionLevel))
-			.addAfter(ChannelHandlers.PREPENDER, "compress", new SpigotPacketCompressor(compressionLevel));
+			.addAfter(SpigotChannelHandlers.SPLITTER, "decompress", new SpigotPacketDecompressor(compressionLevel))
+			.addAfter(SpigotChannelHandlers.PREPENDER, "compress", new SpigotPacketCompressor(compressionLevel));
 		}
 	}
 

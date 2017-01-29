@@ -31,6 +31,7 @@ import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.zplatform.PlatformUtils;
 import protocolsupport.zplatform.impl.spigot.itemstack.SpigotNBTTagCompoundWrapper;
+import protocolsupport.zplatform.impl.spigot.network.SpigotChannelHandlers;
 import protocolsupport.zplatform.impl.spigot.network.SpigotNetworkManagerWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
@@ -199,6 +200,21 @@ public class SpigotMiscUtils implements PlatformUtils {
 	@Override
 	public NetworkManagerWrapper getNetworkManagerFromChannel(Channel channel) {
 		return SpigotNetworkManagerWrapper.getFromChannel(channel);
+	}
+
+	@Override
+	public String getReadTimeoutHandlerName() {
+		return SpigotChannelHandlers.READ_TIMEOUT;
+	}
+
+	@Override
+	public String getSplitterHandlerName() {
+		return SpigotChannelHandlers.SPLITTER;
+	}
+
+	@Override
+	public String getPrependerHandlerName() {
+		return SpigotChannelHandlers.PREPENDER;
 	}
 
 }

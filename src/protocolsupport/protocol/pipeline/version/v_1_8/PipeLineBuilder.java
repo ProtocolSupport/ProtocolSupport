@@ -21,8 +21,8 @@ public class PipeLineBuilder implements IPipeLineBuilder {
 		ChannelHandlers.getSplitter(pipeline).setRealSplitter(new VarIntFrameDecoder());
 		ChannelHandlers.getPrepender(pipeline).setRealPrepender(new VarIntFrameEncoder());
 		NetworkDataCache sharedstorage = new NetworkDataCache();
-		pipeline.addAfter(ChannelHandlers.SPLITTER, ChannelHandlers.DECODER_TRANSFORMER, new PacketDecoder(connection, sharedstorage));
-		pipeline.addAfter(ChannelHandlers.PREPENDER, ChannelHandlers.ENCODER_TRANSFORMER, new PacketEncoder(connection, sharedstorage));
+		pipeline.addAfter(ServerPlatform.get().getMiscUtils().getSplitterHandlerName(), ChannelHandlers.DECODER_TRANSFORMER, new PacketDecoder(connection, sharedstorage));
+		pipeline.addAfter(ServerPlatform.get().getMiscUtils().getPrependerHandlerName(), ChannelHandlers.ENCODER_TRANSFORMER, new PacketEncoder(connection, sharedstorage));
 	}
 
 }

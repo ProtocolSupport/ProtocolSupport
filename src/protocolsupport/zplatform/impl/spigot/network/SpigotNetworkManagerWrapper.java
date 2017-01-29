@@ -22,7 +22,6 @@ import net.minecraft.server.v1_11_R1.PacketListener;
 import net.minecraft.server.v1_11_R1.PlayerConnection;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.packet.handler.IHasProfile;
-import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 import protocolsupport.zplatform.network.NetworkState;
@@ -30,7 +29,7 @@ import protocolsupport.zplatform.network.NetworkState;
 public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 
 	public static SpigotNetworkManagerWrapper getFromChannel(Channel channel) {
-		return new SpigotNetworkManagerWrapper((NetworkManager) channel.pipeline().get(ChannelHandlers.NETWORK_MANAGER));
+		return new SpigotNetworkManagerWrapper((NetworkManager) channel.pipeline().get(SpigotChannelHandlers.NETWORK_MANAGER));
 	}
 
 	private final NetworkManager internal;

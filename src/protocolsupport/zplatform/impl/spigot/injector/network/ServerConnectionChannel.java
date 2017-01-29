@@ -14,6 +14,7 @@ import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.impl.spigot.SpigotConnectionImpl;
+import protocolsupport.zplatform.impl.spigot.network.SpigotChannelHandlers;
 import protocolsupport.zplatform.impl.spigot.network.handler.SpigotFakePacketListener;
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketDecoder;
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketEncoder;
@@ -31,18 +32,18 @@ public class ServerConnectionChannel extends ChannelInitializer<Channel> {
 		connection.storeInChannel(channel);
 		ProtocolStorage.setConnection(channel.remoteAddress(), connection);
 		ChannelPipeline pipeline = channel.pipeline();
-		pipeline.addAfter(ChannelHandlers.READ_TIMEOUT, ChannelHandlers.INITIAL_DECODER, new InitialPacketDecoder());
-		pipeline.addBefore(ChannelHandlers.NETWORK_MANAGER, ChannelHandlers.LOGIC, new LogicHandler(connection));
+		pipeline.addAfter(SpigotChannelHandlers.READ_TIMEOUT, ChannelHandlers.INITIAL_DECODER, new InitialPacketDecoder());
+		pipeline.addBefore(SpigotChannelHandlers.NETWORK_MANAGER, ChannelHandlers.LOGIC, new LogicHandler(connection));
 		pipeline.remove("legacy_query");
-		pipeline.replace(ChannelHandlers.READ_TIMEOUT, ChannelHandlers.READ_TIMEOUT, new SimpleReadTimeoutHandler(30));
-		pipeline.replace(ChannelHandlers.SPLITTER, ChannelHandlers.SPLITTER, new WrappedSplitter());
-		pipeline.replace(ChannelHandlers.PREPENDER, ChannelHandlers.PREPENDER, new WrappedPrepender());
+		pipeline.replace(SpigotChannelHandlers.READ_TIMEOUT, SpigotChannelHandlers.READ_TIMEOUT, new SimpleReadTimeoutHandler(30));
+		pipeline.replace(SpigotChannelHandlers.SPLITTER, SpigotChannelHandlers.SPLITTER, new WrappedSplitter());
+		pipeline.replace(SpigotChannelHandlers.PREPENDER, SpigotChannelHandlers.PREPENDER, new WrappedPrepender());
 		if (replaceDecoderEncoder) {
-			if (pipeline.get(ChannelHandlers.DECODER).getClass().equals(net.minecraft.server.v1_11_R1.PacketDecoder.class)) {
-				pipeline.replace(ChannelHandlers.DECODER, ChannelHandlers.DECODER, new SpigotPacketDecoder());
+			if (pipeline.get(SpigotChannelHandlers.DECODER).getClass().equals(net.minecraft.server.v1_11_R1.PacketDecoder.class)) {
+				pipeline.replace(SpigotChannelHandlers.DECODER, SpigotChannelHandlers.DECODER, new SpigotPacketDecoder());
 			}
-			if (pipeline.get(ChannelHandlers.ENCODER).getClass().equals(net.minecraft.server.v1_11_R1.PacketEncoder.class)) {
-				pipeline.replace(ChannelHandlers.ENCODER, ChannelHandlers.ENCODER, new SpigotPacketEncoder());
+			if (pipeline.get(SpigotChannelHandlers.ENCODER).getClass().equals(net.minecraft.server.v1_11_R1.PacketEncoder.class)) {
+				pipeline.replace(SpigotChannelHandlers.ENCODER, SpigotChannelHandlers.ENCODER, new SpigotPacketEncoder());
 			}
 		}
 	}
