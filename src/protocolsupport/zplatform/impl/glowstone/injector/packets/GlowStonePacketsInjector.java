@@ -3,6 +3,7 @@ package protocolsupport.zplatform.impl.glowstone.injector.packets;
 import com.flowpowered.network.service.HandlerLookupService;
 
 import net.glowstone.net.message.handshake.HandshakeMessage;
+import net.glowstone.net.message.login.EncryptionKeyResponseMessage;
 import net.glowstone.net.message.login.LoginStartMessage;
 import net.glowstone.net.message.status.StatusPingMessage;
 import net.glowstone.net.message.status.StatusRequestMessage;
@@ -17,6 +18,7 @@ public class GlowStonePacketsInjector {
 		injectInboundHandler(ProtocolType.STATUS.getProtocol(), StatusRequestMessage.class, GlowStoneStatusServerInfoRequestHandler.class);
 		injectInboundHandler(ProtocolType.STATUS.getProtocol(), StatusPingMessage.class, GlowStoneStatusServerPingHandler.class);
 		injectInboundHandler(ProtocolType.LOGIN.getProtocol(), LoginStartMessage.class, GlowStoneLoginStartHandler.class);
+		injectInboundHandler(ProtocolType.LOGIN.getProtocol(), EncryptionKeyResponseMessage.class, GlowStoneLoginEncryptionKeyResponseHandler.class);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
