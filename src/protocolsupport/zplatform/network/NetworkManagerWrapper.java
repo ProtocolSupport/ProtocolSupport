@@ -11,6 +11,7 @@ import io.netty.channel.Channel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
+import protocolsupport.protocol.packet.handler.IHasProfile;
 
 public abstract class NetworkManagerWrapper {
 
@@ -18,7 +19,9 @@ public abstract class NetworkManagerWrapper {
 
 	public abstract InetSocketAddress getAddress();
 
-	public abstract InetSocketAddress getRawAddress();
+	public InetSocketAddress getRawAddress() {
+		return (InetSocketAddress) getChannel().remoteAddress();
+	}
 
 	public abstract void setAddress(InetSocketAddress address);
 
@@ -50,6 +53,18 @@ public abstract class NetworkManagerWrapper {
 
 	public abstract Player getBukkitPlayer();
 
-	public abstract String getUserName();
+	public String getUserName() {
+		Player player = getBukkitPlayer();
+		if (player != null) {
+			return player.getName();
+		} else {
+			Object listener = getPacketListener();
+			if (listener instanceof IHasProfile) {
+				return ((IHasProfile) listener).getProfile().getName();
+			} else {
+				return null;
+			}
+		}
+	}
 
 }

@@ -1,13 +1,43 @@
 package protocolsupport.protocol;
 
+import java.net.InetSocketAddress;
+
+import org.bukkit.entity.Player;
+
 import io.netty.channel.Channel;
 import io.netty.util.AttributeKey;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public abstract class ConnectionImpl extends Connection {
 
 	protected static final AttributeKey<ConnectionImpl> key = AttributeKey.valueOf("PSConnectionImpl");
+
+	protected final NetworkManagerWrapper networkmanager;
+	public ConnectionImpl(NetworkManagerWrapper networkmanager) {
+		this.networkmanager = networkmanager;
+	}
+
+	@Override
+	public Object getNetworkManager() {
+		return networkmanager.unwrap();
+	}
+
+	@Override
+	public boolean isConnected() {
+		return networkmanager.isConnected();
+	}
+
+	@Override
+	public InetSocketAddress getAddress() {
+		return networkmanager.getAddress();
+	}
+
+	@Override
+	public Player getPlayer() {
+		return networkmanager.getBukkitPlayer();
+	}
 
 	public static ConnectionImpl getFromChannel(Channel channel) {
 		return channel.attr(key).get();

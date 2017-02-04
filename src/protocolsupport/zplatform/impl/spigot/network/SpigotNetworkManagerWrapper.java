@@ -21,8 +21,6 @@ import net.minecraft.server.v1_11_R1.Packet;
 import net.minecraft.server.v1_11_R1.PacketListener;
 import net.minecraft.server.v1_11_R1.PlayerConnection;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
-import protocolsupport.protocol.packet.handler.IHasProfile;
-import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 import protocolsupport.zplatform.network.NetworkState;
 
@@ -137,26 +135,11 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 
 	@Override
 	public Player getBukkitPlayer() {
-		PacketListener listener =getPacketListener();
+		PacketListener listener = getPacketListener();
 		if (listener instanceof PlayerConnection) {
 			return ((PlayerConnection) listener).player.getBukkitEntity();
 		}
 		return null;
-	}
-
-	@Override
-	public String getUserName() {
-		String username = null;
-		PacketListener listener = getPacketListener();
-		if (listener instanceof IHasProfile) {
-			GameProfile profile = ((IHasProfile) listener).getProfile();
-			if (profile != null) {
-				username = profile.getName();
-			}
-		} else if (listener instanceof PlayerConnection) {
-			username = ((PlayerConnection) listener).player.getProfile().getName();
-		}
-		return username;
 	}
 
 }

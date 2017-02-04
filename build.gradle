@@ -8,7 +8,23 @@ version '4.25.dev'
 
 sourceCompatibility = 1.8
 
-compileJava.dependsOn("updateSpigot")
+import de.undercouch.gradle.tasks.download.Download
+
+task updateSpigot(type: Download) {
+	src 'http://yivesmirror.com/files/spigot/spigot-1.11.2-R0.1-SNAPSHOT.jar'
+	dest buildDir
+	onlyIfNewer true
+	overwrite true
+}
+
+task updateGlowstone(type: Download) {
+	src 'https://bamboo.gserv.me/artifact/GSPP-SRV/shared/build-latestSuccessful/Version-Independent-Server-JAR/glowstone.jar'
+	dest buildDir
+	onlyIfNewer true
+	overwrite true
+}
+
+compileJava.dependsOn(updateSpigot, updateGlowstone)
 
 sourceSets {
 	main {
@@ -21,6 +37,7 @@ sourceSets {
 dependencies {
 	compile files('buildprocessor/BuildProcessor.jar')
 	compile files('build/spigot-1.11.2-R0.1-SNAPSHOT.jar')
+	compile files('build/glowstone.jar')
 }
 
 jar {
@@ -29,12 +46,4 @@ jar {
 
 	destinationDir = file("$rootDir/target/")
 	version = null
-}
-
-import de.undercouch.gradle.tasks.download.Download
-task updateSpigot(type: Download) {
-	src 'http://yivesmirror.com/files/spigot/spigot-1.11.2-R0.1-SNAPSHOT.jar'
-	dest buildDir
-	onlyIfNewer true
-	overwrite true
 }
