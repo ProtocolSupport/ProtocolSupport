@@ -9,7 +9,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 
-public class NettyServerChannelHandler extends ChannelInboundHandlerAdapter {
+public class SpigotNettyServerChannelHandler extends ChannelInboundHandlerAdapter {
 
 	private static final ServerConnectionChannelPlacer serverConnectionChannelPlacer = new ServerConnectionChannelPlacer();
 
@@ -21,7 +21,7 @@ public class NettyServerChannelHandler extends ChannelInboundHandlerAdapter {
 	}
 
 	private static class ServerConnectionChannelPlacer extends ChannelInitializer<Channel> {
-		private static final ServerConnectionChannel serverConnectionChannel = new ServerConnectionChannel();
+		private static final SpigotServerConnectionChannel serverConnectionChannel = new SpigotServerConnectionChannel();
 
 		@Override
 		protected void initChannel(Channel channel) throws Exception {

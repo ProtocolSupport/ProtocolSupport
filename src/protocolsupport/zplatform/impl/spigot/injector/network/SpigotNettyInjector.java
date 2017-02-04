@@ -14,7 +14,7 @@ import net.minecraft.server.v1_11_R1.ServerConnection;
 import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
 
-public class NettyInjector {
+public class SpigotNettyInjector {
 
 	@SuppressWarnings("unchecked")
 	public static void inject() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
@@ -86,7 +86,7 @@ public class NettyInjector {
 
 		protected void inject(ChannelFuture future) {
 			Channel channel = future.channel();
-			channel.pipeline().addFirst(new NettyServerChannelHandler());
+			channel.pipeline().addFirst(new SpigotNettyServerChannelHandler());
 			synchronized (networkManagersList) {
 				for (NetworkManager nm : networkManagersList) {
 					if (nm.channel.localAddress().equals(channel.localAddress())) {

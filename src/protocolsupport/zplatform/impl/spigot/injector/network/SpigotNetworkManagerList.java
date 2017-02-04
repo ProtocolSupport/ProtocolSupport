@@ -4,10 +4,10 @@ import java.util.List;
 
 import net.minecraft.server.v1_11_R1.NetworkManager;
 
-public class NetworkManagerList {
+public class SpigotNetworkManagerList {
 
 	protected final List<NetworkManager> list;
-	public NetworkManagerList(List<NetworkManager> list) {
+	public SpigotNetworkManagerList(List<NetworkManager> list) {
 		this.list = list;
 	}
 

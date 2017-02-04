@@ -20,7 +20,7 @@ import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketDecode
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketEncoder;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
-public class ServerConnectionChannel extends ChannelInitializer<Channel> {
+public class SpigotServerConnectionChannel extends ChannelInitializer<Channel> {
 
 	private static final boolean replaceDecoderEncoder = Utils.getJavaPropertyValue("replaceencoderdecoder", false, Converter.STRING_TO_BOOLEAN);
 
