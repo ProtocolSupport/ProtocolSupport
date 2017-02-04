@@ -9,6 +9,8 @@ import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.protocol.packet.handler.AbstractStatusListener;
 import protocolsupport.zplatform.PlatformWrapperFactory;
+import protocolsupport.zplatform.impl.glowstone.network.handler.GlowStoneLegacyLoginListener;
+import protocolsupport.zplatform.impl.glowstone.network.handler.GlowStoneModernLoginListener;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
@@ -74,8 +76,7 @@ public class GlowStoneWrapperFactory implements PlatformWrapperFactory {
 			}
 			@Override
 			protected AbstractLoginListener getLoginListener(NetworkManagerWrapper networkManager, String hostname) {
-				// TODO Auto-generated method stub
-				return null;
+				return new GlowStoneModernLoginListener(networkmanager, hostname, hasCompression);
 			}
 		};
 	}
@@ -90,8 +91,7 @@ public class GlowStoneWrapperFactory implements PlatformWrapperFactory {
 			}
 			@Override
 			protected AbstractLoginListener getLoginListener(NetworkManagerWrapper networkManager, String hostname) {
-				// TODO Auto-generated method stub
-				return null;
+				return new GlowStoneLegacyLoginListener(networkmanager, hostname);
 			}
 		};
 	}

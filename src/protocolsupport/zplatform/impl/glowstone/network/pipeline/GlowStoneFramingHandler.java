@@ -1,4 +1,4 @@
-package protocolsupport.zplatform.impl.glowstone.network;
+package protocolsupport.zplatform.impl.glowstone.network.pipeline;
 
 import java.util.List;
 

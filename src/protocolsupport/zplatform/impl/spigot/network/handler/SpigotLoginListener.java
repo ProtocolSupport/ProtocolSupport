@@ -20,13 +20,20 @@ import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public abstract class SpigotLoginListener extends AbstractLoginListener implements ITickable, PacketLoginInListener {
 
-	public SpigotLoginListener(NetworkManagerWrapper networkmanager, String hostname) {
+	private final boolean hasCompression;
+	public SpigotLoginListener(NetworkManagerWrapper networkmanager, String hostname, boolean hasCompression) {
 		super(networkmanager, hostname);
+		this.hasCompression = hasCompression;
 	}
 
 	@Override
 	public void F_() {
 		tick();
+	}
+
+	@Override
+	protected boolean hasCompression() {
+		return hasCompression;
 	}
 
 	@Override

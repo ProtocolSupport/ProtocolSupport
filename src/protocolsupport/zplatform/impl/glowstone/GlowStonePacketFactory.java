@@ -10,6 +10,7 @@ import net.glowstone.net.message.KickMessage;
 import net.glowstone.net.message.SetCompressionMessage;
 import net.glowstone.net.message.handshake.HandshakeMessage;
 import net.glowstone.net.message.login.EncryptionKeyRequestMessage;
+import net.glowstone.net.message.login.EncryptionKeyResponseMessage;
 import net.glowstone.net.message.login.LoginStartMessage;
 import net.glowstone.net.message.login.LoginSuccessMessage;
 import net.glowstone.net.message.play.entity.*;
@@ -613,7 +614,7 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 
     @Override
     public int getInLoginEncryptionBeginPacketId() {
-        return getOpcode(ProtocolType.LOGIN, INBOUND, EncryptionKeyRequestMessage.class);
+        return getOpcode(ProtocolType.LOGIN, INBOUND, EncryptionKeyResponseMessage.class);
     }
 
     @Override
@@ -779,12 +780,10 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
             Field messagesField = ReflectionUtils.getField(service.getClass(), "messages");
             messagesField.setAccessible(true);
             ConcurrentMap<Class<? extends Message>, CodecRegistration> messageMap = (ConcurrentMap<Class<? extends Message>, CodecRegistration>) messagesField.get(service);
-            if (!messageMap.containsKey(messageClass)) return -1;
-            CodecRegistration reg = messageMap.get(messageClass);
-            return reg.getOpcode();
+            return messageMap.get(messageClass).getOpcode();
         } catch (Throwable ignored) {
+        	throw new RuntimeException("Unable to get opcode");
         }
-        return -1;
     }
 
 }

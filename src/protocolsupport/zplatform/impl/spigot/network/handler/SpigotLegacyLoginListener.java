@@ -10,12 +10,7 @@ import protocolsupport.zplatform.network.NetworkManagerWrapper;
 public class SpigotLegacyLoginListener extends SpigotLoginListener {
 
 	public SpigotLegacyLoginListener(NetworkManagerWrapper networkmanager, String hostname) {
-		super(networkmanager, hostname);
-	}
-
-	@Override
-	protected boolean hasCompression() {
-		return false;
+		super(networkmanager, hostname, false);
 	}
 
 	@Override
