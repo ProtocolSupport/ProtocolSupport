@@ -6,8 +6,6 @@ import java.text.MessageFormat;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
-import javax.crypto.SecretKey;
-
 import org.bukkit.entity.Player;
 
 import com.flowpowered.network.Message;
@@ -119,12 +117,6 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 	@Override
 	public void setPacketListener(Object listener) {
 		getChannel().attr(packet_listener_key).set(listener);
-	}
-
-	@Override
-	public void enableEncryption(SecretKey key) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

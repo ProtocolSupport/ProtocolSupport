@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import javax.crypto.SecretKey;
-
 import org.bukkit.entity.Player;
 
 import com.mojang.authlib.properties.Property;
@@ -93,11 +91,6 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 	@Override
 	public void setPacketListener(Object listener) {
 		internal.setPacketListener((PacketListener) listener);
-	}
-
-	@Override
-	public void enableEncryption(SecretKey key) {
-		internal.a(key);
 	}
 
 	@Override

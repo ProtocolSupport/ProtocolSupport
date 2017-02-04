@@ -1,5 +1,6 @@
 package protocolsupport.zplatform.impl.glowstone.network.handler;
 
+import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 
 import protocolsupport.protocol.pipeline.common.PacketDecrypter;
@@ -15,7 +16,7 @@ public class GlowStoneLegacyLoginListener extends GlowStoneLoginListener {
 
 	@Override
 	protected void enableEncryption(SecretKey key) {
-		networkManager.getChannel().pipeline().addBefore(GlowStoneChannelHandlers.FRAMING, GlowStoneChannelHandlers.DECRYPT, new PacketDecrypter(MinecraftEncryption.getDecrypter(key)));
+		networkManager.getChannel().pipeline().addBefore(GlowStoneChannelHandlers.FRAMING, GlowStoneChannelHandlers.DECRYPT, new PacketDecrypter(MinecraftEncryption.getCipher(Cipher.DECRYPT_MODE, key)));
 	}
 
 }

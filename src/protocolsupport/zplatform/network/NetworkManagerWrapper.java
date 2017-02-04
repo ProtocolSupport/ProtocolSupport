@@ -3,8 +3,6 @@ package protocolsupport.zplatform.network;
 import java.net.InetSocketAddress;
 import java.util.UUID;
 
-import javax.crypto.SecretKey;
-
 import org.bukkit.entity.Player;
 
 import io.netty.channel.Channel;
@@ -40,8 +38,6 @@ public abstract class NetworkManagerWrapper {
 	public abstract Object getPacketListener();
 
 	public abstract void setPacketListener(Object listener);
-
-	public abstract void enableEncryption(SecretKey key);
 
 	public abstract UUID getSpoofedUUID();
 

@@ -11,10 +11,10 @@ import javax.crypto.spec.IvParameterSpec;
 
 public class MinecraftEncryption {
 
-	public static Cipher getDecrypter(SecretKey key) {
+	public static Cipher getCipher(int mode, SecretKey key) {
 		try {
 			Cipher instance = Cipher.getInstance("AES/CFB8/NoPadding");
-			instance.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(key.getEncoded()));
+			instance.init(mode, key, new IvParameterSpec(key.getEncoded()));
 			return instance;
 		} catch (GeneralSecurityException e) {
 			throw new RuntimeException("Unable to get decrypter", e);

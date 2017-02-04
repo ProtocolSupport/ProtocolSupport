@@ -11,10 +11,8 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 
 public class PacketDecrypter extends ByteToMessageDecoder {
 
-	private static final byte[] empty = new byte[0];
-
-	private Cipher cipher;
-	private byte[] buffer = empty;
+	private final Cipher cipher;
+	private byte[] buffer = {};
 
 	public PacketDecrypter(Cipher cipher) {
 		this.cipher = cipher;

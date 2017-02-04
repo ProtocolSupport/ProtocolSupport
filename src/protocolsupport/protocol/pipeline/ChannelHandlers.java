@@ -11,6 +11,8 @@ public class ChannelHandlers {
 	public static final String ENCODER_TRANSFORMER = "ps_encoder_transformer";
 	public static final String LOGIC = "ps_logic";
 	public static final String LEGACY_KICK = "ps_legacy_kick";
+	public static final String ENCRYPT = "encrypt";
+	public static final String DECRYPT = "decrypt";
 
 	public static SimpleReadTimeoutHandler getTimeoutHandler(ChannelPipeline pipeline) {
 		return (SimpleReadTimeoutHandler) pipeline.get(ServerPlatform.get().getMiscUtils().getReadTimeoutHandlerName());
