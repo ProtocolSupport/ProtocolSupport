@@ -10,6 +10,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
 
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelPipeline;
+import protocolsupport.protocol.pipeline.IPacketPrepender;
+import protocolsupport.protocol.pipeline.IPacketSplitter;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 import protocolsupport.zplatform.network.NetworkState;
@@ -67,5 +70,7 @@ public interface PlatformUtils {
 	public String getSplitterHandlerName();
 
 	public String getPrependerHandlerName();
+
+	public void setFraming(ChannelPipeline pipeline, IPacketSplitter splitter, IPacketPrepender prepender);
 
 }

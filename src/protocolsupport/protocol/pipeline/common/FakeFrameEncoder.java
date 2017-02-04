@@ -4,13 +4,10 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
 
-public class NoOpFrameEncoder implements IPacketPrepender {
+public class FakeFrameEncoder implements IPacketPrepender {
 
 	@Override
 	public void prepend(ChannelHandlerContext ctx, ByteBuf input, ByteBuf output) {
-		int readableBytes = input.readableBytes();
-		output.ensureWritable(readableBytes);
-		output.writeBytes(input, input.readerIndex(), readableBytes);
 	}
 
 }

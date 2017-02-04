@@ -12,11 +12,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
 
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelPipeline;
 import net.glowstone.GlowServer;
 import net.glowstone.net.protocol.ProtocolType;
 import net.glowstone.util.GlowServerIcon;
+import protocolsupport.protocol.pipeline.IPacketPrepender;
+import protocolsupport.protocol.pipeline.IPacketSplitter;
 import protocolsupport.zplatform.PlatformUtils;
 import protocolsupport.zplatform.impl.glowstone.network.GlowStoneChannelHandlers;
+import protocolsupport.zplatform.impl.glowstone.network.GlowStoneFramingHandler;
 import protocolsupport.zplatform.impl.glowstone.network.GlowStoneNetworkManagerWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
@@ -205,12 +209,17 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 
 	@Override
 	public String getSplitterHandlerName() {
-		return GlowStoneChannelHandlers.SPLITTER;
+		return GlowStoneChannelHandlers.FRAMING;
 	}
 
 	@Override
 	public String getPrependerHandlerName() {
-		return GlowStoneChannelHandlers.PREPENDER;
+		return GlowStoneChannelHandlers.FRAMING;
+	}
+
+	@Override
+	public void setFraming(ChannelPipeline pipeline, IPacketSplitter splitter, IPacketPrepender prepender) {
+		((GlowStoneFramingHandler) pipeline.get(GlowStoneChannelHandlers.FRAMING)).setRealFraming(prepender, splitter);
 	}
 
 }

@@ -19,6 +19,7 @@ import org.spigotmc.SpigotConfig;
 import com.mojang.authlib.properties.Property;
 
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelPipeline;
 import net.minecraft.server.v1_11_R1.EnumProtocol;
 import net.minecraft.server.v1_11_R1.Item;
 import net.minecraft.server.v1_11_R1.LocaleI18n;
@@ -28,11 +29,15 @@ import net.minecraft.server.v1_11_R1.NBTTagCompound;
 import net.minecraft.server.v1_11_R1.NetworkManager;
 import net.minecraft.server.v1_11_R1.SoundEffect;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
+import protocolsupport.protocol.pipeline.IPacketPrepender;
+import protocolsupport.protocol.pipeline.IPacketSplitter;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.zplatform.PlatformUtils;
 import protocolsupport.zplatform.impl.spigot.itemstack.SpigotNBTTagCompoundWrapper;
 import protocolsupport.zplatform.impl.spigot.network.SpigotChannelHandlers;
 import protocolsupport.zplatform.impl.spigot.network.SpigotNetworkManagerWrapper;
+import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedPrepender;
+import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedSplitter;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 import protocolsupport.zplatform.network.NetworkState;
@@ -215,6 +220,12 @@ public class SpigotMiscUtils implements PlatformUtils {
 	@Override
 	public String getPrependerHandlerName() {
 		return SpigotChannelHandlers.PREPENDER;
+	}
+
+	@Override
+	public void setFraming(ChannelPipeline pipeline, IPacketSplitter splitter, IPacketPrepender prepender) {
+		((SpigotWrappedSplitter) pipeline.get(SpigotChannelHandlers.SPLITTER)).setRealSplitter(splitter);
+		((SpigotWrappedPrepender) pipeline.get(SpigotChannelHandlers.PREPENDER)).setRealPrepender(prepender);
 	}
 
 }

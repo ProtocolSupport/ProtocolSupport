@@ -3,7 +3,6 @@ package protocolsupport.protocol.pipeline.version.v_future;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import protocolsupport.api.Connection;
-import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.IPipeLineBuilder;
 import protocolsupport.protocol.pipeline.common.VarIntFrameDecoder;
 import protocolsupport.protocol.pipeline.common.VarIntFrameEncoder;
@@ -17,8 +16,7 @@ public class PipeLineBuilder implements IPipeLineBuilder {
 		ChannelPipeline pipeline = channel.pipeline();
 		NetworkManagerWrapper networkmanager = ServerPlatform.get().getMiscUtils().getNetworkManagerFromChannel(channel);
 		networkmanager.setPacketListener(ServerPlatform.get().getWrapperFactory().createModernHandshakeListener(networkmanager, true));
-		ChannelHandlers.getSplitter(pipeline).setRealSplitter(new VarIntFrameDecoder());
-		ChannelHandlers.getPrepender(pipeline).setRealPrepender(new VarIntFrameEncoder());
+		ServerPlatform.get().getMiscUtils().setFraming(pipeline, new VarIntFrameDecoder(), new VarIntFrameEncoder());
 	}
 
 }

@@ -6,11 +6,10 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
 
-public class NoOpFrameDecoder implements IPacketSplitter {
+public class FakeFrameDecoder implements IPacketSplitter {
 
 	@Override
 	public void split(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) {
-		list.add(input.readBytes(input.readableBytes()));
 	}
 
 }
