@@ -1,10 +1,8 @@
 package protocolsupport.zplatform.impl.glowstone.network;
 
-import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
 import java.text.MessageFormat;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicReference;
 
 import org.bukkit.entity.Player;
 
@@ -19,7 +17,6 @@ import net.glowstone.net.GlowSession;
 import net.glowstone.net.pipeline.MessageHandler;
 import net.glowstone.net.protocol.ProtocolType;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
-import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.zplatform.impl.glowstone.GlowStoneMiscUtils;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 import protocolsupport.zplatform.network.NetworkState;
@@ -36,20 +33,13 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 		return new GlowStoneNetworkManagerWrapper((MessageHandler) channel.pipeline().get(GlowStoneChannelHandlers.NETWORK_MANAGER));
 	}
 
-	private static final Field atomicSessionField = ReflectionUtils.getField(MessageHandler.class, "session");
-
 	private final MessageHandler handler;
 	public GlowStoneNetworkManagerWrapper(MessageHandler handler) {
 		this.handler = handler;
 	}
 
-	@SuppressWarnings("unchecked")
 	private GlowSession getSession() {
-		try {
-			return ((AtomicReference<GlowSession>) atomicSessionField.get(handler)).get();
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			throw new RuntimeException("Unable to get session from message handler", e);
-		}
+		return handler.getSession().get();
 	}
 
 	@Override
