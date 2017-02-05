@@ -58,7 +58,7 @@ public abstract class AbstractHandshakeListener {
 				//check client version (may be not latest if connection was from snapshot)
 				ProtocolVersion clientversion = ProtocolVersion.fromId(clientVersion);
 				if (clientversion != ProtocolVersion.getLatest()) {
-					String message = MessageFormat.format(ServerPlatform.get().getMiscUtils().getOutdatedServerMessage().replaceAll("'", "''"), "1.11.1");
+					String message = MessageFormat.format(ServerPlatform.get().getMiscUtils().getOutdatedServerMessage().replace("'", "''"), ServerPlatform.get().getMiscUtils().getVersionName());
 					this.networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), new GenericFutureListener<Future<? super Void>>() {
 						@Override
 						public void operationComplete(Future<? super Void> arg0)  {

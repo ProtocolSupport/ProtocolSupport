@@ -98,8 +98,7 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 
 	@Override
 	public String getOutdatedServerMessage() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Outdated server! I\'m running {0}";
 	}
 
 	@Override
