@@ -14,11 +14,13 @@ import org.bukkit.util.CachedServerIcon;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import net.glowstone.GlowServer;
+import net.glowstone.io.nbt.NbtSerialization;
 import net.glowstone.net.protocol.ProtocolType;
 import net.glowstone.util.GlowServerIcon;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
 import protocolsupport.zplatform.PlatformUtils;
+import protocolsupport.zplatform.impl.glowstone.itemstack.GlowStoneNBTTagCompoundWrapper;
 import protocolsupport.zplatform.impl.glowstone.network.GlowStoneChannelHandlers;
 import protocolsupport.zplatform.impl.glowstone.network.GlowStoneNetworkManagerWrapper;
 import protocolsupport.zplatform.impl.glowstone.network.pipeline.GlowStoneFramingHandler;
@@ -80,14 +82,12 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 
 	@Override
 	public ItemStack createItemStackFromNBTTag(NBTTagCompoundWrapper tag) {
-		// TODO Auto-generated method stub
-		return null;
+		return NbtSerialization.readItem(((GlowStoneNBTTagCompoundWrapper) tag).unwrap());
 	}
 
 	@Override
 	public NBTTagCompoundWrapper createNBTTagFromItemStack(ItemStack itemstack) {
-		// TODO Auto-generated method stub
-		return null;
+		return GlowStoneNBTTagCompoundWrapper.wrap(NbtSerialization.writeItem(itemstack, 0));
 	}
 
 	@Override
@@ -136,8 +136,9 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 
 	@Override
 	public <V> FutureTask<V> callSyncTask(Callable<V> call) {
-		// TODO Auto-generated method stub
-		return null;
+		FutureTask<V> task = new FutureTask<>(call);
+		Bukkit.getScheduler().scheduleSyncDelayedTask(null, task);
+		return task;
 	}
 
 	@Override

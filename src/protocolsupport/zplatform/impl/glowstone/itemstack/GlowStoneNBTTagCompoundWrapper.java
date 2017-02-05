@@ -25,6 +25,10 @@ public class GlowStoneNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 		this.tag = tag;
 	}
 
+	public CompoundTag unwrap() {
+		return tag;
+	}
+
 	public static GlowStoneNBTTagCompoundWrapper fromJson(String json) {
 		try {
 			return new GlowStoneNBTTagCompoundWrapper(Mojangson.parseCompound(json));
