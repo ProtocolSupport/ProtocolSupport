@@ -75,14 +75,6 @@ public abstract class AbstractLoginListenerPlay implements IHasProfile {
 		}
 	}
 
-	private JoinData joindata = null;
-	private JoinData getOrCreateJoinData() {
-		if (joindata == null) {
-			joindata = createJoinData();
-		}
-		return joindata;
-	}
-
 	private void tryJoin() {
 		//find players with same uuid
 		List<Player> toKick = Bukkit.getOnlinePlayers().stream().filter(player -> player.getUniqueId().equals(profile.getUUID())).collect(Collectors.toList());
@@ -92,15 +84,18 @@ public abstract class AbstractLoginListenerPlay implements IHasProfile {
 			return;
 		}
 
+		//no longer attempt to join
+		ready = false;
+
 		//get player
-		JoinData data = getOrCreateJoinData();
+		JoinData joindata = createJoinData();
 
 		//ps sync login event
-		PlayerSyncLoginEvent syncloginevent = new PlayerSyncLoginEvent(ConnectionImpl.getFromChannel(networkManager.getChannel()), data.player);
+		PlayerSyncLoginEvent syncloginevent = new PlayerSyncLoginEvent(ConnectionImpl.getFromChannel(networkManager.getChannel()), joindata.player);
 		Bukkit.getPluginManager().callEvent(syncloginevent);
 		if (syncloginevent.isLoginDenied()) {
 			disconnect(syncloginevent.getDenyLoginMessage());
-			data.close();
+			joindata.close();
 			return;
 		}
 
@@ -109,12 +104,10 @@ public abstract class AbstractLoginListenerPlay implements IHasProfile {
 		checkBans(event, joindata.data);
 		if (event.getResult() != PlayerLoginEvent.Result.ALLOWED) {
 			disconnect(event.getKickMessage());
-			data.close();
+			joindata.close();
 			return;
 		}
 
-		//no longer attempt to join
-		ready = false;
 		//send packet to notify about actual login phase finished
 		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("PS|FinishLogin"));
 		//add player to game
