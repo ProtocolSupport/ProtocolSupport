@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_4__1_5__
 import org.bukkit.Material;
 
 import io.netty.buffer.Unpooled;
+import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
@@ -15,6 +16,9 @@ public class CustomPayload extends MiddleCustomPayload {
 	@Override
 	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) {
 		tag = serializer.readString(20);
+		if (serializer.readableBytes() > Short.MAX_VALUE) {
+			throw new DecoderException("Payload may not be larger than 32767 bytes");
+		}
 		ProtocolSupportPacketDataSerializer olddata = new ProtocolSupportPacketDataSerializer(Unpooled.wrappedBuffer(serializer.readByteArray(Short.MAX_VALUE)), serializer.getVersion());
 		newdata.clear();
 		if (tag.equals("MC|ItemName")) {
