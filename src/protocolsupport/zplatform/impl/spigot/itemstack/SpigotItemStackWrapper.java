@@ -79,11 +79,6 @@ public class SpigotItemStackWrapper extends ItemStackWrapper {
 	}
 
 	@Override
-	public String getDisplayName() {
-		return itemstack.getName();
-	}
-
-	@Override
 	public void setDisplayName(String displayName) {
 		itemstack.c(displayName);
 	}

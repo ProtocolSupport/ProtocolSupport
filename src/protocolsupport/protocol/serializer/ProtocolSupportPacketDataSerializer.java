@@ -391,6 +391,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 			if (nbttagcompound.hasKeyOfType("stored-enchants", NBTTagCompoundWrapper.TYPE_LIST)) {
 				nbttagcompound.setList("stored-enchants", filterEnchantList(nbttagcompound.getList("stored-enchants", NBTTagCompoundWrapper.TYPE_COMPOUND)));
 			}
+			itemstack.setTag(nbttagcompound);
 		}
 		if (ItemStackWriteEvent.getHandlerList().getRegisteredListeners().length > 0) {
 			ItemStackWriteEvent event = new InternalItemStackWriteEvent(getVersion(), original, itemstack);

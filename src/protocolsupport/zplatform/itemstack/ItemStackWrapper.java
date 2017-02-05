@@ -31,8 +31,6 @@ public abstract class ItemStackWrapper {
 
 	public abstract void setAmount(int amount);
 
-	public abstract String getDisplayName();
-
 	public abstract void setDisplayName(String displayName);
 
 	public abstract NBTTagCompoundWrapper getTag();
