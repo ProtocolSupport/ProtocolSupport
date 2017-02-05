@@ -634,7 +634,7 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 
     @Override
     public int getInPlayPlayerPacketId() {
-        return getOpcode(ProtocolType.PLAY, INBOUND, PlayerActionMessage.class);
+        return getOpcode(ProtocolType.PLAY, INBOUND, PlayerUpdateMessage.class);
     }
 
     @Override
@@ -659,7 +659,7 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 
     @Override
     public int getInPlayBlockPlacePacketId() {
-        return getOpcode(ProtocolType.PLAY, INBOUND, BlockPlacementMessage.class);
+        return getOpcode(ProtocolType.PLAY, INBOUND, UseItemMessage.class);
     }
 
     @Override
@@ -749,7 +749,7 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 
     @Override
     public int getInPlayUseItemPacketId() {
-        return getOpcode(ProtocolType.PLAY, INBOUND, UseItemMessage.class);
+        return getOpcode(ProtocolType.PLAY, INBOUND, BlockPlacementMessage.class);
     }
 
     @Override
