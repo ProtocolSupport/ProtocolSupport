@@ -39,6 +39,9 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 
 	@Override
 	public void encode(ChannelHandlerContext ctx, ByteBuf packet, List<Object> output) throws InstantiationException, IllegalAccessException  {
+		if (!packet.isReadable()) {
+			return;
+		}
 		NetworkState currentProtocol = ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(ctx.channel());
 		middlebuffer.setBuf(packet);
 		int packetId = middlebuffer.readVarInt();

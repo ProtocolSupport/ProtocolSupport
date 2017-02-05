@@ -18,6 +18,9 @@ public class PacketEncrypter extends MessageToByteEncoder<ByteBuf> {
 
 	@Override
 	protected void encode(ChannelHandlerContext ctx, ByteBuf in, ByteBuf out) throws Exception {
+		if (!in.isReadable()) {
+			return;
+		}
 		int readableBytes = in.readableBytes();
 		byte[] inBytes = readIn(in);
 		int outputSize = cipher.getOutputSize(readableBytes);
