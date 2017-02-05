@@ -1,7 +1,7 @@
 package protocolsupport.zplatform.impl.glowstone;
 
-import java.io.DataInput;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.bukkit.Material;
 
@@ -9,6 +9,8 @@ import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.protocol.packet.handler.AbstractStatusListener;
 import protocolsupport.zplatform.PlatformWrapperFactory;
+import protocolsupport.zplatform.impl.glowstone.itemstack.GlowStoneNBTTagCompoundWrapper;
+import protocolsupport.zplatform.impl.glowstone.itemstack.GlowStoneNBTTagListWrapper;
 import protocolsupport.zplatform.impl.glowstone.network.handler.GlowStoneLegacyLoginListener;
 import protocolsupport.zplatform.impl.glowstone.network.handler.GlowStoneModernLoginListener;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
@@ -20,32 +22,27 @@ public class GlowStoneWrapperFactory implements PlatformWrapperFactory {
 
 	@Override
 	public NBTTagListWrapper createEmptyNBTList() {
-		// TODO Auto-generated method stub
-		return null;
+		return GlowStoneNBTTagListWrapper.create();
 	}
 
 	@Override
 	public NBTTagCompoundWrapper createNBTCompoundFromJson(String json) {
-		// TODO Auto-generated method stub
-		return null;
+		return GlowStoneNBTTagCompoundWrapper.fromJson(json);
 	}
 
 	@Override
-	public NBTTagCompoundWrapper createNBTCompoundFromStream(DataInput datainput) throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+	public NBTTagCompoundWrapper createNBTCompoundFromStream(InputStream in) throws IOException {
+		return GlowStoneNBTTagCompoundWrapper.fromStream(in);
 	}
 
 	@Override
 	public NBTTagCompoundWrapper createEmptyNBTCompound() {
-		// TODO Auto-generated method stub
-		return null;
+		return GlowStoneNBTTagCompoundWrapper.createEmpty();
 	}
 
 	@Override
 	public NBTTagCompoundWrapper createNullNBTCompound() {
-		// TODO Auto-generated method stub
-		return null;
+		return GlowStoneNBTTagCompoundWrapper.createNull();
 	}
 
 	@Override

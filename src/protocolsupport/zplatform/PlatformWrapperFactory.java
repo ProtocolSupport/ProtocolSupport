@@ -1,7 +1,7 @@
 package protocolsupport.zplatform;
 
-import java.io.DataInput;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.bukkit.Material;
 
@@ -17,7 +17,7 @@ public interface PlatformWrapperFactory {
 
 	public NBTTagCompoundWrapper createNBTCompoundFromJson(String json);
 
-	public NBTTagCompoundWrapper createNBTCompoundFromStream(DataInput datainput) throws IOException;
+	public NBTTagCompoundWrapper createNBTCompoundFromStream(InputStream datainput) throws IOException;
 
 	public NBTTagCompoundWrapper createEmptyNBTCompound();
 

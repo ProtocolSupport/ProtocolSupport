@@ -1,12 +1,12 @@
 package protocolsupport.zplatform.itemstack;
 
-import java.io.DataOutput;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Collection;
 
 public abstract class NBTTagCompoundWrapper {
 
-	public abstract void writeToStream(DataOutput dataoutput) throws IOException;
+	public abstract void writeToStream(OutputStream outputstream) throws IOException;
 
 	public abstract boolean isNull();
 

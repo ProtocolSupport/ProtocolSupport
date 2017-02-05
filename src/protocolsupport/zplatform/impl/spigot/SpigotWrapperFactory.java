@@ -1,7 +1,8 @@
 package protocolsupport.zplatform.impl.spigot;
 
-import java.io.DataInput;
+import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.bukkit.Material;
 
@@ -30,8 +31,8 @@ public class SpigotWrapperFactory implements PlatformWrapperFactory {
 	}
 
 	@Override
-	public NBTTagCompoundWrapper createNBTCompoundFromStream(DataInput datainput) throws IOException {
-		return SpigotNBTTagCompoundWrapper.fromStream(datainput);
+	public NBTTagCompoundWrapper createNBTCompoundFromStream(InputStream in) throws IOException {
+		return SpigotNBTTagCompoundWrapper.fromStream(new DataInputStream(in));
 	}
 
 	@Override

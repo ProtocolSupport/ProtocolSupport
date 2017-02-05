@@ -3,6 +3,8 @@ package protocolsupport.protocol.serializer;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.zip.GZIPInputStream;
@@ -230,8 +232,8 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 				if (length < 0) {
 					return ServerPlatform.get().getWrapperFactory().createNullNBTCompound();
 				}
-				try (DataInputStream datainputstream = new DataInputStream(new GZIPInputStream(new ByteBufInputStream(readSlice(length))))) {
-					return ServerPlatform.get().getWrapperFactory().createNBTCompoundFromStream(datainputstream);
+				try (InputStream inputstream = new GZIPInputStream(new ByteBufInputStream(readSlice(length)))) {
+					return ServerPlatform.get().getWrapperFactory().createNBTCompoundFromStream(inputstream);
 				}
 			} else {
 				markReaderIndex();
@@ -258,8 +260,8 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 					//fake length
 					writeShort(0);
 					//actual nbt
-					try (DataOutputStream dataoutputstream = new DataOutputStream(new GZIPOutputStream(new ByteBufOutputStream(this)))) {
-						tag.writeToStream(dataoutputstream);
+					try (OutputStream outputstream = new GZIPOutputStream(new ByteBufOutputStream(this))) {
+						tag.writeToStream(outputstream);
 					}
 					//now replace fake length with real length
 					setShort(writerIndex, writerIndex() - writerIndex - Short.BYTES);
