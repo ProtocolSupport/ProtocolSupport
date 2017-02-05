@@ -78,7 +78,7 @@ public class GlowStoneNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 	@Override
 	public boolean hasKeyOfType(String tagname, int type) {
 		Tag<?> tagval = tag.getValue().get(tagname);
-		if (tagval != null && tagval.getType().getId() == type) {
+		if ((tagval != null) && (tagval.getType().getId() == type)) {
 			return true;
 		}
 		return false;
@@ -87,7 +87,7 @@ public class GlowStoneNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 	@Override
 	public NBTTagCompoundWrapper getCompound(String key) {
 		Tag<?> tagval = tag.getValue().get(key);
-		if (tagval != null && tagval.getType() == TagType.COMPOUND) {
+		if ((tagval != null) && (tagval.getType() == TagType.COMPOUND)) {
 			return GlowStoneNBTTagCompoundWrapper.wrap((CompoundTag) tagval);
 		}
 		return GlowStoneNBTTagCompoundWrapper.createEmpty();
@@ -102,7 +102,7 @@ public class GlowStoneNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 	@Override
 	public NBTTagListWrapper getList(String key, int type) {
 		Tag<?> tagval = tag.getValue().get(key);
-		if (tagval != null && tagval.getType() == TagType.LIST) {
+		if ((tagval != null) && (tagval.getType() == TagType.LIST)) {
 			return new GlowStoneNBTTagListWrapper((ListTag<Tag<?>>) tagval);
 		}
 		return GlowStoneNBTTagListWrapper.create();
@@ -117,7 +117,7 @@ public class GlowStoneNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 	@Override
 	public String getString(String key) {
 		Tag<?> tagval = tag.getValue().get(key);
-		if (tagval != null && tagval.getType() == TagType.STRING) {
+		if ((tagval != null) && (tagval.getType() == TagType.STRING)) {
 			return (String) tagval.getValue();
 		}
 		return "";

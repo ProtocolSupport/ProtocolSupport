@@ -14,7 +14,7 @@ public class GameProfile {
 	private final HashMap<String, ProfileProperty> properties = new HashMap<>();
 
 	public GameProfile(UUID uuid, String name) {
-		if (uuid == null && name == null) {
+		if ((uuid == null) && (name == null)) {
 			throw new IllegalArgumentException("Both name and uuid can't be null");
 		}
 		this.uuid = uuid;

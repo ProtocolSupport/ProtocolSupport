@@ -55,7 +55,7 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 	@Override
 	public void setAddress(InetSocketAddress address) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -118,7 +118,7 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 	@Override
 	public void setSpoofedUUID(UUID uuid) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -130,7 +130,7 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 	@Override
 	public void setSpoofedProperties(ProfileProperty[] properties) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

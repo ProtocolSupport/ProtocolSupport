@@ -90,7 +90,7 @@ public class GlowStoneLoginListenerPlay extends AbstractLoginListenerPlay implem
 		GlowServer.logger.info(glowplayer.getName() + " [" + networkManager.getAddress() + "] connected, UUID: " + glowplayer.getUniqueId());
 
 		String message = EventFactory.onPlayerJoin(glowplayer).getJoinMessage();
-		if (message != null && !message.isEmpty()) {
+		if ((message != null) && !message.isEmpty()) {
 			server.broadcastMessage(message);
 		}
 		Message addMessage = new UserListItemMessage(UserListItemMessage.Action.ADD_PLAYER, glowplayer.getUserListEntry());

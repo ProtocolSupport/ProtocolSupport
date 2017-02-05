@@ -20,8 +20,8 @@ import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.protocol.storage.ThrottleTracker;
 import protocolsupport.protocol.utils.authlib.UUIDTypeAdapter;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.network.NetworkState;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
+import protocolsupport.zplatform.network.NetworkState;
 
 public abstract class AbstractHandshakeListener {
 

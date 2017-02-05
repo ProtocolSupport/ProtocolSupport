@@ -15,7 +15,7 @@ public class ApacheCommonsUtils {
 	}
 
 	public static boolean isEmpty(String str) {
-		return str == null || str.isEmpty();
+		return (str == null) || str.isEmpty();
 	}
 
 	public static class ImmutablePair<T1, T2> {

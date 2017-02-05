@@ -29,7 +29,7 @@ public class GlowStoneLoginEncryptionKeyResponseHandler implements MessageHandle
 					throw new RuntimeException("Unable to decrypt key", e);
 				}
 			}
-			
+
 			@Override
 			public byte[] getNonce(PrivateKey key) {
 				try {

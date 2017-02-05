@@ -91,7 +91,7 @@ public abstract class AbstractLoginListenerPlay implements IHasProfile {
 			toKick.forEach(player -> player.kickPlayer("You logged in from another location"));
 			return;
 		}
-		
+
 		//get player
 		JoinData data = getOrCreateJoinData();
 
@@ -159,7 +159,7 @@ public abstract class AbstractLoginListenerPlay implements IHasProfile {
 		});
 	}
 
-	protected abstract JoinData createJoinData(); 
+	protected abstract JoinData createJoinData();
 
 	protected abstract void checkBans(PlayerLoginEvent event, Object[] data);
 

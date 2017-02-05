@@ -1,8 +1,22 @@
 package protocolsupport.zplatform.impl.glowstone;
 
+import java.lang.reflect.Field;
+import java.security.PublicKey;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentMap;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.WorldType;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import com.flowpowered.network.Codec.CodecRegistration;
 import com.flowpowered.network.Message;
 import com.flowpowered.network.service.CodecLookupService;
+
 import net.glowstone.GlowServer;
 import net.glowstone.entity.meta.profile.PlayerProfile;
 import net.glowstone.net.handler.play.player.UseItemMessage;
@@ -13,10 +27,95 @@ import net.glowstone.net.message.login.EncryptionKeyRequestMessage;
 import net.glowstone.net.message.login.EncryptionKeyResponseMessage;
 import net.glowstone.net.message.login.LoginStartMessage;
 import net.glowstone.net.message.login.LoginSuccessMessage;
-import net.glowstone.net.message.play.entity.*;
-import net.glowstone.net.message.play.game.*;
-import net.glowstone.net.message.play.inv.*;
-import net.glowstone.net.message.play.player.*;
+import net.glowstone.net.message.play.entity.AnimateEntityMessage;
+import net.glowstone.net.message.play.entity.AttachEntityMessage;
+import net.glowstone.net.message.play.entity.CollectItemMessage;
+import net.glowstone.net.message.play.entity.DestroyEntitiesMessage;
+import net.glowstone.net.message.play.entity.EntityEffectMessage;
+import net.glowstone.net.message.play.entity.EntityEquipmentMessage;
+import net.glowstone.net.message.play.entity.EntityHeadRotationMessage;
+import net.glowstone.net.message.play.entity.EntityMetadataMessage;
+import net.glowstone.net.message.play.entity.EntityPropertyMessage;
+import net.glowstone.net.message.play.entity.EntityRemoveEffectMessage;
+import net.glowstone.net.message.play.entity.EntityRotationMessage;
+import net.glowstone.net.message.play.entity.EntityStatusMessage;
+import net.glowstone.net.message.play.entity.EntityTeleportMessage;
+import net.glowstone.net.message.play.entity.EntityVelocityMessage;
+import net.glowstone.net.message.play.entity.RelativeEntityPositionMessage;
+import net.glowstone.net.message.play.entity.RelativeEntityPositionRotationMessage;
+import net.glowstone.net.message.play.entity.SetCooldownMessage;
+import net.glowstone.net.message.play.entity.SetPassengerMessage;
+import net.glowstone.net.message.play.entity.SpawnLightningStrikeMessage;
+import net.glowstone.net.message.play.entity.SpawnMobMessage;
+import net.glowstone.net.message.play.entity.SpawnObjectMessage;
+import net.glowstone.net.message.play.entity.SpawnPaintingMessage;
+import net.glowstone.net.message.play.entity.SpawnXpOrbMessage;
+import net.glowstone.net.message.play.entity.VehicleMoveMessage;
+import net.glowstone.net.message.play.game.BlockActionMessage;
+import net.glowstone.net.message.play.game.BlockChangeMessage;
+import net.glowstone.net.message.play.game.ChatMessage;
+import net.glowstone.net.message.play.game.ChunkDataMessage;
+import net.glowstone.net.message.play.game.ClientSettingsMessage;
+import net.glowstone.net.message.play.game.ExperienceMessage;
+import net.glowstone.net.message.play.game.ExplosionMessage;
+import net.glowstone.net.message.play.game.HealthMessage;
+import net.glowstone.net.message.play.game.IncomingChatMessage;
+import net.glowstone.net.message.play.game.JoinGameMessage;
+import net.glowstone.net.message.play.game.MapDataMessage;
+import net.glowstone.net.message.play.game.MultiBlockChangeMessage;
+import net.glowstone.net.message.play.game.NamedSoundEffectMessage;
+import net.glowstone.net.message.play.game.PingMessage;
+import net.glowstone.net.message.play.game.PlayEffectMessage;
+import net.glowstone.net.message.play.game.PlayParticleMessage;
+import net.glowstone.net.message.play.game.PluginMessage;
+import net.glowstone.net.message.play.game.PositionRotationMessage;
+import net.glowstone.net.message.play.game.RespawnMessage;
+import net.glowstone.net.message.play.game.SignEditorMessage;
+import net.glowstone.net.message.play.game.SoundEffectMessage;
+import net.glowstone.net.message.play.game.SpawnPositionMessage;
+import net.glowstone.net.message.play.game.StateChangeMessage;
+import net.glowstone.net.message.play.game.StatisticMessage;
+import net.glowstone.net.message.play.game.TimeMessage;
+import net.glowstone.net.message.play.game.TitleMessage;
+import net.glowstone.net.message.play.game.UnloadChunkMessage;
+import net.glowstone.net.message.play.game.UpdateBlockEntityMessage;
+import net.glowstone.net.message.play.game.UpdateSignMessage;
+import net.glowstone.net.message.play.game.UserListHeaderFooterMessage;
+import net.glowstone.net.message.play.game.UserListItemMessage;
+import net.glowstone.net.message.play.game.WorldBorderMessage;
+import net.glowstone.net.message.play.inv.CloseWindowMessage;
+import net.glowstone.net.message.play.inv.CreativeItemMessage;
+import net.glowstone.net.message.play.inv.EnchantItemMessage;
+import net.glowstone.net.message.play.inv.HeldItemMessage;
+import net.glowstone.net.message.play.inv.OpenWindowMessage;
+import net.glowstone.net.message.play.inv.SetWindowContentsMessage;
+import net.glowstone.net.message.play.inv.SetWindowSlotMessage;
+import net.glowstone.net.message.play.inv.TransactionMessage;
+import net.glowstone.net.message.play.inv.WindowClickMessage;
+import net.glowstone.net.message.play.inv.WindowPropertyMessage;
+import net.glowstone.net.message.play.player.BlockPlacementMessage;
+import net.glowstone.net.message.play.player.BossBarMessage;
+import net.glowstone.net.message.play.player.CameraMessage;
+import net.glowstone.net.message.play.player.ClientStatusMessage;
+import net.glowstone.net.message.play.player.CombatEventMessage;
+import net.glowstone.net.message.play.player.DiggingMessage;
+import net.glowstone.net.message.play.player.InteractEntityMessage;
+import net.glowstone.net.message.play.player.PlayerAbilitiesMessage;
+import net.glowstone.net.message.play.player.PlayerActionMessage;
+import net.glowstone.net.message.play.player.PlayerLookMessage;
+import net.glowstone.net.message.play.player.PlayerPositionLookMessage;
+import net.glowstone.net.message.play.player.PlayerPositionMessage;
+import net.glowstone.net.message.play.player.PlayerSwingArmMessage;
+import net.glowstone.net.message.play.player.PlayerUpdateMessage;
+import net.glowstone.net.message.play.player.ResourcePackSendMessage;
+import net.glowstone.net.message.play.player.ResourcePackStatusMessage;
+import net.glowstone.net.message.play.player.ServerDifficultyMessage;
+import net.glowstone.net.message.play.player.SpectateMessage;
+import net.glowstone.net.message.play.player.SteerVehicleMessage;
+import net.glowstone.net.message.play.player.TabCompleteMessage;
+import net.glowstone.net.message.play.player.TabCompleteResponseMessage;
+import net.glowstone.net.message.play.player.TeleportConfirmMessage;
+import net.glowstone.net.message.play.player.UseBedMessage;
 import net.glowstone.net.message.play.scoreboard.ScoreboardDisplayMessage;
 import net.glowstone.net.message.play.scoreboard.ScoreboardObjectiveMessage;
 import net.glowstone.net.message.play.scoreboard.ScoreboardScoreMessage;
@@ -27,24 +126,12 @@ import net.glowstone.net.message.status.StatusResponseMessage;
 import net.glowstone.net.protocol.GlowProtocol;
 import net.glowstone.net.protocol.ProtocolType;
 import net.glowstone.util.TextMessage;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.WorldType;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.zplatform.PlatformPacketFactory;
-
-import java.lang.reflect.Field;
-import java.security.PublicKey;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentMap;
 
 public class GlowStonePacketFactory implements PlatformPacketFactory {
 
@@ -154,7 +241,7 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
         description.put("text", motd);
         json.put("description", description);
 
-        if (icon != null && !icon.isEmpty()) {
+        if ((icon != null) && !icon.isEmpty()) {
             json.put("favicon", icon);
         }
 

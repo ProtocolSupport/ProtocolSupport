@@ -4,8 +4,8 @@ import io.netty.channel.Channel;
 import net.glowstone.net.pipeline.CompressionHandler;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.protocol.packet.handler.AbstractLoginListenerPlay;
-import protocolsupport.zplatform.network.NetworkManagerWrapper;
 import protocolsupport.zplatform.impl.glowstone.network.GlowStoneChannelHandlers;
+import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public abstract class GlowStoneLoginListener extends AbstractLoginListener implements GlowStoneTickableListener {
 

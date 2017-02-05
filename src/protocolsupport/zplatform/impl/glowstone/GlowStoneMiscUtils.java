@@ -129,13 +129,13 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	@Override
 	public void enableDebug() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void disableDebug() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

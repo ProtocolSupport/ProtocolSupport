@@ -14,7 +14,7 @@ public class GlowStoneConnectionImpl extends ConnectionImpl {
 	}
 
 	@Override
-	public void receivePacket(Object packet) { 
+	public void receivePacket(Object packet) {
 		Runnable packetRecv = () -> {
 			try {
 				ChannelHandlerContext networkManagerContext = networkmanager.getChannel().pipeline().context(GlowStoneChannelHandlers.NETWORK_MANAGER);

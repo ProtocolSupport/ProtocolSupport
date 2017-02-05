@@ -35,12 +35,12 @@ public class GlowStoneNBTTagListWrapper extends NBTTagListWrapper {
 	}
 
 	private boolean checkIndex(int index) {
-		return index >= 0 && index < size();
+		return (index >= 0) && (index < size());
 	}
 
 	@Override
 	public NBTTagCompoundWrapper getCompound(int index) {
-		if (tag.getType() == TagType.COMPOUND && checkIndex(index)) {
+		if ((tag.getType() == TagType.COMPOUND) && checkIndex(index)) {
 			return GlowStoneNBTTagCompoundWrapper.wrap((CompoundTag) tag.getValue().get(index));
 		}
 		return GlowStoneNBTTagCompoundWrapper.createEmpty();
@@ -55,7 +55,7 @@ public class GlowStoneNBTTagListWrapper extends NBTTagListWrapper {
 
 	@Override
 	public String getString(int index) {
-		if (tag.getType() == TagType.STRING && checkIndex(index)) {
+		if ((tag.getType() == TagType.STRING) && checkIndex(index)) {
 			return ((StringTag) tag.getValue().get(index)).getValue();
 		}
 		return "";

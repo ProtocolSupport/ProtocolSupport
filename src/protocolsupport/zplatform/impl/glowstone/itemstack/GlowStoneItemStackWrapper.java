@@ -35,7 +35,7 @@ public class GlowStoneItemStackWrapper extends ItemStackWrapper {
 
 	@Override
 	public boolean isNull() {
-		return itemstack.getType() == Material.AIR || getAmount() <= 0 || getData() < -32768 || getData() > 65535;
+		return (itemstack.getType() == Material.AIR) || (getAmount() <= 0) || (getData() < -32768) || (getData() > 65535);
 	}
 
 	@SuppressWarnings("deprecation")
