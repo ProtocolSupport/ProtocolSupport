@@ -15,6 +15,7 @@ import net.minecraft.server.v1_11_R1.IChatBaseComponent;
 import net.minecraft.server.v1_11_R1.ITickable;
 import net.minecraft.server.v1_11_R1.IpBanEntry;
 import net.minecraft.server.v1_11_R1.MinecraftServer;
+import net.minecraft.server.v1_11_R1.NetworkManager;
 import net.minecraft.server.v1_11_R1.PacketListenerPlayIn;
 import net.minecraft.server.v1_11_R1.PacketLoginInEncryptionBegin;
 import net.minecraft.server.v1_11_R1.PacketLoginInListener;
@@ -117,7 +118,7 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 
 	@Override
 	protected void joinGame(Object[] data) {
-		server.getPlayerList().a((EntityPlayer) data[0]);
+		server.getPlayerList().a((NetworkManager) networkManager.unwrap(), (EntityPlayer) data[0]);
 	}
 
 	@Override
