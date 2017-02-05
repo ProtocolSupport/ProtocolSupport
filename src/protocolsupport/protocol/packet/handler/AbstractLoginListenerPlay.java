@@ -7,17 +7,21 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerLoginEvent;
 
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.PlayerLoginFinishEvent;
+import protocolsupport.api.events.PlayerSyncLoginEvent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
+import protocolsupport.zplatform.network.NetworkState;
 
+//TODO: Generics for JoinData
 public abstract class AbstractLoginListenerPlay implements IHasProfile {
 
 	protected final NetworkManagerWrapper networkManager;
@@ -37,9 +41,15 @@ public abstract class AbstractLoginListenerPlay implements IHasProfile {
 		return profile;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void finishLogin() {
 		// send login success
-		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginSuccessPacket(profile));
+		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginSuccessPacket(profile), new GenericFutureListener<Future<? super Void>>() {
+			@Override
+			public void operationComplete(Future<? super Void> future) throws Exception {
+				networkManager.setProtocol(NetworkState.PLAY);
+			}
+		});
 		// tick connection keep now
 		keepConnection();
 		// now fire login event
@@ -65,6 +75,14 @@ public abstract class AbstractLoginListenerPlay implements IHasProfile {
 		}
 	}
 
+	private JoinData joindata = null;
+	private JoinData getOrCreateJoinData() {
+		if (joindata == null) {
+			joindata = createJoinData();
+		}
+		return joindata;
+	}
+
 	private void tryJoin() {
 		//find players with same uuid
 		List<Player> toKick = Bukkit.getOnlinePlayers().stream().filter(player -> player.getUniqueId().equals(profile.getUUID())).collect(Collectors.toList());
@@ -73,19 +91,37 @@ public abstract class AbstractLoginListenerPlay implements IHasProfile {
 			toKick.forEach(player -> player.kickPlayer("You logged in from another location"));
 			return;
 		}
-		//attempt login (fire login events and check bans)
-		Object loginplayer = attemptLogin();
-		if (loginplayer != null) {
-			//no longer attempt to join
-			ready = false;
-			//send packet to notify about actual login phase finished
-			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("PS|FinishLogin"));
-			//add player to game
-			joinGame(loginplayer);
+		
+		//get player
+		JoinData data = getOrCreateJoinData();
+
+		//ps sync login event
+		PlayerSyncLoginEvent syncloginevent = new PlayerSyncLoginEvent(ConnectionImpl.getFromChannel(networkManager.getChannel()), data.player);
+		Bukkit.getPluginManager().callEvent(syncloginevent);
+		if (syncloginevent.isLoginDenied()) {
+			disconnect(syncloginevent.getDenyLoginMessage());
+			data.close();
+			return;
 		}
+
+		//bukkit sync login event
+		PlayerLoginEvent event = new PlayerLoginEvent(joindata.player, hostname, networkManager.getAddress().getAddress(), networkManager.getRawAddress().getAddress());
+		checkBans(event, joindata.data);
+		if (event.getResult() != PlayerLoginEvent.Result.ALLOWED) {
+			disconnect(event.getKickMessage());
+			data.close();
+			return;
+		}
+
+		//no longer attempt to join
+		ready = false;
+		//send packet to notify about actual login phase finished
+		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("PS|FinishLogin"));
+		//add player to game
+		joinGame(joindata.data);
 	}
 
-	private void keepConnection() {
+	protected void keepConnection() {
 		// custom payload does nothing on a client when sent with invalid tag,
 		// but it resets client readtimeouthandler, and that is exactly what we need
 		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("PS|KeepAlive"));
@@ -123,8 +159,20 @@ public abstract class AbstractLoginListenerPlay implements IHasProfile {
 		});
 	}
 
-	protected abstract Object attemptLogin();
+	protected abstract JoinData createJoinData(); 
 
-	protected abstract void joinGame(Object player);
+	protected abstract void checkBans(PlayerLoginEvent event, Object[] data);
+
+	protected abstract void joinGame(Object[] data);
+
+	protected abstract class JoinData {
+		public final Player player;
+		public final Object[] data;
+		public JoinData(Player player, Object... data) {
+			this.player = player;
+			this.data = data;
+		}
+		protected abstract void close();
+	}
 
 }

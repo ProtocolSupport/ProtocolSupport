@@ -38,7 +38,7 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 		this.handler = handler;
 	}
 
-	private GlowSession getSession() {
+	public GlowSession getSession() {
 		return handler.getSession().get();
 	}
 

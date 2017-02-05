@@ -4,6 +4,7 @@ import java.security.KeyPair;
 import java.text.MessageFormat;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
+import java.util.stream.Collectors;
 
 import org.bukkit.Achievement;
 import org.bukkit.Bukkit;
@@ -14,11 +15,14 @@ import org.bukkit.util.CachedServerIcon;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import net.glowstone.GlowServer;
+import net.glowstone.entity.meta.profile.PlayerProfile;
+import net.glowstone.entity.meta.profile.PlayerProperty;
 import net.glowstone.io.nbt.NbtSerialization;
 import net.glowstone.net.protocol.ProtocolType;
 import net.glowstone.util.GlowServerIcon;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
+import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.zplatform.PlatformUtils;
 import protocolsupport.zplatform.impl.glowstone.itemstack.GlowStoneNBTTagCompoundWrapper;
 import protocolsupport.zplatform.impl.glowstone.network.GlowStoneChannelHandlers;
@@ -32,6 +36,16 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 
 	public static GlowServer getServer() {
 		return ((GlowServer) Bukkit.getServer());
+	}
+
+	public static PlayerProfile toGlowStoneGameProfile(GameProfile profile) {
+		return new PlayerProfile(
+			profile.getName(), profile.getUUID(),
+			profile.getProperties().values()
+			.stream()
+			.map(property -> new PlayerProperty(property.getName(), property.getValue(), property.getSignature()))
+			.collect(Collectors.toList())
+		);
 	}
 
 	public static ProtocolType netStateToProtocol(NetworkState type) {

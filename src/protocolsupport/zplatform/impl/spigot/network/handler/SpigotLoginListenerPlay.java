@@ -15,7 +15,6 @@ import net.minecraft.server.v1_11_R1.IChatBaseComponent;
 import net.minecraft.server.v1_11_R1.ITickable;
 import net.minecraft.server.v1_11_R1.IpBanEntry;
 import net.minecraft.server.v1_11_R1.MinecraftServer;
-import net.minecraft.server.v1_11_R1.NetworkManager;
 import net.minecraft.server.v1_11_R1.PacketListenerPlayIn;
 import net.minecraft.server.v1_11_R1.PacketLoginInEncryptionBegin;
 import net.minecraft.server.v1_11_R1.PacketLoginInListener;
@@ -49,8 +48,6 @@ import net.minecraft.server.v1_11_R1.PacketPlayInVehicleMove;
 import net.minecraft.server.v1_11_R1.PacketPlayInWindowClick;
 import net.minecraft.server.v1_11_R1.PlayerInteractManager;
 import net.minecraft.server.v1_11_R1.PlayerList;
-import protocolsupport.api.events.PlayerSyncLoginEvent;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.handler.AbstractLoginListenerPlay;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
@@ -69,29 +66,25 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 		tick();
 	}
 
-	//reimplement PlayerList login attempt logic to fire PlayerSyncLoginEvent before PlayerLognEvent
-	//also delay login if there was a player with same uuid which was kicked when handling this
+	@Override
+	protected JoinData createJoinData() {
+		com.mojang.authlib.GameProfile mojangGameProfile = SpigotMiscUtils.toMojangGameProfile(profile);
+		EntityPlayer entity = new EntityPlayer(server, server.getWorldServer(0), mojangGameProfile, new PlayerInteractManager(server.getWorldServer(0)));
+		return new JoinData(entity.getBukkitEntity(), entity) {
+			@Override
+			protected void close() {
+			}
+		};
+	}
+
 	private static final SimpleDateFormat banDateFormat = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
 	@Override
-	public EntityPlayer attemptLogin() {
+	protected void checkBans(PlayerLoginEvent event, Object[] data) {
 		PlayerList playerlist = server.getPlayerList();
 
-		com.mojang.authlib.GameProfile mojangGameProfile = SpigotMiscUtils.toMojangGameProfile(profile);
+		com.mojang.authlib.GameProfile mojangGameProfile = ((EntityPlayer) data[0]).getProfile();
 
-		//prepare player entity
-		EntityPlayer entity = new EntityPlayer(server, server.getWorldServer(0), mojangGameProfile, new PlayerInteractManager(server.getWorldServer(0)));
-
-		//ps sync login event
-		PlayerSyncLoginEvent syncloginevent = new PlayerSyncLoginEvent(ConnectionImpl.getFromChannel(networkManager.getChannel()), entity.getBukkitEntity());
-		Bukkit.getPluginManager().callEvent(syncloginevent);
-		if (syncloginevent.isLoginDenied()) {
-			disconnect(syncloginevent.getDenyLoginMessage());
-			return null;
-		}
-
-		//bukkit sync login event
 		InetSocketAddress socketaddress = networkManager.getAddress();
-		PlayerLoginEvent event = new PlayerLoginEvent(entity.getBukkitEntity(), hostname, socketaddress.getAddress(), networkManager.getRawAddress().getAddress());
 		if (playerlist.getProfileBans().isBanned(mojangGameProfile)) {
 			GameProfileBanEntry profileban = playerlist.getProfileBans().get(mojangGameProfile);
 			if (!hasExpired(profileban)) {
@@ -115,13 +108,6 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 		} else if ((playerlist.players.size() >= playerlist.getMaxPlayers()) && !playerlist.f(mojangGameProfile)) {
 			event.disallow(PlayerLoginEvent.Result.KICK_FULL, SpigotConfig.serverFullMessage);
 		}
-		Bukkit.getServer().getPluginManager().callEvent(event);
-		if (event.getResult() != PlayerLoginEvent.Result.ALLOWED) {
-			disconnect(event.getKickMessage());
-			return null;
-		}
-
-		return entity;
 	}
 
 	private static boolean hasExpired(ExpirableListEntry<?> entry) {
@@ -130,8 +116,8 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 	}
 
 	@Override
-	protected void joinGame(Object player) {
-		server.getPlayerList().a((NetworkManager) networkManager.unwrap(), (EntityPlayer) player);
+	protected void joinGame(Object[] data) {
+		server.getPlayerList().a((EntityPlayer) data[0]);
 	}
 
 	@Override

@@ -30,7 +30,7 @@ public abstract class GlowStoneLoginListener extends AbstractLoginListener imple
 
 	@Override
 	protected AbstractLoginListenerPlay getLoginListenerPlay() {
-		throw new UnsupportedOperationException("Can't switch to play state yet");
+		return new GlowStoneLoginListenerPlay(networkManager, profile, isOnlineMode, hostname);
 	}
 
 }
