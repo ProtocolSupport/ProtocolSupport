@@ -226,7 +226,7 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
             for (int i = 0; i < profiles.size(); i++) {
                 playerProfiles[i] = new PlayerProfile(profiles.get(i), randomUUID);
             }
-            playerProfiles = Arrays.copyOfRange(playerProfiles, 0, server.getPlayerSampleCount());
+            playerProfiles = Arrays.copyOfRange(playerProfiles, 0, Math.min(playerProfiles.length, server.getPlayerSampleCount()));
             for (PlayerProfile profile : playerProfiles) {
                 JSONObject sample = new JSONObject();
                 sample.put("name", profile.getName());
