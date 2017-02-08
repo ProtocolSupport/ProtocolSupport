@@ -21,7 +21,6 @@ import com.mojang.authlib.properties.Property;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import net.minecraft.server.v1_11_R1.EnumProtocol;
-import net.minecraft.server.v1_11_R1.Item;
 import net.minecraft.server.v1_11_R1.LocaleI18n;
 import net.minecraft.server.v1_11_R1.MinecraftServer;
 import net.minecraft.server.v1_11_R1.MobEffectList;
@@ -93,15 +92,6 @@ public class SpigotMiscUtils implements PlatformUtils {
 		NBTTagCompound compound = new NBTTagCompound();
 		nmsitemstack.save(compound);
 		return SpigotNBTTagCompoundWrapper.wrap(compound);
-	}
-
-	@Override
-	public Integer getItemIdByName(String registryname) {
-		Item item = Item.b(registryname);
-		if (item != null) {
-			return Item.getId(item);
-		}
-		return null;
 	}
 
 	@Override

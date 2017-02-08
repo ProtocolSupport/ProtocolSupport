@@ -25,8 +25,6 @@ public interface PlatformUtils {
 
 	public NBTTagCompoundWrapper createNBTTagFromItemStack(ItemStack itemstack);
 
-	public Integer getItemIdByName(String registryname);
-
 	public String getOutdatedServerMessage();
 
 	public boolean isBungeeEnabled();

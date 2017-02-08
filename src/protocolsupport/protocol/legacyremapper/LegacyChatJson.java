@@ -5,6 +5,7 @@ import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TranslateComponent;
 import protocolsupport.api.chat.modifiers.ClickAction;
 import protocolsupport.api.chat.modifiers.HoverAction;
+import protocolsupport.protocol.utils.data.items.ItemData;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
@@ -32,7 +33,7 @@ public class LegacyChatJson {
 		HoverAction hover = component.getHoverAction();
 		if ((hover != null) && (hover.getType() == HoverAction.Type.SHOW_ITEM)) {
 			NBTTagCompoundWrapper compound = ServerPlatform.get().getWrapperFactory().createNBTCompoundFromJson(hover.getValue());
-			Integer id = ServerPlatform.get().getMiscUtils().getItemIdByName(compound.getString("id"));
+			Integer id = ItemData.getIdByName(compound.getString("id"));
 			if (id != null) {
 				compound.setInt("id", id);
 			}

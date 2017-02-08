@@ -1,9 +1,12 @@
 package protocolsupport.utils;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import protocolsupport.ProtocolSupport;
 
 public class Utils {
 
@@ -99,11 +102,9 @@ public class Utils {
 		return (b != null) && b;
 	}
 
-	@FunctionalInterface
-	public static interface LazyLoad<T> {
-
-		public T create();
-
+	private static final String resourcesDirName = "resources";
+	public static InputStream getResource(String name) {
+		return ProtocolSupport.class.getClassLoader().getResourceAsStream(resourcesDirName + "/" + name);
 	}
 
 }

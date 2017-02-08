@@ -105,12 +105,6 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	}
 
 	@Override
-	public Integer getItemIdByName(String registryname) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public String getOutdatedServerMessage() {
 		return "Outdated server! I\'m running {0}";
 	}
