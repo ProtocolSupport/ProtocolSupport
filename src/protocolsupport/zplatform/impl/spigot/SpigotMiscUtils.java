@@ -23,7 +23,6 @@ import io.netty.channel.ChannelPipeline;
 import net.minecraft.server.v1_11_R1.EnumProtocol;
 import net.minecraft.server.v1_11_R1.LocaleI18n;
 import net.minecraft.server.v1_11_R1.MinecraftServer;
-import net.minecraft.server.v1_11_R1.MobEffectList;
 import net.minecraft.server.v1_11_R1.NBTTagCompound;
 import net.minecraft.server.v1_11_R1.NetworkManager;
 import net.minecraft.server.v1_11_R1.SoundEffect;
@@ -180,11 +179,6 @@ public class SpigotMiscUtils implements PlatformUtils {
 	@Override
 	public String getSoundNameById(int soundId) {
 		return SoundEffect.a.b(SoundEffect.a.getId(soundId)).a();
-	}
-
-	@Override
-	public String getPotionEffectNameById(int id) {
-		return MobEffectList.REGISTRY.b(MobEffectList.fromId(id)).toString();
 	}
 
 	@Override

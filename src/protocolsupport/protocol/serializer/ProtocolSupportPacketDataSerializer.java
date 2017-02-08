@@ -31,6 +31,7 @@ import protocolsupport.protocol.typeskipper.id.SkippingTable.IntSkippingTable;
 import protocolsupport.protocol.utils.GameProfileSerializer;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.protocol.utils.authlib.UUIDTypeAdapter;
+import protocolsupport.protocol.utils.data.PotionData;
 import protocolsupport.protocol.utils.types.MerchantData;
 import protocolsupport.protocol.utils.types.MerchantData.TradeOffer;
 import protocolsupport.protocol.utils.types.Position;
@@ -355,8 +356,8 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 				String potion = nbttagcompound.getString("Potion");
 				if (!potion.isEmpty()) {
 					NBTTagListWrapper tagList = nbttagcompound.getList("CustomPotionEffects", NBTTagCompoundWrapper.TYPE_COMPOUND);
-					for (int i = 0; i < tagList.size(); i++) {
-						potion = ServerPlatform.get().getMiscUtils().getPotionEffectNameById(tagList.getCompound(i).getNumber("Id"));
+					if (tagList.size() >= 1) {
+						potion = PotionData.getNameById(tagList.getCompound(0).getNumber("Id"));
 					}
 					Integer data = LegacyPotion.toLegacyId(potion, item != Material.POTION);
 					itemstack.setData(data);

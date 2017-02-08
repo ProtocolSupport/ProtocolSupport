@@ -57,8 +57,6 @@ public interface PlatformUtils {
 
 	public String getSoundNameById(int soundId);
 
-	public String getPotionEffectNameById(int id);
-
 	public NetworkState getNetworkStateFromChannel(Channel channel);
 
 	public NetworkManagerWrapper getNetworkManagerFromChannel(Channel channel);

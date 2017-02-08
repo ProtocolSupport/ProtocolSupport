@@ -1,0 +1,110 @@
+[
+  {
+    "id": 1,
+    "name": "speed"
+  },
+  {
+    "id": 2,
+    "name": "slowness"
+  },
+  {
+    "id": 3,
+    "name": "haste"
+  },
+  {
+    "id": 4,
+    "name": "mining_fatigue"
+  },
+  {
+    "id": 5,
+    "name": "strength"
+  },
+  {
+    "id": 6,
+    "name": "instant_health"
+  },
+  {
+    "id": 7,
+    "name": "instant_damage"
+  },
+  {
+    "id": 8,
+    "name": "jump_boost"
+  },
+  {
+    "id": 9,
+    "name": "nausea"
+  },
+  {
+    "id": 10,
+    "name": "regeneration"
+  },
+  {
+    "id": 11,
+    "name": "resistance"
+  },
+  {
+    "id": 12,
+    "name": "fire_resistance"
+  },
+  {
+    "id": 13,
+    "name": "water_breathing"
+  },
+  {
+    "id": 14,
+    "name": "invisibility"
+  },
+  {
+    "id": 15,
+    "name": "blindness"
+  },
+  {
+    "id": 16,
+    "name": "night_vision"
+  },
+  {
+    "id": 17,
+    "name": "hunger"
+  },
+  {
+    "id": 18,
+    "name": "weakness"
+  },
+  {
+    "id": 19,
+    "name": "poison"
+  },
+  {
+    "id": 20,
+    "name": "wither"
+  },
+  {
+    "id": 21,
+    "name": "health_boost"
+  },
+  {
+    "id": 22,
+    "name": "absorption"
+  },
+  {
+    "id": 23,
+    "name": "saturation"
+  },
+  {
+    "id": 24,
+    "name": "glowing"
+  },
+  {
+    "id": 25,
+    "name": "levitation"
+  },
+  {
+    "id": 26,
+    "name": "luck"
+  },
+  {
+    "id": 27,
+    "name": "unluck"
+  }
+]

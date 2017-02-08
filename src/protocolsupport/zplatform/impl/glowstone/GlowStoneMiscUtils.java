@@ -195,12 +195,6 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	}
 
 	@Override
-	public String getPotionEffectNameById(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public NetworkState getNetworkStateFromChannel(Channel channel) {
 		return GlowStoneNetworkManagerWrapper.getFromChannel(channel).getProtocol();
 	}
