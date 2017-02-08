@@ -1,4 +1,4 @@
-package protocolsupport.protocol.utils.data.items;
+package protocolsupport.protocol.utils.data;
 
 import java.io.InputStreamReader;
 import java.util.HashMap;
@@ -7,7 +7,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import protocolsupport.protocol.utils.data.MinecraftData;
 import protocolsupport.utils.JsonUtils;
 
 public class ItemData {

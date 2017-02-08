@@ -9,7 +9,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.legacyremapper.LegacyEntityType;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
-import protocolsupport.protocol.utils.data.items.ItemData;
+import protocolsupport.protocol.utils.data.ItemData;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.Utils;
