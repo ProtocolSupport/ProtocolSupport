@@ -25,7 +25,6 @@ import net.minecraft.server.v1_11_R1.LocaleI18n;
 import net.minecraft.server.v1_11_R1.MinecraftServer;
 import net.minecraft.server.v1_11_R1.NBTTagCompound;
 import net.minecraft.server.v1_11_R1.NetworkManager;
-import net.minecraft.server.v1_11_R1.SoundEffect;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
@@ -174,11 +173,6 @@ public class SpigotMiscUtils implements PlatformUtils {
 			throw new IllegalArgumentException(icon + " was not created by " + CraftServer.class);
 		}
 		return ((CraftIconCache) icon).value;
-	}
-
-	@Override
-	public String getSoundNameById(int soundId) {
-		return SoundEffect.a.b(SoundEffect.a.getId(soundId)).a();
 	}
 
 	@Override

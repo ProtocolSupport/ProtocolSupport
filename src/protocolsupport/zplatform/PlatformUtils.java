@@ -55,8 +55,6 @@ public interface PlatformUtils {
 
 	public String convertBukkitIconToBase64(CachedServerIcon icon);
 
-	public String getSoundNameById(int soundId);
-
 	public NetworkState getNetworkStateFromChannel(Channel channel);
 
 	public NetworkManagerWrapper getNetworkManagerFromChannel(Channel channel);

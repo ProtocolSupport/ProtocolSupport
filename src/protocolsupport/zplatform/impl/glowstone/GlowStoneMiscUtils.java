@@ -189,12 +189,6 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	}
 
 	@Override
-	public String getSoundNameById(int soundId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public NetworkState getNetworkStateFromChannel(Channel channel) {
 		return GlowStoneNetworkManagerWrapper.getFromChannel(channel).getProtocol();
 	}

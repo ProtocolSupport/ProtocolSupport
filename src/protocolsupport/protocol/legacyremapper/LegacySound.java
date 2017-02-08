@@ -2,14 +2,14 @@ package protocolsupport.protocol.legacyremapper;
 
 import java.util.HashMap;
 
-import protocolsupport.zplatform.ServerPlatform;
+import protocolsupport.protocol.utils.data.SoundData;
 
 public class LegacySound {
 
 	private static final HashMap<String, String> legacySounds = new HashMap<>();
 
 	public static String getSoundName(int soundId) {
-		return ServerPlatform.get().getMiscUtils().getSoundNameById(soundId);
+		return SoundData.getNameById(soundId);
 	}
 
 	public static String getLegacySoundName(int soundType) {
