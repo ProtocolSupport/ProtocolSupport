@@ -2,6 +2,8 @@ package protocolsupport.zplatform.impl.glowstone;
 
 import java.security.KeyPair;
 import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 import java.util.stream.Collectors;
@@ -15,6 +17,8 @@ import org.bukkit.util.CachedServerIcon;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import net.glowstone.GlowServer;
+import net.glowstone.constants.GlowAchievement;
+import net.glowstone.constants.GlowStatistic;
 import net.glowstone.entity.meta.profile.PlayerProfile;
 import net.glowstone.entity.meta.profile.PlayerProperty;
 import net.glowstone.io.nbt.NbtSerialization;
@@ -159,28 +163,29 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 		return GlowServer.GAME_VERSION;
 	}
 
+	private static final Map<String, Statistic> statByName = Arrays.stream(Statistic.values())
+	.collect(Collectors.toMap(stat -> GlowStatistic.getName(stat), stat -> stat));
+	private static final Map<String, Achievement> achByName = Arrays.stream(Achievement.values())
+	.collect(Collectors.toMap(ach -> GlowAchievement.getName(ach), ach -> ach));
+
 	@Override
 	public Statistic getStatisticByName(String value) {
-		// TODO Auto-generated method stub
-		return null;
+		return statByName.get(value);
 	}
 
 	@Override
 	public String getStatisticName(Statistic stat) {
-		// TODO Auto-generated method stub
-		return null;
+		return GlowStatistic.getName(stat);
 	}
 
 	@Override
 	public Achievement getAchievmentByName(String value) {
-		// TODO Auto-generated method stub
-		return null;
+		return achByName.get(value);
 	}
 
 	@Override
 	public String getAchievmentName(Achievement achievement) {
-		// TODO Auto-generated method stub
-		return null;
+		return GlowAchievement.getName(achievement);
 	}
 
 	@Override
