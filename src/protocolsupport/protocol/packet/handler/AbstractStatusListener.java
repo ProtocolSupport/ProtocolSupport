@@ -5,6 +5,10 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -12,14 +16,31 @@ import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.util.CachedServerIcon;
 
 import io.netty.channel.ChannelFutureListener;
+import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.utils.Utils;
+import protocolsupport.utils.Utils.Converter;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public abstract class AbstractStatusListener {
+
+	private static final int statusThreads = Utils.getJavaPropertyValue("statusthreads", 2, Converter.STRING_TO_INT);
+	private static final int statusThreadKeepAlive = Utils.getJavaPropertyValue("statusthreadskeepalive", 60, Converter.STRING_TO_INT);
+
+	public static void init() {
+		ProtocolSupport.logInfo("Login threads max count: "+statusThreads+", keep alive time: "+statusThreadKeepAlive);
+	}
+
+	private static final Executor statusprocessor = new ThreadPoolExecutor(
+		1, statusThreads,
+		statusThreadKeepAlive, TimeUnit.SECONDS,
+		new LinkedBlockingQueue<Runnable>(),
+		r -> new Thread(r, "LoginProcessingThread")
+	);
 
 	protected final NetworkManagerWrapper networkManager;
 	public AbstractStatusListener(NetworkManagerWrapper networkmanager) {
@@ -34,37 +55,39 @@ public abstract class AbstractStatusListener {
 		}
 		sentInfo = true;
 
-		InetSocketAddress addr = networkManager.getAddress();
+		statusprocessor.execute(() -> {
+			InetSocketAddress addr = networkManager.getAddress();
 
-		ArrayList<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
+			ArrayList<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
 
-		String motd = Bukkit.getMotd();
-		int maxPlayers = Bukkit.getMaxPlayers();
+			String motd = Bukkit.getMotd();
+			int maxPlayers = Bukkit.getMaxPlayers();
+	
+			InternalServerListPingEvent bevent = new InternalServerListPingEvent(addr.getAddress(), motd, maxPlayers, players);
+			bevent.setServerIcon(Bukkit.getServerIcon());
+			Bukkit.getPluginManager().callEvent(bevent);
 
-		InternalServerListPingEvent bevent = new InternalServerListPingEvent(addr.getAddress(), motd, maxPlayers, players);
-		bevent.setServerIcon(Bukkit.getServerIcon());
-		Bukkit.getPluginManager().callEvent(bevent);
+			String icon = bevent.getIcon() != null ? ServerPlatform.get().getMiscUtils().convertBukkitIconToBase64(bevent.getIcon()) : null;
+			motd = bevent.getMotd();
+			maxPlayers = bevent.getMaxPlayers();
 
-		String icon = bevent.getIcon() != null ? ServerPlatform.get().getMiscUtils().convertBukkitIconToBase64(bevent.getIcon()) : null;
-		motd = bevent.getMotd();
-		maxPlayers = bevent.getMaxPlayers();
+			List<String> profiles = new ArrayList<>(players.size());
+			for (Player player : players) {
+				profiles.add(player.getName());
+			}
 
-		List<String> profiles = new ArrayList<>(players.size());
-		for (Player player : players) {
-			profiles.add(player.getName());
-		}
+			ServerPingResponseEvent revent = new ServerPingResponseEvent(
+				ConnectionImpl.getFromChannel(networkManager.getChannel()),
+				new ProtocolInfo(ProtocolVersion.getLatest(), ServerPlatform.get().getMiscUtils().getModName() + " " + ServerPlatform.get().getMiscUtils().getVersionName()),
+				icon, motd, maxPlayers, profiles
+			);
+			Bukkit.getPluginManager().callEvent(revent);
 
-		ServerPingResponseEvent revent = new ServerPingResponseEvent(
-			ConnectionImpl.getFromChannel(networkManager.getChannel()),
-			new ProtocolInfo(ProtocolVersion.getLatest(), ServerPlatform.get().getMiscUtils().getModName() + " " + ServerPlatform.get().getMiscUtils().getVersionName()),
-			icon, motd, maxPlayers, profiles
-		);
-		Bukkit.getPluginManager().callEvent(revent);
-
-		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createStausServerInfoPacket(
-			revent.getPlayers(), revent.getProtocolInfo(),
-			revent.getIcon(), revent.getMotd(), revent.getMaxPlayers()
-		));
+			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createStausServerInfoPacket(
+				revent.getPlayers(), revent.getProtocolInfo(),
+				revent.getIcon(), revent.getMotd(), revent.getMaxPlayers()
+			));
+		});
 	}
 
 	@SuppressWarnings("unchecked")
