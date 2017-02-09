@@ -2,6 +2,9 @@ package protocolsupport.zplatform.impl.glowstone.network;
 
 import java.net.InetSocketAddress;
 import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -14,7 +17,9 @@ import io.netty.channel.Channel;
 import io.netty.util.AttributeKey;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import net.glowstone.entity.meta.profile.PlayerProperty;
 import net.glowstone.net.GlowSession;
+import net.glowstone.net.ProxyData;
 import net.glowstone.net.pipeline.MessageHandler;
 import net.glowstone.net.protocol.ProtocolType;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
@@ -25,6 +30,7 @@ import protocolsupport.zplatform.network.NetworkState;
 public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 
 	private static final AttributeKey<Object> packet_listener_key = AttributeKey.valueOf("ps_packet_listener");
+	private static final UUID fakeUUID = UUID.randomUUID();
 
 	public static Object getPacketListener(GlowSession session) {
 		return session.getChannel().attr(packet_listener_key).get();
@@ -55,8 +61,12 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 
 	@Override
 	public void setAddress(InetSocketAddress address) {
-		// TODO Auto-generated method stub
-
+		ProxyData old = getSession().getProxyData();
+		if (old != null) {
+			getSession().setProxyData(new ProxyData(null, null, address, null, old.getProfile().getUniqueId(), old.getProfile().getProperties()));
+		} else {
+			getSession().setProxyData(new ProxyData(null, null, address, null, fakeUUID, Collections.emptyList()));
+		}
 	}
 
 	@Override
@@ -116,12 +126,6 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 	}
 
 	@Override
-	public void setSpoofedUUID(UUID uuid) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public ProfileProperty[] getSpoofedProperties() {
 		return getSession().getProxyData().getProfile().getProperties()
 		.stream()
@@ -131,9 +135,19 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 	}
 
 	@Override
-	public void setSpoofedProperties(ProfileProperty[] properties) {
-		// TODO Auto-generated method stub
-
+	public void setSpoofedProfile(UUID uuid, ProfileProperty[] properties) {
+		ProxyData old = getSession().getProxyData();
+		List<PlayerProperty> glowproperties = Collections.emptyList();
+		if (properties != null) {
+			glowproperties = Arrays.stream(properties)
+			.map(prop -> new PlayerProperty(prop.getName(), prop.getValue(), prop.getSignature()))
+			.collect(Collectors.toList());
+		}
+		if (old != null) {
+			getSession().setProxyData(new ProxyData(null, null, old.getAddress(), null, uuid, glowproperties));
+		} else {
+			getSession().setProxyData(new ProxyData(null, null, getAddress(), null, uuid, glowproperties));
+		}
 	}
 
 	@Override

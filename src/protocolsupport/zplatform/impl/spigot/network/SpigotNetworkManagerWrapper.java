@@ -99,11 +99,6 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 	}
 
 	@Override
-	public void setSpoofedUUID(UUID uuid) {
-		internal.spoofedUUID = uuid;
-	}
-
-	@Override
 	public ProfileProperty[] getSpoofedProperties() {
 		if (internal.spoofedProfile == null) {
 			return null;
@@ -117,13 +112,14 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 	}
 
 	@Override
-	public void setSpoofedProperties(ProfileProperty[] properties) {
-		internal.spoofedProfile =
-			Arrays.asList(properties)
-			.stream()
+	public void setSpoofedProfile(UUID uuid, ProfileProperty[] properties) {
+		internal.spoofedUUID = uuid;
+		if (properties != null) {
+			internal.spoofedProfile = Arrays.stream(properties)
 			.map(prop -> new Property(prop.getName(), prop.getValue(), prop.getSignature()))
 			.collect(Collectors.toList())
 			.toArray(new Property[0]);
+		}
 	}
 
 	@Override

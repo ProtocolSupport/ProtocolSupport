@@ -83,10 +83,7 @@ public abstract class AbstractHandshakeListener {
 					}
 					hostname = split[0];
 					changeRemoteAddress(connection, new InetSocketAddress(split[1], connection.getAddress().getPort()));
-					networkManager.setSpoofedUUID(UUIDTypeAdapter.fromString(split[2]));
-					if (split.length == 4) {
-						networkManager.setSpoofedProperties(gson.fromJson(split[3], ProfileProperty[].class));
-					}
+					networkManager.setSpoofedProfile(UUIDTypeAdapter.fromString(split[2]), split.length == 4 ? gson.fromJson(split[3], ProfileProperty[].class) : null);
 				}
 				//ps handshake event
 				ConnectionHandshakeEvent event = new ConnectionHandshakeEvent(connection, hostname);

@@ -41,11 +41,9 @@ public abstract class NetworkManagerWrapper {
 
 	public abstract UUID getSpoofedUUID();
 
-	public abstract void setSpoofedUUID(UUID uuid);
-
 	public abstract ProfileProperty[] getSpoofedProperties();
 
-	public abstract void setSpoofedProperties(ProfileProperty[] properties);
+	public abstract void setSpoofedProfile(UUID uuid, ProfileProperty[] properties);
 
 	public abstract Player getBukkitPlayer();
 
