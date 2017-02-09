@@ -147,7 +147,8 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 
     @Override
     public Message createTabHeaderFooterPacket(BaseComponent header, BaseComponent footer) {
-        return null; // TODO: change UserListHeaderFooterMessage to use BaseComponent instead of TextMessage
+    	//TODO: Change to use BaseComponent when it will be possible
+        return new UserListHeaderFooterMessage(new TextMessage(header.toLegacyText()), new TextMessage(header.toLegacyText()));
     }
 
     @Override
