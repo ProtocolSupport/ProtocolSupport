@@ -3,6 +3,7 @@ package protocolsupport.zplatform.impl.glowstone.network;
 import java.net.InetSocketAddress;
 import java.text.MessageFormat;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.bukkit.entity.Player;
 
@@ -111,8 +112,7 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 
 	@Override
 	public UUID getSpoofedUUID() {
-		// TODO Auto-generated method stub
-		return null;
+		return getSession().getProxyData().getProfile().getUniqueId();
 	}
 
 	@Override
@@ -123,8 +123,11 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 
 	@Override
 	public ProfileProperty[] getSpoofedProperties() {
-		// TODO Auto-generated method stub
-		return null;
+		return getSession().getProxyData().getProfile().getProperties()
+		.stream()
+		.map(property -> new ProfileProperty(property.getName(), property.getValue(), property.getSignature()))
+		.collect(Collectors.toList())
+		.toArray(new ProfileProperty[0]);
 	}
 
 	@Override
