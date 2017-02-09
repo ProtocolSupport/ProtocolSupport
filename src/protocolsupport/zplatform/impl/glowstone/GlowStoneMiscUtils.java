@@ -118,22 +118,21 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 		return getServer().getProxySupport();
 	}
 
+	private boolean debug = false;
+
 	@Override
 	public boolean isDebugging() {
-		// TODO Auto-generated method stub
-		return false;
+		return debug == true;
 	}
 
 	@Override
 	public void enableDebug() {
-		// TODO Auto-generated method stub
-
+		debug = true;
 	}
 
 	@Override
 	public void disableDebug() {
-		// TODO Auto-generated method stub
-
+		debug = false;
 	}
 
 	@Override
