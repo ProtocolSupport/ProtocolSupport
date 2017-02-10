@@ -62,7 +62,7 @@ public abstract class AbstractStatusListener {
 
 			String motd = Bukkit.getMotd();
 			int maxPlayers = Bukkit.getMaxPlayers();
-	
+
 			InternalServerListPingEvent bevent = new InternalServerListPingEvent(addr.getAddress(), motd, maxPlayers, players);
 			bevent.setServerIcon(Bukkit.getServerIcon());
 			Bukkit.getPluginManager().callEvent(bevent);
