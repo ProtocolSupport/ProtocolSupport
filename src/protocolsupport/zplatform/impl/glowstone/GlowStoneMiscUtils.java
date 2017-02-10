@@ -93,12 +93,6 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	}
 
 	@Override
-	public String localize(String key, Object... args) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public ItemStack createItemStackFromNBTTag(NBTTagCompoundWrapper tag) {
 		return NbtSerialization.readItem(((GlowStoneNBTTagCompoundWrapper) tag).unwrap());
 	}

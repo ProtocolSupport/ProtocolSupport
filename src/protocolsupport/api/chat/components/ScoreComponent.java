@@ -7,8 +7,8 @@ import org.bukkit.scoreboard.Scoreboard;
 
 public class ScoreComponent extends BaseComponent {
 
-	private String playername;
-	private String objectivename;
+	private final String playername;
+	private final String objectivename;
 	private String value;
 
 	public ScoreComponent(String playername, String objectivename) {

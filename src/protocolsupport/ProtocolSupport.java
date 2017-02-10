@@ -21,6 +21,7 @@ import protocolsupport.protocol.typeskipper.id.IdSkipper;
 import protocolsupport.protocol.utils.data.ItemData;
 import protocolsupport.protocol.utils.data.PotionData;
 import protocolsupport.protocol.utils.data.SoundData;
+import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.zplatform.ServerPlatform;
@@ -42,6 +43,7 @@ public class ProtocolSupport extends JavaPlugin {
 			ItemData.init();
 			PotionData.init();
 			SoundData.init();
+			I18NData.init();
 			Compressor.init();
 			ServerBoundPacket.init();
 			ClientBoundPacket.init();

@@ -8,12 +8,12 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
 import protocolsupport.protocol.legacyremapper.LegacyChat;
-import protocolsupport.zplatform.ServerPlatform;
+import protocolsupport.protocol.utils.i18n.I18NData;
 
 public class TranslateComponent extends BaseComponent {
 
-	private String translationKey;
-	private List<BaseComponent> args = new ArrayList<>();
+	private final String translationKey;
+	private final List<BaseComponent> args = new ArrayList<>();
 
 	@Deprecated
 	public TranslateComponent(String translationKey, Object... values) {
@@ -51,7 +51,7 @@ public class TranslateComponent extends BaseComponent {
 
 	@Override
 	public String getValue() {
-		return ServerPlatform.get().getMiscUtils().localize(translationKey, Lists.transform(args, new Function<BaseComponent, String>() {
+		return I18NData.i18n("en_us", translationKey, Lists.transform(args, new Function<BaseComponent, String>() {
 			@Override
 			public String apply(BaseComponent v) {
 				return LegacyChat.toText(v);

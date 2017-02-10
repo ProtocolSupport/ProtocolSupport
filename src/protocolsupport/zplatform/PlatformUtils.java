@@ -19,8 +19,6 @@ import protocolsupport.zplatform.network.NetworkState;
 
 public interface PlatformUtils {
 
-	public String localize(String key, Object... args);
-
 	public ItemStack createItemStackFromNBTTag(NBTTagCompoundWrapper tag);
 
 	public NBTTagCompoundWrapper createNBTTagFromItemStack(ItemStack itemstack);

@@ -2,7 +2,7 @@ package protocolsupport.api.chat.components;
 
 public class SelectorComponent extends BaseComponent {
 
-	private String selector;
+	private final String selector;
 
 	public SelectorComponent(String selector) {
 		this.selector = selector;

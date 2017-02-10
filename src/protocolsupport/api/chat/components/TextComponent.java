@@ -2,7 +2,7 @@ package protocolsupport.api.chat.components;
 
 public class TextComponent extends BaseComponent {
 
-	private String text;
+	private final String text;
 
 	public TextComponent(String text) {
 		this.text = text;

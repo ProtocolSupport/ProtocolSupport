@@ -21,7 +21,6 @@ import com.mojang.authlib.properties.Property;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import net.minecraft.server.v1_11_R1.EnumProtocol;
-import net.minecraft.server.v1_11_R1.LocaleI18n;
 import net.minecraft.server.v1_11_R1.MinecraftServer;
 import net.minecraft.server.v1_11_R1.NBTTagCompound;
 import net.minecraft.server.v1_11_R1.NetworkManager;
@@ -72,11 +71,6 @@ public class SpigotMiscUtils implements PlatformUtils {
 			mojangGameProfile.getProperties().put(entry.getKey(), new Property(property.getName(), property.getValue(), property.getSignature()));
 		}
 		return mojangGameProfile;
-	}
-
-	@Override
-	public String localize(String key, Object... args) {
-		return LocaleI18n.a(key, args);
 	}
 
 	@Override
