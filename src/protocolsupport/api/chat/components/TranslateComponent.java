@@ -12,13 +12,11 @@ import protocolsupport.protocol.utils.i18n.I18NData;
 
 public class TranslateComponent extends BaseComponent {
 
-	private final String lang;
 	private final String translationKey;
 	private final List<BaseComponent> args = new ArrayList<>();
 
 	@Deprecated
 	public TranslateComponent(String translationKey, Object... values) {
-		this.lang = I18NData.DEFAULT_LANG;
 		this.translationKey = translationKey;
 		this.args.addAll(Lists.transform(Arrays.asList(values), new Function<Object, BaseComponent>() {
 			@Override
@@ -30,12 +28,6 @@ public class TranslateComponent extends BaseComponent {
 
 	public TranslateComponent(String translationKey, BaseComponent... values) {
 		this(I18NData.DEFAULT_LANG, translationKey, values);
-	}
-
-	public TranslateComponent(String lang, String translationKey, BaseComponent... values) {
-		this.lang = lang;
-		this.translationKey = translationKey;
-		this.args.addAll(Arrays.asList(values));
 	}
 
 	public String getTranslationKey() {
@@ -58,6 +50,10 @@ public class TranslateComponent extends BaseComponent {
 
 	@Override
 	public String getValue() {
+		return getValue(I18NData.DEFAULT_LANG);
+	}
+
+	public String getValue(String lang) {
 		return I18NData.i18n(lang, translationKey, Lists.transform(args, new Function<BaseComponent, String>() {
 			@Override
 			public String apply(BaseComponent v) {
