@@ -24,6 +24,7 @@ task updateGlowstone(type: Download) {
 	overwrite true
 }
 
+compileJava.dependsOn(clean)
 compileJava.dependsOn(updateSpigot, updateGlowstone)
 
 sourceSets {
