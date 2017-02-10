@@ -157,8 +157,10 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	}
 
 	private static final Map<String, Statistic> statByName = Arrays.stream(Statistic.values())
+	.filter(stat -> GlowStatistic.getName(stat) != null)
 	.collect(Collectors.toMap(stat -> GlowStatistic.getName(stat), stat -> stat));
 	private static final Map<String, Achievement> achByName = Arrays.stream(Achievement.values())
+	.filter(ach -> GlowAchievement.getName(ach) != null)
 	.collect(Collectors.toMap(ach -> GlowAchievement.getName(ach), ach -> ach));
 
 	@Override
