@@ -327,6 +327,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 		}
 	}
 
+	//TODO: Add remapper that is similar to update tile nbt remapper
 	@SuppressWarnings("deprecation")
 	private ItemStackWrapper transformItemStack(ItemStackWrapper original) {
 		ItemStackWrapper itemstack = original.cloneItemStack();
@@ -347,6 +348,13 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 						newpages.addString(ChatAPI.fromJSON(pages.getString(i)).toLegacyText());
 					}
 					nbttagcompound.setList("pages", newpages);
+				}
+			}
+			if (item == Material.BOOK_AND_QUILL || item == Material.WRITTEN_BOOK) {
+				if (!nbttagcompound.hasKeyOfType("pages", NBTTagCompoundWrapper.TYPE_LIST)) {
+					NBTTagListWrapper pages = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
+					pages.addString("");
+					nbttagcompound.setList("pages", pages);
 				}
 			}
 			if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_5) && (item == Material.SKULL_ITEM)) {
