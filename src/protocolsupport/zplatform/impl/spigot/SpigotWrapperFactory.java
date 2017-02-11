@@ -42,7 +42,7 @@ public class SpigotWrapperFactory implements PlatformWrapperFactory {
 
 	@Override
 	public NBTTagCompoundWrapper createNullNBTCompound() {
-		return SpigotNBTTagCompoundWrapper.createEmpty();
+		return SpigotNBTTagCompoundWrapper.createNull();
 	}
 
 	@Override
