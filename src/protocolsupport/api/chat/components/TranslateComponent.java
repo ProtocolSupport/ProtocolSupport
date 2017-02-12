@@ -27,7 +27,8 @@ public class TranslateComponent extends BaseComponent {
 	}
 
 	public TranslateComponent(String translationKey, BaseComponent... values) {
-		this(I18NData.DEFAULT_LANG, translationKey, values);
+		this.translationKey = translationKey;
+		this.args.addAll(Arrays.asList(values));
 	}
 
 	public String getTranslationKey() {
