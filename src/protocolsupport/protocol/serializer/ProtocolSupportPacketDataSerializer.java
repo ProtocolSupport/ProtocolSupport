@@ -245,20 +245,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 				}
 				resetReaderIndex();
 				try (DataInputStream datainputstream = new DataInputStream(new ByteBufInputStream(this))) {
-					NBTTagCompoundWrapper tag = wrapperFactory.createNBTCompoundFromStream(datainputstream);
-					if (getVersion() == ProtocolVersion.MINECRAFT_1_8) {
-						NBTTagListWrapper pages = tag.getList("pages", 8);
-						NBTTagListWrapper newPages = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
-
-						if (!pages.isEmpty()) {
-							for (int i = 0; i < pages.size(); i++) {
-								String page = pages.getString(i);
-								newPages.addString(strFormatting(page));
-							}
-							tag.setList("pages", newPages);
-						}
-					}
-					return tag;
+					return wrapperFactory.createNBTCompoundFromStream(datainputstream);
 				}
 			}
 		} catch (IOException e) {
@@ -405,6 +392,17 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 					NBTTagListWrapper pages = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
 					pages.addString("");
 					nbttagcompound.setList("pages", pages);
+				}
+			}
+			if (item == Material.BOOK_AND_QUILL) {
+				NBTTagListWrapper pages = nbttagcompound.getList("pages", 8);
+				NBTTagListWrapper newPages = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
+
+				if (!pages.isEmpty()) {
+					for (int i = 0; i < pages.size(); i++) {
+						newPages.addString(strFormatting(pages.getString(i)));
+					}
+					nbttagcompound.setList("pages", newPages);
 				}
 			}
 			if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_5) && (item == Material.SKULL_ITEM)) {
