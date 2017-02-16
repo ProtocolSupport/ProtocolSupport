@@ -32,5 +32,4 @@ public class CustomPayload extends MiddleCustomPayload {
 			data = ProtocolSupportPacketDataSerializer.toArray(serializer);
 		}
 	}
-
 }

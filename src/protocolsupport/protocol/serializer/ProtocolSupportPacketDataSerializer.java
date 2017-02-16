@@ -36,6 +36,7 @@ import protocolsupport.protocol.utils.types.MerchantData;
 import protocolsupport.protocol.utils.types.MerchantData.TradeOffer;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.netty.WrappingBuffer;
+import protocolsupport.zplatform.PlatformWrapperFactory;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -227,28 +228,64 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 	}
 
 	public NBTTagCompoundWrapper readTag() {
+		PlatformWrapperFactory wrapperFactory = ServerPlatform.get().getWrapperFactory();
 		try {
 			if (getVersion().isBefore(ProtocolVersion.MINECRAFT_1_8)) {
 				final short length = readShort();
 				if (length < 0) {
-					return ServerPlatform.get().getWrapperFactory().createNullNBTCompound();
+					return wrapperFactory.createNullNBTCompound();
 				}
 				try (InputStream inputstream = new GZIPInputStream(new ByteBufInputStream(readSlice(length)))) {
-					return ServerPlatform.get().getWrapperFactory().createNBTCompoundFromStream(inputstream);
+					return wrapperFactory.createNBTCompoundFromStream(inputstream);
 				}
 			} else {
 				markReaderIndex();
 				if (readByte() == 0) {
-					return ServerPlatform.get().getWrapperFactory().createNullNBTCompound();
+					return wrapperFactory.createNullNBTCompound();
 				}
 				resetReaderIndex();
 				try (DataInputStream datainputstream = new DataInputStream(new ByteBufInputStream(this))) {
-					return ServerPlatform.get().getWrapperFactory().createNBTCompoundFromStream(datainputstream);
+					return wrapperFactory.createNBTCompoundFromStream(datainputstream);
 				}
 			}
 		} catch (IOException e) {
 			throw new DecoderException(e);
 		}
+	}
+
+	private String strFormatting(String str) {
+		char[] chars = str.toCharArray();
+		char[] newChars = new char[chars.length];
+		boolean mark = false;
+		int index = 0;
+		for (int i = 0; i < chars.length; i++) {
+			char ch = chars[i];
+			if (ch == '\\') {
+				mark = true;
+				int nextIndex = i + 1;
+				if (nextIndex >= chars.length)
+					break;
+				char next = chars[nextIndex];
+				if (next == '"') {
+					ch = '"';
+					i++;
+					mark = false;
+				} else if (next == 'n') {
+					ch = '\n';
+					i++;
+					mark = false;
+				} else if (next == '\\') {
+					i++;
+					mark = false;
+				}
+			} else if (ch == '"') {
+				if (!mark) {
+					continue;
+				}
+			}
+			newChars[index++] = ch;
+		}
+		return new String(newChars);
 	}
 
 	public void writeTag(NBTTagCompoundWrapper tag) {
@@ -355,6 +392,17 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 					NBTTagListWrapper pages = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
 					pages.addString("");
 					nbttagcompound.setList("pages", pages);
+				}
+			}
+			if (item == Material.BOOK_AND_QUILL) {
+				NBTTagListWrapper pages = nbttagcompound.getList("pages", 8);
+				NBTTagListWrapper newPages = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
+
+				if (!pages.isEmpty()) {
+					for (int i = 0; i < pages.size(); i++) {
+						newPages.addString(strFormatting(pages.getString(i)));
+					}
+					nbttagcompound.setList("pages", newPages);
 				}
 			}
 			if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_5) && (item == Material.SKULL_ITEM)) {
