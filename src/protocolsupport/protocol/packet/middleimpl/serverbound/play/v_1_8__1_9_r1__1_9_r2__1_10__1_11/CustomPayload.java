@@ -7,10 +7,7 @@ import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
-import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 
 public class CustomPayload extends MiddleCustomPayload {
 
@@ -29,60 +26,10 @@ public class CustomPayload extends MiddleCustomPayload {
 		} else if (tag.equals("MC|BSign") || tag.equals("MC|BEdit")) {
 			ItemStackWrapper book = serializer.readItemStack();
 			book.setType(Material.BOOK_AND_QUILL);
-			NBTTagCompoundWrapper bookTag = book.getTag();
-
-			if (serializer.getVersion() == ProtocolVersion.MINECRAFT_1_8) {
-				NBTTagListWrapper pages = bookTag.getList("pages", 8);
-				NBTTagListWrapper newPages = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
-
-				if (!pages.isEmpty()) {
-					for (int i = 0; i < pages.size(); i++) {
-						String page = pages.getString(i);
-						newPages.addString(strFormatting(page));
-					}
-					bookTag.setList("pages", newPages);
-				}
-			}
-
 			newdata.writeItemStack(book);
 			data = ProtocolSupportPacketDataSerializer.toArray(newdata);
 		} else {
 			data = ProtocolSupportPacketDataSerializer.toArray(serializer);
 		}
-	}
-
-	private String strFormatting(String str) {
-		char[] chars = str.toCharArray();
-		char[] newChars = new char[chars.length];
-		boolean mark = false;
-		int index = 0;
-		for (int i = 0; i < chars.length; i++) {
-			char ch = chars[i];
-			if (ch == '\\') {
-				mark = true;
-				int nextIndex = i + 1;
-				if (nextIndex >= chars.length)
-					break;
-				char next = chars[nextIndex];
-				if (next == '"') {
-					ch = '"';
-					i++;
-					mark = false;
-				} else if (next == 'n') {
-					ch = '\n';
-					i++;
-					mark = false;
-				} else if (next == '\\') {
-					i++;
-					mark = false;
-				}
-			} else if (ch == '"') {
-				if (!mark) {
-					continue;
-				}
-			}
-			newChars[index++] = ch;
-		}
-		return new String(newChars);
 	}
 }
