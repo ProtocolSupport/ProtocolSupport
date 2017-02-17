@@ -10,6 +10,8 @@ import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import com.google.common.base.CharMatcher;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -21,6 +23,7 @@ import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
+import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.events.ItemStackWriteEvent;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.legacyremapper.LegacyEntityType;
@@ -355,6 +358,18 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 					NBTTagListWrapper pages = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
 					pages.addString("");
 					nbttagcompound.setList("pages", pages);
+				}
+			}
+			if (getVersion() == ProtocolVersion.MINECRAFT_1_8 && item == Material.WRITTEN_BOOK) {
+				if (nbttagcompound.hasKeyOfType("pages", NBTTagCompoundWrapper.TYPE_LIST)) {
+					NBTTagListWrapper pages = nbttagcompound.getList("pages", NBTTagCompoundWrapper.TYPE_STRING);
+					NBTTagListWrapper newPages = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
+					for (int i = 0; i< pages.size(); i++) {
+						String page = ChatAPI.fromJSON(pages.getString(i)).getValue();
+						String newPage = CharMatcher.is('\"').trimFrom(StringEscapeUtils.unescapeJava(page));
+						newPages.addString(ChatAPI.toJSON(new TextComponent(newPage)));
+					}
+					nbttagcompound.setList("pages", newPages);
 				}
 			}
 			if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_5) && (item == Material.SKULL_ITEM)) {
