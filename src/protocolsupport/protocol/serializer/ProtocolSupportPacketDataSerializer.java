@@ -21,6 +21,7 @@ import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
+import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.events.ItemStackWriteEvent;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.legacyremapper.LegacyEntityType;
@@ -357,6 +358,17 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 					nbttagcompound.setList("pages", pages);
 				}
 			}
+			if (getVersion() == ProtocolVersion.MINECRAFT_1_8 && item == Material.WRITTEN_BOOK) {
+				if (nbttagcompound.hasKeyOfType("pages", NBTTagCompoundWrapper.TYPE_LIST)) {
+					NBTTagListWrapper pages = nbttagcompound.getList("pages", NBTTagCompoundWrapper.TYPE_STRING);
+					NBTTagListWrapper newPages = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
+					for (int i = 0; i< pages.size(); i++) {
+						String page = ChatAPI.fromJSON(pages.getString(i)).getValue();
+						newPages.addString(ChatAPI.toJSON(new TextComponent(strFormat(page))));
+					}
+					nbttagcompound.setList("pages", newPages);
+				}
+			}
 			if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_5) && (item == Material.SKULL_ITEM)) {
 				transformSkull(nbttagcompound);
 			}
@@ -407,6 +419,41 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 			Bukkit.getPluginManager().callEvent(event);
 		}
 		return itemstack;
+	}
+
+	private static String strFormat(String str) {
+		char[] chars = str.toCharArray();
+		char[] newChars = new char[chars.length];
+		boolean mark = false;
+		int index = 0;
+		for (int i = 0; i < chars.length; i++) {
+			char ch = chars[i];
+			if (ch == '\\') {
+				mark = true;
+				int nextIndex = i + 1;
+				if (nextIndex >= chars.length)
+					break;
+				char next = chars[nextIndex];
+				if (next == '"') {
+					ch = '"';
+					i++;
+					mark = false;
+				} else if (next == 'n') {
+					ch = '\n';
+					i++;
+					mark = false;
+				} else if (next == '\\') {
+					i++;
+					mark = false;
+				}
+			} else if (ch == '"') {
+				if (!mark) {
+					continue;
+				}
+			}
+			newChars[index++] = ch;
+		}
+		return new String(newChars);
 	}
 
 	private NBTTagListWrapper filterEnchantList(NBTTagListWrapper oldList) {
