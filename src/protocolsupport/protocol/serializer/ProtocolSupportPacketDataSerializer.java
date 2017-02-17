@@ -10,6 +10,7 @@ import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -364,7 +365,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 					NBTTagListWrapper newPages = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
 					for (int i = 0; i< pages.size(); i++) {
 						String page = ChatAPI.fromJSON(pages.getString(i)).getValue();
-						newPages.addString(ChatAPI.toJSON(new TextComponent(strFormat(page))));
+						newPages.addString(ChatAPI.toJSON(new TextComponent(StringEscapeUtils.unescapeJava(page))));
 					}
 					nbttagcompound.setList("pages", newPages);
 				}
@@ -419,41 +420,6 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 			Bukkit.getPluginManager().callEvent(event);
 		}
 		return itemstack;
-	}
-
-	private static String strFormat(String str) {
-		char[] chars = str.toCharArray();
-		char[] newChars = new char[chars.length];
-		boolean mark = false;
-		int index = 0;
-		for (int i = 0; i < chars.length; i++) {
-			char ch = chars[i];
-			if (ch == '\\') {
-				mark = true;
-				int nextIndex = i + 1;
-				if (nextIndex >= chars.length)
-					break;
-				char next = chars[nextIndex];
-				if (next == '"') {
-					ch = '"';
-					i++;
-					mark = false;
-				} else if (next == 'n') {
-					ch = '\n';
-					i++;
-					mark = false;
-				} else if (next == '\\') {
-					i++;
-					mark = false;
-				}
-			} else if (ch == '"') {
-				if (!mark) {
-					continue;
-				}
-			}
-			newChars[index++] = ch;
-		}
-		return new String(newChars);
 	}
 
 	private NBTTagListWrapper filterEnchantList(NBTTagListWrapper oldList) {
