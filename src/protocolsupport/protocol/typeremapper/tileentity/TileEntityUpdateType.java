@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.nbt;
+package protocolsupport.protocol.typeremapper.tileentity;
 
 import java.util.HashMap;
 

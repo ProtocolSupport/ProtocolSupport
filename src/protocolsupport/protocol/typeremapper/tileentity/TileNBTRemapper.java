@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.nbt;
+package protocolsupport.protocol.typeremapper.tileentity;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -32,12 +32,12 @@ public class TileNBTRemapper {
 		newToOldType.put("minecraft:sign", "Sign");
 	}
 
-	private static final EnumMap<TileEntityUpdateType, EnumMap<ProtocolVersion, List<NBTSpecificRemapper>>> registry = new EnumMap<>(TileEntityUpdateType.class);
+	private static final EnumMap<TileEntityUpdateType, EnumMap<ProtocolVersion, List<TileEntitySpecificRemapper>>> registry = new EnumMap<>(TileEntityUpdateType.class);
 
-	private static void register(TileEntityUpdateType type, NBTSpecificRemapper transformer, ProtocolVersion... versions) {
-		EnumMap<ProtocolVersion, List<NBTSpecificRemapper>> map = Utils.getOrCreateDefault(registry, type, new EnumMap<ProtocolVersion, List<NBTSpecificRemapper>>(ProtocolVersion.class));
+	private static void register(TileEntityUpdateType type, TileEntitySpecificRemapper transformer, ProtocolVersion... versions) {
+		EnumMap<ProtocolVersion, List<TileEntitySpecificRemapper>> map = Utils.getOrCreateDefault(registry, type, new EnumMap<ProtocolVersion, List<TileEntitySpecificRemapper>>(ProtocolVersion.class));
 		for (ProtocolVersion version : versions) {
-			Utils.getOrCreateDefault(map, version, new ArrayList<NBTSpecificRemapper>()).add(transformer);
+			Utils.getOrCreateDefault(map, version, new ArrayList<TileEntitySpecificRemapper>()).add(transformer);
 		}
 	}
 
@@ -143,11 +143,11 @@ public class TileNBTRemapper {
 	}
 
 	public static NBTTagCompoundWrapper remap(ProtocolVersion version, NBTTagCompoundWrapper compound) {
-		EnumMap<ProtocolVersion, List<NBTSpecificRemapper>> map = registry.get(TileEntityUpdateType.fromType(getTileType(compound)));
+		EnumMap<ProtocolVersion, List<TileEntitySpecificRemapper>> map = registry.get(TileEntityUpdateType.fromType(getTileType(compound)));
 		if (map != null) {
-			List<NBTSpecificRemapper> transformers = map.get(version);
+			List<TileEntitySpecificRemapper> transformers = map.get(version);
 			if (transformers != null) {
-				for (NBTSpecificRemapper transformer : transformers) {
+				for (TileEntitySpecificRemapper transformer : transformers) {
 					compound = transformer.remap(version, compound);
 				}
 				return compound;

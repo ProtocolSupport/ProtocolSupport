@@ -6,7 +6,7 @@ import protocolsupport.protocol.legacyremapper.chunk.ChunkTransformer.BlockForma
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.typeremapper.nbt.TileNBTRemapper;
+import protocolsupport.protocol.typeremapper.tileentity.TileNBTRemapper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
