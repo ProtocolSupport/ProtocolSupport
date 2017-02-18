@@ -5,9 +5,7 @@ import java.util.ArrayList;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 
-import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.api.remapper.BlockRemapperControl;
 import protocolsupport.protocol.typeremapper.id.RemappingRegistry.GenericRemappingRegistry;
 import protocolsupport.protocol.typeremapper.id.RemappingRegistry.IdRemappingRegistry;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
@@ -130,85 +128,6 @@ public class IdRemapper {
 		@Override
 		protected ArrayBasedIdRemappingTable createTable() {
 			return new ArrayBasedIdRemappingTable(4096 * 16);
-		}
-	};
-
-	@SuppressWarnings("deprecation")
-	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> ITEM = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
-		{
-			for (ProtocolVersion version : ProtocolVersion.values()) {
-				if (version.isSupported()) {
-					BlockRemapperControl ctrl = ProtocolSupportAPI.getBlockRemapper(version);
-					for (int i = 0; i < 4096; i++) {
-						registerRemapEntry(i, ctrl.getRemap(i), version);
-					}
-				}
-			}
-			registerRemapEntry(Material.SHULKER_SHELL, Material.COBBLESTONE, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(Material.TOTEM, Material.COBBLESTONE, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(Material.BEETROOT, Material.BROWN_MUSHROOM, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(Material.BEETROOT_SOUP, Material.MUSHROOM_SOUP, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(Material.BEETROOT_SEEDS, Material.SEEDS, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(Material.CHORUS_FRUIT, Material.POTATO_ITEM, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(Material.CHORUS_FRUIT_POPPED, Material.BAKED_POTATO, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(Material.DRAGONS_BREATH, Material.POTION, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(Material.SPLASH_POTION, Material.POTION, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(Material.LINGERING_POTION, Material.POTION, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(Material.ELYTRA, Material.LEATHER_CHESTPLATE, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(Material.END_CRYSTAL, Material.STONE, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(Material.SHIELD, Material.WOOD_SWORD, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(Material.SPECTRAL_ARROW, Material.ARROW, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(Material.TIPPED_ARROW, Material.ARROW, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(Material.BOAT_ACACIA, Material.BOAT, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(Material.BOAT_BIRCH, Material.BOAT, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(Material.BOAT_DARK_OAK, Material.BOAT, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(Material.BOAT_JUNGLE, Material.BOAT, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(Material.BOAT_SPRUCE, Material.BOAT, ProtocolVersionsHelper.BEFORE_1_9);
-			// all doors -> door
-			registerRemapEntry(427, 324, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(428, 324, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(429, 324, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(430, 324, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(431, 324, ProtocolVersionsHelper.BEFORE_1_8);
-			// rabbit raw meat -> chicken raw meat
-			registerRemapEntry(411, 365, ProtocolVersionsHelper.BEFORE_1_8);
-			// rabbit cooked meat -> chicken cooked meat
-			registerRemapEntry(412, 366, ProtocolVersionsHelper.BEFORE_1_8);
-			// rabbit stew -> mushroom stew
-			registerRemapEntry(413, 282, ProtocolVersionsHelper.BEFORE_1_8);
-			// raw mutton -> chicken raw meat
-			registerRemapEntry(423, 365, ProtocolVersionsHelper.BEFORE_1_8);
-			// cooked mutton -> chicken cooked meat
-			registerRemapEntry(424, 366, ProtocolVersionsHelper.BEFORE_1_8);
-			// banner -> sign
-			registerRemapEntry(425, 323, ProtocolVersionsHelper.BEFORE_1_8);
-			// everything else -> stone
-			registerRemapEntry(409, 1, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(410, 1, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(414, 1, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(415, 1, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(416, 1, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(417, 1, ProtocolVersionsHelper.BEFORE_1_6);
-			registerRemapEntry(418, 1, ProtocolVersionsHelper.BEFORE_1_6);
-			registerRemapEntry(419, 1, ProtocolVersionsHelper.BEFORE_1_6);
-			registerRemapEntry(420, 1, ProtocolVersionsHelper.BEFORE_1_6);
-			registerRemapEntry(421, 1, ProtocolVersionsHelper.BEFORE_1_6);
-			// minecarts -> default minecart
-			registerRemapEntry(407, 328, ProtocolVersionsHelper.BEFORE_1_5);
-			registerRemapEntry(408, 328, ProtocolVersionsHelper.BEFORE_1_5);
-			// comparator -> repeater
-			registerRemapEntry(404, 356, ProtocolVersionsHelper.BEFORE_1_5);
-			// nether brick -> brick
-			registerRemapEntry(405, 336, ProtocolVersionsHelper.BEFORE_1_5);
-			// quartz -> feather
-			registerRemapEntry(406, 288, ProtocolVersionsHelper.BEFORE_1_5);
-		}
-		private void registerRemapEntry(Material from, Material to, ProtocolVersion... versions) {
-			registerRemapEntry(from.getId(), to.getId(), versions);
-		}
-		@Override
-		protected ArrayBasedIdRemappingTable createTable() {
-			return new ArrayBasedIdRemappingTable(4096);
 		}
 	};
 

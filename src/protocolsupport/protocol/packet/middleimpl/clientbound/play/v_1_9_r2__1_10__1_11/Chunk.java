@@ -6,7 +6,7 @@ import protocolsupport.protocol.legacyremapper.chunk.ChunkTransformer.BlockForma
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.typeremapper.nbt.tileupdate.TileNBTTransformer;
+import protocolsupport.protocol.typeremapper.nbt.TileNBTRemapper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -26,7 +26,7 @@ public class Chunk extends MiddleChunk<RecyclableCollection<ClientBoundPacketDat
 		serializer.writeByteArray(transformer.toLegacyData(version));
 		serializer.writeVarInt(tiles.length);
 		for (NBTTagCompoundWrapper tile : tiles) {
-			serializer.writeTag(TileNBTTransformer.transform(version, tile));
+			serializer.writeTag(TileNBTRemapper.remap(version, tile));
 		}
 		return RecyclableSingletonList.create(serializer);
 	}

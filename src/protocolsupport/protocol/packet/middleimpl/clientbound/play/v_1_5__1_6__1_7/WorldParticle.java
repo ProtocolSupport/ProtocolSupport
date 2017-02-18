@@ -5,6 +5,7 @@ import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldParticle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.utils.types.Particle;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -18,7 +19,7 @@ public class WorldParticle extends MiddleWorldParticle<RecyclableCollection<Clie
 		String name = particle.getName();
 		switch (particle) {
 			case ITEM_CRACK: {
-				name += IdRemapper.ITEM.getTable(version).getRemap(adddata.get(0));
+				name += ItemStackRemapper.ITEM_ID_REMAPPING_REGISTRY.getTable(version).getRemap(adddata.get(0));
 				break;
 			}
 			case BLOCK_CRACK:

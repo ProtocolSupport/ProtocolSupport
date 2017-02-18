@@ -3,8 +3,8 @@ package protocolsupport.api.remapper;
 import org.bukkit.Material;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 
 public class ItemRemapperControl {
 
@@ -16,7 +16,7 @@ public class ItemRemapperControl {
 				throw new IllegalArgumentException(version+" is not a valid protocol version");
 			}
 			default: {
-				table = IdRemapper.ITEM.getTable(version);
+				table = ItemStackRemapper.ITEM_ID_REMAPPING_REGISTRY.getTable(version);
 				break;
 			}
 		}

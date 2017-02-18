@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.nbt.tileupdate;
+package protocolsupport.protocol.typeremapper.nbt;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -7,8 +7,7 @@ import java.util.List;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.legacyremapper.LegacyEntityType;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
-import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.utils.data.ItemData;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.ProtocolVersionsHelper;
@@ -16,7 +15,7 @@ import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
-public class TileNBTTransformer {
+public class TileNBTRemapper {
 
 	private static final String tileEntityTypeKey = "id";
 
@@ -33,12 +32,12 @@ public class TileNBTTransformer {
 		newToOldType.put("minecraft:sign", "Sign");
 	}
 
-	private static final EnumMap<TileEntityUpdateType, EnumMap<ProtocolVersion, List<SpecificTransformer>>> registry = new EnumMap<>(TileEntityUpdateType.class);
+	private static final EnumMap<TileEntityUpdateType, EnumMap<ProtocolVersion, List<NBTSpecificRemapper>>> registry = new EnumMap<>(TileEntityUpdateType.class);
 
-	private static void register(TileEntityUpdateType type, SpecificTransformer transformer, ProtocolVersion... versions) {
-		EnumMap<ProtocolVersion, List<SpecificTransformer>> map = Utils.getOrCreateDefault(registry, type, new EnumMap<ProtocolVersion, List<SpecificTransformer>>(ProtocolVersion.class));
+	private static void register(TileEntityUpdateType type, NBTSpecificRemapper transformer, ProtocolVersion... versions) {
+		EnumMap<ProtocolVersion, List<NBTSpecificRemapper>> map = Utils.getOrCreateDefault(registry, type, new EnumMap<ProtocolVersion, List<NBTSpecificRemapper>>(ProtocolVersion.class));
 		for (ProtocolVersion version : versions) {
-			Utils.getOrCreateDefault(map, version, new ArrayList<SpecificTransformer>()).add(transformer);
+			Utils.getOrCreateDefault(map, version, new ArrayList<NBTSpecificRemapper>()).add(transformer);
 		}
 	}
 
@@ -53,7 +52,8 @@ public class TileNBTTransformer {
 				ProtocolVersionsHelper.BEFORE_1_11
 			);
 		}
-		register(TileEntityUpdateType.MOB_SPAWNER,
+		register(
+			TileEntityUpdateType.MOB_SPAWNER,
 			(version, input) -> {
 				if (!input.hasKeyOfType("SpawnData", NBTTagCompoundWrapper.TYPE_COMPOUND)) {
 					NBTTagCompoundWrapper spawndata = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
@@ -99,16 +99,16 @@ public class TileNBTTransformer {
 			(version, input) -> {
 				if (input.getNumber("SkullType") == 5) {
 					input.setByte("SkullType", 3);
-					input.setCompound("Owner", ProtocolSupportPacketDataSerializer.createDragonHeadSkullTag());
+					input.setCompound("Owner", ItemStackRemapper.createDragonHeadSkullTag());
 				}
 				return input;
 			},
-			ProtocolVersion.getAllBefore(ProtocolVersion.MINECRAFT_1_9)
+			ProtocolVersion.getAllBefore(ProtocolVersion.MINECRAFT_1_8)
 		);
 		register(
 			TileEntityUpdateType.SKULL,
 			(version, input) -> {
-				ProtocolSupportPacketDataSerializer.transformSkull(input);
+				ItemStackRemapper.remapSkull(input);
 				return input;
 			},
 			ProtocolVersion.getAllBefore(ProtocolVersion.MINECRAFT_1_7_5)
@@ -118,7 +118,7 @@ public class TileNBTTransformer {
 			(version, input) -> {
 				Integer id = ItemData.getIdByName(input.getString("Item"));
 				if (id != null) {
-					input.setInt("Item", IdRemapper.ITEM.getTable(version).getRemap(id));
+					input.setInt("Item", ItemStackRemapper.ITEM_ID_REMAPPING_REGISTRY.getTable(version).getRemap(id));
 				}
 				return input;
 			},
@@ -142,13 +142,13 @@ public class TileNBTTransformer {
 		return lines;
 	}
 
-	public static NBTTagCompoundWrapper transform(ProtocolVersion version, NBTTagCompoundWrapper compound) {
-		EnumMap<ProtocolVersion, List<SpecificTransformer>> map = registry.get(TileEntityUpdateType.fromType(getTileType(compound)));
+	public static NBTTagCompoundWrapper remap(ProtocolVersion version, NBTTagCompoundWrapper compound) {
+		EnumMap<ProtocolVersion, List<NBTSpecificRemapper>> map = registry.get(TileEntityUpdateType.fromType(getTileType(compound)));
 		if (map != null) {
-			List<SpecificTransformer> transformers = map.get(version);
+			List<NBTSpecificRemapper> transformers = map.get(version);
 			if (transformers != null) {
-				for (SpecificTransformer transformer : transformers) {
-					compound = transformer.transform(version, compound);
+				for (NBTSpecificRemapper transformer : transformers) {
+					compound = transformer.remap(version, compound);
 				}
 				return compound;
 			}
