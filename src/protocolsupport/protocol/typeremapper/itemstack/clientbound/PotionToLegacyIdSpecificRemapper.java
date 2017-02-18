@@ -8,10 +8,10 @@ import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 
-public class PotionNBTSpecificRemapper extends ItemStackNBTSpecificRemapper {
+public class PotionToLegacyIdSpecificRemapper extends ItemStackNBTSpecificRemapper {
 
 	private final boolean isThrowablePotion;
-	public PotionNBTSpecificRemapper(boolean isThrowablePotion) {
+	public PotionToLegacyIdSpecificRemapper(boolean isThrowablePotion) {
 		this.isThrowablePotion = isThrowablePotion;
 	}
 

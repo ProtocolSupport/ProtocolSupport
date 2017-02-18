@@ -8,7 +8,7 @@ import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 
-public class BookPagesSpecificRemapper extends ItemStackNBTSpecificRemapper {
+public class BookPagesToLegacyTextSpecificRemapper extends ItemStackNBTSpecificRemapper {
 
 	@Override
 	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, ItemStackWrapper itemstack, NBTTagCompoundWrapper tag) {
