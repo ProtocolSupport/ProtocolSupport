@@ -1,5 +1,6 @@
 package protocolsupport.api.chat;
 
+import org.apache.commons.lang3.Validate;
 import org.bukkit.entity.Player;
 
 import com.google.gson.Gson;
@@ -10,7 +11,6 @@ import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.modifiers.ClickAction;
 import protocolsupport.api.chat.modifiers.HoverAction;
 import protocolsupport.api.chat.modifiers.Modifier;
-import protocolsupport.utils.ApacheCommonsUtils;
 import protocolsupport.utils.chat.ClickActionSerializer;
 import protocolsupport.utils.chat.ComponentSerializer;
 import protocolsupport.utils.chat.HoverActionSerializer;
@@ -47,9 +47,9 @@ public class ChatAPI {
 	}
 
 	public static void sendMessage(Player player, String messageJson, MessagePosition position) {
-		ApacheCommonsUtils.notNull(player, "Player can't be null");
-		ApacheCommonsUtils.notNull(messageJson, "Message can't be null");
-		ApacheCommonsUtils.notNull(position, "Message position can't be null");
+		Validate.notNull(player, "Player can't be null");
+		Validate.notNull(messageJson, "Message can't be null");
+		Validate.notNull(position, "Message position can't be null");
 		ProtocolSupportAPI.getConnection(player).sendPacket(ServerPlatform.get().getPacketFactory().createOutboundChatPacket(messageJson, position.ordinal()));
 	}
 

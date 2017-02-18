@@ -10,9 +10,9 @@ import java.util.Base64;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.lang3.Validate;
 import org.bukkit.util.CachedServerIcon;
 
-import protocolsupport.utils.ApacheCommonsUtils;
 import protocolsupport.zplatform.ServerPlatform;
 
 public class IconUtils {
@@ -26,8 +26,8 @@ public class IconUtils {
 	}
 
 	public static String loadIcon(BufferedImage image) throws IOException {
-		ApacheCommonsUtils.isTrue(image.getWidth() == 64, "Must be 64 pixels wide");
-		ApacheCommonsUtils.isTrue(image.getHeight() == 64, "Must be 64 pixels high");
+		Validate.isTrue(image.getWidth() == 64, "Must be 64 pixels wide");
+		Validate.isTrue(image.getHeight() == 64, "Must be 64 pixels high");
 		ByteArrayOutputStream data = new ByteArrayOutputStream();
 		ImageIO.write(image, "PNG", data);
 		return "data:image/png;base64," + Base64.getEncoder().encodeToString(data.toByteArray());

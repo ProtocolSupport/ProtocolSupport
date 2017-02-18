@@ -3,9 +3,10 @@ package protocolsupport.protocol.utils;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
+
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.utils.authlib.GameProfile;
-import protocolsupport.utils.ApacheCommonsUtils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
@@ -20,7 +21,7 @@ public class GameProfileSerializer {
 
 	public static NBTTagCompoundWrapper serialize(GameProfile gameProfile) {
 		NBTTagCompoundWrapper tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-		if (!ApacheCommonsUtils.isEmpty(gameProfile.getName())) {
+		if (!StringUtils.isEmpty(gameProfile.getName())) {
 			tag.setString(NAME_KEY, gameProfile.getName());
 		}
 		if (gameProfile.getUUID() != null) {
@@ -56,7 +57,7 @@ public class GameProfileSerializer {
 			}
 		} catch (Throwable t) {
 		}
-		if (ApacheCommonsUtils.isEmpty(name) && (uuid == null)) {
+		if (StringUtils.isEmpty(name) && (uuid == null)) {
 			return null;
 		}
 		GameProfile gameProfile = new GameProfile(uuid, name);

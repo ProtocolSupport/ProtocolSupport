@@ -5,11 +5,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.Validate;
 import org.bukkit.event.HandlerList;
 
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
-import protocolsupport.utils.ApacheCommonsUtils;
 
 public class PlayerPropertiesResolveEvent extends PlayerEvent {
 
@@ -49,8 +49,8 @@ public class PlayerPropertiesResolveEvent extends PlayerEvent {
 		private final String signature;
 
 		public ProfileProperty(String name, String value, String signature) {
-			ApacheCommonsUtils.notNull(name, "Name cannot be null");
-			ApacheCommonsUtils.notNull(value, "Value cannot be null");
+			Validate.notNull(name, "Name cannot be null");
+			Validate.notNull(value, "Value cannot be null");
 			this.name = name;
 			this.value = value;
 			this.signature = signature;

@@ -1,6 +1,11 @@
 plugins {
     id 'java'
     id 'de.undercouch.download' version '3.1.1'
+    id 'com.github.johnrengelman.shadow' version '1.2.4'
+}
+
+tasks.withType(AbstractCompile) {
+	classpath += configurations.shadow
 }
 
 group 'protocolsupport'
@@ -38,16 +43,31 @@ sourceSets {
 	}
 }
 
-dependencies {
-	compile files('buildprocessor/BuildProcessor.jar')
-	compile files('build/spigot-1.11.2-R0.1-SNAPSHOT.jar')
-	compile files('build/glowstone.jar')
+repositories {
+	mavenCentral()
 }
 
-jar {
+dependencies {
+	shadow files('buildprocessor/BuildProcessor.jar')
+	shadow files('build/spigot-1.11.2-R0.1-SNAPSHOT.jar')
+	shadow files('build/glowstone.jar')
+	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+	compile group: 'net.sf.trove4j', name: 'trove4j', version: '3.0.3'
+	compile group: 'com.google.code.gson', name: 'gson', version: '2.8.0'
+}
+
+shadowJar {
 	from "LICENSE"
 	from "src/plugin.yml"
 
 	destinationDir = file("$rootDir/target/")
-	version = null
+	archiveName = "${baseName}.${extension}"
+
+    relocate 'org.apache', 'protocolsupport.libs.org.apache'
+    relocate 'gnu.trove', 'protocolsupport.libs.gnu.trove'
+    relocate 'com.google', 'protocolsupport.libs.com.google'
 }
+
+
+jar.enabled = false
+classes.finalizedBy(shadowJar)

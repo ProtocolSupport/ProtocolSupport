@@ -2,6 +2,7 @@ package protocolsupport.protocol.typeremapper.id;
 
 import java.util.ArrayList;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 
@@ -11,7 +12,6 @@ import protocolsupport.protocol.typeremapper.id.RemappingRegistry.IdRemappingReg
 import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.GenericRemappingTable;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.HashMapBasedIdRemappingTable;
-import protocolsupport.utils.ApacheCommonsUtils.ImmutablePair;
 import protocolsupport.utils.ProtocolVersionsHelper;
 
 public class IdRemapper {

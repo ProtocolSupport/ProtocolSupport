@@ -1,11 +1,11 @@
 package protocolsupport.api.tab;
 
+import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.chat.components.BaseComponent;
-import protocolsupport.utils.ApacheCommonsUtils;
 import protocolsupport.zplatform.ServerPlatform;
 
 public class TabAPI {
@@ -41,7 +41,7 @@ public class TabAPI {
 	}
 
 	public static void sendHeaderFooter(Player player, BaseComponent header, BaseComponent footer) {
-		ApacheCommonsUtils.notNull(player, "Player can't be null");
+		Validate.notNull(player, "Player can't be null");
 		ProtocolSupportAPI.getConnection(player).sendPacket(ServerPlatform.get().getPacketFactory().createTabHeaderFooterPacket(header, footer));
 	}
 

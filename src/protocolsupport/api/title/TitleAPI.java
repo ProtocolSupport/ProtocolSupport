@@ -1,12 +1,12 @@
 package protocolsupport.api.title;
 
+import org.apache.commons.lang3.Validate;
 import org.bukkit.entity.Player;
 
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
-import protocolsupport.utils.ApacheCommonsUtils;
 import protocolsupport.zplatform.ServerPlatform;
 
 public class TitleAPI {
@@ -16,7 +16,7 @@ public class TitleAPI {
 	}
 
 	public static void sendSimpleTitle(Player player, String titleJson, String subtitleJson, int fadeIn, int stay, int fadeOut) {
-		ApacheCommonsUtils.notNull(player, "Player can't be null");
+		Validate.notNull(player, "Player can't be null");
 		if ((titleJson == null) && (subtitleJson == null)) {
 			throw new IllegalArgumentException("Title and subtitle can't be both null");
 		}
