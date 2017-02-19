@@ -22,13 +22,14 @@ public class ServerPlatform {
 			throw new IllegalStateException("Implementation already detected");
 		}
 		try {
-			NetworkManager.a.getName();
-			SpigotConfig.config.contains("test");
+			NetworkManager.class.getDeclaredFields();
+			SpigotConfig.class.getDeclaredFields();
 			current = new ServerPlatform("Spigot", new SpigotPlatformInjector(), new SpigotMiscUtils(), new SpigotPacketFactory(), new SpigotWrapperFactory());
 		} catch (Throwable t) {
+			t.printStackTrace();
 		}
 		try {
-			GlowServer.GAME_VERSION.getBytes();
+			GlowServer.class.getDeclaredFields();
 			current = new ServerPlatform("GlowStone", new GlowstonePlatformInjector(), new GlowStoneMiscUtils(), new GlowStonePacketFactory(), new GlowStoneWrapperFactory());
 		} catch (Throwable t) {
 		}
