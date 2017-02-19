@@ -1,7 +1,7 @@
 plugins {
-    id 'java'
-    id 'de.undercouch.download' version '3.1.1'
-    id 'com.github.johnrengelman.shadow' version '1.2.4'
+	id 'java'
+	id 'de.undercouch.download' version '3.1.1'
+	id 'com.github.johnrengelman.shadow' version '1.2.4'
 }
 
 tasks.withType(AbstractCompile) {
@@ -35,10 +35,10 @@ compileJava.dependsOn(updateSpigot, updateGlowstone)
 sourceSets {
 	main {
 		java {
-			srcDirs = ["src"]
+			srcDirs = ['src']
 		}
 		resources {
-			srcDirs = ["resources"]
+			srcDirs = ['resources']
 		}
 	}
 }
@@ -48,24 +48,24 @@ repositories {
 }
 
 dependencies {
-	shadow files('buildprocessor/BuildProcessor.jar')
-	shadow files('build/spigot-1.11.2-R0.1-SNAPSHOT.jar')
-	shadow files('build/glowstone.jar')
+	shadow files('buildprocessor/BuildProcessor.jar', 'build/spigot-1.11.2-R0.1-SNAPSHOT.jar', 'build/glowstone.jar')
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 	compile group: 'net.sf.trove4j', name: 'trove4j', version: '3.0.3'
 	compile group: 'com.google.code.gson', name: 'gson', version: '2.8.0'
 }
 
 shadowJar {
-	from "LICENSE"
-	from "src/plugin.yml"
+
+	from 'LICENSE'
+	from 'src/plugin.yml'
 
 	destinationDir = file("$rootDir/target/")
 	archiveName = "${baseName}.${extension}"
 
-    relocate 'org.apache', 'protocolsupport.libs.org.apache'
-    relocate 'gnu.trove', 'protocolsupport.libs.gnu.trove'
-    relocate 'com.google', 'protocolsupport.libs.com.google'
+	exclude 'META-INF/**'
+	relocate 'org.apache', 'protocolsupport.libs.org.apache'
+	relocate 'gnu.trove', 'protocolsupport.libs.gnu.trove'
+	relocate 'com.google', 'protocolsupport.libs.com.google'
 }
 
 
