@@ -144,7 +144,7 @@ public class SpigotNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 
 	@Override
 	public String toString() {
-		return tag.toString();
+		return Objects.toString(tag);
 	}
 
 }
