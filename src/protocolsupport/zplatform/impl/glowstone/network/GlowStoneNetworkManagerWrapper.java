@@ -17,6 +17,7 @@ import io.netty.channel.Channel;
 import io.netty.util.AttributeKey;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import net.glowstone.entity.meta.profile.PlayerProfile;
 import net.glowstone.entity.meta.profile.PlayerProperty;
 import net.glowstone.net.GlowSession;
 import net.glowstone.net.ProxyData;
@@ -122,16 +123,23 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 
 	@Override
 	public UUID getSpoofedUUID() {
-		return getSession().getProxyData().getProfile().getUniqueId();
+		PlayerProfile profile = getSpoofedProfile();
+		return profile != null ? profile.getUniqueId() : null;
 	}
 
 	@Override
 	public ProfileProperty[] getSpoofedProperties() {
-		return getSession().getProxyData().getProfile().getProperties()
-		.stream()
+		PlayerProfile profile = getSpoofedProfile();
+		return profile == null ? null :
+		profile.getProperties().stream()
 		.map(property -> new ProfileProperty(property.getName(), property.getValue(), property.getSignature()))
 		.collect(Collectors.toList())
 		.toArray(new ProfileProperty[0]);
+	}
+
+	private PlayerProfile getSpoofedProfile() {
+		ProxyData proxydata = getSession().getProxyData();
+		return proxydata != null ? proxydata.getProfile("?[]___PSFakeProfile!!!!!!!") : null;
 	}
 
 	@Override
