@@ -207,13 +207,13 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 		}
 		ItemStackWrapper remapped = ItemStackRemapper.remapClientbound(getVersion(), itemstack.cloneItemStack());
 		if (ItemStackWriteEvent.getHandlerList().getRegisteredListeners().length > 0) {
-			ItemStackWriteEvent event = new InternalItemStackWriteEvent(getVersion(), remapped, itemstack);
+			ItemStackWriteEvent event = new InternalItemStackWriteEvent(getVersion(), itemstack, remapped);
 			Bukkit.getPluginManager().callEvent(event);
 		}
-		writeShort(ItemStackRemapper.ITEM_ID_REMAPPING_REGISTRY.getTable(version).getRemap(itemstack.getTypeId()));
-		writeByte(itemstack.getAmount());
-		writeShort(itemstack.getData());
-		writeTag(itemstack.getTag());
+		writeShort(ItemStackRemapper.ITEM_ID_REMAPPING_REGISTRY.getTable(version).getRemap(remapped.getTypeId()));
+		writeByte(remapped.getAmount());
+		writeShort(remapped.getData());
+		writeTag(remapped.getTag());
 	}
 
 	public NBTTagCompoundWrapper readTag() {
