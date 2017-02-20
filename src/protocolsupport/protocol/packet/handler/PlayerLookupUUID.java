@@ -8,9 +8,12 @@ import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerPreLoginEvent;
 
+import protocolsupport.api.Connection;
+import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.ConnectionImpl;
@@ -57,12 +60,22 @@ public class PlayerLookupUUID {
 
 		String playerName = listener.profile.getName();
 		InetSocketAddress saddress = listener.networkManager.getAddress();
+
+		Connection apiconnection = ProtocolSupportAPI.getConnection(saddress);
+		if (apiconnection == null) {
+			listener.disconnect(ChatColor.RED + "No Connection instance found");
+			return;
+		}
+
+		Connection channelconnection = ConnectionImpl.getFromChannel(listener.networkManager.getChannel());
+		if (channelconnection != apiconnection) {
+			listener.disconnect(ChatColor.RED + "API and Channel Connection missmatch");
+			return;
+		}
+
 		InetAddress address = saddress.getAddress();
 
-		PlayerPropertiesResolveEvent propResolve = new PlayerPropertiesResolveEvent(
-			ConnectionImpl.getFromChannel(listener.networkManager.getChannel()), playerName,
-			listener.profile.getProperties().values()
-		);
+		PlayerPropertiesResolveEvent propResolve = new PlayerPropertiesResolveEvent(channelconnection, playerName, listener.profile.getProperties().values());
 		Bukkit.getPluginManager().callEvent(propResolve);
 		listener.profile.clearProperties();
 		for (ProfileProperty property : propResolve.getProperties().values()) {
