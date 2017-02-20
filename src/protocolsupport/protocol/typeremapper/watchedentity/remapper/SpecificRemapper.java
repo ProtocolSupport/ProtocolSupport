@@ -796,7 +796,7 @@ public enum SpecificRemapper {
 	}
 
 	private static class Mapping {
-		private int idFrom;
+		private final int idFrom;
 		private final List<Entry> entries = new ArrayList<>();
 		public Mapping(int idFrom) {
 			this.idFrom = idFrom;
@@ -806,9 +806,9 @@ public enum SpecificRemapper {
 			return this;
 		}
 		private static class Entry {
-			private int idTo;
-			private ValueRemapper<?> vremap;
-			private ProtocolVersion[] versions;
+			private final int idTo;
+			private final ValueRemapper<?> vremap;
+			private final ProtocolVersion[] versions;
 			public Entry(int to, ValueRemapper<?> vremap, ProtocolVersion[] versions) {
 				this.idTo = to;
 				this.vremap = vremap;

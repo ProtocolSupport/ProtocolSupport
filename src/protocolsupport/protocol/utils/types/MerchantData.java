@@ -8,8 +8,8 @@ import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 public class MerchantData {
 
-	private int windowId;
-	private List<TradeOffer> offers = new ArrayList<>(10);
+	private final int windowId;
+	private final List<TradeOffer> offers = new ArrayList<>(10);
 
 	public MerchantData(int windowId) {
 		this.windowId = windowId;
@@ -28,11 +28,11 @@ public class MerchantData {
 	}
 
 	public static class TradeOffer {
-		private ItemStackWrapper itemstack1;
-		private ItemStackWrapper itemstack2;
-		private ItemStackWrapper result;
-		private int uses;
-		private int maxuses;
+		private final ItemStackWrapper itemstack1;
+		private final ItemStackWrapper itemstack2;
+		private final ItemStackWrapper result;
+		private final int uses;
+		private final int maxuses;
 
 		public TradeOffer(ItemStackWrapper itemstack1, ItemStackWrapper itemstack2, ItemStackWrapper result, int uses, int maxuses) {
 			this.itemstack1 = itemstack1;

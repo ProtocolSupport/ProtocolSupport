@@ -5,8 +5,8 @@ import java.net.URL;
 
 public class ClickAction {
 
-	private Type type;
-	private String value;
+	private final Type type;
+	private final String value;
 
 	public ClickAction(Type action, String value) {
 		this.type = action;

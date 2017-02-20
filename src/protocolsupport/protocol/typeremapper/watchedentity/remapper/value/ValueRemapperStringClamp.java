@@ -6,7 +6,7 @@ import protocolsupport.utils.Utils;
 
 public class ValueRemapperStringClamp extends ValueRemapper<DataWatcherObjectString> {
 
-	private int limit;
+	private final int limit;
 	public ValueRemapperStringClamp(int limit) {
 		this.limit = limit;
 	}

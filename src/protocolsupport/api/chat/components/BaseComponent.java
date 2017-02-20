@@ -12,7 +12,7 @@ import protocolsupport.protocol.legacyremapper.LegacyChat;
 
 public abstract class BaseComponent {
 
-	private List<BaseComponent> siblings = new ArrayList<>();
+	private final List<BaseComponent> siblings = new ArrayList<>();
 	private Modifier modifier;
 	private ClickAction clickAction;
 	private HoverAction hoverAction;

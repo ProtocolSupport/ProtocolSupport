@@ -16,8 +16,8 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class HoverAction {
 
-	private Type type;
-	private String value;
+	private final Type type;
+	private final String value;
 
 	public HoverAction(Type type, String value) {
 		this.type = type;
@@ -101,9 +101,9 @@ public class HoverAction {
 	}
 
 	public static class EntityInfo {
-		private EntityType etype;
-		private UUID uuid;
-		private String name;
+		private final EntityType etype;
+		private final UUID uuid;
+		private final String name;
 
 		public EntityInfo(EntityType etype, UUID uuid, String name) {
 			this.etype = etype;

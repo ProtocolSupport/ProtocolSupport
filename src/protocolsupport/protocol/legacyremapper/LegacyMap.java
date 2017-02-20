@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class LegacyMap {
 
-	private byte[] colors = new byte[16384];
+	private final byte[] colors = new byte[16384];
 
 	private int columnStart;
 	private int columnEnd;
@@ -44,10 +44,10 @@ public class LegacyMap {
 			this.colors = new byte[rows];
 		}
 
-		private int x;
-		private int y;
+		private final int x;
+		private final int y;
 
-		private byte[] colors;
+		private final byte[] colors;
 
 		public int getX() {
 			return x;

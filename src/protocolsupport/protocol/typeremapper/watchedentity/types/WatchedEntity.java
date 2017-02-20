@@ -4,7 +4,7 @@ import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRema
 
 public abstract class WatchedEntity {
 
-	private int id;
+	private final int id;
 
 	public WatchedEntity(int id) {
 		this.id = id;

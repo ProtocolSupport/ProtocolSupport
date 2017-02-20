@@ -97,7 +97,7 @@ public abstract class AbstractStatusListener {
 
 	public static class InternalServerListPingEvent extends ServerListPingEvent {
 
-		private List<Player> players;
+		private final List<Player> players;
 		protected InternalServerListPingEvent(InetAddress address, String motd, int maxPlayers, List<Player> players) {
 			super(address, motd, maxPlayers);
 			this.players = players;

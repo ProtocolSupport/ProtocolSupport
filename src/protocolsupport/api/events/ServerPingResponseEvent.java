@@ -78,8 +78,8 @@ public class ServerPingResponseEvent extends ConnectionEvent {
 	}
 
 	public static class ProtocolInfo {
-		private int id;
-		private String name;
+		private final int id;
+		private final String name;
 
 		public ProtocolInfo(int id, String name) {
 			this.id = id;
