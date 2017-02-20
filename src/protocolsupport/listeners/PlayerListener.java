@@ -31,7 +31,8 @@ public class PlayerListener implements Listener {
 	@EventHandler
 	public void onShift(PlayerToggleSneakEvent event) {
 		Player player = event.getPlayer();
-		if (player.isInsideVehicle() && ProtocolSupportAPI.getProtocolVersion(player).isBeforeOrEq(ProtocolVersion.MINECRAFT_1_5_2)) {
+		Connection connection = ProtocolSupportAPI.getConnection(player);
+		if (connection != null && connection.getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_5_2)) {
 			player.leaveVehicle();
 		}
 	}
@@ -39,10 +40,20 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onVehicleInteract(PlayerInteractEntityEvent event) {
 		Player player = event.getPlayer();
-		if (player.isInsideVehicle() && ProtocolSupportAPI.getProtocolVersion(player).isBeforeOrEq(ProtocolVersion.MINECRAFT_1_5_2)) {
+		Connection connection = ProtocolSupportAPI.getConnection(player);
+		if (connection != null && connection.getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_5_2)) {
 			if (player.getVehicle().equals(event.getRightClicked())) {
 				player.leaveVehicle();
 			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onBlockPlace(BlockPlaceEvent event) {
+		Connection connection = ProtocolSupportAPI.getConnection(event.getPlayer());
+		if (connection != null && connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9)) {
+			Block block = event.getBlock();
+			connection.sendPacket(ServerPlatform.get().getPacketFactory().createBlockBreakSoundPacket(new Position(block.getX(), block.getY(), block.getZ()), block.getType()));
 		}
 	}
 
@@ -50,15 +61,6 @@ public class PlayerListener implements Listener {
 	public void onVehicleEnter(VehicleEnterEvent event) {
 		if (!event.getVehicle().getPassengers().isEmpty()) {
 			event.setCancelled(true);
-		}
-	}
-
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onBlockPlace(BlockPlaceEvent event) {
-		Connection connection = ProtocolSupportAPI.getConnection(event.getPlayer());
-		if (connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9)) {
-			Block block = event.getBlock();
-			connection.sendPacket(ServerPlatform.get().getPacketFactory().createBlockBreakSoundPacket(new Position(block.getX(), block.getY(), block.getZ()), block.getType()));
 		}
 	}
 
