@@ -55,12 +55,11 @@ dependencies {
 }
 
 shadowJar {
-
 	from 'LICENSE'
 	from 'src/plugin.yml'
 
-	destinationDir = file("$rootDir/target/")
-	archiveName = "${baseName}.${extension}"
+	destinationDir = file('build')
+	archiveName = 'ProtocolSupport-all.jar'
 
 	exclude 'META-INF/**'
 	relocate 'org.apache', 'protocolsupport.libs.org.apache'
@@ -68,6 +67,19 @@ shadowJar {
 	relocate 'com.google.gson', 'protocolsupport.libs.com.google.gson'
 }
 
+task replaceManifest(type: Zip) {
+	def shadedFile = file('build/ProtocolSupport-all.jar')
+	destinationDir = file('target')
+	archiveName = 'ProtocolSupport.jar'
+	from (zipTree(shadedFile), {
+		filesMatching('META-INF/MANIFEST.MF') {
+			filter {
+				String line -> line.startsWith("Manifest-Version:") ? line : null
+			}
+		}
+    })
+}
 
 jar.enabled = false
 classes.finalizedBy(shadowJar)
+shadowJar.finalizedBy(replaceManifest)
