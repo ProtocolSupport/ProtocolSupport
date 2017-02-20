@@ -192,7 +192,6 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 		int type = readShort();
 		if (type >= 0) {
 			ItemStackWrapper itemstack = ServerPlatform.get().getWrapperFactory().createItemStack(type);
-			itemstack.setTypeId(type);
 			itemstack.setAmount(readByte());
 			itemstack.setData(readShort());
 			itemstack.setTag(readTag());
