@@ -1,7 +1,6 @@
 package protocolsupport.protocol.pipeline.common;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.nio.channels.ClosedChannelException;
 import java.util.HashSet;
 
@@ -18,7 +17,6 @@ import protocolsupport.api.events.PlayerDisconnectEvent;
 import protocolsupport.logger.AsyncErrorLogger;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.storage.ProtocolStorage;
-import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class LogicHandler extends ChannelDuplexHandler {
@@ -69,15 +67,14 @@ public class LogicHandler extends ChannelDuplexHandler {
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		super.channelInactive(ctx);
-		NetworkManagerWrapper networkmanager = ServerPlatform.get().getMiscUtils().getNetworkManagerFromChannel(ctx.channel());
-		InetSocketAddress addr = networkmanager.getAddress();
-		Connection connection = ProtocolStorage.getConnection(addr);
+		ConnectionImpl connection = ConnectionImpl.getFromChannel(ctx.channel());
+		NetworkManagerWrapper networkmanager = connection.getNetworkManagerWrapper();
 		String username = networkmanager.getUserName();
 		if (username != null) {
 			Bukkit.getPluginManager().callEvent(new PlayerDisconnectEvent(connection, username));
 		}
 		Bukkit.getPluginManager().callEvent(new ConnectionCloseEvent(connection));
-		ProtocolStorage.removeConnection(addr);
+		ProtocolStorage.removeConnection(networkmanager.getRawAddress());
 	}
 
 }

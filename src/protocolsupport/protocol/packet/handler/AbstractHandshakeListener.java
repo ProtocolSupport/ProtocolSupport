@@ -2,7 +2,6 @@ package protocolsupport.protocol.packet.handler;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
 import java.text.MessageFormat;
 import java.util.logging.Level;
 
@@ -16,7 +15,6 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ConnectionHandshakeEvent;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.protocol.storage.ThrottleTracker;
 import protocolsupport.protocol.utils.authlib.UUIDTypeAdapter;
 import protocolsupport.zplatform.ServerPlatform;
@@ -82,14 +80,14 @@ public abstract class AbstractHandshakeListener {
 						return;
 					}
 					hostname = split[0];
-					changeRemoteAddress(connection, new InetSocketAddress(split[1], connection.getAddress().getPort()));
+					connection.changeAddress(new InetSocketAddress(split[1], connection.getAddress().getPort()));
 					networkManager.setSpoofedProfile(UUIDTypeAdapter.fromString(split[2]), split.length == 4 ? gson.fromJson(split[3], ProfileProperty[].class) : null);
 				}
 				//ps handshake event
 				ConnectionHandshakeEvent event = new ConnectionHandshakeEvent(connection, hostname);
 				Bukkit.getPluginManager().callEvent(event);
 				if (event.getSpoofedAddress() != null) {
-					changeRemoteAddress(connection, event.getSpoofedAddress());
+					connection.changeAddress(event.getSpoofedAddress());
 				}
 				//switch to login stage
 				networkManager.setPacketListener(getLoginListener(networkManager, hostname + ":" + port));
@@ -105,13 +103,6 @@ public abstract class AbstractHandshakeListener {
 				throw new UnsupportedOperationException("Invalid intention " + nextState);
 			}
 		}
-	}
-
-	protected void changeRemoteAddress(ConnectionImpl connection, InetSocketAddress newRemote) {
-		SocketAddress oldaddress = networkManager.getAddress();
-		ProtocolStorage.removeConnection(oldaddress);
-		networkManager.setAddress(newRemote);
-		ProtocolStorage.setConnection(newRemote, connection);
 	}
 
 	protected abstract AbstractLoginListener getLoginListener(NetworkManagerWrapper networkManager, String hostname);

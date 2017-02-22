@@ -29,7 +29,7 @@ public class GlowStoneServerConnectionChannel extends ChannelInitializer<Channel
 
 		GlowStoneConnectionImpl connection = new GlowStoneConnectionImpl(ServerPlatform.get().getMiscUtils().getNetworkManagerFromChannel(channel));
 		connection.storeInChannel(channel);
-		ProtocolStorage.setConnection(channel.remoteAddress(), connection);
+		ProtocolStorage.addConnection(channel.remoteAddress(), connection);
 		ChannelPipeline pipeline = channel.pipeline();
 		pipeline.remove(GlowStoneChannelHandlers.READ_TIMEOUT);
 		pipeline.remove("legacy_ping");

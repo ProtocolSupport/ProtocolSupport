@@ -1,6 +1,7 @@
 package protocolsupport.protocol;
 
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 
 import org.bukkit.entity.Player;
 
@@ -8,6 +9,7 @@ import io.netty.channel.Channel;
 import io.netty.util.AttributeKey;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public abstract class ConnectionImpl extends Connection {
@@ -17,6 +19,10 @@ public abstract class ConnectionImpl extends Connection {
 	protected final NetworkManagerWrapper networkmanager;
 	public ConnectionImpl(NetworkManagerWrapper networkmanager) {
 		this.networkmanager = networkmanager;
+	}
+
+	public NetworkManagerWrapper getNetworkManagerWrapper() {
+		return networkmanager;
 	}
 
 	@Override
@@ -30,8 +36,20 @@ public abstract class ConnectionImpl extends Connection {
 	}
 
 	@Override
+	public InetSocketAddress getRawAddress() {
+		return networkmanager.getRawAddress();
+	}
+
+	@Override
 	public InetSocketAddress getAddress() {
 		return networkmanager.getAddress();
+	}
+
+	@Override
+	public void changeAddress(InetSocketAddress newRemote) {
+		SocketAddress primaryaddr = networkmanager.getRawAddress();
+		ProtocolStorage.addAddress(primaryaddr, newRemote);
+		networkmanager.setAddress(newRemote);
 	}
 
 	@Override

@@ -27,7 +27,7 @@ public class ProtocolSupportAPI {
 	}
 
 	public static Connection getConnection(Player player) {
-		return getConnection(player.getAddress());
+		return getConnection(player.spigot().getRawAddress());
 	}
 
 	public static Connection getConnection(SocketAddress address) {

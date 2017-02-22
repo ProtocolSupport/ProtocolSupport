@@ -30,7 +30,7 @@ public class SpigotServerConnectionChannel extends ChannelInitializer<Channel> {
 		networkmanager.setPacketListener(new SpigotFakePacketListener());
 		SpigotConnectionImpl connection = new SpigotConnectionImpl(networkmanager);
 		connection.storeInChannel(channel);
-		ProtocolStorage.setConnection(channel.remoteAddress(), connection);
+		ProtocolStorage.addConnection(channel.remoteAddress(), connection);
 		ChannelPipeline pipeline = channel.pipeline();
 		pipeline.addAfter(SpigotChannelHandlers.READ_TIMEOUT, ChannelHandlers.INITIAL_DECODER, new InitialPacketDecoder());
 		pipeline.addBefore(SpigotChannelHandlers.NETWORK_MANAGER, ChannelHandlers.LOGIC, new LogicHandler(connection));

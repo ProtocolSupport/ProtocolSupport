@@ -14,7 +14,11 @@ public abstract class Connection {
 
 	public abstract boolean isConnected();
 
+	public abstract InetSocketAddress getRawAddress();
+
 	public abstract InetSocketAddress getAddress();
+
+	public abstract void changeAddress(InetSocketAddress newRemote);
 
 	public abstract Player getPlayer();
 
