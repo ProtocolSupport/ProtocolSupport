@@ -23,7 +23,6 @@ import protocolsupport.protocol.typeremapper.itemstack.clientbound.MonsterEggToL
 import protocolsupport.protocol.typeremapper.itemstack.clientbound.MonsterEggToLegacyNameSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.clientbound.PlayerSkullSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.clientbound.PotionToLegacyIdSpecificRemapper;
-import protocolsupport.protocol.typeremapper.itemstack.serverbound.BookPagesUnescapeSpecificRemapper;
 import protocolsupport.protocol.utils.GameProfileSerializer;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.protocol.utils.authlib.UUIDTypeAdapter;
@@ -120,9 +119,9 @@ public class ItemStackRemapper {
 		registerRemapper(clientbound_remapper_registry, material, transformer, versions);
 	}
 
-	private static void registerServerboundRemapper(Material material, ItemStackSpecificRemapper transformer, ProtocolVersion... versions) {
-		registerRemapper(serverbound_remapper_registry, material, transformer, versions);
-	}
+//	private static void registerServerboundRemapper(Material material, ItemStackSpecificRemapper transformer, ProtocolVersion... versions) {
+//		registerRemapper(serverbound_remapper_registry, material, transformer, versions);
+//	}
 
 	@SuppressWarnings("deprecation")
 	private static void registerRemapper(TIntObjectHashMap<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>> registry, Material material, ItemStackSpecificRemapper transformer, ProtocolVersion... versions) {
@@ -146,7 +145,6 @@ public class ItemStackRemapper {
 		registerClientboundRemapper(Material.BOOK_AND_QUILL, new EmptyBookPageAdderSpecificRemapper(), ProtocolVersionsHelper.ALL);
 		EnchantFilterNBTSpecificRemapper enchantfilter = new EnchantFilterNBTSpecificRemapper();
 		Arrays.stream(Material.values()).forEach(material -> registerClientboundRemapper(material, enchantfilter, ProtocolVersionsHelper.ALL));
-		registerServerboundRemapper(Material.WRITTEN_BOOK, new BookPagesUnescapeSpecificRemapper(), ProtocolVersion.MINECRAFT_1_8);
 	}
 
 	public static ItemStackWrapper remapClientbound(ProtocolVersion version, ItemStackWrapper itemstack) {
