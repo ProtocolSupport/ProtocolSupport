@@ -156,7 +156,7 @@ public class ItemStackRemapper {
 	}
 
 	private static ItemStackWrapper remap(TIntObjectHashMap<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>> registry, ProtocolVersion version, ItemStackWrapper itemstack) {
-		EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>> map = clientbound_remapper_registry.get(itemstack.getTypeId());
+		EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>> map = registry.get(itemstack.getTypeId());
 		if (map != null) {
 			List<ItemStackSpecificRemapper> transformers = map.get(version);
 			if (transformers != null) {
