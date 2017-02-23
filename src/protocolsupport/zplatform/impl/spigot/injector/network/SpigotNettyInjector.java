@@ -89,7 +89,7 @@ public class SpigotNettyInjector {
 			channel.pipeline().addFirst(new SpigotNettyServerChannelHandler());
 			synchronized (networkManagersList) {
 				for (NetworkManager nm : networkManagersList) {
-					if (nm.channel.localAddress().equals(channel.localAddress())) {
+					if (nm.channel != null && nm.channel.localAddress().equals(channel.localAddress())) {
 						nm.close(new ChatComponentText("ProtocolSupport channel reset"));
 					}
 				}
