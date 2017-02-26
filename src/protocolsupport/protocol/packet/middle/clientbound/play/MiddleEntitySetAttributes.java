@@ -1,18 +1,20 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
+import java.util.LinkedHashMap;
 import java.util.UUID;
 
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public abstract class MiddleEntitySetAttributes<T> extends MiddleEntity<T> {
 
-	protected Attribute[] attributes;
+	protected final LinkedHashMap<String, Attribute> attributes = new LinkedHashMap<>();
 
 	@Override
 	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
 		super.readFromServerData(serializer);
-		attributes = new Attribute[serializer.readInt()];
-		for (int i = 0; i < attributes.length; i++) {
+		attributes.clear();
+		int attributesCount = serializer.readInt();
+		for (int i = 0; i < attributesCount; i++) {
 			Attribute attribute = new Attribute();
 			attribute.key = serializer.readString(64);
 			attribute.value = serializer.readDouble();
@@ -24,17 +26,21 @@ public abstract class MiddleEntitySetAttributes<T> extends MiddleEntity<T> {
 				modifier.operation = serializer.readByte();
 				attribute.modifiers[j] = modifier;
 			}
-			attributes[i] = attribute;
+			attributes.put(attribute.key, attribute);
 		}
 	}
 
 	@Override
 	public void handle() {
+		for (Attribute attr : attributes.values()) {
+			if (attr.value == 0.0D) {
+				attr.value = 0.00000001;
+			}
+		}
 		if (entityId == cache.getSelfPlayerEntityId()) {
-			for (Attribute attr : attributes) {
-				if (attr.key.equals("generic.maxHealth")) {
-					cache.setMaxHealth((float) attr.value);
-				}
+			Attribute attr = attributes.get("generic.maxHealth");
+			if (attr != null) {
+				cache.setMaxHealth((float) attr.value);
 			}
 		}
 	}
