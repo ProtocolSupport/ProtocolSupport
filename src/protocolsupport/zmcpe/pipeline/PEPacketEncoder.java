@@ -13,9 +13,11 @@ import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.zmcpe.packetsimpl.clientbound.Chat;
 import protocolsupport.zmcpe.packetsimpl.clientbound.Chunk;
 import protocolsupport.zmcpe.packetsimpl.clientbound.CustomPayload;
+import protocolsupport.zmcpe.packetsimpl.clientbound.KickDisconnect;
 import protocolsupport.zmcpe.packetsimpl.clientbound.Login;
 import protocolsupport.zmcpe.packetsimpl.clientbound.LoginSuccess;
 import protocolsupport.zmcpe.packetsimpl.clientbound.Position;
+import protocolsupport.zmcpe.packetsimpl.clientbound.SetHealth;
 import protocolsupport.zplatform.network.NetworkState;
 
 public class PEPacketEncoder extends AbstractPacketEncoder {
@@ -30,6 +32,8 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CHUNK_SINGLE_ID, Chunk.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_POSITION_ID, Position.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CHAT_ID, Chat.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_KICK_DISCONNECT_ID, KickDisconnect.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UPDATE_HEALTH_ID, SetHealth.class);
 	}
 
 	public PEPacketEncoder(Connection connection, NetworkDataCache storage) {

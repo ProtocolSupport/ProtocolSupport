@@ -20,11 +20,11 @@ public class Login extends MiddleLogin<RecyclableCollection<ClientBoundPacketDat
 		ClientBoundPacketData startgame = ClientBoundPacketData.create(PEPacketIDs.START_GAME, version);
 		startgame.writeSVarLong(0); //player entity unique id
 		startgame.writeSVarLong(0); //player entity runtime id
-		startgame.writeFloat(0); //x
-		startgame.writeFloat(0); //y
-		startgame.writeFloat(0); //z
-		startgame.writeFloat(0); //yaw
-		startgame.writeFloat(0); //pitch
+		startgame.writeLFloat(0); //x
+		startgame.writeLFloat(0); //y
+		startgame.writeLFloat(0); //z
+		startgame.writeLFloat(0); //yaw
+		startgame.writeLFloat(0); //pitch
 		startgame.writeSVarInt(0); //seed
 		startgame.writeSVarInt(dimension);
 		startgame.writeSVarInt(0); //generator
@@ -36,8 +36,8 @@ public class Login extends MiddleLogin<RecyclableCollection<ClientBoundPacketDat
 		startgame.writeBoolean(false); //?
 		startgame.writeSVarInt(-1); //time stop
 		startgame.writeBoolean(false); //edu mode
-		startgame.writeFloat(0); //rain level
-		startgame.writeFloat(0); //lighting level
+		startgame.writeLFloat(0); //rain level
+		startgame.writeLFloat(0); //lighting level
 		startgame.writeBoolean(true); //commands enabled
 		startgame.writeBoolean(false); //needs texture pack
 		startgame.writeString("");
