@@ -10,6 +10,7 @@ import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
+import protocolsupport.zmcpe.packetsimpl.clientbound.Chat;
 import protocolsupport.zmcpe.packetsimpl.clientbound.Chunk;
 import protocolsupport.zmcpe.packetsimpl.clientbound.CustomPayload;
 import protocolsupport.zmcpe.packetsimpl.clientbound.Login;
@@ -28,6 +29,7 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID, CustomPayload.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CHUNK_SINGLE_ID, Chunk.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_POSITION_ID, Position.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CHAT_ID, Chat.class);
 	}
 
 	public PEPacketEncoder(Connection connection, NetworkDataCache storage) {
