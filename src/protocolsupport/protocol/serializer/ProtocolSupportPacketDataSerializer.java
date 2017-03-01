@@ -172,7 +172,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 
 	public byte[] readByteArray(int limit) {
 		int size = -1;
-		if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10)) {
+		if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10) && getVersion() != ProtocolVersion.MINECRAFT_PE) {
 			size = readShort();
 		} else {
 			size = readVarInt();

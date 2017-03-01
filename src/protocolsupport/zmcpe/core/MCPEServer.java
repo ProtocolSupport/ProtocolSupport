@@ -17,6 +17,8 @@ import protocolsupport.protocol.pipeline.timeout.SimpleReadTimeoutHandler;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.utils.ReflectionUtils;
+import protocolsupport.zmcpe.pipeline.PEBatchPacketDecoder;
+import protocolsupport.zmcpe.pipeline.PEBatchPacketEncoder;
 import protocolsupport.zmcpe.pipeline.PEPacketDecoder;
 import protocolsupport.zmcpe.pipeline.PEPacketEncoder;
 import protocolsupport.zplatform.impl.spigot.SpigotConnectionImpl;
@@ -56,7 +58,9 @@ public class MCPEServer {
 					connection.setVersion(ProtocolVersion.MINECRAFT_PE);
 					NetworkDataCache cache = new NetworkDataCache();
 					channel.pipeline().replace("rns-timeout", SpigotChannelHandlers.READ_TIMEOUT, new SimpleReadTimeoutHandler(30));
+					channel.pipeline().addLast(new PEBatchPacketEncoder());
 					channel.pipeline().addLast(new PEPacketEncoder(connection, cache));
+					channel.pipeline().addLast(new PEBatchPacketDecoder());
 					channel.pipeline().addLast(new PEPacketDecoder(connection, cache));
 					channel.pipeline().addLast(SpigotChannelHandlers.ENCODER, new SpigotPacketEncoder());
 					channel.pipeline().addLast(SpigotChannelHandlers.DECODER, new SpigotPacketDecoder());
