@@ -22,6 +22,7 @@ public enum ProtocolVersion {
 	MINECRAFT_1_5_1(60, 2, "1.5.1"),
 	MINECRAFT_1_4_7(51, 1, "1.4.7"),
 	MINECRAFT_LEGACY(-1, 0),
+	MINECRAFT_PE(-1, -1, "MCPE"),
 	UNKNOWN(-1);
 
 	private final int id;

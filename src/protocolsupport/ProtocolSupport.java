@@ -24,9 +24,12 @@ import protocolsupport.protocol.utils.data.SoundData;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
+import protocolsupport.zmcpe.core.MCPEServer;
 import protocolsupport.zplatform.ServerPlatform;
 
 public class ProtocolSupport extends JavaPlugin {
+
+	private MCPEServer server;
 
 	@Override
 	public void onLoad() {
@@ -55,6 +58,7 @@ public class ProtocolSupport extends JavaPlugin {
 			IdRemapper.init();
 			BlockStorageReader.init();
 			ServerPlatform.get().inject();
+			server = new MCPEServer(2222);
 		} catch (Throwable t) {
 			t.printStackTrace();
 			Bukkit.shutdown();
@@ -66,12 +70,16 @@ public class ProtocolSupport extends JavaPlugin {
 		getCommand("protocolsupport").setExecutor(new CommandHandler());
 		getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 		getServer().getPluginManager().registerEvents(new CommandListener(), this);
+		Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+			server.start();
+		});
 	}
 
 	@Override
 	public void onDisable() {
 		Bukkit.shutdown();
 		AsyncErrorLogger.INSTANCE.stop();
+		server.stop();
 	}
 
 	public static void logWarning(String message) {

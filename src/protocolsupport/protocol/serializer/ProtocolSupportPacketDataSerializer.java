@@ -15,6 +15,7 @@ import org.bukkit.Bukkit;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 import protocolsupport.api.ProtocolVersion;
@@ -41,12 +42,20 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 		return this.version;
 	}
 
+	public void writeLFloat(float f) {
+		writeInt(ByteBufUtil.swapInt(Float.floatToIntBits(f)));
+	}
+
 	public int readVarInt() {
 		return readVarInt(this);
 	}
 
 	public void writeVarInt(int varint) {
 		writeVarInt(this, varint);
+	}
+
+	public void writeSVarInt(int varint) {
+		writeVarInt((varint << 1) ^ (varint >> 31));
 	}
 
 	public long readVarLong() {
@@ -69,6 +78,10 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 			varlong >>>= 7;
 		}
 		this.writeByte((int) varlong);
+	}
+
+	public void writeSVarLong(long varlong) {
+		writeVarLong((varlong << 1) ^ (varlong >> 63));
 	}
 
 	public <T extends Enum<T>> T readEnum(Class<T> clazz) {
@@ -105,7 +118,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 	}
 
 	public void writeString(String string) {
-		if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4)) {
+		if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4) && getVersion() != ProtocolVersion.MINECRAFT_PE) {
 			writeShort(string.length());
 			writeBytes(string.getBytes(StandardCharsets.UTF_16BE));
 		} else {
@@ -171,7 +184,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 	}
 
 	public void writeByteArray(ByteBuf data) {
-		if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10)) {
+		if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10) && getVersion() != ProtocolVersion.MINECRAFT_PE) {
 			writeShort(data.readableBytes());
 		} else {
 			writeVarInt(data.readableBytes());
@@ -180,7 +193,7 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 	}
 
 	public void writeByteArray(byte[] data) {
-		if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10)) {
+		if (getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10) && getVersion() != ProtocolVersion.MINECRAFT_PE) {
 			writeShort(data.length);
 		} else {
 			writeVarInt(data.length);
