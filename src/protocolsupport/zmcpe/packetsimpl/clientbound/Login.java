@@ -29,7 +29,7 @@ public class Login extends MiddleLogin<RecyclableCollection<ClientBoundPacketDat
 		startgame.writeLFloat(0); //pitch
 		startgame.writeSVarInt(0); //seed
 		startgame.writeSVarInt(dimension);
-		startgame.writeSVarInt(0); //generator
+		startgame.writeSVarInt(1); //world type (1 - infinite)
 		startgame.writeSVarInt(gamemode);
 		startgame.writeSVarInt(difficulty);
 		startgame.writeSVarInt(0); //spawn x
