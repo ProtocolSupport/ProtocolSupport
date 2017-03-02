@@ -22,6 +22,7 @@ public class Chunk extends MiddleChunk<RecyclableCollection<ClientBoundPacketDat
 		serializer.writeSVarInt(chunkZ);
 		transformer.loadData(data, bitmask, cache.hasSkyLightInCurrentDimension(), full);
 		ProtocolSupportPacketDataSerializer chunkdata = new ProtocolSupportPacketDataSerializer(Unpooled.buffer(), version);
+		chunkdata.writeByte(Integer.bitCount(bitmask));
 		chunkdata.writeBytes(transformer.toLegacyData(version));
 		chunkdata.writeBytes(new byte[512]); //heightmap (actually shorts), TODO: calculate it
 		chunkdata.writeBytes(new byte[256]); //biomes TODO: write them
