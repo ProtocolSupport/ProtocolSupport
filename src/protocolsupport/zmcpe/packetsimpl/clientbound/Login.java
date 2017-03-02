@@ -1,5 +1,7 @@
 package protocolsupport.zmcpe.packetsimpl.clientbound;
 
+import org.bukkit.Bukkit;
+
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleLogin;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -46,6 +48,9 @@ public class Login extends MiddleLogin<RecyclableCollection<ClientBoundPacketDat
 		ClientBoundPacketData playstatus = ClientBoundPacketData.create(PEPacketIDs.PLAY_STATUS, version);
 		playstatus.writeInt(3);
 		packets.add(playstatus);
+		ClientBoundPacketData chunkradius = ClientBoundPacketData.create(PEPacketIDs.CHUNK_RADIUS, version);
+		chunkradius.writeSVarInt(Bukkit.getViewDistance());
+		packets.add(chunkradius);
 		return packets;
 	}
 
