@@ -9,7 +9,7 @@ public class PositionLook extends MiddlePositionLook {
 	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) {
 		serializer.readVarInt(); //entity id
 		x = serializer.readLFloat();
-		y = serializer.readLFloat() - 1.6200000047683716F;
+		y = serializer.readLFloat() - 1.6200000047683716D;
 		z = serializer.readLFloat();
 		pitch = serializer.readLFloat();
 		yaw = serializer.readLFloat();

@@ -14,7 +14,7 @@ public class Position extends MiddlePosition<RecyclableCollection<ClientBoundPac
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_MOVE, version);
 		serializer.writeSVarLong(0); //player entity id (0 for self)
 		serializer.writeLFloat((float) x);
-		serializer.writeLFloat((float) y + 1.6200000047683716F);
+		serializer.writeLFloat((float) (y + 1.6200000047683716D));
 		serializer.writeLFloat((float) z);
 		serializer.writeLFloat(pitch);
 		serializer.writeLFloat(yaw);

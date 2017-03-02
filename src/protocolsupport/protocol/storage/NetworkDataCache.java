@@ -14,6 +14,8 @@ import protocolsupport.protocol.utils.types.WindowType;
 
 public class NetworkDataCache {
 
+	private static final double acceptableError = 0.0001;
+
 	private double x;
 	private double y;
 	private double z;
@@ -25,9 +27,9 @@ public class NetworkDataCache {
 
 	public int tryTeleportConfirm(double x, double y, double z) {
 		if (
-			(Double.doubleToLongBits(this.x) == Double.doubleToLongBits(x)) &&
-			(Double.doubleToLongBits(this.y) == Double.doubleToLongBits(y)) &&
-			(Double.doubleToLongBits(this.z) == Double.doubleToLongBits(z))
+			(Math.abs(this.x - x) < acceptableError) &&
+			(Math.abs(this.y - y) < acceptableError) &&
+			(Math.abs(this.z - z) < acceptableError)
 		) {
 			int r = teleportConfirmId;
 			teleportConfirmId = -1;
