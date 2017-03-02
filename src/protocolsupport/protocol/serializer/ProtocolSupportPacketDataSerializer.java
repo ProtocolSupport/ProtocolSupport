@@ -42,6 +42,10 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 		return this.version;
 	}
 
+	public float readLFloat() {
+		return Float.intBitsToFloat(ByteBufUtil.swapInt(readInt()));
+	}
+
 	public void writeLFloat(float f) {
 		writeInt(ByteBufUtil.swapInt(Float.floatToIntBits(f)));
 	}
@@ -52,6 +56,11 @@ public class ProtocolSupportPacketDataSerializer extends WrappingBuffer {
 
 	public void writeVarInt(int varint) {
 		writeVarInt(this, varint);
+	}
+
+	public int readSVarInt() {
+		int varint = readVarInt();
+		return (varint >> 1) ^ -(varint & 1);
 	}
 
 	public void writeSVarInt(int varint) {

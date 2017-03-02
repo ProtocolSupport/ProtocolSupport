@@ -13,7 +13,10 @@ import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
+import protocolsupport.zmcpe.packetsimpl.PEPacketIDs;
 import protocolsupport.zmcpe.packetsimpl.serverbound.ClientLogin;
+import protocolsupport.zmcpe.packetsimpl.serverbound.PlayerAction;
+import protocolsupport.zmcpe.packetsimpl.serverbound.PositionLook;
 import protocolsupport.zplatform.network.NetworkState;
 
 public class PEPacketDecoder extends AbstractPacketDecoder {
@@ -22,7 +25,9 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		for (int i = 0; i < 255; i++) {
 			registry.register(NetworkState.PLAY, i, Noop.class);
 		}
-		registry.register(NetworkState.PLAY, 1, ClientLogin.class);
+		registry.register(NetworkState.PLAY, PEPacketIDs.LOGIN, ClientLogin.class);
+		registry.register(NetworkState.PLAY, PEPacketIDs.PLAYER_MOVE, PositionLook.class);
+		registry.register(NetworkState.PLAY, PEPacketIDs.PLAYER_ACTION, PlayerAction.class);
 	}
 
 	public PEPacketDecoder(Connection connection, NetworkDataCache cache) {
