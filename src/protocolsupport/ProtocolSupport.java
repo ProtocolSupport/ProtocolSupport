@@ -58,7 +58,7 @@ public class ProtocolSupport extends JavaPlugin {
 			IdRemapper.init();
 			BlockStorageReader.init();
 			ServerPlatform.get().inject();
-			server = new MCPEServer(2222);
+			server = new MCPEServer(19132);
 		} catch (Throwable t) {
 			t.printStackTrace();
 			Bukkit.shutdown();
