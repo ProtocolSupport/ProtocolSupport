@@ -8,7 +8,7 @@ import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class InventoryData extends MiddleInventoryData<RecyclableCollection<ClientBoundPacketData>> {
+public class InventoryData extends MiddleInventoryData {
 
 	private static final int[] furTypeTr = { 1, 2, 0 };
 	private final int[] enchTypeVal = new int[10];

@@ -4,18 +4,20 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleStatistics;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class Statistics extends MiddleStatistics<RecyclableCollection<ClientBoundPacketData>> {
+public class Statistics extends MiddleStatistics {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_STATISTICS_ID, version);
-		serializer.writeVarInt(statistics.length);
+		VarNumberSerializer.writeVarInt(serializer, statistics.length);
 		for (Statistic stat : statistics) {
-			serializer.writeString(stat.name);
-			serializer.writeVarInt(stat.value);
+			StringSerializer.writeString(serializer, version, stat.name);
+			VarNumberSerializer.writeVarInt(serializer, stat.value);
 		}
 		return RecyclableSingletonList.create(serializer);
 	}

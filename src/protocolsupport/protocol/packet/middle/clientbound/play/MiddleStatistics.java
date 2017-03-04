@@ -1,19 +1,22 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
+import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 
-public abstract class MiddleStatistics<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleStatistics extends ClientBoundMiddlePacket {
 
 	protected Statistic[] statistics;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		statistics = new Statistic[serializer.readVarInt()];
+	public void readFromServerData(ByteBuf serverdata) {
+		statistics = new Statistic[VarNumberSerializer.readVarInt(serverdata)];
 		for (int i = 0; i < statistics.length; i++) {
 			Statistic stat = new Statistic();
-			stat.name = serializer.readString();
-			stat.value = serializer.readVarInt();
+			stat.name = StringSerializer.readString(serverdata, ProtocolVersion.getLatest());
+			stat.value = VarNumberSerializer.readVarInt(serverdata);
 			statistics[i] = stat;
 		}
 	}

@@ -2,13 +2,12 @@ package protocolsupport.protocol.packet.middleimpl;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.util.Recycler;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.utils.netty.Allocator;
+import protocolsupport.utils.netty.WrappingBuffer;
 import protocolsupport.utils.recyclable.Recyclable;
 
-public class ServerBoundPacketData extends ProtocolSupportPacketDataSerializer implements Recyclable {
+public class ServerBoundPacketData extends WrappingBuffer implements Recyclable {
 
 	private static final Recycler<ServerBoundPacketData> RECYCLER = new Recycler<ServerBoundPacketData>() {
 		@Override
@@ -25,7 +24,7 @@ public class ServerBoundPacketData extends ProtocolSupportPacketDataSerializer i
 
 	private final Recycler.Handle handle;
 	private ServerBoundPacketData(Recycler.Handle handle) {
-		super(Allocator.allocateUnpooledBuffer(), ProtocolVersion.getLatest());
+		super(Allocator.allocateUnpooledBuffer());
 		this.handle = handle;
 	}
 

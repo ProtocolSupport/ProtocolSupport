@@ -3,7 +3,7 @@ package protocolsupport.protocol.pipeline.common;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class VarIntFrameEncoder implements IPacketPrepender {
 
@@ -11,7 +11,7 @@ public class VarIntFrameEncoder implements IPacketPrepender {
 	public void prepend(ChannelHandlerContext ctx, ByteBuf input, ByteBuf output)  {
 		int readableBytes = input.readableBytes();
 		output.ensureWritable(readableBytes + 3);
-		ProtocolSupportPacketDataSerializer.writeVarInt(output, readableBytes);
+		VarNumberSerializer.writeVarInt(output, readableBytes);
 		output.writeBytes(input);
 	}
 

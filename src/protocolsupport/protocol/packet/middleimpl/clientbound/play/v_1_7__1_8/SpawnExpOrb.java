@@ -4,15 +4,16 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnExpOrb;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class SpawnExpOrb extends MiddleSpawnExpOrb<RecyclableCollection<ClientBoundPacketData>> {
+public class SpawnExpOrb extends MiddleSpawnExpOrb {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_EXP_ORB_ID, version);
-		serializer.writeVarInt(entityId);
+		VarNumberSerializer.writeVarInt(serializer, entityId);
 		serializer.writeInt((int) (x * 32));
 		serializer.writeInt((int) (y * 32));
 		serializer.writeInt((int) (z * 32));

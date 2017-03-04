@@ -1,19 +1,20 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 
-public abstract class MiddleBlockAction<T> extends MiddleBlock<T> {
+public abstract class MiddleBlockAction extends MiddleBlock {
 
 	protected int info1;
 	protected int info2;
 	protected int type;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		super.readFromServerData(serializer);
-		info1 = serializer.readUnsignedByte();
-		info2 = serializer.readUnsignedByte();
-		type = serializer.readVarInt();
+	public void readFromServerData(ByteBuf serverdata) {
+		super.readFromServerData(serverdata);
+		info1 = serverdata.readUnsignedByte();
+		info2 = serverdata.readUnsignedByte();
+		type = VarNumberSerializer.readVarInt(serverdata);
 	}
 
 }

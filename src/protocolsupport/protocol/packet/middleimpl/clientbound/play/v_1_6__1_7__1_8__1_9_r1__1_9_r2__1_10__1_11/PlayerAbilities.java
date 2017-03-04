@@ -7,7 +7,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class PlayerAbilities extends MiddlePlayerAbilities<RecyclableCollection<ClientBoundPacketData>> {
+public class PlayerAbilities extends MiddlePlayerAbilities {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {

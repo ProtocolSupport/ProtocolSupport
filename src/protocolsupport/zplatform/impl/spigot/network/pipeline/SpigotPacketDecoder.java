@@ -12,7 +12,7 @@ import net.minecraft.server.v1_11_R1.EnumProtocolDirection;
 import net.minecraft.server.v1_11_R1.NetworkManager;
 import net.minecraft.server.v1_11_R1.Packet;
 import net.minecraft.server.v1_11_R1.PacketDataSerializer;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.netty.WrappingBuffer;
 
 public class SpigotPacketDecoder extends ByteToMessageDecoder {
@@ -27,7 +27,7 @@ public class SpigotPacketDecoder extends ByteToMessageDecoder {
 		}
 		EnumProtocol protocol = ctx.channel().attr(NetworkManager.c).get();
 		wrapper.setBuf(input);
-		int packetId = ProtocolSupportPacketDataSerializer.readVarInt(wrapper);
+		int packetId = VarNumberSerializer.readVarInt(wrapper);
 		Packet<?> packet = protocol.a(EnumProtocolDirection.SERVERBOUND, packetId);
 		if (packet == null) {
 			throw new DecoderException("Bad packet id " + packetId);

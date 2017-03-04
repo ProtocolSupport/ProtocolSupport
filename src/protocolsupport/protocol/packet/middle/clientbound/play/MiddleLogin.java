@@ -1,12 +1,14 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
+import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.tab.TabAPI;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
 
-public abstract class MiddleLogin<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleLogin extends ClientBoundMiddlePacket {
 
 	protected int playerEntityId;
 	protected int gamemode;
@@ -17,15 +19,15 @@ public abstract class MiddleLogin<T> extends ClientBoundMiddlePacket<T> {
 	protected boolean reducedDebugInfo;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		playerEntityId = serializer.readInt();
-		gamemode = serializer.readByte();
-		dimension = IdRemapper.fixDimensionId(serializer.readInt());
-		difficulty = serializer.readByte();
-		serializer.readByte();
+	public void readFromServerData(ByteBuf serverdata) {
+		playerEntityId = serverdata.readInt();
+		gamemode = serverdata.readByte();
+		dimension = IdRemapper.fixDimensionId(serverdata.readInt());
+		difficulty = serverdata.readByte();
+		serverdata.readByte();
 		maxplayers = TabAPI.getMaxTabSize();
-		leveltype = serializer.readString(16);
-		reducedDebugInfo = serializer.readBoolean();
+		leveltype = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(), 16);
+		reducedDebugInfo = serverdata.readBoolean();
 	}
 
 	@Override

@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
-public class NoopLoginSuccess extends MiddleLoginSuccess<RecyclableCollection<ClientBoundPacketData>> {
+public class NoopLoginSuccess extends MiddleLoginSuccess {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {

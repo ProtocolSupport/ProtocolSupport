@@ -6,12 +6,15 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntitySetAttributes;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
 import protocolsupport.protocol.typeskipper.id.SkippingTable.GenericSkippingTable;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class EntitySetAttributes extends MiddleEntitySetAttributes<RecyclableCollection<ClientBoundPacketData>> {
+public class EntitySetAttributes extends MiddleEntitySetAttributes {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
@@ -23,14 +26,14 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes<RecyclableCol
 				sendattrs.add(attribute);
 			}
 		}
-		serializer.writeVarInt(entityId);
+		VarNumberSerializer.writeVarInt(serializer, entityId);
 		serializer.writeInt(sendattrs.size());
 		for (Attribute attribute : sendattrs) {
-			serializer.writeString(attribute.key);
+			StringSerializer.writeString(serializer, version, attribute.key);
 			serializer.writeDouble(attribute.value);
-			serializer.writeVarInt(attribute.modifiers.length);
+			VarNumberSerializer.writeVarInt(serializer, attribute.modifiers.length);
 			for (Modifier modifier : attribute.modifiers) {
-				serializer.writeUUID(modifier.uuid);
+				MiscSerializer.writeUUID(serializer, modifier.uuid);
 				serializer.writeDouble(modifier.amount);
 				serializer.writeByte(modifier.operation);
 			}

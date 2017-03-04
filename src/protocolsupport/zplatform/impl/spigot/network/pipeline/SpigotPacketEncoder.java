@@ -12,7 +12,7 @@ import net.minecraft.server.v1_11_R1.NetworkManager;
 import net.minecraft.server.v1_11_R1.Packet;
 import net.minecraft.server.v1_11_R1.PacketDataSerializer;
 import net.minecraft.server.v1_11_R1.PacketListener;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.netty.WrappingBuffer;
 
 public class SpigotPacketEncoder extends MessageToByteEncoder<Packet<PacketListener>> {
@@ -28,7 +28,7 @@ public class SpigotPacketEncoder extends MessageToByteEncoder<Packet<PacketListe
 			throw new EncoderException("Can't serialize unregistered packet " + packet.getClass().getName());
 		}
 		wrapper.setBuf(data);
-		ProtocolSupportPacketDataSerializer.writeVarInt(wrapper, packetId);
+		VarNumberSerializer.writeVarInt(wrapper, packetId);
 		try {
 			packet.b(nativeSerializer);
 		} catch (IOException e) {

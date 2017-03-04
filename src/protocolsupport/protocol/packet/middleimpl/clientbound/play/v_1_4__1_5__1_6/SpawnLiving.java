@@ -11,7 +11,7 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class SpawnLiving extends MiddleSpawnLiving<RecyclableCollection<ClientBoundPacketData>> {
+public class SpawnLiving extends MiddleSpawnLiving {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
@@ -30,7 +30,7 @@ public class SpawnLiving extends MiddleSpawnLiving<RecyclableCollection<ClientBo
 		serializer.writeShort(motX);
 		serializer.writeShort(motY);
 		serializer.writeShort(motZ);
-		LegacyDataWatcherSerializer.encodeData(WatchedDataRemapper.transform(cache, entityId, metadata, version), serializer);
+		LegacyDataWatcherSerializer.encodeData(serializer, version, WatchedDataRemapper.transform(cache, entityId, metadata, version));
 		return RecyclableSingletonList.create(serializer);
 	}
 

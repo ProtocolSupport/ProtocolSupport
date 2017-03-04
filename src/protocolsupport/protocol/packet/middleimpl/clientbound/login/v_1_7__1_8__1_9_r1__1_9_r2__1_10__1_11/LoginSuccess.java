@@ -4,10 +4,11 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.login.MiddleLoginSuccess;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class LoginSuccess extends MiddleLoginSuccess<RecyclableCollection<ClientBoundPacketData>> {
+public class LoginSuccess extends MiddleLoginSuccess {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
@@ -15,8 +16,8 @@ public class LoginSuccess extends MiddleLoginSuccess<RecyclableCollection<Client
 			uuidstring = uuidstring.replace("-", "");
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.LOGIN_SUCCESS_ID, version);
-		serializer.writeString(uuidstring);
-		serializer.writeString(name);
+		StringSerializer.writeString(serializer, version, uuidstring);
+		StringSerializer.writeString(serializer, version, name);
 		return RecyclableSingletonList.create(serializer);
 	}
 

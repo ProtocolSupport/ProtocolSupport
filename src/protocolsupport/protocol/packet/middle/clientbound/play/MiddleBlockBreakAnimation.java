@@ -1,17 +1,18 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 
-public abstract class MiddleBlockBreakAnimation<T> extends MiddleBlock<T> {
+public abstract class MiddleBlockBreakAnimation extends MiddleBlock {
 
 	protected int entityId;
 	protected int stage;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		entityId = serializer.readVarInt();
-		super.readFromServerData(serializer);
-		stage = serializer.readByte();
+	public void readFromServerData(ByteBuf serverdata) {
+		entityId = VarNumberSerializer.readVarInt(serverdata);
+		super.readFromServerData(serverdata);
+		stage = serverdata.readByte();
 	}
 
 }

@@ -7,7 +7,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class VehicleMove extends MiddleVehicleMove<RecyclableCollection<ClientBoundPacketData>> {
+public class VehicleMove extends MiddleVehicleMove {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {

@@ -16,7 +16,9 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.ByteArraySerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -32,24 +34,22 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 		ServerBoundPacketData hsscreator = ServerBoundPacketData.create(ServerBoundPacket.HANDSHAKE_START);
-		hsscreator.writeVarInt(ProtocolVersion.getLatest().getId());
-		hsscreator.writeString("");
+		VarNumberSerializer.writeVarInt(hsscreator, ProtocolVersion.getLatest().getId());
+		StringSerializer.writeString(hsscreator, ProtocolVersion.getLatest(), "");
 		hsscreator.writeShort(0);
-		hsscreator.writeVarInt(2);
+		VarNumberSerializer.writeVarInt(hsscreator, 2);
 		packets.add(hsscreator);
 		ServerBoundPacketData lscreator = ServerBoundPacketData.create(ServerBoundPacket.LOGIN_START);
-		lscreator.writeString(username);
+		StringSerializer.writeString(lscreator, ProtocolVersion.getLatest(), username);
 		packets.add(lscreator);
 		return packets;
 	}
 
 	@Override
-	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) {
-		serializer.skipBytes(Integer.BYTES); //TODO: validate protocol
-		serializer.skipBytes(Byte.BYTES); //skip pe type
-		ByteBuf logindata = Unpooled.wrappedBuffer(Decompressor.decompressStatic(
-			ProtocolSupportPacketDataSerializer.toArray(serializer.readSlice(serializer.readVarInt()))
-		));
+	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
+		clientdata.skipBytes(Integer.BYTES); //TODO: validate protocol
+		clientdata.skipBytes(Byte.BYTES); //skip pe type
+		ByteBuf logindata = Unpooled.wrappedBuffer(Decompressor.decompressStatic(ByteArraySerializer.readByteArray(clientdata, version)));
 		//decode chain
 		JsonElement root = parser.parse(new InputStreamReader(new ByteBufInputStream(logindata, ByteBufUtil.swapInt(logindata.readInt()))));
 		String chain = JsonUtils.getJsonArray(root.getAsJsonObject(), "chain").get(0).getAsString();

@@ -7,7 +7,7 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 import protocolsupport.zmcpe.packetsimpl.PEPacketIDs;
 
-public class LoginSuccess extends MiddleLoginSuccess<RecyclableCollection<ClientBoundPacketData>> {
+public class LoginSuccess extends MiddleLoginSuccess {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {

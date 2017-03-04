@@ -4,12 +4,13 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityEffectAdd;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class EntityEffectAdd extends MiddleEntityEffectAdd<RecyclableCollection<ClientBoundPacketData>> {
+public class EntityEffectAdd extends MiddleEntityEffectAdd {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
@@ -17,10 +18,10 @@ public class EntityEffectAdd extends MiddleEntityEffectAdd<RecyclableCollection<
 			return RecyclableEmptyList.get();
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_EFFECT_ADD_ID, version);
-		serializer.writeVarInt(entityId);
+		VarNumberSerializer.writeVarInt(serializer, entityId);
 		serializer.writeByte(effectId);
 		serializer.writeByte(amplifier);
-		serializer.writeVarInt(duration);
+		VarNumberSerializer.writeVarInt(serializer, duration);
 		serializer.writeBoolean(hideParticles);
 		return RecyclableSingletonList.create(serializer);
 	}

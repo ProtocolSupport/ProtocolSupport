@@ -4,12 +4,13 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventorySetSlot;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class InventorySetSlot extends MiddleInventorySetSlot<RecyclableCollection<ClientBoundPacketData>> {
+public class InventorySetSlot extends MiddleInventorySetSlot {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
@@ -34,7 +35,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot<RecyclableCollectio
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_SET_SLOT_ID, version);
 		serializer.writeByte(windowId);
 		serializer.writeShort(slot);
-		serializer.writeItemStack(itemstack);
+		ItemStackSerializer.writeItemStack(serializer, version, itemstack);
 		return RecyclableSingletonList.create(serializer);
 	}
 

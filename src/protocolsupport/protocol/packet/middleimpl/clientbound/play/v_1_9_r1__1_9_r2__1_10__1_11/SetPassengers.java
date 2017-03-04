@@ -4,18 +4,19 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetPassengers;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class SetPassengers extends MiddleSetPassengers<RecyclableCollection<ClientBoundPacketData>> {
+public class SetPassengers extends MiddleSetPassengers {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SET_PASSENGERS_ID, version);
-		serializer.writeVarInt(vehicleId);
-		serializer.writeVarInt(passengersIds.length);
+		VarNumberSerializer.writeVarInt(serializer, vehicleId);
+		VarNumberSerializer.writeVarInt(serializer, passengersIds.length);
 		for (int passengerId : passengersIds) {
-			serializer.writeVarInt(passengerId);
+			VarNumberSerializer.writeVarInt(serializer, passengerId);
 		}
 		return RecyclableSingletonList.create(serializer);
 	}

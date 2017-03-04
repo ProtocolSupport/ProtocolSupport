@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
-public class NoopScoreboardTeam extends MiddleScoreboardTeam<RecyclableCollection<ClientBoundPacketData>> {
+public class NoopScoreboardTeam extends MiddleScoreboardTeam {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {

@@ -19,6 +19,13 @@ public class WrappingBuffer extends ByteBuf {
 
 	protected ByteBuf buf;
 
+	public WrappingBuffer() {
+	}
+
+	public WrappingBuffer(ByteBuf buf) {
+		this.buf = buf;
+	}
+
 	public void setBuf(ByteBuf buf) {
 		this.buf = buf;
 	}

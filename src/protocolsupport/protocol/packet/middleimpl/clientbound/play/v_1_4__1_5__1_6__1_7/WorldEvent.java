@@ -5,11 +5,12 @@ import protocolsupport.protocol.legacyremapper.LegacyEffect;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldEvent;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class WorldEvent extends MiddleWorldEvent<RecyclableCollection<ClientBoundPacketData>> {
+public class WorldEvent extends MiddleWorldEvent {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
@@ -20,7 +21,7 @@ public class WorldEvent extends MiddleWorldEvent<RecyclableCollection<ClientBoun
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_EVENT_ID, version);
 		serializer.writeInt(effectId);
-		serializer.writeLegacyPositionB(position);
+		PositionSerializer.writeLegacyPositionB(serializer, position);
 		serializer.writeInt(data);
 		serializer.writeBoolean(disableRelative);
 		return RecyclableSingletonList.create(serializer);

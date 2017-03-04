@@ -5,11 +5,14 @@ import org.bukkit.Bukkit;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleLogin;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.zmcpe.packetsimpl.PEPacketIDs;
 
-public class Login extends MiddleLogin<RecyclableCollection<ClientBoundPacketData>> {
+public class Login extends MiddleLogin {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
@@ -20,36 +23,36 @@ public class Login extends MiddleLogin<RecyclableCollection<ClientBoundPacketDat
 		resourcepack.writeShort(0); //beh packs count
 		packets.add(resourcepack);
 		ClientBoundPacketData startgame = ClientBoundPacketData.create(PEPacketIDs.START_GAME, version);
-		startgame.writeSVarLong(0); //player entity unique id
-		startgame.writeSVarLong(0); //player entity runtime id
-		startgame.writeLFloat(0); //x
-		startgame.writeLFloat(0); //y
-		startgame.writeLFloat(0); //z
-		startgame.writeLFloat(0); //yaw
-		startgame.writeLFloat(0); //pitch
-		startgame.writeSVarInt(0); //seed
-		startgame.writeSVarInt(dimension);
-		startgame.writeSVarInt(1); //world type (1 - infinite)
-		startgame.writeSVarInt(gamemode);
-		startgame.writeSVarInt(difficulty);
-		startgame.writeSVarInt(0); //spawn x
-		startgame.writeVarInt(0); //spawn y
-		startgame.writeSVarInt(0); //spawn z
+		VarNumberSerializer.writeSVarLong(startgame, 0); //player entity unique id
+		VarNumberSerializer.writeSVarLong(startgame, 0); //player entity runtime id
+		MiscSerializer.writeLFloat(startgame, 0); //x
+		MiscSerializer.writeLFloat(startgame, 0); //y
+		MiscSerializer.writeLFloat(startgame, 0); //z
+		MiscSerializer.writeLFloat(startgame, 0); //yaw
+		MiscSerializer.writeLFloat(startgame, 0); //pitch
+		VarNumberSerializer.writeSVarInt(startgame, 0); //seed
+		VarNumberSerializer.writeSVarInt(startgame, dimension);
+		VarNumberSerializer.writeSVarInt(startgame, 1); //world type (1 - infinite)
+		VarNumberSerializer.writeSVarInt(startgame, gamemode);
+		VarNumberSerializer.writeSVarInt(startgame, difficulty);
+		VarNumberSerializer.writeSVarInt(startgame, 0); //spawn x
+		VarNumberSerializer.writeVarInt(startgame, 0); //spawn y
+		VarNumberSerializer.writeSVarInt(startgame, 0); //spawn z
 		startgame.writeBoolean(false); //?
-		startgame.writeSVarInt(-1); //time stop
+		VarNumberSerializer.writeSVarInt(startgame, -1); //time stop
 		startgame.writeBoolean(false); //edu mode
-		startgame.writeLFloat(0); //rain level
-		startgame.writeLFloat(0); //lighting level
+		MiscSerializer.writeLFloat(startgame, 0); //rain level
+		MiscSerializer.writeLFloat(startgame, 0); //lighting level
 		startgame.writeBoolean(true); //commands enabled
 		startgame.writeBoolean(false); //needs texture pack
-		startgame.writeString("");
-		startgame.writeString("");
+		StringSerializer.writeString(startgame, version, ""); //level type?
+		StringSerializer.writeString(startgame, version, ""); //world name?
 		packets.add(startgame);
 		ClientBoundPacketData playstatus = ClientBoundPacketData.create(PEPacketIDs.PLAY_STATUS, version);
 		playstatus.writeInt(3);
 		packets.add(playstatus);
 		ClientBoundPacketData chunkradius = ClientBoundPacketData.create(PEPacketIDs.CHUNK_RADIUS, version);
-		chunkradius.writeSVarInt(Bukkit.getViewDistance());
+		VarNumberSerializer.writeSVarInt(chunkradius, Bukkit.getViewDistance());
 		packets.add(chunkradius);
 		return packets;
 	}

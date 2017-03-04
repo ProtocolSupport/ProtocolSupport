@@ -4,6 +4,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -11,7 +12,7 @@ import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 import protocolsupport.zplatform.ServerPlatform;
 
-public class InventoryOpen extends MiddleInventoryOpen<RecyclableCollection<ClientBoundPacketData>> {
+public class InventoryOpen extends MiddleInventoryOpen {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
@@ -22,8 +23,8 @@ public class InventoryOpen extends MiddleInventoryOpen<RecyclableCollection<Clie
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_OPEN_ID, version);
 		serializer.writeByte(windowId);
-		serializer.writeString(IdRemapper.INVENTORY.getTable(version).getRemap(invname));
-		serializer.writeString(titleJson);
+		StringSerializer.writeString(serializer, version, IdRemapper.INVENTORY.getTable(version).getRemap(invname));
+		StringSerializer.writeString(serializer, version, titleJson);
 		serializer.writeByte(slots);
 		if (invname.equals("EntityHorse")) {
 			serializer.writeInt(horseId);

@@ -6,12 +6,15 @@ import protocolsupport.protocol.legacyremapper.chunk.ChunkTransformer.BlockForma
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.ByteArraySerializer;
+import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.tileentity.TileNBTRemapper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
-public class Chunk extends MiddleChunk<RecyclableCollection<ClientBoundPacketData>> {
+public class Chunk extends MiddleChunk {
 
 	private final ChunkTransformer transformer = ChunkTransformer.create(BlockFormat.VARIES);
 
@@ -21,12 +24,12 @@ public class Chunk extends MiddleChunk<RecyclableCollection<ClientBoundPacketDat
 		serializer.writeInt(chunkX);
 		serializer.writeInt(chunkZ);
 		serializer.writeBoolean(full);
-		serializer.writeVarInt(bitmask);
+		VarNumberSerializer.writeVarInt(serializer, bitmask);
 		transformer.loadData(data, bitmask, cache.hasSkyLightInCurrentDimension(), full);
-		serializer.writeByteArray(transformer.toLegacyData(version));
-		serializer.writeVarInt(tiles.length);
+		ByteArraySerializer.writeByteArray(serializer, version, transformer.toLegacyData(version));
+		VarNumberSerializer.writeVarInt(serializer, tiles.length);
 		for (NBTTagCompoundWrapper tile : tiles) {
-			serializer.writeTag(TileNBTRemapper.remap(version, tile));
+			ItemStackSerializer.writeTag(serializer, version, TileNBTRemapper.remap(version, tile));
 		}
 		return RecyclableSingletonList.create(serializer);
 	}

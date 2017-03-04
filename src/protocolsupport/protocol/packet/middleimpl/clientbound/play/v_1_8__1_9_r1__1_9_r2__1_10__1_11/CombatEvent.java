@@ -4,28 +4,31 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCombatEvent;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class CombatEvent extends MiddleCombatEvent<RecyclableCollection<ClientBoundPacketData>> {
+public class CombatEvent extends MiddleCombatEvent {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_COMBAT_EVENT_ID, version);
-		serializer.writeEnum(type);
+		MiscSerializer.writeEnum(serializer, type);
 		switch (type) {
 			case ENTER_COMBAT: {
 				break;
 			}
 			case END_COMBAT: {
-				serializer.writeVarInt(duration);
+				VarNumberSerializer.writeVarInt(serializer, duration);
 				serializer.writeInt(entityId);
 				break;
 			}
 			case ENTITY_DEAD: {
-				serializer.writeVarInt(playerId);
+				VarNumberSerializer.writeVarInt(serializer, playerId);
 				serializer.writeInt(entityId);
-				serializer.writeString(message);
+				StringSerializer.writeString(serializer, version, message);
 				break;
 			}
 		}

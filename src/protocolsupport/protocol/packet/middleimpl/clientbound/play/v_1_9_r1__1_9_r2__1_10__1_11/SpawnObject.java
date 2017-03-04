@@ -4,17 +4,19 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnObject;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class SpawnObject extends MiddleSpawnObject<RecyclableCollection<ClientBoundPacketData>> {
+public class SpawnObject extends MiddleSpawnObject {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_OBJECT_ID, version);
-		serializer.writeVarInt(entityId);
-		serializer.writeUUID(uuid);
+		VarNumberSerializer.writeVarInt(serializer, entityId);
+		MiscSerializer.writeUUID(serializer, uuid);
 		serializer.writeByte(IdRemapper.ENTITY_OBJECT.getTable(version).getRemap(type));
 		serializer.writeDouble(x);
 		serializer.writeDouble(y);

@@ -1,15 +1,18 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_4__1_5__1_6__1_7;
 
+import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateSign;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.PositionSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
 
 public class UpdateSign extends MiddleUpdateSign {
 
 	@Override
-	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) {
-		position = serializer.readLegacyPositionS();
+	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
+		position = PositionSerializer.readLegacyPositionS(clientdata);
 		for (int i = 0; i < 4; i++) {
-			lines[i] = serializer.readString(15);
+			lines[i] = StringSerializer.readString(clientdata, version, 15);
 		}
 	}
 

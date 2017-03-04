@@ -4,11 +4,13 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityEquipment;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class EntityEquipment extends MiddleEntityEquipment<RecyclableCollection<ClientBoundPacketData>> {
+public class EntityEquipment extends MiddleEntityEquipment {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
@@ -16,9 +18,9 @@ public class EntityEquipment extends MiddleEntityEquipment<RecyclableCollection<
 			return RecyclableEmptyList.get();
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_EQUIPMENT_ID, version);
-		serializer.writeVarInt(entityId);
+		VarNumberSerializer.writeVarInt(serializer, entityId);
 		serializer.writeShort(slot == 0 ? slot : slot - 1);
-		serializer.writeItemStack(itemstack);
+		ItemStackSerializer.writeItemStack(serializer, version, itemstack);
 		return RecyclableSingletonList.create(serializer);
 	}
 

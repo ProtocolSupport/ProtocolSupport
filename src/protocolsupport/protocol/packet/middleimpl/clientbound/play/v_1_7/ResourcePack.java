@@ -6,16 +6,18 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleResourcePack;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.ByteArraySerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class ResourcePack extends MiddleResourcePack<RecyclableCollection<ClientBoundPacketData>> {
+public class ResourcePack extends MiddleResourcePack {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID, version);
-		serializer.writeString("MC|RPack");
-		serializer.writeByteArray(url.getBytes(StandardCharsets.UTF_8));
+		StringSerializer.writeString(serializer, version, "MC|RPack");
+		ByteArraySerializer.writeByteArray(serializer, version, url.getBytes(StandardCharsets.UTF_8));
 		return RecyclableSingletonList.create(serializer);
 	}
 

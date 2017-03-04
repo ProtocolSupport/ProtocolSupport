@@ -1,8 +1,9 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 
-public abstract class MiddleEntityEffectAdd<T> extends MiddleEntity<T> {
+public abstract class MiddleEntityEffectAdd extends MiddleEntity {
 
 	protected int effectId;
 	protected int amplifier;
@@ -10,12 +11,12 @@ public abstract class MiddleEntityEffectAdd<T> extends MiddleEntity<T> {
 	protected boolean hideParticles;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		super.readFromServerData(serializer);
-		effectId = serializer.readByte();
-		amplifier = serializer.readByte();
-		duration = serializer.readVarInt();
-		hideParticles = serializer.readBoolean();
+	public void readFromServerData(ByteBuf serverdata) {
+		super.readFromServerData(serverdata);
+		effectId = serverdata.readByte();
+		amplifier = serverdata.readByte();
+		duration = VarNumberSerializer.readVarInt(serverdata);
+		hideParticles = serverdata.readBoolean();
 	}
 
 }

@@ -7,7 +7,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class InventoryConfirmTransaction extends MiddleInventoryConfirmTransaction<RecyclableCollection<ClientBoundPacketData>> {
+public class InventoryConfirmTransaction extends MiddleInventoryConfirmTransaction {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {

@@ -4,13 +4,14 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldParticle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.utils.types.Particle;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class WorldParticle extends MiddleWorldParticle<RecyclableCollection<ClientBoundPacketData>> {
+public class WorldParticle extends MiddleWorldParticle {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
@@ -32,7 +33,7 @@ public class WorldParticle extends MiddleWorldParticle<RecyclableCollection<Clie
 				break;
 			}
 		}
-		serializer.writeString(name);
+		StringSerializer.writeString(serializer, version, name);
 		serializer.writeFloat(x);
 		serializer.writeFloat(y);
 		serializer.writeFloat(z);

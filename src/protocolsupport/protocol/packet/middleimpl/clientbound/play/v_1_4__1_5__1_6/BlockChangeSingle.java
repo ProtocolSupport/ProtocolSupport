@@ -4,16 +4,17 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChangeSingle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class BlockChangeSingle extends MiddleBlockChangeSingle<RecyclableCollection<ClientBoundPacketData>> {
+public class BlockChangeSingle extends MiddleBlockChangeSingle {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BLOCK_CHANGE_SINGLE_ID, version);
-		serializer.writeLegacyPositionB(position);
+		PositionSerializer.writeLegacyPositionB(serializer, position);
 		id = IdRemapper.BLOCK.getTable(version).getRemap(id);
 		serializer.writeShort(id >> 4);
 		serializer.writeByte(id & 0xF);

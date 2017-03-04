@@ -4,16 +4,17 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnPosition;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class SpawnPosition extends MiddleSpawnPosition<RecyclableCollection<ClientBoundPacketData>> {
+public class SpawnPosition extends MiddleSpawnPosition {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_POSITION_ID, version);
 		position.modifyY(1);
-		serializer.writeLegacyPositionI(position);
+		PositionSerializer.writeLegacyPositionI(serializer, position);
 		return RecyclableSingletonList.create(serializer);
 	}
 

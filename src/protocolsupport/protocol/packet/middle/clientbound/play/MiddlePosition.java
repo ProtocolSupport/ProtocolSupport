@@ -2,10 +2,11 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import org.bukkit.Location;
 
+import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 
-public abstract class MiddlePosition<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddlePosition extends ClientBoundMiddlePacket {
 
 	protected double xOrig;
 	protected double yOrig;
@@ -21,13 +22,13 @@ public abstract class MiddlePosition<T> extends ClientBoundMiddlePacket<T> {
 	protected int teleportConfirmId;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		xOrig = x = serializer.readDouble();
-		yOrig = y = serializer.readDouble();
-		zOrig = z = serializer.readDouble();
-		yawOrig = yaw = serializer.readFloat();
-		pitchOrig = pitch = serializer.readFloat();
-		flags = serializer.readByte();
+	public void readFromServerData(ByteBuf serverdata) {
+		xOrig = x = serverdata.readDouble();
+		yOrig = y = serverdata.readDouble();
+		zOrig = z = serverdata.readDouble();
+		yawOrig = yaw = serverdata.readFloat();
+		pitchOrig = pitch = serverdata.readFloat();
+		flags = serverdata.readByte();
 		if (flags != 0) {
 			Location location = connection.getPlayer().getLocation();
 			if ((flags & 0x01) != 0) {
@@ -46,7 +47,7 @@ public abstract class MiddlePosition<T> extends ClientBoundMiddlePacket<T> {
 				pitch += location.getPitch();
 			}
 		}
-		teleportConfirmId = serializer.readVarInt();
+		teleportConfirmId = VarNumberSerializer.readVarInt(serverdata);
 	}
 
 	@Override

@@ -4,16 +4,17 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleScoreboardDisplay;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class ScoreboardDisplay extends MiddleScoreboardDisplay<RecyclableCollection<ClientBoundPacketData>> {
+public class ScoreboardDisplay extends MiddleScoreboardDisplay {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SCOREBOARD_DISPLAY_SLOT_ID, version);
 		serializer.writeByte(position);
-		serializer.writeString(name);
+		StringSerializer.writeString(serializer, version, name);
 		return RecyclableSingletonList.create(serializer);
 	}
 

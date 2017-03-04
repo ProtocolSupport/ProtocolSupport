@@ -5,6 +5,7 @@ import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
 import protocolsupport.protocol.utils.types.WindowType;
@@ -13,7 +14,7 @@ import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 import protocolsupport.zplatform.ServerPlatform;
 
-public class InventoryOpen extends MiddleInventoryOpen<RecyclableCollection<ClientBoundPacketData>> {
+public class InventoryOpen extends MiddleInventoryOpen {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
@@ -26,7 +27,7 @@ public class InventoryOpen extends MiddleInventoryOpen<RecyclableCollection<Clie
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_OPEN_ID, version);
 		serializer.writeByte(windowId);
 		serializer.writeByte(id);
-		serializer.writeString(ChatAPI.fromJSON(titleJson).toLegacyText());
+		StringSerializer.writeString(serializer, version, ChatAPI.fromJSON(titleJson).toLegacyText());
 		serializer.writeByte(slots);
 		serializer.writeBoolean(true);
 		if (id == 11) {

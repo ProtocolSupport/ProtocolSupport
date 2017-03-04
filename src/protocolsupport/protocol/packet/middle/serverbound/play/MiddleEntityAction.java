@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.middle.serverbound.play;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -15,9 +16,9 @@ public abstract class MiddleEntityAction extends ServerBoundMiddlePacket {
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_ENTITY_ACTION);
-		creator.writeVarInt(entityId);
-		creator.writeVarInt(actionId);
-		creator.writeVarInt(jumpBoost);
+		VarNumberSerializer.writeVarInt(creator, entityId);
+		VarNumberSerializer.writeVarInt(creator, actionId);
+		VarNumberSerializer.writeVarInt(creator, jumpBoost);
 		return RecyclableSingletonList.create(creator);
 	}
 

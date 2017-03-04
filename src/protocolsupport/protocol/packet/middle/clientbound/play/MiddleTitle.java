@@ -1,9 +1,12 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
+import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 
-public abstract class MiddleTitle<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleTitle extends ClientBoundMiddlePacket {
 
 	protected Action action;
 	protected String titleJson;
@@ -13,25 +16,25 @@ public abstract class MiddleTitle<T> extends ClientBoundMiddlePacket<T> {
 	protected int fadeOut;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		action = Action.values()[serializer.readVarInt()];
+	public void readFromServerData(ByteBuf serverdata) {
+		action = Action.values()[VarNumberSerializer.readVarInt(serverdata)];
 		switch (action) {
 			case SET_TITLE: {
-				titleJson = serializer.readString();
+				titleJson = StringSerializer.readString(serverdata, ProtocolVersion.getLatest());
 				break;
 			}
 			case SET_SUBTITLE: {
-				subtitleJson = serializer.readString();
+				subtitleJson = StringSerializer.readString(serverdata, ProtocolVersion.getLatest());
 				break;
 			}
 			case SET_ACTION_BAR: {
-				titleJson = serializer.readString();
+				titleJson = StringSerializer.readString(serverdata, ProtocolVersion.getLatest());
 				break;
 			}
 			case SET_TIMES: {
-				fadeIn = serializer.readInt();
-				stay = serializer.readInt();
-				fadeOut = serializer.readInt();
+				fadeIn = serverdata.readInt();
+				stay = serverdata.readInt();
+				fadeOut = serverdata.readInt();
 				break;
 			}
 			case HIDE:

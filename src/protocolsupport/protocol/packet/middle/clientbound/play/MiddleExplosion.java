@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
+import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-public abstract class MiddleExplosion<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleExplosion extends ClientBoundMiddlePacket {
 
 	protected float x;
 	protected float y;
@@ -15,22 +15,22 @@ public abstract class MiddleExplosion<T> extends ClientBoundMiddlePacket<T> {
 	protected float pMotZ;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		x = serializer.readFloat();
-		y = serializer.readFloat();
-		z = serializer.readFloat();
-		radius = serializer.readFloat();
-		blocks = new AffectedBlock[serializer.readInt()];
+	public void readFromServerData(ByteBuf serverdata) {
+		x = serverdata.readFloat();
+		y = serverdata.readFloat();
+		z = serverdata.readFloat();
+		radius = serverdata.readFloat();
+		blocks = new AffectedBlock[serverdata.readInt()];
 		for (int i = 0; i < blocks.length; i++) {
 			AffectedBlock block = new AffectedBlock();
-			block.offX = serializer.readByte();
-			block.offY = serializer.readByte();
-			block.offZ = serializer.readByte();
+			block.offX = serverdata.readByte();
+			block.offY = serverdata.readByte();
+			block.offZ = serverdata.readByte();
 			blocks[i] = block;
 		}
-		pMotX = serializer.readFloat();
-		pMotY = serializer.readFloat();
-		pMotZ = serializer.readFloat();
+		pMotX = serverdata.readFloat();
+		pMotY = serverdata.readFloat();
+		pMotZ = serverdata.readFloat();
 	}
 
 	protected static class AffectedBlock {

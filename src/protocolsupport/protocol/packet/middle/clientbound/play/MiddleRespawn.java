@@ -1,10 +1,12 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
+import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 
-public abstract class MiddleRespawn<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleRespawn extends ClientBoundMiddlePacket {
 
 	protected int dimension;
 	protected int difficulty;
@@ -12,11 +14,11 @@ public abstract class MiddleRespawn<T> extends ClientBoundMiddlePacket<T> {
 	protected String leveltype;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		dimension = IdRemapper.fixDimensionId(serializer.readInt());
-		difficulty = serializer.readByte();
-		gamemode = serializer.readByte();
-		leveltype = serializer.readString(16);
+	public void readFromServerData(ByteBuf serverdata) {
+		dimension = IdRemapper.fixDimensionId(serverdata.readInt());
+		difficulty = serverdata.readByte();
+		gamemode = serverdata.readByte();
+		leveltype = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(), 16);
 	}
 
 	@Override

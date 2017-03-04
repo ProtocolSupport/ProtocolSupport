@@ -5,11 +5,13 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleTitle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class Title extends MiddleTitle<RecyclableCollection<ClientBoundPacketData>> {
+public class Title extends MiddleTitle {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
@@ -18,14 +20,14 @@ public class Title extends MiddleTitle<RecyclableCollection<ClientBoundPacketDat
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_TITLE_ID, version);
 		int actionId = action.ordinal();
-		serializer.writeVarInt(actionId > 2 ? actionId - 1 : actionId);
+		VarNumberSerializer.writeVarInt(serializer, actionId > 2 ? actionId - 1 : actionId);
 		switch (action) {
 			case SET_TITLE: {
-				serializer.writeString(titleJson);
+				StringSerializer.writeString(serializer, version, titleJson);
 				break;
 			}
 			case SET_SUBTITLE: {
-				serializer.writeString(subtitleJson);
+				StringSerializer.writeString(serializer, version, subtitleJson);
 				break;
 			}
 			case SET_TIMES: {

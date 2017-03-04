@@ -6,10 +6,11 @@ import protocolsupport.protocol.legacyremapper.LegacyRelMoveConverter.RelMove;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityRelMoveLook;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
-public class EntityRelMoveLook extends MiddleEntityRelMoveLook<RecyclableCollection<ClientBoundPacketData>> {
+public class EntityRelMoveLook extends MiddleEntityRelMoveLook {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
@@ -19,7 +20,7 @@ public class EntityRelMoveLook extends MiddleEntityRelMoveLook<RecyclableCollect
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		for (RelMove relMove : LegacyRelMoveConverter.getRelMoves(new RelMove(relMoveX, relMoveY, relMoveZ), 127)) {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_REL_MOVE_LOOK_ID, version);
-			serializer.writeVarInt(entityId);
+			VarNumberSerializer.writeVarInt(serializer, entityId);
 			serializer.writeByte(relMove.getX());
 			serializer.writeByte(relMove.getY());
 			serializer.writeByte(relMove.getZ());

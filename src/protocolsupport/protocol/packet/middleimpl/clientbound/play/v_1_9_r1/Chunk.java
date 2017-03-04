@@ -7,11 +7,13 @@ import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1__1_9_r2__1_10__1_11.BlockTileUpdate;
+import protocolsupport.protocol.serializer.ByteArraySerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
-public class Chunk extends MiddleChunk<RecyclableCollection<ClientBoundPacketData>> {
+public class Chunk extends MiddleChunk {
 
 	private final ChunkTransformer transformer = ChunkTransformer.create(BlockFormat.VARIES);
 
@@ -22,9 +24,9 @@ public class Chunk extends MiddleChunk<RecyclableCollection<ClientBoundPacketDat
 		chunkdata.writeInt(chunkX);
 		chunkdata.writeInt(chunkZ);
 		chunkdata.writeBoolean(full);
-		chunkdata.writeVarInt(bitmask);
+		VarNumberSerializer.writeVarInt(chunkdata, bitmask);
 		transformer.loadData(data, bitmask, cache.hasSkyLightInCurrentDimension(), full);
-		chunkdata.writeByteArray(transformer.toLegacyData(version));
+		ByteArraySerializer.writeByteArray(chunkdata, version, transformer.toLegacyData(version));
 		packets.add(chunkdata);
 		for (NBTTagCompoundWrapper tile : tiles) {
 			packets.add(BlockTileUpdate.createPacketData(version, tile));

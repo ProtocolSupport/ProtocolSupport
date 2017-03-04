@@ -4,18 +4,20 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleMap;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.ByteArraySerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class Map extends MiddleMap<RecyclableCollection<ClientBoundPacketData>> {
+public class Map extends MiddleMap {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_MAP_ID, version);
-		serializer.writeVarInt(itemData);
+		VarNumberSerializer.writeVarInt(serializer, itemData);
 		serializer.writeByte(scale);
 		serializer.writeBoolean(showIcons);
-		serializer.writeVarInt(icons.length);
+		VarNumberSerializer.writeVarInt(serializer, icons.length);
 		for (Icon icon : icons) {
 			serializer.writeByte(icon.dirtype);
 			serializer.writeByte(icon.x);
@@ -26,7 +28,7 @@ public class Map extends MiddleMap<RecyclableCollection<ClientBoundPacketData>> 
 			serializer.writeByte(rows);
 			serializer.writeByte(xstart);
 			serializer.writeByte(zstart);
-			serializer.writeByteArray(data);
+			ByteArraySerializer.writeByteArray(serializer, version, data);
 		}
 		return RecyclableSingletonList.create(serializer);
 	}

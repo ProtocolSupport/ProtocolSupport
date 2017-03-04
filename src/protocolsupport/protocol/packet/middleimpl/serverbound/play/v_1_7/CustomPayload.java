@@ -2,43 +2,48 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_7;
 
 import org.bukkit.Material;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.ByteArraySerializer;
+import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
+//TODO: Create types for cmd control data and use them to share more code
 public class CustomPayload extends MiddleCustomPayload {
 
-	private final ProtocolSupportPacketDataSerializer newdata = new ProtocolSupportPacketDataSerializer(Unpooled.buffer(), ProtocolVersion.getLatest());
+	private final ByteBuf newdata = Unpooled.buffer();
 
 	@Override
-	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) {
-		tag = serializer.readString(20);
-		if (serializer.readableBytes() > Short.MAX_VALUE) {
+	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
+		tag = StringSerializer.readString(clientdata, version, 20);
+		if (clientdata.readableBytes() > Short.MAX_VALUE) {
 			throw new DecoderException("Payload may not be larger than 32767 bytes");
 		}
-		ProtocolSupportPacketDataSerializer olddata = new ProtocolSupportPacketDataSerializer(Unpooled.wrappedBuffer(serializer.readByteArray()), serializer.getVersion());
 		newdata.clear();
+		ByteBuf olddata = Unpooled.wrappedBuffer(ByteArraySerializer.readByteArray(clientdata, version));
 		if (tag.equals("MC|ItemName")) {
-			newdata.writeByteArray(olddata);
+			ByteArraySerializer.writeByteArray(newdata, ProtocolVersion.getLatest(), olddata);
 		} else if (tag.equals("MC|BSign") || tag.equals("MC|BEdit")) {
-			ItemStackWrapper book = olddata.readItemStack();
+			ItemStackWrapper book = ItemStackSerializer.readItemStack(olddata, version);
 			book.setType(Material.BOOK_AND_QUILL);
-			newdata.writeItemStack(book);
+			ItemStackSerializer.writeItemStack(newdata, ProtocolVersion.getLatest(), book);
 		} else if (tag.equals("MC|AdvCdm")) {
 			tag = "MC|AdvCmd";
 			newdata.writeByte(olddata.readByte());
 			newdata.writeInt(olddata.readInt());
 			newdata.writeInt(olddata.readInt());
 			newdata.writeInt(olddata.readInt());
-			newdata.writeString(olddata.readString());
+			StringSerializer.writeString(newdata, ProtocolVersion.getLatest(), StringSerializer.readString(olddata, version));
 			newdata.writeBoolean(true);
 		} else {
 			newdata.writeBytes(olddata);
 		}
-		data = ProtocolSupportPacketDataSerializer.toArray(newdata);
+		data = MiscSerializer.readAllBytes(newdata);
 	}
 
 }

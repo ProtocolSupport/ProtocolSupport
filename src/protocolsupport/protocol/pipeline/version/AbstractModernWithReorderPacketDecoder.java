@@ -8,7 +8,7 @@ import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.legacyremapper.LegacyAnimatePacketReorderer;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.zplatform.ServerPlatform;
 
@@ -18,7 +18,6 @@ public class AbstractModernWithReorderPacketDecoder extends AbstractPacketDecode
 		super(connection, sharedstorage);
 	}
 
-	private final ProtocolSupportPacketDataSerializer serializer = new ProtocolSupportPacketDataSerializer(null, connection.getVersion());
 	private final LegacyAnimatePacketReorderer animateReorderer = new LegacyAnimatePacketReorderer();
 
 	@Override
@@ -26,11 +25,13 @@ public class AbstractModernWithReorderPacketDecoder extends AbstractPacketDecode
 		if (!input.isReadable()) {
 			return;
 		}
-		serializer.setBuf(input);
-		ServerBoundMiddlePacket packetTransformer = registry.getTransformer(ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(ctx.channel()), serializer.readVarInt());
-		packetTransformer.readFromClientData(serializer);
-		if (serializer.isReadable()) {
-			throw new DecoderException("Did not read all data from packet " + packetTransformer.getClass().getName() + ", bytes left: " + serializer.readableBytes());
+		ServerBoundMiddlePacket packetTransformer = registry.getTransformer(
+			ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(ctx.channel()),
+			VarNumberSerializer.readVarInt(input)
+		);
+		packetTransformer.readFromClientData(input, connection.getVersion());
+		if (input.isReadable()) {
+			throw new DecoderException("Did not read all data from packet " + packetTransformer.getClass().getName() + ", bytes left: " + input.readableBytes());
 		}
 		addPackets(animateReorderer.orderPackets(packetTransformer.toNative()), list);
 	}

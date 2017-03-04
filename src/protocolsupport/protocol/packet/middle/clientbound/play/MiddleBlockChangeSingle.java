@@ -1,15 +1,16 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 
-public abstract class MiddleBlockChangeSingle<T> extends MiddleBlock<T> {
+public abstract class MiddleBlockChangeSingle extends MiddleBlock {
 
 	protected int id;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		super.readFromServerData(serializer);
-		id = serializer.readVarInt();
+	public void readFromServerData(ByteBuf serverdata) {
+		super.readFromServerData(serverdata);
+		id = VarNumberSerializer.readVarInt(serverdata);
 	}
 
 }

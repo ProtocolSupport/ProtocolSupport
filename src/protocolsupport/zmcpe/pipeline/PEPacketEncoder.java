@@ -1,12 +1,12 @@
 package protocolsupport.zmcpe.pipeline;
 
+import io.netty.buffer.ByteBuf;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.pipeline.version.AbstractPacketEncoder;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -45,11 +45,11 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 		return oldPacketId;
 	}
 
-	public static class Noop extends ClientBoundMiddlePacket<RecyclableCollection<ClientBoundPacketData>> {
+	public static class Noop extends ClientBoundMiddlePacket {
 
 		@Override
-		public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-			serializer.skipBytes(serializer.readableBytes());
+		public void readFromServerData(ByteBuf serverdata) {
+			serverdata.skipBytes(serverdata.readableBytes());
 		}
 
 		@Override

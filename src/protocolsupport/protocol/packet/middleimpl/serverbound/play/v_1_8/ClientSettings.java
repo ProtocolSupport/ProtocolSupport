@@ -1,17 +1,19 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_8;
 
+import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleClientSettings;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
 
 public class ClientSettings extends MiddleClientSettings {
 
 	@Override
-	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) {
-		locale = serializer.readString(7);
-		viewDist = serializer.readByte();
-		chatMode = serializer.readByte();
-		chatColors = serializer.readBoolean();
-		skinFlags = serializer.readUnsignedByte();
+	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
+		locale = StringSerializer.readString(clientdata, version, 7);
+		viewDist = clientdata.readByte();
+		chatMode = clientdata.readByte();
+		chatColors = clientdata.readBoolean();
+		skinFlags = clientdata.readUnsignedByte();
 		mainHand = 1;
 	}
 

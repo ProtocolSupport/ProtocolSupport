@@ -1,15 +1,15 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
+import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-public abstract class MiddleServerDifficulty<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleServerDifficulty extends ClientBoundMiddlePacket {
 
 	protected int difficulty;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		difficulty = serializer.readByte();
+	public void readFromServerData(ByteBuf serverdata) {
+		difficulty = serverdata.readByte();
 	}
 
 }

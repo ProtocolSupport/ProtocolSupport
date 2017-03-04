@@ -1,21 +1,24 @@
 package protocolsupport.zmcpe.packetsimpl.serverbound;
 
+import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddlePositionLook;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class PositionLook extends MiddlePositionLook {
 
 	@Override
-	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) {
-		serializer.readVarInt(); //entity id
-		x = serializer.readLFloat();
-		y = serializer.readLFloat() - 1.6200000047683716D;
-		z = serializer.readLFloat();
-		pitch = serializer.readLFloat();
-		yaw = serializer.readLFloat();
-		serializer.readLFloat(); //head yaw
-		serializer.readByte(); //mode
-		onGround = serializer.readBoolean();
+	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
+		VarNumberSerializer.readVarLong(clientdata); //entity id
+		x = MiscSerializer.readLFloat(clientdata);
+		y = MiscSerializer.readLFloat(clientdata) - 1.6200000047683716D;
+		z = MiscSerializer.readLFloat(clientdata);
+		pitch = MiscSerializer.readLFloat(clientdata);
+		yaw = MiscSerializer.readLFloat(clientdata);
+		MiscSerializer.readLFloat(clientdata); //head yaw
+		clientdata.readByte(); //mode
+		onGround = clientdata.readBoolean();
 	}
 
 }

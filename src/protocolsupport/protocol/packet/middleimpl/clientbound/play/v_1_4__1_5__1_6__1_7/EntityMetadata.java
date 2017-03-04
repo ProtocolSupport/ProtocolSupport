@@ -12,7 +12,7 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class EntityMetadata extends MiddleEntityMetadata<RecyclableCollection<ClientBoundPacketData>> {
+public class EntityMetadata extends MiddleEntityMetadata {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
@@ -22,7 +22,7 @@ public class EntityMetadata extends MiddleEntityMetadata<RecyclableCollection<Cl
 		} else {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_METADATA_ID, version);
 			serializer.writeInt(entityId);
-			LegacyDataWatcherSerializer.encodeData(remapped, serializer);
+			LegacyDataWatcherSerializer.encodeData(serializer, version, remapped);
 			return RecyclableSingletonList.create(serializer);
 		}
 	}

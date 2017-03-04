@@ -1,7 +1,8 @@
 package protocolsupport.protocol.utils.datawatcher.objects;
 
+import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.types.BlockDirection;
 
@@ -16,13 +17,13 @@ public class DataWatcherObjectDirection extends DataWatcherObject<BlockDirection
 	}
 
 	@Override
-	public void readFromStream(ProtocolSupportPacketDataSerializer serializer) {
-		value = serializer.readEnum(BlockDirection.class);
+	public void readFromStream(ByteBuf from, ProtocolVersion version) {
+		value = MiscSerializer.readEnum(from, BlockDirection.class);
 	}
 
 	@Override
-	public void writeToStream(ProtocolSupportPacketDataSerializer serializer) {
-		serializer.writeEnum(value);
+	public void writeToStream(ByteBuf to, ProtocolVersion version) {
+		MiscSerializer.writeEnum(to, value);
 	}
 
 }

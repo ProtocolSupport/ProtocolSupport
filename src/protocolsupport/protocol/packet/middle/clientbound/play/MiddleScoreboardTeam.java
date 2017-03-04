@@ -1,9 +1,12 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
+import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 
-public abstract class MiddleScoreboardTeam<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleScoreboardTeam extends ClientBoundMiddlePacket {
 
 	protected String name;
 	protected int mode;
@@ -17,22 +20,22 @@ public abstract class MiddleScoreboardTeam<T> extends ClientBoundMiddlePacket<T>
 	protected String[] players;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		name = serializer.readString(16);
-		mode = serializer.readUnsignedByte();
+	public void readFromServerData(ByteBuf serverdata) {
+		name = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(), 16);
+		mode = serverdata.readUnsignedByte();
 		if ((mode == 0) || (mode == 2)) {
-			displayName = serializer.readString(32);
-			prefix = serializer.readString(16);
-			suffix = serializer.readString(16);
-			friendlyFire = serializer.readUnsignedByte();
-			nameTagVisibility = serializer.readString(32);
-			collisionRule = serializer.readString(32);
-			color = serializer.readUnsignedByte();
+			displayName = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(), 32);
+			prefix = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(), 16);
+			suffix = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(), 16);
+			friendlyFire = serverdata.readUnsignedByte();
+			nameTagVisibility = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(), 32);
+			collisionRule = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(), 32);
+			color = serverdata.readUnsignedByte();
 		}
 		if ((mode == 0) || (mode == 3) || (mode == 4)) {
-			players = new String[serializer.readVarInt()];
+			players = new String[VarNumberSerializer.readVarInt(serverdata)];
 			for (int i = 0; i < players.length; i++) {
-				players[i] = serializer.readString(40);
+				players[i] = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(), 40);
 			}
 		}
 	}

@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
-public class NoopWorldParticle extends MiddleWorldParticle<RecyclableCollection<ClientBoundPacketData>> {
+public class NoopWorldParticle extends MiddleWorldParticle {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {

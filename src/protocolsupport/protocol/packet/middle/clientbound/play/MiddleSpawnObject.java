@@ -2,11 +2,13 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import java.util.UUID;
 
+import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedObject;
 
-public abstract class MiddleSpawnObject<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 
 	protected int entityId;
 	protected UUID uuid;
@@ -22,19 +24,19 @@ public abstract class MiddleSpawnObject<T> extends ClientBoundMiddlePacket<T> {
 	protected int motZ;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		entityId = serializer.readVarInt();
-		uuid = serializer.readUUID();
-		type = serializer.readUnsignedByte();
-		x = serializer.readDouble();
-		y = serializer.readDouble();
-		z = serializer.readDouble();
-		pitch = serializer.readUnsignedByte();
-		yaw = serializer.readUnsignedByte();
-		objectdata = serializer.readInt();
-		motX = serializer.readShort();
-		motY = serializer.readShort();
-		motZ = serializer.readShort();
+	public void readFromServerData(ByteBuf serverdata) {
+		entityId = VarNumberSerializer.readVarInt(serverdata);
+		uuid = MiscSerializer.readUUID(serverdata);
+		type = serverdata.readUnsignedByte();
+		x = serverdata.readDouble();
+		y = serverdata.readDouble();
+		z = serverdata.readDouble();
+		pitch = serverdata.readUnsignedByte();
+		yaw = serverdata.readUnsignedByte();
+		objectdata = serverdata.readInt();
+		motX = serverdata.readShort();
+		motY = serverdata.readShort();
+		motZ = serverdata.readShort();
 	}
 
 	@Override

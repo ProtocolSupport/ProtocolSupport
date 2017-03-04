@@ -1,8 +1,8 @@
 package protocolsupport.protocol.utils.datawatcher;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
 @NeedsNoArgConstructor
@@ -12,9 +12,9 @@ public abstract class DataWatcherObject<T> {
 
 	public abstract int getTypeId(ProtocolVersion version);
 
-	public abstract void readFromStream(ProtocolSupportPacketDataSerializer serializer) throws DecoderException;
+	public abstract void readFromStream(ByteBuf from, ProtocolVersion version) throws DecoderException;
 
-	public abstract void writeToStream(ProtocolSupportPacketDataSerializer serializer);
+	public abstract void writeToStream(ByteBuf to, ProtocolVersion version);
 
 	public T getValue() {
 		return value;

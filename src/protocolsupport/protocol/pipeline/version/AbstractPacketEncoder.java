@@ -8,7 +8,7 @@ import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry;
 import protocolsupport.utils.netty.Allocator;
@@ -32,28 +32,26 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 		varintPacketId = connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_1_7_5);
 	}
 
-	protected final MiddleTransformerRegistry<ClientBoundMiddlePacket<RecyclableCollection<ClientBoundPacketData>>> registry = new MiddleTransformerRegistry<>();
+	protected final MiddleTransformerRegistry<ClientBoundMiddlePacket> registry = new MiddleTransformerRegistry<>();
 
-	private final ProtocolSupportPacketDataSerializer middlebuffer = new ProtocolSupportPacketDataSerializer(null, ProtocolVersion.getLatest());
 	private final boolean varintPacketId;
 
 	@Override
-	public void encode(ChannelHandlerContext ctx, ByteBuf packet, List<Object> output) throws InstantiationException, IllegalAccessException  {
-		if (!packet.isReadable()) {
+	public void encode(ChannelHandlerContext ctx, ByteBuf input, List<Object> output) throws InstantiationException, IllegalAccessException  {
+		if (!input.isReadable()) {
 			return;
 		}
 		NetworkState currentProtocol = ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(ctx.channel());
-		middlebuffer.setBuf(packet);
-		int packetId = middlebuffer.readVarInt();
-		ClientBoundMiddlePacket<RecyclableCollection<ClientBoundPacketData>> packetTransformer = registry.getTransformer(currentProtocol, packetId);
-		packetTransformer.readFromServerData(middlebuffer);
+		int packetId = VarNumberSerializer.readVarInt(input);
+		ClientBoundMiddlePacket packetTransformer = registry.getTransformer(currentProtocol, packetId);
+		packetTransformer.readFromServerData(input);
 		packetTransformer.handle();
 		try (RecyclableCollection<ClientBoundPacketData> data = packetTransformer.toData(connection.getVersion())) {
 			for (ClientBoundPacketData packetdata : data) {
 				ByteBuf senddata = Allocator.allocateBuffer();
 				int newPacketId = getNewPacketId(currentProtocol, packetdata.getPacketId());
 				if (varintPacketId) {
-					ProtocolSupportPacketDataSerializer.writeVarInt(senddata, newPacketId);
+					VarNumberSerializer.writeVarInt(senddata, newPacketId);
 				} else {
 					senddata.writeByte(newPacketId);
 				}
