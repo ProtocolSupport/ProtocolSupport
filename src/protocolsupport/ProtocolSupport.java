@@ -5,6 +5,7 @@ import java.text.MessageFormat;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.commands.CommandHandler;
 import protocolsupport.listeners.CommandListener;
 import protocolsupport.listeners.PlayerListener;
@@ -39,6 +40,7 @@ public class ProtocolSupport extends JavaPlugin {
 			getLogger().info(MessageFormat.format("Detected {0} server implementation type", ServerPlatform.get().getName()));
 		}
 		try {
+			ProtocolVersion.values();
 			Allocator.init();
 			ItemData.init();
 			PotionData.init();
