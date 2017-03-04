@@ -4,6 +4,9 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockTileUpdate;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.serializer.PositionSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.tileentity.TileEntityUpdateType;
 import protocolsupport.protocol.typeremapper.tileentity.TileNBTRemapper;
 import protocolsupport.protocol.utils.types.Position;
@@ -23,16 +26,16 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 		Position position = TileNBTRemapper.getPosition(tag);
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9_4) && (type == TileEntityUpdateType.SIGN)) {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.LEGACY_PLAY_UPDATE_SIGN_ID, version);
-			serializer.writePosition(position);
+			PositionSerializer.writePosition(serializer, position);
 			for (String line : TileNBTRemapper.getSignLines(tag)) {
-				serializer.writeString(line);
+				StringSerializer.writeString(serializer, version, line);
 			}
 			return serializer;
 		} else {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_UPDATE_TILE_ID, version);
-			serializer.writePosition(position);
+			PositionSerializer.writePosition(serializer, position);
 			serializer.writeByte(type.getId());
-			serializer.writeTag(TileNBTRemapper.remap(version, tag));
+			ItemStackSerializer.writeTag(serializer, version, TileNBTRemapper.remap(version, tag));
 			return serializer;
 		}
 	}

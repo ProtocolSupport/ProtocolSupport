@@ -8,6 +8,7 @@ import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1__1_9_r2__1_10__1_11.BlockTileUpdate;
+import protocolsupport.protocol.serializer.ByteArraySerializer;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -26,11 +27,11 @@ public class Chunk extends MiddleChunk {
 		boolean hasSkyLight = cache.hasSkyLightInCurrentDimension();
 		if ((bitmask == 0) && full) {
 			chunkdata.writeShort(1);
-			chunkdata.writeByteArray(EmptyChunk.get18ChunkData(hasSkyLight));
+			ByteArraySerializer.writeByteArray(chunkdata, version, EmptyChunk.get18ChunkData(hasSkyLight));
 		} else {
 			chunkdata.writeShort(bitmask);
 			transformer.loadData(data, bitmask, hasSkyLight, full);
-			chunkdata.writeByteArray(transformer.toLegacyData(ProtocolVersion.MINECRAFT_1_8));
+			ByteArraySerializer.writeByteArray(chunkdata, version, transformer.toLegacyData(version));
 		}
 		packets.add(chunkdata);
 		for (NBTTagCompoundWrapper tile : tiles) {

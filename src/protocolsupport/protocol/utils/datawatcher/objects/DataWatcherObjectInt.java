@@ -1,7 +1,7 @@
 package protocolsupport.protocol.utils.datawatcher.objects;
 
+import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 
 public class DataWatcherObjectInt extends DataWatcherObject<Integer> {
@@ -22,13 +22,13 @@ public class DataWatcherObjectInt extends DataWatcherObject<Integer> {
 	}
 
 	@Override
-	public void readFromStream(ProtocolSupportPacketDataSerializer serializer) {
-		value = serializer.readInt();
+	public void readFromStream(ByteBuf from, ProtocolVersion version) {
+		value = from.readInt();
 	}
 
 	@Override
-	public void writeToStream(ProtocolSupportPacketDataSerializer serializer) {
-		serializer.writeInt(value);
+	public void writeToStream(ByteBuf to, ProtocolVersion version) {
+		to.writeInt(value);
 	}
 
 }

@@ -3,8 +3,11 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import java.util.UUID;
 
 import gnu.trove.map.TIntObjectMap;
+import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedLiving;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
@@ -28,20 +31,20 @@ public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 	protected TIntObjectMap<DataWatcherObject<?>> metadata;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		entityId = serializer.readVarInt();
-		uuid = serializer.readUUID();
-		type = serializer.readVarInt();
-		x = serializer.readDouble();
-		y = serializer.readDouble();
-		z = serializer.readDouble();
-		yaw = serializer.readUnsignedByte();
-		pitch = serializer.readUnsignedByte();
-		headPitch = serializer.readUnsignedByte();
-		motX = serializer.readShort();
-		motY = serializer.readShort();
-		motZ = serializer.readShort();
-		metadata = DataWatcherDeserializer.decodeData(serializer);
+	public void readFromServerData(ByteBuf serverdata) {
+		entityId = VarNumberSerializer.readVarInt(serverdata);
+		uuid = MiscSerializer.readUUID(serverdata);
+		type = VarNumberSerializer.readVarInt(serverdata);
+		x = serverdata.readDouble();
+		y = serverdata.readDouble();
+		z = serverdata.readDouble();
+		yaw = serverdata.readUnsignedByte();
+		pitch = serverdata.readUnsignedByte();
+		headPitch = serverdata.readUnsignedByte();
+		motX = serverdata.readShort();
+		motY = serverdata.readShort();
+		motZ = serverdata.readShort();
+		metadata = DataWatcherDeserializer.decodeData(serverdata, ProtocolVersion.getLatest());
 	}
 
 	@Override

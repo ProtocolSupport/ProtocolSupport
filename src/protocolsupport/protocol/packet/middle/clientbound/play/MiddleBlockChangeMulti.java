@@ -1,7 +1,8 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
+import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {
 
@@ -10,14 +11,14 @@ public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {
 	protected Record[] records;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		chunkX = serializer.readInt();
-		chunkZ = serializer.readInt();
-		records = new Record[serializer.readVarInt()];
+	public void readFromServerData(ByteBuf serverdata) {
+		chunkX = serverdata.readInt();
+		chunkZ = serverdata.readInt();
+		records = new Record[VarNumberSerializer.readVarInt(serverdata)];
 		for (int i = 0; i < records.length; i++) {
 			Record record = new Record();
-			record.coord = serializer.readUnsignedShort();
-			record.id = serializer.readVarInt();
+			record.coord = serverdata.readUnsignedShort();
+			record.id = VarNumberSerializer.readVarInt(serverdata);
 			records[i] = record;
 		}
 	}

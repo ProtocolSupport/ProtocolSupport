@@ -4,6 +4,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleTabComplete;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -17,7 +18,7 @@ public class TabComplete extends MiddleTabComplete {
 			return RecyclableEmptyList.get();
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_TAB_COMPLETE_ID, version);
-		serializer.writeString(Utils.clampString(String.join("\u0000", matches), Short.MAX_VALUE));
+		StringSerializer.writeString(serializer, version, Utils.clampString(String.join("\u0000", matches), Short.MAX_VALUE));
 		return RecyclableSingletonList.create(serializer);
 	}
 

@@ -1,7 +1,8 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
+import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleWorldBorder extends ClientBoundMiddlePacket {
 
@@ -17,41 +18,41 @@ public abstract class MiddleWorldBorder extends ClientBoundMiddlePacket {
 	protected int warnBlocks;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		action = Action.values()[serializer.readVarInt()];
+	public void readFromServerData(ByteBuf serverdata) {
+		action = Action.values()[VarNumberSerializer.readVarInt(serverdata)];
 		switch (action) {
 			case SET_SIZE: {
-				radius = serializer.readDouble();
+				radius = serverdata.readDouble();
 				break;
 			}
 			case LERP_SIZE: {
-				oldRadius = serializer.readDouble();
-				newRadius = serializer.readDouble();
-				speed = serializer.readVarLong();
+				oldRadius = serverdata.readDouble();
+				newRadius = serverdata.readDouble();
+				speed = VarNumberSerializer.readVarLong(serverdata);
 				break;
 			}
 			case SET_CENTER: {
-				x = serializer.readDouble();
-				z = serializer.readDouble();
+				x = serverdata.readDouble();
+				z = serverdata.readDouble();
 				break;
 			}
 			case INIT: {
-				x = serializer.readDouble();
-				z = serializer.readDouble();
-				oldRadius = serializer.readDouble();
-				newRadius = serializer.readDouble();
-				speed = serializer.readVarLong();
-				teleportBound = serializer.readVarInt();
-				warnTime = serializer.readVarInt();
-				warnBlocks = serializer.readVarInt();
+				x = serverdata.readDouble();
+				z = serverdata.readDouble();
+				oldRadius = serverdata.readDouble();
+				newRadius = serverdata.readDouble();
+				speed = VarNumberSerializer.readVarLong(serverdata);
+				teleportBound = VarNumberSerializer.readVarInt(serverdata);
+				warnTime = VarNumberSerializer.readVarInt(serverdata);
+				warnBlocks = VarNumberSerializer.readVarInt(serverdata);
 				break;
 			}
 			case SET_WARN_TIME: {
-				warnTime = serializer.readVarInt();
+				warnTime = VarNumberSerializer.readVarInt(serverdata);
 				break;
 			}
 			case SET_WARN_BLOCKS: {
-				warnBlocks = serializer.readVarInt();
+				warnBlocks = VarNumberSerializer.readVarInt(serverdata);
 				break;
 			}
 		}

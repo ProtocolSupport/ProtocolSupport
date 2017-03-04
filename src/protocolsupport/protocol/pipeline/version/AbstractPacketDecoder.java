@@ -7,7 +7,7 @@ import io.netty.handler.codec.MessageToMessageDecoder;
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry;
 import protocolsupport.utils.netty.Allocator;
@@ -32,7 +32,7 @@ public abstract class AbstractPacketDecoder extends MessageToMessageDecoder<Byte
 		try {
 			for (ServerBoundPacketData packetdata : packets) {
 				ByteBuf receivedata = Allocator.allocateBuffer();
-				ProtocolSupportPacketDataSerializer.writeVarInt(receivedata, packetdata.getPacketId());
+				VarNumberSerializer.writeVarInt(receivedata, packetdata.getPacketId());
 				receivedata.writeBytes(packetdata);
 				to.add(receivedata);
 			}

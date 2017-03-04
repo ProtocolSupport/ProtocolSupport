@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
+import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public abstract class MiddlePlayerAbilities extends ClientBoundMiddlePacket {
 
@@ -10,10 +10,10 @@ public abstract class MiddlePlayerAbilities extends ClientBoundMiddlePacket {
 	protected float walkspeed;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		flags = serializer.readUnsignedByte();
-		flyspeed = serializer.readFloat();
-		walkspeed = serializer.readFloat();
+	public void readFromServerData(ByteBuf serverdata) {
+		flags = serverdata.readUnsignedByte();
+		flyspeed = serverdata.readFloat();
+		walkspeed = serverdata.readFloat();
 	}
 
 }

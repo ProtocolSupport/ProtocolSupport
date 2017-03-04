@@ -20,7 +20,7 @@ import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.LegacyServerPingResponseEvent;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.utils.netty.Allocator;
 
 @SuppressWarnings("deprecation")
@@ -29,31 +29,31 @@ public class LegacyLoginAndPingHandler extends SimpleChannelInboundHandler<ByteB
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf input)  {
-		ProtocolSupportPacketDataSerializer serializer = new ProtocolSupportPacketDataSerializer(Allocator.allocateBuffer(), ProtocolVersion.MINECRAFT_LEGACY);
+		ByteBuf buf = Allocator.allocateBuffer();
 		try {
 			int packetId = input.readUnsignedByte();
 			if (packetId == 0xFE) {
-				writePing(ctx.channel(), serializer);
+				writePing(ctx.channel(), buf);
 			} else if (packetId == 0x02) {
-				writeLoginKick(serializer);
+				writeLoginKick(buf);
 			} else {
 				throw new DecoderException("Unknown packet id "+packetId + " in legacy login and ping handler");
 			}
-			ctx.channel().pipeline().firstContext().writeAndFlush(serializer).addListener(ChannelFutureListener.CLOSE);
-			serializer = null;
+			ctx.channel().pipeline().firstContext().writeAndFlush(buf).addListener(ChannelFutureListener.CLOSE);
+			buf = null;
 		} finally {
-			if (serializer != null) {
-				serializer.release();
+			if (buf != null) {
+				buf.release();
 			}
 		}
 	}
 
-	private static void writeLoginKick(ProtocolSupportPacketDataSerializer serializer) {
-		serializer.writeByte(0xFF);
-		serializer.writeString("Outdated client");
+	private static void writeLoginKick(ByteBuf buf) {
+		buf.writeByte(0xFF);
+		StringSerializer.writeString(buf, ProtocolVersion.getOldest(), "Outdated client");
 	}
 
-	private static void writePing(Channel channel, ProtocolSupportPacketDataSerializer serializer) {
+	private static void writePing(Channel channel, ByteBuf buf) {
 		Connection connection = ConnectionImpl.getFromChannel(channel);
 		ServerListPingEvent bevent = new ServerListPingEvent(
 			connection.getAddress().getAddress(),
@@ -74,8 +74,8 @@ public class LegacyLoginAndPingHandler extends SimpleChannelInboundHandler<ByteB
 		Bukkit.getPluginManager().callEvent(revent);
 
 		String response = ChatColor.stripColor(revent.getMotd())+"§"+bevent.getNumPlayers()+"§"+revent.getMaxPlayers();
-		serializer.writeByte(0xFF);
-		serializer.writeString(response);
+		buf.writeByte(0xFF);
+		StringSerializer.writeString(buf, ProtocolVersion.getOldest(), response);
 	}
 
 }

@@ -2,10 +2,14 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import java.util.UUID;
 
+import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 
 public abstract class MiddlePlayerInfo extends ClientBoundMiddlePacket {
@@ -14,43 +18,43 @@ public abstract class MiddlePlayerInfo extends ClientBoundMiddlePacket {
 	protected Info[] infos;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		action = Action.values()[serializer.readVarInt()];
-		infos = new Info[serializer.readVarInt()];
+	public void readFromServerData(ByteBuf serverdata) {
+		action = Action.values()[VarNumberSerializer.readVarInt(serverdata)];
+		infos = new Info[VarNumberSerializer.readVarInt(serverdata)];
 		for (int i = 0; i < infos.length; i++) {
 			Info info = new Info();
-			info.uuid = serializer.readUUID();
+			info.uuid = MiscSerializer.readUUID(serverdata);
 			switch (action) {
 				case ADD: {
-					info.username = serializer.readString(16);
-					info.properties = new ProfileProperty[serializer.readVarInt()];
+					info.username = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(), 16);
+					info.properties = new ProfileProperty[VarNumberSerializer.readVarInt(serverdata)];
 					for (int j = 0; j < info.properties.length; j++) {
-						String name = serializer.readString();
-						String value = serializer.readString();
+						String name = StringSerializer.readString(serverdata, ProtocolVersion.getLatest());
+						String value = StringSerializer.readString(serverdata, ProtocolVersion.getLatest());
 						String signature = null;
-						if (serializer.readBoolean()) {
-							signature = serializer.readString();
+						if (serverdata.readBoolean()) {
+							signature = StringSerializer.readString(serverdata, ProtocolVersion.getLatest());
 						}
 						info.properties[j] = new ProfileProperty(name, value, signature);
 					}
-					info.gamemode = serializer.readVarInt();
-					info.ping = serializer.readVarInt();
-					if (serializer.readBoolean()) {
-						info.displayNameJson = serializer.readString();
+					info.gamemode = VarNumberSerializer.readVarInt(serverdata);
+					info.ping = VarNumberSerializer.readVarInt(serverdata);
+					if (serverdata.readBoolean()) {
+						info.displayNameJson = StringSerializer.readString(serverdata, ProtocolVersion.getLatest());
 					}
 					break;
 				}
 				case GAMEMODE: {
-					info.gamemode = serializer.readVarInt();
+					info.gamemode = VarNumberSerializer.readVarInt(serverdata);
 					break;
 				}
 				case PING: {
-					info.ping = serializer.readVarInt();
+					info.ping = VarNumberSerializer.readVarInt(serverdata);
 					break;
 				}
 				case DISPLAY_NAME: {
-					if (serializer.readBoolean()) {
-						info.displayNameJson = serializer.readString();
+					if (serverdata.readBoolean()) {
+						info.displayNameJson = StringSerializer.readString(serverdata, ProtocolVersion.getLatest());
 					}
 					break;
 				}

@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
+import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public abstract class MiddleUnloadChunk extends ClientBoundMiddlePacket {
 
@@ -9,9 +9,9 @@ public abstract class MiddleUnloadChunk extends ClientBoundMiddlePacket {
 	protected int chunkZ;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		chunkX = serializer.readInt();
-		chunkZ = serializer.readInt();
+	public void readFromServerData(ByteBuf serverdata) {
+		chunkX = serverdata.readInt();
+		chunkZ = serverdata.readInt();
 	}
 
 }

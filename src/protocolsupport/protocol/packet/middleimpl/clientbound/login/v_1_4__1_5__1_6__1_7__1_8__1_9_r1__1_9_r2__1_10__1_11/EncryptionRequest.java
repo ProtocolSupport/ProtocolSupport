@@ -4,6 +4,8 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.login.MiddleEncryptionRequest;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.ByteArraySerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -12,9 +14,9 @@ public class EncryptionRequest extends MiddleEncryptionRequest {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.LOGIN_ENCRYPTION_BEGIN_ID, version);
-		serializer.writeString(serverId);
-		serializer.writeByteArray(publicKey);
-		serializer.writeByteArray(verifyToken);
+		StringSerializer.writeString(serializer, version, serverId);
+		ByteArraySerializer.writeByteArray(serializer, version, publicKey);
+		ByteArraySerializer.writeByteArray(serializer, version, verifyToken);
 		return RecyclableSingletonList.create(serializer);
 	}
 

@@ -1,15 +1,18 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_8;
 
+import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleTabComplete;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.PositionSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
 
 public class TabComplete extends MiddleTabComplete {
 
 	@Override
-	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) {
-		string = serializer.readString();
-		if (serializer.readBoolean()) {
-			position = serializer.readPosition();
+	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
+		string = StringSerializer.readString(clientdata, version);
+		if (clientdata.readBoolean()) {
+			position = PositionSerializer.readPosition(clientdata);
 		}
 	}
 

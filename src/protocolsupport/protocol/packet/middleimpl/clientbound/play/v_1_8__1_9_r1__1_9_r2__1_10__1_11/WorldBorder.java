@@ -4,6 +4,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldBorder;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -12,7 +13,7 @@ public class WorldBorder extends MiddleWorldBorder {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_BORDER_ID, version);
-		serializer.writeVarInt(action.ordinal());
+		VarNumberSerializer.writeVarInt(serializer, action.ordinal());
 		switch (action) {
 			case SET_SIZE: {
 				serializer.writeDouble(radius);
@@ -21,7 +22,7 @@ public class WorldBorder extends MiddleWorldBorder {
 			case LERP_SIZE: {
 				serializer.writeDouble(oldRadius);
 				serializer.writeDouble(newRadius);
-				serializer.writeVarLong(speed);
+				VarNumberSerializer.writeVarLong(serializer, speed);
 				break;
 			}
 			case SET_CENTER: {
@@ -34,18 +35,18 @@ public class WorldBorder extends MiddleWorldBorder {
 				serializer.writeDouble(z);
 				serializer.writeDouble(oldRadius);
 				serializer.writeDouble(newRadius);
-				serializer.writeVarLong(speed);
-				serializer.writeVarInt(teleportBound);
-				serializer.writeVarInt(warnTime);
-				serializer.writeVarInt(warnBlocks);
+				VarNumberSerializer.writeVarLong(serializer, speed);
+				VarNumberSerializer.writeVarInt(serializer, teleportBound);
+				VarNumberSerializer.writeVarInt(serializer, warnTime);
+				VarNumberSerializer.writeVarInt(serializer, warnBlocks);
 				break;
 			}
 			case SET_WARN_TIME: {
-				serializer.writeVarInt(warnTime);
+				VarNumberSerializer.writeVarInt(serializer, warnTime);
 				break;
 			}
 			case SET_WARN_BLOCKS: {
-				serializer.writeVarInt(warnBlocks);
+				VarNumberSerializer.writeVarInt(serializer, warnBlocks);
 				break;
 			}
 		}

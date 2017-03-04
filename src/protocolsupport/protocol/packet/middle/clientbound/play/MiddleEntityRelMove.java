@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import io.netty.buffer.ByteBuf;
 
 public abstract class MiddleEntityRelMove extends MiddleEntity {
 
@@ -10,12 +10,12 @@ public abstract class MiddleEntityRelMove extends MiddleEntity {
 	protected boolean onGround;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		super.readFromServerData(serializer);
-		relX = serializer.readShort();
-		relY = serializer.readShort();
-		relZ = serializer.readShort();
-		onGround = serializer.readBoolean();
+	public void readFromServerData(ByteBuf serverdata) {
+		super.readFromServerData(serverdata);
+		relX = serverdata.readShort();
+		relY = serverdata.readShort();
+		relZ = serverdata.readShort();
+		onGround = serverdata.readBoolean();
 	}
 
 }

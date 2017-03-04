@@ -2,8 +2,12 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import java.util.UUID;
 
+import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleBossBar extends ClientBoundMiddlePacket {
 
@@ -16,36 +20,36 @@ public abstract class MiddleBossBar extends ClientBoundMiddlePacket {
 	protected int flags;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		uuid = serializer.readUUID();
-		action = serializer.readEnum(Action.class);
+	public void readFromServerData(ByteBuf serverdata) {
+		uuid = MiscSerializer.readUUID(serverdata);
+		action = MiscSerializer.readEnum(serverdata, Action.class);
 		switch (action) {
 			case ADD: {
-				title = serializer.readString();
-				percent = serializer.readFloat();
-				color = serializer.readVarInt();
-				divider = serializer.readVarInt();
-				flags = serializer.readUnsignedByte();
+				title = StringSerializer.readString(serverdata, ProtocolVersion.getLatest());
+				percent = serverdata.readFloat();
+				color = VarNumberSerializer.readVarInt(serverdata);
+				divider = VarNumberSerializer.readVarInt(serverdata);
+				flags = serverdata.readUnsignedByte();
 				break;
 			}
 			case REMOVE: {
 				break;
 			}
 			case UPDATE_PERCENT: {
-				percent = serializer.readFloat();
+				percent = serverdata.readFloat();
 				break;
 			}
 			case UPDATE_TITLE: {
-				title = serializer.readString();
+				title = StringSerializer.readString(serverdata, ProtocolVersion.getLatest());
 				break;
 			}
 			case UPDATE_STYLE: {
-				color = serializer.readVarInt();
-				divider = serializer.readVarInt();
+				color = VarNumberSerializer.readVarInt(serverdata);
+				divider = VarNumberSerializer.readVarInt(serverdata);
 				break;
 			}
 			case UPDATE_FLAGS: {
-				flags = serializer.readUnsignedByte();
+				flags = serverdata.readUnsignedByte();
 				break;
 			}
 		}

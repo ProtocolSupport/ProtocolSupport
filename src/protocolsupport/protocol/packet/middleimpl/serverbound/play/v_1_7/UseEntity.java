@@ -1,14 +1,15 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_7;
 
+import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUseEntity;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public class UseEntity extends MiddleUseEntity {
 
 	@Override
-	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) {
-		entityId = serializer.readInt();
-		action = Action.values()[serializer.readByte()];
+	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
+		entityId = clientdata.readInt();
+		action = Action.values()[clientdata.readByte()];
 	}
 
 }

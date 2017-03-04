@@ -1,6 +1,8 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public abstract class MiddleBlockTileUpdate extends MiddleBlock {
@@ -9,10 +11,10 @@ public abstract class MiddleBlockTileUpdate extends MiddleBlock {
 	protected NBTTagCompoundWrapper tag;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		super.readFromServerData(serializer);
-		type = serializer.readUnsignedByte();
-		tag = serializer.readTag();
+	public void readFromServerData(ByteBuf serverdata) {
+		super.readFromServerData(serverdata);
+		type = serverdata.readUnsignedByte();
+		tag = ItemStackSerializer.readTag(serverdata, ProtocolVersion.getLatest());
 	}
 
 }

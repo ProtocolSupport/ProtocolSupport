@@ -1,7 +1,8 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
+import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleSetHealth extends ClientBoundMiddlePacket {
 
@@ -10,10 +11,10 @@ public abstract class MiddleSetHealth extends ClientBoundMiddlePacket {
 	protected float saturation;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		health = serializer.readFloat();
-		food = serializer.readVarInt();
-		saturation = serializer.readFloat();
+	public void readFromServerData(ByteBuf serverdata) {
+		health = serverdata.readFloat();
+		food = VarNumberSerializer.readVarInt(serverdata);
+		saturation = serverdata.readFloat();
 	}
 
 }

@@ -9,7 +9,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.DecoderException;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class SpigotPacketDecompressor extends net.minecraft.server.v1_11_R1.PacketDecompressor {
 
@@ -32,14 +33,14 @@ public class SpigotPacketDecompressor extends net.minecraft.server.v1_11_R1.Pack
 		if (!from.isReadable()) {
 			return;
 		}
-		int uncompressedlength = ProtocolSupportPacketDataSerializer.readVarInt(from);
+		int uncompressedlength = VarNumberSerializer.readVarInt(from);
 		if (uncompressedlength == 0) {
 			list.add(from.readBytes(from.readableBytes()));
 		} else {
 			if (uncompressedlength > maxPacketLength) {
 				throw new DecoderException(MessageFormat.format("Badly compressed packet - size of {0} is larger than protocol maximum of {1}", uncompressedlength, maxPacketLength));
 			}
-			inflater.setInput(ProtocolSupportPacketDataSerializer.toArray(from));
+			inflater.setInput(MiscSerializer.readAllBytes(from));
 			byte[] uncompressed = new byte[uncompressedlength];
 			inflater.inflate(uncompressed);
 			list.add(Unpooled.wrappedBuffer(uncompressed));

@@ -2,26 +2,27 @@ package protocolsupport.protocol.legacyremapper;
 
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.TIntObjectMap;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 
 public class LegacyDataWatcherSerializer {
 
-	public static void encodeData(TIntObjectMap<DataWatcherObject<?>> objects, ProtocolSupportPacketDataSerializer serializer) {
+	public static void encodeData(ByteBuf to, ProtocolVersion version, TIntObjectMap<DataWatcherObject<?>> objects) {
 		if (!objects.isEmpty()) {
 			TIntObjectIterator<DataWatcherObject<?>> iterator = objects.iterator();
 			while (iterator.hasNext()) {
 				iterator.advance();
 				DataWatcherObject<?> object = iterator.value();
-				int tk = ((object.getTypeId(serializer.getVersion()) << 5) | (iterator.key() & 0x1F)) & 0xFF;
-				serializer.writeByte(tk);
-				object.writeToStream(serializer);
+				int tk = ((object.getTypeId(version) << 5) | (iterator.key() & 0x1F)) & 0xFF;
+				to.writeByte(tk);
+				object.writeToStream(to, version);
 			}
 		} else {
-			serializer.writeByte(31);
-			serializer.writeByte(0);
+			to.writeByte(31);
+			to.writeByte(0);
 		}
-		serializer.writeByte(127);
+		to.writeByte(127);
 	}
 
 }

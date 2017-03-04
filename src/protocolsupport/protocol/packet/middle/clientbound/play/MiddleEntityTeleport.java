@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import io.netty.buffer.ByteBuf;
 
 public abstract class MiddleEntityTeleport extends MiddleEntity {
 
@@ -12,14 +12,14 @@ public abstract class MiddleEntityTeleport extends MiddleEntity {
 	protected boolean onGround;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		super.readFromServerData(serializer);
-		x = serializer.readDouble();
-		y = serializer.readDouble();
-		z = serializer.readDouble();
-		yaw = serializer.readByte();
-		pitch = serializer.readByte();
-		onGround = serializer.readBoolean();
+	public void readFromServerData(ByteBuf serverdata) {
+		super.readFromServerData(serverdata);
+		x = serverdata.readDouble();
+		y = serverdata.readDouble();
+		z = serverdata.readDouble();
+		yaw = serverdata.readByte();
+		pitch = serverdata.readByte();
+		onGround = serverdata.readBoolean();
 	}
 
 }

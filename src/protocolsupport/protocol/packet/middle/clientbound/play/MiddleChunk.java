@@ -1,7 +1,11 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
+import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.ByteArraySerializer;
+import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public abstract class MiddleChunk extends ClientBoundMiddlePacket {
@@ -14,15 +18,15 @@ public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 	protected NBTTagCompoundWrapper[] tiles;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		chunkX = serializer.readInt();
-		chunkZ = serializer.readInt();
-		full = serializer.readBoolean();
-		bitmask = serializer.readVarInt();
-		data = serializer.readByteArray();
-		tiles = new NBTTagCompoundWrapper[serializer.readVarInt()];
+	public void readFromServerData(ByteBuf serverdata) {
+		chunkX = serverdata.readInt();
+		chunkZ = serverdata.readInt();
+		full = serverdata.readBoolean();
+		bitmask = VarNumberSerializer.readVarInt(serverdata);
+		data = ByteArraySerializer.readByteArray(serverdata, ProtocolVersion.getLatest());
+		tiles = new NBTTagCompoundWrapper[VarNumberSerializer.readVarInt(serverdata)];
 		for (int i = 0; i < tiles.length; i++) {
-			tiles[i] = serializer.readTag();
+			tiles[i] = ItemStackSerializer.readTag(serverdata, ProtocolVersion.getLatest());
 		}
 	}
 

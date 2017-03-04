@@ -2,8 +2,10 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import java.util.ArrayList;
 
+import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 public abstract class MiddleInventorySetItems extends ClientBoundMiddlePacket {
@@ -12,12 +14,12 @@ public abstract class MiddleInventorySetItems extends ClientBoundMiddlePacket {
 	protected ArrayList<ItemStackWrapper> itemstacks = new ArrayList<>();
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		windowId = serializer.readUnsignedByte();
-		int count = serializer.readShort();
+	public void readFromServerData(ByteBuf serverdata) {
+		windowId = serverdata.readUnsignedByte();
+		int count = serverdata.readShort();
 		itemstacks.clear();
 		for (int i = 0; i < count; i++) {
-			itemstacks.add(serializer.readItemStack());
+			itemstacks.add(ItemStackSerializer.readItemStack(serverdata, ProtocolVersion.getLatest()));
 		}
 	}
 

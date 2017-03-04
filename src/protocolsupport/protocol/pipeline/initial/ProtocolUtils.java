@@ -3,7 +3,7 @@ package protocolsupport.protocol.pipeline.initial;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class ProtocolUtils {
 
@@ -32,9 +32,9 @@ public class ProtocolUtils {
 
 	@SuppressWarnings("deprecation")
 	protected static ProtocolVersion readNettyHandshake(ByteBuf data) {
-		int packetId = ProtocolSupportPacketDataSerializer.readVarInt(data);
+		int packetId = VarNumberSerializer.readVarInt(data);
 		if (packetId == 0x00) {
-			ProtocolVersion version = ProtocolVersion.fromId(ProtocolSupportPacketDataSerializer.readVarInt(data));
+			ProtocolVersion version = ProtocolVersion.fromId(VarNumberSerializer.readVarInt(data));
 			return version != ProtocolVersion.UNKNOWN ? version : ProtocolVersion.MINECRAFT_FUTURE;
 		} else {
 			throw new DecoderException(packetId + " is not a valid packet id");

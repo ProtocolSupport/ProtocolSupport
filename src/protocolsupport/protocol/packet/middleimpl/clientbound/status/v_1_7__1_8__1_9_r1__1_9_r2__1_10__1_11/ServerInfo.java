@@ -4,6 +4,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.status.MiddleServerInfo;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.utils.pingresponse.PingResponse;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -15,9 +16,9 @@ public class ServerInfo extends MiddleServerInfo {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.STATUS_SERVER_INFO_ID, version);
 		PingResponse ping = PingResponse.fromJson(pingJson);
 		if (ping.getProtocolData().getVersion() == ProtocolVersion.getLatest().getId()) {
-			ping.getProtocolData().setVersion(serializer.getVersion().getId());
+			ping.getProtocolData().setVersion(version.getId());
 		}
-		serializer.writeString(PingResponse.toJson(ping));
+		StringSerializer.writeString(serializer, version, PingResponse.toJson(ping));
 		return RecyclableSingletonList.create(serializer);
 	}
 

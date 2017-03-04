@@ -6,6 +6,8 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntitySetAttributes;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
 import protocolsupport.protocol.typeskipper.id.SkippingTable.GenericSkippingTable;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -26,12 +28,12 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 		serializer.writeInt(entityId);
 		serializer.writeInt(sendattrs.size());
 		for (Attribute attribute : sendattrs) {
-			serializer.writeString(attribute.key);
+			StringSerializer.writeString(serializer, version, attribute.key);
 			serializer.writeDouble(attribute.value);
 			if (version != ProtocolVersion.MINECRAFT_1_6_1) {
 				serializer.writeShort(attribute.modifiers.length);
 				for (Modifier modifier : attribute.modifiers) {
-					serializer.writeUUID(modifier.uuid);
+					MiscSerializer.writeUUID(serializer, modifier.uuid);
 					serializer.writeDouble(modifier.amount);
 					serializer.writeByte(modifier.operation);
 				}

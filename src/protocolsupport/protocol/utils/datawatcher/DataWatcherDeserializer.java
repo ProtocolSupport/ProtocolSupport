@@ -6,9 +6,9 @@ import java.lang.reflect.InvocationTargetException;
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
+import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBlockState;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
@@ -52,17 +52,17 @@ public class DataWatcherDeserializer {
 		registry[constr.newInstance().getTypeId(ProtocolVersion.getLatest())] = constr;
 	}
 
-	public static TIntObjectMap<DataWatcherObject<?>> decodeData(ProtocolSupportPacketDataSerializer serializer) {
+	public static TIntObjectMap<DataWatcherObject<?>> decodeData(ByteBuf from, ProtocolVersion version) {
 		TIntObjectMap<DataWatcherObject<?>> map = new TIntObjectHashMap<>(10, 0.5f, -1);
 		do {
-			int key = serializer.readUnsignedByte();
+			int key = from.readUnsignedByte();
 			if (key == 0xFF) {
 				break;
 			}
-			int type = serializer.readUnsignedByte();
+			int type = from.readUnsignedByte();
 			try {
 				DataWatcherObject<?> object = registry[type].newInstance();
-				object.readFromStream(serializer);
+				object.readFromStream(from, version);
 				map.put(key, object);
 			} catch (Exception e) {
 				throw new DecoderException("Unable to decode datawatcher object", e);
@@ -71,22 +71,22 @@ public class DataWatcherDeserializer {
 		return map;
 	}
 
-	public static void encodeData(TIntObjectMap<DataWatcherObject<?>> objects, ProtocolSupportPacketDataSerializer serializer) {
+	public static void encodeData(ByteBuf to, ProtocolVersion version, TIntObjectMap<DataWatcherObject<?>> objects) {
 		if (!objects.isEmpty()) {
 			TIntObjectIterator<DataWatcherObject<?>> iterator = objects.iterator();
 			while (iterator.hasNext()) {
 				iterator.advance();
 				DataWatcherObject<?> object = iterator.value();
-				serializer.writeByte(iterator.key());
-				serializer.writeByte(object.getTypeId(serializer.getVersion()));
-				object.writeToStream(serializer);
+				to.writeByte(iterator.key());
+				to.writeByte(object.getTypeId(version));
+				object.writeToStream(to, version);
 			}
 		} else {
-			serializer.writeByte(31);
-			serializer.writeByte(0);
-			serializer.writeByte(0);
+			to.writeByte(31);
+			to.writeByte(0);
+			to.writeByte(0);
 		}
-		serializer.writeByte(0xFF);
+		to.writeByte(0xFF);
 	}
 
 }

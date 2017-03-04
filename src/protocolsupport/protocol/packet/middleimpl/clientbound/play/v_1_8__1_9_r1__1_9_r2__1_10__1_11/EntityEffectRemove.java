@@ -4,6 +4,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityEffectRemove;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -17,7 +18,7 @@ public class EntityEffectRemove extends MiddleEntityEffectRemove {
 			return RecyclableEmptyList.get();
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_EFFECT_REMOVE_ID, version);
-		serializer.writeVarInt(entityId);
+		VarNumberSerializer.writeVarInt(serializer, entityId);
 		serializer.writeByte(effectId);
 		return RecyclableSingletonList.create(serializer);
 	}

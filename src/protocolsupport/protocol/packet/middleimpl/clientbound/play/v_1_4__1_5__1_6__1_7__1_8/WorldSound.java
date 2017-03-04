@@ -5,6 +5,7 @@ import protocolsupport.protocol.legacyremapper.LegacySound;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldSound;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -25,7 +26,7 @@ public class WorldSound extends MiddleWorldSound {
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_6_1)) {
 			soundname = Utils.clampString(soundname, 32);
 		}
-		serializer.writeString(soundname);
+		StringSerializer.writeString(serializer, version, soundname);
 		serializer.writeInt(x);
 		serializer.writeInt(y);
 		serializer.writeInt(z);

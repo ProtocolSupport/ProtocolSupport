@@ -1,18 +1,21 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_4__1_5__1_6__1_7;
 
+import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockPlace;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.serializer.PositionSerializer;
 
 public class BlockPlace extends MiddleBlockPlace {
 
 	@Override
-	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) {
-		position = serializer.readLegacyPositionB();
-		face = serializer.readByte();
-		serializer.readItemStack();
-		cX = serializer.readUnsignedByte() / 16.0F;
-		cY = serializer.readUnsignedByte() / 16.0F;
-		cZ = serializer.readUnsignedByte() / 16.0F;
+	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
+		position = PositionSerializer.readLegacyPositionB(clientdata);
+		face = clientdata.readByte();
+		ItemStackSerializer.readItemStack(clientdata, version);
+		cX = clientdata.readUnsignedByte() / 16.0F;
+		cY = clientdata.readUnsignedByte() / 16.0F;
+		cZ = clientdata.readUnsignedByte() / 16.0F;
 	}
 
 }

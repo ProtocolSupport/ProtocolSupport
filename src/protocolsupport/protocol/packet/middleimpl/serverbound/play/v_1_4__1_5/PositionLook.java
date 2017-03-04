@@ -1,10 +1,11 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_1_4__1_5;
 
+import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleTeleportAccept;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -20,14 +21,14 @@ public class PositionLook extends ServerBoundMiddlePacket {
 	protected boolean onGround;
 
 	@Override
-	public void readFromClientData(ProtocolSupportPacketDataSerializer serializer) {
-		x = serializer.readDouble();
-		y = serializer.readDouble();
-		yhead = serializer.readDouble();
-		z = serializer.readDouble();
-		yaw = serializer.readFloat();
-		pitch = serializer.readFloat();
-		onGround = serializer.readBoolean();
+	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
+		x = clientdata.readDouble();
+		y = clientdata.readDouble();
+		yhead = clientdata.readDouble();
+		z = clientdata.readDouble();
+		yaw = clientdata.readFloat();
+		pitch = clientdata.readFloat();
+		onGround = clientdata.readBoolean();
 	}
 
 	@Override

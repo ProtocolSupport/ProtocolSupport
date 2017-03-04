@@ -1,7 +1,9 @@
 package protocolsupport.protocol.packet.middle.clientbound.login;
 
+import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
 
 public abstract class MiddleLoginSuccess extends ClientBoundMiddlePacket {
 
@@ -9,9 +11,9 @@ public abstract class MiddleLoginSuccess extends ClientBoundMiddlePacket {
 	protected String name;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		uuidstring = serializer.readString(36);
-		name = serializer.readString(16);
+	public void readFromServerData(ByteBuf serverdata) {
+		uuidstring = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(), 36);
+		name = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(), 16);
 	}
 
 }

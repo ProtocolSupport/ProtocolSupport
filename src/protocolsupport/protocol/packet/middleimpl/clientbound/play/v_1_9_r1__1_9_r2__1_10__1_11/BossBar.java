@@ -4,6 +4,9 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBossBar;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -12,14 +15,14 @@ public class BossBar extends MiddleBossBar {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BOSS_BAR_ID, version);
-		serializer.writeUUID(uuid);
-		serializer.writeEnum(action);
+		MiscSerializer.writeUUID(serializer, uuid);
+		MiscSerializer.writeEnum(serializer, action);
 		switch (action) {
 			case ADD: {
-				serializer.writeString(title);
+				StringSerializer.writeString(serializer, version, title);
 				serializer.writeFloat(percent);
-				serializer.writeVarInt(color);
-				serializer.writeVarInt(divider);
+				VarNumberSerializer.writeVarInt(serializer, color);
+				VarNumberSerializer.writeVarInt(serializer, divider);
 				serializer.writeByte(flags);
 				break;
 			}
@@ -31,12 +34,12 @@ public class BossBar extends MiddleBossBar {
 				break;
 			}
 			case UPDATE_TITLE: {
-				serializer.writeString(title);
+				StringSerializer.writeString(serializer, version, title);
 				break;
 			}
 			case UPDATE_STYLE: {
-				serializer.writeVarInt(color);
-				serializer.writeVarInt(divider);
+				VarNumberSerializer.writeVarInt(serializer, color);
+				VarNumberSerializer.writeVarInt(serializer, divider);
 				break;
 			}
 			case UPDATE_FLAGS: {

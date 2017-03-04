@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
+import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 public abstract class MiddleEntityStatus extends ClientBoundMiddlePacket {
 
@@ -9,9 +9,9 @@ public abstract class MiddleEntityStatus extends ClientBoundMiddlePacket {
 	protected int status;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		entityId = serializer.readInt();
-		status = serializer.readUnsignedByte();
+	public void readFromServerData(ByteBuf serverdata) {
+		entityId = serverdata.readInt();
+		status = serverdata.readUnsignedByte();
 	}
 
 }

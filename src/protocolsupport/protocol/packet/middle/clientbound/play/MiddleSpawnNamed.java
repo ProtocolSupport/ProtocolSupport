@@ -5,9 +5,12 @@ import java.util.List;
 import java.util.UUID;
 
 import gnu.trove.map.TIntObjectMap;
+import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
@@ -29,15 +32,15 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 	protected TIntObjectMap<DataWatcherObject<?>> metadata;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		playerEntityId = serializer.readVarInt();
-		uuid = serializer.readUUID();
-		x = serializer.readDouble();
-		y = serializer.readDouble();
-		z = serializer.readDouble();
-		yaw = serializer.readUnsignedByte();
-		pitch = serializer.readUnsignedByte();
-		metadata = DataWatcherDeserializer.decodeData(serializer);
+	public void readFromServerData(ByteBuf serverdata) {
+		playerEntityId = VarNumberSerializer.readVarInt(serverdata);
+		uuid = MiscSerializer.readUUID(serverdata);
+		x = serverdata.readDouble();
+		y = serverdata.readDouble();
+		z = serverdata.readDouble();
+		yaw = serverdata.readUnsignedByte();
+		pitch = serverdata.readUnsignedByte();
+		metadata = DataWatcherDeserializer.decodeData(serverdata, ProtocolVersion.getLatest());
 	}
 
 	@Override

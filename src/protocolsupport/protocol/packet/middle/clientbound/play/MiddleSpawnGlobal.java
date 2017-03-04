@@ -1,7 +1,8 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
+import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleSpawnGlobal extends ClientBoundMiddlePacket {
 
@@ -12,12 +13,12 @@ public abstract class MiddleSpawnGlobal extends ClientBoundMiddlePacket {
 	protected double z;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		entityId = serializer.readVarInt();
-		type = serializer.readUnsignedByte();
-		x = serializer.readDouble();
-		y = serializer.readDouble();
-		z = serializer.readDouble();
+	public void readFromServerData(ByteBuf serverdata) {
+		entityId = VarNumberSerializer.readVarInt(serverdata);
+		type = serverdata.readUnsignedByte();
+		x = serverdata.readDouble();
+		y = serverdata.readDouble();
+		z = serverdata.readDouble();
 	}
 
 }

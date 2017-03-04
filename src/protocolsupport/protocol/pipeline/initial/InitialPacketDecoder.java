@@ -1,6 +1,5 @@
 package protocolsupport.protocol.pipeline.initial;
 
-import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.EnumMap;
 import java.util.concurrent.TimeUnit;
@@ -16,7 +15,8 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.IPipeLineBuilder;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer;
@@ -116,7 +116,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 							scheduleTask(ctx, new SetProtocolTask(this, channel, ProtocolVersion.MINECRAFT_1_5_2), ping152delay, TimeUnit.MILLISECONDS);
 						} else if (
 							(replayingBuffer.readUnsignedByte() == 0xFA) &&
-							"MC|PingHost".equals(new String(ProtocolSupportPacketDataSerializer.toArray(replayingBuffer.readSlice(replayingBuffer.readUnsignedShort() * 2)), StandardCharsets.UTF_16BE))
+							"MC|PingHost".equals(StringSerializer.readString(replayingBuffer, ProtocolVersion.MINECRAFT_1_6_4))
 						) {
 							//definitely 1.6
 							replayingBuffer.readUnsignedShort();
@@ -163,7 +163,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
 	private static ProtocolVersion attemptDecodeNettyHandshake(ByteBuf bytebuf) {
 		bytebuf.readerIndex(0);
-		return ProtocolUtils.readNettyHandshake(bytebuf.readSlice(ProtocolSupportPacketDataSerializer.readVarInt(bytebuf)));
+		return ProtocolUtils.readNettyHandshake(bytebuf.readSlice(VarNumberSerializer.readVarInt(bytebuf)));
 	}
 
 }

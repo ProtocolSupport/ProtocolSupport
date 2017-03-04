@@ -4,6 +4,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleLogin;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -21,7 +22,7 @@ public class Login extends MiddleLogin {
 		}
 		serializer.writeByte(difficulty);
 		serializer.writeByte(maxplayers);
-		serializer.writeString(leveltype);
+		StringSerializer.writeString(serializer, version, leveltype);
 		serializer.writeBoolean(reducedDebugInfo);
 		return RecyclableSingletonList.create(serializer);
 	}

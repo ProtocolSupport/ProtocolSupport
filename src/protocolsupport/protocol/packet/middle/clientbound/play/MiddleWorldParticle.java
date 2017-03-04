@@ -2,8 +2,9 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import java.util.ArrayList;
 
+import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleWorldParticle extends ClientBoundMiddlePacket {
 
@@ -20,20 +21,20 @@ public abstract class MiddleWorldParticle extends ClientBoundMiddlePacket {
 	protected ArrayList<Integer> adddata = new ArrayList<>();
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		type = serializer.readInt();
-		longdist = serializer.readBoolean();
-		x = serializer.readFloat();
-		y = serializer.readFloat();
-		z = serializer.readFloat();
-		offX = serializer.readFloat();
-		offY = serializer.readFloat();
-		offZ = serializer.readFloat();
-		speed = serializer.readFloat();
-		count = serializer.readInt();
+	public void readFromServerData(ByteBuf serverdata) {
+		type = serverdata.readInt();
+		longdist = serverdata.readBoolean();
+		x = serverdata.readFloat();
+		y = serverdata.readFloat();
+		z = serverdata.readFloat();
+		offX = serverdata.readFloat();
+		offY = serverdata.readFloat();
+		offZ = serverdata.readFloat();
+		speed = serverdata.readFloat();
+		count = serverdata.readInt();
 		adddata.clear();
-		while (serializer.isReadable()) {
-			adddata.add(serializer.readVarInt());
+		while (serverdata.isReadable()) {
+			adddata.add(VarNumberSerializer.readVarInt(serverdata));
 		}
 	}
 

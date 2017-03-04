@@ -1,17 +1,18 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
+import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleEntityDestroy extends ClientBoundMiddlePacket {
 
 	protected int[] entityIds;
 
 	@Override
-	public void readFromServerData(ProtocolSupportPacketDataSerializer serializer) {
-		entityIds = new int[serializer.readVarInt()];
+	public void readFromServerData(ByteBuf serverdata) {
+		entityIds = new int[VarNumberSerializer.readVarInt(serverdata)];
 		for (int i = 0; i < entityIds.length; i++) {
-			entityIds[i] = serializer.readVarInt();
+			entityIds[i] = VarNumberSerializer.readVarInt(serverdata);
 		}
 	}
 

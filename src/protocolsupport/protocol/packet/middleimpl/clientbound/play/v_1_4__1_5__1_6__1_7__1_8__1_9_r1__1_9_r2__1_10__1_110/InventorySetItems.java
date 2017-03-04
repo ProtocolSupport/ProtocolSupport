@@ -4,6 +4,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventorySetItems;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -25,7 +26,7 @@ public class InventorySetItems extends MiddleInventorySetItems {
 		serializer.writeByte(windowId);
 		serializer.writeShort(itemstacks.size());
 		for (ItemStackWrapper itemstack : itemstacks) {
-			serializer.writeItemStack(itemstack);
+			ItemStackSerializer.writeItemStack(serializer, version, itemstack);
 		}
 		return RecyclableSingletonList.create(serializer);
 	}

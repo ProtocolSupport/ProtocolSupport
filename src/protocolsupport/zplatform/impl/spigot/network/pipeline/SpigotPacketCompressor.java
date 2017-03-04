@@ -2,7 +2,8 @@ package protocolsupport.zplatform.impl.spigot.network.pipeline;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.netty.Compressor;
 
 public class SpigotPacketCompressor extends net.minecraft.server.v1_11_R1.PacketCompressor {
@@ -28,11 +29,11 @@ public class SpigotPacketCompressor extends net.minecraft.server.v1_11_R1.Packet
 			return;
 		}
 		if (readable < this.threshold) {
-			ProtocolSupportPacketDataSerializer.writeVarInt(to, 0);
+			VarNumberSerializer.writeVarInt(to, 0);
 			to.writeBytes(from);
 		} else {
-			ProtocolSupportPacketDataSerializer.writeVarInt(to, readable);
-			to.writeBytes(compressor.compress(ProtocolSupportPacketDataSerializer.toArray(from)));
+			VarNumberSerializer.writeVarInt(to, readable);
+			to.writeBytes(compressor.compress(MiscSerializer.readAllBytes(from)));
 		}
 	}
 

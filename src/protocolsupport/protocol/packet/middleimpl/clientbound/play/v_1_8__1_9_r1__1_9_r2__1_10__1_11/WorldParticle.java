@@ -4,6 +4,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldParticle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -27,7 +28,7 @@ public class WorldParticle extends MiddleWorldParticle {
 		serializer.writeFloat(speed);
 		serializer.writeInt(count);
 		for (int additional : adddata) {
-			serializer.writeVarInt(additional);
+			VarNumberSerializer.writeVarInt(serializer, additional);
 		}
 		return RecyclableSingletonList.create(serializer);
 	}

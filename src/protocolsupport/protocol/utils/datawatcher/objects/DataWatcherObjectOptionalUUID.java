@@ -2,8 +2,9 @@ package protocolsupport.protocol.utils.datawatcher.objects;
 
 import java.util.UUID;
 
+import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
+import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 
 public class DataWatcherObjectOptionalUUID extends DataWatcherObject<UUID> {
@@ -17,17 +18,17 @@ public class DataWatcherObjectOptionalUUID extends DataWatcherObject<UUID> {
 	}
 
 	@Override
-	public void readFromStream(ProtocolSupportPacketDataSerializer serializer) {
-		if (serializer.readBoolean()) {
-			value = serializer.readUUID();
+	public void readFromStream(ByteBuf from, ProtocolVersion version) {
+		if (from.readBoolean()) {
+			value = MiscSerializer.readUUID(from);
 		}
 	}
 
 	@Override
-	public void writeToStream(ProtocolSupportPacketDataSerializer serializer) {
-		serializer.writeBoolean(value != null);
+	public void writeToStream(ByteBuf to, ProtocolVersion version) {
+		to.writeBoolean(value != null);
 		if (value != null) {
-			serializer.writeUUID(value);
+			MiscSerializer.writeUUID(to, value);
 		}
 	}
 
