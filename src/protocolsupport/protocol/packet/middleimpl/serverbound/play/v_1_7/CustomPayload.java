@@ -27,7 +27,7 @@ public class CustomPayload extends MiddleCustomPayload {
 		newdata.clear();
 		ByteBuf olddata = Unpooled.wrappedBuffer(ByteArraySerializer.readByteArray(clientdata, version));
 		if (tag.equals("MC|ItemName")) {
-			ByteArraySerializer.writeByteArray(newdata, ProtocolVersion.getLatest(), ByteArraySerializer.readByteArray(olddata, version));
+			ByteArraySerializer.writeByteArray(newdata, ProtocolVersion.getLatest(), olddata);
 		} else if (tag.equals("MC|BSign") || tag.equals("MC|BEdit")) {
 			ItemStackWrapper book = ItemStackSerializer.readItemStack(olddata, version);
 			book.setType(Material.BOOK_AND_QUILL);
