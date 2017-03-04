@@ -1,8 +1,22 @@
+buildscript {
+	dependencies {
+		classpath 'org.jdom:jdom2:2.0.6'
+		classpath 'org.ow2.asm:asm:5.1'
+		classpath 'org.ow2.asm:asm-commons:5.1'
+		classpath 'commons-io:commons-io:2.5'
+		classpath 'org.apache.ant:ant:1.9.7'
+		classpath 'org.codehaus.plexus:plexus-utils:3.0.24'
+		classpath 'org.vafer:jdependency:1.1'
+		classpath files('gradle/plugins/shadowPlugin.jar')
+	}
+}
+
 plugins {
 	id 'java'
 	id 'de.undercouch.download' version '3.1.1'
-	id 'com.github.johnrengelman.shadow' version '1.2.4'
 }
+
+apply plugin: com.github.jengelman.gradle.plugins.shadow.ShadowPlugin
 
 tasks.withType(AbstractCompile) {
 	classpath += configurations.shadow
@@ -29,7 +43,6 @@ task updateGlowstone(type: Download) {
 	overwrite true
 }
 
-compileJava.dependsOn(clean)
 compileJava.dependsOn(updateSpigot, updateGlowstone)
 
 sourceSets {
@@ -58,9 +71,10 @@ shadowJar {
 	from sourceSets.main.allSource
 	from 'LICENSE'
 	from 'src/plugin.yml'
+	minimizeJar = true
 
-	destinationDir = file('build')
-	archiveName = 'ProtocolSupport-all.jar'
+	destinationDir = file('target')
+	archiveName = 'ProtocolSupport.jar'
 
 	exclude 'META-INF/**'
 	relocate 'org.apache', 'protocolsupport.libs.org.apache'
@@ -68,19 +82,5 @@ shadowJar {
 	relocate 'com.google.gson', 'protocolsupport.libs.com.google.gson'
 }
 
-task replaceManifest(type: Zip) {
-	def shadedFile = file('build/ProtocolSupport-all.jar')
-	destinationDir = file('target')
-	archiveName = 'ProtocolSupport.jar'
-	from (zipTree(shadedFile), {
-		filesMatching('META-INF/MANIFEST.MF') {
-			filter {
-				String line -> line.startsWith("Manifest-Version:") ? line : null
-			}
-		}
-    })
-}
-
 jar.enabled = false
 classes.finalizedBy(shadowJar)
-shadowJar.finalizedBy(replaceManifest)
