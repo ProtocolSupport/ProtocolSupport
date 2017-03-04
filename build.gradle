@@ -55,6 +55,7 @@ dependencies {
 }
 
 shadowJar {
+	from sourceSets.main.allSource
 	from 'LICENSE'
 	from 'src/plugin.yml'
 
