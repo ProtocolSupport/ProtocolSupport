@@ -7,7 +7,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class WorldCustomSound extends MiddleWorldCustomSound<RecyclableCollection<ClientBoundPacketData>> {
+public class WorldCustomSound extends MiddleWorldCustomSound {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {

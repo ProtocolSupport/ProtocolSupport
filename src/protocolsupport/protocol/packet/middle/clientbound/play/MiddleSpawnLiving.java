@@ -10,7 +10,7 @@ import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedLiving;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 
-public abstract class MiddleSpawnLiving<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 
 	protected int entityId;
 	protected UUID uuid;

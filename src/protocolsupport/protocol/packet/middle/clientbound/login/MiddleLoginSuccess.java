@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.login;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-public abstract class MiddleLoginSuccess<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleLoginSuccess extends ClientBoundMiddlePacket {
 
 	protected String uuidstring;
 	protected String name;

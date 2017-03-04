@@ -9,7 +9,7 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class EntityEffectAdd extends MiddleEntityEffectAdd<RecyclableCollection<ClientBoundPacketData>> {
+public class EntityEffectAdd extends MiddleEntityEffectAdd {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {

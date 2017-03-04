@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
-public class NoopPlayerListHeaderFooter extends MiddlePlayerListHeaderFooter<RecyclableCollection<ClientBoundPacketData>> {
+public class NoopPlayerListHeaderFooter extends MiddlePlayerListHeaderFooter {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {

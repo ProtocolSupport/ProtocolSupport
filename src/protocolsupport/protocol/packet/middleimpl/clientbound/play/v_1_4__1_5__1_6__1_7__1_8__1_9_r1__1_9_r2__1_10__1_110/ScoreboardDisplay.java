@@ -7,7 +7,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class ScoreboardDisplay extends MiddleScoreboardDisplay<RecyclableCollection<ClientBoundPacketData>> {
+public class ScoreboardDisplay extends MiddleScoreboardDisplay {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {

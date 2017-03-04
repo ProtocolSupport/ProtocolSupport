@@ -8,7 +8,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class SetPassengers extends MiddleSetPassengers<RecyclableCollection<ClientBoundPacketData>> {
+public class SetPassengers extends MiddleSetPassengers {
 
 	private final TIntIntHashMap vehiclePassenger = new TIntIntHashMap();
 	private int passengerId;

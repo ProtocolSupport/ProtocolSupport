@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-public abstract class MiddleInventoryData<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleInventoryData extends ClientBoundMiddlePacket {
 
 	protected int windowId;
 	protected int type;

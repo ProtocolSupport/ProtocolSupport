@@ -13,7 +13,7 @@ import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemap
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
-public class Map extends MiddleMap<RecyclableCollection<ClientBoundPacketData>> {
+public class Map extends MiddleMap {
 
 	@SuppressWarnings("deprecation")
 	private static final int mapId = Material.MAP.getId();

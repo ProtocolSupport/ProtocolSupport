@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-public abstract class MiddleResourcePack<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleResourcePack extends ClientBoundMiddlePacket {
 
 	protected String url;
 	protected String hash;

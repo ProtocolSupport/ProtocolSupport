@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedObject;
 
-public abstract class MiddleSpawnObject<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 
 	protected int entityId;
 	protected UUID uuid;

@@ -4,7 +4,7 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 
-public abstract class MiddleRespawn<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleRespawn extends ClientBoundMiddlePacket {
 
 	protected int dimension;
 	protected int difficulty;

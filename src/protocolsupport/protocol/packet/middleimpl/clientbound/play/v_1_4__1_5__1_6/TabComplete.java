@@ -9,7 +9,7 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class TabComplete extends MiddleTabComplete<RecyclableCollection<ClientBoundPacketData>> {
+public class TabComplete extends MiddleTabComplete {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {

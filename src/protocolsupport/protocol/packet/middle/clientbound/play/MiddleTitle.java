@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-public abstract class MiddleTitle<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleTitle extends ClientBoundMiddlePacket {
 
 	protected Action action;
 	protected String titleJson;

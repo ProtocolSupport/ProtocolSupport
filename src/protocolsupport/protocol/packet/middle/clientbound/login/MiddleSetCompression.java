@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.login;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-public abstract class MiddleSetCompression<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleSetCompression extends ClientBoundMiddlePacket {
 
 	protected int threshold;
 

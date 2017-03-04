@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-public abstract class MiddleEntityTeleport<T> extends MiddleEntity<T> {
+public abstract class MiddleEntityTeleport extends MiddleEntity {
 
 	protected double x;
 	protected double y;

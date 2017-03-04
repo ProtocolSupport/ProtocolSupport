@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-public abstract class MiddleEntityRelMove<T> extends MiddleEntity<T> {
+public abstract class MiddleEntityRelMove extends MiddleEntity {
 
 	protected int relX;
 	protected int relY;

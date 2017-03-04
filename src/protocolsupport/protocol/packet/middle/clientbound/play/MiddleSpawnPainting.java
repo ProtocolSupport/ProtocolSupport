@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.utils.types.Position;
 
-public abstract class MiddleSpawnPainting<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleSpawnPainting extends ClientBoundMiddlePacket {
 
 	protected int entityId;
 	protected UUID uuid;

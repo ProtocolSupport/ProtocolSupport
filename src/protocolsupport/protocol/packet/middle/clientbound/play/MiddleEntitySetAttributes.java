@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-public abstract class MiddleEntitySetAttributes<T> extends MiddleEntity<T> {
+public abstract class MiddleEntitySetAttributes extends MiddleEntity {
 
 	protected final LinkedHashMap<String, Attribute> attributes = new LinkedHashMap<>();
 

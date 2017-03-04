@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-public abstract class MiddleEntityHeadRotation<T> extends MiddleEntity<T> {
+public abstract class MiddleEntityHeadRotation extends MiddleEntity {
 
 	protected byte headRot;
 

@@ -9,7 +9,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
-public class EntityRelMoveLook extends MiddleEntityRelMoveLook<RecyclableCollection<ClientBoundPacketData>> {
+public class EntityRelMoveLook extends MiddleEntityRelMoveLook {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {

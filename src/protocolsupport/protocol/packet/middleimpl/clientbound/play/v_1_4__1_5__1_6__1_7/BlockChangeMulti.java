@@ -9,7 +9,7 @@ import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemap
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class BlockChangeMulti extends MiddleBlockChangeMulti<RecyclableCollection<ClientBoundPacketData>> {
+public class BlockChangeMulti extends MiddleBlockChangeMulti {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {

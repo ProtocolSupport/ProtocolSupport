@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-public abstract class MiddleBlockAction<T> extends MiddleBlock<T> {
+public abstract class MiddleBlockAction extends MiddleBlock {
 
 	protected int info1;
 	protected int info2;

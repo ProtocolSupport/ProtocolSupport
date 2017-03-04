@@ -8,7 +8,7 @@ import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
-public class PlayerInfo extends MiddlePlayerInfo<RecyclableCollection<ClientBoundPacketData>> {
+public class PlayerInfo extends MiddlePlayerInfo {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {

@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-public abstract class MiddleWorldBorder<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleWorldBorder extends ClientBoundMiddlePacket {
 
 	protected Action action;
 	protected double radius;

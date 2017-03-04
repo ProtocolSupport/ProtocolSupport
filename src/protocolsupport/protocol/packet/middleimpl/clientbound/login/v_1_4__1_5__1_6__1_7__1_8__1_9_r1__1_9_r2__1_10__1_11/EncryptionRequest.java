@@ -7,7 +7,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class EncryptionRequest extends MiddleEncryptionRequest<RecyclableCollection<ClientBoundPacketData>> {
+public class EncryptionRequest extends MiddleEncryptionRequest {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {

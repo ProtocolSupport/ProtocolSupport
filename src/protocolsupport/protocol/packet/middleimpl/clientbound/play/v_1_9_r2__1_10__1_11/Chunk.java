@@ -11,7 +11,7 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
-public class Chunk extends MiddleChunk<RecyclableCollection<ClientBoundPacketData>> {
+public class Chunk extends MiddleChunk {
 
 	private final ChunkTransformer transformer = ChunkTransformer.create(BlockFormat.VARIES);
 

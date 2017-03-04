@@ -6,7 +6,7 @@ import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
 
-public abstract class MiddleLogin<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleLogin extends ClientBoundMiddlePacket {
 
 	protected int playerEntityId;
 	protected int gamemode;

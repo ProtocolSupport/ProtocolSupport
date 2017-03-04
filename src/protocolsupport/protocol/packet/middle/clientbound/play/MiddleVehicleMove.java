@@ -4,7 +4,7 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
 //TODO: Find out how and when it is used
-public abstract class MiddleVehicleMove<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleVehicleMove extends ClientBoundMiddlePacket {
 
 	protected double x;
 	protected double y;

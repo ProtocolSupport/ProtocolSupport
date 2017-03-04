@@ -8,7 +8,7 @@ import protocolsupport.protocol.utils.pingresponse.PingResponse;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class ServerInfo extends MiddleServerInfo<RecyclableCollection<ClientBoundPacketData>> {
+public class ServerInfo extends MiddleServerInfo {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {

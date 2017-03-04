@@ -10,7 +10,7 @@ import protocolsupport.protocol.utils.types.Particle;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class WorldParticle extends MiddleWorldParticle<RecyclableCollection<ClientBoundPacketData>> {
+public class WorldParticle extends MiddleWorldParticle {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {

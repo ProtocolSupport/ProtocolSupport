@@ -4,7 +4,7 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
-public abstract class MiddleEntityEquipment<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleEntityEquipment extends ClientBoundMiddlePacket {
 
 	protected int entityId;
 	protected int slot;

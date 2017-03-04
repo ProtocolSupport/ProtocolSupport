@@ -4,7 +4,7 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.utils.types.WindowType;
 
-public abstract class MiddleInventoryOpen<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 
 	protected int windowId;
 	protected String invname;

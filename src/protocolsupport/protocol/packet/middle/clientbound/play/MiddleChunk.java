@@ -4,7 +4,7 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
-public abstract class MiddleChunk<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 
 	protected int chunkX;
 	protected int chunkZ;

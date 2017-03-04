@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.login;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-public abstract class MiddleEncryptionRequest<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleEncryptionRequest extends ClientBoundMiddlePacket {
 
 	protected String serverId;
 	protected byte[] publicKey;

@@ -4,7 +4,7 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.utils.types.Position;
 
-public abstract class MiddleWorldEvent<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleWorldEvent extends ClientBoundMiddlePacket {
 
 	protected int effectId;
 	protected Position position;

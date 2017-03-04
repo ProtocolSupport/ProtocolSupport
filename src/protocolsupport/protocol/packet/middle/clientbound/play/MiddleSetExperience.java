@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-public abstract class MiddleSetExperience<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleSetExperience extends ClientBoundMiddlePacket {
 
 	protected float exp;
 	protected int level;

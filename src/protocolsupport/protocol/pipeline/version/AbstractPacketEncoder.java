@@ -32,7 +32,7 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 		varintPacketId = connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_1_7_5);
 	}
 
-	protected final MiddleTransformerRegistry<ClientBoundMiddlePacket<RecyclableCollection<ClientBoundPacketData>>> registry = new MiddleTransformerRegistry<>();
+	protected final MiddleTransformerRegistry<ClientBoundMiddlePacket> registry = new MiddleTransformerRegistry<>();
 
 	private final ProtocolSupportPacketDataSerializer middlebuffer = new ProtocolSupportPacketDataSerializer(null, ProtocolVersion.getLatest());
 	private final boolean varintPacketId;
@@ -45,7 +45,7 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 		NetworkState currentProtocol = ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(ctx.channel());
 		middlebuffer.setBuf(packet);
 		int packetId = middlebuffer.readVarInt();
-		ClientBoundMiddlePacket<RecyclableCollection<ClientBoundPacketData>> packetTransformer = registry.getTransformer(currentProtocol, packetId);
+		ClientBoundMiddlePacket packetTransformer = registry.getTransformer(currentProtocol, packetId);
 		packetTransformer.readFromServerData(middlebuffer);
 		packetTransformer.handle();
 		try (RecyclableCollection<ClientBoundPacketData> data = packetTransformer.toData(connection.getVersion())) {

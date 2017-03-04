@@ -8,7 +8,7 @@ import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class ScoreboardTeam extends MiddleScoreboardTeam<RecyclableCollection<ClientBoundPacketData>> {
+public class ScoreboardTeam extends MiddleScoreboardTeam {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {

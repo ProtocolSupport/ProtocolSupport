@@ -8,7 +8,7 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 
-public abstract class MiddlePlayerInfo<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddlePlayerInfo extends ClientBoundMiddlePacket {
 
 	protected Action action;
 	protected Info[] infos;

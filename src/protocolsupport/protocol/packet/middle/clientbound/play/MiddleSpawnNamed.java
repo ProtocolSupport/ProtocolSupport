@@ -14,7 +14,7 @@ import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 
-public abstract class MiddleSpawnNamed<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 
 	protected int playerEntityId;
 	protected UUID uuid;

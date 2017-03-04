@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
-public class NoopServerDifficulty extends MiddleServerDifficulty<RecyclableCollection<ClientBoundPacketData>> {
+public class NoopServerDifficulty extends MiddleServerDifficulty {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {

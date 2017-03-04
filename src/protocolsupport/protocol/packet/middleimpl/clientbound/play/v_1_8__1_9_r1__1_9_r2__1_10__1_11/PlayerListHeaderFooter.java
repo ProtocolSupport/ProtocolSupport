@@ -7,7 +7,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class PlayerListHeaderFooter extends MiddlePlayerListHeaderFooter<RecyclableCollection<ClientBoundPacketData>> {
+public class PlayerListHeaderFooter extends MiddlePlayerListHeaderFooter {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {

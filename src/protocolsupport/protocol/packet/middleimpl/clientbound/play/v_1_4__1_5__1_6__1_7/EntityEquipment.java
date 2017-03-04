@@ -8,7 +8,7 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class EntityEquipment extends MiddleEntityEquipment<RecyclableCollection<ClientBoundPacketData>> {
+public class EntityEquipment extends MiddleEntityEquipment {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {

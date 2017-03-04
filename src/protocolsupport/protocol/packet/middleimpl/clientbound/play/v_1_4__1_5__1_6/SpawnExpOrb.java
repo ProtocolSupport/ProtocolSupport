@@ -7,7 +7,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class SpawnExpOrb extends MiddleSpawnExpOrb<RecyclableCollection<ClientBoundPacketData>> {
+public class SpawnExpOrb extends MiddleSpawnExpOrb {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {

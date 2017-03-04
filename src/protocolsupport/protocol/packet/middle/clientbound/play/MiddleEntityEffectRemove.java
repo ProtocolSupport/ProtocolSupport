@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-public abstract class MiddleEntityEffectRemove<T> extends MiddleEntity<T> {
+public abstract class MiddleEntityEffectRemove extends MiddleEntity {
 
 	protected int effectId;
 

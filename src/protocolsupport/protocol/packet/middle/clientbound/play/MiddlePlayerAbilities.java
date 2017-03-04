@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-public abstract class MiddlePlayerAbilities<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddlePlayerAbilities extends ClientBoundMiddlePacket {
 
 	protected int flags;
 	protected float flyspeed;

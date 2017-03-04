@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-public abstract class MiddleBlockChangeMulti<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {
 
 	protected int chunkX;
 	protected int chunkZ;

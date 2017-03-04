@@ -5,7 +5,7 @@ import org.bukkit.Location;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-public abstract class MiddlePosition<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddlePosition extends ClientBoundMiddlePacket {
 
 	protected double xOrig;
 	protected double yOrig;

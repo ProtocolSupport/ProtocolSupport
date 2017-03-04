@@ -7,7 +7,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class EntityHeadRotation extends MiddleEntityHeadRotation<RecyclableCollection<ClientBoundPacketData>> {
+public class EntityHeadRotation extends MiddleEntityHeadRotation {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {

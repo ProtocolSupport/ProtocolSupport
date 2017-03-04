@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
-public abstract class MiddleBlockTileUpdate<T> extends MiddleBlock<T> {
+public abstract class MiddleBlockTileUpdate extends MiddleBlock {
 
 	protected int type;
 	protected NBTTagCompoundWrapper tag;

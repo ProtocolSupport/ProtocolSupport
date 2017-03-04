@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-public abstract class MiddleWorldParticle<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleWorldParticle extends ClientBoundMiddlePacket {
 
 	protected int type;
 	protected boolean longdist;

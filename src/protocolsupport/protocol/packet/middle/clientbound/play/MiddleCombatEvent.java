@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-public abstract class MiddleCombatEvent<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleCombatEvent extends ClientBoundMiddlePacket {
 
 	protected Type type;
 	protected int duration;

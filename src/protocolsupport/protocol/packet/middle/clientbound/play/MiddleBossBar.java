@@ -5,7 +5,7 @@ import java.util.UUID;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-public abstract class MiddleBossBar<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleBossBar extends ClientBoundMiddlePacket {
 
 	protected UUID uuid;
 	protected Action action;

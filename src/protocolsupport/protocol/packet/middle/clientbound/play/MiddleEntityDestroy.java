@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-public abstract class MiddleEntityDestroy<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleEntityDestroy extends ClientBoundMiddlePacket {
 
 	protected int[] entityIds;
 

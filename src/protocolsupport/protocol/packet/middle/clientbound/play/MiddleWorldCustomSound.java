@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-public abstract class MiddleWorldCustomSound<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleWorldCustomSound extends ClientBoundMiddlePacket {
 
 	protected String id;
 	protected int category;

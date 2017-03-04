@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-public abstract class MiddleCustomPayload<T> extends ClientBoundMiddlePacket<T> {
+public abstract class MiddleCustomPayload extends ClientBoundMiddlePacket {
 
 	protected String tag;
 	protected ProtocolSupportPacketDataSerializer data;

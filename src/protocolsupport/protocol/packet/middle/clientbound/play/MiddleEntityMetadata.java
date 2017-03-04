@@ -5,7 +5,7 @@ import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 
-public abstract class MiddleEntityMetadata<T> extends MiddleEntity<T> {
+public abstract class MiddleEntityMetadata extends MiddleEntity {
 
 	protected TIntObjectMap<DataWatcherObject<?>> metadata;
 

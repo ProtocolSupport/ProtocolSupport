@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import protocolsupport.protocol.serializer.ProtocolSupportPacketDataSerializer;
 
-public abstract class MiddleEntityEffectAdd<T> extends MiddleEntity<T> {
+public abstract class MiddleEntityEffectAdd extends MiddleEntity {
 
 	protected int effectId;
 	protected int amplifier;
