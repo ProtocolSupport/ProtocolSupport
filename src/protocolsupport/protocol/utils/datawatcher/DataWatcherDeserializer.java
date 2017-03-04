@@ -8,6 +8,7 @@ import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBlockState;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;
@@ -49,7 +50,7 @@ public class DataWatcherDeserializer {
 
 	private static void register(Class<? extends DataWatcherObject<?>> clazz) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		Constructor<? extends DataWatcherObject<?>> constr = clazz.getConstructor();
-		registry[constr.newInstance().getTypeId(ProtocolVersion.getLatest())] = constr;
+		registry[constr.newInstance().getTypeId(ProtocolVersion.getLatest(ProtocolType.PC))] = constr;
 	}
 
 	public static TIntObjectMap<DataWatcherObject<?>> decodeData(ByteBuf from, ProtocolVersion version) {

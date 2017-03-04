@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
@@ -26,7 +27,7 @@ public abstract class MiddleInventoryClick extends ServerBoundMiddlePacket {
 		creator.writeByte(button);
 		creator.writeShort(actionNumber);
 		creator.writeByte(mode);
-		ItemStackSerializer.writeItemStack(creator, ProtocolVersion.getLatest(), itemstack);
+		ItemStackSerializer.writeItemStack(creator, ProtocolVersion.getLatest(ProtocolType.PC), itemstack);
 		return RecyclableSingletonList.create(creator);
 	}
 

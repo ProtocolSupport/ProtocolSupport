@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -18,7 +19,7 @@ public abstract class MiddleRespawn extends ClientBoundMiddlePacket {
 		dimension = IdRemapper.fixDimensionId(serverdata.readInt());
 		difficulty = serverdata.readByte();
 		gamemode = serverdata.readByte();
-		leveltype = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(), 16);
+		leveltype = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(ProtocolType.PC), 16);
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
@@ -19,7 +20,7 @@ public abstract class MiddleTabComplete extends ServerBoundMiddlePacket {
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_TAB_COMPLETE);
-		StringSerializer.writeString(creator, ProtocolVersion.getLatest(), string);
+		StringSerializer.writeString(creator, ProtocolVersion.getLatest(ProtocolType.PC), string);
 		creator.writeBoolean(assumecommand);
 		if (position != null) {
 			creator.writeBoolean(true);

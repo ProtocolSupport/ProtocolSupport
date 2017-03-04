@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_1_6;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
@@ -30,8 +31,8 @@ public class Ping extends ServerBoundMiddlePacket {
 	public RecyclableCollection<ServerBoundPacketData> toNative()  {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 		ServerBoundPacketData hsscreator = ServerBoundPacketData.create(ServerBoundPacket.HANDSHAKE_START);
-		VarNumberSerializer.writeVarInt(hsscreator, ProtocolVersion.getLatest().getId());
-		StringSerializer.writeString(hsscreator, ProtocolVersion.getLatest(), hostname);
+		VarNumberSerializer.writeVarInt(hsscreator, ProtocolVersion.getLatest(ProtocolType.PC).getId());
+		StringSerializer.writeString(hsscreator, ProtocolVersion.getLatest(ProtocolType.PC), hostname);
 		hsscreator.writeShort(port);
 		VarNumberSerializer.writeVarInt(hsscreator, 1);
 		packets.add(hsscreator);

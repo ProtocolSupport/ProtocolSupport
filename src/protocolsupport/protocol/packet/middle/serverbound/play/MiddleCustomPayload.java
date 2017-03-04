@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
@@ -16,7 +17,7 @@ public abstract class MiddleCustomPayload extends ServerBoundMiddlePacket {
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_CUSTOM_PAYLOAD);
-		StringSerializer.writeString(creator, ProtocolVersion.getLatest(), tag);
+		StringSerializer.writeString(creator, ProtocolVersion.getLatest(ProtocolType.PC), tag);
 		creator.writeBytes(data);
 		return RecyclableSingletonList.create(creator);
 	}

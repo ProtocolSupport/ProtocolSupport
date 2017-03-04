@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.login;
 
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
@@ -15,7 +16,7 @@ public abstract class MiddleLoginStart extends ServerBoundMiddlePacket {
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.LOGIN_START);
-		StringSerializer.writeString(creator, ProtocolVersion.getLatest(), name);
+		StringSerializer.writeString(creator, ProtocolVersion.getLatest(ProtocolType.PC), name);
 		return RecyclableSingletonList.create(creator);
 	}
 

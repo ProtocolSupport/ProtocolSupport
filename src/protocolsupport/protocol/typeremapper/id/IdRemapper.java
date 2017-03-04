@@ -131,6 +131,7 @@ public class IdRemapper {
 		}
 	};
 
+	@SuppressWarnings("deprecation")
 	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> ENTITY_LIVING = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
 		final class Mapping {
 			private final EntityType from;
@@ -213,7 +214,6 @@ public class IdRemapper {
 			.addMapping(EntityType.COW, ProtocolVersionsHelper.BEFORE_1_6)
 			.register();
 		}
-		@SuppressWarnings("deprecation")
 		private void registerRemapEntry(EntityType from, EntityType to, ProtocolVersion... versions) {
 			registerRemapEntry(from.getTypeId(), to.getTypeId(), versions);
 		}
