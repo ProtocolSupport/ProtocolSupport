@@ -63,7 +63,7 @@ public enum ProtocolVersion {
 	/**
 	 * Returns the user friendly version name
 	 * Notice: This name can change, so it shouldn't be used as a key anywhere
-	 * @return 
+	 * @return
 	 */
 	public String getName() {
 		return name;
@@ -254,7 +254,7 @@ public enum ProtocolVersion {
 	/**
 	 * Returns latest supported protocol version for {@link ProtocolType} PC
 	 * @return latest supported protocol version for {@link ProtocolType} PC
-	 * @deprecated 
+	 * @deprecated
 	 */
 	@Deprecated
 	public static ProtocolVersion getLatest() {

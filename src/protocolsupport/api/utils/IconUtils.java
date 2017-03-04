@@ -17,14 +17,32 @@ import protocolsupport.zplatform.ServerPlatform;
 
 public class IconUtils {
 
+	/**
+	 * Loads icon to base64 form from {@link File}
+	 * @param file file
+	 * @return base64 icon
+	 * @throws IOException
+	 */
 	public static String loadIcon(File file) throws IOException {
 		return loadIcon(new FileInputStream(file));
 	}
 
+	/**
+	 * Loads icon to base64 form from {@link InputStream}
+	 * @param file file
+	 * @return base64 icon
+	 * @throws IOException
+	 */
 	public static String loadIcon(InputStream rawStream) throws IOException {
 		return loadIcon(ImageIO.read(rawStream));
 	}
 
+	/**
+	 * Converts icon to base64 from {@link BufferedImage}
+	 * @param file file
+	 * @return base64 icon
+	 * @throws IOException
+	 */
 	public static String loadIcon(BufferedImage image) throws IOException {
 		Validate.isTrue(image.getWidth() == 64, "Must be 64 pixels wide");
 		Validate.isTrue(image.getHeight() == 64, "Must be 64 pixels high");
@@ -33,6 +51,11 @@ public class IconUtils {
 		return "data:image/png;base64," + Base64.getEncoder().encodeToString(data.toByteArray());
 	}
 
+	/**
+	 * Converts icon to base64 form from bukit {@link CachedServerIcon}
+	 * @param icon
+	 * @return
+	 */
 	public static String fromBukkit(CachedServerIcon icon) {
 		return ServerPlatform.get().getMiscUtils().convertBukkitIconToBase64(icon);
 	}
