@@ -10,6 +10,7 @@ import protocolsupport.api.Connection;
 import protocolsupport.protocol.legacyremapper.LegacyAnimatePacketReorderer;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.utils.netty.ReplayingDecoderBuffer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
 import protocolsupport.zplatform.ServerPlatform;
 
@@ -19,7 +20,8 @@ public class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
 		super(connection, storage);
 	}
 
-	private final ByteBuf cumulation = Unpooled.buffer();
+	private final ByteBuf buffer = Unpooled.buffer();
+	private final ReplayingDecoderBuffer cumulation = new ReplayingDecoderBuffer(buffer);
 	private final LegacyAnimatePacketReorderer animateReorderer = new LegacyAnimatePacketReorderer();
 
 	@Override
@@ -27,13 +29,13 @@ public class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
 		if (!input.isReadable()) {
 			return;
 		}
-		cumulation.writeBytes(input);
-		while (cumulation.isReadable()) {
+		buffer.writeBytes(input);
+		while (buffer.isReadable()) {
 			if (!decode0(ctx.channel(), list)) {
 				break;
 			}
 		}
-		cumulation.discardSomeReadBytes();
+		buffer.discardSomeReadBytes();
 	}
 
 	private boolean decode0(Channel channel, List<Object> list) throws InstantiationException, IllegalAccessException {

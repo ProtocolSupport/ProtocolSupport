@@ -28,7 +28,7 @@ public final class ReplayingDecoderBuffer extends ByteBuf {
 		this.buffer = buffer;
 	}
 
-	public void setCumulation(final ByteBuf buffer) {
+	public void setBuf(ByteBuf buffer) {
 		this.buffer = buffer;
 	}
 
