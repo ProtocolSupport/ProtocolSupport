@@ -1,4 +1,4 @@
-package protocolsupport.zmcpe.packetsimpl.clientbound;
+package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCustomPayload;

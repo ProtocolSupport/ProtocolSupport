@@ -1,4 +1,4 @@
-package protocolsupport.zmcpe.pipeline;
+package protocolsupport.protocol.pipeline.version.v_pe;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.Connection;
@@ -6,18 +6,18 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSuccess;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Chat;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Chunk;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.CustomPayload;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.KickDisconnect;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Login;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Position;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SetHealth;
 import protocolsupport.protocol.pipeline.version.AbstractPacketEncoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
-import protocolsupport.zmcpe.packetsimpl.clientbound.Chat;
-import protocolsupport.zmcpe.packetsimpl.clientbound.Chunk;
-import protocolsupport.zmcpe.packetsimpl.clientbound.CustomPayload;
-import protocolsupport.zmcpe.packetsimpl.clientbound.KickDisconnect;
-import protocolsupport.zmcpe.packetsimpl.clientbound.Login;
-import protocolsupport.zmcpe.packetsimpl.clientbound.LoginSuccess;
-import protocolsupport.zmcpe.packetsimpl.clientbound.Position;
-import protocolsupport.zmcpe.packetsimpl.clientbound.SetHealth;
 import protocolsupport.zplatform.network.NetworkState;
 
 public class PEPacketEncoder extends AbstractPacketEncoder {

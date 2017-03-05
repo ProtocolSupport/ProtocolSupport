@@ -1,4 +1,4 @@
-package protocolsupport.zmcpe.packetsimpl.serverbound;
+package protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_pe;
 
 import java.io.ByteArrayInputStream;
 import java.util.Base64;
@@ -21,9 +21,9 @@ import protocolsupport.protocol.serializer.ByteArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.JsonUtils;
+import protocolsupport.utils.netty.Decompressor;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.zmcpe.pipeline.Decompressor;
 
 public class ClientLogin extends ServerBoundMiddlePacket {
 

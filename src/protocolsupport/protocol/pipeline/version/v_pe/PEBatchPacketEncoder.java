@@ -1,14 +1,14 @@
-package protocolsupport.zmcpe.pipeline;
+package protocolsupport.protocol.pipeline.version.v_pe;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.packet.PEPacketIDs;
 import protocolsupport.protocol.serializer.ByteArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
-import protocolsupport.zmcpe.packetsimpl.PEPacketIDs;
 import protocolsupport.zplatform.ServerPlatform;
 
 public class PEBatchPacketEncoder extends MessageToByteEncoder<ByteBuf> {

@@ -26,8 +26,8 @@ import protocolsupport.protocol.utils.data.SoundData;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
-import protocolsupport.zmcpe.core.MCPEServer;
 import protocolsupport.zplatform.ServerPlatform;
+import protocolsupport.zplatform.pe.MCPEServer;
 
 public class ProtocolSupport extends JavaPlugin {
 

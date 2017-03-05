@@ -1,4 +1,4 @@
-package protocolsupport.zmcpe.packetsimpl;
+package protocolsupport.protocol.packet;
 
 public class PEPacketIDs {
 

@@ -1,4 +1,4 @@
-package protocolsupport.zmcpe.pipeline;
+package protocolsupport.protocol.pipeline.version.v_pe;
 
 import java.util.List;
 
@@ -7,8 +7,9 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.packet.PEPacketIDs;
 import protocolsupport.protocol.serializer.ByteArraySerializer;
-import protocolsupport.zmcpe.packetsimpl.PEPacketIDs;
+import protocolsupport.utils.netty.Decompressor;
 
 public class PEBatchPacketDecoder extends MessageToMessageDecoder<ByteBuf> {
 

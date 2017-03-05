@@ -1,4 +1,4 @@
-package protocolsupport.zmcpe.packetsimpl.serverbound;
+package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;

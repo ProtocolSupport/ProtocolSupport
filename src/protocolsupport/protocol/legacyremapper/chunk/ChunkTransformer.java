@@ -7,7 +7,6 @@ import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.Utils;
-import protocolsupport.zmcpe.packetsimpl.ChunkTransformerPE;
 
 public abstract class ChunkTransformer {
 
@@ -87,9 +86,9 @@ public abstract class ChunkTransformer {
 			}
 		}
 
-		public final BlockStorageReader blockdata;
-		public final byte[] blocklight = new byte[2048];
-		public final byte[] skylight = new byte[2048];
+		protected final BlockStorageReader blockdata;
+		protected final byte[] blocklight = new byte[2048];
+		protected final byte[] skylight = new byte[2048];
 
 		public ChunkSection(ByteBuf datastream, boolean hasSkyLight) {
 			byte bitsPerBlock = datastream.readByte();

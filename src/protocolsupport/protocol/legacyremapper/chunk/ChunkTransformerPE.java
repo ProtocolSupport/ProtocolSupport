@@ -1,9 +1,8 @@
-package protocolsupport.zmcpe.packetsimpl;
+package protocolsupport.protocol.legacyremapper.chunk;
 
 import java.io.ByteArrayOutputStream;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.legacyremapper.chunk.ChunkTransformer;
 
 public class ChunkTransformerPE extends ChunkTransformer {
 

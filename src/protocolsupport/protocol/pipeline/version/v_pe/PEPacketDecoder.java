@@ -1,4 +1,4 @@
-package protocolsupport.zmcpe.pipeline;
+package protocolsupport.protocol.pipeline.version.v_pe;
 
 import java.util.List;
 
@@ -7,16 +7,17 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.packet.PEPacketIDs;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_pe.ClientLogin;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PlayerAction;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PositionLook;
 import protocolsupport.protocol.pipeline.version.AbstractPacketDecoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
-import protocolsupport.zmcpe.packetsimpl.PEPacketIDs;
-import protocolsupport.zmcpe.packetsimpl.serverbound.ClientLogin;
-import protocolsupport.zmcpe.packetsimpl.serverbound.PlayerAction;
-import protocolsupport.zmcpe.packetsimpl.serverbound.PositionLook;
+import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkState;
 
 public class PEPacketDecoder extends AbstractPacketDecoder {
@@ -25,7 +26,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		for (int i = 0; i < 255; i++) {
 			registry.register(NetworkState.PLAY, i, Noop.class);
 		}
-		registry.register(NetworkState.PLAY, PEPacketIDs.LOGIN, ClientLogin.class);
+		registry.register(NetworkState.HANDSHAKING, PEPacketIDs.LOGIN, ClientLogin.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.PLAYER_MOVE, PositionLook.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.PLAYER_ACTION, PlayerAction.class);
 	}
@@ -39,7 +40,10 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		if (!input.isReadable()) {
 			return;
 		}
-		ServerBoundMiddlePacket packetTransformer = registry.getTransformer(NetworkState.PLAY, input.readUnsignedByte());
+		ServerBoundMiddlePacket packetTransformer = registry.getTransformer(
+			ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(ctx.channel()),
+			input.readUnsignedByte()
+		);
 		packetTransformer.readFromClientData(input, connection.getVersion());
 		if (input.isReadable()) {
 			throw new DecoderException("Did not read all data from packet " + packetTransformer.getClass().getName() + ", bytes left: " + input.readableBytes());

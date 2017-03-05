@@ -1,4 +1,4 @@
-package protocolsupport.zmcpe.core;
+package protocolsupport.zplatform.pe;
 
 import java.net.InetSocketAddress;
 import java.util.List;
@@ -14,13 +14,13 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.common.LogicHandler;
 import protocolsupport.protocol.pipeline.timeout.SimpleReadTimeoutHandler;
+import protocolsupport.protocol.pipeline.version.v_pe.PEBatchPacketDecoder;
+import protocolsupport.protocol.pipeline.version.v_pe.PEBatchPacketEncoder;
+import protocolsupport.protocol.pipeline.version.v_pe.PEPacketDecoder;
+import protocolsupport.protocol.pipeline.version.v_pe.PEPacketEncoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.utils.ReflectionUtils;
-import protocolsupport.zmcpe.pipeline.PEBatchPacketDecoder;
-import protocolsupport.zmcpe.pipeline.PEBatchPacketEncoder;
-import protocolsupport.zmcpe.pipeline.PEPacketDecoder;
-import protocolsupport.zmcpe.pipeline.PEPacketEncoder;
 import protocolsupport.zplatform.impl.spigot.SpigotConnectionImpl;
 import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
 import protocolsupport.zplatform.impl.spigot.network.SpigotChannelHandlers;
