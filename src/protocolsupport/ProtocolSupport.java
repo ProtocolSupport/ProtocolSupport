@@ -1,6 +1,7 @@
 package protocolsupport;
 
 import java.text.MessageFormat;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -58,7 +59,7 @@ public class ProtocolSupport extends JavaPlugin {
 			BlockStorageReader.init();
 			ServerPlatform.get().inject();
 		} catch (Throwable t) {
-			t.printStackTrace();
+			getLogger().log(Level.SEVERE, "Error when loading, make sure you are using supported server version", t);
 			Bukkit.shutdown();
 		}
 	}
