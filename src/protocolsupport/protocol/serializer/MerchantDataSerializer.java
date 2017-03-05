@@ -1,6 +1,7 @@
 package protocolsupport.protocol.serializer;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.utils.types.MerchantData;
 import protocolsupport.protocol.utils.types.MerchantData.TradeOffer;
@@ -22,7 +23,7 @@ public class MerchantDataSerializer {
 			boolean disabled = from.readBoolean();
 			int uses = 0;
 			int maxuses = 7;
-			if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8)) {
+			if (isUsingUsesCount(version)) {
 				uses = from.readInt();
 				maxuses = from.readInt();
 			}
@@ -42,11 +43,15 @@ public class MerchantDataSerializer {
 				ItemStackSerializer.writeItemStack(to, version, offer.getItemStack2());
 			}
 			to.writeBoolean(offer.isDisabled());
-			if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8)) {
+			if (isUsingUsesCount(version)) {
 				to.writeInt(offer.getUses());
 				to.writeInt(offer.getMaxUses());
 			}
 		}
+	}
+
+	private static boolean isUsingUsesCount(ProtocolVersion version) {
+		return (version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
 	}
 
 }

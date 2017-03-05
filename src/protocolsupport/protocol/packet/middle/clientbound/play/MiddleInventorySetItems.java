@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import java.util.ArrayList;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
@@ -19,7 +20,7 @@ public abstract class MiddleInventorySetItems extends ClientBoundMiddlePacket {
 		int count = serverdata.readShort();
 		itemstacks.clear();
 		for (int i = 0; i < count; i++) {
-			itemstacks.add(ItemStackSerializer.readItemStack(serverdata, ProtocolVersion.getLatest()));
+			itemstacks.add(ItemStackSerializer.readItemStack(serverdata, ProtocolVersion.getLatest(ProtocolType.PC)));
 		}
 	}
 

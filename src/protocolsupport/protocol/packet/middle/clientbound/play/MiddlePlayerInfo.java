@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
@@ -26,21 +27,21 @@ public abstract class MiddlePlayerInfo extends ClientBoundMiddlePacket {
 			info.uuid = MiscSerializer.readUUID(serverdata);
 			switch (action) {
 				case ADD: {
-					info.username = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(), 16);
+					info.username = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(ProtocolType.PC), 16);
 					info.properties = new ProfileProperty[VarNumberSerializer.readVarInt(serverdata)];
 					for (int j = 0; j < info.properties.length; j++) {
-						String name = StringSerializer.readString(serverdata, ProtocolVersion.getLatest());
-						String value = StringSerializer.readString(serverdata, ProtocolVersion.getLatest());
+						String name = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(ProtocolType.PC));
+						String value = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(ProtocolType.PC));
 						String signature = null;
 						if (serverdata.readBoolean()) {
-							signature = StringSerializer.readString(serverdata, ProtocolVersion.getLatest());
+							signature = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(ProtocolType.PC));
 						}
 						info.properties[j] = new ProfileProperty(name, value, signature);
 					}
 					info.gamemode = VarNumberSerializer.readVarInt(serverdata);
 					info.ping = VarNumberSerializer.readVarInt(serverdata);
 					if (serverdata.readBoolean()) {
-						info.displayNameJson = StringSerializer.readString(serverdata, ProtocolVersion.getLatest());
+						info.displayNameJson = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(ProtocolType.PC));
 					}
 					break;
 				}
@@ -54,7 +55,7 @@ public abstract class MiddlePlayerInfo extends ClientBoundMiddlePacket {
 				}
 				case DISPLAY_NAME: {
 					if (serverdata.readBoolean()) {
-						info.displayNameJson = StringSerializer.readString(serverdata, ProtocolVersion.getLatest());
+						info.displayNameJson = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(ProtocolType.PC));
 					}
 					break;
 				}

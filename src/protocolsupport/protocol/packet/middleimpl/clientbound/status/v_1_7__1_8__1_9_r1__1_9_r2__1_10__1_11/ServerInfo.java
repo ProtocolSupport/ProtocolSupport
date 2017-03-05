@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.status.v_1_7__1_8__1_9_r1__1_9_r2__1_10__1_11;
 
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.status.MiddleServerInfo;
@@ -15,7 +16,7 @@ public class ServerInfo extends MiddleServerInfo {
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.STATUS_SERVER_INFO_ID, version);
 		PingResponse ping = PingResponse.fromJson(pingJson);
-		if (ping.getProtocolData().getVersion() == ProtocolVersion.getLatest().getId()) {
+		if (ping.getProtocolData().getVersion() == ProtocolVersion.getLatest(ProtocolType.PC).getId()) {
 			ping.getProtocolData().setVersion(version.getId());
 		}
 		StringSerializer.writeString(serializer, version, PingResponse.toJson(ping));

@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
@@ -18,7 +19,7 @@ public abstract class MiddleCreativeSetSlot extends ServerBoundMiddlePacket {
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_CREATIVE_SET_SLOT);
 		creator.writeShort(slot);
-		ItemStackSerializer.writeItemStack(creator, ProtocolVersion.getLatest(), itemstack);
+		ItemStackSerializer.writeItemStack(creator, ProtocolVersion.getLatest(ProtocolType.PC), itemstack);
 		return RecyclableSingletonList.create(creator);
 	}
 

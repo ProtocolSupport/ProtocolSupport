@@ -31,9 +31,9 @@ import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
+@SuppressWarnings("deprecation")
 public class ItemStackRemapper {
 
-	@SuppressWarnings("deprecation")
 	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> ITEM_ID_REMAPPING_REGISTRY = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
 		{
 			for (ProtocolVersion version : ProtocolVersion.values()) {
@@ -123,7 +123,6 @@ public class ItemStackRemapper {
 //		registerRemapper(serverbound_remapper_registry, material, transformer, versions);
 //	}
 
-	@SuppressWarnings("deprecation")
 	private static void registerRemapper(TIntObjectHashMap<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>> registry, Material material, ItemStackSpecificRemapper transformer, ProtocolVersion... versions) {
 		EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>> map = Utils.getOrCreateDefault(
 			new TIntObjectMapDecorator<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>>(clientbound_remapper_registry),

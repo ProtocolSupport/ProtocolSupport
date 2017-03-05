@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -15,7 +16,7 @@ public abstract class MiddleStatistics extends ClientBoundMiddlePacket {
 		statistics = new Statistic[VarNumberSerializer.readVarInt(serverdata)];
 		for (int i = 0; i < statistics.length; i++) {
 			Statistic stat = new Statistic();
-			stat.name = StringSerializer.readString(serverdata, ProtocolVersion.getLatest());
+			stat.name = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(ProtocolType.PC));
 			stat.value = VarNumberSerializer.readVarInt(serverdata);
 			statistics[i] = stat;
 		}

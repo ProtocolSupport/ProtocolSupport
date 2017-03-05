@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
@@ -21,7 +22,7 @@ public abstract class MiddleClientSettings extends ServerBoundMiddlePacket {
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_SETTINGS);
-		StringSerializer.writeString(creator, ProtocolVersion.getLatest(), locale);
+		StringSerializer.writeString(creator, ProtocolVersion.getLatest(ProtocolType.PC), locale);
 		creator.writeByte(viewDist);
 		VarNumberSerializer.writeVarInt(creator, chatMode);
 		creator.writeBoolean(chatColors);

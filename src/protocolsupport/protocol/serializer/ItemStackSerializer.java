@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.MessageFormat;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -15,6 +16,7 @@ import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ItemStackWriteEvent;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
@@ -54,7 +56,7 @@ public class ItemStackSerializer {
 
 	public static NBTTagCompoundWrapper readTag(ByteBuf from, ProtocolVersion version) {
 		try {
-			if (version.isBefore(ProtocolVersion.MINECRAFT_1_8)) {
+			if (isUsingShortLengthNBT(version)) {
 				final short length = from.readShort();
 				if (length < 0) {
 					return ServerPlatform.get().getWrapperFactory().createNullNBTCompound();
@@ -62,7 +64,7 @@ public class ItemStackSerializer {
 				try (InputStream inputstream = new GZIPInputStream(new ByteBufInputStream(from.readSlice(length)))) {
 					return ServerPlatform.get().getWrapperFactory().createNBTCompoundFromStream(inputstream);
 				}
-			} else {
+			} else if (isUsingDirectOrZeroIfNoneNBT(version)) {
 				from.markReaderIndex();
 				if (from.readByte() == 0) {
 					return ServerPlatform.get().getWrapperFactory().createNullNBTCompound();
@@ -71,6 +73,8 @@ public class ItemStackSerializer {
 				try (DataInputStream datainputstream = new DataInputStream(new ByteBufInputStream(from))) {
 					return ServerPlatform.get().getWrapperFactory().createNBTCompoundFromStream(datainputstream);
 				}
+			} else {
+				throw new IllegalArgumentException(MessageFormat.format("Don't know how to read nbt of version {0}", version));
 			}
 		} catch (IOException e) {
 			throw new DecoderException(e);
@@ -79,7 +83,7 @@ public class ItemStackSerializer {
 
 	public static void writeTag(ByteBuf to, ProtocolVersion version, NBTTagCompoundWrapper tag) {
 		try {
-			if (version.isBefore(ProtocolVersion.MINECRAFT_1_8)) {
+			if (isUsingShortLengthNBT(version)) {
 				if (tag.isNull()) {
 					to.writeShort(-1);
 				} else {
@@ -93,7 +97,7 @@ public class ItemStackSerializer {
 					//now replace fake length with real length
 					to.setShort(writerIndex, to.writerIndex() - writerIndex - Short.BYTES);
 				}
-			} else {
+			} else if (isUsingDirectOrZeroIfNoneNBT(version)) {
 				if (tag.isNull()) {
 					to.writeByte(0);
 				} else {
@@ -101,12 +105,21 @@ public class ItemStackSerializer {
 						tag.writeToStream(dataoutputstream);
 					}
 				}
+			} else {
+				throw new IllegalArgumentException(MessageFormat.format("Don't know how to write nbt of version {0}", version));
 			}
 		} catch (Throwable ioexception) {
 			throw new EncoderException(ioexception);
 		}
 	}
 
+	private static final boolean isUsingShortLengthNBT(ProtocolVersion version) {
+		return (version.getProtocolType() == ProtocolType.PC) && version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10);
+	}
+
+	private static final boolean isUsingDirectOrZeroIfNoneNBT(ProtocolVersion version) {
+		return (version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
+	}
 
 	public static class InternalItemStackWriteEvent extends ItemStackWriteEvent {
 

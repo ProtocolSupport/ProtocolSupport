@@ -15,6 +15,7 @@ import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
+@SuppressWarnings("deprecation")
 public class TileNBTRemapper {
 
 	private static final String tileEntityTypeKey = "id";

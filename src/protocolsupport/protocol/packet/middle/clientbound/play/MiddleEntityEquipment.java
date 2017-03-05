@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
@@ -17,7 +18,7 @@ public abstract class MiddleEntityEquipment extends ClientBoundMiddlePacket {
 	public void readFromServerData(ByteBuf serverdata) {
 		entityId = VarNumberSerializer.readVarInt(serverdata);
 		slot = VarNumberSerializer.readVarInt(serverdata);
-		itemstack = ItemStackSerializer.readItemStack(serverdata, ProtocolVersion.getLatest());
+		itemstack = ItemStackSerializer.readItemStack(serverdata, ProtocolVersion.getLatest(ProtocolType.PC));
 	}
 
 }

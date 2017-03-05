@@ -12,6 +12,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
@@ -34,13 +35,13 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 		ServerBoundPacketData hsscreator = ServerBoundPacketData.create(ServerBoundPacket.HANDSHAKE_START);
-		VarNumberSerializer.writeVarInt(hsscreator, ProtocolVersion.getLatest().getId());
-		StringSerializer.writeString(hsscreator, ProtocolVersion.getLatest(), "");
+		VarNumberSerializer.writeVarInt(hsscreator, ProtocolVersion.getLatest(ProtocolType.PC).getId());
+		StringSerializer.writeString(hsscreator, ProtocolVersion.getLatest(ProtocolType.PC), "");
 		hsscreator.writeShort(0);
 		VarNumberSerializer.writeVarInt(hsscreator, 2);
 		packets.add(hsscreator);
 		ServerBoundPacketData lscreator = ServerBoundPacketData.create(ServerBoundPacket.LOGIN_START);
-		StringSerializer.writeString(lscreator, ProtocolVersion.getLatest(), username);
+		StringSerializer.writeString(lscreator, ProtocolVersion.getLatest(ProtocolType.PC), username);
 		packets.add(lscreator);
 		return packets;
 	}
