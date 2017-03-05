@@ -23,7 +23,7 @@ tasks.withType(AbstractCompile) {
 }
 
 group 'protocolsupport'
-version '4.25.dev'
+version '4.26.dev'
 
 sourceCompatibility = 1.8
 
@@ -77,7 +77,6 @@ dependencies {
 shadowJar {
 	from sourceSets.main.allSource
 	from 'LICENSE'
-	from 'src/plugin.yml'
 	minimizeJar = true
 
 	destinationDir = file('target')
