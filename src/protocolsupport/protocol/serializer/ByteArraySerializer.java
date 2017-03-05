@@ -20,7 +20,7 @@ public class ByteArraySerializer {
 		} else if (isUsingVarIntLength(version)) {
 			length = VarNumberSerializer.readVarInt(from);
 		} else {
-			throw new IllegalArgumentException(MessageFormat.format("Don't know how to read byte array of version {0}", version)); 
+			throw new IllegalArgumentException(MessageFormat.format("Don't know how to read byte array of version {0}", version));
 		}
 		MiscSerializer.checkLimit(length, limit);
 		return MiscSerializer.readBytes(from, length);
@@ -32,7 +32,7 @@ public class ByteArraySerializer {
 		} else if (isUsingVarIntLength(version)) {
 			VarNumberSerializer.writeVarInt(to, data.readableBytes());
 		} else {
-			throw new IllegalArgumentException(MessageFormat.format("Don't know how to write byte array of version {0}", version)); 
+			throw new IllegalArgumentException(MessageFormat.format("Don't know how to write byte array of version {0}", version));
 		}
 		to.writeBytes(data);
 	}
@@ -42,11 +42,11 @@ public class ByteArraySerializer {
 	}
 
 	private static boolean isUsingShortLength(ProtocolVersion version) {
-		return version.getProtocolType() == ProtocolType.PC && version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10);
+		return (version.getProtocolType() == ProtocolType.PC) && version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10);
 	}
 
 	private static boolean isUsingVarIntLength(ProtocolVersion version) {
-		return version.getProtocolType() == ProtocolType.PC && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
+		return (version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
 	}
 
 }

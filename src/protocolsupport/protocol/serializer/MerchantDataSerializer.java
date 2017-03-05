@@ -51,7 +51,7 @@ public class MerchantDataSerializer {
 	}
 
 	private static boolean isUsingUsesCount(ProtocolVersion version) {
-		return version.getProtocolType() == ProtocolType.PC && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
+		return (version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
 	}
 
 }

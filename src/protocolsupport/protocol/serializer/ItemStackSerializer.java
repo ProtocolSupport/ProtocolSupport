@@ -74,7 +74,7 @@ public class ItemStackSerializer {
 					return ServerPlatform.get().getWrapperFactory().createNBTCompoundFromStream(datainputstream);
 				}
 			} else {
-				throw new IllegalArgumentException(MessageFormat.format("Don't know how to read nbt of version {0}", version)); 
+				throw new IllegalArgumentException(MessageFormat.format("Don't know how to read nbt of version {0}", version));
 			}
 		} catch (IOException e) {
 			throw new DecoderException(e);
@@ -106,7 +106,7 @@ public class ItemStackSerializer {
 					}
 				}
 			} else {
-				throw new IllegalArgumentException(MessageFormat.format("Don't know how to write nbt of version {0}", version)); 
+				throw new IllegalArgumentException(MessageFormat.format("Don't know how to write nbt of version {0}", version));
 			}
 		} catch (Throwable ioexception) {
 			throw new EncoderException(ioexception);
@@ -114,11 +114,11 @@ public class ItemStackSerializer {
 	}
 
 	private static final boolean isUsingShortLengthNBT(ProtocolVersion version) {
-		return version.getProtocolType() == ProtocolType.PC && version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10);
+		return (version.getProtocolType() == ProtocolType.PC) && version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10);
 	}
 
 	private static final boolean isUsingDirectOrZeroIfNoneNBT(ProtocolVersion version) {
-		return version.getProtocolType() == ProtocolType.PC && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
+		return (version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
 	}
 
 	public static class InternalItemStackWriteEvent extends ItemStackWriteEvent {
