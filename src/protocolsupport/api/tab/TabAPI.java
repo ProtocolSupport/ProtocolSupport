@@ -34,7 +34,7 @@ public class TabAPI {
 
 	/**
 	 * Sets default player list header that is sent 1 tick after player join
-	 * @param footer footer
+	 * @param header footer
 	 */
 	public static void setDefaultHeader(BaseComponent header) {
 		currentHeader = header;

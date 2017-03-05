@@ -61,9 +61,9 @@ public enum ProtocolVersion {
 	}
 
 	/**
-	 * Returns the user friendly version name
+	 * Returns user friendly version name
 	 * Notice: This name can change, so it shouldn't be used as a key anywhere
-	 * @return
+	 * @return user friendly version name
 	 */
 	public String getName() {
 		return name;
@@ -79,10 +79,9 @@ public enum ProtocolVersion {
 
 	/**
 	 * Returns if the game version used by this protocol released after the game version used by another protocol version
-	 * Throws {@link IllegalArgumentException} if protocol versions use different protocol types
 	 * @param another another protocol version
 	 * @return true if game version is released after the game version used by another protocol version
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException if protocol versions use different protocol types
 	 */
 	public boolean isAfter(ProtocolVersion another) {
 		return orderId.compareTo(another.orderId) > 0;
@@ -90,10 +89,9 @@ public enum ProtocolVersion {
 
 	/**
 	 * Returns if the game version used by this protocol released after (or is the same) the game version used by another protocol version
-	 * Throws {@link IllegalArgumentException} if protocol versions use different protocol types
 	 * @param another another protocol version
 	 * @return true if game version is released after (or is the same) the game version used by another protocol version
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException if protocol versions use different protocol types
 	 */
 	public boolean isAfterOrEq(ProtocolVersion another) {
 		return orderId.compareTo(another.orderId) >= 0;
@@ -101,10 +99,9 @@ public enum ProtocolVersion {
 
 	/**
 	 * Returns if the game version used by this protocol released before the game version used by another protocol version
-	 * Throws {@link IllegalArgumentException} if protocol versions use different protocol types
 	 * @param another another protocol version
 	 * @return true if game version is released before the game version used by another protocol version
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException if protocol versions use different protocol types
 	 */
 	public boolean isBefore(ProtocolVersion another) {
 		return orderId.compareTo(another.orderId) < 0;
@@ -112,10 +109,9 @@ public enum ProtocolVersion {
 
 	/**
 	 * Returns if the game version used by this protocol released before (or is the same) the game version used by another protocol version
-	 * Throws {@link IllegalArgumentException} if protocol versions use different protocol types
 	 * @param another another protocol version
 	 * @return true if game version is released before (or is the same) the game version used by another protocol version
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException if protocol versions use different protocol types
 	 */
 	public boolean isBeforeOrEq(ProtocolVersion another) {
 		return orderId.compareTo(another.orderId) <= 0;
@@ -123,11 +119,10 @@ public enum ProtocolVersion {
 
 	/**
 	 * Returns if the game version used by this protocol released in between (or is the same) of other game versions used by others protocol versions
-	 * Throws {@link IllegalArgumentException} if protocol versions use different protocol types
 	 * @param one one protocol version
 	 * @param another another protocol version
 	 * @return true if game version is released before (or is the same) the game version used by another protocol version
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException if protocol versions use different protocol types
 	 */
 	public boolean isBetween(ProtocolVersion one, ProtocolVersion another) {
 		return (isAfterOrEq(one) && isBeforeOrEq(another)) || (isBeforeOrEq(one) && isAfterOrEq(another));
@@ -167,6 +162,40 @@ public enum ProtocolVersion {
 	}
 
 	/**
+	 * Returns protocol version that is used by the game version released after game version used by this protocol
+	 * Returns null if next game version doesn't exist
+	 * @return protocol version that is used by the game version released after game version used by this protocol
+	 * @throws IllegalArgumentException if protocol type is UNKNOWN
+	 */
+	public ProtocolVersion next() {
+		Validate.isTrue(getProtocolType() != ProtocolType.UNKNOWN, "Can't get next version for unknown protocol type");
+		ProtocolVersion[] versions = byOrderId.get(getProtocolType());
+		int nextVersionOrderId = orderId.id + 1;
+		if (nextVersionOrderId < versions.length) {
+			return versions[nextVersionOrderId];
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Returns protocol version that is used by the game version released before game version used by this protocol
+	 * Returns null if previous game version doesn't exist
+	 * @return protocol version that is used by the game version released before game version used by this protocol
+	 * @throws IllegalArgumentException if protocol type is UNKNOWN
+	 */
+	public ProtocolVersion previous() {
+		Validate.isTrue(getProtocolType() != ProtocolType.UNKNOWN, "Can't get next version for unknown protocol type");
+		ProtocolVersion[] versions = byOrderId.get(getProtocolType());
+		int previousVersionOrderId = orderId.id - 1;
+		if (previousVersionOrderId >= 0) {
+			return versions[previousVersionOrderId];
+		} else {
+			return null;
+		}
+	}
+
+	/**
 	 * Returns all protocol versions that are between specified ones (inclusive)
 	 * Throws {@link IllegalArgumentException} if protocol versions types are not the same or one of the types is UNKNOWN
 	 * @param one one protocol version
@@ -189,10 +218,9 @@ public enum ProtocolVersion {
 
 	/**
 	 * Returns latest supported protocol version for specified protocol type
-	 * Throws {@link IllegalArgumentException} if protocol type has not supported protocol versions
 	 * @param type protocol type
 	 * @return latest supported protocol version for specified protocol type
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException if protocol type has not supported protocol versions
 	 */
 	public static ProtocolVersion getLatest(ProtocolType type) {
 		switch (type) {
@@ -207,10 +235,9 @@ public enum ProtocolVersion {
 
 	/**
 	 * Returns oldest supported protocol version for specified protocol type
-	 * Throws {@link IllegalArgumentException} if protocol type has not supported protocol versions
 	 * @param type protocol type
 	 * @return oldest supported protocol version for specified protocol type
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException if protocol type has not supported protocol versions
 	 */
 	public static ProtocolVersion getOldest(ProtocolType type) {
 		switch (type) {
@@ -225,10 +252,9 @@ public enum ProtocolVersion {
 
 	/**
 	 * Returns all protocol versions that are after specified one (inclusive)
-	 * Throws {@link IllegalArgumentException} if getAllBetween(version, getLatest(version.getType())) throws one
 	 * @param version protocol version
 	 * @return all protocol versions that are after specified one  (inclusive)
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException  if getAllBetween(version, getLatest(version.getType())) throws one
 	 * @deprecated non intuitive behavior
 	 */
 	@Deprecated
@@ -238,10 +264,9 @@ public enum ProtocolVersion {
 
 	/**
 	 * Returns all protocol versions that are before specified one (inclusive)
-	 * Throws {@link IllegalArgumentException} if getAllBetween(getOldest(version.getType()), version) throws one
 	 * @param version protocol version
 	 * @return all protocol versions that are before specified one
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException if getAllBetween(getOldest(version.getType()), version) throws one
 	 * @deprecated non intuitive behavior
 	 */
 	@Deprecated
@@ -252,7 +277,7 @@ public enum ProtocolVersion {
 	/**
 	 * Returns latest supported protocol version for {@link ProtocolType} PC
 	 * @return latest supported protocol version for {@link ProtocolType} PC
-	 * @deprecated
+	 * @deprecated only returns latest version for {@link ProtocolType} PC
 	 */
 	@Deprecated
 	public static ProtocolVersion getLatest() {
@@ -262,6 +287,7 @@ public enum ProtocolVersion {
 	/**
 	 * Returns oldest supported protocol version for {@link ProtocolType} PC
 	 * @return oldest supported protocol version for {@link ProtocolType} PC
+	 * @deprecated only returns oldest version for {@link ProtocolType} PC
 	 */
 	@Deprecated
 	public static ProtocolVersion getOldest() {

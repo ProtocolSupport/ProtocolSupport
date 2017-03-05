@@ -19,9 +19,9 @@ public class IconUtils {
 
 	/**
 	 * Loads icon to base64 form from {@link File}
-	 * @param file file
+	 * @param file file from which base64 will be constructed
 	 * @return base64 icon
-	 * @throws IOException
+	 * @throws IOException if new FileInputStream(file) throws
 	 */
 	public static String loadIcon(File file) throws IOException {
 		return loadIcon(new FileInputStream(file));
@@ -29,9 +29,9 @@ public class IconUtils {
 
 	/**
 	 * Loads icon to base64 form from {@link InputStream}
-	 * @param file file
+	 * @param rawStream input stream from which base64 will be constructed
 	 * @return base64 icon
-	 * @throws IOException
+	 * @throws IOException if ImageIO.read(rawStream) throws
 	 */
 	public static String loadIcon(InputStream rawStream) throws IOException {
 		return loadIcon(ImageIO.read(rawStream));
@@ -39,9 +39,10 @@ public class IconUtils {
 
 	/**
 	 * Converts icon to base64 from {@link BufferedImage}
-	 * @param file file
+	 * @param image image from which base64 will be constructed
 	 * @return base64 icon
-	 * @throws IOException
+	 * @throws IOException if can't write image data as png
+	 * @throws IllegalArgumentException if image widget and height != 64x64 pixels
 	 */
 	public static String loadIcon(BufferedImage image) throws IOException {
 		Validate.isTrue(image.getWidth() == 64, "Must be 64 pixels wide");
@@ -52,9 +53,10 @@ public class IconUtils {
 	}
 
 	/**
-	 * Converts icon to base64 form from bukit {@link CachedServerIcon}
-	 * @param icon
-	 * @return
+	 * Converts icon to base64 form from bukkit {@link CachedServerIcon}
+	 * Throws exception if icon is not constructed by server implementation
+	 * @param icon bukkit server icon
+	 * @return base64 icon
 	 */
 	public static String fromBukkit(CachedServerIcon icon) {
 		return ServerPlatform.get().getMiscUtils().convertBukkitIconToBase64(icon);
