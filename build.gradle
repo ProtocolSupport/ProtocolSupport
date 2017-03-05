@@ -79,7 +79,7 @@ shadowJar {
 		new File(destinationDir, archiveName).delete()
 	}
 
-	from sourceSets.main.allSource
+	from sourceSets.main.java.srcDirs
 	from 'LICENSE'
 	minimizeJar = true
 
