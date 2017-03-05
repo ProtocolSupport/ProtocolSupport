@@ -29,21 +29,21 @@ sourceCompatibility = 1.8
 
 import de.undercouch.gradle.tasks.download.Download
 
-task updateSpigot(type: Download) {
-	src 'http://yivesmirror.com/files/spigot/spigot-1.11.2-R0.1-SNAPSHOT.jar'
-	dest buildDir
+def dllibs = new File('dllibs')
+dllibs.mkdirs()
+
+task updateLibs(type: Download) {
+	src([
+		'http://yivesmirror.com/files/spigot/spigot-1.11.2-R0.1-SNAPSHOT.jar',
+		'https://bamboo.gserv.me/artifact/GSPP-SRV/shared/build-latestSuccessful/Version-Independent-Server-JAR/glowstone.jar'
+	])
+	dest dllibs
 	onlyIfNewer true
 	overwrite true
 }
 
-task updateGlowstone(type: Download) {
-	src 'https://bamboo.gserv.me/artifact/GSPP-SRV/shared/build-latestSuccessful/Version-Independent-Server-JAR/glowstone.jar'
-	dest buildDir
-	onlyIfNewer true
-	overwrite true
-}
-
-compileJava.dependsOn(updateSpigot, updateGlowstone)
+compileJava.dependsOn(clean)
+compileJava.dependsOn(updateLibs)
 compileJava.finalizedBy(test)
 
 sourceSets {
@@ -67,7 +67,7 @@ repositories {
 }
 
 dependencies {
-	shadow files('buildprocessor/BuildProcessor.jar', 'build/spigot-1.11.2-R0.1-SNAPSHOT.jar', 'build/glowstone.jar')
+	shadow files('buildprocessor/BuildProcessor.jar', new File(dllibs, 'spigot-1.11.2-R0.1-SNAPSHOT.jar'), new File(dllibs, 'glowstone.jar'))
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 	compile group: 'net.sf.trove4j', name: 'trove4j', version: '3.0.3'
 	compile group: 'com.google.code.gson', name: 'gson', version: '2.8.0'
@@ -75,6 +75,10 @@ dependencies {
 }
 
 shadowJar {
+	doFirst {
+		new File(destinationDir, archiveName).delete()
+	}
+
 	from sourceSets.main.allSource
 	from 'LICENSE'
 	minimizeJar = true
@@ -89,4 +93,4 @@ shadowJar {
 }
 
 jar.enabled = false
-classes.finalizedBy(shadowJar)
+jar.finalizedBy(shadowJar)
