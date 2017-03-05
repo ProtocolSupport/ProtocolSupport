@@ -93,7 +93,7 @@ public class PingResponse {
 
 		@Override
 		public PingResponse deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext ctx) throws JsonParseException {
-			JsonObject jsonObject = JsonUtils.getObject(jsonElement, "status");
+			JsonObject jsonObject = JsonUtils.getAsJsonObject(jsonElement, "status");
 			PingResponse ping = new PingResponse();
 			if (jsonObject.has("version")) {
 				ping.setProtocolData(ctx.deserialize(jsonObject.get("version"), PingResponseProtocolData.class));

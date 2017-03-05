@@ -60,14 +60,14 @@ public class PingResponsePlayers {
 	public static class Serializer implements JsonDeserializer<PingResponsePlayers>, JsonSerializer<PingResponsePlayers> {
 		@Override
 		public PingResponsePlayers deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-			JsonObject jsonObject = JsonUtils.getObject(jsonElement, "players");
+			JsonObject jsonObject = JsonUtils.getAsJsonObject(jsonElement, "players");
 			PingResponsePlayers players = new PingResponsePlayers(JsonUtils.getInt(jsonObject, "max"), JsonUtils.getInt(jsonObject, "online"));
 			if (JsonUtils.isJsonArray(jsonObject, "sample")) {
 				JsonArray jsonArray = JsonUtils.getJsonArray(jsonObject, "sample");
 				if (jsonArray.size() > 0) {
 					GameProfile[] array = new GameProfile[jsonArray.size()];
 					for (int i = 0; i < array.length; ++i) {
-						JsonObject playerJsonObject = JsonUtils.getObject(jsonArray.get(i), "player[" + i + "]");
+						JsonObject playerJsonObject = JsonUtils.getAsJsonObject(jsonArray.get(i), "player[" + i + "]");
 						array[i] = new GameProfile(UUID.fromString(JsonUtils.getString(playerJsonObject, "id")), JsonUtils.getString(playerJsonObject, "name"));
 					}
 					players.setPlayers(array);

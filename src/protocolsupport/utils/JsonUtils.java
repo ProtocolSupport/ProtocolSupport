@@ -64,7 +64,7 @@ public class JsonUtils {
 		throw new JsonSyntaxException("Missing " + s + ", expected to find a Int");
 	}
 
-	public static JsonObject getObject(JsonElement jsonElement, String name) {
+	public static JsonObject getAsJsonObject(JsonElement jsonElement, String name) {
 		if (jsonElement.isJsonObject()) {
 			return jsonElement.getAsJsonObject();
 		}
