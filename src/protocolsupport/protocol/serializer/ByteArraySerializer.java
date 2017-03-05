@@ -1,6 +1,10 @@
 package protocolsupport.protocol.serializer;
 
+import java.text.MessageFormat;
+
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 
 public class ByteArraySerializer {
@@ -11,31 +15,38 @@ public class ByteArraySerializer {
 
 	public static byte[] readByteArray(ByteBuf from, ProtocolVersion version, int limit) {
 		int length = -1;
-		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10)) {
+		if (isUsingShortLength(version)) {
 			length = from.readShort();
-		} else {
+		} else if (isUsingVarIntLength(version)) {
 			length = VarNumberSerializer.readVarInt(from);
+		} else {
+			throw new IllegalArgumentException(MessageFormat.format("Don't know how to read byte array of version {0}", version)); 
 		}
 		MiscSerializer.checkLimit(length, limit);
 		return MiscSerializer.readBytes(from, length);
 	}
 
 	public static void writeByteArray(ByteBuf to, ProtocolVersion version, ByteBuf data) {
-		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10)) {
+		if (isUsingShortLength(version)) {
 			to.writeShort(data.readableBytes());
-		} else {
+		} else if (isUsingVarIntLength(version)) {
 			VarNumberSerializer.writeVarInt(to, data.readableBytes());
+		} else {
+			throw new IllegalArgumentException(MessageFormat.format("Don't know how to write byte array of version {0}", version)); 
 		}
 		to.writeBytes(data);
 	}
 
 	public static void writeByteArray(ByteBuf to, ProtocolVersion version, byte[] data) {
-		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10)) {
-			to.writeShort(data.length);
-		} else {
-			VarNumberSerializer.writeVarInt(to, data.length);
-		}
-		to.writeBytes(data);
+		writeByteArray(to, version, Unpooled.wrappedBuffer(data));
+	}
+
+	private static boolean isUsingShortLength(ProtocolVersion version) {
+		return version.getProtocolType() == ProtocolType.PC && version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10);
+	}
+
+	private static boolean isUsingVarIntLength(ProtocolVersion version) {
+		return version.getProtocolType() == ProtocolType.PC && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
 	}
 
 }
