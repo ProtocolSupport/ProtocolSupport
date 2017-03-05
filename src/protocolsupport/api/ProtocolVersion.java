@@ -135,11 +135,9 @@ public enum ProtocolVersion {
 
 	private static final TIntObjectHashMap<ProtocolVersion> byProtocolId = new TIntObjectHashMap<>();
 	static {
-		for (ProtocolVersion version : ProtocolVersion.values()) {
-			if (version.id != -1) {
-				byProtocolId.put(version.id, version);
-			}
-		}
+		Arrays.stream(ProtocolVersion.values())
+		.filter(ProtocolVersion::isSupported)
+		.forEach(version -> byProtocolId.put(version.id, version));
 	}
 
 	/**
