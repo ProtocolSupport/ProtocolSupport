@@ -8,6 +8,7 @@ public class PEPacketIDs {
 	public static final int BATCH = 6;
 	public static final int RESOURCE_PACK = 7;
 	public static final int CHAT = 10;
+	public static final int UPDATE_TIME = 11;
 	public static final int START_GAME = 12;
 	public static final int UPDATE_BLOCK = 23;
 	public static final int PLAYER_ACTION = 36;

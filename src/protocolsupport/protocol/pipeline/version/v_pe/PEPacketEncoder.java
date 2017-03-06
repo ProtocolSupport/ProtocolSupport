@@ -15,6 +15,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.KickDisc
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Login;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Position;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SetHealth;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.TimeUpdate;
 import protocolsupport.protocol.pipeline.version.AbstractPacketEncoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -36,6 +37,7 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_KICK_DISCONNECT_ID, KickDisconnect.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UPDATE_HEALTH_ID, SetHealth.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BLOCK_CHANGE_SINGLE_ID, BlockChangeSingle.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UPDATE_TIME_ID, TimeUpdate.class);
 	}
 
 	public PEPacketEncoder(Connection connection, NetworkDataCache storage) {
