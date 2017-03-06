@@ -12,6 +12,10 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+		return RecyclableSingletonList.create(BlockChangeSingle.toPEUpdateBlockPacket(version, position, id));
+	}
+	
+	public static ClientBoundPacketData toPEUpdateBlockPacket(ProtocolVersion version, protocolsupport.protocol.utils.types.Position position, int id) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.UPDATE_BLOCK, version);
 		VarNumberSerializer.writeSVarInt(serializer, position.getX());
 		VarNumberSerializer.writeVarInt(serializer, position.getY());
@@ -20,7 +24,7 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 		int meta = id & 15;
 		VarNumberSerializer.writeVarInt(serializer, type);
 		VarNumberSerializer.writeVarInt(serializer, (0b1000 << 4) | meta); // 0b1000 = Priority // TODO: Flags (are they even used anymore?)
-		return RecyclableSingletonList.create(serializer);
+		return serializer;
 	}
 
 }
