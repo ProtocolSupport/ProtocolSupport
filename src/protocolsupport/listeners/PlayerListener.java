@@ -19,6 +19,7 @@ import org.bukkit.event.vehicle.VehicleEnterEvent;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.tab.TabAPI;
@@ -45,7 +46,12 @@ public class PlayerListener implements Listener {
 	public void onVehicleInteract(PlayerInteractEntityEvent event) {
 		Player player = event.getPlayer();
 		Connection connection = ProtocolSupportAPI.getConnection(player);
-		if ((connection != null) && connection.getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_5_2) && player.isInsideVehicle()) {
+		if (
+			player.isInsideVehicle() &&
+			(connection != null) &&
+			connection.getVersion().getProtocolType() == ProtocolType.PC &&
+			connection.getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_5_2)
+		) {
 			if (player.getVehicle().equals(event.getRightClicked())) {
 				player.leaveVehicle();
 			}
@@ -55,7 +61,11 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
 		Connection connection = ProtocolSupportAPI.getConnection(event.getPlayer());
-		if ((connection != null) && connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9)) {
+		if (
+			(connection != null) &&
+			connection.getVersion().getProtocolType() == ProtocolType.PC &&
+			connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9)
+		) {
 			Block block = event.getBlock();
 			connection.sendPacket(ServerPlatform.get().getPacketFactory().createBlockBreakSoundPacket(new Position(block.getX(), block.getY(), block.getZ()), block.getType()));
 		}
@@ -65,7 +75,11 @@ public class PlayerListener implements Listener {
 	public void onItemPickup(PlayerPickupItemEvent event) {
 		Player player = event.getPlayer();
 		Connection connection = ProtocolSupportAPI.getConnection(player);
-		if ((connection != null) && connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9)) {
+		if (
+			(connection != null) &&
+			connection.getVersion().getProtocolType() == ProtocolType.PC &&
+			connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9)
+		) {
 			player.playSound(
 				event.getItem().getLocation(), Sound.ENTITY_ITEM_PICKUP,
 				0.2F, (((ThreadLocalRandom.current().nextFloat() - ThreadLocalRandom.current().nextFloat()) * 0.7F) + 1.0F) * 2.0F
