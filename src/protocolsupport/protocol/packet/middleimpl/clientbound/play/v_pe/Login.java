@@ -23,8 +23,8 @@ public class Login extends MiddleLogin {
 		resourcepack.writeShort(0); //beh packs count
 		packets.add(resourcepack);
 		ClientBoundPacketData startgame = ClientBoundPacketData.create(PEPacketIDs.START_GAME, version);
-		VarNumberSerializer.writeSVarLong(startgame, 0); //player entity unique id
-		VarNumberSerializer.writeSVarLong(startgame, 0); //player entity runtime id
+		VarNumberSerializer.writeSVarLong(startgame, playerEntityId);
+		VarNumberSerializer.writeSVarLong(startgame, playerEntityId);
 		MiscSerializer.writeLFloat(startgame, 0); //x
 		MiscSerializer.writeLFloat(startgame, 0); //y
 		MiscSerializer.writeLFloat(startgame, 0); //z

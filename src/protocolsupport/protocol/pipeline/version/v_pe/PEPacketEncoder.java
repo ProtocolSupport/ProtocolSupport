@@ -14,6 +14,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.CustomPa
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.KickDisconnect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Login;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Position;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntitySetAttributes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SetHealth;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnPosition;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.TimeUpdate;
@@ -40,6 +41,7 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BLOCK_CHANGE_SINGLE_ID, BlockChangeSingle.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UPDATE_TIME_ID, TimeUpdate.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_POSITION_ID, SpawnPosition.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_ATTRIBUTES_ID, EntitySetAttributes.class);
 	}
 
 	public PEPacketEncoder(Connection connection, NetworkDataCache storage) {

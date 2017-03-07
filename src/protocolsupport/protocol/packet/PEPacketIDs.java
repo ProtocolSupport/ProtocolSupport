@@ -11,6 +11,7 @@ public class PEPacketIDs {
 	public static final int UPDATE_TIME = 11;
 	public static final int START_GAME = 12;
 	public static final int UPDATE_BLOCK = 23;
+	public static final int SET_ATTRIBUTES = 31;
 	public static final int PLAYER_ACTION = 36;
 	public static final int PLAYER_MOVE = 20;
 	public static final int SET_HEALTH = 42;

@@ -14,7 +14,7 @@ public class Position extends MiddlePosition {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_MOVE, version);
-		VarNumberSerializer.writeSVarLong(serializer, 0); //player entity id (0 for self)
+		VarNumberSerializer.writeSVarLong(serializer, cache.getSelfPlayerEntityId());
 		MiscSerializer.writeLFloat(serializer, (float) x);
 		MiscSerializer.writeLFloat(serializer, (float) (y + 1.6200000047683716D));
 		MiscSerializer.writeLFloat(serializer, (float) z);
