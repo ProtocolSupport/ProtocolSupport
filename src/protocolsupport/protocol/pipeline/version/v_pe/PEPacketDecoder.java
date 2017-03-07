@@ -11,6 +11,7 @@ import protocolsupport.protocol.packet.PEPacketIDs;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_pe.ClientLogin;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Chat;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PlayerAction;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PositionLook;
 import protocolsupport.protocol.pipeline.version.AbstractPacketDecoder;
@@ -29,6 +30,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		registry.register(NetworkState.HANDSHAKING, PEPacketIDs.LOGIN, ClientLogin.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.PLAYER_MOVE, PositionLook.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.PLAYER_ACTION, PlayerAction.class);
+		registry.register(NetworkState.PLAY, PEPacketIDs.CHAT, Chat.class);
 	}
 
 	public PEPacketDecoder(Connection connection, NetworkDataCache cache) {
