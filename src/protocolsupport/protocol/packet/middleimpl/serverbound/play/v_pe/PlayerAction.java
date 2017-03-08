@@ -4,8 +4,10 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockDig;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -35,6 +37,15 @@ public class PlayerAction extends ServerBoundMiddlePacket {
 				ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacket.PLAY_CLIENT_COMMAND);
 				VarNumberSerializer.writeSVarInt(serializer, 0);
 				return RecyclableSingletonList.create(serializer);
+			}
+			case 0: {
+				return RecyclableSingletonList.create(MiddleBlockDig.create(0, new Position(blockX, blockY, blockZ), face));
+			}
+			case 1: {
+				return RecyclableSingletonList.create(MiddleBlockDig.create(1, new Position(blockX, blockY, blockZ), face));
+			}
+			case 2: {
+				return RecyclableSingletonList.create(MiddleBlockDig.create(2, new Position(blockX, blockY, blockZ), face));				
 			}
 			default: {
 				return RecyclableEmptyList.get();

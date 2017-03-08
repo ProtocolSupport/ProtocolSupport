@@ -16,6 +16,7 @@ public class PEPacketIDs {
 	public static final int PLAYER_MOVE = 20;
 	public static final int SET_HEALTH = 42;
 	public static final int SPAWN_POS = 43;
+	public static final int ANIMATION = 44;
 	public static final int RESPAWN_POS = 45;
 	public static final int CHUNK_DATA = 58;
 	public static final int SET_DIFFICULTY = 60;
