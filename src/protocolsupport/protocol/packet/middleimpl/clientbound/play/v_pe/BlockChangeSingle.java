@@ -10,6 +10,12 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class BlockChangeSingle extends MiddleBlockChangeSingle {
 
+    private static final int flag_update_neighbors = 0b0001;
+    private static final int flag_network = 0b0010;
+    private static final int flag_prioirty = 0b1000;
+
+    private static final int flags = (flag_update_neighbors | flag_network | flag_prioirty);
+
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		return RecyclableSingletonList.create(BlockChangeSingle.create(version, position, id));
@@ -23,7 +29,7 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 		int type = id >> 4;
 		int meta = id & 15;
 		VarNumberSerializer.writeVarInt(serializer, type);
-		VarNumberSerializer.writeVarInt(serializer, (0b1000 << 4) | meta); // 0b1000 = Priority // TODO: Flags (are they even used anymore?)
+		VarNumberSerializer.writeVarInt(serializer, (flags << 4) | meta);
 		return serializer;
 	}
 
