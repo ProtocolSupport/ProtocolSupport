@@ -4,7 +4,6 @@ import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public abstract class MiddlePositionLook extends ServerBoundMiddlePacket {
@@ -18,23 +17,20 @@ public abstract class MiddlePositionLook extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		if (!cache.isTeleportConfirmNeeded()) {
-			ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_POSITION_LOOK);
-			creator.writeDouble(x);
-			creator.writeDouble(y);
-			creator.writeDouble(z);
-			creator.writeFloat(yaw);
-			creator.writeFloat(pitch);
-			creator.writeBoolean(onGround);
-			return RecyclableSingletonList.create(creator);
-		} else {
+		if (cache.isTeleportConfirmNeeded()) {
 			int teleportId = cache.tryTeleportConfirm(x, y, z);
-			if (teleportId == -1) {
-				return RecyclableEmptyList.get();
-			} else {
+			if (teleportId != -1) {
 				return MiddleTeleportAccept.create(teleportId);
 			}
 		}
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_POSITION_LOOK);
+		creator.writeDouble(x);
+		creator.writeDouble(y);
+		creator.writeDouble(z);
+		creator.writeFloat(yaw);
+		creator.writeFloat(pitch);
+		creator.writeBoolean(onGround);
+		return RecyclableSingletonList.create(creator);
 	}
 
 }
