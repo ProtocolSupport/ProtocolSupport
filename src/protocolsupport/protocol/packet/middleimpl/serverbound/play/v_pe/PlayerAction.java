@@ -30,6 +30,8 @@ public class PlayerAction extends ServerBoundMiddlePacket {
 		face = VarNumberSerializer.readSVarInt(clientdata);
 	}
 
+	protected Position breakPosition = null;
+
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		switch (action) {
@@ -39,13 +41,24 @@ public class PlayerAction extends ServerBoundMiddlePacket {
 				return RecyclableSingletonList.create(serializer);
 			}
 			case 0: {
-				return RecyclableSingletonList.create(MiddleBlockDig.create(0, new Position(blockX, blockY, blockZ), face));
+				breakPosition = new Position(blockX, blockY, blockZ);
+				return RecyclableSingletonList.create(MiddleBlockDig.create(0, breakPosition, face));
 			}
 			case 1: {
-				return RecyclableSingletonList.create(MiddleBlockDig.create(1, new Position(blockX, blockY, blockZ), face));
+				if (breakPosition != null) {
+					Position rBreakPosition = breakPosition;
+					breakPosition = null;
+					return RecyclableSingletonList.create(MiddleBlockDig.create(1, rBreakPosition, face));
+				} else {
+					return RecyclableEmptyList.get();
+				}
 			}
 			case 2: {
-				return RecyclableSingletonList.create(MiddleBlockDig.create(2, new Position(blockX, blockY, blockZ), face));				
+				if (breakPosition != null) {
+					return RecyclableSingletonList.create(MiddleBlockDig.create(2, breakPosition, face));
+				} else {
+					return RecyclableEmptyList.get();
+				}
 			}
 			default: {
 				return RecyclableEmptyList.get();

@@ -12,11 +12,11 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockCha
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Chat;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Chunk;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.CustomPayload;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntitySetAttributes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.KickDisconnect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Login;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Position;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.ServerDifficulty;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntitySetAttributes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SetHealth;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnPosition;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.TimeUpdate;
