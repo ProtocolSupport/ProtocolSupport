@@ -19,7 +19,6 @@ import com.flowpowered.network.service.CodecLookupService;
 
 import net.glowstone.GlowServer;
 import net.glowstone.entity.meta.profile.PlayerProfile;
-import net.glowstone.net.handler.play.player.UseItemMessage;
 import net.glowstone.net.message.KickMessage;
 import net.glowstone.net.message.SetCompressionMessage;
 import net.glowstone.net.message.handshake.HandshakeMessage;
@@ -116,6 +115,7 @@ import net.glowstone.net.message.play.player.TabCompleteMessage;
 import net.glowstone.net.message.play.player.TabCompleteResponseMessage;
 import net.glowstone.net.message.play.player.TeleportConfirmMessage;
 import net.glowstone.net.message.play.player.UseBedMessage;
+import net.glowstone.net.message.play.player.UseItemMessage;
 import net.glowstone.net.message.play.scoreboard.ScoreboardDisplayMessage;
 import net.glowstone.net.message.play.scoreboard.ScoreboardObjectiveMessage;
 import net.glowstone.net.message.play.scoreboard.ScoreboardScoreMessage;
