@@ -17,6 +17,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.KickDisc
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Login;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Position;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.ServerDifficulty;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SetExperience;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SetHealth;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnPosition;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.TimeUpdate;
@@ -46,6 +47,7 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_ATTRIBUTES_ID, EntitySetAttributes.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SERVER_DIFFICULTY_ID, ServerDifficulty.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BLOCK_CHANGE_MULTI_ID, BlockChangeMulti.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_EXPERIENCE_ID, SetExperience.class);
 	}
 
 	public PEPacketEncoder(Connection connection, NetworkDataCache storage) {
