@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.PEPacketIDs;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetHealth;
+import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntitySetAttributes.Attribute;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -24,7 +25,16 @@ public class SetHealth extends MiddleSetHealth {
 			MiscSerializer.writeLFloat(respawnpos, 0);
 			packets.add(respawnpos);
 		}
+		packets.add(EntitySetAttributes.create(version, cache.getSelfPlayerEntityId(), createAttribute("minecraft:player.hunger", food)));
+		packets.add(EntitySetAttributes.create(version, cache.getSelfPlayerEntityId(), createAttribute("minecraft:player.saturation", saturation)));
 		return packets;
+	}
+
+	protected static Attribute createAttribute(String name, double value) {
+		Attribute attr = new Attribute();
+		attr.key = name;
+		attr.value = value;
+		return attr;
 	}
 
 }

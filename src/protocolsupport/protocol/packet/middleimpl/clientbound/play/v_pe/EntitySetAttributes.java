@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 import java.util.HashMap;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.utils.Any;
 import protocolsupport.protocol.packet.PEPacketIDs;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntitySetAttributes;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -14,10 +15,17 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class EntitySetAttributes extends MiddleEntitySetAttributes {
 
-	private static final HashMap<String, String> attrNames = new HashMap<>();
+	private static final HashMap<String, String> remapAttrNames = new HashMap<>();
+	private static final HashMap<String, Any<Float, Float>> knownMinMax = new HashMap<>();
 	static {
-		attrNames.put("generic.movementSpeed", "minecraft:movement");
+		remapAttrNames.put("generic.movementSpeed", "minecraft:movement");
+		knownMinMax.put("minecraft:player.saturation", new Any<Float, Float>(0.0F, 20.0F));
+		knownMinMax.put("minecraft:player.hunger", new Any<Float, Float>(0.0F, 20.0F));
+		knownMinMax.put("minecraft:player.experience", new Any<Float, Float>(0.0F, 1.0F));
+		knownMinMax.put("minecraft:player.level", new Any<Float, Float>(0.0F, 24791.0F));
+		knownMinMax.put("minecraft:movement", new Any<Float, Float>(0.0F, 24791.0F));
 	}
+	
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
@@ -29,11 +37,13 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 		VarNumberSerializer.writeSVarInt(serializer, entityId);
 		VarNumberSerializer.writeVarInt(serializer, attributes.length);
 		for (Attribute attr : attributes) {
-			MiscSerializer.writeLFloat(serializer, Float.MIN_VALUE); //min value
-			MiscSerializer.writeLFloat(serializer, Float.MAX_VALUE); //max value
+			String pename = remapAttrNames.getOrDefault(attr.key, attr.key);
+			Any<Float, Float> minmax = knownMinMax.getOrDefault(pename, new Any<Float, Float>(Float.MIN_VALUE, Float.MAX_VALUE));
+			MiscSerializer.writeLFloat(serializer, minmax.getObj1());
+			MiscSerializer.writeLFloat(serializer, minmax.getObj2());
 			MiscSerializer.writeLFloat(serializer, (float) attr.value);
 			MiscSerializer.writeLFloat(serializer, 0.000001F); //default value
-			StringSerializer.writeString(serializer, version, attrNames.getOrDefault(attr.key, attr.key));
+			StringSerializer.writeString(serializer, version, pename);
 		}
 		return serializer;
 	}
