@@ -48,4 +48,11 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 		return serializer;
 	}
 
+	public static Attribute createAttribute(String name, double value) {
+		Attribute attr = new Attribute();
+		attr.key = name;
+		attr.value = value;
+		return attr;
+	}
+
 }
