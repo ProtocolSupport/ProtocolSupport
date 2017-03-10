@@ -1,7 +1,6 @@
 package protocolsupport.protocol.serializer;
 
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -101,8 +100,8 @@ public class ItemStackSerializer {
 				if (tag.isNull()) {
 					to.writeByte(0);
 				} else {
-					try (DataOutputStream dataoutputstream = new DataOutputStream(new ByteBufOutputStream(to))) {
-						tag.writeToStream(dataoutputstream);
+					try (OutputStream outputstream = new ByteBufOutputStream(to)) {
+						tag.writeToStream(outputstream);
 					}
 				}
 			} else {
