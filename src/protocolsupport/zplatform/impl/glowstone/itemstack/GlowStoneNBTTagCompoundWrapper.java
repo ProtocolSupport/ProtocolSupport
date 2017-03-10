@@ -1,9 +1,12 @@
 package protocolsupport.zplatform.impl.glowstone.itemstack;
 
+import java.io.DataOutput;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import net.glowstone.util.mojangson.Mojangson;
@@ -11,8 +14,8 @@ import net.glowstone.util.mojangson.ex.MojangsonParseException;
 import net.glowstone.util.nbt.CompoundTag;
 import net.glowstone.util.nbt.ListTag;
 import net.glowstone.util.nbt.NBTInputStream;
-import net.glowstone.util.nbt.NBTOutputStream;
 import net.glowstone.util.nbt.NBTReadLimiter;
+import net.glowstone.util.nbt.StringTag;
 import net.glowstone.util.nbt.Tag;
 import net.glowstone.util.nbt.TagType;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -21,6 +24,7 @@ import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 public class GlowStoneNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 
 	protected final CompoundTag tag;
+
 	protected GlowStoneNBTTagCompoundWrapper(CompoundTag tag) {
 		this.tag = tag;
 	}
@@ -54,10 +58,9 @@ public class GlowStoneNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 		return new GlowStoneNBTTagCompoundWrapper(tag);
 	}
 
-	@SuppressWarnings("resource")
 	@Override
-	public void writeToStream(OutputStream outputstream) throws IOException {
-		new NBTOutputStream(outputstream, false).writeTag(tag);
+	public void writeToStream(DataOutput outputstream) throws IOException {
+		NBTOutputStream.writeTag(outputstream, tag);
 	}
 
 	@Override
@@ -167,6 +170,100 @@ public class GlowStoneNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 	@Override
 	public String toString() {
 		return Objects.toString(tag);
+	}
+
+	private static final class NBTOutputStream {
+
+		@SuppressWarnings("rawtypes")
+		public static void writeTag(DataOutput os, Tag tag) throws IOException {
+			writeTag(os, "", tag);
+		}
+
+		@SuppressWarnings("rawtypes")
+		private static void writeTag(DataOutput os, String name, final Tag tag) throws IOException {
+			final TagType type = tag.getType();
+			final byte[] nameBytes = name.getBytes(StandardCharsets.UTF_8);
+			if (type == TagType.END) {
+				throw new IOException("Named TAG_End not permitted.");
+			}
+			os.writeByte(type.getId());
+			os.writeShort(nameBytes.length);
+			os.write(nameBytes);
+			writeTagPayload(os, tag);
+		}
+
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		private static void writeTagPayload(DataOutput os, final Tag tag) throws IOException {
+			final TagType type = tag.getType();
+			switch (type) {
+				case BYTE: {
+					os.writeByte((byte) tag.getValue());
+					break;
+				}
+				case SHORT: {
+					os.writeShort((short) tag.getValue());
+					break;
+				}
+				case INT: {
+					os.writeInt((int) tag.getValue());
+					break;
+				}
+				case LONG: {
+					os.writeLong((long) tag.getValue());
+					break;
+				}
+				case FLOAT: {
+					os.writeFloat((float) tag.getValue());
+					break;
+				}
+				case DOUBLE: {
+					os.writeDouble((double) tag.getValue());
+					break;
+				}
+				case BYTE_ARRAY: {
+					final byte[] bytes = (byte[]) tag.getValue();
+					os.writeInt(bytes.length);
+					os.write(bytes);
+					break;
+				}
+				case STRING: {
+					final byte[] bytes = ((StringTag) tag).getValue().getBytes(StandardCharsets.UTF_8);
+					os.writeShort(bytes.length);
+					os.write(bytes);
+					break;
+				}
+				case LIST: {
+					final ListTag<Tag> listTag = (ListTag<Tag>) tag;
+					final List<Tag> tags = (List<Tag>) listTag.getValue();
+					os.writeByte(listTag.getChildType().getId());
+					os.writeInt(tags.size());
+					for (final Tag child : tags) {
+						writeTagPayload(os, child);
+					}
+					break;
+				}
+				case COMPOUND: {
+					final Map<String, Tag> map = (Map<String, Tag>) ((CompoundTag) tag).getValue();
+					for (final Map.Entry<String, Tag> entry : map.entrySet()) {
+						writeTag(os, entry.getKey(), entry.getValue());
+					}
+					os.writeByte(0);
+					break;
+				}
+				case INT_ARRAY: {
+					final int[] ints = (int[]) tag.getValue();
+					os.writeInt(ints.length);
+					for (final int value : ints) {
+						os.writeInt(value);
+					}
+					break;
+				}
+				default: {
+					throw new IOException("Invalid tag type: " + type + ".");
+				}
+			}
+		}
+
 	}
 
 }

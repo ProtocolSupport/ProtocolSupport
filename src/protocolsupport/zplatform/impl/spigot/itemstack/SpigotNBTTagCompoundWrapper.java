@@ -2,9 +2,7 @@ package protocolsupport.zplatform.impl.spigot.itemstack;
 
 import java.io.DataInput;
 import java.io.DataOutput;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -55,8 +53,8 @@ public class SpigotNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 	}
 
 	@Override
-	public void writeToStream(OutputStream outputstream) throws IOException {
-		NBTCompressedStreamTools.a(tag, (DataOutput) new DataOutputStream(outputstream));
+	public void writeToStream(DataOutput outputstream) throws IOException {
+		NBTCompressedStreamTools.a(tag, outputstream);
 	}
 
 	@Override
