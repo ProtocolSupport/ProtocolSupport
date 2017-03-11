@@ -16,6 +16,7 @@ public class ChunkTransformerPE extends ChunkTransformer {
 	@Override
 	protected byte[] toLegacyData0(ProtocolVersion version) {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream(10241 * columnsCount);
+		stream.write(columnsCount);
 		for (int i = 0; i < columnsCount; i++) {
 			ChunkSection section = sections[i];
 			stream.write(0); //type
@@ -44,6 +45,8 @@ public class ChunkTransformerPE extends ChunkTransformer {
 			}
 			stream.write(blockLight, 0, blockLight.length);
 		}
+		stream.write(new byte[512], 0, 512); //heightmap
+		stream.write(new byte[256], 0, 256); //biomes TODO: write them
 		return stream.toByteArray();
 	}
 

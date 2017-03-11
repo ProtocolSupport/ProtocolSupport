@@ -9,9 +9,12 @@ import protocolsupport.protocol.packet.PEPacketIDs;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ByteArraySerializer;
+import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.tileentity.TileNBTRemapper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
+import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class Chunk extends MiddleChunk {
 
@@ -24,13 +27,12 @@ public class Chunk extends MiddleChunk {
 		VarNumberSerializer.writeSVarInt(serializer, chunkZ);
 		transformer.loadData(data, bitmask, cache.hasSkyLightInCurrentDimension(), full);
 		ByteBuf chunkdata = Unpooled.buffer();
-		chunkdata.writeByte(Integer.bitCount(bitmask));
 		chunkdata.writeBytes(transformer.toLegacyData(version));
-		chunkdata.writeBytes(new byte[512]); //heightmap (actually shorts), TODO: calculate it
-		chunkdata.writeBytes(new byte[256]); //biomes TODO: write them
 		chunkdata.writeByte(0); //borders???
 		VarNumberSerializer.writeSVarInt(chunkdata, 0); //extra data???
-		chunkdata.writeBytes(new byte[0]); //nbt tiles TODO
+		for (NBTTagCompoundWrapper tile : tiles) {
+			ItemStackSerializer.writeTag(chunkdata, version, TileNBTRemapper.remap(version, tile));
+		}
 		ByteArraySerializer.writeByteArray(serializer, version, chunkdata);
 		return RecyclableSingletonList.create(serializer);
 	}
