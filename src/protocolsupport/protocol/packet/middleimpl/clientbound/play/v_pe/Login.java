@@ -31,7 +31,7 @@ public class Login extends MiddleLogin {
 		MiscSerializer.writeLFloat(startgame, 0); //yaw
 		MiscSerializer.writeLFloat(startgame, 0); //pitch
 		VarNumberSerializer.writeSVarInt(startgame, 0); //seed
-		VarNumberSerializer.writeSVarInt(startgame, dimension);
+		VarNumberSerializer.writeSVarInt(startgame, Respawn.remapDimensionId(dimension));
 		VarNumberSerializer.writeSVarInt(startgame, 1); //world type (1 - infinite)
 		VarNumberSerializer.writeSVarInt(startgame, gamemode);
 		VarNumberSerializer.writeSVarInt(startgame, difficulty);

@@ -22,6 +22,7 @@ public class Chunk extends MiddleChunk {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+		cache.markSentChunk(chunkX, chunkZ);
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHUNK_DATA, version);
 		VarNumberSerializer.writeSVarInt(serializer, chunkX);
 		VarNumberSerializer.writeSVarInt(serializer, chunkZ);
@@ -35,6 +36,18 @@ public class Chunk extends MiddleChunk {
 		}
 		ByteArraySerializer.writeByteArray(serializer, version, chunkdata);
 		return RecyclableSingletonList.create(serializer);
+	}
+
+	public static ClientBoundPacketData createEmptyChunk(ProtocolVersion version, int chunkX, int chunkZ) {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHUNK_DATA, version);
+		VarNumberSerializer.writeSVarInt(serializer, chunkX);
+		VarNumberSerializer.writeSVarInt(serializer, chunkZ);
+		ByteBuf chunkdata = Unpooled.buffer();
+		chunkdata.writeByte(0); //section count
+		chunkdata.writeByte(0); //borders???
+		VarNumberSerializer.writeSVarInt(chunkdata, 0); //extra data???
+		ByteArraySerializer.writeByteArray(serializer, version, chunkdata);
+		return serializer;
 	}
 
 }

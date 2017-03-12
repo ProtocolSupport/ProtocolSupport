@@ -20,6 +20,7 @@ public class PEPacketIDs {
 	public static final int RESPAWN_POS = 45;
 	public static final int CHUNK_DATA = 58;
 	public static final int SET_DIFFICULTY = 60;
+	public static final int CHANGE_DIMENSION = 61;
 	public static final int CHUNK_RADIUS = 69;
 
 }
