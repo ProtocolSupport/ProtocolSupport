@@ -224,8 +224,8 @@ public class NetworkDataCache {
 	}
 
 	protected static class ChunkCoord {
-		private int x;
-		private int z;
+		private final int x;
+		private final int z;
 		public ChunkCoord(int x, int z) {
 			this.x = x;
 			this.z = z;
@@ -236,11 +236,11 @@ public class NetworkDataCache {
 				return false;
 			}
 			ChunkCoord other = (ChunkCoord) obj;
-			return x == other.x && z == other.z;
+			return (x == other.x) && (z == other.z);
 		}
 		@Override
 		public int hashCode() {
-			return x * 31 + z;
+			return (x * 31) + z;
 		}
 	}
 

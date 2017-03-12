@@ -234,7 +234,7 @@ public class GlowStoneNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 				}
 				case LIST: {
 					final ListTag<Tag> listTag = (ListTag<Tag>) tag;
-					final List<Tag> tags = (List<Tag>) listTag.getValue();
+					final List<Tag> tags = listTag.getValue();
 					os.writeByte(listTag.getChildType().getId());
 					os.writeInt(tags.size());
 					for (final Tag child : tags) {
@@ -243,7 +243,7 @@ public class GlowStoneNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 					break;
 				}
 				case COMPOUND: {
-					final Map<String, Tag> map = (Map<String, Tag>) ((CompoundTag) tag).getValue();
+					final Map<String, Tag> map = ((CompoundTag) tag).getValue();
 					for (final Map.Entry<String, Tag> entry : map.entrySet()) {
 						writeTag(os, entry.getKey(), entry.getValue());
 					}

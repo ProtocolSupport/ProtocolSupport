@@ -29,7 +29,7 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 			object.setConnection(AbstractPacketEncoder.this.connection);
 			object.setSharedStorage(AbstractPacketEncoder.this.cache);
 		});
-		varintPacketId = connection.getVersion() != ProtocolVersion.MINECRAFT_PE && connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_1_7_5);
+		varintPacketId = (connection.getVersion() != ProtocolVersion.MINECRAFT_PE) && connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_1_7_5);
 	}
 
 	protected final MiddleTransformerRegistry<ClientBoundMiddlePacket> registry = new MiddleTransformerRegistry<>();

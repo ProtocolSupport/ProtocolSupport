@@ -25,7 +25,7 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 		knownMinMax.put("minecraft:player.level", new Any<Float, Float>(0.0F, 24791.0F));
 		knownMinMax.put("minecraft:movement", new Any<Float, Float>(0.0F, 24791.0F));
 	}
-	
+
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {

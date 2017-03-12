@@ -16,7 +16,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntitySe
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.KickDisconnect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Login;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Position;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Respawn;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.ServerDifficulty;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SetExperience;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SetHealth;

@@ -20,7 +20,7 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		return RecyclableSingletonList.create(BlockChangeSingle.create(version, position, id));
 	}
-	
+
 	public static ClientBoundPacketData create(ProtocolVersion version, protocolsupport.protocol.utils.types.Position position, int id) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.UPDATE_BLOCK, version);
 		VarNumberSerializer.writeSVarInt(serializer, position.getX());
