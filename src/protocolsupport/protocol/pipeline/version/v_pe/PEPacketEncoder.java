@@ -12,6 +12,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockCha
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Chat;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Chunk;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.CustomPayload;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityDestory;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntitySetAttributes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityTeleport;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityVelocity;
@@ -58,6 +59,7 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_LIVING_ID, SpawnLiving.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_VELOCITY_ID, EntityVelocity.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_TELEPORT_ID, EntityTeleport.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_DESTROY_ID, EntityDestory.class);
 	}
 
 	public PEPacketEncoder(Connection connection, NetworkDataCache storage) {
