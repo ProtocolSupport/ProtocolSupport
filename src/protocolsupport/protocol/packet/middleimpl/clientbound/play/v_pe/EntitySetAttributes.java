@@ -19,6 +19,7 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 	private static final HashMap<String, Any<Float, Float>> knownMinMax = new HashMap<>();
 	static {
 		remapAttrNames.put("generic.movementSpeed", "minecraft:movement");
+		knownMinMax.put("minecraft:health", new Any<Float, Float>(0.0F, 20.0F));
 		knownMinMax.put("minecraft:player.saturation", new Any<Float, Float>(0.0F, 20.0F));
 		knownMinMax.put("minecraft:player.hunger", new Any<Float, Float>(0.0F, 20.0F));
 		knownMinMax.put("minecraft:player.experience", new Any<Float, Float>(0.0F, 1.0F));
