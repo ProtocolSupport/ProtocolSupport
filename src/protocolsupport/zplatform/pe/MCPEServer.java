@@ -10,7 +10,10 @@ import net.minecraft.server.v1_11_R1.EnumProtocolDirection;
 import net.minecraft.server.v1_11_R1.NetworkManager;
 import net.minecraft.server.v1_11_R1.ServerConnection;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.ChatAPI;
+import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.packet.handler.AbstractStatusListener;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.common.LogicHandler;
 import protocolsupport.protocol.pipeline.timeout.SimpleReadTimeoutHandler;
@@ -44,7 +47,17 @@ public class MCPEServer {
 			this.raknetserver = new RakNetServer(new InetSocketAddress(port), new PingHandler() {
 				@Override
 				public String getServerInfo(Channel channel) {
-					return String.join(";", "MCPE", "test", "101", "1.0.3", String.valueOf(Bukkit.getOnlinePlayers().size()), String.valueOf(Bukkit.getMaxPlayers()));
+					ServerPingResponseEvent revent = AbstractStatusListener.createPingResponse(channel, (InetSocketAddress) channel.remoteAddress());
+					return String.join(";",
+						"MCPE",
+						ChatAPI.fromJSON(revent.getMotd()).toLegacyText().replace(";", ":"),
+						"102", "1.0.4",
+						String.valueOf(revent.getPlayers().size()), String.valueOf(revent.getMaxPlayers())
+					);
+				}
+				@Override
+				public void executeHandler(Runnable runnable) {
+					AbstractStatusListener.executeTask(runnable);
 				}
 			}, new UserChannelInitializer() {
 				@Override
