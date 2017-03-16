@@ -13,6 +13,8 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Chat;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Chunk;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.CustomPayload;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntitySetAttributes;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityTeleport;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityVelocity;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.KickDisconnect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Login;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Position;
@@ -54,6 +56,8 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_RESPAWN_ID, Respawn.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CHUNK_UNLOAD_ID, UnloadChunk.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_LIVING_ID, SpawnLiving.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_VELOCITY_ID, EntityVelocity.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_TELEPORT_ID, EntityTeleport.class);
 	}
 
 	public PEPacketEncoder(Connection connection, NetworkDataCache storage) {
