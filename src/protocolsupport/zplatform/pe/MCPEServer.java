@@ -10,7 +10,6 @@ import net.minecraft.server.v1_11_R1.EnumProtocolDirection;
 import net.minecraft.server.v1_11_R1.NetworkManager;
 import net.minecraft.server.v1_11_R1.ServerConnection;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.handler.AbstractStatusListener;
@@ -50,7 +49,7 @@ public class MCPEServer {
 					ServerPingResponseEvent revent = AbstractStatusListener.createPingResponse(channel, (InetSocketAddress) channel.remoteAddress());
 					return String.join(";",
 						"MCPE",
-						ChatAPI.fromJSON(revent.getMotd()).toLegacyText().replace(";", ":"),
+						revent.getMotd().replace(";", ":"),
 						"102", "1.0.4",
 						String.valueOf(revent.getPlayers().size()), String.valueOf(revent.getMaxPlayers())
 					);
