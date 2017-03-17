@@ -8,7 +8,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
-public class EntityDestory extends MiddleEntityDestroy {
+public class EntityDestroy extends MiddleEntityDestroy {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
