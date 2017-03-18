@@ -21,11 +21,14 @@ public class Position extends MiddlePosition {
 		if (!cache.isChunkMarkedAsSent(chunkX, chunkZ)) {
 			packets.add(Chunk.createEmptyChunk(version, chunkX, chunkZ));
 		}
-		packets.add(create(version, cache.getSelfPlayerEntityId(), x, y, z, pitch, yaw));
+		packets.add(create(version, cache.getSelfPlayerEntityId(), x, y, z, pitch, yaw, ANIMATION_MODE_NONE));
 		return packets;
 	}
 
-	public static ClientBoundPacketData create(ProtocolVersion version, int entityId, double x, double y, double z, float pitch, float yaw) {
+	public static final int ANIMATION_MODE_ALL = 0;
+	public static final int ANIMATION_MODE_NONE = 1;
+
+	public static ClientBoundPacketData create(ProtocolVersion version, int entityId, double x, double y, double z, float pitch, float yaw, int mode) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_MOVE, version);
 		VarNumberSerializer.writeSVarLong(serializer, entityId);
 		MiscSerializer.writeLFloat(serializer, (float) x);
@@ -34,7 +37,7 @@ public class Position extends MiddlePosition {
 		MiscSerializer.writeLFloat(serializer, pitch);
 		MiscSerializer.writeLFloat(serializer, yaw);
 		MiscSerializer.writeLFloat(serializer, yaw); //head yaw actually
-		serializer.writeByte(1); //animation mode, 1 none
+		serializer.writeByte(mode);
 		serializer.writeBoolean(false);
 		return serializer;
 	}

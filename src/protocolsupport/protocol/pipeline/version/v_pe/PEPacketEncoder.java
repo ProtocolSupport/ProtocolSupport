@@ -18,12 +18,14 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityTe
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityVelocity;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.KickDisconnect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Login;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.PlayerInfo;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Position;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Respawn;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.ServerDifficulty;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SetExperience;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SetHealth;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnLiving;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnNamed;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnPosition;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.TimeUpdate;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.UnloadChunk;
@@ -60,6 +62,8 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_VELOCITY_ID, EntityVelocity.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_TELEPORT_ID, EntityTeleport.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_DESTROY_ID, EntityDestroy.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_PLAYER_INFO_ID, PlayerInfo.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_NAMED_ID, SpawnNamed.class);
 	}
 
 	public PEPacketEncoder(Connection connection, NetworkDataCache storage) {

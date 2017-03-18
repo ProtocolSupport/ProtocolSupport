@@ -10,6 +10,7 @@ public class PEPacketIDs {
 	public static final int CHAT = 10;
 	public static final int UPDATE_TIME = 11;
 	public static final int START_GAME = 12;
+	public static final int SPAWN_PLAYER = 13;
 	public static final int SPAWN_ENTITY = 14;
 	public static final int ENTITY_DESTORY = 15;
 	public static final int ENTITY_TELEPORT = 19;
@@ -24,6 +25,7 @@ public class PEPacketIDs {
 	public static final int CHUNK_DATA = 58;
 	public static final int SET_DIFFICULTY = 60;
 	public static final int CHANGE_DIMENSION = 61;
+	public static final int PLAYER_INFO = 63;
 	public static final int CHUNK_RADIUS = 69;
 
 }
