@@ -16,7 +16,7 @@ public class EntityTeleport extends MiddleEntityTeleport {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		WatchedEntity wentity = cache.getWatchedEntity(entityId);
-		if (wentity != null && wentity.getType() == SpecificRemapper.PLAYER) {
+		if ((wentity != null) && (wentity.getType() == SpecificRemapper.PLAYER)) {
 			return RecyclableSingletonList.create(Position.create(version, entityId, x, y, z, pitch, yaw, Position.ANIMATION_MODE_ALL));
 		} else {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_TELEPORT, version);

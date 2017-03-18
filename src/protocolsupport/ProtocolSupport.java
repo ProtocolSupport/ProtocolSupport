@@ -70,6 +70,12 @@ public class ProtocolSupport extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		try {
+			ServerPlatform.get().injectOnEnable();
+		} catch (Throwable t) {
+			getLogger().log(Level.SEVERE, "Error when loading, make sure you are using supported server version", t);
+			Bukkit.shutdown();
+		}
 		getCommand("protocolsupport").setExecutor(new CommandHandler());
 		getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 		getServer().getPluginManager().registerEvents(new CommandListener(), this);
