@@ -350,7 +350,7 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 							return;
 						}
 					}
-					entityplayer.removeQueue.remove((Object) this.tracker.getId());
+					entityplayer.d(this.tracker);
 					addTrackedPlayer(entityplayer);
 					final Packet<?> packet = this.e();
 					entityplayer.playerConnection.sendPacket(packet);
