@@ -13,6 +13,10 @@ public class KickDisconnect extends MiddleKickDisconnect {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+		return create(version, messageJson);
+	}
+
+	public static RecyclableCollection<ClientBoundPacketData> create(ProtocolVersion version, String messageJson) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.DISCONNECT, version);
 		serializer.writeBoolean(false); //do not hide disconnection screen
 		StringSerializer.writeString(serializer, version, ChatAPI.fromJSON(messageJson).toLegacyText());

@@ -6,6 +6,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginDisconnect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSuccess;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockChangeMulti;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockChangeSingle;
@@ -41,6 +42,7 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 		for (int i = 0; i < 255; i++) {
 			registry.register(NetworkState.PLAY, i, Noop.class);
 		}
+		registry.register(NetworkState.LOGIN, ClientBoundPacket.LOGIN_DISCONNECT_ID, LoginDisconnect.class);
 		registry.register(NetworkState.LOGIN, ClientBoundPacket.LOGIN_SUCCESS_ID, LoginSuccess.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_LOGIN_ID, Login.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID, CustomPayload.class);
