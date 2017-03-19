@@ -61,7 +61,7 @@ public class ProtocolSupport extends JavaPlugin {
 			IdRemapper.init();
 			BlockStorageReader.init();
 			ServerPlatform.get().inject();
-			server = new MCPEServer(2222);
+			server = new MCPEServer(19132);
 		} catch (Throwable t) {
 			getLogger().log(Level.SEVERE, "Error when loading, make sure you are using supported server version", t);
 			Bukkit.shutdown();
