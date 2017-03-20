@@ -13,6 +13,7 @@ import protocolsupport.listeners.PlayerListener;
 import protocolsupport.logger.AsyncErrorLogger;
 import protocolsupport.protocol.legacyremapper.LegacySound;
 import protocolsupport.protocol.legacyremapper.chunk.BlockStorageReader;
+import protocolsupport.protocol.legacyremapper.pe.PESkin;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
@@ -61,6 +62,7 @@ public class ProtocolSupport extends JavaPlugin {
 			IdRemapper.init();
 			BlockStorageReader.init();
 			ServerPlatform.get().inject();
+			PESkin.init();
 			server = new MCPEServer(2222);
 		} catch (Throwable t) {
 			getLogger().log(Level.SEVERE, "Error when loading, make sure you are using supported server version", t);
