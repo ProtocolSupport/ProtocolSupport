@@ -11,9 +11,13 @@ public class LoginSuccess extends MiddleLoginSuccess {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAY_STATUS, version);
-		serializer.writeInt(0);
-		return RecyclableSingletonList.create(serializer);
+		return RecyclableSingletonList.create(createPlayStatus(version, 0));
+	}
+
+	public static ClientBoundPacketData createPlayStatus(ProtocolVersion version, int status) {
+		ClientBoundPacketData playstatus = ClientBoundPacketData.create(PEPacketIDs.PLAY_STATUS, version);
+		playstatus.writeInt(status);
+		return playstatus;
 	}
 
 }

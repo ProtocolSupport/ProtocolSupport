@@ -6,6 +6,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.PEPacketIDs;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleLogin;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSuccess;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -48,9 +49,7 @@ public class Login extends MiddleLogin {
 		StringSerializer.writeString(startgame, version, ""); //level type?
 		StringSerializer.writeString(startgame, version, ""); //world name?
 		packets.add(startgame);
-		ClientBoundPacketData playstatus = ClientBoundPacketData.create(PEPacketIDs.PLAY_STATUS, version);
-		playstatus.writeInt(3);
-		packets.add(playstatus);
+		packets.add(LoginSuccess.createPlayStatus(version, 3));
 		ClientBoundPacketData chunkradius = ClientBoundPacketData.create(PEPacketIDs.CHUNK_RADIUS, version);
 		VarNumberSerializer.writeSVarInt(chunkradius, Bukkit.getViewDistance());
 		packets.add(chunkradius);

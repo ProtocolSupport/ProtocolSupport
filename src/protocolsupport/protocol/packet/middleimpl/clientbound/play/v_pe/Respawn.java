@@ -6,22 +6,26 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.PEPacketIDs;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleRespawn;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSuccess;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class Respawn extends MiddleRespawn {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHANGE_DIMENSION, version);
 		VarNumberSerializer.writeSVarInt(serializer, remapDimensionId(dimension));
 		MiscSerializer.writeLFloat(serializer, 0); //x
 		MiscSerializer.writeLFloat(serializer, 0); //y
 		MiscSerializer.writeLFloat(serializer, 0); //z
 		serializer.writeBoolean(true); //unused value
-		return RecyclableSingletonList.create(serializer);
+		packets.add(serializer);
+		packets.add(LoginSuccess.createPlayStatus(version, 3));
+		return packets;
 	}
 
 	public static int remapDimensionId(int dimId) {
