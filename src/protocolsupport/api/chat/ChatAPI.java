@@ -1,10 +1,13 @@
 package protocolsupport.api.chat;
 
+import java.text.MessageFormat;
+
 import org.apache.commons.lang3.Validate;
 import org.bukkit.entity.Player;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.chat.components.BaseComponent;
@@ -26,8 +29,12 @@ public class ChatAPI {
 	.registerTypeHierarchyAdapter(HoverAction.class, new HoverActionSerializer())
 	.create();
 
-	public static BaseComponent fromJSON(String json) {
-		return json != null ? gson.fromJson(json, BaseComponent.class) : null;
+	public static BaseComponent fromJSON(String json) throws JsonParseException {
+		try {
+			return json != null ? gson.fromJson(json, BaseComponent.class) : null;
+		} catch (JsonSyntaxException e) {
+			throw new JsonParseException(json, e);
+		}
 	}
 
 	public static String toJSON(BaseComponent component) {
@@ -51,6 +58,13 @@ public class ChatAPI {
 		Validate.notNull(messageJson, "Message can't be null");
 		Validate.notNull(position, "Message position can't be null");
 		ProtocolSupportAPI.getConnection(player).sendPacket(ServerPlatform.get().getPacketFactory().createOutboundChatPacket(messageJson, position.ordinal()));
+	}
+
+	public static class JsonParseException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
+		public JsonParseException(String msg, Exception e) {
+			super(MessageFormat.format("Unable to parse json string {0}", msg), e);
+		}
 	}
 
 	public static enum MessagePosition {
