@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.utils.Any;
-import protocolsupport.protocol.packet.PEPacketIDs;
+import protocolsupport.protocol.legacyremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntitySetAttributes;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;

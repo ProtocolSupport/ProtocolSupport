@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet;
+package protocolsupport.protocol.legacyremapper.pe;
 
 public class PEPacketIDs {
 

@@ -7,7 +7,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.packet.PEPacketIDs;
+import protocolsupport.protocol.legacyremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.serializer.ByteArraySerializer;
 import protocolsupport.utils.netty.Decompressor;
 
