@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.handler;
 
 import java.security.PrivateKey;
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.UUID;
 import java.util.concurrent.Executor;
@@ -37,7 +38,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 	private static final int loginThreadKeepAlive = Utils.getJavaPropertyValue("loginthreadskeepalive", 60, Converter.STRING_TO_INT);
 
 	public static void init() {
-		ProtocolSupport.logInfo("Login threads max count: "+loginThreads+", keep alive time: "+loginThreadKeepAlive);
+		ProtocolSupport.logInfo(MessageFormat.format("Login threads max count: {0}, keep alive time: {1}", loginThreads, loginThreadKeepAlive));
 	}
 
 	private static final Executor loginprocessor = new ThreadPoolExecutor(
