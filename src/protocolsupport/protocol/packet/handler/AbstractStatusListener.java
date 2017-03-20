@@ -2,6 +2,7 @@ package protocolsupport.protocol.packet.handler;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -33,14 +34,14 @@ public abstract class AbstractStatusListener {
 	private static final int statusThreadKeepAlive = Utils.getJavaPropertyValue("statusthreadskeepalive", 60, Converter.STRING_TO_INT);
 
 	public static void init() {
-		ProtocolSupport.logInfo("Login threads max count: "+statusThreads+", keep alive time: "+statusThreadKeepAlive);
+		ProtocolSupport.logInfo(MessageFormat.format("Status threads max count: {0}, keep alive time: {1}", statusThreads, statusThreadKeepAlive));
 	}
 
 	private static final Executor statusprocessor = new ThreadPoolExecutor(
 		1, statusThreads,
 		statusThreadKeepAlive, TimeUnit.SECONDS,
 		new LinkedBlockingQueue<Runnable>(),
-		r -> new Thread(r, "LoginProcessingThread")
+		r -> new Thread(r, "StatusProcessingThread")
 	);
 
 	protected final NetworkManagerWrapper networkManager;
