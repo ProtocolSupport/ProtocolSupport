@@ -11,6 +11,7 @@ import com.google.gson.JsonSyntaxException;
 
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.chat.modifiers.ClickAction;
 import protocolsupport.api.chat.modifiers.HoverAction;
 import protocolsupport.api.chat.modifiers.Modifier;
@@ -31,7 +32,8 @@ public class ChatAPI {
 
 	public static BaseComponent fromJSON(String json) throws JsonParseException {
 		try {
-			return json != null ? gson.fromJson(json, BaseComponent.class) : null;
+			BaseComponent result = gson.fromJson(json, BaseComponent.class);
+			return result != null ? result : new TextComponent("");
 		} catch (JsonSyntaxException e) {
 			throw new JsonParseException(json, e);
 		}
