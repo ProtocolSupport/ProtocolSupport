@@ -9,30 +9,30 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
-/**
- * This one is a bit weird. Pocket uses some different events for this pc packet.
- * Currently only the weather changes and gamemode changes are being handled.
- * TODO: Add the other functionality this packet provides.
- */
+//TODO: implement other events and functions
 public class ChangeGameState extends MiddleGameStateChange {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		switch(type){
-			case 1:
-				packets.add(PELevelEvent.ClientLevelEvent(PELevelEvent.EVENT_STOP_RAIN));
-			break;
-			case 2:
-				packets.add(PELevelEvent.ClientLevelEvent(PELevelEvent.EVENT_START_RAIN, 60000)); //Give it the max time. Usually the server cuts it off earlier, but we still need to wind up.
-			break;
-			case 3:
+		switch (type) {
+			case 1: {
+				packets.add(PELevelEvent.createPacket(PELevelEvent.EVENT_STOP_RAIN));
+				break;
+			}
+			case 2: {
+				packets.add(PELevelEvent.createPacket(PELevelEvent.EVENT_START_RAIN, 60000));
+				break;
+			}
+			case 3: {
+				//TODO: Emulate adventure gamemode via AdventureSettingsPacket
 				ClientBoundPacketData changeGameType = ClientBoundPacketData.create(PEPacketIDs.CHANGE_PLAYER_GAMETYPE, version);
 				VarNumberSerializer.writeSVarInt(changeGameType, (int) value);
 				packets.add(changeGameType);
-			break;
+				break;
+			}
 		}
 		return packets;
 	}
-	
+
 }
