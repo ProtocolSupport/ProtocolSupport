@@ -17,6 +17,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.Connection;
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.LegacyServerPingResponseEvent;
 import protocolsupport.protocol.ConnectionImpl;
@@ -50,7 +51,7 @@ public class LegacyLoginAndPingHandler extends SimpleChannelInboundHandler<ByteB
 
 	private static void writeLoginKick(ByteBuf buf) {
 		buf.writeByte(0xFF);
-		StringSerializer.writeString(buf, ProtocolVersion.getOldest(), "Outdated client");
+		StringSerializer.writeString(buf, ProtocolVersion.getOldest(ProtocolType.PC), "Outdated client");
 	}
 
 	private static void writePing(Channel channel, ByteBuf buf) {
@@ -75,7 +76,7 @@ public class LegacyLoginAndPingHandler extends SimpleChannelInboundHandler<ByteB
 
 		String response = ChatColor.stripColor(revent.getMotd())+"§"+bevent.getNumPlayers()+"§"+revent.getMaxPlayers();
 		buf.writeByte(0xFF);
-		StringSerializer.writeString(buf, ProtocolVersion.getOldest(), response);
+		StringSerializer.writeString(buf, ProtocolVersion.getOldest(ProtocolType.PC), response);
 	}
 
 }

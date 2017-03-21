@@ -292,7 +292,7 @@ public enum ProtocolVersion {
 	 */
 	@Deprecated
 	public static ProtocolVersion getOldest() {
-		return getLatest(ProtocolType.PC);
+		return getOldest(ProtocolType.PC);
 	}
 
 	private static class OrderId implements Comparable<OrderId> {
