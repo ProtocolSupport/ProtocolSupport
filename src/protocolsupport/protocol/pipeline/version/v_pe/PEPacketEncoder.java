@@ -10,6 +10,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginDi
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSuccess;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockChangeMulti;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockChangeSingle;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.ChangeGameState;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Chat;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Chunk;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.CustomPayload;
@@ -66,6 +67,7 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_DESTROY_ID, EntityDestroy.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_PLAYER_INFO_ID, PlayerInfo.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_NAMED_ID, SpawnNamed.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_GAME_STATE_CHANGE_ID, ChangeGameState.class);
 	}
 
 	public PEPacketEncoder(Connection connection, NetworkDataCache storage) {
