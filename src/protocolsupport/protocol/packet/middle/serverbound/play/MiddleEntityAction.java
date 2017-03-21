@@ -19,10 +19,10 @@ public abstract class MiddleEntityAction extends ServerBoundMiddlePacket {
 		return RecyclableSingletonList.create(creator);
 	}
 
-	public static ServerBoundPacketData create(int eid, int action, int jumpBoost) {
+	public static ServerBoundPacketData create(int entityId, int actionId, int jumpBoost) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_ENTITY_ACTION);
-		VarNumberSerializer.writeVarInt(creator, eid);
-		VarNumberSerializer.writeVarInt(creator, action);
+		VarNumberSerializer.writeVarInt(creator, entityId);
+		VarNumberSerializer.writeVarInt(creator, actionId);
 		VarNumberSerializer.writeVarInt(creator, jumpBoost);
 		return creator;
 	}

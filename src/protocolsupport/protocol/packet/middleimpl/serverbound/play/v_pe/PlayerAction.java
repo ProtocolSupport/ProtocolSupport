@@ -1,8 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
-import org.bukkit.entity.Player;
-import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
@@ -25,7 +23,7 @@ public class PlayerAction extends ServerBoundMiddlePacket {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
-		VarNumberSerializer.readVarLong(clientdata); //entity id
+		VarNumberSerializer.readVarLong(clientdata); // entity id
 		action = VarNumberSerializer.readSVarInt(clientdata);
 		blockX = VarNumberSerializer.readSVarInt(clientdata);
 		blockY = VarNumberSerializer.readVarInt(clientdata);
@@ -35,19 +33,18 @@ public class PlayerAction extends ServerBoundMiddlePacket {
 
 	protected Position breakPosition = null;
 
-	private static final int START_BREAK =   0;
-	private static final int ABORT_BREAK =   1;
-	private static final int STOP_BREAK =    2;
-	private static final int RELEASE_ITEM =  5;
+	private static final int START_BREAK = 0;
+	private static final int ABORT_BREAK = 1;
+	private static final int STOP_BREAK = 2;
+	private static final int RELEASE_ITEM = 5;
 	private static final int STOP_SLEEPING = 6;
-	private static final int RESPAWN =       7;
-	private static final int JUMP =          8;
-	private static final int START_SPRINT =  9;
-	private static final int STOP_SPRINT =  10;
-	private static final int START_SNEAK =  11;
-	private static final int STOP_SNEAK =   12;
-	private static final int START_GLIDE =  15;
-	private static final int STOP_GLIDE =   16;
+	private static final int RESPAWN = 7;
+	private static final int START_SPRINT = 9;
+	private static final int STOP_SPRINT = 10;
+	private static final int START_SNEAK = 11;
+	private static final int STOP_SNEAK = 12;
+	private static final int START_GLIDE = 15;
+	private static final int STOP_GLIDE = 16;
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
