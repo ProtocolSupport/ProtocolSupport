@@ -89,7 +89,6 @@ public class PELevelEvent {
 		MiscSerializer.writeLFloat(clientLevelEvent, y);
 		MiscSerializer.writeLFloat(clientLevelEvent, z);
 		VarNumberSerializer.writeSVarInt(clientLevelEvent, data);
-		System.out.println(clientLevelEvent);
 		return clientLevelEvent;
     }
     
