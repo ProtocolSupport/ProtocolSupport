@@ -15,10 +15,7 @@ public abstract class MiddleEntityAction extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_ENTITY_ACTION);
-		VarNumberSerializer.writeVarInt(creator, entityId);
-		VarNumberSerializer.writeVarInt(creator, actionId);
-		VarNumberSerializer.writeVarInt(creator, jumpBoost);
+		ServerBoundPacketData creator = MiddleEntityAction.create(entityId, actionId, jumpBoost);
 		return RecyclableSingletonList.create(creator);
 	}
 
