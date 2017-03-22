@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.concurrent.Callable;
 
 import javax.imageio.ImageIO;
@@ -13,7 +15,28 @@ import org.apache.commons.lang3.Validate;
 import protocolsupport.utils.Utils;
 
 public class PESkin {
-
+	
+	//TODO Fix this :)
+	public static final byte[] getSkin (String username){
+		URL imageLocation;
+		try {
+			imageLocation = new URL("http://s3.amazonaws.com/MinecraftSkins/" + username + ".png");
+		} catch (MalformedURLException e1) {
+			return STEVE;
+		}
+		return new Callable<byte[]>() {
+			@Override
+			public byte[] call() {
+				try {
+					return toNetworkData(ImageIO.read(imageLocation));
+				} catch (Exception e) {
+					return STEVE;
+				}
+			}
+		}.call();
+	}
+	
+	
 	public static void init() {
 	}
 
