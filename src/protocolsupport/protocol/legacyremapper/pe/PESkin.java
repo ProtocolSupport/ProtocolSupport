@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.concurrent.Callable;
 
 import javax.imageio.ImageIO;
@@ -27,6 +29,20 @@ public class PESkin {
 			}
 		}
 	}.call();
+
+	public static final byte[] fromUsername(String username)	{
+		try {
+			BufferedImage img = ImageIO.read(new URL("https://crafatar.com/skins/" + username + "?default=MHF_Steve"));
+			return toNetworkData(img);
+		} catch (MalformedURLException e)	{
+			//this shouldn't ever happen unless a bad username is given, so error
+			e.printStackTrace();
+		} catch (IOException e)	{
+			e.printStackTrace();
+		}
+
+		return STEVE;
+	}
 
 	public static byte[] toNetworkData(BufferedImage skin) {
 		Validate.isTrue(skin.getWidth() == 64, "Must be 64 pixels wide");
