@@ -38,11 +38,31 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 		VarNumberSerializer.writeSVarInt(serializer, entityId);
 		VarNumberSerializer.writeVarInt(serializer, attributes.length);
 		for (Attribute attr : attributes) {
+			double add = 0;
+			double mulInc = 1;
+			double mulMore = 1;
+			for (Modifier modifier : attr.modifiers) {
+				switch (modifier.operation) {
+					case 0: {
+						add += modifier.amount;
+						break;
+					}
+					case 1: {
+						mulInc += modifier.amount;
+						break;
+					}
+					case 2: {
+						mulMore *= (modifier.amount + 1);
+						break;
+					}
+				}
+			}
+			double attrvalue = (attr.value + add) * mulInc * mulMore;
 			String pename = remapAttrNames.getOrDefault(attr.key, attr.key);
 			Any<Float, Float> minmax = knownMinMax.getOrDefault(pename, new Any<Float, Float>(Float.MIN_VALUE, Float.MAX_VALUE));
 			MiscSerializer.writeLFloat(serializer, minmax.getObj1());
 			MiscSerializer.writeLFloat(serializer, minmax.getObj2());
-			MiscSerializer.writeLFloat(serializer, (float) attr.value);
+			MiscSerializer.writeLFloat(serializer, (float) attrvalue);
 			MiscSerializer.writeLFloat(serializer, 0.000001F); //default value
 			StringSerializer.writeString(serializer, version, pename);
 		}
@@ -53,6 +73,7 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 		Attribute attr = new Attribute();
 		attr.key = name;
 		attr.value = value;
+		attr.modifiers = new Modifier[0];
 		return attr;
 	}
 
