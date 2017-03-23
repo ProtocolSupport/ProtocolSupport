@@ -45,18 +45,20 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 		int packetId = VarNumberSerializer.readVarInt(input);
 		ClientBoundMiddlePacket packetTransformer = registry.getTransformer(currentProtocol, packetId);
 		packetTransformer.readFromServerData(input);
-		packetTransformer.handle();
-		try (RecyclableCollection<ClientBoundPacketData> data = packetTransformer.toData(connection.getVersion())) {
-			for (ClientBoundPacketData packetdata : data) {
-				ByteBuf senddata = Allocator.allocateBuffer();
-				int newPacketId = getNewPacketId(currentProtocol, packetdata.getPacketId());
-				if (varintPacketId) {
-					VarNumberSerializer.writeVarInt(senddata, newPacketId);
-				} else {
-					senddata.writeByte(newPacketId);
+		if (packetTransformer.isValid()) {
+			packetTransformer.handle();
+			try (RecyclableCollection<ClientBoundPacketData> data = packetTransformer.toData(connection.getVersion())) {
+				for (ClientBoundPacketData packetdata : data) {
+					ByteBuf senddata = Allocator.allocateBuffer();
+					int newPacketId = getNewPacketId(currentProtocol, packetdata.getPacketId());
+					if (varintPacketId) {
+						VarNumberSerializer.writeVarInt(senddata, newPacketId);
+					} else {
+						senddata.writeByte(newPacketId);
+					}
+					senddata.writeBytes(packetdata);
+					output.add(senddata);
 				}
-				senddata.writeBytes(packetdata);
-				output.add(senddata);
 			}
 		}
 	}
