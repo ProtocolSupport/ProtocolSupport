@@ -9,6 +9,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedLiving;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
@@ -52,6 +53,11 @@ public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 	public void handle() {
 		wentity = new WatchedLiving(entityId, type);
 		cache.addWatchedEntity(wentity);
+	}
+
+	@Override
+	public boolean isValid() {
+		return SpecificRemapper.getMobByTypeId(type) != SpecificRemapper.NONE;
 	}
 
 }

@@ -742,10 +742,16 @@ public enum SpecificRemapper {
 	}
 
 	public static SpecificRemapper getObjectByTypeId(int objectTypeId) {
+		if (objectTypeId < 0 || objectTypeId >= OBJECT_BY_TYPE_ID.length) {
+			return SpecificRemapper.NONE;
+		}
 		return OBJECT_BY_TYPE_ID[objectTypeId];
 	}
 
 	public static SpecificRemapper getMobByTypeId(int mobTypeId) {
+		if (mobTypeId < 0 || mobTypeId >= MOB_BY_TYPE_ID.length) {
+			return SpecificRemapper.NONE;
+		}
 		return MOB_BY_TYPE_ID[mobTypeId];
 	}
 
