@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedObject;
 
 public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
@@ -42,6 +43,11 @@ public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 	@Override
 	public void handle() {
 		cache.addWatchedEntity(new WatchedObject(entityId, type));
+	}
+
+	@Override
+	public boolean isValid() {
+		return SpecificRemapper.getObjectByTypeId(type) != SpecificRemapper.NONE;
 	}
 
 }
