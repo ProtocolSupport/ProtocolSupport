@@ -5,7 +5,8 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 
-//Ids are copied from the Nukkit project :)
+//Reference for PELevelEvent which is PE only.
+//IDs are copied from the Nukkit project :)
 //TODO: recheck all ids for wrong and missing ones
 public class PELevelEvent {
 
