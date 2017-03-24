@@ -15,10 +15,11 @@ public class PEPacketIDs {
 	public static final int ENTITY_DESTORY = 15;
 	public static final int ENTITY_TELEPORT = 19;
 	public static final int UPDATE_BLOCK = 23;
-	public static final int SET_ATTRIBUTES = 31;
-	public static final int PLAYER_ACTION = 36;
 	public static final int PLAYER_MOVE = 20;
 	public static final int LEVEL_EVENT = 27;
+	public static final int SET_ATTRIBUTES = 31;
+	public static final int PLAYER_ACTION = 36;
+	public static final int ENTITY_METADATA = 39;
 	public static final int ENTITY_VELOCITY = 40;
 	public static final int SPAWN_POS = 43;
 	public static final int ANIMATION = 44;
