@@ -8,6 +8,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectChat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectDirection;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectItemStack;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectLong;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalUUID;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectPosition;
@@ -30,6 +31,7 @@ public abstract class ValueRemapperNoOp<T extends DataWatcherObject<?>> extends 
 	public static final ValueRemapperNoOp<DataWatcherObjectDirection> DIRECTION = new ValueRemapperNoOp<DataWatcherObjectDirection>(){};
 	public static final ValueRemapperNoOp<DataWatcherObjectOptionalUUID> OPTIONAL_UUID = new ValueRemapperNoOp<DataWatcherObjectOptionalUUID>(){};
 	public static final ValueRemapperNoOp<DataWatcherObjectBlockState> BLOCKSTATE = new ValueRemapperNoOp<DataWatcherObjectBlockState>(){};
+	public static final ValueRemapperNoOp<DataWatcherObjectLong> LONG = new ValueRemapperNoOp<DataWatcherObjectLong>(){};
 
 	private ValueRemapperNoOp() {
 	}

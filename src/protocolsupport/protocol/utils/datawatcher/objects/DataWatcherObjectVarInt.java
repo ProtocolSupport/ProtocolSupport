@@ -7,9 +7,16 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 
 public class DataWatcherObjectVarInt extends DataWatcherObject<Integer> {
 
+	public DataWatcherObjectVarInt(){
+	}
+	
+	public DataWatcherObjectVarInt(int Value) {
+		this.value = Value;
+	}
+
 	@Override
 	public int getTypeId(ProtocolVersion version) {
-		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_8)) {
+		if ((!version.equals(ProtocolVersion.MINECRAFT_PE)) && version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_8)) {
 			throw new IllegalStateException("No type id exists for protocol version "+version);
 		}
 		return 1;
@@ -22,7 +29,8 @@ public class DataWatcherObjectVarInt extends DataWatcherObject<Integer> {
 
 	@Override
 	public void writeToStream(ByteBuf to, ProtocolVersion version) {
-		VarNumberSerializer.writeVarInt(to, value);
+		if(version.equals(ProtocolVersion.MINECRAFT_PE)){VarNumberSerializer.writeSVarInt(to, value);}
+		else {VarNumberSerializer.writeVarInt(to, value);}
 	}
 
 }

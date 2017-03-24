@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import gnu.trove.map.TIntObjectMap;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.legacyremapper.LegacyDataWatcherSerializer;
+import protocolsupport.protocol.legacyremapper.pe.PEEntityMetaData;
 import protocolsupport.protocol.legacyremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -13,7 +13,7 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class EntityMetadata extends MiddleEntityMetadata{
+public class EntityMetadata extends MiddleEntityMetadata {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		TIntObjectMap<DataWatcherObject<?>> remapped = WatchedDataRemapper.transform(cache, entityId, metadata, version);
@@ -22,7 +22,7 @@ public class EntityMetadata extends MiddleEntityMetadata{
 		} else {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_METADATA, version);
 			VarNumberSerializer.writeSVarLong(serializer, entityId);
-			LegacyDataWatcherSerializer.encodeData(serializer, version, remapped);
+			PEEntityMetaData.writeMetadata(serializer, version, remapped);
 			return RecyclableSingletonList.create(serializer);
 		}
 	}
