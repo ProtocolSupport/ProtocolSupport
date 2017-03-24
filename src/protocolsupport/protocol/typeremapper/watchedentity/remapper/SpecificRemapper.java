@@ -36,7 +36,7 @@ public enum SpecificRemapper {
 		.addRemap(0, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL),
 		//air
 		new Mapping(1)
-		.addRemap(1, ValueRemapperNumberToShort.INSTANCE, ProtocolVersion.MINECRAFT_PE)
+		.addRemap(7, ValueRemapperNumberToShort.INSTANCE, ProtocolVersion.MINECRAFT_PE)
 		.addRemap(1, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_9__1_11)
 		.addRemap(1, ValueRemapperNumberToShort.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//nametag
