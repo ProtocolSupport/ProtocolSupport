@@ -21,8 +21,7 @@ public class DataWatcherObjectVarInt extends DataWatcherObject<Integer> {
 
 	@Override
 	public void writeToStream(ByteBuf to, ProtocolVersion version) {
-		if(version.equals(ProtocolVersion.MINECRAFT_PE)){VarNumberSerializer.writeSVarInt(to, value);}
-		else {VarNumberSerializer.writeVarInt(to, value);}
+		VarNumberSerializer.writeVarInt(to, value);
 	}
 
 }
