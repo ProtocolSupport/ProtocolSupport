@@ -32,22 +32,19 @@ public class PlayerAction extends ServerBoundMiddlePacket {
 	}
 
 	protected Position breakPosition = null;
-	
-	public static final int START_BREAK = 0;
-	public static final int ABORT_BREAK = 1;
-	public static final int STOP_BREAK = 2;
-	public static final int RELEASE_ITEM = 5;
-	public static final int STOP_SLEEPING = 6;
-	public static final int RESPAWN = 7;
-	public static final int JUMP = 8;
-	public static final int START_SPRINT = 9;
-	public static final int STOP_SPRINT = 10;
-	public static final int START_SNEAK = 11;
-	public static final int STOP_SNEAK = 12;
-	public static final int DIMENSION_CHANGE = 13;
-	public static final int START_GLIDE = 15;
-	public static final int DONTKNOW = 14;
-	public static final int STOP_GLIDE = 16;
+
+	private static final int START_BREAK = 0;
+	private static final int ABORT_BREAK = 1;
+	private static final int STOP_BREAK = 2;
+	private static final int RELEASE_ITEM = 5;
+	private static final int STOP_SLEEPING = 6;
+	private static final int RESPAWN = 7;
+	private static final int START_SPRINT = 9;
+	private static final int STOP_SPRINT = 10;
+	private static final int START_SNEAK = 11;
+	private static final int STOP_SNEAK = 12;
+	private static final int START_GLIDE = 15;
+	private static final int STOP_GLIDE = 16;
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
@@ -82,11 +79,11 @@ public class PlayerAction extends ServerBoundMiddlePacket {
 			}
 			case STOP_SPRINT: {
 				return RecyclableSingletonList.create(MiddleEntityAction.create(cache.getSelfPlayerEntityId(), 4, 0));
-      }
-			case START_SNEAK:{
+			}
+			case START_SNEAK: {
 				return RecyclableSingletonList.create(MiddleEntityAction.create(cache.getSelfPlayerEntityId(), 0, 0));
-      }
-			case STOP_SNEAK:{
+			}
+			case STOP_SNEAK: {
 				return RecyclableSingletonList.create(MiddleEntityAction.create(cache.getSelfPlayerEntityId(), 1, 0));
 			}
 			default: {
