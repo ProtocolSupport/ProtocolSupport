@@ -14,11 +14,6 @@ public class DataWatcherObjectByte extends DataWatcherObject<Byte> {
 	}
 
 	@Override
-	public int getTypeId(ProtocolVersion version) {
-		return 0;
-	}
-
-	@Override
 	public void readFromStream(ByteBuf from, ProtocolVersion version) {
 		value = from.readByte();
 	}

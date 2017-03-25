@@ -3,6 +3,7 @@ package protocolsupport.utils;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 
 public class ProtocolVersionsHelper {
@@ -51,6 +52,8 @@ public class ProtocolVersionsHelper {
 	public static final ProtocolVersion[] RANGE__1_8__1_9 = ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_9_4, ProtocolVersion.MINECRAFT_1_8);
 
 	public static final ProtocolVersion[] RANGE__1_6__1_10 = ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_6_1, ProtocolVersion.MINECRAFT_1_10);
+
+	public static final ProtocolVersion[] AFTER_1_8 = ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_9, ProtocolVersion.getLatest(ProtocolType.PC));
 
 	public static final ProtocolVersion[] concat(ProtocolVersion[] versions, ProtocolVersion... moreVersions) {
 		ArrayList<ProtocolVersion> all = new ArrayList<>();

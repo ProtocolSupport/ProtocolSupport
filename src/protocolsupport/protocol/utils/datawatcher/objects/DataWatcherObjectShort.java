@@ -15,14 +15,6 @@ public class DataWatcherObjectShort extends DataWatcherObject<Short> {
 	}
 
 	@Override
-	public int getTypeId(ProtocolVersion version) {
-		if ((!version.equals(ProtocolVersion.MINECRAFT_PE)) && version.isAfter(ProtocolVersion.MINECRAFT_1_8)) {
-			throw new IllegalStateException("No type id exists for protocol version "+version);
-		}
-		return 1;
-	}
-
-	@Override
 	public void readFromStream(ByteBuf from, ProtocolVersion version) {
 		value = from.readShort();
 	}

@@ -50,7 +50,7 @@ public class DataWatcherDeserializer {
 
 	private static void register(Class<? extends DataWatcherObject<?>> clazz) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		Constructor<? extends DataWatcherObject<?>> constr = clazz.getConstructor();
-		registry[constr.newInstance().getTypeId(ProtocolVersion.getLatest(ProtocolType.PC))] = constr;
+		registry[DataWatcherObjectIdRegistry.getTypeId(clazz, ProtocolVersion.getLatest(ProtocolType.PC))] = constr;
 	}
 
 	public static TIntObjectMap<DataWatcherObject<?>> decodeData(ByteBuf from, ProtocolVersion version) {
@@ -79,7 +79,7 @@ public class DataWatcherDeserializer {
 				iterator.advance();
 				DataWatcherObject<?> object = iterator.value();
 				to.writeByte(iterator.key());
-				to.writeByte(object.getTypeId(version));
+				to.writeByte(DataWatcherObjectIdRegistry.getTypeId(object, version));
 				object.writeToStream(to, version);
 			}
 		} else {

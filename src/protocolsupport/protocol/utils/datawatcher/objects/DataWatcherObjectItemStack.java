@@ -9,11 +9,6 @@ import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 public class DataWatcherObjectItemStack extends DataWatcherObject<ItemStackWrapper> {
 
 	@Override
-	public int getTypeId(ProtocolVersion version) {
-		return 5;
-	}
-
-	@Override
 	public void readFromStream(ByteBuf from, ProtocolVersion version) {
 		value = ItemStackSerializer.readItemStack(from, version);
 	}

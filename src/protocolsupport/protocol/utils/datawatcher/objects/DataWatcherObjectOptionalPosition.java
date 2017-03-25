@@ -9,14 +9,6 @@ import protocolsupport.protocol.utils.types.Position;
 public class DataWatcherObjectOptionalPosition extends DataWatcherObject<Position> {
 
 	@Override
-	public int getTypeId(ProtocolVersion version) {
-		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_8)) {
-			throw new IllegalStateException("No type id exists for protocol version "+version);
-		}
-		return 9;
-	}
-
-	@Override
 	public void readFromStream(ByteBuf from, ProtocolVersion version) {
 		if (from.readBoolean()) {
 			value = PositionSerializer.readPosition(from);

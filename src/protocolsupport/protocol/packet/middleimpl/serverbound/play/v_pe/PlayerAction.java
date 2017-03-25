@@ -77,14 +77,18 @@ public class PlayerAction extends ServerBoundMiddlePacket {
 					return RecyclableEmptyList.get();
 				}
 			}
-			case START_SPRINT:
+			case START_SPRINT: {
 				return RecyclableSingletonList.create(MiddleEntityAction.create(cache.getSelfPlayerEntityId(), 3, 0));
-			case STOP_SPRINT:
+			}
+			case STOP_SPRINT: {
 				return RecyclableSingletonList.create(MiddleEntityAction.create(cache.getSelfPlayerEntityId(), 4, 0));
-			case START_SNEAK:
+      }
+			case START_SNEAK:{
 				return RecyclableSingletonList.create(MiddleEntityAction.create(cache.getSelfPlayerEntityId(), 0, 0));
-			case STOP_SNEAK:
+      }
+			case STOP_SNEAK:{
 				return RecyclableSingletonList.create(MiddleEntityAction.create(cache.getSelfPlayerEntityId(), 1, 0));
+			}
 			default: {
 				return RecyclableEmptyList.get();
 			}

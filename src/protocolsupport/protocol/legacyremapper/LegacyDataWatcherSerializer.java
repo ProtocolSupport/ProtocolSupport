@@ -5,6 +5,7 @@ import gnu.trove.map.TIntObjectMap;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
 
 public class LegacyDataWatcherSerializer {
 
@@ -14,7 +15,7 @@ public class LegacyDataWatcherSerializer {
 			while (iterator.hasNext()) {
 				iterator.advance();
 				DataWatcherObject<?> object = iterator.value();
-				int tk = ((object.getTypeId(version) << 5) | (iterator.key() & 0x1F)) & 0xFF;
+				int tk = ((DataWatcherObjectIdRegistry.getTypeId(object, version) << 5) | (iterator.key() & 0x1F)) & 0xFF;
 				to.writeByte(tk);
 				object.writeToStream(to, version);
 			}

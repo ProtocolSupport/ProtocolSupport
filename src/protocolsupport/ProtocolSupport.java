@@ -24,6 +24,7 @@ import protocolsupport.protocol.typeskipper.id.IdSkipper;
 import protocolsupport.protocol.utils.data.ItemData;
 import protocolsupport.protocol.utils.data.PotionData;
 import protocolsupport.protocol.utils.data.SoundData;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
@@ -58,6 +59,7 @@ public class ProtocolSupport extends JavaPlugin {
 			AbstractLoginListener.init();
 			LegacySound.init();
 			IdSkipper.init();
+			DataWatcherObjectIdRegistry.init();
 			SpecificRemapper.init();
 			IdRemapper.init();
 			BlockStorageReader.init();
