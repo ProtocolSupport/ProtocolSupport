@@ -10,41 +10,40 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
 
 public class PEEntityMetaData {
-	
-	public static int FLAG_ON_FIRE = 0;
-	public static int FLAG_SNEAKING = 1;
-	public static int FLAG_RIDING = 2;
-	public static int FLAG_SPRINTING = 3;
-	public static int FLAG_USING_ITEM = 4;
-	public static int FLAG_INVISIBLE = 5;
-	public static int FLAG_TEMPTED = 6;
-	public static int FLAG_IN_LOVE = 7;
-	public static int FLAG_SADDLED = 8;
-	public static int FLAG_POWERED = 9;
-	public static int FLAG_IGNITED = 10;
-	public static int FLAG_BABY = 11;
-	public static int FLAG_CONVERTING = 12;
-	public static int FLAG_CRITICAL = 13;
-	public static int FLAG_SHOW_NAMETAG = 14;
-	public static int FLAG_ALWAYS_SHOW_NAMETAG = 15;
-	public static int FLAG_NO_AI = 16;
-	public static int FLAG_SILENT = 17;
-	public static int FLAG_CLIMBING = 18;
-	public static int FLAG_RESTING = 19;
-	public static int FLAG_SITTING = 20;
-	public static int FLAG_ANGRY = 21;
-	public static int FLAG_INTERESTED = 22;
-	public static int FLAG_CHARGED = 23;
-	public static int FLAG_TAMED = 24;
-	public static int FLAG_LEASHED = 25;
-	public static int FLAG_SHEARED = 26;
-	public static int FLAG_GLIDING = 27;
-	public static int FLAG_ELDER = 28;
-	public static int FLAG_MOVING = 29;
-	public static int FLAG_BREATHING = 30;
-	public static int FLAG_CHESTED = 31;
-	public static int FLAG_STACKABLE = 32;
-	public static int FLAG_IDLING = 36;
+	private static int FLAG_ON_FIRE = 0;
+	private static int FLAG_SNEAKING = 1;
+//	private static int FLAG_RIDING = 2; TODO: Implement more flags and update getBaseValues() to find them out.
+	private static int FLAG_SPRINTING = 3;
+//	private static int FLAG_USING_ITEM = 4;
+	private static int FLAG_INVISIBLE = 5;
+//	private static int FLAG_TEMPTED = 6;
+//	private static int FLAG_IN_LOVE = 7;
+//	private static int FLAG_SADDLED = 8;
+//	private static int FLAG_POWERED = 9;
+//	private static int FLAG_IGNITED = 10;
+//	private static int FLAG_BABY = 11;
+//	private static int FLAG_CONVERTING = 12;
+//	private static int FLAG_CRITICAL = 13;
+//	private static int FLAG_SHOW_NAMETAG = 14;
+//	private static int FLAG_ALWAYS_SHOW_NAMETAG = 15;
+//	private static int FLAG_NO_AI = 16;
+//	private static int FLAG_SILENT = 17;
+//	private static int FLAG_CLIMBING = 18;
+//	private static int FLAG_RESTING = 19;
+//	private static int FLAG_SITTING = 20;
+//	private static int FLAG_ANGRY = 21;
+//	private static int FLAG_INTERESTED = 22;
+//	private static int FLAG_CHARGED = 23;
+//	private static int FLAG_TAMED = 24;
+//	private static int FLAG_LEASHED = 25;
+//	private static int FLAG_SHEARED = 26;
+	private static int FLAG_GLIDING = 27;
+//	private static int FLAG_ELDER = 28;
+//	private static int FLAG_MOVING = 29;
+//	private static int FLAG_BREATHING = 30;
+//	private static int FLAG_CHESTED = 31;
+//	private static int FLAG_STACKABLE = 32;
+//	private static int FLAG_IDLING = 36;
 	
 	
 	public static boolean writeMetadata(ByteBuf to, ProtocolVersion version, TIntObjectMap<DataWatcherObject<?>> peMetadata) {
