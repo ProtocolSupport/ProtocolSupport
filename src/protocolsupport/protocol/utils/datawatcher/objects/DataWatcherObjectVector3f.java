@@ -9,11 +9,6 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 public class DataWatcherObjectVector3f extends DataWatcherObject<Vector> {
 
 	@Override
-	public int getTypeId(ProtocolVersion version) {
-		return 7;
-	}
-
-	@Override
 	public void readFromStream(ByteBuf from, ProtocolVersion version) {
 		value = new Vector(from.readFloat(), from.readFloat(), from.readFloat());
 	}
