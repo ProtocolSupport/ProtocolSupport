@@ -17,11 +17,11 @@ public class ChangeGameState extends MiddleGameStateChange {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		switch (type) {
 			case 1: {
-				packets.add(PELevelEvent.createPacket(PELevelEvent.EVENT_STOP_RAIN));
+				packets.add(PELevelEvent.createPacket(PELevelEvent.STOP_RAIN));
 				break;
 			}
 			case 2: {
-				packets.add(PELevelEvent.createPacket(PELevelEvent.EVENT_START_RAIN, 60000));
+				packets.add(PELevelEvent.createPacket(PELevelEvent.START_RAIN, 60000));
 				break;
 			}
 			case 3: {
