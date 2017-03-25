@@ -15,11 +15,6 @@ public class DataWatcherObjectString extends DataWatcherObject<String> {
 	}
 
 	@Override
-	public int getTypeId(ProtocolVersion version) {
-		return version.isAfter(ProtocolVersion.MINECRAFT_1_8) ? 3 : 4;
-	}
-
-	@Override
 	public void readFromStream(ByteBuf from, ProtocolVersion version) {
 		value = StringSerializer.readString(from, version);
 	}

@@ -9,14 +9,6 @@ import protocolsupport.protocol.utils.types.Position;
 public class DataWatcherObjectVector3i extends DataWatcherObject<Position> {
 
 	@Override
-	public int getTypeId(ProtocolVersion version) {
-		if (version.isAfter(ProtocolVersion.MINECRAFT_1_8)) {
-			throw new IllegalStateException("No type id exists for protocol version " + version);
-		}
-		return 6;
-	}
-
-	@Override
 	public void readFromStream(ByteBuf from, ProtocolVersion version) {
 		value = PositionSerializer.readLegacyPositionI(from);
 	}

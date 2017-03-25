@@ -7,11 +7,6 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 public class DataWatcherObjectFloat extends DataWatcherObject<Float> {
 
 	@Override
-	public int getTypeId(ProtocolVersion version) {
-		return version.isAfter(ProtocolVersion.MINECRAFT_1_8) ? 2 : 3;
-	}
-
-	@Override
 	public void readFromStream(ByteBuf from, ProtocolVersion version) {
 		value = from.readFloat();
 	}

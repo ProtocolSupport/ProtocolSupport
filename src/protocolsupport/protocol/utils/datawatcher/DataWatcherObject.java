@@ -10,8 +10,6 @@ public abstract class DataWatcherObject<T> {
 
 	protected T value;
 
-	public abstract int getTypeId(ProtocolVersion version);
-
 	public abstract void readFromStream(ByteBuf from, ProtocolVersion version) throws DecoderException;
 
 	public abstract void writeToStream(ByteBuf to, ProtocolVersion version);

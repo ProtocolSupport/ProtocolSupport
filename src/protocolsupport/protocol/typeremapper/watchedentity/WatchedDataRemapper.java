@@ -62,7 +62,6 @@ public class WatchedDataRemapper {
 				try {
 					if (remapper.isValid(object)) {
 						DataWatcherObject<?> remapped = remapper.remap(object);
-						remapped.getTypeId(to);
 						transformed.put(entry.getIdTo(), remapped);
 					}
 				} catch (Exception e) {
