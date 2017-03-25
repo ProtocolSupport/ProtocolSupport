@@ -13,6 +13,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectDirec
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectItemStack;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectLong;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalUUID;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectPosition;
@@ -57,6 +58,15 @@ public class DataWatcherObjectIdRegistry {
 		register(DataWatcherObjectVarInt.class, 1, ProtocolVersionsHelper.AFTER_1_8);
 		register(DataWatcherObjectVector3f.class, 7, ProtocolVersionsHelper.ALL);
 		register(DataWatcherObjectVector3i.class, 6, ProtocolVersionsHelper.BEFORE_1_9);
+		//PE Values
+		register(DataWatcherObjectShort.class, 1, ProtocolVersion.MINECRAFT_PE);
+		register(DataWatcherObjectVarInt.class, 2, ProtocolVersion.MINECRAFT_PE);
+		register(DataWatcherObjectFloat.class, 3, ProtocolVersion.MINECRAFT_PE);
+		register(DataWatcherObjectString.class, 4, ProtocolVersion.MINECRAFT_PE);
+		//TODO: SLOT
+		//TODO: BLOCKPOSITION (Vector3i?)
+		register(DataWatcherObjectLong.class, 7, ProtocolVersion.MINECRAFT_PE);
+		//TODO: ENTITYPOSTIION (Vector3f?)
 	}
 
 	public static int getTypeId(@SuppressWarnings("rawtypes") Class<? extends DataWatcherObject> clazz, ProtocolVersion version) {

@@ -19,20 +19,12 @@ public class DataWatcherObjectLong extends DataWatcherObject<Long>{
 	}
 
 	@Override
-	public int getTypeId(ProtocolVersion version) {
-		if(version.equals(ProtocolVersion.MINECRAFT_PE)){return 7;}
-		else{return 1;} //It is technically PE only though.
-	}
-
-	@Override
 	public void readFromStream(ByteBuf from, ProtocolVersion version) {
-		if(version.equals(ProtocolVersion.MINECRAFT_PE)){value = VarNumberSerializer.readVarLong(from);}
-		else {value = (long) from.readInt();}
+		value = VarNumberSerializer.readVarLong(from);
 	}
 
 	@Override
 	public void writeToStream(ByteBuf to, ProtocolVersion version) {
-		if(version.equals(ProtocolVersion.MINECRAFT_PE)){VarNumberSerializer.writeSVarLong(to, value);}
-		else {to.writeInt(Math.toIntExact(value));}
+		VarNumberSerializer.writeSVarLong(to, value);
 	}
 }

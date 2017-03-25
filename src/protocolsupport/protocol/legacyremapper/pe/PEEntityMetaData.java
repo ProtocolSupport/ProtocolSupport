@@ -7,6 +7,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
 
 public class PEEntityMetaData {
 	
@@ -55,9 +56,10 @@ public class PEEntityMetaData {
 				iterator.advance();
 				DataWatcherObject<?> object = iterator.value();
 				VarNumberSerializer.writeSVarInt(to, iterator.key());
-				VarNumberSerializer.writeSVarInt(to, object.getTypeId(version));
+				int tk = ((DataWatcherObjectIdRegistry.getTypeId(object, version) << 5) | (iterator.key() & 0x1F)) & 0xFF;
+				VarNumberSerializer.writeSVarInt(to, tk);
 				System.out.print("Key: ");System.out.println(iterator.key());
-				System.out.print("Type: ");System.out.println(object.getTypeId(version));
+				System.out.print("Type: ");System.out.println(tk);
 				System.out.print("Value: ");System.out.println(object.getValue());
 				object.writeToStream(to, ProtocolVersion.MINECRAFT_PE);
 			}
