@@ -70,7 +70,7 @@ public class PEEntityMetaData {
 		return false;
 	}
 	
-	public static Long getBaseValues(int entityId, WatchedEntity entity, NetworkDataCache cache, TIntObjectMap<DataWatcherObject<?>> originaldata){
+	public static Long getBaseValues(int entityId, WatchedEntity entity, NetworkDataCache cache, TIntObjectMap<DataWatcherObject<?>> pcMeta){
 		byte pcBaseValue = cache.getWatchedEntityBaseMeta(entityId);
 		
 		long b = 0;
@@ -80,8 +80,10 @@ public class PEEntityMetaData {
 		if((pcBaseValue & (1 << 5)) != 0) b |= (1 << FLAG_INVISIBLE);
 		if((pcBaseValue & (1 << 7)) != 0) b |= (1 << FLAG_GLIDING);
 		
-		//Player's have names on default. TODO: Fix team visibility (maybe using ScoreBoard Objective packet calling Metadata change packet?)
-		if((boolFromPc(3, originaldata)) || (entity.getType() == SpecificRemapper.PLAYER && !originaldata.containsKey(3))){
+		if(pcMeta.containsKey(2)) b |= (1 << FLAG_SHOW_NAMETAG);
+		
+		//Player's have names on default. TODO: Fix team visibility (maybe using ScoreBoard Team packet calling Metadata change packet?)
+		if(entity.getType() == SpecificRemapper.PLAYER && (!pcMeta.containsKey(3) || boolFromPc(3, pcMeta))){
 			 b |= (1 << FLAG_SHOW_NAMETAG);
 			 b |= (1 << FLAG_ALWAYS_SHOW_NAMETAG);
 		}

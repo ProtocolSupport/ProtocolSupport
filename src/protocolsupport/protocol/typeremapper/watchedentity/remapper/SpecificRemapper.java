@@ -41,6 +41,7 @@ public enum SpecificRemapper {
 		.addRemap(1, ValueRemapperNumberToShort.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//nametag
 		new Mapping(2)
+		.addRemap(4, ValueRemapperNoOp.STRING, ProtocolVersion.MINECRAFT_PE)
 		.addRemap(2, ValueRemapperNoOp.STRING, ProtocolVersionsHelper.RANGE__1_9__1_11),
 		//nametag visible
 		new Mapping(3)
