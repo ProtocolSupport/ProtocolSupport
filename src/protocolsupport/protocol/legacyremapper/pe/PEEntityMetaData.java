@@ -55,10 +55,10 @@ public class PEEntityMetaData {
 				iterator.advance();
 				DataWatcherObject<?> object = iterator.value();
 				VarNumberSerializer.writeVarInt(to, iterator.key());
-				int tk = ((DataWatcherObjectIdRegistry.getTypeId(object, version) << 5) | (iterator.key() & 0x1F)) & 0xFF;
+				int tk = DataWatcherObjectIdRegistry.getTypeId(object, version) ;
 				VarNumberSerializer.writeVarInt(to, tk);
  				System.out.println("	Key: " + iterator.key());
- 				System.out.println("	Type" + tk);
+ 				System.out.println("	Type: " + tk);
  				System.out.println("	Value: " + object.getValue());
 				object.writeToStream(to, version);
 			}
