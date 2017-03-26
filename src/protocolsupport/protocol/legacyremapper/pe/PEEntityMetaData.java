@@ -21,7 +21,7 @@ public class PEEntityMetaData {
 	private static int FLAG_INVISIBLE = 5;
 //	private static int FLAG_TEMPTED = 6;
 //	private static int FLAG_IN_LOVE = 7;
-//	private static int FLAG_SADDLED = 8;
+	private static int FLAG_SADDLED = 8;
 //	private static int FLAG_POWERED = 9;
 //	private static int FLAG_IGNITED = 10;
 //	private static int FLAG_BABY = 11;
@@ -30,7 +30,7 @@ public class PEEntityMetaData {
 	private static int FLAG_SHOW_NAMETAG = 14;
 	private static int FLAG_ALWAYS_SHOW_NAMETAG = 15;
 //	private static int FLAG_NO_AI = 16;
-//	private static int FLAG_SILENT = 17;
+	private static int FLAG_SILENT = 17;
 //	private static int FLAG_CLIMBING = 18;
 //	private static int FLAG_RESTING = 19;
 //	private static int FLAG_SITTING = 20;
@@ -52,7 +52,6 @@ public class PEEntityMetaData {
 	public static boolean writeMetadata(ByteBuf to, ProtocolVersion version, TIntObjectMap<DataWatcherObject<?>> peMetadata) {
 		if (!peMetadata.isEmpty()) {
 			TIntObjectIterator<DataWatcherObject<?>> iterator = peMetadata.iterator();
-			System.out.println("Size: " + peMetadata.size());
 			VarNumberSerializer.writeVarInt(to, peMetadata.size());
 			while (iterator.hasNext()) {
 				iterator.advance();
@@ -60,9 +59,6 @@ public class PEEntityMetaData {
 				VarNumberSerializer.writeVarInt(to, iterator.key());
 				int tk = DataWatcherObjectIdRegistry.getTypeId(object, version) ;
 				VarNumberSerializer.writeVarInt(to, tk);
- 				System.out.println("	Key: " + iterator.key());
- 				System.out.println("	Type: " + tk);
- 				System.out.println("	Value: " + object.getValue());
 				object.writeToStream(to, version);
 			}
 			return true;
@@ -71,30 +67,60 @@ public class PEEntityMetaData {
 	}
 	
 	public static Long getBaseValues(int entityId, WatchedEntity entity, NetworkDataCache cache, TIntObjectMap<DataWatcherObject<?>> pcMeta){
-		byte pcBaseValue = cache.getWatchedEntityBaseMeta(entityId);
-		
+		byte basevalue = cache.getWatchedEntityBaseMeta(entityId);
 		long b = 0;
-		if((pcBaseValue & (1 << 0)) != 0) b |= (1 << FLAG_ON_FIRE);
-		if((pcBaseValue & (1 << 1)) != 0) b |= (1 << FLAG_SNEAKING);
-		if((pcBaseValue & (1 << 3)) != 0) b |= (1 << FLAG_SPRINTING);
-		if((pcBaseValue & (1 << 5)) != 0) b |= (1 << FLAG_INVISIBLE);
-		if((pcBaseValue & (1 << 7)) != 0) b |= (1 << FLAG_GLIDING);
-		
-		if(pcMeta.containsKey(2)) b |= (1 << FLAG_SHOW_NAMETAG);
-		
-		//Player's have names on default. TODO: Fix team visibility (maybe using ScoreBoard Team packet calling Metadata change packet?)
-		if(entity.getType() == SpecificRemapper.PLAYER && (!pcMeta.containsKey(3) || boolFromPc(3, pcMeta))){
-			 b |= (1 << FLAG_SHOW_NAMETAG);
-			 b |= (1 << FLAG_ALWAYS_SHOW_NAMETAG);
-		}
-		
-		
+		if((basevalue & (1 << 0)) != 0) b |= (1 << FLAG_ON_FIRE);
+		if((basevalue & (1 << 1)) != 0) b |= (1 << FLAG_SNEAKING);
+		if((basevalue & (1 << 3)) != 0) b |= (1 << FLAG_SPRINTING);
+		if((basevalue & (1 << 5)) != 0) b |= (1 << FLAG_INVISIBLE);
+		if((basevalue & (1 << 7)) != 0) b |= (1 << FLAG_GLIDING);
+		if(boolFromPc(4, pcMeta)) b |= (1 << FLAG_SILENT);
+		if(showName(entity, pcMeta) >= NAME_SHOW_CLOSE) b |= (1 << FLAG_SHOW_NAMETAG);
+		if(showName(entity, pcMeta) >= NAME_SHOW_FAR) b |= (1 << FLAG_ALWAYS_SHOW_NAMETAG);
+		//Specifics:
+		if(entity.getType() == SpecificRemapper.PIG)  b |= (1 << FLAG_SADDLED); //Test
+		//if((entity.getType() == SpecificRemapper.AGEABLE) && boolFromPc(12, pcMeta)) b |= (1 << FLAG_BABY);
+		//if(((entity.getType() == SpecificRemapper.PIG) && boolFromPc(13, pcMeta)) || ((entity.getType() == SpecificRemapper.BASE_HORSE) && boolFromPcFlag(13, 2, pcMeta))) b |= (1 << FLAG_SADDLED);
+		//if((entity.getType() == SpecificRemapper.SHEEP) && boolFromPcFlag(13, 7, pcMeta)) b |= (1 << FLAG_SHEARED);
 		return b;
 	}
 	
-	public static boolean boolFromPc(int key, TIntObjectMap<DataWatcherObject<?>> originaldata){
+	private static int NAME_DONT_SHOW = 0;
+	private static int NAME_SHOW_CLOSE = 1;
+	private static int NAME_SHOW_FAR = 2;
+	
+	private static int showName(WatchedEntity entity, TIntObjectMap<DataWatcherObject<?>> pcMeta){
+		if(entity.getType() == SpecificRemapper.PLAYER && (!pcMeta.containsKey(3) || boolFromPc(3, pcMeta))){
+			return NAME_SHOW_FAR;
+		}else if (pcMeta.containsKey(2)){
+			return NAME_SHOW_CLOSE;
+		}
+		return NAME_DONT_SHOW;
+	}
+	
+	private static boolean boolFromPc(int key, TIntObjectMap<DataWatcherObject<?>> originaldata){
 		if((originaldata.containsKey(key)) && ((DataWatcherObjectBoolean)originaldata.get(key)).getValue()) return true;
 		return false;
 	}
+	
+	//Allright, this had to be done differently altogether since minecraft doesn't always send all Metadata of animals etc.
+	//Just like the basecash it should be stored inside the NetworkDataCashe. Eg:
+	/*
+ 			DataWatcherObject<?> horseFlags = originaldata.get(13);
+			if (horseFlags != null) {
+				if (horseFlags.getValue() instanceof Number) {
+					cache.addWatchedEntityHorseMeta(entityId, ((Number) horseFlags.getValue()).byteValue());
+				}
+			}
+	 */
+	//Also information such as isBaba (which is set to 12) doesn't seem to be send always (updated) so should also be Cashed. ;(
+	
+	/*private static boolean boolFromPcFlag(int key, int flagKey, TIntObjectMap<DataWatcherObject<?>> pcMeta){
+		if(pcMeta.containsKey(key)){
+			byte flags = ((Number) pcMeta.get(key).getValue()).byteValue();
+			return ((flags & (1 << flagKey)) != 0);
+		}
+		return false; 
+	}*/
 	
 }

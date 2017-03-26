@@ -55,9 +55,10 @@ public class WatchedDataRemapper {
 				}
 			}
 		}
+		
 		if(to.equals(ProtocolVersion.MINECRAFT_PE)){
 			originaldata.put(0, new DataWatcherObjectLong(PEEntityMetaData.getBaseValues(entityId, entity, cache, originaldata)));
-			if((entity.getType() == SpecificRemapper.PLAYER) && originaldata.containsKey(2)) originaldata.remove(2); //Don't put nametags on players. Why would you?
+			if((entity.getType() == SpecificRemapper.PLAYER) && originaldata.containsKey(2)) originaldata.remove(2); //Don't put empty nametags on players. Why would you?
 			if((!originaldata.containsKey(1)) || (int)(((DataWatcherObjectVarInt)originaldata.get(1)).getValue()) == 300) originaldata.put(1, new DataWatcherObjectVarInt(0)); //Air is 0 when full and 0 when empty on PE.
 			originaldata.put(38, new DataWatcherObjectLong(-1));//TODO: Add Leash functionality.
 		}

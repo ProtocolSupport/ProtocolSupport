@@ -2,12 +2,14 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.legacyremapper.pe.PEDataValues;
+import protocolsupport.protocol.legacyremapper.pe.PEEntityMetaData;
 import protocolsupport.protocol.legacyremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnLiving;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.watchedentity.WatchedDataRemapper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -28,7 +30,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		MiscSerializer.writeLFloat(serializer, pitch);
 		MiscSerializer.writeLFloat(serializer, yaw);
 		VarNumberSerializer.writeVarInt(serializer, 0); //attributes
-		VarNumberSerializer.writeVarInt(serializer, 0); //TODO: metadata
+		PEEntityMetaData.writeMetadata(serializer, version, WatchedDataRemapper.transform(cache, entityId, metadata, version));
 		VarNumberSerializer.writeVarInt(serializer, 0); //links
 		return RecyclableSingletonList.create(serializer);
 	}
