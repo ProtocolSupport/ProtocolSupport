@@ -50,17 +50,17 @@ public class PEEntityMetaData {
 		if (!peMetadata.isEmpty()) {
 			TIntObjectIterator<DataWatcherObject<?>> iterator = peMetadata.iterator();
 			System.out.println("Size: " + peMetadata.size());
-			VarNumberSerializer.writeSVarInt(to, peMetadata.size());
+			VarNumberSerializer.writeVarInt(to, peMetadata.size());
 			while (iterator.hasNext()) {
 				iterator.advance();
 				DataWatcherObject<?> object = iterator.value();
-				VarNumberSerializer.writeSVarInt(to, iterator.key());
+				VarNumberSerializer.writeVarInt(to, iterator.key());
 				int tk = ((DataWatcherObjectIdRegistry.getTypeId(object, version) << 5) | (iterator.key() & 0x1F)) & 0xFF;
-				VarNumberSerializer.writeSVarInt(to, tk);
-				System.out.print("Key: ");System.out.println(iterator.key());
-				System.out.print("Type: ");System.out.println(tk);
-				System.out.print("Value: ");System.out.println(object.getValue());
-				object.writeToStream(to, ProtocolVersion.MINECRAFT_PE);
+				VarNumberSerializer.writeVarInt(to, tk);
+ 				System.out.println("	Key: " + iterator.key());
+ 				System.out.println("	Type" + tk);
+ 				System.out.println("	Value: " + object.getValue());
+				object.writeToStream(to, version);
 			}
 			return true;
 		}

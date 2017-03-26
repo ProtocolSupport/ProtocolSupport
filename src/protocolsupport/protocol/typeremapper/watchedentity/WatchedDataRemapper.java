@@ -56,7 +56,6 @@ public class WatchedDataRemapper {
 			}
 		}
 		if(to.equals(ProtocolVersion.MINECRAFT_PE)){
-			originaldata.clear();
 			originaldata.put(0, new DataWatcherObjectLong(PEEntityMetaData.getBaseValues(cache, entityId, originaldata)));
 			if(!originaldata.containsKey(1)) originaldata.put(1, new DataWatcherObjectVarInt(0));
 			originaldata.put(38, new DataWatcherObjectLong(-1));//TODO: Add Leash functionality.

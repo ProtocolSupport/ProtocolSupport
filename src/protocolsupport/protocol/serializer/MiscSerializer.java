@@ -15,6 +15,14 @@ public class MiscSerializer {
 	public static void writeLFloat(ByteBuf to, float f) {
 		to.writeInt(ByteBufUtil.swapInt(Float.floatToIntBits(f)));
 	}
+	
+	public static short readLShort(ByteBuf from){
+		return ByteBufUtil.swapShort(from.readShort());
+	}
+	
+	public static void writeLShort(ByteBuf to, short s){
+		to.writeShort(ByteBufUtil.swapShort(s));
+	}
 
 	public static <T extends Enum<T>> T readEnum(ByteBuf from, Class<T> clazz) {
 		return clazz.getEnumConstants()[VarNumberSerializer.readVarInt(from)];
