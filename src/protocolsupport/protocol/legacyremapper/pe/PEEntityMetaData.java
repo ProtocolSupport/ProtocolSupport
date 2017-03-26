@@ -6,8 +6,11 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
+import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;
 
 public class PEEntityMetaData {
 	private static int FLAG_ON_FIRE = 0;
@@ -24,8 +27,8 @@ public class PEEntityMetaData {
 //	private static int FLAG_BABY = 11;
 //	private static int FLAG_CONVERTING = 12;
 //	private static int FLAG_CRITICAL = 13;
-//	private static int FLAG_SHOW_NAMETAG = 14;
-//	private static int FLAG_ALWAYS_SHOW_NAMETAG = 15;
+	private static int FLAG_SHOW_NAMETAG = 14;
+	private static int FLAG_ALWAYS_SHOW_NAMETAG = 15;
 //	private static int FLAG_NO_AI = 16;
 //	private static int FLAG_SILENT = 17;
 //	private static int FLAG_CLIMBING = 18;
@@ -67,16 +70,29 @@ public class PEEntityMetaData {
 		return false;
 	}
 	
-	public static Long getBaseValues(NetworkDataCache cache, int entityId, TIntObjectMap<DataWatcherObject<?>> originaldata){
+	public static Long getBaseValues(int entityId, WatchedEntity entity, NetworkDataCache cache, TIntObjectMap<DataWatcherObject<?>> originaldata){
 		byte pcBaseValue = cache.getWatchedEntityBaseMeta(entityId);
 		
 		long b = 0;
-		b |= (pcBaseValue & 0x02) > 0 ? FLAG_ON_FIRE : 0;
-		b |= (pcBaseValue & 0x08) > 0 ? FLAG_SNEAKING : 0;
-		b |= (pcBaseValue & 0x10) > 0 ? FLAG_SPRINTING : 0;
-		b |= (pcBaseValue & 0x20) > 0 ? FLAG_INVISIBLE : 0;
-		b |= (pcBaseValue & 0x80) > 0 ? FLAG_GLIDING : 0;
+		if((pcBaseValue & (1 << 0)) != 0) b |= (1 << FLAG_ON_FIRE);
+		if((pcBaseValue & (1 << 1)) != 0) b |= (1 << FLAG_SNEAKING);
+		if((pcBaseValue & (1 << 3)) != 0) b |= (1 << FLAG_SPRINTING);
+		if((pcBaseValue & (1 << 5)) != 0) b |= (1 << FLAG_INVISIBLE);
+		if((pcBaseValue & (1 << 7)) != 0) b |= (1 << FLAG_GLIDING);
+		
+		//Player's have names on default. TODO: Fix team visibility (maybe using ScoreBoard Objective packet calling Metadata change packet?)
+		if((boolFromPc(3, originaldata)) || (entity.getType() == SpecificRemapper.PLAYER && !originaldata.containsKey(3))){
+			 b |= (1 << FLAG_SHOW_NAMETAG);
+			 b |= (1 << FLAG_ALWAYS_SHOW_NAMETAG);
+		}
+		
+		
 		return b;
+	}
+	
+	public static boolean boolFromPc(int key, TIntObjectMap<DataWatcherObject<?>> originaldata){
+		if((originaldata.containsKey(key)) && ((DataWatcherObjectBoolean)originaldata.get(key)).getValue()) return true;
+		return false;
 	}
 	
 }
