@@ -15,20 +15,20 @@ public class PEPacketIDs {
 	public static final int ENTITY_DESTORY = 15;
 	public static final int ENTITY_TELEPORT = 19;
 	public static final int UPDATE_BLOCK = 23;
-	public static final int SET_ATTRIBUTES = 31;
-	public static final int PLAYER_ACTION = 36;
 	public static final int PLAYER_MOVE = 20;
 	public static final int LEVEL_EVENT = 27;
-	public static final int ENTITY_VELOCITY = 40;
-	public static final int SPAWN_POS = 43;
-	public static final int ANIMATION = 44;
-	public static final int RESPAWN_POS = 45;
-	public static final int ADVENTURE_SETTINGS = 55;
-	public static final int CHUNK_DATA = 58;
-	public static final int SET_DIFFICULTY = 60;
-	public static final int CHANGE_DIMENSION = 61;
-	public static final int CHANGE_PLAYER_GAMETYPE = 62;
-	public static final int PLAYER_INFO = 63;
-	public static final int CHUNK_RADIUS = 69;
+	public static final int SET_ATTRIBUTES = 31;
+	public static final int PLAYER_ACTION = 37;
+	public static final int ENTITY_VELOCITY = 41;
+	public static final int SPAWN_POS = 44;
+	public static final int ANIMATION = 45;
+	public static final int RESPAWN_POS = 46;
+	public static final int ADVENTURE_SETTINGS = 56;
+	public static final int CHUNK_DATA = 59;
+	public static final int SET_DIFFICULTY = 61;
+	public static final int CHANGE_DIMENSION = 62;
+	public static final int CHANGE_PLAYER_GAMETYPE = 63;
+	public static final int PLAYER_INFO = 64;
+	public static final int CHUNK_RADIUS = 70;
 
 }
