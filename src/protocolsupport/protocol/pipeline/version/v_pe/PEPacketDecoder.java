@@ -15,6 +15,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Animatio
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Chat;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PlayerAction;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PositionLook;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.UseEntity;
 import protocolsupport.protocol.pipeline.version.AbstractPacketDecoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -33,6 +34,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		registry.register(NetworkState.PLAY, PEPacketIDs.PLAYER_ACTION, PlayerAction.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.CHAT, Chat.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.ANIMATION, Animation.class);
+		registry.register(NetworkState.PLAY, PEPacketIDs.INTERACT, UseEntity.class);
 	}
 
 	public PEPacketDecoder(Connection connection, NetworkDataCache cache) {
