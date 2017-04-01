@@ -245,4 +245,29 @@ public class NetworkDataCache {
 		}
 	}
 
+	private int gamemode = 0;
+	private boolean canFly = false;
+	private boolean isFlying = false;
+
+	public void setGameMode(int gamemode) {
+		this.gamemode = gamemode;
+	}
+
+	public int getGameMode() {
+		return this.gamemode;
+	}
+
+	public void updateFlying(boolean canFly, boolean isFlying) {
+		this.canFly = canFly;
+		this.isFlying = isFlying;
+	}
+
+	public boolean canFly() {
+		return this.canFly;
+	}
+
+	public boolean isFlying() {
+		return this.isFlying;
+	}
+
 }
