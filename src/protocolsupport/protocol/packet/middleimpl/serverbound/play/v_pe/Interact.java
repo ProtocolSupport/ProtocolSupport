@@ -1,47 +1,54 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
+import org.bukkit.util.Vector;
+
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUseEntity;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
+import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
+import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class Interact extends ServerBoundMiddlePacket{
 	
-	protected short action;
-	protected long target;
-	
+	protected short peAction;
+	protected int targetId;
 	
 	@Override
 	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
-		action = clientdata.readUnsignedByte();
-		target = VarNumberSerializer.readVarLong(clientdata);
+		peAction = clientdata.readUnsignedByte();
+		targetId = (int) VarNumberSerializer.readVarLong(clientdata)/2; //We should look into why pocket doubles the entity ids. For now I just divide it back.
 	}
 	
-	private static final int ATTACK = 2; //The site says one but wth? I 
-//	private static final int INTERACT = 2;
-//	private static final int LEAVE_VEHICLE = 3;
-//	private static final int HOVER = 4;
+	private static final int INTERACT = 1; //I think MCW10 does this on every right click. Pocket can only right click when button appears.
+	private static final int ATTACK = 2;
+	private static final int LEAVE_VEHICLE = 3;
+//	private static final int HOVER = 4; //TODO: send the interact button back to PE when looking at entity such as a villager.
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		System.out.println("E: " + target + " - " + action);
-		switch(action){
-			case ATTACK: {
-				System.out.println("ATTACKING!!");
-				return RecyclableSingletonList.create(MiddleUseEntity.create((int) target, MiddleUseEntity.Action.ATTACK, null, 0));
+		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
+		WatchedEntity target = cache.getWatchedEntity(targetId);
+		switch(peAction){
+			case INTERACT: {
+				//Some plugins listen to the new interactAt event while others listen to the old event which isn't send when clicking armor stands o_O Best to send both when applicable.
+				if(target.getType() != SpecificRemapper.ARMOR_STAND){
+					packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT, null, 0));
+				}
+				packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT_AT, new Vector(), 0)); //TODO: Send where the entity is clicked (will probably be implemented with armorstands.)
 			}
-			//case INTERACT: {
-			//	return RecyclableSingletonList.create(MiddleUseEntity.create((int) target, MiddleUseEntity.Action.INTERACT, null, 0));
-			//}
-			default: {
-				return RecyclableEmptyList.get();
+			case ATTACK: {
+				packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.ATTACK, null, 0));
+			}
+			case LEAVE_VEHICLE: {
+				//packets.add(MiddleEntityAction.create(cache.getSelfPlayerEntityId(), 0, 0)); Exit vehicle by sneaking.
 			}
 		}
+		return packets;
 	}
 
 }

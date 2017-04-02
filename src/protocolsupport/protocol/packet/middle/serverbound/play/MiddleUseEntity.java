@@ -19,9 +19,7 @@ public abstract class MiddleUseEntity extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		System.out.println("E: " + entityId + " - " + action + " - " + interactedAt + " - " + usedHand);
-		ServerBoundPacketData creator = MiddleUseEntity.create(entityId, action, interactedAt, entityId);
-		return RecyclableSingletonList.create(creator);
+		return RecyclableSingletonList.create(create(entityId, action, interactedAt, usedHand));
 	}
 	
 	public static ServerBoundPacketData create(int entityId, Action action, Vector interactedAt, int usedHand) {
