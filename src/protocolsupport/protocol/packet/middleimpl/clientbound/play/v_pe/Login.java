@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 import org.bukkit.Bukkit;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.legacyremapper.pe.PEAdventureSettings;
 import protocolsupport.protocol.legacyremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleLogin;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -34,7 +35,7 @@ public class Login extends MiddleLogin {
 		VarNumberSerializer.writeSVarInt(startgame, 0); //seed
 		VarNumberSerializer.writeSVarInt(startgame, Respawn.remapDimensionId(dimension));
 		VarNumberSerializer.writeSVarInt(startgame, 1); //world type (1 - infinite)
-		VarNumberSerializer.writeSVarInt(startgame, gamemode);
+		VarNumberSerializer.writeSVarInt(startgame, gamemode == 1 ? 1 : 0);
 		VarNumberSerializer.writeSVarInt(startgame, difficulty);
 		VarNumberSerializer.writeSVarInt(startgame, 0); //spawn x
 		VarNumberSerializer.writeVarInt(startgame, 0); //spawn y
@@ -53,6 +54,7 @@ public class Login extends MiddleLogin {
 		ClientBoundPacketData chunkradius = ClientBoundPacketData.create(PEPacketIDs.CHUNK_RADIUS, version);
 		VarNumberSerializer.writeSVarInt(chunkradius, Bukkit.getViewDistance());
 		packets.add(chunkradius);
+		packets.add(PEAdventureSettings.createPacket(cache));
 		return packets;
 	}
 

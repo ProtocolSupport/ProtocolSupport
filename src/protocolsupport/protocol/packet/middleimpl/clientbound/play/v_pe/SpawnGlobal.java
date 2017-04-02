@@ -20,14 +20,14 @@ public class SpawnGlobal extends MiddleSpawnGlobal {
 		MiscSerializer.writeLFloat(serializer, (float) x);
 		MiscSerializer.writeLFloat(serializer, (float) y);
 		MiscSerializer.writeLFloat(serializer, (float) z);
-		MiscSerializer.writeLFloat(serializer, 0);  //Well luckily lightning doesn't need much data.
-		MiscSerializer.writeLFloat(serializer, 0);
-		MiscSerializer.writeLFloat(serializer, 0);
-		MiscSerializer.writeLFloat(serializer, 0);
-		MiscSerializer.writeLFloat(serializer, 0);
-		VarNumberSerializer.writeVarInt(serializer, 0);
-		VarNumberSerializer.writeVarInt(serializer, 0);
-		VarNumberSerializer.writeVarInt(serializer, 0);
+		MiscSerializer.writeLFloat(serializer, 0); //mot x, not used
+		MiscSerializer.writeLFloat(serializer, 0); //mot y, not used
+		MiscSerializer.writeLFloat(serializer, 0); //mot z, not used
+		MiscSerializer.writeLFloat(serializer, 0); //pitch, not used
+		MiscSerializer.writeLFloat(serializer, 0); //yaw, not used
+		VarNumberSerializer.writeVarInt(serializer, 0); //attributes, not used
+		VarNumberSerializer.writeVarInt(serializer, 0); //metadata, not used
+		VarNumberSerializer.writeVarInt(serializer, 0); //links, not used
 		return RecyclableSingletonList.create(serializer);
 	}
 }

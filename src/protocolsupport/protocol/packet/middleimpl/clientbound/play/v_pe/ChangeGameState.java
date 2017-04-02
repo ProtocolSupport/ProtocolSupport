@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.legacyremapper.pe.PEAdventureSettings;
 import protocolsupport.protocol.legacyremapper.pe.PELevelEvent;
 import protocolsupport.protocol.legacyremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleGameStateChange;
@@ -26,9 +27,12 @@ public class ChangeGameState extends MiddleGameStateChange {
 			}
 			case 3: {
 				//TODO: Emulate adventure gamemode via AdventureSettingsPacket
+				int gamemode = (int) value;
+				cache.setGameMode(gamemode);
 				ClientBoundPacketData changeGameType = ClientBoundPacketData.create(PEPacketIDs.CHANGE_PLAYER_GAMETYPE, version);
-				VarNumberSerializer.writeSVarInt(changeGameType, (int) value);
+				VarNumberSerializer.writeSVarInt(changeGameType, gamemode);
 				packets.add(changeGameType);
+				packets.add(PEAdventureSettings.createPacket(cache));
 				break;
 			}
 		}

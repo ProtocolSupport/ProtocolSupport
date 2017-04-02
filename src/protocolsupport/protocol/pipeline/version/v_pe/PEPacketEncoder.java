@@ -22,6 +22,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityTe
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityVelocity;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.KickDisconnect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Login;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.PlayerAbilities;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.PlayerInfo;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Position;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Respawn;
@@ -76,6 +77,7 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WORLD_EVENT_ID, WorldEvent.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_WEATHER_ID, SpawnGlobal.class);
     registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_METADATA_ID, EntityMetadata.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ABILITIES_ID, PlayerAbilities.class);
 	}
 
 	public PEPacketEncoder(Connection connection, NetworkDataCache storage) {
