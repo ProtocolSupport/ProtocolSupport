@@ -39,12 +39,15 @@ public class Interact extends ServerBoundMiddlePacket{
 					packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT, null, 0));
 				}
 				packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT_AT, new Vector(), 0)); //TODO: Send where the entity is clicked (will probably be implemented with armorstands.)
+				break;
 			}
 			case ATTACK: {
 				packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.ATTACK, null, 0));
+				break;
 			}
 			case LEAVE_VEHICLE: {
 				//packets.add(MiddleEntityAction.create(cache.getSelfPlayerEntityId(), 0, 0)); //Exit vehicle by sneaking.
+				break;
 			}
 		}
 		return packets;
