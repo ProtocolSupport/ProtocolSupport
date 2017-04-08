@@ -21,7 +21,7 @@ public class Interact extends ServerBoundMiddlePacket{
 	@Override
 	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
 		peAction = clientdata.readUnsignedByte();
-		targetId = ((int) VarNumberSerializer.readVarLong(clientdata) /2); //We should look into why pocket doubles the entity ids. For now I just divide it back.
+		targetId = (int) VarNumberSerializer.readSVarLong(clientdata); //We should look into why pocket doubles the entity ids. For now I just divide it back.
 	}
 	
 	private static final int INTERACT = 1; //I think MCW10 does this on every right click. Pocket can only right click when button appears.
