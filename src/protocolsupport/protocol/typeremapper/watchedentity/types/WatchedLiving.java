@@ -1,19 +1,16 @@
 package protocolsupport.protocol.typeremapper.watchedentity.types;
 
-import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
-
-
 public class WatchedLiving extends WatchedEntity {
 
-	private final SpecificRemapper stype;
+	private final WatchedType stype;
 
 	public WatchedLiving(int id, int type) {
 		super(id);
-		stype = SpecificRemapper.getMobByTypeId(type);
+		stype = WatchedType.getMobByTypeId(type);
 	}
 
 	@Override
-	public SpecificRemapper getType() {
+	public WatchedType getType() {
 		return stype;
 	}
 

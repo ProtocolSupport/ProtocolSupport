@@ -1,8 +1,5 @@
 package protocolsupport.protocol.typeremapper.watchedentity.types;
 
-import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
-
-
 public class WatchedPlayer extends WatchedEntity {
 
 	public WatchedPlayer(int id) {
@@ -10,8 +7,8 @@ public class WatchedPlayer extends WatchedEntity {
 	}
 
 	@Override
-	public SpecificRemapper getType() {
-		return SpecificRemapper.PLAYER;
+	public WatchedType getType() {
+		return WatchedType.PLAYER;
 	}
 
 }

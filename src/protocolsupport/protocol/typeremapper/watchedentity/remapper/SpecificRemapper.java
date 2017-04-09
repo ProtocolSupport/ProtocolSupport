@@ -16,6 +16,7 @@ import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueR
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperNumberToInt;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperNumberToShort;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperStringClamp;
+import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedType;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBlockState;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;
@@ -753,6 +754,15 @@ public enum SpecificRemapper {
 			return SpecificRemapper.NONE;
 		}
 		return MOB_BY_TYPE_ID[mobTypeId];
+	}
+	
+	public static SpecificRemapper fromWatchedType(WatchedType type){
+		if(type.getEType() == protocolsupport.protocol.typeremapper.watchedentity.types.WatchedType.EType.MOB){
+			return getMobByTypeId(type.getTypeId());
+		}else if(type.getEType() == protocolsupport.protocol.typeremapper.watchedentity.types.WatchedType.EType.OBJECT){
+			return getObjectByTypeId(type.getTypeId());
+		}
+		return SpecificRemapper.NONE;
 	}
 
 	private final EType etype;
