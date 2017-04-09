@@ -13,7 +13,7 @@ import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
-public class Interact extends ServerBoundMiddlePacket{
+public class Interact extends ServerBoundMiddlePacket {
 	
 	protected short peAction;
 	protected int targetId;
@@ -21,13 +21,13 @@ public class Interact extends ServerBoundMiddlePacket{
 	@Override
 	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
 		peAction = clientdata.readUnsignedByte();
-		targetId = (int) VarNumberSerializer.readSVarLong(clientdata); //We should look into why pocket doubles the entity ids. For now I just divide it back.
+		targetId = (int) VarNumberSerializer.readSVarLong(clientdata);
 	}
 	
-	private static final int INTERACT = 1; //I think MCW10 does this on every right click. Pocket can only right click when button appears.
+	private static final int INTERACT = 1; //Mobile version of Pocket can only right click when interactable entityMeta is set appears.
 	private static final int ATTACK = 2;
 	private static final int LEAVE_VEHICLE = 3;
-//	private static final int HOVER = 4; //TODO: send the interact button back to PE when looking at entity. Perhaps with update trade packet?
+	private static final int HOVER = 4;
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
@@ -47,6 +47,10 @@ public class Interact extends ServerBoundMiddlePacket{
 			}
 			case LEAVE_VEHICLE: {
 				//packets.add(MiddleEntityAction.create(cache.getSelfPlayerEntityId(), 0, 0)); //Exit vehicle by sneaking.
+				break;
+			}
+			case HOVER: {
+				//TODO: add this for some plugin that can use it?
 				break;
 			}
 		}
