@@ -24,7 +24,7 @@ public class Interact extends ServerBoundMiddlePacket {
 		targetId = (int) VarNumberSerializer.readSVarLong(clientdata);
 	}
 	
-	private static final int INTERACT = 1; //Mobile version of Pocket can only right click when interactable entityMeta is set appears.
+	private static final int INTERACT = 1;
 	private static final int ATTACK = 2;
 	private static final int LEAVE_VEHICLE = 3;
 	private static final int HOVER = 4;
@@ -46,7 +46,7 @@ public class Interact extends ServerBoundMiddlePacket {
 				break;
 			}
 			case LEAVE_VEHICLE: {
-				//packets.add(MiddleEntityAction.create(cache.getSelfPlayerEntityId(), 0, 0)); //Exit vehicle by sneaking.
+				//packets.add(MiddleEntityAction.create(cache.getSelfPlayerEntityId(), 0, 0)); //TODO: Exit vehicle by sneaking.
 				break;
 			}
 			case HOVER: {
