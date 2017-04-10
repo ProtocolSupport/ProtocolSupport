@@ -757,9 +757,9 @@ public enum SpecificRemapper {
 	}
 	
 	public static SpecificRemapper fromWatchedType(WatchedType type){
-		if(type.getEType() == protocolsupport.protocol.typeremapper.watchedentity.types.WatchedType.EType.MOB){
+		if (type.getEType() == WatchedType.EType.MOB) {
 			return getMobByTypeId(type.getTypeId());
-		}else if(type.getEType() == protocolsupport.protocol.typeremapper.watchedentity.types.WatchedType.EType.OBJECT){
+		} else if (type.getEType() == WatchedType.EType.OBJECT) {
 			return getObjectByTypeId(type.getTypeId());
 		}
 		return SpecificRemapper.NONE;

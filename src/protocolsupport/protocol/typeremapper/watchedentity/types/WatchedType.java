@@ -8,6 +8,11 @@ import org.bukkit.entity.EntityType;
  * All the types network entities can be.
  */
 public enum WatchedType {
+	
+    //=====================================================\\
+    //					  Watched Types					   \\
+    //=====================================================\\
+	
 	NONE(EType.NONE, -1),
 	ENTITY(EType.NONE, -1),
 	LIVING(EType.NONE, -1, WatchedType.ENTITY),
@@ -103,17 +108,18 @@ public enum WatchedType {
 	DRAGON_FIREBALL(EType.OBJECT, EntityType.DRAGON_FIREBALL, ENTITY),
 	EVOCATOR_FANGS(EType.OBJECT, EntityType.EVOKER_FANGS, ENTITY);
 	
+    //=====================================================\\
+    //					Object Values					   \\
+    //=====================================================\\
+	
 	private final EType etype;
 	private final int typeId;
-	private WatchedType superType;
-	
-	private static final WatchedType[] OBJECT_BY_TYPE_ID = new WatchedType[256];
-	private static final WatchedType[] MOB_BY_TYPE_ID = new WatchedType[256];
+	private final WatchedType superType;
 
 	/***
 	 * @return the type's parent.
 	 */
-	public WatchedType getSuperType(){
+	public WatchedType getSuperType() {
 		return superType;
 	}
 	
@@ -130,6 +136,54 @@ public enum WatchedType {
 	public EType getEType() {
 		return etype;
 	}
+	
+	/***
+	 * Checks whether the WatchedEntity is the same as <strong>type</strong> or a some child of <strong>type</strong>.
+	 * @param type
+	 * @return true, if there is a connection
+	 */
+	public boolean isOfType(WatchedType type) {
+		return (type == this || (getSuperType() != null && getSuperType().isOfType(type)));
+	}
+	
+	/***
+	 * Entities can be either a mob or an object.
+	 */
+	public enum EType {
+		NONE, OBJECT, MOB
+	}
+	
+    //=====================================================\\
+    //					Static Values					   \\
+    //=====================================================\\
+	
+	private static final WatchedType[] OBJECT_BY_TYPE_ID = new WatchedType[256];
+	private static final WatchedType[] MOB_BY_TYPE_ID = new WatchedType[256];
+	
+	//Fill static values.
+	static {
+		Arrays.fill(OBJECT_BY_TYPE_ID, WatchedType.NONE);
+		Arrays.fill(MOB_BY_TYPE_ID, WatchedType.NONE);
+		for (WatchedType type : values()) {
+			if (type.typeId != -1){
+				switch (type.etype) {
+					case OBJECT: {
+						OBJECT_BY_TYPE_ID[type.typeId] = type;
+						break;
+					}
+					case MOB: {
+						MOB_BY_TYPE_ID[type.typeId] = type;
+						break;
+					}
+					default: {
+						break;
+					}
+				}
+			}
+		}
+	}
+	
+	public static void init() { }
 	
 	/***
 	 * Gets the WatchedType for an object using it's ID.
@@ -154,70 +208,28 @@ public enum WatchedType {
 		}
 		return MOB_BY_TYPE_ID[mobTypeId];
 	}
-	
-	static {
-		Arrays.fill(OBJECT_BY_TYPE_ID, WatchedType.NONE);
-		Arrays.fill(MOB_BY_TYPE_ID, WatchedType.NONE);
-		for (WatchedType type : values()) {
-			if(type.typeId != -1){
-				switch (type.etype) {
-				case OBJECT: {
-					OBJECT_BY_TYPE_ID[type.typeId] = type;
-					break;
-				}
-				case MOB: {
-					MOB_BY_TYPE_ID[type.typeId] = type;
-					break;
-				}
-				default: {
-					break;
-				}
-			}
-			}
-		}
-	}
-	
-	public static void init() {
-	}
-	
-	/***
-	 * Entities can be either a mob or an object.
-	 */
-	public enum EType {
-		NONE, OBJECT, MOB
-	}
-	
-	/***
-	 * Checks whether the WatchedEntity is the same as <strong>type</strong> or a some child of <strong>type</strong>.
-	 * @param type
-	 * @return true, if there is a connection
-	 */
-	public boolean isOfType(WatchedType type){
-		return type == this || (getSuperType() != null && getSuperType().isOfType(type));
-	}
 		
     //=====================================================\\
     //					Constructors					   \\
     //=====================================================\\
 	
-	WatchedType(EType etype, int typeId) {
+	WatchedType(EType etype, int typeId, WatchedType superType) {
 		this.etype = etype;
 		this.typeId = typeId;
-		this.superType = null;
+		this.superType = superType;
 	}
 	
 	@SuppressWarnings("deprecation")
-	WatchedType(EType etype, EntityType type) {
-		this(etype, type.getTypeId());
-	}
-	
-	WatchedType(EType etype, int typeId, WatchedType superType) {
-		this(etype, typeId);
-		this.superType = superType;
-	}
-	
 	WatchedType(EType etype, EntityType type, WatchedType superType) {
-		this(etype, type);
-		this.superType = superType;
+		this(etype, type.getTypeId(), superType);
 	}
+	
+	WatchedType(EType etype, int typeId) {
+		this(etype, typeId, null);
+	}
+	
+	WatchedType(EType etype, EntityType type) {
+		this(etype, type, null);
+	}
+	
 }
