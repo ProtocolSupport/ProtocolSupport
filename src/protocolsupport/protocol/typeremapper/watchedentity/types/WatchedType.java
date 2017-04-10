@@ -97,7 +97,7 @@ public enum WatchedType {
 	DRAGON_FIREBALL(EType.OBJECT, 93, EntityType.DRAGON_FIREBALL, ENTITY),
 	EVOCATOR_FANGS(EType.OBJECT, 79, EntityType.EVOKER_FANGS, ENTITY),
 	MINECART(EType.OBJECT, 10, EntityType.MINECART, ENTITY),
-	//Hack, the only object where different types are send using objectData.
+	//Hack, using unsused ids; the only object where different types are send using objectData.
 	MINECART_CHEST(EType.OBJECT, 211, EntityType.MINECART_CHEST, MINECART), 
 	MINECART_FURNACE(EType.OBJECT, 212, EntityType.MINECART_FURNACE, MINECART),
 	MINECART_TNT(EType.OBJECT, 213, EntityType.MINECART_TNT, MINECART),
@@ -123,7 +123,7 @@ public enum WatchedType {
 	 * @return the typeId.
 	 */
 	public int getTypeId() {
-		if(isOfType(MINECART)) return MINECART.typeId;
+		if (isOfType(MINECART)) return MINECART.typeId;
 		return typeId;
 	}
 	
