@@ -8,11 +8,6 @@ import org.bukkit.entity.EntityType;
  * All the types network entities can be.
  */
 public enum WatchedType {
-	
-    //=====================================================\\
-    //					  Watched Types					   \\
-    //=====================================================\\
-	
 	NONE(EType.NONE, -1),
 	ENTITY(EType.NONE, -1),
 	LIVING(EType.NONE, -1, WatchedType.ENTITY),
@@ -108,10 +103,6 @@ public enum WatchedType {
 	DRAGON_FIREBALL(EType.OBJECT, EntityType.DRAGON_FIREBALL, ENTITY),
 	EVOCATOR_FANGS(EType.OBJECT, EntityType.EVOKER_FANGS, ENTITY);
 	
-    //=====================================================\\
-    //					Object Values					   \\
-    //=====================================================\\
-	
 	private final EType etype;
 	private final int typeId;
 	private final WatchedType superType;
@@ -153,14 +144,10 @@ public enum WatchedType {
 		NONE, OBJECT, MOB
 	}
 	
-    //=====================================================\\
-    //					Static Values					   \\
-    //=====================================================\\
-	
 	private static final WatchedType[] OBJECT_BY_TYPE_ID = new WatchedType[256];
 	private static final WatchedType[] MOB_BY_TYPE_ID = new WatchedType[256];
 	
-	//Fill static values.
+	//Fill the static values.
 	static {
 		Arrays.fill(OBJECT_BY_TYPE_ID, WatchedType.NONE);
 		Arrays.fill(MOB_BY_TYPE_ID, WatchedType.NONE);
@@ -208,10 +195,6 @@ public enum WatchedType {
 		}
 		return MOB_BY_TYPE_ID[mobTypeId];
 	}
-		
-    //=====================================================\\
-    //					Constructors					   \\
-    //=====================================================\\
 	
 	WatchedType(EType etype, int typeId, WatchedType superType) {
 		this.etype = etype;
