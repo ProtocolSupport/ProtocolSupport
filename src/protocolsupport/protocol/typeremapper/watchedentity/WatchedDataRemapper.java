@@ -8,6 +8,7 @@ import protocolsupport.protocol.typeremapper.watchedentity.remapper.MappingEntry
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
+import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedType;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
 import protocolsupport.utils.Utils;
@@ -23,7 +24,7 @@ public class WatchedDataRemapper {
 			return EMPTY_MAP;
 		}
 		//copy active hand meta to base flags index 4
-		if (entity.getType() == SpecificRemapper.PLAYER) {
+		if (entity.getType() == WatchedType.PLAYER) {
 			DataWatcherObject<?> baseflags = originaldata.get(0);
 			if (baseflags != null) {
 				if (baseflags.getValue() instanceof Number) {
@@ -54,7 +55,7 @@ public class WatchedDataRemapper {
 		}
 		//registry based remap
 		TIntObjectHashMap<DataWatcherObject<?>> transformed = new TIntObjectHashMap<>();
-		SpecificRemapper stype = entity.getType();
+		SpecificRemapper stype = SpecificRemapper.fromWatchedType(entity.getType());
 		for (MappingEntry entry : stype.getRemaps(to)) {
 			DataWatcherObject<?> object = originaldata.get(entry.getIdFrom());
 			if (object != null) {
@@ -74,7 +75,7 @@ public class WatchedDataRemapper {
 
 	public static class MetadataRemapException extends RuntimeException {
 
-		public MetadataRemapException(int index, int entityId, SpecificRemapper type, ProtocolVersion to, Exception e) {
+		public MetadataRemapException(int index, int entityId, WatchedType type, ProtocolVersion to, Exception e) {
 			super(Utils.exceptionMessage(
 				"Unable to remap entity metadata",
 				String.format("Metadata index: %d", index),
