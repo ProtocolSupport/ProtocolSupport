@@ -150,7 +150,7 @@ public enum WatchedType {
 	@SuppressWarnings("deprecation")
 	public int getBukkitTypeId() {
 		if(bukkitType != null) return bukkitType.getTypeId();
-		return 0;
+		return -1;
 	}
 	
 	/***
@@ -193,7 +193,7 @@ public enum WatchedType {
 						break;
 					}
 				}
-				if (type.getBukkitType() != null) TYPE_BUKKIT_ID[type.getBukkitTypeId()] = type;
+				if (type.getBukkitTypeId() != -1) TYPE_BUKKIT_ID[type.getBukkitTypeId()] = type;
 			}
 		}
 	}
