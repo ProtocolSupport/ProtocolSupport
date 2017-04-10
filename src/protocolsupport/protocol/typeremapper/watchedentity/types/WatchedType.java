@@ -21,7 +21,6 @@ public enum WatchedType {
 	CHICKEN(EType.MOB, EntityType.CHICKEN, WatchedType.AGEABLE),
 	SQUID(EType.MOB, EntityType.SQUID, WatchedType.INSENTIENT),
 	BASE_HORSE(EType.NONE, -1, WatchedType.AGEABLE),
-	BASE_MINECART(EType.NONE, -1, WatchedType.ENTITY),
 	BATTLE_HORSE(EType.NONE, -1, BASE_HORSE),
 	CARGO_HORSE(EType.NONE, -1, BASE_HORSE),
 	BASE_SKELETON(EType.NONE, -1, INSENTIENT),
@@ -97,14 +96,14 @@ public enum WatchedType {
 	SHULKER_BULLET(EType.OBJECT, 67, EntityType.SHULKER_BULLET, ENTITY),
 	DRAGON_FIREBALL(EType.OBJECT, 93, EntityType.DRAGON_FIREBALL, ENTITY),
 	EVOCATOR_FANGS(EType.OBJECT, 79, EntityType.EVOKER_FANGS, ENTITY),
-	MINECART(EType.OBJECT, 10, EntityType.MINECART, BASE_MINECART),
+	MINECART(EType.OBJECT, 10, EntityType.MINECART, ENTITY),
 	//Hack, the only object where different types are send using objectData.
-	MINECART_CHEST(EType.OBJECT, 250, EntityType.MINECART_CHEST, BASE_MINECART), 
-	MINECART_COMMAND(EType.OBJECT, 251, EntityType.MINECART_COMMAND, BASE_MINECART),
-	MINECART_FURNACE(EType.OBJECT, 252, EntityType.MINECART_FURNACE, BASE_MINECART),
-	MINECART_HOPPER(EType.OBJECT, 253, EntityType.MINECART_HOPPER, BASE_MINECART),
-	MINECART_MOB_SPAWNER(EType.OBJECT, 254, EntityType.MINECART_MOB_SPAWNER, BASE_MINECART),
-	MINECART_TNT(EType.OBJECT, 255, EntityType.MINECART_TNT, BASE_MINECART);
+	MINECART_CHEST(EType.OBJECT, 211, EntityType.MINECART_CHEST, MINECART), 
+	MINECART_FURNACE(EType.OBJECT, 212, EntityType.MINECART_FURNACE, MINECART),
+	MINECART_TNT(EType.OBJECT, 213, EntityType.MINECART_TNT, MINECART),
+	MINECART_MOB_SPAWNER(EType.OBJECT, 214, EntityType.MINECART_MOB_SPAWNER, MINECART),
+	MINECART_HOPPER(EType.OBJECT, 215, EntityType.MINECART_HOPPER, MINECART),
+	MINECART_COMMAND(EType.OBJECT, 216, EntityType.MINECART_COMMAND, MINECART);
 	
 	private final EType etype;
 	private final EntityType bukkitType;
@@ -172,6 +171,7 @@ public enum WatchedType {
 	static {
 		Arrays.fill(OBJECT_BY_TYPE_ID, WatchedType.NONE);
 		Arrays.fill(MOB_BY_TYPE_ID, WatchedType.NONE);
+		Arrays.fill(TYPE_BUKKIT_ID, WatchedType.NONE);
 		for (WatchedType type : values()) {
 			if (type.getTypeId() != -1) {
 				switch (type.getEType()) {
@@ -196,6 +196,7 @@ public enum WatchedType {
 	
 	/***
 	 * Gets the WatchedType for an object using it's ID.
+	 * Does not form minecarts!
 	 * @param objectTypeId
 	 * @return the corresponding WatchedType
 	 */
@@ -204,6 +205,18 @@ public enum WatchedType {
 			return WatchedType.NONE;
 		}
 		return OBJECT_BY_TYPE_ID[objectTypeId];
+	}
+	
+	/***
+	 * Gets the WatchedType for an object using it's ID and objectData.
+	 * @param objectTypeId
+	 * @param objectData
+	 * @return
+	 */
+	public static WatchedType getObjectByTypeAndData (int objectTypeId, int objectData){
+		WatchedType w = getObjectByTypeId(objectTypeId);
+		if(w.isOfType(MINECART)) return minecartFromData(objectData);
+		return w;
 	}
 
 	/***
@@ -238,6 +251,16 @@ public enum WatchedType {
 	@SuppressWarnings("deprecation")
 	public static WatchedType fromEntityType (EntityType entityType){
 		return fromBukkitTypeId(entityType.getTypeId());
+	}
+	
+	/***
+	 * Gets the WatchedType of a minecart based on the objectData. 
+	 * @param objectData
+	 * @return the corresponding WatchedType
+	 */
+	public static WatchedType minecartFromData (int objectData) {
+		if(objectData == 0) return MINECART;
+		return getObjectByTypeId(210 + objectData);
 	}
 	
 	WatchedType(EType etype, int typeId, EntityType bukkitType, WatchedType superType) {
