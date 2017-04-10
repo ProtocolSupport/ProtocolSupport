@@ -111,6 +111,7 @@ public enum WatchedType {
 	private final WatchedType superType;
 
 	/***
+	 * Gets the type's parent.
 	 * @return the type's parent.
 	 */
 	public WatchedType getSuperType() {
@@ -118,13 +119,16 @@ public enum WatchedType {
 	}
 	
 	/***
+	 * Gets the networkId.
 	 * @return the typeId.
 	 */
 	public int getTypeId() {
+		if(isOfType(MINECART)) return MINECART.typeId;
 		return typeId;
 	}
 	
 	/***
+	 * Gets the type's form.
 	 * @return the type's eType.
 	 */
 	public EType getEType() {
@@ -132,6 +136,7 @@ public enum WatchedType {
 	}
 	
 	/***
+	 * Gets the type's bukkitType.
 	 * @return the bukkit type of the WatchedType or null.
 	 */
 	public EntityType getBukkitType() {
@@ -139,6 +144,7 @@ public enum WatchedType {
 	}
 	
 	/***
+	 * Gets the type's bukkitTypeId.
 	 * @return the bukkit typeId of the WatchedType or 0.
 	 */
 	@SuppressWarnings("deprecation")
@@ -173,14 +179,14 @@ public enum WatchedType {
 		Arrays.fill(MOB_BY_TYPE_ID, WatchedType.NONE);
 		Arrays.fill(TYPE_BUKKIT_ID, WatchedType.NONE);
 		for (WatchedType type : values()) {
-			if (type.getTypeId() != -1) {
-				switch (type.getEType()) {
+			if (type.typeId != -1) {
+				switch (type.etype) {
 					case OBJECT: {
-						OBJECT_BY_TYPE_ID[type.getTypeId()] = type;
+						OBJECT_BY_TYPE_ID[type.typeId] = type;
 						break;
 					}
 					case MOB: {
-						MOB_BY_TYPE_ID[type.getTypeId()] = type;
+						MOB_BY_TYPE_ID[type.typeId] = type;
 						break;
 					}
 					default: {
