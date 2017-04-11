@@ -40,7 +40,7 @@ public class PlayerListener implements Listener {
 		if (
 			player.isInsideVehicle() &&
 			(connection != null) &&
-			connection.getVersion().getProtocolType() == ProtocolType.PC &&
+			(connection.getVersion().getProtocolType() == ProtocolType.PC) &&
 			connection.getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_5_2)
 		) {
 			player.leaveVehicle();
@@ -54,7 +54,7 @@ public class PlayerListener implements Listener {
 		if (
 			player.isInsideVehicle() &&
 			(connection != null) &&
-			connection.getVersion().getProtocolType() == ProtocolType.PC &&
+			(connection.getVersion().getProtocolType() == ProtocolType.PC) &&
 			connection.getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_5_2)
 		) {
 			if (player.getVehicle().equals(event.getRightClicked())) {
@@ -68,7 +68,7 @@ public class PlayerListener implements Listener {
 		Connection connection = ProtocolSupportAPI.getConnection(event.getPlayer());
 		if (
 			(connection != null) &&
-			connection.getVersion().getProtocolType() == ProtocolType.PC &&
+			(connection.getVersion().getProtocolType() == ProtocolType.PC) &&
 			connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9)
 		) {
 			Block block = event.getBlock();
@@ -82,7 +82,7 @@ public class PlayerListener implements Listener {
 		Connection connection = ProtocolSupportAPI.getConnection(player);
 		if (
 			(connection != null) &&
-			connection.getVersion().getProtocolType() == ProtocolType.PC &&
+			(connection.getVersion().getProtocolType() == ProtocolType.PC) &&
 			connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9)
 		) {
 			player.playSound(

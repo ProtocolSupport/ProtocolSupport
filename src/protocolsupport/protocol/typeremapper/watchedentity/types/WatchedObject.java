@@ -8,7 +8,7 @@ public class WatchedObject extends WatchedEntity {
 		super(id);
 		stype = WatchedType.getObjectByTypeAndData(type, objectData);
 	}
-	
+
 	public WatchedObject(int id, int type){
 		this(id, type, 0);
 	}

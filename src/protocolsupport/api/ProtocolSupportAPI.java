@@ -63,7 +63,7 @@ public class ProtocolSupportAPI {
 	}
 
 	/**
-	 * @param version protocol version for you want to control remapping 
+	 * @param version protocol version for you want to control remapping
 	 * @return item remapper control
 	 * @deprecated instance can be constructed directly
 	 */
