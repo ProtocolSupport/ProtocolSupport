@@ -762,6 +762,7 @@ public enum SpecificRemapper {
 		} else if (type.getEType() == WatchedType.EType.OBJECT) {
 			return getObjectByTypeId(type.getTypeId());
 		}
+		if(type == WatchedType.PLAYER) return PLAYER;
 		return SpecificRemapper.NONE;
 	}
 
