@@ -12,7 +12,7 @@ public enum WatchedType {
 	ENTITY(EType.NONE, -1),
 	LIVING(EType.NONE, -1, WatchedType.ENTITY),
 	INSENTIENT(EType.NONE, -1, WatchedType.LIVING),
-	PLAYER(EType.NONE, -1, WatchedType.LIVING),
+	PLAYER(EType.NONE, -1, EntityType.PLAYER, WatchedType.LIVING),
 	AGEABLE(EType.NONE, -1, WatchedType.INSENTIENT),
 	TAMEABLE(EType.NONE, -1, WatchedType.AGEABLE),
 	ARMOR_STAND(EType.NONE, -1, WatchedType.LIVING),
