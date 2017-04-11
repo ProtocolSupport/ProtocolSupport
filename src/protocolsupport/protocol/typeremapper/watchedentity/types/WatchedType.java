@@ -21,9 +21,10 @@ public enum WatchedType {
 	CHICKEN(EType.MOB, EntityType.CHICKEN, WatchedType.AGEABLE),
 	SQUID(EType.MOB, EntityType.SQUID, WatchedType.INSENTIENT),
 	BASE_HORSE(EType.NONE, -1, WatchedType.AGEABLE),
-	BASE_MINECART(EType.NONE, -1, WatchedType.ENTITY),
 	BATTLE_HORSE(EType.NONE, -1, BASE_HORSE),
 	CARGO_HORSE(EType.NONE, -1, BASE_HORSE),
+	BASE_SKELETON(EType.NONE, -1, INSENTIENT),
+	//Mobs (Network and game values are the same)
 	COMMON_HORSE(EType.MOB, EntityType.HORSE, BATTLE_HORSE),
 	ZOMBIE_HORSE(EType.MOB, EntityType.ZOMBIE_HORSE, BATTLE_HORSE),
 	SKELETON_HORSE(EType.MOB, EntityType.SKELETON_HORSE, BATTLE_HORSE),
@@ -55,7 +56,6 @@ public enum WatchedType {
 	GHAST(EType.MOB, EntityType.GHAST, INSENTIENT),
 	SLIME(EType.MOB, EntityType.SLIME, INSENTIENT),
 	MAGMA_CUBE(EType.MOB, EntityType.MAGMA_CUBE, SLIME),
-	BASE_SKELETON(EType.NONE, -1, INSENTIENT),
 	SKELETON(EType.MOB, EntityType.SKELETON, BASE_SKELETON),
 	WITHER_SKELETON(EType.MOB, EntityType.WITHER_SKELETON, BASE_SKELETON),
 	STRAY(EType.MOB, EntityType.STRAY, BASE_SKELETON),
@@ -69,45 +69,49 @@ public enum WatchedType {
 	EVOKER(EType.MOB, EntityType.EVOKER, INSENTIENT),
 	VEX(EType.MOB, EntityType.VEX, INSENTIENT),
 	ARMOR_STAND_MOB(EType.MOB, EntityType.ARMOR_STAND, ARMOR_STAND),
-	BOAT(EType.OBJECT, EntityType.BOAT),
-	TNT(EType.OBJECT, EntityType.PRIMED_TNT, ENTITY),
-	SNOWBALL(EType.OBJECT, EntityType.SNOWBALL, ENTITY),
-	EGG(EType.OBJECT, EntityType.EGG, ENTITY),
-	FIREBALL(EType.OBJECT, EntityType.FIREBALL, ENTITY),
-	FIRECHARGE(EType.OBJECT, EntityType.SMALL_FIREBALL, ENTITY),
-	ENDERPEARL(EType.OBJECT, EntityType.ENDER_PEARL, ENTITY),
-	WITHER_SKULL(EType.OBJECT, EntityType.WITHER_SKULL, FIREBALL),
-	FALLING_OBJECT(EType.OBJECT, EntityType.FALLING_BLOCK, ENTITY),
-	ENDEREYE(EType.OBJECT, EntityType.ENDER_SIGNAL, ENTITY),
-	POTION(EType.OBJECT, EntityType.SPLASH_POTION, ENTITY),
-	EXP_BOTTLE(EType.OBJECT, EntityType.THROWN_EXP_BOTTLE, ENTITY),
-	LEASH_KNOT(EType.OBJECT, EntityType.LEASH_HITCH, ENTITY),
-	FISHING_FLOAT(EType.OBJECT, EntityType.FISHING_HOOK, ENTITY),
-	ITEM(EType.OBJECT, EntityType.DROPPED_ITEM, ENTITY),
-	MINECART(EType.OBJECT, EntityType.MINECART, BASE_MINECART),
-	MINECART_CHEST(EType.OBJECT, EntityType.MINECART_CHEST, BASE_MINECART),
-	MINECART_COMMAND(EType.OBJECT, EntityType.MINECART_COMMAND, BASE_MINECART),
-	MINECART_FURNACE(EType.OBJECT, EntityType.MINECART_FURNACE, BASE_MINECART),
-	MINECART_HOPPER(EType.OBJECT, EntityType.MINECART_HOPPER, BASE_MINECART),
-	MINECART_MOB_SPAWNER(EType.OBJECT, EntityType.MINECART_MOB_SPAWNER, BASE_MINECART),
-	MINECART_TNT(EType.OBJECT, EntityType.MINECART_TNT, BASE_MINECART),
-	ARROW(EType.OBJECT, EntityType.ARROW, ENTITY),
-	SPECTRAL_ARROW(EType.OBJECT, EntityType.SPECTRAL_ARROW, ARROW),
-	TIPPED_ARROW(EType.OBJECT, EntityType.TIPPED_ARROW, ARROW),
-	FIREWORK(EType.OBJECT, EntityType.FIREWORK, ENTITY),
-	ITEM_FRAME(EType.OBJECT, EntityType.ITEM_FRAME, ENTITY),
-	ENDER_CRYSTAL(EType.OBJECT, EntityType.ENDER_CRYSTAL, ENTITY),
-	ARMOR_STAND_OBJECT(EType.OBJECT, EntityType.ARMOR_STAND, ARMOR_STAND),
-	AREA_EFFECT_CLOUD(EType.OBJECT, EntityType.AREA_EFFECT_CLOUD, ENTITY),
-	SHULKER_BULLET(EType.OBJECT, EntityType.SHULKER_BULLET, ENTITY),
-	DRAGON_FIREBALL(EType.OBJECT, EntityType.DRAGON_FIREBALL, ENTITY),
-	EVOCATOR_FANGS(EType.OBJECT, EntityType.EVOKER_FANGS, ENTITY);
+	//Objects (Different networking values)
+	BOAT(EType.OBJECT, 1, EntityType.BOAT, ENTITY),
+	TNT(EType.OBJECT, 50, EntityType.PRIMED_TNT, ENTITY),
+	SNOWBALL(EType.OBJECT, 61, EntityType.SNOWBALL, ENTITY),
+	EGG(EType.OBJECT, 62, EntityType.EGG, ENTITY),
+	FIREBALL(EType.OBJECT, 63, EntityType.FIREBALL, ENTITY),
+	FIRECHARGE(EType.OBJECT, 64, EntityType.SMALL_FIREBALL, ENTITY),
+	ENDERPEARL(EType.OBJECT, 65, EntityType.ENDER_PEARL, ENTITY),
+	WITHER_SKULL(EType.OBJECT, 66, EntityType.WITHER_SKULL, FIREBALL),
+	FALLING_OBJECT(EType.OBJECT, 70, EntityType.FALLING_BLOCK, ENTITY),
+	ENDEREYE(EType.OBJECT, 72, EntityType.ENDER_SIGNAL, ENTITY),
+	POTION(EType.OBJECT, 73, EntityType.SPLASH_POTION, ENTITY),
+	EXP_BOTTLE(EType.OBJECT, 75, EntityType.THROWN_EXP_BOTTLE, ENTITY),
+	LEASH_KNOT(EType.OBJECT, 77,  EntityType.LEASH_HITCH, ENTITY),
+	FISHING_FLOAT(EType.OBJECT, 90, EntityType.FISHING_HOOK, ENTITY),
+	ITEM(EType.OBJECT, 2, EntityType.DROPPED_ITEM, ENTITY),
+	ARROW(EType.OBJECT, 60, EntityType.ARROW, ENTITY),
+	SPECTRAL_ARROW(EType.OBJECT, 91, EntityType.SPECTRAL_ARROW, ARROW),
+	TIPPED_ARROW(EType.OBJECT, 92, EntityType.TIPPED_ARROW, ARROW),
+	FIREWORK(EType.OBJECT, 76,  EntityType.FIREWORK, ENTITY),
+	ITEM_FRAME(EType.OBJECT, 71, EntityType.ITEM_FRAME, ENTITY),
+	ENDER_CRYSTAL(EType.OBJECT, 51, EntityType.ENDER_CRYSTAL, ENTITY),
+	ARMOR_STAND_OBJECT(EType.OBJECT, 78, EntityType.ARMOR_STAND, ARMOR_STAND),
+	AREA_EFFECT_CLOUD(EType.OBJECT, 3, EntityType.AREA_EFFECT_CLOUD, ENTITY),
+	SHULKER_BULLET(EType.OBJECT, 67, EntityType.SHULKER_BULLET, ENTITY),
+	DRAGON_FIREBALL(EType.OBJECT, 93, EntityType.DRAGON_FIREBALL, ENTITY),
+	EVOCATOR_FANGS(EType.OBJECT, 79, EntityType.EVOKER_FANGS, ENTITY),
+	MINECART(EType.OBJECT, 10, EntityType.MINECART, ENTITY),
+	//Hack, using unsused ids; the only object where different types are send using objectData.
+	MINECART_CHEST(EType.OBJECT, 211, EntityType.MINECART_CHEST, MINECART), 
+	MINECART_FURNACE(EType.OBJECT, 212, EntityType.MINECART_FURNACE, MINECART),
+	MINECART_TNT(EType.OBJECT, 213, EntityType.MINECART_TNT, MINECART),
+	MINECART_MOB_SPAWNER(EType.OBJECT, 214, EntityType.MINECART_MOB_SPAWNER, MINECART),
+	MINECART_HOPPER(EType.OBJECT, 215, EntityType.MINECART_HOPPER, MINECART),
+	MINECART_COMMAND(EType.OBJECT, 216, EntityType.MINECART_COMMAND, MINECART);
 	
 	private final EType etype;
+	private final EntityType bukkitType;
 	private final int typeId;
 	private final WatchedType superType;
 
 	/***
+	 * Gets the type's parent.
 	 * @return the type's parent.
 	 */
 	public WatchedType getSuperType() {
@@ -115,17 +119,38 @@ public enum WatchedType {
 	}
 	
 	/***
+	 * Gets the networkId.
 	 * @return the typeId.
 	 */
 	public int getTypeId() {
+		if (isOfType(MINECART)) return MINECART.typeId;
 		return typeId;
 	}
 	
 	/***
+	 * Gets the type's form.
 	 * @return the type's eType.
 	 */
 	public EType getEType() {
 		return etype;
+	}
+	
+	/***
+	 * Gets the type's bukkitType.
+	 * @return the bukkit type of the WatchedType or null.
+	 */
+	public EntityType getBukkitType() {
+		return bukkitType;
+	}
+	
+	/***
+	 * Gets the type's bukkitTypeId.
+	 * @return the bukkit typeId of the WatchedType or 0.
+	 */
+	@SuppressWarnings("deprecation")
+	public int getBukkitTypeId() {
+		if(bukkitType != null) return bukkitType.getTypeId();
+		return -1;
 	}
 	
 	/***
@@ -145,14 +170,16 @@ public enum WatchedType {
 	}
 	
 	private static final WatchedType[] OBJECT_BY_TYPE_ID = new WatchedType[256];
+	private static final WatchedType[] TYPE_BUKKIT_ID = new WatchedType[256];
 	private static final WatchedType[] MOB_BY_TYPE_ID = new WatchedType[256];
 	
 	//Fill the static values.
 	static {
 		Arrays.fill(OBJECT_BY_TYPE_ID, WatchedType.NONE);
 		Arrays.fill(MOB_BY_TYPE_ID, WatchedType.NONE);
+		Arrays.fill(TYPE_BUKKIT_ID, WatchedType.NONE);
 		for (WatchedType type : values()) {
-			if (type.typeId != -1){
+			if (type.typeId != -1) {
 				switch (type.etype) {
 					case OBJECT: {
 						OBJECT_BY_TYPE_ID[type.typeId] = type;
@@ -166,6 +193,7 @@ public enum WatchedType {
 						break;
 					}
 				}
+				if (type.getBukkitTypeId() != -1) TYPE_BUKKIT_ID[type.getBukkitTypeId()] = type;
 			}
 		}
 	}
@@ -174,6 +202,7 @@ public enum WatchedType {
 	
 	/***
 	 * Gets the WatchedType for an object using it's ID.
+	 * Does not form minecarts!
 	 * @param objectTypeId
 	 * @return the corresponding WatchedType
 	 */
@@ -182,6 +211,18 @@ public enum WatchedType {
 			return WatchedType.NONE;
 		}
 		return OBJECT_BY_TYPE_ID[objectTypeId];
+	}
+	
+	/***
+	 * Gets the WatchedType for an object using it's ID and objectData.
+	 * @param objectTypeId
+	 * @param objectData
+	 * @return
+	 */
+	public static WatchedType getObjectByTypeAndData (int objectTypeId, int objectData){
+		WatchedType w = getObjectByTypeId(objectTypeId);
+		if(w.isOfType(MINECART)) return minecartFromData(objectData);
+		return w;
 	}
 
 	/***
@@ -196,23 +237,60 @@ public enum WatchedType {
 		return MOB_BY_TYPE_ID[mobTypeId];
 	}
 	
-	WatchedType(EType etype, int typeId, WatchedType superType) {
+	/***
+	 * Gets the WatchedType for any entity using it's bukkitId.
+	 * @param bukkitId
+	 * @return the corresponding WatchedType
+	 */
+	public static WatchedType fromBukkitTypeId (int bukkitId){
+		if (bukkitId < 0 || bukkitId >= TYPE_BUKKIT_ID.length) {
+			return WatchedType.NONE;
+		}
+		return TYPE_BUKKIT_ID[bukkitId];
+	}
+	
+	/***
+	 * Gets the WatchedType for any entity using it's EntityType.
+	 * @param entityType
+	 * @return the corresponding WatchedType
+	 */
+	@SuppressWarnings("deprecation")
+	public static WatchedType fromEntityType (EntityType entityType){
+		return fromBukkitTypeId(entityType.getTypeId());
+	}
+	
+	/***
+	 * Gets the WatchedType of a minecart based on the objectData. 
+	 * @param objectData
+	 * @return the corresponding WatchedType
+	 */
+	public static WatchedType minecartFromData (int objectData) {
+		if(objectData == 0) return MINECART;
+		return getObjectByTypeId(210 + objectData);
+	}
+	
+	WatchedType(EType etype, int typeId, EntityType bukkitType, WatchedType superType) {
 		this.etype = etype;
 		this.typeId = typeId;
+		this.bukkitType = bukkitType;
 		this.superType = superType;
 	}
 	
+	WatchedType(EType etype, int typeId, WatchedType superType) {
+		this(etype, typeId, null, superType);
+	}
+	
 	@SuppressWarnings("deprecation")
-	WatchedType(EType etype, EntityType type, WatchedType superType) {
-		this(etype, type.getTypeId(), superType);
+	WatchedType(EType etype, EntityType bukkitType, WatchedType superType) {
+		this(etype, bukkitType.getTypeId(), bukkitType, superType);
 	}
 	
 	WatchedType(EType etype, int typeId) {
 		this(etype, typeId, null);
 	}
 	
-	WatchedType(EType etype, EntityType type) {
-		this(etype, type, null);
+	WatchedType(EType etype, EntityType bukkitType) {
+		this(etype, bukkitType, null);
 	}
 	
 }
