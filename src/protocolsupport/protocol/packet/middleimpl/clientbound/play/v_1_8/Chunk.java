@@ -9,6 +9,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_1_8__1_9_r1__1_9_r2__1_10__1_11.BlockTileUpdate;
 import protocolsupport.protocol.serializer.ByteArraySerializer;
+import protocolsupport.protocol.typeremapper.tileentity.TileNBTRemapper;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -35,7 +36,7 @@ public class Chunk extends MiddleChunk {
 		}
 		packets.add(chunkdata);
 		for (NBTTagCompoundWrapper tile : tiles) {
-			packets.add(BlockTileUpdate.createPacketData(version, tile));
+			packets.add(BlockTileUpdate.createPacketData(version, TileNBTRemapper.getPosition(tile), tile));
 		}
 		return packets;
 	}

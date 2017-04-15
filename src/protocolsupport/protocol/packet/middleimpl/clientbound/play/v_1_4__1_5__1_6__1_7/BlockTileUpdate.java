@@ -20,12 +20,11 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		return RecyclableSingletonList.create(createPacketData(version, tag));
+		return RecyclableSingletonList.create(createPacketData(version, position, tag));
 	}
 
-	public static ClientBoundPacketData createPacketData(ProtocolVersion version, NBTTagCompoundWrapper tag) {
+	public static ClientBoundPacketData createPacketData(ProtocolVersion version, Position position, NBTTagCompoundWrapper tag) {
 		TileEntityUpdateType type = TileEntityUpdateType.fromType(TileNBTRemapper.getTileType(tag));
-		Position position = TileNBTRemapper.getPosition(tag);
 		if (type == TileEntityUpdateType.SIGN) {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.LEGACY_PLAY_UPDATE_SIGN_ID, version);
 			PositionSerializer.writeLegacyPositionS(serializer, position);
