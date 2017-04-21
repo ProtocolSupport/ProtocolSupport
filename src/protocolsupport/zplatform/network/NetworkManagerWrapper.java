@@ -10,6 +10,7 @@ import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.packet.handler.IHasProfile;
+import protocolsupport.protocol.utils.authlib.GameProfile;
 
 public abstract class NetworkManagerWrapper {
 
@@ -54,7 +55,8 @@ public abstract class NetworkManagerWrapper {
 		} else {
 			Object listener = getPacketListener();
 			if (listener instanceof IHasProfile) {
-				return ((IHasProfile) listener).getProfile().getName();
+				GameProfile profile = ((IHasProfile) listener).getProfile();
+				return profile != null ? profile.getName() : null;
 			} else {
 				return null;
 			}
