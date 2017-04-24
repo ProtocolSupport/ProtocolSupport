@@ -16,6 +16,7 @@ import protocolsupport.api.events.PlayerLoginFinishEvent;
 import protocolsupport.api.events.PlayerSyncLoginEvent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
+import protocolsupport.protocol.pipeline.timeout.SimpleReadTimeoutHandler;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
@@ -43,6 +44,10 @@ public abstract class AbstractLoginListenerPlay implements IHasProfile {
 
 	@SuppressWarnings("unchecked")
 	public void finishLogin() {
+		if (!networkManager.isConnected()) {
+			return;
+		}
+
 		// send login success
 		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginSuccessPacket(profile), new GenericFutureListener<Future<? super Void>>() {
 			@Override
@@ -119,8 +124,11 @@ public abstract class AbstractLoginListenerPlay implements IHasProfile {
 		// custom payload does nothing on a client when sent with invalid tag,
 		// but it resets client readtimeouthandler, and that is exactly what we need
 		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("PS|KeepAlive"));
-		// we also need to reset server readtimeouthandler
-		ChannelHandlers.getTimeoutHandler(networkManager.getChannel().pipeline()).setLastRead();
+		// we also need to reset server readtimeouthandler (may be null if netty already teared down the pipeline)
+		SimpleReadTimeoutHandler timeouthandler = ChannelHandlers.getTimeoutHandler(networkManager.getChannel().pipeline());
+		if (timeouthandler != null) {
+			timeouthandler.setLastRead();
+		}
 	}
 
 	protected String getConnectionRepr() {
