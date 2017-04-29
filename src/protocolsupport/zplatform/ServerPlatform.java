@@ -24,7 +24,7 @@ public class ServerPlatform {
 		try {
 			NetworkManager.class.getDeclaredFields();
 			SpigotConfig.class.getDeclaredFields();
-			current = new ServerPlatform("Spigot", new SpigotPlatformInjector(), new SpigotMiscUtils(), new SpigotPacketFactory(), new SpigotWrapperFactory());
+//			current = new ServerPlatform("Spigot", new SpigotPlatformInjector(), new SpigotMiscUtils(), new SpigotPacketFactory(), new SpigotWrapperFactory());
 		} catch (Throwable t) {
 		}
 		try {
