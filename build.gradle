@@ -35,7 +35,7 @@ dllibs.mkdirs()
 task updateLibs(type: Download) {
 	src([
 		'http://yivesmirror.com/files/spigot/spigot-1.11.2-R0.1-SNAPSHOT.jar',
-		'https://bamboo.gserv.me/artifact/GSPP-SRV/shared/build-latestSuccessful/Version-Independent-Server-JAR/glowstone.jar'
+		'http://bamboo.gserv.me/browse/GSPP-SRV49-23/artifact/shared/Version-Independent-Server-JAR/glowstone.jar'
 	])
 	dest dllibs
 	onlyIfNewer true
