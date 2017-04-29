@@ -226,7 +226,7 @@ public enum ProtocolVersion {
 	public static ProtocolVersion getLatest(ProtocolType type) {
 		switch (type) {
 			case PC: {
-				return MINECRAFT_1_11_1;
+				return MINECRAFT_1_12;
 			}
 			default: {
 				throw new IllegalArgumentException(MessageFormat.format("No supported versions for protocol type {0}", type));

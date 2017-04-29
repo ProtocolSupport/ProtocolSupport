@@ -13,6 +13,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectDirec
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectItemStack;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectNBTTagCompound;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalUUID;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectPosition;
@@ -48,6 +49,7 @@ public class DataWatcherObjectIdRegistry {
 		register(DataWatcherObjectFloat.class, 3, ProtocolVersionsHelper.BEFORE_1_9);
 		register(DataWatcherObjectInt.class, 2, ProtocolVersionsHelper.BEFORE_1_9);
 		register(DataWatcherObjectItemStack.class, 5, ProtocolVersionsHelper.ALL);
+		register(DataWatcherObjectNBTTagCompound.class, 13, ProtocolVersionsHelper.AFTER_1_11);
 		register(DataWatcherObjectOptionalPosition.class, 9, ProtocolVersionsHelper.AFTER_1_8);
 		register(DataWatcherObjectOptionalUUID.class, 11, ProtocolVersionsHelper.AFTER_1_8);
 		register(DataWatcherObjectPosition.class, 8, ProtocolVersionsHelper.AFTER_1_8);

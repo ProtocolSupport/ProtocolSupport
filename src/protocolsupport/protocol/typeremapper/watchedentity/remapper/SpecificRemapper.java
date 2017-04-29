@@ -33,20 +33,20 @@ public enum SpecificRemapper {
 		.addRemap(0, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL),
 		//air
 		new Mapping(1)
-		.addRemap(1, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_9__1_11)
+		.addRemap(1, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_9__1_12)
 		.addRemap(1, ValueRemapperNumberToShort.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//nametag
 		new Mapping(2)
-		.addRemap(2, ValueRemapperNoOp.STRING, ProtocolVersionsHelper.RANGE__1_9__1_11),
+		.addRemap(2, ValueRemapperNoOp.STRING, ProtocolVersionsHelper.RANGE__1_9__1_12),
 		//nametag visible
 		new Mapping(3)
-		.addRemap(3, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_9__1_11),
+		.addRemap(3, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_9__1_12),
 		//silent
 		new Mapping(4)
-		.addRemap(4, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_9__1_11),
+		.addRemap(4, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_9__1_12),
 		//no gravity
 		new Mapping(5)
-		.addRemap(5, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(5, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_12)
 	),
 	LIVING(WatchedType.LIVING, SpecificRemapper.ENTITY,
 		//nametag
@@ -61,27 +61,27 @@ public enum SpecificRemapper {
 		.addRemap(6, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_6),
 		//hand use
 		new Mapping(6)
-		.addRemap(6, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(6, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(5, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9),
 		//health
 		new Mapping(7)
-		.addRemap(7, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(7, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(6, ValueRemapperNoOp.FLOAT, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_9_4, ProtocolVersion.MINECRAFT_1_6_1)),
 		//pcolor
 		new Mapping(8)
-		.addRemap(8, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(8, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(7, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(7, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.RANGE__1_6__1_7)
 		.addRemap(8, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_6),
 		//pambient
 		new Mapping(9)
-		.addRemap(9, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(9, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(8, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(8, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.RANGE__1_6__1_7)
 		.addRemap(9, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_6),
 		//arrowsn
 		new Mapping(10)
-		.addRemap(10, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(10, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(9, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(9, ValueRemapperNumberToByte.INSTANCE, ProtocolVersionsHelper.RANGE__1_6__1_7)
 		.addRemap(10, ValueRemapperNumberToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_6)
@@ -89,31 +89,31 @@ public enum SpecificRemapper {
 	INSENTIENT(WatchedType.INSENTIENT, SpecificRemapper.LIVING,
 		//noai
 		new Mapping(11)
-		.addRemap(11, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(11, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(10, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(15, ValueRemapperNoOp.BYTE, ProtocolVersion.MINECRAFT_1_8)
 	),
 	PLAYER(WatchedType.PLAYER, SpecificRemapper.LIVING,
 		//additional hearts
 		new Mapping(11)
-		.addRemap(11, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(11, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(10, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(17, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.BEFORE_1_9),
 		//score
 		new Mapping(12)
-		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(11, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(18, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//skin flags(cape enabled for some protocols)
 		new Mapping(13)
-		.addRemap(13, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(13, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(10, ValueRemapperNoOp.BYTE, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1))
 	),
 	AGEABLE(WatchedType.AGEABLE, SpecificRemapper.INSENTIENT,
 		//age
 		new Mapping(12)
-		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(11, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(12, new ValueRemapper<DataWatcherObjectBoolean>() {
 			@Override
@@ -135,32 +135,32 @@ public enum SpecificRemapper {
 	TAMEABLE(WatchedType.TAMEABLE, SpecificRemapper.AGEABLE,
 		//tame flags
 		new Mapping(13)
-		.addRemap(13, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(13, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	ARMOR_STAND(WatchedType.ARMOR_STAND, SpecificRemapper.LIVING,
 		//parts position
 		new Mapping(11)
-		.addRemap(11, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(11, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(10, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_8__1_9),
 		new Mapping(12)
-		.addRemap(12, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(12, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(11, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE__1_8__1_9),
 		new Mapping(13)
-		.addRemap(13, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(13, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(12, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE__1_8__1_9),
 		new Mapping(14)
-		.addRemap(14, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(14, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(13, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE__1_8__1_9),
 		new Mapping(15)
-		.addRemap(15, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(15, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(14, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE__1_8__1_9),
 		new Mapping(16)
-		.addRemap(16, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(16, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(15, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE__1_8__1_9),
 		new Mapping(17)
-		.addRemap(17, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(17, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(16, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE__1_8__1_9)
 	),
 	COW(WatchedType.COW, SpecificRemapper.AGEABLE),
@@ -170,19 +170,19 @@ public enum SpecificRemapper {
 	BASE_HORSE(WatchedType.BASE_HORSE, SpecificRemapper.AGEABLE,
 		//info flags
 		new Mapping(13)
-		.addRemap(13, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(13, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(17, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	BATTLE_HORSE(WatchedType.BATTLE_HORSE, SpecificRemapper.BASE_HORSE,
 		//color/variant
 		new Mapping(15)
-		.addRemap(15, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(15, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(14, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(20, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//armor
 		new Mapping(16)
-		.addRemap(16, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_11)
+		.addRemap(16, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_11__1_12)
 		.addRemap(17, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(16, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(22, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
@@ -190,7 +190,7 @@ public enum SpecificRemapper {
 	CARGO_HORSE(WatchedType.CARGO_HORSE, SpecificRemapper.BASE_HORSE,
 		//has chest
 		new Mapping(15)
-		.addRemap(15, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_11)
+		.addRemap(15, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_11__1_12)
 	),
 	COMMON_HORSE(WatchedType.COMMON_HORSE, SpecificRemapper.BATTLE_HORSE),
 	ZOMBIE_HORSE(WatchedType.ZOMBIE_HORSE, SpecificRemapper.BATTLE_HORSE),
@@ -200,32 +200,32 @@ public enum SpecificRemapper {
 	LAMA(WatchedType.LAMA, SpecificRemapper.CARGO_HORSE,
 		//strength
 		new Mapping(16)
-		.addRemap(16, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_11),
+		.addRemap(16, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_11__1_12),
 		//carpet color
 		new Mapping(17)
-		.addRemap(17, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_11),
+		.addRemap(17, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_11__1_12),
 		//type
 		new Mapping(18)
-		.addRemap(18, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_11)
+		.addRemap(18, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_11__1_12)
 	),
 	BAT(WatchedType.BAT, SpecificRemapper.INSENTIENT,
 		//hanging
 		new Mapping(12)
-		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(11, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	OCELOT(WatchedType.OCELOT, SpecificRemapper.TAMEABLE,
 		//type
 		new Mapping(15)
-		.addRemap(15, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(15, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(14, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(18, ValueRemapperNumberToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	WOLF(WatchedType.WOLF, SpecificRemapper.TAMEABLE,
 		//health
 		new Mapping(15)
-		.addRemap(15, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(15, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(14, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(18, ValueRemapperNoOp.FLOAT, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1))
 		.addRemap(18, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_6),
@@ -249,7 +249,7 @@ public enum SpecificRemapper {
 	PIG(WatchedType.PIG, SpecificRemapper.AGEABLE,
 		//has saddle
 		new Mapping(13)
-		.addRemap(13, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(13, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//boost time
@@ -259,33 +259,33 @@ public enum SpecificRemapper {
 	RABBIT(WatchedType.RABBIT, SpecificRemapper.AGEABLE,
 		//type
 		new Mapping(13)
-		.addRemap(13, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(13, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(18, ValueRemapperNumberToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	SHEEP(WatchedType.SHEEP, SpecificRemapper.AGEABLE,
 		//info flags (color + sheared)
 		new Mapping(13)
-		.addRemap(13, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(13, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	POLAR_BEAR(WatchedType.POLAR_BEAR, SpecificRemapper.AGEABLE,
 		//standing up
 		new Mapping(13)
-		.addRemap(13, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(13, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_12)
 	),
 	VILLAGER(WatchedType.VILLAGER, SpecificRemapper.AGEABLE,
 		//profession
 		new Mapping(13)
-		.addRemap(13, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(13, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	ENDERMAN(WatchedType.ENDERMAN, SpecificRemapper.INSENTIENT,
 		//carried block
 		new Mapping(12)
-		.addRemap(12, ValueRemapperNoOp.BLOCKSTATE, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(12, ValueRemapperNoOp.BLOCKSTATE, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(11, ValueRemapperNoOp.BLOCKSTATE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, new ValueRemapper<DataWatcherObjectBlockState>() {
 			@Override
@@ -307,7 +307,7 @@ public enum SpecificRemapper {
 		}, ProtocolVersionsHelper.BEFORE_1_9),
 		//screaming
 		new Mapping(13)
-		.addRemap(13, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(13, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(18, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
@@ -317,36 +317,36 @@ public enum SpecificRemapper {
 	ENDER_DRAGON(WatchedType.ENDER_DRAGON, SpecificRemapper.INSENTIENT,
 		//phase
 		new Mapping(12)
-		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(11, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 	),
 	SNOWMAN(WatchedType.SNOWMAN, SpecificRemapper.INSENTIENT,
 		//no hat
 		new Mapping(12)
-		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(11, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 	),
 	ZOMBIE(WatchedType.ZOMBIE, SpecificRemapper.INSENTIENT,
 		//is baby
 		new Mapping(12)
-		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(11, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(12, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//profession
 		new Mapping(13)
-		.addRemap(13, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(13, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(13, ValueRemapperNumberToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//hands up
 		new Mapping(14)
-		.addRemap(14, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_11)
+		.addRemap(14, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_11__1_12)
 		.addRemap(15, ValueRemapperNoOp.BOOLEAN, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(14, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 	),
 	ZOMBIE_VILLAGER(WatchedType.ZOMBIE_VILLAGER, SpecificRemapper.ZOMBIE,
 		//is converting
 		new Mapping(15)
-		.addRemap(15, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_11)
+		.addRemap(15, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_11__1_12)
 		.addRemap(14, ValueRemapperNoOp.BOOLEAN, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(13, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(14, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
@@ -356,14 +356,14 @@ public enum SpecificRemapper {
 	BLAZE(WatchedType.BLAZE, SpecificRemapper.INSENTIENT,
 		//on fire
 		new Mapping(12)
-		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(11, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	SPIDER(WatchedType.SPIDER, SpecificRemapper.LIVING,
 		//is climbing
 		new Mapping(12)
-		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(11, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
@@ -371,31 +371,31 @@ public enum SpecificRemapper {
 	CREEPER(WatchedType.CREEPER, SpecificRemapper.INSENTIENT,
 		//state
 		new Mapping(12)
-		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(11, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNumberToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//is powered
 		new Mapping(13)
-		.addRemap(13, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(13, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(17, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//ignited
 		new Mapping(14)
-		.addRemap(14, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(14, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(13, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(18, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	GHAST(WatchedType.GHAST, SpecificRemapper.INSENTIENT,
 		//is attacking
 		new Mapping(12)
-		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(11, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	SLIME(WatchedType.SLIME, SpecificRemapper.INSENTIENT,
 		//size
 		new Mapping(12)
-		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(11, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNumberToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
@@ -403,7 +403,7 @@ public enum SpecificRemapper {
 	BASE_SKELETON(WatchedType.BASE_SKELETON, SpecificRemapper.INSENTIENT,
 		//is attacking
 		new Mapping(12)
-		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_11)
+		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_11__1_12)
 		.addRemap(13, ValueRemapperNoOp.BOOLEAN, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 	),
@@ -413,60 +413,60 @@ public enum SpecificRemapper {
 	WITCH(WatchedType.WITCH, SpecificRemapper.INSENTIENT,
 		//agressive
 		new Mapping(12)
-		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(11, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	IRON_GOLEM(WatchedType.IRON_GOLEM, SpecificRemapper.INSENTIENT,
 		//player created
 		new Mapping(12)
-		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(11, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	SHULKER(WatchedType.SHULKER, SpecificRemapper.INSENTIENT,
 		//direction
 		new Mapping(12)
-		.addRemap(12, ValueRemapperNoOp.DIRECTION, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(12, ValueRemapperNoOp.DIRECTION, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(11, ValueRemapperNoOp.DIRECTION, ProtocolVersionsHelper.ALL_1_9),
 		//attachment pos
 		new Mapping(13)
-		.addRemap(13, ValueRemapperNoOp.OPTIONAL_POSITION, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(13, ValueRemapperNoOp.OPTIONAL_POSITION, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(12, ValueRemapperNoOp.OPTIONAL_POSITION, ProtocolVersionsHelper.ALL_1_9),
 		//shield h
 		new Mapping(14)
-		.addRemap(14, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(14, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(13, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9),
 		//color
 		new Mapping(15)
-		.addRemap(15, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_11)
+		.addRemap(15, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_11__1_12)
 	),
 	WITHER(WatchedType.WITHER, SpecificRemapper.INSENTIENT,
 		//target 1
 		new Mapping(12)
-		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(11, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(17, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//target 2
 		new Mapping(13)
-		.addRemap(13, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(13, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(18, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//target 3
 		new Mapping(14)
-		.addRemap(14, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(14, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(13, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(19, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//invulnerable time
 		new Mapping(15)
-		.addRemap(15, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(15, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(14, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(20, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	GUARDIAN(WatchedType.GUARDIAN, SpecificRemapper.INSENTIENT,
 		//spikes
 		new Mapping(12)
-		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_11)
+		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_11__1_12)
 		.addRemap(12, new ValueRemapper<DataWatcherObjectBoolean>() {
 			@Override
 			public DataWatcherObject<?> remap(DataWatcherObjectBoolean object) {
@@ -487,7 +487,7 @@ public enum SpecificRemapper {
 		}, ProtocolVersion.MINECRAFT_1_8),
 		//target id
 		new Mapping(13)
-		.addRemap(13, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(13, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(17, ValueRemapperNumberToInt.INSTANCE, ProtocolVersion.MINECRAFT_1_8)
 	),
@@ -495,17 +495,17 @@ public enum SpecificRemapper {
 	VINDICATOR(WatchedType.VINDICATOR, SpecificRemapper.INSENTIENT,
 		//agressive
 		new Mapping(12)
-		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_11)
+		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_11__1_12)
 	),
 	EVOKER(WatchedType.EVOKER, SpecificRemapper.INSENTIENT,
 		//spell
 		new Mapping(12)
-		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_11)
+		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_11__1_12)
 	),
 	VEX(WatchedType.VEX, SpecificRemapper.INSENTIENT,
 		//vex
 		new Mapping(12)
-		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_11)
+		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_11__1_12)
 	),
 	ARMOR_STAND_MOB(WatchedType.ARMOR_STAND_MOB, SpecificRemapper.ARMOR_STAND),
 	BOAT(WatchedType.BOAT,
@@ -527,18 +527,18 @@ public enum SpecificRemapper {
 		.addRemap(19, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_6),
 		//type
 		new Mapping(9)
-		.addRemap(9, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11),
+		.addRemap(9, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12),
 		//left paddle
 		new Mapping(10)
-		.addRemap(10, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_11),
+		.addRemap(10, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_12),
 		//right paddle
 		new Mapping(11)
-		.addRemap(11, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(11, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_12)
 	),
 	TNT(WatchedType.TNT, SpecificRemapper.ENTITY,
 		//fuse ticks
 		new Mapping(6)
-		.addRemap(6, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(6, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(5, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 	),
 	SNOWBALL(WatchedType.SNOWBALL, SpecificRemapper.ENTITY),
@@ -549,7 +549,7 @@ public enum SpecificRemapper {
 	WITHER_SKULL(WatchedType.WITHER_SKULL, SpecificRemapper.FIREBALL,
 		//is charged
 		new Mapping(6)
-		.addRemap(6, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(6, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(5, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(10, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
@@ -558,7 +558,7 @@ public enum SpecificRemapper {
 	POTION(WatchedType.POTION, SpecificRemapper.ENTITY,
 		//potion item (remap to 2 ids for 1.10.*, because 1.10.2 uses id 6, and 1.10 uses id 7)
 		new Mapping(6)
-		.addRemap(6, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(6, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(7, ValueRemapperNoOp.ITEMSTACK, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(6, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.ALL_1_9)
 	),
@@ -567,46 +567,46 @@ public enum SpecificRemapper {
 	FISHING_FLOAT(WatchedType.FISHING_FLOAT, SpecificRemapper.ENTITY,
 		//hooked entity id
 		new Mapping(6)
-		.addRemap(6, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(6, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(5, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 	),
 	ITEM(WatchedType.ITEM, SpecificRemapper.ENTITY,
 		//item
 		new Mapping(6)
-		.addRemap(6, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(6, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(5, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(10, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	MINECART(WatchedType.MINECART, SpecificRemapper.ENTITY,
 		//shaking power
 		new Mapping(6)
-		.addRemap(6, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(6, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(5, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(17, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//shaking direction
 		new Mapping(7)
-		.addRemap(7, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(7, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(6, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(18, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//block y
 		new Mapping(10)
-		.addRemap(10, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(10, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(9, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(21, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//show block
 		new Mapping(11)
-		.addRemap(11, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(11, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(10, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(22, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//damage taken
 		new Mapping(8)
-		.addRemap(8, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(8, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(7, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(19, ValueRemapperNoOp.FLOAT, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1))
 		.addRemap(19, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_6),
 		//block
 		new Mapping(9)
-		.addRemap(9, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(9, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(8, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(20, ValueRemapperNumberToInt.INSTANCE, ProtocolVersion.MINECRAFT_1_8)
 		.addRemap(20, new ValueRemapper<DataWatcherObjectVarInt>() {
@@ -625,15 +625,15 @@ public enum SpecificRemapper {
 			public DataWatcherObject<?> remap(DataWatcherObject<?> object) {
 				return object;
 			}
-		}, ProtocolVersionsHelper.ALL_1_11),
+		}, ProtocolVersionsHelper.RANGE__1_11__1_12),
 		//last output
 		new Mapping(13)
-		.addRemap(13, ValueRemapperNoOp.STRING, ProtocolVersionsHelper.ALL_1_11)
+		.addRemap(13, ValueRemapperNoOp.STRING, ProtocolVersionsHelper.RANGE__1_11__1_12)
 	),
 	ARROW(WatchedType.ARROW, SpecificRemapper.ENTITY,
 		//is critical
 		new Mapping(6)
-		.addRemap(6, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(6, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(5, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(15, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
@@ -641,13 +641,13 @@ public enum SpecificRemapper {
 	TIPPED_ARROW(WatchedType.TIPPED_ARROW, SpecificRemapper.ARROW,
 		//color
 		new Mapping(7)
-		.addRemap(7, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(7, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(6, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 	),
 	FIREWORK(WatchedType.FIREWORK, SpecificRemapper.ENTITY,
 		//info
 		new Mapping(6)
-		.addRemap(6, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(6, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(5, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(8, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.BEFORE_1_9),
 		//who used
@@ -657,13 +657,13 @@ public enum SpecificRemapper {
 	ITEM_FRAME(WatchedType.ITEM_FRAME, SpecificRemapper.ENTITY,
 		//item
 		new Mapping(6)
-		.addRemap(6, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(6, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(5, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(8, ValueRemapperNoOp.ITEMSTACK, ProtocolVersion.MINECRAFT_1_8)
 		.addRemap(2, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.BEFORE_1_8),
 		//rotation
 		new Mapping(7)
-		.addRemap(7, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(7, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(6, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(9, ValueRemapperNumberToByte.INSTANCE, ProtocolVersion.MINECRAFT_1_8)
 		.addRemap(3, new ValueRemapper<DataWatcherObjectVarInt>() {
@@ -676,38 +676,38 @@ public enum SpecificRemapper {
 	ENDER_CRYSTAL(WatchedType.ENDER_CRYSTAL, SpecificRemapper.ENTITY,
 		//target
 		new Mapping(6)
-		.addRemap(6, ValueRemapperNoOp.OPTIONAL_POSITION, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(6, ValueRemapperNoOp.OPTIONAL_POSITION, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(5, ValueRemapperNoOp.OPTIONAL_POSITION, ProtocolVersionsHelper.ALL_1_9),
 		//show botton
 		new Mapping(7)
-		.addRemap(7, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(7, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(6, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 	),
 	ARMOR_STAND_OBJECT(WatchedType.ARMOR_STAND_OBJECT, SpecificRemapper.ARMOR_STAND),
 	AREA_EFFECT_CLOUD(WatchedType.AREA_EFFECT_CLOUD, SpecificRemapper.ENTITY,
 		//radius
 		new Mapping(6)
-		.addRemap(6, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(6, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(5, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.ALL_1_9),
 		//color
 		new Mapping(7)
-		.addRemap(7, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(7, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(6, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9),
 		//single point
 		new Mapping(8)
-		.addRemap(8, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(8, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(7, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9),
 		//particle id
 		new Mapping(9)
-		.addRemap(9, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(9, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(8, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9),
 		//particle param 1
 		new Mapping(10)
-		.addRemap(10, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(10, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(9, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9),
 		//particle param 2
 		new Mapping(11)
-		.addRemap(11, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(11, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(10, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 	),
 	SHULKER_BULLET(WatchedType.SHULKER_BULLET, SpecificRemapper.ENTITY),
