@@ -1,6 +1,8 @@
 package protocolsupport.protocol.serializer;
 
+import java.lang.reflect.Array;
 import java.text.MessageFormat;
+import java.util.function.Function;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -47,6 +49,31 @@ public class ByteArraySerializer {
 
 	private static boolean isUsingVarIntLength(ProtocolVersion version) {
 		return (version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T[] readVarIntTArray(ByteBuf from, Class<T> tclass, Function<ByteBuf, T> elementReader) {
+		T[] array = (T[]) Array.newInstance(tclass, VarNumberSerializer.readVarInt(from));
+		for (int i = 0; i < array.length; i++) {
+			array[i] = elementReader.apply(from);
+		}
+		return array;
+	}
+
+	public static int[] readVarIntVarIntArray(ByteBuf from) {
+		int[] array = new int[VarNumberSerializer.readVarInt(from)];
+		for (int i = 0; i < array.length; i++) {
+			array[i] = VarNumberSerializer.readVarInt(from);
+		}
+		return array;
+	}
+
+	public static int[] readVarIntIntArray(ByteBuf from) {
+		int[] array = new int[VarNumberSerializer.readVarInt(from)];
+		for (int i = 0; i < array.length; i++) {
+			array[i] = from.readInt();
+		}
+		return array;
 	}
 
 }

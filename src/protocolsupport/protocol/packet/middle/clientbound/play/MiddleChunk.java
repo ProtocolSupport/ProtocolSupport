@@ -25,10 +25,10 @@ public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 		full = serverdata.readBoolean();
 		bitmask = VarNumberSerializer.readVarInt(serverdata);
 		data = ByteArraySerializer.readByteArray(serverdata, ProtocolVersion.getLatest(ProtocolType.PC));
-		tiles = new NBTTagCompoundWrapper[VarNumberSerializer.readVarInt(serverdata)];
-		for (int i = 0; i < tiles.length; i++) {
-			tiles[i] = ItemStackSerializer.readTag(serverdata, ProtocolVersion.getLatest(ProtocolType.PC));
-		}
+		tiles = ByteArraySerializer.readVarIntTArray(
+			serverdata, NBTTagCompoundWrapper.class,
+			(from) -> ItemStackSerializer.readTag(serverdata, ProtocolVersion.getLatest(ProtocolType.PC))
+		);
 	}
 
 }

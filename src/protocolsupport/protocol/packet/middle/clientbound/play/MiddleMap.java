@@ -24,14 +24,10 @@ public abstract class MiddleMap extends ClientBoundMiddlePacket {
 		itemData = VarNumberSerializer.readVarInt(serverdata);
 		scale = serverdata.readUnsignedByte();
 		showIcons = serverdata.readBoolean();
-		icons = new Icon[VarNumberSerializer.readVarInt(serverdata)];
-		for (int i = 0; i < icons.length; i++) {
-			Icon icon = new Icon();
-			icon.dirtype = serverdata.readUnsignedByte();
-			icon.x = serverdata.readUnsignedByte();
-			icon.z = serverdata.readUnsignedByte();
-			icons[i] = icon;
-		}
+		icons = ByteArraySerializer.readVarIntTArray(
+			serverdata, Icon.class,
+			(from) -> new Icon(from.readUnsignedByte(), from.readUnsignedByte(), from.readUnsignedByte())
+		);
 		columns = serverdata.readUnsignedByte();
 		if (columns > 0) {
 			rows = serverdata.readUnsignedByte();
@@ -41,10 +37,15 @@ public abstract class MiddleMap extends ClientBoundMiddlePacket {
 		}
 	}
 
-	protected static class Icon {
+	public static class Icon {
 		public int dirtype;
 		public int x;
 		public int z;
+		public Icon(int dirtype, int x, int z) {
+			this.dirtype = dirtype;
+			this.x = x;
+			this.z = z;
+		}
 	}
 
 }
