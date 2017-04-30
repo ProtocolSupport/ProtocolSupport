@@ -16,12 +16,11 @@ public class Map extends MiddleMap {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_MAP_ID, version);
 		VarNumberSerializer.writeVarInt(serializer, itemData);
 		serializer.writeByte(scale);
-		VarNumberSerializer.writeVarInt(serializer, icons.length);
-		for (Icon icon : icons) {
-			serializer.writeByte(icon.dirtype);
-			serializer.writeByte(icon.x);
-			serializer.writeByte(icon.z);
-		}
+		ArraySerializer.writeVarIntTArray(serializer, icons, (to, icon) -> {
+			to.writeByte(icon.dirtype);
+			to.writeByte(icon.x);
+			to.writeByte(icon.z);
+		});
 		serializer.writeByte(columns);
 		if (columns > 0) {
 			serializer.writeByte(rows);

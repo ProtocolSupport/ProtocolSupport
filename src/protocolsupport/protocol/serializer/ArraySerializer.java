@@ -8,6 +8,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.utils.Utils.BiCallable;
 
 public class ArraySerializer {
 
@@ -74,6 +75,20 @@ public class ArraySerializer {
 			array[i] = from.readInt();
 		}
 		return array;
+	}
+
+	public static <T> void writeVarIntTArray(ByteBuf to, T[] array, BiCallable<ByteBuf, T> elementWriter) {
+		VarNumberSerializer.writeVarInt(to, array.length);
+		for (T element : array) {
+			elementWriter.call(to, element);
+		}
+	}
+
+	public static void writeVarIntVarIntArray(ByteBuf to, int[] array) {
+		VarNumberSerializer.writeVarInt(to, array.length);
+		for (int element : array) {
+			VarNumberSerializer.writeVarInt(to, element);
+		}
 	}
 
 }
