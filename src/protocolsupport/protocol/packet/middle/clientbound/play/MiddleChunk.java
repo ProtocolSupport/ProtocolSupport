@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ByteArraySerializer;
+import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -24,8 +24,8 @@ public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 		chunkZ = serverdata.readInt();
 		full = serverdata.readBoolean();
 		bitmask = VarNumberSerializer.readVarInt(serverdata);
-		data = ByteArraySerializer.readByteArray(serverdata, ProtocolVersion.getLatest(ProtocolType.PC));
-		tiles = ByteArraySerializer.readVarIntTArray(
+		data = ArraySerializer.readByteArray(serverdata, ProtocolVersion.getLatest(ProtocolType.PC));
+		tiles = ArraySerializer.readVarIntTArray(
 			serverdata, NBTTagCompoundWrapper.class,
 			(from) -> ItemStackSerializer.readTag(serverdata, ProtocolVersion.getLatest(ProtocolType.PC))
 		);

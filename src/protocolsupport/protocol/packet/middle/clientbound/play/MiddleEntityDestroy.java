@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ByteArraySerializer;
+import protocolsupport.protocol.serializer.ArraySerializer;
 
 public abstract class MiddleEntityDestroy extends ClientBoundMiddlePacket {
 
@@ -10,7 +10,7 @@ public abstract class MiddleEntityDestroy extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		entityIds = ByteArraySerializer.readVarIntVarIntArray(serverdata);
+		entityIds = ArraySerializer.readVarIntVarIntArray(serverdata);
 	}
 
 	@Override

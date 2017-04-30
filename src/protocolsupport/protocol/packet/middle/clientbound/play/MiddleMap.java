@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ByteArraySerializer;
+import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleMap extends ClientBoundMiddlePacket {
@@ -24,7 +24,7 @@ public abstract class MiddleMap extends ClientBoundMiddlePacket {
 		itemData = VarNumberSerializer.readVarInt(serverdata);
 		scale = serverdata.readUnsignedByte();
 		showIcons = serverdata.readBoolean();
-		icons = ByteArraySerializer.readVarIntTArray(
+		icons = ArraySerializer.readVarIntTArray(
 			serverdata, Icon.class,
 			(from) -> new Icon(from.readUnsignedByte(), from.readUnsignedByte(), from.readUnsignedByte())
 		);
@@ -33,7 +33,7 @@ public abstract class MiddleMap extends ClientBoundMiddlePacket {
 			rows = serverdata.readUnsignedByte();
 			xstart = serverdata.readUnsignedByte();
 			zstart = serverdata.readUnsignedByte();
-			data = ByteArraySerializer.readByteArray(serverdata, ProtocolVersion.getLatest(ProtocolType.PC));
+			data = ArraySerializer.readByteArray(serverdata, ProtocolVersion.getLatest(ProtocolType.PC));
 		}
 	}
 

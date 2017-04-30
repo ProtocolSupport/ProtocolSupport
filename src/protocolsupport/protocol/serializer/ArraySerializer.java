@@ -9,7 +9,7 @@ import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 
-public class ByteArraySerializer {
+public class ArraySerializer {
 
 	public static byte[] readByteArray(ByteBuf from, ProtocolVersion version) {
 		return readByteArray(from, version, from.readableBytes());

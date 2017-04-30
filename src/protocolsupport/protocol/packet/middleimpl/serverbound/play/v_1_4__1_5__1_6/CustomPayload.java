@@ -8,7 +8,7 @@ import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
-import protocolsupport.protocol.serializer.ByteArraySerializer;
+import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -26,9 +26,9 @@ public class CustomPayload extends MiddleCustomPayload {
 			throw new DecoderException("Payload may not be larger than 32767 bytes");
 		}
 		newdata.clear();
-		ByteBuf olddata = Unpooled.wrappedBuffer(ByteArraySerializer.readByteArray(clientdata, version, Short.MAX_VALUE));
+		ByteBuf olddata = Unpooled.wrappedBuffer(ArraySerializer.readByteArray(clientdata, version, Short.MAX_VALUE));
 		if (tag.equals("MC|ItemName")) {
-			ByteArraySerializer.writeByteArray(newdata, ProtocolVersion.getLatest(ProtocolType.PC), olddata);
+			ArraySerializer.writeByteArray(newdata, ProtocolVersion.getLatest(ProtocolType.PC), olddata);
 		} else if (tag.equals("MC|BSign") || tag.equals("MC|BEdit")) {
 			ItemStackWrapper book = ItemStackSerializer.readItemStack(olddata, version);
 			book.setType(Material.BOOK_AND_QUILL);

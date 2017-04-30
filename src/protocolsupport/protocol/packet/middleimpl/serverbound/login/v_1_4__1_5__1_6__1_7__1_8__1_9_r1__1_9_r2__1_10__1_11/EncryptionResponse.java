@@ -3,14 +3,14 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.login.v_1_4__1_5_
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.serverbound.login.MiddleEncryptionResponse;
-import protocolsupport.protocol.serializer.ByteArraySerializer;
+import protocolsupport.protocol.serializer.ArraySerializer;
 
 public class EncryptionResponse extends MiddleEncryptionResponse {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
-		sharedSecret = ByteArraySerializer.readByteArray(clientdata, version, 256);
-		verifyToken = ByteArraySerializer.readByteArray(clientdata, version, 256);
+		sharedSecret = ArraySerializer.readByteArray(clientdata, version, 256);
+		verifyToken = ArraySerializer.readByteArray(clientdata, version, 256);
 	}
 
 }

@@ -6,7 +6,7 @@ import protocolsupport.protocol.legacyremapper.chunk.ChunkTransformer.BlockForma
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.ByteArraySerializer;
+import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.tileentity.TileNBTRemapper;
@@ -26,7 +26,7 @@ public class Chunk extends MiddleChunk {
 		serializer.writeBoolean(full);
 		VarNumberSerializer.writeVarInt(serializer, bitmask);
 		transformer.loadData(data, bitmask, cache.hasSkyLightInCurrentDimension(), full);
-		ByteArraySerializer.writeByteArray(serializer, version, transformer.toLegacyData(version));
+		ArraySerializer.writeByteArray(serializer, version, transformer.toLegacyData(version));
 		VarNumberSerializer.writeVarInt(serializer, tiles.length);
 		for (NBTTagCompoundWrapper tile : tiles) {
 			ItemStackSerializer.writeTag(serializer, version, TileNBTRemapper.remap(version, tile));

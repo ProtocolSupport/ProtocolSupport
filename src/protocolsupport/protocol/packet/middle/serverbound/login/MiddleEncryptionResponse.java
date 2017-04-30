@@ -5,7 +5,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.ByteArraySerializer;
+import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -17,8 +17,8 @@ public abstract class MiddleEncryptionResponse extends ServerBoundMiddlePacket {
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.LOGIN_ENCRYPTION_BEGIN);
-		ByteArraySerializer.writeByteArray(creator, ProtocolVersion.getLatest(ProtocolType.PC), sharedSecret);
-		ByteArraySerializer.writeByteArray(creator, ProtocolVersion.getLatest(ProtocolType.PC), verifyToken);
+		ArraySerializer.writeByteArray(creator, ProtocolVersion.getLatest(ProtocolType.PC), sharedSecret);
+		ArraySerializer.writeByteArray(creator, ProtocolVersion.getLatest(ProtocolType.PC), verifyToken);
 		return RecyclableSingletonList.create(creator);
 	}
 

@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ByteArraySerializer;
+import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 
@@ -14,7 +14,7 @@ public abstract class MiddleStatistics extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		statistics = ByteArraySerializer.readVarIntTArray(
+		statistics = ArraySerializer.readVarIntTArray(
 			serverdata, Statistic.class,
 			(from) -> new Statistic(StringSerializer.readString(from, ProtocolVersion.getLatest(ProtocolType.PC)), VarNumberSerializer.readVarInt(serverdata))
 		);

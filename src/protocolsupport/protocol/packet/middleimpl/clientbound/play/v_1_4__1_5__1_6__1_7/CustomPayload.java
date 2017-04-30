@@ -6,7 +6,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.ByteArraySerializer;
+import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MerchantDataSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -25,7 +25,7 @@ public class CustomPayload extends MiddleCustomPayload {
 		} else {
 			newdata.writeBytes(data);
 		}
-		ByteArraySerializer.writeByteArray(serializer, version, newdata);
+		ArraySerializer.writeByteArray(serializer, version, newdata);
 		return RecyclableSingletonList.create(serializer);
 	}
 
