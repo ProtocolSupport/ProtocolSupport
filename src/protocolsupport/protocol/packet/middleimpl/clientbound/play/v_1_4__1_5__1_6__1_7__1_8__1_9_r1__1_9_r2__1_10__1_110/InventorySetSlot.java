@@ -35,7 +35,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_SET_SLOT_ID, version);
 		serializer.writeByte(windowId);
 		serializer.writeShort(slot);
-		ItemStackSerializer.writeItemStack(serializer, version, itemstack);
+		ItemStackSerializer.writeItemStack(serializer, version, itemstack, true);
 		return RecyclableSingletonList.create(serializer);
 	}
 

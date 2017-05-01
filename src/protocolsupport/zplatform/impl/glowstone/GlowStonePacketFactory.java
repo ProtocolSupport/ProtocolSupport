@@ -48,6 +48,7 @@ import net.glowstone.net.message.play.entity.SpawnLightningStrikeMessage;
 import net.glowstone.net.message.play.entity.SpawnMobMessage;
 import net.glowstone.net.message.play.entity.SpawnObjectMessage;
 import net.glowstone.net.message.play.entity.SpawnPaintingMessage;
+import net.glowstone.net.message.play.entity.SpawnPlayerMessage;
 import net.glowstone.net.message.play.entity.SpawnXpOrbMessage;
 import net.glowstone.net.message.play.entity.VehicleMoveMessage;
 import net.glowstone.net.message.play.game.BlockActionMessage;
@@ -362,7 +363,7 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 
     @Override
     public int getOutPlaySpawnNamedPacketId() {
-        return getOpcode(ProtocolType.PLAY, OUTBOUND, SpawnMobMessage.class);
+        return getOpcode(ProtocolType.PLAY, OUTBOUND, SpawnPlayerMessage.class);
     }
 
     @Override

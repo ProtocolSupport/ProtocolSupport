@@ -20,6 +20,7 @@ import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
+import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedType;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
 import protocolsupport.protocol.utils.data.ItemData;
 import protocolsupport.protocol.utils.data.PotionData;
@@ -47,6 +48,7 @@ public class ProtocolSupport extends JavaPlugin {
 		}
 		try {
 			ProtocolVersion.values();
+			WatchedType.init();
 			Allocator.init();
 			ItemData.init();
 			PotionData.init();

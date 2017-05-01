@@ -9,9 +9,9 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedLiving;
+import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedType;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 
@@ -57,7 +57,7 @@ public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 
 	@Override
 	public boolean isValid() {
-		return SpecificRemapper.getMobByTypeId(type) != SpecificRemapper.NONE;
+		return WatchedType.getMobByTypeId(type) != WatchedType.NONE;
 	}
 
 }

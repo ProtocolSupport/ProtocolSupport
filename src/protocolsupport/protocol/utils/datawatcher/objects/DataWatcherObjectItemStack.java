@@ -15,7 +15,7 @@ public class DataWatcherObjectItemStack extends DataWatcherObject<ItemStackWrapp
 
 	@Override
 	public void writeToStream(ByteBuf to, ProtocolVersion version) {
-		ItemStackSerializer.writeItemStack(to, version, value);
+		ItemStackSerializer.writeItemStack(to, version, value, true);
 	}
 
 }

@@ -32,15 +32,15 @@ public class MerchantDataSerializer {
 		return merchdata;
 	}
 
-	public static void writeMerchantData(ByteBuf to, ProtocolVersion version, MerchantData merchdata) {
+	public static void writeMerchantData(ByteBuf to, ProtocolVersion version, MerchantData merchdata, boolean fireItemStackEvents) {
 		to.writeInt(merchdata.getWindowId());
 		to.writeByte(merchdata.getOffers().size());
 		for (TradeOffer offer : merchdata.getOffers()) {
-			ItemStackSerializer.writeItemStack(to, version, offer.getItemStack1());
-			ItemStackSerializer.writeItemStack(to, version, offer.getResult());
+			ItemStackSerializer.writeItemStack(to, version, offer.getItemStack1(), fireItemStackEvents);
+			ItemStackSerializer.writeItemStack(to, version, offer.getResult(), fireItemStackEvents);
 			to.writeBoolean(offer.hasItemStack2());
 			if (offer.hasItemStack2()) {
-				ItemStackSerializer.writeItemStack(to, version, offer.getItemStack2());
+				ItemStackSerializer.writeItemStack(to, version, offer.getItemStack2(), fireItemStackEvents);
 			}
 			to.writeBoolean(offer.isDisabled());
 			if (isUsingUsesCount(version)) {

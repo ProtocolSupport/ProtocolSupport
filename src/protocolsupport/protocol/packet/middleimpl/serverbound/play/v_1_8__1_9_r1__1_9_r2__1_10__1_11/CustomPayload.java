@@ -37,7 +37,7 @@ public class CustomPayload extends MiddleCustomPayload {
 			if (version == ProtocolVersion.MINECRAFT_1_8) {
 				remapBookPages(book);
 			}
-			ItemStackSerializer.writeItemStack(newdata, ProtocolVersion.getLatest(ProtocolType.PC), book);
+			ItemStackSerializer.writeItemStack(newdata, ProtocolVersion.getLatest(ProtocolType.PC), book, false);
 			data = MiscSerializer.readAllBytes(newdata);
 		} else {
 			data = MiscSerializer.readAllBytes(clientdata);
