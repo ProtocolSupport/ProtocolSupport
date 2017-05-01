@@ -33,6 +33,22 @@ public class TileNBTRemapper {
 		newToOldType.put("minecraft:sign", "Sign");
 	}
 
+	private static final HashMap<String, String> peTypes = new HashMap<>();
+	static {
+		peTypes.put("minecraft:chest", "Chest");
+		peTypes.put("minecraft:ender_chest", "EnderChest");
+		peTypes.put("minecraft:furnace", "Furnace");
+		peTypes.put("minecraft:sign", "Sign");
+		peTypes.put("minecraft:mob_spawner", "MobSpawner");
+		peTypes.put("minecraft:enchanting_table", "EnchantTable");
+		peTypes.put("minecraft:skull", "Skull");
+		peTypes.put("minecraft:flower_pot", "FlowerPot");
+		peTypes.put("minecraft:brewing_stand", "BrewingStand");
+		peTypes.put("minecraft:daylight_detector", "DaylightDetector");
+		peTypes.put("minecraft:noteblock", "Music");
+		peTypes.put("minecraft:beacon", "Beacon");
+	}
+
 	private static final EnumMap<TileEntityUpdateType, EnumMap<ProtocolVersion, List<TileEntitySpecificRemapper>>> registry = new EnumMap<>(TileEntityUpdateType.class);
 
 	private static void register(TileEntityUpdateType type, TileEntitySpecificRemapper transformer, ProtocolVersion... versions) {
@@ -51,6 +67,14 @@ public class TileNBTRemapper {
 					return input;
 				},
 				ProtocolVersionsHelper.BEFORE_1_11
+			);
+			register(
+				type,
+				(version, input) -> {
+					input.setString(tileEntityTypeKey, peTypes.getOrDefault(input.getString(tileEntityTypeKey), "Unknown"));
+					return input;
+				},
+				ProtocolVersion.MINECRAFT_PE
 			);
 		}
 		register(

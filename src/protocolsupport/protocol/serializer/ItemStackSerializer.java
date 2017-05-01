@@ -19,6 +19,7 @@ import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ItemStackWriteEvent;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
+import protocolsupport.protocol.utils.PENetworkNBTDataOutputStream;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -104,6 +105,8 @@ public class ItemStackSerializer {
 						tag.writeToStream(outputstream);
 					}
 				}
+			} else if (isUsingPENBT(version)) {
+				tag.writeToStream(new PENetworkNBTDataOutputStream(to));
 			} else {
 				throw new IllegalArgumentException(MessageFormat.format("Don't know how to write nbt of version {0}", version));
 			}
@@ -118,6 +121,10 @@ public class ItemStackSerializer {
 
 	private static final boolean isUsingDirectOrZeroIfNoneNBT(ProtocolVersion version) {
 		return (version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
+	}
+
+	private static final boolean isUsingPENBT(ProtocolVersion version) {
+		return (version.getProtocolType() == ProtocolType.PE) && (version == ProtocolVersion.MINECRAFT_PE);
 	}
 
 	public static class InternalItemStackWriteEvent extends ItemStackWriteEvent {

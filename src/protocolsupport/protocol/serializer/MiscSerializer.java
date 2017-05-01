@@ -3,9 +3,18 @@ package protocolsupport.protocol.serializer;
 import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.handler.codec.DecoderException;
 
 public class MiscSerializer {
+
+	public static float readLFloat(ByteBuf from) {
+		return Float.intBitsToFloat(ByteBufUtil.swapInt(from.readInt()));
+	}
+
+	public static void writeLFloat(ByteBuf to, float f) {
+		to.writeInt(ByteBufUtil.swapInt(Float.floatToIntBits(f)));
+	}
 
 	public static <T extends Enum<T>> T readEnum(ByteBuf from, Class<T> clazz) {
 		return clazz.getEnumConstants()[VarNumberSerializer.readVarInt(from)];

@@ -35,7 +35,8 @@ dllibs.mkdirs()
 task updateLibs(type: Download) {
 	src([
 		'http://yivesmirror.com/files/spigot/spigot-1.11.2-R0.1-SNAPSHOT.jar',
-		'https://bamboo.gserv.me/artifact/GSPP-SRV/shared/build-latestSuccessful/Version-Independent-Server-JAR/glowstone.jar'
+		'https://bamboo.gserv.me/artifact/GSPP-SRV/shared/build-latestSuccessful/Version-Independent-Server-JAR/glowstone.jar',
+		'https://build.true-games.org/job/RakNetServer/lastSuccessfulBuild/artifact/target/RakNetServer.jar'
 	])
 	dest dllibs
 	onlyIfNewer true
@@ -68,6 +69,7 @@ repositories {
 
 dependencies {
 	shadow files('buildprocessor/BuildProcessor.jar', new File(dllibs, 'spigot-1.11.2-R0.1-SNAPSHOT.jar'), new File(dllibs, 'glowstone.jar'))
+	compile files(new File(dllibs, 'RakNetServer.jar'))
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 	compile group: 'net.sf.trove4j', name: 'trove4j', version: '3.0.3'
 	compile group: 'com.google.code.gson', name: 'gson', version: '2.8.0'
@@ -90,6 +92,8 @@ shadowJar {
 	relocate 'org.apache', 'protocolsupport.libs.org.apache'
 	relocate 'gnu.trove', 'protocolsupport.libs.gnu.trove'
 	relocate 'com.google.gson', 'protocolsupport.libs.com.google.gson'
+	relocate 'raknetserver', 'protocolsupport.libs.raknetserver'
+	relocate 'udpserversocketchannel', 'protocolsupport.libs.udpserversocketchannel'
 }
 
 jar.enabled = false

@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.util.CachedServerIcon;
 
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolType;
@@ -51,40 +52,47 @@ public abstract class AbstractStatusListener {
 
 	private boolean sentInfo = false;
 
+	public static void executeTask(Runnable run) {
+		statusprocessor.execute(run);
+	}
+
+	public static ServerPingResponseEvent createPingResponse(Channel channel, InetSocketAddress addr) {
+
+		ArrayList<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
+
+		String motd = Bukkit.getMotd();
+		int maxPlayers = Bukkit.getMaxPlayers();
+
+		InternalServerListPingEvent bevent = new InternalServerListPingEvent(addr.getAddress(), motd, maxPlayers, players);
+		bevent.setServerIcon(Bukkit.getServerIcon());
+		Bukkit.getPluginManager().callEvent(bevent);
+
+		String icon = bevent.getIcon() != null ? ServerPlatform.get().getMiscUtils().convertBukkitIconToBase64(bevent.getIcon()) : null;
+		motd = bevent.getMotd();
+		maxPlayers = bevent.getMaxPlayers();
+
+		List<String> profiles = new ArrayList<>(players.size());
+		for (Player player : players) {
+			profiles.add(player.getName());
+		}
+
+		ServerPingResponseEvent revent = new ServerPingResponseEvent(
+			ConnectionImpl.getFromChannel(channel),
+			new ProtocolInfo(ProtocolVersion.getLatest(ProtocolType.PC), ServerPlatform.get().getMiscUtils().getModName() + " " + ServerPlatform.get().getMiscUtils().getVersionName()),
+			icon, motd, maxPlayers, profiles
+		);
+		Bukkit.getPluginManager().callEvent(revent);
+		return revent;
+	}
+
 	public void handleStatusRequest() {
 		if (sentInfo) {
 			networkManager.close("Status request has already been handled.");
 		}
 		sentInfo = true;
 
-		statusprocessor.execute(() -> {
-			InetSocketAddress addr = networkManager.getAddress();
-
-			ArrayList<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
-
-			String motd = Bukkit.getMotd();
-			int maxPlayers = Bukkit.getMaxPlayers();
-
-			InternalServerListPingEvent bevent = new InternalServerListPingEvent(addr.getAddress(), motd, maxPlayers, players);
-			bevent.setServerIcon(Bukkit.getServerIcon());
-			Bukkit.getPluginManager().callEvent(bevent);
-
-			String icon = bevent.getIcon() != null ? ServerPlatform.get().getMiscUtils().convertBukkitIconToBase64(bevent.getIcon()) : null;
-			motd = bevent.getMotd();
-			maxPlayers = bevent.getMaxPlayers();
-
-			List<String> profiles = new ArrayList<>(players.size());
-			for (Player player : players) {
-				profiles.add(player.getName());
-			}
-
-			ServerPingResponseEvent revent = new ServerPingResponseEvent(
-				ConnectionImpl.getFromChannel(networkManager.getChannel()),
-				new ProtocolInfo(ProtocolVersion.getLatest(ProtocolType.PC), ServerPlatform.get().getMiscUtils().getModName() + " " + ServerPlatform.get().getMiscUtils().getVersionName()),
-				icon, motd, maxPlayers, profiles
-			);
-			Bukkit.getPluginManager().callEvent(revent);
-
+		executeTask(() -> {
+			ServerPingResponseEvent revent = createPingResponse(networkManager.getChannel(), networkManager.getAddress());
 			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createStausServerInfoPacket(
 				revent.getPlayers(), revent.getProtocolInfo(),
 				revent.getIcon(), revent.getMotd(), revent.getMaxPlayers()

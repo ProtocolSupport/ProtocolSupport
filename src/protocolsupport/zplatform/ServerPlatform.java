@@ -63,6 +63,10 @@ public class ServerPlatform {
 		injector.inject();
 	}
 
+	public void injectOnEnable() {
+		injector.injectOnEnable();
+	}
+
 	public PlatformUtils getMiscUtils() {
 		return utils;
 	}

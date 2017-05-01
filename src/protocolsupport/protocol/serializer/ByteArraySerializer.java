@@ -46,7 +46,9 @@ public class ByteArraySerializer {
 	}
 
 	private static boolean isUsingVarIntLength(ProtocolVersion version) {
-		return (version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
+		return
+			((version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8)) ||
+			((version.getProtocolType() == ProtocolType.PE) && (version == ProtocolVersion.MINECRAFT_PE));
 	}
 
 }

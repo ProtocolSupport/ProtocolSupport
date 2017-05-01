@@ -2,6 +2,7 @@ package protocolsupport.protocol.storage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,6 +15,8 @@ import protocolsupport.protocol.utils.types.WindowType;
 
 public class NetworkDataCache {
 
+	private static final double acceptableError = 0.0001;
+
 	private double x;
 	private double y;
 	private double z;
@@ -25,9 +28,9 @@ public class NetworkDataCache {
 
 	public int tryTeleportConfirm(double x, double y, double z) {
 		if (
-			(Double.doubleToLongBits(this.x) == Double.doubleToLongBits(x)) &&
-			(Double.doubleToLongBits(this.y) == Double.doubleToLongBits(y)) &&
-			(Double.doubleToLongBits(this.z) == Double.doubleToLongBits(z))
+			(Math.abs(this.x - x) < acceptableError) &&
+			(Math.abs(this.y - y) < acceptableError) &&
+			(Math.abs(this.z - z) < acceptableError)
 		) {
 			int r = teleportConfirmId;
 			teleportConfirmId = -1;
@@ -115,6 +118,7 @@ public class NetworkDataCache {
 
 	public void clearWatchedEntities() {
 		watchedEntities.clear();
+		sentChunks.clear();
 		readdSelfPlayer();
 	}
 
@@ -203,6 +207,41 @@ public class NetworkDataCache {
 				clone.propstorage.add(property);
 			}
 			return clone;
+		}
+	}
+
+	private final HashSet<ChunkCoord> sentChunks = new HashSet<>();
+
+	public void markSentChunk(int x, int z) {
+		sentChunks.add(new ChunkCoord(x, z));
+	}
+
+	public void unmarkSentChunk(int x, int z) {
+		sentChunks.remove(new ChunkCoord(x, z));
+	}
+
+	public boolean isChunkMarkedAsSent(int x, int z) {
+		return sentChunks.contains(new ChunkCoord(x, z));
+	}
+
+	protected static class ChunkCoord {
+		private final int x;
+		private final int z;
+		public ChunkCoord(int x, int z) {
+			this.x = x;
+			this.z = z;
+		}
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof ChunkCoord)) {
+				return false;
+			}
+			ChunkCoord other = (ChunkCoord) obj;
+			return (x == other.x) && (z == other.z);
+		}
+		@Override
+		public int hashCode() {
+			return (x * 31) + z;
 		}
 	}
 
