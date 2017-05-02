@@ -17,6 +17,9 @@ import protocolsupport.utils.ProtocolVersionsHelper;
 public class IdRemapper {
 
 	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> BLOCK = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
+
+		private static final int DATA_MAX = 16;
+
 		{
 			registerRemapEntry(Material.IRON_NUGGET, Material.GOLD_NUGGET, ProtocolVersionsHelper.BEFORE_1_11_1);
 			registerRemapEntry(Material.OBSERVER, Material.FURNACE, 2, ProtocolVersionsHelper.BEFORE_1_11);
@@ -41,8 +44,12 @@ public class IdRemapper {
 			registerRemapEntry(Material.RED_NETHER_BRICK, Material.NETHER_BRICK, ProtocolVersionsHelper.BEFORE_1_10);
 			registerRemapEntry(Material.MAGMA, Material.NETHERRACK, ProtocolVersionsHelper.BEFORE_1_10);
 			registerRemapEntry(Material.BONE_BLOCK, Material.BRICK, ProtocolVersionsHelper.BEFORE_1_10);
-			registerRemapEntry(Material.COMMAND_CHAIN, Material.COMMAND, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(Material.COMMAND_REPEATING, Material.COMMAND, ProtocolVersionsHelper.BEFORE_1_9);
+			for (int i = 0; i < DATA_MAX; i++) {
+				int newdata = (i & 0x8) == 1 ? 1 : 0;
+				registerRemapEntry(Material.COMMAND_CHAIN, i, Material.COMMAND, newdata, ProtocolVersionsHelper.BEFORE_1_9);
+				registerRemapEntry(Material.COMMAND_REPEATING, i, Material.COMMAND, newdata, ProtocolVersionsHelper.BEFORE_1_9);
+				registerRemapEntry(Material.COMMAND, i, Material.COMMAND, newdata, ProtocolVersionsHelper.BEFORE_1_9);
+			}
 			registerRemapEntry(Material.CHORUS_FLOWER, Material.WOOD, ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry(Material.CHORUS_PLANT, Material.WOOD, ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry(Material.END_GATEWAY, Material.ENDER_PORTAL, ProtocolVersionsHelper.BEFORE_1_9);
@@ -113,21 +120,23 @@ public class IdRemapper {
 			registerRemapEntry(Material.REDSTONE_COMPARATOR_OFF, Material.DIODE_BLOCK_OFF, ProtocolVersionsHelper.BEFORE_1_5);
 			registerRemapEntry(Material.REDSTONE_COMPARATOR_ON, Material.DIODE_BLOCK_ON, ProtocolVersionsHelper.BEFORE_1_5);
 		}
-		@SuppressWarnings("deprecation")
 		protected void registerRemapEntry(Material from, Material to, ProtocolVersion... versions) {
-			for (int i = 0; i < 16; i++) {
-				registerRemapEntry((from.getId() << 4) | i, (to.getId() << 4) | i, versions);
+			for (int i = 0; i < DATA_MAX; i++) {
+				registerRemapEntry(from, i, to, i, versions);
+			}
+		}
+		protected void registerRemapEntry(Material matFrom, Material matTo, int dataTo, ProtocolVersion... versions) {
+			for (int i = 0; i < DATA_MAX; i++) {
+				registerRemapEntry(matFrom, i, matTo, dataTo, versions);
 			}
 		}
 		@SuppressWarnings("deprecation")
-		protected void registerRemapEntry(Material matFrom, Material matTo, int dataTo, ProtocolVersion... versions) {
-			for (int i = 0; i < 16; i++) {
-				registerRemapEntry((matFrom.getId() << 4) | i, (matTo.getId() << 4) | (dataTo & 0xF), versions);
-			}
+		protected void registerRemapEntry(Material matFrom, int dataFrom, Material matTo, int dataTo, ProtocolVersion... versions) {
+			registerRemapEntry((matFrom.getId() << 4) | dataFrom, (matTo.getId() << 4) | (dataTo & 0xF), versions);
 		}
 		@Override
 		protected ArrayBasedIdRemappingTable createTable() {
-			return new ArrayBasedIdRemappingTable(4096 * 16);
+			return new ArrayBasedIdRemappingTable(4096 * DATA_MAX);
 		}
 	};
 
