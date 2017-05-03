@@ -44,7 +44,7 @@ public class ItemStackSerializer {
 			return;
 		}
 		ItemStackWrapper remapped = ItemStackRemapper.remapClientbound(version, itemstack.cloneItemStack());
-		if (fireEvent && ItemStackWriteEvent.getHandlerList().getRegisteredListeners().length > 0) {
+		if (fireEvent && (ItemStackWriteEvent.getHandlerList().getRegisteredListeners().length > 0)) {
 			ItemStackWriteEvent event = new InternalItemStackWriteEvent(version, itemstack, remapped);
 			Bukkit.getPluginManager().callEvent(event);
 		}

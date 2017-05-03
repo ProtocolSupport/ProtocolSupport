@@ -15,7 +15,7 @@ import protocolsupport.protocol.utils.types.WindowType;
 
 public class NetworkDataCache {
 
-	private static final double acceptableError = 0.0001;
+	private static final double acceptableError = 0.001;
 
 	private double x;
 	private double y;
