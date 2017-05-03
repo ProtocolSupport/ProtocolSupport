@@ -5,23 +5,26 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 
-public class DataWatcherObjectVarInt extends DataWatcherObject<Integer> {
-
-	public DataWatcherObjectVarInt(){
+public class DataWatcherObjectLong extends DataWatcherObject<Long>{
+	
+	public DataWatcherObjectLong(){
 	}
 	
-	public DataWatcherObjectVarInt(int Value) {
+	public DataWatcherObjectLong(Long Value) {
 		this.value = Value;
+	}
+
+	public DataWatcherObjectLong(int Value) {
+		this.value = (long) Value;
 	}
 
 	@Override
 	public void readFromStream(ByteBuf from, ProtocolVersion version) {
-		value = VarNumberSerializer.readVarInt(from);
+		value = VarNumberSerializer.readVarLong(from);
 	}
 
 	@Override
 	public void writeToStream(ByteBuf to, ProtocolVersion version) {
-		VarNumberSerializer.writeVarInt(to, value);
+		VarNumberSerializer.writeSVarLong(to, value);
 	}
-
 }

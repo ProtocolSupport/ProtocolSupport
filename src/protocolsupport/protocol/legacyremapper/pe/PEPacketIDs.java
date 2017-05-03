@@ -18,7 +18,8 @@ public class PEPacketIDs {
 	public static final int PLAYER_MOVE = 20;
 	public static final int LEVEL_EVENT = 27;
 	public static final int SET_ATTRIBUTES = 31;
-	public static final int PLAYER_ACTION = 37;
+	public static final int PLAYER_ACTION = 37
+  public static final int ENTITY_METADATA = 40;
 	public static final int ENTITY_VELOCITY = 41;
 	public static final int SPAWN_POS = 44;
 	public static final int ANIMATION = 45;
@@ -30,5 +31,4 @@ public class PEPacketIDs {
 	public static final int CHANGE_PLAYER_GAMETYPE = 63;
 	public static final int PLAYER_INFO = 64;
 	public static final int CHUNK_RADIUS = 70;
-
 }

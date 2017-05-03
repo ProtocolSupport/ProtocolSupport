@@ -3,6 +3,7 @@ package protocolsupport.protocol.typeremapper.watchedentity;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.legacyremapper.pe.PEEntityMetaData;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.MappingEntry;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
@@ -11,6 +12,8 @@ import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedType;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectLong;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
 import protocolsupport.utils.Utils;
 
 public class WatchedDataRemapper {
@@ -53,6 +56,15 @@ public class WatchedDataRemapper {
 				}
 			}
 		}
+		
+		if(to.equals(ProtocolVersion.MINECRAFT_PE)){
+			originaldata.put(0, new DataWatcherObjectLong(PEEntityMetaData.getBaseValues(entityId, entity, cache, originaldata)));
+			if((entity.getType() == SpecificRemapper.PLAYER) && originaldata.containsKey(2)) originaldata.remove(2); //Don't put empty nametags on players. Why would you?
+			if((!originaldata.containsKey(1)) || (int)(((DataWatcherObjectVarInt)originaldata.get(1)).getValue()) == 300) originaldata.put(1, new DataWatcherObjectVarInt(0)); //Air is 0 when full and 0 when empty on PE.
+			originaldata.put(38, new DataWatcherObjectLong(-1));//TODO: Add Leash functionality.
+		}
+		
+		
 		//registry based remap
 		TIntObjectHashMap<DataWatcherObject<?>> transformed = new TIntObjectHashMap<>();
 		SpecificRemapper stype = SpecificRemapper.fromWatchedType(entity.getType());

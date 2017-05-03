@@ -30,13 +30,16 @@ public enum SpecificRemapper {
 	ENTITY(WatchedType.ENTITY,
 		//flags
 		new Mapping(0)
+		.addRemap(0, ValueRemapperNoOp.LONG, ProtocolVersion.MINECRAFT_PE)
 		.addRemap(0, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL),
 		//air
 		new Mapping(1)
+		.addRemap(7, ValueRemapperNumberToShort.INSTANCE, ProtocolVersion.MINECRAFT_PE)
 		.addRemap(1, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_9__1_11)
 		.addRemap(1, ValueRemapperNumberToShort.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9),
 		//nametag
 		new Mapping(2)
+		.addRemap(4, ValueRemapperNoOp.STRING, ProtocolVersion.MINECRAFT_PE)
 		.addRemap(2, ValueRemapperNoOp.STRING, ProtocolVersionsHelper.RANGE__1_9__1_11),
 		//nametag visible
 		new Mapping(3)
@@ -46,7 +49,10 @@ public enum SpecificRemapper {
 		.addRemap(4, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_9__1_11),
 		//no gravity
 		new Mapping(5)
-		.addRemap(5, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_11)
+		.addRemap(5, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_11),
+		//Leash for PE
+		new Mapping(38)
+		.addRemap(38, ValueRemapperNoOp.LONG, ProtocolVersion.MINECRAFT_PE)
 	),
 	LIVING(WatchedType.LIVING, SpecificRemapper.ENTITY,
 		//nametag

@@ -25,9 +25,9 @@ public class PlayerInfo extends MiddlePlayerInfo {
 				for (Info info : infos) {
 					MiscSerializer.writeUUID(serializer, info.uuid);
 					VarNumberSerializer.writeSVarInt(serializer, 0); //entity id
-					StringSerializer.writeString(serializer, version, info.getName());
+					StringSerializer.writeString(serializer, version, info.username);
 					StringSerializer.writeString(serializer, version, "Standard_Steve");
-					ByteArraySerializer.writeByteArray(serializer, version, PESkin.STEVE);
+					ByteArraySerializer.writeByteArray(serializer, version, PESkin.STEVE); //Meh.
 				}
 				return RecyclableSingletonList.create(serializer);
 			}
