@@ -34,7 +34,7 @@ public class CustomPayload extends MiddleCustomPayload {
 		} else if (tag.equals("MC|BSign") || tag.equals("MC|BEdit")) {
 			ItemStackWrapper book = ItemStackSerializer.readItemStack(clientdata, version);
 			book.setType(Material.BOOK_AND_QUILL);
-			if (version == ProtocolVersion.MINECRAFT_1_8) {
+			if (version == ProtocolVersion.MINECRAFT_1_8 && tag.equals("MC|BSign")) {
 				remapBookPages(book);
 			}
 			ItemStackSerializer.writeItemStack(newdata, ProtocolVersion.getLatest(ProtocolType.PC), book, false);
