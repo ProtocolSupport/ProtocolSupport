@@ -14,13 +14,13 @@ public class Login extends MiddleLogin {
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_LOGIN_ID, version);
 		serializer.writeInt(playerEntityId);
-		serializer.writeByte(gamemode);
+		serializer.writeByte(gamemode.getId());
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9_1)) {
-			serializer.writeByte(dimension);
+			serializer.writeByte(dimension.getId());
 		} else {
-			serializer.writeInt(dimension);
+			serializer.writeInt(dimension.getId());
 		}
-		serializer.writeByte(difficulty);
+		serializer.writeByte(difficulty.getId());
 		serializer.writeByte(maxplayers);
 		StringSerializer.writeString(serializer, version, leveltype);
 		serializer.writeBoolean(reducedDebugInfo);

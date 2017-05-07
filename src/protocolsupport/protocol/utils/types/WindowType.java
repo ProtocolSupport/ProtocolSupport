@@ -1,51 +1,51 @@
 package protocolsupport.protocol.utils.types;
 
-public enum WindowType {
-	CHEST, CRAFTING_TABLE, FURNACE, DISPENSER, ENCHANT, BREING, VILLAGER, BEACON, ANVIL, HOPPER, DROPPER, SHULKER, HORSE, PLAYER;
+import java.text.MessageFormat;
+import java.util.Map;
 
-	public static WindowType fromName(String inventoryid) {
-		switch (inventoryid) {
-			case "minecraft:chest":
-			case "minecraft:container": {
-				return CHEST;
-			}
-			case "minecraft:crafting_table": {
-				return CRAFTING_TABLE;
-			}
-			case "minecraft:furnace": {
-				return FURNACE;
-			}
-			case "minecraft:dispenser": {
-				return DISPENSER;
-			}
-			case "minecraft:enchanting_table": {
-				return ENCHANT;
-			}
-			case "minecraft:brewing_stand": {
-				return BREING;
-			}
-			case "minecraft:villager": {
-				return VILLAGER;
-			}
-			case "minecraft:beacon": {
-				return BEACON;
-			}
-			case "minecraft:anvil": {
-				return ANVIL;
-			}
-			case "minecraft:hopper": {
-				return HOPPER;
-			}
-			case "minecraft:dropper": {
-				return DROPPER;
-			}
-			case "minecraft:shulker_box": {
-				return SHULKER;
-			}
-			case "EntityHorse": {
-				return HORSE;
-			}
-		}
-		throw new IllegalArgumentException("Don't know how to convert " + inventoryid);
+import protocolsupport.utils.CollectionsUtils;
+
+public enum WindowType {
+
+	CHEST("minecraft:chest"),
+	CRAFTING_TABLE("minecraft:crafting_table"),
+	FURNACE("minecraft:furnace"),
+	DISPENSER("minecraft:dispenser"),
+	ENCHANT("minecraft:enchanting_table"),
+	BREING("minecraft:brewing_stand"),
+	VILLAGER("minecraft:villager"),
+	BEACON("minecraft:beacon"),
+	ANVIL("minecraft:anvil"),
+	HOPPER("minecraft:hopper"),
+	DROPPER("minecraft:dropper"),
+	SHULKER("minecraft:shulker_box"),
+	HORSE("EntityHorse"),
+	PLAYER("_____FAKETYPE_PLAYER");
+
+	private final String id;
+	WindowType(String id) {
+		this.id = id;
 	}
+
+	private static final Map<String, WindowType> byId = CollectionsUtils.makeEnumMappingMap(WindowType.class, WindowType::getId);
+	static {
+		byId.put("minecraft:container", WindowType.CHEST);
+	}
+
+	public static WindowType getById(String inventoryid) {
+		WindowType type = byId.get(inventoryid);
+		if (type == null) {
+			throw new IllegalArgumentException(MessageFormat.format("Unknown inventory type {0}", inventoryid));
+		}
+		return type;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public int toLegacyId() {
+		return ordinal();
+	}
+
 }

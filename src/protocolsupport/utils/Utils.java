@@ -107,9 +107,4 @@ public class Utils {
 		return ProtocolSupport.class.getClassLoader().getResourceAsStream(resourcesDirName + "/" + name);
 	}
 
-	@FunctionalInterface
-	public static interface BiCallable<T1, T2> {
-		public void call(T1 t1, T2 t2);
-	}
-
 }

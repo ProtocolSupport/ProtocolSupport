@@ -6,15 +6,18 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.tab.TabAPI;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
+import protocolsupport.protocol.utils.types.Difficulty;
+import protocolsupport.protocol.utils.types.Environment;
+import protocolsupport.protocol.utils.types.GameMode;
 
 public abstract class MiddleLogin extends ClientBoundMiddlePacket {
 
 	protected int playerEntityId;
-	protected int gamemode;
-	protected int dimension;
-	protected int difficulty;
+	protected GameMode gamemode;
+	protected boolean hardcore;
+	protected Environment dimension;
+	protected Difficulty difficulty;
 	protected int maxplayers;
 	protected String leveltype;
 	protected boolean reducedDebugInfo;
@@ -22,9 +25,11 @@ public abstract class MiddleLogin extends ClientBoundMiddlePacket {
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
 		playerEntityId = serverdata.readInt();
-		gamemode = serverdata.readByte();
-		dimension = IdRemapper.fixDimensionId(serverdata.readInt());
-		difficulty = serverdata.readByte();
+		int gmdata = serverdata.readByte();
+		gamemode = GameMode.getById(gmdata & 0b11);
+		hardcore = (gmdata & 0b100) == 1 ? true : false;
+		dimension = Environment.getById(serverdata.readInt());
+		difficulty = Difficulty.getById(serverdata.readByte());
 		serverdata.readByte();
 		maxplayers = TabAPI.getMaxTabSize();
 		leveltype = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(ProtocolType.PC), 16);

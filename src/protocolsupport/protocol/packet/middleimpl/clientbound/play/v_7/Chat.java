@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.legacyremapper.LegacyChatJson;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChat;
@@ -14,7 +15,7 @@ public class Chat extends MiddleChat {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHAT_ID, version);
-		StringSerializer.writeString(serializer, version, LegacyChatJson.convert(chatJson));
+		StringSerializer.writeString(serializer, version, ChatAPI.toJSON(LegacyChatJson.convert(message)));
 		return RecyclableSingletonList.create(serializer);
 	}
 

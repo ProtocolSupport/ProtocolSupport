@@ -2,13 +2,13 @@ package protocolsupport.protocol.serializer;
 
 import java.lang.reflect.Array;
 import java.text.MessageFormat;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.utils.Utils.BiCallable;
 
 public class ArraySerializer {
 
@@ -77,10 +77,10 @@ public class ArraySerializer {
 		return array;
 	}
 
-	public static <T> void writeVarIntTArray(ByteBuf to, T[] array, BiCallable<ByteBuf, T> elementWriter) {
+	public static <T> void writeVarIntTArray(ByteBuf to, T[] array, BiConsumer<ByteBuf, T> elementWriter) {
 		VarNumberSerializer.writeVarInt(to, array.length);
 		for (T element : array) {
-			elementWriter.call(to, element);
+			elementWriter.accept(to, element);
 		}
 	}
 

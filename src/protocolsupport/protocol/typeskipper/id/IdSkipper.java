@@ -5,6 +5,7 @@ import protocolsupport.protocol.typeskipper.id.SkippingRegistry.IntSkippingRegis
 import protocolsupport.protocol.typeskipper.id.SkippingTable.ArrayBasedIntSkippingTable;
 import protocolsupport.protocol.typeskipper.id.SkippingTable.GenericSkippingTable;
 import protocolsupport.protocol.typeskipper.id.SkippingTable.HashMapBasedIntSkippingTable;
+import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.ProtocolVersionsHelper;
 
 public class IdSkipper {
@@ -57,13 +58,13 @@ public class IdSkipper {
 		}
 	};
 
-	public static final GenericSkippingRegistry<String, GenericSkippingTable<String>> INVENTORY = new GenericSkippingRegistry<String, GenericSkippingTable<String>>() {
+	public static final GenericSkippingRegistry<WindowType, GenericSkippingTable<WindowType>> INVENTORY = new GenericSkippingRegistry<WindowType, GenericSkippingTable<WindowType>>() {
 		{
-			registerSkipEntry("EntityHorse", ProtocolVersionsHelper.BEFORE_1_11);
-			registerSkipEntry("minecraft:hopper", ProtocolVersionsHelper.BEFORE_1_5);
+			registerSkipEntry(WindowType.HORSE, ProtocolVersionsHelper.BEFORE_1_11);
+			registerSkipEntry(WindowType.HOPPER, ProtocolVersionsHelper.BEFORE_1_5);
 		}
 		@Override
-		protected GenericSkippingTable<String> createTable() {
+		protected GenericSkippingTable<WindowType> createTable() {
 			return new GenericSkippingTable<>();
 		}
 	};

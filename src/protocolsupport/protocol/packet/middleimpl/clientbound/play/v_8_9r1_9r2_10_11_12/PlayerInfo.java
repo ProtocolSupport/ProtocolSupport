@@ -32,7 +32,7 @@ public class PlayerInfo extends MiddlePlayerInfo {
 							StringSerializer.writeString(serializer, version, property.getSignature());
 						}
 					}
-					VarNumberSerializer.writeVarInt(serializer, info.gamemode);
+					VarNumberSerializer.writeVarInt(serializer, info.gamemode.getId());
 					VarNumberSerializer.writeVarInt(serializer, info.ping);
 					serializer.writeBoolean(info.displayNameJson != null);
 					if (info.displayNameJson != null) {
@@ -41,7 +41,7 @@ public class PlayerInfo extends MiddlePlayerInfo {
 					break;
 				}
 				case GAMEMODE: {
-					VarNumberSerializer.writeVarInt(serializer, info.gamemode);
+					VarNumberSerializer.writeVarInt(serializer, info.gamemode.getId());
 					break;
 				}
 				case PING: {

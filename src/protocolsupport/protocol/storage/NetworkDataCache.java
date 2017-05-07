@@ -10,6 +10,7 @@ import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
 import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
+import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.protocol.utils.types.WindowType;
 
 public class NetworkDataCache {
@@ -72,7 +73,7 @@ public class NetworkDataCache {
 	private final TIntObjectHashMap<Byte> watchedEntitiesBaseFlags = new TIntObjectHashMap<>();
 	private WatchedPlayer player;
 	private final HashMap<UUID, NetworkDataCache.PlayerListEntry> playerlist = new HashMap<>();
-	private int dimensionId;
+	private Environment dimensionId;
 	private float maxHealth = 20.0F;
 
 	public void addWatchedEntity(WatchedEntity entity) {
@@ -132,12 +133,12 @@ public class NetworkDataCache {
 		playerlist.remove(uuid);
 	}
 
-	public void setDimensionId(int dimensionId) {
+	public void setDimensionId(Environment dimensionId) {
 		this.dimensionId = dimensionId;
 	}
 
 	public boolean hasSkyLightInCurrentDimension() {
-		return dimensionId == 0;
+		return dimensionId == Environment.OVERWORLD;
 	}
 
 	public void setMaxHealth(float maxHealth) {

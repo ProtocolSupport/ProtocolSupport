@@ -15,9 +15,9 @@ public class Login extends MiddleLogin {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_LOGIN_ID, version);
 		serializer.writeInt(playerEntityId);
 		StringSerializer.writeString(serializer, version, leveltype);
-		serializer.writeByte(gamemode);
-		serializer.writeByte(dimension);
-		serializer.writeByte(difficulty);
+		serializer.writeByte(gamemode.getId());
+		serializer.writeByte(dimension.getId());
+		serializer.writeByte(difficulty.getId());
 		serializer.writeByte(0);
 		serializer.writeByte(maxplayers);
 		return RecyclableSingletonList.create(serializer);

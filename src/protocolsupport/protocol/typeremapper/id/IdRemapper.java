@@ -12,6 +12,7 @@ import protocolsupport.protocol.typeremapper.id.RemappingRegistry.IdRemappingReg
 import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.GenericRemappingTable;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.HashMapBasedIdRemappingTable;
+import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.ProtocolVersionsHelper;
 
 public class IdRemapper {
@@ -299,24 +300,16 @@ public class IdRemapper {
 		}
 	};
 
-	public static final GenericRemappingRegistry<String, GenericRemappingTable<String>> INVENTORY = new GenericRemappingRegistry<String, GenericRemappingTable<String>>() {
+	public static final GenericRemappingRegistry<WindowType, GenericRemappingTable<WindowType>> INVENTORY = new GenericRemappingRegistry<WindowType, GenericRemappingTable<WindowType>>() {
 		{
-			registerRemapEntry("minecraft:shulker_box", "minecraft:chest", ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry("minecraft:dropper", "minecraft:dispenser", ProtocolVersionsHelper.BEFORE_1_5);
+			registerRemapEntry(WindowType.SHULKER, WindowType.CHEST, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(WindowType.DROPPER, WindowType.DISPENSER, ProtocolVersionsHelper.BEFORE_1_5);
 		}
 		@Override
-		protected GenericRemappingTable<String> createTable() {
+		protected GenericRemappingTable<WindowType> createTable() {
 			return new GenericRemappingTable<>();
 		}
 	};
-
-	public static int fixDimensionId(int dimensionId) {
-		if ((dimensionId > 1) || (dimensionId < -1)) {
-			return 0;
-		}
-		return dimensionId;
-	}
-
 
 	public static void init() {
 	}

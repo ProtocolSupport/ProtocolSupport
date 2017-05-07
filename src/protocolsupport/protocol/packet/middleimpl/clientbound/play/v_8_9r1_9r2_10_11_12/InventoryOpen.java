@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -16,17 +17,17 @@ public class InventoryOpen extends MiddleInventoryOpen {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		if (IdSkipper.INVENTORY.getTable(version).shouldSkip(invname)) {
+		if (IdSkipper.INVENTORY.getTable(version).shouldSkip(type)) {
 			cache.closeWindow();
 			connection.receivePacket(ServerPlatform.get().getPacketFactory().createInboundInventoryClosePacket());
 			return RecyclableEmptyList.get();
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_OPEN_ID, version);
 		serializer.writeByte(windowId);
-		StringSerializer.writeString(serializer, version, IdRemapper.INVENTORY.getTable(version).getRemap(invname));
-		StringSerializer.writeString(serializer, version, titleJson);
+		StringSerializer.writeString(serializer, version, IdRemapper.INVENTORY.getTable(version).getRemap(type).getId());
+		StringSerializer.writeString(serializer, version, ChatAPI.toJSON(title));
 		serializer.writeByte(slots);
-		if (invname.equals("EntityHorse")) {
+		if (type.equals("EntityHorse")) {
 			serializer.writeInt(horseId);
 		}
 		return RecyclableSingletonList.create(serializer);

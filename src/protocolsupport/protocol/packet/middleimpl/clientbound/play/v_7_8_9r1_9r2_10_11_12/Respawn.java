@@ -13,9 +13,9 @@ public class Respawn extends MiddleRespawn {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_RESPAWN_ID, version);
-		serializer.writeInt(dimension);
-		serializer.writeByte(difficulty);
-		serializer.writeByte(gamemode);
+		serializer.writeInt(dimension.getId());
+		serializer.writeByte(difficulty.getId());
+		serializer.writeByte(gamemode.getId());
 		StringSerializer.writeString(serializer, version, leveltype);
 		return RecyclableSingletonList.create(serializer);
 	}

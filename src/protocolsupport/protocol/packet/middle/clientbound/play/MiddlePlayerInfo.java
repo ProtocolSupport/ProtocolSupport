@@ -12,6 +12,7 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.utils.types.GameMode;
 
 public abstract class MiddlePlayerInfo extends ClientBoundMiddlePacket {
 
@@ -38,7 +39,7 @@ public abstract class MiddlePlayerInfo extends ClientBoundMiddlePacket {
 						}
 						info.properties[j] = new ProfileProperty(name, value, signature);
 					}
-					info.gamemode = VarNumberSerializer.readVarInt(serverdata);
+					info.gamemode = GameMode.getById(VarNumberSerializer.readVarInt(serverdata));
 					info.ping = VarNumberSerializer.readVarInt(serverdata);
 					if (serverdata.readBoolean()) {
 						info.displayNameJson = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(ProtocolType.PC));
@@ -46,7 +47,7 @@ public abstract class MiddlePlayerInfo extends ClientBoundMiddlePacket {
 					break;
 				}
 				case GAMEMODE: {
-					info.gamemode = VarNumberSerializer.readVarInt(serverdata);
+					info.gamemode = GameMode.getById(VarNumberSerializer.readVarInt(serverdata));
 					break;
 				}
 				case PING: {
@@ -111,7 +112,7 @@ public abstract class MiddlePlayerInfo extends ClientBoundMiddlePacket {
 		public NetworkDataCache.PlayerListEntry previousinfo;
 		public String username;
 		public int ping;
-		public int gamemode;
+		public GameMode gamemode;
 		public String displayNameJson;
 		public ProfileProperty[] properties;
 
