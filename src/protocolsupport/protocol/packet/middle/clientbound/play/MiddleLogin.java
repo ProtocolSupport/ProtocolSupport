@@ -26,8 +26,8 @@ public abstract class MiddleLogin extends ClientBoundMiddlePacket {
 	public void readFromServerData(ByteBuf serverdata) {
 		playerEntityId = serverdata.readInt();
 		int gmdata = serverdata.readByte();
-		gamemode = GameMode.getById(gmdata & 0b11);
-		hardcore = (gmdata & 0b100) == 1 ? true : false;
+		gamemode = GameMode.getById(gmdata & 0xFFFFFFF7);
+		hardcore = (gmdata & 0x8) == 0x8 ? true : false;
 		dimension = Environment.getById(serverdata.readInt());
 		difficulty = Difficulty.getById(serverdata.readByte());
 		serverdata.readByte();

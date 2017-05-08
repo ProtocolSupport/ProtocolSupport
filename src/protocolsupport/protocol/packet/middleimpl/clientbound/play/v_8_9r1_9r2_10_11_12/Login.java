@@ -14,7 +14,7 @@ public class Login extends MiddleLogin {
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_LOGIN_ID, version);
 		serializer.writeInt(playerEntityId);
-		serializer.writeByte(gamemode.getId() | ((hardcore ? 1 : 0) << 2));
+		serializer.writeByte(gamemode.getId() | (hardcore ? 0x8 : 0));
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9_1)) {
 			serializer.writeByte(dimension.getId());
 		} else {
