@@ -17,7 +17,7 @@ public class InventorySetItems extends MiddleInventorySetItems {
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && ((cache.getOpenedWindow() == WindowType.PLAYER) || (windowId == 0))) {
 			itemstacks.remove(itemstacks.size() - 1);
 		}
-		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && (cache.getOpenedWindow() == WindowType.BREING)) {
+		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && (cache.getOpenedWindow() == WindowType.BREWING)) {
 			itemstacks.remove(4);
 		} else if (version.isBefore(ProtocolVersion.MINECRAFT_1_8) && (cache.getOpenedWindow() == WindowType.ENCHANT)) {
 			itemstacks.remove(1);

@@ -17,7 +17,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && ((cache.getOpenedWindow() == WindowType.PLAYER) || (windowId == 0)) && (slot == 45)) {
 			return RecyclableEmptyList.get();
 		}
-		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && (cache.getOpenedWindow() == WindowType.BREING)) {
+		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && (cache.getOpenedWindow() == WindowType.BREWING)) {
 			if (slot == 4) {
 				return RecyclableEmptyList.get();
 			}

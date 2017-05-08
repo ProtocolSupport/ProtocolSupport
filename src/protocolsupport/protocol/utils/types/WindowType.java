@@ -12,7 +12,7 @@ public enum WindowType {
 	FURNACE("minecraft:furnace"),
 	DISPENSER("minecraft:dispenser"),
 	ENCHANT("minecraft:enchanting_table"),
-	BREING("minecraft:brewing_stand"),
+	BREWING("minecraft:brewing_stand"),
 	VILLAGER("minecraft:villager"),
 	BEACON("minecraft:beacon"),
 	ANVIL("minecraft:anvil"),
