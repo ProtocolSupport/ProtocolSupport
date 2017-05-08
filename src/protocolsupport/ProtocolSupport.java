@@ -18,7 +18,6 @@ import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
-import protocolsupport.protocol.typeremapper.watchedentity.WatchedType;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
 import protocolsupport.protocol.utils.data.ItemData;
@@ -26,6 +25,7 @@ import protocolsupport.protocol.utils.data.PotionData;
 import protocolsupport.protocol.utils.data.SoundData;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
 import protocolsupport.protocol.utils.i18n.I18NData;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.zplatform.ServerPlatform;
@@ -44,7 +44,7 @@ public class ProtocolSupport extends JavaPlugin {
 		}
 		try {
 			ProtocolVersion.values();
-			WatchedType.init();
+			NetworkEntityType.init();
 			Allocator.init();
 			ItemData.init();
 			PotionData.init();

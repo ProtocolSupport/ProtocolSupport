@@ -3,18 +3,20 @@ package protocolsupport.protocol.typeremapper.watchedentity;
 import java.text.MessageFormat;
 import java.util.UUID;
 
+import protocolsupport.protocol.utils.types.NetworkEntityType;
+
 public class WatchedEntity {
 
 	public static WatchedEntity createMob(UUID uuid, int id, int typeId) {
-		return new WatchedEntity(uuid, id, WatchedType.getMobByTypeId(typeId));
+		return new WatchedEntity(uuid, id, NetworkEntityType.getMobByTypeId(typeId));
 	}
 
 	public static WatchedEntity createObject(UUID uuid, int id, int typeId, int objectData) {
-		return new WatchedEntity(uuid, id, WatchedType.getObjectByTypeAndData(typeId, objectData));
+		return new WatchedEntity(uuid, id, NetworkEntityType.getObjectByTypeAndData(typeId, objectData));
 	}
 
 	public static WatchedEntity createPlayer(UUID uuid, int id) {
-		return new WatchedEntity(uuid, id, WatchedType.PLAYER);
+		return new WatchedEntity(uuid, id, NetworkEntityType.PLAYER);
 	}
 
 	public static WatchedEntity createPlayer(int id) {
@@ -23,9 +25,9 @@ public class WatchedEntity {
 
 	private final UUID uuid;
 	private final int id;
-	private final WatchedType type;
+	private final NetworkEntityType type;
 
-	public WatchedEntity(UUID uuid, int id, WatchedType type) {
+	public WatchedEntity(UUID uuid, int id, NetworkEntityType type) {
 		this.uuid = uuid;
 		this.id = id;
 		this.type = type;
@@ -39,7 +41,7 @@ public class WatchedEntity {
 		return id;
 	}
 
-	public WatchedType getType() {
+	public NetworkEntityType getType() {
 		return type;
 	}
 

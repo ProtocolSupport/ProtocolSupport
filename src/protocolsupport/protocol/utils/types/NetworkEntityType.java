@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.watchedentity;
+package protocolsupport.protocol.utils.types;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
@@ -8,24 +8,21 @@ import org.bukkit.entity.EntityType;
 import protocolsupport.utils.CollectionsUtils;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
-/***
- * All the types network entities can be.
- */
-public enum WatchedType {
+public enum NetworkEntityType {
 
 	NONE(EType.NONE, -1),
 	ENTITY(EType.NONE, -1),
-	LIVING(EType.NONE, -1, WatchedType.ENTITY),
-	INSENTIENT(EType.NONE, -1, WatchedType.LIVING),
-	PLAYER(EType.NONE, -1, WatchedType.LIVING),
-	AGEABLE(EType.NONE, -1, WatchedType.INSENTIENT),
-	TAMEABLE(EType.NONE, -1, WatchedType.AGEABLE),
-	ARMOR_STAND(EType.NONE, -1, WatchedType.LIVING),
-	COW(EType.MOB, EntityType.COW, WatchedType.AGEABLE),
-	MUSHROOM_COW(EType.MOB, EntityType.MUSHROOM_COW, WatchedType.COW),
-	CHICKEN(EType.MOB, EntityType.CHICKEN, WatchedType.AGEABLE),
-	SQUID(EType.MOB, EntityType.SQUID, WatchedType.INSENTIENT),
-	BASE_HORSE(EType.NONE, -1, WatchedType.AGEABLE),
+	LIVING(EType.NONE, -1, NetworkEntityType.ENTITY),
+	INSENTIENT(EType.NONE, -1, NetworkEntityType.LIVING),
+	PLAYER(EType.NONE, -1, NetworkEntityType.LIVING),
+	AGEABLE(EType.NONE, -1, NetworkEntityType.INSENTIENT),
+	TAMEABLE(EType.NONE, -1, NetworkEntityType.AGEABLE),
+	ARMOR_STAND(EType.NONE, -1, NetworkEntityType.LIVING),
+	COW(EType.MOB, EntityType.COW, NetworkEntityType.AGEABLE),
+	MUSHROOM_COW(EType.MOB, EntityType.MUSHROOM_COW, NetworkEntityType.COW),
+	CHICKEN(EType.MOB, EntityType.CHICKEN, NetworkEntityType.AGEABLE),
+	SQUID(EType.MOB, EntityType.SQUID, NetworkEntityType.INSENTIENT),
+	BASE_HORSE(EType.NONE, -1, NetworkEntityType.AGEABLE),
 	BATTLE_HORSE(EType.NONE, -1, BASE_HORSE),
 	CARGO_HORSE(EType.NONE, -1, BASE_HORSE),
 	BASE_SKELETON(EType.NONE, -1, INSENTIENT),
@@ -112,9 +109,9 @@ public enum WatchedType {
 
 	private final EType etype;
 	private final int typeId;
-	private final WatchedType superType;
+	private final NetworkEntityType superType;
 
-	public WatchedType getSuperType() {
+	public NetworkEntityType getSuperType() {
 		return superType;
 	}
 
@@ -125,7 +122,7 @@ public enum WatchedType {
 		return typeId;
 	}
 
-	public boolean isOfType(WatchedType type) {
+	public boolean isOfType(NetworkEntityType type) {
 		return ((type == this) || ((getSuperType() != null) && getSuperType().isOfType(type)));
 	}
 
@@ -133,56 +130,56 @@ public enum WatchedType {
 		NONE, OBJECT, MOB
 	}
 
-	private static final ArrayMap<WatchedType> OBJECT_BY_TYPE_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(WatchedType.values()).filter(w -> w.etype == EType.OBJECT), WatchedType::getTypeId);
-	private static final ArrayMap<WatchedType> MOB_BY_TYPE_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(WatchedType.values()).filter(w -> w.etype == EType.MOB), WatchedType::getTypeId);
+	private static final ArrayMap<NetworkEntityType> OBJECT_BY_TYPE_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.OBJECT), NetworkEntityType::getTypeId);
+	private static final ArrayMap<NetworkEntityType> MOB_BY_TYPE_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.MOB), NetworkEntityType::getTypeId);
 
-	public static WatchedType getObjectByTypeId(int objectTypeId) {
-		WatchedType type = OBJECT_BY_TYPE_ID.get(objectTypeId);
+	public static NetworkEntityType getObjectByTypeId(int objectTypeId) {
+		NetworkEntityType type = OBJECT_BY_TYPE_ID.get(objectTypeId);
 		if (type == null) {
 			throw new IllegalArgumentException(MessageFormat.format("Unknown object network type id {0}", objectTypeId));
 		}
 		return type;
 	}
 
-	public static WatchedType getObjectByTypeAndData(int objectTypeId, int objectData) {
-		WatchedType w = getObjectByTypeId(objectTypeId);
+	public static NetworkEntityType getObjectByTypeAndData(int objectTypeId, int objectData) {
+		NetworkEntityType w = getObjectByTypeId(objectTypeId);
 		if (w.isOfType(MINECART)) {
 			return getMinecartByData(objectData);
 		}
 		return w;
 	}
 
-	public static WatchedType getMobByTypeId(int mobTypeId) {
-		WatchedType type = MOB_BY_TYPE_ID.get(mobTypeId);
+	public static NetworkEntityType getMobByTypeId(int mobTypeId) {
+		NetworkEntityType type = MOB_BY_TYPE_ID.get(mobTypeId);
 		if (type == null) {
 			throw new IllegalArgumentException(MessageFormat.format("Unknown mob network type id {0}", mobTypeId));
 		}
 		return type;
 	}
 
-	public static WatchedType getMinecartByData(int objectData) {
+	public static NetworkEntityType getMinecartByData(int objectData) {
 		if (objectData == 0) {
 			return MINECART;
 		}
 		return getObjectByTypeId(210 + objectData);
 	}
 
-	WatchedType(EType etype, int typeId, WatchedType superType) {
+	NetworkEntityType(EType etype, int typeId, NetworkEntityType superType) {
 		this.etype = etype;
 		this.typeId = typeId;
 		this.superType = superType;
 	}
 
 	@SuppressWarnings("deprecation")
-	WatchedType(EType etype, EntityType bukkitType, WatchedType superType) {
+	NetworkEntityType(EType etype, EntityType bukkitType, NetworkEntityType superType) {
 		this(etype, bukkitType.getTypeId(), superType);
 	}
 
-	WatchedType(EType etype, int typeId) {
+	NetworkEntityType(EType etype, int typeId) {
 		this(etype, typeId, null);
 	}
 
-	WatchedType(EType etype, EntityType bukkitType) {
+	NetworkEntityType(EType etype, EntityType bukkitType) {
 		this(etype, bukkitType, null);
 	}
 

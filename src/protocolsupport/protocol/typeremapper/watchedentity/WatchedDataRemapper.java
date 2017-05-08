@@ -8,6 +8,7 @@ import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRema
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.Utils;
 
 public class WatchedDataRemapper {
@@ -20,7 +21,7 @@ public class WatchedDataRemapper {
 			return EMPTY_MAP;
 		}
 		//copy active hand meta to base flags index 4
-		if (entity.getType() == WatchedType.PLAYER) {
+		if (entity.getType() == NetworkEntityType.PLAYER) {
 			DataWatcherObject<?> baseflags = originaldata.get(0);
 			if (baseflags != null) {
 				if (baseflags.getValue() instanceof Number) {
@@ -71,7 +72,7 @@ public class WatchedDataRemapper {
 
 	public static class MetadataRemapException extends RuntimeException {
 
-		public MetadataRemapException(int index, int entityId, WatchedType type, ProtocolVersion to, Exception e) {
+		public MetadataRemapException(int index, int entityId, NetworkEntityType type, ProtocolVersion to, Exception e) {
 			super(Utils.exceptionMessage(
 				"Unable to remap entity metadata",
 				String.format("Metadata index: %d", index),

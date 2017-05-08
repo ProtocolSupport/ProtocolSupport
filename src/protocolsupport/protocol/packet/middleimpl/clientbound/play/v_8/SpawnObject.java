@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnObject
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
-import protocolsupport.protocol.typeremapper.watchedentity.WatchedType;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -14,8 +14,8 @@ public class SpawnObject extends MiddleSpawnObject {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		WatchedType type = entity.getType();
-		if (type == WatchedType.FALLING_OBJECT) {
+		NetworkEntityType type = entity.getType();
+		if (type == NetworkEntityType.FALLING_OBJECT) {
 			int id = IdRemapper.BLOCK.getTable(version).getRemap((objectdata & 4095) << 4) >> 4;
 			int data = (objectdata >> 12) & 0xF;
 			objectdata = (data << 12) | id;

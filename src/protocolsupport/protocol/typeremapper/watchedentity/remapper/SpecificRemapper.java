@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.watchedentity.WatchedType;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperBooleanToByte;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperNoOp;
@@ -21,13 +20,14 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectShort;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.ProtocolVersionsHelper;
 
 public enum SpecificRemapper {
 
 	//TODO: add new entities entries, add type adder for horse, skeleton, minecart
-	NONE(WatchedType.NONE),
-	ENTITY(WatchedType.ENTITY,
+	NONE(NetworkEntityType.NONE),
+	ENTITY(NetworkEntityType.ENTITY,
 		//flags
 		new Mapping(0)
 		.addRemap(0, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL),
@@ -48,7 +48,7 @@ public enum SpecificRemapper {
 		new Mapping(5)
 		.addRemap(5, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_12)
 	),
-	LIVING(WatchedType.LIVING, SpecificRemapper.ENTITY,
+	LIVING(NetworkEntityType.LIVING, SpecificRemapper.ENTITY,
 		//nametag
 		new Mapping(2)
 		.addRemap(2, ValueRemapperNoOp.STRING, ProtocolVersion.MINECRAFT_1_8)
@@ -86,14 +86,14 @@ public enum SpecificRemapper {
 		.addRemap(9, ValueRemapperNumberToByte.INSTANCE, ProtocolVersionsHelper.RANGE__1_6__1_7)
 		.addRemap(10, ValueRemapperNumberToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_6)
 	),
-	INSENTIENT(WatchedType.INSENTIENT, SpecificRemapper.LIVING,
+	INSENTIENT(NetworkEntityType.INSENTIENT, SpecificRemapper.LIVING,
 		//noai
 		new Mapping(11)
 		.addRemap(11, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(10, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(15, ValueRemapperNoOp.BYTE, ProtocolVersion.MINECRAFT_1_8)
 	),
-	PLAYER(WatchedType.PLAYER, SpecificRemapper.LIVING,
+	PLAYER(NetworkEntityType.PLAYER, SpecificRemapper.LIVING,
 		//additional hearts
 		new Mapping(11)
 		.addRemap(11, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.RANGE__1_10__1_12)
@@ -110,7 +110,7 @@ public enum SpecificRemapper {
 		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(10, ValueRemapperNoOp.BYTE, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1))
 	),
-	AGEABLE(WatchedType.AGEABLE, SpecificRemapper.INSENTIENT,
+	AGEABLE(NetworkEntityType.AGEABLE, SpecificRemapper.INSENTIENT,
 		//age
 		new Mapping(12)
 		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_12)
@@ -132,14 +132,14 @@ public enum SpecificRemapper {
 		new Mapping(30)
 		.addRemap(12, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.RANGE__1_6__1_7)
 	),
-	TAMEABLE(WatchedType.TAMEABLE, SpecificRemapper.AGEABLE,
+	TAMEABLE(NetworkEntityType.TAMEABLE, SpecificRemapper.AGEABLE,
 		//tame flags
 		new Mapping(13)
 		.addRemap(13, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	ARMOR_STAND(WatchedType.ARMOR_STAND, SpecificRemapper.LIVING,
+	ARMOR_STAND(NetworkEntityType.ARMOR_STAND, SpecificRemapper.LIVING,
 		//parts position
 		new Mapping(11)
 		.addRemap(11, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_12)
@@ -163,18 +163,18 @@ public enum SpecificRemapper {
 		.addRemap(17, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(16, ValueRemapperNoOp.VECTOR3F, ProtocolVersionsHelper.RANGE__1_8__1_9)
 	),
-	COW(WatchedType.COW, SpecificRemapper.AGEABLE),
-	MUSHROOM_COW(WatchedType.MUSHROOM_COW, SpecificRemapper.COW),
-	CHICKEN(WatchedType.CHICKEN, SpecificRemapper.AGEABLE),
-	SQUID(WatchedType.SQUID, SpecificRemapper.INSENTIENT),
-	BASE_HORSE(WatchedType.BASE_HORSE, SpecificRemapper.AGEABLE,
+	COW(NetworkEntityType.COW, SpecificRemapper.AGEABLE),
+	MUSHROOM_COW(NetworkEntityType.MUSHROOM_COW, SpecificRemapper.COW),
+	CHICKEN(NetworkEntityType.CHICKEN, SpecificRemapper.AGEABLE),
+	SQUID(NetworkEntityType.SQUID, SpecificRemapper.INSENTIENT),
+	BASE_HORSE(NetworkEntityType.BASE_HORSE, SpecificRemapper.AGEABLE,
 		//info flags
 		new Mapping(13)
 		.addRemap(13, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(17, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	BATTLE_HORSE(WatchedType.BATTLE_HORSE, SpecificRemapper.BASE_HORSE,
+	BATTLE_HORSE(NetworkEntityType.BATTLE_HORSE, SpecificRemapper.BASE_HORSE,
 		//color/variant
 		new Mapping(15)
 		.addRemap(15, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
@@ -187,17 +187,17 @@ public enum SpecificRemapper {
 		.addRemap(16, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(22, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	CARGO_HORSE(WatchedType.CARGO_HORSE, SpecificRemapper.BASE_HORSE,
+	CARGO_HORSE(NetworkEntityType.CARGO_HORSE, SpecificRemapper.BASE_HORSE,
 		//has chest
 		new Mapping(15)
 		.addRemap(15, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_11__1_12)
 	),
-	COMMON_HORSE(WatchedType.COMMON_HORSE, SpecificRemapper.BATTLE_HORSE),
-	ZOMBIE_HORSE(WatchedType.ZOMBIE_HORSE, SpecificRemapper.BATTLE_HORSE),
-	SKELETON_HORSE(WatchedType.SKELETON_HORSE, SpecificRemapper.BATTLE_HORSE),
-	DONKEY(WatchedType.DONKEY, SpecificRemapper.CARGO_HORSE),
-	MULE(WatchedType.MULE, SpecificRemapper.CARGO_HORSE),
-	LAMA(WatchedType.LAMA, SpecificRemapper.CARGO_HORSE,
+	COMMON_HORSE(NetworkEntityType.COMMON_HORSE, SpecificRemapper.BATTLE_HORSE),
+	ZOMBIE_HORSE(NetworkEntityType.ZOMBIE_HORSE, SpecificRemapper.BATTLE_HORSE),
+	SKELETON_HORSE(NetworkEntityType.SKELETON_HORSE, SpecificRemapper.BATTLE_HORSE),
+	DONKEY(NetworkEntityType.DONKEY, SpecificRemapper.CARGO_HORSE),
+	MULE(NetworkEntityType.MULE, SpecificRemapper.CARGO_HORSE),
+	LAMA(NetworkEntityType.LAMA, SpecificRemapper.CARGO_HORSE,
 		//strength
 		new Mapping(16)
 		.addRemap(16, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_11__1_12),
@@ -208,21 +208,21 @@ public enum SpecificRemapper {
 		new Mapping(18)
 		.addRemap(18, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_11__1_12)
 	),
-	BAT(WatchedType.BAT, SpecificRemapper.INSENTIENT,
+	BAT(NetworkEntityType.BAT, SpecificRemapper.INSENTIENT,
 		//hanging
 		new Mapping(12)
 		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(11, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	OCELOT(WatchedType.OCELOT, SpecificRemapper.TAMEABLE,
+	OCELOT(NetworkEntityType.OCELOT, SpecificRemapper.TAMEABLE,
 		//type
 		new Mapping(15)
 		.addRemap(15, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(14, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(18, ValueRemapperNumberToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	WOLF(WatchedType.WOLF, SpecificRemapper.TAMEABLE,
+	WOLF(NetworkEntityType.WOLF, SpecificRemapper.TAMEABLE,
 		//health
 		new Mapping(15)
 		.addRemap(15, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.RANGE__1_10__1_12)
@@ -246,7 +246,7 @@ public enum SpecificRemapper {
 			}
 		}, ProtocolVersionsHelper.BEFORE_1_8)
 	),
-	PIG(WatchedType.PIG, SpecificRemapper.AGEABLE,
+	PIG(NetworkEntityType.PIG, SpecificRemapper.AGEABLE,
 		//has saddle
 		new Mapping(13)
 		.addRemap(13, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_12)
@@ -256,33 +256,33 @@ public enum SpecificRemapper {
 		new Mapping(14)
 		.addRemap(14, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_11_1)
 	),
-	RABBIT(WatchedType.RABBIT, SpecificRemapper.AGEABLE,
+	RABBIT(NetworkEntityType.RABBIT, SpecificRemapper.AGEABLE,
 		//type
 		new Mapping(13)
 		.addRemap(13, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(18, ValueRemapperNumberToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	SHEEP(WatchedType.SHEEP, SpecificRemapper.AGEABLE,
+	SHEEP(NetworkEntityType.SHEEP, SpecificRemapper.AGEABLE,
 		//info flags (color + sheared)
 		new Mapping(13)
 		.addRemap(13, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	POLAR_BEAR(WatchedType.POLAR_BEAR, SpecificRemapper.AGEABLE,
+	POLAR_BEAR(NetworkEntityType.POLAR_BEAR, SpecificRemapper.AGEABLE,
 		//standing up
 		new Mapping(13)
 		.addRemap(13, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_12)
 	),
-	VILLAGER(WatchedType.VILLAGER, SpecificRemapper.AGEABLE,
+	VILLAGER(NetworkEntityType.VILLAGER, SpecificRemapper.AGEABLE,
 		//profession
 		new Mapping(13)
 		.addRemap(13, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	ENDERMAN(WatchedType.ENDERMAN, SpecificRemapper.INSENTIENT,
+	ENDERMAN(NetworkEntityType.ENDERMAN, SpecificRemapper.INSENTIENT,
 		//carried block
 		new Mapping(12)
 		.addRemap(12, ValueRemapperNoOp.BLOCKSTATE, ProtocolVersionsHelper.RANGE__1_10__1_12)
@@ -311,22 +311,22 @@ public enum SpecificRemapper {
 		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(18, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	GIANT(WatchedType.GIANT, SpecificRemapper.INSENTIENT),
-	SILVERFISH(WatchedType.SILVERFISH, SpecificRemapper.INSENTIENT),
-	ENDERMITE(WatchedType.ENDERMITE, SpecificRemapper.INSENTIENT),
-	ENDER_DRAGON(WatchedType.ENDER_DRAGON, SpecificRemapper.INSENTIENT,
+	GIANT(NetworkEntityType.GIANT, SpecificRemapper.INSENTIENT),
+	SILVERFISH(NetworkEntityType.SILVERFISH, SpecificRemapper.INSENTIENT),
+	ENDERMITE(NetworkEntityType.ENDERMITE, SpecificRemapper.INSENTIENT),
+	ENDER_DRAGON(NetworkEntityType.ENDER_DRAGON, SpecificRemapper.INSENTIENT,
 		//phase
 		new Mapping(12)
 		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(11, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 	),
-	SNOWMAN(WatchedType.SNOWMAN, SpecificRemapper.INSENTIENT,
+	SNOWMAN(NetworkEntityType.SNOWMAN, SpecificRemapper.INSENTIENT,
 		//no hat
 		new Mapping(12)
 		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(11, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 	),
-	ZOMBIE(WatchedType.ZOMBIE, SpecificRemapper.INSENTIENT,
+	ZOMBIE(NetworkEntityType.ZOMBIE, SpecificRemapper.INSENTIENT,
 		//is baby
 		new Mapping(12)
 		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_12)
@@ -343,7 +343,7 @@ public enum SpecificRemapper {
 		.addRemap(15, ValueRemapperNoOp.BOOLEAN, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(14, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 	),
-	ZOMBIE_VILLAGER(WatchedType.ZOMBIE_VILLAGER, SpecificRemapper.ZOMBIE,
+	ZOMBIE_VILLAGER(NetworkEntityType.ZOMBIE_VILLAGER, SpecificRemapper.ZOMBIE,
 		//is converting
 		new Mapping(15)
 		.addRemap(15, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_11__1_12)
@@ -351,24 +351,24 @@ public enum SpecificRemapper {
 		.addRemap(13, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(14, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	HUSK(WatchedType.HUSK, SpecificRemapper.ZOMBIE),
-	ZOMBIE_PIGMAN(WatchedType.ZOMBIE_PIGMAN, SpecificRemapper.ZOMBIE),
-	BLAZE(WatchedType.BLAZE, SpecificRemapper.INSENTIENT,
+	HUSK(NetworkEntityType.HUSK, SpecificRemapper.ZOMBIE),
+	ZOMBIE_PIGMAN(NetworkEntityType.ZOMBIE_PIGMAN, SpecificRemapper.ZOMBIE),
+	BLAZE(NetworkEntityType.BLAZE, SpecificRemapper.INSENTIENT,
 		//on fire
 		new Mapping(12)
 		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(11, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	SPIDER(WatchedType.SPIDER, SpecificRemapper.LIVING,
+	SPIDER(NetworkEntityType.SPIDER, SpecificRemapper.LIVING,
 		//is climbing
 		new Mapping(12)
 		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(11, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	CAVE_SPIDER(WatchedType.CAVE_SPIDER, SpecificRemapper.SPIDER),
-	CREEPER(WatchedType.CREEPER, SpecificRemapper.INSENTIENT,
+	CAVE_SPIDER(NetworkEntityType.CAVE_SPIDER, SpecificRemapper.SPIDER),
+	CREEPER(NetworkEntityType.CREEPER, SpecificRemapper.INSENTIENT,
 		//state
 		new Mapping(12)
 		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
@@ -385,46 +385,46 @@ public enum SpecificRemapper {
 		.addRemap(13, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(18, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	GHAST(WatchedType.GHAST, SpecificRemapper.INSENTIENT,
+	GHAST(NetworkEntityType.GHAST, SpecificRemapper.INSENTIENT,
 		//is attacking
 		new Mapping(12)
 		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(11, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	SLIME(WatchedType.SLIME, SpecificRemapper.INSENTIENT,
+	SLIME(NetworkEntityType.SLIME, SpecificRemapper.INSENTIENT,
 		//size
 		new Mapping(12)
 		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(11, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNumberToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	MAGMA_CUBE(WatchedType.MAGMA_CUBE, SpecificRemapper.SLIME),
-	BASE_SKELETON(WatchedType.BASE_SKELETON, SpecificRemapper.INSENTIENT,
+	MAGMA_CUBE(NetworkEntityType.MAGMA_CUBE, SpecificRemapper.SLIME),
+	BASE_SKELETON(NetworkEntityType.BASE_SKELETON, SpecificRemapper.INSENTIENT,
 		//is attacking
 		new Mapping(12)
 		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_11__1_12)
 		.addRemap(13, ValueRemapperNoOp.BOOLEAN, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 	),
-	SKELETON(WatchedType.SKELETON, SpecificRemapper.BASE_SKELETON),
-	WITHER_SKELETON(WatchedType.WITHER_SKELETON, SpecificRemapper.BASE_SKELETON),
-	STRAY(WatchedType.STRAY, SpecificRemapper.BASE_SKELETON),
-	WITCH(WatchedType.WITCH, SpecificRemapper.INSENTIENT,
+	SKELETON(NetworkEntityType.SKELETON, SpecificRemapper.BASE_SKELETON),
+	WITHER_SKELETON(NetworkEntityType.WITHER_SKELETON, SpecificRemapper.BASE_SKELETON),
+	STRAY(NetworkEntityType.STRAY, SpecificRemapper.BASE_SKELETON),
+	WITCH(NetworkEntityType.WITCH, SpecificRemapper.INSENTIENT,
 		//agressive
 		new Mapping(12)
 		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(11, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	IRON_GOLEM(WatchedType.IRON_GOLEM, SpecificRemapper.INSENTIENT,
+	IRON_GOLEM(NetworkEntityType.IRON_GOLEM, SpecificRemapper.INSENTIENT,
 		//player created
 		new Mapping(12)
 		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(11, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(16, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	SHULKER(WatchedType.SHULKER, SpecificRemapper.INSENTIENT,
+	SHULKER(NetworkEntityType.SHULKER, SpecificRemapper.INSENTIENT,
 		//direction
 		new Mapping(12)
 		.addRemap(12, ValueRemapperNoOp.DIRECTION, ProtocolVersionsHelper.RANGE__1_10__1_12)
@@ -441,7 +441,7 @@ public enum SpecificRemapper {
 		new Mapping(15)
 		.addRemap(15, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_11__1_12)
 	),
-	WITHER(WatchedType.WITHER, SpecificRemapper.INSENTIENT,
+	WITHER(NetworkEntityType.WITHER, SpecificRemapper.INSENTIENT,
 		//target 1
 		new Mapping(12)
 		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
@@ -463,7 +463,7 @@ public enum SpecificRemapper {
 		.addRemap(14, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(20, ValueRemapperNumberToInt.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	GUARDIAN(WatchedType.GUARDIAN, SpecificRemapper.INSENTIENT,
+	GUARDIAN(NetworkEntityType.GUARDIAN, SpecificRemapper.INSENTIENT,
 		//spikes
 		new Mapping(12)
 		.addRemap(12, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_11__1_12)
@@ -491,24 +491,24 @@ public enum SpecificRemapper {
 		.addRemap(12, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(17, ValueRemapperNumberToInt.INSTANCE, ProtocolVersion.MINECRAFT_1_8)
 	),
-	ELDER_GUARDIAN(WatchedType.ELDER_GUARDIAN, SpecificRemapper.GUARDIAN),
-	VINDICATOR(WatchedType.VINDICATOR, SpecificRemapper.INSENTIENT,
+	ELDER_GUARDIAN(NetworkEntityType.ELDER_GUARDIAN, SpecificRemapper.GUARDIAN),
+	VINDICATOR(NetworkEntityType.VINDICATOR, SpecificRemapper.INSENTIENT,
 		//agressive
 		new Mapping(12)
 		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_11__1_12)
 	),
-	EVOKER(WatchedType.EVOKER, SpecificRemapper.INSENTIENT,
+	EVOKER(NetworkEntityType.EVOKER, SpecificRemapper.INSENTIENT,
 		//spell
 		new Mapping(12)
 		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_11__1_12)
 	),
-	VEX(WatchedType.VEX, SpecificRemapper.INSENTIENT,
+	VEX(NetworkEntityType.VEX, SpecificRemapper.INSENTIENT,
 		//vex
 		new Mapping(12)
 		.addRemap(12, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_11__1_12)
 	),
-	ARMOR_STAND_MOB(WatchedType.ARMOR_STAND_MOB, SpecificRemapper.ARMOR_STAND),
-	BOAT(WatchedType.BOAT,
+	ARMOR_STAND_MOB(NetworkEntityType.ARMOR_STAND_MOB, SpecificRemapper.ARMOR_STAND),
+	BOAT(NetworkEntityType.BOAT,
 		//time since hit
 		new Mapping(6)
 		.addRemap(6, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_10)
@@ -535,49 +535,49 @@ public enum SpecificRemapper {
 		new Mapping(11)
 		.addRemap(11, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_12)
 	),
-	TNT(WatchedType.TNT, SpecificRemapper.ENTITY,
+	TNT(NetworkEntityType.TNT, SpecificRemapper.ENTITY,
 		//fuse ticks
 		new Mapping(6)
 		.addRemap(6, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(5, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 	),
-	SNOWBALL(WatchedType.SNOWBALL, SpecificRemapper.ENTITY),
-	EGG(WatchedType.EGG, SpecificRemapper.ENTITY),
-	FIREBALL(WatchedType.FIREBALL, SpecificRemapper.ENTITY),
-	FIRECHARGE(WatchedType.FIRECHARGE, SpecificRemapper.ENTITY),
-	ENDERPEARL(WatchedType.ENDERPEARL, SpecificRemapper.ENTITY),
-	WITHER_SKULL(WatchedType.WITHER_SKULL, SpecificRemapper.FIREBALL,
+	SNOWBALL(NetworkEntityType.SNOWBALL, SpecificRemapper.ENTITY),
+	EGG(NetworkEntityType.EGG, SpecificRemapper.ENTITY),
+	FIREBALL(NetworkEntityType.FIREBALL, SpecificRemapper.ENTITY),
+	FIRECHARGE(NetworkEntityType.FIRECHARGE, SpecificRemapper.ENTITY),
+	ENDERPEARL(NetworkEntityType.ENDERPEARL, SpecificRemapper.ENTITY),
+	WITHER_SKULL(NetworkEntityType.WITHER_SKULL, SpecificRemapper.FIREBALL,
 		//is charged
 		new Mapping(6)
 		.addRemap(6, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(5, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(10, ValueRemapperBooleanToByte.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	FALLING_OBJECT(WatchedType.FALLING_OBJECT, SpecificRemapper.ENTITY),
-	ENDEREYE(WatchedType.ENDEREYE, SpecificRemapper.ENTITY),
-	POTION(WatchedType.POTION, SpecificRemapper.ENTITY,
+	FALLING_OBJECT(NetworkEntityType.FALLING_OBJECT, SpecificRemapper.ENTITY),
+	ENDEREYE(NetworkEntityType.ENDEREYE, SpecificRemapper.ENTITY),
+	POTION(NetworkEntityType.POTION, SpecificRemapper.ENTITY,
 		//potion item (remap to 2 ids for 1.10.*, because 1.10.2 uses id 6, and 1.10 uses id 7)
 		new Mapping(6)
 		.addRemap(6, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(7, ValueRemapperNoOp.ITEMSTACK, ProtocolVersion.MINECRAFT_1_10)
 		.addRemap(6, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.ALL_1_9)
 	),
-	EXP_BOTTLE(WatchedType.EXP_BOTTLE, SpecificRemapper.ENTITY),
-	LEASH_KNOT(WatchedType.LEASH_KNOT, SpecificRemapper.ENTITY),
-	FISHING_FLOAT(WatchedType.FISHING_FLOAT, SpecificRemapper.ENTITY,
+	EXP_BOTTLE(NetworkEntityType.EXP_BOTTLE, SpecificRemapper.ENTITY),
+	LEASH_KNOT(NetworkEntityType.LEASH_KNOT, SpecificRemapper.ENTITY),
+	FISHING_FLOAT(NetworkEntityType.FISHING_FLOAT, SpecificRemapper.ENTITY,
 		//hooked entity id
 		new Mapping(6)
 		.addRemap(6, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(5, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 	),
-	ITEM(WatchedType.ITEM, SpecificRemapper.ENTITY,
+	ITEM(NetworkEntityType.ITEM, SpecificRemapper.ENTITY,
 		//item
 		new Mapping(6)
 		.addRemap(6, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(5, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(10, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	MINECART(WatchedType.MINECART, SpecificRemapper.ENTITY,
+	MINECART(NetworkEntityType.MINECART, SpecificRemapper.ENTITY,
 		//shaking power
 		new Mapping(6)
 		.addRemap(6, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
@@ -630,21 +630,21 @@ public enum SpecificRemapper {
 		new Mapping(13)
 		.addRemap(13, ValueRemapperNoOp.STRING, ProtocolVersionsHelper.RANGE__1_11__1_12)
 	),
-	ARROW(WatchedType.ARROW, SpecificRemapper.ENTITY,
+	ARROW(NetworkEntityType.ARROW, SpecificRemapper.ENTITY,
 		//is critical
 		new Mapping(6)
 		.addRemap(6, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(5, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.ALL_1_9)
 		.addRemap(15, ValueRemapperNoOp.BYTE, ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	SPECTRAL_ARROW(WatchedType.SPECTRAL_ARROW, SpecificRemapper.ARROW),
-	TIPPED_ARROW(WatchedType.TIPPED_ARROW, SpecificRemapper.ARROW,
+	SPECTRAL_ARROW(NetworkEntityType.SPECTRAL_ARROW, SpecificRemapper.ARROW),
+	TIPPED_ARROW(NetworkEntityType.TIPPED_ARROW, SpecificRemapper.ARROW,
 		//color
 		new Mapping(7)
 		.addRemap(7, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(6, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 	),
-	FIREWORK(WatchedType.FIREWORK, SpecificRemapper.ENTITY,
+	FIREWORK(NetworkEntityType.FIREWORK, SpecificRemapper.ENTITY,
 		//info
 		new Mapping(6)
 		.addRemap(6, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.RANGE__1_10__1_12)
@@ -654,7 +654,7 @@ public enum SpecificRemapper {
 		new Mapping(7)
 		.addRemap(7, ValueRemapperNoOp.VARINT, ProtocolVersion.MINECRAFT_1_11_1)
 	),
-	ITEM_FRAME(WatchedType.ITEM_FRAME, SpecificRemapper.ENTITY,
+	ITEM_FRAME(NetworkEntityType.ITEM_FRAME, SpecificRemapper.ENTITY,
 		//item
 		new Mapping(6)
 		.addRemap(6, ValueRemapperNoOp.ITEMSTACK, ProtocolVersionsHelper.RANGE__1_10__1_12)
@@ -673,7 +673,7 @@ public enum SpecificRemapper {
 			}
 		}, ProtocolVersionsHelper.BEFORE_1_8)
 	),
-	ENDER_CRYSTAL(WatchedType.ENDER_CRYSTAL, SpecificRemapper.ENTITY,
+	ENDER_CRYSTAL(NetworkEntityType.ENDER_CRYSTAL, SpecificRemapper.ENTITY,
 		//target
 		new Mapping(6)
 		.addRemap(6, ValueRemapperNoOp.OPTIONAL_POSITION, ProtocolVersionsHelper.RANGE__1_10__1_12)
@@ -683,8 +683,8 @@ public enum SpecificRemapper {
 		.addRemap(7, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(6, ValueRemapperNoOp.BOOLEAN, ProtocolVersionsHelper.ALL_1_9)
 	),
-	ARMOR_STAND_OBJECT(WatchedType.ARMOR_STAND_OBJECT, SpecificRemapper.ARMOR_STAND),
-	AREA_EFFECT_CLOUD(WatchedType.AREA_EFFECT_CLOUD, SpecificRemapper.ENTITY,
+	ARMOR_STAND_OBJECT(NetworkEntityType.ARMOR_STAND_OBJECT, SpecificRemapper.ARMOR_STAND),
+	AREA_EFFECT_CLOUD(NetworkEntityType.AREA_EFFECT_CLOUD, SpecificRemapper.ENTITY,
 		//radius
 		new Mapping(6)
 		.addRemap(6, ValueRemapperNoOp.FLOAT, ProtocolVersionsHelper.RANGE__1_10__1_12)
@@ -710,11 +710,11 @@ public enum SpecificRemapper {
 		.addRemap(11, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.RANGE__1_10__1_12)
 		.addRemap(10, ValueRemapperNoOp.VARINT, ProtocolVersionsHelper.ALL_1_9)
 	),
-	SHULKER_BULLET(WatchedType.SHULKER_BULLET, SpecificRemapper.ENTITY),
-	DRAGON_FIREBALL(WatchedType.DRAGON_FIREBALL, SpecificRemapper.ENTITY),
-	EVOCATOR_FANGS(WatchedType.EVOCATOR_FANGS, SpecificRemapper.ENTITY);
+	SHULKER_BULLET(NetworkEntityType.SHULKER_BULLET, SpecificRemapper.ENTITY),
+	DRAGON_FIREBALL(NetworkEntityType.DRAGON_FIREBALL, SpecificRemapper.ENTITY),
+	EVOCATOR_FANGS(NetworkEntityType.EVOCATOR_FANGS, SpecificRemapper.ENTITY);
 
-	private static final EnumMap<WatchedType, SpecificRemapper> wtype = new EnumMap<>(WatchedType.class);
+	private static final EnumMap<NetworkEntityType, SpecificRemapper> wtype = new EnumMap<>(NetworkEntityType.class);
 
 	static {
 		for (SpecificRemapper remapper : SpecificRemapper.values()) {
@@ -722,11 +722,11 @@ public enum SpecificRemapper {
 		}
 	}
 
-	public static SpecificRemapper fromWatchedType(WatchedType type) {
+	public static SpecificRemapper fromWatchedType(NetworkEntityType type) {
 		return wtype.getOrDefault(type, SpecificRemapper.NONE);
 	}
 
-	private final WatchedType type;
+	private final NetworkEntityType type;
 	private final EnumMap<ProtocolVersion, ArrayList<MappingEntry>> entries = new EnumMap<>(ProtocolVersion.class);
 	{
 		for (ProtocolVersion version : ProtocolVersion.values()) {
@@ -734,7 +734,7 @@ public enum SpecificRemapper {
 		}
 	}
 
-	SpecificRemapper(WatchedType type, Mapping... entries) {
+	SpecificRemapper(NetworkEntityType type, Mapping... entries) {
 		this.type = type;
 		for (Mapping mapping : entries) {
 			for (Mapping.Entry entry : mapping.entries) {
@@ -745,7 +745,7 @@ public enum SpecificRemapper {
 		}
 	}
 
-	SpecificRemapper(WatchedType type, SpecificRemapper superType, Mapping... entries) {
+	SpecificRemapper(NetworkEntityType type, SpecificRemapper superType, Mapping... entries) {
 		this(type, entries);
 		for (Entry<ProtocolVersion, ArrayList<MappingEntry>> entry : superType.entries.entrySet()) {
 			this.entries.get(entry.getKey()).addAll(entry.getValue());

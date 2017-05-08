@@ -5,7 +5,7 @@ import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnObject;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
-import protocolsupport.protocol.typeremapper.watchedentity.WatchedType;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -14,14 +14,14 @@ public class SpawnObject extends MiddleSpawnObject {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		WatchedType type = entity.getType();
-		if (type == WatchedType.ARMOR_STAND_OBJECT) {
+		NetworkEntityType type = entity.getType();
+		if (type == NetworkEntityType.ARMOR_STAND_OBJECT) {
 			return RecyclableEmptyList.get();
 		}
 		x *= 32;
 		y *= 32;
 		z *= 32;
-		if (type == WatchedType.ITEM_FRAME) {
+		if (type == NetworkEntityType.ITEM_FRAME) {
 			switch (objectdata) {
 				case 0: {
 					z -= 32;
@@ -45,12 +45,12 @@ public class SpawnObject extends MiddleSpawnObject {
 				}
 			}
 		}
-		if (type == WatchedType.FALLING_OBJECT) {
+		if (type == NetworkEntityType.FALLING_OBJECT) {
 			int id = IdRemapper.BLOCK.getTable(version).getRemap((objectdata & 4095) << 4) >> 4;
 			int data = (objectdata >> 12) & 0xF;
 			objectdata = (id | (data << 16));
 		}
-		if ((type == WatchedType.TNT) || (type == WatchedType.FALLING_OBJECT)) {
+		if ((type == NetworkEntityType.TNT) || (type == NetworkEntityType.FALLING_OBJECT)) {
 			y += 16;
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_OBJECT_ID, version);
