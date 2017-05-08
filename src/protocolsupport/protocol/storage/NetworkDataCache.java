@@ -69,7 +69,6 @@ public class NetworkDataCache {
 
 
 	private final TIntObjectHashMap<WatchedEntity> watchedEntities = new TIntObjectHashMap<>();
-	private final TIntObjectHashMap<Byte> watchedEntitiesBaseFlags = new TIntObjectHashMap<>();
 	private WatchedEntity player;
 	private final HashMap<UUID, NetworkDataCache.PlayerListEntry> playerlist = new HashMap<>();
 	private Environment dimensionId;
@@ -82,10 +81,6 @@ public class NetworkDataCache {
 	public void addWatchedSelfPlayer(WatchedEntity player) {
 		this.player = player;
 		addWatchedEntity(player);
-	}
-
-	public void addWatchedEntityBaseMeta(int entityId, byte flags) {
-		watchedEntitiesBaseFlags.put(entityId, flags);
 	}
 
 	public int getSelfPlayerEntityId() {
@@ -102,15 +97,9 @@ public class NetworkDataCache {
 		return watchedEntities.get(entityId);
 	}
 
-	public byte getWatchedEntityBaseMeta(int entityId) {
-		Byte ret = watchedEntitiesBaseFlags.get(entityId);
-		return ret == null ? 0 : ret;
-	}
-
 	public void removeWatchedEntities(int[] entityIds) {
 		for (int entityId : entityIds) {
 			watchedEntities.remove(entityId);
-			watchedEntitiesBaseFlags.remove(entityId);
 		}
 		readdSelfPlayer();
 	}

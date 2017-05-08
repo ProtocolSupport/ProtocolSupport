@@ -3,7 +3,6 @@ package protocolsupport.protocol.typeremapper.watchedentity;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.MappingEntry;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapper;
@@ -15,10 +14,8 @@ public class WatchedDataRemapper {
 
 	private static final TIntObjectMap<DataWatcherObject<?>> EMPTY_MAP = new TIntObjectHashMap<>();
 
-	//TODO: move flags to watched entity cache
 	@SuppressWarnings("unchecked")
-	public static TIntObjectMap<DataWatcherObject<?>> transform(NetworkDataCache cache, int entityId, TIntObjectMap<DataWatcherObject<?>> originaldata, ProtocolVersion to) {
-		WatchedEntity entity = cache.getWatchedEntity(entityId);
+	public static TIntObjectMap<DataWatcherObject<?>> transform(WatchedEntity entity, TIntObjectMap<DataWatcherObject<?>> originaldata, ProtocolVersion to) {
 		if (entity == null) {
 			return EMPTY_MAP;
 		}
@@ -27,14 +24,14 @@ public class WatchedDataRemapper {
 			DataWatcherObject<?> baseflags = originaldata.get(0);
 			if (baseflags != null) {
 				if (baseflags.getValue() instanceof Number) {
-					cache.addWatchedEntityBaseMeta(entityId, ((Number) baseflags.getValue()).byteValue());
+					entity.getDataCache().baseMetaFlags = ((Number) baseflags.getValue()).byteValue();
 				}
 			}
 			DataWatcherObject<?> activehandflags = originaldata.get(6);
 			if (activehandflags != null) {
 				if (activehandflags.getValue() instanceof Number) {
 					byte activehandvalue = ((Number) activehandflags.getValue()).byteValue();
-					byte basevalue = cache.getWatchedEntityBaseMeta(entityId);
+					byte basevalue = entity.getDataCache().baseMetaFlags;
 					switch (activehandvalue) {
 						case 1: {
 							basevalue |= (1 << 4);

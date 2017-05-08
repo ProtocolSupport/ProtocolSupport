@@ -43,9 +43,19 @@ public class WatchedEntity {
 		return type;
 	}
 
+	private final DataCache cache = new DataCache();
+
+	public DataCache getDataCache() {
+		return cache;
+	}
+
 	@Override
 	public String toString() {
 		return MessageFormat.format("{0}(UUID: {1}, Id: {2}, Type: {3})", getClass().getSimpleName(), getUUID(), getId(), getType());
+	}
+
+	public static class DataCache {
+		public byte baseMetaFlags;
 	}
 
 }
