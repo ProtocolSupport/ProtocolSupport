@@ -7,10 +7,10 @@ import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.id.RemappingRegistry.GenericRemappingRegistry;
+import protocolsupport.protocol.typeremapper.id.RemappingRegistry.EnumRemappingRegistry;
 import protocolsupport.protocol.typeremapper.id.RemappingRegistry.IdRemappingRegistry;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
-import protocolsupport.protocol.typeremapper.id.RemappingTable.GenericRemappingTable;
+import protocolsupport.protocol.typeremapper.id.RemappingTable.EnumRemappingTable;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.HashMapBasedIdRemappingTable;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.ProtocolVersionsHelper;
@@ -301,14 +301,14 @@ public class IdRemapper {
 		}
 	};
 
-	public static final GenericRemappingRegistry<WindowType, GenericRemappingTable<WindowType>> INVENTORY = new GenericRemappingRegistry<WindowType, GenericRemappingTable<WindowType>>() {
+	public static final EnumRemappingRegistry<WindowType, EnumRemappingTable<WindowType>> INVENTORY = new EnumRemappingRegistry<WindowType, EnumRemappingTable<WindowType>>() {
 		{
 			registerRemapEntry(WindowType.SHULKER, WindowType.CHEST, ProtocolVersionsHelper.BEFORE_1_11);
 			registerRemapEntry(WindowType.DROPPER, WindowType.DISPENSER, ProtocolVersionsHelper.BEFORE_1_5);
 		}
 		@Override
-		protected GenericRemappingTable<WindowType> createTable() {
-			return new GenericRemappingTable<>();
+		protected EnumRemappingTable<WindowType> createTable() {
+			return new EnumRemappingTable<>(WindowType.class);
 		}
 	};
 

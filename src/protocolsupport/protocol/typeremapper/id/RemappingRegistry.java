@@ -3,6 +3,7 @@ package protocolsupport.protocol.typeremapper.id;
 import java.util.EnumMap;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.typeremapper.id.RemappingTable.EnumRemappingTable;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.GenericRemappingTable;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.IdRemappingTable;
 
@@ -27,6 +28,16 @@ public abstract class RemappingRegistry<T extends RemappingTable> {
 	public static abstract class IdRemappingRegistry<T extends IdRemappingTable> extends RemappingRegistry<T> {
 
 		public void registerRemapEntry(int from, int to, ProtocolVersion... versions) {
+			for (ProtocolVersion version : versions) {
+				getTable(version).setRemap(from, to);
+			}
+		}
+
+	}
+
+	public static abstract class EnumRemappingRegistry<T extends Enum<T>, R extends EnumRemappingTable<T>> extends RemappingRegistry<R> {
+
+		public void registerRemapEntry(T from, T to, ProtocolVersion... versions) {
 			for (ProtocolVersion version : versions) {
 				getTable(version).setRemap(from, to);
 			}
