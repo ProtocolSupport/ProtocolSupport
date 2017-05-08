@@ -43,7 +43,7 @@ public class CollectionsUtils {
 			int minKey = entries.stream().min(Comparator.comparingInt(e -> e.key)).get().key;
 			int maxKey = entries.stream().max(Comparator.comparingInt(e -> e.key)).get().key;
 			this.offset = -minKey;
-			this.array = new Object[maxKey - minKey];
+			this.array = new Object[maxKey - minKey + 1];
 			entries.stream().forEach(entry -> put(entry.key, entry.value));
 		}
 
@@ -54,7 +54,7 @@ public class CollectionsUtils {
 
 		@SuppressWarnings("unchecked")
 		public T get(int key) {
-			int aindex = key - offset;
+			int aindex = key + offset;
 			if ((aindex >= array.length) || (aindex < 0)) {
 				return null;
 			}
@@ -62,7 +62,7 @@ public class CollectionsUtils {
 		}
 
 		public void put(int key, T value) {
-			int aindex = key - offset;
+			int aindex = key + offset;
 			if ((aindex >= array.length) || (aindex < 0)) {
 				throw new IllegalArgumentException(MessageFormat.format("Cant fit key {0} in size {1} and offset {2}", key, array.length, offset));
 			}
