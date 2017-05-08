@@ -64,7 +64,7 @@ public class CollectionsUtils {
 		public void put(int key, T value) {
 			int aindex = key - offset;
 			if ((aindex >= array.length) || (aindex < 0)) {
-				throw new IllegalArgumentException(MessageFormat.format("Can't fit key {0} in size {1} and offset {2}", key, array.length, offset));
+				throw new IllegalArgumentException(MessageFormat.format("Cant fit key {0} in size {1} and offset {2}", key, array.length, offset));
 			}
 			array[aindex] = value;
 		}
