@@ -55,7 +55,7 @@ public class SpawnObject extends MiddleSpawnObject {
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_OBJECT_ID, version);
 		serializer.writeInt(entity.getId());
-		serializer.writeByte(IdRemapper.ENTITY_OBJECT.getTable(version).getRemap(type.getTypeId()));
+		serializer.writeByte(IdRemapper.ENTITY.getTable(version).getRemap(type).getTypeId());
 		serializer.writeInt((int) x);
 		serializer.writeInt((int) y);
 		serializer.writeInt((int) z);
