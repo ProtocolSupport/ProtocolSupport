@@ -6,10 +6,10 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.tab.TabAPI;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.typeremapper.watchedentity.WatchedEntity;
 import protocolsupport.protocol.utils.types.Difficulty;
 import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.protocol.utils.types.GameMode;
+import protocolsupport.protocol.utils.types.NetworkEntity;
 
 public abstract class MiddleLogin extends ClientBoundMiddlePacket {
 
@@ -38,7 +38,7 @@ public abstract class MiddleLogin extends ClientBoundMiddlePacket {
 
 	@Override
 	public void handle() {
-		cache.addWatchedSelfPlayer(WatchedEntity.createPlayer(playerEntityId));
+		cache.addWatchedSelfPlayer(NetworkEntity.createPlayer(playerEntityId));
 		cache.setDimensionId(dimension);
 	}
 

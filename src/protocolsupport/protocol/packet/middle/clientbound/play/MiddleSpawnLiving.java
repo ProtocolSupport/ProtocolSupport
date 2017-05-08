@@ -9,13 +9,13 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.watchedentity.WatchedEntity;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.types.NetworkEntity;
 
 public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 
-	protected WatchedEntity entity;
+	protected NetworkEntity entity;
 	protected double x;
 	protected double y;
 	protected double z;
@@ -32,7 +32,7 @@ public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 		int entityId = VarNumberSerializer.readVarInt(serverdata);
 		UUID uuid = MiscSerializer.readUUID(serverdata);
 		int typeId = VarNumberSerializer.readVarInt(serverdata);
-		entity = WatchedEntity.createMob(uuid, entityId, typeId);
+		entity = NetworkEntity.createMob(uuid, entityId, typeId);
 		x = serverdata.readDouble();
 		y = serverdata.readDouble();
 		z = serverdata.readDouble();

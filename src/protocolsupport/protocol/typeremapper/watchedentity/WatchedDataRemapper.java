@@ -9,6 +9,7 @@ import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueR
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
+import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.utils.Utils;
 
 public class WatchedDataRemapper {
@@ -16,7 +17,7 @@ public class WatchedDataRemapper {
 	private static final TIntObjectMap<DataWatcherObject<?>> EMPTY_MAP = new TIntObjectHashMap<>();
 
 	@SuppressWarnings("unchecked")
-	public static TIntObjectMap<DataWatcherObject<?>> transform(WatchedEntity entity, TIntObjectMap<DataWatcherObject<?>> originaldata, ProtocolVersion to) {
+	public static TIntObjectMap<DataWatcherObject<?>> transform(NetworkEntity entity, TIntObjectMap<DataWatcherObject<?>> originaldata, ProtocolVersion to) {
 		if (entity == null) {
 			return EMPTY_MAP;
 		}

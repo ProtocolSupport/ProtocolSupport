@@ -4,8 +4,8 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityTeleport;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.typeremapper.watchedentity.WatchedEntity;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
+import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -13,7 +13,7 @@ public class EntityTeleport extends MiddleEntityTeleport {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		WatchedEntity wentity = cache.getWatchedEntity(entityId);
+		NetworkEntity wentity = cache.getWatchedEntity(entityId);
 		y *= 32;
 		if ((wentity != null) && ((wentity.getType() == NetworkEntityType.TNT) || (wentity.getType() == NetworkEntityType.FALLING_OBJECT))) {
 			y += 16;

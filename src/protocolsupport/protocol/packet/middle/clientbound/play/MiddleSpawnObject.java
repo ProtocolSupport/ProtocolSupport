@@ -6,11 +6,11 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.watchedentity.WatchedEntity;
+import protocolsupport.protocol.utils.types.NetworkEntity;
 
 public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 
-	protected WatchedEntity entity;
+	protected NetworkEntity entity;
 	protected double x;
 	protected double y;
 	protected double z;
@@ -35,7 +35,7 @@ public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 		motX = serverdata.readShort();
 		motY = serverdata.readShort();
 		motZ = serverdata.readShort();
-		entity = WatchedEntity.createObject(uuid, entityId, typeId, objectdata);
+		entity = NetworkEntity.createObject(uuid, entityId, typeId, objectdata);
 	}
 
 	@Override
