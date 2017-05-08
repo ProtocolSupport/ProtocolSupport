@@ -16,15 +16,15 @@ public class SpawnNamed extends MiddleSpawnNamed {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_NAMED_ID, version);
-		VarNumberSerializer.writeVarInt(serializer, playerEntityId);
-		MiscSerializer.writeUUID(serializer, uuid);
+		VarNumberSerializer.writeVarInt(serializer, entity.getId());
+		MiscSerializer.writeUUID(serializer, entity.getUUID());
 		serializer.writeInt((int) (x * 32));
 		serializer.writeInt((int) (y * 32));
 		serializer.writeInt((int) (z * 32));
 		serializer.writeByte(yaw);
 		serializer.writeByte(pitch);
 		serializer.writeShort(0);
-		LegacyDataWatcherSerializer.encodeData(serializer, version, WatchedDataRemapper.transform(cache, playerEntityId, metadata, version));
+		LegacyDataWatcherSerializer.encodeData(serializer, version, WatchedDataRemapper.transform(cache, entity.getId(), metadata, version));
 		return RecyclableSingletonList.create(serializer);
 	}
 

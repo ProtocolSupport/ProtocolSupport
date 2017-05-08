@@ -141,6 +141,7 @@ public class IdRemapper {
 		}
 	};
 
+	//TODO: merge living and object remapper and use WatchedType
 	@SuppressWarnings("deprecation")
 	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> ENTITY_LIVING = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
 		final class Mapping {

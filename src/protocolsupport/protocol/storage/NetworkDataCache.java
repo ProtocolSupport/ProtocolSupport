@@ -8,8 +8,7 @@ import java.util.UUID;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
-import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
-import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
+import protocolsupport.protocol.typeremapper.watchedentity.WatchedEntity;
 import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.protocol.utils.types.WindowType;
 
@@ -71,7 +70,7 @@ public class NetworkDataCache {
 
 	private final TIntObjectHashMap<WatchedEntity> watchedEntities = new TIntObjectHashMap<>();
 	private final TIntObjectHashMap<Byte> watchedEntitiesBaseFlags = new TIntObjectHashMap<>();
-	private WatchedPlayer player;
+	private WatchedEntity player;
 	private final HashMap<UUID, NetworkDataCache.PlayerListEntry> playerlist = new HashMap<>();
 	private Environment dimensionId;
 	private float maxHealth = 20.0F;
@@ -80,7 +79,7 @@ public class NetworkDataCache {
 		watchedEntities.put(entity.getId(), entity);
 	}
 
-	public void addWatchedSelfPlayer(WatchedPlayer player) {
+	public void addWatchedSelfPlayer(WatchedEntity player) {
 		this.player = player;
 		addWatchedEntity(player);
 	}

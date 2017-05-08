@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.typeremapper.watchedentity.WatchedType;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperBooleanToByte;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperNoOp;
@@ -13,7 +14,6 @@ import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueR
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperNumberToInt;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperNumberToShort;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapperStringClamp;
-import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedType;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBlockState;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;

@@ -4,8 +4,8 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityTeleport;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
-import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedType;
+import protocolsupport.protocol.typeremapper.watchedentity.WatchedEntity;
+import protocolsupport.protocol.typeremapper.watchedentity.WatchedType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 

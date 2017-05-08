@@ -6,14 +6,11 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedObject;
-import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedType;
+import protocolsupport.protocol.typeremapper.watchedentity.WatchedEntity;
 
 public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 
-	protected int entityId;
-	protected UUID uuid;
-	protected int type;
+	protected WatchedEntity entity;
 	protected double x;
 	protected double y;
 	protected double z;
@@ -26,9 +23,9 @@ public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		entityId = VarNumberSerializer.readVarInt(serverdata);
-		uuid = MiscSerializer.readUUID(serverdata);
-		type = serverdata.readUnsignedByte();
+		int entityId = VarNumberSerializer.readVarInt(serverdata);
+		UUID uuid = MiscSerializer.readUUID(serverdata);
+		int typeId = serverdata.readUnsignedByte();
 		x = serverdata.readDouble();
 		y = serverdata.readDouble();
 		z = serverdata.readDouble();
@@ -38,16 +35,12 @@ public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 		motX = serverdata.readShort();
 		motY = serverdata.readShort();
 		motZ = serverdata.readShort();
+		entity = WatchedEntity.createObject(uuid, entityId, typeId, objectdata);
 	}
 
 	@Override
 	public void handle() {
-		cache.addWatchedEntity(new WatchedObject(entityId, type, objectdata));
-	}
-
-	@Override
-	public boolean isValid() {
-		return WatchedType.getObjectByTypeId(type) != WatchedType.NONE;
+		cache.addWatchedEntity(entity);
 	}
 
 }

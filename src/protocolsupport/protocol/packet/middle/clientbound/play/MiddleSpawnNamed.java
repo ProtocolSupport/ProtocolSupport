@@ -13,15 +13,13 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
-import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
-import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
+import protocolsupport.protocol.typeremapper.watchedentity.WatchedEntity;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 
 public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 
-	protected int playerEntityId;
-	protected UUID uuid;
+	protected WatchedEntity entity;
 	protected String name;
 	protected double x;
 	protected double y;
@@ -29,13 +27,13 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 	protected int yaw;
 	protected int pitch;
 	protected List<ProfileProperty> properties;
-	protected WatchedEntity wplayer;
 	protected TIntObjectMap<DataWatcherObject<?>> metadata;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		playerEntityId = VarNumberSerializer.readVarInt(serverdata);
-		uuid = MiscSerializer.readUUID(serverdata);
+		int playerEntityId = VarNumberSerializer.readVarInt(serverdata);
+		UUID uuid = MiscSerializer.readUUID(serverdata);
+		entity = WatchedEntity.createPlayer(uuid, playerEntityId);
 		x = serverdata.readDouble();
 		y = serverdata.readDouble();
 		z = serverdata.readDouble();
@@ -46,9 +44,8 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 
 	@Override
 	public void handle() {
-		wplayer = new WatchedPlayer(playerEntityId);
-		cache.addWatchedEntity(wplayer);
-		NetworkDataCache.PlayerListEntry entry = cache.getPlayerListEntry(uuid);
+		cache.addWatchedEntity(entity);
+		NetworkDataCache.PlayerListEntry entry = cache.getPlayerListEntry(entity.getUUID());
 		if (entry != null) {
 			name = entry.getUserName();
 			properties = entry.getProperties().getAll(true);

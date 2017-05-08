@@ -9,17 +9,13 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
-import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedLiving;
-import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedType;
+import protocolsupport.protocol.typeremapper.watchedentity.WatchedEntity;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 
 public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 
-	protected int entityId;
-	protected UUID uuid;
-	protected int type;
+	protected WatchedEntity entity;
 	protected double x;
 	protected double y;
 	protected double z;
@@ -29,14 +25,14 @@ public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 	protected int motX;
 	protected int motY;
 	protected int motZ;
-	protected WatchedEntity wentity;
 	protected TIntObjectMap<DataWatcherObject<?>> metadata;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		entityId = VarNumberSerializer.readVarInt(serverdata);
-		uuid = MiscSerializer.readUUID(serverdata);
-		type = VarNumberSerializer.readVarInt(serverdata);
+		int entityId = VarNumberSerializer.readVarInt(serverdata);
+		UUID uuid = MiscSerializer.readUUID(serverdata);
+		int typeId = VarNumberSerializer.readVarInt(serverdata);
+		entity = WatchedEntity.createMob(uuid, entityId, typeId);
 		x = serverdata.readDouble();
 		y = serverdata.readDouble();
 		z = serverdata.readDouble();
@@ -51,13 +47,7 @@ public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 
 	@Override
 	public void handle() {
-		wentity = new WatchedLiving(entityId, type);
-		cache.addWatchedEntity(wentity);
-	}
-
-	@Override
-	public boolean isValid() {
-		return WatchedType.getMobByTypeId(type) != WatchedType.NONE;
+		cache.addWatchedEntity(entity);
 	}
 
 }

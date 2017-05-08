@@ -15,9 +15,9 @@ public class SpawnObject extends MiddleSpawnObject {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_OBJECT_ID, version);
-		VarNumberSerializer.writeVarInt(serializer, entityId);
-		MiscSerializer.writeUUID(serializer, uuid);
-		serializer.writeByte(IdRemapper.ENTITY_OBJECT.getTable(version).getRemap(type));
+		VarNumberSerializer.writeVarInt(serializer, entity.getId());
+		MiscSerializer.writeUUID(serializer, entity.getUUID());
+		serializer.writeByte(IdRemapper.ENTITY_OBJECT.getTable(version).getRemap(entity.getType().getTypeId()));
 		serializer.writeDouble(x);
 		serializer.writeDouble(y);
 		serializer.writeDouble(z);

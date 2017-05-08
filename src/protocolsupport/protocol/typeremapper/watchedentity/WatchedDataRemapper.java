@@ -7,8 +7,6 @@ import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.MappingEntry;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.ValueRemapper;
-import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
-import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedType;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
 import protocolsupport.utils.Utils;
@@ -17,6 +15,7 @@ public class WatchedDataRemapper {
 
 	private static final TIntObjectMap<DataWatcherObject<?>> EMPTY_MAP = new TIntObjectHashMap<>();
 
+	//TODO: move flags to watched entity cache
 	@SuppressWarnings("unchecked")
 	public static TIntObjectMap<DataWatcherObject<?>> transform(NetworkDataCache cache, int entityId, TIntObjectMap<DataWatcherObject<?>> originaldata, ProtocolVersion to) {
 		WatchedEntity entity = cache.getWatchedEntity(entityId);

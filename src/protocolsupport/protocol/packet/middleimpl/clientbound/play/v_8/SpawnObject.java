@@ -6,6 +6,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnObject
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.watchedentity.WatchedType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -13,14 +14,15 @@ public class SpawnObject extends MiddleSpawnObject {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		if (type == 70) {
+		WatchedType type = entity.getType();
+		if (type == WatchedType.FALLING_OBJECT) {
 			int id = IdRemapper.BLOCK.getTable(version).getRemap((objectdata & 4095) << 4) >> 4;
 			int data = (objectdata >> 12) & 0xF;
 			objectdata = (data << 12) | id;
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_OBJECT_ID, version);
-		VarNumberSerializer.writeVarInt(serializer, entityId);
-		serializer.writeByte(IdRemapper.ENTITY_OBJECT.getTable(version).getRemap(type));
+		VarNumberSerializer.writeVarInt(serializer, entity.getId());
+		serializer.writeByte(IdRemapper.ENTITY_OBJECT.getTable(version).getRemap(type.getTypeId()));
 		serializer.writeInt((int) (x * 32));
 		serializer.writeInt((int) (y * 32));
 		serializer.writeInt((int) (z * 32));

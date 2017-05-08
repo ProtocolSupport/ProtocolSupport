@@ -17,9 +17,9 @@ public class SpawnLiving extends MiddleSpawnLiving {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_LIVING_ID, version);
-		VarNumberSerializer.writeVarInt(serializer, entityId);
-		MiscSerializer.writeUUID(serializer, uuid);
-		VarNumberSerializer.writeVarInt(serializer, IdRemapper.ENTITY_LIVING.getTable(version).getRemap(type));
+		VarNumberSerializer.writeVarInt(serializer, entity.getId());
+		MiscSerializer.writeUUID(serializer, entity.getUUID());
+		VarNumberSerializer.writeVarInt(serializer, IdRemapper.ENTITY_LIVING.getTable(version).getRemap(entity.getType().getTypeId()));
 		serializer.writeDouble(x);
 		serializer.writeDouble(y);
 		serializer.writeDouble(z);
@@ -29,7 +29,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		serializer.writeShort(motX);
 		serializer.writeShort(motY);
 		serializer.writeShort(motZ);
-		DataWatcherDeserializer.encodeData(serializer, version, WatchedDataRemapper.transform(cache, entityId, metadata, version));
+		DataWatcherDeserializer.encodeData(serializer, version, WatchedDataRemapper.transform(cache, entity.getId(), metadata, version));
 		return RecyclableSingletonList.create(serializer);
 	}
 

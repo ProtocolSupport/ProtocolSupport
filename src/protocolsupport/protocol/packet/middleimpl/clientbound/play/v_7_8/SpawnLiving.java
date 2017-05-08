@@ -8,6 +8,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.WatchedDataRemapper;
+import protocolsupport.protocol.typeremapper.watchedentity.WatchedType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -16,12 +17,12 @@ public class SpawnLiving extends MiddleSpawnLiving {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		if (version.isBefore(ProtocolVersion.MINECRAFT_1_8) && (type == 30)) { //skip armor stand, TODO: move to id skipper
+		if (version.isBefore(ProtocolVersion.MINECRAFT_1_8) && (entity.getType() == WatchedType.ARMOR_STAND_MOB)) {//TODO: move to id skipper
 			return RecyclableEmptyList.get();
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_LIVING_ID, version);
-		VarNumberSerializer.writeVarInt(serializer, entityId);
-		serializer.writeByte(IdRemapper.ENTITY_LIVING.getTable(version).getRemap(type));
+		VarNumberSerializer.writeVarInt(serializer, entity.getId());
+		serializer.writeByte(IdRemapper.ENTITY_LIVING.getTable(version).getRemap(entity.getType().getTypeId()));
 		serializer.writeInt((int) (x * 32));
 		serializer.writeInt((int) (y * 32));
 		serializer.writeInt((int) (z * 32));
@@ -31,7 +32,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		serializer.writeShort(motX);
 		serializer.writeShort(motY);
 		serializer.writeShort(motZ);
-		LegacyDataWatcherSerializer.encodeData(serializer, version, WatchedDataRemapper.transform(cache, entityId, metadata, version));
+		LegacyDataWatcherSerializer.encodeData(serializer, version, WatchedDataRemapper.transform(cache, entity.getId(), metadata, version));
 		return RecyclableSingletonList.create(serializer);
 	}
 

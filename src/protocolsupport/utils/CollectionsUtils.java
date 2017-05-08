@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CollectionsUtils {
 
@@ -22,6 +23,10 @@ public class CollectionsUtils {
 
 	public static <V extends Enum<V>> ArrayMap<V> makeEnumMappingArrayMap(Class<V> e, ToIntFunction<V> mapping) {
 		return new ArrayMap<V>(Arrays.stream(e.getEnumConstants()).map(c -> new ArrayMap.Entry<>(mapping.applyAsInt(c), c)).collect(Collectors.toList()));
+	}
+
+	public static <V extends Enum<V>> ArrayMap<V> makeEnumMappingArrayMap(Stream<V> stream, ToIntFunction<V> mapping) {
+		return new ArrayMap<V>(stream.map(c -> new ArrayMap.Entry<>(mapping.applyAsInt(c), c)).collect(Collectors.toList()));
 	}
 
 	public static class ArrayMap<T> {
