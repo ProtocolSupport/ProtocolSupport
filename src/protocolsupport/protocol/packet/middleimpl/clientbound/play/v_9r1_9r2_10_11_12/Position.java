@@ -13,11 +13,11 @@ public class Position extends MiddlePosition {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_POSITION_ID, version);
-		serializer.writeDouble(x);
-		serializer.writeDouble(y);
-		serializer.writeDouble(z);
-		serializer.writeFloat(yaw);
-		serializer.writeFloat(pitch);
+		serializer.writeDouble(xOrig);
+		serializer.writeDouble(yOrig);
+		serializer.writeDouble(zOrig);
+		serializer.writeFloat(yawOrig);
+		serializer.writeFloat(pitchOrig);
 		serializer.writeByte(flags);
 		VarNumberSerializer.writeVarInt(serializer, teleportConfirmId);
 		return RecyclableSingletonList.create(serializer);
