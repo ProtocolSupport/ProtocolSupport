@@ -6,6 +6,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.login.noop.NoopSet
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_4_5_6_7_8_9r1_9r2_10_11_12.EncryptionRequest;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r2_10_11_12.LoginDisconnect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r2_10_11_12.LoginSuccess;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopAdvancements;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopBossBar;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopCamera;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopCombatEvent;
@@ -13,6 +14,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopPlay
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopServerDifficulty;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopSetCooldown;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopTitle;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopUnlockRecipes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopVehicleMove;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopWorldBorder;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.BlockChangeMulti;
@@ -252,6 +254,8 @@ public class PacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SET_COOLDOWN_ID, NoopSetCooldown.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BOSS_BAR_ID, NoopBossBar.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_VEHICLE_MOVE_ID, NoopVehicleMove.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UNLOCK_RECIPES, NoopUnlockRecipes.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ADVANCEMENTS, NoopAdvancements.class);
 	}
 
 	public PacketEncoder(Connection connection, NetworkDataCache storage) {

@@ -213,6 +213,10 @@ public interface PlatformPacketFactory {
 
 	public int getOutPlayVehicleMovePacketId();
 
+	public int getOutPlayUnlockRecipes();
+
+	public int getOutPlayAdvancements();
+
 
 	public int getInHandshakeStartPacketId();
 

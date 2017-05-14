@@ -91,4 +91,11 @@ public class ArraySerializer {
 		}
 	}
 
+	public static void writeVarIntIntArray(ByteBuf to, int[] array) {
+		VarNumberSerializer.writeVarInt(to, array.length);
+		for (int element : array) {
+			to.writeInt(element);
+		}
+	}
+
 }

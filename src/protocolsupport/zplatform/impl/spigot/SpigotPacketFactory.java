@@ -572,6 +572,16 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 		return getOutId(PacketPlayOutVehicleMove.class);
 	}
 
+	@Override
+	public int getOutPlayUnlockRecipes() {
+		return getOutId(PacketPlayOutRecipes.class);
+	}
+
+	@Override
+	public int getOutPlayAdvancements() {
+		return getOutId(PacketPlayOutAdvancements.class);
+	}
+
 
 	@Override
 	public int getInHandshakeStartPacketId() {
