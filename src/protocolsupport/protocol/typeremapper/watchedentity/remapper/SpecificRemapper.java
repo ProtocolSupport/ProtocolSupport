@@ -22,6 +22,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectDirec
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectItemStack;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectNBTTagCompound;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectShort;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
@@ -81,7 +82,11 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Player.SCORE, 18),  ProtocolVersionsHelper.BEFORE_1_9),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Player.SKIN_FLAGS, 13) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Player.SKIN_FLAGS, 12) {}, ProtocolVersionsHelper.ALL_1_9),
-		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Player.SKIN_FLAGS, 10) {}, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1))
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Player.SKIN_FLAGS, 10) {}, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1)),
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Player.MAIN_HAND, 14) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Player.MAIN_HAND, 13) {}, ProtocolVersionsHelper.ALL_1_9),
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectNBTTagCompound>(DataWatcherObjectIndex.Player.LEFT_SHOULDER_ENTITY, 15) {}, ProtocolVersion.MINECRAFT_1_12),
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectNBTTagCompound>(DataWatcherObjectIndex.Player.RIGHT_SHOULDER_ENTITY, 16) {}, ProtocolVersion.MINECRAFT_1_12)		
 	),
 	AGEABLE(NetworkEntityType.AGEABLE, SpecificRemapper.INSENTIENT,
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Ageable.AGE, 12) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),

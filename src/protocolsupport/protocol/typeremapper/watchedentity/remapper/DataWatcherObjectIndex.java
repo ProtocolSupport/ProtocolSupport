@@ -28,6 +28,9 @@ public class DataWatcherObjectIndex {
 		public static final int ADDITIONAL_HEARTS = 11;
 		public static final int SCORE = 12;
 		public static final int SKIN_FLAGS = 13;
+		public static final int MAIN_HAND = 14;
+		public static final int LEFT_SHOULDER_ENTITY = 15;
+		public static final int RIGHT_SHOULDER_ENTITY = 16;
 	}
 
 	public static final class Ageable {
