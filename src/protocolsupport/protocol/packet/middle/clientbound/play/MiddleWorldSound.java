@@ -1,10 +1,7 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolType;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleWorldSound extends ClientBoundMiddlePacket {
@@ -20,9 +17,8 @@ public abstract class MiddleWorldSound extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		category = VarNumberSerializer.readVarInt(serverdata);
 		id = VarNumberSerializer.readVarInt(serverdata);
-		parrotedEntityType = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(ProtocolType.PC));
+		category = VarNumberSerializer.readVarInt(serverdata);
 		x = serverdata.readInt();
 		y = serverdata.readInt();
 		z = serverdata.readInt();
