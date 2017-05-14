@@ -131,8 +131,8 @@ public enum NetworkEntityType {
 		NONE, OBJECT, MOB
 	}
 
-	private static final ArrayMap<NetworkEntityType> OBJECT_BY_TYPE_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.OBJECT), NetworkEntityType::getTypeId);
-	private static final ArrayMap<NetworkEntityType> MOB_BY_TYPE_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.MOB), NetworkEntityType::getTypeId);
+	private static final ArrayMap<NetworkEntityType> OBJECT_BY_TYPE_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.OBJECT), (w -> w.typeId));
+	private static final ArrayMap<NetworkEntityType> MOB_BY_TYPE_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.MOB), (w -> w.typeId));
 
 	public static NetworkEntityType getObjectByTypeId(int objectTypeId) {
 		NetworkEntityType type = OBJECT_BY_TYPE_ID.get(objectTypeId);
