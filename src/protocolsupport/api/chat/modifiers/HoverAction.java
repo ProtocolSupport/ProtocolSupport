@@ -48,6 +48,7 @@ public class HoverAction {
 		this.value = compound.toString();
 	}
 
+	@Deprecated
 	public HoverAction(Achievement achievment) {
 		this.type = Type.SHOW_ACHIEVEMENT;
 		this.value = ServerPlatform.get().getMiscUtils().getAchievmentName(achievment);

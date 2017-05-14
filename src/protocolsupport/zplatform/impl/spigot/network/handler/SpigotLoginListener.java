@@ -7,11 +7,11 @@ import javax.crypto.SecretKey;
 import org.bukkit.Bukkit;
 
 import io.netty.channel.Channel;
-import net.minecraft.server.v1_11_R1.IChatBaseComponent;
-import net.minecraft.server.v1_11_R1.ITickable;
-import net.minecraft.server.v1_11_R1.PacketLoginInEncryptionBegin;
-import net.minecraft.server.v1_11_R1.PacketLoginInListener;
-import net.minecraft.server.v1_11_R1.PacketLoginInStart;
+import net.minecraft.server.v1_12_R1.IChatBaseComponent;
+import net.minecraft.server.v1_12_R1.ITickable;
+import net.minecraft.server.v1_12_R1.PacketLoginInEncryptionBegin;
+import net.minecraft.server.v1_12_R1.PacketLoginInListener;
+import net.minecraft.server.v1_12_R1.PacketLoginInStart;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.zplatform.impl.spigot.network.SpigotChannelHandlers;
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketCompressor;
@@ -27,7 +27,7 @@ public abstract class SpigotLoginListener extends AbstractLoginListener implemen
 	}
 
 	@Override
-	public void F_() {
+	public void e() {
 		tick();
 	}
 

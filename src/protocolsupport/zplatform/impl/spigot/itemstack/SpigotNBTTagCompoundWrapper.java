@@ -8,11 +8,11 @@ import java.util.Objects;
 
 import org.spigotmc.SneakyThrow;
 
-import net.minecraft.server.v1_11_R1.MojangsonParseException;
-import net.minecraft.server.v1_11_R1.MojangsonParser;
-import net.minecraft.server.v1_11_R1.NBTCompressedStreamTools;
-import net.minecraft.server.v1_11_R1.NBTReadLimiter;
-import net.minecraft.server.v1_11_R1.NBTTagCompound;
+import net.minecraft.server.v1_12_R1.MojangsonParseException;
+import net.minecraft.server.v1_12_R1.MojangsonParser;
+import net.minecraft.server.v1_12_R1.NBTCompressedStreamTools;
+import net.minecraft.server.v1_12_R1.NBTReadLimiter;
+import net.minecraft.server.v1_12_R1.NBTTagCompound;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 
