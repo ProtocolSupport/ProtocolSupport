@@ -41,6 +41,7 @@ public class DataWatcherObjectIndex {
 
 	public static final class Tameable {
 		public static final int TAME_FLAGS = 13;
+		public static final int OWNER = 14;
 	}
 
 	public static final class ArmorStand {
@@ -193,6 +194,10 @@ public class DataWatcherObjectIndex {
 
 	public static final class Vex {
 		public static final int FLAGS = 12;
+	}
+
+	public static final class Parrot {
+		public static final int VARIANT = 15;
 	}
 
 	public static final class Boat {

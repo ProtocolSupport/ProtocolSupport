@@ -69,7 +69,9 @@ public enum NetworkEntityType {
 	ELDER_GUARDIAN(EType.MOB, EntityType.ELDER_GUARDIAN, GUARDIAN),
 	VINDICATOR(EType.MOB, EntityType.VINDICATOR, INSENTIENT),
 	EVOKER(EType.MOB, EntityType.EVOKER, INSENTIENT),
+	ILLUSIONER(EType.MOB, EntityType.ILLUSIONER, EVOKER),
 	VEX(EType.MOB, EntityType.VEX, INSENTIENT),
+	PARROT(EType.MOB, EntityType.PARROT, TAMEABLE),
 	ARMOR_STAND_MOB(EType.MOB, EntityType.ARMOR_STAND, ARMOR_STAND),
 	// Objects (Different networking values)
 	BOAT(EType.OBJECT, 1, ENTITY),

@@ -369,8 +369,12 @@ public enum SpecificRemapper {
 	EVOKER(NetworkEntityType.EVOKER, SpecificRemapper.INSENTIENT,
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Evoker.SPELL, 12) {}, ProtocolVersionsHelper.RANGE__1_11__1_12)
 	),
+	ILLUSIONER(NetworkEntityType.ILLUSIONER, SpecificRemapper.EVOKER),
 	VEX(NetworkEntityType.VEX, SpecificRemapper.INSENTIENT,
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Vex.FLAGS, 12) {}, ProtocolVersionsHelper.RANGE__1_11__1_12)
+	),
+	PARROT(NetworkEntityType.PARROT, SpecificRemapper.TAMEABLE,
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Parrot.VARIANT, 15) {}, ProtocolVersion.MINECRAFT_1_12)
 	),
 	ARMOR_STAND_MOB(NetworkEntityType.ARMOR_STAND_MOB, SpecificRemapper.ARMOR_STAND),
 	BOAT(NetworkEntityType.BOAT,
