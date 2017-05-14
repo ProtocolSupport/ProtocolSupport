@@ -2,6 +2,7 @@ package protocolsupport.protocol.typeremapper.watchedentity.remapper.value;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.text.MessageFormat;
 
 import gnu.trove.map.TIntObjectMap;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherDataRemapper;
@@ -23,9 +24,19 @@ public abstract class WatchedDataIndexValueRemapper<T extends DataWatcherObject<
 		ParameterizedType ptype = (ParameterizedType) this.getClass().getGenericSuperclass();
 		Type type = ptype.getActualTypeArguments()[0];
 		try {
-			return (Class<T>) Class.forName(type.getTypeName());
+			return (Class<T>) Class.forName(getTypeName(type));
 		} catch (ClassNotFoundException e) {
 			throw new RuntimeException("Unable to get generic type", e);
+		}
+	}
+
+	private static String getTypeName(Type type) {
+		if (type instanceof Class) {
+			return ((Class<?>) type).getName();
+		} else if (type instanceof ParameterizedType) {
+			return getTypeName(((ParameterizedType) type).getRawType());
+		} else {
+			throw new IllegalArgumentException(MessageFormat.format("Cant extract generic type from {0}:{1}", type.getClass().getName(), type));
 		}
 	}
 
