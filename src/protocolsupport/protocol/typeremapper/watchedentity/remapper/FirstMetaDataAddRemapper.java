@@ -4,11 +4,11 @@ import gnu.trove.map.TIntObjectMap;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 
-public class DataWatchedFirstMetaDataAddRemapper extends DataWatcherDataRemapper {
+public class FirstMetaDataAddRemapper extends DataWatcherDataRemapper {
 
 	private final int index;
 	private final DataWatcherObject<?> object;
-	public DataWatchedFirstMetaDataAddRemapper(int index, DataWatcherObject<?> object) {
+	public FirstMetaDataAddRemapper(int index, DataWatcherObject<?> object) {
 		this.index = index;
 		this.object = object;
 	}

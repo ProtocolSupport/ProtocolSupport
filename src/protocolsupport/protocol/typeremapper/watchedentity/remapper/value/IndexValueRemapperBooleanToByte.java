@@ -4,9 +4,9 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
 
-public final class ValueRemapperBooleanToByte extends WatchedDataIndexValueRemapper<DataWatcherObjectBoolean> {
+public final class IndexValueRemapperBooleanToByte extends IndexValueRemapper<DataWatcherObjectBoolean> {
 
-	public ValueRemapperBooleanToByte(int fromIndex, int toIndex) {
+	public IndexValueRemapperBooleanToByte(int fromIndex, int toIndex) {
 		super(fromIndex, toIndex);
 	}
 

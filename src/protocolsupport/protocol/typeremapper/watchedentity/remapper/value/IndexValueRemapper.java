@@ -9,11 +9,11 @@ import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherD
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 
-public abstract class WatchedDataIndexValueRemapper<T extends DataWatcherObject<?>> extends DataWatcherDataRemapper {
+public abstract class IndexValueRemapper<T extends DataWatcherObject<?>> extends DataWatcherDataRemapper {
 
 	private final int fromIndex;
 	private final int toIndex;
-	public WatchedDataIndexValueRemapper(int fromIndex, int toIndex) {
+	public IndexValueRemapper(int fromIndex, int toIndex) {
 		this.fromIndex = fromIndex;
 		this.toIndex = toIndex;
 	}
@@ -40,10 +40,9 @@ public abstract class WatchedDataIndexValueRemapper<T extends DataWatcherObject<
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void remap(NetworkEntity entity, TIntObjectMap<DataWatcherObject<?>> original, TIntObjectMap<DataWatcherObject<?>> remapped) {
-		getObject(original, fromIndex, typeClass).ifPresent(o -> remapped.put(toIndex, remapValue((T) o.getValue())));
+		getObject(original, fromIndex, typeClass).ifPresent(o -> remapped.put(toIndex, remapValue(o)));
 	}
 
 	public abstract DataWatcherObject<?> remapValue(T object);

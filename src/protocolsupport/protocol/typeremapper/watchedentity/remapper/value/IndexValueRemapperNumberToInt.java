@@ -3,9 +3,9 @@ package protocolsupport.protocol.typeremapper.watchedentity.remapper.value;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectInt;
 
-public final class ValueRemapperNumberToInt extends WatchedDataIndexValueRemapper<DataWatcherObject<?>> {
+public final class IndexValueRemapperNumberToInt extends IndexValueRemapper<DataWatcherObject<?>> {
 
-	public ValueRemapperNumberToInt(int fromIndex, int toIndex) {
+	public IndexValueRemapperNumberToInt(int fromIndex, int toIndex) {
 		super(fromIndex, toIndex);
 	}
 
