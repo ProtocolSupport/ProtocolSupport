@@ -19,7 +19,7 @@ public class Compressor {
 
 	private static final Recycler<Compressor> recycler = new Recycler<Compressor>() {
 		@Override
-		protected Compressor newObject(Handle handle) {
+		protected Compressor newObject(Handle<Compressor> handle) {
 			return new Compressor(handle);
 		}
 	};
@@ -29,8 +29,8 @@ public class Compressor {
 	}
 
 	private final Deflater deflater = new Deflater(compressionLevel);
-	private final Handle handle;
-	protected Compressor(Handle handle) {
+	private final Handle<Compressor> handle;
+	protected Compressor(Handle<Compressor> handle) {
 		this.handle = handle;
 	}
 
@@ -44,7 +44,7 @@ public class Compressor {
 	}
 
 	public void recycle() {
-		recycler.recycle(this, handle);
+		handle.recycle(this);
 	}
 
 	public static byte[] compressStatic(byte[] input) {

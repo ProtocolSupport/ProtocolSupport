@@ -3,25 +3,29 @@ package protocolsupport.utils.recyclable;
 import java.util.ArrayList;
 
 import io.netty.util.Recycler;
+import io.netty.util.Recycler.Handle;
 
 public class RecyclableArrayList<E> extends ArrayList<E> implements RecyclableCollection<E> {
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("rawtypes")
-	private static final Recycler<RecyclableArrayList> RECYCLER = new Recycler<RecyclableArrayList>() {
+	private static final Recycler<RecyclableArrayList> recycler = new Recycler<RecyclableArrayList>() {
+		@SuppressWarnings("unchecked")
 		@Override
-		protected RecyclableArrayList newObject(Recycler.Handle handle) {
+		protected RecyclableArrayList newObject(Handle<RecyclableArrayList> handle) {
 			return new RecyclableArrayList(handle);
 		}
 	};
 
 	@SuppressWarnings("unchecked")
 	public static <T> RecyclableArrayList<T> create() {
-		return RECYCLER.get();
+		return recycler.get();
 	}
 
-	private final Recycler.Handle handle;
-	private RecyclableArrayList(Recycler.Handle handle) {
+	@SuppressWarnings("rawtypes")
+	private final Handle<RecyclableArrayList> handle;
+	@SuppressWarnings("rawtypes")
+	private RecyclableArrayList(Handle<RecyclableArrayList> handle) {
 		this.handle = handle;
 	}
 
@@ -38,7 +42,7 @@ public class RecyclableArrayList<E> extends ArrayList<E> implements RecyclableCo
 	@Override
 	public void recycleObjectOnly() {
 		clear();
-		RECYCLER.recycle(this, handle);
+		handle.recycle(this);
 	}
 
 }
