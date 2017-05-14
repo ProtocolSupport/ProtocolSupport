@@ -12,8 +12,6 @@ import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.lwjgl.system.CallbackI.V;
-
 public class CollectionsUtils {
 
 	public static <K, V extends Enum<V>> Map<K, V> makeEnumMappingMap(Class<V> e, Function<V, K> mapping) {

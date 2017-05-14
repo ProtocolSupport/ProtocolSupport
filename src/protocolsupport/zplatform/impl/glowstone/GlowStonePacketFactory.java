@@ -403,7 +403,7 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 
     @Override
     public int getOutPlayEntityPacketId() {
-        return 0x28; // not implemented in Glowstone
+        return 0x29; // not implemented in Glowstone
     }
 
     @Override
@@ -488,7 +488,7 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 
     @Override
     public int getOutPlayBlockBreakAnimationPacketId() {
-        return 0x08; // not implemented in Glowstone
+        return 0x09; // not implemented in Glowstone
     }
 
     @Override
