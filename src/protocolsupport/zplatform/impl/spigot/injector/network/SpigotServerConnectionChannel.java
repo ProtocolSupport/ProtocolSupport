@@ -1,7 +1,6 @@
 package protocolsupport.zplatform.impl.spigot.injector.network;
 
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.common.LogicHandler;
@@ -10,6 +9,7 @@ import protocolsupport.protocol.pipeline.timeout.SimpleReadTimeoutHandler;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.Utils.Converter;
+import protocolsupport.utils.netty.ChannelInitializer;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.impl.spigot.SpigotConnectionImpl;
 import protocolsupport.zplatform.impl.spigot.network.SpigotChannelHandlers;
@@ -20,7 +20,7 @@ import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedPrepe
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedSplitter;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
-public class SpigotServerConnectionChannel extends ChannelInitializer<Channel> {
+public class SpigotServerConnectionChannel extends ChannelInitializer {
 
 	private static final boolean replaceDecoderEncoder = Utils.getJavaPropertyValue("replaceencoderdecoder", false, Converter.STRING_TO_BOOLEAN);
 
