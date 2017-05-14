@@ -2,18 +2,17 @@ package protocolsupport.protocol.typeremapper.watchedentity.remapper.value;
 
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectNumber;
 
-public class ValueRemapperNumberToByte extends ValueRemapper<DataWatcherObject<?>> {
+public final class ValueRemapperNumberToByte extends WatchedDataIndexValueRemapper<DataWatcherObjectNumber<?>> {
 
-	public static final ValueRemapperNumberToByte INSTANCE = new ValueRemapperNumberToByte();
-
-	protected ValueRemapperNumberToByte() {
+	public ValueRemapperNumberToByte(int fromIndex, int toIndex) {
+		super(fromIndex, toIndex);
 	}
 
 	@Override
-	public DataWatcherObject<?> remap(DataWatcherObject<?> object) {
-		Number number = (Number) object.getValue();
-		return new DataWatcherObjectByte(number.byteValue());
+	public DataWatcherObject<?> remapValue(DataWatcherObjectNumber<?> object) {
+		return new DataWatcherObjectByte(object.getValue().byteValue());
 	}
 
 }

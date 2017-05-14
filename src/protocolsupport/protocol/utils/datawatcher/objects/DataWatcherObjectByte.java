@@ -2,9 +2,8 @@ package protocolsupport.protocol.utils.datawatcher.objects;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 
-public class DataWatcherObjectByte extends DataWatcherObject<Byte> {
+public class DataWatcherObjectByte extends DataWatcherObjectNumber<Byte> {
 
 	public DataWatcherObjectByte() {
 	}

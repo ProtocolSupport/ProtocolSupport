@@ -4,15 +4,14 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
 
-public class ValueRemapperBooleanToByte extends ValueRemapper<DataWatcherObjectBoolean> {
+public final class ValueRemapperBooleanToByte extends WatchedDataIndexValueRemapper<DataWatcherObjectBoolean> {
 
-	public static final ValueRemapperBooleanToByte INSTANCE = new ValueRemapperBooleanToByte();
-
-	protected ValueRemapperBooleanToByte() {
+	public ValueRemapperBooleanToByte(int fromIndex, int toIndex) {
+		super(fromIndex, toIndex);
 	}
 
 	@Override
-	public DataWatcherObject<?> remap(DataWatcherObjectBoolean object) {
+	public DataWatcherObject<?> remapValue(DataWatcherObjectBoolean object) {
 		return new DataWatcherObjectByte((byte) (object.getValue() ? 1 : 0));
 	}
 

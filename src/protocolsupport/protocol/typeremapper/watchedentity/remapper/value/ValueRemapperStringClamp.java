@@ -4,15 +4,16 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
 import protocolsupport.utils.Utils;
 
-public class ValueRemapperStringClamp extends ValueRemapper<DataWatcherObjectString> {
+public final class ValueRemapperStringClamp extends WatchedDataIndexValueRemapper<DataWatcherObjectString> {
 
 	private final int limit;
-	public ValueRemapperStringClamp(int limit) {
+	public ValueRemapperStringClamp(int fromIndex, int toIndex, int limit) {
+		super(fromIndex, toIndex);
 		this.limit = limit;
 	}
 
 	@Override
-	public DataWatcherObject<?> remap(DataWatcherObjectString object) {
+	public DataWatcherObject<?> remapValue(DataWatcherObjectString object) {
 		return new DataWatcherObjectString(Utils.clampString(object.getValue(), limit));
 	}
 

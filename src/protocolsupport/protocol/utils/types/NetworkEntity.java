@@ -55,6 +55,7 @@ public class NetworkEntity {
 	}
 
 	public static class DataCache {
+		public boolean firstMeta = true;
 		public byte baseMetaFlags;
 	}
 

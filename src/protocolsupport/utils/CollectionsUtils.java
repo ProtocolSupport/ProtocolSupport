@@ -4,6 +4,7 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -11,10 +12,20 @@ import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.lwjgl.system.CallbackI.V;
+
 public class CollectionsUtils {
 
 	public static <K, V extends Enum<V>> Map<K, V> makeEnumMappingMap(Class<V> e, Function<V, K> mapping) {
 		HashMap<K, V> map = new HashMap<>();
+		for (V v : e.getEnumConstants()) {
+			map.put(mapping.apply(v), v);
+		}
+		return map;
+	}
+
+	public static <K extends Enum<K>, V extends Enum<V>> EnumMap<K, V> makeEnumMappingEnumMap(Class<V> e, Class<K> k, Function<V, K> mapping) {
+		EnumMap<K, V> map = new EnumMap<>(k);
 		for (V v : e.getEnumConstants()) {
 			map.put(mapping.apply(v), v);
 		}

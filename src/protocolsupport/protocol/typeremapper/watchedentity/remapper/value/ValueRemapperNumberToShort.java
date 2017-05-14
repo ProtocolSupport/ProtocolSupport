@@ -1,19 +1,18 @@
 package protocolsupport.protocol.typeremapper.watchedentity.remapper.value;
 
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectNumber;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectShort;
 
-public class ValueRemapperNumberToShort extends ValueRemapper<DataWatcherObject<?>> {
+public final class ValueRemapperNumberToShort extends WatchedDataIndexValueRemapper<DataWatcherObjectNumber<?>> {
 
-	public static final ValueRemapperNumberToShort INSTANCE = new ValueRemapperNumberToShort();
-
-	protected ValueRemapperNumberToShort() {
+	public ValueRemapperNumberToShort(int fromIndex, int toIndex) {
+		super(fromIndex, toIndex);
 	}
 
 	@Override
-	public DataWatcherObject<?> remap(DataWatcherObject<?> object) {
-		Number number = (Number) object.getValue();
-		return new DataWatcherObjectShort(number.shortValue());
+	public DataWatcherObject<?> remapValue(DataWatcherObjectNumber<?> object) {
+		return new DataWatcherObjectShort(object.getValue().shortValue());
 	}
 
 
