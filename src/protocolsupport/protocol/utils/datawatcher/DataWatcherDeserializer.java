@@ -17,6 +17,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectChat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectDirection;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectItemStack;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectNBTTagCompound;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalUUID;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectPosition;
@@ -43,6 +44,7 @@ public class DataWatcherDeserializer {
 			register(DataWatcherObjectDirection.class);
 			register(DataWatcherObjectOptionalUUID.class);
 			register(DataWatcherObjectBlockState.class);
+			register(DataWatcherObjectNBTTagCompound.class);
 		} catch (Exception e) {
 			throw new RuntimeException("Exception in datawatcher init", e);
 		}
