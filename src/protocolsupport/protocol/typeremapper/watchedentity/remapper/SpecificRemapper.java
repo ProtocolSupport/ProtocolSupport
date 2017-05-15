@@ -35,7 +35,7 @@ import protocolsupport.utils.ProtocolVersionsHelper;
 
 public enum SpecificRemapper {
 
-	//TODO: add new entities entries, add type adder for horse, skeleton, minecart
+	//TODO: add type adder for horse
 	NONE(NetworkEntityType.NONE),
 	ENTITY(NetworkEntityType.ENTITY,
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Entity.FLAGS, 0) {}, ProtocolVersionsHelper.ALL),
@@ -44,7 +44,7 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectString>(DataWatcherObjectIndex.Entity.NAMETAG, 2) {}, ProtocolVersionsHelper.RANGE__1_9__1_12),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Entity.NAMETAG_VISIBLE, 3) {}, ProtocolVersionsHelper.RANGE__1_9__1_12),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Entity.SILENT, 4) {}, ProtocolVersionsHelper.RANGE__1_9__1_12),
-		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Entity.NO_GRAVITY, 5) {}, ProtocolVersionsHelper.RANGE__1_9__1_12)
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Entity.NO_GRAVITY, 5) {}, ProtocolVersionsHelper.RANGE__1_10__1_12)
 	),
 	LIVING(NetworkEntityType.LIVING, SpecificRemapper.ENTITY,
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectString>(DataWatcherObjectIndex.Entity.NAMETAG, 2) {}, ProtocolVersion.MINECRAFT_1_8),
@@ -331,8 +331,14 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.BaseSkeleton.ATTACKING, 12) {}, ProtocolVersionsHelper.ALL_1_9)
 	),
 	SKELETON(NetworkEntityType.SKELETON, SpecificRemapper.BASE_SKELETON),
-	WITHER_SKELETON(NetworkEntityType.WITHER_SKELETON, SpecificRemapper.BASE_SKELETON),
-	STRAY(NetworkEntityType.STRAY, SpecificRemapper.BASE_SKELETON),
+	WITHER_SKELETON(NetworkEntityType.WITHER_SKELETON, SpecificRemapper.BASE_SKELETON,
+		new Entry(new FirstMetaDataAddRemapper(12, new DataWatcherObjectVarInt(1)), ProtocolVersion.MINECRAFT_1_10),
+		new Entry(new FirstMetaDataAddRemapper(11, new DataWatcherObjectVarInt(1)), ProtocolVersionsHelper.ALL_1_9),
+		new Entry(new FirstMetaDataAddRemapper(13, new DataWatcherObjectByte((byte) 1)), ProtocolVersionsHelper.BEFORE_1_9)
+	),
+	STRAY(NetworkEntityType.STRAY, SpecificRemapper.BASE_SKELETON,
+		new Entry(new FirstMetaDataAddRemapper(12, new DataWatcherObjectVarInt(2)), ProtocolVersion.MINECRAFT_1_10)
+	),
 	WITCH(NetworkEntityType.WITCH, SpecificRemapper.INSENTIENT,
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Witch.AGGRESSIVE, 12) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Witch.AGGRESSIVE, 11) {}, ProtocolVersionsHelper.ALL_1_9),

@@ -6,6 +6,13 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class DataWatcherObjectVarInt extends DataWatcherObjectNumber<Integer> {
 
+	public DataWatcherObjectVarInt() {
+	}
+
+	public DataWatcherObjectVarInt(int value) {
+		this.value = value;
+	}
+
 	@Override
 	public void readFromStream(ByteBuf from, ProtocolVersion version) {
 		value = VarNumberSerializer.readVarInt(from);
