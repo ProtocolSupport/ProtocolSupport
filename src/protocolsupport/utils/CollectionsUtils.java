@@ -52,7 +52,7 @@ public class CollectionsUtils {
 			int minKey = entries.stream().min(Comparator.comparingInt(e -> e.key)).get().key;
 			int maxKey = entries.stream().max(Comparator.comparingInt(e -> e.key)).get().key;
 			this.offset = -minKey;
-			this.array = new Object[maxKey - minKey + 1];
+			this.array = new Object[(maxKey - minKey) + 1];
 			entries.stream().forEach(entry -> put(entry.key, entry.value));
 		}
 

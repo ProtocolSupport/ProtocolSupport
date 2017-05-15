@@ -150,7 +150,7 @@ public class DataWatcherObjectIndex {
 	}
 
 	public static final class Slime {
-		public static final int SIZE = 12; 
+		public static final int SIZE = 12;
 	}
 
 	public static final class BaseSkeleton {

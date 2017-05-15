@@ -502,7 +502,7 @@ public enum SpecificRemapper {
 	),
 	ARROW(NetworkEntityType.ARROW, SpecificRemapper.ENTITY,
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Arrow.CIRTICAL, 6) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
-		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Arrow.CIRTICAL, 5) {}, ProtocolVersionsHelper.ALL_1_9),	
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Arrow.CIRTICAL, 5) {}, ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Arrow.CIRTICAL, 15) {}, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	SPECTRAL_ARROW(NetworkEntityType.SPECTRAL_ARROW, SpecificRemapper.ARROW),
@@ -512,7 +512,7 @@ public enum SpecificRemapper {
 	),
 	FIREWORK(NetworkEntityType.FIREWORK, SpecificRemapper.ENTITY,
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectItemStack>(DataWatcherObjectIndex.Firework.ITEM, 6) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
-		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectItemStack>(DataWatcherObjectIndex.Firework.ITEM, 5) {}, ProtocolVersionsHelper.ALL_1_9),	
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectItemStack>(DataWatcherObjectIndex.Firework.ITEM, 5) {}, ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectItemStack>(DataWatcherObjectIndex.Firework.ITEM, 8) {}, ProtocolVersionsHelper.BEFORE_1_9),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Firework.USER, 7) {}, ProtocolVersionsHelper.RANGE__1_11_1__1_12)
 	),
