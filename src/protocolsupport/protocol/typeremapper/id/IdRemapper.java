@@ -177,6 +177,9 @@ public class IdRemapper {
 			}
 		}
 		{
+			new Mapping(NetworkEntityType.ILLUSIONER)
+			.addMapping(NetworkEntityType.WITCH, ProtocolVersionsHelper.BEFORE_1_12)
+			.register();
 			new Mapping(NetworkEntityType.VINDICATOR)
 			.addMapping(NetworkEntityType.WITCH, ProtocolVersionsHelper.BEFORE_1_11)
 			.register();
