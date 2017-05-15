@@ -6,6 +6,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+import gnu.trove.map.TIntObjectMap;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapperBooleanToByte;
@@ -27,6 +28,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptio
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectShort;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
+import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.CollectionsUtils;
 import protocolsupport.utils.ProtocolVersionsHelper;
@@ -86,7 +88,33 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Player.MAIN_HAND, 14) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Player.MAIN_HAND, 13) {}, ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectNBTTagCompound>(DataWatcherObjectIndex.Player.LEFT_SHOULDER_ENTITY, 15) {}, ProtocolVersion.MINECRAFT_1_12),
-		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectNBTTagCompound>(DataWatcherObjectIndex.Player.RIGHT_SHOULDER_ENTITY, 16) {}, ProtocolVersion.MINECRAFT_1_12)		
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectNBTTagCompound>(DataWatcherObjectIndex.Player.RIGHT_SHOULDER_ENTITY, 16) {}, ProtocolVersion.MINECRAFT_1_12),
+		new Entry(new DataWatcherDataRemapper() {
+			@Override
+			public void remap(NetworkEntity entity, TIntObjectMap<DataWatcherObject<?>> original, TIntObjectMap<DataWatcherObject<?>> remapped) {
+				getObject(original, DataWatcherObjectIndex.Entity.FLAGS, DataWatcherObjectByte.class)
+				.ifPresent(baseflags -> entity.getDataCache().baseMetaFlags = baseflags.getValue());
+				getObject(original, DataWatcherObjectIndex.EntityLiving.HAND_USE, DataWatcherObjectByte.class)
+				.ifPresent(activehandflags -> {
+					byte activehandvalue = activehandflags.getValue();
+					byte basevalue = entity.getDataCache().baseMetaFlags;
+					switch (activehandvalue) {
+						case 1: {
+							basevalue |= (1 << 4);
+							break;
+						}
+						case 0: {
+							basevalue &= ~(1 << 4);
+							break;
+						}
+						default: {
+							break;
+						}
+					}
+					remapped.put(0, new DataWatcherObjectByte(basevalue));
+				});
+			}
+		}, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	AGEABLE(NetworkEntityType.AGEABLE, SpecificRemapper.INSENTIENT,
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Ageable.AGE, 12) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
