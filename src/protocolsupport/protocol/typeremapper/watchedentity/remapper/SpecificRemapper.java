@@ -35,7 +35,6 @@ import protocolsupport.utils.ProtocolVersionsHelper;
 
 public enum SpecificRemapper {
 
-	//TODO: add type adder for horse
 	NONE(NetworkEntityType.NONE),
 	ENTITY(NetworkEntityType.ENTITY,
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Entity.FLAGS, 0) {}, ProtocolVersionsHelper.ALL),
@@ -176,10 +175,26 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.CargoHorse.HAS_CHEST, 15) {}, ProtocolVersionsHelper.RANGE__1_11__1_12)
 	),
 	COMMON_HORSE(NetworkEntityType.COMMON_HORSE, SpecificRemapper.BATTLE_HORSE),
-	ZOMBIE_HORSE(NetworkEntityType.ZOMBIE_HORSE, SpecificRemapper.BATTLE_HORSE),
-	SKELETON_HORSE(NetworkEntityType.SKELETON_HORSE, SpecificRemapper.BATTLE_HORSE),
-	DONKEY(NetworkEntityType.DONKEY, SpecificRemapper.CARGO_HORSE),
-	MULE(NetworkEntityType.MULE, SpecificRemapper.CARGO_HORSE),
+	ZOMBIE_HORSE(NetworkEntityType.ZOMBIE_HORSE, SpecificRemapper.BATTLE_HORSE,
+		new Entry(new FirstMetaDataAddRemapper(14, new DataWatcherObjectVarInt(3)), ProtocolVersion.MINECRAFT_1_10),
+		new Entry(new FirstMetaDataAddRemapper(13, new DataWatcherObjectVarInt(3)), ProtocolVersionsHelper.ALL_1_9),
+		new Entry(new FirstMetaDataAddRemapper(19, new DataWatcherObjectByte((byte) 3)), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_6_1, ProtocolVersion.MINECRAFT_1_8))
+	),
+	SKELETON_HORSE(NetworkEntityType.SKELETON_HORSE, SpecificRemapper.BATTLE_HORSE,
+		new Entry(new FirstMetaDataAddRemapper(14, new DataWatcherObjectVarInt(4)), ProtocolVersion.MINECRAFT_1_10),
+		new Entry(new FirstMetaDataAddRemapper(13, new DataWatcherObjectVarInt(4)), ProtocolVersionsHelper.ALL_1_9),
+		new Entry(new FirstMetaDataAddRemapper(19, new DataWatcherObjectByte((byte) 4)), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_6_1, ProtocolVersion.MINECRAFT_1_8))
+	),
+	DONKEY(NetworkEntityType.DONKEY, SpecificRemapper.CARGO_HORSE,
+		new Entry(new FirstMetaDataAddRemapper(14, new DataWatcherObjectVarInt(1)), ProtocolVersion.MINECRAFT_1_10),
+		new Entry(new FirstMetaDataAddRemapper(13, new DataWatcherObjectVarInt(1)), ProtocolVersionsHelper.ALL_1_9),
+		new Entry(new FirstMetaDataAddRemapper(19, new DataWatcherObjectByte((byte) 1)), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_6_1, ProtocolVersion.MINECRAFT_1_8))
+	),
+	MULE(NetworkEntityType.MULE, SpecificRemapper.CARGO_HORSE,
+		new Entry(new FirstMetaDataAddRemapper(14, new DataWatcherObjectVarInt(2)), ProtocolVersion.MINECRAFT_1_10),
+		new Entry(new FirstMetaDataAddRemapper(13, new DataWatcherObjectVarInt(2)), ProtocolVersionsHelper.ALL_1_9),
+		new Entry(new FirstMetaDataAddRemapper(19, new DataWatcherObjectByte((byte) 2)), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_6_1, ProtocolVersion.MINECRAFT_1_8))
+	),
 	LAMA(NetworkEntityType.LAMA, SpecificRemapper.CARGO_HORSE,
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Lama.STRENGTH, 16) {}, ProtocolVersionsHelper.RANGE__1_11__1_12),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Lama.CARPET_COLOR, 17) {}, ProtocolVersionsHelper.RANGE__1_11__1_12),

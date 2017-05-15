@@ -56,6 +56,7 @@ public class DataWatcherObjectIndex {
 
 	public static final class BaseHorse {
 		public static final int FLAGS = 13;
+		public static final int OWNER = 14;
 	}
 
 	public static final class BattleHorse {
