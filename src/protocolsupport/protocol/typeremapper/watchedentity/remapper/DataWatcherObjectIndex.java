@@ -236,8 +236,15 @@ public class DataWatcherObjectIndex {
 		public static final int BLOCK = 9;
 		public static final int BLOCK_Y = 10;
 		public static final int SHOW_BLOCK = 11;
-		public static final int DATA12 = 12;
-		public static final int DATA13 = 13;
+	}
+
+	public static final class MinecartFurnace {
+		public static final int POWERED = 12;
+	}
+
+	public static final class MinecartCommand {
+		public static final int COMMAND = 12;
+		public static final int LAST_OUTPUT = 13;
 	}
 
 	public static final class Arrow {
