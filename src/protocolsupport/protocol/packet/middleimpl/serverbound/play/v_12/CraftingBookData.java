@@ -1,0 +1,25 @@
+package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_12;
+
+import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCraftingBookData;
+
+public class CraftingBookData extends MiddleCraftingBookData {
+
+	@Override
+	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
+		type = clientdata.readInt();
+		switch (type) {
+			case TYPE_DISPLAYED_RECIPE: {
+				recipeId = clientdata.readInt();
+				break;
+			}
+			case TYPE_CRAFTING_BOOK_STATUS: {
+				craftingBookOpen = clientdata.readBoolean();
+				recipeFilterEnabled = clientdata.readBoolean();
+				break;
+			}
+		}
+	}
+
+}

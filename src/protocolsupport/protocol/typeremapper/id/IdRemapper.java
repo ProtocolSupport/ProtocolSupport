@@ -177,6 +177,9 @@ public class IdRemapper {
 			}
 		}
 		{
+			new Mapping(NetworkEntityType.PARROT)
+			.addMapping(NetworkEntityType.OCELOT, ProtocolVersionsHelper.BEFORE_1_12)
+			.register();
 			new Mapping(NetworkEntityType.ILLUSIONER)
 			.addMapping(NetworkEntityType.WITCH, ProtocolVersionsHelper.BEFORE_1_12)
 			.register();
@@ -220,9 +223,6 @@ public class IdRemapper {
 			new Mapping(NetworkEntityType.LAMA)
 			.addMapping(NetworkEntityType.COMMON_HORSE, ProtocolVersionsHelper.RANGE__1_6__1_10)
 			.addMapping(NetworkEntityType.COW, ProtocolVersionsHelper.BEFORE_1_6)
-			.register();
-			new Mapping(NetworkEntityType.PARROT)
-			.addMapping(NetworkEntityType.BAT, ProtocolVersionsHelper.BEFORE_1_12)
 			.register();
 			new Mapping(NetworkEntityType.WITHER_SKELETON)
 			.addMapping(NetworkEntityType.SKELETON, ProtocolVersionsHelper.BEFORE_1_11)

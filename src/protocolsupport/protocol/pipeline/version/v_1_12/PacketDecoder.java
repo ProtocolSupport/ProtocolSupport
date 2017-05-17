@@ -6,6 +6,8 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.login.v_4_5_6_7_8_
 import protocolsupport.protocol.packet.middleimpl.serverbound.login.v_7_8_9r1_9r2_10_11_12.LoginStart;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_10_11_12.ResourcePackStatus;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_11_12.BlockPlace;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_12.CraftingBookData;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_12.CraftingGrid;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12.Chat;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12.CreativeSetSlot;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12.Flying;
@@ -49,6 +51,7 @@ public class PacketDecoder extends AbstractModernWithoutReorderPacketDecoder {
 		registry.register(NetworkState.STATUS, 0x00, ServerInfoRequest.class);
 		registry.register(NetworkState.STATUS, 0x01, Ping.class);
 		registry.register(NetworkState.PLAY, 0x00, TeleportAccept.class);
+		registry.register(NetworkState.PLAY, 0x01, CraftingGrid.class);
 		registry.register(NetworkState.PLAY, 0x02, TabComplete.class);
 		registry.register(NetworkState.PLAY, 0x03, Chat.class);
 		registry.register(NetworkState.PLAY, 0x04, ClientCommand.class);
@@ -70,6 +73,7 @@ public class PacketDecoder extends AbstractModernWithoutReorderPacketDecoder {
 		registry.register(NetworkState.PLAY, 0x14, BlockDig.class);
 		registry.register(NetworkState.PLAY, 0x15, EntityAction.class);
 		registry.register(NetworkState.PLAY, 0x16, SteerVehicle.class);
+		registry.register(NetworkState.PLAY, 0x17, CraftingBookData.class);
 		registry.register(NetworkState.PLAY, 0x18, ResourcePackStatus.class);
 		registry.register(NetworkState.PLAY, 0x19, HeldSlot.class);
 		registry.register(NetworkState.PLAY, 0x1A, CreativeSetSlot.class);

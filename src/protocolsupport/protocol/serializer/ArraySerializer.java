@@ -61,6 +61,15 @@ public class ArraySerializer {
 		return array;
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <T> T[] readShortTArray(ByteBuf from, Class<T> tclass, Function<ByteBuf, T> elementReader) {
+		T[] array = (T[]) Array.newInstance(tclass, from.readShort());
+		for (int i = 0; i < array.length; i++) {
+			array[i] = elementReader.apply(from);
+		}
+		return array;
+	}
+
 	public static int[] readVarIntVarIntArray(ByteBuf from) {
 		int[] array = new int[VarNumberSerializer.readVarInt(from)];
 		for (int i = 0; i < array.length; i++) {
@@ -79,6 +88,13 @@ public class ArraySerializer {
 
 	public static <T> void writeVarIntTArray(ByteBuf to, T[] array, BiConsumer<ByteBuf, T> elementWriter) {
 		VarNumberSerializer.writeVarInt(to, array.length);
+		for (T element : array) {
+			elementWriter.accept(to, element);
+		}
+	}
+
+	public static <T> void writeShortTArray(ByteBuf to, T[] array, BiConsumer<ByteBuf, T> elementWriter) {
+		to.writeShort(array.length);
 		for (T element : array) {
 			elementWriter.accept(to, element);
 		}

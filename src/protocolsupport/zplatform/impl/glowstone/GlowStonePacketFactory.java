@@ -868,6 +868,16 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 		return getOpcode(ProtocolType.PLAY, INBOUND, TeleportConfirmMessage.class);
 	}
 
+	@Override
+	public int getInPlayCraftingBookPacketId() {
+		return 0x17;  // TODO: not implemented in Glowstone
+	}
+
+	@Override
+	public int getInPlayPrepareCraftingGridPacketId() {
+		return 0x01; // TODO: not implemented in Glowstone
+	}
+
 
 	private static final int INBOUND = 0, OUTBOUND = 1;
 

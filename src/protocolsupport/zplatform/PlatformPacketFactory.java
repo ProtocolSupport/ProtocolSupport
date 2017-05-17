@@ -288,4 +288,8 @@ public interface PlatformPacketFactory {
 
 	public int getInPlayTeleportAcceptPacketId();
 
+	public int getInPlayCraftingBookPacketId();
+
+	public int getInPlayPrepareCraftingGridPacketId();
+
 }

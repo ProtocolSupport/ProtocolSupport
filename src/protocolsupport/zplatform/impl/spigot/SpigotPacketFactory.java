@@ -758,6 +758,16 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 		return getInId(PacketPlayInTeleportAccept.class);
 	}
 
+	@Override
+	public int getInPlayCraftingBookPacketId() {
+		return getInId(PacketPlayInRecipeDisplayed.class);
+	}
+
+	@Override
+	public int getInPlayPrepareCraftingGridPacketId() {
+		return getInId(PacketPlayInAutoRecipe.class);
+	}
+
 
 	@SuppressWarnings("unchecked")
 	private static Map<EnumProtocolDirection, BiMap<Integer, Class<? extends Packet<?>>>> getPacketIdMap(Class<?> packetClass) {
