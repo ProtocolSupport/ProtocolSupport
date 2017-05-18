@@ -5,11 +5,8 @@ import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
-import org.bukkit.Achievement;
 import org.bukkit.Bukkit;
-import org.bukkit.Statistic;
 import org.bukkit.craftbukkit.v1_12_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_12_R1.CraftStatistic;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_12_R1.util.CraftIconCache;
 import org.bukkit.inventory.ItemStack;
@@ -136,26 +133,6 @@ public class SpigotMiscUtils implements PlatformUtils {
 	@Override
 	public String getVersionName() {
 		return getServer().getVersion();
-	}
-
-	@Override
-	public Statistic getStatisticByName(String value) {
-		return CraftStatistic.getBukkitStatisticByName(value);
-	}
-
-	@Override
-	public String getStatisticName(Statistic stat) {
-		return CraftStatistic.getNMSStatistic(stat).name;
-	}
-
-	@Override
-	public Achievement getAchievmentByName(String value) {
-		return null;
-	}
-
-	@Override
-	public String getAchievmentName(Achievement achievement) {
-		return "No longer existing achievement: "  + achievement.toString();
 	}
 
 	@Override

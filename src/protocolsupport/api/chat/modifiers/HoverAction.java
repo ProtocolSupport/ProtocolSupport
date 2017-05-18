@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.utils.Any;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -50,13 +51,14 @@ public class HoverAction {
 
 	@Deprecated
 	public HoverAction(Achievement achievment) {
-		this.type = Type.SHOW_ACHIEVEMENT;
-		this.value = ServerPlatform.get().getMiscUtils().getAchievmentName(achievment);
+		this.type = Type.SHOW_TEXT;
+		this.value = ChatAPI.toJSON(new TextComponent("Achievement hover component is no longer supported"));
 	}
 
+	@Deprecated
 	public HoverAction(Statistic stat) {
-		this.type = Type.SHOW_ACHIEVEMENT;
-		this.value = ServerPlatform.get().getMiscUtils().getStatisticName(stat);
+		this.type = Type.SHOW_TEXT;
+		this.value = ChatAPI.toJSON(new TextComponent("Statistic hover component is no longer supported"));
 	}
 
 	public Type getType() {
@@ -84,11 +86,10 @@ public class HoverAction {
 		return new EntityInfo(EntityType.fromName(compound.getString("type")), UUID.fromString(compound.getString("id")), compound.getString("name"));
 	}
 
+	@Deprecated
 	public Any<Achievement, Statistic> getAchievmentOrStat() {
 		validateAction(type, Type.SHOW_ACHIEVEMENT);
-		Achievement achievement = ServerPlatform.get().getMiscUtils().getAchievmentByName(value);
-		Statistic stat = ServerPlatform.get().getMiscUtils().getStatisticByName(value);
-		return new Any<>(achievement, stat);
+		return new Any<>(null, null);
 	}
 
 	static void validateAction(Type current, Type expected) {
@@ -98,7 +99,9 @@ public class HoverAction {
 	}
 
 	public static enum Type {
-		SHOW_TEXT, SHOW_ACHIEVEMENT, SHOW_ITEM, SHOW_ENTITY;
+		SHOW_TEXT, SHOW_ITEM, SHOW_ENTITY,
+		SHOW_ACHIEVEMENT //no longer exist
+		;
 	}
 
 	public static class EntityInfo {
