@@ -13,6 +13,8 @@ public class TabComplete extends MiddleTabComplete {
 		string = StringSerializer.readString(clientdata, version);
 		if (clientdata.readBoolean()) {
 			position = PositionSerializer.readPosition(clientdata);
+		} else {
+			position = null;
 		}
 	}
 

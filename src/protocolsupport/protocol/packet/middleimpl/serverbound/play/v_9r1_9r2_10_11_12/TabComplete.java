@@ -14,6 +14,8 @@ public class TabComplete extends MiddleTabComplete {
 		assumecommand = clientdata.readBoolean();
 		if (clientdata.readBoolean()) {
 			position = PositionSerializer.readPosition(clientdata);
+		} else {
+			position = null;
 		}
 	}
 
