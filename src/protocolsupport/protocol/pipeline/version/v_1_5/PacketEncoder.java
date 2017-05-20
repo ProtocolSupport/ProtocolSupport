@@ -7,6 +7,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.login.noop.NoopSet
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_4_5_6.LoginDisconnect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_4_5_6_7_8_9r1_9r2_10_11_12.EncryptionRequest;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopAdvancements;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopAdvanementProgress;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopBlockOpenSignEditor;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopBossBar;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopCamera;
@@ -251,6 +252,7 @@ public class PacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_ATTRIBUTES_ID, NoopEntitySetAttributes.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UNLOCK_RECIPES, NoopUnlockRecipes.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ADVANCEMENTS, NoopAdvancements.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ADVANCEMENT_PROGRESS, NoopAdvanementProgress.class);
 	}
 
 	public PacketEncoder(Connection connection, NetworkDataCache storage) {

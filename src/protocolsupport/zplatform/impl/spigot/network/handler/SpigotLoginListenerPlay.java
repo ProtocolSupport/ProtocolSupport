@@ -21,6 +21,7 @@ import net.minecraft.server.v1_12_R1.PacketLoginInEncryptionBegin;
 import net.minecraft.server.v1_12_R1.PacketLoginInListener;
 import net.minecraft.server.v1_12_R1.PacketLoginInStart;
 import net.minecraft.server.v1_12_R1.PacketPlayInAbilities;
+import net.minecraft.server.v1_12_R1.PacketPlayInAdvancements;
 import net.minecraft.server.v1_12_R1.PacketPlayInArmAnimation;
 import net.minecraft.server.v1_12_R1.PacketPlayInAutoRecipe;
 import net.minecraft.server.v1_12_R1.PacketPlayInBlockDig;
@@ -250,6 +251,10 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 
 	@Override
 	public void a(PacketPlayInRecipeDisplayed p0) {
+	}
+
+	@Override
+	public void a(PacketPlayInAdvancements arg0) {
 	}
 
 }

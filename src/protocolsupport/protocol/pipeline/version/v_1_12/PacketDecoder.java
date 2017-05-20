@@ -6,6 +6,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.login.v_4_5_6_7_8_
 import protocolsupport.protocol.packet.middleimpl.serverbound.login.v_7_8_9r1_9r2_10_11_12.LoginStart;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_10_11_12.ResourcePackStatus;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_11_12.BlockPlace;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_12.AdvancementTab;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_12.CraftingBookData;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_12.CraftingGrid;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12.Chat;
@@ -63,10 +64,10 @@ public class PacketDecoder extends AbstractModernWithoutReorderPacketDecoder {
 		registry.register(NetworkState.PLAY, 0x0A, CustomPayload.class);
 		registry.register(NetworkState.PLAY, 0x0B, UseEntity.class);
 		registry.register(NetworkState.PLAY, 0x0C, KeepAlive.class);
-		registry.register(NetworkState.PLAY, 0x0D, Position.class);
-		registry.register(NetworkState.PLAY, 0x0E, PositionLook.class);
-		registry.register(NetworkState.PLAY, 0x0F, Look.class);
-		registry.register(NetworkState.PLAY, 0x10, Flying.class);
+		registry.register(NetworkState.PLAY, 0x0D, Flying.class);
+		registry.register(NetworkState.PLAY, 0x0E, Position.class);
+		registry.register(NetworkState.PLAY, 0x0F, PositionLook.class);
+		registry.register(NetworkState.PLAY, 0x10, Look.class);
 		registry.register(NetworkState.PLAY, 0x11, MoveVehicle.class);
 		registry.register(NetworkState.PLAY, 0x12, SteerBoat.class);
 		registry.register(NetworkState.PLAY, 0x13, PlayerAbilities.class);
@@ -75,13 +76,14 @@ public class PacketDecoder extends AbstractModernWithoutReorderPacketDecoder {
 		registry.register(NetworkState.PLAY, 0x16, SteerVehicle.class);
 		registry.register(NetworkState.PLAY, 0x17, CraftingBookData.class);
 		registry.register(NetworkState.PLAY, 0x18, ResourcePackStatus.class);
-		registry.register(NetworkState.PLAY, 0x19, HeldSlot.class);
-		registry.register(NetworkState.PLAY, 0x1A, CreativeSetSlot.class);
-		registry.register(NetworkState.PLAY, 0x1B, UpdateSign.class);
-		registry.register(NetworkState.PLAY, 0x1C, Animation.class);
-		registry.register(NetworkState.PLAY, 0x1D, Spectate.class);
-		registry.register(NetworkState.PLAY, 0x1E, BlockPlace.class);
-		registry.register(NetworkState.PLAY, 0x1F, UseItem.class);
+		registry.register(NetworkState.PLAY, 0x19, AdvancementTab.class);
+		registry.register(NetworkState.PLAY, 0x1A, HeldSlot.class);
+		registry.register(NetworkState.PLAY, 0x1B, CreativeSetSlot.class);
+		registry.register(NetworkState.PLAY, 0x1C, UpdateSign.class);
+		registry.register(NetworkState.PLAY, 0x1D, Animation.class);
+		registry.register(NetworkState.PLAY, 0x1E, Spectate.class);
+		registry.register(NetworkState.PLAY, 0x1F, BlockPlace.class);
+		registry.register(NetworkState.PLAY, 0x20, UseItem.class);
 	}
 
 	public PacketDecoder(Connection connection, NetworkDataCache sharedstorage) {

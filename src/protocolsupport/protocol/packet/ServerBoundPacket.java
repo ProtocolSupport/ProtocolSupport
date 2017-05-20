@@ -40,7 +40,8 @@ public enum ServerBoundPacket {
 	PLAY_RESOURCE_PACK_STATUS(ServerPlatform.get().getPacketFactory().getInPlayResourcePackStatusPacketId()),
 	PLAY_TELEPORT_ACCEPT(ServerPlatform.get().getPacketFactory().getInPlayTeleportAcceptPacketId()),
 	PLAY_CRAFTING_BOOK_DATA(ServerPlatform.get().getPacketFactory().getInPlayCraftingBookPacketId()),
-	PLAY_PREPARE_CRAFTING_GRID(ServerPlatform.get().getPacketFactory().getInPlayPrepareCraftingGridPacketId());
+	PLAY_PREPARE_CRAFTING_GRID(ServerPlatform.get().getPacketFactory().getInPlayPrepareCraftingGridPacketId()),
+	PLAY_ADVANCEMENT_TAB(ServerPlatform.get().getPacketFactory().getInPlayAdvancementTabPacketId());
 
 	private final int id;
 	ServerBoundPacket(int id) {

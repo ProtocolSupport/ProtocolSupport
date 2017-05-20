@@ -573,13 +573,18 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
-	public int getOutPlayUnlockRecipes() {
+	public int getOutPlayUnlockRecipesPacketId() {
 		return getOutId(PacketPlayOutRecipes.class);
 	}
 
 	@Override
-	public int getOutPlayAdvancements() {
+	public int getOutPlayAdvancementsPacketId() {
 		return getOutId(PacketPlayOutAdvancements.class);
+	}
+
+	@Override
+	public int getOutPlayAdvancementProgressPacketId() {
+		return getOutId(PacketPlayOutSelectAdvancementTab.class);
 	}
 
 
@@ -766,6 +771,11 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	@Override
 	public int getInPlayPrepareCraftingGridPacketId() {
 		return getInId(PacketPlayInAutoRecipe.class);
+	}
+
+	@Override
+	public int getInPlayAdvancementTabPacketId() {
+		return getInId(PacketPlayInAdvancements.class);
 	}
 
 

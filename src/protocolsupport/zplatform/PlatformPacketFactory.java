@@ -213,9 +213,11 @@ public interface PlatformPacketFactory {
 
 	public int getOutPlayVehicleMovePacketId();
 
-	public int getOutPlayUnlockRecipes();
+	public int getOutPlayUnlockRecipesPacketId();
 
-	public int getOutPlayAdvancements();
+	public int getOutPlayAdvancementsPacketId();
+
+	public int getOutPlayAdvancementProgressPacketId();
 
 
 	public int getInHandshakeStartPacketId();
@@ -291,5 +293,7 @@ public interface PlatformPacketFactory {
 	public int getInPlayCraftingBookPacketId();
 
 	public int getInPlayPrepareCraftingGridPacketId();
+
+	public int getInPlayAdvancementTabPacketId();
 
 }

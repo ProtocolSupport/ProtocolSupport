@@ -11,6 +11,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_10_11_12.Wo
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_11_12.CollectEffect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_11_12.SpawnLiving;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_11_12.Title;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_12.AdvancementProgress;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_12.Advancements;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_12.UnlockRecipes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12.EntityStatus;
@@ -183,6 +184,7 @@ public class PacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_VEHICLE_MOVE_ID, VehicleMove.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UNLOCK_RECIPES, UnlockRecipes.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ADVANCEMENTS, Advancements.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ADVANCEMENT_PROGRESS, AdvancementProgress.class);
 	}
 
 	public PacketEncoder(Connection connection, NetworkDataCache storage) {

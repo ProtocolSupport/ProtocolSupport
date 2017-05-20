@@ -7,6 +7,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r2_10_11_12.LoginSuccess;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_8_9r1_9r2_10_11_12.SetCompression;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopAdvancements;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopAdvanementProgress;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopUnlockRecipes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_10_11_12.WorldCustomSound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_10_11_12.WorldSound;
@@ -269,6 +270,7 @@ public class PacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_VEHICLE_MOVE_ID, VehicleMove.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UNLOCK_RECIPES, NoopUnlockRecipes.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ADVANCEMENTS, NoopAdvancements.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ADVANCEMENT_PROGRESS, NoopAdvanementProgress.class);
 	}
 
 	public PacketEncoder(Connection connection, NetworkDataCache storage) {
