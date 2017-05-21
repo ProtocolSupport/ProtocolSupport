@@ -13,7 +13,7 @@ public class KeybindComponent extends BaseComponent {
 
 	public String getKeybind() {
 		return keybind;
-	} 
+	}
 
 	@Override
 	public String getValue() {

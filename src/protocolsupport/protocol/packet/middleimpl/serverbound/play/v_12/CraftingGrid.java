@@ -18,7 +18,7 @@ public class CraftingGrid extends MiddleCraftingGrid {
 			return new Entry(ItemStackSerializer.readItemStack(from, version), from.readByte(), from.readByte());
 		};
 		returnEntries = ArraySerializer.readShortTArray(clientdata, Entry.class, elementReader);
-		prepareEntries = ArraySerializer.readShortTArray(clientdata, Entry.class, elementReader); 
+		prepareEntries = ArraySerializer.readShortTArray(clientdata, Entry.class, elementReader);
 	}
 
 }
