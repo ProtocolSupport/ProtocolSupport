@@ -15,7 +15,7 @@ public class Utils {
 	}
 
 	public static <T> T getFromArrayOrNull(T[] array, int index) {
-		if ((index > 0) && (index < array.length)) {
+		if ((index >= 0) && (index < array.length)) {
 			return array[index];
 		} else {
 			return null;
