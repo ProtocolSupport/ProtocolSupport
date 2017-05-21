@@ -19,6 +19,14 @@ public class Utils {
 		}
 	}
 
+	public static <T> T getFromArrayOrNull(T[] array, int index) {
+		if (index > 0 && index < array.length) {
+			return array[index];
+		} else {
+			return null;
+		}
+	}
+
 	public static String exceptionMessage(Object... strings) {
 		StringBuilder msg = new StringBuilder();
 		msg.append(strings[0]).append(System.lineSeparator());

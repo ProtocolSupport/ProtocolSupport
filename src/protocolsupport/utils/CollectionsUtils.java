@@ -63,11 +63,7 @@ public class CollectionsUtils {
 
 		@SuppressWarnings("unchecked")
 		public T get(int key) {
-			int aindex = key + offset;
-			if ((aindex >= array.length) || (aindex < 0)) {
-				return null;
-			}
-			return (T) array[aindex];
+			return (T) Utils.getFromArrayOrNull(array, key + offset);
 		}
 
 		public void put(int key, T value) {

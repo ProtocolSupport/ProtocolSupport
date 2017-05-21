@@ -4,12 +4,15 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleClientCommand;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.utils.Utils;
 
 public class ClientCommand extends MiddleClientCommand {
 
+	private static final Command[] commandsById = new Command[] { Command.REQUEST_RESPAWN, Command.GET_STATS };
+
 	@Override
 	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
-		command = VarNumberSerializer.readVarInt(clientdata);
+		command = Utils.getFromArrayOrNull(commandsById, VarNumberSerializer.readVarInt(clientdata));
 	}
 
 }
