@@ -13,12 +13,12 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6.Custo
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6.KickDisconnect;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6.UseEntity;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7.Animation;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7.BlockDig;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7.BlockPlace;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7.KeepAlive;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7.Position;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7.TabComplete;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7.UpdateSign;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8.BlockDig;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12.Chat;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12.CreativeSetSlot;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12.Flying;

@@ -21,7 +21,6 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8.ClientSet
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8.TabComplete;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8.UseEntity;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2.ResourcePackStatus;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12.BlockDig;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12.CustomPayload;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12.EntityAction;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12.KeepAlive;
@@ -30,6 +29,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_1
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12.Spectate;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12.SteerVehicle;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12.UpdateSign;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_9r1_9r2_10_11_12.BlockDig;
 import protocolsupport.protocol.packet.middleimpl.serverbound.status.v_7_8_9r1_9r2_10_11_12.Ping;
 import protocolsupport.protocol.packet.middleimpl.serverbound.status.v_7_8_9r1_9r2_10_11_12.ServerInfoRequest;
 import protocolsupport.protocol.pipeline.version.AbstractModernWithReorderPacketDecoder;
