@@ -8,7 +8,6 @@ import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
-import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBlockState;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;
@@ -24,6 +23,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectPosit
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3f;
+import protocolsupport.utils.ProtocolVersionsHelper;
 
 public class DataWatcherDeserializer {
 
@@ -52,7 +52,7 @@ public class DataWatcherDeserializer {
 
 	private static void register(Class<? extends DataWatcherObject<?>> clazz) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		Constructor<? extends DataWatcherObject<?>> constr = clazz.getConstructor();
-		registry[DataWatcherObjectIdRegistry.getTypeId(clazz, ProtocolVersion.getLatest(ProtocolType.PC))] = constr;
+		registry[DataWatcherObjectIdRegistry.getTypeId(clazz, ProtocolVersionsHelper.LATEST_PC)] = constr;
 	}
 
 	public static TIntObjectMap<DataWatcherObject<?>> decodeData(ByteBuf from, ProtocolVersion version) {

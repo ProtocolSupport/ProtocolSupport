@@ -4,11 +4,10 @@ import java.util.LinkedHashMap;
 import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolType;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleEntitySetAttributes extends MiddleEntity {
 
@@ -21,7 +20,7 @@ public abstract class MiddleEntitySetAttributes extends MiddleEntity {
 		int attributesCount = serverdata.readInt();
 		for (int i = 0; i < attributesCount; i++) {
 			Attribute attribute = new Attribute();
-			attribute.key = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(ProtocolType.PC), 64);
+			attribute.key = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC, 64);
 			attribute.value = serverdata.readDouble();
 			attribute.modifiers = new Modifier[VarNumberSerializer.readVarInt(serverdata)];
 			for (int j = 0; j < attribute.modifiers.length; j++) {

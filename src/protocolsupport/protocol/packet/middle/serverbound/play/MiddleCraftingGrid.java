@@ -3,16 +3,16 @@ package protocolsupport.protocol.packet.middle.serverbound.play;
 import java.util.function.BiConsumer;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolType;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+
 
 public abstract class MiddleCraftingGrid extends ServerBoundMiddlePacket {
 
@@ -22,7 +22,7 @@ public abstract class MiddleCraftingGrid extends ServerBoundMiddlePacket {
 	protected Entry[] prepareEntries;
 
 	private static final BiConsumer<ByteBuf, Entry> entryWriter = (to, entry) -> {
-		ItemStackSerializer.writeItemStack(to, ProtocolVersion.getLatest(ProtocolType.PC), entry.itemstack, false);
+		ItemStackSerializer.writeItemStack(to, ProtocolVersionsHelper.LATEST_PC, entry.itemstack, false);
 		to.writeByte(entry.craftSlot);
 		to.writeByte(entry.playerSlot);
 	};

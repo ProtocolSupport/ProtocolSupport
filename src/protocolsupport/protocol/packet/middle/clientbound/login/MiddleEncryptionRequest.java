@@ -1,11 +1,10 @@
 package protocolsupport.protocol.packet.middle.clientbound.login;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolType;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleEncryptionRequest extends ClientBoundMiddlePacket {
 
@@ -15,9 +14,9 @@ public abstract class MiddleEncryptionRequest extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		serverId = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(ProtocolType.PC));
-		publicKey = ArraySerializer.readByteArray(serverdata, ProtocolVersion.getLatest(ProtocolType.PC));
-		verifyToken = ArraySerializer.readByteArray(serverdata, ProtocolVersion.getLatest(ProtocolType.PC));
+		serverId = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
+		publicKey = ArraySerializer.readByteArray(serverdata, ProtocolVersionsHelper.LATEST_PC);
+		verifyToken = ArraySerializer.readByteArray(serverdata, ProtocolVersionsHelper.LATEST_PC);
 	}
 
 }

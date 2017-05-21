@@ -6,8 +6,6 @@ import java.util.UUID;
 
 import gnu.trove.map.TIntObjectMap;
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolType;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
@@ -16,6 +14,7 @@ import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 
@@ -39,7 +38,7 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 		z = serverdata.readDouble();
 		yaw = serverdata.readUnsignedByte();
 		pitch = serverdata.readUnsignedByte();
-		metadata = DataWatcherDeserializer.decodeData(serverdata, ProtocolVersion.getLatest(ProtocolType.PC));
+		metadata = DataWatcherDeserializer.decodeData(serverdata, ProtocolVersionsHelper.LATEST_PC);
 	}
 
 	@Override

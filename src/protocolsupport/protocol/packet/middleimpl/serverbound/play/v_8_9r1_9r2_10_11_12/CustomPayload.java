@@ -5,13 +5,13 @@ import org.bukkit.Material;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.DecoderException;
-import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.utils.ProtocolVersionsHelper;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -37,7 +37,7 @@ public class CustomPayload extends MiddleCustomPayload {
 			if ((version == ProtocolVersion.MINECRAFT_1_8) && tag.equals("MC|BSign")) {
 				remapBookPages(book);
 			}
-			ItemStackSerializer.writeItemStack(newdata, ProtocolVersion.getLatest(ProtocolType.PC), book, false);
+			ItemStackSerializer.writeItemStack(newdata, ProtocolVersionsHelper.LATEST_PC, book, false);
 			data = MiscSerializer.readAllBytes(newdata);
 		} else {
 			data = MiscSerializer.readAllBytes(clientdata);

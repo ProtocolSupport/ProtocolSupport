@@ -1,12 +1,11 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolType;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.utils.ProtocolVersionsHelper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public abstract class MiddleChunk extends ClientBoundMiddlePacket {
@@ -24,10 +23,10 @@ public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 		chunkZ = serverdata.readInt();
 		full = serverdata.readBoolean();
 		bitmask = VarNumberSerializer.readVarInt(serverdata);
-		data = ArraySerializer.readByteArray(serverdata, ProtocolVersion.getLatest(ProtocolType.PC));
+		data = ArraySerializer.readByteArray(serverdata, ProtocolVersionsHelper.LATEST_PC);
 		tiles = ArraySerializer.readVarIntTArray(
 			serverdata, NBTTagCompoundWrapper.class,
-			(from) -> ItemStackSerializer.readTag(serverdata, ProtocolVersion.getLatest(ProtocolType.PC))
+			(from) -> ItemStackSerializer.readTag(serverdata, ProtocolVersionsHelper.LATEST_PC)
 		);
 	}
 

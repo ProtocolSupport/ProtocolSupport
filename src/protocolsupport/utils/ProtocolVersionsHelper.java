@@ -57,9 +57,11 @@ public class ProtocolVersionsHelper {
 
 	public static final ProtocolVersion[] RANGE__1_6__1_10 = ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_6_1, ProtocolVersion.MINECRAFT_1_10);
 
-	public static final ProtocolVersion[] AFTER_1_11 = ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_12, ProtocolVersion.getLatest(ProtocolType.PC));
+	public static final ProtocolVersion[] AFTER_1_11 = ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_12, ProtocolVersionsHelper.LATEST_PC);
 
-	public static final ProtocolVersion[] AFTER_1_8 = ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_9, ProtocolVersion.getLatest(ProtocolType.PC));
+	public static final ProtocolVersion[] AFTER_1_8 = ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_9, ProtocolVersionsHelper.LATEST_PC);
+
+	public static final ProtocolVersion LATEST_PC = ProtocolVersion.getLatest(ProtocolType.PC);
 
 	public static final ProtocolVersion[] concat(ProtocolVersion[] versions, ProtocolVersion... moreVersions) {
 		ArrayList<ProtocolVersion> all = new ArrayList<>();

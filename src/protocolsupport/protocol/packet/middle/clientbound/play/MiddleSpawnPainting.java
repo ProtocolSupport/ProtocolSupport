@@ -3,14 +3,13 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolType;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleSpawnPainting extends ClientBoundMiddlePacket {
 
@@ -24,7 +23,7 @@ public abstract class MiddleSpawnPainting extends ClientBoundMiddlePacket {
 	public void readFromServerData(ByteBuf serverdata) {
 		entityId = VarNumberSerializer.readVarInt(serverdata);
 		uuid = MiscSerializer.readUUID(serverdata);
-		type = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(ProtocolType.PC), 13);
+		type = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC, 13);
 		position = PositionSerializer.readPosition(serverdata);
 		direction = serverdata.readUnsignedByte();
 	}

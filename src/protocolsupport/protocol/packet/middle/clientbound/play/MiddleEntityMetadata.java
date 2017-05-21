@@ -2,10 +2,9 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import gnu.trove.map.TIntObjectMap;
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolType;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleEntityMetadata extends MiddleEntity {
 
@@ -14,7 +13,7 @@ public abstract class MiddleEntityMetadata extends MiddleEntity {
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
 		super.readFromServerData(serverdata);
-		metadata = DataWatcherDeserializer.decodeData(serverdata, ProtocolVersion.getLatest(ProtocolType.PC));
+		metadata = DataWatcherDeserializer.decodeData(serverdata, ProtocolVersionsHelper.LATEST_PC);
 	}
 
 }
