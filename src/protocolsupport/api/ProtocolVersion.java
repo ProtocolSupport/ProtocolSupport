@@ -7,6 +7,7 @@ import java.util.EnumMap;
 import org.apache.commons.lang3.Validate;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
+import protocolsupport.utils.Utils;
 
 public enum ProtocolVersion {
 
@@ -170,13 +171,7 @@ public enum ProtocolVersion {
 	 */
 	public ProtocolVersion next() {
 		Validate.isTrue(getProtocolType() != ProtocolType.UNKNOWN, "Can't get next version for unknown protocol type");
-		ProtocolVersion[] versions = byOrderId.get(getProtocolType());
-		int nextVersionOrderId = orderId.id + 1;
-		if (nextVersionOrderId < versions.length) {
-			return versions[nextVersionOrderId];
-		} else {
-			return null;
-		}
+		return Utils.getFromArrayOrNull(byOrderId.get(getProtocolType()), orderId.id + 1);
 	}
 
 	/**
@@ -187,13 +182,7 @@ public enum ProtocolVersion {
 	 */
 	public ProtocolVersion previous() {
 		Validate.isTrue(getProtocolType() != ProtocolType.UNKNOWN, "Can't get next version for unknown protocol type");
-		ProtocolVersion[] versions = byOrderId.get(getProtocolType());
-		int previousVersionOrderId = orderId.id - 1;
-		if (previousVersionOrderId >= 0) {
-			return versions[previousVersionOrderId];
-		} else {
-			return null;
-		}
+		return Utils.getFromArrayOrNull(byOrderId.get(getProtocolType()), orderId.id - 1);
 	}
 
 	/**
