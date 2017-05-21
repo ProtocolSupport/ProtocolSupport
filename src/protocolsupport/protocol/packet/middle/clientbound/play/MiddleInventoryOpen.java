@@ -5,8 +5,8 @@ import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.WindowType;
-import protocolsupport.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 

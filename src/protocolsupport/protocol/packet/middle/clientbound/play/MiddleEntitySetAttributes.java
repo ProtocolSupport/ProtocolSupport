@@ -7,7 +7,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.utils.ProtocolVersionsHelper;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleEntitySetAttributes extends MiddleEntity {
 

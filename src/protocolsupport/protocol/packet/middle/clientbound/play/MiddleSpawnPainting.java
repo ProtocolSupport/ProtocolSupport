@@ -8,8 +8,8 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleSpawnPainting extends ClientBoundMiddlePacket {
 

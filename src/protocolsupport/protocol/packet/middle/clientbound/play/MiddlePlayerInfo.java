@@ -10,8 +10,8 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.GameMode;
-import protocolsupport.utils.ProtocolVersionsHelper;
 
 public abstract class MiddlePlayerInfo extends ClientBoundMiddlePacket {
 

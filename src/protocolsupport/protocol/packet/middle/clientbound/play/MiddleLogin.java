@@ -4,11 +4,11 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.tab.TabAPI;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.Difficulty;
 import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.NetworkEntity;
-import protocolsupport.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleLogin extends ClientBoundMiddlePacket {
 

@@ -3,7 +3,7 @@ package protocolsupport.protocol.legacyremapper;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.id.RemappingRegistry.IdRemappingRegistry;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.HashMapBasedIdRemappingTable;
-import protocolsupport.utils.ProtocolVersionsHelper;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class LegacyEffect {
 

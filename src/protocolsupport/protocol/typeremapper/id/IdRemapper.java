@@ -11,9 +11,9 @@ import protocolsupport.protocol.typeremapper.id.RemappingRegistry.IdRemappingReg
 import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.EnumRemappingTable;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.HashMapBasedIdRemappingTable;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
-import protocolsupport.utils.ProtocolVersionsHelper;
 
 public class IdRemapper {
 

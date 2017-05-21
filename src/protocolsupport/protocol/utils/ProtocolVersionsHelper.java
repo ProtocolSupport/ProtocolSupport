@@ -1,4 +1,4 @@
-package protocolsupport.utils;
+package protocolsupport.protocol.utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;

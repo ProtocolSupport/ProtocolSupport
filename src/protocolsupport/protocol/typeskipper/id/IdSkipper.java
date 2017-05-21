@@ -5,8 +5,8 @@ import protocolsupport.protocol.typeskipper.id.SkippingRegistry.IntSkippingRegis
 import protocolsupport.protocol.typeskipper.id.SkippingTable.ArrayBasedIntSkippingTable;
 import protocolsupport.protocol.typeskipper.id.SkippingTable.GenericSkippingTable;
 import protocolsupport.protocol.typeskipper.id.SkippingTable.HashMapBasedIntSkippingTable;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.WindowType;
-import protocolsupport.utils.ProtocolVersionsHelper;
 
 public class IdSkipper {
 

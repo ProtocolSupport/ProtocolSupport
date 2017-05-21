@@ -5,6 +5,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBlockState;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
@@ -22,7 +23,6 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectStrin
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3f;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3i;
-import protocolsupport.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.Utils;
 
 public class DataWatcherObjectIdRegistry {
