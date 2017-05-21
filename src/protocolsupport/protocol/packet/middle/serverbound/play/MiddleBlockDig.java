@@ -25,7 +25,7 @@ public abstract class MiddleBlockDig extends ServerBoundMiddlePacket {
 	}
 
 	protected static enum Action {
-		START_DIG, CANCEL_DIG, FINISH_DIG, DROP_ITEM_ALL, DROP_ITEM_SINGLE, FINISH_USE, SWAP_ITEMS 
+		START_DIG, CANCEL_DIG, FINISH_DIG, DROP_ITEM_ALL, DROP_ITEM_SINGLE, FINISH_USE, SWAP_ITEMS
 	}
 
 }

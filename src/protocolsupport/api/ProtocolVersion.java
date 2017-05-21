@@ -224,7 +224,7 @@ public enum ProtocolVersion {
 	 */
 	public static ProtocolVersion[] getAllAfterE(ProtocolVersion version) {
 		ProtocolVersion next = version.next();
-		if (next == null || !next.isSupported()) {
+		if ((next == null) || !next.isSupported()) {
 			return new ProtocolVersion[0];
 		} else {
 			return getAllAfterI(next);
@@ -249,7 +249,7 @@ public enum ProtocolVersion {
 	 */
 	public static ProtocolVersion[] getAllBeforeE(ProtocolVersion version) {
 		ProtocolVersion prev = version.previous();
-		if (prev == null || !prev.isSupported()) {
+		if ((prev == null) || !prev.isSupported()) {
 			return new ProtocolVersion[0];
 		} else {
 			return getAllBeforeI(prev);
