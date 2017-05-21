@@ -15,7 +15,6 @@ import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
-@SuppressWarnings("deprecation")
 public class TileNBTRemapper {
 
 	private static final String tileEntityTypeKey = "id";
@@ -63,7 +62,7 @@ public class TileNBTRemapper {
 				}
 				return input;
 			},
-			ProtocolVersionsHelper.ALL
+			ProtocolVersionsHelper.ALL_PC
 		);
 		register(
 			TileEntityUpdateType.MOB_SPAWNER,
@@ -104,7 +103,7 @@ public class TileNBTRemapper {
 				}
 				return input;
 			},
-			ProtocolVersion.getAllBefore(ProtocolVersion.MINECRAFT_1_8)
+			ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_8)
 		);
 		register(
 			TileEntityUpdateType.SKULL,
@@ -112,7 +111,7 @@ public class TileNBTRemapper {
 				ItemStackRemapper.remapSkull(input);
 				return input;
 			},
-			ProtocolVersion.getAllBefore(ProtocolVersion.MINECRAFT_1_7_5)
+			ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_7_5)
 		);
 		register(
 			TileEntityUpdateType.FLOWER_POT,

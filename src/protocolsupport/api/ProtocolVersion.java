@@ -76,7 +76,7 @@ public enum ProtocolVersion {
 	 * @return true if this protocol version is supported
 	 */
 	public boolean isSupported() {
-		return name != null;
+		return id != -1;
 	}
 
 	/**
@@ -207,6 +207,56 @@ public enum ProtocolVersion {
 	}
 
 	/**
+	 * Returns all protocol versions that are after specified one (inclusive)
+	 * @param version protocol version
+	 * @return all protocol versions that are after specified one (including this one)
+	 * @throws IllegalArgumentException  if getAllBetween(version, getLatest(version.getType())) throws one
+	 */
+	public static ProtocolVersion[] getAllAfterI(ProtocolVersion version) {
+		return getAllBetween(version, getLatest(version.getProtocolType()));
+	}
+
+	/**
+	 * Returns all protocol versions that are after specified one (exclusive)
+	 * @param version protocol version
+	 * @return all protocol versions that are after specified one  (exclusive) or empty array if no protocol versions exist after this one
+	 * @throws IllegalArgumentException  if getAllBetween(version, getLatest(version.getType()))
+	 */
+	public static ProtocolVersion[] getAllAfterE(ProtocolVersion version) {
+		ProtocolVersion next = version.next();
+		if (next == null || !next.isSupported()) {
+			return new ProtocolVersion[0];
+		} else {
+			return getAllAfterI(next);
+		}
+	}
+
+	/**
+	 * Returns all protocol versions that are before specified one (inclusive)
+	 * @param version protocol version
+	 * @return all protocol versions that are before specified one (including this one)
+	 * @throws IllegalArgumentException if getAllBetween(getOldest(version.getType()), version) throws one
+	 */
+	public static ProtocolVersion[] getAllBeforeI(ProtocolVersion version) {
+		return getAllBetween(getOldest(version.getProtocolType()), version);
+	}
+
+	/**
+	 * Returns all protocol versions that are before specified one (exclusive)
+	 * @param version protocol version
+	 * @return all protocol versions that are before specified one  (exclusive) or empty array if no protocol versions exist after this one
+	 * @throws IllegalArgumentException  if getAllBetween(version, getOldest(version.getType()))
+	 */
+	public static ProtocolVersion[] getAllBeforeE(ProtocolVersion version) {
+		ProtocolVersion prev = version.previous();
+		if (prev == null || !prev.isSupported()) {
+			return new ProtocolVersion[0];
+		} else {
+			return getAllBeforeI(prev);
+		}
+	}
+
+	/**
 	 * Returns latest supported protocol version for specified protocol type
 	 * @param type protocol type
 	 * @return latest supported protocol version for specified protocol type
@@ -249,7 +299,7 @@ public enum ProtocolVersion {
 	 */
 	@Deprecated
 	public static ProtocolVersion[] getAllAfter(ProtocolVersion version) {
-		return getAllBetween(version, getLatest(version.getProtocolType()));
+		return getAllAfterI(version);
 	}
 
 	/**
@@ -261,7 +311,7 @@ public enum ProtocolVersion {
 	 */
 	@Deprecated
 	public static ProtocolVersion[] getAllBefore(ProtocolVersion version) {
-		return getAllBetween(getOldest(version.getProtocolType()), version);
+		return getAllBeforeI(version);
 	}
 
 	/**

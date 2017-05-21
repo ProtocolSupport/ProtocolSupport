@@ -137,14 +137,14 @@ public class ItemStackRemapper {
 		registerClientboundRemapper(Material.MONSTER_EGG, new MonsterEggToLegacyNameSpecificRemapper(), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_10, ProtocolVersion.MINECRAFT_1_9));
 		registerClientboundRemapper(Material.MONSTER_EGG, new MonsterEggToLegacyIdSpecificRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
 		registerClientboundRemapper(Material.SKULL_ITEM, new DragonHeadSpecificRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
-		registerClientboundRemapper(Material.SKULL_ITEM, new PlayerSkullSpecificRemapper(), ProtocolVersion.getAllBefore(ProtocolVersion.MINECRAFT_1_7_5));
+		registerClientboundRemapper(Material.SKULL_ITEM, new PlayerSkullSpecificRemapper(), ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_7_5));
 		registerClientboundRemapper(Material.POTION, new PotionToLegacyIdSpecificRemapper(false), ProtocolVersionsHelper.BEFORE_1_9);
 		registerClientboundRemapper(Material.SPLASH_POTION, new PotionToLegacyIdSpecificRemapper(true), ProtocolVersionsHelper.BEFORE_1_9);
 		registerClientboundRemapper(Material.LINGERING_POTION, new PotionToLegacyIdSpecificRemapper(true), ProtocolVersionsHelper.BEFORE_1_9);
 		registerClientboundRemapper(Material.WRITTEN_BOOK, new BookPagesToLegacyTextSpecificRemapper(), ProtocolVersionsHelper.BEFORE_1_8);
-		registerClientboundRemapper(Material.BOOK_AND_QUILL, new EmptyBookPageAdderSpecificRemapper(), ProtocolVersionsHelper.ALL);
+		registerClientboundRemapper(Material.BOOK_AND_QUILL, new EmptyBookPageAdderSpecificRemapper(), ProtocolVersionsHelper.ALL_PC);
 		EnchantFilterNBTSpecificRemapper enchantfilter = new EnchantFilterNBTSpecificRemapper();
-		Arrays.stream(Material.values()).forEach(material -> registerClientboundRemapper(material, enchantfilter, ProtocolVersionsHelper.ALL));
+		Arrays.stream(Material.values()).forEach(material -> registerClientboundRemapper(material, enchantfilter, ProtocolVersionsHelper.ALL_PC));
 	}
 
 	public static ItemStackWrapper remapClientbound(ProtocolVersion version, ItemStackWrapper itemstack) {

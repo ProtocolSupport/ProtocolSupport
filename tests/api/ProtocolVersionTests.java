@@ -3,6 +3,7 @@ package api;
 import org.junit.Assert;
 
 import junit.framework.TestCase;
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 
 public class ProtocolVersionTests extends TestCase {
@@ -52,6 +53,39 @@ public class ProtocolVersionTests extends TestCase {
 		Assert.assertArrayEquals(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_6_4, ProtocolVersion.MINECRAFT_1_7_10), new ProtocolVersion[] {
 			ProtocolVersion.MINECRAFT_1_6_4, ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_7_10
 		});
+		Assert.assertArrayEquals(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_6_4), new ProtocolVersion[] {
+			ProtocolVersion.MINECRAFT_1_6_4, ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_7_10
+		});
+	}
+
+	public void testGetAllAfterI() {
+		Assert.assertArrayEquals(
+			ProtocolVersion.getAllAfterI(ProtocolVersion.MINECRAFT_1_11),
+			ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_11, ProtocolVersion.getLatest(ProtocolType.PC))
+		);
+	}
+
+	public void testGetAllAfterE() {
+		Assert.assertArrayEquals(
+			ProtocolVersion.getAllAfterE(ProtocolVersion.MINECRAFT_1_11),
+			ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_11_1, ProtocolVersion.getLatest(ProtocolType.PC))
+		);
+		Assert.assertArrayEquals(ProtocolVersion.getAllAfterE(ProtocolVersion.getLatest(ProtocolType.PC)), new ProtocolVersion[0]);
+	}
+
+	public void testGetAllBeforeI() {
+		Assert.assertArrayEquals(
+			ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_11),
+			ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_11, ProtocolVersion.getOldest(ProtocolType.PC))
+		);
+	}
+
+	public void testGetAllBeforeE() {
+		Assert.assertArrayEquals(
+			ProtocolVersion.getAllBeforeE(ProtocolVersion.MINECRAFT_1_11),
+			ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_10, ProtocolVersion.getOldest(ProtocolType.PC))
+		);
+		Assert.assertArrayEquals(ProtocolVersion.getAllBeforeE(ProtocolVersion.getOldest(ProtocolType.PC)), new ProtocolVersion[0]);
 	}
 
 }
