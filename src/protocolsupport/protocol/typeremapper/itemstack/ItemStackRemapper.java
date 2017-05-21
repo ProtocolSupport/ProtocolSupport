@@ -125,11 +125,11 @@ public class ItemStackRemapper {
 //	}
 
 	private static void registerRemapper(TIntObjectHashMap<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>> registry, Material material, ItemStackSpecificRemapper transformer, ProtocolVersion... versions) {
-		EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>> map = Utils.getOrCreateDefault(
+		EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>> map = Utils.getFromMapOrCreateDefault(
 			new TIntObjectMapDecorator<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>>(clientbound_remapper_registry),
 			material.getId(), new EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>(ProtocolVersion.class)
 		);
-		Arrays.stream(versions).forEach(version -> Utils.getOrCreateDefault(map, version, new ArrayList<ItemStackSpecificRemapper>()).add(transformer));
+		Arrays.stream(versions).forEach(version -> Utils.getFromMapOrCreateDefault(map, version, new ArrayList<ItemStackSpecificRemapper>()).add(transformer));
 	}
 
 	//Order is important because some transformers may add tags in new format

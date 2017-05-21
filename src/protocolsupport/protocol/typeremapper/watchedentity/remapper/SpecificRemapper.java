@@ -32,6 +32,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarIn
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.CollectionsUtils;
+import protocolsupport.utils.Utils;
 
 public enum SpecificRemapper {
 
@@ -584,17 +585,12 @@ public enum SpecificRemapper {
 
 	private final NetworkEntityType type;
 	private final EnumMap<ProtocolVersion, ArrayList<DataWatcherDataRemapper>> entries = new EnumMap<>(ProtocolVersion.class);
-	{
-		for (ProtocolVersion version : ProtocolVersion.values()) {
-			entries.put(version, new ArrayList<DataWatcherDataRemapper>());
-		}
-	}
 
 	SpecificRemapper(NetworkEntityType type, Entry... entries) {
 		this.type = type;
 		for (Entry entry : entries) {
 			for (ProtocolVersion version : entry.versions) {
-				this.entries.get(version).add(entry.remapper);
+				Utils.getFromMapOrCreateDefault(this.entries, version, new ArrayList<DataWatcherDataRemapper>()).add(entry.remapper);
 			}
 		}
 	}

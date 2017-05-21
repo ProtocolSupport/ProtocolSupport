@@ -5,19 +5,14 @@ import java.util.EnumMap;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeskipper.id.SkippingTable.GenericSkippingTable;
 import protocolsupport.protocol.typeskipper.id.SkippingTable.IntSkippingTable;
+import protocolsupport.utils.Utils;
 
 public abstract class SkippingRegistry<T extends SkippingTable> {
 
 	private final EnumMap<ProtocolVersion, T> registry = new EnumMap<>(ProtocolVersion.class);
 
-	public SkippingRegistry() {
-		for (ProtocolVersion version : ProtocolVersion.values()) {
-			registry.put(version, createTable());
-		}
-	}
-
 	public T getTable(ProtocolVersion version) {
-		return registry.get(version);
+		return Utils.getFromMapOrCreateDefault(registry, version, createTable());
 	}
 
 	protected abstract T createTable();

@@ -36,9 +36,9 @@ public class TileNBTRemapper {
 	private static final EnumMap<TileEntityUpdateType, EnumMap<ProtocolVersion, List<TileEntitySpecificRemapper>>> registry = new EnumMap<>(TileEntityUpdateType.class);
 
 	private static void register(TileEntityUpdateType type, TileEntitySpecificRemapper transformer, ProtocolVersion... versions) {
-		EnumMap<ProtocolVersion, List<TileEntitySpecificRemapper>> map = Utils.getOrCreateDefault(registry, type, new EnumMap<ProtocolVersion, List<TileEntitySpecificRemapper>>(ProtocolVersion.class));
+		EnumMap<ProtocolVersion, List<TileEntitySpecificRemapper>> map = Utils.getFromMapOrCreateDefault(registry, type, new EnumMap<ProtocolVersion, List<TileEntitySpecificRemapper>>(ProtocolVersion.class));
 		for (ProtocolVersion version : versions) {
-			Utils.getOrCreateDefault(map, version, new ArrayList<TileEntitySpecificRemapper>()).add(transformer);
+			Utils.getFromMapOrCreateDefault(map, version, new ArrayList<TileEntitySpecificRemapper>()).add(transformer);
 		}
 	}
 

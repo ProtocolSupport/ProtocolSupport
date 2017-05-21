@@ -33,7 +33,7 @@ public class DataWatcherObjectIdRegistry {
 	private static final HashMap<Class<? extends DataWatcherObject<?>>, EnumMap<ProtocolVersion, Integer>> registry = new HashMap<>();
 
 	private static void register(Class<? extends DataWatcherObject<?>> clazz, int id, ProtocolVersion... versions) {
-		EnumMap<ProtocolVersion, Integer> mmap = Utils.getOrCreateDefault(registry, clazz, new EnumMap<>(ProtocolVersion.class));
+		EnumMap<ProtocolVersion, Integer> mmap = Utils.getFromMapOrCreateDefault(registry, clazz, new EnumMap<>(ProtocolVersion.class));
 		for (ProtocolVersion version : versions) {
 			mmap.put(version, id);
 		}
