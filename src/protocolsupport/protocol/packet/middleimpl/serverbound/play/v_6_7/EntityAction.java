@@ -18,6 +18,7 @@ public class EntityAction extends MiddleEntityAction {
 	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
 		entityId = clientdata.readInt();
 		action = actionById.get(clientdata.readByte());
+		jumpBoost = clientdata.readInt();
 	}
 
 }
