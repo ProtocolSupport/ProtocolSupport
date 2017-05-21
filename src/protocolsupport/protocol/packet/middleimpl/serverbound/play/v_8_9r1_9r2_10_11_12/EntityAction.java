@@ -4,16 +4,27 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleEntityAction;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class EntityAction extends MiddleEntityAction {
+
+	private static final ArrayMap<Action> actionById8 = new ArrayMap<>(
+		new ArrayMap.Entry<>(0, Action.START_SNEAK), new ArrayMap.Entry<>(1, Action.STOP_SNEAK),
+		new ArrayMap.Entry<>(2, Action.LEAVE_BED),
+		new ArrayMap.Entry<>(3, Action.START_SPRINT), new ArrayMap.Entry<>(4, Action.STOP_SPRINT),
+		new ArrayMap.Entry<>(5, Action.STOP_JUMP), //this won't work now anyway, but still map it
+		new ArrayMap.Entry<>(6, Action.OPEN_HORSE_INV)
+	);
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
 		entityId = VarNumberSerializer.readVarInt(clientdata);
-		actionId = VarNumberSerializer.readVarInt(clientdata);
+		int actionId = VarNumberSerializer.readVarInt(clientdata);
 		jumpBoost = VarNumberSerializer.readVarInt(clientdata);
-		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_8) && (actionId == 6)) {
-			actionId = 7;
+		if (version == ProtocolVersion.MINECRAFT_1_8) {
+			action = actionById8.get(actionId);
+		} else {
+			action = Action.values()[actionId];
 		}
 	}
 
