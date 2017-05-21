@@ -8,6 +8,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
+import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -27,7 +28,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 		StringSerializer.writeString(serializer, version, IdRemapper.INVENTORY.getTable(version).getRemap(type).getId());
 		StringSerializer.writeString(serializer, version, ChatAPI.toJSON(title));
 		serializer.writeByte(slots);
-		if (type.equals("EntityHorse")) {
+		if (type == WindowType.HORSE) {
 			serializer.writeInt(horseId);
 		}
 		return RecyclableSingletonList.create(serializer);
