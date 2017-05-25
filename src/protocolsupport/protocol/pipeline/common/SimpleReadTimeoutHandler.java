@@ -1,4 +1,4 @@
-package protocolsupport.protocol.pipeline.timeout;
+package protocolsupport.protocol.pipeline.common;
 
 import java.util.concurrent.TimeUnit;
 
