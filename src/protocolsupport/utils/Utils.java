@@ -21,7 +21,7 @@ public class Utils {
 				for (Field field : clazz.getDeclaredFields()) {
 					ReflectionUtils.setAccessible(field);
 					Object value = field.get(obj);
-					if (value == null || !value.getClass().isArray()) {
+					if ((value == null) || !value.getClass().isArray()) {
 						joiner.add(field.getName() + ": " + Objects.toString(value));
 					} else {
 						joiner.add(field.getName() + ": " + Arrays.deepToString(new Object[] {value}));
