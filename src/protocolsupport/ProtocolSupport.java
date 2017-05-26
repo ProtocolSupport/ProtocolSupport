@@ -18,6 +18,7 @@ import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherObjectIndex;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
 import protocolsupport.protocol.utils.data.ItemData;
@@ -45,6 +46,7 @@ public class ProtocolSupport extends JavaPlugin {
 		}
 		try {
 			ProtocolVersion.values();
+			DataWatcherObjectIndex.init();
 			NetworkEntityType.init();
 			Allocator.init();
 			ItemData.init();

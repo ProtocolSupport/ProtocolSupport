@@ -29,7 +29,7 @@ public abstract class SkippingRegistry<T extends SkippingTable> {
 	}
 
 	public static abstract class EnumSkippingRegistry<T extends Enum<T>, R extends EnumSkippingTable<T>> extends SkippingRegistry<R> {
-		
+
 		public void registerSkipEntry(T id, ProtocolVersion... versions) {
 			for (ProtocolVersion version : versions) {
 				getTable(version).setSkip(id);

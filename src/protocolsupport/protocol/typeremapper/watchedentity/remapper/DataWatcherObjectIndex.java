@@ -1,283 +1,305 @@
 package protocolsupport.protocol.typeremapper.watchedentity.remapper;
 
-//TODO: build a hierarchy to auto calculate id
+import java.util.HashMap;
+
 public class DataWatcherObjectIndex {
 
-	public static final class Entity {
-		public static final int FLAGS = 0;
-		public static final int AIR = 1;
-		public static final int NAMETAG = 2;
-		public static final int NAMETAG_VISIBLE = 3;
-		public static final int SILENT = 4;
-		public static final int NO_GRAVITY = 5;
+	public static void init() {
 	}
 
-	public static final class EntityLiving {
-		public static final int HAND_USE = 6;
-		public static final int HEALTH = 7;
-		public static final int POTION_COLOR = 8;
-		public static final int POTION_AMBIENT = 9;
-		public static final int ARROWS_IN = 10;
+	public static class Entity {
+		public static final int FLAGS = takeNextId();
+		public static final int AIR = takeNextId();
+		public static final int NAMETAG = takeNextId();
+		public static final int NAMETAG_VISIBLE = takeNextId();
+		public static final int SILENT = takeNextId();
+		public static final int NO_GRAVITY = takeNextId();
 	}
 
-	public static final class Insentient {
-		public static final int NO_AI = 11;
+	public static class EntityLiving extends Entity {
+		public static final int HAND_USE = takeNextId();
+		public static final int HEALTH = takeNextId();
+		public static final int POTION_COLOR = takeNextId();
+		public static final int POTION_AMBIENT = takeNextId();
+		public static final int ARROWS_IN = takeNextId();
 	}
 
-	public static final class Player {
-		public static final int ADDITIONAL_HEARTS = 11;
-		public static final int SCORE = 12;
-		public static final int SKIN_FLAGS = 13;
-		public static final int MAIN_HAND = 14;
-		public static final int LEFT_SHOULDER_ENTITY = 15;
-		public static final int RIGHT_SHOULDER_ENTITY = 16;
+	public static class Insentient extends EntityLiving {
+		public static final int NO_AI = takeNextId();
 	}
 
-	public static final class Ageable {
-		public static final int AGE = 12;
+	public static final class Player extends EntityLiving {
+		public static final int ADDITIONAL_HEARTS = takeNextId();
+		public static final int SCORE = takeNextId();
+		public static final int SKIN_FLAGS = takeNextId();
+		public static final int MAIN_HAND = takeNextId();
+		public static final int LEFT_SHOULDER_ENTITY = takeNextId();
+		public static final int RIGHT_SHOULDER_ENTITY = takeNextId();
+	}
+
+	public static class Ageable extends Insentient {
+		public static final int AGE = takeNextId();
 		//age - special hack for hologram plugins that want to set int age
 		public static final int AGE_HACK = 30;
 	}
 
-	public static final class Tameable {
-		public static final int TAME_FLAGS = 13;
-		public static final int OWNER = 14;
+	public static class Tameable extends Ageable {
+		public static final int TAME_FLAGS = takeNextId();
+		public static final int OWNER = takeNextId();
 	}
 
-	public static final class ArmorStand {
-		public static final int FLAGS = 11;
-		public static final int HEAD_ROT = 12;
-		public static final int BODY_ROT = 13;
-		public static final int LEFT_ARM_ROT = 14;
-		public static final int RIGHT_ARM_ROT = 15;
-		public static final int LEFT_LEG_ROT = 16;
-		public static final int RIGHT_LEG_ROT = 17;
+	public static class ArmorStand extends EntityLiving {
+		public static final int FLAGS = takeNextId();
+		public static final int HEAD_ROT = takeNextId();
+		public static final int BODY_ROT = takeNextId();
+		public static final int LEFT_ARM_ROT = takeNextId();
+		public static final int RIGHT_ARM_ROT = takeNextId();
+		public static final int LEFT_LEG_ROT = takeNextId();
+		public static final int RIGHT_LEG_ROT = takeNextId();
 	}
 
-	public static final class BaseHorse {
-		public static final int FLAGS = 13;
-		public static final int OWNER = 14;
+	public static class BaseHorse extends Ageable {
+		public static final int FLAGS = takeNextId();
+		public static final int OWNER = takeNextId();
 	}
 
-	public static final class BattleHorse {
-		public static final int VARIANT = 15;
-		public static final int ARMOR = 16;
+	public static class BattleHorse extends BaseHorse {
+		public static final int VARIANT = takeNextId();
+		public static final int ARMOR = takeNextId();
 	}
 
-	public static final class CargoHorse {
-		public static final int HAS_CHEST = 15;
+	public static class CargoHorse extends BaseHorse {
+		public static final int HAS_CHEST = takeNextId();
 	}
 
-	public static final class Lama {
-		public static final int STRENGTH = 16;
-		public static final int CARPET_COLOR = 17;
-		public static final int VARINAT = 18;
+	public static class Lama extends CargoHorse {
+		public static final int STRENGTH = takeNextId();
+		public static final int CARPET_COLOR = takeNextId();
+		public static final int VARIANT = takeNextId();
 	}
 
-	public static final class Bat {
-		public static final int HANGING = 12;
+	public static class Bat extends Insentient {
+		public static final int HANGING = takeNextId();
 	}
 
-	public static final class Ocelot {
-		public static final int VARIANT = 15;
+	public static class Ocelot extends Tameable {
+		public static final int VARIANT = takeNextId();
 	}
 
-	public static final class Wolf {
-		public static final int HEALTH = 15;
-		public static final int BEGGING = 16;
-		public static final int COLLAR_COLOR = 17;
+	public static class Wolf extends Tameable {
+		public static final int HEALTH = takeNextId();
+		public static final int BEGGING = takeNextId();
+		public static final int COLLAR_COLOR = takeNextId();
 	}
 
-	public static final class Pig {
-		public static final int HAS_SADLLE = 13;
-		public static final int BOOST_TIME = 14;
+	public static class Pig extends Ageable {
+		public static final int HAS_SADLLE = takeNextId();
+		public static final int BOOST_TIME = takeNextId();
 	}
 
-	public static final class Rabbit {
-		public static final int VARIANT = 13;
+	public static class Rabbit extends Ageable {
+		public static final int VARIANT = takeNextId();
 	}
 
-	public static final class Sheep {
-		public static final int FLAGS = 13;
+	public static class Sheep extends Ageable {
+		public static final int FLAGS = takeNextId();
 	}
 
-	public static final class PolarBear {
-		public static final int STANDING_UP = 13;
+	public static class PolarBear extends Ageable  {
+		public static final int STANDING_UP = takeNextId();
 	}
 
-	public static final class Villager {
-		public static final int PROFESSION = 13;
+	public static class Villager extends Ageable  {
+		public static final int PROFESSION = takeNextId();
 	}
 
-	public static final class Enderman {
-		public static final int CARRIED_BLOCK = 12;
-		public static final int SCREAMING = 13;
+	public static class Enderman extends Insentient {
+		public static final int CARRIED_BLOCK = takeNextId();
+		public static final int SCREAMING = takeNextId();
 	}
 
-	public static final class EnderDragon {
-		public static final int PHASE = 12;
+	public static class EnderDragon extends Insentient {
+		public static final int PHASE = takeNextId();
 	}
 
-	public static final class Snowman {
-		public static final int NO_HAT = 12;
+	public static class Snowman extends Insentient {
+		public static final int NO_HAT = takeNextId();
 	}
 
-	public static final class Zombie {
-		public static final int BABY = 12;
-		public static final int PROFESSION = 13;
-		public static final int HANDS_UP = 14;
+	public static class Zombie extends Insentient {
+		public static final int BABY = takeNextId();
+		public static final int PROFESSION = takeNextId();
+		public static final int HANDS_UP = takeNextId();
 	}
 
-	public static final class ZombieVillager {
-		public static final int CONVERTING = 15;
+	public static class ZombieVillager extends Zombie {
+		public static final int CONVERTING = takeNextId();
 	}
 
-	public static final class Blaze {
-		public static final int ON_FIRE = 12;
+	public static class Blaze extends Insentient {
+		public static final int ON_FIRE = takeNextId();
 	}
 
-	public static final class Spider {
-		public static final int CLIMBING = 12;
+	public static class Spider extends Insentient {
+		public static final int CLIMBING = takeNextId();
 	}
 
-	public static final class Creeper {
-		public static final int STATE = 12;
-		public static final int POWERED = 13;
-		public static final int IGNITED = 14;
+	public static class Creeper extends Insentient {
+		public static final int STATE = takeNextId();
+		public static final int POWERED = takeNextId();
+		public static final int IGNITED = takeNextId();
 	}
 
-	public static final class Ghast {
-		public static final int ATTACKING = 12;
+	public static class Ghast extends Insentient {
+		public static final int ATTACKING = takeNextId();
 	}
 
-	public static final class Slime {
-		public static final int SIZE = 12;
+	public static class Slime extends Insentient {
+		public static final int SIZE = takeNextId();
 	}
 
-	public static final class BaseSkeleton {
-		public static final int ATTACKING = 12;
+	public static class Skeleton extends Insentient {
+		public static final int ATTACKING = takeNextId();
 	}
 
-	public static final class Witch {
-		public static final int AGGRESSIVE = 12;
+	public static class Witch extends Insentient {
+		public static final int AGGRESSIVE = takeNextId();
 	}
 
-	public static final class IronGolem {
-		public static final int PLAYER_CREATED = 12;
+	public static class IronGolem extends Insentient{
+		public static final int PLAYER_CREATED = takeNextId();
 	}
 
-	public static final class Shulker {
-		public static final int DIRECTION = 12;
-		public static final int ATTACHMENT_POS = 13;
-		public static final int SHIELD_HEIGHT = 14;
-		public static final int COLOR = 15;
+	public static class Shulker extends Insentient {
+		public static final int DIRECTION = takeNextId();
+		public static final int ATTACHMENT_POS = takeNextId();
+		public static final int SHIELD_HEIGHT = takeNextId();
+		public static final int COLOR = takeNextId();
 	}
 
-	public static final class Wither {
-		public static final int TARGET1 = 12;
-		public static final int TARGET2 = 13;
-		public static final int TARGET3 = 14;
-		public static final int INVULNERABLE_TIME = 15;
+	public static class Wither extends Insentient {
+		public static final int TARGET1 = takeNextId();
+		public static final int TARGET2 = takeNextId();
+		public static final int TARGET3 = takeNextId();
+		public static final int INVULNERABLE_TIME = takeNextId();
 	}
 
-	public static final class Guardian {
-		public static final int SPIKES = 12;
-		public static final int TARGET_ID = 13;
+	public static class Guardian extends Insentient {
+		public static final int SPIKES = takeNextId();
+		public static final int TARGET_ID = takeNextId();
 	}
 
-	public static final class Vindicator {
-		public static final int AGGRESSIVE = 12;
+	public static class Vindicator extends Insentient {
+		public static final int AGGRESSIVE = takeNextId();
 	}
 
-	public static final class Evoker {
-		public static final int SPELL = 12;
+	public static class Evoker extends Insentient {
+		public static final int SPELL = takeNextId();
 	}
 
-	public static final class Vex {
-		public static final int FLAGS = 12;
+	public static class Vex extends Insentient {
+		public static final int FLAGS = takeNextId();
 	}
 
-	public static final class Parrot {
-		public static final int VARIANT = 15;
+	public static class Parrot extends Tameable {
+		public static final int VARIANT = takeNextId();
 	}
 
-	public static final class Boat {
-		public static final int TIME_SINCE_LAST_HIT = 6;
-		public static final int FORWARD_DIRECTION = 7;
-		public static final int DAMAGE_TAKEN = 8;
-		public static final int VARIANT = 9;
-		public static final int LEFT_PADDLE = 10;
-		public static final int RIGHT_PADDLE = 11;
+	public static class Boat extends Entity {
+		public static final int TIME_SINCE_LAST_HIT = takeNextId();
+		public static final int FORWARD_DIRECTION = takeNextId();
+		public static final int DAMAGE_TAKEN = takeNextId();
+		public static final int VARIANT = takeNextId();
+		public static final int LEFT_PADDLE = takeNextId();
+		public static final int RIGHT_PADDLE = takeNextId();
 	}
 
-	public static final class Tnt {
-		public static final int FUSE = 6;
+	public static class Tnt extends Entity {
+		public static final int FUSE = takeNextId();
 	}
 
-	public static final class WitherSkull {
-		public static final int CHARGED = 6;
+	public static class WitherSkull extends Entity {
+		public static final int CHARGED = takeNextId();
 	}
 
-	public static final class Potion {
-		public static final int ITEM = 6;
+	public static class Potion extends Entity {
+		public static final int ITEM = takeNextId();
 	}
 
-	public static final class FinshingFloat {
-		public static final int HOOKED_ENTITY = 6;
+	public static class FinshingFloat extends Entity {
+		public static final int HOOKED_ENTITY = takeNextId();
 	}
 
-	public static final class Item {
-		public static final int ITEM = 6;
+	public static class Item extends Entity {
+		public static final int ITEM = takeNextId();
 	}
 
-	public static final class Minecart {
-		public static final int SHAKING_POWER = 6;
-		public static final int SHAKING_DIRECTION = 7;
-		public static final int DAMAGE_TAKEN = 8;
-		public static final int BLOCK = 9;
-		public static final int BLOCK_Y = 10;
-		public static final int SHOW_BLOCK = 11;
+	public static class Minecart extends Entity {
+		public static final int SHAKING_POWER = takeNextId();
+		public static final int SHAKING_DIRECTION = takeNextId();
+		public static final int DAMAGE_TAKEN = takeNextId();
+		public static final int BLOCK = takeNextId();
+		public static final int BLOCK_Y = takeNextId();
+		public static final int SHOW_BLOCK = takeNextId();
 	}
 
-	public static final class MinecartFurnace {
-		public static final int POWERED = 12;
+	public static class MinecartFurnace extends Minecart {
+		public static final int POWERED = takeNextId();
 	}
 
-	public static final class MinecartCommand {
-		public static final int COMMAND = 12;
-		public static final int LAST_OUTPUT = 13;
+	public static class MinecartCommand extends Minecart {
+		public static final int COMMAND = takeNextId();
+		public static final int LAST_OUTPUT = takeNextId();
 	}
 
-	public static final class Arrow {
-		public static final int CIRTICAL = 6;
+	public static class Arrow extends Entity {
+		public static final int CIRTICAL = takeNextId();
 	}
 
-	public static final class TippedArrow {
-		public static final int COLOR = 7;
+	public static class TippedArrow extends Arrow {
+		public static final int COLOR = takeNextId();
 	}
 
-	public static final class Firework {
-		public static final int ITEM = 6;
-		public static final int USER = 7;
+	public static class Firework extends Entity {
+		public static final int ITEM = takeNextId();
+		public static final int USER = takeNextId();
 	}
 
-	public static final class ItemFrame {
-		public static final int ITEM = 6;
-		public static final int ROTATION = 7;
+	public static class ItemFrame extends Entity {
+		public static final int ITEM = takeNextId();
+		public static final int ROTATION = takeNextId();
 	}
 
-	public static final class EnderCrystal {
-		public static final int TARGET = 6;
-		public static final int SHOW_BOTTOM = 7;
+	public static class EnderCrystal extends Entity {
+		public static final int TARGET = takeNextId();
+		public static final int SHOW_BOTTOM = takeNextId();
 	}
 
-	public static final class AreaEffectCloud {
-		public static final int RADIUS = 6;
-		public static final int COLOR = 7;
-		public static final int SINGLE_POINT = 8;
-		public static final int PARTICLE = 9;
-		public static final int PARTICLE_DATA1 = 10;
-		public static final int PARTICLE_DATA2 = 11;
+	public static class AreaEffectCloud extends Entity {
+		public static final int RADIUS = takeNextId();
+		public static final int COLOR = takeNextId();
+		public static final int SINGLE_POINT = takeNextId();
+		public static final int PARTICLE = takeNextId();
+		public static final int PARTICLE_DATA1 = takeNextId();
+		public static final int PARTICLE_DATA2 = takeNextId();
+	}
+
+	private static final HashMap<Class<?>, Integer> lastTakenId = new HashMap<>();
+	protected static int takeNextId() {
+		try {
+			Class<?> caller = Class.forName(new Exception().getStackTrace()[1].getClassName());
+			int newid = -1;
+			if (lastTakenId.containsKey(caller)) {
+				newid = lastTakenId.get(caller) + 1;
+			} else {
+				Class<?> superclass = caller.getSuperclass();
+				newid = superclass == Object.class ? 0 : lastTakenId.get(superclass) + 1;
+			}
+			lastTakenId.put(caller, newid);
+			return newid;
+		} catch (Exception e) {
+			throw new RuntimeException("Exception occured while computing datawatcherobjectindex", e);
+		}
 	}
 
 }

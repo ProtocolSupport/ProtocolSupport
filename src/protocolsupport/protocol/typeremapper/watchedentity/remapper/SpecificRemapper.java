@@ -199,7 +199,7 @@ public enum SpecificRemapper {
 	LAMA(NetworkEntityType.LAMA, SpecificRemapper.CARGO_HORSE,
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Lama.STRENGTH, 16) {}, ProtocolVersionsHelper.RANGE__1_11__1_12),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Lama.CARPET_COLOR, 17) {}, ProtocolVersionsHelper.RANGE__1_11__1_12),
-		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Lama.VARINAT, 18) {}, ProtocolVersionsHelper.RANGE__1_11__1_12)
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Lama.VARIANT, 18) {}, ProtocolVersionsHelper.RANGE__1_11__1_12)
 	),
 	BAT(NetworkEntityType.BAT, SpecificRemapper.INSENTIENT,
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Bat.HANGING, 12) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
@@ -342,9 +342,9 @@ public enum SpecificRemapper {
 	),
 	MAGMA_CUBE(NetworkEntityType.MAGMA_CUBE, SpecificRemapper.SLIME),
 	BASE_SKELETON(NetworkEntityType.BASE_SKELETON, SpecificRemapper.INSENTIENT,
-		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.BaseSkeleton.ATTACKING, 12) {}, ProtocolVersionsHelper.RANGE__1_11__1_12),
-		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.BaseSkeleton.ATTACKING, 13) {}, ProtocolVersion.MINECRAFT_1_10),
-		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.BaseSkeleton.ATTACKING, 12) {}, ProtocolVersionsHelper.ALL_1_9)
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Skeleton.ATTACKING, 12) {}, ProtocolVersionsHelper.RANGE__1_11__1_12),
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Skeleton.ATTACKING, 13) {}, ProtocolVersion.MINECRAFT_1_10),
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Skeleton.ATTACKING, 12) {}, ProtocolVersionsHelper.ALL_1_9)
 	),
 	SKELETON(NetworkEntityType.SKELETON, SpecificRemapper.BASE_SKELETON),
 	WITHER_SKELETON(NetworkEntityType.WITHER_SKELETON, SpecificRemapper.BASE_SKELETON,
