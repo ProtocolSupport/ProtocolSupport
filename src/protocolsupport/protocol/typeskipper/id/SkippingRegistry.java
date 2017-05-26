@@ -3,6 +3,7 @@ package protocolsupport.protocol.typeskipper.id;
 import java.util.EnumMap;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.typeskipper.id.SkippingTable.EnumSkippingTable;
 import protocolsupport.protocol.typeskipper.id.SkippingTable.GenericSkippingTable;
 import protocolsupport.protocol.typeskipper.id.SkippingTable.IntSkippingTable;
 import protocolsupport.utils.Utils;
@@ -20,6 +21,16 @@ public abstract class SkippingRegistry<T extends SkippingTable> {
 	public static abstract class IntSkippingRegistry<T extends IntSkippingTable> extends SkippingRegistry<T> {
 
 		public void registerSkipEntry(int id, ProtocolVersion... versions) {
+			for (ProtocolVersion version : versions) {
+				getTable(version).setSkip(id);
+			}
+		}
+
+	}
+
+	public static abstract class EnumSkippingRegistry<T extends Enum<T>, R extends EnumSkippingTable<T>> extends SkippingRegistry<R> {
+		
+		public void registerSkipEntry(T id, ProtocolVersion... versions) {
 			for (ProtocolVersion version : versions) {
 				getTable(version).setSkip(id);
 			}

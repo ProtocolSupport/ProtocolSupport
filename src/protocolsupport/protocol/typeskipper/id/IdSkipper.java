@@ -1,14 +1,30 @@
 package protocolsupport.protocol.typeskipper.id;
 
+import protocolsupport.protocol.typeskipper.id.SkippingRegistry.EnumSkippingRegistry;
 import protocolsupport.protocol.typeskipper.id.SkippingRegistry.GenericSkippingRegistry;
 import protocolsupport.protocol.typeskipper.id.SkippingRegistry.IntSkippingRegistry;
 import protocolsupport.protocol.typeskipper.id.SkippingTable.ArrayBasedIntSkippingTable;
+import protocolsupport.protocol.typeskipper.id.SkippingTable.EnumSkippingTable;
 import protocolsupport.protocol.typeskipper.id.SkippingTable.GenericSkippingTable;
 import protocolsupport.protocol.typeskipper.id.SkippingTable.HashMapBasedIntSkippingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
 
 public class IdSkipper {
+
+	public static final EnumSkippingRegistry<NetworkEntityType, EnumSkippingTable<NetworkEntityType>> ENTITY = new EnumSkippingRegistry<NetworkEntityType, EnumSkippingTable<NetworkEntityType>>() {
+		{
+			registerSkipEntry(NetworkEntityType.ARMOR_STAND_MOB, ProtocolVersionsHelper.BEFORE_1_8);
+			registerSkipEntry(NetworkEntityType.ARMOR_STAND_OBJECT, ProtocolVersionsHelper.BEFORE_1_8);
+		}
+
+		@Override
+		protected EnumSkippingTable<NetworkEntityType> createTable() {
+			return new EnumSkippingTable<>(NetworkEntityType.class);
+		}
+
+	};
 
 	public static final IntSkippingRegistry<HashMapBasedIntSkippingTable> ENCHANT = new IntSkippingRegistry<HashMapBasedIntSkippingTable>() {
 		{
@@ -58,14 +74,14 @@ public class IdSkipper {
 		}
 	};
 
-	public static final GenericSkippingRegistry<WindowType, GenericSkippingTable<WindowType>> INVENTORY = new GenericSkippingRegistry<WindowType, GenericSkippingTable<WindowType>>() {
+	public static final EnumSkippingRegistry<WindowType, EnumSkippingTable<WindowType>> INVENTORY = new EnumSkippingRegistry<WindowType, EnumSkippingTable<WindowType>>() {
 		{
 			registerSkipEntry(WindowType.HORSE, ProtocolVersionsHelper.BEFORE_1_11);
 			registerSkipEntry(WindowType.HOPPER, ProtocolVersionsHelper.BEFORE_1_5);
 		}
 		@Override
-		protected GenericSkippingTable<WindowType> createTable() {
-			return new GenericSkippingTable<>();
+		protected EnumSkippingTable<WindowType> createTable() {
+			return new EnumSkippingTable<>(WindowType.class);
 		}
 	};
 

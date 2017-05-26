@@ -22,7 +22,6 @@ import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 import protocolsupport.zplatform.network.NetworkState;
 
-//TODO: Generics for JoinData
 public abstract class AbstractLoginListenerPlay implements IHasProfile {
 
 	protected final NetworkManagerWrapper networkManager;
