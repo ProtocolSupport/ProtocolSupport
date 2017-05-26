@@ -18,7 +18,7 @@ public class AbstractModernWithoutReorderPacketDecoder extends AbstractPacketDec
 	}
 
 	@Override
-	public void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws InstantiationException, IllegalAccessException  {
+	public void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
 		if (!input.isReadable()) {
 			return;
 		}
@@ -26,11 +26,15 @@ public class AbstractModernWithoutReorderPacketDecoder extends AbstractPacketDec
 			ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(ctx.channel()),
 			VarNumberSerializer.readVarInt(input)
 		);
-		packetTransformer.readFromClientData(input, connection.getVersion());
-		if (input.isReadable()) {
-			throw new DecoderException("Did not read all data from packet " + packetTransformer.getClass().getName() + ", bytes left: " + input.readableBytes());
+		try {
+			packetTransformer.readFromClientData(input, connection.getVersion());
+			if (input.isReadable()) {
+				throw new DecoderException("Did not read all data from packet " + packetTransformer.getClass().getName() + ", bytes left: " + input.readableBytes());
+			}
+			addPackets(packetTransformer.toNative(), list);
+		} catch (Exception e) {
+			throwFailedTransformException(e, packetTransformer, input);
 		}
-		addPackets(packetTransformer.toNative(), list);
 	}
 
 }

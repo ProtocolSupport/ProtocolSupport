@@ -4,6 +4,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleExplosion;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -17,10 +18,10 @@ public class Explosion extends MiddleExplosion {
 		serializer.writeDouble(z);
 		serializer.writeFloat(radius);
 		serializer.writeInt(blocks.length);
-		for (AffectedBlock block : blocks) {
-			serializer.writeByte(block.offX);
-			serializer.writeByte(block.offY);
-			serializer.writeByte(block.offZ);
+		for (Position block : blocks) {
+			serializer.writeByte(block.getX());
+			serializer.writeByte(block.getY());
+			serializer.writeByte(block.getZ());
 		}
 		serializer.writeFloat(pMotX);
 		serializer.writeFloat(pMotY);

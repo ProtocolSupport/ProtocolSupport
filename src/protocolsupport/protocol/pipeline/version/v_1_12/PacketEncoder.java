@@ -87,12 +87,12 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r2_10_11_12.Chunk;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_7_8_9r1_9r2_10_11_12.Pong;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_7_8_9r1_9r2_10_11_12.ServerInfo;
-import protocolsupport.protocol.pipeline.version.AbstractPacketEncoder;
+import protocolsupport.protocol.pipeline.version.AbstractModernPacketEncoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.zplatform.network.NetworkState;
 
 //TODO: use remapping registry for packet ids
-public class PacketEncoder extends AbstractPacketEncoder {
+public class PacketEncoder extends AbstractModernPacketEncoder {
 
 	@Override
 	protected int getNewPacketId(NetworkState currentProtocol, int oldPacketId) {

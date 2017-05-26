@@ -1,7 +1,8 @@
 package protocolsupport.protocol.utils.types;
 
-import java.text.MessageFormat;
 import java.util.UUID;
+
+import protocolsupport.utils.Utils;
 
 public class NetworkEntity {
 
@@ -51,12 +52,16 @@ public class NetworkEntity {
 
 	@Override
 	public String toString() {
-		return MessageFormat.format("{0}(UUID: {1}, Id: {2}, Type: {3})", getClass().getSimpleName(), getUUID(), getId(), getType());
+		return Utils.toStringAllFields(this);
 	}
 
 	public static class DataCache {
 		public boolean firstMeta = true;
 		public byte baseMetaFlags;
+		@Override
+		public String toString() {
+			return Utils.toStringAllFields(this);
+		}
 	}
 
 }

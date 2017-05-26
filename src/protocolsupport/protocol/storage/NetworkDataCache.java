@@ -11,6 +11,7 @@ import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.utils.Utils;
 
 public class NetworkDataCache {
 
@@ -137,6 +138,11 @@ public class NetworkDataCache {
 		return maxHealth;
 	}
 
+	@Override
+	public String toString() {
+		return Utils.toStringAllFields(this);
+	}
+
 	public static class PropertiesStorage {
 		private final HashMap<String, ProfileProperty> signed = new HashMap<>();
 		private final HashMap<String, ProfileProperty> unsigned = new HashMap<>();
@@ -158,6 +164,11 @@ public class NetworkDataCache {
 				properties.addAll(unsigned.values());
 				return properties;
 			}
+		}
+
+		@Override
+		public String toString() {
+			return Utils.toStringAllFields(this);
 		}
 	}
 
@@ -194,6 +205,11 @@ public class NetworkDataCache {
 				clone.propstorage.add(property);
 			}
 			return clone;
+		}
+
+		@Override
+		public String toString() {
+			return Utils.toStringAllFields(this);
 		}
 	}
 

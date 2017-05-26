@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.utils.Utils;
 
 public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {
 
@@ -24,6 +25,10 @@ public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {
 		public Record(int coord, int id) {
 			this.coord = coord;
 			this.id = id;
+		}
+		@Override
+		public String toString() {
+			return Utils.toStringAllFields(this);
 		}
 	}
 

@@ -8,6 +8,7 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupport.utils.Utils;
 
 public abstract class MiddleEntitySetAttributes extends MiddleEntity {
 
@@ -53,12 +54,20 @@ public abstract class MiddleEntitySetAttributes extends MiddleEntity {
 		public String key;
 		public double value;
 		public Modifier[] modifiers;
+		@Override
+		public String toString() {
+			return Utils.toStringAllFields(this);
+		}
 	}
 
 	protected static class Modifier {
 		public UUID uuid;
 		public double amount;
 		public int operation;
+		@Override
+		public String toString() {
+			return Utils.toStringAllFields(this);
+		}
 	}
 
 }

@@ -12,6 +12,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.GameMode;
+import protocolsupport.utils.Utils;
 
 public abstract class MiddlePlayerInfo extends ClientBoundMiddlePacket {
 
@@ -117,6 +118,11 @@ public abstract class MiddlePlayerInfo extends ClientBoundMiddlePacket {
 
 		public String getName() {
 			return displayNameJson == null ? username : ChatAPI.fromJSON(displayNameJson).toLegacyText();
+		}
+
+		@Override
+		public String toString() {
+			return Utils.toStringAllFields(this);
 		}
 	}
 

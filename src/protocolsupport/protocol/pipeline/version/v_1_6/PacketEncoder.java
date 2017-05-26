@@ -87,12 +87,12 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7_8.SetPa
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7_8_9r1_9r2_10_11_12.PlayerAbilities;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.noop.NoopPong;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_5_6.ServerInfo;
-import protocolsupport.protocol.pipeline.version.AbstractPacketEncoder;
+import protocolsupport.protocol.pipeline.version.AbstractLegacyPacketEncoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.utils.registry.PacketIdTransformerRegistry;
 import protocolsupport.zplatform.network.NetworkState;
 
-public class PacketEncoder extends AbstractPacketEncoder {
+public class PacketEncoder extends AbstractLegacyPacketEncoder {
 
 	private static final PacketIdTransformerRegistry packetIdRegistry = new PacketIdTransformerRegistry();
 	static {

@@ -1,14 +1,38 @@
 package protocolsupport.utils;
 
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.StringJoiner;
 
 import protocolsupport.ProtocolSupport;
 
 public class Utils {
+
+	public static String toStringAllFields(Object obj) {
+		StringJoiner joiner = new StringJoiner(", ");
+		Class<?> clazz = obj.getClass();
+		do {
+			try {
+				for (Field field : clazz.getDeclaredFields()) {
+					ReflectionUtils.setAccessible(field);
+					Object value = field.get(obj);
+					if (value == null || !value.getClass().isArray()) {
+						joiner.add(field.getName() + ": " + Objects.toString(value));
+					} else {
+						joiner.add(field.getName() + ": " + Arrays.deepToString(new Object[] {value}));
+					}
+				}
+			} catch (IllegalAccessException e) {
+				throw new RuntimeException("Unable to get object fields values", e);
+			}
+		} while ((clazz = clazz.getSuperclass()) != null);
+		return obj.getClass().getName() + "(" + joiner.toString() + ")";
+	}
 
 	public static <K, V> V getFromMapOrCreateDefault(Map<K, V> map, K key, V defaultValue) {
 		return map.computeIfAbsent(key, k -> defaultValue);
