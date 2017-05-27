@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.BiFunction;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.legacyremapper.LegacyEntityType;
@@ -32,12 +33,12 @@ public class TileNBTRemapper {
 		newToOldType.put("minecraft:sign", "Sign");
 	}
 
-	private static final EnumMap<TileEntityUpdateType, EnumMap<ProtocolVersion, List<TileEntitySpecificRemapper>>> registry = new EnumMap<>(TileEntityUpdateType.class);
+	private static final EnumMap<TileEntityUpdateType, EnumMap<ProtocolVersion, List<BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper>>>> registry = new EnumMap<>(TileEntityUpdateType.class);
 
-	private static void register(TileEntityUpdateType type, TileEntitySpecificRemapper transformer, ProtocolVersion... versions) {
-		EnumMap<ProtocolVersion, List<TileEntitySpecificRemapper>> map = Utils.getFromMapOrCreateDefault(registry, type, new EnumMap<ProtocolVersion, List<TileEntitySpecificRemapper>>(ProtocolVersion.class));
+	private static void register(TileEntityUpdateType type, BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper> transformer, ProtocolVersion... versions) {
+		EnumMap<ProtocolVersion, List<BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper>>> map = Utils.getFromMapOrCreateDefault(registry, type, new EnumMap<>(ProtocolVersion.class));
 		for (ProtocolVersion version : versions) {
-			Utils.getFromMapOrCreateDefault(map, version, new ArrayList<TileEntitySpecificRemapper>()).add(transformer);
+			Utils.getFromMapOrCreateDefault(map, version, new ArrayList<>()).add(transformer);
 		}
 	}
 
@@ -143,12 +144,12 @@ public class TileNBTRemapper {
 	}
 
 	public static NBTTagCompoundWrapper remap(ProtocolVersion version, NBTTagCompoundWrapper compound) {
-		EnumMap<ProtocolVersion, List<TileEntitySpecificRemapper>> map = registry.get(TileEntityUpdateType.fromType(getTileType(compound)));
+		EnumMap<ProtocolVersion, List<BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper>>> map = registry.get(TileEntityUpdateType.fromType(getTileType(compound)));
 		if (map != null) {
-			List<TileEntitySpecificRemapper> transformers = map.get(version);
+			List<BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper>> transformers = map.get(version);
 			if (transformers != null) {
-				for (TileEntitySpecificRemapper transformer : transformers) {
-					compound = transformer.remap(version, compound);
+				for (BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper> transformer : transformers) {
+					compound = transformer.apply(version, compound);
 				}
 				return compound;
 			}

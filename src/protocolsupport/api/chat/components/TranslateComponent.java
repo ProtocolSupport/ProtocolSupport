@@ -2,6 +2,8 @@ package protocolsupport.api.chat.components;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.common.base.Function;
@@ -17,8 +19,7 @@ public class TranslateComponent extends BaseComponent {
 
 	@Deprecated
 	public TranslateComponent(String translationKey, Object... values) {
-		this.translationKey = translationKey;
-		this.args.addAll(Lists.transform(Arrays.asList(values), new Function<Object, BaseComponent>() {
+		this(translationKey, Lists.transform(Arrays.asList(values), new Function<Object, BaseComponent>() {
 			@Override
 			public BaseComponent apply(Object v) {
 				return v instanceof BaseComponent ? (BaseComponent) v : new TextComponent(v.toString());
@@ -27,8 +28,12 @@ public class TranslateComponent extends BaseComponent {
 	}
 
 	public TranslateComponent(String translationKey, BaseComponent... values) {
+		this(translationKey, Arrays.asList(values));
+	}
+
+	public TranslateComponent(String translationKey, Collection<BaseComponent> values) {
 		this.translationKey = translationKey;
-		this.args.addAll(Arrays.asList(values));
+		this.args.addAll(values);
 	}
 
 	public String getTranslationKey() {
@@ -46,7 +51,7 @@ public class TranslateComponent extends BaseComponent {
 	}
 
 	public List<BaseComponent> getTranslationArgs() {
-		return args;
+		return Collections.unmodifiableList(args);
 	}
 
 	@Override

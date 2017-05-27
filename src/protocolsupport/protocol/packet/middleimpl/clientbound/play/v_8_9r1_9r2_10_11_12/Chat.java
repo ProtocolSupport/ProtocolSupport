@@ -15,7 +15,7 @@ public class Chat extends MiddleChat {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHAT_ID, version);
-		StringSerializer.writeString(serializer, version, ChatAPI.toJSON(version.isBefore(ProtocolVersion.MINECRAFT_1_9) ? LegacyChatJson.convert(message) : message));
+		StringSerializer.writeString(serializer, version, ChatAPI.toJSON(LegacyChatJson.convert(message, version)));
 		serializer.writeByte(position.ordinal());
 		return RecyclableSingletonList.create(serializer);
 	}
