@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.StringJoiner;
+import java.util.function.Function;
 
 import protocolsupport.ProtocolSupport;
 
@@ -104,28 +105,19 @@ public class Utils {
 		return (number + base) - mod;
 	}
 
-	public static <T> T getJavaPropertyValue(String property, T defaultValue, Converter<String, T> converter) {
+	public static <T> T getJavaPropertyValue(String property, T defaultValue, Function<String, T> converter) {
 		return getRawJavaPropertyValue("protocolsupport."+property, defaultValue, converter);
 	}
 
-	public static <T> T getRawJavaPropertyValue(String property, T defaultValue, Converter<String, T> converter) {
+	public static <T> T getRawJavaPropertyValue(String property, T defaultValue, Function<String, T> converter) {
 		try {
 			String value = System.getProperty(property);
 			if (value != null) {
-				return converter.convert(value);
+				return converter.apply(value);
 			}
 		} catch (Throwable t) {
 		}
 		return defaultValue;
-	}
-
-	@FunctionalInterface
-	public static interface Converter<T, R> {
-		public static final Converter<String, Integer> STRING_TO_INT = Integer::parseInt;
-		public static final Converter<String, Long> STRING_TO_LONG = Long::parseLong;
-		public static final Converter<String, Boolean> STRING_TO_BOOLEAN = Boolean::parseBoolean;
-		public static final Converter<String, String> NONE = t -> t;
-		public R convert(T t);
 	}
 
 	public static boolean isTrue(Boolean b) {

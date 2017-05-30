@@ -18,15 +18,14 @@ import protocolsupport.protocol.pipeline.IPipeLineBuilder;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.Utils;
-import protocolsupport.utils.Utils.Converter;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
 import protocolsupport.zplatform.ServerPlatform;
 
 public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
-	private static final int ping152delay = Utils.getJavaPropertyValue("ping152delay", 100, Converter.STRING_TO_INT);
-	private static final int pingLegacyDelay = Utils.getJavaPropertyValue("pinglegacydelay", 200, Converter.STRING_TO_INT);
+	private static final int ping152delay = Utils.getJavaPropertyValue("ping152delay", 100, Integer::parseInt);
+	private static final int pingLegacyDelay = Utils.getJavaPropertyValue("pinglegacydelay", 200, Integer::parseInt);
 
 	public static void init() {
 		ProtocolSupport.logInfo("Assume 1.5.2 ping delay: "+ping152delay);

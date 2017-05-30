@@ -7,7 +7,6 @@ import io.netty.util.Recycler;
 import io.netty.util.Recycler.Handle;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.utils.Utils;
-import protocolsupport.utils.Utils.Converter;
 
 public class Compressor {
 
@@ -15,7 +14,7 @@ public class Compressor {
 		ProtocolSupport.logInfo("Compression level: "+compressionLevel);
 	}
 
-	private static final int compressionLevel = Utils.getJavaPropertyValue("compressionlevel", 3, Converter.STRING_TO_INT);
+	private static final int compressionLevel = Utils.getJavaPropertyValue("compressionlevel", 3, Integer::parseInt);
 
 	private static final Recycler<Compressor> recycler = new Recycler<Compressor>() {
 		@Override
