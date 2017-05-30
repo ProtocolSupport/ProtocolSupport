@@ -10,9 +10,6 @@ public class SoundData {
 
 	private static final TIntObjectHashMap<String> idToName = new TIntObjectHashMap<>();
 
-	public static void init() {
-	}
-
 	static {
 		for (JsonElement element : MinecraftData.iterateJsonArrayResource("sounds.json")) {
 			JsonObject object = element.getAsJsonObject();

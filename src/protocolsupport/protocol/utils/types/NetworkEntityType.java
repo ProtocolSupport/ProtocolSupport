@@ -186,7 +186,4 @@ public enum NetworkEntityType {
 		this(etype, bukkitType, null);
 	}
 
-	public static void init() {
-	}
-
 }

@@ -4,9 +4,6 @@ import java.util.HashMap;
 
 public class DataWatcherObjectIndex {
 
-	public static void init() {
-	}
-
 	public static class Entity {
 		public static final int FLAGS = takeNextId();
 		public static final int AIR = takeNextId();

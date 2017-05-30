@@ -52,7 +52,4 @@ public enum ServerBoundPacket {
 		return id;
 	}
 
-	public static void init() {
-	}
-
 }

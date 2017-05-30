@@ -27,9 +27,6 @@ import protocolsupport.utils.Utils;
 
 public class DataWatcherObjectIdRegistry {
 
-	public static void init() {
-	}
-
 	private static final HashMap<Class<? extends DataWatcherObject<?>>, EnumMap<ProtocolVersion, Integer>> registry = new HashMap<>();
 
 	private static void register(Class<? extends DataWatcherObject<?>> clazz, int id, ProtocolVersion... versions) {

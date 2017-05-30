@@ -92,7 +92,4 @@ public class ClientBoundPacket {
 
 	public static final int LEGACY_PLAY_UPDATE_SIGN_ID = 100;
 
-	public static void init() {
-	}
-
 }

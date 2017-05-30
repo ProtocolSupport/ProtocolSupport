@@ -615,7 +615,4 @@ public enum SpecificRemapper {
 		}
 	}
 
-	public static void init() {
-	}
-
 }

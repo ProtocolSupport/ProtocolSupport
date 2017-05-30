@@ -10,9 +10,6 @@ public class KeybindData {
 
 	private static final HashMap<String, String> nameToKeyRepr = new HashMap<>();
 
-	public static void init() {
-	}
-
 	static {
 		new BufferedReader(new InputStreamReader(MinecraftData.getDataResource("keybinds"), StandardCharsets.UTF_8)).lines()
 		.filter(line -> !line.isEmpty())

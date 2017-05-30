@@ -36,7 +36,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 	private static final int loginThreads = Utils.getJavaPropertyValue("loginthreads", Integer.MAX_VALUE, Integer::parseInt);
 	private static final int loginThreadKeepAlive = Utils.getJavaPropertyValue("loginthreadskeepalive", 60, Integer::parseInt);
 
-	public static void init() {
+	static {
 		ProtocolSupport.logInfo(MessageFormat.format("Login threads max count: {0}, keep alive time: {1}", loginThreads, loginThreadKeepAlive));
 	}
 

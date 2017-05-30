@@ -11,9 +11,6 @@ public class ItemData {
 
 	private static final HashMap<String, Integer> nameToId = new HashMap<>();
 
-	public static void init() {
-	}
-
 	static {
 		read("blocks.json");
 		read("items.json");

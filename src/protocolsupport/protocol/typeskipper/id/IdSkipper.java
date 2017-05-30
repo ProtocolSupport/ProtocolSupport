@@ -86,7 +86,4 @@ public class IdSkipper {
 		}
 	};
 
-	public static void init() {
-	}
-
 }

@@ -27,7 +27,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 	private static final int ping152delay = Utils.getJavaPropertyValue("ping152delay", 100, Integer::parseInt);
 	private static final int pingLegacyDelay = Utils.getJavaPropertyValue("pinglegacydelay", 200, Integer::parseInt);
 
-	public static void init() {
+	static {
 		ProtocolSupport.logInfo("Assume 1.5.2 ping delay: "+ping152delay);
 		ProtocolSupport.logInfo("Assume legacy ping dealy: "+pingLegacyDelay);
 	}

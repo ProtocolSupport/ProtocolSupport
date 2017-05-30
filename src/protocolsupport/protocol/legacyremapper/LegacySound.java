@@ -507,7 +507,4 @@ public class LegacySound {
 		register("block.chest.close", "random.chestclosed");
 	}
 
-	public static void init() {
-	}
-
 }

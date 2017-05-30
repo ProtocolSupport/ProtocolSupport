@@ -9,10 +9,6 @@ import protocolsupport.utils.Utils;
 
 public class Allocator {
 
-	public static void init() {
-		ProtocolSupport.logInfo("Allocator: "+allocator + ", direct: "+direct);
-	}
-
 	private static final boolean direct = Utils.getJavaPropertyValue("buffer", true, (t -> {
 		switch (t.toLowerCase()) {
 			case "direct": {
@@ -39,6 +35,10 @@ public class Allocator {
 			}
 		}
 	}));
+
+	static {
+		ProtocolSupport.logInfo("Allocator: "+allocator + ", direct: "+direct);
+	}
 
 	public static ByteBuf allocateBuffer() {
 		if (direct) {

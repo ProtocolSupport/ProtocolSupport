@@ -328,7 +328,4 @@ public class IdRemapper {
 		}
 	};
 
-	public static void init() {
-	}
-
 }
