@@ -2,6 +2,7 @@ package protocolsupport.utils;
 
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,12 +20,14 @@ public class Utils {
 		do {
 			try {
 				for (Field field : clazz.getDeclaredFields()) {
-					ReflectionUtils.setAccessible(field);
-					Object value = field.get(obj);
-					if ((value == null) || !value.getClass().isArray()) {
-						joiner.add(field.getName() + ": " + Objects.toString(value));
-					} else {
-						joiner.add(field.getName() + ": " + Arrays.deepToString(new Object[] {value}));
+					if (!Modifier.isStatic(field.getModifiers())) {
+						ReflectionUtils.setAccessible(field);
+						Object value = field.get(obj);
+						if ((value == null) || !value.getClass().isArray()) {
+							joiner.add(field.getName() + ": " + Objects.toString(value));
+						} else {
+							joiner.add(field.getName() + ": " + Arrays.deepToString(new Object[] {value}));
+						}
 					}
 				}
 			} catch (IllegalAccessException e) {
