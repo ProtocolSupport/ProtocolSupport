@@ -10,7 +10,6 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.commands.CommandHandler;
 import protocolsupport.listeners.CommandListener;
 import protocolsupport.listeners.PlayerListener;
-import protocolsupport.logger.AsyncErrorLogger;
 import protocolsupport.protocol.legacyremapper.LegacySound;
 import protocolsupport.protocol.legacyremapper.chunk.BlockStorageReader;
 import protocolsupport.protocol.packet.ClientBoundPacket;
@@ -36,7 +35,6 @@ public class ProtocolSupport extends JavaPlugin {
 
 	@Override
 	public void onLoad() {
-		AsyncErrorLogger.INSTANCE.start();
 		if (!ServerPlatform.detect()) {
 			getLogger().severe("Unsupported server implementation type, shutting down");
 			Bukkit.shutdown();
@@ -82,7 +80,6 @@ public class ProtocolSupport extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		Bukkit.shutdown();
-		AsyncErrorLogger.INSTANCE.stop();
 	}
 
 	public static void logWarning(String message) {
