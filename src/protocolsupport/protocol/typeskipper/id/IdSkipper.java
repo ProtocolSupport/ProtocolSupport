@@ -63,6 +63,7 @@ public class IdSkipper {
 
 	public static final GenericSkippingRegistry<String, GenericSkippingTable<String>> ATTRIBUTES = new GenericSkippingRegistry<String, GenericSkippingTable<String>>() {
 		{
+			registerSkipEntry("generic.flyingSpeed", ProtocolVersionsHelper.BEFORE_1_12);
 			registerSkipEntry("generic.armorToughness", ProtocolVersionsHelper.BEFORE_1_9_1);
 			registerSkipEntry("generic.luck", ProtocolVersionsHelper.BEFORE_1_9);
 			registerSkipEntry("generic.armor", ProtocolVersionsHelper.BEFORE_1_9);
