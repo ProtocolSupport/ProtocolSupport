@@ -80,7 +80,6 @@ public class LogicHandler extends ChannelDuplexHandler {
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		super.channelInactive(ctx);
-		ConnectionImpl connection = ConnectionImpl.getFromChannel(ctx.channel());
 		NetworkManagerWrapper networkmanager = connection.getNetworkManagerWrapper();
 		String username = networkmanager.getUserName();
 		if (username != null) {
