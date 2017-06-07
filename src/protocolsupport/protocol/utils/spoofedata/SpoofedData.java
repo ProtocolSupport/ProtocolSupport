@@ -8,8 +8,8 @@ public class SpoofedData {
 
 	private final String hostname;
 	private final String address;
-	private UUID uuid;
-	private ProfileProperty[] properties;
+	private final UUID uuid;
+	private final ProfileProperty[] properties;
 	public SpoofedData(String hostname, String address, UUID uuid, ProfileProperty[] properties) {
 		this.hostname = hostname;
 		this.address = address;

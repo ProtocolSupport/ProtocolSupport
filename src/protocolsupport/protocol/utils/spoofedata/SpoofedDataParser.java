@@ -13,7 +13,7 @@ public class SpoofedDataParser {
 	}
 
 	public static SpoofedData tryParse(String data) {
-		return parsers.stream().map(parser -> { 
+		return parsers.stream().map(parser -> {
 			try {
 				return parser.apply(data);
 			} catch (Exception e) {
