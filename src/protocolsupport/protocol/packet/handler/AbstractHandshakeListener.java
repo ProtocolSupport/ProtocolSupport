@@ -18,13 +18,13 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.storage.ThrottleTracker;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.authlib.UUIDTypeAdapter;
+import protocolsupport.protocol.utils.spoofedata.SpoofedData;
+import protocolsupport.protocol.utils.spoofedata.SpoofedDataParser;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 import protocolsupport.zplatform.network.NetworkState;
 
 public abstract class AbstractHandshakeListener {
-
-	private static final Gson gson = new Gson();
 
 	protected final NetworkManagerWrapper networkManager;
 	protected AbstractHandshakeListener(NetworkManagerWrapper networkmanager) {
@@ -39,7 +39,7 @@ public abstract class AbstractHandshakeListener {
 				//check connection throttle
 				try {
 					final InetAddress address = networkManager.getAddress().getAddress();
-					if (ThrottleTracker.isEnabled() && !ServerPlatform.get().getMiscUtils().isBungeeEnabled()) {
+					if (ThrottleTracker.isEnabled() && !ServerPlatform.get().getMiscUtils().isProxyEnabled()) {
 						if (ThrottleTracker.throttle(address)) {
 							String message = "Connection throttled! Please wait before reconnecting.";
 							networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), new GenericFutureListener<Future<? super Void>>() {
@@ -68,10 +68,10 @@ public abstract class AbstractHandshakeListener {
 				}
 				ConnectionImpl connection = ConnectionImpl.getFromChannel(networkManager.getChannel());
 				//bungee spoofed data handling
-				if (ServerPlatform.get().getMiscUtils().isBungeeEnabled()) {
-					final String[] split = hostname.split("\u0000");
-					if ((split.length != 3) && (split.length != 4)) {
-						String message = "If you wish to use IP forwarding, please enable it in your BungeeCord config as well!";
+				if (ServerPlatform.get().getMiscUtils().isProxyEnabled()) {
+					SpoofedData sdata = SpoofedDataParser.tryParse(hostname);
+					if (sdata == null) {
+						String message = "Ip forwarding is enabled but spoofed data can't be decoded or is missing";
 						networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), new GenericFutureListener<Future<? super Void>>() {
 							@Override
 							public void operationComplete(Future<? super Void> arg0)  {
@@ -80,9 +80,9 @@ public abstract class AbstractHandshakeListener {
 						});
 						return;
 					}
-					hostname = split[0];
-					connection.changeAddress(new InetSocketAddress(split[1], connection.getAddress().getPort()));
-					networkManager.setSpoofedProfile(UUIDTypeAdapter.fromString(split[2]), split.length == 4 ? gson.fromJson(split[3], ProfileProperty[].class) : null);
+					hostname = sdata.getHostname();
+					connection.changeAddress(new InetSocketAddress(sdata.getAddress(), connection.getAddress().getPort()));
+					networkManager.setSpoofedProfile(sdata.getUUID(), sdata.getProperties());
 				}
 				//ps handshake event
 				ConnectionHandshakeEvent event = new ConnectionHandshakeEvent(connection, hostname);

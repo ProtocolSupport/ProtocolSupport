@@ -89,7 +89,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 	}
 
 	@Override
-	public boolean isBungeeEnabled() {
+	public boolean isProxyEnabled() {
 		return SpigotConfig.bungee;
 	}
 

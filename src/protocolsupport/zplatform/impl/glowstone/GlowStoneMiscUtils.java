@@ -102,7 +102,7 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	}
 
 	@Override
-	public boolean isBungeeEnabled() {
+	public boolean isProxyEnabled() {
 		return getServer().getProxySupport();
 	}
 

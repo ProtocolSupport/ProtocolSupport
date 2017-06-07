@@ -23,7 +23,7 @@ public interface PlatformUtils {
 
 	public String getOutdatedServerMessage();
 
-	public boolean isBungeeEnabled();
+	public boolean isProxyEnabled();
 
 	public boolean isDebugging();
 
