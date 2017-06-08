@@ -213,7 +213,7 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNumberToByte(DataWatcherObjectIndex.Ocelot.VARIANT, 16), ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	WOLF(NetworkEntityType.WOLF, SpecificRemapper.TAMEABLE,
-		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectFloat>(DataWatcherObjectIndex.Wolf.HEALTH, 12) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectFloat>(DataWatcherObjectIndex.Wolf.HEALTH, 15) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectFloat>(DataWatcherObjectIndex.Wolf.HEALTH, 14) {}, ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectFloat>(DataWatcherObjectIndex.Wolf.HEALTH, 18) {}, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1)),
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Wolf.HEALTH, 18), ProtocolVersionsHelper.BEFORE_1_6),
