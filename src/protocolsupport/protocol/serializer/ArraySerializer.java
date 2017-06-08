@@ -78,14 +78,6 @@ public class ArraySerializer {
 		return array;
 	}
 
-	public static int[] readVarIntIntArray(ByteBuf from) {
-		int[] array = new int[VarNumberSerializer.readVarInt(from)];
-		for (int i = 0; i < array.length; i++) {
-			array[i] = from.readInt();
-		}
-		return array;
-	}
-
 	public static <T> void writeVarIntTArray(ByteBuf to, T[] array, BiConsumer<ByteBuf, T> elementWriter) {
 		VarNumberSerializer.writeVarInt(to, array.length);
 		for (T element : array) {
@@ -104,13 +96,6 @@ public class ArraySerializer {
 		VarNumberSerializer.writeVarInt(to, array.length);
 		for (int element : array) {
 			VarNumberSerializer.writeVarInt(to, element);
-		}
-	}
-
-	public static void writeVarIntIntArray(ByteBuf to, int[] array) {
-		VarNumberSerializer.writeVarInt(to, array.length);
-		for (int element : array) {
-			to.writeInt(element);
 		}
 	}
 

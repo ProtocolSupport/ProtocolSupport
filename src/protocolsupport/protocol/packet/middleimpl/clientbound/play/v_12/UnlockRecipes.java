@@ -17,9 +17,9 @@ public class UnlockRecipes extends MiddleUnlockRecipes {
 		MiscSerializer.writeEnum(serializer, action);
 		serializer.writeBoolean(openBook);
 		serializer.writeBoolean(enableFiltering);
-		ArraySerializer.writeVarIntIntArray(serializer, recipes1);
+		ArraySerializer.writeVarIntVarIntArray(serializer, recipes1);
 		if (action == Action.INIT) {
-			ArraySerializer.writeVarIntIntArray(serializer, recipes2);
+			ArraySerializer.writeVarIntVarIntArray(serializer, recipes2);
 		}
 		return RecyclableSingletonList.create(serializer);
 	}

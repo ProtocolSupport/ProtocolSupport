@@ -18,9 +18,9 @@ public abstract class MiddleUnlockRecipes extends ClientBoundMiddlePacket {
 		action = MiscSerializer.readEnum(serverdata, Action.class);
 		openBook = serverdata.readBoolean();
 		enableFiltering = serverdata.readBoolean();
-		recipes1 = ArraySerializer.readVarIntIntArray(serverdata);
+		recipes1 = ArraySerializer.readVarIntVarIntArray(serverdata);
 		if (action == Action.INIT) {
-			recipes2 = ArraySerializer.readVarIntIntArray(serverdata);
+			recipes2 = ArraySerializer.readVarIntVarIntArray(serverdata);
 		}
 	}
 
