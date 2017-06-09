@@ -20,7 +20,6 @@ import protocolsupport.protocol.pipeline.common.SimpleReadTimeoutHandler;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
-import protocolsupport.zplatform.network.NetworkState;
 
 public abstract class AbstractLoginListenerPlay implements IHasProfile {
 
@@ -41,22 +40,16 @@ public abstract class AbstractLoginListenerPlay implements IHasProfile {
 		return profile;
 	}
 
-	@SuppressWarnings("unchecked")
 	public void finishLogin() {
 		if (!networkManager.isConnected()) {
 			return;
 		}
 
-		// send login success
-		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginSuccessPacket(profile), new GenericFutureListener<Future<? super Void>>() {
-			@Override
-			public void operationComplete(Future<? super Void> future) throws Exception {
-				networkManager.setProtocol(NetworkState.PLAY);
-			}
-		});
-		// tick connection keep now
+		//send login success
+		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginSuccessPacket(profile));
+		//tick connection keep now
 		keepConnection();
-		// now fire login event
+		//now fire login event
 		PlayerLoginFinishEvent event = new PlayerLoginFinishEvent(ConnectionImpl.getFromChannel(networkManager.getChannel()), profile.getName(), profile.getUUID(), onlineMode);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.isLoginDenied()) {
@@ -117,16 +110,13 @@ public abstract class AbstractLoginListenerPlay implements IHasProfile {
 		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("PS|FinishLogin"));
 		//add player to game
 		joinGame(joindata.data);
-
-		//force channel read because otherwise it gets stuck. TODO: remove this when it gets fixed
-		networkManager.getChannel().read();
 	}
 
 	protected void keepConnection() {
-		// custom payload does nothing on a client when sent with invalid tag,
-		// but it resets client readtimeouthandler, and that is exactly what we need
+		//custom payload does nothing on a client when sent with invalid tag,
+		//but it resets client readtimeouthandler, and that is exactly what we need
 		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("PS|KeepAlive"));
-		// we also need to reset server readtimeouthandler (may be null if netty already teared down the pipeline)
+		//we also need to reset server readtimeouthandler (may be null if netty already teared down the pipeline)
 		SimpleReadTimeoutHandler timeouthandler = ChannelHandlers.getTimeoutHandler(networkManager.getChannel().pipeline());
 		if (timeouthandler != null) {
 			timeouthandler.setLastRead();
@@ -141,9 +131,9 @@ public abstract class AbstractLoginListenerPlay implements IHasProfile {
 		try {
 			Bukkit.getLogger().info("Disconnecting " + getConnectionRepr() + ": " + s);
 			if (ConnectionImpl.getFromChannel(networkManager.getChannel()).getVersion().isBetween(ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_7_10)) {
-				// first send join game that will make client actually switch to game state
+				//first send join game that will make client actually switch to game state
 				networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createFakeJoinGamePacket());
-				// send disconnect with a little delay
+				//send disconnect with a little delay
 				networkManager.getChannel().eventLoop().schedule(() -> disconnect0(s), 50, TimeUnit.MILLISECONDS);
 			} else {
 				disconnect0(s);
