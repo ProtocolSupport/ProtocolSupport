@@ -576,6 +576,7 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.AreaEffectCloud.PARTICLE_DATA2, 10) {}, ProtocolVersionsHelper.ALL_1_9)
 	),
 	SHULKER_BULLET(NetworkEntityType.SHULKER_BULLET, SpecificRemapper.ENTITY),
+	LAMA_SPIT(NetworkEntityType.LAMA_SPIT, SpecificRemapper.ENTITY),
 	DRAGON_FIREBALL(NetworkEntityType.DRAGON_FIREBALL, SpecificRemapper.ENTITY),
 	EVOCATOR_FANGS(NetworkEntityType.EVOCATOR_FANGS, SpecificRemapper.ENTITY);
 
