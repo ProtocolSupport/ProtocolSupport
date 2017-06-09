@@ -117,6 +117,9 @@ public abstract class AbstractLoginListenerPlay implements IHasProfile {
 		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("PS|FinishLogin"));
 		//add player to game
 		joinGame(joindata.data);
+
+		//force channel read because otherwise it gets stuck. TODO: remove this when it gets fixed
+		networkManager.getChannel().read();
 	}
 
 	protected void keepConnection() {
