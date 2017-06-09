@@ -61,6 +61,10 @@ public class ArraySerializer {
 		return array;
 	}
 
+	public static String[] readVarIntStringArray(ByteBuf from, ProtocolVersion version) {
+		return readVarIntTArray(from, String.class, buf -> StringSerializer.readString(buf, version));
+	}
+
 	@SuppressWarnings("unchecked")
 	public static <T> T[] readShortTArray(ByteBuf from, Class<T> tclass, Function<ByteBuf, T> elementReader) {
 		T[] array = (T[]) Array.newInstance(tclass, from.readShort());
@@ -82,6 +86,13 @@ public class ArraySerializer {
 		VarNumberSerializer.writeVarInt(to, array.length);
 		for (T element : array) {
 			elementWriter.accept(to, element);
+		}
+	}
+
+	public static void writeVarIntStringArray(ByteBuf to, ProtocolVersion version, String[] array) {
+		VarNumberSerializer.writeVarInt(to, array.length);
+		for (String str : array) {
+			StringSerializer.writeString(to, version, str);
 		}
 	}
 
