@@ -2,6 +2,7 @@ package protocolsupport.protocol.typeremapper.watchedentity.remapper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -585,7 +586,7 @@ public enum SpecificRemapper {
 	}
 
 	private final NetworkEntityType type;
-	private final EnumMap<ProtocolVersion, ArrayList<DataWatcherDataRemapper>> entries = new EnumMap<>(ProtocolVersion.class);
+	private final EnumMap<ProtocolVersion, List<DataWatcherDataRemapper>> entries = new EnumMap<>(ProtocolVersion.class);
 
 	SpecificRemapper(NetworkEntityType type, Entry... entries) {
 		this.type = type;
@@ -598,13 +599,13 @@ public enum SpecificRemapper {
 
 	SpecificRemapper(NetworkEntityType type, SpecificRemapper superType, Entry... entries) {
 		this(type, entries);
-		for (Map.Entry<ProtocolVersion, ArrayList<DataWatcherDataRemapper>> entry : superType.entries.entrySet()) {
+		for (Map.Entry<ProtocolVersion, List<DataWatcherDataRemapper>> entry : superType.entries.entrySet()) {
 			Utils.getFromMapOrCreateDefault(this.entries, entry.getKey(), new ArrayList<DataWatcherDataRemapper>()).addAll(entry.getValue());
 		}
 	}
 
 	public List<DataWatcherDataRemapper> getRemaps(ProtocolVersion version) {
-		return entries.get(version);
+		return entries.getOrDefault(version, Collections.emptyList());
 	}
 
 	private static class Entry {
