@@ -52,6 +52,7 @@ import net.glowstone.net.message.play.entity.SpawnPlayerMessage;
 import net.glowstone.net.message.play.entity.SpawnXpOrbMessage;
 import net.glowstone.net.message.play.entity.VehicleMoveMessage;
 import net.glowstone.net.message.play.game.BlockActionMessage;
+import net.glowstone.net.message.play.game.BlockBreakAnimationMessage;
 import net.glowstone.net.message.play.game.BlockChangeMessage;
 import net.glowstone.net.message.play.game.ChatMessage;
 import net.glowstone.net.message.play.game.ChunkDataMessage;
@@ -489,7 +490,7 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 
 	@Override
 	public int getOutPlayBlockBreakAnimationPacketId() {
-		return 0x09; // TODO: not implemented in Glowstone
+		return getOpcode(ProtocolType.PLAY, OUTBOUND, BlockBreakAnimationMessage.class);
 	}
 
 	@Override
