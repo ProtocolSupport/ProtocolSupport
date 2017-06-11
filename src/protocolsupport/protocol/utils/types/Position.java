@@ -1,5 +1,7 @@
 package protocolsupport.protocol.utils.types;
 
+import protocolsupport.utils.Utils;
+
 public class Position {
 
 	protected int x;
@@ -42,6 +44,11 @@ public class Position {
 
 	public void modifyZ(int cnt) {
 		z += cnt;
+	}
+
+	@Override
+	public String toString() {
+		return Utils.toStringAllFields(this);
 	}
 
 }

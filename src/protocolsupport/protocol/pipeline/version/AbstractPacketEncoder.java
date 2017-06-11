@@ -1,13 +1,16 @@
 package protocolsupport.protocol.pipeline.version;
 
+import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.EncoderException;
 import protocolsupport.api.Connection;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry;
@@ -29,39 +32,44 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 			object.setConnection(AbstractPacketEncoder.this.connection);
 			object.setSharedStorage(AbstractPacketEncoder.this.cache);
 		});
-		varintPacketId = (connection.getVersion() != ProtocolVersion.MINECRAFT_PE) && connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_1_7_5);
 	}
 
 	protected final MiddleTransformerRegistry<ClientBoundMiddlePacket> registry = new MiddleTransformerRegistry<>();
 
-	private final boolean varintPacketId;
-
 	@Override
-	public void encode(ChannelHandlerContext ctx, ByteBuf input, List<Object> output) throws InstantiationException, IllegalAccessException  {
+	public void encode(ChannelHandlerContext ctx, ByteBuf input, List<Object> output) throws Exception {
 		if (!input.isReadable()) {
 			return;
 		}
 		NetworkState currentProtocol = ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(ctx.channel());
 		int packetId = VarNumberSerializer.readVarInt(input);
 		ClientBoundMiddlePacket packetTransformer = registry.getTransformer(currentProtocol, packetId);
-		packetTransformer.readFromServerData(input);
-		if (packetTransformer.isValid()) {
+		try {
+			packetTransformer.readFromServerData(input);
 			packetTransformer.handle();
 			try (RecyclableCollection<ClientBoundPacketData> data = packetTransformer.toData(connection.getVersion())) {
 				for (ClientBoundPacketData packetdata : data) {
 					ByteBuf senddata = Allocator.allocateBuffer();
-					int newPacketId = getNewPacketId(currentProtocol, packetdata.getPacketId());
-					if (varintPacketId) {
-						VarNumberSerializer.writeVarInt(senddata, newPacketId);
-					} else {
-						senddata.writeByte(newPacketId);
-					}
+					writePacketId(senddata, getNewPacketId(currentProtocol, packetdata.getPacketId()));
 					senddata.writeBytes(packetdata);
 					output.add(senddata);
 				}
 			}
+		} catch (Exception exception) {
+			if (ServerPlatform.get().getMiscUtils().isDebugging()) {
+				input.readerIndex(0);
+				throw new EncoderException(MessageFormat.format(
+					"Unable to transform or read middle packet {0} (data: {1})",
+					packetTransformer.toString(),
+					Arrays.toString(MiscSerializer.readAllBytes(input))
+				), exception);
+			} else {
+				throw exception;
+			}
 		}
 	}
+
+	protected abstract void writePacketId(ByteBuf to, int packetId);
 
 	protected abstract int getNewPacketId(NetworkState currentProtocol, int oldPacketId);
 

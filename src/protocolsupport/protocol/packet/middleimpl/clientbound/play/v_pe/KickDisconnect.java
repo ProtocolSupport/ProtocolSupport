@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.api.chat.ChatAPI;
+import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.protocol.legacyremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleKickDisconnect;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -13,13 +13,13 @@ public class KickDisconnect extends MiddleKickDisconnect {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		return create(version, messageJson);
+		return create(version, message);
 	}
 
-	public static RecyclableCollection<ClientBoundPacketData> create(ProtocolVersion version, String messageJson) {
+	public static RecyclableCollection<ClientBoundPacketData> create(ProtocolVersion version, BaseComponent message) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.DISCONNECT, version);
 		serializer.writeBoolean(false); //do not hide disconnection screen
-		StringSerializer.writeString(serializer, version, ChatAPI.fromJSON(messageJson).toLegacyText());
+		StringSerializer.writeString(serializer, version, message.toLegacyText());
 		return RecyclableSingletonList.create(serializer);
 	}
 

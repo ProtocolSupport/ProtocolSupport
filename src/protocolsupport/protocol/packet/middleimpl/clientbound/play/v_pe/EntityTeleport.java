@@ -6,8 +6,8 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityTelep
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
-import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedType;
+import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -15,8 +15,8 @@ public class EntityTeleport extends MiddleEntityTeleport {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		WatchedEntity wentity = cache.getWatchedEntity(entityId);
-		if ((wentity != null) && (wentity.getType() == WatchedType.PLAYER)) {
+		NetworkEntity wentity = cache.getWatchedEntity(entityId);
+		if ((wentity != null) && (wentity.getType() == NetworkEntityType.PLAYER)) {
 			return RecyclableSingletonList.create(Position.create(version, entityId, x, y, z, pitch, yaw, Position.ANIMATION_MODE_ALL));
 		} else {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_TELEPORT, version);

@@ -16,9 +16,6 @@ public class BlockStorageReader {
 		}
 	}
 
-	public static void init() {
-	}
-
 	private final int[] palette;
 	private final long[] blockdata;
 	private final int bitsPerBlock;

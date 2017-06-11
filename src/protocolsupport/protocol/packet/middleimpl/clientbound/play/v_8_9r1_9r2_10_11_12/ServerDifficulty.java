@@ -1,0 +1,19 @@
+package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12;
+
+import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.middle.clientbound.play.MiddleServerDifficulty;
+import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableSingletonList;
+
+public class ServerDifficulty extends MiddleServerDifficulty {
+
+	@Override
+	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SERVER_DIFFICULTY_ID, version);
+		serializer.writeByte(difficulty.getId());
+		return RecyclableSingletonList.create(serializer);
+	}
+
+}

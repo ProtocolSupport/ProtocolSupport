@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 
 import protocolsupport.protocol.ConnectionImpl;
 
-//TODO: guard with single rw lock because otherwise after moving handshake processing to separate executor race conditions may occur
 public class ProtocolStorage {
 
 	private static final Map<SocketAddress, Data> primaryStorage = new ConcurrentHashMap<>(1000);
@@ -23,8 +22,10 @@ public class ProtocolStorage {
 
 	public static final void addAddress(SocketAddress primary, SocketAddress additional) {
 		Data dataentry = primaryStorage.get(primary);
-		dataentry.addresses.add(additional);
-		secondayStorage.put(additional, dataentry.connection);
+		if (dataentry != null) {
+			dataentry.addresses.add(additional);
+			secondayStorage.put(additional, dataentry.connection);
+		}
 	}
 
 	public static ConnectionImpl getConnection(SocketAddress address) {
@@ -34,9 +35,9 @@ public class ProtocolStorage {
 	public static ConnectionImpl removeConnection(SocketAddress address) {
 		Data dataentry = primaryStorage.remove(address);
 		for (SocketAddress aaddr : dataentry.addresses) {
-			secondayStorage.remove(aaddr);
+			secondayStorage.remove(aaddr, dataentry.connection);
 		}
-		secondayStorage.remove(address);
+		secondayStorage.remove(address, dataentry.connection);
 		return dataentry.connection;
 	}
 

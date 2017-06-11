@@ -9,7 +9,8 @@ public class ScoreComponent extends BaseComponent {
 
 	private final String playername;
 	private final String objectivename;
-	private String value;
+
+	private String forcedvalue;
 
 	public ScoreComponent(String playername, String objectivename) {
 		this.playername = playername;
@@ -24,12 +25,17 @@ public class ScoreComponent extends BaseComponent {
 		return objectivename;
 	}
 
+	public boolean hasValue() {
+		return forcedvalue != null;
+	}
+
 	public void setValue(String value) {
-		this.value = value;
+		forcedvalue = value;
 	}
 
 	@Override
 	public String getValue() {
+		String value = forcedvalue;
 		if (value == null) {
 			Player player = Bukkit.getPlayerExact(playername);
 			if (player != null) {
@@ -40,10 +46,7 @@ public class ScoreComponent extends BaseComponent {
 				}
 			}
 		}
-		if (value == null) {
-			value = "";
-		}
-		return value;
+		return value != null ? value : "";
 	}
 
 }

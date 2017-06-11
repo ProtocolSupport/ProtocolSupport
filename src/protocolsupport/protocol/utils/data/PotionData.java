@@ -10,9 +10,6 @@ public class PotionData {
 
 	private static final TIntObjectHashMap<String> idToName = new TIntObjectHashMap<>();
 
-	public static void init() {
-	}
-
 	static {
 		for (JsonElement element : MinecraftData.iterateJsonArrayResource("potions.json")) {
 			JsonObject object = element.getAsJsonObject();

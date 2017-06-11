@@ -1,13 +1,30 @@
 package protocolsupport.protocol.typeskipper.id;
 
+import protocolsupport.protocol.typeskipper.id.SkippingRegistry.EnumSkippingRegistry;
 import protocolsupport.protocol.typeskipper.id.SkippingRegistry.GenericSkippingRegistry;
 import protocolsupport.protocol.typeskipper.id.SkippingRegistry.IntSkippingRegistry;
 import protocolsupport.protocol.typeskipper.id.SkippingTable.ArrayBasedIntSkippingTable;
+import protocolsupport.protocol.typeskipper.id.SkippingTable.EnumSkippingTable;
 import protocolsupport.protocol.typeskipper.id.SkippingTable.GenericSkippingTable;
 import protocolsupport.protocol.typeskipper.id.SkippingTable.HashMapBasedIntSkippingTable;
-import protocolsupport.utils.ProtocolVersionsHelper;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
+import protocolsupport.protocol.utils.types.WindowType;
 
 public class IdSkipper {
+
+	public static final EnumSkippingRegistry<NetworkEntityType, EnumSkippingTable<NetworkEntityType>> ENTITY = new EnumSkippingRegistry<NetworkEntityType, EnumSkippingTable<NetworkEntityType>>() {
+		{
+			registerSkipEntry(NetworkEntityType.ARMOR_STAND_MOB, ProtocolVersionsHelper.BEFORE_1_8);
+			registerSkipEntry(NetworkEntityType.ARMOR_STAND_OBJECT, ProtocolVersionsHelper.BEFORE_1_8);
+		}
+
+		@Override
+		protected EnumSkippingTable<NetworkEntityType> createTable() {
+			return new EnumSkippingTable<>(NetworkEntityType.class);
+		}
+
+	};
 
 	public static final IntSkippingRegistry<HashMapBasedIntSkippingTable> ENCHANT = new IntSkippingRegistry<HashMapBasedIntSkippingTable>() {
 		{
@@ -46,6 +63,7 @@ public class IdSkipper {
 
 	public static final GenericSkippingRegistry<String, GenericSkippingTable<String>> ATTRIBUTES = new GenericSkippingRegistry<String, GenericSkippingTable<String>>() {
 		{
+			registerSkipEntry("generic.flyingSpeed", ProtocolVersionsHelper.BEFORE_1_12);
 			registerSkipEntry("generic.armorToughness", ProtocolVersionsHelper.BEFORE_1_9_1);
 			registerSkipEntry("generic.luck", ProtocolVersionsHelper.BEFORE_1_9);
 			registerSkipEntry("generic.armor", ProtocolVersionsHelper.BEFORE_1_9);
@@ -57,18 +75,15 @@ public class IdSkipper {
 		}
 	};
 
-	public static final GenericSkippingRegistry<String, GenericSkippingTable<String>> INVENTORY = new GenericSkippingRegistry<String, GenericSkippingTable<String>>() {
+	public static final EnumSkippingRegistry<WindowType, EnumSkippingTable<WindowType>> INVENTORY = new EnumSkippingRegistry<WindowType, EnumSkippingTable<WindowType>>() {
 		{
-			registerSkipEntry("EntityHorse", ProtocolVersionsHelper.BEFORE_1_11);
-			registerSkipEntry("minecraft:hopper", ProtocolVersionsHelper.BEFORE_1_5);
+			registerSkipEntry(WindowType.HORSE, ProtocolVersionsHelper.BEFORE_1_11);
+			registerSkipEntry(WindowType.HOPPER, ProtocolVersionsHelper.BEFORE_1_5);
 		}
 		@Override
-		protected GenericSkippingTable<String> createTable() {
-			return new GenericSkippingTable<>();
+		protected EnumSkippingTable<WindowType> createTable() {
+			return new EnumSkippingTable<>(WindowType.class);
 		}
 	};
-
-	public static void init() {
-	}
 
 }

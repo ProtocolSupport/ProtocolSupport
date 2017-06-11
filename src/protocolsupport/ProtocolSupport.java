@@ -10,7 +10,6 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.commands.CommandHandler;
 import protocolsupport.listeners.CommandListener;
 import protocolsupport.listeners.PlayerListener;
-import protocolsupport.logger.AsyncErrorLogger;
 import protocolsupport.protocol.legacyremapper.LegacySound;
 import protocolsupport.protocol.legacyremapper.chunk.BlockStorageReader;
 import protocolsupport.protocol.legacyremapper.pe.PESkin;
@@ -19,14 +18,18 @@ import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
+import protocolsupport.protocol.typeremapper.tileentity.TileNBTRemapper;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherObjectIndex;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
-import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedType;
 import protocolsupport.protocol.typeskipper.id.IdSkipper;
 import protocolsupport.protocol.utils.data.ItemData;
+import protocolsupport.protocol.utils.data.KeybindData;
 import protocolsupport.protocol.utils.data.PotionData;
 import protocolsupport.protocol.utils.data.SoundData;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
 import protocolsupport.protocol.utils.i18n.I18NData;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.zplatform.ServerPlatform;
@@ -38,7 +41,6 @@ public class ProtocolSupport extends JavaPlugin {
 
 	@Override
 	public void onLoad() {
-		AsyncErrorLogger.INSTANCE.start();
 		if (!ServerPlatform.detect()) {
 			getLogger().severe("Unsupported server implementation type, shutting down");
 			Bukkit.shutdown();
@@ -47,24 +49,28 @@ public class ProtocolSupport extends JavaPlugin {
 			getLogger().info(MessageFormat.format("Detected {0} server implementation type", ServerPlatform.get().getName()));
 		}
 		try {
-			ProtocolVersion.values();
-			WatchedType.init();
-			Allocator.init();
-			ItemData.init();
-			PotionData.init();
-			SoundData.init();
-			I18NData.init();
-			Compressor.init();
-			ServerBoundPacket.init();
-			ClientBoundPacket.init();
-			InitialPacketDecoder.init();
-			AbstractLoginListener.init();
-			LegacySound.init();
-			IdSkipper.init();
-			DataWatcherObjectIdRegistry.init();
-			SpecificRemapper.init();
-			IdRemapper.init();
-			BlockStorageReader.init();
+			Class.forName(ProtocolVersion.class.getName());
+			Class.forName(NetworkEntityType.class.getName());
+			Class.forName(DataWatcherObjectIndex.class.getName());
+			Class.forName(DataWatcherObjectIdRegistry.class.getName());
+			Class.forName(Allocator.class.getName());
+			Class.forName(ItemData.class.getName());
+			Class.forName(PotionData.class.getName());
+			Class.forName(SoundData.class.getName());
+			Class.forName(KeybindData.class.getName());
+			Class.forName(I18NData.class.getName());
+			Class.forName(Compressor.class.getName());
+			Class.forName(ServerBoundPacket.class.getName());
+			Class.forName(ClientBoundPacket.class.getName());
+			Class.forName(InitialPacketDecoder.class.getName());
+			Class.forName(AbstractLoginListener.class.getName());
+			Class.forName(LegacySound.class.getName());
+			Class.forName(IdSkipper.class.getName());
+			Class.forName(SpecificRemapper.class.getName());
+			Class.forName(IdRemapper.class.getName());
+			Class.forName(ItemStackRemapper.class.getName());
+			Class.forName(TileNBTRemapper.class.getName());
+			Class.forName(BlockStorageReader.class.getName());
 			ServerPlatform.get().inject();
 			PESkin.init();
 			server = new MCPEServer(2222);
@@ -93,7 +99,6 @@ public class ProtocolSupport extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		Bukkit.shutdown();
-		AsyncErrorLogger.INSTANCE.stop();
 		server.stop();
 	}
 

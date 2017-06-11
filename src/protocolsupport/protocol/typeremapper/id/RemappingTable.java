@@ -1,5 +1,6 @@
 package protocolsupport.protocol.typeremapper.id;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 
 import gnu.trove.map.hash.TIntIntHashMap;
@@ -49,6 +50,23 @@ public class RemappingTable {
 		public int getRemap(int id) {
 			int r = table.get(id);
 			return r != -1 ? r : id;
+		}
+
+	}
+
+	public static class EnumRemappingTable<T extends Enum<T>> extends RemappingTable {
+
+		protected final EnumMap<T, T> table;
+		public EnumRemappingTable(Class<T> enumClazz) {
+			table = new EnumMap<>(enumClazz);
+		}
+
+		public void setRemap(T from, T to) {
+			table.put(from, to);
+		}
+
+		public T getRemap(T from) {
+			return table.getOrDefault(from, from);
 		}
 
 	}

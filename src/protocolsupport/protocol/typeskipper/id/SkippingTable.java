@@ -1,5 +1,6 @@
 package protocolsupport.protocol.typeskipper.id;
 
+import java.util.EnumSet;
 import java.util.HashSet;
 
 import gnu.trove.map.hash.TIntByteHashMap;
@@ -55,6 +56,23 @@ public class SkippingTable {
 	public static class GenericSkippingTable<T> extends SkippingTable {
 
 		protected final HashSet<T> set = new HashSet<>();
+
+		public void setSkip(T id) {
+			set.add(id);
+		}
+
+		public boolean shouldSkip(T id) {
+			return set.contains(id);
+		}
+
+	}
+
+	public static class EnumSkippingTable<T extends Enum<T>> extends SkippingTable {
+
+		protected final EnumSet<T> set;
+		public EnumSkippingTable(Class<T> clazz) {
+			this.set = EnumSet.noneOf(clazz);
+		}
 
 		public void setSkip(T id) {
 			set.add(id);

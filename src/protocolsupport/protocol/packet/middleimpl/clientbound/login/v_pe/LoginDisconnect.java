@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.packet.middle.clientbound.login.MiddleLoginDisconnect;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.KickDisconnect;
@@ -10,7 +11,7 @@ public class LoginDisconnect extends MiddleLoginDisconnect {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		return KickDisconnect.create(version, messageJson);
+		return KickDisconnect.create(version, ChatAPI.fromJSON(messageJson));
 	}
 
 }

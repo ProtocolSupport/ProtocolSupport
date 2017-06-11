@@ -5,26 +5,30 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import io.netty.util.Recycler;
+import io.netty.util.Recycler.Handle;
 
 public class RecyclableSingletonList<E> extends AbstractCollection<E> implements RecyclableCollection<E> {
 
 	@SuppressWarnings("rawtypes")
-	private static final Recycler<RecyclableSingletonList> RECYCLER = new Recycler<RecyclableSingletonList>() {
+	private static final Recycler<RecyclableSingletonList> recycle = new Recycler<RecyclableSingletonList>() {
+		@SuppressWarnings("unchecked")
 		@Override
-		protected RecyclableSingletonList newObject(Recycler.Handle handle) {
+		protected RecyclableSingletonList newObject(Handle<RecyclableSingletonList> handle) {
 			return new RecyclableSingletonList(handle);
 		}
 	};
 
 	@SuppressWarnings("unchecked")
 	public static <T> RecyclableSingletonList<T> create(T singleValue) {
-		RecyclableSingletonList<T> list = RECYCLER.get();
+		RecyclableSingletonList<T> list = recycle.get();
 		list.singleValue = singleValue;
 		return list;
 	}
 
-	private final Recycler.Handle handle;
-	private RecyclableSingletonList(Recycler.Handle handle) {
+	@SuppressWarnings("rawtypes")
+	private final Handle<RecyclableSingletonList> handle;
+	@SuppressWarnings("rawtypes")
+	private RecyclableSingletonList(Handle<RecyclableSingletonList> handle) {
 		this.handle = handle;
 	}
 
@@ -41,7 +45,7 @@ public class RecyclableSingletonList<E> extends AbstractCollection<E> implements
 	@Override
 	public void recycleObjectOnly() {
 		singleValue = null;
-		RECYCLER.recycle(this, handle);
+		handle.recycle(this);
 	}
 
 	@Override

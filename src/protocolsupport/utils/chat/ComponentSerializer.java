@@ -13,6 +13,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.api.chat.components.KeybindComponent;
 import protocolsupport.api.chat.components.ScoreComponent;
 import protocolsupport.api.chat.components.SelectorComponent;
 import protocolsupport.api.chat.components.TextComponent;
@@ -69,6 +70,8 @@ public class ComponentSerializer implements JsonDeserializer<BaseComponent>, Jso
 				}
 			} else if (jsonObject.has("selector")) {
 				component = new SelectorComponent(JsonUtils.getString(jsonObject, "selector"));
+			} else if (jsonObject.has("keybind")) {
+				component = new KeybindComponent(JsonUtils.getString(jsonObject, "keybind"));
 			} else {
 				throw new JsonParseException("Don't know how to turn " + element.toString() + " into a Component");
 			}
@@ -131,10 +134,14 @@ public class ComponentSerializer implements JsonDeserializer<BaseComponent>, Jso
 			JsonObject scoreJSON = new JsonObject();
 			scoreJSON.addProperty("name", score.getPlayerName());
 			scoreJSON.addProperty("objective", score.getObjectiveName());
-			scoreJSON.addProperty("value", score.getValue());
+			if (score.hasValue()) {
+				scoreJSON.addProperty("value", score.getValue());
+			}
 			jsonObject.add("score", scoreJSON);
 		} else if (component instanceof SelectorComponent) {
 			jsonObject.addProperty("selector", component.getValue());
+		} else if (component instanceof KeybindComponent) {
+			jsonObject.addProperty("keybind", ((KeybindComponent) component).getKeybind());
 		} else {
 			throw new IllegalArgumentException("Don't know how to serialize " + component + " as a Component");
 		}

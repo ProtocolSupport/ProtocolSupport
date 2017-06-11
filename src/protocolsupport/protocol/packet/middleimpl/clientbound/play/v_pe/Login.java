@@ -11,6 +11,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSu
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -33,10 +34,10 @@ public class Login extends MiddleLogin {
 		MiscSerializer.writeLFloat(startgame, 0); //yaw
 		MiscSerializer.writeLFloat(startgame, 0); //pitch
 		VarNumberSerializer.writeSVarInt(startgame, 0); //seed
-		VarNumberSerializer.writeSVarInt(startgame, Respawn.remapDimensionId(dimension));
+		VarNumberSerializer.writeSVarInt(startgame, Respawn.getPeDimensionId(dimension));
 		VarNumberSerializer.writeSVarInt(startgame, 1); //world type (1 - infinite)
-		VarNumberSerializer.writeSVarInt(startgame, gamemode == 1 ? 1 : 0);
-		VarNumberSerializer.writeSVarInt(startgame, difficulty);
+		VarNumberSerializer.writeSVarInt(startgame, (gamemode == GameMode.CREATIVE ? GameMode.CREATIVE : GameMode.SURVIVAL).getId());
+		VarNumberSerializer.writeSVarInt(startgame, difficulty.getId());
 		VarNumberSerializer.writeSVarInt(startgame, 0); //spawn x
 		VarNumberSerializer.writeVarInt(startgame, 0); //spawn y
 		VarNumberSerializer.writeSVarInt(startgame, 0); //spawn z

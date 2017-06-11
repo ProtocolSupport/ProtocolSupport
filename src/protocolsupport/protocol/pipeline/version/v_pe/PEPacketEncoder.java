@@ -35,13 +35,13 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnPos
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.TimeUpdate;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.UnloadChunk;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldEvent;
-import protocolsupport.protocol.pipeline.version.AbstractPacketEncoder;
+import protocolsupport.protocol.pipeline.version.AbstractLegacyPacketEncoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.zplatform.network.NetworkState;
 
-public class PEPacketEncoder extends AbstractPacketEncoder {
+public class PEPacketEncoder extends AbstractLegacyPacketEncoder {
 
 	{
 		for (int i = 0; i < 255; i++) {

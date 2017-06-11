@@ -1,12 +1,9 @@
 package protocolsupport.protocol.legacyremapper.chunk;
 
-import java.util.Arrays;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.utils.Utils;
 
 public abstract class ChunkTransformer {
 
@@ -37,9 +34,6 @@ public abstract class ChunkTransformer {
 		}
 	}
 
-	protected byte[] data;
-	protected int bitmap;
-
 	protected int columnsCount;
 	protected boolean hasSkyLight;
 	protected boolean hasBiomeData;
@@ -47,30 +41,20 @@ public abstract class ChunkTransformer {
 	protected final byte[] biomeData = new byte[256];
 
 	public void loadData(byte[] data, int bitmap, boolean hasSkyLight, boolean hasBiomeData) {
-		try {
-			this.data = data;
-			this.bitmap = bitmap;
-			this.columnsCount = Integer.bitCount(bitmap);
-			this.hasSkyLight = hasSkyLight;
-			this.hasBiomeData = hasBiomeData;
-			ByteBuf chunkdata = Unpooled.wrappedBuffer(data);
-			for (int i = 0; i < this.columnsCount; i++) {
-				sections[i] = new ChunkSection(chunkdata, hasSkyLight);
-			}
-			if (hasBiomeData) {
-				chunkdata.readBytes(biomeData);
-			}
-		} catch (Throwable e) {
-			throw new ChunkDataParseException(data, bitmap, hasSkyLight, hasBiomeData, e);
+		this.columnsCount = Integer.bitCount(bitmap);
+		this.hasSkyLight = hasSkyLight;
+		this.hasBiomeData = hasBiomeData;
+		ByteBuf chunkdata = Unpooled.wrappedBuffer(data);
+		for (int i = 0; i < this.columnsCount; i++) {
+			sections[i] = new ChunkSection(chunkdata, hasSkyLight);
+		}
+		if (hasBiomeData) {
+			chunkdata.readBytes(biomeData);
 		}
 	}
 
 	public byte[] toLegacyData(ProtocolVersion version) {
-		try {
-			return toLegacyData0(version);
-		} catch (Throwable t) {
-			throw new ChunkDataParseException(data, bitmap, hasSkyLight, hasBiomeData, t);
-		}
+		return toLegacyData0(version);
 	}
 
 	protected abstract byte[] toLegacyData0(ProtocolVersion version);
@@ -108,20 +92,6 @@ public abstract class ChunkTransformer {
 			}
 		}
 
-	}
-
-	public static final class ChunkDataParseException extends RuntimeException {
-		private static final long serialVersionUID = 1L;
-
-		public ChunkDataParseException(byte[] data, int bitmap, boolean hasSkyLight, boolean hasBiomeData, Throwable e) {
-			super(Utils.exceptionMessage(
-				"Failed to parse chunk data",
-				String.format("Column bitmap: %s (Column count: %d)", Integer.toBinaryString(bitmap), Integer.bitCount(bitmap)),
-				String.format("Has sky light: %b", hasSkyLight),
-				String.format("Has biome data: %b", hasBiomeData),
-				String.format("Chunk data: %s", Arrays.toString(data))
-			), e);
-		}
 	}
 
 }

@@ -3,12 +3,11 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolType;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleBossBar extends ClientBoundMiddlePacket {
 
@@ -26,7 +25,7 @@ public abstract class MiddleBossBar extends ClientBoundMiddlePacket {
 		action = MiscSerializer.readEnum(serverdata, Action.class);
 		switch (action) {
 			case ADD: {
-				title = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(ProtocolType.PC));
+				title = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
 				percent = serverdata.readFloat();
 				color = VarNumberSerializer.readVarInt(serverdata);
 				divider = VarNumberSerializer.readVarInt(serverdata);
@@ -41,7 +40,7 @@ public abstract class MiddleBossBar extends ClientBoundMiddlePacket {
 				break;
 			}
 			case UPDATE_TITLE: {
-				title = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(ProtocolType.PC));
+				title = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
 				break;
 			}
 			case UPDATE_STYLE: {

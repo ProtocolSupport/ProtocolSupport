@@ -24,9 +24,9 @@ import protocolsupport.protocol.typeremapper.itemstack.clientbound.MonsterEggToL
 import protocolsupport.protocol.typeremapper.itemstack.clientbound.PlayerSkullSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.clientbound.PotionToLegacyIdSpecificRemapper;
 import protocolsupport.protocol.utils.GameProfileSerializer;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.protocol.utils.authlib.UUIDTypeAdapter;
-import protocolsupport.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -44,6 +44,7 @@ public class ItemStackRemapper {
 					}
 				}
 			}
+			registerRemapEntry(Material.KNOWLEDGE_BOOK, Material.BOOK, ProtocolVersionsHelper.BEFORE_1_12);
 			registerRemapEntry(Material.SHULKER_SHELL, Material.COBBLESTONE, ProtocolVersionsHelper.BEFORE_1_11);
 			registerRemapEntry(Material.TOTEM, Material.COBBLESTONE, ProtocolVersionsHelper.BEFORE_1_11);
 			registerRemapEntry(Material.BEETROOT, Material.BROWN_MUSHROOM, ProtocolVersionsHelper.BEFORE_1_9);
@@ -124,11 +125,11 @@ public class ItemStackRemapper {
 //	}
 
 	private static void registerRemapper(TIntObjectHashMap<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>> registry, Material material, ItemStackSpecificRemapper transformer, ProtocolVersion... versions) {
-		EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>> map = Utils.getOrCreateDefault(
+		EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>> map = Utils.getFromMapOrCreateDefault(
 			new TIntObjectMapDecorator<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>>(clientbound_remapper_registry),
 			material.getId(), new EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>(ProtocolVersion.class)
 		);
-		Arrays.stream(versions).forEach(version -> Utils.getOrCreateDefault(map, version, new ArrayList<ItemStackSpecificRemapper>()).add(transformer));
+		Arrays.stream(versions).forEach(version -> Utils.getFromMapOrCreateDefault(map, version, new ArrayList<ItemStackSpecificRemapper>()).add(transformer));
 	}
 
 	//Order is important because some transformers may add tags in new format
@@ -136,14 +137,14 @@ public class ItemStackRemapper {
 		registerClientboundRemapper(Material.MONSTER_EGG, new MonsterEggToLegacyNameSpecificRemapper(), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_10, ProtocolVersion.MINECRAFT_1_9));
 		registerClientboundRemapper(Material.MONSTER_EGG, new MonsterEggToLegacyIdSpecificRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
 		registerClientboundRemapper(Material.SKULL_ITEM, new DragonHeadSpecificRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
-		registerClientboundRemapper(Material.SKULL_ITEM, new PlayerSkullSpecificRemapper(), ProtocolVersion.getAllBefore(ProtocolVersion.MINECRAFT_1_7_5));
+		registerClientboundRemapper(Material.SKULL_ITEM, new PlayerSkullSpecificRemapper(), ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_7_5));
 		registerClientboundRemapper(Material.POTION, new PotionToLegacyIdSpecificRemapper(false), ProtocolVersionsHelper.BEFORE_1_9);
 		registerClientboundRemapper(Material.SPLASH_POTION, new PotionToLegacyIdSpecificRemapper(true), ProtocolVersionsHelper.BEFORE_1_9);
 		registerClientboundRemapper(Material.LINGERING_POTION, new PotionToLegacyIdSpecificRemapper(true), ProtocolVersionsHelper.BEFORE_1_9);
 		registerClientboundRemapper(Material.WRITTEN_BOOK, new BookPagesToLegacyTextSpecificRemapper(), ProtocolVersionsHelper.BEFORE_1_8);
-		registerClientboundRemapper(Material.BOOK_AND_QUILL, new EmptyBookPageAdderSpecificRemapper(), ProtocolVersionsHelper.ALL);
+		registerClientboundRemapper(Material.BOOK_AND_QUILL, new EmptyBookPageAdderSpecificRemapper(), ProtocolVersionsHelper.ALL_PC);
 		EnchantFilterNBTSpecificRemapper enchantfilter = new EnchantFilterNBTSpecificRemapper();
-		Arrays.stream(Material.values()).forEach(material -> registerClientboundRemapper(material, enchantfilter, ProtocolVersionsHelper.ALL));
+		Arrays.stream(Material.values()).forEach(material -> registerClientboundRemapper(material, enchantfilter, ProtocolVersionsHelper.ALL_PC));
 	}
 
 	public static ItemStackWrapper remapClientbound(ProtocolVersion version, ItemStackWrapper itemstack) {

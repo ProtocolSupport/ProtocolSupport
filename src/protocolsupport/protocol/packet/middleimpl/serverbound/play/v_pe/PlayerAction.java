@@ -56,35 +56,35 @@ public class PlayerAction extends ServerBoundMiddlePacket {
 			}
 			case START_BREAK: {
 				breakPosition = new Position(blockX, blockY, blockZ);
-				return RecyclableSingletonList.create(MiddleBlockDig.create(0, breakPosition, face));
+				return RecyclableSingletonList.create(MiddleBlockDig.create(MiddleBlockDig.Action.START_DIG, breakPosition, face));
 			}
 			case ABORT_BREAK: {
 				if (breakPosition != null) {
 					Position rBreakPosition = breakPosition;
 					breakPosition = null;
-					return RecyclableSingletonList.create(MiddleBlockDig.create(1, rBreakPosition, face));
+					return RecyclableSingletonList.create(MiddleBlockDig.create(MiddleBlockDig.Action.CANCEL_DIG, rBreakPosition, face));
 				} else {
 					return RecyclableEmptyList.get();
 				}
 			}
 			case STOP_BREAK: {
 				if (breakPosition != null) {
-					return RecyclableSingletonList.create(MiddleBlockDig.create(2, breakPosition, face));
+					return RecyclableSingletonList.create(MiddleBlockDig.create(MiddleBlockDig.Action.FINISH_DIG, breakPosition, face));
 				} else {
 					return RecyclableEmptyList.get();
 				}
 			}
 			case START_SPRINT: {
-				return RecyclableSingletonList.create(MiddleEntityAction.create(cache.getSelfPlayerEntityId(), 3, 0));
+				return RecyclableSingletonList.create(MiddleEntityAction.create(cache.getSelfPlayerEntityId(), MiddleEntityAction.Action.START_SPRINT, 0));
 			}
 			case STOP_SPRINT: {
-				return RecyclableSingletonList.create(MiddleEntityAction.create(cache.getSelfPlayerEntityId(), 4, 0));
+				return RecyclableSingletonList.create(MiddleEntityAction.create(cache.getSelfPlayerEntityId(), MiddleEntityAction.Action.STOP_SPRINT, 0));
 			}
 			case START_SNEAK: {
-				return RecyclableSingletonList.create(MiddleEntityAction.create(cache.getSelfPlayerEntityId(), 0, 0));
+				return RecyclableSingletonList.create(MiddleEntityAction.create(cache.getSelfPlayerEntityId(), MiddleEntityAction.Action.START_SNEAK, 0));
 			}
 			case STOP_SNEAK: {
-				return RecyclableSingletonList.create(MiddleEntityAction.create(cache.getSelfPlayerEntityId(), 1, 0));
+				return RecyclableSingletonList.create(MiddleEntityAction.create(cache.getSelfPlayerEntityId(), MiddleEntityAction.Action.STOP_SNEAK, 0));
 			}
 			default: {
 				return RecyclableEmptyList.get();

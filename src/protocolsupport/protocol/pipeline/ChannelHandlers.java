@@ -1,7 +1,7 @@
 package protocolsupport.protocol.pipeline;
 
 import io.netty.channel.ChannelPipeline;
-import protocolsupport.protocol.pipeline.timeout.SimpleReadTimeoutHandler;
+import protocolsupport.protocol.pipeline.common.SimpleReadTimeoutHandler;
 import protocolsupport.zplatform.ServerPlatform;
 
 public class ChannelHandlers {

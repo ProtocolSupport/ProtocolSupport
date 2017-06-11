@@ -8,13 +8,13 @@ import org.bukkit.Bukkit;
 import org.spigotmc.AsyncCatcher;
 import org.spigotmc.TrackingRange;
 
-import net.minecraft.server.v1_11_R1.CrashReport;
-import net.minecraft.server.v1_11_R1.CrashReportSystemDetails;
-import net.minecraft.server.v1_11_R1.Entity;
-import net.minecraft.server.v1_11_R1.EntityTracker;
-import net.minecraft.server.v1_11_R1.EntityTrackerEntry;
-import net.minecraft.server.v1_11_R1.ReportedException;
-import net.minecraft.server.v1_11_R1.WorldServer;
+import net.minecraft.server.v1_12_R1.CrashReport;
+import net.minecraft.server.v1_12_R1.CrashReportSystemDetails;
+import net.minecraft.server.v1_12_R1.Entity;
+import net.minecraft.server.v1_12_R1.EntityTracker;
+import net.minecraft.server.v1_12_R1.EntityTrackerEntry;
+import net.minecraft.server.v1_12_R1.ReportedException;
+import net.minecraft.server.v1_12_R1.WorldServer;
 import protocolsupport.utils.ReflectionUtils;
 
 public class SpigotEntityTracker extends EntityTracker {

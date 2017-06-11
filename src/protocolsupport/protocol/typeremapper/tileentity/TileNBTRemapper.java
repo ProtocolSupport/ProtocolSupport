@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.BiFunction;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.legacyremapper.LegacyEntityType;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.data.ItemData;
 import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
-@SuppressWarnings("deprecation")
 public class TileNBTRemapper {
 
 	private static final String tileEntityTypeKey = "id";
@@ -49,12 +49,12 @@ public class TileNBTRemapper {
 		peTypes.put("minecraft:beacon", "Beacon");
 	}
 
-	private static final EnumMap<TileEntityUpdateType, EnumMap<ProtocolVersion, List<TileEntitySpecificRemapper>>> registry = new EnumMap<>(TileEntityUpdateType.class);
+	private static final EnumMap<TileEntityUpdateType, EnumMap<ProtocolVersion, List<BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper>>>> registry = new EnumMap<>(TileEntityUpdateType.class);
 
-	private static void register(TileEntityUpdateType type, TileEntitySpecificRemapper transformer, ProtocolVersion... versions) {
-		EnumMap<ProtocolVersion, List<TileEntitySpecificRemapper>> map = Utils.getOrCreateDefault(registry, type, new EnumMap<ProtocolVersion, List<TileEntitySpecificRemapper>>(ProtocolVersion.class));
+	private static void register(TileEntityUpdateType type, BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper> transformer, ProtocolVersion... versions) {
+		EnumMap<ProtocolVersion, List<BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper>>> map = Utils.getFromMapOrCreateDefault(registry, type, new EnumMap<>(ProtocolVersion.class));
 		for (ProtocolVersion version : versions) {
-			Utils.getOrCreateDefault(map, version, new ArrayList<TileEntitySpecificRemapper>()).add(transformer);
+			Utils.getFromMapOrCreateDefault(map, version, new ArrayList<>()).add(transformer);
 		}
 	}
 
@@ -87,7 +87,7 @@ public class TileNBTRemapper {
 				}
 				return input;
 			},
-			ProtocolVersionsHelper.ALL
+			ProtocolVersionsHelper.ALL_PC
 		);
 		register(
 			TileEntityUpdateType.MOB_SPAWNER,
@@ -128,7 +128,7 @@ public class TileNBTRemapper {
 				}
 				return input;
 			},
-			ProtocolVersion.getAllBefore(ProtocolVersion.MINECRAFT_1_8)
+			ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_8)
 		);
 		register(
 			TileEntityUpdateType.SKULL,
@@ -136,7 +136,7 @@ public class TileNBTRemapper {
 				ItemStackRemapper.remapSkull(input);
 				return input;
 			},
-			ProtocolVersion.getAllBefore(ProtocolVersion.MINECRAFT_1_7_5)
+			ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_7_5)
 		);
 		register(
 			TileEntityUpdateType.FLOWER_POT,
@@ -168,12 +168,12 @@ public class TileNBTRemapper {
 	}
 
 	public static NBTTagCompoundWrapper remap(ProtocolVersion version, NBTTagCompoundWrapper compound) {
-		EnumMap<ProtocolVersion, List<TileEntitySpecificRemapper>> map = registry.get(TileEntityUpdateType.fromType(getTileType(compound)));
+		EnumMap<ProtocolVersion, List<BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper>>> map = registry.get(TileEntityUpdateType.fromType(getTileType(compound)));
 		if (map != null) {
-			List<TileEntitySpecificRemapper> transformers = map.get(version);
+			List<BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper>> transformers = map.get(version);
 			if (transformers != null) {
-				for (TileEntitySpecificRemapper transformer : transformers) {
-					compound = transformer.remap(version, compound);
+				for (BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper> transformer : transformers) {
+					compound = transformer.apply(version, compound);
 				}
 				return compound;
 			}

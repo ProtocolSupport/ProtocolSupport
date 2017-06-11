@@ -1,15 +1,14 @@
 package protocolsupport.zplatform.impl.spigot.injector.network;
 
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.common.LogicHandler;
+import protocolsupport.protocol.pipeline.common.SimpleReadTimeoutHandler;
 import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
-import protocolsupport.protocol.pipeline.timeout.SimpleReadTimeoutHandler;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.utils.Utils;
-import protocolsupport.utils.Utils.Converter;
+import protocolsupport.utils.netty.ChannelInitializer;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.impl.spigot.SpigotConnectionImpl;
 import protocolsupport.zplatform.impl.spigot.network.SpigotChannelHandlers;
@@ -20,9 +19,9 @@ import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedPrepe
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedSplitter;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
-public class SpigotServerConnectionChannel extends ChannelInitializer<Channel> {
+public class SpigotServerConnectionChannel extends ChannelInitializer {
 
-	private static final boolean replaceDecoderEncoder = Utils.getJavaPropertyValue("replaceencoderdecoder", false, Converter.STRING_TO_BOOLEAN);
+	private static final boolean replaceDecoderEncoder = Utils.getJavaPropertyValue("replaceencoderdecoder", false, Boolean::parseBoolean);
 
 	@Override
 	protected void initChannel(Channel channel) {
@@ -39,10 +38,10 @@ public class SpigotServerConnectionChannel extends ChannelInitializer<Channel> {
 		pipeline.replace(SpigotChannelHandlers.SPLITTER, SpigotChannelHandlers.SPLITTER, new SpigotWrappedSplitter());
 		pipeline.replace(SpigotChannelHandlers.PREPENDER, SpigotChannelHandlers.PREPENDER, new SpigotWrappedPrepender());
 		if (replaceDecoderEncoder) {
-			if (pipeline.get(SpigotChannelHandlers.DECODER).getClass().equals(net.minecraft.server.v1_11_R1.PacketDecoder.class)) {
+			if (pipeline.get(SpigotChannelHandlers.DECODER).getClass().equals(net.minecraft.server.v1_12_R1.PacketDecoder.class)) {
 				pipeline.replace(SpigotChannelHandlers.DECODER, SpigotChannelHandlers.DECODER, new SpigotPacketDecoder());
 			}
-			if (pipeline.get(SpigotChannelHandlers.ENCODER).getClass().equals(net.minecraft.server.v1_11_R1.PacketEncoder.class)) {
+			if (pipeline.get(SpigotChannelHandlers.ENCODER).getClass().equals(net.minecraft.server.v1_12_R1.PacketEncoder.class)) {
 				pipeline.replace(SpigotChannelHandlers.ENCODER, SpigotChannelHandlers.ENCODER, new SpigotPacketEncoder());
 			}
 		}
