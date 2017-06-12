@@ -44,7 +44,6 @@ public class PlayerAction extends ServerBoundMiddlePacket {
 	private static final int START_SNEAK = 11;
 	private static final int STOP_SNEAK = 12;
 	private static final int START_GLIDE = 15;
-	private static final int STOP_GLIDE = 16;
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
@@ -74,6 +73,9 @@ public class PlayerAction extends ServerBoundMiddlePacket {
 					return RecyclableEmptyList.get();
 				}
 			}
+			case RELEASE_ITEM: {
+				return RecyclableSingletonList.create(MiddleBlockDig.create(MiddleBlockDig.Action.FINISH_USE, new Position(0, 0, 0), 255));
+			}
 			case START_SPRINT: {
 				return RecyclableSingletonList.create(MiddleEntityAction.create(cache.getSelfPlayerEntityId(), MiddleEntityAction.Action.START_SPRINT, 0));
 			}
@@ -85,6 +87,12 @@ public class PlayerAction extends ServerBoundMiddlePacket {
 			}
 			case STOP_SNEAK: {
 				return RecyclableSingletonList.create(MiddleEntityAction.create(cache.getSelfPlayerEntityId(), MiddleEntityAction.Action.STOP_SNEAK, 0));
+			}
+			case STOP_SLEEPING: {
+				return RecyclableSingletonList.create(MiddleEntityAction.create(cache.getSelfPlayerEntityId(), MiddleEntityAction.Action.LEAVE_BED, 0));
+			}
+			case START_GLIDE: {
+				return RecyclableSingletonList.create(MiddleEntityAction.create(cache.getSelfPlayerEntityId(), MiddleEntityAction.Action.START_ELYTRA_FLY, 0));
 			}
 			default: {
 				return RecyclableEmptyList.get();
