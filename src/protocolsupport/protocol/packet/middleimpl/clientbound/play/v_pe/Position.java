@@ -29,7 +29,6 @@ public class Position extends MiddlePosition {
 	public static final int ANIMATION_MODE_NONE = 1;
 
 	public static ClientBoundPacketData create(ProtocolVersion version, int entityId, double x, double y, double z, float pitch, float yaw, int mode) {
-		//Transform using constants.
 		float realYaw = (float) (yaw * (360D/256D));
 		float realY = (float) (y + 1.6200000047683716D);
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_MOVE, version);
@@ -41,7 +40,8 @@ public class Position extends MiddlePosition {
 		MiscSerializer.writeLFloat(serializer, realYaw);
 		MiscSerializer.writeLFloat(serializer, realYaw); //head yaw actually
 		serializer.writeByte(mode);
-		serializer.writeBoolean(false);
+		serializer.writeBoolean(false); //on ground
+		VarNumberSerializer.writeVarLong(serializer, 0); //? TODO: check it, might be related to teleport accept
 		return serializer;
 	}
 

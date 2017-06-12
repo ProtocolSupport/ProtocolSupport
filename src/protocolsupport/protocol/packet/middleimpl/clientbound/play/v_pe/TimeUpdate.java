@@ -14,7 +14,6 @@ public class TimeUpdate extends MiddleTimeUpdate {
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.UPDATE_TIME, version);
 		VarNumberSerializer.writeSVarInt(serializer, (int) timeOfDay);
-		serializer.writeBoolean(timeOfDay > 0);
 		return RecyclableSingletonList.create(serializer);
 	}
 

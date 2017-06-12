@@ -27,6 +27,8 @@ public class EntityTeleport extends MiddleEntityTeleport {
 			serializer.writeByte(pitch);
 			serializer.writeByte(yaw); //head yaw actually
 			serializer.writeByte(yaw);
+			serializer.writeBoolean(onGround);
+			serializer.writeBoolean(false); //teleported
 			return RecyclableSingletonList.create(serializer);
 		}
 	}

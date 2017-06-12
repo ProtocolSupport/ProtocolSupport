@@ -5,7 +5,7 @@ import protocolsupport.protocol.legacyremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.legacyremapper.pe.PESkin;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddlePlayerInfo;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.ByteArraySerializer;
+import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -27,7 +27,7 @@ public class PlayerInfo extends MiddlePlayerInfo {
 					VarNumberSerializer.writeSVarInt(serializer, 0); //entity id
 					StringSerializer.writeString(serializer, version, info.getName());
 					StringSerializer.writeString(serializer, version, "Standard_Steve");
-					ByteArraySerializer.writeByteArray(serializer, version, PESkin.STEVE);
+					ArraySerializer.writeByteArray(serializer, version, PESkin.STEVE);
 				}
 				return RecyclableSingletonList.create(serializer);
 			}

@@ -16,8 +16,8 @@ import protocolsupport.protocol.packet.handler.AbstractStatusListener;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.common.LogicHandler;
 import protocolsupport.protocol.pipeline.common.SimpleReadTimeoutHandler;
-import protocolsupport.protocol.pipeline.version.v_pe.PEBatchPacketDecoder;
-import protocolsupport.protocol.pipeline.version.v_pe.PEBatchPacketEncoder;
+import protocolsupport.protocol.pipeline.version.v_pe.PEDecompressor;
+import protocolsupport.protocol.pipeline.version.v_pe.PECompressor;
 import protocolsupport.protocol.pipeline.version.v_pe.PEPacketDecoder;
 import protocolsupport.protocol.pipeline.version.v_pe.PEPacketEncoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
@@ -50,7 +50,7 @@ public class MCPEServer {
 					return String.join(";",
 						"MCPE",
 						revent.getMotd().replace(";", ":"),
-						"105", "1.0.5",
+						"113", "1.1.0",
 						String.valueOf(revent.getPlayers().size()), String.valueOf(revent.getMaxPlayers())
 					);
 				}
@@ -70,9 +70,9 @@ public class MCPEServer {
 					connection.setVersion(ProtocolVersion.MINECRAFT_PE);
 					NetworkDataCache cache = new NetworkDataCache();
 					channel.pipeline().replace("rns-timeout", SpigotChannelHandlers.READ_TIMEOUT, new SimpleReadTimeoutHandler(30));
-					channel.pipeline().addLast(new PEBatchPacketEncoder());
+					channel.pipeline().addLast(new PECompressor());
 					channel.pipeline().addLast(new PEPacketEncoder(connection, cache));
-					channel.pipeline().addLast(new PEBatchPacketDecoder());
+					channel.pipeline().addLast(new PEDecompressor());
 					channel.pipeline().addLast(new PEPacketDecoder(connection, cache));
 					channel.pipeline().addLast(SpigotChannelHandlers.ENCODER, new SpigotPacketEncoder());
 					channel.pipeline().addLast(SpigotChannelHandlers.DECODER, new SpigotPacketDecoder());

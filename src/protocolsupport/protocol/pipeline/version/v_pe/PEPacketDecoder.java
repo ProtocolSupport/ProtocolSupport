@@ -44,15 +44,20 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		if (!input.isReadable()) {
 			return;
 		}
-		ServerBoundMiddlePacket packetTransformer = registry.getTransformer(
-			ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(ctx.channel()),
-			input.readUnsignedByte()
-		);
-		packetTransformer.readFromClientData(input, connection.getVersion());
-		if (input.isReadable()) {
-			throw new DecoderException("Did not read all data from packet " + packetTransformer.getClass().getName() + ", bytes left: " + input.readableBytes());
+		ServerBoundMiddlePacket packetTransformer = null;
+		try {
+			packetTransformer = registry.getTransformer(
+				ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(ctx.channel()),
+				input.readUnsignedByte()
+			);
+			packetTransformer.readFromClientData(input, connection.getVersion());
+			if (input.isReadable()) {
+				throw new DecoderException("Did not read all data from packet " + packetTransformer.getClass().getName() + ", bytes left: " + input.readableBytes());
+			}
+			addPackets(packetTransformer.toNative(), list);
+		} catch (Exception e) {
+			throwFailedTransformException(e, packetTransformer, input);
 		}
-		addPackets(packetTransformer.toNative(), list);
 	}
 
 	public static class Noop extends ServerBoundMiddlePacket {

@@ -17,11 +17,10 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.ByteArraySerializer;
+import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.JsonUtils;
-import protocolsupport.utils.netty.Decompressor;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -50,7 +49,7 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
 		clientdata.skipBytes(Integer.BYTES); //TODO: validate protocol
 		clientdata.skipBytes(Byte.BYTES); //skip pe type
-		ByteBuf logindata = Unpooled.wrappedBuffer(Decompressor.decompressStatic(ByteArraySerializer.readByteArray(clientdata, version)));
+		ByteBuf logindata = Unpooled.wrappedBuffer(ArraySerializer.readByteArray(clientdata, version));
 		//decode chain
 		JsonElement root = parser.parse(new InputStreamReader(new ByteBufInputStream(logindata, ByteBufUtil.swapInt(logindata.readInt()))));
 		String chain = JsonUtils.getJsonArray(root.getAsJsonObject(), "chain").get(0).getAsString();

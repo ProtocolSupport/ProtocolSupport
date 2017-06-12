@@ -26,7 +26,6 @@ public class ChangeGameState extends MiddleGameStateChange {
 				break;
 			}
 			case 3: {
-				//TODO: Emulate adventure gamemode via AdventureSettingsPacket
 				int gamemode = (int) value;
 				cache.setGameMode(gamemode);
 				ClientBoundPacketData changeGameType = ClientBoundPacketData.create(PEPacketIDs.CHANGE_PLAYER_GAMETYPE, version);

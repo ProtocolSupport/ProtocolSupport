@@ -8,7 +8,7 @@ import protocolsupport.protocol.legacyremapper.chunk.ChunkTransformer.BlockForma
 import protocolsupport.protocol.legacyremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.ByteArraySerializer;
+import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.tileentity.TileNBTRemapper;
@@ -29,12 +29,12 @@ public class Chunk extends MiddleChunk {
 		transformer.loadData(data, bitmask, cache.hasSkyLightInCurrentDimension(), full);
 		ByteBuf chunkdata = Unpooled.buffer();
 		chunkdata.writeBytes(transformer.toLegacyData(version));
-		chunkdata.writeByte(0); //borders???
-		VarNumberSerializer.writeSVarInt(chunkdata, 0); //extra data???
+		chunkdata.writeByte(0); //borders
+		VarNumberSerializer.writeSVarInt(chunkdata, 0); //extra data
 		for (NBTTagCompoundWrapper tile : tiles) {
 			ItemStackSerializer.writeTag(chunkdata, version, TileNBTRemapper.remap(version, tile));
 		}
-		ByteArraySerializer.writeByteArray(serializer, version, chunkdata);
+		ArraySerializer.writeByteArray(serializer, version, chunkdata);
 		return RecyclableSingletonList.create(serializer);
 	}
 
@@ -44,9 +44,11 @@ public class Chunk extends MiddleChunk {
 		VarNumberSerializer.writeSVarInt(serializer, chunkZ);
 		ByteBuf chunkdata = Unpooled.buffer();
 		chunkdata.writeByte(0); //section count
-		chunkdata.writeByte(0); //borders???
-		VarNumberSerializer.writeSVarInt(chunkdata, 0); //extra data???
-		ByteArraySerializer.writeByteArray(serializer, version, chunkdata);
+		chunkdata.writeBytes(new byte[512]); //heightmap
+		chunkdata.writeBytes(new byte[256]); //biomes
+		chunkdata.writeByte(0); //borders
+		VarNumberSerializer.writeSVarInt(chunkdata, 0); //extra data
+		ArraySerializer.writeByteArray(serializer, version, chunkdata);
 		return serializer;
 	}
 
