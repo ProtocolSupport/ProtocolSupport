@@ -77,7 +77,7 @@ public enum ProtocolVersion {
 	 * @return true if this protocol version is supported
 	 */
 	public boolean isSupported() {
-		return id != -1;
+		return name != null;
 	}
 
 	/**
