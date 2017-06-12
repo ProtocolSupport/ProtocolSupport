@@ -20,7 +20,7 @@ public class EntityTeleport extends MiddleEntityTeleport {
 			return RecyclableSingletonList.create(Position.create(version, entityId, x, y, z, pitch, yaw, Position.ANIMATION_MODE_ALL));
 		} else {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_TELEPORT, version);
-			VarNumberSerializer.writeSVarLong(serializer, entityId);
+			VarNumberSerializer.writeVarLong(serializer, entityId);
 			MiscSerializer.writeLFloat(serializer, (float) x);
 			MiscSerializer.writeLFloat(serializer, (float) y);
 			MiscSerializer.writeLFloat(serializer, (float) z);

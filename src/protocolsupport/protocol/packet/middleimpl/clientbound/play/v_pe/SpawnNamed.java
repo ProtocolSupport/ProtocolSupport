@@ -18,7 +18,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		MiscSerializer.writeUUID(serializer, entity.getUUID());
 		StringSerializer.writeString(serializer, version, name);
 		VarNumberSerializer.writeSVarLong(serializer, entity.getId());
-		VarNumberSerializer.writeSVarLong(serializer, entity.getId());
+		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		MiscSerializer.writeLFloat(serializer, (float) x);
 		MiscSerializer.writeLFloat(serializer, (float) y);
 		MiscSerializer.writeLFloat(serializer, (float) z);

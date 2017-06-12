@@ -35,7 +35,7 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 
 	public static ClientBoundPacketData create(ProtocolVersion version, int entityId, Attribute... attributes) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SET_ATTRIBUTES, version);
-		VarNumberSerializer.writeSVarInt(serializer, entityId);
+		VarNumberSerializer.writeVarLong(serializer, entityId);
 		VarNumberSerializer.writeVarInt(serializer, attributes.length);
 		for (Attribute attr : attributes) {
 			double add = 0;

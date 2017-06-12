@@ -15,7 +15,7 @@ public class SpawnGlobal extends MiddleSpawnGlobal {
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SPAWN_ENTITY, version);
 		VarNumberSerializer.writeSVarLong(serializer, entityId);
-		VarNumberSerializer.writeSVarLong(serializer, entityId);
+		VarNumberSerializer.writeVarLong(serializer, entityId);
 		VarNumberSerializer.writeVarInt(serializer, 93); //Lightning is always entity 93. No remap. No worries.
 		MiscSerializer.writeLFloat(serializer, (float) x);
 		MiscSerializer.writeLFloat(serializer, (float) y);

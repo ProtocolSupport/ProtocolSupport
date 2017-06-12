@@ -17,7 +17,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SPAWN_ENTITY, version);
 		VarNumberSerializer.writeSVarLong(serializer, entity.getId());
-		VarNumberSerializer.writeSVarLong(serializer, entity.getId());
+		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		VarNumberSerializer.writeVarInt(serializer, PEDataValues.getLivingEntityType(IdRemapper.ENTITY.getTable(version).getRemap(entity.getType()).getTypeId()));
 		MiscSerializer.writeLFloat(serializer, (float) x);
 		MiscSerializer.writeLFloat(serializer, (float) y);

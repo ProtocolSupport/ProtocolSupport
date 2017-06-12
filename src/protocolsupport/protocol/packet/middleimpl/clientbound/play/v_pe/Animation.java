@@ -29,7 +29,7 @@ public class Animation extends MiddleAnimation {
 	private static ClientBoundPacketData create(ProtocolVersion version, int entityId, int animation) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ANIMATION, version);
 		VarNumberSerializer.writeSVarInt(serializer, animation);
-		VarNumberSerializer.writeSVarLong(serializer, entityId);
+		VarNumberSerializer.writeVarLong(serializer, entityId);
 		return serializer;
 	}
 

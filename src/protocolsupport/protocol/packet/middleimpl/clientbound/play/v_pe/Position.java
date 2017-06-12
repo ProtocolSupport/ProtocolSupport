@@ -32,7 +32,7 @@ public class Position extends MiddlePosition {
 		float realYaw = (float) (yaw * (360D/256D));
 		float realY = (float) (y + 1.6200000047683716D);
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_MOVE, version);
-		VarNumberSerializer.writeSVarLong(serializer, entityId);
+		VarNumberSerializer.writeVarLong(serializer, entityId);
 		MiscSerializer.writeLFloat(serializer, (float) x);
 		MiscSerializer.writeLFloat(serializer, realY);
 		MiscSerializer.writeLFloat(serializer, (float) z);

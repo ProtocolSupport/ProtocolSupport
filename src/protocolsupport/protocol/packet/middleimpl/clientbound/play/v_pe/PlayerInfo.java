@@ -24,7 +24,7 @@ public class PlayerInfo extends MiddlePlayerInfo {
 				VarNumberSerializer.writeVarInt(serializer, infos.length);
 				for (Info info : infos) {
 					MiscSerializer.writeUUID(serializer, info.uuid);
-					VarNumberSerializer.writeSVarInt(serializer, 0); //entity id
+					VarNumberSerializer.writeVarInt(serializer, 0); //entity id
 					StringSerializer.writeString(serializer, version, info.getName());
 					StringSerializer.writeString(serializer, version, "Standard_Steve");
 					ArraySerializer.writeByteArray(serializer, version, PESkin.STEVE);
