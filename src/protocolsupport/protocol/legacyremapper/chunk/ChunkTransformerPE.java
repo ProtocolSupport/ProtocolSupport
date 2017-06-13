@@ -3,6 +3,9 @@ package protocolsupport.protocol.legacyremapper.chunk;
 import java.io.ByteArrayOutputStream;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.legacyremapper.pe.PEDataValues;
+import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
 
 public class ChunkTransformerPE extends ChunkTransformer {
 
@@ -15,6 +18,7 @@ public class ChunkTransformerPE extends ChunkTransformer {
 
 	@Override
 	protected byte[] toLegacyData0(ProtocolVersion version) {
+		ArrayBasedIdRemappingTable table = IdRemapper.BLOCK.getTable(version);
 		ByteArrayOutputStream stream = new ByteArrayOutputStream(10241 * columnsCount);
 		stream.write(columnsCount);
 		for (int i = 0; i < columnsCount; i++) {
@@ -24,8 +28,8 @@ public class ChunkTransformerPE extends ChunkTransformer {
 				for (int z = 0; z < 16; z++) {
 					int xzoffset = (x << 7) | (z << 3);
 					for (int y = 0; y < 16; y += 2) {
-						int stateL = getBlockState(section, x, y, z);
-						int stateH = getBlockState(section, x, y + 1, z);
+						int stateL = PEDataValues.BLOCK_ID.getRemap(table.getRemap(getBlockState(section, x, y, z)));
+						int stateH = PEDataValues.BLOCK_ID.getRemap(table.getRemap(getBlockState(section, x, y + 1, z)));
 						blocks[((xzoffset << 1) | y)] = (byte) (stateL >> 4);
 						blocks[((xzoffset << 1) | (y + 1))] = (byte) (stateH >> 4);
 						blockdata[(xzoffset | (y >> 1))] = (byte) (((stateH & 0xF) << 4) | (stateL & 0xF));

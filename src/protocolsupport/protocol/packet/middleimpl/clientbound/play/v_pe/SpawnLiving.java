@@ -18,7 +18,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SPAWN_ENTITY, version);
 		VarNumberSerializer.writeSVarLong(serializer, entity.getId());
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
-		VarNumberSerializer.writeVarInt(serializer, PEDataValues.getLivingEntityType(IdRemapper.ENTITY.getTable(version).getRemap(entity.getType()).getTypeId()));
+		VarNumberSerializer.writeVarInt(serializer, PEDataValues.getLivingEntityTypeId(IdRemapper.ENTITY.getTable(version).getRemap(entity.getType())));
 		MiscSerializer.writeLFloat(serializer, (float) x);
 		MiscSerializer.writeLFloat(serializer, (float) y);
 		MiscSerializer.writeLFloat(serializer, (float) z);
