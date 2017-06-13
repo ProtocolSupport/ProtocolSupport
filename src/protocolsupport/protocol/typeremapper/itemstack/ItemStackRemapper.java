@@ -27,6 +27,7 @@ import protocolsupport.protocol.utils.GameProfileSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.protocol.utils.authlib.UUIDTypeAdapter;
+import protocolsupport.protocol.utils.data.MinecraftData;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -39,7 +40,7 @@ public class ItemStackRemapper {
 			for (ProtocolVersion version : ProtocolVersion.values()) {
 				if (version.isSupported()) {
 					BlockRemapperControl ctrl = ProtocolSupportAPI.getBlockRemapper(version);
-					for (int i = 0; i < 4096; i++) {
+					for (int i = 0; i < MinecraftData.BLOCK_ID_MAX; i++) {
 						registerRemapEntry(i, ctrl.getRemap(i), version);
 					}
 				}

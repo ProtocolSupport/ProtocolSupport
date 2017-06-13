@@ -24,4 +24,19 @@ public class MinecraftData {
 		return Utils.getResource("data/" + name);
 	}
 
+	public static final int BLOCK_ID_MAX = 4096;
+	public static final int BLOCK_DATA_MAX = 16;
+
+	public static int getBlockStateFromIdAndData(int id, int data) {
+		return (id << 4) | data;
+	}
+
+	public static int getBlockIdFromState(int blockstate) {
+		return blockstate >> 4;
+	}
+
+	public static int getBlockDataFromState(int blockdata) {
+		return blockdata & 0xF;
+	}
+
 }
