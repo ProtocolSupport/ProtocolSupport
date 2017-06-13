@@ -10,30 +10,32 @@ import protocolsupport.utils.netty.Allocator;
 
 public class ChunkTransformerVaries extends ChunkTransformer {
 
-	protected static final int bitsPerBlock__1_9__1_11 = 13;
+	protected static final int bitsPerBlock__1_9__1_12 = 13;
 
 	@Override
-	protected byte[] toLegacyData0(ProtocolVersion version) {
+	public byte[] toLegacyData(ProtocolVersion version) {
 		ArrayBasedIdRemappingTable table = IdRemapper.BLOCK.getTable(version);
 		ByteBuf chunkdata = Allocator.allocateBuffer();
 		try {
-			for (int i = 0; i < columnsCount; i++) {
+			for (int i = 0; i < sections.length; i++) {
 				ChunkSection section = sections[i];
-				chunkdata.writeByte(bitsPerBlock__1_9__1_11);
-				VarNumberSerializer.writeVarInt(chunkdata, 0);
-				BlockStorageReader storage = section.blockdata;
-				BlockStorageWriter blockstorage = new BlockStorageWriter(bitsPerBlock__1_9__1_11, blocksInSection);
-				for (int block = 0; block < blocksInSection; block++) {
-					blockstorage.setBlockState(block, table.getRemap(storage.getBlockState(block)));
-				}
-				long[] ldata = blockstorage.getBlockData();
-				VarNumberSerializer.writeVarInt(chunkdata, ldata.length);
-				for (long l : ldata) {
-					chunkdata.writeLong(l);
-				}
-				chunkdata.writeBytes(section.blocklight);
-				if (hasSkyLight) {
-					chunkdata.writeBytes(section.skylight);
+				if (section != null) {
+					chunkdata.writeByte(bitsPerBlock__1_9__1_12);
+					VarNumberSerializer.writeVarInt(chunkdata, 0);
+					BlockStorageReader storage = section.blockdata;
+					BlockStorageWriter blockstorage = new BlockStorageWriter(bitsPerBlock__1_9__1_12, blocksInSection);
+					for (int block = 0; block < blocksInSection; block++) {
+						blockstorage.setBlockState(block, table.getRemap(storage.getBlockState(block)));
+					}
+					long[] ldata = blockstorage.getBlockData();
+					VarNumberSerializer.writeVarInt(chunkdata, ldata.length);
+					for (long l : ldata) {
+						chunkdata.writeLong(l);
+					}
+					chunkdata.writeBytes(section.blocklight);
+					if (hasSkyLight) {
+						chunkdata.writeBytes(section.skylight);
+					}
 				}
 			}
 			if (hasBiomeData) {

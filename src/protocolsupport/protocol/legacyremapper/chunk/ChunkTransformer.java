@@ -41,19 +41,19 @@ public abstract class ChunkTransformer {
 		this.hasSkyLight = hasSkyLight;
 		this.hasBiomeData = hasBiomeData;
 		ByteBuf chunkdata = Unpooled.wrappedBuffer(data);
-		for (int i = 0; i < this.columnsCount; i++) {
-			sections[i] = new ChunkSection(chunkdata, hasSkyLight);
+		for (int i = 0; i < sections.length; i++) {
+			if ((bitmap & (1 << i)) != 0) {
+				sections[i] = new ChunkSection(chunkdata, hasSkyLight);
+			} else {
+				sections[i] = null;
+			}
 		}
 		if (hasBiomeData) {
 			chunkdata.readBytes(biomeData);
 		}
 	}
 
-	public byte[] toLegacyData(ProtocolVersion version) {
-		return toLegacyData0(version);
-	}
-
-	protected abstract byte[] toLegacyData0(ProtocolVersion version);
+	public abstract byte[] toLegacyData(ProtocolVersion version);
 
 	protected static final int blocksInSection = 16 * 16 * 16;
 
