@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.utils.data.MinecraftData;
 
 public class BlockRemapperControl {
 
@@ -56,7 +57,7 @@ public class BlockRemapperControl {
 	 */
 	@Deprecated
 	public int getRemap(int id) {
-		return id(table.getRemap(combinedId(id, 0)));
+		return MinecraftData.getBlockIdFromState(table.getRemap(MinecraftData.getBlockStateFromIdAndData(id, 0)));
 	}
 
 	/**
@@ -65,8 +66,8 @@ public class BlockRemapperControl {
 	 * @return remap for specified material and data
 	 */
 	public MaterialAndData getRemap(MaterialAndData entry) {
-		int combinedId = table.getRemap(combinedId(entry.getId(), entry.getData()));
-		return new MaterialAndData(id(combinedId), data(combinedId));
+		int combinedId = table.getRemap(MinecraftData.getBlockStateFromIdAndData(entry.getId(), entry.getData()));
+		return new MaterialAndData(MinecraftData.getBlockIdFromState(combinedId), MinecraftData.getBlockDataFromState(combinedId));
 	}
 
 	/**
@@ -98,7 +99,7 @@ public class BlockRemapperControl {
 	 * @param dataTo item data to which remap will occur
 	 */
 	public void setRemap(int idFrom, int dataFrom, int idTo, int dataTo) {
-		table.setRemap(combinedId(idFrom, dataFrom), combinedId(idTo, dataTo));
+		table.setRemap(MinecraftData.getBlockStateFromIdAndData(idFrom, dataFrom), MinecraftData.getBlockStateFromIdAndData(idTo, dataTo));
 	}
 
 	public static class MaterialAndData {
@@ -127,18 +128,6 @@ public class BlockRemapperControl {
 		public int getData() {
 			return data;
 		}
-	}
-
-	private static int combinedId(int id, int data) {
-		return (id << 4) | (data & 0xF);
-	}
-
-	private static int id(int combinedId) {
-		return combinedId >> 4;
-	}
-
-	private static int data(int combinedId) {
-		return combinedId & 0xF;
 	}
 
 }

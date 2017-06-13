@@ -12,15 +12,13 @@ import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemap
 import protocolsupport.protocol.typeremapper.id.RemappingTable.EnumRemappingTable;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.HashMapBasedIdRemappingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupport.protocol.utils.data.MinecraftData;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
 
 public class IdRemapper {
 
 	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> BLOCK = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
-
-		private static final int DATA_MAX = 16;
-
 		{
 			registerRemapEntry(Material.CONCRETE, Material.BRICK, 0, ProtocolVersionsHelper.BEFORE_1_12);
 			registerRemapEntry(Material.CONCRETE_POWDER, Material.WOOL, ProtocolVersionsHelper.BEFORE_1_12);
@@ -63,7 +61,7 @@ public class IdRemapper {
 			registerRemapEntry(Material.RED_NETHER_BRICK, Material.NETHER_BRICK, ProtocolVersionsHelper.BEFORE_1_10);
 			registerRemapEntry(Material.MAGMA, Material.NETHERRACK, ProtocolVersionsHelper.BEFORE_1_10);
 			registerRemapEntry(Material.BONE_BLOCK, Material.BRICK, ProtocolVersionsHelper.BEFORE_1_10);
-			for (int i = 0; i < DATA_MAX; i++) {
+			for (int i = 0; i < MinecraftData.BLOCK_DATA_MAX; i++) {
 				int newdata = (i & 0x8) == 0x8 ? 1 : 0;
 				registerRemapEntry(Material.COMMAND_CHAIN, i, Material.COMMAND, newdata, ProtocolVersionsHelper.BEFORE_1_9);
 				registerRemapEntry(Material.COMMAND_REPEATING, i, Material.COMMAND, newdata, ProtocolVersionsHelper.BEFORE_1_9);
@@ -140,22 +138,22 @@ public class IdRemapper {
 			registerRemapEntry(Material.REDSTONE_COMPARATOR_ON, Material.DIODE_BLOCK_ON, ProtocolVersionsHelper.BEFORE_1_5);
 		}
 		protected void registerRemapEntry(Material from, Material to, ProtocolVersion... versions) {
-			for (int i = 0; i < DATA_MAX; i++) {
+			for (int i = 0; i < MinecraftData.BLOCK_DATA_MAX; i++) {
 				registerRemapEntry(from, i, to, i, versions);
 			}
 		}
 		protected void registerRemapEntry(Material matFrom, Material matTo, int dataTo, ProtocolVersion... versions) {
-			for (int i = 0; i < DATA_MAX; i++) {
+			for (int i = 0; i < MinecraftData.BLOCK_DATA_MAX; i++) {
 				registerRemapEntry(matFrom, i, matTo, dataTo, versions);
 			}
 		}
 		@SuppressWarnings("deprecation")
 		protected void registerRemapEntry(Material matFrom, int dataFrom, Material matTo, int dataTo, ProtocolVersion... versions) {
-			registerRemapEntry((matFrom.getId() << 4) | dataFrom, (matTo.getId() << 4) | (dataTo & 0xF), versions);
+			registerRemapEntry(MinecraftData.getBlockStateFromIdAndData(matFrom.getId(), dataFrom), MinecraftData.getBlockStateFromIdAndData(matTo.getId(), dataTo), versions);
 		}
 		@Override
 		protected ArrayBasedIdRemappingTable createTable() {
-			return new ArrayBasedIdRemappingTable(4096 * DATA_MAX);
+			return new ArrayBasedIdRemappingTable(MinecraftData.BLOCK_ID_MAX * MinecraftData.BLOCK_DATA_MAX);
 		}
 	};
 

@@ -17,6 +17,7 @@ import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexV
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapperNumberToShort;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapperStringClamp;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupport.protocol.utils.data.MinecraftData;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBlockState;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;
@@ -261,19 +262,19 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapper<DataWatcherObjectBlockState>(DataWatcherObjectIndex.Enderman.CARRIED_BLOCK, 16) {
 			@Override
 			public DataWatcherObject<?> remapValue(DataWatcherObjectBlockState object) {
-				return new DataWatcherObjectShort((short) (object.getValue() >> 4));
+				return new DataWatcherObjectShort((short) MinecraftData.getBlockIdFromState(object.getValue()));
 			}
 		}, ProtocolVersion.MINECRAFT_1_8),
 		new Entry(new IndexValueRemapper<DataWatcherObjectBlockState>(DataWatcherObjectIndex.Enderman.CARRIED_BLOCK, 16) {
 			@Override
 			public DataWatcherObject<?> remapValue(DataWatcherObjectBlockState object) {
-				return new DataWatcherObjectByte((byte) (object.getValue() >> 4));
+				return new DataWatcherObjectByte((byte) MinecraftData.getBlockIdFromState(object.getValue()));
 			}
 		}, ProtocolVersionsHelper.BEFORE_1_8),
 		new Entry(new IndexValueRemapper<DataWatcherObjectBlockState>(DataWatcherObjectIndex.Enderman.CARRIED_BLOCK, 17) {
 			@Override
 			public DataWatcherObject<?> remapValue(DataWatcherObjectBlockState object) {
-				return new DataWatcherObjectByte((byte) (object.getValue() & 0xF));
+				return new DataWatcherObjectByte((byte) MinecraftData.getBlockDataFromState(object.getValue()));
 			}
 		}, ProtocolVersionsHelper.BEFORE_1_9),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Enderman.SCREAMING, 13) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
