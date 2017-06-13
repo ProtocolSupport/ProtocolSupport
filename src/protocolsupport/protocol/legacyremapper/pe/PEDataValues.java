@@ -3,6 +3,7 @@ package protocolsupport.protocol.legacyremapper.pe;
 import java.util.EnumMap;
 
 import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.utils.data.MinecraftData;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
 
 public class PEDataValues {
@@ -57,10 +58,10 @@ public class PEDataValues {
 		return livingEntityType.get(type);
 	}
 
-	public static final ArrayBasedIdRemappingTable BLOCK_ID = new ArrayBasedIdRemappingTable(4096 * 16);
+	public static final ArrayBasedIdRemappingTable BLOCK_ID = new ArrayBasedIdRemappingTable(MinecraftData.BLOCK_ID_MAX * MinecraftData.BLOCK_DATA_MAX);
 	private static void registerBlockRemap(int from, int to) {
-		for (int i = 0; i < 16; i++) {
-			BLOCK_ID.setRemap((from << 4) | i, (to << 4) | i);
+		for (int i = 0; i < MinecraftData.BLOCK_DATA_MAX; i++) {
+			BLOCK_ID.setRemap(MinecraftData.getBlockStateFromIdAndData(from, i), MinecraftData.getBlockStateFromIdAndData(to, i));
 		}
 	}
 	static {
