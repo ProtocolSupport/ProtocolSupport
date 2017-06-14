@@ -58,7 +58,7 @@ public class Login extends MiddleLogin {
 		packets.add(startgame);
 		packets.add(PEAdventureSettings.createPacket(cache));
 		ClientBoundPacketData chunkradius = ClientBoundPacketData.create(PEPacketIDs.CHUNK_RADIUS, version);
-		VarNumberSerializer.writeSVarInt(chunkradius, Math.min(Bukkit.getViewDistance(), 7));
+		VarNumberSerializer.writeSVarInt(chunkradius, Bukkit.getViewDistance() * 2);
 		packets.add(chunkradius);
 		packets.add(LoginSuccess.createPlayStatus(version, 3));
 		return packets;
