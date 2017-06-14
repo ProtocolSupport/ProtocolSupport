@@ -18,13 +18,13 @@ public class Respawn extends MiddleRespawn {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHANGE_DIMENSION, version);
-		VarNumberSerializer.writeSVarInt(serializer, getPeDimensionId(dimension));
-		MiscSerializer.writeLFloat(serializer, 0); //x
-		MiscSerializer.writeLFloat(serializer, 0); //y
-		MiscSerializer.writeLFloat(serializer, 0); //z
-		serializer.writeBoolean(true); //unused value
-		packets.add(serializer);
+		ClientBoundPacketData changedim = ClientBoundPacketData.create(PEPacketIDs.CHANGE_DIMENSION, version);
+		VarNumberSerializer.writeSVarInt(changedim, getPeDimensionId(dimension));
+		MiscSerializer.writeLFloat(changedim, 0); //x
+		MiscSerializer.writeLFloat(changedim, 0); //y
+		MiscSerializer.writeLFloat(changedim, 0); //z
+		changedim.writeBoolean(true); //unused value
+		packets.add(changedim);
 		packets.add(LoginSuccess.createPlayStatus(version, 3));
 		return packets;
 	}

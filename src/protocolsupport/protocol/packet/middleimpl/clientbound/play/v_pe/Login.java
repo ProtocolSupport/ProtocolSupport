@@ -37,7 +37,7 @@ public class Login extends MiddleLogin {
 		MiscSerializer.writeLFloat(startgame, 0); //yaw
 		MiscSerializer.writeLFloat(startgame, 0); //pitch
 		VarNumberSerializer.writeSVarInt(startgame, 0); //seed
-		VarNumberSerializer.writeSVarInt(startgame, 0 /*Respawn.getPeDimensionId(dimension)*/);
+		VarNumberSerializer.writeSVarInt(startgame, Respawn.getPeDimensionId(dimension));
 		VarNumberSerializer.writeSVarInt(startgame, 1); //world type (1 - infinite)
 		VarNumberSerializer.writeSVarInt(startgame, GameMode.SURVIVAL.getId()); // world gamemode
 		VarNumberSerializer.writeSVarInt(startgame, difficulty.getId());
@@ -51,14 +51,14 @@ public class Login extends MiddleLogin {
 		startgame.writeBoolean(false); //needs texture pack
 		VarNumberSerializer.writeVarInt(startgame, 0); //game rules
 		StringSerializer.writeString(startgame, version, ""); //level type
-		StringSerializer.writeString(startgame, version, "test"); //world name
+		StringSerializer.writeString(startgame, version, ""); //world name
 		StringSerializer.writeString(startgame, version, ""); //premium world template
 		startgame.writeBoolean(false); //apply level ticks
 		startgame.writeLong(0); //level ticks
 		packets.add(startgame);
 		packets.add(PEAdventureSettings.createPacket(cache));
 		ClientBoundPacketData chunkradius = ClientBoundPacketData.create(PEPacketIDs.CHUNK_RADIUS, version);
-		VarNumberSerializer.writeSVarInt(chunkradius, Bukkit.getViewDistance());
+		VarNumberSerializer.writeSVarInt(chunkradius, Math.min(Bukkit.getViewDistance(), 7));
 		packets.add(chunkradius);
 		packets.add(LoginSuccess.createPlayStatus(version, 3));
 		return packets;
