@@ -25,6 +25,11 @@ public class Respawn extends MiddleRespawn {
 		MiscSerializer.writeLFloat(changedim, 0); //z
 		changedim.writeBoolean(true); //unused value
 		packets.add(changedim);
+		for (int x = -10; x < 10; x++) {
+			for (int z = -10; z < 10; z++) {
+				packets.add(Chunk.createEmptyChunk(version, x, z));
+			}
+		}
 		packets.add(LoginSuccess.createPlayStatus(version, 3));
 		return packets;
 	}
