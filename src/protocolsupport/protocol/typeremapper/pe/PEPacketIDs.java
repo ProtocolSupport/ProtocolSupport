@@ -29,5 +29,5 @@ public class PEPacketIDs {
 	public static final int CHANGE_PLAYER_GAMETYPE = 62;
 	public static final int PLAYER_INFO = 63;
 	public static final int CHUNK_RADIUS = 70;
-
+	public static final int SET_TITLE = 89;
 }
