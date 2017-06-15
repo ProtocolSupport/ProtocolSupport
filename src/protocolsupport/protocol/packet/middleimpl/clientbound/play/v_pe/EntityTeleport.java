@@ -17,7 +17,7 @@ public class EntityTeleport extends MiddleEntityTeleport {
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		NetworkEntity wentity = cache.getWatchedEntity(entityId);
 		if ((wentity != null) && (wentity.getType() == NetworkEntityType.PLAYER)) {
-			return RecyclableSingletonList.create(Position.create(version, entityId, x, y, z, pitch, yaw, Position.ANIMATION_MODE_ALL));
+			return RecyclableSingletonList.create(Position.create(version, entityId, x, y + 1.6200000047683716D, z, pitch, yaw, Position.ANIMATION_MODE_ALL));
 		} else {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_TELEPORT, version);
 			VarNumberSerializer.writeVarLong(serializer, entityId);
