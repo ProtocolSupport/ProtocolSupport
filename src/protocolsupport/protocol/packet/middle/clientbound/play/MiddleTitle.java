@@ -1,6 +1,8 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.api.chat.ChatAPI;
+import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -9,8 +11,7 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 public abstract class MiddleTitle extends ClientBoundMiddlePacket {
 
 	protected Action action;
-	protected String titleJson;
-	protected String subtitleJson;
+	protected BaseComponent message;
 	protected int fadeIn;
 	protected int stay;
 	protected int fadeOut;
@@ -19,16 +20,10 @@ public abstract class MiddleTitle extends ClientBoundMiddlePacket {
 	public void readFromServerData(ByteBuf serverdata) {
 		action = Action.values()[VarNumberSerializer.readVarInt(serverdata)];
 		switch (action) {
-			case SET_TITLE: {
-				titleJson = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
-				break;
-			}
-			case SET_SUBTITLE: {
-				subtitleJson = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
-				break;
-			}
+			case SET_TITLE:
+			case SET_SUBTITLE: 
 			case SET_ACTION_BAR: {
-				titleJson = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
+				message = ChatAPI.fromJSON(StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC));
 				break;
 			}
 			case SET_TIMES: {
