@@ -35,7 +35,7 @@ public class ChunkTransformerPE extends ChunkTransformer {
 							int stateH = PEDataValues.BLOCK_ID.getRemap(table.getRemap(getBlockState(section, x, y + 1, z)));
 							blocks[((xzoffset << 1) | y)] = (byte) MinecraftData.getBlockIdFromState(stateL);
 							blocks[((xzoffset << 1) | (y + 1))] = (byte) MinecraftData.getBlockIdFromState(stateH);
-							blockdata[(xzoffset | (y >> 1))] = (byte) ((MinecraftData.getBlockDataFromState(stateH) << 4) | (MinecraftData.getBlockDataFromState(stateL) << 4));
+							blockdata[(xzoffset | (y >> 1))] = (byte) ((MinecraftData.getBlockDataFromState(stateH) << 4) | MinecraftData.getBlockDataFromState(stateL));
 							if (hasSkyLight) {
 								skyLight[(xzoffset | (y >> 1))] = (byte) ((getSkyLight(section, x, y + 1, z) << 4) | getSkyLight(section, x, y, z));
 							}
