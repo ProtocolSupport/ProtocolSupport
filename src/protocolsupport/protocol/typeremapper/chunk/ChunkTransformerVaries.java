@@ -1,4 +1,4 @@
-package protocolsupport.protocol.legacyremapper.chunk;
+package protocolsupport.protocol.typeremapper.chunk;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;

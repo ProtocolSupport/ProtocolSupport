@@ -1,4 +1,4 @@
-package protocolsupport.protocol.utils.data;
+package protocolsupport.protocol.utils.minecraftdata;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;

@@ -2,11 +2,11 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8;
 
 import gnu.trove.map.TIntObjectMap;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.legacyremapper.LegacyDataWatcherSerializer;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.legacy.LegacyDataWatcherSerializer;
 import protocolsupport.protocol.typeremapper.watchedentity.WatchedDataRemapper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.utils.recyclable.RecyclableCollection;

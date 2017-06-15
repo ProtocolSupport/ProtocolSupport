@@ -1,4 +1,4 @@
-package protocolsupport.protocol.legacyremapper;
+package protocolsupport.protocol.typeremapper.legacy;
 
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.Utils;

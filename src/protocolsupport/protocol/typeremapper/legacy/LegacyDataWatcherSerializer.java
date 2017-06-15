@@ -1,4 +1,4 @@
-package protocolsupport.protocol.legacyremapper;
+package protocolsupport.protocol.typeremapper.legacy;
 
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.TIntObjectMap;

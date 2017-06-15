@@ -1,4 +1,4 @@
-package protocolsupport.protocol.legacyremapper.chunk;
+package protocolsupport.protocol.typeremapper.chunk;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;

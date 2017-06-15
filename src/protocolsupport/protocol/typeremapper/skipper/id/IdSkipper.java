@@ -1,12 +1,12 @@
-package protocolsupport.protocol.typeskipper.id;
+package protocolsupport.protocol.typeremapper.skipper.id;
 
-import protocolsupport.protocol.typeskipper.id.SkippingRegistry.EnumSkippingRegistry;
-import protocolsupport.protocol.typeskipper.id.SkippingRegistry.GenericSkippingRegistry;
-import protocolsupport.protocol.typeskipper.id.SkippingRegistry.IntSkippingRegistry;
-import protocolsupport.protocol.typeskipper.id.SkippingTable.ArrayBasedIntSkippingTable;
-import protocolsupport.protocol.typeskipper.id.SkippingTable.EnumSkippingTable;
-import protocolsupport.protocol.typeskipper.id.SkippingTable.GenericSkippingTable;
-import protocolsupport.protocol.typeskipper.id.SkippingTable.HashMapBasedIntSkippingTable;
+import protocolsupport.protocol.typeremapper.skipper.id.SkippingRegistry.EnumSkippingRegistry;
+import protocolsupport.protocol.typeremapper.skipper.id.SkippingRegistry.GenericSkippingRegistry;
+import protocolsupport.protocol.typeremapper.skipper.id.SkippingRegistry.IntSkippingRegistry;
+import protocolsupport.protocol.typeremapper.skipper.id.SkippingTable.ArrayBasedIntSkippingTable;
+import protocolsupport.protocol.typeremapper.skipper.id.SkippingTable.EnumSkippingTable;
+import protocolsupport.protocol.typeremapper.skipper.id.SkippingTable.GenericSkippingTable;
+import protocolsupport.protocol.typeremapper.skipper.id.SkippingTable.HashMapBasedIntSkippingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.WindowType;

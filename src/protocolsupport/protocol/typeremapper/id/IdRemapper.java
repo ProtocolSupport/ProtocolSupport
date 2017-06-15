@@ -12,7 +12,7 @@ import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemap
 import protocolsupport.protocol.typeremapper.id.RemappingTable.EnumRemappingTable;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.HashMapBasedIdRemappingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.data.MinecraftData;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
 

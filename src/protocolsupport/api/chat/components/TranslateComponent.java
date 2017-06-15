@@ -9,7 +9,7 @@ import java.util.List;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
-import protocolsupport.protocol.legacyremapper.LegacyChat;
+import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
 import protocolsupport.protocol.utils.i18n.I18NData;
 
 public class TranslateComponent extends BaseComponent {

@@ -1,8 +1,8 @@
-package protocolsupport.protocol.legacyremapper;
+package protocolsupport.protocol.typeremapper.legacy;
 
 import java.util.HashMap;
 
-import protocolsupport.protocol.utils.data.SoundData;
+import protocolsupport.protocol.utils.minecraftdata.SoundData;
 
 public class LegacySound {
 

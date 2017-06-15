@@ -27,7 +27,7 @@ import protocolsupport.protocol.utils.GameProfileSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.protocol.utils.authlib.UUIDTypeAdapter;
-import protocolsupport.protocol.utils.data.MinecraftData;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;

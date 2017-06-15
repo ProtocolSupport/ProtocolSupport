@@ -1,4 +1,4 @@
-package protocolsupport.protocol.utils.data;
+package protocolsupport.protocol.utils.minecraftdata;
 
 import java.util.HashMap;
 

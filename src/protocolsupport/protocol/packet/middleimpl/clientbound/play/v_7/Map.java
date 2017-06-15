@@ -1,12 +1,12 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.legacyremapper.LegacyMap;
-import protocolsupport.protocol.legacyremapper.LegacyMap.ColumnEntry;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleMap;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.legacy.LegacyMap;
+import protocolsupport.protocol.typeremapper.legacy.LegacyMap.ColumnEntry;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 

@@ -1,11 +1,11 @@
-package protocolsupport.protocol.typeskipper.id;
+package protocolsupport.protocol.typeremapper.skipper.id;
 
 import java.util.EnumMap;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeskipper.id.SkippingTable.EnumSkippingTable;
-import protocolsupport.protocol.typeskipper.id.SkippingTable.GenericSkippingTable;
-import protocolsupport.protocol.typeskipper.id.SkippingTable.IntSkippingTable;
+import protocolsupport.protocol.typeremapper.skipper.id.SkippingTable.EnumSkippingTable;
+import protocolsupport.protocol.typeremapper.skipper.id.SkippingTable.GenericSkippingTable;
+import protocolsupport.protocol.typeremapper.skipper.id.SkippingTable.IntSkippingTable;
 import protocolsupport.utils.Utils;
 
 public abstract class SkippingRegistry<T extends SkippingTable> {

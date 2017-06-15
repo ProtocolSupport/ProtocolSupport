@@ -1,9 +1,9 @@
-package protocolsupport.protocol.legacyremapper.chunk;
+package protocolsupport.protocol.typeremapper.chunk;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
-import protocolsupport.protocol.utils.data.MinecraftData;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 
 public class ChunkTransformerByte extends ChunkTransformer {
 
