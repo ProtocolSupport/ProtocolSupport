@@ -65,7 +65,34 @@ public class PEDataValues {
 			BLOCK_ID.setRemap(MinecraftData.getBlockStateFromIdAndData(from, i), MinecraftData.getBlockStateFromIdAndData(to, i));
 		}
 	}
+	private static void registerBlockRemap(int from, int dataFrom, int to, int dataTo) {
+		for (int i = 0; i < MinecraftData.BLOCK_DATA_MAX; i++) {
+			BLOCK_ID.setRemap(MinecraftData.getBlockStateFromIdAndData(from, dataFrom), MinecraftData.getBlockStateFromIdAndData(to, dataTo));
+		}
+	}
+	private static void registerBlockRemap(int from, int to, int dataTo) {
+		for (int i = 0; i < MinecraftData.BLOCK_DATA_MAX; i++) {
+			BLOCK_ID.setRemap(MinecraftData.getBlockStateFromIdAndData(from, i), MinecraftData.getBlockStateFromIdAndData(to, dataTo));
+		}
+	}
+	
 	static {
+		// Nether slab -> Quartz slab
+		registerBlockRemap(44, 7, 44, 6);
+		registerBlockRemap(44, 14, 44, 15);
+		registerBlockRemap(43, 7, 44, 6);
+		// And vice-versa
+		registerBlockRemap(44, 6, 44, 7);
+		registerBlockRemap(44, 15, 44, 14);
+		registerBlockRemap(43, 6, 44, 7);
+		// Podzol
+		registerBlockRemap(3, 2, 243, 0);
+		// Colored Fences
+		registerBlockRemap(188, 85, 1);
+		registerBlockRemap(189, 85, 2);
+		registerBlockRemap(190, 85, 3);
+		registerBlockRemap(191, 85, 4);
+		registerBlockRemap(192, 85, 5);
 		// Concrete
 		registerBlockRemap(251, 236);
 		// Concrete Powder
@@ -124,9 +151,15 @@ public class PEDataValues {
 		// Activator Rail
 		registerBlockRemap(157, 126);
 		// Double Wooden Slab
-		registerBlockRemap(43, 157);
+		registerBlockRemap(125, 157);
 		// Dropper
 		registerBlockRemap(158, 125);
+		// Beetroot
+		registerBlockRemap(207, 244);
+		
+		// ===[ MISSING BLOCK REMAPS ]===
+		// Jukebox -> Noteblock
+		registerBlockRemap(84, 25);
 	}
 
 }
