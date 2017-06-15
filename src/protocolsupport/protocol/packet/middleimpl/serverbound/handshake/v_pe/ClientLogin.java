@@ -1,16 +1,16 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_pe;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStreamReader;
 import java.util.Base64;
+import java.util.List;
+import java.util.Map;
 
-import org.bukkit.craftbukkit.libs.jline.internal.InputStreamReader;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.JsonObject;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
-import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
@@ -20,15 +20,13 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.utils.JsonUtils;
+import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class ClientLogin extends ServerBoundMiddlePacket {
 
 	private String username;
-
-	private final JsonParser parser = new JsonParser();
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
@@ -47,16 +45,34 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
-		clientdata.skipBytes(Integer.BYTES); //TODO: validate protocol
-		clientdata.skipBytes(Byte.BYTES); //skip pe type
+		clientdata.skipBytes(Integer.BYTES); // TODO: validate protocol
+		clientdata.skipBytes(Byte.BYTES); // skip pe type
 		ByteBuf logindata = Unpooled.wrappedBuffer(ArraySerializer.readByteArray(clientdata, version));
 		//decode chain
-		JsonElement root = parser.parse(new InputStreamReader(new ByteBufInputStream(logindata, ByteBufUtil.swapInt(logindata.readInt()))));
-		String chain = JsonUtils.getJsonArray(root.getAsJsonObject(), "chain").get(0).getAsString();
-		JsonElement data = parser.parse(new InputStreamReader(new ByteArrayInputStream(Base64.getDecoder().decode(chain.split("[.]")[1]))));
-		username = JsonUtils.getString(JsonUtils.getJsonObject(data.getAsJsonObject(), "extraData"), "displayName");
+		@SuppressWarnings("serial")
+		Map<String, List<String>> map = Utils.GSON.fromJson(
+			new InputStreamReader(new ByteBufInputStream(logindata, logindata.readIntLE())),
+			new TypeToken<Map<String, List<String>>>() {}.getType()
+		);
+		for (String c : map.get("chain")) {
+			JsonObject chainMap = decodeToken(c);
+			if (chainMap != null && chainMap.has("extraData")) {
+				JsonObject extra = chainMap.get("extraData").getAsJsonObject();
+				if (extra.has("displayName")) {
+					username = extra.get("displayName").getAsString();
+				}
+			}
+		}
 		//skip skin data
-		logindata.skipBytes(ByteBufUtil.swapInt(logindata.readInt()));
+		logindata.skipBytes(logindata.readIntLE());
+	}
+
+	private JsonObject decodeToken(String token) {
+		String[] base = token.split("\\.");
+		if (base.length < 2) {
+			return null;
+		}
+		return Utils.GSON.fromJson(new InputStreamReader(new ByteArrayInputStream(Base64.getDecoder().decode(base[1]))), JsonObject.class);
 	}
 
 }
