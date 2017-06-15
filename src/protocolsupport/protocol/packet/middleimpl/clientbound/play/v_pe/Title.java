@@ -2,7 +2,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import io.netty.handler.codec.EncoderException;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleTitle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -29,17 +28,17 @@ public class Title extends MiddleTitle {
 			case RESET: {
 				return RecyclableSingletonList.create(create(version, RESET, "", 0, 0, 0));
 			}
-			case SET_ACTION_BAR: {
-				return RecyclableSingletonList.create(create(version, SET_ACTION_BAR, ChatAPI.fromJSON(titleJson).toLegacyText(), 0, 0, 0));
+			case SET_TITLE: {
+				return RecyclableSingletonList.create(create(version, SET_TITLE, message.toLegacyText(), 0, 0, 0));
 			}
 			case SET_SUBTITLE: {
-				return RecyclableSingletonList.create(create(version, SET_SUBTITLE, ChatAPI.fromJSON(subtitleJson).toLegacyText(), 0, 0, 0));
+				return RecyclableSingletonList.create(create(version, SET_SUBTITLE, message.toLegacyText(), 0, 0, 0));
+			}
+			case SET_ACTION_BAR: {
+				return RecyclableSingletonList.create(create(version, SET_ACTION_BAR, message.toLegacyText(), 0, 0, 0));
 			}
 			case SET_TIMES: {
 				return RecyclableSingletonList.create(create(version, SET_TIMINGS, "", fadeIn, stay, fadeOut));
-			}
-			case SET_TITLE: {
-				return RecyclableSingletonList.create(create(version, SET_TITLE, ChatAPI.fromJSON(titleJson).toLegacyText(), 0, 0, 0));
 			}
 			default: {
 				throw new EncoderException("Should not reach here");
