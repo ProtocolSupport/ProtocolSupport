@@ -12,9 +12,11 @@ Important notes:
 * Only latest version of this plugin is supported
 * This plugin can't be reloaded or loaded not at server startup
 * This plugin doesn't work with netty native transport
+* Online mode must be set to false
 
 Known issues:
 * [Anything that is not latest] Items in creative mode may not work as expected, or may not work at all
+* Online Mode set to true will generate errors or completely stop your server
 
 
 Known wontfix issues:
