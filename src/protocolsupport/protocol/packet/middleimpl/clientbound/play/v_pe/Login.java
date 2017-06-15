@@ -58,7 +58,7 @@ public class Login extends MiddleLogin {
 		packets.add(startgame);
 		packets.add(PEAdventureSettings.createPacket(cache));
 		ClientBoundPacketData chunkradius = ClientBoundPacketData.create(PEPacketIDs.CHUNK_RADIUS, version);
-		VarNumberSerializer.writeSVarInt(chunkradius, Bukkit.getViewDistance() * 2);
+		VarNumberSerializer.writeSVarInt(chunkradius, Bukkit.getViewDistance() + 1); //should exactly match the view distance that server uses to broadcast chunks. +1 because mcpe includes the chunk client is standing in in calculations, while pc does not
 		packets.add(chunkradius);
 		packets.add(LoginSuccess.createPlayStatus(version, 3));
 		return packets;
