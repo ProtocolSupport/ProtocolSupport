@@ -2,12 +2,12 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
-import protocolsupport.protocol.legacyremapper.LegacyDataWatcherSerializer;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnNamed;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.legacy.LegacyDataWatcherSerializer;
 import protocolsupport.protocol.typeremapper.watchedentity.WatchedDataRemapper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;

@@ -3,8 +3,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 import org.bukkit.Bukkit;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.legacyremapper.pe.PEAdventureSettings;
-import protocolsupport.protocol.legacyremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleLogin;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSuccess;
@@ -12,6 +10,8 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.pe.PEAdventureSettings;
+import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableArrayList;

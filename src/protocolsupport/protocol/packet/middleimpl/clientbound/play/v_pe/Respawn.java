@@ -3,12 +3,12 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 import java.text.MessageFormat;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.legacyremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleRespawn;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSuccess;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;

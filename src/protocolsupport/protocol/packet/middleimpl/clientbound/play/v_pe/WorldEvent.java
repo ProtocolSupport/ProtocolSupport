@@ -2,9 +2,9 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import gnu.trove.map.hash.TIntIntHashMap;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.legacyremapper.pe.PELevelEvent;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldEvent;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.typeremapper.pe.PELevelEvent;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 

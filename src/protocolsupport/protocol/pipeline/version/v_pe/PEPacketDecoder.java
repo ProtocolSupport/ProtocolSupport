@@ -7,7 +7,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.legacyremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_pe.ClientLogin;
@@ -17,6 +16,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PlayerAc
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PositionLook;
 import protocolsupport.protocol.pipeline.version.AbstractPacketDecoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.zplatform.ServerPlatform;

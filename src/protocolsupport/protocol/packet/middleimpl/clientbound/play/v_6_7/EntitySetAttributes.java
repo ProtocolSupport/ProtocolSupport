@@ -8,8 +8,8 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntitySetAt
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.typeskipper.id.IdSkipper;
-import protocolsupport.protocol.typeskipper.id.SkippingTable.GenericSkippingTable;
+import protocolsupport.protocol.typeremapper.skipper.id.IdSkipper;
+import protocolsupport.protocol.typeremapper.skipper.id.SkippingTable.GenericSkippingTable;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 

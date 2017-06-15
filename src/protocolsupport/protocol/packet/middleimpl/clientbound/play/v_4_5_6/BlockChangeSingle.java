@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChange
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
-import protocolsupport.protocol.utils.data.MinecraftData;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 

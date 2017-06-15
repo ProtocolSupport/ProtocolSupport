@@ -1,12 +1,12 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.legacyremapper.LegacyEffect;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldEvent;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.legacy.LegacyEffect;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 

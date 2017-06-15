@@ -1,12 +1,12 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.legacyremapper.pe.PEDataValues;
-import protocolsupport.protocol.legacyremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChangeSingle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.pe.PEDataValues;
+import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 

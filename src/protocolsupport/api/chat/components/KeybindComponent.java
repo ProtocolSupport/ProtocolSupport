@@ -2,7 +2,7 @@ package protocolsupport.api.chat.components;
 
 import java.text.MessageFormat;
 
-import protocolsupport.protocol.utils.data.KeybindData;
+import protocolsupport.protocol.utils.minecraftdata.KeybindData;
 
 public class KeybindComponent extends BaseComponent {
 

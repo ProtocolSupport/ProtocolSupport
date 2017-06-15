@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.legacyremapper.LegacyEntityType;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
+import protocolsupport.protocol.typeremapper.legacy.LegacyEntityType;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.data.ItemData;
+import protocolsupport.protocol.utils.minecraftdata.ItemData;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;

@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 
 import io.netty.util.ResourceLeakDetector;
 import io.netty.util.ResourceLeakDetector.Level;
+import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.zplatform.ServerPlatform;
@@ -50,6 +51,12 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			} else {
 				ResourceLeakDetector.setLevel(Level.PARANOID);
 				sender.sendMessage(ChatColor.GOLD + "Enabled leak detector");
+			}
+			return true;
+		}
+		if ((args.length == 1) && args[0].equalsIgnoreCase("connections")) {
+			for (Connection connection : ProtocolSupportAPI.getConnections()) {
+				sender.sendMessage(ChatColor.GREEN + connection.toString());
 			}
 			return true;
 		}

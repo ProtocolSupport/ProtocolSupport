@@ -17,7 +17,6 @@ import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexV
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapperNumberToShort;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapperStringClamp;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.data.MinecraftData;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBlockState;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;
@@ -32,6 +31,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectShort
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3f;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.CollectionsUtils;

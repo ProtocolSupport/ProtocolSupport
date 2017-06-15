@@ -6,10 +6,10 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.Connection;
-import protocolsupport.protocol.legacyremapper.LegacyAnimatePacketReorderer;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.typeremapper.legacy.LegacyAnimatePacketReorderer;
 import protocolsupport.zplatform.ServerPlatform;
 
 public class AbstractModernWithReorderPacketDecoder extends AbstractPacketDecoder  {

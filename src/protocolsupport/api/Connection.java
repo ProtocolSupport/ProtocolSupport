@@ -107,7 +107,7 @@ public abstract class Connection {
 		receiveListeners.remove(listener);
 	}
 
-	private final ConcurrentHashMap<String, Object> metadata = new ConcurrentHashMap<>();
+	protected final ConcurrentHashMap<String, Object> metadata = new ConcurrentHashMap<>();
 
 	/**
 	 * Adds any object to the internal map

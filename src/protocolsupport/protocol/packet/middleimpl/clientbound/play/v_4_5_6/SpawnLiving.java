@@ -1,13 +1,13 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.legacyremapper.LegacyDataWatcherSerializer;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnLiving;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.legacy.LegacyDataWatcherSerializer;
+import protocolsupport.protocol.typeremapper.skipper.id.IdSkipper;
 import protocolsupport.protocol.typeremapper.watchedentity.WatchedDataRemapper;
-import protocolsupport.protocol.typeskipper.id.IdSkipper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;

@@ -3,11 +3,11 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 import org.bukkit.util.NumberConversions;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.legacyremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddlePosition;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 

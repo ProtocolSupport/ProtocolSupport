@@ -7,7 +7,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryOp
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
-import protocolsupport.protocol.typeskipper.id.IdSkipper;
+import protocolsupport.protocol.typeremapper.skipper.id.IdSkipper;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
