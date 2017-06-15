@@ -2,6 +2,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_
 
 import io.netty.handler.codec.EncoderException;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleTitle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -22,12 +23,9 @@ public class Title extends MiddleTitle {
 		int actionId = action.ordinal();
 		VarNumberSerializer.writeVarInt(serializer, actionId > 2 ? actionId - 1 : actionId);
 		switch (action) {
-			case SET_TITLE: {
-				StringSerializer.writeString(serializer, version, titleJson);
-				break;
-			}
+			case SET_TITLE:
 			case SET_SUBTITLE: {
-				StringSerializer.writeString(serializer, version, subtitleJson);
+				StringSerializer.writeString(serializer, version, ChatAPI.toJSON(message));
 				break;
 			}
 			case SET_TIMES: {

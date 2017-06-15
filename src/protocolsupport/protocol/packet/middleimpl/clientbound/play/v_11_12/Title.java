@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_11_12;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleTitle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -16,16 +17,10 @@ public class Title extends MiddleTitle {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_TITLE_ID, version);
 		VarNumberSerializer.writeVarInt(serializer, action.ordinal());
 		switch (action) {
-			case SET_TITLE: {
-				StringSerializer.writeString(serializer, version, titleJson);
-				break;
-			}
-			case SET_SUBTITLE: {
-				StringSerializer.writeString(serializer, version, subtitleJson);
-				break;
-			}
+			case SET_TITLE:
+			case SET_SUBTITLE:
 			case SET_ACTION_BAR: {
-				StringSerializer.writeString(serializer, version, titleJson);
+				StringSerializer.writeString(serializer, version, ChatAPI.toJSON(message));
 				break;
 			}
 			case SET_TIMES: {
