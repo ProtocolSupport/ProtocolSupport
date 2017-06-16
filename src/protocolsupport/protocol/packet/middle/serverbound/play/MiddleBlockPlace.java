@@ -20,7 +20,6 @@ public abstract class MiddleBlockPlace extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		
 		if (face != -1) {
 			ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_USE_ITEM);
 			PositionSerializer.writePosition(creator, position);
