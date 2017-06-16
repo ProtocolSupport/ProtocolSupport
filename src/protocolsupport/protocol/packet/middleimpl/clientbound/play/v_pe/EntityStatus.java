@@ -15,7 +15,8 @@ public class EntityStatus extends MiddleEntityStatus{
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_EVENT, version);
 		VarNumberSerializer.writeVarLong(serializer, entityId);
 		
-		//TODO: write as remapper.
+		//TODO: Update status codes when added.
+		//Check, but so far no tested unknown status codes break PE.
 		switch(cache.getWatchedEntity(entityId).getType()){
 			case FISHING_FLOAT: {
 				if(status == 31) status = 13;
