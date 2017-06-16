@@ -23,6 +23,5 @@ public class UseItem extends MiddleBlockPlace {
 		cZ = MiscSerializer.readLFloat(clientdata);
 		//Don't care bout the remaining shizzle.
 		clientdata.skipBytes(clientdata.readableBytes());
-		
 	}
 }
