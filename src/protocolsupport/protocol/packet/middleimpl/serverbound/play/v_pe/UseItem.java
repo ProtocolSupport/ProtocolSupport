@@ -9,7 +9,6 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 
 public class UseItem extends MiddleBlockPlace {
-	
 	@Override
 	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
 		position = PositionSerializer.readPEPosition(clientdata);
