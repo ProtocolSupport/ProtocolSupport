@@ -12,7 +12,7 @@ import io.netty.handler.codec.DecoderException;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 
-public class SpigotPacketDecompressor extends net.minecraft.server.v1_11_R1.PacketDecompressor {
+public class SpigotPacketDecompressor extends net.minecraft.server.v1_12_R1.PacketDecompressor {
 
 	private static final int maxPacketLength = (int) Math.pow(2, 7 * 3);
 

@@ -8,8 +8,8 @@ import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
-import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBlockState;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
@@ -17,6 +17,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectChat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectDirection;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectItemStack;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectNBTTagCompound;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalUUID;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectPosition;
@@ -43,6 +44,7 @@ public class DataWatcherDeserializer {
 			register(DataWatcherObjectDirection.class);
 			register(DataWatcherObjectOptionalUUID.class);
 			register(DataWatcherObjectBlockState.class);
+			register(DataWatcherObjectNBTTagCompound.class);
 		} catch (Exception e) {
 			throw new RuntimeException("Exception in datawatcher init", e);
 		}
@@ -50,7 +52,7 @@ public class DataWatcherDeserializer {
 
 	private static void register(Class<? extends DataWatcherObject<?>> clazz) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		Constructor<? extends DataWatcherObject<?>> constr = clazz.getConstructor();
-		registry[DataWatcherObjectIdRegistry.getTypeId(clazz, ProtocolVersion.getLatest(ProtocolType.PC))] = constr;
+		registry[DataWatcherObjectIdRegistry.getTypeId(clazz, ProtocolVersionsHelper.LATEST_PC)] = constr;
 	}
 
 	public static TIntObjectMap<DataWatcherObject<?>> decodeData(ByteBuf from, ProtocolVersion version) {

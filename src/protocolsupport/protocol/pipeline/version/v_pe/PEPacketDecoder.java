@@ -7,17 +7,18 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.legacyremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_pe.ClientLogin;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Animation;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Chat;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.InstantBlockBreak;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PlayerAction;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PositionLook;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Interact;
 import protocolsupport.protocol.pipeline.version.AbstractPacketDecoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.zplatform.ServerPlatform;
@@ -35,6 +36,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		registry.register(NetworkState.PLAY, PEPacketIDs.CHAT, Chat.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.ANIMATION, Animation.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.INTERACT, Interact.class);
+		registry.register(NetworkState.PLAY, PEPacketIDs.REMOVE_BLOCK, InstantBlockBreak.class);
 	}
 
 	public PEPacketDecoder(Connection connection, NetworkDataCache cache) {
@@ -46,15 +48,20 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		if (!input.isReadable()) {
 			return;
 		}
-		ServerBoundMiddlePacket packetTransformer = registry.getTransformer(
-			ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(ctx.channel()),
-			input.readUnsignedByte()
-		);
-		packetTransformer.readFromClientData(input, connection.getVersion());
-		if (input.isReadable()) {
-			throw new DecoderException("Did not read all data from packet " + packetTransformer.getClass().getName() + ", bytes left: " + input.readableBytes());
+		ServerBoundMiddlePacket packetTransformer = null;
+		try {
+			packetTransformer = registry.getTransformer(
+				ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(ctx.channel()),
+				input.readUnsignedByte()
+			);
+			packetTransformer.readFromClientData(input, connection.getVersion());
+			if (input.isReadable()) {
+				throw new DecoderException("Did not read all data from packet " + packetTransformer.getClass().getName() + ", bytes left: " + input.readableBytes());
+			}
+			addPackets(packetTransformer.toNative(), list);
+		} catch (Exception e) {
+			throwFailedTransformException(e, packetTransformer, input);
 		}
-		addPackets(packetTransformer.toNative(), list);
 	}
 
 	public static class Noop extends ServerBoundMiddlePacket {

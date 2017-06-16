@@ -4,12 +4,12 @@ import java.util.HashMap;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.utils.Any;
-import protocolsupport.protocol.legacyremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntitySetAttributes;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -35,7 +35,7 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 
 	public static ClientBoundPacketData create(ProtocolVersion version, int entityId, Attribute... attributes) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SET_ATTRIBUTES, version);
-		VarNumberSerializer.writeSVarInt(serializer, entityId);
+		VarNumberSerializer.writeVarLong(serializer, entityId);
 		VarNumberSerializer.writeVarInt(serializer, attributes.length);
 		for (Attribute attr : attributes) {
 			double add = 0;

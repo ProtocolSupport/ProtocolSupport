@@ -1,11 +1,10 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolType;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ByteArraySerializer;
+import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleMap extends ClientBoundMiddlePacket {
 
@@ -24,27 +23,28 @@ public abstract class MiddleMap extends ClientBoundMiddlePacket {
 		itemData = VarNumberSerializer.readVarInt(serverdata);
 		scale = serverdata.readUnsignedByte();
 		showIcons = serverdata.readBoolean();
-		icons = new Icon[VarNumberSerializer.readVarInt(serverdata)];
-		for (int i = 0; i < icons.length; i++) {
-			Icon icon = new Icon();
-			icon.dirtype = serverdata.readUnsignedByte();
-			icon.x = serverdata.readUnsignedByte();
-			icon.z = serverdata.readUnsignedByte();
-			icons[i] = icon;
-		}
+		icons = ArraySerializer.readVarIntTArray(
+			serverdata, Icon.class,
+			(from) -> new Icon(from.readUnsignedByte(), from.readUnsignedByte(), from.readUnsignedByte())
+		);
 		columns = serverdata.readUnsignedByte();
 		if (columns > 0) {
 			rows = serverdata.readUnsignedByte();
 			xstart = serverdata.readUnsignedByte();
 			zstart = serverdata.readUnsignedByte();
-			data = ByteArraySerializer.readByteArray(serverdata, ProtocolVersion.getLatest(ProtocolType.PC));
+			data = ArraySerializer.readByteArray(serverdata, ProtocolVersionsHelper.LATEST_PC);
 		}
 	}
 
-	protected static class Icon {
+	public static class Icon {
 		public int dirtype;
 		public int x;
 		public int z;
+		public Icon(int dirtype, int x, int z) {
+			this.dirtype = dirtype;
+			this.x = x;
+			this.z = z;
+		}
 	}
 
 }

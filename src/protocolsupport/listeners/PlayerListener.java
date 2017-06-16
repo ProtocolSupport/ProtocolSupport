@@ -40,7 +40,7 @@ public class PlayerListener implements Listener {
 		if (
 			player.isInsideVehicle() &&
 			(connection != null) &&
-			connection.getVersion().getProtocolType() == ProtocolType.PC &&
+			(connection.getVersion().getProtocolType() == ProtocolType.PC) &&
 			connection.getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_5_2)
 		) {
 			player.leaveVehicle();

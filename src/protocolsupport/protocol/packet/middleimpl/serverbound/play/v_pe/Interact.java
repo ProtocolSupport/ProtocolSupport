@@ -8,8 +8,8 @@ import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUseEntity;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
-import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
+import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -21,7 +21,7 @@ public class Interact extends ServerBoundMiddlePacket {
 	@Override
 	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
 		peAction = clientdata.readUnsignedByte();
-		targetId = (int) VarNumberSerializer.readSVarLong(clientdata);
+		targetId = (int) VarNumberSerializer.readVarLong(clientdata);
 	}
 	
 	private static final int INTERACT = 1;
@@ -32,10 +32,10 @@ public class Interact extends ServerBoundMiddlePacket {
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
-		WatchedEntity target = cache.getWatchedEntity(targetId);
+		NetworkEntity target = cache.getWatchedEntity(targetId);
 		switch(peAction){
 			case INTERACT: {
-				if(target.getType() != SpecificRemapper.ARMOR_STAND){
+				if(target.getType() != NetworkEntityType.ARMOR_STAND){
 					packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT, null, 0));
 				}
 				packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT_AT, new Vector(), 0)); //TODO: Send where the entity is clicked (will probably be implemented with armorstands.)

@@ -38,6 +38,7 @@ public class PositionLook extends MiddlePositionLook {
 		MiscSerializer.readLFloat(clientdata); //head yaw
 		clientdata.readByte(); //mode
 		onGround = clientdata.readBoolean();
+		VarNumberSerializer.readVarLong(clientdata);
 	}
 
 }

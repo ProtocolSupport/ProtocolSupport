@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufUtil;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public final class PENetworkNBTDataOutputStream implements DataOutput {
@@ -76,7 +75,7 @@ public final class PENetworkNBTDataOutputStream implements DataOutput {
 
 	@Override
 	public void writeShort(int s) throws IOException {
-		buf.writeShort(ByteBufUtil.swapShort((short) s));
+		buf.writeShortLE(s);
 	}
 
 	@Override

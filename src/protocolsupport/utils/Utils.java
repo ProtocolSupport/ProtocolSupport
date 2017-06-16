@@ -1,21 +1,56 @@
 package protocolsupport.utils;
 
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.StringJoiner;
+import java.util.function.Function;
+
+import com.google.gson.Gson;
 
 import protocolsupport.ProtocolSupport;
 
 public class Utils {
 
-	public static <K, V> V getOrCreateDefault(Map<K, V> map, K key, V defaultValue) {
-		if (map.containsKey(key)) {
-			return map.get(key);
+	public static final Gson GSON = new Gson();
+
+	public static String toStringAllFields(Object obj) {
+		StringJoiner joiner = new StringJoiner(", ");
+		Class<?> clazz = obj.getClass();
+		do {
+			try {
+				for (Field field : clazz.getDeclaredFields()) {
+					if (!Modifier.isStatic(field.getModifiers())) {
+						ReflectionUtils.setAccessible(field);
+						Object value = field.get(obj);
+						if ((value == null) || !value.getClass().isArray()) {
+							joiner.add(field.getName() + ": " + Objects.toString(value));
+						} else {
+							joiner.add(field.getName() + ": " + Arrays.deepToString(new Object[] {value}));
+						}
+					}
+				}
+			} catch (IllegalAccessException e) {
+				throw new RuntimeException("Unable to get object fields values", e);
+			}
+		} while ((clazz = clazz.getSuperclass()) != null);
+		return obj.getClass().getName() + "(" + joiner.toString() + ")";
+	}
+
+	public static <K, V> V getFromMapOrCreateDefault(Map<K, V> map, K key, V defaultValue) {
+		return map.computeIfAbsent(key, k -> defaultValue);
+	}
+
+	public static <T> T getFromArrayOrNull(T[] array, int index) {
+		if ((index >= 0) && (index < array.length)) {
+			return array[index];
 		} else {
-			map.put(key, defaultValue);
-			return defaultValue;
+			return null;
 		}
 	}
 
@@ -74,28 +109,19 @@ public class Utils {
 		return (number + base) - mod;
 	}
 
-	public static <T> T getJavaPropertyValue(String property, T defaultValue, Converter<String, T> converter) {
+	public static <T> T getJavaPropertyValue(String property, T defaultValue, Function<String, T> converter) {
 		return getRawJavaPropertyValue("protocolsupport."+property, defaultValue, converter);
 	}
 
-	public static <T> T getRawJavaPropertyValue(String property, T defaultValue, Converter<String, T> converter) {
+	public static <T> T getRawJavaPropertyValue(String property, T defaultValue, Function<String, T> converter) {
 		try {
 			String value = System.getProperty(property);
 			if (value != null) {
-				return converter.convert(value);
+				return converter.apply(value);
 			}
 		} catch (Throwable t) {
 		}
 		return defaultValue;
-	}
-
-	@FunctionalInterface
-	public static interface Converter<T, R> {
-		public static final Converter<String, Integer> STRING_TO_INT = Integer::parseInt;
-		public static final Converter<String, Long> STRING_TO_LONG = Long::parseLong;
-		public static final Converter<String, Boolean> STRING_TO_BOOLEAN = Boolean::parseBoolean;
-		public static final Converter<String, String> NONE = t -> t;
-		public R convert(T t);
 	}
 
 	public static boolean isTrue(Boolean b) {

@@ -6,22 +6,19 @@ import java.util.UUID;
 
 import gnu.trove.map.TIntObjectMap;
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolType;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
-import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
-import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.types.NetworkEntity;
 
 public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 
-	protected int playerEntityId;
-	protected UUID uuid;
+	protected NetworkEntity entity;
 	protected String name;
 	protected double x;
 	protected double y;
@@ -29,26 +26,25 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 	protected int yaw;
 	protected int pitch;
 	protected List<ProfileProperty> properties;
-	protected WatchedEntity wplayer;
 	protected TIntObjectMap<DataWatcherObject<?>> metadata;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		playerEntityId = VarNumberSerializer.readVarInt(serverdata);
-		uuid = MiscSerializer.readUUID(serverdata);
+		int playerEntityId = VarNumberSerializer.readVarInt(serverdata);
+		UUID uuid = MiscSerializer.readUUID(serverdata);
+		entity = NetworkEntity.createPlayer(uuid, playerEntityId);
 		x = serverdata.readDouble();
 		y = serverdata.readDouble();
 		z = serverdata.readDouble();
 		yaw = serverdata.readUnsignedByte();
 		pitch = serverdata.readUnsignedByte();
-		metadata = DataWatcherDeserializer.decodeData(serverdata, ProtocolVersion.getLatest(ProtocolType.PC));
+		metadata = DataWatcherDeserializer.decodeData(serverdata, ProtocolVersionsHelper.LATEST_PC);
 	}
 
 	@Override
 	public void handle() {
-		wplayer = new WatchedPlayer(playerEntityId);
-		cache.addWatchedEntity(wplayer);
-		NetworkDataCache.PlayerListEntry entry = cache.getPlayerListEntry(uuid);
+		cache.addWatchedEntity(entity);
+		NetworkDataCache.PlayerListEntry entry = cache.getPlayerListEntry(entity.getUUID());
 		if (entry != null) {
 			name = entry.getUserName();
 			properties = entry.getProperties().getAll(true);

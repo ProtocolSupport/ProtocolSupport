@@ -86,10 +86,10 @@ public class ClientBoundPacket {
 	public static final int PLAY_BOSS_BAR_ID = ServerPlatform.get().getPacketFactory().getOutPlayBossBarPacketId();
 	public static final int PLAY_SET_COOLDOWN_ID = ServerPlatform.get().getPacketFactory().getOutPlaySetCooldownPacketId();
 	public static final int PLAY_VEHICLE_MOVE_ID = ServerPlatform.get().getPacketFactory().getOutPlayVehicleMovePacketId();
+	public static final int PLAY_UNLOCK_RECIPES = ServerPlatform.get().getPacketFactory().getOutPlayUnlockRecipesPacketId();
+	public static final int PLAY_ADVANCEMENTS = ServerPlatform.get().getPacketFactory().getOutPlayAdvancementsPacketId();
+	public static final int PLAY_ADVANCEMENT_PROGRESS = ServerPlatform.get().getPacketFactory().getOutPlayAdvancementProgressPacketId();
 
 	public static final int LEGACY_PLAY_UPDATE_SIGN_ID = 100;
-
-	public static void init() {
-	}
 
 }

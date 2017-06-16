@@ -9,13 +9,14 @@ import java.util.UUID;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
-import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedEntity;
-import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedPlayer;
+import protocolsupport.protocol.utils.types.Environment;
+import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.utils.Utils;
 
 public class NetworkDataCache {
 
-	private static final double acceptableError = 0.0001;
+	private static final double acceptableError = 0.001;
 
 	private double x;
 	private double y;
@@ -69,24 +70,19 @@ public class NetworkDataCache {
 	}
 
 
-	private final TIntObjectHashMap<WatchedEntity> watchedEntities = new TIntObjectHashMap<>();
-	private final TIntObjectHashMap<Byte> watchedEntitiesBaseFlags = new TIntObjectHashMap<>();
-	private WatchedPlayer player;
+	private final TIntObjectHashMap<NetworkEntity> watchedEntities = new TIntObjectHashMap<>();
+	private NetworkEntity player;
 	private final HashMap<UUID, NetworkDataCache.PlayerListEntry> playerlist = new HashMap<>();
-	private int dimensionId;
+	private Environment dimensionId;
 	private float maxHealth = 20.0F;
 
-	public void addWatchedEntity(WatchedEntity entity) {
+	public void addWatchedEntity(NetworkEntity entity) {
 		watchedEntities.put(entity.getId(), entity);
 	}
 
-	public void addWatchedSelfPlayer(WatchedPlayer player) {
+	public void addWatchedSelfPlayer(NetworkEntity player) {
 		this.player = player;
 		addWatchedEntity(player);
-	}
-
-	public void addWatchedEntityBaseMeta(int entityId, byte flags) {
-		watchedEntitiesBaseFlags.put(entityId, flags);
 	}
 
 	public int getSelfPlayerEntityId() {
@@ -99,19 +95,13 @@ public class NetworkDataCache {
 		}
 	}
 
-	public WatchedEntity getWatchedEntity(int entityId) {
+	public NetworkEntity getWatchedEntity(int entityId) {
 		return watchedEntities.get(entityId);
-	}
-
-	public byte getWatchedEntityBaseMeta(int entityId) {
-		Byte ret = watchedEntitiesBaseFlags.get(entityId);
-		return ret == null ? 0 : ret;
 	}
 
 	public void removeWatchedEntities(int[] entityIds) {
 		for (int entityId : entityIds) {
 			watchedEntities.remove(entityId);
-			watchedEntitiesBaseFlags.remove(entityId);
 		}
 		readdSelfPlayer();
 	}
@@ -134,12 +124,12 @@ public class NetworkDataCache {
 		playerlist.remove(uuid);
 	}
 
-	public void setDimensionId(int dimensionId) {
+	public void setDimensionId(Environment dimensionId) {
 		this.dimensionId = dimensionId;
 	}
 
 	public boolean hasSkyLightInCurrentDimension() {
-		return dimensionId == 0;
+		return dimensionId == Environment.OVERWORLD;
 	}
 
 	public void setMaxHealth(float maxHealth) {
@@ -148,6 +138,11 @@ public class NetworkDataCache {
 
 	public float getMaxHealth() {
 		return maxHealth;
+	}
+
+	@Override
+	public String toString() {
+		return Utils.toStringAllFields(this);
 	}
 
 	public static class PropertiesStorage {
@@ -171,6 +166,11 @@ public class NetworkDataCache {
 				properties.addAll(unsigned.values());
 				return properties;
 			}
+		}
+
+		@Override
+		public String toString() {
+			return Utils.toStringAllFields(this);
 		}
 	}
 
@@ -208,6 +208,11 @@ public class NetworkDataCache {
 			}
 			return clone;
 		}
+
+		@Override
+		public String toString() {
+			return Utils.toStringAllFields(this);
+		}
 	}
 
 	private final HashSet<ChunkCoord> sentChunks = new HashSet<>();
@@ -243,6 +248,31 @@ public class NetworkDataCache {
 		public int hashCode() {
 			return (x * 31) + z;
 		}
+	}
+
+	private int gamemode = 0;
+	private boolean canFly = false;
+	private boolean isFlying = false;
+
+	public void setGameMode(int gamemode) {
+		this.gamemode = gamemode;
+	}
+
+	public int getGameMode() {
+		return this.gamemode;
+	}
+
+	public void updateFlying(boolean canFly, boolean isFlying) {
+		this.canFly = canFly;
+		this.isFlying = isFlying;
+	}
+
+	public boolean canFly() {
+		return this.canFly;
+	}
+
+	public boolean isFlying() {
+		return this.isFlying;
 	}
 
 }

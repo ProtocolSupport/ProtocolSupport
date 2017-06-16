@@ -9,6 +9,7 @@ import java.util.UUID;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
@@ -35,7 +36,7 @@ public class MinecraftSessionService {
 				));
 			}
 			return profile;
-		} catch (IOException e) {
+		} catch (IOException | IllegalStateException | JsonParseException e) {
 			throw new AuthenticationUnavailableException();
 		}
 	}
