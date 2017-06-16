@@ -22,6 +22,7 @@ public class PEPacketIDs {
 	public static final int ENTITY_EFFECT = 29;
 	public static final int SET_ATTRIBUTES = 30;
 	public static final int INTERACT = 33;
+	public static final int USE_ITEM = 35;
 	public static final int PLAYER_ACTION = 36;
 	public static final int ENTITY_VELOCITY = 40;
 	public static final int SPAWN_POS = 43;
