@@ -57,6 +57,11 @@ public class VarNumberSerializer {
 		}
 		to.writeByte((int) varlong);
 	}
+	
+	public static long readSVarLong(ByteBuf from) {
+		long varlong = readVarLong(from);
+		return (varlong >> 1) ^ -(varlong & 1);
+	}
 
 	public static void writeSVarLong(ByteBuf to, long varlong) {
 		writeVarLong(to, (varlong << 1) ^ (varlong >> 63));
