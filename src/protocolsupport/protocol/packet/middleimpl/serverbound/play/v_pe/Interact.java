@@ -14,16 +14,16 @@ import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class Interact extends ServerBoundMiddlePacket {
-	
+
 	protected short peAction;
 	protected int targetId;
-	
+
 	@Override
 	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
 		peAction = clientdata.readUnsignedByte();
 		targetId = (int) VarNumberSerializer.readVarLong(clientdata);
 	}
-	
+
 	private static final int INTERACT = 1;
 	private static final int ATTACK = 2;
 	private static final int LEAVE_VEHICLE = 3;
@@ -33,12 +33,13 @@ public class Interact extends ServerBoundMiddlePacket {
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 		NetworkEntity target = cache.getWatchedEntity(targetId);
-		switch(peAction){
+		switch (peAction) {
 			case INTERACT: {
-				if(target.getType() != NetworkEntityType.ARMOR_STAND){
+				if (target != null && target.getType() != NetworkEntityType.ARMOR_STAND) {
+					packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT_AT, new Vector(), 0));
+				} else {
 					packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT, null, 0));
 				}
-				packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT_AT, new Vector(), 0)); //TODO: Send where the entity is clicked (will probably be implemented with armorstands.)
 				break;
 			}
 			case ATTACK: {
@@ -46,11 +47,11 @@ public class Interact extends ServerBoundMiddlePacket {
 				break;
 			}
 			case LEAVE_VEHICLE: {
-				//packets.add(MiddleEntityAction.create(cache.getSelfPlayerEntityId(), 0, 0)); //TODO: Exit vehicle by sneaking.
+				// packets.add(MiddleEntityAction.create(cache.getSelfPlayerEntityId(),
+				// 0, 0)); //TODO: Exit vehicle by sneaking.
 				break;
 			}
 			case HOVER: {
-				//TODO: add this for some plugin that can use it?
 				break;
 			}
 		}
