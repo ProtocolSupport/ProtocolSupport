@@ -7,6 +7,7 @@ import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockDig;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleEntityAction;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
+import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -16,18 +17,14 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class PlayerAction extends ServerBoundMiddlePacket {
 
 	protected int action;
-	protected int blockX;
-	protected int blockY;
-	protected int blockZ;
+	protected Position blockPosition;
 	protected int face;
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
 		VarNumberSerializer.readVarLong(clientdata); // entity id
 		action = VarNumberSerializer.readSVarInt(clientdata);
-		blockX = VarNumberSerializer.readSVarInt(clientdata);
-		blockY = VarNumberSerializer.readVarInt(clientdata);
-		blockZ = VarNumberSerializer.readSVarInt(clientdata);
+		blockPosition = PositionSerializer.readPEPosition(clientdata);
 		face = VarNumberSerializer.readSVarInt(clientdata);
 	}
 
@@ -56,7 +53,7 @@ public class PlayerAction extends ServerBoundMiddlePacket {
 				return RecyclableSingletonList.create(serializer);
 			}
 			case START_BREAK: {
-				breakPosition = new Position(blockX, blockY, blockZ);
+				breakPosition = blockPosition.clone();
 				return RecyclableSingletonList.create(MiddleBlockDig.create(MiddleBlockDig.Action.START_DIG, breakPosition, face));
 			}
 			case ABORT_BREAK: {

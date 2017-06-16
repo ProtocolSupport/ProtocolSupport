@@ -14,6 +14,7 @@ public class PEPacketIDs {
 	public static final int ENTITY_DESTROY = 14;
 	public static final int ENTITY_TELEPORT = 18;
 	public static final int PLAYER_MOVE = 19;
+	public static final int REMOVE_BLOCK = 21;
 	public static final int UPDATE_BLOCK = 22;
 	public static final int LEVEL_EVENT = 26;
 	public static final int SET_ATTRIBUTES = 30;
@@ -30,4 +31,5 @@ public class PEPacketIDs {
 	public static final int PLAYER_INFO = 63;
 	public static final int CHUNK_RADIUS = 70;
 	public static final int SET_TITLE = 89;
+
 }
