@@ -17,6 +17,7 @@ public class PEPacketIDs {
 	public static final int REMOVE_BLOCK = 21;
 	public static final int UPDATE_BLOCK = 22;
 	public static final int LEVEL_EVENT = 26;
+	public static final int ENTITY_EVENT = 28;
 	public static final int SET_ATTRIBUTES = 30;
 	public static final int PLAYER_ACTION = 36;
 	public static final int ENTITY_VELOCITY = 40;
