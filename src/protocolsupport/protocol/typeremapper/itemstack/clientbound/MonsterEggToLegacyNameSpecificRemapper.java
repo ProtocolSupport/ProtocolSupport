@@ -1,8 +1,8 @@
 package protocolsupport.protocol.typeremapper.itemstack.clientbound;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.legacyremapper.LegacyEntityType;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackNBTSpecificRemapper;
+import protocolsupport.protocol.typeremapper.legacy.LegacyEntityType;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 

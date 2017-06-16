@@ -34,15 +34,16 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnLiv
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnNamed;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnPosition;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.TimeUpdate;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Title;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.UnloadChunk;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldEvent;
-import protocolsupport.protocol.pipeline.version.AbstractPacketEncoder;
+import protocolsupport.protocol.pipeline.version.AbstractLegacyPacketEncoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.zplatform.network.NetworkState;
 
-public class PEPacketEncoder extends AbstractPacketEncoder {
+public class PEPacketEncoder extends AbstractLegacyPacketEncoder {
 
 	{
 		for (int i = 0; i < 255; i++) {
@@ -78,6 +79,7 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_WEATHER_ID, SpawnGlobal.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ABILITIES_ID, PlayerAbilities.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_STATUS_ID, EntityStatus.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_TITLE_ID, Title.class);
 	}
 
 	public PEPacketEncoder(Connection connection, NetworkDataCache storage) {

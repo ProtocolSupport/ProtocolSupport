@@ -10,7 +10,7 @@ public class LoginDisconnect extends MiddleLoginDisconnect {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		return KickDisconnect.create(version, messageJson);
+		return KickDisconnect.create(version, message);
 	}
 
 }

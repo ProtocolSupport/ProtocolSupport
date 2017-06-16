@@ -2,6 +2,7 @@ package protocolsupport.protocol;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.text.MessageFormat;
 
 import org.bukkit.entity.Player;
 
@@ -97,6 +98,14 @@ public abstract class ConnectionImpl extends Connection {
 			}
 		}
 		return canReceive;
+	}
+
+	@Override
+	public String toString() {
+		return MessageFormat.format(
+			"{0}(player: {1}, address: {2}, rawaddress: {3}, version: {4}, metadata: {5}, rlisteners: {6}, slisteners: {7})",
+			getClass().getName(), getPlayer(), getAddress(), getRawAddress(), getVersion(), metadata, receiveListeners, sendListeners
+		);
 	}
 
 }

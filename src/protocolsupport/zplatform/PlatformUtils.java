@@ -4,8 +4,6 @@ import java.security.KeyPair;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
-import org.bukkit.Achievement;
-import org.bukkit.Statistic;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
 
@@ -25,7 +23,7 @@ public interface PlatformUtils {
 
 	public String getOutdatedServerMessage();
 
-	public boolean isBungeeEnabled();
+	public boolean isProxyEnabled();
 
 	public boolean isDebugging();
 
@@ -42,14 +40,6 @@ public interface PlatformUtils {
 	public String getModName();
 
 	public String getVersionName();
-
-	public Statistic getStatisticByName(String value);
-
-	public String getStatisticName(Statistic stat);
-
-	public Achievement getAchievmentByName(String value);
-
-	public String getAchievmentName(Achievement achievement);
 
 	public String convertBukkitIconToBase64(CachedServerIcon icon);
 

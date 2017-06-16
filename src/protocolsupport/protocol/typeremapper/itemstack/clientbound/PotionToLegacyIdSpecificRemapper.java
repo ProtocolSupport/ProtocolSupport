@@ -1,9 +1,9 @@
 package protocolsupport.protocol.typeremapper.itemstack.clientbound;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.legacyremapper.LegacyPotion;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackNBTSpecificRemapper;
-import protocolsupport.protocol.utils.data.PotionData;
+import protocolsupport.protocol.typeremapper.legacy.LegacyPotion;
+import protocolsupport.protocol.utils.minecraftdata.PotionData;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;

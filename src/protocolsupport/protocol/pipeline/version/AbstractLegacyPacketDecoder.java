@@ -7,9 +7,9 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import protocolsupport.api.Connection;
-import protocolsupport.protocol.legacyremapper.LegacyAnimatePacketReorderer;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.typeremapper.legacy.LegacyAnimatePacketReorderer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
 import protocolsupport.zplatform.ServerPlatform;
@@ -25,29 +25,27 @@ public class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
 	private final LegacyAnimatePacketReorderer animateReorderer = new LegacyAnimatePacketReorderer();
 
 	@Override
-	public void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws InstantiationException, IllegalAccessException  {
+	public void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
 		if (!input.isReadable()) {
 			return;
 		}
 		buffer.writeBytes(input);
-		while (buffer.isReadable()) {
-			if (!decode0(ctx.channel(), list)) {
-				break;
-			}
-		}
+		while (buffer.isReadable() && decode0(ctx.channel(), list)) {}
 		buffer.discardSomeReadBytes();
 	}
 
-	private boolean decode0(Channel channel, List<Object> list) throws InstantiationException, IllegalAccessException {
+	private boolean decode0(Channel channel, List<Object> list) throws Exception {
 		cumulation.markReaderIndex();
+		ServerBoundMiddlePacket packetTransformer = registry.getTransformer(ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(channel), cumulation.readUnsignedByte());
 		try {
-			ServerBoundMiddlePacket packetTransformer = registry.getTransformer(ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(channel), cumulation.readUnsignedByte());
 			packetTransformer.readFromClientData(cumulation, connection.getVersion());
 			addPackets(animateReorderer.orderPackets(packetTransformer.toNative()), list);
-			packetTransformer = null;
 			return true;
 		} catch (EOFSignal ex) {
 			cumulation.resetReaderIndex();
+			return false;
+		} catch (Exception e) {
+			throwFailedTransformException(e, packetTransformer, cumulation);
 			return false;
 		}
 	}

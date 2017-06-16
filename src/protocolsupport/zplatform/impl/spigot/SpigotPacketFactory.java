@@ -14,17 +14,17 @@ import org.spigotmc.SpigotConfig;
 import com.google.common.collect.BiMap;
 
 import io.netty.buffer.Unpooled;
-import net.minecraft.server.v1_11_R1.*;
-import net.minecraft.server.v1_11_R1.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_11_R1.PacketPlayInFlying.PacketPlayInLook;
-import net.minecraft.server.v1_11_R1.PacketPlayInFlying.PacketPlayInPosition;
-import net.minecraft.server.v1_11_R1.PacketPlayInFlying.PacketPlayInPositionLook;
-import net.minecraft.server.v1_11_R1.PacketPlayOutEntity.PacketPlayOutEntityLook;
-import net.minecraft.server.v1_11_R1.PacketPlayOutEntity.PacketPlayOutRelEntityMove;
-import net.minecraft.server.v1_11_R1.PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook;
-import net.minecraft.server.v1_11_R1.PacketPlayOutTitle.EnumTitleAction;
-import net.minecraft.server.v1_11_R1.ServerPing.ServerData;
-import net.minecraft.server.v1_11_R1.ServerPing.ServerPingPlayerSample;
+import net.minecraft.server.v1_12_R1.*;
+import net.minecraft.server.v1_12_R1.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_12_R1.PacketPlayInFlying.PacketPlayInLook;
+import net.minecraft.server.v1_12_R1.PacketPlayInFlying.PacketPlayInPosition;
+import net.minecraft.server.v1_12_R1.PacketPlayInFlying.PacketPlayInPositionLook;
+import net.minecraft.server.v1_12_R1.PacketPlayOutEntity.PacketPlayOutEntityLook;
+import net.minecraft.server.v1_12_R1.PacketPlayOutEntity.PacketPlayOutRelEntityMove;
+import net.minecraft.server.v1_12_R1.PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook;
+import net.minecraft.server.v1_12_R1.PacketPlayOutTitle.EnumTitleAction;
+import net.minecraft.server.v1_12_R1.ServerPing.ServerData;
+import net.minecraft.server.v1_12_R1.ServerPing.ServerPingPlayerSample;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
@@ -43,7 +43,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 
 	@Override
 	public Object createOutboundChatPacket(String message, int position) {
-		return new PacketPlayOutChat(ChatSerializer.a(message), (byte) position);
+		return new PacketPlayOutChat(ChatSerializer.a(message), ChatMessageType.a((byte) position));
 	}
 
 	private static final BaseComponent empty = new TextComponent("");
@@ -572,6 +572,21 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 		return getOutId(PacketPlayOutVehicleMove.class);
 	}
 
+	@Override
+	public int getOutPlayUnlockRecipesPacketId() {
+		return getOutId(PacketPlayOutRecipes.class);
+	}
+
+	@Override
+	public int getOutPlayAdvancementsPacketId() {
+		return getOutId(PacketPlayOutAdvancements.class);
+	}
+
+	@Override
+	public int getOutPlayAdvancementProgressPacketId() {
+		return getOutId(PacketPlayOutSelectAdvancementTab.class);
+	}
+
 
 	@Override
 	public int getInHandshakeStartPacketId() {
@@ -746,6 +761,21 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	@Override
 	public int getInPlayTeleportAcceptPacketId() {
 		return getInId(PacketPlayInTeleportAccept.class);
+	}
+
+	@Override
+	public int getInPlayCraftingBookPacketId() {
+		return getInId(PacketPlayInRecipeDisplayed.class);
+	}
+
+	@Override
+	public int getInPlayPrepareCraftingGridPacketId() {
+		return getInId(PacketPlayInAutoRecipe.class);
+	}
+
+	@Override
+	public int getInPlayAdvancementTabPacketId() {
+		return getInId(PacketPlayInAdvancements.class);
 	}
 
 

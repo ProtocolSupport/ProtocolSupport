@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public enum TileEntityUpdateType {
 
-	UNKNOWN, MOB_SPAWNER, COMMAND_BLOCK, BEACON, SKULL, FLOWER_POT, BANNER, STRUCTURE, END_GATEWAY, SIGN, SHULKER_BOX;
+	UNKNOWN, MOB_SPAWNER, COMMAND_BLOCK, BEACON, SKULL, FLOWER_POT, BANNER, STRUCTURE, END_GATEWAY, SIGN, SHULKER_BOX, BED;
 
 	private static final HashMap<String, TileEntityUpdateType> updateTypes = new HashMap<>();
 	static {

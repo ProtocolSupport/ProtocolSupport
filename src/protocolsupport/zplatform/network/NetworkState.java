@@ -20,7 +20,7 @@ public enum NetworkState {
 				return PLAY;
 			}
 			default: {
-				throw new IllegalArgumentException(MessageFormat.format("Uknown id {0}", id));
+				throw new IllegalArgumentException(MessageFormat.format("Unknown network state id {0}", id));
 			}
 		}
 	}

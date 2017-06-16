@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.middle.serverbound.play;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
+import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -10,21 +11,25 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public abstract class MiddleEntityAction extends ServerBoundMiddlePacket {
 
 	protected int entityId;
-	protected int actionId;
+	protected Action action;
 	protected int jumpBoost;
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		ServerBoundPacketData creator = MiddleEntityAction.create(entityId, actionId, jumpBoost);
+		ServerBoundPacketData creator = MiddleEntityAction.create(entityId, action, jumpBoost);
 		return RecyclableSingletonList.create(creator);
 	}
 
-	public static ServerBoundPacketData create(int entityId, int actionId, int jumpBoost) {
+	public static ServerBoundPacketData create(int entityId, Action action, int jumpBoost) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_ENTITY_ACTION);
 		VarNumberSerializer.writeVarInt(creator, entityId);
-		VarNumberSerializer.writeVarInt(creator, actionId);
+		MiscSerializer.writeEnum(creator, action);
 		VarNumberSerializer.writeVarInt(creator, jumpBoost);
 		return creator;
+	}
+
+	public static enum Action {
+		START_SNEAK, STOP_SNEAK, LEAVE_BED, START_SPRINT, STOP_SPRINT, START_JUMP, STOP_JUMP, OPEN_HORSE_INV, START_ELYTRA_FLY;
 	}
 
 }

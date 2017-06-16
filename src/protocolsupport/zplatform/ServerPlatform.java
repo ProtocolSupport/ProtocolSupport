@@ -3,7 +3,7 @@ package protocolsupport.zplatform;
 import org.spigotmc.SpigotConfig;
 
 import net.glowstone.GlowServer;
-import net.minecraft.server.v1_11_R1.NetworkManager;
+import net.minecraft.server.v1_12_R1.NetworkManager;
 import protocolsupport.zplatform.impl.glowstone.GlowStoneMiscUtils;
 import protocolsupport.zplatform.impl.glowstone.GlowStonePacketFactory;
 import protocolsupport.zplatform.impl.glowstone.GlowStoneWrapperFactory;
@@ -26,7 +26,6 @@ public class ServerPlatform {
 			SpigotConfig.class.getDeclaredFields();
 			current = new ServerPlatform("Spigot", new SpigotPlatformInjector(), new SpigotMiscUtils(), new SpigotPacketFactory(), new SpigotWrapperFactory());
 		} catch (Throwable t) {
-			t.printStackTrace();
 		}
 		try {
 			GlowServer.class.getDeclaredFields();

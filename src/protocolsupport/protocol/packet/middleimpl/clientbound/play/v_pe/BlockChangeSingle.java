@@ -1,10 +1,14 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.legacyremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChangeSingle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.pe.PEDataValues;
+import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -21,15 +25,12 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 		return RecyclableSingletonList.create(BlockChangeSingle.create(version, position, id));
 	}
 
-	public static ClientBoundPacketData create(ProtocolVersion version, protocolsupport.protocol.utils.types.Position position, int id) {
+	public static ClientBoundPacketData create(ProtocolVersion version, protocolsupport.protocol.utils.types.Position position, int state) {
+		state = PEDataValues.BLOCK_ID.getRemap(IdRemapper.BLOCK.getTable(version).getRemap(state));
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.UPDATE_BLOCK, version);
-		VarNumberSerializer.writeSVarInt(serializer, position.getX());
-		VarNumberSerializer.writeVarInt(serializer, position.getY());
-		VarNumberSerializer.writeSVarInt(serializer, position.getZ());
-		int type = id >> 4;
-		int meta = id & 15;
-		VarNumberSerializer.writeVarInt(serializer, type);
-		VarNumberSerializer.writeVarInt(serializer, (flags << 4) | meta);
+		PositionSerializer.writePEPosition(serializer, position);
+		VarNumberSerializer.writeVarInt(serializer, MinecraftData.getBlockIdFromState(state));
+		VarNumberSerializer.writeVarInt(serializer, (flags << 4) | MinecraftData.getBlockDataFromState(state));
 		return serializer;
 	}
 

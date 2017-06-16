@@ -9,6 +9,10 @@ public class PositionSerializer {
 		return Position.fromLong(from.readLong());
 	}
 
+	public static Position readPEPosition(ByteBuf from) {
+		return new Position(VarNumberSerializer.readSVarInt(from), VarNumberSerializer.readVarInt(from), VarNumberSerializer.readSVarInt(from));
+	}
+
 	public static Position readLegacyPositionB(ByteBuf from) {
 		return new Position(from.readInt(), from.readUnsignedByte(), from.readInt());
 	}
@@ -23,6 +27,12 @@ public class PositionSerializer {
 
 	public static void writePosition(ByteBuf to, Position position) {
 		to.writeLong(position.asLong());
+	}
+
+	public static void writePEPosition(ByteBuf to, Position position) {
+		VarNumberSerializer.writeSVarInt(to, position.getX());
+		VarNumberSerializer.writeVarInt(to, position.getY());
+		VarNumberSerializer.writeSVarInt(to, position.getZ());
 	}
 
 	public static void writeLegacyPositionB(ByteBuf to, Position position) {

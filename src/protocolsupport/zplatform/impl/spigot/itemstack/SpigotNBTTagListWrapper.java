@@ -2,10 +2,10 @@ package protocolsupport.zplatform.impl.spigot.itemstack;
 
 import java.util.Objects;
 
-import net.minecraft.server.v1_11_R1.NBTTagByte;
-import net.minecraft.server.v1_11_R1.NBTTagInt;
-import net.minecraft.server.v1_11_R1.NBTTagList;
-import net.minecraft.server.v1_11_R1.NBTTagString;
+import net.minecraft.server.v1_12_R1.NBTTagByte;
+import net.minecraft.server.v1_12_R1.NBTTagInt;
+import net.minecraft.server.v1_12_R1.NBTTagList;
+import net.minecraft.server.v1_12_R1.NBTTagString;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 

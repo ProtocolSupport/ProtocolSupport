@@ -13,14 +13,14 @@ public class Decompressor {
 
 	private final Inflater inflater = new Inflater();
 	private final byte[] buffer = new byte[2 << 21]; //the maximum size of a pc message (21 bits)
-	private final Handle handle;
-	protected Decompressor(Handle handle) {
+	private final Handle<Decompressor> handle;
+	protected Decompressor(Handle<Decompressor> handle) {
 		this.handle = handle;
 	}
 
 	private static final Recycler<Decompressor> recycler = new Recycler<Decompressor>() {
 		@Override
-		protected Decompressor newObject(Handle handle) {
+		protected Decompressor newObject(Handle<Decompressor> handle) {
 			return new Decompressor(handle);
 		}
 	};
@@ -45,7 +45,7 @@ public class Decompressor {
 	}
 
 	public void recycle() {
-		recycler.recycle(this, handle);
+		handle.recycle(this);
 	}
 
 	public static byte[] decompressStatic(byte[] input) {

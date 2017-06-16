@@ -19,20 +19,18 @@ import org.bukkit.util.CachedServerIcon;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 import protocolsupport.ProtocolSupport;
-import protocolsupport.api.ProtocolType;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.Utils;
-import protocolsupport.utils.Utils.Converter;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public abstract class AbstractStatusListener {
 
-	private static final int statusThreads = Utils.getJavaPropertyValue("statusthreads", 2, Converter.STRING_TO_INT);
-	private static final int statusThreadKeepAlive = Utils.getJavaPropertyValue("statusthreadskeepalive", 60, Converter.STRING_TO_INT);
+	private static final int statusThreads = Utils.getJavaPropertyValue("statusthreads", 2, Integer::parseInt);
+	private static final int statusThreadKeepAlive = Utils.getJavaPropertyValue("statusthreadskeepalive", 60, Integer::parseInt);
 
 	public static void init() {
 		ProtocolSupport.logInfo(MessageFormat.format("Status threads max count: {0}, keep alive time: {1}", statusThreads, statusThreadKeepAlive));
@@ -78,7 +76,7 @@ public abstract class AbstractStatusListener {
 
 		ServerPingResponseEvent revent = new ServerPingResponseEvent(
 			ConnectionImpl.getFromChannel(channel),
-			new ProtocolInfo(ProtocolVersion.getLatest(ProtocolType.PC), ServerPlatform.get().getMiscUtils().getModName() + " " + ServerPlatform.get().getMiscUtils().getVersionName()),
+			new ProtocolInfo(ProtocolVersionsHelper.LATEST_PC, ServerPlatform.get().getMiscUtils().getModName() + " " + ServerPlatform.get().getMiscUtils().getVersionName()),
 			icon, motd, maxPlayers, profiles
 		);
 		Bukkit.getPluginManager().callEvent(revent);

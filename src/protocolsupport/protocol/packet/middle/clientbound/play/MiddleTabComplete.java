@@ -1,11 +1,10 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolType;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
+import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleTabComplete extends ClientBoundMiddlePacket {
 
@@ -13,10 +12,10 @@ public abstract class MiddleTabComplete extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		matches = new String[VarNumberSerializer.readVarInt(serverdata)];
-		for (int i = 0; i < matches.length; i++) {
-			matches[i] = StringSerializer.readString(serverdata, ProtocolVersion.getLatest(ProtocolType.PC));
-		}
+		matches = ArraySerializer.readVarIntTArray(
+			serverdata, String.class,
+			(from) -> StringSerializer.readString(from, ProtocolVersionsHelper.LATEST_PC)
+		);
 	}
 
 }

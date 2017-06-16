@@ -2,9 +2,9 @@ package protocolsupport.zplatform.impl.spigot;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelOutboundHandler;
-import net.minecraft.server.v1_11_R1.CancelledPacketHandleException;
-import net.minecraft.server.v1_11_R1.Packet;
-import net.minecraft.server.v1_11_R1.PacketListener;
+import net.minecraft.server.v1_12_R1.CancelledPacketHandleException;
+import net.minecraft.server.v1_12_R1.Packet;
+import net.minecraft.server.v1_12_R1.PacketListener;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.zplatform.impl.spigot.network.SpigotChannelHandlers;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
