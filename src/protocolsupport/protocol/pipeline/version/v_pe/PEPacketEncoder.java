@@ -29,6 +29,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Respawn;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.ServerDifficulty;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SetExperience;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SetHealth;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnExpOrb;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnGlobal;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnLiving;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnNamed;
@@ -81,6 +82,7 @@ public class PEPacketEncoder extends AbstractLegacyPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ABILITIES_ID, PlayerAbilities.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_STATUS_ID, EntityStatus.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_TITLE_ID, Title.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_EXP_ORB_ID, SpawnExpOrb.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_PAINTING_ID, SpawnPainting.class);
 	}
 
