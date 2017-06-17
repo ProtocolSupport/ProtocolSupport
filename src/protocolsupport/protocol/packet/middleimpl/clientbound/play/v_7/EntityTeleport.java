@@ -15,7 +15,7 @@ public class EntityTeleport extends MiddleEntityTeleport {
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		NetworkEntity wentity = cache.getWatchedEntity(entityId);
 		y *= 32;
-		if ((wentity.getType() == NetworkEntityType.TNT) || (wentity.getType() == NetworkEntityType.FALLING_OBJECT)) {
+		if ((wentity != null) && ((wentity.getType() == NetworkEntityType.TNT) || (wentity.getType() == NetworkEntityType.FALLING_OBJECT))) {
 			y += 16;
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_TELEPORT_ID, version);
