@@ -40,7 +40,7 @@ public class Position extends MiddlePosition {
 		MiscSerializer.writeLFloat(serializer, realYaw); //head yaw actually
 		serializer.writeByte(mode);
 		serializer.writeBoolean(false); //on ground
-		VarNumberSerializer.writeVarLong(serializer, 0); //? TODO: check it, might be related to teleport accept
+		VarNumberSerializer.writeVarLong(serializer, 0);
 		return serializer;
 	}
 
