@@ -2,6 +2,9 @@ package protocolsupport.protocol.utils.types;
 
 import java.util.UUID;
 
+import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.utils.Utils;
 
 public class NetworkEntity {
@@ -43,12 +46,17 @@ public class NetworkEntity {
 	public NetworkEntityType getType() {
 		return type;
 	}
+	
+	public boolean isOfType(NetworkEntityType type) {
+		return type.isOfType(type);
+	}
 
 	private final DataCache cache = new DataCache();
 
 	public DataCache getDataCache() {
 		return cache;
 	}
+	
 
 	@Override
 	public String toString() {
@@ -57,7 +65,27 @@ public class NetworkEntity {
 
 	public static class DataCache {
 		public boolean firstMeta = true;
-		public byte baseMetaFlags;
+		public TIntObjectMap<DataWatcherObject<?>> metadata = new TIntObjectHashMap<>();
+		
+		public Object getMetaValue(int index) {
+			return metadata.get(index).getValue();
+		}
+		
+		public boolean getMetaBool(int index) {
+			if(metadata.containsKey(index)) {
+				try {
+					return (boolean) getMetaValue(index);
+				} catch (ClassCastException e) {}
+			}
+			return false;
+		}
+		
+		public void updateMeta(TIntObjectMap<DataWatcherObject<?>> updateWith) {
+			for(int index : updateWith.keys()) {
+				metadata.put(index, updateWith.get(index));
+			}
+		}
+		
 		@Override
 		public String toString() {
 			return Utils.toStringAllFields(this);
