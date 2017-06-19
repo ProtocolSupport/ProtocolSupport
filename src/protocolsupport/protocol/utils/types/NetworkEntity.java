@@ -43,6 +43,10 @@ public class NetworkEntity {
 	public NetworkEntityType getType() {
 		return type;
 	}
+	
+	public boolean isOfType(NetworkEntityType type) {
+		return type.isOfType(type);
+	}
 
 	private final DataCache cache = new DataCache();
 
