@@ -34,7 +34,7 @@ import protocolsupport.utils.netty.Compressor;
 import protocolsupport.zplatform.ServerPlatform;
 
 public class ProtocolSupport extends JavaPlugin {
-	//Test
+
 	@Override
 	public void onLoad() {
 		if (!ServerPlatform.detect()) {
