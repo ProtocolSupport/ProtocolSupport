@@ -7,6 +7,14 @@ import io.netty.handler.codec.DecoderException;
 
 public class MiscSerializer {
 
+	public static float readLFloat(ByteBuf from) {
+		return Float.intBitsToFloat(from.readIntLE());
+	}
+
+	public static void writeLFloat(ByteBuf to, float f) {
+		to.writeIntLE(Float.floatToIntBits(f));
+	}
+
 	public static <T extends Enum<T>> T readEnum(ByteBuf from, Class<T> clazz) {
 		return clazz.getEnumConstants()[VarNumberSerializer.readVarInt(from)];
 	}

@@ -11,6 +11,7 @@ public abstract class ChunkTransformer {
 		VARIES, //format for 1.9+
 		SHORT, //format for 1.8
 		BYTE, //format for 1.7-
+		PE,
 	}
 
 	public static ChunkTransformer create(BlockFormat format) {
@@ -23,6 +24,9 @@ public abstract class ChunkTransformer {
 			}
 			case BYTE: {
 				return new ChunkTransformerByte();
+			}
+			case PE: {
+				return new ChunkTransformerPE();
 			}
 			default: {
 				throw new IllegalArgumentException();

@@ -71,6 +71,13 @@ public class JsonUtils {
 		throw new JsonSyntaxException("Expected " + name + " to be a JsonObject, was " + toString(jsonElement));
 	}
 
+	public static JsonObject getJsonObject(JsonObject jsonObject, String name) {
+		if (jsonObject.has(name)) {
+			return getAsJsonObject(jsonObject.get(name), name);
+		}
+		throw new JsonSyntaxException("Missing " + name + ", expected to find an Object");
+	}
+
 	private static String toString(JsonElement jsonElement) {
 		String abbreviateMiddle = String.valueOf(jsonElement);
 		if (jsonElement == null) {
