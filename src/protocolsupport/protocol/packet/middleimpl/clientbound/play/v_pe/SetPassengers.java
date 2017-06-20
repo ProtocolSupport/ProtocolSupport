@@ -43,8 +43,8 @@ public class SetPassengers extends MiddleSetPassengers {
 
 	public static ClientBoundPacketData create(ProtocolVersion version, int vehicleId, int passengerId, boolean add) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(41, version);
-		VarNumberSerializer.writeSVarLong(serializer, vehicleId);
-		VarNumberSerializer.writeSVarLong(serializer, passengerId);
+		VarNumberSerializer.writeVarLong(serializer, vehicleId);
+		VarNumberSerializer.writeVarLong(serializer, passengerId);
 		serializer.writeBoolean(add);
 		return serializer;
 	}

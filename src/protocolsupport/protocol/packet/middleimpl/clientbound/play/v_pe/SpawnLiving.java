@@ -30,7 +30,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 			float motX, float motY, float motZ,
 			float pitch, float yaw, TIntObjectMap<DataWatcherObject<?>> metadata, int entityType) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SPAWN_ENTITY, version);
-		VarNumberSerializer.writeSVarLong(serializer, entityId);
+		VarNumberSerializer.writeVarLong(serializer, entityId);
 		VarNumberSerializer.writeVarLong(serializer, entityId);
 		VarNumberSerializer.writeVarInt(serializer, entityType);
 		MiscSerializer.writeLFloat(serializer, (float) x);
