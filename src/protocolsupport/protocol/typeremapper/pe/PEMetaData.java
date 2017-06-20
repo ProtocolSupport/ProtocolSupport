@@ -6,6 +6,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.watchedentity.WatchedDataRemapper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectLong;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectShortLe;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.NetworkEntity.DataCache;
@@ -16,18 +17,21 @@ public class PEMetaData {
 	private static final TIntObjectMap<DataWatcherObject<?>> EMPTY_MAP = new TIntObjectHashMap<>();
 
 	public static TIntObjectMap<DataWatcherObject<?>> transform(NetworkEntity entity, TIntObjectMap<DataWatcherObject<?>> originaldata, ProtocolVersion to) {
+		
+		//Always cache the metadata for PE players.
+		entity.getDataCache().updateMeta(originaldata);
+		
 		TIntObjectMap<DataWatcherObject<?>> transformed = WatchedDataRemapper.transform(entity, originaldata, to);
 		if (transformed.isEmpty()) {
 			return EMPTY_MAP;
 		}
 		
-		//Always cache the metadata for PE players.
-		entity.getDataCache().updateMeta(originaldata);
+		//System.out.println("Updated. Cache is now: " + entity.getDataCache().metadata.toString());
 		
 		//Apply default necessary values for PE
 		transformed.put(0, new DataWatcherObjectLong(mapBaseFlags(entity)));
 		//TODO: CHECK IF NECESSARY/ if((entity.isOfType(NetworkEntityType.PLAYER)) && originaldata.containsKey(2)) originaldata.remove(2); //Don't put empty nametags on players. Why would you?
-		if((!originaldata.containsKey(1)) || (int)(((DataWatcherObjectVarInt)originaldata.get(1)).getValue()) == 300) transformed.put(1, new DataWatcherObjectVarInt(0)); //Air is 0 when full and 0 when empty on PE.
+		if((!originaldata.containsKey(1)) || (int)(((DataWatcherObjectVarInt)originaldata.get(1)).getValue()) == 300) transformed.put(7, new DataWatcherObjectShortLe(0)); //Air is 0 when full and 0 when empty on PE.
 		transformed.put(38, new DataWatcherObjectLong(-1));//TODO: Add Leash functionality.
 		return transformed;
 	}

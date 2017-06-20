@@ -1,12 +1,10 @@
 package protocolsupport.protocol.utils.datawatcher.objects;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 
-public class DataWatcherObjectLong extends DataWatcherObject<Long> {
+public class DataWatcherObjectLong extends DataWatcherObjectNumber<Long> {
 
 	public DataWatcherObjectLong() {
 	}
@@ -26,7 +24,7 @@ public class DataWatcherObjectLong extends DataWatcherObject<Long> {
 
 	@Override
 	public void writeToStream(ByteBuf to, ProtocolVersion version) {
-		VarNumberSerializer.writeSVarLong(to, value);
+		VarNumberSerializer.writeVarLong(to, value);
 	}
 
 }

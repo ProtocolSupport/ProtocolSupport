@@ -14,11 +14,13 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectDirec
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectItemStack;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectLong;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectNBTTagCompound;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalUUID;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectShort;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectShortLe;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3f;
@@ -37,6 +39,7 @@ public class DataWatcherObjectIdRegistry {
 	}
 
 	static {
+		//Pc
 		register(DataWatcherObjectBlockState.class, 12, ProtocolVersionsHelper.AFTER_1_8);
 		register(DataWatcherObjectBoolean.class, 6, ProtocolVersionsHelper.AFTER_1_8);
 		register(DataWatcherObjectByte.class, 0, ProtocolVersionsHelper.ALL_PC);
@@ -56,6 +59,15 @@ public class DataWatcherObjectIdRegistry {
 		register(DataWatcherObjectVarInt.class, 1, ProtocolVersionsHelper.AFTER_1_8);
 		register(DataWatcherObjectVector3f.class, 7, ProtocolVersionsHelper.ALL_PC);
 		register(DataWatcherObjectVector3i.class, 6, ProtocolVersionsHelper.BEFORE_1_9);
+		//PE
+		register(DataWatcherObjectShortLe.class, 1, ProtocolVersion.MINECRAFT_PE);
+		register(DataWatcherObjectVarInt.class, 2, ProtocolVersion.MINECRAFT_PE);
+		register(DataWatcherObjectFloat.class, 3, ProtocolVersion.MINECRAFT_PE);
+		register(DataWatcherObjectString.class, 4, ProtocolVersion.MINECRAFT_PE);
+		//TODO: SLOT (5)
+		//TODO: BLOCKPOSITION (Vector3i?) (6)
+		register(DataWatcherObjectLong.class, 7, ProtocolVersion.MINECRAFT_PE);
+		//TODO: ENTITYPOSTIION (Vector3f?) (8)
 	}
 
 	public static int getTypeId(@SuppressWarnings("rawtypes") Class<? extends DataWatcherObject> clazz, ProtocolVersion version) {
