@@ -57,6 +57,10 @@ public class NetworkEntity {
 		return cache;
 	}
 	
+	public void updateMetaCache(TIntObjectMap<DataWatcherObject<?>> updateWith) {
+		cache.updateMeta(updateWith);
+	}
+	
 
 	@Override
 	public String toString() {
@@ -66,6 +70,7 @@ public class NetworkEntity {
 	public static class DataCache {
 		public boolean firstMeta = true;
 		public TIntObjectMap<DataWatcherObject<?>> metadata = new TIntObjectHashMap<>();
+		public int attachedId = -1; //Leashed? Data is send in pocket meta, but might be useful to store for other things.
 		
 		public Object getMetaValue(int index) {
 			return metadata.get(index).getValue();

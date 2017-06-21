@@ -9,13 +9,13 @@ import java.util.Map;
 
 import gnu.trove.map.TIntObjectMap;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapperBooleanToByte;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapperNoOp;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapperNumberToByte;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapperNumberToInt;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapperNumberToShort;
-import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapperNumberToShortLe;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapperStringClamp;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
@@ -30,12 +30,14 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectLong;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectNBTTagCompound;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectShort;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectShortLe;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3f;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
+import protocolsupport.protocol.utils.types.NetworkEntity.DataCache;
 import protocolsupport.utils.CollectionsUtils;
 import protocolsupport.utils.Utils;
 
@@ -44,10 +46,45 @@ public enum SpecificRemapper {
 	NONE(NetworkEntityType.NONE),
 	ENTITY(NetworkEntityType.ENTITY,
 		//PE
-		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectLong>(DataWatcherObjectIndex.Entity.FLAGS, 0) {}, ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNumberToShortLe(DataWatcherObjectIndex.Entity.AIR, 7), ProtocolVersion.MINECRAFT_PE),
+		new Entry(new DataWatcherDataRemapper(){
+			@Override
+			public void remap(NetworkEntity entity, TIntObjectMap<DataWatcherObject<?>> original, TIntObjectMap<DataWatcherObject<?>> remapped) {
+				DataCache cache = entity.getDataCache();
+				byte pcbaseflags = (byte) cache.getMetaValue(0);
+				System.out.println(Integer.toBinaryString(pcbaseflags));
+				long b = 0;
+				//Pc base-flags
+				if((pcbaseflags & (1 << 0)) != 0) b |= (1 << EntityMetadata.FLAG_ON_FIRE);
+				if((pcbaseflags & (1 << 1)) != 0) b |= (1 << EntityMetadata.FLAG_SNEAKING);
+				if((pcbaseflags & (1 << 3)) != 0) b |= (1 << EntityMetadata.FLAG_SPRINTING);
+				if((pcbaseflags & (1 << 5)) != 0) b |= (1 << EntityMetadata.FLAG_INVISIBLE);
+				if((pcbaseflags & (1 << 7)) != 0) b |= (1 << EntityMetadata.FLAG_GLIDING);
+				//Boolean meta values
+				if(cache.getMetaBool(4)) b |= (1 << EntityMetadata.FLAG_SILENT);
+				//Names
+				//TODO: IS THIS RIGHT? if(cache.getMetaBool(2)) b |= (1 << FLAG_SHOW_NAMETAG);
+				if(entity.isOfType(NetworkEntityType.PLAYER)) {b |= (1 << EntityMetadata.FLAG_ALWAYS_SHOW_NAMETAG); b |= (1 << EntityMetadata.FLAG_SHOW_NAMETAG);}
+				//Specifics:
+				if(entity.isOfType(NetworkEntityType.PIG))  b |= (1 << EntityMetadata.FLAG_SADDLED); //Test
+				//if((entity.getType() == SpecificRemapper.AGEABLE) && boolFromPc(12, pcMeta)) b |= (1 << FLAG_BABY);
+				//if(((entity.getType() == SpecificRemapper.PIG) && boolFromPc(13, pcMeta)) || ((entity.getType() == SpecificRemapper.BASE_HORSE) && boolFromPcFlag(13, 2, pcMeta))) b |= (1 << FLAG_SADDLED);
+				//if((entity.getType() == SpecificRemapper.SHEEP) && boolFromPcFlag(13, 7, pcMeta)) b |= (1 << FLAG_SHEARED);
+				System.out.println(Long.toBinaryString(b));
+				System.out.println("Done flags...");
+				remapped.put(0, new DataWatcherObjectLong(b));
+			}}, ProtocolVersion.MINECRAFT_PE),
+		new Entry(new IndexValueRemapper<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Entity.AIR, 7) {
+			@Override
+			public DataWatcherObject<?> remapValue(DataWatcherObjectVarInt object) {
+				return new DataWatcherObjectShortLe((object.getValue() == 300) ? 0 : object.getValue());
+			}
+		}, ProtocolVersion.MINECRAFT_PE),
 		//new Entry(new IndexValueRemapperNoOp<DataWatcherObjectString>(DataWatcherObjectIndex.Entity.NAMETAG, 4) {}, ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectLong>(DataWatcherObjectIndex.Entity.LEAD, 38) {}, ProtocolVersion.MINECRAFT_PE),
+		new Entry(new DataWatcherDataRemapper(){
+			@Override
+			public void remap(NetworkEntity entity, TIntObjectMap<DataWatcherObject<?>> original, TIntObjectMap<DataWatcherObject<?>> remapped) {
+				remapped.put(38, new DataWatcherObjectLong(entity.getDataCache().attachedId));
+			}}, ProtocolVersion.MINECRAFT_PE),
 		
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Entity.FLAGS, 0) {}, ProtocolVersionsHelper.ALL_PC),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Entity.AIR, 1) {}, ProtocolVersionsHelper.RANGE__1_9__1_12),
