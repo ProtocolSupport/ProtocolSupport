@@ -49,8 +49,8 @@ public class NetworkEntity {
 		return type;
 	}
 	
-	public boolean isOfType(NetworkEntityType type) {
-		return type.isOfType(type);
+	public boolean isOfType(NetworkEntityType typeToCheck) {
+		return type.isOfType(typeToCheck);
 	}
 
 	private DataCache cache = new DataCache();
@@ -94,9 +94,7 @@ public class NetworkEntity {
 		}
 		
 		public boolean getMetaBool(int index, int bitpos) {
-			System.out.println("Calling check metabool on index, " + index);
-			if(metadata.containsKey(index) /*&& (getMetaValue(index) instanceof Byte)*/) {
-				System.out.println("Found, in actuallity the value is of type, " + metadata.get(index).getValue().getClass().getName());
+			if(metadata.containsKey(index)) {
 				return (((byte) getMetaValue(index)) & (1 << (bitpos - 1))) != 0;
 			}
 			return false;
