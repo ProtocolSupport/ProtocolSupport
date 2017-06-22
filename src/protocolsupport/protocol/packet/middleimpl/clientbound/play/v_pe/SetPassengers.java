@@ -36,16 +36,20 @@ public class SetPassengers extends MiddleSetPassengers {
 				switch(cache.getWatchedEntity(vehicleId).getType()) {
 				case BOAT:
 					data.rider.position = new Vector(0, 1, 0);
+					data.rider.rotationLocked = false;
 					data.rider.rotationMax = 180f;
 					data.rider.rotationMin = -180f;
 				break;
 				default:
 					data.rider.position = new Vector(0, 0, 0);
+					data.rider.rotationLocked = false;
 					data.rider.rotationMax = 180f;
 					data.rider.rotationMin = -180f;
 				break;
 				}
 				cache.updateWatchedDataCache(passengerId, data);
+				//Update meta too.
+				packets.add(EntityMetadata.create(cache.getWatchedEntity(passengerId), version));
 			}
 		}
 		prevPassengersIds.forEach(new TIntProcedure() {
@@ -56,6 +60,8 @@ public class SetPassengers extends MiddleSetPassengers {
 					DataCache data = cache.getWatchedEntity(passengerId).getDataCache();
 					data.rider.riding = false;
 					cache.updateWatchedDataCache(passengerId, data);
+					//Also update meta.
+					packets.add(EntityMetadata.create(cache.getWatchedEntity(passengerId), version));
 				}
 				return true;
 			}

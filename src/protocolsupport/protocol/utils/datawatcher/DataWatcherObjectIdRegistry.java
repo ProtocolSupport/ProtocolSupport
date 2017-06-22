@@ -39,7 +39,7 @@ public class DataWatcherObjectIdRegistry {
 	}
 
 	static {
-		//Pc
+		//PC
 		register(DataWatcherObjectBlockState.class, 12, ProtocolVersionsHelper.AFTER_1_8);
 		register(DataWatcherObjectBoolean.class, 6, ProtocolVersionsHelper.AFTER_1_8);
 		register(DataWatcherObjectByte.class, 0, ProtocolVersionsHelper.ALL_PC);
@@ -60,6 +60,7 @@ public class DataWatcherObjectIdRegistry {
 		register(DataWatcherObjectVector3f.class, 7, ProtocolVersionsHelper.ALL_PC);
 		register(DataWatcherObjectVector3i.class, 6, ProtocolVersionsHelper.BEFORE_1_9);
 		//PE
+		register(DataWatcherObjectByte.class, 0, ProtocolVersion.MINECRAFT_PE);
 		register(DataWatcherObjectShortLe.class, 1, ProtocolVersion.MINECRAFT_PE);
 		register(DataWatcherObjectVarInt.class, 2, ProtocolVersion.MINECRAFT_PE);
 		register(DataWatcherObjectFloat.class, 3, ProtocolVersion.MINECRAFT_PE);
@@ -67,7 +68,7 @@ public class DataWatcherObjectIdRegistry {
 		//TODO: SLOT (5)
 		//TODO: BLOCKPOSITION (Vector3i?) (6)
 		register(DataWatcherObjectLong.class, 7, ProtocolVersion.MINECRAFT_PE);
-		//TODO: ENTITYPOSTIION (Vector3f?) (8)
+		register(DataWatcherObjectVector3f.class, 8, ProtocolVersion.MINECRAFT_PE);
 	}
 
 	public static int getTypeId(@SuppressWarnings("rawtypes") Class<? extends DataWatcherObject> clazz, ProtocolVersion version) {
