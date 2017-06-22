@@ -8,10 +8,12 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class SpawnExpOrb extends MiddleSpawnExpOrb {
 
+	public static int typeIdExpOrb = 93;
+	
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		// TODO: When metadata is implemented, set the exp count in the exp orb metadata!
-		return RecyclableSingletonList.create(SpawnLiving.create(version, entityId, x, y, z, 0, 0, 0, 0, 0, null, 69));
+		return RecyclableSingletonList.create(SpawnLiving.createSimple(version, entityId, x, y, z, typeIdExpOrb));
 	}
 
 }

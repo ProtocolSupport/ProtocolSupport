@@ -8,6 +8,13 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 
 public class DataWatcherObjectVector3f extends DataWatcherObject<Vector> {
 
+	public DataWatcherObjectVector3f() {
+	}
+	
+	public DataWatcherObjectVector3f(Vector position) {
+		value = position;
+	}
+
 	@Override
 	public void readFromStream(ByteBuf from, ProtocolVersion version) {
 		value = new Vector(from.readFloat(), from.readFloat(), from.readFloat());

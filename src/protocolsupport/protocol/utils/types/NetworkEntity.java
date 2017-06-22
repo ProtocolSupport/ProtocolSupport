@@ -2,6 +2,8 @@ package protocolsupport.protocol.utils.types;
 
 import java.util.UUID;
 
+import org.bukkit.util.Vector;
+
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
@@ -51,13 +53,17 @@ public class NetworkEntity {
 		return type.isOfType(type);
 	}
 
-	private final DataCache cache = new DataCache();
+	private DataCache cache = new DataCache();
 
 	public DataCache getDataCache() {
 		return cache;
 	}
 	
-	public void updateMetaCache(TIntObjectMap<DataWatcherObject<?>> updateWith) {
+	public void updateDataCache(DataCache updateWith) {
+		cache = updateWith;
+	}
+	
+	public void updateMetadata(TIntObjectMap<DataWatcherObject<?>> updateWith) {
 		cache.updateMeta(updateWith);
 	}
 	
@@ -67,10 +73,12 @@ public class NetworkEntity {
 		return Utils.toStringAllFields(this);
 	}
 
-	public static class DataCache {
+	public class DataCache {
 		public boolean firstMeta = true;
 		public TIntObjectMap<DataWatcherObject<?>> metadata = new TIntObjectHashMap<>();
 		public int attachedId = -1; //Leashed? Data is send in pocket meta, but might be useful to store for other things.
+		public boolean inLove = false; //Show just one metaupdate?
+		public Rider rider = new Rider();
 		
 		public Object getMetaValue(int index) {
 			return metadata.get(index).getValue();
@@ -85,11 +93,28 @@ public class NetworkEntity {
 			return false;
 		}
 		
+		public boolean getMetaBool(int index, int bitpos) {
+			System.out.println("Calling check metabool on index, " + index);
+			if(metadata.containsKey(index) /*&& (getMetaValue(index) instanceof Byte)*/) {
+				System.out.println("Found, in actuallity the value is of type, " + metadata.get(index).getValue().getClass().getName());
+				return (((byte) getMetaValue(index)) & (1 << (bitpos - 1))) != 0;
+			}
+			return false;
+		}
+		
 		public void updateMeta(TIntObjectMap<DataWatcherObject<?>> updateWith) {
 			for(int index : updateWith.keys()) {
 				metadata.put(index, updateWith.get(index));
 			}
 		}
+		
+		public class Rider {
+			public boolean riding = false;
+			public Vector position = new Vector();
+			public boolean rotationLocked = false;
+			public float rotationMin = 0;
+			public float rotationMax = 0;
+		};
 		
 		@Override
 		public String toString() {

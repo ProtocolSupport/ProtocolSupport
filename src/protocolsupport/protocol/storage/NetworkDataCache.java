@@ -11,6 +11,7 @@ import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.NetworkEntity.DataCache;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.Utils;
 
@@ -78,6 +79,10 @@ public class NetworkDataCache {
 
 	public void addWatchedEntity(NetworkEntity entity) {
 		watchedEntities.put(entity.getId(), entity);
+	}
+	
+	public void updateWatchedDataCache(int entityId, DataCache updateWith) {
+		watchedEntities.get(entityId).updateDataCache(updateWith);
 	}
 
 	public void addWatchedSelfPlayer(NetworkEntity player) {

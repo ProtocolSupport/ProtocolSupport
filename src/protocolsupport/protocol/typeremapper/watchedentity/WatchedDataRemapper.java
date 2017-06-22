@@ -13,10 +13,9 @@ public class WatchedDataRemapper {
 
 	public static TIntObjectMap<DataWatcherObject<?>> transform(NetworkEntity entity, TIntObjectMap<DataWatcherObject<?>> originaldata, ProtocolVersion to) {
 		if (entity == null) {
-			System.out.println("Null ENTITY!");
 			return EMPTY_MAP;
 		}
-		entity.updateMetaCache(originaldata);
+		entity.updateMetadata(originaldata);
 		TIntObjectHashMap<DataWatcherObject<?>> transformed = new TIntObjectHashMap<>();
 		SpecificRemapper.fromWatchedType(entity.getType()).getRemaps(to)
 		.forEach(remapper -> remapper.remap(entity, originaldata, transformed));

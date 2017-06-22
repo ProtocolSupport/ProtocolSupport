@@ -47,7 +47,7 @@ public class Login extends MiddleLogin {
 		startgame.writeBoolean(false); //edu mode
 		MiscSerializer.writeLFloat(startgame, 0); //rain level
 		MiscSerializer.writeLFloat(startgame, 0); //lighting level
-		startgame.writeBoolean(true); //commands enabled
+		startgame.writeBoolean(false); //commands enabled
 		startgame.writeBoolean(false); //needs texture pack
 		VarNumberSerializer.writeVarInt(startgame, 0); //game rules
 		StringSerializer.writeString(startgame, version, ""); //level type

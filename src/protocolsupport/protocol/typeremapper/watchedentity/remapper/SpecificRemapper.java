@@ -9,7 +9,7 @@ import java.util.Map;
 
 import gnu.trove.map.TIntObjectMap;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata.PeMetaBase;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapperBooleanToByte;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapperNoOp;
@@ -45,46 +45,73 @@ public enum SpecificRemapper {
 
 	NONE(NetworkEntityType.NONE),
 	ENTITY(NetworkEntityType.ENTITY,
-		//PE
+		//PE Flags
 		new Entry(new DataWatcherDataRemapper(){
 			@Override
 			public void remap(NetworkEntity entity, TIntObjectMap<DataWatcherObject<?>> original, TIntObjectMap<DataWatcherObject<?>> remapped) {
-				DataCache cache = entity.getDataCache();
-				byte pcbaseflags = (byte) cache.getMetaValue(0);
-				System.out.println(Integer.toBinaryString(pcbaseflags));
+				DataCache data = entity.getDataCache();
 				long b = 0;
 				//Pc base-flags
-				if((pcbaseflags & (1 << 0)) != 0) b |= (1 << EntityMetadata.FLAG_ON_FIRE);
-				if((pcbaseflags & (1 << 1)) != 0) b |= (1 << EntityMetadata.FLAG_SNEAKING);
-				if((pcbaseflags & (1 << 3)) != 0) b |= (1 << EntityMetadata.FLAG_SPRINTING);
-				if((pcbaseflags & (1 << 5)) != 0) b |= (1 << EntityMetadata.FLAG_INVISIBLE);
-				if((pcbaseflags & (1 << 7)) != 0) b |= (1 << EntityMetadata.FLAG_GLIDING);
+				if(data.getMetaBool(0,1)) b |= (1 << PeMetaBase.FLAG_ON_FIRE);
+				if(data.getMetaBool(0,2)) b |= (1 << PeMetaBase.FLAG_SNEAKING);
+				if(data.getMetaBool(0,4)) b |= (1 << PeMetaBase.FLAG_SPRINTING);
+				if(data.getMetaBool(0,6)) b |= (1 << PeMetaBase.FLAG_INVISIBLE);
+				if(data.getMetaBool(0,8)) b |= (1 << PeMetaBase.FLAG_GLIDING);
+				
 				//Boolean meta values
-				if(cache.getMetaBool(4)) b |= (1 << EntityMetadata.FLAG_SILENT);
+				if(data.getMetaBool(4)) b |= (1 << PeMetaBase.FLAG_SILENT);
+				if((entity.isOfType(NetworkEntityType.PIG) && data.getMetaBool(13)) || (entity.isOfType(NetworkEntityType.BASE_HORSE) && data.getMetaBool(13, 3)))  b |= (1 << PeMetaBase.FLAG_SADDLED);
+				
 				//Names
-				//TODO: IS THIS RIGHT? if(cache.getMetaBool(2)) b |= (1 << FLAG_SHOW_NAMETAG);
-				if(entity.isOfType(NetworkEntityType.PLAYER)) {b |= (1 << EntityMetadata.FLAG_ALWAYS_SHOW_NAMETAG); b |= (1 << EntityMetadata.FLAG_SHOW_NAMETAG);}
+				if(entity.isOfType(NetworkEntityType.PLAYER) || (data.metadata.containsKey(2) && data.getMetaBool(3))) b |= (1 << PeMetaBase.FLAG_SHOW_NAMETAG);
+				if(entity.isOfType(NetworkEntityType.PLAYER)) b |= (1 << PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG);
+				
 				//Specifics:
-				if(entity.isOfType(NetworkEntityType.PIG))  b |= (1 << EntityMetadata.FLAG_SADDLED); //Test
-				//if((entity.getType() == SpecificRemapper.AGEABLE) && boolFromPc(12, pcMeta)) b |= (1 << FLAG_BABY);
+				if(data.getMetaBool(12) && (entity.isOfType(NetworkEntityType.AGEABLE) || entity.isOfType(NetworkEntityType.ZOMBIE))) b |= (1 << PeMetaBase.FLAG_BABY);
+				
+				//Love is send via entityStatus and should only be send once.
+				if(data.inLove) {b |= (1 << PeMetaBase.FLAG_IN_LOVE); data.inLove = false; entity.updateDataCache(data);}
+				
+				//Leashing is send in Entity Leash.
+				if(data.attachedId != -1) b |= (1 << PeMetaBase.FLAG_LEASHED);
 				//if(((entity.getType() == SpecificRemapper.PIG) && boolFromPc(13, pcMeta)) || ((entity.getType() == SpecificRemapper.BASE_HORSE) && boolFromPcFlag(13, 2, pcMeta))) b |= (1 << FLAG_SADDLED);
 				//if((entity.getType() == SpecificRemapper.SHEEP) && boolFromPcFlag(13, 7, pcMeta)) b |= (1 << FLAG_SHEARED);
-				System.out.println(Long.toBinaryString(b));
-				System.out.println("Done flags...");
 				remapped.put(0, new DataWatcherObjectLong(b));
 			}}, ProtocolVersion.MINECRAFT_PE),
+		
+		//Pe Air
 		new Entry(new IndexValueRemapper<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Entity.AIR, 7) {
 			@Override
 			public DataWatcherObject<?> remapValue(DataWatcherObjectVarInt object) {
 				return new DataWatcherObjectShortLe((object.getValue() == 300) ? 0 : object.getValue());
 			}
 		}, ProtocolVersion.MINECRAFT_PE),
-		//new Entry(new IndexValueRemapperNoOp<DataWatcherObjectString>(DataWatcherObjectIndex.Entity.NAMETAG, 4) {}, ProtocolVersion.MINECRAFT_PE),
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectString>(DataWatcherObjectIndex.Entity.NAMETAG, 4) {}, ProtocolVersion.MINECRAFT_PE),
+		
+		//Leasing things.
 		new Entry(new DataWatcherDataRemapper(){
 			@Override
 			public void remap(NetworkEntity entity, TIntObjectMap<DataWatcherObject<?>> original, TIntObjectMap<DataWatcherObject<?>> remapped) {
+				//Send on pc via Entity Leash.
 				remapped.put(38, new DataWatcherObjectLong(entity.getDataCache().attachedId));
 			}}, ProtocolVersion.MINECRAFT_PE),
+		
+		//Riding things.
+		new Entry(new DataWatcherDataRemapper(){
+			@Override
+			public void remap(NetworkEntity entity, TIntObjectMap<DataWatcherObject<?>> original, TIntObjectMap<DataWatcherObject<?>> remapped) {
+				DataCache data = entity.getDataCache();
+				if(data.rider.riding) {
+					//Extra data PE needs for vehicles. Send in setPassenger.
+					remapped.put(57, new DataWatcherObjectVector3f(data.rider.position));
+					remapped.put(58, new DataWatcherObjectByte((byte) ((data.rider.rotationLocked) ? 1 : 0)));
+					remapped.put(59, new DataWatcherObjectFloat(data.rider.rotationMax));
+					remapped.put(60, new DataWatcherObjectFloat(data.rider.rotationMin));
+				}
+			}}, ProtocolVersion.MINECRAFT_PE),
+		
+		
+		//TODO: FINISH
 		
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Entity.FLAGS, 0) {}, ProtocolVersionsHelper.ALL_PC),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Entity.AIR, 1) {}, ProtocolVersionsHelper.RANGE__1_9__1_12),
@@ -140,8 +167,6 @@ public enum SpecificRemapper {
 		new Entry(new DataWatcherDataRemapper() {
 			@Override
 			public void remap(NetworkEntity entity, TIntObjectMap<DataWatcherObject<?>> original, TIntObjectMap<DataWatcherObject<?>> remapped) {
-				getObject(original, DataWatcherObjectIndex.Entity.FLAGS, DataWatcherObjectByte.class)
-				.ifPresent(baseflags -> entity.getDataCache().metadata = remapped);
 				getObject(original, DataWatcherObjectIndex.EntityLiving.HAND_USE, DataWatcherObjectByte.class)
 				.ifPresent(activehandflags -> {
 					byte activehandvalue = activehandflags.getValue();
