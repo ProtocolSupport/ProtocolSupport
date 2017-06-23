@@ -12,6 +12,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectChat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectDirection;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloat;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloatLe;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectItemStack;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectLong;
@@ -24,6 +25,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectShort
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3f;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3fLe;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3i;
 import protocolsupport.utils.Utils;
 
@@ -63,12 +65,12 @@ public class DataWatcherObjectIdRegistry {
 		register(DataWatcherObjectByte.class, 0, ProtocolVersion.MINECRAFT_PE);
 		register(DataWatcherObjectShortLe.class, 1, ProtocolVersion.MINECRAFT_PE);
 		register(DataWatcherObjectVarInt.class, 2, ProtocolVersion.MINECRAFT_PE);
-		register(DataWatcherObjectFloat.class, 3, ProtocolVersion.MINECRAFT_PE);
+		register(DataWatcherObjectFloatLe.class, 3, ProtocolVersion.MINECRAFT_PE);
 		register(DataWatcherObjectString.class, 4, ProtocolVersion.MINECRAFT_PE);
 		//TODO: SLOT (5)
 		//TODO: BLOCKPOSITION (Vector3i?) (6)
 		register(DataWatcherObjectLong.class, 7, ProtocolVersion.MINECRAFT_PE);
-		register(DataWatcherObjectVector3f.class, 8, ProtocolVersion.MINECRAFT_PE);
+		register(DataWatcherObjectVector3fLe.class, 8, ProtocolVersion.MINECRAFT_PE);
 	}
 
 	public static int getTypeId(@SuppressWarnings("rawtypes") Class<? extends DataWatcherObject> clazz, ProtocolVersion version) {

@@ -66,8 +66,8 @@ public class NetworkEntity {
 	public void updateMetadata(TIntObjectMap<DataWatcherObject<?>> updateWith) {
 		cache.updateMeta(updateWith);
 	}
-	
 
+	
 	@Override
 	public String toString() {
 		return Utils.toStringAllFields(this);
@@ -78,7 +78,7 @@ public class NetworkEntity {
 		public TIntObjectMap<DataWatcherObject<?>> metadata = new TIntObjectHashMap<>();
 		public int attachedId = -1; //Leashed? Data is send in pocket meta, but might be useful to store for other things.
 		public boolean inLove = false; //Show just one metaupdate?
-		public Rider rider = new Rider();
+		public Rider rider = new Rider(false);
 		
 		public Object getMetaValue(int index) {
 			return metadata.get(index).getValue();
@@ -108,10 +108,26 @@ public class NetworkEntity {
 		
 		public class Rider {
 			public boolean riding = false;
-			public Vector position = new Vector();
+			public Vector position = new Vector(0, 0, 0);
 			public boolean rotationLocked = false;
-			public float rotationMin = 0;
-			public float rotationMax = 0;
+			public float rotationMin = 180f;
+			public float rotationMax = -180f;
+			
+			public Rider(boolean riding) {
+				this.riding = riding;
+			}
+			
+			public Rider(Vector position, boolean rotationLocked, float rotationMax, float rotationMin) {
+				this(true, position, rotationLocked, rotationMax, rotationMin);
+			}
+			
+			public Rider(boolean riding, Vector position, boolean rotationLocked, float rotationMax, float rotationMin) {
+				this.riding = riding;
+				this.position = position;
+				this.rotationLocked = rotationLocked;
+				this.rotationMax = rotationMax;
+				this.rotationMin = rotationMin;
+			}
 		};
 		
 		@Override

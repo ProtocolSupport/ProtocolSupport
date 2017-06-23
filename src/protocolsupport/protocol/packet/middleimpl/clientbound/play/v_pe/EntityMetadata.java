@@ -13,13 +13,18 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class EntityMetadata extends MiddleEntityMetadata {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		return RecyclableSingletonList.create(create(cache.getWatchedEntity(entityId), metadata, version));
+		if(!cache.containsWatchedEntity(entityId)) {
+			return RecyclableEmptyList.get();
+		} else {
+			return RecyclableSingletonList.create(create(cache.getWatchedEntity(entityId), metadata, version));
+		}
 	}
 	
 	public static ClientBoundPacketData create(NetworkEntity entity, ProtocolVersion version) {
