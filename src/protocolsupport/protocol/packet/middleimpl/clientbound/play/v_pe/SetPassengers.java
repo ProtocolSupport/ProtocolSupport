@@ -29,26 +29,18 @@ public class SetPassengers extends MiddleSetPassengers {
 		for (int passengerId : passengersIds) {
 			if (!prevPassengersIds.contains(passengerId)) {
 				packets.add(create(version, vehicleId, passengerId, true));
-				
+				//Update meta too.
 				//TODO: Find correct values for ofset etc. This is an example:
 				DataCache data = cache.getWatchedEntity(passengerId).getDataCache();
-				data.rider.riding = true;
 				switch(cache.getWatchedEntity(vehicleId).getType()) {
-				case BOAT:
-					data.rider.position = new Vector(0, 1, 0);
-					data.rider.rotationLocked = false;
-					data.rider.rotationMax = 180f;
-					data.rider.rotationMin = -180f;
+				case PIG:
+					data.rider = data.new Rider(new Vector(0, 1.8, 0), true, 180f, -180f);
 				break;
 				default:
-					data.rider.position = new Vector(0, 0, 0);
-					data.rider.rotationLocked = false;
-					data.rider.rotationMax = 180f;
-					data.rider.rotationMin = -180f;
+					data.rider = data.new Rider(true);
 				break;
 				}
 				cache.updateWatchedDataCache(passengerId, data);
-				//Update meta too.
 				packets.add(EntityMetadata.create(cache.getWatchedEntity(passengerId), version));
 			}
 		}
@@ -57,10 +49,10 @@ public class SetPassengers extends MiddleSetPassengers {
 			public boolean execute(int passengerId) {
 				if (!newPassengersIds.contains(passengerId)) {
 					packets.add(create(version, vehicleId, passengerId, false));
-					DataCache data = cache.getWatchedEntity(passengerId).getDataCache();
-					data.rider.riding = false;
-					cache.updateWatchedDataCache(passengerId, data);
 					//Also update meta.
+					DataCache data = cache.getWatchedEntity(passengerId).getDataCache();
+					data.rider = data.new Rider(false);
+					cache.updateWatchedDataCache(passengerId, data);
 					packets.add(EntityMetadata.create(cache.getWatchedEntity(passengerId), version));
 				}
 				return true;

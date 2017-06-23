@@ -8,10 +8,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class SpawnGlobal extends MiddleSpawnGlobal {
 
-	public static int typeIdGlobal = 93;
-	
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		return RecyclableSingletonList.create(SpawnLiving.createSimple(version, entityId, x, y, z, typeIdGlobal));
+		return RecyclableSingletonList.create(SpawnLiving.createSimple(version, entityId, x, y, z, 93));
 	}
 }
