@@ -1,5 +1,7 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
+import org.bukkit.util.Vector;
+
 import io.netty.buffer.ByteBuf;
 
 public abstract class MiddleEntityRelMoveLook extends MiddleEntity {
@@ -22,4 +24,10 @@ public abstract class MiddleEntityRelMoveLook extends MiddleEntity {
 		onGround = serverdata.readBoolean();
 	}
 
+	@Override
+	public void handle() {
+		cache.updateWatchedPosition(entityId, new Vector(relX, relY, relZ));
+		cache.updateWatchedRotation(entityId, (byte) yaw, (byte) pitch);
+	}
+	
 }

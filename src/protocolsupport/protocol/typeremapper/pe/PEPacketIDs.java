@@ -12,7 +12,7 @@ public class PEPacketIDs {
 	public static final int SPAWN_PLAYER = 12;
 	public static final int SPAWN_ENTITY = 13;
 	public static final int ENTITY_DESTROY = 14;
-	public static final int ENTITY_TELEPORT = 18;
+	public static final int ENTITY_MOVE = 18;
 	public static final int PLAYER_MOVE = 19;
 	public static final int REMOVE_BLOCK = 21;
 	public static final int UPDATE_BLOCK = 22;

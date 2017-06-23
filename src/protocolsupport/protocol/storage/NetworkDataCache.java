@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.util.Vector;
+
 import gnu.trove.map.hash.TIntObjectHashMap;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
@@ -79,6 +81,25 @@ public class NetworkDataCache {
 	public void addWatchedEntity(NetworkEntity entity) {
 		watchedEntities.put(entity.getId(), entity);
 	}
+<<<<<<< HEAD
+=======
+	
+	public void updateWatchedDataCache(int entityId, DataCache updateWith) {
+		watchedEntities.get(entityId).updateDataCache(updateWith);
+	}
+	
+	public void updateWatchedPosition(int entityId, Vector updateWith) {
+		watchedEntities.get(entityId).updatePosition(updateWith);
+	}
+	
+	public void updateWatchedRelPosition(int entityId, Vector updateWith) {
+		updateWatchedPosition(entityId, watchedEntities.get(entityId).getPosition().add(updateWith));
+	}
+	
+	public void updateWatchedRotation(int entityId, byte yaw, byte pitch) {
+		watchedEntities.get(entityId).updateRotation(yaw, pitch);
+	}
+>>>>>>> 911359ff... Attempt 1 at entityLook.
 
 	public void addWatchedSelfPlayer(NetworkEntity player) {
 		this.player = player;
@@ -97,6 +118,10 @@ public class NetworkDataCache {
 
 	public NetworkEntity getWatchedEntity(int entityId) {
 		return watchedEntities.get(entityId);
+	}
+	
+	public boolean containsWatchedEntity(int entityId) {
+		return watchedEntities.containsKey(entityId);
 	}
 
 	public void removeWatchedEntities(int[] entityIds) {

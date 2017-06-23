@@ -2,6 +2,8 @@ package protocolsupport.protocol.utils.types;
 
 import java.util.UUID;
 
+import org.bukkit.util.Vector;
+
 import protocolsupport.utils.Utils;
 
 public class NetworkEntity {
@@ -50,6 +52,32 @@ public class NetworkEntity {
 		return cache;
 	}
 
+	private Vector position = new Vector();
+	private byte yaw;
+	private byte pitch;
+	
+	
+	public void updatePosition(Vector updateWith) {
+		position = updateWith;
+	}
+	
+	public Vector getPosition() {
+		return position;
+	}
+	
+	public void updateRotation(byte updateYaw, byte updatePitch) {
+		yaw = updateYaw;
+		pitch = updatePitch;
+	}
+	
+	public byte getYaw() {
+		return yaw;
+	}
+	
+	public byte getPitch() {
+		return pitch;
+	}
+	
 	@Override
 	public String toString() {
 		return Utils.toStringAllFields(this);

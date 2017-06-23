@@ -9,18 +9,27 @@ import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class EntityTeleport extends MiddleEntityTeleport {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		NetworkEntity wentity = cache.getWatchedEntity(entityId);
-		if ((wentity != null) && (wentity.getType() == NetworkEntityType.PLAYER)) {
-			return RecyclableSingletonList.create(Position.create(version, entityId, x, y + 1.6200000047683716D, z, pitch, yaw, Position.ANIMATION_MODE_ALL));
+		if(!cache.containsWatchedEntity(entityId)) {
+			return RecyclableEmptyList.get();
 		} else {
-			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_TELEPORT, version);
-			VarNumberSerializer.writeVarLong(serializer, entityId);
+			return RecyclableSingletonList.create(create(cache.getWatchedEntity(entityId), x, y, z, pitch, yaw, onGround, true, version));
+		}
+		
+	}
+	
+	public static ClientBoundPacketData create(NetworkEntity entity, double x, double y, double z, byte pitch, byte yaw, boolean onGround, boolean teleported, ProtocolVersion version) {
+		if ((entity != null) && (entity.getType() == NetworkEntityType.PLAYER)) {
+			return Position.create(version, entity.getId(), x, y + 1.6200000047683716D, z, pitch, yaw, Position.ANIMATION_MODE_ALL);
+		} else {
+			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_MOVE, version);
+			VarNumberSerializer.writeVarLong(serializer, entity.getId());
 			MiscSerializer.writeLFloat(serializer, (float) x);
 			MiscSerializer.writeLFloat(serializer, (float) y);
 			MiscSerializer.writeLFloat(serializer, (float) z);
@@ -28,8 +37,8 @@ public class EntityTeleport extends MiddleEntityTeleport {
 			serializer.writeByte(yaw); //head yaw actually
 			serializer.writeByte(yaw);
 			serializer.writeBoolean(onGround);
-			serializer.writeBoolean(false); //teleported
-			return RecyclableSingletonList.create(serializer);
+			serializer.writeBoolean(teleported);
+			return serializer;
 		}
 	}
 
