@@ -209,13 +209,15 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 						if ((!flag2 || !flag3) && !(this.tracker instanceof EntityArrow)) {
 							if (flag2) {
 								defaultpacket = new PacketPlayOutEntity.PacketPlayOutRelEntityMove(this.tracker.getId(), l2, i3, j3, this.tracker.onGround);
+								pepacket = new PacketPlayOutEntityTeleport(this.tracker);
 							} else if (flag3) {
 								defaultpacket = new PacketPlayOutEntity.PacketPlayOutEntityLook(this.tracker.getId(), (byte) j2, (byte) k2, this.tracker.onGround);
+								pepacket = defaultpacket;
 							}
 						} else {
 							defaultpacket = new PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook(this.tracker.getId(), l2, i3, j3, (byte) j2, (byte) k2, this.tracker.onGround);
+							pepacket = new PacketPlayOutEntityTeleport(this.tracker);
 						}
-						pepacket = new PacketPlayOutEntityTeleport(this.tracker);
 					} else {
 						this.onGround = this.tracker.onGround;
 						this.moveUpdateTicks = 0;

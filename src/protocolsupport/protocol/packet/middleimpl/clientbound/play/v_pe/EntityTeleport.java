@@ -16,15 +16,16 @@ public class EntityTeleport extends MiddleEntityTeleport {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		if(!cache.containsWatchedEntity(entityId)) {
+		NetworkEntity entity = cache.getWatchedEntity(entityId);
+		if(entity == null) {
 			return RecyclableEmptyList.get();
 		} else {
-			return RecyclableSingletonList.create(create(cache.getWatchedEntity(entityId), x, y, z, pitch, yaw, onGround, true, version));
+			return RecyclableSingletonList.create(create(entity, x, y, z, pitch, entity.getHeadYaw(), yaw, onGround, false, version));
 		}
 		
 	}
 	
-	public static ClientBoundPacketData create(NetworkEntity entity, double x, double y, double z, byte pitch, byte yaw, boolean onGround, boolean teleported, ProtocolVersion version) {
+	public static ClientBoundPacketData create(NetworkEntity entity, double x, double y, double z, byte pitch, byte headYaw, byte yaw, boolean onGround, boolean teleported, ProtocolVersion version) {
 		if ((entity != null) && (entity.getType() == NetworkEntityType.PLAYER)) {
 			return Position.create(version, entity.getId(), x, y + 1.6200000047683716D, z, pitch, yaw, Position.ANIMATION_MODE_ALL);
 		} else {
@@ -34,7 +35,7 @@ public class EntityTeleport extends MiddleEntityTeleport {
 			MiscSerializer.writeLFloat(serializer, (float) y);
 			MiscSerializer.writeLFloat(serializer, (float) z);
 			serializer.writeByte(pitch);
-			serializer.writeByte(yaw); //head yaw actually
+			serializer.writeByte(headYaw);
 			serializer.writeByte(yaw);
 			serializer.writeBoolean(onGround);
 			serializer.writeBoolean(teleported);

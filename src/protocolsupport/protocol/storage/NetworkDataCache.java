@@ -81,25 +81,37 @@ public class NetworkDataCache {
 	public void addWatchedEntity(NetworkEntity entity) {
 		watchedEntities.put(entity.getId(), entity);
 	}
-<<<<<<< HEAD
-=======
 	
-	public void updateWatchedDataCache(int entityId, DataCache updateWith) {
-		watchedEntities.get(entityId).updateDataCache(updateWith);
+	public void addWatchedEntity(NetworkEntity entity, Vector pos, byte yaw, byte pitch) {
+		entity.updatePosition(pos);
+		entity.updateRotation(yaw, pitch);
+		addWatchedEntity(entity);
 	}
 	
 	public void updateWatchedPosition(int entityId, Vector updateWith) {
+		if(watchedEntities.containsKey(entityId))
 		watchedEntities.get(entityId).updatePosition(updateWith);
 	}
 	
 	public void updateWatchedRelPosition(int entityId, Vector updateWith) {
-		updateWatchedPosition(entityId, watchedEntities.get(entityId).getPosition().add(updateWith));
+		if(watchedEntities.containsKey(entityId))
+		watchedEntities.get(entityId).updateRelPosition(updateWith);
 	}
 	
 	public void updateWatchedRotation(int entityId, byte yaw, byte pitch) {
+		if(watchedEntities.containsKey(entityId))
 		watchedEntities.get(entityId).updateRotation(yaw, pitch);
 	}
->>>>>>> 911359ff... Attempt 1 at entityLook.
+	
+	public void updateWatchedHeadRotation(int entityId, byte headYaw) {
+		if(watchedEntities.containsKey(entityId))
+		watchedEntities.get(entityId).updateHeadYaw(headYaw);
+	}
+	
+	public void updateWatchedOnGround(int entityId, boolean onGround) {
+		if(watchedEntities.containsKey(entityId))
+		watchedEntities.get(entityId).updateOnGround(onGround);
+	}
 
 	public void addWatchedSelfPlayer(NetworkEntity player) {
 		this.player = player;

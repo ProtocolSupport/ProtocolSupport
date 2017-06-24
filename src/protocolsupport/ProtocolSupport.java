@@ -73,7 +73,7 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(BlockStorageReader.class.getName());
 			ServerPlatform.get().inject();
 			PESkin.init();
-			server = new MCPEServer(2222);
+			server = new MCPEServer(19138);
 		} catch (Throwable t) {
 			getLogger().log(Level.SEVERE, "Error when loading, make sure you are using supported server version", t);
 			Bukkit.shutdown();

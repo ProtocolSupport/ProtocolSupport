@@ -28,6 +28,7 @@ public abstract class MiddleEntityTeleport extends MiddleEntity {
 	public void handle() {
 		cache.updateWatchedPosition(entityId, new Vector(x, y, z));
 		cache.updateWatchedRotation(entityId, yaw, pitch);
+		cache.updateWatchedOnGround(entityId, onGround);
 	}
 
 }

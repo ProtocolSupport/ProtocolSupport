@@ -52,13 +52,20 @@ public class NetworkEntity {
 		return cache;
 	}
 
-	private Vector position = new Vector();
-	private byte yaw;
-	private byte pitch;
+	private Vector position;
+	private Byte headYaw;
+	private Byte yaw;
+	private Byte pitch;
+	private Boolean onGround = true;
 	
 	
 	public void updatePosition(Vector updateWith) {
 		position = updateWith;
+	}
+	
+	public void updateRelPosition(Vector updateWith) {
+		position = position.add(updateWith);
+		System.out.println("Rel pos: " + position.toString());
 	}
 	
 	public Vector getPosition() {
@@ -70,12 +77,29 @@ public class NetworkEntity {
 		pitch = updatePitch;
 	}
 	
+	public void updateHeadYaw(byte updateWith) {
+		headYaw = updateWith;
+	}
+	
+	public byte getHeadYaw() {
+		if(headYaw == null) return yaw;
+		return headYaw;
+	}
+	
 	public byte getYaw() {
 		return yaw;
 	}
 	
 	public byte getPitch() {
 		return pitch;
+	}
+	
+	public void updateOnGround(boolean updateWith) {
+		onGround = updateWith;
+	}
+	
+	public boolean getOnGround() {
+		return onGround;
 	}
 	
 	@Override

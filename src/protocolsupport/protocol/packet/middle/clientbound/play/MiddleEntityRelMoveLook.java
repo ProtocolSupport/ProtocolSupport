@@ -26,8 +26,9 @@ public abstract class MiddleEntityRelMoveLook extends MiddleEntity {
 
 	@Override
 	public void handle() {
-		cache.updateWatchedPosition(entityId, new Vector(relX, relY, relZ));
+		cache.updateWatchedRelPosition(entityId, new Vector(relX, relY, relZ));
 		cache.updateWatchedRotation(entityId, (byte) yaw, (byte) pitch);
+		cache.updateWatchedOnGround(entityId, onGround);
 	}
 	
 }
