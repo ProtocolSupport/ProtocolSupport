@@ -2,6 +2,8 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import java.util.UUID;
 
+import org.bukkit.util.Vector;
+
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
@@ -40,7 +42,7 @@ public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 
 	@Override
 	public void handle() {
-		cache.addWatchedEntity(entity);
+		cache.addWatchedEntity(entity, new Vector(x, y, z), (byte) yaw, (byte) pitch);
 	}
 
 }
