@@ -14,7 +14,7 @@ public abstract class MiddleEntityHeadRotation extends MiddleEntity {
 	
 	@Override
 	public void handle() {
-		cache.updateWatchedHeadRotation(headRot, headRot);
+		cache.updateWatchedHeadRotation(entityId, headRot);
 	}
 
 }

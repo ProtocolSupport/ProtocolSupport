@@ -19,6 +19,7 @@ public abstract class MiddleEntityLook extends MiddleEntity {
 	@Override
 	public void handle() {
 		cache.updateWatchedRotation(entityId, (byte) yaw, (byte) pitch);
+		cache.updateWatchedHeadRotation(entityId, (byte) yaw);
 		cache.updateWatchedOnGround(entityId, onGround);
 	}
 

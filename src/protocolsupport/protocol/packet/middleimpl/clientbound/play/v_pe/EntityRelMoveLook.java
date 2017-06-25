@@ -15,7 +15,7 @@ public class EntityRelMoveLook extends MiddleEntityRelMoveLook {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		NetworkEntity entity = cache.getWatchedEntity(entityId);
-		if(entity == null) {
+		if(entity == null || cache.isSelf(entityId)) {
 			return RecyclableEmptyList.get();
 		} else {
 			Vector pos = entity.getPosition();

@@ -45,11 +45,15 @@ public class NetworkEntity {
 	public NetworkEntityType getType() {
 		return type;
 	}
+	
+	public boolean isOfType(NetworkEntityType checkWith) {
+		return type.isOfType(checkWith);
+	}
 
-	private final DataCache cache = new DataCache();
+	private final DataCache data = new DataCache();
 
 	public DataCache getDataCache() {
-		return cache;
+		return data;
 	}
 
 	private Vector position;
@@ -63,9 +67,9 @@ public class NetworkEntity {
 		position = updateWith;
 	}
 	
-	public void updateRelPosition(Vector updateWith) {
-		position = position.add(updateWith);
-		System.out.println("Rel pos: " + position.toString());
+	public void updateRelPosition(int relX, int relY, int relZ) {
+		//X and Y are known. Relative is send (a * 32 - x * 32) * 128 = y                   y / 128 = a32 - x32         (y/128) + x32 = a 32               ((y / 128) + 32x) / 32 = a
+		position = new Vector(((relX / 128) + (position.getX() * 32)) / 32, ((relY / 128) + (position.getY() * 32)) / 32, ((relZ / 128) + (position.getZ() * 32)) / 32);
 	}
 	
 	public Vector getPosition() {

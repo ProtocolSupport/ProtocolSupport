@@ -17,17 +17,17 @@ public class EntityTeleport extends MiddleEntityTeleport {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		NetworkEntity entity = cache.getWatchedEntity(entityId);
-		if(entity == null) {
+		if(entity == null || cache.isSelf(entityId)) {
 			return RecyclableEmptyList.get();
 		} else {
-			return RecyclableSingletonList.create(create(entity, x, y, z, pitch, entity.getHeadYaw(), yaw, onGround, false, version));
+			return RecyclableSingletonList.create(create(entity, x, y, z, pitch, yaw, yaw, onGround, true, version));
 		}
 		
 	}
 	
 	public static ClientBoundPacketData create(NetworkEntity entity, double x, double y, double z, byte pitch, byte headYaw, byte yaw, boolean onGround, boolean teleported, ProtocolVersion version) {
 		if ((entity != null) && (entity.getType() == NetworkEntityType.PLAYER)) {
-			return Position.create(version, entity.getId(), x, y + 1.6200000047683716D, z, pitch, yaw, Position.ANIMATION_MODE_ALL);
+			return Position.create(version, entity.getId(), x, y + 1.6200000047683716D, z, pitch, headYaw, yaw, onGround, Position.ANIMATION_MODE_ALL);
 		} else {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_MOVE, version);
 			VarNumberSerializer.writeVarLong(serializer, entity.getId());

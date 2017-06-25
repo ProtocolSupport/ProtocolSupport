@@ -21,14 +21,14 @@ public class Position extends MiddlePosition {
 		if (!cache.isChunkMarkedAsSent(chunkX, chunkZ)) {
 			packets.add(Chunk.createEmptyChunk(version, chunkX, chunkZ));
 		}
-		packets.add(create(version, cache.getSelfPlayerEntityId(), x, y, z, pitch, yaw, ANIMATION_MODE_TELEPORT));
+		packets.add(create(version, entityId, x, y, z, pitch, yaw, yaw, true, ANIMATION_MODE_TELEPORT));
 		return packets;
 	}
 
 	public static final int ANIMATION_MODE_ALL = 0;
 	public static final int ANIMATION_MODE_TELEPORT = 2;
 
-	public static ClientBoundPacketData create(ProtocolVersion version, int entityId, double x, double y, double z, float pitch, float yaw, int mode) {
+	public static ClientBoundPacketData create(ProtocolVersion version, int entityId, double x, double y, double z, float pitch, float headYaw, float yaw, boolean onGround, int mode) {
 		float realYaw = (float) (yaw * (360D/256D));
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_MOVE, version);
 		VarNumberSerializer.writeVarLong(serializer, entityId);
@@ -36,10 +36,10 @@ public class Position extends MiddlePosition {
 		MiscSerializer.writeLFloat(serializer, (float) y);
 		MiscSerializer.writeLFloat(serializer, (float) z);
 		MiscSerializer.writeLFloat(serializer, pitch);
+		MiscSerializer.writeLFloat(serializer, headYaw);
 		MiscSerializer.writeLFloat(serializer, realYaw);
-		MiscSerializer.writeLFloat(serializer, realYaw); //head yaw actually
 		serializer.writeByte(mode);
-		serializer.writeBoolean(false); //on ground
+		serializer.writeBoolean(onGround);
 		VarNumberSerializer.writeVarLong(serializer, 0);
 		return serializer;
 	}

@@ -93,9 +93,9 @@ public class NetworkDataCache {
 		watchedEntities.get(entityId).updatePosition(updateWith);
 	}
 	
-	public void updateWatchedRelPosition(int entityId, Vector updateWith) {
+	public void updateWatchedRelPosition(int entityId, int relX, int relY, int relZ) {
 		if(watchedEntities.containsKey(entityId))
-		watchedEntities.get(entityId).updateRelPosition(updateWith);
+		watchedEntities.get(entityId).updateRelPosition(relX, relY, relZ);
 	}
 	
 	public void updateWatchedRotation(int entityId, byte yaw, byte pitch) {
@@ -111,6 +111,15 @@ public class NetworkDataCache {
 	public void updateWatchedOnGround(int entityId, boolean onGround) {
 		if(watchedEntities.containsKey(entityId))
 		watchedEntities.get(entityId).updateOnGround(onGround);
+	}
+	
+	public boolean isSelf(int entityId) {
+		return (this.getSelfPlayerEntityId() == entityId);
+	}
+	
+	public NetworkEntity getWatchedSelf() {
+		if(!watchedEntities.contains(getSelfPlayerEntityId())) return player;
+		return watchedEntities.get(this.getSelfPlayerEntityId());
 	}
 
 	public void addWatchedSelfPlayer(NetworkEntity player) {
