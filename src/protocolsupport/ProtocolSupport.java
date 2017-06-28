@@ -18,6 +18,7 @@ import protocolsupport.protocol.typeremapper.chunk.BlockStorageReader;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacySound;
+import protocolsupport.protocol.typeremapper.pe.PESkin;
 import protocolsupport.protocol.typeremapper.skipper.id.IdSkipper;
 import protocolsupport.protocol.typeremapper.tileentity.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherObjectIndex;
@@ -32,8 +33,11 @@ import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.zplatform.ServerPlatform;
+import protocolsupport.zplatform.pe.MCPEServer;
 
 public class ProtocolSupport extends JavaPlugin {
+
+	private MCPEServer server;
 
 	@Override
 	public void onLoad() {
@@ -68,6 +72,8 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(TileNBTRemapper.class.getName());
 			Class.forName(BlockStorageReader.class.getName());
 			ServerPlatform.get().inject();
+			PESkin.init();
+			server = new MCPEServer(2222);
 		} catch (Throwable t) {
 			getLogger().log(Level.SEVERE, "Error when loading, make sure you are using supported server version", t);
 			Bukkit.shutdown();
@@ -76,14 +82,24 @@ public class ProtocolSupport extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		try {
+			ServerPlatform.get().injectOnEnable();
+		} catch (Throwable t) {
+			getLogger().log(Level.SEVERE, "Error when loading, make sure you are using supported server version", t);
+			Bukkit.shutdown();
+		}
 		getCommand("protocolsupport").setExecutor(new CommandHandler());
 		getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 		getServer().getPluginManager().registerEvents(new CommandListener(), this);
+		Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+			server.start();
+		});
 	}
 
 	@Override
 	public void onDisable() {
 		Bukkit.shutdown();
+		server.stop();
 	}
 
 	public static void logWarning(String message) {

@@ -19,6 +19,10 @@ public abstract class MiddleUseEntity extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
+		return RecyclableSingletonList.create(create(entityId, action, interactedAt, usedHand));
+	}
+	
+	public static ServerBoundPacketData create(int entityId, Action action, Vector interactedAt, int usedHand) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_USE_ENTITY);
 		VarNumberSerializer.writeVarInt(creator, entityId);
 		MiscSerializer.writeEnum(creator, action);
@@ -38,10 +42,10 @@ public abstract class MiddleUseEntity extends ServerBoundMiddlePacket {
 				break;
 			}
 		}
-		return RecyclableSingletonList.create(creator);
+		return creator;
 	}
 
-	protected enum Action {
+	public enum Action {
 		INTERACT, ATTACK, INTERACT_AT
 	}
 

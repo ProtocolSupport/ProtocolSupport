@@ -17,14 +17,18 @@ public abstract class MiddleBlockDig extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
+		return RecyclableSingletonList.create(create(status, position, face));
+	}
+
+	public static ServerBoundPacketData create(Action status, Position position, int face) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_BLOCK_DIG);
 		MiscSerializer.writeEnum(creator, status);
 		PositionSerializer.writePosition(creator, position);
 		creator.writeByte(face);
-		return RecyclableSingletonList.create(creator);
+		return creator;
 	}
 
-	protected static enum Action {
+	public static enum Action {
 		START_DIG, CANCEL_DIG, FINISH_DIG, DROP_ITEM_ALL, DROP_ITEM_SINGLE, FINISH_USE, SWAP_ITEMS
 	}
 
