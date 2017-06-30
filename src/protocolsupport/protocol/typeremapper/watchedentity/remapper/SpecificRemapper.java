@@ -239,8 +239,8 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Pig.BOOST_TIME, 14) {}, ProtocolVersionsHelper.RANGE__1_11_1__1_12)
 	),
 	RABBIT(NetworkEntityType.RABBIT, SpecificRemapper.AGEABLE,
-		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Rabbit.VARIANT, 13) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
-		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Rabbit.VARIANT, 12) {}, ProtocolVersionsHelper.ALL_1_9),
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Rabbit.VARIANT, 13) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Rabbit.VARIANT, 12) {}, ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNumberToByte(DataWatcherObjectIndex.Rabbit.VARIANT, 18), ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	SHEEP(NetworkEntityType.SHEEP, SpecificRemapper.AGEABLE,
