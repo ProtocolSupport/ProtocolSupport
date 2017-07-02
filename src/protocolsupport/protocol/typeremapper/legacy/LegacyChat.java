@@ -2,6 +2,7 @@ package protocolsupport.protocol.typeremapper.legacy;
 
 import org.bukkit.ChatColor;
 
+import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.modifiers.Modifier;
 import protocolsupport.utils.Utils;
@@ -12,6 +13,7 @@ public class LegacyChat {
 		if (component == null) {
 			return "";
 		}
+		System.err.println(ChatAPI.toJSON(component));
 		final StringBuilder out = new StringBuilder();
 		toTextSingle(out, locale, component, component.getModifier());
 		return out.toString();
@@ -43,9 +45,6 @@ public class LegacyChat {
 		}
 		out.append(component.getValue(locale));
 		for (BaseComponent child : component.getSiblings()) {
-			if (out.length() > 0) {
-				out.append(ChatColor.RESET);
-			}
 			Modifier childmodifier = child.getModifier();
 			Modifier combinedmodifier = new Modifier();
 			combinedmodifier.setColor(childmodifier.hasColor() ? childmodifier.getColor() : modifier.getColor());
@@ -55,6 +54,7 @@ public class LegacyChat {
 			combinedmodifier.setStrikethrough(childmodifier.isStrikethrough() != null ? childmodifier.isStrikethrough() : modifier.isStrikethrough());
 			combinedmodifier.setRandom(childmodifier.isRandom() != null ? childmodifier.isRandom() : modifier.isRandom());
 			toTextSingle(out, locale, child, combinedmodifier);
+			out.append(ChatColor.RESET);
 		}
 	}
 
