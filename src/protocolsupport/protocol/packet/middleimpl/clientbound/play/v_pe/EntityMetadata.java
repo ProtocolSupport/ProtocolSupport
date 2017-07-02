@@ -20,10 +20,11 @@ public class EntityMetadata extends MiddleEntityMetadata {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		if(!cache.containsWatchedEntity(entityId)) {
+		NetworkEntity entity = cache.getWatchedEntity(entityId);
+		if(entity == null) {
 			return RecyclableEmptyList.get();
 		} else {
-			return RecyclableSingletonList.create(create(cache.getWatchedEntity(entityId), metadata, version));
+			return RecyclableSingletonList.create(create(entity, metadata, version));
 		}
 	}
 	
