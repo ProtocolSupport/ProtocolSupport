@@ -10,6 +10,7 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.typeremapper.legacy.LegacyChatJson;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -49,8 +50,8 @@ public class Advancements extends MiddleAdvancements {
 	}
 
 	protected static void writeAdvancementDisplay(ByteBuf to, ProtocolVersion version, String locale, AdvancementDisplay display) {
-		StringSerializer.writeString(to, version, ChatAPI.toJSON(display.title));
-		StringSerializer.writeString(to, version, ChatAPI.toJSON(display.description));
+		StringSerializer.writeString(to, version, ChatAPI.toJSON(LegacyChatJson.convert(display.title, version, locale)));
+		StringSerializer.writeString(to, version, ChatAPI.toJSON(LegacyChatJson.convert(display.description, version, locale)));
 		ItemStackSerializer.writeItemStack(to, version, locale, display.icon, false);
 		MiscSerializer.writeEnum(to, display.frametype);
 		to.writeInt(display.flags);

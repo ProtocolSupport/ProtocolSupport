@@ -2,7 +2,6 @@ package protocolsupport.protocol.typeremapper.legacy;
 
 import org.bukkit.ChatColor;
 
-import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.modifiers.Modifier;
 import protocolsupport.utils.Utils;
@@ -13,7 +12,6 @@ public class LegacyChat {
 		if (component == null) {
 			return "";
 		}
-		System.err.println(ChatAPI.toJSON(component));
 		final StringBuilder out = new StringBuilder();
 		toTextSingle(out, locale, component, component.getModifier());
 		return out.toString();

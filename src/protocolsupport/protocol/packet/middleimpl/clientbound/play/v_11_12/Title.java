@@ -7,6 +7,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleTitle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.legacy.LegacyChatJson;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -20,7 +21,7 @@ public class Title extends MiddleTitle {
 			case SET_TITLE:
 			case SET_SUBTITLE:
 			case SET_ACTION_BAR: {
-				StringSerializer.writeString(serializer, version, ChatAPI.toJSON(message));
+				StringSerializer.writeString(serializer, version, ChatAPI.toJSON(LegacyChatJson.convert(message, version, cache.getLocale())));
 				break;
 			}
 			case SET_TIMES: {
