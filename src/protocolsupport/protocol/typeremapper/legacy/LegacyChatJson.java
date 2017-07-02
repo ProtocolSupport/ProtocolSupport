@@ -21,7 +21,7 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 public class LegacyChatJson {
 
 	public static BaseComponent convert(BaseComponent message, ProtocolVersion version, String locale) {
-		return fixSingleComponent(message, version, locale);
+		return replaceComponent(fixSingleComponent(message, version, locale), version, locale);
 	}
 
 	private static final EnumMap<ProtocolVersion, List<ComponentConverter>> registry = new EnumMap<>(ProtocolVersion.class);
@@ -86,15 +86,17 @@ public class LegacyChatJson {
 
 	private static List<BaseComponent> replaceComponents(List<BaseComponent> oldlist, ProtocolVersion version, String locale) {
 		List<BaseComponent> newlist = new ArrayList<>();
-		List<ComponentConverter> tlist = registry.getOrDefault(version, Collections.emptyList());
 		for (BaseComponent old : oldlist) {
-			old = fixSingleComponent(old, version, locale);
-			for (ComponentConverter r : tlist) {
-				old = r.convert(version, locale, old);
-			}
-			newlist.add(old);
+			newlist.add(replaceComponent(fixSingleComponent(old, version, locale), version, locale));
 		}
 		return newlist;
+	}
+
+	private static BaseComponent replaceComponent(BaseComponent old, ProtocolVersion version, String locale) {
+		for (ComponentConverter r : registry.getOrDefault(version, Collections.emptyList())) {
+			old = r.convert(version, locale, old);
+		}
+		return old;
 	}
 
 	@FunctionalInterface
