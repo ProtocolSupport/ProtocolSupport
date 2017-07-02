@@ -1,6 +1,5 @@
 package protocolsupport.protocol.utils.i18n;
 
-import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,13 +29,6 @@ public class I18N {
 				continue;
 			}
 			i18n.put(split[0], split[1]);
-		}
-		String filelang = getI18N("language.code");
-		if (filelang == null) {
-			throw new IllegalArgumentException("Invalid language: code not found");
-		}
-		if (!filelang.equalsIgnoreCase(lang)) {
-			throw new IllegalArgumentException(MessageFormat.format("Invalid language: expected {0} got {1}", lang, filelang));
 		}
 	}
 

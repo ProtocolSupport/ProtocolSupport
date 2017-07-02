@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 
 import io.netty.util.ResourceLeakDetector;
 import io.netty.util.ResourceLeakDetector.Level;
+import protocolsupport.ProtocolSupport;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
@@ -20,15 +21,24 @@ import protocolsupport.zplatform.ServerPlatform;
 
 public class CommandHandler implements CommandExecutor, TabCompleter {
 
+	private final ProtocolSupport plugin;
+	public CommandHandler(ProtocolSupport plugin) {
+		this.plugin = plugin;
+	}
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (!sender.hasPermission("protocolsupport.admin")) {
 			sender.sendMessage(ChatColor.RED + "You have no power here!");
 			return true;
 		}
+		if ((args.length == 1) && args[0].equalsIgnoreCase("buildinfo")) {
+			sender.sendMessage(ChatColor.GOLD.toString() + plugin.getBuildInfo());
+			return true;
+		}
 		if ((args.length == 1) && args[0].equalsIgnoreCase("list")) {
 			for (ProtocolVersion version : ProtocolVersion.values()) {
-				if (version.getName() != null) {
+				if (version.isSupported()) {
 					sender.sendMessage(ChatColor.GOLD+"["+version.getName()+"]: "+ChatColor.GREEN+getPlayersStringForProtocol(version));
 				}
 			}

@@ -29,8 +29,11 @@ sourceCompatibility = 1.8
 
 import de.undercouch.gradle.tasks.download.Download
 
-def dllibs = new File('dllibs')
+File dllibs = new File('dllibs')
 dllibs.mkdirs()
+
+File gen = new File('gen')
+gen.mkdirs();
 
 task updateLibs(type: Download) {
 	src([
@@ -62,6 +65,35 @@ sourceSets {
 	}
 }
 
+
+task generateLocaleList(type: DefaultTask) {
+	ArrayList<String> locales = new ArrayList<String>();
+	for (String filename : new File(sourceSets.main.resources.srcDirs.iterator().next(), "resources/i18n").list()) {
+		String[] split = filename.split("[.]");
+		if (split.length == 2 && split[1].equals("lang")) {
+			locales.add(split[0]);
+		}
+	}
+	File languageslist = new File(gen, "resources/i18n/languages");
+	languageslist.getParentFile().mkdirs();
+	languageslist.createNewFile();
+	PrintWriter writer = new PrintWriter(languageslist);
+	for (String locale : locales) {
+		writer.println(locale);
+	}
+	writer.close();
+}
+
+task generateInfo(type: DefaultTask) {
+	Properties properties = new Properties();
+	properties.setProperty("buildtime", new Date().format("yyyy.MM.dd 'at' HH:mm:ss z"));
+	properties.setProperty("buildhost", System.getProperty("protocolsupport.buildhost", "unknown"));
+	properties.setProperty("buildnumber", System.getProperty("protocolsupport.buildnumber", "unknown"));
+	File buildinfo = new File(gen, "resources/buildinfo");
+	buildinfo.createNewFile();
+	properties.store(new FileOutputStream(buildinfo), "Build info");
+}
+
 repositories {
 	mavenCentral()
 }
@@ -81,6 +113,8 @@ shadowJar {
 
 	from sourceSets.main.java.srcDirs
 	from 'LICENSE'
+	from gen
+
 	minimizeJar = true
 
 	destinationDir = file('target')
@@ -91,6 +125,9 @@ shadowJar {
 	relocate 'gnu.trove', 'protocolsupport.libs.gnu.trove'
 	relocate 'com.google.gson', 'protocolsupport.libs.com.google.gson'
 }
+
+shadowJar.dependsOn(generateInfo)
+shadowJar.dependsOn(generateLocaleList)
 
 jar.enabled = false
 jar.finalizedBy(shadowJar)
