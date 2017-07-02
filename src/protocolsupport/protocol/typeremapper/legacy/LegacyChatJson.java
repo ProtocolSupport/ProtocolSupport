@@ -47,7 +47,7 @@ public class LegacyChatJson {
 		register((version, locale, component) -> {
 			if (component instanceof TranslateComponent) {
 				TranslateComponent tcomponent = (TranslateComponent) component;
-				if (!LegacyTranslation.isSupported(tcomponent.getTranslationKey(), version)) {
+				if (!LegacyI18NData.isSupported(tcomponent.getTranslationKey(), version)) {
 					return new TextComponent(tcomponent.getValue(locale));
 				}
 			}

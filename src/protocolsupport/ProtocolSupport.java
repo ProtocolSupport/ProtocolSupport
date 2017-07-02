@@ -20,6 +20,7 @@ import protocolsupport.protocol.typeremapper.chunk.BlockStorageReader;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacySound;
+import protocolsupport.protocol.typeremapper.legacy.LegacyI18NData;
 import protocolsupport.protocol.typeremapper.skipper.id.IdSkipper;
 import protocolsupport.protocol.typeremapper.tileentity.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherObjectIndex;
@@ -70,6 +71,7 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(SoundData.class.getName());
 			Class.forName(KeybindData.class.getName());
 			Class.forName(I18NData.class.getName());
+			Class.forName(LegacyI18NData.class.getName());
 			Class.forName(Compressor.class.getName());
 			Class.forName(ServerBoundPacket.class.getName());
 			Class.forName(ClientBoundPacket.class.getName());

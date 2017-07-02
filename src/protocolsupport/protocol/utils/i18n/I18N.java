@@ -1,5 +1,7 @@
 package protocolsupport.protocol.utils.i18n;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,6 +32,10 @@ public class I18N {
 			}
 			i18n.put(split[0], split[1]);
 		}
+	}
+
+	public Collection<String> getKeys() {
+		return Collections.unmodifiableCollection(i18n.keySet());
 	}
 
 	public String getI18N(String key) {

@@ -18,17 +18,18 @@ public class I18NData {
 		new BufferedReader(new InputStreamReader(Utils.getResource("i18n/languages"))).lines().forEach(locale -> loadLocale(locale));
 	}
 
-	private static final I18N defaulti18n = i18ns.get(DEFAULT_LOCALE);
-
-	private static I18N loadLocale(String locale) {
+	private static void loadLocale(String locale) {
 		I18N i18n = new I18N(locale);
 		i18n.load(new BufferedReader(new InputStreamReader(Utils.getResource("i18n/" + locale + ".lang"))).lines().collect(Collectors.toList()));
-		return i18n;
+		i18ns.put(locale, i18n);
 	}
 
-	public static String i18n(String lang, String key, String... args) {
-		I18N i18n = i18ns.getOrDefault(lang, defaulti18n);
-		return String.format(i18n.getI18N(key), (Object[]) args);
+	public static I18N getI18N(String locale) {
+		return i18ns.getOrDefault(locale, i18ns.get(DEFAULT_LOCALE));
+	}
+
+	public static String i18n(String locale, String key, String... args) {
+		return String.format(getI18N(locale).getI18N(key), (Object[]) args);
 	}
 
 }
