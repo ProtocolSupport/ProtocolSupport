@@ -3,6 +3,7 @@ package protocolsupport.api;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.EnumMap;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.Validate;
 
@@ -288,6 +289,19 @@ public enum ProtocolVersion {
 				throw new IllegalArgumentException(MessageFormat.format("No supported versions for protocol type {0}", type));
 			}
 		}
+	}
+
+	private static final ProtocolVersion[] allSupported = Arrays.stream(ProtocolVersion.values())
+	.filter(ProtocolVersion::isSupported)
+	.collect(Collectors.toList())
+	.toArray(new ProtocolVersion[0]);
+
+	/**
+	 * Returns all supported protocol versions
+	 * @return all supported protocol versions
+	 */
+	public static ProtocolVersion[] getAllSupported() {
+		return allSupported.clone();
 	}
 
 	/**
