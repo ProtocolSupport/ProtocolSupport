@@ -7,7 +7,7 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public enum GameMode {
 
-	SURVIVAL(0), CREATIVE(1), ADVENTURE(2), SPECTATOR(3);
+	NOT_SET(-1), SURVIVAL(0), CREATIVE(1), ADVENTURE(2), SPECTATOR(3);
 
 	private static final ArrayMap<GameMode> byId = CollectionsUtils.makeEnumMappingArrayMap(GameMode.class, GameMode::getId);
 
