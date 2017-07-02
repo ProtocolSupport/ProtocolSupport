@@ -12,7 +12,7 @@ import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 public class EnchantFilterNBTSpecificRemapper extends ItemStackNBTSpecificRemapper {
 
 	@Override
-	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, ItemStackWrapper itemstack, NBTTagCompoundWrapper tag) {
+	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, String locale, ItemStackWrapper itemstack, NBTTagCompoundWrapper tag) {
 		if (tag.hasKeyOfType("ench", NBTTagCompoundWrapper.TYPE_LIST)) {
 			tag.setList("ench", filterEnchantList(version, tag.getList("ench", NBTTagCompoundWrapper.TYPE_COMPOUND)));
 		}

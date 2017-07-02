@@ -25,24 +25,24 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class ItemStackSerializer {
 
-	public static ItemStackWrapper readItemStack(ByteBuf from, ProtocolVersion version) {
+	public static ItemStackWrapper readItemStack(ByteBuf from, ProtocolVersion version, String locale) {
 		int type = from.readShort();
 		if (type >= 0) {
 			ItemStackWrapper itemstack = ServerPlatform.get().getWrapperFactory().createItemStack(type);
 			itemstack.setAmount(from.readByte());
 			itemstack.setData(from.readShort());
 			itemstack.setTag(readTag(from, version));
-			return ItemStackRemapper.remapServerbound(version, itemstack.cloneItemStack());
+			return ItemStackRemapper.remapServerbound(version, locale, itemstack.cloneItemStack());
 		}
 		return ServerPlatform.get().getWrapperFactory().createNullItemStack();
 	}
 
-	public static void writeItemStack(ByteBuf to, ProtocolVersion version, ItemStackWrapper itemstack, boolean fireEvent) {
+	public static void writeItemStack(ByteBuf to, ProtocolVersion version, String locale, ItemStackWrapper itemstack, boolean fireEvent) {
 		if (itemstack.isNull()) {
 			to.writeShort(-1);
 			return;
 		}
-		ItemStackWrapper remapped = ItemStackRemapper.remapClientbound(version, itemstack.cloneItemStack());
+		ItemStackWrapper remapped = ItemStackRemapper.remapClientbound(version, locale, itemstack.cloneItemStack());
 		if (fireEvent && (ItemStackWriteEvent.getHandlerList().getRegisteredListeners().length > 0)) {
 			ItemStackWriteEvent event = new InternalItemStackWriteEvent(version, itemstack, remapped);
 			Bukkit.getPluginManager().callEvent(event);

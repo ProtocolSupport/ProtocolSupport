@@ -11,7 +11,7 @@ import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 public class BookPagesToLegacyTextSpecificRemapper extends ItemStackNBTSpecificRemapper {
 
 	@Override
-	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, ItemStackWrapper itemstack, NBTTagCompoundWrapper tag) {
+	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, String locale, ItemStackWrapper itemstack, NBTTagCompoundWrapper tag) {
 		if (tag.hasKeyOfType("pages", NBTTagCompoundWrapper.TYPE_LIST)) {
 			NBTTagListWrapper pages = tag.getList("pages", NBTTagCompoundWrapper.TYPE_STRING);
 			NBTTagListWrapper newpages = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();

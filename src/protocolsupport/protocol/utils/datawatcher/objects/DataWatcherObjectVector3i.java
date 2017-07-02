@@ -9,12 +9,12 @@ import protocolsupport.protocol.utils.types.Position;
 public class DataWatcherObjectVector3i extends DataWatcherObject<Position> {
 
 	@Override
-	public void readFromStream(ByteBuf from, ProtocolVersion version) {
+	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {
 		value = PositionSerializer.readLegacyPositionI(from);
 	}
 
 	@Override
-	public void writeToStream(ByteBuf to, ProtocolVersion version) {
+	public void writeToStream(ByteBuf to, ProtocolVersion version, String locale) {
 		PositionSerializer.writeLegacyPositionI(to, value);
 	}
 

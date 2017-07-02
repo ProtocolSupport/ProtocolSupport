@@ -148,21 +148,21 @@ public class ItemStackRemapper {
 		Arrays.stream(Material.values()).forEach(material -> registerClientboundRemapper(material, enchantfilter, ProtocolVersionsHelper.ALL_PC));
 	}
 
-	public static ItemStackWrapper remapClientbound(ProtocolVersion version, ItemStackWrapper itemstack) {
-		return remap(clientbound_remapper_registry, version, itemstack);
+	public static ItemStackWrapper remapClientbound(ProtocolVersion version, String locale, ItemStackWrapper itemstack) {
+		return remap(clientbound_remapper_registry, version, locale, itemstack);
 	}
 
-	public static ItemStackWrapper remapServerbound(ProtocolVersion version, ItemStackWrapper itemstack) {
-		return remap(serverbound_remapper_registry, version, itemstack);
+	public static ItemStackWrapper remapServerbound(ProtocolVersion version, String locale, ItemStackWrapper itemstack) {
+		return remap(serverbound_remapper_registry, version, locale, itemstack);
 	}
 
-	private static ItemStackWrapper remap(TIntObjectHashMap<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>> registry, ProtocolVersion version, ItemStackWrapper itemstack) {
+	private static ItemStackWrapper remap(TIntObjectHashMap<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>> registry, ProtocolVersion version, String locale, ItemStackWrapper itemstack) {
 		EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>> map = registry.get(itemstack.getTypeId());
 		if (map != null) {
 			List<ItemStackSpecificRemapper> transformers = map.get(version);
 			if (transformers != null) {
 				for (ItemStackSpecificRemapper transformer : transformers) {
-					itemstack = transformer.remap(version, itemstack);
+					itemstack = transformer.remap(version, locale, itemstack);
 				}
 				return itemstack;
 			}

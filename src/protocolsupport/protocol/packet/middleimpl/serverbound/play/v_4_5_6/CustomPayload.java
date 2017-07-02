@@ -30,9 +30,9 @@ public class CustomPayload extends MiddleCustomPayload {
 		if (tag.equals("MC|ItemName")) {
 			ArraySerializer.writeByteArray(newdata, ProtocolVersionsHelper.LATEST_PC, olddata);
 		} else if (tag.equals("MC|BSign") || tag.equals("MC|BEdit")) {
-			ItemStackWrapper book = ItemStackSerializer.readItemStack(olddata, version);
+			ItemStackWrapper book = ItemStackSerializer.readItemStack(olddata, version, cache.getLocale());
 			book.setType(Material.BOOK_AND_QUILL);
-			ItemStackSerializer.writeItemStack(newdata, ProtocolVersionsHelper.LATEST_PC, book, false);
+			ItemStackSerializer.writeItemStack(newdata, ProtocolVersionsHelper.LATEST_PC, cache.getLocale(), book, false);
 		} else if (tag.equals("MC|AdvCdm")) {
 			tag = "MC|AdvCmd";
 			newdata.writeByte(0);

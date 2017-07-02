@@ -32,26 +32,26 @@ public class CustomPayload extends MiddleCustomPayload {
 			tag = "MC|AdvCmd";
 			data = MiscSerializer.readAllBytes(clientdata);
 		} else if (tag.equals("MC|BSign") || tag.equals("MC|BEdit")) {
-			ItemStackWrapper book = ItemStackSerializer.readItemStack(clientdata, version);
+			ItemStackWrapper book = ItemStackSerializer.readItemStack(clientdata, version, cache.getLocale());
 			book.setType(Material.BOOK_AND_QUILL);
 			if ((version == ProtocolVersion.MINECRAFT_1_8) && tag.equals("MC|BSign")) {
-				remapBookPages(book);
+				remapBookPages(book, cache.getLocale());
 			}
-			ItemStackSerializer.writeItemStack(newdata, ProtocolVersionsHelper.LATEST_PC, book, false);
+			ItemStackSerializer.writeItemStack(newdata, ProtocolVersionsHelper.LATEST_PC, cache.getLocale(), book, false);
 			data = MiscSerializer.readAllBytes(newdata);
 		} else {
 			data = MiscSerializer.readAllBytes(clientdata);
 		}
 	}
 
-	private static void remapBookPages(ItemStackWrapper itemstack) {
+	private static void remapBookPages(ItemStackWrapper itemstack, String locale) {
 		NBTTagCompoundWrapper tag = itemstack.getTag();
 		if (!tag.isNull()) {
 			if (tag.hasKeyOfType("pages", NBTTagCompoundWrapper.TYPE_LIST)) {
 				NBTTagListWrapper pages = tag.getList("pages", NBTTagCompoundWrapper.TYPE_STRING);
 				NBTTagListWrapper newPages = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
 				for (int i = 0; i < pages.size(); i++) {
-					newPages.addString(ChatAPI.fromJSON(pages.getString(i)).toLegacyText());
+					newPages.addString(ChatAPI.fromJSON(pages.getString(i)).toLegacyText(locale));
 				}
 				tag.setList("pages", newPages);
 			}

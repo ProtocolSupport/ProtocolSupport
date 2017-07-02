@@ -21,7 +21,7 @@ public class Advancements extends MiddleAdvancements {
 		serializer.writeBoolean(reset);
 		ArraySerializer.writeVarIntTArray(serializer, advancementsMapping, (to, element) -> {
 			StringSerializer.writeString(to, version, element.getObj1());
-			writeAdvanvement(to, version, element.getObj2());
+			writeAdvanvement(to, version, cache.getLocale(), element.getObj2());
 		});
 		ArraySerializer.writeVarIntStringArray(serializer, version, removeAdvancements);
 		ArraySerializer.writeVarIntTArray(serializer, advancementsProgress, (to, element) -> {
@@ -31,7 +31,7 @@ public class Advancements extends MiddleAdvancements {
 		return RecyclableSingletonList.create(serializer);
 	}
 
-	protected static void writeAdvanvement(ByteBuf to, ProtocolVersion version, Advancement advancement) {
+	protected static void writeAdvanvement(ByteBuf to, ProtocolVersion version, String locale, Advancement advancement) {
 		if (advancement.parentId != null) {
 			to.writeBoolean(true);
 			StringSerializer.writeString(to, version, advancement.parentId);
@@ -40,7 +40,7 @@ public class Advancements extends MiddleAdvancements {
 		}
 		if (advancement.display != null) {
 			to.writeBoolean(true);
-			writeAdvancementDisplay(to, version, advancement.display);
+			writeAdvancementDisplay(to, version, locale, advancement.display);
 		} else {
 			to.writeBoolean(false);
 		}
@@ -48,10 +48,10 @@ public class Advancements extends MiddleAdvancements {
 		ArraySerializer.writeVarIntTArray(to, advancement.requirements, (buf, element) -> ArraySerializer.writeVarIntStringArray(to, version, element));
 	}
 
-	protected static void writeAdvancementDisplay(ByteBuf to, ProtocolVersion version, AdvancementDisplay display) {
+	protected static void writeAdvancementDisplay(ByteBuf to, ProtocolVersion version, String locale, AdvancementDisplay display) {
 		StringSerializer.writeString(to, version, ChatAPI.toJSON(display.title));
 		StringSerializer.writeString(to, version, ChatAPI.toJSON(display.description));
-		ItemStackSerializer.writeItemStack(to, version, display.icon, false);
+		ItemStackSerializer.writeItemStack(to, version, locale, display.icon, false);
 		MiscSerializer.writeEnum(to, display.frametype);
 		to.writeInt(display.flags);
 		if ((display.flags & AdvancementDisplay.flagHasBackgroundOffset) != 0) {

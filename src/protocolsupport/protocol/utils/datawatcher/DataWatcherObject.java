@@ -11,9 +11,9 @@ public abstract class DataWatcherObject<T> {
 
 	protected T value;
 
-	public abstract void readFromStream(ByteBuf from, ProtocolVersion version) throws DecoderException;
+	public abstract void readFromStream(ByteBuf from, ProtocolVersion version, String locale) throws DecoderException;
 
-	public abstract void writeToStream(ByteBuf to, ProtocolVersion version);
+	public abstract void writeToStream(ByteBuf to, ProtocolVersion version, String locale);
 
 	public T getValue() {
 		return value;

@@ -22,7 +22,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		} else {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_METADATA_ID, version);
 			serializer.writeInt(entityId);
-			LegacyDataWatcherSerializer.encodeData(serializer, version, remapped);
+			LegacyDataWatcherSerializer.encodeData(serializer, version, cache.getLocale(), remapped);
 			return RecyclableSingletonList.create(serializer);
 		}
 	}

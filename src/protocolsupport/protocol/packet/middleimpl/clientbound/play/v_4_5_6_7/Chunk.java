@@ -44,6 +44,7 @@ public class Chunk extends MiddleChunk {
 		for (NBTTagCompoundWrapper tile : tiles) {
 			packets.add(BlockTileUpdate.createPacketData(
 				version,
+				cache.getLocale(),
 				TileEntityUpdateType.fromType(TileNBTRemapper.getTileType(tile)),
 				TileNBTRemapper.getPosition(tile),
 				tile

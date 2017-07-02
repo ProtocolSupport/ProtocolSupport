@@ -10,15 +10,15 @@ import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 public class MerchantDataSerializer {
 
-	public static MerchantData readMerchantData(ByteBuf from, ProtocolVersion version) {
+	public static MerchantData readMerchantData(ByteBuf from, ProtocolVersion version, String locale) {
 		MerchantData merchdata = new MerchantData(from.readInt());
 		int count = from.readUnsignedByte();
 		for (int i = 0; i < count; i++) {
-			ItemStackWrapper itemstack1 = ItemStackSerializer.readItemStack(from, version);
-			ItemStackWrapper result = ItemStackSerializer.readItemStack(from, version);
+			ItemStackWrapper itemstack1 = ItemStackSerializer.readItemStack(from, version, locale);
+			ItemStackWrapper result = ItemStackSerializer.readItemStack(from, version, locale);
 			ItemStackWrapper itemstack2 = ServerPlatform.get().getWrapperFactory().createNullItemStack();
 			if (from.readBoolean()) {
-				itemstack2 = ItemStackSerializer.readItemStack(from, version);
+				itemstack2 = ItemStackSerializer.readItemStack(from, version, locale);
 			}
 			boolean disabled = from.readBoolean();
 			int uses = 0;
@@ -32,15 +32,15 @@ public class MerchantDataSerializer {
 		return merchdata;
 	}
 
-	public static void writeMerchantData(ByteBuf to, ProtocolVersion version, MerchantData merchdata, boolean fireItemStackEvents) {
+	public static void writeMerchantData(ByteBuf to, ProtocolVersion version, String locale, MerchantData merchdata, boolean fireItemStackEvents) {
 		to.writeInt(merchdata.getWindowId());
 		to.writeByte(merchdata.getOffers().size());
 		for (TradeOffer offer : merchdata.getOffers()) {
-			ItemStackSerializer.writeItemStack(to, version, offer.getItemStack1(), fireItemStackEvents);
-			ItemStackSerializer.writeItemStack(to, version, offer.getResult(), fireItemStackEvents);
+			ItemStackSerializer.writeItemStack(to, version, locale, offer.getItemStack1(), fireItemStackEvents);
+			ItemStackSerializer.writeItemStack(to, version, locale, offer.getResult(), fireItemStackEvents);
 			to.writeBoolean(offer.hasItemStack2());
 			if (offer.hasItemStack2()) {
-				ItemStackSerializer.writeItemStack(to, version, offer.getItemStack2(), fireItemStackEvents);
+				ItemStackSerializer.writeItemStack(to, version,locale, offer.getItemStack2(), fireItemStackEvents);
 			}
 			to.writeBoolean(offer.isDisabled());
 			if (isUsingUsesCount(version)) {

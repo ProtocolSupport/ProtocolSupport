@@ -20,15 +20,15 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		return RecyclableSingletonList.create(createPacketData(version, TileEntityUpdateType.fromId(type), position, tag));
+		return RecyclableSingletonList.create(createPacketData(version, cache.getLocale(), TileEntityUpdateType.fromId(type), position, tag));
 	}
 
-	public static ClientBoundPacketData createPacketData(ProtocolVersion version, TileEntityUpdateType type, Position position, NBTTagCompoundWrapper tag) {
+	public static ClientBoundPacketData createPacketData(ProtocolVersion version, String locale, TileEntityUpdateType type, Position position, NBTTagCompoundWrapper tag) {
 		if (type == TileEntityUpdateType.SIGN) {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.LEGACY_PLAY_UPDATE_SIGN_ID, version);
 			PositionSerializer.writeLegacyPositionS(serializer, position);
 			for (String line : TileNBTRemapper.getSignLines(tag)) {
-				StringSerializer.writeString(serializer, version, Utils.clampString(ChatAPI.fromJSON(line).toLegacyText(), 15));
+				StringSerializer.writeString(serializer, version, Utils.clampString(ChatAPI.fromJSON(line).toLegacyText(locale), 15));
 			}
 			return serializer;
 		} else {

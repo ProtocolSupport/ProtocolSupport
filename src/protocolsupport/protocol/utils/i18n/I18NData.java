@@ -20,9 +20,9 @@ public class I18NData {
 		return i18n;
 	}
 
-	public static String i18n(String lang, String key, Object... args) {
+	public static String i18n(String lang, String key, String... args) {
 		I18N i18n = i18ns.getOrDefault(lang, defaulti18n);
-		return String.format(i18n.getI18N(key), args);
+		return String.format(i18n.getI18N(key), (Object[]) args);
 	}
 
 }

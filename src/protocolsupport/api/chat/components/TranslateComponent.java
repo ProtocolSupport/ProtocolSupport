@@ -59,13 +59,13 @@ public class TranslateComponent extends BaseComponent {
 		return getValue(I18NData.DEFAULT_LANG);
 	}
 
-	public String getValue(String lang) {
-		return I18NData.i18n(lang, translationKey, Lists.transform(args, new Function<BaseComponent, String>() {
+	public String getValue(String locale) {
+		return I18NData.i18n(locale, translationKey, Lists.transform(args, new Function<BaseComponent, String>() {
 			@Override
 			public String apply(BaseComponent v) {
-				return LegacyChat.toText(v);
+				return LegacyChat.toText(v, locale);
 			}
-		}).toArray());
+		}).toArray(new String[0]));
 	}
 
 }

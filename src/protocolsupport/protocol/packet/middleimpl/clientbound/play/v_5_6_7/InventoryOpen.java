@@ -24,7 +24,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_OPEN_ID, version);
 		serializer.writeByte(windowId);
 		serializer.writeByte(type.toLegacyId());
-		StringSerializer.writeString(serializer, version, title.toLegacyText());
+		StringSerializer.writeString(serializer, version, title.toLegacyText(cache.getLocale()));
 		serializer.writeByte(slots);
 		serializer.writeBoolean(true);
 		if (type == WindowType.HORSE) {

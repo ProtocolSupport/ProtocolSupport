@@ -9,6 +9,7 @@ import protocolsupport.api.chat.modifiers.ClickAction;
 import protocolsupport.api.chat.modifiers.HoverAction;
 import protocolsupport.api.chat.modifiers.Modifier;
 import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
+import protocolsupport.protocol.utils.i18n.I18NData;
 
 public abstract class BaseComponent {
 
@@ -82,7 +83,11 @@ public abstract class BaseComponent {
 	public abstract String getValue();
 
 	public String toLegacyText() {
-		return LegacyChat.toText(this);
+		return toLegacyText(I18NData.DEFAULT_LANG);
 	}
+
+	public String toLegacyText(String locale) {
+		return LegacyChat.toText(this, locale);
+	} 
 
 }
