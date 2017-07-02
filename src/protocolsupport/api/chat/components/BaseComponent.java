@@ -92,6 +92,6 @@ public abstract class BaseComponent {
 
 	public String toLegacyText(String locale) {
 		return LegacyChat.toText(this, locale);
-	} 
+	}
 
 }

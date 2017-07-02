@@ -21,7 +21,7 @@ public abstract class MiddleTitle extends ClientBoundMiddlePacket {
 		action = Action.values()[VarNumberSerializer.readVarInt(serverdata)];
 		switch (action) {
 			case SET_TITLE:
-			case SET_SUBTITLE: 
+			case SET_SUBTITLE:
 			case SET_ACTION_BAR: {
 				message = ChatAPI.fromJSON(StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC));
 				break;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
+
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.KeybindComponent;
@@ -24,7 +25,7 @@ public class LegacyChatJson {
 		List<BaseComponent> siblings = new ArrayList<>(message.getSiblings());
 		message.clearSiblings();
 		HoverAction hoveraction = message.getHoverAction();
-		if (hoveraction != null && hoveraction.getType() == HoverAction.Type.SHOW_TEXT) {
+		if ((hoveraction != null) && (hoveraction.getType() == HoverAction.Type.SHOW_TEXT)) {
 			message.setHoverAction(new HoverAction(convert(hoveraction.getText(), version, locale)));
 		}
 		message.addSiblings(convertComponents(siblings, version, locale));
@@ -64,13 +65,13 @@ public class LegacyChatJson {
 				if (!LegacyI18NData.isSupported(tcomponent.getTranslationKey(), version)) {
 					BaseComponent[] tlargs = tcomponent.getTranslationArgs().toArray(new BaseComponent[0]);
 					String[] tlstringsplit = I18NData.getI18N(locale).getI18N(tcomponent.getTranslationKey()).split("[%][s]", -1);
-					if (tlargs.length != tlstringsplit.length - 1) {
+					if (tlargs.length != (tlstringsplit.length - 1)) {
 						return new TextComponent("Translation error");
 					}
 					BaseComponent rootcomponent = cloneComponentAuxData(tcomponent, new TextComponent(""));
 					for (int i = 0; i < tlstringsplit.length; i++) {
 						rootcomponent.addSibling(new TextComponent(tlstringsplit[i].replace("%%", "%")));
-						if (i < tlstringsplit.length - 1) {
+						if (i < (tlstringsplit.length - 1)) {
 							rootcomponent.addSibling(tlargs[i]);
 						}
 					}
