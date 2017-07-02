@@ -80,10 +80,14 @@ public abstract class BaseComponent {
 		this.clickInsertion = clickInsertion;
 	}
 
-	public abstract String getValue();
+	public String getValue() {
+		return getValue(I18NData.DEFAULT_LOCALE);
+	}
+
+	public abstract String getValue(String locale);
 
 	public String toLegacyText() {
-		return toLegacyText(I18NData.DEFAULT_LANG);
+		return toLegacyText(I18NData.DEFAULT_LOCALE);
 	}
 
 	public String toLegacyText(String locale) {

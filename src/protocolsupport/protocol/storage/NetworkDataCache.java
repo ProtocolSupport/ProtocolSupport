@@ -214,7 +214,7 @@ public class NetworkDataCache {
 		}
 	}
 
-	protected String locale = I18NData.DEFAULT_LANG;
+	protected String locale = I18NData.DEFAULT_LOCALE;
 
 	public void setLocale(String locale) {
 		this.locale = locale;

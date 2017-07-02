@@ -55,10 +55,6 @@ public class TranslateComponent extends BaseComponent {
 	}
 
 	@Override
-	public String getValue() {
-		return getValue(I18NData.DEFAULT_LANG);
-	}
-
 	public String getValue(String locale) {
 		return I18NData.i18n(locale, translationKey, Lists.transform(args, new Function<BaseComponent, String>() {
 			@Override

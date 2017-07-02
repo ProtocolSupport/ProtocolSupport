@@ -41,7 +41,7 @@ public class LegacyChat {
 		if (!hadFormat && Utils.isTrue(modifier.isRandom())) {
 			out.append(ChatColor.MAGIC);
 		}
-		out.append(component.getValue());
+		out.append(component.getValue(locale));
 		for (BaseComponent child : component.getSiblings()) {
 			if (out.length() > 0) {
 				out.append(ChatColor.RESET);

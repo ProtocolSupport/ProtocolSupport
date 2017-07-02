@@ -16,7 +16,7 @@ public class KeybindComponent extends BaseComponent {
 	}
 
 	@Override
-	public String getValue() {
+	public String getValue(String locale) {
 		String keybindtext = KeybindData.getKey(keybind);
 		return MessageFormat.format("{0}({1})", keybind, keybindtext != null ? keybindtext : "unknown");
 	}

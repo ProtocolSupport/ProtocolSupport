@@ -9,10 +9,10 @@ import protocolsupport.utils.Utils;
 
 public class I18NData {
 
-	public static final String DEFAULT_LANG = "en_us";
+	public static final String DEFAULT_LOCALE = "en_us";
 
 	private static final HashMap<String, I18N> i18ns = new HashMap<>();
-	private static final I18N defaulti18n = loadLocale(DEFAULT_LANG);
+	private static final I18N defaulti18n = loadLocale(DEFAULT_LOCALE);
 
 	private static I18N loadLocale(String lang) {
 		I18N i18n = new I18N(lang);
