@@ -12,6 +12,7 @@ import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.utils.Any;
+import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
@@ -98,6 +99,11 @@ public class HoverAction {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return Utils.toStringAllFields(this);
+	}
+
 	public static enum Type {
 		SHOW_TEXT, SHOW_ITEM, SHOW_ENTITY,
 		SHOW_ACHIEVEMENT //no longer exist
@@ -129,6 +135,11 @@ public class HoverAction {
 
 		public String getName() {
 			return name;
+		}
+
+		@Override
+		public String toString() {
+			return Utils.toStringAllFields(this);
 		}
 	}
 

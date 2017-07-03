@@ -10,6 +10,7 @@ import protocolsupport.api.chat.modifiers.HoverAction;
 import protocolsupport.api.chat.modifiers.Modifier;
 import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
 import protocolsupport.protocol.utils.i18n.I18NData;
+import protocolsupport.utils.Utils;
 
 public abstract class BaseComponent {
 
@@ -92,6 +93,11 @@ public abstract class BaseComponent {
 
 	public String toLegacyText(String locale) {
 		return LegacyChat.toText(this, locale);
+	}
+
+	@Override
+	public String toString() {
+		return Utils.toStringAllFields(this);
 	}
 
 }

@@ -3,6 +3,8 @@ package protocolsupport.api.chat.modifiers;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import protocolsupport.utils.Utils;
+
 public class ClickAction {
 
 	private final Type type;
@@ -31,6 +33,11 @@ public class ClickAction {
 			return new URL(value);
 		}
 		throw new IllegalStateException(type + " is not an " + Type.OPEN_URL);
+	}
+
+	@Override
+	public String toString() {
+		return Utils.toStringAllFields(this);
 	}
 
 	public static enum Type {
