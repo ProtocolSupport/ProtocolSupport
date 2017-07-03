@@ -9,14 +9,14 @@ import protocolsupport.protocol.utils.types.Position;
 public class DataWatcherObjectOptionalPosition extends DataWatcherObject<Position> {
 
 	@Override
-	public void readFromStream(ByteBuf from, ProtocolVersion version) {
+	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {
 		if (from.readBoolean()) {
 			value = PositionSerializer.readPosition(from);
 		}
 	}
 
 	@Override
-	public void writeToStream(ByteBuf to, ProtocolVersion version) {
+	public void writeToStream(ByteBuf to, ProtocolVersion version, String locale) {
 		to.writeBoolean(value != null);
 		if (value != null) {
 			PositionSerializer.writePosition(to, value);

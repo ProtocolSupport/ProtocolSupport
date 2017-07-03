@@ -4,8 +4,8 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleScoreboardTeam;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -26,12 +26,9 @@ public class ScoreboardTeam extends MiddleScoreboardTeam {
 			serializer.writeByte(color);
 		}
 		if ((mode == 0) || (mode == 3) || (mode == 4)) {
-			VarNumberSerializer.writeVarInt(serializer, players.length);
-			for (String player : players) {
-				StringSerializer.writeString(serializer, version, version.isBefore(ProtocolVersion.MINECRAFT_1_9) ? Utils.clampString(player, 16) : player);
-			}
+			ArraySerializer.writeVarIntTArray(serializer, players, (to, element) -> StringSerializer.writeString(to, version, Utils.clampString(element, 16)));
 		}
-		return RecyclableSingletonList.<ClientBoundPacketData>create(serializer);
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

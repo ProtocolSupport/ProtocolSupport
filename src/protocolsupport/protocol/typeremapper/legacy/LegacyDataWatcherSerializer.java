@@ -9,7 +9,7 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
 
 public class LegacyDataWatcherSerializer {
 
-	public static void encodeData(ByteBuf to, ProtocolVersion version, TIntObjectMap<DataWatcherObject<?>> objects) {
+	public static void encodeData(ByteBuf to, ProtocolVersion version, String locale, TIntObjectMap<DataWatcherObject<?>> objects) {
 		if (!objects.isEmpty()) {
 			TIntObjectIterator<DataWatcherObject<?>> iterator = objects.iterator();
 			while (iterator.hasNext()) {
@@ -17,7 +17,7 @@ public class LegacyDataWatcherSerializer {
 				DataWatcherObject<?> object = iterator.value();
 				int tk = ((DataWatcherObjectIdRegistry.getTypeId(object, version) << 5) | (iterator.key() & 0x1F)) & 0xFF;
 				to.writeByte(tk);
-				object.writeToStream(to, version);
+				object.writeToStream(to, version, locale);
 			}
 		} else {
 			to.writeByte(31);

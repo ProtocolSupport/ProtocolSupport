@@ -9,6 +9,7 @@ import java.util.UUID;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
+import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.WindowType;
@@ -195,8 +196,8 @@ public class NetworkDataCache {
 			return name;
 		}
 
-		public String getName() {
-			return displayNameJson == null ? name : ChatAPI.fromJSON(displayNameJson).toLegacyText();
+		public String getName(String locale) {
+			return displayNameJson == null ? name : ChatAPI.fromJSON(displayNameJson).toLegacyText(locale);
 		}
 
 		@Override
@@ -213,6 +214,16 @@ public class NetworkDataCache {
 		public String toString() {
 			return Utils.toStringAllFields(this);
 		}
+	}
+
+	protected String locale = I18NData.DEFAULT_LOCALE;
+
+	public void setLocale(String locale) {
+		this.locale = locale.toLowerCase();
+	}
+
+	public String getLocale() {
+		return locale;
 	}
 
 	private final HashSet<ChunkCoord> sentChunks = new HashSet<>();

@@ -34,7 +34,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		serializer.writeShort(motX);
 		serializer.writeShort(motY);
 		serializer.writeShort(motZ);
-		DataWatcherDeserializer.encodeData(serializer, version, WatchedDataRemapper.transform(entity, metadata, version));
+		DataWatcherDeserializer.encodeData(serializer, version, cache.getLocale(), WatchedDataRemapper.transform(entity, metadata, version));
 		return RecyclableSingletonList.create(serializer);
 	}
 

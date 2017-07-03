@@ -29,13 +29,16 @@ sourceCompatibility = 1.8
 
 import de.undercouch.gradle.tasks.download.Download
 
-def dllibs = new File('dllibs')
+File dllibs = new File('dllibs')
 dllibs.mkdirs()
+
+File gen = new File('gen')
+gen.mkdirs();
 
 task updateLibs(type: Download) {
 	src([
 		'https://yivesmirror.com/files/spigot/spigot-1.12-R0.1-SNAPSHOT-b1299.jar',
-		'http://bamboo.gserv.me/browse/GSPP-SRV60-59/artifact/shared/Version-Independent-Server-JAR/glowstone.jar',
+		'https://932-33457443-gh.circle-artifacts.com/0/tmp/circle-artifacts.qg2dJa3/glowstone.jar',
 		'https://build.true-games.org/job/RakNetServer/lastSuccessfulBuild/artifact/target/RakNetServer.jar'
 	])
 	dest dllibs
@@ -63,6 +66,35 @@ sourceSets {
 	}
 }
 
+
+task generateLocaleList(type: DefaultTask) {
+	ArrayList<String> locales = new ArrayList<String>();
+	for (String filename : new File(sourceSets.main.resources.srcDirs.iterator().next(), "resources/i18n").list()) {
+		String[] split = filename.split("[.]");
+		if (split.length == 2 && split[1].equals("lang")) {
+			locales.add(split[0]);
+		}
+	}
+	File languageslist = new File(gen, "resources/i18n/languages");
+	languageslist.getParentFile().mkdirs();
+	languageslist.createNewFile();
+	PrintWriter writer = new PrintWriter(languageslist);
+	for (String locale : locales) {
+		writer.println(locale);
+	}
+	writer.close();
+}
+
+task generateInfo(type: DefaultTask) {
+	Properties properties = new Properties();
+	properties.setProperty("buildtime", new Date().format("yyyy.MM.dd 'at' HH:mm:ss z"));
+	properties.setProperty("buildhost", System.getProperty("protocolsupport.buildhost", "unknown"));
+	properties.setProperty("buildnumber", System.getProperty("protocolsupport.buildnumber", "unknown"));
+	File buildinfo = new File(gen, "resources/buildinfo");
+	buildinfo.createNewFile();
+	properties.store(new FileOutputStream(buildinfo), "Build info");
+}
+
 repositories {
 	mavenCentral()
 }
@@ -83,6 +115,8 @@ shadowJar {
 
 	from sourceSets.main.java.srcDirs
 	from 'LICENSE'
+	from gen
+
 	minimizeJar = true
 
 	destinationDir = file('target')
@@ -95,6 +129,9 @@ shadowJar {
 	relocate 'raknetserver', 'protocolsupport.libs.raknetserver'
 	relocate 'udpserversocketchannel', 'protocolsupport.libs.udpserversocketchannel'
 }
+
+shadowJar.dependsOn(generateInfo)
+shadowJar.dependsOn(generateLocaleList)
 
 jar.enabled = false
 jar.finalizedBy(shadowJar)

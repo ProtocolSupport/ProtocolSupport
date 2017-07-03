@@ -6,6 +6,6 @@ import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 @FunctionalInterface
 public interface ItemStackSpecificRemapper {
 
-	public ItemStackWrapper remap(ProtocolVersion version, ItemStackWrapper itemstack);
+	public ItemStackWrapper remap(ProtocolVersion version, String locale, ItemStackWrapper itemstack);
 
 }

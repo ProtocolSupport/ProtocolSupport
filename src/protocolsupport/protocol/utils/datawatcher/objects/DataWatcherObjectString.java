@@ -15,12 +15,12 @@ public class DataWatcherObjectString extends DataWatcherObject<String> {
 	}
 
 	@Override
-	public void readFromStream(ByteBuf from, ProtocolVersion version) {
+	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {
 		value = StringSerializer.readString(from, version);
 	}
 
 	@Override
-	public void writeToStream(ByteBuf to, ProtocolVersion version) {
+	public void writeToStream(ByteBuf to, ProtocolVersion version, String locale) {
 		StringSerializer.writeString(to, version, value);
 	}
 

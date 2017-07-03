@@ -13,7 +13,7 @@ public abstract class MiddleEntityMetadata extends MiddleEntity {
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
 		super.readFromServerData(serverdata);
-		metadata = DataWatcherDeserializer.decodeData(serverdata, ProtocolVersionsHelper.LATEST_PC);
+		metadata = DataWatcherDeserializer.decodeData(serverdata, ProtocolVersionsHelper.LATEST_PC, cache.getLocale());
 	}
 
 }

@@ -2,8 +2,8 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
+import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleScoreboardTeam extends ClientBoundMiddlePacket {
@@ -33,10 +33,7 @@ public abstract class MiddleScoreboardTeam extends ClientBoundMiddlePacket {
 			color = serverdata.readUnsignedByte();
 		}
 		if ((mode == 0) || (mode == 3) || (mode == 4)) {
-			players = new String[VarNumberSerializer.readVarInt(serverdata)];
-			for (int i = 0; i < players.length; i++) {
-				players[i] = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC, 40);
-			}
+			players = ArraySerializer.readVarIntStringArray(serverdata, ProtocolVersionsHelper.LATEST_PC, 40);
 		}
 	}
 

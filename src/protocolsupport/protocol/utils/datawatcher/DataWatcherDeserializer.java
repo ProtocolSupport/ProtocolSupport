@@ -55,7 +55,7 @@ public class DataWatcherDeserializer {
 		registry[DataWatcherObjectIdRegistry.getTypeId(clazz, ProtocolVersionsHelper.LATEST_PC)] = constr;
 	}
 
-	public static TIntObjectMap<DataWatcherObject<?>> decodeData(ByteBuf from, ProtocolVersion version) {
+	public static TIntObjectMap<DataWatcherObject<?>> decodeData(ByteBuf from, ProtocolVersion version, String locale) {
 		TIntObjectMap<DataWatcherObject<?>> map = new TIntObjectHashMap<>(10, 0.5f, -1);
 		do {
 			int key = from.readUnsignedByte();
@@ -65,7 +65,7 @@ public class DataWatcherDeserializer {
 			int type = from.readUnsignedByte();
 			try {
 				DataWatcherObject<?> object = registry[type].newInstance();
-				object.readFromStream(from, version);
+				object.readFromStream(from, version, locale);
 				map.put(key, object);
 			} catch (Exception e) {
 				throw new DecoderException("Unable to decode datawatcher object", e);
@@ -74,7 +74,7 @@ public class DataWatcherDeserializer {
 		return map;
 	}
 
-	public static void encodeData(ByteBuf to, ProtocolVersion version, TIntObjectMap<DataWatcherObject<?>> objects) {
+	public static void encodeData(ByteBuf to, ProtocolVersion version, String locale, TIntObjectMap<DataWatcherObject<?>> objects) {
 		if (!objects.isEmpty()) {
 			TIntObjectIterator<DataWatcherObject<?>> iterator = objects.iterator();
 			while (iterator.hasNext()) {
@@ -82,7 +82,7 @@ public class DataWatcherDeserializer {
 				DataWatcherObject<?> object = iterator.value();
 				to.writeByte(iterator.key());
 				to.writeByte(DataWatcherObjectIdRegistry.getTypeId(object, version));
-				object.writeToStream(to, version);
+				object.writeToStream(to, version, locale);
 			}
 		} else {
 			to.writeByte(31);

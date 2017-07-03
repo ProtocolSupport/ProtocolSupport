@@ -9,13 +9,13 @@ import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 public class DataWatcherObjectItemStack extends DataWatcherObject<ItemStackWrapper> {
 
 	@Override
-	public void readFromStream(ByteBuf from, ProtocolVersion version) {
-		value = ItemStackSerializer.readItemStack(from, version);
+	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {
+		value = ItemStackSerializer.readItemStack(from, version, locale);
 	}
 
 	@Override
-	public void writeToStream(ByteBuf to, ProtocolVersion version) {
-		ItemStackSerializer.writeItemStack(to, version, value, true);
+	public void writeToStream(ByteBuf to, ProtocolVersion version, String locale) {
+		ItemStackSerializer.writeItemStack(to, version, locale, value, true);
 	}
 
 }

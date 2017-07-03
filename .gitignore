@@ -1,8 +1,11 @@
 # Build Folders #
 bin/
 build/
-target/
 libs/
+target/
+gen/
+dllibs/
+
 .externalToolBuilders/
  # Eclipse Files #
 *.project
@@ -21,5 +24,3 @@ libs/
 # IntelliJ
 .idea/
 *.iml
-/dllibs/
-classes/

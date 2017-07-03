@@ -10,7 +10,7 @@ import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 public class EmptyBookPageAdderSpecificRemapper extends ItemStackNBTSpecificRemapper {
 
 	@Override
-	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, ItemStackWrapper itemstack, NBTTagCompoundWrapper tag) {
+	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, String locale, ItemStackWrapper itemstack, NBTTagCompoundWrapper tag) {
 		if (!tag.hasKeyOfType("pages", NBTTagCompoundWrapper.TYPE_LIST)) {
 			NBTTagListWrapper pages = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
 			pages.addString("");

@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
 
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.chat.components.BaseComponent;
@@ -34,7 +33,7 @@ public class ChatAPI {
 		try {
 			BaseComponent result = gson.fromJson(json, BaseComponent.class);
 			return result != null ? result : new TextComponent("");
-		} catch (JsonSyntaxException e) {
+		} catch (Exception e) {
 			throw new JsonParseException(json, e);
 		}
 	}

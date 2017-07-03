@@ -13,12 +13,12 @@ public class DataWatcherObjectByte extends DataWatcherObjectNumber<Byte> {
 	}
 
 	@Override
-	public void readFromStream(ByteBuf from, ProtocolVersion version) {
+	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {
 		value = from.readByte();
 	}
 
 	@Override
-	public void writeToStream(ByteBuf to, ProtocolVersion version) {
+	public void writeToStream(ByteBuf to, ProtocolVersion version, String locale) {
 		to.writeByte(value);
 	}
 

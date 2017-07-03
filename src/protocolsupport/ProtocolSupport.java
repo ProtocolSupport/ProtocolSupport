@@ -1,6 +1,8 @@
 package protocolsupport;
 
+import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.Properties;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -17,6 +19,7 @@ import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
 import protocolsupport.protocol.typeremapper.chunk.BlockStorageReader;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
+import protocolsupport.protocol.typeremapper.legacy.LegacyI18NData;
 import protocolsupport.protocol.typeremapper.legacy.LegacySound;
 import protocolsupport.protocol.typeremapper.pe.PESkin;
 import protocolsupport.protocol.typeremapper.skipper.id.IdSkipper;
@@ -30,6 +33,7 @@ import protocolsupport.protocol.utils.minecraftdata.KeybindData;
 import protocolsupport.protocol.utils.minecraftdata.PotionData;
 import protocolsupport.protocol.utils.minecraftdata.SoundData;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
+import protocolsupport.utils.Utils;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.zplatform.ServerPlatform;
@@ -37,12 +41,24 @@ import protocolsupport.zplatform.pe.MCPEServer;
 
 public class ProtocolSupport extends JavaPlugin {
 
+	private BuildInfo buildinfo;
+
+	public BuildInfo getBuildInfo() {
+		return buildinfo;
+	}
+
 	private MCPEServer server;
 
 	@Override
 	public void onLoad() {
+		try {
+			buildinfo = new BuildInfo();
+		} catch (Throwable t) {
+			getLogger().severe("Unable to load buildinfo, make sure you built this version using Gradle");
+			Bukkit.shutdown();
+		}
 		if (!ServerPlatform.detect()) {
-			getLogger().severe("Unsupported server implementation type, shutting down");
+			getLogger().severe("Unsupported server implementation type");
 			Bukkit.shutdown();
 			return;
 		} else {
@@ -59,6 +75,7 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(SoundData.class.getName());
 			Class.forName(KeybindData.class.getName());
 			Class.forName(I18NData.class.getName());
+			Class.forName(LegacyI18NData.class.getName());
 			Class.forName(Compressor.class.getName());
 			Class.forName(ServerBoundPacket.class.getName());
 			Class.forName(ClientBoundPacket.class.getName());
@@ -88,7 +105,7 @@ public class ProtocolSupport extends JavaPlugin {
 			getLogger().log(Level.SEVERE, "Error when loading, make sure you are using supported server version", t);
 			Bukkit.shutdown();
 		}
-		getCommand("protocolsupport").setExecutor(new CommandHandler());
+		getCommand("protocolsupport").setExecutor(new CommandHandler(this));
 		getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 		getServer().getPluginManager().registerEvents(new CommandListener(), this);
 		Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
@@ -108,6 +125,23 @@ public class ProtocolSupport extends JavaPlugin {
 
 	public static void logInfo(String message) {
 		JavaPlugin.getPlugin(ProtocolSupport.class).getLogger().info(message);
+	}
+
+	public static class BuildInfo {
+		public final String buildtime;
+		public final String buildhost;
+		public final String buildnumber;
+		public BuildInfo() throws IOException {
+			Properties properties = new Properties();
+			properties.load(Utils.getResource("buildinfo"));
+			buildtime = properties.getProperty("buildtime");
+			buildhost = properties.getProperty("buildhost");
+			buildnumber = properties.getProperty("buildnumber");
+		}
+		@Override
+		public String toString() {
+			return Utils.toStringAllFields(this);
+		}
 	}
 
 }

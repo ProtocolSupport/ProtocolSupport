@@ -16,7 +16,7 @@ public class PotionToLegacyIdSpecificRemapper extends ItemStackNBTSpecificRemapp
 	}
 
 	@Override
-	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, ItemStackWrapper itemstack, NBTTagCompoundWrapper tag) {
+	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, String locale, ItemStackWrapper itemstack, NBTTagCompoundWrapper tag) {
 		String potion = tag.getString("Potion");
 		if (!potion.isEmpty()) {
 			NBTTagListWrapper tagList = tag.getList("CustomPotionEffects", NBTTagCompoundWrapper.TYPE_COMPOUND);

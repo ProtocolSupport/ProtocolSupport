@@ -5,8 +5,8 @@ import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformer;
-import protocolsupport.protocol.typeremapper.chunk.EmptyChunk;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformer.BlockFormat;
+import protocolsupport.protocol.typeremapper.chunk.EmptyChunk;
 import protocolsupport.protocol.typeremapper.tileentity.TileEntityUpdateType;
 import protocolsupport.protocol.typeremapper.tileentity.TileNBTRemapper;
 import protocolsupport.utils.netty.Compressor;
@@ -44,6 +44,7 @@ public class Chunk extends MiddleChunk {
 		for (NBTTagCompoundWrapper tile : tiles) {
 			packets.add(BlockTileUpdate.createPacketData(
 				version,
+				cache.getLocale(),
 				TileEntityUpdateType.fromType(TileNBTRemapper.getTileType(tile)),
 				TileNBTRemapper.getPosition(tile),
 				tile

@@ -63,6 +63,10 @@ public class ArraySerializer {
 		return array;
 	}
 
+	public static String[] readVarIntStringArray(ByteBuf from, ProtocolVersion version, int strmaxlength) {
+		return readVarIntTArray(from, String.class, buf -> StringSerializer.readString(buf, version, strmaxlength));
+	}
+
 	public static String[] readVarIntStringArray(ByteBuf from, ProtocolVersion version) {
 		return readVarIntTArray(from, String.class, buf -> StringSerializer.readString(buf, version));
 	}

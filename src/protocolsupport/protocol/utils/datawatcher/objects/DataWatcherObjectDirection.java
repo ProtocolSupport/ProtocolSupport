@@ -9,12 +9,12 @@ import protocolsupport.protocol.utils.types.BlockDirection;
 public class DataWatcherObjectDirection extends DataWatcherObject<BlockDirection> {
 
 	@Override
-	public void readFromStream(ByteBuf from, ProtocolVersion version) {
+	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {
 		value = MiscSerializer.readEnum(from, BlockDirection.class);
 	}
 
 	@Override
-	public void writeToStream(ByteBuf to, ProtocolVersion version) {
+	public void writeToStream(ByteBuf to, ProtocolVersion version, String locale) {
 		MiscSerializer.writeEnum(to, value);
 	}
 

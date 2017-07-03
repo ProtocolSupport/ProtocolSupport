@@ -116,8 +116,8 @@ public abstract class MiddlePlayerInfo extends ClientBoundMiddlePacket {
 		public String displayNameJson;
 		public ProfileProperty[] properties;
 
-		public String getName() {
-			return displayNameJson == null ? username : ChatAPI.fromJSON(displayNameJson).toLegacyText();
+		public String getName(String locale) {
+			return displayNameJson == null ? username : ChatAPI.fromJSON(displayNameJson).toLegacyText(locale);
 		}
 
 		@Override
