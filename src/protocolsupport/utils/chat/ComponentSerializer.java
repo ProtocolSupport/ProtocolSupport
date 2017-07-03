@@ -87,9 +87,13 @@ public class ComponentSerializer implements JsonDeserializer<BaseComponent>, Jso
 			if (jsonObject.has("insertion")) {
 				component.setClickInsertion(jsonObject.getAsJsonPrimitive("insertion").getAsString());
 			}
-			component.setModifier(ctx.<Modifier>deserialize(element, Modifier.class));
-			component.setClickAction(ctx.<ClickAction>deserialize(element, ClickAction.class));
-			component.setHoverAction(ctx.<HoverAction>deserialize(element, HoverAction.class));
+			component.setModifier(ctx.deserialize(jsonObject, Modifier.class));
+			if (jsonObject.has("clickEvent")) {
+				component.setClickAction(ctx.deserialize(jsonObject.get("clickEvent"), ClickAction.class));
+			}
+			if (jsonObject.has("hoverEvent")) {
+				component.setHoverAction(ctx.deserialize(jsonObject.get("hoverEvent"), HoverAction.class));
+			}
 			return component;
 		}
         throw new JsonParseException("Don't know how to turn " + element.toString() + " into a Component");
