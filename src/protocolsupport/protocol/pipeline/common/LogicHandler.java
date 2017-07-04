@@ -6,11 +6,13 @@ import java.text.MessageFormat;
 import java.util.HashSet;
 
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import io.netty.handler.timeout.ReadTimeoutException;
+import protocolsupport.ProtocolSupport;
 import protocolsupport.api.events.ConnectionCloseEvent;
 import protocolsupport.api.events.ConnectionOpenEvent;
 import protocolsupport.api.events.PlayerDisconnectEvent;
@@ -63,7 +65,8 @@ public class LogicHandler extends ChannelDuplexHandler {
 
 		public NetworkException(Throwable original, ConnectionImpl connection) {
 			super(MessageFormat.format(
-				"Network exception occured(address: {0}, username: {1}, version: {2})",
+				"ProtocolSupport(buildinfo: {0}): Network exception occured(address: {1}, username: {2}, version: {3})",
+				JavaPlugin.getPlugin(ProtocolSupport.class).getBuildInfo(),
 				connection.getAddress(),
 				connection.getNetworkManagerWrapper().getUserName(),
 				connection.getVersion()
