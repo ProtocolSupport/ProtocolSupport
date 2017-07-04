@@ -7,13 +7,16 @@ import protocolsupport.protocol.utils.types.NetworkEntity.DataCache;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class EntityLeash extends MiddleEntityLeash{
+public class EntityLeash extends MiddleEntityLeash {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		DataCache data = cache.getWatchedEntity(entityId).getDataCache();
-		data.attachedId = vehicleId;
-		cache.updateWatchedDataCache(entityId, data);
+		//TODO: How to properly unleash entities? Sending -1 does nada.
+		/*if(vehicleId == -1) {
+			DataCache data = cache.getWatchedEntity(entityId).getDataCache();
+			data.attachedId = entityId;
+			cache.updateWatchedDataCache(entityId, data);
+		}*/
 		return RecyclableSingletonList.create(EntityMetadata.create(cache.getWatchedEntity(entityId), version));
 	}
 

@@ -34,8 +34,8 @@ dllibs.mkdirs()
 
 task updateLibs(type: Download) {
 	src([
-		'https://yivesmirror.com/grab/spigot/spigot-api-1.12-R0.1-SNAPSHOT-shaded-b1344.jar', 
-		'http://bamboo.gserv.me/browse/GSPP-SRV60-59/artifact/shared/Version-Independent-Server-JAR/glowstone.jar',
+		'https://yivesmirror.com/files/spigot/spigot-api-1.12-R0.1-SNAPSHOT-shaded-b1344.jar', 
+		'https://932-33457443-gh.circle-artifacts.com/0/tmp/circle-artifacts.qg2dJa3/glowstone.jar',
 		'https://build.true-games.org/job/RakNetServer/lastSuccessfulBuild/artifact/target/RakNetServer.jar'
 	])
 	dest dllibs

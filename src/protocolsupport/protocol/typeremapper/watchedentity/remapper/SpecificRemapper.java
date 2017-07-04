@@ -70,13 +70,13 @@ public enum SpecificRemapper {
 					b |= (1 << PeMetaBase.FLAG_BABY);
 					remapped.put(39, new DataWatcherObjectFloatLe(0.5f)); //Send scale -> avoid big mobs with floating heads.
 				}
-				if(entity.isOfType(NetworkEntityType.PLAYER) || 
-						(data.metadata.containsKey(DataWatcherObjectIndex.Entity.NAMETAG) && data.getMetaBool(DataWatcherObjectIndex.Entity.NAMETAG_VISIBLE))) 
+				if(entity.isOfType(NetworkEntityType.GIANT)) {
+					remapped.put(39, new DataWatcherObjectFloatLe(50f)); //Send scale -> giants are giant zombies in PE.
+				}
+				if(data.metadata.containsKey(DataWatcherObjectIndex.Entity.NAMETAG)) 
 					b |= (1 << PeMetaBase.FLAG_SHOW_NAMETAG);
 				if(entity.isOfType(NetworkEntityType.PLAYER)) 
 					b |= (1 << PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG);
-				
-				
 				
 				//Specifics:
 				//Riding things.
@@ -84,7 +84,10 @@ public enum SpecificRemapper {
 				//Love is send via entityStatus and should only be send once.
 				if(data.inLove) {b |= (1 << PeMetaBase.FLAG_IN_LOVE); data.inLove = false; entity.updateDataCache(data);}
 				//Leashing is send in Entity Leash.
-				if(data.attachedId != -1) b |= (1 << PeMetaBase.FLAG_LEASHED);
+				//if(data.attachedId != -1) b |= (1 << PeMetaBase.FLAG_LEASHED);
+				System.out.println(((b) & (1 << (PeMetaBase.FLAG_LEASHED))) != 0);
+				
+				
 				remapped.put(0, new DataWatcherObjectLong(b));
 				
 				// = PE Nametag =
@@ -95,10 +98,13 @@ public enum SpecificRemapper {
 				}
 				
 				// = PE Air =
-				int air = ((DataWatcherObjectVarInt) remapped.get(DataWatcherObjectIndex.Entity.AIR)).getValue();
-				remapped.put(7, new DataWatcherObjectShortLe(air <= 300 ? 0 : air));
+				int air = (!data.metadata.containsKey(DataWatcherObjectIndex.Entity.AIR)) ? 0 : (int) data.getMetaValue(DataWatcherObjectIndex.Entity.AIR);
+				remapped.put(7, new DataWatcherObjectShortLe((air >= 300) ? 0 : air));
 				
 				// = PE LEAD =
+				//TODO: Find out how to unleash correctly.. 
+				//Now I just set the attachedId to the entity itself as that's the only thing that will prevent the lead from flying around the world.
+				System.out.println("UPDATING LEASH TO: " + data.attachedId);
 				remapped.put(38, new DataWatcherObjectLong(data.attachedId));
 				
 				// = PE RIDING =

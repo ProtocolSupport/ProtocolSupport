@@ -52,7 +52,7 @@ public class PEDataValues {
 		livingEntityType.put(NetworkEntityType.IRON_GOLEM, 20);
 		livingEntityType.put(NetworkEntityType.OCELOT, 22);
 		livingEntityType.put(NetworkEntityType.SNOWMAN, 21);
-		livingEntityType.put(NetworkEntityType.LAMA, 27);
+		livingEntityType.put(NetworkEntityType.LAMA, 29);
 	}
 
 	public static int getLivingEntityTypeId(NetworkEntityType type) {

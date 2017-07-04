@@ -81,7 +81,11 @@ public class NetworkEntity {
 		public Rider rider = new Rider(false);
 		
 		public Object getMetaValue(int index) {
-			return metadata.get(index).getValue();
+			if(metadata.containsKey(index)) {
+				return metadata.get(index).getValue();	
+			} else {
+				return null;
+			}
 		}
 		
 		public boolean getMetaBool(int index) {

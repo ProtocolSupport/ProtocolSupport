@@ -10,6 +10,8 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetPassenge
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.NetworkEntity.DataCache;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -29,17 +31,14 @@ public class SetPassengers extends MiddleSetPassengers {
 		for (int passengerId : passengersIds) {
 			if (!prevPassengersIds.contains(passengerId)) {
 				packets.add(create(version, vehicleId, passengerId, true));
+				
 				//Update meta too.
-				//TODO: Find correct values for ofset etc. This is an example:
-				DataCache data = cache.getWatchedEntity(passengerId).getDataCache();
-				switch(cache.getWatchedEntity(vehicleId).getType()) {
-				case PIG:
-					data.rider = data.new Rider(new Vector(0, 1.8, 0), true, 180f, -180f);
-				break;
-				default:
-					data.rider = data.new Rider(true);
-				break;
-				}
+				//TODO: Find correct values for offset etc. This is an example:
+				NetworkEntity passenger = cache.getWatchedEntity(vehicleId);
+				DataCache data = passenger.getDataCache();
+				if(passenger.isOfType(NetworkEntityType.PIG)) data.rider = data.new Rider(new Vector(0, 1.8, 0), true, 180f, -180f);
+				if(passenger.isOfType(NetworkEntityType.BASE_HORSE)) data.rider = data.new Rider(new Vector(0, 2.5, 0), true, 180f, -180f);
+				else data.rider = data.new Rider(true);
 				cache.updateWatchedDataCache(passengerId, data);
 				packets.add(EntityMetadata.create(cache.getWatchedEntity(passengerId), version));
 			}
