@@ -89,6 +89,11 @@ public class SpigotMiscUtils implements PlatformUtils {
 	}
 
 	@Override
+	public boolean isRunning() {
+		return getServer().isRunning();
+	}
+
+	@Override
 	public boolean isProxyEnabled() {
 		return SpigotConfig.bungee;
 	}
