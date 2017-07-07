@@ -60,23 +60,37 @@ public enum SpecificRemapper {
 				if(data.getMetaBool(DataWatcherObjectIndex.Entity.FLAGS, 6)) b |= (1 << PeMetaBase.FLAG_INVISIBLE);
 				if(data.getMetaBool(DataWatcherObjectIndex.Entity.FLAGS, 8)) b |= (1 << PeMetaBase.FLAG_GLIDING);
 				if(data.getMetaBool(DataWatcherObjectIndex.Entity.SILENT)) b |= (1 << PeMetaBase.FLAG_SILENT);
-				if(entity.isOfType(NetworkEntityType.SHEEP) && data.getMetaBool(DataWatcherObjectIndex.Sheep.FLAGS, 5)) 
-					b |= (1 << PeMetaBase.FLAG_SHEARED);
+				if(entity.isOfType(NetworkEntityType.SHEEP) && data.getMetaBool(DataWatcherObjectIndex.Sheep.FLAGS, 5)) b |= (1 << PeMetaBase.FLAG_SHEARED);
+				if(entity.isOfType(NetworkEntityType.ARROW) && data.getMetaBool(DataWatcherObjectIndex.Arrow.CIRTICAL, 1)) b |= (1 << PeMetaBase.FLAG_CRITICAL);
+				if(entity.isOfType(NetworkEntityType.ZOMBIE_VILLAGER) && data.getMetaBool(DataWatcherObjectIndex.ZombieVillager.CONVERTING)) b |= (1 << PeMetaBase.FLAG_CONVERTING);
+				if(entity.isOfType(NetworkEntityType.MINECART_FURNACE) && data.getMetaBool(DataWatcherObjectIndex.MinecartFurnace.POWERED)) b |= (1 << PeMetaBase.FLAG_POWERED);
+				if(data.metadata.containsKey(DataWatcherObjectIndex.Entity.NAMETAG)) b |= (1 << PeMetaBase.FLAG_SHOW_NAMETAG);
+				if(entity.isOfType(NetworkEntityType.PLAYER)) b |= (1 << PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG);
 				if((entity.isOfType(NetworkEntityType.PIG) && data.getMetaBool(DataWatcherObjectIndex.Pig.HAS_SADLLE)) ||
-						(entity.isOfType(NetworkEntityType.BASE_HORSE) && data.getMetaBool(DataWatcherObjectIndex.BaseHorse.FLAGS, 3))) 
+						(entity.isOfType(NetworkEntityType.BASE_HORSE) && data.getMetaBool(DataWatcherObjectIndex.BaseHorse.FLAGS, 3))) {
 					b |= (1 << PeMetaBase.FLAG_SADDLED);
+				}
+				if(entity.isOfType(NetworkEntityType.CREEPER)) {
+					if(data.getMetaBool(DataWatcherObjectIndex.Creeper.IGNITED)) b |= (1 << PeMetaBase.FLAG_IGNITED);
+					if(data.getMetaBool(DataWatcherObjectIndex.Creeper.POWERED)) b |= (1 << PeMetaBase.FLAG_CHARGED);
+				}
+				if(entity.isOfType(NetworkEntityType.SPIDER)) {
+					b |= (1 << PeMetaBase.FLAG_CAN_CLIMB);
+					if(data.getMetaBool(DataWatcherObjectIndex.Spider.CLIMBING, 1)) b |= (1 << PeMetaBase.FLAG_CLIMBING);
+				}
+				if(entity.isOfType(NetworkEntityType.SQUID)) {
+					//Or gardian? TODO: Test test test.
+					b |= (1 << PeMetaBase.FLAG_CAN_SWIM);
+				}
 				if((entity.isOfType(NetworkEntityType.AGEABLE) && (data.getMetaBool(DataWatcherObjectIndex.Ageable.AGE)) ||
 						(entity.isOfType(NetworkEntityType.ZOMBIE) && data.getMetaBool(DataWatcherObjectIndex.Zombie.BABY)))) {
 					b |= (1 << PeMetaBase.FLAG_BABY);
 					remapped.put(39, new DataWatcherObjectFloatLe(0.5f)); //Send scale -> avoid big mobs with floating heads.
 				}
 				if(entity.isOfType(NetworkEntityType.GIANT)) {
-					remapped.put(39, new DataWatcherObjectFloatLe(50f)); //Send scale -> giants are giant zombies in PE.
+					remapped.put(39, new DataWatcherObjectFloatLe(50f)); //Send scale -> giants are Giant Zombies in PE.
 				}
-				if(data.metadata.containsKey(DataWatcherObjectIndex.Entity.NAMETAG)) 
-					b |= (1 << PeMetaBase.FLAG_SHOW_NAMETAG);
-				if(entity.isOfType(NetworkEntityType.PLAYER)) 
-					b |= (1 << PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG);
+				
 				
 				//Specifics:
 				//Riding things.
