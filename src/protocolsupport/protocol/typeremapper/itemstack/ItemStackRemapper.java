@@ -14,7 +14,6 @@ import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.api.remapper.BlockRemapperControl;
 import protocolsupport.api.remapper.BlockRemapperControl.MaterialAndData;
 import protocolsupport.protocol.typeremapper.id.RemappingRegistry.IdRemappingRegistry;
-import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.HashMapBasedIdRemappingTable;
 import protocolsupport.protocol.typeremapper.itemstack.clientbound.BookPagesToLegacyTextSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.clientbound.DragonHeadSpecificRemapper;
@@ -47,6 +46,7 @@ public class ItemStackRemapper {
 					}
 				}
 			}
+			registerRemapEntry(Material.BED, Material.BED, 0, ProtocolVersionsHelper.BEFORE_1_12);
 			registerRemapEntry(Material.KNOWLEDGE_BOOK, Material.BOOK, ProtocolVersionsHelper.BEFORE_1_12);
 			registerRemapEntry(Material.SHULKER_SHELL, Material.COBBLESTONE, ProtocolVersionsHelper.BEFORE_1_11);
 			registerRemapEntry(Material.TOTEM, Material.COBBLESTONE, ProtocolVersionsHelper.BEFORE_1_11);
