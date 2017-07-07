@@ -33,7 +33,7 @@ public class BlockRemapperControl {
 	 * @param to item id to which remap will occur
 	 */
 	public void setRemap(int from, int to) {
-		for (int i = 0; i < 16; i++) {
+		for (int i = 0; i < MinecraftData.BLOCK_DATA_MAX; i++) {
 			setRemap(from, i, to, i);
 		}
 	}
@@ -71,7 +71,7 @@ public class BlockRemapperControl {
 	}
 
 	/**
-	 * Sets remap for specified mateiral and data
+	 * Sets remap for specified material and data
 	 * @param from {@link MaterialAndData} which will be remapped
 	 * @param to {@link MaterialAndData} to which remap will occur
 	 */
@@ -80,7 +80,7 @@ public class BlockRemapperControl {
 	}
 
 	/**
-	 * Sets remap for specified mateiral and data
+	 * Sets remap for specified material and data
 	 * @param matFrom {@link Material} which will be remapped
 	 * @param dataFrom item data which will be remapped
 	 * @param matTo {@link Material} to which remap will occur
@@ -92,7 +92,7 @@ public class BlockRemapperControl {
 	}
 
 	/**
-	 * Sets remap for specified mateiral and data
+	 * Sets remap for specified material and data
 	 * @param idFrom item id which will be remapped
 	 * @param dataFrom item data which will be remapped
 	 * @param idTo item id to which remap will occur

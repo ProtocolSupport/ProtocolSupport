@@ -11,7 +11,7 @@ public class KeybindData {
 	private static final HashMap<String, String> nameToKeyRepr = new HashMap<>();
 
 	static {
-		new BufferedReader(new InputStreamReader(MinecraftData.getDataResource("keybinds"), StandardCharsets.UTF_8)).lines()
+		new BufferedReader(new InputStreamReader(MinecraftData.getResource("keybinds"), StandardCharsets.UTF_8)).lines()
 		.filter(line -> !line.isEmpty())
 		.forEach(line -> {
 			String[] split = line.split("[:]");

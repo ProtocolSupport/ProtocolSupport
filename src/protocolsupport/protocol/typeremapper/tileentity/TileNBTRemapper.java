@@ -11,6 +11,7 @@ import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityType;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.minecraftdata.ItemData;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
@@ -119,7 +120,9 @@ public class TileNBTRemapper {
 			(version, input) -> {
 				Integer id = ItemData.getIdByName(input.getString("Item"));
 				if (id != null) {
-					input.setInt("Item", ItemStackRemapper.ITEM_ID_REMAPPING_REGISTRY.getTable(version).getRemap(id));
+					input.setInt("Item", MinecraftData.getItemIdFromState(
+						ItemStackRemapper.ITEM_ID_REMAPPING_REGISTRY.getTable(version).getRemap(MinecraftData.getItemStateFromIdAndData(id, 0))
+					));
 				}
 				return input;
 			},
