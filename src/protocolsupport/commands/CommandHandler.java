@@ -29,48 +29,53 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (!sender.hasPermission("protocolsupport.admin")) {
-			sender.sendMessage(ChatColor.RED + "You have no power here!");
+			sender.sendMessage(plugin.getConfig().getBoolean("expose-plugin") ? ChatColor.RED + "You have no power here!" : "Unknown command. Type \"/help\" for help.");
 			return true;
 		}
-		if ((args.length == 1) && args[0].equalsIgnoreCase("buildinfo")) {
-			sender.sendMessage(ChatColor.GOLD.toString() + plugin.getBuildInfo());
-			return true;
-		}
-		if ((args.length == 1) && args[0].equalsIgnoreCase("list")) {
-			for (ProtocolVersion version : ProtocolVersion.values()) {
-				if (version.isSupported()) {
-					sender.sendMessage(ChatColor.GOLD+"["+version.getName()+"]: "+ChatColor.GREEN+getPlayersStringForProtocol(version));
+		else if(args.length == 1) {
+			if (args[0].equalsIgnoreCase("buildinfo")) {
+				sender.sendMessage(ChatColor.GOLD.toString() + plugin.getBuildInfo());
+				return true;
+			}
+			else if (args[0].equalsIgnoreCase("list")) {
+				for (ProtocolVersion version : ProtocolVersion.values()) {
+					if (version.isSupported()) {
+						String res = getPlayersStringForProtocol(version);
+						if(res.length() > 0 || !plugin.getConfig().getBoolean("list-only-relevant-versions"))
+							sender.sendMessage(ChatColor.GOLD+"["+version.getName()+"]: "+ChatColor.GREEN+res);
+					}
 				}
+				return true;
 			}
-			return true;
-		}
-		if ((args.length == 1) && args[0].equalsIgnoreCase("debug")) {
-			if (ServerPlatform.get().getMiscUtils().isDebugging()) {
-				ServerPlatform.get().getMiscUtils().disableDebug();
-				sender.sendMessage(ChatColor.GOLD + "Disabled debug");
-			} else {
-				ServerPlatform.get().getMiscUtils().enableDebug();
-				sender.sendMessage(ChatColor.GOLD + "Enabled debug");
+			else if (args[0].equalsIgnoreCase("debug")) {
+				if (ServerPlatform.get().getMiscUtils().isDebugging()) {
+					ServerPlatform.get().getMiscUtils().disableDebug();
+					sender.sendMessage(ChatColor.GOLD + "Disabled debug");
+				} else {
+					ServerPlatform.get().getMiscUtils().enableDebug();
+					sender.sendMessage(ChatColor.GOLD + "Enabled debug");
+				}
+				return true;
 			}
-			return true;
-		}
-		if ((args.length == 1) && args[0].equalsIgnoreCase("leakdetector")) {
-			if (ResourceLeakDetector.isEnabled()) {
-				ResourceLeakDetector.setLevel(Level.DISABLED);
-				sender.sendMessage(ChatColor.GOLD + "Disabled leak detector");
-			} else {
-				ResourceLeakDetector.setLevel(Level.PARANOID);
-				sender.sendMessage(ChatColor.GOLD + "Enabled leak detector");
+			else if (args[0].equalsIgnoreCase("leakdetector")) {
+				if (ResourceLeakDetector.isEnabled()) {
+					ResourceLeakDetector.setLevel(Level.DISABLED);
+					sender.sendMessage(ChatColor.GOLD + "Disabled leak detector");
+				} else {
+					ResourceLeakDetector.setLevel(Level.PARANOID);
+					sender.sendMessage(ChatColor.GOLD + "Enabled leak detector");
+				}
+				return true;
 			}
-			return true;
-		}
-		if ((args.length == 1) && args[0].equalsIgnoreCase("connections")) {
-			for (Connection connection : ProtocolSupportAPI.getConnections()) {
-				sender.sendMessage(ChatColor.GREEN + connection.toString());
+			else if (args[0].equalsIgnoreCase("connections")) {
+				for (Connection connection : ProtocolSupportAPI.getConnections()) {
+					sender.sendMessage(ChatColor.GREEN + connection.toString());
+				}
+				return true;
 			}
-			return true;
 		}
-		return false;
+		sender.sendMessage("Usage: /protocolsupport [buildinfo|list|debug|leakdetector|connections]");
+		return true;
 	}
 
 	private String getPlayersStringForProtocol(ProtocolVersion version) {
