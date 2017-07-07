@@ -29,10 +29,10 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (!sender.hasPermission("protocolsupport.admin")) {
-			sender.sendMessage(plugin.getConfig().getBoolean("expose-plugin") ? ChatColor.RED + "You have no power here!" : "Unknown command. Type \"/help\" for help.");
+			sender.sendMessage("Unknown command. Type \"/help\" for help.");
 			return true;
 		}
-		else if(args.length == 1) {
+		else if(args.length == 1 || args.length == 2) {
 			if (args[0].equalsIgnoreCase("buildinfo")) {
 				sender.sendMessage(ChatColor.GOLD.toString() + plugin.getBuildInfo());
 				return true;
@@ -41,7 +41,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 				for (ProtocolVersion version : ProtocolVersion.values()) {
 					if (version.isSupported()) {
 						String res = getPlayersStringForProtocol(version);
-						if(res.length() > 0 || !plugin.getConfig().getBoolean("list-only-relevant-versions"))
+						if(res.length() > 0 || (args.length == 2 && (args[1].equalsIgnoreCase("v") || args[1].equalsIgnoreCase("verbose"))))
 							sender.sendMessage(ChatColor.GOLD+"["+version.getName()+"]: "+ChatColor.GREEN+res);
 					}
 				}

@@ -89,11 +89,6 @@ public class ProtocolSupport extends JavaPlugin {
 			getLogger().log(Level.SEVERE, "Error when loading, make sure you are using supported server version", t);
 			Bukkit.shutdown();
 		}
-
-		getConfig().addDefault("expose-plugin", true);
-		getConfig().addDefault("list-only-relevant-versions", false);
-		getConfig().options().copyDefaults(true);
-		saveConfig();
 	}
 
 	@Override
