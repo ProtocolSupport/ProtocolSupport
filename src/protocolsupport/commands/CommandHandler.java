@@ -38,12 +38,12 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 				return true;
 			}
 			else if (args[0].equalsIgnoreCase("list")) {
-				for (ProtocolVersion version : ProtocolVersion.values()) {
-					if (version.isSupported()) {
+				for (ProtocolVersion version : ProtocolVersion.getAllSupported()) {
+					//if (version.isSupported()) {
 						String res = getPlayersStringForProtocol(version);
 						if(res.length() > 0 || (args.length == 2 && (args[1].equalsIgnoreCase("v") || args[1].equalsIgnoreCase("verbose"))))
 							sender.sendMessage(ChatColor.GOLD+"["+version.getName()+"]: "+ChatColor.GREEN+res);
-					}
+					//}
 				}
 				return true;
 			}
@@ -74,8 +74,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 				return true;
 			}
 		}
-		sender.sendMessage("Usage: /protocolsupport [buildinfo|list|debug|leakdetector|connections]");
-		return true;
+		return false;
 	}
 
 	private String getPlayersStringForProtocol(ProtocolVersion version) {

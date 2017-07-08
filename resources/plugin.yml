@@ -7,4 +7,4 @@ commands:
   protocolsupport:
     description: All ProtocolSupport commands
     aliases: ps
-    usage: Invalid command
+    usage: '/protocolsupport [buildinfo|list|debug|leakdetector|connections]'
