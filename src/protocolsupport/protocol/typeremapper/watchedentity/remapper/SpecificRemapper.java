@@ -88,7 +88,7 @@ public enum SpecificRemapper {
 					remapped.put(39, new DataWatcherObjectFloatLe(0.5f)); //Send scale -> avoid big mobs with floating heads.
 				}
 				if(entity.isOfType(NetworkEntityType.GIANT)) {
-					remapped.put(39, new DataWatcherObjectFloatLe(50f)); //Send scale -> giants are Giant Zombies in PE.
+					remapped.put(39, new DataWatcherObjectFloatLe(6f)); //Send scale -> giants are Giant Zombies in PE.
 				}
 				
 				
@@ -98,9 +98,7 @@ public enum SpecificRemapper {
 				//Love is send via entityStatus and should only be send once.
 				if(data.inLove) {b |= (1 << PeMetaBase.FLAG_IN_LOVE); data.inLove = false; entity.updateDataCache(data);}
 				//Leashing is send in Entity Leash.
-				//if(data.attachedId != -1) b |= (1 << PeMetaBase.FLAG_LEASHED);
-				System.out.println(((b) & (1 << (PeMetaBase.FLAG_LEASHED))) != 0);
-				
+				if(data.attachedId != -1) b |= (1 << PeMetaBase.FLAG_LEASHED);
 				
 				remapped.put(0, new DataWatcherObjectLong(b));
 				
@@ -116,9 +114,6 @@ public enum SpecificRemapper {
 				remapped.put(7, new DataWatcherObjectShortLe((air >= 300) ? 0 : air));
 				
 				// = PE LEAD =
-				//TODO: Find out how to unleash correctly.. 
-				//Now I just set the attachedId to the entity itself as that's the only thing that will prevent the lead from flying around the world.
-				System.out.println("UPDATING LEASH TO: " + data.attachedId);
 				remapped.put(38, new DataWatcherObjectLong(data.attachedId));
 				
 				// = PE RIDING =
@@ -258,7 +253,20 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.BaseHorse.FLAGS, 17), ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	BATTLE_HORSE(NetworkEntityType.BATTLE_HORSE, SpecificRemapper.BASE_HORSE,
-		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.BattleHorse.VARIANT, 2) {}, ProtocolVersion.MINECRAFT_PE),
+			
+		new Entry(new DataWatcherDataRemapper() {
+			@Override
+			public void remap(NetworkEntity entity, TIntObjectMap<DataWatcherObject<?>> original, TIntObjectMap<DataWatcherObject<?>> remapped) {
+				getObject(original, DataWatcherObjectIndex.BattleHorse.VARIANT, DataWatcherObjectVarInt.class)
+				.ifPresent(variant -> {
+					int variantValue = variant.getValue();
+					int baseColor = variantValue & 0x7;
+					int markings = (variantValue >> 8) & 0x7;
+					remapped.put(2,  new DataWatcherObjectVarInt(baseColor << 1));
+					remapped.put(44, new DataWatcherObjectVarInt(markings << 1));
+				});
+			}
+		},  ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.BattleHorse.VARIANT, 15) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.BattleHorse.VARIANT, 14) {}, ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.BattleHorse.VARIANT, 20), ProtocolVersionsHelper.BEFORE_1_9),
