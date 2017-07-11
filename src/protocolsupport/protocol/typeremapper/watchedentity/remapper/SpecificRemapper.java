@@ -300,7 +300,14 @@ public enum SpecificRemapper {
 		new Entry(new FirstMetaDataAddRemapper(19, new DataWatcherObjectByte((byte) 2)), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_6_1, ProtocolVersion.MINECRAFT_1_8))
 	),
 	LAMA(NetworkEntityType.LAMA, SpecificRemapper.CARGO_HORSE,
-		new Entry(new IndexValueRemapperNumberToByte(DataWatcherObjectIndex.Lama.CARPET_COLOR, 3), ProtocolVersion.MINECRAFT_PE),
+		new Entry(new IndexValueRemapper<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Lama.VARIANT, 2) {
+			@Override
+			public DataWatcherObject<?> remapValue(DataWatcherObjectVarInt object) {
+				return new DataWatcherObjectVarInt(object.getValue() << 1);
+			}
+		}, ProtocolVersion.MINECRAFT_PE),
+		
+		//new Entry(new IndexValueRemapperNumberToByte(DataWatcherObjectIndex.Lama.CARPET_COLOR, 3), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Lama.VARIANT, 4) {}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Lama.STRENGTH, 75) {}, ProtocolVersion.MINECRAFT_PE), //TODO: Should max strength also be added?
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Lama.STRENGTH, 16) {}, ProtocolVersionsHelper.RANGE__1_11__1_12),
