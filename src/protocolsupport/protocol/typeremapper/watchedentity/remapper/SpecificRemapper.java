@@ -66,9 +66,17 @@ public enum SpecificRemapper {
 				if(entity.isOfType(NetworkEntityType.MINECART_FURNACE) && data.getMetaBool(DataWatcherObjectIndex.MinecartFurnace.POWERED)) b |= (1 << PeMetaBase.FLAG_POWERED);
 				if(data.metadata.containsKey(DataWatcherObjectIndex.Entity.NAMETAG)) b |= (1 << PeMetaBase.FLAG_SHOW_NAMETAG);
 				if(entity.isOfType(NetworkEntityType.PLAYER)) b |= (1 << PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG);
-				if((entity.isOfType(NetworkEntityType.PIG) && data.getMetaBool(DataWatcherObjectIndex.Pig.HAS_SADLLE)) ||
-						(entity.isOfType(NetworkEntityType.BASE_HORSE) && data.getMetaBool(DataWatcherObjectIndex.BaseHorse.FLAGS, 3))) {
-					b |= (1 << PeMetaBase.FLAG_SADDLED);
+				if(entity.isOfType(NetworkEntityType.PIG) && data.getMetaBool(DataWatcherObjectIndex.Pig.HAS_SADLLE)) b |= (1 << PeMetaBase.FLAG_SADDLED);
+				if(entity.isOfType(NetworkEntityType.TAMEABLE)) {
+					if(data.getMetaBool(DataWatcherObjectIndex.Tameable.TAME_FLAGS, 1)) b |= (1 << PeMetaBase.FLAG_SITTING);
+					if(data.getMetaBool(DataWatcherObjectIndex.Tameable.TAME_FLAGS, 2)) b |= (1 << PeMetaBase.FLAG_ANGRY);
+					if(data.getMetaBool(DataWatcherObjectIndex.Tameable.TAME_FLAGS, 3)) b |= (1 << PeMetaBase.FLAG_TAMED);
+				}
+				if(entity.isOfType(NetworkEntityType.BASE_HORSE)) {
+					if(data.getMetaBool(DataWatcherObjectIndex.BaseHorse.FLAGS, 2)) b |= (1 << PeMetaBase.FLAG_TAMED);
+					if(data.getMetaBool(DataWatcherObjectIndex.BaseHorse.FLAGS, 3)) b |= (1 << PeMetaBase.FLAG_SADDLED);
+					if(data.getMetaBool(DataWatcherObjectIndex.BaseHorse.FLAGS, 4)) b |= (1 << PeMetaBase.FLAG_CHESTED);
+					if(data.getMetaBool(DataWatcherObjectIndex.BaseHorse.FLAGS, 7)) b |= (1 << PeMetaBase.FLAG_REARING);
 				}
 				if(entity.isOfType(NetworkEntityType.CREEPER)) {
 					if(data.getMetaBool(DataWatcherObjectIndex.Creeper.IGNITED)) b |= (1 << PeMetaBase.FLAG_IGNITED);
