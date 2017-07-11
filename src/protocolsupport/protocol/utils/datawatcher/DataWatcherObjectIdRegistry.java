@@ -20,6 +20,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectNBTTa
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalUUID;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectPosition;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectSVarInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectShort;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectShortLe;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
@@ -65,6 +66,7 @@ public class DataWatcherObjectIdRegistry {
 		register(DataWatcherObjectByte.class, 0, ProtocolVersion.MINECRAFT_PE);
 		register(DataWatcherObjectShortLe.class, 1, ProtocolVersion.MINECRAFT_PE);
 		register(DataWatcherObjectVarInt.class, 2, ProtocolVersion.MINECRAFT_PE);
+		register(DataWatcherObjectSVarInt.class, 2, ProtocolVersion.MINECRAFT_PE);
 		register(DataWatcherObjectFloatLe.class, 3, ProtocolVersion.MINECRAFT_PE);
 		register(DataWatcherObjectString.class, 4, ProtocolVersion.MINECRAFT_PE);
 		//TODO: SLOT (5)

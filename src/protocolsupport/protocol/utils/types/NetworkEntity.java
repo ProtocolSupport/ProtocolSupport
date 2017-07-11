@@ -112,10 +112,10 @@ public class NetworkEntity {
 		
 		public class Rider {
 			public boolean riding = false;
-			public Vector position = new Vector(0, 0, 0);
+			public Vector position = new Vector(0, 0.6, 0);
 			public boolean rotationLocked = false;
-			public float rotationMin = 180f;
-			public float rotationMax = -180f;
+			public Float rotationMin;
+			public Float rotationMax;
 			
 			public Rider(boolean riding) {
 				this.riding = riding;

@@ -36,8 +36,8 @@ public class SetPassengers extends MiddleSetPassengers {
 				//TODO: Find correct values for offset etc. This is an example:
 				NetworkEntity passenger = cache.getWatchedEntity(vehicleId);
 				DataCache data = passenger.getDataCache();
-				if(passenger.isOfType(NetworkEntityType.PIG)) data.rider = data.new Rider(new Vector(0, 1.8, 0), true, 180f, -180f);
-				if(passenger.isOfType(NetworkEntityType.BASE_HORSE)) data.rider = data.new Rider(new Vector(0, 2.5, 0), true, 180f, -180f);
+				if(passenger.isOfType(NetworkEntityType.PIG)) data.rider = data.new Rider(new Vector(0.0, 0.63, 0.0), false, 180f, -180f);
+				if(passenger.isOfType(NetworkEntityType.BASE_HORSE)) data.rider = data.new Rider(new Vector(0.0, 1.1, -0.2), true, 180f, -180f);
 				else data.rider = data.new Rider(true);
 				cache.updateWatchedDataCache(passengerId, data);
 				packets.add(EntityMetadata.create(cache.getWatchedEntity(passengerId), version));
