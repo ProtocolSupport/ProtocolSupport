@@ -22,6 +22,7 @@ import protocolsupport.zplatform.ServerPlatform;
 public class CommandHandler implements CommandExecutor, TabCompleter {
 
 	private final ProtocolSupport plugin;
+
 	public CommandHandler(ProtocolSupport plugin) {
 		this.plugin = plugin;
 	}
@@ -31,24 +32,22 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 		if (!sender.hasPermission("protocolsupport.admin")) {
 			sender.sendMessage(ChatColor.RED + "You have no power here!");
 			return true;
-		}
-		else if(args.length == 1 || args.length == 2) {
+		} else if (args.length == 1 || args.length == 2) {
 			if (args[0].equalsIgnoreCase("buildinfo")) {
 				sender.sendMessage(ChatColor.GOLD.toString() + plugin.getBuildInfo());
 				return true;
-			}
-			else if (args[0].equalsIgnoreCase("list")) {
+			} else if (args[0].equalsIgnoreCase("list")) {
 				sender.sendMessage(ChatColor.GREEN + "ProtocolSupport Players:");
 				for (ProtocolVersion version : ProtocolVersion.getAllSupported()) {
-						String res = getPlayersStringForProtocol(version);
-						if(res.length() > 0 || (args.length == 2 && (args[1].equalsIgnoreCase("v") || args[1].equalsIgnoreCase("verbose"))))
-							sender.sendMessage(ChatColor.GOLD+"["+version.getName()+"]: "+ChatColor.GREEN+res);
+					String res = getPlayersStringForProtocol(version);
+					if (res.length() > 0 || (args.length == 2 && (args[1].equalsIgnoreCase("v") || args[1].equalsIgnoreCase("verbose"))))
+						sender.sendMessage(ChatColor.GOLD + "[" + version.getName() + "]: " + ChatColor.GREEN + res);
 				}
-				if(args.length == 1 || !(args[1].equalsIgnoreCase("v") || args[1].equalsIgnoreCase("verbose")))
-					sender.sendMessage(ChatColor.GOLD +"List all compatible versions using " + ChatColor.GREEN +"/ps list verbose");
+				if (args.length == 1 || !(args[1].equalsIgnoreCase("v") || args[1].equalsIgnoreCase("verbose"))) {
+					sender.sendMessage(ChatColor.GOLD + "List all compatible versions using " + ChatColor.GREEN + "/ps list verbose");
+				}
 				return true;
-			}
-			else if (args[0].equalsIgnoreCase("debug")) {
+			} else if (args[0].equalsIgnoreCase("debug")) {
 				if (ServerPlatform.get().getMiscUtils().isDebugging()) {
 					ServerPlatform.get().getMiscUtils().disableDebug();
 					sender.sendMessage(ChatColor.GOLD + "Disabled debug");
@@ -57,8 +56,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 					sender.sendMessage(ChatColor.GOLD + "Enabled debug");
 				}
 				return true;
-			}
-			else if (args[0].equalsIgnoreCase("leakdetector")) {
+			} else if (args[0].equalsIgnoreCase("leakdetector")) {
 				if (ResourceLeakDetector.isEnabled()) {
 					ResourceLeakDetector.setLevel(Level.DISABLED);
 					sender.sendMessage(ChatColor.GOLD + "Disabled leak detector");
@@ -67,8 +65,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 					sender.sendMessage(ChatColor.GOLD + "Enabled leak detector");
 				}
 				return true;
-			}
-			else if (args[0].equalsIgnoreCase("connections")) {
+			} else if (args[0].equalsIgnoreCase("connections")) {
 				for (Connection connection : ProtocolSupportAPI.getConnections()) {
 					sender.sendMessage(ChatColor.GREEN + connection.toString());
 				}
