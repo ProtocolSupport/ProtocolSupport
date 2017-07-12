@@ -33,28 +33,30 @@ public class SetPassengers extends MiddleSetPassengers {
 			for (int passengerId : passengersIds) {
 				NetworkEntity passenger = cache.getWatchedEntity(passengerId);
 				if (passenger != null) {
-					packets.add(create(version, vehicleId, (cache.isSelf(passengerId)) ? 0 : passengerId, true));
-					
 					//Update rider positions too.
 					DataCache data = passenger.getDataCache();
-					if(vehicle.isOfType(NetworkEntityType.PIG)) data.rider = data.new Rider(new Vector(0.0, 2.83, 0.0), false);
+					if(vehicle.isOfType(NetworkEntityType.PIG)) data.rider = data.new Rider(new Vector(0.0, 3.8, 0.0), false);
 					if(vehicle.isOfType(NetworkEntityType.BASE_HORSE)) data.rider = data.new Rider(new Vector(0.0, 2.3, -0.2), true, 180f, -180f);
 					else data.rider = data.new Rider(true);
 					cache.updateWatchedDataCache(passengerId, data);
 					packets.add(EntityMetadata.create(cache.getWatchedEntity(passengerId), version));
+					
+					packets.add(create(version, vehicleId, passengerId, true));
+					if(cache.isSelf(passengerId)) packets.add(create(version, vehicleId, 0, true));
 				}
 			}
 			prevPassengersIds.forEach(new TIntProcedure() {
 				@Override
 				public boolean execute(int passengerId) {
 					if (!newPassengersIds.contains(passengerId)) {
-						packets.add(create(version, vehicleId, (cache.isSelf(passengerId)) ? 0 : passengerId, false));
-						
 						//Also update meta.
 						DataCache data = cache.getWatchedEntity(passengerId).getDataCache();
 						data.rider = data.new Rider(false);
 						cache.updateWatchedDataCache(passengerId, data);
 						packets.add(EntityMetadata.create(cache.getWatchedEntity(passengerId), version));
+						
+						packets.add(create(version, vehicleId, passengerId, false));
+						if(cache.isSelf(passengerId)) packets.add(create(version, vehicleId, 0, false));
 					}
 					return true;
 				}
