@@ -21,6 +21,7 @@ import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyI18NData;
 import protocolsupport.protocol.typeremapper.legacy.LegacySound;
+import protocolsupport.protocol.typeremapper.mapcolor.MapColorRemapper;
 import protocolsupport.protocol.typeremapper.skipper.id.IdSkipper;
 import protocolsupport.protocol.typeremapper.tileentity.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherObjectIndex;
@@ -94,6 +95,7 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(ItemStackRemapper.class.getName());
 			Class.forName(TileNBTRemapper.class.getName());
 			Class.forName(BlockStorageReader.class.getName());
+			Class.forName(MapColorRemapper.class.getName());
 			ServerPlatform.get().inject();
 		} catch (Throwable t) {
 			getLogger().log(Level.SEVERE, "Error when loading, make sure you are using supported server version", t);
