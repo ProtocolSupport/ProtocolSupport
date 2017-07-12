@@ -93,6 +93,15 @@ public class NetworkDataCache {
 	public int getSelfPlayerEntityId() {
 		return player != null ? player.getId() : -1;
 	}
+	
+	public boolean isSelf(int entityId) {
+		return (this.getSelfPlayerEntityId() == entityId);
+	}
+	
+	public NetworkEntity getWatchedSelf() {
+		if(!watchedEntities.contains(getSelfPlayerEntityId())) return player;
+		return watchedEntities.get(this.getSelfPlayerEntityId());
+	}
 
 	private void readdSelfPlayer() {
 		if (player != null) {

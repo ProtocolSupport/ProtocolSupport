@@ -125,7 +125,11 @@ public class NetworkEntity {
 				this(true, position, rotationLocked, rotationMax, rotationMin);
 			}
 			
-			public Rider(boolean riding, Vector position, boolean rotationLocked, float rotationMax, float rotationMin) {
+			public Rider(Vector position, boolean rotationLocked) {
+				this(true, position, rotationLocked, null, null);
+			}
+			
+			public Rider(boolean riding, Vector position, boolean rotationLocked, Float rotationMax, Float rotationMin) {
 				this.riding = riding;
 				this.position = position;
 				this.rotationLocked = rotationLocked;

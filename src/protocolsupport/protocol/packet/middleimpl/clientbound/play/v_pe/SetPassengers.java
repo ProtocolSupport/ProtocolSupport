@@ -23,41 +23,44 @@ public class SetPassengers extends MiddleSetPassengers {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		TIntHashSet prevPassengersIds = passengers.get(vehicleId);
-		if (prevPassengersIds == null) {
-			prevPassengersIds = new TIntHashSet();
-		}
-		TIntHashSet newPassengersIds = new TIntHashSet(passengersIds);
-		for (int passengerId : passengersIds) {
-			if (!prevPassengersIds.contains(passengerId)) {
-				packets.add(create(version, vehicleId, passengerId, true));
-				
-				//Update meta too.
-				//TODO: Find correct values for offset etc. This is an example:
-				NetworkEntity passenger = cache.getWatchedEntity(vehicleId);
-				DataCache data = passenger.getDataCache();
-				if(passenger.isOfType(NetworkEntityType.PIG)) data.rider = data.new Rider(new Vector(0.0, 0.63, 0.0), false, 180f, -180f);
-				if(passenger.isOfType(NetworkEntityType.BASE_HORSE)) data.rider = data.new Rider(new Vector(0.0, 1.1, -0.2), true, 180f, -180f);
-				else data.rider = data.new Rider(true);
-				cache.updateWatchedDataCache(passengerId, data);
-				packets.add(EntityMetadata.create(cache.getWatchedEntity(passengerId), version));
+		NetworkEntity vehicle = cache.getWatchedEntity(vehicleId);
+		if(vehicle != null) {
+			TIntHashSet prevPassengersIds = passengers.get(vehicleId);
+			if (prevPassengersIds == null) {
+				prevPassengersIds = new TIntHashSet();
 			}
-		}
-		prevPassengersIds.forEach(new TIntProcedure() {
-			@Override
-			public boolean execute(int passengerId) {
-				if (!newPassengersIds.contains(passengerId)) {
-					packets.add(create(version, vehicleId, passengerId, false));
-					//Also update meta.
-					DataCache data = cache.getWatchedEntity(passengerId).getDataCache();
-					data.rider = data.new Rider(false);
+			TIntHashSet newPassengersIds = new TIntHashSet(passengersIds);
+			for (int passengerId : passengersIds) {
+				NetworkEntity passenger = cache.getWatchedEntity(passengerId);
+				if (passenger != null) {
+					packets.add(create(version, vehicleId, (cache.isSelf(passengerId)) ? 0 : passengerId, true));
+					
+					//Update rider positions too.
+					DataCache data = passenger.getDataCache();
+					if(vehicle.isOfType(NetworkEntityType.PIG)) data.rider = data.new Rider(new Vector(0.0, 2.83, 0.0), false);
+					if(vehicle.isOfType(NetworkEntityType.BASE_HORSE)) data.rider = data.new Rider(new Vector(0.0, 2.3, -0.2), true, 180f, -180f);
+					else data.rider = data.new Rider(true);
 					cache.updateWatchedDataCache(passengerId, data);
 					packets.add(EntityMetadata.create(cache.getWatchedEntity(passengerId), version));
 				}
-				return true;
 			}
-		});
-		passengers.put(vehicleId, newPassengersIds);
+			prevPassengersIds.forEach(new TIntProcedure() {
+				@Override
+				public boolean execute(int passengerId) {
+					if (!newPassengersIds.contains(passengerId)) {
+						packets.add(create(version, vehicleId, (cache.isSelf(passengerId)) ? 0 : passengerId, false));
+						
+						//Also update meta.
+						DataCache data = cache.getWatchedEntity(passengerId).getDataCache();
+						data.rider = data.new Rider(false);
+						cache.updateWatchedDataCache(passengerId, data);
+						packets.add(EntityMetadata.create(cache.getWatchedEntity(passengerId), version));
+					}
+					return true;
+				}
+			});
+			passengers.put(vehicleId, newPassengersIds);
+		}
 		return packets;
 	}
 
