@@ -6,6 +6,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCustomPaylo
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MerchantDataSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -16,7 +17,7 @@ public class CustomPayload extends MiddleCustomPayload {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID, version);
 		StringSerializer.writeString(serializer, version, tag);
 		if (tag.equals("MC|TrList")) {
-			MerchantDataSerializer.writeMerchantData(serializer, version, cache.getLocale(), MerchantDataSerializer.readMerchantData(data, version, cache.getLocale()), true);
+			MerchantDataSerializer.writeMerchantData(serializer, version, cache.getLocale(), MerchantDataSerializer.readMerchantData(data, ProtocolVersionsHelper.LATEST_PC, cache.getLocale()), true);
 		} else {
 			serializer.writeBytes(data);
 		}
