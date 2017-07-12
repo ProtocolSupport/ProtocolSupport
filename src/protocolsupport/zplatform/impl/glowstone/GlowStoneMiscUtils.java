@@ -102,6 +102,11 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	}
 
 	@Override
+	public boolean isRunning() {
+		return true;
+	}
+
+	@Override
 	public boolean isProxyEnabled() {
 		return getServer().getProxySupport();
 	}

@@ -20,6 +20,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ItemStackWriteEvent;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.utils.PENetworkNBTDataOutputStream;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -48,9 +49,10 @@ public class ItemStackSerializer {
 			ItemStackWriteEvent event = new InternalItemStackWriteEvent(version, itemstack, remapped);
 			Bukkit.getPluginManager().callEvent(event);
 		}
-		to.writeShort(ItemStackRemapper.ITEM_ID_REMAPPING_REGISTRY.getTable(version).getRemap(remapped.getTypeId()));
+		int itemstate = ItemStackRemapper.ITEM_ID_REMAPPING_REGISTRY.getTable(version).getRemap(MinecraftData.getItemStateFromIdAndData(remapped.getTypeId(), remapped.getData()));
+		to.writeShort(MinecraftData.getItemIdFromState(itemstate));
 		to.writeByte(remapped.getAmount());
-		to.writeShort(remapped.getData());
+		to.writeShort(MinecraftData.getItemDataFromState(itemstate));
 		writeTag(to, version, remapped.getTag());
 	}
 

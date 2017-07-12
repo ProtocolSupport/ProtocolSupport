@@ -77,7 +77,7 @@ public class IdSkipper {
 
 	public static final EnumSkippingRegistry<WindowType, EnumSkippingTable<WindowType>> INVENTORY = new EnumSkippingRegistry<WindowType, EnumSkippingTable<WindowType>>() {
 		{
-			registerSkipEntry(WindowType.HORSE, ProtocolVersionsHelper.BEFORE_1_11);
+			registerSkipEntry(WindowType.HORSE, ProtocolVersionsHelper.BEFORE_1_6);
 			registerSkipEntry(WindowType.HOPPER, ProtocolVersionsHelper.BEFORE_1_5);
 		}
 		@Override

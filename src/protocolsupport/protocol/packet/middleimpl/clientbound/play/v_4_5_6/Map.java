@@ -6,10 +6,10 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleMap;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.typeremapper.legacy.LegacyMap;
 import protocolsupport.protocol.typeremapper.legacy.LegacyMap.ColumnEntry;
+import protocolsupport.protocol.typeremapper.mapcolor.MapColorRemapper;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -44,7 +44,7 @@ public class Map extends MiddleMap {
 		if (columns > 0) {
 			LegacyMap maptransformer = new LegacyMap();
 			maptransformer.loadFromNewMapData(columns, rows, xstart, zstart, data);
-			ArrayBasedIdRemappingTable colorRemapper = IdRemapper.MAPCOLOR.getTable(version);
+			ArrayBasedIdRemappingTable colorRemapper = MapColorRemapper.REMAPPER.getTable(version);
 			for (ColumnEntry entry : maptransformer.toPre18MapData()) {
 				ClientBoundPacketData mapdata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_MAP_ID, version);
 				mapdata.writeShort(mapId);

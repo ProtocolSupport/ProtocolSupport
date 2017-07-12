@@ -23,6 +23,8 @@ public interface PlatformUtils {
 
 	public String getOutdatedServerMessage();
 
+	public boolean isRunning();
+
 	public boolean isProxyEnabled();
 
 	public boolean isDebugging();

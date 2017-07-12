@@ -1,9 +1,12 @@
 package protocolsupport.commands;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,95 +14,63 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import io.netty.util.ResourceLeakDetector;
-import io.netty.util.ResourceLeakDetector.Level;
-import protocolsupport.ProtocolSupport;
-import protocolsupport.api.Connection;
-import protocolsupport.api.ProtocolSupportAPI;
-import protocolsupport.api.ProtocolVersion;
-import protocolsupport.zplatform.ServerPlatform;
-
 public class CommandHandler implements CommandExecutor, TabCompleter {
 
-	private final ProtocolSupport plugin;
-	public CommandHandler(ProtocolSupport plugin) {
-		this.plugin = plugin;
+	private final Map<String, SubCommand> subcommands = new LinkedHashMap<>();
+	{
+		subcommands.put("buildinfo", new BuildInfoSubCommand());
+		subcommands.put("debug", new DebugSubCommand());
+		subcommands.put("leakdetector", new LeakDetectorSubCommand());
+		subcommands.put("list", new PlayerListSubCommand());
+		subcommands.put("connections", new ConnectionsListSubCommand());
+		subcommands.put("help", new SubCommand() {
+			@Override
+			public int getMinArgs() {
+				return 0;
+			}
+
+			@Override
+			public boolean handle(CommandSender sender, String[] args) {
+				String prepend = sender instanceof Player ? "/" : "";
+				for (Entry<String, SubCommand> entry : subcommands.entrySet()) {
+					sender.sendMessage(ChatColor.YELLOW + prepend + "ps " + entry.getKey() + " - " + entry.getValue().getHelp());
+				}
+				return true;
+			}
+
+			@Override
+			public String getHelp() {
+				return "prints help";
+			}
+		});
 	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (!sender.hasPermission("protocolsupport.admin")) {
-			sender.sendMessage(ChatColor.RED + "You have no power here!");
+			sender.sendMessage(ChatColor.DARK_RED + "You have no power here!");
 			return true;
 		}
-		if ((args.length == 1) && args[0].equalsIgnoreCase("buildinfo")) {
-			sender.sendMessage(ChatColor.GOLD.toString() + plugin.getBuildInfo());
+		if (args.length == 0) {
+			return false;
+		}
+		SubCommand subcommand = subcommands.get(args[0]);
+		if (subcommand == null) {
+			return false;
+		}
+		String[] subcommandargs = Arrays.copyOfRange(args, 1, args.length);
+		if (subcommandargs.length < subcommand.getMinArgs()) {
+			sender.sendMessage(ChatColor.DARK_RED + "Not enough args");
 			return true;
 		}
-		if ((args.length == 1) && args[0].equalsIgnoreCase("list")) {
-			for (ProtocolVersion version : ProtocolVersion.values()) {
-				if (version.isSupported()) {
-					sender.sendMessage(ChatColor.GOLD+"["+version.getName()+"]: "+ChatColor.GREEN+getPlayersStringForProtocol(version));
-				}
-			}
-			return true;
-		}
-		if ((args.length == 1) && args[0].equalsIgnoreCase("debug")) {
-			if (ServerPlatform.get().getMiscUtils().isDebugging()) {
-				ServerPlatform.get().getMiscUtils().disableDebug();
-				sender.sendMessage(ChatColor.GOLD + "Disabled debug");
-			} else {
-				ServerPlatform.get().getMiscUtils().enableDebug();
-				sender.sendMessage(ChatColor.GOLD + "Enabled debug");
-			}
-			return true;
-		}
-		if ((args.length == 1) && args[0].equalsIgnoreCase("leakdetector")) {
-			if (ResourceLeakDetector.isEnabled()) {
-				ResourceLeakDetector.setLevel(Level.DISABLED);
-				sender.sendMessage(ChatColor.GOLD + "Disabled leak detector");
-			} else {
-				ResourceLeakDetector.setLevel(Level.PARANOID);
-				sender.sendMessage(ChatColor.GOLD + "Enabled leak detector");
-			}
-			return true;
-		}
-		if ((args.length == 1) && args[0].equalsIgnoreCase("connections")) {
-			for (Connection connection : ProtocolSupportAPI.getConnections()) {
-				sender.sendMessage(ChatColor.GREEN + connection.toString());
-			}
-			return true;
-		}
-		return false;
-	}
-
-	private String getPlayersStringForProtocol(ProtocolVersion version) {
-		StringBuilder sb = new StringBuilder();
-		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (ProtocolSupportAPI.getProtocolVersion(player) == version) {
-				sb.append(player.getName());
-				sb.append(", ");
-			}
-		}
-		if (sb.length() > 2) {
-			sb.delete(sb.length() - 2, sb.length());
-		}
-		return sb.toString();
+		return subcommand.handle(sender, subcommandargs);
 	}
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
-		ArrayList<String> completions = new ArrayList<>();
-		if ("list".startsWith(args[0])) {
-			completions.add("list");
-		}
-		if ("debug".startsWith(args[0])) {
-			completions.add("debug");
-		}
-		if ("leakdetector".startsWith(args[0])) {
-			completions.add("leakdetector");
-		}
-		return completions;
+		return subcommands.keySet().stream()
+		.filter(subcommand -> subcommand.startsWith(args[0]))
+		.collect(Collectors.toList());
 	}
 
 }

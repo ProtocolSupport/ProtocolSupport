@@ -7,6 +7,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.Particle;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -20,13 +21,15 @@ public class WorldParticle extends MiddleWorldParticle {
 		String name = particle.getName();
 		switch (particle) {
 			case ITEM_CRACK: {
-				name += ItemStackRemapper.ITEM_ID_REMAPPING_REGISTRY.getTable(version).getRemap(adddata.get(0));
+				int itemstate = ItemStackRemapper.ITEM_ID_REMAPPING_REGISTRY.getTable(version).getRemap(MinecraftData.getItemStateFromIdAndData(adddata.get(0), adddata.get(1)));
+				name += "_" + MinecraftData.getItemIdFromState(itemstate) + "_" + MinecraftData.getItemDataFromState(itemstate);
 				break;
 			}
 			case BLOCK_CRACK:
 			case BLOCK_DUST: {
-				int blockstateId = adddata.get(0);
-				name += "_" + (IdRemapper.BLOCK.getTable(version).getRemap((blockstateId & 4095) << 4) >> 4) + "_" + ((blockstateId >> 12) & 0xF);
+				int blockstate = adddata.get(0);
+				blockstate = IdRemapper.BLOCK.getTable(version).getRemap(MinecraftData.getBlockStateFromIdAndData(blockstate & 4095, blockstate >> 12));
+				name += "_" + MinecraftData.getBlockIdFromState(blockstate) + "_" + MinecraftData.getBlockDataFromState(blockstate);
 				break;
 			}
 			default: {

@@ -33,12 +33,13 @@ File dllibs = new File('dllibs')
 dllibs.mkdirs()
 
 File gen = new File('gen')
+gen.deleteDir();
 gen.mkdirs();
 
 task updateLibs(type: Download) {
 	src([
 		'https://yivesmirror.com/files/spigot/spigot-1.12-R0.1-SNAPSHOT-b1299.jar',
-		'https://932-33457443-gh.circle-artifacts.com/0/tmp/circle-artifacts.qg2dJa3/glowstone.jar',
+		'https://repo.glowstone.net/repository/internal/net/glowstone/glowstone/2017.7.0-SNAPSHOT/glowstone-2017.7.0-20170703.092618-15.jar',
 		'https://build.true-games.org/job/RakNetServer/lastSuccessfulBuild/artifact/target/RakNetServer.jar'
 	])
 	dest dllibs
@@ -67,7 +68,7 @@ sourceSets {
 }
 
 
-task generateLocaleList(type: DefaultTask) {
+task generateLocaleList(type: DefaultTask) << {
 	ArrayList<String> locales = new ArrayList<String>();
 	for (String filename : new File(sourceSets.main.resources.srcDirs.iterator().next(), "resources/i18n").list()) {
 		String[] split = filename.split("[.]");
@@ -85,12 +86,13 @@ task generateLocaleList(type: DefaultTask) {
 	writer.close();
 }
 
-task generateInfo(type: DefaultTask) {
+task generateInfo(type: DefaultTask) << {
 	Properties properties = new Properties();
 	properties.setProperty("buildtime", new Date().format("yyyy.MM.dd 'at' HH:mm:ss z"));
 	properties.setProperty("buildhost", System.getProperty("protocolsupport.buildhost", "unknown"));
 	properties.setProperty("buildnumber", System.getProperty("protocolsupport.buildnumber", "unknown"));
 	File buildinfo = new File(gen, "resources/buildinfo");
+	buildinfo.getParentFile().mkdirs();
 	buildinfo.createNewFile();
 	properties.store(new FileOutputStream(buildinfo), "Build info");
 }
@@ -100,7 +102,7 @@ repositories {
 }
 
 dependencies {
-	shadow files('buildprocessor/BuildProcessor.jar', new File(dllibs, 'spigot-1.12-R0.1-SNAPSHOT-b1299.jar'), new File(dllibs, 'glowstone.jar'))
+	shadow files('buildprocessor/BuildProcessor.jar', new File(dllibs, 'spigot-1.12-R0.1-SNAPSHOT-b1299.jar'), new File(dllibs, 'glowstone-2017.7.0-20170703.092618-15.jar'))
 	compile files(new File(dllibs, 'RakNetServer.jar'))
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 	compile group: 'net.sf.trove4j', name: 'trove4j', version: '3.0.3'
