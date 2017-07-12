@@ -39,6 +39,16 @@ import protocolsupport.zplatform.ServerPlatform;
 
 public class ProtocolSupport extends JavaPlugin {
 
+	private static ProtocolSupport instance;
+
+	public static ProtocolSupport getInstance() {
+		return instance;
+	}
+
+	public ProtocolSupport() {
+		instance = this;
+	}
+
 	private BuildInfo buildinfo;
 
 	public BuildInfo getBuildInfo() {
@@ -93,8 +103,8 @@ public class ProtocolSupport extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		getCommand("protocolsupport").setExecutor(new CommandHandler(this));
-		getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+		getCommand("protocolsupport").setExecutor(new CommandHandler());
+		getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 		getServer().getPluginManager().registerEvents(new CommandListener(), this);
 	}
 
@@ -103,12 +113,8 @@ public class ProtocolSupport extends JavaPlugin {
 		Bukkit.shutdown();
 	}
 
-	public static void logWarning(String message) {
-		JavaPlugin.getPlugin(ProtocolSupport.class).getLogger().warning(message);
-	}
-
 	public static void logInfo(String message) {
-		JavaPlugin.getPlugin(ProtocolSupport.class).getLogger().info(message);
+		ProtocolSupport.getInstance().getLogger().info(message);
 	}
 
 	public static class BuildInfo {

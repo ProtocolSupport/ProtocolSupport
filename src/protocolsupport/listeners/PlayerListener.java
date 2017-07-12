@@ -28,11 +28,6 @@ import protocolsupport.zplatform.ServerPlatform;
 
 public class PlayerListener implements Listener {
 
-	private final ProtocolSupport plugin;
-	public PlayerListener(ProtocolSupport plugin) {
-		this.plugin = plugin;
-	}
-
 	@EventHandler
 	public void onShift(PlayerToggleSneakEvent event) {
 		Player player = event.getPlayer();
@@ -101,7 +96,7 @@ public class PlayerListener implements Listener {
 
 	@EventHandler
 	public void onJoin(final PlayerJoinEvent event) {
-		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+		Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), new Runnable() {
 			@Override
 			public void run() {
 				BaseComponent header = TabAPI.getDefaultHeader();
