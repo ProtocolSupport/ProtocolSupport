@@ -269,45 +269,6 @@ public class IdRemapper {
 		}
 	};
 
-	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> MAPCOLOR = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
-		{
-			//see http://minecraft.gamepedia.com/Map_item_format (i don't event know a names for half of those colors)
-			registerRemapEntry(14, 8, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(15, 10, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(16, 5, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(17, 5, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(18, 2, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(19, 1, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(20, 4, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(21, 11, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(22, 11, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(23, 5, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(24, 5, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(25, 5, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(26, 10, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(27, 7, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(28, 4, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(29, 11, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(30, 2, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(31, 5, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(32, 5, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(33, 7, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(34, 10, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(35, 4, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(36, 10, ProtocolVersionsHelper.BEFORE_1_7);
-		}
-		@Override
-		protected ArrayBasedIdRemappingTable createTable() {
-			return new ArrayBasedIdRemappingTable(64) {
-				@Override
-				public int getRemap(int id) {
-					int realColor = (id & 0xFF) >> 2;
-					return ((table[realColor] << 2) + (id & 0b11));
-				}
-			};
-		}
-	};
-
 	public static final IdRemappingRegistry<HashMapBasedIdRemappingTable> EFFECT = new IdRemappingRegistry<HashMapBasedIdRemappingTable>() {
 		@Override
 		protected HashMapBasedIdRemappingTable createTable() {
