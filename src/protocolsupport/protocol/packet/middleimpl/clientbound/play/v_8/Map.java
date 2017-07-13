@@ -27,7 +27,7 @@ public class Map extends MiddleMap {
 		if (columns > 0) {
 			ArrayBasedIdRemappingTable colorRemapper = MapColorRemapper.REMAPPER.getTable(version);
 			for (int i = 0; i < colors.length; i++) {
-				colors[i] = (byte) colorRemapper.getRemap(colors[i]);
+				colors[i] = (byte) colorRemapper.getRemap(colors[i] & 0xFF);
 			}
 			serializer.writeByte(rows);
 			serializer.writeByte(xstart);

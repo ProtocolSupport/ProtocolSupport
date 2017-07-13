@@ -55,7 +55,7 @@ public class Map extends MiddleMap {
 				mapdata.writeByte(entry.getY());
 				byte[] colors = entry.getColors();
 				for (int i = 0; i < colors.length; i++) {
-					colors[i] = (byte) colorRemapper.getRemap(colors[i]);
+					colors[i] = (byte) colorRemapper.getRemap(colors[i] & 0xFF);
 				}
 				mapdata.writeBytes(colors);
 				datas.add(mapdata);
