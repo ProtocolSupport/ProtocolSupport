@@ -43,7 +43,7 @@ public class Map extends MiddleMap {
 		}
 		if (columns > 0) {
 			LegacyMap maptransformer = new LegacyMap();
-			maptransformer.loadFromNewMapData(columns, rows, xstart, zstart, data);
+			maptransformer.loadFromNewMapData(columns, rows, xstart, zstart, colors);
 			ArrayBasedIdRemappingTable colorRemapper = MapColorRemapper.REMAPPER.getTable(version);
 			for (ColumnEntry entry : maptransformer.toPre18MapData()) {
 				ClientBoundPacketData mapdata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_MAP_ID, version);

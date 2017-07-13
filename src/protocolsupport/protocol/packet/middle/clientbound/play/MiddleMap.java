@@ -16,7 +16,7 @@ public abstract class MiddleMap extends ClientBoundMiddlePacket {
 	protected int rows;
 	protected int xstart;
 	protected int zstart;
-	protected byte[] data;
+	protected byte[] colors;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
@@ -32,7 +32,7 @@ public abstract class MiddleMap extends ClientBoundMiddlePacket {
 			rows = serverdata.readUnsignedByte();
 			xstart = serverdata.readUnsignedByte();
 			zstart = serverdata.readUnsignedByte();
-			data = ArraySerializer.readByteArray(serverdata, ProtocolVersionsHelper.LATEST_PC);
+			colors = ArraySerializer.readByteArray(serverdata, ProtocolVersionsHelper.LATEST_PC);
 		}
 	}
 
