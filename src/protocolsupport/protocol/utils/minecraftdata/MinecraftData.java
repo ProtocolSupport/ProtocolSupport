@@ -27,7 +27,7 @@ public class MinecraftData {
 	public static final int BLOCK_ID_MAX = 4096;
 	public static final int BLOCK_DATA_MAX = 16;
 	public static final int ITEM_ID_MAX = Short.MAX_VALUE;
-	public static final int ITEM_DATA_MAX = Short.MAX_VALUE;
+	public static final int ITEM_DATA_MAX = (int) (Math.pow(2, 16) - 1);
 
 	public static int getBlockStateFromIdAndData(int id, int data) {
 		return (id << 4) | data;
