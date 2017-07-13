@@ -8,10 +8,6 @@ public class MapColorHelper {
 		return getSimilarMapColor(color, ModernMapColor.values(), ModernMapColor.Color4.getId(), maxMapColorId);
 	}
 
-	public static IMapColor getSimilarV7Color(ModernMapColor color) {
-		return getSimilarMapColor(color, V7MapColor.values(), V7MapColor.Color4.getId(), V7MapColor.Color139.getId());
-	}
-
 	public static IMapColor getSimilarLegacyColor(ModernMapColor color) {
 		return getSimilarMapColor(color, LegacyMapColor.values(), LegacyMapColor.Color4.getId(), LegacyMapColor.Color55.getId());
 	}
