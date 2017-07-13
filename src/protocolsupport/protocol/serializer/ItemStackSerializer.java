@@ -27,7 +27,7 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 public class ItemStackSerializer {
 
 	public static ItemStackWrapper readItemStack(ByteBuf from, ProtocolVersion version, String locale) {
-		int type = from.readUnsignedShort();
+		int type = from.readShort();
 		if (type >= 0) {
 			ItemStackWrapper itemstack = ServerPlatform.get().getWrapperFactory().createItemStack(type);
 			itemstack.setAmount(from.readByte());
