@@ -3,6 +3,7 @@ package protocolsupport.protocol.pipeline.version;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
@@ -51,8 +52,7 @@ public abstract class AbstractPacketDecoder extends MessageToMessageDecoder<Byte
 			data.readerIndex(0);
 			throw new DecoderException(MessageFormat.format(
 				"Unable to transform or read middle packet {0} (data: {1})",
-				packet.toString(),
-				Arrays.toString(MiscSerializer.readAllBytes(data))
+				Objects.toString(packet), Arrays.toString(MiscSerializer.readAllBytes(data))
 			), exception);
 		} else {
 			throw exception;

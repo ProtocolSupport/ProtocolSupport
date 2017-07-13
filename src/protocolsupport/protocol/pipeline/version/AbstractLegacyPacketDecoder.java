@@ -36,8 +36,9 @@ public class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
 
 	private boolean decode0(Channel channel, List<Object> list) throws Exception {
 		cumulation.markReaderIndex();
-		ServerBoundMiddlePacket packetTransformer = registry.getTransformer(ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(channel), cumulation.readUnsignedByte());
+		ServerBoundMiddlePacket packetTransformer = null;
 		try {
+			packetTransformer = registry.getTransformer(ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(channel), cumulation.readUnsignedByte());
 			packetTransformer.readFromClientData(cumulation, connection.getVersion());
 			addPackets(animateReorderer.orderPackets(packetTransformer.toNative()), list);
 			return true;
