@@ -27,11 +27,11 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 public class ItemStackSerializer {
 
 	public static ItemStackWrapper readItemStack(ByteBuf from, ProtocolVersion version, String locale) {
-		int type = from.readShort();
+		int type = from.readUnsignedShort();
 		if (type >= 0) {
 			ItemStackWrapper itemstack = ServerPlatform.get().getWrapperFactory().createItemStack(type);
 			itemstack.setAmount(from.readByte());
-			itemstack.setData(from.readShort());
+			itemstack.setData(from.readUnsignedShort());
 			itemstack.setTag(readTag(from, version));
 			return ItemStackRemapper.remapServerbound(version, locale, itemstack.cloneItemStack());
 		}
