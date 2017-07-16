@@ -70,12 +70,11 @@ public enum SpecificRemapper {
 				if(entity.isOfType(NetworkEntityType.WOLF) && data.getMetaBool(DataWatcherObjectIndex.Wolf.BEGGING)) b |= (1 << PeMetaBase.FLAG_INTERESTED);
 				if(entity.isOfType(NetworkEntityType.ZOMBIE_VILLAGER) && data.getMetaBool(DataWatcherObjectIndex.ZombieVillager.CONVERTING)) b |= (1 << PeMetaBase.FLAG_CONVERTING); //TODO: Test.
 				if(entity.isOfType(NetworkEntityType.MINECART_FURNACE) && data.getMetaBool(DataWatcherObjectIndex.MinecartFurnace.POWERED)) b |= (1 << PeMetaBase.FLAG_POWERED);
-				//if(entity.isOfType(NetworkEntityType.POLAR_BEAR) && data.getMetaBool(DataWatcherObjectIndex.PolarBear.STANDING_UP)) b |= (1 << PeMetaBase.FLAG_REARING); //TODO: Just like horses, disappears. Perhaps send a unknown entitystatus aswell? Meh.
+				if(entity.isOfType(NetworkEntityType.POLAR_BEAR) && data.getMetaBool(DataWatcherObjectIndex.PolarBear.STANDING_UP)) b |= (1 << PeMetaBase.FLAG_REARING); //TODO: Just like horses, disappears. Perhaps send a unknown entitystatus aswell? Meh.
 				if(entity.isOfType(NetworkEntityType.SNOWMAN) && !data.getMetaBool(DataWatcherObjectIndex.Snowman.NO_HAT, 5)) b |= (1 << PeMetaBase.FLAG_SHEARED);
-				if(entity.isOfType(NetworkEntityType.BAT) && data.getMetaBool(DataWatcherObjectIndex.Bat.HANGING, 1)) b |= (1 << PeMetaBase.FLAG_RESTING);
 				if(data.metadata.containsKey(DataWatcherObjectIndex.Entity.NAMETAG)) b |= (1 << PeMetaBase.FLAG_SHOW_NAMETAG);
 				if(entity.isOfType(NetworkEntityType.PLAYER)) b |= (1 << PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG);
-				if(entity.isOfType(NetworkEntityType.PIG) && data.getMetaBool(DataWatcherObjectIndex.Pig.HAS_SADLLE)) {b |= (1 << PeMetaBase.FLAG_SADDLED);}
+				if(entity.isOfType(NetworkEntityType.PIG) && data.getMetaBool(DataWatcherObjectIndex.Pig.HAS_SADLLE)) b |= (1 << PeMetaBase.FLAG_SADDLED);
 				if(entity.isOfType(NetworkEntityType.TAMEABLE)) {
 					if(data.getMetaBool(DataWatcherObjectIndex.Tameable.TAME_FLAGS, 1)) b |= (1 << PeMetaBase.FLAG_SITTING);
 					if(data.getMetaBool(DataWatcherObjectIndex.Tameable.TAME_FLAGS, 2)) b |= (1 << PeMetaBase.FLAG_ANGRY);
@@ -85,7 +84,7 @@ public enum SpecificRemapper {
 					if(data.getMetaBool(DataWatcherObjectIndex.BaseHorse.FLAGS, 2)) b |= (1 << PeMetaBase.FLAG_TAMED);
 					if(data.getMetaBool(DataWatcherObjectIndex.BaseHorse.FLAGS, 3)) b |= (1 << PeMetaBase.FLAG_SADDLED);
 					if(data.getMetaBool(DataWatcherObjectIndex.BaseHorse.FLAGS, 4)) b |= (1 << PeMetaBase.FLAG_CHESTED);
-					//if(data.getMetaBool(DataWatcherObjectIndex.BaseHorse.FLAGS, 7)) b |= (1 << PeMetaBase.FLAG_REARING); TODO: not like this? It seems to make the horse disappear :/
+					//if(data.getMetaBool(DataWatcherObjectIndex.BaseHorse.FLAGS, 7)) b |= (1 << PeMetaBase.FLAG_REARING); //TODO: not like this? It seems to make the horse disappear :/
 					//if(data.getMetaBool(DataWatcherObjectIndex.BaseHorse.FLAGS, 8)) b |= (1 << PeMetaBase.FLAG_BREATHING);
 				}
 				if(entity.isOfType(NetworkEntityType.CREEPER)) {
@@ -97,6 +96,10 @@ public enum SpecificRemapper {
 					b |= (1 << PeMetaBase.FLAG_CAN_CLIMB);
 					if(data.getMetaBool(DataWatcherObjectIndex.Spider.CLIMBING, 1)) b |= (1 << PeMetaBase.FLAG_CLIMBING);
 				}
+				if(entity.isOfType(NetworkEntityType.BAT)) {
+					 b |= (1 << PeMetaBase.FLAG_CAN_FLY);
+					if(data.getMetaBool(DataWatcherObjectIndex.Bat.HANGING, 1)) b |= (1 << PeMetaBase.FLAG_RESTING);
+				}
 				if(entity.isOfType(NetworkEntityType.SQUID)) {
 					//Or gardian? TODO: Test test test.
 					b |= (1 << PeMetaBase.FLAG_CAN_SWIM);
@@ -106,7 +109,7 @@ public enum SpecificRemapper {
 					b |= (1 << PeMetaBase.FLAG_BABY);
 					remapped.put(39, new DataWatcherObjectFloatLe(0.5f)); //Send scale -> avoid big mobs with floating heads.
 				}
-				if(entity.isOfType(NetworkEntityType.GIANT)) remapped.put(39, new DataWatcherObjectFloatLe(6f)); //Send scale -> giants are Giant Zombies in PE.
+				//if(entity.isOfType(NetworkEntityType.GIANT)) remapped.put(39, new DataWatcherObjectFloatLe(6f)); //Send scale -> giants are Giant Zombies in PE.
 				
 				//Specifics:
 				//Riding things.
@@ -267,6 +270,13 @@ public enum SpecificRemapper {
 	CHICKEN(NetworkEntityType.CHICKEN, SpecificRemapper.AGEABLE),
 	SQUID(NetworkEntityType.SQUID, SpecificRemapper.INSENTIENT),
 	BASE_HORSE(NetworkEntityType.BASE_HORSE, SpecificRemapper.AGEABLE,
+		new Entry(new DataWatcherDataRemapper(){
+			@Override
+			public void remap(NetworkEntity entity, TIntObjectMap<DataWatcherObject<?>> original, TIntObjectMap<DataWatcherObject<?>> remapped) {
+				DataCache data = entity.getDataCache();
+				if(data.getMetaBool(DataWatcherObjectIndex.BaseHorse.FLAGS, 6)) remapped.put(16, new DataWatcherObjectVarInt(0b100000));
+			}
+		}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.BaseHorse.FLAGS, 13) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.BaseHorse.FLAGS, 12) {}, ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.BaseHorse.FLAGS, 17), ProtocolVersionsHelper.BEFORE_1_9)
@@ -418,7 +428,13 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Enderman.SCREAMING, 12) {}, ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.Enderman.SCREAMING, 18), ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	GIANT(NetworkEntityType.GIANT, SpecificRemapper.INSENTIENT),
+	GIANT(NetworkEntityType.GIANT, SpecificRemapper.INSENTIENT, 
+		new Entry(new DataWatcherDataRemapper() {
+			@Override
+			public void remap(NetworkEntity entity, TIntObjectMap<DataWatcherObject<?>> original, TIntObjectMap<DataWatcherObject<?>> remapped) {
+				remapped.put(39, new DataWatcherObjectFloatLe(6f)); //Send scale -> Giants are Giant Zombies in PE.
+			}
+		}, ProtocolVersion.MINECRAFT_PE)),
 	SILVERFISH(NetworkEntityType.SILVERFISH, SpecificRemapper.INSENTIENT),
 	ENDERMITE(NetworkEntityType.ENDERMITE, SpecificRemapper.INSENTIENT),
 	ENDER_DRAGON(NetworkEntityType.ENDER_DRAGON, SpecificRemapper.INSENTIENT,
