@@ -6,12 +6,12 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.types.Position;
 
-public class DataWatcherObjectVector3fVarInt extends DataWatcherObject<Position> {
+public class DataWatcherObjectVector3vi extends DataWatcherObject<Position> {
 
-	public DataWatcherObjectVector3fVarInt() {
+	public DataWatcherObjectVector3vi() {
 	}
 	
-	public DataWatcherObjectVector3fVarInt(Position position) {
+	public DataWatcherObjectVector3vi(Position position) {
 		value = position;
 	}
 

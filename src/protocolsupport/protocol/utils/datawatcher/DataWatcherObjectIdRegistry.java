@@ -28,6 +28,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarIn
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3f;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3fLe;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3i;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3vi;
 import protocolsupport.utils.Utils;
 
 public class DataWatcherObjectIdRegistry {
@@ -70,7 +71,7 @@ public class DataWatcherObjectIdRegistry {
 		register(DataWatcherObjectFloatLe.class, 3, ProtocolVersion.MINECRAFT_PE);
 		register(DataWatcherObjectString.class, 4, ProtocolVersion.MINECRAFT_PE);
 		//TODO: SLOT (5)
-		//TODO: BLOCKPOSITION (Vector3i?) (6)
+		register(DataWatcherObjectVector3vi.class, 6, ProtocolVersion.MINECRAFT_PE);
 		register(DataWatcherObjectLong.class, 7, ProtocolVersion.MINECRAFT_PE);
 		register(DataWatcherObjectVector3fLe.class, 8, ProtocolVersion.MINECRAFT_PE);
 	}
