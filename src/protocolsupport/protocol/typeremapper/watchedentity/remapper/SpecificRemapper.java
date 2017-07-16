@@ -141,7 +141,7 @@ public enum SpecificRemapper {
 				}
 				
 				// = PE Interaction =
-				remapped.put(40, new DataWatcherObjectString("Interact")); //TODO: different texts? I ain't bothered.
+				remapped.put(40, new DataWatcherObjectString("Interact")); //TODO: different texts? I ain't bothered yet.
 				
 			}}, ProtocolVersion.MINECRAFT_PE),
 		
