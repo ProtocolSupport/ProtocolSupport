@@ -5,11 +5,14 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -68,6 +71,16 @@ public class PlayerListener implements Listener {
 		) {
 			Block block = event.getBlock();
 			connection.sendPacket(ServerPlatform.get().getPacketFactory().createBlockBreakSoundPacket(new Position(block.getX(), block.getY(), block.getZ()), block.getType()));
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onEntityDamage(EntityDamageEvent event) {
+		if((event.getCause() == DamageCause.FIRE_TICK || event.getCause() == DamageCause.FIRE) && event.getEntity() instanceof LivingEntity) {
+			LivingEntity l = (LivingEntity) event.getEntity();
+			//Hard reset on how Bukkit sends it's damage for fire. Apparently Minecraft doesn't send fire damage packets anymore.
+			l.damage(event.getDamage(), event.getCause());
+			event.setCancelled(true);
 		}
 	}
 
