@@ -7,6 +7,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -65,6 +66,10 @@ public interface PlatformUtils {
 	public String getPrependerHandlerName();
 
 	public void setFraming(ChannelPipeline pipeline, IPacketSplitter splitter, IPacketPrepender prepender);
+	
+	public Sound getSoundFromName(String name);
+	
+	public String getSoundName(Sound sound);
 	
 	public List<Connection> getNearbyConnections(Location loc, double deltaX, double deltaY, double deltaZ, ProtocolVersion... versions);
 

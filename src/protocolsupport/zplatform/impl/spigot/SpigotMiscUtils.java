@@ -10,7 +10,9 @@ import java.util.stream.Stream;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_12_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_12_R1.CraftSound;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_12_R1.util.CraftIconCache;
 import org.bukkit.entity.EntityType;
@@ -193,6 +195,16 @@ public class SpigotMiscUtils implements PlatformUtils {
 	public void setFraming(ChannelPipeline pipeline, IPacketSplitter splitter, IPacketPrepender prepender) {
 		((SpigotWrappedSplitter) pipeline.get(SpigotChannelHandlers.SPLITTER)).setRealSplitter(splitter);
 		((SpigotWrappedPrepender) pipeline.get(SpigotChannelHandlers.PREPENDER)).setRealPrepender(prepender);
+	}
+	
+	@Override
+	public String getSoundName(Sound sound) {
+		return CraftSound.getSound(sound);
+	}
+	
+	@Override
+	public Sound getSoundFromName(String name) {
+		return Sound.valueOf(name.replaceAll(".", "_").toUpperCase());
 	}
 	
 	@Override
