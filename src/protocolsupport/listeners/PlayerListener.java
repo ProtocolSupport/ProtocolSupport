@@ -5,6 +5,8 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -76,10 +78,9 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityDamage(EntityDamageEvent event) {
 		if((event.getCause() == DamageCause.FIRE_TICK || event.getCause() == DamageCause.FIRE)) {
-			for(Player p : Bukkit.getOnlinePlayers()) {
-				//Send extra status packets to all old connections within 48 blocks (2304 = 48^2).
-				if(p.getLocation().distanceSquared(event.getEntity().getLocation()) <= 2304) { 
-					Connection connection = ProtocolSupportAPI.getConnection(p);
+			for(Entity e : event.getEntity().getWorld().getNearbyEntities(event.getEntity().getLocation(), 48, 128, 48)) {
+				if(e.getType() == EntityType.PLAYER) { 
+					Connection connection = ProtocolSupportAPI.getConnection((Player) e);
 					if (
 						(connection != null) &&
 						(connection.getVersion().getProtocolType() == ProtocolType.PC) &&

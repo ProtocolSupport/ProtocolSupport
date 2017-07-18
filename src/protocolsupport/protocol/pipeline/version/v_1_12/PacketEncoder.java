@@ -7,7 +7,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r2_10_11_12.LoginSuccess;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_8_9r1_9r2_10_11_12.SetCompression;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_10_11_12.WorldCustomSound;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_10_11_12.WorldSound;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_12.WorldSound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_11_12.CollectEffect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_11_12.SpawnLiving;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_11_12.Title;

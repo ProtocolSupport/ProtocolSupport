@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_10_11_12;
+package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_10_11;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
@@ -16,7 +16,7 @@ public class WorldSound extends MiddleWorldSound {
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		String soundname = LegacySound.getSoundName(id);
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_CUSTOM_SOUND_ID, version);
-		if(soundname == "entity.player.hurt_on_fire" && version.isBefore(ProtocolVersion.MINECRAFT_1_12)) soundname = "entity.player.hurt";
+		if(soundname == "entity.player.hurt_on_fire") soundname = "entity.player.hurt";
 		StringSerializer.writeString(serializer, version, soundname);
 		VarNumberSerializer.writeVarInt(serializer, category);
 		serializer.writeInt(x);
