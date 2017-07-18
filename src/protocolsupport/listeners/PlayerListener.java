@@ -10,6 +10,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -23,6 +25,7 @@ import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.tab.TabAPI;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.zplatform.ServerPlatform;
 
@@ -68,6 +71,15 @@ public class PlayerListener implements Listener {
 		) {
 			Block block = event.getBlock();
 			connection.sendPacket(ServerPlatform.get().getPacketFactory().createBlockBreakSoundPacket(new Position(block.getX(), block.getY(), block.getZ()), block.getType()));
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onEntityDamage(EntityDamageEvent event) {
+		if((event.getCause() == DamageCause.FIRE_TICK || event.getCause() == DamageCause.FIRE)) {
+			for(Connection c : ServerPlatform.get().getMiscUtils().getNearbyConnections(event.getEntity().getLocation(), 48, 128, 48, ProtocolVersionsHelper.BEFORE_1_12)) {
+				c.sendPacket(ServerPlatform.get().getPacketFactory().createStatusPacket(event.getEntity(), 2));
+			}
 		}
 	}
 

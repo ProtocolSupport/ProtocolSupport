@@ -1,14 +1,24 @@
 package protocolsupport.zplatform;
 
 import java.security.KeyPair;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
+import org.bukkit.Location;
+import org.bukkit.Sound;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
 
+import com.google.common.base.Predicate;
+
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
+import protocolsupport.api.Connection;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -56,5 +66,18 @@ public interface PlatformUtils {
 	public String getPrependerHandlerName();
 
 	public void setFraming(ChannelPipeline pipeline, IPacketSplitter splitter, IPacketPrepender prepender);
+	
+	public Sound getSoundFromName(String name);
+	
+	public String getSoundName(Sound sound);
+	
+	public List<Connection> getNearbyConnections(Location loc, double deltaX, double deltaY, double deltaZ, ProtocolVersion... versions);
 
+	public List<Player> getNearbyPlayers(Location loc, double deltaX, double deltaY, double deltaZ);
+	
+	public List<Entity> getNearbyEntities(Location loc, double deltaX, double deltaY, double deltaZ);
+
+	static Predicate<Connection> legacyConnectionFilter(ProtocolVersion... versions) {
+		return e -> e != null && Arrays.asList(versions).contains(e.getVersion());
+	}
 }

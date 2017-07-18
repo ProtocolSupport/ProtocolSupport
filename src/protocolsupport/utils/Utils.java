@@ -9,10 +9,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.StringJoiner;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
 import com.google.gson.Gson;
 
+import gnu.trove.map.hash.TIntObjectHashMap;
+import gnu.trove.procedure.TIntObjectProcedure;
 import protocolsupport.ProtocolSupport;
 
 public class Utils {
@@ -126,6 +129,20 @@ public class Utils {
 
 	public static boolean isTrue(Boolean b) {
 		return (b != null) && b;
+	}
+	
+	public static int TIntObjectHashMapGetKeyFromValue(TIntObjectHashMap<?> map, Object fromValue) {
+		AtomicInteger found = new AtomicInteger(-1);
+		map.forEachEntry(new TIntObjectProcedure<Object>() {
+			@Override
+			public boolean execute(int key, Object value) {
+				if(value.equals(fromValue)) {
+					found.set(key);
+					return false;
+				}
+				return true;
+			}});
+		return found.get();
 	}
 
 	private static final String resourcesDirName = "resources";

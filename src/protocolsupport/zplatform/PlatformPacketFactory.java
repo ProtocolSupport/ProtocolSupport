@@ -4,6 +4,7 @@ import java.security.PublicKey;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
@@ -37,6 +38,8 @@ public interface PlatformPacketFactory {
 	public Object createSetCompressionPacket(int threshold);
 
 	public Object createBlockBreakSoundPacket(Position pos, Material type);
+	
+	public Object createStatusPacket(Entity entity, int status);
 
 	public Object createStatusPongPacket(long pingId);
 

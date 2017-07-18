@@ -2,22 +2,35 @@ package protocolsupport.zplatform.impl.glowstone;
 
 import java.security.KeyPair;
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Sound;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
+
+import com.google.common.base.Predicate;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import net.glowstone.GlowServer;
+import net.glowstone.constants.GlowSound;
 import net.glowstone.entity.meta.profile.PlayerProfile;
 import net.glowstone.entity.meta.profile.PlayerProperty;
 import net.glowstone.io.nbt.NbtSerialization;
 import net.glowstone.net.protocol.ProtocolType;
 import net.glowstone.util.GlowServerIcon;
+import protocolsupport.api.Connection;
+import protocolsupport.api.ProtocolSupportAPI;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
 import protocolsupport.protocol.utils.authlib.GameProfile;
@@ -188,6 +201,39 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	@Override
 	public void setFraming(ChannelPipeline pipeline, IPacketSplitter splitter, IPacketPrepender prepender) {
 		((GlowStoneFramingHandler) pipeline.get(GlowStoneChannelHandlers.FRAMING)).setRealFraming(prepender, splitter);
+	}
+	
+	@Override
+	public String getSoundName(Sound sound) {
+		return GlowSound.getVanillaId(sound);
+	}
+	
+	@Override
+	public Sound getSoundFromName(String name) {
+		return GlowSound.getVanillaSound(name);
+	}
+
+	@Override
+	public List<Connection> getNearbyConnections(Location loc, double deltaX, double deltaY, double deltaZ, ProtocolVersion... versions) {
+		return getNearbyGlowEntities(loc, deltaX, deltaY, deltaZ).filter(GlowStoneMiscUtils.playerFilter()).map(p -> ProtocolSupportAPI.getConnection((Player) p)).filter(PlatformUtils.legacyConnectionFilter(versions)).collect(Collectors.toList());
+	}
+	
+	@Override
+	public List<Player> getNearbyPlayers(Location loc, double deltaX, double deltaY, double deltaZ) {
+		return getNearbyGlowEntities(loc, deltaX, deltaY, deltaZ).filter(GlowStoneMiscUtils.playerFilter()).map(e -> (Player) e).collect(Collectors.toList());
+	}
+	
+	@Override
+	public List<Entity> getNearbyEntities(Location loc, double deltaX, double deltaY, double deltaZ) {
+		return getNearbyGlowEntities(loc, deltaX, deltaY, deltaZ).collect(Collectors.toList());
+	}
+	
+	public Stream<Entity> getNearbyGlowEntities(Location loc, double deltaX, double deltaY, double deltaZ) {
+		return loc.getWorld().getNearbyEntities(loc, deltaX, deltaY, deltaZ).stream();
+	}
+	
+	public static Predicate<? super Entity> playerFilter() {
+		return e -> e.getType() == EntityType.PLAYER;
 	}
 
 }

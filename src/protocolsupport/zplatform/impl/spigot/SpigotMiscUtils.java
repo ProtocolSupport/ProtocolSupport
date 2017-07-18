@@ -1,26 +1,41 @@
 package protocolsupport.zplatform.impl.spigot;
 
 import java.security.KeyPair;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_12_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_12_R1.CraftSound;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_12_R1.util.CraftIconCache;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
 import org.spigotmc.SpigotConfig;
 
+import com.google.common.base.Predicate;
 import com.mojang.authlib.properties.Property;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
+import net.minecraft.server.v1_12_R1.AxisAlignedBB;
+import net.minecraft.server.v1_12_R1.Entity;
 import net.minecraft.server.v1_12_R1.EnumProtocol;
 import net.minecraft.server.v1_12_R1.MinecraftServer;
 import net.minecraft.server.v1_12_R1.NBTTagCompound;
 import net.minecraft.server.v1_12_R1.NetworkManager;
+import protocolsupport.api.Connection;
+import protocolsupport.api.ProtocolSupportAPI;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
@@ -180,6 +195,39 @@ public class SpigotMiscUtils implements PlatformUtils {
 	public void setFraming(ChannelPipeline pipeline, IPacketSplitter splitter, IPacketPrepender prepender) {
 		((SpigotWrappedSplitter) pipeline.get(SpigotChannelHandlers.SPLITTER)).setRealSplitter(splitter);
 		((SpigotWrappedPrepender) pipeline.get(SpigotChannelHandlers.PREPENDER)).setRealPrepender(prepender);
+	}
+	
+	@Override
+	public String getSoundName(Sound sound) {
+		return CraftSound.getSound(sound);
+	}
+	
+	@Override
+	public Sound getSoundFromName(String name) {
+		return Sound.valueOf(name.replaceAll(".", "_").toUpperCase());
+	}
+	
+	@Override
+	public List<Connection> getNearbyConnections(Location loc, double deltaX, double deltaY, double deltaZ, ProtocolVersion... versions) {
+		return getNearbyCraftEntities(loc, deltaX, deltaY, deltaZ, SpigotMiscUtils.playerFilter()).map(e -> ProtocolSupportAPI.getConnection((Player) e.getBukkitEntity())).filter(PlatformUtils.legacyConnectionFilter(versions)).collect(Collectors.toList());
+	}
+	
+	@Override
+	public List<Player> getNearbyPlayers(Location loc, double deltaX, double deltaY, double deltaZ) {
+		return getNearbyCraftEntities(loc, deltaX, deltaY, deltaZ, SpigotMiscUtils.playerFilter()).map(e -> (Player) e.getBukkitEntity()).collect(Collectors.toList());
+	}
+	
+	@Override
+	public List<org.bukkit.entity.Entity> getNearbyEntities(Location loc, double deltaX, double deltaY, double deltaZ) {
+		return getNearbyCraftEntities(loc, deltaX, deltaY, deltaZ, null).map(e -> e.getBukkitEntity()).collect(Collectors.toList());
+	}
+
+	public Stream<Entity> getNearbyCraftEntities(Location loc, double deltaX, double deltaY, double deltaZ, Predicate<? super Entity> filter) {
+		return ((CraftWorld)loc.getWorld()).getHandle().getEntities(null, new AxisAlignedBB(loc.getX() - deltaX, loc.getY() - deltaY, loc.getZ() - deltaZ, loc.getX() + deltaX, loc.getY() + deltaY, loc.getZ() + deltaZ), filter).stream();
+	}
+	
+	private static Predicate<? super Entity> playerFilter() {
+		return e -> e.getBukkitEntity().getType() == EntityType.PLAYER;
 	}
 
 }
