@@ -117,6 +117,11 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 			blocksound.b() * 0.8F
 		);
 	}
+	
+	@Override
+	public Object createStatusPacket(org.bukkit.entity.Entity entity, int status) {
+		return new PacketPlayOutEntityStatus(((org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity) entity).getHandle(), (byte) status);
+	}
 
 	@Override
 	public Object createStatusPongPacket(long pingId) {

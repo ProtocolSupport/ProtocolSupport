@@ -5,7 +5,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -76,11 +75,20 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityDamage(EntityDamageEvent event) {
-		if((event.getCause() == DamageCause.FIRE_TICK || event.getCause() == DamageCause.FIRE) && event.getEntity() instanceof LivingEntity) {
-			LivingEntity l = (LivingEntity) event.getEntity();
-			//Hard reset on how Bukkit sends it's damage for fire. Apparently Minecraft doesn't send fire damage packets anymore.
-			l.damage(event.getDamage(), event.getCause());
-			event.setCancelled(true);
+		if((event.getCause() == DamageCause.FIRE_TICK || event.getCause() == DamageCause.FIRE)) {
+			for(Player p : Bukkit.getOnlinePlayers()) {
+				//Send extra status packets to all old connections within 48 blocks (2304 = 48^2).
+				if(p.getLocation().distanceSquared(event.getEntity().getLocation()) <= 2304) { 
+					Connection connection = ProtocolSupportAPI.getConnection(p);
+					if (
+						(connection != null) &&
+						(connection.getVersion().getProtocolType() == ProtocolType.PC) &&
+						connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_12)
+					) {
+						connection.sendPacket(ServerPlatform.get().getPacketFactory().createStatusPacket(event.getEntity(), 2));
+					}
+				}
+			}
 		}
 	}
 
