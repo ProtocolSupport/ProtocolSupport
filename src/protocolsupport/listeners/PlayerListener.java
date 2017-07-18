@@ -10,6 +10,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -84,6 +86,22 @@ public class PlayerListener implements Listener {
 				event.getItem().getLocation(), Sound.ENTITY_ITEM_PICKUP,
 				0.2F, (((ThreadLocalRandom.current().nextFloat() - ThreadLocalRandom.current().nextFloat()) * 0.7F) + 1.0F) * 2.0F
 			);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onEntityDamage(EntityDamageEvent event) {
+		if ((event.getCause() == DamageCause.FIRE_TICK || event.getCause() == DamageCause.FIRE)) {
+			for (Player player : ServerPlatform.get().getMiscUtils().getNearbyPlayers(event.getEntity().getLocation(), 48, 128, 48)) {
+				Connection connection = ProtocolSupportAPI.getConnection(player);
+				if (
+					(connection != null) &&
+					(connection.getVersion().getProtocolType() == ProtocolType.PC) &&
+					connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_12)
+				) {
+					connection.sendPacket(ServerPlatform.get().getPacketFactory().createEntityStatusPacket(player, 2));
+				}
+			}
 		}
 	}
 

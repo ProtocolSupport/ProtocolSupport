@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.spigotmc.SpigotConfig;
 
 import com.google.common.collect.BiMap;
@@ -159,6 +160,11 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	@Override
 	public Object createFakeJoinGamePacket() {
 		return new PacketPlayOutLogin(0, EnumGamemode.NOT_SET, false, 0, EnumDifficulty.EASY, 60, WorldType.NORMAL, false);
+	}
+
+	@Override
+	public Object createEntityStatusPacket(org.bukkit.entity.Entity entity, int status) {
+		return new PacketPlayOutEntityStatus(((CraftEntity) entity).getHandle(), (byte) status);
 	}
 
 

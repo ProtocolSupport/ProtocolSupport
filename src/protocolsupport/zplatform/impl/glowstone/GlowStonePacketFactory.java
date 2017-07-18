@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.WorldType;
+import org.bukkit.entity.Entity;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -272,6 +273,12 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 	public Message createFakeJoinGamePacket() {
 		return new JoinGameMessage(0, 0, 0, 0, 0, WorldType.NORMAL.name(), false);
 	}
+
+	@Override
+	public Object createEntityStatusPacket(Entity entity, int status) {
+		return new EntityStatusMessage(entity.getEntityId(), status);
+	}
+
 
 	@Override
 	public int getOutLoginDisconnectPacketId() {
