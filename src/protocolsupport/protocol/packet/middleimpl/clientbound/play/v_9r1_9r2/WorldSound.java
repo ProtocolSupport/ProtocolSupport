@@ -14,8 +14,10 @@ public class WorldSound extends MiddleWorldSound {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+		String soundname = LegacySound.getSoundName(id);
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_CUSTOM_SOUND_ID, version);
-		StringSerializer.writeString(serializer, version, LegacySound.getSoundName(id));
+		if(soundname == "entity.player.hurt_on_fire") soundname = "entity.player.hurt";
+		StringSerializer.writeString(serializer, version, soundname);
 		VarNumberSerializer.writeVarInt(serializer, category);
 		serializer.writeInt(x);
 		serializer.writeInt(y);

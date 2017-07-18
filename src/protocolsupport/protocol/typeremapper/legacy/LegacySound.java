@@ -2,6 +2,7 @@ package protocolsupport.protocol.typeremapper.legacy;
 
 import java.util.HashMap;
 
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.utils.minecraftdata.SoundData;
 
 public class LegacySound {
@@ -34,7 +35,8 @@ public class LegacySound {
 			case "game.neutral.hurt":
 			case "game.neutral.die":
 			case "game.hostile.hurt":
-			case "game.hostile.die": {
+			case "game.hostile.die":
+			{
 				return "damage.hit";
 			}
 			case "game.player.swim":
@@ -505,6 +507,7 @@ public class LegacySound {
 		//manually mapped sounds
 		register("block.chest.open", "random.chestopen");
 		register("block.chest.close", "random.chestclosed");
+		register("entity.player.hurt_on_fire", "game.player.hurt");
 	}
 
 }
