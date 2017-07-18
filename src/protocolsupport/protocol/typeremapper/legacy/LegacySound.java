@@ -17,6 +17,18 @@ public class LegacySound {
 		return legacySounds.get(newSound);
 	}
 
+	public static String getPreV_12SoundName(int soundType) {
+		String newSound = getSoundName(soundType);
+		switch (newSound) {
+			case "entity.player.hurt_on_fire": {
+				return "entity.player.hurt";
+			}
+			default: {
+				return newSound;
+			}
+		}
+	}
+	
 	public static String getLegacySoundName(String soundName) {
 		switch (soundName) {
 			case "game.player.hurt.fall.big":

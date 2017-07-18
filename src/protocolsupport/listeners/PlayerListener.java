@@ -5,8 +5,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -27,6 +25,7 @@ import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.tab.TabAPI;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.zplatform.ServerPlatform;
 
@@ -78,17 +77,8 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityDamage(EntityDamageEvent event) {
 		if((event.getCause() == DamageCause.FIRE_TICK || event.getCause() == DamageCause.FIRE)) {
-			for(Entity e : event.getEntity().getWorld().getNearbyEntities(event.getEntity().getLocation(), 48, 128, 48)) {
-				if(e.getType() == EntityType.PLAYER) { 
-					Connection connection = ProtocolSupportAPI.getConnection((Player) e);
-					if (
-						(connection != null) &&
-						(connection.getVersion().getProtocolType() == ProtocolType.PC) &&
-						connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_12)
-					) {
-						connection.sendPacket(ServerPlatform.get().getPacketFactory().createStatusPacket(event.getEntity(), 2));
-					}
-				}
+			for(Connection c : ServerPlatform.get().getMiscUtils().getNearbyConnections(event.getEntity().getLocation(), 48, 128, 48, ProtocolVersionsHelper.BEFORE_1_12)) {
+				c.sendPacket(ServerPlatform.get().getPacketFactory().createStatusPacket(event.getEntity(), 2));
 			}
 		}
 	}
