@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
@@ -17,7 +16,6 @@ import org.bukkit.util.CachedServerIcon;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import net.glowstone.GlowServer;
-import net.glowstone.constants.GlowSound;
 import net.glowstone.entity.meta.profile.PlayerProfile;
 import net.glowstone.entity.meta.profile.PlayerProperty;
 import net.glowstone.io.nbt.NbtSerialization;
@@ -207,11 +205,6 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	@Override
 	public void setFraming(ChannelPipeline pipeline, IPacketSplitter splitter, IPacketPrepender prepender) {
 		((GlowStoneFramingHandler) pipeline.get(GlowStoneChannelHandlers.FRAMING)).setRealFraming(prepender, splitter);
-	}
-	
-	@Override
-	public String getSoundName(Sound sound) {
-		return GlowSound.getVanillaId(sound);
 	}
 
 }
