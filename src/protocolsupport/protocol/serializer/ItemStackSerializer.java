@@ -43,12 +43,15 @@ public class ItemStackSerializer {
 			to.writeShort(-1);
 			return;
 		}
-		ItemStackWrapper remapped = ItemStackRemapper.remapClientbound(version, locale, itemstack.cloneItemStack());
+		ItemStackWrapper remapped = itemstack.cloneItemStack();
+		int itemstate = ItemStackRemapper.ITEM_ID_REMAPPING_REGISTRY.getTable(version).getRemap(MinecraftData.getItemStateFromIdAndData(remapped.getTypeId(), remapped.getData()));
+		remapped.setTypeId(MinecraftData.getItemIdFromState(itemstate));
+		remapped.setData(MinecraftData.getItemDataFromState(itemstate));
 		if (fireEvent && (ItemStackWriteEvent.getHandlerList().getRegisteredListeners().length > 0)) {
 			ItemStackWriteEvent event = new InternalItemStackWriteEvent(version, itemstack, remapped);
 			Bukkit.getPluginManager().callEvent(event);
 		}
-		int itemstate = ItemStackRemapper.ITEM_ID_REMAPPING_REGISTRY.getTable(version).getRemap(MinecraftData.getItemStateFromIdAndData(remapped.getTypeId(), remapped.getData()));
+		remapped = ItemStackRemapper.remapClientbound(version, locale, remapped);
 		to.writeShort(MinecraftData.getItemIdFromState(itemstate));
 		to.writeByte(remapped.getAmount());
 		to.writeShort(MinecraftData.getItemDataFromState(itemstate));
