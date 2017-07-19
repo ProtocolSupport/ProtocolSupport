@@ -115,6 +115,7 @@ public class ProtocolSupport extends JavaPlugin {
 		getCommand("protocolsupport").setExecutor(new CommandHandler());
 		getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 		getServer().getPluginManager().registerEvents(new CommandListener(), this);
+		getServer().getScheduler().runTask(this, () -> peserver.start());
 	}
 
 	@Override
