@@ -43,7 +43,7 @@ public class Map extends MiddleMap {
 		}
 		if (columns > 0) {
 			LegacyMap maptransformer = new LegacyMap();
-			maptransformer.loadFromNewMapData(columns, rows, xstart, zstart, data);
+			maptransformer.loadFromNewMapData(columns, rows, xstart, zstart, colors);
 			ArrayBasedIdRemappingTable colorRemapper = MapColorRemapper.REMAPPER.getTable(version);
 			for (ColumnEntry entry : maptransformer.toPre18MapData()) {
 				ClientBoundPacketData mapdata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_MAP_ID, version);
@@ -55,7 +55,7 @@ public class Map extends MiddleMap {
 				mapdata.writeByte(entry.getY());
 				byte[] colors = entry.getColors();
 				for (int i = 0; i < colors.length; i++) {
-					colors[i] = (byte) colorRemapper.getRemap(colors[i]);
+					colors[i] = (byte) colorRemapper.getRemap(colors[i] & 0xFF);
 				}
 				mapdata.writeBytes(colors);
 				datas.add(mapdata);

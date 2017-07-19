@@ -32,7 +32,7 @@ public class ItemStackSerializer {
 		if (type >= 0) {
 			ItemStackWrapper itemstack = ServerPlatform.get().getWrapperFactory().createItemStack(type);
 			itemstack.setAmount(from.readByte());
-			itemstack.setData(from.readShort());
+			itemstack.setData(from.readUnsignedShort());
 			itemstack.setTag(readTag(from, version));
 			return ItemStackRemapper.remapServerbound(version, locale, itemstack.cloneItemStack());
 		}

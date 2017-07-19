@@ -8,12 +8,10 @@ public class LegacyEntityType {
 	static {
 		register("fireworks_rocket", "FireworksRocketEntity");
 		register("skeleton_horse", "SkeletonHorse");
-		register("item", "Item");
 		register("vindication_illager", "VindicationIllager");
 		register("xp_bottle", "ThrownExpBottle");
 		register("elder_guardian", "ElderGuardian");
 		register("villager_golem", "VillagerGolem");
-		register("item_frame", "ItemFrame");
 		register("zombie_pigman", "PigZombie");
 		register("wither_skeleton", "WitherSkeleton");
 		register("mule", "Mule");
@@ -32,17 +30,14 @@ public class LegacyEntityType {
 		register("arrow", "Arrow");
 		register("zombie_horse", "ZombieHorse");
 		register("dragon_fireball", "DragonFireball");
-		register("egg", "ThrownEgg");
 		register("ender_pearl", "ThrownEnderpearl");
 		register("cow", "Cow");
 		register("snowman", "SnowMan");
 		register("hopper_minecart", "MinecartHopper");
 		register("spider", "Spider");
 		register("small_fireball", "SmallFireball");
-		register("painting", "Painting");
 		register("witch", "Witch");
 		register("wither", "WitherBoss");
-		register("falling_block", "FallingSand");
 		register("stray", "Stray");
 		register("creeper", "Creeper");
 		register("wither_skull", "WitherSkull");
@@ -83,7 +78,6 @@ public class LegacyEntityType {
 		register("shulker_bullet", "ShulkerBullet");
 		register("ender_dragon", "EnderDragon");
 		register("enderman", "Enderman");
-		register("lightning_bolt", "null");
 		register("llama_spit", "LlamaSpit");
 		register("snowball", "Snowball");
 		register("tnt", "PrimedTnt");

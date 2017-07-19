@@ -52,7 +52,7 @@ public class GlowStoneItemStackWrapper extends ItemStackWrapper {
 
 	@Override
 	public int getData() {
-		return itemstack.getDurability();
+		return itemstack.getDurability() & 0xFFFF;
 	}
 
 	@Override
