@@ -16,7 +16,7 @@ public class WorldSound extends MiddleWorldSound {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		String soundname = SoundRemapper.getSoundName(version, id);
-		if (soundname == null || soundname == "") {
+		if (soundname == null) {
 			return RecyclableEmptyList.get();
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_CUSTOM_SOUND_ID, version);
