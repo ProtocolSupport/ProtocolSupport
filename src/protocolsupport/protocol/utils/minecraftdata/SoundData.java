@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
 import protocolsupport.utils.JsonUtils;
-import protocolsupport.utils.Utils;
 
 public class SoundData {
 
@@ -20,10 +19,6 @@ public class SoundData {
 
 	public static String getNameById(int id) {
 		return idToName.get(id);
-	}
-	
-	public static int getIdByName(String name) {
-		return Utils.TIntObjectHashMapGetKeyFromValue(idToName, name);
 	}
 
 }
