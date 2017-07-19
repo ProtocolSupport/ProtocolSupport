@@ -96,7 +96,7 @@ public class ProtocolSupportAPI {
 
 	/**
 	 * Return true if protocol version support is enabled
-	 * @param version protocol version for which support enabled should be checked  
+	 * @param version protocol version for which support enabled should be checked
 	 * @return true if protocol version support is enabled, false otherwise
 	 */
 	public static boolean isProtocolVersionEnabled(ProtocolVersion version) {
