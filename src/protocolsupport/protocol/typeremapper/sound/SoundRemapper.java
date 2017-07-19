@@ -210,7 +210,7 @@ public class SoundRemapper {
 			registerRemapEntry("entity.hostile.big_fall", "game.hostile.hurt.fall.big", ProtocolVersionsHelper.RANGE__1_7_5__1_8);
 			registerRemapEntry("entity.player.big_fall", "damage.fallbig", ProtocolVersionsHelper.BEFORE_1_7);
 			registerRemapEntry("entity.generic.big_fall", "damage.fallbig", ProtocolVersionsHelper.BEFORE_1_7);
-7			registerRemapEntry("entity.hostile.big_fall", "damage.fallbig", ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry("entity.hostile.big_fall", "damage.fallbig", ProtocolVersionsHelper.BEFORE_1_7);
 			registerRemapEntry("record.mall", "records.mall", ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry("entity.blaze.burn", "fire.fire", ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry("block.fire.ambient", "fire.fire", ProtocolVersionsHelper.BEFORE_1_9);

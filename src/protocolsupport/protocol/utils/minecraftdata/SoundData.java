@@ -39,14 +39,6 @@ public class SoundData {
 		return ServerPlatform.get().getMiscUtils().getSoundName(sound);
 	}
 	
-	public static Sound getSoundByName(String name) {
-		return ServerPlatform.get().getMiscUtils().getSoundFromName(name);
-	}
-	
-	public static Sound getSoundById(int id) {
-		return getSoundByName(getNameById(id));
-	}
-	
 	public static int getIdBySound(Sound sound) {
 		return getIdByName(getNameBySound(sound));
 	}

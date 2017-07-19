@@ -35,7 +35,7 @@ public class SoundRemapperControl {
 	}
 	
 	/**
-	 * Sets remap from a Bukkit Sound to another sounf with name.
+	 * Sets remap from a Bukkit Sound to another sound with specified name.
 	 * @param from {@link Sound} which will be remapped
 	 * @param to {@link String} to which remap will occur
 	 */
@@ -53,7 +53,7 @@ public class SoundRemapperControl {
 	}
 	
 	/**
-	 * Sets remap from a sound id to another sound with name.
+	 * Sets remap from a sound id to another sound with specified name.
 	 * @param from {@link Sound} which will be remapped
 	 * @param to {@link Sound} to which remap will occur
 	 */
@@ -86,26 +86,6 @@ public class SoundRemapperControl {
 	 */
 	public String getRemap(Sound from) {
 		return getRemap(SoundData.getNameBySound(from));
-	}
-	
-	/**
-	 * Returns remap as Bukkit sound for specified soundname
-	 * May return null if the sound is unknown in Bukkit!
-	 * @param from {@link String}
-	 * @return remap for specified soundname
-	 */
-	public Sound getRemappedSound(String from) {
-		return SoundData.getSoundByName(getRemap(from));
-	}
-	
-	/**
-	 * Returns remap as SoundId for specified soundname
-	 * May return -1 if the sound is unknown in Bukkit!
-	 * @param from {@link String}
-	 * @return remap for specified soundname
-	 */
-	public int getRemappedSoundId(String from) {
-		return SoundData.getIdByName(getRemap(from));
 	}
 	
 }

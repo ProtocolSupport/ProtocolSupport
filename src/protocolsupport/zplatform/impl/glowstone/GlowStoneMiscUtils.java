@@ -213,10 +213,5 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	public String getSoundName(Sound sound) {
 		return GlowSound.getVanillaId(sound);
 	}
-	
-	@Override
-	public Sound getSoundFromName(String name) {
-		return GlowSound.getVanillaSound(name);
-	}
 
 }

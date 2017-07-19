@@ -64,8 +64,6 @@ public interface PlatformUtils {
 
 	public void setFraming(ChannelPipeline pipeline, IPacketSplitter splitter, IPacketPrepender prepender);
 	
-	public Sound getSoundFromName(String name);
-	
 	public String getSoundName(Sound sound);
 	
 }

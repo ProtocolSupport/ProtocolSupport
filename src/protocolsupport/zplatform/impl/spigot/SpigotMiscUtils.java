@@ -207,10 +207,5 @@ public class SpigotMiscUtils implements PlatformUtils {
 	public String getSoundName(Sound sound) {
 		return CraftSound.getSound(sound);
 	}
-	
-	@Override
-	public Sound getSoundFromName(String name) {
-		return Sound.valueOf(name.replaceAll(".", "_").toUpperCase());
-	}
 
 }

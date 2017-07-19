@@ -20,7 +20,7 @@ public class WorldSound extends MiddleWorldSound {
 			return RecyclableEmptyList.get();
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_CUSTOM_SOUND_ID, version);
-		StringSerializer.writeString(serializer, version, LegacySound.getSoundName(id));
+		StringSerializer.writeString(serializer, version, soundname);
 		VarNumberSerializer.writeVarInt(serializer, category);
 		serializer.writeInt(x);
 		serializer.writeInt(y);
