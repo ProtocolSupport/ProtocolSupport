@@ -2,8 +2,14 @@ package protocolsupport.api;
 
 import java.net.SocketAddress;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.lang3.Validate;
 import org.bukkit.entity.Player;
 
 import protocolsupport.api.remapper.BlockRemapperControl;
@@ -61,6 +67,51 @@ public class ProtocolSupportAPI {
 	public static Connection getConnection(SocketAddress address) {
 		return ProtocolStorage.getConnection(address);
 	}
+
+
+	private static final Set<ProtocolVersion> enabledVersions = Collections.newSetFromMap(new ConcurrentHashMap<>());
+	static {
+		enabledVersions.addAll(Arrays.asList(ProtocolVersion.getAllSupported()));
+	}
+
+	/**
+	 * Enables protocol version support if it was disabled previously
+	 * By default all supported versions are enabled
+	 * @param version protocol version which support needs to be enabled
+	 */
+	public static void enableProtocolVersion(ProtocolVersion version) {
+		Validate.isTrue(version.isSupported(), "Can't enable support for version that is not supported at all");
+		enabledVersions.add(version);
+	}
+
+	/**
+	 * Disables protocol version support, players with that version won't be able to login to server and ping will report server as unsupported version
+	 * Disabling all versions before 1.9 will allow multiple passengers on entity
+	 * @param version protocol version which support needs to be disabled
+	 */
+	public static void disableProtocolVersion(ProtocolVersion version) {
+		Validate.isTrue(version.isSupported(), "Can't disable support for version that is not supported at all");
+		enabledVersions.remove(version);
+	}
+
+	/**
+	 * Return true if protocol version support is enabled
+	 * @param version protocol version for which support enabled should be checked  
+	 * @return true if protocol version support is enabled, false otherwise
+	 */
+	public static boolean isProtocolVersionEnabled(ProtocolVersion version) {
+		return enabledVersions.contains(version);
+	}
+
+	/**
+	 * Returns all currently enabled protocol versions
+	 * @return all currently enabled protocol versions
+	 */
+	public static Collection<ProtocolVersion> getEnabledProtocolVersions() {
+		return new ArrayList<ProtocolVersion>(enabledVersions);
+	}
+
+
 
 	/**
 	 * @param version protocol version for you want to control remapping
