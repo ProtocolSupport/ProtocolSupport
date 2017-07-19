@@ -13,7 +13,6 @@ public class MapColorRemapper {
 				if (color.getId() > ModernMapColor.Color143.getId()) {
 					registerRemapEntry(color.getId(), MapColorHelper.getSimilarModernColor(color, ModernMapColor.Color143.getId()).getId(), ProtocolVersionsHelper.BEFORE_1_12);
 				}
-				registerRemapEntry(color.getId(), MapColorHelper.getSimilarV7Color(color).getId(), ProtocolVersionsHelper.BEFORE_1_8);
 				registerRemapEntry(color.getId(), MapColorHelper.getSimilarLegacyColor(color).getId(), ProtocolVersionsHelper.BEFORE_1_7);
 			}
 		}

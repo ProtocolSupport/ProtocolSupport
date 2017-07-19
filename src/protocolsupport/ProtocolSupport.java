@@ -20,10 +20,10 @@ import protocolsupport.protocol.typeremapper.chunk.BlockStorageReader;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyI18NData;
-import protocolsupport.protocol.typeremapper.legacy.LegacySound;
 import protocolsupport.protocol.typeremapper.mapcolor.MapColorRemapper;
 import protocolsupport.protocol.typeremapper.pe.PESkin;
 import protocolsupport.protocol.typeremapper.skipper.id.IdSkipper;
+import protocolsupport.protocol.typeremapper.sound.SoundRemapper;
 import protocolsupport.protocol.typeremapper.tileentity.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherObjectIndex;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
@@ -92,7 +92,7 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(ClientBoundPacket.class.getName());
 			Class.forName(InitialPacketDecoder.class.getName());
 			Class.forName(AbstractLoginListener.class.getName());
-			Class.forName(LegacySound.class.getName());
+			Class.forName(SoundRemapper.class.getName());
 			Class.forName(IdSkipper.class.getName());
 			Class.forName(SpecificRemapper.class.getName());
 			Class.forName(IdRemapper.class.getName());
@@ -115,6 +115,7 @@ public class ProtocolSupport extends JavaPlugin {
 		getCommand("protocolsupport").setExecutor(new CommandHandler());
 		getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 		getServer().getPluginManager().registerEvents(new CommandListener(), this);
+		getServer().getScheduler().runTask(this, () -> peserver.start());
 	}
 
 	@Override

@@ -52,8 +52,7 @@ public abstract class AbstractPacketDecoder extends MessageToMessageDecoder<Byte
 			data.readerIndex(0);
 			throw new DecoderException(MessageFormat.format(
 				"Unable to transform or read middle packet {0} (data: {1})",
-				Objects.toString(packet),
-				Arrays.toString(MiscSerializer.readAllBytes(data))
+				Objects.toString(packet), Arrays.toString(MiscSerializer.readAllBytes(data))
 			), exception);
 		} else {
 			throw exception;

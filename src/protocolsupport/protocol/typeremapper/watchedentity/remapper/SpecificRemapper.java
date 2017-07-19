@@ -289,8 +289,8 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.EnderDragon.PHASE, 11) {}, ProtocolVersionsHelper.ALL_1_9)
 	),
 	SNOWMAN(NetworkEntityType.SNOWMAN, SpecificRemapper.INSENTIENT,
-		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Snowman.NO_HAT, 12) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
-		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Snowman.NO_HAT, 11) {}, ProtocolVersionsHelper.ALL_1_9)
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Snowman.NO_HAT, 12) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Snowman.NO_HAT, 11) {}, ProtocolVersionsHelper.ALL_1_9)
 	),
 	ZOMBIE(NetworkEntityType.ZOMBIE, SpecificRemapper.INSENTIENT,
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Zombie.BABY, 12) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),

@@ -80,7 +80,7 @@ public class SpigotItemStackWrapper extends ItemStackWrapper {
 
 	@Override
 	public void setDisplayName(String displayName) {
-		itemstack.c(displayName);
+		itemstack.g(displayName);
 	}
 
 	@Override

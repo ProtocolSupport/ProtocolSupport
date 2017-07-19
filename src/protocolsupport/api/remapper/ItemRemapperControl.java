@@ -67,6 +67,8 @@ public class ItemRemapperControl {
 	 * @return remap for specified material and data
 	 */
 	public MaterialAndData getRemap(MaterialAndData entry) {
+		Validate.inclusiveBetween(0, MinecraftData.ITEM_ID_MAX, entry.getId());
+		Validate.inclusiveBetween(0, MinecraftData.ITEM_DATA_MAX, entry.getData());
 		int combinedId = table.getRemap(MinecraftData.getItemStateFromIdAndData(entry.getId(), entry.getData()));
 		return new MaterialAndData(MinecraftData.getItemIdFromState(combinedId), MinecraftData.getItemDataFromState(combinedId));
 	}
@@ -100,6 +102,10 @@ public class ItemRemapperControl {
 	 * @param dataTo item data to which remap will occur
 	 */
 	public void setRemap(int idFrom, int dataFrom, int idTo, int dataTo) {
+		Validate.inclusiveBetween(0, MinecraftData.ITEM_ID_MAX, idFrom);
+		Validate.inclusiveBetween(0, MinecraftData.ITEM_DATA_MAX, dataFrom);
+		Validate.inclusiveBetween(0, MinecraftData.ITEM_ID_MAX, idTo);
+		Validate.inclusiveBetween(0, MinecraftData.ITEM_DATA_MAX, dataTo);
 		table.setRemap(MinecraftData.getItemStateFromIdAndData(idFrom, dataFrom), MinecraftData.getItemStateFromIdAndData(idTo, dataTo));
 	}
 

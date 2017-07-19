@@ -1,14 +1,14 @@
 package protocolsupport.protocol.typeremapper.itemstack.clientbound;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.itemstack.ItemStackNBTSpecificRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.ItemStackSpecificRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyPotion;
 import protocolsupport.protocol.utils.minecraftdata.PotionData;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 
-public class PotionToLegacyIdSpecificRemapper extends ItemStackNBTSpecificRemapper {
+public class PotionToLegacyIdSpecificRemapper implements ItemStackSpecificRemapper {
 
 	private final boolean isThrowablePotion;
 	public PotionToLegacyIdSpecificRemapper(boolean isThrowablePotion) {
@@ -16,21 +16,24 @@ public class PotionToLegacyIdSpecificRemapper extends ItemStackNBTSpecificRemapp
 	}
 
 	@Override
-	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, String locale, ItemStackWrapper itemstack, NBTTagCompoundWrapper tag) {
+	public ItemStackWrapper remap(ProtocolVersion version, String locale, ItemStackWrapper itemstack) {
+		NBTTagCompoundWrapper tag = itemstack.getTag();
+		if (tag.isNull()) {
+			return itemstack;
+		}
 		String potion = tag.getString("Potion");
 		if (!potion.isEmpty()) {
 			NBTTagListWrapper tagList = tag.getList("CustomPotionEffects", NBTTagCompoundWrapper.TYPE_COMPOUND);
 			if (tagList.size() >= 1) {
 				potion = PotionData.getNameById(tagList.getCompound(0).getNumber("Id"));
 			}
-			Integer data = LegacyPotion.toLegacyId(potion, isThrowablePotion);
-			itemstack.setData(data);
+			itemstack.setData(LegacyPotion.toLegacyId(potion, isThrowablePotion));
 			String basicTypeName = LegacyPotion.getBasicTypeName(potion);
 			if (basicTypeName != null) {
 				itemstack.setDisplayName(basicTypeName);
 			}
 		}
-		return tag;
+		return itemstack;
 	}
 
 }
