@@ -4,12 +4,12 @@ import org.apache.commons.lang3.Validate;
 import org.bukkit.Sound;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.id.RemappingTable.HashMapBasedStringRemappingTable;
+import protocolsupport.protocol.typeremapper.id.RemappingTable.GenericRemappingTable;
 import protocolsupport.protocol.typeremapper.sound.SoundRemapper;
 import protocolsupport.protocol.utils.minecraftdata.SoundData;
 
 public class SoundRemapperControl {
-	private final HashMapBasedStringRemappingTable table;
+	private final GenericRemappingTable<String> table;
 
 	public SoundRemapperControl(ProtocolVersion version) {
 		Validate.isTrue(version.isSupported(), "Can't control item remapping for unsupported version");

@@ -14,31 +14,6 @@ public class RemappingTable {
 		public abstract int getRemap(int id);
 
 	}
-	
-	public abstract static class StringRemappingTable extends RemappingTable {
-
-		public abstract void setRemap(String from, String to);
-
-		public abstract String getRemap(String value);
-
-	}
-	
-	public static class HashMapBasedStringRemappingTable extends StringRemappingTable {
-
-		protected final HashMap<String, String> table = new HashMap<String, String>();
-
-		@Override
-		public void setRemap(String from, String to) {
-			table.put(from, to);
-		}
-
-		@Override
-		public String getRemap(String value) {
-			String r = table.get(value);
-			return r != null ? r : value;
-		}
-
-	}
 
 	public static class ArrayBasedIdRemappingTable extends IdRemappingTable {
 
