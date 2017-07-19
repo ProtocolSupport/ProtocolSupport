@@ -99,7 +99,7 @@ public class PlayerListener implements Listener {
 					(connection.getVersion().getProtocolType() == ProtocolType.PC) &&
 					connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_12)
 				) {
-					connection.sendPacket(ServerPlatform.get().getPacketFactory().createEntityStatusPacket(player, 2));
+					connection.sendPacket(ServerPlatform.get().getPacketFactory().createEntityStatusPacket(event.getEntity(), 2));
 				}
 			}
 		}
