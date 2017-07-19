@@ -5,35 +5,52 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnObject
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
+import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 public class SpawnObject extends MiddleSpawnObject {
 	
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		if(entity.getType() == NetworkEntityType.ITEM) {
-			//We need to prepare the item because we can only spawn it after we've received the first metadata update.
-			cache.prepareItem(new PreparedItem(entity.getId(), x, y, z, motX / 8.000F, motY / 8000.F, motZ / 8000.F));
-			return RecyclableEmptyList.get();
-		} else { 
-			return RecyclableSingletonList.create(SpawnLiving.create(
-				version,
-				entity.getId(), 
-				x, y, z,
-				motX / 8.000F, motY / 8000.F, motZ / 8000.F, 
-				pitch, yaw,
-				null, 
-				PEDataValues.getObjectEntityTypeId(IdRemapper.ENTITY.getTable(version).getRemap(entity.getType()))
-			));
+		switch(entity.getType()) {
+			case ITEM: {
+				//We need to prepare the item because we can only spawn it after we've received the first metadata update.
+				//cache.prepareItem(new PreparedItem(entity.getId(), x, y, z, motX / 8.000F, motY / 8000.F, motZ / 8000.F)); TODO: Add this with metadata update implementation.
+				return RecyclableEmptyList.get();
+			}
+			case ITEM_FRAME: {
+				return RecyclableSingletonList.create(createHanging(version, entity.getId(), (int) x, (int) y, (int) z));
+			}
+			default: {
+				return RecyclableSingletonList.create(SpawnLiving.create(
+						version,
+						entity.getId(), 
+						x, y, z,
+						motX / 8.000F, motY / 8000.F, motZ / 8000.F, 
+						pitch, yaw,
+						null, 
+						PEDataValues.getObjectEntityTypeId(IdRemapper.ENTITY.getTable(version).getRemap(entity.getType()))
+					));
+			}
 		}
+	}
+	
+	public static ClientBoundPacketData createHanging(ProtocolVersion version,
+			int entityId, int x, int y, int z) {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ADD_HANGING_ENTITY, version);
+		VarNumberSerializer.writeSVarLong(serializer, entityId);
+		VarNumberSerializer.writeVarLong(serializer, entityId);
+		PositionSerializer.writePEPosition(serializer, new Position(x, y, z));
+		VarNumberSerializer.writeVarInt(serializer, 0); //?
+		return serializer;
 	}
 	
 	public class PreparedItem {

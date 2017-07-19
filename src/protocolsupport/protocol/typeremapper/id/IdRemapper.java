@@ -181,6 +181,12 @@ public class IdRemapper {
 			new Mapping(NetworkEntityType.MINECART_FURNACE)
 			.addMapping(NetworkEntityType.MINECART, ProtocolVersion.MINECRAFT_PE) //TODO: Add furnace via block?
 			.register();
+			new Mapping(NetworkEntityType.FIREWORK)
+			.addMapping(NetworkEntityType.FIRECHARGE, ProtocolVersion.MINECRAFT_PE) //TODO: Will come in 1.12 not bothering now.
+			.register();
+			new Mapping(NetworkEntityType.ARMOR_STAND_OBJECT)
+			.addMapping(NetworkEntityType.SKELETON, ProtocolVersion.MINECRAFT_PE) //TODO: Will come in 1.12 not bothering now.
+			.register();
 			new Mapping(NetworkEntityType.ILLUSIONER)
 			.addMapping(NetworkEntityType.WITCH, ProtocolVersionsHelper.BEFORE_1_12)
 			.register();
@@ -244,10 +250,10 @@ public class IdRemapper {
 			.addMapping(NetworkEntityType.FIRECHARGE, ProtocolVersionsHelper.BEFORE_1_9)
 			.register();
 			new Mapping(NetworkEntityType.SPECTRAL_ARROW)
-			.addMapping(NetworkEntityType.ARROW, ProtocolVersionsHelper.BEFORE_1_9)
+			.addMapping(NetworkEntityType.ARROW, ProtocolVersionsHelper.concat(ProtocolVersionsHelper.BEFORE_1_9, ProtocolVersion.MINECRAFT_PE))
 			.register();
 			new Mapping(NetworkEntityType.TIPPED_ARROW)
-			.addMapping(NetworkEntityType.ARROW, ProtocolVersionsHelper.BEFORE_1_9)
+			.addMapping(NetworkEntityType.ARROW, ProtocolVersionsHelper.concat(ProtocolVersionsHelper.BEFORE_1_9, ProtocolVersion.MINECRAFT_PE))
 			.register();
 			new Mapping(NetworkEntityType.ENDERMITE)
 			.addMapping(NetworkEntityType.SILVERFISH, ProtocolVersionsHelper.BEFORE_1_8)
