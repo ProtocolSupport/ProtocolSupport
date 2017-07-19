@@ -61,5 +61,5 @@ public interface PlatformUtils {
 	public String getPrependerHandlerName();
 
 	public void setFraming(ChannelPipeline pipeline, IPacketSplitter splitter, IPacketPrepender prepender);
-	
+
 }
