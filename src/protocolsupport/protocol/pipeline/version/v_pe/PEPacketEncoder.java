@@ -36,6 +36,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnExp
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnGlobal;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnLiving;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnNamed;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnObject;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnPainting;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnPosition;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.TimeUpdate;
@@ -73,6 +74,7 @@ public class PEPacketEncoder extends AbstractLegacyPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_RESPAWN_ID, Respawn.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CHUNK_UNLOAD_ID, UnloadChunk.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_LIVING_ID, SpawnLiving.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_OBJECT_ID, SpawnObject.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_VELOCITY_ID, EntityVelocity.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_TELEPORT_ID, EntityTeleport.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_DESTROY_ID, EntityDestroy.class);
