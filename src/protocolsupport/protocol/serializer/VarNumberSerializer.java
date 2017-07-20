@@ -48,8 +48,8 @@ public class VarNumberSerializer {
 			}
 		} while ((part & 0x80) == 0x80);
 		return varlong;
-	}
-
+	}	
+	
 	public static void writeVarLong(ByteBuf to, long varlong) {
 		while ((varlong & 0xFFFFFFFFFFFFFF80L) != 0x0L) {
 			to.writeByte((int) (varlong & 0x7FL) | 0x80);

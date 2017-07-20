@@ -2,6 +2,11 @@ package protocolsupport.protocol.utils.types;
 
 import java.util.UUID;
 
+import org.bukkit.util.Vector;
+
+import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.utils.Utils;
 
 public class NetworkEntity {
@@ -43,21 +48,96 @@ public class NetworkEntity {
 	public NetworkEntityType getType() {
 		return type;
 	}
+	
+	public boolean isOfType(NetworkEntityType typeToCheck) {
+		return type.isOfType(typeToCheck);
+	}
 
-	private final DataCache cache = new DataCache();
+	private DataCache cache = new DataCache();
 
 	public DataCache getDataCache() {
 		return cache;
 	}
+	
+	public void updateDataCache(DataCache updateWith) {
+		cache = updateWith;
+	}
+	
+	public void updateMetadata(TIntObjectMap<DataWatcherObject<?>> updateWith) {
+		cache.updateMeta(updateWith);
+	}
 
+	
 	@Override
 	public String toString() {
 		return Utils.toStringAllFields(this);
 	}
 
-	public static class DataCache {
+	public class DataCache {
 		public boolean firstMeta = true;
-		public byte baseMetaFlags;
+		public TIntObjectMap<DataWatcherObject<?>> metadata = new TIntObjectHashMap<>();
+		public int attachedId = -1; //Leashed? Data is send in pocket meta, but might be useful to store for other things.
+		public boolean inLove = false; //Show just one metaupdate?
+		public Rider rider = new Rider(false);
+		
+		public Object getMetaValue(int index) {
+			if(metadata.containsKey(index)) {
+				return metadata.get(index).getValue();	
+			} else {
+				return null;
+			}
+		}
+		
+		public boolean getMetaBool(int index) {
+			if(metadata.containsKey(index)) {
+				try {
+					return (boolean) getMetaValue(index);
+				} catch (ClassCastException e) {}
+			}
+			return false;
+		}
+		
+		public boolean getMetaBool(int index, int bitpos) {
+			if(metadata.containsKey(index)) {
+				return (((byte) getMetaValue(index)) & (1 << (bitpos - 1))) != 0;
+			}
+			return false;
+		}
+		
+		public void updateMeta(TIntObjectMap<DataWatcherObject<?>> updateWith) {
+			for(int index : updateWith.keys()) {
+				metadata.put(index, updateWith.get(index));
+			}
+		}
+		
+		public class Rider {
+			public boolean riding = false;
+			public Vector position = new Vector(0, 0.6, 0);
+			public boolean rotationLocked = false;
+			public Float rotationMin;
+			public Float rotationMax;
+			
+			public Rider(boolean riding) {
+				this.riding = riding;
+			}
+			
+			public Rider(Vector position, boolean rotationLocked, float rotationMax, float rotationMin) {
+				this(true, position, rotationLocked, rotationMax, rotationMin);
+			}
+			
+			public Rider(Vector position, boolean rotationLocked) {
+				this(true, position, rotationLocked, null, null);
+			}
+			
+			public Rider(boolean riding, Vector position, boolean rotationLocked, Float rotationMax, Float rotationMin) {
+				this.riding = riding;
+				this.position = position;
+				this.rotationLocked = rotationLocked;
+				this.rotationMax = rotationMax;
+				this.rotationMin = rotationMin;
+			}
+		};
+		
 		@Override
 		public String toString() {
 			return Utils.toStringAllFields(this);

@@ -28,7 +28,7 @@ public class Login extends MiddleLogin {
 		resourcepack.writeShortLE(0); //beh packs count
 		packets.add(resourcepack);
 		ClientBoundPacketData startgame = ClientBoundPacketData.create(PEPacketIDs.START_GAME, version);
-		VarNumberSerializer.writeSVarLong(startgame, playerEntityId);
+		VarNumberSerializer.writeVarLong(startgame, playerEntityId);
 		VarNumberSerializer.writeVarLong(startgame, playerEntityId);
 		VarNumberSerializer.writeSVarInt(startgame, gamemode.getId());
 		MiscSerializer.writeLFloat(startgame, 0); //x
@@ -47,7 +47,7 @@ public class Login extends MiddleLogin {
 		startgame.writeBoolean(false); //edu mode
 		MiscSerializer.writeLFloat(startgame, 0); //rain level
 		MiscSerializer.writeLFloat(startgame, 0); //lighting level
-		startgame.writeBoolean(true); //commands enabled
+		startgame.writeBoolean(false); //commands enabled
 		startgame.writeBoolean(false); //needs texture pack
 		VarNumberSerializer.writeVarInt(startgame, 0); //game rules
 		StringSerializer.writeString(startgame, version, ""); //level type
@@ -61,6 +61,7 @@ public class Login extends MiddleLogin {
 		VarNumberSerializer.writeSVarInt(chunkradius, Bukkit.getViewDistance() + 1); //should exactly match the view distance that server uses to broadcast chunks. +1 because mcpe includes the chunk client is standing in in calculations, while pc does not
 		packets.add(chunkradius);
 		packets.add(LoginSuccess.createPlayStatus(version, 3));
+		packets.add(EntityMetadata.create(cache.getWatchedSelf(), version)); //Removes the bubbles right on login. If something important needs to be send the server will take care with a metadata update.
 		return packets;
 	}
 

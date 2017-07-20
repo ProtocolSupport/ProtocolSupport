@@ -13,6 +13,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnObj
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.NetworkEntity.DataCache;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.Utils;
 
@@ -82,6 +83,10 @@ public class NetworkDataCache {
 	public void addWatchedEntity(NetworkEntity entity) {
 		watchedEntities.put(entity.getId(), entity);
 	}
+	
+	public void updateWatchedDataCache(int entityId, DataCache updateWith) {
+		watchedEntities.get(entityId).updateDataCache(updateWith);
+	}
 
 	public void addWatchedSelfPlayer(NetworkEntity player) {
 		this.player = player;
@@ -90,6 +95,15 @@ public class NetworkDataCache {
 
 	public int getSelfPlayerEntityId() {
 		return player != null ? player.getId() : -1;
+	}
+	
+	public boolean isSelf(int entityId) {
+		return (this.getSelfPlayerEntityId() == entityId);
+	}
+	
+	public NetworkEntity getWatchedSelf() {
+		if(!watchedEntities.contains(getSelfPlayerEntityId())) return player;
+		return watchedEntities.get(this.getSelfPlayerEntityId());
 	}
 
 	private void readdSelfPlayer() {

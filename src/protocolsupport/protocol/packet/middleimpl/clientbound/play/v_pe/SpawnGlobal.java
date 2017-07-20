@@ -10,6 +10,6 @@ public class SpawnGlobal extends MiddleSpawnGlobal {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		return RecyclableSingletonList.create(SpawnLiving.create(version, entityId, x, y, z, 0, 0, 0, 0, 0, null, 93));
+		return RecyclableSingletonList.create(SpawnLiving.createSimple(version, entityId, x, y, z, 93));
 	}
 }

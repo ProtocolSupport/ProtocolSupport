@@ -1,22 +1,23 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityDestroy;
+import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityLeash;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
-public class EntityDestroy extends MiddleEntityDestroy {
+public class EntityLeash extends MiddleEntityLeash {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		for (int entityId : entityIds) {
-			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_DESTROY, version);
-			VarNumberSerializer.writeVarLong(serializer, entityId);
-			packets.add(serializer);
+		NetworkEntity e = cache.getWatchedEntity(entityId);
+		if(e != null) {
+			packets.add(EntityMetadata.create(cache.getWatchedEntity(entityId), version));
+			if(vehicleId == -1) {
+				packets.add(EntityStatus.create(e, EntityStatus.PE_UNLEASH, version));
+			}
 		}
 		return packets;
 	}

@@ -18,6 +18,8 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.CustomPa
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityDestroy;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityEffectAdd;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityEffectRemove;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityLeash;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntitySetAttributes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityStatus;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityTeleport;
@@ -92,6 +94,8 @@ public class PEPacketEncoder extends AbstractLegacyPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_EFFECT_ADD_ID, EntityEffectAdd.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_EFFECT_REMOVE_ID, EntityEffectRemove.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SET_PASSENGERS_ID, SetPassengers.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_METADATA_ID, EntityMetadata.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_LEASH_ID, EntityLeash.class);
 	}
 
 	public PEPacketEncoder(Connection connection, NetworkDataCache storage) {

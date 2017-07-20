@@ -7,6 +7,7 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.protocol.typeremapper.watchedentity.WatchedDataRemapper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -17,7 +18,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SPAWN_PLAYER, version);
 		MiscSerializer.writeUUID(serializer, entity.getUUID());
 		StringSerializer.writeString(serializer, version, name);
-		VarNumberSerializer.writeSVarLong(serializer, entity.getId());
+		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		MiscSerializer.writeLFloat(serializer, (float) x);
 		MiscSerializer.writeLFloat(serializer, (float) y);
@@ -29,7 +30,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		MiscSerializer.writeLFloat(serializer, yaw); //head yaw actually
 		MiscSerializer.writeLFloat(serializer, yaw);
 		VarNumberSerializer.writeSVarInt(serializer, 0); //held itemstack (it is actually a slot, but we only send null itemstack here, so we only write 0 id)
-		VarNumberSerializer.writeSVarInt(serializer, 0); //TODO: metadata
+		EntityMetadata.encodeMeta(serializer, version, WatchedDataRemapper.transform(entity, metadata, version));
 		return RecyclableSingletonList.create(serializer);
 	}
 
