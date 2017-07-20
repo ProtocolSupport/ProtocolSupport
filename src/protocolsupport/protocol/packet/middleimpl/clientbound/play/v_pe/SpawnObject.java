@@ -5,7 +5,6 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnObject
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
@@ -13,7 +12,6 @@ import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
-import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 public class SpawnObject extends MiddleSpawnObject {
@@ -27,7 +25,8 @@ public class SpawnObject extends MiddleSpawnObject {
 				return RecyclableEmptyList.get();
 			}
 			case ITEM_FRAME: {
-				return RecyclableSingletonList.create(createHanging(version, entity.getId(), (int) x, (int) y, (int) z));
+				//TODO: ITEM FRAMES ARE BLOCKS IN PE?
+				return RecyclableEmptyList.get();
 			}
 			default: {
 				return RecyclableSingletonList.create(SpawnLiving.create(
@@ -41,16 +40,6 @@ public class SpawnObject extends MiddleSpawnObject {
 					));
 			}
 		}
-	}
-	
-	public static ClientBoundPacketData createHanging(ProtocolVersion version,
-			int entityId, int x, int y, int z) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ADD_HANGING_ENTITY, version);
-		VarNumberSerializer.writeSVarLong(serializer, entityId);
-		VarNumberSerializer.writeVarLong(serializer, entityId);
-		PositionSerializer.writePEPosition(serializer, new Position(x, y, z));
-		VarNumberSerializer.writeVarInt(serializer, 0); //?
-		return serializer;
 	}
 	
 	public class PreparedItem {
