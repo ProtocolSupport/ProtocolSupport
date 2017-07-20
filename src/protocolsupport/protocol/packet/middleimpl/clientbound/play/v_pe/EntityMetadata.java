@@ -6,15 +6,18 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnObject.PreparedItem;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.typeremapper.watchedentity.WatchedDataRemapper;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
+import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 public class EntityMetadata extends MiddleEntityMetadata {
 
@@ -24,7 +27,21 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		if(entity == null) {
 			return RecyclableEmptyList.get();
 		} else {
-			return RecyclableSingletonList.create(create(entity, metadata, version));
+			switch(entity.getType()) {
+				case ITEM: {
+					if(metadata.containsKey(DataWatcherObjectIndex.Item.ITEM)) {
+						PreparedItem i = cache.getPreparedItem(entityId);
+						if(i != null) {
+							i.setItemStack((ItemStackWrapper) metadata.get(DataWatcherObjectIndex.Item.ITEM).getValue());
+							cache.removePreparedItem(entityId);
+							return RecyclableSingletonList.create(i.getSpawnPacket(version));
+						}
+					}
+				}
+				default: {
+					return RecyclableSingletonList.create(create(entity, metadata, version));
+				}
+			}
 		}
 	}
 	
@@ -48,7 +65,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 			VarNumberSerializer.writeVarInt(to, iterator.key());
 			int tk = DataWatcherObjectIdRegistry.getTypeId(object, version) ;
 			VarNumberSerializer.writeVarInt(to, tk);
-			object.writeToStream(to, version);
+			object.writeToStream(to, version, null);
 		}
 	}
 

@@ -21,7 +21,7 @@ public class SpawnObject extends MiddleSpawnObject {
 		switch(entity.getType()) {
 			case ITEM: {
 				//We need to prepare the item because we can only spawn it after we've received the first metadata update.
-				//cache.prepareItem(new PreparedItem(entity.getId(), x, y, z, motX / 8.000F, motY / 8000.F, motZ / 8000.F)); TODO: Add this with metadata implementation.
+				cache.prepareItem(new PreparedItem(entity.getId(), x, y, z, motX / 8.000F, motY / 8000.F, motZ / 8000.F));
 				return RecyclableEmptyList.get();
 			}
 			case ITEM_FRAME: {
@@ -31,7 +31,7 @@ public class SpawnObject extends MiddleSpawnObject {
 			default: {
 				return RecyclableSingletonList.create(SpawnLiving.create(
 						version,
-						entity.getId(), 
+						entity, 
 						x, y, z,
 						motX / 8.000F, motY / 8000.F, motZ / 8000.F, 
 						pitch, yaw,

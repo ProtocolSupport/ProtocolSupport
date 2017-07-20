@@ -58,12 +58,14 @@ public class ItemStackSerializer {
 	
 	public static void writePeSlot(ByteBuf to, ProtocolVersion version, ItemStackWrapper itemstack) {
 		if(itemstack.isNull() || itemstack.getTypeId() <= 0) {
-			VarNumberSerializer.writeVarInt(to, 0); 
+			VarNumberSerializer.writeVarInt(to, 0);
+			VarNumberSerializer.writeVarInt(to, 0); //TODO: CanPlaceOn PE
+			VarNumberSerializer.writeVarInt(to, 0); //TODO: CanDestroy PE
 			return;
 		}
 		VarNumberSerializer.writeVarInt(to, itemstack.getTypeId()); //TODO: Remap PE itemstacks...
 		VarNumberSerializer.writeVarInt(to, (itemstack.getData() << 8) | itemstack.getAmount());
-		to.writeShortLE(0); //TODO: Implement PE NBT
+		VarNumberSerializer.writeVarInt(to, 0); //TODO: Implement PE NBT
 		VarNumberSerializer.writeVarInt(to, 0); //TODO: CanPlaceOn PE
 		VarNumberSerializer.writeVarInt(to, 0); //TODO: CanDestroy PE
 	}

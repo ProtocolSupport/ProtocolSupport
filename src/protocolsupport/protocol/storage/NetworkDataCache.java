@@ -136,6 +136,10 @@ public class NetworkDataCache {
 	public PreparedItem getPreparedItem(int entityId) {
 		return preparedItems.get(entityId);
 	}
+	
+	public void removePreparedItem(int entityId) {
+		preparedItems.remove(entityId);
+	}
 
 	public void addPlayerListEntry(UUID uuid, PlayerListEntry entry) {
 		playerlist.put(uuid, entry);
