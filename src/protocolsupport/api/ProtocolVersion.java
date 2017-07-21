@@ -74,7 +74,7 @@ public enum ProtocolVersion {
 	}
 
 	/**
-	 * Returns if this version is supported as game version (i.e.: player can join and play on the server)
+	 * Returns if this version is supported as game version (i.e.: player can possibly join and play on the server)
 	 * @return true if this protocol version is supported
 	 */
 	public boolean isSupported() {

@@ -7,10 +7,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
-public class CommandListener implements Listener {
+public class ReloadCommandBlocker implements Listener {
+
 	private final Set<String> blacklist = new HashSet<>();
 
-	public CommandListener() {
+	public ReloadCommandBlocker() {
 		blacklist.add("/reload");
 		blacklist.add("/reload confirm");
 		blacklist.add("/rl");
@@ -28,4 +29,5 @@ public class CommandListener implements Listener {
 			event.getPlayer().sendMessage("The reload command has been disabled by ProtocolSupport");
 		}
 	}
+
 }
