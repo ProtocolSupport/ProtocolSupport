@@ -75,13 +75,15 @@ public class FeatureEmulation implements Listener {
 	public void onEntityDamage(EntityDamageEvent event) {
 		if (((event.getCause() == DamageCause.FIRE_TICK) || (event.getCause() == DamageCause.FIRE))) {
 			for (Player player : ServerPlatform.get().getMiscUtils().getNearbyPlayers(event.getEntity().getLocation(), 48, 128, 48)) {
-				Connection connection = ProtocolSupportAPI.getConnection(player);
-				if (
-					(connection != null) &&
-					(connection.getVersion().getProtocolType() == ProtocolType.PC) &&
-					connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_12)
-				) {
-					connection.sendPacket(ServerPlatform.get().getPacketFactory().createEntityStatusPacket(event.getEntity(), 2));
+				if (player != null) {
+					Connection connection = ProtocolSupportAPI.getConnection(player);
+					if (
+						(connection != null) &&
+						(connection.getVersion().getProtocolType() == ProtocolType.PC) &&
+						connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_12)
+					) {
+						connection.sendPacket(ServerPlatform.get().getPacketFactory().createEntityStatusPacket(event.getEntity(), 2));
+					}
 				}
 			}
 		}
