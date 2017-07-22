@@ -62,7 +62,7 @@ public class PEDataValues {
 	
 	private static final EnumMap<NetworkEntityType, Integer> objectEntityType = new EnumMap<>(NetworkEntityType.class);
 	static {
-		objectEntityType.put(NetworkEntityType.TNT, 64);
+		objectEntityType.put(NetworkEntityType.TNT, 65);
 		objectEntityType.put(NetworkEntityType.FALLING_OBJECT, 66);
 		//TODO: Fix pistons, moving blocks? -> 67
 		objectEntityType.put(NetworkEntityType.EXP_BOTTLE, 68);
@@ -88,6 +88,7 @@ public class PEDataValues {
 		objectEntityType.put(NetworkEntityType.MINECART_TNT, 97);
 		objectEntityType.put(NetworkEntityType.MINECART_CHEST, 98);
 		objectEntityType.put(NetworkEntityType.MINECART_COMMAND, 100);
+		objectEntityType.put(NetworkEntityType.MINECART_FURNACE, 84); //Hack TODO: Remap furnace onto the minecart.
 		objectEntityType.put(NetworkEntityType.AREA_EFFECT_CLOUD, 101);
 		objectEntityType.put(NetworkEntityType.LAMA_SPIT, 102);
 		objectEntityType.put(NetworkEntityType.EVOCATOR_FANGS, 103);

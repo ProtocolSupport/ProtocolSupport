@@ -72,6 +72,7 @@ public enum SpecificRemapper {
 				if(entity.isOfType(NetworkEntityType.MINECART_FURNACE) && data.getMetaBool(DataWatcherObjectIndex.MinecartFurnace.POWERED)) b |= (1 << PeMetaBase.FLAG_POWERED);
 				if(entity.isOfType(NetworkEntityType.POLAR_BEAR) && data.getMetaBool(DataWatcherObjectIndex.PolarBear.STANDING_UP)) b |= (1 << PeMetaBase.FLAG_REARING); //TODO: Just like horses, disappears. Perhaps send a unknown entitystatus aswell? Meh.
 				if(entity.isOfType(NetworkEntityType.SNOWMAN) && !data.getMetaBool(DataWatcherObjectIndex.Snowman.NO_HAT, 5)) b |= (1 << PeMetaBase.FLAG_SHEARED);
+				if(entity.isOfType(NetworkEntityType.TNT)) b |= (1 << PeMetaBase.FLAG_IGNITED);
 				if(data.metadata.containsKey(DataWatcherObjectIndex.Entity.NAMETAG)) b |= (1 << PeMetaBase.FLAG_SHOW_NAMETAG);
 				if(entity.isOfType(NetworkEntityType.PLAYER)) b |= (1 << PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG);
 				if(entity.isOfType(NetworkEntityType.PIG) && data.getMetaBool(DataWatcherObjectIndex.Pig.HAS_SADLLE)) b |= (1 << PeMetaBase.FLAG_SADDLED);
@@ -84,7 +85,7 @@ public enum SpecificRemapper {
 					if(data.getMetaBool(DataWatcherObjectIndex.BaseHorse.FLAGS, 2)) b |= (1 << PeMetaBase.FLAG_TAMED);
 					if(data.getMetaBool(DataWatcherObjectIndex.BaseHorse.FLAGS, 3)) b |= (1 << PeMetaBase.FLAG_SADDLED);
 					if(data.getMetaBool(DataWatcherObjectIndex.BaseHorse.FLAGS, 4)) b |= (1 << PeMetaBase.FLAG_CHESTED);
-					//if(data.getMetaBool(DataWatcherObjectIndex.BaseHorse.FLAGS, 7)) b |= (1 << PeMetaBase.FLAG_REARING); //TODO: not like this? It seems to make the horse disappear :/
+					//if(data.getMetaBool(DataWatcherObjectIndex.BaseHorse.FLAGS, 7)) b |= (1 << PeMetaBase.FLAG_REARING); //TODO: not like this? Just this makes the horse disappear :/
 					//if(data.getMetaBool(DataWatcherObjectIndex.BaseHorse.FLAGS, 8)) b |= (1 << PeMetaBase.FLAG_BREATHING);
 				}
 				if(entity.isOfType(NetworkEntityType.CREEPER)) {
@@ -612,6 +613,7 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Boat.RIGHT_PADDLE, 11) {}, ProtocolVersionsHelper.RANGE__1_10__1_12)
 	),
 	TNT(NetworkEntityType.TNT, SpecificRemapper.ENTITY,
+		new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Tnt.FUSE, 56), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Tnt.FUSE, 6) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Tnt.FUSE, 5) {}, ProtocolVersionsHelper.ALL_1_9)
 	),

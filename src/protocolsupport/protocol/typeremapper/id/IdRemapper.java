@@ -178,9 +178,6 @@ public class IdRemapper {
 			new Mapping(NetworkEntityType.PARROT)
 			.addMapping(NetworkEntityType.OCELOT, ProtocolVersionsHelper.concat(ProtocolVersionsHelper.BEFORE_1_12, ProtocolVersion.MINECRAFT_PE))
 			.register();
-			new Mapping(NetworkEntityType.MINECART_FURNACE)
-			.addMapping(NetworkEntityType.MINECART, ProtocolVersion.MINECRAFT_PE) //TODO: Add furnace via block?
-			.register();
 			new Mapping(NetworkEntityType.FIREWORK)
 			.addMapping(NetworkEntityType.FIRECHARGE, ProtocolVersion.MINECRAFT_PE) //TODO: Will come in 1.12 not bothering now.
 			.register();

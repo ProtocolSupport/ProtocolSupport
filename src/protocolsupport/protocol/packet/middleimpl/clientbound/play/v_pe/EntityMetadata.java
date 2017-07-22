@@ -14,35 +14,35 @@ import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherO
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
 import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 public class EntityMetadata extends MiddleEntityMetadata {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		NetworkEntity entity = cache.getWatchedEntity(entityId);
-		if(entity == null) {
-			return RecyclableEmptyList.get();
-		} else {
-			switch(entity.getType()) {
-				case ITEM: {
-					if(metadata.containsKey(DataWatcherObjectIndex.Item.ITEM)) {
-						PreparedItem i = cache.getPreparedItem(entityId);
-						if(i != null) {
-							i.setItemStack((ItemStackWrapper) metadata.get(DataWatcherObjectIndex.Item.ITEM).getValue());
-							cache.removePreparedItem(entityId);
-							return RecyclableSingletonList.create(i.getSpawnPacket(version));
-						}
+		
+		if(entity == null) return packets;
+		switch(entity.getType()) {
+			case ITEM: {
+				if(metadata.containsKey(DataWatcherObjectIndex.Item.ITEM)) {
+					PreparedItem i = cache.getPreparedItem(entityId);
+					if(i != null) {
+						i.setItemStack((ItemStackWrapper) metadata.get(DataWatcherObjectIndex.Item.ITEM).getValue());
+						cache.removePreparedItem(entityId);
+						packets.add(i.getSpawnPacket(version));
 					}
 				}
-				default: {
-					return RecyclableSingletonList.create(create(entity, metadata, version));
-				}
+			}
+			default: {
+				packets.add(create(entity, metadata, version));
 			}
 		}
+		
+		return packets;
 	}
 	
 	public static ClientBoundPacketData create(NetworkEntity entity, ProtocolVersion version) {

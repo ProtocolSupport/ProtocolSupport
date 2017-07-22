@@ -25,7 +25,7 @@ public class SpawnObject extends MiddleSpawnObject {
 				return RecyclableEmptyList.get();
 			}
 			case ITEM_FRAME: {
-				//TODO: Itemframes behave differently in PE and might even need to be added as blocks.
+				//TODO: Make this in 1.12.
 				return RecyclableEmptyList.get();
 			}
 			default: {
@@ -35,7 +35,7 @@ public class SpawnObject extends MiddleSpawnObject {
 						x, y, z,
 						motX / 8.000F, motY / 8000.F, motZ / 8000.F, 
 						pitch, yaw,
-						null, 
+						entity.getDataCache().metadata, 
 						PEDataValues.getObjectEntityTypeId(IdRemapper.ENTITY.getTable(version).getRemap(entity.getType()))
 					));
 			}
@@ -72,14 +72,6 @@ public class SpawnObject extends MiddleSpawnObject {
 		}
 		
 		public ClientBoundPacketData getSpawnPacket(ProtocolVersion version) {
-			//Let's dump some info.
-			System.out.println("Item " + entityId);
-			System.out.println("   x, y, z: " + x + " " + y + " " + z);
-			System.out.println("   mot x y z: " + motX + " " + motY + " " + motZ);
-			System.out.println("   ItemId " + itemstack.getTypeId());
-			System.out.println("   DataD: " + itemstack.getData());
-			System.out.println("   Count: " + itemstack.getAmount());
-			
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ADD_ITEM_ENTITY, version);
 			VarNumberSerializer.writeSVarLong(serializer, entityId);
 			VarNumberSerializer.writeVarLong(serializer, entityId);

@@ -14,6 +14,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockCha
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.ChangeGameState;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Chat;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Chunk;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.CollectEffect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.CustomPayload;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityDestroy;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityEffectAdd;
@@ -77,6 +78,7 @@ public class PEPacketEncoder extends AbstractLegacyPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CHUNK_UNLOAD_ID, UnloadChunk.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_LIVING_ID, SpawnLiving.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_OBJECT_ID, SpawnObject.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_COLLECT_EFFECT_ID, CollectEffect.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_VELOCITY_ID, EntityVelocity.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_TELEPORT_ID, EntityTeleport.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_DESTROY_ID, EntityDestroy.class);
