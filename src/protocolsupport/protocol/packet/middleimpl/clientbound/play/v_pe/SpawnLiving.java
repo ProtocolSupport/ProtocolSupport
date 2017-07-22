@@ -30,7 +30,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 	public static ClientBoundPacketData createSimple(ProtocolVersion version,
 			int entityId, double x, double y, double z, int peEntityType) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SPAWN_ENTITY, version);
-		VarNumberSerializer.writeVarLong(serializer, entityId);
+		VarNumberSerializer.writeSVarLong(serializer, entityId);
 		VarNumberSerializer.writeVarLong(serializer, entityId);
 		VarNumberSerializer.writeVarInt(serializer, peEntityType);
 		MiscSerializer.writeLFloat(serializer, (float) x);
@@ -52,7 +52,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 			float motX, float motY, float motZ,
 			float pitch, float yaw, TIntObjectMap<DataWatcherObject<?>> metadata, int entityType) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SPAWN_ENTITY, version);
-		VarNumberSerializer.writeVarLong(serializer, entity.getId());
+		VarNumberSerializer.writeSVarLong(serializer, entity.getId());
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		VarNumberSerializer.writeVarInt(serializer, entityType);
 		MiscSerializer.writeLFloat(serializer, (float) x);

@@ -4,16 +4,16 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 
-public class DataWatcherObjectLong extends DataWatcherObjectNumber<Long> {
+public class DataWatcherObjectVarLong extends DataWatcherObjectNumber<Long> {
 
-	public DataWatcherObjectLong() {
+	public DataWatcherObjectVarLong() {
 	}
 	
-	public DataWatcherObjectLong(Long Value) {
+	public DataWatcherObjectVarLong(Long Value) {
 		this.value = Value;
 	}
 
-	public DataWatcherObjectLong(int Value) {
+	public DataWatcherObjectVarLong(int Value) {
 		this.value = (long) Value;
 	}
 

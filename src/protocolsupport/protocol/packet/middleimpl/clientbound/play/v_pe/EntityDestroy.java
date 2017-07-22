@@ -15,7 +15,7 @@ public class EntityDestroy extends MiddleEntityDestroy {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		for (int entityId : entityIds) {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_DESTROY, version);
-			VarNumberSerializer.writeVarLong(serializer, entityId);
+			VarNumberSerializer.writeSVarLong(serializer, entityId);
 			packets.add(serializer);
 		}
 		return packets;

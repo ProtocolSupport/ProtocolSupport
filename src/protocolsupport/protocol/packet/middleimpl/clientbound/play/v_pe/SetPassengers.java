@@ -18,6 +18,10 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class SetPassengers extends MiddleSetPassengers {
 
+	public static final int UNLINK = 0; 
+	public static final int LINK = 1;
+	public static final int PASSENGER = 2;
+	
 	private final TIntObjectHashMap<TIntHashSet> passengers = new TIntObjectHashMap<>();
 
 	@Override
@@ -36,27 +40,29 @@ public class SetPassengers extends MiddleSetPassengers {
 					//Update rider positions too.
 					DataCache data = passenger.getDataCache();
 					if(vehicle.isOfType(NetworkEntityType.PIG)) data.rider = data.new Rider(new Vector(0.0, 3.8, 0.0), false);
-					if(vehicle.isOfType(NetworkEntityType.BASE_HORSE)) data.rider = data.new Rider(new Vector(0.0, 2.3, -0.2), true, 180f, -180f);
+					else if(vehicle.isOfType(NetworkEntityType.BASE_HORSE)) data.rider = data.new Rider(new Vector(0.0, 2.3, -0.2), true, 180f, -180f);
 					else data.rider = data.new Rider(true);
 					cache.updateWatchedDataCache(passengerId, data);
-					packets.add(EntityMetadata.create(cache.getWatchedEntity(passengerId), version));
+					packets.add(EntityMetadata.create(passenger, version));
 					
-					packets.add(create(version, vehicleId, passengerId, true));
-					if(cache.isSelf(passengerId)) packets.add(create(version, vehicleId, 0, true));
+					packets.add(create(version, vehicleId, passengerId, LINK));
+					if(cache.isSelf(passengerId)) packets.add(create(version, vehicleId, 0, LINK));
 				}
 			}
 			prevPassengersIds.forEach(new TIntProcedure() {
 				@Override
 				public boolean execute(int passengerId) {
 					if (!newPassengersIds.contains(passengerId)) {
-						//Also update meta.
-						DataCache data = cache.getWatchedEntity(passengerId).getDataCache();
-						data.rider = data.new Rider(false);
-						cache.updateWatchedDataCache(passengerId, data);
-						packets.add(EntityMetadata.create(cache.getWatchedEntity(passengerId), version));
-						
-						packets.add(create(version, vehicleId, passengerId, false));
-						if(cache.isSelf(passengerId)) packets.add(create(version, vehicleId, 0, false));
+						NetworkEntity passenger = cache.getWatchedEntity(passengerId);
+						if(passenger != null) {
+							//Also update meta.
+							DataCache data = passenger.getDataCache();
+							data.rider = data.new Rider(false);
+							cache.updateWatchedDataCache(passengerId, data);
+							packets.add(EntityMetadata.create(passenger, version));
+							packets.add(create(version, vehicleId, passengerId, UNLINK));
+							if(cache.isSelf(passengerId)) packets.add(create(version, vehicleId, 0, UNLINK));
+						}
 					}
 					return true;
 				}
@@ -66,11 +72,11 @@ public class SetPassengers extends MiddleSetPassengers {
 		return packets;
 	}
 
-	public static ClientBoundPacketData create(ProtocolVersion version, int vehicleId, int passengerId, boolean add) {
+	public static ClientBoundPacketData create(ProtocolVersion version, int vehicleId, int passengerId, int action) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_LINK, version);
-		VarNumberSerializer.writeVarLong(serializer, vehicleId);
-		VarNumberSerializer.writeVarLong(serializer, passengerId);
-		serializer.writeBoolean(add);
+		VarNumberSerializer.writeSVarLong(serializer, vehicleId);
+		VarNumberSerializer.writeSVarLong(serializer, passengerId);
+		serializer.writeByte(action);
 		return serializer;
 	}
 

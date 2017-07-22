@@ -29,10 +29,11 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloat
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloatLe;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectItemStack;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectLong;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarLong;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectNBTTagCompound;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectSVarInt;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectSVarLong;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectShort;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectShortLe;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
@@ -70,7 +71,7 @@ public enum SpecificRemapper {
 				if(entity.isOfType(NetworkEntityType.WOLF) && data.getMetaBool(DataWatcherObjectIndex.Wolf.BEGGING)) b |= (1 << PeMetaBase.FLAG_INTERESTED);
 				if(entity.isOfType(NetworkEntityType.ZOMBIE_VILLAGER) && data.getMetaBool(DataWatcherObjectIndex.ZombieVillager.CONVERTING)) b |= (1 << PeMetaBase.FLAG_CONVERTING); //TODO: Test.
 				if(entity.isOfType(NetworkEntityType.MINECART_FURNACE) && data.getMetaBool(DataWatcherObjectIndex.MinecartFurnace.POWERED)) b |= (1 << PeMetaBase.FLAG_POWERED);
-				if(entity.isOfType(NetworkEntityType.POLAR_BEAR) && data.getMetaBool(DataWatcherObjectIndex.PolarBear.STANDING_UP)) b |= (1 << PeMetaBase.FLAG_REARING); //TODO: Just like horses, disappears. Perhaps send a unknown entitystatus aswell? Meh.
+				//if(entity.isOfType(NetworkEntityType.POLAR_BEAR) && data.getMetaBool(DataWatcherObjectIndex.PolarBear.STANDING_UP)) b |= (1 << PeMetaBase.FLAG_REARING); //TODO: Just like horses, disappears. Perhaps send a unknown entitystatus aswell? Meh.
 				if(entity.isOfType(NetworkEntityType.SNOWMAN) && !data.getMetaBool(DataWatcherObjectIndex.Snowman.NO_HAT, 5)) b |= (1 << PeMetaBase.FLAG_SHEARED);
 				if(entity.isOfType(NetworkEntityType.TNT)) b |= (1 << PeMetaBase.FLAG_IGNITED);
 				if(data.metadata.containsKey(DataWatcherObjectIndex.Entity.NAMETAG)) b |= (1 << PeMetaBase.FLAG_SHOW_NAMETAG);
@@ -110,7 +111,6 @@ public enum SpecificRemapper {
 					b |= (1 << PeMetaBase.FLAG_BABY);
 					remapped.put(39, new DataWatcherObjectFloatLe(0.5f)); //Send scale -> avoid big mobs with floating heads.
 				}
-				//if(entity.isOfType(NetworkEntityType.GIANT)) remapped.put(39, new DataWatcherObjectFloatLe(6f)); //Send scale -> giants are Giant Zombies in PE.
 				
 				//Specifics:
 				//Riding things.
@@ -120,7 +120,7 @@ public enum SpecificRemapper {
 				//Leashing is send in Entity Leash.
 				if(data.attachedId != -1) b |= (1 << PeMetaBase.FLAG_LEASHED);
 				
-				remapped.put(0, new DataWatcherObjectLong(b));
+				remapped.put(0, new DataWatcherObjectVarLong(b));
 				
 				// = PE Nametag =
 				if(original.containsKey(DataWatcherObjectIndex.Entity.NAMETAG)) {
@@ -134,15 +134,15 @@ public enum SpecificRemapper {
 				remapped.put(7, new DataWatcherObjectShortLe((air >= 300) ? 0 : air));
 				
 				// = PE LEAD =
-				remapped.put(38, new DataWatcherObjectLong(data.attachedId));
+				remapped.put(38, new DataWatcherObjectSVarLong(data.attachedId));
 				
 				// = PE RIDING =
 				if(data.rider.riding) {
 					//Extra data PE needs for vehicles. Send in setPassenger.
 					remapped.put(57, new DataWatcherObjectVector3fLe(data.rider.position));
-					remapped.put(58, new DataWatcherObjectByte((byte) ((data.rider.rotationLocked) ? 1 : 0)));
-					if(data.rider.rotationMax != null) remapped.put(59, new DataWatcherObjectFloatLe(data.rider.rotationMax));
-					if(data.rider.rotationMin != null) remapped.put(60, new DataWatcherObjectFloatLe(data.rider.rotationMin));
+					//remapped.put(58, new DataWatcherObjectByte((byte) ((data.rider.rotationLocked) ? 1 : 0)));
+					//if(data.rider.rotationMax != null) remapped.put(59, new DataWatcherObjectFloatLe(data.rider.rotationMax));
+					//if(data.rider.rotationMin != null) remapped.put(60, new DataWatcherObjectFloatLe(data.rider.rotationMin));
 				}
 				
 				// = PE Interaction =
