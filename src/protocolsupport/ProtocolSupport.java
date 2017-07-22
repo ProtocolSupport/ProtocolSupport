@@ -120,8 +120,8 @@ public class ProtocolSupport extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		Bukkit.shutdown();
 		peserver.stop();
+		Bukkit.shutdown();
 	}
 
 	public static void logInfo(String message) {

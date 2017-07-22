@@ -59,13 +59,13 @@ public class ItemStackSerializer {
 	public static void writePeSlot(ByteBuf to, ProtocolVersion version, ItemStackWrapper itemstack) {
 		if(itemstack.isNull() || itemstack.getTypeId() <= 0) {
 			VarNumberSerializer.writeVarInt(to, 0);
-			VarNumberSerializer.writeVarInt(to, 0); //TODO: CanPlaceOn PE
-			VarNumberSerializer.writeVarInt(to, 0); //TODO: CanDestroy PE
 			return;
 		}
-		VarNumberSerializer.writeVarInt(to, itemstack.getTypeId()); //TODO: Remap PE itemstacks...
-		VarNumberSerializer.writeVarInt(to, (itemstack.getData() << 8) | itemstack.getAmount());
-		VarNumberSerializer.writeVarInt(to, 0); //TODO: Implement PE NBT
+		ItemStackWrapper remapped = ItemStackRemapper.remapClientbound(version, null, itemstack.cloneItemStack());
+		int itemstate = ItemStackRemapper.ITEM_ID_REMAPPING_REGISTRY.getTable(version).getRemap(MinecraftData.getItemStateFromIdAndData(remapped.getTypeId(), remapped.getData()));
+		VarNumberSerializer.writeSVarInt(to, MinecraftData.getItemIdFromState(itemstate)); //TODO: Remap PE itemstacks...
+		VarNumberSerializer.writeSVarInt(to, (((MinecraftData.getItemDataFromState(itemstate) & 0xFFFF) << 8) | itemstack.getAmount()));
+		to.writeShortLE(0); //TODO: Implement PE NBT
 		VarNumberSerializer.writeVarInt(to, 0); //TODO: CanPlaceOn PE
 		VarNumberSerializer.writeVarInt(to, 0); //TODO: CanDestroy PE
 	}

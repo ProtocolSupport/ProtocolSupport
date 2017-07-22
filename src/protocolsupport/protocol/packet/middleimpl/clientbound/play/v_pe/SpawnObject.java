@@ -72,6 +72,14 @@ public class SpawnObject extends MiddleSpawnObject {
 		}
 		
 		public ClientBoundPacketData getSpawnPacket(ProtocolVersion version) {
+			//Let's dump some info.
+			System.out.println("Item " + entityId);
+			System.out.println("   x, y, z: " + x + " " + y + " " + z);
+			System.out.println("   mot x y z: " + motX + " " + motY + " " + motZ);
+			System.out.println("   ItemId " + itemstack.getTypeId());
+			System.out.println("   DataD: " + itemstack.getData());
+			System.out.println("   Count: " + itemstack.getAmount());
+			
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ADD_ITEM_ENTITY, version);
 			VarNumberSerializer.writeSVarLong(serializer, entityId);
 			VarNumberSerializer.writeVarLong(serializer, entityId);
