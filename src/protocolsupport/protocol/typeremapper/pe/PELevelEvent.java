@@ -8,8 +8,6 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 //TODO: recheck all ids for wrong and missing ones
 public class PELevelEvent {
 
-	public static final int PARTICLE_MASK = 0x4000;
-	
 	public static final int SOUND_CLICK = 1000;
 	public static final int SOUND_CLICK_FAIL = 1001;
 	public static final int SOUND_SHOOT = 1002;
@@ -55,7 +53,26 @@ public class PELevelEvent {
 	public static final int SOUND_SPLASH = 3506;
 	public static final int CAULDRON_TAKE_WATER = 3507;
 	public static final int CAULDRON_ADD_DYE = 3508;
-			
+	
+	public static final int PARTICLE_SHOOT = 2000;
+	public static final int PARTICLE_DESTROY = 2001;
+	public static final int PARTICLE_EYE_DESPAWN = 2003;
+	public static final int PARTICLE_SPAWN = 2004;
+	public static final int PARTICLE_BONEMEAL = 2005;
+
+	public static final int START_RAIN = 3001;
+	public static final int START_THUNDER = 3002;
+	public static final int STOP_RAIN = 3003;
+	public static final int STOP_THUNDER = 3004;
+
+	public static final int SOUND_CAULDRON = 3501;
+	public static final int SOUND_CAULDRON_DYE_ARMOR = 3502;
+	public static final int SOUND_CAULDRON_FILL_POTION = 3504;
+	public static final int SOUND_CAULDRON_FILL_WATER = 3506;
+
+	public static final int SET_DATA = 4000;
+	
+	public static final int PLAYERS_SLEEPING = 9800;
 	
 	public static final int PARTICLE = 0x4000,
 		PARTICLE_BUBBLE 				= PARTICLE | 1,
@@ -99,27 +116,6 @@ public class PELevelEvent {
 		PARTICLE_UNKNOWN_1 				= PARTICLE | 39,
 		PARTICLE_END_ROT 				= PARTICLE | 40,
 		PARTICLE_DRAGONS_BREATH 		= PARTICLE | 41;
-		
-	
-	public static final int PARTICLE_SHOOT = 2000;
-	public static final int PARTICLE_DESTROY = 2001;
-	public static final int PARTICLE_EYE_DESPAWN = 2003;
-	public static final int PARTICLE_SPAWN = 2004;
-	public static final int PARTICLE_BONEMEAL = 2005;
-
-	public static final int START_RAIN = 3001;
-	public static final int START_THUNDER = 3002;
-	public static final int STOP_RAIN = 3003;
-	public static final int STOP_THUNDER = 3004;
-
-	public static final int SOUND_CAULDRON = 3501;
-	public static final int SOUND_CAULDRON_DYE_ARMOR = 3502;
-	public static final int SOUND_CAULDRON_FILL_POTION = 3504;
-	public static final int SOUND_CAULDRON_FILL_WATER = 3506;
-
-	public static final int SET_DATA = 4000;
-
-	public static final int PLAYERS_SLEEPING = 9800;
 
 	public static ClientBoundPacketData createPacket(int levelEvent, float x, float y, float z, int data) {
 		ClientBoundPacketData clientLevelEvent = ClientBoundPacketData.create(PEPacketIDs.LEVEL_EVENT, ProtocolVersion.MINECRAFT_PE);
