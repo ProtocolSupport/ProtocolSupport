@@ -55,7 +55,7 @@ public class ProtocolVersionsHelper {
 	public static final ProtocolVersion[] AFTER_1_11 = ProtocolVersion.getAllAfterE(ProtocolVersion.MINECRAFT_1_11_1);
 
 	public static final ProtocolVersion[] AFTER_1_8 = ProtocolVersion.getAllAfterE(ProtocolVersion.MINECRAFT_1_8);
-	
+
 	public static final ProtocolVersion[] BEFORE_1_9_AND_PE = concat(BEFORE_1_9, ProtocolVersion.MINECRAFT_PE);
 
 	public static final ProtocolVersion[] concat(ProtocolVersion[] versions, ProtocolVersion... moreVersions) {

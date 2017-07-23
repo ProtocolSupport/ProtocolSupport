@@ -46,6 +46,7 @@ public class Position {
 		z += cnt;
 	}
 
+	@Override
 	public Position clone() {
 		return new Position(x, y, z);
 	}

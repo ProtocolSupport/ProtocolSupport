@@ -13,7 +13,9 @@ public class WorldSound extends MiddleWorldSound {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		String soundname = SoundRemapper.getSoundName(version, id);
-		if (soundname == null) return RecyclableEmptyList.get();
+		if (soundname == null) {
+			return RecyclableEmptyList.get();
+		}
 		return RecyclableSingletonList.create(WorldCustomSound.create(version, soundname, x, y, z, volume, pitch));
 	}
 

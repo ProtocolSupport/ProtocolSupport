@@ -43,7 +43,7 @@ public class IdSkipper {
 			return new HashMapBasedIntSkippingTable();
 		}
 	};
-	
+
 	public static final IntSkippingRegistry<ArrayBasedIntSkippingTable> PARTICLE = new IntSkippingRegistry<ArrayBasedIntSkippingTable>() {
 		{
 			//Fireworks Spark

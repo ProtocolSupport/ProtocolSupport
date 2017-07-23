@@ -18,7 +18,7 @@ import protocolsupport.utils.Utils;
 
 public class NetworkDataCache {
 
-	private static final double acceptableError = 0.001;
+	private static final double acceptableError = 0.1;
 
 	private double x;
 	private double y;
@@ -114,11 +114,11 @@ public class NetworkDataCache {
 		sentChunks.clear();
 		readdSelfPlayer();
 	}
-	
+
 	public void prepareItem(PreparedItem preparedItem) {
 		preparedItems.put(preparedItem.getId(), preparedItem);
 	}
-	
+
 	public PreparedItem getPreparedItem(int entityId) {
 		return preparedItems.get(entityId);
 	}

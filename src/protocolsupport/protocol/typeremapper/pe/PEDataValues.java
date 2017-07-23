@@ -58,7 +58,7 @@ public class PEDataValues {
 	public static int getLivingEntityTypeId(NetworkEntityType type) {
 		return livingEntityType.get(type);
 	}
-	
+
 	private static final EnumMap<NetworkEntityType, Integer> objectEntityType = new EnumMap<>(NetworkEntityType.class);
 	static {
 		objectEntityType.put(NetworkEntityType.TNT, 65);
@@ -91,7 +91,7 @@ public class PEDataValues {
 		objectEntityType.put(NetworkEntityType.LAMA_SPIT, 102);
 		objectEntityType.put(NetworkEntityType.EVOCATOR_FANGS, 103);
 	}
-	
+
 	public static int getObjectEntityTypeId(NetworkEntityType type) {
 		return objectEntityType.get(type);
 	}
@@ -112,7 +112,7 @@ public class PEDataValues {
 			BLOCK_ID.setRemap(MinecraftData.getBlockStateFromIdAndData(from, i), MinecraftData.getBlockStateFromIdAndData(to, dataTo));
 		}
 	}
-	
+
 	static {
 		// Nether slab -> Quartz slab
 		registerBlockRemap(44, 7, 44, 6);
@@ -193,7 +193,7 @@ public class PEDataValues {
 		registerBlockRemap(158, 125);
 		// Beetroot
 		registerBlockRemap(207, 244);
-		
+
 		// ===[ MISSING BLOCK REMAPS ]===
 		// Jukebox -> Noteblock
 		registerBlockRemap(84, 25);
