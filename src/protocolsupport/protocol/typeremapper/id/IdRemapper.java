@@ -278,7 +278,7 @@ public class IdRemapper {
 			return new EnumRemappingTable<>(NetworkEntityType.class);
 		}
 	};
-	
+
 	public static final IdRemappingRegistry<HashMapBasedIdRemappingTable> PARTICLE = new IdRemappingRegistry<HashMapBasedIdRemappingTable>() {
 		{
 			//TODO: Check values. (Speculative = names don't match) Only a few values have been tested by hand.
@@ -286,7 +286,7 @@ public class IdRemapper {
 			registerRemapEntry( 1, PELevelEvent.PARTICLE_HUGE_EXPLOSION, ProtocolVersion.MINECRAFT_PE);
 			registerRemapEntry( 2, PELevelEvent.PARTICLE_HUGE_EXPLOSION_SEED, ProtocolVersion.MINECRAFT_PE);
 			registerRemapEntry( 4, PELevelEvent.PARTICLE_BUBBLE, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry( 5, PELevelEvent.PARTICLE_SPLASH, ProtocolVersion.MINECRAFT_PE); 
+			registerRemapEntry( 5, PELevelEvent.PARTICLE_SPLASH, ProtocolVersion.MINECRAFT_PE);
 			registerRemapEntry( 6, PELevelEvent.PARTICLE_WATER_WAKE, ProtocolVersion.MINECRAFT_PE);
 			registerRemapEntry( 9, PELevelEvent.PARTICLE_CRITICAL, ProtocolVersion.MINECRAFT_PE);
 			registerRemapEntry(10, PELevelEvent.PARTICLE_CRITICAL, ProtocolVersion.MINECRAFT_PE); //Magiccrit..?

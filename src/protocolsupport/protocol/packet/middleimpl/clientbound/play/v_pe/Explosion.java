@@ -22,7 +22,7 @@ public class Explosion extends MiddleExplosion {
 		packets.add(WorldParticle.create(PELevelEvent.PARTICLE_HUGE_EXPLOSION_SEED, x, y, z));
 		return packets;
 	}
-	
+
 	public static ClientBoundPacketData create(ProtocolVersion version, float x, float y, float z, float radius, Position[] blocks) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.EXPLODE, version);
 		MiscSerializer.writeLFloat(serializer, x);
