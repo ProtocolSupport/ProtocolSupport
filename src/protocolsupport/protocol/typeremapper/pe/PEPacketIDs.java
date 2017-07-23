@@ -6,6 +6,7 @@ public class PEPacketIDs {
 	public static final int PLAY_STATUS = 2;
 	public static final int DISCONNECT = 5;
 	public static final int RESOURCE_PACK = 6;
+	public static final int RESOURCE_STACK = 7;
 	public static final int CHAT = 9;
 	public static final int UPDATE_TIME = 10;
 	public static final int START_GAME = 11;
