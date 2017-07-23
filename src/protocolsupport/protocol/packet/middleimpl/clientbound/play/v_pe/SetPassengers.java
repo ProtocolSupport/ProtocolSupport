@@ -39,7 +39,7 @@ public class SetPassengers extends MiddleSetPassengers {
 				if (passenger != null) {
 					//Update rider positions too.
 					DataCache data = passenger.getDataCache();
-					if(vehicle.isOfType(NetworkEntityType.PIG)) data.rider = data.new Rider(new Vector(0.0, 3.8, 0.0), false);
+					if(vehicle.isOfType(NetworkEntityType.PIG)) data.rider = data.new Rider(new Vector(0.0, 2.8, 0.0), false);
 					else if(vehicle.isOfType(NetworkEntityType.BASE_HORSE)) data.rider = data.new Rider(new Vector(0.0, 2.3, -0.2), true, 180f, -180f);
 					else data.rider = data.new Rider(true);
 					cache.updateWatchedDataCache(passengerId, data);
