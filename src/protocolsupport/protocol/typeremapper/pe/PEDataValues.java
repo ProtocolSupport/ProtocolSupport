@@ -58,6 +58,43 @@ public class PEDataValues {
 	public static int getLivingEntityTypeId(NetworkEntityType type) {
 		return livingEntityType.get(type);
 	}
+	
+	private static final EnumMap<NetworkEntityType, Integer> objectEntityType = new EnumMap<>(NetworkEntityType.class);
+	static {
+		objectEntityType.put(NetworkEntityType.TNT, 65);
+		objectEntityType.put(NetworkEntityType.FALLING_OBJECT, 66);
+		//TODO: Fix pistons, moving blocks? -> 67
+		objectEntityType.put(NetworkEntityType.EXP_BOTTLE, 68);
+		objectEntityType.put(NetworkEntityType.ENDEREYE, 70);
+		objectEntityType.put(NetworkEntityType.ENDER_CRYSTAL, 71);
+		objectEntityType.put(NetworkEntityType.SHULKER_BULLET, 76);
+		objectEntityType.put(NetworkEntityType.FISHING_FLOAT, 77);
+		objectEntityType.put(NetworkEntityType.DRAGON_FIREBALL, 79);
+		objectEntityType.put(NetworkEntityType.ARROW, 80);
+		objectEntityType.put(NetworkEntityType.SNOWBALL, 81);
+		objectEntityType.put(NetworkEntityType.EGG, 82);
+		objectEntityType.put(NetworkEntityType.MINECART, 84);
+		objectEntityType.put(NetworkEntityType.FIREBALL, 85);
+		objectEntityType.put(NetworkEntityType.POTION, 86);
+		objectEntityType.put(NetworkEntityType.ENDERPEARL, 87);
+		objectEntityType.put(NetworkEntityType.LEASH_KNOT, 88);
+		objectEntityType.put(NetworkEntityType.WITHER_SKULL, 89);
+		objectEntityType.put(NetworkEntityType.BOAT, 90);
+		//TODO: WitherSkull dangerous? -> 91
+		objectEntityType.put(NetworkEntityType.FIRECHARGE, 94);
+		objectEntityType.put(NetworkEntityType.AREA_EFFECT_CLOUD, 95);
+		objectEntityType.put(NetworkEntityType.MINECART_HOPPER, 96);
+		objectEntityType.put(NetworkEntityType.MINECART_TNT, 97);
+		objectEntityType.put(NetworkEntityType.MINECART_CHEST, 98);
+		objectEntityType.put(NetworkEntityType.MINECART_COMMAND, 100);
+		objectEntityType.put(NetworkEntityType.AREA_EFFECT_CLOUD, 101);
+		objectEntityType.put(NetworkEntityType.LAMA_SPIT, 102);
+		objectEntityType.put(NetworkEntityType.EVOCATOR_FANGS, 103);
+	}
+	
+	public static int getObjectEntityTypeId(NetworkEntityType type) {
+		return objectEntityType.get(type);
+	}
 
 	public static final ArrayBasedIdRemappingTable BLOCK_ID = new ArrayBasedIdRemappingTable(MinecraftData.BLOCK_ID_MAX * MinecraftData.BLOCK_DATA_MAX);
 	private static void registerBlockRemap(int from, int to) {

@@ -15,7 +15,7 @@ public class CraftingGrid extends MiddleCraftingGrid {
 		windowId = clientdata.readByte();
 		actionNumber = clientdata.readShort();
 		Function<ByteBuf, Entry> elementReader = (from) -> {
-			return new Entry(ItemStackSerializer.readItemStack(from, version), from.readByte(), from.readByte());
+			return new Entry(ItemStackSerializer.readItemStack(from, version, cache.getLocale()), from.readByte(), from.readByte());
 		};
 		returnEntries = ArraySerializer.readShortTArray(clientdata, Entry.class, elementReader);
 		prepareEntries = ArraySerializer.readShortTArray(clientdata, Entry.class, elementReader);

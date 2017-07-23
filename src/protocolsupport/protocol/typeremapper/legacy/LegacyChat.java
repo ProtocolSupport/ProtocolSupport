@@ -8,16 +8,16 @@ import protocolsupport.utils.Utils;
 
 public class LegacyChat {
 
-	public static String toText(BaseComponent component) {
+	public static String toText(BaseComponent component, String locale) {
 		if (component == null) {
 			return "";
 		}
 		final StringBuilder out = new StringBuilder();
-		toTextSingle(out, component, component.getModifier());
+		toTextSingle(out, locale, component, component.getModifier());
 		return out.toString();
 	}
 
-	private static void toTextSingle(StringBuilder out, BaseComponent component, Modifier modifier) {
+	private static void toTextSingle(StringBuilder out, String locale, BaseComponent component, Modifier modifier) {
 		if (Utils.isTrue(modifier.hasColor())) {
 			out.append(modifier.getColor());
 		}
@@ -41,11 +41,8 @@ public class LegacyChat {
 		if (!hadFormat && Utils.isTrue(modifier.isRandom())) {
 			out.append(ChatColor.MAGIC);
 		}
-		out.append(component.getValue());
+		out.append(component.getValue(locale));
 		for (BaseComponent child : component.getSiblings()) {
-			if (out.length() > 0) {
-				out.append(ChatColor.RESET);
-			}
 			Modifier childmodifier = child.getModifier();
 			Modifier combinedmodifier = new Modifier();
 			combinedmodifier.setColor(childmodifier.hasColor() ? childmodifier.getColor() : modifier.getColor());
@@ -54,7 +51,8 @@ public class LegacyChat {
 			combinedmodifier.setUnderlined(childmodifier.isUnderlined() != null ? childmodifier.isUnderlined() : modifier.isUnderlined());
 			combinedmodifier.setStrikethrough(childmodifier.isStrikethrough() != null ? childmodifier.isStrikethrough() : modifier.isStrikethrough());
 			combinedmodifier.setRandom(childmodifier.isRandom() != null ? childmodifier.isRandom() : modifier.isRandom());
-			toTextSingle(out, child, combinedmodifier);
+			toTextSingle(out, locale, child, combinedmodifier);
+			out.append(ChatColor.RESET);
 		}
 	}
 

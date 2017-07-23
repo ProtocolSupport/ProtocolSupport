@@ -9,7 +9,7 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 public class MonsterEggToLegacyNameSpecificRemapper extends ItemStackNBTSpecificRemapper {
 
 	@Override
-	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, ItemStackWrapper itemstack, NBTTagCompoundWrapper tag) {
+	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, String locale, ItemStackWrapper itemstack, NBTTagCompoundWrapper tag) {
 		NBTTagCompoundWrapper entitytag = tag.getCompound("EntityTag");
 		String entityId = entitytag.getString("id");
 		if (!entityId.isEmpty()) {

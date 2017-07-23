@@ -7,6 +7,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
@@ -16,13 +17,16 @@ public class ClickActionSerializer implements JsonDeserializer<ClickAction>, Jso
 
 	@Override
 	public ClickAction deserialize(JsonElement element, Type type, JsonDeserializationContext ctx) throws JsonParseException {
-		JsonObject jsonobject = element.getAsJsonObject();
-		if (!jsonobject.has("clickEvent")) {
+		JsonObject jsonObject = element.getAsJsonObject();
+		JsonPrimitive actionJson = jsonObject.getAsJsonPrimitive("action");
+		if (actionJson == null) {
 			return null;
 		}
-		JsonObject clickObject = jsonobject.getAsJsonObject("clickEvent");
-		ClickAction.Type atype = ClickAction.Type.valueOf(clickObject.getAsJsonPrimitive("action").getAsString().toUpperCase());
-		return new ClickAction(atype, clickObject.getAsJsonPrimitive("value").getAsString());
+		JsonElement valueJson = jsonObject.get("value");
+		if (valueJson == null) {
+			return null;
+		}
+		return new ClickAction(ClickAction.Type.valueOf(actionJson.getAsString().toUpperCase()), valueJson.getAsString());
 	}
 
 	@Override

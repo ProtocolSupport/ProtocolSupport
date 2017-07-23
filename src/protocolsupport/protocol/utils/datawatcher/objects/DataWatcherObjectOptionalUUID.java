@@ -10,14 +10,14 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 public class DataWatcherObjectOptionalUUID extends DataWatcherObject<UUID> {
 
 	@Override
-	public void readFromStream(ByteBuf from, ProtocolVersion version) {
+	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {
 		if (from.readBoolean()) {
 			value = MiscSerializer.readUUID(from);
 		}
 	}
 
 	@Override
-	public void writeToStream(ByteBuf to, ProtocolVersion version) {
+	public void writeToStream(ByteBuf to, ProtocolVersion version, String locale) {
 		to.writeBoolean(value != null);
 		if (value != null) {
 			MiscSerializer.writeUUID(to, value);

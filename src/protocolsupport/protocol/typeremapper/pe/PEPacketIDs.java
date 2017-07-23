@@ -6,17 +6,20 @@ public class PEPacketIDs {
 	public static final int PLAY_STATUS = 2;
 	public static final int DISCONNECT = 5;
 	public static final int RESOURCE_PACK = 6;
+	public static final int RESOURCE_STACK = 7;
 	public static final int CHAT = 9;
 	public static final int UPDATE_TIME = 10;
 	public static final int START_GAME = 11;
 	public static final int SPAWN_PLAYER = 12;
 	public static final int SPAWN_ENTITY = 13;
 	public static final int ENTITY_DESTROY = 14;
-	public static final int ENTITY_MOVE = 18;
+	public static final int ADD_ITEM_ENTITY = 15;
+  public static final int ENTITY_MOVE = 18;
 	public static final int PLAYER_MOVE = 19;
 	public static final int REMOVE_BLOCK = 21;
 	public static final int UPDATE_BLOCK = 22;
 	public static final int SPAWN_PAINTING = 23;
+	public static final int EXPLODE = 24;
 	public static final int LEVEL_EVENT = 26;
 	public static final int ENTITY_EVENT = 28;
 	public static final int ENTITY_EFFECT = 29;
@@ -35,6 +38,7 @@ public class PEPacketIDs {
 	public static final int CHANGE_PLAYER_GAMETYPE = 62;
 	public static final int PLAYER_INFO = 63;
 	public static final int CHUNK_RADIUS = 70;
+	public static final int PLAY_SOUND = 87;
 	public static final int SET_TITLE = 89;
 
 }

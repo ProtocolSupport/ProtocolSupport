@@ -18,24 +18,24 @@ public class PlayerInfo extends MiddlePlayerInfo {
 			switch (action) {
 				case ADD: {
 					if (info.previousinfo != null) {
-						datas.add(createData(info.previousinfo.getName(), false, version));
+						datas.add(create(info.previousinfo.getName(cache.getLocale()), false, version));
 					}
-					datas.add(createData(info.getName(), true, version));
+					datas.add(create(info.getName(cache.getLocale()), true, version));
 					break;
 				}
 				case REMOVE: {
 					if (info.previousinfo != null) {
-						datas.add(createData(info.previousinfo.getName(), false, version));
+						datas.add(create(info.previousinfo.getName(cache.getLocale()), false, version));
 					}
 					break;
 				}
 				case DISPLAY_NAME: {
 					if (info.previousinfo != null) {
-						datas.add(createData(info.previousinfo.getName(), false, version));
+						datas.add(create(info.previousinfo.getName(cache.getLocale()), false, version));
 						if (info.displayNameJson != null) {
-							datas.add(createData(info.getName(), true, version));
+							datas.add(create(info.getName(cache.getLocale()), true, version));
 						} else {
-							datas.add(createData(info.previousinfo.getUserName(), true, version));
+							datas.add(create(info.previousinfo.getUserName(), true, version));
 						}
 					}
 					break;
@@ -48,7 +48,7 @@ public class PlayerInfo extends MiddlePlayerInfo {
 		return datas;
 	}
 
-	static ClientBoundPacketData createData(String name, boolean add, ProtocolVersion version) {
+	private static ClientBoundPacketData create(String name, boolean add, ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_PLAYER_INFO_ID, version);
 		StringSerializer.writeString(serializer, version, Utils.clampString(name, 16));
 		serializer.writeBoolean(add);

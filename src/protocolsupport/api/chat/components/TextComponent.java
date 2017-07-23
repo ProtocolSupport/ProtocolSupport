@@ -9,7 +9,7 @@ public class TextComponent extends BaseComponent {
 	}
 
 	@Override
-	public String getValue() {
+	public String getValue(String locale) {
 		return text;
 	}
 

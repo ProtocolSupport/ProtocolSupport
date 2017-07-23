@@ -25,7 +25,7 @@ public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 		reset = serverdata.readBoolean();
 		advancementsMapping = ArraySerializer.readVarIntTArray(
 			serverdata, Any.class,
-			buf -> new Any<String, Advancement>(StringSerializer.readString(buf, ProtocolVersionsHelper.LATEST_PC), Advancement.read(buf))
+			buf -> new Any<String, Advancement>(StringSerializer.readString(buf, ProtocolVersionsHelper.LATEST_PC), Advancement.read(buf, cache.getLocale()))
 		);
 		removeAdvancements = ArraySerializer.readVarIntStringArray(serverdata, ProtocolVersionsHelper.LATEST_PC);
 		advancementsProgress = ArraySerializer.readVarIntTArray(
@@ -36,9 +36,9 @@ public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 
 	protected static class Advancement {
 
-		protected static Advancement read(ByteBuf from) {
+		protected static Advancement read(ByteBuf from, String locale) {
 			String parentId = from.readBoolean() ? StringSerializer.readString(from, ProtocolVersionsHelper.LATEST_PC) : null;
-			AdvancementDisplay display = from.readBoolean() ? AdvancementDisplay.read(from) : null;
+			AdvancementDisplay display = from.readBoolean() ? AdvancementDisplay.read(from, locale) : null;
 			String[] criterias = ArraySerializer.readVarIntStringArray(from, ProtocolVersionsHelper.LATEST_PC);
 			String[][] requirments = ArraySerializer.readVarIntTArray(from, String[].class, buf -> ArraySerializer.readVarIntStringArray(buf, ProtocolVersionsHelper.LATEST_PC));
 			return new Advancement(parentId, display, criterias, requirments);
@@ -60,10 +60,10 @@ public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 
 		public static final int flagHasBackgroundOffset = 0x1;
 
-		protected static AdvancementDisplay read(ByteBuf from) {
+		protected static AdvancementDisplay read(ByteBuf from, String locale) {
 			BaseComponent title = ChatAPI.fromJSON(StringSerializer.readString(from, ProtocolVersionsHelper.LATEST_PC));
 			BaseComponent description = ChatAPI.fromJSON(StringSerializer.readString(from, ProtocolVersionsHelper.LATEST_PC));
-			ItemStackWrapper icon = ItemStackSerializer.readItemStack(from, ProtocolVersionsHelper.LATEST_PC);
+			ItemStackWrapper icon = ItemStackSerializer.readItemStack(from, ProtocolVersionsHelper.LATEST_PC, locale);
 			FrameType type = MiscSerializer.readEnum(from, FrameType.class);
 			int flags = from.readInt();
 			String background = (flags & flagHasBackgroundOffset) != 0 ? StringSerializer.readString(from, ProtocolVersionsHelper.LATEST_PC) : null;

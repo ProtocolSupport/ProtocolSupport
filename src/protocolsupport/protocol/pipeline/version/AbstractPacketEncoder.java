@@ -3,6 +3,7 @@ package protocolsupport.protocol.pipeline.version;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -42,9 +43,9 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 			return;
 		}
 		NetworkState currentProtocol = ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(ctx.channel());
-		int packetId = VarNumberSerializer.readVarInt(input);
-		ClientBoundMiddlePacket packetTransformer = registry.getTransformer(currentProtocol, packetId);
+		ClientBoundMiddlePacket packetTransformer = null;
 		try {
+			packetTransformer = registry.getTransformer(currentProtocol, VarNumberSerializer.readVarInt(input));
 			packetTransformer.readFromServerData(input);
 			packetTransformer.handle();
 			try (RecyclableCollection<ClientBoundPacketData> data = packetTransformer.toData(connection.getVersion())) {
@@ -60,8 +61,7 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 				input.readerIndex(0);
 				throw new EncoderException(MessageFormat.format(
 					"Unable to transform or read middle packet {0} (data: {1})",
-					packetTransformer.toString(),
-					Arrays.toString(MiscSerializer.readAllBytes(input))
+					Objects.toString(packetTransformer), Arrays.toString(MiscSerializer.readAllBytes(input))
 				), exception);
 			} else {
 				throw exception;

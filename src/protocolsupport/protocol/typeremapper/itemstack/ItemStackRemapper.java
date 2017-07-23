@@ -9,12 +9,12 @@ import org.bukkit.Material;
 
 import gnu.trove.decorator.TIntObjectMapDecorator;
 import gnu.trove.map.hash.TIntObjectHashMap;
-import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.api.remapper.BlockRemapperControl;
+import protocolsupport.api.remapper.BlockRemapperControl.MaterialAndData;
 import protocolsupport.protocol.typeremapper.id.RemappingRegistry.IdRemappingRegistry;
-import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.typeremapper.id.RemappingTable.HashMapBasedIdRemappingTable;
 import protocolsupport.protocol.typeremapper.itemstack.clientbound.BookPagesToLegacyTextSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.clientbound.DragonHeadSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.clientbound.EmptyBookPageAdderSpecificRemapper;
@@ -35,16 +35,18 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 @SuppressWarnings("deprecation")
 public class ItemStackRemapper {
 
-	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> ITEM_ID_REMAPPING_REGISTRY = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
+	public static final IdRemappingRegistry<HashMapBasedIdRemappingTable> ITEM_ID_REMAPPING_REGISTRY = new IdRemappingRegistry<HashMapBasedIdRemappingTable>() {
 		{
-			for (ProtocolVersion version : ProtocolVersion.values()) {
-				if (version.isSupported()) {
-					BlockRemapperControl ctrl = ProtocolSupportAPI.getBlockRemapper(version);
-					for (int i = 0; i < MinecraftData.BLOCK_ID_MAX; i++) {
-						registerRemapEntry(i, ctrl.getRemap(i), version);
+			for (ProtocolVersion version : ProtocolVersion.getAllSupported()) {
+				BlockRemapperControl ctrl = new BlockRemapperControl(version);
+				for (int id = 0; id < MinecraftData.BLOCK_ID_MAX; id++) {
+					for (int data = 0; data < MinecraftData.BLOCK_DATA_MAX; data++) {
+						MaterialAndData remap = ctrl.getRemap(new MaterialAndData(id, data));
+						registerRemapEntry(id, data, remap.getId(), remap.getData(), version);
 					}
 				}
 			}
+			registerRemapEntry(Material.BED, Material.BED, 0, ProtocolVersionsHelper.BEFORE_1_12);
 			registerRemapEntry(Material.KNOWLEDGE_BOOK, Material.BOOK, ProtocolVersionsHelper.BEFORE_1_12);
 			registerRemapEntry(Material.SHULKER_SHELL, Material.COBBLESTONE, ProtocolVersionsHelper.BEFORE_1_11);
 			registerRemapEntry(Material.TOTEM, Material.COBBLESTONE, ProtocolVersionsHelper.BEFORE_1_11);
@@ -66,51 +68,52 @@ public class ItemStackRemapper {
 			registerRemapEntry(Material.BOAT_DARK_OAK, Material.BOAT, ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry(Material.BOAT_JUNGLE, Material.BOAT, ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry(Material.BOAT_SPRUCE, Material.BOAT, ProtocolVersionsHelper.BEFORE_1_9);
-			// all doors -> door
-			registerRemapEntry(427, 324, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(428, 324, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(429, 324, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(430, 324, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(431, 324, ProtocolVersionsHelper.BEFORE_1_8);
-			// rabbit raw meat -> chicken raw meat
-			registerRemapEntry(411, 365, ProtocolVersionsHelper.BEFORE_1_8);
-			// rabbit cooked meat -> chicken cooked meat
-			registerRemapEntry(412, 366, ProtocolVersionsHelper.BEFORE_1_8);
-			// rabbit stew -> mushroom stew
-			registerRemapEntry(413, 282, ProtocolVersionsHelper.BEFORE_1_8);
-			// raw mutton -> chicken raw meat
-			registerRemapEntry(423, 365, ProtocolVersionsHelper.BEFORE_1_8);
-			// cooked mutton -> chicken cooked meat
-			registerRemapEntry(424, 366, ProtocolVersionsHelper.BEFORE_1_8);
-			// banner -> sign
-			registerRemapEntry(425, 323, ProtocolVersionsHelper.BEFORE_1_8);
-			// everything else -> stone
-			registerRemapEntry(409, 1, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(410, 1, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(414, 1, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(415, 1, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(416, 1, ProtocolVersionsHelper.BEFORE_1_8);
-			registerRemapEntry(417, 1, ProtocolVersionsHelper.BEFORE_1_6);
-			registerRemapEntry(418, 1, ProtocolVersionsHelper.BEFORE_1_6);
-			registerRemapEntry(419, 1, ProtocolVersionsHelper.BEFORE_1_6);
-			registerRemapEntry(420, 1, ProtocolVersionsHelper.BEFORE_1_6);
-			registerRemapEntry(421, 1, ProtocolVersionsHelper.BEFORE_1_6);
-			// minecarts -> default minecart
-			registerRemapEntry(407, 328, ProtocolVersionsHelper.BEFORE_1_5);
-			registerRemapEntry(408, 328, ProtocolVersionsHelper.BEFORE_1_5);
-			// comparator -> repeater
-			registerRemapEntry(404, 356, ProtocolVersionsHelper.BEFORE_1_5);
-			// nether brick -> brick
-			registerRemapEntry(405, 336, ProtocolVersionsHelper.BEFORE_1_5);
-			// quartz -> feather
-			registerRemapEntry(406, 288, ProtocolVersionsHelper.BEFORE_1_5);
+			registerRemapEntry(Material.SPRUCE_DOOR_ITEM, Material.WOOD_DOOR, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.BIRCH_DOOR_ITEM, Material.WOOD_DOOR, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.JUNGLE_DOOR_ITEM, Material.WOOD_DOOR, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.ACACIA_DOOR_ITEM, Material.WOOD_DOOR, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.DARK_OAK_DOOR_ITEM, Material.WOOD_DOOR, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.RABBIT, Material.RAW_CHICKEN, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.COOKED_RABBIT, Material.COOKED_CHICKEN, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.RABBIT_STEW, Material.MUSHROOM_SOUP, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.MUTTON, Material.RAW_CHICKEN, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.COOKED_MUTTON, Material.COOKED_CHICKEN, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.BANNER, Material.SIGN, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.PRISMARINE_SHARD, Material.STONE, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.PRISMARINE_CRYSTALS, Material.STONE, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.RABBIT_FOOT, Material.STONE, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.RABBIT_HIDE, Material.STONE, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.ARMOR_STAND, Material.STONE, ProtocolVersionsHelper.BEFORE_1_8);
+			registerRemapEntry(Material.IRON_BARDING, Material.LEATHER_CHESTPLATE, ProtocolVersionsHelper.BEFORE_1_6);
+			registerRemapEntry(Material.GOLD_BARDING, Material.LEATHER_CHESTPLATE, ProtocolVersionsHelper.BEFORE_1_6);
+			registerRemapEntry(Material.DIAMOND_BARDING, Material.LEATHER_CHESTPLATE, ProtocolVersionsHelper.BEFORE_1_6);
+			registerRemapEntry(Material.LEASH, Material.STONE, ProtocolVersionsHelper.BEFORE_1_6);
+			registerRemapEntry(Material.NAME_TAG, Material.STONE, ProtocolVersionsHelper.BEFORE_1_6);
+			registerRemapEntry(Material.EXPLOSIVE_MINECART, Material.MINECART, ProtocolVersionsHelper.BEFORE_1_5);
+			registerRemapEntry(Material.HOPPER_MINECART, Material.MINECART, ProtocolVersionsHelper.BEFORE_1_5);
+			registerRemapEntry(Material.REDSTONE_COMPARATOR, Material.DIODE, ProtocolVersionsHelper.BEFORE_1_5);
+			registerRemapEntry(Material.NETHER_BRICK_ITEM, Material.CLAY_BRICK, ProtocolVersionsHelper.BEFORE_1_5);
+			registerRemapEntry(Material.QUARTZ, Material.FEATHER, ProtocolVersionsHelper.BEFORE_1_5);
 		}
 		private void registerRemapEntry(Material from, Material to, ProtocolVersion... versions) {
-			registerRemapEntry(from.getId(), to.getId(), versions);
+			for (int i = 0; i < MinecraftData.ITEM_DATA_MAX; i++) {
+				registerRemapEntry(from, i, to, i, versions);
+			}
+		}
+		private void registerRemapEntry(Material from, Material to, int dataTo, ProtocolVersion... versions) {
+			for (int i = 0; i < MinecraftData.ITEM_DATA_MAX; i++) {
+				registerRemapEntry(from, i, to, dataTo, versions);
+			}
+		}
+		private void registerRemapEntry(Material from, int dataFrom, Material to, int dataTo, ProtocolVersion... versions) {
+			registerRemapEntry(from.getId(), dataFrom, to.getId(), dataTo, versions);
+		}
+		private void registerRemapEntry(int idFrom, int dataFrom, int idTo, int dataTo, ProtocolVersion... versions) {
+			registerRemapEntry(MinecraftData.getItemStateFromIdAndData(idFrom, dataFrom), MinecraftData.getItemStateFromIdAndData(idTo, dataTo), versions);
 		}
 		@Override
-		protected ArrayBasedIdRemappingTable createTable() {
-			return new ArrayBasedIdRemappingTable(4096);
+		protected HashMapBasedIdRemappingTable createTable() {
+			return new HashMapBasedIdRemappingTable();
 		}
 	};
 
@@ -148,21 +151,21 @@ public class ItemStackRemapper {
 		Arrays.stream(Material.values()).forEach(material -> registerClientboundRemapper(material, enchantfilter, ProtocolVersionsHelper.ALL_PC));
 	}
 
-	public static ItemStackWrapper remapClientbound(ProtocolVersion version, ItemStackWrapper itemstack) {
-		return remap(clientbound_remapper_registry, version, itemstack);
+	public static ItemStackWrapper remapClientbound(ProtocolVersion version, String locale, ItemStackWrapper itemstack) {
+		return remap(clientbound_remapper_registry, version, locale, itemstack);
 	}
 
-	public static ItemStackWrapper remapServerbound(ProtocolVersion version, ItemStackWrapper itemstack) {
-		return remap(serverbound_remapper_registry, version, itemstack);
+	public static ItemStackWrapper remapServerbound(ProtocolVersion version, String locale, ItemStackWrapper itemstack) {
+		return remap(serverbound_remapper_registry, version, locale, itemstack);
 	}
 
-	private static ItemStackWrapper remap(TIntObjectHashMap<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>> registry, ProtocolVersion version, ItemStackWrapper itemstack) {
+	private static ItemStackWrapper remap(TIntObjectHashMap<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>> registry, ProtocolVersion version, String locale, ItemStackWrapper itemstack) {
 		EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>> map = registry.get(itemstack.getTypeId());
 		if (map != null) {
 			List<ItemStackSpecificRemapper> transformers = map.get(version);
 			if (transformers != null) {
 				for (ItemStackSpecificRemapper transformer : transformers) {
-					itemstack = transformer.remap(version, itemstack);
+					itemstack = transformer.remap(version, locale, itemstack);
 				}
 				return itemstack;
 			}

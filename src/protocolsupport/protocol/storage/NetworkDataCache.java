@@ -11,6 +11,8 @@ import org.bukkit.util.Vector;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnObject.PreparedItem;
+import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.WindowType;
@@ -73,6 +75,7 @@ public class NetworkDataCache {
 
 
 	private final TIntObjectHashMap<NetworkEntity> watchedEntities = new TIntObjectHashMap<>();
+	private final TIntObjectHashMap<PreparedItem> preparedItems = new TIntObjectHashMap<>();
 	private NetworkEntity player;
 	private final HashMap<UUID, NetworkDataCache.PlayerListEntry> playerlist = new HashMap<>();
 	private Environment dimensionId;
@@ -156,6 +159,14 @@ public class NetworkDataCache {
 		watchedEntities.clear();
 		sentChunks.clear();
 		readdSelfPlayer();
+	}
+	
+	public void prepareItem(PreparedItem preparedItem) {
+		preparedItems.put(preparedItem.getId(), preparedItem);
+	}
+	
+	public PreparedItem getPreparedItem(int entityId) {
+		return preparedItems.get(entityId);
 	}
 
 	public void addPlayerListEntry(UUID uuid, PlayerListEntry entry) {
@@ -241,8 +252,8 @@ public class NetworkDataCache {
 			return name;
 		}
 
-		public String getName() {
-			return displayNameJson == null ? name : ChatAPI.fromJSON(displayNameJson).toLegacyText();
+		public String getName(String locale) {
+			return displayNameJson == null ? name : ChatAPI.fromJSON(displayNameJson).toLegacyText(locale);
 		}
 
 		@Override
@@ -259,6 +270,16 @@ public class NetworkDataCache {
 		public String toString() {
 			return Utils.toStringAllFields(this);
 		}
+	}
+
+	protected String locale = I18NData.DEFAULT_LOCALE;
+
+	public void setLocale(String locale) {
+		this.locale = locale.toLowerCase();
+	}
+
+	public String getLocale() {
+		return locale;
 	}
 
 	private final HashSet<ChunkCoord> sentChunks = new HashSet<>();

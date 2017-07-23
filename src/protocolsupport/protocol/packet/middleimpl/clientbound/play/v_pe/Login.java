@@ -27,6 +27,11 @@ public class Login extends MiddleLogin {
 		resourcepack.writeShortLE(0); //res packs count
 		resourcepack.writeShortLE(0); //beh packs count
 		packets.add(resourcepack);
+		ClientBoundPacketData resourcestack = ClientBoundPacketData.create(PEPacketIDs.RESOURCE_STACK, version);
+		resourcestack.writeBoolean(false); // required
+		resourcestack.writeShortLE(0); //res packs count
+		resourcestack.writeShortLE(0); //beh packs count
+		packets.add(resourcestack);
 		ClientBoundPacketData startgame = ClientBoundPacketData.create(PEPacketIDs.START_GAME, version);
 		VarNumberSerializer.writeSVarLong(startgame, playerEntityId);
 		VarNumberSerializer.writeVarLong(startgame, playerEntityId);

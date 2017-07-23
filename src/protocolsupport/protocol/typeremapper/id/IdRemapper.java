@@ -11,6 +11,7 @@ import protocolsupport.protocol.typeremapper.id.RemappingRegistry.IdRemappingReg
 import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.EnumRemappingTable;
 import protocolsupport.protocol.typeremapper.id.RemappingTable.HashMapBasedIdRemappingTable;
+import protocolsupport.protocol.typeremapper.pe.PELevelEvent;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
@@ -178,6 +179,15 @@ public class IdRemapper {
 			new Mapping(NetworkEntityType.PARROT)
 			.addMapping(NetworkEntityType.OCELOT, ProtocolVersionsHelper.concat(ProtocolVersionsHelper.BEFORE_1_12, ProtocolVersion.MINECRAFT_PE))
 			.register();
+			new Mapping(NetworkEntityType.MINECART_FURNACE)
+			.addMapping(NetworkEntityType.MINECART, ProtocolVersion.MINECRAFT_PE) //TODO: Add furnace via block?
+			.register();
+			new Mapping(NetworkEntityType.FIREWORK)
+			.addMapping(NetworkEntityType.FIRECHARGE, ProtocolVersion.MINECRAFT_PE) //TODO: Will come in 1.12 not bothering now.
+			.register();
+			new Mapping(NetworkEntityType.ARMOR_STAND_OBJECT)
+			.addMapping(NetworkEntityType.SKELETON, ProtocolVersion.MINECRAFT_PE) //TODO: Will come in 1.12 not bothering now.
+			.register();
 			new Mapping(NetworkEntityType.ILLUSIONER)
 			.addMapping(NetworkEntityType.WITCH, ProtocolVersionsHelper.BEFORE_1_12)
 			.register();
@@ -241,10 +251,10 @@ public class IdRemapper {
 			.addMapping(NetworkEntityType.FIRECHARGE, ProtocolVersionsHelper.BEFORE_1_9)
 			.register();
 			new Mapping(NetworkEntityType.SPECTRAL_ARROW)
-			.addMapping(NetworkEntityType.ARROW, ProtocolVersionsHelper.BEFORE_1_9)
+			.addMapping(NetworkEntityType.ARROW, ProtocolVersionsHelper.concat(ProtocolVersionsHelper.BEFORE_1_9, ProtocolVersion.MINECRAFT_PE))
 			.register();
 			new Mapping(NetworkEntityType.TIPPED_ARROW)
-			.addMapping(NetworkEntityType.ARROW, ProtocolVersionsHelper.BEFORE_1_9)
+			.addMapping(NetworkEntityType.ARROW, ProtocolVersionsHelper.concat(ProtocolVersionsHelper.BEFORE_1_9, ProtocolVersion.MINECRAFT_PE))
 			.register();
 			new Mapping(NetworkEntityType.ENDERMITE)
 			.addMapping(NetworkEntityType.SILVERFISH, ProtocolVersionsHelper.BEFORE_1_8)
@@ -268,43 +278,48 @@ public class IdRemapper {
 			return new EnumRemappingTable<>(NetworkEntityType.class);
 		}
 	};
-
-	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> MAPCOLOR = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
+	
+	public static final IdRemappingRegistry<HashMapBasedIdRemappingTable> PARTICLE = new IdRemappingRegistry<HashMapBasedIdRemappingTable>() {
 		{
-			//see http://minecraft.gamepedia.com/Map_item_format (i don't event know a names for half of those colors)
-			registerRemapEntry(14, 8, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(15, 10, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(16, 5, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(17, 5, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(18, 2, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(19, 1, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(20, 4, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(21, 11, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(22, 11, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(23, 5, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(24, 5, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(25, 5, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(26, 10, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(27, 7, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(28, 4, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(29, 11, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(30, 2, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(31, 5, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(32, 5, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(33, 7, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(34, 10, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(35, 4, ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(36, 10, ProtocolVersionsHelper.BEFORE_1_7);
+			//TODO: Check values. (Speculative = names don't match) Only a few values have been tested by hand.
+			registerRemapEntry( 0, PELevelEvent.PARTICLE_EXPLODE, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry( 1, PELevelEvent.PARTICLE_HUGE_EXPLOSION, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry( 2, PELevelEvent.PARTICLE_HUGE_EXPLOSION_SEED, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry( 4, PELevelEvent.PARTICLE_BUBBLE, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry( 5, PELevelEvent.PARTICLE_SPLASH, ProtocolVersion.MINECRAFT_PE); 
+			registerRemapEntry( 6, PELevelEvent.PARTICLE_WATER_WAKE, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry( 9, PELevelEvent.PARTICLE_CRITICAL, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(10, PELevelEvent.PARTICLE_CRITICAL, ProtocolVersion.MINECRAFT_PE); //Magiccrit..?
+			registerRemapEntry(11, PELevelEvent.PARTICLE_SMOKE, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(12, PELevelEvent.PARTICLE_LARGE_SMOKE, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(13, PELevelEvent.PARTICLE_MOB_SPELL, ProtocolVersion.MINECRAFT_PE); //Speculative
+			registerRemapEntry(14, PELevelEvent.PARTICLE_MOB_SPELL_INSTANTANIOUS, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(15, PELevelEvent.PARTICLE_MOB_SPELL, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(16, PELevelEvent.PARTICLE_MOB_SPELL_INSTANTANIOUS, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(17, PELevelEvent.PARTICLE_WITCH_SPELL, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(18, PELevelEvent.PARTICLE_DRIP_WATER, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(19, PELevelEvent.PARTICLE_DRIP_LAVA, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(20, PELevelEvent.PARTICLE_VILLAGER_ANGRY, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(21, PELevelEvent.PARTICLE_VILLAGER_HAPPY, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(22, PELevelEvent.PARTICLE_TOWN_AURA, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(23, PELevelEvent.PARTICLE_NOTE, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(24, PELevelEvent.PARTICLE_PORTAL, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(25, PELevelEvent.PARTICLE_ENCHANTMENT_TABLE, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(26, PELevelEvent.PARTICLE_FLAME, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(27, PELevelEvent.PARTICLE_LAVA, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(30, PELevelEvent.PARTICLE_RISING_RED_DUST, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(31, PELevelEvent.PARTICLE_SNOWBALL_POOF, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(33, PELevelEvent.PARTICLE_SLIME, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(34, PELevelEvent.PARTICLE_HEART, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(35, PELevelEvent.PARTICLE_BLOCK_FORCE_FIELD, ProtocolVersion.MINECRAFT_PE); //Speculative
+			registerRemapEntry(40, PELevelEvent.CAULDRON_TAKE_WATER, ProtocolVersion.MINECRAFT_PE); //Speculative
+			registerRemapEntry(42, PELevelEvent.PARTICLE_DRAGONS_BREATH, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(43, PELevelEvent.PARTICLE_END_ROT, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(46, PELevelEvent.PARTICLE_FALLING_DUST, ProtocolVersion.MINECRAFT_PE);
 		}
 		@Override
-		protected ArrayBasedIdRemappingTable createTable() {
-			return new ArrayBasedIdRemappingTable(64) {
-				@Override
-				public int getRemap(int id) {
-					int realColor = (id & 0xFF) >> 2;
-					return ((table[realColor] << 2) + (id & 0b11));
-				}
-			};
+		protected HashMapBasedIdRemappingTable createTable() {
+			return new HashMapBasedIdRemappingTable();
 		}
 	};
 

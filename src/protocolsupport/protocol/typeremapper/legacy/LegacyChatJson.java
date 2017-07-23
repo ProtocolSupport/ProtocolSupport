@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
-import java.util.function.Function;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
@@ -14,6 +13,7 @@ import protocolsupport.api.chat.components.TranslateComponent;
 import protocolsupport.api.chat.modifiers.ClickAction;
 import protocolsupport.api.chat.modifiers.HoverAction;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.minecraftdata.ItemData;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
@@ -21,20 +21,34 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class LegacyChatJson {
 
-	public static BaseComponent convert(BaseComponent message, ProtocolVersion version) {
-		return fixSingleComponent(message, version);
+	public static BaseComponent convert(BaseComponent message, ProtocolVersion version, String locale) {
+		List<BaseComponent> siblings = new ArrayList<>(message.getSiblings());
+		message.clearSiblings();
+		HoverAction hoveraction = message.getHoverAction();
+		if ((hoveraction != null) && (hoveraction.getType() == HoverAction.Type.SHOW_TEXT)) {
+			message.setHoverAction(new HoverAction(convert(hoveraction.getText(), version, locale)));
+		}
+		message.addSiblings(convertComponents(siblings, version, locale));
+		if (message instanceof TranslateComponent) {
+			TranslateComponent tlcomp = (TranslateComponent) message;
+			message = cloneComponentAuxData(tlcomp, new TranslateComponent(tlcomp.getTranslationKey(), convertComponents(tlcomp.getTranslationArgs(), version, locale)));
+		}
+		for (ComponentConverter r : registry.getOrDefault(version, Collections.emptyList())) {
+			message = r.convert(version, locale, message);
+		}
+		return message;
 	}
 
-	private static final EnumMap<ProtocolVersion, List<Function<BaseComponent, BaseComponent>>> registry = new EnumMap<>(ProtocolVersion.class);
+	private static final EnumMap<ProtocolVersion, List<ComponentConverter>> registry = new EnumMap<>(ProtocolVersion.class);
 
-	private static void register(Function<BaseComponent, BaseComponent> r, ProtocolVersion... versions) {
+	private static void register(ComponentConverter r, ProtocolVersion... versions) {
 		for (ProtocolVersion version : versions) {
 			Utils.getFromMapOrCreateDefault(registry, version, new ArrayList<>()).add(r);
 		}
 	}
 
 	static {
-		register(component -> {
+		register((version, locale, component) -> {
 			ClickAction click = component.getClickAction();
 			if ((click != null) && (click.getType() == ClickAction.Type.OPEN_URL)) {
 				String url = click.getValue();
@@ -44,14 +58,35 @@ public class LegacyChatJson {
 				component.setClickAction(new ClickAction(ClickAction.Type.OPEN_URL, url));
 			}
 			return component;
-		}, ProtocolVersion.values());
-		register(component -> {
+		}, ProtocolVersion.getAllSupported());
+		register((version, locale, component) -> {
+			if (component instanceof TranslateComponent) {
+				TranslateComponent tcomponent = (TranslateComponent) component;
+				if (!LegacyI18NData.isSupported(tcomponent.getTranslationKey(), version)) {
+					BaseComponent[] tlargs = tcomponent.getTranslationArgs().toArray(new BaseComponent[0]);
+					String[] tlstringsplit = I18NData.getI18N(locale).getI18N(tcomponent.getTranslationKey()).split("[%][s]", -1);
+					if (tlargs.length != (tlstringsplit.length - 1)) {
+						return new TextComponent("Translation error");
+					}
+					BaseComponent rootcomponent = cloneComponentAuxData(tcomponent, new TextComponent(""));
+					for (int i = 0; i < tlstringsplit.length; i++) {
+						rootcomponent.addSibling(new TextComponent(tlstringsplit[i].replace("%%", "%")));
+						if (i < (tlstringsplit.length - 1)) {
+							rootcomponent.addSibling(tlargs[i]);
+						}
+					}
+					return rootcomponent;
+				}
+			}
+			return component;
+		}, ProtocolVersion.getAllSupported());
+		register((version, locale, component) -> {
 			if (component instanceof KeybindComponent) {
-				return new TextComponent(component.getValue());
+				return cloneComponentAuxData(component, new TextComponent(component.getValue()));
 			}
 			return component;
 		}, ProtocolVersionsHelper.BEFORE_1_12);
-		register(component -> {
+		register((version, locale, component) -> {
 			HoverAction hover = component.getHoverAction();
 			if ((hover != null) && (hover.getType() == HoverAction.Type.SHOW_ITEM)) {
 				NBTTagCompoundWrapper compound = ServerPlatform.get().getWrapperFactory().createNBTCompoundFromJson(hover.getValue());
@@ -65,28 +100,26 @@ public class LegacyChatJson {
 		}, ProtocolVersionsHelper.BEFORE_1_8);
 	}
 
-	private static BaseComponent fixSingleComponent(BaseComponent message, ProtocolVersion version) {
-		List<BaseComponent> siblings = new ArrayList<>(message.getSiblings());
-		message.clearSiblings();
-		message.addSiblings(replaceComponents(siblings, version));
-		if (message instanceof TranslateComponent) {
-			TranslateComponent tlcomp = (TranslateComponent) message;
-			message = new TranslateComponent(tlcomp.getTranslationKey(), replaceComponents(tlcomp.getTranslationArgs(), version));
-		}
-		return message;
+	private static BaseComponent cloneComponentAuxData(BaseComponent from, BaseComponent to) {
+		to.addSiblings(from.getSiblings());
+		to.setClickAction(from.getClickAction());
+		to.setHoverAction(from.getHoverAction());
+		to.setClickInsertion(from.getClickInsertion());
+		to.setModifier(from.getModifier());
+		return to;
 	}
 
-	private static List<BaseComponent> replaceComponents(List<BaseComponent> oldlist, ProtocolVersion version) {
+	private static List<BaseComponent> convertComponents(List<BaseComponent> oldlist, ProtocolVersion version, String locale) {
 		List<BaseComponent> newlist = new ArrayList<>();
-		List<Function<BaseComponent, BaseComponent>> tlist = registry.getOrDefault(version, Collections.emptyList());
 		for (BaseComponent old : oldlist) {
-			old = fixSingleComponent(old, version);
-			for (Function<BaseComponent, BaseComponent> r : tlist) {
-				old = r.apply(old);
-			}
-			newlist.add(old);
+			newlist.add(convert(old, version, locale));
 		}
 		return newlist;
+	}
+
+	@FunctionalInterface
+	private static interface ComponentConverter {
+		public BaseComponent convert(ProtocolVersion version, String locale, BaseComponent from);
 	}
 
 }

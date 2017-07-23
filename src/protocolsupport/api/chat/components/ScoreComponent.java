@@ -34,7 +34,7 @@ public class ScoreComponent extends BaseComponent {
 	}
 
 	@Override
-	public String getValue() {
+	public String getValue(String locale) {
 		String value = forcedvalue;
 		if (value == null) {
 			Player player = Bukkit.getPlayerExact(playername);

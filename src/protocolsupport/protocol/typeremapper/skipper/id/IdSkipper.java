@@ -1,5 +1,6 @@
 package protocolsupport.protocol.typeremapper.skipper.id;
 
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.skipper.id.SkippingRegistry.EnumSkippingRegistry;
 import protocolsupport.protocol.typeremapper.skipper.id.SkippingRegistry.GenericSkippingRegistry;
 import protocolsupport.protocol.typeremapper.skipper.id.SkippingRegistry.IntSkippingRegistry;
@@ -42,6 +43,37 @@ public class IdSkipper {
 			return new HashMapBasedIntSkippingTable();
 		}
 	};
+	
+	public static final IntSkippingRegistry<ArrayBasedIntSkippingTable> PARTICLE = new IntSkippingRegistry<ArrayBasedIntSkippingTable>() {
+		{
+			//Fireworks Spark
+			registerSkipEntry(3, ProtocolVersion.MINECRAFT_PE);
+			//Suspended, depth suspended
+			registerSkipEntry(7, ProtocolVersion.MINECRAFT_PE);
+			registerSkipEntry(8, ProtocolVersion.MINECRAFT_PE);
+			//Footstep, cloudt
+			registerSkipEntry(28, ProtocolVersion.MINECRAFT_PE);
+			registerSkipEntry(29, ProtocolVersion.MINECRAFT_PE);
+			//Snow shovel
+			registerSkipEntry(32, ProtocolVersion.MINECRAFT_PE);
+			//Ironcrack, Blockcrack, Blokdust, Droplet
+			registerSkipEntry(36, ProtocolVersion.MINECRAFT_PE);
+			registerSkipEntry(37, ProtocolVersion.MINECRAFT_PE);
+			registerSkipEntry(38, ProtocolVersion.MINECRAFT_PE);
+			registerSkipEntry(39, ProtocolVersion.MINECRAFT_PE);
+			//Mobappearance
+			registerSkipEntry(41, ProtocolVersion.MINECRAFT_PE);
+			//Damageindicator, sweepattack
+			registerSkipEntry(44, ProtocolVersion.MINECRAFT_PE);
+			registerSkipEntry(45, ProtocolVersion.MINECRAFT_PE);
+			//Totem
+			registerSkipEntry(47, ProtocolVersion.MINECRAFT_PE);
+		}
+		@Override
+		protected ArrayBasedIntSkippingTable createTable() {
+			return new ArrayBasedIntSkippingTable(48);
+		}
+	};
 
 	public static final IntSkippingRegistry<ArrayBasedIntSkippingTable> EFFECT = new IntSkippingRegistry<ArrayBasedIntSkippingTable>() {
 		{
@@ -77,7 +109,7 @@ public class IdSkipper {
 
 	public static final EnumSkippingRegistry<WindowType, EnumSkippingTable<WindowType>> INVENTORY = new EnumSkippingRegistry<WindowType, EnumSkippingTable<WindowType>>() {
 		{
-			registerSkipEntry(WindowType.HORSE, ProtocolVersionsHelper.BEFORE_1_11);
+			registerSkipEntry(WindowType.HORSE, ProtocolVersionsHelper.BEFORE_1_6);
 			registerSkipEntry(WindowType.HOPPER, ProtocolVersionsHelper.BEFORE_1_5);
 		}
 		@Override

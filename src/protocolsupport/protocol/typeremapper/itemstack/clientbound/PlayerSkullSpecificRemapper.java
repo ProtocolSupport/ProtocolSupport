@@ -9,7 +9,7 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 public class PlayerSkullSpecificRemapper extends ItemStackNBTSpecificRemapper {
 
 	@Override
-	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, ItemStackWrapper itemstack, NBTTagCompoundWrapper tag) {
+	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, String locale, ItemStackWrapper itemstack, NBTTagCompoundWrapper tag) {
 		ItemStackRemapper.remapSkull(tag);
 		return tag;
 	}

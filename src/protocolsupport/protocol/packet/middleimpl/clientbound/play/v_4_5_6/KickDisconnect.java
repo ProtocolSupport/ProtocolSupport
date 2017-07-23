@@ -13,7 +13,7 @@ public class KickDisconnect extends MiddleKickDisconnect {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_KICK_DISCONNECT_ID, version);
-		StringSerializer.writeString(serializer, version, message.toLegacyText());
+		StringSerializer.writeString(serializer, version, message.toLegacyText(cache.getLocale()));
 		return RecyclableSingletonList.create(serializer);
 	}
 

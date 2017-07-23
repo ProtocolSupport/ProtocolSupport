@@ -2,6 +2,8 @@ package protocolsupport.api.chat.modifiers;
 
 import org.bukkit.ChatColor;
 
+import protocolsupport.utils.Utils;
+
 public class Modifier {
 
 	private ChatColor color;
@@ -124,6 +126,11 @@ public class Modifier {
 
 	public void setRandom(Boolean random) {
 		this.obfuscated = random;
+	}
+
+	@Override
+	public String toString() {
+		return Utils.toStringAllFields(this);
 	}
 
 }

@@ -21,17 +21,16 @@ public abstract class MiddleCraftingGrid extends ServerBoundMiddlePacket {
 	protected Entry[] returnEntries;
 	protected Entry[] prepareEntries;
 
-	private static final BiConsumer<ByteBuf, Entry> entryWriter = (to, entry) -> {
-		ItemStackSerializer.writeItemStack(to, ProtocolVersionsHelper.LATEST_PC, entry.itemstack, false);
-		to.writeByte(entry.craftSlot);
-		to.writeByte(entry.playerSlot);
-	};
-
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_PREPARE_CRAFTING_GRID);
 		creator.writeByte(windowId);
 		creator.writeShort(actionNumber);
+		BiConsumer<ByteBuf, Entry> entryWriter = (to, entry) -> {
+			ItemStackSerializer.writeItemStack(to, ProtocolVersionsHelper.LATEST_PC, cache.getLocale(), entry.itemstack, false);
+			to.writeByte(entry.craftSlot);
+			to.writeByte(entry.playerSlot);
+		};
 		ArraySerializer.writeShortTArray(creator, returnEntries, entryWriter);
 		ArraySerializer.writeShortTArray(creator, prepareEntries, entryWriter);
 		return RecyclableSingletonList.create(creator);

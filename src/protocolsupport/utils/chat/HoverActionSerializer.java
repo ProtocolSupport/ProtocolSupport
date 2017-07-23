@@ -19,13 +19,17 @@ public class HoverActionSerializer implements JsonDeserializer<HoverAction>, Jso
 
 	@Override
 	public HoverAction deserialize(JsonElement element, Type type, JsonDeserializationContext ctx) throws JsonParseException {
-		JsonObject jsonobject = element.getAsJsonObject();
-		if (!jsonobject.has("hoverEvent")) {
+		JsonObject jsonObject = element.getAsJsonObject();
+		JsonPrimitive actionJson = jsonObject.getAsJsonPrimitive("action");
+		if (actionJson == null) {
 			return null;
 		}
-		JsonObject clickObject = jsonobject.getAsJsonObject("hoverEvent");
-		HoverAction.Type atype = HoverAction.Type.valueOf(clickObject.getAsJsonPrimitive("action").getAsString().toUpperCase());
-		BaseComponent component = ((BaseComponent) ctx.deserialize(clickObject.get("value"), BaseComponent.class));
+		JsonElement valueJson = jsonObject.get("value");
+		if (valueJson == null) {
+			return null;
+		}
+		HoverAction.Type atype = HoverAction.Type.valueOf(actionJson.getAsString().toUpperCase());
+		BaseComponent component = ctx.deserialize(valueJson, BaseComponent.class);
 		return new HoverAction(atype, atype == HoverAction.Type.SHOW_TEXT ? ChatAPI.toJSON(component) : component.getValue());
 	}
 

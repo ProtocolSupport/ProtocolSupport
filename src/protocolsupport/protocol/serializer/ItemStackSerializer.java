@@ -20,38 +20,55 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ItemStackWriteEvent;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.utils.PENetworkNBTDataOutputStream;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class ItemStackSerializer {
 
-	public static ItemStackWrapper readItemStack(ByteBuf from, ProtocolVersion version) {
+	public static ItemStackWrapper readItemStack(ByteBuf from, ProtocolVersion version, String locale) {
 		int type = from.readShort();
 		if (type >= 0) {
 			ItemStackWrapper itemstack = ServerPlatform.get().getWrapperFactory().createItemStack(type);
 			itemstack.setAmount(from.readByte());
-			itemstack.setData(from.readShort());
+			itemstack.setData(from.readUnsignedShort());
 			itemstack.setTag(readTag(from, version));
-			return ItemStackRemapper.remapServerbound(version, itemstack.cloneItemStack());
+			return ItemStackRemapper.remapServerbound(version, locale, itemstack.cloneItemStack());
 		}
 		return ServerPlatform.get().getWrapperFactory().createNullItemStack();
 	}
 
-	public static void writeItemStack(ByteBuf to, ProtocolVersion version, ItemStackWrapper itemstack, boolean fireEvent) {
+	public static void writeItemStack(ByteBuf to, ProtocolVersion version, String locale, ItemStackWrapper itemstack, boolean fireEvent) {
 		if (itemstack.isNull()) {
 			to.writeShort(-1);
 			return;
 		}
-		ItemStackWrapper remapped = ItemStackRemapper.remapClientbound(version, itemstack.cloneItemStack());
+		ItemStackWrapper remapped = itemstack.cloneItemStack();
+		int itemstate = ItemStackRemapper.ITEM_ID_REMAPPING_REGISTRY.getTable(version).getRemap(MinecraftData.getItemStateFromIdAndData(remapped.getTypeId(), remapped.getData()));
+		remapped.setTypeId(MinecraftData.getItemIdFromState(itemstate));
+		remapped.setData(MinecraftData.getItemDataFromState(itemstate));
 		if (fireEvent && (ItemStackWriteEvent.getHandlerList().getRegisteredListeners().length > 0)) {
 			ItemStackWriteEvent event = new InternalItemStackWriteEvent(version, itemstack, remapped);
 			Bukkit.getPluginManager().callEvent(event);
 		}
-		to.writeShort(ItemStackRemapper.ITEM_ID_REMAPPING_REGISTRY.getTable(version).getRemap(remapped.getTypeId()));
+		remapped = ItemStackRemapper.remapClientbound(version, locale, remapped);
+		to.writeShort(MinecraftData.getItemIdFromState(itemstate));
 		to.writeByte(remapped.getAmount());
-		to.writeShort(remapped.getData());
+		to.writeShort(MinecraftData.getItemDataFromState(itemstate));
 		writeTag(to, version, remapped.getTag());
+	}
+	
+	public static void writePeSlot(ByteBuf to, ProtocolVersion version, ItemStackWrapper itemstack) {
+		if(itemstack.isNull() || itemstack.getTypeId() <= 0) {
+			VarNumberSerializer.writeVarInt(to, 0); 
+			return;
+		}
+		VarNumberSerializer.writeVarInt(to, itemstack.getTypeId()); //TODO: Remap PE itemstacks...
+		VarNumberSerializer.writeVarInt(to, (itemstack.getData() << 8) | itemstack.getAmount());
+		to.writeShortLE(0); //TODO: Implement PE NBT
+		VarNumberSerializer.writeVarInt(to, 0); //TODO: CanPlaceOn PE
+		VarNumberSerializer.writeVarInt(to, 0); //TODO: CanDestroy PE
 	}
 
 	public static NBTTagCompoundWrapper readTag(ByteBuf from, ProtocolVersion version) {

@@ -10,7 +10,7 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 public class DragonHeadSpecificRemapper implements ItemStackSpecificRemapper {
 
 	@Override
-	public ItemStackWrapper remap(ProtocolVersion version, ItemStackWrapper itemstack) {
+	public ItemStackWrapper remap(ProtocolVersion version, String locale, ItemStackWrapper itemstack) {
 		if (itemstack.getData() == 5) {
 			itemstack.setData(3);
 			NBTTagCompoundWrapper wrapper = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();

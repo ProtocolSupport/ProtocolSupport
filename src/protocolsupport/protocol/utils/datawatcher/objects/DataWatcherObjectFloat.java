@@ -6,12 +6,12 @@ import protocolsupport.api.ProtocolVersion;
 public class DataWatcherObjectFloat extends DataWatcherObjectNumber<Float> {
 
 	@Override
-	public void readFromStream(ByteBuf from, ProtocolVersion version) {
+	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {
 		value = from.readFloat();
 	}
 
 	@Override
-	public void writeToStream(ByteBuf to, ProtocolVersion version) {
+	public void writeToStream(ByteBuf to, ProtocolVersion version, String locale) {
 		to.writeFloat(value);
 	}
 

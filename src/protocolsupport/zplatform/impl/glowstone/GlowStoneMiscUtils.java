@@ -2,11 +2,14 @@ package protocolsupport.zplatform.impl.glowstone;
 
 import java.security.KeyPair;
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
 
@@ -87,6 +90,20 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	}
 
 	@Override
+	public List<Player> getNearbyPlayers(Location location, double x, double y, double z) {
+		return location.getWorld().getPlayers().stream().filter(player -> {
+			Location playerLocation = player.getLocation();
+			return
+				(playerLocation.getX() >= (location.getX() - x)) &&
+				(playerLocation.getY() >= (location.getY() - y)) &&
+				(playerLocation.getZ() >= (location.getZ() - z)) &&
+				(playerLocation.getX() <= (location.getX() + x)) &&
+				(playerLocation.getY() <= (location.getY() + y)) &&
+				(playerLocation.getZ() <= (location.getZ() + z));
+		}).collect(Collectors.toList());
+	}
+
+	@Override
 	public ItemStack createItemStackFromNBTTag(NBTTagCompoundWrapper tag) {
 		return NbtSerialization.readItem(((GlowStoneNBTTagCompoundWrapper) tag).unwrap());
 	}
@@ -99,6 +116,11 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	@Override
 	public String getOutdatedServerMessage() {
 		return "Outdated server! I\'m running {0}";
+	}
+
+	@Override
+	public boolean isRunning() {
+		return true;
 	}
 
 	@Override

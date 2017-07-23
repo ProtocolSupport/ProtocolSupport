@@ -9,7 +9,7 @@ public class SelectorComponent extends BaseComponent {
 	}
 
 	@Override
-	public String getValue() {
+	public String getValue(String locale) {
 		return selector;
 	}
 

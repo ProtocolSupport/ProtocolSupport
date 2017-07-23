@@ -10,11 +10,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
-import org.bukkit.event.vehicle.VehicleEnterEvent;
 
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.Connection;
@@ -26,12 +26,7 @@ import protocolsupport.api.tab.TabAPI;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.zplatform.ServerPlatform;
 
-public class PlayerListener implements Listener {
-
-	private final ProtocolSupport plugin;
-	public PlayerListener(ProtocolSupport plugin) {
-		this.plugin = plugin;
-	}
+public class FeatureEmulation implements Listener {
 
 	@EventHandler
 	public void onShift(PlayerToggleSneakEvent event) {
@@ -44,22 +39,6 @@ public class PlayerListener implements Listener {
 			connection.getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_5_2)
 		) {
 			player.leaveVehicle();
-		}
-	}
-
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onVehicleInteract(PlayerInteractEntityEvent event) {
-		Player player = event.getPlayer();
-		Connection connection = ProtocolSupportAPI.getConnection(player);
-		if (
-			player.isInsideVehicle() &&
-			(connection != null) &&
-			(connection.getVersion().getProtocolType() == ProtocolType.PC) &&
-			connection.getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_5_2)
-		) {
-			if (player.getVehicle().equals(event.getRightClicked())) {
-				player.leaveVehicle();
-			}
 		}
 	}
 
@@ -92,16 +71,27 @@ public class PlayerListener implements Listener {
 		}
 	}
 
-	@EventHandler(ignoreCancelled = true)
-	public void onVehicleEnter(VehicleEnterEvent event) {
-		if (!event.getVehicle().getPassengers().isEmpty()) {
-			event.setCancelled(true);
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onEntityDamage(EntityDamageEvent event) {
+		if (((event.getCause() == DamageCause.FIRE_TICK) || (event.getCause() == DamageCause.FIRE))) {
+			for (Player player : ServerPlatform.get().getMiscUtils().getNearbyPlayers(event.getEntity().getLocation(), 48, 128, 48)) {
+				if (player != null) {
+					Connection connection = ProtocolSupportAPI.getConnection(player);
+					if (
+						(connection != null) &&
+						(connection.getVersion().getProtocolType() == ProtocolType.PC) &&
+						connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_12)
+					) {
+						connection.sendPacket(ServerPlatform.get().getPacketFactory().createEntityStatusPacket(event.getEntity(), 2));
+					}
+				}
+			}
 		}
 	}
 
 	@EventHandler
 	public void onJoin(final PlayerJoinEvent event) {
-		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+		Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), new Runnable() {
 			@Override
 			public void run() {
 				BaseComponent header = TabAPI.getDefaultHeader();

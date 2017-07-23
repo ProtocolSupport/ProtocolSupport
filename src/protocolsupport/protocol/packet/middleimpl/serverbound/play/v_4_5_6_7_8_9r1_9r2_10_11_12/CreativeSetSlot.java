@@ -10,7 +10,7 @@ public class CreativeSetSlot extends MiddleCreativeSetSlot {
 	@Override
 	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
 		slot = clientdata.readShort();
-		itemstack = ItemStackSerializer.readItemStack(clientdata, version);
+		itemstack = ItemStackSerializer.readItemStack(clientdata, version, cache.getLocale());
 	}
 
 }

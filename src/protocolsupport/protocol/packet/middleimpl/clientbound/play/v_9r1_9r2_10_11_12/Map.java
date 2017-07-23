@@ -6,6 +6,8 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleMap;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.typeremapper.mapcolor.MapColorRemapper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -24,10 +26,14 @@ public class Map extends MiddleMap {
 		});
 		serializer.writeByte(columns);
 		if (columns > 0) {
+			ArrayBasedIdRemappingTable colorRemapper = MapColorRemapper.REMAPPER.getTable(version);
+			for (int i = 0; i < colors.length; i++) {
+				colors[i] = (byte) colorRemapper.getRemap(colors[i] & 0xFF);
+			}
 			serializer.writeByte(rows);
 			serializer.writeByte(xstart);
 			serializer.writeByte(zstart);
-			ArraySerializer.writeByteArray(serializer, version, data);
+			ArraySerializer.writeByteArray(serializer, version, colors);
 		}
 		return RecyclableSingletonList.create(serializer);
 	}

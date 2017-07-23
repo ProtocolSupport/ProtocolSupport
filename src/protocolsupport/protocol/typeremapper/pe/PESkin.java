@@ -14,9 +14,6 @@ import protocolsupport.utils.Utils;
 
 public class PESkin {
 
-	public static void init() {
-	}
-
 	public static final byte[] STEVE = new Callable<byte[]>() {
 		@Override
 		public byte[] call() {

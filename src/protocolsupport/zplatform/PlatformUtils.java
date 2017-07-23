@@ -1,9 +1,12 @@
 package protocolsupport.zplatform;
 
 import java.security.KeyPair;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
 
@@ -21,7 +24,11 @@ public interface PlatformUtils {
 
 	public NBTTagCompoundWrapper createNBTTagFromItemStack(ItemStack itemstack);
 
+	public List<Player> getNearbyPlayers(Location location, double rX, double rY, double rZ);
+
 	public String getOutdatedServerMessage();
+
+	public boolean isRunning();
 
 	public boolean isProxyEnabled();
 

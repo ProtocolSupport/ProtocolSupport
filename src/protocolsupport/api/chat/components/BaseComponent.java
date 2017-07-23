@@ -9,6 +9,8 @@ import protocolsupport.api.chat.modifiers.ClickAction;
 import protocolsupport.api.chat.modifiers.HoverAction;
 import protocolsupport.api.chat.modifiers.Modifier;
 import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
+import protocolsupport.protocol.utils.i18n.I18NData;
+import protocolsupport.utils.Utils;
 
 public abstract class BaseComponent {
 
@@ -79,10 +81,23 @@ public abstract class BaseComponent {
 		this.clickInsertion = clickInsertion;
 	}
 
-	public abstract String getValue();
+	public String getValue() {
+		return getValue(I18NData.DEFAULT_LOCALE);
+	}
+
+	public abstract String getValue(String locale);
 
 	public String toLegacyText() {
-		return LegacyChat.toText(this);
+		return toLegacyText(I18NData.DEFAULT_LOCALE);
+	}
+
+	public String toLegacyText(String locale) {
+		return LegacyChat.toText(this, locale);
+	}
+
+	@Override
+	public String toString() {
+		return Utils.toStringAllFields(this);
 	}
 
 }

@@ -29,7 +29,7 @@ public class ProtocolStorage {
 	}
 
 	public static ConnectionImpl getConnection(SocketAddress address) {
-		return secondayStorage.get(address);
+		return address != null ? secondayStorage.get(address) : null;
 	}
 
 	public static ConnectionImpl removeConnection(SocketAddress address) {

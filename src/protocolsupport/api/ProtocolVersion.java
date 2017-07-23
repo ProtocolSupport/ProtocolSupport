@@ -3,6 +3,7 @@ package protocolsupport.api;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.EnumMap;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.Validate;
 
@@ -73,7 +74,7 @@ public enum ProtocolVersion {
 	}
 
 	/**
-	 * Returns if this version is supported as game version (i.e.: player can join and play on the server)
+	 * Returns if this version is supported as game version (i.e.: player can possibly join and play on the server)
 	 * @return true if this protocol version is supported
 	 */
 	public boolean isSupported() {
@@ -295,6 +296,19 @@ public enum ProtocolVersion {
 				throw new IllegalArgumentException(MessageFormat.format("No supported versions for protocol type {0}", type));
 			}
 		}
+	}
+
+	private static final ProtocolVersion[] allSupported = Arrays.stream(ProtocolVersion.values())
+	.filter(ProtocolVersion::isSupported)
+	.collect(Collectors.toList())
+	.toArray(new ProtocolVersion[0]);
+
+	/**
+	 * Returns all supported protocol versions
+	 * @return all supported protocol versions
+	 */
+	public static ProtocolVersion[] getAllSupported() {
+		return allSupported.clone();
 	}
 
 	/**

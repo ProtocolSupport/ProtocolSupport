@@ -11,7 +11,7 @@ public class MonsterEggToLegacyIdSpecificRemapper extends ItemStackNBTSpecificRe
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, ItemStackWrapper itemstack, NBTTagCompoundWrapper tag) {
+	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, String locale, ItemStackWrapper itemstack, NBTTagCompoundWrapper tag) {
 		String entityId = tag.getCompound("EntityTag").getString("id");
 		if (!entityId.isEmpty()) {
 			if (entityId.startsWith("minecraft:")) {
