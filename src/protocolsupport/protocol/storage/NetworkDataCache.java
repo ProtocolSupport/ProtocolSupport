@@ -16,7 +16,7 @@ import protocolsupport.utils.Utils;
 
 public class NetworkDataCache {
 
-	private static final double acceptableError = 0.001;
+	private static final double acceptableError = 0.1;
 
 	private double x;
 	private double y;

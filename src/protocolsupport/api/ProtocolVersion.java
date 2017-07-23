@@ -124,7 +124,7 @@ public enum ProtocolVersion {
 	 * Returns if the game version used by this protocol released in between (or is the same) of other game versions used by others protocol versions
 	 * @param one one protocol version
 	 * @param another another protocol version
-	 * @return true if game version is released before (or is the same) the game version used by another protocol version
+	 * @return true if the game version used by this protocol released in between (or is the same) of other game versions used by others protocol versions
 	 * @throws IllegalArgumentException if protocol versions use different protocol types
 	 */
 	public boolean isBetween(ProtocolVersion one, ProtocolVersion another) {
