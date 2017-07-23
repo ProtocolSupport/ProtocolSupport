@@ -6,6 +6,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.pe.PELevelEvent;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
@@ -18,6 +19,8 @@ public class Explosion extends MiddleExplosion {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		packets.add(create(version, x, y , z, radius, blocks));
 		packets.add(EntityVelocity.create(version, cache.getSelfPlayerEntityId(), pMotX, pMotY, pMotZ));
+		packets.add(WorldParticle.create(PELevelEvent.PARTICLE_HUGE_EXPLOSION_SEED, x, y, z));
+		//TODO: Play Explosion Sound
 		return packets;
 	}
 	
