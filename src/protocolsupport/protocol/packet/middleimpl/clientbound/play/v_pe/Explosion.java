@@ -20,7 +20,6 @@ public class Explosion extends MiddleExplosion {
 		packets.add(create(version, x, y , z, radius, blocks));
 		packets.add(EntityVelocity.create(version, cache.getSelfPlayerEntityId(), pMotX, pMotY, pMotZ));
 		packets.add(WorldParticle.create(PELevelEvent.PARTICLE_HUGE_EXPLOSION_SEED, x, y, z));
-		//TODO: Play Explosion Sound
 		return packets;
 	}
 	

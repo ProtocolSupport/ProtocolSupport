@@ -14,6 +14,10 @@ public class WorldCustomSound extends MiddleWorldCustomSound {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+		return RecyclableSingletonList.create(create(version, id, x, y, z, volume, pitch));
+	}
+	
+	public static ClientBoundPacketData create(ProtocolVersion version, String id, int x, int y, int z, float volume, float pitch) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAY_SOUND, version);
 		StringSerializer.writeString(serializer, version, id);
 		VarNumberSerializer.writeSVarInt(serializer, x);
@@ -21,7 +25,7 @@ public class WorldCustomSound extends MiddleWorldCustomSound {
 		VarNumberSerializer.writeSVarInt(serializer, z);
 		MiscSerializer.writeLFloat(serializer, volume);
 		MiscSerializer.writeLFloat(serializer, pitch);
-		return RecyclableSingletonList.create(serializer);
+		return serializer;
 	}
 
 }
