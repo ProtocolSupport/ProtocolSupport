@@ -48,7 +48,7 @@ public class ItemStackSerializer {
 		remapped.setTypeId(MinecraftData.getItemIdFromState(itemstate));
 		remapped.setData(MinecraftData.getItemDataFromState(itemstate));
 		if (fireEvent && (ItemStackWriteEvent.getHandlerList().getRegisteredListeners().length > 0)) {
-			ItemStackWriteEvent event = new InternalItemStackWriteEvent(version, itemstack, remapped);
+			ItemStackWriteEvent event = new InternalItemStackWriteEvent(version, locale, itemstack, remapped);
 			Bukkit.getPluginManager().callEvent(event);
 		}
 		remapped = ItemStackRemapper.remapClientbound(version, locale, remapped);
@@ -128,8 +128,8 @@ public class ItemStackSerializer {
 	public static class InternalItemStackWriteEvent extends ItemStackWriteEvent {
 
 		private final org.bukkit.inventory.ItemStack wrapped;
-		public InternalItemStackWriteEvent(ProtocolVersion version, ItemStackWrapper original, ItemStackWrapper itemstack) {
-			super(version, original.asBukkitMirror());
+		public InternalItemStackWriteEvent(ProtocolVersion version, String locale, ItemStackWrapper original, ItemStackWrapper itemstack) {
+			super(version, locale, original.asBukkitMirror());
 			this.wrapped = itemstack.asBukkitMirror();
 		}
 
