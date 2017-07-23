@@ -42,6 +42,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnPos
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.TimeUpdate;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Title;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.UnloadChunk;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldCustomSound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldEvent;
 import protocolsupport.protocol.pipeline.version.AbstractLegacyPacketEncoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
@@ -92,6 +93,7 @@ public class PEPacketEncoder extends AbstractLegacyPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_EFFECT_ADD_ID, EntityEffectAdd.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_EFFECT_REMOVE_ID, EntityEffectRemove.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SET_PASSENGERS_ID, SetPassengers.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WORLD_CUSTOM_SOUND_ID, WorldCustomSound.class);
 	}
 
 	public PEPacketEncoder(Connection connection, NetworkDataCache storage) {
