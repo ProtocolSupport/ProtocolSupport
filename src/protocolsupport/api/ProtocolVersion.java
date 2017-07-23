@@ -47,6 +47,30 @@ public enum ProtocolVersion {
 		this.name = name;
 	}
 
+	private static final ProtocolVersion[] allSupported = Arrays.stream(ProtocolVersion.values())
+	.filter(ProtocolVersion::isSupported)
+	.collect(Collectors.toList())
+	.toArray(new ProtocolVersion[0]);
+
+	private static final TIntObjectHashMap<ProtocolVersion> byProtocolId = new TIntObjectHashMap<>();
+	static {
+		Arrays.stream(ProtocolVersion.getAllSupported()).forEach(version -> byProtocolId.put(version.id, version));
+	}
+
+	private static final EnumMap<ProtocolType, ProtocolVersion[]> byOrderId = new EnumMap<>(ProtocolType.class);
+	static {
+		for (ProtocolType type : ProtocolType.values()) {
+			if (type != ProtocolType.UNKNOWN) {
+				byOrderId.put(type,
+					Arrays.stream(ProtocolVersion.values())
+					.filter(version -> version.getProtocolType() == type)
+					.sorted((o1, o2) -> o1.orderId.compareTo(o2.orderId))
+					.toArray(size -> new ProtocolVersion[size])
+				);
+			}
+		}
+	}
+
 	/**
 	 * Return protocol type of this protocol version
 	 * @return {@link ProtocolType} of this protocol version
@@ -131,11 +155,6 @@ public enum ProtocolVersion {
 		return (isAfterOrEq(one) && isBeforeOrEq(another)) || (isBeforeOrEq(one) && isAfterOrEq(another));
 	}
 
-	private static final TIntObjectHashMap<ProtocolVersion> byProtocolId = new TIntObjectHashMap<>();
-	static {
-		Arrays.stream(ProtocolVersion.getAllSupported()).forEach(version -> byProtocolId.put(version.id, version));
-	}
-
 	/**
 	 * Returns protocol version by network game id
 	 * @param id network version id
@@ -146,20 +165,6 @@ public enum ProtocolVersion {
 	public static ProtocolVersion fromId(int id) {
 		ProtocolVersion version = byProtocolId.get(id);
 		return version != null ? version : UNKNOWN;
-	}
-
-	private static final EnumMap<ProtocolType, ProtocolVersion[]> byOrderId = new EnumMap<>(ProtocolType.class);
-	static {
-		for (ProtocolType type : ProtocolType.values()) {
-			if (type != ProtocolType.UNKNOWN) {
-				byOrderId.put(type,
-					Arrays.stream(ProtocolVersion.values())
-					.filter(version -> version.getProtocolType() == type)
-					.sorted((o1, o2) -> o1.orderId.compareTo(o2.orderId))
-					.toArray(size -> new ProtocolVersion[size])
-				);
-			}
-		}
 	}
 
 	/**
@@ -288,11 +293,6 @@ public enum ProtocolVersion {
 			}
 		}
 	}
-
-	private static final ProtocolVersion[] allSupported = Arrays.stream(ProtocolVersion.values())
-	.filter(ProtocolVersion::isSupported)
-	.collect(Collectors.toList())
-	.toArray(new ProtocolVersion[0]);
 
 	/**
 	 * Returns all supported protocol versions
