@@ -73,35 +73,27 @@ public class SpawnObject extends MiddleSpawnObject {
 			RecyclableArrayList<ClientBoundPacketData> updatepackets = RecyclableArrayList.create();
 			if (!this.itemstack.equals(itemstack)) {
 				if (spawned) {
-					updatepackets.add(getDespawnPacket(version));
+					updatepackets.add(EntityDestroy.create(version, entityId));
+					spawned = false;
 				}
 				this.itemstack = itemstack;
 			}
 			if (!spawned) {
-				updatepackets.add(getSpawnPacket(version));
+				ClientBoundPacketData spawn = ClientBoundPacketData.create(PEPacketIDs.ADD_ITEM_ENTITY, version);
+				VarNumberSerializer.writeSVarLong(spawn, entityId);
+				VarNumberSerializer.writeVarLong(spawn, entityId);
+				ItemStackSerializer.writeItemStack(spawn, version, cache.getLocale(), itemstack, false);
+				MiscSerializer.writeLFloat(spawn, (float) x);
+				MiscSerializer.writeLFloat(spawn, (float) y);
+				MiscSerializer.writeLFloat(spawn, (float) z);
+				MiscSerializer.writeLFloat(spawn, motX);
+				MiscSerializer.writeLFloat(spawn, motY);
+				MiscSerializer.writeLFloat(spawn, motZ);
+				VarNumberSerializer.writeVarInt(spawn, 0);
+				updatepackets.add(spawn);
+				spawned = true;
 			}
 			return updatepackets;
-		}
-
-		private ClientBoundPacketData getSpawnPacket(ProtocolVersion version) {
-			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ADD_ITEM_ENTITY, version);
-			VarNumberSerializer.writeSVarLong(serializer, entityId);
-			VarNumberSerializer.writeVarLong(serializer, entityId);
-			ItemStackSerializer.writeItemStack(serializer, version, cache.getLocale(), itemstack, false);
-			MiscSerializer.writeLFloat(serializer, (float) x);
-			MiscSerializer.writeLFloat(serializer, (float) y);
-			MiscSerializer.writeLFloat(serializer, (float) z);
-			MiscSerializer.writeLFloat(serializer, motX);
-			MiscSerializer.writeLFloat(serializer, motY);
-			MiscSerializer.writeLFloat(serializer, motZ);
-			VarNumberSerializer.writeVarInt(serializer, 0);
-			spawned = true;
-			return serializer;
-		}
-		
-		private ClientBoundPacketData getDespawnPacket(ProtocolVersion version) {
-			spawned = false;
-			return EntityDestroy.create(version, entityId);
 		}
 		
 	}
