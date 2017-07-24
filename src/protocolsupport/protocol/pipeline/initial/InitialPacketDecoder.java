@@ -11,6 +11,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.concurrent.Future;
 import protocolsupport.ProtocolSupport;
+import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
@@ -32,9 +33,11 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		ProtocolSupport.logInfo("Assume legacy ping dealy: "+pingLegacyDelay);
 	}
 
+	private static final IPipeLineBuilder futureVersionsBuilder = new protocolsupport.protocol.pipeline.version.v_future.PipeLineBuilder();
+	private static final IPipeLineBuilder legacyVersionsBulder = new protocolsupport.protocol.pipeline.version.v_legacy.PipeLineBuilder();
+
 	private static final EnumMap<ProtocolVersion, IPipeLineBuilder> pipelineBuilders = new EnumMap<>(ProtocolVersion.class);
 	static {
-		pipelineBuilders.put(ProtocolVersion.MINECRAFT_FUTURE, new protocolsupport.protocol.pipeline.version.v_future.PipeLineBuilder());
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_12, new protocolsupport.protocol.pipeline.version.v_1_12.PipeLineBuilder());
 		IPipeLineBuilder builder111 = new protocolsupport.protocol.pipeline.version.v_1_11.PipeLineBuilder();
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_11_1, builder111);
@@ -57,7 +60,6 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_5_2, builder15);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_5_1, builder15);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_4_7, new protocolsupport.protocol.pipeline.version.v_1_4.PipeLineBuilder());
-		pipelineBuilders.put(ProtocolVersion.MINECRAFT_LEGACY, new protocolsupport.protocol.pipeline.version.v_legacy.PipeLineBuilder());
 	}
 
 	protected final ByteBuf receivedData = Unpooled.buffer();
@@ -156,7 +158,11 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		}
 		connection.setVersion(version);
 		channel.pipeline().remove(ChannelHandlers.INITIAL_DECODER);
-		pipelineBuilders.get(version).buildPipeLine(channel, connection);
+		if (ProtocolSupportAPI.isProtocolVersionEnabled(version)) {
+			pipelineBuilders.get(version).buildPipeLine(channel, connection);
+		} else {
+			(version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4) ? legacyVersionsBulder : futureVersionsBuilder).buildPipeLine(channel, connection);
+		}
 		receivedData.readerIndex(0);
 		channel.pipeline().firstContext().fireChannelRead(receivedData);
 	}

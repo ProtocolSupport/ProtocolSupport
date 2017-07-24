@@ -94,12 +94,12 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 		return location.getWorld().getPlayers().stream().filter(player -> {
 			Location playerLocation = player.getLocation();
 			return
-				playerLocation.getX() >= location.getX() - x &&
-				playerLocation.getY() >= location.getY() - y &&
-				playerLocation.getZ() >= location.getZ() - z &&
-				playerLocation.getX() <= location.getX() + x &&
-				playerLocation.getY() <= location.getY() + y &&
-				playerLocation.getZ() <= location.getZ() + z;
+				(playerLocation.getX() >= (location.getX() - x)) &&
+				(playerLocation.getY() >= (location.getY() - y)) &&
+				(playerLocation.getZ() >= (location.getZ() - z)) &&
+				(playerLocation.getX() <= (location.getX() + x)) &&
+				(playerLocation.getY() <= (location.getY() + y)) &&
+				(playerLocation.getZ() <= (location.getZ() + z));
 		}).collect(Collectors.toList());
 	}
 

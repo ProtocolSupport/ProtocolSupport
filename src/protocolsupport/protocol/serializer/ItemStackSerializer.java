@@ -44,18 +44,21 @@ public class ItemStackSerializer {
 			to.writeShort(-1);
 			return;
 		}
-		ItemStackWrapper remapped = ItemStackRemapper.remapClientbound(version, locale, itemstack.cloneItemStack());
+		ItemStackWrapper remapped = itemstack.cloneItemStack();
+		int itemstate = ItemStackRemapper.ITEM_ID_REMAPPING_REGISTRY.getTable(version).getRemap(MinecraftData.getItemStateFromIdAndData(remapped.getTypeId(), remapped.getData()));
+		remapped.setTypeId(MinecraftData.getItemIdFromState(itemstate));
+		remapped.setData(MinecraftData.getItemDataFromState(itemstate));
 		if (fireEvent && (ItemStackWriteEvent.getHandlerList().getRegisteredListeners().length > 0)) {
-			ItemStackWriteEvent event = new InternalItemStackWriteEvent(version, itemstack, remapped);
+			ItemStackWriteEvent event = new InternalItemStackWriteEvent(version, locale, itemstack, remapped);
 			Bukkit.getPluginManager().callEvent(event);
 		}
-		int itemstate = ItemStackRemapper.ITEM_ID_REMAPPING_REGISTRY.getTable(version).getRemap(MinecraftData.getItemStateFromIdAndData(remapped.getTypeId(), remapped.getData()));
+		remapped = ItemStackRemapper.remapClientbound(version, locale, remapped);
 		to.writeShort(MinecraftData.getItemIdFromState(itemstate));
 		to.writeByte(remapped.getAmount());
 		to.writeShort(MinecraftData.getItemDataFromState(itemstate));
 		writeTag(to, version, remapped.getTag());
 	}
-	
+
 	public static void writePeSlot(ByteBuf to, ProtocolVersion version, ItemStackWrapper itemstack) {
 		if(itemstack.isNull() || itemstack.getTypeId() <= 0) {
 			VarNumberSerializer.writeVarInt(to, 0);
@@ -146,8 +149,8 @@ public class ItemStackSerializer {
 	public static class InternalItemStackWriteEvent extends ItemStackWriteEvent {
 
 		private final org.bukkit.inventory.ItemStack wrapped;
-		public InternalItemStackWriteEvent(ProtocolVersion version, ItemStackWrapper original, ItemStackWrapper itemstack) {
-			super(version, original.asBukkitMirror());
+		public InternalItemStackWriteEvent(ProtocolVersion version, String locale, ItemStackWrapper original, ItemStackWrapper itemstack) {
+			super(version, locale, original.asBukkitMirror());
 			this.wrapped = itemstack.asBukkitMirror();
 		}
 

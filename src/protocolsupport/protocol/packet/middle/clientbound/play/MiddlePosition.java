@@ -41,10 +41,10 @@ public abstract class MiddlePosition extends ClientBoundMiddlePacket {
 				z += location.getX();
 			}
 			if ((flags & 0x08) != 0) {
-				yaw += location.getYaw();
+				pitch += location.getPitch();
 			}
 			if ((flags & 0x10) != 0) {
-				pitch += location.getPitch();
+				yaw += location.getYaw();
 			}
 		}
 		teleportConfirmId = VarNumberSerializer.readVarInt(serverdata);

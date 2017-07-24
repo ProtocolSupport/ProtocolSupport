@@ -10,8 +10,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.commands.CommandHandler;
-import protocolsupport.listeners.CommandListener;
-import protocolsupport.listeners.PlayerListener;
+import protocolsupport.listeners.FeatureEmulation;
+import protocolsupport.listeners.MultiplePassengersRestrict;
+import protocolsupport.listeners.ReloadCommandBlocker;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
@@ -113,8 +114,9 @@ public class ProtocolSupport extends JavaPlugin {
 	public void onEnable() {
 		ServerPlatform.get().injectOnEnable();
 		getCommand("protocolsupport").setExecutor(new CommandHandler());
-		getServer().getPluginManager().registerEvents(new PlayerListener(), this);
-		getServer().getPluginManager().registerEvents(new CommandListener(), this);
+		getServer().getPluginManager().registerEvents(new FeatureEmulation(), this);
+		getServer().getPluginManager().registerEvents(new ReloadCommandBlocker(), this);
+		getServer().getPluginManager().registerEvents(new MultiplePassengersRestrict(), this);
 		getServer().getScheduler().runTask(this, () -> peserver.start());
 	}
 

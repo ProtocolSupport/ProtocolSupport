@@ -25,6 +25,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntitySe
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityStatus;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityTeleport;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityVelocity;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Explosion;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.KickDisconnect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Login;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.PlayerAbilities;
@@ -45,7 +46,10 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnPos
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.TimeUpdate;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Title;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.UnloadChunk;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldCustomSound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldEvent;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldParticle;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldSound;
 import protocolsupport.protocol.pipeline.version.AbstractLegacyPacketEncoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -87,6 +91,7 @@ public class PEPacketEncoder extends AbstractLegacyPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_GAME_STATE_CHANGE_ID, ChangeGameState.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ANIMATION_ID, Animation.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WORLD_EVENT_ID, WorldEvent.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WORLD_PARTICLES_ID, WorldParticle.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_WEATHER_ID, SpawnGlobal.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ABILITIES_ID, PlayerAbilities.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_STATUS_ID, EntityStatus.class);
@@ -98,6 +103,9 @@ public class PEPacketEncoder extends AbstractLegacyPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SET_PASSENGERS_ID, SetPassengers.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_METADATA_ID, EntityMetadata.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_LEASH_ID, EntityLeash.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_EXPLOSION_ID, Explosion.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WORLD_SOUND_ID, WorldSound.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WORLD_CUSTOM_SOUND_ID, WorldCustomSound.class);
 	}
 
 	public PEPacketEncoder(Connection connection, NetworkDataCache storage) {
