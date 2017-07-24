@@ -71,8 +71,8 @@ public class SpawnObject extends MiddleSpawnObject {
 		
 		public RecyclableArrayList<ClientBoundPacketData> updateItem(ProtocolVersion version, ItemStackWrapper itemstack) {
 			RecyclableArrayList<ClientBoundPacketData> updatepackets = RecyclableArrayList.create();
-			if(this.itemstack != itemstack) {
-				if(spawned) updatepackets.add(getDespawnPacket(version));
+			if (this.itemstack != itemstack) {
+				if (spawned) {updatepackets.add(getDespawnPacket(version));}
 				this.itemstack = itemstack;
 			}
 			if (!spawned) {
@@ -101,6 +101,7 @@ public class SpawnObject extends MiddleSpawnObject {
 			spawned = false;
 			return EntityDestroy.create(version, entityId);
 		}
+		
 	}
 
 }

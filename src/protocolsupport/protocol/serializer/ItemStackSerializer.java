@@ -28,8 +28,11 @@ public class ItemStackSerializer {
 
 	public static ItemStackWrapper readItemStack(ByteBuf from, ProtocolVersion version, String locale) {
 		int type = 0;
-		if(version == ProtocolVersion.MINECRAFT_PE) type = VarNumberSerializer.readSVarInt(from);
-		else type = from.readShort();
+		if (version == ProtocolVersion.MINECRAFT_PE) {
+			type = VarNumberSerializer.readSVarInt(from);
+		} else {
+			type = from.readShort();
+		}
 		if (type >= 0) {
 			ItemStackWrapper itemstack = ServerPlatform.get().getWrapperFactory().createItemStack(type);
 			int amount, data = 0;
@@ -55,7 +58,9 @@ public class ItemStackSerializer {
 
 	public static void writeItemStack(ByteBuf to, ProtocolVersion version, String locale, ItemStackWrapper itemstack, boolean fireEvent) {
 		if (itemstack.isNull()) {
-			if(version == ProtocolVersion.MINECRAFT_PE) VarNumberSerializer.writeVarInt(to, 0);
+			if (version == ProtocolVersion.MINECRAFT_PE) {
+				VarNumberSerializer.writeVarInt(to, 0);
+			}
 			else to.writeShort(-1);
 			return;
 		}
@@ -68,7 +73,7 @@ public class ItemStackSerializer {
 			Bukkit.getPluginManager().callEvent(event);
 		}
 		remapped = ItemStackRemapper.remapClientbound(version, locale, itemstack.getTypeId(), remapped);
-		if(version == ProtocolVersion.MINECRAFT_PE) {
+		if (version == ProtocolVersion.MINECRAFT_PE) {
 			VarNumberSerializer.writeSVarInt(to, remapped.getTypeId()); //TODO: Remap PE itemstacks...
 			VarNumberSerializer.writeSVarInt(to, ((remapped.getData() & 0xFFFF) << 8) | remapped.getAmount());
 			writeTag(to, version, remapped.getTag()); //TODO: Remap PE NBT
