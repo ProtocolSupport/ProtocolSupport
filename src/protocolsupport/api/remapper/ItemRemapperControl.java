@@ -5,17 +5,18 @@ import org.bukkit.Material;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.remapper.BlockRemapperControl.MaterialAndData;
-import protocolsupport.protocol.typeremapper.id.RemappingTable.HashMapBasedIdRemappingTable;
+import protocolsupport.protocol.typeremapper.id.RemappingTable.ComplexIdRemappingTable;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import protocolsupport.utils.IntTuple;
 
 public class ItemRemapperControl {
 
-	private final HashMapBasedIdRemappingTable table;
+	private final ComplexIdRemappingTable table;
 
 	public ItemRemapperControl(ProtocolVersion version) {
 		Validate.isTrue(version.isSupported(), "Can't control item remapping for unsupported version");
-		table = ItemStackRemapper.ITEM_ID_REMAPPING_REGISTRY.getTable(version);
+		table = ItemStackRemapper.ID_DATA_REMAPPING_REGISTRY.getTable(version);
 	}
 
 	/**
@@ -23,9 +24,8 @@ public class ItemRemapperControl {
 	 * @param from {@link Material} which will be remapped
 	 * @param to {@link Material} to which remap will occur
 	 */
-	@SuppressWarnings("deprecation")
 	public void setRemap(Material from, Material to) {
-		setRemap(from.getId(), to.getId());
+		setRemap(from, to, -1);
 	}
 
 	/**
@@ -34,9 +34,28 @@ public class ItemRemapperControl {
 	 * @param to item id to which remap will occur
 	 */
 	public void setRemap(int from, int to) {
-		for (int i = 0; i < MinecraftData.ITEM_DATA_MAX; i++) {
-			setRemap(from, i, to, i);
-		}
+		setRemap(from, to, -1);
+	}
+
+	/**
+	 * Sets remap from one material to another material and data for all data
+	 * @param from {@link Material} which will be remapped
+	 * @param matTo {@link Material} to which remap will occur
+	 * @param dataTo data to which remap will occur
+	 */
+	@SuppressWarnings("deprecation")
+	public void setRemap(Material from, Material matTo, int dataTo) {
+		setRemap(from.getId(), matTo.getId(), dataTo);
+	}
+
+	/**
+	 * Sets remap from one id to another for all data
+	 * @param from item id which will be remapped
+	 * @param idTo item id to which remap will occur
+	 * @param dataTo data to which remap will occur
+	 */
+	public void setRemap(int from, int idTo, int dataTo) {
+		table.setSingleRemap(from, idTo, dataTo);
 	}
 
 	/**
@@ -58,7 +77,7 @@ public class ItemRemapperControl {
 	 */
 	@Deprecated
 	public int getRemap(int id) {
-		return table.getRemap(id);
+		return getRemap(new MaterialAndData(id, 0)).getId();
 	}
 
 	/**
@@ -69,8 +88,8 @@ public class ItemRemapperControl {
 	public MaterialAndData getRemap(MaterialAndData entry) {
 		Validate.inclusiveBetween(0, MinecraftData.ITEM_ID_MAX, entry.getId());
 		Validate.inclusiveBetween(0, MinecraftData.ITEM_DATA_MAX, entry.getData());
-		int combinedId = table.getRemap(MinecraftData.getItemStateFromIdAndData(entry.getId(), entry.getData()));
-		return new MaterialAndData(MinecraftData.getItemIdFromState(combinedId), MinecraftData.getItemDataFromState(combinedId));
+		IntTuple iddata = table.getRemap(entry.getId(), entry.getData());
+		return iddata != null ? new MaterialAndData(iddata.getI1(), iddata.getI2() != -1 ? iddata.getI2() : entry.getData()) : entry;
 	}
 
 	/**
@@ -106,7 +125,7 @@ public class ItemRemapperControl {
 		Validate.inclusiveBetween(0, MinecraftData.ITEM_DATA_MAX, dataFrom);
 		Validate.inclusiveBetween(0, MinecraftData.ITEM_ID_MAX, idTo);
 		Validate.inclusiveBetween(0, MinecraftData.ITEM_DATA_MAX, dataTo);
-		table.setRemap(MinecraftData.getItemStateFromIdAndData(idFrom, dataFrom), MinecraftData.getItemStateFromIdAndData(idTo, dataTo));
+		table.setComplexRemap(idFrom, dataFrom, idTo, dataTo);
 	}
 
 }
