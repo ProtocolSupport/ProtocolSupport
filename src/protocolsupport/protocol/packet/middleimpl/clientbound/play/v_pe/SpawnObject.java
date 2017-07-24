@@ -52,6 +52,7 @@ public class SpawnObject extends MiddleSpawnObject {
 		private final float motY;
 		private final float motZ;
 		private ItemStackWrapper itemstack;
+		private boolean spawned = false;
 
 		PreparedItem(int entityId, double x, double y, double z, float motX, float motY, float motZ) {
 			this.entityId = entityId;
@@ -66,16 +67,24 @@ public class SpawnObject extends MiddleSpawnObject {
 		public int getId() {
 			return entityId;
 		}
-
-		public void setItemStack(ItemStackWrapper itemstack) {
-			this.itemstack = itemstack;
+		
+		public RecyclableArrayList<ClientBoundPacketData> updateItem(ProtocolVersion version, ItemStackWrapper itemstack) {
+			RecyclableArrayList<ClientBoundPacketData> updatepackets = RecyclableArrayList.create();
+			if(this.itemstack != itemstack) {
+				if(spawned) updatepackets.add(getDespawnPacket(version));
+				this.itemstack = itemstack;
+			}
+			if (!spawned) {
+				updatepackets.add(getSpawnPacket(version));
+			}
+			return updatepackets;
 		}
 
-		public ClientBoundPacketData getSpawnPacket(ProtocolVersion version) {
+		private ClientBoundPacketData getSpawnPacket(ProtocolVersion version) {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ADD_ITEM_ENTITY, version);
 			VarNumberSerializer.writeSVarLong(serializer, entityId);
 			VarNumberSerializer.writeVarLong(serializer, entityId);
-			ItemStackSerializer.writePeSlot(serializer, version, itemstack);
+			ItemStackSerializer.writeItemStack(serializer, version, cache.getLocale(), itemstack, false);
 			MiscSerializer.writeLFloat(serializer, (float) x);
 			MiscSerializer.writeLFloat(serializer, (float) y);
 			MiscSerializer.writeLFloat(serializer, (float) z);
@@ -83,9 +92,15 @@ public class SpawnObject extends MiddleSpawnObject {
 			MiscSerializer.writeLFloat(serializer, motY);
 			MiscSerializer.writeLFloat(serializer, motZ);
 			VarNumberSerializer.writeVarInt(serializer, 0);
+			spawned = true;
 			return serializer;
 		}
-
+		
+		private ClientBoundPacketData getDespawnPacket(ProtocolVersion version) {
+			spawned = false;
+			return EntityDestroy.create(version, entityId);
+		}
+		
 	}
 
 }

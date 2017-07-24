@@ -19,7 +19,6 @@ import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ItemStackWriteEvent;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
-import protocolsupport.protocol.utils.PENetworkNBTDataOutputStream;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
@@ -28,12 +27,27 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 public class ItemStackSerializer {
 
 	public static ItemStackWrapper readItemStack(ByteBuf from, ProtocolVersion version, String locale) {
-		int type = from.readShort();
+		int type = 0;
+		if(version == ProtocolVersion.MINECRAFT_PE) type = VarNumberSerializer.readSVarInt(from);
+		else type = from.readShort();
 		if (type >= 0) {
 			ItemStackWrapper itemstack = ServerPlatform.get().getWrapperFactory().createItemStack(type);
-			itemstack.setAmount(from.readByte());
-			itemstack.setData(from.readUnsignedShort());
-			itemstack.setTag(readTag(from, version));
+			int amount, data = 0;
+			if(version == ProtocolVersion.MINECRAFT_PE) {
+				int amountdata = VarNumberSerializer.readSVarInt(from);
+				amount = (amountdata & 0x7F);
+				data = ((amountdata >> 8) & 0xFFFF);
+				itemstack.setTag(readTag(from, version));
+				//TODO: Read the rest properly..
+				ArraySerializer.readVarIntStringArray(from, version); //TODO: CanPlaceOn PE
+				ArraySerializer.readVarIntStringArray(from, version); //TODO: CanDestroy PE
+			} else {
+				amount = from.readByte();
+				data = from.readUnsignedShort();
+				itemstack.setTag(readTag(from, version));
+			}
+			itemstack.setAmount(amount);
+			itemstack.setData(data);
 			return ItemStackRemapper.remapServerbound(version, locale, itemstack.cloneItemStack());
 		}
 		return ServerPlatform.get().getWrapperFactory().createNullItemStack();
@@ -41,7 +55,8 @@ public class ItemStackSerializer {
 
 	public static void writeItemStack(ByteBuf to, ProtocolVersion version, String locale, ItemStackWrapper itemstack, boolean fireEvent) {
 		if (itemstack.isNull()) {
-			to.writeShort(-1);
+			if(version == ProtocolVersion.MINECRAFT_PE) VarNumberSerializer.writeVarInt(to, 0);
+			else to.writeShort(-1);
 			return;
 		}
 		ItemStackWrapper remapped = itemstack.cloneItemStack();
@@ -53,22 +68,18 @@ public class ItemStackSerializer {
 			Bukkit.getPluginManager().callEvent(event);
 		}
 		remapped = ItemStackRemapper.remapClientbound(version, locale, itemstack.getTypeId(), remapped);
-		to.writeShort(remapped.getTypeId());
-		to.writeByte(remapped.getAmount());
-		to.writeShort(remapped.getData());
-		writeTag(to, version, remapped.getTag());
-	}
-
-	public static void writePeSlot(ByteBuf to, ProtocolVersion version, ItemStackWrapper itemstack) {
-		if(itemstack.isNull() || (itemstack.getTypeId() <= 0)) {
-			VarNumberSerializer.writeVarInt(to, 0);
-			return;
+		if(version == ProtocolVersion.MINECRAFT_PE) {
+			VarNumberSerializer.writeSVarInt(to, remapped.getTypeId()); //TODO: Remap PE itemstacks...
+			VarNumberSerializer.writeSVarInt(to, ((remapped.getData() & 0xFFFF) << 8) | remapped.getAmount());
+			writeTag(to, version, remapped.getTag()); //TODO: Remap PE NBT
+			VarNumberSerializer.writeVarInt(to, 0); //TODO: CanPlaceOn PE
+			VarNumberSerializer.writeVarInt(to, 0); //TODO: CanDestroy PE
+		} else {
+			to.writeShort(remapped.getTypeId());
+			to.writeByte(remapped.getAmount());
+			to.writeShort(remapped.getData());
+			writeTag(to, version, remapped.getTag());
 		}
-		VarNumberSerializer.writeVarInt(to, itemstack.getTypeId()); //TODO: Remap PE itemstacks...
-		VarNumberSerializer.writeVarInt(to, (itemstack.getData() << 8) | itemstack.getAmount());
-		to.writeShortLE(0); //TODO: Implement PE NBT
-		VarNumberSerializer.writeVarInt(to, 0); //TODO: CanPlaceOn PE
-		VarNumberSerializer.writeVarInt(to, 0); //TODO: CanDestroy PE
 	}
 
 	public static NBTTagCompoundWrapper readTag(ByteBuf from, ProtocolVersion version) {
@@ -123,7 +134,13 @@ public class ItemStackSerializer {
 					}
 				}
 			} else if (isUsingPENBT(version)) {
-				tag.writeToStream(new PENetworkNBTDataOutputStream(to));
+				int writerIndex = to.writerIndex();
+				//fake length
+				to.writeShortLE(0);
+				//actual nbt
+				//tag.writeToStream(new PENetworkNBTDataOutputStream(to)); //TODO Remap and write PE NBT.
+				//now replace fake length with real length
+				to.setShortLE(writerIndex, to.writerIndex() - writerIndex - Short.BYTES);
 			} else {
 				throw new IllegalArgumentException(MessageFormat.format("Don't know how to write nbt of version {0}", version));
 			}
