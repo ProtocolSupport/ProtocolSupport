@@ -31,9 +31,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 				if(metadata.containsKey(DataWatcherObjectIndex.Item.ITEM)) {
 					PreparedItem i = cache.getPreparedItem(entityId);
 					if(i != null) {
-						i.setItemStack((ItemStackWrapper) metadata.get(DataWatcherObjectIndex.Item.ITEM).getValue());
-						cache.removePreparedItem(entityId);
-						packets.add(i.getSpawnPacket(version));
+						packets.addAll(i.updateItem(version, (ItemStackWrapper) metadata.get(DataWatcherObjectIndex.Item.ITEM).getValue()));
 					}
 				}
 			}
