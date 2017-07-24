@@ -19,7 +19,7 @@ import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ItemStackWriteEvent;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import protocolsupport.utils.IntTuple;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -65,9 +65,13 @@ public class ItemStackSerializer {
 			return;
 		}
 		ItemStackWrapper remapped = itemstack.cloneItemStack();
-		int itemstate = ItemStackRemapper.ITEM_ID_REMAPPING_REGISTRY.getTable(version).getRemap(MinecraftData.getItemStateFromIdAndData(remapped.getTypeId(), remapped.getData()));
-		remapped.setTypeId(MinecraftData.getItemIdFromState(itemstate));
-		remapped.setData(MinecraftData.getItemDataFromState(itemstate));
+		IntTuple iddata = ItemStackRemapper.ID_DATA_REMAPPING_REGISTRY.getTable(version).getRemap(remapped.getTypeId(), remapped.getData());
+		if (iddata != null) {
+			remapped.setTypeId(iddata.getI1());
+			if (iddata.getI2() != -1) {
+				remapped.setData(iddata.getI2());
+			}
+		}
 		if (fireEvent && (ItemStackWriteEvent.getHandlerList().getRegisteredListeners().length > 0)) {
 			ItemStackWriteEvent event = new InternalItemStackWriteEvent(version, locale, itemstack, remapped);
 			Bukkit.getPluginManager().callEvent(event);
