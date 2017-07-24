@@ -53,9 +53,9 @@ public class ItemStackSerializer {
 			Bukkit.getPluginManager().callEvent(event);
 		}
 		remapped = ItemStackRemapper.remapClientbound(version, locale, remapped);
-		to.writeShort(MinecraftData.getItemIdFromState(itemstate));
+		to.writeShort(remapped.getTypeId());
 		to.writeByte(remapped.getAmount());
-		to.writeShort(MinecraftData.getItemDataFromState(itemstate));
+		to.writeShort(remapped.getData());
 		writeTag(to, version, remapped.getTag());
 	}
 
