@@ -52,7 +52,7 @@ public class ItemStackSerializer {
 			ItemStackWriteEvent event = new InternalItemStackWriteEvent(version, locale, itemstack, remapped);
 			Bukkit.getPluginManager().callEvent(event);
 		}
-		remapped = ItemStackRemapper.remapClientbound(version, locale, remapped);
+		remapped = ItemStackRemapper.remapClientbound(version, locale, itemstack.getTypeId(), remapped);
 		to.writeShort(remapped.getTypeId());
 		to.writeByte(remapped.getAmount());
 		to.writeShort(remapped.getData());
