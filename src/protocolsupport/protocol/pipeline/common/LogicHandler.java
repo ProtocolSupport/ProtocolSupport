@@ -11,6 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
+import io.netty.channel.unix.Errors.NativeIoException;
 import io.netty.handler.timeout.ReadTimeoutException;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.events.ConnectionCloseEvent;
@@ -28,6 +29,7 @@ public class LogicHandler extends ChannelDuplexHandler {
 		ignoreExceptions.add(ClosedChannelException.class);
 		ignoreExceptions.add(ReadTimeoutException.class);
 		ignoreExceptions.add(IOException.class);
+		ignoreExceptions.add(NativeIoException.class);
 	}
 
 	private final ConnectionImpl connection;
