@@ -85,7 +85,7 @@ public class SpawnObject extends MiddleSpawnObject {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ADD_ITEM_ENTITY, version);
 			VarNumberSerializer.writeSVarLong(serializer, entityId);
 			VarNumberSerializer.writeVarLong(serializer, entityId);
-			ItemStackSerializer.writePeSlot(serializer, version, itemstack);
+			ItemStackSerializer.writeItemStack(serializer, version, cache.getLocale(), itemstack, false);
 			MiscSerializer.writeLFloat(serializer, (float) x);
 			MiscSerializer.writeLFloat(serializer, (float) y);
 			MiscSerializer.writeLFloat(serializer, (float) z);
