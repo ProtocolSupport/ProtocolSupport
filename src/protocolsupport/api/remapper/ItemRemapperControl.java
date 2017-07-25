@@ -12,6 +12,13 @@ import protocolsupport.utils.IntTuple;
 
 public class ItemRemapperControl {
 
+	/**
+	 * Resets all items remaps to default ones
+	 */
+	public static void resetToDefault() {
+		ItemStackRemapper.ID_DATA_REMAPPING_REGISTRY.applyDefaultRemaps();
+	}
+
 	private final ComplexIdRemappingTable table;
 
 	public ItemRemapperControl(ProtocolVersion version) {

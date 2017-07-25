@@ -32,8 +32,14 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 @SuppressWarnings("deprecation")
 public class ItemStackRemapper {
 
-	public static final RemappingRegistry<ComplexIdRemappingTable> ID_DATA_REMAPPING_REGISTRY = new RemappingRegistry<ComplexIdRemappingTable>() {
+	public static final ItemIdDataRemappingRegistry ID_DATA_REMAPPING_REGISTRY = new ItemIdDataRemappingRegistry();
+
+	public static class ItemIdDataRemappingRegistry extends RemappingRegistry<ComplexIdRemappingTable> {
 		{
+			applyDefaultRemaps();
+		}
+		public void applyDefaultRemaps() {
+			remappings.clear();
 			//modified copy of blocks remapper adapted to items
 			registerRemapEntry(Material.CONCRETE, Material.BRICK, 0, ProtocolVersionsHelper.BEFORE_1_12);
 			registerRemapEntry(Material.CONCRETE_POWDER, Material.WOOL, ProtocolVersionsHelper.BEFORE_1_12);
@@ -210,7 +216,7 @@ public class ItemStackRemapper {
 		protected ComplexIdRemappingTable createTable() {
 			return new ComplexIdRemappingTable();
 		}
-	};
+	}
 
 	private static final TIntObjectHashMap<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>> clientbound_remapper_registry = new TIntObjectHashMap<>();
 	private static final TIntObjectHashMap<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>> serverbound_remapper_registry = new TIntObjectHashMap<>();
