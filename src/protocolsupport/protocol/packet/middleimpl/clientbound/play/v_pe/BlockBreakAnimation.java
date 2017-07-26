@@ -21,10 +21,10 @@ public class BlockBreakAnimation extends MiddleBlockBreakAnimation {
 				animations.put(entityId, new TimePle(false, System.nanoTime(), stage));
 			} else {
 				if (!animation.getStarted() && stage > animation.getStartStage()) {
-					animations.get(entityId).setStarted(true);
-					return RecyclableSingletonList.create(PELevelEvent.createPacket(PELevelEvent.BLOCK_START_BREAK, position, (int) (
-							65535 / Math.ceil(((((System.nanoTime() - animation.getStartTime()) / (stage - animation.getStartStage())) * (9 - animation.getStartStage())) / 1000000000) * 20 + 12.5)
-						)));	
+					animation.setStarted(true);
+					double breakMils = Math.ceil((((System.nanoTime() - animation.getStartTime()) / (stage - animation.getStartStage())) * (9 - animation.getStartStage()) + 0.1) / 1000000);
+					int ticksToBreak = (int) (Math.ceil(((breakMils / 1000) + 0.25) * 20));
+					return RecyclableSingletonList.create(PELevelEvent.createPacket(PELevelEvent.BLOCK_START_BREAK, position, (int) (65535 / ticksToBreak)));	
 				}
 			}
 		} else {
