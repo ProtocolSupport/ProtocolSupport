@@ -11,25 +11,24 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class BlockBreakAnimation extends MiddleBlockBreakAnimation {
 
-	private final TIntObjectHashMap<TimePle> animation = new TIntObjectHashMap<>();
+	private final TIntObjectHashMap<TimePle> animations = new TIntObjectHashMap<>();
 	
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		if (stage >= 1 && stage <= 9) {
-			if (!animation.containsKey(entityId)) {
-				animation.put(entityId, new TimePle(false, System.nanoTime(), stage));
+			TimePle animation = animations.get(entityId);
+			if (animation == null) {
+				animations.put(entityId, new TimePle(false, System.nanoTime(), stage));
 			} else {
-				if (!animation.get(entityId).getStarted() && stage > animation.get(entityId).getStartStage()) {
-					animation.get(entityId).setStarted(true);
+				if (!animation.getStarted() && stage > animation.getStartStage()) {
+					animations.get(entityId).setStarted(true);
 					return RecyclableSingletonList.create(PELevelEvent.createPacket(PELevelEvent.BLOCK_START_BREAK, position, (int) (
-							65535 / Math.ceil(((((System.nanoTime() - animation.get(entityId).getStartTime()) / (stage - animation.get(entityId).getStartStage())) * (9 - animation.get(entityId).getStartStage())) / 1000000000) * 20 + 12.5)
+							65535 / Math.ceil(((((System.nanoTime() - animation.getStartTime()) / (stage - animation.getStartStage())) * (9 - animation.getStartStage())) / 1000000000) * 20 + 12.5)
 						)));	
 				}
 			}
 		} else {
-			if (animation.containsKey(entityId)) {
-				animation.remove(entityId);
-			}
+			animations.remove(entityId);
 			return RecyclableSingletonList.create(PELevelEvent.createPacket(PELevelEvent.BLOCK_STOP_BREAK, position));
 		}
 		return RecyclableEmptyList.get();
