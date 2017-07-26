@@ -30,7 +30,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
 	static {
 		ProtocolSupport.logInfo("Assume 1.5.2 ping delay: "+ping152delay);
-		ProtocolSupport.logInfo("Assume legacy ping dealy: "+pingLegacyDelay);
+		ProtocolSupport.logInfo("Assume legacy ping delay: "+pingLegacyDelay);
 	}
 
 	private static final IPipeLineBuilder futureVersionsBuilder = new protocolsupport.protocol.pipeline.version.v_future.PipeLineBuilder();

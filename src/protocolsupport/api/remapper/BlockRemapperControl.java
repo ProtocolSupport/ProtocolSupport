@@ -10,6 +10,13 @@ import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 
 public class BlockRemapperControl {
 
+	/**
+	 * Resets all block remaps to default ones
+	 */
+	public static void resetToDefault() {
+		IdRemapper.BLOCK.applyDefaultRemaps();
+	}
+
 	private final ArrayBasedIdRemappingTable table;
 
 	public BlockRemapperControl(ProtocolVersion version) {
