@@ -18,10 +18,10 @@ import org.bukkit.util.CachedServerIcon;
 
 import io.netty.channel.ChannelFutureListener;
 import protocolsupport.ProtocolSupport;
+import protocolsupport.api.Connection;
 import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
@@ -76,9 +76,10 @@ public abstract class AbstractStatusListener {
 				profiles.add(player.getName());
 			}
 
+			Connection connection = ConnectionImpl.getFromChannel(networkManager.getChannel());
 			ServerPingResponseEvent revent = new ServerPingResponseEvent(
-				ConnectionImpl.getFromChannel(networkManager.getChannel()),
-				new ProtocolInfo(ProtocolVersionsHelper.LATEST_PC, ServerPlatform.get().getMiscUtils().getModName() + " " + ServerPlatform.get().getMiscUtils().getVersionName()),
+				connection,
+				new ProtocolInfo(connection.getVersion(), ServerPlatform.get().getMiscUtils().getModName() + " " + ServerPlatform.get().getMiscUtils().getVersionName()),
 				icon, motd, maxPlayers, profiles
 			);
 			Bukkit.getPluginManager().callEvent(revent);
