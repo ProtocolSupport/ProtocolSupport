@@ -1,9 +1,12 @@
 package protocolsupport.protocol.typeremapper.legacy;
 
+import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 
 public class LegacyPotion {
 
+	private static final TIntObjectHashMap<String> potionFromLegacyIds = new TIntObjectHashMap<>();
 	private static final TObjectIntHashMap<String> potionToLegacyIds = new TObjectIntHashMap<>();
 	static {
 		register("night_vision", 8198);
@@ -41,12 +44,24 @@ public class LegacyPotion {
 
 	private static void register(String name, int id) {
 		potionToLegacyIds.put(name, id);
-		potionToLegacyIds.put("minecraft:"+name, id);
+		potionToLegacyIds.put(MinecraftData.addNamespacePrefix(name), id);
+		potionFromLegacyIds.put(id, MinecraftData.addNamespacePrefix(name));
 	}
 
 	public static int toLegacyId(String nbttag, boolean isThrowable) {
 		int value = potionToLegacyIds.get(nbttag);
 		return isThrowable ? value + 8192 : value;
+	}
+
+	public static boolean isThrowable(int legacyId) {
+		return legacyId > 16384;
+	}
+
+	public static String fromLegacyId(int legacyId) {
+		if (isThrowable(legacyId)) {
+			legacyId -= 8192;
+		}
+		return potionFromLegacyIds.get(legacyId);
 	}
 
 	public static String getBasicTypeName(String nbttag) {

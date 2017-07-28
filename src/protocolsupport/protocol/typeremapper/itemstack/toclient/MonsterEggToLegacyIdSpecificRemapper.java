@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.itemstack.clientbound;
+package protocolsupport.protocol.typeremapper.itemstack.toclient;
 
 import org.bukkit.entity.EntityType;
 

@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.itemstack.clientbound;
+package protocolsupport.protocol.typeremapper.itemstack.toclient;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.TranslationAPI;
