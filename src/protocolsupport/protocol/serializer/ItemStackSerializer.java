@@ -26,40 +26,46 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class ItemStackSerializer {
 
-	public static ItemStackWrapper readItemStack(ByteBuf from, ProtocolVersion version, String locale) {
+	public static ItemStackWrapper readItemStack(ByteBuf from, ProtocolVersion version, String locale, boolean isFromClient) {
 		int type = from.readShort();
 		if (type >= 0) {
 			ItemStackWrapper itemstack = ServerPlatform.get().getWrapperFactory().createItemStack(type);
 			itemstack.setAmount(from.readByte());
 			itemstack.setData(from.readUnsignedShort());
 			itemstack.setTag(readTag(from, version));
-			return ItemStackRemapper.remapServerbound(version, locale, itemstack.cloneItemStack());
+			if (isFromClient) {
+				itemstack = ItemStackRemapper.remapFromClient(version, locale, itemstack.cloneItemStack());
+			}
+			return itemstack;
 		}
 		return ServerPlatform.get().getWrapperFactory().createNullItemStack();
 	}
 
-	public static void writeItemStack(ByteBuf to, ProtocolVersion version, String locale, ItemStackWrapper itemstack, boolean fireEvent) {
+	public static void writeItemStack(ByteBuf to, ProtocolVersion version, String locale, ItemStackWrapper itemstack, boolean isToClient) {
 		if (itemstack.isNull()) {
 			to.writeShort(-1);
 			return;
 		}
-		ItemStackWrapper remapped = itemstack.cloneItemStack();
-		IntTuple iddata = ItemStackRemapper.ID_DATA_REMAPPING_REGISTRY.getTable(version).getRemap(remapped.getTypeId(), remapped.getData());
-		if (iddata != null) {
-			remapped.setTypeId(iddata.getI1());
-			if (iddata.getI2() != -1) {
-				remapped.setData(iddata.getI2());
+		ItemStackWrapper witemstack = itemstack;
+		if (isToClient) {
+			witemstack = witemstack.cloneItemStack();
+			IntTuple iddata = ItemStackRemapper.ID_DATA_REMAPPING_REGISTRY.getTable(version).getRemap(witemstack.getTypeId(), witemstack.getData());
+			if (iddata != null) {
+				witemstack.setTypeId(iddata.getI1());
+				if (iddata.getI2() != -1) {
+					witemstack.setData(iddata.getI2());
+				}
 			}
+			if (ItemStackWriteEvent.getHandlerList().getRegisteredListeners().length > 0) {
+				ItemStackWriteEvent event = new InternalItemStackWriteEvent(version, locale, itemstack, witemstack);
+				Bukkit.getPluginManager().callEvent(event);
+			}
+			witemstack = ItemStackRemapper.remapToClient(version, locale, itemstack.getTypeId(), witemstack);
 		}
-		if (fireEvent && (ItemStackWriteEvent.getHandlerList().getRegisteredListeners().length > 0)) {
-			ItemStackWriteEvent event = new InternalItemStackWriteEvent(version, locale, itemstack, remapped);
-			Bukkit.getPluginManager().callEvent(event);
-		}
-		remapped = ItemStackRemapper.remapClientbound(version, locale, itemstack.getTypeId(), remapped);
-		to.writeShort(remapped.getTypeId());
-		to.writeByte(remapped.getAmount());
-		to.writeShort(remapped.getData());
-		writeTag(to, version, remapped.getTag());
+		to.writeShort(witemstack.getTypeId());
+		to.writeByte(witemstack.getAmount());
+		to.writeShort(witemstack.getData());
+		writeTag(to, version, witemstack.getTag());
 	}
 
 	public static NBTTagCompoundWrapper readTag(ByteBuf from, ProtocolVersion version) {

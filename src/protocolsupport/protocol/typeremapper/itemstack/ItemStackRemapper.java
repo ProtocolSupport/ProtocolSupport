@@ -218,20 +218,20 @@ public class ItemStackRemapper {
 		}
 	}
 
-	private static final TIntObjectHashMap<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>> clientbound_remapper_registry = new TIntObjectHashMap<>();
-	private static final TIntObjectHashMap<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>> serverbound_remapper_registry = new TIntObjectHashMap<>();
+	private static final TIntObjectHashMap<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>> toClientRemapper = new TIntObjectHashMap<>();
+	private static final TIntObjectHashMap<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>> fromClientRemapper = new TIntObjectHashMap<>();
 
-	private static void registerClientboundRemapper(Material material, ItemStackSpecificRemapper transformer, ProtocolVersion... versions) {
-		registerRemapper(clientbound_remapper_registry, material, transformer, versions);
+	private static void registerToClientRemapper(Material material, ItemStackSpecificRemapper transformer, ProtocolVersion... versions) {
+		registerRemapper(toClientRemapper, material, transformer, versions);
 	}
 
-//	private static void registerServerboundRemapper(Material material, ItemStackSpecificRemapper transformer, ProtocolVersion... versions) {
-//		registerRemapper(serverbound_remapper_registry, material, transformer, versions);
-//	}
+	private static void registerFromClientRemapper(Material material, ItemStackSpecificRemapper transformer, ProtocolVersion... versions) {
+		registerRemapper(fromClientRemapper, material, transformer, versions);
+	}
 
 	private static void registerRemapper(TIntObjectHashMap<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>> registry, Material material, ItemStackSpecificRemapper transformer, ProtocolVersion... versions) {
 		EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>> map = Utils.getFromMapOrCreateDefault(
-			new TIntObjectMapDecorator<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>>(clientbound_remapper_registry),
+			new TIntObjectMapDecorator<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>>(toClientRemapper),
 			material.getId(), new EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>(ProtocolVersion.class)
 		);
 		Arrays.stream(versions).forEach(version -> Utils.getFromMapOrCreateDefault(map, version, new ArrayList<ItemStackSpecificRemapper>()).add(transformer));
@@ -239,25 +239,25 @@ public class ItemStackRemapper {
 
 	//Order is important because some transformers may add tags in new format
 	static {
-		registerClientboundRemapper(Material.MONSTER_EGG, new MonsterEggToLegacyNameSpecificRemapper(), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_10, ProtocolVersion.MINECRAFT_1_9));
-		registerClientboundRemapper(Material.MONSTER_EGG, new MonsterEggToLegacyIdSpecificRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
-		registerClientboundRemapper(Material.SKULL_ITEM, new DragonHeadSpecificRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
-		registerClientboundRemapper(Material.SKULL_ITEM, new PlayerSkullSpecificRemapper(), ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_7_5));
-		registerClientboundRemapper(Material.POTION, new PotionToLegacyIdSpecificRemapper(false), ProtocolVersionsHelper.BEFORE_1_9);
-		registerClientboundRemapper(Material.SPLASH_POTION, new PotionToLegacyIdSpecificRemapper(true), ProtocolVersionsHelper.BEFORE_1_9);
-		registerClientboundRemapper(Material.LINGERING_POTION, new PotionToLegacyIdSpecificRemapper(true), ProtocolVersionsHelper.BEFORE_1_9);
-		registerClientboundRemapper(Material.WRITTEN_BOOK, new BookPagesToLegacyTextSpecificRemapper(), ProtocolVersionsHelper.BEFORE_1_8);
-		registerClientboundRemapper(Material.BOOK_AND_QUILL, new EmptyBookPageAdderSpecificRemapper(), ProtocolVersionsHelper.ALL_PC);
+		registerToClientRemapper(Material.MONSTER_EGG, new MonsterEggToLegacyNameSpecificRemapper(), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_10, ProtocolVersion.MINECRAFT_1_9));
+		registerToClientRemapper(Material.MONSTER_EGG, new MonsterEggToLegacyIdSpecificRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
+		registerToClientRemapper(Material.SKULL_ITEM, new DragonHeadSpecificRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
+		registerToClientRemapper(Material.SKULL_ITEM, new PlayerSkullSpecificRemapper(), ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_7_5));
+		registerToClientRemapper(Material.POTION, new PotionToLegacyIdSpecificRemapper(false), ProtocolVersionsHelper.BEFORE_1_9);
+		registerToClientRemapper(Material.SPLASH_POTION, new PotionToLegacyIdSpecificRemapper(true), ProtocolVersionsHelper.BEFORE_1_9);
+		registerToClientRemapper(Material.LINGERING_POTION, new PotionToLegacyIdSpecificRemapper(true), ProtocolVersionsHelper.BEFORE_1_9);
+		registerToClientRemapper(Material.WRITTEN_BOOK, new BookPagesToLegacyTextSpecificRemapper(), ProtocolVersionsHelper.BEFORE_1_8);
+		registerToClientRemapper(Material.BOOK_AND_QUILL, new EmptyBookPageAdderSpecificRemapper(), ProtocolVersionsHelper.ALL_PC);
 		EnchantFilterNBTSpecificRemapper enchantfilter = new EnchantFilterNBTSpecificRemapper();
-		Arrays.stream(Material.values()).forEach(material -> registerClientboundRemapper(material, enchantfilter, ProtocolVersionsHelper.ALL_PC));
+		Arrays.stream(Material.values()).forEach(material -> registerToClientRemapper(material, enchantfilter, ProtocolVersionsHelper.ALL_PC));
 	}
 
-	public static ItemStackWrapper remapClientbound(ProtocolVersion version, String locale, int originalTypeId, ItemStackWrapper itemstack) {
-		return remap(clientbound_remapper_registry, version, locale, originalTypeId, itemstack);
+	public static ItemStackWrapper remapToClient(ProtocolVersion version, String locale, int originalTypeId, ItemStackWrapper itemstack) {
+		return remap(toClientRemapper, version, locale, originalTypeId, itemstack);
 	}
 
-	public static ItemStackWrapper remapServerbound(ProtocolVersion version, String locale, ItemStackWrapper itemstack) {
-		return remap(serverbound_remapper_registry, version, locale, itemstack.getTypeId(), itemstack);
+	public static ItemStackWrapper remapFromClient(ProtocolVersion version, String locale, ItemStackWrapper itemstack) {
+		return remap(fromClientRemapper, version, locale, itemstack.getTypeId(), itemstack);
 	}
 
 	private static ItemStackWrapper remap(

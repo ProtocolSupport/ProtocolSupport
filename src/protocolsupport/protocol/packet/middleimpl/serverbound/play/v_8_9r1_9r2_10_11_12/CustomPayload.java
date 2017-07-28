@@ -32,7 +32,7 @@ public class CustomPayload extends MiddleCustomPayload {
 			tag = "MC|AdvCmd";
 			data = MiscSerializer.readAllBytes(clientdata);
 		} else if (tag.equals("MC|BSign") || tag.equals("MC|BEdit")) {
-			ItemStackWrapper book = ItemStackSerializer.readItemStack(clientdata, version, cache.getLocale());
+			ItemStackWrapper book = ItemStackSerializer.readItemStack(clientdata, version, cache.getLocale(), true);
 			book.setType(Material.BOOK_AND_QUILL);
 			if ((version == ProtocolVersion.MINECRAFT_1_8) && tag.equals("MC|BSign")) {
 				remapBookPages(book, cache.getLocale());
