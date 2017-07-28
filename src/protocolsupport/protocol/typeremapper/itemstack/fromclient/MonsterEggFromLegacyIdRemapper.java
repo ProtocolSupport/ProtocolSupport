@@ -4,6 +4,7 @@ import org.bukkit.entity.EntityType;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackSpecificRemapper;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -15,14 +16,13 @@ public class MonsterEggFromLegacyIdRemapper implements ItemStackSpecificRemapper
 		EntityType type = EntityType.fromId(entityId); // ...so we get the EntityType from the ItemStack data value
 
 		if (type != null) { // Disallow invalid spawn eggs (prevent crashes)
-			// Get the ItemStack NBT tag (or create one if needed)
 			NBTTagCompoundWrapper tag = itemstack.getTag();
 			if (tag.isNull()) {
 				tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
 				itemstack.setTag(tag);
 			}
 			NBTTagCompoundWrapper nbtEntity = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-			nbtEntity.setString("id", "minecraft:" + type.getName());
+			nbtEntity.setString("id", MinecraftData.addNamespacePrefix(type.getName()));
 			tag.setCompound("EntityTag", nbtEntity);
 			itemstack.setData(0); // Reset the egg data value to 0
 		}
