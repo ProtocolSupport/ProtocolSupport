@@ -1,5 +1,7 @@
 package protocolsupport.protocol.utils.types;
 
+import java.text.MessageFormat;
+
 import protocolsupport.utils.CollectionsUtils;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
@@ -20,7 +22,10 @@ public enum Environment {
 
 	public static Environment getById(int id) {
 		Environment env = byId.get(id);
-		return env != null ? env : Environment.OVERWORLD;
+		if (env == null) {
+			throw new IllegalArgumentException(MessageFormat.format("Unknown dimension network id {0}", id));
+		}
+		return env;
 	}
 
 }
