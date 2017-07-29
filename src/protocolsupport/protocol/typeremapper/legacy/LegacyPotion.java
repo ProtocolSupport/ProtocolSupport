@@ -6,8 +6,8 @@ import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 
 public class LegacyPotion {
 
-	private static final TIntObjectHashMap<String> potionFromLegacyIds = new TIntObjectHashMap<>();
-	private static final TObjectIntHashMap<String> potionToLegacyIds = new TObjectIntHashMap<>();
+	private static final TObjectIntHashMap<String> toLegacyId = new TObjectIntHashMap<>();
+	private static final TIntObjectHashMap<String> fromLegacyId = new TIntObjectHashMap<>();
 	static {
 		register("night_vision", 8198);
 		register("long_night_vision", 8262);
@@ -43,13 +43,13 @@ public class LegacyPotion {
 	}
 
 	private static void register(String name, int id) {
-		potionToLegacyIds.put(name, id);
-		potionToLegacyIds.put(MinecraftData.addNamespacePrefix(name), id);
-		potionFromLegacyIds.put(id, MinecraftData.addNamespacePrefix(name));
+		toLegacyId.put(name, id);
+		toLegacyId.put(MinecraftData.addNamespacePrefix(name), id);
+		fromLegacyId.put(id, MinecraftData.addNamespacePrefix(name));
 	}
 
 	public static int toLegacyId(String nbttag, boolean isThrowable) {
-		int value = potionToLegacyIds.get(nbttag);
+		int value = toLegacyId.get(nbttag);
 		return isThrowable ? value + 8192 : value;
 	}
 
@@ -61,7 +61,7 @@ public class LegacyPotion {
 		if (isThrowable(legacyId)) {
 			legacyId -= 8192;
 		}
-		return potionFromLegacyIds.get(legacyId);
+		return fromLegacyId.get(legacyId);
 	}
 
 	public static String getBasicTypeName(String nbttag) {

@@ -20,7 +20,11 @@ import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
 import protocolsupport.protocol.typeremapper.chunk.BlockStorageReader;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
+import protocolsupport.protocol.typeremapper.legacy.LegacyEffect;
+import protocolsupport.protocol.typeremapper.legacy.LegacyEntityType;
 import protocolsupport.protocol.typeremapper.legacy.LegacyI18NData;
+import protocolsupport.protocol.typeremapper.legacy.LegacyMonsterEgg;
+import protocolsupport.protocol.typeremapper.legacy.LegacyPotion;
 import protocolsupport.protocol.typeremapper.mapcolor.MapColorRemapper;
 import protocolsupport.protocol.typeremapper.skipper.id.IdSkipper;
 import protocolsupport.protocol.typeremapper.sound.SoundRemapper;
@@ -97,6 +101,10 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(TileNBTRemapper.class.getName());
 			Class.forName(BlockStorageReader.class.getName());
 			Class.forName(MapColorRemapper.class.getName());
+			Class.forName(LegacyMonsterEgg.class.getName());
+			Class.forName(LegacyPotion.class.getName());
+			Class.forName(LegacyEntityType.class.getName());
+			Class.forName(LegacyEffect.class.getName());
 			ServerPlatform.get().inject();
 		} catch (Throwable t) {
 			getLogger().log(Level.SEVERE, "Error when loading, make sure you are using supported server version", t);

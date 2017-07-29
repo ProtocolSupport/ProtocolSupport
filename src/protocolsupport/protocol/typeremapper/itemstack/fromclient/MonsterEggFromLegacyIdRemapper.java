@@ -1,31 +1,31 @@
 package protocolsupport.protocol.typeremapper.itemstack.fromclient;
 
-import org.bukkit.entity.EntityType;
+import org.apache.commons.lang3.StringUtils;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackSpecificRemapper;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import protocolsupport.protocol.typeremapper.legacy.LegacyMonsterEgg;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class MonsterEggFromLegacyIdRemapper implements ItemStackSpecificRemapper {
+
 	@Override
 	public ItemStackWrapper remap(ProtocolVersion version, String locale, ItemStackWrapper itemstack) {
-		int entityId = itemstack.getData(); // In pre-1.9 versions, the data value from the spawn egg is actually the entity ID
-		EntityType type = EntityType.fromId(entityId); // ...so we get the EntityType from the ItemStack data value
-
-		if (type != null) { // Disallow invalid spawn eggs (prevent crashes)
+		String type = LegacyMonsterEgg.fromLegacyId(itemstack.getData());
+		if (!StringUtils.isEmpty(type)) {
 			NBTTagCompoundWrapper tag = itemstack.getTag();
 			if (tag.isNull()) {
 				tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
 				itemstack.setTag(tag);
 			}
 			NBTTagCompoundWrapper nbtEntity = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-			nbtEntity.setString("id", MinecraftData.addNamespacePrefix(type.getName()));
+			nbtEntity.setString("id", type);
 			tag.setCompound("EntityTag", nbtEntity);
-			itemstack.setData(0); // Reset the egg data value to 0
+			itemstack.setData(0);
 		}
 		return itemstack;
 	}
+
 }

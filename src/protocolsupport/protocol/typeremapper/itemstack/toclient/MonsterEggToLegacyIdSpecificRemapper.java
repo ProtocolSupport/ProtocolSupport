@@ -1,28 +1,21 @@
 package protocolsupport.protocol.typeremapper.itemstack.toclient;
 
-import org.bukkit.entity.EntityType;
-
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.itemstack.ItemStackNBTSpecificRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.ItemStackSpecificRemapper;
+import protocolsupport.protocol.typeremapper.legacy.LegacyMonsterEgg;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
-public class MonsterEggToLegacyIdSpecificRemapper extends ItemStackNBTSpecificRemapper {
+public class MonsterEggToLegacyIdSpecificRemapper implements ItemStackSpecificRemapper {
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, String locale, ItemStackWrapper itemstack, NBTTagCompoundWrapper tag) {
-		String entityId = tag.getCompound("EntityTag").getString("id");
-		if (!entityId.isEmpty()) {
-			if (entityId.startsWith("minecraft:")) {
-				entityId = entityId.substring("minecraft:".length());
-			}
-			EntityType type = EntityType.fromName(entityId);
-			if (type != null) {
-				itemstack.setData(type.getTypeId());
-			}
+	public ItemStackWrapper remap(ProtocolVersion version, String locale, ItemStackWrapper itemstack) {
+		NBTTagCompoundWrapper tag = itemstack.getTag();
+		if (tag.isNull()) {
+			return itemstack;
 		}
-		return tag;
+		itemstack.setData(LegacyMonsterEgg.toLegacyId(tag.getCompound("EntityTag").getString("id")));
+		return itemstack;
 	}
 
 }
