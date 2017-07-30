@@ -11,8 +11,6 @@ import gnu.trove.decorator.TIntObjectMapDecorator;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
-import protocolsupport.protocol.typeremapper.id.RemappingRegistry;
-import protocolsupport.protocol.typeremapper.id.RemappingTable.ComplexIdRemappingTable;
 import protocolsupport.protocol.typeremapper.itemstack.fromclient.MonsterEggFromLegacyIdRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.fromclient.PotionFromLegacyIdRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.BookPagesToLegacyTextSpecificRemapper;
@@ -23,6 +21,8 @@ import protocolsupport.protocol.typeremapper.itemstack.toclient.MonsterEggToLega
 import protocolsupport.protocol.typeremapper.itemstack.toclient.MonsterEggToLegacyNameSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.PlayerSkullSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.PotionToLegacyIdSpecificRemapper;
+import protocolsupport.protocol.typeremapper.utils.RemappingRegistry;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.ComplexIdRemappingTable;
 import protocolsupport.protocol.utils.GameProfileSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.authlib.GameProfile;

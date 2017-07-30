@@ -1,12 +1,13 @@
-package protocolsupport.protocol.typeremapper.skipper.id;
+package protocolsupport.protocol.typeremapper.id;
 
-import protocolsupport.protocol.typeremapper.skipper.id.SkippingRegistry.EnumSkippingRegistry;
-import protocolsupport.protocol.typeremapper.skipper.id.SkippingRegistry.GenericSkippingRegistry;
-import protocolsupport.protocol.typeremapper.skipper.id.SkippingRegistry.IntSkippingRegistry;
-import protocolsupport.protocol.typeremapper.skipper.id.SkippingTable.ArrayBasedIntSkippingTable;
-import protocolsupport.protocol.typeremapper.skipper.id.SkippingTable.EnumSkippingTable;
-import protocolsupport.protocol.typeremapper.skipper.id.SkippingTable.GenericSkippingTable;
-import protocolsupport.protocol.typeremapper.skipper.id.SkippingTable.HashMapBasedIntSkippingTable;
+import protocolsupport.protocol.typeremapper.utils.SkippingTable;
+import protocolsupport.protocol.typeremapper.utils.SkippingRegistry.EnumSkippingRegistry;
+import protocolsupport.protocol.typeremapper.utils.SkippingRegistry.GenericSkippingRegistry;
+import protocolsupport.protocol.typeremapper.utils.SkippingRegistry.IntSkippingRegistry;
+import protocolsupport.protocol.typeremapper.utils.SkippingTable.ArrayBasedIntSkippingTable;
+import protocolsupport.protocol.typeremapper.utils.SkippingTable.EnumSkippingTable;
+import protocolsupport.protocol.typeremapper.utils.SkippingTable.GenericSkippingTable;
+import protocolsupport.protocol.typeremapper.utils.SkippingTable.HashMapBasedIntSkippingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Particle;

@@ -1,8 +1,8 @@
 package protocolsupport.protocol.typeremapper.sound;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.id.RemappingRegistry.GenericRemappingRegistry;
-import protocolsupport.protocol.typeremapper.id.RemappingTable.GenericRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.GenericRemappingRegistry;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.GenericRemappingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.minecraftdata.SoundData;
 

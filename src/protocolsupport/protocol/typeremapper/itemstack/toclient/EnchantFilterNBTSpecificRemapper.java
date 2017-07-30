@@ -1,9 +1,9 @@
 package protocolsupport.protocol.typeremapper.itemstack.toclient;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.typeremapper.id.IdSkipper;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackNBTSpecificRemapper;
-import protocolsupport.protocol.typeremapper.skipper.id.IdSkipper;
-import protocolsupport.protocol.typeremapper.skipper.id.SkippingTable.IntSkippingTable;
+import protocolsupport.protocol.typeremapper.utils.SkippingTable.IntSkippingTable;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
