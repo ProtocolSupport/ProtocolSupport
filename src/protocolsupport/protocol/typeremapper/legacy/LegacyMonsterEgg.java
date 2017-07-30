@@ -8,7 +8,7 @@ import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 
 @SuppressWarnings("deprecation")
 public class LegacyMonsterEgg {
-	
+
 	private static final TObjectIntHashMap<String> toLegacyId = new TObjectIntHashMap<>();
 	private static final TIntObjectHashMap<String> fromLegacyId = new TIntObjectHashMap<>();
 	static {

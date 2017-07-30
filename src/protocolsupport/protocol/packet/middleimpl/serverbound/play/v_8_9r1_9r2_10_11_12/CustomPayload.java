@@ -22,7 +22,8 @@ public class CustomPayload extends MiddleCustomPayload {
 	private final ByteBuf newdata = Unpooled.buffer();
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
+	public void readFromClientData(ByteBuf clientdata) {
+		ProtocolVersion version = connection.getVersion();
 		tag = StringSerializer.readString(clientdata, version, 20);
 		if (clientdata.readableBytes() > Short.MAX_VALUE) {
 			throw new DecoderException("Payload may not be larger than 32767 bytes");

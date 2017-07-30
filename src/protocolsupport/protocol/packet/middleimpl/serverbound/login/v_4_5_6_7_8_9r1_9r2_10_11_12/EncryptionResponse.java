@@ -8,7 +8,8 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 public class EncryptionResponse extends MiddleEncryptionResponse {
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
+	public void readFromClientData(ByteBuf clientdata) {
+		ProtocolVersion version = connection.getVersion();
 		sharedSecret = ArraySerializer.readByteArray(clientdata, version, 256);
 		verifyToken = ArraySerializer.readByteArray(clientdata, version, 256);
 	}

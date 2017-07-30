@@ -25,7 +25,7 @@ public class AbstractModernWithoutReorderPacketDecoder extends AbstractPacketDec
 		ServerBoundMiddlePacket packetTransformer = null;
 		try {
 			packetTransformer = registry.getTransformer(ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(ctx.channel()), VarNumberSerializer.readVarInt(input));
-			packetTransformer.readFromClientData(input, connection.getVersion());
+			packetTransformer.readFromClientData(input);
 			if (input.isReadable()) {
 				throw new DecoderException("Did not read all data from packet " + packetTransformer.getClass().getName() + ", bytes left: " + input.readableBytes());
 			}
