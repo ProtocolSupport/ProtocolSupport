@@ -18,7 +18,8 @@ public class CustomPayload extends MiddleCustomPayload {
 	private final ByteBuf newdata = Unpooled.buffer();
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID, version);
 		StringSerializer.writeString(serializer, version, tag);
 		if (tag.equals("MC|TrList")) {

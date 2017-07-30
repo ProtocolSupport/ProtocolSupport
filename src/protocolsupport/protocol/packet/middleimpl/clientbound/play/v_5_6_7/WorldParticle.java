@@ -16,7 +16,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class WorldParticle extends MiddleWorldParticle {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_PARTICLES_ID, version);
 		Particle particle = Particle.getById(type);
 		String name = particle.getName();

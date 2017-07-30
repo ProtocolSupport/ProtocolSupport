@@ -12,7 +12,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class EntityEffectRemove extends MiddleEntityEffectRemove {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		if (IdSkipper.EFFECT.getTable(version).shouldSkip(effectId)) {
 			return RecyclableEmptyList.get();
 		}

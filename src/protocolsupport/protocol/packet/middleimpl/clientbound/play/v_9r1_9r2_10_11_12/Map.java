@@ -14,7 +14,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class Map extends MiddleMap {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_MAP_ID, version);
 		VarNumberSerializer.writeVarInt(serializer, itemData);
 		serializer.writeByte(scale);

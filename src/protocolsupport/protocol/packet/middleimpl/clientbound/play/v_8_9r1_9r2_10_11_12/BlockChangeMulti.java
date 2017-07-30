@@ -14,7 +14,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class BlockChangeMulti extends MiddleBlockChangeMulti {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		ArrayBasedIdRemappingTable remapper = IdRemapper.BLOCK.getTable(version);
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BLOCK_CHANGE_MULTI_ID, version);
 		serializer.writeInt(chunkX);

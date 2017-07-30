@@ -20,7 +20,8 @@ public class Chunk extends MiddleChunk {
 	private final ChunkTransformer transformer = ChunkTransformer.create(BlockFormat.VARIES);
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID, version);
 		chunkdata.writeInt(chunkX);

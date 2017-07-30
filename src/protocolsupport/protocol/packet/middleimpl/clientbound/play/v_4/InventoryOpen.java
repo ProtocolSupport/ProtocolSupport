@@ -15,7 +15,8 @@ import protocolsupport.zplatform.ServerPlatform;
 public class InventoryOpen extends MiddleInventoryOpen {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		if (IdSkipper.INVENTORY.getTable(version).shouldSkip(type)) {
 			cache.closeWindow();
 			connection.receivePacket(ServerPlatform.get().getPacketFactory().createInboundInventoryClosePacket());

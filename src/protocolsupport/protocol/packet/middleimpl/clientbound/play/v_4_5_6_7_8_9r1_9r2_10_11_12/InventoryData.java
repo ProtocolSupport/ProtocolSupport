@@ -14,7 +14,8 @@ public class InventoryData extends MiddleInventoryData {
 	private final int[] enchTypeVal = new int[10];
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		if ((version == ProtocolVersion.MINECRAFT_1_8) && (cache.getOpenedWindow() == WindowType.ENCHANT)) {
 			enchTypeVal[type] = value;
 			if ((type >= 7) && (type <= 9)) {

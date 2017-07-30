@@ -12,8 +12,9 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class WorldParticle extends MiddleWorldParticle {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && (type > 41)) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
+		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && (type > 41)) {//TODO: particle skipping table
 			return RecyclableEmptyList.get();
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_PARTICLES_ID, version);

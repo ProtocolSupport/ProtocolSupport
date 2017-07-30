@@ -12,7 +12,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class BlockOpenSignEditor extends MiddleBlockOpenSignEditor {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		if (version == ProtocolVersion.MINECRAFT_1_6_1) {
 			return RecyclableEmptyList.get();
 		}
