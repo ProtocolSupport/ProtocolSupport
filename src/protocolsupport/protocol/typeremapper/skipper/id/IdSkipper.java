@@ -9,6 +9,7 @@ import protocolsupport.protocol.typeremapper.skipper.id.SkippingTable.GenericSki
 import protocolsupport.protocol.typeremapper.skipper.id.SkippingTable.HashMapBasedIntSkippingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
+import protocolsupport.protocol.utils.types.Particle;
 import protocolsupport.protocol.utils.types.WindowType;
 
 public class IdSkipper {
@@ -83,6 +84,16 @@ public class IdSkipper {
 		@Override
 		protected EnumSkippingTable<WindowType> createTable() {
 			return new EnumSkippingTable<>(WindowType.class);
+		}
+	};
+
+	public static final EnumSkippingRegistry<Particle, EnumSkippingTable<Particle>> PARTICLE = new EnumSkippingRegistry<Particle, SkippingTable.EnumSkippingTable<Particle>>() {
+		{
+			
+		}
+		@Override
+		protected EnumSkippingTable<Particle> createTable() {
+			return new EnumSkippingTable<>(Particle.class);
 		}
 	};
 
