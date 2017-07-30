@@ -90,7 +90,13 @@ public class IdSkipper {
 
 	public static final EnumSkippingRegistry<Particle, EnumSkippingTable<Particle>> PARTICLE = new EnumSkippingRegistry<Particle, SkippingTable.EnumSkippingTable<Particle>>() {
 		{
-			
+			registerSkipEntry(Particle.TOTEM, ProtocolVersionsHelper.BEFORE_1_11);
+			registerSkipEntry(Particle.SPIT, ProtocolVersionsHelper.BEFORE_1_11);
+			registerSkipEntry(Particle.FALLING_DUST, ProtocolVersionsHelper.BEFORE_1_10);
+			registerSkipEntry(Particle.DRAGON_BREATH, ProtocolVersionsHelper.BEFORE_1_9);
+			registerSkipEntry(Particle.END_ROD, ProtocolVersionsHelper.BEFORE_1_9);
+			registerSkipEntry(Particle.DAMAGE_INDICATOR, ProtocolVersionsHelper.BEFORE_1_9);
+			registerSkipEntry(Particle.SWEEP_ATTACK, ProtocolVersionsHelper.BEFORE_1_9);
 		}
 		@Override
 		protected EnumSkippingTable<Particle> createTable() {
