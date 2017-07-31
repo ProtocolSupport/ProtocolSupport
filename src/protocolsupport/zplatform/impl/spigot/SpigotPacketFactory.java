@@ -166,8 +166,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	public Object createEntityStatusPacket(org.bukkit.entity.Entity entity, int status) {
 		return new PacketPlayOutEntityStatus(((CraftEntity) entity).getHandle(), (byte) status);
 	}
-
-
+	
 	@Override
 	public int getOutLoginDisconnectPacketId() {
 		return getOutId(PacketLoginOutDisconnect.class);

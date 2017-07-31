@@ -48,6 +48,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnPos
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.TimeUpdate;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Title;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.UnloadChunk;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.VehicleMove;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldCustomSound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldEvent;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldParticle;
@@ -90,6 +91,7 @@ public class PEPacketEncoder extends AbstractLegacyPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_REL_MOVE_ID, EntityRelMove.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_REL_MOVE_LOOK_ID, EntityRelMoveLook.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_HEAD_ROTATION_ID, EntityHeadRotation.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_VEHICLE_MOVE_ID, VehicleMove.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_DESTROY_ID, EntityDestroy.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_PLAYER_INFO_ID, PlayerInfo.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_NAMED_ID, SpawnNamed.class);

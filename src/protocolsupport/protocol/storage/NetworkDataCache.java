@@ -139,6 +139,10 @@ public class NetworkDataCache {
 			addWatchedEntity(player);
 		}
 	}
+	
+	public TIntObjectHashMap<NetworkEntity> getWatchedEntities() {
+		return watchedEntities;
+	}
 
 	public NetworkEntity getWatchedEntity(int entityId) {
 		return watchedEntities.get(entityId);
