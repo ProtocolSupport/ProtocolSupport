@@ -1,5 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
+import org.bukkit.util.Vector;
+
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityTeleport;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -41,6 +43,11 @@ public class EntityTeleport extends MiddleEntityTeleport {
 			serializer.writeBoolean(teleported);
 			return serializer;
 		}
+	}
+	
+	public static ClientBoundPacketData create(NetworkEntity entity, ProtocolVersion version) {
+		Vector pos = entity.getPosition();
+		return create(entity, pos.getX(), pos.getY(), pos.getZ(), entity.getPitch(), entity.getHeadYaw(), entity.getYaw(), entity.getOnGround(), false, version);
 	}
 
 }

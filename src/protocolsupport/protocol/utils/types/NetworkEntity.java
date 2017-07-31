@@ -56,7 +56,9 @@ public class NetworkEntity {
 		return data;
 	}
 
+	//Movement
 	private Vector position;
+	private Vector velocity = new Vector(0, 0, 0);
 	private Byte headYaw;
 	private Byte yaw;
 	private Byte pitch;
@@ -67,13 +69,33 @@ public class NetworkEntity {
 		position = updateWith;
 	}
 	
+	public void updatePosition(Position updateWith) {
+		position = new Vector(updateWith.getX(), updateWith.getY(), updateWith.getZ());
+	}
+	
 	public void updateRelPosition(int relX, int relY, int relZ) {
 		//X and Y are known. Relative is send (a * 32 - x * 32) * 128 = y                   y / 128 = a32 - x32         (y/128) + x32 = a 32               ((y / 128) + 32x) / 32 = a
 		position = new Vector(((relX / 128) + (position.getX() * 32)) / 32, ((relY / 128) + (position.getY() * 32)) / 32, ((relZ / 128) + (position.getZ() * 32)) / 32);
 	}
 	
+	public void addPosition(Vector toAdd) {
+		position.add(toAdd);
+	}
+	
 	public Vector getPosition() {
 		return position;
+	}
+	
+	public void updateVelocity(Vector updateWith) {
+		velocity = updateWith;
+	}
+	
+	public Vector getVelocity() {
+		return velocity;
+	}
+	
+	public boolean hasVelocity() {
+		return velocity.getX() < 0.01 && velocity.getY() < 0.01 && velocity.getZ() < 0.01;
 	}
 	
 	public void updateRotation(byte updateYaw, byte updatePitch) {
@@ -106,11 +128,7 @@ public class NetworkEntity {
 		return onGround;
 	}
 	
-	@Override
-	public String toString() {
-		return Utils.toStringAllFields(this);
-	}
-
+	//DataCache
 	public static class DataCache {
 		public boolean firstMeta = true;
 		public byte baseMetaFlags;
@@ -118,6 +136,11 @@ public class NetworkEntity {
 		public String toString() {
 			return Utils.toStringAllFields(this);
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return Utils.toStringAllFields(this);
 	}
 
 }

@@ -30,7 +30,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
 	static {
 		ProtocolSupport.logInfo("Assume 1.5.2 ping delay: "+ping152delay);
-		ProtocolSupport.logInfo("Assume legacy ping dealy: "+pingLegacyDelay);
+		ProtocolSupport.logInfo("Assume legacy ping delay: "+pingLegacyDelay);
 	}
 
 	private static final IPipeLineBuilder futureVersionsBuilder = new protocolsupport.protocol.pipeline.version.v_future.PipeLineBuilder();
@@ -156,12 +156,18 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		if (ServerPlatform.get().getMiscUtils().isDebugging()) {
 			ProtocolSupport.logInfo(MessageFormat.format("{0} connected with protocol version {1}", connection.getAddress(), version));
 		}
-		connection.setVersion(version);
 		channel.pipeline().remove(ChannelHandlers.INITIAL_DECODER);
 		if (ProtocolSupportAPI.isProtocolVersionEnabled(version)) {
+			connection.setVersion(version);
 			pipelineBuilders.get(version).buildPipeLine(channel, connection);
 		} else {
-			(version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4) ? legacyVersionsBulder : futureVersionsBuilder).buildPipeLine(channel, connection);
+			if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4)) {
+				connection.setVersion(ProtocolVersion.MINECRAFT_LEGACY);
+				legacyVersionsBulder.buildPipeLine(channel, connection);
+			} else {
+				connection.setVersion(ProtocolVersion.MINECRAFT_FUTURE);
+				futureVersionsBuilder.buildPipeLine(channel, connection);
+			}
 		}
 		receivedData.readerIndex(0);
 		channel.pipeline().firstContext().fireChannelRead(receivedData);

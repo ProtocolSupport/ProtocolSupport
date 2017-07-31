@@ -13,5 +13,10 @@ public abstract class MiddleSpawnPosition extends ClientBoundMiddlePacket {
 	public void readFromServerData(ByteBuf serverdata) {
 		position = PositionSerializer.readPosition(serverdata);
 	}
+	
+	@Override
+	public void handle() {
+		cache.getWatchedSelf().updatePosition(position);
+	}
 
 }

@@ -13,6 +13,7 @@ public class EntityVelocity extends MiddleEntityVelocity {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+		System.out.println(entityId + " Moved: " + motX + " " + motY + " " + motZ);
 		return RecyclableSingletonList.create(create(version, entityId, motX, motY, motZ));
 	}
 

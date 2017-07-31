@@ -13,7 +13,7 @@ public class GlowStoneHandshakeStartPacketHandler implements MessageHandler<Glow
 	@Override
 	public void handle(GlowSession session, HandshakeMessage msg) {
 		AbstractHandshakeListener listener = (AbstractHandshakeListener) GlowStoneNetworkManagerWrapper.getPacketListener(session);
-		listener.handleSetProtocol(msg.getVersion(), NetworkState.byNetworkId(msg.getState()), msg.getAddress(), msg.getPort());
+		listener.handleSetProtocol(NetworkState.byNetworkId(msg.getState()), msg.getAddress(), msg.getPort());
 	}
 
 }
