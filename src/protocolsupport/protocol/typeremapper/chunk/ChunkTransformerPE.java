@@ -56,7 +56,7 @@ public class ChunkTransformerPE extends ChunkTransformer {
 			}
 		}
 		stream.write(new byte[512], 0, 512); //heightmap
-		stream.write(new byte[256], 0, 256); //biomes TODO: write them
+		stream.write(biomeData, 0 , 256);
 		return stream.toByteArray();
 	}
 

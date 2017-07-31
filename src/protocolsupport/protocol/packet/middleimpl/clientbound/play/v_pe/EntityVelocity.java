@@ -15,7 +15,7 @@ public class EntityVelocity extends MiddleEntityVelocity {
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		return RecyclableSingletonList.create(create(version, entityId, motX, motY, motZ));
 	}
-	
+
 	public static ClientBoundPacketData create(ProtocolVersion version, int entityId, float motX, float motY, float motZ) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_VELOCITY, version);
 		VarNumberSerializer.writeVarLong(serializer, entityId);

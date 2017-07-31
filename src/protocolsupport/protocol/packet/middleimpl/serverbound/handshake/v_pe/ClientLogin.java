@@ -56,7 +56,7 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 		);
 		for (String c : map.get("chain")) {
 			JsonObject chainMap = decodeToken(c);
-			if (chainMap != null && chainMap.has("extraData")) {
+			if ((chainMap != null) && chainMap.has("extraData")) {
 				JsonObject extra = chainMap.get("extraData").getAsJsonObject();
 				if (extra.has("displayName")) {
 					username = extra.get("displayName").getAsString();

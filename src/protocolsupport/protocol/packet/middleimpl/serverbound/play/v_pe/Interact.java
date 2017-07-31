@@ -35,7 +35,7 @@ public class Interact extends ServerBoundMiddlePacket {
 		NetworkEntity target = cache.getWatchedEntity(targetId);
 		switch (peAction) {
 			case INTERACT: {
-				if (target != null && target.getType() != NetworkEntityType.ARMOR_STAND) {
+				if ((target != null) && (target.getType() != NetworkEntityType.ARMOR_STAND)) {
 					packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT_AT, new Vector(), 0));
 				} else {
 					packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT, null, 0));

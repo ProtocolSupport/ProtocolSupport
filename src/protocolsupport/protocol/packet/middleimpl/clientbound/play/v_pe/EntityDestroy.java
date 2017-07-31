@@ -14,11 +14,15 @@ public class EntityDestroy extends MiddleEntityDestroy {
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		for (int entityId : entityIds) {
-			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_DESTROY, version);
-			VarNumberSerializer.writeSVarLong(serializer, entityId);
-			packets.add(serializer);
+			packets.add(create(version, entityId));
 		}
 		return packets;
+	}
+	
+	public static ClientBoundPacketData create(ProtocolVersion version, int entityId) {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_DESTROY, version);
+		VarNumberSerializer.writeSVarLong(serializer, entityId);
+		return serializer;
 	}
 
 }

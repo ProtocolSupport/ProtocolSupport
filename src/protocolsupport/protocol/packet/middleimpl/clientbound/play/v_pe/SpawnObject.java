@@ -9,13 +9,14 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 public class SpawnObject extends MiddleSpawnObject {
-	
+
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
 		switch(entity.getType()) {
@@ -31,28 +32,29 @@ public class SpawnObject extends MiddleSpawnObject {
 			default: {
 				return RecyclableSingletonList.create(SpawnLiving.create(
 						version,
-						entity.getId(), 
+						entity.getId(),
 						x, y, z,
-						motX / 8.000F, motY / 8000.F, motZ / 8000.F, 
+						motX / 8.000F, motY / 8000.F, motZ / 8000.F,
 						pitch, yaw,
-						null, 
+						null,
 						PEDataValues.getObjectEntityTypeId(IdRemapper.ENTITY.getTable(version).getRemap(entity.getType()))
 					));
 			}
 		}
 	}
-	
+
 	public class PreparedItem {
-		
-		private int entityId;
-		private double x; 
-		private double y;
-		private double z;
-		private float motX;
-		private float motY;
-		private float motZ;
+
+		private final int entityId;
+		private final double x;
+		private final double y;
+		private final double z;
+		private final float motX;
+		private final float motY;
+		private final float motZ;
 		private ItemStackWrapper itemstack;
-		
+		private boolean spawned = false;
+
 		PreparedItem(int entityId, double x, double y, double z, float motX, float motY, float motZ) {
 			this.entityId = entityId;
 			this.x = x;
@@ -62,28 +64,36 @@ public class SpawnObject extends MiddleSpawnObject {
 			this.motY = motY;
 			this.motZ = motZ;
 		}
-		
+
 		public int getId() {
 			return entityId;
 		}
 		
-		public void setItemStack(ItemStackWrapper itemstack) {
-			this.itemstack = itemstack;
-		}
-		
-		public ClientBoundPacketData getSpawnPacket(ProtocolVersion version) {
-			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ADD_ITEM_ENTITY, version);
-			VarNumberSerializer.writeSVarLong(serializer, entityId);
-			VarNumberSerializer.writeVarLong(serializer, entityId);
-			ItemStackSerializer.writePeSlot(serializer, version, itemstack);
-			MiscSerializer.writeLFloat(serializer, (float) x);
-			MiscSerializer.writeLFloat(serializer, (float) y);
-			MiscSerializer.writeLFloat(serializer, (float) z);
-			MiscSerializer.writeLFloat(serializer, motX); 
-			MiscSerializer.writeLFloat(serializer, motY);
-			MiscSerializer.writeLFloat(serializer, motZ);
-			VarNumberSerializer.writeVarInt(serializer, 0);
-			return serializer;
+		public RecyclableArrayList<ClientBoundPacketData> updateItem(ProtocolVersion version, ItemStackWrapper itemstack) {
+			RecyclableArrayList<ClientBoundPacketData> updatepackets = RecyclableArrayList.create();
+			if (!this.itemstack.equals(itemstack)) {
+				if (spawned) {
+					updatepackets.add(EntityDestroy.create(version, entityId));
+					spawned = false;
+				}
+				this.itemstack = itemstack;
+			}
+			if (!spawned) {
+				ClientBoundPacketData spawn = ClientBoundPacketData.create(PEPacketIDs.ADD_ITEM_ENTITY, version);
+				VarNumberSerializer.writeSVarLong(spawn, entityId);
+				VarNumberSerializer.writeVarLong(spawn, entityId);
+				ItemStackSerializer.writeItemStack(spawn, version, cache.getLocale(), itemstack, false);
+				MiscSerializer.writeLFloat(spawn, (float) x);
+				MiscSerializer.writeLFloat(spawn, (float) y);
+				MiscSerializer.writeLFloat(spawn, (float) z);
+				MiscSerializer.writeLFloat(spawn, motX);
+				MiscSerializer.writeLFloat(spawn, motY);
+				MiscSerializer.writeLFloat(spawn, motZ);
+				VarNumberSerializer.writeVarInt(spawn, 0);
+				updatepackets.add(spawn);
+				spawned = true;
+			}
+			return updatepackets;
 		}
 		
 	}
