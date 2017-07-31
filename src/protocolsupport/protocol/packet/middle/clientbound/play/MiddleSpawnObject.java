@@ -43,6 +43,7 @@ public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 	@Override
 	public void handle() {
 		cache.addWatchedEntity(entity, new Vector(x, y, z), (byte) yaw, (byte) pitch);
+		cache.updateWatchedVelocity(entity.getId(), new Vector(motX, motY, motZ));
 	}
 
 }

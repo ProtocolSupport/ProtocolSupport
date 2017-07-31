@@ -116,6 +116,11 @@ public class NetworkDataCache {
 		watchedEntities.get(entityId).updateOnGround(onGround);
 	}
 	
+	public void updateWatchedVelocity(int entityId, Vector velocity) {
+		if(watchedEntities.containsKey(entityId))
+		watchedEntities.get(entityId).updateVelocity(velocity);
+	}
+	
 	public boolean isSelf(int entityId) {
 		return (this.getSelfPlayerEntityId() == entityId);
 	}

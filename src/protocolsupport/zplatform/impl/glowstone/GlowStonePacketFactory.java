@@ -278,6 +278,11 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 	public Object createEntityStatusPacket(Entity entity, int status) {
 		return new EntityStatusMessage(entity.getEntityId(), status);
 	}
+	
+	@Override
+	public Object createRelEntityMove(int entityId, int relX, int relY, int relZ, boolean onGround) {
+		return new RelativeEntityPositionMessage(entityId, (short) relX, (short) relY, (short) relZ, onGround);
+	}
 
 
 	@Override

@@ -95,7 +95,7 @@ public class NetworkEntity {
 	}
 	
 	public boolean hasVelocity() {
-		return velocity.getX() < 0.01 && velocity.getY() < 0.01 && velocity.getZ() < 0.01;
+		return velocity.getX() > 0.01 && velocity.getY() > 0.01 && velocity.getZ() > 0.01;
 	}
 	
 	public void updateRotation(byte updateYaw, byte updatePitch) {

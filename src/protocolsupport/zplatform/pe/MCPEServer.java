@@ -71,8 +71,7 @@ public class MCPEServer {
 					NetworkDataCache cache = new NetworkDataCache();
 					channel.pipeline().replace("rns-timeout", SpigotChannelHandlers.READ_TIMEOUT, new SimpleReadTimeoutHandler(30));
 					channel.pipeline().addLast(new PECompressor());
-					PEPacketEncoder peEncoder = new PEPacketEncoder(connection, cache);
-					channel.pipeline().addLast(peEncoder);
+					channel.pipeline().addLast(new PEPacketEncoder(connection, cache));
 					channel.pipeline().addLast(new PEDecompressor());
 					channel.pipeline().addLast(new PEPacketDecoder(connection, cache));
 					channel.pipeline().addLast(SpigotChannelHandlers.ENCODER, new SpigotPacketEncoder());
@@ -80,7 +79,6 @@ public class MCPEServer {
 					channel.pipeline().addLast(ChannelHandlers.LOGIC, new LogicHandler(connection));
 					channel.pipeline().addLast(SpigotChannelHandlers.NETWORK_MANAGER, networkmanager);
 					networkmanagerlist.add(networkmanager);
-					//peEncoder.customEndode?
 					new PeMovement(protocolSupport, connection, cache).start();
 				}
 			}, 0xFE);

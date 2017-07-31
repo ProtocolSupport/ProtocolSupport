@@ -168,6 +168,11 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 	
 	@Override
+	public Object createRelEntityMove(int entityId, int relX, int relY, int relZ, boolean onGround) {
+		return new PacketPlayOutRelEntityMove(entityId, relX, relY, relZ, onGround);
+	}
+	
+	@Override
 	public int getOutLoginDisconnectPacketId() {
 		return getOutId(PacketLoginOutDisconnect.class);
 	}

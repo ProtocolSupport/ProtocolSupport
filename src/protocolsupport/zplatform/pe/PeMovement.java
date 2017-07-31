@@ -1,12 +1,13 @@
 package protocolsupport.zplatform.pe;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 
 import gnu.trove.procedure.TObjectProcedure;
 import protocolsupport.api.Connection;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityTeleport;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.zplatform.ServerPlatform;
 
 public class PeMovement implements Runnable {
 
@@ -23,9 +24,12 @@ public class PeMovement implements Runnable {
 	
 	@Override
 	public void run() {
-		//Runs every tick.
+		//Runs every tick, stop when we cannot execute our functions anymore.
 		if(connection != null && cache != null) {
-			cache.getWatchedEntities().forEachValue(updateVelocity);
+			if(cache.getSelfPlayerEntityId() != -1) {
+				System.out.println("Sending Faux Movement");
+				cache.getWatchedEntities().forEachValue(updateVelocity);
+			}
 		} else {
 			stop();
 		}
@@ -35,20 +39,18 @@ public class PeMovement implements Runnable {
 		@Override
 		public boolean execute(NetworkEntity entity) {
 			if(entity != null && entity.hasVelocity()) {
-				entity.addPosition(entity.getVelocity().multiply(1/8000));
-				sendMovementUpdate(entity);
+				updateMovement(entity, entity.getVelocity().multiply(1/8000));
 			}
 			return true;
 		}
 	};
 	
-	public void sendMovementUpdate(NetworkEntity entity) {
-		connection.
-		connection.sendPacket(EntityTeleport.create(entity, connection.getVersion()));
+	public void updateMovement(NetworkEntity entity, Vector relPos) {
+		connection.sendPacket(ServerPlatform.get().getPacketFactory().createRelEntityMove(entity.getId(), (int) relPos.getX(), (int) relPos.getY(), (int) relPos.getZ(), entity.getOnGround()));
 	}
 	
 	public void start() {
-		taskId = protocolSupport.getServer().getScheduler().scheduleSyncRepeatingTask(protocolSupport, this, 0, 1);
+		taskId = protocolSupport.getServer().getScheduler().scheduleSyncRepeatingTask(protocolSupport, this, 0, 1)/*.getTaskId()*/;
 	}
 	
 	public void stop() {
