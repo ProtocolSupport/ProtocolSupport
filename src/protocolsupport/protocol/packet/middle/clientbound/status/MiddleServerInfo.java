@@ -4,14 +4,15 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupport.protocol.utils.pingresponse.PingResponse;
 
 public abstract class MiddleServerInfo extends ClientBoundMiddlePacket {
 
-	protected String pingJson;
+	protected PingResponse ping;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		pingJson = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
+		ping = PingResponse.fromJson(StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC));
 	}
 
 }

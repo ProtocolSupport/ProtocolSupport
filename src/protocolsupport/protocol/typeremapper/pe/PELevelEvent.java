@@ -4,6 +4,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.utils.types.Position;
 
 public class PELevelEvent {
 
@@ -69,6 +70,9 @@ public class PELevelEvent {
 	public static final int SOUND_CAULDRON_FILL_POTION = 3504;
 	public static final int SOUND_CAULDRON_FILL_WATER = 3506;
 
+	public static final int BLOCK_START_BREAK = 3600;
+	public static final int BLOCK_STOP_BREAK = 3601;
+	
 	public static final int SET_DATA = 4000;
 
 	public static final int PLAYERS_SLEEPING = 9800;
@@ -124,6 +128,14 @@ public class PELevelEvent {
 		MiscSerializer.writeLFloat(clientLevelEvent, z);
 		VarNumberSerializer.writeSVarInt(clientLevelEvent, data);
 		return clientLevelEvent;
+	}
+	
+	public static ClientBoundPacketData createPacket(int levelEvent, Position position, int data) {
+		return createPacket(levelEvent, position.getX(), position.getY(), position.getZ(), data);
+	}
+	
+	public static ClientBoundPacketData createPacket(int levelEvent, Position position) {
+		return createPacket(levelEvent, position, 0);
 	}
 
 	public static ClientBoundPacketData createPacket(int levelEvent, int data) {

@@ -1,6 +1,7 @@
 package protocolsupport.protocol.typeremapper.itemstack.clientbound;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.TranslationAPI;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackSpecificRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyPotion;
 import protocolsupport.protocol.utils.minecraftdata.PotionData;
@@ -30,7 +31,7 @@ public class PotionToLegacyIdSpecificRemapper implements ItemStackSpecificRemapp
 			itemstack.setData(LegacyPotion.toLegacyId(potion, isThrowablePotion));
 			String basicTypeName = LegacyPotion.getBasicTypeName(potion);
 			if (basicTypeName != null) {
-				itemstack.setDisplayName(basicTypeName);
+				itemstack.setDisplayName(TranslationAPI.translate(locale, basicTypeName));
 			}
 		}
 		return itemstack;

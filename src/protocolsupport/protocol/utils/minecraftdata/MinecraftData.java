@@ -41,16 +41,4 @@ public class MinecraftData {
 		return blockstate & 0xF;
 	}
 
-	public static int getItemStateFromIdAndData(int id, int data) {
-		return (id << 16) | data;
-	}
-
-	public static int getItemIdFromState(int itemstate) {
-		return itemstate >>> 16;
-	}
-
-	public static int getItemDataFromState(int itemstate) {
-		return itemstate & 0xFFFF;
-	}
-
 }

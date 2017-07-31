@@ -10,7 +10,7 @@ import protocolsupport.utils.Utils;
 
 public abstract class RemappingRegistry<T extends RemappingTable> {
 
-	private final EnumMap<ProtocolVersion, T> remappings = new EnumMap<>(ProtocolVersion.class);
+	protected final EnumMap<ProtocolVersion, T> remappings = new EnumMap<>(ProtocolVersion.class);
 
 	public T getTable(ProtocolVersion version) {
 		return Utils.getFromMapOrCreateDefault(remappings, version, createTable());
