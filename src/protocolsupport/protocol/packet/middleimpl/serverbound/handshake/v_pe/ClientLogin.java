@@ -45,8 +45,7 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
-		/*clientdata.skipBytes(Integer.BYTES); // TODO: validate protocol
-		clientdata.skipBytes(Byte.BYTES); // skip pe type
+		clientdata.skipBytes(Integer.BYTES); // TODO: validate protocol
 		ByteBuf logindata = Unpooled.wrappedBuffer(ArraySerializer.readByteArray(clientdata, version));
 		//decode chain
 		@SuppressWarnings("serial")
@@ -65,10 +64,6 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 		}
 		//skip skin data  ---- Skip the rest xD
 		logindata.skipBytes(logindata.readIntLE());
-		//logindata.skipBytes(logindata.readableBytes());*/
-		
-		username = "MEEP!";
-		clientdata.readBytes(clientdata.readableBytes());
 	}
 
 	private JsonObject decodeToken(String token) {
