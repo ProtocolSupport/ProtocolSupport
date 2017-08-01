@@ -10,8 +10,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class LoginSuccess extends MiddleLoginSuccess {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		return RecyclableSingletonList.create(createPlayStatus(version, 0));
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		return RecyclableSingletonList.create(createPlayStatus(connection.getVersion(), 0));
 	}
 
 	public static ClientBoundPacketData createPlayStatus(ProtocolVersion version, int status) {

@@ -48,7 +48,9 @@ public enum Particle {
 	END_ROD("endRod"),
 	DAMAGE_INDICATOR("damageIndicator"),
 	SWEEP_ATTACK("sweepAttack"),
-	FALLING_DUST("fallingdust");
+	FALLING_DUST("fallingdust"),
+    TOTEM("totem"),
+    SPIT("spit");
 
 	private final String id;
 

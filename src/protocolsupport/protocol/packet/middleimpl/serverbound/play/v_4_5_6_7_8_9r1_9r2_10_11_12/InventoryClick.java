@@ -9,9 +9,10 @@ import protocolsupport.protocol.utils.types.WindowType;
 public class InventoryClick extends MiddleInventoryClick {
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
+	public void readFromClientData(ByteBuf clientdata) {
 		windowId = clientdata.readUnsignedByte();
 		slot = clientdata.readShort();
+		ProtocolVersion version = connection.getVersion();
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && (cache.getOpenedWindow() == WindowType.BREWING)) {
 			if (slot > 3) {
 				slot++;
@@ -24,7 +25,7 @@ public class InventoryClick extends MiddleInventoryClick {
 		button = clientdata.readUnsignedByte();
 		actionNumber = clientdata.readShort();
 		mode = clientdata.readUnsignedByte();
-		itemstack = ItemStackSerializer.readItemStack(clientdata, version, cache.getLocale());
+		itemstack = ItemStackSerializer.readItemStack(clientdata, version, cache.getLocale(), true);
 	}
 
 }

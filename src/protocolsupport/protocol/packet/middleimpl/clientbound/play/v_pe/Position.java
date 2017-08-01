@@ -14,7 +14,8 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 public class Position extends MiddlePosition {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		int chunkX = NumberConversions.floor(x) >> 4;
 		int chunkZ = NumberConversions.floor(z) >> 4;

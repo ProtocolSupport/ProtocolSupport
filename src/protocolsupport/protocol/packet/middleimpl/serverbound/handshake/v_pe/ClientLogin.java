@@ -44,9 +44,9 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 	}
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
+	public void readFromClientData(ByteBuf clientdata) {
 		clientdata.skipBytes(Integer.BYTES); // TODO: validate protocol
-		ByteBuf logindata = Unpooled.wrappedBuffer(ArraySerializer.readByteArray(clientdata, version));
+		ByteBuf logindata = Unpooled.wrappedBuffer(ArraySerializer.readByteArray(clientdata, connection.getVersion()));
 		//decode chain
 		@SuppressWarnings("serial")
 		Map<String, List<String>> map = Utils.GSON.fromJson(

@@ -15,7 +15,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class SpawnNamed extends MiddleSpawnNamed {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_NAMED_ID, version);
 		VarNumberSerializer.writeVarInt(serializer, entity.getId());
 		StringSerializer.writeString(serializer, version, version == ProtocolVersion.MINECRAFT_1_7_10 ? entity.getUUID().toString() : entity.getUUID().toString().replace("-", ""));

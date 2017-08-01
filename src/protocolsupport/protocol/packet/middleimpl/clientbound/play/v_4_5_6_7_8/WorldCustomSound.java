@@ -11,7 +11,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class WorldCustomSound extends MiddleWorldCustomSound {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_CUSTOM_SOUND_ID, version);
 		StringSerializer.writeString(serializer, version, id);
 		serializer.writeInt(x);

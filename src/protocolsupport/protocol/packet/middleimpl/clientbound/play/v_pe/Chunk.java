@@ -21,7 +21,8 @@ public class Chunk extends MiddleChunk {
 	private final ChunkTransformer transformer = ChunkTransformer.create(BlockFormat.PE);
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		cache.markSentChunk(chunkX, chunkZ);
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHUNK_DATA, version);
 		VarNumberSerializer.writeSVarInt(serializer, chunkX);

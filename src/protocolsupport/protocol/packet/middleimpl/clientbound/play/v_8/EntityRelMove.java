@@ -13,7 +13,8 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 public class EntityRelMove extends MiddleEntityRelMove {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		int relMoveX = relX / 128;
 		int relMoveY = relY / 128;
 		int relMoveZ = relZ / 128;

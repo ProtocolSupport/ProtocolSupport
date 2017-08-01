@@ -15,7 +15,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class EntityMetadata extends MiddleEntityMetadata {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		TIntObjectMap<DataWatcherObject<?>> remapped = WatchedDataRemapper.transform(cache.getWatchedEntity(entityId), metadata, version);
 		if (remapped.isEmpty()) {
 			return RecyclableEmptyList.get();

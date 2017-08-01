@@ -16,7 +16,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class SpawnLiving extends MiddleSpawnLiving {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		return RecyclableSingletonList.create(create(
 			version,
 			entity.getId(), x, y, z,

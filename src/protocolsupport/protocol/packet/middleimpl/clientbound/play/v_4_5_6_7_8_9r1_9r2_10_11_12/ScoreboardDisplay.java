@@ -11,7 +11,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class ScoreboardDisplay extends MiddleScoreboardDisplay {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SCOREBOARD_DISPLAY_SLOT_ID, version);
 		serializer.writeByte(position);
 		StringSerializer.writeString(serializer, version, name);

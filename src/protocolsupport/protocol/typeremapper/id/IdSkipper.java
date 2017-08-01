@@ -1,15 +1,16 @@
-package protocolsupport.protocol.typeremapper.skipper.id;
+package protocolsupport.protocol.typeremapper.id;
 
-import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.skipper.id.SkippingRegistry.EnumSkippingRegistry;
-import protocolsupport.protocol.typeremapper.skipper.id.SkippingRegistry.GenericSkippingRegistry;
-import protocolsupport.protocol.typeremapper.skipper.id.SkippingRegistry.IntSkippingRegistry;
-import protocolsupport.protocol.typeremapper.skipper.id.SkippingTable.ArrayBasedIntSkippingTable;
-import protocolsupport.protocol.typeremapper.skipper.id.SkippingTable.EnumSkippingTable;
-import protocolsupport.protocol.typeremapper.skipper.id.SkippingTable.GenericSkippingTable;
-import protocolsupport.protocol.typeremapper.skipper.id.SkippingTable.HashMapBasedIntSkippingTable;
+import protocolsupport.protocol.typeremapper.utils.SkippingRegistry.EnumSkippingRegistry;
+import protocolsupport.protocol.typeremapper.utils.SkippingRegistry.GenericSkippingRegistry;
+import protocolsupport.protocol.typeremapper.utils.SkippingRegistry.IntSkippingRegistry;
+import protocolsupport.protocol.typeremapper.utils.SkippingTable;
+import protocolsupport.protocol.typeremapper.utils.SkippingTable.ArrayBasedIntSkippingTable;
+import protocolsupport.protocol.typeremapper.utils.SkippingTable.EnumSkippingTable;
+import protocolsupport.protocol.typeremapper.utils.SkippingTable.GenericSkippingTable;
+import protocolsupport.protocol.typeremapper.utils.SkippingTable.HashMapBasedIntSkippingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
+import protocolsupport.protocol.utils.types.Particle;
 import protocolsupport.protocol.utils.types.WindowType;
 
 public class IdSkipper {
@@ -41,37 +42,6 @@ public class IdSkipper {
 		@Override
 		protected HashMapBasedIntSkippingTable createTable() {
 			return new HashMapBasedIntSkippingTable();
-		}
-	};
-
-	public static final IntSkippingRegistry<ArrayBasedIntSkippingTable> PARTICLE = new IntSkippingRegistry<ArrayBasedIntSkippingTable>() {
-		{
-			//Fireworks Spark
-			registerSkipEntry(3, ProtocolVersion.MINECRAFT_PE);
-			//Suspended, depth suspended
-			registerSkipEntry(7, ProtocolVersion.MINECRAFT_PE);
-			registerSkipEntry(8, ProtocolVersion.MINECRAFT_PE);
-			//Footstep, cloudt
-			registerSkipEntry(28, ProtocolVersion.MINECRAFT_PE);
-			registerSkipEntry(29, ProtocolVersion.MINECRAFT_PE);
-			//Snow shovel
-			registerSkipEntry(32, ProtocolVersion.MINECRAFT_PE);
-			//Ironcrack, Blockcrack, Blokdust, Droplet
-			registerSkipEntry(36, ProtocolVersion.MINECRAFT_PE);
-			registerSkipEntry(37, ProtocolVersion.MINECRAFT_PE);
-			registerSkipEntry(38, ProtocolVersion.MINECRAFT_PE);
-			registerSkipEntry(39, ProtocolVersion.MINECRAFT_PE);
-			//Mobappearance
-			registerSkipEntry(41, ProtocolVersion.MINECRAFT_PE);
-			//Damageindicator, sweepattack
-			registerSkipEntry(44, ProtocolVersion.MINECRAFT_PE);
-			registerSkipEntry(45, ProtocolVersion.MINECRAFT_PE);
-			//Totem
-			registerSkipEntry(47, ProtocolVersion.MINECRAFT_PE);
-		}
-		@Override
-		protected ArrayBasedIntSkippingTable createTable() {
-			return new ArrayBasedIntSkippingTable(48);
 		}
 	};
 
@@ -115,6 +85,22 @@ public class IdSkipper {
 		@Override
 		protected EnumSkippingTable<WindowType> createTable() {
 			return new EnumSkippingTable<>(WindowType.class);
+		}
+	};
+
+	public static final EnumSkippingRegistry<Particle, EnumSkippingTable<Particle>> PARTICLE = new EnumSkippingRegistry<Particle, SkippingTable.EnumSkippingTable<Particle>>() {
+		{
+			registerSkipEntry(Particle.TOTEM, ProtocolVersionsHelper.BEFORE_1_11);
+			registerSkipEntry(Particle.SPIT, ProtocolVersionsHelper.BEFORE_1_11);
+			registerSkipEntry(Particle.FALLING_DUST, ProtocolVersionsHelper.BEFORE_1_10);
+			registerSkipEntry(Particle.DRAGON_BREATH, ProtocolVersionsHelper.BEFORE_1_9);
+			registerSkipEntry(Particle.END_ROD, ProtocolVersionsHelper.BEFORE_1_9);
+			registerSkipEntry(Particle.DAMAGE_INDICATOR, ProtocolVersionsHelper.BEFORE_1_9);
+			registerSkipEntry(Particle.SWEEP_ATTACK, ProtocolVersionsHelper.BEFORE_1_9);
+		}
+		@Override
+		protected EnumSkippingTable<Particle> createTable() {
+			return new EnumSkippingTable<>(Particle.class);
 		}
 	};
 

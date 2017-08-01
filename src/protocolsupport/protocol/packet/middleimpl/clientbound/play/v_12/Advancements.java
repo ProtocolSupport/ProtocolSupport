@@ -17,7 +17,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class Advancements extends MiddleAdvancements {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ADVANCEMENTS, version);
 		serializer.writeBoolean(reset);
 		ArraySerializer.writeVarIntTArray(serializer, advancementsMapping, (to, element) -> {

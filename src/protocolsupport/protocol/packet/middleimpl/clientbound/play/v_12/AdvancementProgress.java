@@ -11,7 +11,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class AdvancementProgress extends MiddleAdvancementProgress {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ADVANCEMENT_PROGRESS, version);
 		if (identifier != null) {
 			serializer.writeBoolean(true);

@@ -12,8 +12,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class KickDisconnect extends MiddleKickDisconnect {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		return create(version, message);
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		return create(connection.getVersion(), message);
 	}
 
 	public static RecyclableCollection<ClientBoundPacketData> create(ProtocolVersion version, BaseComponent message) {
