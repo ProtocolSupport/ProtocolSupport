@@ -11,7 +11,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class ResourcePack extends MiddleResourcePack {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_RESOURCE_PACK_ID, version);
 		StringSerializer.writeString(serializer, version, url);
 		StringSerializer.writeString(serializer, version, hash);

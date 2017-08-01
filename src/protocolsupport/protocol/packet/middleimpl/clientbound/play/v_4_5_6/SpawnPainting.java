@@ -12,7 +12,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class SpawnPainting extends MiddleSpawnPainting {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		switch (direction) {
 			case 0: {
 				position.modifyZ(-1);

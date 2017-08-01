@@ -1,7 +1,7 @@
 package protocolsupport.protocol.typeremapper.mapcolor;
 
-import protocolsupport.protocol.typeremapper.id.RemappingRegistry.IdRemappingRegistry;
-import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.IdRemappingRegistry;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class MapColorRemapper {

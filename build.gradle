@@ -23,7 +23,7 @@ tasks.withType(AbstractCompile) {
 }
 
 group 'protocolsupport'
-version '4.26-base.pedev'
+version '4.27-dev-pe'
 
 sourceCompatibility = 1.8
 

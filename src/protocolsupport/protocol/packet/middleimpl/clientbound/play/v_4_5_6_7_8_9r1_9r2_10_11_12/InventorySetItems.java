@@ -13,7 +13,8 @@ import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 public class InventorySetItems extends MiddleInventorySetItems {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && ((cache.getOpenedWindow() == WindowType.PLAYER) || (windowId == 0))) {
 			itemstacks.remove(itemstacks.size() - 1);
 		}

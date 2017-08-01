@@ -13,10 +13,11 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class TabComplete extends MiddleTabComplete {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
 		if (matches.length == 0) {
 			return RecyclableEmptyList.get();
 		}
+		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_TAB_COMPLETE_ID, version);
 		StringSerializer.writeString(serializer, version, Utils.clampString(String.join("\u0000", matches), Short.MAX_VALUE));
 		return RecyclableSingletonList.create(serializer);

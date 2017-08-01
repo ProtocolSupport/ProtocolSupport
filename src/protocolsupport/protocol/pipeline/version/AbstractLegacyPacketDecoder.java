@@ -39,7 +39,7 @@ public class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
 		ServerBoundMiddlePacket packetTransformer = null;
 		try {
 			packetTransformer = registry.getTransformer(ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(channel), cumulation.readUnsignedByte());
-			packetTransformer.readFromClientData(cumulation, connection.getVersion());
+			packetTransformer.readFromClientData(cumulation);
 			addPackets(animateReorderer.orderPackets(packetTransformer.toNative()), list);
 			return true;
 		} catch (EOFSignal ex) {

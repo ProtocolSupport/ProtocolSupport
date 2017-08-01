@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleGameStateChange;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -10,8 +9,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class GameStateChange extends MiddleGameStateChange {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_GAME_STATE_CHANGE_ID, version);
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_GAME_STATE_CHANGE_ID, connection.getVersion());
 		serializer.writeByte(type);
 		serializer.writeFloat(value);
 		return RecyclableSingletonList.create(serializer);

@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.utils.types.Particle;
 
 public abstract class MiddleWorldParticle extends ClientBoundMiddlePacket {
 
-	protected int type;
+	protected Particle type;
 	protected boolean longdist;
 	protected float x;
 	protected float y;
@@ -22,7 +23,7 @@ public abstract class MiddleWorldParticle extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		type = serverdata.readInt();
+		type = Particle.getById(serverdata.readInt());
 		longdist = serverdata.readBoolean();
 		x = serverdata.readFloat();
 		y = serverdata.readFloat();

@@ -72,7 +72,7 @@ public class PELevelEvent {
 
 	public static final int BLOCK_START_BREAK = 3600;
 	public static final int BLOCK_STOP_BREAK = 3601;
-	
+
 	public static final int SET_DATA = 4000;
 
 	public static final int PLAYERS_SLEEPING = 9800;
@@ -129,11 +129,11 @@ public class PELevelEvent {
 		VarNumberSerializer.writeSVarInt(clientLevelEvent, data);
 		return clientLevelEvent;
 	}
-	
+
 	public static ClientBoundPacketData createPacket(int levelEvent, Position position, int data) {
 		return createPacket(levelEvent, position.getX(), position.getY(), position.getZ(), data);
 	}
-	
+
 	public static ClientBoundPacketData createPacket(int levelEvent, Position position) {
 		return createPacket(levelEvent, position, 0);
 	}

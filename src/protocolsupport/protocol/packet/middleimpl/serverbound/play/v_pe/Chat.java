@@ -21,7 +21,8 @@ public class Chat extends MiddleChat {
 	}
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
+	public void readFromClientData(ByteBuf clientdata) {
+		ProtocolVersion version = connection.getVersion();
 		int type = clientdata.readUnsignedByte();
 		Validate.isTrue(type == validChatType, MessageFormat.format("Unxepected serverbound chat type, expected {0}, but received {1}", validChatType, type));
 		StringSerializer.readString(clientdata, version); //skip sender

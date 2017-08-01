@@ -15,7 +15,8 @@ public class SetPassengers extends MiddleSetPassengers {
 	private final TIntObjectHashMap<TIntHashSet> passengers = new TIntObjectHashMap<>();
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		TIntHashSet prevPassengersIds = passengers.get(vehicleId);
 		if (prevPassengersIds == null) {

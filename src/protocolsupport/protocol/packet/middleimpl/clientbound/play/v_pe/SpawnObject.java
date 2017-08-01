@@ -18,27 +18,27 @@ import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 public class SpawnObject extends MiddleSpawnObject {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		switch(entity.getType()) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
+		switch (entity.getType()) {
 			case ITEM: {
-				//We need to prepare the item because we can only spawn it after we've received the first metadata update.
-				//cache.prepareItem(new PreparedItem(entity.getId(), x, y, z, motX / 8.000F, motY / 8000.F, motZ / 8000.F)); TODO: Add this with metadata implementation.
+				// We need to prepare the item because we can only spawn it after we've received the first metadata update.
+				// cache.prepareItem(new PreparedItem(entity.getId(), x, y, z, motX / 8.000F, motY / 8000.F, motZ / 8000.F));
+				// TODO: Add this with metadata implementation.
 				return RecyclableEmptyList.get();
 			}
 			case ITEM_FRAME: {
-				//TODO: Itemframes behave differently in PE and might even need to be added as blocks.
+				// TODO: Item frames are blocks in pe
 				return RecyclableEmptyList.get();
 			}
 			default: {
 				return RecyclableSingletonList.create(SpawnLiving.create(
-						version,
-						entity.getId(),
-						x, y, z,
-						motX / 8.000F, motY / 8000.F, motZ / 8000.F,
-						pitch, yaw,
-						null,
-						PEDataValues.getObjectEntityTypeId(IdRemapper.ENTITY.getTable(version).getRemap(entity.getType()))
-					));
+					version, entity.getId(),
+					x, y, z,
+					motX / 8.000F, motY / 8000.F, motZ / 8000.F,
+					pitch, yaw,
+					null, PEDataValues.getObjectEntityTypeId(IdRemapper.ENTITY.getTable(version).getRemap(entity.getType()))
+				));
 			}
 		}
 	}
@@ -68,7 +68,7 @@ public class SpawnObject extends MiddleSpawnObject {
 		public int getId() {
 			return entityId;
 		}
-		
+
 		public RecyclableArrayList<ClientBoundPacketData> updateItem(ProtocolVersion version, ItemStackWrapper itemstack) {
 			RecyclableArrayList<ClientBoundPacketData> updatepackets = RecyclableArrayList.create();
 			if (!this.itemstack.equals(itemstack)) {
@@ -95,7 +95,7 @@ public class SpawnObject extends MiddleSpawnObject {
 			}
 			return updatepackets;
 		}
-		
+
 	}
 
 }

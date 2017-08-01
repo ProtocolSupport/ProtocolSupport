@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import gnu.trove.map.hash.TIntIntHashMap;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldEvent;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.pe.PELevelEvent;
@@ -62,7 +61,7 @@ public class WorldEvent extends MiddleWorldEvent {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
 		return RecyclableSingletonList.create(PELevelEvent.createPacket(remaps.get(effectId), position.getX(), position.getY(), position.getZ(), data));
 	}
 

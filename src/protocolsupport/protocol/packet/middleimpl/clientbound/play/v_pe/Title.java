@@ -20,7 +20,8 @@ public class Title extends MiddleTitle {
 	private static final int SET_TIMINGS = 5;
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		switch (this.action) {
 			case HIDE: {
 				return RecyclableSingletonList.create(create(version, HIDE, "", 0, 0, 0));

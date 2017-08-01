@@ -3,7 +3,6 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 import org.bukkit.util.Vector;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUseEntity;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -19,7 +18,7 @@ public class Interact extends ServerBoundMiddlePacket {
 	protected int targetId;
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
+	public void readFromClientData(ByteBuf clientdata) {
 		peAction = clientdata.readUnsignedByte();
 		targetId = (int) VarNumberSerializer.readVarLong(clientdata);
 	}

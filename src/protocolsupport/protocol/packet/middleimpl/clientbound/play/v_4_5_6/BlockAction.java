@@ -13,7 +13,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class BlockAction extends MiddleBlockAction {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		int blockstate = type << 4;
 		if (IdRemapper.BLOCK.getTable(version).getRemap(blockstate) != blockstate) {
 			return RecyclableEmptyList.get();

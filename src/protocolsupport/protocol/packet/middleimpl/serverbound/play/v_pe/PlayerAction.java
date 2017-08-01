@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockDig;
@@ -21,7 +20,7 @@ public class PlayerAction extends ServerBoundMiddlePacket {
 	protected int face;
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
+	public void readFromClientData(ByteBuf clientdata) {
 		VarNumberSerializer.readVarLong(clientdata); // entity id
 		action = VarNumberSerializer.readSVarInt(clientdata);
 		blockPosition = PositionSerializer.readPEPosition(clientdata);

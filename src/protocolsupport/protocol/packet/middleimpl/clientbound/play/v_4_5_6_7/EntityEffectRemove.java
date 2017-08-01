@@ -4,7 +4,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityEffectRemove;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.typeremapper.skipper.id.IdSkipper;
+import protocolsupport.protocol.typeremapper.id.IdSkipper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -12,7 +12,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class EntityEffectRemove extends MiddleEntityEffectRemove {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		if (IdSkipper.EFFECT.getTable(version).shouldSkip(effectId)) {
 			return RecyclableEmptyList.get();
 		}

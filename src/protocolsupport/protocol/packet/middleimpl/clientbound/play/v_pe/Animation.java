@@ -12,7 +12,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class Animation extends MiddleAnimation {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		switch (animation) {
 			case 0: {
 				return RecyclableSingletonList.create(create(version, entityId, 1));

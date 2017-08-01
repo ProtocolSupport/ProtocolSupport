@@ -16,7 +16,8 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 public class Respawn extends MiddleRespawn {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		ClientBoundPacketData changedim = ClientBoundPacketData.create(PEPacketIDs.CHANGE_DIMENSION, version);
 		VarNumberSerializer.writeSVarInt(changedim, getPeDimensionId(dimension));

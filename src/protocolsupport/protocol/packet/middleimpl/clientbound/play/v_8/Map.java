@@ -6,15 +6,16 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleMap;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.typeremapper.mapcolor.MapColorRemapper;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class Map extends MiddleMap {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_MAP_ID, version);
 		VarNumberSerializer.writeVarInt(serializer, itemData);
 		serializer.writeByte(scale);

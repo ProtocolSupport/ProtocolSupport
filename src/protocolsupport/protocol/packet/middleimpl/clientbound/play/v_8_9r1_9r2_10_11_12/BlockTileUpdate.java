@@ -17,8 +17,8 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 public class BlockTileUpdate extends MiddleBlockTileUpdate {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		return RecyclableSingletonList.create(createPacketData(version, TileEntityUpdateType.fromId(type), position, tag));
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		return RecyclableSingletonList.create(createPacketData(connection.getVersion(), TileEntityUpdateType.fromId(type), position, tag));
 	}
 
 	public static ClientBoundPacketData createPacketData(ProtocolVersion version, TileEntityUpdateType type, Position position, NBTTagCompoundWrapper tag) {

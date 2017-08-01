@@ -5,7 +5,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
-import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.utils.netty.Allocator;
 
 public class ChunkTransformerVaries extends ChunkTransformer {

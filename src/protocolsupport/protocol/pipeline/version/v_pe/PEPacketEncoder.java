@@ -2,7 +2,6 @@ package protocolsupport.protocol.pipeline.version.v_pe;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.Connection;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -121,7 +120,7 @@ public class PEPacketEncoder extends AbstractLegacyPacketEncoder {
 		}
 
 		@Override
-		public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+		public RecyclableCollection<ClientBoundPacketData> toData() {
 			return RecyclableEmptyList.get();
 		}
 

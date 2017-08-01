@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityStatus;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -11,8 +10,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class EntityStatus extends MiddleEntityStatus {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_EVENT, version);
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_EVENT, connection.getVersion());
 		VarNumberSerializer.writeVarLong(serializer, entityId);
 		// TODO: Update status codes when added.
 		// Check, but so far no tested unknown status codes break PE.
