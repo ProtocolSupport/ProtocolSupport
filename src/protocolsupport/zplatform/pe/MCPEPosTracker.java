@@ -9,6 +9,7 @@ import protocolsupport.api.Connection;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 
+//Experiment #1
 public class MCPEPosTracker implements Runnable {
 
 	private int id = -1;
@@ -38,6 +39,7 @@ public class MCPEPosTracker implements Runnable {
 						if(e.getLocation().getYaw() != n.getYaw() || e.getLocation().getPitch() != n.getPitch()) {
 							cache.updateWatchedRotation(n.getId(), (byte) e.getLocation().getYaw(), (byte) e.getLocation().getPitch());
 						}
+						//Send movement update..
 					}
 				}
 			}
