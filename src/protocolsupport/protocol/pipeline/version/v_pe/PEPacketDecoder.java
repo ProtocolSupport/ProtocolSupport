@@ -18,6 +18,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PlayerAc
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PositionLook;
 //import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.UseItem;
 import protocolsupport.protocol.pipeline.version.AbstractPacketDecoder;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -54,7 +55,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		try {
 			packetTransformer = registry.getTransformer(
 				ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(ctx.channel()),
-				input.readUnsignedByte()
+				readPacketId(input)
 			);
 			packetTransformer.readFromClientData(input, connection.getVersion());
 			if (input.isReadable()) {
@@ -64,6 +65,12 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		} catch (Exception e) {
 			throwFailedTransformException(e, packetTransformer, input);
 		}
+	}
+	
+	protected int readPacketId(ByteBuf from) {
+		int id = VarNumberSerializer.readVarInt(from);
+		from.skipBytes(2);
+		return id;
 	}
 
 	public static class Noop extends ServerBoundMiddlePacket {
