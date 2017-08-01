@@ -111,7 +111,7 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(LegacyEffect.class.getName());
 			Class.forName(PESkin.class.getName());
 			ServerPlatform.get().inject();
-			peserver = new MCPEServer(19138);
+			peserver = new MCPEServer(2222);
 		} catch (Throwable t) {
 			getLogger().log(Level.SEVERE, "Error when loading, make sure you are using supported server version", t);
 			Bukkit.shutdown();
