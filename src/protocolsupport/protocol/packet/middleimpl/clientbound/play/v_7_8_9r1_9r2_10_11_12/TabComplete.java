@@ -12,7 +12,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class TabComplete extends MiddleTabComplete {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_TAB_COMPLETE_ID, version);
 		ArraySerializer.writeVarIntTArray(serializer, matches, (to, match) -> StringSerializer.writeString(to, version, match));
 		return RecyclableSingletonList.create(serializer);

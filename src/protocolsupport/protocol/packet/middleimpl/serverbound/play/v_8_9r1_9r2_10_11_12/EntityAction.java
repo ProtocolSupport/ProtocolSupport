@@ -17,11 +17,11 @@ public class EntityAction extends MiddleEntityAction {
 	);
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
+	public void readFromClientData(ByteBuf clientdata) {
 		entityId = VarNumberSerializer.readVarInt(clientdata);
 		int actionId = VarNumberSerializer.readVarInt(clientdata);
 		jumpBoost = VarNumberSerializer.readVarInt(clientdata);
-		if (version == ProtocolVersion.MINECRAFT_1_8) {
+		if (connection.getVersion() == ProtocolVersion.MINECRAFT_1_8) {
 			action = actionById8.get(actionId);
 		} else {
 			action = Action.values()[actionId];

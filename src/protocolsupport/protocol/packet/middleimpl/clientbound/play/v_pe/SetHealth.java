@@ -11,7 +11,8 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 public class SetHealth extends MiddleSetHealth {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		double shealth = (health * 20.0F) / cache.getMaxHealth();
 		packets.add(EntitySetAttributes.create(version, cache.getSelfPlayerEntityId(), EntitySetAttributes.createAttribute("minecraft:health", shealth)));

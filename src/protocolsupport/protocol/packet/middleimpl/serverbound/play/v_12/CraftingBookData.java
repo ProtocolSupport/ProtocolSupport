@@ -1,14 +1,13 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_12;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCraftingBookData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 
 public class CraftingBookData extends MiddleCraftingBookData {
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
+	public void readFromClientData(ByteBuf clientdata) {
 		type = MiscSerializer.readEnum(clientdata, Type.class);
 		switch (type) {
 			case DISPLAYED_RECIPE: {

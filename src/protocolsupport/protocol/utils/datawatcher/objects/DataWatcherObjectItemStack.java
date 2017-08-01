@@ -10,7 +10,7 @@ public class DataWatcherObjectItemStack extends DataWatcherObject<ItemStackWrapp
 
 	@Override
 	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {
-		value = ItemStackSerializer.readItemStack(from, version, locale);
+		value = ItemStackSerializer.readItemStack(from, version, locale, false);
 	}
 
 	@Override

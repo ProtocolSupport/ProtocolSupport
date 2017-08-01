@@ -2,6 +2,8 @@ package protocolsupport.protocol.typeremapper.legacy;
 
 import java.util.HashMap;
 
+import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+
 public class LegacyEntityType {
 
 	private static final HashMap<String, String> legacyNames = new HashMap<>();
@@ -86,7 +88,7 @@ public class LegacyEntityType {
 
 	private static void register(String name, String legacy) {
 		legacyNames.put(name, legacy);
-		legacyNames.put("minecraft:"+name, legacy);
+		legacyNames.put(MinecraftData.addNamespacePrefix(name), legacy);
 	}
 
 	public static String getLegacyName(String name) {

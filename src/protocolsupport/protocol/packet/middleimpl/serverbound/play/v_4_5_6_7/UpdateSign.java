@@ -9,8 +9,9 @@ import protocolsupport.protocol.serializer.StringSerializer;
 public class UpdateSign extends MiddleUpdateSign {
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
+	public void readFromClientData(ByteBuf clientdata) {
 		position = PositionSerializer.readLegacyPositionS(clientdata);
+		ProtocolVersion version = connection.getVersion();
 		for (int i = 0; i < 4; i++) {
 			lines[i] = StringSerializer.readString(clientdata, version, 15);
 		}

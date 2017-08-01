@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_6_7;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleEntityAction;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
@@ -15,7 +14,7 @@ public class EntityAction extends MiddleEntityAction {
 	);
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
+	public void readFromClientData(ByteBuf clientdata) {
 		entityId = clientdata.readInt();
 		action = actionById.get(clientdata.readByte());
 		jumpBoost = clientdata.readInt();

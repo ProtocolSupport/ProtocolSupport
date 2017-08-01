@@ -13,8 +13,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class WorldCustomSound extends MiddleWorldCustomSound {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		return RecyclableSingletonList.create(create(version, id, x, y, z, volume, pitch));
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		return RecyclableSingletonList.create(create(connection.getVersion(), id, x, y, z, volume, pitch));
 	}
 
 	public static ClientBoundPacketData create(ProtocolVersion version, String id, int x, int y, int z, float volume, float pitch) {

@@ -13,7 +13,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class WorldEvent extends MiddleWorldEvent {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		effectId = IdRemapper.EFFECT.getTable(version).getRemap(effectId);
 		effectId = LegacyEffect.getLegacyId(version, effectId);
 		if (effectId == 2001) {

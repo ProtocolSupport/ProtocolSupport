@@ -12,7 +12,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class SpawnPainting extends MiddleSpawnPainting {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SPAWN_PAINTING, version);
 		VarNumberSerializer.writeSVarLong(serializer, entityId);
 		VarNumberSerializer.writeVarLong(serializer, entityId);
@@ -41,7 +42,7 @@ public class SpawnPainting extends MiddleSpawnPainting {
 		VarNumberSerializer.writeVarInt(serializer, position.getY());
 		VarNumberSerializer.writeSVarInt(serializer, mcpeZ);
 		VarNumberSerializer.writeSVarInt(serializer, direction);
-		StringSerializer.writeString(serializer, version, type); // The painting names seems to be the same in both versions
+		StringSerializer.writeString(serializer, version, type);
 		return RecyclableSingletonList.create(serializer);
 	}
 }

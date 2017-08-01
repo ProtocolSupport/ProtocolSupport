@@ -1,9 +1,5 @@
 package protocolsupport.zplatform.impl.spigot;
 
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.bukkit.Material;
 
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
@@ -31,18 +27,8 @@ public class SpigotWrapperFactory implements PlatformWrapperFactory {
 	}
 
 	@Override
-	public NBTTagCompoundWrapper createNBTCompoundFromStream(InputStream in) throws IOException {
-		return SpigotNBTTagCompoundWrapper.fromStream(new DataInputStream(in));
-	}
-
-	@Override
 	public NBTTagCompoundWrapper createEmptyNBTCompound() {
 		return SpigotNBTTagCompoundWrapper.createEmpty();
-	}
-
-	@Override
-	public NBTTagCompoundWrapper createNullNBTCompound() {
-		return SpigotNBTTagCompoundWrapper.createNull();
 	}
 
 	@Override

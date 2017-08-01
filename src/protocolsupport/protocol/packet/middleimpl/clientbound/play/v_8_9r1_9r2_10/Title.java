@@ -16,10 +16,11 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class Title extends MiddleTitle {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
 		if (action == Action.SET_ACTION_BAR) {
 			return RecyclableEmptyList.get();
 		}
+		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_TITLE_ID, version);
 		int actionId = action.ordinal();
 		VarNumberSerializer.writeVarInt(serializer, actionId > 2 ? actionId - 1 : actionId);

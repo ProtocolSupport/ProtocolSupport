@@ -13,15 +13,17 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class EntityEquipment extends MiddleEntityEquipment {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
 		if (slot == 1) {
 			return RecyclableEmptyList.get();
+		} else {
+			ProtocolVersion version = connection.getVersion();
+			ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_EQUIPMENT_ID, version);
+			VarNumberSerializer.writeVarInt(serializer, entityId);
+			serializer.writeShort(slot == 0 ? slot : slot - 1);
+			ItemStackSerializer.writeItemStack(serializer, version, cache.getLocale(), itemstack, true);
+			return RecyclableSingletonList.create(serializer);
 		}
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_EQUIPMENT_ID, version);
-		VarNumberSerializer.writeVarInt(serializer, entityId);
-		serializer.writeShort(slot == 0 ? slot : slot - 1);
-		ItemStackSerializer.writeItemStack(serializer, version, cache.getLocale(), itemstack, true);
-		return RecyclableSingletonList.create(serializer);
 	}
 
 }

@@ -3,7 +3,6 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_5;
 import org.bukkit.Bukkit;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -16,7 +15,7 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 public class Ping extends ServerBoundMiddlePacket {
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
+	public void readFromClientData(ByteBuf clientdata) {
 		clientdata.readUnsignedByte();
 	}
 

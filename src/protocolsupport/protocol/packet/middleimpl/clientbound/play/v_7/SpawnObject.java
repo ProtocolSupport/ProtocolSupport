@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnObject
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
-import protocolsupport.protocol.typeremapper.skipper.id.IdSkipper;
+import protocolsupport.protocol.typeremapper.id.IdSkipper;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -15,7 +15,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class SpawnObject extends MiddleSpawnObject {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		NetworkEntityType type = entity.getType();
 		if (IdSkipper.ENTITY.getTable(version).shouldSkip(type)) {
 			return RecyclableEmptyList.get();

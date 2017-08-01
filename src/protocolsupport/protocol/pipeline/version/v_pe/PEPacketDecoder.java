@@ -6,7 +6,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.Connection;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_pe.ClientLogin;
@@ -56,7 +55,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 				ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(ctx.channel()),
 				readPacketId(input)
 			);
-			packetTransformer.readFromClientData(input, connection.getVersion());
+			packetTransformer.readFromClientData(input);
 			if (input.isReadable()) {
 				throw new DecoderException("Did not read all data from packet " + packetTransformer.getClass().getName() + ", bytes left: " + input.readableBytes());
 			}
@@ -75,7 +74,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 	public static class Noop extends ServerBoundMiddlePacket {
 
 		@Override
-		public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
+		public void readFromClientData(ByteBuf clientdata) {
 			clientdata.skipBytes(clientdata.readableBytes());
 		}
 

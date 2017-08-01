@@ -13,11 +13,12 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class CustomPayload extends MiddleCustomPayload {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID, version);
 		StringSerializer.writeString(serializer, version, tag);
 		if (tag.equals("MC|TrList")) {
-			MerchantDataSerializer.writeMerchantData(serializer, version, cache.getLocale(), MerchantDataSerializer.readMerchantData(data, ProtocolVersionsHelper.LATEST_PC, cache.getLocale()), true);
+			MerchantDataSerializer.writeMerchantData(serializer, version, cache.getLocale(), MerchantDataSerializer.readMerchantData(data, ProtocolVersionsHelper.LATEST_PC, cache.getLocale()));
 		} else {
 			serializer.writeBytes(data);
 		}

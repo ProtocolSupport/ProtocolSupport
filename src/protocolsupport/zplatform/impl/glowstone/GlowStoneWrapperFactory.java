@@ -1,8 +1,5 @@
 package protocolsupport.zplatform.impl.glowstone;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.bukkit.Material;
 
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
@@ -32,18 +29,8 @@ public class GlowStoneWrapperFactory implements PlatformWrapperFactory {
 	}
 
 	@Override
-	public NBTTagCompoundWrapper createNBTCompoundFromStream(InputStream in) throws IOException {
-		return GlowStoneNBTTagCompoundWrapper.fromStream(in);
-	}
-
-	@Override
 	public NBTTagCompoundWrapper createEmptyNBTCompound() {
 		return GlowStoneNBTTagCompoundWrapper.createEmpty();
-	}
-
-	@Override
-	public NBTTagCompoundWrapper createNullNBTCompound() {
-		return GlowStoneNBTTagCompoundWrapper.createNull();
 	}
 
 	@Override

@@ -13,7 +13,7 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class SpawnPainting extends MiddleSpawnPainting {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
 		switch (direction) {
 			case 0: {
 				position.modifyZ(-1);
@@ -32,6 +32,7 @@ public class SpawnPainting extends MiddleSpawnPainting {
 				break;
 			}
 		}
+		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_PAINTING_ID, version);
 		VarNumberSerializer.writeVarInt(serializer, entityId);
 		StringSerializer.writeString(serializer, version, type);

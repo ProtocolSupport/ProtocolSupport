@@ -11,7 +11,8 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 public class EntityDestroy extends MiddleEntityDestroy {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		RecyclableCollection<ClientBoundPacketData> datas = RecyclableArrayList.create();
 		for (int[] part : Utils.splitArray(entityIds, 120)) {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_DESTROY_ID, version);

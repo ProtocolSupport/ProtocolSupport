@@ -89,7 +89,11 @@ public class GlowStoneItemStackWrapper extends ItemStackWrapper {
 
 	@Override
 	public void setTag(NBTTagCompoundWrapper tag) {
-		itemstack.setItemMeta(GlowItemFactory.instance().readNbt(getType(), ((GlowStoneNBTTagCompoundWrapper) tag).tag));
+		if (tag.isNull()) {
+			itemstack.setItemMeta(null);
+		} else {
+			itemstack.setItemMeta(GlowItemFactory.instance().readNbt(getType(), ((GlowStoneNBTTagCompoundWrapper) tag).tag));
+		}
 	}
 
 	@Override

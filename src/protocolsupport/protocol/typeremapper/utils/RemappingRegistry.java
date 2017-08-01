@@ -1,11 +1,11 @@
-package protocolsupport.protocol.typeremapper.id;
+package protocolsupport.protocol.typeremapper.utils;
 
 import java.util.EnumMap;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.id.RemappingTable.EnumRemappingTable;
-import protocolsupport.protocol.typeremapper.id.RemappingTable.GenericRemappingTable;
-import protocolsupport.protocol.typeremapper.id.RemappingTable.IdRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.EnumRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.GenericRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.IdRemappingTable;
 import protocolsupport.utils.Utils;
 
 public abstract class RemappingRegistry<T extends RemappingTable> {
