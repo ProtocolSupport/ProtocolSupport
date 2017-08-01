@@ -111,7 +111,8 @@ public class PEPacketEncoder extends AbstractLegacyPacketEncoder {
 	@Override
 	protected void writePacketId(ByteBuf to, int packetId) {
 		VarNumberSerializer.writeVarInt(to, packetId);
-		to.writeBytes(new byte[2], 0, 2); //? Swell.
+		to.writeByte(0);
+		to.writeByte(0);
 	}
 
 	@Override
