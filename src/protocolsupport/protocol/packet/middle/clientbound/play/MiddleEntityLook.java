@@ -15,5 +15,12 @@ public abstract class MiddleEntityLook extends MiddleEntity {
 		pitch = serverdata.readByte();
 		onGround = serverdata.readBoolean();
 	}
+	
+	@Override
+	public void handle() {
+		cache.updateWatchedRotation(entityId, (byte) yaw, (byte) pitch);
+		cache.updateWatchedHeadRotation(entityId, (byte) yaw);
+		cache.updateWatchedOnGround(entityId, onGround);
+	}
 
 }

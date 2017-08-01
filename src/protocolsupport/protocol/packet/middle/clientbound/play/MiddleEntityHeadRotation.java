@@ -11,5 +11,10 @@ public abstract class MiddleEntityHeadRotation extends MiddleEntity {
 		super.readFromServerData(serverdata);
 		headRot = serverdata.readByte();
 	}
+	
+	@Override
+	public void handle() {
+		cache.updateWatchedHeadRotation(entityId, headRot);
+	}
 
 }

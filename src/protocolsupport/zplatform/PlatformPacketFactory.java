@@ -50,8 +50,9 @@ public interface PlatformPacketFactory {
 	public Object createFakeJoinGamePacket();
 
 	public Object createEntityStatusPacket(Entity entity, int status);
-
-
+	
+	public Object createRelEntityMove(int entityId, int relX, int relY, int relZ, boolean onGround);
+	
 	public int getOutLoginDisconnectPacketId();
 
 	public int getOutLoginEncryptionBeginPacketId();

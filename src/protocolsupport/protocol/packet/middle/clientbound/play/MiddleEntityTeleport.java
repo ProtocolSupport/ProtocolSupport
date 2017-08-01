@@ -1,5 +1,7 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
+import org.bukkit.util.Vector;
+
 import io.netty.buffer.ByteBuf;
 
 public abstract class MiddleEntityTeleport extends MiddleEntity {
@@ -20,6 +22,14 @@ public abstract class MiddleEntityTeleport extends MiddleEntity {
 		yaw = serverdata.readByte();
 		pitch = serverdata.readByte();
 		onGround = serverdata.readBoolean();
+	}
+	
+	@Override
+	public void handle() {
+		cache.updateWatchedPosition(entityId, new Vector(x, y, z));
+		cache.updateWatchedRotation(entityId, yaw, pitch);
+		cache.updateWatchedHeadRotation(entityId, yaw);
+		cache.updateWatchedOnGround(entityId, onGround);
 	}
 
 }

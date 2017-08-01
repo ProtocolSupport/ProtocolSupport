@@ -215,7 +215,7 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 						} else {
 							defaultpacket = new PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook(this.tracker.getId(), l2, i3, j3, (byte) j2, (byte) k2, this.tracker.onGround);
 						}
-						pepacket = new PacketPlayOutEntityTeleport(this.tracker);
+						//pepacket = new PacketPlayOutEntityTeleport(this.tracker); Maybe the entire injector is not needed now?
 					} else {
 						this.onGround = this.tracker.onGround;
 						this.moveUpdateTicks = 0;

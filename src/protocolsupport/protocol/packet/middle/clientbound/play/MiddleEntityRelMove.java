@@ -17,5 +17,11 @@ public abstract class MiddleEntityRelMove extends MiddleEntity {
 		relZ = serverdata.readShort();
 		onGround = serverdata.readBoolean();
 	}
-
+	
+	@Override
+	public void handle() {
+		cache.updateWatchedRelPosition(entityId, relX, relY, relZ);
+		cache.updateWatchedOnGround(entityId, onGround);
+	}
+	
 }

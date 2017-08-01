@@ -3,7 +3,7 @@ package protocolsupport.zplatform.pe;
 import java.net.InetSocketAddress;
 import java.util.List;
 
-import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import io.netty.channel.Channel;
 import net.minecraft.server.v1_12_R1.EnumProtocolDirection;
@@ -37,8 +37,8 @@ import raknetserver.pipeline.raknet.RakNetPacketConnectionEstablishHandler.PingH
 public class MCPEServer {
 
 	private final RakNetServer raknetserver;
-	public MCPEServer(int port) {
-		if (Bukkit.getServer().getOnlineMode()) {
+	public MCPEServer(JavaPlugin protocolSupport, int port) {
+		if (protocolSupport.getServer().getOnlineMode()) {
 			throw new IllegalStateException("MCPE doesn't support online-mode");
 		}
 		try {
@@ -50,7 +50,7 @@ public class MCPEServer {
 					return String.join(";",
 						"MCPE",
 						revent.getMotd().replace(";", ":"),
-						"113", "1.1.0",
+						"113", "1.1.1",
 						String.valueOf(revent.getPlayers().size()), String.valueOf(revent.getMaxPlayers())
 					);
 				}
@@ -79,6 +79,7 @@ public class MCPEServer {
 					channel.pipeline().addLast(ChannelHandlers.LOGIC, new LogicHandler(connection));
 					channel.pipeline().addLast(SpigotChannelHandlers.NETWORK_MANAGER, networkmanager);
 					networkmanagerlist.add(networkmanager);
+					new PeMovement(protocolSupport, connection, cache).start();
 				}
 			}, 0xFE);
 		} catch (IllegalArgumentException | IllegalAccessException | SecurityException | NoSuchFieldException e) {
