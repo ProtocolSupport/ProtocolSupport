@@ -8,6 +8,7 @@ import protocolsupport.protocol.utils.minecraftdata.PotionData;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagType;
 
 public class PotionToLegacyIdSpecificRemapper implements ItemStackSpecificRemapper {
 
@@ -24,9 +25,9 @@ public class PotionToLegacyIdSpecificRemapper implements ItemStackSpecificRemapp
 		}
 		String potion = tag.getString("Potion");
 		if (!potion.isEmpty()) {
-			NBTTagListWrapper tagList = tag.getList("CustomPotionEffects", NBTTagCompoundWrapper.TYPE_COMPOUND);
+			NBTTagListWrapper tagList = tag.getList("CustomPotionEffects", NBTTagType.COMPOUND);
 			if (tagList.size() >= 1) {
-				potion = PotionData.getNameById(tagList.getCompound(0).getNumber("Id"));
+				potion = PotionData.getNameById(tagList.getCompound(0).getIntNumber("Id"));
 			}
 			itemstack.setData(LegacyPotion.toLegacyId(potion, isThrowablePotion));
 			String basicTypeName = LegacyPotion.getBasicTypeName(potion);

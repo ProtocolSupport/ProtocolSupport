@@ -8,16 +8,17 @@ import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagType;
 
 public class EnchantFilterNBTSpecificRemapper extends ItemStackNBTSpecificRemapper {
 
 	@Override
 	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, String locale, ItemStackWrapper itemstack, NBTTagCompoundWrapper tag) {
-		if (tag.hasKeyOfType("ench", NBTTagCompoundWrapper.TYPE_LIST)) {
-			tag.setList("ench", filterEnchantList(version, tag.getList("ench", NBTTagCompoundWrapper.TYPE_COMPOUND)));
+		if (tag.hasKeyOfType("ench", NBTTagType.LIST)) {
+			tag.setList("ench", filterEnchantList(version, tag.getList("ench", NBTTagType.COMPOUND)));
 		}
-		if (tag.hasKeyOfType("stored-enchants", NBTTagCompoundWrapper.TYPE_LIST)) {
-			tag.setList("stored-enchants", filterEnchantList(version, tag.getList("stored-enchants", NBTTagCompoundWrapper.TYPE_COMPOUND)));
+		if (tag.hasKeyOfType("stored-enchants", NBTTagType.LIST)) {
+			tag.setList("stored-enchants", filterEnchantList(version, tag.getList("stored-enchants", NBTTagType.COMPOUND)));
 		}
 		return tag;
 	}
@@ -27,7 +28,7 @@ public class EnchantFilterNBTSpecificRemapper extends ItemStackNBTSpecificRemapp
 		NBTTagListWrapper newList = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
 		for (int i = 0; i < oldList.size(); i++) {
 			NBTTagCompoundWrapper enchData = oldList.getCompound(i);
-			if (!enchSkip.shouldSkip(enchData.getNumber("id") & 0xFFFF)) {
+			if (!enchSkip.shouldSkip(enchData.getIntNumber("id") & 0xFFFF)) {
 				newList.addCompound(enchData);
 			}
 		}

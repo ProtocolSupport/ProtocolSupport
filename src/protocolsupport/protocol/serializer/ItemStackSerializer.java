@@ -1,6 +1,5 @@
 package protocolsupport.protocol.serializer;
 
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -19,6 +18,7 @@ import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ItemStackWriteEvent;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
+import protocolsupport.protocol.utils.NBTTagCompoundSerializer;
 import protocolsupport.utils.IntTuple;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
@@ -73,19 +73,14 @@ public class ItemStackSerializer {
 			if (isUsingShortLengthNBT(version)) {
 				final short length = from.readShort();
 				if (length < 0) {
-					return ServerPlatform.get().getWrapperFactory().createNullNBTCompound();
+					return NBTTagCompoundWrapper.NULL;
 				}
 				try (InputStream inputstream = new GZIPInputStream(new ByteBufInputStream(from.readSlice(length)))) {
-					return ServerPlatform.get().getWrapperFactory().createNBTCompoundFromStream(inputstream);
+					return NBTTagCompoundSerializer.readTag(inputstream);
 				}
-			} else if (isUsingDirectOrZeroIfNoneNBT(version)) {
-				from.markReaderIndex();
-				if (from.readByte() == 0) {
-					return ServerPlatform.get().getWrapperFactory().createNullNBTCompound();
-				}
-				from.resetReaderIndex();
-				try (DataInputStream datainputstream = new DataInputStream(new ByteBufInputStream(from))) {
-					return ServerPlatform.get().getWrapperFactory().createNBTCompoundFromStream(datainputstream);
+			} else if (isUsingDirectNBT(version)) {
+				try (InputStream inputstream = new ByteBufInputStream(from)) {
+					return NBTTagCompoundSerializer.readTag(inputstream);
 				}
 			} else {
 				throw new IllegalArgumentException(MessageFormat.format("Don't know how to read nbt of version {0}", version));
@@ -106,18 +101,14 @@ public class ItemStackSerializer {
 					to.writeShort(0);
 					//actual nbt
 					try (OutputStream outputstream = new GZIPOutputStream(new ByteBufOutputStream(to))) {
-						tag.writeToStream(outputstream);
+						NBTTagCompoundSerializer.writeTag(outputstream, tag);
 					}
 					//now replace fake length with real length
 					to.setShort(writerIndex, to.writerIndex() - writerIndex - Short.BYTES);
 				}
-			} else if (isUsingDirectOrZeroIfNoneNBT(version)) {
-				if (tag.isNull()) {
-					to.writeByte(0);
-				} else {
-					try (OutputStream outputstream = new ByteBufOutputStream(to)) {
-						tag.writeToStream(outputstream);
-					}
+			} else if (isUsingDirectNBT(version)) {
+				try (OutputStream outputstream = new ByteBufOutputStream(to)) {
+					NBTTagCompoundSerializer.writeTag(outputstream, tag);
 				}
 			} else {
 				throw new IllegalArgumentException(MessageFormat.format("Don't know how to write nbt of version {0}", version));
@@ -131,7 +122,7 @@ public class ItemStackSerializer {
 		return (version.getProtocolType() == ProtocolType.PC) && version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10);
 	}
 
-	private static final boolean isUsingDirectOrZeroIfNoneNBT(ProtocolVersion version) {
+	private static final boolean isUsingDirectNBT(ProtocolVersion version) {
 		return (version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
 	}
 

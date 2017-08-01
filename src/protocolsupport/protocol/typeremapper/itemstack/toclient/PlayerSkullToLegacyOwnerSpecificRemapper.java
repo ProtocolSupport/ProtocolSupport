@@ -6,6 +6,7 @@ import protocolsupport.protocol.utils.GameProfileSerializer;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagType;
 
 public class PlayerSkullToLegacyOwnerSpecificRemapper extends ItemStackNBTSpecificRemapper {
 
@@ -16,7 +17,7 @@ public class PlayerSkullToLegacyOwnerSpecificRemapper extends ItemStackNBTSpecif
 	}
 
 	public static void remap(NBTTagCompoundWrapper tag, String tagname, String newtagname) {
-		if (tag.hasKeyOfType(tagname, NBTTagCompoundWrapper.TYPE_COMPOUND)) {
+		if (tag.hasKeyOfType(tagname, NBTTagType.COMPOUND)) {
 			GameProfile gameprofile = GameProfileSerializer.deserialize(tag.getCompound(tagname));
 			if (gameprofile.getName() != null) {
 				tag.setString(newtagname, gameprofile.getName());

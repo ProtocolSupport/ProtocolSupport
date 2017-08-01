@@ -1,9 +1,9 @@
 package protocolsupport.protocol.typeremapper.id;
 
-import protocolsupport.protocol.typeremapper.utils.SkippingTable;
 import protocolsupport.protocol.typeremapper.utils.SkippingRegistry.EnumSkippingRegistry;
 import protocolsupport.protocol.typeremapper.utils.SkippingRegistry.GenericSkippingRegistry;
 import protocolsupport.protocol.typeremapper.utils.SkippingRegistry.IntSkippingRegistry;
+import protocolsupport.protocol.typeremapper.utils.SkippingTable;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.ArrayBasedIntSkippingTable;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.EnumSkippingTable;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.GenericSkippingTable;

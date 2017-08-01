@@ -16,6 +16,7 @@ import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagType;
 
 public class CustomPayload extends MiddleCustomPayload {
 
@@ -48,8 +49,8 @@ public class CustomPayload extends MiddleCustomPayload {
 	private static void remapBookPages(ItemStackWrapper itemstack, String locale) {
 		NBTTagCompoundWrapper tag = itemstack.getTag();
 		if (!tag.isNull()) {
-			if (tag.hasKeyOfType("pages", NBTTagCompoundWrapper.TYPE_LIST)) {
-				NBTTagListWrapper pages = tag.getList("pages", NBTTagCompoundWrapper.TYPE_STRING);
+			if (tag.hasKeyOfType("pages", NBTTagType.LIST)) {
+				NBTTagListWrapper pages = tag.getList("pages", NBTTagType.STRING);
 				NBTTagListWrapper newPages = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
 				for (int i = 0; i < pages.size(); i++) {
 					newPages.addString(ChatAPI.fromJSON(pages.getString(i)).toLegacyText(locale));
