@@ -4,7 +4,6 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleExplosion;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PELevelEvent;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
@@ -29,10 +28,12 @@ public class Explosion extends MiddleExplosion {
 		MiscSerializer.writeLFloat(serializer, x);
 		MiscSerializer.writeLFloat(serializer, y);
 		MiscSerializer.writeLFloat(serializer, z);
-		MiscSerializer.writeLFloat(serializer, radius);
+		MiscSerializer.writeLFloat(serializer, radius * 100);
 		VarNumberSerializer.writeVarInt(serializer, blocks.length);
 		for (Position b : blocks) {
-			PositionSerializer.writePEPosition(serializer, b);
+			VarNumberSerializer.writeSVarInt(serializer, b.getX());
+			VarNumberSerializer.writeSVarInt(serializer, b.getY());
+			VarNumberSerializer.writeSVarInt(serializer, b.getZ());
 		}
 		return serializer;
 	}
