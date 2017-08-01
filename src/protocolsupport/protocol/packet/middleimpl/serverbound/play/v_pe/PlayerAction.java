@@ -38,12 +38,11 @@ public class PlayerAction extends ServerBoundMiddlePacket {
 	private static final int STOP_SLEEPING = 5;
 	private static final int RESPAWN1 = 6;
 	//private static final int JUMP = 7;
-	private static final int RESPAWN2 = 13;
 	private static final int START_SPRINT = 8;
 	private static final int STOP_SPRINT = 9;
 	private static final int START_SNEAK = 10;
 	private static final int STOP_SNEAK = 11;
-	//private static final int DIMENSION_CHANGE = 12;
+	private static final int DIMENSION_CHANGE = 12;
 	//private static final int DIMENSION_CHANGE_ACK = 13;
 	private static final int START_GLIDE = 14;
 
@@ -51,7 +50,7 @@ public class PlayerAction extends ServerBoundMiddlePacket {
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		switch (action) {
 			case RESPAWN1:
-			case RESPAWN2: {
+			case DIMENSION_CHANGE: {
 				ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacket.PLAY_CLIENT_COMMAND);
 				VarNumberSerializer.writeSVarInt(serializer, 0);
 				return RecyclableSingletonList.create(serializer);

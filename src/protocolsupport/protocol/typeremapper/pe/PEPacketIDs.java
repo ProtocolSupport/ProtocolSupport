@@ -76,6 +76,5 @@ public class PEPacketIDs {
 	//public static final int EDIT_BOOK = 97;
 
 	//REMOVED?
-	//public static final int REMOVE_BLOCK = 21;
 	//public static final int USE_ITEM = 35;
 }

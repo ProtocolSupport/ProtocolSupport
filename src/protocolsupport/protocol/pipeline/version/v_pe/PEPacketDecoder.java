@@ -38,7 +38,6 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		registry.register(NetworkState.PLAY, PEPacketIDs.CHAT, Chat.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.ANIMATION, Animation.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.INTERACT, Interact.class);
-		//registry.register(NetworkState.PLAY, PEPacketIDs.REMOVE_BLOCK, InstantBlockBreak.class);
 		//registry.register(NetworkState.PLAY, PEPacketIDs.USE_ITEM, UseItem.class);
 	}
 
