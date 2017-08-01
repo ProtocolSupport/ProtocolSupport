@@ -61,7 +61,6 @@ public class MCPEServer {
 			}, new UserChannelInitializer() {
 				@Override
 				public void init(Channel channel) {
-					System.out.println("INIT!!!!");
 					NetworkManager networkmanager = new NetworkManager(EnumProtocolDirection.SERVERBOUND);
 					SpigotNetworkManagerWrapper wrapper = new SpigotNetworkManagerWrapper(networkmanager);
 					networkmanager.setPacketListener(new SpigotLegacyHandshakeListener(wrapper));
