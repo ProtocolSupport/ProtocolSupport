@@ -62,7 +62,7 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 				}
 			}
 		}
-		//skip skin data  ---- Skip the rest xD
+		//skip skin data
 		logindata.skipBytes(logindata.readIntLE());
 	}
 
