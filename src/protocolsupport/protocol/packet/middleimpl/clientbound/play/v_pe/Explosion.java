@@ -23,6 +23,7 @@ public class Explosion extends MiddleExplosion {
 		return packets;
 	}
 
+	//TODO: Send chuck again. It seems too many updates make chunks disappear or something..
 	public static ClientBoundPacketData create(ProtocolVersion version, float x, float y, float z, float radius, Position[] blocks) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.EXPLODE, version);
 		MiscSerializer.writeLFloat(serializer, x);
