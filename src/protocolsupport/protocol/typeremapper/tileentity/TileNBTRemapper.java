@@ -8,6 +8,8 @@ import java.util.function.BiFunction;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.toclient.DragonHeadSpecificRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.toclient.PlayerSkullToLegacyOwnerSpecificRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityType;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.minecraftdata.ItemData;
@@ -101,7 +103,7 @@ public class TileNBTRemapper {
 			(version, input) -> {
 				if (input.getNumber("SkullType") == 5) {
 					input.setByte("SkullType", 3);
-					input.setCompound("Owner", ItemStackRemapper.createDragonHeadSkullTag());
+					input.setCompound("Owner", DragonHeadSpecificRemapper.createTag());
 				}
 				return input;
 			},
@@ -110,7 +112,7 @@ public class TileNBTRemapper {
 		register(
 			TileEntityUpdateType.SKULL,
 			(version, input) -> {
-				ItemStackRemapper.remapSkull(input);
+				PlayerSkullToLegacyOwnerSpecificRemapper.remap(input, "Owner", "ExtraType");
 				return input;
 			},
 			ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_7_5)
