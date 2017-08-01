@@ -11,7 +11,7 @@ import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 public class ChunkTransformerPE extends ChunkTransformer {
 
 	private static final byte[] emptySection = new byte[4096 + 2048 + 2048 + 2048];
-	private static final byte[] emptySkyLight = new byte[2048];
+	//private static final byte[] emptySkyLight = new byte[2048];
 
 	private final byte[] blocks = new byte[4096];
 	private final byte[] blockdata = new byte[2048];
@@ -45,12 +45,12 @@ public class ChunkTransformerPE extends ChunkTransformer {
 				}
 				stream.write(blocks, 0, blocks.length);
 				stream.write(blockdata, 0, blockdata.length);
-				if (hasSkyLight) {
+				/*if (hasSkyLight) { TODO: Check this? Probably removed in 1.2.
 					stream.write(skyLight, 0, skyLight.length);
 				} else {
 					stream.write(emptySkyLight, 0, emptySkyLight.length);
-				}
-				stream.write(blockLight, 0, blockLight.length);
+				}*/
+				//stream.write(blockLight, 0, blockLight.length);
 			} else {
 				stream.write(emptySection, 0, emptySection.length);
 			}

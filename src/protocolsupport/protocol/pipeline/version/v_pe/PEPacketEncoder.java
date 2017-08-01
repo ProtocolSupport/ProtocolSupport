@@ -48,6 +48,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldEve
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldParticle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldSound;
 import protocolsupport.protocol.pipeline.version.AbstractLegacyPacketEncoder;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -105,6 +106,12 @@ public class PEPacketEncoder extends AbstractLegacyPacketEncoder {
 
 	public PEPacketEncoder(Connection connection, NetworkDataCache storage) {
 		super(connection, storage);
+	}
+	
+	@Override
+	protected void writePacketId(ByteBuf to, int packetId) {
+		VarNumberSerializer.writeVarInt(to, packetId);
+		to.writeBytes(new byte[2], 0, 2); //? Swell.
 	}
 
 	@Override

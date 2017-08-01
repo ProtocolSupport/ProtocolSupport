@@ -7,6 +7,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetPassengers;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -43,7 +44,7 @@ public class SetPassengers extends MiddleSetPassengers {
 	}
 
 	public static ClientBoundPacketData create(ProtocolVersion version, int vehicleId, int passengerId, boolean add) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(41, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_LINK, version);
 		VarNumberSerializer.writeSVarLong(serializer, vehicleId);
 		VarNumberSerializer.writeSVarLong(serializer, passengerId);
 		serializer.writeBoolean(add);

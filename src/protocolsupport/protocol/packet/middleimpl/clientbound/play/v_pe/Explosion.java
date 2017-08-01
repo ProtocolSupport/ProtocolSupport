@@ -4,7 +4,6 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleExplosion;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PELevelEvent;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
@@ -24,15 +23,18 @@ public class Explosion extends MiddleExplosion {
 		return packets;
 	}
 
+	//TODO: Send chuck again. It seems too many updates make chunks disappear or something..
 	public static ClientBoundPacketData create(ProtocolVersion version, float x, float y, float z, float radius, Position[] blocks) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.EXPLODE, version);
 		MiscSerializer.writeLFloat(serializer, x);
 		MiscSerializer.writeLFloat(serializer, y);
 		MiscSerializer.writeLFloat(serializer, z);
-		MiscSerializer.writeLFloat(serializer, radius);
+		MiscSerializer.writeLFloat(serializer, radius * 100);
 		VarNumberSerializer.writeVarInt(serializer, blocks.length);
 		for (Position b : blocks) {
-			PositionSerializer.writePEPosition(serializer, b);
+			VarNumberSerializer.writeSVarInt(serializer, b.getX());
+			VarNumberSerializer.writeSVarInt(serializer, b.getY());
+			VarNumberSerializer.writeSVarInt(serializer, b.getZ());
 		}
 		return serializer;
 	}

@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUseEntity;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
+import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
@@ -16,11 +17,13 @@ public class Interact extends ServerBoundMiddlePacket {
 
 	protected short peAction;
 	protected int targetId;
+	Vector interactAt;
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		peAction = clientdata.readUnsignedByte();
 		targetId = (int) VarNumberSerializer.readVarLong(clientdata);
+		interactAt = new Vector(MiscSerializer.readLFloat(clientdata), MiscSerializer.readLFloat(clientdata), MiscSerializer.readLFloat(clientdata));
 	}
 
 	private static final int INTERACT = 1;
@@ -35,7 +38,7 @@ public class Interact extends ServerBoundMiddlePacket {
 		switch (peAction) {
 			case INTERACT: {
 				if ((target != null) && (target.getType() != NetworkEntityType.ARMOR_STAND)) {
-					packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT_AT, new Vector(), 0));
+					packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT_AT, interactAt, 0));
 				} else {
 					packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT, null, 0));
 				}

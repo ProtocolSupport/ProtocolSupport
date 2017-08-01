@@ -11,12 +11,11 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_pe.ClientLogin;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Animation;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Chat;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.InstantBlockBreak;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Interact;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PlayerAction;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PositionLook;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.UseItem;
 import protocolsupport.protocol.pipeline.version.AbstractPacketDecoder;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -36,8 +35,6 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		registry.register(NetworkState.PLAY, PEPacketIDs.CHAT, Chat.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.ANIMATION, Animation.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.INTERACT, Interact.class);
-		registry.register(NetworkState.PLAY, PEPacketIDs.REMOVE_BLOCK, InstantBlockBreak.class);
-		registry.register(NetworkState.PLAY, PEPacketIDs.USE_ITEM, UseItem.class);
 	}
 
 	public PEPacketDecoder(Connection connection, NetworkDataCache cache) {
@@ -53,7 +50,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		try {
 			packetTransformer = registry.getTransformer(
 				ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(ctx.channel()),
-				input.readUnsignedByte()
+				readPacketId(input)
 			);
 			packetTransformer.readFromClientData(input);
 			if (input.isReadable()) {
@@ -63,6 +60,12 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		} catch (Exception e) {
 			throwFailedTransformException(e, packetTransformer, input);
 		}
+	}
+	
+	protected int readPacketId(ByteBuf from) {
+		int id = VarNumberSerializer.readVarInt(from);
+		from.skipBytes(2);
+		return id;
 	}
 
 	public static class Noop extends ServerBoundMiddlePacket {
