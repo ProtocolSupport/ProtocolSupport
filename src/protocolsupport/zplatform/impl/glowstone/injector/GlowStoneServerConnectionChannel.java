@@ -26,7 +26,6 @@ public class GlowStoneServerConnectionChannel extends ChannelInitializer {
 		} catch (ChannelException e) {
 		}
 		channel.config().setAllocator(PooledByteBufAllocator.DEFAULT);
-
 		GlowStoneConnectionImpl connection = new GlowStoneConnectionImpl(ServerPlatform.get().getMiscUtils().getNetworkManagerFromChannel(channel));
 		connection.storeInChannel(channel);
 		ProtocolStorage.addConnection(channel.remoteAddress(), connection);

@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.handler;
 
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -20,6 +21,7 @@ import protocolsupport.protocol.pipeline.common.SimpleReadTimeoutHandler;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
+import protocolsupport.zplatform.network.NetworkState;
 
 public abstract class AbstractLoginListenerPlay implements IHasProfile {
 
@@ -40,13 +42,31 @@ public abstract class AbstractLoginListenerPlay implements IHasProfile {
 		return profile;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void finishLogin() {
 		if (!networkManager.isConnected()) {
 			return;
 		}
 
-		//send login success
-		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginSuccessPacket(profile));
+		//send login success and wait for finish
+		CountDownLatch waitpacketsend = new CountDownLatch(1);
+		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginSuccessPacket(profile), new GenericFutureListener<Future<? super Void>>() {
+			@Override
+			public void operationComplete(Future<? super Void> p0) throws Exception {
+				waitpacketsend.countDown();
+			}
+		});
+		try {
+			if (!waitpacketsend.await(5, TimeUnit.SECONDS)) {
+				disconnect("Timeout while waiting for login success send");
+				return;
+			}
+		} catch (InterruptedException e) {
+			disconnect("Exception while waiting for login success send");
+			return;
+		}
+		//set network state to game
+		networkManager.setProtocol(NetworkState.PLAY);
 		//tick connection keep now
 		keepConnection();
 		//now fire login event
