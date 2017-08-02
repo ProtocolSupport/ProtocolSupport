@@ -104,7 +104,9 @@ public class ItemStackSerializer {
 				if (length < 0) {
 					return NBTTagCompoundWrapper.NULL;
 				}
-				return NBTTagCompoundSerializer.readTag(new DataInputStream(new GZIPInputStream(new ByteBufInputStream(from.readSlice(length)))));
+				try (InputStream inputstream = new GZIPInputStream(new ByteBufInputStream(from.readSlice(length)))) {
+					return NBTTagCompoundSerializer.readTag(new DataInputStream(inputstream));
+				}
 			} else if (isUsingDirectNBT(version)) {
 				return NBTTagCompoundSerializer.readTag(new DataInputStream(new ByteBufInputStream(from)));
 			} else {
