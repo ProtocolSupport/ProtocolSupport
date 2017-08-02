@@ -4,10 +4,10 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.text.MessageFormat;
 
-import gnu.trove.map.TIntObjectMap;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherDataRemapper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public abstract class IndexValueRemapper<T extends DataWatcherObject<?>> extends DataWatcherDataRemapper {
 
@@ -41,7 +41,7 @@ public abstract class IndexValueRemapper<T extends DataWatcherObject<?>> extends
 	}
 
 	@Override
-	public void remap(NetworkEntity entity, TIntObjectMap<DataWatcherObject<?>> original, TIntObjectMap<DataWatcherObject<?>> remapped) {
+	public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 		getObject(original, fromIndex, typeClass).ifPresent(o -> remapped.put(toIndex, remapValue(o)));
 	}
 
