@@ -174,8 +174,7 @@ public class GlowStoneNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 
 	@Override
 	public void setList(String key, NBTTagListWrapper list) {
-		ListTag<?> listtag = ((GlowStoneNBTTagListWrapper) list).tag;
-		tag.putList(key, listtag.getType(), listtag.getValue());
+		tag.getValue().put(key, ((GlowStoneNBTTagListWrapper) list).tag);
 	}
 
 	@Override

@@ -600,9 +600,14 @@ public enum SpecificRemapper {
 	}
 
 	SpecificRemapper(NetworkEntityType type, SpecificRemapper superType, Entry... entries) {
-		this(type, entries);
+		this.type = type;
 		for (Map.Entry<ProtocolVersion, List<DataWatcherDataRemapper>> entry : superType.entries.entrySet()) {
 			Utils.getFromMapOrCreateDefault(this.entries, entry.getKey(), new ArrayList<DataWatcherDataRemapper>()).addAll(entry.getValue());
+		}
+		for (Entry entry : entries) {
+			for (ProtocolVersion version : entry.versions) {
+				Utils.getFromMapOrCreateDefault(this.entries, version, new ArrayList<DataWatcherDataRemapper>()).add(entry.remapper);
+			}
 		}
 	}
 
