@@ -108,7 +108,7 @@ public class ItemStackSerializer {
 					return NBTTagCompoundSerializer.readTag(new DataInputStream(inputstream));
 				}
 			} else if (isUsingDirectNBT(version)) {
-				return NBTTagCompoundSerializer.readTag(new DataInputStream(new ByteBufInputStream(from)));
+				return NBTTagCompoundSerializer.readTag(new ByteBufInputStream(from));
 			} else {
 				throw new IllegalArgumentException(MessageFormat.format("Don't know how to read nbt of version {0}", version));
 			}
@@ -134,7 +134,7 @@ public class ItemStackSerializer {
 					to.setShort(writerIndex, to.writerIndex() - writerIndex - Short.BYTES);
 				}
 			} else if (isUsingDirectNBT(version)) {
-				NBTTagCompoundSerializer.writeTag(new DataOutputStream(new ByteBufOutputStream(to)), tag);
+				NBTTagCompoundSerializer.writeTag(new ByteBufOutputStream(to), tag);
 			} else if (isUsingPENBT(version)) {
 				if (tag.isNull()) {
 					to.writeShort(0);
