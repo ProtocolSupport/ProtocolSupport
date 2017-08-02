@@ -17,7 +17,7 @@ public class Interact extends ServerBoundMiddlePacket {
 
 	protected short peAction;
 	protected int targetId;
-	Vector interactAt;
+	protected Vector interactAt;
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
@@ -38,10 +38,10 @@ public class Interact extends ServerBoundMiddlePacket {
 		switch (peAction) {
 			case INTERACT: {
 				if ((target != null) && (target.getType() != NetworkEntityType.ARMOR_STAND)) {
-					packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT_AT, interactAt, 0));
-				} else {
+					//Packet for old plugins that use EntityInteract instead of EntityInteractAt event. Send for all entities except armorstands.
 					packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT, null, 0));
 				}
+				packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT_AT, interactAt, 0)); //Send for all entities.
 				break;
 			}
 			case ATTACK: {
