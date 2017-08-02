@@ -1,8 +1,8 @@
 package protocolsupport.protocol.typeremapper.watchedentity.remapper;
 
-import gnu.trove.map.TIntObjectMap;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class FirstMetaDataAddRemapper extends DataWatcherDataRemapper {
 
@@ -14,7 +14,7 @@ public class FirstMetaDataAddRemapper extends DataWatcherDataRemapper {
 	}
 
 	@Override
-	public void remap(NetworkEntity entity, TIntObjectMap<DataWatcherObject<?>> original, TIntObjectMap<DataWatcherObject<?>> remapped) {
+	public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 		if (entity.getDataCache().firstMeta) {
 			remapped.put(index, object);
 		}

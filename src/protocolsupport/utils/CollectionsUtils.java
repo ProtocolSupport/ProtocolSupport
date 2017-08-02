@@ -61,6 +61,14 @@ public class CollectionsUtils {
 			this(Arrays.asList(entries));
 		}
 
+		public int getMinKey() {
+			return -offset;
+		}
+
+		public int getMaxKey() {
+			return array.length + offset;
+		}
+
 		@SuppressWarnings("unchecked")
 		public T get(int key) {
 			return (T) Utils.getFromArrayOrNull(array, key + offset);

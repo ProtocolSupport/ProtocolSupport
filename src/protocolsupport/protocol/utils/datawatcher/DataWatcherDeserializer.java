@@ -3,9 +3,6 @@ package protocolsupport.protocol.utils.datawatcher;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import gnu.trove.iterator.TIntObjectIterator;
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.ProtocolVersion;
@@ -24,6 +21,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectPosit
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3f;
+import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class DataWatcherDeserializer {
 
@@ -55,8 +53,8 @@ public class DataWatcherDeserializer {
 		registry[DataWatcherObjectIdRegistry.getTypeId(clazz, ProtocolVersionsHelper.LATEST_PC)] = constr;
 	}
 
-	public static TIntObjectMap<DataWatcherObject<?>> decodeData(ByteBuf from, ProtocolVersion version, String locale) {
-		TIntObjectMap<DataWatcherObject<?>> map = new TIntObjectHashMap<>(10, 0.5f, -1);
+	public static ArrayMap<DataWatcherObject<?>> decodeData(ByteBuf from, ProtocolVersion version, String locale) {
+		ArrayMap<DataWatcherObject<?>> map = new ArrayMap<>(256);
 		do {
 			int key = from.readUnsignedByte();
 			if (key == 0xFF) {
@@ -74,17 +72,18 @@ public class DataWatcherDeserializer {
 		return map;
 	}
 
-	public static void encodeData(ByteBuf to, ProtocolVersion version, String locale, TIntObjectMap<DataWatcherObject<?>> objects) {
-		if (!objects.isEmpty()) {
-			TIntObjectIterator<DataWatcherObject<?>> iterator = objects.iterator();
-			while (iterator.hasNext()) {
-				iterator.advance();
-				DataWatcherObject<?> object = iterator.value();
-				to.writeByte(iterator.key());
+	public static void encodeData(ByteBuf to, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> objects) {
+		boolean hadObject = false;
+		for (int key = objects.getMinKey(); key < objects.getMaxKey(); key++) {
+			DataWatcherObject<?> object = objects.get(key);
+			if (object != null) {
+				hadObject = true;
+				to.writeByte(key);
 				to.writeByte(DataWatcherObjectIdRegistry.getTypeId(object, version));
 				object.writeToStream(to, version, locale);
 			}
-		} else {
+		}
+		if (!hadObject) {
 			to.writeByte(31);
 			to.writeByte(0);
 			to.writeByte(0);

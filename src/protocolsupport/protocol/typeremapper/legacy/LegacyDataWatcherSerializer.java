@@ -1,25 +1,25 @@
 package protocolsupport.protocol.typeremapper.legacy;
 
-import gnu.trove.iterator.TIntObjectIterator;
-import gnu.trove.map.TIntObjectMap;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
+import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class LegacyDataWatcherSerializer {
 
-	public static void encodeData(ByteBuf to, ProtocolVersion version, String locale, TIntObjectMap<DataWatcherObject<?>> objects) {
-		if (!objects.isEmpty()) {
-			TIntObjectIterator<DataWatcherObject<?>> iterator = objects.iterator();
-			while (iterator.hasNext()) {
-				iterator.advance();
-				DataWatcherObject<?> object = iterator.value();
-				int tk = ((DataWatcherObjectIdRegistry.getTypeId(object, version) << 5) | (iterator.key() & 0x1F)) & 0xFF;
+	public static void encodeData(ByteBuf to, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> objects) {
+		boolean hadObject = false;
+		for (int key = objects.getMinKey(); key < objects.getMaxKey(); key++) {
+			DataWatcherObject<?> object = objects.get(key);
+			if (object != null) {
+				hadObject = true;
+				int tk = ((DataWatcherObjectIdRegistry.getTypeId(object, version) << 5) | (key & 0x1F)) & 0xFF;
 				to.writeByte(tk);
 				object.writeToStream(to, version, locale);
 			}
-		} else {
+		}
+		if (!hadObject) {
 			to.writeByte(31);
 			to.writeByte(0);
 		}

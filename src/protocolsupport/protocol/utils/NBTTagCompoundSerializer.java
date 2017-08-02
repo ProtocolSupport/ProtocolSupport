@@ -1,11 +1,8 @@
 package protocolsupport.protocol.utils;
 
-import java.io.DataInputStream;
+import java.io.DataInput;
 import java.io.DataOutput;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.MessageFormat;
 
 import protocolsupport.zplatform.ServerPlatform;
@@ -15,14 +12,13 @@ import protocolsupport.zplatform.itemstack.NBTTagType;
 
 public class NBTTagCompoundSerializer {
 
-	public static void writeTag(OutputStream stream, NBTTagCompoundWrapper tag) throws IOException {
-		DataOutputStream dataoutput = new DataOutputStream(stream);
+	public static void writeTag(DataOutput os, NBTTagCompoundWrapper tag) throws IOException {
 		if (tag.isNull()) {
-			dataoutput.writeByte(NBTTagType.END.getId());
+			os.writeByte(NBTTagType.END.getId());
 			return;
 		}
-		writeTagHeader(dataoutput, "", NBTTagType.COMPOUND);
-		writeCompoundPayload(dataoutput, tag);
+		writeTagHeader(os, "", NBTTagType.COMPOUND);
+		writeCompoundPayload(os, tag);
 	}
 
 	private static void writeTagHeader(DataOutput os, String name, NBTTagType tag) throws IOException {
@@ -176,22 +172,21 @@ public class NBTTagCompoundSerializer {
 	}
 
 
-	public static NBTTagCompoundWrapper readTag(InputStream stream) throws IOException {
-		DataInputStream datainput = new DataInputStream(stream);
-		NBTTagType type = NBTTagType.fromId(datainput.readByte());
+	public static NBTTagCompoundWrapper readTag(DataInput is) throws IOException {
+		NBTTagType type = NBTTagType.fromId(is.readByte());
 		if (type == NBTTagType.END) {
 			return NBTTagCompoundWrapper.NULL;
 		}
 		if (type != NBTTagType.COMPOUND) {
 			throw new IOException(MessageFormat.format("Root tag must be compound, got: {0}", type));
 		}
-		datainput.readUTF();
+		is.readUTF();
 		NBTTagCompoundWrapper tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-		readCompoundPayload(datainput, tag);
+		readCompoundPayload(is, tag);
 		return tag;
 	}
 
-	private static void readCompoundPayload(DataInputStream is, NBTTagCompoundWrapper tag) throws IOException {
+	private static void readCompoundPayload(DataInput is, NBTTagCompoundWrapper tag) throws IOException {
 		NBTTagType type = null;
 		while ((type = NBTTagType.fromId(is.readByte())) != NBTTagType.END) {
 			String name = is.readUTF();
@@ -265,7 +260,7 @@ public class NBTTagCompoundSerializer {
 		}
 	}
 
-	private static void readListPayload(DataInputStream is, NBTTagListWrapper tag) throws IOException {
+	private static void readListPayload(DataInput is, NBTTagListWrapper tag) throws IOException {
 		NBTTagType type = NBTTagType.fromId(is.readByte());
 		int size = is.readInt();
 		if ((type == NBTTagType.END) && (size > 0)) {
