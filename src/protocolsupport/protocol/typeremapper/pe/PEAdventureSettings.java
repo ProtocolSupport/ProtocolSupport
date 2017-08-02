@@ -53,8 +53,8 @@ public class PEAdventureSettings {
 		VarNumberSerializer.writeVarInt(serializer, 0); //?
 		//TODO: Actually work with permissions?
 		VarNumberSerializer.writeVarInt(serializer, PERMISSIONS_ALLOW_ALL);
-		VarNumberSerializer.writeVarInt(serializer, GROUP_OP);
-		VarNumberSerializer.writeSVarLong(serializer, entityId);
+		VarNumberSerializer.writeVarInt(serializer, GROUP_NORMAL);
+		VarNumberSerializer.writeSVarLong(serializer, 0);
 		return serializer;
 	}
 
