@@ -1,5 +1,7 @@
 package protocolsupport.protocol.serializer;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -76,12 +78,10 @@ public class ItemStackSerializer {
 					return NBTTagCompoundWrapper.NULL;
 				}
 				try (InputStream inputstream = new GZIPInputStream(new ByteBufInputStream(from.readSlice(length)))) {
-					return NBTTagCompoundSerializer.readTag(inputstream);
+					return NBTTagCompoundSerializer.readTag(new DataInputStream(inputstream));
 				}
 			} else if (isUsingDirectNBT(version)) {
-				try (InputStream inputstream = new ByteBufInputStream(from)) {
-					return NBTTagCompoundSerializer.readTag(inputstream);
-				}
+				return NBTTagCompoundSerializer.readTag(new DataInputStream(new ByteBufInputStream(from)));
 			} else {
 				throw new IllegalArgumentException(MessageFormat.format("Don't know how to read nbt of version {0}", version));
 			}
@@ -101,15 +101,13 @@ public class ItemStackSerializer {
 					to.writeShort(0);
 					//actual nbt
 					try (OutputStream outputstream = new GZIPOutputStream(new ByteBufOutputStream(to))) {
-						NBTTagCompoundSerializer.writeTag(outputstream, tag);
+						NBTTagCompoundSerializer.writeTag(new DataOutputStream(outputstream), tag);
 					}
 					//now replace fake length with real length
 					to.setShort(writerIndex, to.writerIndex() - writerIndex - Short.BYTES);
 				}
 			} else if (isUsingDirectNBT(version)) {
-				try (OutputStream outputstream = new ByteBufOutputStream(to)) {
-					NBTTagCompoundSerializer.writeTag(outputstream, tag);
-				}
+				NBTTagCompoundSerializer.writeTag(new DataOutputStream(new ByteBufOutputStream(to)), tag);
 			} else {
 				throw new IllegalArgumentException(MessageFormat.format("Don't know how to write nbt of version {0}", version));
 			}
