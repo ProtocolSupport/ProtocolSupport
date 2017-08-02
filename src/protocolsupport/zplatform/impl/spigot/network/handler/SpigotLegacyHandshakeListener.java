@@ -21,7 +21,7 @@ public class SpigotLegacyHandshakeListener extends AbstractHandshakeListener imp
 
 	@Override
 	public void a(PacketHandshakingInSetProtocol packet) {
-		handleSetProtocol(packet.b(), SpigotMiscUtils.netStateFromEnumProtocol(packet.a()), packet.hostname, packet.port);
+		handleSetProtocol(SpigotMiscUtils.netStateFromEnumProtocol(packet.a()), packet.hostname, packet.port);
 	}
 
 	@Override

@@ -33,15 +33,14 @@ import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public abstract class AbstractLoginListener implements IHasProfile {
 
-	private static final int loginThreads = Utils.getJavaPropertyValue("loginthreads", Integer.MAX_VALUE, Integer::parseInt);
 	private static final int loginThreadKeepAlive = Utils.getJavaPropertyValue("loginthreadskeepalive", 60, Integer::parseInt);
 
 	static {
-		ProtocolSupport.logInfo(MessageFormat.format("Login threads max count: {0}, keep alive time: {1}", loginThreads, loginThreadKeepAlive));
+		ProtocolSupport.logInfo(MessageFormat.format("Login threads keep alive time: {0}", loginThreadKeepAlive));
 	}
 
 	private static final Executor loginprocessor = new ThreadPoolExecutor(
-		1, loginThreads,
+		1, Integer.MAX_VALUE,
 		loginThreadKeepAlive, TimeUnit.SECONDS,
 		new LinkedBlockingQueue<Runnable>(),
 		r -> new Thread(r, "LoginProcessingThread")

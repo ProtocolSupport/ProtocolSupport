@@ -13,10 +13,10 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_pe.Cli
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Animation;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Chat;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.InstantBlockBreak;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Interact;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PlayerAction;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PositionLook;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.UseItem;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Interact;
 import protocolsupport.protocol.pipeline.version.AbstractPacketDecoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;

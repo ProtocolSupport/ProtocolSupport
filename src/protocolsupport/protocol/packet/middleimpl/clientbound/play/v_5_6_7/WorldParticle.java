@@ -9,6 +9,7 @@ import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.Particle;
+import protocolsupport.utils.IntTuple;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -21,8 +22,12 @@ public class WorldParticle extends MiddleWorldParticle {
 		String name = particle.getName();
 		switch (particle) {
 			case ITEM_CRACK: {
-				int itemstate = ItemStackRemapper.ITEM_ID_REMAPPING_REGISTRY.getTable(version).getRemap(MinecraftData.getItemStateFromIdAndData(adddata.get(0), adddata.get(1)));
-				name += "_" + MinecraftData.getItemIdFromState(itemstate) + "_" + MinecraftData.getItemDataFromState(itemstate);
+				IntTuple iddata = ItemStackRemapper.ID_DATA_REMAPPING_REGISTRY.getTable(version).getRemap(adddata.get(0), adddata.get(1));
+				if (iddata != null) {
+					name += "_" + iddata.getI1() + "_" + (iddata.getI2() != -1 ? iddata.getI2() : adddata.get(1));
+				} else {
+					name += "_" + adddata.get(0) + "_" +  adddata.get(1);
+				}
 				break;
 			}
 			case BLOCK_CRACK:

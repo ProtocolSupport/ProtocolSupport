@@ -53,15 +53,15 @@ public class LegacyPotion {
 		switch (nbttag) {
 			case "mundane":
 			case "minecraft:mundane": {
-				return "Mundane Potion";
+				return "potion.effect.mundane";
 			}
 			case "thick":
 			case "minecraft:thick": {
-				return "Thick Potion";
+				return "potion.effect.thick";
 			}
 			case "awkward":
 			case "minecraft:awkward": {
-				return "Awkward Potion";
+				return "potion.effect.awkward";
 			}
 			default: {
 				return null;

@@ -13,31 +13,31 @@ import protocolsupport.protocol.ConnectionImpl;
 public class ProtocolStorage {
 
 	private static final Map<SocketAddress, Data> primaryStorage = new ConcurrentHashMap<>(1000);
-	private static final Map<SocketAddress, ConnectionImpl> secondayStorage = new ConcurrentHashMap<>(2000);
+	private static final Map<SocketAddress, ConnectionImpl> secondaryStorage = new ConcurrentHashMap<>(2000);
 
 	public static final void addConnection(SocketAddress address, ConnectionImpl connection) {
 		primaryStorage.put(address, new Data(connection));
-		secondayStorage.put(address, connection);
+		secondaryStorage.put(address, connection);
 	}
 
 	public static final void addAddress(SocketAddress primary, SocketAddress additional) {
 		Data dataentry = primaryStorage.get(primary);
 		if (dataentry != null) {
 			dataentry.addresses.add(additional);
-			secondayStorage.put(additional, dataentry.connection);
+			secondaryStorage.put(additional, dataentry.connection);
 		}
 	}
 
 	public static ConnectionImpl getConnection(SocketAddress address) {
-		return secondayStorage.get(address);
+		return address != null ? secondaryStorage.get(address) : null;
 	}
 
 	public static ConnectionImpl removeConnection(SocketAddress address) {
 		Data dataentry = primaryStorage.remove(address);
 		for (SocketAddress aaddr : dataentry.addresses) {
-			secondayStorage.remove(aaddr, dataentry.connection);
+			secondaryStorage.remove(aaddr, dataentry.connection);
 		}
-		secondayStorage.remove(address, dataentry.connection);
+		secondaryStorage.remove(address, dataentry.connection);
 		return dataentry.connection;
 	}
 
