@@ -21,8 +21,8 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
     private static final int flags = (flag_update_neighbors | flag_network | flag_prioirty);
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		return RecyclableSingletonList.create(BlockChangeSingle.create(version, position, id));
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		return RecyclableSingletonList.create(BlockChangeSingle.create(connection.getVersion(), position, id));
 	}
 
 	public static ClientBoundPacketData create(ProtocolVersion version, protocolsupport.protocol.utils.types.Position position, int state) {

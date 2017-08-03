@@ -13,7 +13,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class LoginDisconnect extends MiddleLoginDisconnect {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.LOGIN_DISCONNECT_ID, version);
 		StringSerializer.writeString(serializer, version, ChatAPI.toJSON(LegacyChatJson.convert(message, version, cache.getLocale())));
 		return RecyclableSingletonList.create(serializer);

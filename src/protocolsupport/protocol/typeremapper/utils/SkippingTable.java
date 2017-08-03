@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.skipper.id;
+package protocolsupport.protocol.typeremapper.utils;
 
 import java.util.EnumSet;
 import java.util.HashSet;

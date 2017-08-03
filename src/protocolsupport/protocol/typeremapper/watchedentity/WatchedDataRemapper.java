@@ -15,7 +15,6 @@ public class WatchedDataRemapper {
 		if (entity == null) {
 			return EMPTY_MAP;
 		}
-		entity.updateMetadata(originaldata);
 		TIntObjectHashMap<DataWatcherObject<?>> transformed = new TIntObjectHashMap<>();
 		SpecificRemapper.fromWatchedType(entity.getType()).getRemaps(to)
 		.forEach(remapper -> remapper.remap(entity, originaldata, transformed));

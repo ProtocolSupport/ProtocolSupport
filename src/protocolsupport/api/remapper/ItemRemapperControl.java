@@ -5,8 +5,8 @@ import org.bukkit.Material;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.remapper.BlockRemapperControl.MaterialAndData;
-import protocolsupport.protocol.typeremapper.id.RemappingTable.ComplexIdRemappingTable;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.ComplexIdRemappingTable;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.IntTuple;
 

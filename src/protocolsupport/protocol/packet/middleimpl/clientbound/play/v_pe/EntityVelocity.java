@@ -12,8 +12,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class EntityVelocity extends MiddleEntityVelocity {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		return RecyclableSingletonList.create(create(version, entityId, motX, motY, motZ));
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		return RecyclableSingletonList.create(create(connection.getVersion(), entityId, motX, motY, motZ));
 	}
 
 	public static ClientBoundPacketData create(ProtocolVersion version, int entityId, float motX, float motY, float motZ) {

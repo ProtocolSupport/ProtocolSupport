@@ -8,6 +8,8 @@ import java.util.function.BiFunction;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.toclient.DragonHeadSpecificRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.toclient.PlayerSkullToLegacyOwnerSpecificRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityType;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.minecraftdata.ItemData;
@@ -16,6 +18,7 @@ import protocolsupport.utils.IntTuple;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagType;
 
 public class TileNBTRemapper {
 
@@ -81,7 +84,7 @@ public class TileNBTRemapper {
 		register(
 			TileEntityUpdateType.MOB_SPAWNER,
 			(version, input) -> {
-				if (!input.hasKeyOfType("SpawnData", NBTTagCompoundWrapper.TYPE_COMPOUND)) {
+				if (!input.hasKeyOfType("SpawnData", NBTTagType.COMPOUND)) {
 					NBTTagCompoundWrapper spawndata = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
 					spawndata.setString("id", "minecraft:pig");
 					input.setCompound("SpawnData", spawndata);
@@ -123,9 +126,9 @@ public class TileNBTRemapper {
 		register(
 			TileEntityUpdateType.SKULL,
 			(version, input) -> {
-				if (input.getNumber("SkullType") == 5) {
+				if (input.getIntNumber("SkullType") == 5) {
 					input.setByte("SkullType", 3);
-					input.setCompound("Owner", ItemStackRemapper.createDragonHeadSkullTag());
+					input.setCompound("Owner", DragonHeadSpecificRemapper.createTag());
 				}
 				return input;
 			},
@@ -134,7 +137,7 @@ public class TileNBTRemapper {
 		register(
 			TileEntityUpdateType.SKULL,
 			(version, input) -> {
-				ItemStackRemapper.remapSkull(input);
+				PlayerSkullToLegacyOwnerSpecificRemapper.remap(input, "Owner", "ExtraType");
 				return input;
 			},
 			ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_7_5)
@@ -158,7 +161,7 @@ public class TileNBTRemapper {
 	}
 
 	public static Position getPosition(NBTTagCompoundWrapper tag) {
-		return new Position(tag.getNumber("x"), tag.getNumber("y"), tag.getNumber("z"));
+		return new Position(tag.getIntNumber("x"), tag.getIntNumber("y"), tag.getIntNumber("z"));
 	}
 
 	public static String[] getSignLines(NBTTagCompoundWrapper tag) {

@@ -29,8 +29,8 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		return RecyclableSingletonList.create(create(version, entityId, attributes.values().toArray(new Attribute[0])));
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		return RecyclableSingletonList.create(create(connection.getVersion(), entityId, attributes.values().toArray(new Attribute[0])));
 	}
 
 	public static ClientBoundPacketData create(ProtocolVersion version, int entityId, Attribute... attributes) {

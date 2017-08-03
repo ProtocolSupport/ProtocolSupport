@@ -13,7 +13,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class Statistics extends MiddleStatistics {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_STATISTICS_ID, version);
 		ArraySerializer.writeVarIntTArray(serializer, statistics, (to, stat) -> {
 			StringSerializer.writeString(to, version, stat.name);

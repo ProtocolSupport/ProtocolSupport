@@ -1,8 +1,5 @@
 package protocolsupport.zplatform.impl.spigot.itemstack;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -10,11 +7,13 @@ import org.spigotmc.SneakyThrow;
 
 import net.minecraft.server.v1_12_R1.MojangsonParseException;
 import net.minecraft.server.v1_12_R1.MojangsonParser;
-import net.minecraft.server.v1_12_R1.NBTCompressedStreamTools;
-import net.minecraft.server.v1_12_R1.NBTReadLimiter;
+import net.minecraft.server.v1_12_R1.NBTBase;
 import net.minecraft.server.v1_12_R1.NBTTagCompound;
+import net.minecraft.server.v1_12_R1.NBTTagList;
+import net.minecraft.server.v1_12_R1.NBTTagLongArray;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagType;
 
 public class SpigotNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 
@@ -36,25 +35,12 @@ public class SpigotNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 		return null;
 	}
 
-	public static SpigotNBTTagCompoundWrapper fromStream(DataInput datainput) throws IOException {
-		return new SpigotNBTTagCompoundWrapper(NBTCompressedStreamTools.a(datainput, new NBTReadLimiter(2097152L)));
-	}
-
 	public static SpigotNBTTagCompoundWrapper createEmpty() {
 		return new SpigotNBTTagCompoundWrapper(new NBTTagCompound());
 	}
 
-	public static SpigotNBTTagCompoundWrapper createNull() {
-		return new SpigotNBTTagCompoundWrapper(null);
-	}
-
 	public static SpigotNBTTagCompoundWrapper wrap(NBTTagCompound tag) {
 		return new SpigotNBTTagCompoundWrapper(tag);
-	}
-
-	@Override
-	public void writeToStream(DataOutput outputstream) throws IOException {
-		NBTCompressedStreamTools.a(tag, outputstream);
 	}
 
 	@Override
@@ -67,18 +53,20 @@ public class SpigotNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 		tag.remove(key);
 	}
 
-	public static final int TYPE_STRING = 8;
-	public static final int TYPE_COMPOUND = 10;
-	public static final int TYPE_LIST = 9;
-
 	@Override
 	public Collection<String> getKeys() {
 		return tag.c();
 	}
 
 	@Override
-	public boolean hasKeyOfType(String tagname, int i) {
-		return tag.hasKeyOfType(tagname, i);
+	public NBTTagType getTagType(String tagname) {
+		NBTBase base = tag.get(tagname);
+		return base != null ? NBTTagType.fromId(base.getTypeId()) : null;
+	}
+
+	@Override
+	public boolean hasKeyOfType(String tagname, NBTTagType i) {
+		return tag.hasKeyOfType(tagname, i.getId());
 	}
 
 	@Override
@@ -87,18 +75,17 @@ public class SpigotNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 	}
 
 	@Override
-	public void setCompound(String key, NBTTagCompoundWrapper compound) {
-		tag.set(key, ((SpigotNBTTagCompoundWrapper) compound).tag);
+	public NBTTagListWrapper getList(String key) {
+        NBTBase nbtBase = tag.get(key);
+        if ((nbtBase != null) && (nbtBase.getTypeId() == NBTTagType.LIST.getId())) {
+            return new SpigotNBTTagListWrapper((NBTTagList) nbtBase);
+        }
+        return SpigotNBTTagListWrapper.create();
 	}
 
 	@Override
-	public NBTTagListWrapper getList(String key, int type) {
-		return new SpigotNBTTagListWrapper(tag.getList(key, type));
-	}
-
-	@Override
-	public void setList(String key, NBTTagListWrapper list) {
-		tag.set(key, ((SpigotNBTTagListWrapper) list).tag);
+	public NBTTagListWrapper getList(String key, NBTTagType type) {
+		return new SpigotNBTTagListWrapper(tag.getList(key, type.getId()));
 	}
 
 	@Override
@@ -107,23 +94,99 @@ public class SpigotNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 	}
 
 	@Override
+	public int getIntNumber(String key) {
+		return tag.getInt(key);
+	}
+
+	@Override
+	public long getLongNumber(String key) {
+		return tag.getLong(key);
+	}
+
+	@Override
+	public float getFloatNumber(String key) {
+		return tag.getFloat(key);
+	}
+
+	@Override
+	public double getDoubleNumber(String key) {
+		return tag.getDouble(key);
+	}
+
+	@Override
+	public byte[] getByteArray(String key) {
+		return tag.getByteArray(key);
+	}
+
+	@Override
+	public int[] getIntArray(String key) {
+		return tag.getIntArray(key);
+	}
+
+	@Override
+	public long[] getLongArray(String key) {
+		//TODO: actually implement this
+		return new long[0];
+	}
+
+	@Override
+	public void setCompound(String key, NBTTagCompoundWrapper compound) {
+		tag.set(key, ((SpigotNBTTagCompoundWrapper) compound).tag);
+	}
+
+	@Override
+	public void setList(String key, NBTTagListWrapper list) {
+		tag.set(key, ((SpigotNBTTagListWrapper) list).tag);
+	}
+
+	@Override
 	public void setString(String key, String value) {
 		tag.setString(key, value);
 	}
 
 	@Override
-	public int getNumber(String key) {
-		return tag.getInt(key);
-	}
-
-	@Override
-	public void setInt(String key, int i) {
-		tag.setInt(key, i);
-	}
-
-	@Override
 	public void setByte(String key, int value) {
 		tag.setByte(key, (byte) value);
+	}
+
+	@Override
+	public void setShort(String key, int value) {
+		tag.setShort(key, (short) value);
+	}
+
+	@Override
+	public void setInt(String key, int value) {
+		tag.setInt(key, value);
+	}
+
+	@Override
+	public void setLong(String key, long value) {
+		tag.setLong(key, value);
+	}
+
+	@Override
+	public void setFloat(String key, float value) {
+		tag.setFloat(key, value);
+	}
+
+	@Override
+	public void setDouble(String key, double value) {
+		tag.setDouble(key, value);
+	}
+
+	@Override
+	public void setByteArray(String key, byte[] value) {
+		tag.setByteArray(key, value);
+	}
+
+	@Override
+	public void setIntArray(String key, int[] value) {
+		tag.setIntArray(key, value);
+	}
+
+	@Override
+	public void setLongArray(String key, long[] value) {
+		tag.set(key, new NBTTagLongArray(value));
 	}
 
 	@Override

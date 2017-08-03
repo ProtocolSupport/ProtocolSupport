@@ -13,7 +13,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class BossBar extends MiddleBossBar {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BOSS_BAR_ID, version);
 		MiscSerializer.writeUUID(serializer, uuid);
 		MiscSerializer.writeEnum(serializer, action);

@@ -6,18 +6,19 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldParticle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.id.IdSkipper;
 import protocolsupport.protocol.typeremapper.pe.PELevelEvent;
-import protocolsupport.protocol.typeremapper.skipper.id.IdSkipper;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class WorldParticle extends MiddleWorldParticle {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		if (!IdSkipper.PARTICLE.getTable(version).shouldSkip(type)) {
-			packets.addAll(create(IdRemapper.PARTICLE.getTable(version).getRemap(type), x, y, z, offX, offY, offZ, (int) speed, count));
+			packets.addAll(create(IdRemapper.PARTICLE.getTable(version).getRemap(type.getId()), x, y, z, offX, offY, offZ, (int) speed, count));
 		}
 		return packets;
 	}

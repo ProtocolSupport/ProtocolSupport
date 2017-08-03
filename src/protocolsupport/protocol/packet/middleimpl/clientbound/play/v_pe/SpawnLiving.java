@@ -9,7 +9,6 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.typeremapper.watchedentity.WatchedDataRemapper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -18,7 +17,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class SpawnLiving extends MiddleSpawnLiving {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		return RecyclableSingletonList.create(create(
 			version,
 			entity, x, y, z,
@@ -67,7 +67,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		if (metadata == null) {
 			VarNumberSerializer.writeVarInt(serializer, 0);
 		} else {
-			EntityMetadata.encodeMeta(serializer, version, WatchedDataRemapper.transform(entity, metadata, version));
+			EntityMetadata.encodeMeta(serializer, version, EntityMetadata.transform(entity, metadata, version));
 		}
 		VarNumberSerializer.writeVarInt(serializer, 0); //links, not used
 		return serializer;

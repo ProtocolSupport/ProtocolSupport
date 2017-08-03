@@ -10,6 +10,7 @@ import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagType;
 
 public class GameProfileSerializer {
 
@@ -47,12 +48,12 @@ public class GameProfileSerializer {
 
 	public static GameProfile deserialize(NBTTagCompoundWrapper tag) {
 		String name = null;
-		if (tag.hasKeyOfType(NAME_KEY, NBTTagCompoundWrapper.TYPE_STRING)) {
+		if (tag.hasKeyOfType(NAME_KEY, NBTTagType.STRING)) {
 			name = tag.getString(NAME_KEY);
 		}
 		UUID uuid = null;
 		try {
-			if (tag.hasKeyOfType(UUID_KEY, NBTTagCompoundWrapper.TYPE_STRING)) {
+			if (tag.hasKeyOfType(UUID_KEY, NBTTagType.STRING)) {
 				uuid = UUID.fromString(tag.getString(UUID_KEY));
 			}
 		} catch (Throwable t) {
@@ -61,14 +62,14 @@ public class GameProfileSerializer {
 			return null;
 		}
 		GameProfile gameProfile = new GameProfile(uuid, name);
-		if (tag.hasKeyOfType(PROPERTIES_KEY, NBTTagCompoundWrapper.TYPE_COMPOUND)) {
+		if (tag.hasKeyOfType(PROPERTIES_KEY, NBTTagType.COMPOUND)) {
 			NBTTagCompoundWrapper compound = tag.getCompound(PROPERTIES_KEY);
 			for (String propertyName : compound.getKeys()) {
-				NBTTagListWrapper list = compound.getList(propertyName, NBTTagCompoundWrapper.TYPE_COMPOUND);
+				NBTTagListWrapper list = compound.getList(propertyName, NBTTagType.COMPOUND);
 				for (int i = 0; i < list.size(); ++i) {
 					NBTTagCompoundWrapper value = list.getCompound(i);
 					String propertyValue = value.getString(PROPERTY_VALUE_KEY);
-					if (value.hasKeyOfType(PROPERTY_SIGNATURE_KEY, NBTTagCompoundWrapper.TYPE_STRING)) {
+					if (value.hasKeyOfType(PROPERTY_SIGNATURE_KEY, NBTTagType.STRING)) {
 						gameProfile.getProperties().put(propertyName, new ProfileProperty(propertyName, propertyValue, value.getString(PROPERTY_SIGNATURE_KEY)));
 					} else {
 						gameProfile.getProperties().put(propertyName, new ProfileProperty(propertyName, propertyValue));

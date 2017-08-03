@@ -4,9 +4,6 @@ import java.util.UUID;
 
 import org.bukkit.util.Vector;
 
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.utils.Utils;
 
 public class NetworkEntity {
@@ -60,54 +57,63 @@ public class NetworkEntity {
 	}
 	
 	public void updateDataCache(DataCache updateWith) {
-		cache = updateWith;
+		this.cache = updateWith;
 	}
-	
-	public void updateMetadata(TIntObjectMap<DataWatcherObject<?>> updateWith) {
-		cache.updateMeta(updateWith);
-	}
-
 	
 	@Override
 	public String toString() {
 		return Utils.toStringAllFields(this);
 	}
 
-	public class DataCache {
-		public boolean firstMeta = true;
-		public TIntObjectMap<DataWatcherObject<?>> metadata = new TIntObjectHashMap<>();
+	public static class DataCache {
+		private byte pcBaseFlags = 0;
+		public boolean firstMeta = false;
+		
+		public byte getPcBaseFlags() {
+			return pcBaseFlags;
+		}
+		
+		public boolean getPcBaseFlag(int bitpos) {
+			return (pcBaseFlags & (1 << (bitpos - 1))) != 0;
+		}
+		
+		public void setPcBaseFlag(int bitpos, boolean value) {
+			setPcBaseFlag(bitpos, value ? 1 : 0);
+		}
+		
+		public void setPcBaseFlag(int bitpos, int value) {
+			pcBaseFlags &= ~(1 << (bitpos - 1));
+			pcBaseFlags |= (value << (bitpos - 1));
+		}
+		
+		public void setPcBaseFlags(byte pcBaseFlags) {
+			this.pcBaseFlags = pcBaseFlags;
+		}
+		
+		//Cache for PE shizzles.
+		private long peBaseFlags = 0;
 		public int attachedId = -1; //Leashed? Data is send in pocket meta, but might be useful to store for other things.
-		public boolean inLove = false; //Show just one metaupdate?
 		public Rider rider = new Rider(false);
 		
-		public Object getMetaValue(int index) {
-			if(metadata.containsKey(index)) {
-				return metadata.get(index).getValue();	
-			} else {
-				return null;
-			}
+		public long getPeBaseFlags() {
+			return peBaseFlags;
 		}
 		
-		public boolean getMetaBool(int index) {
-			if(metadata.containsKey(index)) {
-				try {
-					return (boolean) getMetaValue(index);
-				} catch (ClassCastException e) {}
-			}
-			return false;
+		public boolean getPeBaseFlag(int bitpos) {
+			return (peBaseFlags & (1 << (bitpos - 1))) != 0;
 		}
 		
-		public boolean getMetaBool(int index, int bitpos) {
-			if(metadata.containsKey(index)) {
-				return (((byte) getMetaValue(index)) & (1 << (bitpos - 1))) != 0;
-			}
-			return false;
+		public void setPeBaseFlag(int bitpos, boolean value) {
+			setPeBaseFlag(bitpos, value ? 1 : 0);
 		}
 		
-		public void updateMeta(TIntObjectMap<DataWatcherObject<?>> updateWith) {
-			for(int index : updateWith.keys()) {
-				metadata.put(index, updateWith.get(index));
-			}
+		public void setPeBaseFlag(int bitpos, long value) {
+			peBaseFlags &= ~(1l << (bitpos - 1));
+			peBaseFlags |= (value << (bitpos - 1));
+		}
+		
+		public void setPeBaseFlags(long peBaseFlags) {
+			this.peBaseFlags = peBaseFlags;
 		}
 		
 		public class Rider {
@@ -142,6 +148,7 @@ public class NetworkEntity {
 		public String toString() {
 			return Utils.toStringAllFields(this);
 		}
+
 	}
 
 }

@@ -14,11 +14,11 @@ public class MerchantDataSerializer {
 		MerchantData merchdata = new MerchantData(from.readInt());
 		int count = from.readUnsignedByte();
 		for (int i = 0; i < count; i++) {
-			ItemStackWrapper itemstack1 = ItemStackSerializer.readItemStack(from, version, locale);
-			ItemStackWrapper result = ItemStackSerializer.readItemStack(from, version, locale);
+			ItemStackWrapper itemstack1 = ItemStackSerializer.readItemStack(from, version, locale, false);
+			ItemStackWrapper result = ItemStackSerializer.readItemStack(from, version, locale, false);
 			ItemStackWrapper itemstack2 = ServerPlatform.get().getWrapperFactory().createNullItemStack();
 			if (from.readBoolean()) {
-				itemstack2 = ItemStackSerializer.readItemStack(from, version, locale);
+				itemstack2 = ItemStackSerializer.readItemStack(from, version, locale, false);
 			}
 			boolean disabled = from.readBoolean();
 			int uses = 0;
@@ -32,15 +32,15 @@ public class MerchantDataSerializer {
 		return merchdata;
 	}
 
-	public static void writeMerchantData(ByteBuf to, ProtocolVersion version, String locale, MerchantData merchdata, boolean fireItemStackEvents) {
+	public static void writeMerchantData(ByteBuf to, ProtocolVersion version, String locale, MerchantData merchdata) {
 		to.writeInt(merchdata.getWindowId());
 		to.writeByte(merchdata.getOffers().size());
 		for (TradeOffer offer : merchdata.getOffers()) {
-			ItemStackSerializer.writeItemStack(to, version, locale, offer.getItemStack1(), fireItemStackEvents);
-			ItemStackSerializer.writeItemStack(to, version, locale, offer.getResult(), fireItemStackEvents);
+			ItemStackSerializer.writeItemStack(to, version, locale, offer.getItemStack1(), true);
+			ItemStackSerializer.writeItemStack(to, version, locale, offer.getResult(), true);
 			to.writeBoolean(offer.hasItemStack2());
 			if (offer.hasItemStack2()) {
-				ItemStackSerializer.writeItemStack(to, version,locale, offer.getItemStack2(), fireItemStackEvents);
+				ItemStackSerializer.writeItemStack(to, version,locale, offer.getItemStack2(), true);
 			}
 			to.writeBoolean(offer.isDisabled());
 			if (isUsingUsesCount(version)) {

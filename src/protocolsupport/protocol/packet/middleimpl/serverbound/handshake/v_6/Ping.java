@@ -17,7 +17,8 @@ public class Ping extends ServerBoundMiddlePacket {
 	protected int port;
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
+	public void readFromClientData(ByteBuf clientdata) {
+		ProtocolVersion version = connection.getVersion();
 		clientdata.readUnsignedByte();
 		clientdata.readUnsignedByte();
 		StringSerializer.readString(clientdata, version);

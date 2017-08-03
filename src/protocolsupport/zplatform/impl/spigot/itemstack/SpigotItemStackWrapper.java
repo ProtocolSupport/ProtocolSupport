@@ -90,7 +90,11 @@ public class SpigotItemStackWrapper extends ItemStackWrapper {
 
 	@Override
 	public void setTag(NBTTagCompoundWrapper tag) {
-		itemstack.setTag(((SpigotNBTTagCompoundWrapper) tag).tag);
+		if (tag.isNull()) {
+			itemstack.setTag(null);
+		} else {
+			itemstack.setTag(((SpigotNBTTagCompoundWrapper) tag).tag);
+		}
 	}
 
 	@Override

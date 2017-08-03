@@ -18,15 +18,16 @@ import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 public class SpawnObject extends MiddleSpawnObject {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
-		switch(entity.getType()) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
+		switch (entity.getType()) {
 			case ITEM: {
 				//We need to prepare the item because we can only spawn it after we've received the first metadata update.
 				cache.prepareItem(new PreparedItem(entity.getId(), x, y, z, motX / 8.000F, motY / 8000.F, motZ / 8000.F));
 				return RecyclableEmptyList.get();
 			}
 			case ITEM_FRAME: {
-				//TODO: Make this in 1.12.
+				//Still not here :/
 				return RecyclableEmptyList.get();
 			}
 			default: {
@@ -36,7 +37,7 @@ public class SpawnObject extends MiddleSpawnObject {
 						x, y, z,
 						motX / 8.000F, motY / 8000.F, motZ / 8000.F,
 						pitch, yaw,
-						entity.getDataCache().metadata, 
+						null, //TODO: Add spawnmeta to something like sand. 
 						PEDataValues.getObjectEntityTypeId(IdRemapper.ENTITY.getTable(version).getRemap(entity.getType()))
 					));
 			}
@@ -68,7 +69,7 @@ public class SpawnObject extends MiddleSpawnObject {
 		public int getId() {
 			return entityId;
 		}
-		
+
 		public RecyclableArrayList<ClientBoundPacketData> updateItem(ProtocolVersion version, ItemStackWrapper itemstack) {
 			RecyclableArrayList<ClientBoundPacketData> updatepackets = RecyclableArrayList.create();
 			if (!this.itemstack.equals(itemstack)) {
@@ -86,16 +87,16 @@ public class SpawnObject extends MiddleSpawnObject {
 				MiscSerializer.writeLFloat(spawn, (float) x);
 				MiscSerializer.writeLFloat(spawn, (float) y);
 				MiscSerializer.writeLFloat(spawn, (float) z);
-				MiscSerializer.writeLFloat(spawn, motX);
-				MiscSerializer.writeLFloat(spawn, motY);
-				MiscSerializer.writeLFloat(spawn, motZ);
+				MiscSerializer.writeLFloat(spawn, motX / 8000);
+				MiscSerializer.writeLFloat(spawn, motY / 8000);
+				MiscSerializer.writeLFloat(spawn, motZ / 8000);
 				VarNumberSerializer.writeVarInt(spawn, 0);
 				updatepackets.add(spawn);
 				spawned = true;
 			}
 			return updatepackets;
 		}
-		
+
 	}
 
 }

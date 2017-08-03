@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddlePositionLook;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -28,7 +27,7 @@ public class PositionLook extends MiddlePositionLook {
 	}
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
+	public void readFromClientData(ByteBuf clientdata) {
 		VarNumberSerializer.readVarLong(clientdata); //entity id
 		x = MiscSerializer.readLFloat(clientdata);
 		y = MiscSerializer.readLFloat(clientdata) - 1.6200000047683716D;

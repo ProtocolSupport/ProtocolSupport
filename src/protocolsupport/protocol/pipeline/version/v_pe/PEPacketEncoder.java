@@ -2,7 +2,6 @@ package protocolsupport.protocol.pipeline.version.v_pe;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.Connection;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -52,6 +51,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldEve
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldParticle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldSound;
 import protocolsupport.protocol.pipeline.version.AbstractLegacyPacketEncoder;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -113,6 +113,13 @@ public class PEPacketEncoder extends AbstractLegacyPacketEncoder {
 	public PEPacketEncoder(Connection connection, NetworkDataCache storage) {
 		super(connection, storage);
 	}
+	
+	@Override
+	protected void writePacketId(ByteBuf to, int packetId) {
+		VarNumberSerializer.writeVarInt(to, packetId);
+		to.writeByte(0);
+		to.writeByte(0);
+	}
 
 	@Override
 	protected int getNewPacketId(NetworkState currentProtocol, int oldPacketId) {
@@ -127,7 +134,7 @@ public class PEPacketEncoder extends AbstractLegacyPacketEncoder {
 		}
 
 		@Override
-		public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+		public RecyclableCollection<ClientBoundPacketData> toData() {
 			return RecyclableEmptyList.get();
 		}
 

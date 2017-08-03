@@ -8,7 +8,6 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSuccess;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEAdventureSettings;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
@@ -20,7 +19,8 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 public class Login extends MiddleLogin {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		ClientBoundPacketData resourcepack = ClientBoundPacketData.create(PEPacketIDs.RESOURCE_PACK, version);
 		resourcepack.writeBoolean(false); // required
@@ -47,26 +47,28 @@ public class Login extends MiddleLogin {
 		VarNumberSerializer.writeSVarInt(startgame, GameMode.SURVIVAL.getId()); // world gamemode
 		VarNumberSerializer.writeSVarInt(startgame, difficulty.getId());
 		PositionSerializer.writePEPosition(startgame, new Position(0, 0, 0));
-		startgame.writeBoolean(false); //disable achievments
+		startgame.writeBoolean(false); //disable achievements
 		VarNumberSerializer.writeSVarInt(startgame, 0); //time
 		startgame.writeBoolean(false); //edu mode
 		MiscSerializer.writeLFloat(startgame, 0); //rain level
 		MiscSerializer.writeLFloat(startgame, 0); //lighting level
-		startgame.writeBoolean(false); //commands enabled
+		startgame.writeBoolean(true); //is multiplayer
+		startgame.writeBoolean(false); //broadcast to lan
+		startgame.writeBoolean(false); //broadcast to xbl
+		startgame.writeBoolean(true); //commands enabled
 		startgame.writeBoolean(false); //needs texture pack
 		VarNumberSerializer.writeVarInt(startgame, 0); //game rules
-		StringSerializer.writeString(startgame, version, ""); //level type
-		StringSerializer.writeString(startgame, version, ""); //world name
-		StringSerializer.writeString(startgame, version, ""); //premium world template
-		startgame.writeBoolean(false); //apply level ticks
-		startgame.writeLong(0); //level ticks
+		startgame.writeBoolean(false); //bonus chest enabled
+		startgame.writeBoolean(false); //trust players
+		VarNumberSerializer.writeSVarInt(startgame, PEAdventureSettings.GROUP_NORMAL); //permission level
+		VarNumberSerializer.writeSVarInt(startgame, 4); //game publish setting
 		packets.add(startgame);
 		packets.add(PEAdventureSettings.createPacket(cache));
 		ClientBoundPacketData chunkradius = ClientBoundPacketData.create(PEPacketIDs.CHUNK_RADIUS, version);
 		VarNumberSerializer.writeSVarInt(chunkradius, Bukkit.getViewDistance() + 1); //should exactly match the view distance that server uses to broadcast chunks. +1 because mcpe includes the chunk client is standing in in calculations, while pc does not
 		packets.add(chunkradius);
 		packets.add(LoginSuccess.createPlayStatus(version, 3));
-		packets.add(EntityMetadata.create(cache.getWatchedSelf(), version)); //Removes the bubbles right on login. If something important needs to be send also, the server will take care with a metadata update.
+		packets.add(EntityMetadata.createFaux(cache.getWatchedSelf(), version)); //Add faux flags right on login. If something important needs to be send also, the server will take care with a metadata update.
 		return packets;
 	}
 

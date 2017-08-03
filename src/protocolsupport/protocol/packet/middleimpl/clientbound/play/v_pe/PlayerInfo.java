@@ -16,7 +16,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class PlayerInfo extends MiddlePlayerInfo {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		switch (action) {
 			case ADD: {
 				ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_INFO, version);

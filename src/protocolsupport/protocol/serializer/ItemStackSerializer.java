@@ -1,6 +1,5 @@
 package protocolsupport.protocol.serializer;
 
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -19,6 +18,7 @@ import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ItemStackWriteEvent;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
+import protocolsupport.protocol.utils.NBTTagCompoundSerializer;
 import protocolsupport.utils.IntTuple;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
@@ -26,7 +26,7 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class ItemStackSerializer {
 
-	public static ItemStackWrapper readItemStack(ByteBuf from, ProtocolVersion version, String locale) {
+	public static ItemStackWrapper readItemStack(ByteBuf from, ProtocolVersion version, String locale, boolean isFromClient) {
 		int type = 0;
 		if (version == ProtocolVersion.MINECRAFT_PE) {
 			type = VarNumberSerializer.readSVarInt(from);
@@ -35,59 +35,65 @@ public class ItemStackSerializer {
 		}
 		if (type >= 0) {
 			ItemStackWrapper itemstack = ServerPlatform.get().getWrapperFactory().createItemStack(type);
-			int amount, data = 0;
 			if (version == ProtocolVersion.MINECRAFT_PE) {
 				int amountdata = VarNumberSerializer.readSVarInt(from);
-				amount = (amountdata & 0x7F);
-				data = ((amountdata >> 8) & 0xFFFF);
+				itemstack.setAmount(amountdata & 0x7F);
+				itemstack.setData((amountdata >> 8) & 0xFFFF);
 				itemstack.setTag(readTag(from, version));
 				//TODO: Read the rest properly..
 				ArraySerializer.readVarIntStringArray(from, version); //TODO: CanPlaceOn PE
 				ArraySerializer.readVarIntStringArray(from, version); //TODO: CanDestroy PE
 			} else {
-				amount = from.readByte();
-				data = from.readUnsignedShort();
+				itemstack.setAmount(from.readByte());
+				itemstack.setData(from.readUnsignedShort());
 				itemstack.setTag(readTag(from, version));
 			}
-			itemstack.setAmount(amount);
-			itemstack.setData(data);
-			return ItemStackRemapper.remapServerbound(version, locale, itemstack.cloneItemStack());
+			if (isFromClient) {
+				itemstack = ItemStackRemapper.remapFromClient(version, locale, itemstack.cloneItemStack());
+			}
+			return itemstack;
 		}
 		return ServerPlatform.get().getWrapperFactory().createNullItemStack();
 	}
 
-	public static void writeItemStack(ByteBuf to, ProtocolVersion version, String locale, ItemStackWrapper itemstack, boolean fireEvent) {
+	public static void writeItemStack(ByteBuf to, ProtocolVersion version, String locale, ItemStackWrapper itemstack, boolean isToClient) {
 		if (itemstack.isNull()) {
 			if (version == ProtocolVersion.MINECRAFT_PE) {
-				VarNumberSerializer.writeVarInt(to, 0);
+				VarNumberSerializer.writeVarInt(to, -1);
+			} else {
+				to.writeShort(-1);
 			}
-			else to.writeShort(-1);
 			return;
 		}
-		ItemStackWrapper remapped = itemstack.cloneItemStack();
-		IntTuple iddata = ItemStackRemapper.ID_DATA_REMAPPING_REGISTRY.getTable(version).getRemap(remapped.getTypeId(), remapped.getData());
-		if (iddata != null) {
-			remapped.setTypeId(iddata.getI1());
-			if (iddata.getI2() != -1) {
-				remapped.setData(iddata.getI2());
+		ItemStackWrapper witemstack = itemstack;
+		if (isToClient) {
+			witemstack = witemstack.cloneItemStack();
+			IntTuple iddata = ItemStackRemapper.ID_DATA_REMAPPING_REGISTRY.getTable(version).getRemap(witemstack.getTypeId(), witemstack.getData());
+			if (iddata != null) {
+				witemstack.setTypeId(iddata.getI1());
+				if (iddata.getI2() != -1) {
+					witemstack.setData(iddata.getI2());
+				}
 			}
+			if (ItemStackWriteEvent.getHandlerList().getRegisteredListeners().length > 0) {
+				ItemStackWriteEvent event = new InternalItemStackWriteEvent(version, locale, itemstack, witemstack);
+				Bukkit.getPluginManager().callEvent(event);
+			}
+			witemstack = ItemStackRemapper.remapToClient(version, locale, itemstack.getTypeId(), witemstack);
 		}
-		if (fireEvent && (ItemStackWriteEvent.getHandlerList().getRegisteredListeners().length > 0)) {
-			ItemStackWriteEvent event = new InternalItemStackWriteEvent(version, locale, itemstack, remapped);
-			Bukkit.getPluginManager().callEvent(event);
-		}
-		remapped = ItemStackRemapper.remapClientbound(version, locale, itemstack.getTypeId(), remapped);
 		if (version == ProtocolVersion.MINECRAFT_PE) {
-			VarNumberSerializer.writeSVarInt(to, remapped.getTypeId()); //TODO: Remap PE itemstacks...
-			VarNumberSerializer.writeSVarInt(to, ((remapped.getData() & 0xFFFF) << 8) | remapped.getAmount());
-			writeTag(to, version, remapped.getTag()); //TODO: Remap PE NBT
-			VarNumberSerializer.writeVarInt(to, 0); //TODO: CanPlaceOn PE
-			VarNumberSerializer.writeVarInt(to, 0); //TODO: CanDestroy PE
+			VarNumberSerializer.writeSVarInt(to, witemstack.getTypeId()); //TODO: Remap PE itemstacks...
+			VarNumberSerializer.writeSVarInt(to, ((witemstack.getData() & 0xFFFF) << 8) | witemstack.getAmount());
+			writeTag(to, version, witemstack.getTag()); //TODO: Remap PE NBT
+			to.writeByte(0);
+			to.writeByte(0);
+			//VarNumberSerializer.writeVarInt(to, 0); //TODO: CanPlaceOn PE
+			//VarNumberSerializer.writeVarInt(to, 0); //TODO: CanDestroy PE
 		} else {
-			to.writeShort(remapped.getTypeId());
-			to.writeByte(remapped.getAmount());
-			to.writeShort(remapped.getData());
-			writeTag(to, version, remapped.getTag());
+			to.writeShort(witemstack.getTypeId());
+			to.writeByte(witemstack.getAmount());
+			to.writeShort(witemstack.getData());
+			writeTag(to, version, witemstack.getTag());
 		}
 	}
 
@@ -96,19 +102,14 @@ public class ItemStackSerializer {
 			if (isUsingShortLengthNBT(version)) {
 				final short length = from.readShort();
 				if (length < 0) {
-					return ServerPlatform.get().getWrapperFactory().createNullNBTCompound();
+					return NBTTagCompoundWrapper.NULL;
 				}
 				try (InputStream inputstream = new GZIPInputStream(new ByteBufInputStream(from.readSlice(length)))) {
-					return ServerPlatform.get().getWrapperFactory().createNBTCompoundFromStream(inputstream);
+					return NBTTagCompoundSerializer.readTag(inputstream);
 				}
-			} else if (isUsingDirectOrZeroIfNoneNBT(version)) {
-				from.markReaderIndex();
-				if (from.readByte() == 0) {
-					return ServerPlatform.get().getWrapperFactory().createNullNBTCompound();
-				}
-				from.resetReaderIndex();
-				try (DataInputStream datainputstream = new DataInputStream(new ByteBufInputStream(from))) {
-					return ServerPlatform.get().getWrapperFactory().createNBTCompoundFromStream(datainputstream);
+			} else if (isUsingDirectNBT(version)) {
+				try (InputStream inputstream = new ByteBufInputStream(from)) {
+					return NBTTagCompoundSerializer.readTag(inputstream);
 				}
 			} else {
 				throw new IllegalArgumentException(MessageFormat.format("Don't know how to read nbt of version {0}", version));
@@ -129,27 +130,27 @@ public class ItemStackSerializer {
 					to.writeShort(0);
 					//actual nbt
 					try (OutputStream outputstream = new GZIPOutputStream(new ByteBufOutputStream(to))) {
-						tag.writeToStream(outputstream);
+						NBTTagCompoundSerializer.writeTag(outputstream, tag);
 					}
 					//now replace fake length with real length
 					to.setShort(writerIndex, to.writerIndex() - writerIndex - Short.BYTES);
 				}
-			} else if (isUsingDirectOrZeroIfNoneNBT(version)) {
-				if (tag.isNull()) {
-					to.writeByte(0);
-				} else {
-					try (OutputStream outputstream = new ByteBufOutputStream(to)) {
-						tag.writeToStream(outputstream);
-					}
+			} else if (isUsingDirectNBT(version)) {
+				try (OutputStream outputstream = new ByteBufOutputStream(to)) {
+					NBTTagCompoundSerializer.writeTag(outputstream, tag);
 				}
 			} else if (isUsingPENBT(version)) {
-				int writerIndex = to.writerIndex();
-				//fake length
-				to.writeShortLE(0);
-				//actual nbt
-				//tag.writeToStream(new PENetworkNBTDataOutputStream(to)); //TODO Remap and write PE NBT.
-				//now replace fake length with real length
-				to.setShortLE(writerIndex, to.writerIndex() - writerIndex - Short.BYTES);
+				if (tag.isNull()) {
+					to.writeShort(0);
+				} else {
+					int writerIndex = to.writerIndex();
+					//fake length
+					to.writeShortLE(0);
+					//actual nbt
+					//tag.writeToStream(new PENetworkNBTDataOutputStream(to)); //TODO Remap and write PE NBT.
+					//now replace fake length with real length
+					to.setShortLE(writerIndex, to.writerIndex() - writerIndex - Short.BYTES);
+				}
 			} else {
 				throw new IllegalArgumentException(MessageFormat.format("Don't know how to write nbt of version {0}", version));
 			}
@@ -162,7 +163,7 @@ public class ItemStackSerializer {
 		return (version.getProtocolType() == ProtocolType.PC) && version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10);
 	}
 
-	private static final boolean isUsingDirectOrZeroIfNoneNBT(ProtocolVersion version) {
+	private static final boolean isUsingDirectNBT(ProtocolVersion version) {
 		return (version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
 	}
 

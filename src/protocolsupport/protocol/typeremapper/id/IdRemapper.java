@@ -6,12 +6,12 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.bukkit.Material;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.id.RemappingRegistry.EnumRemappingRegistry;
-import protocolsupport.protocol.typeremapper.id.RemappingRegistry.IdRemappingRegistry;
-import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
-import protocolsupport.protocol.typeremapper.id.RemappingTable.EnumRemappingTable;
-import protocolsupport.protocol.typeremapper.id.RemappingTable.HashMapBasedIdRemappingTable;
 import protocolsupport.protocol.typeremapper.pe.PELevelEvent;
+import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.EnumRemappingRegistry;
+import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.IdRemappingRegistry;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.EnumRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.HashMapBasedIdRemappingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
@@ -183,13 +183,7 @@ public class IdRemapper {
 		}
 		{
 			new Mapping(NetworkEntityType.PARROT)
-			.addMapping(NetworkEntityType.OCELOT, ProtocolVersionsHelper.concat(ProtocolVersionsHelper.BEFORE_1_12, ProtocolVersion.MINECRAFT_PE))
-			.register();
-			new Mapping(NetworkEntityType.FIREWORK)
-			.addMapping(NetworkEntityType.FIRECHARGE, ProtocolVersion.MINECRAFT_PE) //TODO: Will come in 1.12 not bothering now.
-			.register();
-			new Mapping(NetworkEntityType.ARMOR_STAND_OBJECT)
-			.addMapping(NetworkEntityType.SKELETON, ProtocolVersion.MINECRAFT_PE) //TODO: Will come in 1.12 not bothering now.
+			.addMapping(NetworkEntityType.OCELOT, ProtocolVersionsHelper.BEFORE_1_12)
 			.register();
 			new Mapping(NetworkEntityType.ILLUSIONER)
 			.addMapping(NetworkEntityType.WITCH, ProtocolVersionsHelper.BEFORE_1_12)
@@ -282,16 +276,18 @@ public class IdRemapper {
 		}
 	};
 
+	//TODO: this doesn't belong here, should be moved to PEDataValues
 	public static final IdRemappingRegistry<HashMapBasedIdRemappingTable> PARTICLE = new IdRemappingRegistry<HashMapBasedIdRemappingTable>() {
 		{
 			//TODO: Check values. (Speculative = names don't match) Only a few values have been tested by hand.
-			registerRemapEntry( 0, PELevelEvent.PARTICLE_EXPLODE, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry( 1, PELevelEvent.PARTICLE_HUGE_EXPLOSION, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry( 2, PELevelEvent.PARTICLE_HUGE_EXPLOSION_SEED, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry( 4, PELevelEvent.PARTICLE_BUBBLE, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry( 5, PELevelEvent.PARTICLE_SPLASH, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry( 6, PELevelEvent.PARTICLE_WATER_WAKE, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry( 9, PELevelEvent.PARTICLE_CRITICAL, ProtocolVersion.MINECRAFT_PE);
+			//TODO: Use particle enum
+			registerRemapEntry(0, PELevelEvent.PARTICLE_EXPLODE, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(1, PELevelEvent.PARTICLE_HUGE_EXPLOSION, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(2, PELevelEvent.PARTICLE_HUGE_EXPLOSION_SEED, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(4, PELevelEvent.PARTICLE_BUBBLE, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(5, PELevelEvent.PARTICLE_SPLASH, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(6, PELevelEvent.PARTICLE_WATER_WAKE, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(9, PELevelEvent.PARTICLE_CRITICAL, ProtocolVersion.MINECRAFT_PE);
 			registerRemapEntry(10, PELevelEvent.PARTICLE_CRITICAL, ProtocolVersion.MINECRAFT_PE); //Magiccrit..?
 			registerRemapEntry(11, PELevelEvent.PARTICLE_SMOKE, ProtocolVersion.MINECRAFT_PE);
 			registerRemapEntry(12, PELevelEvent.PARTICLE_LARGE_SMOKE, ProtocolVersion.MINECRAFT_PE);

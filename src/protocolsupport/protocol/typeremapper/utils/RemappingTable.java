@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.id;
+package protocolsupport.protocol.typeremapper.utils;
 
 import java.util.EnumMap;
 import java.util.HashMap;

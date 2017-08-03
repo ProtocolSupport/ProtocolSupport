@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleGameStateChange;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -14,7 +13,7 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 public class ChangeGameState extends MiddleGameStateChange {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		switch (type) {
 			case 1: {
@@ -28,7 +27,7 @@ public class ChangeGameState extends MiddleGameStateChange {
 			case 3: {
 				int gamemode = (int) value;
 				cache.setGameMode(gamemode);
-				ClientBoundPacketData changeGameType = ClientBoundPacketData.create(PEPacketIDs.CHANGE_PLAYER_GAMETYPE, version);
+				ClientBoundPacketData changeGameType = ClientBoundPacketData.create(PEPacketIDs.CHANGE_PLAYER_GAMETYPE, connection.getVersion());
 				VarNumberSerializer.writeSVarInt(changeGameType, gamemode);
 				packets.add(changeGameType);
 				packets.add(PEAdventureSettings.createPacket(cache));

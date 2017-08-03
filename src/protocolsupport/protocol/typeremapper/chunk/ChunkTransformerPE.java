@@ -4,19 +4,16 @@ import java.io.ByteArrayOutputStream;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
-import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 
 public class ChunkTransformerPE extends ChunkTransformer {
 
-	private static final byte[] emptySection = new byte[4096 + 2048 + 2048 + 2048];
-	private static final byte[] emptySkyLight = new byte[2048];
+	private static final byte[] emptySection = new byte[4096 + 2048];
 
 	private final byte[] blocks = new byte[4096];
 	private final byte[] blockdata = new byte[2048];
-	private final byte[] skyLight = new byte[2048];
-	private final byte[] blockLight = new byte[2048];
 
 	@Override
 	public byte[] toLegacyData(ProtocolVersion version) {
@@ -36,21 +33,11 @@ public class ChunkTransformerPE extends ChunkTransformer {
 							blocks[((xzoffset << 1) | y)] = (byte) MinecraftData.getBlockIdFromState(stateL);
 							blocks[((xzoffset << 1) | (y + 1))] = (byte) MinecraftData.getBlockIdFromState(stateH);
 							blockdata[(xzoffset | (y >> 1))] = (byte) ((MinecraftData.getBlockDataFromState(stateH) << 4) | MinecraftData.getBlockDataFromState(stateL));
-							if (hasSkyLight) {
-								skyLight[(xzoffset | (y >> 1))] = (byte) ((getSkyLight(section, x, y + 1, z) << 4) | getSkyLight(section, x, y, z));
-							}
-							blockLight[(xzoffset | (y >> 1))] = (byte) ((getBlockLight(section, x, y + 1, z) << 4) | getBlockLight(section, x, y, z));
 						}
 					}
 				}
 				stream.write(blocks, 0, blocks.length);
 				stream.write(blockdata, 0, blockdata.length);
-				if (hasSkyLight) {
-					stream.write(skyLight, 0, skyLight.length);
-				} else {
-					stream.write(emptySkyLight, 0, emptySkyLight.length);
-				}
-				stream.write(blockLight, 0, blockLight.length);
 			} else {
 				stream.write(emptySection, 0, emptySection.length);
 			}
@@ -61,23 +48,7 @@ public class ChunkTransformerPE extends ChunkTransformer {
 	}
 
 	private static int getBlockState(ChunkSection section, int x, int y, int z) {
-		return section.blockdata.getBlockState(getIndex(x, y, z));
-	}
-
-	private static int getSkyLight(ChunkSection section, int x, int y, int z) {
-		 int index = getIndex(x, y, z);
-		 int val = section.skylight[index >> 1];
-		 return ((index & 1) == 1) ? val >> 4 : val & 0xF;
-	}
-
-	private static int getBlockLight(ChunkSection section, int x, int y, int z) {
-		 int index = getIndex(x, y, z);
-		 int val = section.blocklight[index >> 1];
-		 return ((index & 1) == 1) ? val >> 4 : val & 0xF;
-	}
-
-	private static int getIndex(int x, int y, int z) {
-		return (y << 8) | (z << 4) | (x);
+		return section.blockdata.getBlockState((y << 8) | (z << 4) | (x));
 	}
 
 }

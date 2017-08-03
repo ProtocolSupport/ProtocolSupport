@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleTeleportAccept;
@@ -21,7 +20,7 @@ public class PositionLook extends ServerBoundMiddlePacket {
 	protected boolean onGround;
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
+	public void readFromClientData(ByteBuf clientdata) {
 		x = clientdata.readDouble();
 		y = clientdata.readDouble();
 		yhead = clientdata.readDouble();

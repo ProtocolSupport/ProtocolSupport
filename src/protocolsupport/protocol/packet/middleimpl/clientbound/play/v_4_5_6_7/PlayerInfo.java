@@ -12,7 +12,8 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 public class PlayerInfo extends MiddlePlayerInfo {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData(ProtocolVersion version) {
+	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> datas = RecyclableArrayList.create();
 		for (Info info : infos) {
 			switch (action) {

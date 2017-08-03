@@ -2,7 +2,7 @@ package protocolsupport.protocol.typeremapper.pe;
 
 import java.util.EnumMap;
 
-import protocolsupport.protocol.typeremapper.id.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
 
@@ -54,6 +54,8 @@ public class PEDataValues {
 		livingEntityType.put(NetworkEntityType.OCELOT, 22);
 		livingEntityType.put(NetworkEntityType.SNOWMAN, 21);
 		livingEntityType.put(NetworkEntityType.LAMA, 29);
+		livingEntityType.put(NetworkEntityType.PARROT, 30);
+		livingEntityType.put(NetworkEntityType.ARMOR_STAND_MOB, 61);
 	}
 
 	public static int getLivingEntityTypeId(NetworkEntityType type) {
@@ -62,6 +64,8 @@ public class PEDataValues {
 
 	private static final EnumMap<NetworkEntityType, Integer> objectEntityType = new EnumMap<>(NetworkEntityType.class);
 	static {
+		objectEntityType.put(NetworkEntityType.FIREWORK, 8);
+		objectEntityType.put(NetworkEntityType.ARMOR_STAND_OBJECT, 61);
 		objectEntityType.put(NetworkEntityType.TNT, 65);
 		objectEntityType.put(NetworkEntityType.FALLING_OBJECT, 66);
 		//TODO: Fix pistons, moving blocks? -> 67
