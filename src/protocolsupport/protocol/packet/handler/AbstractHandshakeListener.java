@@ -30,7 +30,7 @@ public abstract class AbstractHandshakeListener {
 		switch (nextState) {
 			case LOGIN: {
 				networkManager.setProtocol(NetworkState.LOGIN);
-				//check connection throttleconnection.getVersion() != ProtocolVersionsHelper.LATEST_PC)
+				//check connection throttle
 				try {
 					final InetAddress address = networkManager.getAddress().getAddress();
 					if (ThrottleTracker.isEnabled() && !ServerPlatform.get().getMiscUtils().isProxyEnabled()) {

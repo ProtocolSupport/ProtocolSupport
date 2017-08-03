@@ -7,7 +7,6 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import gnu.trove.map.TIntObjectMap;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata.PeMetaBase;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapper;
@@ -48,6 +47,7 @@ import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.NetworkEntity.DataCache.Rider;
 import protocolsupport.utils.CollectionsUtils;
+import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.utils.Utils;
 
 public enum SpecificRemapper {
@@ -152,7 +152,7 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectNBTTagCompound>(DataWatcherObjectIndex.Player.RIGHT_SHOULDER_ENTITY, 16) {}, ProtocolVersion.MINECRAFT_1_12),
 		new Entry(new DataWatcherDataRemapper() {
 			@Override
-			public void remap(NetworkEntity entity, TIntObjectMap<DataWatcherObject<?>> original, TIntObjectMap<DataWatcherObject<?>> remapped) {
+			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				getObject(original, DataWatcherObjectIndex.Entity.FLAGS, DataWatcherObjectByte.class)
 				.ifPresent(baseflags -> entity.getDataCache().setPcBaseFlags(baseflags.getValue()));
 				getObject(original, DataWatcherObjectIndex.EntityLiving.HAND_USE, DataWatcherObjectByte.class)
@@ -766,9 +766,14 @@ public enum SpecificRemapper {
 	}
 
 	SpecificRemapper(NetworkEntityType type, SpecificRemapper superType, Entry... entries) {
-		this(type, entries);
+		this.type = type;
 		for (Map.Entry<ProtocolVersion, List<DataWatcherDataRemapper>> entry : superType.entries.entrySet()) {
 			Utils.getFromMapOrCreateDefault(this.entries, entry.getKey(), new ArrayList<DataWatcherDataRemapper>()).addAll(entry.getValue());
+		}
+		for (Entry entry : entries) {
+			for (ProtocolVersion version : entry.versions) {
+				Utils.getFromMapOrCreateDefault(this.entries, version, new ArrayList<DataWatcherDataRemapper>()).add(entry.remapper);
+			}
 		}
 	}
 

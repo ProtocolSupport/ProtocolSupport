@@ -1,14 +1,14 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import gnu.trove.map.TIntObjectMap;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public abstract class MiddleEntityMetadata extends MiddleEntity {
 
-	protected TIntObjectMap<DataWatcherObject<?>> metadata;
+	protected ArrayMap<DataWatcherObject<?>> metadata;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {

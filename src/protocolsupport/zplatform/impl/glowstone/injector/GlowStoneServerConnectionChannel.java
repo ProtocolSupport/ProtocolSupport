@@ -26,7 +26,6 @@ public class GlowStoneServerConnectionChannel extends ChannelInitializer {
 		} catch (ChannelException e) {
 		}
 		channel.config().setAllocator(PooledByteBufAllocator.DEFAULT);
-
 		GlowStoneConnectionImpl connection = new GlowStoneConnectionImpl(ServerPlatform.get().getMiscUtils().getNetworkManagerFromChannel(channel));
 		connection.storeInChannel(channel);
 		ProtocolStorage.addConnection(channel.remoteAddress(), connection);
@@ -34,7 +33,6 @@ public class GlowStoneServerConnectionChannel extends ChannelInitializer {
 		pipeline.remove(GlowStoneChannelHandlers.READ_TIMEOUT);
 		pipeline.remove("legacy_ping");
 		pipeline.remove("encryption");
-		pipeline.remove("writeidletimeout");
 		pipeline.remove("compression");
 		pipeline.addFirst(GlowStoneChannelHandlers.READ_TIMEOUT, new SimpleReadTimeoutHandler(30));
 		pipeline.addAfter(GlowStoneChannelHandlers.READ_TIMEOUT, ChannelHandlers.INITIAL_DECODER, new InitialPacketDecoder());

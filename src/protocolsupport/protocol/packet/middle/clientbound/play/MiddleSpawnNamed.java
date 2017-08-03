@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import gnu.trove.map.TIntObjectMap;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
@@ -15,6 +14,7 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 
@@ -26,7 +26,7 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 	protected int yaw;
 	protected int pitch;
 	protected List<ProfileProperty> properties;
-	protected TIntObjectMap<DataWatcherObject<?>> metadata;
+	protected ArrayMap<DataWatcherObject<?>> metadata;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
