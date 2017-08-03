@@ -56,19 +56,18 @@ public enum SpecificRemapper {
 	ENTITY(NetworkEntityType.ENTITY,
 		new Entry(new DataWatcherDataRemapper() {
 			@Override
-			public void remap(NetworkEntity entity, TIntObjectMap<DataWatcherObject<?>> original, TIntObjectMap<DataWatcherObject<?>> remapped) {
+			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				// = PE Lead =
 				//Leashing is set in Entity Leash.
 				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_LEASHED, entity.getDataCache().attachedId != -1);
 				remapped.put(38, new DataWatcherObjectSVarLong(entity.getDataCache().attachedId));
 				
 				// = PE Nametag =
-				if(original.containsKey(DataWatcherObjectIndex.Entity.NAMETAG)) {
+				DataWatcherObject<?> nameTagWatcher = original.get(DataWatcherObjectIndex.Entity.NAMETAG);
+				if(nameTagWatcher != null) {
 					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_SHOW_NAMETAG, true);
 					if(!entity.isOfType(NetworkEntityType.PLAYER)) { //Nametag value on player seems to bug up their name.
-						remapped.put(4, original.get(DataWatcherObjectIndex.Entity.NAMETAG));
-					} else {
-						entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG, true);
+						remapped.put(4, nameTagWatcher);
 					}
 				}
 				
@@ -180,7 +179,7 @@ public enum SpecificRemapper {
 	AGEABLE(NetworkEntityType.AGEABLE, SpecificRemapper.INSENTIENT,
 		new Entry(new DataWatcherDataRemapper() {
 			@Override
-			public void remap(NetworkEntity entity, TIntObjectMap<DataWatcherObject<?>> original, TIntObjectMap<DataWatcherObject<?>> remapped) {
+			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				getObject(original, DataWatcherObjectIndex.Ageable.AGE, DataWatcherObjectBoolean.class).ifPresent(boolWatcher -> {
 					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_BABY, boolWatcher.getValue());
 					remapped.put(39, new DataWatcherObjectFloatLe(boolWatcher.getValue() ? 0.5f : 1f)); //Send scale -> avoid big mobs with floating heads.
@@ -233,7 +232,7 @@ public enum SpecificRemapper {
 		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.BaseHorse.FLAGS, new int[] {2, 3, 4}, new int[] {PeMetaBase.FLAG_TAMED, PeMetaBase.FLAG_SADDLED, PeMetaBase.FLAG_CHESTED}), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new DataWatcherDataRemapper(){
 			@Override
-			public void remap(NetworkEntity entity, TIntObjectMap<DataWatcherObject<?>> original, TIntObjectMap<DataWatcherObject<?>> remapped) {
+			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				getObject(original, DataWatcherObjectIndex.BaseHorse.FLAGS, DataWatcherObjectByte.class).ifPresent(byteWatcher -> {
 					if((byteWatcher.getValue() & (1 << (6-1))) != 0) {
 						//TODO: Store PE horseflags when neeeded.
@@ -249,7 +248,7 @@ public enum SpecificRemapper {
 	BATTLE_HORSE(NetworkEntityType.BATTLE_HORSE, SpecificRemapper.BASE_HORSE,
 		new Entry(new DataWatcherDataRemapper() {
 			@Override
-			public void remap(NetworkEntity entity, TIntObjectMap<DataWatcherObject<?>> original, TIntObjectMap<DataWatcherObject<?>> remapped) {
+			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				getObject(original, DataWatcherObjectIndex.BattleHorse.VARIANT, DataWatcherObjectVarInt.class)
 				.ifPresent(variant -> {
 					int variantValue = variant.getValue();
@@ -402,7 +401,7 @@ public enum SpecificRemapper {
 	GIANT(NetworkEntityType.GIANT, SpecificRemapper.INSENTIENT, 
 		new Entry(new DataWatcherDataRemapper() {
 			@Override
-			public void remap(NetworkEntity entity, TIntObjectMap<DataWatcherObject<?>> original, TIntObjectMap<DataWatcherObject<?>> remapped) {
+			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				remapped.put(39, new DataWatcherObjectFloatLe(6f)); //Send scale -> Giants are Giant Zombies in PE.
 			}
 		}, ProtocolVersion.MINECRAFT_PE)),
@@ -420,7 +419,7 @@ public enum SpecificRemapper {
 	ZOMBIE(NetworkEntityType.ZOMBIE, SpecificRemapper.INSENTIENT,
 		new Entry(new DataWatcherDataRemapper() {
 			@Override
-			public void remap(NetworkEntity entity, TIntObjectMap<DataWatcherObject<?>> original, TIntObjectMap<DataWatcherObject<?>> remapped) {
+			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				getObject(original, DataWatcherObjectIndex.Zombie.BABY, DataWatcherObjectBoolean.class).ifPresent(boolWatcher -> {
 					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_BABY, boolWatcher.getValue());
 					remapped.put(39, new DataWatcherObjectFloatLe(boolWatcher.getValue() ? 0.5f : 1f)); //Send scale -> avoid big mobs with floating heads.
@@ -663,7 +662,7 @@ public enum SpecificRemapper {
 	MINECART_FURNACE(NetworkEntityType.MINECART_FURNACE, SpecificRemapper.MINECART,
 		new Entry(new DataWatcherDataRemapper() {
 			@Override
-			public void remap(NetworkEntity entity, TIntObjectMap<DataWatcherObject<?>> original, TIntObjectMap<DataWatcherObject<?>> remapped) {
+			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				//Simulate furnaceMinecart in Pocket.
 				remapped.put(16, new DataWatcherObjectSVarInt(61));
 				getObject(original, DataWatcherObjectIndex.MinecartFurnace.POWERED, DataWatcherObjectBoolean.class).ifPresent(boolWatcher -> {if(boolWatcher.getValue()) {

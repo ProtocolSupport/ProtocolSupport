@@ -13,7 +13,7 @@ public class EntityLeash extends MiddleEntityLeash {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		NetworkEntity e = cache.getWatchedEntity(entityId);
 		if(e != null) {
-			packets.add(EntityMetadata.createFaux(e, connection.getVersion()));
+			packets.add(EntityMetadata.createFaux(e, cache.getLocale(), connection.getVersion()));
 			if(vehicleId == -1) {
 				packets.add(EntityStatus.create(e, EntityStatus.PE_UNLEASH, connection.getVersion()));
 			}

@@ -1,10 +1,10 @@
 package protocolsupport.protocol.typeremapper.watchedentity.remapper.value;
 
-import gnu.trove.map.TIntObjectMap;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherDataRemapper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
 import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public final class PeFlagRemapper extends DataWatcherDataRemapper {
 
@@ -19,7 +19,7 @@ public final class PeFlagRemapper extends DataWatcherDataRemapper {
 	}
 	
 	@Override
-	public void remap(NetworkEntity entity, TIntObjectMap<DataWatcherObject<?>> original, TIntObjectMap<DataWatcherObject<?>> remapped) {
+	public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 		getObject(original, fromByteId, DataWatcherObjectByte.class).ifPresent(fromByteWatcher -> {
 			byte fromByte = fromByteWatcher.getValue();
 			for(int i = 0; i < fromBitPosi.length; i++) {

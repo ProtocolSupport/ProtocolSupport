@@ -44,7 +44,7 @@ public class SetPassengers extends MiddleSetPassengers {
 					else if(vehicle.isOfType(NetworkEntityType.BASE_HORSE)) data.rider = data.new Rider(new Vector(0.0, 2.3, -0.2), true, 180f, -180f);
 					else data.rider = data.new Rider(true);
 					cache.updateWatchedDataCache(passengerId, data);
-					packets.add(EntityMetadata.createFaux(passenger, version));
+					packets.add(EntityMetadata.createFaux(passenger, cache.getLocale(), version));
 					
 					packets.add(create(version, vehicleId, passengerId, LINK));
 					if(cache.isSelf(passengerId)) packets.add(create(version, vehicleId, 0, LINK));
@@ -60,7 +60,7 @@ public class SetPassengers extends MiddleSetPassengers {
 							DataCache data = passenger.getDataCache();
 							data.rider = data.new Rider(false);
 							cache.updateWatchedDataCache(passengerId, data);
-							packets.add(EntityMetadata.createFaux(passenger, version));
+							packets.add(EntityMetadata.createFaux(passenger, cache.getLocale(), version));
 							packets.add(create(version, vehicleId, passengerId, UNLINK));
 							if(cache.isSelf(passengerId)) packets.add(create(version, vehicleId, 0, UNLINK));
 						}

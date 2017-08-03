@@ -1,8 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
-import gnu.trove.iterator.TIntObjectIterator;
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityMetadata;
@@ -16,6 +13,7 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectSVarLong;
 import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
@@ -30,53 +28,73 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		if(entity == null) return packets;
 		switch(entity.getType()) {
 			case ITEM: {
-				if(metadata.containsKey(DataWatcherObjectIndex.Item.ITEM)) {
+				DataWatcherObject<?> itemWatcher = metadata.get(DataWatcherObjectIndex.Item.ITEM);
+				if(itemWatcher != null) {
 					PreparedItem i = cache.getPreparedItem(entityId);
 					if(i != null) {
-						//packets.addAll(i.updateItem(connection.getVersion(), (ItemStackWrapper) metadata.get(DataWatcherObjectIndex.Item.ITEM).getValue()));
+						packets.addAll(i.updateItem(connection.getVersion(), (ItemStackWrapper) metadata.get(DataWatcherObjectIndex.Item.ITEM).getValue()));
 					}
 				}
 			}
 			default: {
-				packets.add(create(entity, metadata, connection.getVersion()));
+				packets.add(create(entity, cache.getLocale(), metadata, connection.getVersion()));
 			}
 		}
 		
 		return packets;
 	}
 	
-	public static ClientBoundPacketData createFaux(NetworkEntity entity,  TIntObjectMap<DataWatcherObject<?>> fauxMeta, ProtocolVersion version) {
-		return create(entity, transform(entity, fauxMeta, version), version);
+	public static ClientBoundPacketData createFaux(NetworkEntity entity, String locale, ArrayMap<DataWatcherObject<?>> fauxMeta, ProtocolVersion version) {
+		return create(entity, locale, transform(entity, fauxMeta, version), version);
 	}
 	
-	public static ClientBoundPacketData createFaux(NetworkEntity entity, ProtocolVersion version) {
-		return create(entity, transform(entity, new TIntObjectHashMap<DataWatcherObject<?>>(), version), version);
+	public static ClientBoundPacketData createFaux(NetworkEntity entity, String locale, ProtocolVersion version) {
+		return create(entity, locale, transform(entity, new ArrayMap<DataWatcherObject<?>>(), version), version);
 	}
 	
-	public static TIntObjectMap<DataWatcherObject<?>> transform(NetworkEntity entity, TIntObjectMap<DataWatcherObject<?>> pcMetadata, ProtocolVersion version) {
-		TIntObjectMap<DataWatcherObject<?>> peMetadata = WatchedDataRemapper.transform(entity, pcMetadata, version);
+	public static ArrayMap<DataWatcherObject<?>> transform(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> pcMetadata, ProtocolVersion version) {
+		ArrayMap<DataWatcherObject<?>> peMetadata = WatchedDataRemapper.transform(entity, pcMetadata, version);
 		peMetadata.put(0, new DataWatcherObjectSVarLong(entity.getDataCache().getPeBaseFlags()));
 		return peMetadata;
 	}
 	
-	public static ClientBoundPacketData create(NetworkEntity entity, TIntObjectMap<DataWatcherObject<?>> metadata, ProtocolVersion version) {
+	public static ClientBoundPacketData create(NetworkEntity entity, String locale, ArrayMap<DataWatcherObject<?>> metadata, ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SET_ENTITY_DATA, version);
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
-		EntityMetadata.encodeMeta(serializer, version, transform(entity, metadata, version));
+		EntityMetadata.encodeMeta(serializer, version, locale, transform(entity, metadata, version));
 		return serializer;
 	}
 	
-	public static void encodeMeta(ByteBuf to, ProtocolVersion version, TIntObjectMap<DataWatcherObject<?>> peMetadata) {
-		TIntObjectIterator<DataWatcherObject<?>> iterator = peMetadata.iterator();
-		VarNumberSerializer.writeVarInt(to, peMetadata.size());
-		while (iterator.hasNext()) {
-			iterator.advance();
-			DataWatcherObject<?> object = iterator.value();
-			VarNumberSerializer.writeVarInt(to, iterator.key());
-			int tk = DataWatcherObjectIdRegistry.getTypeId(object, version) ;
-			VarNumberSerializer.writeVarInt(to, tk);
-			object.writeToStream(to, version, null);
+	public static void encodeMeta(ByteBuf to, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> peMetadata) {
+		ByteBuf fakeBuf = null;
+		int entries = 0;
+		for (int key = peMetadata.getMinKey(); key < peMetadata.getMaxKey(); key++) {
+			DataWatcherObject<?> object = peMetadata.get(key);
+			if (object != null) {
+				VarNumberSerializer.writeVarInt(fakeBuf, key);
+				VarNumberSerializer.writeVarInt(fakeBuf, DataWatcherObjectIdRegistry.getTypeId(object, version));
+				object.writeToStream(fakeBuf, version, locale);
+				entries++;
+			}
 		}
+		//We stored that. Now write the length first and then go.
+		VarNumberSerializer.writeVarInt(to, entries);
+		to.writeBytes(fakeBuf);
+		
+		
+		
+		/*VarNumberSerializer.writeVarInt(to, 0); //Fake
+		int entries = 0;
+		for (int key = peMetadata.getMinKey(); key < peMetadata.getMaxKey(); key++) {
+			DataWatcherObject<?> object = peMetadata.get(key);
+			if (object != null) {
+				VarNumberSerializer.writeVarInt(to, key);
+				VarNumberSerializer.writeVarInt(to, DataWatcherObjectIdRegistry.getTypeId(object, version));
+				object.writeToStream(to, version, locale);
+				entries++;
+			}
+		}*/
+		
 	}
 
 	public static class PeMetaBase {

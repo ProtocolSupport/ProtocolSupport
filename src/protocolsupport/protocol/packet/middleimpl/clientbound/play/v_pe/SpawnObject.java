@@ -36,7 +36,7 @@ public class SpawnObject extends MiddleSpawnObject {
 						entity, 
 						x, y, z,
 						motX / 8.000F, motY / 8000.F, motZ / 8000.F,
-						pitch, yaw,
+						pitch, yaw, cache.getLocale(),
 						null, //TODO: Add spawnmeta to something like sand. 
 						PEDataValues.getObjectEntityTypeId(IdRemapper.ENTITY.getTable(version).getRemap(entity.getType()))
 					));
@@ -83,7 +83,7 @@ public class SpawnObject extends MiddleSpawnObject {
 				ClientBoundPacketData spawn = ClientBoundPacketData.create(PEPacketIDs.ADD_ITEM_ENTITY, version);
 				VarNumberSerializer.writeSVarLong(spawn, entityId);
 				VarNumberSerializer.writeVarLong(spawn, entityId);
-				ItemStackSerializer.writeItemStack(spawn, version, cache.getLocale(), itemstack, false);
+				ItemStackSerializer.writeItemStack(spawn, version, cache.getLocale(), itemstack, true);
 				MiscSerializer.writeLFloat(spawn, (float) x);
 				MiscSerializer.writeLFloat(spawn, (float) y);
 				MiscSerializer.writeLFloat(spawn, (float) z);

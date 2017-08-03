@@ -68,7 +68,7 @@ public class Login extends MiddleLogin {
 		VarNumberSerializer.writeSVarInt(chunkradius, Bukkit.getViewDistance() + 1); //should exactly match the view distance that server uses to broadcast chunks. +1 because mcpe includes the chunk client is standing in in calculations, while pc does not
 		packets.add(chunkradius);
 		packets.add(LoginSuccess.createPlayStatus(version, 3));
-		packets.add(EntityMetadata.createFaux(cache.getWatchedSelf(), version)); //Add faux flags right on login. If something important needs to be send also, the server will take care with a metadata update.
+		packets.add(EntityMetadata.createFaux(cache.getWatchedSelf(), cache.getLocale(), version)); //Add faux flags right on login. If something important needs to be send also, the server will take care with a metadata update.
 		return packets;
 	}
 
