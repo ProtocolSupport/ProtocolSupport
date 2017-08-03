@@ -421,7 +421,7 @@ public class SoundRemapper {
 			//manually mapped sounds
 			registerRemapEntry("block.chest.open", "random.chestopen", ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry("block.chest.close", "random.chestclosed", ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry("entity.player.hurt_on_fire", "entity.player.hurt", ProtocolVersionsHelper.RANGE__1_9__1_12);
+			registerRemapEntry("entity.player.hurt_on_fire", "entity.player.hurt", ProtocolVersionsHelper.RANGE__1_9__1_12_1);
 			registerRemapEntry("entity.player.hurt_on_fire", "game.player.hurt", ProtocolVersionsHelper.BEFORE_1_9);
 		}
 		@Override

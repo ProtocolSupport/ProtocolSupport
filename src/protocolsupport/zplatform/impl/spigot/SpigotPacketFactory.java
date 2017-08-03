@@ -589,8 +589,13 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
-	public int getOutPlayAdvancementProgressPacketId() {
+	public int getOutPlayAdvancementsTabPacketId() {
 		return getOutId(PacketPlayOutSelectAdvancementTab.class);
+	}
+
+	@Override
+	public int getOutPlayCraftingGridConfirmPacketId() {
+		return getOutId(PacketPlayOutAutoRecipe.class);
 	}
 
 

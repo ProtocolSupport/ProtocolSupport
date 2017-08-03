@@ -220,7 +220,9 @@ public interface PlatformPacketFactory {
 
 	public int getOutPlayAdvancementsPacketId();
 
-	public int getOutPlayAdvancementProgressPacketId();
+	public int getOutPlayAdvancementsTabPacketId();
+
+	public int getOutPlayCraftingGridConfirmPacketId();
 
 
 	public int getInHandshakeStartPacketId();
