@@ -25,6 +25,7 @@ public class Chat extends MiddleChat {
 		ProtocolVersion version = connection.getVersion();
 		int type = clientdata.readUnsignedByte();
 		Validate.isTrue(type == validChatType, MessageFormat.format("Unxepected serverbound chat type, expected {0}, but received {1}", validChatType, type));
+		StringSerializer.readString(clientdata, version); //skip unknown string (seems to be empty)
 		StringSerializer.readString(clientdata, version); //skip sender
 		message = StringSerializer.readString(clientdata, version);
 		if ((message.length() >= 2) && cmdCharacters.contains(message.charAt(0)) && (message.charAt(1) == '/')) {
