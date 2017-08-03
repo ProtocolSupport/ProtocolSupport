@@ -1,5 +1,7 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
+import protocolsupport.api.ProtocolType;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -19,4 +21,9 @@ public abstract class MiddleChat extends ServerBoundMiddlePacket {
 		return RecyclableSingletonList.create(creator);
 	}
 
+	public static ServerBoundPacketData create(String message) {
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_CHAT);
+		StringSerializer.writeString(creator, ProtocolVersion.getLatest(ProtocolType.PC), message);
+		return creator;
+	}
 }
