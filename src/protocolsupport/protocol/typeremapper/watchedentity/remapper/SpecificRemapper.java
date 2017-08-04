@@ -86,10 +86,10 @@ public enum SpecificRemapper {
 				remapped.put(39, new DataWatcherObjectFloatLe(1)); //Overridden by baby's or Giants.
 				
 				// = PE Interaction =
-				remapped.put(40, new DataWatcherObjectString("Interact")); //TODO: different texts? I ain't bothered.
+				remapped.put(40, new DataWatcherObjectString("Interact")); //Different texts? I ain't bothered.
 				
 			}}, ProtocolVersion.MINECRAFT_PE),
-		new Entry(new PeSimpleFlagAdder(new int[] {PeMetaBase.FLAG_GRAVITY}, new boolean[] {true}), ProtocolVersion.MINECRAFT_PE),
+		new Entry(new PeSimpleFlagAdder(new int[] {PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG, PeMetaBase.FLAG_GRAVITY}, new boolean[] {true, true}), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.Entity.FLAGS, 
 				new int[] {1, 2, 4, 6, 8}, new int[] {PeMetaBase.FLAG_ON_FIRE, PeMetaBase.FLAG_SNEAKING, PeMetaBase.FLAG_SPRINTING, PeMetaBase.FLAG_INVISIBLE, PeMetaBase.FLAG_GLIDING}
 		), ProtocolVersion.MINECRAFT_PE),
@@ -301,7 +301,7 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Lama.VARIANT, 18) {}, ProtocolVersionsHelper.RANGE__1_11__1_12)
 	),
 	BAT(NetworkEntityType.BAT, SpecificRemapper.INSENTIENT,
-		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.Bat.HANGING, new int[] {1}, new int[] {PeMetaBase.FLAG_RESTING}), ProtocolVersion.MINECRAFT_PE),
+		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.Bat.HANGING, new int[] {1, 1}, new int[] {PeMetaBase.FLAG_RESTING, -PeMetaBase.FLAG_GRAVITY}), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Bat.HANGING, 12) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Bat.HANGING, 11) {}, ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Bat.HANGING, 16) {}, ProtocolVersionsHelper.BEFORE_1_9)

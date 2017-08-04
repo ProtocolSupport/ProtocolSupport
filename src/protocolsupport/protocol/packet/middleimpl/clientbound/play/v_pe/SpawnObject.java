@@ -90,7 +90,7 @@ public class SpawnObject extends MiddleSpawnObject {
 				MiscSerializer.writeLFloat(spawn, motX / 8000);
 				MiscSerializer.writeLFloat(spawn, motY / 8000);
 				MiscSerializer.writeLFloat(spawn, motZ / 8000);
-				VarNumberSerializer.writeVarInt(spawn, 0);
+				VarNumberSerializer.writeVarInt(spawn, 0); //Metadata?
 				updatepackets.add(spawn);
 				spawned = true;
 			}

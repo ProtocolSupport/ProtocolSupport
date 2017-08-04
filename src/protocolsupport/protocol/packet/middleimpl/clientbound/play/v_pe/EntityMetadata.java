@@ -49,7 +49,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 	}
 	
 	public static ClientBoundPacketData createFaux(NetworkEntity entity, String locale, ProtocolVersion version) {
-		return create(entity, locale, transform(entity, new ArrayMap<DataWatcherObject<?>>(), version), version);
+		return create(entity, locale, transform(entity, new ArrayMap<DataWatcherObject<?>>(76), version), version);
 	}
 	
 	public static ArrayMap<DataWatcherObject<?>> transform(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> pcMetadata, ProtocolVersion version) {
@@ -66,23 +66,29 @@ public class EntityMetadata extends MiddleEntityMetadata {
 	}
 	
 	public static void encodeMeta(ByteBuf to, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> peMetadata) {
-		ByteBuf fakeBuf = null;
+		
+		//For now. Iterate two times :P
 		int entries = 0;
 		for (int key = peMetadata.getMinKey(); key < peMetadata.getMaxKey(); key++) {
 			DataWatcherObject<?> object = peMetadata.get(key);
 			if (object != null) {
-				VarNumberSerializer.writeVarInt(fakeBuf, key);
-				VarNumberSerializer.writeVarInt(fakeBuf, DataWatcherObjectIdRegistry.getTypeId(object, version));
-				object.writeToStream(fakeBuf, version, locale);
 				entries++;
 			}
 		}
 		//We stored that. Now write the length first and then go.
 		VarNumberSerializer.writeVarInt(to, entries);
-		to.writeBytes(fakeBuf);
+		for (int key = peMetadata.getMinKey(); key < peMetadata.getMaxKey(); key++) {
+			DataWatcherObject<?> object = peMetadata.get(key);
+			if (object != null) {
+				VarNumberSerializer.writeVarInt(to, key);
+				VarNumberSerializer.writeVarInt(to, DataWatcherObjectIdRegistry.getTypeId(object, version));
+				object.writeToStream(to, version, locale);
+				entries++;
+			}
+		}
 		
 		
-		
+		//TODO Fake this stuff.
 		/*VarNumberSerializer.writeVarInt(to, 0); //Fake
 		int entries = 0;
 		for (int key = peMetadata.getMinKey(); key < peMetadata.getMaxKey(); key++) {
