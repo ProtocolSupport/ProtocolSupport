@@ -12,7 +12,8 @@ import protocolsupport.utils.Utils;
 
 public enum ProtocolVersion {
 
-	MINECRAFT_FUTURE(-1, new OrderId(ProtocolType.PC, 18)),
+	MINECRAFT_FUTURE(-1, new OrderId(ProtocolType.PC, 19)),
+	MINECRAFT_1_12_1(338, new OrderId(ProtocolType.PC, 18), "1.12.1"),
 	MINECRAFT_1_12(335, new OrderId(ProtocolType.PC, 17), "1.12"),
 	MINECRAFT_1_11_1(316, new OrderId(ProtocolType.PC, 16), "1.11.2"),
 	MINECRAFT_1_11(315, new OrderId(ProtocolType.PC, 15), "1.11"),
@@ -270,7 +271,7 @@ public enum ProtocolVersion {
 	public static ProtocolVersion getLatest(ProtocolType type) {
 		switch (type) {
 			case PC: {
-				return MINECRAFT_1_12;
+				return MINECRAFT_1_12_1;
 			}
 			case PE: {
 				return MINECRAFT_PE;

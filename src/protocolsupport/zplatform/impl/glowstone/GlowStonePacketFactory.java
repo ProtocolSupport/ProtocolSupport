@@ -692,18 +692,23 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 
 	@Override
 	public int getOutPlayUnlockRecipesPacketId() {
-		return 0x30; // TODO: not implemented in Glowstone
+		return 0x31; // TODO: not implemented in Glowstone
 	}
 
 	@Override
-	public int getOutPlayAdvancementProgressPacketId() {
-		return 0x36; // TODO: not implemented in Glowstone
+	public int getOutPlayAdvancementsTabPacketId() {
+		return 0x37; // TODO: not implemented in Glowstone
 	}
 
 
 	@Override
 	public int getOutPlayAdvancementsPacketId() {
-		return 0x4C; // TODO: not implemented in Glowstone
+		return 0x4D; // TODO: not implemented in Glowstone
+	}
+
+	@Override
+	public int getOutPlayCraftingGridConfirmPacketId() {
+		return 0x2B; // TODO: not implemented in Glowstone
 	}
 
 

@@ -64,7 +64,7 @@ public class PEPacketIDs {
 	//public static final int BOSS_EVENT = 74;
 	//public static final int SHOW_CREDITS = 75;
 	//public static final int TAB_COMPLETE = 76;
-	//public static final int COMMAND_REQUEST = 77;
+	public static final int COMMAND_REQUEST = 77;
 	//public static final int COMMAND_BLOCK_UPDATE = 78;
 	//public static final int TRADE_UPDATE = 80;
 	//public static final int EQUIPMENT = 81;
