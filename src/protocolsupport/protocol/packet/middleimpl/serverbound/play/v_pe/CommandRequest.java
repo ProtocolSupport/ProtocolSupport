@@ -12,16 +12,13 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class CommandRequest extends ServerBoundMiddlePacket {
 
 	protected String command;
-	protected int type;
-	protected String requestId;
-	protected int playerId;
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		command = StringSerializer.readString(clientdata, connection.getVersion());
-		type = VarNumberSerializer.readVarInt(clientdata);
-		requestId = StringSerializer.readString(clientdata, connection.getVersion());
-		playerId = VarNumberSerializer.readSVarInt(clientdata);
+		VarNumberSerializer.readVarInt(clientdata); // type
+		StringSerializer.readString(clientdata, connection.getVersion()); // request ID
+		VarNumberSerializer.readSVarInt(clientdata); // player ID
 	}
 
 	@Override

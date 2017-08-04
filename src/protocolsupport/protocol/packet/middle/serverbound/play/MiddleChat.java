@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import protocolsupport.api.ProtocolType;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -16,14 +14,12 @@ public abstract class MiddleChat extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_CHAT);
-		StringSerializer.writeString(creator, ProtocolVersionsHelper.LATEST_PC, message);
-		return RecyclableSingletonList.create(creator);
+		return RecyclableSingletonList.create(create(message));
 	}
 
 	public static ServerBoundPacketData create(String message) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_CHAT);
-		StringSerializer.writeString(creator, ProtocolVersion.getLatest(ProtocolType.PC), message);
+		StringSerializer.writeString(creator, ProtocolVersionsHelper.LATEST_PC, message);
 		return creator;
 	}
 }
