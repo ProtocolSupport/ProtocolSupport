@@ -86,8 +86,7 @@ public class ItemStackSerializer {
 		if (version == ProtocolVersion.MINECRAFT_PE) {
 			VarNumberSerializer.writeSVarInt(to, witemstack.getTypeId()); //TODO: Remap PE itemstacks...
 			VarNumberSerializer.writeSVarInt(to, ((witemstack.getData() & 0xFFFF) << 8) | witemstack.getAmount());
-			to.writeShortLE(0);
-			//writeTag(to, version, witemstack.getTag()); //TODO: write and Remap PE NBT
+			writeTag(to, version, witemstack.getTag()); //TODO: write and Remap PE NBT
 			to.writeByte(0); //TODO: CanPlaceOn PE
 			to.writeByte(0); //TODO: CanDestroy PE
 		} else {
@@ -110,6 +109,8 @@ public class ItemStackSerializer {
 				}
 			} else if (isUsingDirectNBT(version)) {
 				return NBTTagCompoundSerializer.readTag(new ByteBufInputStream(from));
+			} else if (isUsingPENBT(version)) {
+				return NBTTagCompoundSerializer.readPeTag(from, version);
 			} else {
 				throw new IllegalArgumentException(MessageFormat.format("Don't know how to read nbt of version {0}", version));
 			}
@@ -144,7 +145,7 @@ public class ItemStackSerializer {
 					//fake length
 					to.writeShortLE(0);
 					//actual nbt
-					NBTTagCompoundSerializer.writePeTag(to, tag, version); //TODO Remap and write PE NBT.
+					//NBTTagCompoundSerializer.writePeTag(to, tag, version); //TODO Remap PE NBT?
 					//now replace fake length with real length
 					to.setShortLE(writerIndex, to.writerIndex() - writerIndex - Short.BYTES);
 				}

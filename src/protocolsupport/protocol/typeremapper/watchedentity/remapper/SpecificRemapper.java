@@ -65,16 +65,14 @@ public enum SpecificRemapper {
 				// = PE Nametag =
 				//Doing this for players makes nametags behave weird or only when close.
 				DataWatcherObject<?> nameTagWatcher = original.get(DataWatcherObjectIndex.Entity.NAMETAG);
-				boolean doNametag = (nameTagWatcher != null && entity.getType() != NetworkEntityType.PLAYER);
+				boolean doNametag = (nameTagWatcher != null);
 				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_SHOW_NAMETAG, doNametag);
-				if(doNametag) {
-					remapped.put(4, nameTagWatcher);
-				}
+				if (doNametag) { remapped.put(4, nameTagWatcher); }
 				
 				// = PE Riding =
 				Rider rider = entity.getDataCache().rider;
 				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_RIDING, rider.riding);
-				if(rider.riding) {
+				if (rider.riding) {
 					//Extra data PE needs for vehicles. Set in setPassenger.
 					remapped.put(57, new DataWatcherObjectVector3fLe(rider.position));
 					remapped.put(58, new DataWatcherObjectByte((byte) ((rider.rotationLocked) ? 1 : 0)));
@@ -86,7 +84,7 @@ public enum SpecificRemapper {
 				remapped.put(40, new DataWatcherObjectString("Interact")); //Different texts? I ain't bothered.
 				
 			}}, ProtocolVersion.MINECRAFT_PE),
-		new Entry(new PeSimpleFlagAdder(new int[] {PeMetaBase.FLAG_GRAVITY}, new boolean[] {true}), ProtocolVersion.MINECRAFT_PE),
+		new Entry(new PeSimpleFlagAdder(new int[] {PeMetaBase.FLAG_GRAVITY, PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG}, new boolean[] {true, true}), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.Entity.FLAGS, 
 				new int[] {1, 2, 4, 6, 8}, new int[] {PeMetaBase.FLAG_ON_FIRE, PeMetaBase.FLAG_SNEAKING, PeMetaBase.FLAG_SPRINTING, PeMetaBase.FLAG_INVISIBLE, PeMetaBase.FLAG_GLIDING}
 		), ProtocolVersion.MINECRAFT_PE),
