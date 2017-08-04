@@ -82,9 +82,6 @@ public enum SpecificRemapper {
 					if(rider.rotationMin != null) remapped.put(60, new DataWatcherObjectFloatLe(rider.rotationMin));
 				}
 				
-				// = PE Scale =
-				remapped.put(39, new DataWatcherObjectFloatLe(1)); //Overridden by baby's or Giants.
-				
 				// = PE Interaction =
 				remapped.put(40, new DataWatcherObjectString("Interact")); //Different texts? I ain't bothered.
 				
