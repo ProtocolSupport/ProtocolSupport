@@ -5,6 +5,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -12,8 +13,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
 import protocolsupport.ProtocolSupport;
@@ -56,18 +57,21 @@ public class FeatureEmulation implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onItemPickup(PlayerPickupItemEvent event) {
-		Player player = event.getPlayer();
-		Connection connection = ProtocolSupportAPI.getConnection(player);
-		if (
-			(connection != null) &&
-			(connection.getVersion().getProtocolType() == ProtocolType.PC) &&
-			connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9)
-		) {
-			player.playSound(
-				event.getItem().getLocation(), Sound.ENTITY_ITEM_PICKUP,
-				0.2F, (((ThreadLocalRandom.current().nextFloat() - ThreadLocalRandom.current().nextFloat()) * 0.7F) + 1.0F) * 2.0F
-			);
+	public void onItemPickup(EntityPickupItemEvent event) {
+		Entity entity = event.getEntity();
+		if (entity instanceof Player) {
+			Player player = (Player) entity;
+			Connection connection = ProtocolSupportAPI.getConnection(player);
+			if (
+				(connection != null) &&
+				(connection.getVersion().getProtocolType() == ProtocolType.PC) &&
+				connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9)
+			) {
+				player.playSound(
+					event.getItem().getLocation(), Sound.ENTITY_ITEM_PICKUP,
+					0.2F, (((ThreadLocalRandom.current().nextFloat() - ThreadLocalRandom.current().nextFloat()) * 0.7F) + 1.0F) * 2.0F
+				);
+			}
 		}
 	}
 
