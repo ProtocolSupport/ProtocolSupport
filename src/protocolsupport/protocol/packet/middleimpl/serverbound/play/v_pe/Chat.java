@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import java.text.MessageFormat;
-import java.util.HashSet;
 
 import org.apache.commons.lang3.Validate;
 
@@ -14,12 +13,6 @@ public class Chat extends MiddleChat {
 
 	private static final int validChatType = 1;
 
-	public static final HashSet<Character> cmdCharacters = new HashSet<>();
-	static {
-		cmdCharacters.add('!');
-		cmdCharacters.add('.');
-	}
-
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		ProtocolVersion version = connection.getVersion();
@@ -28,9 +21,6 @@ public class Chat extends MiddleChat {
 		StringSerializer.readString(clientdata, version); //skip unknown string (seems to be empty)
 		StringSerializer.readString(clientdata, version); //skip sender
 		message = StringSerializer.readString(clientdata, version);
-		if ((message.length() >= 2) && cmdCharacters.contains(message.charAt(0)) && (message.charAt(1) == '/')) {
-			message = message.substring(1);
-		}
 	}
 
 }
