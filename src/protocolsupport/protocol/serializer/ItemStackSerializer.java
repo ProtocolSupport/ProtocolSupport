@@ -144,7 +144,7 @@ public class ItemStackSerializer {
 					//fake length
 					to.writeShortLE(0);
 					//actual nbt
-					//tag.writeToStream(new PENetworkNBTDataOutputStream(to)); //TODO Remap and write PE NBT.
+					NBTTagCompoundSerializer.writePeTag(to, tag, version); //TODO Remap and write PE NBT.
 					//now replace fake length with real length
 					to.setShortLE(writerIndex, to.writerIndex() - writerIndex - Short.BYTES);
 				}

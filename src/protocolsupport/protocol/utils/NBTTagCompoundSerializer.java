@@ -5,6 +5,11 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.text.MessageFormat;
 
+import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
@@ -327,6 +332,338 @@ public class NBTTagCompoundSerializer {
 				case LIST: {
 					NBTTagListWrapper list = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
 					readListPayload(is, list);
+					tag.addList(list);
+					break;
+				}
+				default: {
+					throw new IOException(MessageFormat.format("Unknown or unsupported tag type {0}", type));
+				}
+			}
+		}
+	}
+	
+	public static void writePeTag(ByteBuf os, NBTTagCompoundWrapper tag, ProtocolVersion version) throws IOException {
+		if (tag.isNull()) {
+			os.writeByte(NBTTagType.END.getId());
+			return;
+		}
+		writePeTagHeader(os, "", NBTTagType.COMPOUND, version);
+		writePeCompoundPayload(os, tag, version);
+	}
+	
+	private static void writePeTagHeader(ByteBuf os, String name, NBTTagType tag, ProtocolVersion version) throws IOException {
+		os.writeByte(tag.getId());
+		StringSerializer.writeString(os, version, name);
+	}
+	
+	private static void writePeCompoundPayload(ByteBuf os, NBTTagCompoundWrapper tag, ProtocolVersion version) throws IOException {
+		for (String key : tag.getKeys()) {
+			NBTTagType type = tag.getTagType(key);
+			writePeTagHeader(os, key, type, version);
+			switch (type) {
+				case BYTE: {
+					os.writeByte(tag.getIntNumber(key));
+					break;
+				}
+				case SHORT: {
+					os.writeShortLE(tag.getIntNumber(key));
+					break;
+				}
+				case INT: {
+					VarNumberSerializer.writeSVarInt(os, tag.getIntNumber(key));
+					break;
+				}
+				case LONG: {
+					VarNumberSerializer.writeSVarLong(os, tag.getLongNumber(key));
+					break;
+				}
+				case FLOAT: {
+					MiscSerializer.writeLFloat(os, tag.getFloatNumber(key));
+					break;
+				}
+				case DOUBLE: {
+					os.writeDouble(tag.getDoubleNumber(key));
+					break;
+				}
+				case BYTE_ARRAY: {
+					byte[] array = tag.getByteArray(key);
+					VarNumberSerializer.writeVarInt(os, array.length);
+					os.writeBytes(array);
+					break;
+				}
+				case INT_ARRAY: {
+					int[] array = tag.getIntArray(key);
+					VarNumberSerializer.writeVarInt(os, array.length);
+					for (int v : array) {
+						VarNumberSerializer.writeSVarInt(os, v);
+					}
+					break;
+				}
+				//Not in PE (Yet) :S
+				/*case LONG_ARRAY: {
+					long[] array = tag.getLongArray(key);
+					VarNumberSerializer.writeVarInt(os, array.length);
+					for (long v : array) {
+						VarNumberSerializer.writeSVarInt(os, (int) v); //Cast that sh*t.
+					}
+					break;
+				}*/
+				case STRING: {
+					StringSerializer.writeString(os, version, tag.getString(key));
+					break;
+				}
+				case COMPOUND: {
+					writePeCompoundPayload(os, tag.getCompound(key), version);
+					break;
+				}
+				case LIST: {
+					writePeListPayload(os, tag.getList(key), version);
+					break;
+				}
+				default: {
+					throw new IOException(MessageFormat.format("Unknown or unsupported tag type {0}", type));
+				}
+			}
+		}
+		os.writeByte(NBTTagType.END.getId());
+	}
+
+	private static void writePeListPayload(ByteBuf os, NBTTagListWrapper tag, ProtocolVersion version) throws IOException {
+		NBTTagType type = tag.getType();
+		os.writeByte(type.getId());
+		os.writeInt(tag.size());
+		for (int i = 0; i < tag.size(); i++) {
+			switch (type) {
+				case END: {
+					break;
+				}
+				case BYTE: {
+					os.writeByte(tag.getIntNumber(i));
+					break;
+				}
+				case SHORT: {
+					os.writeShortLE(tag.getIntNumber(i));
+					break;
+				}
+				case INT: {
+					VarNumberSerializer.writeSVarInt(os, tag.getIntNumber(i));
+					break;
+				}
+				case LONG: {
+					VarNumberSerializer.writeSVarLong(os, tag.getLongNumber(i));
+					break;
+				}
+				case FLOAT: {
+					MiscSerializer.writeLFloat(os, tag.getFloatNumber(i));
+					break;
+				}
+				case DOUBLE: {
+					os.writeDouble(tag.getDoubleNumber(i));
+					break;
+				}
+				case BYTE_ARRAY: {
+					byte[] array = tag.getByteArray(i);
+					VarNumberSerializer.writeVarInt(os, array.length);
+					os.writeBytes(array);
+					break;
+				}
+				case INT_ARRAY: {
+					int[] array = tag.getIntArray(i);
+					VarNumberSerializer.writeVarInt(os, array.length);
+					for (int v : array) {
+						VarNumberSerializer.writeSVarInt(os, v);
+					}
+					break;
+				}
+				//Not in PE (Yet) :S
+				/*case LONG_ARRAY: {
+					long[] array = tag.getLongArray(i);
+					os.writeInt(array.length);
+					for (long v : array) {
+						os.writeLong(v);
+					}
+					break;
+				}*/
+				case STRING: {
+					StringSerializer.writeString(os, version, tag.getString(i));
+					break;
+				}
+				case COMPOUND: {
+					writePeCompoundPayload(os, tag.getCompound(i), version);
+					break;
+				}
+				case LIST: {
+					writePeListPayload(os, tag.getList(i), version);
+					break;
+				}
+				default: {
+					throw new IOException(MessageFormat.format("Unknown or unsupported tag type {0}", type));
+				}
+			}
+		}
+	}
+	
+	public static NBTTagCompoundWrapper readPeTag(ByteBuf is, ProtocolVersion version) throws IOException {
+		NBTTagType type = NBTTagType.fromId(is.readByte());
+		if (type == NBTTagType.END) {
+			return NBTTagCompoundWrapper.NULL;
+		}
+		if (type != NBTTagType.COMPOUND) {
+			throw new IOException(MessageFormat.format("Root tag must be compound, got: {0}", type));
+		}
+		StringSerializer.readString(is, version);
+		NBTTagCompoundWrapper tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+		readPeCompoundPayload(is, tag, version);
+		return tag;
+	}
+
+	private static void readPeCompoundPayload(ByteBuf is, NBTTagCompoundWrapper tag, ProtocolVersion version) throws IOException {
+		NBTTagType type = null;
+		while ((type = NBTTagType.fromId(is.readByte())) != NBTTagType.END) {
+			String name = StringSerializer.readString(is, version);
+			switch (type) {
+				case BYTE: {
+					tag.setByte(name, is.readByte());
+					break;
+				}
+				case SHORT: {
+					tag.setShort(name, is.readShortLE());
+					break;
+				}
+				case INT: {
+					tag.setInt(name, VarNumberSerializer.readSVarInt(is));
+					break;
+				}
+				case LONG: {
+					tag.setLong(name, VarNumberSerializer.readSVarLong(is));
+					break;
+				}
+				case FLOAT: {
+					tag.setFloat(name, MiscSerializer.readLFloat(is));
+					break;
+				}
+				case DOUBLE: {
+					tag.setDouble(name, is.readDouble());
+					break;
+				}
+				case BYTE_ARRAY: {
+					byte[] array = new byte[VarNumberSerializer.readVarInt(is)];
+					for(int i = 0; i < array.length; i++) {
+						array[i] = is.readByte();
+					}
+					tag.setByteArray(name, array);
+					break;
+				}
+				case INT_ARRAY: {
+					int[] array = new int[VarNumberSerializer.readVarInt(is)];
+					for(int i = 0; i < array.length; i++) {
+						array[i] = VarNumberSerializer.readSVarInt(is);
+					}
+					tag.setIntArray(name, array);
+					break;
+				}
+				//Not in PE (Yet) :S
+				/*case LONG_ARRAY: {
+					long[] array = new long[is.readInt()];
+					for (int j = 0; j < array.length; j++) {
+						array[j] = is.readLong();
+					}
+					tag.setLongArray(name, array);
+					break;
+				}*/
+				case STRING: {
+					tag.setString(name, StringSerializer.readString(is, version));
+					break;
+				}
+				case COMPOUND: {
+					NBTTagCompoundWrapper compound = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+					readPeCompoundPayload(is, compound, version);
+					tag.setCompound(name, compound);
+					break;
+				}
+				case LIST: {
+					NBTTagListWrapper list = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
+					readPeListPayload(is, list, version);
+					tag.setList(name, list);
+					break;
+				}
+				default: {
+					throw new IOException(MessageFormat.format("Unknown or unsupported tag type {0}", type));
+				}
+			}
+		}
+	}
+	
+	private static void readPeListPayload(ByteBuf is, NBTTagListWrapper tag, ProtocolVersion version) throws IOException {
+		NBTTagType type = NBTTagType.fromId(is.readByte());
+		int size = is.readInt();
+		if ((type == NBTTagType.END) && (size > 0)) {
+			throw new IOException("Missing type");
+		}
+		for (int i = 0; i < size; i++) {
+			switch (type) {
+				case BYTE: {
+					tag.addByte(is.readByte());
+					break;
+				}
+				case SHORT: {
+					tag.addShort(is.readShortLE());
+					break;
+				}
+				case INT: {
+					tag.addInt(VarNumberSerializer.readSVarInt(is));
+					break;
+				}
+				case LONG: {
+					tag.addLong(VarNumberSerializer.readSVarLong(is));
+					break;
+				}
+				case FLOAT: {
+					tag.addFloat(MiscSerializer.readLFloat(is));
+					break;
+				}
+				case DOUBLE: {
+					tag.addDouble(is.readDouble());
+					break;
+				}
+				case BYTE_ARRAY: {
+					byte[] array = new byte[VarNumberSerializer.readVarInt(is)];
+					for(int ii = 0; ii < array.length; ii++) {
+						array[ii] = is.readByte();
+					}
+					tag.addByteArray(array);
+					break;
+				}
+				case INT_ARRAY: {
+					int[] array = new int[VarNumberSerializer.readVarInt(is)];
+					for(int ii = 0; ii < array.length; ii++) {
+						array[ii] = VarNumberSerializer.readSVarInt(is);
+					}
+					tag.addIntArray(array);
+					break;
+				}
+				//Not in PE (Yet) :S
+				/*case LONG_ARRAY: {
+					long[] array = new long[is.readInt()];
+					for (int j = 0; j < array.length; j++) {
+						array[j] = is.readLong();
+					}
+					tag.addLongArray(array);
+					break;
+				}*/
+				case STRING: {
+					tag.addString(StringSerializer.readString(is, version));
+					break;
+				}
+				case COMPOUND: {
+					NBTTagCompoundWrapper compound = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+					readPeCompoundPayload(is, compound, version);
+					tag.addCompound(compound);
+					break;
+				}
+				case LIST: {
+					NBTTagListWrapper list = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
+					readPeListPayload(is, list, version);
 					tag.addList(list);
 					break;
 				}
