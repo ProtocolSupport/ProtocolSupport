@@ -62,21 +62,19 @@ public class LegacyChatJson {
 		register((version, locale, component) -> {
 			if (component instanceof TranslateComponent) {
 				TranslateComponent tcomponent = (TranslateComponent) component;
-				if (!LegacyI18NData.isSupported(tcomponent.getTranslationKey(), version)) {
-					BaseComponent[] tlargs = tcomponent.getTranslationArgs().toArray(new BaseComponent[0]);
-					String[] tlstringsplit = I18NData.getI18N(locale).getI18N(tcomponent.getTranslationKey()).split("[%][s]", -1);
-					if (tlargs.length != (tlstringsplit.length - 1)) {
-						return new TextComponent("Translation error");
-					}
-					BaseComponent rootcomponent = cloneComponentAuxData(tcomponent, new TextComponent(""));
-					for (int i = 0; i < tlstringsplit.length; i++) {
-						rootcomponent.addSibling(new TextComponent(tlstringsplit[i].replace("%%", "%")));
-						if (i < (tlstringsplit.length - 1)) {
-							rootcomponent.addSibling(tlargs[i]);
-						}
-					}
-					return rootcomponent;
+				BaseComponent[] tlargs = tcomponent.getTranslationArgs().toArray(new BaseComponent[0]);
+				String[] tlstringsplit = I18NData.getI18N(locale).getI18N(tcomponent.getTranslationKey()).split("[%][s]", -1);
+				if (tlargs.length != (tlstringsplit.length - 1)) {
+					return new TextComponent("Translation error");
 				}
+				BaseComponent rootcomponent = cloneComponentAuxData(tcomponent, new TextComponent(""));
+				for (int i = 0; i < tlstringsplit.length; i++) {
+					rootcomponent.addSibling(new TextComponent(tlstringsplit[i].replace("%%", "%")));
+					if (i < (tlstringsplit.length - 1)) {
+						rootcomponent.addSibling(tlargs[i]);
+					}
+				}
+				return rootcomponent;
 			}
 			return component;
 		}, ProtocolVersion.getAllSupported());
