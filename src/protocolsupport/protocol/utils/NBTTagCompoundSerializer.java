@@ -387,7 +387,7 @@ public class NBTTagCompoundSerializer {
 				}
 				case BYTE_ARRAY: {
 					byte[] array = tag.getByteArray(key);
-					VarNumberSerializer.writeVarInt(os, array.length);
+					writePeNBTInt(os, varint, array.length);
 					os.writeBytes(array);
 					break;
 				}
@@ -712,8 +712,9 @@ public class NBTTagCompoundSerializer {
 			VarNumberSerializer.writeVarInt(to, data.length);
 			to.writeBytes(data);
 		} else {
-			to.writeShortLE(s.length());
-			to.writeBytes(s.getBytes(StandardCharsets.UTF_16BE));
+			byte[] data = s.getBytes(StandardCharsets.UTF_8);
+			to.writeShortLE(data.length);
+			to.writeBytes(data);
 		}
 	}
 	
