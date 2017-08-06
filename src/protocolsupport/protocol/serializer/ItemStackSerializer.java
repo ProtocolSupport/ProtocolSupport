@@ -41,7 +41,7 @@ public class ItemStackSerializer {
 				int amountdata = VarNumberSerializer.readSVarInt(from);
 				itemstack.setAmount(amountdata & 0x7F);
 				itemstack.setData((amountdata >> 8) & 0xFFFF);
-				itemstack.setTag(readTag(from, version));
+				itemstack.setTag(readTag(from, false, version));
 				//TODO: Read the rest properly..
 				ArraySerializer.readVarIntStringArray(from, version); //TODO: CanPlaceOn PE
 				ArraySerializer.readVarIntStringArray(from, version); //TODO: CanDestroy PE
@@ -86,7 +86,7 @@ public class ItemStackSerializer {
 		if (version == ProtocolVersion.MINECRAFT_PE) {
 			VarNumberSerializer.writeSVarInt(to, witemstack.getTypeId()); //TODO: Remap PE itemstacks...
 			VarNumberSerializer.writeSVarInt(to, ((witemstack.getData() & 0xFFFF) << 8) | witemstack.getAmount());
-			writeTag(to, version, witemstack.getTag()); //TODO: write and Remap PE NBT
+			writeTag(to, false, version, witemstack.getTag()); //TODO: write and Remap PE NBT
 			to.writeByte(0); //TODO: CanPlaceOn PE
 			to.writeByte(0); //TODO: CanDestroy PE
 		} else {
@@ -98,6 +98,10 @@ public class ItemStackSerializer {
 	}
 
 	public static NBTTagCompoundWrapper readTag(ByteBuf from, ProtocolVersion version) {
+		return readTag(from, false, version);
+	}
+	
+	public static NBTTagCompoundWrapper readTag(ByteBuf from, boolean varint, ProtocolVersion version) {
 		try {
 			if (isUsingShortLengthNBT(version)) {
 				final short length = from.readShort();
@@ -110,7 +114,7 @@ public class ItemStackSerializer {
 			} else if (isUsingDirectNBT(version)) {
 				return NBTTagCompoundSerializer.readTag(new ByteBufInputStream(from));
 			} else if (isUsingPENBT(version)) {
-				return NBTTagCompoundSerializer.readPeTag(from, version);
+				return NBTTagCompoundSerializer.readPeTag(from, varint);
 			} else {
 				throw new IllegalArgumentException(MessageFormat.format("Don't know how to read nbt of version {0}", version));
 			}
@@ -118,8 +122,12 @@ public class ItemStackSerializer {
 			throw new DecoderException(e);
 		}
 	}
-
+	
 	public static void writeTag(ByteBuf to, ProtocolVersion version, NBTTagCompoundWrapper tag) {
+		writeTag(to, false, version, tag);
+	}
+
+	public static void writeTag(ByteBuf to, boolean varint, ProtocolVersion version, NBTTagCompoundWrapper tag) {
 		try {
 			if (isUsingShortLengthNBT(version)) {
 				if (tag.isNull()) {
@@ -138,19 +146,15 @@ public class ItemStackSerializer {
 			} else if (isUsingDirectNBT(version)) {
 				NBTTagCompoundSerializer.writeTag(new ByteBufOutputStream(to), tag);
 			} else if (isUsingPENBT(version)) {
-				System.out.println("Going to write POCKET NBT");
 				if (tag.isNull()) {
 					to.writeShortLE(0);
-					System.out.println("NO NBT");
 				} else {
 					int writerIndex = to.writerIndex();
 					//fake length
 					to.writeShortLE(0);
 					//actual nbt
-					NBTTagCompoundSerializer.writePeTag(to, tag, version); //TODO Remap PE NBT?
+					NBTTagCompoundSerializer.writePeTag(to, varint, tag); //TODO Remap PE NBT?
 					//now replace fake length with real length
-					
-					System.out.println("Length: " + (to.writerIndex() - writerIndex - Short.BYTES));
 					to.setShortLE(writerIndex, to.writerIndex() - writerIndex - Short.BYTES);
 				}
 			} else {

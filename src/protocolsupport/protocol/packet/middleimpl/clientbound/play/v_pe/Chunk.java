@@ -33,7 +33,7 @@ public class Chunk extends MiddleChunk {
 		chunkdata.writeByte(0); //borders
 		VarNumberSerializer.writeSVarInt(chunkdata, 0); //extra data
 		for (NBTTagCompoundWrapper tile : tiles) {
-			ItemStackSerializer.writeTag(chunkdata, version, TileNBTRemapper.remap(version, tile));
+			ItemStackSerializer.writeTag(chunkdata, true, version, TileNBTRemapper.remap(version, tile));
 		}
 		ArraySerializer.writeByteArray(serializer, version, chunkdata);
 		return RecyclableSingletonList.create(serializer);
