@@ -16,6 +16,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Inventor
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PlayerAction;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PositionLook;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.CommandRequest;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.HeldSlot;
 import protocolsupport.protocol.pipeline.version.AbstractPacketDecoder;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
@@ -38,6 +39,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		registry.register(NetworkState.PLAY, PEPacketIDs.ANIMATION, Animation.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.INTERACT, Interact.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.COMMAND_REQUEST, CommandRequest.class);
+		registry.register(NetworkState.PLAY, PEPacketIDs.PLAYER_HOTBAR, HeldSlot.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.CONTAINER_CLOSE, InventoryClose.class);
 	}
 
