@@ -352,6 +352,7 @@ public class NBTTagCompoundSerializer {
 	}
 	
 	private static void writePeTagHeader(ByteBuf os, String name, NBTTagType tag, ProtocolVersion version) throws IOException {
+		System.out.print(name + ": ");
 		os.writeByte(tag.getId());
 		StringSerializer.writeString(os, version, name);
 	}
@@ -362,33 +363,40 @@ public class NBTTagCompoundSerializer {
 			writePeTagHeader(os, key, type, version);
 			switch (type) {
 				case BYTE: {
+					System.out.print(tag.getIntNumber(key) + " ");
 					os.writeByte(tag.getIntNumber(key));
 					break;
 				}
 				case SHORT: {
+					System.out.print(tag.getIntNumber(key) + " ");
 					os.writeShortLE(tag.getIntNumber(key));
 					break;
 				}
 				case INT: {
+					System.out.print(tag.getIntNumber(key) + " ");
 					VarNumberSerializer.writeSVarInt(os, tag.getIntNumber(key));
 					break;
 				}
 				case LONG: {
-					VarNumberSerializer.writeSVarLong(os, tag.getLongNumber(key));
+					System.out.print(tag.getLongNumber(key) + " ");
+					os.writeLongLE(tag.getLongNumber(key));
 					break;
 				}
 				case FLOAT: {
+					System.out.print(tag.getFloatNumber(key) + " ");
 					MiscSerializer.writeLFloat(os, tag.getFloatNumber(key));
 					break;
 				}
 				case DOUBLE: {
-					os.writeDouble(tag.getDoubleNumber(key));
+					System.out.print(tag.getDoubleNumber(key) + " ");
+					MiscSerializer.writeLDouble(os, tag.getDoubleNumber(key));
 					break;
 				}
 				case BYTE_ARRAY: {
 					byte[] array = tag.getByteArray(key);
 					VarNumberSerializer.writeVarInt(os, array.length);
 					os.writeBytes(array);
+					System.out.print(array + " ");
 					break;
 				}
 				case INT_ARRAY: {
@@ -397,6 +405,7 @@ public class NBTTagCompoundSerializer {
 					for (int v : array) {
 						VarNumberSerializer.writeSVarInt(os, v);
 					}
+					System.out.print(array + " ");
 					break;
 				}
 				//Not in PE (Yet) :S
@@ -410,14 +419,17 @@ public class NBTTagCompoundSerializer {
 				}*/
 				case STRING: {
 					StringSerializer.writeString(os, version, tag.getString(key));
+					System.out.print(tag.getString(key));
 					break;
 				}
 				case COMPOUND: {
 					writePeCompoundPayload(os, tag.getCompound(key), version);
+					System.out.print("compound ");
 					break;
 				}
 				case LIST: {
 					writePeListPayload(os, tag.getList(key), version);
+					System.out.print("list ");
 					break;
 				}
 				default: {
@@ -433,38 +445,46 @@ public class NBTTagCompoundSerializer {
 		os.writeByte(type.getId());
 		os.writeInt(tag.size());
 		for (int i = 0; i < tag.size(); i++) {
+			System.out.print("i");
 			switch (type) {
 				case END: {
 					break;
 				}
 				case BYTE: {
 					os.writeByte(tag.getIntNumber(i));
+					System.out.print(tag.getIntNumber(i));
 					break;
 				}
 				case SHORT: {
 					os.writeShortLE(tag.getIntNumber(i));
+					System.out.print(tag.getIntNumber(i));
 					break;
 				}
 				case INT: {
 					VarNumberSerializer.writeSVarInt(os, tag.getIntNumber(i));
+					System.out.print(tag.getIntNumber(i));
 					break;
 				}
 				case LONG: {
-					VarNumberSerializer.writeSVarLong(os, tag.getLongNumber(i));
+					os.writeLongLE(tag.getLongNumber(i));
+					System.out.print(tag.getLongNumber(i));
 					break;
 				}
 				case FLOAT: {
 					MiscSerializer.writeLFloat(os, tag.getFloatNumber(i));
+					System.out.print(tag.getFloatNumber(i));
 					break;
 				}
 				case DOUBLE: {
-					os.writeDouble(tag.getDoubleNumber(i));
+					MiscSerializer.writeLDouble(os, tag.getDoubleNumber(i));
+					System.out.print(tag.getDoubleNumber(i));
 					break;
 				}
 				case BYTE_ARRAY: {
 					byte[] array = tag.getByteArray(i);
 					VarNumberSerializer.writeVarInt(os, array.length);
 					os.writeBytes(array);
+					System.out.print(array);
 					break;
 				}
 				case INT_ARRAY: {
@@ -473,6 +493,7 @@ public class NBTTagCompoundSerializer {
 					for (int v : array) {
 						VarNumberSerializer.writeSVarInt(os, v);
 					}
+					System.out.print(array);
 					break;
 				}
 				//Not in PE (Yet) :S
@@ -486,14 +507,17 @@ public class NBTTagCompoundSerializer {
 				}*/
 				case STRING: {
 					StringSerializer.writeString(os, version, tag.getString(i));
+					System.out.print(tag.getString(i));
 					break;
 				}
 				case COMPOUND: {
 					writePeCompoundPayload(os, tag.getCompound(i), version);
+					System.out.print("compound");
 					break;
 				}
 				case LIST: {
 					writePeListPayload(os, tag.getList(i), version);
+					System.out.print("list");
 					break;
 				}
 				default: {
@@ -535,7 +559,7 @@ public class NBTTagCompoundSerializer {
 					break;
 				}
 				case LONG: {
-					tag.setLong(name, VarNumberSerializer.readSVarLong(is));
+					tag.setLong(name, is.readLongLE());
 					break;
 				}
 				case FLOAT: {
@@ -543,7 +567,7 @@ public class NBTTagCompoundSerializer {
 					break;
 				}
 				case DOUBLE: {
-					tag.setDouble(name, is.readDouble());
+					tag.setDouble(name, MiscSerializer.readLDouble(is));
 					break;
 				}
 				case BYTE_ARRAY: {
@@ -615,7 +639,7 @@ public class NBTTagCompoundSerializer {
 					break;
 				}
 				case LONG: {
-					tag.addLong(VarNumberSerializer.readSVarLong(is));
+					tag.addLong(is.readLongLE());
 					break;
 				}
 				case FLOAT: {
@@ -623,7 +647,7 @@ public class NBTTagCompoundSerializer {
 					break;
 				}
 				case DOUBLE: {
-					tag.addDouble(is.readDouble());
+					tag.addDouble(MiscSerializer.readLDouble(is));
 					break;
 				}
 				case BYTE_ARRAY: {

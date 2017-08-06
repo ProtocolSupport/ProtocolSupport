@@ -138,15 +138,19 @@ public class ItemStackSerializer {
 			} else if (isUsingDirectNBT(version)) {
 				NBTTagCompoundSerializer.writeTag(new ByteBufOutputStream(to), tag);
 			} else if (isUsingPENBT(version)) {
+				System.out.println("Going to write POCKET NBT");
 				if (tag.isNull()) {
 					to.writeShortLE(0);
+					System.out.println("NO NBT");
 				} else {
 					int writerIndex = to.writerIndex();
 					//fake length
 					to.writeShortLE(0);
 					//actual nbt
-					//NBTTagCompoundSerializer.writePeTag(to, tag, version); //TODO Remap PE NBT?
+					NBTTagCompoundSerializer.writePeTag(to, tag, version); //TODO Remap PE NBT?
 					//now replace fake length with real length
+					
+					System.out.println("Length: " + (to.writerIndex() - writerIndex - Short.BYTES));
 					to.setShortLE(writerIndex, to.writerIndex() - writerIndex - Short.BYTES);
 				}
 			} else {
