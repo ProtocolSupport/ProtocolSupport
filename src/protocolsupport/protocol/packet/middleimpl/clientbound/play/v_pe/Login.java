@@ -2,10 +2,13 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import org.bukkit.Bukkit;
 
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleLogin;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSuccess;
+import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -15,6 +18,9 @@ import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.zplatform.PlatformUtils;
+import protocolsupport.zplatform.ServerPlatform;
+import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 public class Login extends MiddleLogin {
 
@@ -69,6 +75,12 @@ public class Login extends MiddleLogin {
 		packets.add(chunkradius);
 		packets.add(LoginSuccess.createPlayStatus(version, 3));
 		packets.add(EntityMetadata.createFaux(cache.getWatchedSelf(), cache.getLocale(), version)); //Add faux flags right on login. If something important needs to be send also, the server will take care with a metadata update.
+		// TODO: Remove this, this is used to give the client a sign upon join, used for debugging while inventories aren't implemented
+		ClientBoundPacketData setSlot = ClientBoundPacketData.create(0x32, version);
+		VarNumberSerializer.writeVarInt(setSlot, 0);
+		VarNumberSerializer.writeVarInt(setSlot, 0);
+		ItemStackSerializer.writeItemStack(setSlot, ProtocolVersion.MINECRAFT_PE, "minecraft.sign", ServerPlatform.get().getWrapperFactory().createItemStack(323), true);
+		packets.add(setSlot);
 		return packets;
 	}
 

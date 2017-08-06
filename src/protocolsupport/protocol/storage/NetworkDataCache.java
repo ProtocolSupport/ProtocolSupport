@@ -16,6 +16,7 @@ import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.NetworkEntity.DataCache;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.Utils;
+import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class NetworkDataCache {
 
@@ -314,4 +315,9 @@ public class NetworkDataCache {
 		return this.isFlying;
 	}
 
+	private NBTTagCompoundWrapper signTag;
+
+	public void setSignTag(NBTTagCompoundWrapper signTag) { this.signTag = signTag; }
+
+	public NBTTagCompoundWrapper getSignTag() { return signTag; }
 }
