@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.DragonHeadSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.PlayerSkullToLegacyOwnerSpecificRemapper;
@@ -153,6 +154,18 @@ public class TileNBTRemapper {
 				return input;
 			},
 			ProtocolVersionsHelper.BEFORE_1_8
+		);
+		register(
+				TileEntityUpdateType.SIGN,
+				(version, input) -> {
+					String[] lines = getSignLines(input);
+					for (int i = 1; 4 >= i; i++) {
+						String line = ChatAPI.fromJSON(lines[i  - 1]).toLegacyText();
+						input.setString("Text" + i, line);
+					}
+					return input;
+				},
+				ProtocolVersion.MINECRAFT_PE
 		);
 	}
 

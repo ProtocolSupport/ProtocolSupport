@@ -49,7 +49,7 @@ public class PEPacketIDs {
 	//public static final int CRAFTING_EVENT = 53;
 	//public static final int GUI_DATA_PICK_ITEM = 54;
 	public static final int ADVENTURE_SETTINGS = 55;
-	//public static final int TILE_DATA_UPDATE = 56;
+	public static final int TILE_DATA_UPDATE = 56;
 	//public static final int PLAYER_INPUT = 57;
 	public static final int CHUNK_DATA = 58;
 	public static final int SET_DIFFICULTY = 60;

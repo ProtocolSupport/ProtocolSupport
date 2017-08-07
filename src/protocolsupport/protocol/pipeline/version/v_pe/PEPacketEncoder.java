@@ -11,6 +11,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Animatio
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockBreakAnimation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockChangeMulti;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockChangeSingle;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockTileUpdate;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.ChangeGameState;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Chat;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Chunk;
@@ -108,6 +109,7 @@ public class PEPacketEncoder extends AbstractLegacyPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WORLD_SOUND_ID, WorldSound.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WORLD_CUSTOM_SOUND_ID, WorldCustomSound.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BLOCK_BREAK_ANIMATION_ID, BlockBreakAnimation.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UPDATE_TILE_ID, BlockTileUpdate.class);
 	}
 
 	public PEPacketEncoder(Connection connection, NetworkDataCache storage) {
