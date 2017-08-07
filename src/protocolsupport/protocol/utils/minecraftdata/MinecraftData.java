@@ -1,7 +1,6 @@
 package protocolsupport.protocol.utils.minecraftdata;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.BufferedReader;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -15,10 +14,10 @@ public class MinecraftData {
 	}
 
 	public static Iterable<JsonElement> iterateJsonArrayResource(String name) {
-		return new JsonParser().parse(new InputStreamReader(getResource(name))).getAsJsonArray();
+		return new JsonParser().parse(getResource(name)).getAsJsonArray();
 	}
 
-	public static InputStream getResource(String name) {
+	public static BufferedReader getResource(String name) {
 		return Utils.getResource("data/" + name);
 	}
 
