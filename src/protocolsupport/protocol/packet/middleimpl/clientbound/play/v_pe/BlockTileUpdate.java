@@ -17,7 +17,7 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.TILE_DATA_UPDATE, version);
 		PositionSerializer.writePEPosition(serializer, position);
-		ItemStackSerializer.writeTag(serializer, true, version, TileNBTRemapper.remap(version, this.tag));
+		ItemStackSerializer.writeTag(serializer, true, version, TileNBTRemapper.remap(version, tag));
 		return RecyclableSingletonList.create(serializer);
 	}
 
