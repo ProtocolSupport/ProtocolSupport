@@ -159,10 +159,18 @@ public class TileNBTRemapper {
 				TileEntityUpdateType.SIGN,
 				(version, input) -> {
 					String[] lines = getSignLines(input);
+					StringBuilder stringBuilder = new StringBuilder();
 					for (int i = 1; 4 >= i; i++) {
 						String line = ChatAPI.fromJSON(lines[i  - 1]).toLegacyText();
-						input.setString("Text" + i, line);
+						if (stringBuilder.length() == 0) {
+							stringBuilder.append(line);
+						} else {
+							stringBuilder.append("\n");
+							stringBuilder.append(line);
+						}
+						input.remove("Text" + i); // Cleanup old NBT value
 					}
+					input.setString("Text", stringBuilder.toString());
 					return input;
 				},
 				ProtocolVersion.MINECRAFT_PE
