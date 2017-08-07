@@ -38,6 +38,9 @@ public class ItemStackSerializer {
 		if (type >= 0) {
 			ItemStackWrapper itemstack = ServerPlatform.get().getWrapperFactory().createItemStack(type);
 			if (version == ProtocolVersion.MINECRAFT_PE) {
+				if(type == 0) { //Non or empty item stacks can also be 0 in PE.
+					return ServerPlatform.get().getWrapperFactory().createNullItemStack();
+				}
 				int amountdata = VarNumberSerializer.readSVarInt(from);
 				itemstack.setAmount(amountdata & 0x7F);
 				itemstack.setData((amountdata >> 8) & 0xFFFF);

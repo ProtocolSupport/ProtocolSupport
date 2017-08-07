@@ -13,12 +13,13 @@ public class InventorySetItems extends MiddleInventorySetItems {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CONTAINER_DATA, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.INVENTORY_CONTENT, connection.getVersion());
 		VarNumberSerializer.writeVarInt(serializer, windowId);
 		VarNumberSerializer.writeVarInt(serializer, itemstacks.size());
 		for(ItemStackWrapper itemstack : itemstacks) {
 			ItemStackSerializer.writeItemStack(serializer, connection.getVersion(), cache.getLocale(), itemstack, true);
 		}
+		System.out.println(this.toString());
 		return RecyclableSingletonList.create(serializer);
 	}
 

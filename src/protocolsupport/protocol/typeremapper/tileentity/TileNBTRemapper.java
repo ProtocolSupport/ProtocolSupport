@@ -159,10 +159,13 @@ public class TileNBTRemapper {
 				TileEntityUpdateType.SIGN,
 				(version, input) -> {
 					String[] lines = getSignLines(input);
+					StringBuilder s = new StringBuilder();
 					for (int i = 0; i < lines.length; i++) {
 						String line = ChatAPI.fromJSON(lines[i]).toLegacyText();
-						input.setString("Text" + (i+1), line);
+						//input.setString("Text" + (i+1), line);
+						s.append(line + "\n");
 					}
+					input.setString("Text", s.toString());
 					return input;
 				},
 				ProtocolVersion.MINECRAFT_PE

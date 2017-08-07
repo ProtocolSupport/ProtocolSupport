@@ -11,6 +11,7 @@ public class HeldSlot extends MiddleHeldSlot {
 		slot = VarNumberSerializer.readVarInt(clientdata);
 		//Don't need the rest? TODO: test
 		clientdata.readBytes(clientdata.readableBytes());
+		System.out.println("Client held slot: " + slot);
 	}
 
 }

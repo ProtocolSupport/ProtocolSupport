@@ -276,7 +276,7 @@ public class IdRemapper {
 		}
 	};
 
-	//TODO: this doesn't belong here, should be moved to PEDataValues
+	//TODO: this doesn't belong here, should be moved to PEDataValues. TODO: Why? You can add other versions too :)
 	public static final IdRemappingRegistry<HashMapBasedIdRemappingTable> PARTICLE = new IdRemappingRegistry<HashMapBasedIdRemappingTable>() {
 		{
 			//TODO: Check values. (Speculative = names don't match) Only a few values have been tested by hand.

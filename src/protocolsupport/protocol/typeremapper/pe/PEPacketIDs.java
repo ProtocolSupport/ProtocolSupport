@@ -25,7 +25,7 @@ public class PEPacketIDs {
 	public static final int ENTITY_EVENT = 27;
 	public static final int ENTITY_EFFECT = 28;
 	public static final int SET_ATTRIBUTES = 29;
-	//public static final int INVENTORY_TRANSACTION = 30;
+	public static final int INVENTORY_TRANSACTION = 30;
 	//public static final int MOB_EQUIPMENT = 31;
 	//public static final int MOB_ARMOR_EQUIPMENT = 32;
 	public static final int INTERACT = 33;
@@ -42,9 +42,9 @@ public class PEPacketIDs {
 	public static final int CONTAINER_OPEN = 46;
 	public static final int CONTAINER_CLOSE = 47;
 	public static final int PLAYER_HOTBAR = 48;
-	//public static final int INVENTORY_CONTENT = 49;
+	public static final int INVENTORY_CONTENT = 49;
 	public static final int INVENTORY_SLOT = 50;
-	public static final int CONTAINER_DATA = 51;
+	//public static final int CONTAINER_DATA = 51;
 	//public static final int CRAFTING_DATA = 52;
 	//public static final int CRAFTING_EVENT = 53;
 	//public static final int GUI_DATA_PICK_ITEM = 54;

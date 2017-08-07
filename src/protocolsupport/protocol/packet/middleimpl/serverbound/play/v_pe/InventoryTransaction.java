@@ -18,11 +18,12 @@ import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
+//DKTAPPS THANK YOU FOR HELPING ME!
 //The Pe GodPacket... I'm going to make him an offer he can't refuse...
 public class InventoryTransaction extends ServerBoundMiddlePacket {
 
+	//Transactions
 	protected InfTransaction[] transactions;
-	
 	//Complex Actions
 	protected int actionId;
 	protected int subTypeId = -1;
@@ -55,11 +56,12 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 				break;
 			}
 			case ACTION_INTERACT: {
-				targetId = VarNumberSerializer.readVarInt(clientdata);
+				targetId = (int) VarNumberSerializer.readSVarLong(clientdata);
 				subTypeId = VarNumberSerializer.readVarInt(clientdata);
 				slot = VarNumberSerializer.readSVarInt(clientdata);
 				itemstack = ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), cache.getLocale(), true);
 				fromX = MiscSerializer.readLFloat(clientdata); fromY = MiscSerializer.readLFloat(clientdata); fromZ = MiscSerializer.readLFloat(clientdata);
+				cX = MiscSerializer.readLFloat(clientdata); cY = MiscSerializer.readLFloat(clientdata); cZ = MiscSerializer.readLFloat(clientdata);
 				break;
 			}
 			case ACTION_RELEASE_ITEM: {
@@ -72,10 +74,12 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 			case ACTION_NORMAL:
 			case ACTION_MISMATCH:
 			default: {
-				clientdata.readBytes(clientdata.readableBytes());
 				break;
 			}
 		}
+		//BLEEHH!
+		clientdata.readBytes(clientdata.readableBytes());
+		System.out.println(this);
 	}
 	
 	//Sources
@@ -83,7 +87,7 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 	public static final int SOURCE_GLOBAL = 1;
 	public static final int SOURCE_WORLD_INTERACTION = 2;
 	public static final int SOURCE_CREATIVE = 3;
-	public static final int SOURCE_CRAFT = 99999;
+	public static final int SOURCE_TODO = 99999;
 	//Actions
 	public static final int ACTION_NORMAL = 0;
 	public static final int ACTION_MISMATCH = 1;
@@ -112,7 +116,10 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 		for(int i = 0; i < transactions.length; i++) {
-			//TODO handle simpleTransactions.
+			ServerBoundPacketData packet = transactions[i].writeToStream();
+			if(packet != null) {
+				packets.add(packet);
+			}
 		}
 		switch(actionId) {
 			case ACTION_USE_ITEM: {
@@ -125,7 +132,7 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 						packets.add(MiddleBlockPlace.createUse(position, face, 0, cX, cY, cZ));
 						break;
 					}
-					case USE_DIG: { //TODO: Instabreak?
+					case USE_DIG: { //instabreak
 						packets.add(MiddleBlockDig.create(MiddleBlockDig.Action.START_DIG, position, 0));		
 						packets.add(MiddleBlockDig.create(MiddleBlockDig.Action.FINISH_DIG, position, 0));
 						break;
@@ -171,7 +178,7 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 	@SuppressWarnings("unused") //TODO: IMPLEMENT!
 	private static class InfTransaction {
 		
-		private int source;
+		private int sourceId;
 		private int inventoryId;
 		private int action;
 		private int slot;
@@ -180,18 +187,20 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 		
 		private static InfTransaction readFromStream(ByteBuf from, String locale, ProtocolVersion version) {
 			InfTransaction transaction = new InfTransaction();
-			transaction.source = VarNumberSerializer.readVarInt(from);
-			switch(transaction.source) {
+			transaction.sourceId = VarNumberSerializer.readVarInt(from);
+			switch(transaction.sourceId) {
 				case SOURCE_CONTAINER: {
 					transaction.inventoryId = VarNumberSerializer.readSVarInt(from);
 					break;
 				}
 				case SOURCE_WORLD_INTERACTION: {
+					transaction.inventoryId = -1;
 					transaction.action = VarNumberSerializer.readVarInt(from);
 					break;
 				}
-				case SOURCE_CRAFT: {
-					transaction.action = VarNumberSerializer.readVarInt(from);
+				case SOURCE_TODO: {
+					transaction.inventoryId = VarNumberSerializer.readSVarInt(from);
+					transaction.action = 0;
 					break;
 				}
 				case SOURCE_GLOBAL:
@@ -200,10 +209,14 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 					break;
 				}
 			}
-			transaction.slot = VarNumberSerializer.readSVarInt(from);
+			transaction.slot = VarNumberSerializer.readVarInt(from);
 			transaction.oldItem = ItemStackSerializer.readItemStack(from, version, locale, true);
 			transaction.newItem = ItemStackSerializer.readItemStack(from, version, locale, true);
 			return transaction;
+		}
+		
+		public ServerBoundPacketData writeToStream() {
+			return null;
 		}
 		
 	}
