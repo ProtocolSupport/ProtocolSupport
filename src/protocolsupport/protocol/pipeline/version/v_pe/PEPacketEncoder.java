@@ -34,6 +34,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Inventor
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventorySetSlot;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.KickDisconnect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Login;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Map;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.PlayerAbilities;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.PlayerInfo;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Position;
@@ -120,6 +121,7 @@ public class PEPacketEncoder extends AbstractLegacyPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_SET_ITEMS_ID, InventorySetItems.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_SET_SLOT_ID, InventorySetSlot.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UPDATE_TILE_ID, BlockTileUpdate.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_MAP_ID, Map.class);
 	}
 
 	public PEPacketEncoder(Connection connection, NetworkDataCache storage) {
