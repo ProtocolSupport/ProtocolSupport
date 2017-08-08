@@ -61,7 +61,7 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 				break;
 			}
 			case ACTION_INTERACT: {
-				targetId = (int) VarNumberSerializer.readSVarLong(clientdata);
+				targetId = (int) VarNumberSerializer.readVarLong(clientdata);
 				subTypeId = VarNumberSerializer.readVarInt(clientdata);
 				slot = VarNumberSerializer.readSVarInt(clientdata);
 				itemstack = ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), cache.getLocale(), true);
@@ -167,6 +167,7 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 			//For creative?
 			case ACTION_RELEASE_ITEM: {
 				packets.add(MiddleHeldSlot.create(slot));
+				System.out.println("Realease item. Action " + subTypeId + " ");
 				switch(subTypeId) {
 					default: {
 						break;
