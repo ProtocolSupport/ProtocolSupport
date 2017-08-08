@@ -14,11 +14,7 @@ public class MapInfoRequest extends ServerBoundMiddlePacket {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		System.out.println("Receiving a MapInfoRequest packet!");
-
-		long mapId = VarNumberSerializer.readSVarLong(clientdata);
-
-		System.out.println("The client wants to receive map " + mapId + "!");
+		VarNumberSerializer.readSVarLong(clientdata); // map id
 	}
 
 	@Override

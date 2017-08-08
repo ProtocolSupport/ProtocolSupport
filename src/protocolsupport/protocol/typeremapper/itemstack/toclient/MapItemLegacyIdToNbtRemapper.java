@@ -18,7 +18,6 @@ public class MapItemLegacyIdToNbtRemapper implements ItemStackSpecificRemapper {
 		tag.setString("map_uuid", String.valueOf(itemstack.getData()));
 		itemstack.setTag(tag);
 		itemstack.setData(0);
-		System.out.println("Map remap NBT tag: " + tag);
 		return itemstack;
 	}
 
