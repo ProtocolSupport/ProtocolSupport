@@ -36,19 +36,23 @@ public class Map extends MiddleMap {
 		// VarNumberSerializer.writeVarInt(serializer, 0x00);
 
 		VarNumberSerializer.writeVarInt(serializer, 2); // texture update
-		serializer.writeByte(1); // scale
-		VarNumberSerializer.writeSVarInt(serializer, 128); // columns
-		VarNumberSerializer.writeSVarInt(serializer, 128); // row
+		serializer.writeByte(this.scale); // scale
+		VarNumberSerializer.writeSVarInt(serializer, this.columns); // columns
+		VarNumberSerializer.writeSVarInt(serializer, this.rows); // row
 		VarNumberSerializer.writeSVarInt(serializer, this.xstart); // offset X
 		VarNumberSerializer.writeSVarInt(serializer, this.zstart); // offset Y
-		VarNumberSerializer.writeVarInt(serializer, 128*128);
+		VarNumberSerializer.writeVarInt(serializer, this.columns*this.rows);
 
 		RemappingTable.ArrayBasedIdRemappingTable colorRemapper = MapColorRemapper.REMAPPER.getTable(ProtocolVersion.MINECRAFT_PE);
 
 		// data
 		for (byte byteColor : this.colors) {
-			int pocketId = colorRemapper.getRemap(byteColor);
-			VarNumberSerializer.writeVarInt(serializer, pocketId);
+			try {
+				int pocketId = colorRemapper.getRemap(byteColor);
+				VarNumberSerializer.writeVarInt(serializer, pocketId);
+			} catch (Exception e) {
+				VarNumberSerializer.writeVarInt(serializer, 0x000000);
+			}
 		}
 
 		sendMaps.add(String.valueOf(this.itemData));
