@@ -2,12 +2,11 @@ package protocolsupport.protocol.typeremapper.itemstack.toclient;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackSpecificRemapper;
-import protocolsupport.protocol.typeremapper.legacy.LegacyMonsterEgg;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
-public class MapItemLegacyIdToNbtRemapper implements ItemStackSpecificRemapper {
+public class MapItemLegacyIdToNbtSpecificRemapper implements ItemStackSpecificRemapper {
 
 	@Override
 	public ItemStackWrapper remap(ProtocolVersion version, String locale, ItemStackWrapper itemstack) {

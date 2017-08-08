@@ -1,49 +1,60 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleMap;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.mapcolor.MapColorRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class Map extends MiddleMap {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		if (this.columns == 0) { // For now we are only going to send texture updates
-			return RecyclableEmptyList.get();
-		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MAP_ITEM_DATA, connection.getVersion());
-
 		VarNumberSerializer.writeSVarLong(serializer, this.itemData);
 
-		// 0x08 = entity update
-		// 0x04 = decoration update
-		// 0x02 = texture update
-		VarNumberSerializer.writeVarInt(serializer, 2); // texture update
-		serializer.writeByte(this.scale); // scale
-		VarNumberSerializer.writeSVarInt(serializer, this.columns); // columns
-		VarNumberSerializer.writeSVarInt(serializer, this.rows); // row
-		VarNumberSerializer.writeSVarInt(serializer, this.xstart); // offset X
-		VarNumberSerializer.writeSVarInt(serializer, this.zstart); // offset Y
-		VarNumberSerializer.writeVarInt(serializer, this.columns * this.rows);
-
-		RemappingTable.ArrayBasedIdRemappingTable colorRemapper = MapColorRemapper.REMAPPER.getTable(ProtocolVersion.MINECRAFT_PE);
-
-		// data
-		for (byte byteColor : this.colors) {
-			try {
-				int pocketId = colorRemapper.getRemap(byteColor);
-				VarNumberSerializer.writeVarInt(serializer, pocketId);
-			} catch (Exception e) {
-				VarNumberSerializer.writeVarInt(serializer, 0x000000);
+		int flags = 0;
+		//final int FLAG_ENTITY_UPDATE = 0x08;
+		final int FLAG_DECORATION_UPDATE = 0x04;
+		final int FLAG_TEXTURE_UPDATE = 0x02;
+		//final int FLAG_ITEM_UPDATE = 0x01;
+		
+		if (columns > 0) { flags |= FLAG_TEXTURE_UPDATE; }
+		if (icons.length > 0) { flags |= FLAG_DECORATION_UPDATE; }
+		
+		VarNumberSerializer.writeVarInt(serializer, flags);
+		
+		//Implementation
+		if ((flags & (FLAG_DECORATION_UPDATE | FLAG_TEXTURE_UPDATE)) != 0) {
+			serializer.writeByte(scale);
+		}
+		
+		if ((flags & FLAG_DECORATION_UPDATE) != 0) {
+			VarNumberSerializer.writeVarInt(serializer, icons.length);
+			for (Icon icon: icons) {
+				serializer.writeByte(1); //type
+				serializer.writeByte(icon.dirtype & 0xF0);
+				serializer.writeByte(icon.x);
+				serializer.writeByte(icon.z);
+				StringSerializer.writeString(serializer, connection.getVersion(), "");
+				serializer.writeByte(icon.dirtype & 0x0F);
 			}
 		}
-
+		
+		if ((flags & FLAG_TEXTURE_UPDATE) != 0) {
+			VarNumberSerializer.writeSVarInt(serializer, columns);
+			VarNumberSerializer.writeSVarInt(serializer, rows);
+			VarNumberSerializer.writeSVarInt(serializer, xstart);
+			VarNumberSerializer.writeSVarInt(serializer, zstart);
+			VarNumberSerializer.writeVarInt(serializer, colors.length);
+			RemappingTable.ArrayBasedIdRemappingTable colorRemapper = MapColorRemapper.REMAPPER.getTable(connection.getVersion());
+			for (int i = 0; i < colors.length; i++) {
+					VarNumberSerializer.writeVarInt(serializer, colorRemapper.getRemap(colors[i] & 0xFF));
+			}
+		}
 		return RecyclableSingletonList.create(serializer);
 	}
 }
