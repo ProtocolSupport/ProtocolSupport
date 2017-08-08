@@ -23,7 +23,7 @@ public class BlockEntityData extends ServerBoundMiddlePacket {
 		VarNumberSerializer.readSVarInt(clientdata); // x
 		VarNumberSerializer.readVarInt(clientdata); // y
 		VarNumberSerializer.readSVarInt(clientdata); // z
-		nbt = ItemStackSerializer.readTag(clientdata, ProtocolVersion.MINECRAFT_PE);
+		nbt = ItemStackSerializer.readTag(clientdata, true, ProtocolVersion.MINECRAFT_PE);
 
 		if (nbt.getString("id").equals("Sign")) {
 			this.cache.setSignTag(nbt);
