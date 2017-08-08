@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class MapColorHelper {
 	
 	public static int getARGB(IMapColor color) {
-		return toARGB((byte) color.getGreen(), (byte) color.getRed(), (byte) color.getBlue(), (byte) 0xff);
+		return toARGB((byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue(), (byte) 0xff);
 	}
 
 	private static int toARGB(byte r, byte g, byte b, byte a) {
