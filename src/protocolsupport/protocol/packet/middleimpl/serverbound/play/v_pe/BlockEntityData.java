@@ -7,6 +7,8 @@ import protocolsupport.protocol.packet.middle.serverbound.play.MiddleChat;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateSign;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -20,9 +22,7 @@ public class BlockEntityData extends ServerBoundMiddlePacket {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		VarNumberSerializer.readSVarInt(clientdata); // x
-		VarNumberSerializer.readVarInt(clientdata); // y
-		VarNumberSerializer.readSVarInt(clientdata); // z
+		PositionSerializer.readPEPosition(clientdata); // x, y, z
 		nbt = ItemStackSerializer.readTag(clientdata, true, ProtocolVersion.MINECRAFT_PE);
 
 		if (nbt.getString("id").equals("Sign")) {
