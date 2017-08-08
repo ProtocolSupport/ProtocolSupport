@@ -46,8 +46,10 @@ public class ItemStackSerializer {
 				itemstack.setData((amountdata >> 8) & 0xFFFF);
 				itemstack.setTag(readTag(from, false, version));
 				//TODO: Read the rest properly..
-				ArraySerializer.readVarIntStringArray(from, version); //TODO: CanPlaceOn PE
-				ArraySerializer.readVarIntStringArray(from, version); //TODO: CanDestroy PE
+				from.readByte();
+				from.readByte();
+				//ArraySerializer.readVarIntStringArray(from, version); //TODO: CanPlaceOn PE
+				//ArraySerializer.readVarIntStringArray(from, version); //TODO: CanDestroy PE
 			} else {
 				itemstack.setAmount(from.readByte());
 				itemstack.setData(from.readUnsignedShort());
@@ -117,6 +119,10 @@ public class ItemStackSerializer {
 			} else if (isUsingDirectNBT(version)) {
 				return NBTTagCompoundSerializer.readTag(new ByteBufInputStream(from));
 			} else if (isUsingPENBT(version)) {
+				final short length = from.readShortLE();
+				if(length <= 0) {
+					return NBTTagCompoundWrapper.NULL;
+				}
 				return NBTTagCompoundSerializer.readPeTag(from, varint);
 			} else {
 				throw new IllegalArgumentException(MessageFormat.format("Don't know how to read nbt of version {0}", version));
