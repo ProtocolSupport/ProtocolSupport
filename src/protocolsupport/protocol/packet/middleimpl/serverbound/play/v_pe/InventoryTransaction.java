@@ -98,9 +98,9 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 	public static final int RELEASE_RELEASE = 0;
 	public static final int RELEASE_DESTROY = 1;
 	//Action - Item Use
-	public static final int USE_PLACE = 0;
-	public static final int USE_USE = 1;
-	public static final int USE_DIG = 2;
+	public static final int USE_CLICK_BLOCK = 0;
+	public static final int USE_CLICK_AIR = 1;
+	public static final int USE_DIG_BLOCK = 2;
 	//Action - Interact
 	public static final int INTERACT_INTERACT = 0;
 	public static final int INTERACT_ATTACK = 1;
@@ -124,17 +124,17 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 		switch(actionId) {
 			case ACTION_USE_ITEM: {
 				switch(subTypeId) {
-					case USE_PLACE: {
-						packets.add(MiddleBlockPlace.createPlace(0));
+					case USE_CLICK_AIR:
+						face = -1;
+					case USE_CLICK_BLOCK: {
+						packets.add(MiddleBlockPlace.create(position, face, 0, cX, cY, cZ));
 						break;
 					}
-					case USE_USE: {
-						packets.add(MiddleBlockPlace.createUse(position, face, 0, cX, cY, cZ));
-						break;
-					}
-					case USE_DIG: { //instabreak
-						packets.add(MiddleBlockDig.create(MiddleBlockDig.Action.START_DIG, position, 0));		
-						packets.add(MiddleBlockDig.create(MiddleBlockDig.Action.FINISH_DIG, position, 0));
+					case USE_DIG_BLOCK: { //instabreak
+						if(cache.getGameMode() == 1) {
+							packets.add(MiddleBlockDig.create(MiddleBlockDig.Action.START_DIG, position, 0));		
+							packets.add(MiddleBlockDig.create(MiddleBlockDig.Action.FINISH_DIG, position, 0));
+						}
 						break;
 					}
 				}
@@ -151,7 +151,7 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 						break;
 					}
 					case INTERACT_AT: {
-						packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT_AT, new Vector(fromX, fromY, fromZ), 0));
+						packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT_AT, new Vector(cX, cY, cZ), 0));
 						break;
 					}
 				}

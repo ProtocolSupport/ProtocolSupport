@@ -9,9 +9,12 @@ public class HeldSlot extends MiddleHeldSlot {
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		slot = VarNumberSerializer.readVarInt(clientdata);
-		//Don't need the rest? TODO: test
-		clientdata.readBytes(clientdata.readableBytes());
-		System.out.println("Client held slot: " + slot);
+		int windowId = clientdata.readByte(); //windowID
+		int[] linkedSlots = new int[VarNumberSerializer.readVarInt(clientdata)];
+		for(int i = 0; i < linkedSlots.length; i++) {
+			linkedSlots[i] = VarNumberSerializer.readVarInt(clientdata);
+		}
+		System.out.println("Client held slot: " + slot + " windowId: " + windowId + " linkedSlots: " + linkedSlots.toString());
 	}
 
 }

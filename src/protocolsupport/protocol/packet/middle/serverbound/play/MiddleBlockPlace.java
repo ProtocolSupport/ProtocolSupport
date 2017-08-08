@@ -20,14 +20,11 @@ public abstract class MiddleBlockPlace extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		if (face != -1) {
-			return RecyclableSingletonList.create(createUse(position, face, usedHand, cX, cY, cZ));
-		} else {
-			return RecyclableSingletonList.create(createPlace(usedHand));
-		}
+		return RecyclableSingletonList.create(create(position, face, usedHand, cX, cY, cZ));
 	}
 	
-	public static ServerBoundPacketData createUse(Position position, int face, int usedHand, float cX, float cY, float cZ) {
+	public static ServerBoundPacketData create(Position position, int face, int usedHand, float cX, float cY, float cZ) {
+		if (face != -1) {
 			ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_USE_ITEM);
 			PositionSerializer.writePosition(creator, position);
 			VarNumberSerializer.writeVarInt(creator, face);
@@ -36,12 +33,11 @@ public abstract class MiddleBlockPlace extends ServerBoundMiddlePacket {
 			creator.writeFloat(cY);
 			creator.writeFloat(cZ);
 			return creator;
+		} else {
+			ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_BLOCK_PLACE);
+			VarNumberSerializer.writeVarInt(creator, usedHand);
+			return creator;
+		}
 	}
 	
-	public static ServerBoundPacketData createPlace(int usedHand) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_BLOCK_PLACE);
-		VarNumberSerializer.writeVarInt(creator, usedHand);
-		return creator;
-	}
-
 }
