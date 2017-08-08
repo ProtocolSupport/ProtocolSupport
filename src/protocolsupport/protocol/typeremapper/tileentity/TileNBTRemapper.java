@@ -160,10 +160,10 @@ public class TileNBTRemapper {
 				(version, input) -> {
 					String[] lines = getSignLines(input);
 					StringBuilder s = new StringBuilder();
-					for (int i = 0; i < lines.length; i++) {
-						String line = ChatAPI.fromJSON(lines[i]).toLegacyText();
-						//input.setString("Text" + (i+1), line);
-						s.append(line + "\n");
+          s.append(ChatAPI.fromJSON(lines[0]).toLegacyText());
+					for (int i = 1; i < lines.length; i++) {
+						s.append("\n");
+						s.append(ChatAPI.fromJSON(lines[i]).toLegacyText());
 					}
 					input.setString("Text", s.toString());
 					return input;
