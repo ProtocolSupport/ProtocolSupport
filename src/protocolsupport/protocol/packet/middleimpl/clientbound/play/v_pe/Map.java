@@ -1,11 +1,14 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleHeldSlot;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleMap;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.mapcolor.MapColorRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -36,31 +39,19 @@ public class Map extends MiddleMap {
 		serializer.writeByte(1); // scale
 		VarNumberSerializer.writeSVarInt(serializer, 128); // columns
 		VarNumberSerializer.writeSVarInt(serializer, 128); // row
-		VarNumberSerializer.writeSVarInt(serializer, 0); // offset X
-		VarNumberSerializer.writeSVarInt(serializer, 0); // offset Y
+		VarNumberSerializer.writeSVarInt(serializer, this.xstart); // offset X
+		VarNumberSerializer.writeSVarInt(serializer, this.zstart); // offset Y
 		VarNumberSerializer.writeVarInt(serializer, 128*128);
 
-		// data
-		for (int y = 0; y < 128; y++) {
-			for (int x = 0; x < 128; x++) {
-				Color color = new Color(0, 162, 232);
-				byte red = (byte) color.getRed();
-				byte green = (byte) color.getGreen();
-				byte blue = (byte) color.getBlue();
+		RemappingTable.ArrayBasedIdRemappingTable colorRemapper = MapColorRemapper.REMAPPER.getTable(ProtocolVersion.MINECRAFT_PE);
 
-				VarNumberSerializer.writeVarInt(serializer, toRGB((byte) 128, (byte) 128, (byte) 128, (byte) 0xFF));
-			}
+		// data
+		for (byte byteColor : this.colors) {
+			int pocketId = colorRemapper.getRemap(byteColor);
+			VarNumberSerializer.writeVarInt(serializer, pocketId);
 		}
 
 		sendMaps.add(String.valueOf(this.itemData));
 		return RecyclableSingletonList.create(serializer);
-	}
-
-	private static int toRGB(byte r, byte g, byte b, byte a) {
-		long result = (int) r & 0xff;
-		result |= ((int) g & 0xff) << 8;
-		result |= ((int) b & 0xff) << 16;
-		result |= ((int) a & 0xff) << 24;
-		return (int) (result & 0xFFFFFFFFL);
 	}
 }
