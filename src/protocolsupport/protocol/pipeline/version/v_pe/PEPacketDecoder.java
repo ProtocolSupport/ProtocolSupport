@@ -14,6 +14,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Chat;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Interact;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.InventoryClose;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.InventoryTransaction;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.MapInfoRequest;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PlayerAction;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PositionLook;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.CommandRequest;
@@ -43,6 +44,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		registry.register(NetworkState.PLAY, PEPacketIDs.PLAYER_HOTBAR, HeldSlot.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.CONTAINER_CLOSE, InventoryClose.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.INVENTORY_TRANSACTION, InventoryTransaction.class);
+		registry.register(NetworkState.PLAY, PEPacketIDs.MAP_INFO_REQUEST, MapInfoRequest.class);
 	}
 
 	public PEPacketDecoder(Connection connection, NetworkDataCache cache) {

@@ -57,7 +57,8 @@ public class PEPacketIDs {
 	public static final int CHANGE_PLAYER_GAMETYPE = 62;
 	public static final int PLAYER_INFO = 63;
 	//public static final int TELEMETRY_EVENT = 65;
-	//public static final int MAP_INFO_REQUEST = 67;
+	public static final int MAP_ITEM_DATA = 67;
+	public static final int MAP_INFO_REQUEST = 68;
 	public static final int CHUNK_RADIUS = 70;
 	//public static final int ITEM_FRAME_DROP = 71;
 	//public static final int GAME_RULE_CHANGE = 72;
