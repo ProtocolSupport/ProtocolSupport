@@ -50,7 +50,7 @@ public class MCPEServer {
 					return String.join(";",
 						"MCPE",
 						revent.getMotd().replace(";", ":"),
-						"130", "1.2",
+						"131", "1.2.0.7",
 						String.valueOf(revent.getPlayers().size()), String.valueOf(revent.getMaxPlayers())
 					);
 				}

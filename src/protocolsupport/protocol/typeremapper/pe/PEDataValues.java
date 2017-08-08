@@ -204,5 +204,19 @@ public class PEDataValues {
 		// Jukebox -> Noteblock
 		registerBlockRemap(84, 25);
 	}
+	
+	public static int remapClientboundSlot(int windowId, int slot) {
+		if(windowId <= 0 && slot >= 36) {
+			return slot - 36;
+		}
+		return slot;
+	}
+	
+	public static int remapServerboundSlot(int windowId, int slot) {
+		if (windowId == 0 && slot < 9) {
+			return slot + 36;
+		}
+		return slot;
+	}
 
 }
