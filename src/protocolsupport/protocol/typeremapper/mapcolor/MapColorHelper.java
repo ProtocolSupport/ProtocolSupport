@@ -3,7 +3,19 @@ package protocolsupport.protocol.typeremapper.mapcolor;
 import java.util.Arrays;
 
 public class MapColorHelper {
+	
+	public static int getARGB(IMapColor color) {
+		return toARGB((byte) color.getGreen(), (byte) color.getRed(), (byte) color.getBlue(), (byte) 0xff);
+	}
 
+	private static int toARGB(byte r, byte g, byte b, byte a) {
+		long result = (int) r & 0xff;
+		result |= ((int) g & 0xff) << 8;
+		result |= ((int) b & 0xff) << 16;
+		result |= ((int) a & 0xff) << 24;
+		return (int) (result & 0xFFFFFFFFL);
+	}
+	
 	public static IMapColor getSimilarModernColor(ModernMapColor color, int maxMapColorId) {
 		return getSimilarMapColor(color, ModernMapColor.values(), ModernMapColor.Color4.getId(), maxMapColorId);
 	}
