@@ -20,14 +20,19 @@ public abstract class MiddleInventoryClick extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
+		System.out.println("CLICK window:" + windowId + " slot: " + slot + " button: " + button + " actionNumber: " + actionNumber + " mode: " + mode + " itemstack: " + itemstack);
+		return RecyclableSingletonList.create(create(cache.getLocale(), windowId, slot, button, actionNumber, mode, itemstack));
+	}
+	
+	public static ServerBoundPacketData create(String locale, int windowId, int slot, int button, int actionNumber, int mode, ItemStackWrapper itemstack) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_WINDOW_CLICK);
 		creator.writeByte(windowId);
 		creator.writeShort(slot);
 		creator.writeByte(button);
 		creator.writeShort(actionNumber);
 		creator.writeByte(mode);
-		ItemStackSerializer.writeItemStack(creator, ProtocolVersionsHelper.LATEST_PC, cache.getLocale(), itemstack, false);
-		return RecyclableSingletonList.create(creator);
+		ItemStackSerializer.writeItemStack(creator, ProtocolVersionsHelper.LATEST_PC, locale, itemstack, false);
+		return creator;
 	}
 
 }

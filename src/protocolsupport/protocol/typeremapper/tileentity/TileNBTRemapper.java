@@ -106,7 +106,7 @@ public class TileNBTRemapper {
 				}
 				return input;
 			},
-			ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_9, ProtocolVersion.MINECRAFT_1_10)
+			ProtocolVersionsHelper.concat(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_9, ProtocolVersion.MINECRAFT_1_10), ProtocolVersion.MINECRAFT_PE)
 		);
 		register(
 			TileEntityUpdateType.MOB_SPAWNER,
@@ -159,18 +159,13 @@ public class TileNBTRemapper {
 				TileEntityUpdateType.SIGN,
 				(version, input) -> {
 					String[] lines = getSignLines(input);
-					StringBuilder stringBuilder = new StringBuilder();
-					for (int i = 1; 4 >= i; i++) {
-						String line = ChatAPI.fromJSON(lines[i  - 1]).toLegacyText();
-						if (stringBuilder.length() == 0) {
-							stringBuilder.append(line);
-						} else {
-							stringBuilder.append("\n");
-							stringBuilder.append(line);
-						}
-						input.remove("Text" + i); // Cleanup old NBT value
+					StringBuilder s = new StringBuilder();
+          s.append(ChatAPI.fromJSON(lines[0]).toLegacyText());
+					for (int i = 1; i < lines.length; i++) {
+						s.append("\n");
+						s.append(ChatAPI.fromJSON(lines[i]).toLegacyText());
 					}
-					input.setString("Text", stringBuilder.toString());
+					input.setString("Text", s.toString());
 					return input;
 				},
 				ProtocolVersion.MINECRAFT_PE
