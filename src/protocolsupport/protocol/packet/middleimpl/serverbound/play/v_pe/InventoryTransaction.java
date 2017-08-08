@@ -7,13 +7,18 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockDig;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockPlace;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleHeldSlot;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClick;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUseEntity;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
@@ -79,7 +84,6 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 		}
 		//BLEEHH!
 		clientdata.readBytes(clientdata.readableBytes());
-		System.out.println(this);
 	}
 	
 	//Sources
@@ -111,18 +115,20 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 	public static final int POCKET_OFFHAND = 119;
 	public static final int POCKET_ARMOR_EQUIPMENT = 120;
 	public static final int POCKET_CREATIVE_INVENTORY = 121;
+	public static final int POCKET_CLICKED_SLOT = 124;
 	
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 		for(int i = 0; i < transactions.length; i++) {
-			ServerBoundPacketData packet = transactions[i].writeToStream();
+			ServerBoundPacketData packet = transactions[i].toClick(cache);
 			if(packet != null) {
 				packets.add(packet);
 			}
 		}
 		switch(actionId) {
 			case ACTION_USE_ITEM: {
+				packets.add(MiddleHeldSlot.create(slot));
 				switch(subTypeId) {
 					case USE_CLICK_AIR:
 						face = -1;
@@ -141,6 +147,7 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 				break;
 			}
 			case ACTION_INTERACT: {
+				packets.add(MiddleHeldSlot.create(slot));
 				switch(subTypeId) {
 					case INTERACT_INTERACT: {
 						packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT, null, 0));
@@ -159,6 +166,7 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 			}
 			//For creative?
 			case ACTION_RELEASE_ITEM: {
+				packets.add(MiddleHeldSlot.create(slot));
 				switch(subTypeId) {
 					default: {
 						break;
@@ -215,8 +223,19 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 			return transaction;
 		}
 		
-		public ServerBoundPacketData writeToStream() {
+		public ServerBoundPacketData toClick(NetworkDataCache cache) {
+			if(inventoryId == POCKET_CLICKED_SLOT) {
+				cache.setCursorItem(newItem);
+			} else if (inventoryId == POCKET_INVENTORY) {
+				System.out.println(cache.getLocale() + " " + inventoryId + " " + PEDataValues.remapServerboundSlot(inventoryId, slot) + " " + 0 + " " + cache.getActionNumber() + " " + 0 + " " + cache.getCursorItem());
+				return MiddleInventoryClick.create(cache.getLocale(), inventoryId, PEDataValues.remapServerboundSlot(inventoryId, slot), 0, cache.getActionNumber(), 0, cache.getCursorItem());
+			}
 			return null;
+		}
+		
+		@Override
+		public String toString() {
+			return Utils.toStringAllFields(this);
 		}
 		
 	}
