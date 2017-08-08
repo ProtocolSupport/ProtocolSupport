@@ -13,7 +13,7 @@ public class HeldSlot extends MiddleHeldSlot {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_HOTBAR, connection.getVersion());
-		VarNumberSerializer.writeVarInt(serializer, PEDataValues.remapSlot(0, slot));
+		VarNumberSerializer.writeVarInt(serializer, PEDataValues.remapClientboundSlot(0, slot));
 		serializer.writeByte(0); //WindowID
 		int[] linkedSlots = new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8};
 		VarNumberSerializer.writeVarInt(serializer, linkedSlots.length);

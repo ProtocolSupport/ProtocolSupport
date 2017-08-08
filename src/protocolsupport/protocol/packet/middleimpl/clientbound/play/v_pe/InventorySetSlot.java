@@ -15,7 +15,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.INVENTORY_SLOT, connection.getVersion());
 		VarNumberSerializer.writeVarInt(serializer, windowId);
-		VarNumberSerializer.writeVarInt(serializer, PEDataValues.remapSlot(windowId, slot));
+		VarNumberSerializer.writeVarInt(serializer, PEDataValues.remapClientboundSlot(windowId, slot));
 		ItemStackSerializer.writeItemStack(serializer, connection.getVersion(), cache.getLocale(), itemstack, true);
 		System.out.println(slot);
 		return RecyclableSingletonList.create(serializer);
