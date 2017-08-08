@@ -361,7 +361,7 @@ public enum ProtocolVersion {
 		public int compareTo(OrderId o) {
 			Validate.isTrue(this.type != ProtocolType.UNKNOWN, "Can't compare unknown protocol type");
 			Validate.isTrue(o.type != ProtocolType.UNKNOWN, "Can't compare with unknown protocol type");
-			Validate.isTrue(this.type == o.type, MessageFormat.format("Cant compare order from different types: this - {0}, other - {1}", type, o.type));
+			Validate.isTrue(this.type == o.type, "Cant compare order from different types");
 			return Integer.compare(id, o.id);
 		}
 
