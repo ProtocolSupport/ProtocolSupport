@@ -4,7 +4,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventorySe
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.pe.PEDataValues;
+import protocolsupport.protocol.typeremapper.pe.PEInventory;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -15,7 +15,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.INVENTORY_SLOT, connection.getVersion());
 		VarNumberSerializer.writeVarInt(serializer, windowId);
-		VarNumberSerializer.writeVarInt(serializer, PEDataValues.remapClientboundSlot(windowId, slot));
+		VarNumberSerializer.writeVarInt(serializer, PEInventory.remapClientboundSlot(cache.getOpenedWindow(), slot));
 		ItemStackSerializer.writeItemStack(serializer, connection.getVersion(), cache.getLocale(), itemstack, true);
 		System.out.println(slot);
 		return RecyclableSingletonList.create(serializer);
