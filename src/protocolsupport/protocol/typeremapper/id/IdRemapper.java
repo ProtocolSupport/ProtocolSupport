@@ -321,6 +321,32 @@ public class IdRemapper {
 			return new HashMapBasedIdRemappingTable();
 		}
 	};
+	
+	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> WINDOWTYPE = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
+		{
+			registerRemapEntry(WindowType.PLAYER, -1, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(WindowType.CHEST, 0, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(WindowType.CRAFTING_TABLE, 1, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(WindowType.FURNACE, 2, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(WindowType.ENCHANT, 3, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(WindowType.BREWING, 4, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(WindowType.ANVIL, 5, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(WindowType.DISPENSER, 6, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(WindowType.DROPPER, 7, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(WindowType.HOPPER, 8, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(WindowType.HORSE, 12, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(WindowType.BEACON, 13, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(WindowType.VILLAGER, 15, ProtocolVersion.MINECRAFT_PE);
+		}
+		@Override
+		protected ArrayBasedIdRemappingTable createTable() {
+			return new ArrayBasedIdRemappingTable(14);
+		}
+		
+		private void registerRemapEntry(WindowType type, int to, ProtocolVersion version) {
+			registerRemapEntry(type.toLegacyId(), to, version);
+		}
+	};
 
 	public static final IdRemappingRegistry<HashMapBasedIdRemappingTable> EFFECT = new IdRemappingRegistry<HashMapBasedIdRemappingTable>() {
 		@Override

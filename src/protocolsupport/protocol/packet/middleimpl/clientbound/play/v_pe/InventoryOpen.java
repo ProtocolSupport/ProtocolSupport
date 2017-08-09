@@ -4,6 +4,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryOp
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -15,13 +16,14 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CONTAINER_OPEN, connection.getVersion());
 		serializer.writeByte(windowId);
-		serializer.writeByte(type.toLegacyId());
-		PositionSerializer.writePEPosition(serializer, new protocolsupport.protocol.utils.types.Position(0, 0, 0));
+		serializer.writeByte(IdRemapper.WINDOWTYPE.getTable(connection.getVersion()).getRemap(type.toLegacyId()));
+		PositionSerializer.writePEPosition(serializer, cache.getClickedPosition());
 		if (type == WindowType.HORSE) { //TODO: check if this is correct.
 			VarNumberSerializer.writeVarInt(serializer, horseId);
 		} else {
 			VarNumberSerializer.writeVarInt(serializer, -1);
 		}
+		System.out.println("Inventory open.. windowId: " + windowId + " type: "  + IdRemapper.WINDOWTYPE.getTable(connection.getVersion()).getRemap(type.toLegacyId()) + " position: " + cache.getClickedPosition() + " horseId: " + horseId);
 		return RecyclableSingletonList.create(serializer);
 	}
 

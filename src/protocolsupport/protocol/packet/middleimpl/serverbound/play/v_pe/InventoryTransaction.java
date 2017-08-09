@@ -133,11 +133,12 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 					case USE_CLICK_AIR:
 						face = -1;
 					case USE_CLICK_BLOCK: {
+						cache.setClickedPosition(position);
 						packets.add(MiddleBlockPlace.create(position, face, 0, cX, cY, cZ));
 						break;
 					}
-					case USE_DIG_BLOCK: { //instabreak
-						if(cache.getGameMode() == 1) {
+					case USE_DIG_BLOCK: {
+						if(cache.getGameMode() == 1) { //instabreak
 							packets.add(MiddleBlockDig.create(MiddleBlockDig.Action.START_DIG, position, 0));		
 							packets.add(MiddleBlockDig.create(MiddleBlockDig.Action.FINISH_DIG, position, 0));
 						}
