@@ -119,9 +119,11 @@ public class ItemStackSerializer {
 			} else if (isUsingDirectNBT(version)) {
 				return NBTTagCompoundSerializer.readTag(new ByteBufInputStream(from));
 			} else if (isUsingPENBT(version)) {
-				final short length = from.readShortLE();
-				if(length <= 0) {
-					return NBTTagCompoundWrapper.NULL;
+				if (!varint) { // VarInts NBTs doesn't have length
+					final short length = from.readShortLE();
+					if (length <= 0) {
+						return NBTTagCompoundWrapper.NULL;
+					}
 				}
 				return NBTTagCompoundSerializer.readPeTag(from, varint);
 			} else {
@@ -160,11 +162,15 @@ public class ItemStackSerializer {
 				} else {
 					int writerIndex = to.writerIndex();
 					//fake length
-					to.writeShortLE(0);
+					if (!varint) { // VarInt NBTs doesn't have length
+						to.writeShortLE(0);
+					}
 					//actual nbt
 					NBTTagCompoundSerializer.writePeTag(to, varint, tag); //TODO Remap PE NBT?
 					//now replace fake length with real length
-					to.setShortLE(writerIndex, to.writerIndex() - writerIndex - Short.BYTES);
+					if (!varint) {
+						to.setShortLE(writerIndex, to.writerIndex() - writerIndex - Short.BYTES);
+					}
 				}
 			} else {
 				throw new IllegalArgumentException(MessageFormat.format("Don't know how to write nbt of version {0}", version));
