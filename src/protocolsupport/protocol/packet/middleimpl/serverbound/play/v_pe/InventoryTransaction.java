@@ -228,7 +228,7 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 			if(inventoryId == POCKET_CLICKED_SLOT) {
 				cache.setCursorItem(newItem);
 			} else if (inventoryId == POCKET_INVENTORY) {
-				System.out.println(cache.getLocale() + " " + inventoryId + " " + PEDataValues.remapServerboundSlot(inventoryId, slot) + " " + 0 + " " + cache.getActionNumber() + " " + 0 + " " + cache.getCursorItem());
+				System.out.println(cache.getLocale() + " wId: " + inventoryId + " Slot: " + PEDataValues.remapServerboundSlot(inventoryId, slot) + " Button: " + 0 + " ActionNumber.. " + /*cache.getActionNumber() +*/ " Action: " + 0 + " Cursor: " + cache.getCursorItem());
 				return MiddleInventoryClick.create(cache.getLocale(), inventoryId, PEDataValues.remapServerboundSlot(inventoryId, slot), 0, cache.getActionNumber(), 0, cache.getCursorItem());
 			}
 			return null;
