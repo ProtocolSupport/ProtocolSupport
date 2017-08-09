@@ -796,26 +796,26 @@ deathScreen.spectate=Tonton Dunia
 deathScreen.title=Anda mati!
 deathScreen.title.hardcore=Permainan Selesai!
 deathScreen.titleScreen=Menu Utama
-debug.advanced_tooltips.help=F3 + H = TipsAlat Lanjutan
-debug.advanced_tooltips.off=TipsAlat Lanjutan: Tersembunyi
-debug.advanced_tooltips.on=TipsAlat Lanjutan: Tampak
-debug.chunk_boundaries.help=F3 + G = Tampilkan batas Bingkah
+debug.advanced_tooltips.help=F3 + H = Tips Alat Lanjutan
+debug.advanced_tooltips.off=Tips Alat Lanjutan: Tersembunyi
+debug.advanced_tooltips.on=Tips Alat Lanjutan: Tampak
+debug.chunk_boundaries.help=F3 + G = Tampilkan Batas Bingkah
 debug.chunk_boundaries.off=Bingkah Perbatasan: Tersembunyi
 debug.chunk_boundaries.on=Batas Bingkah: Tampak
 debug.clear_chat.help=F3 + D = Membersihkan Obrolan
 debug.creative_spectator.error='Tak dapat beralih mode permainan, 'tak ada izin
 debug.creative_spectator.help=F3 + N = Putar Kreatif <-> Penonton
-debug.cycle_renderdistance.help=F3 + F = Putar Jarak Pandang (Shift 'tuk membalik)
+debug.cycle_renderdistance.help=F3 + F = Putar Jarak Pandang (Shift untuk membalik)
 debug.cycle_renderdistance.message=Jarak Pandang:%s
-debug.help.help=F3 + Q = Perlihatkan daftar ini
+debug.help.help=F3 + Q = Perlihatkan Daftar Ini
 debug.help.message=Pengaturan tombol:
-debug.pause_focus.help=F3 + P = Jeda saat hilang fokus
+debug.pause_focus.help=F3 + P = Jeda Saat Hilang Fokus
 debug.pause_focus.off=Jeda saat hilang fokus: Dimatikan
 debug.pause_focus.on=Jeda saat hilang fokus: Diaktifkan
 debug.prefix=[Awakutu]:
-debug.reload_chunks.help=F3 + A = Muat ulang bingkah
+debug.reload_chunks.help=F3 + A = Muat Ulang Bingkah
 debug.reload_chunks.message=Muat ulang semua Bingkah
-debug.reload_resourcepacks.help=F3 + T = Muat ulang Paket Daya
+debug.reload_resourcepacks.help=F3 + T = Muat Ulang Paket Daya
 debug.reload_resourcepacks.message=Memuat ulang Paket Daya
 debug.show_hitboxes.help=F3 + B = Tampilkan Kotak Pukul
 debug.show_hitboxes.off=Kotak Pukul: Tersembunyi
@@ -1869,7 +1869,7 @@ item.modifiers.head=Saat di kepala:
 item.modifiers.legs=Saat di tungkai:
 item.modifiers.mainhand=Saat di tangan utama:
 item.modifiers.offhand=Saat di tangan kedua:
-item.monsterPlacer.name=Bangkitkan
+item.monsterPlacer.name=Pembangkit
 item.mushroomStew.name=Sup Jamur
 item.muttonCooked.name=Daging Domba Matang
 item.muttonRaw.name=Daging Domba Mentah
@@ -1917,7 +1917,7 @@ item.redstone.name=Batu Merah
 item.reeds.name=Tebu
 item.rottenFlesh.name=Daging Busuk
 item.saddle.name=Pelana
-item.seeds.name=Biji
+item.seeds.name=Biji Gandum
 item.seeds_melon.name=Biji Semangka
 item.seeds_pumpkin.name=Biji Labu
 item.shears.name=Gunting
@@ -1955,7 +1955,7 @@ item.skull.zombie.name=Kepala Zombi
 item.slimeball.name=Bola Geladir
 item.snowball.name=Bola Salju
 item.speckledMelon.name=Semangka Emas
-item.spectral_arrow.name=Panah Hantu
+item.spectral_arrow.name=Panah Bersinar
 item.spiderEye.name=Mata Laba-Laba
 item.splash_potion.name=Ramuan Ciprat
 item.stick.name=Batang Kayu
@@ -2157,9 +2157,9 @@ options.forceUnicodeFont=Paksa Aksara Unicode
 options.fov=Jarak Pandang
 options.fov.max=Luas
 options.fov.min=Normal
-options.framerate=%s fps
-options.framerateLimit=Kec. Bingkai Maks.
-options.framerateLimit.max=Tak Terbatas
+options.framerate=%s bpd
+options.framerateLimit=Tkt Bingkai Mks
+options.framerateLimit.max=TakTerbatas
 options.fullscreen=Layar Penuh
 options.gamma=Kecerahan
 options.gamma.max=Terang
@@ -2668,7 +2668,7 @@ subtitles.entity.llama.swag=Llama terhiasi
 subtitles.entity.magmacube.death=Kubus Magma mati
 subtitles.entity.magmacube.hurt=Kubus Magma terluka
 subtitles.entity.magmacube.squish=Kubus Magma jadi gepeng
-subtitles.entity.minecart.riding=Naik Kereta Tambang
+subtitles.entity.minecart.riding=Kereta Tambang berjalan
 subtitles.entity.mule.ambient=Bagal mendunus
 subtitles.entity.mule.chest=Bagal dengan Peti
 subtitles.entity.mule.death=Bagal mati
@@ -2714,7 +2714,7 @@ subtitles.entity.pig.saddle=Pelana dipasang
 subtitles.entity.player.burp=Bersendawa
 subtitles.entity.player.death=Pemain mati
 subtitles.entity.player.hurt=Pemain terluka
-subtitles.entity.player.levelup=Tingkatan menaik
+subtitles.entity.player.levelup=Tingkat meningkat
 subtitles.entity.polar_bear.ambient=Beruang Kutub mengerang
 subtitles.entity.polar_bear.baby_ambient=Dengungan Beruang Kutub
 subtitles.entity.polar_bear.death=Beruang Kutub mati
@@ -3050,8 +3050,8 @@ tile.monsterStoneEgg.chiseledbrick.name=Telur Monster Batu Bata Pahatan
 tile.monsterStoneEgg.cobble.name=Telur Monster Batu Kasar
 tile.monsterStoneEgg.crackedbrick.name=Telur Monster Batu Bata Retak
 tile.monsterStoneEgg.mossybrick.name=Telur Monster Batu Bata Berlumut
-tile.monsterStoneEgg.name=Batu Telur Monster
-tile.monsterStoneEgg.stone.name=Batu Telur Monster
+tile.monsterStoneEgg.name=Telur Monster Batu
+tile.monsterStoneEgg.stone.name=Telur Monster Batu
 tile.mushroom.name=Jamur
 tile.musicBlock.name=Kotak Nada
 tile.mycel.name=Miselium
@@ -3104,7 +3104,7 @@ tile.sand.red.name=Pasir Merah
 tile.sandStone.chiseled.name=Batu Pasir Pahatan
 tile.sandStone.default.name=Batu Pasir
 tile.sandStone.name=Batu Pasir
-tile.sandStone.smooth.name=Pasir halus
+tile.sandStone.smooth.name=Batu Pasir Halus
 tile.sapling.acacia.name=Bibit Pohon Akasia
 tile.sapling.big_oak.name=Bibit Pohon Ek Gelap
 tile.sapling.birch.name=Bibit Pohon Pinus

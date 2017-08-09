@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
@@ -47,6 +49,8 @@ public class LegacyChatJson {
 		}
 	}
 
+	protected static final Pattern langFormat = Pattern.compile("\\%(\\d?)\\$?([%s])");
+
 	static {
 		register((version, locale, component) -> {
 			ClickAction click = component.getClickAction();
@@ -62,21 +66,32 @@ public class LegacyChatJson {
 		register((version, locale, component) -> {
 			if (component instanceof TranslateComponent) {
 				TranslateComponent tcomponent = (TranslateComponent) component;
-				if (!LegacyI18NData.isSupported(tcomponent.getTranslationKey(), version)) {
-					BaseComponent[] tlargs = tcomponent.getTranslationArgs().toArray(new BaseComponent[0]);
-					String[] tlstringsplit = I18NData.getI18N(locale).getI18N(tcomponent.getTranslationKey()).split("[%][s]", -1);
-					if (tlargs.length != (tlstringsplit.length - 1)) {
-						return new TextComponent("Translation error");
-					}
-					BaseComponent rootcomponent = cloneComponentAuxData(tcomponent, new TextComponent(""));
-					for (int i = 0; i < tlstringsplit.length; i++) {
-						rootcomponent.addSibling(new TextComponent(tlstringsplit[i].replace("%%", "%")));
-						if (i < (tlstringsplit.length - 1)) {
-							rootcomponent.addSibling(tlargs[i]);
+				List<BaseComponent> tlargs = tcomponent.getTranslationArgs();
+				BaseComponent rootcomponent = cloneComponentAuxData(tcomponent, new TextComponent(""));
+				String translation = I18NData.getI18N(locale).getI18N(tcomponent.getTranslationKey());
+				Matcher matcher = langFormat.matcher(translation);
+				int index = 0;
+				int tlargindex = 0;
+				while (matcher.find()) {
+					rootcomponent.addSibling(new TextComponent(translation.substring(index, matcher.start())));
+					index = matcher.end();
+					if (matcher.group(2).equals("%")) {
+						rootcomponent.addSibling(new TextComponent("%"));
+					} else if (matcher.group(2).equals("s")) {
+						int ltlargindex = tlargindex;
+						if (!matcher.group(1).isEmpty()) {
+							ltlargindex = Integer.parseInt(matcher.group(1)) - 1;
+						}
+						if (tlargindex < tlargs.size()) {
+							rootcomponent.addSibling(tlargs.get(ltlargindex));
+						} else {
+							rootcomponent.addSibling(new TextComponent("[Invalid traslation argument index]"));
 						}
 					}
-					return rootcomponent;
+					tlargindex++;
 				}
+				rootcomponent.addSibling(new TextComponent(translation.substring(index)));
+				return rootcomponent;
 			}
 			return component;
 		}, ProtocolVersion.getAllSupported());

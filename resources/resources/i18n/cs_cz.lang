@@ -2287,7 +2287,7 @@ selectWorld.edit.openFolder=Otevřít složku
 
 selectWorld.edit.resetIcon=Obnovit náhled
 selectWorld.edit.save=Uložit svět
-selectWorld.edit.title=Upravit svět
+selectWorld.edit.title=Úprava světa
 selectWorld.empty=prázdný
 selectWorld.enterName=Název světa
 selectWorld.enterSeed=Zdroj pro generátor světa

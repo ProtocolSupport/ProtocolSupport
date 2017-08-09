@@ -1,14 +1,8 @@
 package protocolsupport.protocol.typeremapper.itemstack;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.List;
-
-import org.bukkit.Material;
-
 import gnu.trove.decorator.TIntObjectMapDecorator;
 import gnu.trove.map.hash.TIntObjectHashMap;
+import org.bukkit.Material;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.fromclient.MonsterEggFromLegacyIdRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.fromclient.PotionFromLegacyIdRemapper;
@@ -17,6 +11,7 @@ import protocolsupport.protocol.typeremapper.itemstack.toclient.DragonHeadSpecif
 import protocolsupport.protocol.typeremapper.itemstack.toclient.EmptyBookPageAdderSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.EnchantFilterNBTSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.EnchantToPEEnchantSpecificRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.toclient.ItemIdToPEIdSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.MapItemLegacyIdToNbtSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.MonsterEggToLegacyIdSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.MonsterEggToLegacyNameSpecificRemapper;
@@ -27,6 +22,11 @@ import protocolsupport.protocol.typeremapper.utils.RemappingTable.ComplexIdRemap
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.List;
 
 @SuppressWarnings("deprecation")
 public class ItemStackRemapper {
@@ -254,7 +254,11 @@ public class ItemStackRemapper {
 			registerToClientRemapper(material, enchantfilter, ProtocolVersion.MINECRAFT_PE);
 		});
 		EnchantToPEEnchantSpecificRemapper peenchantremapper = new EnchantToPEEnchantSpecificRemapper();
-		Arrays.stream(Material.values()).forEach(material -> registerToClientRemapper(material, peenchantremapper, ProtocolVersion.MINECRAFT_PE));
+		ItemIdToPEIdSpecificRemapper itemtope = new ItemIdToPEIdSpecificRemapper();
+		Arrays.stream(Material.values()).forEach(material -> {
+			registerToClientRemapper(material, peenchantremapper, ProtocolVersion.MINECRAFT_PE);
+			registerToClientRemapper(material, itemtope, ProtocolVersion.MINECRAFT_PE);
+		});
 		registerFromClientRemapper(Material.POTION, new PotionFromLegacyIdRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
 		registerFromClientRemapper(Material.MONSTER_EGG, new MonsterEggFromLegacyIdRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
 	}

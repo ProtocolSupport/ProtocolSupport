@@ -24,11 +24,7 @@ public class I18NData {
 	}
 
 	public static void loadAndRegisterI18N(String locale, InputStream stream) {
-		i18ns.put(locale, loadI18N(locale, stream));
-	}
-
-	public static I18N loadI18N(String locale, InputStream stream) {
-		return new I18N(locale, new BufferedReader(new InputStreamReader(stream)).lines().collect(Collectors.toList()));
+		i18ns.put(locale, new I18N(locale, new BufferedReader(new InputStreamReader(stream)).lines().collect(Collectors.toList())));
 	}
 
 	public static I18N getI18N(String locale) {
