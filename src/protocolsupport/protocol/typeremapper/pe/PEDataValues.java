@@ -113,11 +113,9 @@ public class PEDataValues {
 		}
 	}
 
-	public static final ArrayBasedIdRemappingTable ITEM_ID = new ArrayBasedIdRemappingTable(MinecraftData.ITEM_ID_MAX * MinecraftData.ITEM_DATA_MAX);
+	public static final ArrayBasedIdRemappingTable ITEM_ID = new ArrayBasedIdRemappingTable(MinecraftData.ITEM_ID_MAX);
 	private static void registerItemRemap(int from, int to) {
-		for (int i = 0; i < MinecraftData.ITEM_DATA_MAX; i++) {
-			ITEM_ID.setRemap(MinecraftData.getBlockStateFromIdAndData(from, i), MinecraftData.getBlockStateFromIdAndData(to, i));
-		}
+		ITEM_ID.setRemap(from, to);
 	}
 
 	static {
