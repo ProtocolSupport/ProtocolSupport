@@ -16,6 +16,7 @@ import protocolsupport.protocol.typeremapper.itemstack.toclient.BookPagesToLegac
 import protocolsupport.protocol.typeremapper.itemstack.toclient.DragonHeadSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.EmptyBookPageAdderSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.EnchantFilterNBTSpecificRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.toclient.ItemIdToPEIdSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.MonsterEggToLegacyIdSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.MonsterEggToLegacyNameSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.PlayerSkullToLegacyOwnerSpecificRemapper;
@@ -247,6 +248,8 @@ public class ItemStackRemapper {
 		registerToClientRemapper(Material.BOOK_AND_QUILL, new EmptyBookPageAdderSpecificRemapper(), ProtocolVersionsHelper.ALL_PC);
 		EnchantFilterNBTSpecificRemapper enchantfilter = new EnchantFilterNBTSpecificRemapper();
 		Arrays.stream(Material.values()).forEach(material -> registerToClientRemapper(material, enchantfilter, ProtocolVersionsHelper.ALL_PC));
+		ItemIdToPEIdSpecificRemapper itemtope = new ItemIdToPEIdSpecificRemapper();
+		Arrays.stream(Material.values()).forEach(material -> registerToClientRemapper(material, itemtope, ProtocolVersion.MINECRAFT_PE));
 		registerFromClientRemapper(Material.POTION, new PotionFromLegacyIdRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
 		registerFromClientRemapper(Material.MONSTER_EGG, new MonsterEggFromLegacyIdRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
 	}

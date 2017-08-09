@@ -113,6 +113,23 @@ public class PEDataValues {
 		}
 	}
 
+	public static final ArrayBasedIdRemappingTable ITEM_ID = new ArrayBasedIdRemappingTable(MinecraftData.ITEM_ID_MAX * MinecraftData.ITEM_DATA_MAX);
+	private static void registerItemRemap(int from, int to) {
+		for (int i = 0; i < MinecraftData.ITEM_DATA_MAX; i++) {
+			ITEM_ID.setRemap(MinecraftData.getBlockStateFromIdAndData(from, i), MinecraftData.getBlockStateFromIdAndData(to, i));
+		}
+	}
+	private static void registerItemRemap(int from, int dataFrom, int to, int dataTo) {
+		for (int i = 0; i < MinecraftData.ITEM_DATA_MAX; i++) {
+			ITEM_ID.setRemap(MinecraftData.getBlockStateFromIdAndData(from, dataFrom), MinecraftData.getBlockStateFromIdAndData(to, dataTo));
+		}
+	}
+	private static void registerItemRemap(int from, int to, int dataTo) {
+		for (int i = 0; i < MinecraftData.ITEM_DATA_MAX; i++) {
+			ITEM_ID.setRemap(MinecraftData.getBlockStateFromIdAndData(from, i), MinecraftData.getBlockStateFromIdAndData(to, dataTo));
+		}
+	}
+
 	static {
 		// Nether slab -> Quartz slab
 		registerBlockRemap(44, 7, 44, 6);
@@ -193,10 +210,26 @@ public class PEDataValues {
 		registerBlockRemap(158, 125);
 		// Beetroot
 		registerBlockRemap(207, 244);
+		// Structure Block
+		registerBlockRemap(255, 252);
 
-		// ===[ MISSING BLOCK REMAPS ]===
-		// Jukebox -> Noteblock
-		registerBlockRemap(84, 25);
+		// Armor Stand
+		registerItemRemap(416, 425);
+		// Banner
+		registerItemRemap(425, 446);
+		// Records
+		registerItemRemap(2256, 500);
+		registerItemRemap(2257, 501);
+		registerItemRemap(2258, 502);
+		registerItemRemap(2259, 503);
+		registerItemRemap(2260, 504);
+		registerItemRemap(2261, 505);
+		registerItemRemap(2262, 506);
+		registerItemRemap(2263, 507);
+		registerItemRemap(2264, 508);
+		registerItemRemap(2265, 509);
+		registerItemRemap(2266, 510);
+		registerItemRemap(2267, 511);
 	}
 
 }
