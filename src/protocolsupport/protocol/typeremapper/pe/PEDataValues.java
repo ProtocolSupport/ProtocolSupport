@@ -119,16 +119,6 @@ public class PEDataValues {
 			ITEM_ID.setRemap(MinecraftData.getBlockStateFromIdAndData(from, i), MinecraftData.getBlockStateFromIdAndData(to, i));
 		}
 	}
-	private static void registerItemRemap(int from, int dataFrom, int to, int dataTo) {
-		for (int i = 0; i < MinecraftData.ITEM_DATA_MAX; i++) {
-			ITEM_ID.setRemap(MinecraftData.getBlockStateFromIdAndData(from, dataFrom), MinecraftData.getBlockStateFromIdAndData(to, dataTo));
-		}
-	}
-	private static void registerItemRemap(int from, int to, int dataTo) {
-		for (int i = 0; i < MinecraftData.ITEM_DATA_MAX; i++) {
-			ITEM_ID.setRemap(MinecraftData.getBlockStateFromIdAndData(from, i), MinecraftData.getBlockStateFromIdAndData(to, dataTo));
-		}
-	}
 
 	static {
 		// Nether slab -> Quartz slab
