@@ -10,7 +10,7 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
-public class BlockEntityData extends ServerBoundMiddlePacket {
+public class BlockTileUpdate extends ServerBoundMiddlePacket {
 
 	protected NBTTagCompoundWrapper nbt;
 
