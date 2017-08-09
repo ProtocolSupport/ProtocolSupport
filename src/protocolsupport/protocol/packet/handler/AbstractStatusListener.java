@@ -4,12 +4,15 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -71,16 +74,11 @@ public abstract class AbstractStatusListener {
 			motd = bevent.getMotd();
 			maxPlayers = bevent.getMaxPlayers();
 
-			List<String> profiles = new ArrayList<>(players.size());
-			for (Player player : players) {
-				profiles.add(player.getName());
-			}
-
 			Connection connection = ConnectionImpl.getFromChannel(networkManager.getChannel());
 			ServerPingResponseEvent revent = new ServerPingResponseEvent(
 				connection,
 				new ProtocolInfo(connection.getVersion(), ServerPlatform.get().getMiscUtils().getModName() + " " + ServerPlatform.get().getMiscUtils().getVersionName()),
-				icon, motd, maxPlayers, profiles
+				icon, motd, maxPlayers, bevent.getSampleText()
 			);
 			Bukkit.getPluginManager().callEvent(revent);
 
@@ -99,9 +97,11 @@ public abstract class AbstractStatusListener {
 	public static class InternalServerListPingEvent extends ServerListPingEvent {
 
 		private final List<Player> players;
+		private Set<String> sample;
 		protected InternalServerListPingEvent(InetAddress address, String motd, int maxPlayers, List<Player> players) {
 			super(address, motd, maxPlayers);
 			this.players = players;
+			this.sample = this.players.stream().map(Player::getName).collect(Collectors.toSet());
 		}
 
 		protected CachedServerIcon icon;
@@ -114,9 +114,36 @@ public abstract class AbstractStatusListener {
 			this.icon = icon;
 		}
 
+		public List<String> getSampleText() {
+			return new ArrayList<String>(sample);
+		}
+
 		@Override
-		public Iterator<Player> iterator() throws UnsupportedOperationException {
-			return players.iterator();
+		public Iterator<Player> iterator() {
+			return new Iterator<Player>() {
+				private final Iterator<Player> iterator = players.iterator();
+				private Player player;
+				@Override
+				public boolean hasNext() {
+					return iterator.hasNext();
+				}
+
+				@Override
+				public Player next() {
+					return (player = iterator.next());
+				}
+
+				@Override
+				public void remove() {
+					iterator.remove();
+					sample.remove(player.getName());
+				}
+			};
+		}
+
+		public void setSampleText(List<String> sample) {
+			this.sample = new HashSet<>(sample);
+			this.players.removeIf(player -> !sample.contains(player.getName()));
 		}
 
 	}
