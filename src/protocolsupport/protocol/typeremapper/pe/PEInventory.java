@@ -8,17 +8,28 @@ import protocolsupport.protocol.utils.types.WindowType;
 public class PEInventory {
 	
 	public static int remapClientboundSlot(WindowType windowType, int slot) {
-		if(windowType == WindowType.PLAYER && slot >= 36) {
-			return slot - 36;
+		switch(windowType) {
+			case PLAYER: {
+				if(slot >= 36 && slot <= 44) {
+					return slot - 36;
+				}
+			}
+		default:
+			return slot;
 		}
-		return slot;
 	}
 	
 	public static int remapServerboundSlot(WindowType windowType, int slot) {
-		if (windowType == WindowType.PLAYER && slot < 9) {
-			return slot + 36;
+		switch(windowType) {
+			case PLAYER: {
+				if(slot < 9) {
+					return slot + 36;
+				}
+			}
+			default: {
+				return slot;
+			}
 		}
-		return slot;
 	}
 	
 }
