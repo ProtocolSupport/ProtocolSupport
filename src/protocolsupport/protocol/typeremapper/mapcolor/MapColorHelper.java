@@ -4,6 +4,18 @@ import java.util.Arrays;
 
 public class MapColorHelper {
 	
+	//TODO: fix all the colors and perhaps do this more effectively.
+	public static int fixColorId(int id) {
+		switch(id) {
+			case 54:
+			return 50;
+			case 50:
+			return 54;
+			default:
+			return id;
+		}
+	}
+	
 	public static int getARGB(IMapColor color) {
 		return toARGB((byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue(), (byte) 0xff);
 	}

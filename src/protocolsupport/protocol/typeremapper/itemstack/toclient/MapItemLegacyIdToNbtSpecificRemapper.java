@@ -15,6 +15,7 @@ public class MapItemLegacyIdToNbtSpecificRemapper implements ItemStackSpecificRe
 			tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
 		}
 		tag.setString("map_uuid", String.valueOf(itemstack.getData()));
+		tag.setByte("map_player_display", 1); //TODO: Fix players not showing up.
 		itemstack.setTag(tag);
 		itemstack.setData(0);
 		return itemstack;

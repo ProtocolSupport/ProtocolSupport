@@ -15,7 +15,7 @@ public class MapColorRemapper {
 					registerRemapEntry(color.getId(), MapColorHelper.getSimilarModernColor(color, ModernMapColor.Color143.getId()).getId(), ProtocolVersionsHelper.BEFORE_1_12);
 				}
 				registerRemapEntry(color.getId(), MapColorHelper.getSimilarLegacyColor(color).getId(), ProtocolVersionsHelper.BEFORE_1_7);
-				registerRemapEntry(color.getId(), MapColorHelper.getARGB(color), ProtocolVersion.MINECRAFT_PE);
+				registerRemapEntry(MapColorHelper.fixColorId(color.getId()), MapColorHelper.getARGB(color), ProtocolVersion.MINECRAFT_PE);
 			}
 		}
 		@Override
