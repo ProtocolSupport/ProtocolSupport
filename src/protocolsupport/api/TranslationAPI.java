@@ -19,7 +19,11 @@ public class TranslationAPI {
 	}
 
 	public static String translate(String locale, String key, String... args) {
-		return I18NData.i18n(locale, key, args);
+		return I18NData.translate(locale, key, args);
+	}
+
+	public static String getTranslationString(String locale, String key) {
+		return I18NData.getTranslationString(locale, key);
 	}
 
 }

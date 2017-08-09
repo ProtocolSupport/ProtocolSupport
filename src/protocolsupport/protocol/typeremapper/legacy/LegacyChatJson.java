@@ -8,6 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.TranslationAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.KeybindComponent;
 import protocolsupport.api.chat.components.TextComponent;
@@ -15,7 +16,6 @@ import protocolsupport.api.chat.components.TranslateComponent;
 import protocolsupport.api.chat.modifiers.ClickAction;
 import protocolsupport.api.chat.modifiers.HoverAction;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.minecraftdata.ItemData;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
@@ -68,7 +68,7 @@ public class LegacyChatJson {
 				TranslateComponent tcomponent = (TranslateComponent) component;
 				List<BaseComponent> tlargs = tcomponent.getTranslationArgs();
 				BaseComponent rootcomponent = cloneComponentAuxData(tcomponent, new TextComponent(""));
-				String translation = I18NData.getI18N(locale).getI18N(tcomponent.getTranslationKey());
+				String translation = TranslationAPI.getTranslationString(locale, tcomponent.getTranslationKey());
 				Matcher matcher = langFormat.matcher(translation);
 				int index = 0;
 				int tlargindex = 0;
