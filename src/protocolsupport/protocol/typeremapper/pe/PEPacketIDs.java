@@ -21,7 +21,7 @@ public class PEPacketIDs {
 	public static final int SPAWN_PAINTING = 22;
 	public static final int EXPLODE = 23;
 	public static final int LEVEL_EVENT = 25;
-	//public static final int TILE_EVENT = 26;
+	public static final int TILE_EVENT = 26;
 	public static final int ENTITY_EVENT = 27;
 	public static final int ENTITY_EFFECT = 28;
 	public static final int SET_ATTRIBUTES = 29;
