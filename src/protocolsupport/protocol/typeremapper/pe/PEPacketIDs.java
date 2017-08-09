@@ -26,8 +26,8 @@ public class PEPacketIDs {
 	public static final int ENTITY_EFFECT = 28;
 	public static final int SET_ATTRIBUTES = 29;
 	public static final int INVENTORY_TRANSACTION = 30;
-	//public static final int MOB_EQUIPMENT = 31;
-	//public static final int MOB_ARMOR_EQUIPMENT = 32;
+	public static final int MOB_EQUIPMENT = 31;
+	public static final int MOB_ARMOR_EQUIPMENT = 32;
 	public static final int INTERACT = 33;
 	//public static final int BLOCK_PICK_REQUEST = 34;
 	//public static final int ENTITY_PICK_REQUEST = 35;
