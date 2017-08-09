@@ -36,7 +36,7 @@ public class PositionLook extends MiddlePositionLook {
 
 			String[] nbtLines = new String[4];
 			String[] lines = signTag.getString("Text").split("\n"); // Lines in MCPE are separated by new lines
-			for (int i = 0; 4 > i; i++) {
+			for (int i = 0; nbtLines.length > i; i++) {
 				if (lines.length > i) {
 					nbtLines[i] = lines[i];
 				} else {

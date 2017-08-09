@@ -16,9 +16,8 @@ public class BlockTileUpdate extends ServerBoundMiddlePacket {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		PositionSerializer.readPEPosition(clientdata); // x, y, z
+		PositionSerializer.readPEPosition(clientdata);
 		nbt = ItemStackSerializer.readTag(clientdata, true, ProtocolVersion.MINECRAFT_PE);
-
 		if (nbt.getString("id").equals("Sign")) {
 			this.cache.setSignTag(nbt);
 		}
