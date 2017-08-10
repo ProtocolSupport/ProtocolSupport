@@ -18,7 +18,7 @@ public class PESkin {
 		@Override
 		public byte[] call() {
 			try {
-				return toNetworkData(ImageIO.read(Utils.getResource("steve_skin.png")));
+				return toNetworkData(ImageIO.read(Utils.getResourceAsStream("steve_skin.png")));
 			} catch (IOException e) {
 				return new byte[0];
 			}

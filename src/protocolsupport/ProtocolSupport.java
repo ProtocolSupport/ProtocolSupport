@@ -42,7 +42,6 @@ import protocolsupport.utils.Utils;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.pe.MCPEServer;
 
 public class ProtocolSupport extends JavaPlugin {
 
@@ -62,8 +61,6 @@ public class ProtocolSupport extends JavaPlugin {
 		return buildinfo;
 	}
 
-	private MCPEServer peserver;
-
 	@Override
 	public void onLoad() {
 		try {
@@ -71,6 +68,11 @@ public class ProtocolSupport extends JavaPlugin {
 		} catch (Throwable t) {
 			getLogger().severe("Unable to load buildinfo, make sure you built this version using Gradle");
 			Bukkit.shutdown();
+		}
+		if (Bukkit.getServer().getOnlineMode()) {
+			getLogger().severe("PSPE doesn't support online mode");
+			Bukkit.shutdown();
+			return;
 		}
 		if (!ServerPlatform.detect()) {
 			getLogger().severe("Unsupported server implementation type");
@@ -109,7 +111,6 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(LegacyEffect.class.getName());
 			Class.forName(PESkin.class.getName());
 			ServerPlatform.get().inject();
-			peserver = new MCPEServer(19138);
 		} catch (Throwable t) {
 			getLogger().log(Level.SEVERE, "Error when loading, make sure you are using supported server version", t);
 			Bukkit.shutdown();
@@ -118,18 +119,18 @@ public class ProtocolSupport extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		ServerPlatform.get().injectOnEnable();
+		ServerPlatform.get().onEnable();
 		getCommand("protocolsupport").setExecutor(new CommandHandler());
 		getServer().getPluginManager().registerEvents(new FeatureEmulation(), this);
 		getServer().getPluginManager().registerEvents(new ReloadCommandBlocker(), this);
 		getServer().getPluginManager().registerEvents(new MultiplePassengersRestrict(), this);
-		getServer().getScheduler().runTask(this, () -> peserver.start());
+		getServer().getScheduler().runTask(this, () -> ServerPlatform.get().onFirstTick());
 	}
 
 	@Override
 	public void onDisable() {
 		Bukkit.shutdown();
-		peserver.stop();
+		ServerPlatform.get().onDisable();
 	}
 
 	public static void logInfo(String message) {

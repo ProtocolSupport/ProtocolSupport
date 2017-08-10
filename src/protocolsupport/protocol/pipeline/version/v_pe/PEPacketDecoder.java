@@ -11,13 +11,13 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_pe.ClientLogin;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Animation;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Chat;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.CommandRequest;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Interact;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.InventoryClose;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.InventoryTransaction;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.MapInfoRequest;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PlayerAction;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PositionLook;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.CommandRequest;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.BlockTileUpdate;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.HeldSlot;
 import protocolsupport.protocol.pipeline.version.AbstractPacketDecoder;
@@ -73,7 +73,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 			throwFailedTransformException(e, packetTransformer, input);
 		}
 	}
-	
+
 	protected int readPacketId(ByteBuf from) {
 		int id = VarNumberSerializer.readVarInt(from);
 		from.readByte();

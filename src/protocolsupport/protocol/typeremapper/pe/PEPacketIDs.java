@@ -77,5 +77,5 @@ public class PEPacketIDs {
 	//public static final int SUB_LOGIN = 94;
 	//public static final int LAST_HURT = 96;
 	//public static final int EDIT_BOOK = 97;
-	
+
 }

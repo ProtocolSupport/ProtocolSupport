@@ -306,7 +306,7 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Ocelot.VARIANT, 2), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Ocelot.VARIANT, 15) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_1),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Ocelot.VARIANT, 14) {}, ProtocolVersionsHelper.ALL_1_9),
-		new Entry(new IndexValueRemapperNumberToByte(DataWatcherObjectIndex.Ocelot.VARIANT, 16), ProtocolVersionsHelper.BEFORE_1_9)
+		new Entry(new IndexValueRemapperNumberToByte(DataWatcherObjectIndex.Ocelot.VARIANT, 18), ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	WOLF(NetworkEntityType.WOLF, SpecificRemapper.TAMEABLE,
 		//new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Wolf.HEALTH, 1), ProtocolVersion.MINECRAFT_PE), //TODO: Test this?

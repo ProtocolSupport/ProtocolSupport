@@ -131,7 +131,7 @@ public class PEPacketEncoder extends AbstractLegacyPacketEncoder {
 	public PEPacketEncoder(Connection connection, NetworkDataCache storage) {
 		super(connection, storage);
 	}
-	
+
 	@Override
 	protected void writePacketId(ByteBuf to, int packetId) {
 		VarNumberSerializer.writeVarInt(to, packetId);

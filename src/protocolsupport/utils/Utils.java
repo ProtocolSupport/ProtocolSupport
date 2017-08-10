@@ -1,8 +1,11 @@
 package protocolsupport.utils;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -129,7 +132,11 @@ public class Utils {
 	}
 
 	private static final String resourcesDirName = "resources";
-	public static InputStream getResource(String name) {
+	public static BufferedReader getResource(String name) {
+		return new BufferedReader(new InputStreamReader(getResourceAsStream(name), StandardCharsets.UTF_8));
+	}
+
+	public static InputStream getResourceAsStream(String name) {
 		return ProtocolSupport.class.getClassLoader().getResourceAsStream(resourcesDirName + "/" + name);
 	}
 

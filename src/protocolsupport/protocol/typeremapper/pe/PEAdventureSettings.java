@@ -16,7 +16,7 @@ public class PEAdventureSettings {
 	public static final int ALLOW_FLIGHT = 0x40;
 	public static final int NOCLIP_ENABLED = 0x80;
 	public static final int FLYING = 0x200;
-	
+
 	//Permissions? Arg.
 	public static final int PERMISSIONS_PROHIBIT_ALL = 0x00;
 	public static final int PERMISSIONS_BUILD_AND_MINE = 0x01;
