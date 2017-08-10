@@ -35,8 +35,8 @@ public class I18N {
 		return new HashSet<>(i18n.keySet());
 	}
 
-	public String getI18N(String key) {
-		return i18n.getOrDefault(key, key);
+	public String getTranslationString(String key) {
+		return i18n.get(key);
 	}
 
 }

@@ -4,10 +4,12 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Callable;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.io.input.ReaderInputStream;
 import org.apache.commons.lang3.Validate;
 
 import protocolsupport.utils.Utils;
@@ -18,7 +20,7 @@ public class PESkin {
 		@Override
 		public byte[] call() {
 			try {
-				return toNetworkData(ImageIO.read(Utils.getResource("steve_skin.png")));
+				return toNetworkData(ImageIO.read(new ReaderInputStream(Utils.getResource("steve_skin.png"), StandardCharsets.UTF_8)));
 			} catch (IOException e) {
 				return new byte[0];
 			}
