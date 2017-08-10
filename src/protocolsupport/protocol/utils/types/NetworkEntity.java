@@ -1,10 +1,11 @@
 package protocolsupport.protocol.utils.types;
 
-import java.util.UUID;
-
 import org.bukkit.util.Vector;
-
 import protocolsupport.utils.Utils;
+import protocolsupport.zplatform.ServerPlatform;
+import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+
+import java.util.UUID;
 
 public class NetworkEntity {
 
@@ -94,7 +95,15 @@ public class NetworkEntity {
 		private long peBaseFlags = 0;
 		public int attachedId = -1; //Leashed? Data is send in pocket meta, but might be useful to store for other things.
 		public Rider rider = new Rider(false);
-		
+		// static final null ItemStack, while the null ItemStack in Vanilla code is a static final variable, ProtocolSupport wraps
+		// it inside a ItemStackWrapper, causing object duplication, so, to avoid too much memory usage, why not just reuse the
+		// same object? After all, the nullItemStack isn't going to be edited by anyone anyway :)
+		private static final ItemStackWrapper nullItemStack = ServerPlatform.get().getWrapperFactory().createNullItemStack();
+		private ItemStackWrapper helmet = nullItemStack;
+		private ItemStackWrapper chestplate = nullItemStack;
+		private ItemStackWrapper leggings = nullItemStack;
+		private ItemStackWrapper boots = nullItemStack;
+
 		public long getPeBaseFlags() {
 			return peBaseFlags;
 		}
@@ -115,7 +124,31 @@ public class NetworkEntity {
 		public void setPeBaseFlags(long peBaseFlags) {
 			this.peBaseFlags = peBaseFlags;
 		}
-		
+
+		public void setHelmet(ItemStackWrapper helmet) {
+			this.helmet = helmet;
+		}
+
+		public ItemStackWrapper getHelmet() { return this.helmet; }
+
+		public void setChestplate(ItemStackWrapper chestplate) { 
+			this.chestplate = chestplate; 
+		}
+
+		public ItemStackWrapper getChestplate() { return this.chestplate; }
+
+		public void setLeggings(ItemStackWrapper leggings) {
+			this.leggings = leggings;
+		}
+
+		public ItemStackWrapper getLeggings() { return this.leggings; }
+
+		public void setBoots(ItemStackWrapper boots) {
+			this.boots = boots;
+		}
+
+		public ItemStackWrapper getBoots() { return this.boots; }
+
 		public class Rider {
 			public boolean riding = false;
 			public Vector position = new Vector(0, 0.6, 0);
