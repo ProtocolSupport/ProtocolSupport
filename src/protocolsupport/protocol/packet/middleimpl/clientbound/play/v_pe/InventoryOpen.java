@@ -19,9 +19,9 @@ public class InventoryOpen extends MiddleInventoryOpen {
 		serializer.writeByte(IdRemapper.WINDOWTYPE.getTable(connection.getVersion()).getRemap(type.toLegacyId()));
 		PositionSerializer.writePEPosition(serializer, cache.getClickedPosition());
 		if (type == WindowType.HORSE) { //TODO: check if this is correct.
-			VarNumberSerializer.writeVarInt(serializer, horseId);
+			VarNumberSerializer.writeSVarLong(serializer, horseId);
 		} else {
-			VarNumberSerializer.writeVarInt(serializer, -1);
+			VarNumberSerializer.writeSVarLong(serializer, -1);
 		}
 		System.out.println("Inventory open.. windowId: " + windowId + " type: "  + IdRemapper.WINDOWTYPE.getTable(connection.getVersion()).getRemap(type.toLegacyId()) + " position: " + cache.getClickedPosition() + " horseId: " + horseId);
 		return RecyclableSingletonList.create(serializer);
