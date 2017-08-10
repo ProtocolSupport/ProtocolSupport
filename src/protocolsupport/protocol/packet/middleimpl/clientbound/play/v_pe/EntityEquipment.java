@@ -38,10 +38,10 @@ public class EntityEquipment extends MiddleEntityEquipment {
 					break;
 				}
 			}
-			ItemStackSerializer.writeItemStack(serializer, ProtocolVersion.MINECRAFT_PE, this.cache.getLocale(), dataCache.getHelmet(), true);
-			ItemStackSerializer.writeItemStack(serializer, ProtocolVersion.MINECRAFT_PE, this.cache.getLocale(), dataCache.getChestplate(), true);
-			ItemStackSerializer.writeItemStack(serializer, ProtocolVersion.MINECRAFT_PE, this.cache.getLocale(), dataCache.getLeggings(), true);
-			ItemStackSerializer.writeItemStack(serializer, ProtocolVersion.MINECRAFT_PE, this.cache.getLocale(), dataCache.getBoots(), true);
+			ItemStackSerializer.writeItemStack(serializer, ProtocolVersion.MINECRAFT_PE, cache.getLocale(), dataCache.getHelmet(), true);
+			ItemStackSerializer.writeItemStack(serializer, ProtocolVersion.MINECRAFT_PE, cache.getLocale(), dataCache.getChestplate(), true);
+			ItemStackSerializer.writeItemStack(serializer, ProtocolVersion.MINECRAFT_PE, cache.getLocale(), dataCache.getLeggings(), true);
+			ItemStackSerializer.writeItemStack(serializer, ProtocolVersion.MINECRAFT_PE, cache.getLocale(), dataCache.getBoots(), true);
 
 			return RecyclableSingletonList.create(serializer);
 		} else if (slot == 0) { // Main hand update
