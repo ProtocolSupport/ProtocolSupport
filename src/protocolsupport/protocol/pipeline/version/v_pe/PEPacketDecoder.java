@@ -11,10 +11,10 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_pe.ClientLogin;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Animation;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Chat;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.CommandRequest;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Interact;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PlayerAction;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PositionLook;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.CommandRequest;
 import protocolsupport.protocol.pipeline.version.AbstractPacketDecoder;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
@@ -63,7 +63,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 			throwFailedTransformException(e, packetTransformer, input);
 		}
 	}
-	
+
 	protected int readPacketId(ByteBuf from) {
 		int id = VarNumberSerializer.readVarInt(from);
 		from.readByte();
