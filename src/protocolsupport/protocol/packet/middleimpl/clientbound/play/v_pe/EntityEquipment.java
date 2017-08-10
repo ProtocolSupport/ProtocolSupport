@@ -15,41 +15,41 @@ public class EntityEquipment extends MiddleEntityEquipment {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		if (this.slot > 1) {
+		if (slot > 1) {
 			// Armor update
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOB_ARMOR_EQUIPMENT, connection.getVersion());
-			VarNumberSerializer.writeVarLong(serializer, this.entityId);
-			NetworkEntity.DataCache dataCache = this.cache.getWatchedEntity(this.entityId).getDataCache();
-			switch (this.slot) {
+			VarNumberSerializer.writeVarLong(serializer, entityId);
+			NetworkEntity.DataCache dataCache = cache.getWatchedEntity(entityId).getDataCache();
+			switch (slot) {
 				case (2): {
-					dataCache.setBoots(this.itemstack);
+					dataCache.setBoots(itemstack);
 					break;
 				}
 				case (3): {
-					dataCache.setLeggings(this.itemstack);
+					dataCache.setLeggings(itemstack);
 					break;
 				}
 				case (4): {
-					dataCache.setChestplate(this.itemstack);
+					dataCache.setChestplate(itemstack);
 					break;
 				}
 				case (5): {
-					dataCache.setHelmet(this.itemstack);
+					dataCache.setHelmet(itemstack);
 					break;
 				}
 			}
-			ItemStackSerializer.writeItemStack(serializer, ProtocolVersion.MINECRAFT_PE, this.cache.getLocale(), dataCache.getHelmet(), true); // helmet
-			ItemStackSerializer.writeItemStack(serializer, ProtocolVersion.MINECRAFT_PE, this.cache.getLocale(), dataCache.getChestplate(), true); // chestplate
-			ItemStackSerializer.writeItemStack(serializer, ProtocolVersion.MINECRAFT_PE, this.cache.getLocale(), dataCache.getLeggings(), true); // leggings
-			ItemStackSerializer.writeItemStack(serializer, ProtocolVersion.MINECRAFT_PE, this.cache.getLocale(), dataCache.getBoots(), true); // boots
+			ItemStackSerializer.writeItemStack(serializer, ProtocolVersion.MINECRAFT_PE, this.cache.getLocale(), dataCache.getHelmet(), true);
+			ItemStackSerializer.writeItemStack(serializer, ProtocolVersion.MINECRAFT_PE, this.cache.getLocale(), dataCache.getChestplate(), true);
+			ItemStackSerializer.writeItemStack(serializer, ProtocolVersion.MINECRAFT_PE, this.cache.getLocale(), dataCache.getLeggings(), true);
+			ItemStackSerializer.writeItemStack(serializer, ProtocolVersion.MINECRAFT_PE, this.cache.getLocale(), dataCache.getBoots(), true);
 
 			return RecyclableSingletonList.create(serializer);
-		} else if (this.slot == 0) { // Main hand update
+		} else if (slot == 0) { // Main hand update
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOB_EQUIPMENT, connection.getVersion());
-			VarNumberSerializer.writeVarLong(serializer, this.entityId);
-			ItemStackSerializer.writeItemStack(serializer, ProtocolVersion.MINECRAFT_PE, this.cache.getLocale(), this.itemstack, true);
-			serializer.writeByte(this.slot); // Inventory slot (I wonder why the client needs to care about this...)
-			serializer.writeByte(this.slot); // Hotbar slot (again, why?)
+			VarNumberSerializer.writeVarLong(serializer, entityId);
+			ItemStackSerializer.writeItemStack(serializer, ProtocolVersion.MINECRAFT_PE, cache.getLocale(), itemstack, true);
+			serializer.writeByte(slot); // Inventory slot (I wonder why the client needs to care about this...)
+			serializer.writeByte(slot); // Hotbar slot (again, why?)
 			serializer.writeByte(0); // Container ID
 
 			return RecyclableSingletonList.create(serializer);
