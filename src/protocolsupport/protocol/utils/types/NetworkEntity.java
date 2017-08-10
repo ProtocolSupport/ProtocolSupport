@@ -131,7 +131,9 @@ public class NetworkEntity {
 
 		public ItemStackWrapper getHelmet() { return this.helmet; }
 
-		public void setChestplate(ItemStackWrapper chestplate) { this.chestplate = chestplate; }
+		public void setChestplate(ItemStackWrapper chestplate) { 
+			this.chestplate = chestplate; 
+		}
 
 		public ItemStackWrapper getChestplate() { return this.chestplate; }
 
