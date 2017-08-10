@@ -9,6 +9,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginDi
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSuccess;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityEquipment;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Animation;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockAction;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockBreakAnimation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockChangeMulti;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockChangeSingle;
@@ -124,6 +125,7 @@ public class PEPacketEncoder extends AbstractLegacyPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UPDATE_TILE_ID, BlockTileUpdate.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_MAP_ID, Map.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_EQUIPMENT_ID, EntityEquipment.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BLOCK_ACTION_ID, BlockAction.class);
 	}
 
 	public PEPacketEncoder(Connection connection, NetworkDataCache storage) {
