@@ -20,8 +20,18 @@ public class SpigotPlatformInjector implements PlatformInjector {
 	}
 
 	@Override
-	public void injectOnEnable() {
+	public void onEnable() {
 		Bukkit.getPluginManager().registerEvents(new SpigotEntityTrackerInjector(), JavaPlugin.getPlugin(ProtocolSupport.class));
+	}
+
+	@Override
+	public void onFirstTick() {
+		SpigotNettyInjector.startPEServer();
+	}
+
+	@Override
+	public void onDisable() {
+		SpigotNettyInjector.stopPEServer();
 	}
 
 }
