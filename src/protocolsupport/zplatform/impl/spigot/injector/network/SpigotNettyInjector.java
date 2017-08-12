@@ -63,7 +63,11 @@ public class SpigotNettyInjector {
 	public static void startPEServer() {
 		try {
 			List<NetworkManager> networkmanagerlist = getNetworkManagerList();
-			peserver = new RakNetServer(new InetSocketAddress(PENetServerConstants.TEST_PORT), PENetServerConstants.PING_HANDLER, new UserChannelInitializer() {
+			String serverIp = SpigotMiscUtils.getServer().server.getIp();
+			if (serverIp.isEmpty()) {
+				serverIp = "0.0.0.0";
+			}
+			peserver = new RakNetServer(new InetSocketAddress(serverIp,PENetServerConstants.TEST_PORT), PENetServerConstants.PING_HANDLER, new UserChannelInitializer() {
 				@Override
 				public void init(Channel channel) {
 					NetworkManager networkmanager = new NetworkManager(EnumProtocolDirection.SERVERBOUND);

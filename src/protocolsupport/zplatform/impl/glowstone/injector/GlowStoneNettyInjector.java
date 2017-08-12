@@ -74,7 +74,11 @@ public class GlowStoneNettyInjector {
 	public static void startPEServer() {
 		try {
 			GameServer gameserver = getGameServer();
-			peserver = new RakNetServer(new InetSocketAddress(PENetServerConstants.TEST_PORT), PENetServerConstants.PING_HANDLER, new UserChannelInitializer() {
+			String serverIp = gameserver.getServer().getIp();
+			if (serverIp.isEmpty()) {
+				serverIp = "0.0.0.0";
+			}
+			peserver = new RakNetServer(new InetSocketAddress(serverIp,PENetServerConstants.TEST_PORT), PENetServerConstants.PING_HANDLER, new UserChannelInitializer() {
 				@Override
 				public void init(Channel channel) {
 					MessageHandler networkmanager = new MessageHandler(gameserver);
