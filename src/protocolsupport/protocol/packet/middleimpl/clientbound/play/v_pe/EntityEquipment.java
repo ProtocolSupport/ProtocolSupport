@@ -8,10 +8,11 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class EntityEquipment extends MiddleEntityEquipment {
+	public static final int MAIN_HAND_ID = 0;
+	public static final int OFF_HAND_ID = 0;
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
@@ -44,19 +45,15 @@ public class EntityEquipment extends MiddleEntityEquipment {
 			ItemStackSerializer.writeItemStack(serializer, ProtocolVersion.MINECRAFT_PE, cache.getLocale(), dataCache.getBoots(), true);
 
 			return RecyclableSingletonList.create(serializer);
-		} else if (slot == 0) { // Main hand update
-			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOB_EQUIPMENT, connection.getVersion());
-			VarNumberSerializer.writeVarLong(serializer, entityId);
-			ItemStackSerializer.writeItemStack(serializer, ProtocolVersion.MINECRAFT_PE, cache.getLocale(), itemstack, true);
-			serializer.writeByte(slot); // Inventory slot (I wonder why the client needs to care about this...)
-			serializer.writeByte(slot); // Hotbar slot (again, why?)
-			serializer.writeByte(0); // Container ID
-
-			return RecyclableSingletonList.create(serializer);
-		} else {
-			// Offhand update
-			return RecyclableEmptyList.get();
 		}
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOB_EQUIPMENT, connection.getVersion());
+		VarNumberSerializer.writeVarLong(serializer, entityId);
+		ItemStackSerializer.writeItemStack(serializer, ProtocolVersion.MINECRAFT_PE, cache.getLocale(), itemstack, true);
+		serializer.writeByte(0); // Inventory slot (I wonder why the client needs to care about this...)
+		serializer.writeByte(0); // Hotbar slot (again, why?)
+		serializer.writeByte(slot == 1 ? OFF_HAND_ID : MAIN_HAND_ID); // Container ID, offhand slot uses ID 119
+
+		return RecyclableSingletonList.create(serializer);
 	}
-	
+
 }
