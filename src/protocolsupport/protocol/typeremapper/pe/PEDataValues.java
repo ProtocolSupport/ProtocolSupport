@@ -150,7 +150,7 @@ public class PEDataValues {
 		// Grass Path
 		registerBlockRemap(208, 198);
 		// Double Wooden Slab
-		registerBlockRemap(125, 157);
+		registerBlockRemap(126, 157);
 
 		registerBlockRemap(95, 241); // STAINED_GLASS
 		registerBlockRemap(157, 126); // ACTIVATOR_RAIL
