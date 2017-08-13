@@ -1,10 +1,10 @@
 package protocolsupport.protocol.typeremapper.pe;
 
-import java.util.EnumMap;
-
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
+
+import java.util.EnumMap;
 
 public class PEDataValues {
 
@@ -119,6 +119,7 @@ public class PEDataValues {
 	}
 
 	static {
+		// ===[ BLOCKS ]===
 		// Nether slab -> Quartz slab
 		registerBlockRemap(44, 7, 44, 6);
 		registerBlockRemap(44, 14, 44, 15);
@@ -127,6 +128,9 @@ public class PEDataValues {
 		registerBlockRemap(44, 6, 44, 7);
 		registerBlockRemap(44, 15, 44, 14);
 		registerBlockRemap(43, 6, 44, 7);
+		// Prismarine data ID mismatch
+		registerBlockRemap(168, 1, 168, 2);
+		registerBlockRemap(168, 2, 168, 1);
 		// Podzol
 		registerBlockRemap(3, 2, 243, 0);
 		// Colored Fences
@@ -135,76 +139,57 @@ public class PEDataValues {
 		registerBlockRemap(190, 85, 3);
 		registerBlockRemap(191, 85, 4);
 		registerBlockRemap(192, 85, 5);
-		// Concrete
-		registerBlockRemap(251, 236);
 		// Concrete Powder
 		registerBlockRemap(252, 237);
-		// Chrous Plant
-		registerBlockRemap(240, 199);
-		// Observer
-		registerBlockRemap(218, 251);
-		// Stained Glass - The block ID already exists in PE but the block apperence isn't implemented yet (1.1.1?)
-		registerBlockRemap(95, 241);
-		// ...Glazed Terracota
-		// Purple
-		registerBlockRemap(245, 219);
-		// White
-		registerBlockRemap(235, 220);
-		// Orange
-		registerBlockRemap(236, 221);
-		// Magenta
-		registerBlockRemap(237, 222);
-		// Light Blue
-		registerBlockRemap(238, 223);
-		// Yellow
-		registerBlockRemap(239, 224);
-		// Lime
-		registerBlockRemap(240, 225);
-		// Pink
-		registerBlockRemap(241, 226);
-		// Gray
-		registerBlockRemap(242, 227);
-		// Light Gray
-		registerBlockRemap(243, 228);
-		// Cyan
-		registerBlockRemap(244, 229);
-		// Blue
-		registerBlockRemap(245, 231);
-		// Brown
-		registerBlockRemap(247, 232);
-		// Green
-		registerBlockRemap(248, 233);
-		// Red
-		registerBlockRemap(249, 234);
-		// Black
-		registerBlockRemap(250, 235);
 		// Shulker Box
 		registerBlockRemap(229, 218);
-		// End Rod
-		registerBlockRemap(198, 208);
-		// Frosted Ice
-		registerBlockRemap(212, 207);
-		// Grass Path
-		registerBlockRemap(208, 198);
 		// Chain Command Block
 		registerBlockRemap(211, 189);
 		// Repeating Command Block
 		registerBlockRemap(210, 188);
-		// Activator Rail
-		registerBlockRemap(157, 126);
+		// Grass Path
+		registerBlockRemap(208, 198);
 		// Double Wooden Slab
 		registerBlockRemap(125, 157);
-		// Dropper
-		registerBlockRemap(158, 125);
-		// Beetroot
-		registerBlockRemap(207, 244);
-		// Structure Block
-		registerBlockRemap(255, 252);
 
-		// Armor Stand
-		registerItemRemap(416, 425);
-		// Banner
-		registerItemRemap(425, 446);
+		registerBlockRemap(95, 241); // STAINED_GLASS
+		registerBlockRemap(157, 126); // ACTIVATOR_RAIL
+		registerBlockRemap(158, 125); // DROPPER
+		registerBlockRemap(198, 208); // END_ROD
+		registerBlockRemap(199, 240); // CHORUS_PLANT
+		registerBlockRemap(207, 244); // BEETROOT_BLOCK
+		registerBlockRemap(208, 198); // GRASS_PATH
+		registerBlockRemap(212, 207); // FROSTED_ICE
+		registerBlockRemap(218, 251); // OBSERVER
+		registerBlockRemap(235, 220); // WHITE_GLAZED_TERRACOTTA
+		registerBlockRemap(236, 221); // ORANGE_GLAZED_TERRACOTTA
+		registerBlockRemap(237, 222); // MAGENTA_GLAZED_TERRACOTTA
+		registerBlockRemap(238, 223); // LIGHT_BLUE_GLAZED_TERRACOTTA
+		registerBlockRemap(239, 224); // YELLOW_GLAZED_TERRACOTTA
+		registerBlockRemap(240, 225); // LIME_GLAZED_TERRACOTTA
+		registerBlockRemap(241, 226); // PINK_GLAZED_TERRACOTTA
+		registerBlockRemap(242, 227); // GRAY_GLAZED_TERRACOTTA
+		registerBlockRemap(243, 228); // SILVER_GLAZED_TERRACOTTA
+		registerBlockRemap(244, 229); // CYAN_GLAZED_TERRACOTTA
+		registerBlockRemap(245, 219); // PURPLE_GLAZED_TERRACOTTA
+		registerBlockRemap(246, 231); // BLUE_GLAZED_TERRACOTTA
+		registerBlockRemap(247, 232); // BROWN_GLAZED_TERRACOTTA
+		registerBlockRemap(248, 233); // GREEN_GLAZED_TERRACOTTA
+		registerBlockRemap(249, 234); // RED_GLAZED_TERRACOTTA
+		registerBlockRemap(250, 235); // BLACK_GLAZED_TERRACOTTA
+		registerBlockRemap(251, 236); // CONCRETE
+		registerBlockRemap(255, 252); // STRUCTURE_BLOCK
+
+		// ===[ ITEMS ]===
+		registerBlockRemap(410, 422); // PRISMARINE_CRYSTALS
+		registerBlockRemap(416, 425); // ARMOR_STAND
+		registerBlockRemap(425, 446); // BANNER
+		registerBlockRemap(434, 457); // BEETROOT
+		registerBlockRemap(435, 458); // BEETROOT_SEEDS
+		registerBlockRemap(436, 459); // BEETROOT_SOUP
+		registerBlockRemap(443, 444); // ELYTRA
+		registerBlockRemap(449, 450); // TOTEM
+		registerBlockRemap(450, 445); // SHULKER_SHELL
 		// Records
 		registerItemRemap(2256, 500);
 		registerItemRemap(2257, 501);
