@@ -18,6 +18,7 @@ import protocolsupport.protocol.typeremapper.itemstack.toclient.MonsterEggToLega
 import protocolsupport.protocol.typeremapper.itemstack.toclient.PlayerSkullToLegacyOwnerSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.PotionToLegacyIdSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.PotionToPEIdSpecificRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.toclient.ShulkerBoxToPESpecificRemapper;
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ComplexIdRemappingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
@@ -252,6 +253,12 @@ public class ItemStackRemapper {
 		PotionToPEIdSpecificRemapper pepotion = new PotionToPEIdSpecificRemapper();
 		registerToClientRemapper(Material.POTION, pepotion, ProtocolVersion.MINECRAFT_PE);
 		registerToClientRemapper(Material.SPLASH_POTION, pepotion, ProtocolVersion.MINECRAFT_PE);
+		ShulkerBoxToPESpecificRemapper peshulker = new ShulkerBoxToPESpecificRemapper();
+		Arrays.stream(Material.values()).forEach(material -> {
+			if (material.name().endsWith("_SHULKER_BOX")) {
+				registerToClientRemapper(material, peshulker, ProtocolVersion.MINECRAFT_PE);
+			}
+		});
 		EnchantFilterNBTSpecificRemapper enchantfilter = new EnchantFilterNBTSpecificRemapper();
 		Arrays.stream(Material.values()).forEach(material -> {
 			registerToClientRemapper(material, enchantfilter, ProtocolVersionsHelper.ALL_PC);

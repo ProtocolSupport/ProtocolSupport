@@ -1,11 +1,5 @@
 package protocolsupport.protocol.typeremapper.tileentity;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.List;
-import java.util.function.BiFunction;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
@@ -20,6 +14,12 @@ import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagType;
+
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.function.BiFunction;
 
 public class TileNBTRemapper {
 
@@ -166,6 +166,16 @@ public class TileNBTRemapper {
 						s.append(ChatAPI.fromJSON(lines[i]).toLegacyText());
 					}
 					input.setString("Text", s.toString());
+					return input;
+				},
+				ProtocolVersion.MINECRAFT_PE
+		);
+		register(
+				TileEntityUpdateType.SHULKER_BOX,
+				(version, input) -> {
+					System.out.println("Remapping NBT for Shulker Box!");
+					input.setByte("isUndyed", 0);
+					input.setByte("facing", 0);
 					return input;
 				},
 				ProtocolVersion.MINECRAFT_PE

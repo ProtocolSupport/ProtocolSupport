@@ -1,5 +1,6 @@
 package protocolsupport.protocol.typeremapper.pe;
 
+import protocolsupport.protocol.typeremapper.utils.RemappingTable;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
@@ -119,9 +120,15 @@ public class PEDataValues {
 		}
 	}
 
-	public static final ArrayBasedIdRemappingTable ITEM_ID = new ArrayBasedIdRemappingTable(MinecraftData.ITEM_ID_MAX);
+	public static final RemappingTable.ComplexIdRemappingTable ITEM_ID = new RemappingTable.ComplexIdRemappingTable();
 	private static void registerItemRemap(int from, int to) {
-		ITEM_ID.setRemap(from, to);
+		ITEM_ID.setSingleRemap(from, to, -1);
+	}
+	private static void registerItemRemap(int from, int to, int secondaryTo) {
+		ITEM_ID.setComplexRemap(from, -1, to, secondaryTo);
+	}
+	private static void registerItemRemap(int from, int to, int secondaryFrom, int secondaryTo) {
+		ITEM_ID.setComplexRemap(from, secondaryFrom, to, secondaryTo);
 	}
 
 	static {
@@ -148,22 +155,22 @@ public class PEDataValues {
 		// Concrete Powder
 		registerBlockRemap(252, 237);
 		// Shulker Boxes
-		registerBlockRemap(219, 218); // WHITE_SHULKER_BOX
-		registerBlockRemap(220, 218); // ORANGE_SHULKER_BOX
-		registerBlockRemap(221, 218); // MAGENTA_SHULKER_BOX
-		registerBlockRemap(222, 218); // LIGHT_BLUE_SHULKER_BOX
-		registerBlockRemap(223, 218); // YELLOW_SHULKER_BOX
-		registerBlockRemap(224, 218); // LIME_SHULKER_BOX
-		registerBlockRemap(225, 218); // PINK_SHULKER_BOX
-		registerBlockRemap(226, 218); // GRAY_SHULKER_BOX
-		registerBlockRemap(227, 218); // SILVER_SHULKER_BOX
-		registerBlockRemap(228, 218); // CYAN_SHULKER_BOX
-		registerBlockRemap(229, 218); // PURPLE_SHULKER_BOX
-		registerBlockRemap(230, 218); // BLUE_SHULKER_BOX
-		registerBlockRemap(231, 218); // BROWN_SHULKER_BOX
-		registerBlockRemap(232, 218); // GREEN_SHULKER_BOX
-		registerBlockRemap(233, 218); // RED_SHULKER_BOX
-		registerBlockRemap(234, 218); // BLACK_SHULKER_BOX
+		registerBlockRemap(219, 218, 0); // WHITE_SHULKER_BOX
+		registerBlockRemap(220, 218, 1); // ORANGE_SHULKER_BOX
+		registerBlockRemap(221, 218, 2); // MAGENTA_SHULKER_BOX
+		registerBlockRemap(222, 218, 3); // LIGHT_BLUE_SHULKER_BOX
+		registerBlockRemap(223, 218, 4); // YELLOW_SHULKER_BOX
+		registerBlockRemap(224, 218, 5); // LIME_SHULKER_BOX
+		registerBlockRemap(225, 218, 6); // PINK_SHULKER_BOX
+		registerBlockRemap(226, 218, 7); // GRAY_SHULKER_BOX
+		registerBlockRemap(227, 218, 8); // SILVER_SHULKER_BOX
+		registerBlockRemap(228, 218, 9); // CYAN_SHULKER_BOX
+		registerBlockRemap(229, 218, 10); // PURPLE_SHULKER_BOX
+		registerBlockRemap(230, 218, 11); // BLUE_SHULKER_BOX
+		registerBlockRemap(231, 218, 12); // BROWN_SHULKER_BOX
+		registerBlockRemap(232, 218, 13); // GREEN_SHULKER_BOX
+		registerBlockRemap(233, 218, 14); // RED_SHULKER_BOX
+		registerBlockRemap(234, 218, 15); // BLACK_SHULKER_BOX
 		// Chain Command Block
 		registerBlockRemap(211, 189);
 		// Repeating Command Block
@@ -202,6 +209,80 @@ public class PEDataValues {
 		registerBlockRemap(255, 252); // STRUCTURE_BLOCK
 
 		// ===[ ITEMS ]===
+		// Nether slab -> Quartz slab
+		registerItemRemap(44, 7, 44, 6);
+		registerItemRemap(44, 14, 44, 15);
+		registerItemRemap(43, 7, 44, 6);
+		// And vice-versa
+		registerItemRemap(44, 6, 44, 7);
+		registerItemRemap(44, 15, 44, 14);
+		registerItemRemap(43, 6, 44, 7);
+		// Prismarine data ID mismatch
+		registerItemRemap(168, 1, 168, 2);
+		registerItemRemap(168, 2, 168, 1);
+		// Podzol
+		registerItemRemap(3, 2, 243, 0);
+		// Colored Fences
+		registerItemRemap(188, 85, 1);
+		registerItemRemap(189, 85, 2);
+		registerItemRemap(190, 85, 3);
+		registerItemRemap(191, 85, 4);
+		registerItemRemap(192, 85, 5);
+		// Concrete Powder
+		registerItemRemap(252, 237);
+		// Shulker Boxes
+		registerItemRemap(219, 218, 0); // WHITE_SHULKER_BOX
+		registerItemRemap(220, 218, 1); // ORANGE_SHULKER_BOX
+		registerItemRemap(221, 218, 2); // MAGENTA_SHULKER_BOX
+		registerItemRemap(222, 218, 3); // LIGHT_BLUE_SHULKER_BOX
+		registerItemRemap(223, 218, 4); // YELLOW_SHULKER_BOX
+		registerItemRemap(224, 218, 5); // LIME_SHULKER_BOX
+		registerItemRemap(225, 218, 6); // PINK_SHULKER_BOX
+		registerItemRemap(226, 218, 7); // GRAY_SHULKER_BOX
+		registerItemRemap(227, 218, 8); // SILVER_SHULKER_BOX
+		registerItemRemap(228, 218, 9); // CYAN_SHULKER_BOX
+		registerItemRemap(229, 218, 10); // PURPLE_SHULKER_BOX
+		registerItemRemap(230, 218, 11); // BLUE_SHULKER_BOX
+		registerItemRemap(231, 218, 12); // BROWN_SHULKER_BOX
+		registerItemRemap(232, 218, 13); // GREEN_SHULKER_BOX
+		registerItemRemap(233, 218, 14); // RED_SHULKER_BOX
+		registerItemRemap(234, 218, 15); // BLACK_SHULKER_BOX
+		// Chain Command Block
+		registerItemRemap(211, 189);
+		// Repeating Command Block
+		registerItemRemap(210, 188);
+		// Grass Path
+		registerItemRemap(208, 198);
+		// Double Wooden Slab
+		registerItemRemap(126, 157);
+
+		registerItemRemap(95, 241); // STAINED_GLASS
+		registerItemRemap(157, 126); // ACTIVATOR_RAIL
+		registerItemRemap(158, 125); // DROPPER
+		registerItemRemap(198, 208); // END_ROD
+		registerItemRemap(199, 240); // CHORUS_PLANT
+		registerItemRemap(207, 244); // BEETROOT_BLOCK
+		registerItemRemap(208, 198); // GRASS_PATH
+		registerItemRemap(212, 207); // FROSTED_ICE
+		registerItemRemap(218, 251); // OBSERVER
+		registerItemRemap(235, 220); // WHITE_GLAZED_TERRACOTTA
+		registerItemRemap(236, 221); // ORANGE_GLAZED_TERRACOTTA
+		registerItemRemap(237, 222); // MAGENTA_GLAZED_TERRACOTTA
+		registerItemRemap(238, 223); // LIGHT_BLUE_GLAZED_TERRACOTTA
+		registerItemRemap(239, 224); // YELLOW_GLAZED_TERRACOTTA
+		registerItemRemap(240, 225); // LIME_GLAZED_TERRACOTTA
+		registerItemRemap(241, 226); // PINK_GLAZED_TERRACOTTA
+		registerItemRemap(242, 227); // GRAY_GLAZED_TERRACOTTA
+		registerItemRemap(243, 228); // SILVER_GLAZED_TERRACOTTA
+		registerItemRemap(244, 229); // CYAN_GLAZED_TERRACOTTA
+		registerItemRemap(245, 219); // PURPLE_GLAZED_TERRACOTTA
+		registerItemRemap(246, 231); // BLUE_GLAZED_TERRACOTTA
+		registerItemRemap(247, 232); // BROWN_GLAZED_TERRACOTTA
+		registerItemRemap(248, 233); // GREEN_GLAZED_TERRACOTTA
+		registerItemRemap(249, 234); // RED_GLAZED_TERRACOTTA
+		registerItemRemap(250, 235); // BLACK_GLAZED_TERRACOTTA
+		registerItemRemap(251, 236); // CONCRETE
+		registerItemRemap(255, 252); // STRUCTURE_BLOCK
 		registerItemRemap(410, 422); // PRISMARINE_CRYSTALS
 		registerItemRemap(416, 425); // ARMOR_STAND
 		registerItemRemap(425, 446); // BANNER
