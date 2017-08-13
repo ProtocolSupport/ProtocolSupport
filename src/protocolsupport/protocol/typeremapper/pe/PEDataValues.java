@@ -181,15 +181,15 @@ public class PEDataValues {
 		registerBlockRemap(255, 252); // STRUCTURE_BLOCK
 
 		// ===[ ITEMS ]===
-		registerBlockRemap(410, 422); // PRISMARINE_CRYSTALS
-		registerBlockRemap(416, 425); // ARMOR_STAND
-		registerBlockRemap(425, 446); // BANNER
-		registerBlockRemap(434, 457); // BEETROOT
-		registerBlockRemap(435, 458); // BEETROOT_SEEDS
-		registerBlockRemap(436, 459); // BEETROOT_SOUP
-		registerBlockRemap(443, 444); // ELYTRA
-		registerBlockRemap(449, 450); // TOTEM
-		registerBlockRemap(450, 445); // SHULKER_SHELL
+		registerItemRemap(410, 422); // PRISMARINE_CRYSTALS
+		registerItemRemap(416, 425); // ARMOR_STAND
+		registerItemRemap(425, 446); // BANNER
+		registerItemRemap(434, 457); // BEETROOT
+		registerItemRemap(435, 458); // BEETROOT_SEEDS
+		registerItemRemap(436, 459); // BEETROOT_SOUP
+		registerItemRemap(443, 444); // ELYTRA
+		registerItemRemap(449, 450); // TOTEM
+		registerItemRemap(450, 445); // SHULKER_SHELL
 		// Records
 		registerItemRemap(2256, 500);
 		registerItemRemap(2257, 501);
