@@ -141,8 +141,23 @@ public class PEDataValues {
 		registerBlockRemap(192, 85, 5);
 		// Concrete Powder
 		registerBlockRemap(252, 237);
-		// Shulker Box
-		registerBlockRemap(229, 218);
+		// Shulker Boxes
+		registerBlockRemap(219, 218); // WHITE_SHULKER_BOX
+		registerBlockRemap(220, 218); // ORANGE_SHULKER_BOX
+		registerBlockRemap(221, 218); // MAGENTA_SHULKER_BOX
+		registerBlockRemap(222, 218); // LIGHT_BLUE_SHULKER_BOX
+		registerBlockRemap(223, 218); // YELLOW_SHULKER_BOX
+		registerBlockRemap(224, 218); // LIME_SHULKER_BOX
+		registerBlockRemap(225, 218); // PINK_SHULKER_BOX
+		registerBlockRemap(226, 218); // GRAY_SHULKER_BOX
+		registerBlockRemap(227, 218); // SILVER_SHULKER_BOX
+		registerBlockRemap(228, 218); // CYAN_SHULKER_BOX
+		registerBlockRemap(229, 218); // PURPLE_SHULKER_BOX
+		registerBlockRemap(230, 218); // BLUE_SHULKER_BOX
+		registerBlockRemap(231, 218); // BROWN_SHULKER_BOX
+		registerBlockRemap(232, 218); // GREEN_SHULKER_BOX
+		registerBlockRemap(233, 218); // RED_SHULKER_BOX
+		registerBlockRemap(234, 218); // BLACK_SHULKER_BOX
 		// Chain Command Block
 		registerBlockRemap(211, 189);
 		// Repeating Command Block
