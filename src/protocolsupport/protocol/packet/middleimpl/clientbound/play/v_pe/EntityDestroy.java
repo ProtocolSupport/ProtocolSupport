@@ -5,6 +5,8 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityDestr
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -15,6 +17,10 @@ public class EntityDestroy extends MiddleEntityDestroy {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		ProtocolVersion version = connection.getVersion();
 		for (int entityId : entityIds) {
+			NetworkEntity entity = cache.getWatchedEntity(entityId);
+			if(entity != null && entity.getType() == NetworkEntityType.ITEM) {
+					cache.removePreparedItem(entityId);
+			}
 			packets.add(create(version, entityId));
 		}
 		return packets;

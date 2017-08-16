@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.DragonHeadSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.PlayerSkullToLegacyOwnerSpecificRemapper;
@@ -105,7 +106,7 @@ public class TileNBTRemapper {
 				}
 				return input;
 			},
-			ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_9, ProtocolVersion.MINECRAFT_1_10)
+			ProtocolVersionsHelper.concat(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_9, ProtocolVersion.MINECRAFT_1_10), ProtocolVersion.MINECRAFT_PE)
 		);
 		register(
 			TileEntityUpdateType.MOB_SPAWNER,
@@ -153,6 +154,21 @@ public class TileNBTRemapper {
 				return input;
 			},
 			ProtocolVersionsHelper.BEFORE_1_8
+		);
+		register(
+				TileEntityUpdateType.SIGN,
+				(version, input) -> {
+					String[] lines = getSignLines(input);
+					StringBuilder s = new StringBuilder();
+          s.append(ChatAPI.fromJSON(lines[0]).toLegacyText());
+					for (int i = 1; i < lines.length; i++) {
+						s.append("\n");
+						s.append(ChatAPI.fromJSON(lines[i]).toLegacyText());
+					}
+					input.setString("Text", s.toString());
+					return input;
+				},
+				ProtocolVersion.MINECRAFT_PE
 		);
 	}
 

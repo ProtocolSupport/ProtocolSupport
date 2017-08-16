@@ -13,8 +13,13 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnObj
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.NetworkEntity.DataCache;
+import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.Utils;
+import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
+import protocolsupport.zplatform.ServerPlatform;
+import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 public class NetworkDataCache {
 
@@ -70,6 +75,32 @@ public class NetworkDataCache {
 	public void closeWindow() {
 		this.windowType = WindowType.PLAYER;
 	}
+	
+	private ItemStackWrapper cursorItem = ServerPlatform.get().getWrapperFactory().createNullItemStack();
+	
+	public ItemStackWrapper getCursorItem() {
+		return cursorItem;
+	}
+	
+	public void setCursorItem(ItemStackWrapper cursorItem) {
+		this.cursorItem = cursorItem;
+	}
+	
+	private int actionNumber = 0;
+	
+	public int getActionNumber() {
+		return actionNumber++;
+	}
+	
+	public void resetActionNumber() {
+		actionNumber = 0;
+	}
+	
+	Position clickedPosition = new Position(0, 0, 0);
+	
+	public void setClickedPosition(Position clickedPosition) { this.clickedPosition = clickedPosition; }
+	
+	public Position getClickedPosition() { return clickedPosition; }
 
 
 	private final TIntObjectHashMap<NetworkEntity> watchedEntities = new TIntObjectHashMap<>();
@@ -82,6 +113,10 @@ public class NetworkDataCache {
 	public void addWatchedEntity(NetworkEntity entity) {
 		watchedEntities.put(entity.getId(), entity);
 	}
+	
+	public void updateWatchedDataCache(int entityId, DataCache updateWith) {
+		watchedEntities.get(entityId).updateDataCache(updateWith);
+	}
 
 	public void addWatchedSelfPlayer(NetworkEntity player) {
 		this.player = player;
@@ -90,6 +125,15 @@ public class NetworkDataCache {
 
 	public int getSelfPlayerEntityId() {
 		return player != null ? player.getId() : -1;
+	}
+	
+	public boolean isSelf(int entityId) {
+		return (this.getSelfPlayerEntityId() == entityId);
+	}
+	
+	public NetworkEntity getWatchedSelf() {
+		if(!watchedEntities.contains(getSelfPlayerEntityId())) return player;
+		return watchedEntities.get(this.getSelfPlayerEntityId());
 	}
 
 	private void readdSelfPlayer() {
@@ -121,6 +165,10 @@ public class NetworkDataCache {
 
 	public PreparedItem getPreparedItem(int entityId) {
 		return preparedItems.get(entityId);
+	}
+	
+	public void removePreparedItem(int entityId) {
+		preparedItems.remove(entityId);
 	}
 
 	public void addPlayerListEntry(UUID uuid, PlayerListEntry entry) {
@@ -296,4 +344,9 @@ public class NetworkDataCache {
 		return this.isFlying;
 	}
 
+	private NBTTagCompoundWrapper signTag;
+
+	public void setSignTag(NBTTagCompoundWrapper signTag) { this.signTag = signTag; }
+
+	public NBTTagCompoundWrapper getSignTag() { return signTag; }
 }

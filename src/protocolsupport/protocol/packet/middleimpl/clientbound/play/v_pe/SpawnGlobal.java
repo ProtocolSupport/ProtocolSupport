@@ -9,6 +9,7 @@ public class SpawnGlobal extends MiddleSpawnGlobal {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		return RecyclableSingletonList.create(SpawnLiving.create(connection.getVersion(), entityId, x, y, z, 0, 0, 0, 0, 0, null, 93));
+		return RecyclableSingletonList.create(SpawnLiving.createSimple(connection.getVersion(), entityId, x, y, z, 93));
 	}
+	
 }
