@@ -23,7 +23,7 @@ public class ArraySerializer {
 		} else if (isUsingVarIntLength(version)) {
 			length = VarNumberSerializer.readVarInt(from);
 		} else {
-			throw new IllegalArgumentException(MessageFormat.format("Don't know how to read byte array of version {0}", version));
+			throw new IllegalArgumentException(MessageFormat.format("Dont know how to read byte array of version {0}", version));
 		}
 		MiscSerializer.checkLimit(length, limit);
 		return MiscSerializer.readBytes(from, length);
@@ -35,7 +35,7 @@ public class ArraySerializer {
 		} else if (isUsingVarIntLength(version)) {
 			VarNumberSerializer.writeVarInt(to, data.readableBytes());
 		} else {
-			throw new IllegalArgumentException(MessageFormat.format("Don't know how to write byte array of version {0}", version));
+			throw new IllegalArgumentException(MessageFormat.format("Dont know how to write byte array of version {0}", version));
 		}
 		to.writeBytes(data);
 	}
