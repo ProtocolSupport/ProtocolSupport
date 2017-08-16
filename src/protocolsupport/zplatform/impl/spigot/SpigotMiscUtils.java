@@ -38,6 +38,8 @@ import protocolsupport.zplatform.PlatformUtils;
 import protocolsupport.zplatform.impl.spigot.itemstack.SpigotNBTTagCompoundWrapper;
 import protocolsupport.zplatform.impl.spigot.network.SpigotChannelHandlers;
 import protocolsupport.zplatform.impl.spigot.network.SpigotNetworkManagerWrapper;
+import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketCompressor;
+import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketDecompressor;
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedPrepender;
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedSplitter;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -193,6 +195,13 @@ public class SpigotMiscUtils implements PlatformUtils {
 	@Override
 	public String getPrependerHandlerName() {
 		return SpigotChannelHandlers.PREPENDER;
+	}
+
+	@Override
+	public void enableCompression(ChannelPipeline pipeline, int compressionThreshold) {
+		pipeline
+		.addAfter(SpigotChannelHandlers.SPLITTER, "decompress", new SpigotPacketDecompressor(compressionThreshold))
+		.addAfter(SpigotChannelHandlers.PREPENDER, "compress", new SpigotPacketCompressor(compressionThreshold));
 	}
 
 	@Override
