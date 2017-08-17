@@ -160,7 +160,9 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 			ProtocolSupport.logInfo(MessageFormat.format("{0} connected with protocol version {1}", connection.getAddress(), info.getVersion()));
 		}
 		channel.pipeline().remove(ChannelHandlers.INITIAL_DECODER);
-		connection.changeAddress(info.getAddress());
+		if (connection.getRawAddress().getAddress().isLoopbackAddress()) {
+			connection.changeAddress(info.getAddress());
+		}
 		ProtocolVersion version = info.getVersion();
 		if (!ProtocolSupportAPI.isProtocolVersionEnabled(version)) {
 			version = version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4) ? ProtocolVersion.MINECRAFT_LEGACY : ProtocolVersion.MINECRAFT_FUTURE;
