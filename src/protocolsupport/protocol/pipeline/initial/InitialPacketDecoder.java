@@ -172,6 +172,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		}
 		putils.setFraming(channel.pipeline(), new VarIntFrameDecoder(), new VarIntFrameEncoder());
 		pipelineBuilders.get(version).buildCodec(channel, connection);
+		channel.pipeline().firstContext().fireChannelRead(receivedData);
 	}
 
 	protected void setNativeProtocol(Channel channel, ProtocolVersion version) {
