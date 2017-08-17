@@ -160,7 +160,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 			ProtocolSupport.logInfo(MessageFormat.format("{0} connected with protocol version {1}", connection.getAddress(), info.getVersion()));
 		}
 		channel.pipeline().remove(ChannelHandlers.INITIAL_DECODER);
-		if (connection.getRawAddress().getAddress().isLoopbackAddress()) {
+		if (connection.getRawAddress().getAddress().isLoopbackAddress() && info.getAddress() != null) {
 			connection.changeAddress(info.getAddress());
 		}
 		ProtocolVersion version = info.getVersion();

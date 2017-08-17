@@ -17,12 +17,16 @@ public class EncapsulatedProtocolUtils {
 		switch (encapVersion) {
 			case 0x00: {
 				try {
-					InetAddress address = InetAddress.getByAddress(MiscSerializer.readBytes(from, VarNumberSerializer.readVarInt(from)));
-					int port = VarNumberSerializer.readVarInt(from);
+					InetSocketAddress remoteaddress = null;
+					if (from.readBoolean()) {
+						InetAddress address = InetAddress.getByAddress(MiscSerializer.readBytes(from, VarNumberSerializer.readVarInt(from)));
+						int port = VarNumberSerializer.readVarInt(from);
+						remoteaddress = new InetSocketAddress(address, port);
+					}
 					boolean hasCompression = from.readBoolean();
 					int protocoltype = VarNumberSerializer.readVarInt(from);
 					int protocolversion = VarNumberSerializer.readVarInt(from);
-					return new EncapsulatedProtocolInfo(getVersion(protocoltype, protocolversion), hasCompression, new InetSocketAddress(address, port));
+					return new EncapsulatedProtocolInfo(remoteaddress, hasCompression, getVersion(protocoltype, protocolversion));
 				} catch (UnknownHostException e) {
 					throw new DecoderException("Invalid ip address");
 				}
@@ -51,10 +55,10 @@ public class EncapsulatedProtocolUtils {
 		private final ProtocolVersion version;
 		private final boolean hasCompression;
 		private final InetSocketAddress address;
-		public EncapsulatedProtocolInfo(ProtocolVersion version, boolean hasCompression, InetSocketAddress address) {
+		public EncapsulatedProtocolInfo(InetSocketAddress address, boolean hasCompression, ProtocolVersion version) {
+			this.address = address;
 			this.version = version;
 			this.hasCompression = hasCompression;
-			this.address = address;
 		}
 		public InetSocketAddress getAddress() {
 			return address;
