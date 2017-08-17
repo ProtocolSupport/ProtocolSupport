@@ -1,6 +1,7 @@
 package protocolsupport.protocol.pipeline.initial;
 
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 
 import io.netty.buffer.ByteBuf;
@@ -17,10 +18,11 @@ public class EncapsulatedProtocolUtils {
 			case 0x00: {
 				try {
 					InetAddress address = InetAddress.getByAddress(MiscSerializer.readBytes(from, VarNumberSerializer.readVarInt(from)));
+					int port = VarNumberSerializer.readVarInt(from);
 					boolean hasCompression = from.readBoolean();
 					int protocoltype = VarNumberSerializer.readVarInt(from);
 					int protocolversion = VarNumberSerializer.readVarInt(from);
-					return new EncapsulatedProtocolInfo(getVersion(protocoltype, protocolversion), hasCompression, address);
+					return new EncapsulatedProtocolInfo(getVersion(protocoltype, protocolversion), hasCompression, new InetSocketAddress(address, port));
 				} catch (UnknownHostException e) {
 					throw new DecoderException("Invalid ip address");
 				}
@@ -48,13 +50,13 @@ public class EncapsulatedProtocolUtils {
 	public static class EncapsulatedProtocolInfo {
 		private final ProtocolVersion version;
 		private final boolean hasCompression;
-		private final InetAddress address;
-		public EncapsulatedProtocolInfo(ProtocolVersion version, boolean hasCompression, InetAddress address) {
+		private final InetSocketAddress address;
+		public EncapsulatedProtocolInfo(ProtocolVersion version, boolean hasCompression, InetSocketAddress address) {
 			this.version = version;
 			this.hasCompression = hasCompression;
 			this.address = address;
 		}
-		public InetAddress getAddress() {
+		public InetSocketAddress getAddress() {
 			return address;
 		}
 		public boolean hasCompression() {
