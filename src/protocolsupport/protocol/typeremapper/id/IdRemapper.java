@@ -183,16 +183,7 @@ public class IdRemapper {
 		}
 		{
 			new Mapping(NetworkEntityType.PARROT)
-			.addMapping(NetworkEntityType.OCELOT, ProtocolVersionsHelper.concat(ProtocolVersionsHelper.BEFORE_1_12, ProtocolVersion.MINECRAFT_PE))
-			.register();
-			new Mapping(NetworkEntityType.MINECART_FURNACE)
-			.addMapping(NetworkEntityType.MINECART, ProtocolVersion.MINECRAFT_PE) //TODO: Add furnace via block?
-			.register();
-			new Mapping(NetworkEntityType.FIREWORK)
-			.addMapping(NetworkEntityType.FIRECHARGE, ProtocolVersion.MINECRAFT_PE) //TODO: Will come in 1.12 not bothering now.
-			.register();
-			new Mapping(NetworkEntityType.ARMOR_STAND_OBJECT)
-			.addMapping(NetworkEntityType.SKELETON, ProtocolVersion.MINECRAFT_PE) //TODO: Will come in 1.12 not bothering now.
+			.addMapping(NetworkEntityType.OCELOT, ProtocolVersionsHelper.BEFORE_1_12)
 			.register();
 			new Mapping(NetworkEntityType.ILLUSIONER)
 			.addMapping(NetworkEntityType.WITCH, ProtocolVersionsHelper.BEFORE_1_12)
@@ -285,7 +276,7 @@ public class IdRemapper {
 		}
 	};
 
-	//TODO: this doesn't belong here, should be moved to PEDataValues
+	//TODO: this doesn't belong here, should be moved to PEDataValues. TODO: Why? You can add other versions too :)
 	public static final IdRemappingRegistry<HashMapBasedIdRemappingTable> PARTICLE = new IdRemappingRegistry<HashMapBasedIdRemappingTable>() {
 		{
 			//TODO: Check values. (Speculative = names don't match) Only a few values have been tested by hand.
@@ -328,6 +319,32 @@ public class IdRemapper {
 		@Override
 		protected HashMapBasedIdRemappingTable createTable() {
 			return new HashMapBasedIdRemappingTable();
+		}
+	};
+	
+	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> WINDOWTYPE = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
+		{
+			registerRemapEntry(WindowType.PLAYER, -1, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(WindowType.CHEST, 0, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(WindowType.CRAFTING_TABLE, 1, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(WindowType.FURNACE, 2, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(WindowType.ENCHANT, 3, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(WindowType.BREWING, 4, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(WindowType.ANVIL, 5, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(WindowType.DISPENSER, 6, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(WindowType.DROPPER, 7, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(WindowType.HOPPER, 8, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(WindowType.HORSE, 12, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(WindowType.BEACON, 13, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(WindowType.VILLAGER, 15, ProtocolVersion.MINECRAFT_PE);
+		}
+		@Override
+		protected ArrayBasedIdRemappingTable createTable() {
+			return new ArrayBasedIdRemappingTable(14);
+		}
+		
+		private void registerRemapEntry(WindowType type, int to, ProtocolVersion version) {
+			registerRemapEntry(type.toLegacyId(), to, version);
 		}
 	};
 

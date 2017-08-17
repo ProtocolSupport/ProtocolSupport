@@ -22,23 +22,24 @@ public class SpawnObject extends MiddleSpawnObject {
 		ProtocolVersion version = connection.getVersion();
 		switch (entity.getType()) {
 			case ITEM: {
-				// We need to prepare the item because we can only spawn it after we've received the first metadata update.
-				// cache.prepareItem(new PreparedItem(entity.getId(), x, y, z, motX / 8.000F, motY / 8000.F, motZ / 8000.F));
-				// TODO: Add this with metadata implementation.
+				//We need to prepare the item because we can only spawn it after we've received the first metadata update.
+				cache.prepareItem(new PreparedItem(entity.getId(), x, y, z, motX / 8.000F, motY / 8000.F, motZ / 8000.F));
 				return RecyclableEmptyList.get();
 			}
 			case ITEM_FRAME: {
-				// TODO: Item frames are blocks in pe
+				//Still not here :/
 				return RecyclableEmptyList.get();
 			}
 			default: {
 				return RecyclableSingletonList.create(SpawnLiving.create(
-					version, entity.getId(),
-					x, y, z,
-					motX / 8.000F, motY / 8000.F, motZ / 8000.F,
-					pitch, yaw,
-					null, PEDataValues.getObjectEntityTypeId(IdRemapper.ENTITY.getTable(version).getRemap(entity.getType()))
-				));
+						version,
+						entity, 
+						x, y, z,
+						motX / 8.000F, motY / 8000.F, motZ / 8000.F,
+						pitch, yaw, cache.getLocale(),
+						null, //TODO: Add spawnmeta to something like sand. 
+						PEDataValues.getObjectEntityTypeId(IdRemapper.ENTITY.getTable(version).getRemap(entity.getType()))
+					));
 			}
 		}
 	}
@@ -71,7 +72,7 @@ public class SpawnObject extends MiddleSpawnObject {
 
 		public RecyclableArrayList<ClientBoundPacketData> updateItem(ProtocolVersion version, ItemStackWrapper itemstack) {
 			RecyclableArrayList<ClientBoundPacketData> updatepackets = RecyclableArrayList.create();
-			if (!this.itemstack.equals(itemstack)) {
+			if (this.itemstack == null || !this.itemstack.equals(itemstack)) {
 				if (spawned) {
 					updatepackets.add(EntityDestroy.create(version, entityId));
 					spawned = false;
@@ -82,14 +83,14 @@ public class SpawnObject extends MiddleSpawnObject {
 				ClientBoundPacketData spawn = ClientBoundPacketData.create(PEPacketIDs.ADD_ITEM_ENTITY, version);
 				VarNumberSerializer.writeSVarLong(spawn, entityId);
 				VarNumberSerializer.writeVarLong(spawn, entityId);
-				ItemStackSerializer.writeItemStack(spawn, version, cache.getLocale(), itemstack, false);
+				ItemStackSerializer.writeItemStack(spawn, version, cache.getLocale(), itemstack, true);
 				MiscSerializer.writeLFloat(spawn, (float) x);
 				MiscSerializer.writeLFloat(spawn, (float) y);
 				MiscSerializer.writeLFloat(spawn, (float) z);
-				MiscSerializer.writeLFloat(spawn, motX);
-				MiscSerializer.writeLFloat(spawn, motY);
-				MiscSerializer.writeLFloat(spawn, motZ);
-				VarNumberSerializer.writeVarInt(spawn, 0);
+				MiscSerializer.writeLFloat(spawn, motX / 8000);
+				MiscSerializer.writeLFloat(spawn, motY / 8000);
+				MiscSerializer.writeLFloat(spawn, motZ / 8000);
+				VarNumberSerializer.writeVarInt(spawn, 0); //Metadata?
 				updatepackets.add(spawn);
 				spawned = true;
 			}

@@ -17,12 +17,15 @@ public abstract class MiddleUpdateSign extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
+		return RecyclableSingletonList.create(create(position, lines));
+	}
+
+	public static ServerBoundPacketData create(Position position, String[] lines) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_UPDATE_SIGN);
 		PositionSerializer.writePosition(creator, position);
 		for (int i = 0; i < lines.length; i++) {
 			StringSerializer.writeString(creator, ProtocolVersionsHelper.LATEST_PC, lines[i]);
 		}
-		return RecyclableSingletonList.create(creator);
+		return creator;
 	}
-
 }

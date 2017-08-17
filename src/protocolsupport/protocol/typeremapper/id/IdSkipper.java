@@ -1,5 +1,6 @@
 package protocolsupport.protocol.typeremapper.id;
 
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.utils.SkippingRegistry.EnumSkippingRegistry;
 import protocolsupport.protocol.typeremapper.utils.SkippingRegistry.GenericSkippingRegistry;
 import protocolsupport.protocol.typeremapper.utils.SkippingRegistry.IntSkippingRegistry;
@@ -38,6 +39,11 @@ public class IdSkipper {
 			//lure, luck of the sea
 			registerSkipEntry(62, ProtocolVersionsHelper.BEFORE_1_7);
 			registerSkipEntry(61, ProtocolVersionsHelper.BEFORE_1_7);
+
+			//curse of binding, sweeping edge, curse of vanishing
+			registerSkipEntry(10, ProtocolVersion.MINECRAFT_PE);
+			registerSkipEntry(22, ProtocolVersion.MINECRAFT_PE);
+			registerSkipEntry(71, ProtocolVersion.MINECRAFT_PE);
 		}
 		@Override
 		protected HashMapBasedIntSkippingTable createTable() {

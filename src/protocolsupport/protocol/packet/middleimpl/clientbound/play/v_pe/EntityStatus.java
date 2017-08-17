@@ -1,13 +1,15 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import gnu.trove.set.hash.TIntHashSet;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityStatus;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
+import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class EntityStatus extends MiddleEntityStatus {
 
@@ -16,24 +18,26 @@ public class EntityStatus extends MiddleEntityStatus {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
+		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		if(allowedIds.contains(status)) {
-			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_EVENT, connection.getVersion());
-			VarNumberSerializer.writeVarLong(serializer, entityId);
-			switch (cache.getWatchedEntity(entityId).getType()) {
-				case FISHING_FLOAT: {
-					if (status == 31) {
-						status = 13;
-					}
-				}
-				default: {
-					break;
-				}
+			NetworkEntity e = cache.getWatchedEntity(entityId);
+			//The only remap I know so far.
+			if(status == 31 && e.getType() == NetworkEntityType.FISHING_FLOAT) {
+				status = 13;
 			}
-			serializer.writeByte((byte) status);
-			VarNumberSerializer.writeVarInt(serializer, 0);
-			return RecyclableSingletonList.create(serializer);
+			packets.add(create(e, status, connection.getVersion()));
 		}
-		return RecyclableEmptyList.get();
+		return packets;
+	}
+	
+	public static int PE_UNLEASH = 63;
+	
+	public static ClientBoundPacketData create(NetworkEntity entity, int status, ProtocolVersion version) {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_EVENT, version);
+		VarNumberSerializer.writeVarLong(serializer, entity.getId());
+		serializer.writeByte((byte) status);
+		VarNumberSerializer.writeVarInt(serializer, 0); //?
+		return serializer;
 	}
 
 }

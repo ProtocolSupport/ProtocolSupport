@@ -30,7 +30,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		MiscSerializer.writeLFloat(serializer, yaw); //head yaw actually
 		MiscSerializer.writeLFloat(serializer, yaw);
 		VarNumberSerializer.writeSVarInt(serializer, 0); //held itemstack (it is actually a slot, but we only send null itemstack here, so we only write 0 id)
-		VarNumberSerializer.writeSVarInt(serializer, 0); //TODO: metadata
+		EntityMetadata.encodeMeta(serializer, version, cache.getLocale(), EntityMetadata.transform(entity, metadata, version));
 		return RecyclableSingletonList.create(serializer);
 	}
 

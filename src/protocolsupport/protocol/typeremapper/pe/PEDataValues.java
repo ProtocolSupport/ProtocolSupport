@@ -34,6 +34,7 @@ public class PEDataValues {
 		livingEntityType.put(NetworkEntityType.GHAST, 41);
 		livingEntityType.put(NetworkEntityType.SLIME, 37);
 		livingEntityType.put(NetworkEntityType.ZOMBIE, 32);
+		livingEntityType.put(NetworkEntityType.GIANT, 32); //Massive zombies. No remap though because we want the metadata.
 		livingEntityType.put(NetworkEntityType.SPIDER, 35);
 		livingEntityType.put(NetworkEntityType.SKELETON, 34);
 		livingEntityType.put(NetworkEntityType.CREEPER, 33);
@@ -52,7 +53,9 @@ public class PEDataValues {
 		livingEntityType.put(NetworkEntityType.IRON_GOLEM, 20);
 		livingEntityType.put(NetworkEntityType.OCELOT, 22);
 		livingEntityType.put(NetworkEntityType.SNOWMAN, 21);
-		livingEntityType.put(NetworkEntityType.LAMA, 27);
+		livingEntityType.put(NetworkEntityType.LAMA, 29);
+		livingEntityType.put(NetworkEntityType.PARROT, 30);
+		livingEntityType.put(NetworkEntityType.ARMOR_STAND_MOB, 61);
 	}
 
 	public static int getLivingEntityTypeId(NetworkEntityType type) {
@@ -61,6 +64,8 @@ public class PEDataValues {
 
 	private static final EnumMap<NetworkEntityType, Integer> objectEntityType = new EnumMap<>(NetworkEntityType.class);
 	static {
+		objectEntityType.put(NetworkEntityType.FIREWORK, 8);
+		objectEntityType.put(NetworkEntityType.ARMOR_STAND_OBJECT, 61);
 		objectEntityType.put(NetworkEntityType.TNT, 65);
 		objectEntityType.put(NetworkEntityType.FALLING_OBJECT, 66);
 		//TODO: Fix pistons, moving blocks? -> 67
@@ -87,6 +92,7 @@ public class PEDataValues {
 		objectEntityType.put(NetworkEntityType.MINECART_TNT, 97);
 		objectEntityType.put(NetworkEntityType.MINECART_CHEST, 98);
 		objectEntityType.put(NetworkEntityType.MINECART_COMMAND, 100);
+		objectEntityType.put(NetworkEntityType.MINECART_FURNACE, 84); //Hack TODO: Remap furnace onto the minecart.
 		objectEntityType.put(NetworkEntityType.AREA_EFFECT_CLOUD, 101);
 		objectEntityType.put(NetworkEntityType.LAMA_SPIT, 102);
 		objectEntityType.put(NetworkEntityType.EVOCATOR_FANGS, 103);
