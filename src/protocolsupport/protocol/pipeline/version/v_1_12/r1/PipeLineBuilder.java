@@ -15,10 +15,14 @@ public class PipeLineBuilder implements IPipeLineBuilder {
 
 	@Override
 	public void buildPipeLine(Channel channel, Connection connection) {
+		ServerPlatform.get().getMiscUtils().setFraming(channel.pipeline(), new VarIntFrameDecoder(), new VarIntFrameEncoder());
+	}
+
+	@Override
+	public void buildCodec(Channel channel, Connection connection) {
 		ChannelPipeline pipeline = channel.pipeline();
 		NetworkManagerWrapper networkmanager = ServerPlatform.get().getMiscUtils().getNetworkManagerFromChannel(channel);
 		networkmanager.setPacketListener(ServerPlatform.get().getWrapperFactory().createModernHandshakeListener(networkmanager, true));
-		ServerPlatform.get().getMiscUtils().setFraming(pipeline, new VarIntFrameDecoder(), new VarIntFrameEncoder());
 		NetworkDataCache sharedstorage = new NetworkDataCache();
 		pipeline.addAfter(ServerPlatform.get().getMiscUtils().getSplitterHandlerName(), ChannelHandlers.DECODER_TRANSFORMER, new PacketDecoder(connection, sharedstorage));
 		pipeline.addAfter(ServerPlatform.get().getMiscUtils().getPrependerHandlerName(), ChannelHandlers.ENCODER_TRANSFORMER, new PacketEncoder(connection, sharedstorage));

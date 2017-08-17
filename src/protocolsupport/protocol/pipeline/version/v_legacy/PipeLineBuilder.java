@@ -12,6 +12,10 @@ public class PipeLineBuilder implements IPipeLineBuilder {
 
 	@Override
 	public void buildPipeLine(Channel channel, Connection connection) {
+	}
+
+	@Override
+	public void buildCodec(Channel channel, Connection connection) {
 		channel.pipeline().addAfter(ServerPlatform.get().getMiscUtils().getReadTimeoutHandlerName(), ChannelHandlers.LEGACY_KICK, legacyHandler);
 	}
 
