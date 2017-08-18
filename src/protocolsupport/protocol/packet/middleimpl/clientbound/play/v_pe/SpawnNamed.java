@@ -31,6 +31,19 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		MiscSerializer.writeLFloat(serializer, yaw);
 		VarNumberSerializer.writeSVarInt(serializer, 0); //held itemstack (it is actually a slot, but we only send null itemstack here, so we only write 0 id)
 		VarNumberSerializer.writeSVarInt(serializer, 0); //TODO: metadata
+
+		//adventure settings
+		VarNumberSerializer.writeVarInt(serializer, 0);
+		VarNumberSerializer.writeVarInt(serializer, 0);
+		VarNumberSerializer.writeVarInt(serializer, 0);
+		VarNumberSerializer.writeVarInt(serializer, 0);
+		VarNumberSerializer.writeVarInt(serializer, 0);
+
+		VarNumberSerializer.writeVarLong(serializer, 0); //?
+
+		//entity links
+		//TODO: Implement entity links
+		VarNumberSerializer.writeSVarInt(serializer, 0);
 		return RecyclableSingletonList.create(serializer);
 	}
 

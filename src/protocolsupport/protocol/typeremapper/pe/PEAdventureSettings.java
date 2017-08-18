@@ -1,11 +1,11 @@
 package protocolsupport.protocol.typeremapper.pe;
 
-import java.util.Arrays;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
+
+import java.util.Arrays;
 
 public class PEAdventureSettings {
 
@@ -54,6 +54,7 @@ public class PEAdventureSettings {
 		//TODO: Actually work with permissions?
 		VarNumberSerializer.writeVarInt(serializer, PERMISSIONS_ALLOW_ALL);
 		VarNumberSerializer.writeVarInt(serializer, GROUP_NORMAL);
+		VarNumberSerializer.writeVarInt(serializer, 0); //? (custom flags)
 		VarNumberSerializer.writeSVarLong(serializer, 0);
 		return serializer;
 	}
