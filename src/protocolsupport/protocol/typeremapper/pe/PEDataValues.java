@@ -140,44 +140,8 @@ public class PEDataValues {
 
 	static {
 		// ===[ BLOCKS ]===
-		// Nether slab -> Quartz slab
-		registerBlockAndItemRemap(44, 7, 44, 6);
-		registerBlockAndItemRemap(44, 14, 44, 15);
-		registerBlockAndItemRemap(43, 7, 44, 6);
-		// And vice-versa
-		registerBlockAndItemRemap(44, 6, 44, 7);
-		registerBlockAndItemRemap(44, 15, 44, 14);
-		registerBlockAndItemRemap(43, 6, 44, 7);
-		// Prismarine data ID mismatch
-		registerBlockAndItemRemap(168, 1, 168, 2);
-		registerBlockAndItemRemap(168, 2, 168, 1);
-		// Podzol
-		registerBlockAndItemRemap(3, 2, 243, 0);
-		// Colored Fences
-		registerBlockAndItemRemap(188, 85, 1);
-		registerBlockAndItemRemap(189, 85, 2);
-		registerBlockAndItemRemap(190, 85, 3);
-		registerBlockAndItemRemap(192, 85, 4);
-		registerBlockAndItemRemap(191, 85, 5);
 		// Concrete Powder
 		registerBlockAndItemRemap(252, 237);
-		// Shulker Boxes
-		registerBlockAndItemRemap(219, 218, 0); // WHITE_SHULKER_BOX
-		registerBlockAndItemRemap(220, 218, 1); // ORANGE_SHULKER_BOX
-		registerBlockAndItemRemap(221, 218, 2); // MAGENTA_SHULKER_BOX
-		registerBlockAndItemRemap(222, 218, 3); // LIGHT_BLUE_SHULKER_BOX
-		registerBlockAndItemRemap(223, 218, 4); // YELLOW_SHULKER_BOX
-		registerBlockAndItemRemap(224, 218, 5); // LIME_SHULKER_BOX
-		registerBlockAndItemRemap(225, 218, 6); // PINK_SHULKER_BOX
-		registerBlockAndItemRemap(226, 218, 7); // GRAY_SHULKER_BOX
-		registerBlockAndItemRemap(227, 218, 8); // SILVER_SHULKER_BOX
-		registerBlockAndItemRemap(228, 218, 9); // CYAN_SHULKER_BOX
-		registerBlockAndItemRemap(229, 218, 10); // PURPLE_SHULKER_BOX
-		registerBlockAndItemRemap(230, 218, 11); // BLUE_SHULKER_BOX
-		registerBlockAndItemRemap(231, 218, 12); // BROWN_SHULKER_BOX
-		registerBlockAndItemRemap(232, 218, 13); // GREEN_SHULKER_BOX
-		registerBlockAndItemRemap(233, 218, 14); // RED_SHULKER_BOX
-		registerBlockAndItemRemap(234, 218, 15); // BLACK_SHULKER_BOX
 		// Chain Command Block
 		registerBlockAndItemRemap(211, 189);
 		// Repeating Command Block
@@ -186,7 +150,6 @@ public class PEDataValues {
 		registerBlockAndItemRemap(208, 198);
 		// Double Wooden Slab
 		registerBlockAndItemRemap(126, 157);
-
 		registerBlockAndItemRemap(95, 241); // STAINED_GLASS
 		registerBlockAndItemRemap(157, 126); // ACTIVATOR_RAIL
 		registerBlockAndItemRemap(158, 125); // DROPPER
@@ -214,6 +177,43 @@ public class PEDataValues {
 		registerBlockAndItemRemap(250, 235); // BLACK_GLAZED_TERRACOTTA
 		registerBlockAndItemRemap(251, 236); // CONCRETE
 		registerBlockAndItemRemap(255, 252); // STRUCTURE_BLOCK
+
+		// Nether slab -> Quartz slab
+		registerBlockAndItemRemap(44, 7, 44, 6);
+		registerBlockAndItemRemap(44, 14, 44, 15);
+		registerBlockAndItemRemap(43, 7, 44, 6);
+		// And vice-versa
+		registerBlockAndItemRemap(44, 6, 44, 7);
+		registerBlockAndItemRemap(44, 15, 44, 14);
+		registerBlockAndItemRemap(43, 6, 44, 7);
+		// Prismarine data ID mismatch
+		registerBlockAndItemRemap(168, 1, 168, 2);
+		registerBlockAndItemRemap(168, 2, 168, 1);
+		// Podzol
+		registerBlockAndItemRemap(3, 2, 243, 0);
+		// Colored Fences
+		registerBlockAndItemRemap(188, 85, 1);
+		registerBlockAndItemRemap(189, 85, 2);
+		registerBlockAndItemRemap(190, 85, 3);
+		registerBlockAndItemRemap(192, 85, 4);
+		registerBlockAndItemRemap(191, 85, 5);
+		// Shulker Boxes
+		registerBlockAndItemRemap(219, 218, 0); // WHITE_SHULKER_BOX
+		registerBlockAndItemRemap(220, 218, 1); // ORANGE_SHULKER_BOX
+		registerBlockAndItemRemap(221, 218, 2); // MAGENTA_SHULKER_BOX
+		registerBlockAndItemRemap(222, 218, 3); // LIGHT_BLUE_SHULKER_BOX
+		registerBlockAndItemRemap(223, 218, 4); // YELLOW_SHULKER_BOX
+		registerBlockAndItemRemap(224, 218, 5); // LIME_SHULKER_BOX
+		registerBlockAndItemRemap(225, 218, 6); // PINK_SHULKER_BOX
+		registerBlockAndItemRemap(226, 218, 7); // GRAY_SHULKER_BOX
+		registerBlockAndItemRemap(227, 218, 8); // SILVER_SHULKER_BOX
+		registerBlockAndItemRemap(228, 218, 9); // CYAN_SHULKER_BOX
+		registerBlockAndItemRemap(229, 218, 10); // PURPLE_SHULKER_BOX
+		registerBlockAndItemRemap(230, 218, 11); // BLUE_SHULKER_BOX
+		registerBlockAndItemRemap(231, 218, 12); // BROWN_SHULKER_BOX
+		registerBlockAndItemRemap(232, 218, 13); // GREEN_SHULKER_BOX
+		registerBlockAndItemRemap(233, 218, 14); // RED_SHULKER_BOX
+		registerBlockAndItemRemap(234, 218, 15); // BLACK_SHULKER_BOX
 
 		// ===[ ITEMS ]===
 		registerItemRemap(410, 422); // PRISMARINE_CRYSTALS
