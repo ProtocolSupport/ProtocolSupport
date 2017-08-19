@@ -1,11 +1,11 @@
 package protocolsupport.zplatform.impl;
 
-import java.net.InetSocketAddress;
-
 import io.netty.channel.Channel;
 import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.protocol.packet.handler.AbstractStatusListener;
 import raknetserver.pipeline.raknet.RakNetPacketConnectionEstablishHandler.PingHandler;
+
+import java.net.InetSocketAddress;
 
 public class PENetServerConstants {
 
@@ -16,7 +16,7 @@ public class PENetServerConstants {
 			return String.join(";",
 				"MCPE",
 				revent.getMotd().replace(";", ":"),
-				"130", "1.2.0",
+				"133", "1.2.0",
 				String.valueOf(revent.getPlayers().size()), String.valueOf(revent.getMaxPlayers())
 			);
 		}
