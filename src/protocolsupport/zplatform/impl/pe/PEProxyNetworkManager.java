@@ -53,6 +53,7 @@ public class PEProxyNetworkManager extends SimpleChannelInboundHandler<ByteBuf> 
 
 	//TODO: rewrite this
 	private static Channel connectToServer(Channel peclientchannel, ByteBuf loginpacket) {
+		InetSocketAddress remote = (InetSocketAddress) peclientchannel.remoteAddress();
 		int protocolversion = getProtocolVersion(loginpacket);
 		EventLoopGroup loopgroup = ServerPlatform.get().getMiscUtils().getServerEventLoop();
 		Class<? extends Channel> channel = loopgroup instanceof EpollEventLoopGroup ? EpollSocketChannel.class : NioSocketChannel.class;
@@ -72,7 +73,7 @@ public class PEProxyNetworkManager extends SimpleChannelInboundHandler<ByteBuf> 
 					@Override
 					public void channelActive(ChannelHandlerContext ctx) throws Exception {
 						channel.pipeline().remove(this);
-						ctx.writeAndFlush(createHandshake((InetSocketAddress) ctx.channel().remoteAddress(), protocolversion)).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
+						ctx.writeAndFlush(createHandshake(remote, protocolversion)).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
 						super.channelActive(ctx);
 					}
 				})
