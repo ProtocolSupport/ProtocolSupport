@@ -169,11 +169,11 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		}
 		connection.setVersion(version);
 		PlatformUtils putils = ServerPlatform.get().getMiscUtils();
+		pipelineBuilders.get(version).buildCodec(channel, connection);
+		putils.setFraming(channel.pipeline(), new VarIntFrameDecoder(), new VarIntFrameEncoder());
 		if (info.hasCompression()) {
 			putils.enableCompression(channel.pipeline(), putils.getCompressionThreshold());
 		}
-		putils.setFraming(channel.pipeline(), new VarIntFrameDecoder(), new VarIntFrameEncoder());
-		pipelineBuilders.get(version).buildCodec(channel, connection);
 		channel.pipeline().firstContext().fireChannelRead(receivedData);
 	}
 
@@ -188,8 +188,8 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		}
 		connection.setVersion(version);
 		IPipeLineBuilder builder = pipelineBuilders.get(version);
-		builder.buildPipeLine(channel, connection);
 		builder.buildCodec(channel, connection);
+		builder.buildPipeLine(channel, connection);
 		receivedData.readerIndex(0);
 		channel.pipeline().firstContext().fireChannelRead(receivedData);
 	}
