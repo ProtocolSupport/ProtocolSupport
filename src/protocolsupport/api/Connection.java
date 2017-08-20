@@ -59,18 +59,25 @@ public abstract class Connection {
 	}
 
 	/**
-	 * Forces serverbound packet handing
+	 * Forces packet handing
 	 * Packet received by this method skips receive packet listener
-	 * @param packet serverbound packet
+	 * @param packet packet
 	 */
 	public abstract void receivePacket(Object packet);
 
 	/**
-	 * Sends clientbound packet to player
+	 * Sends packet to player
 	 * Packet sent by this method skips send packet listener
-	 * @param packet clientbound packet
+	 * @param packet packet
 	 */
 	public abstract void sendPacket(Object packet);
+
+	/**
+	 * Sends packet data to player
+	 * Packet sent by this method bypasses the encoder-transformer
+	 * @param data packet data
+	 */
+	public abstract void sendRawPacket(byte[] data);
 
 	protected final CopyOnWriteArrayList<PacketSendListener> sendListeners = new CopyOnWriteArrayList<>();
 	protected final CopyOnWriteArrayList<PacketReceiveListener> receiveListeners = new CopyOnWriteArrayList<>();

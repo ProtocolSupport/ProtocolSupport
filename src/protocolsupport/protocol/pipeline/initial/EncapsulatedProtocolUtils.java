@@ -43,7 +43,7 @@ public class EncapsulatedProtocolUtils {
 				return ProtocolUtils.getOldProtocolVersion(protocolversion);
 			}
 			case 1: {
-				return ProtocolUtils.getNewProtocolVersion(protocolversion);			
+				return ProtocolUtils.getNewProtocolVersion(protocolversion);
 			}
 			default: {
 				throw new IllegalArgumentException("Unknown protocol type: " + protocoltype);
