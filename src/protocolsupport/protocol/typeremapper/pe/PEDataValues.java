@@ -119,7 +119,7 @@ public class PEDataValues {
 		ITEM_ID.setSingleRemap(from, to, -1);
 	}
 	private static void registerItemRemap(int from, int to, int dataTo) {
-		ITEM_ID.setComplexRemap(from, -1, to, dataTo);
+		ITEM_ID.setSingleRemap(from, to, dataTo);
 	}
 	private static void registerItemRemap(int from, int dataFrom, int to, int dataTo) {
 		ITEM_ID.setComplexRemap(from, dataFrom, to, dataTo);
