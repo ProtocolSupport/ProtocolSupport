@@ -1,11 +1,10 @@
-package protocolsupport.protocol.pipeline.version.v_pe;
+package protocolsupport.zplatform.impl.pe;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
-import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
 
@@ -23,9 +22,9 @@ public class PECompressor extends MessageToByteEncoder<ByteBuf> {
 
 	@Override
 	protected void encode(ChannelHandlerContext ctx, ByteBuf buf, ByteBuf out) throws Exception {
-		//pack packets (only 1 packet actually)
 		packbuffer.clear();
-		ArraySerializer.writeByteArray(packbuffer, ProtocolVersion.MINECRAFT_PE, buf);
+		VarNumberSerializer.writeVarInt(packbuffer, buf.readableBytes());
+		packbuffer.writeBytes(buf);
 		out.writeBytes(compressor.compress(MiscSerializer.readAllBytes(packbuffer)));
 	}
 

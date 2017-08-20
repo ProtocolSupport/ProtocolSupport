@@ -45,6 +45,9 @@ public class EncapsulatedProtocolUtils {
 			case 1: {
 				return ProtocolUtils.getNewProtocolVersion(protocolversion);
 			}
+			case 2: {
+				return ProtocolVersion.MINECRAFT_PE;
+			}
 			default: {
 				throw new IllegalArgumentException("Unknown protocol type: " + protocoltype);
 			}

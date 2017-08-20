@@ -1,44 +1,18 @@
 package protocolsupport.zplatform.impl.glowstone.injector;
 
 import java.lang.reflect.Field;
-import java.net.InetSocketAddress;
 import java.util.concurrent.CountDownLatch;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.EventLoopGroup;
 import net.glowstone.GlowServer;
 import net.glowstone.net.GameServer;
-import net.glowstone.net.pipeline.CodecsHandler;
-import net.glowstone.net.pipeline.MessageHandler;
-import net.glowstone.net.protocol.ProtocolType;
 import protocolsupport.ProtocolSupport;
-import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.pipeline.ChannelHandlers;
-import protocolsupport.protocol.pipeline.common.LogicHandler;
-import protocolsupport.protocol.pipeline.common.SimpleReadTimeoutHandler;
-import protocolsupport.protocol.pipeline.version.v_pe.PECompressor;
-import protocolsupport.protocol.pipeline.version.v_pe.PEDecompressor;
-import protocolsupport.protocol.pipeline.version.v_pe.PEPacketDecoder;
-import protocolsupport.protocol.pipeline.version.v_pe.PEPacketEncoder;
-import protocolsupport.protocol.storage.NetworkDataCache;
-import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.utils.ReflectionUtils;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.impl.PENetServerConstants;
-import protocolsupport.zplatform.impl.glowstone.GlowStoneConnectionImpl;
 import protocolsupport.zplatform.impl.glowstone.GlowStoneMiscUtils;
-import protocolsupport.zplatform.impl.glowstone.network.GlowStoneChannelHandlers;
-import protocolsupport.zplatform.impl.glowstone.network.GlowStoneNetworkManagerWrapper;
-import protocolsupport.zplatform.impl.glowstone.network.pipeline.GlowStoneSyncConnectionTicker;
-import protocolsupport.zplatform.impl.spigot.network.SpigotChannelHandlers;
-import protocolsupport.zplatform.network.NetworkManagerWrapper;
-import raknetserver.RakNetServer;
-import raknetserver.RakNetServer.UserChannelInitializer;
 
 public class GlowStoneNettyInjector {
 
@@ -69,53 +43,11 @@ public class GlowStoneNettyInjector {
 		}).start();
 	}
 
-	private static RakNetServer peserver;
-
-	public static void startPEServer() {
+	public static EventLoopGroup getServerEventLoop() {
 		try {
-			GameServer gameserver = getGameServer();
-			String serverIp = gameserver.getServer().getIp();
-			if (serverIp.isEmpty()) {
-				serverIp = "0.0.0.0";
-			}
-			peserver = new RakNetServer(new InetSocketAddress(serverIp,PENetServerConstants.TEST_PORT), PENetServerConstants.PING_HANDLER, new UserChannelInitializer() {
-				@Override
-				public void init(Channel channel) {
-					MessageHandler networkmanager = new MessageHandler(gameserver);
-					NetworkManagerWrapper wrapper = new GlowStoneNetworkManagerWrapper(networkmanager);
-					ConnectionImpl connection = new GlowStoneConnectionImpl(wrapper);
-					connection.storeInChannel(channel);
-					ProtocolStorage.addConnection(channel.remoteAddress(), connection);
-					connection.setVersion(ProtocolVersion.MINECRAFT_PE);
-					NetworkDataCache cache = new NetworkDataCache();
-					channel.pipeline().replace("rns-timeout", SpigotChannelHandlers.READ_TIMEOUT, new SimpleReadTimeoutHandler(30));
-					channel.pipeline().addLast(new ChannelInboundHandlerAdapter() {
-						@Override
-						public void channelActive(ChannelHandlerContext ctx) throws Exception {
-							super.channelActive(ctx);
-							wrapper.setPacketListener(ServerPlatform.get().getWrapperFactory().createLegacyHandshakeListener(wrapper));
-							ctx.channel().pipeline().remove(this);
-						}
-					});
-					channel.pipeline().addLast(new PECompressor());
-					channel.pipeline().addLast(new PEPacketEncoder(connection, cache));
-					channel.pipeline().addLast(new PEDecompressor());
-					channel.pipeline().addLast(new PEPacketDecoder(connection, cache));
-					channel.pipeline().addLast(GlowStoneChannelHandlers.DECODER_ENCODER, new CodecsHandler(ProtocolType.HANDSHAKE.getProtocol()));
-					channel.pipeline().addLast("ps_glowstone_sync_ticker", new GlowStoneSyncConnectionTicker());
-					channel.pipeline().addLast(ChannelHandlers.LOGIC, new LogicHandler(connection));
-					channel.pipeline().addLast(GlowStoneChannelHandlers.NETWORK_MANAGER, networkmanager);
-				}
-			}, PENetServerConstants.USER_PACKET_ID);
-			peserver.start();
+			return (EventLoopGroup) ReflectionUtils.getField(GameServer.class, "workerGroup").get(getGameServer());
 		} catch (IllegalArgumentException | IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	public static void stopPEServer() {
-		if (peserver != null) {
-			peserver.stop();
+			throw new RuntimeException("unable to get event loop", e);
 		}
 	}
 

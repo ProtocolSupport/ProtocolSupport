@@ -42,6 +42,7 @@ import protocolsupport.utils.Utils;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.zplatform.ServerPlatform;
+import protocolsupport.zplatform.impl.pe.PEProxyServer;
 
 public class ProtocolSupport extends JavaPlugin {
 
@@ -60,6 +61,8 @@ public class ProtocolSupport extends JavaPlugin {
 	public BuildInfo getBuildInfo() {
 		return buildinfo;
 	}
+
+	private PEProxyServer peserver;
 
 	@Override
 	public void onLoad() {
@@ -124,13 +127,16 @@ public class ProtocolSupport extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new FeatureEmulation(), this);
 		getServer().getPluginManager().registerEvents(new ReloadCommandBlocker(), this);
 		getServer().getPluginManager().registerEvents(new MultiplePassengersRestrict(), this);
-		getServer().getScheduler().runTask(this, () -> ServerPlatform.get().onFirstTick());
+		getServer().getScheduler().scheduleSyncDelayedTask(this, () -> (peserver = new PEProxyServer()).start());
 	}
 
 	@Override
 	public void onDisable() {
 		Bukkit.shutdown();
 		ServerPlatform.get().onDisable();
+		if (peserver != null) {
+			peserver.stop();
+		}
 	}
 
 	public static void logInfo(String message) {

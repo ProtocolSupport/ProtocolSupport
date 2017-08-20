@@ -45,7 +45,7 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		clientdata.skipBytes(Integer.BYTES); // TODO: validate protocol
+		clientdata.readInt(); //protocol version
 		ByteBuf logindata = Unpooled.wrappedBuffer(ArraySerializer.readByteArray(clientdata, connection.getVersion()));
 		//decode chain
 		@SuppressWarnings("serial")

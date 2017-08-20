@@ -25,13 +25,7 @@ public class SpigotPlatformInjector implements PlatformInjector {
 	}
 
 	@Override
-	public void onFirstTick() {
-		SpigotNettyInjector.startPEServer();
-	}
-
-	@Override
 	public void onDisable() {
-		SpigotNettyInjector.stopPEServer();
 	}
 
 }
