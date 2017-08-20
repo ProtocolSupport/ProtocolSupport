@@ -25,17 +25,17 @@ public class TileNBTRemapper {
 
 	private static final String tileEntityTypeKey = "id";
 
-	private static final HashMap<String, String> newToOldType = new HashMap<>();
+	private static final EnumMap<TileEntityUpdateType, String> newToOldType = new EnumMap<>(TileEntityUpdateType.class);
 	static {
-		newToOldType.put("minecraft:mob_spawner", "MobSpawner");
-		newToOldType.put("minecraft:command_block", "Control");
-		newToOldType.put("minecraft:beacon", "Beacon");
-		newToOldType.put("minecraft:skull", "Skull");
-		newToOldType.put("minecraft:flower_pot", "FlowerPot");
-		newToOldType.put("minecraft:banner", "Banner");
-		newToOldType.put("minecraft:structure_block", "Structure");
-		newToOldType.put("minecraft:end_gateway", "Airportal");
-		newToOldType.put("minecraft:sign", "Sign");
+		newToOldType.put(TileEntityUpdateType.MOB_SPAWNER, "MobSpawner");
+		newToOldType.put(TileEntityUpdateType.COMMAND_BLOCK, "Control");
+		newToOldType.put(TileEntityUpdateType.BEACON, "Beacon");
+		newToOldType.put(TileEntityUpdateType.SKULL, "Skull");
+		newToOldType.put(TileEntityUpdateType.FLOWER_POT, "FlowerPot");
+		newToOldType.put(TileEntityUpdateType.BANNER, "Banner");
+		newToOldType.put(TileEntityUpdateType.STRUCTURE, "Structure");
+		newToOldType.put(TileEntityUpdateType.END_GATEWAY, "Airportal");
+		newToOldType.put(TileEntityUpdateType.SIGN, "Sign");
 	}
 
 	private static final HashMap<String, String> peTypes = new HashMap<>();
@@ -68,7 +68,7 @@ public class TileNBTRemapper {
 			register(
 				type,
 				(version, input) -> {
-					input.setString(tileEntityTypeKey, newToOldType.getOrDefault(input.getString(tileEntityTypeKey), "Unknown"));
+					input.setString(tileEntityTypeKey, newToOldType.getOrDefault(type, "Unknown"));
 					return input;
 				},
 				ProtocolVersionsHelper.BEFORE_1_11
