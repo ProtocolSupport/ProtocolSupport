@@ -17,6 +17,8 @@ public enum TileEntityUpdateType {
 		updateTypes.put("minecraft:structure_block", TileEntityUpdateType.STRUCTURE);
 		updateTypes.put("minecraft:end_gateway", TileEntityUpdateType.END_GATEWAY);
 		updateTypes.put("minecraft:sign", TileEntityUpdateType.SIGN);
+		updateTypes.put("minecraft:shulker_box", TileEntityUpdateType.SHULKER_BOX);
+		updateTypes.put("minecraft:bed", TileEntityUpdateType.BED);
 	}
 
 	public static TileEntityUpdateType fromType(String type) {
