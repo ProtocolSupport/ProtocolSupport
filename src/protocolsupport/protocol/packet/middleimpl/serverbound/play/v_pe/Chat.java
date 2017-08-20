@@ -1,12 +1,13 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
-import io.netty.buffer.ByteBuf;
+import java.text.MessageFormat;
+
 import org.apache.commons.lang3.Validate;
+
+import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleChat;
 import protocolsupport.protocol.serializer.StringSerializer;
-
-import java.text.MessageFormat;
 
 public class Chat extends MiddleChat {
 

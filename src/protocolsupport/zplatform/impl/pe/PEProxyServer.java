@@ -24,7 +24,7 @@ public class PEProxyServer {
 			}
 		}, PENetServerConstants.USER_PACKET_ID
 	);
-	
+
 	public void start() {
 		peserver.start();
 	}

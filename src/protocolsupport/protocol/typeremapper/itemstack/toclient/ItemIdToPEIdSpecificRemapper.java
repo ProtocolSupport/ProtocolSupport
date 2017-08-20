@@ -19,7 +19,7 @@ public class ItemIdToPEIdSpecificRemapper implements ItemStackSpecificRemapper {
 				itemstack.setData(itemAndData.getI2());
 			}
 		}
-		
+
 		return itemstack;
 	}
 

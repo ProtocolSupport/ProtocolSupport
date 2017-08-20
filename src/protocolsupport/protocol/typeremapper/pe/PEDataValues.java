@@ -1,11 +1,11 @@
 package protocolsupport.protocol.typeremapper.pe;
 
+import java.util.EnumMap;
+
 import protocolsupport.protocol.typeremapper.utils.RemappingTable;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
-
-import java.util.EnumMap;
 
 public class PEDataValues {
 
