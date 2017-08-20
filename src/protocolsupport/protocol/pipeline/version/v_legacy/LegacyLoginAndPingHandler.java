@@ -52,8 +52,11 @@ public class LegacyLoginAndPingHandler extends SimpleChannelInboundHandler<ByteB
 			try {
 				buf.writeByte(0xFF);
 				StringSerializer.writeString(buf, ProtocolVersion.getOldest(ProtocolType.PC), ChatColor.stripColor(revent.getMotd())+"§"+revent.getPlayers().size()+"§"+revent.getMaxPlayers());
-				channel.pipeline().firstContext().writeAndFlush(buf).addListener(ChannelFutureListener.CLOSE);
-				buf = null;
+				ChannelHandlerContext first = channel.pipeline().firstContext();
+				if (first != null) {
+					first.writeAndFlush(buf).addListener(ChannelFutureListener.CLOSE);
+					buf = null;
+				}
 			} finally {
 				if (buf != null) {
 					buf.release();
