@@ -2,6 +2,7 @@ package protocolsupport.protocol.typeremapper.tileentity;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.BiFunction;
 
