@@ -60,6 +60,8 @@ public interface PlatformUtils {
 
 	public String getPrependerHandlerName();
 
+	public void enableCompression(ChannelPipeline pipeline, int compressionThreshold);
+
 	public void setFraming(ChannelPipeline pipeline, IPacketSplitter splitter, IPacketPrepender prepender);
 
 }

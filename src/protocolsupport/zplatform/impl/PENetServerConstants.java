@@ -5,14 +5,12 @@ import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.protocol.packet.handler.AbstractStatusListener;
 import raknetserver.pipeline.raknet.RakNetPacketConnectionEstablishHandler.PingHandler;
 
-import java.net.InetSocketAddress;
-
 public class PENetServerConstants {
 
 	public static final PingHandler PING_HANDLER = new PingHandler() {
 		@Override
 		public String getServerInfo(Channel channel) {
-			ServerPingResponseEvent revent = AbstractStatusListener.createPingResponse(channel, (InetSocketAddress) channel.remoteAddress());
+			ServerPingResponseEvent revent = AbstractStatusListener.createResponse(channel);
 			return String.join(";",
 				"MCPE",
 				revent.getMotd().replace(";", ":"),

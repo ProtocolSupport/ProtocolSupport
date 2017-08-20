@@ -1,5 +1,6 @@
 package protocolsupport.protocol.serializer;
 
+import java.text.MessageFormat;
 import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
@@ -42,9 +43,9 @@ public class MiscSerializer {
 		return result;
 	}
 
-	protected static void checkLimit(int size, int limit) {
-		if (size > limit) {
-			throw new DecoderException("Size " + size + " is bigger than allowed " + limit);
+	protected static void checkLimit(int length, int limit) {
+		if (length > limit) {
+			throw new DecoderException(MessageFormat.format("Size {0} is bigger than allowed {1}", length, limit));
 		}
 	}
 

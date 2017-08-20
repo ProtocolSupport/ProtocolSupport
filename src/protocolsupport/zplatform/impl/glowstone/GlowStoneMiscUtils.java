@@ -19,6 +19,7 @@ import net.glowstone.GlowServer;
 import net.glowstone.entity.meta.profile.PlayerProfile;
 import net.glowstone.entity.meta.profile.PlayerProperty;
 import net.glowstone.io.nbt.NbtSerialization;
+import net.glowstone.net.pipeline.CompressionHandler;
 import net.glowstone.net.protocol.ProtocolType;
 import net.glowstone.util.GlowServerIcon;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
@@ -200,6 +201,11 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	@Override
 	public String getPrependerHandlerName() {
 		return GlowStoneChannelHandlers.FRAMING;
+	}
+
+	@Override
+	public void enableCompression(ChannelPipeline pipeline, int compressionThreshold) {
+		pipeline.addAfter(GlowStoneChannelHandlers.FRAMING, "compression", new CompressionHandler(compressionThreshold));
 	}
 
 	@Override
