@@ -105,8 +105,6 @@ public abstract class AbstractLoginListener implements IHasProfile {
 
 	protected abstract boolean hasCompression();
 
-	protected abstract void enableCompression(int compressionLevel);
-
 	public String getConnectionRepr() {
 		return (profile != null) ? (profile + " (" + networkManager.getAddress() + ")") : networkManager.getAddress().toString();
 	}
@@ -201,14 +199,14 @@ public abstract class AbstractLoginListener implements IHasProfile {
 			profile = newProfile;
 		}
 		if (hasCompression()) {
-			final int threshold = ServerPlatform.get().getMiscUtils().getCompressionThreshold();
+			int threshold = ServerPlatform.get().getMiscUtils().getCompressionThreshold();
 			if (threshold >= 0) {
 				this.networkManager.sendPacket(
 					ServerPlatform.get().getPacketFactory().createSetCompressionPacket(threshold),
 					new ChannelFutureListener() {
 						@Override
 						public void operationComplete(ChannelFuture future)  {
-							enableCompression(threshold);
+							ServerPlatform.get().getMiscUtils().enableCompression(networkManager.getChannel().pipeline(), threshold);
 						}
 					}
 				);

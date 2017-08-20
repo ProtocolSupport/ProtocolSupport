@@ -20,13 +20,7 @@ public class GlowstonePlatformInjector implements PlatformInjector {
 	}
 
 	@Override
-	public void onFirstTick() {
-		GlowStoneNettyInjector.startPEServer();
-	}
-
-	@Override
 	public void onDisable() {
-		GlowStoneNettyInjector.stopPEServer();
 	}
 
 }

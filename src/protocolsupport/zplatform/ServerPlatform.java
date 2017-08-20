@@ -67,10 +67,6 @@ public class ServerPlatform {
 		injector.onEnable();
 	}
 
-	public void onFirstTick() {
-		injector.onFirstTick();
-	}
-
 	public void onDisable() {
 		injector.onDisable();
 	}

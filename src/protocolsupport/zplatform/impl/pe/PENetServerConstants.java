@@ -1,23 +1,22 @@
-package protocolsupport.zplatform.impl;
+package protocolsupport.zplatform.impl.pe;
+
+import org.bukkit.Bukkit;
 
 import io.netty.channel.Channel;
-import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.protocol.packet.handler.AbstractStatusListener;
 import raknetserver.pipeline.raknet.RakNetPacketConnectionEstablishHandler.PingHandler;
-
-import java.net.InetSocketAddress;
 
 public class PENetServerConstants {
 
 	public static final PingHandler PING_HANDLER = new PingHandler() {
 		@Override
 		public String getServerInfo(Channel channel) {
-			ServerPingResponseEvent revent = AbstractStatusListener.createPingResponse(channel, (InetSocketAddress) channel.remoteAddress());
+			//TODO: fake pspe packets for ping passthrough
 			return String.join(";",
 				"MCPE",
-				revent.getMotd().replace(";", ":"),
+				Bukkit.getMotd().replace(";", ":"),
 				"133", "1.2.0",
-				String.valueOf(revent.getPlayers().size()), String.valueOf(revent.getMaxPlayers())
+				String.valueOf(Bukkit.getOnlinePlayers().size()), String.valueOf(Bukkit.getMaxPlayers())
 			);
 		}
 		@Override

@@ -1,11 +1,11 @@
 package protocolsupport.protocol.typeremapper.pe;
 
+import java.util.Arrays;
+
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
-
-import java.util.Arrays;
 
 public class PEAdventureSettings {
 

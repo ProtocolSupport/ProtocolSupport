@@ -127,7 +127,7 @@ public class ItemStackSerializer {
 				}
 				return NBTTagCompoundSerializer.readPeTag(from, varint);
 			} else {
-				throw new IllegalArgumentException(MessageFormat.format("Don't know how to read nbt of version {0}", version));
+				throw new IllegalArgumentException(MessageFormat.format("Dont know how to read nbt of version {0}", version));
 			}
 		} catch (IOException e) {
 			throw new DecoderException(e);
@@ -173,7 +173,7 @@ public class ItemStackSerializer {
 					}
 				}
 			} else {
-				throw new IllegalArgumentException(MessageFormat.format("Don't know how to write nbt of version {0}", version));
+				throw new IllegalArgumentException(MessageFormat.format("Dont know how to write nbt of version {0}", version));
 			}
 		} catch (Throwable ioexception) {
 			throw new EncoderException(ioexception);

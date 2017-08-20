@@ -1,7 +1,6 @@
 package protocolsupport.zplatform.impl.spigot.injector.network;
 
 import java.lang.reflect.Field;
-import java.net.InetSocketAddress;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -9,33 +8,13 @@ import java.util.ListIterator;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.EventLoopGroup;
 import net.minecraft.server.v1_12_R1.ChatComponentText;
-import net.minecraft.server.v1_12_R1.EnumProtocolDirection;
+import net.minecraft.server.v1_12_R1.LazyInitVar;
 import net.minecraft.server.v1_12_R1.NetworkManager;
 import net.minecraft.server.v1_12_R1.ServerConnection;
-import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.pipeline.ChannelHandlers;
-import protocolsupport.protocol.pipeline.common.LogicHandler;
-import protocolsupport.protocol.pipeline.common.SimpleReadTimeoutHandler;
-import protocolsupport.protocol.pipeline.version.v_pe.PECompressor;
-import protocolsupport.protocol.pipeline.version.v_pe.PEDecompressor;
-import protocolsupport.protocol.pipeline.version.v_pe.PEPacketDecoder;
-import protocolsupport.protocol.pipeline.version.v_pe.PEPacketEncoder;
-import protocolsupport.protocol.storage.NetworkDataCache;
-import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.utils.ReflectionUtils;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.impl.PENetServerConstants;
-import protocolsupport.zplatform.impl.spigot.SpigotConnectionImpl;
 import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
-import protocolsupport.zplatform.impl.spigot.network.SpigotChannelHandlers;
-import protocolsupport.zplatform.impl.spigot.network.SpigotNetworkManagerWrapper;
-import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketDecoder;
-import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketEncoder;
-import protocolsupport.zplatform.network.NetworkManagerWrapper;
-import raknetserver.RakNetServer;
-import raknetserver.RakNetServer.UserChannelInitializer;
 
 public class SpigotNettyInjector {
 
@@ -58,47 +37,15 @@ public class SpigotNettyInjector {
 		connectionsList.injectExisting();
 	}
 
-	private static RakNetServer peserver;
-
-	public static void startPEServer() {
+	public static EventLoopGroup getServerEventLoop() {
 		try {
-			List<NetworkManager> networkmanagerlist = getNetworkManagerList();
-			String serverIp = SpigotMiscUtils.getServer().server.getIp();
-			if (serverIp.isEmpty()) {
-				serverIp = "0.0.0.0";
+			if (ReflectionUtils.setAccessible(ReflectionUtils.getField(LazyInitVar.class, "b")).getBoolean(ServerConnection.b)) {
+				return ServerConnection.b.c();
+			} else {
+				return ServerConnection.a.c();
 			}
-			peserver = new RakNetServer(new InetSocketAddress(serverIp,PENetServerConstants.TEST_PORT), PENetServerConstants.PING_HANDLER, new UserChannelInitializer() {
-				@Override
-				public void init(Channel channel) {
-					NetworkManager networkmanager = new NetworkManager(EnumProtocolDirection.SERVERBOUND);
-					NetworkManagerWrapper wrapper = new SpigotNetworkManagerWrapper(networkmanager);
-					wrapper.setPacketListener(ServerPlatform.get().getWrapperFactory().createLegacyHandshakeListener(wrapper));
-					ConnectionImpl connection = new SpigotConnectionImpl(wrapper);
-					connection.storeInChannel(channel);
-					ProtocolStorage.addConnection(channel.remoteAddress(), connection);
-					connection.setVersion(ProtocolVersion.MINECRAFT_PE);
-					NetworkDataCache cache = new NetworkDataCache();
-					channel.pipeline().replace("rns-timeout", SpigotChannelHandlers.READ_TIMEOUT, new SimpleReadTimeoutHandler(30));
-					channel.pipeline().addLast(new PECompressor());
-					channel.pipeline().addLast(new PEPacketEncoder(connection, cache));
-					channel.pipeline().addLast(new PEDecompressor());
-					channel.pipeline().addLast(new PEPacketDecoder(connection, cache));
-					channel.pipeline().addLast(SpigotChannelHandlers.ENCODER, new SpigotPacketEncoder());
-					channel.pipeline().addLast(SpigotChannelHandlers.DECODER, new SpigotPacketDecoder());
-					channel.pipeline().addLast(ChannelHandlers.LOGIC, new LogicHandler(connection));
-					channel.pipeline().addLast(SpigotChannelHandlers.NETWORK_MANAGER, networkmanager);
-					networkmanagerlist.add(networkmanager);
-				}
-			}, PENetServerConstants.USER_PACKET_ID);
-			peserver.start();
-		} catch (IllegalArgumentException | IllegalAccessException | SecurityException | NoSuchFieldException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	public static void stopPEServer() {
-		if (peserver != null) {
-			peserver.stop();
+		} catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
+			throw new RuntimeException("Unable to get event loop", e);
 		}
 	}
 

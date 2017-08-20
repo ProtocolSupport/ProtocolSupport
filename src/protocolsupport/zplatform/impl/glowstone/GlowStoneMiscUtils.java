@@ -15,16 +15,19 @@ import org.bukkit.util.CachedServerIcon;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
+import io.netty.channel.EventLoopGroup;
 import net.glowstone.GlowServer;
 import net.glowstone.entity.meta.profile.PlayerProfile;
 import net.glowstone.entity.meta.profile.PlayerProperty;
 import net.glowstone.io.nbt.NbtSerialization;
+import net.glowstone.net.pipeline.CompressionHandler;
 import net.glowstone.net.protocol.ProtocolType;
 import net.glowstone.util.GlowServerIcon;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.zplatform.PlatformUtils;
+import protocolsupport.zplatform.impl.glowstone.injector.GlowStoneNettyInjector;
 import protocolsupport.zplatform.impl.glowstone.itemstack.GlowStoneNBTTagCompoundWrapper;
 import protocolsupport.zplatform.impl.glowstone.network.GlowStoneChannelHandlers;
 import protocolsupport.zplatform.impl.glowstone.network.GlowStoneNetworkManagerWrapper;
@@ -203,8 +206,18 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	}
 
 	@Override
+	public void enableCompression(ChannelPipeline pipeline, int compressionThreshold) {
+		pipeline.addAfter(GlowStoneChannelHandlers.FRAMING, "compression", new CompressionHandler(compressionThreshold));
+	}
+
+	@Override
 	public void setFraming(ChannelPipeline pipeline, IPacketSplitter splitter, IPacketPrepender prepender) {
 		((GlowStoneFramingHandler) pipeline.get(GlowStoneChannelHandlers.FRAMING)).setRealFraming(prepender, splitter);
+	}
+
+	@Override
+	public EventLoopGroup getServerEventLoop() {
+		return GlowStoneNettyInjector.getServerEventLoop();
 	}
 
 }

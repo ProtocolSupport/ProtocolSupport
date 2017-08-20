@@ -12,6 +12,7 @@ import org.bukkit.util.CachedServerIcon;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
+import io.netty.channel.EventLoopGroup;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -60,6 +61,10 @@ public interface PlatformUtils {
 
 	public String getPrependerHandlerName();
 
+	public void enableCompression(ChannelPipeline pipeline, int compressionThreshold);
+
 	public void setFraming(ChannelPipeline pipeline, IPacketSplitter splitter, IPacketPrepender prepender);
+
+	public EventLoopGroup getServerEventLoop();
 
 }

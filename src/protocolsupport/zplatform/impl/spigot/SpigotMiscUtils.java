@@ -23,6 +23,7 @@ import com.mojang.authlib.properties.Property;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
+import io.netty.channel.EventLoopGroup;
 import net.minecraft.server.v1_12_R1.AxisAlignedBB;
 import net.minecraft.server.v1_12_R1.EntityPlayer;
 import net.minecraft.server.v1_12_R1.EnumProtocol;
@@ -35,9 +36,12 @@ import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.zplatform.PlatformUtils;
+import protocolsupport.zplatform.impl.spigot.injector.network.SpigotNettyInjector;
 import protocolsupport.zplatform.impl.spigot.itemstack.SpigotNBTTagCompoundWrapper;
 import protocolsupport.zplatform.impl.spigot.network.SpigotChannelHandlers;
 import protocolsupport.zplatform.impl.spigot.network.SpigotNetworkManagerWrapper;
+import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketCompressor;
+import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketDecompressor;
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedPrepender;
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedSplitter;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -196,9 +200,21 @@ public class SpigotMiscUtils implements PlatformUtils {
 	}
 
 	@Override
+	public void enableCompression(ChannelPipeline pipeline, int compressionThreshold) {
+		pipeline
+		.addAfter(SpigotChannelHandlers.SPLITTER, "decompress", new SpigotPacketDecompressor(compressionThreshold))
+		.addAfter(SpigotChannelHandlers.PREPENDER, "compress", new SpigotPacketCompressor(compressionThreshold));
+	}
+
+	@Override
 	public void setFraming(ChannelPipeline pipeline, IPacketSplitter splitter, IPacketPrepender prepender) {
 		((SpigotWrappedSplitter) pipeline.get(SpigotChannelHandlers.SPLITTER)).setRealSplitter(splitter);
 		((SpigotWrappedPrepender) pipeline.get(SpigotChannelHandlers.PREPENDER)).setRealPrepender(prepender);
+	}
+
+	@Override
+	public EventLoopGroup getServerEventLoop() {
+		return SpigotNettyInjector.getServerEventLoop();
 	}
 
 }

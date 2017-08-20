@@ -23,7 +23,7 @@ public class StringSerializer {
 			MiscSerializer.checkLimit(length, limit * 4);
 			return new String(MiscSerializer.readBytes(from, length), StandardCharsets.UTF_8);
 		} else {
-			throw new IllegalArgumentException(MessageFormat.format("Don't know how to read string of version {0}", version));
+			throw new IllegalArgumentException(MessageFormat.format("Dont know how to read string of version {0}", version));
 		}
 	}
 
@@ -36,7 +36,7 @@ public class StringSerializer {
 			VarNumberSerializer.writeVarInt(to, data.length);
 			to.writeBytes(data);
 		} else {
-			throw new IllegalArgumentException(MessageFormat.format("Don't know how to write string of version {0}", version));
+			throw new IllegalArgumentException(MessageFormat.format("Dont know how to write string of version {0}", version));
 		}
 	}
 

@@ -1,10 +1,7 @@
 package protocolsupport.zplatform.impl.glowstone.network.handler;
 
-import io.netty.channel.Channel;
-import net.glowstone.net.pipeline.CompressionHandler;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.protocol.packet.handler.AbstractLoginListenerPlay;
-import protocolsupport.zplatform.impl.glowstone.network.GlowStoneChannelHandlers;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public abstract class GlowStoneLoginListener extends AbstractLoginListener implements GlowStoneTickableListener {
@@ -18,14 +15,6 @@ public abstract class GlowStoneLoginListener extends AbstractLoginListener imple
 	@Override
 	protected boolean hasCompression() {
 		return hasCompression;
-	}
-
-	@Override
-	protected void enableCompression(int compressionLevel) {
-		Channel channel = networkManager.getChannel();
-		if (compressionLevel >= 0) {
-			channel.pipeline().addAfter(GlowStoneChannelHandlers.FRAMING, "compression", new CompressionHandler(compressionLevel));
-		}
 	}
 
 	@Override
