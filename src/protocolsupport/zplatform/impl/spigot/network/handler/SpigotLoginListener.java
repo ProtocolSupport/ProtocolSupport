@@ -14,22 +14,15 @@ import net.minecraft.server.v1_12_R1.PacketLoginInStart;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
-public abstract class SpigotLoginListener extends AbstractLoginListener implements ITickable, PacketLoginInListener {
+public class SpigotLoginListener extends AbstractLoginListener implements ITickable, PacketLoginInListener {
 
-	private final boolean hasCompression;
-	public SpigotLoginListener(NetworkManagerWrapper networkmanager, String hostname, boolean hasCompression) {
-		super(networkmanager, hostname);
-		this.hasCompression = hasCompression;
+	public SpigotLoginListener(NetworkManagerWrapper networkmanager, String hostname, boolean hasCompression, boolean fullEncryption) {
+		super(networkmanager, hostname, hasCompression, fullEncryption);
 	}
 
 	@Override
 	public void e() {
 		tick();
-	}
-
-	@Override
-	protected boolean hasCompression() {
-		return hasCompression;
 	}
 
 	@Override

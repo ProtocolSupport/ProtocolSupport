@@ -22,7 +22,7 @@ public class PipeLineBuilder implements IPipeLineBuilder {
 	public void buildCodec(Channel channel, Connection connection) {
 		ChannelPipeline pipeline = channel.pipeline();
 		NetworkManagerWrapper networkmanager = ServerPlatform.get().getMiscUtils().getNetworkManagerFromChannel(channel);
-		networkmanager.setPacketListener(ServerPlatform.get().getWrapperFactory().createModernHandshakeListener(networkmanager, false));
+		networkmanager.setPacketListener(ServerPlatform.get().getWrapperFactory().createHandshakeListener(networkmanager, false, true));
 		NetworkDataCache sharedstorage = new NetworkDataCache();
 		pipeline.addAfter(ServerPlatform.get().getMiscUtils().getSplitterHandlerName(), ChannelHandlers.DECODER_TRANSFORMER, new PacketDecoder(connection, sharedstorage));
 		pipeline.addAfter(ServerPlatform.get().getMiscUtils().getPrependerHandlerName(), ChannelHandlers.ENCODER_TRANSFORMER, new PacketEncoder(connection, sharedstorage));

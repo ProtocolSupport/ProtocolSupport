@@ -18,7 +18,7 @@ public class PipeLineBuilder implements IPipeLineBuilder {
 	@Override
 	public void buildCodec(Channel channel, Connection connection) {
 		NetworkManagerWrapper networkmanager = ServerPlatform.get().getMiscUtils().getNetworkManagerFromChannel(channel);
-		networkmanager.setPacketListener(ServerPlatform.get().getWrapperFactory().createModernHandshakeListener(networkmanager, true));
+		networkmanager.setPacketListener(ServerPlatform.get().getWrapperFactory().createHandshakeListener(networkmanager, true, true));
 	}
 
 }

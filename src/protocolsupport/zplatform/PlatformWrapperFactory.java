@@ -22,8 +22,6 @@ public interface PlatformWrapperFactory {
 
 	public ItemStackWrapper createItemStack(int typeId);
 
-	public AbstractHandshakeListener createModernHandshakeListener(NetworkManagerWrapper networkmanager, boolean hasCompression);
-
-	public AbstractHandshakeListener createLegacyHandshakeListener(NetworkManagerWrapper networkmanager);
+	public AbstractHandshakeListener createHandshakeListener(NetworkManagerWrapper networkmanager, boolean hasCompression, boolean fullEncryption);
 
 }
