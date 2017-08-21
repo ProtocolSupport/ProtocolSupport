@@ -9,10 +9,14 @@ import protocolsupport.protocol.packet.handler.AbstractStatusListener;
 import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
-public class SpigotLegacyHandshakeListener extends AbstractHandshakeListener implements PacketHandshakingInListener {
+public class SpigotHandshakeListener extends AbstractHandshakeListener implements PacketHandshakingInListener {
 
-	public SpigotLegacyHandshakeListener(NetworkManagerWrapper networkmanager) {
+	private final boolean hasCompression;
+	private final boolean fullEncryption;
+	public SpigotHandshakeListener(NetworkManagerWrapper networkmanager, boolean hasCompression, boolean fullEncryption) {
 		super(networkmanager);
+		this.hasCompression = hasCompression;
+		this.fullEncryption = fullEncryption;
 	}
 
 	@Override
@@ -26,7 +30,7 @@ public class SpigotLegacyHandshakeListener extends AbstractHandshakeListener imp
 
 	@Override
 	public AbstractLoginListener getLoginListener(NetworkManagerWrapper networkManager, String hostname) {
-		return new SpigotLegacyLoginListener(networkManager, hostname);
+		return new SpigotLoginListener(networkManager, hostname, hasCompression, fullEncryption);
 	}
 
 	@Override

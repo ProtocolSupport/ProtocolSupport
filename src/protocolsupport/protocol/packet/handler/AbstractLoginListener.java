@@ -11,6 +11,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
+import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 
 import org.apache.commons.lang3.Validate;
@@ -20,15 +21,21 @@ import com.google.common.base.Charsets;
 
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelPipeline;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.events.PlayerLoginStartEvent;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.pipeline.ChannelHandlers;
+import protocolsupport.protocol.pipeline.common.PacketDecrypter;
+import protocolsupport.protocol.pipeline.common.PacketEncrypter;
+import protocolsupport.protocol.utils.MinecraftEncryption;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
+import protocolsupport.zplatform.impl.spigot.network.SpigotChannelHandlers;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public abstract class AbstractLoginListener implements IHasProfile {
@@ -48,6 +55,8 @@ public abstract class AbstractLoginListener implements IHasProfile {
 
 	protected final NetworkManagerWrapper networkManager;
 	protected final String hostname;
+	protected final boolean hasCompression;
+	protected final boolean fullEncryption;
 	protected final byte[] randomBytes = new byte[4];
 	protected int loginTicks;
 	protected SecretKey loginKey;
@@ -58,9 +67,11 @@ public abstract class AbstractLoginListener implements IHasProfile {
 	protected boolean useOnlineModeUUID = isOnlineMode;
 	protected UUID forcedUUID = null;
 
-	public AbstractLoginListener(NetworkManagerWrapper networkmanager, String hostname) {
+	public AbstractLoginListener(NetworkManagerWrapper networkmanager, String hostname, boolean hasCompression, boolean fullEncryption) {
 		this.networkManager = networkmanager;
 		this.hostname = hostname;
+		this.hasCompression = hasCompression;
+		this.fullEncryption = fullEncryption;
 		ThreadLocalRandom.current().nextBytes(randomBytes);
 	}
 
@@ -102,8 +113,6 @@ public abstract class AbstractLoginListener implements IHasProfile {
 	protected UUID generateOffileModeUUID() {
 		return UUID.nameUUIDFromBytes(("OfflinePlayer:" + profile.getName()).getBytes(Charsets.UTF_8));
 	}
-
-	protected abstract boolean hasCompression();
 
 	public String getConnectionRepr() {
 		return (profile != null) ? (profile + " (" + networkManager.getAddress() + ")") : networkManager.getAddress().toString();
@@ -182,7 +191,13 @@ public abstract class AbstractLoginListener implements IHasProfile {
 		});
 	}
 
-	protected abstract void enableEncryption(SecretKey key);
+	protected void enableEncryption(SecretKey key) {
+		ChannelPipeline pipeline = networkManager.getChannel().pipeline();
+		pipeline.addBefore(SpigotChannelHandlers.SPLITTER, ChannelHandlers.DECRYPT, new PacketDecrypter(MinecraftEncryption.getCipher(Cipher.DECRYPT_MODE, key)));
+		if (fullEncryption) {
+			pipeline.addBefore(SpigotChannelHandlers.PREPENDER, ChannelHandlers.ENCRYPT, new PacketEncrypter(MinecraftEncryption.getCipher(Cipher.ENCRYPT_MODE, key)));
+		}
+	}
 
 	@SuppressWarnings("unchecked")
 	public void setReadyToAccept() {
@@ -198,7 +213,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 			newProfile.getProperties().putAll(profile.getProperties());
 			profile = newProfile;
 		}
-		if (hasCompression()) {
+		if (hasCompression) {
 			int threshold = ServerPlatform.get().getMiscUtils().getCompressionThreshold();
 			if (threshold >= 0) {
 				this.networkManager.sendPacket(
