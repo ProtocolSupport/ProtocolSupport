@@ -17,7 +17,7 @@ public class Chat extends MiddleChat {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		if (position != MessagePosition.CHAT) {
+		if (position == MessagePosition.HOTBAR) {
 			return RecyclableEmptyList.get();
 		}
 		ProtocolVersion version = connection.getVersion();
