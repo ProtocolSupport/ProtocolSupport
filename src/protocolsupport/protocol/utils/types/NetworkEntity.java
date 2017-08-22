@@ -1,11 +1,12 @@
 package protocolsupport.protocol.utils.types;
 
+import java.util.UUID;
+
 import org.bukkit.util.Vector;
+
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
-
-import java.util.UUID;
 
 public class NetworkEntity {
 
@@ -46,7 +47,7 @@ public class NetworkEntity {
 	public NetworkEntityType getType() {
 		return type;
 	}
-	
+
 	public boolean isOfType(NetworkEntityType typeToCheck) {
 		return type.isOfType(typeToCheck);
 	}
@@ -56,11 +57,11 @@ public class NetworkEntity {
 	public DataCache getDataCache() {
 		return cache;
 	}
-	
+
 	public void updateDataCache(DataCache updateWith) {
 		this.cache = updateWith;
 	}
-	
+
 	@Override
 	public String toString() {
 		return Utils.toStringAllFields(this);
@@ -69,28 +70,28 @@ public class NetworkEntity {
 	public static class DataCache {
 		private byte pcBaseFlags = 0;
 		public boolean firstMeta = false;
-		
+
 		public byte getPcBaseFlags() {
 			return pcBaseFlags;
 		}
-		
+
 		public boolean getPcBaseFlag(int bitpos) {
 			return (pcBaseFlags & (1 << (bitpos - 1))) != 0;
 		}
-		
+
 		public void setPcBaseFlag(int bitpos, boolean value) {
 			setPcBaseFlag(bitpos, value ? 1 : 0);
 		}
-		
+
 		public void setPcBaseFlag(int bitpos, int value) {
 			pcBaseFlags &= ~(1 << (bitpos - 1));
 			pcBaseFlags |= (value << (bitpos - 1));
 		}
-		
+
 		public void setPcBaseFlags(byte pcBaseFlags) {
 			this.pcBaseFlags = pcBaseFlags;
 		}
-		
+
 		//Cache for PE shizzles.
 		private long peBaseFlags = 0;
 		public int attachedId = -1; //Leashed? Data is send in pocket meta, but might be useful to store for other things.
@@ -107,20 +108,20 @@ public class NetworkEntity {
 		public long getPeBaseFlags() {
 			return peBaseFlags;
 		}
-		
+
 		public boolean getPeBaseFlag(int bitpos) {
 			return (peBaseFlags & (1 << (bitpos - 1))) != 0;
 		}
-		
+
 		public void setPeBaseFlag(int bitpos, boolean value) {
 			setPeBaseFlag(bitpos, value ? 1 : 0);
 		}
-		
+
 		public void setPeBaseFlag(int bitpos, long value) {
 			peBaseFlags &= ~(1l << (bitpos - 1));
 			peBaseFlags |= (value << (bitpos - 1));
 		}
-		
+
 		public void setPeBaseFlags(long peBaseFlags) {
 			this.peBaseFlags = peBaseFlags;
 		}
@@ -131,8 +132,8 @@ public class NetworkEntity {
 
 		public ItemStackWrapper getHelmet() { return this.helmet; }
 
-		public void setChestplate(ItemStackWrapper chestplate) { 
-			this.chestplate = chestplate; 
+		public void setChestplate(ItemStackWrapper chestplate) {
+			this.chestplate = chestplate;
 		}
 
 		public ItemStackWrapper getChestplate() { return this.chestplate; }
@@ -155,19 +156,19 @@ public class NetworkEntity {
 			public boolean rotationLocked = false;
 			public Float rotationMin;
 			public Float rotationMax;
-			
+
 			public Rider(boolean riding) {
 				this.riding = riding;
 			}
-			
+
 			public Rider(Vector position, boolean rotationLocked, float rotationMax, float rotationMin) {
 				this(true, position, rotationLocked, rotationMax, rotationMin);
 			}
-			
+
 			public Rider(Vector position, boolean rotationLocked) {
 				this(true, position, rotationLocked, null, null);
 			}
-			
+
 			public Rider(boolean riding, Vector position, boolean rotationLocked, Float rotationMax, Float rotationMin) {
 				this.riding = riding;
 				this.position = position;
@@ -176,7 +177,7 @@ public class NetworkEntity {
 				this.rotationMin = rotationMin;
 			}
 		};
-		
+
 		@Override
 		public String toString() {
 			return Utils.toStringAllFields(this);

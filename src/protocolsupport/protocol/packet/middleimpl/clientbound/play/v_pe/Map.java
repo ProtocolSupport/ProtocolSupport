@@ -21,17 +21,17 @@ public class Map extends MiddleMap {
 		final int FLAG_DECORATION_UPDATE = 0x04;
 		final int FLAG_TEXTURE_UPDATE = 0x02;
 		final int FLAG_ITEM_UPDATE = 0x01;
-		
+
 		if (columns > 0) { flags |= FLAG_TEXTURE_UPDATE; }
 		else if (icons.length > 0) { flags |= (FLAG_DECORATION_UPDATE | FLAG_ITEM_UPDATE) ; }
-		
+
 		VarNumberSerializer.writeVarInt(serializer, flags);
-		
+
 		//Implementation
 		if ((flags & (FLAG_DECORATION_UPDATE | FLAG_TEXTURE_UPDATE)) != 0) {
 			serializer.writeByte(scale);
 		}
-		
+
 		if ((flags & FLAG_DECORATION_UPDATE) != 0) {
 			VarNumberSerializer.writeVarInt(serializer, icons.length);
 			for (Icon icon: icons) {
@@ -43,7 +43,7 @@ public class Map extends MiddleMap {
 				VarNumberSerializer.writeVarInt(serializer, (icon.dirtype & 0x0F)); //TODO: Remap icon colors.
 			}
 		}
-		
+
 		if ((flags & FLAG_TEXTURE_UPDATE) != 0) {
 			VarNumberSerializer.writeSVarInt(serializer, columns);
 			VarNumberSerializer.writeSVarInt(serializer, rows);
@@ -55,7 +55,7 @@ public class Map extends MiddleMap {
 					VarNumberSerializer.writeVarInt(serializer, colorRemapper.getRemap(colors[i] & 0xFF));
 			}
 		}
-		
+
 		return RecyclableSingletonList.create(serializer);
 	}
 }

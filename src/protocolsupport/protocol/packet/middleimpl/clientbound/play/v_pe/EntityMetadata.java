@@ -24,8 +24,10 @@ public class EntityMetadata extends MiddleEntityMetadata {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		NetworkEntity entity = cache.getWatchedEntity(entityId);
-		
-		if(entity == null) return packets;
+
+		if(entity == null) {
+			return packets;
+		}
 		switch(entity.getType()) {
 			case ITEM: {
 				DataWatcherObject<?> itemWatcher = metadata.get(DataWatcherObjectIndex.Item.ITEM);
@@ -40,33 +42,33 @@ public class EntityMetadata extends MiddleEntityMetadata {
 				packets.add(create(entity, cache.getLocale(), metadata, connection.getVersion()));
 			}
 		}
-		
+
 		return packets;
 	}
-	
+
 	public static ClientBoundPacketData createFaux(NetworkEntity entity, String locale, ArrayMap<DataWatcherObject<?>> fauxMeta, ProtocolVersion version) {
 		return create(entity, locale, transform(entity, fauxMeta, version), version);
 	}
-	
+
 	public static ClientBoundPacketData createFaux(NetworkEntity entity, String locale, ProtocolVersion version) {
 		return create(entity, locale, transform(entity, new ArrayMap<DataWatcherObject<?>>(76), version), version);
 	}
-	
+
 	public static ArrayMap<DataWatcherObject<?>> transform(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> pcMetadata, ProtocolVersion version) {
 		ArrayMap<DataWatcherObject<?>> peMetadata = WatchedDataRemapper.transform(entity, pcMetadata, version);
 		peMetadata.put(0, new DataWatcherObjectSVarLong(entity.getDataCache().getPeBaseFlags()));
 		return peMetadata;
 	}
-	
+
 	public static ClientBoundPacketData create(NetworkEntity entity, String locale, ArrayMap<DataWatcherObject<?>> metadata, ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SET_ENTITY_DATA, version);
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		EntityMetadata.encodeMeta(serializer, version, locale, transform(entity, metadata, version));
 		return serializer;
 	}
-	
+
 	public static void encodeMeta(ByteBuf to, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> peMetadata) {
-		
+
 		//For now. Iterate two times :P
 		int entries = 0;
 		for (int key = peMetadata.getMinKey(); key < peMetadata.getMaxKey(); key++) {
@@ -86,8 +88,8 @@ public class EntityMetadata extends MiddleEntityMetadata {
 				entries++;
 			}
 		}
-		
-		
+
+
 		//TODO Fake this stuff.
 		/*VarNumberSerializer.writeVarInt(to, 0); //Fake
 		int entries = 0;
@@ -100,17 +102,17 @@ public class EntityMetadata extends MiddleEntityMetadata {
 				entries++;
 			}
 		}*/
-		
+
 	}
 
 	public static class PeMetaBase {
-		
+
 		//PE's extra baseflags. TODO: Implement more flags (Easy Remapping)
 		protected static int id = 1;
 		protected static int takeNextId() {
 			return id++;
 		}
-		
+
 		public static int FLAG_ON_FIRE = takeNextId(); //0
 		public static int FLAG_SNEAKING = takeNextId();
 		public static int FLAG_RIDING = takeNextId();
@@ -158,6 +160,6 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		public static int FLAG_LINGER = takeNextId();
 		public static int FLAG_unknown4 = takeNextId();
 		public static int FLAG_GRAVITY = takeNextId();
-		
+
 	}
 }

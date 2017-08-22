@@ -7,10 +7,10 @@ import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class PeSimpleFlagRemapper extends DataWatcherDataRemapper {
-	
+
 	private final int fromBooleanId;
 	private final int toFlagId;
-	
+
 	public PeSimpleFlagRemapper(int fromBooleanId, int toFlagId) {
 		this.fromBooleanId = fromBooleanId;
 		this.toFlagId = toFlagId;

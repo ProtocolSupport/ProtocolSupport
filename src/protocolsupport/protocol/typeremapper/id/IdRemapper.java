@@ -321,7 +321,7 @@ public class IdRemapper {
 			return new HashMapBasedIdRemappingTable();
 		}
 	};
-	
+
 	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> WINDOWTYPE = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
 		{
 			registerRemapEntry(WindowType.PLAYER, -1, ProtocolVersion.MINECRAFT_PE);
@@ -342,7 +342,7 @@ public class IdRemapper {
 		protected ArrayBasedIdRemappingTable createTable() {
 			return new ArrayBasedIdRemappingTable(14);
 		}
-		
+
 		private void registerRemapEntry(WindowType type, int to, ProtocolVersion version) {
 			registerRemapEntry(type.toLegacyId(), to, version);
 		}

@@ -33,11 +33,11 @@ public class SpawnObject extends MiddleSpawnObject {
 			default: {
 				return RecyclableSingletonList.create(SpawnLiving.create(
 						version,
-						entity, 
+						entity,
 						x, y, z,
 						motX / 8.000F, motY / 8000.F, motZ / 8000.F,
 						pitch, yaw, cache.getLocale(),
-						null, //TODO: Add spawnmeta to something like sand. 
+						null, //TODO: Add spawnmeta to something like sand.
 						PEDataValues.getObjectEntityTypeId(IdRemapper.ENTITY.getTable(version).getRemap(entity.getType()))
 					));
 			}
@@ -72,7 +72,7 @@ public class SpawnObject extends MiddleSpawnObject {
 
 		public RecyclableArrayList<ClientBoundPacketData> updateItem(ProtocolVersion version, ItemStackWrapper itemstack) {
 			RecyclableArrayList<ClientBoundPacketData> updatepackets = RecyclableArrayList.create();
-			if (this.itemstack == null || !this.itemstack.equals(itemstack)) {
+			if ((this.itemstack == null) || !this.itemstack.equals(itemstack)) {
 				if (spawned) {
 					updatepackets.add(EntityDestroy.create(version, entityId));
 					spawned = false;

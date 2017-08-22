@@ -16,5 +16,5 @@ public class CollectEffect extends MiddleCollectEffect {
 		VarNumberSerializer.writeVarLong(serializer, collectorId);
 		return RecyclableSingletonList.create(serializer);
 	}
-	
+
 }

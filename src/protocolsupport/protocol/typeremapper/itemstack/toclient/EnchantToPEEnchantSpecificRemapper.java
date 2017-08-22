@@ -1,6 +1,7 @@
 package protocolsupport.protocol.typeremapper.itemstack.toclient;
 
 import org.bukkit.enchantments.Enchantment;
+
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackNBTSpecificRemapper;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable;
@@ -10,6 +11,7 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagType;
 
+@SuppressWarnings("deprecation")
 public class EnchantToPEEnchantSpecificRemapper extends ItemStackNBTSpecificRemapper {
 
 	private static final RemappingTable.HashMapBasedIdRemappingTable ENCHANT = new RemappingTable.HashMapBasedIdRemappingTable();

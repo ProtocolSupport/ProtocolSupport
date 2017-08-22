@@ -26,7 +26,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 			null, PEDataValues.getLivingEntityTypeId(IdRemapper.ENTITY.getTable(version).getRemap(entity.getType()))
 		));
 	}
-	
+
 	public static ClientBoundPacketData createSimple(ProtocolVersion version,
 			int entityId, double x, double y, double z, int peEntityType) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SPAWN_ENTITY, version);

@@ -7,7 +7,7 @@ public class DataWatcherObjectFloat extends DataWatcherObjectNumber<Float> {
 
 	public DataWatcherObjectFloat() {
 	}
-	
+
 	public DataWatcherObjectFloat(float value) {
 		this.value = value;
 	}

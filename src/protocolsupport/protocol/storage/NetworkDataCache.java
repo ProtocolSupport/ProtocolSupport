@@ -17,9 +17,9 @@ import protocolsupport.protocol.utils.types.NetworkEntity.DataCache;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.Utils;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class NetworkDataCache {
 
@@ -75,31 +75,31 @@ public class NetworkDataCache {
 	public void closeWindow() {
 		this.windowType = WindowType.PLAYER;
 	}
-	
+
 	private ItemStackWrapper cursorItem = ServerPlatform.get().getWrapperFactory().createNullItemStack();
-	
+
 	public ItemStackWrapper getCursorItem() {
 		return cursorItem;
 	}
-	
+
 	public void setCursorItem(ItemStackWrapper cursorItem) {
 		this.cursorItem = cursorItem;
 	}
-	
+
 	private int actionNumber = 0;
-	
+
 	public int getActionNumber() {
 		return actionNumber++;
 	}
-	
+
 	public void resetActionNumber() {
 		actionNumber = 0;
 	}
-	
+
 	Position clickedPosition = new Position(0, 0, 0);
-	
+
 	public void setClickedPosition(Position clickedPosition) { this.clickedPosition = clickedPosition; }
-	
+
 	public Position getClickedPosition() { return clickedPosition; }
 
 
@@ -113,7 +113,7 @@ public class NetworkDataCache {
 	public void addWatchedEntity(NetworkEntity entity) {
 		watchedEntities.put(entity.getId(), entity);
 	}
-	
+
 	public void updateWatchedDataCache(int entityId, DataCache updateWith) {
 		watchedEntities.get(entityId).updateDataCache(updateWith);
 	}
@@ -126,13 +126,15 @@ public class NetworkDataCache {
 	public int getSelfPlayerEntityId() {
 		return player != null ? player.getId() : -1;
 	}
-	
+
 	public boolean isSelf(int entityId) {
 		return (this.getSelfPlayerEntityId() == entityId);
 	}
-	
+
 	public NetworkEntity getWatchedSelf() {
-		if(!watchedEntities.contains(getSelfPlayerEntityId())) return player;
+		if(!watchedEntities.contains(getSelfPlayerEntityId())) {
+			return player;
+		}
 		return watchedEntities.get(this.getSelfPlayerEntityId());
 	}
 
@@ -166,7 +168,7 @@ public class NetworkDataCache {
 	public PreparedItem getPreparedItem(int entityId) {
 		return preparedItems.get(entityId);
 	}
-	
+
 	public void removePreparedItem(int entityId) {
 		preparedItems.remove(entityId);
 	}

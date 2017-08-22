@@ -8,7 +8,7 @@ public class DataWatcherObjectVarLong extends DataWatcherObjectNumber<Long> {
 
 	public DataWatcherObjectVarLong() {
 	}
-	
+
 	public DataWatcherObjectVarLong(Long Value) {
 		this.value = Value;
 	}

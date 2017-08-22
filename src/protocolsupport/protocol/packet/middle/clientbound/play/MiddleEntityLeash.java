@@ -14,7 +14,7 @@ public abstract class MiddleEntityLeash extends ClientBoundMiddlePacket {
 		entityId = serverdata.readInt();
 		vehicleId = serverdata.readInt();
 	}
-	
+
 	@Override
 	public void handle() {
 		DataCache data = cache.getWatchedEntity(entityId).getDataCache();

@@ -11,7 +11,7 @@ public class DataWatcherObjectVector3fLe extends DataWatcherObject<Vector> {
 
 	public DataWatcherObjectVector3fLe() {
 	}
-	
+
 	public DataWatcherObjectVector3fLe(Vector position) {
 		value = position;
 	}

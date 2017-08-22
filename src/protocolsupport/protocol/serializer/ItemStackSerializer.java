@@ -105,7 +105,7 @@ public class ItemStackSerializer {
 	public static NBTTagCompoundWrapper readTag(ByteBuf from, ProtocolVersion version) {
 		return readTag(from, false, version);
 	}
-	
+
 	public static NBTTagCompoundWrapper readTag(ByteBuf from, boolean varint, ProtocolVersion version) {
 		try {
 			if (isUsingShortLengthNBT(version)) {
@@ -133,7 +133,7 @@ public class ItemStackSerializer {
 			throw new DecoderException(e);
 		}
 	}
-	
+
 	public static void writeTag(ByteBuf to, ProtocolVersion version, NBTTagCompoundWrapper tag) {
 		writeTag(to, false, version, tag);
 	}

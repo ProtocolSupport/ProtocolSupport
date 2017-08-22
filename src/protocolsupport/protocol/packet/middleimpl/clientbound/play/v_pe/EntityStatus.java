@@ -22,16 +22,16 @@ public class EntityStatus extends MiddleEntityStatus {
 		if(allowedIds.contains(status)) {
 			NetworkEntity e = cache.getWatchedEntity(entityId);
 			//The only remap I know so far.
-			if(status == 31 && e.getType() == NetworkEntityType.FISHING_FLOAT) {
+			if((status == 31) && (e.getType() == NetworkEntityType.FISHING_FLOAT)) {
 				status = 13;
 			}
 			packets.add(create(e, status, connection.getVersion()));
 		}
 		return packets;
 	}
-	
+
 	public static int PE_UNLEASH = 63;
-	
+
 	public static ClientBoundPacketData create(NetworkEntity entity, int status, ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_EVENT, version);
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());

@@ -15,11 +15,11 @@ public class MiscSerializer {
 	public static void writeLFloat(ByteBuf to, float f) {
 		to.writeIntLE(Float.floatToIntBits(f));
 	}
-	
+
 	public static double readLDouble(ByteBuf from) {
 		return Double.longBitsToDouble(from.readLongLE());
 	}
-	
+
 	public static void writeLDouble(ByteBuf to, double d) {
 		to.writeLongLE(Double.doubleToLongBits(d));
 	}

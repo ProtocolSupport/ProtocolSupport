@@ -6,12 +6,12 @@ import protocolsupport.protocol.utils.types.WindowType;
 //This class houses some run of the mill hacky, slashy functions to compensate slots and simulate PC inventory clicking behavior.
 //Buyers beware!
 public class PEInventory {
-	
+
 	public static int remapClientboundSlot(WindowType windowType, int slot) {
 		switch(windowType) {
 			case PLAYER: {
 				//Hotbar
-				if(slot >= 36 && slot <= 44) {
+				if((slot >= 36) && (slot <= 44)) {
 					return slot - 36;
 				}
 				//Offhand
@@ -23,7 +23,7 @@ public class PEInventory {
 			return slot;
 		}
 	}
-	
+
 	public static int remapServerboundSlot(WindowType windowType, int slot) {
 		switch(windowType) {
 			case PLAYER: {
@@ -41,5 +41,5 @@ public class PEInventory {
 			}
 		}
 	}
-	
+
 }

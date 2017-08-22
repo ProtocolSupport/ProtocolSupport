@@ -9,12 +9,12 @@ public class PeSimpleFlagAdder extends DataWatcherDataRemapper {
 
 	private final int[] flags;
 	private final boolean[] set;
-	
+
 	public PeSimpleFlagAdder(int[] flags, boolean[] set) {
 		this.flags = flags;
 		this.set = set;
 	}
-	
+
 	@Override
 	public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 		for(int i = 0; i < flags.length; i++) {

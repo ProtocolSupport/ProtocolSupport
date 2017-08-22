@@ -10,7 +10,7 @@ public class DataWatcherObjectVector3vi extends DataWatcherObject<Position> {
 
 	public DataWatcherObjectVector3vi() {
 	}
-	
+
 	public DataWatcherObjectVector3vi(Position position) {
 		value = position;
 	}

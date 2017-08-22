@@ -11,5 +11,5 @@ public class SpawnGlobal extends MiddleSpawnGlobal {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		return RecyclableSingletonList.create(SpawnLiving.createSimple(connection.getVersion(), entityId, x, y, z, 93));
 	}
-	
+
 }

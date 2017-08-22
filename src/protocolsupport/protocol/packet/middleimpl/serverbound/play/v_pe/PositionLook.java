@@ -26,7 +26,7 @@ public class PositionLook extends MiddlePositionLook {
 		} finally {
 			superPackets.recycleObjectOnly();
 		}
-		
+
 		if (cache.getSignTag() != null) { // If the player was writing a sign...
 			NBTTagCompoundWrapper signTag = cache.getSignTag();
 			int x = signTag.getIntNumber("x");
@@ -45,7 +45,7 @@ public class PositionLook extends MiddlePositionLook {
 			packets.add(MiddleUpdateSign.create(new Position(x, y, z), nbtLines));
 			cache.setSignTag(null);
 		}
-		
+
 		return packets;
 	}
 

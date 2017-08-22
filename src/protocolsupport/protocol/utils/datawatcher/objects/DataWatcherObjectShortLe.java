@@ -11,7 +11,7 @@ public class DataWatcherObjectShortLe extends DataWatcherObjectNumber<Short> {
 	public DataWatcherObjectShortLe(short s) {
 		value = s;
 	}
-	
+
 	public DataWatcherObjectShortLe(int i) {
 		value = (short) i;
 	}
@@ -23,7 +23,7 @@ public class DataWatcherObjectShortLe extends DataWatcherObjectNumber<Short> {
 
 	@Override
 	public void writeToStream(ByteBuf to, ProtocolVersion version, String locale) {
-		to.writeShortLE(value); 
+		to.writeShortLE(value);
 	}
 
 }

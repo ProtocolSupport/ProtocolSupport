@@ -11,13 +11,13 @@ public final class PeFlagRemapper extends DataWatcherDataRemapper {
 	private final int fromByteId;
 	private final int[] fromBitPosi;
 	private final int[] toPosi;
-	
+
 	public PeFlagRemapper(int fromByteId, int[] fromBitPosi, int[] toPosi) {
 		this.fromByteId = fromByteId;
 		this.fromBitPosi = fromBitPosi;
 		this.toPosi = toPosi;
 	}
-	
+
 	@Override
 	public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 		getObject(original, fromByteId, DataWatcherObjectByte.class).ifPresent(fromByteWatcher -> {

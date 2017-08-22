@@ -9,11 +9,11 @@ public class DataWatcherObjectSVarLong extends DataWatcherObjectNumber<Long> {
 
 	public DataWatcherObjectSVarLong() {
 	}
-	
+
 	public DataWatcherObjectSVarLong(Long value) {
 		this.value = value;
 	}
-	
+
 	public DataWatcherObjectSVarLong(int value) {
 		this.value = (long) value;
 	}

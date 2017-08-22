@@ -46,8 +46,8 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVecto
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3vi;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.NetworkEntity;
-import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.NetworkEntity.DataCache.Rider;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.CollectionsUtils;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.utils.Utils;
@@ -63,14 +63,14 @@ public enum SpecificRemapper {
 				//Leashing is set in Entity Leash.
 				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_LEASHED, entity.getDataCache().attachedId != -1);
 				remapped.put(38, new DataWatcherObjectSVarLong(entity.getDataCache().attachedId));
-				
+
 				// = PE Nametag =
 				//Doing this for players makes nametags behave weird or only when close.
 				DataWatcherObject<?> nameTagWatcher = original.get(DataWatcherObjectIndex.Entity.NAMETAG);
 				boolean doNametag = (nameTagWatcher != null);
 				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_SHOW_NAMETAG, doNametag);
 				if (doNametag) { remapped.put(4, nameTagWatcher); }
-				
+
 				// = PE Riding =
 				Rider rider = entity.getDataCache().rider;
 				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_RIDING, rider.riding);
@@ -78,16 +78,20 @@ public enum SpecificRemapper {
 					//Extra data PE needs for vehicles. Set in setPassenger.
 					remapped.put(57, new DataWatcherObjectVector3fLe(rider.position));
 					remapped.put(58, new DataWatcherObjectByte((byte) ((rider.rotationLocked) ? 1 : 0)));
-					if(rider.rotationMax != null) remapped.put(59, new DataWatcherObjectFloatLe(rider.rotationMax));
-					if(rider.rotationMin != null) remapped.put(60, new DataWatcherObjectFloatLe(rider.rotationMin));
+					if(rider.rotationMax != null) {
+						remapped.put(59, new DataWatcherObjectFloatLe(rider.rotationMax));
+					}
+					if(rider.rotationMin != null) {
+						remapped.put(60, new DataWatcherObjectFloatLe(rider.rotationMin));
+					}
 				}
-				
+
 				// = PE Interaction =
 				remapped.put(40, new DataWatcherObjectString("Interact")); //Different texts? I ain't bothered.
-				
+
 			}}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new PeSimpleFlagAdder(new int[] {PeMetaBase.FLAG_GRAVITY, PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG}, new boolean[] {true, true}), ProtocolVersion.MINECRAFT_PE),
-		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.Entity.FLAGS, 
+		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.Entity.FLAGS,
 				new int[] {1, 2, 4, 6, 8}, new int[] {PeMetaBase.FLAG_ON_FIRE, PeMetaBase.FLAG_SNEAKING, PeMetaBase.FLAG_SPRINTING, PeMetaBase.FLAG_INVISIBLE, PeMetaBase.FLAG_GLIDING}
 		), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new PeSimpleFlagRemapper(DataWatcherObjectIndex.Entity.SILENT, PeMetaBase.FLAG_SILENT), ProtocolVersion.MINECRAFT_PE),
@@ -154,7 +158,7 @@ public enum SpecificRemapper {
 				getObject(original, DataWatcherObjectIndex.EntityLiving.HAND_USE, DataWatcherObjectByte.class)
 				.ifPresent(activehandflags -> {
 					byte activehandvalue = activehandflags.getValue();
-					byte basevalue = (byte) entity.getDataCache().getPcBaseFlags();
+					byte basevalue = entity.getDataCache().getPcBaseFlags();
 					switch (activehandvalue) {
 						case 1: {
 							basevalue |= (1 << 4);
@@ -233,7 +237,7 @@ public enum SpecificRemapper {
 				getObject(original, DataWatcherObjectIndex.BaseHorse.FLAGS, DataWatcherObjectByte.class).ifPresent(byteWatcher -> {
 					if((byteWatcher.getValue() & (1 << (6-1))) != 0) {
 						//TODO: Store PE horseflags when neeeded.
-						remapped.put(16, new DataWatcherObjectVarInt(0b100000));	
+						remapped.put(16, new DataWatcherObjectVarInt(0b100000));
 					}
 				});
 			}
@@ -359,7 +363,7 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Sheep.FLAGS, 16) {}, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	POLAR_BEAR(NetworkEntityType.POLAR_BEAR, SpecificRemapper.AGEABLE,
-		//TODO: Just like horses, disappears. Perhaps send a unknown entitystatus aswell? Meh.	
+		//TODO: Just like horses, disappears. Perhaps send a unknown entitystatus aswell? Meh.
 		new Entry(new PeSimpleFlagRemapper(DataWatcherObjectIndex.PolarBear.STANDING_UP, PeMetaBase.FLAG_REARING), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.PolarBear.STANDING_UP, 13) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_1)
 	),
@@ -404,7 +408,7 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Enderman.SCREAMING, 12) {}, ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.Enderman.SCREAMING, 18), ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	GIANT(NetworkEntityType.GIANT, SpecificRemapper.INSENTIENT, 
+	GIANT(NetworkEntityType.GIANT, SpecificRemapper.INSENTIENT,
 		new Entry(new DataWatcherDataRemapper() {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {

@@ -11,17 +11,17 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.NetworkEntity;
-import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.NetworkEntity.DataCache;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class SetPassengers extends MiddleSetPassengers {
 
-	public static final int UNLINK = 0; 
+	public static final int UNLINK = 0;
 	public static final int LINK = 1;
 	public static final int PASSENGER = 2;
-	
+
 	private final TIntObjectHashMap<TIntHashSet> passengers = new TIntObjectHashMap<>();
 
 	@Override
@@ -40,14 +40,20 @@ public class SetPassengers extends MiddleSetPassengers {
 				if (passenger != null) {
 					//TODO: Fix and Update this: Rider positions.
 					DataCache data = passenger.getDataCache();
-					if(vehicle.isOfType(NetworkEntityType.PIG)) data.rider = data.new Rider(new Vector(0.0, 2.8, 0.0), false);
-					else if(vehicle.isOfType(NetworkEntityType.BASE_HORSE)) data.rider = data.new Rider(new Vector(0.0, 2.3, -0.2), true, 180f, -180f);
-					else data.rider = data.new Rider(true);
+					if(vehicle.isOfType(NetworkEntityType.PIG)) {
+						data.rider = data.new Rider(new Vector(0.0, 2.8, 0.0), false);
+					} else if(vehicle.isOfType(NetworkEntityType.BASE_HORSE)) {
+						data.rider = data.new Rider(new Vector(0.0, 2.3, -0.2), true, 180f, -180f);
+					} else {
+						data.rider = data.new Rider(true);
+					}
 					cache.updateWatchedDataCache(passengerId, data);
 					packets.add(EntityMetadata.createFaux(passenger, cache.getLocale(), version));
-					
+
 					packets.add(create(version, vehicleId, passengerId, LINK));
-					if(cache.isSelf(passengerId)) packets.add(create(version, vehicleId, 0, LINK));
+					if(cache.isSelf(passengerId)) {
+						packets.add(create(version, vehicleId, 0, LINK));
+					}
 				}
 			}
 			prevPassengersIds.forEach(new TIntProcedure() {
@@ -62,7 +68,9 @@ public class SetPassengers extends MiddleSetPassengers {
 							cache.updateWatchedDataCache(passengerId, data);
 							packets.add(EntityMetadata.createFaux(passenger, cache.getLocale(), version));
 							packets.add(create(version, vehicleId, passengerId, UNLINK));
-							if(cache.isSelf(passengerId)) packets.add(create(version, vehicleId, 0, UNLINK));
+							if(cache.isSelf(passengerId)) {
+								packets.add(create(version, vehicleId, 0, UNLINK));
+							}
 						}
 					}
 					return true;

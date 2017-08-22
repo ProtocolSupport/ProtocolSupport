@@ -18,7 +18,7 @@ public class EntityDestroy extends MiddleEntityDestroy {
 		ProtocolVersion version = connection.getVersion();
 		for (int entityId : entityIds) {
 			NetworkEntity entity = cache.getWatchedEntity(entityId);
-			if(entity != null && entity.getType() == NetworkEntityType.ITEM) {
+			if((entity != null) && (entity.getType() == NetworkEntityType.ITEM)) {
 					cache.removePreparedItem(entityId);
 			}
 			packets.add(create(version, entityId));

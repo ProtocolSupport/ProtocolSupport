@@ -22,7 +22,7 @@ public abstract class MiddleBlockPlace extends ServerBoundMiddlePacket {
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		return RecyclableSingletonList.create(create(position, face, usedHand, cX, cY, cZ));
 	}
-	
+
 	public static ServerBoundPacketData create(Position position, int face, int usedHand, float cX, float cY, float cZ) {
 		if (face != -1) {
 			ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_USE_ITEM);
@@ -39,5 +39,5 @@ public abstract class MiddleBlockPlace extends ServerBoundMiddlePacket {
 			return creator;
 		}
 	}
-	
+
 }

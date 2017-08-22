@@ -7,7 +7,6 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginDisconnect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSuccess;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityEquipment;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Animation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockAction;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockBreakAnimation;
@@ -22,6 +21,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.CustomPa
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityDestroy;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityEffectAdd;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityEffectRemove;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityEquipment;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityLeash;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntitySetAttributes;

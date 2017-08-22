@@ -340,7 +340,7 @@ public class NBTTagCompoundSerializer {
 			}
 		}
 	}
-	
+
 	public static void writePeTag(ByteBuf os, boolean varint, NBTTagCompoundWrapper tag) throws IOException {
 		System.out.println("Writing NBT... Varint: " + varint + " tag: " + tag);
 		if (tag.isNull()) {
@@ -350,12 +350,12 @@ public class NBTTagCompoundSerializer {
 		writePeTagHeader(os, varint, "", NBTTagType.COMPOUND);
 		writePeCompoundPayload(os, varint, tag);
 	}
-	
+
 	private static void writePeTagHeader(ByteBuf os, boolean varint, String name, NBTTagType tag) throws IOException {
 		os.writeByte(tag.getId());
 		writePeNBTString(os, varint, name);
 	}
-	
+
 	private static void writePeCompoundPayload(ByteBuf os, boolean varint, NBTTagCompoundWrapper tag) throws IOException {
 		for (String key : tag.getKeys()) {
 			NBTTagType type = tag.getTagType(key);
@@ -502,7 +502,7 @@ public class NBTTagCompoundSerializer {
 			}
 		}
 	}
-	
+
 	public static NBTTagCompoundWrapper readPeTag(ByteBuf is, boolean varint) throws IOException {
 		NBTTagType type = NBTTagType.fromId(is.readByte());
 		if (type == NBTTagType.END) {
@@ -593,7 +593,7 @@ public class NBTTagCompoundSerializer {
 			}
 		}
 	}
-	
+
 	private static void readPeListPayload(ByteBuf is, boolean varint, NBTTagListWrapper tag) throws IOException {
 		NBTTagType type = NBTTagType.fromId(is.readByte());
 		int size = readPeNBTInt(is, varint);
@@ -673,7 +673,7 @@ public class NBTTagCompoundSerializer {
 			}
 		}
 	}
-	
+
 	private static void writePeNBTInt(ByteBuf to, boolean varint, int i) {
 		if (varint) {
 			VarNumberSerializer.writeVarInt(to, i);
@@ -681,7 +681,7 @@ public class NBTTagCompoundSerializer {
 			to.writeIntLE(i);
 		}
 	}
-	
+
 	private static void writePeNBTSInt(ByteBuf to, boolean varint, int i) {
 		if (varint) {
 			VarNumberSerializer.writeSVarInt(to, i);
@@ -689,7 +689,7 @@ public class NBTTagCompoundSerializer {
 			to.writeIntLE(i);
 		}
 	}
-	
+
 	private static int readPeNBTInt(ByteBuf from, boolean varint) {
 		if (varint) {
 			return VarNumberSerializer.readVarInt(from);
@@ -697,7 +697,7 @@ public class NBTTagCompoundSerializer {
 			return from.readIntLE();
 		}
 	}
-	
+
 	private static int readPeNBTSInt(ByteBuf from, boolean varint) {
 		if (varint) {
 			return VarNumberSerializer.readSVarInt(from);
@@ -705,7 +705,7 @@ public class NBTTagCompoundSerializer {
 			return from.readIntLE();
 		}
 	}
-	
+
 	private static void writePeNBTString(ByteBuf to, boolean varint, String s) {
 		if (varint) {
 			byte[] data = s.getBytes(StandardCharsets.UTF_8);
@@ -717,7 +717,7 @@ public class NBTTagCompoundSerializer {
 			to.writeBytes(data);
 		}
 	}
-	
+
 	private static String readPeNBTString(ByteBuf from, boolean varint) {
 		if (varint) {
 			int length = VarNumberSerializer.readVarInt(from);

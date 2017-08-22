@@ -39,16 +39,16 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 	protected float cX, cY, cZ;
 	protected int face;
 	protected int targetId;
-	
+
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		actionId = VarNumberSerializer.readVarInt(clientdata);
-		
+
 		transactions = new InfTransaction[VarNumberSerializer.readVarInt(clientdata)];
 		for(int i = 0; i < transactions.length; i++) {
 			transactions[i] = InfTransaction.readFromStream(clientdata, cache.getLocale(), connection.getVersion());
 		}
-		
+
 		switch(actionId) {
 			case ACTION_USE_ITEM: {
 				subTypeId = VarNumberSerializer.readVarInt(clientdata);
@@ -85,7 +85,7 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 		//BLEEHH!
 		clientdata.readBytes(clientdata.readableBytes());
 	}
-	
+
 	//Sources
 	public static final int SOURCE_CONTAINER = 0;
 	public static final int SOURCE_GLOBAL = 1;
@@ -109,14 +109,14 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 	public static final int INTERACT_INTERACT = 0;
 	public static final int INTERACT_ATTACK = 1;
 	public static final int INTERACT_AT = 2;
-	
+
 	//Slot thingy numbers.
 	public static final int POCKET_INVENTORY = 0;
 	public static final int POCKET_OFFHAND = 119;
 	public static final int POCKET_ARMOR_EQUIPMENT = 120;
 	public static final int POCKET_CREATIVE_INVENTORY = 121;
 	public static final int POCKET_CLICKED_SLOT = 124;
-	
+
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
@@ -139,7 +139,7 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 					}
 					case USE_DIG_BLOCK: {
 						if(cache.getGameMode() == 1) { //instabreak
-							packets.add(MiddleBlockDig.create(MiddleBlockDig.Action.START_DIG, position, 0));		
+							packets.add(MiddleBlockDig.create(MiddleBlockDig.Action.START_DIG, position, 0));
 							packets.add(MiddleBlockDig.create(MiddleBlockDig.Action.FINISH_DIG, position, 0));
 						}
 						break;
@@ -184,17 +184,17 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 		}
 		return packets;
 	}
-	
+
 	@SuppressWarnings("unused") //TODO: IMPLEMENT!
 	private static class InfTransaction {
-		
+
 		private int sourceId;
 		private int inventoryId;
 		private int action;
 		private int slot;
 		private ItemStackWrapper oldItem;
 		private ItemStackWrapper newItem;
-		
+
 		private static InfTransaction readFromStream(ByteBuf from, String locale, ProtocolVersion version) {
 			InfTransaction transaction = new InfTransaction();
 			transaction.sourceId = VarNumberSerializer.readVarInt(from);
@@ -224,7 +224,7 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 			transaction.newItem = ItemStackSerializer.readItemStack(from, version, locale, true);
 			return transaction;
 		}
-		
+
 		public ServerBoundPacketData toClick(NetworkDataCache cache) {
 			if(inventoryId == POCKET_CLICKED_SLOT) {
 				cache.setCursorItem(newItem);
@@ -234,12 +234,12 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 			}
 			return null;
 		}
-		
+
 		@Override
 		public String toString() {
 			return Utils.toStringAllFields(this);
 		}
-		
+
 	}
 
 }

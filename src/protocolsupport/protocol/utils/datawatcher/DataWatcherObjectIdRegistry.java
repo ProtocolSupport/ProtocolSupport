@@ -15,7 +15,6 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloat
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloatLe;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectItemStack;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarLong;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectNBTTagCompound;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalUUID;
@@ -26,6 +25,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectShort
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectShortLe;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarLong;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3f;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3fLe;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3i;
