@@ -21,7 +21,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.CustomPa
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityDestroy;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityEffectAdd;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityEffectRemove;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityEquipment;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityLeash;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntitySetAttributes;
@@ -29,14 +28,8 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntitySt
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityTeleport;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityVelocity;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Explosion;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.HeldSlot;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventoryClose;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventoryOpen;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventorySetItems;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventorySetSlot;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.KickDisconnect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Login;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Map;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.PlayerAbilities;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.PlayerInfo;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Position;
@@ -117,14 +110,7 @@ public class PEPacketEncoder extends AbstractLegacyPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WORLD_SOUND_ID, WorldSound.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WORLD_CUSTOM_SOUND_ID, WorldCustomSound.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BLOCK_BREAK_ANIMATION_ID, BlockBreakAnimation.class);
-		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_HELD_SLOT_ID, HeldSlot.class);
-		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_OPEN_ID, InventoryOpen.class);
-		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_CLOSE_ID, InventoryClose.class);
-		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_SET_ITEMS_ID, InventorySetItems.class);
-		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_SET_SLOT_ID, InventorySetSlot.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UPDATE_TILE_ID, BlockTileUpdate.class);
-		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_MAP_ID, Map.class);
-		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_EQUIPMENT_ID, EntityEquipment.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BLOCK_ACTION_ID, BlockAction.class);
 	}
 

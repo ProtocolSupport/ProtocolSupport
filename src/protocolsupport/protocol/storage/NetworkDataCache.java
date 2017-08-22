@@ -14,11 +14,8 @@ import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.NetworkEntity.DataCache;
-import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.Utils;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class NetworkDataCache {
@@ -75,32 +72,6 @@ public class NetworkDataCache {
 	public void closeWindow() {
 		this.windowType = WindowType.PLAYER;
 	}
-
-	private ItemStackWrapper cursorItem = ServerPlatform.get().getWrapperFactory().createNullItemStack();
-
-	public ItemStackWrapper getCursorItem() {
-		return cursorItem;
-	}
-
-	public void setCursorItem(ItemStackWrapper cursorItem) {
-		this.cursorItem = cursorItem;
-	}
-
-	private int actionNumber = 0;
-
-	public int getActionNumber() {
-		return actionNumber++;
-	}
-
-	public void resetActionNumber() {
-		actionNumber = 0;
-	}
-
-	Position clickedPosition = new Position(0, 0, 0);
-
-	public void setClickedPosition(Position clickedPosition) { this.clickedPosition = clickedPosition; }
-
-	public Position getClickedPosition() { return clickedPosition; }
 
 
 	private final TIntObjectHashMap<NetworkEntity> watchedEntities = new TIntObjectHashMap<>();
