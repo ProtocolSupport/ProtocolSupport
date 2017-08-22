@@ -342,7 +342,6 @@ public class NBTTagCompoundSerializer {
 	}
 
 	public static void writePeTag(ByteBuf os, boolean varint, NBTTagCompoundWrapper tag) throws IOException {
-		System.out.println("Writing NBT... Varint: " + varint + " tag: " + tag);
 		if (tag.isNull()) {
 			os.writeByte(NBTTagType.END.getId());
 			return;
