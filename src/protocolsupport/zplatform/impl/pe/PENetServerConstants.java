@@ -15,7 +15,7 @@ public class PENetServerConstants {
 			return String.join(";",
 				"MCPE",
 				Bukkit.getMotd().replace(";", ":"),
-				"133", "1.2.0",
+				"134", "1.2.0",
 				String.valueOf(Bukkit.getOnlinePlayers().size()), String.valueOf(Bukkit.getMaxPlayers())
 			);
 		}
