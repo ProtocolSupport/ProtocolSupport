@@ -13,6 +13,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Animatio
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.BlockTileUpdate;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Chat;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.CommandRequest;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.HeldSlot;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Interact;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.MapInfoRequest;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PlayerAction;
@@ -40,6 +41,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		registry.register(NetworkState.PLAY, PEPacketIDs.INTERACT, Interact.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.COMMAND_REQUEST, CommandRequest.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.TILE_DATA_UPDATE, BlockTileUpdate.class);
+		registry.register(NetworkState.PLAY, PEPacketIDs.PLAYER_HOTBAR, HeldSlot.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.MAP_INFO_REQUEST, MapInfoRequest.class);
 	}
 
