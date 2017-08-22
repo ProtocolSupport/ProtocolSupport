@@ -52,6 +52,7 @@ public class TileNBTRemapper {
 		peTypes.put("minecraft:daylight_detector", "DaylightDetector");
 		peTypes.put("minecraft:noteblock", "Music");
 		peTypes.put("minecraft:beacon", "Beacon");
+		peTypes.put("minecraft:shulker_box", "ShulkerBox");
 	}
 
 	private static final EnumMap<TileEntityUpdateType, EnumMap<ProtocolVersion, List<BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper>>>> registry = new EnumMap<>(TileEntityUpdateType.class);
