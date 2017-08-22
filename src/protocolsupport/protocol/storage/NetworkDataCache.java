@@ -132,10 +132,7 @@ public class NetworkDataCache {
 	}
 
 	public NetworkEntity getWatchedSelf() {
-		if(!watchedEntities.contains(getSelfPlayerEntityId())) {
-			return player;
-		}
-		return watchedEntities.get(this.getSelfPlayerEntityId());
+		return player;
 	}
 
 	private void readdSelfPlayer() {
