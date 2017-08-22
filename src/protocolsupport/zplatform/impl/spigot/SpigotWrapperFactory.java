@@ -7,8 +7,7 @@ import protocolsupport.zplatform.PlatformWrapperFactory;
 import protocolsupport.zplatform.impl.spigot.itemstack.SpigotItemStackWrapper;
 import protocolsupport.zplatform.impl.spigot.itemstack.SpigotNBTTagCompoundWrapper;
 import protocolsupport.zplatform.impl.spigot.itemstack.SpigotNBTTagListWrapper;
-import protocolsupport.zplatform.impl.spigot.network.handler.SpigotLegacyHandshakeListener;
-import protocolsupport.zplatform.impl.spigot.network.handler.SpigotModernHandshakeListener;
+import protocolsupport.zplatform.impl.spigot.network.handler.SpigotHandshakeListener;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
@@ -48,13 +47,8 @@ public class SpigotWrapperFactory implements PlatformWrapperFactory {
 	}
 
 	@Override
-	public AbstractHandshakeListener createModernHandshakeListener(NetworkManagerWrapper networkmanager, boolean hasCompression) {
-		return new SpigotModernHandshakeListener(networkmanager, hasCompression);
-	}
-
-	@Override
-	public AbstractHandshakeListener createLegacyHandshakeListener(NetworkManagerWrapper networkmanager) {
-		return new SpigotLegacyHandshakeListener(networkmanager);
+	public AbstractHandshakeListener createHandshakeListener(NetworkManagerWrapper networkmanager, boolean hasCompression, boolean fullEncryption) {
+		return new SpigotHandshakeListener(networkmanager, hasCompression, fullEncryption);
 	}
 
 }
