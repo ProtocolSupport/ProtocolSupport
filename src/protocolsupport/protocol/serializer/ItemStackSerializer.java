@@ -64,7 +64,7 @@ public class ItemStackSerializer {
 	}
 
 	public static void writeItemStack(ByteBuf to, ProtocolVersion version, String locale, ItemStackWrapper itemstack, boolean isToClient) {
-		if (itemstack.isNull()) {
+		if (itemstack == null || itemstack.isNull()) {
 			if (version == ProtocolVersion.MINECRAFT_PE) {
 				VarNumberSerializer.writeVarInt(to, 0);
 			} else {

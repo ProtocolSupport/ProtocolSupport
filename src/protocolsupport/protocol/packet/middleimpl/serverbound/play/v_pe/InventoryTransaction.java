@@ -17,6 +17,7 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.pe.PEInventory;
+import protocolsupport.protocol.typeremapper.pe.PEInventory.PESlot;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
@@ -110,22 +111,9 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 	public static final int INTERACT_ATTACK = 1;
 	public static final int INTERACT_AT = 2;
 
-	//Slot thingy numbers.
-	public static final int POCKET_INVENTORY = 0;
-	public static final int POCKET_OFFHAND = 119;
-	public static final int POCKET_ARMOR_EQUIPMENT = 120;
-	public static final int POCKET_CREATIVE_INVENTORY = 121;
-	public static final int POCKET_CLICKED_SLOT = 124;
-
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
-		for(int i = 0; i < transactions.length; i++) {
-			ServerBoundPacketData packet = transactions[i].toClick(cache);
-			if(packet != null) {
-				packets.add(packet);
-			}
-		}
 		switch(actionId) {
 			case ACTION_USE_ITEM: {
 				packets.add(MiddleHeldSlot.create(slot));
@@ -176,7 +164,15 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 				}
 				break;
 			}
-			case ACTION_NORMAL:
+			case ACTION_NORMAL: {
+				for(int i = 0; i < transactions.length; i++) {
+					ServerBoundPacketData packet = transactions[i].toClick(cache);
+					if(packet != null) {
+						packets.add(packet);
+					}
+				}
+				break;
+			}
 			case ACTION_MISMATCH:
 			default: {
 				break;
@@ -226,9 +222,9 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 		}
 
 		public ServerBoundPacketData toClick(NetworkDataCache cache) {
-			if(inventoryId == POCKET_CLICKED_SLOT) {
+			if(inventoryId == PESlot.POCKET_CLICKED_SLOT) {
 				cache.setCursorItem(newItem);
-			} else if (inventoryId == POCKET_INVENTORY) {
+			} else if (inventoryId == 0) {
 				System.out.println(cache.getLocale() + " wId: " + inventoryId + " Slot: " + PEInventory.remapServerboundSlot(cache.getOpenedWindow(), slot) + " Button: " + 0 + " ActionNumber.. " + /*cache.getActionNumber() +*/ " Action: " + 0 + " Cursor: " + cache.getCursorItem());
 				return MiddleInventoryClick.create(cache.getLocale(), inventoryId, PEInventory.remapServerboundSlot(cache.getOpenedWindow(), slot), 0, cache.getActionNumber(), 0, cache.getCursorItem());
 			}
