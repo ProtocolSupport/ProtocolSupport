@@ -16,6 +16,7 @@ import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
+@SuppressWarnings("deprecation")
 public class HoverAction {
 
 	private final Type type;
@@ -40,7 +41,6 @@ public class HoverAction {
 		this(new EntityInfo(entity));
 	}
 
-	@SuppressWarnings("deprecation")
 	public HoverAction(EntityInfo entityinfo) {
 		this.type = Type.SHOW_ENTITY;
 		NBTTagCompoundWrapper compound = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
@@ -80,7 +80,6 @@ public class HoverAction {
 		return ServerPlatform.get().getMiscUtils().createItemStackFromNBTTag(ServerPlatform.get().getWrapperFactory().createNBTCompoundFromJson(value));
 	}
 
-	@SuppressWarnings("deprecation")
 	public EntityInfo getEntity() {
 		validateAction(type, Type.SHOW_ENTITY);
 		NBTTagCompoundWrapper compound = ServerPlatform.get().getWrapperFactory().createNBTCompoundFromJson(value);
