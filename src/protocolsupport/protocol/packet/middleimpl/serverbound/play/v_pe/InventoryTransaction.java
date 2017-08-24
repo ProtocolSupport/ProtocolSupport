@@ -23,8 +23,8 @@ import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
-//DKTAPPS THANK YOU FOR HELPING ME!
-//The Pe GodPacket... I'm going to make him an offer he can't refuse...
+//DKTAPPS THANK YOU FOR HELPING ME! - This would have been insufferable without him.
+//The Pe GodPacket. I'm going to make him an offer he can't refuse...
 public class InventoryTransaction extends ServerBoundMiddlePacket {
 
 	//Transactions
@@ -221,12 +221,10 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 		}
 
 		public ServerBoundPacketData toClick(NetworkDataCache cache) {
-			
 			//Different. Set the cursoritem because we need to send that in one go to PC. (PE uses two packets)
 			if (inventoryId == PESource.POCKET_CLICKED_SLOT) {
 				cache.setCursorItem(newItem);
 			}
-			
 			switch(cache.getOpenedWindow()) {
 				case PLAYER: {
 					int sSlot = -1; //Slot to send.
@@ -260,14 +258,13 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 						}
 					}
 					if (sSlot != -1) {
-						System.out.println(cache.getLocale() + " wId: " + inventoryId + " Slot: " + sSlot + " Button: " + 0 + " ActionNumber.. " + /*cache.getActionNumber() +*/ " Action: " + 0 + " Cursor: " + cache.getCursorItem());
-						return MiddleInventoryClick.create(cache.getLocale(), inventoryId, sSlot, 0, cache.getActionNumber(), 0, cache.getCursorItem());
+						System.out.println(cache.getLocale() + " wId: " + 0 + " Slot: " + sSlot + " Button: " + 0 + " ActionNumber.. " + /*cache.getActionNumber() +*/ " Action: " + 0 + " Cursor: " + cache.getCursorItem());
+						return MiddleInventoryClick.create(cache.getLocale(), 0, sSlot, 0, cache.getActionNumber(), 0, cache.getCursorItem());
 					}
 				}
 				default: {
 					break;
 				}
-			
 			}
 			return null;
 		}
