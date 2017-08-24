@@ -27,6 +27,6 @@ public class PENetServerConstants {
 
 	public static final int USER_PACKET_ID = 0xFE;
 
-	public static final int TEST_PORT = 2222;
+	public static final int TEST_PORT = 19138;
 
 }

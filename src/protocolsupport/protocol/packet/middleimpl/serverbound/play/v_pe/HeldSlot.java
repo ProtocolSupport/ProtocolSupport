@@ -14,6 +14,7 @@ public class HeldSlot extends MiddleHeldSlot {
 		for(int i = 0; i < linkedSlots.length; i++) {
 			linkedSlots[i] = VarNumberSerializer.readVarInt(clientdata);
 		}
+		//TODO: Figure out this linked slot thing and check if I am faking it ok. This here doesn't get called often. For now the inv transaction works ok.
 		System.out.println("Client held slot: " + slot + " windowId: " + windowId + " linkedSlots: " + linkedSlots.toString());
 	}
 
