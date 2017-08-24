@@ -68,7 +68,7 @@ sourceSets {
 }
 
 
-task generateLocaleList(type: DefaultTask) << {
+task generateLocaleList(type: DefaultTask) {doLast{
 	ArrayList<String> locales = new ArrayList<String>();
 	for (String filename : new File(sourceSets.main.resources.srcDirs.iterator().next(), "resources/i18n").list()) {
 		String[] split = filename.split("[.]");
@@ -84,9 +84,9 @@ task generateLocaleList(type: DefaultTask) << {
 		writer.println(locale);
 	}
 	writer.close();
-}
+}}
 
-task generateInfo(type: DefaultTask) << {
+task generateInfo(type: DefaultTask) {doLast{
 	Properties properties = new Properties();
 	properties.setProperty("buildtime", new Date().format("yyyy.MM.dd 'at' HH:mm:ss z"));
 	properties.setProperty("buildhost", System.getProperty("protocolsupport.buildhost", "unknown"));
@@ -95,7 +95,7 @@ task generateInfo(type: DefaultTask) << {
 	buildinfo.getParentFile().mkdirs();
 	buildinfo.createNewFile();
 	properties.store(new FileOutputStream(buildinfo), "Build info");
-}
+}}
 
 repositories {
 	mavenCentral()
