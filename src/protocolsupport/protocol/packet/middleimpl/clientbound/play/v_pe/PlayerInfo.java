@@ -46,7 +46,7 @@ public class PlayerInfo extends MiddlePlayerInfo {
 		}
 
 		ClientBoundPacketData packetData = ClientBoundPacketData.create(PEPacketIDs.CRAFTING_DATA, ProtocolVersion.MINECRAFT_PE);
-		packetData.writeBytes(PECraftingManager.getInstance().getAllRecipes().array());
+		packetData.writeBytes(MiscSerializer.readAllBytes(PECraftingManager.getInstance().getAllRecipes()));
 		packets.add(packetData);
 		return packets;
 	}
