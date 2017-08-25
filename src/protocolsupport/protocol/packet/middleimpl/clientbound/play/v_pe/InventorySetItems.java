@@ -18,6 +18,7 @@ public class InventorySetItems extends MiddleInventorySetItems {
 		ProtocolVersion version = connection.getVersion();
 		String locale = cache.getLocale();
 		RecyclableArrayList<ClientBoundPacketData> contentpackets = RecyclableArrayList.create();
+		ItemStackWrapper[] items = itemstacks.toArray(new ItemStackWrapper[itemstacks.size()]);
 		switch(cache.getOpenedWindow()) {
 			case PLAYER: {
 				ItemStackWrapper[] peInvGridResult = new ItemStackWrapper[1];
@@ -25,21 +26,12 @@ public class InventorySetItems extends MiddleInventorySetItems {
 				ItemStackWrapper[] peArmor = new ItemStackWrapper[4];
 				ItemStackWrapper[] peInventory = new ItemStackWrapper[36];
 				ItemStackWrapper[] peOffhand = new ItemStackWrapper[1];
-				for (int i = 0; i < itemstacks.size(); i++) {
-					if (i == 0) {
-						peInvGridResult[0] = itemstacks.get(i);
-					} else if (i <= 4) {
-						peInvGrid[i - 1] = itemstacks.get(i);
-					} else if (i <= 8) {
-						peArmor[i - 5] = itemstacks.get(i);
-					} else if (i <= 35) {
-						peInventory[i] = itemstacks.get(i);
-					} else if (i <= 44) {
-						peInventory[i - 36] = itemstacks.get(i);
-					} else if (i == 45) {
-						peOffhand[0] = itemstacks.get(i);
-					}
-				}
+				System.arraycopy(items, 0, peInvGridResult, 0, 1);
+				System.arraycopy(items, 1, peInvGrid, 0, 4);
+				System.arraycopy(items, 5, peArmor, 0, 4);
+				System.arraycopy(items, 36, peInventory, 0, 9);
+				System.arraycopy(items, 9, peInventory, 9, 27);
+				System.arraycopy(items, 45, peOffhand, 0, 1);
 				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_CRAFTING_RESULT, peInvGridResult));
 				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_CRAFTING_GRID, peInvGrid));
 				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_ARMOR_EQUIPMENT, peArmor));
@@ -48,7 +40,7 @@ public class InventorySetItems extends MiddleInventorySetItems {
 				break;
 			}
 			default: {
-				contentpackets.add(InventorySetItems.create(version, locale, windowId, (ItemStackWrapper[]) itemstacks.toArray()));
+				contentpackets.add(InventorySetItems.create(version, locale, windowId, items));
 				break;
 			}
 		}
@@ -65,5 +57,5 @@ public class InventorySetItems extends MiddleInventorySetItems {
 		}
 		return serializer;
 	}
-
+	
 }
