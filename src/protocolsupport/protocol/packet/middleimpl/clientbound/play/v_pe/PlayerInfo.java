@@ -12,7 +12,6 @@ import protocolsupport.protocol.typeremapper.pe.PESkin;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
-import protocolsupport.zplatform.pe.PECraftingManager;
 
 public class PlayerInfo extends MiddlePlayerInfo {
 
