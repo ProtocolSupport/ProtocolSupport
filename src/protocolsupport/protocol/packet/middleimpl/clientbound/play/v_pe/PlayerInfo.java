@@ -12,6 +12,10 @@ import protocolsupport.protocol.typeremapper.pe.PESkin;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
+import protocolsupport.zplatform.impl.spigot.itemstack.SpigotItemStackWrapper;
+import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
+import protocolsupport.zplatform.pe.PECraftingManager;
 
 public class PlayerInfo extends MiddlePlayerInfo {
 
@@ -45,6 +49,9 @@ public class PlayerInfo extends MiddlePlayerInfo {
 				return RecyclableEmptyList.get();
 			}
 		}
+
+		packets.add(PECraftingManager.getInstance().getAllRecipies());
+		return packets;
 	}
 
 }
