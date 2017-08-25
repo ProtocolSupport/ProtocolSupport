@@ -46,10 +46,8 @@ public class ItemStackSerializer {
 				itemstack.setData((amountdata >> 8) & 0xFFFF);
 				itemstack.setTag(readTag(from, false, version));
 				//TODO: Read the rest properly..
-				from.readByte();
-				from.readByte();
-				//ArraySerializer.readVarIntStringArray(from, version); //TODO: CanPlaceOn PE
-				//ArraySerializer.readVarIntStringArray(from, version); //TODO: CanDestroy PE
+				from.readByte(); //TODO: CanPlaceOn PE
+				from.readByte(); //TODO: CanDestroy PE
 			} else {
 				itemstack.setAmount(from.readByte());
 				itemstack.setData(from.readUnsignedShort());
