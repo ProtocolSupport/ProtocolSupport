@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Properties;
 import java.util.logging.Level;
-
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.commands.CommandHandler;
 import protocolsupport.listeners.FeatureEmulation;
@@ -43,6 +41,12 @@ import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.impl.pe.PEProxyServer;
+import protocolsupport.zplatform.pe.PECraftingManager;
+
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.Properties;
+import java.util.logging.Level;
 
 public class ProtocolSupport extends JavaPlugin {
 
@@ -127,7 +131,10 @@ public class ProtocolSupport extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new FeatureEmulation(), this);
 		getServer().getPluginManager().registerEvents(new ReloadCommandBlocker(), this);
 		getServer().getPluginManager().registerEvents(new MultiplePassengersRestrict(), this);
-		getServer().getScheduler().scheduleSyncDelayedTask(this, () -> (peserver = new PEProxyServer()).start());
+		getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
+			(peserver = new PEProxyServer()).start();
+			PECraftingManager.getInstance().registerRecipes();
+		});
 	}
 
 	@Override

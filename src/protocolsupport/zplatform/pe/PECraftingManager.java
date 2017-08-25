@@ -1,29 +1,32 @@
 package protocolsupport.zplatform.pe;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufUtil;
-import net.minecraft.server.v1_12_R1.*;
-import org.bukkit.inventory.ItemStack;
+import io.netty.buffer.Unpooled;
+import net.minecraft.server.v1_12_R1.Block;
+import net.minecraft.server.v1_12_R1.Item;
+import net.minecraft.server.v1_12_R1.ItemStack;
+import org.bukkit.Bukkit;
+import org.bukkit.inventory.FurnaceRecipe;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
+import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
-import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.IntTuple;
 import protocolsupport.zplatform.impl.spigot.itemstack.SpigotItemStackWrapper;
 
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
-import java.nio.MappedByteBuffer;
+import java.util.Map;
 import java.util.UUID;
 
 public class PECraftingManager {
     private static PECraftingManager instance = null;
 
-    private final ClientBoundPacketData allRecipies;
-    private ByteBuf byteBuf = ByteBufUtil.threadLocalDirectBuffer();
+    private static final org.bukkit.inventory.ItemStack AIR = new org.bukkit.inventory.ItemStack(0, 0);
+
+    private ByteBuf byteBuf = Unpooled.buffer();
     private int recipeCount = 0;
 
     public static PECraftingManager getInstance()    {
@@ -34,32 +37,68 @@ public class PECraftingManager {
     }
 
     public PECraftingManager()  {
-        allRecipies = ClientBoundPacketData.create(PEPacketIDs.CRAFTING_DATA, ProtocolVersion.MINECRAFT_PE);
     }
 
-    public ClientBoundPacketData getAllRecipies()   {
-        return allRecipies;
+    public ByteBuf getAllRecipes()   {
+        return byteBuf;
     }
 
-    public void registerRecipies()  {
-        registerCrafting();
-        registerFurnace();
+    public void registerRecipes()  {
+        ProtocolSupport.logInfo("Processing and caching crafting recipes...");
+        Bukkit.recipeIterator().forEachRemaining(recipe -> {
+            if (recipe instanceof ShapedRecipe) {
+                ShapedRecipe shapedRecipe = (ShapedRecipe) recipe;
+                Map<Character, org.bukkit.inventory.ItemStack> map = shapedRecipe.getIngredientMap(); //caching for SPEEEEEEED
+                String[] pattern = shapedRecipe.getShape(); //caching for SPEEEEEEED
+                int width = pattern[0].length(), height = pattern.length;
+                SpigotItemStackWrapper[] required = new SpigotItemStackWrapper[width * height];
+                for (int z = 0; z < height; ++z) {
+                    for (int x = 0; x < width; ++x) {
+                        int i = z * x;
+                        char key = pattern[z].charAt(x);
+                        try {
+                            org.bukkit.inventory.ItemStack stack = map.get(key);
+                            required[i] = stack == null || stack.getTypeId() < 1 ? (SpigotItemStackWrapper) SpigotItemStackWrapper.create(0) : fromBukkitStack(stack);
+                        } catch (NullPointerException e)    {
+                            ProtocolSupport.logInfo("[WARN] Unable to locate key " + key + " for recipe with output " + recipe.getResult().toString());
+                            return;
+                        }
+                    }
+                }
+                addRecipeShaped(fromBukkitStack(shapedRecipe.getResult()), width, height, required);
+            } else if (recipe instanceof ShapelessRecipe)   {
+                ShapelessRecipe shapelessRecipe = (ShapelessRecipe) recipe;
+                SpigotItemStackWrapper[] required = new SpigotItemStackWrapper[shapelessRecipe.getIngredientList().size()];
+                for (int i = 0; i < required.length; i++)   {
+                    required[i] = fromBukkitStack(shapelessRecipe.getIngredientList().get(i));
+                }
+                addRecipeShapeless(fromBukkitStack(recipe.getResult()), required);
+            } else if (recipe instanceof FurnaceRecipe) {
+                FurnaceRecipe shapelessRecipe = (FurnaceRecipe) recipe;
+                addRecipeFurnace(fromBukkitStack(shapelessRecipe.getResult()), fromBukkitStack(shapelessRecipe.getInput()));
+            } else {
+                ProtocolSupport.logInfo("unknown recipe type: " + recipe.getClass().getCanonicalName());
+            }
+        });
 
-        VarNumberSerializer.writeVarInt(allRecipies, recipeCount);
-        allRecipies.writeBytes(byteBuf);
-        byteBuf = null;
+        byte[] cached = byteBuf.array();
+        byteBuf.clear();
+
+        VarNumberSerializer.writeVarInt(byteBuf, recipeCount);
+        byteBuf.writeBytes(cached);
+
+        ProtocolSupport.logInfo("Done! Processed " + recipeCount + " recipes!");
     }
 
-    private void registerFurnace()  {
-        addRecipeFurnace(getId(Blocks.GLASS), 1, getId(Blocks.SAND), 0);
-    }
-
-    private void registerCrafting()  {
-        addRecipeShapeless(getId(Blocks.PLANKS), 4, getIds(Blocks.LOG));
-        addRecipeShaped(getId(Blocks.CRAFTING_TABLE), 1, 2, 2, getIds(Blocks.PLANKS, Blocks.PLANKS, Blocks.PLANKS, Blocks.PLANKS));
-        addRecipeShaped(getId(Blocks.FURNACE), 1, 3, 3, getIds(Blocks.COBBLESTONE, Blocks.COBBLESTONE, Blocks.COBBLESTONE, Blocks.COBBLESTONE, null, Blocks.COBBLESTONE, Blocks.COBBLESTONE, Blocks.COBBLESTONE, Blocks.COBBLESTONE));
-        addRecipeShaped(getId(Items.WOODEN_PICKAXE), 1, 3, 3, getIds(Blocks.PLANKS, Blocks.PLANKS, Blocks.PLANKS, null, Items.STICK, null, null, Items.STICK, null));
-        addRecipeShaped(getId(Items.STICK), 4, 1, 2, getIds(Blocks.PLANKS));
+    public SpigotItemStackWrapper fromBukkitStack(org.bukkit.inventory.ItemStack stack) {
+        //ProtocolSupport.logInfo(stack.toString());
+        Item i = Item.getById(
+                stack.getType().getId());
+        if (i != null)  {
+            return new SpigotItemStackWrapper(new ItemStack(i, stack.getAmount(), stack.getDurability()));
+        }
+        Block b = Block.getById(stack.getTypeId());
+        return new SpigotItemStackWrapper(new ItemStack(b, stack.getAmount(), stack.getDurability()));
     }
 
     public int getId(Block b)   {
@@ -86,51 +125,49 @@ public class PECraftingManager {
         return result;
     }
 
-    public void addRecipeShaped(int output, int count, int width, int height, int[] required)   {
+    public void addRecipeShaped(SpigotItemStackWrapper output, int width, int height, SpigotItemStackWrapper[] required)    {
         recipeCount++;
         VarNumberSerializer.writeSVarInt(byteBuf, 1); //type
         VarNumberSerializer.writeSVarInt(byteBuf, width);
         VarNumberSerializer.writeSVarInt(byteBuf, height);
-        for (int id : required) {
-            ItemStackSerializer.writeItemStack(byteBuf, ProtocolVersion.MINECRAFT_PE, "en_US", SpigotItemStackWrapper.create(id), true);
+        for (SpigotItemStackWrapper stack : required) {
+            ItemStackSerializer.writeItemStack(byteBuf, ProtocolVersion.MINECRAFT_PE, "en_US", stack, true);
         }
         VarNumberSerializer.writeVarInt(byteBuf, 1); //not sure but pocketmine has it
-        ItemStackSerializer.writeItemStack(byteBuf, ProtocolVersion.MINECRAFT_PE, "en_US", new SpigotItemStackWrapper(new net.minecraft.server.v1_12_R1.ItemStack(Item.getById(output), count)), true);
+        ItemStackSerializer.writeItemStack(byteBuf, ProtocolVersion.MINECRAFT_PE, "en_US", output, true);
         MiscSerializer.writeUUID(byteBuf, UUID.nameUUIDFromBytes(byteBuf.array()));
     }
 
-    public void addRecipeShapeless(int output, int count, int[] required)   {
+    public void addRecipeShapeless(SpigotItemStackWrapper output, SpigotItemStackWrapper[] required)    {
         recipeCount++;
-        VarNumberSerializer.writeSVarInt(byteBuf, 0); //type
+        VarNumberSerializer.writeSVarInt(byteBuf, 0);
         VarNumberSerializer.writeVarInt(byteBuf, required.length);
-        for (int id : required) {
-            ItemStackSerializer.writeItemStack(byteBuf, ProtocolVersion.MINECRAFT_PE, "en_US", SpigotItemStackWrapper.create(id), true);
+        for (SpigotItemStackWrapper stack : required) {
+            ItemStackSerializer.writeItemStack(byteBuf, ProtocolVersion.MINECRAFT_PE, "en_US", stack, true);
         }
         VarNumberSerializer.writeVarInt(byteBuf, 1); //not sure but pocketmine has it
-        ItemStackSerializer.writeItemStack(byteBuf, ProtocolVersion.MINECRAFT_PE, "en_US", new SpigotItemStackWrapper(new net.minecraft.server.v1_12_R1.ItemStack(Item.getById(output), count)), true);
+        ItemStackSerializer.writeItemStack(byteBuf, ProtocolVersion.MINECRAFT_PE, "en_US", output, true);
         MiscSerializer.writeUUID(byteBuf, UUID.nameUUIDFromBytes(byteBuf.array()));
     }
 
-    public void addRecipeFurnace(int output, int count, int required, int meta)   {
-        IntTuple iddata = ItemStackRemapper.ID_DATA_REMAPPING_REGISTRY.getTable(ProtocolVersion.MINECRAFT_PE).getRemap(required, meta == -1 ? 0 : meta);
+    public void addRecipeFurnace(SpigotItemStackWrapper output, SpigotItemStackWrapper input)   {
+        IntTuple iddata = ItemStackRemapper.ID_DATA_REMAPPING_REGISTRY.getTable(ProtocolVersion.MINECRAFT_PE).getRemap(input.getTypeId(), input.getData());
         if (iddata != null) {
-            required = iddata.getI1();
+            input.setTypeId(iddata.getI1());
             if (iddata.getI2() != -1) {
-               meta = iddata.getI2();
-            } else {
-                meta = -1;
+                input.setData(iddata.getI2());
             }
         }
 
-        if (meta == -1 || meta == 0) {
+        if (input.getData() == 0) {
             VarNumberSerializer.writeSVarInt(byteBuf, 2); //type
-            VarNumberSerializer.writeSVarInt(byteBuf, required);
-            ItemStackSerializer.writeItemStack(byteBuf, ProtocolVersion.MINECRAFT_PE, "en_US", new SpigotItemStackWrapper(new net.minecraft.server.v1_12_R1.ItemStack(Item.getById(output), count)), true);
+            VarNumberSerializer.writeSVarInt(byteBuf, input.getTypeId());
+            ItemStackSerializer.writeItemStack(byteBuf, ProtocolVersion.MINECRAFT_PE, "en_US", output, true);
         } else { //meta recipe
             VarNumberSerializer.writeSVarInt(byteBuf, 3); //type
-            VarNumberSerializer.writeSVarInt(byteBuf, required);
-            VarNumberSerializer.writeSVarInt(byteBuf, meta);
-            ItemStackSerializer.writeItemStack(byteBuf, ProtocolVersion.MINECRAFT_PE, "en_US", new SpigotItemStackWrapper(new net.minecraft.server.v1_12_R1.ItemStack(Item.getById(output), count)), true);
+            VarNumberSerializer.writeSVarInt(byteBuf, input.getTypeId());
+            VarNumberSerializer.writeSVarInt(byteBuf, input.getData());
+            ItemStackSerializer.writeItemStack(byteBuf, ProtocolVersion.MINECRAFT_PE, "en_US", output, true);
         }
     }
 }
