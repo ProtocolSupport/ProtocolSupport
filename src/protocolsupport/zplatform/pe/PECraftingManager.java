@@ -14,6 +14,8 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.utils.IntTuple;
+import protocolsupport.zplatform.PlatformWrapperFactory;
+import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.impl.spigot.itemstack.SpigotNBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -52,14 +54,14 @@ public class PECraftingManager {
                 Map<Character, org.bukkit.inventory.ItemStack> map = shapedRecipe.getIngredientMap(); //caching for SPEEEEEEED
                 String[] pattern = shapedRecipe.getShape(); //caching for SPEEEEEEED
                 int width = pattern[0].length(), height = pattern.length;
-                ItemStackWrapper[] required = new RecipeItemStackWrapper[width * height];
+                ItemStackWrapper[] required = new ItemStackWrapper[width * height];
                 for (int z = 0; z < height; ++z) {
                     for (int x = 0; x < width; ++x) {
                         int i = z * x;
                         char key = pattern[z].charAt(x);
                         try {
                             org.bukkit.inventory.ItemStack stack = map.get(key);
-                            required[i] = stack == null || stack.getTypeId() < 1 ? RecipeItemStackWrapper.createNull() : fromBukkitStack(stack);
+                            required[i] = stack == null || stack.getTypeId() < 1 ? ServerPlatform.get().getWrapperFactory().createItemStack(0) : fromBukkitStack(stack);
                         } catch (NullPointerException e)    {
                             ProtocolSupport.logInfo("[WARN] Unable to locate key " + key + " for recipe with output " + recipe.getResult().toString());
                             return;
@@ -69,7 +71,7 @@ public class PECraftingManager {
                 addRecipeShaped(fromBukkitStack(shapedRecipe.getResult()), width, height, required);
             } else if (recipe instanceof ShapelessRecipe)   {
                 ShapelessRecipe shapelessRecipe = (ShapelessRecipe) recipe;
-                ItemStackWrapper[] required = new RecipeItemStackWrapper[shapelessRecipe.getIngredientList().size()];
+                ItemStackWrapper[] required = new ItemStackWrapper[shapelessRecipe.getIngredientList().size()];
                 for (int i = 0; i < required.length; i++)   {
                     required[i] = fromBukkitStack(shapelessRecipe.getIngredientList().get(i));
                 }
@@ -92,7 +94,7 @@ public class PECraftingManager {
     }
 
     public ItemStackWrapper fromBukkitStack(org.bukkit.inventory.ItemStack stack) {
-        return new RecipeItemStackWrapper(stack);
+        return ServerPlatform.get().getWrapperFactory().createItemStack(stack.getType());
     }
 
     public void addRecipeShaped(ItemStackWrapper output, int width, int height, ItemStackWrapper[] required)    {
@@ -138,113 +140,6 @@ public class PECraftingManager {
             VarNumberSerializer.writeSVarInt(byteBuf, input.getTypeId());
             VarNumberSerializer.writeSVarInt(byteBuf, input.getData());
             ItemStackSerializer.writeItemStack(byteBuf, ProtocolVersion.MINECRAFT_PE, "en_US", output, true);
-        }
-    }
-
-    private static class RecipeItemStackWrapper extends ItemStackWrapper   {
-        protected final org.bukkit.inventory.ItemStack itemstack;
-        public RecipeItemStackWrapper(org.bukkit.inventory.ItemStack itemstack) {
-            this.itemstack = itemstack;
-        }
-
-        public static RecipeItemStackWrapper createNull() {
-            return create(Material.AIR.getId());
-        }
-
-        public static RecipeItemStackWrapper create(int typeId) {
-            return new RecipeItemStackWrapper(new org.bukkit.inventory.ItemStack(Material.getMaterial(typeId)));
-        }
-
-        @Override
-        public org.bukkit.inventory.ItemStack asBukkitMirror() {
-            return itemstack;
-        }
-
-        @Override
-        public boolean isNull() {
-            return itemstack == null || itemstack.getType() == Material.AIR;
-        }
-
-        @Override
-        public int getTypeId() {
-            return itemstack.getTypeId();
-        }
-
-        @Override
-        @SuppressWarnings("deprecation")
-        public Material getType() {
-            return itemstack.getType();
-        }
-
-        @Override
-        @SuppressWarnings("deprecation")
-        public void setTypeId(int typeId) {
-            Material material = Material.getMaterial(typeId);
-            itemstack.setType(material == null ? Material.AIR : material);
-        }
-
-        @Override
-        @SuppressWarnings("deprecation")
-        public void setType(Material material) {
-            setTypeId(material.getId());
-        }
-
-        @Override
-        public int getData() {
-            return itemstack.getData().getData();
-        }
-
-        @Override
-        public void setData(int data) {
-            itemstack.getData().setData((byte) data);
-        }
-
-        @Override
-        public int getAmount() {
-            return itemstack.getAmount();
-        }
-
-        @Override
-        public void setAmount(int amount) {
-            itemstack.setAmount(amount);
-        }
-
-        @Override
-        public void setDisplayName(String displayName) {
-        }
-
-        @Override
-        public SpigotNBTTagCompoundWrapper getTag() {
-            return SpigotNBTTagCompoundWrapper.wrap(null);
-        }
-
-        @Override
-        public void setTag(NBTTagCompoundWrapper tag) {
-
-        }
-
-        @Override
-        public ItemStackWrapper cloneItemStack() {
-            return new RecipeItemStackWrapper(itemstack.clone());
-        }
-
-        @Override
-        public int hashCode() {
-            return itemstack != null ? itemstack.hashCode() : 0;
-        }
-
-        @Override
-        public boolean equals(Object otherObj) {
-            if (!(otherObj instanceof RecipeItemStackWrapper)) {
-                return false;
-            }
-            RecipeItemStackWrapper other = (RecipeItemStackWrapper) otherObj;
-            return Objects.equals(itemstack, other.itemstack);
-        }
-
-        @Override
-        public String toString() {
-            return String.valueOf(itemstack);
         }
     }
 }
