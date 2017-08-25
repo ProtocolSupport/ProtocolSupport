@@ -10,6 +10,8 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.typeremapper.pe.PESkin;
 import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableEmptyList;
+import protocolsupport.utils.recyclable.RecyclableSingletonList;
 import protocolsupport.zplatform.pe.PECraftingManager;
 
 public class PlayerInfo extends MiddlePlayerInfo {
@@ -44,11 +46,6 @@ public class PlayerInfo extends MiddlePlayerInfo {
 				return RecyclableEmptyList.get();
 			}
 		}
-
-		ClientBoundPacketData packetData = ClientBoundPacketData.create(PEPacketIDs.CRAFTING_DATA, ProtocolVersion.MINECRAFT_PE);
-		packetData.writeBytes(MiscSerializer.readAllBytes(PECraftingManager.getInstance().getAllRecipes()));
-		packets.add(packetData);
-		return packets;
 	}
 
 }
