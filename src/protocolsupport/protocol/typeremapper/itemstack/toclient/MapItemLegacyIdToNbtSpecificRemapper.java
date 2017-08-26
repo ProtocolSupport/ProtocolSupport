@@ -14,10 +14,12 @@ public class MapItemLegacyIdToNbtSpecificRemapper implements ItemStackSpecificRe
 		if (tag.isNull()) {
 			tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
 		}
-		tag.setString("map_uuid", String.valueOf(itemstack.getData()));
-		tag.setByte("map_player_display", 1); //TODO: Fix players not showing up.
-		itemstack.setTag(tag);
-		itemstack.setData(0);
+		if(itemstack.getData() != Integer.MAX_VALUE) {
+			tag.setString("map_uuid", String.valueOf(itemstack.getData()));
+			tag.setByte("map_player_display", 1); //TODO: Fix players not showing up.
+			itemstack.setTag(tag);
+			itemstack.setData(0);
+		}
 		return itemstack;
 	}
 
