@@ -63,17 +63,25 @@ public class NetworkDataCache {
 	}
 
 	private WindowType windowType = WindowType.PLAYER;
+	private int windowId = 0;
 
-	public void setOpenedWindow(WindowType windowType) {
+	public void setOpenedWindow(WindowType windowType, int windowId) {
 		this.windowType = windowType;
+		this.windowId = windowId;
+		System.out.println("MEEEP!: " + windowId);
 	}
 
 	public WindowType getOpenedWindow() {
 		return this.windowType;
 	}
+	
+	public int getOpenedWindowId() {
+		return this.windowId;
+	}
 
 	public void closeWindow() {
 		this.windowType = WindowType.PLAYER;
+		this.windowId = 0;
 	}
 
 	private ItemStackWrapper cursorItem = ServerPlatform.get().getWrapperFactory().createNullItemStack();
