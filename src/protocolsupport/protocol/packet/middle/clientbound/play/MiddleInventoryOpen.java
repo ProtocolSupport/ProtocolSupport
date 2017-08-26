@@ -29,7 +29,7 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 
 	@Override
 	public void handle() {
-		cache.setOpenedWindow(type, windowId);
+		cache.setOpenedWindow(type, windowId, slots);
 	}
 
 }
