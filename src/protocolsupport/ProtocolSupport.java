@@ -132,9 +132,9 @@ public class ProtocolSupport extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new ReloadCommandBlocker(), this);
 		getServer().getPluginManager().registerEvents(new MultiplePassengersRestrict(), this);
 		getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
+			PECraftingManager.getInstance().registerRecipes();
 			(peserver = new PEProxyServer()).start();
 		});
-		PECraftingManager.getInstance().registerRecipes();
 	}
 
 	@Override
