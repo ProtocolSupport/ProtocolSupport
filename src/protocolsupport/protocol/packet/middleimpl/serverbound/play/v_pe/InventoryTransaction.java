@@ -217,6 +217,7 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 			transaction.slot = VarNumberSerializer.readVarInt(from);
 			transaction.oldItem = ItemStackSerializer.readItemStack(from, version, locale, true);
 			transaction.newItem = ItemStackSerializer.readItemStack(from, version, locale, true);
+			System.out.println("Inv transaction read: sId: " + transaction.sourceId + " wId: " + transaction.inventoryId + " action: " + transaction.action + " slot: " + transaction.slot);
 			return transaction;
 		}
 
@@ -224,10 +225,12 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 			//Different. Set the cursoritem because we need to send that in one go to PC. (PE uses two packets)
 			if (inventoryId == PESource.POCKET_CLICKED_SLOT) {
 				cache.setCursorItem(newItem);
+				return null;
 			}
+			
+			int sSlot = -1; //Slot to send.
 			switch(cache.getOpenedWindow()) {
 				case PLAYER: {
-					int sSlot = -1; //Slot to send.
 					switch(inventoryId) {
 						case PESource.POCKET_CRAFTING_RESULT: {
 							sSlot = 0;
@@ -242,11 +245,11 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 							break;
 						}
 						case PESource.POCKET_INVENTORY: {
-							if (slot < 9) {
-								sSlot = slot + 36;
-							} else {
-								sSlot = slot;
-							}
+								if (slot < 9) {
+									sSlot = slot + 36;
+								} else {
+									sSlot = slot;
+								}
 							break;
 						}
 						case PESource.POCKET_OFFHAND: {
@@ -257,18 +260,66 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 							break;
 						}
 					}
-					if (sSlot != -1) {
-						System.out.println(cache.getLocale() + " wId: " + 0 + " Slot: " + sSlot + " Button: " + 0 + " ActionNumber.. " + /*cache.getActionNumber() +*/ " Action: " + 0 + " Cursor: " + cache.getCursorItem());
-						return MiddleInventoryClick.create(cache.getLocale(), 0, sSlot, 0, cache.getActionNumber(), 0, cache.getCursorItem());
+					break;
+				}
+				case ANVIL: case VILLAGER: case FURNACE: {
+					if (inventoryId == PESource.POCKET_INVENTORY) {
+						if (slot < 9) {
+							sSlot = slot + 30;
+						} else {
+							sSlot = slot - 6;
+						}
+					} else {
+						sSlot = slot;
+					}
+					break;
+				}
+				case DROPPER: case DISPENSER: case CRAFTING_TABLE: {
+					if (inventoryId == PESource.POCKET_INVENTORY) {
+						if (slot < 9) {
+							sSlot = slot + 36;
+						} else {
+							sSlot = slot;
+						}
+					} else {
+						sSlot = slot;
+					}
+					break;
+				}
+				case HOPPER: {
+					if (inventoryId == PESource.POCKET_INVENTORY) {
+						if(slot < 9) {
+							sSlot = slot + 32;
+						} else {
+							sSlot = slot - 4;
+						}
+					} else {
+						sSlot = slot;
+					}
+					break;
+				}
+				case BEACON: {
+					if(inventoryId == PESource.POCKET_INVENTORY) {
+						if (slot < 9) {
+							sSlot = slot + 28;
+						} else {
+							sSlot = slot - 8;
+						}
+					} else {
+						sSlot = slot;
 					}
 				}
 				default: {
 					break;
 				}
 			}
+			if (sSlot != -1) {
+				System.out.println(cache.getLocale() + " wId: " + cache.getOpenedWindowId() + " Slot: " + sSlot + " Button: " + 0 + " ActionNumber.. " + /*cache.getActionNumber() +*/ " Action: " + 0 + " Cursor: " + cache.getCursorItem());
+				return MiddleInventoryClick.create(cache.getLocale(), cache.getOpenedWindowId(), sSlot, 0, cache.getActionNumber(), 0, cache.getCursorItem());
+			}
 			return null;
 		}
-
+		
 		@Override
 		public String toString() {
 			return Utils.toStringAllFields(this);

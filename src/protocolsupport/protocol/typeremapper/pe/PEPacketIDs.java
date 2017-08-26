@@ -44,7 +44,7 @@ public class PEPacketIDs {
 	public static final int PLAYER_HOTBAR = 48;
 	public static final int INVENTORY_CONTENT = 49;
 	public static final int INVENTORY_SLOT = 50;
-	//public static final int CONTAINER_DATA = 51;
+	public static final int CONTAINER_DATA = 51;
 	public static final int CRAFTING_DATA = 52;
 	//public static final int CRAFTING_EVENT = 53;
 	//public static final int GUI_DATA_PICK_ITEM = 54;

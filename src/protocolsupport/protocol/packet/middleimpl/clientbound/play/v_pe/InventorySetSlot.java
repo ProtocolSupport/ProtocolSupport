@@ -36,7 +36,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 				break;
 			}
 			default: {
-				break;
+				return RecyclableSingletonList.create(create(version, locale, windowId, slot, itemstack));
 			}
 		}
 		return RecyclableEmptyList.get();
