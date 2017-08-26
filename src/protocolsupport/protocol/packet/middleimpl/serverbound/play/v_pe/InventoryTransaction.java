@@ -262,54 +262,10 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 					}
 					break;
 				}
-				case ANVIL: case VILLAGER: case FURNACE: {
-					if (inventoryId == PESource.POCKET_INVENTORY) {
-						if (slot < 9) {
-							sSlot = slot + 30;
-						} else {
-							sSlot = slot - 6;
-						}
-					} else {
-						sSlot = slot;
-					}
-					break;
-				}
-				case DROPPER: case DISPENSER: case CRAFTING_TABLE: {
-					if (inventoryId == PESource.POCKET_INVENTORY) {
-						if (slot < 9) {
-							sSlot = slot + 36;
-						} else {
-							sSlot = slot;
-						}
-					} else {
-						sSlot = slot;
-					}
-					break;
-				}
-				case HOPPER: {
-					if (inventoryId == PESource.POCKET_INVENTORY) {
-						if(slot < 9) {
-							sSlot = slot + 32;
-						} else {
-							sSlot = slot - 4;
-						}
-					} else {
-						sSlot = slot;
-					}
-					break;
-				}
-				case BEACON: {
-					if(inventoryId == PESource.POCKET_INVENTORY) {
-						if (slot < 9) {
-							sSlot = slot + 28;
-						} else {
-							sSlot = slot - 8;
-						}
-					} else {
-						sSlot = slot;
-					}
-				}
+				//Maybe more integred stuff is needed for complexer things like horses or something. So I'll leave the switch for now.
 				default: {
+					//return MiddleInventoryClick.create(cache.getLocale(), cache.getOpenedWindowId(), invSlotToContainerSlot(inventoryId, cache.getOpenedWindowSlots(), slot), 0, cache.getActionNumber(), 0, cache.getCursorItem());
+					sSlot = invSlotToContainerSlot(inventoryId, cache.getOpenedWindowSlots(), slot);
 					break;
 				}
 			}
@@ -318,6 +274,17 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 				return MiddleInventoryClick.create(cache.getLocale(), cache.getOpenedWindowId(), sSlot, 0, cache.getActionNumber(), 0, cache.getCursorItem());
 			}
 			return null;
+		}
+		
+		private int invSlotToContainerSlot(int inventoryId, int start, int slot) {
+			if(inventoryId == PESource.POCKET_INVENTORY) {
+				if (slot < 9) {
+					return slot + (27 + start);
+				} else {
+					return slot - (9 - start);
+				}
+			}
+			return slot;
 		}
 		
 		@Override
