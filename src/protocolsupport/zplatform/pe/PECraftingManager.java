@@ -23,10 +23,8 @@ public class PECraftingManager {
 	private static final org.bukkit.inventory.ItemStack AIR = new org.bukkit.inventory.ItemStack(0, 0);
 	private static PECraftingManager instance = null;
 	private ByteBuf byteBuf = Unpooled.buffer();
+	private byte[] recipes;
 	private int recipeCount = 0;
-	
-	public PECraftingManager() {
-	}
 	
 	public static PECraftingManager getInstance() {
 		if (instance == null) {
@@ -35,8 +33,8 @@ public class PECraftingManager {
 		return instance;
 	}
 	
-	public ByteBuf getAllRecipes() {
-		return byteBuf;
+	public byte[] getAllRecipes() {
+		return recipes;
 	}
 	
 	public void registerRecipes() {
@@ -74,12 +72,14 @@ public class PECraftingManager {
 			}
 		});
 		
-		byte[] cached = byteBuf.array();
+		byte[] cached = MiscSerializer.readAllBytes(byteBuf);
 		byteBuf.clear();
 		
 		VarNumberSerializer.writeVarInt(byteBuf, recipeCount);
 		byteBuf.writeBytes(cached);
 		
+		recipes = MiscSerializer.readAllBytes(byteBuf);
+		byteBuf = null;
 	}
 	
 	public ItemStackWrapper fromBukkitStack(org.bukkit.inventory.ItemStack stack) {
