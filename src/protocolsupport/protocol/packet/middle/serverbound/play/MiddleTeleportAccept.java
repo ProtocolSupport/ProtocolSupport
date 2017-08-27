@@ -21,10 +21,13 @@ public abstract class MiddleTeleportAccept extends ServerBoundMiddlePacket {
 		}
 	}
 
-	public static RecyclableCollection<ServerBoundPacketData> create(int teleportId) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_TELEPORT_ACCEPT);
-		VarNumberSerializer.writeVarInt(creator, teleportId);
-		return RecyclableSingletonList.create(creator);
+	private static RecyclableCollection<ServerBoundPacketData> create(int teleportId) {
+		return RecyclableSingletonList.create(createPacket(teleportId));
 	}
 
+	public static ServerBoundPacketData createPacket(int teleportId) {
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_TELEPORT_ACCEPT);
+		VarNumberSerializer.writeVarInt(creator, teleportId);
+		return creator;
+	}
 }
