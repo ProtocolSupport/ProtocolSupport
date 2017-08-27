@@ -15,6 +15,7 @@ import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.zplatform.pe.PECraftingManager;
 
 public class Login extends MiddleLogin {
 
@@ -69,6 +70,9 @@ public class Login extends MiddleLogin {
 		packets.add(chunkradius);
 		packets.add(LoginSuccess.createPlayStatus(version, 3));
 		packets.add(EntityMetadata.createFaux(cache.getWatchedSelf(), cache.getLocale(), version)); //Add faux flags right on login. If something important needs to be send also, the server will take care with a metadata update.
+		ClientBoundPacketData packetData = ClientBoundPacketData.create(PEPacketIDs.CRAFTING_DATA, ProtocolVersion.MINECRAFT_PE);
+		packetData.writeBytes(PECraftingManager.getInstance().getAllRecipes());
+		packets.add(packetData);
 		return packets;
 	}
 
