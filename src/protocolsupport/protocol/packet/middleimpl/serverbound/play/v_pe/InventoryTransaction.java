@@ -21,6 +21,7 @@ import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 //DKTAPPS THANK YOU FOR HELPING ME! - This would have been insufferable without him.
@@ -163,12 +164,20 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 				}
 				break;
 			}
-			case ACTION_NORMAL: {
+			case ACTION_NORMAL: { //Normal inventory transaction.
+				int button = 0, mode = 0;
+				
+				if(transactions.length > 2) { //Drop action
+					packets.add(MiddleInventoryClick.create(cache.getLocale(), cache.getOpenedWindowId(), PESource.POCKET_FAUX_DROP, 0, cache.getActionNumber(), 5, ServerPlatform.get().getWrapperFactory().createItemStack(0)));
+				}
 				for(int i = 0; i < transactions.length; i++) {
-					ServerBoundPacketData packet = transactions[i].toClick(cache, transactions.length);
+					ServerBoundPacketData packet = transactions[i].toClick(cache, button, mode);
 					if(packet != null) {
 						packets.add(packet);
 					}
+				}
+				if(transactions.length > 2) { //Drop action
+					packets.add(MiddleInventoryClick.create(cache.getLocale(), cache.getOpenedWindowId(), PESource.POCKET_FAUX_DROP, 2, cache.getActionNumber(), 5, ServerPlatform.get().getWrapperFactory().createItemStack(0)));
 				}
 				break;
 			}
@@ -199,7 +208,7 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 					break;
 				}
 				case SOURCE_WORLD_INTERACTION: {
-					transaction.inventoryId = -999;
+					transaction.inventoryId = PESource.POCKET_FAUX_DROP;
 					transaction.action = VarNumberSerializer.readVarInt(from);
 					break;
 				}
@@ -221,14 +230,20 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 			return transaction;
 		}
 
-		public ServerBoundPacketData toClick(NetworkDataCache cache, int length) {
-			//Different. Set the cursoritem because we need to send that in one go to PC. (PE uses two packets)
-			if (inventoryId == PESource.POCKET_CLICKED_SLOT) {
-				//cache.setCursorItem(newItem);
-				return null;
+		public ServerBoundPacketData toClick(NetworkDataCache cache, int button, int mode) {
+			int sSlot = -1; //Slot to send.
+			
+			//Special cases
+			switch(inventoryId) {
+				case PESource.POCKET_CLICKED_SLOT: {
+					return null;
+				}
+				case PESource.POCKET_FAUX_DROP: {
+					sSlot = inventoryId;
+					break;
+				}
 			}
 			
-			int sSlot = -1; //Slot to send.
 			switch(cache.getOpenedWindow()) {
 				case PLAYER: {
 					switch(inventoryId) {
@@ -262,6 +277,10 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 					}
 					break;
 				}
+				case CRAFTING_TABLE: {
+					sSlot = invSlotToContainerSlot(inventoryId, 10, slot);
+					break;
+				}
 				//Maybe more integred stuff is needed for complexer things like horses or something. So I'll leave the switch for now.
 				default: {
 					//return MiddleInventoryClick.create(cache.getLocale(), cache.getOpenedWindowId(), invSlotToContainerSlot(inventoryId, cache.getOpenedWindowSlots(), slot), 0, cache.getActionNumber(), 0, cache.getCursorItem());
@@ -269,18 +288,9 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 					break;
 				}
 			}
-			if (inventoryId == -999) { //Drop item.
-				sSlot = inventoryId;
-			}
 			if (sSlot != -1) {
-				int butt = 0;
-				int mode = 0;
-				if(length > 2) {
-					butt = 1;
-					mode = 5;
-				}
-				System.out.println(cache.getLocale() + " wId: " + cache.getOpenedWindowId() + " Slot: " + sSlot + " Button: " + butt + " ActionNumber.. " + /*cache.getActionNumber() +*/ " Action: " + mode + " Cursor: " + oldItem + length);
-				return MiddleInventoryClick.create(cache.getLocale(), cache.getOpenedWindowId(), sSlot, butt, cache.getActionNumber(), mode, oldItem /*cache.getCursorItem()*/);
+				System.out.println(cache.getLocale() + " wId: " + cache.getOpenedWindowId() + " Slot: " + sSlot + " Button: " + button + " ActionNumber.. " + /*cache.getActionNumber() +*/ " Action: " + mode + " Cursor: " + oldItem);
+				return MiddleInventoryClick.create(cache.getLocale(), cache.getOpenedWindowId(), sSlot, button, cache.getActionNumber(), mode, oldItem /*cache.getCursorItem()*/);
 			}
 			return null;
 		}
