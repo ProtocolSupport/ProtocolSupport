@@ -165,7 +165,7 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 			}
 			case ACTION_NORMAL: {
 				for(int i = 0; i < transactions.length; i++) {
-					ServerBoundPacketData packet = transactions[i].toClick(cache);
+					ServerBoundPacketData packet = transactions[i].toClick(cache, transactions.length);
 					if(packet != null) {
 						packets.add(packet);
 					}
@@ -199,7 +199,7 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 					break;
 				}
 				case SOURCE_WORLD_INTERACTION: {
-					transaction.inventoryId = -1;
+					transaction.inventoryId = -999;
 					transaction.action = VarNumberSerializer.readVarInt(from);
 					break;
 				}
@@ -221,10 +221,10 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 			return transaction;
 		}
 
-		public ServerBoundPacketData toClick(NetworkDataCache cache) {
+		public ServerBoundPacketData toClick(NetworkDataCache cache, int length) {
 			//Different. Set the cursoritem because we need to send that in one go to PC. (PE uses two packets)
 			if (inventoryId == PESource.POCKET_CLICKED_SLOT) {
-				cache.setCursorItem(newItem);
+				//cache.setCursorItem(newItem);
 				return null;
 			}
 			
@@ -269,9 +269,18 @@ public class InventoryTransaction extends ServerBoundMiddlePacket {
 					break;
 				}
 			}
+			if (inventoryId == -999) { //Drop item.
+				sSlot = inventoryId;
+			}
 			if (sSlot != -1) {
-				System.out.println(cache.getLocale() + " wId: " + cache.getOpenedWindowId() + " Slot: " + sSlot + " Button: " + 0 + " ActionNumber.. " + /*cache.getActionNumber() +*/ " Action: " + 0 + " Cursor: " + cache.getCursorItem());
-				return MiddleInventoryClick.create(cache.getLocale(), cache.getOpenedWindowId(), sSlot, 0, cache.getActionNumber(), 0, cache.getCursorItem());
+				int butt = 0;
+				int mode = 0;
+				if(length > 2) {
+					butt = 1;
+					mode = 5;
+				}
+				System.out.println(cache.getLocale() + " wId: " + cache.getOpenedWindowId() + " Slot: " + sSlot + " Button: " + butt + " ActionNumber.. " + /*cache.getActionNumber() +*/ " Action: " + mode + " Cursor: " + oldItem + length);
+				return MiddleInventoryClick.create(cache.getLocale(), cache.getOpenedWindowId(), sSlot, butt, cache.getActionNumber(), mode, oldItem /*cache.getCursorItem()*/);
 			}
 			return null;
 		}
