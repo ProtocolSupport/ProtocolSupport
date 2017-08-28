@@ -43,11 +43,6 @@ import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.impl.pe.PEProxyServer;
 import protocolsupport.zplatform.pe.PECraftingManager;
 
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.Properties;
-import java.util.logging.Level;
-
 public class ProtocolSupport extends JavaPlugin {
 
 	private static ProtocolSupport instance;
@@ -132,7 +127,13 @@ public class ProtocolSupport extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new ReloadCommandBlocker(), this);
 		getServer().getPluginManager().registerEvents(new MultiplePassengersRestrict(), this);
 		getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
-			PECraftingManager.getInstance().registerRecipes();
+			Thread recipesinit = new Thread(() -> PECraftingManager.getInstance().registerRecipes());
+			recipesinit.setDaemon(true);
+			recipesinit.start();
+			try {
+				recipesinit.join();
+			} catch (InterruptedException e) {
+			}
 			(peserver = new PEProxyServer()).start();
 		});
 	}
