@@ -1,4 +1,4 @@
-package protocolsupport.protocol.pipeline.initial;
+package protocolsupport.zplatform.impl.encapsulated;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -6,9 +6,11 @@ import java.net.UnknownHostException;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class EncapsulatedProtocolUtils {
 
@@ -37,13 +39,29 @@ public class EncapsulatedProtocolUtils {
 		}
 	}
 
+	public static void writeInfo(ByteBuf to, EncapsulatedProtocolInfo info) {
+		VarNumberSerializer.writeVarInt(to, 0x00);
+		if (info.getAddress() != null) {
+			to.writeBoolean(true);
+			byte[] addr = info.getAddress().getAddress().getAddress();
+			VarNumberSerializer.writeVarInt(to, addr.length);
+			to.writeBytes(addr);
+			VarNumberSerializer.writeVarInt(to, info.getAddress().getPort());
+		} else {
+			to.writeBoolean(false);
+		}
+		to.writeBoolean(info.hasCompression());
+		VarNumberSerializer.writeVarInt(to, getVersionType(info.getVersion()));
+		VarNumberSerializer.writeVarInt(to, info.getVersion().getId());
+	}
+
 	private static ProtocolVersion getVersion(int protocoltype, int protocolversion) {
 		switch (protocoltype) {
 			case 0: {
-				return ProtocolUtils.getOldProtocolVersion(protocolversion);
+				return ProtocolVersionsHelper.getOldProtocolVersion(protocolversion);
 			}
 			case 1: {
-				return ProtocolUtils.getNewProtocolVersion(protocolversion);
+				return ProtocolVersionsHelper.getNewProtocolVersion(protocolversion);
 			}
 			default: {
 				throw new IllegalArgumentException("Unknown protocol type: " + protocoltype);
@@ -51,24 +69,15 @@ public class EncapsulatedProtocolUtils {
 		}
 	}
 
-	public static class EncapsulatedProtocolInfo {
-		private final ProtocolVersion version;
-		private final boolean hasCompression;
-		private final InetSocketAddress address;
-		public EncapsulatedProtocolInfo(InetSocketAddress address, boolean hasCompression, ProtocolVersion version) {
-			this.address = address;
-			this.version = version;
-			this.hasCompression = hasCompression;
+	private static int getVersionType(ProtocolVersion version) {
+		if (version.getProtocolType() == ProtocolType.PC) {
+			if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4)) {
+				return 0;
+			} else if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_7_5)) {
+				return 1;
+			}
 		}
-		public InetSocketAddress getAddress() {
-			return address;
-		}
-		public boolean hasCompression() {
-			return hasCompression;
-		}
-		public ProtocolVersion getVersion() {
-			return version;
-		}
+		throw new IllegalArgumentException("Can't convert version " + version + " to protocol type");
 	}
 
 }

@@ -18,7 +18,6 @@ import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.IPipeLineBuilder;
 import protocolsupport.protocol.pipeline.common.VarIntFrameDecoder;
 import protocolsupport.protocol.pipeline.common.VarIntFrameEncoder;
-import protocolsupport.protocol.pipeline.initial.EncapsulatedProtocolUtils.EncapsulatedProtocolInfo;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.Utils;
@@ -26,6 +25,8 @@ import protocolsupport.utils.netty.ReplayingDecoderBuffer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
 import protocolsupport.zplatform.PlatformUtils;
 import protocolsupport.zplatform.ServerPlatform;
+import protocolsupport.zplatform.impl.encapsulated.EncapsulatedProtocolInfo;
+import protocolsupport.zplatform.impl.encapsulated.EncapsulatedProtocolUtils;
 
 public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
