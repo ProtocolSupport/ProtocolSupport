@@ -55,15 +55,15 @@ public class PositionLook extends ServerBoundMiddlePacket {
 					return RecyclableEmptyList.get();
 				} else {
 					RecyclableCollection<ServerBoundPacketData> collection = RecyclableArrayList.create();
-					collection.add(MiddleTeleportAccept.createPacket(teleportId));
-					collection.add(createPacket());
+					collection.add(MiddleTeleportAccept.create(teleportId));
+					collection.add(createMoveLookPacket());
 					return collection;
 				}
 			}
 		}
 	}
 
-	private ServerBoundPacketData createPacket() {
+	private ServerBoundPacketData createMoveLookPacket() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_POSITION_LOOK);
 		creator.writeDouble(x);
 		creator.writeDouble(y);
