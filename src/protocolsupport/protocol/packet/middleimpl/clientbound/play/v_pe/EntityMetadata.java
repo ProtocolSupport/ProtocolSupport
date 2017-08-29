@@ -155,11 +155,13 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		public static int FLAG_IDLING = takeNextId();
 		public static int FLAG_EVOKER_SPELL = takeNextId(); //40
 		public static int FLAG_CHARGE_ATTACK = takeNextId();
+		public static int FLAG_WASD_CONTROLLED = takeNextId();
 		public static int FLAG_unknown2 = takeNextId();
-		public static int FLAG_unknown3 = takeNextId();
 		public static int FLAG_LINGER = takeNextId();
-		public static int FLAG_unknown4 = takeNextId();
+		public static int FLAG_COLLIDE = takeNextId();
 		public static int FLAG_GRAVITY = takeNextId();
+		public static int FLAG_unknown3 = takeNextId();
+		public static int FLAG_DANCING = takeNextId();
 
 	}
 }
