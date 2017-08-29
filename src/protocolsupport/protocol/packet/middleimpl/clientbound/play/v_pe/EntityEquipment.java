@@ -5,15 +5,14 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityEquip
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class EntityEquipment extends MiddleEntityEquipment {
-	public static final int MAIN_HAND_ID = 0;
-	public static final int OFF_HAND_ID = 0;
-
+	
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		if (slot > 1) {
@@ -51,7 +50,7 @@ public class EntityEquipment extends MiddleEntityEquipment {
 		ItemStackSerializer.writeItemStack(serializer, ProtocolVersion.MINECRAFT_PE, cache.getLocale(), itemstack, true);
 		serializer.writeByte(0); // Inventory slot (I wonder why the client needs to care about this...)
 		serializer.writeByte(0); // Hotbar slot (again, why?)
-		serializer.writeByte(slot == 1 ? OFF_HAND_ID : MAIN_HAND_ID); // Container ID, offhand slot uses ID 119
+		serializer.writeByte(slot == 1 ? PESource.POCKET_OFFHAND : PESource.POCKET_INVENTORY);
 
 		return RecyclableSingletonList.create(serializer);
 	}
