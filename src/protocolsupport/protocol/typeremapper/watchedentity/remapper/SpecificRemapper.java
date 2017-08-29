@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata.PeMetaBase;
@@ -18,7 +19,6 @@ import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexV
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapperNumberToInt;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapperNumberToSVarInt;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapperNumberToShort;
-import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapperNumberToShortLe;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapperStringClamp;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.PeFlagRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.PeSimpleFlagAdder;
@@ -67,7 +67,7 @@ public enum SpecificRemapper {
 				// = PE Nametag =
 				//Doing this for players makes nametags behave weird or only when close.
 				DataWatcherObject<?> nameTagWatcher = original.get(DataWatcherObjectIndex.Entity.NAMETAG);
-				boolean doNametag = (nameTagWatcher != null);
+				boolean doNametag = (nameTagWatcher != null && entity.getType() != NetworkEntityType.PLAYER);
 				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_SHOW_NAMETAG, doNametag);
 				if (doNametag) { remapped.put(4, nameTagWatcher); }
 
@@ -85,18 +85,24 @@ public enum SpecificRemapper {
 						remapped.put(60, new DataWatcherObjectFloatLe(rider.rotationMin));
 					}
 				}
+				
+				// = PE Air =
+				AtomicInteger air = new AtomicInteger(0);
+				getObject(original, DataWatcherObjectIndex.Entity.AIR, DataWatcherObjectVarInt.class).ifPresent(airWatcher -> {
+					air.set(airWatcher.getValue() >= 300 ? 0 : airWatcher.getValue());
+				});
+				remapped.put(7, new DataWatcherObjectShortLe(air.get()));
 
 				// = PE Interaction =
 				remapped.put(40, new DataWatcherObjectString("Interact")); //Different texts? I ain't bothered.
 
 			}}, ProtocolVersion.MINECRAFT_PE),
-		new Entry(new PeSimpleFlagAdder(new int[] {PeMetaBase.FLAG_GRAVITY, PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG}, new boolean[] {true, true}), ProtocolVersion.MINECRAFT_PE),
+		new Entry(new PeSimpleFlagAdder(new int[] {PeMetaBase.FLAG_GRAVITY}, new boolean[] {true}), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.Entity.FLAGS,
 				new int[] {1, 2, 4, 6, 8}, new int[] {PeMetaBase.FLAG_ON_FIRE, PeMetaBase.FLAG_SNEAKING, PeMetaBase.FLAG_SPRINTING, PeMetaBase.FLAG_INVISIBLE, PeMetaBase.FLAG_GLIDING}
 		), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new PeSimpleFlagRemapper(DataWatcherObjectIndex.Entity.SILENT, PeMetaBase.FLAG_SILENT), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new PeSimpleFlagRemapper(DataWatcherObjectIndex.Entity.NO_GRAVITY, -PeMetaBase.FLAG_GRAVITY), ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNumberToShortLe(DataWatcherObjectIndex.Entity.AIR, 7), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Entity.FLAGS, 0) {}, ProtocolVersionsHelper.ALL_PC),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Entity.AIR, 1) {}, ProtocolVersionsHelper.RANGE__1_9__1_12_1),
 		new Entry(new IndexValueRemapperNumberToShort(DataWatcherObjectIndex.Entity.AIR, 1), ProtocolVersionsHelper.BEFORE_1_9),
@@ -137,6 +143,7 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Insentient.NO_AI, 15) {}, ProtocolVersion.MINECRAFT_1_8)
 	),
 	PLAYER(NetworkEntityType.PLAYER, SpecificRemapper.LIVING,
+		new Entry(new PeSimpleFlagAdder(new int[] {PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG}, new boolean[] {true}), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectFloat>(DataWatcherObjectIndex.Player.ADDITIONAL_HEARTS, 11) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_1),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectFloat>(DataWatcherObjectIndex.Player.ADDITIONAL_HEARTS, 10) {}, ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectFloat>(DataWatcherObjectIndex.Player.ADDITIONAL_HEARTS, 17) {}, ProtocolVersionsHelper.BEFORE_1_9),
