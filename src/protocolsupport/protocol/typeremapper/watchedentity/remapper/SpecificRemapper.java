@@ -92,7 +92,12 @@ public enum SpecificRemapper {
 					air.set(airWatcher.getValue() >= 300 ? 0 : airWatcher.getValue());
 				});
 				remapped.put(7, new DataWatcherObjectShortLe(air.get()));
-
+				
+				// = PE Bounding Box =
+				//TODO: Put real numbers in? This will allow mobs to push PE player properly and such xD Necessary for PE Lighting.
+				remapped.put(54, new DataWatcherObjectFloatLe(0.6f)); //Width
+				remapped.put(55, new DataWatcherObjectFloatLe(1.8f)); //Height
+				
 				// = PE Interaction =
 				remapped.put(40, new DataWatcherObjectString("Interact")); //Different texts? I ain't bothered.
 
@@ -112,6 +117,9 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Entity.NO_GRAVITY, 5) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_1)
 	),
 	LIVING(NetworkEntityType.LIVING, SpecificRemapper.ENTITY,
+		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.EntityLiving.HAND_USE,
+				new int[] {1}, new int[] {PeMetaBase.FLAG_USING_ITEM}
+		), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.EntityLiving.POTION_COLOR, 8) {}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.EntityLiving.POTION_AMBIENT, 9), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectString>(DataWatcherObjectIndex.Entity.NAMETAG, 2) {}, ProtocolVersion.MINECRAFT_1_8),
@@ -143,7 +151,7 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Insentient.NO_AI, 15) {}, ProtocolVersion.MINECRAFT_1_8)
 	),
 	PLAYER(NetworkEntityType.PLAYER, SpecificRemapper.LIVING,
-		new Entry(new PeSimpleFlagAdder(new int[] {PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG}, new boolean[] {true}), ProtocolVersion.MINECRAFT_PE),
+		new Entry(new PeSimpleFlagAdder(new int[] {PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG, PeMetaBase.FLAG_COLLIDE}, new boolean[] {true, true}), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectFloat>(DataWatcherObjectIndex.Player.ADDITIONAL_HEARTS, 11) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_1),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectFloat>(DataWatcherObjectIndex.Player.ADDITIONAL_HEARTS, 10) {}, ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectFloat>(DataWatcherObjectIndex.Player.ADDITIONAL_HEARTS, 17) {}, ProtocolVersionsHelper.BEFORE_1_9),
