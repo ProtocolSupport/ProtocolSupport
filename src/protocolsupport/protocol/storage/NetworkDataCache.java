@@ -17,8 +17,6 @@ import protocolsupport.protocol.utils.types.NetworkEntity.DataCache;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.Utils;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class NetworkDataCache {
@@ -88,16 +86,6 @@ public class NetworkDataCache {
 		this.windowType = WindowType.PLAYER;
 		this.windowId = 0;
 		this.windowSlots = 46;
-	}
-
-	private ItemStackWrapper cursorItem = ServerPlatform.get().getWrapperFactory().createNullItemStack();
-
-	public ItemStackWrapper getCursorItem() {
-		return cursorItem;
-	}
-
-	public void setCursorItem(ItemStackWrapper cursorItem) {
-		this.cursorItem = cursorItem;
 	}
 
 	private int actionNumber = 0;

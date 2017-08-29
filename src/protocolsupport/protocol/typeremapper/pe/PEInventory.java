@@ -4,6 +4,7 @@ public class PEInventory {
 	
 	//Slot thingy numbers.
 	public static class PESource {
+		public static final int POCKET_FAUX_DROP = -999;
 		public static final int POCKET_CRAFTING_RESULT = -4;
 		public static final int POCKET_CRAFTING_GRID = -2;
 		public static final int POCKET_INVENTORY = 0;
