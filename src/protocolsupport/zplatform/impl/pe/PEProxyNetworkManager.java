@@ -24,6 +24,7 @@ import io.netty.handler.codec.DecoderException;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.IdleStateHandler;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.pipeline.common.VarIntFrameDecoder;
 import protocolsupport.protocol.pipeline.common.VarIntFrameEncoder;
 import protocolsupport.protocol.serializer.MiscSerializer;
@@ -31,6 +32,8 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.netty.ChannelInitializer;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.zplatform.ServerPlatform;
+import protocolsupport.zplatform.impl.encapsulated.EncapsulatedProtocolInfo;
+import protocolsupport.zplatform.impl.encapsulated.EncapsulatedProtocolUtils;
 
 public class PEProxyNetworkManager extends SimpleChannelInboundHandler<ByteBuf> {
 
@@ -187,21 +190,8 @@ public class PEProxyNetworkManager extends SimpleChannelInboundHandler<ByteBuf> 
 
 	private static ByteBuf createHandshake(InetSocketAddress remote, int protocolversion) {
 		ByteBuf data = Unpooled.buffer();
-
 		data.writeByte(0);
-
-		VarNumberSerializer.writeVarInt(data, 0);
-
-		data.writeBoolean(true);
-		byte[] addrb = remote.getAddress().getAddress();
-		VarNumberSerializer.writeVarInt(data, addrb.length);
-		data.writeBytes(addrb);
-		VarNumberSerializer.writeVarInt(data, remote.getPort());
-
-		data.writeBoolean(true);
-
-		VarNumberSerializer.writeVarInt(data, 2);
-		VarNumberSerializer.writeVarInt(data, protocolversion);
+		EncapsulatedProtocolUtils.writeInfo(data, new EncapsulatedProtocolInfo(remote, true, ProtocolVersion.MINECRAFT_PE));
 		return data;
 	}
 

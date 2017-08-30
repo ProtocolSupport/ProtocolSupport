@@ -63,6 +63,9 @@ public class EncapsulatedProtocolUtils {
 			case 1: {
 				return ProtocolVersionsHelper.getNewProtocolVersion(protocolversion);
 			}
+			case 2: {
+				return ProtocolVersion.MINECRAFT_PE;
+			}
 			default: {
 				throw new IllegalArgumentException("Unknown protocol type: " + protocoltype);
 			}
@@ -76,6 +79,8 @@ public class EncapsulatedProtocolUtils {
 			} else if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_7_5)) {
 				return 1;
 			}
+		} else if (version.getProtocolType() == ProtocolType.PE) {
+			return 2;
 		}
 		throw new IllegalArgumentException("Can't convert version " + version + " to protocol type");
 	}
