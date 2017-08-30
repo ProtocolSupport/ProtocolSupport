@@ -5,6 +5,7 @@ import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleTeleportAccept;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
+import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -53,10 +54,23 @@ public class PositionLook extends ServerBoundMiddlePacket {
 				if (teleportId == -1) {
 					return RecyclableEmptyList.get();
 				} else {
-					return MiddleTeleportAccept.create(teleportId);
+					RecyclableCollection<ServerBoundPacketData> collection = RecyclableArrayList.create();
+					collection.add(MiddleTeleportAccept.create(teleportId));
+					collection.add(createMoveLookPacket());
+					return collection;
 				}
 			}
 		}
 	}
 
+	private ServerBoundPacketData createMoveLookPacket() {
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_POSITION_LOOK);
+		creator.writeDouble(x);
+		creator.writeDouble(y);
+		creator.writeDouble(z);
+		creator.writeFloat(yaw);
+		creator.writeFloat(pitch);
+		creator.writeBoolean(onGround);
+		return creator;
+	}
 }
