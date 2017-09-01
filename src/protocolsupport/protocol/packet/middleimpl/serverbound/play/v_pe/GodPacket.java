@@ -24,9 +24,23 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
-//DKTAPPS THANK YOU FOR HELPING ME! - This would have been insufferable without him.
-//The Pe GodPacket. I'm going to make him an offer he can't refuse...
-public class InventoryTransaction extends ServerBoundMiddlePacket {
+/**
+ * Lo and behold. The PE GodPacket. 
+ * DKTAPPS THANK YOU FOR HELPING ME! - This would be insufferable without him.
+ * 
+ * This packet handles among other things
+ *  - Using items (Right clicking)
+ *  - Interacting (left and right clicking mob)
+ *  - Releasing items (shoot bow, eat food)
+ *  - Getting creative items
+ *  - MANAGING INVENTORY
+ *  
+ *  Apart from managing inventories it is the usual packet deal,
+ *  except that we have an extra layer of encapsulation.
+ *  
+ *  Managing inventories works very different in PE, so for now excpect some hacky code.
+ */
+public class GodPacket extends ServerBoundMiddlePacket {
 
 	//Transactions
 	protected InfTransaction[] transactions;
