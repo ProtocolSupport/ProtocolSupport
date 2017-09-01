@@ -423,6 +423,8 @@ public class SoundRemapper {
 			registerRemapEntry("block.chest.close", "random.chestclosed", ProtocolVersionsHelper.BEFORE_1_9_AND_PE);
 			registerRemapEntry("entity.player.hurt_on_fire", "entity.player.hurt", ProtocolVersionsHelper.RANGE__1_9__1_12_1);
 			registerRemapEntry("entity.player.hurt_on_fire", "game.player.hurt", ProtocolVersionsHelper.BEFORE_1_9_AND_PE);
+			registerRemapEntry("entity.player.hurt_drown", "entity.player.hurt", ProtocolVersionsHelper.RANGE__1_9__1_12_1);
+			registerRemapEntry("entity.player.hurt_drown", "game.player.hurt", ProtocolVersionsHelper.BEFORE_1_9_AND_PE);
 		}
 		@Override
 		protected GenericRemappingTable<String> createTable() {
