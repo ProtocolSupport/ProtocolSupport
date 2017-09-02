@@ -20,6 +20,7 @@ public class HeldSlot extends MiddleHeldSlot {
 		for(int i = 0; i < linkedSlots.length; i++) {
 			VarNumberSerializer.writeVarInt(serializer, linkedSlots[i]);
 		}
+		serializer.writeBoolean(true); //Set held slot!
 		return RecyclableSingletonList.create(serializer);
 	}
 

@@ -4,6 +4,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleMap;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.mapcolor.MapColorHelper;
 import protocolsupport.protocol.typeremapper.mapcolor.MapColorRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable;
@@ -11,21 +12,25 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class Map extends MiddleMap {
+	
+	public static final int FLAG_ENTITY_UPDATE = 0x08;
+	public static final int FLAG_DECORATION_UPDATE = 0x04;
+	public static final int FLAG_TEXTURE_UPDATE = 0x02;
+	public static final int FLAG_ITEM_UPDATE = 0x01;
+	
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MAP_ITEM_DATA, connection.getVersion());
-		VarNumberSerializer.writeSVarLong(serializer, this.itemData);
+		VarNumberSerializer.writeSVarLong(serializer, itemData);
 
 		int flags = 0;
-		//final int FLAG_ENTITY_UPDATE = 0x08;
-		final int FLAG_DECORATION_UPDATE = 0x04;
-		final int FLAG_TEXTURE_UPDATE = 0x02;
-		final int FLAG_ITEM_UPDATE = 0x01;
 
 		if (columns > 0) { flags |= FLAG_TEXTURE_UPDATE; }
-		else if (icons.length > 0) { flags |= (FLAG_DECORATION_UPDATE | FLAG_ITEM_UPDATE) ; }
+		//if (icons.length > 0) { flags |= (FLAG_DECORATION_UPDATE) ; } TODO: Fix the map icons.
+		flags |= FLAG_ITEM_UPDATE;
 
 		VarNumberSerializer.writeVarInt(serializer, flags);
+		serializer.writeByte(0); //Dimension
 
 		//Implementation
 		if ((flags & (FLAG_DECORATION_UPDATE | FLAG_TEXTURE_UPDATE)) != 0) {
@@ -35,12 +40,12 @@ public class Map extends MiddleMap {
 		if ((flags & FLAG_DECORATION_UPDATE) != 0) {
 			VarNumberSerializer.writeVarInt(serializer, icons.length);
 			for (Icon icon: icons) {
-				serializer.writeByte(1); //type
-				serializer.writeByte((byte) (icon.dirtype & 0xF0));
+				VarNumberSerializer.writeSVarInt(serializer, icon.dirtype);
 				serializer.writeByte(icon.x);
 				serializer.writeByte(icon.z);
 				StringSerializer.writeString(serializer, connection.getVersion(), "");
-				VarNumberSerializer.writeVarInt(serializer, (icon.dirtype & 0x0F)); //TODO: Remap icon colors.
+				//TODO: Remap icon colors. (Also: writeIntLE instead?)
+				VarNumberSerializer.writeVarInt(serializer, MapColorHelper.toARGB((byte) 255, (byte) 255, (byte) 255, (byte) 255));
 			}
 		}
 
@@ -58,4 +63,5 @@ public class Map extends MiddleMap {
 
 		return RecyclableSingletonList.create(serializer);
 	}
+	
 }
