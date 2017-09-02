@@ -14,6 +14,8 @@ import protocolsupport.protocol.utils.types.Position;
 public interface PlatformPacketFactory {
 
 	public Object createInboundInventoryClosePacket();
+	
+	public Object createInboundInventoryConfirmTransactionPacket(int windowId, int actionNumber, boolean accepted);
 
 	public Object createOutboundChatPacket(String message, int position);
 

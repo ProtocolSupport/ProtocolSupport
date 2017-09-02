@@ -41,6 +41,20 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	public Object createInboundInventoryClosePacket() {
 		return new PacketPlayInCloseWindow();
 	}
+	
+	@Override
+	public Object createInboundInventoryConfirmTransactionPacket(int windowId, int actionNumber, boolean accepted) {
+		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer());
+		serializer.writeByte(windowId);
+		serializer.writeShort(actionNumber);
+		serializer.writeByte(accepted ? 1 : 0);
+		PacketPlayInTransaction packet = new PacketPlayInTransaction();
+		try {
+			packet.a(serializer);
+		} catch (IOException e) {
+		}
+		return packet;
+	}
 
 	@Override
 	public Object createOutboundChatPacket(String message, int position) {

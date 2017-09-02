@@ -31,6 +31,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityVe
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Explosion;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.HeldSlot;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventoryClose;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventoryConfirmTransaction;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventoryData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventorySetItems;
@@ -128,6 +129,7 @@ public class PEPacketEncoder extends AbstractLegacyPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_EQUIPMENT_ID, EntityEquipment.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BLOCK_ACTION_ID, BlockAction.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_DATA_ID, InventoryData.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_TRANSACTION_ID, InventoryConfirmTransaction.class);
 	}
 
 	public PEPacketEncoder(Connection connection, NetworkDataCache storage) {

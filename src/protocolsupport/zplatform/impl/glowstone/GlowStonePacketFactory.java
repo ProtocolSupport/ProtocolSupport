@@ -144,6 +144,11 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
+	public Message createInboundInventoryConfirmTransactionPacket(int windowId, int actionNumber, boolean accepted) {
+		return new TransactionMessage(windowId, actionNumber, accepted);
+	}
+	
+	@Override
 	public Message createOutboundChatPacket(String message, int position) {
 		return new ChatMessage(new TextMessage(message), position);
 	}
