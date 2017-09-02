@@ -41,7 +41,7 @@ import protocolsupport.zplatform.itemstack.ItemStackWrapper;
  *  Managing inventories works very different in PE, so for now excpect some hacky code.
  */
 public class GodPacket extends ServerBoundMiddlePacket {
-
+	
 	//Transactions
 	protected InfTransaction[] transactions;
 	//Complex Actions
@@ -54,9 +54,12 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	protected float cX, cY, cZ;
 	protected int face;
 	protected int targetId;
+	//Misc
+	private static ItemStackWrapper AIR = ServerPlatform.get().getWrapperFactory().createItemStack(0);
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
+		System.out.println("NEEWWW GODPACKET!");
 		actionId = VarNumberSerializer.readVarInt(clientdata);
 
 		transactions = new InfTransaction[VarNumberSerializer.readVarInt(clientdata)];
@@ -179,20 +182,21 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				break;
 			}
 			case ACTION_NORMAL: { //Normal inventory transaction.
-				int button = 0, mode = 0;
+				ClickType clickType = calculateClickType();
 				
-				if(transactions.length > 2) { //Drop action
-					packets.add(MiddleInventoryClick.create(cache.getLocale(), cache.getOpenedWindowId(), PESource.POCKET_FAUX_DROP, 0, cache.getActionNumber(), 5, ServerPlatform.get().getWrapperFactory().createItemStack(0)));
+				if(clickType.doPrefix()) {
+					packets.add(clickType.createPrefix(cache));
 				}
 				for(int i = 0; i < transactions.length; i++) {
-					ServerBoundPacketData packet = transactions[i].toClick(cache, button, mode);
-					if(packet != null) {
-						packets.add(packet);
+					RecyclableArrayList<ServerBoundPacketData> clickPackets = transactions[i].toClick(cache, clickType);
+					if(clickPackets != null) {
+						packets.addAll(clickPackets);
 					}
 				}
-				if(transactions.length > 2) { //Drop action
-					packets.add(MiddleInventoryClick.create(cache.getLocale(), cache.getOpenedWindowId(), PESource.POCKET_FAUX_DROP, 2, cache.getActionNumber(), 5, ServerPlatform.get().getWrapperFactory().createItemStack(0)));
+				if(clickType.doSuffix()) {
+					packets.add(clickType.createSuffix(cache));
 				}
+				
 				break;
 			}
 			case ACTION_MISMATCH:
@@ -203,7 +207,6 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		return packets;
 	}
 
-	@SuppressWarnings("unused") //TODO: IMPLEMENT!
 	private static class InfTransaction {
 
 		private int sourceId;
@@ -240,22 +243,17 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			transaction.slot = VarNumberSerializer.readVarInt(from);
 			transaction.oldItem = ItemStackSerializer.readItemStack(from, version, locale, true);
 			transaction.newItem = ItemStackSerializer.readItemStack(from, version, locale, true);
-			System.out.println("Inv transaction read: sId: " + transaction.sourceId + " wId: " + transaction.inventoryId + " action: " + transaction.action + " slot: " + transaction.slot);
+			System.out.println("Inv transaction read: sId: " + transaction.sourceId + " wId: " + transaction.inventoryId + " action: " + transaction.action + " slot: " + transaction.slot 
+					+ " oldItem: " + transaction.oldItem.toString() + " newItem: " + transaction.newItem.toString());
 			return transaction;
 		}
 
-		public ServerBoundPacketData toClick(NetworkDataCache cache, int button, int mode) {
+		public RecyclableArrayList<ServerBoundPacketData> toClick(NetworkDataCache cache, ClickType transType) {
 			int sSlot = -1; //Slot to send.
 			
-			//Special cases
-			switch(inventoryId) {
-				case PESource.POCKET_CLICKED_SLOT: {
-					return null;
-				}
-				case PESource.POCKET_FAUX_DROP: {
-					sSlot = inventoryId;
-					break;
-				}
+			//Repetitive.
+			if(newItem.equals(oldItem)) {
+				return null;
 			}
 			
 			switch(cache.getOpenedWindow()) {
@@ -295,29 +293,27 @@ public class GodPacket extends ServerBoundMiddlePacket {
 					sSlot = invSlotToContainerSlot(inventoryId, 10, slot);
 					break;
 				}
-				//Maybe more integred stuff is needed for complexer things like horses or something. So I'll leave the switch for now.
 				default: {
-					//return MiddleInventoryClick.create(cache.getLocale(), cache.getOpenedWindowId(), invSlotToContainerSlot(inventoryId, cache.getOpenedWindowSlots(), slot), 0, cache.getActionNumber(), 0, cache.getCursorItem());
 					sSlot = invSlotToContainerSlot(inventoryId, cache.getOpenedWindowSlots(), slot);
 					break;
 				}
 			}
-			if (sSlot != -1) {
-				System.out.println(cache.getLocale() + " wId: " + cache.getOpenedWindowId() + " Slot: " + sSlot + " Button: " + button + " ActionNumber.. " + /*cache.getActionNumber() +*/ " Action: " + mode + " Cursor: " + oldItem);
-				return MiddleInventoryClick.create(cache.getLocale(), cache.getOpenedWindowId(), sSlot, button, cache.getActionNumber(), mode, oldItem /*cache.getCursorItem()*/);
-			}
-			return null;
-		}
-		
-		private int invSlotToContainerSlot(int inventoryId, int start, int slot) {
-			if(inventoryId == PESource.POCKET_INVENTORY) {
-				if (slot < 9) {
-					return slot + (27 + start);
-				} else {
-					return slot - (9 - start);
+			
+			//Special cases
+			switch(inventoryId) {
+				case PESource.POCKET_CLICKED_SLOT: {
+					return null;
+				}
+				case PESource.POCKET_FAUX_DROP: {
+					sSlot = inventoryId;
+					break;
 				}
 			}
-			return slot;
+			
+			if (sSlot != -1) {
+				return transType.process(cache, sSlot, oldItem);
+			}
+			return null;
 		}
 		
 		@Override
@@ -325,6 +321,125 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			return Utils.toStringAllFields(this);
 		}
 
+	}
+	
+	private static int invSlotToContainerSlot(int inventoryId, int start, int slot) {
+		if(inventoryId == PESource.POCKET_INVENTORY) {
+			if (slot < 9) {
+				return slot + (27 + start);
+			} else {
+				return slot - (9 - start);
+			}
+		}
+		return slot;
+	}
+	
+	private ClickType calculateClickType() {
+		System.out.println("Calculating clicktype...");
+		if (transactions.length > 0) {
+			System.out.println("Transactions > 0");
+			if(transactions[0].inventoryId == PESource.POCKET_CLICKED_SLOT) {
+				System.out.println("Click based action");
+				if(transactions.length > 2) {
+					System.out.println("Drag based action");
+					if (transactions[transactions.length - 1].newItem.getAmount() == 1) {
+						System.out.println("Single item. (DropOff)");
+						return ClickType.DRAGRIGHT;
+					} else if (transactions[transactions.length - 1].newItem.getAmount() == 0) { 
+						System.out.println("Double click.");
+						return ClickType.DUBBLECLICK;
+					} else {
+						System.out.println("Multiple items (SplitStack).");
+						return ClickType.DRAGLEFT;
+					}
+				} else {
+					System.out.println("Single click action");
+					if (transactions[transactions.length - 1].newItem.getAmount() == 1) {
+						System.out.println("Single item. (DropOff)");
+						return ClickType.RIGHTCLICK;
+					} else {
+						System.out.println("Multiple item. (Drop Stack)");
+						return ClickType.LEFTCLICK;
+					}
+				}
+			} else {
+				System.out.println("Tap based action");
+				if (transactions[transactions.length - 1].newItem.getAmount() == 1) {
+					System.out.println("Single item transfer.");
+					return ClickType.TRANSFERITEM;
+				} else {
+					System.out.println("Stack transfer.");
+					return ClickType.TRANSFERSTACK;
+				}
+			}
+		}
+		
+		return ClickType.UNKNOWN;
+	}
+	
+	public enum ClickType {
+		LEFTCLICK		( 0,  0, -1, -1, false), 
+		RIGHTCLICK		( 0,  1, -1, -1, false), 
+		DUBBLECLICK		( 6,  0, -1, -1, false),
+		DRAGLEFT		( 5,  1,  0,  2, false), 
+		DRAGRIGHT		( 5,  5,  4,  6, false), 
+		TRANSFERSTACK	( 0,  0, -1, -1, true ),
+		TRANSFERITEM	( 0,  1, -1, -1, true ),
+		UNKNOWN			(-1, -1, -1, -1, false);
+		
+		private final int mode;
+		private final int button;
+		private final int prefixButton;
+		private final int suffixButton;
+		private final boolean faux;
+		
+		private boolean doneFirst = false;
+		private int fauxFirstSlot;
+		
+		ClickType(int mode, int button, int prefixButton, int suffixButton, boolean faux) {
+			this.mode = mode;
+			this.button = button;
+			this.prefixButton = prefixButton;
+			this.suffixButton = suffixButton;
+			this.faux = faux;
+		}
+		
+		public boolean doPrefix() {
+			return prefixButton != -1 ? true : false;
+		}
+		
+		public boolean doSuffix() {
+			return suffixButton != -1 ? true : false;
+		}
+		
+		public ServerBoundPacketData createPrefix(NetworkDataCache cache) {
+			return pcClick(cache, mode, prefixButton, -999, AIR);
+		}
+		
+		public ServerBoundPacketData createSuffix(NetworkDataCache cache) {
+			return pcClick(cache, mode, suffixButton, -999, AIR);
+		}
+		
+		RecyclableArrayList<ServerBoundPacketData> process(NetworkDataCache cache, int slot, ItemStackWrapper lastItem) {
+			RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
+			if(mode != -1 && (!faux || doneFirst) && (mode != 6 || !doneFirst)) {
+				packets.add(pcClick(cache, mode, button, slot, lastItem)); doneFirst = true;
+			}
+			if(faux) {
+				if (!doneFirst) { 
+					packets.add(pcClick(cache, 0, 0, slot, lastItem)); 
+					fauxFirstSlot = slot;
+				} else { 
+					packets.add(pcClick(cache, 0, 0, fauxFirstSlot, AIR));
+				}
+			}
+			return packets;
+		}
+		
+	}
+	
+	private static ServerBoundPacketData pcClick(NetworkDataCache cache, int mode, int button, int slot, ItemStackWrapper lastItem) {
+		return MiddleInventoryClick.create(cache.getLocale(), cache.getOpenedWindowId(), slot, button, cache.getActionNumber(), mode, lastItem);
 	}
 
 }
