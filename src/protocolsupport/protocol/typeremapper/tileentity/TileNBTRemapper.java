@@ -23,7 +23,6 @@ import protocolsupport.utils.IntTuple;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagType;
 
 public class TileNBTRemapper {
@@ -187,8 +186,8 @@ public class TileNBTRemapper {
 						NBTTagCompoundWrapper compound = input.getCompound("SpawnData");
 
 						String id = MinecraftData.removeNamespacePrefix(compound.getString("id"));
-						EntityType entityType = EntityType.fromName(id);
-						NetworkEntityType networkEntityType = NetworkEntityType.getMobByTypeId(entityType.getTypeId());
+						@SuppressWarnings("deprecation")
+						NetworkEntityType networkEntityType = NetworkEntityType.fromBukkitType(EntityType.fromName(id));
 						entityId = PEDataValues.getLivingEntityTypeId(networkEntityType);
 						compound.setInt("Type", entityId);
 					}
