@@ -1,6 +1,6 @@
 package protocolsupport.protocol.typeremapper.itemstack.toclient;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.entity.EntityType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackSpecificRemapper;
