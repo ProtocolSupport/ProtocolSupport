@@ -1,5 +1,6 @@
 package protocolsupport.protocol.typeremapper.itemstack.toclient;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.entity.EntityType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackSpecificRemapper;
@@ -16,11 +17,16 @@ public class MonsterEggToPEIdSpecificRemapper implements ItemStackSpecificRemapp
 	@Override
 	public ItemStackWrapper remap(ProtocolVersion version, String locale, ItemStackWrapper itemstack) {
 		NBTTagCompoundWrapper tag = itemstack.getTag();
-		if (tag.isNull() || !tag.hasKeyOfType("EntityType", NBTTagType.COMPOUND)) {
+		if (tag.isNull()) {
 			return itemstack;
 		}
-		String id = MinecraftData.removeNamespacePrefix(tag.getCompound("EntityTag").getString("id"));
-		EntityType entityType = EntityType.fromName(id);
+		String id = tag.getCompound("EntityTag").getString("id");
+
+		if (StringUtils.isEmpty(id)) {
+			return itemstack;
+		}
+
+		EntityType entityType = EntityType.fromName(MinecraftData.removeNamespacePrefix(id));
 		NetworkEntityType networkEntityType = NetworkEntityType.getMobByTypeId(entityType.getTypeId());
 		itemstack.setData(PEDataValues.getLivingEntityTypeId(networkEntityType));
 		return itemstack;
