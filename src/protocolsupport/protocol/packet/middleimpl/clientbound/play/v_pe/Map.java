@@ -16,7 +16,6 @@ public class Map extends MiddleMap {
 	public static final int FLAG_ENTITY_UPDATE = 0x08;
 	public static final int FLAG_DECORATION_UPDATE = 0x04;
 	public static final int FLAG_TEXTURE_UPDATE = 0x02;
-	public static final int FLAG_ITEM_UPDATE = 0x01;
 	
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
@@ -26,8 +25,7 @@ public class Map extends MiddleMap {
 		int flags = 0;
 
 		if (columns > 0) { flags |= FLAG_TEXTURE_UPDATE; }
-		//if (icons.length > 0) { flags |= (FLAG_DECORATION_UPDATE) ; } TODO: Fix the map icons.
-		flags |= FLAG_ITEM_UPDATE;
+		if (icons.length > 0) { flags |= (FLAG_DECORATION_UPDATE) ; } //TODO: Fix the map icons.
 
 		VarNumberSerializer.writeVarInt(serializer, flags);
 		serializer.writeByte(0); //Dimension
@@ -38,9 +36,11 @@ public class Map extends MiddleMap {
 		}
 
 		if ((flags & FLAG_DECORATION_UPDATE) != 0) {
+			VarNumberSerializer.writeVarInt(serializer, 0); //Playerheads?
 			VarNumberSerializer.writeVarInt(serializer, icons.length);
 			for (Icon icon: icons) {
-				VarNumberSerializer.writeSVarInt(serializer, icon.dirtype);
+				serializer.writeByte(icon.dirtype & 0x0F);
+				serializer.writeByte(icon.dirtype & 0xF0);
 				serializer.writeByte(icon.x);
 				serializer.writeByte(icon.z);
 				StringSerializer.writeString(serializer, connection.getVersion(), "");

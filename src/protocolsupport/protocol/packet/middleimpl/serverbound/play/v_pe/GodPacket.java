@@ -170,15 +170,10 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				}
 				break;
 			}
-			//For creative?
 			case ACTION_RELEASE_ITEM: {
 				packets.add(MiddleHeldSlot.create(slot));
-				System.out.println("Realease item. Action " + subTypeId + " ");
-				switch(subTypeId) {
-					default: {
-						break;
-					}
-				}
+				//Special place packet.
+				packets.add(MiddleBlockPlace.create(new Position(-1, 255, -1), -1, 0, cX, cY, cZ));
 				break;
 			}
 			case ACTION_NORMAL: { //Normal inventory transaction.
@@ -422,6 +417,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		
 		RecyclableArrayList<ServerBoundPacketData> process(NetworkDataCache cache, int slot, ItemStackWrapper lastItem) {
 			RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
+			System.out.print(mode != -1); System.out.print(!faux || doneFirst); System.out.print(mode != 6 || !doneFirst);
 			if(mode != -1 && (!faux || doneFirst) && (mode != 6 || !doneFirst)) {
 				packets.add(pcClick(cache, mode, button, slot, lastItem)); doneFirst = true;
 			}
