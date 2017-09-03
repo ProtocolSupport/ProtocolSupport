@@ -2,7 +2,7 @@ package protocolsupport.protocol.typeremapper.itemstack.toclient;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackSpecificRemapper;
-import protocolsupport.protocol.typeremapper.legacy.LegacyMonsterEgg;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
@@ -14,7 +14,10 @@ public class MonsterEggToLegacyIdSpecificRemapper implements ItemStackSpecificRe
 		if (tag.isNull()) {
 			return itemstack;
 		}
-		itemstack.setData(LegacyMonsterEgg.toLegacyId(tag.getCompound("EntityTag").getString("id")));
+		NetworkEntityType type = NetworkEntityType.getByRegistrySTypeId(tag.getCompound("EntityTag").getString("id"));
+		if (type != NetworkEntityType.NONE) {
+			itemstack.setData(type.getRegistryITypeId());
+		}
 		return itemstack;
 	}
 
