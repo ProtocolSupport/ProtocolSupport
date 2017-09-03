@@ -6,19 +6,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.function.BiFunction;
 
+import org.bukkit.entity.EntityType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.DragonHeadSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.PlayerSkullToLegacyOwnerSpecificRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityType;
+import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.minecraftdata.ItemData;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.IntTuple;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagType;
 
 public class TileNBTRemapper {
@@ -107,7 +112,7 @@ public class TileNBTRemapper {
 				}
 				return input;
 			},
-			ProtocolVersionsHelper.concat(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_9, ProtocolVersion.MINECRAFT_1_10), ProtocolVersion.MINECRAFT_PE)
+			ProtocolVersionsHelper.concat(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_9, ProtocolVersion.MINECRAFT_1_10))
 		);
 		register(
 			TileEntityUpdateType.MOB_SPAWNER,
@@ -167,6 +172,31 @@ public class TileNBTRemapper {
 						s.append(ChatAPI.fromJSON(lines[i]).toLegacyText());
 					}
 					input.setString("Text", s.toString());
+					return input;
+				},
+				ProtocolVersion.MINECRAFT_PE
+		);
+		register(
+				TileEntityUpdateType.MOB_SPAWNER,
+				(version, input) -> {
+					input.remove("SpawnPotentials"); // TODO: Remap SpawnPotentials (does the client even care about it anyway?)
+
+					int entityId = 0;
+
+					if (input.hasKeyOfType("SpawnData", NBTTagType.COMPOUND)) {
+						NBTTagCompoundWrapper compound = input.getCompound("SpawnData");
+
+						String id = MinecraftData.removeNamespacePrefix(compound.getString("id"));
+						EntityType entityType = EntityType.fromName(id);
+						NetworkEntityType networkEntityType = NetworkEntityType.getMobByTypeId(entityType.getTypeId());
+						entityId = PEDataValues.getLivingEntityTypeId(networkEntityType);
+						compound.setInt("Type", entityId);
+					}
+
+					input.setInt("EntityId", entityId);
+					input.setFloat("DisplayEntityWidth", 1);
+					input.setFloat("DisplayEntityHeight", 1);
+					input.setFloat("DisplayEntityScale", 1);
 					return input;
 				},
 				ProtocolVersion.MINECRAFT_PE
