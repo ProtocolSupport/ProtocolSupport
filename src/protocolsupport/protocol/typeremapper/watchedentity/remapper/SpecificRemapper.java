@@ -94,7 +94,7 @@ public enum SpecificRemapper {
 				remapped.put(7, new DataWatcherObjectShortLe(air.get()));
 				
 				// = PE Bounding Box =
-				//TODO: Put real numbers in? This will allow mobs to push PE player properly and such xD Necessary for PE Lighting.
+				//TODO: Put real numbers in? This will allow mobs to push PE player properly and such xD Perhaps necessary for PE Lighting?
 				remapped.put(54, new DataWatcherObjectFloatLe(0.6f)); //Width
 				remapped.put(55, new DataWatcherObjectFloatLe(1.8f)); //Height
 				
@@ -102,7 +102,9 @@ public enum SpecificRemapper {
 				remapped.put(40, new DataWatcherObjectString("Interact")); //Different texts? I ain't bothered.
 
 			}}, ProtocolVersion.MINECRAFT_PE),
-		new Entry(new PeSimpleFlagAdder(new int[] {PeMetaBase.FLAG_GRAVITY}, new boolean[] {true}), ProtocolVersion.MINECRAFT_PE),
+		new Entry(new PeSimpleFlagAdder(
+				new int[] {PeMetaBase.FLAG_GRAVITY}, new boolean[] {true}
+			), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.Entity.FLAGS,
 				new int[] {1, 2, 4, 6, 8}, new int[] {PeMetaBase.FLAG_ON_FIRE, PeMetaBase.FLAG_SNEAKING, PeMetaBase.FLAG_SPRINTING, PeMetaBase.FLAG_INVISIBLE, PeMetaBase.FLAG_GLIDING}
 		), ProtocolVersion.MINECRAFT_PE),
@@ -151,7 +153,9 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Insentient.NO_AI, 15) {}, ProtocolVersion.MINECRAFT_1_8)
 	),
 	PLAYER(NetworkEntityType.PLAYER, SpecificRemapper.LIVING,
-		new Entry(new PeSimpleFlagAdder(new int[] {PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG, PeMetaBase.FLAG_COLLIDE}, new boolean[] {true, true}), ProtocolVersion.MINECRAFT_PE),
+		new Entry(new PeSimpleFlagAdder(
+				new int[] {PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG, PeMetaBase.FLAG_COLLIDE}, new boolean[] {true, true}
+			), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectFloat>(DataWatcherObjectIndex.Player.ADDITIONAL_HEARTS, 11) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_1),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectFloat>(DataWatcherObjectIndex.Player.ADDITIONAL_HEARTS, 10) {}, ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectFloat>(DataWatcherObjectIndex.Player.ADDITIONAL_HEARTS, 17) {}, ProtocolVersionsHelper.BEFORE_1_9),
@@ -218,7 +222,9 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Ageable.AGE_HACK, 12), ProtocolVersionsHelper.RANGE__1_6__1_7)
 	),
 	TAMEABLE(NetworkEntityType.TAMEABLE, SpecificRemapper.AGEABLE,
-		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.Tameable.TAME_FLAGS, new int[] {1, 2, 3}, new int[] {PeMetaBase.FLAG_SITTING, PeMetaBase.FLAG_ANGRY, PeMetaBase.FLAG_TAMED}), ProtocolVersion.MINECRAFT_PE),
+		new Entry(new PeFlagRemapper(
+				DataWatcherObjectIndex.Tameable.TAME_FLAGS, new int[] {1, 2, 3}, new int[] {PeMetaBase.FLAG_SITTING, PeMetaBase.FLAG_ANGRY, PeMetaBase.FLAG_TAMED}
+			), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Tameable.TAME_FLAGS, 13) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_1),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Tameable.TAME_FLAGS, 12) {},ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Tameable.TAME_FLAGS, 16) {}, ProtocolVersionsHelper.BEFORE_1_9)
@@ -245,7 +251,9 @@ public enum SpecificRemapper {
 	SQUID(NetworkEntityType.SQUID, SpecificRemapper.INSENTIENT),
 	BASE_HORSE(NetworkEntityType.BASE_HORSE, SpecificRemapper.AGEABLE,
 		//TODO: Not thse flags? These just make the horse disappear :/ PeMetaBase.FLAG_REARING PeMetaBase.FLAG_BREATHING
-		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.BaseHorse.FLAGS, new int[] {2, 3, 4}, new int[] {PeMetaBase.FLAG_TAMED, PeMetaBase.FLAG_SADDLED, PeMetaBase.FLAG_CHESTED}), ProtocolVersion.MINECRAFT_PE),
+		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.BaseHorse.FLAGS, 
+				new int[] {2, 3, 4}, new int[] {PeMetaBase.FLAG_TAMED, PeMetaBase.FLAG_SADDLED, PeMetaBase.FLAG_CHESTED}), 
+			ProtocolVersion.MINECRAFT_PE),
 		new Entry(new DataWatcherDataRemapper(){
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
@@ -316,7 +324,9 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Lama.VARIANT, 18) {}, ProtocolVersionsHelper.RANGE__1_11__1_12_1)
 	),
 	BAT(NetworkEntityType.BAT, SpecificRemapper.INSENTIENT,
-		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.Bat.HANGING, new int[] {1, 1}, new int[] {PeMetaBase.FLAG_RESTING, -PeMetaBase.FLAG_GRAVITY}), ProtocolVersion.MINECRAFT_PE),
+		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.Bat.HANGING,
+				new int[] {1, 1}, new int[] {PeMetaBase.FLAG_RESTING, -PeMetaBase.FLAG_GRAVITY}), //If the bat is hanging, remove it's gravity to prevent it from falling.
+			ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Bat.HANGING, 12) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_1),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Bat.HANGING, 11) {}, ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Bat.HANGING, 16) {}, ProtocolVersionsHelper.BEFORE_1_9)
@@ -372,7 +382,9 @@ public enum SpecificRemapper {
 			public DataWatcherObjectByte remapValue(DataWatcherObjectByte object) {
 				return new DataWatcherObjectByte((byte) (object.getValue() & 0x0F));
 			}}, ProtocolVersion.MINECRAFT_PE),
-		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.Sheep.FLAGS, new int[] {5}, new int[] {PeMetaBase.FLAG_SHEARED}), ProtocolVersion.MINECRAFT_PE),
+		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.Sheep.FLAGS,
+				new int[] {5}, new int[] {PeMetaBase.FLAG_SHEARED}), 
+			ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Sheep.FLAGS, 13) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_1),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Sheep.FLAGS, 12) {}, ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Sheep.FLAGS, 16) {}, ProtocolVersionsHelper.BEFORE_1_9)
@@ -437,7 +449,9 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.EnderDragon.PHASE, 11) {}, ProtocolVersionsHelper.ALL_1_9)
 	),
 	SNOWMAN(NetworkEntityType.SNOWMAN, SpecificRemapper.INSENTIENT,
-		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.Snowman.NO_HAT, new int[] {5}, new int[] {-PeMetaBase.FLAG_SHEARED}), ProtocolVersion.MINECRAFT_PE),
+		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.Snowman.NO_HAT,
+				new int[] {5}, new int[] {-PeMetaBase.FLAG_SHEARED}
+		), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Snowman.NO_HAT, 12) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_1),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Snowman.NO_HAT, 11) {}, ProtocolVersionsHelper.ALL_1_9)
 	),
@@ -474,7 +488,9 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Blaze.ON_FIRE, 16) {}, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	SPIDER(NetworkEntityType.SPIDER, SpecificRemapper.LIVING,
-		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.Spider.CLIMBING, new int[] {1}, new int[] {PeMetaBase.FLAG_CLIMBING}), ProtocolVersion.MINECRAFT_PE),
+		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.Spider.CLIMBING,
+				new int[] {1}, new int[] {PeMetaBase.FLAG_CLIMBING}
+		), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Spider.CLIMBING, 12) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_1),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Spider.CLIMBING, 11) {}, ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Spider.CLIMBING, 16) {}, ProtocolVersionsHelper.BEFORE_1_9)
@@ -634,7 +650,9 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Boat.RIGHT_PADDLE, 11) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_1)
 	),
 	TNT(NetworkEntityType.TNT, SpecificRemapper.ENTITY,
-		new Entry(new PeSimpleFlagAdder(new int[] {PeMetaBase.FLAG_IGNITED}, new boolean[] {true}), ProtocolVersion.MINECRAFT_PE),
+		new Entry(new PeSimpleFlagAdder(
+				new int[] {PeMetaBase.FLAG_IGNITED}, new boolean[] {true}
+			), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Tnt.FUSE, 56), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Tnt.FUSE, 6) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_1),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Tnt.FUSE, 5) {}, ProtocolVersionsHelper.ALL_1_9)
@@ -733,7 +751,9 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectString>(DataWatcherObjectIndex.MinecartCommand.LAST_OUTPUT, 24) {}, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_8))
 	),
 	ARROW(NetworkEntityType.ARROW, SpecificRemapper.ENTITY,
-		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.Arrow.CIRTICAL, new int[] {1}, new int[] {PeMetaBase.FLAG_CRITICAL})),
+		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.Arrow.CIRTICAL,
+				new int[] {1}, new int[] {PeMetaBase.FLAG_CRITICAL}
+		), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Arrow.CIRTICAL, 6) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_1),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Arrow.CIRTICAL, 5) {}, ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Arrow.CIRTICAL, 15) {}, ProtocolVersionsHelper.BEFORE_1_9)
