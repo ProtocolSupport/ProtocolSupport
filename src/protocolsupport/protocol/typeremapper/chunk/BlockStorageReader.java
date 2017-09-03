@@ -1,20 +1,8 @@
 package protocolsupport.protocol.typeremapper.chunk;
 
-import org.bukkit.Material;
-
 import io.netty.buffer.ByteBuf;
 
-@SuppressWarnings("deprecation")
 public class BlockStorageReader {
-
-	private static final boolean[] validBlockState = new boolean[Short.MAX_VALUE * 2];
-	static {
-		for (Material material : Material.values()) {
-			for (int i = 0; i < 16; i++) {
-				validBlockState[(material.getId() << 4) | i] = true;
-			}
-		}
-	}
 
 	private final int[] palette;
 	private final long[] blockdata;
@@ -35,12 +23,7 @@ public class BlockStorageReader {
 	}
 
 	public int getBlockState(int blockindex) {
-		int blockState = palette[getPaletteIndex(blockindex)];
-		if ((blockState > 0) && (blockState < validBlockState.length) && validBlockState[blockState]) {
-			return blockState;
-		} else {
-			return 0;
-		}
+		return palette[getPaletteIndex(blockindex)];
 	}
 
 	private int getPaletteIndex(int blockIndex) {
