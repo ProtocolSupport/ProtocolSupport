@@ -183,6 +183,7 @@ public class PEDataValues {
 		registerBlockAndItemRemap(250, 235); // BLACK_GLAZED_TERRACOTTA
 		registerBlockAndItemRemap(251, 236); // CONCRETE
 		registerBlockAndItemRemap(255, 252); // STRUCTURE_BLOCK
+		registerBlockAndItemRemap(166, 95);  // BARRIER
 
 		// Nether slab -> Quartz slab
 		registerBlockAndItemRemap(44, 7, 44, 6);
