@@ -25,6 +25,9 @@ public class VarIntFrameDecoder implements IPacketSplitter {
 				tmpPacketLength |= (part & 0x7F) << (i * 7);
 				if (part >= 0) {
 					packetLength = tmpPacketLength;
+					if (packetLength == 0) {
+						packetLength = -1;
+					}
 					return;
 				}
 			}
