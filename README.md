@@ -24,14 +24,18 @@ Known wontfix issues:
 * [1.8 and earlier] Can't control vehicle
 * [1.6 and earlier] Stats are not sent
 
-================
+---
+
+Website: http://protocolsupport.true-games.org/
 
 Spigot: http://www.spigotmc.org/resources/protocolsupport.7201/
 
 BukkitDev: https://dev.bukkit.org/projects/protocolsupport/
 
+MC Market: http://www.mc-market.org/resources/4607/
+
 Jenkins: http://build.true-games.org/job/ProtocolSupport/
 
-================
+---
 
 Licensed under the terms of GNU AGPLv3
