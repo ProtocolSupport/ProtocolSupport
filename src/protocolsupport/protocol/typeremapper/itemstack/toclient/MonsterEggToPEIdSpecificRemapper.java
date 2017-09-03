@@ -9,13 +9,14 @@ import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagType;
 
 public class MonsterEggToPEIdSpecificRemapper implements ItemStackSpecificRemapper {
 
 	@Override
 	public ItemStackWrapper remap(ProtocolVersion version, String locale, ItemStackWrapper itemstack) {
 		NBTTagCompoundWrapper tag = itemstack.getTag();
-		if (tag.isNull()) {
+		if (tag.isNull() || !tag.hasKeyOfType("EntityType", NBTTagType.COMPOUND)) {
 			return itemstack;
 		}
 		String id = MinecraftData.removeNamespacePrefix(tag.getCompound("EntityTag").getString("id"));
