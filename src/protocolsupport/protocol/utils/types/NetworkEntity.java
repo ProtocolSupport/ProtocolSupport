@@ -11,11 +11,11 @@ import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 public class NetworkEntity {
 
 	public static NetworkEntity createMob(UUID uuid, int id, int typeId) {
-		return new NetworkEntity(uuid, id, NetworkEntityType.getMobByTypeId(typeId));
+		return new NetworkEntity(uuid, id, NetworkEntityType.getMobByNetworkTypeId(typeId));
 	}
 
 	public static NetworkEntity createObject(UUID uuid, int id, int typeId, int objectData) {
-		return new NetworkEntity(uuid, id, NetworkEntityType.getObjectByTypeAndData(typeId, objectData));
+		return new NetworkEntity(uuid, id, NetworkEntityType.getObjectByNetworkTypeIdAndData(typeId, objectData));
 	}
 
 	public static NetworkEntity createPlayer(UUID uuid, int id) {

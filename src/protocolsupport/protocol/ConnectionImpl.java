@@ -10,7 +10,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelOutboundHandler;
 import io.netty.util.AttributeKey;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
@@ -18,7 +17,7 @@ import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
-public abstract class ConnectionImpl extends Connection {
+public class ConnectionImpl extends Connection {
 
 	protected static final AttributeKey<ConnectionImpl> key = AttributeKey.valueOf("PSConnectionImpl");
 
@@ -64,15 +63,51 @@ public abstract class ConnectionImpl extends Connection {
 	}
 
 	@Override
+	public void sendPacket(Object packet) {
+		Runnable packetSend = () -> {
+			try {
+				ChannelHandlerContext ctx = networkmanager.getChannel().pipeline().context(ChannelHandlers.LOGIC);
+				ctx.writeAndFlush(packet);
+			} catch (Throwable t) {
+				System.err.println("Error occured while packet sending");
+				t.printStackTrace();
+			}
+		};
+		if (networkmanager.getChannel().eventLoop().inEventLoop()) {
+			packetSend.run();
+		} else {
+			networkmanager.getChannel().eventLoop().submit(packetSend);
+		}
+	}
+
+	@Override
+	public void receivePacket(Object packet) {
+		Runnable packetRecv = () -> {
+			try {
+				ChannelHandlerContext ctx = networkmanager.getChannel().pipeline().context(ChannelHandlers.LOGIC);
+				ctx.fireChannelRead(packet);
+			} catch (Throwable t) {
+				System.err.println("Error occured while packet receiving");
+				t.printStackTrace();
+			}
+		};
+		if (networkmanager.getChannel().eventLoop().inEventLoop()) {
+			packetRecv.run();
+		} else {
+			networkmanager.getChannel().eventLoop().submit(packetRecv);
+		}
+	}
+
+	@Override
 	public void sendRawPacket(byte[] data) {
 		ByteBuf dataInst = Unpooled.wrappedBuffer(data);
 		Runnable packetSend = () -> {
 			try {
-				ChannelHandlerContext encoderContext = networkmanager.getChannel().pipeline().context(ChannelHandlers.ENCODER_TRANSFORMER);
-				ChannelOutboundHandler encoderChannelHandler = (ChannelOutboundHandler) encoderContext.handler();
-				encoderChannelHandler.write(encoderContext, dataInst, encoderContext.voidPromise());
-			} catch (Exception e) {
-				e.printStackTrace();
+				ChannelHandlerContext ctx = networkmanager.getChannel().pipeline().context(ChannelHandlers.ENCODER_TRANSFORMER);
+				ctx.writeAndFlush(dataInst);
+			} catch (Throwable t) {
+				System.err.println("Error occured while raw packet sending");
+				t.printStackTrace();
 			}
 		};
 		if (networkmanager.getChannel().eventLoop().inEventLoop()) {

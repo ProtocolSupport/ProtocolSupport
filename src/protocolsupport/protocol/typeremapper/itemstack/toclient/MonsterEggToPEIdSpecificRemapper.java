@@ -1,7 +1,6 @@
 package protocolsupport.protocol.typeremapper.itemstack.toclient;
 
 import org.apache.commons.lang3.StringUtils;
-import org.bukkit.entity.EntityType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackSpecificRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
@@ -10,7 +9,6 @@ import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
-@SuppressWarnings("deprecation")
 public class MonsterEggToPEIdSpecificRemapper implements ItemStackSpecificRemapper {
 
 	@Override
@@ -25,7 +23,7 @@ public class MonsterEggToPEIdSpecificRemapper implements ItemStackSpecificRemapp
 			return itemstack;
 		}
 
-		itemstack.setData(PEDataValues.getLivingEntityTypeId(NetworkEntityType.fromBukkitType(EntityType.fromName(MinecraftData.removeNamespacePrefix(id)))));
+		itemstack.setData(PEDataValues.getLivingEntityTypeId(NetworkEntityType.getByRegistrySTypeId(MinecraftData.removeNamespacePrefix(id))));
 		return itemstack;
 	}
 

@@ -2,9 +2,11 @@ package protocolsupport.protocol.utils.types;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.HashMap;
 
 import org.bukkit.entity.EntityType;
 
+import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.CollectionsUtils;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
@@ -27,6 +29,7 @@ public enum NetworkEntityType {
 	BATTLE_HORSE(EType.NONE, -1, BASE_HORSE),
 	CARGO_HORSE(EType.NONE, -1, BASE_HORSE),
 	BASE_SKELETON(EType.NONE, -1, INSENTIENT),
+	EXP_ORB(EType.NONE, -1),
 	// Mobs (Network and game values are the same)
 	COMMON_HORSE(EType.MOB, EntityType.HORSE, BATTLE_HORSE),
 	ZOMBIE_HORSE(EType.MOB, EntityType.ZOMBIE_HORSE, BATTLE_HORSE),
@@ -120,57 +123,60 @@ public enum NetworkEntityType {
 		return superType;
 	}
 
-	public int getTypeId() {
+	public int getNetworkTypeId() {
 		if (isOfType(MINECART)) {
 			return MINECART.typeId;
 		}
 		return typeId;
 	}
 
+	public String getRegistrySTypeId() {
+		return bukkitType != null ? MinecraftData.addNamespacePrefix(bukkitType.getName()) : "";
+	}
+
+	public int getRegistryITypeId() {
+		return bukkitType != null ? bukkitType.getTypeId() : 0;
+	}
+
 	public boolean isOfType(NetworkEntityType type) {
 		return ((type == this) || ((getSuperType() != null) && getSuperType().isOfType(type)));
-	}
-	
-	public EntityType getBukkitType() {
-		return bukkitType;
 	}
 
 	public enum EType {
 		NONE, OBJECT, MOB
 	}
 
-	private static final ArrayMap<NetworkEntityType> OBJECT_BY_TYPE_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.OBJECT), (w -> w.typeId));
-	private static final ArrayMap<NetworkEntityType> MOB_BY_TYPE_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.MOB), (w -> w.typeId));
-	private static final ArrayMap<NetworkEntityType> MOB_BY_BUKKIT_TYPE = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()), (w -> w.bukkitType.getTypeId()));
-	
-	public static NetworkEntityType getObjectByTypeId(int objectTypeId) {
-		NetworkEntityType type = OBJECT_BY_TYPE_ID.get(objectTypeId);
+	private static final ArrayMap<NetworkEntityType> OBJECT_BY_N_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.OBJECT), (w -> w.typeId));
+	private static final ArrayMap<NetworkEntityType> MOB_BY_N_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.MOB), (w -> w.typeId));
+	private static final ArrayMap<NetworkEntityType> BY_R_INT_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()), (w -> w.bukkitType.getTypeId()));
+	private static final HashMap<String, NetworkEntityType> BY_R_STRING_ID = new HashMap<>();
+	static {
+		Arrays.stream(NetworkEntityType.values()).forEach(w -> {
+			BY_R_STRING_ID.put(w.bukkitType.getName(), w);
+			BY_R_STRING_ID.put(MinecraftData.addNamespacePrefix(w.bukkitType.getName()), w);
+		});
+	}
+
+	public static NetworkEntityType getObjectByNetworkTypeId(int objectTypeId) {
+		NetworkEntityType type = OBJECT_BY_N_ID.get(objectTypeId);
 		if (type == null) {
 			throw new IllegalArgumentException(MessageFormat.format("Unknown object network type id {0}", objectTypeId));
 		}
 		return type;
 	}
 
-	public static NetworkEntityType getObjectByTypeAndData(int objectTypeId, int objectData) {
-		NetworkEntityType w = getObjectByTypeId(objectTypeId);
+	public static NetworkEntityType getObjectByNetworkTypeIdAndData(int objectTypeId, int objectData) {
+		NetworkEntityType w = getObjectByNetworkTypeId(objectTypeId);
 		if (w.isOfType(MINECART)) {
 			return getMinecartByData(objectData);
 		}
 		return w;
 	}
 
-	public static NetworkEntityType getMobByTypeId(int mobTypeId) {
-		NetworkEntityType type = MOB_BY_TYPE_ID.get(mobTypeId);
+	public static NetworkEntityType getMobByNetworkTypeId(int mobTypeId) {
+		NetworkEntityType type = MOB_BY_N_ID.get(mobTypeId);
 		if (type == null) {
 			throw new IllegalArgumentException(MessageFormat.format("Unknown mob network type id {0}", mobTypeId));
-		}
-		return type;
-	}
-	
-	public static NetworkEntityType fromBukkitType(EntityType bukkitType) {
-		NetworkEntityType type = MOB_BY_BUKKIT_TYPE.get(bukkitType.getTypeId());
-		if (type == null) {
-			throw new IllegalArgumentException(MessageFormat.format("Unknown entity network from bukkit {0}", bukkitType));
 		}
 		return type;
 	}
@@ -179,7 +185,16 @@ public enum NetworkEntityType {
 		if (objectData == 0) {
 			return MINECART;
 		}
-		return getObjectByTypeId(210 + objectData);
+		return getObjectByNetworkTypeId(210 + objectData);
+	}
+
+	public static NetworkEntityType getByRegistrySTypeId(String name) {
+		return BY_R_STRING_ID.getOrDefault(name, NONE);
+	}
+
+	public static NetworkEntityType getByRegistryITypeId(int typeId) {
+		NetworkEntityType type = BY_R_INT_ID.get(typeId);
+		return type != null ? type : NONE;
 	}
 
 	NetworkEntityType(EType etype, int typeId, EntityType bukkitType, NetworkEntityType superType) {
@@ -188,7 +203,7 @@ public enum NetworkEntityType {
 		this.bukkitType = bukkitType;
 		this.superType = superType;
 	}
-	
+
 	NetworkEntityType(EType etype, int typeId, NetworkEntityType superType) {
 		this(etype, typeId, EntityType.UNKNOWN, superType);
 	}
