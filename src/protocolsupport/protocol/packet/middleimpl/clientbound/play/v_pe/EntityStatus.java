@@ -13,6 +13,8 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class EntityStatus extends MiddleEntityStatus {
 
+	public static final int PE_UNLEASH = 63;
+	
 	//TODO: Actually remap and skip the status codes. It seems that with the new update PE crashes if ID is unknown.
 	TIntHashSet allowedIds = new TIntHashSet(new int[] {2, 3, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 31, 34, 57, 63});
 
@@ -29,8 +31,6 @@ public class EntityStatus extends MiddleEntityStatus {
 		}
 		return packets;
 	}
-
-	public static int PE_UNLEASH = 63;
 
 	public static ClientBoundPacketData create(NetworkEntity entity, int status, ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_EVENT, version);
