@@ -29,6 +29,7 @@ public enum NetworkEntityType {
 	BATTLE_HORSE(EType.NONE, -1, BASE_HORSE),
 	CARGO_HORSE(EType.NONE, -1, BASE_HORSE),
 	BASE_SKELETON(EType.NONE, -1, INSENTIENT),
+	EXP_ORB(EType.NONE, -1),
 	// Mobs (Network and game values are the same)
 	COMMON_HORSE(EType.MOB, EntityType.HORSE, BATTLE_HORSE),
 	ZOMBIE_HORSE(EType.MOB, EntityType.ZOMBIE_HORSE, BATTLE_HORSE),

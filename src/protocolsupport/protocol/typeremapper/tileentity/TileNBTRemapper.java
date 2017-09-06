@@ -12,6 +12,7 @@ import protocolsupport.protocol.typeremapper.itemstack.toclient.PlayerSkullToLeg
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityType;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.minecraftdata.ItemData;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.IntTuple;
 import protocolsupport.utils.Utils;
@@ -61,7 +62,7 @@ public class TileNBTRemapper {
 			(version, input) -> {
 				if (!input.hasKeyOfType("SpawnData", NBTTagType.COMPOUND)) {
 					NBTTagCompoundWrapper spawndata = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-					spawndata.setString("id", "minecraft:pig");
+					spawndata.setString("id", NetworkEntityType.PIG.getRegistrySTypeId());
 					input.setCompound("SpawnData", spawndata);
 				}
 				return input;
@@ -72,11 +73,9 @@ public class TileNBTRemapper {
 			TileEntityUpdateType.MOB_SPAWNER,
 			(version, input) -> {
 				NBTTagCompoundWrapper spawndata = input.getCompound("SpawnData");
-				if (!spawndata.isNull()) {
-					String mobname = spawndata.getString("id");
-					if (!mobname.isEmpty()) {
-						spawndata.setString("id", LegacyEntityType.getLegacyName(mobname));
-					}
+				NetworkEntityType type = NetworkEntityType.getByRegistrySTypeId(spawndata.getString("id"));
+				if (type != NetworkEntityType.NONE) {
+					spawndata.setString("id", LegacyEntityType.getLegacyName(type));
 				}
 				return input;
 			},
@@ -88,11 +87,9 @@ public class TileNBTRemapper {
 				NBTTagCompoundWrapper spawndata = input.getCompound("SpawnData");
 				input.remove("SpawnPotentials");
 				input.remove("SpawnData");
-				if (!spawndata.isNull()) {
-					String mobname = spawndata.getString("id");
-					if (!mobname.isEmpty()) {
-						input.setString("EntityId", LegacyEntityType.getLegacyName(mobname));
-					}
+				NetworkEntityType type = NetworkEntityType.getByRegistrySTypeId(spawndata.getString("id"));
+				if (type != NetworkEntityType.NONE) {
+					input.setString("EntityId", LegacyEntityType.getLegacyName(type));
 				}
 				return input;
 			},
