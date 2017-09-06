@@ -5,6 +5,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelException;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.ChannelPipeline;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.common.LogicHandler;
 import protocolsupport.protocol.pipeline.common.SimpleReadTimeoutHandler;
@@ -12,7 +13,6 @@ import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.utils.netty.ChannelInitializer;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.impl.glowstone.GlowStoneConnectionImpl;
 import protocolsupport.zplatform.impl.glowstone.network.GlowStoneChannelHandlers;
 import protocolsupport.zplatform.impl.glowstone.network.pipeline.GlowStoneFramingHandler;
 import protocolsupport.zplatform.impl.glowstone.network.pipeline.GlowStoneSyncConnectionTicker;
@@ -26,7 +26,7 @@ public class GlowStoneServerConnectionChannel extends ChannelInitializer {
 		} catch (ChannelException e) {
 		}
 		channel.config().setAllocator(PooledByteBufAllocator.DEFAULT);
-		GlowStoneConnectionImpl connection = new GlowStoneConnectionImpl(ServerPlatform.get().getMiscUtils().getNetworkManagerFromChannel(channel));
+		ConnectionImpl connection = new ConnectionImpl(ServerPlatform.get().getMiscUtils().getNetworkManagerFromChannel(channel));
 		connection.storeInChannel(channel);
 		ProtocolStorage.addConnection(channel.remoteAddress(), connection);
 		ChannelPipeline pipeline = channel.pipeline();

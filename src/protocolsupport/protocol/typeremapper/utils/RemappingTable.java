@@ -34,7 +34,7 @@ public class RemappingTable {
 
 		@Override
 		public int getRemap(int id) {
-			if (id >= 0 && id < table.length) {
+			if ((id >= 0) && (id < table.length)) {
 				return table[id];
 			} else {
 				return id;

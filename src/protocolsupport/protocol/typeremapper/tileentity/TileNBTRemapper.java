@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.function.BiFunction;
 
-import org.bukkit.entity.EntityType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
@@ -92,7 +91,7 @@ public class TileNBTRemapper {
 			(version, input) -> {
 				if (!input.hasKeyOfType("SpawnData", NBTTagType.COMPOUND)) {
 					NBTTagCompoundWrapper spawndata = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-					spawndata.setString("id", "minecraft:pig");
+					spawndata.setString("id", NetworkEntityType.PIG.getRegistrySTypeId());
 					input.setCompound("SpawnData", spawndata);
 				}
 				return input;
@@ -103,11 +102,9 @@ public class TileNBTRemapper {
 			TileEntityUpdateType.MOB_SPAWNER,
 			(version, input) -> {
 				NBTTagCompoundWrapper spawndata = input.getCompound("SpawnData");
-				if (!spawndata.isNull()) {
-					String mobname = spawndata.getString("id");
-					if (!mobname.isEmpty()) {
-						spawndata.setString("id", LegacyEntityType.getLegacyName(mobname));
-					}
+				NetworkEntityType type = NetworkEntityType.getByRegistrySTypeId(spawndata.getString("id"));
+				if (type != NetworkEntityType.NONE) {
+					spawndata.setString("id", LegacyEntityType.getLegacyName(type));
 				}
 				return input;
 			},
@@ -119,11 +116,9 @@ public class TileNBTRemapper {
 				NBTTagCompoundWrapper spawndata = input.getCompound("SpawnData");
 				input.remove("SpawnPotentials");
 				input.remove("SpawnData");
-				if (!spawndata.isNull()) {
-					String mobname = spawndata.getString("id");
-					if (!mobname.isEmpty()) {
-						input.setString("EntityId", LegacyEntityType.getLegacyName(mobname));
-					}
+				NetworkEntityType type = NetworkEntityType.getByRegistrySTypeId(spawndata.getString("id"));
+				if (type != NetworkEntityType.NONE) {
+					input.setString("EntityId", LegacyEntityType.getLegacyName(type));
 				}
 				return input;
 			},
@@ -186,8 +181,7 @@ public class TileNBTRemapper {
 						NBTTagCompoundWrapper compound = input.getCompound("SpawnData");
 
 						String id = MinecraftData.removeNamespacePrefix(compound.getString("id"));
-						@SuppressWarnings("deprecation")
-						NetworkEntityType networkEntityType = NetworkEntityType.fromBukkitType(EntityType.fromName(id));
+						NetworkEntityType networkEntityType = NetworkEntityType.getByRegistrySTypeId(id);
 						entityId = PEDataValues.getLivingEntityTypeId(networkEntityType);
 						compound.setInt("Type", entityId);
 					}
