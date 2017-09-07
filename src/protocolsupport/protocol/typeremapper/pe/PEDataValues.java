@@ -57,6 +57,9 @@ public class PEDataValues {
 		livingEntityType.put(NetworkEntityType.LAMA, 29);
 		livingEntityType.put(NetworkEntityType.PARROT, 30);
 		livingEntityType.put(NetworkEntityType.ARMOR_STAND_MOB, 61);
+		livingEntityType.put(NetworkEntityType.VINDICATOR, 57);
+		livingEntityType.put(NetworkEntityType.EVOKER, 104);
+		livingEntityType.put(NetworkEntityType.VEX, 105);
 	}
 
 	public static int getLivingEntityTypeId(NetworkEntityType type) {

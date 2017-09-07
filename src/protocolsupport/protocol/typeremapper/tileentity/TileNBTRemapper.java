@@ -12,8 +12,11 @@ import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.DragonHeadSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.PlayerSkullToLegacyOwnerSpecificRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityType;
+import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.minecraftdata.ItemData;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.IntTuple;
 import protocolsupport.utils.Utils;
@@ -88,7 +91,7 @@ public class TileNBTRemapper {
 			(version, input) -> {
 				if (!input.hasKeyOfType("SpawnData", NBTTagType.COMPOUND)) {
 					NBTTagCompoundWrapper spawndata = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-					spawndata.setString("id", "minecraft:pig");
+					spawndata.setString("id", NetworkEntityType.PIG.getRegistrySTypeId());
 					input.setCompound("SpawnData", spawndata);
 				}
 				return input;
@@ -99,15 +102,13 @@ public class TileNBTRemapper {
 			TileEntityUpdateType.MOB_SPAWNER,
 			(version, input) -> {
 				NBTTagCompoundWrapper spawndata = input.getCompound("SpawnData");
-				if (!spawndata.isNull()) {
-					String mobname = spawndata.getString("id");
-					if (!mobname.isEmpty()) {
-						spawndata.setString("id", LegacyEntityType.getLegacyName(mobname));
-					}
+				NetworkEntityType type = NetworkEntityType.getByRegistrySTypeId(spawndata.getString("id"));
+				if (type != NetworkEntityType.NONE) {
+					spawndata.setString("id", LegacyEntityType.getLegacyName(type));
 				}
 				return input;
 			},
-			ProtocolVersionsHelper.concat(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_9, ProtocolVersion.MINECRAFT_1_10), ProtocolVersion.MINECRAFT_PE)
+			ProtocolVersionsHelper.concat(ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_9, ProtocolVersion.MINECRAFT_1_10))
 		);
 		register(
 			TileEntityUpdateType.MOB_SPAWNER,
@@ -115,11 +116,9 @@ public class TileNBTRemapper {
 				NBTTagCompoundWrapper spawndata = input.getCompound("SpawnData");
 				input.remove("SpawnPotentials");
 				input.remove("SpawnData");
-				if (!spawndata.isNull()) {
-					String mobname = spawndata.getString("id");
-					if (!mobname.isEmpty()) {
-						input.setString("EntityId", LegacyEntityType.getLegacyName(mobname));
-					}
+				NetworkEntityType type = NetworkEntityType.getByRegistrySTypeId(spawndata.getString("id"));
+				if (type != NetworkEntityType.NONE) {
+					input.setString("EntityId", LegacyEntityType.getLegacyName(type));
 				}
 				return input;
 			},
@@ -167,6 +166,30 @@ public class TileNBTRemapper {
 						s.append(ChatAPI.fromJSON(lines[i]).toLegacyText());
 					}
 					input.setString("Text", s.toString());
+					return input;
+				},
+				ProtocolVersion.MINECRAFT_PE
+		);
+		register(
+				TileEntityUpdateType.MOB_SPAWNER,
+				(version, input) -> {
+					input.remove("SpawnPotentials"); // TODO: Remap SpawnPotentials (does the client even care about it anyway?)
+
+					int entityId = 0;
+
+					if (input.hasKeyOfType("SpawnData", NBTTagType.COMPOUND)) {
+						NBTTagCompoundWrapper compound = input.getCompound("SpawnData");
+
+						String id = MinecraftData.removeNamespacePrefix(compound.getString("id"));
+						NetworkEntityType networkEntityType = NetworkEntityType.getByRegistrySTypeId(id);
+						entityId = PEDataValues.getLivingEntityTypeId(networkEntityType);
+						compound.setInt("Type", entityId);
+					}
+
+					input.setInt("EntityId", entityId);
+					input.setFloat("DisplayEntityWidth", 1);
+					input.setFloat("DisplayEntityHeight", 1);
+					input.setFloat("DisplayEntityScale", 1);
 					return input;
 				},
 				ProtocolVersion.MINECRAFT_PE

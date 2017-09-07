@@ -1,12 +1,15 @@
 package protocolsupport.protocol.typeremapper.itemstack.toclient;
 
+import org.apache.commons.lang3.StringUtils;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackSpecificRemapper;
+import protocolsupport.protocol.typeremapper.pe.PEDataValues;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
-public class MonsterEggToLegacyIdSpecificRemapper implements ItemStackSpecificRemapper {
+public class MonsterEggToPEIdSpecificRemapper implements ItemStackSpecificRemapper {
 
 	@Override
 	public ItemStackWrapper remap(ProtocolVersion version, String locale, ItemStackWrapper itemstack) {
@@ -14,10 +17,13 @@ public class MonsterEggToLegacyIdSpecificRemapper implements ItemStackSpecificRe
 		if (tag.isNull()) {
 			return itemstack;
 		}
-		NetworkEntityType type = NetworkEntityType.getByRegistrySTypeId(tag.getCompound("EntityTag").getString("id"));
-		if (type != NetworkEntityType.NONE) {
-			itemstack.setData(type.getRegistryITypeId());
+		String id = tag.getCompound("EntityTag").getString("id");
+
+		if (StringUtils.isEmpty(id)) {
+			return itemstack;
 		}
+
+		itemstack.setData(PEDataValues.getLivingEntityTypeId(NetworkEntityType.getByRegistrySTypeId(MinecraftData.removeNamespacePrefix(id))));
 		return itemstack;
 	}
 

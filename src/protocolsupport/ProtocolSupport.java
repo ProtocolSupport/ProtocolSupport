@@ -21,7 +21,6 @@ import protocolsupport.protocol.typeremapper.id.IdSkipper;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEffect;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityType;
-import protocolsupport.protocol.typeremapper.legacy.LegacyMonsterEgg;
 import protocolsupport.protocol.typeremapper.legacy.LegacyPotion;
 import protocolsupport.protocol.typeremapper.mapcolor.MapColorRemapper;
 import protocolsupport.protocol.typeremapper.pe.PESkin;
@@ -29,6 +28,7 @@ import protocolsupport.protocol.typeremapper.sound.SoundRemapper;
 import protocolsupport.protocol.typeremapper.tileentity.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherObjectIndex;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.minecraftdata.ItemData;
@@ -85,6 +85,7 @@ public class ProtocolSupport extends JavaPlugin {
 		}
 		try {
 			Class.forName(ProtocolVersion.class.getName());
+			Class.forName(ProtocolVersionsHelper.class.getName());
 			Class.forName(NetworkEntityType.class.getName());
 			Class.forName(DataWatcherObjectIndex.class.getName());
 			Class.forName(DataWatcherObjectIdRegistry.class.getName());
@@ -107,7 +108,6 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(TileNBTRemapper.class.getName());
 			Class.forName(BlockStorageReader.class.getName());
 			Class.forName(MapColorRemapper.class.getName());
-			Class.forName(LegacyMonsterEgg.class.getName());
 			Class.forName(LegacyPotion.class.getName());
 			Class.forName(LegacyEntityType.class.getName());
 			Class.forName(LegacyEffect.class.getName());

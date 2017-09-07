@@ -2,12 +2,15 @@ package protocolsupport.protocol.utils.types;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.HashMap;
 
 import org.bukkit.entity.EntityType;
 
+import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.CollectionsUtils;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
+@SuppressWarnings("deprecation")
 public enum NetworkEntityType {
 
 	NONE(EType.NONE, -1),
@@ -26,6 +29,7 @@ public enum NetworkEntityType {
 	BATTLE_HORSE(EType.NONE, -1, BASE_HORSE),
 	CARGO_HORSE(EType.NONE, -1, BASE_HORSE),
 	BASE_SKELETON(EType.NONE, -1, INSENTIENT),
+	EXP_ORB(EType.NONE, -1),
 	// Mobs (Network and game values are the same)
 	COMMON_HORSE(EType.MOB, EntityType.HORSE, BATTLE_HORSE),
 	ZOMBIE_HORSE(EType.MOB, EntityType.ZOMBIE_HORSE, BATTLE_HORSE),
@@ -74,55 +78,64 @@ public enum NetworkEntityType {
 	PARROT(EType.MOB, EntityType.PARROT, TAMEABLE),
 	ARMOR_STAND_MOB(EType.MOB, EntityType.ARMOR_STAND, ARMOR_STAND),
 	// Objects (Different networking values)
-	BOAT(EType.OBJECT, 1, ENTITY),
-	TNT(EType.OBJECT, 50, ENTITY),
-	SNOWBALL(EType.OBJECT, 61, ENTITY),
-	EGG(EType.OBJECT, 62, ENTITY),
-	FIREBALL(EType.OBJECT, 63, ENTITY),
-	FIRECHARGE(EType.OBJECT, 64, ENTITY),
-	ENDERPEARL(EType.OBJECT, 65, ENTITY),
-	WITHER_SKULL(EType.OBJECT, 66, FIREBALL),
-	FALLING_OBJECT(EType.OBJECT, 70, ENTITY),
-	ENDEREYE(EType.OBJECT, 72, ENTITY),
-	POTION(EType.OBJECT, 73, ENTITY),
-	EXP_BOTTLE(EType.OBJECT, 75, ENTITY),
-	LEASH_KNOT(EType.OBJECT, 77, ENTITY),
-	FISHING_FLOAT(EType.OBJECT, 90, ENTITY),
-	ITEM(EType.OBJECT, 2, ENTITY),
-	ARROW(EType.OBJECT, 60, ENTITY),
-	SPECTRAL_ARROW(EType.OBJECT, 91, ARROW),
-	TIPPED_ARROW(EType.OBJECT, 92, ARROW),
-	FIREWORK(EType.OBJECT, 76, ENTITY),
-	ITEM_FRAME(EType.OBJECT, 71, ENTITY),
-	ENDER_CRYSTAL(EType.OBJECT, 51, ENTITY),
-	ARMOR_STAND_OBJECT(EType.OBJECT, 78, ARMOR_STAND),
-	AREA_EFFECT_CLOUD(EType.OBJECT, 3, ENTITY),
-	SHULKER_BULLET(EType.OBJECT, 67, ENTITY),
-	LAMA_SPIT(EType.OBJECT, 68, ENTITY),
-	DRAGON_FIREBALL(EType.OBJECT, 93, ENTITY),
-	EVOCATOR_FANGS(EType.OBJECT, 79, ENTITY),
-	MINECART(EType.OBJECT, 10,  ENTITY),
+	BOAT(EType.OBJECT, 1, EntityType.BOAT, ENTITY),
+	TNT(EType.OBJECT, 50, EntityType.PRIMED_TNT, ENTITY),
+	SNOWBALL(EType.OBJECT, 61, EntityType.SNOWBALL, ENTITY),
+	EGG(EType.OBJECT, 62, EntityType.EGG, ENTITY),
+	FIREBALL(EType.OBJECT, 63, EntityType.FIREBALL, ENTITY),
+	FIRECHARGE(EType.OBJECT, 64, EntityType.SMALL_FIREBALL, ENTITY),
+	ENDERPEARL(EType.OBJECT, 65, EntityType.ENDER_PEARL, ENTITY),
+	WITHER_SKULL(EType.OBJECT, 66, EntityType.WITHER_SKULL ,FIREBALL),
+	FALLING_OBJECT(EType.OBJECT, 70, EntityType.FALLING_BLOCK, ENTITY),
+	ENDEREYE(EType.OBJECT, 72, EntityType.ENDER_SIGNAL, ENTITY),
+	POTION(EType.OBJECT, 73, EntityType.SPLASH_POTION, ENTITY),
+	EXP_BOTTLE(EType.OBJECT, 75, EntityType.THROWN_EXP_BOTTLE, ENTITY),
+	LEASH_KNOT(EType.OBJECT, 77, EntityType.LEASH_HITCH, ENTITY),
+	FISHING_FLOAT(EType.OBJECT, 90, EntityType.FISHING_HOOK, ENTITY),
+	ITEM(EType.OBJECT, 2, EntityType.DROPPED_ITEM, ENTITY),
+	ARROW(EType.OBJECT, 60, EntityType.ARROW, ENTITY),
+	SPECTRAL_ARROW(EType.OBJECT, 91, EntityType.SPECTRAL_ARROW, ARROW),
+	TIPPED_ARROW(EType.OBJECT, 92, EntityType.TIPPED_ARROW, ARROW),
+	FIREWORK(EType.OBJECT, 76, EntityType.FIREWORK, ENTITY),
+	ITEM_FRAME(EType.OBJECT, 71, EntityType.ITEM_FRAME, ENTITY),
+	ENDER_CRYSTAL(EType.OBJECT, 51, EntityType.ENDER_CRYSTAL, ENTITY),
+	ARMOR_STAND_OBJECT(EType.OBJECT, 78, EntityType.ARMOR_STAND, ARMOR_STAND),
+	AREA_EFFECT_CLOUD(EType.OBJECT, 3, EntityType.AREA_EFFECT_CLOUD, ENTITY),
+	SHULKER_BULLET(EType.OBJECT, 67, EntityType.SHULKER_BULLET, ENTITY),
+	LAMA_SPIT(EType.OBJECT, 68, EntityType.LLAMA_SPIT, ENTITY),
+	DRAGON_FIREBALL(EType.OBJECT, 93, EntityType.DRAGON_FIREBALL, ENTITY),
+	EVOCATOR_FANGS(EType.OBJECT, 79, EntityType.EVOKER_FANGS, ENTITY),
+	MINECART(EType.OBJECT, 10,  EntityType.MINECART, ENTITY),
 	// Hack, using unsused ids; the only object where different types are send using objectData.
-	MINECART_CHEST(EType.OBJECT, 211, MINECART),
-	MINECART_FURNACE(EType.OBJECT, 212, MINECART),
-	MINECART_TNT(EType.OBJECT, 213, MINECART),
-	MINECART_MOB_SPAWNER(EType.OBJECT, 214, MINECART),
-	MINECART_HOPPER(EType.OBJECT, 215, MINECART),
-	MINECART_COMMAND(EType.OBJECT, 216, MINECART);
+	MINECART_CHEST(EType.OBJECT, 211, EntityType.MINECART_CHEST, MINECART),
+	MINECART_FURNACE(EType.OBJECT, 212, EntityType.MINECART_FURNACE, MINECART),
+	MINECART_TNT(EType.OBJECT, 213, EntityType.MINECART_TNT, MINECART),
+	MINECART_MOB_SPAWNER(EType.OBJECT, 214, EntityType.MINECART_MOB_SPAWNER, MINECART),
+	MINECART_HOPPER(EType.OBJECT, 215, EntityType.MINECART_HOPPER, MINECART),
+	MINECART_COMMAND(EType.OBJECT, 216, EntityType.MINECART_COMMAND, MINECART);
 
 	private final EType etype;
 	private final int typeId;
+	private final EntityType bukkitType;
 	private final NetworkEntityType superType;
 
 	public NetworkEntityType getSuperType() {
 		return superType;
 	}
 
-	public int getTypeId() {
+	public int getNetworkTypeId() {
 		if (isOfType(MINECART)) {
 			return MINECART.typeId;
 		}
 		return typeId;
+	}
+
+	public String getRegistrySTypeId() {
+		return bukkitType != null ? MinecraftData.addNamespacePrefix(bukkitType.getName()) : "";
+	}
+
+	public int getRegistryITypeId() {
+		return bukkitType != null ? bukkitType.getTypeId() : 0;
 	}
 
 	public boolean isOfType(NetworkEntityType type) {
@@ -133,27 +146,35 @@ public enum NetworkEntityType {
 		NONE, OBJECT, MOB
 	}
 
-	private static final ArrayMap<NetworkEntityType> OBJECT_BY_TYPE_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.OBJECT), (w -> w.typeId));
-	private static final ArrayMap<NetworkEntityType> MOB_BY_TYPE_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.MOB), (w -> w.typeId));
+	private static final ArrayMap<NetworkEntityType> OBJECT_BY_N_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.OBJECT), (w -> w.typeId));
+	private static final ArrayMap<NetworkEntityType> MOB_BY_N_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.MOB), (w -> w.typeId));
+	private static final ArrayMap<NetworkEntityType> BY_R_INT_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()), (w -> w.bukkitType.getTypeId()));
+	private static final HashMap<String, NetworkEntityType> BY_R_STRING_ID = new HashMap<>();
+	static {
+		Arrays.stream(NetworkEntityType.values()).forEach(w -> {
+			BY_R_STRING_ID.put(w.bukkitType.getName(), w);
+			BY_R_STRING_ID.put(MinecraftData.addNamespacePrefix(w.bukkitType.getName()), w);
+		});
+	}
 
-	public static NetworkEntityType getObjectByTypeId(int objectTypeId) {
-		NetworkEntityType type = OBJECT_BY_TYPE_ID.get(objectTypeId);
+	public static NetworkEntityType getObjectByNetworkTypeId(int objectTypeId) {
+		NetworkEntityType type = OBJECT_BY_N_ID.get(objectTypeId);
 		if (type == null) {
 			throw new IllegalArgumentException(MessageFormat.format("Unknown object network type id {0}", objectTypeId));
 		}
 		return type;
 	}
 
-	public static NetworkEntityType getObjectByTypeAndData(int objectTypeId, int objectData) {
-		NetworkEntityType w = getObjectByTypeId(objectTypeId);
+	public static NetworkEntityType getObjectByNetworkTypeIdAndData(int objectTypeId, int objectData) {
+		NetworkEntityType w = getObjectByNetworkTypeId(objectTypeId);
 		if (w.isOfType(MINECART)) {
 			return getMinecartByData(objectData);
 		}
 		return w;
 	}
 
-	public static NetworkEntityType getMobByTypeId(int mobTypeId) {
-		NetworkEntityType type = MOB_BY_TYPE_ID.get(mobTypeId);
+	public static NetworkEntityType getMobByNetworkTypeId(int mobTypeId) {
+		NetworkEntityType type = MOB_BY_N_ID.get(mobTypeId);
 		if (type == null) {
 			throw new IllegalArgumentException(MessageFormat.format("Unknown mob network type id {0}", mobTypeId));
 		}
@@ -164,18 +185,31 @@ public enum NetworkEntityType {
 		if (objectData == 0) {
 			return MINECART;
 		}
-		return getObjectByTypeId(210 + objectData);
+		return getObjectByNetworkTypeId(210 + objectData);
 	}
 
-	NetworkEntityType(EType etype, int typeId, NetworkEntityType superType) {
+	public static NetworkEntityType getByRegistrySTypeId(String name) {
+		return BY_R_STRING_ID.getOrDefault(name, NONE);
+	}
+
+	public static NetworkEntityType getByRegistryITypeId(int typeId) {
+		NetworkEntityType type = BY_R_INT_ID.get(typeId);
+		return type != null ? type : NONE;
+	}
+
+	NetworkEntityType(EType etype, int typeId, EntityType bukkitType, NetworkEntityType superType) {
 		this.etype = etype;
 		this.typeId = typeId;
+		this.bukkitType = bukkitType;
 		this.superType = superType;
 	}
 
-	@SuppressWarnings("deprecation")
+	NetworkEntityType(EType etype, int typeId, NetworkEntityType superType) {
+		this(etype, typeId, EntityType.UNKNOWN, superType);
+	}
+
 	NetworkEntityType(EType etype, EntityType bukkitType, NetworkEntityType superType) {
-		this(etype, bukkitType.getTypeId(), superType);
+		this(etype, bukkitType.getTypeId(), bukkitType, superType);
 	}
 
 	NetworkEntityType(EType etype, int typeId) {
