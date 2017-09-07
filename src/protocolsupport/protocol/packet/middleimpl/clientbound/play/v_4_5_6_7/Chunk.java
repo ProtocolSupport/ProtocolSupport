@@ -7,8 +7,8 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformer;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformer.BlockFormat;
 import protocolsupport.protocol.typeremapper.chunk.EmptyChunk;
-import protocolsupport.protocol.typeremapper.tileentity.TileEntityUpdateType;
 import protocolsupport.protocol.typeremapper.tileentity.TileNBTRemapper;
+import protocolsupport.protocol.utils.types.TileEntityType;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -46,7 +46,7 @@ public class Chunk extends MiddleChunk {
 			packets.add(BlockTileUpdate.createPacketData(
 				version,
 				cache.getLocale(),
-				TileEntityUpdateType.fromType(TileNBTRemapper.getTileType(tile)),
+				TileEntityType.getByRegistryId(TileNBTRemapper.getTileType(tile)),
 				TileNBTRemapper.getPosition(tile),
 				tile
 			));

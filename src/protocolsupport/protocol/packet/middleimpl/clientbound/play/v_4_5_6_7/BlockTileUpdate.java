@@ -8,9 +8,9 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.typeremapper.tileentity.TileEntityUpdateType;
 import protocolsupport.protocol.typeremapper.tileentity.TileNBTRemapper;
 import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.utils.types.TileEntityType;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -20,11 +20,11 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		return RecyclableSingletonList.create(createPacketData(connection.getVersion(), cache.getLocale(), TileEntityUpdateType.fromId(type), position, tag));
+		return RecyclableSingletonList.create(createPacketData(connection.getVersion(), cache.getLocale(), TileEntityType.getByNetworkId(type), position, tag));
 	}
 
-	public static ClientBoundPacketData createPacketData(ProtocolVersion version, String locale, TileEntityUpdateType type, Position position, NBTTagCompoundWrapper tag) {
-		if (type == TileEntityUpdateType.SIGN) {
+	public static ClientBoundPacketData createPacketData(ProtocolVersion version, String locale, TileEntityType type, Position position, NBTTagCompoundWrapper tag) {
+		if (type == TileEntityType.SIGN) {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.LEGACY_PLAY_UPDATE_SIGN_ID, version);
 			PositionSerializer.writeLegacyPositionS(serializer, position);
 			for (String line : TileNBTRemapper.getSignLines(tag)) {
@@ -34,7 +34,7 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 		} else {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_UPDATE_TILE_ID, version);
 			PositionSerializer.writeLegacyPositionS(serializer, position);
-			serializer.writeByte(type.getId());
+			serializer.writeByte(type.getNetworkId());
 			ItemStackSerializer.writeTag(serializer, version, TileNBTRemapper.remap(version, tag));
 			return serializer;
 		}
