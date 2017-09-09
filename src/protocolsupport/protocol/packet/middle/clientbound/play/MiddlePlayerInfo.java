@@ -1,9 +1,13 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
+import java.util.Arrays;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.ProtocolSupport;
 import protocolsupport.api.chat.ChatAPI;
+import protocolsupport.api.events.PlayerListEvent;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
@@ -100,6 +104,15 @@ public abstract class MiddlePlayerInfo extends ClientBoundMiddlePacket {
 					break;
 				}
 			}
+		}
+		//HACK! HACK! HACK IT UP!
+		//TODO: Not hack?
+		if(action == Action.ADD) {
+			System.out.println("HACK! HACK!!!!!");
+			PlayerListEvent ple = new PlayerListEvent(connection, 
+					Arrays.stream(infos).map(i -> new PlayerListEvent.Info(i.uuid, i.username, i.ping, i.gamemode, i.displayNameJson, i.properties)).collect(Collectors.toList()))
+				;
+			ProtocolSupport.getInstance().getServer().getPluginManager().callEvent(ple);
 		}
 	}
 

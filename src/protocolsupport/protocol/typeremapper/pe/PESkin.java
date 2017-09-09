@@ -27,7 +27,7 @@ public class PESkin {
 
 	public static byte[] toNetworkData(BufferedImage skin) {
 		Validate.isTrue(skin.getWidth() == 64, "Must be 64 pixels wide");
-		Validate.isTrue(skin.getHeight() == 64, "Must be 64 pixels high");
+		Validate.isTrue(skin.getHeight() == 64 || skin.getHeight() == 32, "Must be 64 or 32 pixels high");
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		for (int y = 0; y < skin.getHeight(); y++) {
 			for (int x = 0; x < skin.getWidth(); x++) {
