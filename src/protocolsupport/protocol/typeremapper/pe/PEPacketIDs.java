@@ -73,9 +73,13 @@ public class PEPacketIDs {
 	public static final int PLAY_SOUND = 86;
 	//public static final int STOP_SOUND = 87;
 	public static final int SET_TITLE = 88;
-	//public static final int PLAYER_SKIN = 93;
+	public static final int PLAYER_SKIN = 93;
 	//public static final int SUB_LOGIN = 94;
 	//public static final int LAST_HURT = 96;
 	//public static final int EDIT_BOOK = 97;
+	//public static final int NPC_REQUEST = 98;
+	//public static final int PHOTO_TRANSFER = 99;
+	public static final int MODAL_REQUEST = 100;
+	public static final int MODAL_RESPONSE = 101;
 
 }
