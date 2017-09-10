@@ -128,14 +128,14 @@ public class ProtocolSupport extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new ReloadCommandBlocker(), this);
 		getServer().getPluginManager().registerEvents(new MultiplePassengersRestrict(), this);
 		getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
-			Thread cacheinit = new Thread(() -> {
+			Thread pocketPacketCache = new Thread(() -> {
 				PECraftingManager.getInstance().registerRecipes();
-				PECreativeInventory.generateCreativeInventoryItems();
+				PECreativeInventory.getInstance().generateCreativeInventoryItems();
 			});
-			cacheinit.setDaemon(true);
-			cacheinit.start();
+			pocketPacketCache.setDaemon(true);
+			pocketPacketCache.start();
 			try {
-				cacheinit.join();
+				pocketPacketCache.join();
 			} catch (InterruptedException e) {
 			}
 			(peserver = new PEProxyServer()).start();

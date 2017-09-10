@@ -10,8 +10,8 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEAdventureSettings;
+import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
 import protocolsupport.zplatform.pe.PECreativeInventory;
-import protocolsupport.protocol.typeremapper.pe.PEInventory;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.Position;
@@ -72,10 +72,15 @@ public class Login extends MiddleLogin {
 		packets.add(chunkradius);
 		packets.add(LoginSuccess.createPlayStatus(version, 3));
 		packets.add(EntityMetadata.createFaux(cache.getWatchedSelf(), cache.getLocale(), version)); //Add faux flags right on login. If something important needs to be send also, the server will take care with a metadata update.
-		ClientBoundPacketData packetData = ClientBoundPacketData.create(PEPacketIDs.CRAFTING_DATA, ProtocolVersion.MINECRAFT_PE);
-		packetData.writeBytes(PECraftingManager.getInstance().getAllRecipes());
-		packets.add(packetData);
-		packets.add(PECreativeInventory.getCreativeInventoryPacket());
+		ClientBoundPacketData craftPacket = ClientBoundPacketData.create(PEPacketIDs.CRAFTING_DATA, version);
+		craftPacket.writeBytes(PECraftingManager.getInstance().getAllRecipes());
+		packets.add(craftPacket);
+		PECreativeInventory peInv = PECreativeInventory.getInstance();
+		ClientBoundPacketData creativeInventoryPacket = ClientBoundPacketData.create(PEPacketIDs.INVENTORY_CONTENT, version);
+		VarNumberSerializer.writeVarInt(creativeInventoryPacket, PESource.POCKET_CREATIVE_INVENTORY);
+		VarNumberSerializer.writeVarInt(creativeInventoryPacket, peInv.getItemCount());
+		creativeInventoryPacket.writeBytes(peInv.getCreativeItems());
+		packets.add(creativeInventoryPacket);
 		return packets;
 	}
 
