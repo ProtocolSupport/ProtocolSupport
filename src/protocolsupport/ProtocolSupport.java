@@ -23,6 +23,7 @@ import protocolsupport.protocol.typeremapper.legacy.LegacyEffect;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityType;
 import protocolsupport.protocol.typeremapper.legacy.LegacyPotion;
 import protocolsupport.protocol.typeremapper.mapcolor.MapColorRemapper;
+import protocolsupport.zplatform.pe.PECreativeInventory;
 import protocolsupport.protocol.typeremapper.pe.PESkin;
 import protocolsupport.protocol.typeremapper.sound.SoundRemapper;
 import protocolsupport.protocol.typeremapper.tileentity.TileNBTRemapper;
@@ -127,11 +128,14 @@ public class ProtocolSupport extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new ReloadCommandBlocker(), this);
 		getServer().getPluginManager().registerEvents(new MultiplePassengersRestrict(), this);
 		getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
-			Thread recipesinit = new Thread(() -> PECraftingManager.getInstance().registerRecipes());
-			recipesinit.setDaemon(true);
-			recipesinit.start();
+			Thread cacheinit = new Thread(() -> {
+				PECraftingManager.getInstance().registerRecipes();
+				PECreativeInventory.generateCreativeInventoryItems();
+			});
+			cacheinit.setDaemon(true);
+			cacheinit.start();
 			try {
-				recipesinit.join();
+				cacheinit.join();
 			} catch (InterruptedException e) {
 			}
 			(peserver = new PEProxyServer()).start();
