@@ -10,6 +10,8 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEAdventureSettings;
+import protocolsupport.zplatform.pe.PECreativeInventory;
+import protocolsupport.protocol.typeremapper.pe.PEInventory;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.Position;
@@ -73,6 +75,7 @@ public class Login extends MiddleLogin {
 		ClientBoundPacketData packetData = ClientBoundPacketData.create(PEPacketIDs.CRAFTING_DATA, ProtocolVersion.MINECRAFT_PE);
 		packetData.writeBytes(PECraftingManager.getInstance().getAllRecipes());
 		packets.add(packetData);
+		packets.add(PECreativeInventory.getCreativeInventoryPacket());
 		return packets;
 	}
 
