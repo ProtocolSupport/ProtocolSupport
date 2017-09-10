@@ -113,11 +113,8 @@ public class PECreativeInventory {
 		for (Material material : Material.values()) {
 			if (!skipMaterials.contains(material.getId())) {
 				ItemStackWrapper wrapper = ServerPlatform.get().getWrapperFactory().createItemStack(material);
-				if (wrapper.getType() == Material.AIR) {
-					continue;
-				}
 				itemStacks.add(wrapper);
-				// Adding misc stuff
+				// Adding sub IDs items (if needed)
 				if (subIds.containsKey(material)) {
 					int maxValue = subIds.get(material);
 					for (int i = 1; maxValue >= i; i++) {
