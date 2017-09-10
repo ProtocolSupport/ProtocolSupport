@@ -187,7 +187,11 @@ public class PEDataValues {
 		registerBlockAndItemRemap(251, 236); // CONCRETE
 		registerBlockAndItemRemap(255, 252); // STRUCTURE_BLOCK
 		registerBlockAndItemRemap(166, 95);  // BARRIER
-
+		registerBlockAndItemRemap(154, 410);  // HOPPER
+		registerBlockAndItemRemap(36, 250);  // Block Being Moved By Piston
+		registerBlockAndItemRemap(205, 203);  // Purpur slab
+		registerBlockAndItemRemap(204, 201);  // Purpur double slab TODO: Check if this is right
+		registerBlockAndItemRemap(202, 201, 2);  // Purpur pillar
 		// Nether slab -> Quartz slab
 		registerBlockAndItemRemap(44, 7, 44, 6);
 		registerBlockAndItemRemap(44, 14, 44, 15);
@@ -235,6 +239,15 @@ public class PEDataValues {
 		registerItemRemap(443, 444); // ELYTRA
 		registerItemRemap(449, 450); // TOTEM
 		registerItemRemap(450, 445); // SHULKER_SHELL
+		registerItemRemap(444, 333, 1); // Spruce Boat
+		registerItemRemap(445, 333, 2); // Birch Boat
+		registerItemRemap(446, 333, 3); // Jungle Boat
+		registerItemRemap(447, 333, 4); // Acacia Boat
+		registerItemRemap(448, 333, 5); // Dark Oak Boat
+		registerItemRemap(422, 443); // Minecart with a Command Block
+		registerItemRemap(335, 325, 1); // Milk Bucket
+		registerItemRemap(326, 325, 8); // Water Bucket
+		registerItemRemap(327, 325, 10); // Lava Bucket
 		// Records
 		registerItemRemap(2256, 500);
 		registerItemRemap(2257, 501);
@@ -248,6 +261,13 @@ public class PEDataValues {
 		registerItemRemap(2265, 509);
 		registerItemRemap(2266, 510);
 		registerItemRemap(2267, 511);
+
+		// Not implemented yet in PE
+		registerItemRemap(453, 340); // KNOWLEDGE BOOK -> BOOK
+		registerItemRemap(442, 268); // SHIELD -> WOODEN SWORD
+		registerItemRemap(440, 262); // TIPPED ARROW -> ARROW
+		registerItemRemap(439, 262); // SPECTRAL ARROW -> ARROW
+		registerItemRemap(343, 408); // POWERED MINECART -> MINECART WITH A HOPPER
 	}
 
 }
