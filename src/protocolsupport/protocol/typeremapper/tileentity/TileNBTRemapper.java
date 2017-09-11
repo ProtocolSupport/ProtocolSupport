@@ -3,7 +3,6 @@ package protocolsupport.protocol.typeremapper.tileentity;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
@@ -43,21 +42,21 @@ public class TileNBTRemapper {
 		newToOldType.put(TileEntityType.SIGN, "Sign");
 	}
 
-	private static final HashMap<String, String> peTypes = new HashMap<>();
+	private static final EnumMap<TileEntityType, String> peTypes = new EnumMap<>(TileEntityType.class);
 	static {
-		peTypes.put("minecraft:chest", "Chest");
-		peTypes.put("minecraft:ender_chest", "EnderChest");
-		peTypes.put("minecraft:furnace", "Furnace");
-		peTypes.put("minecraft:sign", "Sign");
-		peTypes.put("minecraft:mob_spawner", "MobSpawner");
-		peTypes.put("minecraft:enchanting_table", "EnchantTable");
-		peTypes.put("minecraft:skull", "Skull");
-		peTypes.put("minecraft:flower_pot", "FlowerPot");
-		peTypes.put("minecraft:brewing_stand", "BrewingStand");
-		peTypes.put("minecraft:daylight_detector", "DaylightDetector");
-		peTypes.put("minecraft:noteblock", "Music");
-		peTypes.put("minecraft:beacon", "Beacon");
-		peTypes.put("minecraft:shulker_box", "ShulkerBox");
+		peTypes.put(TileEntityType.CHEST, "Chest");
+		peTypes.put(TileEntityType.ENDER_CHEST, "EnderChest");
+		peTypes.put(TileEntityType.FURNACE, "Furnace");
+		peTypes.put(TileEntityType.SIGN, "Sign");
+		peTypes.put(TileEntityType.MOB_SPAWNER, "MobSpawner");
+		peTypes.put(TileEntityType.ENCHANTING_TABLE, "EnchantTable");
+		peTypes.put(TileEntityType.SKULL, "Skull");
+		peTypes.put(TileEntityType.FLOWER_POT, "FlowerPot");
+		peTypes.put(TileEntityType.BREWING_STAND, "BrewingStand");
+		peTypes.put(TileEntityType.DAYLIGHT_DETECTOR, "DaylightDetector");
+		peTypes.put(TileEntityType.NOTE_BLOCK, "Music");
+		peTypes.put(TileEntityType.BEACON, "Beacon");
+		peTypes.put(TileEntityType.SHULKER_BOX, "ShulkerBox");
 	}
 
 	private static final EnumMap<TileEntityType, EnumMap<ProtocolVersion, List<BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper>>>> registry = new EnumMap<>(TileEntityType.class);
@@ -82,7 +81,7 @@ public class TileNBTRemapper {
 			register(
 				type,
 				(version, input) -> {
-					input.setString(tileEntityTypeKey, peTypes.getOrDefault(input.getString(tileEntityTypeKey), "Unknown"));
+					input.setString(tileEntityTypeKey, peTypes.getOrDefault(type, type.getRegistryId()));
 					return input;
 				},
 				ProtocolVersion.MINECRAFT_PE
