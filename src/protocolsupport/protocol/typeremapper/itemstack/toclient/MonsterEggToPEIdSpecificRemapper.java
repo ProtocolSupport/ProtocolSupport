@@ -1,10 +1,10 @@
 package protocolsupport.protocol.typeremapper.itemstack.toclient;
 
 import org.apache.commons.lang3.StringUtils;
+
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackSpecificRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -23,7 +23,7 @@ public class MonsterEggToPEIdSpecificRemapper implements ItemStackSpecificRemapp
 			return itemstack;
 		}
 
-		itemstack.setData(PEDataValues.getLivingEntityTypeId(NetworkEntityType.getByRegistrySTypeId(MinecraftData.removeNamespacePrefix(id))));
+		itemstack.setData(PEDataValues.getLivingEntityTypeId(NetworkEntityType.getByRegistrySTypeId(id)));
 		return itemstack;
 	}
 

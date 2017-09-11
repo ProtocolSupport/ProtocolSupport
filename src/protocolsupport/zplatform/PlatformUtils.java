@@ -57,10 +57,6 @@ public interface PlatformUtils {
 
 	public String getReadTimeoutHandlerName();
 
-	public String getSplitterHandlerName();
-
-	public String getPrependerHandlerName();
-
 	public void enableCompression(ChannelPipeline pipeline, int compressionThreshold);
 
 	public void setFraming(ChannelPipeline pipeline, IPacketSplitter splitter, IPacketPrepender prepender);

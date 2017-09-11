@@ -19,13 +19,14 @@ import protocolsupport.protocol.storage.ProtocolStorage;
 
 public class ProtocolSupportAPI {
 
+	private static final BigInteger apiversion = BigInteger.valueOf(2);
 	/**
 	 * Returns ProtocolSupport API version
 	 * This number is incremented every time API changes (behavior change, method/field added/removed)
 	 * @return API version
 	 */
 	public static BigInteger getAPIVersion() {
-		return BigInteger.ONE;
+		return apiversion;
 	}
 
 	/**
