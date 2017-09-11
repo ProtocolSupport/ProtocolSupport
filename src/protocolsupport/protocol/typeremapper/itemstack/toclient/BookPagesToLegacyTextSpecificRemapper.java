@@ -17,7 +17,7 @@ public class BookPagesToLegacyTextSpecificRemapper extends ItemStackNBTSpecificR
 			NBTTagListWrapper pages = tag.getList("pages", NBTTagType.STRING);
 			NBTTagListWrapper newpages = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
 			for (int i = 0; i < pages.size(); i++) {
-				newpages.addString(ChatAPI.fromJSON(pages.getString(i)).toLegacyText());
+				newpages.addString(ChatAPI.fromJSON(pages.getString(i)).toLegacyText(locale));
 			}
 			tag.setList("pages", newpages);
 		}
