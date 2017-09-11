@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.ChatAPI.MessagePosition;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChat;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -14,9 +15,9 @@ public class Chat extends MiddleChat {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHAT, version);
-		serializer.writeByte(0); //raw type
+		serializer.writeByte(position == MessagePosition.HOTBAR ? 5 : 0); //type
 		serializer.writeByte(0); //isLocalise?
-		StringSerializer.writeString(serializer, version, message.toLegacyText());
+		StringSerializer.writeString(serializer, version, message.toLegacyText(cache.getLocale()));
 		StringSerializer.writeString(serializer, version, ""); //Xbox user ID
 		return RecyclableSingletonList.create(serializer);
 	}

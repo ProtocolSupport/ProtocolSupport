@@ -8,6 +8,8 @@ import io.netty.channel.ChannelPipeline;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.common.LogicHandler;
+import protocolsupport.protocol.pipeline.common.RawPacketDataCaptureReceive;
+import protocolsupport.protocol.pipeline.common.RawPacketDataCaptureSend;
 import protocolsupport.protocol.pipeline.common.SimpleReadTimeoutHandler;
 import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
 import protocolsupport.protocol.storage.ProtocolStorage;
@@ -39,6 +41,8 @@ public class GlowStoneServerConnectionChannel extends ChannelInitializer {
 		pipeline.addBefore(GlowStoneChannelHandlers.NETWORK_MANAGER, "ps_glowstone_sync_ticker", new GlowStoneSyncConnectionTicker());
 		pipeline.addBefore(GlowStoneChannelHandlers.NETWORK_MANAGER, ChannelHandlers.LOGIC, new LogicHandler(connection));
 		pipeline.replace(GlowStoneChannelHandlers.FRAMING, GlowStoneChannelHandlers.FRAMING, new GlowStoneFramingHandler());
+		pipeline.addAfter(GlowStoneChannelHandlers.FRAMING, ChannelHandlers.RAW_CAPTURE_SEND, new RawPacketDataCaptureSend(connection));
+		pipeline.addAfter(GlowStoneChannelHandlers.FRAMING, ChannelHandlers.RAW_CAPTURE_RECEIVE, new RawPacketDataCaptureReceive(connection));
 	}
 
 }

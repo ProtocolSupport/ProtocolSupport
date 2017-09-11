@@ -30,13 +30,13 @@ public class Title extends MiddleTitle {
 				return RecyclableSingletonList.create(create(version, RESET, "", 0, 0, 0));
 			}
 			case SET_TITLE: {
-				return RecyclableSingletonList.create(create(version, SET_TITLE, message.toLegacyText(), 0, 0, 0));
+				return RecyclableSingletonList.create(create(version, SET_TITLE, message.toLegacyText(cache.getLocale()), 0, 0, 0));
 			}
 			case SET_SUBTITLE: {
-				return RecyclableSingletonList.create(create(version, SET_SUBTITLE, message.toLegacyText(), 0, 0, 0));
+				return RecyclableSingletonList.create(create(version, SET_SUBTITLE, message.toLegacyText(cache.getLocale()), 0, 0, 0));
 			}
 			case SET_ACTION_BAR: {
-				return RecyclableSingletonList.create(create(version, SET_ACTION_BAR, message.toLegacyText(), 0, 0, 0));
+				return RecyclableSingletonList.create(create(version, SET_ACTION_BAR, message.toLegacyText(cache.getLocale()), 0, 0, 0));
 			}
 			case SET_TIMES: {
 				return RecyclableSingletonList.create(create(version, SET_TIMINGS, "", fadeIn, stay, fadeOut));

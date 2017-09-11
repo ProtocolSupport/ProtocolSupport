@@ -13,10 +13,6 @@ public class MinecraftData {
 		return "minecraft:" + val;
 	}
 
-	public static String removeNamespacePrefix(String val) {
-		return val.substring(10);
-	}
-
 	public static Iterable<JsonElement> iterateJsonArrayResource(String name) {
 		return new JsonParser().parse(getResource(name)).getAsJsonArray();
 	}

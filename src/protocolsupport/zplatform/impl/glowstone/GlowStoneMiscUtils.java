@@ -196,16 +196,6 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	}
 
 	@Override
-	public String getSplitterHandlerName() {
-		return GlowStoneChannelHandlers.FRAMING;
-	}
-
-	@Override
-	public String getPrependerHandlerName() {
-		return GlowStoneChannelHandlers.FRAMING;
-	}
-
-	@Override
 	public void enableCompression(ChannelPipeline pipeline, int compressionThreshold) {
 		pipeline.addAfter(GlowStoneChannelHandlers.FRAMING, "compression", new CompressionHandler(compressionThreshold));
 	}
