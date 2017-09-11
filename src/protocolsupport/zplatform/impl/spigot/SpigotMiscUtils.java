@@ -188,16 +188,6 @@ public class SpigotMiscUtils implements PlatformUtils {
 	}
 
 	@Override
-	public String getSplitterHandlerName() {
-		return SpigotChannelHandlers.SPLITTER;
-	}
-
-	@Override
-	public String getPrependerHandlerName() {
-		return SpigotChannelHandlers.PREPENDER;
-	}
-
-	@Override
 	public void enableCompression(ChannelPipeline pipeline, int compressionThreshold) {
 		pipeline
 		.addAfter(SpigotChannelHandlers.SPLITTER, "decompress", new SpigotPacketDecompressor(compressionThreshold))

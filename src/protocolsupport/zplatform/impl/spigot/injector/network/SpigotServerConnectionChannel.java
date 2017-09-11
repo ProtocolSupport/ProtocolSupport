@@ -5,6 +5,8 @@ import io.netty.channel.ChannelPipeline;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.common.LogicHandler;
+import protocolsupport.protocol.pipeline.common.RawPacketDataCaptureReceive;
+import protocolsupport.protocol.pipeline.common.RawPacketDataCaptureSend;
 import protocolsupport.protocol.pipeline.common.SimpleReadTimeoutHandler;
 import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
 import protocolsupport.protocol.storage.ProtocolStorage;
@@ -37,6 +39,8 @@ public class SpigotServerConnectionChannel extends ChannelInitializer {
 		pipeline.replace(SpigotChannelHandlers.READ_TIMEOUT, SpigotChannelHandlers.READ_TIMEOUT, new SimpleReadTimeoutHandler(30));
 		pipeline.replace(SpigotChannelHandlers.SPLITTER, SpigotChannelHandlers.SPLITTER, new SpigotWrappedSplitter());
 		pipeline.replace(SpigotChannelHandlers.PREPENDER, SpigotChannelHandlers.PREPENDER, new SpigotWrappedPrepender());
+		pipeline.addAfter(SpigotChannelHandlers.PREPENDER, ChannelHandlers.RAW_CAPTURE_SEND, new RawPacketDataCaptureSend(connection));
+		pipeline.addAfter(SpigotChannelHandlers.SPLITTER, ChannelHandlers.RAW_CAPTURE_RECEIVE, new RawPacketDataCaptureReceive(connection));
 		if (replaceDecoderEncoder) {
 			if (pipeline.get(SpigotChannelHandlers.DECODER).getClass().equals(net.minecraft.server.v1_12_R1.PacketDecoder.class)) {
 				pipeline.replace(SpigotChannelHandlers.DECODER, SpigotChannelHandlers.DECODER, new SpigotPacketDecoder());

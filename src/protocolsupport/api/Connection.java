@@ -6,6 +6,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.bukkit.entity.Player;
 
+import com.google.common.base.Objects;
+
+import io.netty.buffer.ByteBuf;
+
 public abstract class Connection {
 
 	protected volatile ProtocolVersion version = ProtocolVersion.UNKNOWN;
@@ -59,7 +63,7 @@ public abstract class Connection {
 	}
 
 	/**
-	 * Forces packet handing
+	 * Receives packet from client
 	 * Packet received by this method skips receive packet listener
 	 * @param packet packet
 	 */
@@ -74,45 +78,89 @@ public abstract class Connection {
 
 	/**
 	 * Sends packet data to player
-	 * Packet sent by this method bypasses the encoder-transformer
+	 * Packet sent by this method should use native client protocol (packet data including packet id)
 	 * @param data packet data
 	 */
 	public abstract void sendRawPacket(byte[] data);
 
-	protected final CopyOnWriteArrayList<PacketSendListener> sendListeners = new CopyOnWriteArrayList<>();
-	protected final CopyOnWriteArrayList<PacketReceiveListener> receiveListeners = new CopyOnWriteArrayList<>();
+	/**
+	 * Receives raw packet data from client
+	 * Packet received by this method should use native client protocol (packet data including packet id)
+	 * @param data packet data
+	 */
+	public abstract void receiveRawPacket(byte[] data);
+
+
+	protected final CopyOnWriteArrayList<PacketListener> packetlisteners = new CopyOnWriteArrayList<>();
+
+	/**
+	 * Adds packet listener
+	 * @param listener packet listener
+	 */
+	public void addPacketListener(PacketListener listener) {
+		packetlisteners.add(listener);
+	}
+
+	/**
+	 * Removes packet listener
+	 * @param listener packet listener
+	 */
+	public void removePacketListener(PacketListener listener) {
+		packetlisteners.remove(listener);
+	}
 
 	/**
 	 * Adds send packet listener
 	 * @param listener send packet listener
 	 */
+	@Deprecated
 	public void addPacketSendListener(PacketSendListener listener) {
-		sendListeners.add(listener);
+		addPacketListener(new DeprecatedPacketListener(listener) {
+			@Override
+			public void onPacketSending(PacketEvent event) {
+				boolean cansend = listener.onPacketSending(event.getPacket());
+				if (!cansend) {
+					event.setCancelled(true);
+				}
+			}
+		});
 	}
 
 	/**
 	 * Removes send packet listener
 	 * @param listener send packet listener
 	 */
+	@Deprecated
 	public void removePacketSendListener(PacketSendListener listener) {
-		sendListeners.remove(listener);
+		removePacketListener(new DeprecatedPacketListener(listener));
 	}
 
 	/**
 	 * Adds receive packet listener
 	 * @param listener receive packet listener
 	 */
+	@Deprecated
 	public void addPacketReceiveListener(PacketReceiveListener listener) {
-		receiveListeners.add(listener);
+		addPacketListener(new DeprecatedPacketListener(listener) {
+			@Override
+			public void onPacketReceiving(PacketEvent event) {
+				boolean cansend = listener.onPacketReceiving(event.getPacket());
+				if (!cansend) {
+					event.setCancelled(true);
+				}
+			}
+		});
 	}
 
 	/**
 	 * Removes receive packet listener
 	 * @param listener receive packet listener
 	 */
+	@Deprecated
 	public void removePacketReceiveListener(PacketReceiveListener listener) {
-		receiveListeners.remove(listener);
+		removePacketListener(new DeprecatedPacketListener(listener));
 	}
+
 
 	protected final ConcurrentHashMap<String, Object> metadata = new ConcurrentHashMap<>();
 
@@ -154,6 +202,140 @@ public abstract class Connection {
 		return metadata.containsKey(key);
 	}
 
+	public abstract static class PacketListener {
+
+		/**
+		 * Override to handle native packet sending
+		 * Note: PacketEvent and it's data is only valid while handling the packet
+		 * @param event packet event
+		 */
+		public void onPacketSending(PacketEvent event) {
+		}
+
+		/**
+		 * Override to handle native packet receiving
+		 * Note: PacketEvent and it's data is only valid while handling the packet
+		 * Note: Based on client version this the received data might be a part of packet, not a full one
+		 * @param event packet event
+		 */
+		public void onPacketReceiving(PacketEvent event) {
+		}
+
+		/**
+		 * Override to handle raw packet sending
+		 * Note: PacketEvent and it's data is only valid while handling the packet
+		 * @param event packet event
+		 */
+		public void onRawPacketSending(RawPacketEvent event) {
+		}
+
+		/**
+		 * Override to handle raw packet sending
+		 * @param event packet event
+		 */
+		public void onRawPacketReceiving(RawPacketEvent event) {
+		}
+
+		public static class PacketEvent {
+
+			protected Object packet;
+			protected boolean cancelled;
+
+			/**
+			 * Returns packet
+			 * @return native packet instance
+			 */
+			public Object getPacket() {
+				return packet;
+			}
+
+			/**
+			 * Sets packet
+			 * @param packet native packet instance
+			 */
+			public void setPacket(Object packet) {
+				this.packet = packet;
+			}
+
+			/**
+			 * Returns if packet is cancelled
+			 * @return true if packet is cancelled, false otherwise
+			 */
+			public boolean isCancelled() {
+				return cancelled;
+			}
+
+			/**
+			 * Sets if packet is cancelled
+			 * @param cancelled true if packet is cancelled, false otherwise
+			 */
+			public void setCancelled(boolean cancelled) {
+				this.cancelled = cancelled;
+			}
+		}
+
+		public static class RawPacketEvent {
+
+			protected ByteBuf data;
+			protected boolean cancelled;
+
+			/**
+			 * Returns read only packet data
+			 * @return read only packet data
+			 */
+			public ByteBuf getData() {
+				return data.asReadOnly();
+			}
+
+			/**
+			 * Sets packet data
+			 * A copy of passed ByteBuf is made, and passed ByteBuf is not released
+			 * @param data packet data
+			 */
+			public void setData(ByteBuf data) {
+				this.data.release();
+				this.data = data.copy();
+			}
+
+			/**
+			 * Returns if packet is cancelled
+			 * @return true if packet is cancelled, false otherwise
+			 */
+			public boolean isCancelled() {
+				return cancelled;
+			}
+
+			/**
+			 * Sets if packet is cancelled
+			 * @param cancelled true if packet is cancelled, false otherwise
+			 */
+			public void setCancelled(boolean cancelled) {
+				this.cancelled = cancelled;
+			}
+
+		}
+
+	}
+
+	private static class DeprecatedPacketListener extends PacketListener {
+		private final Object deprecatedlistener;
+		public DeprecatedPacketListener(Object deprecatedlistener) {
+			this.deprecatedlistener = deprecatedlistener;
+		}
+		@Override
+		public int hashCode() {
+			return deprecatedlistener.hashCode();
+		}
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof DeprecatedPacketListener) {
+				return Objects.equal(deprecatedlistener, ((DeprecatedPacketListener) obj).deprecatedlistener);
+			}
+			return false;
+		}
+	}
+
+	@Deprecated
 	@FunctionalInterface
 	public static interface PacketSendListener {
 		/**
@@ -165,6 +347,7 @@ public abstract class Connection {
 		public boolean onPacketSending(Object packet);
 	}
 
+	@Deprecated
 	@FunctionalInterface
 	public static interface PacketReceiveListener {
 		/**
