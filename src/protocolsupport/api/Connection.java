@@ -9,7 +9,9 @@ import org.bukkit.entity.Player;
 import com.google.common.base.Objects;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ReadOnlyByteBuf;
 
+@SuppressWarnings("deprecation")
 public abstract class Connection {
 
 	protected volatile ProtocolVersion version = ProtocolVersion.UNKNOWN;
@@ -284,7 +286,7 @@ public abstract class Connection {
 			 * @return read only packet data
 			 */
 			public ByteBuf getData() {
-				return data.asReadOnly();
+				return new ReadOnlyByteBuf(data);
 			}
 
 			/**
