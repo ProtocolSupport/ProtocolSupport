@@ -28,7 +28,7 @@ public abstract class PESkinsProvider {
 	 */
 	public abstract void scheduleGetSkinData(String url, Consumer<byte[]> skindataApplyCallback);
 
-	protected static byte[] toData(BufferedImage skin) {
+	public static byte[] toData(BufferedImage skin) {
 		Validate.isTrue(skin.getWidth() == 64, "Must be 64 pixels wide");
 		Validate.isTrue((skin.getHeight() == 64) || (skin.getHeight() == 32), "Must be 64 or 32 pixels high");
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
