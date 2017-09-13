@@ -86,8 +86,9 @@ public class PlayerInfo extends MiddlePlayerInfo {
 		if (property.isPresent()) {
 			JsonElement propertyjson = new JsonParser().parse(new InputStreamReader(new ByteArrayInputStream(Base64.getDecoder().decode(property.get().getValue())), StandardCharsets.UTF_8));
 			JsonObject skinobject = JsonUtils.getJsonObject(JsonUtils.getJsonObject(JsonUtils.getAsJsonObject(propertyjson, "root element"), "textures"), "SKIN");
-			//TODO: check for slim model
-			return new Any<>(true, JsonUtils.getString(skinobject, "url"));
+			JsonObject skinMetadata; //Contains data about the skinModel. Currently only supports Slim and not Slim or Steve and Alex.
+			boolean isSlim = skinobject.has("metadata") && (skinMetadata = skinobject.get("metadata").getAsJsonObject()).has("model") && JsonUtils.getString(skinMetadata, "model").equals("slim");
+			return new Any<>(isSlim, JsonUtils.getString(skinobject, "url"));
 		} else {
 			return null;
 		}
@@ -123,7 +124,7 @@ public class PlayerInfo extends MiddlePlayerInfo {
 		}
 		StringSerializer.writeString(serializer, version, model.getSkinName());
 		if (isSkinUpdate) {
-			//TODO: find out how it is used
+			//TODO: find out how it is used and if its use matters.
 			StringSerializer.writeString(serializer, version, "Steve");
 		}
 		ArraySerializer.writeByteArray(serializer, version, skindata);
