@@ -16,8 +16,10 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_6_7_8_9r1_9r2_10_11_12r1_12r2.PlayerAbilities;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2.ClientCommand;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8.Animation;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8.BlockDig;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8.BlockPlace;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8.ClientSettings;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8.PositionLook;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8.TabComplete;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8.UseEntity;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2.ResourcePackStatus;
@@ -28,8 +30,6 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_1
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12r1_12r2.Spectate;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12r1_12r2.SteerVehicle;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12r1_12r2.UpdateSign;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_9r1_9r2_10_11_12r1_12r2.BlockDig; //TODO: wtf?
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8.PositionLook;
 import protocolsupport.protocol.packet.middleimpl.serverbound.status.v_7_8_9r1_9r2_10_11_12r1_12r2.Ping;
 import protocolsupport.protocol.packet.middleimpl.serverbound.status.v_7_8_9r1_9r2_10_11_12r1_12r2.ServerInfoRequest;
 import protocolsupport.protocol.pipeline.version.AbstractModernWithReorderPacketDecoder;
