@@ -1,4 +1,4 @@
-package protocolsupport.zplatform.pe;
+package protocolsupport.zplatform.impl.pe;
 
 import org.bukkit.Material;
 

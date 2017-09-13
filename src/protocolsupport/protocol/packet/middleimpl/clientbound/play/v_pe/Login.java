@@ -11,13 +11,13 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEAdventureSettings;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
-import protocolsupport.zplatform.pe.PECreativeInventory;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.zplatform.pe.PECraftingManager;
+import protocolsupport.zplatform.impl.pe.PECraftingManager;
+import protocolsupport.zplatform.impl.pe.PECreativeInventory;
 
 public class Login extends MiddleLogin {
 

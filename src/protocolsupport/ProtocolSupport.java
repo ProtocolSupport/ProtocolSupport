@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.unsafe.peskins.PESkinsProviderSPI;
 import protocolsupport.commands.CommandHandler;
 import protocolsupport.listeners.FeatureEmulation;
 import protocolsupport.listeners.MultiplePassengersRestrict;
@@ -23,8 +24,7 @@ import protocolsupport.protocol.typeremapper.legacy.LegacyEffect;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityType;
 import protocolsupport.protocol.typeremapper.legacy.LegacyPotion;
 import protocolsupport.protocol.typeremapper.mapcolor.MapColorRemapper;
-import protocolsupport.zplatform.pe.PECreativeInventory;
-import protocolsupport.protocol.typeremapper.pe.PESkin;
+import protocolsupport.protocol.typeremapper.pe.PESkinModel;
 import protocolsupport.protocol.typeremapper.sound.SoundRemapper;
 import protocolsupport.protocol.typeremapper.tileentity.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherObjectIndex;
@@ -41,8 +41,9 @@ import protocolsupport.utils.Utils;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.zplatform.ServerPlatform;
+import protocolsupport.zplatform.impl.pe.PECraftingManager;
+import protocolsupport.zplatform.impl.pe.PECreativeInventory;
 import protocolsupport.zplatform.impl.pe.PEProxyServer;
-import protocolsupport.zplatform.pe.PECraftingManager;
 
 public class ProtocolSupport extends JavaPlugin {
 
@@ -112,7 +113,8 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(LegacyPotion.class.getName());
 			Class.forName(LegacyEntityType.class.getName());
 			Class.forName(LegacyEffect.class.getName());
-			Class.forName(PESkin.class.getName());
+			Class.forName(PESkinsProviderSPI.class.getName());
+			Class.forName(PESkinModel.class.getName());
 			ServerPlatform.get().inject();
 		} catch (Throwable t) {
 			getLogger().log(Level.SEVERE, "Error when loading, make sure you are using supported server version", t);

@@ -67,7 +67,7 @@ public enum SpecificRemapper {
 				// = PE Nametag =
 				//Doing this for players makes nametags behave weird or only when close.
 				DataWatcherObject<?> nameTagWatcher = original.get(DataWatcherObjectIndex.Entity.NAMETAG);
-				boolean doNametag = (nameTagWatcher != null && entity.getType() != NetworkEntityType.PLAYER);
+				boolean doNametag = ((nameTagWatcher != null) && (entity.getType() != NetworkEntityType.PLAYER));
 				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_SHOW_NAMETAG, doNametag);
 				if (doNametag) { remapped.put(4, nameTagWatcher); }
 
@@ -85,19 +85,19 @@ public enum SpecificRemapper {
 						remapped.put(60, new DataWatcherObjectFloatLe(rider.rotationMin));
 					}
 				}
-				
+
 				// = PE Air =
 				AtomicInteger air = new AtomicInteger(0);
 				getObject(original, DataWatcherObjectIndex.Entity.AIR, DataWatcherObjectVarInt.class).ifPresent(airWatcher -> {
 					air.set(airWatcher.getValue() >= 300 ? 0 : airWatcher.getValue());
 				});
 				remapped.put(7, new DataWatcherObjectShortLe(air.get()));
-				
+
 				// = PE Bounding Box =
 				//TODO: Put real numbers in? This will allow mobs to push PE player properly and such xD Perhaps necessary for PE Lighting?
 				remapped.put(54, new DataWatcherObjectFloatLe(0.6f)); //Width
 				remapped.put(55, new DataWatcherObjectFloatLe(1.8f)); //Height
-				
+
 				// = PE Interaction =
 				remapped.put(40, new DataWatcherObjectString("Interact")); //Different texts? I ain't bothered.
 
@@ -251,8 +251,8 @@ public enum SpecificRemapper {
 	SQUID(NetworkEntityType.SQUID, SpecificRemapper.INSENTIENT),
 	BASE_HORSE(NetworkEntityType.BASE_HORSE, SpecificRemapper.AGEABLE,
 		//TODO: Not thse flags? These just make the horse disappear :/ PeMetaBase.FLAG_REARING PeMetaBase.FLAG_BREATHING
-		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.BaseHorse.FLAGS, 
-				new int[] {2, 3, 4}, new int[] {PeMetaBase.FLAG_TAMED, PeMetaBase.FLAG_SADDLED, PeMetaBase.FLAG_CHESTED}), 
+		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.BaseHorse.FLAGS,
+				new int[] {2, 3, 4}, new int[] {PeMetaBase.FLAG_TAMED, PeMetaBase.FLAG_SADDLED, PeMetaBase.FLAG_CHESTED}),
 			ProtocolVersion.MINECRAFT_PE),
 		new Entry(new DataWatcherDataRemapper(){
 			@Override
@@ -383,7 +383,7 @@ public enum SpecificRemapper {
 				return new DataWatcherObjectByte((byte) (object.getValue() & 0x0F));
 			}}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.Sheep.FLAGS,
-				new int[] {5}, new int[] {PeMetaBase.FLAG_SHEARED}), 
+				new int[] {5}, new int[] {PeMetaBase.FLAG_SHEARED}),
 			ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Sheep.FLAGS, 13) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_1),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Sheep.FLAGS, 12) {}, ProtocolVersionsHelper.ALL_1_9),
