@@ -29,4 +29,11 @@ public class Position extends MiddlePosition {
 		return RecyclableSingletonList.create(serializer);
 	}
 
+	@Override
+	public void handle() {
+		if (teleportConfirmId != 0) {
+			cache.setTeleportLocation(x, y, z, teleportConfirmId);
+		}
+	}
+
 }

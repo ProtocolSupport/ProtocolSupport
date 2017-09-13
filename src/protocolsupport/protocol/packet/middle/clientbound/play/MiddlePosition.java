@@ -50,11 +50,4 @@ public abstract class MiddlePosition extends ClientBoundMiddlePacket {
 		teleportConfirmId = VarNumberSerializer.readVarInt(serverdata);
 	}
 
-	@Override
-	public void handle() {
-		if (teleportConfirmId != 0) {
-			cache.setTeleportLocation(x, y, z, teleportConfirmId);
-		}
-	}
-
 }

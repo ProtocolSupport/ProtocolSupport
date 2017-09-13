@@ -14,11 +14,15 @@ public abstract class MiddleLook extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
+		return RecyclableSingletonList.create(create(yaw, pitch, onGround));
+	}
+
+	public static ServerBoundPacketData create(float yaw, float pitch, boolean onGround) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_LOOK);
 		creator.writeFloat(yaw);
 		creator.writeFloat(pitch);
 		creator.writeBoolean(onGround);
-		return RecyclableSingletonList.create(creator);
+		return creator;
 	}
 
 }

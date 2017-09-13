@@ -3,7 +3,6 @@ package protocolsupport.protocol.packet.middle.serverbound.play;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -18,20 +17,10 @@ public abstract class MiddlePositionLook extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		if (cache.isTeleportConfirmNeeded()) {
-			int teleportId = cache.tryTeleportConfirm(x, y, z);
-			if (teleportId != -1) {
-				RecyclableCollection<ServerBoundPacketData> collection = RecyclableArrayList.create();
-				collection.add(MiddleTeleportAccept.create(teleportId));
-				collection.add(createMoveLookPacket());
-				return collection;
-			}
-		}
-
-		return RecyclableSingletonList.create(createMoveLookPacket());
+		return RecyclableSingletonList.create(create(x, y, z, yaw, pitch, onGround));
 	}
 
-	private ServerBoundPacketData createMoveLookPacket() {
+	public static ServerBoundPacketData create(double x, double y, double z, float yaw, float pitch, boolean onGround) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_POSITION_LOOK);
 		creator.writeDouble(x);
 		creator.writeDouble(y);
