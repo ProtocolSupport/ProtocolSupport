@@ -12,7 +12,7 @@ import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.legacy.LegacyAnimatePacketReorderer;
 import protocolsupport.zplatform.ServerPlatform;
 
-public class AbstractModernWithReorderPacketDecoder extends AbstractPacketDecoder  {
+public class AbstractModernWithReorderPacketDecoder extends AbstractPacketDecoder {
 
 	public AbstractModernWithReorderPacketDecoder(Connection connection, NetworkDataCache sharedstorage) {
 		super(connection, sharedstorage);

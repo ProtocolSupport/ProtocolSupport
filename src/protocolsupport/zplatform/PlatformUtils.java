@@ -33,6 +33,8 @@ public interface PlatformUtils {
 
 	public boolean isProxyEnabled();
 
+	public boolean isProxyPreventionEnabled();
+
 	public boolean isDebugging();
 
 	public void enableDebug();

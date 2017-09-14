@@ -131,6 +131,11 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 		return getServer().getProxySupport();
 	}
 
+	@Override
+	public boolean isProxyPreventionEnabled() {
+		return getServer().shouldPreventProxy();
+	}
+
 	private boolean debug = false;
 
 	@Override

@@ -147,7 +147,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 						state = LoginState.KEY;
 						networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginEncryptionBeginPacket(ServerPlatform.get().getMiscUtils().getEncryptionKeyPair().getPublic(), randomBytes));
 					} else {
-						new PlayerLookupUUID(AbstractLoginListener.this, isOnlineMode).run();
+						new PlayerAuthenticationTask(AbstractLoginListener.this, isOnlineMode).run();
 					}
 				} catch (Throwable t) {
 					AbstractLoginListener.this.disconnect("Error occured while logging in");
@@ -180,7 +180,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 					}
 					loginKey = encryptionpakcet.getSecretKey(privatekey);
 					enableEncryption(loginKey);
-					new PlayerLookupUUID(AbstractLoginListener.this, isOnlineMode).run();
+					new PlayerAuthenticationTask(AbstractLoginListener.this, isOnlineMode).run();
 				} catch (Throwable t) {
 					AbstractLoginListener.this.disconnect("Error occured while logging in");
 					if (ServerPlatform.get().getMiscUtils().isDebugging()) {

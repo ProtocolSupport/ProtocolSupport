@@ -1,8 +1,9 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.packet.ServerBoundPacket;
+import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddlePositionLook;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleTeleportAccept;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateSign;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
@@ -12,42 +13,14 @@ import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
-public class PositionLook extends MiddlePositionLook {
+public class PositionLook extends ServerBoundMiddlePacket {
 
-	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
-		ServerBoundPacketData flying = ServerBoundPacketData.create(ServerBoundPacket.PLAY_PLAYER);
-		flying.writeBoolean(onGround);
-		packets.add(flying);
-		RecyclableCollection<ServerBoundPacketData> superPackets = super.toNative();
-		try {
-			packets.addAll(superPackets);
-		} finally {
-			superPackets.recycleObjectOnly();
-		}
-
-		if (cache.getSignTag() != null) { // If the player was writing a sign...
-			NBTTagCompoundWrapper signTag = cache.getSignTag();
-			int x = signTag.getIntNumber("x");
-			int y = signTag.getIntNumber("y");
-			int z = signTag.getIntNumber("z");
-
-			String[] nbtLines = new String[4];
-			String[] lines = signTag.getString("Text").split("\n"); // Lines in MCPE are separated by new lines
-			for (int i = 0; i < nbtLines.length; i++) {
-				if (lines.length > i) {
-					nbtLines[i] = lines[i];
-				} else {
-					nbtLines[i] = "";
-				}
-			}
-			packets.add(MiddleUpdateSign.create(new Position(x, y, z), nbtLines));
-			cache.setSignTag(null);
-		}
-
-		return packets;
-	}
+	protected double x;
+	protected double y;
+	protected double z;
+	protected float yaw;
+	protected float pitch;
+	protected boolean onGround;
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
@@ -61,6 +34,40 @@ public class PositionLook extends MiddlePositionLook {
 		clientdata.readByte(); //mode
 		onGround = clientdata.readBoolean();
 		VarNumberSerializer.readVarLong(clientdata);
+	}
+
+	@Override
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
+		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
+		int teleportId = cache.tryTeleportConfirm(x, y, z);
+		if (teleportId == -1) {
+			packets.add(MiddlePositionLook.create(x, y, z, yaw, pitch, onGround));
+		} else {
+			packets.add(MiddleTeleportAccept.create(teleportId));
+			packets.add(MiddlePositionLook.create(x, y, z, yaw, pitch, onGround));
+		}
+
+		//TODO: remove this shit
+		if (cache.getSignTag() != null) {
+			NBTTagCompoundWrapper signTag = cache.getSignTag();
+			int x = signTag.getIntNumber("x");
+			int y = signTag.getIntNumber("y");
+			int z = signTag.getIntNumber("z");
+
+			String[] nbtLines = new String[4];
+			String[] lines = signTag.getString("Text").split("\n");
+			for (int i = 0; i < nbtLines.length; i++) {
+				if (lines.length > i) {
+					nbtLines[i] = lines[i];
+				} else {
+					nbtLines[i] = "";
+				}
+			}
+			packets.add(MiddleUpdateSign.create(new Position(x, y, z), nbtLines));
+			cache.setSignTag(null);
+		}
+
+		return packets;
 	}
 
 }

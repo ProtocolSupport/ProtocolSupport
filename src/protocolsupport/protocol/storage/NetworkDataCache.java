@@ -28,11 +28,10 @@ public class NetworkDataCache {
 	private double z;
 	private int teleportConfirmId;
 
-	public boolean isTeleportConfirmNeeded() {
-		return teleportConfirmId != -1;
-	}
-
 	public int tryTeleportConfirm(double x, double y, double z) {
+		if (teleportConfirmId == -1) {
+			return -1;
+		}
 		if (
 			(Math.abs(this.x - x) < acceptableError) &&
 			(Math.abs(this.y - y) < acceptableError) &&
@@ -43,14 +42,6 @@ public class NetworkDataCache {
 			return r;
 		}
 		return -1;
-	}
-
-	public boolean tryTeleportConfirm(int teleportId) {
-		if (teleportId == teleportConfirmId) {
-			teleportConfirmId = -1;
-			return true;
-		}
-		return false;
 	}
 
 	public void setTeleportLocation(double x, double y, double z, int teleportConfirmId) {
