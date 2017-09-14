@@ -122,6 +122,11 @@ public class SpigotMiscUtils implements PlatformUtils {
 	}
 
 	@Override
+	public boolean isProxyPreventionEnabled() {
+		return getServer().ac();
+	}
+
+	@Override
 	public boolean isDebugging() {
 		return getServer().isDebugging();
 	}

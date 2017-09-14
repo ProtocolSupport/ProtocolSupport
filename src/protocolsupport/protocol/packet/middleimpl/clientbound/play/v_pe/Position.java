@@ -22,8 +22,15 @@ public class Position extends MiddlePosition {
 		if (!cache.isChunkMarkedAsSent(chunkX, chunkZ)) {
 			packets.add(Chunk.createEmptyChunk(version, chunkX, chunkZ));
 		}
-		packets.add(create(version, cache.getSelfPlayerEntityId(), x, y + 0.1, z, pitch, yaw, ANIMATION_MODE_TELEPORT));
+		packets.add(create(version, cache.getSelfPlayerEntityId(), x, y, z, pitch, yaw, ANIMATION_MODE_TELEPORT));
 		return packets;
+	}
+
+	@Override
+	public void handle() {
+		if (teleportConfirmId != 0) {
+			cache.setTeleportLocation(x, y, z, teleportConfirmId);
+		}
 	}
 
 	public static final int ANIMATION_MODE_ALL = 0;
