@@ -20,12 +20,12 @@ import protocolsupport.protocol.utils.authlib.MinecraftSessionService.Authentica
 import protocolsupport.zplatform.ServerPlatform;
 
 @SuppressWarnings("deprecation")
-public class PlayerLookupUUID {
+public class PlayerAuthenticationTask {
 
 	private final AbstractLoginListener listener;
 	private final boolean isOnlineMode;
 
-	public PlayerLookupUUID(AbstractLoginListener listener, boolean isOnlineMode) {
+	public PlayerAuthenticationTask(AbstractLoginListener listener, boolean isOnlineMode) {
 		this.listener = listener;
 		this.isOnlineMode = isOnlineMode;
 	}
@@ -39,7 +39,8 @@ public class PlayerLookupUUID {
 				return;
 			}
 			String hash = new BigInteger(MinecraftEncryption.createHash(ServerPlatform.get().getMiscUtils().getEncryptionKeyPair().getPublic(), listener.loginKey)).toString(16);
-			listener.profile = MinecraftSessionService.hasJoinedServer(joinName, hash);
+			String ip = ServerPlatform.get().getMiscUtils().isProxyPreventionEnabled() ? listener.networkManager.getAddress().getHostString() : null;
+			listener.profile = MinecraftSessionService.hasJoinedServer(joinName, hash, ip);
 			fireLoginEvents();
 		} catch (AuthenticationUnavailableException authenticationunavailableexception) {
 			listener.disconnect("Authentication servers are down. Please try again later, sorry!");
