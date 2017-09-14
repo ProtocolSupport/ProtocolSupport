@@ -2,7 +2,8 @@
 	"skinId" : "c18e65aa-7b21-4637-9b63-8ad63622ef01_CustomSlim",
 	"skinName" : "skin.Standard.CustomSlim",
 	"geometryId" : "geometry.humanoid.customSlim",
-	"geometryData" : {
+	"geometryData" : 
+	{
 	  "geometry.humanoid": {
 	    "bones": [
 	      {
