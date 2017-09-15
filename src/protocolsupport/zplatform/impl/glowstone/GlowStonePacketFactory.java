@@ -58,6 +58,9 @@ import net.glowstone.net.message.play.game.BlockChangeMessage;
 import net.glowstone.net.message.play.game.ChatMessage;
 import net.glowstone.net.message.play.game.ChunkDataMessage;
 import net.glowstone.net.message.play.game.ClientSettingsMessage;
+import net.glowstone.net.message.play.game.CraftRecipeRequestMessage;
+import net.glowstone.net.message.play.game.CraftRecipeResponseMessage;
+import net.glowstone.net.message.play.game.CraftingBookDataMessage;
 import net.glowstone.net.message.play.game.ExperienceMessage;
 import net.glowstone.net.message.play.game.ExplosionMessage;
 import net.glowstone.net.message.play.game.HealthMessage;
@@ -80,6 +83,7 @@ import net.glowstone.net.message.play.game.StatisticMessage;
 import net.glowstone.net.message.play.game.TimeMessage;
 import net.glowstone.net.message.play.game.TitleMessage;
 import net.glowstone.net.message.play.game.UnloadChunkMessage;
+import net.glowstone.net.message.play.game.UnlockRecipesMessage;
 import net.glowstone.net.message.play.game.UpdateBlockEntityMessage;
 import net.glowstone.net.message.play.game.UpdateSignMessage;
 import net.glowstone.net.message.play.game.UserListHeaderFooterMessage;
@@ -692,23 +696,22 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 
 	@Override
 	public int getOutPlayUnlockRecipesPacketId() {
-		return 0x31; // TODO: not implemented in Glowstone
+		return getOpcode(ProtocolType.PLAY, OUTBOUND, UnlockRecipesMessage.class);
 	}
 
 	@Override
 	public int getOutPlayAdvancementsTabPacketId() {
-		return 0x37; // TODO: not implemented in Glowstone
+		return 0x37; //TODO: getOpcode(ProtocolType.PLAY, OUTBOUND, AdvancementTabMessage.class);
 	}
-
 
 	@Override
 	public int getOutPlayAdvancementsPacketId() {
-		return 0x4D; // TODO: not implemented in Glowstone
+		return 0x4D; //TODO: getOpcode(ProtocolType.PLAY, OUTBOUND, AdvancementsMessage.class);
 	}
 
 	@Override
 	public int getOutPlayCraftingGridConfirmPacketId() {
-		return 0x2B; // TODO: not implemented in Glowstone
+		return getOpcode(ProtocolType.PLAY, OUTBOUND, CraftRecipeResponseMessage.class);
 	}
 
 
@@ -889,17 +892,17 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 
 	@Override
 	public int getInPlayCraftingBookPacketId() {
-		return 0x17;  // TODO: not implemented in Glowstone
+		return getOpcode(ProtocolType.PLAY, INBOUND, CraftingBookDataMessage.class);
 	}
 
 	@Override
 	public int getInPlayPrepareCraftingGridPacketId() {
-		return 0x01; // TODO: not implemented in Glowstone
+		return getOpcode(ProtocolType.PLAY, INBOUND, CraftRecipeRequestMessage.class);
 	}
 
 	@Override
 	public int getInPlayAdvancementTabPacketId() {
-		return 0x19; // TODO: not implemented in Glowstone
+		return 0x19; //TODO: getOpcode(ProtocolType.PLAY, INBOUND, AdvancementTabMessage.class);
 	}
 
 
