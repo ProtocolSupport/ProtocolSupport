@@ -12,8 +12,8 @@ public class PESkinModel {
 	private static final PESkinModel normal = loadSkinModel("pe/normal_model.json");
 	private static final PESkinModel slim = loadSkinModel("pe/slim_model.json");
 
-	public static PESkinModel getSkinModel(boolean isNormalModel) {
-		return isNormalModel ? normal : slim;
+	public static PESkinModel getSkinModel(boolean isSlim) {
+		return isSlim ? slim : normal;
 	}
 
 	private final String skinId;

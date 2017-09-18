@@ -341,4 +341,15 @@ public class NetworkDataCache {
 	public void setSignTag(NBTTagCompoundWrapper signTag) { this.signTag = signTag; }
 
 	public NBTTagCompoundWrapper getSignTag() { return signTag; }
+
+	protected long keepAliveId;
+
+	public void setKeepAliveId(long keepAliveId) {
+		this.keepAliveId = keepAliveId;
+	}
+
+	public long getKeepAliveId() {
+		return keepAliveId;
+	}
+
 }

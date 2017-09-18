@@ -9,7 +9,7 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public enum TileEntityType {
 
-	UNKNOWN(-1, "__FAKETYPE_NONE"),
+	UNKNOWN(0, "__FAKETYPE_NONE"),
 	MOB_SPAWNER(1, "mob_spawner"),
 	COMMAND_BLOCK(2, "command_block"),
 	BEACON(3, "beacon"),
@@ -25,7 +25,7 @@ public enum TileEntityType {
 	CHEST(-1, "chest"),
 	ENDER_CHEST(-1, "ender_chest"),
 	JUKEXBOX(-1, "jukebox"),
-	DISPENSER(-1, "dropper"),
+	DISPENSER(-1, "dispenser"),
 	DROPPER(-1, "dropper"),
 	NOTE_BLOCK(-1, "noteblock"),
 	PISTON(-1, "piston"),
@@ -38,7 +38,7 @@ public enum TileEntityType {
 	STRUCTURE_BLOCK(-1, "structure_block");
 
 	private static final HashMap<String, TileEntityType> by_r_id = new HashMap<>();
-	private static final ArrayMap<TileEntityType> by_n_id = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(values()).filter(v -> v.networkId != -1), (v -> v.networkId));
+	private static final ArrayMap<TileEntityType> by_n_id = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(values()).filter(v -> v.networkId > 0), (v -> v.networkId));
 	static {
 		Arrays.stream(values()).forEach(v -> {
 			by_r_id.put(v.registryId, v);
@@ -47,11 +47,12 @@ public enum TileEntityType {
 	}
 
 	public static TileEntityType getByNetworkId(int id) {
-		return by_n_id.get(id);
+		TileEntityType type = by_n_id.get(id);
+		return type != null ? type : UNKNOWN;
 	}
 
 	public static TileEntityType getByRegistryId(String type) {
-		return by_r_id.get(type);
+		return by_r_id.getOrDefault(type, TileEntityType.UNKNOWN);
 	}
 
 	private final int networkId;

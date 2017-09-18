@@ -1,11 +1,8 @@
 package protocolsupport.protocol.packet.handler;
 
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerLoginEvent;
@@ -97,16 +94,13 @@ public abstract class AbstractLoginListenerPlay implements IHasProfile {
 	}
 
 	private void tryJoin() {
-		//find players with same uuid
-		List<Player> toKick = Bukkit.getOnlinePlayers().stream().filter(player -> player.getUniqueId().equals(profile.getUUID())).collect(Collectors.toList());
-		//kick them
-		if (!toKick.isEmpty()) {
-			toKick.forEach(player -> player.kickPlayer("You logged in from another location"));
-			return;
-		}
-
 		//no longer attempt to join
 		ready = false;
+
+		//kick players with same uuid
+		Bukkit.getOnlinePlayers().stream()
+		.filter(player -> player.getUniqueId().equals(profile.getUUID()))
+		.forEach(player -> player.kickPlayer("You logged in from another location"));
 
 		//get player
 		JoinData joindata = createJoinData();

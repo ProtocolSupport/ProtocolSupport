@@ -38,6 +38,18 @@ import protocolsupport.zplatform.PlatformPacketFactory;
 public class SpigotPacketFactory implements PlatformPacketFactory {
 
 	@Override
+	public Object createInboundKeepAlivePacket(long keepAliveId) {
+		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer());
+		serializer.writeLong(keepAliveId);
+		PacketPlayInKeepAlive packet = new PacketPlayInKeepAlive();
+		try {
+			packet.a(serializer);
+		} catch (IOException e) {
+		}
+		return packet;
+	}
+	
+	@Override
 	public Object createInboundInventoryClosePacket() {
 		return new PacketPlayInCloseWindow();
 	}
