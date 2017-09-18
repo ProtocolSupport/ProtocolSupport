@@ -1,8 +1,11 @@
 package protocolsupport.protocol.typeremapper.id;
 
+import org.bukkit.enchantments.Enchantment;
+
 import protocolsupport.protocol.typeremapper.utils.SkippingRegistry.EnumSkippingRegistry;
 import protocolsupport.protocol.typeremapper.utils.SkippingRegistry.GenericSkippingRegistry;
 import protocolsupport.protocol.typeremapper.utils.SkippingRegistry.IntSkippingRegistry;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.ArrayBasedIntSkippingTable;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.EnumSkippingTable;
@@ -30,14 +33,18 @@ public class IdSkipper {
 
 	public static final IntSkippingRegistry<HashMapBasedIntSkippingTable> ENCHANT = new IntSkippingRegistry<HashMapBasedIntSkippingTable>() {
 		{
-			//frost walker, mending
-			registerSkipEntry(9, ProtocolVersionsHelper.BEFORE_1_9);
-			registerSkipEntry(70, ProtocolVersionsHelper.BEFORE_1_9);
-			//depth strider
-			registerSkipEntry(8, ProtocolVersionsHelper.BEFORE_1_8);
-			//lure, luck of the sea
-			registerSkipEntry(62, ProtocolVersionsHelper.BEFORE_1_7);
-			registerSkipEntry(61, ProtocolVersionsHelper.BEFORE_1_7);
+			registerSkipEntry(Enchantment.SWEEPING_EDGE, ProtocolVersionsHelper.BEFORE_1_11_1);
+			registerSkipEntry(Enchantment.BINDING_CURSE, ProtocolVersionsHelper.BEFORE_1_10);
+			registerSkipEntry(Enchantment.VANISHING_CURSE, ProtocolVersionsHelper.BEFORE_1_10);
+			registerSkipEntry(Enchantment.FROST_WALKER, ProtocolVersionsHelper.BEFORE_1_9);
+			registerSkipEntry(Enchantment.MENDING, ProtocolVersionsHelper.BEFORE_1_9);
+			registerSkipEntry(Enchantment.DEPTH_STRIDER, ProtocolVersionsHelper.BEFORE_1_8);
+			registerSkipEntry(Enchantment.LURE, ProtocolVersionsHelper.BEFORE_1_7);
+			registerSkipEntry(Enchantment.LUCK, ProtocolVersionsHelper.BEFORE_1_7);
+		}
+		@SuppressWarnings("deprecation")
+		protected void registerSkipEntry(Enchantment ench, ProtocolVersion... versions) {
+			registerSkipEntry(ench.getId(), versions);
 		}
 		@Override
 		protected HashMapBasedIntSkippingTable createTable() {
