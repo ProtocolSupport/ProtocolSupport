@@ -13,6 +13,8 @@ import protocolsupport.protocol.utils.types.Position;
 
 public interface PlatformPacketFactory {
 
+	public Object createInboundKeepAlivePacket(long keepAliveId);
+	
 	public Object createInboundInventoryClosePacket();
 
 	public Object createOutboundChatPacket(String message, int position);

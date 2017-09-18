@@ -21,8 +21,6 @@ import io.netty.channel.epoll.EpollSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.ByteToMessageCodec;
 import io.netty.handler.codec.DecoderException;
-import io.netty.handler.timeout.IdleState;
-import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.IdleStateHandler;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.pipeline.common.VarIntFrameDecoder;
@@ -84,18 +82,6 @@ public class PEProxyNetworkManager extends SimpleChannelInboundHandler<ByteBuf> 
 					}
 				})
 				.addLast("idlestatehandler", new IdleStateHandler(0, 5, 0))
-				.addLast("keepalive", new ChannelInboundHandlerAdapter() {
-					@Override
-					public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-						if (evt instanceof IdleStateEvent) {
-							if (((IdleStateEvent) evt).state() == IdleState.WRITER_IDLE) {
-								ByteBuf rawemptyframedpacket = Unpooled.buffer();
-								VarNumberSerializer.writeVarInt(rawemptyframedpacket, 0);
-								ctx.writeAndFlush(rawemptyframedpacket);
-							}
-						}
-					}
-				})
 				.addLast("framing", new ByteToMessageCodec<ByteBuf>() {
 					private final VarIntFrameDecoder splitter = new VarIntFrameDecoder();
 					private final VarIntFrameEncoder prepender = new VarIntFrameEncoder();

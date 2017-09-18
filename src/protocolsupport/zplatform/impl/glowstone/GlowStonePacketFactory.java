@@ -143,6 +143,12 @@ import protocolsupport.zplatform.PlatformPacketFactory;
 public class GlowStonePacketFactory implements PlatformPacketFactory {
 
 	@Override
+	public Object createInboundKeepAlivePacket(long keepAliveId) {
+		//TODO: No casting when Glowstone updates!
+		return new PingMessage((int) keepAliveId);
+	}
+	
+	@Override
 	public Message createInboundInventoryClosePacket() {
 		return new CloseWindowMessage(0);
 	}
