@@ -215,4 +215,14 @@ public class NetworkDataCache {
 		return locale;
 	}
 
+	protected long keepAliveId;
+
+	public void setKeepAliveId(long keepAliveId) {
+		this.keepAliveId = keepAliveId;
+	}
+
+	public long getKeepAliveId() {
+		return keepAliveId;
+	}
+
 }

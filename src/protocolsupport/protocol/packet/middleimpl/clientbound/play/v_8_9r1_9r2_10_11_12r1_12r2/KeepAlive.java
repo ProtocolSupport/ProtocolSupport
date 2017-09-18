@@ -15,7 +15,8 @@ public class KeepAlive extends MiddleKeepAlive {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_KEEP_ALIVE_ID, version);
 		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_12_1)) {
-			VarNumberSerializer.writeVarInt(serializer, (int) keepAliveId);
+			cache.setKeepAliveId(keepAliveId);
+			VarNumberSerializer.writeVarInt(serializer, 1);
 		} else {
 			serializer.writeLong(keepAliveId);
 		}

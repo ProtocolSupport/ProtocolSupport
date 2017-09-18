@@ -10,7 +10,8 @@ public class KeepAlive extends MiddleKeepAlive {
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		if (connection.getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_12_1)) {
-			keepAliveId = VarNumberSerializer.readVarInt(clientdata);
+			VarNumberSerializer.readVarInt(clientdata);
+			keepAliveId = cache.getKeepAliveId();
 		} else {
 			keepAliveId = clientdata.readLong();
 		}
