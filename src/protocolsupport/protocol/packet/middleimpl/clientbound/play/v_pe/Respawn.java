@@ -6,9 +6,6 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleRespawn;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSuccess;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -19,13 +16,6 @@ public class Respawn extends MiddleRespawn {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		ClientBoundPacketData changedim = ClientBoundPacketData.create(PEPacketIDs.CHANGE_DIMENSION, version);
-		VarNumberSerializer.writeSVarInt(changedim, getPeDimensionId(dimension));
-		MiscSerializer.writeLFloat(changedim, 0); //x
-		MiscSerializer.writeLFloat(changedim, 0); //y
-		MiscSerializer.writeLFloat(changedim, 0); //z
-		changedim.writeBoolean(true); //unused value
-		packets.add(changedim);
 		for (int x = -10; x < 10; x++) {
 			for (int z = -10; z < 10; z++) {
 				packets.add(Chunk.createEmptyChunk(version, x, z));
