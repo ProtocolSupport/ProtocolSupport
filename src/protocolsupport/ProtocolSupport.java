@@ -85,6 +85,11 @@ public class ProtocolSupport extends JavaPlugin {
 		} else {
 			getLogger().info(MessageFormat.format("Detected {0} server implementation type", ServerPlatform.get().getName()));
 		}
+		if (!ServerPlatform.get().getMiscUtils().getVersionName().equals("1.12.2")) {
+			getLogger().severe("Unsupported server version " + ServerPlatform.get().getMiscUtils().getVersionName());
+			Bukkit.shutdown();
+			return;
+		}
 		try {
 			Class.forName(ProtocolVersion.class.getName());
 			Class.forName(ProtocolVersionsHelper.class.getName());
