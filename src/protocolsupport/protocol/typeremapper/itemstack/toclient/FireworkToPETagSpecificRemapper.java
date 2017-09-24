@@ -54,24 +54,25 @@ public class FireworkToPETagSpecificRemapper implements ItemStackSpecificRemappe
 		return peColors;
 	}
 	
+	//Fireworks have a custom color system. Since PE only supports the Dye colors, here's a basic switcher for now.
 	private byte remapColor(int pcColor) {
 		switch(pcColor) {
-			case 0:						return 0;
-			case 16711680:				return 1;
-			case 39168:					return 2;
-			case 7555840:				return 3;
-			case 255:					return 4;
-			case 10027263:				return 5;
-			case 39372:					return 6;
-			case 12763842:				return 7;
-			case 6710886:				return 8;
-			case 16738047:				return 9;
-			case 10092339:				return 10;
-			case 16776960:				return 11;
-			case 6737151:				return 12;
-			case 16711935:				return 13;
-			case 16737792: 				return 14;
-			default: case 16777215: 	return 15;
+			case 1973019:				return 0;
+			case 11743532:				return 1;
+			case 3887386:				return 2;
+			case 5320730:				return 3;
+			case 2437522:				return 4;
+			case 8073150:				return 5;
+			case 2651799:				return 6;
+			case 11250603:				return 7;
+			case 4408131:				return 8;
+			case 14188952:				return 9;
+			case 4312372:				return 10;
+			case 14602026:				return 11;
+			case 6719955:				return 12;
+			case 12801229:				return 13;
+			case 15435844: 				return 14;
+			default: case 15790320: 	return 15;
 		}
 	}
 
