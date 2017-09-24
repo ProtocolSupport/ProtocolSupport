@@ -21,7 +21,6 @@ public class EntityStatus extends MiddleEntityStatus {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		if(allowedIds.contains(status)) {
 			NetworkEntity e = cache.getWatchedEntity(entityId);
-			//The only remap I know so far.
 			if ((status == 31) && (e.getType() == NetworkEntityType.FISHING_FLOAT)) {
 				status = 13;
 			}
