@@ -23,6 +23,8 @@ public abstract class NBTTagCompoundWrapper {
 	public abstract String getString(String key);
 
 	public abstract int getIntNumber(String key);
+	
+	public abstract byte getByteNumber(String key);
 
 	public abstract long getLongNumber(String key);
 
@@ -110,12 +112,17 @@ public abstract class NBTTagCompoundWrapper {
 		public String getString(String key) {
 			throw reject();
 		}
-
+		
 		@Override
 		public int getIntNumber(String key) {
 			throw reject();
 		}
 
+		@Override
+		public byte getByteNumber(String key) {
+			throw reject();
+		}
+		
 		@Override
 		public long getLongNumber(String key) {
 			throw reject();

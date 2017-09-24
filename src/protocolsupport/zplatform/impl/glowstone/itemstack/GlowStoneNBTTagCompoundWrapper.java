@@ -122,10 +122,15 @@ public class GlowStoneNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 		}
 		return Integer.valueOf(0);
 	}
-
+	
 	@Override
 	public int getIntNumber(String key) {
 		return getNumber(key).intValue();
+	}
+	
+	@Override
+	public byte getByteNumber(String key) {
+		return getNumber(key).byteValue();
 	}
 
 	@Override
