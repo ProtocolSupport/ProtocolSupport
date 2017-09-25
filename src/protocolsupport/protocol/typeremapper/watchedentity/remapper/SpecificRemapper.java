@@ -763,6 +763,7 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.TippedArrow.COLOR, 6) {}, ProtocolVersionsHelper.ALL_1_9)
 	),
 	FIREWORK(NetworkEntityType.FIREWORK, SpecificRemapper.ENTITY,
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectItemStack>(DataWatcherObjectIndex.Firework.ITEM, 16) {}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectItemStack>(DataWatcherObjectIndex.Firework.ITEM, 6) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_2),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectItemStack>(DataWatcherObjectIndex.Firework.ITEM, 5) {}, ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectItemStack>(DataWatcherObjectIndex.Firework.ITEM, 8) {}, ProtocolVersionsHelper.BEFORE_1_9),
