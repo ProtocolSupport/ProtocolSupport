@@ -17,6 +17,7 @@ import protocolsupport.protocol.typeremapper.itemstack.toclient.DragonHeadSpecif
 import protocolsupport.protocol.typeremapper.itemstack.toclient.EmptyBookPageAdderSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.EnchantFilterNBTSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.EnchantToPEEnchantSpecificRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.toclient.FireworkToPETagSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.ItemIdToPEIdSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.MapItemLegacyIdToNbtSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.MonsterEggToLegacyIdSpecificRemapper;
@@ -255,6 +256,8 @@ public class ItemStackRemapper {
 		registerToClientRemapper(Material.POTION, pepotion, ProtocolVersion.MINECRAFT_PE);
 		registerToClientRemapper(Material.SPLASH_POTION, pepotion, ProtocolVersion.MINECRAFT_PE);
 		registerToClientRemapper(Material.MONSTER_EGG, new MonsterEggToPEIdSpecificRemapper(), ProtocolVersion.MINECRAFT_PE);
+		registerToClientRemapper(Material.FIREWORK_CHARGE, new FireworkToPETagSpecificRemapper(), ProtocolVersion.MINECRAFT_PE);
+		registerToClientRemapper(Material.FIREWORK, new FireworkToPETagSpecificRemapper(), ProtocolVersion.MINECRAFT_PE);
 		EnchantFilterNBTSpecificRemapper enchantfilter = new EnchantFilterNBTSpecificRemapper();
 		Arrays.stream(Material.values()).forEach(material -> {
 			registerToClientRemapper(material, enchantfilter, ProtocolVersionsHelper.ALL_PC);

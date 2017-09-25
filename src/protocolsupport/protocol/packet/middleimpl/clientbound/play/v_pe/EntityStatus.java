@@ -21,9 +21,14 @@ public class EntityStatus extends MiddleEntityStatus {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		if(allowedIds.contains(status)) {
 			NetworkEntity e = cache.getWatchedEntity(entityId);
-			//The only remap I know so far.
-			if((status == 31) && (e.getType() == NetworkEntityType.FISHING_FLOAT)) {
+			if ((status == 31) && (e.getType() == NetworkEntityType.FISHING_FLOAT)) {
 				status = 13;
+			}
+			if ((status == 10) && (e.getType() == NetworkEntityType.MINECART_TNT)) {
+				status = 31;
+			}
+			if ((status == 17) && (e.getType() == NetworkEntityType.FIREWORK)) {
+				status = 25;
 			}
 			packets.add(create(e, status, connection.getVersion()));
 		}

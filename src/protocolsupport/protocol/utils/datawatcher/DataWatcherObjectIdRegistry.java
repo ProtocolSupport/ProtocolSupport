@@ -71,7 +71,7 @@ public class DataWatcherObjectIdRegistry {
 		register(DataWatcherObjectSVarInt.class, 2, ProtocolVersion.MINECRAFT_PE);
 		register(DataWatcherObjectFloatLe.class, 3, ProtocolVersion.MINECRAFT_PE);
 		register(DataWatcherObjectString.class, 4, ProtocolVersion.MINECRAFT_PE);
-		//TODO: SLOT (5)
+		register(DataWatcherObjectItemStack.class, 5, ProtocolVersion.MINECRAFT_PE);
 		register(DataWatcherObjectVector3vi.class, 6, ProtocolVersion.MINECRAFT_PE);
 		register(DataWatcherObjectVarLong.class, 7, ProtocolVersion.MINECRAFT_PE);
 		register(DataWatcherObjectSVarLong.class, 7, ProtocolVersion.MINECRAFT_PE);

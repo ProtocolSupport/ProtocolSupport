@@ -68,7 +68,6 @@ public class PEDataValues {
 
 	private static final EnumMap<NetworkEntityType, Integer> objectEntityType = new EnumMap<>(NetworkEntityType.class);
 	static {
-		objectEntityType.put(NetworkEntityType.FIREWORK, 8);
 		objectEntityType.put(NetworkEntityType.ARMOR_STAND_OBJECT, 61);
 		objectEntityType.put(NetworkEntityType.TNT, 65);
 		objectEntityType.put(NetworkEntityType.FALLING_OBJECT, 66);
@@ -76,6 +75,7 @@ public class PEDataValues {
 		objectEntityType.put(NetworkEntityType.EXP_BOTTLE, 68);
 		objectEntityType.put(NetworkEntityType.ENDEREYE, 70);
 		objectEntityType.put(NetworkEntityType.ENDER_CRYSTAL, 71);
+		objectEntityType.put(NetworkEntityType.FIREWORK, 72);
 		objectEntityType.put(NetworkEntityType.SHULKER_BULLET, 76);
 		objectEntityType.put(NetworkEntityType.FISHING_FLOAT, 77);
 		objectEntityType.put(NetworkEntityType.DRAGON_FIREBALL, 79);
@@ -96,7 +96,7 @@ public class PEDataValues {
 		objectEntityType.put(NetworkEntityType.MINECART_TNT, 97);
 		objectEntityType.put(NetworkEntityType.MINECART_CHEST, 98);
 		objectEntityType.put(NetworkEntityType.MINECART_COMMAND, 100);
-		objectEntityType.put(NetworkEntityType.MINECART_FURNACE, 84); //Hack TODO: Remap furnace onto the minecart.
+		objectEntityType.put(NetworkEntityType.MINECART_FURNACE, 84); //Hack, we remap a furnace using entitymetadata.
 		objectEntityType.put(NetworkEntityType.AREA_EFFECT_CLOUD, 101);
 		objectEntityType.put(NetworkEntityType.LAMA_SPIT, 102);
 		objectEntityType.put(NetworkEntityType.EVOCATOR_FANGS, 103);
