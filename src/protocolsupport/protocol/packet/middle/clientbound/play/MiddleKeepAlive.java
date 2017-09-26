@@ -5,11 +5,11 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 
 public abstract class MiddleKeepAlive extends ClientBoundMiddlePacket {
 
-	protected long keepAliveId;
+	protected int keepAliveId;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		keepAliveId = serverdata.readLong();
+		keepAliveId = cache.storeServerKeepAliveId(serverdata.readLong());
 	}
 
 }

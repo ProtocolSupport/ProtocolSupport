@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
+import io.netty.util.internal.ThreadLocalRandom;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.utils.i18n.I18NData;
@@ -215,14 +216,30 @@ public class NetworkDataCache {
 		return locale;
 	}
 
-	protected long keepAliveId;
+	protected long serverKeepAliveId = -1;
+	protected int clientKeepAliveId = -1;
 
-	public void setKeepAliveId(long keepAliveId) {
-		this.keepAliveId = keepAliveId;
+	private int getNextClientKeepAliveId() {
+		clientKeepAliveId++;
+		if (clientKeepAliveId < 1) {
+			clientKeepAliveId = (int) ((System.currentTimeMillis() % (60 * 1000)) << 4) + ThreadLocalRandom.current().nextInt(16) + 1;
+		}
+		return clientKeepAliveId;
 	}
 
-	public long getKeepAliveId() {
-		return keepAliveId;
+	public int storeServerKeepAliveId(long serverKeepAliveId) {
+		this.serverKeepAliveId = serverKeepAliveId;
+		return getNextClientKeepAliveId();
+	}
+
+	public long tryConfirmKeepAlive(int clientKeepAliveId) {
+		if (this.clientKeepAliveId == clientKeepAliveId) {
+			long cServerKeepAliveId = serverKeepAliveId;
+			serverKeepAliveId = -1;
+			return cServerKeepAliveId;
+		} else {
+			return -1;
+		}
 	}
 
 }
