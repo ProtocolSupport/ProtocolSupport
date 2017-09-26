@@ -11,8 +11,7 @@ public class KeepAlive extends MiddleKeepAlive {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_KEEP_ALIVE_ID, connection.getVersion());
-		cache.setKeepAliveId(keepAliveId);
-		serializer.writeInt(1);
+		serializer.writeInt(keepAliveId);
 		return RecyclableSingletonList.create(serializer);
 	}
 

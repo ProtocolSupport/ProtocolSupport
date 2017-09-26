@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
+import io.netty.util.internal.ThreadLocalRandom;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnObject.PreparedItem;
@@ -245,6 +246,32 @@ public class NetworkDataCache {
 		return locale;
 	}
 
+	protected long serverKeepAliveId = -1;
+	protected int clientKeepAliveId = -1;
+
+	private int getNextClientKeepAliveId() {
+		clientKeepAliveId++;
+		if (clientKeepAliveId < 1) {
+			clientKeepAliveId = (int) ((System.currentTimeMillis() % (60 * 1000)) << 4) + ThreadLocalRandom.current().nextInt(16) + 1;
+		}
+		return clientKeepAliveId;
+	}
+
+	public int storeServerKeepAliveId(long serverKeepAliveId) {
+		this.serverKeepAliveId = serverKeepAliveId;
+		return getNextClientKeepAliveId();
+	}
+
+	public long tryConfirmKeepAlive(int clientKeepAliveId) {
+		if (this.clientKeepAliveId == clientKeepAliveId) {
+			long cServerKeepAliveId = serverKeepAliveId;
+			serverKeepAliveId = -1;
+			return cServerKeepAliveId;
+		} else {
+			return -1;
+		}
+	}
+
 	private final HashSet<ChunkCoord> sentChunks = new HashSet<>();
 
 	public void markSentChunk(int x, int z) {
@@ -310,15 +337,5 @@ public class NetworkDataCache {
 	public void setSignTag(NBTTagCompoundWrapper signTag) { this.signTag = signTag; }
 
 	public NBTTagCompoundWrapper getSignTag() { return signTag; }
-
-	protected long keepAliveId;
-
-	public void setKeepAliveId(long keepAliveId) {
-		this.keepAliveId = keepAliveId;
-	}
-
-	public long getKeepAliveId() {
-		return keepAliveId;
-	}
 
 }
