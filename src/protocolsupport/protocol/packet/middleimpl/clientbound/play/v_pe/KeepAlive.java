@@ -10,7 +10,7 @@ public class KeepAlive extends MiddleKeepAlive {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		connection.receivePacket(ServerPlatform.get().getPacketFactory().createInboundKeepAlivePacket(keepAliveId));
+		connection.receivePacket(ServerPlatform.get().getPacketFactory().createInboundKeepAlivePacket(cache.tryConfirmKeepAlive(keepAliveId)));
 		return RecyclableEmptyList.get();
 	}
 
