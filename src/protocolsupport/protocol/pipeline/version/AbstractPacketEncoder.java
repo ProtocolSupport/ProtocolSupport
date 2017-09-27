@@ -23,15 +23,10 @@ import protocolsupport.zplatform.network.NetworkState;
 
 public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<ByteBuf> {
 
-	protected final Connection connection;
-	protected final NetworkDataCache cache;
-
 	public AbstractPacketEncoder(Connection connection, NetworkDataCache storage) {
-		this.connection = connection;
-		this.cache = storage;
 		registry.setCallBack(object -> {
-			object.setConnection(AbstractPacketEncoder.this.connection);
-			object.setSharedStorage(AbstractPacketEncoder.this.cache);
+			object.setConnection(connection);
+			object.setSharedStorage(storage);
 		});
 	}
 
