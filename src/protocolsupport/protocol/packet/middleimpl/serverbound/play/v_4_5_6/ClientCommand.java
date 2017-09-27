@@ -8,6 +8,7 @@ public class ClientCommand extends MiddleClientCommand {
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		clientdata.readByte();
+		command = Command.REQUEST_RESPAWN;
 	}
 
 }
