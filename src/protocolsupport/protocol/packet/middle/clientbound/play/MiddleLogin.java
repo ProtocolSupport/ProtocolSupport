@@ -36,9 +36,10 @@ public abstract class MiddleLogin extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	public void handle() {
+	public boolean postFromServerRead() {
 		cache.addWatchedSelfPlayer(NetworkEntity.createPlayer(playerEntityId));
 		cache.setDimensionId(dimension);
+		return true;
 	}
 
 }

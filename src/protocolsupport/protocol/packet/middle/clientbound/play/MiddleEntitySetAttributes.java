@@ -36,7 +36,7 @@ public abstract class MiddleEntitySetAttributes extends MiddleEntity {
 	}
 
 	@Override
-	public void handle() {
+	public boolean postFromServerRead() {
 		for (Attribute attr : attributes.values()) {
 			if (attr.value == 0.0D) {
 				attr.value = 0.00000001;
@@ -48,6 +48,7 @@ public abstract class MiddleEntitySetAttributes extends MiddleEntity {
 				cache.setMaxHealth((float) attr.value);
 			}
 		}
+		return true;
 	}
 
 	protected static class Attribute {

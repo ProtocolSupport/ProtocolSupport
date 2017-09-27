@@ -8,6 +8,11 @@ import protocolsupport.utils.recyclable.RecyclableEmptyList;
 public class NoopWorldBorder extends MiddleWorldBorder {
 
 	@Override
+	public boolean postFromServerRead() {
+		return false;
+	}
+
+	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		return RecyclableEmptyList.get();
 	}

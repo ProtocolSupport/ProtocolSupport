@@ -1,6 +1,7 @@
 package protocolsupport.protocol.typeremapper.id;
 
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.potion.PotionEffectType;
 
 import protocolsupport.protocol.typeremapper.utils.SkippingRegistry.EnumSkippingRegistry;
 import protocolsupport.protocol.typeremapper.utils.SkippingRegistry.GenericSkippingRegistry;
@@ -54,15 +55,17 @@ public class IdSkipper {
 
 	public static final IntSkippingRegistry<ArrayBasedIntSkippingTable> EFFECT = new IntSkippingRegistry<ArrayBasedIntSkippingTable>() {
 		{
-			//glowing, levitation, luck, unluck
-			registerSkipEntry(24, ProtocolVersionsHelper.BEFORE_1_9);
-			registerSkipEntry(25, ProtocolVersionsHelper.BEFORE_1_9);
-			registerSkipEntry(26, ProtocolVersionsHelper.BEFORE_1_9);
-			registerSkipEntry(27, ProtocolVersionsHelper.BEFORE_1_9);
-			//health boost, absorbtion, saturation
-			registerSkipEntry(21, ProtocolVersionsHelper.BEFORE_1_6);
-			registerSkipEntry(22, ProtocolVersionsHelper.BEFORE_1_6);
-			registerSkipEntry(23, ProtocolVersionsHelper.BEFORE_1_6);
+			registerSkipEntry(PotionEffectType.GLOWING, ProtocolVersionsHelper.BEFORE_1_9);
+			registerSkipEntry(PotionEffectType.LEVITATION, ProtocolVersionsHelper.BEFORE_1_9);
+			registerSkipEntry(PotionEffectType.LUCK, ProtocolVersionsHelper.BEFORE_1_9);
+			registerSkipEntry(PotionEffectType.UNLUCK, ProtocolVersionsHelper.BEFORE_1_9);
+			registerSkipEntry(PotionEffectType.HEALTH_BOOST, ProtocolVersionsHelper.BEFORE_1_6);
+			registerSkipEntry(PotionEffectType.ABSORPTION, ProtocolVersionsHelper.BEFORE_1_6);
+			registerSkipEntry(PotionEffectType.SATURATION, ProtocolVersionsHelper.BEFORE_1_6);
+		}
+		@SuppressWarnings("deprecation")
+		protected void registerSkipEntry(PotionEffectType effecttype, ProtocolVersion... versions) {
+			registerSkipEntry(effecttype.getId(), versions);
 		}
 		@Override
 		protected ArrayBasedIntSkippingTable createTable() {

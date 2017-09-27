@@ -18,4 +18,9 @@ public abstract class MiddleTabComplete extends ClientBoundMiddlePacket {
 		);
 	}
 
+	@Override
+	public boolean postFromServerRead() {
+		return matches.length > 0;
+	}
+
 }

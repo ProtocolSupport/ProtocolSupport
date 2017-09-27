@@ -47,13 +47,14 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 		try {
 			packetTransformer = registry.getTransformer(currentProtocol, VarNumberSerializer.readVarInt(input));
 			packetTransformer.readFromServerData(input);
-			packetTransformer.handle();
-			try (RecyclableCollection<ClientBoundPacketData> data = packetTransformer.toData()) {
-				for (ClientBoundPacketData packetdata : data) {
-					ByteBuf senddata = Allocator.allocateBuffer();
-					writePacketId(senddata, getNewPacketId(currentProtocol, packetdata.getPacketId()));
-					senddata.writeBytes(packetdata);
-					output.add(senddata);
+			if (packetTransformer.postFromServerRead()) {
+				try (RecyclableCollection<ClientBoundPacketData> data = packetTransformer.toData()) {
+					for (ClientBoundPacketData packetdata : data) {
+						ByteBuf senddata = Allocator.allocateBuffer();
+						writePacketId(senddata, getNewPacketId(currentProtocol, packetdata.getPacketId()));
+						senddata.writeBytes(packetdata);
+						output.add(senddata);
+					}
 				}
 			}
 		} catch (Exception exception) {
