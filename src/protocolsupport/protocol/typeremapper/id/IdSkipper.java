@@ -3,10 +3,10 @@ package protocolsupport.protocol.typeremapper.id;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.potion.PotionEffectType;
 
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.utils.SkippingRegistry.EnumSkippingRegistry;
 import protocolsupport.protocol.typeremapper.utils.SkippingRegistry.GenericSkippingRegistry;
 import protocolsupport.protocol.typeremapper.utils.SkippingRegistry.IntSkippingRegistry;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.ArrayBasedIntSkippingTable;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.EnumSkippingTable;
