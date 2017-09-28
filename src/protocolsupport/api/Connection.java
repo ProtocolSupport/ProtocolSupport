@@ -353,7 +353,7 @@ public abstract class Connection {
 	@FunctionalInterface
 	public static interface PacketReceiveListener {
 		/**
-		 * Override to handle packet receiving <br>
+		 * Override to handle packet receivingb <br>
 		 * Return true to allow packet receiving, false to deny
 		 * @param packet packet
 		 * @return true to allow packet receiving, false to deny
