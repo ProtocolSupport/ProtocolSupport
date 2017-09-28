@@ -6,12 +6,10 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldPartic
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
-import protocolsupport.protocol.typeremapper.id.IdSkipper;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.IntTuple;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class WorldParticle extends MiddleWorldParticle {
@@ -19,9 +17,6 @@ public class WorldParticle extends MiddleWorldParticle {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		if (IdSkipper.PARTICLE.getTable(version).shouldSkip(type)) {
-			return RecyclableEmptyList.get();
-		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_PARTICLES_ID, version);
 		String name = type.getName();
 		switch (type) {

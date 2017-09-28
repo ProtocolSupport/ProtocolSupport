@@ -24,9 +24,10 @@ public abstract class MiddleRespawn extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	public void handle() {
+	public boolean postFromServerRead() {
 		cache.clearWatchedEntities();
 		cache.setDimensionId(dimension);
+		return true;
 	}
 
 }

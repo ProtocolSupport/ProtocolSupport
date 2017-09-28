@@ -23,14 +23,10 @@ public abstract class AbstractPacketDecoder extends MessageToMessageDecoder<Byte
 
 	protected final MiddleTransformerRegistry<ServerBoundMiddlePacket> registry = new MiddleTransformerRegistry<>();
 
-	protected final Connection connection;
-	protected final NetworkDataCache cache;
 	public AbstractPacketDecoder(Connection connection, NetworkDataCache cache) {
-		this.connection = connection;
-		this.cache = cache;
 		registry.setCallBack(object -> {
-			object.setConnection(AbstractPacketDecoder.this.connection);
-			object.setSharedStorage(AbstractPacketDecoder.this.cache);
+			object.setConnection(connection);
+			object.setSharedStorage(cache);
 		});
 	}
 

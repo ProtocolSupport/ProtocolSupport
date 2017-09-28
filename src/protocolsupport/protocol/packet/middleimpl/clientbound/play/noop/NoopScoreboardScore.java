@@ -8,6 +8,11 @@ import protocolsupport.utils.recyclable.RecyclableEmptyList;
 public class NoopScoreboardScore extends MiddleScoreboardScore {
 
 	@Override
+	public boolean postFromServerRead() {
+		return false;
+	}
+
+	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		return RecyclableEmptyList.get();
 	}

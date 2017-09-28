@@ -23,15 +23,10 @@ import protocolsupport.zplatform.network.NetworkState;
 
 public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<ByteBuf> {
 
-	protected final Connection connection;
-	protected final NetworkDataCache cache;
-
 	public AbstractPacketEncoder(Connection connection, NetworkDataCache storage) {
-		this.connection = connection;
-		this.cache = storage;
 		registry.setCallBack(object -> {
-			object.setConnection(AbstractPacketEncoder.this.connection);
-			object.setSharedStorage(AbstractPacketEncoder.this.cache);
+			object.setConnection(connection);
+			object.setSharedStorage(storage);
 		});
 	}
 
@@ -47,13 +42,14 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 		try {
 			packetTransformer = registry.getTransformer(currentProtocol, VarNumberSerializer.readVarInt(input));
 			packetTransformer.readFromServerData(input);
-			packetTransformer.handle();
-			try (RecyclableCollection<ClientBoundPacketData> data = packetTransformer.toData()) {
-				for (ClientBoundPacketData packetdata : data) {
-					ByteBuf senddata = Allocator.allocateBuffer();
-					writePacketId(senddata, getNewPacketId(currentProtocol, packetdata.getPacketId()));
-					senddata.writeBytes(packetdata);
-					output.add(senddata);
+			if (packetTransformer.postFromServerRead()) {
+				try (RecyclableCollection<ClientBoundPacketData> data = packetTransformer.toData()) {
+					for (ClientBoundPacketData packetdata : data) {
+						ByteBuf senddata = Allocator.allocateBuffer();
+						writePacketId(senddata, getNewPacketId(currentProtocol, packetdata.getPacketId()));
+						senddata.writeBytes(packetdata);
+						output.add(senddata);
+					}
 				}
 			}
 		} catch (Exception exception) {

@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.UUID;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
+import io.netty.util.internal.ThreadLocalRandom;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnObject.PreparedItem;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.protocol.utils.types.NetworkEntity;
-import protocolsupport.protocol.utils.types.NetworkEntity.DataCache;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.Utils;
@@ -91,9 +91,13 @@ public class NetworkDataCache {
 
 	Position clickedPosition = new Position(0, 0, 0);
 
-	public void setClickedPosition(Position clickedPosition) { this.clickedPosition = clickedPosition; }
+	public void setClickedPosition(Position clickedPosition) {
+		this.clickedPosition = clickedPosition;
+	}
 
-	public Position getClickedPosition() { return clickedPosition; }
+	public Position getClickedPosition() {
+		return clickedPosition;
+	}
 
 
 	private final TIntObjectHashMap<NetworkEntity> watchedEntities = new TIntObjectHashMap<>();
@@ -105,10 +109,6 @@ public class NetworkDataCache {
 
 	public void addWatchedEntity(NetworkEntity entity) {
 		watchedEntities.put(entity.getId(), entity);
-	}
-
-	public void updateWatchedDataCache(int entityId, DataCache updateWith) {
-		watchedEntities.get(entityId).updateDataCache(updateWith);
 	}
 
 	public void addWatchedSelfPlayer(NetworkEntity player) {
@@ -276,6 +276,32 @@ public class NetworkDataCache {
 		return locale;
 	}
 
+	protected long serverKeepAliveId = -1;
+	protected int clientKeepAliveId = -1;
+
+	private int getNextClientKeepAliveId() {
+		clientKeepAliveId++;
+		if (clientKeepAliveId < 1) {
+			clientKeepAliveId = (int) ((System.currentTimeMillis() % (60 * 1000)) << 4) + ThreadLocalRandom.current().nextInt(16) + 1;
+		}
+		return clientKeepAliveId;
+	}
+
+	public int storeServerKeepAliveId(long serverKeepAliveId) {
+		this.serverKeepAliveId = serverKeepAliveId;
+		return getNextClientKeepAliveId();
+	}
+
+	public long tryConfirmKeepAlive(int clientKeepAliveId) {
+		if (this.clientKeepAliveId == clientKeepAliveId) {
+			long cServerKeepAliveId = serverKeepAliveId;
+			serverKeepAliveId = -1;
+			return cServerKeepAliveId;
+		} else {
+			return -1;
+		}
+	}
+
 	private final HashSet<ChunkCoord> sentChunks = new HashSet<>();
 
 	public void markSentChunk(int x, int z) {
@@ -341,15 +367,5 @@ public class NetworkDataCache {
 	public void setSignTag(NBTTagCompoundWrapper signTag) { this.signTag = signTag; }
 
 	public NBTTagCompoundWrapper getSignTag() { return signTag; }
-
-	protected long keepAliveId;
-
-	public void setKeepAliveId(long keepAliveId) {
-		this.keepAliveId = keepAliveId;
-	}
-
-	public long getKeepAliveId() {
-		return keepAliveId;
-	}
 
 }
