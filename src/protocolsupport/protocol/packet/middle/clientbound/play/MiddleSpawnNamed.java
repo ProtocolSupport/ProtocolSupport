@@ -42,7 +42,7 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	public void handle() {
+	public boolean postFromServerRead() {
 		cache.addWatchedEntity(entity);
 		NetworkDataCache.PlayerListEntry entry = cache.getPlayerListEntry(entity.getUUID());
 		if (entry != null) {
@@ -52,6 +52,7 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 			name = "Unknown";
 			properties = Collections.emptyList();
 		}
+		return true;
 	}
 
 }

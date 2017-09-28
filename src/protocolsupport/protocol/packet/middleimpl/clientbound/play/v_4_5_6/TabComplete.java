@@ -7,16 +7,12 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class TabComplete extends MiddleTabComplete {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		if (matches.length == 0) {
-			return RecyclableEmptyList.get();
-		}
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_TAB_COMPLETE_ID, version);
 		StringSerializer.writeString(serializer, version, Utils.clampString(String.join("\u0000", matches), Short.MAX_VALUE));

@@ -22,13 +22,14 @@ public class SetPassengers extends MiddleSetPassengers {
 	}
 
 	@Override
-	public void handle() {
+	public boolean postFromServerRead() {
 		if (passengersIds.length == 0) {
 			passengerId = vehiclePassenger.remove(vehicleId);
 		} else {
 			passengerId = passengersIds[0];
 			vehiclePassenger.put(vehicleId, passengerId);
 		}
+		return true;
 	}
 
 }

@@ -69,7 +69,7 @@ public abstract class MiddlePlayerInfo extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	public void handle() {
+	public boolean postFromServerRead() {
 		for (Info info : infos) {
 			info.previousinfo = cache.getPlayerListEntry(info.uuid);
 			if (info.previousinfo != null) {
@@ -101,6 +101,7 @@ public abstract class MiddlePlayerInfo extends ClientBoundMiddlePacket {
 				}
 			}
 		}
+		return true;
 	}
 
 	protected static enum Action {
