@@ -52,14 +52,10 @@ public class NetworkEntity {
 		return type.isOfType(typeToCheck);
 	}
 
-	private DataCache cache = new DataCache();
+	private final DataCache cache = new DataCache();
 
 	public DataCache getDataCache() {
 		return cache;
-	}
-
-	public void updateDataCache(DataCache updateWith) {
-		this.cache = updateWith;
 	}
 
 	@Override
@@ -150,7 +146,7 @@ public class NetworkEntity {
 
 		public ItemStackWrapper getBoots() { return this.boots; }
 
-		public class Rider {
+		public static class Rider {
 			public boolean riding = false;
 			public Vector position = new Vector(0, 0.6, 0);
 			public boolean rotationLocked = false;
