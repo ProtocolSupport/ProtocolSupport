@@ -17,7 +17,7 @@ public abstract class Connection {
 	protected volatile ProtocolVersion version = ProtocolVersion.UNKNOWN;
 
 	/**
-	 * Returns native network manager object
+	 * Returns native network manager object <br>
 	 * This can be anything, but for now it's NetworkManager for spigot and GlowSession for GlowStone
 	 * @return native network manager object
 	 */
@@ -36,14 +36,14 @@ public abstract class Connection {
 	public abstract InetSocketAddress getRawAddress();
 
 	/**
-	 * Returns remote address
+	 * Returns remote address <br>
 	 * This address can be spoofed
 	 * @return remote address
 	 */
 	public abstract InetSocketAddress getAddress();
 
 	/**
-	 * Changes remote address
+	 * Changes remote address <br>
 	 * This address will be available as parameter for ProtocolSupportAPI until connection close
 	 * @param newRemote new remote address
 	 */
@@ -56,8 +56,8 @@ public abstract class Connection {
 	public abstract Player getPlayer();
 
 	/**
-	 * Returns {@link ProtocolVersion}
-	 * Returns UNKNOWN if handshake packet is not yet received
+	 * Returns {@link ProtocolVersion} <br>
+	 * Returns {@link ProtocolVersion#UNKNOWN} if handshake packet is not yet received
 	 * @return {@link ProtocolVersion}
 	 */
 	public ProtocolVersion getVersion() {
@@ -65,28 +65,28 @@ public abstract class Connection {
 	}
 
 	/**
-	 * Receives packet from client
+	 * Receives packet from client <br>
 	 * Packet received by this method skips receive packet listener
 	 * @param packet packet
 	 */
 	public abstract void receivePacket(Object packet);
 
 	/**
-	 * Sends packet to player
+	 * Sends packet to player <br>
 	 * Packet sent by this method skips send packet listener
 	 * @param packet packet
 	 */
 	public abstract void sendPacket(Object packet);
 
 	/**
-	 * Sends packet data to player
+	 * Sends packet data to player <br>
 	 * Packet sent by this method should use native client protocol (packet data including packet id)
 	 * @param data packet data
 	 */
 	public abstract void sendRawPacket(byte[] data);
 
 	/**
-	 * Receives raw packet data from client
+	 * Receives raw packet data from client <br>
 	 * Packet received by this method should use native client protocol (packet data including packet id)
 	 * @param data packet data
 	 */
@@ -176,7 +176,7 @@ public abstract class Connection {
 	}
 
 	/**
-	 * Returns object from internal map by map key
+	 * Returns object from internal map by map key <br>
 	 * Returns null if there wasn't any object by map key
 	 * @param key map key
 	 * @return value from internal map
@@ -186,7 +186,7 @@ public abstract class Connection {
 	}
 
 	/**
-	 * Removes object from internal map by map key
+	 * Removes object from internal map by map key <br>
 	 * Returns null if there wasn't any object by map key
 	 * @param key map key
 	 * @return deleted value from internal map
@@ -207,25 +207,25 @@ public abstract class Connection {
 	public abstract static class PacketListener {
 
 		/**
-		 * Override to handle native packet sending
-		 * Note: PacketEvent and it's data is only valid while handling the packet
+		 * Override to handle native packet sending <br>
+		 * PacketEvent and it's data is only valid while handling the packet
 		 * @param event packet event
 		 */
 		public void onPacketSending(PacketEvent event) {
 		}
 
 		/**
-		 * Override to handle native packet receiving
-		 * Note: PacketEvent and it's data is only valid while handling the packet
-		 * Note: Based on client version this the received data might be a part of packet, not a full one
+		 * Override to handle native packet receiving <br>
+		 * PacketEvent and it's data is only valid while handling the packet <br>
+		 * Based on client version this the received data might be a part of packet, not a full one
 		 * @param event packet event
 		 */
 		public void onPacketReceiving(PacketEvent event) {
 		}
 
 		/**
-		 * Override to handle raw packet sending
-		 * Note: PacketEvent and it's data is only valid while handling the packet
+		 * Override to handle raw packet sending <br>
+		 * PacketEvent and it's data is only valid while handling the packet
 		 * @param event packet event
 		 */
 		public void onRawPacketSending(RawPacketEvent event) {
@@ -290,7 +290,7 @@ public abstract class Connection {
 			}
 
 			/**
-			 * Sets packet data
+			 * Sets packet data <br>
 			 * A copy of passed ByteBuf is made, and passed ByteBuf is not released
 			 * @param data packet data
 			 */
@@ -341,7 +341,7 @@ public abstract class Connection {
 	@FunctionalInterface
 	public static interface PacketSendListener {
 		/**
-		 * Override to handle packet sending
+		 * Override to handle packet sending <br>
 		 * Return true to allow packet sending, false to deny
 		 * @param packet packet
 		 * @return true to allow packet sending, false to deny
@@ -353,7 +353,7 @@ public abstract class Connection {
 	@FunctionalInterface
 	public static interface PacketReceiveListener {
 		/**
-		 * Override to handle packet receiving
+		 * Override to handle packet receiving <br>
 		 * Return true to allow packet receiving, false to deny
 		 * @param packet packet
 		 * @return true to allow packet receiving, false to deny

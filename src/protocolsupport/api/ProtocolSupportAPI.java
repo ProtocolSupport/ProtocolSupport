@@ -21,7 +21,7 @@ public class ProtocolSupportAPI {
 
 	private static final BigInteger apiversion = BigInteger.valueOf(2);
 	/**
-	 * Returns ProtocolSupport API version
+	 * Returns ProtocolSupport API version <br>
 	 * This number is incremented every time API changes (behavior change, method/field added/removed)
 	 * @return API version
 	 */
@@ -30,8 +30,8 @@ public class ProtocolSupportAPI {
 	}
 
 	/**
-	 * Returns player protocol version
-	 * Returns UNKNOWN if player is not online or is not a real player
+	 * Returns player {@link ProtocolVersion} <br>
+	 * Returns {@link ProtocolVersion#UNKNOWN} if player is not online or is not a real player
 	 * @param player player
 	 * @return player protocol version or UNKNOWN
 	 */
@@ -41,8 +41,8 @@ public class ProtocolSupportAPI {
 	}
 
 	/**
-	 * Returns protocol version of connection with specified address
-	 * Returns UNKNOWN if there is no connection with specified address
+	 * Returns {@link ProtocolVersion} of connection with specified address <br>
+	 * Returns {@link ProtocolVersion#UNKNOWN} if there is no connection with specified address
 	 * @param address address
 	 * @return connection protocol version or UNKNOWN
 	 */
@@ -60,7 +60,7 @@ public class ProtocolSupportAPI {
 	}
 
 	/**
-	 * Returns player {@link Connection}
+	 * Returns player {@link Connection} <br>
 	 * Returns null if player is not online or is not a real player
 	 * @param player player
 	 * @return player {@link Connection} or null
@@ -70,7 +70,7 @@ public class ProtocolSupportAPI {
 	}
 
 	/**
-	 * Returns connection with specified address
+	 * Returns connection with specified address <br>
 	 * Returns null if there is no connection with specified address
 	 * @param address address
 	 * @return {@link Connection} with specified address
@@ -86,7 +86,7 @@ public class ProtocolSupportAPI {
 	}
 
 	/**
-	 * Enables protocol version support if it was disabled previously
+	 * Enables protocol version support if it was disabled previously <br>
 	 * By default all supported versions are enabled
 	 * @param version protocol version which support needs to be enabled
 	 */
@@ -96,7 +96,7 @@ public class ProtocolSupportAPI {
 	}
 
 	/**
-	 * Disables protocol version support, players with that version won't be able to login to server and ping will report server as unsupported version
+	 * Disables protocol version support, players with that version won't be able to login to server and ping will report server as unsupported version <br>
 	 * Disabling all versions before 1.9 will allow multiple passengers on entity
 	 * @param version protocol version which support needs to be disabled
 	 */

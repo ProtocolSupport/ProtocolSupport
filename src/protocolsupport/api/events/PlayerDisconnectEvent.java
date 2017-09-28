@@ -6,6 +6,10 @@ import org.bukkit.event.HandlerList;
 
 import protocolsupport.api.Connection;
 
+/**
+ * This event is fired when player disconnects <br>
+ * This event is fired only if {@link PlayerLoginStartEvent} has fired for this client
+ */
 public class PlayerDisconnectEvent extends PlayerEvent {
 
 	public PlayerDisconnectEvent(Connection connection, String username) {

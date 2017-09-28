@@ -90,8 +90,8 @@ public enum ProtocolVersion {
 	}
 
 	/**
-	 * Returns user friendly version name
-	 * Notice: This name can change, so it shouldn't be used as a key anywhere
+	 * Returns user friendly version name <br>
+	 * This name can change, so it shouldn't be used as a key anywhere
 	 * @return user friendly version name
 	 */
 	public String getName() {
@@ -160,7 +160,7 @@ public enum ProtocolVersion {
 	/**
 	 * Returns protocol version by network game id
 	 * @param id network version id
-	 * @return Returns protocol version by network game id or UNKNOWN if not found
+	 * @return Returns protocol version by network game id or {@link ProtocolVersion#UNKNOWN} if not found
 	 * @deprecated network version ids may be the same for different protocol versions
 	 */
 	@Deprecated
@@ -170,7 +170,7 @@ public enum ProtocolVersion {
 	}
 
 	/**
-	 * Returns protocol version that is used by the game version released after game version used by this protocol
+	 * Returns protocol version that is used by the game version released after game version used by this protocol <br>
 	 * Returns null if next game version doesn't exist
 	 * @return protocol version that is used by the game version released after game version used by this protocol
 	 * @throws IllegalArgumentException if protocol type is UNKNOWN
@@ -181,7 +181,7 @@ public enum ProtocolVersion {
 	}
 
 	/**
-	 * Returns protocol version that is used by the game version released before game version used by this protocol
+	 * Returns protocol version that is used by the game version released before game version used by this protocol <br>
 	 * Returns null if previous game version doesn't exist
 	 * @return protocol version that is used by the game version released before game version used by this protocol
 	 * @throws IllegalArgumentException if protocol type is UNKNOWN
@@ -192,8 +192,8 @@ public enum ProtocolVersion {
 	}
 
 	/**
-	 * Returns all protocol versions that are between specified ones (inclusive)
-	 * Throws {@link IllegalArgumentException} if protocol versions types are not the same or one of the types is UNKNOWN
+	 * Returns all protocol versions that are between specified ones (inclusive) <br>
+	 * Throws {@link IllegalArgumentException} if protocol versions types are not the same or one of the types is {@link ProtocolType#UNKNOWN}
 	 * @param one one protocol version
 	 * @param another one protocol version
 	 * @return all protocol versions that are between specified ones (inclusive)
