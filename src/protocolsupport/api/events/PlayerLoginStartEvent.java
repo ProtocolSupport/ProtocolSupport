@@ -68,7 +68,7 @@ public class PlayerLoginStartEvent extends PlayerAbstractLoginEvent {
 	/**
 	 * Sets if online-mode uuid will be assigned to player <br>
 	 * Only used if player authed using online-mode checks
-	 * @param useonlinemodeuuid if online-mode uuid will be assigned to player 
+	 * @param useonlinemodeuuid if online-mode uuid will be assigned to player
 	 */
 	public void setUseOnlineModeUUID(boolean useonlinemodeuuid) {
 		this.useonlinemodeuuid = useonlinemodeuuid;

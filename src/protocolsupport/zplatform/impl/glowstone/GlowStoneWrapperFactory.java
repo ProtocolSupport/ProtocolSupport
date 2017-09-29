@@ -49,7 +49,7 @@ public class GlowStoneWrapperFactory implements PlatformWrapperFactory {
 	}
 
 	@Override
-	public AbstractHandshakeListener createHandshakeListener(NetworkManagerWrapper networkmanager, boolean hasCompression, boolean fullEncryption) {
+	public AbstractHandshakeListener createHandshakeListener(NetworkManagerWrapper networkmanager) {
 		return new AbstractHandshakeListener(networkmanager) {
 			@Override
 			protected AbstractStatusListener getStatusListener(NetworkManagerWrapper networkManager) {
@@ -58,7 +58,7 @@ public class GlowStoneWrapperFactory implements PlatformWrapperFactory {
 			}
 			@Override
 			protected AbstractLoginListener getLoginListener(NetworkManagerWrapper networkManager, String hostname) {
-				return new GlowStoneLoginListener(networkmanager, hostname, hasCompression, fullEncryption);
+				return new GlowStoneLoginListener(networkmanager, hostname);
 			}
 		};
 	}

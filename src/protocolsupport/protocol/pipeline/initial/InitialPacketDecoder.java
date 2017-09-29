@@ -158,21 +158,9 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 	}
 
 	private void setEncapsulatedProtocol(Channel channel, EncapsulatedProtocolInfo info) {
-		ConnectionImpl connection = ConnectionImpl.getFromChannel(channel);
-		if (ServerPlatform.get().getMiscUtils().isDebugging()) {
-			ProtocolSupport.logInfo(MessageFormat.format("{0} connected with protocol version {1}", connection.getAddress(), info.getVersion()));
-		}
-		channel.pipeline().remove(ChannelHandlers.INITIAL_DECODER);
-		if (connection.getRawAddress().getAddress().isLoopbackAddress() && (info.getAddress() != null)) {
-			connection.changeAddress(info.getAddress());
-		}
-		ProtocolVersion version = info.getVersion();
-		if (!ProtocolSupportAPI.isProtocolVersionEnabled(version)) {
-			version = version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4) ? ProtocolVersion.MINECRAFT_LEGACY : ProtocolVersion.MINECRAFT_FUTURE;
-		}
-		connection.setVersion(version);
+		ConnectionImpl connection = prepare(channel, info.getVersion());
 		PlatformUtils putils = ServerPlatform.get().getMiscUtils();
-		pipelineBuilders.get(version).buildCodec(channel, connection);
+		pipelineBuilders.get(connection.getVersion()).buildCodec(channel, connection);
 		putils.setFraming(channel.pipeline(), new VarIntFrameDecoder(), new VarIntFrameEncoder());
 		if (info.hasCompression()) {
 			putils.enableCompression(channel.pipeline(), putils.getCompressionThreshold());
@@ -181,20 +169,26 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 	}
 
 	protected void setNativeProtocol(Channel channel, ProtocolVersion version) {
-		ConnectionImpl connection = ConnectionImpl.getFromChannel(channel);
-		if (ServerPlatform.get().getMiscUtils().isDebugging()) {
-			ProtocolSupport.logInfo(MessageFormat.format("{0} connected with protocol version {1}", connection.getAddress(), version));
-		}
-		channel.pipeline().remove(ChannelHandlers.INITIAL_DECODER);
-		if (!ProtocolSupportAPI.isProtocolVersionEnabled(version)) {
-			version = version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4) ? ProtocolVersion.MINECRAFT_LEGACY : ProtocolVersion.MINECRAFT_FUTURE;
-		}
-		connection.setVersion(version);
-		IPipeLineBuilder builder = pipelineBuilders.get(version);
+		ConnectionImpl connection = prepare(channel, version);
+		IPipeLineBuilder builder = pipelineBuilders.get(connection.getVersion());
 		builder.buildCodec(channel, connection);
 		builder.buildPipeLine(channel, connection);
 		receivedData.readerIndex(0);
 		channel.pipeline().firstContext().fireChannelRead(receivedData);
+	}
+
+	protected ConnectionImpl prepare(Channel channel, ProtocolVersion version) {
+		channel.pipeline().remove(ChannelHandlers.INITIAL_DECODER);
+		ConnectionImpl connection = ConnectionImpl.getFromChannel(channel);
+		if (ServerPlatform.get().getMiscUtils().isDebugging()) {
+			ProtocolSupport.logInfo(MessageFormat.format("{0} connected with protocol version {1}", connection.getAddress(), version));
+		}
+		connection.getNetworkManagerWrapper().setPacketListener(ServerPlatform.get().getWrapperFactory().createHandshakeListener(connection.getNetworkManagerWrapper()));
+		if (!ProtocolSupportAPI.isProtocolVersionEnabled(version)) {
+			version = version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4) ? ProtocolVersion.MINECRAFT_LEGACY : ProtocolVersion.MINECRAFT_FUTURE;
+		}
+		connection.setVersion(version);
+		return connection;
 	}
 
 	private static ProtocolVersion attemptDecodeNewHandshake(ByteBuf bytebuf) {
