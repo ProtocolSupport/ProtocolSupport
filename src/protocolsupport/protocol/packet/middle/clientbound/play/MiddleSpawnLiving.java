@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.id.IdSkipper;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
@@ -45,8 +46,9 @@ public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	public void handle() {
+	public boolean postFromServerRead() {
 		cache.addWatchedEntity(entity);
+		return !IdSkipper.ENTITY.getTable(connection.getVersion()).shouldSkip(entity.getType());
 	}
 
 }

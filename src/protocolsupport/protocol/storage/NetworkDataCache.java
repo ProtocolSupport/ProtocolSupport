@@ -15,7 +15,6 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacke
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.protocol.utils.types.NetworkEntity;
-import protocolsupport.protocol.utils.types.NetworkEntity.DataCache;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.Utils;
@@ -93,9 +92,13 @@ public class NetworkDataCache {
 
 	Position clickedPosition = new Position(0, 0, 0);
 
-	public void setClickedPosition(Position clickedPosition) { this.clickedPosition = clickedPosition; }
+	public void setClickedPosition(Position clickedPosition) {
+		this.clickedPosition = clickedPosition;
+	}
 
-	public Position getClickedPosition() { return clickedPosition; }
+	public Position getClickedPosition() {
+		return clickedPosition;
+	}
 
 
 	private final TIntObjectHashMap<NetworkEntity> watchedEntities = new TIntObjectHashMap<>();
@@ -108,10 +111,6 @@ public class NetworkDataCache {
 
 	public void addWatchedEntity(NetworkEntity entity) {
 		watchedEntities.put(entity.getId(), entity);
-	}
-
-	public void updateWatchedDataCache(int entityId, DataCache updateWith) {
-		watchedEntities.get(entityId).updateDataCache(updateWith);
 	}
 
 	public void addWatchedSelfPlayer(NetworkEntity player) {

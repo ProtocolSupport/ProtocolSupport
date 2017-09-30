@@ -27,10 +27,11 @@ public class Position extends MiddlePosition {
 	}
 
 	@Override
-	public void handle() {
+	public boolean postFromServerRead() {
 		if (teleportConfirmId != 0) {
 			cache.setTeleportLocation(x, y, z, teleportConfirmId);
 		}
+		return true;
 	}
 
 	public static final int ANIMATION_MODE_ALL = 0;

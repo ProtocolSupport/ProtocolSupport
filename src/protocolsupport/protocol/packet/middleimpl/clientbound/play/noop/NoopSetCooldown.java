@@ -8,6 +8,11 @@ import protocolsupport.utils.recyclable.RecyclableEmptyList;
 public class NoopSetCooldown extends MiddleSetCooldown {
 
 	@Override
+	public boolean postFromServerRead() {
+		return false;
+	}
+
+	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		return RecyclableEmptyList.get();
 	}

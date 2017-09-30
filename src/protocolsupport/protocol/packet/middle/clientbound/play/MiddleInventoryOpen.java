@@ -5,8 +5,10 @@ import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.typeremapper.id.IdSkipper;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.zplatform.ServerPlatform;
 
 public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 
@@ -28,8 +30,14 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	public void handle() {
-		cache.setOpenedWindow(type, windowId, slots);
+	public boolean postFromServerRead() {
+		if (IdSkipper.INVENTORY.getTable(connection.getVersion()).shouldSkip(type)) {
+			connection.receivePacket(ServerPlatform.get().getPacketFactory().createInboundInventoryClosePacket());
+			return false;
+		} else {
+			cache.setOpenedWindow(type, windowId, slots);
+			return true;
+		}
 	}
 
 }

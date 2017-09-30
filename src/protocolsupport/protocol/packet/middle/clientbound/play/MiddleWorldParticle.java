@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.id.IdSkipper;
 import protocolsupport.protocol.utils.types.Particle;
 
 public abstract class MiddleWorldParticle extends ClientBoundMiddlePacket {
@@ -37,6 +38,11 @@ public abstract class MiddleWorldParticle extends ClientBoundMiddlePacket {
 		while (serverdata.isReadable()) {
 			adddata.add(VarNumberSerializer.readVarInt(serverdata));
 		}
+	}
+
+	@Override
+	public boolean postFromServerRead() {
+		return !IdSkipper.PARTICLE.getTable(connection.getVersion()).shouldSkip(type);
 	}
 
 }

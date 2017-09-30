@@ -20,8 +20,9 @@ public abstract class MiddlePlayerAbilities extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	public void handle() {
+	public boolean postFromServerRead() {
 		cache.updateFlying((flags & flagOffsetCanFly) == flagOffsetCanFly, (flags & flagOffsetIsFlying) == flagOffsetIsFlying);
+		return true;
 	}
 
 }

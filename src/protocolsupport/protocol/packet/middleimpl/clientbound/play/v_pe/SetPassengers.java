@@ -41,13 +41,12 @@ public class SetPassengers extends MiddleSetPassengers {
 					//TODO: Fix and Update this: Rider positions.
 					DataCache data = passenger.getDataCache();
 					if(vehicle.isOfType(NetworkEntityType.PIG)) {
-						data.rider = data.new Rider(new Vector(0.0, 2.8, 0.0), false);
+						data.rider = new DataCache.Rider(new Vector(0.0, 2.8, 0.0), false);
 					} else if(vehicle.isOfType(NetworkEntityType.BASE_HORSE)) {
-						data.rider = data.new Rider(new Vector(0.0, 2.3, -0.2), true, 180f, -180f);
+						data.rider = new DataCache.Rider(new Vector(0.0, 2.3, -0.2), true, 180f, -180f);
 					} else {
-						data.rider = data.new Rider(true);
+						data.rider = new DataCache.Rider(true);
 					}
-					cache.updateWatchedDataCache(passengerId, data);
 					packets.add(EntityMetadata.createFaux(passenger, cache.getLocale(), version));
 
 					packets.add(create(version, vehicleId, passengerId, LINK));
@@ -63,9 +62,7 @@ public class SetPassengers extends MiddleSetPassengers {
 						NetworkEntity passenger = cache.getWatchedEntity(passengerId);
 						if(passenger != null) {
 							//Also update meta.
-							DataCache data = passenger.getDataCache();
-							data.rider = data.new Rider(false);
-							cache.updateWatchedDataCache(passengerId, data);
+							passenger.getDataCache().rider = new DataCache.Rider(false);
 							packets.add(EntityMetadata.createFaux(passenger, cache.getLocale(), version));
 							packets.add(create(version, vehicleId, passengerId, UNLINK));
 							if(cache.isSelf(passengerId)) {

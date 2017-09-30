@@ -8,6 +8,11 @@ import protocolsupport.utils.recyclable.RecyclableEmptyList;
 public class NoopAdvancements extends MiddleAdvancements {
 
 	@Override
+	public boolean postFromServerRead() {
+		return false;
+	}
+
+	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		return RecyclableEmptyList.get();
 	}
