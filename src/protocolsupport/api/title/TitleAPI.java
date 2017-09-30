@@ -41,13 +41,14 @@ public class TitleAPI {
 			throw new IllegalArgumentException("Title and subtitle can't be both null");
 		}
 		Connection connection = ProtocolSupportAPI.getConnection(player);
-		if (titleJson != null) {
-			connection.sendPacket(ServerPlatform.get().getPacketFactory().createTitleMainPacket(titleJson));
-		}
+		connection.sendPacket(ServerPlatform.get().getPacketFactory().createTitleParamsPacket(fadeIn, stay, fadeOut));
 		if (subtitleJson != null) {
 			connection.sendPacket(ServerPlatform.get().getPacketFactory().createTitleSubPacket(subtitleJson));
 		}
-		connection.sendPacket(ServerPlatform.get().getPacketFactory().createTitleParamsPacket(fadeIn, stay, fadeOut));
+		if (titleJson == null) {
+			titleJson = "";
+		}
+		connection.sendPacket(ServerPlatform.get().getPacketFactory().createTitleMainPacket(titleJson));
 	}
 
 	/**
