@@ -13,6 +13,5 @@ public class PEInventory {
 		public static final int POCKET_CREATIVE_INVENTORY = 121;
 		public static final int POCKET_CLICKED_SLOT = 124;
 	}
-
-
+	
 }

@@ -11,6 +11,7 @@ import io.netty.util.internal.ThreadLocalRandom;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnObject.PreparedItem;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacket.InfTransactions;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.protocol.utils.types.NetworkEntity;
@@ -99,6 +100,7 @@ public class NetworkDataCache {
 
 	private final TIntObjectHashMap<NetworkEntity> watchedEntities = new TIntObjectHashMap<>();
 	private final TIntObjectHashMap<PreparedItem> preparedItems = new TIntObjectHashMap<>();
+	private final InfTransactions infTransactions = new InfTransactions();
 	private NetworkEntity player;
 	private final HashMap<UUID, NetworkDataCache.PlayerListEntry> playerlist = new HashMap<>();
 	private Environment dimensionId;
@@ -162,6 +164,10 @@ public class NetworkDataCache {
 
 	public void removePreparedItem(int entityId) {
 		preparedItems.remove(entityId);
+	}
+	
+	public InfTransactions getInfTransactions() {
+		return infTransactions;
 	}
 
 	public void addPlayerListEntry(UUID uuid, PlayerListEntry entry) {

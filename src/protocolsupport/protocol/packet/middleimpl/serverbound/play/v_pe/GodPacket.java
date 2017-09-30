@@ -1,5 +1,13 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.bukkit.Material;
 import org.bukkit.util.Vector;
 
 import io.netty.buffer.ByteBuf;
@@ -9,6 +17,7 @@ import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockDig;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockPlace;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleHeldSlot;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClick;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryTransaction;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUseEntity;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
@@ -42,8 +51,6 @@ import protocolsupport.zplatform.itemstack.ItemStackWrapper;
  */
 public class GodPacket extends ServerBoundMiddlePacket {
 	
-	//Transactions
-	protected InfTransaction[] transactions;
 	//Complex Actions
 	protected int actionId;
 	protected int subTypeId = -1;
@@ -57,14 +64,19 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	//Misc
 	private static ItemStackWrapper AIR = ServerPlatform.get().getWrapperFactory().createItemStack(0);
 
+	public static void bug(String bugger) {
+		System.out.println(bugger);
+	}
+	
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		System.out.println("NEEWWW GODPACKET!");
+		System.out.println("NEEWWW GODPACKET! Hooraayy it's a god packet. Don't we all reeeaaally love godpackets? I do. IDDOODD I REALLY DO LOVE THEM. THTHISS IS THE BEST DAY IN MY LIFE.");
 		actionId = VarNumberSerializer.readVarInt(clientdata);
 
-		transactions = new InfTransaction[VarNumberSerializer.readVarInt(clientdata)];
-		for(int i = 0; i < transactions.length; i++) {
-			transactions[i] = InfTransaction.readFromStream(clientdata, cache.getLocale(), connection.getVersion());
+		int transactionLength = VarNumberSerializer.readVarInt(clientdata);
+		for(int i = 0; i < transactionLength; i++) {
+			cache.getInfTransactions().cacheTransaction(cache, InfTransaction.readFromStream(clientdata, cache.getLocale(), connection.getVersion()));
+			bug("cached.. Deficit size: " + cache.getInfTransactions().deficit.size() + " surplus size: " + cache.getInfTransactions().surplus.size());
 		}
 
 		switch(actionId) {
@@ -177,7 +189,10 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				break;
 			}
 			case ACTION_NORMAL: { //Normal inventory transaction.
-				ClickType clickType = calculateClickType();
+				
+				packets.addAll(cache.getInfTransactions().process(cache));
+				
+				/*ClickType clickType = calculateClickType();
 				
 				if(clickType.doPrefix()) {
 					packets.add(clickType.createPrefix(cache));
@@ -191,6 +206,8 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				if(clickType.doSuffix()) {
 					packets.add(clickType.createSuffix(cache));
 				}
+				*/
+				
 				
 				break;
 			}
@@ -202,7 +219,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		return packets;
 	}
 
-	private static class InfTransaction {
+	public static class InfTransaction {
 
 		private int sourceId;
 		private int inventoryId;
@@ -242,80 +259,211 @@ public class GodPacket extends ServerBoundMiddlePacket {
 					+ " oldItem: " + transaction.oldItem.toString() + " newItem: " + transaction.newItem.toString());
 			return transaction;
 		}
+		
+		public int getSourceId() {
+			return sourceId;
+		}
 
-		public RecyclableArrayList<ServerBoundPacketData> toClick(NetworkDataCache cache, ClickType transType) {
-			int sSlot = -1; //Slot to send.
-			
-			//Repetitive.
-			if(newItem.equals(oldItem)) {
-				return null;
-			}
-			
-			switch(cache.getOpenedWindow()) {
-				case PLAYER: {
-					switch(inventoryId) {
-						case PESource.POCKET_CRAFTING_RESULT: {
-							sSlot = 0;
-							break;
-						}
-						case PESource.POCKET_CRAFTING_GRID: {
-							sSlot = slot + 1;
-							break;
-						}
-						case PESource.POCKET_ARMOR_EQUIPMENT: {
-							sSlot = slot + 5;
-							break;
-						}
-						case PESource.POCKET_INVENTORY: {
-								if (slot < 9) {
-									sSlot = slot + 36;
-								} else {
-									sSlot = slot;
-								}
-							break;
-						}
-						case PESource.POCKET_OFFHAND: {
-							sSlot = 45;
-							break;
-						}
-						default: {
-							break;
-						}
-					}
-					break;
-				}
-				case CRAFTING_TABLE: {
-					sSlot = invSlotToContainerSlot(inventoryId, 10, slot);
-					break;
-				}
-				default: {
-					sSlot = invSlotToContainerSlot(inventoryId, cache.getOpenedWindowSlots(), slot);
-					break;
-				}
-			}
-			
-			//Special cases
-			switch(inventoryId) {
-				case PESource.POCKET_CLICKED_SLOT: {
-					return null;
-				}
-				case PESource.POCKET_FAUX_DROP: {
-					sSlot = inventoryId;
-					break;
-				}
-			}
-			
-			if (sSlot != -1) {
-				return transType.process(cache, sSlot, oldItem);
-			}
-			return null;
+
+		public int getInventoryId() {
+			return inventoryId;
+		}
+
+
+		public int getAction() {
+			return action;
+		}
+
+
+		public int getSlot() {
+			return slot;
 		}
 		
+		public ItemStackWrapper getOldItem() {
+			return oldItem;
+		}
+
+
+		public ItemStackWrapper getNewItem() {
+			return newItem;
+		}
+
 		@Override
 		public String toString() {
 			return Utils.toStringAllFields(this);
 		}
 
+	}
+	
+	public static class InfTransactions {
+		Map<String, List<Integer>> surplus = new HashMap<>();
+		Map<String, List<Integer>> deficit = new HashMap<>();
+		
+		public void cacheTransaction(NetworkDataCache cache, InfTransaction transaction) {
+			if (!transaction.getOldItem().equals(transaction.getNewItem())) {
+				String oldId = getItemIdentity(transaction.getOldItem());
+				String newId = getItemIdentity(transaction.getNewItem());
+				if (oldId.equals(newId)) {
+					int amount = transaction.getOldItem().getAmount() - transaction.getNewItem().getAmount();
+					if (amount > 0) {
+						put(surplus, oldId, transformSlot(cache, transaction.getInventoryId(), transaction.getSlot()), amount);
+						bug("adding surplus C: " + oldId + " : " + transformSlot(cache, transaction.getInventoryId(), transaction.getSlot()) + " : " + amount);
+					} else {
+						put(deficit, oldId, transformSlot(cache, transaction.getInventoryId(), transaction.getSlot()), amount * -1);
+						bug("adding deficit C: " + oldId + " : " + transformSlot(cache, transaction.getInventoryId(), transaction.getSlot()) + " : " + amount * -1);
+					}
+				} else {
+					if (transaction.getOldItem().getType() != Material.AIR) {
+						put(surplus, oldId, transformSlot(cache, transaction.getInventoryId(), transaction.getSlot()), transaction.getOldItem().getAmount());
+						bug("adding surplus N: " + oldId + " : " + transformSlot(cache, transaction.getInventoryId(), transaction.getSlot()) + " : " + transaction.getOldItem().getAmount());
+					} if (transaction.getNewItem().getType() != Material.AIR) {
+						put(deficit, newId, transformSlot(cache, transaction.getInventoryId(), transaction.getSlot()), transaction.getNewItem().getAmount());
+						bug("adding deficit N: " + newId + " : " + transformSlot(cache, transaction.getInventoryId(), transaction.getSlot()) + " : " + transaction.getNewItem().getAmount());
+					}
+				}
+			}
+		}
+		
+		private void put(Map<String, List<Integer>> map, String id, int slot, int amount) {
+			bug("slot: " + slot + " amount: " + amount);
+			List<Integer> keys = map.get(id);
+			if(keys == null) {
+				keys = new ArrayList<Integer>();
+				map.put(id, keys);
+			}
+			bug("Adding keyValue: " + Integer.toBinaryString(slot << 8 | amount));
+			keys.add(slot << 8 | amount);
+			bug("keysize: " + keys.size());
+		}
+		
+		public RecyclableArrayList<ServerBoundPacketData> process(NetworkDataCache cache) {
+			RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
+			bug("processing..");
+			Iterator<Entry<String, List<Integer>>> deficitorator = deficit.entrySet().iterator();
+			while(deficitorator.hasNext()) {
+				Entry<String, List<Integer>> deficitEntry = deficitorator.next();
+				List<Integer> surplusSlotValues = surplus.get(deficitEntry.getKey());
+				bug("Deficits of " + deficitEntry.getKey() + "...");
+				if(surplusSlotValues != null) {
+					bug("Found surplus! (Where's the money lebowsky?!)");
+					Iterator<Integer> deficitSlotValueIterator = deficitEntry.getValue().iterator();
+					while(deficitSlotValueIterator.hasNext()) {
+						Integer deficitSlotValue = deficitSlotValueIterator.next();
+						bug("Local debt: " + Integer.toBinaryString(deficitSlotValue));
+						int	deficitSlot = ((deficitSlotValue >> 8) & 0xFF), deficitAmount = (deficitSlotValue & 0xFF);
+						bug("Debt slot: " + deficitSlot + " Debt amount: " + deficitAmount);
+						Iterator<Integer> surplusSlotValueIterator = surplusSlotValues.iterator();
+						while(surplusSlotValueIterator.hasNext()) {
+							bug("Rolling cashier..");
+							Integer surplusSlotValue = surplusSlotValueIterator.next();
+							bug("Surplus value: " + Integer.toBinaryString(surplusSlotValue));
+							int	surplusSlot = ((surplusSlotValue >> 8) & 0xFF), surplusAmount = (surplusSlotValue & 0xFF);
+							bug("Surplus slot: " + surplusSlot + " surplus amount: " + surplusAmount);
+							bug("Left clicking (stealing) surplus...");
+							packets.addAll(Click.LEFT.create(cache, surplusSlot));
+							bug("Getting all we can get our hands on...");
+							for(int i = 0; i < (deficitAmount < surplusAmount ? deficitAmount : surplusAmount); i++) {
+								bug("right..");
+								packets.addAll(Click.RIGHT.create(cache, deficitSlot));
+								deficitSlotValue--; surplusSlotValue--;
+							}
+							packets.addAll(Click.LEFT.create(cache, surplusSlot));
+							if((surplusSlotValue & 0xFF) == 0) {
+								bug("The suitcase is empty!");
+								surplusSlotValueIterator.remove();
+							}
+							if((deficitSlotValue & 0xFF) == 0) {
+								bug("One debt less!");
+								deficitSlotValueIterator.remove();
+							}
+						}
+					}
+					if(deficitEntry.getValue().isEmpty()) {
+						bug("All debt is payed! I AM REALLY FREE!!!");
+						deficitorator.remove();
+					}
+				}
+			}
+			return packets;
+		}
+		
+		private String getItemIdentity(ItemStackWrapper item) {
+			return item.getTypeId() + "-" + item.getData() + "-" + item.getTag().toString();
+		}
+		
+		/*protected class ClickBait {
+			
+			private int fromSlot, toSlot, amount;
+			
+			public ClickBait(int fromSlot, int toSlot, int amount) {
+				this.fromSlot = fromSlot; 
+				this.toSlot = toSlot; 
+				this.amount = amount;
+			}
+
+			public int getFromSlot() {
+				return fromSlot;
+			}
+
+			public int getToSlot() {
+				return toSlot;
+			}
+
+			public int getAmount() {
+				return amount;
+			}
+			
+		}*/
+		
+	}
+	
+	private static int transformSlot(NetworkDataCache cache, int peInventoryId, int peSlot) {
+		int sSlot = -1; //Slot to send.
+		
+		switch(cache.getOpenedWindow()) {
+			case PLAYER: {
+				switch(peInventoryId) {
+					case PESource.POCKET_CRAFTING_RESULT: {
+						sSlot = 0;
+						break;
+					}
+					case PESource.POCKET_CRAFTING_GRID: {
+						sSlot = peSlot + 1;
+						break;
+					}
+					case PESource.POCKET_ARMOR_EQUIPMENT: {
+						sSlot = peSlot + 5;
+						break;
+					}
+					case PESource.POCKET_INVENTORY: {
+							if (peSlot < 9) {
+								sSlot = peSlot + 36;
+							} else {
+								sSlot = peSlot;
+							}
+						break;
+					}
+					case PESource.POCKET_OFFHAND: {
+						sSlot = 45;
+						break;
+					}
+					default: {
+						break;
+					}
+				}
+				break;
+			}
+			case CRAFTING_TABLE: {
+				sSlot = invSlotToContainerSlot(peInventoryId, 10, peSlot);
+				break;
+			}
+			default: {
+				sSlot = invSlotToContainerSlot(peInventoryId, cache.getOpenedWindowSlots(), peSlot);
+				break;
+			}
+		}
+		
+		return sSlot;
 	}
 	
 	private static int invSlotToContainerSlot(int inventoryId, int start, int slot) {
@@ -329,50 +477,29 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		return slot;
 	}
 	
-	private ClickType calculateClickType() {
-		System.out.println("Calculating clicktype...");
-		if (transactions.length > 0) {
-			System.out.println("Transactions > 0");
-			if(transactions[0].inventoryId == PESource.POCKET_CLICKED_SLOT) {
-				System.out.println("Click based action");
-				if(transactions.length > 2) {
-					System.out.println("Drag based action");
-					if (transactions[transactions.length - 1].newItem.getAmount() == 1) {
-						System.out.println("Single item. (DropOff)");
-						return ClickType.DRAGRIGHT;
-					} else if (transactions[transactions.length - 1].newItem.getAmount() == 0) { 
-						System.out.println("Double click.");
-						return ClickType.DUBBLECLICK;
-					} else {
-						System.out.println("Multiple items (SplitStack).");
-						return ClickType.DRAGLEFT;
-					}
-				} else {
-					System.out.println("Single click action");
-					if (transactions[transactions.length - 1].newItem.getAmount() == 1) {
-						System.out.println("Single item. (DropOff)");
-						return ClickType.RIGHTCLICK;
-					} else {
-						System.out.println("Multiple item. (Drop Stack)");
-						return ClickType.LEFTCLICK;
-					}
-				}
-			} else {
-				System.out.println("Tap based action");
-				if (transactions[transactions.length - 1].newItem.getAmount() == 1) {
-					System.out.println("Single item transfer.");
-					return ClickType.TRANSFERITEM;
-				} else {
-					System.out.println("Stack transfer.");
-					return ClickType.TRANSFERSTACK;
-				}
-			}
+	protected enum Click {
+		LEFT	(0, 0),
+		RIGHT	(0, 1);
+		
+		private final int mode;
+		private final int button;
+		
+		Click(int mode, int button) {
+			this.mode = mode;
+			this.button = button;
 		}
 		
-		return ClickType.UNKNOWN;
+		public RecyclableArrayList<ServerBoundPacketData> create(NetworkDataCache cache, int slot) {
+			RecyclableArrayList<ServerBoundPacketData> clickPackets = RecyclableArrayList.create();
+			int actionNumber = cache.getActionNumber();
+			clickPackets.add(MiddleInventoryClick.create(cache.getLocale(), cache.getOpenedWindowId(), slot, button, actionNumber, mode, AIR));
+			clickPackets.add(MiddleInventoryTransaction.create(cache.getOpenedWindowId(), actionNumber, false)); //Instant apology :D
+			return clickPackets;
+		}
+		
 	}
 	
-	public enum ClickType {
+	/*public enum ClickType {
 		LEFTCLICK		( 0,  0, -1, -1, false), 
 		RIGHTCLICK		( 0,  1, -1, -1, false), 
 		DUBBLECLICK		( 6,  0, -1, -1, false),
@@ -432,10 +559,6 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			return packets;
 		}
 		
-	}
-	
-	private static ServerBoundPacketData pcClick(NetworkDataCache cache, int mode, int button, int slot, ItemStackWrapper lastItem) {
-		return MiddleInventoryClick.create(cache.getLocale(), cache.getOpenedWindowId(), slot, button, cache.getActionNumber(), mode, lastItem);
-	}
+	}*/
 
 }
