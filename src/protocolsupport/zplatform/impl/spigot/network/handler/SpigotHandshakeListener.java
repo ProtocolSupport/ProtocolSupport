@@ -11,12 +11,8 @@ import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class SpigotHandshakeListener extends AbstractHandshakeListener implements PacketHandshakingInListener {
 
-	private final boolean hasCompression;
-	private final boolean fullEncryption;
-	public SpigotHandshakeListener(NetworkManagerWrapper networkmanager, boolean hasCompression, boolean fullEncryption) {
+	public SpigotHandshakeListener(NetworkManagerWrapper networkmanager) {
 		super(networkmanager);
-		this.hasCompression = hasCompression;
-		this.fullEncryption = fullEncryption;
 	}
 
 	@Override
@@ -30,7 +26,7 @@ public class SpigotHandshakeListener extends AbstractHandshakeListener implement
 
 	@Override
 	public AbstractLoginListener getLoginListener(NetworkManagerWrapper networkManager, String hostname) {
-		return new SpigotLoginListener(networkManager, hostname, hasCompression, fullEncryption);
+		return new SpigotLoginListener(networkManager, hostname);
 	}
 
 	@Override

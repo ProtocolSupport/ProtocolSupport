@@ -53,7 +53,7 @@ public class IconUtils {
 	}
 
 	/**
-	 * Converts icon to base64 form from bukkit {@link CachedServerIcon}
+	 * Converts icon to base64 form from bukkit {@link CachedServerIcon} <br>
 	 * Throws exception if icon is not constructed by server implementation
 	 * @param icon bukkit server icon
 	 * @return base64 icon

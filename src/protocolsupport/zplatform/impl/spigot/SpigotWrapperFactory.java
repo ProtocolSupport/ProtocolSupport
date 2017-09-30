@@ -47,8 +47,8 @@ public class SpigotWrapperFactory implements PlatformWrapperFactory {
 	}
 
 	@Override
-	public AbstractHandshakeListener createHandshakeListener(NetworkManagerWrapper networkmanager, boolean hasCompression, boolean fullEncryption) {
-		return new SpigotHandshakeListener(networkmanager, hasCompression, fullEncryption);
+	public AbstractHandshakeListener createHandshakeListener(NetworkManagerWrapper networkmanager) {
+		return new SpigotHandshakeListener(networkmanager);
 	}
 
 }

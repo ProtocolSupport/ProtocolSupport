@@ -11,6 +11,9 @@ import org.bukkit.event.HandlerList;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
 
+/**
+ * This event is fired after receiving player properties
+ */
 public class PlayerPropertiesResolveEvent extends PlayerEvent {
 
 	private final HashMap<String, ProfileProperty> properties = new HashMap<>();
@@ -27,18 +30,35 @@ public class PlayerPropertiesResolveEvent extends PlayerEvent {
 		this(ProtocolSupportAPI.getConnection(address), username, properties);
 	}
 
+	/**
+	 * Returns player properties copy
+	 * @return player properties copy
+	 */
 	public Map<String, ProfileProperty> getProperties() {
 		return new HashMap<>(properties);
 	}
 
+	/**
+	 * Checks if player has property by name
+	 * @param name property name
+	 * @return true if has property
+	 */
 	public boolean hasProperty(String name) {
 		return properties.containsKey(name);
 	}
 
+	/**
+	 * Removes property value by name
+	 * @param name property name
+	 */
 	public void removeProperty(String name) {
 		properties.remove(name);
 	}
 
+	/**
+	 * Adds property
+	 * @param property property
+	 */
 	public void addProperty(ProfileProperty property) {
 		properties.put(property.getName(), property);
 	}
@@ -60,18 +80,34 @@ public class PlayerPropertiesResolveEvent extends PlayerEvent {
 			this(name, value, null);
 		}
 
+		/**
+		 * Returns name of the property
+		 * @return name of the property
+		 */
 		public String getName() {
 			return name;
 		}
 
+		/**
+		 * Returns value of the property
+		 * @return value of the property
+		 */
 		public String getValue() {
 			return value;
 		}
 
+		/**
+		 * Returns signature of the property or null if doesn't have one
+		 * @return signature of the property or null
+		 */
 		public String getSignature() {
 			return signature;
 		}
 
+		/**
+		 * Checks if property has signature
+		 * @return true if property has signature
+		 */
 		public boolean hasSignature() {
 			return signature != null;
 		}

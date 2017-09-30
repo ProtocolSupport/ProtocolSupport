@@ -16,8 +16,8 @@ import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class SpigotLoginListener extends AbstractLoginListener implements ITickable, PacketLoginInListener {
 
-	public SpigotLoginListener(NetworkManagerWrapper networkmanager, String hostname, boolean hasCompression, boolean fullEncryption) {
-		super(networkmanager, hostname, hasCompression, fullEncryption);
+	public SpigotLoginListener(NetworkManagerWrapper networkmanager, String hostname) {
+		super(networkmanager, hostname);
 	}
 
 	@Override
