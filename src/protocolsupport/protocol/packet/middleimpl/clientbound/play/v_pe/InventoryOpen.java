@@ -14,6 +14,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
+		cache.getInfTransactions().clear();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CONTAINER_OPEN, connection.getVersion());
 		serializer.writeByte(windowId);
 		serializer.writeByte(IdRemapper.WINDOWTYPE.getTable(connection.getVersion()).getRemap(type.toLegacyId()));

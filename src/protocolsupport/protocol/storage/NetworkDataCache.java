@@ -104,6 +104,8 @@ public class NetworkDataCache {
 	private final TIntObjectHashMap<NetworkEntity> watchedEntities = new TIntObjectHashMap<>();
 	private final TIntObjectHashMap<PreparedItem> preparedItems = new TIntObjectHashMap<>();
 	private final InfTransactions infTransactions = new InfTransactions();
+	private int furnaceFuelTime = 0;
+	private int furnaceSmeltTime = 200;
 	private NetworkEntity player;
 	private final HashMap<UUID, NetworkDataCache.PlayerListEntry> playerlist = new HashMap<>();
 	private Environment dimensionId;
@@ -167,6 +169,22 @@ public class NetworkDataCache {
 	
 	public InfTransactions getInfTransactions() {
 		return infTransactions;
+	}
+	
+	public int getFurnaceFuelTime() {
+		return furnaceFuelTime;
+	}
+	
+	public int getFurnaceSmeltTime() {
+		return furnaceSmeltTime;
+	}
+	
+	public void setFurnaceFuelTime(int furnaceFuelTime) {
+		this.furnaceFuelTime = furnaceFuelTime;
+	}
+	
+	public void setFurnaceSmeltTime(int furnaceSmeltTime) {
+		this.furnaceSmeltTime = furnaceSmeltTime;
 	}
 
 	public void addPlayerListEntry(UUID uuid, PlayerListEntry entry) {

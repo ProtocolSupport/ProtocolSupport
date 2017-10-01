@@ -299,6 +299,12 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		Map<String, List<Integer>> surplus = new HashMap<>();
 		Map<String, List<Integer>> deficit = new HashMap<>();
 		
+		public void clear() {
+			bug("Clearing cache with surplus: " + surplus.toString() + " and deficit: " + deficit.toString());
+			surplus.clear();
+			deficit.clear();
+		}
+		
 		public void cacheTransaction(NetworkDataCache cache, InfTransaction transaction) {
 			if (!transaction.getOldItem().equals(transaction.getNewItem())) {
 				String oldId = getItemIdentity(transaction.getOldItem());

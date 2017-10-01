@@ -6,16 +6,16 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
-import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 public class InventorySetItems extends MiddleInventorySetItems {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ProtocolVersion version = connection.getVersion();
+		return RecyclableEmptyList.get();//TODO: WHY?!
+		/*ProtocolVersion version = connection.getVersion();
 		String locale = cache.getLocale();
 		RecyclableArrayList<ClientBoundPacketData> contentpackets = RecyclableArrayList.create();
 		ItemStackWrapper[] items = itemstacks.toArray(new ItemStackWrapper[itemstacks.size()]);
@@ -40,11 +40,18 @@ public class InventorySetItems extends MiddleInventorySetItems {
 				break;
 			}
 			default: {
-				contentpackets.add(InventorySetItems.create(version, locale, windowId, items));
+				int wSlots = cache.getOpenedWindowSlots();
+				ItemStackWrapper[] windowSlots = new ItemStackWrapper[wSlots];
+				ItemStackWrapper[] peInventory = new ItemStackWrapper[36];
+				System.arraycopy(items, 0, windowSlots, 0, wSlots);
+				System.arraycopy(items, wSlots + 27, peInventory, 0, 9);
+				System.arraycopy(items, wSlots, peInventory, 9, 27);
+				contentpackets.add(InventorySetItems.create(version, locale, windowId, windowSlots));
+				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_INVENTORY, peInventory));
 				break;
 			}
 		}
-		return contentpackets;
+		return contentpackets;*/
 	}
 	
 	public static ClientBoundPacketData create(ProtocolVersion version, String locale, int windowId, ItemStackWrapper[] itemstacks) {
@@ -55,6 +62,7 @@ public class InventorySetItems extends MiddleInventorySetItems {
 		for (int i = 0; i < itemstacks.length; i++) {
 			ItemStackSerializer.writeItemStack(serializer, version, locale, itemstacks[i], true);
 		}
+		System.out.println("Sending inventory contents of " + windowId);
 		return serializer;
 	}
 	

@@ -18,11 +18,20 @@ public class InventoryData extends MiddleInventoryData {
 		switch(cache.getOpenedWindow()) { //A switch, we might want to transform some things in the future and not just simple remap.
 			case FURNACE: {
 				switch(type) {
-					case 0: { //Fire icon (Burned ticks)
-						return RecyclableSingletonList.create(create(version, windowId, 1, value));
+					case 0: { //Fire icon (Burned ticks) (Tick in PE is 50ms while in PC it's PE)
+						return RecyclableSingletonList.create(create(version, windowId, 2, (cache.getFurnaceFuelTime() == 0 ? 0 : (int) (((float) value * 400) / cache.getFurnaceFuelTime()))));
 					}
-					case 2: { //Cook time (Maximum fuel time)
-						return RecyclableSingletonList.create(create(version, windowId, 0, value));
+					case 1: { //Fuel burn time
+						cache.setFurnaceFuelTime(value);
+						break;
+					}
+					case 2: { //Cook time (How long the item has been cooking)
+						cache.getActionNumber();
+						return RecyclableSingletonList.create(create(version, windowId, 0, (cache.getFurnaceSmeltTime() == 0 ? 0 : (int) (((float) value * 400) / cache.getFurnaceSmeltTime()))));
+					}
+					case 3: { //Smelt time (How long it takes for the item to smelt)
+						cache.setFurnaceSmeltTime(value);
+						break;
 					}
 				}
 				break;
