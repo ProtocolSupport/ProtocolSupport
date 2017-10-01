@@ -23,7 +23,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 				if (slot == 0) {
 					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_CRAFTING_RESULT, 0, itemstack));
 				} else if (slot <= 4) {
-					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_CRAFTING_GRID, slot - 1, itemstack));
+					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_CRAFTING_GRID_ADD, slot - 1, itemstack));
 				} else if (slot <= 8) {
 					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_ARMOR_EQUIPMENT, slot - 5, itemstack));
 				} else if (slot <= 35) {

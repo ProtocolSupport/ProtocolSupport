@@ -15,6 +15,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockDig;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockPlace;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCreativeSetSlot;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleHeldSlot;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClick;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryTransaction;
@@ -26,7 +27,10 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
+import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -47,7 +51,7 @@ import protocolsupport.zplatform.itemstack.ItemStackWrapper;
  *  Apart from managing inventories it is the usual packet deal,
  *  except that we have an extra layer of encapsulation.
  *  
- *  Managing inventories works very different in PE, so for now excpect some hacky code.
+ *  Managing inventories works very different in PE, so for now expect some hacky code.
  */
 public class GodPacket extends ServerBoundMiddlePacket {
 	
@@ -76,7 +80,6 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		int transactionLength = VarNumberSerializer.readVarInt(clientdata);
 		for(int i = 0; i < transactionLength; i++) {
 			cache.getInfTransactions().cacheTransaction(cache, InfTransaction.readFromStream(clientdata, cache.getLocale(), connection.getVersion()));
-			bug("cached.. Deficit size: " + cache.getInfTransactions().deficit.size() + " surplus size: " + cache.getInfTransactions().surplus.size());
 		}
 
 		switch(actionId) {
@@ -130,7 +133,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	public static final int ACTION_RELEASE_ITEM = 4;
 	//Action - Item Release
 	public static final int RELEASE_RELEASE = 0;
-	public static final int RELEASE_DESTROY = 1;
+	public static final int RELEASE_CONSUME = 1;
 	//Action - Item Use
 	public static final int USE_CLICK_BLOCK = 0;
 	public static final int USE_CLICK_AIR = 1;
@@ -168,7 +171,11 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				packets.add(MiddleHeldSlot.create(slot));
 				switch(subTypeId) {
 					case INTERACT_INTERACT: {
-						packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT, null, 0));
+						NetworkEntity target = cache.getWatchedEntity(targetId);
+						if(target == null || !target.isOfType(NetworkEntityType.ARMOR_STAND)) {
+							packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT, null, 0));
+						}
+						packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT_AT, new Vector(cX, cY, cZ), 0));
 						break;
 					}
 					case INTERACT_ATTACK: {
@@ -189,26 +196,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				break;
 			}
 			case ACTION_NORMAL: { //Normal inventory transaction.
-				
 				packets.addAll(cache.getInfTransactions().process(cache));
-				
-				/*ClickType clickType = calculateClickType();
-				
-				if(clickType.doPrefix()) {
-					packets.add(clickType.createPrefix(cache));
-				}
-				for(int i = 0; i < transactions.length; i++) {
-					RecyclableArrayList<ServerBoundPacketData> clickPackets = transactions[i].toClick(cache, clickType);
-					if(clickPackets != null) {
-						packets.addAll(clickPackets);
-					}
-				}
-				if(clickType.doSuffix()) {
-					packets.add(clickType.createSuffix(cache));
-				}
-				*/
-				
-				
 				break;
 			}
 			case ACTION_MISMATCH:
@@ -298,6 +286,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	public static class InfTransactions {
 		Map<String, List<Integer>> surplus = new HashMap<>();
 		Map<String, List<Integer>> deficit = new HashMap<>();
+		List<ServerBoundPacketData> misc = new ArrayList<>();
 		
 		public void clear() {
 			bug("Clearing cache with surplus: " + surplus.toString() + " and deficit: " + deficit.toString());
@@ -306,25 +295,39 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		}
 		
 		public void cacheTransaction(NetworkDataCache cache, InfTransaction transaction) {
+			int pcSlot = transformSlot(cache, transaction.getInventoryId(), transaction.getSlot());
+			
+			if(pcSlot == -666) {
+				bug("Found the devil. Keeping him out!");
+				return;
+			}
+			//Special cases
+			if (cache.getGameMode() == 1 && cache.getOpenedWindow() == WindowType.PLAYER) {
+				bug("Creative transaction! Yay, sooo simple.");
+				bug("Slot: " + (pcSlot == -999 ? -1 : pcSlot) + " item: " + getItemIdentity(transaction.getNewItem())); //Drop item is -1 for creative setSlot packet.
+				misc.add(MiddleCreativeSetSlot.create(cache.getLocale(), (pcSlot == -999 ? -1 : pcSlot), transaction.getNewItem()));
+				return;
+			}
+			
 			if (!transaction.getOldItem().equals(transaction.getNewItem())) {
 				String oldId = getItemIdentity(transaction.getOldItem());
 				String newId = getItemIdentity(transaction.getNewItem());
 				if (oldId.equals(newId)) {
 					int amount = transaction.getOldItem().getAmount() - transaction.getNewItem().getAmount();
 					if (amount > 0) {
-						put(surplus, oldId, transformSlot(cache, transaction.getInventoryId(), transaction.getSlot()), amount);
-						bug("adding surplus C: " + oldId + " : " + transformSlot(cache, transaction.getInventoryId(), transaction.getSlot()) + " : " + amount);
+						put(surplus, oldId, pcSlot, amount);
+						bug("adding surplus C: " + oldId + " : " + pcSlot + " : " + amount);
 					} else {
-						put(deficit, oldId, transformSlot(cache, transaction.getInventoryId(), transaction.getSlot()), amount * -1);
-						bug("adding deficit C: " + oldId + " : " + transformSlot(cache, transaction.getInventoryId(), transaction.getSlot()) + " : " + amount * -1);
+						put(deficit, oldId, pcSlot, amount * -1);
+						bug("adding deficit C: " + oldId + " : " + pcSlot + " : " + amount * -1);
 					}
 				} else {
 					if (transaction.getOldItem().getType() != Material.AIR) {
-						put(surplus, oldId, transformSlot(cache, transaction.getInventoryId(), transaction.getSlot()), transaction.getOldItem().getAmount());
+						put(surplus, oldId, pcSlot, transaction.getOldItem().getAmount());
 						bug("adding surplus N: " + oldId + " : " + transformSlot(cache, transaction.getInventoryId(), transaction.getSlot()) + " : " + transaction.getOldItem().getAmount());
 					} if (transaction.getNewItem().getType() != Material.AIR) {
-						put(deficit, newId, transformSlot(cache, transaction.getInventoryId(), transaction.getSlot()), transaction.getNewItem().getAmount());
-						bug("adding deficit N: " + newId + " : " + transformSlot(cache, transaction.getInventoryId(), transaction.getSlot()) + " : " + transaction.getNewItem().getAmount());
+						put(deficit, newId, pcSlot, transaction.getNewItem().getAmount());
+						bug("adding deficit N: " + newId + " : " + pcSlot + " : " + transaction.getNewItem().getAmount());
 					}
 				}
 			}
@@ -344,7 +347,10 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		
 		public RecyclableArrayList<ServerBoundPacketData> process(NetworkDataCache cache) {
 			RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
-			bug("processing..");
+			bug("Sending " + misc.size() + " misc packets...");
+			packets.addAll(misc);
+			misc.clear();
+			bug("Processing surplus / deficit balance...");
 			Iterator<Entry<String, List<Integer>>> deficitorator = deficit.entrySet().iterator();
 			while(deficitorator.hasNext()) {
 				Entry<String, List<Integer>> deficitEntry = deficitorator.next();
@@ -356,14 +362,14 @@ public class GodPacket extends ServerBoundMiddlePacket {
 					while(deficitSlotValueIterator.hasNext()) {
 						Integer deficitSlotValue = deficitSlotValueIterator.next();
 						bug("Local debt: " + Integer.toBinaryString(deficitSlotValue));
-						int	deficitSlot = ((deficitSlotValue >> 8) & 0xFF), deficitAmount = (deficitSlotValue & 0xFF);
+						int	deficitSlot = (deficitSlotValue >> 8), deficitAmount = (deficitSlotValue & 0xFF);
 						bug("Debt slot: " + deficitSlot + " Debt amount: " + deficitAmount);
 						Iterator<Integer> surplusSlotValueIterator = surplusSlotValues.iterator();
 						while(surplusSlotValueIterator.hasNext()) {
 							bug("Rolling cashier..");
 							Integer surplusSlotValue = surplusSlotValueIterator.next();
 							bug("Surplus value: " + Integer.toBinaryString(surplusSlotValue));
-							int	surplusSlot = ((surplusSlotValue >> 8) & 0xFF), surplusAmount = (surplusSlotValue & 0xFF);
+							int	surplusSlot = (surplusSlotValue >> 8), surplusAmount = (surplusSlotValue & 0xFF);
 							bug("Surplus slot: " + surplusSlot + " surplus amount: " + surplusAmount);
 							bug("Left clicking (stealing) surplus...");
 							packets.addAll(Click.LEFT.create(cache, surplusSlot));
@@ -397,90 +403,73 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			return item.getTypeId() + "-" + item.getData() + "-" + item.getTag().toString();
 		}
 		
-		/*protected class ClickBait {
-			
-			private int fromSlot, toSlot, amount;
-			
-			public ClickBait(int fromSlot, int toSlot, int amount) {
-				this.fromSlot = fromSlot; 
-				this.toSlot = toSlot; 
-				this.amount = amount;
-			}
-
-			public int getFromSlot() {
-				return fromSlot;
-			}
-
-			public int getToSlot() {
-				return toSlot;
-			}
-
-			public int getAmount() {
-				return amount;
-			}
-			
-		}*/
+		@Override
+		public String toString() {
+			return Utils.toStringAllFields(this);
+		}
 		
 	}
 	
 	private static int transformSlot(NetworkDataCache cache, int peInventoryId, int peSlot) {
-		int sSlot = -1; //Slot to send.
-		
 		switch(cache.getOpenedWindow()) {
 			case PLAYER: {
 				switch(peInventoryId) {
-					case PESource.POCKET_CRAFTING_RESULT: {
-						sSlot = 0;
-						break;
+					case PESource.POCKET_CLICKED_SLOT: {
+						return -1;
 					}
-					case PESource.POCKET_CRAFTING_GRID: {
-						sSlot = peSlot + 1;
-						break;
+					case PESource.POCKET_CRAFTING_RESULT: {
+						return 0;
+					}
+					case PESource.POCKET_CRAFTING_GRID_ADD:
+					case PESource.POCKET_CRAFTING_GRID_REMOVE: {
+						return peSlot + 1;
 					}
 					case PESource.POCKET_ARMOR_EQUIPMENT: {
-						sSlot = peSlot + 5;
-						break;
+						return peSlot + 5;
 					}
 					case PESource.POCKET_INVENTORY: {
-							if (peSlot < 9) {
-								sSlot = peSlot + 36;
-							} else {
-								sSlot = peSlot;
-							}
-						break;
+						if (peSlot < 9) {
+							return peSlot + 36;
+						} else {
+							return peSlot;
+						}
 					}
 					case PESource.POCKET_OFFHAND: {
-						sSlot = 45;
-						break;
+						return 45;
+					}
+					case PESource.POCKET_FAUX_DROP: {
+						return peInventoryId;
 					}
 					default: {
-						break;
+						return -666;
 					}
 				}
-				break;
 			}
 			case CRAFTING_TABLE: {
-				sSlot = invSlotToContainerSlot(peInventoryId, 10, peSlot);
-				break;
+				return invSlotToContainerSlot(peInventoryId, 10, peSlot);
 			}
 			default: {
-				sSlot = invSlotToContainerSlot(peInventoryId, cache.getOpenedWindowSlots(), peSlot);
-				break;
+				return invSlotToContainerSlot(peInventoryId, cache.getOpenedWindowSlots(), peSlot);
 			}
 		}
-		
-		return sSlot;
 	}
 	
-	private static int invSlotToContainerSlot(int inventoryId, int start, int slot) {
-		if(inventoryId == PESource.POCKET_INVENTORY) {
-			if (slot < 9) {
-				return slot + (27 + start);
-			} else {
-				return slot - (9 - start);
+	private static int invSlotToContainerSlot(int peInventoryId, int start, int peSlot) {
+		switch(peInventoryId) {
+			case PESource.POCKET_FAUX_DROP: {
+				return peInventoryId;
+			}
+			case PESource.POCKET_INVENTORY: {
+				if (peSlot < 9) {
+					return peSlot + (27 + start);
+				} else {
+					return peSlot - (9 - start);
+				}
+			}
+			default: {
+				return peSlot;
 			}
 		}
-		return slot;
 	}
 	
 	protected enum Click {
@@ -504,67 +493,5 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		}
 		
 	}
-	
-	/*public enum ClickType {
-		LEFTCLICK		( 0,  0, -1, -1, false), 
-		RIGHTCLICK		( 0,  1, -1, -1, false), 
-		DUBBLECLICK		( 6,  0, -1, -1, false),
-		DRAGLEFT		( 5,  1,  0,  2, false), 
-		DRAGRIGHT		( 5,  5,  4,  6, false), 
-		TRANSFERSTACK	( 0,  0, -1, -1, true ),
-		TRANSFERITEM	( 0,  1, -1, -1, true ),
-		UNKNOWN			(-1, -1, -1, -1, false);
-		
-		private final int mode;
-		private final int button;
-		private final int prefixButton;
-		private final int suffixButton;
-		private final boolean faux;
-		
-		private boolean doneFirst = false;
-		private int fauxFirstSlot;
-		
-		ClickType(int mode, int button, int prefixButton, int suffixButton, boolean faux) {
-			this.mode = mode;
-			this.button = button;
-			this.prefixButton = prefixButton;
-			this.suffixButton = suffixButton;
-			this.faux = faux;
-		}
-		
-		public boolean doPrefix() {
-			return prefixButton != -1 ? true : false;
-		}
-		
-		public boolean doSuffix() {
-			return suffixButton != -1 ? true : false;
-		}
-		
-		public ServerBoundPacketData createPrefix(NetworkDataCache cache) {
-			return pcClick(cache, mode, prefixButton, -999, AIR);
-		}
-		
-		public ServerBoundPacketData createSuffix(NetworkDataCache cache) {
-			return pcClick(cache, mode, suffixButton, -999, AIR);
-		}
-		
-		RecyclableArrayList<ServerBoundPacketData> process(NetworkDataCache cache, int slot, ItemStackWrapper lastItem) {
-			RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
-			System.out.print(mode != -1); System.out.print(!faux || doneFirst); System.out.print(mode != 6 || !doneFirst);
-			if(mode != -1 && (!faux || doneFirst) && (mode != 6 || !doneFirst)) {
-				packets.add(pcClick(cache, mode, button, slot, lastItem)); doneFirst = true;
-			}
-			if(faux) {
-				if (!doneFirst) { 
-					packets.add(pcClick(cache, 0, 0, slot, lastItem)); 
-					fauxFirstSlot = slot;
-				} else { 
-					packets.add(pcClick(cache, 0, 0, fauxFirstSlot, AIR));
-				}
-			}
-			return packets;
-		}
-		
-	}*/
 
 }
