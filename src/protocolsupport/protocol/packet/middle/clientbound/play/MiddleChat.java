@@ -23,8 +23,8 @@ public abstract class MiddleChat extends ClientBoundMiddlePacket {
 
 	@Override
 	public boolean postFromServerRead() {
-		return ((connection.getVersion().getProtocolType() == ProtocolType.PC) && (connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_1_8))) 
-				|| (position != MessagePosition.HOTBAR);
+		if (connection.getVersion().getProtocolType() != ProtocolType.PC) { return true; }
+		return connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_1_8) || (position != MessagePosition.HOTBAR);
 	}
 
 }

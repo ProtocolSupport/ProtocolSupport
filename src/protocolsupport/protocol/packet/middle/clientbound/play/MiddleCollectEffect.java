@@ -27,8 +27,8 @@ public abstract class MiddleCollectEffect extends ClientBoundMiddlePacket {
 
 	@Override
 	public boolean postFromServerRead() {
-		if (	(connection.getVersion().getProtocolType() == ProtocolType.PC) &&
-				(connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9))) {
+		if (connection.getVersion().getProtocolType() != ProtocolType.PC) { return true; }
+		if (connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9)) {
 			Player player = connection.getPlayer();
 			NetworkEntity entity = cache.getWatchedEntity(entityId);
 			if ((entity != null) && (player != null)) {
