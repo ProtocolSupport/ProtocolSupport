@@ -15,7 +15,7 @@ public class InventoryData extends MiddleInventoryData {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		switch(cache.getOpenedWindow()) { //A switch, we might want to transform some things in the future and not just simple remap.
+		switch(cache.getOpenedWindow()) {
 			case FURNACE: {
 				switch(type) {
 					case 0: { //Fire icon (Burned ticks) (Tick in PE is 50ms while in PC it's PE)
