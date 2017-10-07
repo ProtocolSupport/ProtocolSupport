@@ -1,12 +1,17 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolType;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
+import protocolsupport.api.chat.ChatAPI.MessagePosition;
 import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupport.zplatform.ServerPlatform;
 
 public abstract class MiddleTitle extends ClientBoundMiddlePacket {
 
@@ -37,6 +42,22 @@ public abstract class MiddleTitle extends ClientBoundMiddlePacket {
 				break;
 			}
 		}
+	}
+
+	@Override
+	public boolean postFromServerRead() {
+		if (
+			action == Action.SET_ACTION_BAR &&
+			connection.getVersion().getProtocolType() == ProtocolType.PC &&
+			connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_11)
+		) {
+			connection.sendPacket(ServerPlatform.get().getPacketFactory().createOutboundChatPacket(
+				ChatAPI.toJSON(new TextComponent(message.toLegacyText(cache.getLocale()))),
+				MessagePosition.HOTBAR.ordinal()
+			));
+			return false;
+		}
+		return true;
 	}
 
 	protected static enum Action {
