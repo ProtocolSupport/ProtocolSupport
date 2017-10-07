@@ -19,15 +19,14 @@ public class InventoryData extends MiddleInventoryData {
 			case FURNACE: {
 				switch(type) {
 					case 0: { //Fire icon (Burned ticks) (Tick in PE is 50ms while in PC it's PE)
-						return RecyclableSingletonList.create(create(version, windowId, 2, (cache.getFurnaceFuelTime() == 0 ? 0 : (int) (((float) value * 400) / cache.getFurnaceFuelTime()))));
+						return RecyclableSingletonList.create(create(version, windowId, 2, (cache.getFurnaceFuelTime() == 0 ? 0 : (int) ((value * 400) / (float) cache.getFurnaceFuelTime()))));
 					}
 					case 1: { //Fuel burn time
 						cache.setFurnaceFuelTime(value);
 						break;
 					}
 					case 2: { //Cook time (How long the item has been cooking)
-						cache.getActionNumber();
-						return RecyclableSingletonList.create(create(version, windowId, 0, (cache.getFurnaceSmeltTime() == 0 ? 0 : (int) (((float) value * 400) / cache.getFurnaceSmeltTime()))));
+						return RecyclableSingletonList.create(create(version, windowId, 0, (cache.getFurnaceSmeltTime() == 0 ? 0 : (int) ((value * 400) / (float) cache.getFurnaceSmeltTime()))));
 					}
 					case 3: { //Smelt time (How long it takes for the item to smelt)
 						cache.setFurnaceSmeltTime(value);

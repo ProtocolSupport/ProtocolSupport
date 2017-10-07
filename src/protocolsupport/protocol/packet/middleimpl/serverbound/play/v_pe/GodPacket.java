@@ -345,7 +345,6 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			bug("keysize: " + keys.size());
 		}
 		
-		@SuppressWarnings("unused")
 		public RecyclableArrayList<ServerBoundPacketData> process(NetworkDataCache cache) {
 			RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 			bug("Sending " + misc.size() + " misc packets...");
@@ -364,14 +363,14 @@ public class GodPacket extends ServerBoundMiddlePacket {
 						Integer deficitSlotValue = deficitSlotValueIterator.next();
 						bug("Local debt: " + Integer.toBinaryString(deficitSlotValue));
 						int	deficitSlot = (deficitSlotValue >> 16), deficitSlotAmount = ((deficitSlotValue >> 8) & 0xFF), deficitAmount = (deficitSlotValue & 0xFF);
-						bug("Debt slot: " + deficitSlot + " Debt amount: " + deficitAmount);
+						bug("Deficit slot: " + deficitSlot + "deficitSlotAmount: " + deficitSlotAmount + " Debt amount: " + deficitAmount);
 						Iterator<Integer> surplusSlotValueIterator = surplusSlotValues.iterator();
 						while(surplusSlotValueIterator.hasNext()) {
 							bug("Rolling cashier..");
 							Integer surplusSlotValue = surplusSlotValueIterator.next();
 							bug("Surplus value: " + Integer.toBinaryString(surplusSlotValue));
-							int	surplusSlot = (surplusSlotValue >> 16), surplusSlotAmount = ((deficitSlotValue >> 8) & 0xFF), surplusAmount = (surplusSlotValue & 0xFF);
-							bug("Surplus slot: " + surplusSlot + " surplus amount: " + surplusAmount);
+							int	surplusSlot = (surplusSlotValue >> 16), surplusSlotAmount = ((surplusSlotValue >> 8) & 0xFF), surplusAmount = (surplusSlotValue & 0xFF);
+							bug("Surplus slot: " + surplusSlot + "surplusSlotAmount: " + surplusSlotAmount + " surplus amount: " + surplusAmount);
 							if(surplusSlot != -1) {
 								bug("Left clicking (stealing) surplus...");
 								packets.addAll(Click.LEFT.create(cache, surplusSlot));
@@ -387,15 +386,16 @@ public class GodPacket extends ServerBoundMiddlePacket {
 								}
 							} else {
 								bug("We took all...");
-								surplusSlotValue -= deficitAmount;
+								surplusSlotValue -= (deficitAmount << 8 | deficitAmount);
+								deficitSlotValue += (deficitAmount << 8) - deficitAmount;
 								if(deficitAmount < surplusSlotAmount) {
 									bug("More than we should actually..");
-									for (int i  = 0; i < (deficitAmount - surplusSlotAmount); i ++) {
+									for (int i  = 0; i < (surplusSlotAmount - deficitAmount); i ++) {
 										bug("Right back!");
 										packets.addAll(Click.RIGHT.create(cache, surplusSlot));
+										//surplusSlotValue += 256;
 									}
 								}
-								deficitSlotValue -= deficitAmount;
 							}
 							if(surplusSlot != -1 && deficitSlot != -1) {
 								packets.addAll(Click.LEFT.create(cache, surplusSlot));
