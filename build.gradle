@@ -23,7 +23,7 @@ tasks.withType(AbstractCompile) {
 }
 
 group 'protocolsupport'
-version '4.28-dev'
+version '4.28'
 
 sourceCompatibility = 1.8
 

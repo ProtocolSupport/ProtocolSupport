@@ -47,8 +47,8 @@ public abstract class MiddleTitle extends ClientBoundMiddlePacket {
 	@Override
 	public boolean postFromServerRead() {
 		if (
-			action == Action.SET_ACTION_BAR &&
-			connection.getVersion().getProtocolType() == ProtocolType.PC &&
+			(action == Action.SET_ACTION_BAR) &&
+			(connection.getVersion().getProtocolType() == ProtocolType.PC) &&
 			connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_11)
 		) {
 			connection.sendPacket(ServerPlatform.get().getPacketFactory().createOutboundChatPacket(
