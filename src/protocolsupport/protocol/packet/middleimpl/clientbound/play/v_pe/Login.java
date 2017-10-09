@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
-import org.bukkit.Bukkit;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleLogin;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -64,9 +62,6 @@ public class Login extends MiddleLogin {
 		VarNumberSerializer.writeSVarInt(startgame, 4); //game publish setting
 		packets.add(startgame);
 		packets.add(PEAdventureSettings.createPacket(cache));
-		ClientBoundPacketData chunkradius = ClientBoundPacketData.create(PEPacketIDs.CHUNK_RADIUS, version);
-		VarNumberSerializer.writeSVarInt(chunkradius, Bukkit.getViewDistance() + 1); //should exactly match the view distance that server uses to broadcast chunks. +1 because mcpe includes the chunk client is standing in in calculations, while pc does not
-		packets.add(chunkradius);
 		packets.add(LoginSuccess.createPlayStatus(version, 3));
 		packets.add(EntityMetadata.createFaux(cache.getWatchedSelf(), cache.getLocale(), version)); //Add faux flags right on login. If something important needs to be send also, the server will take care with a metadata update.
 		return packets;

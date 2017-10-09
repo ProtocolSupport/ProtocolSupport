@@ -60,6 +60,10 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 				if (extra.has("displayName")) {
 					username = extra.get("displayName").getAsString();
 				}
+				if (extra.has("locale")) {
+					cache.setLocale(extra.get("locale").getAsString());
+				}
+				System.out.println(extra.toString());
 			}
 		}
 		//skip skin data

@@ -333,4 +333,19 @@ public class NetworkDataCache {
 
 	public NBTTagCompoundWrapper getSignTag() { return signTag; }
 
+	private String title;
+	private int visibleOnScreenTicks = 100; // default fadeIn = 20; default stay = 60; default fadeOut = 20;
+	private long lastSentTitle;
+
+	public String getTitle() { return title; }
+
+	public void setTitle(String title) { this.title = title; }
+
+	public int getVisibleOnScreenTicks() { return visibleOnScreenTicks; }
+
+	public void setVisibleOnScreenTicks(int visibleOnScreenTicks) { this.visibleOnScreenTicks = visibleOnScreenTicks; }
+
+	public long getLastSentTitle() { return lastSentTitle; }
+
+	public void setLastSentTitle(long lastSentTitle) { this.lastSentTitle = lastSentTitle; }
 }

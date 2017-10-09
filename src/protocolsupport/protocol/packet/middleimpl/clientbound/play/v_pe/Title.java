@@ -7,6 +7,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -30,15 +31,24 @@ public class Title extends MiddleTitle {
 				return RecyclableSingletonList.create(create(version, RESET, "", 0, 0, 0));
 			}
 			case SET_TITLE: {
+				String title = message.toLegacyText(cache.getLocale());
+				cache.setTitle(title);
+				cache.setLastSentTitle(System.currentTimeMillis());
 				return RecyclableSingletonList.create(create(version, SET_TITLE, message.toLegacyText(cache.getLocale()), 0, 0, 0));
 			}
 			case SET_SUBTITLE: {
-				return RecyclableSingletonList.create(create(version, SET_SUBTITLE, message.toLegacyText(cache.getLocale()), 0, 0, 0));
+				RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
+				packets.add(create(version, SET_SUBTITLE, message.toLegacyText(cache.getLocale()), 0, 0, 0));
+				if (cache.getLastSentTitle() + (cache.getVisibleOnScreenTicks() * 50) > System.currentTimeMillis()) {
+					packets.add(create(version, SET_TITLE, cache.getTitle(), 0, 0, 0));
+				}
+				return packets;
 			}
 			case SET_ACTION_BAR: {
 				return RecyclableSingletonList.create(create(version, SET_ACTION_BAR, message.toLegacyText(cache.getLocale()), 0, 0, 0));
 			}
 			case SET_TIMES: {
+				cache.setVisibleOnScreenTicks(fadeIn + stay + fadeOut);
 				return RecyclableSingletonList.create(create(version, SET_TIMINGS, "", fadeIn, stay, fadeOut));
 			}
 			default: {
