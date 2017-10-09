@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.ChatAPI.MessagePosition;
@@ -22,7 +23,14 @@ public abstract class MiddleChat extends ClientBoundMiddlePacket {
 
 	@Override
 	public boolean postFromServerRead() {
-		return connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_1_8) || (position != MessagePosition.HOTBAR);
+		if (
+			(position == MessagePosition.HOTBAR) &&
+			(connection.getVersion().getProtocolType() == ProtocolType.PC) &&
+			connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_8)
+		) {
+			return false;
+		}
+		return true;
 	}
 
 }

@@ -6,8 +6,8 @@ import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class GlowStoneLoginListener extends AbstractLoginListener implements GlowStoneTickableListener {
 
-	public GlowStoneLoginListener(NetworkManagerWrapper networkmanager, String hostname, boolean hasCompression, boolean fullEncryption) {
-		super(networkmanager, hostname, hasCompression, fullEncryption);
+	public GlowStoneLoginListener(NetworkManagerWrapper networkmanager, String hostname) {
+		super(networkmanager, hostname);
 	}
 
 	@Override

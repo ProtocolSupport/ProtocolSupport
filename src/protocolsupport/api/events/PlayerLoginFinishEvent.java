@@ -8,6 +8,10 @@ import org.bukkit.event.HandlerList;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
 
+/**
+ * This event is fired when player login finishes (after online-mode processing and uuid generation, but before actual world join)
+ * This event is fired only if {@link PlayerLoginStartEvent} has fired for this client
+ */
 public class PlayerLoginFinishEvent extends PlayerAbstractLoginEvent {
 
 	private final UUID uuid;
@@ -24,10 +28,18 @@ public class PlayerLoginFinishEvent extends PlayerAbstractLoginEvent {
 		this(ProtocolSupportAPI.getConnection(address), username, uuid, onlineMode);
 	}
 
+	/**
+	 * Returns player uuid
+	 * @return player uuid
+	 */
 	public UUID getUUID() {
 		return uuid;
 	}
 
+	/**
+	 * Returns true if this player logged in using online-mode checks
+	 * @return true if this player logged in using online-mode checks
+	 */
 	public boolean isOnlineMode() {
 		return onlineMode;
 	}

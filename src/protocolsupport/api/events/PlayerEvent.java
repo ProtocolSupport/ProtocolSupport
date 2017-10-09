@@ -23,10 +23,10 @@ public abstract class PlayerEvent extends ConnectionEvent {
 		this(ProtocolSupportAPI.getConnection(address), username);
 	}
 
-	public InetSocketAddress getAddress() {
-		return getConnection().getAddress();
-	}
-
+	/**
+	 * Returns the player nickname associated with this event
+	 * @return player nickname
+	 */
 	public String getName() {
 		return username;
 	}

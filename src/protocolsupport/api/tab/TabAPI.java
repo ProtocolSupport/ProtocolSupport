@@ -49,7 +49,7 @@ public class TabAPI {
 	}
 
 	/**
-	 * Returns default header
+	 * Returns default header <br>
 	 * Returns null if header is not set
 	 * @return default header
 	 */
@@ -58,7 +58,7 @@ public class TabAPI {
 	}
 
 	/**
-	 * Returns default footer
+	 * Returns default footer <br>
 	 * Returns null if footer is not set
 	 * @return default header
 	 */

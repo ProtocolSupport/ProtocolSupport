@@ -6,6 +6,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -26,7 +27,11 @@ public abstract class MiddleCollectEffect extends ClientBoundMiddlePacket {
 
 	@Override
 	public boolean postFromServerRead() {
-		if (connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9)) {
+		if (
+			(collectorId == cache.getSelfPlayerEntityId()) &&
+			(connection.getVersion().getProtocolType() == ProtocolType.PC) &&
+			connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9)
+		) {
 			Player player = connection.getPlayer();
 			NetworkEntity entity = cache.getWatchedEntity(entityId);
 			if ((entity != null) && (player != null)) {

@@ -4,6 +4,9 @@ import org.bukkit.event.HandlerList;
 
 import protocolsupport.api.Connection;
 
+/**
+ * This event is fired after connection with client is open
+ */
 public class ConnectionOpenEvent extends ConnectionEvent {
 
 	public ConnectionOpenEvent(Connection connection) {

@@ -10,16 +10,12 @@ import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.legacy.LegacyChatJson;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class Title extends MiddleTitle {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		if (action == Action.SET_ACTION_BAR) {
-			return RecyclableEmptyList.get();
-		}
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_TITLE_ID, version);
 		int actionId = action.ordinal();

@@ -25,6 +25,9 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import protocolsupport.ProtocolSupport;
+import protocolsupport.api.Connection;
+import protocolsupport.api.ProtocolType;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.PlayerLoginStartEvent;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.ConnectionImpl;
@@ -54,9 +57,8 @@ public abstract class AbstractLoginListener implements IHasProfile {
 	);
 
 	protected final NetworkManagerWrapper networkManager;
+	protected final Connection connection;
 	protected final String hostname;
-	protected final boolean hasCompression;
-	protected final boolean fullEncryption;
 	protected final byte[] randomBytes = new byte[4];
 	protected int loginTicks;
 	protected SecretKey loginKey;
@@ -67,11 +69,10 @@ public abstract class AbstractLoginListener implements IHasProfile {
 	protected boolean useOnlineModeUUID = isOnlineMode;
 	protected UUID forcedUUID = null;
 
-	public AbstractLoginListener(NetworkManagerWrapper networkmanager, String hostname, boolean hasCompression, boolean fullEncryption) {
+	public AbstractLoginListener(NetworkManagerWrapper networkmanager, String hostname) {
 		this.networkManager = networkmanager;
+		this.connection = ConnectionImpl.getFromChannel(networkmanager.getChannel());
 		this.hostname = hostname;
-		this.hasCompression = hasCompression;
-		this.fullEncryption = fullEncryption;
 		ThreadLocalRandom.current().nextBytes(randomBytes);
 	}
 
@@ -128,7 +129,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 					profile = new GameProfile(null, name);
 
 					PlayerLoginStartEvent event = new PlayerLoginStartEvent(
-						ConnectionImpl.getFromChannel(networkManager.getChannel()),
+						connection,
 						profile.getName(),
 						isOnlineMode,
 						useOnlineModeUUID,
@@ -194,7 +195,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 	protected void enableEncryption(SecretKey key) {
 		ChannelPipeline pipeline = networkManager.getChannel().pipeline();
 		pipeline.addBefore(SpigotChannelHandlers.SPLITTER, ChannelHandlers.DECRYPT, new PacketDecrypter(MinecraftEncryption.getCipher(Cipher.DECRYPT_MODE, key)));
-		if (fullEncryption) {
+		if (isFullEncryption(connection.getVersion())) {
 			pipeline.addBefore(SpigotChannelHandlers.PREPENDER, ChannelHandlers.ENCRYPT, new PacketEncrypter(MinecraftEncryption.getCipher(Cipher.ENCRYPT_MODE, key)));
 		}
 	}
@@ -213,7 +214,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 			newProfile.getProperties().putAll(profile.getProperties());
 			profile = newProfile;
 		}
-		if (hasCompression) {
+		if (hasCompression(connection.getVersion())) {
 			int threshold = ServerPlatform.get().getMiscUtils().getCompressionThreshold();
 			if (threshold >= 0) {
 				this.networkManager.sendPacket(
@@ -237,6 +238,14 @@ public abstract class AbstractLoginListener implements IHasProfile {
 
 	public enum LoginState {
 		HELLO, ONLINEMODERESOLVE, KEY, AUTHENTICATING;
+	}
+
+	protected static boolean isFullEncryption(ProtocolVersion version) {
+		return (version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_7_5);
+	}
+
+	protected static boolean hasCompression(ProtocolVersion version) {
+		return (version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
 	}
 
 }
