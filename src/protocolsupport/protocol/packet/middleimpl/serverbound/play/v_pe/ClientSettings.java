@@ -13,10 +13,8 @@ public class ClientSettings extends MiddleClientSettings {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		System.out.println("ClientSETTINGS!");
 		locale = cache.getLocale();
 		viewDist = (VarNumberSerializer.readSVarInt(clientdata) - 1);
-		System.out.println("ViewDistancceee: " + viewDist);
 		chatMode = 0;
 		chatColors = true;
 		skinFlags = 0x7F;
@@ -31,7 +29,6 @@ public class ClientSettings extends MiddleClientSettings {
 		chunkResponse.writeByte(0);
 		//should exactly match the view distance that server uses to broadcast chunks. +1 because mcpe includes the chunk client is standing in in calculations, while pc does not
 		VarNumberSerializer.writeSVarInt(chunkResponse, (viewDist > Bukkit.getViewDistance()) ? (Bukkit.getViewDistance() + 1) : (viewDist + 1));
-		System.out.println("Sending: " + ((viewDist > Bukkit.getViewDistance()) ? (Bukkit.getViewDistance() + 1) : (viewDist + 1)));
 		connection.sendRawPacket(MiscSerializer.readAllBytes(chunkResponse));
 	}
 
