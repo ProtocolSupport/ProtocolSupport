@@ -14,6 +14,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnObj
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacket.InfTransactions;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.types.Environment;
+import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.WindowType;
@@ -361,15 +362,15 @@ public class NetworkDataCache {
 		}
 	}
 
-	private int gamemode = 0;
+	private GameMode gamemode = GameMode.SURVIVAL;
 	private boolean canFly = false;
 	private boolean isFlying = false;
 
-	public void setGameMode(int gamemode) {
+	public void setGameMode(GameMode gamemode) {
 		this.gamemode = gamemode;
 	}
 
-	public int getGameMode() {
+	public GameMode getGameMode() {
 		return this.gamemode;
 	}
 

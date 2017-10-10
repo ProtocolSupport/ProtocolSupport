@@ -6,6 +6,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.utils.types.GameMode;
 
 public class PEAdventureSettings {
 
@@ -33,12 +34,12 @@ public class PEAdventureSettings {
 	public static final int GROUP_OP = 2;
 	public static final int GROUP_CUSTOM = 3;
 
-	public static int getGameModeFlags(int gamemode) {
+	public static int getGameModeFlags(GameMode gamemode) {
 		switch (gamemode) {
-			case 2: {
+			case ADVENTURE: {
 				return ADVENTURE_MODE_ENABLED;
 			}
-			case 3: {
+			case SPECTATOR: {
 				return PVP_DISABLED | PVE_DISABLED | ALLOW_FLIGHT | FLYING | NOCLIP_ENABLED;
 			}
 			default: {

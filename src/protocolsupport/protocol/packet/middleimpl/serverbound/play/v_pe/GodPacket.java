@@ -27,6 +27,7 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
+import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Position;
@@ -65,8 +66,9 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	protected float cX, cY, cZ;
 	protected int face;
 	protected int targetId;
+	
 	//Misc
-	private static ItemStackWrapper AIR = ServerPlatform.get().getWrapperFactory().createItemStack(0);
+	private static final ItemStackWrapper AIR = ServerPlatform.get().getWrapperFactory().createItemStack(0);
 
 	public static void bug(String bugger) {
 		System.out.println(bugger);
@@ -158,7 +160,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 						break;
 					}
 					case USE_DIG_BLOCK: {
-						if(cache.getGameMode() == 1) { //instabreak
+						if(cache.getGameMode() == GameMode.CREATIVE) { //instabreak
 							packets.add(MiddleBlockDig.create(MiddleBlockDig.Action.START_DIG, position, 0));
 							packets.add(MiddleBlockDig.create(MiddleBlockDig.Action.FINISH_DIG, position, 0));
 						}
@@ -287,11 +289,13 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		Map<String, List<Integer>> surplus = new HashMap<>();
 		Map<String, List<Integer>> deficit = new HashMap<>();
 		List<ServerBoundPacketData> misc = new ArrayList<>();
+		int cursorValue = 0;
 		
 		public void clear() {
 			bug("Clearing cache with surplus: " + surplus.toString() + " and deficit: " + deficit.toString());
 			surplus.clear();
 			deficit.clear();
+			misc.clear();
 		}
 		
 		public void cacheTransaction(NetworkDataCache cache, InfTransaction transaction) {
@@ -301,11 +305,14 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				bug("Found the devil. Keeping him out!");
 				return;
 			}
+			
 			//Special cases
-			if (cache.getGameMode() == 1 && cache.getOpenedWindow() == WindowType.PLAYER) {
-				bug("Creative transaction! Yay, sooo simple.");
-				bug("Slot: " + (pcSlot == -999 ? -1 : pcSlot) + " item: " + getItemIdentity(transaction.getNewItem())); //Drop item is -1 for creative setSlot packet.
-				misc.add(MiddleCreativeSetSlot.create(cache.getLocale(), (pcSlot == -999 ? -1 : pcSlot), transaction.getNewItem()));
+			if (cache.getGameMode() == GameMode.CREATIVE && cache.getOpenedWindow() == WindowType.PLAYER) {
+				if(pcSlot != - 1) {
+					bug("Creative transaction! Yay, sooo simple.");
+					bug("Slot: " + (pcSlot == -999 ? -1 : pcSlot) + " item: " + getItemIdentity(transaction.getNewItem())); //Drop item is -1 for creative setSlot packet.
+					misc.add(MiddleCreativeSetSlot.create(cache.getLocale(), (pcSlot == -999 ? -1 : pcSlot), transaction.getNewItem()));
+				}
 				return;
 			}
 			
@@ -334,7 +341,11 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		}
 		
 		private void put(Map<String, List<Integer>> map, String id, int slot, int slotAmount, int amount) {
-			bug("slot: " + slot + " amount: " + amount);
+			bug("slot: " + slot + " slotAmount: " + slotAmount + " amount: " + amount);
+			if(slot == -1) {
+				bug("It's the CURSE-OR!");
+				cursorValue++;
+			}
 			List<Integer> keys = map.get(id);
 			if(keys == null) {
 				keys = new ArrayList<Integer>();
@@ -352,20 +363,29 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			misc.clear();
 			bug("Processing surplus / deficit balance...");
 			Iterator<Entry<String, List<Integer>>> deficitorator = deficit.entrySet().iterator();
-			while(deficitorator.hasNext()) {
+			deficitorator:
+			while (deficitorator.hasNext()) {
 				Entry<String, List<Integer>> deficitEntry = deficitorator.next();
 				List<Integer> surplusSlotValues = surplus.get(deficitEntry.getKey());
 				bug("Deficits of " + deficitEntry.getKey() + "...");
 				if(surplusSlotValues != null) {
 					bug("Found surplus! (Where's the money lebowsky?!)");
 					Iterator<Integer> deficitSlotValueIterator = deficitEntry.getValue().iterator();
-					while(deficitSlotValueIterator.hasNext()) {
+					while (deficitSlotValueIterator.hasNext()) {
 						Integer deficitSlotValue = deficitSlotValueIterator.next();
 						bug("Local debt: " + Integer.toBinaryString(deficitSlotValue));
 						int	deficitSlot = (deficitSlotValue >> 16), deficitSlotAmount = ((deficitSlotValue >> 8) & 0xFF), deficitAmount = (deficitSlotValue & 0xFF);
 						bug("Deficit slot: " + deficitSlot + "deficitSlotAmount: " + deficitSlotAmount + " Debt amount: " + deficitAmount);
+						if (deficitSlot == -1 && surplusSlotValues.size() > 1) {
+							bug("Multiple mess so, fridge this stuff, going for the double!");
+							packets.addAll(Click.LEFT.create(cache, deficitSlot));
+							packets.addAll(Click.DOUBLE.create(cache, deficitSlot));
+							surplus.remove(deficitEntry.getKey());
+							deficitorator.remove();
+							continue deficitorator;
+						}
 						Iterator<Integer> surplusSlotValueIterator = surplusSlotValues.iterator();
-						while(surplusSlotValueIterator.hasNext()) {
+						while (surplusSlotValueIterator.hasNext()) {
 							bug("Rolling cashier..");
 							Integer surplusSlotValue = surplusSlotValueIterator.next();
 							bug("Surplus value: " + Integer.toBinaryString(surplusSlotValue));
@@ -377,18 +397,30 @@ public class GodPacket extends ServerBoundMiddlePacket {
 							} else {
 								bug("Surplus is in our own hand!");
 							}
-							if(deficitSlot != -1) {
-								bug("Getting all we can get our hands on...");
-								for(int i = 0; i < (deficitAmount < surplusAmount ? deficitAmount : surplusAmount); i++) {
-									bug("right..");
-									packets.addAll(Click.RIGHT.create(cache, deficitSlot));
-									deficitSlotValue+=255; surplusSlotValue-=257;
+							if (deficitSlot != -1) {
+								if(surplusAmount != surplusSlotAmount) {
+									bug("Getting all we can get our hands on...");
+									for (int i = 0; i < (deficitAmount < surplusAmount ? deficitAmount : surplusAmount); i++) {
+										bug("right..");
+										packets.addAll(Click.RIGHT.create(cache, deficitSlot));
+										deficitSlotValue+=255; surplusSlotValue-=257;
+									}
+								} else {
+									if(cursorValue < 2) {
+										bug("Throwing it all on there");
+										packets.addAll(Click.LEFT.create(cache, deficitSlot));	
+									} else {
+										bug("Something with the cursor to and from? :S");
+									}
+									surplusSlotValue -= (deficitAmount << 8 | deficitAmount);
+									deficitSlotValue += ((deficitAmount << 8) - deficitAmount);
 								}
 							} else {
 								bug("We took all...");
+								//TODO: Find out why this doesn't save if multiple actions are ran?
 								surplusSlotValue -= (deficitAmount << 8 | deficitAmount);
-								deficitSlotValue += (deficitAmount << 8) - deficitAmount;
-								if(deficitAmount < surplusSlotAmount) {
+								deficitSlotValue += ((deficitAmount << 8) - deficitAmount);
+								if(surplusSlotAmount > deficitAmount) {
 									bug("More than we should actually..");
 									for (int i  = 0; i < (surplusSlotAmount - deficitAmount); i ++) {
 										bug("Right back!");
@@ -397,17 +429,22 @@ public class GodPacket extends ServerBoundMiddlePacket {
 									}
 								}
 							}
-							if(surplusSlot != -1 && deficitSlot != -1) {
+							if (surplusSlot != -1 && deficitSlot != -1 && surplusAmount > 0) {
 								packets.addAll(Click.LEFT.create(cache, surplusSlot));
 							}
-							if((surplusSlotValue & 0xFF) == 0) {
+							if ((surplusSlotValue & 0xFF) == 0) {
 								bug("The suitcase is empty!");
 								surplusSlotValueIterator.remove();
+								if(surplus.get(deficitEntry.getKey()).isEmpty()) {
+									bug("Even the secret compartment!");
+									surplus.remove(deficitEntry.getKey());
+								}
 							}
-							if((deficitSlotValue & 0xFF) == 0) {
+							if ((deficitSlotValue & 0xFF) == 0) {
 								bug("One debt less!");
 								deficitSlotValueIterator.remove();
-								break;
+								//Wth is happening here? I somehow don't get my values changed in the surplus.. (No this didn't help, but it's here until the next commit. Deal with it).
+								surplusSlotValueIterator.forEachRemaining(n -> {});
 							}
 						}
 					}
@@ -417,6 +454,8 @@ public class GodPacket extends ServerBoundMiddlePacket {
 					}
 				}
 			}
+			//Hack! :S
+			cursorValue = 0;
 			return packets;
 		}
 		
@@ -532,7 +571,8 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	
 	protected enum Click {
 		LEFT	(0, 0),
-		RIGHT	(0, 1);
+		RIGHT	(0, 1),
+		DOUBLE	(6, 0);
 		
 		private final int mode;
 		private final int button;
