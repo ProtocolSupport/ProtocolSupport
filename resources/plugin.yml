@@ -1,7 +1,11 @@
 name: ProtocolSupport
 main: protocolsupport.ProtocolSupport
-version: 4.28-dev-pe
-author: _Shevchik_
+version: 4.29-dev-pe
+authors:
+- _Shevchik_
+- 7kasper
+- MrPowerGamerBR
+- gdude2002
 load: STARTUP
 commands:
   protocolsupport:
