@@ -408,4 +408,14 @@ public class NetworkDataCache {
 	public long getLastSentTitle() { return lastSentTitle; }
 
 	public void setLastSentTitle(long lastSentTitle) { this.lastSentTitle = lastSentTitle; }
+
+	private long inventoryLockMillis = 0;
+	
+	public void lockInventory() {
+		inventoryLockMillis = System.currentTimeMillis();
+	}
+	
+	public boolean isInventoryLocked() {
+		return System.currentTimeMillis() - inventoryLockMillis < 450;
+	}
 }

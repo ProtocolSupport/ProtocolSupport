@@ -6,10 +6,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
@@ -71,8 +71,28 @@ public class FeatureEmulation implements Listener {
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onPlayerInteract(BlockBreakEvent event) {
-		System.out.println("HIT LEFT?!");
+	public void onInventoryClick(InventoryClickEvent event) {
+		if(event.getWhoClicked() instanceof Player) {
+			Player clicker = (Player) event.getWhoClicked();
+			Connection connection = ProtocolSupportAPI.getConnection(clicker);
+			if(
+				(connection != null) &&
+				(connection.getVersion().getProtocolType() == ProtocolType.PE) &&
+				(
+					(!connection.hasMetadata("lastScheduledInventoryUpdate")) ||
+					(System.currentTimeMillis() - (long) connection.getMetadata("lastScheduledInventoryUpdate") >= 250)
+				)
+			) {
+				connection.addMetadata("lastScheduledInventoryUpdate", System.currentTimeMillis());
+				Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), new Runnable() {
+					@Override
+					public void run() {
+						clicker.updateInventory();	
+					}
+				}, 10);
+			}
+		}
+		
 	}
 
 	@EventHandler

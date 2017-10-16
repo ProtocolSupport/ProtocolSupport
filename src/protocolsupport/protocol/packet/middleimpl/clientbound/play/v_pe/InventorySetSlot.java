@@ -16,6 +16,9 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
+		if(cache.isInventoryLocked()) {
+			return RecyclableEmptyList.get();
+		}
 		ProtocolVersion version = connection.getVersion();
 		String locale = cache.getLocale();
 		switch(cache.getOpenedWindow()) {

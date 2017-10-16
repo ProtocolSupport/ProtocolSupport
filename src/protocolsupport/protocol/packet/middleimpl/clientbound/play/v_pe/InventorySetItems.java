@@ -5,7 +5,9 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventorySe
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
@@ -14,8 +16,10 @@ public class InventorySetItems extends MiddleInventorySetItems {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		return RecyclableEmptyList.get();//TODO: WHY?!
-		/*ProtocolVersion version = connection.getVersion();
+		if(cache.isInventoryLocked()) {
+			return RecyclableEmptyList.get();
+		}
+		ProtocolVersion version = connection.getVersion();
 		String locale = cache.getLocale();
 		RecyclableArrayList<ClientBoundPacketData> contentpackets = RecyclableArrayList.create();
 		ItemStackWrapper[] items = itemstacks.toArray(new ItemStackWrapper[itemstacks.size()]);
@@ -33,7 +37,7 @@ public class InventorySetItems extends MiddleInventorySetItems {
 				System.arraycopy(items, 9, peInventory, 9, 27);
 				System.arraycopy(items, 45, peOffhand, 0, 1);
 				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_CRAFTING_RESULT, peInvGridResult));
-				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_CRAFTING_GRID, peInvGrid));
+				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_CRAFTING_GRID_ADD, peInvGrid));
 				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_ARMOR_EQUIPMENT, peArmor));
 				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_INVENTORY, peInventory));
 				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_OFFHAND, peOffhand));
@@ -51,7 +55,7 @@ public class InventorySetItems extends MiddleInventorySetItems {
 				break;
 			}
 		}
-		return contentpackets;*/
+		return contentpackets;
 	}
 	
 	public static ClientBoundPacketData create(ProtocolVersion version, String locale, int windowId, ItemStackWrapper[] itemstacks) {
