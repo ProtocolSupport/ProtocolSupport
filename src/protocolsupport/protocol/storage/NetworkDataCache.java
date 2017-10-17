@@ -1,11 +1,5 @@
 package protocolsupport.protocol.storage;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
-
 import gnu.trove.map.hash.TIntObjectHashMap;
 import io.netty.util.internal.ThreadLocalRandom;
 import protocolsupport.api.chat.ChatAPI;
@@ -17,6 +11,8 @@ import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
+
+import java.util.*;
 
 public class NetworkDataCache {
 
@@ -348,4 +344,16 @@ public class NetworkDataCache {
 	public long getLastSentTitle() { return lastSentTitle; }
 
 	public void setLastSentTitle(long lastSentTitle) { this.lastSentTitle = lastSentTitle; }
+
+
+	private String skinData = null;
+
+	public String getSkinData() {
+		return skinData;
+	}
+
+	public void setSkinData(String skinData) {
+		this.skinData = skinData;
+	}
+
 }

@@ -82,6 +82,8 @@ public class ClientLogin extends ServerBoundMiddlePacket {
             PESkin skin = new PESkin(clientData.getSkinId(), clientData.getSkinData());
             if (!skin.isValid()) throw new UnsupportedOperationException("Invalid Skin");
 
+            skin.apply(cache);
+
             ProtocolSupport.getInstance().getLogger().info(String.format("Bedrock player %s logged in with %s on a %s", username, clientData.getGameVersion(), clientData.getDeviceModel()));
         } catch (JWTDecodeException | UnsupportedEncodingException e) {
             ProtocolSupport.getInstance().getLogger().warning("Error while parsing JWT Client data");

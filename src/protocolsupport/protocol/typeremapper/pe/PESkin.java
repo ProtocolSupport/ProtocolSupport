@@ -1,10 +1,14 @@
 package protocolsupport.protocol.typeremapper.pe;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.mineskin.MineskinClient;
 import org.mineskin.SkinOptions;
 import org.mineskin.data.Skin;
 import org.mineskin.data.SkinCallback;
 import protocolsupport.ProtocolSupport;
+import protocolsupport.protocol.storage.NetworkDataCache;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -18,6 +22,7 @@ public class PESkin {
     private final String skinId;
     private final byte[] skinData;
     private final byte[] capeData;
+    private NetworkDataCache cache;
 
     public PESkin(String skinId, String skinData, String capeData) {
         this.skinId = skinId;
@@ -62,7 +67,23 @@ public class PESkin {
                 @Override
                 public void done(Skin skin) {
                     temp.delete();
+                    if (cache == null) return;
 
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("id", skin.data.uuid.toString());
+                    jsonObject.addProperty("name", "");
+
+                    JsonObject property = new JsonObject();
+                    property.addProperty("name", "textures");
+                    property.addProperty("value", skin.data.texture.value);
+                    property.addProperty("signature", skin.data.texture.signature);
+
+                    JsonArray propertiesArray = new JsonArray();
+                    propertiesArray.add(property);
+
+                    jsonObject.add("properties", propertiesArray);
+
+                    cache.setSkinData(new Gson().toJson(jsonObject));
                 }
             });
         } catch (IOException e) {
@@ -89,5 +110,10 @@ public class PESkin {
 
     public byte[] getCapeData() {
         return capeData;
+    }
+
+    /// Apply when available the skin to a player
+    public void apply(NetworkDataCache dataCache) {
+        cache = dataCache;
     }
 }
