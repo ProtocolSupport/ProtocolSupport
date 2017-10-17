@@ -1,4 +1,4 @@
-package protocolsupport.zplatform.impl.pe;
+package protocolsupport.protocol.typeremapper.pe;
 
 import org.mineskin.MineskinClient;
 import org.mineskin.SkinOptions;
@@ -31,6 +31,7 @@ public class PESkin {
         this(skinId, skinData, "");
     }
 
+    /// Converts Bedrock Skin Bitmap to PNG and uploads it to Mineskin
     private void toDesktopSkin() {
         if (!isValid()) return;
 

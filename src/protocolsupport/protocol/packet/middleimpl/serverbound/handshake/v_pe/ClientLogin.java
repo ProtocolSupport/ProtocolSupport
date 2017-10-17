@@ -17,11 +17,11 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.pe.PESkin;
+import protocolsupport.protocol.typeremapper.pe.PEUserData;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.zplatform.impl.pe.PESkin;
-import protocolsupport.zplatform.impl.pe.PEUserData;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;

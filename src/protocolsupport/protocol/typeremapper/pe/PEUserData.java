@@ -1,4 +1,4 @@
-package protocolsupport.zplatform.impl.pe;
+package protocolsupport.protocol.typeremapper.pe;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
