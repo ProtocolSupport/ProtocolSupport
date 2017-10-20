@@ -23,7 +23,6 @@ public class ArrayDequeMultiMap<K, V> {
 	}
 	
 	public Predicate<Entry<K, ChildDeque<V>>> keyMatches(K key) {
-		System.out.println("Hash key given: " + key.hashCode());
 		return e -> e.getKey().hashCode() == key.hashCode() && e.getKey().equals(key);
 	}
 	
@@ -32,20 +31,19 @@ public class ArrayDequeMultiMap<K, V> {
 	}
 	
 	public Optional<Entry<K, ChildDeque<V>>> findEntry(K key) {
-		System.out.println("Finding with key " + key);
-		map.parallelStream().forEach(e -> {
-			System.out.println(e.getKey().hashCode());
-			System.out.println(e.getKey().equals(key));
-		});
-		return map.parallelStream().filter(keyMatches(key)).findAny();
+		return map.stream().filter(keyMatches(key)).findFirst();
 	}
 	
 	public Optional<Entry<K, ChildDeque<V>>> findEntryContainingValue(V value) {
-		return map.parallelStream().filter(hasValue(value)).findAny();
+		return map.stream().filter(hasValue(value)).findAny();
 	}
 	
 	public void clear() {
 		map.clear();
+	}
+	
+	public boolean isEmpty() {
+		return map.isEmpty();
 	}
 	
 	public boolean containsKey(K key) {
@@ -67,21 +65,22 @@ public class ArrayDequeMultiMap<K, V> {
 	}
 	
 	public void put(K key, V value, boolean important) {
-		System.out.println("Putting <" + key.toString() + ", " + value.toString() + ">");
-		Entry<K, ChildDeque<V>> entry = findEntry(key).orElse(prepareNewEntry(key));
-		System.out.println(entry.getValue());
-		System.out.println(value);
+		Entry<K, ChildDeque<V>> entry;
+		Optional<Entry<K, ChildDeque<V>>> optionalEntry = findEntry(key);
+		if(optionalEntry.isPresent()) {
+			entry = optionalEntry.get();
+		} else {
+			entry = prepareNewEntry(key);
+		}
 		if(important) {
 			entry.getValue().addFirst(value);
 			if(!keyMatches(entry.getKey()).test(map.getFirst())) {
-				map.remove(entry);
+				remove(key);
 				map.addFirst(entry);
 			}
 		} else {
 			entry.getValue().addLast(value);
 		}
-		System.out.println(entry.getValue().size());
-		System.out.println(map.size());
 	}
 	
 	public void remove(K key) {

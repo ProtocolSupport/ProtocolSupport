@@ -4,13 +4,13 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryCo
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
+import protocolsupport.zplatform.ServerPlatform;
 
 public class InventoryConfirmTransaction extends MiddleInventoryConfirmTransaction {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		System.out.println("Need to apologise to the server >.< " + accepted);
-		//connection.receivePacket(ServerPlatform.get().getPacketFactory().createInboundInventoryConfirmTransactionPacket(windowId, actionNumber, accepted));
+		connection.receivePacket(ServerPlatform.get().getPacketFactory().createInboundInventoryConfirmTransactionPacket(windowId, actionNumber, accepted));
 		return RecyclableEmptyList.get();
 	}
 
