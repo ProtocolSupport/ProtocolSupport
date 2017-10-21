@@ -41,4 +41,13 @@ public class ReflectionUtils {
 		throw new RuntimeException("Can't find method "+name+" with params length "+paramlength);
 	}
 
+	public static Field findUnderlying(Class<?> clazz, String fieldName) {
+		Class<?> current = clazz;
+		do {
+			try {
+				return current.getDeclaredField(fieldName);
+			} catch(Exception e) {}
+		} while((current = current.getSuperclass()) != null);
+		return null;
+	}
 }
