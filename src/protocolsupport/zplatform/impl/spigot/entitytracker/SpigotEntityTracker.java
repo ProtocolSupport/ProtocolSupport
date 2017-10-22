@@ -45,7 +45,7 @@ public class SpigotEntityTracker extends EntityTracker {
 			if (this.trackedEntities.b(entity.getId())) {
 				throw new IllegalStateException("Entity is already tracked!");
 			}
-			final EntityTrackerEntry entitytrackerentry = new SpigotEntityTrackerEntry(entity, i, this.viewDistance, j, flag);
+			final EntityTrackerEntry entitytrackerentry = createTrackerEntry(entity, i, j, flag);
 			this.trackerEntries.add(entitytrackerentry);
 			this.trackedEntities.a(entity.getId(), entitytrackerentry);
 			entitytrackerentry.scanPlayers(this.world.players);
@@ -71,4 +71,11 @@ public class SpigotEntityTracker extends EntityTracker {
 		}
 	}
 
+	public int getViewDistance() {
+		return viewDistance;
+	}
+
+	public EntityTrackerEntry createTrackerEntry(final Entity entity, int i, final int j, final boolean flag) {
+		return new SpigotEntityTrackerEntry(entity, i, this.viewDistance, j, flag);
+	}
 }
