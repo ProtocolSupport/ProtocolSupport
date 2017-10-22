@@ -40,7 +40,7 @@ public class ItemStackSerializer {
 			}
 			return itemstack;
 		}
-		return ServerPlatform.get().getWrapperFactory().createNullItemStack();
+		return ItemStackWrapper.NULL;
 	}
 
 	public static void writeItemStack(ByteBuf to, ProtocolVersion version, String locale, ItemStackWrapper itemstack, boolean isToClient) {

@@ -8,7 +8,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import net.glowstone.inventory.GlowItemFactory;
-import net.glowstone.util.InventoryUtil;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
@@ -17,10 +16,6 @@ public class GlowStoneItemStackWrapper extends ItemStackWrapper {
 	protected final ItemStack itemstack;
 	protected GlowStoneItemStackWrapper(ItemStack itemstack) {
 		this.itemstack = itemstack;
-	}
-
-	public static ItemStackWrapper createNull() {
-		return new GlowStoneItemStackWrapper(InventoryUtil.createEmptyStack());
 	}
 
 	@SuppressWarnings("deprecation")

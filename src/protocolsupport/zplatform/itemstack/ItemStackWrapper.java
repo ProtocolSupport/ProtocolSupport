@@ -39,4 +39,72 @@ public abstract class ItemStackWrapper {
 
 	public abstract ItemStackWrapper cloneItemStack();
 
+
+	public static ItemStackWrapper NULL = new ItemStackWrapper() {
+
+		@Override
+		public boolean isNull() {
+			return true;
+		}
+
+		@Override
+		public ItemStackWrapper cloneItemStack() {
+			return ItemStackWrapper.NULL;
+		}
+
+		private UnsupportedOperationException reject() {
+			return new UnsupportedOperationException("Null itemstack");
+		}
+
+		@Override
+		public void setTypeId(int typeId) {
+			throw reject();
+		}
+
+		@Override
+		public void setTag(NBTTagCompoundWrapper tag) {
+			throw reject();
+		}
+
+		@Override
+		public void setDisplayName(String displayName) {
+			throw reject();
+		}
+
+		@Override
+		public void setData(int data) {
+			throw reject();
+		}
+
+		@Override
+		public void setAmount(int amount) {
+			throw reject();
+		}
+
+		@Override
+		public int getTypeId() {
+			throw reject();
+		}
+
+		@Override
+		public NBTTagCompoundWrapper getTag() {
+			throw reject();
+		}
+
+		@Override
+		public int getData() {
+			throw reject();
+		}
+
+		@Override
+		public int getAmount() {
+			throw reject();
+		}
+
+		@Override
+		public ItemStack asBukkitMirror() {
+			throw reject();
+		}
+	};
+
 }

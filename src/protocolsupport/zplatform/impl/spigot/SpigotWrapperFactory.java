@@ -1,7 +1,5 @@
 package protocolsupport.zplatform.impl.spigot;
 
-import org.bukkit.Material;
-
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.zplatform.PlatformWrapperFactory;
 import protocolsupport.zplatform.impl.spigot.itemstack.SpigotItemStackWrapper;
@@ -28,17 +26,6 @@ public class SpigotWrapperFactory implements PlatformWrapperFactory {
 	@Override
 	public NBTTagCompoundWrapper createEmptyNBTCompound() {
 		return SpigotNBTTagCompoundWrapper.createEmpty();
-	}
-
-	@Override
-	public ItemStackWrapper createNullItemStack() {
-		return SpigotItemStackWrapper.createNull();
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public ItemStackWrapper createItemStack(Material material) {
-		return SpigotItemStackWrapper.create(material.getId());
 	}
 
 	@Override
