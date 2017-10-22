@@ -19,7 +19,7 @@ import protocolsupport.protocol.storage.ProtocolStorage;
 
 public class ProtocolSupportAPI {
 
-	private static final BigInteger apiversion = BigInteger.valueOf(2);
+	private static final BigInteger apiversion = BigInteger.valueOf(3);
 	/**
 	 * Returns ProtocolSupport API version <br>
 	 * This number is incremented every time API changes (behavior change, method/field added/removed)

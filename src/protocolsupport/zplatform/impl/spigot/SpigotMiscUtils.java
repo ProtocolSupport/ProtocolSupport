@@ -32,6 +32,7 @@ import net.minecraft.server.v1_12_R1.NBTTagCompound;
 import net.minecraft.server.v1_12_R1.NetworkManager;
 import net.minecraft.server.v1_12_R1.WorldServer;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
+import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
 import protocolsupport.protocol.utils.authlib.GameProfile;
@@ -39,14 +40,11 @@ import protocolsupport.zplatform.PlatformUtils;
 import protocolsupport.zplatform.impl.spigot.injector.network.SpigotNettyInjector;
 import protocolsupport.zplatform.impl.spigot.itemstack.SpigotNBTTagCompoundWrapper;
 import protocolsupport.zplatform.impl.spigot.network.SpigotChannelHandlers;
-import protocolsupport.zplatform.impl.spigot.network.SpigotNetworkManagerWrapper;
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketCompressor;
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketDecompressor;
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedPrepender;
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedSplitter;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.network.NetworkManagerWrapper;
-import protocolsupport.zplatform.network.NetworkState;
 
 public class SpigotMiscUtils implements PlatformUtils {
 
@@ -182,11 +180,6 @@ public class SpigotMiscUtils implements PlatformUtils {
 	@Override
 	public NetworkState getNetworkStateFromChannel(Channel channel) {
 		return netStateFromEnumProtocol(channel.attr(NetworkManager.c).get());
-	}
-
-	@Override
-	public NetworkManagerWrapper getNetworkManagerFromChannel(Channel channel) {
-		return SpigotNetworkManagerWrapper.getFromChannel(channel);
 	}
 
 	@Override

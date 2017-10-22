@@ -5,7 +5,6 @@ import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.utils.types.MerchantData;
 import protocolsupport.protocol.utils.types.MerchantData.TradeOffer;
-import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 public class MerchantDataSerializer {
@@ -16,7 +15,7 @@ public class MerchantDataSerializer {
 		for (int i = 0; i < count; i++) {
 			ItemStackWrapper itemstack1 = ItemStackSerializer.readItemStack(from, version, locale, false);
 			ItemStackWrapper result = ItemStackSerializer.readItemStack(from, version, locale, false);
-			ItemStackWrapper itemstack2 = ServerPlatform.get().getWrapperFactory().createNullItemStack();
+			ItemStackWrapper itemstack2 = ItemStackWrapper.NULL;
 			if (from.readBoolean()) {
 				itemstack2 = ItemStackSerializer.readItemStack(from, version, locale, false);
 			}

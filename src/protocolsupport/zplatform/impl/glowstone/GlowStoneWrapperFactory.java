@@ -1,7 +1,5 @@
 package protocolsupport.zplatform.impl.glowstone;
 
-import org.bukkit.Material;
-
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.protocol.packet.handler.AbstractStatusListener;
@@ -30,17 +28,6 @@ public class GlowStoneWrapperFactory implements PlatformWrapperFactory {
 	@Override
 	public NBTTagCompoundWrapper createEmptyNBTCompound() {
 		return GlowStoneNBTTagCompoundWrapper.createEmpty();
-	}
-
-	@Override
-	public ItemStackWrapper createNullItemStack() {
-		return GlowStoneItemStackWrapper.createNull();
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public ItemStackWrapper createItemStack(Material material) {
-		return GlowStoneItemStackWrapper.create(material.getId());
 	}
 
 	@Override
