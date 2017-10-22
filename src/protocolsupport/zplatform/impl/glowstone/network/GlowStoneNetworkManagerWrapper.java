@@ -24,9 +24,9 @@ import net.glowstone.net.ProxyData;
 import net.glowstone.net.pipeline.MessageHandler;
 import net.glowstone.net.protocol.ProtocolType;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
+import protocolsupport.api.utils.NetworkState;
 import protocolsupport.zplatform.impl.glowstone.GlowStoneMiscUtils;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
-import protocolsupport.zplatform.network.NetworkState;
 
 public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 

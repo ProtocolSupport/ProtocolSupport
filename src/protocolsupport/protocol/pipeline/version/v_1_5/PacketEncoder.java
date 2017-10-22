@@ -1,6 +1,7 @@
 package protocolsupport.protocol.pipeline.version.v_1_5;
 
 import protocolsupport.api.Connection;
+import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.noop.NoopLoginSuccess;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.noop.NoopSetCompression;
@@ -91,7 +92,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_5_6.Serve
 import protocolsupport.protocol.pipeline.version.AbstractLegacyPacketEncoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.utils.registry.PacketIdTransformerRegistry;
-import protocolsupport.zplatform.network.NetworkState;
 
 public class PacketEncoder extends AbstractLegacyPacketEncoder {
 

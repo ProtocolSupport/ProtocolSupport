@@ -22,6 +22,7 @@ import net.glowstone.io.nbt.NbtSerialization;
 import net.glowstone.net.pipeline.CompressionHandler;
 import net.glowstone.net.protocol.ProtocolType;
 import net.glowstone.util.GlowServerIcon;
+import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
 import protocolsupport.protocol.utils.authlib.GameProfile;
@@ -31,7 +32,6 @@ import protocolsupport.zplatform.impl.glowstone.network.GlowStoneChannelHandlers
 import protocolsupport.zplatform.impl.glowstone.network.GlowStoneNetworkManagerWrapper;
 import protocolsupport.zplatform.impl.glowstone.network.pipeline.GlowStoneFramingHandler;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.network.NetworkState;
 
 public class GlowStoneMiscUtils implements PlatformUtils {
 

@@ -19,8 +19,8 @@ import net.minecraft.server.v1_12_R1.Packet;
 import net.minecraft.server.v1_12_R1.PacketListener;
 import net.minecraft.server.v1_12_R1.PlayerConnection;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
+import protocolsupport.api.utils.NetworkState;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
-import protocolsupport.zplatform.network.NetworkState;
 
 public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 
