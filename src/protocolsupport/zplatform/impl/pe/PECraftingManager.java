@@ -82,7 +82,7 @@ public class PECraftingManager {
 	}
 
 	private static ItemStackWrapper fromBukkitStack(org.bukkit.inventory.ItemStack stack) {
-		return ServerPlatform.get().getWrapperFactory().createItemStack(stack.getType());
+		return ServerPlatform.get().getWrapperFactory().createItemStack(stack.getType().getId());
 	}
 
 	public void addRecipeShaped(ByteBuf to, ItemStackWrapper output, int width, int height, ItemStackWrapper[] required) {

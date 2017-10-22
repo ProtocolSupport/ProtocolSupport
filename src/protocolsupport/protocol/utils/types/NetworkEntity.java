@@ -1,12 +1,10 @@
 package protocolsupport.protocol.utils.types;
 
-import java.util.UUID;
-
 import org.bukkit.util.Vector;
-
 import protocolsupport.utils.Utils;
-import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+
+import java.util.UUID;
 
 public class NetworkEntity {
 
@@ -92,14 +90,10 @@ public class NetworkEntity {
 		private long peBaseFlags = 0;
 		public int attachedId = -1; //Leashed? Data is send in pocket meta, but might be useful to store for other things.
 		public Rider rider = new Rider(false);
-		// static final null ItemStack, while the null ItemStack in Vanilla code is a static final variable, ProtocolSupport wraps
-		// it inside a ItemStackWrapper, causing object duplication, so, to avoid too much memory usage, why not just reuse the
-		// same object? After all, the nullItemStack isn't going to be edited by anyone anyway :)
-		private static final ItemStackWrapper nullItemStack = ItemStackWrapper.NULL;
-		private ItemStackWrapper helmet = nullItemStack;
-		private ItemStackWrapper chestplate = nullItemStack;
-		private ItemStackWrapper leggings = nullItemStack;
-		private ItemStackWrapper boots = nullItemStack;
+		private ItemStackWrapper helmet = ItemStackWrapper.NULL;
+		private ItemStackWrapper chestplate = ItemStackWrapper.NULL;
+		private ItemStackWrapper leggings = ItemStackWrapper.NULL;
+		private ItemStackWrapper boots = ItemStackWrapper.NULL;
 
 		public long getPeBaseFlags() {
 			return peBaseFlags;

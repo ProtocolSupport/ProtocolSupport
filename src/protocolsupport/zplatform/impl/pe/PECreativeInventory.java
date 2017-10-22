@@ -131,7 +131,7 @@ public class PECreativeInventory {
 		AtomicInteger itemcount = new AtomicInteger();
 		Arrays.stream(Material.values())
 			.filter(m -> !skipMaterials.contains(m))
-			.map(m -> ServerPlatform.get().getWrapperFactory().createItemStack(m))
+			.map(m -> ServerPlatform.get().getWrapperFactory().createItemStack(m.getId()))
 			.filter(w -> w.getTypeId() != 0)
 			.forEach(wrapper -> {
 				ItemStackSerializer.writeItemStack(itembuf, ProtocolVersion.MINECRAFT_PE, I18NData.DEFAULT_LOCALE, wrapper, true);
