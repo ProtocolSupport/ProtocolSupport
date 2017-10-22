@@ -95,7 +95,7 @@ public class NetworkEntity {
 		// static final null ItemStack, while the null ItemStack in Vanilla code is a static final variable, ProtocolSupport wraps
 		// it inside a ItemStackWrapper, causing object duplication, so, to avoid too much memory usage, why not just reuse the
 		// same object? After all, the nullItemStack isn't going to be edited by anyone anyway :)
-		private static final ItemStackWrapper nullItemStack = ServerPlatform.get().getWrapperFactory().createNullItemStack();
+		private static final ItemStackWrapper nullItemStack = ItemStackWrapper.NULL;
 		private ItemStackWrapper helmet = nullItemStack;
 		private ItemStackWrapper chestplate = nullItemStack;
 		private ItemStackWrapper leggings = nullItemStack;

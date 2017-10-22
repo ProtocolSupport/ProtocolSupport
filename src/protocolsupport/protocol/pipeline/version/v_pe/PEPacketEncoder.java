@@ -58,7 +58,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
-import protocolsupport.zplatform.network.NetworkState;
+import protocolsupport.api.utils.NetworkState;
 
 public class PEPacketEncoder extends AbstractLegacyPacketEncoder {
 
