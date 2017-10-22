@@ -31,7 +31,6 @@ import protocolsupport.zplatform.impl.glowstone.network.GlowStoneChannelHandlers
 import protocolsupport.zplatform.impl.glowstone.network.GlowStoneNetworkManagerWrapper;
 import protocolsupport.zplatform.impl.glowstone.network.pipeline.GlowStoneFramingHandler;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.network.NetworkManagerWrapper;
 import protocolsupport.zplatform.network.NetworkState;
 
 public class GlowStoneMiscUtils implements PlatformUtils {
@@ -186,11 +185,6 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	@Override
 	public NetworkState getNetworkStateFromChannel(Channel channel) {
 		return GlowStoneNetworkManagerWrapper.getFromChannel(channel).getProtocol();
-	}
-
-	@Override
-	public NetworkManagerWrapper getNetworkManagerFromChannel(Channel channel) {
-		return GlowStoneNetworkManagerWrapper.getFromChannel(channel);
 	}
 
 	@Override
