@@ -1,6 +1,7 @@
 package protocolsupport.protocol.pipeline.version.v_1_6;
 
 import protocolsupport.api.Connection;
+import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_4_5_6.ClientLogin;
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_6.Ping;
 import protocolsupport.protocol.packet.middleimpl.serverbound.login.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2.EncryptionResponse;
@@ -31,7 +32,6 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_6_7.SteerVe
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_6_7_8_9r1_9r2_10_11_12r1_12r2.PlayerAbilities;
 import protocolsupport.protocol.pipeline.version.AbstractLegacyPacketDecoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
-import protocolsupport.zplatform.network.NetworkState;
 
 public class PacketDecoder extends AbstractLegacyPacketDecoder {
 

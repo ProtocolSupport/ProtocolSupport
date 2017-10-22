@@ -1,6 +1,7 @@
 package protocolsupport.protocol.pipeline.version.v_1_10;
 
 import protocolsupport.api.Connection;
+import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2.EncryptionRequest;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r2_10_11_12r1_12r2.LoginDisconnect;
@@ -91,7 +92,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_7_8_9r1_9
 import protocolsupport.protocol.pipeline.version.AbstractModernPacketEncoder;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.utils.registry.PacketIdTransformerRegistry;
-import protocolsupport.zplatform.network.NetworkState;
 
 public class PacketEncoder extends AbstractModernPacketEncoder {
 

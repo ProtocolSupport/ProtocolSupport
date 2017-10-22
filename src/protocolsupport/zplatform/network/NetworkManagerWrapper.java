@@ -9,6 +9,7 @@ import io.netty.channel.Channel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
+import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.packet.handler.IHasProfile;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 

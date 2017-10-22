@@ -10,6 +10,7 @@ import com.google.common.base.Objects;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ReadOnlyByteBuf;
+import protocolsupport.api.utils.NetworkState;
 
 @SuppressWarnings("deprecation")
 public abstract class Connection {
@@ -91,6 +92,12 @@ public abstract class Connection {
 	 * @param data packet data
 	 */
 	public abstract void receiveRawPacket(byte[] data);
+
+	/**
+	 * Gets the state at which server network is now
+	 * @return network state
+	 */
+	public abstract NetworkState getNetworkState();
 
 
 	protected final CopyOnWriteArrayList<PacketListener> packetlisteners = new CopyOnWriteArrayList<>();

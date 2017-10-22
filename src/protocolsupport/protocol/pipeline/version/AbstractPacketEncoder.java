@@ -9,6 +9,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.EncoderException;
 import protocolsupport.api.Connection;
+import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
@@ -19,7 +20,6 @@ import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.MessageToMessageEncoder;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.network.NetworkState;
 
 public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<ByteBuf> {
 
