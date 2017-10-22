@@ -15,8 +15,10 @@ import protocolsupport.api.Connection;
 import protocolsupport.api.Connection.PacketListener.PacketEvent;
 import protocolsupport.api.Connection.PacketListener.RawPacketEvent;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.storage.ProtocolStorage;
+import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class ConnectionImpl extends Connection {
@@ -62,6 +64,11 @@ public class ConnectionImpl extends Connection {
 	@Override
 	public Player getPlayer() {
 		return networkmanager.getBukkitPlayer();
+	}
+
+	@Override
+	public NetworkState getNetworkState() {
+		return ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(networkmanager.getChannel());
 	}
 
 	@Override
