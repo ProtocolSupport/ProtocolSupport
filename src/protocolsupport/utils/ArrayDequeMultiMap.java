@@ -10,7 +10,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /***
- * Simple implementation of a double deque based map.
+ * Simple implementation of a double deque based map. 
+ * (Pulled straight out of my thump. Actually I don't know if this is the best way, but it's A way)
  * Used to store binary-sorted key-value(s) pairs with key-values.
  * Entries containing one or more important values will appear at the two-dimensional top.
  */
@@ -18,52 +19,56 @@ public class ArrayDequeMultiMap<K, V> {
 
 	private final ArrayDeque<Entry<K, ChildDeque<V>>> map = new ArrayDeque<Entry<K, ChildDeque<V>>>();
 	
-	public ArrayDeque<Entry<K, ChildDeque<V>>> entrySet() {
-		return map;
-	}
-	
-	public Predicate<Entry<K, ChildDeque<V>>> keyMatches(K key) {
-		return e -> e.getKey().hashCode() == key.hashCode() && e.getKey().equals(key);
-	}
-	
-	public Predicate<Entry<K, ChildDeque<V>>> hasValue(V value) {
-		return e -> e.getValue().parallelStream().filter(v -> v.hashCode() == value.hashCode() && v.equals(value)).count() > 0;
-	}
-	
-	public Optional<Entry<K, ChildDeque<V>>> findEntry(K key) {
-		return map.stream().filter(keyMatches(key)).findFirst();
-	}
-	
-	public Optional<Entry<K, ChildDeque<V>>> findEntryContainingValue(V value) {
-		return map.stream().filter(hasValue(value)).findAny();
-	}
-	
+	/**
+	 * Clears the multimap.
+	 */
 	public void clear() {
 		map.clear();
 	}
 	
+	/***
+	 * @return if the multimap is empty.
+	 */
 	public boolean isEmpty() {
 		return map.isEmpty();
 	}
 	
+	/***
+	 * Checks if the multimap contains a key.
+	 * @param key
+	 * @return true, if the key exists in the map.
+	 */
 	public boolean containsKey(K key) {
 		return findEntry(key).isPresent();
 	}
 	
+	/***
+	 * Checks if the multimap contains a value.
+	 * @param value
+	 * @return true, if the value exists in the map.
+	 */
 	public boolean containsValue(V value) {
 		return findEntryContainingValue(value).isPresent();
 	}
 	
-	public Entry<K, ChildDeque<V>> prepareNewEntry(K key) {
-		Entry<K, ChildDeque<V>> entry = new AbstractMap.SimpleEntry<K, ChildDeque<V>>(key, new ChildDeque<V>());
-		map.addLast(entry);
-		return entry;
-	}
-	
+	/***
+	 * Puts a non-important value in the ArrayDequeMultiMap.
+	 * Non important entries are always inserted at the bottom.
+	 * @param key
+	 * @param value
+	 */
 	public void put(K key, V value) {
 		put(key, value, false);
 	}
 	
+	/**
+	 * Puts entries in the ArrayDequeMultiMap.
+	 * Important values will be put on top, others on the bottom.
+	 * If a key newly obtains an important value, it will be put on top itself as will the value.
+	 * @param key
+	 * @param value
+	 * @param important
+	 */
 	public void put(K key, V value, boolean important) {
 		Entry<K, ChildDeque<V>> entry;
 		Optional<Entry<K, ChildDeque<V>>> optionalEntry = findEntry(key);
@@ -83,10 +88,21 @@ public class ArrayDequeMultiMap<K, V> {
 		}
 	}
 	
+	/**
+	 * Removes all entries beloning to key.
+	 * @param key
+	 */
 	public void remove(K key) {
 		findEntry(key).ifPresent(entry -> map.remove(entry));
 	}
 	
+	/**
+	 * Get's the entries belonging to the key.
+	 * @param key
+	 * @return
+	 * The entries beloning to key, null if the key isn't present.
+	 * (Empty maps are returned as is)
+	 */
 	public ChildDeque<V> get(K key) {
 		Optional<Entry<K, ChildDeque<V>>> optionalEntry = findEntry(key);
 		if(optionalEntry.isPresent()) {
@@ -96,6 +112,9 @@ public class ArrayDequeMultiMap<K, V> {
 		}
 	}
 	
+	/***
+	 * @return the very first entry of the multimap, null if none exists.
+	 */
 	public V getVeryFirst() {
 		if(map.peekFirst() == null) {
 			return null;
@@ -103,6 +122,9 @@ public class ArrayDequeMultiMap<K, V> {
 		return map.getFirst().getValue().peekFirst();
 	}
 	
+	/***
+	 * @return the very last entry of the multimap, null if none exists.
+	 */
 	public V getVeryLast() {
 		if(map.peekLast() == null) { 
 			return null;
@@ -110,12 +132,28 @@ public class ArrayDequeMultiMap<K, V> {
 		return map.getLast().getValue().peekLast();
 	}
 	
+	/**
+	 * Cycles down (top to bottom) the multimap and removes value if true is returned.
+	 * @param func
+	 * the function to run with the value references.
+	 */
 	public void cycleDown(BiFunction<K, ChildDeque<V>, Boolean> func) {
 		cycle(map.iterator(), func);
 	}
 	
+	/**
+	 * Cycles up (bottom to top) the multimap and removes value if true is returned.
+	 * @param func
+	 * the function to run on the value references.
+	 */
 	public void cycleUp(BiFunction<K, ChildDeque<V>, Boolean> func) {
 		cycle(map.descendingIterator(), func);
+	}
+	
+	private Entry<K, ChildDeque<V>> prepareNewEntry(K key) {
+		Entry<K, ChildDeque<V>> entry = new AbstractMap.SimpleEntry<K, ChildDeque<V>>(key, new ChildDeque<V>());
+		map.addLast(entry);
+		return entry;
 	}
 	
 	private void cycle(Iterator<Entry<K, ChildDeque<V>>> itorator, BiFunction<K, ChildDeque<V>, Boolean> func) {
@@ -127,13 +165,39 @@ public class ArrayDequeMultiMap<K, V> {
 		}
 	}
 	
+	private Predicate<Entry<K, ChildDeque<V>>> keyMatches(K key) {
+		return e -> e.getKey().hashCode() == key.hashCode() && e.getKey().equals(key);
+	}
+	
+	private Predicate<Entry<K, ChildDeque<V>>> hasValue(V value) {
+		return e -> e.getValue().parallelStream().filter(v -> v.hashCode() == value.hashCode() && v.equals(value)).count() > 0;
+	}
+	
+	private Optional<Entry<K, ChildDeque<V>>> findEntry(K key) {
+		return map.stream().filter(keyMatches(key)).findFirst();
+	}
+	
+	private Optional<Entry<K, ChildDeque<V>>> findEntryContainingValue(V value) {
+		return map.stream().filter(hasValue(value)).findAny();
+	}
+	
 	public static class ChildDeque<T> extends ArrayDeque<T> {
 		private static final long serialVersionUID = -5508375911312087313L;
 
+		/**
+		 * Cycles down (top to bottom) the child deque and removes value if true is returned.
+		 * @param func
+		 * the function to run with the value references.
+		 */
 		public void cycleDown(Function<T, Boolean> func) {
 			cycle(iterator(), func);
 		}
 		
+		/**
+		 * Cycles up (bottom to top) the child deque and removes value if true is returned.
+		 * @param func
+		 * the function to run on the value references.
+		 */
 		public void cycleUp(Function<T, Boolean> func) {
 			cycle(descendingIterator(), func);
 		}
