@@ -39,6 +39,7 @@ public class PECreativeInventory {
 		return itemCount;
 	}
 
+	@SuppressWarnings("deprecation")
 	public void generateCreativeInventoryItems() {
 		//We use Integers because there are some duplicated items in the Material enum.
 		List<Material> skipMaterials = new ArrayList<Material>();

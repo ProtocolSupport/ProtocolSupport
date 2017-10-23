@@ -81,6 +81,7 @@ public class PECraftingManager {
 		recipes = MiscSerializer.readAllBytes(recipesbuf);
 	}
 
+	@SuppressWarnings("deprecation")
 	private static ItemStackWrapper fromBukkitStack(org.bukkit.inventory.ItemStack stack) {
 		return ServerPlatform.get().getWrapperFactory().createItemStack(stack.getType().getId());
 	}
