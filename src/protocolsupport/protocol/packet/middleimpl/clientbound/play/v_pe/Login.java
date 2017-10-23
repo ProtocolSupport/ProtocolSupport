@@ -22,13 +22,13 @@ public class Login extends MiddleLogin {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		ClientBoundPacketData resourcepack = ClientBoundPacketData.create(PEPacketIDs.RESOURCE_PACK, version);
 		resourcepack.writeBoolean(false); // required
-		resourcepack.writeShortLE(0); //res packs count
 		resourcepack.writeShortLE(0); //beh packs count
+		resourcepack.writeShortLE(0); //res packs count
 		packets.add(resourcepack);
 		ClientBoundPacketData resourcestack = ClientBoundPacketData.create(PEPacketIDs.RESOURCE_STACK, version);
 		resourcestack.writeBoolean(false); // required
-		resourcestack.writeShortLE(0); //res packs count
-		resourcestack.writeShortLE(0); //beh packs count
+		VarNumberSerializer.writeVarInt(resourcestack, 0); //beh packs count
+		VarNumberSerializer.writeVarInt(resourcestack, 0); //res packs count
 		packets.add(resourcestack);
 		ClientBoundPacketData startgame = ClientBoundPacketData.create(PEPacketIDs.START_GAME, version);
 		VarNumberSerializer.writeSVarLong(startgame, playerEntityId);
