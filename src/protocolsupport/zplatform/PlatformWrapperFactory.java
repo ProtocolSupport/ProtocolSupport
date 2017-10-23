@@ -1,7 +1,5 @@
 package protocolsupport.zplatform;
 
-import org.bukkit.Material;
-
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -15,10 +13,6 @@ public interface PlatformWrapperFactory {
 	public NBTTagCompoundWrapper createNBTCompoundFromJson(String json);
 
 	public NBTTagCompoundWrapper createEmptyNBTCompound();
-
-	public ItemStackWrapper createNullItemStack();
-
-	public ItemStackWrapper createItemStack(Material material);
 
 	public ItemStackWrapper createItemStack(int typeId);
 

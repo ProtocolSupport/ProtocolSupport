@@ -39,7 +39,7 @@ public class ItemStackSerializer {
 			ItemStackWrapper itemstack = ServerPlatform.get().getWrapperFactory().createItemStack(type);
 			if (version == ProtocolVersion.MINECRAFT_PE) {
 				if(type == 0) { //Non or empty item stacks can also be 0 in PE.
-					return ServerPlatform.get().getWrapperFactory().createNullItemStack();
+					return ItemStackWrapper.NULL;
 				}
 				int amountdata = VarNumberSerializer.readSVarInt(from);
 				itemstack.setAmount(amountdata & 0x7F);
@@ -60,7 +60,7 @@ public class ItemStackSerializer {
 			}
 			return itemstack;
 		}
-		return ServerPlatform.get().getWrapperFactory().createNullItemStack();
+		return ItemStackWrapper.NULL;
 	}
 
 	public static void writeItemStack(ByteBuf to, ProtocolVersion version, String locale, ItemStackWrapper itemstack, boolean isToClient) {

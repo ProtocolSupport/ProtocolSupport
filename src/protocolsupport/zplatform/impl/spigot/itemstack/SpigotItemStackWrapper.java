@@ -17,10 +17,6 @@ public class SpigotItemStackWrapper extends ItemStackWrapper {
 		this.itemstack = itemstack;
 	}
 
-	public static ItemStackWrapper createNull() {
-		return new SpigotItemStackWrapper(ItemStack.a);
-	}
-
 	public static ItemStackWrapper create(int typeId) {
 		return new SpigotItemStackWrapper(new ItemStack(Item.getById(typeId)));
 	}
