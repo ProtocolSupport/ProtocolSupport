@@ -50,7 +50,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 		VarNumberSerializer.writeVarInt(serializer, windowId);
 		VarNumberSerializer.writeVarInt(serializer, slot);
 		ItemStackSerializer.writeItemStack(serializer, version, locale, itemstack, true);
-		System.out.println("setting slot " + slot + " to: " + itemstack.getType().toString());
+		System.out.println("setting slot " + slot + " to: " + (itemstack.isNull() ? "air/null" : itemstack.getType().toString()));
 		return serializer;
 	}
 
