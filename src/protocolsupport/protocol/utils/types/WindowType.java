@@ -7,24 +7,37 @@ import protocolsupport.utils.CollectionsUtils;
 
 public enum WindowType {
 
-	CHEST("minecraft:chest"),
-	CRAFTING_TABLE("minecraft:crafting_table"),
-	FURNACE("minecraft:furnace"),
-	DISPENSER("minecraft:dispenser"),
-	ENCHANT("minecraft:enchanting_table"),
-	BREWING("minecraft:brewing_stand"),
+	CHEST("minecraft:chest", 54, TileEntityType.CHEST),
+	CRAFTING_TABLE("minecraft:crafting_table", 58),
+	FURNACE("minecraft:furnace", 61, TileEntityType.FURNACE),
+	DISPENSER("minecraft:dispenser", 23, TileEntityType.DISPENSER),
+	ENCHANT("minecraft:enchanting_table", 116),
+	BREWING("minecraft:brewing_stand", 117, TileEntityType.BREWING_STAND),
 	VILLAGER("minecraft:villager"),
-	BEACON("minecraft:beacon"),
-	ANVIL("minecraft:anvil"),
-	HOPPER("minecraft:hopper"),
-	DROPPER("minecraft:dropper"),
-	SHULKER("minecraft:shulker_box"),
+	BEACON("minecraft:beacon", 138, TileEntityType.BEACON),
+	ANVIL("minecraft:anvil", 145),
+	HOPPER("minecraft:hopper", 154, TileEntityType.HOPPER),
+	DROPPER("minecraft:dropper", 158, TileEntityType.DROPPER),
+	SHULKER("minecraft:shulker_box", 219, TileEntityType.SHULKER_BOX),
 	HORSE("EntityHorse"),
 	PLAYER("_____FAKETYPE_PLAYER");
 
 	private final String id;
+	private final int containerId;
+	private final TileEntityType tileType;
+	
 	WindowType(String id) {
+		this(id, -1);
+	}
+	
+	WindowType(String id, int containerId) {
+		this(id, containerId, TileEntityType.UNKNOWN);
+	}
+	
+	WindowType(String id, int containerId, TileEntityType tileType) {
 		this.id = id;
+		this.containerId = containerId;
+		this.tileType = tileType;
 	}
 
 	private static final Map<String, WindowType> byId = CollectionsUtils.makeEnumMappingMap(WindowType.class, WindowType::getId);
@@ -42,6 +55,14 @@ public enum WindowType {
 
 	public String getId() {
 		return id;
+	}
+	
+	public TileEntityType getTileType() {
+		return tileType;
+	}
+	
+	public int getContainerId() {
+		return containerId;
 	}
 
 	public int toLegacyId() {

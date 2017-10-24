@@ -218,6 +218,11 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 	public Message createBlockBreakSoundPacket(Position pos, Material type) {
 		return null; // TODO: create a getStepSound() equivalent
 	}
+	
+	@Override
+	public Message createBlockUpdatePacket(Position pos, int block) {
+		return new BlockChangeMessage(pos.getX(), pos.getY(), pos.getZ(), block);
+	}
 
 	@Override
 	public Message createStatusPongPacket(long pingId) {

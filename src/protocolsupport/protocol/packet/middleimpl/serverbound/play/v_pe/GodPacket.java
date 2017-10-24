@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
-import org.bukkit.Material;
 import org.bukkit.util.Vector;
 
 import io.netty.buffer.ByteBuf;
@@ -50,6 +49,8 @@ import protocolsupport.zplatform.itemstack.ItemStackWrapper;
  */
 public class GodPacket extends ServerBoundMiddlePacket {
 	
+	//Transactions
+	protected InfTransaction[] transactions;
 	//Complex Actions
 	protected int actionId;
 	protected int subTypeId = -1;
@@ -76,9 +77,9 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		System.out.println("NEEWWW GODPACKET! Hooraayy it's a god packet. Don't we all reeeaaally love godpackets? I do. IDDOODD I REALLY DO LOVE THEM. THTHISS IS THE BEST DAY IN MY LIFE.");
 		actionId = VarNumberSerializer.readVarInt(clientdata);
 
-		int transactionLength = VarNumberSerializer.readVarInt(clientdata);
-		for(int i = 0; i < transactionLength; i++) {
-			cache.getInfTransactions().cacheTransaction(cache, InfTransaction.readFromStream(clientdata, cache.getLocale(), connection.getVersion()));
+		transactions = new InfTransaction[VarNumberSerializer.readVarInt(clientdata)];
+		for(int i = 0; i < transactions.length; i++) {
+			transactions[i] = InfTransaction.readFromStream(clientdata, cache.getLocale(), connection.getVersion());
 		}
 
 		switch(actionId) {
@@ -152,7 +153,6 @@ public class GodPacket extends ServerBoundMiddlePacket {
 					case USE_CLICK_AIR:
 						face = -1;
 					case USE_CLICK_BLOCK: {
-						cache.setClickedPosition(position);
 						packets.add(MiddleBlockPlace.create(position, face, 0, cX, cY, cZ));
 						break;
 					}
@@ -195,6 +195,9 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				break;
 			}
 			case ACTION_NORMAL: { //Normal inventory transaction.
+				for(InfTransaction transaction : transactions) {
+					cache.getInfTransactions().cacheTransaction(cache, transaction);
+				}
 				packets.addAll(cache.getInfTransactions().process(cache));
 				break;
 			}
@@ -310,25 +313,25 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				return;
 			}
 			
-			ItemStackWrapperKey oldItem = new ItemStackWrapperKey(transaction.getOldItem());
-			ItemStackWrapperKey newItem = new ItemStackWrapperKey(transaction.getNewItem());
-			if (oldItem.equals(newItem) && pcSlot != -1) {
+			ItemStackWrapperKey oldItemKey = new ItemStackWrapperKey(transaction.getOldItem());
+			ItemStackWrapperKey newItemKey = new ItemStackWrapperKey(transaction.getNewItem());
+			if (oldItemKey.equals(newItemKey) && pcSlot != -1) {
 				int money = transaction.getOldItem().getAmount() - transaction.getNewItem().getAmount();
 				if(money > 0) {
 					//If there's some money to spend, put it in the suitcase.
-					surplusDeque.put(oldItem, new SlotWrapperValue(pcSlot, transaction.getOldItem().getAmount(), money));
+					surplusDeque.put(oldItemKey, new SlotWrapperValue(pcSlot, transaction.getOldItem().getAmount(), money));
 				} else {
 					//Unless its the cursor (which is already in the system) add the debt.
-					deficitDeque.put(oldItem, new SlotWrapperValue(pcSlot, transaction.getOldItem().getAmount(), -money));	
+					deficitDeque.put(oldItemKey, new SlotWrapperValue(pcSlot, transaction.getOldItem().getAmount(), -money));	
 				}
 			} else {
-				if((transaction.getOldItem().getType() != Material.AIR) && (pcSlot != -1)) {
+				if((!transaction.getOldItem().isNull()) && (pcSlot != -1)) {
 					//Unless its the cursor (which is already in the system) add the debt.
-					surplusDeque.put(oldItem, new SlotWrapperValue(pcSlot, transaction.getOldItem().getAmount(), transaction.getOldItem().getAmount()));
+					surplusDeque.put(oldItemKey, new SlotWrapperValue(pcSlot, transaction.getOldItem().getAmount(), transaction.getOldItem().getAmount()));
 				}
-				if(transaction.getNewItem().getType() != Material.AIR) {
+				if(!transaction.getNewItem().isNull()) {
 					//If there's some money to spend, put it in the suitcase.
-					deficitDeque.put(newItem, new SlotWrapperValue(pcSlot, 0, transaction.getNewItem().getAmount()), pcSlot == -1);
+					deficitDeque.put(newItemKey, new SlotWrapperValue(pcSlot, 0, transaction.getNewItem().getAmount()), pcSlot == -1);
 				}
 			}
 			
@@ -486,14 +489,16 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	
 	protected static class ItemStackWrapperKey {
 		
-		private ItemStackWrapper keyItem;
+		private ItemStackWrapper keyItem = ItemStackWrapper.NULL;
 		private int hash = 0;
 		
 		public ItemStackWrapperKey(ItemStackWrapper keyItem) {
-			this.keyItem = keyItem;
-			hash = 41 * hash + keyItem.getTypeId();
-			hash = 41 * hash + keyItem.getData();
-			hash = 41 * hash + keyItem.getTag().hashCode();
+			if(!keyItem.isNull()) {
+				this.keyItem = keyItem;
+				hash = 41 * hash + keyItem.getTypeId();
+				hash = 41 * hash + keyItem.getData();
+				hash = 41 * hash + keyItem.getTag().hashCode();
+			}
 		}
 		
 		@Deprecated
@@ -516,6 +521,9 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		public boolean equals(Object o) {
 			if(o instanceof ItemStackWrapperKey) {
 				ItemStackWrapperKey wrapper = (ItemStackWrapperKey) o;
+				if(wrapper.getKeyItem().isNull() || this.getKeyItem().isNull()) {
+					return wrapper.getKeyItem().isNull() && this.getKeyItem().isNull();
+				}
 				return (wrapper.getKeyItem().getTypeId() == this.getKeyItem().getTypeId()) &&
 						(wrapper.getKeyItem().getData() == this.getKeyItem().getData()) &&
 						(wrapper.getKeyItem().getTag().toString().equals(this.getKeyItem().getTag().toString()));

@@ -42,6 +42,8 @@ public interface PlatformPacketFactory {
 	public Object createSetCompressionPacket(int threshold);
 
 	public Object createBlockBreakSoundPacket(Position pos, Material type);
+	
+	public Object createBlockUpdatePacket(Position pos, int block);
 
 	public Object createStatusPongPacket(long pingId);
 

@@ -16,7 +16,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		if(cache.isInventoryLocked()) {
+		if(cache.isInventoryLocked() || itemstack.isNull()) {
 			return RecyclableEmptyList.get();
 		}
 		ProtocolVersion version = connection.getVersion();
@@ -50,7 +50,6 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 		VarNumberSerializer.writeVarInt(serializer, windowId);
 		VarNumberSerializer.writeVarInt(serializer, slot);
 		ItemStackSerializer.writeItemStack(serializer, version, locale, itemstack, true);
-		System.out.println("setting slot " + slot + " to: " + itemstack.getType().toString());
 		return serializer;
 	}
 

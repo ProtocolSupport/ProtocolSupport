@@ -91,17 +91,6 @@ public class NetworkDataCache {
 		actionNumber = 0;
 	}
 
-	Position clickedPosition = new Position(0, 0, 0);
-
-	public void setClickedPosition(Position clickedPosition) {
-		this.clickedPosition = clickedPosition;
-	}
-
-	public Position getClickedPosition() {
-		return clickedPosition;
-	}
-
-
 	private final TIntObjectHashMap<NetworkEntity> watchedEntities = new TIntObjectHashMap<>();
 	private final TIntObjectHashMap<PreparedItem> preparedItems = new TIntObjectHashMap<>();
 	private final InfTransactions infTransactions = new InfTransactions();
@@ -361,6 +350,24 @@ public class NetworkDataCache {
 			return (x * 31) + z;
 		}
 	}
+	
+	ChunkCoord fakeInvCoords = null;
+	public Position prepareFakeInventoryCoords() {
+		if(!sentChunks.contains(fakeInvCoords)) {
+			fakeInvCoords = new ChunkCoord(-1, 31);
+			//fakeInvCoords = sentChunks.stream().findFirst().orElseThrow(RuntimeException::new);
+		}
+		return getFakeInventoryCoords();
+	}
+	
+	public Position getFakeInventoryCoords() {
+		if(!sentChunks.contains(fakeInvCoords)) {
+			return null;
+		}
+		return new Position((fakeInvCoords.x << 4), 0, (fakeInvCoords.z << 4));
+	}
+	
+	
 
 	private GameMode gamemode = GameMode.SURVIVAL;
 	private boolean canFly = false;

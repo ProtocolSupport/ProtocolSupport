@@ -164,7 +164,7 @@ public class ItemStackSerializer {
 						to.writeShortLE(0);
 					}
 					//actual nbt
-					NBTTagCompoundSerializer.writePeTag(to, varint, tag); //TODO Remap PE NBT?
+					NBTTagCompoundSerializer.writePeTag(to, varint, tag);
 					//now replace fake length with real length
 					if (!varint) {
 						to.setShortLE(writerIndex, to.writerIndex() - writerIndex - Short.BYTES);
