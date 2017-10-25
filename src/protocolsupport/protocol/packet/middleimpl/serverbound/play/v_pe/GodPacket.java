@@ -497,7 +497,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				this.keyItem = keyItem;
 				hash = 41 * hash + keyItem.getTypeId();
 				hash = 41 * hash + keyItem.getData();
-				hash = 41 * hash + keyItem.getTag().hashCode();
+				hash = 41 * hash + keyItem.getTag().toString().hashCode();
 			}
 		}
 		
@@ -573,9 +573,6 @@ public class GodPacket extends ServerBoundMiddlePacket {
 						return -666;
 					}
 				}
-			}
-			case CRAFTING_TABLE: {
-				return invSlotToContainerSlot(peInventoryId, 10, peSlot);
 			}
 			default: {
 				return invSlotToContainerSlot(peInventoryId, cache.getOpenedWindowSlots(), peSlot);
