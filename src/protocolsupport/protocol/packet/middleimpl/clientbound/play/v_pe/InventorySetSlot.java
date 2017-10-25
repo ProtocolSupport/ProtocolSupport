@@ -16,7 +16,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		if(cache.isInventoryLocked() || itemstack.isNull()) {
+		if(cache.isInventoryLocked()) {
 			return RecyclableEmptyList.get();
 		}
 		ProtocolVersion version = connection.getVersion();
@@ -26,7 +26,12 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 				if (slot == 0) {
 					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_CRAFTING_RESULT, 0, itemstack));
 				} else if (slot <= 4) {
-					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_CRAFTING_GRID_ADD, slot - 1, itemstack));
+					//TODO: Test?
+					if(itemstack.isNull()) {
+						return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_CRAFTING_GRID_REMOVE, slot - 1, itemstack));
+					} else {
+						return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_CRAFTING_GRID_ADD, slot - 1, itemstack));
+					}
 				} else if (slot <= 8) {
 					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_ARMOR_EQUIPMENT, slot - 5, itemstack));
 				} else if (slot <= 35) {
@@ -39,6 +44,15 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 				break;
 			}
 			default: {
+				int wSlots = cache.getOpenedWindowSlots();
+				if(slot > wSlots) {
+					slot -= wSlots;
+					if(slot >= 27) {
+						return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_INVENTORY, slot - 27, itemstack));
+					} else {
+						return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_INVENTORY, slot + 9, itemstack));
+					}
+				}
 				return RecyclableSingletonList.create(create(version, locale, windowId, slot, itemstack));
 			}
 		}
