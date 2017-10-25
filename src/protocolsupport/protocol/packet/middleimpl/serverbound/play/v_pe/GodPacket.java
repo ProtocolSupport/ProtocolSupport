@@ -522,7 +522,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			if(o instanceof ItemStackWrapperKey) {
 				ItemStackWrapperKey wrapper = (ItemStackWrapperKey) o;
 				if(wrapper.getKeyItem().isNull() || this.getKeyItem().isNull()) {
-					return wrapper.getKeyItem().isNull() && this.getKeyItem().isNull();
+					return false;
 				}
 				return (wrapper.getKeyItem().getTypeId() == this.getKeyItem().getTypeId()) &&
 						(wrapper.getKeyItem().getData() == this.getKeyItem().getData()) &&

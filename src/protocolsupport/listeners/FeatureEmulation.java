@@ -1,6 +1,7 @@
 package protocolsupport.listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,6 +11,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
@@ -20,7 +22,9 @@ import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.tab.TabAPI;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventoryOpen;
 import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.zplatform.ServerPlatform;
 
 public class FeatureEmulation implements Listener {
@@ -65,6 +69,44 @@ public class FeatureEmulation implements Listener {
 					) {
 						connection.sendPacket(ServerPlatform.get().getPacketFactory().createEntityStatusPacket(event.getEntity(), 2));
 					}
+				}
+			}
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onInventoryOpen(InventoryOpenEvent event) {
+		if(event.getPlayer() instanceof Player) {
+			Player player = (Player) event.getPlayer();
+			Connection connection = ProtocolSupportAPI.getConnection(player);
+			if (
+				(connection != null) &&
+				(connection.getVersion().getProtocolType() == ProtocolType.PE)
+			) {
+				Location mainLoc = player.getLocation();
+				if ((!player.isOnGround()) || (mainLoc.getBlockY() < 4)) {
+					mainLoc.add(0, 6, 0);
+				}
+				connection.addMetadata("fakeInvBlocks", new Block[] {
+						mainLoc.subtract(1, 2, 0).getBlock(), 
+						mainLoc.add(1, 0, 0).getBlock()
+					});
+				if (event.getInventory().getSize() > 27) {
+					Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), new Runnable() {
+						@Override
+						public void run() {
+							if (connection.hasMetadata("smuggledWindowId")) {
+								InventoryOpen.sendInventory(connection, 
+									(int) connection.getMetadata("smuggledWindowId"),
+									WindowType.CHEST, 
+									Position.fromBukkit(mainLoc),
+									-1
+								);
+								connection.removeMetadata("smuggledWindowId");
+								player.updateInventory();
+							}
+						}
+					}, 2);
 				}
 			}
 		}

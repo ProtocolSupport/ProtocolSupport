@@ -1,5 +1,7 @@
 package protocolsupport.protocol.utils.types;
 
+import org.bukkit.Location;
+
 import protocolsupport.utils.Utils;
 
 public class Position {
@@ -32,6 +34,10 @@ public class Position {
 
 	public static Position fromLong(long n) {
 		return new Position((int) (n >> 38), (int) ((n >> 26) & 0xFFF), (int) ((n << 38) >> 38));
+	}
+	
+	public static Position fromBukkit(Location location) {
+		return new Position(location.getBlockX(), location.getBlockY(), location.getBlockZ());
 	}
 
 	public void modifyX(int cnt) {

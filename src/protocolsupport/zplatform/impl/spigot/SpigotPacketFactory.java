@@ -158,7 +158,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 		}
 		return packet;
 	}
-
+	
 	@Override
 	public Object createStatusPongPacket(long pingId) {
 		return new PacketStatusOutPong(pingId);
