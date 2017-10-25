@@ -35,7 +35,34 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 			connection.receivePacket(ServerPlatform.get().getPacketFactory().createInboundInventoryClosePacket());
 			return false;
 		} else {
-			cache.setOpenedWindow(type, windowId, slots);
+			int cacheSlots;
+			switch(type) {
+				case ANVIL: {
+					cacheSlots = 3;
+					break;
+				}
+				case BEACON: {
+					cacheSlots = 1;
+					break;
+				}
+				case BREWING: {
+					cacheSlots = 5;
+					break;
+				}
+				case CRAFTING_TABLE: {
+					cacheSlots = 10;
+					break;
+				}
+				case ENCHANT: {
+					cacheSlots = 2;
+					break;
+				}
+				default: {
+					cacheSlots = slots;
+					break;
+				}
+			}
+			cache.setOpenedWindow(type, windowId, cacheSlots);
 			return true;
 		}
 	}
