@@ -20,6 +20,7 @@ import protocolsupport.protocol.typeremapper.itemstack.toclient.EnchantFilterNBT
 import protocolsupport.protocol.typeremapper.itemstack.toclient.EnchantToPEEnchantSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.FireworkToPETagSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.ItemIdToPEIdSpecificRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.toclient.LeatherArmorToPESpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.MapItemLegacyIdToNbtSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.MonsterEggToLegacyIdSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.MonsterEggToLegacyNameSpecificRemapper;
@@ -260,6 +261,11 @@ public class ItemStackRemapper {
 		registerToClientRemapper(Material.WRITTEN_BOOK, new BookPagesToPESpecificRemapper(), ProtocolVersion.MINECRAFT_PE);
 		registerToClientRemapper(Material.FIREWORK_CHARGE, new FireworkToPETagSpecificRemapper(), ProtocolVersion.MINECRAFT_PE);
 		registerToClientRemapper(Material.FIREWORK, new FireworkToPETagSpecificRemapper(), ProtocolVersion.MINECRAFT_PE);
+		LeatherArmorToPESpecificRemapper peleatherarmor = new LeatherArmorToPESpecificRemapper();
+		registerToClientRemapper(Material.LEATHER_HELMET, peleatherarmor, ProtocolVersion.MINECRAFT_PE);
+		registerToClientRemapper(Material.LEATHER_CHESTPLATE, peleatherarmor, ProtocolVersion.MINECRAFT_PE);
+		registerToClientRemapper(Material.LEATHER_LEGGINGS, peleatherarmor, ProtocolVersion.MINECRAFT_PE);
+		registerToClientRemapper(Material.LEATHER_BOOTS, peleatherarmor, ProtocolVersion.MINECRAFT_PE);
 		EnchantFilterNBTSpecificRemapper enchantfilter = new EnchantFilterNBTSpecificRemapper();
 		Arrays.stream(Material.values()).forEach(material -> {
 			registerToClientRemapper(material, enchantfilter, ProtocolVersionsHelper.ALL_PC);
