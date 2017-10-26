@@ -1,5 +1,8 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.util.Vector;
 
 import io.netty.buffer.ByteBuf;
@@ -10,6 +13,7 @@ import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockPlace;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCreativeSetSlot;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleHeldSlot;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClick;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryTransaction;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUseEntity;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
@@ -288,7 +292,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	public static class InfTransactions {
 		ArrayDequeMultiMap<ItemStackWrapperKey, SlotWrapperValue> surplusDeque = new ArrayDequeMultiMap<>();
 		ArrayDequeMultiMap<ItemStackWrapperKey, SlotWrapperValue> deficitDeque = new ArrayDequeMultiMap<>();
-		RecyclableArrayList<ServerBoundPacketData> misc =  RecyclableArrayList.create();
+		List<ServerBoundPacketData> misc = new ArrayList<>();
 		
 		public void clear() {
 			surplusDeque.clear();
@@ -318,18 +322,22 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			if (oldItemKey.equals(newItemKey) && pcSlot != -1) {
 				int money = transaction.getOldItem().getAmount() - transaction.getNewItem().getAmount();
 				if(money > 0) {
+					bug("CACHING SURPLUS C - " + oldItemKey.toString() + " - " + money);
 					//If there's some money to spend, put it in the suitcase.
 					surplusDeque.put(oldItemKey, new SlotWrapperValue(pcSlot, transaction.getOldItem().getAmount(), money));
 				} else {
+					bug("CACHING DEFICIT C - " + oldItemKey.toString() + " - " + money);
 					//Unless its the cursor (which is already in the system) add the debt.
-					deficitDeque.put(oldItemKey, new SlotWrapperValue(pcSlot, transaction.getOldItem().getAmount(), -money));	
+					deficitDeque.put(newItemKey, new SlotWrapperValue(pcSlot, transaction.getOldItem().getAmount(), -money));	
 				}
 			} else {
 				if((!transaction.getOldItem().isNull()) && (pcSlot != -1)) {
+					bug("CACHING SURPLUS N - " + oldItemKey.toString() + " - " + transaction.getOldItem().getAmount());
 					//Unless its the cursor (which is already in the system) add the debt.
 					surplusDeque.put(oldItemKey, new SlotWrapperValue(pcSlot, transaction.getOldItem().getAmount(), transaction.getOldItem().getAmount()));
 				}
 				if(!transaction.getNewItem().isNull()) {
+					bug("CACHING DEFICIT N - " + newItemKey.toString() + " - " + transaction.getNewItem().getAmount());
 					//If there's some money to spend, put it in the suitcase.
 					deficitDeque.put(newItemKey, new SlotWrapperValue(pcSlot, 0, transaction.getNewItem().getAmount()), pcSlot == -1);
 				}
@@ -347,7 +355,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			//Send misc data. (Creative inventory, anvils, etc)
 			if(!misc.isEmpty()) {
 				packets.addAll(misc);
-				misc.recycle();
+				misc.clear();
 			}
 			
 			//Match surpluses with defcitis.
@@ -362,28 +370,28 @@ public class GodPacket extends ServerBoundMiddlePacket {
 								int toPay = deficit.amount() < surplus.amount() ? deficit.amount() : surplus.amount();
 								if (!surplus.isCursor()) {
 									//Unless the surplus is already in the cursor, we need to get it.
-									packets.add(Click.LEFT.create(cache, surplus.slot(), item.get(surplus.slotAmount())));
+									packets.addAll(Click.LEFT.create(cache, surplus.slot(), item.get(surplus.slotAmount())));
 								}
 								if (deficit.isCursor() && !surplus.isCursor()) {
 									if (deficit.hasStack()) {
 										//We already had contents in the cursor, so just one left click won't cut it.
-										packets.add(Click.LEFT.create(cache, surplus.slot(), item.get(surplus.slotAmount() + deficit.slotAmount())));
+										packets.addAll(Click.LEFT.create(cache, surplus.slot(), item.get(surplus.slotAmount() + deficit.slotAmount())));
 									}
 									//Put back the items from the cursor that we don't want.
 									for (int i = 0; i < (surplus.slotAmount() - toPay); i++) {
-										packets.add(Click.RIGHT.create(cache, surplus.slot(), (i == 0) ? AIR : item.get(i)));
+										packets.addAll(Click.RIGHT.create(cache, surplus.slot(), (i == 0) ? AIR : item.get(i)));
 									}
 								} else if (!deficit.isCursor()){
 									if (deficit.amount() == surplus.slotAmount()) {
 										if (!((surplus.isCursor()) && (surplusDeque.getVeryLast() != null) && (deficit.slot() == surplusDeque.getVeryLast().slot()))) {
 											//Unless we're swapping (then only one left click is send on next deficit), we can payout the stack in full (left-click)
-											packets.add(Click.LEFT.create(cache, deficit.slot(), (!deficit.hasStack()) ? AIR : item.get(deficit.slotAmount())));
+											packets.addAll(Click.LEFT.create(cache, deficit.slot(), (!deficit.hasStack()) ? AIR : item.get(deficit.slotAmount())));
 										} else {
 										}
 									} else {
 										//We need to pay what we need to pay.
 										for (int i = 0; i < toPay; i++) {
-											packets.add(Click.RIGHT.create(cache, deficit.slot(), ((deficit.slotAmount() + i) == 0) ? AIR : item.get(deficit.slotAmount() + i)));
+											packets.addAll(Click.RIGHT.create(cache, deficit.slot(), ((deficit.slotAmount() + i) == 0) ? AIR : item.get(deficit.slotAmount() + i)));
 										}
 									}
 								}
@@ -392,7 +400,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 								deficit.receive(toPay);
 								//Last but not least, put back our access surplus and or containing stack.
 								if(!surplus.isCursor() && !deficit.isCursor() && surplus.hasStack()) {
-									packets.add(Click.LEFT.create(cache, surplus.slot(), AIR));
+									packets.addAll(Click.LEFT.create(cache, surplus.slot(), AIR));
 								}
 								return surplus.isEmpty();
 							});
@@ -497,7 +505,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				this.keyItem = keyItem;
 				hash = 41 * hash + keyItem.getTypeId();
 				hash = 41 * hash + keyItem.getData();
-				hash = 41 * hash + keyItem.getTag().toString().hashCode();
+				hash = 41 * hash + keyItem.getTag().hashCode();
 			}
 		}
 		
@@ -518,15 +526,16 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		}
 		
 		@Override
-		public boolean equals(Object o) {
-			if(o instanceof ItemStackWrapperKey) {
-				ItemStackWrapperKey wrapper = (ItemStackWrapperKey) o;
+		public boolean equals(Object object) {
+			if(object instanceof ItemStackWrapperKey) {
+				ItemStackWrapperKey wrapper = (ItemStackWrapperKey) object;
 				if(wrapper.getKeyItem().isNull() || this.getKeyItem().isNull()) {
 					return false;
 				}
-				return (wrapper.getKeyItem().getTypeId() == this.getKeyItem().getTypeId()) &&
+				return 
+						(wrapper.getKeyItem().getTypeId() == this.getKeyItem().getTypeId()) &&
 						(wrapper.getKeyItem().getData() == this.getKeyItem().getData()) &&
-						(wrapper.getKeyItem().getTag().toString().equals(this.getKeyItem().getTag().toString()));
+						(wrapper.getKeyItem().getTag().equals(this.getKeyItem().getTag()));
 			}
 			return false;
 			
@@ -574,6 +583,16 @@ public class GodPacket extends ServerBoundMiddlePacket {
 					}
 				}
 			}
+			case BREWING: {
+				if(peInventoryId != PESource.POCKET_INVENTORY) {
+					if(peSlot == 0) {
+						return 3;
+					} else if (peSlot >= 1 && peSlot <= 3) {
+						return peSlot - 1;
+					}
+				}
+				return invSlotToContainerSlot(peInventoryId, 5, peSlot);
+			}
 			default: {
 				return invSlotToContainerSlot(peInventoryId, cache.getOpenedWindowSlots(), peSlot);
 			}
@@ -613,8 +632,14 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			this.button = button;
 		}
 		
-		public ServerBoundPacketData create(NetworkDataCache cache, int slot, ItemStackWrapper item) {
-			return MiddleInventoryClick.create(cache.getLocale(), cache.getOpenedWindowId(), slot, button, cache.getActionNumber(), mode, item);
+		public RecyclableArrayList<ServerBoundPacketData> create(NetworkDataCache cache, int slot, ItemStackWrapper item) {
+			RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
+			int actionNumber = cache.getActionNumber();
+			packets.add(MiddleInventoryClick.create(cache.getLocale(), cache.getOpenedWindowId(), slot, button, actionNumber, mode, item));
+			if(item.getTag() != null && !item.getTag().isNull()) {
+				packets.add(MiddleInventoryTransaction.create(cache.getOpenedWindowId(), actionNumber, false));
+			}
+			return packets;
 		}
 		
 	}
