@@ -20,6 +20,7 @@ import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.ItemStackWriteEvent;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
+import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.utils.NBTTagCompoundSerializer;
 import protocolsupport.utils.IntTuple;
 import protocolsupport.zplatform.ServerPlatform;
@@ -42,8 +43,16 @@ public class ItemStackSerializer {
 					return ItemStackWrapper.NULL;
 				}
 				int amountdata = VarNumberSerializer.readSVarInt(from);
+				int data = (amountdata >> 8) & 0xFFFF;
 				itemstack.setAmount(amountdata & 0x7F);
-				itemstack.setData((amountdata >> 8) & 0xFFFF);
+				itemstack.setData(data);
+				IntTuple itemAndData = PEDataValues.PE_ITEM_ID.getRemap(type, data);
+				if (itemAndData != null) {
+					itemstack.setTypeId(itemAndData.getI1());
+					if (itemAndData.getI2() != -1) {
+						itemstack.setData(itemAndData.getI2());
+					}
+				}
 				itemstack.setTag(readTag(from, false, version));
 				//TODO: Read the rest properly..
 				from.readByte();
