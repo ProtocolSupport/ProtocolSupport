@@ -240,7 +240,6 @@ public class PEDataValues {
 		registerItemRemap(443, 444); // ELYTRA
 		registerItemRemap(449, 450); // TOTEM
 		registerItemRemap(450, 445); // SHULKER_SHELL
-		registerItemRemap(322, 1, 466, 0); // Enchanted Golden Apple
 		registerItemRemap(444, 333, 1); // Spruce Boat
 		registerItemRemap(445, 333, 2); // Birch Boat
 		registerItemRemap(446, 333, 3); // Jungle Boat
