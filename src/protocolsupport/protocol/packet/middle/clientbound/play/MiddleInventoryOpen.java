@@ -45,10 +45,6 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 					cacheSlots = 1;
 					break;
 				}
-				case BREWING: {
-					cacheSlots = 5;
-					break;
-				}
 				case CRAFTING_TABLE: {
 					cacheSlots = 10;
 					break;

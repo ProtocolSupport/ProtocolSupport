@@ -97,6 +97,24 @@ public class ArrayDequeMultiMap<K, V> {
 	}
 	
 	/**
+	 * Removes the very first element.
+	 */
+	public void removeVeryFirst() {
+		if(map.peekFirst() != null) {
+			map.getFirst().getValue().removeFirst();
+		}
+	}
+	
+	/**
+	 * Removes the very last element.
+	 */
+	public void removeVeryLast() {
+		if(map.peekLast() != null) {
+			map.getLast().getValue().removeLast();
+		}
+	}
+	
+	/**
 	 * Get's the entries belonging to the key.
 	 * @param key
 	 * @return

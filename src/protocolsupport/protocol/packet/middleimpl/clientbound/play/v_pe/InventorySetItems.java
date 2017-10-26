@@ -30,12 +30,12 @@ public class InventorySetItems extends MiddleInventorySetItems {
 				ItemStackWrapper[] peArmor = new ItemStackWrapper[4];
 				ItemStackWrapper[] peInventory = new ItemStackWrapper[36];
 				ItemStackWrapper[] peOffhand = new ItemStackWrapper[1];
-				System.arraycopy(items, 0, peInvGridResult, 0, 1);
-				System.arraycopy(items, 1, peInvGrid, 0, 4);
-				System.arraycopy(items, 5, peArmor, 0, 4);
-				System.arraycopy(items, 36, peInventory, 0, 9);
-				System.arraycopy(items, 9, peInventory, 9, 27);
-				System.arraycopy(items, 45, peOffhand, 0, 1);
+				System.arraycopy(items,  0, peInvGridResult, 0 , 1);
+				System.arraycopy(items,  1, peInvGrid, 		 0,  4);
+				System.arraycopy(items,  5, peArmor, 		 0,  4);
+				System.arraycopy(items, 36, peInventory, 	 0,  9);
+				System.arraycopy(items,  9, peInventory, 	 9, 27);
+				System.arraycopy(items, 45, peOffhand, 		 0,  1);
 				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_CRAFTING_RESULT, peInvGridResult));
 				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_CRAFTING_GRID_ADD, peInvGrid));
 				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_ARMOR_EQUIPMENT, peArmor));
@@ -43,9 +43,26 @@ public class InventorySetItems extends MiddleInventorySetItems {
 				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_OFFHAND, peOffhand));
 				break;
 			}
+			case BREWING: {
+				ItemStackWrapper[] brewingSlots = new ItemStackWrapper[5];
+				ItemStackWrapper[] peInventory = new ItemStackWrapper[36];
+				System.arraycopy(items,  0, brewingSlots, 1,  3);
+				System.arraycopy(items,  3, brewingSlots, 0,  1);
+				System.arraycopy(items,  4, brewingSlots, 4,  1);
+				System.arraycopy(items, 32, peInventory,  0,  9);
+				System.arraycopy(items,  5, peInventory,  9, 27);
+				contentpackets.add(InventorySetItems.create(version, locale, windowId, brewingSlots));
+				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_INVENTORY, peInventory));
+				break;
+			}
 			default: {
 				int wSlots = cache.getOpenedWindowSlots();
-				ItemStackWrapper[] windowSlots = new ItemStackWrapper[wSlots];
+				int peWSlots = wSlots;
+				if(wSlots > 16) { 
+					wSlots = wSlots / 9 * 9;
+					peWSlots = wSlots > 27 ? 54 : 27; //PE only has doublechest or single chest interface for high slots.
+				}
+				ItemStackWrapper[] windowSlots = new ItemStackWrapper[peWSlots];
 				ItemStackWrapper[] peInventory = new ItemStackWrapper[36];
 				System.arraycopy(items, 0, windowSlots, 0, wSlots);
 				System.arraycopy(items, wSlots + 27, peInventory, 0, 9);

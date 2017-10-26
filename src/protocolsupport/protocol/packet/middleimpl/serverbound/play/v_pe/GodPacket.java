@@ -290,14 +290,20 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	}
 	
 	public static class InfTransactions {
-		ArrayDequeMultiMap<ItemStackWrapperKey, SlotWrapperValue> surplusDeque = new ArrayDequeMultiMap<>();
-		ArrayDequeMultiMap<ItemStackWrapperKey, SlotWrapperValue> deficitDeque = new ArrayDequeMultiMap<>();
-		List<ServerBoundPacketData> misc = new ArrayList<>();
+		private ArrayDequeMultiMap<ItemStackWrapperKey, SlotWrapperValue> surplusDeque = new ArrayDequeMultiMap<>();
+		private ArrayDequeMultiMap<ItemStackWrapperKey, SlotWrapperValue> deficitDeque = new ArrayDequeMultiMap<>();
+		private List<ServerBoundPacketData> misc = new ArrayList<>();
 		
 		public void clear() {
 			surplusDeque.clear();
 			deficitDeque.clear();
 			misc.clear();
+		}
+		
+		public void customCursorSurplus(ItemStackWrapper itemstack) {
+			if(!itemstack.isNull()) {
+				surplusDeque.put(new ItemStackWrapperKey(itemstack), new SlotWrapperValue(-1, itemstack.getAmount(), itemstack.getAmount()));
+			}
 		}
 		
 		public void cacheTransaction(NetworkDataCache cache, InfTransaction transaction) {
@@ -584,7 +590,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				}
 			}
 			case BREWING: {
-				if(peInventoryId != PESource.POCKET_INVENTORY) {
+				if(peInventoryId == cache.getOpenedWindowId()) {
 					if(peSlot == 0) {
 						return 3;
 					} else if (peSlot >= 1 && peSlot <= 3) {
@@ -594,7 +600,9 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				return invSlotToContainerSlot(peInventoryId, 5, peSlot);
 			}
 			default: {
-				return invSlotToContainerSlot(peInventoryId, cache.getOpenedWindowSlots(), peSlot);
+				int wSlots = cache.getOpenedWindowSlots();
+				if(wSlots > 16) { wSlots = wSlots / 9 * 9; }
+				return invSlotToContainerSlot(peInventoryId, wSlots, peSlot);
 			}
 		}
 	}

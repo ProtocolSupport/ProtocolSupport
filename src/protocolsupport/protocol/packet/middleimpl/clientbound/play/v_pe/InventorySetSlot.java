@@ -16,7 +16,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		if(cache.isInventoryLocked()) {
+		if (cache.isInventoryLocked()) {
 			return RecyclableEmptyList.get();
 		}
 		ProtocolVersion version = connection.getVersion();
@@ -27,7 +27,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_CRAFTING_RESULT, 0, itemstack));
 				} else if (slot <= 4) {
 					//TODO: Test?
-					if(itemstack.isNull()) {
+					if (itemstack.isNull()) {
 						return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_CRAFTING_GRID_REMOVE, slot - 1, itemstack));
 					} else {
 						return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_CRAFTING_GRID_ADD, slot - 1, itemstack));
@@ -43,11 +43,29 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 				}
 				break;
 			}
+			case BREWING: {
+				if (slot == 3) {
+					slot = 0;
+				} else if (slot <= 2) {
+					slot += 1;
+				} else if (slot > 4) {
+					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_INVENTORY, (slot >= 32 ? slot - 32 : slot + 4), itemstack));
+				}
+				return RecyclableSingletonList.create(create(version, locale, windowId, slot, itemstack));
+			}
 			default: {
 				int wSlots = cache.getOpenedWindowSlots();
-				if(slot > wSlots) {
+				//Makes malformated inventory slot amounts to work. (Essentials's /invsee for example)
+				if(wSlots > 16) { wSlots = wSlots / 9 * 9; }
+				if (slot == -1) {
+					//Cursor slot can be set by plugin (only if a window is actually open), this will cause issues however with the deficit/surplus stack so we add them manually here.
+					cache.getInfTransactions().clear();
+					cache.getInfTransactions().customCursorSurplus(itemstack);
+					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_CLICKED_SLOT, 0, itemstack));
+				}
+				if (slot > wSlots) {
 					slot -= wSlots;
-					if(slot >= 27) {
+					if (slot >= 27) {
 						return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_INVENTORY, slot - 27, itemstack));
 					} else {
 						return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_INVENTORY, slot + 9, itemstack));

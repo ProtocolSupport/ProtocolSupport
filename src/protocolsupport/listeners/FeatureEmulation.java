@@ -91,7 +91,7 @@ public class FeatureEmulation implements Listener {
 						mainLoc.subtract(1, 2, 0).getBlock(), 
 						mainLoc.add(1, 0, 0).getBlock()
 					});
-				if (event.getInventory().getSize() > 27) {
+				if (event.getView().getTopInventory().getSize() > 27) {
 					Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), new Runnable() {
 						@Override
 						public void run() {
@@ -112,7 +112,7 @@ public class FeatureEmulation implements Listener {
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
 	public void onInventoryClick(InventoryClickEvent event) {
 		if(event.getWhoClicked() instanceof Player) {
 			Player clicker = (Player) event.getWhoClicked();
@@ -129,7 +129,8 @@ public class FeatureEmulation implements Listener {
 				Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), new Runnable() {
 					@Override
 					public void run() {
-						clicker.updateInventory();	
+						clicker.updateInventory();
+						clicker.setItemOnCursor(event.getCursor());
 					}
 				}, 10);
 			}
