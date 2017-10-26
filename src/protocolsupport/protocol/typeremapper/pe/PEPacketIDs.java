@@ -7,6 +7,7 @@ public class PEPacketIDs {
 	public static final int DISCONNECT = 5;
 	public static final int RESOURCE_PACK = 6;
 	public static final int RESOURCE_STACK = 7;
+	public static final int RESOURCE_RESPONSE = 8;
 	public static final int CHAT = 9;
 	public static final int UPDATE_TIME = 10;
 	public static final int START_GAME = 11;
@@ -70,6 +71,9 @@ public class PEPacketIDs {
 	//public static final int COMMAND_BLOCK_UPDATE = 78;
 	//public static final int TRADE_UPDATE = 80;
 	//public static final int EQUIPMENT = 81;
+	public static final int RESOURCE_INFO = 82;
+	public static final int RESOURCE_DATA = 83;
+	public static final int RESOURCE_REQUEST = 84;
 	//public static final int TRANSFER = 85;
 	public static final int PLAY_SOUND = 86;
 	//public static final int STOP_SOUND = 87;
