@@ -131,6 +131,26 @@ public class ArrayDequeMultiMap<K, V> {
 	}
 	
 	/***
+	 * @return the first key in the map.
+	 */
+	public K getFirstKey() {
+		if(map.peekFirst() == null) {
+			return null;
+		}
+		return map.getFirst().getKey();
+	}
+	
+	/***
+	 * @return the last key in the map.
+	 */
+	public K getLastKey() {
+		if(map.peekLast() == null) {
+			return null;
+		}
+		return map.getLast().getKey();
+	}
+	
+	/***
 	 * @return the very first entry of the multimap, null if none exists.
 	 */
 	public V getVeryFirst() {

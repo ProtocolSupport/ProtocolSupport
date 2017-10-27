@@ -301,7 +301,11 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		}
 		
 		public void customCursorSurplus(ItemStackWrapper itemstack) {
-			if(!itemstack.isNull()) {
+			if(
+				(!itemstack.isNull()) && 
+				(!(surplusDeque.getFirstKey().getKeyItem().getType() == itemstack.getType() && surplusDeque.getFirstKey().getKeyItem().getData() == itemstack.getData()))
+			) {
+				clear();
 				surplusDeque.put(new ItemStackWrapperKey(itemstack), new SlotWrapperValue(-1, itemstack.getAmount(), itemstack.getAmount()));
 			}
 		}
@@ -645,6 +649,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			int actionNumber = cache.getActionNumber();
 			packets.add(MiddleInventoryClick.create(cache.getLocale(), cache.getOpenedWindowId(), slot, button, actionNumber, mode, item));
 			if(item.getTag() != null && !item.getTag().isNull()) {
+				System.out.println("My apologies??!!?!?!");
 				packets.add(MiddleInventoryTransaction.create(cache.getOpenedWindowId(), actionNumber, false));
 			}
 			return packets;
