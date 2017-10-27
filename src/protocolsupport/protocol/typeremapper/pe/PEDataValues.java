@@ -124,14 +124,18 @@ public class PEDataValues {
 	}
 
 	public static final RemappingTable.ComplexIdRemappingTable ITEM_ID = new RemappingTable.ComplexIdRemappingTable();
+	public static final RemappingTable.ComplexIdRemappingTable PE_ITEM_ID = new RemappingTable.ComplexIdRemappingTable();
 	private static void registerItemRemap(int from, int to) {
 		ITEM_ID.setSingleRemap(from, to, -1);
+		PE_ITEM_ID.setSingleRemap(to, from, -1);
 	}
 	private static void registerItemRemap(int from, int to, int dataTo) {
 		ITEM_ID.setSingleRemap(from, to, dataTo);
+		PE_ITEM_ID.setSingleRemap(to, from, dataTo);
 	}
 	private static void registerItemRemap(int from, int dataFrom, int to, int dataTo) {
 		ITEM_ID.setComplexRemap(from, dataFrom, to, dataTo);
+		PE_ITEM_ID.setComplexRemap(to, dataTo, from, dataFrom);
 	}
 
 	private static void registerBlockAndItemRemap(int from, int to) {
