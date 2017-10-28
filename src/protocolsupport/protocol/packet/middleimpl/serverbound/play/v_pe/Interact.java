@@ -4,6 +4,7 @@ import org.bukkit.util.Vector;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSteerVehicle;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUseEntity;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
@@ -23,41 +24,31 @@ public class Interact extends ServerBoundMiddlePacket {
 	public void readFromClientData(ByteBuf clientdata) {
 		peAction = clientdata.readUnsignedByte();
 		targetId = (int) VarNumberSerializer.readVarLong(clientdata);
-		interactAt = new Vector(MiscSerializer.readLFloat(clientdata), MiscSerializer.readLFloat(clientdata), MiscSerializer.readLFloat(clientdata));
+		if (peAction == MOUSE_OVER) {
+			interactAt = new Vector(MiscSerializer.readLFloat(clientdata), MiscSerializer.readLFloat(clientdata), MiscSerializer.readLFloat(clientdata));
+		}
 	}
 
-	private static final int INTERACT = 1;
-	private static final int ATTACK = 2;
 	private static final int LEAVE_VEHICLE = 3;
-	private static final int HOVER = 4;
+	private static final int MOUSE_OVER = 4;
+	private static final int OPEN_INVENTORY = 6;
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 		NetworkEntity target = cache.getWatchedEntity(targetId);
 		switch (peAction) {
-			case INTERACT: {
-				if ((target != null) && (target.getType() != NetworkEntityType.ARMOR_STAND)) {
-					//Packet for old plugins that use EntityInteract instead of EntityInteractAt event. Send for all entities except armorstands.
-					packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT, null, 0));
-				}
-				packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT_AT, interactAt, 0)); //Send for all entities.
-				break;
-			}
-			case ATTACK: {
-				packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.ATTACK, null, 0));
-				break;
-			}
 			case LEAVE_VEHICLE: {
-				// packets.add(MiddleEntityAction.create(cache.getSelfPlayerEntityId(),
-				// 0, 0)); //TODO: Exit vehicle by sneaking.
+				packets.add(MiddleSteerVehicle.create(0, 0, 0x2)); // 0x2 = unmount vehicle
 				break;
 			}
-			case HOVER: {
+			case MOUSE_OVER: {
+				break;
+			}
+			case OPEN_INVENTORY: {
 				break;
 			}
 		}
 		return packets;
 	}
-
 }

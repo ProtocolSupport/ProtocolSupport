@@ -14,11 +14,14 @@ public abstract class MiddleSteerVehicle extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
+		return RecyclableSingletonList.create(create(sideForce, forwardForce, flags));
+	}
+
+	public static ServerBoundPacketData create(float sideForce, float forwardForce, int flags) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_STEER_VEHICLE);
 		creator.writeFloat(sideForce);
 		creator.writeFloat(forwardForce);
 		creator.writeByte(flags);
-		return RecyclableSingletonList.create(creator);
+		return creator;
 	}
-
 }
