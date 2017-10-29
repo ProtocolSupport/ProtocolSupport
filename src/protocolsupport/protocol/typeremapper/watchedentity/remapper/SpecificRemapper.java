@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.unsafe.pemetadata.PEMetaProviderSPI;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata.PeMetaBase;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapperBooleanToByte;
@@ -100,6 +101,9 @@ public enum SpecificRemapper {
 
 				// = PE Interaction =
 				remapped.put(40, new DataWatcherObjectString("Interact")); //Different texts? I ain't bothered.
+				
+				// = PE Size =
+				remapped.put(39, new DataWatcherObjectFloatLe(PEMetaProviderSPI.getProvider().getEntitySize(entity)));
 
 			}}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new PeSimpleFlagAdder(
@@ -202,7 +206,8 @@ public enum SpecificRemapper {
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				getObject(original, DataWatcherObjectIndex.Ageable.AGE, DataWatcherObjectBoolean.class).ifPresent(boolWatcher -> {
 					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_BABY, boolWatcher.getValue());
-					remapped.put(39, new DataWatcherObjectFloatLe(boolWatcher.getValue() ? 0.5f : 1f)); //Send scale -> avoid big mobs with floating heads.
+					float sizeput = PEMetaProviderSPI.getProvider().getEntitySize(entity);
+					remapped.put(39, new DataWatcherObjectFloatLe(boolWatcher.getValue() ? 0.5f * sizeput : sizeput)); //Send scale -> avoid big mobs with floating heads.
 				});
 			}}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Ageable.AGE, 12) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_2),
@@ -438,7 +443,7 @@ public enum SpecificRemapper {
 		new Entry(new DataWatcherDataRemapper() {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
-				remapped.put(39, new DataWatcherObjectFloatLe(6f)); //Send scale -> Giants are Giant Zombies in PE.
+				remapped.put(39, new DataWatcherObjectFloatLe(6f * PEMetaProviderSPI.getProvider().getEntitySize(entity))); //Send scale -> Giants are Giant Zombies in PE.
 			}
 		}, ProtocolVersion.MINECRAFT_PE)),
 	SILVERFISH(NetworkEntityType.SILVERFISH, SpecificRemapper.INSENTIENT),
@@ -460,7 +465,8 @@ public enum SpecificRemapper {
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				getObject(original, DataWatcherObjectIndex.Zombie.BABY, DataWatcherObjectBoolean.class).ifPresent(boolWatcher -> {
 					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_BABY, boolWatcher.getValue());
-					remapped.put(39, new DataWatcherObjectFloatLe(boolWatcher.getValue() ? 0.5f : 1f)); //Send scale -> avoid big mobs with floating heads.
+					float sizeput = PEMetaProviderSPI.getProvider().getEntitySize(entity);
+					remapped.put(39, new DataWatcherObjectFloatLe(boolWatcher.getValue() ? 0.5f * sizeput : sizeput)); //Send scale -> avoid big mobs with floating heads.
 				});
 			}}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Zombie.BABY, 12) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_2),
@@ -514,6 +520,13 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.Ghast.ATTACKING, 16), ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	SLIME(NetworkEntityType.SLIME, SpecificRemapper.INSENTIENT,
+		new Entry(new DataWatcherDataRemapper() {
+			@Override
+			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
+				getObject(original, DataWatcherObjectIndex.Slime.SIZE, DataWatcherObjectVarInt.class).ifPresent(intWatcher -> {
+					remapped.put(39, new DataWatcherObjectFloatLe(PEMetaProviderSPI.getProvider().getEntitySize(entity) * (intWatcher.getValue() + 1))); //Send slime scale. (size 0 = scale 1)
+				});
+			}}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Slime.SIZE, 12) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_2),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Slime.SIZE, 11) {}, ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNumberToByte(DataWatcherObjectIndex.Slime.SIZE, 16), ProtocolVersionsHelper.BEFORE_1_9)
