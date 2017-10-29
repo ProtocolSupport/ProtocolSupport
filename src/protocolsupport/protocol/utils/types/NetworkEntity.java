@@ -5,7 +5,6 @@ import java.util.UUID;
 import org.bukkit.util.Vector;
 
 import protocolsupport.utils.Utils;
-import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 public class NetworkEntity {
