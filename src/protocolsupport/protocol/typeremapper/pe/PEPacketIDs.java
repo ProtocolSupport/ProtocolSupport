@@ -74,7 +74,7 @@ public class PEPacketIDs {
 	public static final int RESOURCE_INFO = 82;
 	public static final int RESOURCE_DATA = 83;
 	public static final int RESOURCE_REQUEST = 84;
-	//public static final int TRANSFER = 85;
+	public static final int TRANSFER = 85;
 	public static final int PLAY_SOUND = 86;
 	//public static final int STOP_SOUND = 87;
 	public static final int SET_TITLE = 88;
