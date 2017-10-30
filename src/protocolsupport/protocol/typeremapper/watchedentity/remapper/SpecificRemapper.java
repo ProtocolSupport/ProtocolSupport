@@ -524,8 +524,9 @@ public enum SpecificRemapper {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				getObject(original, DataWatcherObjectIndex.Slime.SIZE, DataWatcherObjectVarInt.class).ifPresent(intWatcher -> {
-					remapped.put(39, new DataWatcherObjectFloatLe(PEMetaProviderSPI.getProvider().getEntitySize(entity) * (intWatcher.getValue() + 1))); //Send slime scale. (size 0 = scale 1)
+					entity.getDataCache().slimeSize = (byte) ((int) intWatcher.getValue());
 				});
+				remapped.put(39, new DataWatcherObjectFloatLe(PEMetaProviderSPI.getProvider().getEntitySize(entity) * entity.getDataCache().slimeSize)); //Send slime scale.
 			}}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Slime.SIZE, 12) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_2),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Slime.SIZE, 11) {}, ProtocolVersionsHelper.ALL_1_9),

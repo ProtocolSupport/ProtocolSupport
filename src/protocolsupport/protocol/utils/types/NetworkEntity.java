@@ -89,6 +89,7 @@ public class NetworkEntity {
 
 		//Cache for PE shizzles.
 		private long peBaseFlags = 0;
+		public byte slimeSize = 1;
 		public int attachedId = -1; //Leashed? Data is send in pocket meta, but might be useful to store for other things.
 		public Rider rider = new Rider(false);
 		// static final null ItemStack, while the null ItemStack in Vanilla code is a static final variable, ProtocolSupport wraps
