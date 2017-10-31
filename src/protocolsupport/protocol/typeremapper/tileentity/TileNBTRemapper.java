@@ -195,7 +195,6 @@ public class TileNBTRemapper {
 					int color = input.getIntNumber("color");
 					input.remove("color");
 					input.setByte("color", color);
-					System.out.println(input);
 					return input;
 				},
 				ProtocolVersion.MINECRAFT_PE
@@ -209,7 +208,6 @@ public class TileNBTRemapper {
 					input.remove("Data");
 					input.setShort("item", ItemData.getIdByName(itemName));
 					input.setInt("mData", data);
-					System.out.println(input);
 					return input;
 				},
 				ProtocolVersion.MINECRAFT_PE
