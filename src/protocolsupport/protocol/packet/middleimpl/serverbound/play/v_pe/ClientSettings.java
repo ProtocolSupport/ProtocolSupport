@@ -11,24 +11,32 @@ import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 
 public class ClientSettings extends MiddleClientSettings {
 
+	protected int pocketViewDistance;
+	
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
+		pocketViewDistance = VarNumberSerializer.readSVarInt(clientdata);
 		locale = cache.getLocale();
-		viewDist = (VarNumberSerializer.readSVarInt(clientdata) - 1);
+		viewDist = (int) Math.floor((pocketViewDistance - 1) / Math.sqrt(2));
 		chatMode = 0;
 		chatColors = true;
 		skinFlags = 0x7F;
-		mainHand = 0;
+		mainHand = 1;
+		if(viewDist > Bukkit.getViewDistance()) {
+			viewDist = Bukkit.getViewDistance();
+		}
 		sendResponse();
 	}
 	
 	public void sendResponse() {
+		System.err.println("Viewdistance from client: " + pocketViewDistance + " to server: " + viewDist + " To client: " + (int) Math.ceil(viewDist * Math.sqrt(2)));
+		
 		ByteBuf chunkResponse = Unpooled.buffer();
 		VarNumberSerializer.writeVarInt(chunkResponse, PEPacketIDs.CHUNK_RADIUS);
 		chunkResponse.writeByte(0);
 		chunkResponse.writeByte(0);
 		//should exactly match the view distance that server uses to broadcast chunks. +1 because mcpe includes the chunk client is standing in in calculations, while pc does not
-		VarNumberSerializer.writeSVarInt(chunkResponse, (viewDist > Bukkit.getViewDistance()) ? (Bukkit.getViewDistance() + 1) : (viewDist + 1));
+		VarNumberSerializer.writeSVarInt(chunkResponse, pocketViewDistance);
 		connection.sendRawPacket(MiscSerializer.readAllBytes(chunkResponse));
 	}
 

@@ -128,6 +128,7 @@ public enum SpecificRemapper {
 		), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.EntityLiving.POTION_COLOR, 8) {}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.EntityLiving.POTION_AMBIENT, 9), ProtocolVersion.MINECRAFT_PE),
+		new Entry(new FirstMetaDataAddRemapper(1, new DataWatcherObjectVarInt(10)), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectString>(DataWatcherObjectIndex.Entity.NAMETAG, 2) {}, ProtocolVersion.MINECRAFT_1_8),
 		new Entry(new IndexValueRemapperStringClamp(DataWatcherObjectIndex.Entity.NAMETAG, 10, 64), ProtocolVersionsHelper.RANGE__1_6__1_7),
 		new Entry(new IndexValueRemapperStringClamp(DataWatcherObjectIndex.Entity.NAMETAG, 5, 64), ProtocolVersionsHelper.BEFORE_1_6),
