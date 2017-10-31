@@ -113,7 +113,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 			return id++;
 		}
 
-		public static int FLAG_ON_FIRE = takeNextId(); //0
+		public static int FLAG_ON_FIRE = takeNextId(); //1
 		public static int FLAG_SNEAKING = takeNextId();
 		public static int FLAG_RIDING = takeNextId();
 		public static int FLAG_SPRINTING = takeNextId();
@@ -122,8 +122,8 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		public static int FLAG_TEMPTED = takeNextId();
 		public static int FLAG_IN_LOVE = takeNextId();
 		public static int FLAG_SADDLED = takeNextId();
-		public static int FLAG_POWERED = takeNextId();
-		public static int FLAG_IGNITED = takeNextId(); //10
+		public static int FLAG_POWERED = takeNextId(); //10
+		public static int FLAG_IGNITED = takeNextId();
 		public static int FLAG_BABY = takeNextId();
 		public static int FLAG_CRITICAL = takeNextId();
 		public static int FLAG_SHOW_NAMETAG = takeNextId();
@@ -132,8 +132,8 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		public static int FLAG_SILENT = takeNextId();
 		public static int FLAG_unknown1 = takeNextId();
 		public static int FLAG_CLIMBING = takeNextId();
-		public static int FLAG_CAN_CLIMB = takeNextId();
-		public static int FLAG_CAN_SWIM = takeNextId(); //20
+		public static int FLAG_CAN_CLIMB = takeNextId(); //20
+		public static int FLAG_CAN_SWIM = takeNextId();
 		public static int FLAG_CAN_FLY = takeNextId();
 		public static int FLAG_RESTING = takeNextId();
 		public static int FLAG_SITTING = takeNextId();
@@ -142,8 +142,8 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		public static int FLAG_CHARGED = takeNextId();
 		public static int FLAG_TAMED = takeNextId();
 		public static int FLAG_LEASHED = takeNextId();
-		public static int FLAG_SHEARED = takeNextId();
-		public static int FLAG_GLIDING = takeNextId(); //30
+		public static int FLAG_SHEARED = takeNextId(); //30
+		public static int FLAG_GLIDING = takeNextId();
 		public static int FLAG_ELDER = takeNextId();
 		public static int FLAG_MOVING = takeNextId();
 		public static int FLAG_BREATHING = takeNextId();
@@ -152,8 +152,8 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		public static int FLAG_SHOW_BASE = takeNextId();
 		public static int FLAG_REARING = takeNextId();
 		public static int FLAG_VIBRATING = takeNextId();
-		public static int FLAG_IDLING = takeNextId();
-		public static int FLAG_EVOKER_SPELL = takeNextId(); //40
+		public static int FLAG_IDLING = takeNextId(); //40
+		public static int FLAG_EVOKER_SPELL = takeNextId();
 		public static int FLAG_CHARGE_ATTACK = takeNextId();
 		public static int FLAG_WASD_CONTROLLED = takeNextId();
 		public static int FLAG_unknown2 = takeNextId();

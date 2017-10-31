@@ -63,7 +63,7 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 			MiscSerializer.writeLFloat(serializer, minmax.getObj1());
 			MiscSerializer.writeLFloat(serializer, minmax.getObj2());
 			MiscSerializer.writeLFloat(serializer, (float) attrvalue);
-			MiscSerializer.writeLFloat(serializer, 0.000001F); //default value
+			MiscSerializer.writeLFloat(serializer, (float) attrvalue); //default value
 			StringSerializer.writeString(serializer, version, pename);
 		}
 		return serializer;

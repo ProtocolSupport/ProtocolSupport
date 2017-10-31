@@ -1,5 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
+import org.bukkit.Bukkit;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
@@ -12,8 +14,8 @@ import protocolsupport.protocol.typeremapper.chunk.ChunkTransformer;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformer.BlockFormat;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.typeremapper.tileentity.TileNBTRemapper;
+import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class Chunk extends MiddleChunk {
@@ -23,7 +25,13 @@ public class Chunk extends MiddleChunk {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
+		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		cache.markSentChunk(chunkX, chunkZ);
+		if(cache.sendChunkSize() < 3) {
+			ClientBoundPacketData renderClient = ClientBoundPacketData.create(PEPacketIDs.CHUNK_RADIUS, connection.getVersion());
+			VarNumberSerializer.writeSVarInt(renderClient, (int) Math.ceil(Bukkit.getViewDistance() * Math.sqrt(2)));
+			packets.add(renderClient);
+		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHUNK_DATA, version);
 		VarNumberSerializer.writeSVarInt(serializer, chunkX);
 		VarNumberSerializer.writeSVarInt(serializer, chunkZ);
@@ -36,7 +44,8 @@ public class Chunk extends MiddleChunk {
 			ItemStackSerializer.writeTag(chunkdata, true, version, TileNBTRemapper.remap(version, tile));
 		}
 		ArraySerializer.writeByteArray(serializer, version, chunkdata);
-		return RecyclableSingletonList.create(serializer);
+		packets.add(serializer);
+		return packets;
 	}
 
 	public static ClientBoundPacketData createEmptyChunk(ProtocolVersion version, int chunkX, int chunkZ) {

@@ -40,7 +40,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		VarNumberSerializer.writeVarInt(serializer, 0);
 		VarNumberSerializer.writeVarInt(serializer, 0);
 
-		VarNumberSerializer.writeVarLong(serializer, 0); //?
+		serializer.writeLongLE(0); //?
 
 		//entity links
 		//TODO: Implement entity links

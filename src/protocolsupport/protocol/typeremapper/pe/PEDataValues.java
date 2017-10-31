@@ -124,14 +124,18 @@ public class PEDataValues {
 	}
 
 	public static final RemappingTable.ComplexIdRemappingTable ITEM_ID = new RemappingTable.ComplexIdRemappingTable();
+	public static final RemappingTable.ComplexIdRemappingTable PE_ITEM_ID = new RemappingTable.ComplexIdRemappingTable();
 	private static void registerItemRemap(int from, int to) {
 		ITEM_ID.setSingleRemap(from, to, -1);
+		PE_ITEM_ID.setSingleRemap(to, from, -1);
 	}
 	private static void registerItemRemap(int from, int to, int dataTo) {
 		ITEM_ID.setSingleRemap(from, to, dataTo);
+		PE_ITEM_ID.setSingleRemap(to, from, dataTo);
 	}
 	private static void registerItemRemap(int from, int dataFrom, int to, int dataTo) {
 		ITEM_ID.setComplexRemap(from, dataFrom, to, dataTo);
+		PE_ITEM_ID.setComplexRemap(to, dataTo, from, dataFrom);
 	}
 
 	private static void registerBlockAndItemRemap(int from, int to) {
@@ -240,6 +244,7 @@ public class PEDataValues {
 		registerItemRemap(443, 444); // ELYTRA
 		registerItemRemap(449, 450); // TOTEM
 		registerItemRemap(450, 445); // SHULKER_SHELL
+		registerItemRemap(322, 1, 466, 0); // Enchanted Golden Apple
 		registerItemRemap(444, 333, 1); // Spruce Boat
 		registerItemRemap(445, 333, 2); // Birch Boat
 		registerItemRemap(446, 333, 3); // Jungle Boat

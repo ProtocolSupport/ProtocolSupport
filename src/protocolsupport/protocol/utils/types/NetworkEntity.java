@@ -88,6 +88,7 @@ public class NetworkEntity {
 
 		//Cache for PE shizzles.
 		private long peBaseFlags = 0;
+		public byte sizeModifier = 1;
 		public int attachedId = -1; //Leashed? Data is send in pocket meta, but might be useful to store for other things.
 		public Rider rider = new Rider(false);
 		private ItemStackWrapper helmet = ItemStackWrapper.NULL;
