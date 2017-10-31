@@ -57,6 +57,7 @@ public class TileNBTRemapper {
 		peTypes.put(TileEntityType.NOTE_BLOCK, "Music");
 		peTypes.put(TileEntityType.BEACON, "Beacon");
 		peTypes.put(TileEntityType.SHULKER_BOX, "ShulkerBox");
+		peTypes.put(TileEntityType.BED, "Bed");
 	}
 
 	private static final EnumMap<TileEntityType, EnumMap<ProtocolVersion, List<BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper>>>> registry = new EnumMap<>(TileEntityType.class);
@@ -184,6 +185,31 @@ public class TileNBTRemapper {
 					input.setFloat("DisplayEntityWidth", 1);
 					input.setFloat("DisplayEntityHeight", 1);
 					input.setFloat("DisplayEntityScale", 1);
+					return input;
+				},
+				ProtocolVersion.MINECRAFT_PE
+		);
+		register(
+				TileEntityType.BED,
+				(version, input) -> {
+					int color = input.getIntNumber("color");
+					input.remove("color");
+					input.setByte("color", color);
+					System.out.println(input);
+					return input;
+				},
+				ProtocolVersion.MINECRAFT_PE
+		);
+		register(
+				TileEntityType.FLOWER_POT,
+				(version, input) -> {
+					String itemName = input.getString("Item");
+					int data = input.getIntNumber("Data");
+					input.remove("Item");
+					input.remove("Data");
+					input.setShort("item", ItemData.getIdByName(itemName));
+					input.setInt("mData", data);
+					System.out.println(input);
 					return input;
 				},
 				ProtocolVersion.MINECRAFT_PE
