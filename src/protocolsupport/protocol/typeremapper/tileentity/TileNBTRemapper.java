@@ -58,6 +58,7 @@ public class TileNBTRemapper {
 		peTypes.put(TileEntityType.BEACON, "Beacon");
 		peTypes.put(TileEntityType.SHULKER_BOX, "ShulkerBox");
 		peTypes.put(TileEntityType.BED, "Bed");
+		peTypes.put(TileEntityType.BANNER, "Banner");
 	}
 
 	private static final EnumMap<TileEntityType, EnumMap<ProtocolVersion, List<BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper>>>> registry = new EnumMap<>(TileEntityType.class);
