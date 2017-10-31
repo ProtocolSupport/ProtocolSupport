@@ -321,6 +321,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			//Creative transactions.
 			if ((cache.getGameMode() == GameMode.CREATIVE) && (cache.getOpenedWindow() == WindowType.PLAYER)) {
 				if (pcSlot != -1) {
+					clear();
 					//Creative transaction use -1 not for cursor but throwing items, cursoritems are actually deleted on server.
 					misc.add(MiddleCreativeSetSlot.create(cache.getLocale(), (pcSlot == -999 ? -1 : pcSlot), transaction.getNewItem()));
 				}
