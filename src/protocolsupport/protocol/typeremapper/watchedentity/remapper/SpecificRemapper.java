@@ -231,6 +231,15 @@ public enum SpecificRemapper {
 		new Entry(new PeFlagRemapper(
 				DataWatcherObjectIndex.Tameable.TAME_FLAGS, new int[] {1, 2, 3}, new int[] {PeMetaBase.FLAG_SITTING, PeMetaBase.FLAG_ANGRY, PeMetaBase.FLAG_TAMED}
 			), ProtocolVersion.MINECRAFT_PE),
+		new Entry(new DataWatcherDataRemapper() {
+			@Override
+			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
+				getObject(original, DataWatcherObjectIndex.Tameable.TAME_FLAGS, DataWatcherObjectByte.class).ifPresent(byteWatcher -> {
+					if ((byteWatcher.getValue() & 0x04) == 0x04) { // If the entity is tamed
+						remapped.put(5, new DataWatcherObjectSVarLong(0)); // set owner meta to a dummy entity ID
+					}
+				});
+			}}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Tameable.TAME_FLAGS, 13) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_2),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Tameable.TAME_FLAGS, 12) {},ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Tameable.TAME_FLAGS, 16) {}, ProtocolVersionsHelper.BEFORE_1_9)
