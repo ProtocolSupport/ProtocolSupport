@@ -236,9 +236,8 @@ public enum SpecificRemapper {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				getObject(original, DataWatcherObjectIndex.Tameable.TAME_FLAGS, DataWatcherObjectByte.class).ifPresent(byteWatcher -> {
-					if((((byteWatcher.getValue() >> (3 - 1)) & 1) == 1)) {
-						//If the wolf has tamed tag, send fake owner id, to make sure pocket renders collar color instead of the entire wolf.
-						remapped.put(5, new DataWatcherObjectSVarLong(0));
+					if ((byteWatcher.getValue() & 0x04) == 0x04) { // If the entity is tamed
+						remapped.put(5, new DataWatcherObjectSVarLong(0)); // set owner meta to a dummy entity ID
 					}
 				});
 			}}, ProtocolVersion.MINECRAFT_PE),
