@@ -280,6 +280,10 @@ public class NetworkDataCache {
 	public boolean isChunkMarkedAsSent(int x, int z) {
 		return sentChunks.contains(new ChunkCoord(x, z));
 	}
+	
+	public int sendChunkSize() {
+		return sentChunks.size();
+	}
 
 	protected static class ChunkCoord {
 		private final int x;
