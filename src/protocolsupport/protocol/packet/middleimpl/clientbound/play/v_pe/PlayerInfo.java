@@ -85,7 +85,10 @@ public class PlayerInfo extends MiddlePlayerInfo {
 		.findAny();
 		if (property.isPresent()) {
 			JsonElement propertyjson = new JsonParser().parse(new InputStreamReader(new ByteArrayInputStream(Base64.getDecoder().decode(property.get().getValue())), StandardCharsets.UTF_8));
-			JsonObject skinobject = JsonUtils.getJsonObject(JsonUtils.getJsonObject(JsonUtils.getAsJsonObject(propertyjson, "root element"), "textures"), "SKIN");
+			JsonObject texturesobject = JsonUtils.getJsonObject(JsonUtils.getAsJsonObject(propertyjson, "root element"), "textures");
+			if (!texturesobject.has("SKIN")) // if an account is an official Mojang account, but doesn't have an uploaded skin, the SKIN object will be missing
+				return null;
+			JsonObject skinobject = JsonUtils.getJsonObject(texturesobject, "SKIN");
 			JsonObject skinMetadata; //Contains data about the skinModel. Currently only supports Slim and not Slim or Steve and Alex.
 			boolean isSlim = skinobject.has("metadata") && (skinMetadata = skinobject.get("metadata").getAsJsonObject()).has("model") && JsonUtils.getString(skinMetadata, "model").equals("slim");
 			return new Any<>(isSlim, JsonUtils.getString(skinobject, "url"));
