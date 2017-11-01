@@ -15,7 +15,7 @@ public class PENetServerConstants {
 			return String.join(";",
 				"MCPE",
 				Bukkit.getMotd().replace(";", ":"),
-				"134", "1.2.0",
+				String.valueOf(CURRENT_PROTOCOL), POCKET_VERSION,
 				String.valueOf(Bukkit.getOnlinePlayers().size()), String.valueOf(Bukkit.getMaxPlayers())
 			);
 		}
@@ -26,7 +26,7 @@ public class PENetServerConstants {
 	};
 
 	public static final int USER_PACKET_ID = 0xFE;
-
 	public static final int TEST_PORT = 2222;
-
+	public static final int CURRENT_PROTOCOL = 141;
+	public static final String POCKET_VERSION = "1.2.5.15";
 }
