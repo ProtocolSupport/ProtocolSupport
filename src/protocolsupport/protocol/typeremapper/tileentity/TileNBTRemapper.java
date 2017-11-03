@@ -207,8 +207,11 @@ public class TileNBTRemapper {
 					int data = input.getIntNumber("Data");
 					input.remove("Item");
 					input.remove("Data");
-					input.setShort("item", ItemData.getIdByName(itemName));
-					input.setInt("mData", data);
+					Integer id = ItemData.getIdByName(itemName);
+					if (id != null) {
+						input.setShort("item", id);
+						input.setInt("mData", data);
+					}
 					return input;
 				},
 				ProtocolVersion.MINECRAFT_PE
