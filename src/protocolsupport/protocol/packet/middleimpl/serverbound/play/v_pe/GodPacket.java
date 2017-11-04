@@ -302,8 +302,8 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		
 		public void customCursorSurplus(ItemStackWrapper itemstack) {
 			if(
-				(!itemstack.isNull()) && 
-				(!(surplusDeque.getFirstKey().getKeyItem().getType() == itemstack.getType() && surplusDeque.getFirstKey().getKeyItem().getData() == itemstack.getData()))
+				(!itemstack.isNull()) //&& 
+				//(!(surplusDeque.getFirstKey().getKeyItem().getType() == itemstack.getType() && surplusDeque.getFirstKey().getKeyItem().getData() == itemstack.getData()))
 			) {
 				clear();
 				surplusDeque.put(new ItemStackWrapperKey(itemstack), new SlotWrapperValue(-1, itemstack.getAmount(), itemstack.getAmount()));
@@ -313,15 +313,23 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		public void cacheTransaction(NetworkDataCache cache, InfTransaction transaction) {
 			int pcSlot = transformSlot(cache, transaction.getInventoryId(), transaction.getSlot());
 			
+			bug("Going through cache stuff with slot: " + pcSlot);
+			
 			//Signifies death. We don't want unmapped slots to mess it all up.
 			if (pcSlot == -666) {
+				if (transaction.getInventoryId() == PESource.POCKET_CRAFTING_GRID_USE_INGREDIENT) {
+					//Clear the previously cached crap, because we don't have the crafted items in system.
+					surplusDeque.clear();
+					deficitDeque.clear();
+				}
 				return;
 			}
 			
 			//Creative transactions.
 			if ((cache.getGameMode() == GameMode.CREATIVE) && (cache.getOpenedWindow() == WindowType.PLAYER)) {
-				if ((transaction.getSourceId() != SOURCE_CREATIVE)  && (pcSlot != -1)) {
-					//Creative transaction use -1 not for cursor but throwing items, cursoritems are actually deleted on server.
+				if ((transaction.getSourceId() != SOURCE_CREATIVE) && (pcSlot != -1)) {
+					bug("Creative override!");
+					//Creative transaction use -1 not for cursor but throwing items, cursoritems are actually deleted on serverside.
 					misc.add(MiddleCreativeSetSlot.create(cache.getLocale(), (pcSlot == -999 ? -1 : pcSlot), transaction.getNewItem()));
 				}
 				return;
@@ -437,6 +445,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				}
 				return deficits.isEmpty();
 			});
+			bug("Sending " + packets.size() + " packets.... :S"); 
 			return packets;
 		}
 		
@@ -602,6 +611,33 @@ public class GodPacket extends ServerBoundMiddlePacket {
 					}
 				}
 				return invSlotToContainerSlot(peInventoryId, 5, peSlot);
+			}
+			case CRAFTING_TABLE: {
+				switch(peInventoryId) {
+					case PESource.POCKET_CLICKED_SLOT: {
+						return -1;
+					}
+					case PESource.POCKET_CRAFTING_RESULT: {
+						return 0;
+					}
+					case PESource.POCKET_CRAFTING_GRID_ADD:
+					case PESource.POCKET_CRAFTING_GRID_REMOVE: {
+						return peSlot + 1;
+					}
+					case PESource.POCKET_INVENTORY: {
+						if (peSlot < 9) {
+							return peSlot + 37;
+						} else {
+							return peSlot + 1;
+						}
+					}
+					case PESource.POCKET_FAUX_DROP: {
+						return peInventoryId;
+					}
+					default: {
+						return -666;
+					}
+				}
 			}
 			default: {
 				int wSlots = cache.getOpenedWindowSlots();

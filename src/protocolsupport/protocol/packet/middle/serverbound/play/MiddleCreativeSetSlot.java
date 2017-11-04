@@ -20,6 +20,7 @@ public abstract class MiddleCreativeSetSlot extends ServerBoundMiddlePacket {
 	}
 	
 	public static ServerBoundPacketData create(String locale, int slot, ItemStackWrapper itemstack) {
+		System.err.println("What?!: " + slot + " - " + itemstack.toString());
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_CREATIVE_SET_SLOT);
 		creator.writeShort(slot);
 		ItemStackSerializer.writeItemStack(creator, ProtocolVersionsHelper.LATEST_PC, locale, itemstack, false);
