@@ -25,7 +25,6 @@ public abstract class AbstractHandshakeListener {
 		this.networkManager = networkmanager;
 	}
 
-	@SuppressWarnings("unchecked")
 	public void handleSetProtocol(NetworkState nextState, String hostname, int port) {
 		switch (nextState) {
 			case LOGIN: {
@@ -35,13 +34,7 @@ public abstract class AbstractHandshakeListener {
 					final InetAddress address = networkManager.getAddress().getAddress();
 					if (ThrottleTracker.isEnabled() && !ServerPlatform.get().getMiscUtils().isProxyEnabled()) {
 						if (ThrottleTracker.throttle(address)) {
-							String message = "Connection throttled! Please wait before reconnecting.";
-							networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), new GenericFutureListener<Future<? super Void>>() {
-								@Override
-								public void operationComplete(Future<? super Void> arg0)  {
-									networkManager.close(message);
-								}
-							});
+							disconnect("Connection throttled! Please wait before reconnecting.");
 							return;
 						}
 					}
@@ -51,32 +44,8 @@ public abstract class AbstractHandshakeListener {
 				ConnectionImpl connection = ConnectionImpl.getFromChannel(networkManager.getChannel());
 				//version check
 				if (!connection.getVersion().isSupported()) {
-					String message = MessageFormat.format(ServerPlatform.get().getMiscUtils().getOutdatedServerMessage().replace("'", "''"), ServerPlatform.get().getMiscUtils().getVersionName());
-					this.networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), new GenericFutureListener<Future<? super Void>>() {
-						@Override
-						public void operationComplete(Future<? super Void> arg0)  {
-							networkManager.close(message);
-						}
-					});
+					disconnect(MessageFormat.format(ServerPlatform.get().getMiscUtils().getOutdatedServerMessage().replace("'", "''"), ServerPlatform.get().getMiscUtils().getVersionName()));
 					break;
-				}
-				String realhost = hostname + ":" + port;
-				//bungee spoofed data handling
-				if (ServerPlatform.get().getMiscUtils().isProxyEnabled()) {
-					SpoofedData sdata = SpoofedDataParser.tryParse(hostname);
-					if (sdata == null) {
-						String message = "Ip forwarding is enabled but spoofed data can't be decoded or is missing";
-						networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), new GenericFutureListener<Future<? super Void>>() {
-							@Override
-							public void operationComplete(Future<? super Void> arg0)  {
-								networkManager.close(message);
-							}
-						});
-						return;
-					}
-					connection.changeAddress(new InetSocketAddress(sdata.getAddress(), connection.getAddress().getPort()));
-					networkManager.setSpoofedProfile(sdata.getUUID(), sdata.getProperties());
-					realhost = sdata.getHostname() + ":" + port;
 				}
 				//ps handshake event
 				ConnectionHandshakeEvent event = new ConnectionHandshakeEvent(connection, hostname);
@@ -84,8 +53,20 @@ public abstract class AbstractHandshakeListener {
 				if (event.getSpoofedAddress() != null) {
 					connection.changeAddress(event.getSpoofedAddress());
 				}
+				hostname = event.getHostname();
+				//bungee spoofed data handling
+				if (event.shouldParseHostname() && ServerPlatform.get().getMiscUtils().isProxyEnabled()) {
+					SpoofedData sdata = SpoofedDataParser.tryParse(hostname);
+					if (sdata == null) {
+						disconnect("Ip forwarding is enabled but spoofed data can't be decoded or is missing");
+						return;
+					}
+					hostname = sdata.getHostname();
+					connection.changeAddress(new InetSocketAddress(sdata.getAddress(), connection.getAddress().getPort()));
+					networkManager.setSpoofedProfile(sdata.getUUID(), sdata.getProperties());
+				}
 				//switch to login stage
-				networkManager.setPacketListener(getLoginListener(networkManager, realhost));
+				networkManager.setPacketListener(getLoginListener(networkManager, hostname + ":" + port));
 				break;
 			}
 			case STATUS: {
@@ -98,6 +79,16 @@ public abstract class AbstractHandshakeListener {
 				throw new UnsupportedOperationException("Invalid intention " + nextState);
 			}
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	protected void disconnect(String message) {
+		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), new GenericFutureListener<Future<? super Void>>() {
+			@Override
+			public void operationComplete(Future<? super Void> arg0)  {
+				networkManager.close(message);
+			}
+		});
 	}
 
 	protected abstract AbstractLoginListener getLoginListener(NetworkManagerWrapper networkManager, String hostname);

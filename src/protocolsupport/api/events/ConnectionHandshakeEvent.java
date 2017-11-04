@@ -11,7 +11,8 @@ import protocolsupport.api.Connection;
  */
 public class ConnectionHandshakeEvent extends ConnectionEvent {
 
-	private final String hostname;
+	private String hostname;
+	private boolean shouldParseHostname = true;
 
 	public ConnectionHandshakeEvent(Connection connection, String hostname) {
 		super(connection);
@@ -21,10 +22,35 @@ public class ConnectionHandshakeEvent extends ConnectionEvent {
 	/**
 	 * Returns the hostname to which client connects to
 	 * This is data can contain spoofed data
-	 * @return hostname which player used when connecting to server
+	 * @return hostname
 	 */
 	public String getHostname() {
 		return hostname;
+	}
+
+	/**
+	 * Sets hostname to which client connects to
+	 * This data can contains spoofed data
+	 * @param hostname hostname
+	 */
+	public void setHostname(String hostname) {
+		this.hostname = hostname;
+	}
+
+	/**
+	 * Returns true if server should attempt hostname spoofed data parsing in hostname in case proxy is enabled
+	 * Returns true by default
+	 * @return true if server should attempt hostname spoofed data parsing in hostname in case proxy is enabled
+	 */
+	public boolean shouldParseHostname() {
+		return shouldParseHostname;
+	}
+
+	/**
+	 * Disables server hostname spoofed data parsing for this connection
+	 */
+	public void disableParsingHostname() {
+		this.shouldParseHostname = false;
 	}
 
 	protected InetSocketAddress spoofedAddress;
