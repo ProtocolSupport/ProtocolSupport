@@ -20,6 +20,7 @@ public class ConnectionHandshakeEvent extends ConnectionEvent {
 
 	/**
 	 * Returns the hostname to which client connects to
+	 * This is data can contain spoofed data
 	 * @return hostname which player used when connecting to server
 	 */
 	public String getHostname() {

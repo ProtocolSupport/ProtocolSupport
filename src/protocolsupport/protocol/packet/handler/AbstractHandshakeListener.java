@@ -60,6 +60,7 @@ public abstract class AbstractHandshakeListener {
 					});
 					break;
 				}
+				String realhost = hostname + ":" + port;
 				//bungee spoofed data handling
 				if (ServerPlatform.get().getMiscUtils().isProxyEnabled()) {
 					SpoofedData sdata = SpoofedDataParser.tryParse(hostname);
@@ -73,9 +74,9 @@ public abstract class AbstractHandshakeListener {
 						});
 						return;
 					}
-					hostname = sdata.getHostname();
 					connection.changeAddress(new InetSocketAddress(sdata.getAddress(), connection.getAddress().getPort()));
 					networkManager.setSpoofedProfile(sdata.getUUID(), sdata.getProperties());
+					realhost = sdata.getHostname() + ":" + port;
 				}
 				//ps handshake event
 				ConnectionHandshakeEvent event = new ConnectionHandshakeEvent(connection, hostname);
@@ -84,7 +85,7 @@ public abstract class AbstractHandshakeListener {
 					connection.changeAddress(event.getSpoofedAddress());
 				}
 				//switch to login stage
-				networkManager.setPacketListener(getLoginListener(networkManager, hostname + ":" + port));
+				networkManager.setPacketListener(getLoginListener(networkManager, realhost));
 				break;
 			}
 			case STATUS: {

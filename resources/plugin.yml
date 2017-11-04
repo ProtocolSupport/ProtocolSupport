@@ -1,6 +1,6 @@
 name: ProtocolSupport
 main: protocolsupport.ProtocolSupport
-version: 4.28
+version: 4.29-dev
 authors:
 - _Shevchik_
 - 7kasper
