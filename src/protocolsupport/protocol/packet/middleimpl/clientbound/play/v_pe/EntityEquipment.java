@@ -9,6 +9,7 @@ import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class EntityEquipment extends MiddleEntityEquipment {
@@ -19,6 +20,10 @@ public class EntityEquipment extends MiddleEntityEquipment {
 			// Armor update
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOB_ARMOR_EQUIPMENT, connection.getVersion());
 			VarNumberSerializer.writeVarLong(serializer, entityId);
+			if (cache.getWatchedEntity(entityId) == null) {
+				System.out.println("Server tried to update equipment of entity " + entityId + " for " + (this.connection.getPlayer() != null ? this.connection.getPlayer().getName() : this.connection) + ", but I don't have it on cache!");
+				return RecyclableEmptyList.get();
+			}
 			NetworkEntity.DataCache dataCache = cache.getWatchedEntity(entityId).getDataCache();
 			switch (slot) {
 				case (2): {
