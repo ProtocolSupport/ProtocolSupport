@@ -233,6 +233,41 @@ public class PEDataValues {
 		registerBlockAndItemRemap(232, 218, 13); // GREEN_SHULKER_BOX
 		registerBlockAndItemRemap(233, 218, 14); // RED_SHULKER_BOX
 		registerBlockAndItemRemap(234, 218, 15); // BLACK_SHULKER_BOX
+		// Trap Doors...
+		// Wooden
+		registerBlockRemap(96, 0, 96, 3);
+		registerBlockRemap(96, 1, 96, 2);
+		registerBlockRemap(96, 2, 96, 1);
+		registerBlockRemap(96, 3, 96, 0);
+		registerBlockRemap(96, 4, 96, 11);
+		registerBlockRemap(96, 5, 96, 10);
+		registerBlockRemap(96, 6, 96, 9);
+		registerBlockRemap(96, 7, 96, 8);
+		registerBlockRemap(96, 8, 96, 7);
+		registerBlockRemap(96, 9, 96, 6);
+		registerBlockRemap(96, 10, 96, 5);
+		registerBlockRemap(96, 11, 96, 4);
+		registerBlockRemap(96, 12, 96, 15);
+		registerBlockRemap(96, 13, 96, 14);
+		registerBlockRemap(96, 14, 96, 13);
+		registerBlockRemap(96, 15, 96, 12);
+		// Iron
+		registerBlockRemap(167, 0, 167, 3);
+		registerBlockRemap(167, 1, 167, 2);
+		registerBlockRemap(167, 2, 167, 1);
+		registerBlockRemap(167, 3, 167, 0);
+		registerBlockRemap(167, 4, 167, 11);
+		registerBlockRemap(167, 5, 167, 10);
+		registerBlockRemap(167, 6, 167, 9);
+		registerBlockRemap(167, 7, 167, 8);
+		registerBlockRemap(167, 8, 167, 7);
+		registerBlockRemap(167, 9, 167, 6);
+		registerBlockRemap(167, 10, 167, 5);
+		registerBlockRemap(167, 11, 167, 4);
+		registerBlockRemap(167, 12, 167, 15);
+		registerBlockRemap(167, 13, 167, 14);
+		registerBlockRemap(167, 14, 167, 13);
+		registerBlockRemap(167, 15, 167, 12);
 
 		// ===[ ITEMS ]===
 		registerItemRemap(410, 422); // PRISMARINE_CRYSTALS
