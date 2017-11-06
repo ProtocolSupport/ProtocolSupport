@@ -57,7 +57,7 @@ public class PlayerInfo extends MiddlePlayerInfo {
 					} else {
 						writeSkinData(version, serializer, false, false, DefaultPESkinsProvider.DEFAULT_STEVE);
 						if (skininfo != null) {
-							skinprovider.scheduleGetSkinData(skininfo.getObj2(), new SkinUpdate(connection, info.uuid, skininfo.getObj1()));
+							skinprovider.scheduleGetSkinData(skininfo.getObj2(), info.uuid, new SkinUpdate(connection, info.uuid, skininfo.getObj1()));
 						}
 					}
 					StringSerializer.writeString(serializer, version, ""); //xuid
@@ -97,7 +97,7 @@ public class PlayerInfo extends MiddlePlayerInfo {
 		}
 	}
 
-	protected static class SkinUpdate implements Consumer<byte[]> {
+	public static class SkinUpdate implements Consumer<byte[]> {
 		private final Connection connection;
 		private final UUID uuid;
 		private final Boolean isNormalModel;

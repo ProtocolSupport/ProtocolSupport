@@ -4,7 +4,7 @@ import java.math.BigInteger;
 
 public class ProtocolSupportUnsafeAPI {
 
-	private static final BigInteger apiversion = BigInteger.valueOf(2);
+	private static final BigInteger apiversion = BigInteger.valueOf(3);
 	/**
 	 * Returns ProtocolSupport API version
 	 * This number is incremented every time API changes (behavior change, method/field added/removed)

@@ -3,6 +3,7 @@ package protocolsupport.api.unsafe.peskins;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 import org.apache.commons.lang3.Validate;
@@ -24,9 +25,10 @@ public abstract class PESkinsProvider {
 	 * This method should schedule calling the skindataApplyCallback even if for whatever reason it can run it right now
 	 * This method can actually skip calling the skindataApplyCallback if it can't get the skin data for whatever reason
 	 * @param url url to skin image
+	 * @param uuid, uuid of the player.
 	 * @param skindataApplyCallback callback that should be called when receiving skin data completes
 	 */
-	public abstract void scheduleGetSkinData(String url, Consumer<byte[]> skindataApplyCallback);
+	public abstract void scheduleGetSkinData(String url, UUID uuid, Consumer<byte[]> skindataApplyCallback);
 
 	protected static byte[] toData(BufferedImage skin) {
 		Validate.isTrue(skin.getWidth() == 64, "Must be 64 pixels wide");

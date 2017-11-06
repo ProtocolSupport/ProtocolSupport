@@ -1,6 +1,7 @@
 package protocolsupport.api.unsafe.peskins;
 
 import java.io.IOException;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
@@ -29,7 +30,7 @@ public class DefaultPESkinsProvider extends PESkinsProvider {
 	}
 
 	@Override
-	public void scheduleGetSkinData(String url, Consumer<byte[]> skindataApplyCallback) {
+	public void scheduleGetSkinData(String url, UUID uuid, Consumer<byte[]> skindataApplyCallback) {
 	}
 
 }
