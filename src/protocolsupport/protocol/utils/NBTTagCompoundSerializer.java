@@ -719,13 +719,13 @@ public class NBTTagCompoundSerializer {
 	}
 
 	private static String readPeNBTString(ByteBuf from, boolean varint) {
+		int length;
 		if (varint) {
-			int length = VarNumberSerializer.readVarInt(from);
-			return new String(MiscSerializer.readBytes(from, length), StandardCharsets.UTF_8);
+			length = VarNumberSerializer.readVarInt(from);
 		} else {
-			int length = from.readShortLE();
-			return new String(MiscSerializer.readBytes(from, length), StandardCharsets.UTF_16BE);
+			length = from.readShortLE();
 		}
+		return new String(MiscSerializer.readBytes(from, length), StandardCharsets.UTF_8);
 	}
 
 }
