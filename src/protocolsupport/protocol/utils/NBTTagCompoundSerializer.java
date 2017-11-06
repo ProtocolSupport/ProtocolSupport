@@ -723,7 +723,7 @@ public class NBTTagCompoundSerializer {
 			return new String(MiscSerializer.readBytes(from, length), StandardCharsets.UTF_8);
 		} else {
 			int length = from.readShortLE();
-			return new String(MiscSerializer.readBytes(from, length), StandardCharsets.UTF_16BE);
+			return new String(MiscSerializer.readBytes(from, length), StandardCharsets.UTF_8);
 		}
 	}
 
