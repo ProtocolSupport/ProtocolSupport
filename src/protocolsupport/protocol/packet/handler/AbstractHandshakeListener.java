@@ -53,6 +53,10 @@ public abstract class AbstractHandshakeListener {
 				if (event.getSpoofedAddress() != null) {
 					connection.changeAddress(event.getSpoofedAddress());
 				}
+				if (event.isLoginDenied()) {
+					disconnect(event.getDenyLoginMessage());
+					return;
+				}
 				hostname = event.getHostname();
 				//bungee spoofed data handling
 				if (event.shouldParseHostname() && ServerPlatform.get().getMiscUtils().isProxyEnabled()) {
