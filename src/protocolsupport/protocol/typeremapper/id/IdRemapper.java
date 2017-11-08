@@ -66,7 +66,7 @@ public class IdRemapper {
 			registerRemapEntry(Material.NETHER_WART_BLOCK, Material.WOOL, 14, ProtocolVersionsHelper.BEFORE_1_10);
 			registerRemapEntry(Material.RED_NETHER_BRICK, Material.NETHER_BRICK, ProtocolVersionsHelper.BEFORE_1_10);
 			registerRemapEntry(Material.MAGMA, Material.NETHERRACK, ProtocolVersionsHelper.BEFORE_1_10);
-			registerRemapEntry(Material.BONE_BLOCK, Material.BRICK, ProtocolVersionsHelper.BEFORE_1_10);
+			registerRemapEntry(Material.BONE_BLOCK, Material.BRICK, 0, ProtocolVersionsHelper.BEFORE_1_10);
 			for (int i = 0; i < MinecraftData.BLOCK_DATA_MAX; i++) {
 				int newdata = (i & 0x8) == 0x8 ? 1 : 0;
 				registerRemapEntry(Material.COMMAND_CHAIN, i, Material.COMMAND, newdata, ProtocolVersionsHelper.BEFORE_1_9);
