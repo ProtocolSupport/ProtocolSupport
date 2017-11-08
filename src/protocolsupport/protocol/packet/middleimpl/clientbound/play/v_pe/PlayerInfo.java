@@ -47,7 +47,7 @@ public class PlayerInfo extends MiddlePlayerInfo {
 				PESkinsProvider skinprovider = PESkinsProviderSPI.getProvider();
 				VarNumberSerializer.writeVarInt(serializer, infos.length);
 				for (Info info : infos) {
-					MiscSerializer.writeUUID(serializer, info.uuid);
+					MiscSerializer.writeUUID(serializer, connection.getVersion(), info.uuid);
 					VarNumberSerializer.writeVarInt(serializer, 0); //entity id
 					StringSerializer.writeString(serializer, version, info.getName(cache.getLocale()));
 					Any<Boolean, String> skininfo = getSkinInfo(info);
@@ -69,7 +69,7 @@ public class PlayerInfo extends MiddlePlayerInfo {
 				serializer.writeByte(1);
 				VarNumberSerializer.writeVarInt(serializer, infos.length);
 				for (Info info : infos) {
-					MiscSerializer.writeUUID(serializer, info.uuid);
+					MiscSerializer.writeUUID(serializer, connection.getVersion(), info.uuid);
 				}
 				return RecyclableSingletonList.create(serializer);
 			}
@@ -112,7 +112,7 @@ public class PlayerInfo extends MiddlePlayerInfo {
 			VarNumberSerializer.writeVarInt(serializer, PEPacketIDs.PLAYER_SKIN);
 			serializer.writeByte(0);
 			serializer.writeByte(0);
-			MiscSerializer.writeUUID(serializer, uuid);
+			MiscSerializer.writeUUID(serializer, connection.getVersion(), uuid);
 			writeSkinData(connection.getVersion(), serializer, true, isNormalModel, skindata);
 			byte[] rawpacket = MiscSerializer.readAllBytes(serializer);
 			System.err.println(skindata.length);

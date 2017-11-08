@@ -20,7 +20,7 @@ public class PlayerInfo extends MiddlePlayerInfo {
 		VarNumberSerializer.writeVarInt(serializer, action.ordinal());
 		VarNumberSerializer.writeVarInt(serializer, infos.length);
 		for (Info info : infos) {
-			MiscSerializer.writeUUID(serializer, info.uuid);
+			MiscSerializer.writeUUID(serializer, connection.getVersion(), info.uuid);
 			switch (action) {
 				case ADD: {
 					StringSerializer.writeString(serializer, version, info.username);
