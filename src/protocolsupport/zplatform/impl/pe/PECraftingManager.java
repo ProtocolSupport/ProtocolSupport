@@ -5,8 +5,8 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.inventory.FurnaceRecipe;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
@@ -31,9 +31,14 @@ public class PECraftingManager {
 	}
 
 	private byte[] recipes;
+	private AtomicInteger recipescount = new AtomicInteger();
 
 	public byte[] getAllRecipes() {
 		return recipes;
+	}
+	
+	public int getRecipeCount() {
+		return recipescount.get();
 	}
 
 	public void registerRecipes() {
@@ -44,16 +49,13 @@ public class PECraftingManager {
 			if (recipe instanceof ShapedRecipe) {
 				recipescount.incrementAndGet();
 				ShapedRecipe shapedRecipe = (ShapedRecipe) recipe;
-				Map<Character, org.bukkit.inventory.ItemStack> map = shapedRecipe.getIngredientMap();
+				Map<Character, ItemStack> map = shapedRecipe.getIngredientMap();
 				String[] pattern = shapedRecipe.getShape();
 				int width = pattern[0].length(), height = pattern.length;
 				ItemStackWrapper[] required = new ItemStackWrapper[width * height];
-				for (int z = 0; z < height; ++z) {
-					for (int x = 0; x < width; ++x) {
-						int i = z * x;
-						char key = pattern[z].charAt(x);
-						org.bukkit.inventory.ItemStack stack = map.get(key);
-						required[i] = stack == null || stack.getType() == Material.AIR ? ServerPlatform.get().getWrapperFactory().createItemStack(0) : fromBukkitStack(stack);
+				for (int z = 0; z < height; z++) {
+					for (int x = 0; x < width; x++) {
+						required[(z*width) + x] = fromBukkitStack(map.get(pattern[z].charAt(x)));
 					}
 				}
 				addRecipeShaped(recipesbuf, fromBukkitStack(shapedRecipe.getResult()), width, height, required);
@@ -81,9 +83,8 @@ public class PECraftingManager {
 		recipes = MiscSerializer.readAllBytes(recipesbuf);
 	}
 
-	@SuppressWarnings("deprecation")
-	private static ItemStackWrapper fromBukkitStack(org.bukkit.inventory.ItemStack stack) {
-		return ServerPlatform.get().getWrapperFactory().createItemStack(stack.getType().getId());
+	private static ItemStackWrapper fromBukkitStack(ItemStack stack) {
+		return ServerPlatform.get().getWrapperFactory().createItemStack(stack);
 	}
 
 	public void addRecipeShaped(ByteBuf to, ItemStackWrapper output, int width, int height, ItemStackWrapper[] required) {

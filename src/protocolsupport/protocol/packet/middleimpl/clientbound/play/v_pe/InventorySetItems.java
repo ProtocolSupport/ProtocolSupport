@@ -55,18 +55,32 @@ public class InventorySetItems extends MiddleInventorySetItems {
 				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_INVENTORY, peInventory));
 				break;
 			}
+			case CRAFTING_TABLE: {
+				ItemStackWrapper[] craftingGridResult = new ItemStackWrapper[1];
+				ItemStackWrapper[] craftingSlots = new ItemStackWrapper[9];
+				ItemStackWrapper[] peInventory = new ItemStackWrapper[36];
+				System.arraycopy(items,  0, craftingGridResult, 0 , 1);
+				System.arraycopy(items,  1, craftingSlots,	 	0,  9);
+				System.arraycopy(items, 37, peInventory, 		0,  9);
+				System.arraycopy(items, 10, peInventory, 		9, 27);
+				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_CRAFTING_RESULT, craftingGridResult));
+				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_CRAFTING_GRID_ADD, craftingSlots));
+				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_INVENTORY, peInventory));
+				break;
+			}
 			default: {
 				int wSlots = cache.getOpenedWindowSlots();
 				int peWSlots = wSlots;
 				if(wSlots > 16) { 
+					//PE only has doublechest or single chest interface for high slots.
 					wSlots = wSlots / 9 * 9;
-					peWSlots = wSlots > 27 ? 54 : 27; //PE only has doublechest or single chest interface for high slots.
+					peWSlots = wSlots > 27 ? 54 : 27;
 				}
 				ItemStackWrapper[] windowSlots = new ItemStackWrapper[peWSlots];
 				ItemStackWrapper[] peInventory = new ItemStackWrapper[36];
-				System.arraycopy(items, 0, windowSlots, 0, wSlots);
-				System.arraycopy(items, wSlots + 27, peInventory, 0, 9);
-				System.arraycopy(items, wSlots, peInventory, 9, 27);
+				System.arraycopy(items,		 	  0, 	windowSlots, 0, wSlots);
+				System.arraycopy(items, wSlots + 27,	peInventory, 0,	 	 9);
+				System.arraycopy(items, 	 wSlots, 	peInventory, 9, 	27);
 				contentpackets.add(InventorySetItems.create(version, locale, windowId, windowSlots));
 				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_INVENTORY, peInventory));
 				break;

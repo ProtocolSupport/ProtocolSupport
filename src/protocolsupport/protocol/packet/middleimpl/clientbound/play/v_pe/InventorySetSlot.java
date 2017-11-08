@@ -53,6 +53,21 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 				}
 				return RecyclableSingletonList.create(create(version, locale, windowId, slot, itemstack));
 			}
+			case CRAFTING_TABLE: {
+				if (slot == 0) {
+					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_CRAFTING_RESULT, 0, itemstack));
+				} else if (slot < 10) {
+					if (itemstack.isNull()) {
+						return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_CRAFTING_GRID_REMOVE, slot - 1, itemstack));
+					} else {
+						return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_CRAFTING_GRID_ADD, slot - 1, itemstack));
+					}
+				} else if (slot >= 37) {
+					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_INVENTORY, slot - 37, itemstack));
+				} else {
+					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_INVENTORY, slot - 1, itemstack));
+				}
+			}
 			default: {
 				int wSlots = cache.getOpenedWindowSlots();
 				//Makes malformated inventory slot amounts to work. (Essentials's /invsee for example)
