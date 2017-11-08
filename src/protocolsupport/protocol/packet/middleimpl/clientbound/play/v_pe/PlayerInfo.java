@@ -57,7 +57,7 @@ public class PlayerInfo extends MiddlePlayerInfo {
 					} else {
 						writeSkinData(version, serializer, false, false, DefaultPESkinsProvider.DEFAULT_STEVE);
 						if (skininfo != null) {
-							skinprovider.scheduleGetSkinData(skininfo.getObj2(), info.uuid, new SkinUpdate(connection, info.uuid, skininfo.getObj1()));
+							skinprovider.scheduleGetSkinData(skininfo.getObj2(), info.uuid, new SkinUpdate(connection, info.uuid, cache.getClientUUID(), skininfo.getObj1()));
 						}
 					}
 					StringSerializer.writeString(serializer, version, ""); //xuid
@@ -100,10 +100,12 @@ public class PlayerInfo extends MiddlePlayerInfo {
 	public static class SkinUpdate implements Consumer<byte[]> {
 		private final Connection connection;
 		private final UUID uuid;
+		private final UUID clientUUID;
 		private final Boolean isNormalModel;
-		public SkinUpdate(Connection connection, UUID uuid, Boolean isNormalModel) {
+		public SkinUpdate(Connection connection, UUID uuid, UUID clientUUID, Boolean isNormalModel) {
 			this.connection = connection;
 			this.uuid = uuid;
+			this.clientUUID = clientUUID;
 			this.isNormalModel = isNormalModel;
 		}
 		@Override
@@ -112,7 +114,7 @@ public class PlayerInfo extends MiddlePlayerInfo {
 			VarNumberSerializer.writeVarInt(serializer, PEPacketIDs.PLAYER_SKIN);
 			serializer.writeByte(0);
 			serializer.writeByte(0);
-			MiscSerializer.writeUUID(serializer, connection.getVersion(), uuid);
+			MiscSerializer.writeUUID(serializer, connection.getVersion(), uuid.equals(connection.getPlayer().getUniqueId()) ? clientUUID : uuid);
 			writeSkinData(connection.getVersion(), serializer, true, isNormalModel, skindata);
 			byte[] rawpacket = MiscSerializer.readAllBytes(serializer);
 			System.err.println(skindata.length);
