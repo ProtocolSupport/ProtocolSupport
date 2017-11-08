@@ -71,6 +71,7 @@ public class NetworkDataCache {
 	private final HashMap<UUID, NetworkDataCache.PlayerListEntry> playerlist = new HashMap<>();
 	private Environment dimensionId;
 	private float maxHealth = 20.0F;
+	private UUID clientUUID;
 
 	public void addWatchedEntity(NetworkEntity entity) {
 		watchedEntities.put(entity.getId(), entity);
@@ -160,6 +161,10 @@ public class NetworkDataCache {
 	public String toString() {
 		return Utils.toStringAllFields(this);
 	}
+
+	public void setClientUUID(UUID uuid) { this.clientUUID = uuid; }
+
+	public UUID getClientUUID() { return clientUUID; }
 
 	public static class PropertiesStorage {
 		private final HashMap<String, ProfileProperty> signed = new HashMap<>();

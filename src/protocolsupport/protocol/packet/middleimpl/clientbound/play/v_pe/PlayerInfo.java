@@ -47,7 +47,7 @@ public class PlayerInfo extends MiddlePlayerInfo {
 				PESkinsProvider skinprovider = PESkinsProviderSPI.getProvider();
 				VarNumberSerializer.writeVarInt(serializer, infos.length);
 				for (Info info : infos) {
-					MiscSerializer.writeUUID(serializer, connection.getVersion(), info.uuid);
+					MiscSerializer.writeUUID(serializer, connection.getVersion(), info.uuid.equals(connection.getPlayer().getUniqueId()) ? cache.getClientUUID() : info.uuid);
 					VarNumberSerializer.writeVarInt(serializer, 0); //entity id
 					StringSerializer.writeString(serializer, version, info.getName(cache.getLocale()));
 					Any<Boolean, String> skininfo = getSkinInfo(info);

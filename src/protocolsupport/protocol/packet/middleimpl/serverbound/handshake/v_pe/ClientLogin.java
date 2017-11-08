@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.JsonObject;
@@ -62,6 +63,9 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 				}
 				if (extra.has("locale")) {
 					cache.setLocale(extra.get("locale").getAsString());
+				}
+				if (extra.has("identity")) {
+					cache.setClientUUID(UUID.fromString(extra.get("identity").getAsString()));
 				}
 			}
 		}
