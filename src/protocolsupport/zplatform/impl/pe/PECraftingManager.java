@@ -96,7 +96,7 @@ public class PECraftingManager {
 		}
 		VarNumberSerializer.writeVarInt(to, 1); // result item count (PC only supports one itemstack output, so hardcoded to 1)
 		ItemStackSerializer.writeItemStack(to, ProtocolVersion.MINECRAFT_PE, I18NData.DEFAULT_LOCALE, output, true);
-		MiscSerializer.writeUUID(to, UUID.nameUUIDFromBytes(to.array()));
+		MiscSerializer.writeUUID(to, ProtocolVersion.MINECRAFT_PE, UUID.nameUUIDFromBytes(to.array()));
 	}
 
 	public void addRecipeShapeless(ByteBuf to, ItemStackWrapper output, ItemStackWrapper[] required) {
@@ -107,7 +107,7 @@ public class PECraftingManager {
 		}
 		VarNumberSerializer.writeVarInt(to, 1); // result item count (PC only supports one itemstack output, so hardcoded to 1)
 		ItemStackSerializer.writeItemStack(to, ProtocolVersion.MINECRAFT_PE, I18NData.DEFAULT_LOCALE, output, true);
-		MiscSerializer.writeUUID(to, UUID.nameUUIDFromBytes(to.array()));
+		MiscSerializer.writeUUID(to, ProtocolVersion.MINECRAFT_PE, UUID.nameUUIDFromBytes(to.array()));
 	}
 
 	public void addRecipeFurnace(ByteBuf to, ItemStackWrapper output, ItemStackWrapper input) {
