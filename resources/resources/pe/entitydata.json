@@ -1,0 +1,625 @@
+{
+	"PLAYER": {
+		"BoundingBox": {
+			"width": 0.6,
+			"height": 1.8
+		},
+		"RiderInfo": {
+			"position": [0.0, 1.1, -0.35]
+		}
+	},
+	"COMMON_HORSE": {
+		"BoundingBox": {
+			"width": 1.4,
+			"height": 1.6
+		},
+		"RiderInfo": {
+			"position": [0.0, 1.1, -0.2]
+		}
+	},
+	"ZOMBIE_HORSE": {
+		"BoundingBox": {
+			"width": 1.4,
+			"height": 1.6
+		},
+		"RiderInfo": {
+			"position": [0.0, 1.2, -0.2]
+		}
+	},
+	"SKELETON_HORSE": {
+		"BoundingBox": {
+			"width": 1.4,
+			"height": 1.6
+		},
+		"RiderInfo": {
+			"position": [0.0, 1.2, -0.2]
+		}
+	},
+	"DONKEY": {
+		"BoundingBox": {
+			"width": 1.4,
+			"height": 1.6
+		},
+		"RiderInfo": {
+			"position": [0.0, 0.925, -0.2]
+		}
+	},
+	"MULE": {
+		"BoundingBox": {
+			"width": 1.4,
+			"height": 1.6
+		},
+		"RiderInfo": {
+			"position": [0.0, 0.975, -0.2]
+		}
+	},
+	"LAMA": {
+		"BoundingBox":  {
+			"width": 0.9,
+			"height": 1.87
+		},
+		"RiderInfo":  {
+			"position": [0.0, 1.1, -0.2]
+		}
+	},
+	"BAT": {
+		"BoundingBox": {
+			"width": 0.5,
+			"height": 0.9
+		}
+	},
+	"OCELOT": {
+		"BoundingBox": {
+			"width": 0.6,
+			"height": 0.7
+		},
+		"RiderInfo": {
+			"position": [0.0, 0.35, 0.0]
+		}
+	},
+	"WOLF": {
+		"BoundingBox": {
+			"width": 0.6,
+			"height": 0.8
+		},
+		"RiderInfo": {
+			"position": [0.0, 0.675, -0.1]
+		}
+	},
+	"PIG": {
+		"BoundingBox": {
+			"width": 0.9,
+			"height": 0.9
+		},
+		"RiderInfo": {
+			"position": [0.0, 0.63, 0.0]
+		}
+	
+	},
+	"COW": {
+		"BoundingBox": {
+			"width": 0.9,
+			"height": 1.3
+		},
+		"RiderInfo": {
+			"position": [0.0, 1.105, 0.0]
+		}
+	},
+	"MUSHROOM_COW": {
+		"BoundingBox": {
+			"width": 0.9,
+			"height": 1.3
+		},
+		"RiderInfo": {
+			"position": [0.0, 1.105, 0.0]
+		}
+	},
+	"CHICKEN": {
+		"BoundingBox": {
+			"width": 0.6,
+			"height": 0.8
+		},
+		"RiderInfo": {
+			"position": [0.0, 0.4, 0.0]
+		}
+	},
+	"SQUID": {
+		"BoundingBox": {
+			"width": 0.95,
+			"height": 0.95
+		}
+	},
+	"RABBIT": {
+		"BoundingBox": {
+			"width": 0.67,
+			"height": 0.67
+		}
+	},
+	"SHEEP": {
+		"BoundingBox": {
+			"width": 0.9,
+			"height": 1.3
+		},
+		"RiderInfo": {
+			"position": [0.0, 0.925, 0.0]
+		}
+	},
+	"POLAR_BEAR": {
+		"BoundingBox": {
+			"width": 1.3,
+			"height": 1.4
+		}
+	},
+	"VILLAGER": {
+		"BoundingBox": {
+			"width": 0.6,
+			"height": 1.8
+		}
+	},
+	"ENDERMAN": {
+		"BoundingBox": {
+			"width": 0.6,
+			"height": 2.9
+		}
+	},
+	"GIANT": {
+		"BoundingBox": {
+			"width": 0.6,
+			"height": 1.8
+		}
+	},
+	"SILVERFISH": {
+		"BoundingBox": {
+			"width": 0.4,
+			"height": 0.3
+		}
+	},
+	"ENDERMITE": {
+		"BoundingBox": {
+			"width": 0.4,
+			"height": 0.3
+		}
+	},
+	"SNOWMAN": {
+		"BoundingBox": {
+			"width": 0.4,
+			"height": 1.8
+		}
+	},
+	"ZOMBIE": {
+		"BoundingBox": {
+			"width": 0.6,
+			"height": 1.8
+		},
+		"RiderInfo": {
+			"position": [0.0, 1.1, -0.35]
+		}
+	},
+	"ZOMBIE_VILLAGER": {
+		"BoundingBox": {
+			"width": 0.6,
+			"height": 1.8
+		},
+		"RiderInfo": {
+			"position": [0.0, 0.9, -0.25]
+		}
+	},
+	"HUSK": {
+		"BoundingBox": {
+			"width": 0.6,
+			"height": 1.8
+		},
+		"RiderInfo": {
+			"position": [0.0, 1.1, -0.35]
+		}
+	},
+	"ZOMBIE_PIGMAN": {
+		"BoundingBox": {
+			"width": 0.6,
+			"height": 1.8
+		},
+		"RiderInfo": {
+			"position": [0.0, 1.1, -0.35]
+		}
+	},
+	"BLAZE": {
+		"BoundingBox": {
+			"width": 0.5,
+			"heigth": 1.8
+		}
+	},
+	"SPIDER": {
+		"BoundingBox": {
+			"width": 1.4,
+			"heigth": 0.9
+		},
+		"RiderInfo": {
+			"position": [0.0, 0.54, 0.0]
+		}
+	},
+	"CAVE_SPIDER": {
+		"BoundingBox": {
+			"width": 0.7,
+			"heigth": 0.5
+		},
+		"RiderInfo": {
+			"position": [0.0, 0.3, -0.1]
+		}
+	},
+	"CREEPER": {
+		"BoundingBox": {
+			"width": 0.6,
+			"heigth": 1.8
+		}
+	},
+	"GHAST": {
+		"BoundingBox": {
+			"width": 4.0,
+			"heigth": 4.0
+		}
+	},
+	"SLIME": {
+		"BoundingBox": {
+			"width": 0.52,
+			"heigth": 0.52
+		}
+	},
+	"MAGMA_CUBE": {
+		"BoundingBox": {
+			"width": 0.52,
+			"heigth": 0.52
+		}
+	},
+	"SKELETON": {
+		"BoundingBox": {
+			"width": 0.6,
+			"heigth": 1.95
+		}
+	},
+	"WITHER_SKELETON": {
+		"BoundingBox": {
+			"width": 0.72,
+			"heigth": 2
+		}
+	},
+	"STRAY": {
+		"BoundingBox": {
+			"width": 0.6,
+			"heigth": 1.95
+		}
+	},
+	"WITCH": {
+		"BoundingBox": {
+			"width": 0.6,
+			"height": 1.8
+		}
+	},
+	"IRON_GOLEM": {
+		"BoundingBox": {
+			"width": 1.4,
+			"height": 2.9
+		}
+	},
+	"SHULKER": {
+		"BoundingBox": {
+			"width": 1.0,
+			"height": 1.0
+		}
+	},
+	"WITHER": {
+		"BoundingBox": {
+			"width": 1.0,
+			"height": 3.0
+		}
+	},
+	"GUARDIAN": {
+		"BoundingBox": {
+			"width": 0.85,
+			"height": 0.85
+		}
+	},
+	"ELDER_GUARDIAN": {
+		"BoundingBox": {
+			"width": 1.99,
+			"height": 1.99
+		}
+	},
+	"VINDICATOR": {
+		"BoundingBox": {
+			"width": 0.6,
+			"height": 1.95
+		}
+	},
+	"EVOKER": {
+		"BoundingBox": {
+			"width": 0.6,
+			"height": 1.95
+		}
+	},
+	"ILLUSIONER": {
+		"BoundingBox": {
+			"width": 0.6,
+			"height": 1.95
+		}
+	},
+	"VEX": {
+		"BoundingBox": {
+			"width": 0.4,
+			"height": 0.8
+		}
+	},
+	"PARROT": {
+		"BoundingBox": {
+			"width": 0.5,
+			"height": 0.9
+		}
+	},
+	"ARMOR_STAND_MOB": {
+		"BoundingBox": {
+			"width": 0.5,
+			"height": 1.975
+		}
+	},
+	"BOAT": { 
+		"BoundingBox": {
+			"width": 1.4,
+			"height": 0.455	
+		},
+		"Offset": {
+			"position": [0.0, 0.2, 0.0],
+			"rotation": [0.0, 0.0] 
+		},
+		"RiderInfo": {
+			"position": [0.0, -0.2, 0.0]
+		}
+	},
+	"TNT": {
+		"BoundingBox": {
+			"width": 0.98,
+			"heigth": 0.98
+		},
+		"Offset": {
+			"position": [0.0, 0.5, 0.0],
+			"rotation": [0.0, 0.0] 
+		}
+	},
+	"SNOWBALL": {
+		"BoundingBox": {
+			"width": 0.25,
+			"heigth": 0.25
+		}
+	},
+	"EGG": {
+		"BoundingBox": {
+			"width": 0.25,
+			"heigth": 0.25
+		}
+	},
+	"FIREBALL": {
+		"BoundingBox": {
+			"width": 0.31,
+			"heigth": 0.31
+		}
+	},
+	"FIRECHARGE": {
+		"BoundingBox": {
+			"width": 0.31,
+			"heigth": 0.31
+		}
+	},
+	"ENDERPEARL": {
+		"BoundingBox": {
+			"width": 0.25,
+			"heigth": 0.25
+		}
+	},
+	"WITHER_SKULL": {
+		"BoundingBox": {
+			"width": 0.15,
+			"height": 0.15
+		}
+	},
+	"FALLING_OBJECT": {
+		"BoundingBox": {
+			"width": 1.0,
+			"height": 1.0
+		}
+	},
+	"ENDEREYE": {
+		"BoundingBox": {
+			"width": 0.25,
+			"heigth": 0.25
+		}
+	},
+	"POTION": {
+		"BoundingBox": {
+			"width": 0.25,
+			"heigth": 0.25
+		}
+	},
+	"EXP_BOTTLE": {
+		"BoundingBox": {
+			"width": 0.25,
+			"heigth": 0.25
+		}
+	},
+	"LEASH_KNOT": {
+		"BoundingBox": {
+			"width": 0.2,
+			"height": 0.3
+		},
+		"Offset": {
+			"position": [0.0, 0.0, 0.0],
+			"rotation": [0.0, 0.0] 
+		}
+	},
+	"FISHING_FLOAT": {
+		"BoundingBox": {
+			"width": 0.15,
+			"height": 0.15
+		}
+	},
+	"ITEM": {
+		"BoundingBox": {
+			"width": 0.15,
+			"height": 0.15
+		}
+	},
+	"ARROW": {
+		"BoundingBox": {
+			"width": 0.25,
+			"height": 0.25
+		}
+	},
+	"SPECTRAL_ARROW": {
+		"BoundingBox": {
+			"width": 0.25,
+			"height": 0.25
+		}
+	},
+	"TIPPED_ARROW": {
+		"BoundingBox": {
+			"width": 0.25,
+			"height": 0.25
+		}
+	},
+	"FIREWORK": {
+		"BoundingBox": {
+			"width": 0.25,
+			"heigth": 0.25
+		}
+	},
+	"ITEM_FRAME": {
+		"BoundingBox": {
+			"width": 0.98,
+			"heigth": 0.98
+		}
+	},
+	"ENDER_CRYSTAL": {
+		"BoundingBox": {
+			"width": 0.98,
+			"heigth": 0.98
+		}
+	},
+	"ARMOR_STAND_OBJECT": {
+		"BoundingBox": {
+			"width": 0.5,
+			"height": 1.975
+		}
+	},
+	"SHULKER_BULLET": {
+		"BoundingBox": {
+			"width": 0.625,
+			"heigth": 0.625
+		}
+	},
+	"LAMA_SPIT": {
+		"BoundingBox": {
+			"width": 0.31,
+			"heigth": 0.31
+		}
+	},
+	"DRAGON_FIREBALL": {
+		"BoundingBox": {
+			"width": 0.31,
+			"heigth": 0.31
+		}
+	},
+	"EVOCATOR_FANGS": {
+		"BoundingBox": {
+			"width": 0.31,
+			"heigth": 0.31
+		}
+	},
+	"MINECART": {
+		"BoundingBox": {
+			"width": 0.98,
+			"height": 0.7
+		},
+		"Offset": {
+			"position": [0.0, 0.5, 0.0],
+			"rotation": [0.0, 0.0] 
+		},
+		"RiderInfo": {
+			"position": [0.0, -0.2, 0.0]
+		}
+	},
+	"MINECART_CHEST": {
+		"BoundingBox": {
+			"width": 0.98,
+			"height": 0.7
+		},
+		"Offset": {
+			"position": [0.0, 0.5, 0.0],
+			"rotation": [0.0, 0.0] 
+		},
+		"RiderInfo": {
+			"position": [0.0, -0.2, 0.0]
+		}
+	},
+	"MINECART_HOPPER": {
+		"BoundingBox": {
+			"width": 0.98,
+			"height": 0.7
+		},
+		"Offset": {
+			"position": [0.0, 0.5, 0.0],
+			"rotation": [0.0, 0.0] 
+		},
+		"RiderInfo": {
+			"position": [0.0, -0.2, 0.0]
+		}
+	},
+	"MINECART_TNT": {
+		"BoundingBox": {
+			"width": 0.98,
+			"height": 0.7
+		},
+		"Offset": {
+			"position": [0.0, 0.5, 0.0],
+			"rotation": [0.0, 0.0] 
+		},
+		"RiderInfo": {
+			"position": [0.0, -0.2, 0.0]
+		}
+	},
+	"MINECART_MOB_SPAWNER": {
+		"BoundingBox": {
+			"width": 0.98,
+			"height": 0.7
+		},
+		"Offset": {
+			"position": [0.0, 0.5, 0.0],
+			"rotation": [0.0, 0.0] 
+		},
+		"RiderInfo": {
+			"position": [0.0, -0.2, 0.0]
+		}
+	},
+	"MINECART_FURNACE": {
+		"BoundingBox": {
+			"width": 0.98,
+			"height": 0.7
+		},
+		"Offset": {
+			"position": [0.0, 0.5, 0.0],
+			"rotation": [0.0, 0.0] 
+		},
+		"RiderInfo": {
+			"position": [0.0, -0.2, 0.0]
+		}
+	},
+	"MINECART_COMMAND": {
+		"BoundingBox": {
+			"width": 0.98,
+			"height": 0.7
+		},
+		"Offset": {
+			"position": [0.0, 0.5, 0.0],
+			"rotation": [0.0, 0.0] 
+		},
+		"RiderInfo": {
+			"position": [0.0, -0.2, 0.0]
+		}
+	}
+}

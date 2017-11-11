@@ -34,6 +34,7 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.minecraftdata.ItemData;
 import protocolsupport.protocol.utils.minecraftdata.KeybindData;
+import protocolsupport.protocol.utils.minecraftdata.PocketData;
 import protocolsupport.protocol.utils.minecraftdata.PotionData;
 import protocolsupport.protocol.utils.minecraftdata.SoundData;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
@@ -102,6 +103,7 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(SoundData.class.getName());
 			Class.forName(KeybindData.class.getName());
 			Class.forName(I18NData.class.getName());
+			Class.forName(PocketData.class.getName());
 			Class.forName(Compressor.class.getName());
 			Class.forName(ServerBoundPacket.class.getName());
 			Class.forName(ClientBoundPacket.class.getName());
@@ -136,6 +138,7 @@ public class ProtocolSupport extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new MultiplePassengersRestrict(), this);
 		getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
 			Thread pocketPacketCache = new Thread(() -> {
+				PocketData.readEntityDatas();
 				PECraftingManager.getInstance().registerRecipes();
 				PECreativeInventory.getInstance().generateCreativeInventoryItems();
 			});

@@ -97,6 +97,7 @@ public class PEDataValues {
 		objectEntityType.put(NetworkEntityType.MINECART_CHEST, 98);
 		objectEntityType.put(NetworkEntityType.MINECART_COMMAND, 100);
 		objectEntityType.put(NetworkEntityType.MINECART_FURNACE, 84); //Hack, we remap a furnace using entitymetadata.
+		objectEntityType.put(NetworkEntityType.MINECART_MOB_SPAWNER, 84); //Hack, we remap a mobspawner using entitymetadata.
 		objectEntityType.put(NetworkEntityType.AREA_EFFECT_CLOUD, 101);
 		objectEntityType.put(NetworkEntityType.LAMA_SPIT, 102);
 		objectEntityType.put(NetworkEntityType.EVOCATOR_FANGS, 103);

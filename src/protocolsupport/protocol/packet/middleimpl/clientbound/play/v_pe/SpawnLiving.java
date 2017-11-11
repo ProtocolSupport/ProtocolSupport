@@ -8,23 +8,30 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
+import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class SpawnLiving extends MiddleSpawnLiving {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		return RecyclableSingletonList.create(create(
+		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
+		packets.add(create(
 			version,
 			entity, x, y, z,
 			motX / 8.000F, motY / 8000.F, motZ / 8000.F, pitch, yaw, cache.getLocale(),
 			null, PEDataValues.getLivingEntityTypeId(IdRemapper.ENTITY.getTable(version).getRemap(entity.getType()))
 		));
+		DataWatcherObject<?> healthWatcher = metadata.get(DataWatcherObjectIndex.EntityLiving.HEALTH);
+		if (healthWatcher != null) {
+			packets.add(EntitySetAttributes.create(version, entity.getId(), EntitySetAttributes.createAttribute("minecraft:health", (Float) healthWatcher.getValue())));
+		}
+		return packets;
 	}
 
 	public static ClientBoundPacketData createSimple(ProtocolVersion version,

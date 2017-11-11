@@ -13,6 +13,7 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectSVarLong;
 import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -34,11 +35,17 @@ public class EntityMetadata extends MiddleEntityMetadata {
 				if(itemWatcher != null) {
 					PreparedItem i = cache.getPreparedItem(entityId);
 					if(i != null) {
-						packets.addAll(i.updateItem(connection.getVersion(), (ItemStackWrapper) metadata.get(DataWatcherObjectIndex.Item.ITEM).getValue()));
+						packets.addAll(i.updateItem(connection.getVersion(), (ItemStackWrapper) itemWatcher.getValue()));
 					}
 				}
 			}
 			default: {
+				if (entity.isOfType(NetworkEntityType.LIVING)) {
+					DataWatcherObject<?> healthWatcher = metadata.get(DataWatcherObjectIndex.EntityLiving.HEALTH);
+					if (healthWatcher != null) {
+						packets.add(EntitySetAttributes.create(connection.getVersion(), entity.getId(), EntitySetAttributes.createAttribute("minecraft:health", (Float) healthWatcher.getValue())));
+					}
+				}
 				packets.add(create(entity, cache.getLocale(), metadata, connection.getVersion()));
 			}
 		}

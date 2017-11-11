@@ -1,6 +1,8 @@
 package protocolsupport.protocol.utils.types;
 
 import org.bukkit.util.Vector;
+
+import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData.PocketRiderInfo;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
@@ -90,6 +92,7 @@ public class NetworkEntity {
 		private long peBaseFlags = 0;
 		public byte sizeModifier = 1;
 		public int attachedId = -1; //Leashed? Data is send in pocket meta, but might be useful to store for other things.
+		public PocketRiderInfo riderInfo;
 		public Rider rider = new Rider(false);
 		private ItemStackWrapper helmet = ItemStackWrapper.NULL;
 		private ItemStackWrapper chestplate = ItemStackWrapper.NULL;
