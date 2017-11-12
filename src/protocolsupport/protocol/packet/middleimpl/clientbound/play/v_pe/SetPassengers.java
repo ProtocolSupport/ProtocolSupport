@@ -40,25 +40,17 @@ public class SetPassengers extends MiddleSetPassengers {
 			for (int passengerId : passengersIds) {
 				NetworkEntity passenger = cache.getWatchedEntity(passengerId);
 				if (passenger != null) {
+					//MOJANG.... WHYYYYY?!
 					if(vehicle.isOfType(NetworkEntityType.PIG)) {
-						//MOJANG.... WHYYYYY?!
-						packets.add(EntitySetAttributes.create(version, vehicleId, EntitySetAttributes.createAttribute("minecraft:horse.jump_strength", 0.432084373616155)));
+						packets.add(EntitySetAttributes.create(version, vehicleId, EntitySetAttributes.createAttribute("minecraft:horse.jump_strength", 0.432084373616155))); 
 					}
+					
 					DataCache data = passenger.getDataCache();
 					data.riderInfo = PocketData.getPocketEntityData(vehicle.getType()).getRiderInfo();
-					float vehicleSize = PEMetaProviderSPI.getProvider().getEntitySize(vehicle) * vehicle.getDataCache().sizeModifier;
-					data.riderInfo.setPosition(data.riderInfo.getPosition().multiply(new Vector(vehicleSize, vehicleSize, vehicleSize)));
-
-					//TODO: Implement rotation locking etc. Make this more tight.
-					/*if(vehicle.isOfType(NetworkEntityType.PIG)) {
-						data.rider = new DataCache.Rider(new Vector(0.0, 1.8, 0.0), false);
-						packets.add(EntitySetAttributes.create(version, vehicleId, EntitySetAttributes.createAttribute("minecraft:horse.jump_strength", 0.432084373616155)));
-					} else if(vehicle.isOfType(NetworkEntityType.BASE_HORSE)) {
-						data.rider = new DataCache.Rider(new Vector(0.0, 2.3, -0.2), true, 180f, -180f);
-						packets.add(EntitySetAttributes.create(version, vehicleId, EntitySetAttributes.createAttribute("minecraft:horse.jump_strength", 0.966967527085333)));
-					} else {
-						data.rider = new DataCache.Rider(true);
-					}*/
+					if(data.riderInfo != null) {
+						float vehicleSize = PEMetaProviderSPI.getProvider().getEntitySize(vehicle) * vehicle.getDataCache().sizeModifier;
+						data.riderInfo.setPosition(data.riderInfo.getPosition().multiply(new Vector(vehicleSize, vehicleSize, vehicleSize)));
+					}
 					packets.add(EntityMetadata.createFaux(passenger, cache.getLocale(), version));
 
 					packets.add(create(version, vehicleId, passengerId, LINK));

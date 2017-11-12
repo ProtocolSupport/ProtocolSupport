@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.unsafe.pemetadata.PEMetaProviderSPI;
 import protocolsupport.api.unsafe.peskins.PESkinsProviderSPI;
 import protocolsupport.commands.CommandHandler;
 import protocolsupport.listeners.FeatureEmulation;
@@ -121,6 +122,7 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(LegacyEntityType.class.getName());
 			Class.forName(LegacyEffect.class.getName());
 			Class.forName(PESkinsProviderSPI.class.getName());
+			Class.forName(PEMetaProviderSPI.class.getName());
 			Class.forName(PESkinModel.class.getName());
 			ServerPlatform.get().inject();
 		} catch (Throwable t) {

@@ -8,5 +8,10 @@ public class DefaultPEMetaProvider extends PEMetaProvider {
 	public float getEntitySize(NetworkEntity entity) {
 		return 1f;
 	}
+	
+	@Override
+	public String getInteractText(NetworkEntity entity) {
+		return "Interact";
+	}
 
 }

@@ -10,6 +10,9 @@ import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.minecraftdata.PocketData;
+import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData;
+import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData.PocketOffset;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
@@ -57,7 +60,18 @@ public class SpawnLiving extends MiddleSpawnLiving {
 	public static ClientBoundPacketData create(ProtocolVersion version,
 			NetworkEntity entity, double x, double y, double z,
 			float motX, float motY, float motZ,
-			float pitch, float yaw, String locale, ArrayMap<DataWatcherObject<?>> metadata, int entityType) {
+			float pitch, float yaw, 
+			String locale, ArrayMap<DataWatcherObject<?>> metadata, int entityType
+		) {
+		PocketEntityData typeData = PocketData.getPocketEntityData(entity.getType());
+		if (typeData != null && typeData.getOffset() != null) {
+			PocketOffset offset = typeData.getOffset();
+			x += offset.getX();
+			y += offset.getY();
+			z += offset.getZ();
+			pitch += offset.getPitch();
+			yaw += offset.getYaw();
+		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SPAWN_ENTITY, version);
 		VarNumberSerializer.writeSVarLong(serializer, entity.getId());
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
@@ -70,13 +84,13 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		MiscSerializer.writeLFloat(serializer, motZ);
 		MiscSerializer.writeLFloat(serializer, pitch);
 		MiscSerializer.writeLFloat(serializer, yaw);
-		VarNumberSerializer.writeVarInt(serializer, 0); //attributes, not used
+		VarNumberSerializer.writeVarInt(serializer, 0); //attributes, send in separate packet
 		if (metadata == null) {
 			VarNumberSerializer.writeVarInt(serializer, 0);
 		} else {
 			EntityMetadata.encodeMeta(serializer, version, locale, EntityMetadata.transform(entity, metadata, version));
 		}
-		VarNumberSerializer.writeVarInt(serializer, 0); //links, not used
+		VarNumberSerializer.writeVarInt(serializer, 0); //links, send in separate packet
 		return serializer;
 	}
 

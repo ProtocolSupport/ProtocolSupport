@@ -71,27 +71,40 @@ public class PocketData {
 		}
 		
 		public static class PocketOffset {
-			private List<Double> position = new ArrayList<Double>(); 
-			private List<Double> rotation = new ArrayList<Double>();
+			private List<Float> position = new ArrayList<Float>(); 
+			private List<Byte> rotation = new ArrayList<Byte>();
 			
-			public Vector getPosition() {
-				return new Vector(position.get(0), position.get(1), position.get(2));
+			public Float getX() {
+				return position.get(0);
 			}
 			
-			public Double getYaw() {
+			public Float getY() {
+				return position.get(1);
+			}
+			
+			public Float getZ() {
+				return position.get(2);
+			}
+			
+			public Byte getYaw() {
 				return rotation.get(0);
 			}
 			
-			public Double getPitch() {
+			public Byte getPitch() {
 				return rotation.get(1);
 			}
 		}
 		
 		public static class PocketRiderInfo {
 			private List<Double> position = new ArrayList<Double>();
+			private Float rotationlock = null;
 			
 			public Vector getPosition() {
 				return new Vector(position.get(0), position.get(1) + 1, position.get(2));
+			}
+			
+			public Float getRotationLock() {
+				return rotationlock;
 			}
 			
 			public void setPosition(Vector position) {

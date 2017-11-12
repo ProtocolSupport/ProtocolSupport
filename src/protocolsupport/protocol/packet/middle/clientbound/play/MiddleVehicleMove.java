@@ -14,7 +14,6 @@ public abstract class MiddleVehicleMove extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		System.out.println("VEHICLE MOVE!!!");
 		x = serverdata.readDouble();
 		y = serverdata.readDouble();
 		z = serverdata.readDouble();
