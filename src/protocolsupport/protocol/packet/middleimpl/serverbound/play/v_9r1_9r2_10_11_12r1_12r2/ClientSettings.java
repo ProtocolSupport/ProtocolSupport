@@ -2,8 +2,9 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_9r1_9r2_10
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleClientSettings;
+import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.utils.EnumConstantLookups;
 
 public class ClientSettings extends MiddleClientSettings {
 
@@ -11,10 +12,10 @@ public class ClientSettings extends MiddleClientSettings {
 	public void readFromClientData(ByteBuf clientdata) {
 		locale = StringSerializer.readString(clientdata, connection.getVersion(), 16);
 		viewDist = clientdata.readByte();
-		chatMode = clientdata.readByte();
+		chatMode = MiscSerializer.readVarIntEnum(clientdata, ChatMode.CONSTANT_LOOKUP);
 		chatColors = clientdata.readBoolean();
 		skinFlags = clientdata.readUnsignedByte();
-		mainHand = VarNumberSerializer.readVarInt(clientdata);
+		mainHand = MiscSerializer.readVarIntEnum(clientdata, EnumConstantLookups.MAIN_HAND);
 	}
 
 }

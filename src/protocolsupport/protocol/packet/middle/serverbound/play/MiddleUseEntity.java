@@ -7,6 +7,7 @@ import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.utils.EnumConstantLookups;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -21,7 +22,7 @@ public abstract class MiddleUseEntity extends ServerBoundMiddlePacket {
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_USE_ENTITY);
 		VarNumberSerializer.writeVarInt(creator, entityId);
-		MiscSerializer.writeEnum(creator, action);
+		MiscSerializer.writeVarIntEnum(creator, action);
 		switch (action) {
 			case INTERACT: {
 				VarNumberSerializer.writeVarInt(creator, usedHand);
@@ -42,7 +43,8 @@ public abstract class MiddleUseEntity extends ServerBoundMiddlePacket {
 	}
 
 	protected enum Action {
-		INTERACT, ATTACK, INTERACT_AT
+		INTERACT, ATTACK, INTERACT_AT;
+		public static final EnumConstantLookups.EnumConstantLookup<Action> CONSTANT_LOOKUP = new EnumConstantLookups.EnumConstantLookup<>(Action.class);
 	}
 
 }

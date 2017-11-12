@@ -10,6 +10,7 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.utils.EnumConstantLookups;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.utils.Utils;
@@ -21,7 +22,7 @@ public abstract class MiddlePlayerInfo extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		action = Action.values()[VarNumberSerializer.readVarInt(serverdata)];
+		action = MiscSerializer.readVarIntEnum(serverdata, Action.CONSTANT_LOOKUP);
 		infos = new Info[VarNumberSerializer.readVarInt(serverdata)];
 		for (int i = 0; i < infos.length; i++) {
 			Info info = new Info();
@@ -105,7 +106,8 @@ public abstract class MiddlePlayerInfo extends ClientBoundMiddlePacket {
 	}
 
 	protected static enum Action {
-		ADD, GAMEMODE, PING, DISPLAY_NAME, REMOVE
+		ADD, GAMEMODE, PING, DISPLAY_NAME, REMOVE;
+		public static final EnumConstantLookups.EnumConstantLookup<Action> CONSTANT_LOOKUP = new EnumConstantLookups.EnumConstantLookup<>(Action.class);
 	}
 
 	protected static class Info {

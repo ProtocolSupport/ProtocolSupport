@@ -24,7 +24,7 @@ public class EntityAction extends MiddleEntityAction {
 		if (connection.getVersion() == ProtocolVersion.MINECRAFT_1_8) {
 			action = actionById8.get(actionId);
 		} else {
-			action = Action.values()[actionId];
+			action = Action.CONSTANT_LOOKUP.getByOrdinal(actionId);
 		}
 	}
 

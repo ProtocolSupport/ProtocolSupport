@@ -2,7 +2,9 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
+import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.utils.EnumConstantLookups;
 
 public abstract class MiddleWorldBorder extends ClientBoundMiddlePacket {
 
@@ -19,7 +21,7 @@ public abstract class MiddleWorldBorder extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		action = Action.values()[VarNumberSerializer.readVarInt(serverdata)];
+		action = MiscSerializer.readVarIntEnum(serverdata, Action.CONSTANT_LOOKUP);
 		switch (action) {
 			case SET_SIZE: {
 				radius = serverdata.readDouble();
@@ -59,7 +61,8 @@ public abstract class MiddleWorldBorder extends ClientBoundMiddlePacket {
 	}
 
 	protected static enum Action {
-		SET_SIZE, LERP_SIZE, SET_CENTER, INIT, SET_WARN_TIME, SET_WARN_BLOCKS
+		SET_SIZE, LERP_SIZE, SET_CENTER, INIT, SET_WARN_TIME, SET_WARN_BLOCKS;
+		public static final EnumConstantLookups.EnumConstantLookup<Action> CONSTANT_LOOKUP = new EnumConstantLookups.EnumConstantLookup<>(Action.class);
 	}
 
 }

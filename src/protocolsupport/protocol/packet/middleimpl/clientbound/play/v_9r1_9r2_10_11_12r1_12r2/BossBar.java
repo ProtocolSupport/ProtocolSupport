@@ -17,7 +17,7 @@ public class BossBar extends MiddleBossBar {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BOSS_BAR_ID, version);
 		MiscSerializer.writeUUID(serializer, uuid);
-		MiscSerializer.writeEnum(serializer, action);
+		MiscSerializer.writeVarIntEnum(serializer, action);
 		switch (action) {
 			case ADD: {
 				StringSerializer.writeString(serializer, version, title);

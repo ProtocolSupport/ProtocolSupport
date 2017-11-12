@@ -5,15 +5,24 @@ import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
+import protocolsupport.protocol.utils.EnumConstantLookups;
 
 public class MiscSerializer {
 
-	public static <T extends Enum<T>> T readEnum(ByteBuf from, Class<T> clazz) {
-		return clazz.getEnumConstants()[VarNumberSerializer.readVarInt(from)];
+	public static <T extends Enum<T>> T readVarIntEnum(ByteBuf from, EnumConstantLookups.EnumConstantLookup<T> lookup) {
+		return lookup.getByOrdinal(VarNumberSerializer.readVarInt(from));
 	}
 
-	public static void writeEnum(ByteBuf to, Enum<?> e) {
+	public static <T extends Enum<T>> T readByteEnum(ByteBuf from, EnumConstantLookups.EnumConstantLookup<T> lookup) {
+		return lookup.getByOrdinal(from.readByte());
+	}
+
+	public static void writeVarIntEnum(ByteBuf to, Enum<?> e) {
 		VarNumberSerializer.writeVarInt(to, e.ordinal());
+	}
+
+	public static void writeByteEnum(ByteBuf to, Enum<?> e) {
+		to.writeByte(e.ordinal());
 	}
 
 	public static UUID readUUID(ByteBuf from) {
