@@ -16,7 +16,6 @@ import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.NetworkEntity;
-import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -100,6 +99,7 @@ public class NetworkDataCache {
 	private final HashMap<UUID, NetworkDataCache.PlayerListEntry> playerlist = new HashMap<>();
 	private Environment dimensionId;
 	private float maxHealth = 20.0F;
+	private int selectedSlot = 0;
 	private UUID clientUUID;
 
 	public void addWatchedEntity(NetworkEntity entity) {
@@ -158,6 +158,14 @@ public class NetworkDataCache {
 		preparedItems.remove(entityId);
 	}
 	
+	public int getSelectedSlot() {
+		return selectedSlot;
+	}
+
+	public void setSelectedSlot(int selectedSlot) {
+		this.selectedSlot = selectedSlot;
+	}
+
 	public InfTransactions getInfTransactions() {
 		return infTransactions;
 	}
@@ -359,24 +367,6 @@ public class NetworkDataCache {
 			return (x * 31) + z;
 		}
 	}
-	
-	ChunkCoord fakeInvCoords = null;
-	public Position prepareFakeInventoryCoords() {
-		if(!sentChunks.contains(fakeInvCoords)) {
-			fakeInvCoords = new ChunkCoord(-1, 31);
-			//fakeInvCoords = sentChunks.stream().findFirst().orElseThrow(RuntimeException::new);
-		}
-		return getFakeInventoryCoords();
-	}
-	
-	public Position getFakeInventoryCoords() {
-		if(!sentChunks.contains(fakeInvCoords)) {
-			return null;
-		}
-		return new Position((fakeInvCoords.x << 4), 0, (fakeInvCoords.z << 4));
-	}
-	
-	
 
 	private GameMode gamemode = GameMode.SURVIVAL;
 	private boolean canFly = false;

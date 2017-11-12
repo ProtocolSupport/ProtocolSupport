@@ -98,6 +98,8 @@ public class NetworkEntity {
 		private ItemStackWrapper chestplate = ItemStackWrapper.NULL;
 		private ItemStackWrapper leggings = ItemStackWrapper.NULL;
 		private ItemStackWrapper boots = ItemStackWrapper.NULL;
+		private ItemStackWrapper hand = ItemStackWrapper.NULL;
+		private ItemStackWrapper offhand = ItemStackWrapper.NULL;
 
 		public long getPeBaseFlags() {
 			return peBaseFlags;
@@ -143,6 +145,18 @@ public class NetworkEntity {
 		}
 
 		public ItemStackWrapper getBoots() { return this.boots; }
+		
+		public void setHand(ItemStackWrapper hand) {
+			this.hand = hand;
+		}
+
+		public ItemStackWrapper getHand() { return this.hand; }
+		
+		public void setOffHand(ItemStackWrapper offhand) {
+			this.offhand = offhand;
+		}
+
+		public ItemStackWrapper getOffhand() { return this.offhand; }
 
 		public static class Rider {
 			public boolean riding = false;

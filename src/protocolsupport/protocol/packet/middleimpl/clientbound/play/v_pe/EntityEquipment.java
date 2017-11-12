@@ -8,23 +8,27 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.NetworkEntity.DataCache;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
+import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 public class EntityEquipment extends MiddleEntityEquipment {
 	
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
+		ProtocolVersion version = connection.getVersion();
+		String locale = cache.getLocale();
+		NetworkEntity entity = cache.getWatchedEntity(entityId);
+		if (entity == null) {
+			return RecyclableEmptyList.get();
+		}
+		DataCache dataCache = entity.getDataCache();
 		if (slot > 1) {
 			// Armor update
-			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOB_ARMOR_EQUIPMENT, connection.getVersion());
+			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOB_ARMOR_EQUIPMENT, version);
 			VarNumberSerializer.writeVarLong(serializer, entityId);
-			if (cache.getWatchedEntity(entityId) == null) {
-				System.out.println("Server tried to update equipment of entity " + entityId + " for " + (this.connection.getPlayer() != null ? this.connection.getPlayer().getName() : this.connection) + ", but I don't have it on cache!");
-				return RecyclableEmptyList.get();
-			}
-			NetworkEntity.DataCache dataCache = cache.getWatchedEntity(entityId).getDataCache();
 			switch (slot) {
 				case (2): {
 					dataCache.setBoots(itemstack);
@@ -43,21 +47,28 @@ public class EntityEquipment extends MiddleEntityEquipment {
 					break;
 				}
 			}
-			ItemStackSerializer.writeItemStack(serializer, ProtocolVersion.MINECRAFT_PE, cache.getLocale(), dataCache.getHelmet(), true);
-			ItemStackSerializer.writeItemStack(serializer, ProtocolVersion.MINECRAFT_PE, cache.getLocale(), dataCache.getChestplate(), true);
-			ItemStackSerializer.writeItemStack(serializer, ProtocolVersion.MINECRAFT_PE, cache.getLocale(), dataCache.getLeggings(), true);
-			ItemStackSerializer.writeItemStack(serializer, ProtocolVersion.MINECRAFT_PE, cache.getLocale(), dataCache.getBoots(), true);
-
+			ItemStackSerializer.writeItemStack(serializer, version, locale, dataCache.getHelmet(), true);
+			ItemStackSerializer.writeItemStack(serializer, version, locale, dataCache.getChestplate(), true);
+			ItemStackSerializer.writeItemStack(serializer, version, locale, dataCache.getLeggings(), true);
+			ItemStackSerializer.writeItemStack(serializer, version, locale, dataCache.getBoots(), true);
 			return RecyclableSingletonList.create(serializer);
 		}
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOB_EQUIPMENT, connection.getVersion());
+		if (slot == 1) {
+			dataCache.setHand(itemstack);
+		} else {
+			dataCache.setOffHand(itemstack);
+		}
+		return RecyclableSingletonList.create(createUpdateHand(version, locale, entityId, itemstack, cache.isSelf(entityId) ? cache.getSelectedSlot() : 0, slot == 1));
+	}
+	
+	public static ClientBoundPacketData createUpdateHand(ProtocolVersion version, String locale, int entityId, ItemStackWrapper itemstack, int slot, boolean isMainHand) {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOB_EQUIPMENT, version);
 		VarNumberSerializer.writeVarLong(serializer, entityId);
-		ItemStackSerializer.writeItemStack(serializer, ProtocolVersion.MINECRAFT_PE, cache.getLocale(), itemstack, true);
-		serializer.writeByte(0); // Inventory slot (I wonder why the client needs to care about this...)
-		serializer.writeByte(0); // Hotbar slot (again, why?)
-		serializer.writeByte(slot == 1 ? PESource.POCKET_OFFHAND : PESource.POCKET_INVENTORY);
-
-		return RecyclableSingletonList.create(serializer);
+		ItemStackSerializer.writeItemStack(serializer, version, locale, itemstack, true);
+		serializer.writeByte(slot);
+		serializer.writeByte(slot);
+		serializer.writeByte(isMainHand ? PESource.POCKET_OFFHAND : PESource.POCKET_INVENTORY);
+		return serializer;
 	}
 
 }

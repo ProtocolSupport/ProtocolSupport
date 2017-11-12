@@ -45,7 +45,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		registry.register(NetworkState.PLAY, PEPacketIDs.INTERACT, Interact.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.COMMAND_REQUEST, CommandRequest.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.TILE_DATA_UPDATE, BlockTileUpdate.class);
-		registry.register(NetworkState.PLAY, PEPacketIDs.PLAYER_HOTBAR, HeldSlot.class);
+		registry.register(NetworkState.PLAY, PEPacketIDs.MOB_EQUIPMENT, HeldSlot.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.CONTAINER_CLOSE, InventoryClose.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.INVENTORY_TRANSACTION, GodPacket.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.MAP_INFO_REQUEST, MapInfoRequest.class);
