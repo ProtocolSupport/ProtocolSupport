@@ -366,11 +366,12 @@
 			"height": 0.455	
 		},
 		"Offset": {
-			"position": [0.0, 0.2, 0.0],
-			"rotation": [0.0, 0.0] 
+			"position": [0.0, 0.3, 0.0],
+			"rotation": [50, 0] 
 		},
 		"RiderInfo": {
-			"position": [0.0, -0.2, 0.0]
+			"position": [0.0, -0.2, 0.0],
+			"rotationlock": 90.0
 		}
 	},
 	"TNT": {
@@ -380,7 +381,7 @@
 		},
 		"Offset": {
 			"position": [0.0, 0.5, 0.0],
-			"rotation": [0.0, 0.0] 
+			"rotation": [0, 0] 
 		}
 	},
 	"SNOWBALL": {
@@ -449,8 +450,8 @@
 			"height": 0.3
 		},
 		"Offset": {
-			"position": [0.0, 0.0, 0.0],
-			"rotation": [0.0, 0.0] 
+			"position": [0.5, 0.2, 0.5],
+			"rotation": [0, 0] 
 		}
 	},
 	"FISHING_FLOAT": {
@@ -537,8 +538,8 @@
 			"height": 0.7
 		},
 		"Offset": {
-			"position": [0.0, 0.5, 0.0],
-			"rotation": [0.0, 0.0] 
+			"position": [0.0, 0.3, 0.0],
+			"rotation": [0, 0] 
 		},
 		"RiderInfo": {
 			"position": [0.0, -0.2, 0.0]
@@ -550,8 +551,8 @@
 			"height": 0.7
 		},
 		"Offset": {
-			"position": [0.0, 0.5, 0.0],
-			"rotation": [0.0, 0.0] 
+			"position": [0.0, 0.3, 0.0],
+			"rotation": [0, 0] 
 		},
 		"RiderInfo": {
 			"position": [0.0, -0.2, 0.0]
@@ -563,8 +564,8 @@
 			"height": 0.7
 		},
 		"Offset": {
-			"position": [0.0, 0.5, 0.0],
-			"rotation": [0.0, 0.0] 
+			"position": [0.0, 0.3, 0.0],
+			"rotation": [0, 0] 
 		},
 		"RiderInfo": {
 			"position": [0.0, -0.2, 0.0]
@@ -576,8 +577,8 @@
 			"height": 0.7
 		},
 		"Offset": {
-			"position": [0.0, 0.5, 0.0],
-			"rotation": [0.0, 0.0] 
+			"position": [0.0, 0.3, 0.0],
+			"rotation": [0, 0] 
 		},
 		"RiderInfo": {
 			"position": [0.0, -0.2, 0.0]
@@ -589,8 +590,8 @@
 			"height": 0.7
 		},
 		"Offset": {
-			"position": [0.0, 0.5, 0.0],
-			"rotation": [0.0, 0.0] 
+			"position": [0.0, 0.3, 0.0],
+			"rotation": [0, 0] 
 		},
 		"RiderInfo": {
 			"position": [0.0, -0.2, 0.0]
@@ -602,8 +603,8 @@
 			"height": 0.7
 		},
 		"Offset": {
-			"position": [0.0, 0.5, 0.0],
-			"rotation": [0.0, 0.0] 
+			"position": [0.0, 0.3, 0.0],
+			"rotation": [0, 0] 
 		},
 		"RiderInfo": {
 			"position": [0.0, -0.2, 0.0]
@@ -615,8 +616,8 @@
 			"height": 0.7
 		},
 		"Offset": {
-			"position": [0.0, 0.5, 0.0],
-			"rotation": [0.0, 0.0] 
+			"position": [0.0, 0.3, 0.0],
+			"rotation": [0, 0] 
 		},
 		"RiderInfo": {
 			"position": [0.0, -0.2, 0.0]
