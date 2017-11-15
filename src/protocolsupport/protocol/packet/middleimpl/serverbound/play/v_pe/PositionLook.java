@@ -40,12 +40,14 @@ public class PositionLook extends ServerBoundMiddlePacket {
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 		int teleportId = cache.tryTeleportConfirm(x, y, z);
-		if (teleportId == -1) {
-			packets.add(MiddlePositionLook.create(x, y, z, yaw, pitch, onGround));
-		} else {
+		if (teleportId != -1) {
 			packets.add(MiddleTeleportAccept.create(teleportId));
-			packets.add(MiddlePositionLook.create(x, y, z, yaw, pitch, onGround));
 		}
+		//if(cache.getWatchedSelf().getDataCache().riderInfo != null) {
+			//NetworkEntity vehicle = cache.getWatchedSelf().getDataCache().riderInfo.getVehicle();
+			//TODO: Add different packets in here. For instance if you're on a pig, you can only look around (I think) and horses you need to control etc.
+		//}
+		packets.add(MiddlePositionLook.create(x, y, z, yaw, pitch, onGround));
 
 		//TODO: remove this shit
 		if (cache.getSignTag() != null) {

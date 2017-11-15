@@ -34,7 +34,7 @@ public class EntityTeleport extends MiddleEntityTeleport {
 			yaw += offset.getYaw();
 		}
 		if (entity.getType() == NetworkEntityType.PLAYER) {
-			return RecyclableSingletonList.create(Position.create(version, entityId, x, y, z, pitch, yaw, Position.ANIMATION_MODE_ALL));
+			return RecyclableSingletonList.create(Position.create(version, entity, x, y, z, pitch, yaw, Position.ANIMATION_MODE_ALL));
 		} else {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_TELEPORT, version);
 			VarNumberSerializer.writeVarLong(serializer, entityId);
@@ -42,7 +42,7 @@ public class EntityTeleport extends MiddleEntityTeleport {
 			MiscSerializer.writeLFloat(serializer, (float) y);
 			MiscSerializer.writeLFloat(serializer, (float) z);
 			serializer.writeByte(pitch);
-			serializer.writeByte(yaw); //head yaw actually
+			serializer.writeByte(entity.getDataCache().getHeadRotation(yaw));
 			serializer.writeByte(yaw);
 			serializer.writeBoolean(onGround);
 			serializer.writeBoolean(false); //teleported

@@ -50,6 +50,7 @@ public class SetPassengers extends MiddleSetPassengers {
 					if(data.riderInfo != null) {
 						float vehicleSize = PEMetaProviderSPI.getProvider().getEntitySize(vehicle) * vehicle.getDataCache().sizeModifier;
 						data.riderInfo.setPosition(data.riderInfo.getPosition().multiply(new Vector(vehicleSize, vehicleSize, vehicleSize)));
+						data.riderInfo.setVehicle(vehicle);
 					}
 					packets.add(EntityMetadata.createFaux(passenger, cache.getLocale(), version));
 

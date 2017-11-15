@@ -1,9 +1,7 @@
 package protocolsupport.protocol.utils.minecraftdata;
 
 import java.io.BufferedReader;
-import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.List;
 import java.util.Map;
 
 import org.bukkit.util.Vector;
@@ -12,6 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.Utils;
 
@@ -71,47 +70,62 @@ public class PocketData {
 		}
 		
 		public static class PocketOffset {
-			private List<Float> position = new ArrayList<Float>(); 
-			private List<Byte> rotation = new ArrayList<Byte>();
+			private float x;
+			private float y;
+			private float z;
+			private byte yaw;
+			private byte pitch;
 			
-			public Float getX() {
-				return position.get(0);
+			public float getX() {
+				return x;
 			}
 			
-			public Float getY() {
-				return position.get(1);
+			public float getY() {
+				return y;
 			}
 			
-			public Float getZ() {
-				return position.get(2);
+			public float getZ() {
+				return z;
 			}
 			
-			public Byte getYaw() {
-				return rotation.get(0);
+			public byte getYaw() {
+				return yaw;
 			}
 			
-			public Byte getPitch() {
-				return rotation.get(1);
+			public byte getPitch() {
+				return pitch;
 			}
 		}
 		
 		public static class PocketRiderInfo {
-			private List<Double> position = new ArrayList<Double>();
-			private Float rotationlock = null;
+			private double x;
+			private double y;
+			private double z;
+			private Float rotationlock = null; //Optional
+			private NetworkEntity vehicle = null; //Used only in meta
 			
 			public Vector getPosition() {
-				return new Vector(position.get(0), position.get(1) + 1, position.get(2));
+				return new Vector(x, y + 1.2, z);
 			}
 			
 			public Float getRotationLock() {
 				return rotationlock;
 			}
 			
+			public NetworkEntity getVehicle() {
+				return vehicle;
+			}
+
+			public void setVehicle(NetworkEntity vehicle) {
+				this.vehicle = vehicle;
+			}
+
 			public void setPosition(Vector position) {
-				this.position.set(0, position.getX());
-				this.position.set(1, position.getY() - 1d);
-				this.position.set(2, position.getZ());
+				this.x = position.getX();
+				this.y = position.getY() - 1.2;
+				this.z = position.getZ();
 			}
 		}
+		
 	}
 }

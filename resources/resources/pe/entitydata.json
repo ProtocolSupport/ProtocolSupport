@@ -5,7 +5,9 @@
 			"height": 1.8
 		},
 		"RiderInfo": {
-			"position": [0.0, 1.1, -0.35]
+			"x": 0.0,
+			"y": 1.1,
+			"z": -0.35
 		}
 	},
 	"COMMON_HORSE": {
@@ -14,7 +16,9 @@
 			"height": 1.6
 		},
 		"RiderInfo": {
-			"position": [0.0, 1.1, -0.2]
+			"x": 0.0,
+			"y": 1.1,
+			"z": -0.2
 		}
 	},
 	"ZOMBIE_HORSE": {
@@ -23,7 +27,9 @@
 			"height": 1.6
 		},
 		"RiderInfo": {
-			"position": [0.0, 1.2, -0.2]
+			"x": 0.0, 
+			"y": 1.2,
+			"z": -0.2
 		}
 	},
 	"SKELETON_HORSE": {
@@ -32,7 +38,9 @@
 			"height": 1.6
 		},
 		"RiderInfo": {
-			"position": [0.0, 1.2, -0.2]
+			"x": 0.0,
+			"y": 1.2,
+			"z": -0.2
 		}
 	},
 	"DONKEY": {
@@ -41,7 +49,9 @@
 			"height": 1.6
 		},
 		"RiderInfo": {
-			"position": [0.0, 0.925, -0.2]
+			"x": 0.0,
+			"y": 0.925,
+			"z": -0.2
 		}
 	},
 	"MULE": {
@@ -50,7 +60,9 @@
 			"height": 1.6
 		},
 		"RiderInfo": {
-			"position": [0.0, 0.975, -0.2]
+			"x": 0.0,
+			"y": 0.975,
+			"z": -0.2
 		}
 	},
 	"LAMA": {
@@ -59,7 +71,9 @@
 			"height": 1.87
 		},
 		"RiderInfo":  {
-			"position": [0.0, 1.1, -0.2]
+			"x": 0.0,
+			"y": 1.1,
+			"z": -0.2
 		}
 	},
 	"BAT": {
@@ -74,7 +88,9 @@
 			"height": 0.7
 		},
 		"RiderInfo": {
-			"position": [0.0, 0.35, 0.0]
+			"x": 0.0,
+			"y": 0.35,
+			"z": 0.0
 		}
 	},
 	"WOLF": {
@@ -83,7 +99,9 @@
 			"height": 0.8
 		},
 		"RiderInfo": {
-			"position": [0.0, 0.675, -0.1]
+			"x": 0.0,
+			"y": 0.675,
+			"z": -0.1
 		}
 	},
 	"PIG": {
@@ -92,7 +110,9 @@
 			"height": 0.9
 		},
 		"RiderInfo": {
-			"position": [0.0, 0.63, 0.0]
+			"x": 0.0,
+			"y": 0.63,
+			"z": 0.0
 		}
 	
 	},
@@ -102,7 +122,9 @@
 			"height": 1.3
 		},
 		"RiderInfo": {
-			"position": [0.0, 1.105, 0.0]
+			"x": 0.0,
+			"y": 1.105,
+			"z": 0.0
 		}
 	},
 	"MUSHROOM_COW": {
@@ -111,7 +133,9 @@
 			"height": 1.3
 		},
 		"RiderInfo": {
-			"position": [0.0, 1.105, 0.0]
+			"x": 0.0,
+			"y": 1.105,
+			"z": 0.0
 		}
 	},
 	"CHICKEN": {
@@ -120,7 +144,9 @@
 			"height": 0.8
 		},
 		"RiderInfo": {
-			"position": [0.0, 0.4, 0.0]
+			"x": 0.0,
+			"y": 0.4,
+			"z": 0.0
 		}
 	},
 	"SQUID": {
@@ -141,7 +167,9 @@
 			"height": 1.3
 		},
 		"RiderInfo": {
-			"position": [0.0, 0.925, 0.0]
+			"x": 0.0,
+			"y": 0.925,
+			"z": 0.0
 		}
 	},
 	"POLAR_BEAR": {
@@ -192,7 +220,9 @@
 			"height": 1.8
 		},
 		"RiderInfo": {
-			"position": [0.0, 1.1, -0.35]
+			"x": 0.0,
+			"y": 1.1,
+			"z": -0.35
 		}
 	},
 	"ZOMBIE_VILLAGER": {
@@ -201,7 +231,9 @@
 			"height": 1.8
 		},
 		"RiderInfo": {
-			"position": [0.0, 0.9, -0.25]
+			"x": 0.0,
+			"y": 0.9,
+			"z": -0.25
 		}
 	},
 	"HUSK": {
@@ -210,7 +242,9 @@
 			"height": 1.8
 		},
 		"RiderInfo": {
-			"position": [0.0, 1.1, -0.35]
+			"x": 0.0,
+			"y": 1.1,
+			"z": -0.35
 		}
 	},
 	"ZOMBIE_PIGMAN": {
@@ -219,7 +253,9 @@
 			"height": 1.8
 		},
 		"RiderInfo": {
-			"position": [0.0, 1.1, -0.35]
+			"x": 0.0,
+			"y": 1.1,
+			"z": -0.35
 		}
 	},
 	"BLAZE": {
@@ -234,7 +270,9 @@
 			"heigth": 0.9
 		},
 		"RiderInfo": {
-			"position": [0.0, 0.54, 0.0]
+			"x": 0.0,
+			"y": 0.54,
+			"z": 0.0
 		}
 	},
 	"CAVE_SPIDER": {
@@ -243,7 +281,9 @@
 			"heigth": 0.5
 		},
 		"RiderInfo": {
-			"position": [0.0, 0.3, -0.1]
+			"x": 0.0,
+			"y": 0.3,
+			"z": -0.1
 		}
 	},
 	"CREEPER": {
@@ -366,11 +406,16 @@
 			"height": 0.455	
 		},
 		"Offset": {
-			"position": [0.0, 0.3, 0.0],
-			"rotation": [50, 0] 
+			"x": 0.0,
+			"y": 0.3,
+			"z": 0.0,
+			"yaw": 50,
+			"pitch": 0 
 		},
 		"RiderInfo": {
-			"position": [0.0, -0.2, 0.0],
+			"x": 0.0,
+			"y": -0.2,
+			"z": 0.0,
 			"rotationlock": 90.0
 		}
 	},
@@ -380,8 +425,11 @@
 			"heigth": 0.98
 		},
 		"Offset": {
-			"position": [0.0, 0.5, 0.0],
-			"rotation": [0, 0] 
+			"x": 0.0,
+			"y": 0.5,
+			"z": 0.0,
+			"yaw": 0,
+			"pitch": 0
 		}
 	},
 	"SNOWBALL": {
@@ -450,8 +498,11 @@
 			"height": 0.3
 		},
 		"Offset": {
-			"position": [0.5, 0.2, 0.5],
-			"rotation": [0, 0] 
+			"x": 0.5,
+			"y": 0.2,
+			"z": 0.5,
+			"yaw": 0,
+			"pitch": 0
 		}
 	},
 	"FISHING_FLOAT": {
@@ -538,11 +589,16 @@
 			"height": 0.7
 		},
 		"Offset": {
-			"position": [0.0, 0.3, 0.0],
-			"rotation": [0, 0] 
+			"x": 0.0,
+			"y": 0.3,
+			"z": 0.0,
+			"yaw": 0,
+			"pitch": 0
 		},
 		"RiderInfo": {
-			"position": [0.0, -0.2, 0.0]
+			"x": 0.0,
+			"y": -0.2,
+			"z": 0.0
 		}
 	},
 	"MINECART_CHEST": {
@@ -551,11 +607,16 @@
 			"height": 0.7
 		},
 		"Offset": {
-			"position": [0.0, 0.3, 0.0],
-			"rotation": [0, 0] 
+			"x": 0.0,
+			"y": 0.3,
+			"z": 0.0,
+			"yaw": 0,
+			"pitch": 0
 		},
 		"RiderInfo": {
-			"position": [0.0, -0.2, 0.0]
+			"x": 0.0,
+			"y": -0.2,
+			"z": 0.0
 		}
 	},
 	"MINECART_HOPPER": {
@@ -564,11 +625,16 @@
 			"height": 0.7
 		},
 		"Offset": {
-			"position": [0.0, 0.3, 0.0],
-			"rotation": [0, 0] 
+			"x": 0.0,
+			"y": 0.3,
+			"z": 0.0,
+			"yaw": 0,
+			"pitch": 0
 		},
 		"RiderInfo": {
-			"position": [0.0, -0.2, 0.0]
+			"x": 0.0,
+			"y": -0.2,
+			"z": 0.0
 		}
 	},
 	"MINECART_TNT": {
@@ -577,11 +643,16 @@
 			"height": 0.7
 		},
 		"Offset": {
-			"position": [0.0, 0.3, 0.0],
-			"rotation": [0, 0] 
+			"x": 0.0,
+			"y": 0.3,
+			"z": 0.0,
+			"yaw": 0,
+			"pitch": 0
 		},
 		"RiderInfo": {
-			"position": [0.0, -0.2, 0.0]
+			"x": 0.0,
+			"y": -0.2,
+			"z": 0.0
 		}
 	},
 	"MINECART_MOB_SPAWNER": {
@@ -590,11 +661,16 @@
 			"height": 0.7
 		},
 		"Offset": {
-			"position": [0.0, 0.3, 0.0],
-			"rotation": [0, 0] 
+			"x": 0.0,
+			"y": 0.3,
+			"z": 0.0,
+			"yaw": 0,
+			"pitch": 0
 		},
 		"RiderInfo": {
-			"position": [0.0, -0.2, 0.0]
+			"x": 0.0,
+			"y": -0.2,
+			"z": 0.0
 		}
 	},
 	"MINECART_FURNACE": {
@@ -603,11 +679,16 @@
 			"height": 0.7
 		},
 		"Offset": {
-			"position": [0.0, 0.3, 0.0],
-			"rotation": [0, 0] 
+			"x": 0.0,
+			"y": 0.3,
+			"z": 0.0,
+			"yaw": 0,
+			"pitch": 0
 		},
 		"RiderInfo": {
-			"position": [0.0, -0.2, 0.0]
+			"x": 0.0,
+			"y": -0.2,
+			"z": 0.0
 		}
 	},
 	"MINECART_COMMAND": {
@@ -616,11 +697,16 @@
 			"height": 0.7
 		},
 		"Offset": {
-			"position": [0.0, 0.3, 0.0],
-			"rotation": [0, 0] 
+			"x": 0.0,
+			"y": 0.3,
+			"z": 0.0,
+			"yaw": 0,
+			"pitch": 0
 		},
 		"RiderInfo": {
-			"position": [0.0, -0.2, 0.0]
+			"x": 0.0,
+			"y": -0.2,
+			"z": 0.0
 		}
 	}
 }

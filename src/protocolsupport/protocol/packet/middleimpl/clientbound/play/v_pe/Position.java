@@ -8,6 +8,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -22,7 +23,7 @@ public class Position extends MiddlePosition {
 		if (!cache.isChunkMarkedAsSent(chunkX, chunkZ)) {
 			packets.add(Chunk.createEmptyChunk(version, chunkX, chunkZ));
 		}
-		packets.add(create(version, cache.getSelfPlayerEntityId(), x, y + 0.01, z, pitch, yaw, ANIMATION_MODE_TELEPORT));
+		packets.add(create(version, cache.getWatchedSelf(), x, y + 0.01, z, pitch, yaw, ANIMATION_MODE_TELEPORT));
 		return packets;
 	}
 
@@ -37,11 +38,11 @@ public class Position extends MiddlePosition {
 	public static final int ANIMATION_MODE_ALL = 0;
 	public static final int ANIMATION_MODE_TELEPORT = 2;
 
-	public static ClientBoundPacketData create(ProtocolVersion version, int entityId, double x, double y, double z, float pitch, float yaw, int mode) {
+	public static ClientBoundPacketData create(ProtocolVersion version, NetworkEntity entity, double x, double y, double z, float pitch, float yaw, int mode) {
 		y = y + 1.6200000047683716D;
 		float realYaw = (float) (yaw * (360D/256D));
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_MOVE, version);
-		VarNumberSerializer.writeVarLong(serializer, entityId);
+		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		MiscSerializer.writeLFloat(serializer, (float) x);
 		MiscSerializer.writeLFloat(serializer, (float) y);
 		MiscSerializer.writeLFloat(serializer, (float) z);
@@ -50,7 +51,7 @@ public class Position extends MiddlePosition {
 		MiscSerializer.writeLFloat(serializer, realYaw); //head yaw actually
 		serializer.writeByte(mode);
 		serializer.writeBoolean(false); //on ground
-		VarNumberSerializer.writeVarLong(serializer, 0);
+		VarNumberSerializer.writeVarLong(serializer, entity.getDataCache().riderInfo == null ? 0 : entity.getDataCache().riderInfo.getVehicle().getId());
 		return serializer;
 	}
 

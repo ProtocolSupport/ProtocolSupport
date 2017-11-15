@@ -1,7 +1,5 @@
 package protocolsupport.protocol.utils.types;
 
-import org.bukkit.util.Vector;
-
 import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData.PocketRiderInfo;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
@@ -91,9 +89,9 @@ public class NetworkEntity {
 		//Cache for PE shizzles.
 		private long peBaseFlags = 0;
 		public byte sizeModifier = 1;
-		public int attachedId = -1; //Leashed? Data is send in pocket meta, but might be useful to store for other things.
+		public int attachedId = -1;
+		private Byte headRotation = null;
 		public PocketRiderInfo riderInfo;
-		public Rider rider = new Rider(false);
 		private ItemStackWrapper helmet = ItemStackWrapper.NULL;
 		private ItemStackWrapper chestplate = ItemStackWrapper.NULL;
 		private ItemStackWrapper leggings = ItemStackWrapper.NULL;
@@ -157,34 +155,18 @@ public class NetworkEntity {
 		}
 
 		public ItemStackWrapper getOffhand() { return this.offhand; }
-
-		public static class Rider {
-			public boolean riding = false;
-			public Vector position = new Vector(0, 0.6, 0);
-			public boolean rotationLocked = false;
-			public Float rotationMin;
-			public Float rotationMax;
-
-			public Rider(boolean riding) {
-				this.riding = riding;
+		
+		public void setHeadRotation(byte headRot) {
+			this.headRotation = headRot;
+		}
+		
+		public byte getHeadRotation(byte normalRotation) {
+			if (headRotation != null) {
+				return headRotation;
 			}
-
-			public Rider(Vector position, boolean rotationLocked, float rotationMax, float rotationMin) {
-				this(true, position, rotationLocked, rotationMax, rotationMin);
-			}
-
-			public Rider(Vector position, boolean rotationLocked) {
-				this(true, position, rotationLocked, null, null);
-			}
-
-			public Rider(boolean riding, Vector position, boolean rotationLocked, Float rotationMax, Float rotationMin) {
-				this.riding = riding;
-				this.position = position;
-				this.rotationLocked = rotationLocked;
-				this.rotationMax = rotationMax;
-				this.rotationMin = rotationMin;
-			}
-		};
+			return normalRotation;
+		}
+		
 
 		@Override
 		public String toString() {
