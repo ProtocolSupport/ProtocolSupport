@@ -47,7 +47,7 @@ public class NetworkDataCache {
 		return new double[] {x,y,z};
 	}
 	
-	public int getTeleportConfirmIdForFree() {
+	public int peekTeleportConfirmId() {
 		return teleportConfirmId;
 	}
 	

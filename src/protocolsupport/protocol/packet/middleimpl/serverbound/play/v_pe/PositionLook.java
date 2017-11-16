@@ -40,21 +40,17 @@ public class PositionLook extends ServerBoundMiddlePacket {
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 		cache.updatePEPositionLeniency(y - cache.getClientY() > 0);
-		int freeTeleportId = cache.getTeleportConfirmIdForFree();
-		if (freeTeleportId != -1) {
-			if(!cache.shouldResendPEClientPosition()) {
-				//PE sends AVERAGE positions (FFS Mojang) so sometimes the BoundingBox of the player will collide inadvertently.
-				//We fake the servers position in this instance and shrug and resent a rounded position of the player so walking stairs ain't much an issue.
-				packets.add(MiddleTeleportAccept.create(freeTeleportId));
-				cache.payTeleportConfirm();
-				double[] serverPos = cache.getTeleportLocation();
-				packets.add(MiddlePositionLook.create(serverPos[0], serverPos[1], serverPos[2], yaw, pitch, true));
-				cache.setLastClientPosition(x, y, z);
-				x = Math.floor(x * 8) / 8; y = Math.ceil((y + 0.3) * 8) / 8; z = Math.floor(z * 8) / 8;
-				onGround = true;
-			} else if (cache.tryTeleportConfirm(x, y, z) != -1) {
-				packets.add(MiddleTeleportAccept.create(freeTeleportId));
-			}
+		int teleportId = cache.peekTeleportConfirmId();
+		if (teleportId != -1) {
+			//PE sends AVERAGE positions (FFS Mojang) so sometimes the BoundingBox of the player will collide inadvertently.
+			//We fake the servers position in this instance and shrug and resent a rounded position of the player.
+			packets.add(MiddleTeleportAccept.create(teleportId));
+			cache.payTeleportConfirm();
+			double[] serverPos = cache.getTeleportLocation();
+			packets.add(MiddlePositionLook.create(serverPos[0], serverPos[1], serverPos[2], yaw, pitch, onGround));
+			cache.setLastClientPosition(x, y, z);
+			//TODO: Play around more with these numbers to perhaps make things even more smooth.
+			x = Math.floor(x * 8) / 8; y = Math.ceil((y + 0.3) * 8) / 8; z = Math.floor(z * 8) / 8;
 		} else {
 			cache.setLastClientPosition(x, y, z);
 		}
@@ -62,7 +58,7 @@ public class PositionLook extends ServerBoundMiddlePacket {
 		packets.add(MiddlePositionLook.create(x, y, z, yaw, pitch, onGround));
 		
 
-		//TODO: remove this shit
+		//TODO: (re)move this shit
 		if (cache.getSignTag() != null) {
 			NBTTagCompoundWrapper signTag = cache.getSignTag();
 			int x = signTag.getIntNumber("x");
