@@ -23,7 +23,9 @@ public class Position extends MiddlePosition {
 		if (!cache.isChunkMarkedAsSent(chunkX, chunkZ)) {
 			packets.add(Chunk.createEmptyChunk(version, chunkX, chunkZ));
 		}
-		packets.add(create(version, cache.getWatchedSelf(), x, y + 0.01, z, pitch, yaw, ANIMATION_MODE_TELEPORT));
+		if(cache.shouldResendPEClientPosition()) {
+			packets.add(create(version, cache.getWatchedSelf(), x, y + 0.01, z, pitch, yaw, ANIMATION_MODE_TELEPORT));
+		}
 		return packets;
 	}
 

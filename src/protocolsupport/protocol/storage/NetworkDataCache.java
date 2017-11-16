@@ -44,12 +44,57 @@ public class NetworkDataCache {
 		}
 		return -1;
 	}
+	
+	public double[] getTeleportLocation() {
+		return new double[] {x,y,z};
+	}
+	
+	public int peekTeleportConfirmId() {
+		return teleportConfirmId;
+	}
+	
+	public void payTeleportConfirm() {
+		this.teleportConfirmId = -1;
+	}
 
 	public void setTeleportLocation(double x, double y, double z, int teleportConfirmId) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		this.teleportConfirmId = teleportConfirmId;
+	}
+	
+	//For pocket average position mess.
+	private final int leniencyMillis = 1000;
+	private double cX;
+	private double cY;
+	private double cZ;
+	private long leniencyMod;
+	private double pocketPositionLeniency = 0.5;
+	
+	public void setLastClientPosition(double x, double y, double z) {
+		this.cX = x;
+		this.cY = y;
+		this.cZ = z;
+	}
+	
+	public double getClientY() {
+		return cY;
+	}
+	
+	public void updatePEPositionLeniency(boolean loosenUp) {
+		if (loosenUp) {
+			pocketPositionLeniency = 3;
+			leniencyMod = System.currentTimeMillis();
+		} else if ((pocketPositionLeniency != 0.5) && (System.currentTimeMillis() - leniencyMod > leniencyMillis)) {
+			pocketPositionLeniency = 0.5;
+		}
+	}
+	
+	public boolean shouldResendPEClientPosition() {
+		return (Math.abs(cX - x) > pocketPositionLeniency) ||
+			   (Math.abs(cY - y) > pocketPositionLeniency) ||
+			   (Math.abs(cZ - z) > pocketPositionLeniency);
 	}
 
 	private WindowType windowType = WindowType.PLAYER;
