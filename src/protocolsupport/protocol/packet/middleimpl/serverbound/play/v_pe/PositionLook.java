@@ -55,10 +55,17 @@ public class PositionLook extends ServerBoundMiddlePacket {
 			cache.setLastClientPosition(x, y, z);
 		}
 		
-		//if(cache.getWatchedSelf().getDataCache().riderInfo != null) {
-			//NetworkEntity vehicle = cache.getWatchedSelf().getDataCache().riderInfo.getVehicle();
-			//TODO: Add different packets in here. For instance if you're on a pig, you can only look around (I think) and horses you need to control etc.
-		//}
+		/*HOW THE FRIDGGEEE!?!?!?
+		 * if(cache.getWatchedSelf().getDataCache().riderInfo != null) {
+			NetworkEntity vehicle = cache.getWatchedSelf().getDataCache().riderInfo.getVehicle();
+			if (vehicle != null) {
+				if (vehicle.getType() == NetworkEntityType.PIG || vehicle.getType() == NetworkEntityType.BOAT || vehicle.isOfType(NetworkEntityType.BASE_HORSE)) {
+					packets.add(MiddleLook.create(yaw, pitch, onGround));
+					packets.add(MiddleSteerVehicle.create(0, 0, 0));
+					packets.add(MiddleMoveVehicle.create(x, y - 0.675, z, yaw, pitch));					
+				}
+			}
+		}*/
 		packets.add(MiddlePositionLook.create(x, y, z, yaw, pitch, onGround));
 
 		//TODO: (re)move this shit

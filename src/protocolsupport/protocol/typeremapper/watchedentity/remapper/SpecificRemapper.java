@@ -86,11 +86,11 @@ public enum SpecificRemapper {
 					System.out.println("RIDERPOSITION: " + riderInfo.getPosition());
 					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_RIDING, true);
 					remapped.put(57, new DataWatcherObjectVector3fLe(riderInfo.getPosition()));
-					remapped.put(58, new DataWatcherObjectByte((byte) ((riderInfo.getRotationLock() != null) ? 1 : 0)));
+					//remapped.put(58, new DataWatcherObjectByte((byte) ((riderInfo.getRotationLock() != null) ? 1 : 0)));
 					if (riderInfo.getRotationLock() != null) {
 						System.out.println("RIDERLOCK: " + riderInfo.getRotationLock());
-						remapped.put(59, new DataWatcherObjectFloatLe(riderInfo.getRotationLock()));
-						remapped.put(59, new DataWatcherObjectFloatLe(-riderInfo.getRotationLock()));
+						//remapped.put(59, new DataWatcherObjectFloatLe(riderInfo.getRotationLock()));
+						//remapped.put(59, new DataWatcherObjectFloatLe(-riderInfo.getRotationLock()));
 					}
 				} else {
 					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_RIDING, false);
@@ -120,7 +120,7 @@ public enum SpecificRemapper {
 
 			}}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new PeSimpleFlagAdder(
-				new int[] {PeMetaBase.FLAG_GRAVITY}, new boolean[] {true}
+				new int[] {PeMetaBase.FLAG_GRAVITY, PeMetaBase.FLAG_COLLIDE}, new boolean[] {true, true}
 			), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.Entity.FLAGS,
 				new int[] {1, 2, 4, 6, 8}, new int[] {PeMetaBase.FLAG_ON_FIRE, PeMetaBase.FLAG_SNEAKING, PeMetaBase.FLAG_SPRINTING, PeMetaBase.FLAG_INVISIBLE, PeMetaBase.FLAG_GLIDING}
@@ -674,16 +674,16 @@ public enum SpecificRemapper {
 	),
 	ARMOR_STAND_MOB(NetworkEntityType.ARMOR_STAND_MOB, SpecificRemapper.ARMOR_STAND),
 	BOAT(NetworkEntityType.BOAT,
-		new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Boat.VARIANT, 4), ProtocolVersion.MINECRAFT_PE),
+		new Entry(new IndexValueRemapperNumberToByte(DataWatcherObjectIndex.Boat.VARIANT, 3), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapper<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Boat.LEFT_PADDLE, 13) {
 			@Override
 			public DataWatcherObject<?> remapValue(DataWatcherObjectBoolean object) {
-				return new DataWatcherObjectFloatLe(object.getValue() ? Float.MAX_VALUE: 0f);
+				return new DataWatcherObjectFloatLe(object.getValue() ? 0.05f: 0f);
 			}},ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapper<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Boat.RIGHT_PADDLE, 14) {
 			@Override
 			public DataWatcherObject<?> remapValue(DataWatcherObjectBoolean object) {
-				return new DataWatcherObjectFloatLe(object.getValue() ? Float.MAX_VALUE: 0f);
+				return new DataWatcherObjectFloatLe(object.getValue() ? 0.05f: 0f);
 			}},ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Boat.TIME_SINCE_LAST_HIT, 6) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_2),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Boat.TIME_SINCE_LAST_HIT, 5) {}, ProtocolVersionsHelper.ALL_1_9),

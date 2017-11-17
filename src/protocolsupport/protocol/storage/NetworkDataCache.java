@@ -70,7 +70,7 @@ public class NetworkDataCache {
 	private double cY;
 	private double cZ;
 	private long leniencyMod;
-	private double pocketPositionLeniency = 0.5;
+	private double pocketPositionLeniency = 0.7;
 	
 	public void setLastClientPosition(double x, double y, double z) {
 		this.cX = x;
@@ -78,16 +78,28 @@ public class NetworkDataCache {
 		this.cZ = z;
 	}
 	
+	public double getClientX() {
+		return cX;
+	}
+	
 	public double getClientY() {
 		return cY;
+	}
+	
+	public double getClientZ() {
+		return cZ;
+	}
+	
+	public boolean hasClientMoved(double x, double y, double z) {
+		return cX != x || cY != y || cZ != z;
 	}
 	
 	public void updatePEPositionLeniency(boolean loosenUp) {
 		if (loosenUp) {
 			pocketPositionLeniency = 3;
 			leniencyMod = System.currentTimeMillis();
-		} else if ((pocketPositionLeniency != 0.5) && (System.currentTimeMillis() - leniencyMod > leniencyMillis)) {
-			pocketPositionLeniency = 0.5;
+		} else if ((pocketPositionLeniency != 0.7) && (System.currentTimeMillis() - leniencyMod > leniencyMillis)) {
+			pocketPositionLeniency = 0.7;
 		}
 	}
 	
