@@ -419,8 +419,8 @@ public class GodPacket extends ServerBoundMiddlePacket {
 									}
 								} else if (!deficit.isCursor() && !deficit.isToUseInTable()) {
 									if (deficit.amount() == surplus.slotAmount()) {
-										if (!((surplus.isCursor()) && (surplusDeque.getVeryLast() != null) && (deficit.slot() == surplusDeque.getVeryLast().slot()))) {
-											//Unless we're swapping (then only one left click is send on next deficit), we can payout the stack in full (left-click)
+										if (!((surplusDeque.getVeryLast() != null) && (deficit.slot() == surplusDeque.getVeryLast().slot()))) {
+											//Unless we're swapping (then only one left click is sent on next deficit), we can payout the stack in full (left-click)
 											packets.addAll(Click.LEFT.create(cache, deficit.slot(), (!deficit.hasStack()) ? ItemStackWrapper.NULL : item.get(deficit.slotAmount())));
 										} else {
 										}
