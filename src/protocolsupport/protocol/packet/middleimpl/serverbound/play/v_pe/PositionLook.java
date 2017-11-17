@@ -3,11 +3,14 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddlePositionLook;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSteerBoat;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleTeleportAccept;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateSign;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -55,17 +58,20 @@ public class PositionLook extends ServerBoundMiddlePacket {
 			cache.setLastClientPosition(x, y, z);
 		}
 		
-		/*HOW THE FRIDGGEEE!?!?!?
-		 * if(cache.getWatchedSelf().getDataCache().riderInfo != null) {
+		 if(cache.getWatchedSelf().getDataCache().riderInfo != null) {
 			NetworkEntity vehicle = cache.getWatchedSelf().getDataCache().riderInfo.getVehicle();
 			if (vehicle != null) {
-				if (vehicle.getType() == NetworkEntityType.PIG || vehicle.getType() == NetworkEntityType.BOAT || vehicle.isOfType(NetworkEntityType.BASE_HORSE)) {
+				if(vehicle.getType() == NetworkEntityType.BOAT) {
+					packets.add(MiddleSteerBoat.create(cache.isRightPaddleTurning(), cache.isLeftPaddleTurning()));
+				}
+				
+				/*if (vehicle.getType() == NetworkEntityType.PIG || vehicle.getType() == NetworkEntityType.BOAT || vehicle.isOfType(NetworkEntityType.BASE_HORSE)) {
 					packets.add(MiddleLook.create(yaw, pitch, onGround));
 					packets.add(MiddleSteerVehicle.create(0, 0, 0));
 					packets.add(MiddleMoveVehicle.create(x, y - 0.675, z, yaw, pitch));					
-				}
+				}*/
 			}
-		}*/
+		}
 		packets.add(MiddlePositionLook.create(x, y, z, yaw, pitch, onGround));
 
 		//TODO: (re)move this shit

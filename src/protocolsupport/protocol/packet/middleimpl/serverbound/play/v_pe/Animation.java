@@ -15,6 +15,8 @@ public class Animation extends ServerBoundMiddlePacket {
 	protected int action;
 	protected long entityId;
 	protected float paddleTime;
+	protected float prevRightPaddle;
+	protected float prevLeftPaddle;
 	
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
@@ -27,8 +29,17 @@ public class Animation extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
+		System.out.println("ANIMATE - " + Integer.toBinaryString(action) + " eID: " + entityId + "paddleTime: " + paddleTime);
 		if ((action & 0x80) == 0) {
 			return RecyclableSingletonList.create(MiddleAnimation.create(0));
+		} else {
+			if ((action & 0x01) == 0) {
+				cache.setRightPaddleTurning(paddleTime != prevRightPaddle);
+				prevRightPaddle = paddleTime;
+			} else {
+				cache.setRightPaddleTurning(paddleTime != prevLeftPaddle);
+				prevLeftPaddle = paddleTime;
+			}
 		}
 		return RecyclableEmptyList.get();
 	}

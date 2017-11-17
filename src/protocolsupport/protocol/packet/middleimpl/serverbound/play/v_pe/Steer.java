@@ -33,7 +33,7 @@ public class Steer extends ServerBoundMiddlePacket {
 		PocketRiderInfo rider = cache.getWatchedSelf().getDataCache().riderInfo;
 		if (rider != null && rider.getVehicle() != null) {
 			if (rider.getVehicle().getType() == NetworkEntityType.BOAT) {
-				packets.add(MiddleSteerBoat.create(rightPaddleTurning, leftPaddleTurning));
+				//packets.add(MiddleSteerBoat.create(rightPaddleTurning, leftPaddleTurning));
 				packets.add(MiddleSteerVehicle.create(sideForce, forwardForce, 0));
 			} else if (rider.getVehicle().getType() == NetworkEntityType.MINECART) {
 				packets.add(MiddleSteerVehicle.create(sideForce, forwardForce, 0));
