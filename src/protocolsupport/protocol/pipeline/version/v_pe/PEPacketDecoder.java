@@ -21,7 +21,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacke
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.MapInfoRequest;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PlayerAction;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PositionLook;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Steer;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.SteerVehicle;
 import protocolsupport.protocol.pipeline.version.AbstractPacketDecoder;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
@@ -41,7 +41,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		registry.register(NetworkState.PLAY, PEPacketIDs.CLIENT_SETTINGS, ClientSettings.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.PLAYER_MOVE, PositionLook.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.PLAYER_ACTION, PlayerAction.class);
-		registry.register(NetworkState.PLAY, PEPacketIDs.PLAYER_STEER, Steer.class);
+		registry.register(NetworkState.PLAY, PEPacketIDs.PLAYER_STEER, SteerVehicle.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.CHAT, Chat.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.ANIMATION, Animation.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.INTERACT, Interact.class);

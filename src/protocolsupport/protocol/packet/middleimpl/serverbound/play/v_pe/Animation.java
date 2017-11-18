@@ -37,7 +37,7 @@ public class Animation extends ServerBoundMiddlePacket {
 				cache.setRightPaddleTurning(paddleTime != prevRightPaddle);
 				prevRightPaddle = paddleTime;
 			} else {
-				cache.setRightPaddleTurning(paddleTime != prevLeftPaddle);
+				cache.setLeftPaddleTurning(paddleTime != prevLeftPaddle);
 				prevLeftPaddle = paddleTime;
 			}
 		}

@@ -109,6 +109,25 @@ public class NetworkDataCache {
 			   (Math.abs(cZ - z) > pocketPositionLeniency);
 	}
 
+	private boolean isRightPaddleTurning;
+	private boolean isLeftPaddleTurning;
+	
+	public boolean isRightPaddleTurning() {
+		return isRightPaddleTurning;
+	}
+
+	public void setRightPaddleTurning(boolean isRightPaddleTurning) {
+		this.isRightPaddleTurning = isRightPaddleTurning;
+	}
+
+	public boolean isLeftPaddleTurning() {
+		return isLeftPaddleTurning;
+	}
+
+	public void setLeftPaddleTurning(boolean isLeftPaddleTurning) {
+		this.isLeftPaddleTurning = isLeftPaddleTurning;
+	}
+
 	private WindowType windowType = WindowType.PLAYER;
 	private int windowId = 0;
 	private int windowSlots = 46;
