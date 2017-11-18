@@ -13,7 +13,7 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public abstract class MiddleBlockDig extends ServerBoundMiddlePacket {
 
 	protected Action status;
-	protected Position position;
+	protected Position position = new Position(0, 0, 0);
 	protected int face;
 
 	@Override

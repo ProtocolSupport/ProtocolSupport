@@ -7,11 +7,11 @@ import protocolsupport.protocol.utils.types.Position;
 
 public abstract class MiddleBlock extends ClientBoundMiddlePacket {
 
-	protected Position position;
+	protected Position position = new Position(0, 0, 0);
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		position = PositionSerializer.readPosition(serverdata);
+		PositionSerializer.readPositionTo(serverdata, position);
 	}
 
 }

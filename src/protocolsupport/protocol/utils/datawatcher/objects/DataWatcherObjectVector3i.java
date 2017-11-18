@@ -10,7 +10,7 @@ public class DataWatcherObjectVector3i extends DataWatcherObject<Position> {
 
 	@Override
 	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {
-		value = PositionSerializer.readLegacyPositionI(from);
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

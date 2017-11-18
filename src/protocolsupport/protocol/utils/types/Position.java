@@ -26,12 +26,16 @@ public class Position {
 		return z;
 	}
 
-	public long asLong() {
-		return ((getX() & 0x3FFFFFFL) << 38) | ((getY() & 0xFFFL) << 26) | (getZ() & 0x3FFFFFFL);
+	public void setX(int x) {
+		this.x = x;
 	}
 
-	public static Position fromLong(long n) {
-		return new Position((int) (n >> 38), (int) ((n >> 26) & 0xFFF), (int) ((n << 38) >> 38));
+	public void setY(int y) {
+		this.y = y;
+	}
+
+	public void setZ(int z) {
+		this.z = z;
 	}
 
 	public void modifyX(int cnt) {

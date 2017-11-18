@@ -11,7 +11,7 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public abstract class MiddleBlockPlace extends ServerBoundMiddlePacket {
 
-	protected Position position;
+	protected Position position = new Position(0, 0, 0);
 	protected int face;
 	protected int usedHand;
 	protected float cX;
