@@ -5,9 +5,9 @@ import java.util.UUID;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.datawatcher.ReadableDataWatcherObject;
 
-public class DataWatcherObjectOptionalUUID extends DataWatcherObject<UUID> {
+public class DataWatcherObjectOptionalUUID extends ReadableDataWatcherObject<UUID> {
 
 	@Override
 	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {

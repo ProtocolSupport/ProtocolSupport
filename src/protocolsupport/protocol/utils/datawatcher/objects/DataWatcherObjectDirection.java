@@ -3,10 +3,10 @@ package protocolsupport.protocol.utils.datawatcher.objects;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.datawatcher.ReadableDataWatcherObject;
 import protocolsupport.protocol.utils.types.BlockDirection;
 
-public class DataWatcherObjectDirection extends DataWatcherObject<BlockDirection> {
+public class DataWatcherObjectDirection extends ReadableDataWatcherObject<BlockDirection> {
 
 	@Override
 	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {

@@ -26,7 +26,7 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap;
 public class DataWatcherDeserializer {
 
 	@SuppressWarnings("unchecked")
-	private static final Constructor<? extends DataWatcherObject<?>>[] registry = new Constructor[256];
+	private static final Constructor<? extends ReadableDataWatcherObject<?>>[] registry = new Constructor[256];
 	static {
 		try {
 			register(DataWatcherObjectByte.class);
@@ -48,8 +48,8 @@ public class DataWatcherDeserializer {
 		}
 	}
 
-	private static void register(Class<? extends DataWatcherObject<?>> clazz) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		Constructor<? extends DataWatcherObject<?>> constr = clazz.getConstructor();
+	private static void register(Class<? extends ReadableDataWatcherObject<?>> clazz) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		Constructor<? extends ReadableDataWatcherObject<?>> constr = clazz.getConstructor();
 		registry[DataWatcherObjectIdRegistry.getTypeId(clazz, ProtocolVersionsHelper.LATEST_PC)] = constr;
 	}
 
@@ -62,7 +62,7 @@ public class DataWatcherDeserializer {
 			}
 			int type = from.readUnsignedByte();
 			try {
-				DataWatcherObject<?> object = registry[type].newInstance();
+				ReadableDataWatcherObject<?> object = registry[type].newInstance();
 				object.readFromStream(from, version, locale);
 				map.put(key, object);
 			} catch (Exception e) {

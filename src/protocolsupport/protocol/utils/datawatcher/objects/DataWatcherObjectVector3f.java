@@ -4,9 +4,9 @@ import org.bukkit.util.Vector;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.datawatcher.ReadableDataWatcherObject;
 
-public class DataWatcherObjectVector3f extends DataWatcherObject<Vector> {
+public class DataWatcherObjectVector3f extends ReadableDataWatcherObject<Vector> {
 
 	@Override
 	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {

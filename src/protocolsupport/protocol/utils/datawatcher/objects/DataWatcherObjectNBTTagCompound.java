@@ -3,10 +3,10 @@ package protocolsupport.protocol.utils.datawatcher.objects;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.datawatcher.ReadableDataWatcherObject;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
-public class DataWatcherObjectNBTTagCompound extends DataWatcherObject<NBTTagCompoundWrapper> {
+public class DataWatcherObjectNBTTagCompound extends ReadableDataWatcherObject<NBTTagCompoundWrapper> {
 
 	@Override
 	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {
