@@ -1,8 +1,8 @@
 package protocolsupport.protocol.typeremapper.watchedentity.remapper.value;
 
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.protocol.utils.datawatcher.objects.ReadableDataWatcherObjectNumber;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectShort;
+import protocolsupport.protocol.utils.datawatcher.objects.ReadableDataWatcherObjectNumber;
 
 public final class IndexValueRemapperNumberToShort extends IndexValueRemapper<ReadableDataWatcherObjectNumber<?>> {
 
