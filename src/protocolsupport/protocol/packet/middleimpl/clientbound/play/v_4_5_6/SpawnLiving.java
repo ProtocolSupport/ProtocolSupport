@@ -6,7 +6,6 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnLiving
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyDataWatcherSerializer;
-import protocolsupport.protocol.typeremapper.watchedentity.WatchedDataRemapper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -27,7 +26,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		serializer.writeShort(motX);
 		serializer.writeShort(motY);
 		serializer.writeShort(motZ);
-		LegacyDataWatcherSerializer.encodeData(serializer, version, cache.getLocale(), WatchedDataRemapper.transform(entity, metadata, version));
+		LegacyDataWatcherSerializer.encodeData(serializer, version, cache.getLocale(), metadata.getRemapped());
 		return RecyclableSingletonList.create(serializer);
 	}
 

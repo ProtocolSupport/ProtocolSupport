@@ -10,11 +10,8 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.typeremapper.watchedentity.DataWatcherDataRemapper;
 import protocolsupport.protocol.utils.types.NetworkEntity;
-import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 
@@ -26,7 +23,7 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 	protected int yaw;
 	protected int pitch;
 	protected List<ProfileProperty> properties;
-	protected ArrayMap<DataWatcherObject<?>> metadata;
+	protected DataWatcherDataRemapper metadata = new DataWatcherDataRemapper();
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
@@ -38,7 +35,7 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 		z = serverdata.readDouble();
 		yaw = serverdata.readUnsignedByte();
 		pitch = serverdata.readUnsignedByte();
-		metadata = DataWatcherDeserializer.decodeData(serverdata, ProtocolVersionsHelper.LATEST_PC, cache.getLocale());
+		metadata.init(serverdata, connection.getVersion(), cache.getLocale(), entity);
 	}
 
 	@Override

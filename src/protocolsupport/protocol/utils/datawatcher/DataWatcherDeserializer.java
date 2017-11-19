@@ -25,6 +25,9 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class DataWatcherDeserializer {
 
+	//while meta indexes can be now up to 255, we actually use up to 31
+	public static final int MAX_USED_META_INDEX = 31;
+
 	@SuppressWarnings("unchecked")
 	private static final Constructor<? extends ReadableDataWatcherObject<?>>[] registry = new Constructor[256];
 	static {
@@ -53,8 +56,7 @@ public class DataWatcherDeserializer {
 		registry[DataWatcherObjectIdRegistry.getTypeId(clazz, ProtocolVersionsHelper.LATEST_PC)] = constr;
 	}
 
-	public static ArrayMap<DataWatcherObject<?>> decodeData(ByteBuf from, ProtocolVersion version, String locale) {
-		ArrayMap<DataWatcherObject<?>> map = new ArrayMap<>(256);
+	public static void decodeDataTo(ByteBuf from, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> to) {
 		do {
 			int key = from.readUnsignedByte();
 			if (key == 0xFF) {
@@ -64,12 +66,11 @@ public class DataWatcherDeserializer {
 			try {
 				ReadableDataWatcherObject<?> object = registry[type].newInstance();
 				object.readFromStream(from, version, locale);
-				map.put(key, object);
+				to.put(key, object);
 			} catch (Exception e) {
 				throw new DecoderException("Unable to decode datawatcher object", e);
 			}
 		} while (true);
-		return map;
 	}
 
 	public static void encodeData(ByteBuf to, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> objects) {
