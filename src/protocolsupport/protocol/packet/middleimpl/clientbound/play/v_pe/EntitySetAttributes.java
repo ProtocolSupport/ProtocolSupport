@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import protocolsupport.api.ProtocolVersion;
@@ -16,23 +17,39 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class EntitySetAttributes extends MiddleEntitySetAttributes {
 
 	private static final HashMap<String, String> remapAttrNames = new HashMap<>();
+	private static final ArrayList<String> forbiddenAttrNames = new ArrayList<>();
 	private static final HashMap<String, Any<Float, Float>> knownMinMax = new HashMap<>();
 	static {
-		remapAttrNames.put("generic.movementSpeed", "minecraft:movement");
-		remapAttrNames.put("horse.jumpStrength", "minecraft:horse.jump_strength");
-		knownMinMax.put("minecraft:health", new Any<Float, Float>(0.0F, 20.0F));
-		knownMinMax.put("minecraft:player.saturation", new Any<Float, Float>(0.0F, 20.0F));
-		knownMinMax.put("minecraft:player.hunger", new Any<Float, Float>(0.0F, 20.0F));
-		knownMinMax.put("minecraft:player.experience", new Any<Float, Float>(0.0F, 1.0F));
-		knownMinMax.put("minecraft:player.level", new Any<Float, Float>(0.0F, 24791.0F));
-		knownMinMax.put("minecraft:movement", new Any<Float, Float>(0.0F, 24791.0F));
-		knownMinMax.put("minecraft:horse.jump_strength", new Any<Float, Float>(0.0F, 2.0F));
+		remapAttrNames.put("horse.jumpStrength", 			"minecraft:horse.jump_strength");
+		remapAttrNames.put("generic.movementSpeed", 		"minecraft:movement");
+		remapAttrNames.put("generic.attackDamage", 			"minecraft:attack_damage");
+		remapAttrNames.put("generic.knockbackResistance", 	"minecraft:knockback_resistance");
+		remapAttrNames.put("generic.followRange", 			"minecraft:follow_range");
+		knownMinMax.put("minecraft:horse.jump_strength", 	new Any<Float, Float>(0.0F, 2.0F));
+		knownMinMax.put("minecraft:health", 				new Any<Float, Float>(0.0F, 20.0F));
+		knownMinMax.put("minecraft:player.saturation", 		new Any<Float, Float>(0.0F, 20.0F));
+		knownMinMax.put("minecraft:player.hunger", 			new Any<Float, Float>(0.0F, 20.0F));
+		knownMinMax.put("minecraft:player.experience", 		new Any<Float, Float>(0.0F, 1.0F));
+		knownMinMax.put("minecraft:player.level", 			new Any<Float, Float>(0.0F, 24791.0F));
+		knownMinMax.put("minecraft:movement", 				new Any<Float, Float>(0.0F, 24791.0F));
+		knownMinMax.put("minecraft:attack_damage", 			new Any<Float, Float>(0.0F, 2.0F));
+		knownMinMax.put("minecraft:knockback_resistance", 	new Any<Float, Float>(0.0F, 1.0F));
+		knownMinMax.put("minecraft:knockback_resistance", 	new Any<Float, Float>(0.0F, 2080.0F));
+		forbiddenAttrNames.add("generic.maxHealth"); //TODO: Use to set actual max health.
+		forbiddenAttrNames.add("generic.attackSpeed");
+		forbiddenAttrNames.add("generic.armor");
+		forbiddenAttrNames.add("generic.armorToughness");
+		forbiddenAttrNames.add("generic.luck");
+		forbiddenAttrNames.add("generic.flyingSpeed");
+		forbiddenAttrNames.add("zombie.spawnReinforcements");
 	}
 
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		return RecyclableSingletonList.create(create(connection.getVersion(), entityId, attributes.values().toArray(new Attribute[0])));
+		return RecyclableSingletonList.create(create(connection.getVersion(), entityId, 
+				attributes.values().stream().filter(attr -> !forbiddenAttrNames.contains(attr.key)).toArray(Attribute[]::new)
+			));
 	}
 
 	public static ClientBoundPacketData create(ProtocolVersion version, int entityId, Attribute... attributes) {
@@ -67,6 +84,7 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 			MiscSerializer.writeLFloat(serializer, (float) attrvalue);
 			MiscSerializer.writeLFloat(serializer, (float) attrvalue); //default value
 			StringSerializer.writeString(serializer, version, pename);
+			System.out.println("Sending ATTR: " + pename);
 		}
 		return serializer;
 	}

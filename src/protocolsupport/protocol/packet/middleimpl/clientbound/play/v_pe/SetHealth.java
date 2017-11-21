@@ -15,9 +15,10 @@ public class SetHealth extends MiddleSetHealth {
 		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		double shealth = (health * 20.0F) / cache.getMaxHealth();
-		packets.add(EntitySetAttributes.create(version, cache.getSelfPlayerEntityId(), EntitySetAttributes.createAttribute("minecraft:health", shealth)));
-		packets.add(EntitySetAttributes.create(version, cache.getSelfPlayerEntityId(), EntitySetAttributes.createAttribute("minecraft:player.hunger", food)));
-		packets.add(EntitySetAttributes.create(version, cache.getSelfPlayerEntityId(), EntitySetAttributes.createAttribute("minecraft:player.saturation", saturation)));
+		packets.add(EntitySetAttributes.create(version, cache.getSelfPlayerEntityId(), 
+				EntitySetAttributes.createAttribute("minecraft:health", shealth), 
+				EntitySetAttributes.createAttribute("minecraft:player.hunger", food), 
+				EntitySetAttributes.createAttribute("minecraft:player.saturation", saturation)));
 		if (health <= 0.0) {
 			ClientBoundPacketData respawnpos = ClientBoundPacketData.create(PEPacketIDs.RESPAWN_POS, version);
 			MiscSerializer.writeLFloat(respawnpos, 0);
