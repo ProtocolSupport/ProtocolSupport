@@ -37,6 +37,8 @@ public abstract class NetworkManagerWrapper {
 
 	public abstract void setProtocol(NetworkState state);
 
+	public abstract NetworkState getNetworkState();
+
 	public abstract Object getPacketListener();
 
 	public abstract void setPacketListener(Object listener);

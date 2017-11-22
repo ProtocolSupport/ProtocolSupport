@@ -13,9 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
 
-import com.flowpowered.network.protocol.AbstractProtocol;
-
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import net.glowstone.GlowServer;
 import net.glowstone.entity.meta.profile.PlayerProfile;
@@ -186,17 +183,6 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	@Override
 	public String convertBukkitIconToBase64(CachedServerIcon icon) {
 		return ((GlowServerIcon) icon).getData();
-	}
-
-	@Override
-	public NetworkState getNetworkStateFromChannel(Channel channel) {
-		AbstractProtocol proto = getNetworkManager(channel.pipeline()).getSession().get().getProtocol();
-		for (ProtocolType type : ProtocolType.values()) {
-			if (type.getProtocol() == proto) {
-				return GlowStoneMiscUtils.protocolToNetState(type);
-			}
-		}
-		throw new IllegalStateException(MessageFormat.format("Unkown protocol {0}", proto));
 	}
 
 	@Override

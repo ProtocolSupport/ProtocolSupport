@@ -1,6 +1,7 @@
 package protocolsupport.zplatform.impl.glowstone.network;
 
 import java.net.InetSocketAddress;
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 import org.bukkit.entity.Player;
 
 import com.flowpowered.network.Message;
+import com.flowpowered.network.protocol.AbstractProtocol;
 
 import io.netty.channel.Channel;
 import io.netty.util.AttributeKey;
@@ -20,6 +22,7 @@ import net.glowstone.entity.meta.profile.PlayerProperty;
 import net.glowstone.net.GlowSession;
 import net.glowstone.net.ProxyData;
 import net.glowstone.net.pipeline.MessageHandler;
+import net.glowstone.net.protocol.ProtocolType;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.zplatform.impl.glowstone.GlowStoneMiscUtils;
@@ -92,6 +95,17 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 	@Override
 	public void setProtocol(NetworkState state) {
 		getSession().setProtocol(GlowStoneMiscUtils.netStateToProtocol(state));
+	}
+
+	@Override
+	public NetworkState getNetworkState() {
+		AbstractProtocol proto = getSession().getProtocol();
+		for (ProtocolType type : ProtocolType.values()) {
+			if (type.getProtocol() == proto) {
+				return GlowStoneMiscUtils.protocolToNetState(type);
+			}
+		}
+		throw new IllegalStateException(MessageFormat.format("Unkown protocol {0}", proto));
 	}
 
 	@Override

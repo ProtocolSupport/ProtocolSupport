@@ -80,6 +80,11 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 	}
 
 	@Override
+	public NetworkState getNetworkState() {
+		return SpigotMiscUtils.protocolToNetState(getChannel().attr(NetworkManager.c).get());
+	}
+
+	@Override
 	public PacketListener getPacketListener() {
 		return internal.i();
 	}

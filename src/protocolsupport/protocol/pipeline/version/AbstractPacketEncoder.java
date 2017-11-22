@@ -23,9 +23,11 @@ import protocolsupport.zplatform.ServerPlatform;
 
 public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<ByteBuf> {
 
+	protected final Connection connection;
 	public AbstractPacketEncoder(Connection connection, NetworkDataCache storage) {
+		this.connection = connection;
 		registry.setCallBack(object -> {
-			object.setConnection(connection);
+			object.setConnection(this.connection);
 			object.setSharedStorage(storage);
 		});
 	}
@@ -37,7 +39,7 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 		if (!input.isReadable()) {
 			return;
 		}
-		NetworkState currentProtocol = ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(ctx.channel());
+		NetworkState currentProtocol = connection.getNetworkState();
 		ClientBoundMiddlePacket packetTransformer = null;
 		try {
 			packetTransformer = registry.getTransformer(currentProtocol, VarNumberSerializer.readVarInt(input));

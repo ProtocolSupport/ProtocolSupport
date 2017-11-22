@@ -21,14 +21,12 @@ import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
 import com.mojang.authlib.properties.Property;
 
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import net.minecraft.server.v1_12_R1.AxisAlignedBB;
 import net.minecraft.server.v1_12_R1.EntityPlayer;
 import net.minecraft.server.v1_12_R1.EnumProtocol;
 import net.minecraft.server.v1_12_R1.MinecraftServer;
 import net.minecraft.server.v1_12_R1.NBTTagCompound;
-import net.minecraft.server.v1_12_R1.NetworkManager;
 import net.minecraft.server.v1_12_R1.WorldServer;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.api.utils.NetworkState;
@@ -46,7 +44,7 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class SpigotMiscUtils implements PlatformUtils {
 
-	public static NetworkState netStateFromEnumProtocol(EnumProtocol state) {
+	public static NetworkState protocolToNetState(EnumProtocol state) {
 		switch (state) {
 			case HANDSHAKING: {
 				return NetworkState.HANDSHAKING;
@@ -193,11 +191,6 @@ public class SpigotMiscUtils implements PlatformUtils {
 			throw new IllegalArgumentException(icon + " was not created by " + CraftServer.class);
 		}
 		return ((CraftIconCache) icon).value;
-	}
-
-	@Override
-	public NetworkState getNetworkStateFromChannel(Channel channel) {
-		return netStateFromEnumProtocol(channel.attr(NetworkManager.c).get());
 	}
 
 	@Override
