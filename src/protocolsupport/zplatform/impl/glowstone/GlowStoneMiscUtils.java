@@ -26,6 +26,7 @@ import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
 import protocolsupport.protocol.utils.authlib.GameProfile;
+import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.zplatform.PlatformUtils;
 import protocolsupport.zplatform.impl.glowstone.itemstack.GlowStoneNBTTagCompoundWrapper;
 import protocolsupport.zplatform.impl.glowstone.network.GlowStoneChannelHandlers;
@@ -177,7 +178,11 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 
 	@Override
 	public String getVersionName() {
-		return GlowServer.GAME_VERSION;
+		try {
+			return (String) ReflectionUtils.getField(GlowServer.class, "GAME_VERSION").get(null);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw new RuntimeException("Unable to determive version name", e);
+		}
 	}
 
 	@Override
