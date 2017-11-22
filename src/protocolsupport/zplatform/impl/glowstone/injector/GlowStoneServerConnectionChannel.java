@@ -14,10 +14,11 @@ import protocolsupport.protocol.pipeline.common.SimpleReadTimeoutHandler;
 import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.utils.netty.ChannelInitializer;
+import protocolsupport.zplatform.impl.glowstone.GlowStoneMiscUtils;
 import protocolsupport.zplatform.impl.glowstone.network.GlowStoneChannelHandlers;
 import protocolsupport.zplatform.impl.glowstone.network.GlowStoneNetworkManagerWrapper;
 import protocolsupport.zplatform.impl.glowstone.network.pipeline.GlowStoneFramingHandler;
-import protocolsupport.zplatform.impl.glowstone.network.pipeline.GlowStoneSyncConnectionTicker;
+import protocolsupport.zplatform.impl.glowstone.network.pipeline.GlowStoneSyncTickerStarter;
 
 public class GlowStoneServerConnectionChannel extends ChannelInitializer {
 
@@ -27,18 +28,18 @@ public class GlowStoneServerConnectionChannel extends ChannelInitializer {
 			channel.config().setOption(ChannelOption.IP_TOS, 0x18);
 		} catch (ChannelException e) {
 		}
+		ChannelPipeline pipeline = channel.pipeline();
 		channel.config().setAllocator(PooledByteBufAllocator.DEFAULT);
-		ConnectionImpl connection = new ConnectionImpl(GlowStoneNetworkManagerWrapper.getFromChannel(channel));
+		ConnectionImpl connection = new ConnectionImpl(new GlowStoneNetworkManagerWrapper(GlowStoneMiscUtils.getNetworkManager(pipeline)));
 		connection.storeInChannel(channel);
 		ProtocolStorage.addConnection(channel.remoteAddress(), connection);
-		ChannelPipeline pipeline = channel.pipeline();
 		pipeline.remove(GlowStoneChannelHandlers.READ_TIMEOUT);
 		pipeline.remove("legacy_ping");
 		pipeline.remove("encryption");
 		pipeline.remove("compression");
 		pipeline.addFirst(GlowStoneChannelHandlers.READ_TIMEOUT, new SimpleReadTimeoutHandler(30));
 		pipeline.addAfter(GlowStoneChannelHandlers.READ_TIMEOUT, ChannelHandlers.INITIAL_DECODER, new InitialPacketDecoder());
-		pipeline.addBefore(GlowStoneChannelHandlers.NETWORK_MANAGER, "ps_glowstone_sync_ticker", new GlowStoneSyncConnectionTicker());
+		pipeline.addBefore(GlowStoneChannelHandlers.NETWORK_MANAGER, "ps_glowstone_sync_ticker", GlowStoneSyncTickerStarter.INSTANCE);
 		pipeline.addBefore(GlowStoneChannelHandlers.NETWORK_MANAGER, ChannelHandlers.LOGIC, new LogicHandler(connection));
 		pipeline.replace(GlowStoneChannelHandlers.FRAMING, GlowStoneChannelHandlers.FRAMING, new GlowStoneFramingHandler());
 		pipeline.addAfter(GlowStoneChannelHandlers.FRAMING, ChannelHandlers.RAW_CAPTURE_SEND, new RawPacketDataCaptureSend(connection));

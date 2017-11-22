@@ -13,6 +13,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
 
+import com.flowpowered.network.protocol.AbstractProtocol;
+
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import net.glowstone.GlowServer;
@@ -20,6 +22,7 @@ import net.glowstone.entity.meta.profile.PlayerProfile;
 import net.glowstone.entity.meta.profile.PlayerProperty;
 import net.glowstone.io.nbt.NbtSerialization;
 import net.glowstone.net.pipeline.CompressionHandler;
+import net.glowstone.net.pipeline.MessageHandler;
 import net.glowstone.net.protocol.ProtocolType;
 import net.glowstone.util.GlowServerIcon;
 import protocolsupport.api.utils.NetworkState;
@@ -29,7 +32,6 @@ import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.zplatform.PlatformUtils;
 import protocolsupport.zplatform.impl.glowstone.itemstack.GlowStoneNBTTagCompoundWrapper;
 import protocolsupport.zplatform.impl.glowstone.network.GlowStoneChannelHandlers;
-import protocolsupport.zplatform.impl.glowstone.network.GlowStoneNetworkManagerWrapper;
 import protocolsupport.zplatform.impl.glowstone.network.pipeline.GlowStoneFramingHandler;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
@@ -87,6 +89,10 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 				throw new IllegalArgumentException(MessageFormat.format("Unknown protocol {0}", type));
 			}
 		}
+	}
+
+	public static MessageHandler getNetworkManager(ChannelPipeline pipeline) {
+		return (MessageHandler) pipeline.get(GlowStoneChannelHandlers.NETWORK_MANAGER);
 	}
 
 	@Override
@@ -184,7 +190,13 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 
 	@Override
 	public NetworkState getNetworkStateFromChannel(Channel channel) {
-		return GlowStoneNetworkManagerWrapper.getFromChannel(channel).getProtocol();
+		AbstractProtocol proto = getNetworkManager(channel.pipeline()).getSession().get().getProtocol();
+		for (ProtocolType type : ProtocolType.values()) {
+			if (type.getProtocol() == proto) {
+				return GlowStoneMiscUtils.protocolToNetState(type);
+			}
+		}
+		throw new IllegalStateException(MessageFormat.format("Unkown protocol {0}", proto));
 	}
 
 	@Override
