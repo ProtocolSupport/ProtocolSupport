@@ -97,10 +97,12 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 		getSession().setProtocol(GlowStoneMiscUtils.netStateToProtocol(state));
 	}
 
+	private static final ProtocolType[] protocols = ProtocolType.values();
+
 	@Override
 	public NetworkState getNetworkState() {
 		AbstractProtocol proto = getSession().getProtocol();
-		for (ProtocolType type : ProtocolType.values()) {
+		for (ProtocolType type : protocols) {
 			if (type.getProtocol() == proto) {
 				return GlowStoneMiscUtils.protocolToNetState(type);
 			}
