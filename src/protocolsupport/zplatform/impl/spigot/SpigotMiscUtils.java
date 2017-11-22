@@ -66,6 +66,26 @@ public class SpigotMiscUtils implements PlatformUtils {
 		}
 	}
 
+	public static EnumProtocol netStateToProtocol(NetworkState state)  {
+		switch (state) {
+			case HANDSHAKING: {
+				return EnumProtocol.HANDSHAKING;
+			}
+			case PLAY: {
+				return EnumProtocol.PLAY;
+			}
+			case LOGIN: {
+				return EnumProtocol.LOGIN;
+			}
+			case STATUS: {
+				return EnumProtocol.STATUS;
+			}
+			default: {
+				throw new IllegalArgumentException("Unknown state " + state);
+			}
+		}
+	}
+
 	public static MinecraftServer getServer() {
 		return ((CraftServer) Bukkit.getServer()).getServer();
 	}
