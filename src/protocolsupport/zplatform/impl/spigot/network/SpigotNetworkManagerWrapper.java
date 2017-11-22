@@ -24,10 +24,6 @@ import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 
-	public static SpigotNetworkManagerWrapper getFromChannel(Channel channel) {
-		return new SpigotNetworkManagerWrapper((NetworkManager) channel.pipeline().get(SpigotChannelHandlers.NETWORK_MANAGER));
-	}
-
 	private final NetworkManager internal;
 	public SpigotNetworkManagerWrapper(NetworkManager internal) {
 		this.internal = internal;
