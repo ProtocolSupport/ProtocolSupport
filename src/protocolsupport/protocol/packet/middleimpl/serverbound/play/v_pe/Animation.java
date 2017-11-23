@@ -34,11 +34,11 @@ public class Animation extends ServerBoundMiddlePacket {
 			return RecyclableSingletonList.create(MiddleAnimation.create(0));
 		} else {
 			if ((action & 0x01) == 0) {
-				cache.setRightPaddleTurning(paddleTime != prevRightPaddle);
-				prevRightPaddle = paddleTime;
-			} else {
 				cache.setLeftPaddleTurning(paddleTime != prevLeftPaddle);
 				prevLeftPaddle = paddleTime;
+			} else {
+				cache.setRightPaddleTurning(paddleTime != prevRightPaddle);
+				prevRightPaddle = paddleTime;
 			}
 		}
 		return RecyclableEmptyList.get();

@@ -10,6 +10,7 @@ public class SteerVehicle extends MiddleSteerVehicle {
 	public void readFromClientData(ByteBuf clientdata) {
 		sideForce = MiscSerializer.readLFloat(clientdata);
 		forwardForce = MiscSerializer.readLFloat(clientdata);
+		System.out.println("FORCE - S:" + sideForce + " - F:" + forwardForce);
 		clientdata.readBoolean();
 		clientdata.readBoolean();
 	}

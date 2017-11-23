@@ -2,6 +2,7 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleMoveVehicle;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddlePositionLook;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSteerBoat;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleTeleportAccept;
@@ -9,6 +10,7 @@ import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateSign;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.utils.minecraftdata.PocketData;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Position;
@@ -21,9 +23,14 @@ public class PositionLook extends ServerBoundMiddlePacket {
 	protected double x;
 	protected double y;
 	protected double z;
-	protected float yaw;
 	protected float pitch;
+	protected float yaw;
+	protected float headYaw;
+	protected byte mode;
 	protected boolean onGround;
+	protected long vehicle;
+	protected int huh1;
+	protected int huh2;
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
@@ -33,10 +40,15 @@ public class PositionLook extends ServerBoundMiddlePacket {
 		z = MiscSerializer.readLFloat(clientdata);
 		pitch = MiscSerializer.readLFloat(clientdata);
 		yaw = MiscSerializer.readLFloat(clientdata);
-		MiscSerializer.readLFloat(clientdata); //head yaw
-		clientdata.readByte(); //mode
+		headYaw = MiscSerializer.readLFloat(clientdata); //head yaw
+		mode = clientdata.readByte(); //mode
 		onGround = clientdata.readBoolean();
-		VarNumberSerializer.readVarLong(clientdata);
+		vehicle = VarNumberSerializer.readVarLong(clientdata);
+		if (mode == 2) {
+			huh1 = VarNumberSerializer.readSVarInt(clientdata);
+			huh2 = VarNumberSerializer.readSVarInt(clientdata);
+		}
+		//System.out.println("CPL - x: " + x  + " y:" + y + " z:" + z + " yaw:" + yaw + " headYaw:"+ headYaw + " mode:" + Integer.toBinaryString(mode) + " oG:" + onGround + " vehicle:" + vehicle + " huh1:" + huh1 + " huh2:" + huh2);
 	}
 
 	@Override
@@ -50,12 +62,12 @@ public class PositionLook extends ServerBoundMiddlePacket {
 			packets.add(MiddleTeleportAccept.create(teleportId));
 			cache.payTeleportConfirm();
 			double[] serverPos = cache.getTeleportLocation();
-			packets.add(MiddlePositionLook.create(serverPos[0], serverPos[1], serverPos[2], yaw, pitch, onGround));
+			packets.add(MiddlePositionLook.create(serverPos[0], serverPos[1], serverPos[2], headYaw, pitch, onGround));
 			cache.setLastClientPosition(x, y, z);
 			//TODO: Play around more with these numbers to perhaps make things even more smooth.
 			x = Math.floor(x * 8) / 8; y = Math.ceil((y + 0.3) * 8) / 8; z = Math.floor(z * 8) / 8;
 		} else {
-			cache.setLastClientPosition(x, y, z);
+			//
 		}
 		
 		 if(cache.getWatchedSelf().getDataCache().riderInfo != null) {
@@ -63,6 +75,13 @@ public class PositionLook extends ServerBoundMiddlePacket {
 			if (vehicle != null) {
 				if(vehicle.getType() == NetworkEntityType.BOAT) {
 					packets.add(MiddleSteerBoat.create(cache.isRightPaddleTurning(), cache.isLeftPaddleTurning()));
+					
+					
+					double fakeYaw;
+					double dX = x - cache.getClientX(), dZ = z - cache.getClientZ();
+					fakeYaw = 360 - Math.toDegrees(Math.atan2(dX, dZ));
+					System.out.println("MOVE - dx:" + dX + " dz:" + dZ + " fakeYaw:" + fakeYaw);
+					packets.add(MiddleMoveVehicle.create(x, y + PocketData.getPocketEntityData(vehicle.getType()).getOffset().getY(), z, (float) fakeYaw, pitch));
 				}
 				
 				/*if (vehicle.getType() == NetworkEntityType.PIG || vehicle.getType() == NetworkEntityType.BOAT || vehicle.isOfType(NetworkEntityType.BASE_HORSE)) {
@@ -72,8 +91,12 @@ public class PositionLook extends ServerBoundMiddlePacket {
 				}*/
 			}
 		}
-		packets.add(MiddlePositionLook.create(x, y, z, yaw, pitch, onGround));
+		packets.add(MiddlePositionLook.create(x, y, z, headYaw, pitch, onGround));
 
+		if (teleportId == -1) {
+			cache.setLastClientPosition(x, y, z);
+		}
+		
 		//TODO: (re)move this shit
 		if (cache.getSignTag() != null) {
 			NBTTagCompoundWrapper signTag = cache.getSignTag();

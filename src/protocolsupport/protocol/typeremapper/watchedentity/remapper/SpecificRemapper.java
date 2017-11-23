@@ -82,11 +82,12 @@ public enum SpecificRemapper {
 
 				// = PE Riding =
 				PocketRiderInfo riderInfo = entity.getDataCache().riderInfo;
+				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_COLLIDE, riderInfo == null);
 				if (riderInfo != null) {
 					System.out.println("RIDERPOSITION: " + riderInfo.getPosition());
 					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_RIDING, true);
 					remapped.put(57, new DataWatcherObjectVector3fLe(riderInfo.getPosition()));
-					//remapped.put(58, new DataWatcherObjectByte((byte) ((riderInfo.getRotationLock() != null) ? 1 : 0)));
+					remapped.put(58, new DataWatcherObjectByte((byte) ((riderInfo.getRotationLock() != null) ? 1 : 0)));
 					if (riderInfo.getRotationLock() != null) {
 						System.out.println("RIDERLOCK: " + riderInfo.getRotationLock());
 						//remapped.put(59, new DataWatcherObjectFloatLe(riderInfo.getRotationLock()));
@@ -120,7 +121,7 @@ public enum SpecificRemapper {
 
 			}}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new PeSimpleFlagAdder(
-				new int[] {PeMetaBase.FLAG_GRAVITY, PeMetaBase.FLAG_COLLIDE}, new boolean[] {true, true}
+				new int[] {PeMetaBase.FLAG_GRAVITY}, new boolean[] {true}
 			), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.Entity.FLAGS,
 				new int[] {1, 2, 4, 6, 8}, new int[] {PeMetaBase.FLAG_ON_FIRE, PeMetaBase.FLAG_SNEAKING, PeMetaBase.FLAG_SPRINTING, PeMetaBase.FLAG_INVISIBLE, PeMetaBase.FLAG_GLIDING}
@@ -673,7 +674,7 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Parrot.VARIANT, 15) {}, ProtocolVersionsHelper.ALL_1_12)
 	),
 	ARMOR_STAND_MOB(NetworkEntityType.ARMOR_STAND_MOB, SpecificRemapper.ARMOR_STAND),
-	BOAT(NetworkEntityType.BOAT,
+	BOAT(NetworkEntityType.BOAT, SpecificRemapper.ENTITY,
 		new Entry(new IndexValueRemapperNumberToByte(DataWatcherObjectIndex.Boat.VARIANT, 3), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapper<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Boat.LEFT_PADDLE, 13) {
 			@Override
