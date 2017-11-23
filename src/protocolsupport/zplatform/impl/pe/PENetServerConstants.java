@@ -26,7 +26,7 @@ public class PENetServerConstants {
 	};
 
 	public static final int USER_PACKET_ID = 0xFE;
-	public static final int TEST_PORT = 19132;
+	public static final int TEST_PORT = 19138;
 	public static final int CURRENT_PROTOCOL = 140;
 	public static final String POCKET_VERSION = "1.2.6.2";
 }
