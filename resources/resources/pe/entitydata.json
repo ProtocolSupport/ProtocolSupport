@@ -27,7 +27,7 @@
 			"height": 1.6
 		},
 		"RiderInfo": {
-			"x": 0.0, 
+			"x": 0.0,
 			"y": 1.2,
 			"z": -0.2
 		}
@@ -114,7 +114,7 @@
 			"y": 0.63,
 			"z": 0.0
 		}
-	
+
 	},
 	"COW": {
 		"BoundingBox": {
@@ -400,17 +400,17 @@
 			"height": 1.975
 		}
 	},
-	"BOAT": { 
+	"BOAT": {
 		"BoundingBox": {
 			"width": 1.4,
-			"height": 0.455	
+			"height": 0.455
 		},
 		"Offset": {
 			"x": 0.0,
 			"y": 0.375,
 			"z": 0.0,
 			"yaw": 50,
-			"pitch": 0 
+			"pitch": 0
 		},
 		"RiderInfo": {
 			"x": 0.0,
@@ -521,18 +521,33 @@
 		"BoundingBox": {
 			"width": 0.25,
 			"height": 0.25
+		},
+		"RiderInfo": {
+			"x": 0.0,
+			"y": 0.5,
+			"z": 0
 		}
 	},
 	"SPECTRAL_ARROW": {
 		"BoundingBox": {
 			"width": 0.25,
 			"height": 0.25
+		},
+		"RiderInfo": {
+			"x": 0.0,
+			"y": 0.5,
+			"z": 0
 		}
 	},
 	"TIPPED_ARROW": {
 		"BoundingBox": {
 			"width": 0.25,
 			"height": 0.25
+		},
+		"RiderInfo": {
+			"x": 0.0,
+			"y": 0.5,
+			"z": 0
 		}
 	},
 	"FIREWORK": {
@@ -557,6 +572,11 @@
 		"BoundingBox": {
 			"width": 0.5,
 			"height": 1.975
+		},
+		"RiderInfo": {
+			"x": 0.0,
+			"y": 0.0,
+			"z": 0.0
 		}
 	},
 	"SHULKER_BULLET": {
