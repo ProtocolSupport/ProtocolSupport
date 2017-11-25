@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 
+import net.glowstone.net.pipeline.CompressionHandler;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 
@@ -28,6 +29,7 @@ import protocolsupport.ProtocolSupport;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.ServerPlatformIdentifier;
 import protocolsupport.api.events.PlayerLoginStartEvent;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.ConnectionImpl;
@@ -38,6 +40,7 @@ import protocolsupport.protocol.utils.MinecraftEncryption;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
+import protocolsupport.zplatform.impl.glowstone.network.GlowStoneChannelHandlers;
 import protocolsupport.zplatform.impl.spigot.network.SpigotChannelHandlers;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
@@ -194,9 +197,14 @@ public abstract class AbstractLoginListener implements IHasProfile {
 
 	protected void enableEncryption(SecretKey key) {
 		ChannelPipeline pipeline = networkManager.getChannel().pipeline();
-		pipeline.addBefore(SpigotChannelHandlers.SPLITTER, ChannelHandlers.DECRYPT, new PacketDecrypter(MinecraftEncryption.getCipher(Cipher.DECRYPT_MODE, key)));
-		if (isFullEncryption(connection.getVersion())) {
-			pipeline.addBefore(SpigotChannelHandlers.PREPENDER, ChannelHandlers.ENCRYPT, new PacketEncrypter(MinecraftEncryption.getCipher(Cipher.ENCRYPT_MODE, key)));
+		if (ServerPlatform.get().getIdentifier() == ServerPlatformIdentifier.GLOWSTONE) {
+			pipeline.addBefore(GlowStoneChannelHandlers.FRAMING, ChannelHandlers.ENCRYPT, new PacketDecrypter(MinecraftEncryption.getCipher(Cipher.DECRYPT_MODE, key)));
+			pipeline.addBefore(ChannelHandlers.ENCRYPT, ChannelHandlers.DECRYPT, new PacketDecrypter(MinecraftEncryption.getCipher(Cipher.ENCRYPT_MODE, key)));
+		} else {
+			pipeline.addBefore(SpigotChannelHandlers.SPLITTER, ChannelHandlers.DECRYPT, new PacketDecrypter(MinecraftEncryption.getCipher(Cipher.DECRYPT_MODE, key)));
+			if (isFullEncryption(connection.getVersion())) {
+				pipeline.addBefore(SpigotChannelHandlers.PREPENDER, ChannelHandlers.ENCRYPT, new PacketEncrypter(MinecraftEncryption.getCipher(Cipher.ENCRYPT_MODE, key)));
+			}
 		}
 	}
 
