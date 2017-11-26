@@ -197,15 +197,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 
 	protected void enableEncryption(SecretKey key) {
 		ChannelPipeline pipeline = networkManager.getChannel().pipeline();
-		if (ServerPlatform.get().getIdentifier() == ServerPlatformIdentifier.GLOWSTONE) {
-			pipeline.addBefore(GlowStoneChannelHandlers.FRAMING, ChannelHandlers.ENCRYPT, new PacketEncrypter(MinecraftEncryption.getCipher(Cipher.ENCRYPT_MODE, key)));
-			pipeline.addBefore(ChannelHandlers.ENCRYPT, ChannelHandlers.DECRYPT, new PacketDecrypter(MinecraftEncryption.getCipher(Cipher.DECRYPT_MODE, key)));
-		} else {
-			pipeline.addBefore(SpigotChannelHandlers.SPLITTER, ChannelHandlers.DECRYPT, new PacketDecrypter(MinecraftEncryption.getCipher(Cipher.DECRYPT_MODE, key)));
-			if (isFullEncryption(connection.getVersion())) {
-				pipeline.addBefore(SpigotChannelHandlers.PREPENDER, ChannelHandlers.ENCRYPT, new PacketEncrypter(MinecraftEncryption.getCipher(Cipher.ENCRYPT_MODE, key)));
-			}
-		}
+		ServerPlatform.get().getMiscUtils().enableEncryption(pipeline, key, isFullEncryption(connection.getVersion()));
 	}
 
 	@SuppressWarnings("unchecked")
