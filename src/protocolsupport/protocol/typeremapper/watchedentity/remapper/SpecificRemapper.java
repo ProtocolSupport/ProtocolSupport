@@ -90,8 +90,8 @@ public enum SpecificRemapper {
 					remapped.put(58, new DataWatcherObjectByte((byte) ((riderInfo.getRotationLock() != null) ? 1 : 0)));
 					if (riderInfo.getRotationLock() != null) {
 						System.out.println("RIDERLOCK: " + riderInfo.getRotationLock());
-						//remapped.put(59, new DataWatcherObjectFloatLe(riderInfo.getRotationLock()));
-						//remapped.put(59, new DataWatcherObjectFloatLe(-riderInfo.getRotationLock()));
+						remapped.put(59, new DataWatcherObjectFloatLe(riderInfo.getRotationLock()));
+						remapped.put(60, new DataWatcherObjectFloatLe(-riderInfo.getRotationLock()));
 					}
 				} else {
 					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_RIDING, false);
@@ -675,7 +675,7 @@ public enum SpecificRemapper {
 	),
 	ARMOR_STAND_MOB(NetworkEntityType.ARMOR_STAND_MOB, SpecificRemapper.ARMOR_STAND),
 	BOAT(NetworkEntityType.BOAT, SpecificRemapper.ENTITY,
-		new Entry(new IndexValueRemapperNumberToByte(DataWatcherObjectIndex.Boat.VARIANT, 3), ProtocolVersion.MINECRAFT_PE),
+		new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Boat.VARIANT, 2), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapper<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Boat.LEFT_PADDLE, 13) {
 			@Override
 			public DataWatcherObject<?> remapValue(DataWatcherObjectBoolean object) {

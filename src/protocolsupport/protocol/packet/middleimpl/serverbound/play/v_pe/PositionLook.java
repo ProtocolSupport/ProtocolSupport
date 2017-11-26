@@ -31,6 +31,7 @@ public class PositionLook extends ServerBoundMiddlePacket {
 	protected long vehicle;
 	protected int huh1;
 	protected int huh2;
+	protected double fakeYaw;
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
@@ -39,8 +40,8 @@ public class PositionLook extends ServerBoundMiddlePacket {
 		y = MiscSerializer.readLFloat(clientdata) - 1.6200000047683716D;
 		z = MiscSerializer.readLFloat(clientdata);
 		pitch = MiscSerializer.readLFloat(clientdata);
+		headYaw = MiscSerializer.readLFloat(clientdata);
 		yaw = MiscSerializer.readLFloat(clientdata);
-		headYaw = MiscSerializer.readLFloat(clientdata); //head yaw
 		mode = clientdata.readByte(); //mode
 		onGround = clientdata.readBoolean();
 		vehicle = VarNumberSerializer.readVarLong(clientdata);
@@ -66,33 +67,23 @@ public class PositionLook extends ServerBoundMiddlePacket {
 			cache.setLastClientPosition(x, y, z);
 			//TODO: Play around more with these numbers to perhaps make things even more smooth.
 			x = Math.floor(x * 8) / 8; y = Math.ceil((y + 0.3) * 8) / 8; z = Math.floor(z * 8) / 8;
-		} else {
-			//
 		}
-		
 		 if(cache.getWatchedSelf().getDataCache().riderInfo != null) {
-			NetworkEntity vehicle = cache.getWatchedSelf().getDataCache().riderInfo.getVehicle();
+			NetworkEntity vehicle = cache.getWatchedEntity(cache.getWatchedSelf().getDataCache().riderInfo.getVehicleId());
 			if (vehicle != null) {
 				if(vehicle.getType() == NetworkEntityType.BOAT) {
-					packets.add(MiddleSteerBoat.create(cache.isRightPaddleTurning(), cache.isLeftPaddleTurning()));
-					
-					
-					double fakeYaw;
 					double dX = x - cache.getClientX(), dZ = z - cache.getClientZ();
-					fakeYaw = 360 - Math.toDegrees(Math.atan2(dX, dZ));
+					if(Math.abs(dX) > 0 || Math.abs(dZ) > 0) {
+						fakeYaw = 360 - Math.toDegrees(Math.atan2(dX, dZ));
+					}
+					yaw = (float) fakeYaw + yaw + 90;
 					System.out.println("MOVE - dx:" + dX + " dz:" + dZ + " fakeYaw:" + fakeYaw);
-					packets.add(MiddleMoveVehicle.create(x, y + PocketData.getPocketEntityData(vehicle.getType()).getOffset().getY(), z, (float) fakeYaw, pitch));
+					packets.add(MiddleSteerBoat.create(cache.isRightPaddleTurning(), cache.isLeftPaddleTurning()));
+					packets.add(MiddleMoveVehicle.create(x, y + PocketData.getPocketEntityData(vehicle.getType()).getOffset().getY(), z, (float) fakeYaw, 0));
 				}
-				
-				/*if (vehicle.getType() == NetworkEntityType.PIG || vehicle.getType() == NetworkEntityType.BOAT || vehicle.isOfType(NetworkEntityType.BASE_HORSE)) {
-					packets.add(MiddleLook.create(yaw, pitch, onGround));
-					packets.add(MiddleSteerVehicle.create(0, 0, 0));
-					packets.add(MiddleMoveVehicle.create(x, y - 0.675, z, yaw, pitch));					
-				}*/
 			}
 		}
-		packets.add(MiddlePositionLook.create(x, y, z, headYaw, pitch, onGround));
-
+		packets.add(MiddlePositionLook.create(x, y, z, yaw, pitch, onGround));
 		if (teleportId == -1) {
 			cache.setLastClientPosition(x, y, z);
 		}

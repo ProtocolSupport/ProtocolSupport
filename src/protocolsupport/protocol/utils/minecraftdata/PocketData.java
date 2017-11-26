@@ -10,7 +10,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.Utils;
 
@@ -102,7 +101,7 @@ public class PocketData {
 			private double y;
 			private double z;
 			private Float rotationlock = null; //Optional
-			private NetworkEntity vehicle = null; //Used only in meta
+			private int vehicleId = -1; //Used only in meta
 			
 			public Vector getPosition() {
 				return new Vector(x, y + 1.2, z);
@@ -112,12 +111,12 @@ public class PocketData {
 				return rotationlock;
 			}
 			
-			public NetworkEntity getVehicle() {
-				return vehicle;
+			public int getVehicleId() {
+				return vehicleId;
 			}
 
-			public void setVehicle(NetworkEntity vehicle) {
-				this.vehicle = vehicle;
+			public void setVehicleId(int vehicleId) {
+				this.vehicleId = vehicleId;
 			}
 
 			public void setPosition(Vector position) {

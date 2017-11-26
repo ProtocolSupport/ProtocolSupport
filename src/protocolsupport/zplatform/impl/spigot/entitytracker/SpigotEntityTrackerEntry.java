@@ -172,7 +172,8 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 				final int j = MathHelper.d((this.tracker.pitch * 256.0f) / 360.0f);
 				final boolean flag = (Math.abs(i - this.yRot) >= 1) || (Math.abs(j - this.xRot) >= 1);
 				if (flag) {
-					this.broadcast(new PacketPlayOutEntity.PacketPlayOutEntityLook(this.tracker.getId(), (byte) i, (byte) j, this.tracker.onGround));
+					this.broadcast(new PacketPlayOutEntity.PacketPlayOutEntityLook(this.tracker.getId(), (byte) i, (byte) j, this.tracker.onGround),
+						 new PacketPlayOutEntityTeleport(this.tracker));
 					this.yRot = i;
 					this.xRot = j;
 				}
@@ -251,6 +252,9 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 			final int currentHeadYaw = MathHelper.d((this.tracker.getHeadRotation() * 256.0f) / 360.0f);
 			if (Math.abs(currentHeadYaw - this.headYaw) >= 1) {
 				this.broadcast(new PacketPlayOutEntityHeadRotation(this.tracker, (byte) currentHeadYaw));
+				//if (!this.tracker.isPassenger()) {
+					this.broadcastPE(new PacketPlayOutEntityTeleport(this.tracker));
+				//}
 				this.headYaw = currentHeadYaw;
 			}
 			this.tracker.impulse = false;
@@ -303,6 +307,12 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 		}
 		for (EntityPlayer player : trackedPEPlayers) {
 			player.playerConnection.sendPacket(pepacket);
+		}
+	}
+	
+	public void broadcastPE(final Packet<?> packet) {
+		for (final EntityPlayer entityplayer : this.trackedPEPlayers) {
+			entityplayer.playerConnection.sendPacket(packet);
 		}
 	}
 

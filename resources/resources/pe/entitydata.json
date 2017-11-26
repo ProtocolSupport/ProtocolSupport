@@ -407,16 +407,16 @@
 		},
 		"Offset": {
 			"x": 0.0,
-			"y": 0.375,
+			"y": 0.4,
 			"z": 0.0,
-			"yaw": 50,
+			"yaw": 64,
 			"pitch": 0
 		},
 		"RiderInfo": {
 			"x": 0.0,
 			"y": -0.2,
 			"z": 0.0,
-			"rotationlock": 90.0
+			"rotationlock": 105.0
 		}
 	},
 	"TNT": {

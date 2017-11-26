@@ -37,29 +37,6 @@ public class SetPassengers extends MiddleSetPassengers {
 				prevPassengersIds = new TIntHashSet();
 			}
 			TIntHashSet newPassengersIds = new TIntHashSet(passengersIds);
-			for (int passengerId : passengersIds) {
-				NetworkEntity passenger = cache.getWatchedEntity(passengerId);
-				if (passenger != null) {
-					//MOJANG.... WHYYYYY?!
-					if(vehicle.isOfType(NetworkEntityType.PIG)) {
-						packets.add(EntitySetAttributes.create(version, vehicleId, EntitySetAttributes.createAttribute("minecraft:horse.jump_strength", 0.432084373616155))); 
-					}
-					
-					DataCache data = passenger.getDataCache();
-					data.riderInfo = PocketData.getPocketEntityData(vehicle.getType()).getRiderInfo();
-					if(data.riderInfo != null) {
-						float vehicleSize = PEMetaProviderSPI.getProvider().getEntitySize(vehicle) * vehicle.getDataCache().sizeModifier;
-						data.riderInfo.setPosition(data.riderInfo.getPosition().multiply(new Vector(vehicleSize, vehicleSize, vehicleSize)));
-						data.riderInfo.setVehicle(vehicle);
-					}
-					packets.add(EntityMetadata.createFaux(passenger, cache.getLocale(), version));
-
-					packets.add(create(version, vehicleId, passengerId, LINK));
-					if(cache.isSelf(passengerId)) {
-						packets.add(create(version, vehicleId, 0, LINK));
-					}
-				}
-			}
 			prevPassengersIds.forEach(new TIntProcedure() {
 				@Override
 				public boolean execute(int passengerId) {
@@ -78,6 +55,33 @@ public class SetPassengers extends MiddleSetPassengers {
 					return true;
 				}
 			});
+			for (int passengerId : passengersIds) {
+				NetworkEntity passenger = cache.getWatchedEntity(passengerId);
+				if (passenger != null) {
+					//MOJANG.... WHYYYYY?!
+					if(vehicle.isOfType(NetworkEntityType.PIG)) {
+						packets.add(EntitySetAttributes.create(version, vehicleId, EntitySetAttributes.createAttribute("minecraft:horse.jump_strength", 0.432084373616155))); 
+					}
+					
+					DataCache data = passenger.getDataCache();
+					data.riderInfo = PocketData.getPocketEntityData(vehicle.getType()).getRiderInfo();
+					if(data.riderInfo != null) {
+						if(passenger.getType() == NetworkEntityType.PLAYER) {
+							float vehicleSize = PEMetaProviderSPI.getProvider().getEntitySize(vehicle) * vehicle.getDataCache().sizeModifier;
+							data.riderInfo.setPosition(data.riderInfo.getPosition().multiply(new Vector(vehicleSize, vehicleSize, vehicleSize)));
+						} else {
+							data.riderInfo.setPosition(new Vector(0, -0.125, 0));
+						}
+						data.riderInfo.setVehicleId(vehicleId);
+					}
+					packets.add(EntityMetadata.createFaux(passenger, cache.getLocale(), version));
+
+					packets.add(create(version, vehicleId, passengerId, LINK));
+					if(cache.isSelf(passengerId)) {
+						packets.add(create(version, vehicleId, 0, LINK));
+					}
+				}
+			}
 			passengers.put(vehicleId, newPassengersIds);
 		}
 		return packets;
