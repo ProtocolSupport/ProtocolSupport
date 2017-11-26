@@ -209,8 +209,10 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 
 	@Override
 	public void enableEncryption(ChannelPipeline pipeline, SecretKey key, boolean fullEncryption) {
-		pipeline.addBefore(GlowStoneChannelHandlers.FRAMING, ChannelHandlers.ENCRYPT, new PacketEncrypter(MinecraftEncryption.getCipher(Cipher.ENCRYPT_MODE, key)));
-		pipeline.addBefore(ChannelHandlers.ENCRYPT, ChannelHandlers.DECRYPT, new PacketDecrypter(MinecraftEncryption.getCipher(Cipher.DECRYPT_MODE, key)));
+		pipeline.addBefore(GlowStoneChannelHandlers.FRAMING, ChannelHandlers.DECRYPT, new PacketDecrypter(MinecraftEncryption.getCipher(Cipher.DECRYPT_MODE, key)));
+		if (fullEncryption) {
+			pipeline.addBefore(GlowStoneChannelHandlers.FRAMING, ChannelHandlers.ENCRYPT, new PacketEncrypter(MinecraftEncryption.getCipher(Cipher.ENCRYPT_MODE, key)));
+		}
 	}
 
 	@Override
