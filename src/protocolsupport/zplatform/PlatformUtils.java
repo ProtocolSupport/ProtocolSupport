@@ -15,6 +15,8 @@ import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
+import javax.crypto.SecretKey;
+
 public interface PlatformUtils {
 
 	public ItemStack createItemStackFromNBTTag(NBTTagCompoundWrapper tag);
@@ -52,6 +54,8 @@ public interface PlatformUtils {
 	public String getReadTimeoutHandlerName();
 
 	public void enableCompression(ChannelPipeline pipeline, int compressionThreshold);
+
+	public void enableEncryption(ChannelPipeline pipeline, SecretKey key, boolean fullEncryption);
 
 	public void setFraming(ChannelPipeline pipeline, IPacketSplitter splitter, IPacketPrepender prepender);
 

@@ -30,8 +30,12 @@ import net.minecraft.server.v1_12_R1.NBTTagCompound;
 import net.minecraft.server.v1_12_R1.WorldServer;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.api.utils.NetworkState;
+import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
+import protocolsupport.protocol.pipeline.common.PacketDecrypter;
+import protocolsupport.protocol.pipeline.common.PacketEncrypter;
+import protocolsupport.protocol.utils.MinecraftEncryption;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.zplatform.PlatformUtils;
 import protocolsupport.zplatform.impl.spigot.itemstack.SpigotNBTTagCompoundWrapper;
@@ -41,6 +45,9 @@ import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketDecomp
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedPrepender;
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedSplitter;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
+
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
 
 public class SpigotMiscUtils implements PlatformUtils {
 
@@ -203,6 +210,14 @@ public class SpigotMiscUtils implements PlatformUtils {
 		pipeline
 		.addAfter(SpigotChannelHandlers.SPLITTER, "decompress", new SpigotPacketDecompressor(compressionThreshold))
 		.addAfter(SpigotChannelHandlers.PREPENDER, "compress", new SpigotPacketCompressor(compressionThreshold));
+	}
+
+	@Override
+	public void enableEncryption(ChannelPipeline pipeline, SecretKey key, boolean fullEncryption) {
+		pipeline.addBefore(SpigotChannelHandlers.SPLITTER, ChannelHandlers.DECRYPT, new PacketDecrypter(MinecraftEncryption.getCipher(Cipher.DECRYPT_MODE, key)));
+		if (fullEncryption) {
+			pipeline.addBefore(SpigotChannelHandlers.PREPENDER, ChannelHandlers.ENCRYPT, new PacketEncrypter(MinecraftEncryption.getCipher(Cipher.ENCRYPT_MODE, key)));
+		}
 	}
 
 	@Override
