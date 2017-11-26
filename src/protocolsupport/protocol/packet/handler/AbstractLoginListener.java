@@ -1,48 +1,32 @@
 package protocolsupport.protocol.packet.handler;
 
-import java.security.PrivateKey;
-import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.UUID;
-import java.util.concurrent.Executor;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-
-import net.glowstone.net.pipeline.CompressionHandler;
-import org.apache.commons.lang3.Validate;
-import org.bukkit.Bukkit;
-
 import com.google.common.base.Charsets;
-
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelPipeline;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import org.apache.commons.lang3.Validate;
+import org.bukkit.Bukkit;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.api.ServerPlatformIdentifier;
 import protocolsupport.api.events.PlayerLoginStartEvent;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.pipeline.ChannelHandlers;
-import protocolsupport.protocol.pipeline.common.PacketDecrypter;
-import protocolsupport.protocol.pipeline.common.PacketEncrypter;
-import protocolsupport.protocol.utils.MinecraftEncryption;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.impl.glowstone.network.GlowStoneChannelHandlers;
-import protocolsupport.zplatform.impl.spigot.network.SpigotChannelHandlers;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
+
+import javax.crypto.SecretKey;
+import java.security.PrivateKey;
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.UUID;
+import java.util.concurrent.*;
+import java.util.logging.Level;
 
 public abstract class AbstractLoginListener implements IHasProfile {
 
