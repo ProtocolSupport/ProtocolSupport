@@ -45,7 +45,7 @@ public class SetPassengers extends MiddleSetPassengers {
 					}
 					
 					DataCache data = passenger.getDataCache();
-					if (data.riderInfo != null) {
+					if (data.riderInfo != null && data.riderInfo.getVehicleId() != vehicleId) {
 						//In case we are jumping from vehicle to vehicle.
 						packets.addAll(link(version, data.riderInfo.getVehicleId(), passengerId, UNLINK));
 					}

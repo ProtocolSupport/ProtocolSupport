@@ -679,11 +679,13 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapper<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Boat.LEFT_PADDLE, 13) {
 			@Override
 			public DataWatcherObject<?> remapValue(DataWatcherObjectBoolean object) {
+				//TODO: Actually increment and send correct 'paddletime'.
 				return new DataWatcherObjectFloatLe(object.getValue() ? 0.05f: 0f);
 			}},ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapper<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Boat.RIGHT_PADDLE, 14) {
 			@Override
 			public DataWatcherObject<?> remapValue(DataWatcherObjectBoolean object) {
+				//TODO: Actually increment and send correct 'paddletime'.
 				return new DataWatcherObjectFloatLe(object.getValue() ? 0.05f: 0f);
 			}},ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Boat.TIME_SINCE_LAST_HIT, 6) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_2),
