@@ -24,8 +24,12 @@ import net.glowstone.net.pipeline.MessageHandler;
 import net.glowstone.net.protocol.ProtocolType;
 import net.glowstone.util.GlowServerIcon;
 import protocolsupport.api.utils.NetworkState;
+import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
+import protocolsupport.protocol.pipeline.common.PacketDecrypter;
+import protocolsupport.protocol.pipeline.common.PacketEncrypter;
+import protocolsupport.protocol.utils.MinecraftEncryption;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.zplatform.PlatformUtils;
@@ -34,6 +38,9 @@ import protocolsupport.zplatform.impl.glowstone.itemstack.GlowStoneNBTTagCompoun
 import protocolsupport.zplatform.impl.glowstone.network.GlowStoneChannelHandlers;
 import protocolsupport.zplatform.impl.glowstone.network.pipeline.GlowStoneFramingHandler;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
+
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
 
 public class GlowStoneMiscUtils implements PlatformUtils {
 
@@ -200,6 +207,14 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	@Override
 	public void enableCompression(ChannelPipeline pipeline, int compressionThreshold) {
 		pipeline.addAfter(GlowStoneChannelHandlers.FRAMING, "compression", new CompressionHandler(compressionThreshold));
+	}
+
+	@Override
+	public void enableEncryption(ChannelPipeline pipeline, SecretKey key, boolean fullEncryption) {
+		pipeline.addBefore(GlowStoneChannelHandlers.FRAMING, ChannelHandlers.DECRYPT, new PacketDecrypter(MinecraftEncryption.getCipher(Cipher.DECRYPT_MODE, key)));
+		if (fullEncryption) {
+			pipeline.addBefore(GlowStoneChannelHandlers.FRAMING, ChannelHandlers.ENCRYPT, new PacketEncrypter(MinecraftEncryption.getCipher(Cipher.ENCRYPT_MODE, key)));
+		}
 	}
 
 	@Override

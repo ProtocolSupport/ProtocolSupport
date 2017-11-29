@@ -34,9 +34,9 @@ public class GlowStoneServerConnectionChannel extends ChannelInitializer {
 		connection.storeInChannel(channel);
 		ProtocolStorage.addConnection(channel.remoteAddress(), connection);
 		pipeline.remove(GlowStoneChannelHandlers.READ_TIMEOUT);
-		pipeline.remove("legacy_ping");
-		pipeline.remove("encryption");
-		pipeline.remove("compression");
+		pipeline.remove(GlowStoneChannelHandlers.LEGACY_PING);
+		pipeline.remove(GlowStoneChannelHandlers.ENCRYPTION);
+		pipeline.remove(GlowStoneChannelHandlers.COMPRESSION);
 		pipeline.addFirst(GlowStoneChannelHandlers.READ_TIMEOUT, new SimpleReadTimeoutHandler(30));
 		pipeline.addAfter(GlowStoneChannelHandlers.READ_TIMEOUT, ChannelHandlers.INITIAL_DECODER, new InitialPacketDecoder());
 		pipeline.addBefore(GlowStoneChannelHandlers.NETWORK_MANAGER, "ps_glowstone_sync_ticker", GlowStoneSyncTickerStarter.INSTANCE);
