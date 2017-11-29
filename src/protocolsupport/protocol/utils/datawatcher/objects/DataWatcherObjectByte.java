@@ -3,7 +3,7 @@ package protocolsupport.protocol.utils.datawatcher.objects;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 
-public class DataWatcherObjectByte extends DataWatcherObjectNumber<Byte> {
+public class DataWatcherObjectByte extends ReadableDataWatcherObjectNumber<Byte> {
 
 	public DataWatcherObjectByte() {
 	}

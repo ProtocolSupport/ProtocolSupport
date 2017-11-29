@@ -25,8 +25,11 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class DataWatcherDeserializer {
 
+	//while meta indexes can be now up to 255, we actually use up to 31, but we use upto 76 for PE
+	public static final int MAX_USED_META_INDEX = 76;
+
 	@SuppressWarnings("unchecked")
-	private static final Constructor<? extends DataWatcherObject<?>>[] registry = new Constructor[256];
+	private static final Constructor<? extends ReadableDataWatcherObject<?>>[] registry = new Constructor[256];
 	static {
 		try {
 			register(DataWatcherObjectByte.class);
@@ -48,13 +51,12 @@ public class DataWatcherDeserializer {
 		}
 	}
 
-	private static void register(Class<? extends DataWatcherObject<?>> clazz) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		Constructor<? extends DataWatcherObject<?>> constr = clazz.getConstructor();
+	private static void register(Class<? extends ReadableDataWatcherObject<?>> clazz) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		Constructor<? extends ReadableDataWatcherObject<?>> constr = clazz.getConstructor();
 		registry[DataWatcherObjectIdRegistry.getTypeId(clazz, ProtocolVersionsHelper.LATEST_PC)] = constr;
 	}
 
-	public static ArrayMap<DataWatcherObject<?>> decodeData(ByteBuf from, ProtocolVersion version, String locale) {
-		ArrayMap<DataWatcherObject<?>> map = new ArrayMap<>(256);
+	public static void decodeDataTo(ByteBuf from, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> to) {
 		do {
 			int key = from.readUnsignedByte();
 			if (key == 0xFF) {
@@ -62,14 +64,13 @@ public class DataWatcherDeserializer {
 			}
 			int type = from.readUnsignedByte();
 			try {
-				DataWatcherObject<?> object = registry[type].newInstance();
+				ReadableDataWatcherObject<?> object = registry[type].newInstance();
 				object.readFromStream(from, version, locale);
-				map.put(key, object);
+				to.put(key, object);
 			} catch (Exception e) {
 				throw new DecoderException("Unable to decode datawatcher object", e);
 			}
 		} while (true);
-		return map;
 	}
 
 	public static void encodeData(ByteBuf to, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> objects) {

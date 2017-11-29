@@ -8,8 +8,9 @@ import protocolsupport.api.chat.ChatAPI.MessagePosition;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
+import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.utils.EnumConstantLookups;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.zplatform.ServerPlatform;
 
@@ -23,7 +24,7 @@ public abstract class MiddleTitle extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		action = Action.values()[VarNumberSerializer.readVarInt(serverdata)];
+		action = MiscSerializer.readVarIntEnum(serverdata, Action.CONSTANT_LOOKUP);
 		switch (action) {
 			case SET_TITLE:
 			case SET_SUBTITLE:
@@ -61,7 +62,8 @@ public abstract class MiddleTitle extends ClientBoundMiddlePacket {
 	}
 
 	protected static enum Action {
-		SET_TITLE, SET_SUBTITLE, SET_ACTION_BAR, SET_TIMES, HIDE, RESET
+		SET_TITLE, SET_SUBTITLE, SET_ACTION_BAR, SET_TIMES, HIDE, RESET;
+		public static final EnumConstantLookups.EnumConstantLookup<Action> CONSTANT_LOOKUP = new EnumConstantLookups.EnumConstantLookup<>(Action.class);
 	}
 
 }

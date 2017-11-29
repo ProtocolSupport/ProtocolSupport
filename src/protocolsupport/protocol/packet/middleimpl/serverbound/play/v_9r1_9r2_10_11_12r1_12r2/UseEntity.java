@@ -12,7 +12,7 @@ public class UseEntity extends MiddleUseEntity {
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		entityId = VarNumberSerializer.readVarInt(clientdata);
-		action = MiscSerializer.readEnum(clientdata, Action.class);
+		action = MiscSerializer.readVarIntEnum(clientdata, Action.CONSTANT_LOOKUP);
 		switch (action) {
 			case INTERACT: {
 				usedHand = VarNumberSerializer.readVarInt(clientdata);

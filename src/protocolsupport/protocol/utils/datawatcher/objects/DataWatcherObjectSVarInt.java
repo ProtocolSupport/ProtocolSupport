@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 
-public class DataWatcherObjectSVarInt extends DataWatcherObjectNumber<Integer> {
+public class DataWatcherObjectSVarInt extends ReadableDataWatcherObjectNumber<Integer> {
 
 	public DataWatcherObjectSVarInt() {
 	}

@@ -3,9 +3,9 @@ package protocolsupport.protocol.utils.datawatcher.objects;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.datawatcher.ReadableDataWatcherObject;
 
-public class DataWatcherObjectBlockState extends DataWatcherObject<Integer> {
+public class DataWatcherObjectBlockState extends ReadableDataWatcherObject<Integer> {
 
 	@Override
 	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {

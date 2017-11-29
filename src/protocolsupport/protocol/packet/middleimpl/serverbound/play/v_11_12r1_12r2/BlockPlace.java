@@ -9,7 +9,7 @@ public class BlockPlace extends MiddleBlockPlace {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		position = PositionSerializer.readPosition(clientdata);
+		PositionSerializer.readPositionTo(clientdata, position);
 		face = VarNumberSerializer.readVarInt(clientdata);
 		usedHand = VarNumberSerializer.readVarInt(clientdata);
 		cX = clientdata.readFloat();

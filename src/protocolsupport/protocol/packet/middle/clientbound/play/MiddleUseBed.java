@@ -9,12 +9,12 @@ import protocolsupport.protocol.utils.types.Position;
 public abstract class MiddleUseBed extends ClientBoundMiddlePacket {
 
 	protected int entityId;
-	protected Position bed;
+	protected Position bed = new Position(0, 0, 0);
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
 		entityId = VarNumberSerializer.readVarInt(serverdata);
-		bed = PositionSerializer.readPosition(serverdata);
+		PositionSerializer.readPositionTo(serverdata, bed);
 	}
 
 }

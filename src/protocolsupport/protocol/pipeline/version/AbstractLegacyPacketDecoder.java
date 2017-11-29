@@ -12,7 +12,6 @@ import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.legacy.LegacyAnimatePacketReorderer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
-import protocolsupport.zplatform.ServerPlatform;
 
 public class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
 
@@ -38,7 +37,7 @@ public class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
 		cumulation.markReaderIndex();
 		ServerBoundMiddlePacket packetTransformer = null;
 		try {
-			packetTransformer = registry.getTransformer(ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(channel), cumulation.readUnsignedByte());
+			packetTransformer = registry.getTransformer(connection.getNetworkState(), cumulation.readUnsignedByte());
 			packetTransformer.readFromClientData(cumulation);
 			addPackets(animateReorderer.orderPackets(packetTransformer.toNative()), list);
 			return true;

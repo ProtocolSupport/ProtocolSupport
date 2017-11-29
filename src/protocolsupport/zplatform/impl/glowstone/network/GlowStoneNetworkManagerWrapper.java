@@ -40,7 +40,7 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 	public static GlowStoneNetworkManagerWrapper getFromChannel(Channel channel) {
 		return new GlowStoneNetworkManagerWrapper((MessageHandler) channel.pipeline().get(GlowStoneChannelHandlers.NETWORK_MANAGER));
 	}
-
+	
 	private final MessageHandler handler;
 	public GlowStoneNetworkManagerWrapper(MessageHandler handler) {
 		this.handler = handler;
@@ -53,6 +53,16 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 	@Override
 	public Object unwrap() {
 		return handler;
+	}
+	
+	public NetworkState getProtocol() {
+		AbstractProtocol proto = getSession().getProtocol();
+		for (ProtocolType type : ProtocolType.values()) {
+			if (type.getProtocol() == proto) {
+				return GlowStoneMiscUtils.protocolToNetState(type);
+			}
+		}
+		throw new IllegalStateException(MessageFormat.format("Unkown protocol {0}", proto));
 	}
 
 	@Override
@@ -96,19 +106,22 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 		getSession().sendWithFuture((Message) packet).addListener(genericListener).addListeners(futureListeners);
 	}
 
-	public NetworkState getProtocol() {
+	@Override
+	public void setProtocol(NetworkState state) {
+		getSession().setProtocol(GlowStoneMiscUtils.netStateToProtocol(state));
+	}
+
+	private static final ProtocolType[] protocols = ProtocolType.values();
+
+	@Override
+	public NetworkState getNetworkState() {
 		AbstractProtocol proto = getSession().getProtocol();
-		for (ProtocolType type : ProtocolType.values()) {
+		for (ProtocolType type : protocols) {
 			if (type.getProtocol() == proto) {
 				return GlowStoneMiscUtils.protocolToNetState(type);
 			}
 		}
 		throw new IllegalStateException(MessageFormat.format("Unkown protocol {0}", proto));
-	}
-
-	@Override
-	public void setProtocol(NetworkState state) {
-		getSession().setProtocol(GlowStoneMiscUtils.netStateToProtocol(state));
 	}
 
 	@Override

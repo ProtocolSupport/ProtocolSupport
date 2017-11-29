@@ -5,6 +5,7 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.utils.EnumConstantLookups;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleCombatEvent extends ClientBoundMiddlePacket {
@@ -17,7 +18,7 @@ public abstract class MiddleCombatEvent extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		type = MiscSerializer.readEnum(serverdata, Type.class);
+		type = MiscSerializer.readVarIntEnum(serverdata, Type.CONSTANT_LOOKUP);
 		switch (type) {
 			case ENTER_COMBAT: {
 				break;
@@ -37,7 +38,8 @@ public abstract class MiddleCombatEvent extends ClientBoundMiddlePacket {
 	}
 
 	protected static enum Type {
-		ENTER_COMBAT, END_COMBAT, ENTITY_DEAD
+		ENTER_COMBAT, END_COMBAT, ENTITY_DEAD;
+		public static final EnumConstantLookups.EnumConstantLookup<Type> CONSTANT_LOOKUP = new EnumConstantLookups.EnumConstantLookup<>(Type.class);
 	}
 
 }

@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import org.bukkit.Bukkit;
+import org.bukkit.inventory.MainHand;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -18,10 +19,10 @@ public class ClientSettings extends MiddleClientSettings {
 		pocketViewDistance = VarNumberSerializer.readSVarInt(clientdata);
 		locale = cache.getLocale();
 		viewDist = Bukkit.getViewDistance();
-		chatMode = 0;
+		chatMode = ChatMode.NORMAL;
 		chatColors = true;
 		skinFlags = 0x7F;
-		mainHand = 1;
+		mainHand = MainHand.RIGHT;
 		sendResponse();
 	}
 	

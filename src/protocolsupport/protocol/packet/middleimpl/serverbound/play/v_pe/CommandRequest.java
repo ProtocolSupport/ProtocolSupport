@@ -13,7 +13,6 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class CommandRequest extends ServerBoundMiddlePacket {
 	protected String command;
-	
 	//private static final int ORIGIN_PLAYER = 0;
 	//private static final int ORIGIN_BLOCK = 1;
 	//private static final int ORIGIN_MINECART_BLOCK = 2;

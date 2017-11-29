@@ -10,9 +10,9 @@ public class UpdateSign extends MiddleUpdateSign {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		position = PositionSerializer.readLegacyPositionS(clientdata);
+		PositionSerializer.readLegacyPositionSTo(clientdata, position);
 		ProtocolVersion version = connection.getVersion();
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < lines.length; i++) {
 			lines[i] = StringSerializer.readString(clientdata, version, 15);
 		}
 	}

@@ -5,6 +5,7 @@ import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.utils.EnumConstantLookups;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -17,7 +18,7 @@ public abstract class MiddleAdvancementTab extends ServerBoundMiddlePacket {
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_ADVANCEMENT_TAB);
-		MiscSerializer.writeEnum(creator, action);
+		MiscSerializer.writeVarIntEnum(creator, action);
 		if (action == Action.OPEN) {
 			StringSerializer.writeString(creator, ProtocolVersionsHelper.LATEST_PC, identifier);
 		}
@@ -26,6 +27,7 @@ public abstract class MiddleAdvancementTab extends ServerBoundMiddlePacket {
 
 	protected static enum Action {
 		OPEN, CLOSE;
+		public static final EnumConstantLookups.EnumConstantLookup<Action> CONSTANT_LOOKUP = new EnumConstantLookups.EnumConstantLookup<>(Action.class);
 	}
 
 }

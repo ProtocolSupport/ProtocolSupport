@@ -28,7 +28,6 @@ import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
-import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.api.utils.NetworkState;
 
 public class PEPacketDecoder extends AbstractPacketDecoder {
@@ -65,7 +64,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		ServerBoundMiddlePacket packetTransformer = null;
 		try {
 			packetTransformer = registry.getTransformer(
-				ServerPlatform.get().getMiscUtils().getNetworkStateFromChannel(ctx.channel()),
+				connection.getNetworkState(),
 				readPacketId(input)
 			);
 			packetTransformer.readFromClientData(input);

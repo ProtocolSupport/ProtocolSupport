@@ -68,7 +68,8 @@ public class LegacyEntityType {
 		legacyNames.put(NetworkEntityType.EXP_ORB, "XPOrb");
 		legacyNames.put(NetworkEntityType.MUSHROOM_COW, "MushroomCow");
 		legacyNames.put(NetworkEntityType.MINECART_COMMAND, "MinecartCommandBlock");
-		legacyNames.put(NetworkEntityType.ARMOR_STAND, "ArmorStand");
+		legacyNames.put(NetworkEntityType.ARMOR_STAND_MOB, "ArmorStand");
+		legacyNames.put(NetworkEntityType.ARMOR_STAND_OBJECT, "ArmorStand");
 		legacyNames.put(NetworkEntityType.DONKEY, "Donkey");
 		legacyNames.put(NetworkEntityType.LEASH_KNOT, "LeashKnot");
 		legacyNames.put(NetworkEntityType.SKELETON, "Skeleton");

@@ -4,22 +4,22 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 
-public class DataWatcherObjectVarLong extends DataWatcherObjectNumber<Long> {
+public class DataWatcherObjectVarLong extends ReadableDataWatcherObjectNumber<Integer> {
 
 	public DataWatcherObjectVarLong() {
 	}
 
-	public DataWatcherObjectVarLong(Long Value) {
+	public DataWatcherObjectVarLong(Integer Value) {
 		this.value = Value;
 	}
 
 	public DataWatcherObjectVarLong(int Value) {
-		this.value = (long) Value;
+		this.value = (Integer) Value;
 	}
 
 	@Override
 	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {
-		value = VarNumberSerializer.readVarLong(from);
+		value = (int) VarNumberSerializer.readVarLong(from);
 	}
 
 	@Override

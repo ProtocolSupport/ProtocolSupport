@@ -13,7 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
 
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import net.glowstone.GlowServer;
@@ -21,17 +20,18 @@ import net.glowstone.entity.meta.profile.PlayerProfile;
 import net.glowstone.entity.meta.profile.PlayerProperty;
 import net.glowstone.io.nbt.NbtSerialization;
 import net.glowstone.net.pipeline.CompressionHandler;
+import net.glowstone.net.pipeline.MessageHandler;
 import net.glowstone.net.protocol.ProtocolType;
 import net.glowstone.util.GlowServerIcon;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
 import protocolsupport.protocol.utils.authlib.GameProfile;
+import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.zplatform.PlatformUtils;
 import protocolsupport.zplatform.impl.glowstone.injector.GlowStoneNettyInjector;
 import protocolsupport.zplatform.impl.glowstone.itemstack.GlowStoneNBTTagCompoundWrapper;
 import protocolsupport.zplatform.impl.glowstone.network.GlowStoneChannelHandlers;
-import protocolsupport.zplatform.impl.glowstone.network.GlowStoneNetworkManagerWrapper;
 import protocolsupport.zplatform.impl.glowstone.network.pipeline.GlowStoneFramingHandler;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
@@ -89,6 +89,10 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 				throw new IllegalArgumentException(MessageFormat.format("Unknown protocol {0}", type));
 			}
 		}
+	}
+
+	public static MessageHandler getNetworkManager(ChannelPipeline pipeline) {
+		return (MessageHandler) pipeline.get(GlowStoneChannelHandlers.NETWORK_MANAGER);
 	}
 
 	@Override
@@ -176,19 +180,18 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 
 	@Override
 	public String getVersionName() {
-		return GlowServer.GAME_VERSION;
+		try {
+			return (String) ReflectionUtils.getField(GlowServer.class, "GAME_VERSION").get(null);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw new RuntimeException("Unable to determive version name", e);
+		}
 	}
 
 	@Override
 	public String convertBukkitIconToBase64(CachedServerIcon icon) {
 		return ((GlowServerIcon) icon).getData();
 	}
-
-	@Override
-	public NetworkState getNetworkStateFromChannel(Channel channel) {
-		return GlowStoneNetworkManagerWrapper.getFromChannel(channel).getProtocol();
-	}
-
+	
 	@Override
 	public String getReadTimeoutHandlerName() {
 		return GlowStoneChannelHandlers.READ_TIMEOUT;

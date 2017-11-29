@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.MiscSerializer;
 
-public class DataWatcherObjectFloatLe extends DataWatcherObjectNumber<Float> {
+public class DataWatcherObjectFloatLe extends ReadableDataWatcherObjectNumber<Float> {
 
 	public DataWatcherObjectFloatLe() {
 	}

@@ -18,7 +18,7 @@ public abstract class MiddleClientCommand extends ServerBoundMiddlePacket {
 			return RecyclableEmptyList.get();
 		} else {
 			ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_CLIENT_COMMAND);
-			MiscSerializer.writeEnum(creator, command);
+			MiscSerializer.writeVarIntEnum(creator, command);
 			return RecyclableSingletonList.create(creator);
 		}
 	}

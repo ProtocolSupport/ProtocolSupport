@@ -9,8 +9,8 @@ public class BlockDig extends MiddleBlockDig {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		status = MiscSerializer.readEnum(clientdata, Action.class);
-		position = PositionSerializer.readPosition(clientdata);
+		status = MiscSerializer.readVarIntEnum(clientdata, Action.CONSTANT_LOOKUP);
+		PositionSerializer.readPositionTo(clientdata, position);
 		face = clientdata.readUnsignedByte();
 	}
 

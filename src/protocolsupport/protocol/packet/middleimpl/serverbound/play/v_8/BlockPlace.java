@@ -9,7 +9,7 @@ public class BlockPlace extends MiddleBlockPlace {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		position = PositionSerializer.readPosition(clientdata);
+		PositionSerializer.readPositionTo(clientdata, position);
 		face = clientdata.readByte();
 		ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), cache.getLocale(), false);//while it is read from a client, we don't need to remap this item
 		cX = clientdata.readUnsignedByte() / 16.0F;

@@ -8,7 +8,7 @@ public class CraftingBookData extends MiddleCraftingBookData {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		type = MiscSerializer.readEnum(clientdata, Type.class);
+		type = MiscSerializer.readVarIntEnum(clientdata, Type.CONSTANT_LOOKUP);
 		switch (type) {
 			case DISPLAYED_RECIPE: {
 				recipeId = clientdata.readInt();
