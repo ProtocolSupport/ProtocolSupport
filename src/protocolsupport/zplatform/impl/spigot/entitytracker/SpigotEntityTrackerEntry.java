@@ -166,7 +166,7 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 			}
 			this.updateMetadataAndAttributes();
 		}
-		if (((this.a % this.updateInterval) == 0) || this.tracker.impulse || this.tracker.getDataWatcher().a()) {
+		if (((this.a % this.updateInterval) == 0) || this.tracker.impulse || this.tracker.getDataWatcher().a() || hasSignificantVelocity()) {
 			if (this.tracker.isPassenger()) {
 				final int i = MathHelper.d((this.tracker.yaw * 256.0f) / 360.0f);
 				final int j = MathHelper.d((this.tracker.pitch * 256.0f) / 360.0f);
@@ -251,10 +251,7 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 			}
 			final int currentHeadYaw = MathHelper.d((this.tracker.getHeadRotation() * 256.0f) / 360.0f);
 			if (Math.abs(currentHeadYaw - this.headYaw) >= 1) {
-				this.broadcast(new PacketPlayOutEntityHeadRotation(this.tracker, (byte) currentHeadYaw));
-				//if (!this.tracker.isPassenger()) {
-					this.broadcastPE(new PacketPlayOutEntityTeleport(this.tracker));
-				//}
+				this.broadcast(new PacketPlayOutEntityHeadRotation(this.tracker, (byte) currentHeadYaw), new PacketPlayOutEntityTeleport(this.tracker));
 				this.headYaw = currentHeadYaw;
 			}
 			this.tracker.impulse = false;
@@ -278,6 +275,10 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 			}
 			this.tracker.velocityChanged = false;
 		}
+	}
+	
+	private boolean hasSignificantVelocity() {
+		return Math.abs(tracker.motX) > 1 || Math.abs(tracker.motY) > 1 || Math.abs(tracker.motZ) > 1;
 	}
 
 	private void updateMetadataAndAttributes() {
