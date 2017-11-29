@@ -30,7 +30,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 			motX / 8.000F, motY / 8000.F, motZ / 8000.F, pitch, yaw, cache.getLocale(),
 			null, PEDataValues.getLivingEntityTypeId(IdRemapper.ENTITY.getTable(version).getRemap(entity.getType()))
 		));
-		DataWatcherObject<?> healthWatcher = metadata.get(DataWatcherObjectIndex.EntityLiving.HEALTH);
+		DataWatcherObject<?> healthWatcher = metadata.getOriginal().get(DataWatcherObjectIndex.EntityLiving.HEALTH);
 		if (healthWatcher != null) {
 			packets.add(EntitySetAttributes.create(version, entity.getId(), EntitySetAttributes.createAttribute("minecraft:health", (Float) healthWatcher.getValue())));
 		}

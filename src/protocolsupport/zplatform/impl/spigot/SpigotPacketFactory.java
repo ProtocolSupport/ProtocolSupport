@@ -30,6 +30,7 @@ import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
+import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.protocol.utils.types.Position;
@@ -149,7 +150,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	@Override
 	public Object createBlockUpdatePacket(Position pos, int block) {
 		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer());
-		serializer.writeLong(pos.asLong());
+		PositionSerializer.writePosition(serializer, pos);
 		VarNumberSerializer.writeVarInt(serializer, block);
 		PacketPlayOutBlockChange packet = new PacketPlayOutBlockChange();
 		try {

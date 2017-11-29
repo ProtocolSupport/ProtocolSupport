@@ -61,7 +61,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	protected int subTypeId = -1;
 	protected ItemStackWrapper itemstack;
 	protected int slot;
-	protected Position position;
+	protected Position position = new Position(0, 0, 0);
 	protected float fromX, fromY, fromZ;
 	protected float cX, cY, cZ;
 	protected int face;
@@ -84,7 +84,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		switch(actionId) {
 			case ACTION_USE_ITEM: {
 				subTypeId = VarNumberSerializer.readVarInt(clientdata);
-				position = PositionSerializer.readPEPosition(clientdata);
+				PositionSerializer.readPEPositionTo(clientdata, position);
 				face = VarNumberSerializer.readSVarInt(clientdata);
 				slot = VarNumberSerializer.readSVarInt(clientdata);
 				itemstack = ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), cache.getLocale(), true);
