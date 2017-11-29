@@ -48,7 +48,9 @@ import protocolsupport.zplatform.itemstack.ItemStackWrapper;
  *  Apart from managing inventories it is the usual packet deal,
  *  except that we have an extra layer of encapsulation.
  *  
- *  Managing inventories works very different in PE, so for now expect some hacky code.
+ *  Managing inventories works very different in PE, it sends slots, like creative instead of clicks.
+ *  To simulate clicks we use a complex system that calculates them.
+ *  Debugging can be a pain in the butt, I hope the comments can provide some help.
  */
 public class GodPacket extends ServerBoundMiddlePacket {
 	
@@ -146,10 +148,23 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		switch(actionId) {
 			case ACTION_USE_ITEM: {
 				packets.add(MiddleHeldSlot.create(slot));
+				bug("CLICK! Face: " + face + "Subtype: " + subTypeId);
 				switch(subTypeId) {
 					case USE_CLICK_AIR:
 						face = -1;
 					case USE_CLICK_BLOCK: {
+						//TODO: figure this out.
+						/*if (itemstack.asBukkitMirror().getType().isEdible()) {
+							//Intersect if item is ediable to simulate eating for the player himself and make him able to stop it.
+							cache.getWatchedSelf().getDataCache().setPeBaseFlag(PeMetaBase.FLAG_USING_ITEM, true);
+							connection.sendRawPacket(EntityMetadata.createFauxPacket(cache.getWatchedSelf(), cache.getLocale(), connection.getVersion()));
+							ByteBuf meep = Unpooled.buffer();
+							VarNumberSerializer.writeVarInt(meep, PEPacketIDs.ENTITY_EVENT);
+							meep.writeByte(0);
+							meep.writeByte(0);
+							meep.writeBytes(EntityStatus.create(0, 57, connection.getVersion()));
+							connection.sendRawPacket(MiscSerializer.readAllBytes(meep));
+						}*/
 						packets.add(MiddleBlockPlace.create(position, face, 0, cX, cY, cZ));
 						break;
 					}
@@ -187,8 +202,17 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			}
 			case ACTION_RELEASE_ITEM: {
 				packets.add(MiddleHeldSlot.create(slot));
-				//Special place packet.
-				packets.add(MiddleBlockPlace.create(new Position(-1, 255, -1), -1, 0, cX, cY, cZ));
+				switch(subTypeId) {
+					case RELEASE_RELEASE: {
+						bug("RELEASING!");
+						packets.add(MiddleBlockDig.create(MiddleBlockDig.Action.FINISH_USE, new Position(0, -0, 0), 0));
+						break;
+					}
+					case RELEASE_CONSUME: {
+						bug("CONSUMING");
+						break;
+					}
+				}
 				break;
 			}
 			case ACTION_NORMAL: { //Normal inventory transaction.
@@ -294,10 +318,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		}
 		
 		public void customCursorSurplus(ItemStackWrapper itemstack) {
-			if(
-				(!itemstack.isNull()) //&& 
-				//(!(surplusDeque.getFirstKey().getKeyItem().getType() == itemstack.getType() && surplusDeque.getFirstKey().getKeyItem().getData() == itemstack.getData()))
-			) {
+			if((!itemstack.isNull())) {
 				clear();
 				surplusDeque.put(new ItemStackWrapperKey(itemstack), new SlotWrapperValue(-1, itemstack.getAmount(), itemstack.getAmount()));
 			}

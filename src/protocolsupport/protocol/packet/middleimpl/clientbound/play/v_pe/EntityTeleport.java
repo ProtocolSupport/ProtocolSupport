@@ -47,7 +47,7 @@ public class EntityTeleport extends MiddleEntityTeleport {
 					System.out.println("BOAT: " + vehicle.getDataCache().getHeadRotation(yaw));
 					System.out.println("HEAD: " + headYaw);
 					System.out.println("YAWY: " + relYaw);
-					return RecyclableSingletonList.create(Position.create(version, entity, x, y, z, pitch, relYaw, Position.ANIMATION_MODE_ALL));
+					return RecyclableSingletonList.create(updateGeneral(version, entity, x, y, z, pitch, (byte) 0, (byte) relYaw, onGround, false));
 				}
 			} else {
 				entity.getDataCache().riderInfo = null;
@@ -56,20 +56,28 @@ public class EntityTeleport extends MiddleEntityTeleport {
 		if(entity.getType() == NetworkEntityType.BOAT) {
 			entity.getDataCache().setHeadRotation(yaw);
 		}
+		return RecyclableSingletonList.create(updateGeneral(version, entity, x, y, z, pitch, headYaw, yaw, onGround, false));
+	}
+	
+	public static ClientBoundPacketData create(ProtocolVersion version, NetworkEntity entity, double x, double y, double z, byte pitch, byte headYaw, byte yaw, boolean onGround, boolean teleported) {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_TELEPORT, version);
+		VarNumberSerializer.writeVarLong(serializer, entity.getId());
+		MiscSerializer.writeLFloat(serializer, (float) x);
+		MiscSerializer.writeLFloat(serializer, (float) y);
+		MiscSerializer.writeLFloat(serializer, (float) z);
+		serializer.writeByte(pitch);
+		serializer.writeByte(headYaw);
+		serializer.writeByte(yaw);
+		serializer.writeBoolean(onGround);
+		serializer.writeBoolean(teleported);
+		return serializer;
+	}
+	
+	public static ClientBoundPacketData updateGeneral(ProtocolVersion version, NetworkEntity entity, double x, double y, double z, byte pitch, byte headYaw, byte yaw, boolean onGround, boolean teleported) {
 		if (entity.getType() == NetworkEntityType.PLAYER) {
-			return RecyclableSingletonList.create(Position.create(version, entity, x, y, z, pitch, yaw, Position.ANIMATION_MODE_ALL));
+			return Position.create(version, entity, x, y, z, pitch, yaw, teleported ? Position.ANIMATION_MODE_TELEPORT : Position.ANIMATION_MODE_ALL);
 		} else {
-			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_TELEPORT, version);
-			VarNumberSerializer.writeVarLong(serializer, entityId);
-			MiscSerializer.writeLFloat(serializer, (float) x);
-			MiscSerializer.writeLFloat(serializer, (float) y);
-			MiscSerializer.writeLFloat(serializer, (float) z);
-			serializer.writeByte(pitch);
-			serializer.writeByte(headYaw);
-			serializer.writeByte(yaw);
-			serializer.writeBoolean(onGround);
-			serializer.writeBoolean(false); //teleported
-			return RecyclableSingletonList.create(serializer);
+			return create(version, entity, x, y, z, pitch, headYaw, yaw, onGround, teleported);
 		}
 	}
 
