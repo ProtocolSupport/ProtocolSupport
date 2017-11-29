@@ -2,19 +2,12 @@ package protocolsupport.protocol.utils.datawatcher.objects;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 
-public class DataWatcherObjectInt extends DataWatcherObjectNumber<Integer> {
-
-	public DataWatcherObjectInt() {
-	}
+public class DataWatcherObjectInt extends DataWatcherObject<Integer> {
 
 	public DataWatcherObjectInt(int i) {
 		this.value = i;
-	}
-
-	@Override
-	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {
-		value = from.readInt();
 	}
 
 	@Override

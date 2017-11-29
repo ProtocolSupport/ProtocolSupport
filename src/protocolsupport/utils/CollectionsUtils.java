@@ -82,6 +82,10 @@ public class CollectionsUtils {
 			array[aindex] = value;
 		}
 
+		public void clear() {
+			Arrays.fill(array, null);
+		}
+
 		public static class Entry<T> {
 			private final int key;
 			private final T value;

@@ -4,6 +4,7 @@ import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.utils.EnumConstantLookups;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -17,7 +18,7 @@ public abstract class MiddleCraftingBookData extends ServerBoundMiddlePacket {
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_CRAFTING_BOOK_DATA);
-		MiscSerializer.writeEnum(creator, type);
+		MiscSerializer.writeVarIntEnum(creator, type);
 		switch (type) {
 			case DISPLAYED_RECIPE: {
 				creator.writeInt(recipeId);
@@ -34,6 +35,7 @@ public abstract class MiddleCraftingBookData extends ServerBoundMiddlePacket {
 
 	protected static enum Type {
 		DISPLAYED_RECIPE, CRAFTING_BOOK_STATUS;
+		public static final EnumConstantLookups.EnumConstantLookup<Type> CONSTANT_LOOKUP = new EnumConstantLookups.EnumConstantLookup<>(Type.class);
 	}
 
 }

@@ -7,7 +7,6 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnObject.PreparedItem;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.typeremapper.watchedentity.WatchedDataRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
@@ -30,16 +29,16 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		}
 		switch(entity.getType()) {
 			case ITEM: {
-				DataWatcherObject<?> itemWatcher = metadata.get(DataWatcherObjectIndex.Item.ITEM);
+				DataWatcherObject<?> itemWatcher = metadata.getOriginal().get(DataWatcherObjectIndex.Item.ITEM);
 				if(itemWatcher != null) {
 					PreparedItem i = cache.getPreparedItem(entityId);
 					if(i != null) {
-						packets.addAll(i.updateItem(connection.getVersion(), (ItemStackWrapper) metadata.get(DataWatcherObjectIndex.Item.ITEM).getValue()));
+						packets.addAll(i.updateItem(connection.getVersion(), (ItemStackWrapper) metadata.getOriginal().get(DataWatcherObjectIndex.Item.ITEM).getValue()));
 					}
 				}
 			}
 			default: {
-				packets.add(create(entity, cache.getLocale(), metadata, connection.getVersion()));
+				packets.add(create(entity, cache.getLocale(), metadata.getRemapped(), connection.getVersion()));
 			}
 		}
 
@@ -54,16 +53,15 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		return create(entity, locale, transform(entity, new ArrayMap<DataWatcherObject<?>>(76), version), version);
 	}
 
-	public static ArrayMap<DataWatcherObject<?>> transform(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> pcMetadata, ProtocolVersion version) {
-		ArrayMap<DataWatcherObject<?>> peMetadata = WatchedDataRemapper.transform(entity, pcMetadata, version);
-		peMetadata.put(0, new DataWatcherObjectSVarLong(entity.getDataCache().getPeBaseFlags()));
+	public static ArrayMap<DataWatcherObject<?>> transform(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> peMetadata, ProtocolVersion version) {
+		peMetadata.put(0, (DataWatcherObject<?>) new DataWatcherObjectSVarLong(entity.getDataCache().getPeBaseFlags()));
 		return peMetadata;
 	}
 
-	public static ClientBoundPacketData create(NetworkEntity entity, String locale, ArrayMap<DataWatcherObject<?>> metadata, ProtocolVersion version) {
+	public static ClientBoundPacketData create(NetworkEntity entity, String locale, ArrayMap<DataWatcherObject<?>> peMetadata, ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SET_ENTITY_DATA, version);
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
-		EntityMetadata.encodeMeta(serializer, version, locale, transform(entity, metadata, version));
+		EntityMetadata.encodeMeta(serializer, version, locale, transform(entity, peMetadata, version));
 		return serializer;
 	}
 

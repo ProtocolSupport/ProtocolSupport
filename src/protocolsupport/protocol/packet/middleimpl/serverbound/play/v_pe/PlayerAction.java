@@ -16,14 +16,14 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class PlayerAction extends ServerBoundMiddlePacket {
 
 	protected int action;
-	protected Position blockPosition;
+	protected Position blockPosition = new Position(0, 0, 0);
 	protected int face;
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		VarNumberSerializer.readVarLong(clientdata); // entity id
 		action = VarNumberSerializer.readSVarInt(clientdata);
-		blockPosition = PositionSerializer.readPEPosition(clientdata);
+		PositionSerializer.readPEPositionTo(clientdata, blockPosition);
 		face = VarNumberSerializer.readSVarInt(clientdata);
 	}
 

@@ -16,7 +16,7 @@ public class CombatEvent extends MiddleCombatEvent {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_COMBAT_EVENT_ID, version);
-		MiscSerializer.writeEnum(serializer, type);
+		MiscSerializer.writeVarIntEnum(serializer, type);
 		switch (type) {
 			case ENTER_COMBAT: {
 				break;

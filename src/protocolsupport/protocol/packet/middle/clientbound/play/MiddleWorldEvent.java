@@ -8,14 +8,14 @@ import protocolsupport.protocol.utils.types.Position;
 public abstract class MiddleWorldEvent extends ClientBoundMiddlePacket {
 
 	protected int effectId;
-	protected Position position;
+	protected Position position = new Position(0, 0, 0);
 	protected int data;
 	protected boolean disableRelative;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
 		effectId = serverdata.readInt();
-		position = PositionSerializer.readPosition(serverdata);
+		PositionSerializer.readPositionTo(serverdata, position);
 		data = serverdata.readInt();
 		disableRelative = serverdata.readBoolean();
 	}

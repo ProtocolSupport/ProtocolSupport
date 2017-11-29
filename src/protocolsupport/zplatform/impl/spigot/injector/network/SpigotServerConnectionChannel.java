@@ -2,6 +2,7 @@ package protocolsupport.zplatform.impl.spigot.injector.network;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
+import net.minecraft.server.v1_12_R1.NetworkManager;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.common.LogicHandler;
@@ -27,12 +28,12 @@ public class SpigotServerConnectionChannel extends ChannelInitializer {
 
 	@Override
 	protected void initChannel(Channel channel) {
-		NetworkManagerWrapper networkmanager = SpigotNetworkManagerWrapper.getFromChannel(channel);
+		ChannelPipeline pipeline = channel.pipeline();
+		NetworkManagerWrapper networkmanager = new SpigotNetworkManagerWrapper((NetworkManager) pipeline.get(SpigotChannelHandlers.NETWORK_MANAGER));
 		networkmanager.setPacketListener(new SpigotFakePacketListener());
 		ConnectionImpl connection = new ConnectionImpl(networkmanager);
 		connection.storeInChannel(channel);
 		ProtocolStorage.addConnection(channel.remoteAddress(), connection);
-		ChannelPipeline pipeline = channel.pipeline();
 		pipeline.addAfter(SpigotChannelHandlers.READ_TIMEOUT, ChannelHandlers.INITIAL_DECODER, new InitialPacketDecoder());
 		pipeline.addBefore(SpigotChannelHandlers.NETWORK_MANAGER, ChannelHandlers.LOGIC, new LogicHandler(connection));
 		pipeline.remove("legacy_query");

@@ -11,7 +11,8 @@ import protocolsupport.api.Connection;
  */
 public class ConnectionHandshakeEvent extends ConnectionEvent {
 
-	private final String hostname;
+	private String hostname;
+	private boolean shouldParseHostname = true;
 
 	public ConnectionHandshakeEvent(Connection connection, String hostname) {
 		super(connection);
@@ -20,10 +21,36 @@ public class ConnectionHandshakeEvent extends ConnectionEvent {
 
 	/**
 	 * Returns the hostname to which client connects to
-	 * @return hostname which player used when connecting to server
+	 * This is data can contain spoofed data
+	 * @return hostname
 	 */
 	public String getHostname() {
 		return hostname;
+	}
+
+	/**
+	 * Sets hostname to which client connects to
+	 * This data can contains spoofed data
+	 * @param hostname hostname
+	 */
+	public void setHostname(String hostname) {
+		this.hostname = hostname;
+	}
+
+	/**
+	 * Returns true if server should attempt hostname spoofed data parsing in hostname in case proxy is enabled
+	 * Returns true by default
+	 * @return true if server should attempt hostname spoofed data parsing in hostname in case proxy is enabled
+	 */
+	public boolean shouldParseHostname() {
+		return shouldParseHostname;
+	}
+
+	/**
+	 * Disables server hostname spoofed data parsing for this connection
+	 */
+	public void disableParsingHostname() {
+		this.shouldParseHostname = false;
 	}
 
 	protected InetSocketAddress spoofedAddress;
@@ -43,6 +70,33 @@ public class ConnectionHandshakeEvent extends ConnectionEvent {
 	 */
 	public void setSpoofedAddress(InetSocketAddress spoofedAddress) {
 		this.spoofedAddress = spoofedAddress;
+	}
+
+	private String denyLoginMessage;
+
+	/**
+	 * Returns true if login is denied
+	 * @return true if login is denied
+	 */
+	public boolean isLoginDenied() {
+		return denyLoginMessage != null;
+	}
+
+	/**
+	 * Returns deny login message or null if login is not denied
+	 * @return deny login message or null
+	 */
+	public String getDenyLoginMessage() {
+		return denyLoginMessage;
+	}
+
+	/**
+	 * Sets the login deny message
+	 * If message is null, login won't be denied
+	 * @param message login deny message
+	 */
+	public void denyLogin(String message) {
+		this.denyLoginMessage = message;
 	}
 
 

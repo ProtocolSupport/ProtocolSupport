@@ -14,7 +14,7 @@ public abstract class MiddleTabComplete extends ServerBoundMiddlePacket {
 
 	protected String string;
 	protected boolean assumecommand;
-	protected Position position;
+	protected Position position = new Position(0, 0, 0);
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {

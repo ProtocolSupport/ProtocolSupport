@@ -9,6 +9,7 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.utils.EnumConstantLookups;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
@@ -64,7 +65,7 @@ public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 			BaseComponent title = ChatAPI.fromJSON(StringSerializer.readString(from, ProtocolVersionsHelper.LATEST_PC));
 			BaseComponent description = ChatAPI.fromJSON(StringSerializer.readString(from, ProtocolVersionsHelper.LATEST_PC));
 			ItemStackWrapper icon = ItemStackSerializer.readItemStack(from, ProtocolVersionsHelper.LATEST_PC, locale, false);
-			FrameType type = MiscSerializer.readEnum(from, FrameType.class);
+			FrameType type = MiscSerializer.readVarIntEnum(from, FrameType.CONSTANT_LOOKUP);
 			int flags = from.readInt();
 			String background = (flags & flagHasBackgroundOffset) != 0 ? StringSerializer.readString(from, ProtocolVersionsHelper.LATEST_PC) : null;
 			float x = from.readFloat();
@@ -92,7 +93,8 @@ public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 		}
 
 		protected static enum FrameType {
-			TASK, CHALLENGE, GOAL
+			TASK, CHALLENGE, GOAL;
+			public static final EnumConstantLookups.EnumConstantLookup<FrameType> CONSTANT_LOOKUP = new EnumConstantLookups.EnumConstantLookup<>(FrameType.class);
 		}
 	}
 

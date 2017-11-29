@@ -13,20 +13,16 @@ import io.netty.channel.Channel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.minecraft.server.v1_12_R1.ChatComponentText;
-import net.minecraft.server.v1_12_R1.EnumProtocol;
 import net.minecraft.server.v1_12_R1.NetworkManager;
 import net.minecraft.server.v1_12_R1.Packet;
 import net.minecraft.server.v1_12_R1.PacketListener;
 import net.minecraft.server.v1_12_R1.PlayerConnection;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.api.utils.NetworkState;
+import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
-
-	public static SpigotNetworkManagerWrapper getFromChannel(Channel channel) {
-		return new SpigotNetworkManagerWrapper((NetworkManager) channel.pipeline().get(SpigotChannelHandlers.NETWORK_MANAGER));
-	}
 
 	private final NetworkManager internal;
 	public SpigotNetworkManagerWrapper(NetworkManager internal) {
@@ -80,7 +76,12 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 
 	@Override
 	public void setProtocol(NetworkState state) {
-		internal.setProtocol(EnumProtocol.values()[state.ordinal()]);
+		internal.setProtocol(SpigotMiscUtils.netStateToProtocol(state));
+	}
+
+	@Override
+	public NetworkState getNetworkState() {
+		return SpigotMiscUtils.protocolToNetState(getChannel().attr(NetworkManager.c).get());
 	}
 
 	@Override

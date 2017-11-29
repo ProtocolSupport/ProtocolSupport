@@ -10,10 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
 
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
-import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -51,8 +49,6 @@ public interface PlatformUtils {
 	public String getVersionName();
 
 	public String convertBukkitIconToBase64(CachedServerIcon icon);
-
-	public NetworkState getNetworkStateFromChannel(Channel channel);
 
 	public String getReadTimeoutHandlerName();
 

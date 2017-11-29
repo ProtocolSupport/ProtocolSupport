@@ -16,8 +16,8 @@ public class BossBar extends MiddleBossBar {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BOSS_BAR_ID, version);
-		MiscSerializer.writeUUID(serializer, connection.getVersion(), uuid);
-		MiscSerializer.writeEnum(serializer, action);
+		MiscSerializer.writeUUID(serializer, version, uuid);
+		MiscSerializer.writeVarIntEnum(serializer, action);
 		switch (action) {
 			case ADD: {
 				StringSerializer.writeString(serializer, version, title);

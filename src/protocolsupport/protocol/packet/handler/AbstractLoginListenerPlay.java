@@ -151,7 +151,7 @@ public abstract class AbstractLoginListenerPlay implements IHasProfile {
 		try {
 			Bukkit.getLogger().info("Disconnecting " + getConnectionRepr() + ": " + s);
 			ProtocolVersion version = ConnectionImpl.getFromChannel(networkManager.getChannel()).getVersion();
-			if (version.getProtocolType() == ProtocolType.PC && version.isBetween(ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_7_10)) {
+			if ((version.getProtocolType() == ProtocolType.PC) && version.isBetween(ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_7_10)) {
 				//first send join game that will make client actually switch to game state
 				networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createFakeJoinGamePacket());
 				//send disconnect with a little delay

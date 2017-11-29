@@ -16,7 +16,7 @@ public abstract class MiddleSpawnPainting extends ClientBoundMiddlePacket {
 	protected int entityId;
 	protected UUID uuid;
 	protected String type;
-	protected Position position;
+	protected Position position = new Position(0, 0, 0);
 	protected int direction;
 
 	@Override
@@ -24,7 +24,7 @@ public abstract class MiddleSpawnPainting extends ClientBoundMiddlePacket {
 		entityId = VarNumberSerializer.readVarInt(serverdata);
 		uuid = MiscSerializer.readUUID(serverdata);
 		type = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC, 13);
-		position = PositionSerializer.readPosition(serverdata);
+		PositionSerializer.readPositionTo(serverdata, position);
 		direction = serverdata.readUnsignedByte();
 	}
 
