@@ -51,6 +51,10 @@ public class SetPassengers extends MiddleSetPassengers {
 					}
 					data.riderInfo = PocketData.getPocketEntityData(vehicle.getType()).getRiderInfo();
 					if (data.riderInfo != null) {
+						System.out.println("SSSEJjksalkjfdkasjljflasdj");
+						System.out.println("Passenger Type: " + passenger.getType().toString() + "Veh pos + " + data.riderInfo.getPosition());
+						
+						
 						if (passenger.getType() == NetworkEntityType.PLAYER) {
 							float vehicleSize = PEMetaProviderSPI.getProvider().getEntitySize(vehicle) * vehicle.getDataCache().sizeModifier;
 							data.riderInfo.setPosition(data.riderInfo.getPosition().multiply(new Vector(vehicleSize, vehicleSize, vehicleSize)));

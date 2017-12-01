@@ -153,18 +153,6 @@ public class GodPacket extends ServerBoundMiddlePacket {
 					case USE_CLICK_AIR:
 						face = -1;
 					case USE_CLICK_BLOCK: {
-						//TODO: figure this out.
-						/*if (itemstack.asBukkitMirror().getType().isEdible()) {
-							//Intersect if item is ediable to simulate eating for the player himself and make him able to stop it.
-							cache.getWatchedSelf().getDataCache().setPeBaseFlag(PeMetaBase.FLAG_USING_ITEM, true);
-							connection.sendRawPacket(EntityMetadata.createFauxPacket(cache.getWatchedSelf(), cache.getLocale(), connection.getVersion()));
-							ByteBuf meep = Unpooled.buffer();
-							VarNumberSerializer.writeVarInt(meep, PEPacketIDs.ENTITY_EVENT);
-							meep.writeByte(0);
-							meep.writeByte(0);
-							meep.writeBytes(EntityStatus.create(0, 57, connection.getVersion()));
-							connection.sendRawPacket(MiscSerializer.readAllBytes(meep));
-						}*/
 						packets.add(MiddleBlockPlace.create(position, face, 0, cX, cY, cZ));
 						break;
 					}

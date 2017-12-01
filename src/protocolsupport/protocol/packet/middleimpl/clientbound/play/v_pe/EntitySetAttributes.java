@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.api.utils.Any;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntitySetAttributes;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
@@ -18,23 +17,23 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 
 	private static final HashMap<String, String> remapAttrNames = new HashMap<>();
 	private static final ArrayList<String> forbiddenAttrNames = new ArrayList<>();
-	private static final HashMap<String, Any<Float, Float>> knownMinMax = new HashMap<>();
+	private static final HashMap<String, float[]> knownMinMax = new HashMap<>();
 	static {
 		remapAttrNames.put("horse.jumpStrength", 			"minecraft:horse.jump_strength");
 		remapAttrNames.put("generic.movementSpeed", 		"minecraft:movement");
 		remapAttrNames.put("generic.attackDamage", 			"minecraft:attack_damage");
 		remapAttrNames.put("generic.knockbackResistance", 	"minecraft:knockback_resistance");
 		remapAttrNames.put("generic.followRange", 			"minecraft:follow_range");
-		knownMinMax.put("minecraft:horse.jump_strength", 	new Any<Float, Float>(0.0F, 2.0F));
-		knownMinMax.put("minecraft:health", 				new Any<Float, Float>(0.0F, 20.0F));
-		knownMinMax.put("minecraft:player.saturation", 		new Any<Float, Float>(0.0F, 20.0F));
-		knownMinMax.put("minecraft:player.hunger", 			new Any<Float, Float>(0.0F, 20.0F));
-		knownMinMax.put("minecraft:player.experience", 		new Any<Float, Float>(0.0F, 1.0F));
-		knownMinMax.put("minecraft:player.level", 			new Any<Float, Float>(0.0F, 24791.0F));
-		knownMinMax.put("minecraft:movement", 				new Any<Float, Float>(0.0F, 24791.0F));
-		knownMinMax.put("minecraft:attack_damage", 			new Any<Float, Float>(0.0F, 2.0F));
-		knownMinMax.put("minecraft:knockback_resistance", 	new Any<Float, Float>(0.0F, 1.0F));
-		knownMinMax.put("minecraft:knockback_resistance", 	new Any<Float, Float>(0.0F, 2080.0F));
+		//Min max values.												MIN   DEFAULT				MAX
+		knownMinMax.put("minecraft:horse.jump_strength", 	new float[]{0.0F, 0.432084373616155F, 	 2.0F});
+		knownMinMax.put("minecraft:health", 				new float[]{0.0F, 20.0F,				20.0F});
+		knownMinMax.put("minecraft:player.saturation", 		new float[]{0.0F, 20.0F,				20.0F});
+		knownMinMax.put("minecraft:player.hunger", 			new float[]{0.0F, 20.0F,				20.0F});
+		knownMinMax.put("minecraft:player.experience", 		new float[]{0.0F, 0.0F,					 1.0F});
+		knownMinMax.put("minecraft:player.level", 			new float[]{0.0F, 0.0F, 			 24791.0F});
+		knownMinMax.put("minecraft:movement", 				new float[]{0.0F, -1F,				 24791.0F});
+		knownMinMax.put("minecraft:attack_damage", 			new float[]{0.0F, 1.0F,					 2.0F});
+		knownMinMax.put("minecraft:knockback_resistance", 	new float[]{0.0F, 0.0F,				  2080.0F});
 		forbiddenAttrNames.add("generic.maxHealth"); //TODO: Use to set actual max health.
 		forbiddenAttrNames.add("generic.attackSpeed");
 		forbiddenAttrNames.add("generic.armor");
@@ -43,7 +42,6 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 		forbiddenAttrNames.add("generic.flyingSpeed");
 		forbiddenAttrNames.add("zombie.spawnReinforcements");
 	}
-
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
@@ -78,11 +76,11 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 			}
 			double attrvalue = (attr.value + add) * mulInc * mulMore;
 			String pename = remapAttrNames.getOrDefault(attr.key, attr.key);
-			Any<Float, Float> minmax = knownMinMax.getOrDefault(pename, new Any<Float, Float>(Float.MIN_VALUE, Float.MAX_VALUE));
-			MiscSerializer.writeLFloat(serializer, minmax.getObj1());
-			MiscSerializer.writeLFloat(serializer, minmax.getObj2());
+			float[] minmax = knownMinMax.getOrDefault(pename, new float[]{Float.MIN_VALUE, 1, Float.MAX_VALUE});
+			MiscSerializer.writeLFloat(serializer, minmax[0]);
+			MiscSerializer.writeLFloat(serializer, minmax[2]);
 			MiscSerializer.writeLFloat(serializer, (float) attrvalue);
-			MiscSerializer.writeLFloat(serializer, (float) attrvalue); //default value
+			MiscSerializer.writeLFloat(serializer, minmax[1] == -1F ? (float) attrvalue : minmax[1]); //default value
 			StringSerializer.writeString(serializer, version, pename);
 			System.out.println("Sending ATTR: " + pename);
 		}

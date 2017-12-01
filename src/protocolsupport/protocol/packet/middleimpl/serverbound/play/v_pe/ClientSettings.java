@@ -31,7 +31,7 @@ public class ClientSettings extends MiddleClientSettings {
 		VarNumberSerializer.writeVarInt(chunkResponse, PEPacketIDs.CHUNK_RADIUS);
 		chunkResponse.writeByte(0);
 		chunkResponse.writeByte(0);
-		//should exactly match the view distance that server uses to broadcast chunks. +1 because mcpe includes the chunk client is standing in in calculations, while pc does not
+		//Should completely encompass all chunks send by PC to prevent shadow and chunk issues. (NOTE: PC IS SQUARE, PE IS ROUND!)
 		VarNumberSerializer.writeSVarInt(chunkResponse, (int) Math.ceil(viewDist * Math.sqrt(2)));
 		connection.sendRawPacket(MiscSerializer.readAllBytes(chunkResponse));
 	}
