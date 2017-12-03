@@ -12,6 +12,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.minecraftdata.PocketData;
+import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData.PocketRiderInfo;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.NetworkEntity.DataCache;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
@@ -45,23 +46,21 @@ public class SetPassengers extends MiddleSetPassengers {
 					}
 					
 					DataCache data = passenger.getDataCache();
-					if (data.riderInfo != null && data.riderInfo.getVehicleId() != vehicleId) {
+					if (data.isRiding() && data.getVehicleId() != vehicleId) {
 						//In case we are jumping from vehicle to vehicle.
-						packets.addAll(link(version, data.riderInfo.getVehicleId(), passengerId, UNLINK));
+						packets.addAll(link(version, data.getVehicleId(), passengerId, UNLINK));
 					}
-					data.riderInfo = PocketData.getPocketEntityData(vehicle.getType()).getRiderInfo();
-					if (data.riderInfo != null) {
-						System.out.println("SSSEJjksalkjfdkasjljflasdj");
-						System.out.println("Passenger Type: " + passenger.getType().toString() + "Veh pos + " + data.riderInfo.getPosition());
-						
-						
+					PocketRiderInfo rideInfo = PocketData.getPocketEntityData(vehicle.getType()).getRiderInfo();
+					if (rideInfo != null) {
+						System.out.println("Passenger Type: " + passenger.getType().toString() + "Veh pos + " + rideInfo.getPosition());
 						if (passenger.getType() == NetworkEntityType.PLAYER) {
-							float vehicleSize = PEMetaProviderSPI.getProvider().getEntitySize(vehicle) * vehicle.getDataCache().sizeModifier;
-							data.riderInfo.setPosition(data.riderInfo.getPosition().multiply(new Vector(vehicleSize, vehicleSize, vehicleSize)));
+							float vehicleSize = PEMetaProviderSPI.getProvider().getEntitySize(vehicle) * vehicle.getDataCache().getSizeModifier();
+							data.setRiderPosition(rideInfo.getPosition().multiply(new Vector(vehicleSize, vehicleSize, vehicleSize)));
 						} else {
-							data.riderInfo.setPosition(new Vector(0, -0.125, 0));
+							data.setRiderPosition(new Vector(0, -0.125, 0));
 						}
-						data.riderInfo.setVehicleId(vehicleId);
+						data.setRotationlock(rideInfo.getRotationLock());
+						data.setVehicleId(vehicleId);
 					}
 					packets.add(EntityMetadata.createFaux(passenger, cache.getLocale(), version));
 					packets.addAll(link(version, vehicleId, passengerId, LINK));
@@ -74,7 +73,7 @@ public class SetPassengers extends MiddleSetPassengers {
 						NetworkEntity passenger = cache.getWatchedEntity(passengerId);
 						if (passenger != null) {
 							//Also update meta.
-							passenger.getDataCache().riderInfo = null;
+							passenger.getDataCache().setVehicleId(0);
 							packets.add(EntityMetadata.createFaux(passenger, cache.getLocale(), version));
 							packets.addAll(link(version, vehicleId, passengerId, UNLINK));
 						}

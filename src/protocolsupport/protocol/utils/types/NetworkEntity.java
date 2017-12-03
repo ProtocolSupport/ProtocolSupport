@@ -1,10 +1,11 @@
 package protocolsupport.protocol.utils.types;
 
-import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData.PocketRiderInfo;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 import java.util.UUID;
+
+import org.bukkit.util.Vector;
 
 public class NetworkEntity {
 
@@ -63,7 +64,7 @@ public class NetworkEntity {
 
 	public static class DataCache {
 		private byte pcBaseFlags = 0;
-		public boolean firstMeta = false;
+		private boolean firstMeta = false;
 
 		public byte getPcBaseFlags() {
 			return pcBaseFlags;
@@ -86,12 +87,22 @@ public class NetworkEntity {
 			this.pcBaseFlags = pcBaseFlags;
 		}
 
+		public boolean isFirstMeta() {
+			return firstMeta;
+		}
+
+		public void setFirstMeta(boolean firstMeta) {
+			this.firstMeta = firstMeta;
+		}
+
 		//Cache for PE shizzles.
 		private long peBaseFlags = 0;
-		public byte sizeModifier = 1;
-		public int attachedId = -1;
+		private byte sizeModifier = 1;
+		private int attachedId = -1;
 		private Byte headRotation = null;
-		public PocketRiderInfo riderInfo;
+		private int vehicleId = 0;
+		private Vector riderPosition = null;
+		private Float rotationlock = null;
 		private ItemStackWrapper helmet = ItemStackWrapper.NULL;
 		private ItemStackWrapper chestplate = ItemStackWrapper.NULL;
 		private ItemStackWrapper leggings = ItemStackWrapper.NULL;
@@ -101,6 +112,22 @@ public class NetworkEntity {
 
 		public long getPeBaseFlags() {
 			return peBaseFlags;
+		}
+
+		public byte getSizeModifier() {
+			return sizeModifier;
+		}
+
+		public void setSizeModifier(byte sizeModifier) {
+			this.sizeModifier = sizeModifier;
+		}
+
+		public int getAttachedId() {
+			return attachedId;
+		}
+
+		public void setAttachedId(int attachedId) {
+			this.attachedId = attachedId;
 		}
 
 		public boolean getPeBaseFlag(int bitpos) {
@@ -167,12 +194,39 @@ public class NetworkEntity {
 			return normalRotation;
 		}
 		
+		public int getVehicleId() {
+			return vehicleId;
+		}
+		
+		public boolean isRiding() {
+			return vehicleId != 0;
+		}
+
+		public void setVehicleId(int vehicleId) {
+			this.vehicleId = vehicleId;
+		}
+
+		public Vector getRiderPosition() {
+			return riderPosition;
+		}
+
+		public void setRiderPosition(Vector riderPosition) {
+			this.riderPosition = riderPosition;
+		}
+
+		public Float getRotationlock() {
+			return rotationlock;
+		}
+
+		public void setRotationlock(Float rotationlock) {
+			this.rotationlock = rotationlock;
+		}
 
 		@Override
 		public String toString() {
 			return Utils.toStringAllFields(this);
 		}
-
+		
 	}
 
 }

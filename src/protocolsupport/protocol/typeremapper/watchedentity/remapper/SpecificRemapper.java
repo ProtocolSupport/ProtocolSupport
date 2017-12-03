@@ -49,8 +49,8 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVecto
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.minecraftdata.PocketData;
 import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData;
-import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData.PocketRiderInfo;
 import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.NetworkEntity.DataCache;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.CollectionsUtils;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
@@ -63,13 +63,14 @@ public enum SpecificRemapper {
 		new Entry(new DataWatcherDataRemapper() {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
+				DataCache data = entity.getDataCache();
 				PocketEntityData pocketdata = PocketData.getPocketEntityData(entity.getType());
-				float entitySize = PEMetaProviderSPI.getProvider().getEntitySize(entity) * entity.getDataCache().sizeModifier;
+				float entitySize = PEMetaProviderSPI.getProvider().getEntitySize(entity) * data.getSizeModifier();
 				
 				// = PE Lead =
 				//Leashing is set in Entity Leash.
-				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_LEASHED, entity.getDataCache().attachedId != -1);
-				remapped.put(38, new DataWatcherObjectSVarLong(entity.getDataCache().attachedId));
+				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_LEASHED, data.getAttachedId() != -1);
+				remapped.put(38, new DataWatcherObjectSVarLong(data.getAttachedId()));
 
 				// = PE Nametag =
 				DataWatcherObject<?> nameTagWatcher = original.get(DataWatcherObjectIndex.Entity.NAMETAG);
@@ -81,17 +82,17 @@ public enum SpecificRemapper {
 				}
 
 				// = PE Riding =
-				PocketRiderInfo riderInfo = entity.getDataCache().riderInfo;
-				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_COLLIDE, riderInfo == null);
-				if (riderInfo != null) {
-					System.out.println("RIDERPOSITION: " + riderInfo.getPosition());
+				System.out.println("(FAUX) META: " + data.getVehicleId());
+				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_COLLIDE, !data.isRiding());
+				if (data.isRiding()) {
+					System.out.println("RIDERPOSITION: " + data.getRiderPosition());
 					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_RIDING, true);
-					remapped.put(57, new DataWatcherObjectVector3fLe(riderInfo.getPosition()));
-					remapped.put(58, new DataWatcherObjectByte((byte) ((riderInfo.getRotationLock() != null) ? 1 : 0)));
-					if (riderInfo.getRotationLock() != null) {
-						System.out.println("RIDERLOCK: " + riderInfo.getRotationLock());
-						remapped.put(59, new DataWatcherObjectFloatLe(riderInfo.getRotationLock()));
-						remapped.put(60, new DataWatcherObjectFloatLe(-riderInfo.getRotationLock()));
+					remapped.put(57, new DataWatcherObjectVector3fLe(data.getRiderPosition()));
+					remapped.put(58, new DataWatcherObjectByte((byte) ((data.getRotationlock() != null) ? 1 : 0)));
+					if (data.getRotationlock() != null) {
+						System.out.println("RIDERLOCK: " + data.getRotationlock());
+						remapped.put(59, new DataWatcherObjectFloatLe(data.getRotationlock()));
+						remapped.put(60, new DataWatcherObjectFloatLe(-data.getRotationlock()));
 					}
 				} else {
 					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_RIDING, false);
@@ -224,10 +225,10 @@ public enum SpecificRemapper {
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				getObject(original, DataWatcherObjectIndex.Ageable.AGE, DataWatcherObjectBoolean.class).ifPresent(boolWatcher -> {
 					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_BABY, boolWatcher.getValue());
-					entity.getDataCache().sizeModifier = (byte) (boolWatcher.getValue() ? 0.5 : 1);
+					entity.getDataCache().setSizeModifier((byte) (boolWatcher.getValue() ? 0.5 : 1));
 				});
 				//Send scale -> avoid big mobs with floating heads.
-				remapped.put(39, new DataWatcherObjectFloatLe(entity.getDataCache().sizeModifier * PEMetaProviderSPI.getProvider().getEntitySize(entity))); 
+				remapped.put(39, new DataWatcherObjectFloatLe(entity.getDataCache().getSizeModifier() * PEMetaProviderSPI.getProvider().getEntitySize(entity))); 
 			}}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Ageable.AGE, 12) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_2),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Ageable.AGE, 11) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_2),
@@ -471,7 +472,7 @@ public enum SpecificRemapper {
 		new Entry(new DataWatcherDataRemapper() {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
-				entity.getDataCache().sizeModifier = (byte) 6;
+				entity.getDataCache().setSizeModifier((byte) 6);
 				float entitySize = 6f * PEMetaProviderSPI.getProvider().getEntitySize(entity);
 				remapped.put(39, new DataWatcherObjectFloatLe(entitySize)); //Send scale -> Giants are Giant Zombies in PE.
 				PocketEntityData pocketdata = PocketData.getPocketEntityData(entity.getType());
@@ -559,9 +560,9 @@ public enum SpecificRemapper {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				getObject(original, DataWatcherObjectIndex.Slime.SIZE, DataWatcherObjectVarInt.class).ifPresent(intWatcher -> {
-					entity.getDataCache().sizeModifier = (byte) ((int) intWatcher.getValue());
+					entity.getDataCache().setSizeModifier((byte) ((int) intWatcher.getValue()));
 				});
-				float entitySize = PEMetaProviderSPI.getProvider().getEntitySize(entity) * entity.getDataCache().sizeModifier;
+				float entitySize = PEMetaProviderSPI.getProvider().getEntitySize(entity) * entity.getDataCache().getSizeModifier();
 				remapped.put(39, new DataWatcherObjectFloatLe(entitySize)); //Send slime scale.
 				PocketEntityData pocketdata = PocketData.getPocketEntityData(entity.getType());
 				if (pocketdata.getBoundingBox() != null) {

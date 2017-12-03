@@ -101,7 +101,6 @@ public class PocketData {
 			private double y;
 			private double z;
 			private Float rotationlock = null; //Optional
-			private int vehicleId = -1; //Used only in meta
 			
 			public Vector getPosition() {
 				return new Vector(x, y + 1.2, z);
@@ -111,19 +110,6 @@ public class PocketData {
 				return rotationlock;
 			}
 			
-			public int getVehicleId() {
-				return vehicleId;
-			}
-
-			public void setVehicleId(int vehicleId) {
-				this.vehicleId = vehicleId;
-			}
-
-			public void setPosition(Vector position) {
-				this.x = position.getX();
-				this.y = position.getY() - 1.2;
-				this.z = position.getZ();
-			}
 		}
 		
 	}

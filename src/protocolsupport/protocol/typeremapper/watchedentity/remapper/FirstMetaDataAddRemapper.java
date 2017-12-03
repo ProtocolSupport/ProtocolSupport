@@ -15,7 +15,7 @@ public class FirstMetaDataAddRemapper extends DataWatcherDataRemapper {
 
 	@Override
 	public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
-		if (entity.getDataCache().firstMeta) {
+		if (entity.getDataCache().isFirstMeta()) {
 			remapped.put(index, object);
 		}
 	}

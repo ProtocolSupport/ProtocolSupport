@@ -53,7 +53,7 @@ public class Position extends MiddlePosition {
 		MiscSerializer.writeLFloat(serializer, realYaw); //head yaw actually
 		serializer.writeByte(mode);
 		serializer.writeBoolean(false); //on ground
-		VarNumberSerializer.writeVarLong(serializer, entity.getDataCache().riderInfo == null ? 0 : entity.getDataCache().riderInfo.getVehicleId());
+		VarNumberSerializer.writeVarLong(serializer, entity.getDataCache().getVehicleId());
 		return serializer;
 	}
 

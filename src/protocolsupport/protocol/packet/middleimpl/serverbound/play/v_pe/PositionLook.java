@@ -68,8 +68,8 @@ public class PositionLook extends ServerBoundMiddlePacket {
 			//TODO: Play around more with these numbers to perhaps make things even more smooth.
 			x = Math.floor(x * 8) / 8; y = Math.ceil((y + 0.3) * 8) / 8; z = Math.floor(z * 8) / 8;
 		}
-		 if(cache.getWatchedSelf().getDataCache().riderInfo != null) {
-			NetworkEntity vehicle = cache.getWatchedEntity(cache.getWatchedSelf().getDataCache().riderInfo.getVehicleId());
+		 if(cache.getWatchedSelf().getDataCache().isRiding()) {
+			NetworkEntity vehicle = cache.getWatchedEntity(cache.getWatchedSelf().getDataCache().getVehicleId());
 			if (vehicle != null) {
 				if(vehicle.getType() == NetworkEntityType.BOAT) {
 					double dX = x - cache.getClientX(), dZ = z - cache.getClientZ();

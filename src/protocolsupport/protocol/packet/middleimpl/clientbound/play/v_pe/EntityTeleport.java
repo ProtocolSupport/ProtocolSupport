@@ -36,8 +36,8 @@ public class EntityTeleport extends MiddleEntityTeleport {
 				yaw += offset.getYaw();
 			}
 		}
-		if (entity.getDataCache().riderInfo != null) {
-			NetworkEntity vehicle = cache.getWatchedEntity(entity.getDataCache().riderInfo.getVehicleId());
+		if (entity.getDataCache().isRiding()) {
+			NetworkEntity vehicle = cache.getWatchedEntity(entity.getDataCache().getVehicleId());
 			if (vehicle != null) {
 				if (vehicle.getType() == NetworkEntityType.BOAT) {
 					//This bunch calculates the relative head position. Apparently the player is a bit turned inside the boat (in PE) so another little offset is needed.
@@ -50,7 +50,8 @@ public class EntityTeleport extends MiddleEntityTeleport {
 					return RecyclableSingletonList.create(updateGeneral(version, entity, x, y, z, pitch, (byte) 0, (byte) relYaw, onGround, false));
 				}
 			} else {
-				entity.getDataCache().riderInfo = null;
+				//If the vehicle is killed a unlink might not be send yet.
+				entity.getDataCache().setVehicleId(0);
 			}
 		}
 		if(entity.getType() == NetworkEntityType.BOAT) {
