@@ -5,6 +5,7 @@ import org.bukkit.block.Block;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClose;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.zplatform.ServerPlatform;
 
@@ -14,7 +15,10 @@ public class InventoryClose extends MiddleInventoryClose {
 	public void readFromClientData(ByteBuf clientdata) {
 		windowId = clientdata.readByte();
 		cache.getInfTransactions().clear();
-		if(connection.hasMetadata("fakeInvBlocks")) {
+		if (cache.getGameMode() == GameMode.CREATIVE && windowId == -1) {
+			windowId = 0;
+		}
+		if (connection.hasMetadata("fakeInvBlocks")) {
 			destroyFakeContainers((Block[]) connection.getMetadata("fakeInvBlocks"));
 		}
 	}

@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -89,7 +90,7 @@ public class FeatureEmulation implements Listener {
 				}
 				connection.addMetadata("fakeInvBlocks", new Block[] {
 						mainLoc.subtract(1, 2, 0).getBlock(), 
-						mainLoc.add(1, 0, 0).getBlock()
+						mainLoc.	 add(1, 0, 0).getBlock()
 					});
 				if (event.getView().getTopInventory().getSize() > 27) {
 					Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), new Runnable() {
@@ -114,7 +115,7 @@ public class FeatureEmulation implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
 	public void onInventoryClick(InventoryClickEvent event) {
-		if(event.getWhoClicked() instanceof Player) {
+		if ((event.getClick() != ClickType.CREATIVE) && (event.getWhoClicked() instanceof Player)) {
 			Player clicker = (Player) event.getWhoClicked();
 			Connection connection = ProtocolSupportAPI.getConnection(clicker);
 			if(

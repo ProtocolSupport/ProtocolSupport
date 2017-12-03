@@ -74,7 +74,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 				if(wSlots > 16) { wSlots = wSlots / 9 * 9; }
 				if (slot == -1) {
 					//Cursor slot can be set by plugin (only if a window is actually open), this will cause issues however with the deficit/surplus stack so we add them manually here.
-					cache.getInfTransactions().customCursorSurplus(itemstack);
+					cache.getInfTransactions().customCursorSurplus(cache, itemstack);
 					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_CLICKED_SLOT, 0, itemstack));
 				}
 				if (slot > wSlots) {

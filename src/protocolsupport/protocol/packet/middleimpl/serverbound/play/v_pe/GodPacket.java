@@ -305,8 +305,8 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			misc.clear();
 		}
 		
-		public void customCursorSurplus(ItemStackWrapper itemstack) {
-			if((!itemstack.isNull())) {
+		public void customCursorSurplus(NetworkDataCache cache, ItemStackWrapper itemstack) {
+			if ((!itemstack.isNull()) && !((cache.getGameMode() == GameMode.CREATIVE) && (cache.getOpenedWindow() == WindowType.PLAYER))) {
 				clear();
 				surplusDeque.put(new ItemStackWrapperKey(itemstack), new SlotWrapperValue(-1, itemstack.getAmount(), itemstack.getAmount()));
 			}
@@ -327,7 +327,6 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			//Creative transactions.
 			if ((cache.getGameMode() == GameMode.CREATIVE) && (cache.getOpenedWindow() == WindowType.PLAYER)) {
 				if ((transaction.getSourceId() != SOURCE_CREATIVE) && (pcSlot != -1)) {
-					bug("Creative override!");
 					//Creative transaction use -1 not for cursor but throwing items, cursoritems are actually deleted on serverside.
 					misc.add(MiddleCreativeSetSlot.create(cache.getLocale(), (pcSlot == -999 ? -1 : pcSlot), transaction.getNewItem()));
 				}
