@@ -257,7 +257,9 @@ public class ItemStackRemapper {
 		registerToClientRemapper(Material.POTION, pepotion, ProtocolVersion.MINECRAFT_PE);
 		registerToClientRemapper(Material.SPLASH_POTION, pepotion, ProtocolVersion.MINECRAFT_PE);
 		registerToClientRemapper(Material.MONSTER_EGG, new MonsterEggToPEIdSpecificRemapper(), ProtocolVersion.MINECRAFT_PE);
-		registerToClientRemapper(Material.WRITTEN_BOOK, new BookPagesToPESpecificRemapper(), ProtocolVersion.MINECRAFT_PE);
+		BookPagesToPESpecificRemapper pebook = new BookPagesToPESpecificRemapper();
+		registerToClientRemapper(Material.WRITTEN_BOOK, pebook, ProtocolVersion.MINECRAFT_PE);
+		registerToClientRemapper(Material.BOOK_AND_QUILL, pebook, ProtocolVersion.MINECRAFT_PE);
 		registerToClientRemapper(Material.FIREWORK_CHARGE, new FireworkToPETagSpecificRemapper(), ProtocolVersion.MINECRAFT_PE);
 		registerToClientRemapper(Material.FIREWORK, new FireworkToPETagSpecificRemapper(), ProtocolVersion.MINECRAFT_PE);
 		LeatherArmorToPESpecificRemapper peleatherarmor = new LeatherArmorToPESpecificRemapper();

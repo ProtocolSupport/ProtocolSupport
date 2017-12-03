@@ -30,8 +30,8 @@ public class PEPacketIDs {
 	public static final int MOB_EQUIPMENT = 31;
 	public static final int MOB_ARMOR_EQUIPMENT = 32;
 	public static final int INTERACT = 33;
-	//public static final int BLOCK_PICK_REQUEST = 34;
-	//public static final int ENTITY_PICK_REQUEST = 35;
+	public static final int BLOCK_PICK_REQUEST = 34;
+	public static final int ENTITY_PICK_REQUEST = 35;
 	public static final int PLAYER_ACTION = 36;
 	//public static final int HURT_ARMOR = 38;
 	public static final int SET_ENTITY_DATA = 39;
