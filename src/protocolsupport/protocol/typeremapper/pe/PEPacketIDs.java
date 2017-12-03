@@ -15,12 +15,15 @@ public class PEPacketIDs {
 	public static final int SPAWN_ENTITY = 13;
 	public static final int ENTITY_DESTROY = 14;
 	public static final int ADD_ITEM_ENTITY = 15;
+	//public static final int ADD_HANING_ENTITY = 16; //Simulated
 	public static final int TAKE_ITEM_ENTITY = 17;
 	public static final int ENTITY_TELEPORT = 18;
 	public static final int PLAYER_MOVE = 19;
+	//public static final int RIDER_JUMP = 20;
 	public static final int UPDATE_BLOCK = 21;
 	public static final int SPAWN_PAINTING = 22;
 	public static final int EXPLODE = 23;
+	//public static final int LEVEL_SOUND_EVENT = 24; //Simulated
 	public static final int LEVEL_EVENT = 25;
 	public static final int TILE_EVENT = 26;
 	public static final int ENTITY_EVENT = 27;
@@ -33,10 +36,12 @@ public class PEPacketIDs {
 	public static final int BLOCK_PICK_REQUEST = 34;
 	public static final int ENTITY_PICK_REQUEST = 35;
 	public static final int PLAYER_ACTION = 36;
-	//public static final int HURT_ARMOR = 38;
+	//public static final int ENTITY_FALL = 37; //Simulated
+	//public static final int HURT_ARMOR = 38; //Simulated
 	public static final int SET_ENTITY_DATA = 39;
 	public static final int ENTITY_VELOCITY = 40;
 	public static final int ENTITY_LINK = 41;
+	//public static final int SET_HEALTH = 42; //Simulated
 	public static final int SPAWN_POS = 43;
 	public static final int ANIMATION = 44;
 	public static final int RESPAWN_POS = 45;
@@ -53,16 +58,19 @@ public class PEPacketIDs {
 	public static final int TILE_DATA_UPDATE = 56;
 	public static final int PLAYER_STEER = 57;
 	public static final int CHUNK_DATA = 58;
+	//public static final int SET_COMMANDS_ENABLED = 59;
 	public static final int SET_DIFFICULTY = 60;
 	public static final int CHANGE_DIMENSION = 61;
 	public static final int CHANGE_PLAYER_GAMETYPE = 62;
 	public static final int PLAYER_INFO = 63;
+	//public static final int SIMPLE_EVENT = 64;
 	//public static final int TELEMETRY_EVENT = 65;
+	//public static final int SPAWN_XP_ORB = 66; //Simulated
 	public static final int MAP_ITEM_DATA = 67;
 	public static final int MAP_INFO_REQUEST = 68;
 	public static final int CLIENT_SETTINGS = 69;
 	public static final int CHUNK_RADIUS = 70;
-	//public static final int ITEM_FRAME_DROP = 71;
+	//public static final int ITEM_FRAME_DROP = 71; //Simulated
 	//public static final int GAME_RULE_CHANGE = 72;
 	//public static final int BOSS_EVENT = 74;
 	//public static final int SHOW_CREDITS = 75;
@@ -86,5 +94,9 @@ public class PEPacketIDs {
 	//public static final int PHOTO_TRANSFER = 99;
 	public static final int MODAL_REQUEST = 100;
 	public static final int MODAL_RESPONSE = 101;
+	//public static final int SETTINGS_REQUEST = 102;
+	//public static final int SETTINGS_RESPONSE = 103;
+	//public static final int SHOW_PROFILE = 104;
+	//public static final int SET_DEFAULT_GAMEMODE = 105;
 	
 }
