@@ -6,6 +6,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSuccess;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEAdventureSettings;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
@@ -60,6 +61,12 @@ public class Login extends MiddleLogin {
 		startgame.writeBoolean(false); //trust players
 		VarNumberSerializer.writeSVarInt(startgame, PEAdventureSettings.GROUP_NORMAL); //permission level
 		VarNumberSerializer.writeSVarInt(startgame, 4); //game publish setting
+		StringSerializer.writeString(startgame, connection.getVersion(), ""); //level ID (empty string)
+		StringSerializer.writeString(startgame, connection.getVersion(), ""); //world name (empty string)
+		StringSerializer.writeString(startgame, connection.getVersion(), ""); //premium world template id (empty string)
+		startgame.writeBoolean(false); //unknown bool
+		VarNumberSerializer.writeVarLong(startgame, 0); //world ticks
+		VarNumberSerializer.writeSVarInt(startgame, 0); //enchantment seed
 		packets.add(startgame);
 		packets.add(PEAdventureSettings.createPacket(cache));
 		packets.add(LoginSuccess.createPlayStatus(version, 3));
