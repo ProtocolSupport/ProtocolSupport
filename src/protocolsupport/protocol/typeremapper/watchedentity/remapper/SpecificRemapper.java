@@ -137,6 +137,9 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Entity.NO_GRAVITY, 5) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_2)
 	),
 	LIVING(NetworkEntityType.LIVING, SpecificRemapper.ENTITY,
+		new Entry(new PeSimpleFlagAdder(
+				new int[] {PeMetaBase.FLAG_CAN_CLIMB}, new boolean[] {true}
+		), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.EntityLiving.HAND_USE,
 				new int[] {1}, new int[] {PeMetaBase.FLAG_USING_ITEM}
 		), ProtocolVersion.MINECRAFT_PE),
@@ -173,7 +176,7 @@ public enum SpecificRemapper {
 	),
 	PLAYER(NetworkEntityType.PLAYER, SpecificRemapper.LIVING,
 		new Entry(new PeSimpleFlagAdder(
-				new int[] {PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG, PeMetaBase.FLAG_COLLIDE}, new boolean[] {true, true}
+				new int[] {PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG}, new boolean[] {true}
 			), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectFloat>(DataWatcherObjectIndex.Player.ADDITIONAL_HEARTS, 11) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_2),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectFloat>(DataWatcherObjectIndex.Player.ADDITIONAL_HEARTS, 10) {}, ProtocolVersionsHelper.ALL_1_9),
