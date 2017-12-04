@@ -65,7 +65,7 @@ public class Login extends MiddleLogin {
 		StringSerializer.writeString(startgame, connection.getVersion(), ""); //world name (empty string)
 		StringSerializer.writeString(startgame, connection.getVersion(), ""); //premium world template id (empty string)
 		startgame.writeBoolean(false); //unknown bool
-		VarNumberSerializer.writeVarLong(startgame, 0); //world ticks
+		startgame.writeLongLE(0); //world ticks
 		VarNumberSerializer.writeSVarInt(startgame, 0); //enchantment seed
 		packets.add(startgame);
 		packets.add(PEAdventureSettings.createPacket(cache));
