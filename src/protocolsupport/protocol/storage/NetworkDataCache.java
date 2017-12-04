@@ -18,6 +18,7 @@ import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.Utils;
+import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class NetworkDataCache {
@@ -470,10 +471,12 @@ public class NetworkDataCache {
 	}
 
 	private NBTTagCompoundWrapper signTag;
-
+	private ItemStackWrapper[] hotbar = new ItemStackWrapper[10];
+	
 	public void setSignTag(NBTTagCompoundWrapper signTag) { this.signTag = signTag; }
-
 	public NBTTagCompoundWrapper getSignTag() { return signTag; }
+	public void setHotbarItem(int slot, ItemStackWrapper item) { hotbar[slot] = item; }
+	public ItemStackWrapper getHotbarItem(int slot) { return hotbar[slot]; }
 
 	private String title;
 	private int visibleOnScreenTicks = 100; // default fadeIn = 20; default stay = 60; default fadeOut = 20;

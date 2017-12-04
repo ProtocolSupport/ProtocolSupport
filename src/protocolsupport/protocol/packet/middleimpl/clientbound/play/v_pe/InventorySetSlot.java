@@ -37,8 +37,10 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 				} else if (slot <= 35) {
 					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_INVENTORY, slot, itemstack));
 				} else if (slot <= 44) {
+					storeHotbar(slot - 36, itemstack);
 					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_INVENTORY, slot - 36, itemstack));
 				} else if (slot == 45) {
+					storeHotbar(9, itemstack);
 					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_OFFHAND, 0, itemstack));
 				}
 				break;
@@ -89,6 +91,10 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 			}
 		}
 		return RecyclableEmptyList.get();
+	}
+	
+	private void storeHotbar(int slot, ItemStackWrapper itemstack) {
+		cache.setHotbarItem(slot, itemstack);
 	}
 	
 	public static ClientBoundPacketData create(ProtocolVersion version, String locale, int windowId, int slot, ItemStackWrapper itemstack) {

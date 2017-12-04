@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import gnu.trove.decorator.TIntObjectMapDecorator;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.typeremapper.itemstack.fromclient.BookPagesFromPESpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.fromclient.MonsterEggFromLegacyIdRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.fromclient.PotionFromLegacyIdRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.BookPagesToLegacyTextSpecificRemapper;
@@ -260,8 +261,9 @@ public class ItemStackRemapper {
 		BookPagesToPESpecificRemapper pebook = new BookPagesToPESpecificRemapper();
 		registerToClientRemapper(Material.WRITTEN_BOOK, pebook, ProtocolVersion.MINECRAFT_PE);
 		registerToClientRemapper(Material.BOOK_AND_QUILL, pebook, ProtocolVersion.MINECRAFT_PE);
-		registerToClientRemapper(Material.FIREWORK_CHARGE, new FireworkToPETagSpecificRemapper(), ProtocolVersion.MINECRAFT_PE);
-		registerToClientRemapper(Material.FIREWORK, new FireworkToPETagSpecificRemapper(), ProtocolVersion.MINECRAFT_PE);
+		FireworkToPETagSpecificRemapper pefireworks = new FireworkToPETagSpecificRemapper();
+		registerToClientRemapper(Material.FIREWORK_CHARGE, pefireworks, ProtocolVersion.MINECRAFT_PE);
+		registerToClientRemapper(Material.FIREWORK, pefireworks, ProtocolVersion.MINECRAFT_PE);
 		LeatherArmorToPESpecificRemapper peleatherarmor = new LeatherArmorToPESpecificRemapper();
 		registerToClientRemapper(Material.LEATHER_HELMET, peleatherarmor, ProtocolVersion.MINECRAFT_PE);
 		registerToClientRemapper(Material.LEATHER_CHESTPLATE, peleatherarmor, ProtocolVersion.MINECRAFT_PE);
@@ -278,6 +280,9 @@ public class ItemStackRemapper {
 		});
 		registerFromClientRemapper(Material.POTION, new PotionFromLegacyIdRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
 		registerFromClientRemapper(Material.MONSTER_EGG, new MonsterEggFromLegacyIdRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
+		BookPagesFromPESpecificRemapper frompebook = new BookPagesFromPESpecificRemapper();
+		registerFromClientRemapper(Material.WRITTEN_BOOK, frompebook, ProtocolVersion.MINECRAFT_PE);
+		registerFromClientRemapper(Material.BOOK_AND_QUILL, frompebook, ProtocolVersion.MINECRAFT_PE);
 	}
 
 	public static ItemStackWrapper remapToClient(ProtocolVersion version, String locale, int originalTypeId, ItemStackWrapper itemstack) {

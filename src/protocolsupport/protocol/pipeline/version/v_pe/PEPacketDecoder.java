@@ -11,6 +11,7 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_pe.ClientLogin;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Animation;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.BlockTileUpdate;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.BookEdit;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Chat;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.ClientSettings;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.CommandRequest;
@@ -52,6 +53,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		registry.register(NetworkState.PLAY, PEPacketIDs.ENTITY_EVENT, EntityStatus.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.INVENTORY_TRANSACTION, GodPacket.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.MAP_INFO_REQUEST, MapInfoRequest.class);
+		registry.register(NetworkState.PLAY, PEPacketIDs.EDIT_BOOK, BookEdit.class);
 	}
 
 	public PEPacketDecoder(Connection connection, NetworkDataCache cache) {

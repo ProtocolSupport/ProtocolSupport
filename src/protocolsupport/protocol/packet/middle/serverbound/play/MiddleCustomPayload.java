@@ -16,10 +16,14 @@ public abstract class MiddleCustomPayload extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
+		return RecyclableSingletonList.create(create(tag, data));
+	}
+	
+	public static ServerBoundPacketData create(String tag, byte[] data) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_CUSTOM_PAYLOAD);
 		StringSerializer.writeString(creator, ProtocolVersionsHelper.LATEST_PC, tag);
 		creator.writeBytes(data);
-		return RecyclableSingletonList.create(creator);
+		return creator;
 	}
 
 }

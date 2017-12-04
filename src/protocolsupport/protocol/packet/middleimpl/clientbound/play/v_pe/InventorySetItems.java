@@ -36,11 +36,11 @@ public class InventorySetItems extends MiddleInventorySetItems {
 				System.arraycopy(items, 36, peInventory, 	 0,  9);
 				System.arraycopy(items,  9, peInventory, 	 9, 27);
 				System.arraycopy(items, 45, peOffhand, 		 0,  1);
-				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_CRAFTING_RESULT, peInvGridResult));
-				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_CRAFTING_GRID_ADD, peInvGrid));
-				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_ARMOR_EQUIPMENT, peArmor));
-				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_INVENTORY, peInventory));
-				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_OFFHAND, peOffhand));
+				contentpackets.add(create(version, locale, PESource.POCKET_CRAFTING_RESULT, peInvGridResult));
+				contentpackets.add(create(version, locale, PESource.POCKET_CRAFTING_GRID_ADD, peInvGrid));
+				contentpackets.add(create(version, locale, PESource.POCKET_ARMOR_EQUIPMENT, peArmor));
+				contentpackets.add(create(version, locale, PESource.POCKET_INVENTORY, peInventory));
+				contentpackets.add(create(version, locale, PESource.POCKET_OFFHAND, peOffhand));
 				break;
 			}
 			case BREWING: {
@@ -51,8 +51,8 @@ public class InventorySetItems extends MiddleInventorySetItems {
 				System.arraycopy(items,  4, brewingSlots, 4,  1);
 				System.arraycopy(items, 32, peInventory,  0,  9);
 				System.arraycopy(items,  5, peInventory,  9, 27);
-				contentpackets.add(InventorySetItems.create(version, locale, windowId, brewingSlots));
-				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_INVENTORY, peInventory));
+				contentpackets.add(create(version, locale, windowId, brewingSlots));
+				contentpackets.add(create(version, locale, PESource.POCKET_INVENTORY, peInventory));
 				break;
 			}
 			case CRAFTING_TABLE: {
@@ -63,9 +63,9 @@ public class InventorySetItems extends MiddleInventorySetItems {
 				System.arraycopy(items,  1, craftingSlots,	 	0,  9);
 				System.arraycopy(items, 37, peInventory, 		0,  9);
 				System.arraycopy(items, 10, peInventory, 		9, 27);
-				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_CRAFTING_RESULT, craftingGridResult));
-				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_CRAFTING_GRID_ADD, craftingSlots));
-				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_INVENTORY, peInventory));
+				contentpackets.add(create(version, locale, PESource.POCKET_CRAFTING_RESULT, craftingGridResult));
+				contentpackets.add(create(version, locale, PESource.POCKET_CRAFTING_GRID_ADD, craftingSlots));
+				contentpackets.add(create(version, locale, PESource.POCKET_INVENTORY, peInventory));
 				break;
 			}
 			default: {
@@ -81,8 +81,8 @@ public class InventorySetItems extends MiddleInventorySetItems {
 				System.arraycopy(items,		 	  0, 	windowSlots, 0, wSlots);
 				System.arraycopy(items, wSlots + 27,	peInventory, 0,	 	 9);
 				System.arraycopy(items, 	 wSlots, 	peInventory, 9, 	27);
-				contentpackets.add(InventorySetItems.create(version, locale, windowId, windowSlots));
-				contentpackets.add(InventorySetItems.create(version, locale, PESource.POCKET_INVENTORY, peInventory));
+				contentpackets.add(create(version, locale, windowId, windowSlots));
+				contentpackets.add(create(version, locale, PESource.POCKET_INVENTORY, peInventory));
 				break;
 			}
 		}
