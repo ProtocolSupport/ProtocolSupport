@@ -39,7 +39,7 @@ gen.mkdirs();
 task updateLibs(type: Download) {
 	src([
 		'https://yivesmirror.com/files/spigot/spigot-1.12.2-R0.1-SNAPSHOT-b1408.jar',
-		'https://repo.glowstone.net/content/repositories/snapshots/net/glowstone/glowstone/2017.10.0-SNAPSHOT/glowstone-2017.10.0-20171007.064505-9.jar'
+		'https://repo.glowstone.net/repository/snapshots/net/glowstone/glowstone/2018.0.0-SNAPSHOT/glowstone-2018.0.0-20171205.014003-7.jar'
 	])
 	dest dllibs
 	onlyIfNewer true
