@@ -14,12 +14,15 @@ import java.util.Map;
 
 public class PaperEntityTrackerEntry extends SpigotEntityTrackerEntry {
 	private static Field TRACKED_PLAYER_MAP_FIELD;
+	private static Field TRACKER_ENTITY_FIELD;
 	private Map<EntityPlayer, Boolean> trackedPlayerMap;
 
 	static {
 		try {
 			TRACKED_PLAYER_MAP_FIELD = EntityTrackerEntry.class.getDeclaredField("trackedPlayerMap");
 			TRACKED_PLAYER_MAP_FIELD.setAccessible(true);
+			TRACKER_ENTITY_FIELD = Entity.class.getDeclaredField("tracker");
+			TRACKER_ENTITY_FIELD.setAccessible(true);
 		} catch (NoSuchFieldException e) {
 			e.printStackTrace();
 		}
@@ -54,11 +57,9 @@ public class PaperEntityTrackerEntry extends SpigotEntityTrackerEntry {
 	}
 
 	private static void setEntityTracker(Entity entity, EntityTrackerEntry tracker) {
-		Field field = ReflectionUtils.findUnderlying(entity.getClass(), "tracker");
 		try {
-			field.setAccessible(true);
-			field.set(entity, tracker);
-		} catch (Exception e) {
+			TRACKER_ENTITY_FIELD.set(entity, tracker);
+		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
 	}
