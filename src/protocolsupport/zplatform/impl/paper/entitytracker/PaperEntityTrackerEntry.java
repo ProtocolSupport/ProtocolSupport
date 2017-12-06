@@ -18,14 +18,8 @@ public class PaperEntityTrackerEntry extends SpigotEntityTrackerEntry {
 	private Map<EntityPlayer, Boolean> trackedPlayerMap;
 
 	static {
-		try {
-			TRACKED_PLAYER_MAP_FIELD = EntityTrackerEntry.class.getDeclaredField("trackedPlayerMap");
-			TRACKED_PLAYER_MAP_FIELD.setAccessible(true);
-			TRACKER_ENTITY_FIELD = Entity.class.getDeclaredField("tracker");
-			TRACKER_ENTITY_FIELD.setAccessible(true);
-		} catch (NoSuchFieldException e) {
-			e.printStackTrace();
-		}
+		TRACKED_PLAYER_MAP_FIELD = ReflectionUtils.getField(EntityTrackerEntry.class, "trackedPlayerMap");
+		TRACKER_ENTITY_FIELD = ReflectionUtils.getField(Entity.class, "tracker");
 	}
 
 	public PaperEntityTrackerEntry(Entity entity, int trackRange, int viewDistance, int updateInterval, boolean updateVelocity) {
