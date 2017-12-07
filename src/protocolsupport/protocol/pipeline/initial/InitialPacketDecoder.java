@@ -176,7 +176,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 	private void decodeEncapsulated(ChannelHandlerContext ctx) {
 		Channel channel = ctx.channel();
 		ByteBuf firstpacketdata = buffer.readSlice(VarNumberSerializer.readVarInt(buffer));
-		int firstbyte = firstpacketdata.readByte();
+		int firstbyte = firstpacketdata.readUnsignedByte();
 		switch (firstbyte) {
 			case 0xFE: { //legacy ping
 				if (firstpacketdata.readableBytes() == 0) {
