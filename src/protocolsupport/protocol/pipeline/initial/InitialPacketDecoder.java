@@ -70,8 +70,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_LEGACY, new protocolsupport.protocol.pipeline.version.v_legacy.PipeLineBuilder());
 	}
 
-	protected final ByteBuf receivedData = Unpooled.buffer();
-	protected final ReplayingDecoderBuffer replayingBuffer = new ReplayingDecoderBuffer(receivedData);
+	protected final ReplayingDecoderBuffer buffer = new ReplayingDecoderBuffer(Unpooled.buffer());
 
 	protected Future<?> responseTask;
 
@@ -103,8 +102,8 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		if (!buf.isReadable()) {
 			return;
 		}
-		receivedData.writeBytes(buf);
-		receivedData.readerIndex(0);
+		buffer.writeBytes(buf);
+		buffer.readerIndex(0);
 		decode(ctx);
 	}
 
@@ -112,11 +111,11 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
 	private void decode(ChannelHandlerContext ctx) {
 		cancelTask();
-		int firstbyte = replayingBuffer.readUnsignedByte();
+		int firstbyte = buffer.readUnsignedByte();
 		try {
 			if ((encapsulatedinfo == null) && (firstbyte == 0)) {
-				encapsulatedinfo = EncapsulatedProtocolUtils.readInfo(replayingBuffer);
-				receivedData.discardReadBytes();
+				encapsulatedinfo = EncapsulatedProtocolUtils.readInfo(buffer);
+				buffer.discardReadBytes();
 			}
 			if (encapsulatedinfo == null) {
 				decodeRaw(ctx, firstbyte);
@@ -131,46 +130,51 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		Channel channel = ctx.channel();
 		switch (firstbyte) {
 			case 0xFE: { //old ping or a part of varint length
-				if (replayingBuffer.readableBytes() == 0) {
+				if (buffer.readableBytes() == 0) {
 					//no more data received, it may be old protocol, or we just not received all data yet, so delay assuming as really old protocol for some time
 					scheduleTask(ctx, new SetProtocolTask(this, channel, ProtocolVersion.MINECRAFT_LEGACY), pingLegacyDelay, TimeUnit.MILLISECONDS);
-				} else if (replayingBuffer.readUnsignedByte() == 1) {
+				} else if (buffer.readUnsignedByte() == 1) {
 					//1.5-1.6 ping or maybe a finishing byte for 1.7+ packet length
-					if (replayingBuffer.readableBytes() == 0) {
+					if (buffer.readableBytes() == 0) {
 						//no more data received, it may be 1.5.2 or we just didn't receive 1.6 or 1.7+ data yet, so delay assuming as 1.5.2 for some time
 						scheduleTask(ctx, new SetProtocolTask(this, channel, ProtocolVersion.MINECRAFT_1_5_2), ping152delay, TimeUnit.MILLISECONDS);
 					} else if (
-						(replayingBuffer.readUnsignedByte() == 0xFA) &&
-						"MC|PingHost".equals(StringSerializer.readString(replayingBuffer, ProtocolVersion.MINECRAFT_1_6_4))
+						(buffer.readUnsignedByte() == 0xFA) &&
+						"MC|PingHost".equals(StringSerializer.readString(buffer, ProtocolVersion.MINECRAFT_1_6_4))
 					) {
 						//definitely 1.6
-						replayingBuffer.readUnsignedShort();
-						setProtocol(channel, ProtocolUtils.get16PingVersion(replayingBuffer.readUnsignedByte()));
+						buffer.readUnsignedShort();
+						setProtocol(channel, ProtocolUtils.get16PingVersion(buffer.readUnsignedByte()));
 					} else {
 						//it was 1.7+ handshake after all
 						//hope that there won't be any handshake packet with id 0xFA in future because it will be more difficult to support it
-						setProtocol(channel, attemptDecodeNewHandshake(replayingBuffer));
+						setProtocol(channel, attemptDecodeNewHandshake(buffer));
 					}
 				} else {
 					//1.7+ handshake
-					setProtocol(channel, attemptDecodeNewHandshake(replayingBuffer));
+					setProtocol(channel, attemptDecodeNewHandshake(buffer));
 				}
 				break;
 			}
 			case 0x02: { // <= 1.6.4 handshake
-				setProtocol(channel, ProtocolUtils.readOldHandshake(replayingBuffer));
+				setProtocol(channel, ProtocolUtils.readOldHandshake(buffer));
 				break;
 			}
 			default: { // >= 1.7 handshake
-				setProtocol(channel, attemptDecodeNewHandshake(replayingBuffer));
+				setProtocol(channel, attemptDecodeNewHandshake(buffer));
 				break;
 			}
 		}
 	}
 
+	private static ProtocolVersion attemptDecodeNewHandshake(ByteBuf bytebuf) {
+		bytebuf.readerIndex(0);
+		return ProtocolUtils.readNewHandshake(bytebuf.readSlice(VarNumberSerializer.readVarInt(bytebuf)));
+	}
+
 	private void decodeEncapsulated(ChannelHandlerContext ctx) {
 		Channel channel = ctx.channel();
-		ByteBuf firstpacketdata = replayingBuffer.readSlice(VarNumberSerializer.readVarInt(replayingBuffer));
+		ByteBuf firstpacketdata = buffer.readSlice(VarNumberSerializer.readVarInt(buffer));
 		int firstbyte = firstpacketdata.readByte();
 		switch (firstbyte) {
 			case 0xFE: { //legacy ping
@@ -227,11 +231,11 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 				connection.changeAddress(encapsulatedinfo.getAddress());
 			}
 		}
-		receivedData.readerIndex(0);
-		channel.pipeline().firstContext().fireChannelRead(receivedData);
+		buffer.readerIndex(0);
+		channel.pipeline().firstContext().fireChannelRead(buffer.unwrap());
 	}
 
-	protected ConnectionImpl prepare(Channel channel, ProtocolVersion version) {
+	protected static ConnectionImpl prepare(Channel channel, ProtocolVersion version) {
 		channel.pipeline().remove(ChannelHandlers.INITIAL_DECODER);
 		ConnectionImpl connection = ConnectionImpl.getFromChannel(channel);
 		if (ServerPlatform.get().getMiscUtils().isDebugging()) {
@@ -239,15 +243,11 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		}
 		connection.getNetworkManagerWrapper().setPacketListener(ServerPlatform.get().getWrapperFactory().createHandshakeListener(connection.getNetworkManagerWrapper()));
 		if (!ProtocolSupportAPI.isProtocolVersionEnabled(version)) {
+			//TODO: add a future and legacy protocol extractor for protocol type
 			version = version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4) ? ProtocolVersion.MINECRAFT_LEGACY : ProtocolVersion.MINECRAFT_FUTURE;
 		}
 		connection.setVersion(version);
 		return connection;
-	}
-
-	private static ProtocolVersion attemptDecodeNewHandshake(ByteBuf bytebuf) {
-		bytebuf.readerIndex(0);
-		return ProtocolUtils.readNewHandshake(bytebuf.readSlice(VarNumberSerializer.readVarInt(bytebuf)));
 	}
 
 }
