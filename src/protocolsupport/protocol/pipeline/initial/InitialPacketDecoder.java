@@ -20,9 +20,11 @@ import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.IPipeLineBuilder;
 import protocolsupport.protocol.pipeline.common.VarIntFrameDecoder;
 import protocolsupport.protocol.pipeline.common.VarIntFrameEncoder;
+import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.Utils;
+import protocolsupport.utils.netty.Decompressor;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
 import protocolsupport.zplatform.PlatformUtils;
@@ -99,7 +101,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 	}
 
 	@Override
-	public void channelRead0(ChannelHandlerContext ctx, ByteBuf buf)  {
+	public void channelRead0(ChannelHandlerContext ctx, ByteBuf buf) throws Exception {
 		if (!buf.isReadable()) {
 			return;
 		}
@@ -110,7 +112,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
 	private EncapsulatedProtocolInfo encapsulatedinfo = null;
 
-	private void decode(ChannelHandlerContext ctx) {
+	private void decode(ChannelHandlerContext ctx) throws Exception {
 		cancelTask();
 		int firstbyte = buffer.readUnsignedByte();
 		try {
@@ -173,9 +175,15 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		return ProtocolUtils.readNewHandshake(bytebuf.readSlice(VarNumberSerializer.readVarInt(bytebuf)));
 	}
 
-	private void decodeEncapsulated(ChannelHandlerContext ctx) {
+	private void decodeEncapsulated(ChannelHandlerContext ctx) throws Exception {
 		Channel channel = ctx.channel();
 		ByteBuf firstpacketdata = buffer.readSlice(VarNumberSerializer.readVarInt(buffer));
+		if (encapsulatedinfo.hasCompression()) {
+			int uncompressedlength = VarNumberSerializer.readVarInt(firstpacketdata);
+			if (uncompressedlength != 0) {
+				firstpacketdata = Unpooled.wrappedBuffer(Decompressor.decompressStatic(MiscSerializer.readAllBytes(firstpacketdata), uncompressedlength));	
+			}
+		}
 		int firstbyte = firstpacketdata.readUnsignedByte();
 		switch (firstbyte) {
 			case 0xFE: { //legacy ping
