@@ -114,18 +114,23 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		decode(ctx);
 	}
 
+	private boolean firstread = true;
 	private EncapsulatedProtocolInfo encapsulatedinfo = null;
 
 	private void decode(ChannelHandlerContext ctx) throws Exception {
 		cancelTask();
-		int firstbyte = buffer.readUnsignedByte();
-		try {
-			if ((encapsulatedinfo == null) && (firstbyte == 0)) {
+		if (firstread) {
+			int firstbyte = buffer.readUnsignedByte();
+			if (firstbyte == 0) {
 				encapsulatedinfo = EncapsulatedProtocolUtils.readInfo(buffer);
 				buffer.discardReadBytes();
 			}
+			buffer.readerIndex(0);
+			firstread = false;
+		}
+		try {
 			if (encapsulatedinfo == null) {
-				decodeRaw(ctx, firstbyte);
+				decodeRaw(ctx);
 			} else {
 				decodeEncapsulated(ctx);
 			}
@@ -133,8 +138,9 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		}
 	}
 
-	private void decodeRaw(ChannelHandlerContext ctx, int firstbyte) {
+	private void decodeRaw(ChannelHandlerContext ctx) {
 		Channel channel = ctx.channel();
+		int firstbyte = buffer.readUnsignedByte();
 		switch (firstbyte) {
 			case 0xFE: { //old ping or a part of varint length
 				if (buffer.readableBytes() == 0) {
