@@ -1,9 +1,7 @@
 package protocolsupport.zplatform.impl.pe;
 
 import java.net.InetSocketAddress;
-import java.text.MessageFormat;
 import java.util.List;
-import java.util.zip.Inflater;
 
 import org.bukkit.Bukkit;
 
@@ -20,17 +18,13 @@ import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.ByteToMessageCodec;
-import io.netty.handler.codec.DecoderException;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.IdleStateHandler;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.pipeline.common.VarIntFrameDecoder;
 import protocolsupport.protocol.pipeline.common.VarIntFrameEncoder;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.netty.ChannelInitializer;
-import protocolsupport.utils.netty.Compressor;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.impl.encapsulated.EncapsulatedProtocolInfo;
 import protocolsupport.zplatform.impl.encapsulated.EncapsulatedProtocolUtils;
@@ -60,7 +54,6 @@ public class PEProxyNetworkManager extends SimpleChannelInboundHandler<ByteBuf> 
 	//TODO: rewrite this
 	private static Channel connectToServer(Channel peclientchannel, ByteBuf loginpacket) {
 		InetSocketAddress remote = (InetSocketAddress) peclientchannel.remoteAddress();
-		int protocolversion = getProtocolVersion(loginpacket);
 		EventLoopGroup loopgroup = ServerPlatform.get().getMiscUtils().getServerEventLoop();
 		Class<? extends Channel> channel = loopgroup instanceof EpollEventLoopGroup ? EpollSocketChannel.class : NioSocketChannel.class;
 		loginpacket.readerIndex(0);
@@ -79,7 +72,7 @@ public class PEProxyNetworkManager extends SimpleChannelInboundHandler<ByteBuf> 
 					@Override
 					public void channelActive(ChannelHandlerContext ctx) throws Exception {
 						channel.pipeline().remove(this);
-						ctx.writeAndFlush(createHandshake(remote, protocolversion)).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
+						ctx.writeAndFlush(createHandshake(remote)).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
 						super.channelActive(ctx);
 					}
 				})
@@ -114,51 +107,51 @@ public class PEProxyNetworkManager extends SimpleChannelInboundHandler<ByteBuf> 
 						prepender.prepend(ctx, input, output);
 					}
 				})
-				.addLast("compression", new ByteToMessageCodec<ByteBuf>() {
-					private final int maxPacketLength = (int) Math.pow(2, 7 * 3);
-					private final Compressor compressor = Compressor.create();
-					private final int threshold = ServerPlatform.get().getMiscUtils().getCompressionThreshold();
-					private final Inflater inflater = new Inflater();
-					@Override
-					public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-						super.channelInactive(ctx);
-						compressor.recycle();
-						inflater.end();
-					}
-					@Override
-					protected void encode(ChannelHandlerContext ctx, ByteBuf input, ByteBuf output) throws Exception {
-						int readable = input.readableBytes();
-						if (readable == 0) {
-							return;
-						}
-						if (readable < threshold) {
-							VarNumberSerializer.writeVarInt(output, 0);
-							output.writeBytes(input);
-						} else {
-							VarNumberSerializer.writeVarInt(output, readable);
-							output.writeBytes(compressor.compress(MiscSerializer.readAllBytes(input)));
-						}
-					}
-					@Override
-					protected void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
-						if (!input.isReadable()) {
-							return;
-						}
-						int uncompressedlength = VarNumberSerializer.readVarInt(input);
-						if (uncompressedlength == 0) {
-							list.add(input.readBytes(input.readableBytes()));
-						} else {
-							if (uncompressedlength > maxPacketLength) {
-								throw new DecoderException(MessageFormat.format("Badly compressed packet - size of {0} is larger than protocol maximum of {1}", uncompressedlength, maxPacketLength));
-							}
-							inflater.setInput(MiscSerializer.readAllBytes(input));
-							byte[] uncompressed = new byte[uncompressedlength];
-							inflater.inflate(uncompressed);
-							list.add(Unpooled.wrappedBuffer(uncompressed));
-							inflater.reset();
-						}
-					}
-				})
+//				.addLast("compression", new ByteToMessageCodec<ByteBuf>() {
+//					private final int maxPacketLength = (int) Math.pow(2, 7 * 3);
+//					private final Compressor compressor = Compressor.create();
+//					private final int threshold = ServerPlatform.get().getMiscUtils().getCompressionThreshold();
+//					private final Inflater inflater = new Inflater();
+//					@Override
+//					public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+//						super.channelInactive(ctx);
+//						compressor.recycle();
+//						inflater.end();
+//					}
+//					@Override
+//					protected void encode(ChannelHandlerContext ctx, ByteBuf input, ByteBuf output) throws Exception {
+//						int readable = input.readableBytes();
+//						if (readable == 0) {
+//							return;
+//						}
+//						if (readable < threshold) {
+//							VarNumberSerializer.writeVarInt(output, 0);
+//							output.writeBytes(input);
+//						} else {
+//							VarNumberSerializer.writeVarInt(output, readable);
+//							output.writeBytes(compressor.compress(MiscSerializer.readAllBytes(input)));
+//						}
+//					}
+//					@Override
+//					protected void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
+//						if (!input.isReadable()) {
+//							return;
+//						}
+//						int uncompressedlength = VarNumberSerializer.readVarInt(input);
+//						if (uncompressedlength == 0) {
+//							list.add(input.readBytes(input.readableBytes()));
+//						} else {
+//							if (uncompressedlength > maxPacketLength) {
+//								throw new DecoderException(MessageFormat.format("Badly compressed packet - size of {0} is larger than protocol maximum of {1}", uncompressedlength, maxPacketLength));
+//							}
+//							inflater.setInput(MiscSerializer.readAllBytes(input));
+//							byte[] uncompressed = new byte[uncompressedlength];
+//							inflater.inflate(uncompressed);
+//							list.add(Unpooled.wrappedBuffer(uncompressed));
+//							inflater.reset();
+//						}
+//					}
+//				})
 				.addLast("handler", new SimpleChannelInboundHandler<ByteBuf>() {
 					@Override
 					public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -188,16 +181,11 @@ public class PEProxyNetworkManager extends SimpleChannelInboundHandler<ByteBuf> 
 		.channel();
 	}
 
-	private static ByteBuf createHandshake(InetSocketAddress remote, int protocolversion) {
+	private static ByteBuf createHandshake(InetSocketAddress remote) {
 		ByteBuf data = Unpooled.buffer();
 		data.writeByte(0);
-		EncapsulatedProtocolUtils.writeInfo(data, new EncapsulatedProtocolInfo(remote, true, ProtocolVersion.MINECRAFT_PE));
+		EncapsulatedProtocolUtils.writeInfo(data, new EncapsulatedProtocolInfo(remote, false));
 		return data;
-	}
-
-	private static int getProtocolVersion(ByteBuf loginpacket) {
-		loginpacket.skipBytes(3); //packet id and headers
-		return loginpacket.readInt();
 	}
 
 }

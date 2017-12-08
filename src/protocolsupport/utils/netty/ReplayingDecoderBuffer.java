@@ -1,5 +1,6 @@
 package protocolsupport.utils.netty;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
@@ -67,7 +68,7 @@ public final class ReplayingDecoderBuffer extends ByteBuf {
 
 	@Override
 	public boolean isDirect() {
-		return this.buffer.isDirect();
+		return false;
 	}
 
 	@Override
@@ -97,7 +98,8 @@ public final class ReplayingDecoderBuffer extends ByteBuf {
 
 	@Override
 	public ByteBuf clear() {
-		throw reject();
+		buffer.clear();
+		return this;
 	}
 
 	@Override
@@ -123,17 +125,19 @@ public final class ReplayingDecoderBuffer extends ByteBuf {
 
 	@Override
 	public ByteBuf discardReadBytes() {
-		throw reject();
+		this.buffer.discardReadBytes();
+		return this;
 	}
 
 	@Override
 	public ByteBuf ensureWritable(final int n) {
-		throw reject();
+		buffer.ensureWritable(n);
+		return this;
 	}
 
 	@Override
 	public int ensureWritable(final int n, final boolean b) {
-		throw reject();
+		return this.buffer.ensureWritable(n, b);
 	}
 
 	@Override
@@ -823,7 +827,7 @@ public final class ReplayingDecoderBuffer extends ByteBuf {
 
 	@Override
 	public int nioBufferCount() {
-		return this.buffer.nioBufferCount();
+		throw reject();
 	}
 
 	@Override
@@ -872,112 +876,157 @@ public final class ReplayingDecoderBuffer extends ByteBuf {
 
 	@Override
 	public boolean isWritable() {
-		return false;
+		return buffer.isWritable();
 	}
 
 	@Override
 	public boolean isWritable(final int n) {
-		return false;
+		return buffer.isWritable(n);
 	}
 
 	@Override
 	public int writableBytes() {
-		return 0;
+		return buffer.writableBytes();
 	}
 
 	@Override
 	public int maxWritableBytes() {
-		return 0;
+		return buffer.maxWritableBytes();
 	}
 
 	@Override
 	public ByteBuf writeBoolean(final boolean b) {
-		throw reject();
+		buffer.writeBoolean(b);
+		return this;
 	}
 
 	@Override
 	public ByteBuf writeByte(final int n) {
-		throw reject();
+		buffer.writeByte(n);
+		return this;
 	}
 
 	@Override
 	public ByteBuf writeBytes(final byte[] array, final int n, final int n2) {
-		throw reject();
+		buffer.writeBytes(array, n, n2);
+		return this;
 	}
 
 	@Override
 	public ByteBuf writeBytes(final byte[] array) {
-		throw reject();
+		buffer.writeBytes(array);
+		return this;
 	}
 
 	@Override
 	public ByteBuf writeBytes(final ByteBuffer byteBuffer) {
-		throw reject();
+		buffer.writeBytes(byteBuffer);
+		return this;
 	}
 
 	@Override
 	public ByteBuf writeBytes(final ByteBuf byteBuf, final int n, final int n2) {
-		throw reject();
+		buffer.writeBytes(byteBuf, n, n2);
+		return this;
 	}
 
 	@Override
 	public ByteBuf writeBytes(final ByteBuf byteBuf, final int n) {
-		throw reject();
+		buffer.writeBytes(byteBuf, n);
+		return this;
 	}
 
 	@Override
 	public ByteBuf writeBytes(final ByteBuf byteBuf) {
-		throw reject();
+		buffer.writeBytes(byteBuf);
+		return this;
 	}
 
 	@Override
-	public int writeBytes(final InputStream inputStream, final int n) {
-		throw reject();
+	public int writeBytes(final InputStream inputStream, final int n) throws IOException {
+		return buffer.writeBytes(inputStream, n);
 	}
 
 	@Override
-	public int writeBytes(final ScatteringByteChannel scatteringByteChannel, final int n) {
-		throw reject();
+	public int writeBytes(final ScatteringByteChannel scatteringByteChannel, final int n) throws IOException {
+		return buffer.writeBytes(scatteringByteChannel, n);
 	}
 
 	@Override
-	public int writeBytes(final FileChannel fileChannel, final long n, final int n2) {
-		throw reject();
+	public int writeBytes(final FileChannel fileChannel, final long n, final int n2) throws IOException {
+		return buffer.writeBytes(fileChannel, n, n2);
 	}
 
 	@Override
 	public ByteBuf writeInt(final int n) {
-		throw reject();
+		buffer.writeInt(n);
+		return this;
 	}
 
 	@Override
 	public ByteBuf writeIntLE(final int n) {
-		throw reject();
+		buffer.writeIntLE(n);
+		return this;
 	}
 
 	@Override
 	public ByteBuf writeLong(final long n) {
-		throw reject();
+		buffer.writeLong(n);
+		return this;
 	}
 
 	@Override
 	public ByteBuf writeLongLE(final long n) {
-		throw reject();
+		buffer.writeLongLE(n);
+		return this;
 	}
 
 	@Override
 	public ByteBuf writeMedium(final int n) {
-		throw reject();
+		buffer.writeMedium(n);
+		return this;
 	}
 
 	@Override
 	public ByteBuf writeMediumLE(final int n) {
-		throw reject();
+		buffer.writeMedium(n);
+		return this;
 	}
 
 	@Override
 	public ByteBuf writeZero(final int n) {
-		throw reject();
+		buffer.writeZero(n);
+		return this;
+	}
+
+	@Override
+	public ByteBuf writeShort(final int n) {
+		buffer.writeShort(n);
+		return this;
+	}
+
+	@Override
+	public ByteBuf writeShortLE(final int n) {
+		buffer.writeShortLE(n);
+		return this;
+	}
+
+	@Override
+	public ByteBuf writeChar(final int n) {
+		buffer.writeChar(n);
+		return this;
+	}
+
+	@Override
+	public ByteBuf writeFloat(final float n) {
+		buffer.writeFloat(n);
+		return this;
+	}
+
+	@Override
+	public ByteBuf writeDouble(final double n) {
+		buffer.writeDouble(n);
+		return this;
 	}
 
 	@Override
@@ -990,30 +1039,6 @@ public final class ReplayingDecoderBuffer extends ByteBuf {
 		throw reject();
 	}
 
-	@Override
-	public ByteBuf writeShort(final int n) {
-		throw reject();
-	}
-
-	@Override
-	public ByteBuf writeShortLE(final int n) {
-		throw reject();
-	}
-
-	@Override
-	public ByteBuf writeChar(final int n) {
-		throw reject();
-	}
-
-	@Override
-	public ByteBuf writeFloat(final float n) {
-		throw reject();
-	}
-
-	@Override
-	public ByteBuf writeDouble(final double n) {
-		throw reject();
-	}
 
 	@Override
 	public int setCharSequence(final int n, final CharSequence charSequence, final Charset charset) {
@@ -1039,7 +1064,8 @@ public final class ReplayingDecoderBuffer extends ByteBuf {
 
 	@Override
 	public ByteBuf discardSomeReadBytes() {
-		throw reject();
+		buffer.discardSomeReadBytes();
+		return this;
 	}
 
 	@Override
@@ -1081,7 +1107,7 @@ public final class ReplayingDecoderBuffer extends ByteBuf {
 
 	@Override
 	public ByteBuf unwrap() {
-		throw reject();
+		return buffer;
 	}
 
 	private static UnsupportedOperationException reject() {

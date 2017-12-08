@@ -18,7 +18,6 @@ import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
-import protocolsupport.protocol.typeremapper.chunk.BlockStorageReader;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.IdSkipper;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
@@ -113,7 +112,6 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(IdRemapper.class.getName());
 			Class.forName(ItemStackRemapper.class.getName());
 			Class.forName(TileNBTRemapper.class.getName());
-			Class.forName(BlockStorageReader.class.getName());
 			Class.forName(MapColorRemapper.class.getName());
 			Class.forName(LegacyPotion.class.getName());
 			Class.forName(LegacyEntityType.class.getName());
