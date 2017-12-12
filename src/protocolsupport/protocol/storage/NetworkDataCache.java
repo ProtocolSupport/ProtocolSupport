@@ -99,10 +99,8 @@ public class NetworkDataCache {
 		if (loosenUp) {
 			pocketPositionLeniency = 3;
 			leniencyMod = System.currentTimeMillis();
-		} else if ((pocketPositionLeniency != 0.7) && (System.currentTimeMillis() - leniencyMod > leniencyMillis)) {
-			pocketPositionLeniency = 0.7;
 		} else if ((pocketPositionLeniency != 0.5) && ((System.currentTimeMillis() - leniencyMod) > leniencyMillis)) {
-			pocketPositionLeniency = 0.7;
+			pocketPositionLeniency = 0.5;
 		}
 	}
 
