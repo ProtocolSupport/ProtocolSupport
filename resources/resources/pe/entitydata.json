@@ -10,6 +10,12 @@
 			"z": -0.35
 		}
 	},
+	"EXP_ORB" : {
+		"BoundingBox": {
+			"width": 0.15,
+			"height": 0.15
+		}
+	},
 	"COMMON_HORSE": {
 		"BoundingBox": {
 			"width": 1.4,
@@ -579,6 +585,7 @@
 			"z": 0.0
 		}
 	},
+	"AREA_EFFECT_CLOUD": { },
 	"SHULKER_BULLET": {
 		"BoundingBox": {
 			"width": 0.625,
