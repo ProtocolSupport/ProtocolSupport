@@ -27,14 +27,18 @@ public class PEDecompressor extends MessageToMessageDecoder<ByteBuf> {
 
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf buf, List<Object> list) throws Exception {
-		inflater.setInput(MiscSerializer.readAllBytes(buf));
-		int decompressedlength = inflater.inflate(decompressionbuffer);
-		if (!inflater.finished()) {
-			throw new DecoderException(MessageFormat.format("Badly compressed packet - size is larger than protocol maximum of {0}", maxPacketLength));
-		}
-		ByteBuf uncompresseddata = Unpooled.wrappedBuffer(decompressionbuffer, 0, decompressedlength);
-		while (uncompresseddata.isReadable()) {
-			list.add(Unpooled.wrappedBuffer(MiscSerializer.readBytes(uncompresseddata, VarNumberSerializer.readVarInt(uncompresseddata))));
+		try {
+			inflater.setInput(MiscSerializer.readAllBytes(buf));
+			int decompressedlength = inflater.inflate(decompressionbuffer);
+			if (!inflater.finished()) {
+				throw new DecoderException(MessageFormat.format("Badly compressed packet - size is larger than protocol maximum of {0}", maxPacketLength));
+			}
+			ByteBuf uncompresseddata = Unpooled.wrappedBuffer(decompressionbuffer, 0, decompressedlength);
+			while (uncompresseddata.isReadable()) {
+				list.add(Unpooled.wrappedBuffer(MiscSerializer.readBytes(uncompresseddata, VarNumberSerializer.readVarInt(uncompresseddata))));
+			}
+		} finally {
+			inflater.reset();
 		}
 	}
 
