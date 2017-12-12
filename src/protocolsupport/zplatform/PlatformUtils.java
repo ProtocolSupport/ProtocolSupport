@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
+import javax.crypto.SecretKey;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -15,8 +17,6 @@ import io.netty.channel.EventLoopGroup;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-
-import javax.crypto.SecretKey;
 
 public interface PlatformUtils {
 

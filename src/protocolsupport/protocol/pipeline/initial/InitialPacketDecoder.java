@@ -9,18 +9,22 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.codec.DecoderException;
 import io.netty.util.concurrent.Future;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolSupportAPI;
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.IPipeLineBuilder;
 import protocolsupport.protocol.pipeline.common.VarIntFrameDecoder;
 import protocolsupport.protocol.pipeline.common.VarIntFrameEncoder;
+import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.Utils;
+import protocolsupport.utils.netty.Decompressor;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
 import protocolsupport.zplatform.PlatformUtils;
@@ -67,11 +71,13 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_5_1, builder15);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_4_7, new protocolsupport.protocol.pipeline.version.v_1_4.PipeLineBuilder());
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_LEGACY, new protocolsupport.protocol.pipeline.version.v_legacy.PipeLineBuilder());
-		pipelineBuilders.put(ProtocolVersion.MINECRAFT_PE, new protocolsupport.protocol.pipeline.version.v_pe.PipeLineBuilder());
+		IPipeLineBuilder builderpe = new protocolsupport.protocol.pipeline.version.v_pe.PipeLineBuilder();
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_PE_FUTURE, builderpe);
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_PE, builderpe);
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_PE_LEGACY, builderpe);
 	}
 
-	protected final ByteBuf receivedData = Unpooled.buffer();
-	protected final ReplayingDecoderBuffer replayingBuffer = new ReplayingDecoderBuffer(receivedData);
+	protected final ReplayingDecoderBuffer buffer = new ReplayingDecoderBuffer(Unpooled.buffer());
 
 	protected Future<?> responseTask;
 
@@ -99,86 +105,160 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 	}
 
 	@Override
-	public void channelRead0(ChannelHandlerContext ctx, ByteBuf buf)  {
+	public void channelRead0(ChannelHandlerContext ctx, ByteBuf buf) throws Exception {
 		if (!buf.isReadable()) {
 			return;
 		}
-		receivedData.writeBytes(buf);
-		receivedData.readerIndex(0);
+		buffer.writeBytes(buf);
+		buffer.readerIndex(0);
 		decode(ctx);
 	}
 
-	private void decode(ChannelHandlerContext ctx) {
+	private boolean firstread = true;
+	private EncapsulatedProtocolInfo encapsulatedinfo = null;
+
+	private void decode(ChannelHandlerContext ctx) throws Exception {
 		cancelTask();
-		Channel channel = ctx.channel();
-		int firstbyte = replayingBuffer.readUnsignedByte();
+		if (firstread) {
+			int firstbyte = buffer.readUnsignedByte();
+			if (firstbyte == 0) {
+				encapsulatedinfo = EncapsulatedProtocolUtils.readInfo(buffer);
+				buffer.discardReadBytes();
+			}
+			buffer.readerIndex(0);
+			firstread = false;
+		}
 		try {
-			switch (firstbyte) {
-				case 0x00: { // encapsulated protocol handsake
-					setEncapsulatedProtocol(channel, EncapsulatedProtocolUtils.readInfo(replayingBuffer));
-					break;
-				}
-				case 0xFE: { //old ping or a part of varint length
-					if (replayingBuffer.readableBytes() == 0) {
-						//no more data received, it may be old protocol, or we just not received all data yet, so delay assuming as really old protocol for some time
-						scheduleTask(ctx, new SetProtocolTask(this, channel, ProtocolVersion.MINECRAFT_LEGACY), pingLegacyDelay, TimeUnit.MILLISECONDS);
-					} else if (replayingBuffer.readUnsignedByte() == 1) {
-						//1.5-1.6 ping or maybe a finishing byte for 1.7+ packet length
-						if (replayingBuffer.readableBytes() == 0) {
-							//no more data received, it may be 1.5.2 or we just didn't receive 1.6 or 1.7+ data yet, so delay assuming as 1.5.2 for some time
-							scheduleTask(ctx, new SetProtocolTask(this, channel, ProtocolVersion.MINECRAFT_1_5_2), ping152delay, TimeUnit.MILLISECONDS);
-						} else if (
-							(replayingBuffer.readUnsignedByte() == 0xFA) &&
-							"MC|PingHost".equals(StringSerializer.readString(replayingBuffer, ProtocolVersion.MINECRAFT_1_6_4))
-						) {
-							//definitely 1.6
-							replayingBuffer.readUnsignedShort();
-							setNativeProtocol(channel, ProtocolUtils.get16PingVersion(replayingBuffer.readUnsignedByte()));
-						} else {
-							//it was 1.7+ handshake after all
-							//hope that there won't be any handshake packet with id 0xFA in future because it will be more difficult to support it
-							setNativeProtocol(channel, attemptDecodeNewHandshake(replayingBuffer));
-						}
-					} else {
-						//1.7+ handshake
-						setNativeProtocol(channel, attemptDecodeNewHandshake(replayingBuffer));
-					}
-					break;
-				}
-				case 0x02: { // <= 1.6.4 handshake
-					setNativeProtocol(channel, ProtocolUtils.readOldHandshake(replayingBuffer));
-					break;
-				}
-				default: { // >= 1.7 handshake
-					setNativeProtocol(channel, attemptDecodeNewHandshake(replayingBuffer));
-					break;
-				}
+			if (encapsulatedinfo == null) {
+				decodeRaw(ctx);
+			} else {
+				decodeEncapsulated(ctx);
 			}
 		} catch (EOFSignal ex) {
 		}
 	}
 
-	private void setEncapsulatedProtocol(Channel channel, EncapsulatedProtocolInfo info) {
-		ConnectionImpl connection = prepare(channel, info.getVersion());
-		PlatformUtils putils = ServerPlatform.get().getMiscUtils();
-		pipelineBuilders.get(connection.getVersion()).buildCodec(channel, connection);
-		putils.setFraming(channel.pipeline(), new VarIntFrameDecoder(), new VarIntFrameEncoder());
-		if (info.hasCompression()) {
-			putils.enableCompression(channel.pipeline(), putils.getCompressionThreshold());
+	private void decodeRaw(ChannelHandlerContext ctx) {
+		Channel channel = ctx.channel();
+		int firstbyte = buffer.readUnsignedByte();
+		switch (firstbyte) {
+			case 0xFE: { //old ping or a part of varint length
+				if (buffer.readableBytes() == 0) {
+					//no more data received, it may be old protocol, or we just not received all data yet, so delay assuming as really old protocol for some time
+					scheduleTask(ctx, new SetProtocolTask(this, channel, ProtocolVersion.MINECRAFT_LEGACY), pingLegacyDelay, TimeUnit.MILLISECONDS);
+				} else if (buffer.readUnsignedByte() == 1) {
+					//1.5-1.6 ping or maybe a finishing byte for 1.7+ packet length
+					if (buffer.readableBytes() == 0) {
+						//no more data received, it may be 1.5.2 or we just didn't receive 1.6 or 1.7+ data yet, so delay assuming as 1.5.2 for some time
+						scheduleTask(ctx, new SetProtocolTask(this, channel, ProtocolVersion.MINECRAFT_1_5_2), ping152delay, TimeUnit.MILLISECONDS);
+					} else if (
+						(buffer.readUnsignedByte() == 0xFA) &&
+						"MC|PingHost".equals(StringSerializer.readString(buffer, ProtocolVersion.MINECRAFT_1_6_4))
+					) {
+						//definitely 1.6
+						buffer.readUnsignedShort();
+						setProtocol(channel, ProtocolUtils.get16PingVersion(buffer.readUnsignedByte()));
+					} else {
+						//it was 1.7+ handshake after all
+						//hope that there won't be any handshake packet with id 0xFA in future because it will be more difficult to support it
+						setProtocol(channel, attemptDecodeNewHandshake(buffer));
+					}
+				} else {
+					//1.7+ handshake
+					setProtocol(channel, attemptDecodeNewHandshake(buffer));
+				}
+				break;
+			}
+			case 0x02: { // <= 1.6.4 handshake
+				setProtocol(channel, ProtocolUtils.readOldHandshake(buffer));
+				break;
+			}
+			default: { // >= 1.7 handshake
+				setProtocol(channel, attemptDecodeNewHandshake(buffer));
+				break;
+			}
 		}
-		channel.pipeline().firstContext().fireChannelRead(receivedData);
 	}
 
-	protected void setNativeProtocol(Channel channel, ProtocolVersion version) {
+	private static ProtocolVersion attemptDecodeNewHandshake(ByteBuf bytebuf) {
+		bytebuf.readerIndex(0);
+		return ProtocolUtils.readNewHandshake(bytebuf.readSlice(VarNumberSerializer.readVarInt(bytebuf)));
+	}
+
+	private void decodeEncapsulated(ChannelHandlerContext ctx) throws Exception {
+		Channel channel = ctx.channel();
+		ByteBuf firstpacketdata = buffer.readSlice(VarNumberSerializer.readVarInt(buffer));
+		if (encapsulatedinfo.hasCompression()) {
+			int uncompressedlength = VarNumberSerializer.readVarInt(firstpacketdata);
+			if (uncompressedlength != 0) {
+				firstpacketdata = Unpooled.wrappedBuffer(Decompressor.decompressStatic(MiscSerializer.readAllBytes(firstpacketdata), uncompressedlength));
+			}
+		}
+		int firstbyte = firstpacketdata.readUnsignedByte();
+		switch (firstbyte) {
+			case 0xFE: { //legacy ping
+				if (firstpacketdata.readableBytes() == 0) {
+					//< 1.5.2
+					setProtocol(channel, ProtocolVersion.MINECRAFT_LEGACY);
+				} else if (firstpacketdata.readUnsignedByte() == 1) {
+					//1.5 or 1.6 ping
+					if (firstpacketdata.readableBytes() == 0) {
+						//1.5.*, we just assume 1.5.2
+						setProtocol(channel, ProtocolVersion.MINECRAFT_1_5_2);
+					} else if (
+						(firstpacketdata.readUnsignedByte() == 0xFA) &&
+						"MC|PingHost".equals(StringSerializer.readString(firstpacketdata, ProtocolVersion.MINECRAFT_1_6_4))
+					) {
+						//1.6.*
+						firstpacketdata.readUnsignedShort();
+						setProtocol(channel, ProtocolUtils.get16PingVersion(firstpacketdata.readUnsignedByte()));
+					} else {
+						throw new DecoderException("Unable to detect incoming protocol");
+					}
+				} else {
+					throw new DecoderException("Unable to detect incoming protocol");
+				}
+				break;
+			}
+			case 0x02: { // <= 1.6.4 handshake
+				setProtocol(channel, ProtocolUtils.readOldHandshake(firstpacketdata));
+				break;
+			}
+			case 0x00: { // >= 1.7 handshake
+				setProtocol(channel, ProtocolUtils.readNewHandshake(firstpacketdata));
+				break;
+			}
+			case 0x01: { // pe handshake
+				setProtocol(channel, ProtocolUtils.readPEHandshake(firstpacketdata));
+				break;
+			}
+			default: {
+				throw new DecoderException("Unable to detect incoming protocol");
+			}
+		}
+	}
+
+	protected void setProtocol(Channel channel, ProtocolVersion version) {
 		ConnectionImpl connection = prepare(channel, version);
 		IPipeLineBuilder builder = pipelineBuilders.get(connection.getVersion());
 		builder.buildCodec(channel, connection);
-		builder.buildPipeLine(channel, connection);
-		receivedData.readerIndex(0);
-		channel.pipeline().firstContext().fireChannelRead(receivedData);
+		if (encapsulatedinfo == null) {
+			builder.buildPipeLine(channel, connection);
+		} else {
+			PlatformUtils putils = ServerPlatform.get().getMiscUtils();
+			putils.setFraming(channel.pipeline(), new VarIntFrameDecoder(), new VarIntFrameEncoder());
+			if (encapsulatedinfo.hasCompression()) {
+				putils.enableCompression(channel.pipeline(), putils.getCompressionThreshold());
+			}
+			if ((encapsulatedinfo.getAddress() != null) && connection.getRawAddress().getAddress().isLoopbackAddress()) {
+				connection.changeAddress(encapsulatedinfo.getAddress());
+			}
+		}
+		buffer.readerIndex(0);
+		channel.pipeline().firstContext().fireChannelRead(buffer.unwrap());
 	}
 
-	protected ConnectionImpl prepare(Channel channel, ProtocolVersion version) {
+	protected static ConnectionImpl prepare(Channel channel, ProtocolVersion version) {
 		channel.pipeline().remove(ChannelHandlers.INITIAL_DECODER);
 		ConnectionImpl connection = ConnectionImpl.getFromChannel(channel);
 		if (ServerPlatform.get().getMiscUtils().isDebugging()) {
@@ -186,15 +266,16 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		}
 		connection.getNetworkManagerWrapper().setPacketListener(ServerPlatform.get().getWrapperFactory().createHandshakeListener(connection.getNetworkManagerWrapper()));
 		if (!ProtocolSupportAPI.isProtocolVersionEnabled(version)) {
-			version = version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4) ? ProtocolVersion.MINECRAFT_LEGACY : ProtocolVersion.MINECRAFT_FUTURE;
+			if (version.getProtocolType() == ProtocolType.PC) {
+				version = version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4) ? ProtocolVersion.MINECRAFT_LEGACY : ProtocolVersion.MINECRAFT_FUTURE;
+			} else if (version.getProtocolType() == ProtocolType.PE) {
+				version = version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE) ? ProtocolVersion.MINECRAFT_PE_FUTURE : ProtocolVersion.MINECRAFT_PE_LEGACY;
+			} else {
+				throw new IllegalArgumentException(MessageFormat.format("Unable to get legacy or future version for disabled protocol version {0}", version));
+			}
 		}
 		connection.setVersion(version);
 		return connection;
-	}
-
-	private static ProtocolVersion attemptDecodeNewHandshake(ByteBuf bytebuf) {
-		bytebuf.readerIndex(0);
-		return ProtocolUtils.readNewHandshake(bytebuf.readSlice(VarNumberSerializer.readVarInt(bytebuf)));
 	}
 
 }

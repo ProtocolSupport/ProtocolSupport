@@ -110,7 +110,10 @@ public enum SpecificRemapper {
 					remapped.put(54, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getWidth() * entitySize));
 					remapped.put(55, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getHeight() * entitySize));
 				}
-				
+
+				// = PE Interaction =
+				remapped.put(40, new DataWatcherObjectString("Interact")); //Different texts? I ain't bothered.
+
 				// = PE Size =
 				remapped.put(39, new DataWatcherObjectFloatLe(entitySize));
 				
@@ -228,7 +231,7 @@ public enum SpecificRemapper {
 					entity.getDataCache().setSizeModifier((byte) (boolWatcher.getValue() ? 0.5 : 1));
 				});
 				//Send scale -> avoid big mobs with floating heads.
-				remapped.put(39, new DataWatcherObjectFloatLe(entity.getDataCache().getSizeModifier() * PEMetaProviderSPI.getProvider().getEntitySize(entity))); 
+				remapped.put(39, new DataWatcherObjectFloatLe(entity.getDataCache().getSizeModifier() * PEMetaProviderSPI.getProvider().getEntitySize(entity)));
 			}}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Ageable.AGE, 12) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_2),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Ageable.AGE, 11) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_2),

@@ -19,8 +19,7 @@ public class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
 		super(connection, storage);
 	}
 
-	private final ByteBuf buffer = Unpooled.buffer();
-	private final ReplayingDecoderBuffer cumulation = new ReplayingDecoderBuffer(buffer);
+	private final ReplayingDecoderBuffer buffer = new ReplayingDecoderBuffer(Unpooled.buffer());
 	private final LegacyAnimatePacketReorderer animateReorderer = new LegacyAnimatePacketReorderer();
 
 	@Override
@@ -30,22 +29,22 @@ public class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
 		}
 		buffer.writeBytes(input);
 		while (buffer.isReadable() && decode0(ctx.channel(), list)) {}
-		buffer.discardSomeReadBytes();
+		buffer.discardReadBytes();
 	}
 
 	private boolean decode0(Channel channel, List<Object> list) throws Exception {
-		cumulation.markReaderIndex();
+		buffer.markReaderIndex();
 		ServerBoundMiddlePacket packetTransformer = null;
 		try {
-			packetTransformer = registry.getTransformer(connection.getNetworkState(), cumulation.readUnsignedByte());
-			packetTransformer.readFromClientData(cumulation);
+			packetTransformer = registry.getTransformer(connection.getNetworkState(), buffer.readUnsignedByte());
+			packetTransformer.readFromClientData(buffer);
 			addPackets(animateReorderer.orderPackets(packetTransformer.toNative()), list);
 			return true;
 		} catch (EOFSignal ex) {
-			cumulation.resetReaderIndex();
+			buffer.resetReaderIndex();
 			return false;
 		} catch (Exception e) {
-			throwFailedTransformException(e, packetTransformer, cumulation);
+			throwFailedTransformException(e, packetTransformer, buffer);
 			return false;
 		}
 	}

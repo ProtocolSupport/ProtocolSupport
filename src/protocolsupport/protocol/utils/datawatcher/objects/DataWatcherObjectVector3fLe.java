@@ -13,7 +13,7 @@ public class DataWatcherObjectVector3fLe extends ReadableDataWatcherObject<Vecto
 	public DataWatcherObjectVector3fLe() {
 		value = new Vector(0, 0, 0);
 	}
-	
+
 	public DataWatcherObjectVector3fLe(Vector position) {
 		value = position;
 	}
@@ -24,7 +24,7 @@ public class DataWatcherObjectVector3fLe extends ReadableDataWatcherObject<Vecto
 		value.setY(MiscSerializer.readLFloat(from));
 		value.setZ(MiscSerializer.readLFloat(from));
 	}
-	
+
 	@Override
 	public void writeToStream(ByteBuf to, ProtocolVersion version, String locale) {
 		MiscSerializer.writeLFloat(to, (float) value.getX());

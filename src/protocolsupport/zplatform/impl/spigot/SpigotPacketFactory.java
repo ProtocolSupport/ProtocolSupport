@@ -50,7 +50,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 		}
 		return packet;
 	}
-	
+
 	@Override
 	public Object createInboundInventoryClosePacket() {
 		return new PacketPlayInCloseWindow();
