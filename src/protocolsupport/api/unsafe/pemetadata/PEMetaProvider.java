@@ -11,12 +11,11 @@ public abstract class PEMetaProvider {
 	 * @return
 	 */
 	public abstract float getEntitySize(NetworkEntity entity);
-	
+
 	/**
 	 * This method receives the NetworkEntity and should return what interact button text to display. Set to null to not display button at all.
 	 * @param entity
 	 * @return
 	 */
 	public abstract String getInteractText(NetworkEntity entity);
-	
 }

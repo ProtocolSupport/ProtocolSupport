@@ -10,6 +10,7 @@ import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
 public class EntityStatus extends MiddleEntityStatus {
 
@@ -23,6 +24,9 @@ public class EntityStatus extends MiddleEntityStatus {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		if(allowedIds.contains(status)) {
 			NetworkEntity e = cache.getWatchedEntity(entityId);
+			if (e == null) { // Sometimes the server (nasty plugins?) tries to send Entity Status updates for despawned entities, if the entity isn't cached, ignore the update.
+				return RecyclableEmptyList.get();
+			}
 			if ((status == 31) && (e.getType() == NetworkEntityType.FISHING_FLOAT)) {
 				status = 13;
 			}

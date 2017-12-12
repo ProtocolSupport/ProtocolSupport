@@ -15,7 +15,7 @@ public class PositionSerializer {
 		to.setY(VarNumberSerializer.readVarInt(from));
 		to.setZ(VarNumberSerializer.readSVarInt(from));
 	}
-	
+
 	public static void readPEPosition(ByteBuf from) {
 		VarNumberSerializer.readSVarInt(from);
 		VarNumberSerializer.readVarInt(from);

@@ -39,7 +39,7 @@ public class Title extends MiddleTitle {
 			case SET_SUBTITLE: {
 				RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 				packets.add(create(version, SET_SUBTITLE, message.toLegacyText(cache.getLocale()), 0, 0, 0));
-				if (cache.getLastSentTitle() + (cache.getVisibleOnScreenTicks() * 50) > System.currentTimeMillis()) {
+				if ((cache.getLastSentTitle() + (cache.getVisibleOnScreenTicks() * 50)) > System.currentTimeMillis()) {
 					packets.add(create(version, SET_TITLE, cache.getTitle(), 0, 0, 0));
 				}
 				return packets;

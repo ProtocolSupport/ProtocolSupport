@@ -7,6 +7,9 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 import java.util.stream.Collectors;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -38,9 +41,6 @@ import protocolsupport.zplatform.impl.glowstone.itemstack.GlowStoneNBTTagCompoun
 import protocolsupport.zplatform.impl.glowstone.network.GlowStoneChannelHandlers;
 import protocolsupport.zplatform.impl.glowstone.network.pipeline.GlowStoneFramingHandler;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
 
 public class GlowStoneMiscUtils implements PlatformUtils {
 
@@ -198,7 +198,7 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	public String convertBukkitIconToBase64(CachedServerIcon icon) {
 		return ((GlowServerIcon) icon).getData();
 	}
-	
+
 	@Override
 	public String getReadTimeoutHandlerName() {
 		return GlowStoneChannelHandlers.READ_TIMEOUT;

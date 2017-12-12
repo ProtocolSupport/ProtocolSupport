@@ -14,7 +14,7 @@ public class DataWatcherObjectVarLong extends ReadableDataWatcherObjectNumber<In
 	}
 
 	public DataWatcherObjectVarLong(int Value) {
-		this.value = (Integer) Value;
+		this.value = Value;
 	}
 
 	@Override

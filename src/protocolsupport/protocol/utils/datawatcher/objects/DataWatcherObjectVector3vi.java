@@ -11,7 +11,7 @@ public class DataWatcherObjectVector3vi extends ReadableDataWatcherObject<Positi
 	public DataWatcherObjectVector3vi() {
 		value = new Position(0, 0, 0);
 	}
-	
+
 	public DataWatcherObjectVector3vi(Position position) {
 		value = position;
 	}

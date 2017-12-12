@@ -27,7 +27,7 @@ public class FireworkToPETagSpecificRemapper implements ItemStackSpecificRemappe
 		}
 		return itemstack;
 	}
-	
+
 	private NBTTagListWrapper remapExplosions(NBTTagListWrapper pcExplosions) {
 		NBTTagListWrapper peExplosions = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
 		for (int i = 0; i < pcExplosions.size(); i++) {
@@ -35,7 +35,7 @@ public class FireworkToPETagSpecificRemapper implements ItemStackSpecificRemappe
 		}
 		return peExplosions;
 	}
-	
+
 	private NBTTagCompoundWrapper remapExplosion(NBTTagCompoundWrapper pcExplosion) {
 		NBTTagCompoundWrapper peExplosion = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
 		peExplosion.setByteArray("FireworkColor", remapColors(pcExplosion.getIntArray("Colors")));
@@ -45,7 +45,7 @@ public class FireworkToPETagSpecificRemapper implements ItemStackSpecificRemappe
 		peExplosion.setByte("FireworkType", pcExplosion.getByteNumber("Type"));
 		return peExplosion;
 	}
-	
+
 	private byte[] remapColors(int[] pcColors) {
 		byte[] peColors = new byte[pcColors.length];
 		for(int i = 0; i < pcColors.length; i++) {
@@ -53,7 +53,7 @@ public class FireworkToPETagSpecificRemapper implements ItemStackSpecificRemappe
 		}
 		return peColors;
 	}
-	
+
 	//Fireworks have a custom color system. Since PE only supports the Dye colors, here's a basic switcher for now.
 	private byte remapColor(int pcColor) {
 		switch(pcColor) {

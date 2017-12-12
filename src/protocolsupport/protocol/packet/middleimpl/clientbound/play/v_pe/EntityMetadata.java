@@ -68,7 +68,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 	}
 
 	public static ArrayMap<DataWatcherObject<?>> transform(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> peMetadata, ProtocolVersion version) {
-		peMetadata.put(0, (DataWatcherObject<?>) new DataWatcherObjectSVarLong(entity.getDataCache().getPeBaseFlags()));
+		peMetadata.put(0, new DataWatcherObjectSVarLong(entity.getDataCache().getPeBaseFlags()));
 		return peMetadata;
 	}
 
