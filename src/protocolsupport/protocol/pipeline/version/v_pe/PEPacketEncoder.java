@@ -2,6 +2,7 @@ package protocolsupport.protocol.pipeline.version.v_pe;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.Connection;
+import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -58,7 +59,6 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
-import protocolsupport.api.utils.NetworkState;
 
 public class PEPacketEncoder extends AbstractLegacyPacketEncoder {
 

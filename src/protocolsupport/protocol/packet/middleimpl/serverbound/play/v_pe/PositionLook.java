@@ -39,7 +39,7 @@ public class PositionLook extends ServerBoundMiddlePacket {
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
-		cache.updatePEPositionLeniency(y - cache.getClientY() > 0);
+		cache.updatePEPositionLeniency((y - cache.getClientY()) > 0);
 		int teleportId = cache.peekTeleportConfirmId();
 		if (teleportId != -1) {
 			//PE sends AVERAGE positions (FFS Mojang) so sometimes the BoundingBox of the player will collide inadvertently.
@@ -54,9 +54,9 @@ public class PositionLook extends ServerBoundMiddlePacket {
 		} else {
 			cache.setLastClientPosition(x, y, z);
 		}
-		
+
 		packets.add(MiddlePositionLook.create(x, y, z, yaw, pitch, onGround));
-		
+
 
 		//TODO: (re)move this shit
 		if (cache.getSignTag() != null) {

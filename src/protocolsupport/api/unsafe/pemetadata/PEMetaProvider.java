@@ -11,5 +11,5 @@ public abstract class PEMetaProvider {
 	 * @return
 	 */
 	public abstract float getEntitySize(NetworkEntity entity);
-	
+
 }

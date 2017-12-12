@@ -13,7 +13,7 @@ import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 public class ClientSettings extends MiddleClientSettings {
 
 	protected int pocketViewDistance;
-	
+
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		pocketViewDistance = VarNumberSerializer.readSVarInt(clientdata);
@@ -25,7 +25,7 @@ public class ClientSettings extends MiddleClientSettings {
 		mainHand = MainHand.RIGHT;
 		sendResponse();
 	}
-	
+
 	private void sendResponse() {
 		ByteBuf chunkResponse = Unpooled.buffer();
 		VarNumberSerializer.writeVarInt(chunkResponse, PEPacketIDs.CHUNK_RADIUS);

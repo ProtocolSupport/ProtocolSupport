@@ -198,7 +198,7 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	public String convertBukkitIconToBase64(CachedServerIcon icon) {
 		return ((GlowServerIcon) icon).getData();
 	}
-	
+
 	@Override
 	public String getReadTimeoutHandlerName() {
 		return GlowStoneChannelHandlers.READ_TIMEOUT;

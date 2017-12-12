@@ -42,15 +42,15 @@ public class NetworkDataCache {
 		}
 		return -1;
 	}
-	
+
 	public double[] getTeleportLocation() {
 		return new double[] {x,y,z};
 	}
-	
+
 	public int peekTeleportConfirmId() {
 		return teleportConfirmId;
 	}
-	
+
 	public void payTeleportConfirm() {
 		this.teleportConfirmId = -1;
 	}
@@ -61,7 +61,7 @@ public class NetworkDataCache {
 		this.z = z;
 		this.teleportConfirmId = teleportConfirmId;
 	}
-	
+
 	//For pocket average position mess.
 	private final int leniencyMillis = 1000;
 	private double cX;
@@ -69,26 +69,26 @@ public class NetworkDataCache {
 	private double cZ;
 	private long leniencyMod;
 	private double pocketPositionLeniency = 0.5;
-	
+
 	public void setLastClientPosition(double x, double y, double z) {
 		this.cX = x;
 		this.cY = y;
 		this.cZ = z;
 	}
-	
+
 	public double getClientY() {
 		return cY;
 	}
-	
+
 	public void updatePEPositionLeniency(boolean loosenUp) {
 		if (loosenUp) {
 			pocketPositionLeniency = 3;
 			leniencyMod = System.currentTimeMillis();
-		} else if ((pocketPositionLeniency != 0.5) && (System.currentTimeMillis() - leniencyMod > leniencyMillis)) {
+		} else if ((pocketPositionLeniency != 0.5) && ((System.currentTimeMillis() - leniencyMod) > leniencyMillis)) {
 			pocketPositionLeniency = 0.5;
 		}
 	}
-	
+
 	public boolean shouldResendPEClientPosition() {
 		return (Math.abs(cX - x) > pocketPositionLeniency) ||
 			   (Math.abs(cY - y) > pocketPositionLeniency) ||
@@ -330,7 +330,7 @@ public class NetworkDataCache {
 	public boolean isChunkMarkedAsSent(int x, int z) {
 		return sentChunks.contains(new ChunkCoord(x, z));
 	}
-	
+
 	public int sendChunkSize() {
 		return sentChunks.size();
 	}

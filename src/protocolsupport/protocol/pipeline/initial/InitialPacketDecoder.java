@@ -191,7 +191,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		if (encapsulatedinfo.hasCompression()) {
 			int uncompressedlength = VarNumberSerializer.readVarInt(firstpacketdata);
 			if (uncompressedlength != 0) {
-				firstpacketdata = Unpooled.wrappedBuffer(Decompressor.decompressStatic(MiscSerializer.readAllBytes(firstpacketdata), uncompressedlength));	
+				firstpacketdata = Unpooled.wrappedBuffer(Decompressor.decompressStatic(MiscSerializer.readAllBytes(firstpacketdata), uncompressedlength));
 			}
 		}
 		int firstbyte = firstpacketdata.readUnsignedByte();

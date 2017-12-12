@@ -40,7 +40,7 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 	public static GlowStoneNetworkManagerWrapper getFromChannel(Channel channel) {
 		return new GlowStoneNetworkManagerWrapper((MessageHandler) channel.pipeline().get(GlowStoneChannelHandlers.NETWORK_MANAGER));
 	}
-	
+
 	private final MessageHandler handler;
 	public GlowStoneNetworkManagerWrapper(MessageHandler handler) {
 		this.handler = handler;
@@ -54,7 +54,7 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 	public Object unwrap() {
 		return handler;
 	}
-	
+
 	public NetworkState getProtocol() {
 		AbstractProtocol proto = getSession().getProtocol();
 		for (ProtocolType type : ProtocolType.values()) {

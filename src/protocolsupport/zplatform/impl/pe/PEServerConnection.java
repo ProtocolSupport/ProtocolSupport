@@ -61,7 +61,7 @@ public class PEServerConnection extends SimpleChannelInboundHandler<ByteBuf> {
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf bytebuf) throws Exception {
 		ByteBuf cbytebuf = Unpooled.copiedBuffer(bytebuf);
-		clientchannel.eventLoop().execute(() -> 
+		clientchannel.eventLoop().execute(() ->
 			clientchannel
 			.writeAndFlush(cbytebuf)
 			.addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE

@@ -24,7 +24,7 @@ public class DataWatcherDataRemapper {
 			entity.getDataCache().firstMeta = false;
 		}
 	}
-	
+
 	public ArrayMap<DataWatcherObject<?>> getOriginal() {
 		return originalMetadata;
 	}
