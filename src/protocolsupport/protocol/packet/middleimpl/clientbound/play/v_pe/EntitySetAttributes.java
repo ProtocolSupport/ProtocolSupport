@@ -83,7 +83,7 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 			double attrvalue = (attr.value + add) * mulInc * mulMore;
 			String pename = remapAttrNames.getOrDefault(attr.key, attr.key);
 			float[] minmax = knownMinMax.getOrDefault(pename, new float[]{0, 1, Float.MAX_VALUE});
-			if (pename == "minecraft:health") { minmax[2] = entity.getDataCache().getMaxHealth(); }
+			if (pename.equals("minecraft:health")) { minmax[2] = entity.getDataCache().getMaxHealth(); }
 			MiscSerializer.writeLFloat(serializer, minmax[0]);
 			MiscSerializer.writeLFloat(serializer, minmax[2]);
 			MiscSerializer.writeLFloat(serializer, (float) attrvalue);
