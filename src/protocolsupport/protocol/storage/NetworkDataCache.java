@@ -175,7 +175,6 @@ public class NetworkDataCache {
 	private NetworkEntity player;
 	private final HashMap<UUID, NetworkDataCache.PlayerListEntry> playerlist = new HashMap<>();
 	private Environment dimensionId;
-	private float maxHealth = 20.0F;
 	private int selectedSlot = 0;
 	private UUID clientUUID;
 
@@ -281,14 +280,6 @@ public class NetworkDataCache {
 
 	public boolean hasSkyLightInCurrentDimension() {
 		return dimensionId == Environment.OVERWORLD;
-	}
-
-	public void setMaxHealth(float maxHealth) {
-		this.maxHealth = maxHealth;
-	}
-
-	public float getMaxHealth() {
-		return maxHealth;
 	}
 
 	@Override

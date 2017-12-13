@@ -32,7 +32,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		));
 		DataWatcherObject<?> healthWatcher = metadata.getOriginal().get(DataWatcherObjectIndex.EntityLiving.HEALTH);
 		if (healthWatcher != null) {
-			packets.add(EntitySetAttributes.create(version, entity.getId(), EntitySetAttributes.createAttribute("minecraft:health", (Float) healthWatcher.getValue())));
+			packets.add(EntitySetAttributes.create(version, entity, EntitySetAttributes.createAttribute("minecraft:health", (Float) healthWatcher.getValue())));
 		}
 		return packets;
 	}

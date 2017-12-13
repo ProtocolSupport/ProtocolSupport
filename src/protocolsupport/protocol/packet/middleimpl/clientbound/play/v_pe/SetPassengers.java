@@ -42,7 +42,7 @@ public class SetPassengers extends MiddleSetPassengers {
 				if (passenger != null) {
 					//MOJANG.... WHYYYYY?!
 					if (vehicle.isOfType(NetworkEntityType.PIG)) {
-						packets.add(EntitySetAttributes.create(version, vehicleId, EntitySetAttributes.createAttribute("minecraft:horse.jump_strength", 0.432084373616155))); 
+						packets.add(EntitySetAttributes.create(version, vehicle, EntitySetAttributes.createAttribute("minecraft:horse.jump_strength", 0.432084373616155))); 
 					}
 					
 					DataCache data = passenger.getDataCache();

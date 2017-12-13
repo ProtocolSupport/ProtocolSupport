@@ -103,6 +103,7 @@ public class NetworkEntity {
 		private int vehicleId = 0;
 		private Vector riderPosition = null;
 		private Float rotationlock = null;
+		private float maxHealth = 20f;
 		private ItemStackWrapper helmet = ItemStackWrapper.NULL;
 		private ItemStackWrapper chestplate = ItemStackWrapper.NULL;
 		private ItemStackWrapper leggings = ItemStackWrapper.NULL;
@@ -220,6 +221,14 @@ public class NetworkEntity {
 
 		public void setRotationlock(Float rotationlock) {
 			this.rotationlock = rotationlock;
+		}
+
+		public float getMaxHealth() {
+			return maxHealth;
+		}
+
+		public void setMaxHealth(float maxHealth) {
+			this.maxHealth = maxHealth;
 		}
 
 		@Override

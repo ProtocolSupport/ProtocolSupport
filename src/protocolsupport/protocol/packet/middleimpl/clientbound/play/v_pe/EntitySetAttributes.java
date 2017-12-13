@@ -10,7 +10,9 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class EntitySetAttributes extends MiddleEntitySetAttributes {
@@ -34,7 +36,7 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 		knownMinMax.put("minecraft:movement", 				new float[]{0.0F, -1F,				 24791.0F});
 		knownMinMax.put("minecraft:attack_damage", 			new float[]{0.0F, 1.0F,					 2.0F});
 		knownMinMax.put("minecraft:knockback_resistance", 	new float[]{0.0F, 0.0F,				  2080.0F});
-		forbiddenAttrNames.add("generic.maxHealth"); //TODO: Use to set actual max health.
+		forbiddenAttrNames.add("generic.maxHealth"); //Is used instead as max value for the health attribute.
 		forbiddenAttrNames.add("generic.attackSpeed");
 		forbiddenAttrNames.add("generic.armor");
 		forbiddenAttrNames.add("generic.armorToughness");
@@ -45,14 +47,18 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		return RecyclableSingletonList.create(create(connection.getVersion(), entityId, 
-				attributes.values().stream().filter(attr -> !forbiddenAttrNames.contains(attr.key)).toArray(Attribute[]::new)
-			));
+		NetworkEntity entity = cache.getWatchedEntity(entityId);
+		if (entity != null) {
+			return RecyclableSingletonList.create(create(connection.getVersion(), entity, 
+					attributes.values().stream().filter(attr -> !forbiddenAttrNames.contains(attr.key)).toArray(Attribute[]::new)
+				));
+		}
+		return RecyclableEmptyList.get();
 	}
 
-	public static ClientBoundPacketData create(ProtocolVersion version, int entityId, Attribute... attributes) {
+	public static ClientBoundPacketData create(ProtocolVersion version, NetworkEntity entity, Attribute... attributes) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SET_ATTRIBUTES, version);
-		VarNumberSerializer.writeVarLong(serializer, entityId);
+		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		VarNumberSerializer.writeVarInt(serializer, attributes.length);
 		for (Attribute attr : attributes) {
 			double add = 0;
@@ -76,7 +82,8 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 			}
 			double attrvalue = (attr.value + add) * mulInc * mulMore;
 			String pename = remapAttrNames.getOrDefault(attr.key, attr.key);
-			float[] minmax = knownMinMax.getOrDefault(pename, new float[]{Float.MIN_VALUE, 1, Float.MAX_VALUE});
+			float[] minmax = knownMinMax.getOrDefault(pename, new float[]{0, 1, Float.MAX_VALUE});
+			if (pename == "minecraft:health") { minmax[0] = entity.getDataCache().getMaxHealth(); }
 			MiscSerializer.writeLFloat(serializer, minmax[0]);
 			MiscSerializer.writeLFloat(serializer, minmax[2]);
 			MiscSerializer.writeLFloat(serializer, (float) attrvalue);
