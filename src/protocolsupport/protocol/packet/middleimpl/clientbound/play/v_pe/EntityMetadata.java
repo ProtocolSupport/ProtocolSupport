@@ -44,7 +44,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 				if (entity.isOfType(NetworkEntityType.LIVING)) {
 					DataWatcherObject<?> healthWatcher = metadata.getOriginal().get(DataWatcherObjectIndex.EntityLiving.HEALTH);
 					if (healthWatcher != null) {
-						packets.add(EntitySetAttributes.create(connection.getVersion(), entity.getId(), EntitySetAttributes.createAttribute("minecraft:health", (Float) healthWatcher.getValue())));
+						packets.add(EntitySetAttributes.create(connection.getVersion(), entity.getId(), EntitySetAttributes.createAttribute("minecraft:health", Math.ceil((Float) healthWatcher.getValue()))));
 					}
 				}
 				packets.add(create(entity, cache.getLocale(), metadata.getRemapped(), connection.getVersion()));
