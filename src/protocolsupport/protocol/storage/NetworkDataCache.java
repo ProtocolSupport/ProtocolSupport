@@ -331,10 +331,6 @@ public class NetworkDataCache {
 		return sentChunks.contains(new ChunkCoord(x, z));
 	}
 
-	public int sendChunkSize() {
-		return sentChunks.size();
-	}
-
 	protected static class ChunkCoord {
 		private final int x;
 		private final int z;
