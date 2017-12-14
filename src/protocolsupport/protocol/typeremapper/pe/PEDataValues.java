@@ -200,11 +200,11 @@ public class PEDataValues {
 		// Nether slab -> Quartz slab
 		registerBlockAndItemRemap(44, 7, 44, 6);
 		registerBlockAndItemRemap(44, 14, 44, 15);
-		registerBlockAndItemRemap(43, 7, 44, 6);
+		registerBlockAndItemRemap(43, 7, 43, 6);
 		// And vice-versa
 		registerBlockAndItemRemap(44, 6, 44, 7);
 		registerBlockAndItemRemap(44, 15, 44, 14);
-		registerBlockAndItemRemap(43, 6, 44, 7);
+		registerBlockAndItemRemap(43, 6, 43, 7);
 		// Prismarine data ID mismatch
 		registerBlockAndItemRemap(168, 1, 168, 2);
 		registerBlockAndItemRemap(168, 2, 168, 1);
