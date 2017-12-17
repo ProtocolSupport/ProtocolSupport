@@ -51,6 +51,8 @@ public class ItemStackSerializer {
 					itemstack.setTypeId(itemAndData.getI1());
 					if (itemAndData.getI2() != -1) {
 						itemstack.setData(itemAndData.getI2());
+					} else {
+						itemstack.setData(data); // changing the item ID resets the data to 0
 					}
 				}
 				itemstack.setTag(readTag(from, false, version));
