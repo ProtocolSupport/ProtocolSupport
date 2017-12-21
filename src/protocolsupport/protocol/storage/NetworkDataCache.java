@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.lang3.Validate;
+
 import gnu.trove.map.hash.TIntObjectHashMap;
 import io.netty.util.internal.ThreadLocalRandom;
 import protocolsupport.api.chat.ChatAPI;
@@ -116,7 +118,6 @@ public class NetworkDataCache {
 	private final HashMap<UUID, NetworkDataCache.PlayerListEntry> playerlist = new HashMap<>();
 	private Environment dimensionId;
 	private float maxHealth = 20.0F;
-	private UUID clientUUID;
 
 	public void addWatchedEntity(NetworkEntity entity) {
 		watchedEntities.put(entity.getId(), entity);
@@ -207,10 +208,6 @@ public class NetworkDataCache {
 		return Utils.toStringAllFields(this);
 	}
 
-	public void setClientUUID(UUID uuid) { this.clientUUID = uuid; }
-
-	public UUID getClientUUID() { return clientUUID; }
-
 	public static class PropertiesStorage {
 		private final HashMap<String, ProfileProperty> signed = new HashMap<>();
 		private final HashMap<String, ProfileProperty> unsigned = new HashMap<>();
@@ -284,6 +281,7 @@ public class NetworkDataCache {
 	protected String locale = I18NData.DEFAULT_LOCALE;
 
 	public void setLocale(String locale) {
+		Validate.notNull(locale, "Client locale can't be null");
 		this.locale = locale.toLowerCase();
 	}
 
@@ -379,23 +377,61 @@ public class NetworkDataCache {
 
 	private NBTTagCompoundWrapper signTag;
 
-	public void setSignTag(NBTTagCompoundWrapper signTag) { this.signTag = signTag; }
+	public void setSignTag(NBTTagCompoundWrapper signTag) {
+		this.signTag = signTag;
+	}
 
-	public NBTTagCompoundWrapper getSignTag() { return signTag; }
+	public NBTTagCompoundWrapper getSignTag() {
+		return signTag;
+	}
 
 	private String title;
 	private int visibleOnScreenTicks = 100; // default fadeIn = 20; default stay = 60; default fadeOut = 20;
 	private long lastSentTitle;
 
-	public String getTitle() { return title; }
+	public String getTitle() {
+		return title;
+	}
 
-	public void setTitle(String title) { this.title = title; }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-	public int getVisibleOnScreenTicks() { return visibleOnScreenTicks; }
+	public int getVisibleOnScreenTicks() {
+		return visibleOnScreenTicks;
+	}
 
-	public void setVisibleOnScreenTicks(int visibleOnScreenTicks) { this.visibleOnScreenTicks = visibleOnScreenTicks; }
+	public void setVisibleOnScreenTicks(int visibleOnScreenTicks) {
+		this.visibleOnScreenTicks = visibleOnScreenTicks;
+	}
 
-	public long getLastSentTitle() { return lastSentTitle; }
+	public long getLastSentTitle() {
+		return lastSentTitle;
+	}
 
-	public void setLastSentTitle(long lastSentTitle) { this.lastSentTitle = lastSentTitle; }
+	public void setLastSentTitle(long lastSentTitle) {
+		this.lastSentTitle = lastSentTitle;
+	}
+
+	private UUID peClientUUID;
+
+	public void setPEClientUUID(UUID uuid) {
+		Validate.notNull(uuid, "PE client uuid (identity) can't be null");
+		this.peClientUUID = uuid;
+	}
+
+	public UUID getPEClientUUID() {
+		return peClientUUID;
+	}
+
+	private String peXUID;
+
+	public void setPEXUID(String xuid) {
+		this.peXUID = xuid;
+	}
+
+	public String getPEXUID() {
+		return this.peXUID;
+	}
+
 }

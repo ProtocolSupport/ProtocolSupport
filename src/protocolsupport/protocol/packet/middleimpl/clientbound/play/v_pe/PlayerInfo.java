@@ -47,7 +47,7 @@ public class PlayerInfo extends MiddlePlayerInfo {
 				PESkinsProvider skinprovider = PESkinsProviderSPI.getProvider();
 				VarNumberSerializer.writeVarInt(serializer, infos.length);
 				for (Info info : infos) {
-					MiscSerializer.writeUUID(serializer, connection.getVersion(), info.uuid.equals(connection.getPlayer().getUniqueId()) ? cache.getClientUUID() : info.uuid);
+					MiscSerializer.writeUUID(serializer, connection.getVersion(), info.uuid.equals(connection.getPlayer().getUniqueId()) ? cache.getPEClientUUID() : info.uuid);
 					VarNumberSerializer.writeVarInt(serializer, 0); //entity id
 					StringSerializer.writeString(serializer, version, info.getName(cache.getLocale()));
 					Any<Boolean, String> skininfo = getSkinInfo(info);
@@ -57,7 +57,7 @@ public class PlayerInfo extends MiddlePlayerInfo {
 					} else {
 						writeSkinData(version, serializer, false, false, DefaultPESkinsProvider.DEFAULT_STEVE);
 						if (skininfo != null) {
-							skinprovider.scheduleGetSkinData(skininfo.getObj2(), info.uuid, new SkinUpdate(connection, info.uuid, cache.getClientUUID(), skininfo.getObj1()));
+							skinprovider.scheduleGetSkinData(skininfo.getObj2(), info.uuid, new SkinUpdate(connection, info.uuid, cache.getPEClientUUID(), skininfo.getObj1()));
 						}
 					}
 					StringSerializer.writeString(serializer, version, ""); //xuid
