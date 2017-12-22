@@ -153,7 +153,6 @@ public class BookEdit extends ServerBoundMiddlePacket {
 					bookNBT.setString("author", author);
 					bookNBT.setString("title", title);
 					bookNBT.setList("pages", pages);
-					bookItem.setType(Material.WRITTEN_BOOK);
 					bookItem.setTag(bookNBT);
 					return RecyclableSingletonList.create(signBook(bookItem));
 				}
