@@ -2,6 +2,7 @@ package protocolsupport.protocol.typeremapper.itemstack.toclient;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
+import protocolsupport.api.chat.ChatAPI.JsonParseException;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackNBTSpecificRemapper;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
@@ -18,8 +19,12 @@ public class BookPagesToPESpecificRemapper extends ItemStackNBTSpecificRemapper 
 			NBTTagListWrapper newpages = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
 			for (int i = 0; i < pages.size(); i++) {
 				NBTTagCompoundWrapper page = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-				//ChatAPI.
-				page.setString("text", ChatAPI.fromJSON(pages.getString(i)).toLegacyText());
+				try {
+					String fromJSON = ChatAPI.fromJSON(pages.getString(i)).toLegacyText();
+					page.setString("text", fromJSON);
+				} catch (JsonParseException e) {
+					page.setString("text", pages.getString(i));
+				}
 				newpages.addCompound(page);
 			}
 			tag.setList("pages", newpages);

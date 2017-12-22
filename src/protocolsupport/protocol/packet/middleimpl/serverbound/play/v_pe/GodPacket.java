@@ -204,7 +204,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				break;
 			}
 			case ACTION_NORMAL: { //Normal inventory transaction.
-				for(InfTransaction transaction : transactions) {
+				for (InfTransaction transaction : transactions) {
 					cache.getInfTransactions().cacheTransaction(cache, transaction);
 				}
 				packets.addAll(cache.getInfTransactions().process(cache));
@@ -327,8 +327,12 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			//Creative transactions.
 			if ((cache.getGameMode() == GameMode.CREATIVE) && (cache.getOpenedWindow() == WindowType.PLAYER)) {
 				if ((transaction.getSourceId() != SOURCE_CREATIVE) && (pcSlot != -1)) {
+					if(!transaction.getNewItem().isNull()) System.out.println(transaction.getNewItem().getTag());
 					//Creative transaction use -1 not for cursor but throwing items, cursoritems are actually deleted on serverside.
 					misc.add(MiddleCreativeSetSlot.create(cache.getLocale(), (pcSlot == -999 ? -1 : pcSlot), transaction.getNewItem()));
+					if (pcSlot >= 36) {
+						cache.setHotbarItem(pcSlot - 36, transaction.getNewItem());
+					}
 				}
 				return;
 			}

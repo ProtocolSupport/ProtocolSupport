@@ -13,7 +13,7 @@ public class BookPagesFromPESpecificRemapper extends ItemStackNBTSpecificRemappe
 	@Override
 	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, String locale, ItemStackWrapper itemstack, NBTTagCompoundWrapper tag) {
 		if (tag.hasKeyOfType("pages", NBTTagType.LIST)) {
-			NBTTagListWrapper pages = tag.getList("pages", NBTTagType.STRING);
+			NBTTagListWrapper pages = tag.getList("pages", NBTTagType.COMPOUND);
 			NBTTagListWrapper newpages = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
 			for (int i = 0; i < pages.size(); i++) {
 				newpages.addString(pages.getCompound(i).getString("text"));

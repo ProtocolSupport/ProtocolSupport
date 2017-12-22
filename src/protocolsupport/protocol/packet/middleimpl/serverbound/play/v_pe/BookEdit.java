@@ -67,14 +67,6 @@ public class BookEdit extends ServerBoundMiddlePacket {
 				break;
 			}
 		}
-		System.out.println("BOOK EDIT");
-		System.out.println(type);
-		System.out.println(slot);
-		System.out.println(pagenum);
-		System.out.println(pagenum2);
-		System.out.println(text);
-		System.out.println(title);
-		System.out.println(author);
 	}
 	
 	private static final int TYPE_REPLACE = 0;
@@ -89,7 +81,7 @@ public class BookEdit extends ServerBoundMiddlePacket {
 		if (!bookItem.isNull() && bookItem.getType() == Material.BOOK_AND_QUILL) {
 			NBTTagCompoundWrapper bookNBT = bookItem.getTag() != null && !bookItem.getTag().isNull() ? bookItem.getTag() : ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
 			NBTTagListWrapper pages = bookNBT.hasKeyOfType("pages", NBTTagType.LIST) ? bookNBT.getList("pages"): ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
-			int maxpage = pagenum > pages.size() ? pagenum : pages.size();
+			int maxpage = ((pagenum + 1) > pages.size()) ? (pagenum + 1) : (pages.size());
 			switch(type) {
 				case TYPE_REPLACE: {
 					//Cut the crap. No text changed? No packet.
@@ -111,7 +103,6 @@ public class BookEdit extends ServerBoundMiddlePacket {
 					}
 					bookNBT.setList("pages", newpages);
 					bookItem.setTag(bookNBT);
-					System.out.println("PE BOOk" + bookItem.toString() + " \nNBT: " + bookItem.getTag().toString());
 					return RecyclableSingletonList.create(editBook(bookItem));
 				}
 				case TYPE_ADD: {
@@ -161,8 +152,9 @@ public class BookEdit extends ServerBoundMiddlePacket {
 				case TYPE_SIGN: {
 					bookNBT.setString("author", author);
 					bookNBT.setString("title", title);
-					bookItem.setTag(bookNBT);
+					bookNBT.setList("pages", pages);
 					bookItem.setType(Material.WRITTEN_BOOK);
+					bookItem.setTag(bookNBT);
 					return RecyclableSingletonList.create(signBook(bookItem));
 				}
 			}
