@@ -18,6 +18,7 @@ public class BookPagesToPESpecificRemapper extends ItemStackNBTSpecificRemapper 
 			NBTTagListWrapper newpages = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
 			for (int i = 0; i < pages.size(); i++) {
 				NBTTagCompoundWrapper page = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+				//ChatAPI.
 				page.setString("text", ChatAPI.fromJSON(pages.getString(i)).toLegacyText());
 				newpages.addCompound(page);
 			}

@@ -41,6 +41,7 @@ public class CustomPayload extends MiddleCustomPayload {
 					remapBookPages(book, cache.getLocale());
 				}
 			}
+			System.out.println("PCBOOK: " + book + " NBT" + book.getTag());
 			ItemStackSerializer.writeItemStack(newdata, ProtocolVersionsHelper.LATEST_PC, cache.getLocale(), book, false);
 			data = MiscSerializer.readAllBytes(newdata);
 		} else {
