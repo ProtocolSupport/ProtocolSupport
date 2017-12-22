@@ -110,7 +110,7 @@ public class NetworkEntity {
 		private ItemStackWrapper boots = ItemStackWrapper.NULL;
 		private ItemStackWrapper hand = ItemStackWrapper.NULL;
 		private ItemStackWrapper offhand = ItemStackWrapper.NULL;
-
+		
 		public long getPeBaseFlags() {
 			return peBaseFlags;
 		}

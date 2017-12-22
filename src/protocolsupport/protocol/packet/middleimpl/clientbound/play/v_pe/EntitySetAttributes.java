@@ -31,11 +31,11 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 		knownMinMax.put("minecraft:health", 				new float[]{0.0F, 20.0F,				20.0F});
 		knownMinMax.put("minecraft:player.saturation", 		new float[]{0.0F, 20.0F,				20.0F});
 		knownMinMax.put("minecraft:player.hunger", 			new float[]{0.0F, 20.0F,				20.0F});
-		knownMinMax.put("minecraft:player.experience", 		new float[]{0.0F, 0.0F,					 1.0F});
-		knownMinMax.put("minecraft:player.level", 			new float[]{0.0F, 0.0F, 			 24791.0F});
-		knownMinMax.put("minecraft:movement", 				new float[]{0.0F, -1F,				 24791.0F});
-		knownMinMax.put("minecraft:attack_damage", 			new float[]{0.0F, 1.0F,					 2.0F});
-		knownMinMax.put("minecraft:knockback_resistance", 	new float[]{0.0F, 0.0F,				  2080.0F});
+		knownMinMax.put("minecraft:player.experience", 		new float[]{0.0F,  0.0F,				 1.0F});
+		knownMinMax.put("minecraft:player.level", 			new float[]{0.0F,  0.0F, 			 24791.0F});
+		knownMinMax.put("minecraft:movement", 				new float[]{0.0F,   -1F,			 24791.0F});
+		knownMinMax.put("minecraft:attack_damage", 			new float[]{0.0F,  1.0F,				 2.0F});
+		knownMinMax.put("minecraft:knockback_resistance", 	new float[]{0.0F,  0.0F,			  2080.0F});
 		forbiddenAttrNames.add("generic.maxHealth"); //Is used instead as max value for the health attribute.
 		forbiddenAttrNames.add("generic.attackSpeed");
 		forbiddenAttrNames.add("generic.armor");

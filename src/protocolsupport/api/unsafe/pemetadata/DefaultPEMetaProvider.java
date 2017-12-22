@@ -1,17 +1,19 @@
 package protocolsupport.api.unsafe.pemetadata;
 
-import protocolsupport.protocol.utils.types.NetworkEntity;
+import java.util.UUID;
+
+import org.bukkit.entity.EntityType;
 
 public class DefaultPEMetaProvider extends PEMetaProvider {
 
 	@Override
-	public float getEntitySize(NetworkEntity entity) {
-		return 1f;
-	}
-	
-	@Override
-	public String getInteractText(NetworkEntity entity) {
+	public String getUseText(UUID uuid, int id, EntityType entitytype) {
 		return "Interact";
+	}
+
+	@Override
+	public float getSizeScale(UUID uuid, int id, EntityType entitytype) {
+		return 1f;
 	}
 
 }

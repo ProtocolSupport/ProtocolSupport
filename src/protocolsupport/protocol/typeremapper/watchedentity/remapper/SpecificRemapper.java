@@ -65,7 +65,7 @@ public enum SpecificRemapper {
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				DataCache data = entity.getDataCache();
 				PocketEntityData pocketdata = PocketData.getPocketEntityData(entity.getType());
-				float entitySize = PEMetaProviderSPI.getProvider().getEntitySize(entity) * data.getSizeModifier();
+				float entitySize = PEMetaProviderSPI.getProvider().getSizeScale(entity.getUUID(), entity.getId(), entity.getType().getBukkitType()) * data.getSizeModifier();
 				
 				// = PE Lead =
 				//Leashing is set in Entity Leash.
@@ -112,13 +112,15 @@ public enum SpecificRemapper {
 				}
 
 				// = PE Interaction =
-				remapped.put(40, new DataWatcherObjectString("Interact")); //Different texts? I ain't bothered.
+				remapped.put(40, new DataWatcherObjectString(PEMetaProviderSPI.getProvider().getUseText(
+					entity.getUUID(), entity.getId(), entity.getType().getBukkitType()
+				)));
 
 				// = PE Size =
 				remapped.put(39, new DataWatcherObjectFloatLe(entitySize));
 				
 				// = PE Interaction =
-				String interactText = PEMetaProviderSPI.getProvider().getInteractText(entity);
+				String interactText = PEMetaProviderSPI.getProvider().getUseText(entity.getUUID(), entity.getId(), entity.getType().getBukkitType());
 				if(interactText != null) {
 					remapped.put(40, new DataWatcherObjectString(interactText));
 				}
@@ -231,7 +233,9 @@ public enum SpecificRemapper {
 					entity.getDataCache().setSizeModifier((byte) (boolWatcher.getValue() ? 0.5 : 1));
 				});
 				//Send scale -> avoid big mobs with floating heads.
-				remapped.put(39, new DataWatcherObjectFloatLe(entity.getDataCache().getSizeModifier() * PEMetaProviderSPI.getProvider().getEntitySize(entity)));
+				remapped.put(39, new DataWatcherObjectFloatLe(entity.getDataCache().getSizeModifier() * PEMetaProviderSPI.getProvider().getSizeScale(
+					entity.getUUID(), entity.getId(), entity.getType().getBukkitType()
+				)));
 			}}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Ageable.AGE, 12) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_2),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Ageable.AGE, 11) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_2),
@@ -476,7 +480,7 @@ public enum SpecificRemapper {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				entity.getDataCache().setSizeModifier((byte) 6);
-				float entitySize = 6f * PEMetaProviderSPI.getProvider().getEntitySize(entity);
+				float entitySize = 6f * PEMetaProviderSPI.getProvider().getSizeScale(entity.getUUID(), entity.getId(), entity.getType().getBukkitType());
 				remapped.put(39, new DataWatcherObjectFloatLe(entitySize)); //Send scale -> Giants are Giant Zombies in PE.
 				PocketEntityData pocketdata = PocketData.getPocketEntityData(entity.getType());
 				if (pocketdata.getBoundingBox() != null) {
@@ -504,8 +508,8 @@ public enum SpecificRemapper {
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				getObject(original, DataWatcherObjectIndex.Zombie.BABY, DataWatcherObjectBoolean.class).ifPresent(boolWatcher -> {
 					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_BABY, boolWatcher.getValue());
-					float sizeput = PEMetaProviderSPI.getProvider().getEntitySize(entity);
-					remapped.put(39, new DataWatcherObjectFloatLe(boolWatcher.getValue() ? 0.5f * sizeput : sizeput)); //Send scale -> avoid big mobs with floating heads.
+					float sizescale = PEMetaProviderSPI.getProvider().getSizeScale(entity.getUUID(), entity.getId(), entity.getType().getBukkitType());
+					remapped.put(39, new DataWatcherObjectFloatLe(boolWatcher.getValue() ? 0.5f * sizescale : sizescale)); //Send scale -> avoid big mobs with floating heads.
 				});
 			}}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Zombie.BABY, 12) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_2),
@@ -565,7 +569,7 @@ public enum SpecificRemapper {
 				getObject(original, DataWatcherObjectIndex.Slime.SIZE, DataWatcherObjectVarInt.class).ifPresent(intWatcher -> {
 					entity.getDataCache().setSizeModifier((byte) ((int) intWatcher.getValue()));
 				});
-				float entitySize = PEMetaProviderSPI.getProvider().getEntitySize(entity) * entity.getDataCache().getSizeModifier();
+				float entitySize = PEMetaProviderSPI.getProvider().getSizeScale(entity.getUUID(), entity.getId(), entity.getType().getBukkitType()) * entity.getDataCache().getSizeModifier();
 				remapped.put(39, new DataWatcherObjectFloatLe(entitySize)); //Send slime scale.
 				PocketEntityData pocketdata = PocketData.getPocketEntityData(entity.getType());
 				if (pocketdata.getBoundingBox() != null) {

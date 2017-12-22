@@ -54,7 +54,7 @@ public class SetPassengers extends MiddleSetPassengers {
 					if (rideInfo != null) {
 						System.out.println("Passenger Type: " + passenger.getType().toString() + "Veh pos + " + rideInfo.getPosition());
 						if (passenger.getType() == NetworkEntityType.PLAYER) {
-							float vehicleSize = PEMetaProviderSPI.getProvider().getEntitySize(vehicle) * vehicle.getDataCache().getSizeModifier();
+							float vehicleSize = PEMetaProviderSPI.getProvider().getSizeScale(vehicle.getUUID(), vehicle.getId(), vehicle.getType().getBukkitType()) * vehicle.getDataCache().getSizeModifier();
 							data.setRiderPosition(rideInfo.getPosition().multiply(new Vector(vehicleSize, vehicleSize, vehicleSize)));
 						} else {
 							data.setRiderPosition(new Vector(0, -0.125, 0));

@@ -25,7 +25,7 @@ public abstract class PESkinsProvider {
 	 * This method should schedule calling the skindataApplyCallback even if for whatever reason it can run it right now
 	 * This method can actually skip calling the skindataApplyCallback if it can't get the skin data for whatever reason
 	 * @param url url to skin image
-	 * @param uuid, uuid of the player.
+	 * @param uuid uuid of the player.
 	 * @param skindataApplyCallback callback that should be called when receiving skin data completes
 	 */
 	public abstract void scheduleGetSkinData(String url, UUID uuid, Consumer<byte[]> skindataApplyCallback);
