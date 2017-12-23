@@ -95,7 +95,6 @@ public class PlayerAuthenticationTask {
 			return;
 		}
 
-		Bukkit.getLogger().info("UUID of player " + listener.profile.getName() + " is " + listener.profile.getUUID());
 		listener.setReadyToAccept();
 	}
 
