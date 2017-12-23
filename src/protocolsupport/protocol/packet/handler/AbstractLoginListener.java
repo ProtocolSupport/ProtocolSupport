@@ -157,7 +157,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 									disconnect("This server is in online mode, but no valid XUID was found (XBOX live auth required)");
 									return;
 								} else {
-									if (useOnlineModeUUID && forcedUUID == null) {
+									if (useOnlineModeUUID && (forcedUUID == null)) {
 										forcedUUID = new UUID(0, Long.parseLong(xuid));
 									}
 								}
