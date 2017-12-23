@@ -205,6 +205,9 @@ public abstract class AbstractLoginListener implements IHasProfile {
 			newProfile.getProperties().putAll(profile.getProperties());
 			profile = newProfile;
 		}
+
+		Bukkit.getLogger().info("UUID of player " + profile.getName() + " is " + profile.getUUID());
+
 		if (hasCompression(connection.getVersion())) {
 			int threshold = ServerPlatform.get().getMiscUtils().getCompressionThreshold();
 			if (threshold >= 0) {
