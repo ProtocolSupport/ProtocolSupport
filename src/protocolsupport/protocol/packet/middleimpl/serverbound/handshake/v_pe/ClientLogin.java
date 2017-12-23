@@ -40,6 +40,8 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class ClientLogin extends ServerBoundMiddlePacket {
 
+	public static final String XUID_METADATA_KEY = "___PS_PE_XUID";
+
 	protected String username;
 	protected String host;
 	protected int port;
@@ -72,7 +74,7 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 			username = JsonUtils.getString(chaindata.getObj2(), "displayName");
 			cache.setPEClientUUID(UUID.fromString(JsonUtils.getString(chaindata.getObj2(), "identity")));
 			if (chaindata.getObj1() != null) {
-				cache.setPEXUID(JsonUtils.getString(chaindata.getObj2(), "XUID"));
+				connection.addMetadata(XUID_METADATA_KEY, JsonUtils.getString(chaindata.getObj2(), "XUID"));
 			}
 			JWSObject additionaldata = JWSObject.parse(new String(MiscSerializer.readBytes(logindata, logindata.readIntLE())));
 			Map<String, String> clientinfo = Utils.GSON.fromJson(additionaldata.getPayload().toString(), new TypeToken<Map<String, String>>() {}.getType());
@@ -89,14 +91,21 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 		}
 	}
 
+	private static final String MOJANG_KEY = "MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAE8ELkixyLcwlZryUQcu1TvPOmI2B7vX83ndnWRUaXm74wFfa5f/lwQNTfrLVHa2PmenpGI6JhIMUJaWZrjmMj90NoKNFSNBuKdm8rYiXsfaz3K36x/1U26HpG0ZxK/V1V";
+
 	private static Any<Key, JsonObject> extractChainData(Map<String, List<String>> maindata) throws ParseException {
 		List<String> chain = maindata.get("chain");
 		try {
-			boolean signatureValid = true;
-			PublicKey key = parseKey("MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAES9P0yU1kddcH5JPoWV61/uuNuAREhe4GSv5bKmd9yDhH146TIiuxqzE2s7Uuo5gQqroqJZrOwOMWVmuk82948Dy8tSyNpg0vydBV+M3Jrdv08e+Sq3LoErSVw+9OAf2U");
+			PublicKey key = parseKey(MOJANG_KEY);
+			boolean foundMojangKey = false;
+			boolean signatureValid = false;
 			for (String element : chain) {
 				JWSObject jwsobject = JWSObject.parse(element);
-				if (!verify(jwsobject, key)) {
+				if (!foundMojangKey && jwsobject.getHeader().getX509CertURL().toString().equals(MOJANG_KEY)) {
+					foundMojangKey = true;
+					signatureValid = true;
+				}
+				if (foundMojangKey && !verify(jwsobject, key)) {
 					signatureValid = false;
 				}
 				JsonObject jsonobject = Utils.GSON.fromJson(jwsobject.getPayload().toString(), JsonObject.class);
