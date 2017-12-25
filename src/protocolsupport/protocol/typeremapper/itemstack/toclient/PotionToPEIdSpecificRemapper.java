@@ -14,6 +14,9 @@ public class PotionToPEIdSpecificRemapper implements ItemStackSpecificRemapper {
 	private static final TObjectIntHashMap<String> nameToPeId = new TObjectIntHashMap<String>();
 
 	static {
+		nameToPeId.put(MinecraftData.addNamespacePrefix("mundane"), 1);
+		nameToPeId.put(MinecraftData.addNamespacePrefix("awkward"), 4);
+		
 		nameToPeId.put(MinecraftData.addNamespacePrefix("regeneration"), 28);
 		nameToPeId.put(MinecraftData.addNamespacePrefix("swiftness"), 14);
 		nameToPeId.put(MinecraftData.addNamespacePrefix("fire_resistance"), 12);
@@ -36,6 +39,8 @@ public class PotionToPEIdSpecificRemapper implements ItemStackSpecificRemapper {
 		nameToPeId.put(MinecraftData.addNamespacePrefix("strong_poison"), 27);
 		nameToPeId.put(MinecraftData.addNamespacePrefix("strong_strength"), 33);
 
+		nameToPeId.put(MinecraftData.addNamespacePrefix("long_mundane"), 2);
+		
 		nameToPeId.put(MinecraftData.addNamespacePrefix("long_night_vision"), 6);
 		nameToPeId.put(MinecraftData.addNamespacePrefix("long_invisibility"), 8);
 		nameToPeId.put(MinecraftData.addNamespacePrefix("long_leaping"), 10);

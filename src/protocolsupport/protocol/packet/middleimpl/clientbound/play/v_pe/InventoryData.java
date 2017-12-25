@@ -5,6 +5,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryDa
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -44,8 +45,19 @@ public class InventoryData extends MiddleInventoryData {
 					case 0: { //Brew time (0 - 400) (400 is empty)
 						return RecyclableSingletonList.create(create(version, windowId, 0, Math.round(value / 2) * 2));
 					}
-					case 1: { //Fuel time (0 - 20) (20 is full) TODO: Fix this value for PE.
-						return RecyclableSingletonList.create(create(version, windowId, 1, value));
+					case 1: { //Fuel time (0 - 20) (20 is full)
+						//To be honest I have no clue how it works on the inside, I just tried until the bar matches PC :F
+						RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
+						packets.add(create(version, windowId, 1, value > 0 ? 20 : 0));
+						int inv = 20-value;
+						if (inv > 6) { inv += (inv-6); }
+						if (inv > 10) { inv += (inv-10); }
+						if (inv > 30) { inv += (inv-30); }
+						if (inv > 50) { inv += (inv-50); }
+						if (inv > 60) { inv += (inv-60); }
+						System.out.println("Brewing: " + value + " - PE: " +  (20+inv));
+						packets.add(create(version, windowId, 2, 20 + inv));
+						return packets;
 					}
 				}
 				break;
