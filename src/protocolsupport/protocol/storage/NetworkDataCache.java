@@ -512,14 +512,4 @@ public class NetworkDataCache {
 		return peClientUUID;
 	}
 
-	private String peXUID;
-
-	public void setPEXUID(String xuid) {
-		this.peXUID = xuid;
-	}
-
-	public String getPEXUID() {
-		return this.peXUID;
-	}
-
 }

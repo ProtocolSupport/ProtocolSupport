@@ -74,11 +74,6 @@ public class ProtocolSupport extends JavaPlugin {
 			getLogger().severe("Unable to load buildinfo, make sure you built this version using Gradle");
 			Bukkit.shutdown();
 		}
-		if (Bukkit.getServer().getOnlineMode()) {
-			getLogger().severe("PSPE doesn't support online mode");
-			Bukkit.shutdown();
-			return;
-		}
 		if (!ServerPlatform.detect()) {
 			getLogger().severe("Unsupported server implementation type or version");
 			Bukkit.shutdown();

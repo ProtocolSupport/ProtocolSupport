@@ -130,6 +130,9 @@ shadowJar {
 	relocate 'gnu.trove', 'protocolsupport.libs.gnu.trove'
 	relocate 'com.google.gson', 'protocolsupport.libs.com.google.gson'
 	relocate 'com.nimbusds', 'protocolsupport.libs.com.nimbusds'
+	relocate 'org.objectweb', 'protocolsupport.libs.org.objectweb'
+	relocate 'net.minidev', 'protocolsupport.libs.net.minidev'
+	relocate 'net.jcip', 'protocolsupport.libs.net.jcip'
 	relocate 'raknetserver', 'protocolsupport.libs.raknetserver'
 	relocate 'udpserversocketchannel', 'protocolsupport.libs.udpserversocketchannel'
 }
