@@ -77,7 +77,7 @@ public class BookEdit extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		ItemStackWrapper bookItem = cache.getHotbarItem(slot).cloneItemStack();
+		ItemStackWrapper bookItem = cache.getItemInHand();
 		if (!bookItem.isNull() && bookItem.getType() == Material.BOOK_AND_QUILL) {
 			NBTTagCompoundWrapper bookNBT = bookItem.getTag() != null && !bookItem.getTag().isNull() ? bookItem.getTag() : ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
 			NBTTagListWrapper pages = bookNBT.hasKeyOfType("pages", NBTTagType.LIST) ? bookNBT.getList("pages"): ServerPlatform.get().getWrapperFactory().createEmptyNBTList();

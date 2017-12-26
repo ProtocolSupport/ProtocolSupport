@@ -330,8 +330,8 @@ public class GodPacket extends ServerBoundMiddlePacket {
 					if(!transaction.getNewItem().isNull()) System.out.println(transaction.getNewItem().getTag());
 					//Creative transaction use -1 not for cursor but throwing items, cursoritems are actually deleted on serverside.
 					misc.add(MiddleCreativeSetSlot.create(cache.getLocale(), (pcSlot == -999 ? -1 : pcSlot), transaction.getNewItem()));
-					if (pcSlot >= 36) {
-						cache.setHotbarItem(pcSlot - 36, transaction.getNewItem());
+					if (pcSlot == cache.getSelectedSlot()) {
+						cache.setItemInHand(transaction.getNewItem());
 					}
 				}
 				return;

@@ -456,12 +456,12 @@ public class NetworkDataCache {
 	}
 
 	private NBTTagCompoundWrapper signTag;
-	private ItemStackWrapper[] hotbar = new ItemStackWrapper[10];
+	private ItemStackWrapper itemInHand = ItemStackWrapper.NULL;
 	
 	public void setSignTag(NBTTagCompoundWrapper signTag) { this.signTag = signTag; }
 	public NBTTagCompoundWrapper getSignTag() { return signTag; }
-	public void setHotbarItem(int slot, ItemStackWrapper item) { hotbar[slot] = item; }
-	public ItemStackWrapper getHotbarItem(int slot) { return hotbar[slot]; }
+	public ItemStackWrapper getItemInHand() { return itemInHand; }
+	public void setItemInHand(ItemStackWrapper itemInHand) { this.itemInHand = itemInHand; }
 
 	private String title;
 	private int visibleOnScreenTicks = 100; // default fadeIn = 20; default stay = 60; default fadeOut = 20;

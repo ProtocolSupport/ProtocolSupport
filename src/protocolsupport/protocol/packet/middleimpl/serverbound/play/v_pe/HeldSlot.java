@@ -10,9 +10,9 @@ public class HeldSlot extends MiddleHeldSlot {
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		VarNumberSerializer.readVarLong(clientdata);
-		ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), cache.getLocale(), true);
+		cache.setItemInHand(ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), cache.getLocale(), true));
 		clientdata.readByte();
-		slot = clientdata.readByte();
+		cache.setSelectedSlot(slot = clientdata.readByte());
 		clientdata.readByte();
 	}
 
