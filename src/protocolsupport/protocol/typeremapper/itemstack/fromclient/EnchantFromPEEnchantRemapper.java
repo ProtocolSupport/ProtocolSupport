@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.itemstack.toclient;
+package protocolsupport.protocol.typeremapper.itemstack.fromclient;
 
 import org.bukkit.Material;
 
@@ -11,7 +11,7 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagType;
 
-public class EnchantToPEEnchantSpecificRemapper implements ItemStackSpecificRemapper {
+public class EnchantFromPEEnchantRemapper implements ItemStackSpecificRemapper {
 
 	@Override
 	public ItemStackWrapper remap(ProtocolVersion version, String locale, ItemStackWrapper itemstack) {
@@ -24,7 +24,7 @@ public class EnchantToPEEnchantSpecificRemapper implements ItemStackSpecificRema
 				tag.setList("stored-enchants", remapEnchantList(tag.getList("stored-enchants", NBTTagType.COMPOUND)));
 			}
 			itemstack.setTag(tag);
-			if (itemstack.getType() == Material.TIPPED_ARROW) { itemstack.setType(Material.ARROW); }
+			if (itemstack.getType() == Material.ARROW) { itemstack.setType(Material.TIPPED_ARROW); }
 		}
 		return itemstack;
 	}
@@ -33,7 +33,7 @@ public class EnchantToPEEnchantSpecificRemapper implements ItemStackSpecificRema
 		NBTTagListWrapper newList = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
 		for (int i = 0; i < oldList.size(); i++) {
 			NBTTagCompoundWrapper enchData = oldList.getCompound(i);
-			enchData.setShort("id", PEDataValues.pcToPeEnchant(enchData.getIntNumber("id")));
+			enchData.setInt("id", PEDataValues.peToPcEnchant(enchData.getShortNumber("id")));
 			newList.addCompound(enchData);
 		}
 		return newList;

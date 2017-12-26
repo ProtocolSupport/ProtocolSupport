@@ -19,4 +19,5 @@ public class LeatherArmorToPESpecificRemapper extends ItemStackNBTSpecificRemapp
 		}
 		return tag;
 	}
+
 }

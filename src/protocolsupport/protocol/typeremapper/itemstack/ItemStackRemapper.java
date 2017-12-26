@@ -10,9 +10,15 @@ import org.bukkit.Material;
 import gnu.trove.decorator.TIntObjectMapDecorator;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.itemstack.fromclient.BookPagesFromPESpecificRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.fromclient.BookPagesFromPERemapper;
+import protocolsupport.protocol.typeremapper.itemstack.fromclient.EnchantFromPEEnchantRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.fromclient.FireworkFromPETagRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.fromclient.LeatherArmorFromPERemapper;
+import protocolsupport.protocol.typeremapper.itemstack.fromclient.MapItemNbtToLegacyIdRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.fromclient.MonsterEggFromLegacyIdRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.fromclient.MonsterEggFromPEIdRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.fromclient.PotionFromLegacyIdRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.fromclient.PotionFromPEIdRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.BookPagesToLegacyTextSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.BookPagesToPESpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.toclient.DragonHeadSpecificRemapper;
@@ -252,11 +258,13 @@ public class ItemStackRemapper {
 		registerToClientRemapper(Material.SPLASH_POTION, new PotionToLegacyIdSpecificRemapper(true), ProtocolVersionsHelper.BEFORE_1_9);
 		registerToClientRemapper(Material.LINGERING_POTION, new PotionToLegacyIdSpecificRemapper(true), ProtocolVersionsHelper.BEFORE_1_9);
 		registerToClientRemapper(Material.WRITTEN_BOOK, new BookPagesToLegacyTextSpecificRemapper(), ProtocolVersionsHelper.BEFORE_1_8);
-		registerToClientRemapper(Material.BOOK_AND_QUILL, new EmptyBookPageAdderSpecificRemapper(), ProtocolVersionsHelper.ALL_PC);
+		registerToClientRemapper(Material.BOOK_AND_QUILL, new EmptyBookPageAdderSpecificRemapper(), ProtocolVersionsHelper.ALL);
 		registerToClientRemapper(Material.MAP, new MapItemLegacyIdToNbtSpecificRemapper(), ProtocolVersion.MINECRAFT_PE);
 		PotionToPEIdSpecificRemapper pepotion = new PotionToPEIdSpecificRemapper();
 		registerToClientRemapper(Material.POTION, pepotion, ProtocolVersion.MINECRAFT_PE);
 		registerToClientRemapper(Material.SPLASH_POTION, pepotion, ProtocolVersion.MINECRAFT_PE);
+		registerToClientRemapper(Material.LINGERING_POTION, pepotion, ProtocolVersion.MINECRAFT_PE);
+		registerToClientRemapper(Material.SPECTRAL_ARROW, pepotion, ProtocolVersion.MINECRAFT_PE);
 		registerToClientRemapper(Material.MONSTER_EGG, new MonsterEggToPEIdSpecificRemapper(), ProtocolVersion.MINECRAFT_PE);
 		BookPagesToPESpecificRemapper pebook = new BookPagesToPESpecificRemapper();
 		registerToClientRemapper(Material.WRITTEN_BOOK, pebook, ProtocolVersion.MINECRAFT_PE);
@@ -270,19 +278,33 @@ public class ItemStackRemapper {
 		registerToClientRemapper(Material.LEATHER_LEGGINGS, peleatherarmor, ProtocolVersion.MINECRAFT_PE);
 		registerToClientRemapper(Material.LEATHER_BOOTS, peleatherarmor, ProtocolVersion.MINECRAFT_PE);
 		EnchantFilterNBTSpecificRemapper enchantfilter = new EnchantFilterNBTSpecificRemapper();
-		Arrays.stream(Material.values()).forEach(material -> {
-			registerToClientRemapper(material, enchantfilter, ProtocolVersionsHelper.ALL_PC);
-			registerToClientRemapper(material, enchantfilter, ProtocolVersion.MINECRAFT_PE);
-		});
 		EnchantToPEEnchantSpecificRemapper peenchantremapper = new EnchantToPEEnchantSpecificRemapper();
+		EnchantFromPEEnchantRemapper frompeenchantremapper = new EnchantFromPEEnchantRemapper();
 		Arrays.stream(Material.values()).forEach(material -> {
+			registerToClientRemapper(material, enchantfilter, ProtocolVersionsHelper.ALL);
 			registerToClientRemapper(material, peenchantremapper, ProtocolVersion.MINECRAFT_PE);
+			registerFromClientRemapper(material, frompeenchantremapper, ProtocolVersion.MINECRAFT_PE);
 		});
 		registerFromClientRemapper(Material.POTION, new PotionFromLegacyIdRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
 		registerFromClientRemapper(Material.MONSTER_EGG, new MonsterEggFromLegacyIdRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
-		BookPagesFromPESpecificRemapper frompebook = new BookPagesFromPESpecificRemapper();
+		registerFromClientRemapper(Material.MAP, new MapItemNbtToLegacyIdRemapper(), ProtocolVersion.MINECRAFT_PE);
+		registerFromClientRemapper(Material.MONSTER_EGG, new MonsterEggFromPEIdRemapper(), ProtocolVersion.MINECRAFT_PE);
+		BookPagesFromPERemapper frompebook = new BookPagesFromPERemapper();
 		registerFromClientRemapper(Material.WRITTEN_BOOK, frompebook, ProtocolVersion.MINECRAFT_PE);
 		registerFromClientRemapper(Material.BOOK_AND_QUILL, frompebook, ProtocolVersion.MINECRAFT_PE);
+		PotionFromPEIdRemapper frompepotion = new PotionFromPEIdRemapper();
+		registerFromClientRemapper(Material.POTION, frompepotion, ProtocolVersion.MINECRAFT_PE);
+		registerFromClientRemapper(Material.SPLASH_POTION, frompepotion, ProtocolVersion.MINECRAFT_PE);
+		registerFromClientRemapper(Material.LINGERING_POTION, frompepotion, ProtocolVersion.MINECRAFT_PE);
+		registerFromClientRemapper(Material.SPECTRAL_ARROW, frompepotion, ProtocolVersion.MINECRAFT_PE);
+		LeatherArmorFromPERemapper frompeleatherarmor = new LeatherArmorFromPERemapper();
+		registerFromClientRemapper(Material.LEATHER_HELMET, frompeleatherarmor, ProtocolVersion.MINECRAFT_PE);
+		registerFromClientRemapper(Material.LEATHER_CHESTPLATE, frompeleatherarmor, ProtocolVersion.MINECRAFT_PE);
+		registerFromClientRemapper(Material.LEATHER_LEGGINGS, frompeleatherarmor, ProtocolVersion.MINECRAFT_PE);
+		registerFromClientRemapper(Material.LEATHER_BOOTS, frompeleatherarmor, ProtocolVersion.MINECRAFT_PE);
+		FireworkFromPETagRemapper frompefireworks = new FireworkFromPETagRemapper();
+		registerFromClientRemapper(Material.FIREWORK_CHARGE, frompefireworks, ProtocolVersion.MINECRAFT_PE);
+		registerFromClientRemapper(Material.FIREWORK, frompefireworks, ProtocolVersion.MINECRAFT_PE);
 	}
 
 	public static ItemStackWrapper remapToClient(ProtocolVersion version, String locale, int originalTypeId, ItemStackWrapper itemstack) {

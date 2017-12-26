@@ -2,6 +2,10 @@ package protocolsupport.protocol.typeremapper.pe;
 
 import java.util.EnumMap;
 
+import org.bukkit.enchantments.Enchantment;
+
+import gnu.trove.map.hash.TIntIntHashMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
@@ -10,60 +14,69 @@ import protocolsupport.protocol.utils.types.NetworkEntityType;
 public class PEDataValues {
 
 	private static final EnumMap<NetworkEntityType, Integer> livingEntityType = new EnumMap<>(NetworkEntityType.class);
+	private static final TIntObjectHashMap<NetworkEntityType> livingTypeFromNetwork = new TIntObjectHashMap<NetworkEntityType>();
+	private static void registerLivingType(NetworkEntityType type, int networkId) {
+		livingEntityType.put(type, networkId);
+		livingTypeFromNetwork.put(networkId, type);
+	}
 	static {
-		livingEntityType.put(NetworkEntityType.WITHER_SKELETON, 48);
-		livingEntityType.put(NetworkEntityType.WOLF, 14);
-		livingEntityType.put(NetworkEntityType.RABBIT, 18);
-		livingEntityType.put(NetworkEntityType.CHICKEN, 10);
-		livingEntityType.put(NetworkEntityType.COW, 11);
-		livingEntityType.put(NetworkEntityType.SHEEP, 13);
-		livingEntityType.put(NetworkEntityType.PIG, 12);
-		livingEntityType.put(NetworkEntityType.MUSHROOM_COW, 16);
-		livingEntityType.put(NetworkEntityType.SHULKER, 54);
-		livingEntityType.put(NetworkEntityType.GUARDIAN, 49);
-		livingEntityType.put(NetworkEntityType.ENDERMITE, 55);
-		livingEntityType.put(NetworkEntityType.WITCH, 45);
-		livingEntityType.put(NetworkEntityType.BAT, 19);
-		livingEntityType.put(NetworkEntityType.WITHER, 52);
-		livingEntityType.put(NetworkEntityType.ENDER_DRAGON, 53);
-		livingEntityType.put(NetworkEntityType.MAGMA_CUBE, 42);
-		livingEntityType.put(NetworkEntityType.BLAZE, 43);
-		livingEntityType.put(NetworkEntityType.SILVERFISH, 39);
-		livingEntityType.put(NetworkEntityType.CAVE_SPIDER, 40);
-		livingEntityType.put(NetworkEntityType.ENDERMAN, 38);
-		livingEntityType.put(NetworkEntityType.ZOMBIE_PIGMAN, 36);
-		livingEntityType.put(NetworkEntityType.GHAST, 41);
-		livingEntityType.put(NetworkEntityType.SLIME, 37);
-		livingEntityType.put(NetworkEntityType.ZOMBIE, 32);
-		livingEntityType.put(NetworkEntityType.GIANT, 32); //Massive zombies. No remap though because we want the metadata.
-		livingEntityType.put(NetworkEntityType.SPIDER, 35);
-		livingEntityType.put(NetworkEntityType.SKELETON, 34);
-		livingEntityType.put(NetworkEntityType.CREEPER, 33);
-		livingEntityType.put(NetworkEntityType.VILLAGER, 15);
-		livingEntityType.put(NetworkEntityType.MULE, 25);
-		livingEntityType.put(NetworkEntityType.DONKEY, 24);
-		livingEntityType.put(NetworkEntityType.ZOMBIE_HORSE, 27);
-		livingEntityType.put(NetworkEntityType.SKELETON_HORSE, 26);
-		livingEntityType.put(NetworkEntityType.ZOMBIE_VILLAGER, 44);
-		livingEntityType.put(NetworkEntityType.HUSK, 47);
-		livingEntityType.put(NetworkEntityType.SQUID, 17);
-		livingEntityType.put(NetworkEntityType.STRAY, 46);
-		livingEntityType.put(NetworkEntityType.POLAR_BEAR, 28);
-		livingEntityType.put(NetworkEntityType.ELDER_GUARDIAN, 50);
-		livingEntityType.put(NetworkEntityType.COMMON_HORSE, 23);
-		livingEntityType.put(NetworkEntityType.IRON_GOLEM, 20);
-		livingEntityType.put(NetworkEntityType.OCELOT, 22);
-		livingEntityType.put(NetworkEntityType.SNOWMAN, 21);
-		livingEntityType.put(NetworkEntityType.LAMA, 29);
-		livingEntityType.put(NetworkEntityType.PARROT, 30);
-		livingEntityType.put(NetworkEntityType.ARMOR_STAND_MOB, 61);
-		livingEntityType.put(NetworkEntityType.VINDICATOR, 57);
-		livingEntityType.put(NetworkEntityType.EVOKER, 104);
-		livingEntityType.put(NetworkEntityType.VEX, 105);
+		registerLivingType(NetworkEntityType.WITHER_SKELETON, 48);
+		registerLivingType(NetworkEntityType.WOLF, 14);
+		registerLivingType(NetworkEntityType.RABBIT, 18);
+		registerLivingType(NetworkEntityType.CHICKEN, 10);
+		registerLivingType(NetworkEntityType.COW, 11);
+		registerLivingType(NetworkEntityType.SHEEP, 13);
+		registerLivingType(NetworkEntityType.PIG, 12);
+		registerLivingType(NetworkEntityType.MUSHROOM_COW, 16);
+		registerLivingType(NetworkEntityType.SHULKER, 54);
+		registerLivingType(NetworkEntityType.GUARDIAN, 49);
+		registerLivingType(NetworkEntityType.ENDERMITE, 55);
+		registerLivingType(NetworkEntityType.WITCH, 45);
+		registerLivingType(NetworkEntityType.BAT, 19);
+		registerLivingType(NetworkEntityType.WITHER, 52);
+		registerLivingType(NetworkEntityType.ENDER_DRAGON, 53);
+		registerLivingType(NetworkEntityType.MAGMA_CUBE, 42);
+		registerLivingType(NetworkEntityType.BLAZE, 43);
+		registerLivingType(NetworkEntityType.SILVERFISH, 39);
+		registerLivingType(NetworkEntityType.CAVE_SPIDER, 40);
+		registerLivingType(NetworkEntityType.ENDERMAN, 38);
+		registerLivingType(NetworkEntityType.ZOMBIE_PIGMAN, 36);
+		registerLivingType(NetworkEntityType.GHAST, 41);
+		registerLivingType(NetworkEntityType.SLIME, 37);
+		registerLivingType(NetworkEntityType.GIANT, 32); //Massive zombies. No remap though because we want the metadata.
+		registerLivingType(NetworkEntityType.ZOMBIE, 32);
+		registerLivingType(NetworkEntityType.SPIDER, 35);
+		registerLivingType(NetworkEntityType.SKELETON, 34);
+		registerLivingType(NetworkEntityType.CREEPER, 33);
+		registerLivingType(NetworkEntityType.VILLAGER, 15);
+		registerLivingType(NetworkEntityType.MULE, 25);
+		registerLivingType(NetworkEntityType.DONKEY, 24);
+		registerLivingType(NetworkEntityType.ZOMBIE_HORSE, 27);
+		registerLivingType(NetworkEntityType.SKELETON_HORSE, 26);
+		registerLivingType(NetworkEntityType.ZOMBIE_VILLAGER, 44);
+		registerLivingType(NetworkEntityType.HUSK, 47);
+		registerLivingType(NetworkEntityType.SQUID, 17);
+		registerLivingType(NetworkEntityType.STRAY, 46);
+		registerLivingType(NetworkEntityType.POLAR_BEAR, 28);
+		registerLivingType(NetworkEntityType.ELDER_GUARDIAN, 50);
+		registerLivingType(NetworkEntityType.COMMON_HORSE, 23);
+		registerLivingType(NetworkEntityType.IRON_GOLEM, 20);
+		registerLivingType(NetworkEntityType.OCELOT, 22);
+		registerLivingType(NetworkEntityType.SNOWMAN, 21);
+		registerLivingType(NetworkEntityType.LAMA, 29);
+		registerLivingType(NetworkEntityType.PARROT, 30);
+		registerLivingType(NetworkEntityType.ARMOR_STAND_MOB, 61);
+		registerLivingType(NetworkEntityType.VINDICATOR, 57);
+		registerLivingType(NetworkEntityType.EVOKER, 104);
+		registerLivingType(NetworkEntityType.VEX, 105);
 	}
 
 	public static int getLivingEntityTypeId(NetworkEntityType type) {
 		return livingEntityType.get(type);
+	}
+	
+	public static NetworkEntityType getLivingTypeFromPeNetworkId(int networkId) {
+		return livingTypeFromNetwork.get(networkId);
 	}
 
 	private static final EnumMap<NetworkEntityType, Integer> objectEntityType = new EnumMap<>(NetworkEntityType.class);
@@ -122,6 +135,45 @@ public class PEDataValues {
 		for (int i = 0; i < MinecraftData.BLOCK_DATA_MAX; i++) {
 			BLOCK_ID.setRemap(MinecraftData.getBlockStateFromIdAndData(from, i), MinecraftData.getBlockStateFromIdAndData(to, dataTo));
 		}
+	}
+	
+	private static final TIntIntHashMap pcEnchantToPe = new TIntIntHashMap();
+	private static final TIntIntHashMap peEnchantToPc = new TIntIntHashMap();
+	@SuppressWarnings("deprecation")
+	private static void registerEnchantRemap(Enchantment enchantment, int peId) {
+		pcEnchantToPe.put(enchantment.getId(), peId);
+		peEnchantToPc.put(peId, enchantment.getId());
+	}
+	static {
+		registerEnchantRemap(Enchantment.OXYGEN, 6);
+		registerEnchantRemap(Enchantment.WATER_WORKER, 8);
+		registerEnchantRemap(Enchantment.THORNS, 5);
+		registerEnchantRemap(Enchantment.DEPTH_STRIDER, 7);
+		registerEnchantRemap(Enchantment.FROST_WALKER, 25);
+		registerEnchantRemap(Enchantment.DAMAGE_ALL, 9);
+		registerEnchantRemap(Enchantment.DAMAGE_UNDEAD, 10);
+		registerEnchantRemap(Enchantment.DAMAGE_ARTHROPODS, 11);
+		registerEnchantRemap(Enchantment.KNOCKBACK, 12);
+		registerEnchantRemap(Enchantment.FIRE_ASPECT, 13);
+		registerEnchantRemap(Enchantment.LOOT_BONUS_MOBS, 14);
+		registerEnchantRemap(Enchantment.DIG_SPEED, 15);
+		registerEnchantRemap(Enchantment.SILK_TOUCH, 16);
+		registerEnchantRemap(Enchantment.DURABILITY, 17);
+		registerEnchantRemap(Enchantment.LOOT_BONUS_BLOCKS, 18);
+		registerEnchantRemap(Enchantment.ARROW_DAMAGE, 19);
+		registerEnchantRemap(Enchantment.ARROW_KNOCKBACK, 20);
+		registerEnchantRemap(Enchantment.ARROW_FIRE, 21);
+		registerEnchantRemap(Enchantment.ARROW_INFINITE, 22);
+		registerEnchantRemap(Enchantment.LUCK, 23);
+		registerEnchantRemap(Enchantment.LURE, 24);
+		registerEnchantRemap(Enchantment.MENDING, 26);
+	}
+	
+	public static int pcToPeEnchant(int pcId) {
+		return pcEnchantToPe.get(pcId);
+	}
+	public static int peToPcEnchant(int peId) {
+		return peEnchantToPc.get(peId);
 	}
 
 	public static final RemappingTable.ComplexIdRemappingTable ITEM_ID = new RemappingTable.ComplexIdRemappingTable();
@@ -304,10 +356,9 @@ public class PEDataValues {
 		registerItemRemap(2266, 510);
 		registerItemRemap(2267, 511);
 
-		// Not implemented yet in PE
+		// Not implemented (yet) in PE
 		registerItemRemap(453, 340); // KNOWLEDGE BOOK -> BOOK
 		registerItemRemap(442, 268); // SHIELD -> WOODEN SWORD
-		registerItemRemap(440, 262); // TIPPED ARROW -> ARROW
 		registerItemRemap(439, 262); // SPECTRAL ARROW -> ARROW
 		registerItemRemap(343, 408); // POWERED MINECART -> MINECART WITH A HOPPER
 	}
