@@ -264,7 +264,7 @@ public class ItemStackRemapper {
 		registerToClientRemapper(Material.POTION, pepotion, ProtocolVersion.MINECRAFT_PE);
 		registerToClientRemapper(Material.SPLASH_POTION, pepotion, ProtocolVersion.MINECRAFT_PE);
 		registerToClientRemapper(Material.LINGERING_POTION, pepotion, ProtocolVersion.MINECRAFT_PE);
-		registerToClientRemapper(Material.SPECTRAL_ARROW, pepotion, ProtocolVersion.MINECRAFT_PE);
+		registerToClientRemapper(Material.TIPPED_ARROW, pepotion, ProtocolVersion.MINECRAFT_PE);
 		registerToClientRemapper(Material.MONSTER_EGG, new MonsterEggToPEIdSpecificRemapper(), ProtocolVersion.MINECRAFT_PE);
 		BookPagesToPESpecificRemapper pebook = new BookPagesToPESpecificRemapper();
 		registerToClientRemapper(Material.WRITTEN_BOOK, pebook, ProtocolVersion.MINECRAFT_PE);
@@ -296,7 +296,7 @@ public class ItemStackRemapper {
 		registerFromClientRemapper(Material.POTION, frompepotion, ProtocolVersion.MINECRAFT_PE);
 		registerFromClientRemapper(Material.SPLASH_POTION, frompepotion, ProtocolVersion.MINECRAFT_PE);
 		registerFromClientRemapper(Material.LINGERING_POTION, frompepotion, ProtocolVersion.MINECRAFT_PE);
-		registerFromClientRemapper(Material.SPECTRAL_ARROW, frompepotion, ProtocolVersion.MINECRAFT_PE);
+		registerFromClientRemapper(Material.TIPPED_ARROW, frompepotion, ProtocolVersion.MINECRAFT_PE);
 		LeatherArmorFromPERemapper frompeleatherarmor = new LeatherArmorFromPERemapper();
 		registerFromClientRemapper(Material.LEATHER_HELMET, frompeleatherarmor, ProtocolVersion.MINECRAFT_PE);
 		registerFromClientRemapper(Material.LEATHER_CHESTPLATE, frompeleatherarmor, ProtocolVersion.MINECRAFT_PE);
