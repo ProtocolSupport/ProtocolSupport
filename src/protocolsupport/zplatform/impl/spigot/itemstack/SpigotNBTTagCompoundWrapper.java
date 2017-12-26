@@ -97,6 +97,11 @@ public class SpigotNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 	public int getIntNumber(String key) {
 		return tag.getInt(key);
 	}
+	
+	@Override
+	public short getShortNumber(String key) {
+		return tag.getShort(key);
+	}
 
 	@Override
 	public byte getByteNumber(String key) {
