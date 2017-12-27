@@ -63,17 +63,26 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 			case ANVIL: {
 				switch(slot) {
 					case 0: {
-						return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_ANVIL_INPUT, slot, itemstack));
+						return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_ANVIL_INPUT, 0, itemstack));
 					}
 					case 1: {
-						return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_ANVIL_MATERIAL, slot, itemstack));
+						return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_ANVIL_MATERIAL, 0, itemstack));
 					}
 					case 2: {
-						return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_ANVIL_OUTPUT, slot, itemstack));
+						return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_ANVIL_OUTPUT, 0, itemstack));
 					}
 					default: {
 						return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_INVENTORY, slot >= 30 ? slot - 30 : slot + 6, itemstack));
 					}
+				}
+			}
+			case ENCHANT: {
+				if (slot == 0) {
+					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_ENCHANT_OUTPUT, 0, itemstack));
+				} else if (slot == 1) {
+					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_ENCHANT_MATERIAL, 0, itemstack));
+				} else {
+					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_INVENTORY, slot >= 29 ? slot - 29 : slot + 7, itemstack));
 				}
 			}
 			case CRAFTING_TABLE: {

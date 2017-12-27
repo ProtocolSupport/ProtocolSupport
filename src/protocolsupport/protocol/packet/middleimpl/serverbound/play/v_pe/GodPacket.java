@@ -721,6 +721,18 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				}
 				return invSlotToContainerSlot(peInventoryId, 3, peSlot);
 			}
+			case ENCHANT: {
+				switch(peInventoryId) {
+					case PESource.POCKET_ENCHANT_INPUT:
+					case PESource.POCKET_ENCHANT_OUTPUT: {
+						return 0;
+					}
+					case PESource.POCKET_ANVIL_MATERIAL: {
+						return 0;
+					}
+				}
+				return invSlotToContainerSlot(peInventoryId, 2, peSlot);
+			}
 			case CRAFTING_TABLE: {
 				switch(peInventoryId) {
 					case PESource.POCKET_CLICKED_SLOT: {
