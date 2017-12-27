@@ -1,9 +1,14 @@
 package protocolsupport.protocol.typeremapper.pe;
 
+import java.util.EnumMap;
+
 import org.bukkit.block.Block;
 
+import protocolsupport.api.utils.Any;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.utils.types.TileEntityType;
+import protocolsupport.protocol.utils.types.WindowType;
 
 public class PEInventory {
 	
@@ -25,6 +30,28 @@ public class PEInventory {
 		
 		public int getTypeData() {
 			return typeData;
+		}
+		
+		//Table with PE ids and access to tile id, to place the inventory blocks.
+		private static void regInvBlockType(WindowType type, int containerId, TileEntityType tileType) {
+			invBlockType.put(type, new Any<Integer, TileEntityType>(containerId << 4, tileType));
+		}
+		private static EnumMap<WindowType, Any<Integer, TileEntityType>> invBlockType = new EnumMap<>(WindowType.class);
+		static {
+			regInvBlockType(WindowType.CHEST, 			54, TileEntityType.CHEST);
+			regInvBlockType(WindowType.CRAFTING_TABLE, 	58, TileEntityType.UNKNOWN);
+			regInvBlockType(WindowType.FURNACE, 		61, TileEntityType.FURNACE);
+			regInvBlockType(WindowType.DISPENSER, 		23, TileEntityType.DISPENSER);
+			regInvBlockType(WindowType.ENCHANT, 	   116, TileEntityType.UNKNOWN);
+			regInvBlockType(WindowType.BREWING, 	   117, TileEntityType.BREWING_STAND);
+			regInvBlockType(WindowType.BEACON, 		   138, TileEntityType.BEACON);
+			regInvBlockType(WindowType.ANVIL, 		   145, TileEntityType.UNKNOWN);
+			regInvBlockType(WindowType.HOPPER, 		   154, TileEntityType.HOPPER);
+			regInvBlockType(WindowType.DROPPER,		   158, TileEntityType.DROPPER);
+			regInvBlockType(WindowType.SHULKER, 		54, TileEntityType.CHEST);
+		}
+		public static Any<Integer, TileEntityType> getContainerData(WindowType type) {
+			return invBlockType.get(type);
 		}
 	}
 	

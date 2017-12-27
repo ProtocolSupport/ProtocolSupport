@@ -5,6 +5,7 @@ import io.netty.buffer.Unpooled;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.api.utils.Any;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
@@ -23,7 +24,7 @@ import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class InventoryOpen extends MiddleInventoryOpen {
-
+	
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		cache.getInfTransactions().clear();
@@ -41,6 +42,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 				//When it is a doublechest, re-smuggle the windowId back to the metadata.
 				connection.addMetadata("smuggledWindowId", windowId);
 			} else {
+				if(type == WindowType.SHULKER) { type = WindowType.CHEST; } //:shrug:
 				//Only double chests need some time to verify on the client (FFS Mojang!), the rest can be instantly opened after preparing.
 				packets.add(create(connection.getVersion(), windowId, type, blocks[0].getPosition(), -1));
 			}
@@ -50,24 +52,25 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	
 	public static RecyclableArrayList<ClientBoundPacketData> prepareFakeInventory(ProtocolVersion version, String locale, InvBlock[] blocks, WindowType type, BaseComponent title, int slots) {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		if(type.getContainerId() != -1) {
+		Any<Integer, TileEntityType> typeData = InvBlock.getContainerData(type);
+		if(typeData != null) {
 			Position mainpos = blocks[0].getPosition();
-			packets.add(BlockChangeSingle.create(version, mainpos, type.getContainerId() << 4));
+			packets.add(BlockChangeSingle.create(version, mainpos, typeData.getObj1()));
 			NBTTagCompoundWrapper tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
 			tag.setString("CustomName", title.toLegacyText(locale));
-			if(type.getTileType() != TileEntityType.UNKNOWN) {
-				tag.setString("id", type.getTileType().getRegistryId());
+			if(typeData.getObj2() != TileEntityType.UNKNOWN) {
+				tag.setString("id", typeData.getObj2().getRegistryId());
 			}
 			if(type == WindowType.CHEST && slots > 27) {
 				Position auxPos = blocks[1].getPosition();
-				packets.add(BlockChangeSingle.create(version, auxPos, type.getContainerId() << 4));
+				packets.add(BlockChangeSingle.create(version, auxPos, typeData.getObj1()));
 				tag.setInt("pairx", auxPos.getX());
 				tag.setInt("pairz", auxPos.getZ());
 				tag.setByte("pairlead", 1);
 				packets.add(BlockTileUpdate.create(version, mainpos, tag));
 				NBTTagCompoundWrapper auxTag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();;
 				auxTag.setString("CustomName", title.toLegacyText(locale));
-				auxTag.setString("id", type.getTileType().getRegistryId());
+				auxTag.setString("id", typeData.getObj2().getRegistryId());
 				auxTag.setInt("pairx", mainpos.getX());
 				auxTag.setInt("pairz", mainpos.getZ());
 				auxTag.setByte("pairlead", 0);
