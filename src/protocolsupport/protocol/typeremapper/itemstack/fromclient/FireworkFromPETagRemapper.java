@@ -38,11 +38,11 @@ public class FireworkFromPETagRemapper implements ItemStackSpecificRemapper {
 
 	private NBTTagCompoundWrapper remapExplosion(NBTTagCompoundWrapper peExplosion) {
 		NBTTagCompoundWrapper pcExplosion = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-		pcExplosion.setIntArray("Colors", remapColors(peExplosion.getByteArray("FireworkColor")));
-		pcExplosion.setIntArray("FadeColors", remapColors(peExplosion.getByteArray("FireworkFade")));
-		pcExplosion.setByte("Flicker", peExplosion.getByteNumber("FireworkFlicker"));
-		pcExplosion.setByte("Trail", peExplosion.getByteNumber("FireworkTrail"));
-		pcExplosion.setByte("Type", peExplosion.getByteNumber("FireworkType"));
+		if (peExplosion.hasKeyOfType("FireworkColor", NBTTagType.BYTE_ARRAY)) 	{ pcExplosion.setIntArray("Colors", remapColors(peExplosion.getByteArray("FireworkColor"))); }
+		if (peExplosion.hasKeyOfType("FireworkFade", NBTTagType.BYTE_ARRAY)) 	{ pcExplosion.setIntArray("FadeColors", remapColors(peExplosion.getByteArray("FireworkFade"))); }
+		if (peExplosion.hasKeyOfType("FireworkFlicker", NBTTagType.BYTE)) 		{ pcExplosion.setByte("Flicker", peExplosion.getByteNumber("FireworkFlicker")); }
+		if (peExplosion.hasKeyOfType("FireworkTrail", NBTTagType.BYTE)) 		{ pcExplosion.setByte("Trail", peExplosion.getByteNumber("FireworkTrail")); }
+		if (peExplosion.hasKeyOfType("FireworkType", NBTTagType.BYTE)) 			{ pcExplosion.setByte("Type", peExplosion.getByteNumber("FireworkType")); }
 		return pcExplosion;
 	}
 

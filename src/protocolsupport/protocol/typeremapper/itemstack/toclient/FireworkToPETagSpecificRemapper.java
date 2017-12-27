@@ -16,12 +16,12 @@ public class FireworkToPETagSpecificRemapper implements ItemStackSpecificRemappe
 		if (tag.isNull()) {
 			return itemstack;
 		}
-		if(tag.hasKeyOfType("Explosion", NBTTagType.COMPOUND)) {
+		if (tag.hasKeyOfType("Explosion", NBTTagType.COMPOUND)) {
 			tag.setCompound("Explosion", remapExplosion(tag.getCompound("Explosion")));
 		}
 		if(tag.hasKeyOfType("Fireworks", NBTTagType.COMPOUND)) {
 			NBTTagCompoundWrapper fireworks = tag.getCompound("Fireworks");
-			if(fireworks.hasKeyOfType("Explosions", NBTTagType.LIST)) {
+			if (fireworks.hasKeyOfType("Explosions", NBTTagType.LIST)) {
 				fireworks.setList("Explosions", remapExplosions(fireworks.getList("Explosions")));
 			}
 		}
@@ -38,11 +38,11 @@ public class FireworkToPETagSpecificRemapper implements ItemStackSpecificRemappe
 
 	private NBTTagCompoundWrapper remapExplosion(NBTTagCompoundWrapper pcExplosion) {
 		NBTTagCompoundWrapper peExplosion = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-		peExplosion.setByteArray("FireworkColor", remapColors(pcExplosion.getIntArray("Colors")));
-		peExplosion.setByteArray("FireworkFade", remapColors(pcExplosion.getIntArray("FadeColors")));
-		peExplosion.setByte("FireworkFlicker", pcExplosion.getByteNumber("Flicker"));
-		peExplosion.setByte("FireworkTrail", pcExplosion.getByteNumber("Trail"));
-		peExplosion.setByte("FireworkType", pcExplosion.getByteNumber("Type"));
+		if (pcExplosion.hasKeyOfType("Colors", 		NBTTagType.INT_ARRAY)) { peExplosion.setByteArray("FireworkColor", remapColors(pcExplosion.getIntArray("Colors"))); }
+		if (pcExplosion.hasKeyOfType("FadeColors", 	NBTTagType.INT_ARRAY)) { peExplosion.setByteArray("FireworkFade", remapColors(pcExplosion.getIntArray("FadeColors"))); }
+		if (pcExplosion.hasKeyOfType("Flicker", 	NBTTagType.BYTE)) 	   { peExplosion.setByte("FireworkFlicker", pcExplosion.getByteNumber("Flicker")); }
+		if (pcExplosion.hasKeyOfType("Trail", 		NBTTagType.BYTE))	   { peExplosion.setByte("FireworkTrail", pcExplosion.getByteNumber("Trail")); }
+		if (pcExplosion.hasKeyOfType("Type",	 	NBTTagType.BYTE))	   { peExplosion.setByte("FireworkType", pcExplosion.getByteNumber("Type")); }
 		return peExplosion;
 	}
 
