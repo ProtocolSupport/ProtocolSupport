@@ -1,6 +1,32 @@
 package protocolsupport.protocol.typeremapper.pe;
 
+import org.bukkit.block.Block;
+
+import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import protocolsupport.protocol.utils.types.Position;
+
 public class PEInventory {
+	
+	//To store data about fake inventory blocks for async usage.
+	public static class InvBlock {
+		private final Position position;
+		private final int typeData;
+		
+		//Constructor is called in sync!
+		@SuppressWarnings("deprecation")
+		public InvBlock(Block b) {
+			position = Position.fromBukkit(b.getLocation());
+			typeData = MinecraftData.getBlockStateFromIdAndData(b.getTypeId(), b.getData());
+		}
+		
+		public Position getPosition() {
+			return position;
+		}
+		
+		public int getTypeData() {
+			return typeData;
+		}
+	}
 	
 	//Slot thingy numbers.
 	public static class PESource {

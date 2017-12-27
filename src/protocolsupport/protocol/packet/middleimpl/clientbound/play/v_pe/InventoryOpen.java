@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
-import org.bukkit.block.Block;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import protocolsupport.api.Connection;
@@ -13,6 +11,7 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.pe.PEInventory.InvBlock;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.TileEntityType;
@@ -32,8 +31,8 @@ public class InventoryOpen extends MiddleInventoryOpen {
 			return RecyclableSingletonList.create(create(connection.getVersion(), windowId, type, new Position(0, 0, 0), horseId));
 		}
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		if(connection.hasMetadata("fakeInvBlocks")) {
-			Block[] blocks = (Block[]) connection.getMetadata("fakeInvBlocks");
+		if(connection.hasMetadata("peInvBlocks")) {
+			InvBlock[] blocks = (InvBlock[]) connection.getMetadata("peInvBlocks");
 			packets.addAll(prepareFakeInventory(connection.getVersion(), cache.getLocale(), blocks, type, title, cache.getOpenedWindowSlots()));
 			if(
 				(type == WindowType.CHEST) &&
@@ -43,16 +42,16 @@ public class InventoryOpen extends MiddleInventoryOpen {
 				connection.addMetadata("smuggledWindowId", windowId);
 			} else {
 				//Only double chests need some time to verify on the client (FFS Mojang!), the rest can be instantly opened after preparing.
-				packets.add(create(connection.getVersion(), windowId, type, Position.fromBukkit(blocks[0].getLocation()), -1));
+				packets.add(create(connection.getVersion(), windowId, type, blocks[0].getPosition(), -1));
 			}
 		}
 		return packets;
 	}
 	
-	public static RecyclableArrayList<ClientBoundPacketData> prepareFakeInventory(ProtocolVersion version, String locale, Block[] blocks, WindowType type, BaseComponent title, int slots) {
+	public static RecyclableArrayList<ClientBoundPacketData> prepareFakeInventory(ProtocolVersion version, String locale, InvBlock[] blocks, WindowType type, BaseComponent title, int slots) {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		if(type.getContainerId() != -1) {
-			Position mainpos = Position.fromBukkit(blocks[0].getLocation());
+			Position mainpos = blocks[0].getPosition();
 			packets.add(BlockChangeSingle.create(version, mainpos, type.getContainerId() << 4));
 			NBTTagCompoundWrapper tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
 			tag.setString("CustomName", title.toLegacyText(locale));
@@ -60,7 +59,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 				tag.setString("id", type.getTileType().getRegistryId());
 			}
 			if(type == WindowType.CHEST && slots > 27) {
-				Position auxPos = Position.fromBukkit(blocks[1].getLocation());
+				Position auxPos = blocks[1].getPosition();
 				packets.add(BlockChangeSingle.create(version, auxPos, type.getContainerId() << 4));
 				tag.setInt("pairx", auxPos.getX());
 				tag.setInt("pairz", auxPos.getZ());

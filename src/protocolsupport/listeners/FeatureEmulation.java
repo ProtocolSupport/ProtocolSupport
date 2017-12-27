@@ -26,6 +26,7 @@ import protocolsupport.api.tab.TabAPI;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventoryOpen;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.typeremapper.pe.PEInventory.InvBlock;
 import protocolsupport.zplatform.ServerPlatform;
 
 public class FeatureEmulation implements Listener {
@@ -88,9 +89,9 @@ public class FeatureEmulation implements Listener {
 				if ((!player.isOnGround()) || (mainLoc.getBlockY() < 4)) {
 					mainLoc.add(0, 6, 0);
 				}
-				connection.addMetadata("fakeInvBlocks", new Block[] {
-						mainLoc.subtract(1, 2, 0).getBlock(), 
-						mainLoc.	 add(1, 0, 0).getBlock()
+				connection.addMetadata("peInvBlocks", new InvBlock[] {
+						new InvBlock(mainLoc.subtract(1, 2, 0).getBlock()), 
+						new InvBlock(mainLoc.	  add(1, 0, 0).getBlock())
 					});
 				if (event.getView().getTopInventory().getSize() > 27) {
 					Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), new Runnable() {
