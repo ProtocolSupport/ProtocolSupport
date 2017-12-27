@@ -6,7 +6,6 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
-import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -22,7 +21,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 		}
 		ProtocolVersion version = connection.getVersion();
 		String locale = cache.getLocale();
-		if (slot == -1 /*&& cache.getOpenedWindow() != WindowType.PLAYER*/) {
+		if (slot == -1) {
 			//TODO: Figure out how to not fuck this up.
 			//Cursor slot can be set by plugin (only if a window is actually open), this will cause issues however with the deficit/surplus stack so we add them manually here.
 			cache.getInfTransactions().customCursorSurplus(cache, itemstack);

@@ -353,14 +353,12 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			//Anvil naming is only done and known based on the clicked item.
 			if (pcSlot == 2 && cache.getOpenedWindow() == WindowType.ANVIL && !transaction.getOldItem().isNull()) {
 				NBTTagCompoundWrapper tag = transaction.getOldItem().getTag();
-				tag.remove("RepairCost"); //IDK, but it ain't on pc.
 				if (tag.hasKeyOfType("display", NBTTagType.COMPOUND)) {
 					NBTTagCompoundWrapper display = tag.getCompound("display");
 					if (display.hasKeyOfType("Name", NBTTagType.STRING)) {
 						misc.add(anvilName(display.getString("Name")));
 					}
 				}
-				transaction.getOldItem().setTag(tag);
 			}
 			
 			ItemStackWrapperKey oldItemKey = new ItemStackWrapperKey(transaction.getOldItem());
@@ -379,15 +377,19 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				}
 			} else {
 				if((!transaction.getOldItem().isNull()) && (pcSlot != -1)) {
-					if (transaction.getInventoryId() == PESource.POCKET_CRAFTING_GRID_REMOVE && deficitDeque.containsKey(oldItemKey)) {
+					if (
+						(transaction.getInventoryId() == PESource.POCKET_CRAFTING_GRID_REMOVE ||
+						 transaction.getInventoryId() == PESource.POCKET_ANVIL_INPUT || 
+						 transaction.getInventoryId() == PESource.POCKET_ANVIL_MATERIAL
+						) && (deficitDeque.containsKey(oldItemKey))) {
 						//Weird case for the crafting table. Mojang thought it a bright idea to split the adding and removing in there.
 						for (SlotWrapperValue deficit : deficitDeque.get(oldItemKey)) {
 							if(deficit.slot() == pcSlot) {
 								int newDeficit = deficit.amount() - transaction.getOldItem().getAmount();
 								deficit.setAmount(newDeficit <= 0 ? 0 : newDeficit);
-								if(newDeficit < 0) {
+								if (newDeficit <= 0) {
 									deficitDeque.get(oldItemKey).remove(deficit);
-									surplusDeque.put(oldItemKey, new SlotWrapperValue(pcSlot, transaction.getOldItem().getAmount(), -newDeficit));
+									if(newDeficit < 0) { surplusDeque.put(oldItemKey, new SlotWrapperValue(pcSlot, transaction.getOldItem().getAmount(), -newDeficit)); }
 								}
 								return;
 							}
@@ -398,15 +400,20 @@ public class GodPacket extends ServerBoundMiddlePacket {
 					surplusDeque.put(oldItemKey, new SlotWrapperValue(pcSlot, transaction.getOldItem().getAmount(), transaction.getOldItem().getAmount()));
 				}
 				if(!transaction.getNewItem().isNull()) {
-					if (transaction.getInventoryId() == PESource.POCKET_CRAFTING_GRID_ADD && surplusDeque.containsKey(newItemKey)) {
+					if (
+					    (
+					     transaction.getInventoryId() == PESource.POCKET_CRAFTING_GRID_ADD ||
+					     transaction.getInventoryId() == PESource.POCKET_ANVIL_INPUT ||
+					     transaction.getInventoryId() == PESource.POCKET_ANVIL_MATERIAL
+					    ) && (surplusDeque.containsKey(newItemKey))) {
 						//Weird case for the crafting table. Mojang thought it a bright idea to split the adding and removing in there.
 						for (SlotWrapperValue surplus : surplusDeque.get(newItemKey)) {
 							if(surplus.slot() == pcSlot) {
 								int newSurplus = surplus.amount() - transaction.getNewItem().getAmount();
 								surplus.setAmount(newSurplus);
-								if (newSurplus < 0) {
+								if (newSurplus <= 0) {
 									surplusDeque.get(newItemKey).remove(surplus);
-									deficitDeque.put(newItemKey, new SlotWrapperValue(pcSlot, 0, -newSurplus));
+									if (newSurplus < 0) { deficitDeque.put(newItemKey, new SlotWrapperValue(pcSlot, 0, -newSurplus)); }
 								}
 								return;
 							}
@@ -427,19 +434,25 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			//until the manual override kicks in.
 			cache.lockInventory();
 			
+			bug("PROCESSING MISC");
+			
 			//Send misc data. (Creative inventory, anvils, etc)
 			if(!misc.isEmpty()) {
 				packets.addAll(misc);
 				misc.clear();
 			}
 			
+			bug("PROCESSING DEBT SURPLUS");
+			
 			//Match surpluses with defcitis.
 			deficitDeque.cycleUp((item, deficits) -> {
+				bug("HIT UP for DEFITCITTTT " + item + " SIZE: " + deficits.size());
 				ChildDeque<SlotWrapperValue> surpluses = surplusDeque.get(item);
 				if(surpluses != null) {
 					Fin finish = new Fin();
 					while(!finish.fin()) {
 						deficits.cycleUp(deficit -> {
+							bug(item + " defict: " + deficit.slot() + " - " + deficit.amount());
 							finish.setFin(true);
 							surpluses.cycleDown(surplus -> {
 								bug("Surplus by deficit: " + surplus.slot() + " by " + deficit.slot());
@@ -447,8 +460,6 @@ public class GodPacket extends ServerBoundMiddlePacket {
 								if (surplus.isEmpty()) { return true; }
 								//We want to get all we can, but not more than we need.
 								int toPay = deficit.amount() < surplus.amount() ? deficit.amount() : surplus.amount();
-								//FFS... Mojang why the moly holy do signify deletion of items by sending the same to and from slots?!
-								if (surplus.slot() == deficit.slot()) { deficit.pay(toPay); return true; }
 								//The real stuff:
 								if (!surplus.isCursor() && !deficit.isToUseInTable() && !(deficit.isCursor() && deficit.hasStack() && surplus.isCraftingResult(cache))) {
 									//Unless the surplus is already in the cursor, (or this is the second crafting click where we only want one) we need to get it.
@@ -506,6 +517,16 @@ public class GodPacket extends ServerBoundMiddlePacket {
 					}
 				}
 				return deficits.isEmpty();
+			});
+			deficitDeque.cycleDown((item, deficits) -> {
+				bug("ITEM LEFT: " + item + " DEFICITS:");
+				deficits.cycleDown(deficit -> {bug("D" + deficit.slot() + " - " + deficit.amount()); return false;});
+				return false;
+			});
+			surplusDeque.cycleDown((item, deficits) -> {
+				bug("ITEM LEFT: " + item + " SURPLUSSES:");
+				deficits.cycleDown(deficit -> {bug("S" + deficit.slot() + " - " + deficit.amount()); return false;});
+				return false;
 			});
 			bug("Sending " + packets.size() + " packets.... :S"); 
 			return packets;

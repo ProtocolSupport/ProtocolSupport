@@ -135,8 +135,7 @@ public class FeatureEmulation implements Listener {
 					@Override
 					public void run() {
 						clicker.updateInventory();
-						//TODO: figure out a way not to mess up the transactions.... :FFFF
-						//clicker.setItemOnCursor(event.getCursor());
+						clicker.setItemOnCursor(event.getCursor());
 					}
 				}, 10);
 			}
