@@ -6,6 +6,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
+import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -21,6 +22,12 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 		}
 		ProtocolVersion version = connection.getVersion();
 		String locale = cache.getLocale();
+		if (slot == -1 /*&& cache.getOpenedWindow() != WindowType.PLAYER*/) {
+			//TODO: Figure out how to not fuck this up.
+			//Cursor slot can be set by plugin (only if a window is actually open), this will cause issues however with the deficit/surplus stack so we add them manually here.
+			cache.getInfTransactions().customCursorSurplus(cache, itemstack);
+			return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_CLICKED_SLOT, 0, itemstack));
+		}
 		switch(cache.getOpenedWindow()) {
 			case PLAYER: {
 				if (slot == 0) {
@@ -54,6 +61,22 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 				}
 				return RecyclableSingletonList.create(create(version, locale, windowId, slot, itemstack));
 			}
+			case ANVIL: {
+				switch(slot) {
+					case 0: {
+						return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_ANVIL_INPUT, slot, itemstack));
+					}
+					case 1: {
+						return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_ANVIL_MATERIAL, slot, itemstack));
+					}
+					case 2: {
+						return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_ANVIL_OUTPUT, slot, itemstack));
+					}
+					default: {
+						return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_INVENTORY, slot >= 30 ? slot - 30 : slot + 6, itemstack));
+					}
+				}
+			}
 			case CRAFTING_TABLE: {
 				if (slot == 0) {
 					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_CRAFTING_RESULT, 0, itemstack));
@@ -73,11 +96,6 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 				int wSlots = cache.getOpenedWindowSlots();
 				//Makes malformated inventory slot amounts to work. (Essentials's /invsee for example)
 				if(wSlots > 16) { wSlots = wSlots / 9 * 9; }
-				if (slot == -1) {
-					//Cursor slot can be set by plugin (only if a window is actually open), this will cause issues however with the deficit/surplus stack so we add them manually here.
-					cache.getInfTransactions().customCursorSurplus(cache, itemstack);
-					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_CLICKED_SLOT, 0, itemstack));
-				}
 				if (slot > wSlots) {
 					slot -= wSlots;
 					if (slot >= 27) {

@@ -24,7 +24,7 @@ public abstract class MiddleInventoryClick extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(String locale, int windowId, int slot, int button, int actionNumber, int mode, ItemStackWrapper itemstack) {
-		System.out.println("CLICK window:" + windowId + " slot: " + slot + " button: " + button + " actionNumber: " + actionNumber + " mode: " + mode + " itemstack: " + itemstack);
+		System.out.println("CLICK window:" + windowId + " slot: " + slot + " button: " + button + " actionNumber: " + actionNumber + " mode: " + mode + " itemstack: " + itemstack + (!itemstack.isNull() ? itemstack.getTag() : ""));
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_WINDOW_CLICK);
 		creator.writeByte(windowId);
 		creator.writeShort(slot);

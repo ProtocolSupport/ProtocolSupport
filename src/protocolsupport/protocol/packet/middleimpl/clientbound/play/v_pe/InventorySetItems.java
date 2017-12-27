@@ -55,6 +55,22 @@ public class InventorySetItems extends MiddleInventorySetItems {
 				contentpackets.add(create(version, locale, PESource.POCKET_INVENTORY, peInventory));
 				break;
 			}
+			case ANVIL: {
+				ItemStackWrapper[] peAnvIn = new ItemStackWrapper[1];
+				ItemStackWrapper[] peAnvMa = new ItemStackWrapper[1];
+				ItemStackWrapper[] peAnvOu = new ItemStackWrapper[1];
+				ItemStackWrapper[] peInventory = new ItemStackWrapper[36];
+				System.arraycopy(items,  0, peAnvIn, 	 0,  1);
+				System.arraycopy(items,  1, peAnvMa, 	 0,  1);
+				System.arraycopy(items,  2, peAnvOu,     0,  1);
+				System.arraycopy(items, 30, peInventory, 0,  9);
+				System.arraycopy(items,  3, peInventory, 9, 27);
+				contentpackets.add(create(version, locale, PESource.POCKET_ANVIL_INPUT, peAnvIn));
+				contentpackets.add(create(version, locale, PESource.POCKET_ANVIL_MATERIAL, peAnvMa));
+				contentpackets.add(create(version, locale, PESource.POCKET_ANVIL_OUTPUT, peAnvOu));
+				contentpackets.add(create(version, locale, PESource.POCKET_INVENTORY, peInventory));
+				break;
+			}
 			case CRAFTING_TABLE: {
 				ItemStackWrapper[] craftingGridResult = new ItemStackWrapper[1];
 				ItemStackWrapper[] craftingSlots = new ItemStackWrapper[9];

@@ -6,11 +6,13 @@ import java.util.List;
 import org.bukkit.util.Vector;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockDig;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockPlace;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCreativeSetSlot;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleHeldSlot;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClick;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryTransaction;
@@ -19,9 +21,11 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
@@ -33,16 +37,19 @@ import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagType;
 
 /**
  * Lo and behold. The PE GodPacket. 
  * DKTAPPS THANK YOU FOR HELPING ME WITH THE VALUES! - This would be insufferable without him.
  * 
- * This packet handles among other things
+ * This packet handles amongst other things
  *  - Using items (Right clicking)
  *  - Interacting (left and right clicking mob)
  *  - Releasing items (shoot bow, eat food)
  *  - Getting creative items
+ *  - Renaming items in anvil
  *  - MANAGING INVENTORY
  *  
  *  Apart from managing inventories it is the usual packet deal,
@@ -255,7 +262,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			transaction.oldItem = ItemStackSerializer.readItemStack(from, version, locale, true);
 			transaction.newItem = ItemStackSerializer.readItemStack(from, version, locale, true);
 			System.out.println("Inv transaction read: sId: " + transaction.sourceId + " wId: " + transaction.inventoryId + " action: " + transaction.action + " slot: " + transaction.slot 
-					+ " oldItem: " + transaction.oldItem.toString() + " newItem: " + transaction.newItem.toString());
+					+ " oldItem: " + transaction.oldItem.toString()  + ((!transaction.oldItem.isNull()) ? transaction.oldItem.getTag() : "") + " newItem: " + transaction.newItem.toString() + (!transaction.newItem.isNull() ? transaction.newItem.getTag() : ""));
 			return transaction;
 		}
 		
@@ -308,13 +315,19 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		public void customCursorSurplus(NetworkDataCache cache, ItemStackWrapper itemstack) {
 			if ((!itemstack.isNull()) && !((cache.getGameMode() == GameMode.CREATIVE) && (cache.getOpenedWindow() == WindowType.PLAYER))) {
 				clear();
-				surplusDeque.put(new ItemStackWrapperKey(itemstack), new SlotWrapperValue(-1, itemstack.getAmount(), itemstack.getAmount()));
+				ByteBuf screwThis = Unpooled.buffer();
+				ItemStackSerializer.writeItemStack(screwThis, ProtocolVersion.MINECRAFT_PE, cache.getLocale(), itemstack, true);
+				ItemStackWrapper remapped = ItemStackSerializer.readItemStack(screwThis, ProtocolVersion.MINECRAFT_PE, cache.getLocale(), true);
+				if(!itemstack.isNull()) {
+					System.out.println("COMPARING");
+					System.out.println(itemstack.getTag());
+					System.out.println(remapped.getTag());
+				}
+				surplusDeque.put(new ItemStackWrapperKey(remapped), new SlotWrapperValue(-1, itemstack.getAmount(), itemstack.getAmount()));
 			}
 		}
 		
 		public void cacheTransaction(NetworkDataCache cache, InfTransaction transaction) {
-			ItemStackWrapperKey oldItemKey = new ItemStackWrapperKey(transaction.getOldItem());
-			ItemStackWrapperKey newItemKey = new ItemStackWrapperKey(transaction.getNewItem());
 			int pcSlot = transformSlot(cache, transaction.getInventoryId(), transaction.getSlot());
 			
 			bug("Going through cache stuff with slot: " + pcSlot);
@@ -336,6 +349,22 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				}
 				return;
 			}
+			
+			//Anvil naming is only done and known based on the clicked item.
+			if (pcSlot == 2 && cache.getOpenedWindow() == WindowType.ANVIL && !transaction.getOldItem().isNull()) {
+				NBTTagCompoundWrapper tag = transaction.getOldItem().getTag();
+				tag.remove("RepairCost"); //IDK, but it ain't on pc.
+				if (tag.hasKeyOfType("display", NBTTagType.COMPOUND)) {
+					NBTTagCompoundWrapper display = tag.getCompound("display");
+					if (display.hasKeyOfType("Name", NBTTagType.STRING)) {
+						misc.add(anvilName(display.getString("Name")));
+					}
+				}
+				transaction.getOldItem().setTag(tag);
+			}
+			
+			ItemStackWrapperKey oldItemKey = new ItemStackWrapperKey(transaction.getOldItem());
+			ItemStackWrapperKey newItemKey = new ItemStackWrapperKey(transaction.getNewItem());
 			
 			if (oldItemKey.equals(newItemKey) && pcSlot != -1) {
 				int money = transaction.getOldItem().getAmount() - transaction.getNewItem().getAmount();
@@ -411,11 +440,16 @@ public class GodPacket extends ServerBoundMiddlePacket {
 					Fin finish = new Fin();
 					while(!finish.fin()) {
 						deficits.cycleUp(deficit -> {
+							finish.setFin(true);
 							surpluses.cycleDown(surplus -> {
+								bug("Surplus by deficit: " + surplus.slot() + " by " + deficit.slot());
 								//Early copout, because Mojang sometimes really screws up.
 								if (surplus.isEmpty()) { return true; }
 								//We want to get all we can, but not more than we need.
 								int toPay = deficit.amount() < surplus.amount() ? deficit.amount() : surplus.amount();
+								//FFS... Mojang why the moly holy do signify deletion of items by sending the same to and from slots?!
+								if (surplus.slot() == deficit.slot()) { deficit.pay(toPay); return true; }
+								//The real stuff:
 								if (!surplus.isCursor() && !deficit.isToUseInTable() && !(deficit.isCursor() && deficit.hasStack() && surplus.isCraftingResult(cache))) {
 									//Unless the surplus is already in the cursor, (or this is the second crafting click where we only want one) we need to get it.
 									packets.addAll(Click.LEFT.create(cache, surplus.slot(), item.get(surplus.slotAmount())));
@@ -434,7 +468,6 @@ public class GodPacket extends ServerBoundMiddlePacket {
 										if (!((surplusDeque.getVeryLast() != null) && (deficit.slot() == surplusDeque.getVeryLast().slot()))) {
 											//Unless we're swapping (then only one left click is sent on next deficit), we can payout the stack in full (left-click)
 											packets.addAll(Click.LEFT.create(cache, deficit.slot(), (!deficit.hasStack()) ? ItemStackWrapper.NULL : item.get(deficit.slotAmount())));
-										} else {
 										}
 									} else {
 										//We need to pay what we need to pay.
@@ -452,7 +485,6 @@ public class GodPacket extends ServerBoundMiddlePacket {
 								}
 								return surplus.isEmpty();
 							});
-							finish.setFin(true);
 							if (surpluses.isEmpty()) {
 								surplusDeque.remove(item);
 							} else {
@@ -644,7 +676,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				}
 			}
 			case BREWING: {
-				if(peInventoryId == cache.getOpenedWindowId()) {
+				if (peInventoryId == cache.getOpenedWindowId()) {
 					if(peSlot == 0) {
 						return 3;
 					} else if (peSlot >= 1 && peSlot <= 3) {
@@ -652,6 +684,21 @@ public class GodPacket extends ServerBoundMiddlePacket {
 					}
 				}
 				return invSlotToContainerSlot(peInventoryId, 5, peSlot);
+			}
+			case ANVIL: {
+				switch(peInventoryId) {
+					case PESource.POCKET_ANVIL_INPUT: {
+						return 0;
+					}
+					case PESource.POCKET_ANVIL_MATERIAL: {
+						return 1;
+					}
+					case PESource.POCKET_ANVIL_RESULT:
+					case PESource.POCKET_ANVIL_OUTPUT: {
+						return 2;
+					}
+				}
+				return invSlotToContainerSlot(peInventoryId, 3, peSlot);
 			}
 			case CRAFTING_TABLE: {
 				switch(peInventoryId) {
@@ -710,6 +757,12 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				return peSlot;
 			}
 		}
+	}
+	
+	private static ServerBoundPacketData anvilName(String name) {
+		ByteBuf payload = Unpooled.buffer();
+		StringSerializer.writeString(payload, ProtocolVersionsHelper.LATEST_PC, name);
+		return MiddleCustomPayload.create("MC|ItemName", MiscSerializer.readAllBytes(payload));
 	}
 	
 	protected enum Click {

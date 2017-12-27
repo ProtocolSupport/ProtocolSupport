@@ -86,6 +86,8 @@ public class FeatureEmulation implements Listener {
 				(connection.getVersion().getProtocolType() == ProtocolType.PE)
 			) {
 				Location mainLoc = player.getLocation();
+				//If the player is not on the ground or almost at bedrock, 
+				//set the fake blocks above so the player doesn't fall on to it or so they aren't out of the world.
 				if ((!player.isOnGround()) || (mainLoc.getBlockY() < 4)) {
 					mainLoc.add(0, 6, 0);
 				}
@@ -93,6 +95,7 @@ public class FeatureEmulation implements Listener {
 						new InvBlock(mainLoc.subtract(1, 2, 0).getBlock()), 
 						new InvBlock(mainLoc.	  add(1, 0, 0).getBlock())
 					});
+				//Double chests need some ticks to confire after the inventory blocks are placed. We need to resend the inventory open.
 				if (event.getView().getTopInventory().getSize() > 27) {
 					Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), new Runnable() {
 						@Override
@@ -132,7 +135,8 @@ public class FeatureEmulation implements Listener {
 					@Override
 					public void run() {
 						clicker.updateInventory();
-						clicker.setItemOnCursor(event.getCursor());
+						//TODO: figure out a way not to mess up the transactions.... :FFFF
+						//clicker.setItemOnCursor(event.getCursor());
 					}
 				}, 10);
 			}
