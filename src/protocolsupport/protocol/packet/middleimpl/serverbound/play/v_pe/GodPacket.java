@@ -728,10 +728,17 @@ public class GodPacket extends ServerBoundMiddlePacket {
 						return 0;
 					}
 					case PESource.POCKET_ANVIL_MATERIAL: {
-						return 0;
+						return 1;
 					}
 				}
 				return invSlotToContainerSlot(peInventoryId, 2, peSlot);
+			}
+			case BEACON: {
+				if (peInventoryId == PESource.POCKET_BEACON) {
+					return 0;
+				} else {
+					return invSlotToContainerSlot(peInventoryId, 1, peSlot);
+				}
 			}
 			case CRAFTING_TABLE: {
 				switch(peInventoryId) {

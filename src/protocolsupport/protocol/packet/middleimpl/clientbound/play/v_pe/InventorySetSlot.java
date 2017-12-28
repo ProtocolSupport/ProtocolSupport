@@ -85,6 +85,13 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_INVENTORY, slot >= 29 ? slot - 29 : slot + 7, itemstack));
 				}
 			}
+			case BEACON: {
+				if (slot == 0) {
+					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_BEACON, 0, itemstack));
+				} else {
+					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_INVENTORY, slot >= 28 ? slot - 28 : slot + 8, itemstack));
+				}
+			}
 			case CRAFTING_TABLE: {
 				if (slot == 0) {
 					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_CRAFTING_RESULT, 0, itemstack));
