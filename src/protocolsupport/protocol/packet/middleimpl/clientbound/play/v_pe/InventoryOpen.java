@@ -29,6 +29,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		cache.getInfTransactions().clear();
 		if (type == WindowType.HORSE) {
+			System.out.println("HORSEY!!: " + horseId);
 			return RecyclableSingletonList.create(create(connection.getVersion(), windowId, type, new Position(0, 0, 0), horseId));
 		}
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();

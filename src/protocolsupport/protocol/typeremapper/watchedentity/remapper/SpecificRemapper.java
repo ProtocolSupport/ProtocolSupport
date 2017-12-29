@@ -291,7 +291,7 @@ public enum SpecificRemapper {
 	CHICKEN(NetworkEntityType.CHICKEN, SpecificRemapper.AGEABLE),
 	SQUID(NetworkEntityType.SQUID, SpecificRemapper.INSENTIENT),
 	BASE_HORSE(NetworkEntityType.BASE_HORSE, SpecificRemapper.AGEABLE,
-		//TODO: Not thse flags? These just make the horse disappear :/ PeMetaBase.FLAG_REARING PeMetaBase.FLAG_BREATHING
+		//TODO: Not these flags? These just make the horse disappear :/ PeMetaBase.FLAG_REARING PeMetaBase.FLAG_BREATHING
 		new Entry(new PeSimpleFlagAdder(new int[] {PeMetaBase.FLAG_WASD_CONTROLLED}, new boolean[] {true}), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.BaseHorse.FLAGS,
 				new int[] {2, 3, 4, 5, 6}, new int[] {PeMetaBase.FLAG_TAMED, PeMetaBase.FLAG_SADDLED, PeMetaBase.FLAG_CHESTED, PeMetaBase.FLAG_REARING, PeMetaBase.FLAG_BREATHING}),
@@ -334,6 +334,7 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.BattleHorse.ARMOR, 22), ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	CARGO_HORSE(NetworkEntityType.CARGO_HORSE, SpecificRemapper.BASE_HORSE,
+		new Entry(new PeSimpleFlagRemapper(DataWatcherObjectIndex.CargoHorse.HAS_CHEST, PeMetaBase.FLAG_CHESTED), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.CargoHorse.HAS_CHEST, 15) {}, ProtocolVersionsHelper.RANGE__1_11__1_12_2)
 	),
 	COMMON_HORSE(NetworkEntityType.COMMON_HORSE, SpecificRemapper.BATTLE_HORSE),
