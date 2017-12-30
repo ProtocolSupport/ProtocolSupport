@@ -236,6 +236,15 @@ public class GlowStoneNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 	public void setLongArray(String key, long[] value) {
 		//TODO: actually implement this
 	}
+	
+	@Override
+	public NBTTagCompoundWrapper clone() {
+		try {
+			return wrap(Mojangson.parseCompound(Mojangson.fromTag(tag)));
+		} catch (MojangsonParseException e) {
+			return null;
+		}
+	}
 
 	@Override
 	public int hashCode() {

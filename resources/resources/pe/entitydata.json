@@ -25,6 +25,63 @@
 			"x": 0.0,
 			"y": 1.1,
 			"z": -0.2
+		},
+		"InventoryFilter": {
+			"Filter": "{
+		  		'slots': [
+			 		{
+			 			'acceptedItems': [
+			 				{
+			 					'slotItem': {
+			 						'Count': 1b, 
+			 						'Damage': 0s, 
+			 						'id': 329s
+			 					}
+			 				}
+			 			],
+			 			'item': {
+			 				'Count': 1b,
+			 				'Damage': 0s,
+			 				'id': 329s
+			 			},
+			 			'slotNumber': 0
+			 		},{
+			 			'acceptedItems': [
+			 				{
+			 					'slotItem': {
+			 						'Count': 1b,
+			 						'Damage': 0s,
+			 						'id': 416s
+			 					}
+			 				}, {
+			 					'slotItem': {
+			 						'Count': 1b,
+			 						'Damage': 0s,
+			 						'id': 417s
+			 					}
+			 				}, {
+			 					'slotItem': {
+			 						'Count': 1b,
+			 						'Damage': 0s,
+			 						'id': 418s
+			 					}
+			 				}, {
+			 					'slotItem': {
+			 						'Count': 1b,
+			 						'Damage': 0s,
+			 						'id': 419s
+			 					}
+			 				}
+			 			],
+			 			'item': {
+			 				'Count': 1b,
+			 				'Damage': 0s,
+			 				'id': 416s
+			 			},
+			 			'slotNumber': 1
+			 		}
+				]
+		  	}"
 		}
 	},
 	"ZOMBIE_HORSE": {
@@ -80,6 +137,29 @@
 			"x": 0.0,
 			"y": 1.1,
 			"z": -0.2
+		},
+		"InventoryFilter": {
+			"Filter": "{
+				'slots': [
+					{
+						'acceptedItems': [],
+						'item': {
+							'Count': 0b,
+							'Damage': 0s,
+							'id': 329s
+						},
+						'slotNumber': 0
+					},{
+						'acceptedItems': [],
+						'item': {
+							'Count': 0b,
+							'Damage': 0s,
+							'id': 171s
+						},
+						'slotNumber': 1
+					}
+				]
+			}"
 		}
 	},
 	"BAT": {

@@ -63,6 +63,8 @@ public abstract class NBTTagCompoundWrapper {
 	public abstract void setIntArray(String key, int[] value);
 
 	public abstract void setLongArray(String key, long[] value);
+	
+	public abstract NBTTagCompoundWrapper clone();
 
 	public static final NBTTagCompoundWrapper NULL = new NBTTagCompoundWrapper() {
 
@@ -218,6 +220,11 @@ public abstract class NBTTagCompoundWrapper {
 		@Override
 		public void setLongArray(String key, long[] value) {
 			throw reject();
+		}
+		
+		@Override
+		public NBTTagCompoundWrapper clone() {
+			return this;
 		}
 
 	};
