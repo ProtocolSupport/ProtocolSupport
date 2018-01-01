@@ -12,6 +12,8 @@ import com.google.gson.JsonParser;
 
 import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.Utils;
+import protocolsupport.zplatform.ServerPlatform;
+import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class PocketData {
 	
@@ -30,7 +32,7 @@ public class PocketData {
 	
 	public static void readEntityDatas() {
 		getFileObject("entitydata.json").entrySet().forEach(entry -> {
-			entityDatas.put(NetworkEntityType.valueOf(entry.getKey()), gson.fromJson(entry.getValue(), PocketEntityData.class));
+			entityDatas.put(NetworkEntityType.valueOf(entry.getKey()), gson.fromJson(entry.getValue(), PocketEntityData.class).init());
 		});
 	}
 
@@ -42,6 +44,7 @@ public class PocketData {
 		private PocketBoundingBox BoundingBox;
 		private PocketOffset Offset;
 		private PocketRiderInfo RiderInfo;
+		private PocketInventoryFilter InventoryFilter;
 		
 		public PocketBoundingBox getBoundingBox() {
 			return BoundingBox;
@@ -53,6 +56,17 @@ public class PocketData {
 		
 		public PocketRiderInfo getRiderInfo() {
 			return RiderInfo;
+		}
+		
+		public PocketInventoryFilter getInventoryFilter() {
+			return InventoryFilter;
+		}
+		
+		public PocketEntityData init() {
+			if(InventoryFilter != null) {
+				InventoryFilter.init();
+			}
+			return this;
 		}
 		
 		public static class PocketBoundingBox {
@@ -112,5 +126,17 @@ public class PocketData {
 			
 		}
 		
+		public static class PocketInventoryFilter {
+			private String Filter;
+			private transient NBTTagCompoundWrapper filterNBT;
+			
+			protected void init() {
+				filterNBT = ServerPlatform.get().getWrapperFactory().createNBTCompoundFromJson(Filter.replaceAll("\'", "\""));
+			}
+			
+			public NBTTagCompoundWrapper getFilter() {
+				return filterNBT;
+			}
+		}
 	}
 }

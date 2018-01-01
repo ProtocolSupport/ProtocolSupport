@@ -291,10 +291,10 @@ public enum SpecificRemapper {
 	CHICKEN(NetworkEntityType.CHICKEN, SpecificRemapper.AGEABLE),
 	SQUID(NetworkEntityType.SQUID, SpecificRemapper.INSENTIENT),
 	BASE_HORSE(NetworkEntityType.BASE_HORSE, SpecificRemapper.AGEABLE,
-		//TODO: Not these flags? These just make the horse disappear :/ PeMetaBase.FLAG_REARING PeMetaBase.FLAG_BREATHING
 		new Entry(new PeSimpleFlagAdder(new int[] {PeMetaBase.FLAG_WASD_CONTROLLED}, new boolean[] {true}), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.BaseHorse.FLAGS,
-				new int[] {2, 3, 4, 5, 6}, new int[] {PeMetaBase.FLAG_TAMED, PeMetaBase.FLAG_SADDLED, PeMetaBase.FLAG_CHESTED, PeMetaBase.FLAG_REARING, PeMetaBase.FLAG_BREATHING}),
+				//TODO: Eating?
+				new int[] {2, 3, 4, /*5,*/ 6, 7}, new int[] {PeMetaBase.FLAG_TAMED, PeMetaBase.FLAG_SADDLED, PeMetaBase.FLAG_IN_LOVE, /*PeMetaBase.FLAG_USING_ITEM,*/ PeMetaBase.FLAG_REARING, PeMetaBase.FLAG_BREATHING}),
 			ProtocolVersion.MINECRAFT_PE),
 		new Entry(new DataWatcherDataRemapper(){
 			@Override
@@ -362,6 +362,13 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Lama.VARIANT, 2), ProtocolVersion.MINECRAFT_PE),
 		//new Entry(new IndexValueRemapperNumberToByte(DataWatcherObjectIndex.Lama.CARPET_COLOR, 3), ProtocolVersion.MINECRAFT_PE), TODO: Carpet Color. Done via slots instead?
 		new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Lama.STRENGTH, 75), ProtocolVersion.MINECRAFT_PE), //TODO: Should max strength also be added?
+		new Entry(new DataWatcherDataRemapper() {
+			@Override
+			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
+				getObject(original, DataWatcherObjectIndex.Lama.STRENGTH, DataWatcherObjectVarInt.class).ifPresent(intWatcher -> {
+					entity.getDataCache().setStrength(intWatcher.getValue());
+				});
+			}}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Lama.STRENGTH, 16) {}, ProtocolVersionsHelper.RANGE__1_11__1_12_2),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Lama.CARPET_COLOR, 17) {}, ProtocolVersionsHelper.RANGE__1_11__1_12_2),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Lama.VARIANT, 18) {}, ProtocolVersionsHelper.RANGE__1_11__1_12_2)

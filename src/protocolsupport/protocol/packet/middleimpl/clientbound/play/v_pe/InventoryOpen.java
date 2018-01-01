@@ -8,12 +8,17 @@ import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.utils.Any;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.InvBlock;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.protocol.utils.minecraftdata.PocketData;
+import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData;
+import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.TileEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
@@ -22,6 +27,7 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 
 public class InventoryOpen extends MiddleInventoryOpen {
 	
@@ -29,8 +35,28 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		cache.getInfTransactions().clear();
 		if (type == WindowType.HORSE) {
-			System.out.println("HORSEY!!: " + horseId);
-			return RecyclableSingletonList.create(create(connection.getVersion(), windowId, type, new Position(0, 0, 0), horseId));
+			NetworkEntity horse = cache.getWatchedEntity(horseId);
+			if (horse != null) {
+				PocketEntityData horseTypeData = PocketData.getPocketEntityData(horse.getType());
+				if (horseTypeData != null && horseTypeData.getInventoryFilter() != null) {
+					NBTTagCompoundWrapper filter = horseTypeData.getInventoryFilter().getFilter().clone();
+					if (horse.getType() == NetworkEntityType.LAMA) {
+						NBTTagListWrapper newSlots = filter.getList("slots");
+						for(int i = 0; i < (horse.getDataCache().getStrength() * 3); i++) {
+							NBTTagCompoundWrapper slot = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+							NBTTagCompoundWrapper item = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+							item.setByte("Count", 1);
+							item.setShort("Damage", 0);
+							item.setShort("id", 0);
+							slot.setCompound("item", item);
+							slot.setInt("slotNumber", i+2);
+							newSlots.addCompound(slot);
+						}
+						filter.setList("slots", newSlots);
+					}
+					return RecyclableSingletonList.create(openEquipment(connection.getVersion(), windowId, type, horseId, filter));
+				}
+			}
 		}
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		if(connection.hasMetadata("peInvBlocks")) {
@@ -86,6 +112,16 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	
 	public static ClientBoundPacketData create(ProtocolVersion version, int windowId, WindowType type, Position pePosition, int horseId) {
 		return (ClientBoundPacketData) serialize(ClientBoundPacketData.create(PEPacketIDs.CONTAINER_OPEN, version), version, windowId, type, pePosition, horseId);
+	}
+	
+	public static ClientBoundPacketData openEquipment(ProtocolVersion version, int windowId, WindowType type, long entityId, NBTTagCompoundWrapper nbt) {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.EQUIPMENT, version);
+		serializer.writeByte(windowId);
+		serializer.writeByte(IdRemapper.WINDOWTYPE.getTable(version).getRemap(type.toLegacyId()));
+		VarNumberSerializer.writeSVarInt(serializer, 0);
+		VarNumberSerializer.writeSVarLong(serializer, entityId);
+		ItemStackSerializer.writeTag(serializer, true, version, nbt);
+		return serializer;
 	}
 	
 	public static void sendInventory(Connection connection, int windowId, WindowType type, Position pePosition, int horseId) {

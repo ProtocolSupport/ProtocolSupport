@@ -198,6 +198,11 @@ public class SpigotNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 	public void setLongArray(String key, long[] value) {
 		tag.set(key, new NBTTagLongArray(value));
 	}
+	
+	@Override
+	public NBTTagCompoundWrapper clone() {
+		return wrap((NBTTagCompound) tag.clone());
+	}
 
 	@Override
 	public int hashCode() {

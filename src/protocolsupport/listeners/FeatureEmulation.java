@@ -13,6 +13,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
@@ -78,7 +79,10 @@ public class FeatureEmulation implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onInventoryOpen(InventoryOpenEvent event) {
-		if(event.getPlayer() instanceof Player) {
+		if(
+			(event.getInventory().getType() != InventoryType.MERCHANT) &&
+			(event.getPlayer() instanceof Player)
+		  ) {
 			Player player = (Player) event.getPlayer();
 			Connection connection = ProtocolSupportAPI.getConnection(player);
 			if (
@@ -86,15 +90,21 @@ public class FeatureEmulation implements Listener {
 				(connection.getVersion().getProtocolType() == ProtocolType.PE)
 			) {
 				Location mainLoc = player.getLocation();
-				//If the player is not on the ground or almost at bedrock, 
-				//set the fake blocks above so the player doesn't fall on to it or so they aren't out of the world.
-				if ((!player.isOnGround()) || (mainLoc.getBlockY() < 4)) {
-					mainLoc.add(0, 6, 0);
+				if (event.getInventory().getType() == InventoryType.BEACON && event.getInventory().getLocation() != null) {
+					//Since beacon power is checked clientside, we can't even fake the block in position we please.
+					mainLoc = event.getInventory().getLocation();
+				} else {
+					//If the player is not on the ground or almost at bedrock, 
+					//set the fake blocks above so the player doesn't fall on to it or so they aren't out of the world.
+					if ((!player.isOnGround()) || (mainLoc.getBlockY() < 4)) {
+						mainLoc.add(0, 6, 0);
+					}
+					connection.addMetadata("peInvBlocks", new InvBlock[] {
+							new InvBlock(mainLoc.subtract(1, 2, 0).getBlock()), 
+							new InvBlock(mainLoc.	  add(1, 0, 0).getBlock())
+						});
 				}
-				connection.addMetadata("peInvBlocks", new InvBlock[] {
-						new InvBlock(mainLoc.subtract(1, 2, 0).getBlock()), 
-						new InvBlock(mainLoc.	  add(1, 0, 0).getBlock())
-					});
+				Location headChestLock = mainLoc;
 				//Double chests need some ticks to confire after the inventory blocks are placed. We need to resend the inventory open.
 				if (event.getView().getTopInventory().getSize() > 27) {
 					Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), new Runnable() {
@@ -104,7 +114,7 @@ public class FeatureEmulation implements Listener {
 								InventoryOpen.sendInventory(connection, 
 									(int) connection.getMetadata("smuggledWindowId"),
 									WindowType.CHEST, 
-									Position.fromBukkit(mainLoc),
+									Position.fromBukkit(headChestLock),
 									-1
 								);
 								connection.removeMetadata("smuggledWindowId");

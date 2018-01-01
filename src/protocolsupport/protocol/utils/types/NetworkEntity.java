@@ -104,6 +104,7 @@ public class NetworkEntity {
 		private Vector riderPosition = null;
 		private Float rotationlock = null;
 		private float maxHealth = 20f;
+		private int strength = 0;
 		private ItemStackWrapper helmet = ItemStackWrapper.NULL;
 		private ItemStackWrapper chestplate = ItemStackWrapper.NULL;
 		private ItemStackWrapper leggings = ItemStackWrapper.NULL;
@@ -229,6 +230,14 @@ public class NetworkEntity {
 
 		public void setMaxHealth(float maxHealth) {
 			this.maxHealth = maxHealth;
+		}
+
+		public int getStrength() {
+			return strength;
+		}
+
+		public void setStrength(int strength) {
+			this.strength = strength;
 		}
 
 		@Override
