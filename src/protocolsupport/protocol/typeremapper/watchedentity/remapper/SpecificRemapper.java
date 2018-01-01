@@ -743,7 +743,12 @@ public enum SpecificRemapper {
 	EXP_BOTTLE(NetworkEntityType.EXP_BOTTLE, SpecificRemapper.ENTITY),
 	LEASH_KNOT(NetworkEntityType.LEASH_KNOT, SpecificRemapper.ENTITY),
 	FISHING_FLOAT(NetworkEntityType.FISHING_FLOAT, SpecificRemapper.ENTITY,
-		new Entry(new IndexValueRemapperNumberToSVarLong(DataWatcherObjectIndex.FinshingFloat.HOOKED_ENTITY, 5), ProtocolVersion.MINECRAFT_PE), //TODO: Why not working? varlong instead of svarlong? :thonking:
+		new Entry(new IndexValueRemapper<DataWatcherObjectVarInt>(DataWatcherObjectIndex.FinshingFloat.HOOKED_ENTITY, 5) {
+			@Override
+			public DataWatcherObject<?> remapValue(DataWatcherObjectVarInt object) {
+				return new DataWatcherObjectSVarLong(object.getValue() - 1);
+			}
+		}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.FinshingFloat.HOOKED_ENTITY, 6) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_2),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.FinshingFloat.HOOKED_ENTITY, 5) {}, ProtocolVersionsHelper.ALL_1_9)
 	),
