@@ -54,13 +54,13 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldCus
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldEvent;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldParticle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldSound;
-import protocolsupport.protocol.pipeline.version.AbstractLegacyPacketEncoder;
+import protocolsupport.protocol.pipeline.version.AbstractPacketEncoder;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
-public class PEPacketEncoder extends AbstractLegacyPacketEncoder {
+public class PEPacketEncoder extends AbstractPacketEncoder {
 
 	{
 		for (int i = 0; i < 255; i++) {
@@ -118,6 +118,11 @@ public class PEPacketEncoder extends AbstractLegacyPacketEncoder {
 
 	public PEPacketEncoder(Connection connection, NetworkDataCache storage) {
 		super(connection, storage);
+	}
+
+	@Override
+	protected RecyclableCollection<ClientBoundPacketData> processPackets(RecyclableCollection<ClientBoundPacketData> packets) {
+		return cache.getPESendPacketMovementConfirmQueue().attemptSendPackets(packets);
 	}
 
 	@Override

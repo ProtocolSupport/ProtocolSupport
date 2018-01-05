@@ -6,6 +6,9 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleRespawn;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSuccess;
+import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -16,12 +19,20 @@ public class Respawn extends MiddleRespawn {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		for (int x = -10; x < 10; x++) {
-			for (int z = -10; z < 10; z++) {
+		ClientBoundPacketData changedim = ClientBoundPacketData.create(PEPacketIDs.CHANGE_DIMENSION, version);
+		VarNumberSerializer.writeSVarInt(changedim, getPeDimensionId(dimension));
+		MiscSerializer.writeLFloat(changedim, 0); //x
+		MiscSerializer.writeLFloat(changedim, 0); //y
+		MiscSerializer.writeLFloat(changedim, 0); //z
+		changedim.writeBoolean(false); //respawn
+		packets.add(changedim);
+		packets.add(LoginSuccess.createPlayStatus(version, 3));
+		for (int x = -2; x <= 2; x++) {
+			for (int z = -2; z <= 2; z++) {
 				packets.add(Chunk.createEmptyChunk(version, x, z));
 			}
 		}
-		packets.add(LoginSuccess.createPlayStatus(version, 3));
+		packets.add(Position.create(version, cache.getSelfPlayerEntityId(), 0, 20, 0, 0, 0, Position.ANIMATION_MODE_ALL));
 		return packets;
 	}
 

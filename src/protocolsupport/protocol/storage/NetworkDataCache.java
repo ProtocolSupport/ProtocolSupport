@@ -13,6 +13,7 @@ import io.netty.util.internal.ThreadLocalRandom;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnObject.PreparedItem;
+import protocolsupport.protocol.typeremapper.pe.PEMovementConfirmationPacketQueue;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.protocol.utils.types.NetworkEntity;
@@ -422,6 +423,12 @@ public class NetworkDataCache {
 
 	public UUID getPEClientUUID() {
 		return peClientUUID;
+	}
+
+	private final PEMovementConfirmationPacketQueue mvconfirmqueue = new PEMovementConfirmationPacketQueue();
+
+	public PEMovementConfirmationPacketQueue getPESendPacketMovementConfirmQueue() {
+		return mvconfirmqueue;
 	}
 
 }
