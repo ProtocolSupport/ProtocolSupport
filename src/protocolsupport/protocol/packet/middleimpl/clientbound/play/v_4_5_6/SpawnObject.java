@@ -14,41 +14,54 @@ public class SpawnObject extends MiddleSpawnObject {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		NetworkEntityType type = entity.getType();
+		NetworkEntityType type = IdRemapper.ENTITY.getTable(version).getRemap(entity.getType());
 		x *= 32;
 		y *= 32;
 		z *= 32;
-		if (type == NetworkEntityType.ITEM_FRAME) {
-			switch (objectdata) {
-				case 0: {
-					z -= 32;
-					yaw = 128;
-					break;
+		switch (type) {
+			case ITEM_FRAME: {
+				switch (objectdata) {
+					case 0: {
+						z -= 32;
+						yaw = 128;
+						break;
+					}
+					case 1: {
+						x += 32;
+						yaw = 64;
+						break;
+					}
+					case 2: {
+						z += 32;
+						yaw = 0;
+						break;
+					}
+					case 3: {
+						x -= 32;
+						yaw = 192;
+						break;
+					}
 				}
-				case 1: {
-					x += 32;
-					yaw = 64;
-					break;
-				}
-				case 2: {
-					z += 32;
-					yaw = 0;
-					break;
-				}
-				case 3: {
-					x -= 32;
-					yaw = 192;
-					break;
-				}
+				break;
 			}
-		}
-		if (type == NetworkEntityType.FALLING_OBJECT) {
-			int id = IdRemapper.BLOCK.getTable(version).getRemap((objectdata & 4095) << 4) >> 4;
-			int data = (objectdata >> 12) & 0xF;
-			objectdata = (id | (data << 16));
-		}
-		if ((type == NetworkEntityType.TNT) || (type == NetworkEntityType.FALLING_OBJECT)) {
-			y += 16;
+			case FALLING_OBJECT: {
+				int id = IdRemapper.BLOCK.getTable(version).getRemap((objectdata & 4095) << 4) >> 4;
+				int data = (objectdata >> 12) & 0xF;
+				objectdata = (id | (data << 16));
+				y += 16;
+				break;
+			}
+			case TNT: {
+				y += 16;
+				break;
+			}
+			case ARROW: {
+				objectdata--;
+				break;
+			}
+			default: {
+				break;
+			}
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_OBJECT_ID, version);
 		serializer.writeInt(entity.getId());

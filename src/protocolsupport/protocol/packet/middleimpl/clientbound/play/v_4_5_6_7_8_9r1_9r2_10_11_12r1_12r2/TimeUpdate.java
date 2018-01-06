@@ -13,7 +13,7 @@ public class TimeUpdate extends MiddleTimeUpdate {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_UPDATE_TIME_ID, version);
-		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_4_7)) {
+		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_5_2)) {
 			timeOfDay = Math.abs(timeOfDay);
 		}
 		serializer.writeLong(worldAge);

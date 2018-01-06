@@ -10,7 +10,8 @@ public class EntityAction extends MiddleEntityAction {
 		new ArrayMap.Entry<>(1, Action.START_SNEAK), new ArrayMap.Entry<>(2, Action.STOP_SNEAK),
 		new ArrayMap.Entry<>(3, Action.LEAVE_BED),
 		new ArrayMap.Entry<>(4, Action.START_SPRINT), new ArrayMap.Entry<>(5, Action.STOP_SPRINT),
-		new ArrayMap.Entry<>(6, Action.STOP_JUMP) //this won't work now anyway, but still map it
+		new ArrayMap.Entry<>(6, Action.STOP_JUMP),
+		new ArrayMap.Entry<>(7, Action.OPEN_HORSE_INV)
 	);
 
 	@Override
