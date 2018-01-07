@@ -45,9 +45,9 @@ public class ProtocolStorage {
 		return primaryStorage.values().stream().map(data -> data.connection).collect(Collectors.toList());
 	}
 
-	private static class Data {
-		private final ConnectionImpl connection;
-		private final Set<SocketAddress> addresses = Collections.newSetFromMap(new ConcurrentHashMap<>());
+	protected static class Data {
+		protected final ConnectionImpl connection;
+		protected final Set<SocketAddress> addresses = Collections.newSetFromMap(new ConcurrentHashMap<>());
 		public Data(ConnectionImpl connection) {
 			this.connection = connection;
 		}

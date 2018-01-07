@@ -17,12 +17,12 @@ import protocolsupport.utils.Utils;
 
 public class NetworkDataCache {
 
-	private static final double acceptableError = 0.1;
+	protected static final double acceptableError = 0.1;
 
-	private double x;
-	private double y;
-	private double z;
-	private int teleportConfirmId;
+	protected double x;
+	protected double y;
+	protected double z;
+	protected int teleportConfirmId;
 
 	public int tryTeleportConfirm(double x, double y, double z) {
 		if (teleportConfirmId == -1) {
@@ -62,11 +62,11 @@ public class NetworkDataCache {
 	}
 
 
-	private final TIntObjectHashMap<NetworkEntity> watchedEntities = new TIntObjectHashMap<>();
-	private NetworkEntity player;
-	private final HashMap<UUID, NetworkDataCache.PlayerListEntry> playerlist = new HashMap<>();
-	private Environment dimensionId;
-	private float maxHealth = 20.0F;
+	protected final TIntObjectHashMap<NetworkEntity> watchedEntities = new TIntObjectHashMap<>();
+	protected NetworkEntity player;
+	protected final HashMap<UUID, NetworkDataCache.PlayerListEntry> playerlist = new HashMap<>();
+	protected Environment dimensionId;
+	protected float maxHealth = 20.0F;
 
 	public void addWatchedEntity(NetworkEntity entity) {
 		watchedEntities.put(entity.getId(), entity);
@@ -137,8 +137,8 @@ public class NetworkDataCache {
 	}
 
 	public static class PropertiesStorage {
-		private final HashMap<String, ProfileProperty> signed = new HashMap<>();
-		private final HashMap<String, ProfileProperty> unsigned = new HashMap<>();
+		protected final HashMap<String, ProfileProperty> signed = new HashMap<>();
+		protected final HashMap<String, ProfileProperty> unsigned = new HashMap<>();
 
 		public void add(ProfileProperty property) {
 			if (property.hasSignature()) {
@@ -166,9 +166,9 @@ public class NetworkDataCache {
 	}
 
 	public static class PlayerListEntry implements Cloneable {
-		private final String name;
-		private String displayNameJson;
-		private final PropertiesStorage propstorage = new PropertiesStorage();
+		protected final String name;
+		protected String displayNameJson;
+		protected final PropertiesStorage propstorage = new PropertiesStorage();
 
 		public PlayerListEntry(String name) {
 			this.name = name;

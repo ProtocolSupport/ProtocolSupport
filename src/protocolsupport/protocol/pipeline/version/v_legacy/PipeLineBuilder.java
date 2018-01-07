@@ -8,7 +8,7 @@ import protocolsupport.zplatform.ServerPlatform;
 
 public class PipeLineBuilder implements IPipeLineBuilder {
 
-	private static final LegacyLoginAndPingHandler legacyHandler = new LegacyLoginAndPingHandler();
+	protected static final LegacyLoginAndPingHandler legacyHandler = new LegacyLoginAndPingHandler();
 
 	@Override
 	public void buildPipeLine(Channel channel, Connection connection) {

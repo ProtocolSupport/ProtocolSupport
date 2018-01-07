@@ -14,7 +14,7 @@ import protocolsupport.utils.netty.Decompressor;
 
 public class SpigotPacketDecompressor extends net.minecraft.server.v1_12_R1.PacketDecompressor {
 
-	private static final int maxPacketLength = (int) Math.pow(2, 7 * 3);
+	protected static final int maxPacketLength = 2 << 20;
 
 	private final Decompressor decompressor = Decompressor.create();
 
