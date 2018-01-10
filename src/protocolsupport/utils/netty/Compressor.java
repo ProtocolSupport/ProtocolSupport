@@ -10,13 +10,13 @@ import protocolsupport.utils.Utils;
 
 public class Compressor {
 
-	private static final int compressionLevel = Utils.getJavaPropertyValue("compressionlevel", 3, Integer::parseInt);
+	protected static final int compressionLevel = Utils.getJavaPropertyValue("compressionlevel", 3, Integer::parseInt);
 
 	static {
 		ProtocolSupport.logInfo("Compression level: "+compressionLevel);
 	}
 
-	private static final Recycler<Compressor> recycler = new Recycler<Compressor>() {
+	protected static final Recycler<Compressor> recycler = new Recycler<Compressor>() {
 		@Override
 		protected Compressor newObject(Handle<Compressor> handle) {
 			return new Compressor(handle);

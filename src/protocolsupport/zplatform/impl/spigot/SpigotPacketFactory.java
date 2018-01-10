@@ -59,7 +59,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 		return new PacketPlayOutChat(ChatSerializer.a(message), ChatMessageType.a((byte) position));
 	}
 
-	private static final BaseComponent empty = new TextComponent("");
+	protected static final BaseComponent empty = new TextComponent("");
 
 	@Override
 	public Object createTabHeaderFooterPacket(BaseComponent header, BaseComponent footer) {
@@ -163,7 +163,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 		return new PacketLoginOutSuccess(SpigotMiscUtils.toMojangGameProfile(profile));
 	}
 
-	private static final PacketDataSerializer emptyPDS = new PacketDataSerializer(Unpooled.EMPTY_BUFFER);
+	protected static final PacketDataSerializer emptyPDS = new PacketDataSerializer(Unpooled.EMPTY_BUFFER);
 	@Override
 	public Object createEmptyCustomPayloadPacket(String tag) {
 		return new PacketPlayOutCustomPayload(tag, emptyPDS);

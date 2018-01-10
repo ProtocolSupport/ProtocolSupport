@@ -44,7 +44,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 		ProtocolSupport.logInfo(MessageFormat.format("Login threads keep alive time: {0}", loginThreadKeepAlive));
 	}
 
-	private static final Executor loginprocessor = new ThreadPoolExecutor(
+	protected static final Executor loginprocessor = new ThreadPoolExecutor(
 		1, Integer.MAX_VALUE,
 		loginThreadKeepAlive, TimeUnit.SECONDS,
 		new LinkedBlockingQueue<Runnable>(),

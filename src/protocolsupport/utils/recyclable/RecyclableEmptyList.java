@@ -7,7 +7,7 @@ import java.util.NoSuchElementException;
 public class RecyclableEmptyList<E> implements RecyclableCollection<E> {
 
 	@SuppressWarnings("rawtypes")
-	private static final RecyclableEmptyList instance = new RecyclableEmptyList();
+	protected static final RecyclableEmptyList instance = new RecyclableEmptyList();
 
 	@SuppressWarnings("unchecked")
 	public static <T> RecyclableEmptyList<T> get() {

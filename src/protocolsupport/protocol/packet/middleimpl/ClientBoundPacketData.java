@@ -10,7 +10,7 @@ import protocolsupport.utils.recyclable.Recyclable;
 
 public class ClientBoundPacketData extends WrappingBuffer implements Recyclable {
 
-	private static final Recycler<ClientBoundPacketData> recycler = new Recycler<ClientBoundPacketData>() {
+	protected static final Recycler<ClientBoundPacketData> recycler = new Recycler<ClientBoundPacketData>() {
 		@Override
 		protected ClientBoundPacketData newObject(Handle<ClientBoundPacketData> handle) {
 			return new ClientBoundPacketData(handle);

@@ -121,7 +121,7 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 				return GlowStoneMiscUtils.protocolToNetState(type);
 			}
 		}
-		throw new IllegalStateException(MessageFormat.format("Unkown protocol {0}", proto));
+		throw new IllegalStateException(MessageFormat.format("Unknown protocol {0}", proto));
 	}
 
 	@Override
