@@ -31,13 +31,13 @@ public class FeatureEmulation implements Listener {
 			Bukkit.getOnlinePlayers().stream()
 			.filter(player -> {
 				ProtocolVersion version = ProtocolSupportAPI.getProtocolVersion(player);
-				return version.getProtocolType() == ProtocolType.PC && version.isBefore(ProtocolVersion.MINECRAFT_1_9);
+				return (version.getProtocolType() == ProtocolType.PC) && version.isBefore(ProtocolVersion.MINECRAFT_1_9);
 			})
 			.filter(player -> player.hasPotionEffect(PotionEffectType.LEVITATION))
 			.filter(player -> !player.isFlying())
 			.forEach(player -> {
 				Vector vel = player.getVelocity();
-				vel.setY(vel.getY() + ((0.05D * (player.getPotionEffect(PotionEffectType.LEVITATION).getAmplifier() + 1) - vel.getY()) * 0.2D));
+				vel.setY(vel.getY() + (((0.05D * (player.getPotionEffect(PotionEffectType.LEVITATION).getAmplifier() + 1)) - vel.getY()) * 0.2D));
 				player.setVelocity(vel);
 			});
 		}, 1, 1);

@@ -1,14 +1,14 @@
 package protocolsupport.protocol.utils.spoofedata;
 
-import com.destroystokyo.paper.event.player.PlayerHandshakeEvent;
+import java.util.UUID;
+import java.util.function.Function;
 
 import org.bukkit.Bukkit;
 
+import com.destroystokyo.paper.event.player.PlayerHandshakeEvent;
+
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.utils.Utils;
-
-import java.util.UUID;
-import java.util.function.Function;
 
 public class PaperSpoofedDataParser implements Function<String, SpoofedData> {
 
