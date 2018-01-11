@@ -10,7 +10,7 @@ import io.netty.util.Recycler.Handle;
 public class RecyclableSingletonList<E> extends AbstractCollection<E> implements RecyclableCollection<E> {
 
 	@SuppressWarnings("rawtypes")
-	private static final Recycler<RecyclableSingletonList> recycle = new Recycler<RecyclableSingletonList>() {
+	protected static final Recycler<RecyclableSingletonList> recycler = new Recycler<RecyclableSingletonList>() {
 		@SuppressWarnings("unchecked")
 		@Override
 		protected RecyclableSingletonList newObject(Handle<RecyclableSingletonList> handle) {
@@ -20,7 +20,7 @@ public class RecyclableSingletonList<E> extends AbstractCollection<E> implements
 
 	@SuppressWarnings("unchecked")
 	public static <T> RecyclableSingletonList<T> create(T singleValue) {
-		RecyclableSingletonList<T> list = recycle.get();
+		RecyclableSingletonList<T> list = recycler.get();
 		list.singleValue = singleValue;
 		return list;
 	}

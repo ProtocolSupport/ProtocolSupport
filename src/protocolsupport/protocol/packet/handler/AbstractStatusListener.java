@@ -38,7 +38,7 @@ public abstract class AbstractStatusListener {
 		ProtocolSupport.logInfo(MessageFormat.format("Status threads max count: {0}, keep alive time: {1}", statusThreads, statusThreadKeepAlive));
 	}
 
-	private static final Executor statusprocessor = new ThreadPoolExecutor(
+	protected static final Executor statusprocessor = new ThreadPoolExecutor(
 		1, statusThreads,
 		statusThreadKeepAlive, TimeUnit.SECONDS,
 		new LinkedBlockingQueue<Runnable>(),

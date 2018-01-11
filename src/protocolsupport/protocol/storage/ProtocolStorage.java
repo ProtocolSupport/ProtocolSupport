@@ -8,6 +8,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.Validate;
+
 import protocolsupport.protocol.ConnectionImpl;
 
 public class ProtocolStorage {
@@ -16,11 +18,14 @@ public class ProtocolStorage {
 	private static final Map<SocketAddress, ConnectionImpl> secondaryStorage = new ConcurrentHashMap<>(2000);
 
 	public static final void addConnection(SocketAddress address, ConnectionImpl connection) {
+		Validate.notNull(address, "Primary address cant be null");
 		primaryStorage.put(address, new Data(connection));
 		secondaryStorage.put(address, connection);
 	}
 
 	public static final void addAddress(SocketAddress primary, SocketAddress additional) {
+		Validate.notNull(primary, "Primary address cant be null");
+		Validate.notNull(primary, "Additional address cant be null");
 		Data dataentry = primaryStorage.get(primary);
 		if (dataentry != null) {
 			dataentry.addresses.add(additional);
@@ -33,6 +38,7 @@ public class ProtocolStorage {
 	}
 
 	public static ConnectionImpl removeConnection(SocketAddress address) {
+		Validate.notNull(address, "Primary address cant be null");
 		Data dataentry = primaryStorage.remove(address);
 		for (SocketAddress aaddr : dataentry.addresses) {
 			secondaryStorage.remove(aaddr, dataentry.connection);
@@ -45,9 +51,9 @@ public class ProtocolStorage {
 		return primaryStorage.values().stream().map(data -> data.connection).collect(Collectors.toList());
 	}
 
-	private static class Data {
-		private final ConnectionImpl connection;
-		private final Set<SocketAddress> addresses = Collections.newSetFromMap(new ConcurrentHashMap<>());
+	protected static class Data {
+		protected final ConnectionImpl connection;
+		protected final Set<SocketAddress> addresses = Collections.newSetFromMap(new ConcurrentHashMap<>());
 		public Data(ConnectionImpl connection) {
 			this.connection = connection;
 		}

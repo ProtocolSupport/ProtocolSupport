@@ -11,6 +11,8 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.Connection;
@@ -23,6 +25,23 @@ import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.zplatform.ServerPlatform;
 
 public class FeatureEmulation implements Listener {
+
+	public FeatureEmulation() {
+		Bukkit.getScheduler().runTaskTimer(ProtocolSupport.getInstance(), () -> {
+			Bukkit.getOnlinePlayers().stream()
+			.filter(player -> {
+				ProtocolVersion version = ProtocolSupportAPI.getProtocolVersion(player);
+				return (version.getProtocolType() == ProtocolType.PC) && version.isBefore(ProtocolVersion.MINECRAFT_1_9);
+			})
+			.filter(player -> player.hasPotionEffect(PotionEffectType.LEVITATION))
+			.filter(player -> !player.isFlying())
+			.forEach(player -> {
+				Vector vel = player.getVelocity();
+				vel.setY(vel.getY() + (((0.05D * (player.getPotionEffect(PotionEffectType.LEVITATION).getAmplifier() + 1)) - vel.getY()) * 0.2D));
+				player.setVelocity(vel);
+			});
+		}, 1, 1);
+	}
 
 	@EventHandler
 	public void onShift(PlayerToggleSneakEvent event) {
