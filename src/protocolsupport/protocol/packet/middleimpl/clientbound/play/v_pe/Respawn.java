@@ -32,7 +32,7 @@ public class Respawn extends MiddleRespawn {
 				packets.add(Chunk.createEmptyChunk(version, x, z));
 			}
 		}
-		packets.add(Position.create(version, cache.getSelfPlayerEntityId(), 0, 20, 0, 0, 0, Position.ANIMATION_MODE_ALL));
+		packets.add(Position.create(version, cache.getWatchedSelf(), 0, 20, 0, 0, 0, Position.ANIMATION_MODE_ALL));
 		return packets;
 	}
 
