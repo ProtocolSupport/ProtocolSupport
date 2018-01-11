@@ -14,6 +14,7 @@ import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnObject.PreparedItem;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacket.InfTransactions;
+import protocolsupport.protocol.typeremapper.pe.PEMovementConfirmationPacketQueue;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.protocol.utils.types.GameMode;
@@ -25,12 +26,12 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class NetworkDataCache {
 
-	private static final double acceptableError = 0.1;
+	protected static final double acceptableError = 0.1;
 
-	private double x;
-	private double y;
-	private double z;
-	private int teleportConfirmId;
+	protected double x;
+	protected double y;
+	protected double z;
+	protected int teleportConfirmId;
 
 	public int tryTeleportConfirm(double x, double y, double z) {
 		if (teleportConfirmId == -1) {
@@ -169,14 +170,15 @@ public class NetworkDataCache {
 		actionNumber = 0;
 	}
 
-	private final TIntObjectHashMap<NetworkEntity> watchedEntities = new TIntObjectHashMap<>();
-	private final TIntObjectHashMap<PreparedItem> preparedItems = new TIntObjectHashMap<>();
+	protected final TIntObjectHashMap<NetworkEntity> watchedEntities = new TIntObjectHashMap<>();
+	protected final TIntObjectHashMap<PreparedItem> preparedItems = new TIntObjectHashMap<>();
 	private final InfTransactions infTransactions = new InfTransactions();
 	private int fuelTime = 0;
 	private int smeltTime = 200;
-	private NetworkEntity player;
-	private final HashMap<UUID, NetworkDataCache.PlayerListEntry> playerlist = new HashMap<>();
-	private Environment dimensionId;
+	protected NetworkEntity player;
+	protected final HashMap<UUID, NetworkDataCache.PlayerListEntry> playerlist = new HashMap<>();
+	protected Environment dimensionId;
+	protected float maxHealth = 20.0F;
 	private int selectedSlot = 0;
 
 	public void addWatchedEntity(NetworkEntity entity) {
@@ -289,8 +291,8 @@ public class NetworkDataCache {
 	}
 
 	public static class PropertiesStorage {
-		private final HashMap<String, ProfileProperty> signed = new HashMap<>();
-		private final HashMap<String, ProfileProperty> unsigned = new HashMap<>();
+		protected final HashMap<String, ProfileProperty> signed = new HashMap<>();
+		protected final HashMap<String, ProfileProperty> unsigned = new HashMap<>();
 
 		public void add(ProfileProperty property) {
 			if (property.hasSignature()) {
@@ -318,9 +320,9 @@ public class NetworkDataCache {
 	}
 
 	public static class PlayerListEntry implements Cloneable {
-		private final String name;
-		private String displayNameJson;
-		private final PropertiesStorage propstorage = new PropertiesStorage();
+		protected final String name;
+		protected String displayNameJson;
+		protected final PropertiesStorage propstorage = new PropertiesStorage();
 
 		public PlayerListEntry(String name) {
 			this.name = name;
@@ -510,6 +512,12 @@ public class NetworkDataCache {
 
 	public UUID getPEClientUUID() {
 		return peClientUUID;
+	}
+
+	private final PEMovementConfirmationPacketQueue mvconfirmqueue = new PEMovementConfirmationPacketQueue();
+
+	public PEMovementConfirmationPacketQueue getPESendPacketMovementConfirmQueue() {
+		return mvconfirmqueue;
 	}
 
 }

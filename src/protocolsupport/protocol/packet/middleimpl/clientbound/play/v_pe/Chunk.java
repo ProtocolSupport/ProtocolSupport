@@ -44,9 +44,11 @@ public class Chunk extends MiddleChunk {
 		VarNumberSerializer.writeSVarInt(serializer, chunkX);
 		VarNumberSerializer.writeSVarInt(serializer, chunkZ);
 		ByteBuf chunkdata = Unpooled.buffer();
-		chunkdata.writeByte(0); //section count
-		chunkdata.writeBytes(new byte[512]); //heightmap
-		chunkdata.writeBytes(new byte[256]); //biomes
+		chunkdata.writeByte(1); //section count
+		chunkdata.writeZero(4096); //blocks
+		chunkdata.writeZero(2048); //block data
+		chunkdata.writeZero(512); //heightmap
+		chunkdata.writeZero(256); //biomes
 		chunkdata.writeByte(0); //borders
 		VarNumberSerializer.writeSVarInt(chunkdata, 0); //extra data
 		ArraySerializer.writeByteArray(serializer, version, chunkdata);

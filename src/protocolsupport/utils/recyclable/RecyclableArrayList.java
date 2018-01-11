@@ -9,7 +9,7 @@ public class RecyclableArrayList<E> extends ArrayList<E> implements RecyclableCo
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("rawtypes")
-	private static final Recycler<RecyclableArrayList> recycler = new Recycler<RecyclableArrayList>() {
+	protected static final Recycler<RecyclableArrayList> recycler = new Recycler<RecyclableArrayList>() {
 		@SuppressWarnings("unchecked")
 		@Override
 		protected RecyclableArrayList newObject(Handle<RecyclableArrayList> handle) {

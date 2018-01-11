@@ -32,6 +32,7 @@ import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
+import protocolsupport.zplatform.ServerPlatform;
 
 public class PEPacketDecoder extends AbstractPacketDecoder {
 
@@ -77,7 +78,11 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 			if (input.isReadable()) {
 				throw new DecoderException("Did not read all data from packet " + packetTransformer.getClass().getName() + ", bytes left: " + input.readableBytes());
 			}
-			addPackets(packetTransformer.toNative(), list);
+			RecyclableCollection<ServerBoundPacketData> packets = packetTransformer.toNative();
+			if (cache.getPESendPacketMovementConfirmQueue().checkMovement(packets)) {
+				ctx.channel().eventLoop().execute(() -> connection.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("PS|PushQueue")));
+			}
+			addPackets(packets, list);
 		} catch (Exception e) {
 			throwFailedTransformException(e, packetTransformer, input);
 		}

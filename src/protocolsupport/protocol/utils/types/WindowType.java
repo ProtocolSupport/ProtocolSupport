@@ -18,8 +18,8 @@ public enum WindowType {
 	ANVIL("minecraft:anvil"),
 	HOPPER("minecraft:hopper"),
 	DROPPER("minecraft:dropper"),
-	SHULKER("minecraft:shulker_box"),
 	HORSE("EntityHorse"),
+	SHULKER("minecraft:shulker_box"),
 	PLAYER("_____FAKETYPE_PLAYER");
 
 	private final String id;

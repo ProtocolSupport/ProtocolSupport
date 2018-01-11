@@ -65,6 +65,10 @@ public abstract class AbstractHandshakeListener {
 						disconnect("Ip forwarding is enabled but spoofed data can't be decoded or is missing");
 						return;
 					}
+					if (sdata.isFailed()) {
+						disconnect(sdata.getFailMessage());
+						return;
+					}
 					hostname = sdata.getHostname();
 					connection.changeAddress(new InetSocketAddress(sdata.getAddress(), connection.getAddress().getPort()));
 					networkManager.setSpoofedProfile(sdata.getUUID(), sdata.getProperties());
