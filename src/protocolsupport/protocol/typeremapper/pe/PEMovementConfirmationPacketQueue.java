@@ -12,10 +12,10 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 //TODO: put a sane limit on queue size
 public class PEMovementConfirmationPacketQueue {
 
-	private final ArrayList<ClientBoundPacketData> queue = new ArrayList<>(256);
-	private boolean foundLoginPlayStatus = false;
-	private boolean foundRespawnPlayStatus = false;
-	private boolean waitingConfirmation = false;
+	protected final ArrayList<ClientBoundPacketData> queue = new ArrayList<>(256);
+	protected boolean foundLoginPlayStatus = false;
+	protected boolean foundRespawnPlayStatus = false;
+	protected boolean waitingConfirmation = false;
 
 	@SuppressWarnings("unchecked")
 	public RecyclableCollection<ClientBoundPacketData> attemptSendPackets(RecyclableCollection<ClientBoundPacketData> packets) {

@@ -12,6 +12,7 @@ import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEAdventureSettings;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
@@ -70,13 +71,29 @@ public class Login extends MiddleLogin {
 		startgame.writeLongLE(0); //world ticks
 		VarNumberSerializer.writeSVarInt(startgame, 0); //enchantment seed
 		packets.add(startgame);
+		//player metadata and settings update, so it won't behave strangely until medata update is sent by server
 		packets.add(PEAdventureSettings.createPacket(cache));
+		packets.add(EntityMetadata.createFaux(cache.getWatchedSelf(), cache.getLocale(), version));
+		//can now switch to game state
 		packets.add(LoginSuccess.createPlayStatus(version, 3));
+		//send chunk radius update without waiting for request, works anyway
 		//PE uses circle to calculate visible chunks, so the view distance should cover all chunks that are sent by server (pc square should fit into pe circle)
 		ClientBoundPacketData chunkradius = ClientBoundPacketData.create(PEPacketIDs.CHUNK_RADIUS, version);
 		VarNumberSerializer.writeSVarInt(chunkradius, (int) Math.ceil((Bukkit.getViewDistance() + 1) * Math.sqrt(2)));
 		packets.add(chunkradius);
-		packets.add(EntityMetadata.createFaux(cache.getWatchedSelf(), cache.getLocale(), version)); //Add faux flags right on login. If something important needs to be send also, the server will take care with a metadata update.
+		//fake chunks with position, because pe doesn't like spawning in no chunk world
+		for (int x = -2; x <= 2; x++) {
+			for (int z = -2; z <= 2; z++) {
+				packets.add(Chunk.createEmptyChunk(version, x, z));
+			}
+		}
+		//teleport to empty world, this will also unlock packet sending that was stalled by movement confirmation
+		packets.add(protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Position.create(
+			version, playerEntityId, 0, 20, 0, 0, 0, protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Position.ANIMATION_MODE_ALL
+		));
+		//add two dimension switches to make sure that player ends up in right dimension even if bungee dimension switch on server switch broke stuff
+		Respawn.create(version, dimension != Environment.OVERWORLD ? Environment.OVERWORLD: Environment.NETHER, playerEntityId, packets);
+		Respawn.create(version, dimension, playerEntityId, packets);
 		return packets;
 	}
 
