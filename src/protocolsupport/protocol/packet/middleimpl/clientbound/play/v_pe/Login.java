@@ -61,6 +61,7 @@ public class Login extends MiddleLogin {
 		startgame.writeBoolean(false); //needs texture pack
 		VarNumberSerializer.writeVarInt(startgame, 0); //game rules
 		startgame.writeBoolean(false); //bonus chest enabled
+		startgame.writeBoolean(false); //player map enabled
 		startgame.writeBoolean(false); //trust players
 		VarNumberSerializer.writeSVarInt(startgame, PEAdventureSettings.GROUP_NORMAL); //permission level
 		VarNumberSerializer.writeSVarInt(startgame, 4); //game publish setting
@@ -71,7 +72,7 @@ public class Login extends MiddleLogin {
 		startgame.writeLongLE(0); //world ticks
 		VarNumberSerializer.writeSVarInt(startgame, 0); //enchantment seed
 		packets.add(startgame);
-		//player metadata and settings update, so it won't behave strangely until medata update is sent by server
+		//player metadata and settings update, so it won't behave strangely until metadata update is sent by server
 		packets.add(PEAdventureSettings.createPacket(cache));
 		packets.add(EntityMetadata.createFaux(cache.getWatchedSelf(), cache.getLocale(), version));
 		//can now switch to game state
@@ -89,7 +90,7 @@ public class Login extends MiddleLogin {
 		}
 		//teleport to empty world, this will also unlock packet sending that was stalled by movement confirmation
 		packets.add(protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Position.create(
-			version, playerEntityId, 0, 20, 0, 0, 0, protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Position.ANIMATION_MODE_ALL
+			version, playerEntityId, 0, 20, 0, 0, 0, protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Position.ANIMATION_MODE_TELEPORT
 		));
 		//add two dimension switches to make sure that player ends up in right dimension even if bungee dimension switch on server switch broke stuff
 		Respawn.create(version, dimension != Environment.OVERWORLD ? Environment.OVERWORLD: Environment.NETHER, playerEntityId, packets);
