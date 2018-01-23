@@ -13,7 +13,6 @@ import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockDig;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockPlace;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCreativeSetSlot;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddleHeldSlot;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClick;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryTransaction;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUseEntity;
@@ -154,7 +153,6 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 		switch(actionId) {
 			case ACTION_USE_ITEM: {
-				packets.add(MiddleHeldSlot.create(slot));
 				bug("CLICK! Face: " + face + "Subtype: " + subTypeId);
 				switch(subTypeId) {
 					case USE_CLICK_AIR:
@@ -174,7 +172,6 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				break;
 			}
 			case ACTION_INTERACT: {
-				packets.add(MiddleHeldSlot.create(slot));
 				switch(subTypeId) {
 					case INTERACT_INTERACT: {
 						NetworkEntity target = cache.getWatchedEntity(targetId);
@@ -196,7 +193,6 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				break;
 			}
 			case ACTION_RELEASE_ITEM: {
-				packets.add(MiddleHeldSlot.create(slot));
 				switch(subTypeId) {
 					case RELEASE_RELEASE: {
 						bug("RELEASING!");
