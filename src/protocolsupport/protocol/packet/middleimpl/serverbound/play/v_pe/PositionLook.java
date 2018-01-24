@@ -2,17 +2,12 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddleMoveVehicle;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddlePositionLook;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSteerBoat;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleTeleportAccept;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateSign;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.minecraftdata.PocketData;
-import protocolsupport.protocol.utils.types.NetworkEntity;
-import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -68,20 +63,8 @@ public class PositionLook extends ServerBoundMiddlePacket {
 			//TODO: Play around more with these numbers to perhaps make things even more smooth.
 			x = Math.floor(x * 8) / 8; y = Math.ceil((y + 0.3) * 8) / 8; z = Math.floor(z * 8) / 8;
 		}
-		 if(cache.getWatchedSelf().getDataCache().isRiding()) {
-			NetworkEntity vehicle = cache.getWatchedEntity(cache.getWatchedSelf().getDataCache().getVehicleId());
-			if (vehicle != null) {
-				if(vehicle.getType() == NetworkEntityType.BOAT) {
-					double dX = x - cache.getClientX(), dZ = z - cache.getClientZ();
-					if(Math.abs(dX) > 0 || Math.abs(dZ) > 0) {
-						fakeYaw = 360 - Math.toDegrees(Math.atan2(dX, dZ));
-					}
-					yaw = (float) fakeYaw + yaw + 90;
-					System.out.println("MOVE - dx:" + dX + " dz:" + dZ + " fakeYaw:" + fakeYaw);
-					packets.add(MiddleSteerBoat.create(cache.isRightPaddleTurning(), cache.isLeftPaddleTurning()));
-					packets.add(MiddleMoveVehicle.create(x, y + PocketData.getPocketEntityData(vehicle.getType()).getOffset().getY(), z, (float) fakeYaw, 0));
-				}
-			}
+		if (cache.getWatchedSelf().getDataCache().isRiding()) {
+			yaw = (360f/256f) * MoveVehicle.getLastYaw() + yaw + 90;
 		}
 		packets.add(MiddlePositionLook.create(x, y, z, yaw, pitch, onGround));
 		if (teleportId == -1) {

@@ -29,7 +29,6 @@ public class Animation extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		System.out.println("ANIMATE - " + Integer.toBinaryString(action) + " eID: " + entityId + "paddleTime: " + paddleTime);
 		if ((action & 0x80) == 0) {
 			return RecyclableSingletonList.create(MiddleAnimation.create(0));
 		} else {
