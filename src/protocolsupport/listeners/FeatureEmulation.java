@@ -98,6 +98,7 @@ public class FeatureEmulation implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onInventoryOpen(InventoryOpenEvent event) {
+		System.out.println("Meep");
 		if(
 			(event.getInventory().getType() != InventoryType.MERCHANT) &&
 			(event.getPlayer() instanceof Player)
@@ -112,17 +113,17 @@ public class FeatureEmulation implements Listener {
 				if (event.getInventory().getType() == InventoryType.BEACON && event.getInventory().getLocation() != null) {
 					//Since beacon power is checked clientside, we can't even fake the block in position we please.
 					mainLoc = event.getInventory().getLocation();
-				} else {
-					//If the player is not on the ground or almost at bedrock, 
-					//set the fake blocks above so the player doesn't fall on to it or so they aren't out of the world.
-					if ((!player.isOnGround()) || (mainLoc.getBlockY() < 4)) {
-						mainLoc.add(0, 6, 0);
-					}
-					connection.addMetadata("peInvBlocks", new InvBlock[] {
-							new InvBlock(mainLoc.subtract(1, 2, 0).getBlock()), 
-							new InvBlock(mainLoc.	  add(1, 0, 0).getBlock())
-						});
+					mainLoc.add(1, 2, 0);
 				}
+				//If the player is not on the ground or almost at bedrock, 
+				//set the fake blocks above so the player doesn't fall on to it or so they aren't out of the world.
+				if ((!player.isOnGround()) || (mainLoc.getBlockY() < 4)) {
+					mainLoc.add(0, 6, 0);
+				}
+				connection.addMetadata("peInvBlocks", new InvBlock[] {
+						new InvBlock(mainLoc.subtract(1, 2, 0).getBlock()), 
+						new InvBlock(mainLoc.	  add(1, 0, 0).getBlock())
+					});
 				Location headChestLock = mainLoc;
 				//Double chests need some ticks to confire after the inventory blocks are placed. We need to resend the inventory open.
 				if (event.getView().getTopInventory().getSize() > 27) {

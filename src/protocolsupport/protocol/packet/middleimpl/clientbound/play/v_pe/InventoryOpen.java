@@ -24,8 +24,8 @@ import protocolsupport.protocol.utils.types.TileEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 import protocolsupport.zplatform.ServerPlatform;
+import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 
@@ -54,7 +54,11 @@ public class InventoryOpen extends MiddleInventoryOpen {
 						}
 						filter.setList("slots", newSlots);
 					}
-					return RecyclableSingletonList.create(openEquipment(connection.getVersion(), windowId, type, horseId, filter));
+					RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
+					packets.add(openEquipment(connection.getVersion(), 2, type, horseId, filter));
+					packets.add(InventorySetItems.create(connection.getVersion(), cache.getLocale(), 2, new ItemStackWrapper[] {ItemStackWrapper.NULL, ItemStackWrapper.NULL}));
+					//return RecyclableSingletonList.create(openEquipment(connection.getVersion(), 2, type, horseId, filter));
+					return packets;
 				}
 			}
 		}
@@ -120,6 +124,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 		serializer.writeByte(IdRemapper.WINDOWTYPE.getTable(version).getRemap(type.toLegacyId()));
 		VarNumberSerializer.writeSVarInt(serializer, 0);
 		VarNumberSerializer.writeSVarLong(serializer, entityId);
+		System.out.println("OPEN EQ - Eid: "+ entityId + "wId: " + windowId + " type: " + IdRemapper.WINDOWTYPE.getTable(version).getRemap(type.toLegacyId()) +  " Tag: " + nbt);
 		ItemStackSerializer.writeTag(serializer, true, version, nbt);
 		return serializer;
 	}

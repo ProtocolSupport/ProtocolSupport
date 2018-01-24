@@ -300,9 +300,13 @@ public enum SpecificRemapper {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				getObject(original, DataWatcherObjectIndex.BaseHorse.FLAGS, DataWatcherObjectByte.class).ifPresent(byteWatcher -> {
-					if((byteWatcher.getValue() & (1 << (6-1))) != 0) {
-						//TODO: Store PE horseflags when neeeded.
-						remapped.put(16, new DataWatcherObjectVarInt(0b100000));
+					remapped.put(16, new DataWatcherObjectVarInt(((byteWatcher.getValue() & (1 << (6-1))) != 0) ? 0b100000 : 0));
+					System.out.println(((byteWatcher.getValue() & (1 << (2-1))) != 0));
+					if ((byteWatcher.getValue() & (1 << (2-1))) != 0) {
+						System.out.println("Wierd inventoryproperties set.");
+						//When tamed set these weird properties to make the inventory work. FFS Mojang.
+						remapped.put(45, new DataWatcherObjectByte((byte) 12));
+						remapped.put(46, new DataWatcherObjectVarInt(2));
 					}
 				});
 			}
