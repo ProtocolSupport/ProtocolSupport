@@ -291,10 +291,9 @@ public enum SpecificRemapper {
 	CHICKEN(NetworkEntityType.CHICKEN, SpecificRemapper.AGEABLE),
 	SQUID(NetworkEntityType.SQUID, SpecificRemapper.INSENTIENT),
 	BASE_HORSE(NetworkEntityType.BASE_HORSE, SpecificRemapper.AGEABLE,
-		new Entry(new PeSimpleFlagAdder(new int[] {PeMetaBase.FLAG_WASD_CONTROLLED}, new boolean[] {true}), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.BaseHorse.FLAGS,
 				//TODO: Eating?
-				new int[] {2, 3, 4, /*5,*/ 6, 7}, new int[] {PeMetaBase.FLAG_TAMED, PeMetaBase.FLAG_SADDLED, PeMetaBase.FLAG_IN_LOVE, /*PeMetaBase.FLAG_USING_ITEM,*/ PeMetaBase.FLAG_REARING, PeMetaBase.FLAG_BREATHING}),
+				new int[] {2, 3, 3, 3, 4, /*5,*/ 6, 7}, new int[] {PeMetaBase.FLAG_TAMED, PeMetaBase.FLAG_SADDLED, PeMetaBase.FLAG_WASD_CONTROLLED, PeMetaBase.FLAG_CAN_POWER_JUMP, PeMetaBase.FLAG_IN_LOVE, /*PeMetaBase.FLAG_USING_ITEM,*/ PeMetaBase.FLAG_REARING, PeMetaBase.FLAG_BREATHING}),
 			ProtocolVersion.MINECRAFT_PE),
 		new Entry(new DataWatcherDataRemapper(){
 			@Override

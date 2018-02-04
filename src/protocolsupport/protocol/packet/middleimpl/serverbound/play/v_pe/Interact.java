@@ -35,7 +35,6 @@ public class Interact extends ServerBoundMiddlePacket {
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		switch (peAction) {
 			case LEAVE_VEHICLE: {
-				System.out.println("Jump?");
 				return RecyclableSingletonList.create(MiddleSteerVehicle.create(0, 0, 0x2)); // 0x2 = unmount vehicle
 			}
 			case MOUSE_OVER: {

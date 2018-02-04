@@ -19,7 +19,7 @@ public class PEPacketIDs {
 	public static final int TAKE_ITEM_ENTITY = 17;
 	public static final int ENTITY_TELEPORT = 18;
 	public static final int PLAYER_MOVE = 19;
-	//public static final int RIDER_JUMP = 20;
+	public static final int RIDER_JUMP = 20;
 	public static final int UPDATE_BLOCK = 21;
 	public static final int SPAWN_PAINTING = 22;
 	public static final int EXPLODE = 23;

@@ -25,6 +25,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.MapInfoR
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.MoveVehicle;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PlayerAction;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PositionLook;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.RiderJump;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.SteerVehicle;
 import protocolsupport.protocol.pipeline.version.AbstractPacketDecoder;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -57,6 +58,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		registry.register(NetworkState.PLAY, PEPacketIDs.INVENTORY_TRANSACTION, GodPacket.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.MAP_INFO_REQUEST, MapInfoRequest.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.EDIT_BOOK, BookEdit.class);
+		registry.register(NetworkState.PLAY, PEPacketIDs.RIDER_JUMP, RiderJump.class);
 	}
 
 	public PEPacketDecoder(Connection connection, NetworkDataCache cache) {
