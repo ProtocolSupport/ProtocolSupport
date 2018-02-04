@@ -8,6 +8,8 @@ import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateSign;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -64,7 +66,10 @@ public class PositionLook extends ServerBoundMiddlePacket {
 			x = Math.floor(x * 8) / 8; y = Math.ceil((y + 0.3) * 8) / 8; z = Math.floor(z * 8) / 8;
 		}
 		if (cache.getWatchedSelf().getDataCache().isRiding()) {
-			yaw = (360f/256f) * MoveVehicle.getLastYaw() + yaw + 90;
+			NetworkEntity vehicle = cache.getWatchedEntity(cache.getWatchedSelf().getDataCache().getVehicleId());
+			if (!vehicle.isOfType(NetworkEntityType.LIVING)) {
+				yaw = (360f/256f) * MoveVehicle.getLastYaw() + yaw + 90;
+			}
 		}
 		packets.add(MiddlePositionLook.create(x, y, z, yaw, pitch, onGround));
 		if (teleportId == -1) {

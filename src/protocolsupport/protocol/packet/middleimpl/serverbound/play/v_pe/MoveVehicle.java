@@ -53,20 +53,11 @@ public class MoveVehicle extends ServerBoundMiddlePacket {
 				z -= offset.getZ();
 				pitch = (byte) Utils.shortDegree(pitch - offset.getPitch(), 256);
 				yaw = (byte) Utils.shortDegree(yaw - offset.getYaw(), 256);
-				System.out.println("C: " + yaw);
-			}
-			if (vehicle.isOfType(NetworkEntityType.BASE_HORSE)) {
-				//TODO MOJANG... How does horsey work? :F
-				System.out.println("I: " + yaw);
-				yaw = (byte) Utils.shortDegree((yaw/2) - 64, 256);
-				yaw *= 2;
-				System.out.println("C: " + yaw);
 			}
 		}
 		lastYaw = yaw;
 		float realPitch = (360f/256f) * pitch;
 		float realYaw = (360f/256f) * yaw;
-		System.out.println("D: " + realYaw);
 		packets.add(MiddleMoveVehicle.create(x, y, z, realYaw, realPitch));
 		return packets;
 	}
