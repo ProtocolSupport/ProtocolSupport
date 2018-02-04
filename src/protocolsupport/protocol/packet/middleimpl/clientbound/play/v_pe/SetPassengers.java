@@ -48,7 +48,7 @@ public class SetPassengers extends MiddleSetPassengers {
 					DataCache data = passenger.getDataCache();
 					if (data.isRiding() && data.getVehicleId() != vehicleId) {
 						//In case we are jumping from vehicle to vehicle.
-						packets.addAll(link(version, data.getVehicleId(), passengerId, UNLINK));
+						packets.add(create(version, data.getVehicleId(), passengerId, UNLINK));
 					}
 					PocketRiderInfo rideInfo = PocketData.getPocketEntityData(vehicle.getType()).getRiderInfo();
 					if (rideInfo != null) {
@@ -63,7 +63,7 @@ public class SetPassengers extends MiddleSetPassengers {
 						data.setVehicleId(vehicleId);
 					}
 					packets.add(EntityMetadata.createFaux(passenger, cache.getLocale(), version));
-					packets.addAll(link(version, vehicleId, passengerId, LINK));
+					packets.add(create(version, vehicleId, passengerId, LINK));
 				}
 			}
 			prevPassengersIds.forEach(new TIntProcedure() {
@@ -75,7 +75,7 @@ public class SetPassengers extends MiddleSetPassengers {
 							//Also update meta.
 							passenger.getDataCache().setVehicleId(0);
 							packets.add(EntityMetadata.createFaux(passenger, cache.getLocale(), version));
-							packets.addAll(link(version, vehicleId, passengerId, UNLINK));
+							packets.add(create(version, vehicleId, passengerId, UNLINK));
 						}
 					}
 					return true;
@@ -92,15 +92,6 @@ public class SetPassengers extends MiddleSetPassengers {
 		VarNumberSerializer.writeSVarLong(serializer, passengerId);
 		serializer.writeByte(action);
 		return serializer;
-	}
-	
-	public RecyclableArrayList<ClientBoundPacketData> link(ProtocolVersion version, int vehicleId, int passengerId, int action) {
-		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		packets.add(create(version, vehicleId, passengerId, action));
-		if(cache.isSelf(passengerId)) {
-			packets.add(create(version, vehicleId, 0, action));
-		}
-		return packets;
 	}
 
 }
