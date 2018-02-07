@@ -28,6 +28,6 @@ public class PENetServerConstants {
 
 	public static final int USER_PACKET_ID = 0xFE;
 	//TODO: a map for protocol version -> string version
-	public static final String POCKET_VERSION = "1.2.7";
+	public static final String POCKET_VERSION = "1.2.10";
 
 }
