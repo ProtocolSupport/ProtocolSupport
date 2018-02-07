@@ -67,7 +67,7 @@ public class PositionLook extends ServerBoundMiddlePacket {
 		}
 		if (cache.getWatchedSelf().getDataCache().isRiding()) {
 			NetworkEntity vehicle = cache.getWatchedEntity(cache.getWatchedSelf().getDataCache().getVehicleId());
-			if (!vehicle.isOfType(NetworkEntityType.LIVING)) {
+			if (vehicle.isOfType(NetworkEntityType.BOAT)) {
 				yaw = (360f/256f) * MoveVehicle.getLastYaw() + yaw + 90;
 			}
 		}
