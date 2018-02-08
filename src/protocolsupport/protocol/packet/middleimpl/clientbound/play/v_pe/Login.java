@@ -63,7 +63,6 @@ public class Login extends MiddleLogin {
 		startgame.writeBoolean(false); //needs texture pack
 		VarNumberSerializer.writeVarInt(startgame, 0); //game rules
 		startgame.writeBoolean(false); //bonus chest enabled
-		startgame.writeBoolean(false); //start with map item
 		startgame.writeBoolean(false); //trust players
 		VarNumberSerializer.writeSVarInt(startgame, PEAdventureSettings.GROUP_NORMAL); //permission level
 		VarNumberSerializer.writeSVarInt(startgame, 4); //game publish setting
