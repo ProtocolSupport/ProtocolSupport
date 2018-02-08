@@ -280,6 +280,10 @@ public class NetworkDataCache {
 	public void setDimensionId(Environment dimensionId) {
 		this.dimensionId = dimensionId;
 	}
+	
+	public Environment getDimension() {
+		return dimensionId;
+	}
 
 	public boolean hasSkyLightInCurrentDimension() {
 		return dimensionId == Environment.OVERWORLD;

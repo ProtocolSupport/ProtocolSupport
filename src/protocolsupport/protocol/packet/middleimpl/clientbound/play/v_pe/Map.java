@@ -13,7 +13,7 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class Map extends MiddleMap {
 	
-	public static final int FLAG_ENTITY_UPDATE = 0x08;
+	//public static final int FLAG_ENTITY_UPDATE = 0x08;
 	public static final int FLAG_DECORATION_UPDATE = 0x04;
 	public static final int FLAG_TEXTURE_UPDATE = 0x02;
 	
@@ -28,7 +28,7 @@ public class Map extends MiddleMap {
 		if (icons.length > 0) { flags |= (FLAG_DECORATION_UPDATE) ; } //TODO: Fix the map icons.
 
 		VarNumberSerializer.writeVarInt(serializer, flags);
-		serializer.writeByte(0); //Dimension
+		serializer.writeByte(Respawn.getPeDimensionId(cache.getDimension())); //Dimension
 
 		//Implementation
 		if ((flags & (FLAG_DECORATION_UPDATE | FLAG_TEXTURE_UPDATE)) != 0) {
@@ -38,14 +38,13 @@ public class Map extends MiddleMap {
 		if ((flags & FLAG_DECORATION_UPDATE) != 0) {
 			VarNumberSerializer.writeVarInt(serializer, 0); //Playerheads?
 			VarNumberSerializer.writeVarInt(serializer, icons.length);
-			for (Icon icon: icons) {
+			for (Icon icon : icons) {
 				serializer.writeByte(icon.dirtype & 0x0F);
 				serializer.writeByte(icon.dirtype & 0xF0);
 				serializer.writeByte(icon.x);
 				serializer.writeByte(icon.z);
-				StringSerializer.writeString(serializer, connection.getVersion(), "");
-				//TODO: Remap icon colors. (Also: writeIntLE instead?)
-				VarNumberSerializer.writeVarInt(serializer, MapColorHelper.toARGB((byte) 255, (byte) 255, (byte) 255, (byte) 255));
+				StringSerializer.writeString(serializer, connection.getVersion(), ""); //Label
+				VarNumberSerializer.writeVarInt(serializer, MapColorHelper.toARGB((byte) 255, (byte) 255, (byte) 255, (byte) 255)); //TODO: Remap icon colors.
 			}
 		}
 
@@ -54,7 +53,7 @@ public class Map extends MiddleMap {
 			VarNumberSerializer.writeSVarInt(serializer, rows);
 			VarNumberSerializer.writeSVarInt(serializer, xstart);
 			VarNumberSerializer.writeSVarInt(serializer, zstart);
-			VarNumberSerializer.writeVarInt(serializer, colors.length);
+			VarNumberSerializer.writeVarInt(serializer, columns * rows);
 			RemappingTable.ArrayBasedIdRemappingTable colorRemapper = MapColorRemapper.REMAPPER.getTable(connection.getVersion());
 			for (int i = 0; i < colors.length; i++) {
 					VarNumberSerializer.writeVarInt(serializer, colorRemapper.getRemap(colors[i] & 0xFF));
