@@ -25,7 +25,7 @@ public class Map extends MiddleMap {
 		int flags = 0;
 
 		if (columns > 0) { flags |= FLAG_TEXTURE_UPDATE; }
-		if (icons.length > 0) { flags |= (FLAG_DECORATION_UPDATE) ; } //TODO: Fix the map icons.
+		//if (icons.length > 0) { flags |= (FLAG_DECORATION_UPDATE) ; } //TODO: Fix the map icons.
 
 		VarNumberSerializer.writeVarInt(serializer, flags);
 		serializer.writeByte(Respawn.getPeDimensionId(cache.getDimension())); //Dimension
