@@ -39,7 +39,7 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 	}
 
 	public GlowSession getSession() {
-		return handler.getSession().get();
+		return handler.getSession();
 	}
 
 	@Override
