@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 
+import com.destroystokyo.paper.profile.ProfileProperty;
+import net.glowstone.entity.meta.profile.GlowPlayerProfile;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -18,8 +20,6 @@ import org.bukkit.util.CachedServerIcon;
 
 import io.netty.channel.ChannelPipeline;
 import net.glowstone.GlowServer;
-import net.glowstone.entity.meta.profile.PlayerProfile;
-import net.glowstone.entity.meta.profile.PlayerProperty;
 import net.glowstone.io.nbt.NbtSerialization;
 import net.glowstone.net.pipeline.CompressionHandler;
 import net.glowstone.net.pipeline.MessageHandler;
@@ -46,12 +46,12 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 		return ((GlowServer) Bukkit.getServer());
 	}
 
-	public static PlayerProfile toGlowStoneGameProfile(GameProfile profile) {
-		return new PlayerProfile(
+	public static GlowPlayerProfile toGlowStoneGameProfile(GameProfile profile) {
+		return new GlowPlayerProfile(
 			profile.getName(), profile.getUUID(),
 			profile.getProperties().values()
 			.stream()
-			.map(property -> new PlayerProperty(property.getName(), property.getValue(), property.getSignature()))
+			.map(property -> new ProfileProperty(property.getName(), property.getValue(), property.getSignature()))
 			.collect(Collectors.toList())
 		);
 	}
