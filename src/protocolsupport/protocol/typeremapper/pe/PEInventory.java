@@ -69,9 +69,10 @@ public class PEInventory {
 		private ItemStackWrapper[] contents = new ItemStackWrapper[] {
 				ItemStackWrapper.NULL, ItemStackWrapper.NULL, ItemStackWrapper.NULL, ItemStackWrapper.NULL, ItemStackWrapper.NULL
 			};
+		boolean showOptions = false;
 		
-		public void clear() {
-			for (int i = 0; i < contents.length; i++) {
+		public void clearOptions() {
+			for (int i = 2; i < contents.length; i++) {
 				contents[i] = ItemStackWrapper.NULL;
 			}
 		}
@@ -93,55 +94,63 @@ public class PEInventory {
 		}
 		
 		public void updateOptionLore(int num, int xp) {
-			ItemStackWrapper option = createOption(num);
-			if (option.isNull()) { return; }
-			NBTTagCompoundWrapper tag = option.getTag();
-			if (!tag.hasKeyOfType("display", NBTTagType.COMPOUND)) {
-				tag.setCompound("display", ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound());
+			if (showOptions) {
+				NBTTagCompoundWrapper option = createOption(num);
+				if (option.isNull()) { return; }
+				if (!option.hasKeyOfType("display", NBTTagType.COMPOUND)) {
+					option.setCompound("display", ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound());
+				}
+				NBTTagCompoundWrapper display = option.getCompound("display");
+				display.setString("Name", "Click to enchant");
+				NBTTagListWrapper lore = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
+				lore.addString("Requires");
+				lore.addString(xp + (xp == 1 ? " Enchantment Level" : " Enchantment Levels"));
+				lore.addString((num + 1) + " Lapis Lazuli");
+				display.setList("Lore", lore);
+				option.setCompound("display", display);
 			}
-			NBTTagCompoundWrapper display = tag.getCompound("display");
-			NBTTagListWrapper lore = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
-			lore.addString("Click to enchant item. Requires:"); //Empty line
-			lore.addString(xp + (xp == 1 ? " Enchantment Level" : " Enchantment Levels"));
-			lore.addString(num + " Lapis Lazuli");
-			display.setList("Lore", lore);
 		}
 		
 		public void updateOptionEnch(int num, int enchant) {
-			ItemStackWrapper option = createOption(num);
-			if (option.isNull()) { return; }
-			NBTTagCompoundWrapper tag = option.getTag();
-			if (!tag.hasKeyOfType("ench", NBTTagType.LIST)) {
-				tag.setList("ench", ServerPlatform.get().getWrapperFactory().createEmptyNBTList());
+			showOptions = enchant >= 0;
+			if (showOptions) {
+				NBTTagCompoundWrapper option = createOption(num);
+				if (option.isNull()) { return; }
+				if (!option.hasKeyOfType("ench", NBTTagType.LIST)) {
+					option.setList("ench", ServerPlatform.get().getWrapperFactory().createEmptyNBTList());
+				}
+				NBTTagListWrapper ench = option.getList("ench");
+				if(ench.isEmpty()) { ench.addCompound(ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound()); }
+				ench.getCompound(0).setShort("id", enchant);
+				if(!ench.getCompound(0).hasKeyOfType("lvl", NBTTagType.SHORT)) {ench.getCompound(0).setShort("lvl", 1);}
+			} else {
+				clearOptions();
 			}
-			NBTTagListWrapper ench = tag.getList("ench");
-			if(ench.isEmpty()) { ench.addCompound(ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound()); }
-			ench.getCompound(0).setShort("id", enchant);
-			if(!ench.getCompound(0).hasKeyOfType("lvl", NBTTagType.SHORT)) {ench.getCompound(0).setShort("lvl", 1);}
 		}
 		
 		public void updateOptionLevel(int num, int lvl) {
-			ItemStackWrapper option = createOption(num);
-			if (option.isNull()) { return; }
-			NBTTagCompoundWrapper tag = option.getTag();
-			if (!tag.hasKeyOfType("ench", NBTTagType.LIST)) {
-				tag.setList("ench", ServerPlatform.get().getWrapperFactory().createEmptyNBTList());
+			if (showOptions) {
+				NBTTagCompoundWrapper option = createOption(num);
+				if (option.isNull()) { return; }
+				if (option.hasKeyOfType("ench", NBTTagType.LIST)) {
+					NBTTagListWrapper ench = option.getList("ench");
+					if(!ench.isEmpty()) {
+						ench.getCompound(0).setShort("lvl", lvl);
+					}
+				}
 			}
-			NBTTagListWrapper ench = tag.getList("ench");
-			if(ench.isEmpty()) { ench.addCompound(ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound()); }
-			ench.getCompound(0).setShort("lvl", lvl);
-			if(!ench.getCompound(0).hasKeyOfType("ench", NBTTagType.SHORT)) {ench.getCompound(0).setShort("ench", 1);}
 		}
 		
-		private ItemStackWrapper createOption(int num) {
+		private NBTTagCompoundWrapper createOption(int num) {
+			if (contents[0].isNull()) { return NBTTagCompoundWrapper.NULL; }
 			num += 2;
 			if (contents[num].isNull()) {
 				contents[num] = contents[0].cloneItemStack();
-				if(!contents[num].isNull() && contents[num].getTag() == null) {
-					contents[num].setTag(ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound());
-				}
 			}
-			return contents[num];
+			if (contents[num].getTag() == null || contents[num].getTag().isNull()) {
+				contents[num].setTag(ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound());
+			}
+			return contents[num].getTag();
 		}
 		
 		public ClientBoundPacketData updateInventory(NetworkDataCache cache, ProtocolVersion version) {

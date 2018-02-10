@@ -73,6 +73,8 @@ public class InventorySetItems extends MiddleInventorySetItems {
 			}
 			case ENCHANT: { //Faked with hopper thingy, server sends the two slots though.
 				ItemStackWrapper[] peInventory = new ItemStackWrapper[36];
+				cache.getEnchantHopper().setInputOutputStack(items[0]);
+				cache.getEnchantHopper().setLapisStack(items[1]);
 				System.arraycopy(items, 29, peInventory, 0,  9);
 				System.arraycopy(items,  2, peInventory, 9, 27);
 				contentpackets.add(cache.getEnchantHopper().updateInventory(cache, version));

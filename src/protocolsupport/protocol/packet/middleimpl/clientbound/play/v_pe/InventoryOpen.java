@@ -79,7 +79,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 				}
 				if (type == WindowType.ENCHANT) {
 					type = WindowType.HOPPER; //We (currently) fake enchantment tables with hoppers as the server doesn't choose the enchantment otherwise (FFS)
-					cache.getEnchantHopper().clear();
+					cache.getEnchantHopper().clearOptions();
 				}
 				//Only double chests need some time to verify on the client (FFS Mojang!), the rest can be instantly opened after preparing.
 				packets.add(create(connection.getVersion(), windowId, type, blocks[0].getPosition(), -1));

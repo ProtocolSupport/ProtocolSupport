@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Material;
 import org.bukkit.util.Vector;
 
 import io.netty.buffer.ByteBuf;
@@ -363,11 +364,13 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			//Enchantment via hoppers. Yes, it's a hack but it's only possible this way.
 			if (cache.getOpenedWindow() == WindowType.ENCHANT) {
 				if (pcSlot == 0) {
+					cache.getEnchantHopper().clearOptions();
 					cache.getEnchantHopper().setInputOutputStack(transaction.getNewItem());
-				} else if (pcSlot == 1) {
+				} else if (pcSlot == 1 && (transaction.getNewItem().isNull() || (transaction.getNewItem().getType() == Material.INK_SACK && transaction.getNewItem().getData() == 4))) {
 					cache.getEnchantHopper().setLapisStack(transaction.getNewItem());
-				} else {
+				} else if (pcSlot > 1 && pcSlot <= 4) {
 					misc.add(MiddleInventoryEnchant.create(cache.getOpenedWindowId(), pcSlot - 2));
+					misc.addAll(Click.LEFT.create(cache, -999, ItemStackWrapper.NULL)); //Trigger inventory update
 					return;
 				}
 			}
@@ -733,6 +736,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				return invSlotToContainerSlot(peInventoryId, 3, peSlot);
 			}
 			case ENCHANT: {
+				bug("PE SLOT " + peSlot + " PC SLOT " + invSlotToContainerSlot(peInventoryId, 2, peSlot));
 				//We fake enchanting with hoppers, but the server slots are still 0 and 1 for the inventory.
 				return invSlotToContainerSlot(peInventoryId, 2, peSlot);
 			}
