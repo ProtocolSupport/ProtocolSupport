@@ -77,11 +77,9 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 				}
 			}
 			case ENCHANT: {
-				if (slot == 0) {
-					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_ENCHANT_OUTPUT, 0, itemstack));
-				} else if (slot == 1) {
-					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_ENCHANT_MATERIAL, 0, itemstack));
-				} else {
+				if (slot <= 1) {
+					return RecyclableSingletonList.create(cache.getEnchantHopper().updateInventory(cache, version)); //Fake with hopper :F
+				}  else {
 					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_INVENTORY, slot >= 29 ? slot - 29 : slot + 7, itemstack));
 				}
 			}

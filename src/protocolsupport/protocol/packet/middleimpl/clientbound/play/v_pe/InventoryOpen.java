@@ -35,6 +35,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		cache.getInfTransactions().clear();
 		if (type == WindowType.HORSE) {
+			//TODO: Fix this shit. Horses are a pain in the ass and require a different packer. Lama's are even worse with their variable slots. We'll see.
 			NetworkEntity horse = cache.getWatchedEntity(horseId);
 			if (horse != null) {
 				PocketEntityData horseTypeData = PocketData.getPocketEntityData(horse.getType());
@@ -66,14 +67,20 @@ public class InventoryOpen extends MiddleInventoryOpen {
 		if(connection.hasMetadata("peInvBlocks")) {
 			InvBlock[] blocks = (InvBlock[]) connection.getMetadata("peInvBlocks");
 			packets.addAll(prepareFakeInventory(connection.getVersion(), cache.getLocale(), blocks, type, title, cache.getOpenedWindowSlots()));
-			if(
+			if (
 				(type == WindowType.CHEST) &&
 				(cache.getOpenedWindowSlots() > 27)
 			) {
 				//When it is a doublechest, re-smuggle the windowId back to the metadata.
 				connection.addMetadata("smuggledWindowId", windowId);
 			} else {
-				if(type == WindowType.SHULKER) { type = WindowType.CHEST; } //:shrug:
+				if (type == WindowType.SHULKER) {
+					type = WindowType.CHEST; //We (currently) fake shulker boxes with chests as they are the same and PE doesn't like shulkers.
+				}
+				if (type == WindowType.ENCHANT) {
+					type = WindowType.HOPPER; //We (currently) fake enchantment tables with hoppers as the server doesn't choose the enchantment otherwise (FFS)
+					cache.getEnchantHopper().clear();
+				}
 				//Only double chests need some time to verify on the client (FFS Mojang!), the rest can be instantly opened after preparing.
 				packets.add(create(connection.getVersion(), windowId, type, blocks[0].getPosition(), -1));
 			}

@@ -14,6 +14,7 @@ import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnObject.PreparedItem;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacket.InfTransactions;
+import protocolsupport.protocol.typeremapper.pe.PEInventory.EnchantHopper;
 import protocolsupport.protocol.typeremapper.pe.PEMovementConfirmationPacketQueue;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.types.Environment;
@@ -169,7 +170,12 @@ public class NetworkDataCache {
 	public void resetActionNumber() {
 		actionNumber = 0;
 	}
-
+	
+	private EnchantHopper enchantHopper = new EnchantHopper();
+	public EnchantHopper getEnchantHopper() {
+		return enchantHopper;
+	}
+	
 	protected final TIntObjectHashMap<NetworkEntity> watchedEntities = new TIntObjectHashMap<>();
 	protected final TIntObjectHashMap<PreparedItem> preparedItems = new TIntObjectHashMap<>();
 	private final InfTransactions infTransactions = new InfTransactions();

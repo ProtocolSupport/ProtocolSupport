@@ -55,12 +55,23 @@ public class InventoryData extends MiddleInventoryData {
 						if (inv > 30) { inv += (inv-30); }
 						if (inv > 50) { inv += (inv-50); }
 						if (inv > 60) { inv += (inv-60); }
-						System.out.println("Brewing: " + value + " - PE: " +  (20+inv));
 						packets.add(create(version, windowId, 2, 20 + inv));
 						return packets;
 					}
 				}
 				break;
+			}
+			case ENCHANT: {
+				if (type <= 2) { //(0-2) xp per option
+					cache.getEnchantHopper().updateOptionLore(type, value);
+				} else if (type == 3) {
+					break; //Use for weird item names?
+				} else if (type <= 6) { //(4-6) EnchantmentId per option
+					cache.getEnchantHopper().updateOptionEnch(type - 4, value);
+				} else if (type <= 9) { //(7-9) EnchantmentLvl per option
+					cache.getEnchantHopper().updateOptionLevel(type - 7, value);
+				}
+				return RecyclableSingletonList.create(cache.getEnchantHopper().updateInventory(cache, version));
 			}
 			default: {
 				break;

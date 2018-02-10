@@ -14,6 +14,7 @@ import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockPlace;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCreativeSetSlot;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClick;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryEnchant;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryTransaction;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUseEntity;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -49,6 +50,7 @@ import protocolsupport.zplatform.itemstack.NBTTagType;
  *  - Releasing items (shoot bow, eat food)
  *  - Getting creative items
  *  - Renaming items in anvil
+ *  - Enchanting items using hopper (FFS)
  *  - MANAGING INVENTORY
  *  
  *  Apart from managing inventories it is the usual packet deal,
@@ -311,6 +313,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		public void customCursorSurplus(NetworkDataCache cache, ItemStackWrapper itemstack) {
 			if ((!itemstack.isNull()) && !((cache.getGameMode() == GameMode.CREATIVE) && (cache.getOpenedWindow() == WindowType.PLAYER))) {
 				clear();
+				//TODO removing comparing code when are all kinks are worked out.
 				ByteBuf screwThis = Unpooled.buffer();
 				ItemStackSerializer.writeItemStack(screwThis, ProtocolVersion.MINECRAFT_PE, cache.getLocale(), itemstack, true);
 				ItemStackWrapper remapped = ItemStackSerializer.readItemStack(screwThis, ProtocolVersion.MINECRAFT_PE, cache.getLocale(), true);
@@ -354,6 +357,18 @@ public class GodPacket extends ServerBoundMiddlePacket {
 					if (display.hasKeyOfType("Name", NBTTagType.STRING)) {
 						misc.add(anvilName(display.getString("Name")));
 					}
+				}
+			}
+			
+			//Enchantment via hoppers. Yes, it's a hack but it's only possible this way.
+			if (cache.getOpenedWindow() == WindowType.ENCHANT) {
+				if (pcSlot == 0) {
+					cache.getEnchantHopper().setInputOutputStack(transaction.getNewItem());
+				} else if (pcSlot == 1) {
+					cache.getEnchantHopper().setLapisStack(transaction.getNewItem());
+				} else {
+					misc.add(MiddleInventoryEnchant.create(cache.getOpenedWindowId(), pcSlot - 2));
+					return;
 				}
 			}
 			
@@ -718,15 +733,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				return invSlotToContainerSlot(peInventoryId, 3, peSlot);
 			}
 			case ENCHANT: {
-				switch(peInventoryId) {
-					case PESource.POCKET_ENCHANT_INPUT:
-					case PESource.POCKET_ENCHANT_OUTPUT: {
-						return 0;
-					}
-					case PESource.POCKET_ANVIL_MATERIAL: {
-						return 1;
-					}
-				}
+				//We fake enchanting with hoppers, but the server slots are still 0 and 1 for the inventory.
 				return invSlotToContainerSlot(peInventoryId, 2, peSlot);
 			}
 			case BEACON: {
