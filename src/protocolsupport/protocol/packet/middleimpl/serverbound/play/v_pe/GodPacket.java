@@ -364,7 +364,6 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			//Enchantment via hoppers. Yes, it's a hack but it's only possible this way.
 			if (cache.getOpenedWindow() == WindowType.ENCHANT) {
 				if (pcSlot == 0) {
-					cache.getEnchantHopper().clearOptions();
 					cache.getEnchantHopper().setInputOutputStack(transaction.getNewItem());
 				} else if (pcSlot == 1 && (transaction.getNewItem().isNull() || (transaction.getNewItem().getType() == Material.INK_SACK && transaction.getNewItem().getData() == 4))) {
 					cache.getEnchantHopper().setLapisStack(transaction.getNewItem());

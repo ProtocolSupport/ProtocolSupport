@@ -74,12 +74,10 @@ public class InventoryOpen extends MiddleInventoryOpen {
 				//When it is a doublechest, re-smuggle the windowId back to the metadata.
 				connection.addMetadata("smuggledWindowId", windowId);
 			} else {
-				if (type == WindowType.SHULKER) {
-					type = WindowType.CHEST; //We (currently) fake shulker boxes with chests as they are the same and PE doesn't like shulkers.
-				}
-				if (type == WindowType.ENCHANT) {
-					type = WindowType.HOPPER; //We (currently) fake enchantment tables with hoppers as the server doesn't choose the enchantment otherwise (FFS)
-					cache.getEnchantHopper().clearOptions();
+				switch(type) {
+					case SHULKER: { type = WindowType.CHEST; break; } //We (currently) fake shulker boxes with chests as they are the same and PE doesn't like shulkers.
+					case ENCHANT: { type = WindowType.HOPPER; break; } //We (currently) fake enchantment tables with hoppers as the server doesn't choose the enchantment otherwise (FFS)
+					default: break;
 				}
 				//Only double chests need some time to verify on the client (FFS Mojang!), the rest can be instantly opened after preparing.
 				packets.add(create(connection.getVersion(), windowId, type, blocks[0].getPosition(), -1));

@@ -66,94 +66,71 @@ public class PEInventory {
 	
 	//To store data to fake the enchantment process using hoppers.
 	public static class EnchantHopper {
-		private ItemStackWrapper[] contents = new ItemStackWrapper[] {
-				ItemStackWrapper.NULL, ItemStackWrapper.NULL, ItemStackWrapper.NULL, ItemStackWrapper.NULL, ItemStackWrapper.NULL
-			};
-		boolean showOptions = false;
 		
-		public void clearOptions() {
-			for (int i = 2; i < contents.length; i++) {
-				contents[i] = ItemStackWrapper.NULL;
-			}
-		}
+		private ItemStackWrapper inputOutputSlot = ItemStackWrapper.NULL;
+		private ItemStackWrapper lapisSlot = ItemStackWrapper.NULL;
+		private int[] optionXP   = 	new int[] { 0,  0,  0};
+		private int[] optionEnch = 	new int[] {-1, -1, -1};
+		private int[] optionLvl  = 	new int[] { 1,  1,  1};
 		
 		public void setInputOutputStack(ItemStackWrapper inputOutputStack) {
-			contents[0] = inputOutputStack;
+			this.inputOutputSlot = inputOutputStack;
 		}
 		
 		public ItemStackWrapper getInput() {
-			return contents[0];
+			return inputOutputSlot;
 		}
 		
 		public void setLapisStack(ItemStackWrapper lapisStack) {
-			contents[1] = lapisStack;
+			this.lapisSlot = lapisStack;
 		}
 		
-		public void setOption(int num, ItemStackWrapper option) {
-			contents[num + 2] = option;
-		}
-		
-		public void updateOptionLore(int num, int xp) {
-			if (showOptions) {
-				NBTTagCompoundWrapper option = createOption(num);
-				if (option.isNull()) { return; }
-				if (!option.hasKeyOfType("display", NBTTagType.COMPOUND)) {
-					option.setCompound("display", ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound());
-				}
-				NBTTagCompoundWrapper display = option.getCompound("display");
-				display.setString("Name", "Click to enchant");
-				NBTTagListWrapper lore = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
-				lore.addString("Requires");
-				lore.addString(xp + (xp == 1 ? " Enchantment Level" : " Enchantment Levels"));
-				lore.addString((num + 1) + " Lapis Lazuli");
-				display.setList("Lore", lore);
-				option.setCompound("display", display);
-			}
+		public void updateOptionXP(int num, int xp) {
+			optionXP[num] = xp;
 		}
 		
 		public void updateOptionEnch(int num, int enchant) {
-			showOptions = enchant >= 0;
-			if (showOptions) {
-				NBTTagCompoundWrapper option = createOption(num);
-				if (option.isNull()) { return; }
-				if (!option.hasKeyOfType("ench", NBTTagType.LIST)) {
-					option.setList("ench", ServerPlatform.get().getWrapperFactory().createEmptyNBTList());
-				}
-				NBTTagListWrapper ench = option.getList("ench");
-				if(ench.isEmpty()) { ench.addCompound(ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound()); }
-				ench.getCompound(0).setShort("id", enchant);
-				if(!ench.getCompound(0).hasKeyOfType("lvl", NBTTagType.SHORT)) {ench.getCompound(0).setShort("lvl", 1);}
-			} else {
-				clearOptions();
-			}
+			optionEnch[num] = enchant;
 		}
 		
 		public void updateOptionLevel(int num, int lvl) {
-			if (showOptions) {
-				NBTTagCompoundWrapper option = createOption(num);
-				if (option.isNull()) { return; }
-				if (option.hasKeyOfType("ench", NBTTagType.LIST)) {
-					NBTTagListWrapper ench = option.getList("ench");
-					if(!ench.isEmpty()) {
-						ench.getCompound(0).setShort("lvl", lvl);
-					}
-				}
-			}
-		}
-		
-		private NBTTagCompoundWrapper createOption(int num) {
-			if (contents[0].isNull()) { return NBTTagCompoundWrapper.NULL; }
-			num += 2;
-			if (contents[num].isNull()) {
-				contents[num] = contents[0].cloneItemStack();
-			}
-			if (contents[num].getTag() == null || contents[num].getTag().isNull()) {
-				contents[num].setTag(ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound());
-			}
-			return contents[num].getTag();
+			optionLvl[num] = lvl;
 		}
 		
 		public ClientBoundPacketData updateInventory(NetworkDataCache cache, ProtocolVersion version) {
+			ItemStackWrapper[] contents = new ItemStackWrapper[5];
+			contents[0] = inputOutputSlot;
+			contents[1] = lapisSlot;
+			for (int i = 0; i < 3; i++) {
+				//Create option item & nbt
+				if (optionEnch[i] < 0) { contents[i+2] = ItemStackWrapper.NULL; break;}
+				ItemStackWrapper option = inputOutputSlot.cloneItemStack();
+				if (option.isNull()) { break; }
+				System.out.println("Woo not -1!");
+				NBTTagCompoundWrapper tag = (option.getTag() == null || option.getTag().isNull()) ?
+				ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound() : option.getTag();
+				//Display
+				if (!tag.hasKeyOfType("display", NBTTagType.COMPOUND)) {
+					tag.setCompound("display", ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound());
+				}
+				NBTTagCompoundWrapper display = tag.getCompound("display");
+				display.setString("Name", "Click to enchant");
+				NBTTagListWrapper lore = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
+				lore.addString("Requires");
+				lore.addString(optionXP[i] + (optionXP[i] == 1 ? " Enchantment Level" : " Enchantment Levels"));
+				lore.addString((i + 1) + " Lapis Lazuli");
+				display.setList("Lore", lore);
+				tag.setCompound("display", display);
+				//Enchantment
+				NBTTagListWrapper ench = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
+				if(ench.isEmpty()) { ench.addCompound(ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound()); }
+				ench.getCompound(0).setShort("id",  optionEnch[i]);
+				ench.getCompound(0).setShort("lvl", optionLvl [i]);
+				tag.setList("ench", ench);
+				//Wrap up
+				option.setTag(tag);
+				contents[i+2] = option;
+			}
 			return InventorySetItems.create(version, cache.getLocale(), cache.getOpenedWindowId(), contents);
 		}
 		

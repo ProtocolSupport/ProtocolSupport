@@ -62,9 +62,8 @@ public class InventoryData extends MiddleInventoryData {
 				break;
 			}
 			case ENCHANT: {
-				//TODO WHY EVERY SINGLE FREAKING TICK??? Make this not lag the server (it doesn't really but quite computively heavy if players are enchanting alot.
-				if (type <= 2) { //(0-2) xp per option
-					cache.getEnchantHopper().updateOptionLore(type, value);
+				if (type <= 2) { //(0-2) EnchantmentXP per option
+					cache.getEnchantHopper().updateOptionXP(type, value);
 				} else if (type == 3) {
 					break; //Use for weird item names?
 				} else if (type <= 6) { //(4-6) EnchantmentId per option
@@ -73,7 +72,6 @@ public class InventoryData extends MiddleInventoryData {
 					cache.getEnchantHopper().updateOptionLevel(type - 7, value);
 				}
 				break;
-				//return RecyclableSingletonList.create(cache.getEnchantHopper().updateInventory(cache, version)); //Fast update?
 			}
 			default: {
 				break;
