@@ -506,7 +506,7 @@ public class NetworkDataCache {
 	}
 	
 	public boolean isInventoryLocked() {
-		return System.currentTimeMillis() - inventoryLockMillis < 450;
+		return System.currentTimeMillis() - inventoryLockMillis < 230;
 	}
 	
 	public void setLastSentTitle(long lastSentTitle) {

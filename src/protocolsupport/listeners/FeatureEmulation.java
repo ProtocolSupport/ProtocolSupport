@@ -125,7 +125,7 @@ public class FeatureEmulation implements Listener {
 						new InvBlock(mainLoc.	  add(1, 0, 0).getBlock())
 					});
 				Location headChestLock = mainLoc;
-				//Double chests need some ticks to confire after the inventory blocks are placed. We need to resend the inventory open.
+				//Double chests need some ticks to configure after the inventory blocks are placed. We need to resend the inventory open.
 				if (event.getView().getTopInventory().getSize() > 27) {
 					Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), new Runnable() {
 						@Override
@@ -137,8 +137,8 @@ public class FeatureEmulation implements Listener {
 									Position.fromBukkit(headChestLock),
 									-1
 								);
-								connection.removeMetadata("smuggledWindowId");
 								player.updateInventory();
+								connection.removeMetadata("smuggledWindowId");
 							}
 						}
 					}, 2);

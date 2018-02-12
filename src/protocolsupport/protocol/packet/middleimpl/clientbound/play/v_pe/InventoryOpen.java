@@ -71,6 +71,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 				(type == WindowType.CHEST) &&
 				(cache.getOpenedWindowSlots() > 27)
 			) {
+				System.out.println("Smuggling double chest data: " + windowId);
 				//When it is a doublechest, re-smuggle the windowId back to the metadata.
 				connection.addMetadata("smuggledWindowId", windowId);
 			} else {
@@ -120,6 +121,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	}
 	
 	public static ClientBoundPacketData create(ProtocolVersion version, int windowId, WindowType type, Position pePosition, int horseId) {
+		System.out.println("Opening " + type + " inventory: " + windowId);
 		return (ClientBoundPacketData) serialize(ClientBoundPacketData.create(PEPacketIDs.CONTAINER_OPEN, version), version, windowId, type, pePosition, horseId);
 	}
 	
@@ -135,6 +137,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	}
 	
 	public static void sendInventory(Connection connection, int windowId, WindowType type, Position pePosition, int horseId) {
+		System.out.println("Opening " + type + " inventory: " + windowId);
 		ByteBuf serializer = Unpooled.buffer();
 		VarNumberSerializer.writeVarInt(serializer, PEPacketIDs.CONTAINER_OPEN);
 		serializer.writeByte(0);

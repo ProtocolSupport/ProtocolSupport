@@ -12,16 +12,21 @@ public class InventoryClose extends MiddleInventoryClose {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
+		System.out.println("SERVER CLOSE " + windowId);
 		cache.getInfTransactions().clear();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CONTAINER_CLOSE, connection.getVersion());
-		serializer.writeByte(windowId);
-		packets.add(serializer);
+		packets.add(create(connection.getVersion(), windowId));
 		if(connection.hasMetadata("peInvBlocks")) {
 			packets.addAll(destroyFakeInventory(connection.getVersion(), (InvBlock[]) connection.getMetadata("peInvBlocks")));
 			connection.removeMetadata("peInvBlocks");
 		}
 		return packets;
+	}
+	
+	public static ClientBoundPacketData create(ProtocolVersion version, int windowId) {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CONTAINER_CLOSE, version);
+		serializer.writeByte(windowId);
+		return serializer;
 	}
 	
 	public static RecyclableArrayList<ClientBoundPacketData> destroyFakeInventory(ProtocolVersion version, InvBlock[] blocks) {

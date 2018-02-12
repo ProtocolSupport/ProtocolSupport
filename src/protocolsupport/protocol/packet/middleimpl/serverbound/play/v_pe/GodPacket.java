@@ -63,6 +63,7 @@ import protocolsupport.zplatform.itemstack.NBTTagType;
  */
 public class GodPacket extends ServerBoundMiddlePacket {
 	
+	private static boolean godlyDebug = true;
 	//Transactions
 	protected InfTransaction[] transactions;
 	//Complex Actions
@@ -77,7 +78,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	protected int targetId;
 
 	public static void bug(String bugger) {
-		System.out.println(bugger);
+		if(godlyDebug) { System.out.println(bugger); }
 	}
 	
 	@Override
@@ -312,8 +313,9 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		}
 		
 		public void customCursorSurplus(NetworkDataCache cache, ItemStackWrapper itemstack) {
+			clear();
 			if ((!itemstack.isNull()) && !((cache.getGameMode() == GameMode.CREATIVE) && (cache.getOpenedWindow() == WindowType.PLAYER))) {
-				clear();
+				bug("SERVER INTERVENTION ON CURSOR ITEM!! Clearing surplus deficit thingy!");
 				//TODO removing comparing code when are all kinks are worked out.
 				ByteBuf screwThis = Unpooled.buffer();
 				ItemStackSerializer.writeItemStack(screwThis, ProtocolVersion.MINECRAFT_PE, cache.getLocale(), itemstack, true);
@@ -374,6 +376,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				}
 			}
 			
+			//"normal" transactions.
 			ItemStackWrapperKey oldItemKey = new ItemStackWrapperKey(transaction.getOldItem());
 			ItemStackWrapperKey newItemKey = new ItemStackWrapperKey(transaction.getNewItem());
 			
@@ -468,21 +471,25 @@ public class GodPacket extends ServerBoundMiddlePacket {
 							bug(item + " defict: " + deficit.slot() + " - " + deficit.amount());
 							finish.setFin(true);
 							surpluses.cycleDown(surplus -> {
-								bug("Surplus by deficit: " + surplus.slot() + " by " + deficit.slot());
+								bug("Surplus by deficit: " + surplus.slot() + " - " + surplus.amount());
 								//Early copout, because Mojang sometimes really screws up.
 								if (surplus.isEmpty()) { return true; }
 								//We want to get all we can, but not more than we need.
 								int toPay = deficit.amount() < surplus.amount() ? deficit.amount() : surplus.amount();
+								bug("Needing to pay: " + toPay);
 								//The real stuff:
 								if (!surplus.isCursor() && !deficit.isToUseInTable() && !(deficit.isCursor() && deficit.hasStack() && surplus.isCraftingResult(cache))) {
+									bug("Need to get the surplus from inventory");
 									//Unless the surplus is already in the cursor, (or this is the second crafting click where we only want one) we need to get it.
 									packets.addAll(Click.LEFT.create(cache, surplus.slot(), item.get(surplus.slotAmount())));
 								}
 								if (deficit.isCursor() && !surplus.isCursor()) {
 									if (deficit.hasStack()) {
+										bug("Deficit is in cursor and we already clicked so we need to pick it up again.");
 										//We already had contents in the cursor, so just one left click won't cut it.
 										packets.addAll(Click.LEFT.create(cache, surplus.slot(), item.get(surplus.slotAmount() + deficit.slotAmount())));
 									}
+									bug("Clicking until we have the correct number of items in our cursor.");
 									//Put back the items from the cursor that we don't want.
 									for (int i = 0; i < (surplus.slotAmount() - toPay); i++) {
 										packets.addAll(Click.RIGHT.create(cache, surplus.slot(), (i == 0) ? ItemStackWrapper.NULL : item.get(i)));
@@ -490,10 +497,14 @@ public class GodPacket extends ServerBoundMiddlePacket {
 								} else if (!deficit.isCursor() && !deficit.isToUseInTable()) {
 									if (deficit.amount() == surplus.slotAmount()) {
 										if (!((surplusDeque.getVeryLast() != null) && (deficit.slot() == surplusDeque.getVeryLast().slot()))) {
+											bug("Paying out full leftoverstack");
 											//Unless we're swapping (then only one left click is sent on next deficit), we can payout the stack in full (left-click)
 											packets.addAll(Click.LEFT.create(cache, deficit.slot(), (!deficit.hasStack()) ? ItemStackWrapper.NULL : item.get(deficit.slotAmount())));
+										} else {
+											bug("Swapping?");
 										}
 									} else {
+										bug("Paying out in complements.");
 										//We need to pay what we need to pay.
 										for (int i = 0; i < toPay; i++) {
 											packets.addAll(Click.RIGHT.create(cache, deficit.slot(), ((deficit.slotAmount() + i) == 0) ? ItemStackWrapper.NULL : item.get(deficit.slotAmount() + i)));
@@ -503,16 +514,22 @@ public class GodPacket extends ServerBoundMiddlePacket {
 								//Payout the trackers.
 								surplus.pay(toPay); 
 								deficit.receive(toPay);
+								bug("Actually updated deficit & surplus values.");
+								bug(item + " defict: " + deficit.slot() + " - " + deficit.amount());
+								bug("Surplus by deficit: " + surplus.slot() + " - " + surplus.amount());
 								//Last but not least, put back our access surplus and or containing stack.
 								if(!surplus.isCursor() && !deficit.isToUseInTable() && !deficit.isCursor() && surplus.hasStack()) {
+									bug("Putting back access surplus.");
 									packets.addAll(Click.LEFT.create(cache, surplus.slot(), ItemStackWrapper.NULL));
 								}
 								return surplus.isEmpty();
 							});
 							if (surpluses.isEmpty()) {
+								bug("Removing surplus deque.");
 								surplusDeque.remove(item);
 							} else {
-								if(surpluses.size() == 1 && deficits.size() == 1 && deficit.isEmpty()) {
+								if (surpluses.size() == 1 && deficits.size() == 1 && deficit.isEmpty()) {
+									bug("Wrapping surpluss to deficit to accomadate for remainder.");
 									//If we have just one item left, add it as deficit to the cursor so we end up with that in our hands.
 									//This ensures that some left-drag actions having a remainder that doesn't change (e.g. 19/2*9 or 3*6) 
 									//still puts items in the cursor. (Because PE ONLY sends changes)
@@ -522,6 +539,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 							}
 							//If there's still something in the cursor we want it to be accessed next round.
 							if(deficit.isCursor() && deficit.hasStack()) {
+								bug("Putting access cursor to surplus for next round.");
 								surplusDeque.put(item, deficit.setAmount(deficit.slotAmount()), true);
 								return true;
 							}
