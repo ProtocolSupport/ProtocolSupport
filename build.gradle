@@ -39,8 +39,7 @@ gen.mkdirs();
 task updateLibs(type: Download) {
 	src([
 		'https://yivesmirror.com/files/spigot/spigot-1.12.2-R0.1-SNAPSHOT-b1408.jar',
-
-		'https://repo.glowstone.net/repository/snapshots/net/glowstone/glowstone/2018.2.0-SNAPSHOT/glowstone-2018.2.0-20180209.231901-7.jar'
+		'https://repo.glowstone.net/repository/snapshots/net/glowstone/glowstone/2018.2.0-SNAPSHOT/glowstone-2018.2.0-20180209.231901-7.jar',
 		'https://build.true-games.org/job/RakNetServer/lastSuccessfulBuild/artifact/target/RakNetServer.jar'
 	])
 	dest dllibs
