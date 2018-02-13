@@ -13,9 +13,14 @@ public abstract class MiddleInventoryClose extends ServerBoundMiddlePacket {
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		cache.closeWindow();
+		return RecyclableSingletonList.create(create(windowId));
+	}
+	
+	public static ServerBoundPacketData create(int windowId) {
+		System.out.println("Closing INV: " + windowId);
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_WINDOW_CLOSE);
 		creator.writeByte(windowId);
-		return RecyclableSingletonList.create(creator);
+		return creator;
 	}
 
 }

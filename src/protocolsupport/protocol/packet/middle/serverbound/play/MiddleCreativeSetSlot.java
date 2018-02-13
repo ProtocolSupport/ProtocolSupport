@@ -16,10 +16,15 @@ public abstract class MiddleCreativeSetSlot extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
+		return RecyclableSingletonList.create(create(cache.getLocale(), slot, itemstack));
+	}
+	
+	public static ServerBoundPacketData create(String locale, int slot, ItemStackWrapper itemstack) {
+		System.err.println("What?!: " + slot + " - " + itemstack.toString());
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_CREATIVE_SET_SLOT);
 		creator.writeShort(slot);
-		ItemStackSerializer.writeItemStack(creator, ProtocolVersionsHelper.LATEST_PC, cache.getLocale(), itemstack, false);
-		return RecyclableSingletonList.create(creator);
+		ItemStackSerializer.writeItemStack(creator, ProtocolVersionsHelper.LATEST_PC, locale, itemstack, false);
+		return creator;
 	}
 
 }

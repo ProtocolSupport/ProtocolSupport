@@ -13,7 +13,11 @@ import protocolsupport.protocol.utils.types.Position;
 
 public interface PlatformPacketFactory {
 
+	public Object createInboundKeepAlivePacket(long keepAliveId);
+
 	public Object createInboundInventoryClosePacket();
+	
+	public Object createInboundInventoryConfirmTransactionPacket(int windowId, int actionNumber, boolean accepted);
 
 	public Object createOutboundChatPacket(String message, int position);
 
@@ -38,6 +42,8 @@ public interface PlatformPacketFactory {
 	public Object createSetCompressionPacket(int threshold);
 
 	public Object createBlockBreakSoundPacket(Position pos, Material type);
+	
+	public Object createBlockUpdatePacket(Position pos, int block);
 
 	public Object createStatusPongPacket(long pingId);
 

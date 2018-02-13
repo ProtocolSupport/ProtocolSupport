@@ -25,6 +25,7 @@ import com.google.common.collect.Lists;
 import com.mojang.authlib.properties.Property;
 
 import io.netty.channel.ChannelPipeline;
+import io.netty.channel.EventLoopGroup;
 import net.minecraft.server.v1_12_R1.AxisAlignedBB;
 import net.minecraft.server.v1_12_R1.EntityPlayer;
 import net.minecraft.server.v1_12_R1.EnumProtocol;
@@ -41,6 +42,7 @@ import protocolsupport.protocol.pipeline.common.PacketEncrypter;
 import protocolsupport.protocol.utils.MinecraftEncryption;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.zplatform.PlatformUtils;
+import protocolsupport.zplatform.impl.spigot.injector.network.SpigotNettyInjector;
 import protocolsupport.zplatform.impl.spigot.itemstack.SpigotNBTTagCompoundWrapper;
 import protocolsupport.zplatform.impl.spigot.network.SpigotChannelHandlers;
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketCompressor;
@@ -224,6 +226,11 @@ public class SpigotMiscUtils implements PlatformUtils {
 	public void setFraming(ChannelPipeline pipeline, IPacketSplitter splitter, IPacketPrepender prepender) {
 		((SpigotWrappedSplitter) pipeline.get(SpigotChannelHandlers.SPLITTER)).setRealSplitter(splitter);
 		((SpigotWrappedPrepender) pipeline.get(SpigotChannelHandlers.PREPENDER)).setRealPrepender(prepender);
+	}
+
+	@Override
+	public EventLoopGroup getServerEventLoop() {
+		return SpigotNettyInjector.getServerEventLoop();
 	}
 
 }

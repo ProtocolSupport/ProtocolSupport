@@ -11,6 +11,8 @@ public class DataWatcherObjectIndex {
 		public static final int NAMETAG_VISIBLE = takeNextId();
 		public static final int SILENT = takeNextId();
 		public static final int NO_GRAVITY = takeNextId();
+		//Lead - special hack for PE lead.
+		public static final int LEAD = 38;
 	}
 
 	public static class EntityLiving extends Entity {

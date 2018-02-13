@@ -17,7 +17,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_NAMED_ID, version);
 		VarNumberSerializer.writeVarInt(serializer, entity.getId());
-		MiscSerializer.writeUUID(serializer, entity.getUUID());
+		MiscSerializer.writeUUID(serializer, connection.getVersion(), entity.getUUID());
 		serializer.writeInt((int) (x * 32));
 		serializer.writeInt((int) (y * 32));
 		serializer.writeInt((int) (z * 32));

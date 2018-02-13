@@ -1,6 +1,7 @@
 package protocolsupport.listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -9,6 +10,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.potion.PotionEffectType;
@@ -21,7 +26,10 @@ import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.tab.TabAPI;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventoryOpen;
 import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.typeremapper.pe.PEInventory.InvBlock;
 import protocolsupport.zplatform.ServerPlatform;
 
 public class FeatureEmulation implements Listener {
@@ -86,6 +94,83 @@ public class FeatureEmulation implements Listener {
 				}
 			}
 		}
+	}
+	
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onInventoryOpen(InventoryOpenEvent event) {
+		System.out.println("Meep");
+		if(
+			(event.getInventory().getType() != InventoryType.MERCHANT) &&
+			(event.getPlayer() instanceof Player)
+		  ) {
+			Player player = (Player) event.getPlayer();
+			Connection connection = ProtocolSupportAPI.getConnection(player);
+			if (
+				(connection != null) &&
+				(connection.getVersion().getProtocolType() == ProtocolType.PE)
+			) {
+				Location mainLoc = player.getLocation();
+				if (event.getInventory().getType() == InventoryType.BEACON && event.getInventory().getLocation() != null) {
+					//Since beacon power is checked clientside, we can't even fake the block in position we please.
+					mainLoc = event.getInventory().getLocation();
+					mainLoc.add(1, 2, 0);
+				}
+				//If the player is not on the ground or almost at bedrock, 
+				//set the fake blocks above so the player doesn't fall on to it or so they aren't out of the world.
+				if ((!player.isOnGround()) || (mainLoc.getBlockY() < 4)) {
+					mainLoc.add(0, 6, 0);
+				}
+				connection.addMetadata("peInvBlocks", new InvBlock[] {
+						new InvBlock(mainLoc.subtract(1, 2, 0).getBlock()), 
+						new InvBlock(mainLoc.	  add(1, 0, 0).getBlock())
+					});
+				Location headChestLock = mainLoc;
+				//Double chests need some ticks to configure after the inventory blocks are placed. We need to resend the inventory open.
+				if (event.getView().getTopInventory().getSize() > 27) {
+					Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), new Runnable() {
+						@Override
+						public void run() {
+							if (connection.hasMetadata("smuggledWindowId")) {
+								InventoryOpen.sendInventory(connection, 
+									(int) connection.getMetadata("smuggledWindowId"),
+									WindowType.CHEST, 
+									Position.fromBukkit(headChestLock),
+									-1
+								);
+								player.updateInventory();
+								connection.removeMetadata("smuggledWindowId");
+							}
+						}
+					}, 2);
+				}
+			}
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
+	public void onInventoryClick(InventoryClickEvent event) {
+		if ((event.getClick() != ClickType.CREATIVE) && (event.getWhoClicked() instanceof Player)) {
+			Player clicker = (Player) event.getWhoClicked();
+			Connection connection = ProtocolSupportAPI.getConnection(clicker);
+			if(
+				(connection != null) &&
+				(connection.getVersion().getProtocolType() == ProtocolType.PE) &&
+				(
+					(!connection.hasMetadata("lastScheduledInventoryUpdate")) ||
+					(System.currentTimeMillis() - (long) connection.getMetadata("lastScheduledInventoryUpdate") >= 250)
+				)
+			) {
+				connection.addMetadata("lastScheduledInventoryUpdate", System.currentTimeMillis());
+				Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), new Runnable() {
+					@Override
+					public void run() {
+						clicker.updateInventory();
+						clicker.setItemOnCursor(event.getCursor());
+					}
+				}, 10);
+			}
+		}
+		
 	}
 
 	@EventHandler

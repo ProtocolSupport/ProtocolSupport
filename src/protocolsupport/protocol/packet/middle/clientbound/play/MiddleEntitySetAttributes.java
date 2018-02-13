@@ -42,16 +42,14 @@ public abstract class MiddleEntitySetAttributes extends MiddleEntity {
 				attr.value = 0.00000001;
 			}
 		}
-		if (entityId == cache.getSelfPlayerEntityId()) {
-			Attribute attr = attributes.get("generic.maxHealth");
-			if (attr != null) {
-				cache.setMaxHealth((float) attr.value);
-			}
+		Attribute attr = attributes.get("generic.maxHealth");
+		if (attr != null && cache.getWatchedEntity(entityId) != null) {
+			cache.getWatchedEntity(entityId).getDataCache().setMaxHealth((float) attr.value);
 		}
 		return true;
 	}
 
-	protected static class Attribute {
+	public static class Attribute {
 		public String key;
 		public double value;
 		public Modifier[] modifiers;
@@ -61,7 +59,7 @@ public abstract class MiddleEntitySetAttributes extends MiddleEntity {
 		}
 	}
 
-	protected static class Modifier {
+	public static class Modifier {
 		public UUID uuid;
 		public double amount;
 		public int operation;

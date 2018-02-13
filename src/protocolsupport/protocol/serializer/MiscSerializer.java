@@ -5,9 +5,27 @@ import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
+import protocolsupport.api.ProtocolType;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.utils.EnumConstantLookups;
 
 public class MiscSerializer {
+
+	public static float readLFloat(ByteBuf from) {
+		return Float.intBitsToFloat(from.readIntLE());
+	}
+
+	public static void writeLFloat(ByteBuf to, float f) {
+		to.writeIntLE(Float.floatToIntBits(f));
+	}
+
+	public static double readLDouble(ByteBuf from) {
+		return Double.longBitsToDouble(from.readLongLE());
+	}
+
+	public static void writeLDouble(ByteBuf to, double d) {
+		to.writeLongLE(Double.doubleToLongBits(d));
+	}
 
 	public static <T extends Enum<T>> T readVarIntEnum(ByteBuf from, EnumConstantLookups.EnumConstantLookup<T> lookup) {
 		return lookup.getByOrdinal(VarNumberSerializer.readVarInt(from));
@@ -29,9 +47,18 @@ public class MiscSerializer {
 		return new UUID(from.readLong(), from.readLong());
 	}
 
-	public static void writeUUID(ByteBuf to, UUID uuid) {
-		to.writeLong(uuid.getMostSignificantBits());
-		to.writeLong(uuid.getLeastSignificantBits());
+	public static void writeUUID(ByteBuf to, ProtocolVersion version, UUID uuid) {
+		if (isUsingLittleEndian(version)) {
+			to.writeLongLE(uuid.getMostSignificantBits());
+			to.writeLongLE(uuid.getLeastSignificantBits());
+		} else {
+			to.writeLong(uuid.getMostSignificantBits());
+			to.writeLong(uuid.getLeastSignificantBits());
+		}
+	}
+
+	private static boolean isUsingLittleEndian(ProtocolVersion version) {
+		return version.getProtocolType() == ProtocolType.PE;
 	}
 
 	public static byte[] readAllBytes(ByteBuf buf) {

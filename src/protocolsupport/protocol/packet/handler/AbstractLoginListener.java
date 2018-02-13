@@ -30,6 +30,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.PlayerLoginStartEvent;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_pe.ClientLogin;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
@@ -138,11 +139,35 @@ public abstract class AbstractLoginListener implements IHasProfile {
 					isOnlineMode = event.isOnlineMode();
 					useOnlineModeUUID = event.useOnlineModeUUID();
 					forcedUUID = event.getForcedUUID();
-					if (isOnlineMode) {
-						state = LoginState.KEY;
-						networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginEncryptionBeginPacket(ServerPlatform.get().getMiscUtils().getEncryptionKeyPair().getPublic(), randomBytes));
-					} else {
-						new PlayerAuthenticationTask(AbstractLoginListener.this, isOnlineMode).run();
+
+					switch (connection.getVersion().getProtocolType()) {
+						case PC: {
+							if (isOnlineMode) {
+								state = LoginState.KEY;
+								networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginEncryptionBeginPacket(ServerPlatform.get().getMiscUtils().getEncryptionKeyPair().getPublic(), randomBytes));
+							} else {
+								new PlayerAuthenticationTask(AbstractLoginListener.this, isOnlineMode).run();
+							}
+							break;
+						}
+						case PE: {
+							if (isOnlineMode) {
+								String xuid = (String) connection.getMetadata(ClientLogin.XUID_METADATA_KEY);
+								if (xuid == null) {
+									disconnect("This server is in online mode, but no valid XUID was found (XBOX live auth required)");
+									return;
+								} else {
+									if (useOnlineModeUUID && (forcedUUID == null)) {
+										forcedUUID = new UUID(0, Long.parseLong(xuid));
+									}
+								}
+							}
+							new PlayerAuthenticationTask(AbstractLoginListener.this, false).run();
+							break;
+						}
+						default: {
+							throw new IllegalArgumentException(MessageFormat.format("Unknown protocol type {0}", connection.getVersion().getProtocolType()));
+						}
 					}
 				} catch (Throwable t) {
 					AbstractLoginListener.this.disconnect("Error occured while logging in");

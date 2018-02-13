@@ -143,10 +143,21 @@ import protocolsupport.zplatform.PlatformPacketFactory;
 public class GlowStonePacketFactory implements PlatformPacketFactory {
 
 	@Override
+	public Object createInboundKeepAlivePacket(long keepAliveId) {
+		//TODO: No casting when Glowstone updates!
+		return new PingMessage((int) keepAliveId);
+	}
+
+	@Override
 	public Message createInboundInventoryClosePacket() {
 		return new CloseWindowMessage(0);
 	}
 
+	@Override
+	public Message createInboundInventoryConfirmTransactionPacket(int windowId, int actionNumber, boolean accepted) {
+		return new TransactionMessage(windowId, actionNumber, accepted);
+	}
+	
 	@Override
 	public Message createOutboundChatPacket(String message, int position) {
 		return new ChatMessage(new TextMessage(message), position);
@@ -206,6 +217,11 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 	@Override
 	public Message createBlockBreakSoundPacket(Position pos, Material type) {
 		return null; // TODO: create a getStepSound() equivalent
+	}
+	
+	@Override
+	public Message createBlockUpdatePacket(Position pos, int block) {
+		return new BlockChangeMessage(pos.getX(), pos.getY(), pos.getZ(), block);
 	}
 
 	@Override

@@ -71,6 +71,10 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_5_1, builder15);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_4_7, new protocolsupport.protocol.pipeline.version.v_1_4.PipeLineBuilder());
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_LEGACY, new protocolsupport.protocol.pipeline.version.v_legacy.PipeLineBuilder());
+		IPipeLineBuilder builderpe = new protocolsupport.protocol.pipeline.version.v_pe.PipeLineBuilder();
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_PE_FUTURE, builderpe);
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_PE, builderpe);
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_PE_LEGACY, builderpe);
 	}
 
 	protected final ReplayingDecoderBuffer buffer = new ReplayingDecoderBuffer(Unpooled.buffer());
@@ -224,6 +228,10 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 				setProtocol(channel, ProtocolUtils.readNewHandshake(firstpacketdata));
 				break;
 			}
+			case 0x01: { // pe handshake
+				setProtocol(channel, ProtocolUtils.readPEHandshake(firstpacketdata));
+				break;
+			}
 			default: {
 				throw new DecoderException("Unable to detect incoming protocol");
 			}
@@ -260,6 +268,8 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		if (!ProtocolSupportAPI.isProtocolVersionEnabled(version)) {
 			if (version.getProtocolType() == ProtocolType.PC) {
 				version = version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4) ? ProtocolVersion.MINECRAFT_LEGACY : ProtocolVersion.MINECRAFT_FUTURE;
+			} else if (version.getProtocolType() == ProtocolType.PE) {
+				version = version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE) ? ProtocolVersion.MINECRAFT_PE_FUTURE : ProtocolVersion.MINECRAFT_PE_LEGACY;
 			} else {
 				throw new IllegalArgumentException(MessageFormat.format("Unable to get legacy or future version for disabled protocol version {0}", version));
 			}

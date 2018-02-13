@@ -1,8 +1,11 @@
 package protocolsupport.protocol.utils.types;
 
+import protocolsupport.utils.Utils;
+import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+
 import java.util.UUID;
 
-import protocolsupport.utils.Utils;
+import org.bukkit.util.Vector;
 
 public class NetworkEntity {
 
@@ -44,6 +47,10 @@ public class NetworkEntity {
 		return type;
 	}
 
+	public boolean isOfType(NetworkEntityType typeToCheck) {
+		return type.isOfType(typeToCheck);
+	}
+
 	private final DataCache cache = new DataCache();
 
 	public DataCache getDataCache() {
@@ -56,12 +63,188 @@ public class NetworkEntity {
 	}
 
 	public static class DataCache {
-		public boolean firstMeta = true;
-		public byte baseMetaFlags;
+		private byte pcBaseFlags = 0;
+		private boolean firstMeta = false;
+
+		public byte getPcBaseFlags() {
+			return pcBaseFlags;
+		}
+
+		public boolean getPcBaseFlag(int bitpos) {
+			return (pcBaseFlags & (1 << (bitpos - 1))) != 0;
+		}
+
+		public void setPcBaseFlag(int bitpos, boolean value) {
+			setPcBaseFlag(bitpos, value ? 1 : 0);
+		}
+
+		public void setPcBaseFlag(int bitpos, int value) {
+			pcBaseFlags &= ~(1 << (bitpos - 1));
+			pcBaseFlags |= (value << (bitpos - 1));
+		}
+
+		public void setPcBaseFlags(byte pcBaseFlags) {
+			this.pcBaseFlags = pcBaseFlags;
+		}
+
+		public boolean isFirstMeta() {
+			return firstMeta;
+		}
+
+		public void setFirstMeta(boolean firstMeta) {
+			this.firstMeta = firstMeta;
+		}
+
+		//Cache for PE shizzles.
+		private long peBaseFlags = 0;
+		private byte sizeModifier = 1;
+		private int attachedId = -1;
+		private Byte headRotation = null;
+		private int vehicleId = 0;
+		private Vector riderPosition = null;
+		private Float rotationlock = null;
+		private float maxHealth = 20f;
+		private int strength = 0;
+		private ItemStackWrapper helmet = ItemStackWrapper.NULL;
+		private ItemStackWrapper chestplate = ItemStackWrapper.NULL;
+		private ItemStackWrapper leggings = ItemStackWrapper.NULL;
+		private ItemStackWrapper boots = ItemStackWrapper.NULL;
+		private ItemStackWrapper hand = ItemStackWrapper.NULL;
+		private ItemStackWrapper offhand = ItemStackWrapper.NULL;
+		
+		public long getPeBaseFlags() {
+			return peBaseFlags;
+		}
+
+		public byte getSizeModifier() {
+			return sizeModifier;
+		}
+
+		public void setSizeModifier(byte sizeModifier) {
+			this.sizeModifier = sizeModifier;
+		}
+
+		public int getAttachedId() {
+			return attachedId;
+		}
+
+		public void setAttachedId(int attachedId) {
+			this.attachedId = attachedId;
+		}
+
+		public boolean getPeBaseFlag(int bitpos) {
+			return (peBaseFlags & (1 << (bitpos - 1))) != 0;
+		}
+
+		public void setPeBaseFlag(int bitpos, boolean value) {
+			setPeBaseFlag(bitpos, value ? 1 : 0);
+		}
+
+		public void setPeBaseFlag(int bitpos, long value) {
+			peBaseFlags &= ~(1l << (bitpos - 1));
+			peBaseFlags |= (value << (bitpos - 1));
+		}
+
+		public void setPeBaseFlags(long peBaseFlags) {
+			this.peBaseFlags = peBaseFlags;
+		}
+
+		public void setHelmet(ItemStackWrapper helmet) {
+			this.helmet = helmet;
+		}
+
+		public ItemStackWrapper getHelmet() { return this.helmet; }
+
+		public void setChestplate(ItemStackWrapper chestplate) {
+			this.chestplate = chestplate;
+		}
+
+		public ItemStackWrapper getChestplate() { return this.chestplate; }
+
+		public void setLeggings(ItemStackWrapper leggings) {
+			this.leggings = leggings;
+		}
+
+		public ItemStackWrapper getLeggings() { return this.leggings; }
+
+		public void setBoots(ItemStackWrapper boots) {
+			this.boots = boots;
+		}
+
+		public ItemStackWrapper getBoots() { return this.boots; }
+		
+		public void setHand(ItemStackWrapper hand) {
+			this.hand = hand;
+		}
+
+		public ItemStackWrapper getHand() { return this.hand; }
+		
+		public void setOffHand(ItemStackWrapper offhand) {
+			this.offhand = offhand;
+		}
+
+		public ItemStackWrapper getOffhand() { return this.offhand; }
+		
+		public void setHeadRotation(byte headRot) {
+			this.headRotation = headRot;
+		}
+		
+		public byte getHeadRotation(byte normalRotation) {
+			if (headRotation != null) {
+				return headRotation;
+			}
+			return normalRotation;
+		}
+		
+		public int getVehicleId() {
+			return vehicleId;
+		}
+		
+		public boolean isRiding() {
+			return vehicleId != 0;
+		}
+
+		public void setVehicleId(int vehicleId) {
+			this.vehicleId = vehicleId;
+		}
+
+		public Vector getRiderPosition() {
+			return riderPosition;
+		}
+
+		public void setRiderPosition(Vector riderPosition) {
+			this.riderPosition = riderPosition;
+		}
+
+		public Float getRotationlock() {
+			return rotationlock;
+		}
+
+		public void setRotationlock(Float rotationlock) {
+			this.rotationlock = rotationlock;
+		}
+
+		public float getMaxHealth() {
+			return maxHealth;
+		}
+
+		public void setMaxHealth(float maxHealth) {
+			this.maxHealth = maxHealth;
+		}
+
+		public int getStrength() {
+			return strength;
+		}
+
+		public void setStrength(int strength) {
+			this.strength = strength;
+		}
+
 		@Override
 		public String toString() {
 			return Utils.toStringAllFields(this);
 		}
+		
 	}
 
 }

@@ -14,7 +14,7 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 public class GlowStoneItemStackWrapper extends ItemStackWrapper {
 
 	protected final ItemStack itemstack;
-	protected GlowStoneItemStackWrapper(ItemStack itemstack) {
+	public GlowStoneItemStackWrapper(ItemStack itemstack) {
 		this.itemstack = itemstack;
 	}
 

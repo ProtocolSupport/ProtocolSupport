@@ -10,6 +10,8 @@ import protocolsupport.api.ProtocolVersion;
 public class ProtocolVersionsHelper {
 
 	public static final ProtocolVersion LATEST_PC = ProtocolVersion.getLatest(ProtocolType.PC);
+	
+	public static final ProtocolVersion LATEST_PE = ProtocolVersion.getLatest(ProtocolType.PE);
 
 	public static final ProtocolVersion[] BEFORE_1_5 = ProtocolVersion.getAllBeforeE(ProtocolVersion.MINECRAFT_1_5_1);
 
@@ -30,8 +32,12 @@ public class ProtocolVersionsHelper {
 	public static final ProtocolVersion[] BEFORE_1_11_1 = ProtocolVersion.getAllBeforeE(ProtocolVersion.MINECRAFT_1_11_1);
 
 	public static final ProtocolVersion[] BEFORE_1_12 = ProtocolVersion.getAllBeforeE(ProtocolVersion.MINECRAFT_1_12);
+	
+	public static final ProtocolVersion[] ALL = ProtocolVersion.getAllSupported();
 
 	public static final ProtocolVersion[] ALL_PC = ProtocolVersion.getAllBetween(ProtocolVersion.getOldest(ProtocolType.PC), LATEST_PC);
+	
+	public static final ProtocolVersion[] ALL_PE = ProtocolVersion.getAllBetween(ProtocolVersion.getOldest(ProtocolType.PE), LATEST_PE);
 
 	public static final ProtocolVersion[] ALL_1_9 = ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_9_4, ProtocolVersion.MINECRAFT_1_9);
 
@@ -58,6 +64,8 @@ public class ProtocolVersionsHelper {
 	public static final ProtocolVersion[] AFTER_1_11 = ProtocolVersion.getAllAfterE(ProtocolVersion.MINECRAFT_1_11_1);
 
 	public static final ProtocolVersion[] AFTER_1_8 = ProtocolVersion.getAllAfterE(ProtocolVersion.MINECRAFT_1_8);
+
+	public static final ProtocolVersion[] BEFORE_1_9_AND_PE = concat(BEFORE_1_9, ProtocolVersion.MINECRAFT_PE);
 
 	public static final ProtocolVersion[] concat(ProtocolVersion[] versions, ProtocolVersion... moreVersions) {
 		ArrayList<ProtocolVersion> all = new ArrayList<>();

@@ -15,4 +15,12 @@ public class GlowstonePlatformInjector implements PlatformInjector {
 		}
 	}
 
+	@Override
+	public void onEnable() {
+	}
+
+	@Override
+	public void onDisable() {
+	}
+
 }

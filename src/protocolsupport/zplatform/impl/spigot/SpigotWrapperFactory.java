@@ -1,5 +1,8 @@
 package protocolsupport.zplatform.impl.spigot;
 
+import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
+import org.bukkit.inventory.ItemStack;
+
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.zplatform.PlatformWrapperFactory;
 import protocolsupport.zplatform.impl.spigot.itemstack.SpigotItemStackWrapper;
@@ -31,6 +34,11 @@ public class SpigotWrapperFactory implements PlatformWrapperFactory {
 	@Override
 	public ItemStackWrapper createItemStack(int typeId) {
 		return SpigotItemStackWrapper.create(typeId);
+	}
+	
+	@Override
+	public ItemStackWrapper createItemStack(ItemStack item) {
+		return new SpigotItemStackWrapper(CraftItemStack.asNMSCopy(item));
 	}
 
 	@Override

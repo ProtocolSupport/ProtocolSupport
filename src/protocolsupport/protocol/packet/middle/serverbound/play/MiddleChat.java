@@ -14,9 +14,12 @@ public abstract class MiddleChat extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_CHAT);
-		StringSerializer.writeString(creator, ProtocolVersionsHelper.LATEST_PC, message);
-		return RecyclableSingletonList.create(creator);
+		return RecyclableSingletonList.create(create(message));
 	}
 
+	public static ServerBoundPacketData create(String message) {
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_CHAT);
+		StringSerializer.writeString(creator, ProtocolVersionsHelper.LATEST_PC, message);
+		return creator;
+	}
 }

@@ -30,6 +30,8 @@ import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
+import protocolsupport.protocol.serializer.PositionSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.ReflectionUtils;
@@ -38,8 +40,34 @@ import protocolsupport.zplatform.PlatformPacketFactory;
 public class SpigotPacketFactory implements PlatformPacketFactory {
 
 	@Override
+	public Object createInboundKeepAlivePacket(long keepAliveId) {
+		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer());
+		serializer.writeLong(keepAliveId);
+		PacketPlayInKeepAlive packet = new PacketPlayInKeepAlive();
+		try {
+			packet.a(serializer);
+		} catch (IOException e) {
+		}
+		return packet;
+	}
+
+	@Override
 	public Object createInboundInventoryClosePacket() {
 		return new PacketPlayInCloseWindow();
+	}
+	
+	@Override
+	public Object createInboundInventoryConfirmTransactionPacket(int windowId, int actionNumber, boolean accepted) {
+		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer());
+		serializer.writeByte(windowId);
+		serializer.writeShort(actionNumber);
+		serializer.writeByte(accepted ? 1 : 0);
+		PacketPlayInTransaction packet = new PacketPlayInTransaction();
+		try {
+			packet.a(serializer);
+		} catch (IOException e) {
+		}
+		return packet;
 	}
 
 	@Override
@@ -118,7 +146,20 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 			blocksound.b() * 0.8F
 		);
 	}
-
+	
+	@Override
+	public Object createBlockUpdatePacket(Position pos, int block) {
+		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer());
+		PositionSerializer.writePosition(serializer, pos);
+		VarNumberSerializer.writeVarInt(serializer, block);
+		PacketPlayOutBlockChange packet = new PacketPlayOutBlockChange();
+		try {
+			packet.a(serializer);
+		} catch (IOException e) {
+		}
+		return packet;
+	}
+	
 	@Override
 	public Object createStatusPongPacket(long pingId) {
 		return new PacketStatusOutPong(pingId);

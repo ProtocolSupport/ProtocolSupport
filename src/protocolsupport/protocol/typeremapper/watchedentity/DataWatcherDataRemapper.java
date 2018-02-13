@@ -21,8 +21,12 @@ public class DataWatcherDataRemapper {
 		if (entity != null) {
 			SpecificRemapper.fromWatchedType(entity.getType()).getRemaps(version)
 			.forEach(remapper -> remapper.remap(entity, originalMetadata, remappedMetadata));
-			entity.getDataCache().firstMeta = false;
+			entity.getDataCache().setFirstMeta(false);
 		}
+	}
+
+	public ArrayMap<DataWatcherObject<?>> getOriginal() {
+		return originalMetadata;
 	}
 
 	public ArrayMap<DataWatcherObject<?>> getRemapped() {

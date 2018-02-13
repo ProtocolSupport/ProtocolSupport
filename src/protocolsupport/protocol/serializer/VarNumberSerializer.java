@@ -27,6 +27,16 @@ public class VarNumberSerializer {
 		to.writeByte(i);
 	}
 
+
+	public static int readSVarInt(ByteBuf from) {
+		int varint = readVarInt(from);
+		return (varint >> 1) ^ -(varint & 1);
+	}
+
+	public static void writeSVarInt(ByteBuf to, int varint) {
+		writeVarInt(to, (varint << 1) ^ (varint >> 31));
+	}
+
 	public static long readVarLong(ByteBuf from) {
 		long varlong = 0L;
 		int length = 0;
@@ -47,6 +57,15 @@ public class VarNumberSerializer {
 			varlong >>>= 7;
 		}
 		to.writeByte((int) varlong);
+	}
+
+	public static long readSVarLong(ByteBuf from) {
+		long varlong = readVarLong(from);
+		return (varlong >> 1) ^ -(varlong & 1);
+	}
+
+	public static void writeSVarLong(ByteBuf to, long varlong) {
+		writeVarLong(to, (varlong << 1) ^ (varlong >> 63));
 	}
 
 }

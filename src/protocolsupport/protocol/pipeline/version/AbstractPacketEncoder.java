@@ -24,11 +24,13 @@ import protocolsupport.zplatform.ServerPlatform;
 public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<ByteBuf> {
 
 	protected final Connection connection;
-	public AbstractPacketEncoder(Connection connection, NetworkDataCache storage) {
+	protected final NetworkDataCache cache;
+	public AbstractPacketEncoder(Connection connection, NetworkDataCache cache) {
 		this.connection = connection;
+		this.cache = cache;
 		registry.setCallBack(object -> {
 			object.setConnection(this.connection);
-			object.setSharedStorage(storage);
+			object.setSharedStorage(this.cache);
 		});
 	}
 
@@ -45,7 +47,7 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 			packetTransformer = registry.getTransformer(currentProtocol, VarNumberSerializer.readVarInt(input));
 			packetTransformer.readFromServerData(input);
 			if (packetTransformer.postFromServerRead()) {
-				try (RecyclableCollection<ClientBoundPacketData> data = packetTransformer.toData()) {
+				try (RecyclableCollection<ClientBoundPacketData> data = processPackets(packetTransformer.toData())) {
 					for (ClientBoundPacketData packetdata : data) {
 						ByteBuf senddata = Allocator.allocateBuffer();
 						writePacketId(senddata, getNewPacketId(currentProtocol, packetdata.getPacketId()));
@@ -65,6 +67,10 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 				throw exception;
 			}
 		}
+	}
+
+	protected RecyclableCollection<ClientBoundPacketData> processPackets(RecyclableCollection<ClientBoundPacketData> packets) {
+		return packets;
 	}
 
 	protected abstract void writePacketId(ByteBuf to, int packetId);

@@ -25,8 +25,8 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class DataWatcherDeserializer {
 
-	//while meta indexes can be now up to 255, we actually use up to 31
-	public static final int MAX_USED_META_INDEX = 31;
+	//while meta indexes can be now up to 255, we actually use up to 31, but we use upto 76 for PE
+	public static final int MAX_USED_META_INDEX = 76;
 
 	@SuppressWarnings("unchecked")
 	private static final Constructor<? extends ReadableDataWatcherObject<?>>[] registry = new Constructor[256];

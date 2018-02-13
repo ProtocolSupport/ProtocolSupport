@@ -24,6 +24,10 @@ public abstract class MiddleClientSettings extends ServerBoundMiddlePacket {
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		cache.setLocale(locale);
+		return RecyclableSingletonList.create(create(locale, viewDist, chatMode, chatColors, skinFlags, mainHand));
+	}
+
+	public static ServerBoundPacketData create(String locale, int viewDist, ChatMode chatMode, boolean chatColors, int skinFlags, MainHand mainHand) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_SETTINGS);
 		StringSerializer.writeString(creator, ProtocolVersionsHelper.LATEST_PC, locale);
 		creator.writeByte(viewDist);
@@ -31,7 +35,7 @@ public abstract class MiddleClientSettings extends ServerBoundMiddlePacket {
 		creator.writeBoolean(chatColors);
 		creator.writeByte(skinFlags);
 		MiscSerializer.writeVarIntEnum(creator, mainHand);
-		return RecyclableSingletonList.create(creator);
+		return creator;
 	}
 
 	protected static enum ChatMode {
