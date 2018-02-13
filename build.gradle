@@ -39,7 +39,7 @@ gen.mkdirs();
 task updateLibs(type: Download) {
 	src([
 		'https://yivesmirror.com/files/spigot/spigot-1.12.2-R0.1-SNAPSHOT-b1408.jar',
-		'https://repo.glowstone.net/repository/snapshots/net/glowstone/glowstone/2018.0.0-SNAPSHOT/glowstone-2018.0.0-20171205.014003-7.jar',
+		'https://repo.glowstone.net/repository/snapshots/net/glowstone/glowstone/2018.2.0-SNAPSHOT/glowstone-2018.2.0-20180209.231901-7.jar',
 		'https://build.true-games.org/job/RakNetServer/lastSuccessfulBuild/artifact/target/RakNetServer.jar'
 	])
 	dest dllibs
@@ -102,7 +102,7 @@ repositories {
 }
 
 dependencies {
-	shadow files('buildprocessor/BuildProcessor.jar', new File(dllibs, 'spigot-1.12.2-R0.1-SNAPSHOT-b1408.jar'), new File(dllibs, 'glowstone-2018.0.0-20171205.014003-7.jar'))
+	shadow files('buildprocessor/BuildProcessor.jar', new File(dllibs, 'spigot-1.12.2-R0.1-SNAPSHOT-b1408.jar'), new File(dllibs, 'glowstone-2018.2.0-20180209.231901-7.jar'))
 	compile files(new File(dllibs, 'RakNetServer.jar'))
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 	compile group: 'net.sf.trove4j', name: 'trove4j', version: '3.0.3'
