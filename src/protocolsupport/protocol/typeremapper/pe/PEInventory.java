@@ -2,26 +2,43 @@ package protocolsupport.protocol.typeremapper.pe;
 
 import java.util.EnumMap;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
+import protocolsupport.ProtocolSupport;
+import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.utils.Any;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockChangeSingle;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockTileUpdate;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventorySetItems;
 import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.TileEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagType;
 
+/**
+ * Hacky hack. This class is probably the biggest hack in ProtocolSupprt. Buyers be aware, this can break easily!
+ * It is also necessary, without inventories (faked or otherwise) minecraft is unplayable!
+ */
 public class PEInventory {
 	
 	//To store data about fake inventory blocks for async usage.
+	//Data stored inside will be used to reconstruct the block after the inventory is closed.
 	public static class InvBlock {
 		private final Position position;
 		private final int typeData;
@@ -62,6 +79,152 @@ public class PEInventory {
 		public static Any<Integer, TileEntityType> getContainerData(WindowType type) {
 			return invBlockType.get(type);
 		}
+		
+		//Call in sync! Stores information to set and reset fake container blocks and schedules an inventory update.
+		public static void saveFakeInventoryInformation(Connection connection, Inventory inventory) {
+			Location mainLoc = connection.getPlayer().getLocation();
+			//If the player is not on the ground or almost at bedrock, 
+			//set the fake blocks above so the player doesn't fall on to it or so they aren't out of the world.
+			if ((!connection.getPlayer().isOnGround()) || (mainLoc.getBlockY() < 4)) {
+				mainLoc.add(0, 6, 0);
+			}
+			if (inventory.getType() == InventoryType.BEACON && inventory.getLocation() != null) {
+				//Since beacon power is checked clientside, we can't even fake the block in position we please.
+				mainLoc = inventory.getLocation();
+				mainLoc.add(1, 2, 0);
+			}
+			connection.addMetadata("peInvBlocks", new InvBlock[] {
+					new InvBlock(mainLoc.subtract(1, 2, 0).getBlock()), 
+					new InvBlock(mainLoc.	  add(1, 0, 0).getBlock())
+				});
+			Location headChestLock = mainLoc;
+			//Double chests need some ticks to configure after the inventory blocks are placed. We need to resend the inventory open.
+			if (inventory.getSize() > 27) {
+				Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), new Runnable() {
+					@Override
+					public void run() {
+						if (connection.hasMetadata("smuggledWindowId")) {
+							InventoryOpen.sendInventory(connection, 
+								(int) connection.getMetadata("smuggledWindowId"),
+								WindowType.CHEST, 
+								Position.fromBukkit(headChestLock),
+								-1
+							);
+							connection.getPlayer().updateInventory();
+							connection.removeMetadata("smuggledWindowId");
+						}
+					}
+				}, 2);
+			}
+		}
+		
+		//Creates a fake container at the location of the fake blocks.
+		public static RecyclableArrayList<ClientBoundPacketData> prepareFakeInventory(ProtocolVersion version, String locale, InvBlock[] blocks, WindowType type, BaseComponent title, int slots) {
+			RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
+			Any<Integer, TileEntityType> typeData = InvBlock.getContainerData(type);
+			if(typeData != null) {
+				Position mainpos = blocks[0].getPosition();
+				packets.add(BlockChangeSingle.create(version, mainpos, typeData.getObj1()));
+				NBTTagCompoundWrapper tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+				tag.setString("CustomName", title.toLegacyText(locale));
+				if(typeData.getObj2() != TileEntityType.UNKNOWN) {
+					tag.setString("id", typeData.getObj2().getRegistryId());
+				}
+				if(type == WindowType.CHEST && slots > 27) {
+					Position auxPos = blocks[1].getPosition();
+					packets.add(BlockChangeSingle.create(version, auxPos, typeData.getObj1()));
+					tag.setInt("pairx", auxPos.getX());
+					tag.setInt("pairz", auxPos.getZ());
+					tag.setByte("pairlead", 1);
+					packets.add(BlockTileUpdate.create(version, mainpos, tag));
+					NBTTagCompoundWrapper auxTag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();;
+					auxTag.setString("CustomName", title.toLegacyText(locale));
+					auxTag.setString("id", typeData.getObj2().getRegistryId());
+					auxTag.setInt("pairx", mainpos.getX());
+					auxTag.setInt("pairz", mainpos.getZ());
+					auxTag.setByte("pairlead", 0);
+					packets.add(BlockTileUpdate.create(version, auxPos, auxTag));
+				} else {
+					packets.add(BlockTileUpdate.create(version, mainpos, tag));
+				}
+				
+			}
+			return packets;
+		}
+		
+		//Reset all fake container blocks belonging to the connection.
+		public static void destroyFakeContainers(Connection connection) {
+			if (connection.hasMetadata("peInvBlocks")) {
+				InvBlock[] blocks = ((InvBlock[]) connection.getMetadata("peInvBlocks"));
+				for (int i = 0; i < blocks.length; i++) {
+					connection.sendPacket(ServerPlatform.get().getPacketFactory().createBlockUpdatePacket(
+							blocks[i].getPosition(), blocks[i].getTypeData()));
+				}
+				connection.removeMetadata("peInvBlocks");
+			}
+		}
+		
+		//Creates packets for resetting fake container blocks belonging to the connection.
+		public static RecyclableArrayList<ClientBoundPacketData> destroyFakeInventory(Connection connection) {
+			RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
+			if (connection.hasMetadata("peInvBlocks")) {
+				InvBlock[] blocks = ((InvBlock[]) connection.getMetadata("peInvBlocks"));
+				for (int i = 0; i < blocks.length; i++) {
+					packets.add(BlockChangeSingle.create(connection.getVersion(), blocks[i].getPosition(), blocks[i].getTypeData()));
+				}
+				connection.removeMetadata("peInvBlocks");
+			}
+			return packets;
+		}
+		
+	}
+	
+	//Uses bukkit to schedule an inventory update in PE
+	public static void scheduleInventoryUpdate(Connection connection, ItemStack cursorItem) {
+		if (
+				(!connection.hasMetadata("lastScheduledInventoryUpdate")) ||
+				(System.currentTimeMillis() - (long) connection.getMetadata("lastScheduledInventoryUpdate") >= 250)
+		   ) {
+			connection.addMetadata("lastScheduledInventoryUpdate", System.currentTimeMillis());
+			Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), new Runnable() {
+				@Override
+				public void run() {
+					connection.getPlayer().updateInventory();
+					if (cursorItem != null) {
+						connection.getPlayer().setItemOnCursor(cursorItem);
+					}
+				}
+			}, 10);
+		}
+	}
+	
+	//To store data to fake an entire beacon.
+	public static class BeaconTemple {
+		
+		private int primary = 0;
+		private int secondary = 0;
+		
+		public void setPrimaryEffect(int effect) {
+			this.primary = effect;
+		}
+		
+		public void setSecondaryEffect(int effect) {
+			this.secondary = effect;
+		}
+		
+		public RecyclableArrayList<ClientBoundPacketData> updateNBT(ProtocolVersion version, Connection connection) {
+			RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
+			if (connection.hasMetadata("peInvBlocks")) {
+				InvBlock[] blocks = (InvBlock[]) connection.getMetadata("peInvBlocks");
+				NBTTagCompoundWrapper tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+				tag.setString("id", "beacon");
+				tag.setInt("primary", primary);
+				tag.setInt("secondary", secondary);
+				packets.add(BlockTileUpdate.create(version, blocks[0].getPosition(), tag));
+			}
+			return packets;
+		}
+		
 	}
 	
 	//To store data to fake the enchantment process using hoppers.

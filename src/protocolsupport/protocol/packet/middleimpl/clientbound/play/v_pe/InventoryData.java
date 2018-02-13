@@ -40,27 +40,6 @@ public class InventoryData extends MiddleInventoryData {
 				}
 				break;
 			}
-			case BREWING: {
-				switch(type) {
-					case 0: { //Brew time (0 - 400) (400 is empty)
-						return RecyclableSingletonList.create(create(version, windowId, 0, Math.round(value / 2) * 2));
-					}
-					case 1: { //Fuel time (0 - 20) (20 is full)
-						//To be honest I have no clue how it works on the inside, I just tried until the bar matches PC :F
-						RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-						packets.add(create(version, windowId, 1, value > 0 ? 20 : 0));
-						int inv = 20-value;
-						if (inv > 6) { inv += (inv-6); }
-						if (inv > 10) { inv += (inv-10); }
-						if (inv > 30) { inv += (inv-30); }
-						if (inv > 50) { inv += (inv-50); }
-						if (inv > 60) { inv += (inv-60); }
-						packets.add(create(version, windowId, 2, 20 + inv));
-						return packets;
-					}
-				}
-				break;
-			}
 			case ENCHANT: {
 				if (type <= 2) { //(0-2) EnchantmentXP per option
 					cache.getEnchantHopper().updateOptionXP(type, value);
@@ -73,13 +52,56 @@ public class InventoryData extends MiddleInventoryData {
 				}
 				break;
 			}
+			case BEACON: {
+				switch(type) {
+					case 0: {
+						System.out.println("Beacon Level: " + value);
+						break;
+					}
+					case 1: {
+						System.out.println("Beacon Primary: " + value);
+						cache.getBeaconTemple().setPrimaryEffect(value);
+						return cache.getBeaconTemple().updateNBT(version, connection);
+					}
+					case 2: {
+						System.out.println("Beacon Secondary: " + value);
+						cache.getBeaconTemple().setSecondaryEffect(value);
+						return cache.getBeaconTemple().updateNBT(version, connection);
+					}
+				}
+				break;
+			}
+			case ANVIL: {
+				break; //Once PE starts trusting the server we need to send xp cost from here.
+			}
+			case BREWING: {
+				switch(type) {
+					case 0: { //Brew time (0 - 400) (400 is empty)
+						return RecyclableSingletonList.create(create(version, windowId, 0, Math.round(value / 2) * 2));
+					}
+					case 1: { //Fuel time (0 - 20) (20 is full)
+						//To be honest I have no clue how it works on the inside, I just tried until the bar matches PC :F
+						RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
+						packets.add(create(version, windowId, 1, value > 0 ? 20 : 0));
+						int inv = 20 - value;
+						if (inv > 6)  { inv += (inv- 6); }
+						if (inv > 10) { inv += (inv-10); }
+						if (inv > 30) { inv += (inv-30); }
+						if (inv > 50) { inv += (inv-50); }
+						if (inv > 60) { inv += (inv-60); }
+						packets.add(create(version, windowId, 2, 20 + inv));
+						return packets;
+					}
+				}
+				break;
+			}
 			default: {
 				break;
 			}
 		}
 		return RecyclableEmptyList.get();
 	}
-
+	
 	public static ClientBoundPacketData create(ProtocolVersion version, int windowId, int type, int value) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CONTAINER_DATA, version);
 		serializer.writeByte(windowId);

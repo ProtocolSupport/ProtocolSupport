@@ -14,6 +14,7 @@ import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnObject.PreparedItem;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacket.InfTransactions;
+import protocolsupport.protocol.typeremapper.pe.PEInventory.BeaconTemple;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.EnchantHopper;
 import protocolsupport.protocol.typeremapper.pe.PEMovementConfirmationPacketQueue;
 import protocolsupport.protocol.utils.i18n.I18NData;
@@ -174,6 +175,11 @@ public class NetworkDataCache {
 	private EnchantHopper enchantHopper = new EnchantHopper();
 	public EnchantHopper getEnchantHopper() {
 		return enchantHopper;
+	}
+	
+	private BeaconTemple beaconTemple = new BeaconTemple();
+	public BeaconTemple getBeaconTemple() {
+		return beaconTemple;
 	}
 	
 	protected final TIntObjectHashMap<NetworkEntity> watchedEntities = new TIntObjectHashMap<>();

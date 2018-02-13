@@ -85,6 +85,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	public void readFromClientData(ByteBuf clientdata) {
 		System.out.println("NEEWWW GODPACKET! Hooraayy it's a god packet. Don't we all reeeaaally love godpackets? I do. IDDOODD I REALLY DO LOVE THEM. THTHISS IS THE BEST DAY IN MY LIFE.");
 		actionId = VarNumberSerializer.readVarInt(clientdata);
+		System.out.println("ACTION: " + actionId);
 
 		transactions = new InfTransaction[VarNumberSerializer.readVarInt(clientdata)];
 		for(int i = 0; i < transactions.length; i++) {

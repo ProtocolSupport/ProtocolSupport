@@ -4,8 +4,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.api.chat.components.BaseComponent;
-import protocolsupport.api.utils.Any;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
@@ -20,7 +18,6 @@ import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.protocol.utils.types.TileEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -35,6 +32,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		cache.getInfTransactions().clear();
 		if (type == WindowType.HORSE) {
+			
 			//TODO: Fix this shit. Horses are a pain in the ass and require a different packer. Lama's are even worse with their variable slots. We'll see.
 			NetworkEntity horse = cache.getWatchedEntity(horseId);
 			if (horse != null) {
@@ -62,11 +60,12 @@ public class InventoryOpen extends MiddleInventoryOpen {
 					return packets;
 				}
 			}
+			
 		}
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		if(connection.hasMetadata("peInvBlocks")) {
+		if (connection.hasMetadata("peInvBlocks")) {
 			InvBlock[] blocks = (InvBlock[]) connection.getMetadata("peInvBlocks");
-			packets.addAll(prepareFakeInventory(connection.getVersion(), cache.getLocale(), blocks, type, title, cache.getOpenedWindowSlots()));
+			packets.addAll(InvBlock.prepareFakeInventory(connection.getVersion(), cache.getLocale(), blocks, type, title, cache.getOpenedWindowSlots()));
 			if (
 				(type == WindowType.CHEST) &&
 				(cache.getOpenedWindowSlots() > 27)
@@ -75,47 +74,9 @@ public class InventoryOpen extends MiddleInventoryOpen {
 				//When it is a doublechest, re-smuggle the windowId back to the metadata.
 				connection.addMetadata("smuggledWindowId", windowId);
 			} else {
-				switch(type) {
-					case SHULKER: { type = WindowType.CHEST; break; } //We (currently) fake shulker boxes with chests as they are the same and PE doesn't like shulkers.
-					case ENCHANT: { type = WindowType.HOPPER; break; } //We (currently) fake enchantment tables with hoppers as the server doesn't choose the enchantment otherwise (FFS)
-					default: break;
-				}
 				//Only double chests need some time to verify on the client (FFS Mojang!), the rest can be instantly opened after preparing.
 				packets.add(create(connection.getVersion(), windowId, type, blocks[0].getPosition(), -1));
 			}
-		}
-		return packets;
-	}
-	
-	public static RecyclableArrayList<ClientBoundPacketData> prepareFakeInventory(ProtocolVersion version, String locale, InvBlock[] blocks, WindowType type, BaseComponent title, int slots) {
-		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		Any<Integer, TileEntityType> typeData = InvBlock.getContainerData(type);
-		if(typeData != null) {
-			Position mainpos = blocks[0].getPosition();
-			packets.add(BlockChangeSingle.create(version, mainpos, typeData.getObj1()));
-			NBTTagCompoundWrapper tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-			tag.setString("CustomName", title.toLegacyText(locale));
-			if(typeData.getObj2() != TileEntityType.UNKNOWN) {
-				tag.setString("id", typeData.getObj2().getRegistryId());
-			}
-			if(type == WindowType.CHEST && slots > 27) {
-				Position auxPos = blocks[1].getPosition();
-				packets.add(BlockChangeSingle.create(version, auxPos, typeData.getObj1()));
-				tag.setInt("pairx", auxPos.getX());
-				tag.setInt("pairz", auxPos.getZ());
-				tag.setByte("pairlead", 1);
-				packets.add(BlockTileUpdate.create(version, mainpos, tag));
-				NBTTagCompoundWrapper auxTag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();;
-				auxTag.setString("CustomName", title.toLegacyText(locale));
-				auxTag.setString("id", typeData.getObj2().getRegistryId());
-				auxTag.setInt("pairx", mainpos.getX());
-				auxTag.setInt("pairz", mainpos.getZ());
-				auxTag.setByte("pairlead", 0);
-				packets.add(BlockTileUpdate.create(version, auxPos, auxTag));
-			} else {
-				packets.add(BlockTileUpdate.create(version, mainpos, tag));
-			}
-			
 		}
 		return packets;
 	}
