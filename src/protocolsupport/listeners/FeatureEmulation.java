@@ -108,8 +108,6 @@ public class FeatureEmulation implements Listener {
 		}, 1);
 	}
 	
-	//== PE Inventory ==
-	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onInventoryOpen(InventoryOpenEvent event) {
 		if(
@@ -136,7 +134,7 @@ public class FeatureEmulation implements Listener {
 				(connection != null) &&
 				(connection.getVersion().getProtocolType() == ProtocolType.PE)
 			) {
-				PEInventory.scheduleInventoryUpdate(connection, event.getCursor());
+				PEInventory.scheduleInventoryUpdate(connection);
 			}
 		}
 	}

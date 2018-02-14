@@ -7,7 +7,6 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.Connection;
@@ -127,10 +126,10 @@ public class PEInventory {
 				packets.add(BlockChangeSingle.create(version, mainpos, typeData.getObj1()));
 				NBTTagCompoundWrapper tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
 				tag.setString("CustomName", title.toLegacyText(locale));
-				if(typeData.getObj2() != TileEntityType.UNKNOWN) {
+				if (typeData.getObj2() != TileEntityType.UNKNOWN) {
 					tag.setString("id", typeData.getObj2().getRegistryId());
 				}
-				if(type == WindowType.CHEST && slots > 27) {
+				if (type == WindowType.CHEST && slots > 27) {
 					Position auxPos = blocks[1].getPosition();
 					packets.add(BlockChangeSingle.create(version, auxPos, typeData.getObj1()));
 					tag.setInt("pairx", auxPos.getX());
@@ -180,7 +179,7 @@ public class PEInventory {
 	}
 	
 	//Uses bukkit to schedule an inventory update in PE
-	public static void scheduleInventoryUpdate(Connection connection, ItemStack cursorItem) {
+	public static void scheduleInventoryUpdate(Connection connection) {
 		if (
 				(!connection.hasMetadata("lastScheduledInventoryUpdate")) ||
 				(System.currentTimeMillis() - (long) connection.getMetadata("lastScheduledInventoryUpdate") >= 250)
@@ -190,9 +189,7 @@ public class PEInventory {
 				@Override
 				public void run() {
 					connection.getPlayer().updateInventory();
-					if (cursorItem != null) {
-						connection.getPlayer().setItemOnCursor(cursorItem);
-					}
+					connection.getPlayer().setItemOnCursor(connection.getPlayer().getItemOnCursor());
 				}
 			}, 10);
 		}

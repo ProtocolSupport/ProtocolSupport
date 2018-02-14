@@ -67,8 +67,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 			InvBlock[] blocks = (InvBlock[]) connection.getMetadata("peInvBlocks");
 			packets.addAll(InvBlock.prepareFakeInventory(connection.getVersion(), cache.getLocale(), blocks, type, title, cache.getOpenedWindowSlots()));
 			if (
-				(type == WindowType.CHEST) &&
-				(cache.getOpenedWindowSlots() > 27)
+				(type == WindowType.CHEST && cache.getOpenedWindowSlots() > 27)
 			) {
 				System.out.println("Smuggling double chest data: " + windowId);
 				//When it is a doublechest, re-smuggle the windowId back to the metadata.
@@ -109,7 +108,9 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	
 	private static ByteBuf serialize(ByteBuf serializer, ProtocolVersion version, int windowId, WindowType type, Position pePosition, int horseId) {
 		serializer.writeByte(windowId);
-		serializer.writeByte(IdRemapper.WINDOWTYPE.getTable(version).getRemap(type.toLegacyId()));
+		serializer.writeByte(IdRemapper.WINDOWTYPE.getTable(version).getRemap(
+				IdRemapper.INVENTORY.getTable(version).getRemap(type)
+			.toLegacyId()));
 		PositionSerializer.writePEPosition(serializer, pePosition);
 		VarNumberSerializer.writeSVarLong(serializer, horseId);
 		return serializer;

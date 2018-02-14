@@ -223,6 +223,8 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				break;
 			}
 		}
+		//Trigger inventory update, ALWAYS since PE sometimes 'guesses' or doesn't trust the server, we generally want an inventory update scheduled.
+		packets.addAll(Click.MIDDLE.create(cache, -999, ItemStackWrapper.NULL));
 		return packets;
 	}
 
@@ -370,9 +372,8 @@ public class GodPacket extends ServerBoundMiddlePacket {
 					cache.getEnchantHopper().setInputOutputStack(transaction.getNewItem());
 				} else if (pcSlot == 1 && (transaction.getNewItem().isNull() || (transaction.getNewItem().getType() == Material.INK_SACK && transaction.getNewItem().getData() == 4))) {
 					cache.getEnchantHopper().setLapisStack(transaction.getNewItem());
-				} else if (pcSlot > 1 && pcSlot <= 4) {
+				} else if (pcSlot > 1 && pcSlot <= 4 && transaction.getInventoryId() != PESource.POCKET_INVENTORY) { //If and only if on of the three fake hopper option slots are clicked proceed with the enchanting.
 					misc.add(MiddleInventoryEnchant.create(cache.getOpenedWindowId(), pcSlot - 2));
-					misc.addAll(Click.LEFT.create(cache, -999, ItemStackWrapper.NULL)); //Trigger inventory update
 					return;
 				}
 			}
@@ -832,7 +833,8 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	
 	protected enum Click {
 		LEFT	(0, 0),
-		RIGHT	(0, 1);
+		RIGHT	(0, 1),
+		MIDDLE  (3, 2);
 		
 		private final int mode;
 		private final int button;
