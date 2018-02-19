@@ -14,6 +14,14 @@ public class LegacyChat {
 		}
 		final StringBuilder out = new StringBuilder();
 		toTextSingle(out, locale, component, component.getModifier());
+		while (true) {
+			int colorcharsearchindex = out.length() - 2;
+			if (colorcharsearchindex > 0 && out.charAt(colorcharsearchindex) == ChatColor.COLOR_CHAR) {
+				out.delete(colorcharsearchindex, out.length());
+			} else {
+				break;
+			}
+		}
 		return out.toString();
 	}
 
@@ -42,6 +50,7 @@ public class LegacyChat {
 			out.append(ChatColor.MAGIC);
 		}
 		out.append(component.getValue(locale));
+		out.append(ChatColor.RESET);
 		for (BaseComponent child : component.getSiblings()) {
 			Modifier childmodifier = child.getModifier();
 			Modifier combinedmodifier = new Modifier();
@@ -52,7 +61,6 @@ public class LegacyChat {
 			combinedmodifier.setStrikethrough(childmodifier.isStrikethrough() != null ? childmodifier.isStrikethrough() : modifier.isStrikethrough());
 			combinedmodifier.setRandom(childmodifier.isRandom() != null ? childmodifier.isRandom() : modifier.isRandom());
 			toTextSingle(out, locale, child, combinedmodifier);
-			out.append(ChatColor.RESET);
 		}
 	}
 

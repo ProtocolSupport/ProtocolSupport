@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
 
+import net.glowstone.entity.meta.profile.GlowPlayerProfile;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.WorldType;
@@ -19,7 +20,6 @@ import com.flowpowered.network.Message;
 import com.flowpowered.network.service.CodecLookupService;
 
 import net.glowstone.GlowServer;
-import net.glowstone.entity.meta.profile.PlayerProfile;
 import net.glowstone.net.message.KickMessage;
 import net.glowstone.net.message.SetCompressionMessage;
 import net.glowstone.net.message.handshake.HandshakeMessage;
@@ -236,12 +236,12 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 		if (!profiles.isEmpty()) {
 			JSONArray playerSample = new JSONArray();
 			UUID randomUUID = UUID.randomUUID();
-			PlayerProfile[] playerProfiles = new PlayerProfile[profiles.size()];
+			GlowPlayerProfile[] playerProfiles = new GlowPlayerProfile[profiles.size()];
 			for (int i = 0; i < profiles.size(); i++) {
-				playerProfiles[i] = new PlayerProfile(profiles.get(i), randomUUID);
+				playerProfiles[i] = new GlowPlayerProfile(profiles.get(i), randomUUID);
 			}
 			playerProfiles = Arrays.copyOfRange(playerProfiles, 0, Math.min(playerProfiles.length, server.getPlayerSampleCount()));
-			for (PlayerProfile profile : playerProfiles) {
+			for (GlowPlayerProfile profile : playerProfiles) {
 				JSONObject sample = new JSONObject();
 				sample.put("name", profile.getName());
 				sample.put("id", profile.getUniqueId().toString());
