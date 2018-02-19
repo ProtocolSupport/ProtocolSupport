@@ -3,6 +3,7 @@ package protocolsupport.zplatform;
 import java.security.PublicKey;
 import java.util.List;
 
+import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 
@@ -19,7 +20,11 @@ public interface PlatformPacketFactory {
 	
 	public Object createInboundInventoryConfirmTransactionPacket(int windowId, int actionNumber, boolean accepted);
 
+	public Object createInboundCustomPayloadPacket(String tag, byte[] data);
+
 	public Object createOutboundChatPacket(String message, int position);
+
+	public Object createOutboundUpdateChunkPacket(Chunk chunk);
 
 	public Object createTabHeaderFooterPacket(BaseComponent header, BaseComponent footer);
 

@@ -12,6 +12,7 @@ import protocolsupport.api.unsafe.peskins.PESkinsProviderSPI;
 import protocolsupport.commands.CommandHandler;
 import protocolsupport.listeners.FeatureEmulation;
 import protocolsupport.listeners.MultiplePassengersRestrict;
+import protocolsupport.listeners.PERequestListener;
 import protocolsupport.listeners.ReloadCommandBlocker;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.ServerBoundPacket;
@@ -133,6 +134,7 @@ public class ProtocolSupport extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new FeatureEmulation(), this);
 		getServer().getPluginManager().registerEvents(new ReloadCommandBlocker(), this);
 		getServer().getPluginManager().registerEvents(new MultiplePassengersRestrict(), this);
+		getServer().getMessenger().registerIncomingPluginChannel(this, PERequestListener.CHUNK_REQ, new PERequestListener());
 		getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
 			Thread pocketPacketCache = new Thread(() -> {
 				PocketData.readEntityDatas();
