@@ -50,7 +50,7 @@ public class PlayerInfo extends MiddlePlayerInfo {
 					MiscSerializer.writeUUID(serializer, connection.getVersion(), info.uuid.equals(connection.getPlayer().getUniqueId()) ? cache.getPEClientUUID() : info.uuid);
 					VarNumberSerializer.writeVarInt(serializer, 0); //entity id
 					StringSerializer.writeString(serializer, version, info.getName(cache.getLocale()));
-					Any<Boolean, String> skininfo = getSkinInfo(info);
+					Any<Boolean, String> skininfo = getSkinInfo(info); //TODO Erm where does this come from?
 					byte[] skindata = skininfo != null ? skinprovider.getSkinData(skininfo.getObj2()) : null;
 					if (skindata != null) {
 						writeSkinData(version, serializer, false, skininfo.getObj1(), skindata);
