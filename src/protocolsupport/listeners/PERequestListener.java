@@ -13,9 +13,11 @@ import protocolsupport.zplatform.ServerPlatform;
 
 public class PERequestListener implements PluginMessageListener {
 
+	public static final String CHUNK_REQ = "PS|ReqChunk";
+
 	@Override
 	public synchronized void onPluginMessageReceived(String channel, Player player, byte[] message) {
-		if (channel.equals("PS|ReqChunk")) {
+		if (channel.equals(CHUNK_REQ)) {
 			try {
 				DataInputStream in = new DataInputStream(new ByteArrayInputStream(message));
 				int x = in.readInt();
