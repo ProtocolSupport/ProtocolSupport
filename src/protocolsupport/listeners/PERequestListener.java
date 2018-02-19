@@ -18,11 +18,9 @@ public class PERequestListener implements PluginMessageListener {
 		if (channel.equals("PS|ReqChunk")) {
 			try {
 				DataInputStream in = new DataInputStream(new ByteArrayInputStream(message));
-				//System.out.println(in);
 				int x = in.readInt();
 				int z = in.readInt();
 				Chunk toUpdate = player.getWorld().getChunkAt(x, z);
-				System.out.println("Chunk requested: " + x + ", " + z);
 				in.close();
 				ProtocolSupportAPI.getConnection(player).sendPacket(ServerPlatform.get().getPacketFactory().createOutboundUpdateChunkPacket(toUpdate));
 			} catch (IOException e) { }
