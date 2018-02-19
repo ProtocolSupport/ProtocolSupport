@@ -8,6 +8,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.WorldType;
 import org.bukkit.entity.Entity;
@@ -19,6 +20,7 @@ import com.flowpowered.network.Message;
 import com.flowpowered.network.service.CodecLookupService;
 
 import net.glowstone.GlowServer;
+import net.glowstone.chunk.GlowChunk;
 import net.glowstone.entity.meta.profile.PlayerProfile;
 import net.glowstone.net.message.KickMessage;
 import net.glowstone.net.message.SetCompressionMessage;
@@ -144,8 +146,7 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 
 	@Override
 	public Object createInboundKeepAlivePacket(long keepAliveId) {
-		//TODO: No casting when Glowstone updates!
-		return new PingMessage((int) keepAliveId);
+		return new PingMessage(keepAliveId);
 	}
 
 	@Override
@@ -156,6 +157,15 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 	@Override
 	public Message createInboundInventoryConfirmTransactionPacket(int windowId, int actionNumber, boolean accepted) {
 		return new TransactionMessage(windowId, actionNumber, accepted);
+	}
+	
+	@Override
+	public Message createInboundCustomPayloadPacket(String tag, byte[] data) {
+		return new PluginMessage(tag, data);
+	}
+	
+	public Message createOutboundUpdateChunkPacket(Chunk chunk) {
+		return ((GlowChunk) chunk).toMessage();
 	}
 	
 	@Override
