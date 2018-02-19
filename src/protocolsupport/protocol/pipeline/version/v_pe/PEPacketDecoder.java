@@ -1,6 +1,7 @@
 package protocolsupport.protocol.pipeline.version.v_pe;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -22,6 +23,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Position
 import protocolsupport.protocol.pipeline.version.AbstractPacketDecoder;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.typeremapper.pe.PEMovementConfirmationPacketQueue;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -64,9 +66,13 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 			if (input.isReadable()) {
 				throw new DecoderException("Did not read all data from packet " + packetTransformer.getClass().getName() + ", bytes left: " + input.readableBytes());
 			}
-			RecyclableCollection<ServerBoundPacketData> packets = packetTransformer.toNative();
-			if (cache.getPESendPacketMovementConfirmQueue().checkMovement(packets)) {
-				ctx.channel().eventLoop().execute(() -> connection.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("PS|PushQueue")));
+			PEMovementConfirmationPacketQueue confirmqueue = cache.getPESendPacketMovementConfirmQueue();
+			RecyclableCollection<ServerBoundPacketData> packets = confirmqueue.processServerBoundPackets(packetTransformer.toNative());
+			if (confirmqueue.shouldScheduleUnlock()) {
+				ctx.channel().eventLoop().schedule(() -> {
+					confirmqueue.unlock();
+					connection.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("PS|PushQueue"));
+				}, 5, TimeUnit.SECONDS);
 			}
 			addPackets(packets, list);
 		} catch (Exception e) {
