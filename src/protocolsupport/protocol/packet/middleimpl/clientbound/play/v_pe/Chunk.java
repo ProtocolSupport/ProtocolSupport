@@ -52,7 +52,7 @@ public class Chunk extends MiddleChunk {
 				serializer.writeInt(chunkZ);
 				serializer.flush();
 				connection.receivePacket(ServerPlatform.get().getPacketFactory().createInboundCustomPayloadPacket(
-					"PS|ReqChunk", requestChunk.toByteArray()
+					PERequestListener.CHUNK_REQ, requestChunk.toByteArray()
 				));
 			} catch (IOException e) {
 			}
