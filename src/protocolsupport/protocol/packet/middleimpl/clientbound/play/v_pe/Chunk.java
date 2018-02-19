@@ -28,11 +28,8 @@ public class Chunk extends MiddleChunk {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		System.out.println("==========");
-		System.out.println(chunkX + ", " + chunkZ);
 		ProtocolVersion version = connection.getVersion();
 		if (full) {
-			System.out.println(Integer.toBinaryString(bitmask));
 			cache.markSentChunk(chunkX, chunkZ);
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHUNK_DATA, version);
 			VarNumberSerializer.writeSVarInt(serializer, chunkX);
@@ -48,20 +45,19 @@ public class Chunk extends MiddleChunk {
 			ArraySerializer.writeByteArray(serializer, version, chunkdata);
 			return RecyclableSingletonList.create(serializer);
 		} else { //Request a full chunk back from the server.
-			System.out.println(Integer.toBinaryString(bitmask));
 			try {
 				ByteArrayOutputStream requestChunk = new ByteArrayOutputStream();
 				DataOutputStream serializer = new DataOutputStream(requestChunk);
 				serializer.writeInt(chunkX);
 				serializer.writeInt(chunkZ);
 				serializer.flush();
-				connection.receivePacket(ServerPlatform.get().getPacketFactory().createInboundCustomPayloadPacket("PS|ReqChunk", requestChunk.toByteArray()));
+				connection.receivePacket(ServerPlatform.get().getPacketFactory().createInboundCustomPayloadPacket(
+					"PS|ReqChunk", requestChunk.toByteArray()
+				));
 			} catch (IOException e) {
-				e.printStackTrace();
 			}
 			return RecyclableEmptyList.get();
 		}
-
 	}
 
 	public static ClientBoundPacketData createEmptyChunk(ProtocolVersion version, int chunkX, int chunkZ) {
