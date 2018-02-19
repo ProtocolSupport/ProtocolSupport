@@ -134,7 +134,7 @@ public class ProtocolSupport extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new FeatureEmulation(), this);
 		getServer().getPluginManager().registerEvents(new ReloadCommandBlocker(), this);
 		getServer().getPluginManager().registerEvents(new MultiplePassengersRestrict(), this);
-		getServer().getMessenger().registerIncomingPluginChannel(this, "PS|ReqChunk", new PERequestListener());
+		getServer().getMessenger().registerIncomingPluginChannel(this, PERequestListener.CHUNK_REQ, new PERequestListener());
 		getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
 			Thread pocketPacketCache = new Thread(() -> {
 				PocketData.readEntityDatas();
