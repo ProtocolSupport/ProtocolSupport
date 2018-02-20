@@ -2,6 +2,7 @@ package protocolsupport.listeners;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.BiConsumer;
 
 import org.bukkit.Chunk;
@@ -20,6 +21,8 @@ import protocolsupport.zplatform.ServerPlatform;
 import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
 public class InternalPluginMessageRequest implements PluginMessageListener {
+
+	private static final UUID uuid = UUID.randomUUID();
 
 	public static final String TAG = "PS|IR";
 
@@ -94,6 +97,7 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 	public static void receivePluginMessageRequest(Connection connection, PluginMessageData data) {
 		ByteBuf buf = Allocator.allocateBuffer();
 		try {
+			MiscSerializer.writeUUID(buf, ProtocolVersionsHelper.LATEST_PC, uuid);
 			StringSerializer.writeString(buf, ProtocolVersionsHelper.LATEST_PC, classToSubchannel.get(data.getClass()));
 			data.write(buf);
 			connection.receivePacket(ServerPlatform.get().getPacketFactory().createInboundPluginMessagePacket(TAG, MiscSerializer.readAllBytes(buf)));
@@ -105,19 +109,23 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 	@Override
 	public void onPluginMessageReceived(String tag, Player player, byte[] data) {
 		ByteBuf buf = Unpooled.wrappedBuffer(data);
+		UUID luuid = MiscSerializer.readUUID(buf);
+		if (luuid != uuid) {
+			return;
+		}
 		String subchannel = StringSerializer.readString(buf, ProtocolVersionsHelper.LATEST_PC);
 		Class<? extends PluginMessageData> messagedatacl = subchannelToClass.get(subchannel);
-		if (messagedatacl != null) {
-			PluginMessageData messagedata;
-			try {
-				messagedata = messagedatacl.newInstance();
-				messagedata.read(buf);
-				handlers.get(messagedatacl).accept(player, messagedata);
-			} catch (InstantiationException | IllegalAccessException e) {
-				if (ServerPlatform.get().getMiscUtils().isDebugging()) {
-					System.err.println("Exception occured while processing internal plugin message");
-					e.printStackTrace();
-				}
+		if (messagedatacl == null) {
+			return;
+		}
+		try {
+			PluginMessageData messagedata = messagedatacl.newInstance();
+			messagedata.read(buf);
+			handlers.get(messagedatacl).accept(player, messagedata);
+		} catch (InstantiationException | IllegalAccessException e) {
+			if (ServerPlatform.get().getMiscUtils().isDebugging()) {
+				System.err.println("Exception occured while processing internal plugin message");
+				e.printStackTrace();
 			}
 		}
 	}
