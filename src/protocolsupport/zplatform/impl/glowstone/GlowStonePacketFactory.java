@@ -146,8 +146,7 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 
 	@Override
 	public Object createInboundKeepAlivePacket(long keepAliveId) {
-		//TODO: No casting when Glowstone updates!
-		return new PingMessage((int) keepAliveId);
+		return new PingMessage(keepAliveId);
 	}
 
 	@Override
