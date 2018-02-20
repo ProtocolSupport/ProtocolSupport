@@ -12,6 +12,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.unsafe.peskins.PESkinsProviderSPI;
 import protocolsupport.commands.CommandHandler;
 import protocolsupport.listeners.FeatureEmulation;
+import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.listeners.MultiplePassengersRestrict;
 import protocolsupport.listeners.ReloadCommandBlocker;
 import protocolsupport.protocol.packet.ClientBoundPacket;
@@ -127,6 +128,7 @@ public class ProtocolSupport extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new FeatureEmulation(), this);
 		getServer().getPluginManager().registerEvents(new ReloadCommandBlocker(), this);
 		getServer().getPluginManager().registerEvents(new MultiplePassengersRestrict(), this);
+		getServer().getMessenger().registerIncomingPluginChannel(this, InternalPluginMessageRequest.TAG, new InternalPluginMessageRequest());
 		getServer().getScheduler().scheduleSyncDelayedTask(this, () -> (peserver = new PEProxyServer()).start());
 	}
 

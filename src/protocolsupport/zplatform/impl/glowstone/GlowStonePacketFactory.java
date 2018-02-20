@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import net.glowstone.entity.meta.profile.GlowPlayerProfile;
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.WorldType;
 import org.bukkit.entity.Entity;
@@ -20,6 +21,7 @@ import com.flowpowered.network.Message;
 import com.flowpowered.network.service.CodecLookupService;
 
 import net.glowstone.GlowServer;
+import net.glowstone.chunk.GlowChunk;
 import net.glowstone.net.message.KickMessage;
 import net.glowstone.net.message.SetCompressionMessage;
 import net.glowstone.net.message.handshake.HandshakeMessage;
@@ -151,6 +153,11 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 	@Override
 	public Message createInboundInventoryClosePacket() {
 		return new CloseWindowMessage(0);
+	}
+
+	@Override
+	public Object createInboundPluginMessagePacket(String tag, byte[] data) {
+		return new PluginMessage(tag, data);
 	}
 
 	@Override
@@ -287,6 +294,11 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 	@Override
 	public Object createEntityStatusPacket(Entity entity, int status) {
 		return new EntityStatusMessage(entity.getEntityId(), status);
+	}
+
+	@Override
+	public Object createUpdateChunkPacket(Chunk chunk) {
+		return ((GlowChunk) chunk).toMessage();
 	}
 
 
