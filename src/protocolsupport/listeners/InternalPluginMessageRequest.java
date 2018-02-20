@@ -82,7 +82,7 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 		}
 
 		public int getChunkX() {
-			return chunkX;	
+			return chunkX;
 		}
 
 		public int getChunkZ() {

@@ -16,7 +16,7 @@ public class LegacyChat {
 		toTextSingle(out, locale, component, component.getModifier());
 		while (true) {
 			int colorcharsearchindex = out.length() - 2;
-			if (colorcharsearchindex > 0 && out.charAt(colorcharsearchindex) == ChatColor.COLOR_CHAR) {
+			if ((colorcharsearchindex > 0) && (out.charAt(colorcharsearchindex) == ChatColor.COLOR_CHAR)) {
 				out.delete(colorcharsearchindex, out.length());
 			} else {
 				break;

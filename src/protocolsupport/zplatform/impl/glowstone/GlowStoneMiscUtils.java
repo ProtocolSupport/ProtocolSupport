@@ -10,17 +10,18 @@ import java.util.stream.Collectors;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 
-import com.destroystokyo.paper.profile.ProfileProperty;
-import net.glowstone.entity.meta.profile.GlowPlayerProfile;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
 
+import com.destroystokyo.paper.profile.ProfileProperty;
+
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import net.glowstone.GlowServer;
+import net.glowstone.entity.meta.profile.GlowPlayerProfile;
 import net.glowstone.io.nbt.NbtSerialization;
 import net.glowstone.net.pipeline.CompressionHandler;
 import net.glowstone.net.pipeline.MessageHandler;

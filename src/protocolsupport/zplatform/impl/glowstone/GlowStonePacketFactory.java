@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
 
-import net.glowstone.entity.meta.profile.GlowPlayerProfile;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
@@ -22,6 +21,7 @@ import com.flowpowered.network.service.CodecLookupService;
 
 import net.glowstone.GlowServer;
 import net.glowstone.chunk.GlowChunk;
+import net.glowstone.entity.meta.profile.GlowPlayerProfile;
 import net.glowstone.net.message.KickMessage;
 import net.glowstone.net.message.SetCompressionMessage;
 import net.glowstone.net.message.handshake.HandshakeMessage;
