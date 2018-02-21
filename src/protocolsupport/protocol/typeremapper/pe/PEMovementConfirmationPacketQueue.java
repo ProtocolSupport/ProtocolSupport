@@ -73,10 +73,10 @@ public class PEMovementConfirmationPacketQueue {
 		try {
 			RecyclableArrayList<ServerBoundPacketData> allowed = RecyclableArrayList.create();
 			for (ServerBoundPacketData packet : packets) {
-				if (state == State.WAITING_CLIENT_MOVE_CONFIRM && (packet.getPacketType() == ServerBoundPacket.PLAY_POSITION_LOOK)) {
+				if ((state == State.WAITING_CLIENT_MOVE_CONFIRM) && (packet.getPacketType() == ServerBoundPacket.PLAY_POSITION_LOOK)) {
 					state = State.WAITING_UNLOCK;
 				}
-				if (state == State.WAITING_UNLOCK || state == State.UNLOCK_SCHEDULED) {
+				if ((state == State.WAITING_UNLOCK) || (state == State.UNLOCK_SCHEDULED)) {
 					packet.recycle();
 					continue;
 				}
@@ -89,7 +89,7 @@ public class PEMovementConfirmationPacketQueue {
 	}
 
 	public boolean shouldScheduleUnlock() {
-		if (state != State.WAITING_UNLOCK || state == State.UNLOCK_SCHEDULED) {
+		if ((state != State.WAITING_UNLOCK) || (state == State.UNLOCK_SCHEDULED)) {
 			return false;
 		}
 		state = State.UNLOCK_SCHEDULED;
