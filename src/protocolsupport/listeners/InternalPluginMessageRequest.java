@@ -110,7 +110,7 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 	public void onPluginMessageReceived(String tag, Player player, byte[] data) {
 		ByteBuf buf = Unpooled.wrappedBuffer(data);
 		UUID luuid = MiscSerializer.readUUID(buf);
-		if (luuid != uuid) {
+		if (!luuid.equals(uuid)) {
 			return;
 		}
 		String subchannel = StringSerializer.readString(buf, ProtocolVersionsHelper.LATEST_PC);
