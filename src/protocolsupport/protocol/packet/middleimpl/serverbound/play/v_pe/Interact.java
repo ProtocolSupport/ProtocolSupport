@@ -6,7 +6,6 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSteerVehicle;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -22,7 +21,7 @@ public class Interact extends ServerBoundMiddlePacket {
 		peAction = clientdata.readUnsignedByte();
 		targetId = (int) VarNumberSerializer.readVarLong(clientdata);
 		if (peAction == MOUSE_OVER) {
-			interactAt = new Vector(MiscSerializer.readLFloat(clientdata), MiscSerializer.readLFloat(clientdata), MiscSerializer.readLFloat(clientdata));
+			interactAt = new Vector(clientdata.readFloatLE(), clientdata.readFloatLE(), clientdata.readFloatLE());
 		}
 	}
 

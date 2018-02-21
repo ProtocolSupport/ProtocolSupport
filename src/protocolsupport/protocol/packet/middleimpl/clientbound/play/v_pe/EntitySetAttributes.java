@@ -6,7 +6,6 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.utils.Any;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntitySetAttributes;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
@@ -61,10 +60,10 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 			double attrvalue = (attr.value + add) * mulInc * mulMore;
 			String pename = remapAttrNames.getOrDefault(attr.key, attr.key);
 			Any<Float, Float> minmax = knownMinMax.getOrDefault(pename, new Any<Float, Float>(Float.MIN_VALUE, Float.MAX_VALUE));
-			MiscSerializer.writeLFloat(serializer, minmax.getObj1());
-			MiscSerializer.writeLFloat(serializer, minmax.getObj2());
-			MiscSerializer.writeLFloat(serializer, (float) attrvalue);
-			MiscSerializer.writeLFloat(serializer, (float) attrvalue); //default value
+			serializer.writeFloatLE(minmax.getObj1());
+			serializer.writeFloatLE(minmax.getObj2());
+			serializer.writeFloatLE((float) attrvalue);
+			serializer.writeFloatLE((float) attrvalue); //default value
 			StringSerializer.writeString(serializer, version, pename);
 		}
 		return serializer;

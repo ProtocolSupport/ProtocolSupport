@@ -377,11 +377,11 @@ public class NBTTagCompoundSerializer {
 					break;
 				}
 				case FLOAT: {
-					MiscSerializer.writeLFloat(os, tag.getFloatNumber(key));
+					os.writeFloatLE(tag.getFloatNumber(key));
 					break;
 				}
 				case DOUBLE: {
-					MiscSerializer.writeLDouble(os, tag.getDoubleNumber(key));
+					os.writeDoubleLE(tag.getDoubleNumber(key));
 					break;
 				}
 				case BYTE_ARRAY: {
@@ -453,11 +453,11 @@ public class NBTTagCompoundSerializer {
 					break;
 				}
 				case FLOAT: {
-					MiscSerializer.writeLFloat(os, tag.getFloatNumber(i));
+					os.writeFloatLE(tag.getFloatNumber(i));
 					break;
 				}
 				case DOUBLE: {
-					MiscSerializer.writeLDouble(os, tag.getDoubleNumber(i));
+					os.writeDoubleLE(tag.getDoubleNumber(i));
 					break;
 				}
 				case BYTE_ARRAY: {
@@ -538,11 +538,11 @@ public class NBTTagCompoundSerializer {
 					break;
 				}
 				case FLOAT: {
-					tag.setFloat(name, MiscSerializer.readLFloat(is));
+					tag.setFloat(name, is.readFloatLE());
 					break;
 				}
 				case DOUBLE: {
-					tag.setDouble(name, MiscSerializer.readLDouble(is));
+					tag.setDouble(name, is.readDoubleLE());
 					break;
 				}
 				case BYTE_ARRAY: {
@@ -618,11 +618,11 @@ public class NBTTagCompoundSerializer {
 					break;
 				}
 				case FLOAT: {
-					tag.addFloat(MiscSerializer.readLFloat(is));
+					tag.addFloat(is.readFloatLE());
 					break;
 				}
 				case DOUBLE: {
-					tag.addDouble(MiscSerializer.readLDouble(is));
+					tag.addDouble(is.readDoubleLE());
 					break;
 				}
 				case BYTE_ARRAY: {

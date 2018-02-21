@@ -11,22 +11,6 @@ import protocolsupport.protocol.utils.EnumConstantLookups;
 
 public class MiscSerializer {
 
-	public static float readLFloat(ByteBuf from) {
-		return Float.intBitsToFloat(from.readIntLE());
-	}
-
-	public static void writeLFloat(ByteBuf to, float f) {
-		to.writeIntLE(Float.floatToIntBits(f));
-	}
-
-	public static double readLDouble(ByteBuf from) {
-		return Double.longBitsToDouble(from.readLongLE());
-	}
-
-	public static void writeLDouble(ByteBuf to, double d) {
-		to.writeLongLE(Double.doubleToLongBits(d));
-	}
-
 	public static <T extends Enum<T>> T readVarIntEnum(ByteBuf from, EnumConstantLookups.EnumConstantLookup<T> lookup) {
 		return lookup.getByOrdinal(VarNumberSerializer.readVarInt(from));
 	}

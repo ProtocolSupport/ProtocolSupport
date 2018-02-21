@@ -3,7 +3,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityTeleport;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.NetworkEntity;
@@ -22,9 +21,9 @@ public class EntityTeleport extends MiddleEntityTeleport {
 		} else {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_TELEPORT, version);
 			VarNumberSerializer.writeVarLong(serializer, entityId);
-			MiscSerializer.writeLFloat(serializer, (float) x);
-			MiscSerializer.writeLFloat(serializer, (float) y);
-			MiscSerializer.writeLFloat(serializer, (float) z);
+			serializer.writeFloatLE((float) x);
+			serializer.writeFloatLE((float) y);
+			serializer.writeFloatLE((float) z);
 			serializer.writeByte(pitch);
 			serializer.writeByte(yaw); //head yaw actually
 			serializer.writeByte(yaw);

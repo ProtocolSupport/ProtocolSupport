@@ -6,7 +6,6 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleRespawn;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSuccess;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.Environment;
@@ -25,9 +24,9 @@ public class Respawn extends MiddleRespawn {
 	public static void create(ProtocolVersion version, Environment dimension, int playerEntityId, double posY, RecyclableCollection<ClientBoundPacketData> packets) {
 		ClientBoundPacketData changedim = ClientBoundPacketData.create(PEPacketIDs.CHANGE_DIMENSION, version);
 		VarNumberSerializer.writeSVarInt(changedim, getPeDimensionId(dimension));
-		MiscSerializer.writeLFloat(changedim, 0); //x
-		MiscSerializer.writeLFloat(changedim, 0); //y
-		MiscSerializer.writeLFloat(changedim, 0); //z
+		changedim.writeFloatLE(0); //x
+		changedim.writeFloatLE(0); //y
+		changedim.writeFloatLE(0); //z
 		changedim.writeBoolean(true); //respawn
 		packets.add(changedim);
 		packets.add(LoginSuccess.createPlayStatus(version, 3));

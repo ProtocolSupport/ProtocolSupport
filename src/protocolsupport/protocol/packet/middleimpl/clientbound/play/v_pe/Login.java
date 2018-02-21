@@ -6,7 +6,6 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleLogin;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSuccess;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -38,11 +37,11 @@ public class Login extends MiddleLogin {
 		VarNumberSerializer.writeSVarLong(startgame, playerEntityId); //player eid
 		VarNumberSerializer.writeVarLong(startgame, playerEntityId); //player eid
 		VarNumberSerializer.writeSVarInt(startgame, gamemode.getId()); //player gamemode
-		MiscSerializer.writeLFloat(startgame, 0); //player x
-		MiscSerializer.writeLFloat(startgame, 0); //player y
-		MiscSerializer.writeLFloat(startgame, 0); //player z
-		MiscSerializer.writeLFloat(startgame, 0); //player yaw
-		MiscSerializer.writeLFloat(startgame, 0); //player pitch
+		startgame.writeFloatLE(0); //player x
+		startgame.writeFloatLE(0); //player y
+		startgame.writeFloatLE(0); //player z
+		startgame.writeFloatLE(0); //player yaw
+		startgame.writeFloatLE(0); //player pitch
 		VarNumberSerializer.writeSVarInt(startgame, 0); //seed
 		VarNumberSerializer.writeSVarInt(startgame, Respawn.getPeDimensionId(dimension)); //world dimension
 		VarNumberSerializer.writeSVarInt(startgame, 1); //world type (1 - infinite)
@@ -52,8 +51,8 @@ public class Login extends MiddleLogin {
 		startgame.writeBoolean(false); //disable achievements
 		VarNumberSerializer.writeSVarInt(startgame, 0); //time
 		startgame.writeBoolean(false); //edu mode
-		MiscSerializer.writeLFloat(startgame, 0); //rain level
-		MiscSerializer.writeLFloat(startgame, 0); //lighting level
+		startgame.writeFloatLE(0); //rain level
+		startgame.writeFloatLE(0); //lighting level
 		startgame.writeBoolean(true); //is multiplayer
 		startgame.writeBoolean(false); //broadcast to lan
 		startgame.writeBoolean(false); //broadcast to xbl
@@ -69,7 +68,7 @@ public class Login extends MiddleLogin {
 		StringSerializer.writeString(startgame, connection.getVersion(), ""); //level ID (empty string)
 		StringSerializer.writeString(startgame, connection.getVersion(), ""); //world name (empty string)
 		StringSerializer.writeString(startgame, connection.getVersion(), ""); //premium world template id (empty string)
-		startgame.writeBoolean(false); //unknown bool
+		startgame.writeBoolean(false); //is trial
 		startgame.writeLongLE(0); //world ticks
 		VarNumberSerializer.writeSVarInt(startgame, 0); //enchantment seed FFS MOJANG
 		packets.add(startgame);

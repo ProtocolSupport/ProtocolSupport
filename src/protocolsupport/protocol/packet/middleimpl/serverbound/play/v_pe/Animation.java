@@ -2,7 +2,6 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleAnimation;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class Animation extends MiddleAnimation {
@@ -12,7 +11,7 @@ public class Animation extends MiddleAnimation {
 		int action = VarNumberSerializer.readSVarInt(clientdata);
 		VarNumberSerializer.readVarLong(clientdata);
 		if ((action & 0x80) != 0) {
-			MiscSerializer.readLFloat(clientdata);
+			clientdata.readFloatLE();
 		}
 	}
 
