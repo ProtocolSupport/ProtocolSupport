@@ -57,7 +57,7 @@ public class PlayerInfo extends MiddlePlayerInfo {
 					} else {
 						writeSkinData(version, serializer, false, false, DefaultPESkinsProvider.DEFAULT_STEVE);
 						if (skininfo != null) {
-							skinprovider.scheduleGetSkinData(skininfo.getObj2(), info.uuid, new SkinUpdate(connection, info.uuid, cache.getPEClientUUID(), skininfo.getObj1()));
+							skinprovider.scheduleGetSkinData(skininfo.getObj2(), new SkinUpdate(connection, info.uuid, cache.getPEClientUUID(), skininfo.getObj1()));
 						}
 					}
 					StringSerializer.writeString(serializer, version, ""); //xuid
@@ -118,7 +118,6 @@ public class PlayerInfo extends MiddlePlayerInfo {
 			MiscSerializer.writeUUID(serializer, connection.getVersion(), uuid.equals(connection.getPlayer().getUniqueId()) ? clientUUID : uuid);
 			writeSkinData(connection.getVersion(), serializer, true, isNormalModel, skindata);
 			byte[] rawpacket = MiscSerializer.readAllBytes(serializer);
-			System.err.println(skindata.length);
 			connection.sendRawPacket(rawpacket);
 		}
 	}
