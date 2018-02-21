@@ -9,21 +9,16 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
-//TODO: put a sane limit on queue size and replace booleans with enum state
 public class PEMovementConfirmationPacketQueue {
 
-	protected final ArrayList<ClientBoundPacketData> queue = new ArrayList<>(256);
-	protected boolean foundLoginPlayStatus = false;
-	protected boolean foundRespawnPlayStatus = false;
-	protected boolean waitingConfirmation = false;
-	protected boolean waitingUnlock = false;
-	protected boolean unlockScheduled = false;
+	protected final ArrayList<ClientBoundPacketData> queue = new ArrayList<>(2000);
+	protected State state = State.SCANNING_FOR_LOGIN_STATUS;
 
 	@SuppressWarnings("unchecked")
 	public RecyclableCollection<ClientBoundPacketData> processClientBoundPackets(RecyclableCollection<ClientBoundPacketData> packets) {
 		try {
 			RecyclableArrayList<ClientBoundPacketData> allowed = RecyclableArrayList.create();
-			if (!waitingConfirmation && !queue.isEmpty()) {
+			if (isPacketSendingAllowed() && !queue.isEmpty()) {
 				ArrayList<ClientBoundPacketData> qclone = (ArrayList<ClientBoundPacketData>) queue.clone();
 				queue.clear();
 				processClientBoundPackets0(qclone, allowed);
@@ -37,22 +32,18 @@ public class PEMovementConfirmationPacketQueue {
 
 	private void processClientBoundPackets0(Collection<ClientBoundPacketData> sendpackets, RecyclableArrayList<ClientBoundPacketData> allowed) {
 		for (ClientBoundPacketData sendpacket : sendpackets) {
-			if (waitingConfirmation) {
+			if (!isPacketSendingAllowed()) {
 				queue.add(sendpacket);
 			} else {
 				allowed.add(sendpacket);
 				switch (sendpacket.getPacketId()) {
 					case PEPacketIDs.PLAY_STATUS: {
-						if (foundLoginPlayStatus) {
-							foundRespawnPlayStatus = true;
-						} else {
-							foundLoginPlayStatus = true;
-						}
+						state = state == State.SCANNING_FOR_LOGIN_STATUS ? State.SCANNING_FOR_PLAY_STATUS : State.SCANNING_FOR_SET_POSITION;
 						break;
 					}
 					case PEPacketIDs.PLAYER_MOVE: {
-						if (foundRespawnPlayStatus) {
-							waitingConfirmation = true;
+						if (state == State.SCANNING_FOR_SET_POSITION) {
+							state = State.WAITING_CLIENT_MOVE_CONFIRM;
 						}
 						break;
 					}
@@ -61,23 +52,33 @@ public class PEMovementConfirmationPacketQueue {
 		}
 	}
 
+	private boolean isPacketSendingAllowed() {
+		switch (state) {
+			case SCANNING_FOR_LOGIN_STATUS:
+			case SCANNING_FOR_PLAY_STATUS:
+			case SCANNING_FOR_SET_POSITION: {
+				return true;
+			}
+			default: {
+				return false;
+			}
+		}
+	}
+
 	public void unlock() {
-		foundRespawnPlayStatus = false;
-		waitingConfirmation = false;
-		waitingUnlock = false;
-		unlockScheduled = false;
+		state = State.SCANNING_FOR_PLAY_STATUS;
 	}
 
 	public RecyclableCollection<ServerBoundPacketData> processServerBoundPackets(RecyclableCollection<ServerBoundPacketData> packets) {
 		try {
 			RecyclableArrayList<ServerBoundPacketData> allowed = RecyclableArrayList.create();
 			for (ServerBoundPacketData packet : packets) {
-				if (waitingUnlock) {
+				if (state == State.WAITING_CLIENT_MOVE_CONFIRM && (packet.getPacketType() == ServerBoundPacket.PLAY_POSITION_LOOK)) {
+					state = State.WAITING_UNLOCK;
+				}
+				if (state == State.WAITING_UNLOCK || state == State.UNLOCK_SCHEDULED) {
 					packet.recycle();
 					continue;
-				}
-				if (waitingConfirmation && (packet.getPacketType() == ServerBoundPacket.PLAY_POSITION_LOOK)) {
-					waitingUnlock = true;
 				}
 				allowed.add(packet);
 			}
@@ -88,14 +89,15 @@ public class PEMovementConfirmationPacketQueue {
 	}
 
 	public boolean shouldScheduleUnlock() {
-		if (!waitingUnlock) {
+		if (state != State.WAITING_UNLOCK || state == State.UNLOCK_SCHEDULED) {
 			return false;
 		}
-		if (unlockScheduled) {
-			return false;
-		}
-		unlockScheduled = true;
+		state = State.UNLOCK_SCHEDULED;
 		return true;
+	}
+
+	protected static enum State {
+		SCANNING_FOR_LOGIN_STATUS, SCANNING_FOR_PLAY_STATUS, SCANNING_FOR_SET_POSITION, WAITING_CLIENT_MOVE_CONFIRM, WAITING_UNLOCK, UNLOCK_SCHEDULED
 	}
 
 }

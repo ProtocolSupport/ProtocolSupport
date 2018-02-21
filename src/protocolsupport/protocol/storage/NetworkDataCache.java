@@ -431,4 +431,11 @@ public class NetworkDataCache {
 		return mvconfirmqueue;
 	}
 
+	private boolean fakesetpositionswitch = true;
+
+	public double getFakeSetPositionY() {
+		fakesetpositionswitch = !fakesetpositionswitch;
+		return fakesetpositionswitch ? 20.0 : 30.0;
+	}
+
 }

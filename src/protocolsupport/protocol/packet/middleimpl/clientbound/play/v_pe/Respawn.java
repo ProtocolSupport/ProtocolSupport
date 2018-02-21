@@ -18,11 +18,11 @@ public class Respawn extends MiddleRespawn {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		create(connection.getVersion(), dimension, cache.getSelfPlayerEntityId(), packets);
+		create(connection.getVersion(), dimension, cache.getSelfPlayerEntityId(), cache.getFakeSetPositionY(), packets);
 		return packets;
 	}
 
-	public static void create(ProtocolVersion version, Environment dimension, int playerEntityId, RecyclableCollection<ClientBoundPacketData> packets) {
+	public static void create(ProtocolVersion version, Environment dimension, int playerEntityId, double posY, RecyclableCollection<ClientBoundPacketData> packets) {
 		ClientBoundPacketData changedim = ClientBoundPacketData.create(PEPacketIDs.CHANGE_DIMENSION, version);
 		VarNumberSerializer.writeSVarInt(changedim, getPeDimensionId(dimension));
 		MiscSerializer.writeLFloat(changedim, 0); //x
@@ -31,12 +31,16 @@ public class Respawn extends MiddleRespawn {
 		changedim.writeBoolean(true); //respawn
 		packets.add(changedim);
 		packets.add(LoginSuccess.createPlayStatus(version, 3));
+		addFakeChunksAndPos(version, playerEntityId, posY, packets);
+	}
+
+	public static void addFakeChunksAndPos(ProtocolVersion version, int playerEntityId, double posY, RecyclableCollection<ClientBoundPacketData> packets) {
 		for (int x = -2; x <= 2; x++) {
 			for (int z = -2; z <= 2; z++) {
 				packets.add(Chunk.createEmptyChunk(version, x, z));
 			}
 		}
-		packets.add(Position.create(version, playerEntityId, 0, 20, 0, 0, 0, Position.ANIMATION_MODE_TELEPORT));
+		packets.add(Position.create(version, playerEntityId, 0, posY, 0, 0, 0, Position.ANIMATION_MODE_TELEPORT));
 	}
 
 	public static int getPeDimensionId(Environment dimId) {

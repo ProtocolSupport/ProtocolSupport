@@ -84,18 +84,10 @@ public class Login extends MiddleLogin {
 		VarNumberSerializer.writeSVarInt(chunkradius, (int) Math.ceil((Bukkit.getViewDistance() + 1) * Math.sqrt(2)));
 		packets.add(chunkradius);
 		//fake chunks with position, because pe doesn't like spawning in no chunk world
-		for (int x = -2; x <= 2; x++) {
-			for (int z = -2; z <= 2; z++) {
-				packets.add(Chunk.createEmptyChunk(version, x, z));
-			}
-		}
-		//teleport to empty world, this will also unlock packet sending that was stalled by movement confirmation
-		packets.add(protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Position.create(
-			version, playerEntityId, 0, 20, 0, 0, 0, protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Position.ANIMATION_MODE_TELEPORT
-		));
+		Respawn.addFakeChunksAndPos(version, playerEntityId, cache.getFakeSetPositionY(), packets);
 		//add two dimension switches to make sure that player ends up in right dimension even if bungee dimension switch on server switch broke stuff
-		Respawn.create(version, dimension != Environment.OVERWORLD ? Environment.OVERWORLD: Environment.NETHER, playerEntityId, packets);
-		Respawn.create(version, dimension, playerEntityId, packets);
+		Respawn.create(version, dimension != Environment.OVERWORLD ? Environment.OVERWORLD: Environment.THE_END, playerEntityId, cache.getFakeSetPositionY(), packets);
+		Respawn.create(version, dimension, playerEntityId, cache.getFakeSetPositionY(), packets);
 		return packets;
 	}
 
