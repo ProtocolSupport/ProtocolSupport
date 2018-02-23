@@ -14,6 +14,7 @@ import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.protocol.utils.types.GameMode;
+import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -25,17 +26,21 @@ public class Login extends MiddleLogin {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
+		NetworkEntity player = cache.getWatchedSelf();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
+		//Send fake resource packet for sounds.
 		ClientBoundPacketData resourcepack = ClientBoundPacketData.create(PEPacketIDs.RESOURCE_PACK, version);
 		resourcepack.writeBoolean(false); // required
 		resourcepack.writeShortLE(0); //beh packs count
 		resourcepack.writeShortLE(0); //res packs count
 		packets.add(resourcepack);
+		//Send fake resource stack for sounds.
 		ClientBoundPacketData resourcestack = ClientBoundPacketData.create(PEPacketIDs.RESOURCE_STACK, version);
 		resourcestack.writeBoolean(false); // required
 		VarNumberSerializer.writeVarInt(resourcestack, 0); //beh packs count
 		VarNumberSerializer.writeVarInt(resourcestack, 0); //res packs count
 		packets.add(resourcestack);
+		//Send actual start game information.
 		ClientBoundPacketData startgame = ClientBoundPacketData.create(PEPacketIDs.START_GAME, version);
 		VarNumberSerializer.writeSVarLong(startgame, playerEntityId); //player eid
 		VarNumberSerializer.writeVarLong(startgame, playerEntityId); //player eid
@@ -62,7 +67,6 @@ public class Login extends MiddleLogin {
 		startgame.writeBoolean(true); //commands enabled
 		startgame.writeBoolean(false); //needs texture pack
 		VarNumberSerializer.writeVarInt(startgame, 0); //game rules
-		startgame.writeBoolean(false); //bonus chest enabled
 		startgame.writeBoolean(false); //player map enabled
 		startgame.writeBoolean(false); //trust players
 		VarNumberSerializer.writeSVarInt(startgame, PEAdventureSettings.GROUP_NORMAL); //permission level
@@ -75,31 +79,32 @@ public class Login extends MiddleLogin {
 		startgame.writeLongLE(0); //world ticks
 		VarNumberSerializer.writeSVarInt(startgame, 0); //enchantment seed FFS MOJANG
 		packets.add(startgame);
-		//player metadata and settings update, so it won't behave strangely until metadata update is sent by server
+		//Player metadata and settings update, so it won't behave strangely until metadata update is sent by server
 		packets.add(PEAdventureSettings.createPacket(cache));
-		packets.add(EntityMetadata.createFaux(cache.getWatchedSelf(), cache.getLocale(), version));
-		//can now switch to game state
+		packets.add(EntityMetadata.createFaux(player, cache.getLocale(), version));
+		//Can now switch to game state
 		packets.add(LoginSuccess.createPlayStatus(version, 3));
-		//send chunk radius update without waiting for request, works anyway
+		//Send chunk radius update without waiting for request, works anyway
 		//PE uses circle to calculate visible chunks, so the view distance should cover all chunks that are sent by server (pc square should fit into pe circle)
 		ClientBoundPacketData chunkradius = ClientBoundPacketData.create(PEPacketIDs.CHUNK_RADIUS, version);
 		VarNumberSerializer.writeSVarInt(chunkradius, (int) Math.ceil((Bukkit.getViewDistance() + 1) * Math.sqrt(2)));
 		packets.add(chunkradius);
-		packets.add(EntityMetadata.createFaux(cache.getWatchedSelf(), cache.getLocale(), version)); //Add faux flags right on login. If something important needs to be send also, the server will take care with a metadata update.
-		ClientBoundPacketData craftPacket = ClientBoundPacketData.create(PEPacketIDs.CRAFTING_DATA, version); //Send crafting recipes
+		//Send crafting recipes
+		ClientBoundPacketData craftPacket = ClientBoundPacketData.create(PEPacketIDs.CRAFTING_DATA, version); 
 		craftPacket.writeBytes(PECraftingManager.getInstance().getAllRecipes());
 		packets.add(craftPacket);
-		PECreativeInventory peInv = PECreativeInventory.getInstance(); //Send all creative items (from PE json)
+		//Send all creative items (from PE json)
+		PECreativeInventory peInv = PECreativeInventory.getInstance(); 
 		ClientBoundPacketData creativeInventoryPacket = ClientBoundPacketData.create(PEPacketIDs.INVENTORY_CONTENT, version);
 		VarNumberSerializer.writeVarInt(creativeInventoryPacket, PESource.POCKET_CREATIVE_INVENTORY);
 		VarNumberSerializer.writeVarInt(creativeInventoryPacket, peInv.getItemCount());
 		creativeInventoryPacket.writeBytes(peInv.getCreativeItems());
 		packets.add(creativeInventoryPacket);
-		//fake chunks with position, because pe doesn't like spawning in no chunk world
-		Respawn.addFakeChunksAndPos(version, playerEntityId, cache.getFakeSetPositionY(), packets);
-		//add two dimension switches to make sure that player ends up in right dimension even if bungee dimension switch on server switch broke stuff
-		Respawn.create(version, dimension != Environment.OVERWORLD ? Environment.OVERWORLD: Environment.THE_END, playerEntityId, cache.getFakeSetPositionY(), packets);
-		Respawn.create(version, dimension, playerEntityId, cache.getFakeSetPositionY(), packets);
+		//Fake chunks with position, because pe doesn't like spawning in no chunk world
+		Respawn.addFakeChunksAndPos(version, player, cache.getFakeSetPositionY(), packets);
+		//Add two dimension switches to make sure that player ends up in right dimension even if bungee dimension switch on server switch broke stuff
+		Respawn.create(version, dimension != Environment.OVERWORLD ? Environment.OVERWORLD: Environment.THE_END, player, cache.getFakeSetPositionY(), packets);
+		Respawn.create(version, dimension, player, cache.getFakeSetPositionY(), packets);
 		return packets;
 	}
 

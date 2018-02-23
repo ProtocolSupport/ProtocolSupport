@@ -99,8 +99,8 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				face = VarNumberSerializer.readSVarInt(clientdata);
 				slot = VarNumberSerializer.readSVarInt(clientdata);
 				itemstack = ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), cache.getLocale(), true);
-				fromX = MiscSerializer.readLFloat(clientdata); fromY = MiscSerializer.readLFloat(clientdata); fromZ = MiscSerializer.readLFloat(clientdata);
-				cX = MiscSerializer.readLFloat(clientdata); cY = MiscSerializer.readLFloat(clientdata); cZ = MiscSerializer.readLFloat(clientdata);
+				fromX = clientdata.readFloatLE(); fromY = clientdata.readFloatLE(); fromZ = clientdata.readFloatLE();
+				cX = clientdata.readFloatLE(); cY = clientdata.readFloatLE(); cZ = clientdata.readFloatLE();
 				break;
 			}
 			case ACTION_INTERACT: {
@@ -108,15 +108,15 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				subTypeId = VarNumberSerializer.readVarInt(clientdata);
 				slot = VarNumberSerializer.readSVarInt(clientdata);
 				itemstack = ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), cache.getLocale(), true);
-				fromX = MiscSerializer.readLFloat(clientdata); fromY = MiscSerializer.readLFloat(clientdata); fromZ = MiscSerializer.readLFloat(clientdata);
-				cX = MiscSerializer.readLFloat(clientdata); cY = MiscSerializer.readLFloat(clientdata); cZ = MiscSerializer.readLFloat(clientdata);
+				fromX = clientdata.readFloatLE(); fromY = clientdata.readFloatLE(); fromZ = clientdata.readFloatLE();
+				cX = clientdata.readFloatLE(); cY = clientdata.readFloatLE(); cZ = clientdata.readFloatLE();
 				break;
 			}
 			case ACTION_RELEASE_ITEM: {
 				subTypeId = VarNumberSerializer.readVarInt(clientdata);
 				slot = VarNumberSerializer.readSVarInt(clientdata);
 				itemstack = ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), cache.getLocale(), true);
-				fromX = MiscSerializer.readLFloat(clientdata); fromY = MiscSerializer.readLFloat(clientdata); fromZ = MiscSerializer.readLFloat(clientdata);
+				fromX = clientdata.readFloatLE(); fromY = clientdata.readFloatLE(); fromZ = clientdata.readFloatLE();
 				break;
 			}
 			case ACTION_NORMAL:

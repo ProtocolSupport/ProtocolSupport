@@ -33,8 +33,8 @@ import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
 import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.protocol.utils.types.Position;
@@ -85,6 +85,24 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 		} catch (IOException e) {
 		}
 		return packet;
+	}
+	
+	@Override
+	public Object createInboundCustomPayloadPacket(String tag, byte[] data) {
+		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer());
+		StringSerializer.writeString(serializer, ProtocolVersionsHelper.LATEST_PC, tag);
+		serializer.writeBytes(data);
+		PacketPlayInCustomPayload packet = new PacketPlayInCustomPayload();
+		try {
+			packet.a(serializer);
+		} catch (IOException e) {
+		}
+		return packet;
+	}
+	
+	@Override
+	public Object createOutboundUpdateChunkPacket(Chunk chunk) {
+		return new PacketPlayOutMapChunk(((CraftChunk) chunk).getHandle(), 0xFFFF);
 	}
 
 	@Override

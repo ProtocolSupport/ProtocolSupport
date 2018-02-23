@@ -5,7 +5,6 @@ import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleMoveVehicle;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSteerBoat;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.minecraftdata.PocketData;
 import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData;
@@ -27,9 +26,9 @@ public class MoveVehicle extends ServerBoundMiddlePacket {
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		vehicleId = (int) VarNumberSerializer.readVarLong(clientdata);
-		x = MiscSerializer.readLFloat(clientdata);
-		y = MiscSerializer.readLFloat(clientdata);
-		z = MiscSerializer.readLFloat(clientdata);
+		x = clientdata.readFloatLE();
+		y = clientdata.readFloatLE();
+		z = clientdata.readFloatLE();
 		pitch = clientdata.readByte();
 		headYaw = clientdata.readByte();
 		yaw = clientdata.readByte();
