@@ -6,7 +6,6 @@ import java.util.HashMap;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntitySetAttributes;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
@@ -85,10 +84,10 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 			float[] minmax = knownMinMax.getOrDefault(pename, new float[]{0, 1, Float.MAX_VALUE});
 			if (pename.equals("minecraft:health")) { minmax[2] = entity.getDataCache().getMaxHealth(); }
 			if (pename.equals("minecraft:horse.jump_strength")) { System.out.println("HORSAAAYYYY!!!"); }
-			MiscSerializer.writeLFloat(serializer, minmax[0]);
-			MiscSerializer.writeLFloat(serializer, minmax[2]);
-			MiscSerializer.writeLFloat(serializer, (float) attrvalue);
-			MiscSerializer.writeLFloat(serializer, minmax[1] == -1F ? (float) attrvalue : minmax[1]); //default value
+			serializer.writeFloatLE(minmax[0]);
+			serializer.writeFloatLE(minmax[2]);
+			serializer.writeFloatLE((float) attrvalue);
+			serializer.writeFloatLE(minmax[1] == -1F ? (float) attrvalue : minmax[1]); //default value
 			StringSerializer.writeString(serializer, version, pename);
 			System.out.println("Sending ATTR: " + pename);
 		}

@@ -2,7 +2,6 @@ package protocolsupport.protocol.typeremapper.pe;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.types.Position;
 
@@ -125,9 +124,9 @@ public class PELevelEvent {
 	public static ClientBoundPacketData createPacket(int levelEvent, float x, float y, float z, int data) {
 		ClientBoundPacketData clientLevelEvent = ClientBoundPacketData.create(PEPacketIDs.LEVEL_EVENT, ProtocolVersion.MINECRAFT_PE);
 		VarNumberSerializer.writeSVarInt(clientLevelEvent, levelEvent);
-		MiscSerializer.writeLFloat(clientLevelEvent, x);
-		MiscSerializer.writeLFloat(clientLevelEvent, y);
-		MiscSerializer.writeLFloat(clientLevelEvent, z);
+		clientLevelEvent.writeFloatLE(x);
+		clientLevelEvent.writeFloatLE(y);
+		clientLevelEvent.writeFloatLE(z);
 		VarNumberSerializer.writeSVarInt(clientLevelEvent, data);
 		return clientLevelEvent;
 	}

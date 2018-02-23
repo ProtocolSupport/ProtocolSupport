@@ -4,7 +4,6 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleAnimation;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -23,7 +22,7 @@ public class Animation extends ServerBoundMiddlePacket {
 		action = VarNumberSerializer.readSVarInt(clientdata);
 		entityId = VarNumberSerializer.readVarLong(clientdata);
 		if ((action & 0x80) != 0) {
-			paddleTime = MiscSerializer.readLFloat(clientdata);
+			paddleTime = clientdata.readFloatLE();
 		}
 	}
 

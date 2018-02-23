@@ -3,7 +3,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldCustomSound;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
@@ -23,8 +22,8 @@ public class WorldCustomSound extends MiddleWorldCustomSound {
 		VarNumberSerializer.writeSVarInt(serializer, x);
 		VarNumberSerializer.writeVarInt(serializer, y);
 		VarNumberSerializer.writeSVarInt(serializer, z);
-		MiscSerializer.writeLFloat(serializer, volume);
-		MiscSerializer.writeLFloat(serializer, pitch);
+		serializer.writeFloatLE(volume);
+		serializer.writeFloatLE(pitch);
 		return serializer;
 	}
 

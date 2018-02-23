@@ -3,7 +3,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetHealth;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -20,9 +19,9 @@ public class SetHealth extends MiddleSetHealth {
 				EntitySetAttributes.createAttribute("minecraft:player.saturation", saturation)));
 		if (health <= 0.0) {
 			ClientBoundPacketData respawnpos = ClientBoundPacketData.create(PEPacketIDs.RESPAWN_POS, version);
-			MiscSerializer.writeLFloat(respawnpos, 0);
-			MiscSerializer.writeLFloat(respawnpos, 0);
-			MiscSerializer.writeLFloat(respawnpos, 0);
+			respawnpos.writeFloatLE(0);
+			respawnpos.writeFloatLE(0);
+			respawnpos.writeFloatLE(0);
 			packets.add(respawnpos);
 		}
 		return packets;

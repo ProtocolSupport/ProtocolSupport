@@ -31,7 +31,7 @@ public class GlowStoneSyncTickerStarter extends ChannelInboundHandlerAdapter {
 		private final GlowSession session;
 		public SyncTicker(Channel channel) {
 			this.channel = channel;
-			this.session = GlowStoneMiscUtils.getNetworkManager(channel.pipeline()).getSession().get();
+			this.session = GlowStoneMiscUtils.getNetworkManager(channel.pipeline()).getSession();
 		}
 
 		@Override

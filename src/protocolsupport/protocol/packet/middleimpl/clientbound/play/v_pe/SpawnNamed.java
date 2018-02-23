@@ -20,15 +20,15 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		StringSerializer.writeString(serializer, version, name);
 		VarNumberSerializer.writeSVarLong(serializer, entity.getId());
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
-		MiscSerializer.writeLFloat(serializer, (float) x);
-		MiscSerializer.writeLFloat(serializer, (float) y);
-		MiscSerializer.writeLFloat(serializer, (float) z);
-		MiscSerializer.writeLFloat(serializer, 0F); //mot x
-		MiscSerializer.writeLFloat(serializer, 0F); //mot y
-		MiscSerializer.writeLFloat(serializer, 0F); //mot z
-		MiscSerializer.writeLFloat(serializer, pitch);
-		MiscSerializer.writeLFloat(serializer, yaw); //head yaw actually
-		MiscSerializer.writeLFloat(serializer, yaw);
+		serializer.writeFloatLE((float) x);
+		serializer.writeFloatLE((float) y);
+		serializer.writeFloatLE((float) z);
+		serializer.writeFloatLE(0F); //mot x
+		serializer.writeFloatLE(0F); //mot y
+		serializer.writeFloatLE(0F); //mot z
+		serializer.writeFloatLE(pitch);
+		serializer.writeFloatLE(yaw); //head yaw actually
+		serializer.writeFloatLE(yaw);
 		VarNumberSerializer.writeSVarInt(serializer, 0); //held itemstack (it is actually a slot, but we only send null itemstack here, so we only write 0 id)
 
 		EntityMetadata.encodeMeta(serializer, version, cache.getLocale(), EntityMetadata.transform(entity, metadata.getRemapped(), version));

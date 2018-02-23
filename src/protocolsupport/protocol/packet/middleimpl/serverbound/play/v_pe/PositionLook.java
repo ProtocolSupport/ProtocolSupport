@@ -6,7 +6,6 @@ import protocolsupport.protocol.packet.middle.serverbound.play.MiddlePositionLoo
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleTeleportAccept;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateSign;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
@@ -33,12 +32,12 @@ public class PositionLook extends ServerBoundMiddlePacket {
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		VarNumberSerializer.readVarLong(clientdata); //entity id
-		x = MiscSerializer.readLFloat(clientdata);
-		y = MiscSerializer.readLFloat(clientdata) - 1.6200000047683716D;
-		z = MiscSerializer.readLFloat(clientdata);
-		pitch = MiscSerializer.readLFloat(clientdata);
-		headYaw = MiscSerializer.readLFloat(clientdata);
-		yaw = MiscSerializer.readLFloat(clientdata);
+		x = clientdata.readFloatLE();
+		y = clientdata.readFloatLE() - 1.6200000047683716D;
+		z = clientdata.readFloatLE();
+		pitch = clientdata.readFloatLE();
+		headYaw = clientdata.readFloatLE();
+		yaw = clientdata.readFloatLE();
 		mode = clientdata.readByte(); //mode
 		onGround = clientdata.readBoolean();
 		vehicle = VarNumberSerializer.readVarLong(clientdata);

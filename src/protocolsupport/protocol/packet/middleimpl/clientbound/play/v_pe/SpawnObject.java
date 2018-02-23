@@ -4,7 +4,6 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnObject;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
@@ -84,12 +83,12 @@ public class SpawnObject extends MiddleSpawnObject {
 				VarNumberSerializer.writeSVarLong(spawn, entityId);
 				VarNumberSerializer.writeVarLong(spawn, entityId);
 				ItemStackSerializer.writeItemStack(spawn, version, cache.getLocale(), itemstack, true);
-				MiscSerializer.writeLFloat(spawn, (float) x);
-				MiscSerializer.writeLFloat(spawn, (float) y);
-				MiscSerializer.writeLFloat(spawn, (float) z);
-				MiscSerializer.writeLFloat(spawn, motX / 8000);
-				MiscSerializer.writeLFloat(spawn, motY / 8000);
-				MiscSerializer.writeLFloat(spawn, motZ / 8000);
+				spawn.writeFloatLE((float) x);
+				spawn.writeFloatLE((float) y);
+				spawn.writeFloatLE((float) z);
+				spawn.writeFloatLE(motX / 8000);
+				spawn.writeFloatLE(motY / 8000);
+				spawn.writeFloatLE(motZ / 8000);
 				VarNumberSerializer.writeVarInt(spawn, 0); //Metadata?
 				updatepackets.add(spawn);
 				spawned = true;
