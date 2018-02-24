@@ -264,11 +264,16 @@ public class PEDataValues {
 		// Podzol
 		registerBlockAndItemRemap(3, 2, 243, 0);
 		// Colored Fences
-		registerBlockAndItemRemap(188, 85, 1);
-		registerBlockAndItemRemap(189, 85, 2);
-		registerBlockAndItemRemap(190, 85, 3);
-		registerBlockAndItemRemap(192, 85, 4);
-		registerBlockAndItemRemap(191, 85, 5);
+		registerBlockRemap(188, 85, 1);
+		registerBlockRemap(189, 85, 2);
+		registerBlockRemap(190, 85, 3);
+		registerBlockRemap(192, 85, 4);
+		registerBlockRemap(191, 85, 5);
+		registerItemRemap(188, 0, 85, 1);
+		registerItemRemap(189, 0, 85, 2);
+		registerItemRemap(190, 0, 85, 3);
+		registerItemRemap(192, 0, 85, 4);
+		registerItemRemap(191, 0, 85, 5);
 		// Shulker Boxes
 		registerBlockAndItemRemap(219, 218, 0); // WHITE_SHULKER_BOX
 		registerBlockAndItemRemap(220, 218, 1); // ORANGE_SHULKER_BOX
