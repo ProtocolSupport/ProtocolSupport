@@ -1,13 +1,28 @@
 package protocolsupport.protocol.packet.handler;
 
+import java.security.PrivateKey;
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.UUID;
+import java.util.concurrent.Executor;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+
+import javax.crypto.SecretKey;
+
+import org.apache.commons.lang3.Validate;
+import org.bukkit.Bukkit;
+
 import com.google.common.base.Charsets;
+
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelPipeline;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import org.apache.commons.lang3.Validate;
-import org.bukkit.Bukkit;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolType;
@@ -15,18 +30,11 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.PlayerLoginStartEvent;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_pe.ClientLogin;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
-
-import javax.crypto.SecretKey;
-import java.security.PrivateKey;
-import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.UUID;
-import java.util.concurrent.*;
-import java.util.logging.Level;
 
 public abstract class AbstractLoginListener implements IHasProfile {
 
@@ -36,7 +44,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 		ProtocolSupport.logInfo(MessageFormat.format("Login threads keep alive time: {0}", loginThreadKeepAlive));
 	}
 
-	private static final Executor loginprocessor = new ThreadPoolExecutor(
+	protected static final Executor loginprocessor = new ThreadPoolExecutor(
 		1, Integer.MAX_VALUE,
 		loginThreadKeepAlive, TimeUnit.SECONDS,
 		new LinkedBlockingQueue<Runnable>(),
@@ -131,11 +139,35 @@ public abstract class AbstractLoginListener implements IHasProfile {
 					isOnlineMode = event.isOnlineMode();
 					useOnlineModeUUID = event.useOnlineModeUUID();
 					forcedUUID = event.getForcedUUID();
-					if (isOnlineMode) {
-						state = LoginState.KEY;
-						networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginEncryptionBeginPacket(ServerPlatform.get().getMiscUtils().getEncryptionKeyPair().getPublic(), randomBytes));
-					} else {
-						new PlayerAuthenticationTask(AbstractLoginListener.this, isOnlineMode).run();
+
+					switch (connection.getVersion().getProtocolType()) {
+						case PC: {
+							if (isOnlineMode) {
+								state = LoginState.KEY;
+								networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginEncryptionBeginPacket(ServerPlatform.get().getMiscUtils().getEncryptionKeyPair().getPublic(), randomBytes));
+							} else {
+								new PlayerAuthenticationTask(AbstractLoginListener.this, isOnlineMode).run();
+							}
+							break;
+						}
+						case PE: {
+							if (isOnlineMode) {
+								String xuid = (String) connection.getMetadata(ClientLogin.XUID_METADATA_KEY);
+								if (xuid == null) {
+									disconnect("This server is in online mode, but no valid XUID was found (XBOX live auth required)");
+									return;
+								} else {
+									if (useOnlineModeUUID && (forcedUUID == null)) {
+										forcedUUID = new UUID(0, Long.parseLong(xuid));
+									}
+								}
+							}
+							new PlayerAuthenticationTask(AbstractLoginListener.this, false).run();
+							break;
+						}
+						default: {
+							throw new IllegalArgumentException(MessageFormat.format("Unknown protocol type {0}", connection.getVersion().getProtocolType()));
+						}
 					}
 				} catch (Throwable t) {
 					AbstractLoginListener.this.disconnect("Error occured while logging in");
@@ -198,6 +230,9 @@ public abstract class AbstractLoginListener implements IHasProfile {
 			newProfile.getProperties().putAll(profile.getProperties());
 			profile = newProfile;
 		}
+
+		Bukkit.getLogger().info("UUID of player " + profile.getName() + " is " + profile.getUUID());
+
 		if (hasCompression(connection.getVersion())) {
 			int threshold = ServerPlatform.get().getMiscUtils().getCompressionThreshold();
 			if (threshold >= 0) {

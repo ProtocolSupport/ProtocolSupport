@@ -24,7 +24,7 @@ import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class LogicHandler extends ChannelDuplexHandler {
 
-	private static final HashSet<Class<? extends Throwable>> ignoreExceptions = new HashSet<>();
+	protected static final HashSet<Class<? extends Throwable>> ignoreExceptions = new HashSet<>();
 	static {
 		ignoreExceptions.add(ClosedChannelException.class);
 		ignoreExceptions.add(ReadTimeoutException.class);
@@ -32,7 +32,7 @@ public class LogicHandler extends ChannelDuplexHandler {
 		ignoreExceptions.add(NativeIoException.class);
 	}
 
-	private final ConnectionImpl connection;
+	protected final ConnectionImpl connection;
 	public LogicHandler(ConnectionImpl connection) {
 		this.connection = connection;
 	}
@@ -65,7 +65,7 @@ public class LogicHandler extends ChannelDuplexHandler {
 		}
 	}
 
-	private static final class NetworkException extends Exception {
+	protected static final class NetworkException extends Exception {
 		private static final long serialVersionUID = 1L;
 
 		public NetworkException(Throwable original, ConnectionImpl connection) {

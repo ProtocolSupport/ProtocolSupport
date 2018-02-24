@@ -11,6 +11,8 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.AttributeKey;
+import io.netty.util.Recycler;
+import io.netty.util.Recycler.Handle;
 import protocolsupport.api.Connection;
 import protocolsupport.api.Connection.PacketListener.PacketEvent;
 import protocolsupport.api.Connection.PacketListener.RawPacketEvent;
@@ -144,86 +146,137 @@ public class ConnectionImpl extends Connection {
 		this.version = version;
 	}
 
-	private final LPacketEvent packetevent = new LPacketEvent();
+	protected static class LPacketEvent extends PacketEvent implements AutoCloseable {
 
-	private static class LPacketEvent extends PacketEvent {
-		public void init(Object packet) {
-			this.packet = packet;
-			this.cancelled = false;
+		protected static final Recycler<LPacketEvent> recycler = new Recycler<LPacketEvent>() {
+			@Override
+			protected LPacketEvent newObject(Handle<LPacketEvent> handle) {
+				return new LPacketEvent(handle);
+			}
+		};
+
+		public static LPacketEvent create(Object packet) {
+			LPacketEvent packetevent = recycler.get();
+			packetevent.packet = packet;
+			packetevent.cancelled = false;
+			return packetevent;
 		}
+
+		protected final Handle<LPacketEvent> handle;
+		protected LPacketEvent(Handle<LPacketEvent> handle) {
+			this.handle = handle;
+		}
+
+		public void recycle() {
+			this.handle.recycle(this);
+		}
+
+		@Override
+		public void close() {
+			recycle();
+		}
+
 	}
 
 	public Object handlePacketSend(Object packet) {
-		packetevent.init(packet);
-		for (PacketListener listener : packetlisteners) {
-			try {
-				listener.onPacketSending(packetevent);
-			} catch (Throwable t) {
-				System.err.println("Error occured while handling packet sending");
-				t.printStackTrace();
+		try (LPacketEvent packetevent = LPacketEvent.create(packet)) {
+			for (PacketListener listener : packetlisteners) {
+				try {
+					listener.onPacketSending(packetevent);
+				} catch (Throwable t) {
+					System.err.println("Error occured while handling packet sending");
+					t.printStackTrace();
+				}
 			}
+			return packetevent.isCancelled() ? null : packetevent.getPacket();
 		}
-		return packetevent.isCancelled() ? null : packetevent.getPacket();
 	}
 
 	public Object handlePacketReceive(Object packet) {
-		packetevent.init(packet);
-		for (PacketListener listener : packetlisteners) {
-			try {
-				listener.onPacketReceiving(packetevent);
-			} catch (Throwable t) {
-				System.err.println("Error occured while handling packet receiving");
-				t.printStackTrace();
+		try (LPacketEvent packetevent = LPacketEvent.create(packet)) {
+			for (PacketListener listener : packetlisteners) {
+				try {
+					listener.onPacketReceiving(packetevent);
+				} catch (Throwable t) {
+					System.err.println("Error occured while handling packet receiving");
+					t.printStackTrace();
+				}
 			}
+			return packetevent.isCancelled() ? null : packetevent.getPacket();
 		}
-		return packetevent.isCancelled() ? null : packetevent.getPacket();
 	}
 
-	private final LRawPacketEvent rawpacketevent = new LRawPacketEvent();
+	protected static class LRawPacketEvent extends RawPacketEvent implements AutoCloseable {
 
-	private static class LRawPacketEvent extends RawPacketEvent {
-		public void init(ByteBuf data) {
-			this.data = data;
-			this.cancelled = false;
+		protected static final Recycler<LRawPacketEvent> recycler = new Recycler<LRawPacketEvent>() {
+			@Override
+			protected LRawPacketEvent newObject(Handle<LRawPacketEvent> handle) {
+				return new LRawPacketEvent(handle);
+			}
+		};
+
+		public static LRawPacketEvent create(ByteBuf data) {
+			LRawPacketEvent packetevent = recycler.get();
+			packetevent.data = data;
+			packetevent.cancelled = false;
+			return packetevent;
 		}
+
+		protected final Handle<LRawPacketEvent> handle;
+		protected LRawPacketEvent(Handle<LRawPacketEvent> handle) {
+			this.handle = handle;
+		}
+
+		public void recycle() {
+			this.handle.recycle(this);
+		}
+
 		public ByteBuf getDirectData() {
 			return this.data;
 		}
+
+		@Override
+		public void close() {
+			recycle();
+		}
+
 	}
 
 	public ByteBuf handleRawPacketSend(ByteBuf data) {
-		rawpacketevent.init(data);
-		for (PacketListener listener : packetlisteners) {
-			try {
-				listener.onRawPacketSending(rawpacketevent);
-			} catch (Throwable t) {
-				System.err.println("Error occured while handling raw packet sending");
-				t.printStackTrace();
+		try (LRawPacketEvent rawpacketevent = LRawPacketEvent.create(data)) {
+			for (PacketListener listener : packetlisteners) {
+				try {
+					listener.onRawPacketSending(rawpacketevent);
+				} catch (Throwable t) {
+					System.err.println("Error occured while handling raw packet sending");
+					t.printStackTrace();
+				}
 			}
-		}
-		if (rawpacketevent.isCancelled()) {
-			rawpacketevent.getDirectData().release();
-			return null;
-		} else {
-			return rawpacketevent.getDirectData();
+			if (rawpacketevent.isCancelled()) {
+				rawpacketevent.getDirectData().release();
+				return null;
+			} else {
+				return rawpacketevent.getDirectData();
+			}
 		}
 	}
 
 	public ByteBuf handleRawPacketReceive(ByteBuf data) {
-		rawpacketevent.init(data);
-		for (PacketListener listener : packetlisteners) {
-			try {
-				listener.onRawPacketReceiving(rawpacketevent);
-			} catch (Throwable t) {
-				System.err.println("Error occured while handling raw packet receiving");
-				t.printStackTrace();
+		try (LRawPacketEvent rawpacketevent = LRawPacketEvent.create(data)) {
+			for (PacketListener listener : packetlisteners) {
+				try {
+					listener.onRawPacketReceiving(rawpacketevent);
+				} catch (Throwable t) {
+					System.err.println("Error occured while handling raw packet receiving");
+					t.printStackTrace();
+				}
 			}
-		}
-		if (rawpacketevent.isCancelled()) {
-			rawpacketevent.getDirectData().release();
-			return null;
-		} else {
-			return rawpacketevent.getDirectData();
+			if (rawpacketevent.isCancelled()) {
+				rawpacketevent.getDirectData().release();
+				return null;
+			} else {
+				return rawpacketevent.getDirectData();
+			}
 		}
 	}
 

@@ -10,6 +10,7 @@ import org.bukkit.event.HandlerList;
 
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
+import protocolsupport.utils.Utils;
 
 /**
  * This event is fired after receiving player properties
@@ -111,6 +112,12 @@ public class PlayerPropertiesResolveEvent extends PlayerEvent {
 		public boolean hasSignature() {
 			return signature != null;
 		}
+
+		@Override
+		public String toString() {
+			return Utils.toStringAllFields(this);
+		}
+
 	}
 
 

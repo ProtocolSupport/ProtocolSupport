@@ -12,13 +12,13 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.unsafe.peskins.PESkinsProviderSPI;
 import protocolsupport.commands.CommandHandler;
 import protocolsupport.listeners.FeatureEmulation;
+import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.listeners.MultiplePassengersRestrict;
 import protocolsupport.listeners.ReloadCommandBlocker;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
-import protocolsupport.protocol.typeremapper.chunk.BlockStorageReader;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.IdSkipper;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
@@ -73,11 +73,6 @@ public class ProtocolSupport extends JavaPlugin {
 			getLogger().severe("Unable to load buildinfo, make sure you built this version using Gradle");
 			Bukkit.shutdown();
 		}
-		if (Bukkit.getServer().getOnlineMode()) {
-			getLogger().severe("PSPE doesn't support online mode");
-			Bukkit.shutdown();
-			return;
-		}
 		if (!ServerPlatform.detect()) {
 			getLogger().severe("Unsupported server implementation type or version");
 			Bukkit.shutdown();
@@ -113,7 +108,6 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(IdRemapper.class.getName());
 			Class.forName(ItemStackRemapper.class.getName());
 			Class.forName(TileNBTRemapper.class.getName());
-			Class.forName(BlockStorageReader.class.getName());
 			Class.forName(MapColorRemapper.class.getName());
 			Class.forName(LegacyPotion.class.getName());
 			Class.forName(LegacyEntityType.class.getName());
@@ -134,6 +128,7 @@ public class ProtocolSupport extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new FeatureEmulation(), this);
 		getServer().getPluginManager().registerEvents(new ReloadCommandBlocker(), this);
 		getServer().getPluginManager().registerEvents(new MultiplePassengersRestrict(), this);
+		getServer().getMessenger().registerIncomingPluginChannel(this, InternalPluginMessageRequest.TAG, new InternalPluginMessageRequest());
 		getServer().getScheduler().scheduleSyncDelayedTask(this, () -> (peserver = new PEProxyServer()).start());
 	}
 

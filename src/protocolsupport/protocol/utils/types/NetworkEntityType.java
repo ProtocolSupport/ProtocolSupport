@@ -130,6 +130,10 @@ public enum NetworkEntityType {
 		return typeId;
 	}
 
+	public EntityType getBukkitType() {
+		return bukkitType;
+	}
+
 	public String getRegistrySTypeId() {
 		return bukkitType != null ? MinecraftData.addNamespacePrefix(bukkitType.getName()) : "";
 	}

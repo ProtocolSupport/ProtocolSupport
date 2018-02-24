@@ -6,11 +6,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.lang3.Validate;
+
 import gnu.trove.map.hash.TIntObjectHashMap;
 import io.netty.util.internal.ThreadLocalRandom;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnObject.PreparedItem;
+import protocolsupport.protocol.typeremapper.pe.PEMovementConfirmationPacketQueue;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.protocol.utils.types.NetworkEntity;
@@ -20,12 +23,12 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class NetworkDataCache {
 
-	private static final double acceptableError = 0.1;
+	protected static final double acceptableError = 0.1;
 
-	private double x;
-	private double y;
-	private double z;
-	private int teleportConfirmId;
+	protected double x;
+	protected double y;
+	protected double z;
+	protected int teleportConfirmId;
 
 	public int tryTeleportConfirm(double x, double y, double z) {
 		if (teleportConfirmId == -1) {
@@ -42,15 +45,15 @@ public class NetworkDataCache {
 		}
 		return -1;
 	}
-	
+
 	public double[] getTeleportLocation() {
 		return new double[] {x,y,z};
 	}
-	
+
 	public int peekTeleportConfirmId() {
 		return teleportConfirmId;
 	}
-	
+
 	public void payTeleportConfirm() {
 		this.teleportConfirmId = -1;
 	}
@@ -61,7 +64,7 @@ public class NetworkDataCache {
 		this.z = z;
 		this.teleportConfirmId = teleportConfirmId;
 	}
-	
+
 	//For pocket average position mess.
 	private final int leniencyMillis = 1000;
 	private double cX;
@@ -69,26 +72,26 @@ public class NetworkDataCache {
 	private double cZ;
 	private long leniencyMod;
 	private double pocketPositionLeniency = 0.5;
-	
+
 	public void setLastClientPosition(double x, double y, double z) {
 		this.cX = x;
 		this.cY = y;
 		this.cZ = z;
 	}
-	
+
 	public double getClientY() {
 		return cY;
 	}
-	
+
 	public void updatePEPositionLeniency(boolean loosenUp) {
 		if (loosenUp) {
 			pocketPositionLeniency = 3;
 			leniencyMod = System.currentTimeMillis();
-		} else if ((pocketPositionLeniency != 0.5) && (System.currentTimeMillis() - leniencyMod > leniencyMillis)) {
+		} else if ((pocketPositionLeniency != 0.5) && ((System.currentTimeMillis() - leniencyMod) > leniencyMillis)) {
 			pocketPositionLeniency = 0.5;
 		}
 	}
-	
+
 	public boolean shouldResendPEClientPosition() {
 		return (Math.abs(cX - x) > pocketPositionLeniency) ||
 			   (Math.abs(cY - y) > pocketPositionLeniency) ||
@@ -110,13 +113,12 @@ public class NetworkDataCache {
 	}
 
 
-	private final TIntObjectHashMap<NetworkEntity> watchedEntities = new TIntObjectHashMap<>();
-	private final TIntObjectHashMap<PreparedItem> preparedItems = new TIntObjectHashMap<>();
-	private NetworkEntity player;
-	private final HashMap<UUID, NetworkDataCache.PlayerListEntry> playerlist = new HashMap<>();
-	private Environment dimensionId;
-	private float maxHealth = 20.0F;
-	private UUID clientUUID;
+	protected final TIntObjectHashMap<NetworkEntity> watchedEntities = new TIntObjectHashMap<>();
+	protected final TIntObjectHashMap<PreparedItem> preparedItems = new TIntObjectHashMap<>();
+	protected NetworkEntity player;
+	protected final HashMap<UUID, NetworkDataCache.PlayerListEntry> playerlist = new HashMap<>();
+	protected Environment dimensionId;
+	protected float maxHealth = 20.0F;
 
 	public void addWatchedEntity(NetworkEntity entity) {
 		watchedEntities.put(entity.getId(), entity);
@@ -207,13 +209,9 @@ public class NetworkDataCache {
 		return Utils.toStringAllFields(this);
 	}
 
-	public void setClientUUID(UUID uuid) { this.clientUUID = uuid; }
-
-	public UUID getClientUUID() { return clientUUID; }
-
 	public static class PropertiesStorage {
-		private final HashMap<String, ProfileProperty> signed = new HashMap<>();
-		private final HashMap<String, ProfileProperty> unsigned = new HashMap<>();
+		protected final HashMap<String, ProfileProperty> signed = new HashMap<>();
+		protected final HashMap<String, ProfileProperty> unsigned = new HashMap<>();
 
 		public void add(ProfileProperty property) {
 			if (property.hasSignature()) {
@@ -241,9 +239,9 @@ public class NetworkDataCache {
 	}
 
 	public static class PlayerListEntry implements Cloneable {
-		private final String name;
-		private String displayNameJson;
-		private final PropertiesStorage propstorage = new PropertiesStorage();
+		protected final String name;
+		protected String displayNameJson;
+		protected final PropertiesStorage propstorage = new PropertiesStorage();
 
 		public PlayerListEntry(String name) {
 			this.name = name;
@@ -284,6 +282,7 @@ public class NetworkDataCache {
 	protected String locale = I18NData.DEFAULT_LOCALE;
 
 	public void setLocale(String locale) {
+		Validate.notNull(locale, "Client locale can't be null");
 		this.locale = locale.toLowerCase();
 	}
 
@@ -329,10 +328,6 @@ public class NetworkDataCache {
 
 	public boolean isChunkMarkedAsSent(int x, int z) {
 		return sentChunks.contains(new ChunkCoord(x, z));
-	}
-	
-	public int sendChunkSize() {
-		return sentChunks.size();
 	}
 
 	protected static class ChunkCoord {
@@ -383,23 +378,64 @@ public class NetworkDataCache {
 
 	private NBTTagCompoundWrapper signTag;
 
-	public void setSignTag(NBTTagCompoundWrapper signTag) { this.signTag = signTag; }
+	public void setSignTag(NBTTagCompoundWrapper signTag) {
+		this.signTag = signTag;
+	}
 
-	public NBTTagCompoundWrapper getSignTag() { return signTag; }
+	public NBTTagCompoundWrapper getSignTag() {
+		return signTag;
+	}
 
 	private String title;
 	private int visibleOnScreenTicks = 100; // default fadeIn = 20; default stay = 60; default fadeOut = 20;
 	private long lastSentTitle;
 
-	public String getTitle() { return title; }
+	public String getTitle() {
+		return title;
+	}
 
-	public void setTitle(String title) { this.title = title; }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-	public int getVisibleOnScreenTicks() { return visibleOnScreenTicks; }
+	public int getVisibleOnScreenTicks() {
+		return visibleOnScreenTicks;
+	}
 
-	public void setVisibleOnScreenTicks(int visibleOnScreenTicks) { this.visibleOnScreenTicks = visibleOnScreenTicks; }
+	public void setVisibleOnScreenTicks(int visibleOnScreenTicks) {
+		this.visibleOnScreenTicks = visibleOnScreenTicks;
+	}
 
-	public long getLastSentTitle() { return lastSentTitle; }
+	public long getLastSentTitle() {
+		return lastSentTitle;
+	}
 
-	public void setLastSentTitle(long lastSentTitle) { this.lastSentTitle = lastSentTitle; }
+	public void setLastSentTitle(long lastSentTitle) {
+		this.lastSentTitle = lastSentTitle;
+	}
+
+	private UUID peClientUUID;
+
+	public void setPEClientUUID(UUID uuid) {
+		Validate.notNull(uuid, "PE client uuid (identity) can't be null");
+		this.peClientUUID = uuid;
+	}
+
+	public UUID getPEClientUUID() {
+		return peClientUUID;
+	}
+
+	private final PEMovementConfirmationPacketQueue mvconfirmqueue = new PEMovementConfirmationPacketQueue();
+
+	public PEMovementConfirmationPacketQueue getPESendPacketMovementConfirmQueue() {
+		return mvconfirmqueue;
+	}
+
+	private boolean fakesetpositionswitch = true;
+
+	public double getFakeSetPositionY() {
+		fakesetpositionswitch = !fakesetpositionswitch;
+		return fakesetpositionswitch ? 20.0 : 30.0;
+	}
+
 }

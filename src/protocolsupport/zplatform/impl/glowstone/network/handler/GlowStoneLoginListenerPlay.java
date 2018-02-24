@@ -12,7 +12,7 @@ import com.flowpowered.network.Message;
 import net.glowstone.EventFactory;
 import net.glowstone.GlowServer;
 import net.glowstone.entity.GlowPlayer;
-import net.glowstone.entity.meta.profile.PlayerProfile;
+import net.glowstone.entity.meta.profile.GlowPlayerProfile;
 import net.glowstone.io.PlayerDataService.PlayerReader;
 import net.glowstone.net.GlowSession;
 import net.glowstone.net.message.play.game.UserListItemMessage;
@@ -33,7 +33,7 @@ public class GlowStoneLoginListenerPlay extends AbstractLoginListenerPlay implem
 
 	@Override
 	protected JoinData createJoinData() {
-		PlayerProfile glowstoneProfile = GlowStoneMiscUtils.toGlowStoneGameProfile(profile);
+		GlowPlayerProfile glowstoneProfile = GlowStoneMiscUtils.toGlowStoneGameProfile(profile);
 		PlayerReader reader = server.getPlayerDataService().beginReadingData(glowstoneProfile.getUniqueId());
 		GlowPlayer player = new GlowPlayer(((GlowStoneNetworkManagerWrapper) networkManager).getSession(), glowstoneProfile, reader);
 		return new JoinData(player, player, reader) {

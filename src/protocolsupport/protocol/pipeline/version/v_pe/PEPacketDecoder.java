@@ -1,11 +1,13 @@
 package protocolsupport.protocol.pipeline.version.v_pe;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.Connection;
+import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_pe.ClientLogin;
@@ -21,10 +23,11 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Position
 import protocolsupport.protocol.pipeline.version.AbstractPacketDecoder;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.typeremapper.pe.PEMovementConfirmationPacketQueue;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
-import protocolsupport.api.utils.NetworkState;
+import protocolsupport.zplatform.ServerPlatform;
 
 public class PEPacketDecoder extends AbstractPacketDecoder {
 
@@ -63,7 +66,15 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 			if (input.isReadable()) {
 				throw new DecoderException("Did not read all data from packet " + packetTransformer.getClass().getName() + ", bytes left: " + input.readableBytes());
 			}
-			addPackets(packetTransformer.toNative(), list);
+			PEMovementConfirmationPacketQueue confirmqueue = cache.getPESendPacketMovementConfirmQueue();
+			RecyclableCollection<ServerBoundPacketData> packets = confirmqueue.processServerBoundPackets(packetTransformer.toNative());
+			if (confirmqueue.shouldScheduleUnlock()) {
+				ctx.channel().eventLoop().schedule(() -> {
+					confirmqueue.unlock();
+					connection.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("PS|PushQueue"));
+				}, 5, TimeUnit.SECONDS);
+			}
+			addPackets(packets, list);
 		} catch (Exception e) {
 			throwFailedTransformException(e, packetTransformer, input);
 		}

@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.bukkit.Chunk;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_12_R1.CraftChunk;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.spigotmc.SpigotConfig;
 
@@ -30,6 +32,8 @@ import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
+import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.ReflectionUtils;
@@ -48,10 +52,23 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 		}
 		return packet;
 	}
-	
+
 	@Override
 	public Object createInboundInventoryClosePacket() {
 		return new PacketPlayInCloseWindow();
+	}
+
+	@Override
+	public Object createInboundPluginMessagePacket(String tag, byte[] data) {
+		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer());
+		StringSerializer.writeString(serializer, ProtocolVersionsHelper.LATEST_PC, tag);
+		serializer.writeBytes(data);
+		PacketPlayInCustomPayload packet = new PacketPlayInCustomPayload();
+		try {
+			packet.a(serializer);
+		} catch (IOException e) {
+		}
+		return packet;
 	}
 
 	@Override
@@ -59,7 +76,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 		return new PacketPlayOutChat(ChatSerializer.a(message), ChatMessageType.a((byte) position));
 	}
 
-	private static final BaseComponent empty = new TextComponent("");
+	protected static final BaseComponent empty = new TextComponent("");
 
 	@Override
 	public Object createTabHeaderFooterPacket(BaseComponent header, BaseComponent footer) {
@@ -163,7 +180,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 		return new PacketLoginOutSuccess(SpigotMiscUtils.toMojangGameProfile(profile));
 	}
 
-	private static final PacketDataSerializer emptyPDS = new PacketDataSerializer(Unpooled.EMPTY_BUFFER);
+	protected static final PacketDataSerializer emptyPDS = new PacketDataSerializer(Unpooled.EMPTY_BUFFER);
 	@Override
 	public Object createEmptyCustomPayloadPacket(String tag) {
 		return new PacketPlayOutCustomPayload(tag, emptyPDS);
@@ -177,6 +194,11 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	@Override
 	public Object createEntityStatusPacket(org.bukkit.entity.Entity entity, int status) {
 		return new PacketPlayOutEntityStatus(((CraftEntity) entity).getHandle(), (byte) status);
+	}
+
+	@Override
+	public Object createUpdateChunkPacket(Chunk chunk) {
+		return new PacketPlayOutMapChunk(((CraftChunk) chunk).getHandle(), 0xFFFF);
 	}
 
 

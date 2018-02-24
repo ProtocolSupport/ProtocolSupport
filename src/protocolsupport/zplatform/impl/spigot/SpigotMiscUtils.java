@@ -6,6 +6,9 @@ import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_12_R1.CraftServer;
@@ -47,9 +50,6 @@ import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketDecomp
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedPrepender;
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedSplitter;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
 
 public class SpigotMiscUtils implements PlatformUtils {
 

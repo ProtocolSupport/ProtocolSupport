@@ -33,7 +33,7 @@ public class CommandRequest extends ServerBoundMiddlePacket {
 		int type = VarNumberSerializer.readVarInt(clientdata); // type
 		MiscSerializer.readUUID(clientdata); // UUID
 		StringSerializer.readString(clientdata, ProtocolVersion.MINECRAFT_PE); // request ID
-		if (type == ORIGIN_DEV_CONSOLE || type == ORIGIN_TEST) {
+		if ((type == ORIGIN_DEV_CONSOLE) || (type == ORIGIN_TEST)) {
 			VarNumberSerializer.readSVarLong(clientdata); // ???
 		}
 		clientdata.readBoolean(); // isInternal

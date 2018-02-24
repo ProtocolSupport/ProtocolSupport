@@ -81,7 +81,7 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 		};
 	}
 
-	private static final SimpleDateFormat banDateFormat = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+	protected static final SimpleDateFormat banDateFormat = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
 	@Override
 	protected void checkBans(PlayerLoginEvent event, Object[] data) {
 		PlayerList playerlist = server.getPlayerList();

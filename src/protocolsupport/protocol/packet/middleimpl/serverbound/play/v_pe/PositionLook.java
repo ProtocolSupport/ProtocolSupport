@@ -6,7 +6,6 @@ import protocolsupport.protocol.packet.middle.serverbound.play.MiddlePositionLoo
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleTeleportAccept;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateSign;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
@@ -25,12 +24,12 @@ public class PositionLook extends ServerBoundMiddlePacket {
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		VarNumberSerializer.readVarLong(clientdata); //entity id
-		x = MiscSerializer.readLFloat(clientdata);
-		y = MiscSerializer.readLFloat(clientdata) - 1.6200000047683716D;
-		z = MiscSerializer.readLFloat(clientdata);
-		pitch = MiscSerializer.readLFloat(clientdata);
-		yaw = MiscSerializer.readLFloat(clientdata);
-		MiscSerializer.readLFloat(clientdata); //head yaw
+		x = clientdata.readFloatLE();
+		y = clientdata.readFloatLE() - 1.6200000047683716D;
+		z = clientdata.readFloatLE();
+		pitch = clientdata.readFloatLE();
+		yaw = clientdata.readFloatLE();
+		clientdata.readFloatLE(); //head yaw
 		clientdata.readByte(); //mode
 		onGround = clientdata.readBoolean();
 		VarNumberSerializer.readVarLong(clientdata);
@@ -39,7 +38,7 @@ public class PositionLook extends ServerBoundMiddlePacket {
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
-		cache.updatePEPositionLeniency(y - cache.getClientY() > 0);
+		cache.updatePEPositionLeniency((y - cache.getClientY()) > 0);
 		int teleportId = cache.peekTeleportConfirmId();
 		if (teleportId != -1) {
 			//PE sends AVERAGE positions (FFS Mojang) so sometimes the BoundingBox of the player will collide inadvertently.
@@ -54,9 +53,9 @@ public class PositionLook extends ServerBoundMiddlePacket {
 		} else {
 			cache.setLastClientPosition(x, y, z);
 		}
-		
+
 		packets.add(MiddlePositionLook.create(x, y, z, yaw, pitch, onGround));
-		
+
 
 		//TODO: (re)move this shit
 		if (cache.getSignTag() != null) {

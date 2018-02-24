@@ -47,17 +47,17 @@ public class PlayerInfo extends MiddlePlayerInfo {
 				PESkinsProvider skinprovider = PESkinsProviderSPI.getProvider();
 				VarNumberSerializer.writeVarInt(serializer, infos.length);
 				for (Info info : infos) {
-					MiscSerializer.writeUUID(serializer, connection.getVersion(), info.uuid.equals(connection.getPlayer().getUniqueId()) ? cache.getClientUUID() : info.uuid);
+					MiscSerializer.writeUUID(serializer, connection.getVersion(), info.uuid.equals(connection.getPlayer().getUniqueId()) ? cache.getPEClientUUID() : info.uuid);
 					VarNumberSerializer.writeVarInt(serializer, 0); //entity id
 					StringSerializer.writeString(serializer, version, info.getName(cache.getLocale()));
-					Any<Boolean, String> skininfo = getSkinInfo(info);
+					Any<Boolean, String> skininfo = getSkinInfo(info); //TODO Erm where does this come from?
 					byte[] skindata = skininfo != null ? skinprovider.getSkinData(skininfo.getObj2()) : null;
 					if (skindata != null) {
 						writeSkinData(version, serializer, false, skininfo.getObj1(), skindata);
 					} else {
 						writeSkinData(version, serializer, false, false, DefaultPESkinsProvider.DEFAULT_STEVE);
 						if (skininfo != null) {
-							skinprovider.scheduleGetSkinData(skininfo.getObj2(), info.uuid, new SkinUpdate(connection, info.uuid, cache.getClientUUID(), skininfo.getObj1()));
+							skinprovider.scheduleGetSkinData(skininfo.getObj2(), new SkinUpdate(connection, info.uuid, cache.getPEClientUUID(), skininfo.getObj1()));
 						}
 					}
 					StringSerializer.writeString(serializer, version, ""); //xuid
@@ -86,8 +86,9 @@ public class PlayerInfo extends MiddlePlayerInfo {
 		if (property.isPresent()) {
 			JsonElement propertyjson = new JsonParser().parse(new InputStreamReader(new ByteArrayInputStream(Base64.getDecoder().decode(property.get().getValue())), StandardCharsets.UTF_8));
 			JsonObject texturesobject = JsonUtils.getJsonObject(JsonUtils.getAsJsonObject(propertyjson, "root element"), "textures");
-			if (!texturesobject.has("SKIN")) // if an account is an official Mojang account, but doesn't have an uploaded skin, the SKIN object will be missing
+			if (!texturesobject.has("SKIN")) {
 				return null;
+			}
 			JsonObject skinobject = JsonUtils.getJsonObject(texturesobject, "SKIN");
 			JsonObject skinMetadata; //Contains data about the skinModel. Currently only supports Slim and not Slim or Steve and Alex.
 			boolean isSlim = skinobject.has("metadata") && (skinMetadata = skinobject.get("metadata").getAsJsonObject()).has("model") && JsonUtils.getString(skinMetadata, "model").equals("slim");
@@ -117,7 +118,6 @@ public class PlayerInfo extends MiddlePlayerInfo {
 			MiscSerializer.writeUUID(serializer, connection.getVersion(), uuid.equals(connection.getPlayer().getUniqueId()) ? clientUUID : uuid);
 			writeSkinData(connection.getVersion(), serializer, true, isNormalModel, skindata);
 			byte[] rawpacket = MiscSerializer.readAllBytes(serializer);
-			System.err.println(skindata.length);
 			connection.sendRawPacket(rawpacket);
 		}
 	}

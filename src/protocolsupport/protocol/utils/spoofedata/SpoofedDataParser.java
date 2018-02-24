@@ -9,17 +9,33 @@ public class SpoofedDataParser {
 	private static final List<Function<String, SpoofedData>> parsers = new ArrayList<>();
 
 	static {
+		if (isPaperHandshakeEvent()) {
+			parsers.add(new PaperSpoofedDataParser());
+		}
 		parsers.add(new BungeeCordSpoofedDataParser());
 	}
 
 	public static SpoofedData tryParse(String data) {
-		return parsers.stream().map(parser -> {
+		for (Function<String, SpoofedData> parser : parsers) {
 			try {
-				return parser.apply(data);
+				SpoofedData result = parser.apply(data);
+				if (result != null) {
+					return result;
+				}
 			} catch (Exception e) {
-				return null;
+				// ignore
 			}
-		}).filter(res -> res != null).findAny().orElse(null);
+		}
+		return null;
+	}
+
+	private static boolean isPaperHandshakeEvent() {
+		try {
+			Class.forName("com.destroystokyo.paper.event.player.PlayerHandshakeEvent");
+			return true;
+		} catch (ClassNotFoundException e) {
+			return false;
+		}
 	}
 
 }

@@ -7,17 +7,21 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 import java.util.stream.Collectors;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
 
+import com.destroystokyo.paper.profile.ProfileProperty;
+
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import net.glowstone.GlowServer;
-import net.glowstone.entity.meta.profile.PlayerProfile;
-import net.glowstone.entity.meta.profile.PlayerProperty;
+import net.glowstone.entity.meta.profile.GlowPlayerProfile;
 import net.glowstone.io.nbt.NbtSerialization;
 import net.glowstone.net.pipeline.CompressionHandler;
 import net.glowstone.net.pipeline.MessageHandler;
@@ -39,21 +43,18 @@ import protocolsupport.zplatform.impl.glowstone.network.GlowStoneChannelHandlers
 import protocolsupport.zplatform.impl.glowstone.network.pipeline.GlowStoneFramingHandler;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-
 public class GlowStoneMiscUtils implements PlatformUtils {
 
 	public static GlowServer getServer() {
 		return ((GlowServer) Bukkit.getServer());
 	}
 
-	public static PlayerProfile toGlowStoneGameProfile(GameProfile profile) {
-		return new PlayerProfile(
+	public static GlowPlayerProfile toGlowStoneGameProfile(GameProfile profile) {
+		return new GlowPlayerProfile(
 			profile.getName(), profile.getUUID(),
 			profile.getProperties().values()
 			.stream()
-			.map(property -> new PlayerProperty(property.getName(), property.getValue(), property.getSignature()))
+			.map(property -> new ProfileProperty(property.getName(), property.getValue(), property.getSignature()))
 			.collect(Collectors.toList())
 		);
 	}
@@ -198,7 +199,7 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	public String convertBukkitIconToBase64(CachedServerIcon icon) {
 		return ((GlowServerIcon) icon).getData();
 	}
-	
+
 	@Override
 	public String getReadTimeoutHandlerName() {
 		return GlowStoneChannelHandlers.READ_TIMEOUT;

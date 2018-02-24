@@ -17,7 +17,7 @@ public class DataWatcherObjectSVarLong extends ReadableDataWatcherObjectNumber<L
 	public DataWatcherObjectSVarLong(int value) {
 		this.value = (long) value;
 	}
-	
+
 	@Override
 	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) throws DecoderException {
 		value = VarNumberSerializer.readSVarLong(from);

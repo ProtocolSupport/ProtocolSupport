@@ -5,7 +5,6 @@ import org.bukkit.util.NumberConversions;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddlePosition;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
@@ -44,12 +43,12 @@ public class Position extends MiddlePosition {
 		float realYaw = (float) (yaw * (360D/256D));
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_MOVE, version);
 		VarNumberSerializer.writeVarLong(serializer, entityId);
-		MiscSerializer.writeLFloat(serializer, (float) x);
-		MiscSerializer.writeLFloat(serializer, (float) y);
-		MiscSerializer.writeLFloat(serializer, (float) z);
-		MiscSerializer.writeLFloat(serializer, pitch);
-		MiscSerializer.writeLFloat(serializer, realYaw);
-		MiscSerializer.writeLFloat(serializer, realYaw); //head yaw actually
+		serializer.writeFloatLE((float) x);
+		serializer.writeFloatLE((float) y);
+		serializer.writeFloatLE((float) z);
+		serializer.writeFloatLE(pitch);
+		serializer.writeFloatLE(realYaw);
+		serializer.writeFloatLE(realYaw); //head yaw actually
 		serializer.writeByte(mode);
 		serializer.writeBoolean(false); //on ground
 		VarNumberSerializer.writeVarLong(serializer, 0);
