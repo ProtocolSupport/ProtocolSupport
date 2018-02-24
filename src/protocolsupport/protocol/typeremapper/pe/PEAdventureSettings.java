@@ -52,7 +52,6 @@ public class PEAdventureSettings {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ADVENTURE_SETTINGS, ProtocolVersion.MINECRAFT_PE);
 		VarNumberSerializer.writeVarInt(serializer, Arrays.stream(flags).reduce(0, (left, right) -> left | right));
 		VarNumberSerializer.writeVarInt(serializer, 0); //?
-		//TODO: Actually work with permissions?
 		VarNumberSerializer.writeVarInt(serializer, PERMISSIONS_ALLOW_ALL);
 		VarNumberSerializer.writeVarInt(serializer, GROUP_NORMAL);
 		VarNumberSerializer.writeVarInt(serializer, 0); //? (custom flags)

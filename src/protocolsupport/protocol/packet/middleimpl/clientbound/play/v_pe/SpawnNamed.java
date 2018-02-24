@@ -3,12 +3,14 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnNamed;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
+import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 public class SpawnNamed extends MiddleSpawnNamed {
 
@@ -29,22 +31,15 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		serializer.writeFloatLE(pitch);
 		serializer.writeFloatLE(yaw); //head yaw actually
 		serializer.writeFloatLE(yaw);
-		VarNumberSerializer.writeSVarInt(serializer, 0); //held itemstack (it is actually a slot, but we only send null itemstack here, so we only write 0 id)
-
+		ItemStackSerializer.writeItemStack(serializer, version, cache.getLocale(), ItemStackWrapper.NULL, true);
 		EntityMetadata.encodeMeta(serializer, version, cache.getLocale(), EntityMetadata.transform(entity, metadata.getRemapped(), version));
-
-		//adventure settings
-		VarNumberSerializer.writeVarInt(serializer, 0);
-		VarNumberSerializer.writeVarInt(serializer, 0);
-		VarNumberSerializer.writeVarInt(serializer, 0);
-		VarNumberSerializer.writeVarInt(serializer, 0);
-		VarNumberSerializer.writeVarInt(serializer, 0);
-
+		VarNumberSerializer.writeVarInt(serializer, 0); //?
+		VarNumberSerializer.writeVarInt(serializer, 0); //?
+		VarNumberSerializer.writeVarInt(serializer, 0); //?
+		VarNumberSerializer.writeVarInt(serializer, 0); //?
+		VarNumberSerializer.writeVarInt(serializer, 0); //?
 		serializer.writeLongLE(0); //?
-
-		//entity links
-		//TODO: Implement entity links
-		VarNumberSerializer.writeSVarInt(serializer, 0);
+		VarNumberSerializer.writeVarInt(serializer, 0); //entity links
 		return RecyclableSingletonList.create(serializer);
 	}
 

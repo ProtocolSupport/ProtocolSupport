@@ -113,7 +113,7 @@ public class ItemStackSerializer {
 
 			VarNumberSerializer.writeSVarInt(to, id); //TODO: Remap PE itemstacks...
 			VarNumberSerializer.writeSVarInt(to, ((data & 0xFFFF) << 8) | witemstack.getAmount());
-			writeTag(to, false, version, witemstack.getTag()); //TODO: write and Remap PE NBT
+			writeTag(to, false, version, witemstack.getTag()); //TODO: remap PE NBT
 			to.writeByte(0); //TODO: CanPlaceOn PE
 			to.writeByte(0); //TODO: CanDestroy PE
 		} else {
@@ -188,7 +188,7 @@ public class ItemStackSerializer {
 						to.writeShortLE(0);
 					}
 					//actual nbt
-					NBTTagCompoundSerializer.writePeTag(to, varint, tag); //TODO Remap PE NBT?
+					NBTTagCompoundSerializer.writePeTag(to, varint, tag); //TODO remap PE NBT?
 					//now replace fake length with real length
 					if (!varint) {
 						to.setShortLE(writerIndex, to.writerIndex() - writerIndex - Short.BYTES);

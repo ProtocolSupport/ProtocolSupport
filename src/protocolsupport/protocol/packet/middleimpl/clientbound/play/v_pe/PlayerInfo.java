@@ -53,7 +53,7 @@ public class PlayerInfo extends MiddlePlayerInfo {
 					MiscSerializer.writeUUID(serializer, connection.getVersion(), info.uuid.equals(connection.getPlayer().getUniqueId()) ? attrscache.getPEClientUUID() : info.uuid);
 					VarNumberSerializer.writeVarInt(serializer, 0); //entity id
 					StringSerializer.writeString(serializer, version, info.getName(cache.getLocale()));
-					Any<Boolean, String> skininfo = getSkinInfo(info); //TODO Erm where does this come from?
+					Any<Boolean, String> skininfo = getSkinInfo(info);
 					byte[] skindata = skininfo != null ? skinprovider.getSkinData(skininfo.getObj2()) : null;
 					if (skindata != null) {
 						writeSkinData(version, serializer, false, skininfo.getObj1(), skindata);
@@ -132,7 +132,6 @@ public class PlayerInfo extends MiddlePlayerInfo {
 		}
 		StringSerializer.writeString(serializer, version, model.getSkinName());
 		if (isSkinUpdate) {
-			//TODO: find out how it is used and if its use matters.
 			StringSerializer.writeString(serializer, version, "Steve");
 		}
 		ArraySerializer.writeByteArray(serializer, version, skindata);
