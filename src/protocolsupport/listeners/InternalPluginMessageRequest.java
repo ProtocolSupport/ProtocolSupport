@@ -76,7 +76,7 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 			this.chunkX = chunkX;
 			this.chunkZ = chunkZ;
 		}
-		
+
 		@Override
 		protected void read(ByteBuf from) {
 			this.chunkX = from.readInt();
@@ -142,7 +142,9 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 	@Override
 	public void onPluginMessageReceived(String tag, Player player, byte[] data) {
 		Connection connection = ProtocolSupportAPI.getConnection(player);
-		if (connection == null) { return; }
+		if (connection == null) {
+			return;
+		}
 		ByteBuf buf = Unpooled.wrappedBuffer(data);
 		UUID luuid = MiscSerializer.readUUID(buf);
 		if (!luuid.equals(uuid)) {
