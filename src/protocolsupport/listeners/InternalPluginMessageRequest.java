@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 
-import org.bukkit.Chunk;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
@@ -14,39 +14,44 @@ import io.netty.buffer.Unpooled;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
+@SuppressWarnings("deprecation")
 public class InternalPluginMessageRequest implements PluginMessageListener {
 
 	private static final UUID uuid = UUID.randomUUID();
 
 	public static final String TAG = "PS|IR";
 
-	protected static final String SUBCHANNEL_CHUNK_UPDATE_REQUEST = "ChunkUpdate";
-
 	protected static final Map<String, Class<? extends PluginMessageData>> subchannelToClass = new HashMap<>();
-	protected static final Map<Class<? extends PluginMessageData>, String> classToSubchannel = new HashMap<>();
-	protected static final Map<Class<? extends PluginMessageData>, BiConsumer<Player, PluginMessageData>> handlers = new HashMap<>();
+	protected static final Map<Class<? extends PluginMessageData>, BiConsumer<Connection, PluginMessageData>> handlers = new HashMap<>();
 
 	@SuppressWarnings("unchecked")
-	protected static <T extends PluginMessageData> void register(String subchannel, Class<T> dataclass, BiConsumer<Player, T> handler) {
-		subchannelToClass.put(subchannel, dataclass);
-		classToSubchannel.put(dataclass, subchannel);
-		handlers.put(dataclass, (BiConsumer<Player, PluginMessageData>) handler);
+	protected static <T extends PluginMessageData> void register(Class<T> dataclass, BiConsumer<Connection, T> handler) {
+		subchannelToClass.put(dataclass.getName(), dataclass);
+		handlers.put(dataclass, (BiConsumer<Connection, PluginMessageData>) handler);
 	}
 
 	static {
-		register(SUBCHANNEL_CHUNK_UPDATE_REQUEST, ChunkUpdateRequest.class, (player, request) -> {
-			Connection connection = ProtocolSupportAPI.getConnection(player);
-			if (connection != null) {
-				Chunk chunk = player.getWorld().getChunkAt(request.getChunkX(), request.getChunkZ());
-				connection.sendPacket(ServerPlatform.get().getPacketFactory().createUpdateChunkPacket(chunk));
-			}
+		register(ChunkUpdateRequest.class, (connection, request) -> {
+			connection.sendPacket(ServerPlatform.get().getPacketFactory().createUpdateChunkPacket(
+					connection.getPlayer().getWorld().getChunkAt(request.getChunkX(), request.getChunkZ()))
+			);
 		});
+		register(BlockUpdateRequest.class, (connection, request) -> {
+			Block block = request.getPosition().toBukkit(connection.getPlayer().getWorld()).getBlock();
+			connection.sendPacket(ServerPlatform.get().getPacketFactory().createBlockUpdatePacket(
+					request.getPosition(), MinecraftData.getBlockStateFromIdAndData(block.getTypeId(), block.getData()))
+			);
+		});
+		
 	}
 
 	@NeedsNoArgConstructor
@@ -71,7 +76,7 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 			this.chunkX = chunkX;
 			this.chunkZ = chunkZ;
 		}
-
+		
 		@Override
 		protected void read(ByteBuf from) {
 			this.chunkX = from.readInt();
@@ -93,12 +98,40 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 		}
 
 	}
+	
+	public static class BlockUpdateRequest extends PluginMessageData {
+
+		protected Position position;
+
+		public BlockUpdateRequest() {
+			this(new Position(0,0,0));
+		}
+
+		public BlockUpdateRequest(Position position) {
+			this.position = position;
+		}
+		
+		@Override
+		protected void read(ByteBuf from) {
+			this.position = PositionSerializer.readPosition(from);
+		}
+
+		@Override
+		protected void write(ByteBuf to) {
+			PositionSerializer.writePosition(to, position);
+		}
+
+		public Position getPosition() {
+			return position;
+		}
+
+	}
 
 	public static void receivePluginMessageRequest(Connection connection, PluginMessageData data) {
 		ByteBuf buf = Allocator.allocateBuffer();
 		try {
 			MiscSerializer.writeUUID(buf, ProtocolVersionsHelper.LATEST_PC, uuid);
-			StringSerializer.writeString(buf, ProtocolVersionsHelper.LATEST_PC, classToSubchannel.get(data.getClass()));
+			StringSerializer.writeString(buf, ProtocolVersionsHelper.LATEST_PC, (data.getClass().getName()));
 			data.write(buf);
 			connection.receivePacket(ServerPlatform.get().getPacketFactory().createInboundPluginMessagePacket(TAG, MiscSerializer.readAllBytes(buf)));
 		} finally {
@@ -108,6 +141,8 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 
 	@Override
 	public void onPluginMessageReceived(String tag, Player player, byte[] data) {
+		Connection connection = ProtocolSupportAPI.getConnection(player);
+		if (connection == null) { return; }
 		ByteBuf buf = Unpooled.wrappedBuffer(data);
 		UUID luuid = MiscSerializer.readUUID(buf);
 		if (!luuid.equals(uuid)) {
@@ -121,7 +156,7 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 		try {
 			PluginMessageData messagedata = messagedatacl.newInstance();
 			messagedata.read(buf);
-			handlers.get(messagedatacl).accept(player, messagedata);
+			handlers.get(messagedatacl).accept(connection, messagedata);
 		} catch (InstantiationException | IllegalAccessException e) {
 			if (ServerPlatform.get().getMiscUtils().isDebugging()) {
 				System.err.println("Exception occured while processing internal plugin message");
