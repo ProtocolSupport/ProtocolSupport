@@ -3,6 +3,7 @@ package protocolsupport.protocol.typeremapper.pe;
 import java.util.EnumMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.event.inventory.InventoryType;
@@ -181,8 +182,11 @@ public class PEInventory {
 	//Uses bukkit to schedule an inventory update in PE
 	public static void scheduleInventoryUpdate(Connection connection) {
 		if (
-				(!connection.hasMetadata("lastScheduledInventoryUpdate")) ||
-				(System.currentTimeMillis() - (long) connection.getMetadata("lastScheduledInventoryUpdate") >= 250)
+				(
+						(!connection.hasMetadata("lastScheduledInventoryUpdate")) ||
+						(System.currentTimeMillis() - (long) connection.getMetadata("lastScheduledInventoryUpdate") >= 250)
+				) &&
+				(connection.getPlayer().getGameMode() != GameMode.CREATIVE)
 		   ) {
 			connection.addMetadata("lastScheduledInventoryUpdate", System.currentTimeMillis());
 			Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), new Runnable() {
