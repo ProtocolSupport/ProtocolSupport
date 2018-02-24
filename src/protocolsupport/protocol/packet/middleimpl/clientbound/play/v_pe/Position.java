@@ -18,7 +18,7 @@ public class Position extends MiddlePosition {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		int chunkX = NumberConversions.floor(x) >> 4;
 		int chunkZ = NumberConversions.floor(z) >> 4;
-		if (!cache.isChunkMarkedAsSent(chunkX, chunkZ)) {
+		if (!cache.getPEDataCache().getChunkCache().isChunkMarkedAsSent(chunkX, chunkZ)) {
 			packets.add(Chunk.createEmptyChunk(version, chunkX, chunkZ));
 		}
 		if(cache.shouldResendPEClientPosition()) {

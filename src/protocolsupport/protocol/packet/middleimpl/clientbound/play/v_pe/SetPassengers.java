@@ -40,10 +40,10 @@ public class SetPassengers extends MiddleSetPassengers {
 				if (passenger != null) {
 					//TODO: Fix and Update this: Rider positions.
 					DataCache data = passenger.getDataCache();
-					if(vehicle.isOfType(NetworkEntityType.PIG)) {
+					if (vehicle.isOfType(NetworkEntityType.PIG)) {
 						data.rider = new DataCache.Rider(new Vector(0.0, 2.8, 0.0), false);
 						packets.add(EntitySetAttributes.create(version, cache.getSelfPlayerEntityId(), EntitySetAttributes.createAttribute("minecraft:horse.jump_strength", 0.432084373616155)));
-					} else if(vehicle.isOfType(NetworkEntityType.BASE_HORSE)) {
+					} else if (vehicle.isOfType(NetworkEntityType.BASE_HORSE)) {
 						data.rider = new DataCache.Rider(new Vector(0.0, 2.3, -0.2), true, 180f, -180f);
 						packets.add(EntitySetAttributes.create(version, cache.getSelfPlayerEntityId(), EntitySetAttributes.createAttribute("minecraft:horse.jump_strength", 0.966967527085333)));
 					} else {
@@ -52,7 +52,7 @@ public class SetPassengers extends MiddleSetPassengers {
 					packets.add(EntityMetadata.createFaux(passenger, cache.getLocale(), version));
 
 					packets.add(create(version, vehicleId, passengerId, LINK));
-					if(cache.isSelf(passengerId)) {
+					if (cache.isSelf(passengerId)) {
 						packets.add(create(version, vehicleId, 0, LINK));
 					}
 				}
@@ -67,7 +67,7 @@ public class SetPassengers extends MiddleSetPassengers {
 							passenger.getDataCache().rider = new DataCache.Rider(false);
 							packets.add(EntityMetadata.createFaux(passenger, cache.getLocale(), version));
 							packets.add(create(version, vehicleId, passengerId, UNLINK));
-							if(cache.isSelf(passengerId)) {
+							if (cache.isSelf(passengerId)) {
 								packets.add(create(version, vehicleId, 0, UNLINK));
 							}
 						}
