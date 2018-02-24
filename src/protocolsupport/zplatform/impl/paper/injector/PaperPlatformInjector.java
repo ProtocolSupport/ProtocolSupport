@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.zplatform.PlatformInjector;
-import protocolsupport.zplatform.impl.spigot.injector.SpigotEntityTrackerInjector;
 import protocolsupport.zplatform.impl.spigot.injector.SpigotServerInjector;
 import protocolsupport.zplatform.impl.spigot.injector.network.SpigotNettyInjector;
 

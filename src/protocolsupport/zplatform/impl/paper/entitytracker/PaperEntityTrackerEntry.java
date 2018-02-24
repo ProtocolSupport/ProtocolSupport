@@ -2,7 +2,6 @@ package protocolsupport.zplatform.impl.paper.entitytracker;
 
 import net.minecraft.server.v1_12_R1.Entity;
 import net.minecraft.server.v1_12_R1.EntityPlayer;
-import net.minecraft.server.v1_12_R1.EntityTracker;
 import net.minecraft.server.v1_12_R1.EntityTrackerEntry;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.protocol.ConnectionImpl;
@@ -22,6 +21,7 @@ public class PaperEntityTrackerEntry extends SpigotEntityTrackerEntry {
 		TRACKER_ENTITY_FIELD = ReflectionUtils.getField(Entity.class, "tracker");
 	}
 
+	@SuppressWarnings("unchecked")
 	public PaperEntityTrackerEntry(Entity entity, int trackRange, int viewDistance, int updateInterval, boolean updateVelocity) {
 		super(entity, trackRange, viewDistance, updateInterval, updateVelocity);
 		setEntityTracker(entity, this); // Paper
