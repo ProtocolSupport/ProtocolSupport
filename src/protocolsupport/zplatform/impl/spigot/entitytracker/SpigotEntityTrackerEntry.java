@@ -105,8 +105,8 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 	private boolean isPassenger;
 	private boolean onGround;
 
-	private final Set<EntityPlayer> trackedDefaultPlayers = new HashSet<>();
-	private final Set<EntityPlayer> trackedPEPlayers = new HashSet<>();
+	protected final Set<EntityPlayer> trackedDefaultPlayers = new HashSet<>();
+	protected final Set<EntityPlayer> trackedPEPlayers = new HashSet<>();
 
 	public SpigotEntityTrackerEntry(Entity entity, int trackRange, int viewDistance, int updateInterval, boolean updateVelocity) {
 		super(entity, trackRange, viewDistance, updateInterval, updateVelocity);
@@ -577,7 +577,7 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 		}
 	}
 
-	private void addTrackedPlayer(EntityPlayer player) {
+	protected void addTrackedPlayer(EntityPlayer player) {
 		this.trackedPlayers.add(player);
 		ConnectionImpl connection = ConnectionImpl.getFromChannel(player.playerConnection.networkManager.channel);
 		if ((connection != null) && (connection.getVersion().getProtocolType() == ProtocolType.PE)) {
@@ -587,7 +587,7 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 		}
 	}
 
-	private void removeTrackedPlayer(EntityPlayer player) {
+	protected void removeTrackedPlayer(EntityPlayer player) {
 		this.trackedPlayers.remove(player);
 		this.trackedDefaultPlayers.remove(player);
 		this.trackedPEPlayers.remove(player);

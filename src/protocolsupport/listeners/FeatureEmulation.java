@@ -43,7 +43,7 @@ public class FeatureEmulation implements Listener {
 			.filter(player -> !player.isFlying())
 			.forEach(player -> {
 				Vector vel = player.getVelocity();
-				vel.setY(vel.getY() + (((0.05D * (player.getPotionEffect(PotionEffectType.LEVITATION).getAmplifier() + 1)) - vel.getY()) * 0.2D));
+				vel.setY(vel.getY() + (((0.05D * (((byte) player.getPotionEffect(PotionEffectType.LEVITATION).getAmplifier()) + 1)) - vel.getY()) * 0.2D));
 				player.setVelocity(vel);
 			});
 		}, 1, 1);
