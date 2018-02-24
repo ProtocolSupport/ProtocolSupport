@@ -122,7 +122,7 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 
 	@Override
 	protected RecyclableCollection<ClientBoundPacketData> processPackets(RecyclableCollection<ClientBoundPacketData> packets) {
-		return cache.getPESendPacketMovementConfirmQueue().processClientBoundPackets(packets);
+		return cache.getPEDataCache().getMovementConfirmQueue().processClientBoundPackets(packets);
 	}
 
 	@Override

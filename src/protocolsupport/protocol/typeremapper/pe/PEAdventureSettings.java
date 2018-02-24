@@ -6,6 +6,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.storage.pe.PEPlayerAttributesCache;
 
 public class PEAdventureSettings {
 
@@ -60,12 +61,13 @@ public class PEAdventureSettings {
 	}
 
 	public static ClientBoundPacketData createPacket(NetworkDataCache cache) {
+		PEPlayerAttributesCache attrscache = cache.getPEDataCache().getAttributesCache();
 		return PEAdventureSettings.createPacket(
 			cache.getSelfPlayerEntityId(),
-			PEAdventureSettings.getGameModeFlags(cache.getGameMode()),
+			PEAdventureSettings.getGameModeFlags(attrscache.getGameMode()),
 			PEAdventureSettings.AUTOJUMP_ENABLED,
-			cache.canFly() ? PEAdventureSettings.ALLOW_FLIGHT : 0,
-			cache.isFlying() ? PEAdventureSettings.FLYING : 0
+			attrscache.canFly() ? PEAdventureSettings.ALLOW_FLIGHT : 0,
+			attrscache.isFlying() ? PEAdventureSettings.FLYING : 0
 		);
 	}
 

@@ -17,7 +17,7 @@ public class Respawn extends MiddleRespawn {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		create(connection.getVersion(), dimension, cache.getSelfPlayerEntityId(), cache.getFakeSetPositionY(), packets);
+		create(connection.getVersion(), dimension, cache.getSelfPlayerEntityId(), cache.getPEDataCache().getAttributesCache().getFakeSetPositionY(), packets);
 		return packets;
 	}
 

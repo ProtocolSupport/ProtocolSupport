@@ -26,7 +26,7 @@ public class Chunk extends MiddleChunk {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		if (full) {
 			ProtocolVersion version = connection.getVersion();
-			cache.markSentChunk(chunkX, chunkZ);
+			cache.getPEDataCache().getChunkCache().markSentChunk(chunkX, chunkZ);
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHUNK_DATA, version);
 			VarNumberSerializer.writeSVarInt(serializer, chunkX);
 			VarNumberSerializer.writeSVarInt(serializer, chunkZ);

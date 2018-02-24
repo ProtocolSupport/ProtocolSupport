@@ -4,8 +4,8 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnObject.PreparedItem;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.pe.PEItemEntityCache.ItemEntityInfo;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
@@ -15,34 +15,35 @@ import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableEmptyList;
+import protocolsupport.utils.recyclable.RecyclableSingletonList;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 public class EntityMetadata extends MiddleEntityMetadata {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		NetworkEntity entity = cache.getWatchedEntity(entityId);
-
-		if(entity == null) {
-			return packets;
+		if (entity == null) {
+			return RecyclableEmptyList.get();
 		}
-		switch(entity.getType()) {
+		switch (entity.getType()) {
 			case ITEM: {
+				RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 				DataWatcherObject<?> itemWatcher = metadata.getOriginal().get(DataWatcherObjectIndex.Item.ITEM);
-				if(itemWatcher != null) {
-					PreparedItem i = cache.getPreparedItem(entityId);
-					if(i != null) {
+				if (itemWatcher != null) {
+					ItemEntityInfo i = cache.getPEDataCache().getItemEntityCache().getItem(entityId);
+					if (i != null) {
 						packets.addAll(i.updateItem(connection.getVersion(), (ItemStackWrapper) metadata.getOriginal().get(DataWatcherObjectIndex.Item.ITEM).getValue()));
 					}
 				}
+				packets.add(create(entity, cache.getLocale(), metadata.getRemapped(), connection.getVersion()));
+				return packets;
 			}
 			default: {
-				packets.add(create(entity, cache.getLocale(), metadata.getRemapped(), connection.getVersion()));
+				return RecyclableSingletonList.create(create(entity, cache.getLocale(), metadata.getRemapped(), connection.getVersion()));
 			}
 		}
-
-		return packets;
 	}
 
 	public static ClientBoundPacketData createFaux(NetworkEntity entity, String locale, ArrayMap<DataWatcherObject<?>> fauxMeta, ProtocolVersion version) {
@@ -66,7 +67,6 @@ public class EntityMetadata extends MiddleEntityMetadata {
 	}
 
 	public static void encodeMeta(ByteBuf to, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> peMetadata) {
-
 		//For now. Iterate two times :P
 		int entries = 0;
 		for (int key = peMetadata.getMinKey(); key < peMetadata.getMaxKey(); key++) {
@@ -75,6 +75,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 				entries++;
 			}
 		}
+
 		//We stored that. Now write the length first and then go.
 		VarNumberSerializer.writeVarInt(to, entries);
 		for (int key = peMetadata.getMinKey(); key < peMetadata.getMaxKey(); key++) {
@@ -83,24 +84,8 @@ public class EntityMetadata extends MiddleEntityMetadata {
 				VarNumberSerializer.writeVarInt(to, key);
 				VarNumberSerializer.writeVarInt(to, DataWatcherObjectIdRegistry.getTypeId(object, version));
 				object.writeToStream(to, version, locale);
-				entries++;
 			}
 		}
-
-
-		//TODO Fake this stuff.
-		/*VarNumberSerializer.writeVarInt(to, 0); //Fake
-		int entries = 0;
-		for (int key = peMetadata.getMinKey(); key < peMetadata.getMaxKey(); key++) {
-			DataWatcherObject<?> object = peMetadata.get(key);
-			if (object != null) {
-				VarNumberSerializer.writeVarInt(to, key);
-				VarNumberSerializer.writeVarInt(to, DataWatcherObjectIdRegistry.getTypeId(object, version));
-				object.writeToStream(to, version, locale);
-				entries++;
-			}
-		}*/
-
 	}
 
 	public static class PeMetaBase {

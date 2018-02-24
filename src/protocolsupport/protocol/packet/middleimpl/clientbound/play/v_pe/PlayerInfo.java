@@ -28,6 +28,7 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.pe.PEPlayerAttributesCache;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.typeremapper.pe.PESkinModel;
 import protocolsupport.utils.JsonUtils;
@@ -39,6 +40,7 @@ public class PlayerInfo extends MiddlePlayerInfo {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
+		PEPlayerAttributesCache attrscache = cache.getPEDataCache().getAttributesCache();
 		ProtocolVersion version = connection.getVersion();
 		switch (action) {
 			case ADD: {
@@ -47,7 +49,8 @@ public class PlayerInfo extends MiddlePlayerInfo {
 				PESkinsProvider skinprovider = PESkinsProviderSPI.getProvider();
 				VarNumberSerializer.writeVarInt(serializer, infos.length);
 				for (Info info : infos) {
-					MiscSerializer.writeUUID(serializer, connection.getVersion(), info.uuid.equals(connection.getPlayer().getUniqueId()) ? cache.getPEClientUUID() : info.uuid);
+					//TODO: cache player uuid to avoid getPlayer() calls
+					MiscSerializer.writeUUID(serializer, connection.getVersion(), info.uuid.equals(connection.getPlayer().getUniqueId()) ? attrscache.getPEClientUUID() : info.uuid);
 					VarNumberSerializer.writeVarInt(serializer, 0); //entity id
 					StringSerializer.writeString(serializer, version, info.getName(cache.getLocale()));
 					Any<Boolean, String> skininfo = getSkinInfo(info); //TODO Erm where does this come from?
@@ -57,7 +60,7 @@ public class PlayerInfo extends MiddlePlayerInfo {
 					} else {
 						writeSkinData(version, serializer, false, false, DefaultPESkinsProvider.DEFAULT_STEVE);
 						if (skininfo != null) {
-							skinprovider.scheduleGetSkinData(skininfo.getObj2(), new SkinUpdate(connection, info.uuid, cache.getPEClientUUID(), skininfo.getObj1()));
+							skinprovider.scheduleGetSkinData(skininfo.getObj2(), new SkinUpdate(connection, info.uuid, attrscache.getPEClientUUID(), skininfo.getObj1()));
 						}
 					}
 					StringSerializer.writeString(serializer, version, ""); //xuid
