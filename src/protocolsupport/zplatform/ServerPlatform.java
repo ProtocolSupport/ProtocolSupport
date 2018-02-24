@@ -28,7 +28,7 @@ public class ServerPlatform {
 			NetworkManager.class.getDeclaredFields();
 			SpigotConfig.class.getDeclaredFields();
 			if (Bukkit.getVersion().toLowerCase().contains("paper")) {
-				current = new ServerPlatform(ServerPlatformIdentifier.PAPER, new PaperPlatformInjector(), new SpigotMiscUtils(), new SpigotPacketFactory(), new SpigotWrapperFactory());
+				current = new ServerPlatform(ServerPlatformIdentifier.SPIGOT, new PaperPlatformInjector(), new SpigotMiscUtils(), new SpigotPacketFactory(), new SpigotWrapperFactory());
 			} else {
 				current = new ServerPlatform(ServerPlatformIdentifier.SPIGOT, new SpigotPlatformInjector(), new SpigotMiscUtils(), new SpigotPacketFactory(), new SpigotWrapperFactory());
 			}

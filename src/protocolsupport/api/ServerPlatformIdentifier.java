@@ -5,7 +5,6 @@ import protocolsupport.zplatform.ServerPlatform;
 public enum ServerPlatformIdentifier {
 
 	SPIGOT("Spigot"),
-	PAPER("Paper"),
 	GLOWSTONE("GlowStone");
 
 	/**
