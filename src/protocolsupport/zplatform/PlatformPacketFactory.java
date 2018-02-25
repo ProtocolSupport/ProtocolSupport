@@ -58,6 +58,8 @@ public interface PlatformPacketFactory {
 
 	public Object createUpdateChunkPacket(Chunk chunk);
 
+	public Object createBlockUpdatePacket(Position pos, int block);
+
 	public int getOutLoginDisconnectPacketId();
 
 	public int getOutLoginEncryptionBeginPacketId();

@@ -291,13 +291,18 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
-	public Object createEntityStatusPacket(Entity entity, int status) {
+	public Message createEntityStatusPacket(Entity entity, int status) {
 		return new EntityStatusMessage(entity.getEntityId(), status);
 	}
 
 	@Override
-	public Object createUpdateChunkPacket(Chunk chunk) {
+	public Message createUpdateChunkPacket(Chunk chunk) {
 		return ((GlowChunk) chunk).toMessage();
+	}
+	
+	@Override
+	public Message createBlockUpdatePacket(Position pos, int block) {
+		return new BlockChangeMessage(pos.getX(), pos.getY(), pos.getZ(), block);
 	}
 
 
