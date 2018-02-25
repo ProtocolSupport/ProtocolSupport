@@ -2,7 +2,6 @@ package protocolsupport.protocol.storage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,19 +11,26 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 import io.netty.util.internal.ThreadLocalRandom;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
+<<<<<<< HEAD
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnObject.PreparedItem;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacket.InfTransactions;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.BeaconTemple;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.EnchantHopper;
 import protocolsupport.protocol.typeremapper.pe.PEMovementConfirmationPacketQueue;
+=======
+import protocolsupport.protocol.storage.pe.PEDataCache;
+>>>>>>> branch 'mcpenew' of https://github.com/ProtocolSupport/ProtocolSupport.git
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.Utils;
+<<<<<<< HEAD
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
+=======
+>>>>>>> branch 'mcpenew' of https://github.com/ProtocolSupport/ProtocolSupport.git
 
 public class NetworkDataCache {
 
@@ -183,10 +189,6 @@ public class NetworkDataCache {
 	}
 	
 	protected final TIntObjectHashMap<NetworkEntity> watchedEntities = new TIntObjectHashMap<>();
-	protected final TIntObjectHashMap<PreparedItem> preparedItems = new TIntObjectHashMap<>();
-	private final InfTransactions infTransactions = new InfTransactions();
-	private int fuelTime = 0;
-	private int smeltTime = 200;
 	protected NetworkEntity player;
 	protected final HashMap<UUID, NetworkDataCache.PlayerListEntry> playerlist = new HashMap<>();
 	protected Environment dimensionId;
@@ -233,20 +235,8 @@ public class NetworkDataCache {
 
 	public void clearWatchedEntities() {
 		watchedEntities.clear();
-		sentChunks.clear();
 		readdSelfPlayer();
-	}
-
-	public void prepareItem(PreparedItem preparedItem) {
-		preparedItems.put(preparedItem.getId(), preparedItem);
-	}
-
-	public PreparedItem getPreparedItem(int entityId) {
-		return preparedItems.get(entityId);
-	}
-
-	public void removePreparedItem(int entityId) {
-		preparedItems.remove(entityId);
+		getPEDataCache().getChunkCache().clear();
 	}
 	
 	public int getSelectedSlot() {
@@ -255,26 +245,6 @@ public class NetworkDataCache {
 
 	public void setSelectedSlot(int selectedSlot) {
 		this.selectedSlot = selectedSlot;
-	}
-
-	public InfTransactions getInfTransactions() {
-		return infTransactions;
-	}
-	
-	public int getFuelTime() {
-		return fuelTime;
-	}
-	
-	public int getSmeltTime() {
-		return smeltTime;
-	}
-	
-	public void setFuelTime(int fuelTime) {
-		this.fuelTime = fuelTime;
-	}
-	
-	public void setSmeltTime(int smeltTime) {
-		this.smeltTime = smeltTime;
 	}
 
 	public void addPlayerListEntry(UUID uuid, PlayerListEntry entry) {
@@ -413,40 +383,6 @@ public class NetworkDataCache {
 		}
 	}
 
-	private final HashSet<ChunkCoord> sentChunks = new HashSet<>();
-
-	public void markSentChunk(int x, int z) {
-		sentChunks.add(new ChunkCoord(x, z));
-	}
-
-	public void unmarkSentChunk(int x, int z) {
-		sentChunks.remove(new ChunkCoord(x, z));
-	}
-
-	public boolean isChunkMarkedAsSent(int x, int z) {
-		return sentChunks.contains(new ChunkCoord(x, z));
-	}
-
-	protected static class ChunkCoord {
-		private final int x;
-		private final int z;
-		public ChunkCoord(int x, int z) {
-			this.x = x;
-			this.z = z;
-		}
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof ChunkCoord)) {
-				return false;
-			}
-			ChunkCoord other = (ChunkCoord) obj;
-			return (x == other.x) && (z == other.z);
-		}
-		@Override
-		public int hashCode() {
-			return (x * 31) + z;
-		}
-	}
 
 	private GameMode gamemode = GameMode.SURVIVAL;
 	private boolean canFly = false;
@@ -505,42 +441,14 @@ public class NetworkDataCache {
 		return lastSentTitle;
 	}
 
-	private long inventoryLockMillis = 0;
-	
-	public void lockInventory() {
-		inventoryLockMillis = System.currentTimeMillis();
-	}
-	
-	public boolean isInventoryLocked() {
-		return System.currentTimeMillis() - inventoryLockMillis < 230;
-	}
 	
 	public void setLastSentTitle(long lastSentTitle) {
 		this.lastSentTitle = lastSentTitle;
 	}
 
-	private UUID peClientUUID;
-
-	public void setPEClientUUID(UUID uuid) {
-		Validate.notNull(uuid, "PE client uuid (identity) can't be null");
-		this.peClientUUID = uuid;
-	}
-
-	public UUID getPEClientUUID() {
-		return peClientUUID;
-	}
-
-	private final PEMovementConfirmationPacketQueue mvconfirmqueue = new PEMovementConfirmationPacketQueue();
-
-	public PEMovementConfirmationPacketQueue getPESendPacketMovementConfirmQueue() {
-		return mvconfirmqueue;
-	}
-
-	private boolean fakesetpositionswitch = true;
-
-	public double getFakeSetPositionY() {
-		fakesetpositionswitch = !fakesetpositionswitch;
-		return fakesetpositionswitch ? 20.0 : 30.0;
+	private final PEDataCache pedatacache = new PEDataCache();
+	public PEDataCache getPEDataCache() {
+		return pedatacache;
 	}
 
 }

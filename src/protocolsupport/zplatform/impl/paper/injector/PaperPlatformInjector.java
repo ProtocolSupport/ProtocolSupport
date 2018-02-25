@@ -2,6 +2,7 @@ package protocolsupport.zplatform.impl.paper.injector;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+
 import protocolsupport.ProtocolSupport;
 import protocolsupport.zplatform.PlatformInjector;
 import protocolsupport.zplatform.impl.spigot.injector.SpigotServerInjector;
@@ -11,7 +12,6 @@ public class PaperPlatformInjector implements PlatformInjector {
 
 	@Override
 	public void inject() {
-		// We are going to reuse the Spigot***Injector, there isn't any differences between Spigot's and Paper's impl here
 		try {
 			SpigotServerInjector.inject();
 			SpigotNettyInjector.inject();

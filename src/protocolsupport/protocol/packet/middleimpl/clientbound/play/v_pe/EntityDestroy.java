@@ -18,8 +18,8 @@ public class EntityDestroy extends MiddleEntityDestroy {
 		ProtocolVersion version = connection.getVersion();
 		for (int entityId : entityIds) {
 			NetworkEntity entity = cache.getWatchedEntity(entityId);
-			if((entity != null) && (entity.getType() == NetworkEntityType.ITEM)) {
-					cache.removePreparedItem(entityId);
+			if ((entity != null) && (entity.getType() == NetworkEntityType.ITEM)) {
+				cache.getPEDataCache().getItemEntityCache().removeItem(entityId);
 			}
 			packets.add(create(version, entityId));
 		}

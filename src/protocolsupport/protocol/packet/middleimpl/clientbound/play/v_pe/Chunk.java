@@ -24,9 +24,9 @@ public class Chunk extends MiddleChunk {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		if (full) { //Only send full chunks to PE.
+		if (full || bitmask == 0xFFFF) { //Only send full or 'full' chunks to PE.
 			ProtocolVersion version = connection.getVersion();
-			cache.markSentChunk(chunkX, chunkZ);
+			cache.getPEDataCache().getChunkCache().markSentChunk(chunkX, chunkZ);
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHUNK_DATA, version);
 			VarNumberSerializer.writeSVarInt(serializer, chunkX);
 			VarNumberSerializer.writeSVarInt(serializer, chunkZ);
@@ -40,7 +40,7 @@ public class Chunk extends MiddleChunk {
 			}
 			ArraySerializer.writeByteArray(serializer, version, chunkdata);
 			return RecyclableSingletonList.create(serializer);
-		} else {
+		} else { //Request a full chunk.
 			InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.ChunkUpdateRequest(chunkX, chunkZ));
 			return RecyclableEmptyList.get();
 		}

@@ -109,9 +109,9 @@ public class ItemStackSerializer {
 				}
 			}
 
-			VarNumberSerializer.writeSVarInt(to, id); //TODO: Remap PE itemstacks...
+			VarNumberSerializer.writeSVarInt(to, id);
 			VarNumberSerializer.writeSVarInt(to, ((data & 0xFFFF) << 8) | witemstack.getAmount());
-			writeTag(to, false, version, witemstack.getTag()); //TODO: write and Remap PE NBT
+			writeTag(to, false, version, witemstack.getTag());
 			to.writeByte(0); //TODO: CanPlaceOn PE
 			to.writeByte(0); //TODO: CanDestroy PE
 		} else {

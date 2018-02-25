@@ -72,7 +72,7 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 				new TypeToken<Map<String, List<String>>>() {}.getType()
 			));
 			username = JsonUtils.getString(chaindata.getObj2(), "displayName");
-			cache.setPEClientUUID(UUID.fromString(JsonUtils.getString(chaindata.getObj2(), "identity")));
+			cache.getPEDataCache().getAttributesCache().setPEClientUUID(UUID.fromString(JsonUtils.getString(chaindata.getObj2(), "identity")));
 			if (chaindata.getObj1() != null) {
 				connection.addMetadata(XUID_METADATA_KEY, JsonUtils.getString(chaindata.getObj2(), "XUID"));
 			}

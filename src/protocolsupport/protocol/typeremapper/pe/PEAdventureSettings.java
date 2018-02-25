@@ -6,7 +6,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
-import protocolsupport.protocol.utils.types.GameMode;
+import protocolsupport.protocol.storage.pe.PEPlayerAttributesCache;
 
 public class PEAdventureSettings {
 
@@ -34,12 +34,12 @@ public class PEAdventureSettings {
 	public static final int GROUP_OP = 2;
 	public static final int GROUP_CUSTOM = 3;
 
-	public static int getGameModeFlags(GameMode gamemode) {
+	public static int getGameModeFlags(int gamemode) {
 		switch (gamemode) {
-			case ADVENTURE: {
+			case 1: {
 				return ADVENTURE_MODE_ENABLED;
 			}
-			case SPECTATOR: {
+			case 3: {
 				return PVP_DISABLED | PVE_DISABLED | ALLOW_FLIGHT | FLYING | NOCLIP_ENABLED;
 			}
 			default: {
@@ -52,7 +52,6 @@ public class PEAdventureSettings {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ADVENTURE_SETTINGS, ProtocolVersion.MINECRAFT_PE);
 		VarNumberSerializer.writeVarInt(serializer, Arrays.stream(flags).reduce(0, (left, right) -> left | right));
 		VarNumberSerializer.writeVarInt(serializer, 0); //?
-		//TODO: Actually work with permissions?
 		VarNumberSerializer.writeVarInt(serializer, PERMISSIONS_ALLOW_ALL);
 		VarNumberSerializer.writeVarInt(serializer, GROUP_NORMAL);
 		VarNumberSerializer.writeVarInt(serializer, 0); //? (custom flags)
@@ -61,12 +60,13 @@ public class PEAdventureSettings {
 	}
 
 	public static ClientBoundPacketData createPacket(NetworkDataCache cache) {
+		PEPlayerAttributesCache attrscache = cache.getPEDataCache().getAttributesCache();
 		return PEAdventureSettings.createPacket(
 			cache.getSelfPlayerEntityId(),
-			PEAdventureSettings.getGameModeFlags(cache.getGameMode()),
+			PEAdventureSettings.getGameModeFlags(attrscache.getGameMode()),
 			PEAdventureSettings.AUTOJUMP_ENABLED,
-			cache.canFly() ? PEAdventureSettings.ALLOW_FLIGHT : 0,
-			cache.isFlying() ? PEAdventureSettings.FLYING : 0
+			attrscache.canFly() ? PEAdventureSettings.ALLOW_FLIGHT : 0,
+			attrscache.isFlying() ? PEAdventureSettings.FLYING : 0
 		);
 	}
 

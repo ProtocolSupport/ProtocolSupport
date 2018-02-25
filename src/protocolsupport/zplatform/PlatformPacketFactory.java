@@ -50,8 +50,6 @@ public interface PlatformPacketFactory {
 
 	public Object createBlockBreakSoundPacket(Position pos, Material type);
 	
-	public Object createBlockUpdatePacket(Position pos, int block);
-
 	public Object createStatusPongPacket(long pingId);
 
 	public Object createStausServerInfoPacket(List<String> profiles, ProtocolInfo info, String icon, String motd, int maxPlayers);
@@ -65,6 +63,8 @@ public interface PlatformPacketFactory {
 	public Object createEntityStatusPacket(Entity entity, int status);
 
 	public Object createUpdateChunkPacket(Chunk chunk);
+
+	public Object createBlockUpdatePacket(Position pos, int block);
 
 	public int getOutLoginDisconnectPacketId();
 

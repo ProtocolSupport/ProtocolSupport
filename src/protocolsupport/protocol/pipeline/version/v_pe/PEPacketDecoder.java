@@ -31,7 +31,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.SteerVeh
 import protocolsupport.protocol.pipeline.version.AbstractPacketDecoder;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
-import protocolsupport.protocol.typeremapper.pe.PEMovementConfirmationPacketQueue;
+import protocolsupport.protocol.storage.pe.PEDimensionSwitchMovementConfirmationPacketQueue;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -82,7 +82,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 			if (input.isReadable()) {
 				throw new DecoderException("Did not read all data from packet " + packetTransformer.getClass().getName() + ", bytes left: " + input.readableBytes());
 			}
-			PEMovementConfirmationPacketQueue confirmqueue = cache.getPESendPacketMovementConfirmQueue();
+			PEDimensionSwitchMovementConfirmationPacketQueue confirmqueue = cache.getPEDataCache().getMovementConfirmQueue();
 			RecyclableCollection<ServerBoundPacketData> packets = confirmqueue.processServerBoundPackets(packetTransformer.toNative());
 			if (confirmqueue.shouldScheduleUnlock()) {
 				ctx.channel().eventLoop().schedule(() -> {

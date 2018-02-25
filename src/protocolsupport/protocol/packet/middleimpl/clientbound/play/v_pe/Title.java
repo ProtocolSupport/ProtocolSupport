@@ -6,6 +6,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleTitle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.pe.PETitleCache;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -22,6 +23,7 @@ public class Title extends MiddleTitle {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
+		PETitleCache titlecache = cache.getPEDataCache().getTitleCache();
 		ProtocolVersion version = connection.getVersion();
 		switch (this.action) {
 			case HIDE: {
@@ -32,15 +34,14 @@ public class Title extends MiddleTitle {
 			}
 			case SET_TITLE: {
 				String title = message.toLegacyText(cache.getLocale());
-				cache.setTitle(title);
-				cache.setLastSentTitle(System.currentTimeMillis());
+				titlecache.setTitle(title);
 				return RecyclableSingletonList.create(create(version, SET_TITLE, message.toLegacyText(cache.getLocale()), 0, 0, 0));
 			}
 			case SET_SUBTITLE: {
 				RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 				packets.add(create(version, SET_SUBTITLE, message.toLegacyText(cache.getLocale()), 0, 0, 0));
-				if ((cache.getLastSentTitle() + (cache.getVisibleOnScreenTicks() * 50)) > System.currentTimeMillis()) {
-					packets.add(create(version, SET_TITLE, cache.getTitle(), 0, 0, 0));
+				if ((titlecache.getLastSentTitle() + (titlecache.getVisibleOnScreenTicks() * 50)) > System.currentTimeMillis()) {
+					packets.add(create(version, SET_TITLE, titlecache.getTitle(), 0, 0, 0));
 				}
 				return packets;
 			}
@@ -48,7 +49,7 @@ public class Title extends MiddleTitle {
 				return RecyclableSingletonList.create(create(version, SET_ACTION_BAR, message.toLegacyText(cache.getLocale()), 0, 0, 0));
 			}
 			case SET_TIMES: {
-				cache.setVisibleOnScreenTicks(fadeIn + stay + fadeOut);
+				titlecache.setVisibleOnScreenTicks(fadeIn + stay + fadeOut);
 				return RecyclableSingletonList.create(create(version, SET_TIMINGS, "", fadeIn, stay, fadeOut));
 			}
 			default: {

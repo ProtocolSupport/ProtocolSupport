@@ -4,12 +4,10 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnObject.PreparedItem;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.pe.PEItemEntityCache.ItemEntityInfo;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.typeremapper.watchedentity.DataWatcherDataRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherObjectIndex;
-import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectSVarLong;
@@ -26,19 +24,19 @@ public class EntityMetadata extends MiddleEntityMetadata {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		NetworkEntity entity = cache.getWatchedEntity(entityId);
-
 		if(entity == null) {
 			return packets;
 		}
 		switch(entity.getType()) {
 			case ITEM: {
 				DataWatcherObject<?> itemWatcher = metadata.getOriginal().get(DataWatcherObjectIndex.Item.ITEM);
-				if(itemWatcher != null) {
-					PreparedItem i = cache.getPreparedItem(entityId);
-					if(i != null) {
+				if (itemWatcher != null) {
+					ItemEntityInfo i = cache.getPEDataCache().getItemEntityCache().getItem(entityId);
+					if (i != null) {
 						packets.addAll(i.updateItem(connection.getVersion(), (ItemStackWrapper) metadata.getOriginal().get(DataWatcherObjectIndex.Item.ITEM).getValue()));
 					}
 				}
+				break;
 			}
 			default: {
 				if (entity.isOfType(NetworkEntityType.LIVING)) {
@@ -50,7 +48,6 @@ public class EntityMetadata extends MiddleEntityMetadata {
 				packets.add(create(entity, cache.getLocale(), metadata.getRemapped(), connection.getVersion()));
 			}
 		}
-
 		return packets;
 	}
 
@@ -59,12 +56,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 	}
 
 	public static ClientBoundPacketData createFaux(NetworkEntity entity, String locale, ProtocolVersion version) {
-		DataWatcherDataRemapper faux = new DataWatcherDataRemapper();
-		if (entity != null) {
-			SpecificRemapper.fromWatchedType(entity.getType()).getRemaps(version)
-			.forEach(remapper -> remapper.remap(entity, faux.getOriginal(), faux.getRemapped()));
-		}
-		return create(entity, locale, transform(entity, faux.getRemapped(), version), version);
+		return create(entity, locale, transform(entity, new ArrayMap<DataWatcherObject<?>>(76), version), version);
 	}
 
 	public static ArrayMap<DataWatcherObject<?>> transform(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> peMetadata, ProtocolVersion version) {
@@ -80,8 +72,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 	}
 
 	public static void encodeMeta(ByteBuf to, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> peMetadata) {
-
-		//For now. Iterate two times :P
+		//For now. Iterate two times :P TODO: Fake varint, if that's possible.
 		int entries = 0;
 		for (int key = peMetadata.getMinKey(); key < peMetadata.getMaxKey(); key++) {
 			DataWatcherObject<?> object = peMetadata.get(key);
@@ -100,21 +91,6 @@ public class EntityMetadata extends MiddleEntityMetadata {
 				entries++;
 			}
 		}
-
-
-		//TODO Fake this stuff.
-		/*VarNumberSerializer.writeVarInt(to, 0); //Fake
-		int entries = 0;
-		for (int key = peMetadata.getMinKey(); key < peMetadata.getMaxKey(); key++) {
-			DataWatcherObject<?> object = peMetadata.get(key);
-			if (object != null) {
-				VarNumberSerializer.writeVarInt(to, key);
-				VarNumberSerializer.writeVarInt(to, DataWatcherObjectIdRegistry.getTypeId(object, version));
-				object.writeToStream(to, version, locale);
-				entries++;
-			}
-		}*/
-
 	}
 
 	public static class PeMetaBase {
