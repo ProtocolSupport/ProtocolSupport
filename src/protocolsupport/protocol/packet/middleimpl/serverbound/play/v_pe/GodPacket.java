@@ -25,6 +25,7 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.storage.pe.PEInventoryCache;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.GameMode;
@@ -155,6 +156,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
+		PEInventoryCache invCache = cache.getPEDataCache().getInventoryCache();
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 		switch(actionId) {
 			case ACTION_USE_ITEM: {
@@ -167,7 +169,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 						break;
 					}
 					case USE_DIG_BLOCK: {
-						if(cache.getGameMode() == GameMode.CREATIVE) { //instabreak
+						if(cache.getPEDataCache().getAttributesCache().getGameMode() == GameMode.CREATIVE) { //instabreak
 							packets.add(MiddleBlockDig.create(MiddleBlockDig.Action.START_DIG, position, 0));
 							packets.add(MiddleBlockDig.create(MiddleBlockDig.Action.FINISH_DIG, position, 0));
 						}
@@ -213,9 +215,9 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			}
 			case ACTION_NORMAL: { //Normal inventory transaction.
 				for (InfTransaction transaction : transactions) {
-					cache.getInfTransactions().cacheTransaction(cache, transaction);
+					invCache.getInfTransactions().cacheTransaction(cache, transaction);
 				}
-				packets.addAll(cache.getInfTransactions().process(cache));
+				packets.addAll(invCache.getInfTransactions().process(cache));
 				break;
 			}
 			case ACTION_MISMATCH:
@@ -317,7 +319,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		
 		public void customCursorSurplus(NetworkDataCache cache, ItemStackWrapper itemstack) {
 			clear();
-			if ((!itemstack.isNull()) && !((cache.getGameMode() == GameMode.CREATIVE) && (cache.getOpenedWindow() == WindowType.PLAYER))) {
+			if ((!itemstack.isNull()) && !((cache.getPEDataCache().getAttributesCache().getGameMode() == GameMode.CREATIVE) && (cache.getOpenedWindow() == WindowType.PLAYER))) {
 				bug("SERVER INTERVENTION ON CURSOR ITEM!! Clearing surplus deficit thingy!");
 				//TODO removing comparing code when are all kinks are worked out.
 				ByteBuf screwThis = Unpooled.buffer();
@@ -333,6 +335,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		}
 		
 		public void cacheTransaction(NetworkDataCache cache, InfTransaction transaction) {
+			PEInventoryCache invCache = cache.getPEDataCache().getInventoryCache();
 			int pcSlot = transformSlot(cache, transaction.getInventoryId(), transaction.getSlot());
 			
 			bug("Going through cache stuff with slot: " + pcSlot);
@@ -343,13 +346,13 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			}
 			
 			//Creative transactions.
-			if ((cache.getGameMode() == GameMode.CREATIVE) && (cache.getOpenedWindow() == WindowType.PLAYER)) {
+			if ((cache.getPEDataCache().getAttributesCache().getGameMode() == GameMode.CREATIVE) && (cache.getOpenedWindow() == WindowType.PLAYER)) {
 				if ((transaction.getSourceId() != SOURCE_CREATIVE) && (pcSlot != -1)) {
 					if(!transaction.getNewItem().isNull()) System.out.println(transaction.getNewItem().getTag());
 					//Creative transaction use -1 not for cursor but throwing items, cursoritems are actually deleted on serverside.
 					misc.add(MiddleCreativeSetSlot.create(cache.getLocale(), (pcSlot == -999 ? -1 : pcSlot), transaction.getNewItem()));
-					if (pcSlot == cache.getSelectedSlot()) {
-						cache.setItemInHand(transaction.getNewItem());
+					if (pcSlot == invCache.getSelectedSlot()) {
+						invCache.setItemInHand(transaction.getNewItem());
 					}
 				}
 				return;
@@ -369,9 +372,9 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			//Enchantment via hoppers. Yes, it's a hack but it's only possible this way.
 			if (cache.getOpenedWindow() == WindowType.ENCHANT) {
 				if (pcSlot == 0) {
-					cache.getEnchantHopper().setInputOutputStack(transaction.getNewItem());
+					invCache.getEnchantHopper().setInputOutputStack(transaction.getNewItem());
 				} else if (pcSlot == 1 && (transaction.getNewItem().isNull() || (transaction.getNewItem().getType() == Material.INK_SACK && transaction.getNewItem().getData() == 4))) {
-					cache.getEnchantHopper().setLapisStack(transaction.getNewItem());
+					invCache.getEnchantHopper().setLapisStack(transaction.getNewItem());
 				} else if (pcSlot > 1 && pcSlot <= 4 && transaction.getInventoryId() != PESource.POCKET_INVENTORY) { //If and only if on of the three fake hopper option slots are clicked proceed with the enchanting.
 					misc.add(MiddleInventoryEnchant.create(cache.getOpenedWindowId(), pcSlot - 2));
 					return;
@@ -450,7 +453,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			//Since pocket simulates most things clientside, 
 			//we stop any incoming inventory traffic when processing slots
 			//until the manual override kicks in.
-			cache.lockInventory();
+			cache.getPEDataCache().getInventoryCache().lockInventory();
 			
 			bug("PROCESSING MISC");
 			

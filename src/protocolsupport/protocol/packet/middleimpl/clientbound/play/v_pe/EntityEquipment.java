@@ -58,7 +58,7 @@ public class EntityEquipment extends MiddleEntityEquipment {
 		} else {
 			dataCache.setOffHand(itemstack);
 		}
-		return RecyclableSingletonList.create(createUpdateHand(version, locale, entityId, itemstack, cache.isSelf(entityId) ? cache.getSelectedSlot() : 0, slot == 1));
+		return RecyclableSingletonList.create(createUpdateHand(version, locale, entityId, itemstack, cache.isSelf(entityId) ? cache.getPEDataCache().getInventoryCache().getSelectedSlot() : 0, slot == 1));
 	}
 	
 	public static ClientBoundPacketData createUpdateHand(ProtocolVersion version, String locale, int entityId, ItemStackWrapper itemstack, int slot, boolean isMainHand) {

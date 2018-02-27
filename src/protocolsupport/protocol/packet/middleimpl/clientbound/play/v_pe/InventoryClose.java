@@ -12,7 +12,7 @@ public class InventoryClose extends MiddleInventoryClose {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		cache.getInfTransactions().clear();
+		cache.getPEDataCache().getInventoryCache().getInfTransactions().clear();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		packets.add(create(connection.getVersion(), windowId));
 		packets.addAll(InvBlock.destroyFakeInventory(connection));

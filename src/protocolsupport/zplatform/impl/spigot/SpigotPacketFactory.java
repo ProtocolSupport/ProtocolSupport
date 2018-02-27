@@ -183,19 +183,6 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 	
 	@Override
-	public Object createBlockUpdatePacket(Position pos, int block) {
-		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer());
-		PositionSerializer.writePosition(serializer, pos);
-		VarNumberSerializer.writeVarInt(serializer, block);
-		PacketPlayOutBlockChange packet = new PacketPlayOutBlockChange();
-		try {
-			packet.a(serializer);
-		} catch (IOException e) {
-		}
-		return packet;
-	}
-	
-	@Override
 	public Object createStatusPongPacket(long pingId) {
 		return new PacketStatusOutPong(pingId);
 	}
@@ -246,6 +233,19 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	@Override
 	public Object createUpdateChunkPacket(Chunk chunk) {
 		return new PacketPlayOutMapChunk(((CraftChunk) chunk).getHandle(), 0xFFFF);
+	}
+
+	@Override
+	public Object createBlockUpdatePacket(Position pos, int block) {
+		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer());
+		PositionSerializer.writePosition(serializer, pos);
+		VarNumberSerializer.writeVarInt(serializer, block);
+		PacketPlayOutBlockChange packet = new PacketPlayOutBlockChange();
+		try {
+			packet.a(serializer);
+		} catch (IOException e) {
+		}
+		return packet;
 	}
 
 

@@ -4,6 +4,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryData;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.pe.PEInventoryCache;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -15,25 +16,26 @@ public class InventoryData extends MiddleInventoryData {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
+		PEInventoryCache invCache = cache.getPEDataCache().getInventoryCache();
 		switch(cache.getOpenedWindow()) {
 			case FURNACE: {
 				switch(type) {
 					case 0: { //Fire icon (Burned ticks) (Tick in PE is 50ms while in PC it's 20)
-						int peValue = Math.round((((float) value * 400) / cache.getFuelTime()));
+						int peValue = Math.round((((float) value * 400) / invCache.getFuelTime()));
 						return RecyclableSingletonList.create(create(version, windowId, 2, peValue));
 					}
 					case 1: { //Fuel burn time
 						if(value != 0) {
-							cache.setFuelTime(value);
+							invCache.setFuelTime(value);
 						}
 						break;
 					}
 					case 2: { //Cook time (How long the item has been cooking)
-						return RecyclableSingletonList.create(create(version, windowId, 0, Math.round((((float) value * 400) / cache.getSmeltTime()))));
+						return RecyclableSingletonList.create(create(version, windowId, 0, Math.round((((float) value * 400) / invCache.getSmeltTime()))));
 					}
 					case 3: { //Smelt time (How long it takes for the item to smelt)
 						if(value != 0) {
-							cache.setSmeltTime(value);
+							invCache.setSmeltTime(value);
 						}
 						break;
 					}
@@ -42,13 +44,13 @@ public class InventoryData extends MiddleInventoryData {
 			}
 			case ENCHANT: {
 				if (type <= 2) { //(0-2) EnchantmentXP per option
-					cache.getEnchantHopper().updateOptionXP(type, value);
+					invCache.getEnchantHopper().updateOptionXP(type, value);
 				} else if (type == 3) {
 					break; //Use for weird item names?
 				} else if (type <= 6) { //(4-6) EnchantmentId per option
-					cache.getEnchantHopper().updateOptionEnch(type - 4, value);
+					invCache.getEnchantHopper().updateOptionEnch(type - 4, value);
 				} else if (type <= 9) { //(7-9) EnchantmentLvl per option
-					cache.getEnchantHopper().updateOptionLevel(type - 7, value);
+					invCache.getEnchantHopper().updateOptionLevel(type - 7, value);
 				}
 				break;
 			}
@@ -60,13 +62,13 @@ public class InventoryData extends MiddleInventoryData {
 					}
 					case 1: {
 						System.out.println("Beacon Primary: " + value);
-						cache.getBeaconTemple().setPrimaryEffect(value);
-						return cache.getBeaconTemple().updateNBT(version, connection);
+						invCache.getBeaconTemple().setPrimaryEffect(value);
+						return invCache.getBeaconTemple().updateNBT(version, connection);
 					}
 					case 2: {
 						System.out.println("Beacon Secondary: " + value);
-						cache.getBeaconTemple().setSecondaryEffect(value);
-						return cache.getBeaconTemple().updateNBT(version, connection);
+						invCache.getBeaconTemple().setSecondaryEffect(value);
+						return invCache.getBeaconTemple().updateNBT(version, connection);
 					}
 				}
 				break;

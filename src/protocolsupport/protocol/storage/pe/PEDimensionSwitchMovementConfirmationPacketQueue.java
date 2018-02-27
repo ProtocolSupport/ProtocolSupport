@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.pe;
+package protocolsupport.protocol.storage.pe;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -6,10 +6,11 @@ import java.util.Collection;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
+import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
-public class PEMovementConfirmationPacketQueue {
+public class PEDimensionSwitchMovementConfirmationPacketQueue {
 
 	protected final ArrayList<ClientBoundPacketData> queue = new ArrayList<>(2000);
 	protected State state = State.SCANNING_FOR_LOGIN_STATUS;

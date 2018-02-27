@@ -16,7 +16,7 @@ import protocolsupport.protocol.ConnectionImpl;
 
 public class SpigotEntityTrackerBlock implements IWorldAccess {
 
-	private WorldServer worldserver;
+	private final WorldServer worldserver;
 
 	public SpigotEntityTrackerBlock(WorldServer worldserver) {
 		this.worldserver = worldserver;
@@ -72,7 +72,7 @@ public class SpigotEntityTrackerBlock implements IWorldAccess {
 	@Override // Block break. We hook into this notifier to also update PE blocks.
 	public void b(int id, BlockPosition position, int progress) {
 		worldserver.players.stream()
-			.filter(he -> (he != null && he.getId() == id && he instanceof EntityPlayer)).map(he -> (EntityPlayer) he)
+			.filter(he -> ((he != null) && (he.getId() == id) && (he instanceof EntityPlayer))).map(he -> (EntityPlayer) he)
 			.forEach(player -> {
 				ConnectionImpl connection = ConnectionImpl.getFromChannel(player.playerConnection.networkManager.channel);
 				if ((connection != null) && (connection.getVersion().getProtocolType() == ProtocolType.PE)) {

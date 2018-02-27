@@ -18,6 +18,7 @@ public class PipeLineBuilder implements IPipeLineBuilder {
 	public void buildCodec(Channel channel, Connection connection) {
 		ChannelPipeline pipeline = channel.pipeline();
 		NetworkDataCache sharedstorage = new NetworkDataCache();
+		sharedstorage.initPECash();
 		pipeline.addAfter(ChannelHandlers.RAW_CAPTURE_RECEIVE, ChannelHandlers.DECODER_TRANSFORMER, new PEPacketDecoder(connection, sharedstorage));
 		pipeline.addAfter(ChannelHandlers.RAW_CAPTURE_SEND, ChannelHandlers.ENCODER_TRANSFORMER, new PEPacketEncoder(connection, sharedstorage));
 	}

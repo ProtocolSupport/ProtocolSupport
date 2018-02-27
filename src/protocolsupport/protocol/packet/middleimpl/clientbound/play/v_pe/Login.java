@@ -9,6 +9,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSu
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.pe.PEPlayerAttributesCache;
 import protocolsupport.protocol.typeremapper.pe.PEAdventureSettings;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
@@ -24,7 +25,7 @@ import protocolsupport.zplatform.impl.pe.PECreativeInventory;
 public class Login extends MiddleLogin {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
+	public RecyclableCollection<ClientBoundPacketData> toData() {		
 		ProtocolVersion version = connection.getVersion();
 		NetworkEntity player = cache.getWatchedSelf();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
@@ -100,11 +101,13 @@ public class Login extends MiddleLogin {
 		VarNumberSerializer.writeVarInt(creativeInventoryPacket, peInv.getItemCount());
 		creativeInventoryPacket.writeBytes(peInv.getCreativeItems());
 		packets.add(creativeInventoryPacket);
-		//Fake chunks with position, because pe doesn't like spawning in no chunk world
-		Respawn.addFakeChunksAndPos(version, player, cache.getFakeSetPositionY(), packets);
-		//Add two dimension switches to make sure that player ends up in right dimension even if bungee dimension switch on server switch broke stuff
-		Respawn.create(version, dimension != Environment.OVERWORLD ? Environment.OVERWORLD: Environment.THE_END, player, cache.getFakeSetPositionY(), packets);
-		Respawn.create(version, dimension, player, cache.getFakeSetPositionY(), packets);
+		PEPlayerAttributesCache attrscache = cache.getPEDataCache().getAttributesCache();
+		attrscache.setGameMode(gamemode);
+		//fake chunks with position, because pe doesn't like spawning in no chunk world
+		Respawn.addFakeChunksAndPos(version, cache.getWatchedSelf(), attrscache.getFakeSetPositionY(), packets);
+		//add two dimension switches to make sure that player ends up in right dimension even if bungee dimension switch on server switch broke stuff
+		Respawn.create(version, dimension != Environment.OVERWORLD ? Environment.OVERWORLD: Environment.THE_END, cache.getWatchedSelf(), attrscache.getFakeSetPositionY(), packets);
+		Respawn.create(version, dimension, cache.getWatchedSelf(), attrscache.getFakeSetPositionY(), packets);
 		return packets;
 	}
 

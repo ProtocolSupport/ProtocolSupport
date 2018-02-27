@@ -6,6 +6,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.storage.pe.PEPlayerAttributesCache;
 import protocolsupport.protocol.utils.types.GameMode;
 
 public class PEAdventureSettings {
@@ -52,7 +53,6 @@ public class PEAdventureSettings {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ADVENTURE_SETTINGS, ProtocolVersion.MINECRAFT_PE);
 		VarNumberSerializer.writeVarInt(serializer, Arrays.stream(flags).reduce(0, (left, right) -> left | right));
 		VarNumberSerializer.writeVarInt(serializer, 0); //?
-		//TODO: Actually work with permissions?
 		VarNumberSerializer.writeVarInt(serializer, PERMISSIONS_ALLOW_ALL);
 		VarNumberSerializer.writeVarInt(serializer, GROUP_NORMAL);
 		VarNumberSerializer.writeVarInt(serializer, 0); //? (custom flags)
@@ -61,12 +61,13 @@ public class PEAdventureSettings {
 	}
 
 	public static ClientBoundPacketData createPacket(NetworkDataCache cache) {
+		PEPlayerAttributesCache attrscache = cache.getPEDataCache().getAttributesCache();
 		return PEAdventureSettings.createPacket(
 			cache.getSelfPlayerEntityId(),
-			PEAdventureSettings.getGameModeFlags(cache.getGameMode()),
+			PEAdventureSettings.getGameModeFlags(attrscache.getGameMode()),
 			PEAdventureSettings.AUTOJUMP_ENABLED,
-			cache.canFly() ? PEAdventureSettings.ALLOW_FLIGHT : 0,
-			cache.isFlying() ? PEAdventureSettings.FLYING : 0
+			attrscache.canFly() ? PEAdventureSettings.ALLOW_FLIGHT : 0,
+			attrscache.isFlying() ? PEAdventureSettings.FLYING : 0
 		);
 	}
 

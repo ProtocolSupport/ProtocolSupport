@@ -5,6 +5,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventorySe
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.pe.PEInventoryCache;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -16,15 +17,16 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		if (cache.isInventoryLocked()) {
+		ProtocolVersion version = connection.getVersion();
+		PEInventoryCache invCache = cache.getPEDataCache().getInventoryCache();
+		if (invCache.isInventoryLocked()) {
 			return RecyclableEmptyList.get();
 		}
-		ProtocolVersion version = connection.getVersion();
 		String locale = cache.getLocale();
 		if (slot == -1) {
 			//TODO: Figure out how to not fuck this up.
 			//Cursor slot can be set by plugin (only if a window is actually open), this will cause issues however with the deficit/surplus stack so we add them manually here.
-			cache.getInfTransactions().customCursorSurplus(cache, itemstack);
+			invCache.getInfTransactions().customCursorSurplus(cache, itemstack);
 			return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_CLICKED_SLOT, 0, itemstack));
 		}
 		switch(cache.getOpenedWindow()) {
@@ -43,7 +45,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 				} else if (slot <= 35) {
 					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_INVENTORY, slot, itemstack));
 				} else if (slot <= 44) {
-					if(slot - 36 == cache.getSelectedSlot()) { cache.setItemInHand(itemstack); }
+					if(slot - 36 == invCache.getSelectedSlot()) { invCache.setItemInHand(itemstack); }
 					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_INVENTORY, slot - 36, itemstack));
 				} else if (slot == 45) {
 					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_OFFHAND, 0, itemstack));
@@ -78,11 +80,11 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 			}
 			case ENCHANT: {
 				if (slot == 0) {
-					cache.getEnchantHopper().setInputOutputStack(itemstack);
-					return RecyclableSingletonList.create(cache.getEnchantHopper().updateInventory(cache, version)); //Fake with hopper :F
+					invCache.getEnchantHopper().setInputOutputStack(itemstack);
+					return RecyclableSingletonList.create(invCache.getEnchantHopper().updateInventory(cache, version)); //Fake with hopper :F
 				} else if (slot == 1) {
-					cache.getEnchantHopper().setLapisStack(itemstack);
-					return RecyclableSingletonList.create(cache.getEnchantHopper().updateInventory(cache, version));
+					invCache.getEnchantHopper().setLapisStack(itemstack);
+					return RecyclableSingletonList.create(invCache.getEnchantHopper().updateInventory(cache, version));
 				} else {
 					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_INVENTORY, slot >= 29 ? slot - 29 : slot + 7, itemstack));
 				}

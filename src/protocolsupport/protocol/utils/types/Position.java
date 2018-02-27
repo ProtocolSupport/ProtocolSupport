@@ -1,6 +1,7 @@
 package protocolsupport.protocol.utils.types;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 
 import protocolsupport.utils.Utils;
 
@@ -54,6 +55,10 @@ public class Position {
 
 	public void modifyZ(int cnt) {
 		z += cnt;
+	}
+	
+	public Location toBukkit(World world) {
+		return new Location(world, x, y, z);
 	}
 
 	@Override

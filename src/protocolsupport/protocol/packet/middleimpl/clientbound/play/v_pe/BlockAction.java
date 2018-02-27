@@ -10,9 +10,10 @@ import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class BlockAction extends MiddleBlockAction {
+
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		switch(this.type) {
+		switch (this.type) {
 			case 54: // chest
 			case 130: // enderchest
 			case 146: // trapped chest
@@ -25,8 +26,10 @@ public class BlockAction extends MiddleBlockAction {
 					VarNumberSerializer.writeSVarInt(serializer, 0);
 				}
 				return RecyclableSingletonList.create(serializer);
-			default:
+			default: {
 				return RecyclableEmptyList.get();
+			}
 		}
 	}
+
 }
