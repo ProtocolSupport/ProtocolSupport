@@ -82,14 +82,12 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 			double attrvalue = (attr.value + add) * mulInc * mulMore;
 			String pename = remapAttrNames.getOrDefault(attr.key, attr.key);
 			float[] minmax = knownMinMax.getOrDefault(pename, new float[]{0, 1, Float.MAX_VALUE});
-			if (pename.equals("minecraft:health")) { minmax[2] = entity.getDataCache().getMaxHealth(); }
-			if (pename.equals("minecraft:horse.jump_strength")) { System.out.println("HORSAAAYYYY!!!"); }
-			serializer.writeFloatLE(minmax[0]);
-			serializer.writeFloatLE(minmax[2]);
-			serializer.writeFloatLE((float) attrvalue);
+			if (pename.equals("minecraft:health")) { minmax[2] = entity.getDataCache().getMaxHealth(); } //Max health via health attribute.
+			serializer.writeFloatLE(minmax[0]); //Min
+			serializer.writeFloatLE(minmax[2]); //Max
+			serializer.writeFloatLE((float) attrvalue); //Value
 			serializer.writeFloatLE(minmax[1] == -1F ? (float) attrvalue : minmax[1]); //default value
 			StringSerializer.writeString(serializer, version, pename);
-			System.out.println("Sending ATTR: " + pename);
 		}
 		return serializer;
 	}

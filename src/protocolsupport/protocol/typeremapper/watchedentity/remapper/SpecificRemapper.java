@@ -82,7 +82,6 @@ public enum SpecificRemapper {
 				}
 
 				// = PE Riding =
-				System.out.println("(FAUX) META: " + data.getVehicleId());
 				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_COLLIDE, !data.isRiding());
 				if (data.isRiding()) {
 					System.out.println("RIDERPOSITION: " + data.getRiderPosition());
