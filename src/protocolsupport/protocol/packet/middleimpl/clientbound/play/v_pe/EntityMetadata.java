@@ -7,6 +7,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.pe.PEItemEntityCache.ItemEntityInfo;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.protocol.typeremapper.watchedentity.DataWatcherDataRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
@@ -56,7 +57,9 @@ public class EntityMetadata extends MiddleEntityMetadata {
 	}
 
 	public static ClientBoundPacketData createFaux(NetworkEntity entity, String locale, ProtocolVersion version) {
-		return create(entity, locale, transform(entity, new ArrayMap<DataWatcherObject<?>>(76), version), version);
+		DataWatcherDataRemapper faux = new DataWatcherDataRemapper();
+		faux.remap(version, entity);
+		return create(entity, locale, transform(entity, faux.getRemapped(), version), version);
 	}
 
 	public static ArrayMap<DataWatcherObject<?>> transform(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> peMetadata, ProtocolVersion version) {
