@@ -9,7 +9,8 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.storage.netcache.PlayerListCache;
+import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
 import protocolsupport.protocol.utils.EnumConstantLookups;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.GameMode;
@@ -71,30 +72,31 @@ public abstract class MiddlePlayerInfo extends ClientBoundMiddlePacket {
 
 	@Override
 	public boolean postFromServerRead() {
+		PlayerListCache plcache = cache.getPlayerListCache();
 		for (Info info : infos) {
-			info.previousinfo = cache.getPlayerListEntry(info.uuid);
+			info.previousinfo = plcache.getPlayerListEntry(info.uuid);
 			if (info.previousinfo != null) {
 				info.previousinfo = info.previousinfo.clone();
 			}
 			switch (action) {
 				case ADD: {
-					NetworkDataCache.PlayerListEntry entry = new NetworkDataCache.PlayerListEntry(info.username);
+					PlayerListEntry entry = new PlayerListEntry(info.username);
 					entry.setDisplayNameJson(info.displayNameJson);
 					for (ProfileProperty property : info.properties) {
 						entry.getProperties().add(property);
 					}
-					cache.addPlayerListEntry(info.uuid, entry);
+					plcache.addPlayerListEntry(info.uuid, entry);
 					break;
 				}
 				case DISPLAY_NAME: {
-					NetworkDataCache.PlayerListEntry entry = cache.getPlayerListEntry(info.uuid);
+					PlayerListEntry entry = plcache.getPlayerListEntry(info.uuid);
 					if (entry != null) {
 						entry.setDisplayNameJson(info.displayNameJson);
 					}
 					break;
 				}
 				case REMOVE: {
-					cache.removePlayerListEntry(info.uuid);
+					plcache.removePlayerListEntry(info.uuid);
 					break;
 				}
 				default: {
@@ -112,7 +114,7 @@ public abstract class MiddlePlayerInfo extends ClientBoundMiddlePacket {
 
 	protected static class Info {
 		public UUID uuid;
-		public NetworkDataCache.PlayerListEntry previousinfo;
+		public PlayerListEntry previousinfo;
 		public String username;
 		public int ping;
 		public GameMode gamemode;

@@ -17,7 +17,7 @@ public class Chat extends MiddleChat {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHAT_ID, version);
-		StringSerializer.writeString(serializer, version, encode(message.toLegacyText(cache.getLocale())));
+		StringSerializer.writeString(serializer, version, encode(message.toLegacyText(cache.getAttributesCache().getLocale())));
 		return RecyclableSingletonList.create(serializer);
 	}
 

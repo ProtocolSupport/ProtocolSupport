@@ -20,7 +20,7 @@ public class ServerInfo extends MiddleServerInfo {
 		.add("§1")
 		.add(String.valueOf(ping.getProtocolData().getVersion()))
 		.add(ping.getProtocolData().getName())
-		.add(ping.getMotd().toLegacyText(cache.getLocale()))
+		.add(ping.getMotd().toLegacyText(cache.getAttributesCache().getLocale()))
 		.add(String.valueOf(ping.getPlayers().getOnline()))
 		.add(String.valueOf(ping.getPlayers().getMax()))
 		.toString();

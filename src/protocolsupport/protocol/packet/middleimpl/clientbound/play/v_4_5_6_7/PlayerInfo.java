@@ -19,22 +19,22 @@ public class PlayerInfo extends MiddlePlayerInfo {
 			switch (action) {
 				case ADD: {
 					if (info.previousinfo != null) {
-						datas.add(create(info.previousinfo.getName(cache.getLocale()), false, version));
+						datas.add(create(info.previousinfo.getName(cache.getAttributesCache().getLocale()), false, version));
 					}
-					datas.add(create(info.getName(cache.getLocale()), true, version));
+					datas.add(create(info.getName(cache.getAttributesCache().getLocale()), true, version));
 					break;
 				}
 				case REMOVE: {
 					if (info.previousinfo != null) {
-						datas.add(create(info.previousinfo.getName(cache.getLocale()), false, version));
+						datas.add(create(info.previousinfo.getName(cache.getAttributesCache().getLocale()), false, version));
 					}
 					break;
 				}
 				case DISPLAY_NAME: {
 					if (info.previousinfo != null) {
-						datas.add(create(info.previousinfo.getName(cache.getLocale()), false, version));
+						datas.add(create(info.previousinfo.getName(cache.getAttributesCache().getLocale()), false, version));
 						if (info.displayNameJson != null) {
-							datas.add(create(info.getName(cache.getLocale()), true, version));
+							datas.add(create(info.getName(cache.getAttributesCache().getLocale()), true, version));
 						} else {
 							datas.add(create(info.previousinfo.getUserName(), true, version));
 						}

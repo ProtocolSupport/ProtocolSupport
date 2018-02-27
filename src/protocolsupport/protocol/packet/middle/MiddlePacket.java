@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middle;
 
 import protocolsupport.api.Connection;
-import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.utils.Utils;
 import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 

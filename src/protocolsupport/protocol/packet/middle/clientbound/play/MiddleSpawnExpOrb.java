@@ -25,7 +25,7 @@ public abstract class MiddleSpawnExpOrb extends ClientBoundMiddlePacket {
 
 	@Override
 	public boolean postFromServerRead() {
-		cache.addWatchedEntity(entity);
+		cache.getWatchedEntityCache().addWatchedEntity(entity);
 		return true;
 	}
 

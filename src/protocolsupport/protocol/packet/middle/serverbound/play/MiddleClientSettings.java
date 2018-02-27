@@ -23,7 +23,7 @@ public abstract class MiddleClientSettings extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		cache.setLocale(locale);
+		cache.getAttributesCache().setLocale(locale);
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_SETTINGS);
 		StringSerializer.writeString(creator, ProtocolVersionsHelper.LATEST_PC, locale);
 		creator.writeByte(viewDist);

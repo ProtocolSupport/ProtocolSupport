@@ -20,7 +20,7 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		return RecyclableSingletonList.create(createPacketData(connection.getVersion(), cache.getLocale(), TileEntityType.getByNetworkId(type), position, tag));
+		return RecyclableSingletonList.create(createPacketData(connection.getVersion(), cache.getAttributesCache().getLocale(), TileEntityType.getByNetworkId(type), position, tag));
 	}
 
 	public static ClientBoundPacketData createPacketData(ProtocolVersion version, String locale, TileEntityType type, Position position, NBTTagCompoundWrapper tag) {

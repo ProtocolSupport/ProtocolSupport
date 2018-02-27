@@ -15,17 +15,17 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && ((cache.getOpenedWindow() == WindowType.PLAYER) || (windowId == 0)) && (slot == 45)) {
+		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && ((cache.getWindowCache().getOpenedWindow() == WindowType.PLAYER) || (windowId == 0)) && (slot == 45)) {
 			return RecyclableEmptyList.get();
 		}
-		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && (cache.getOpenedWindow() == WindowType.BREWING)) {
+		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && (cache.getWindowCache().getOpenedWindow() == WindowType.BREWING)) {
 			if (slot == 4) {
 				return RecyclableEmptyList.get();
 			}
 			if (slot > 4) {
 				slot--;
 			}
-		} else if (version.isBefore(ProtocolVersion.MINECRAFT_1_8) && (cache.getOpenedWindow() == WindowType.ENCHANT)) {
+		} else if (version.isBefore(ProtocolVersion.MINECRAFT_1_8) && (cache.getWindowCache().getOpenedWindow() == WindowType.ENCHANT)) {
 			if (slot == 1) {
 				return RecyclableEmptyList.get();
 			}
@@ -36,7 +36,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_SET_SLOT_ID, version);
 		serializer.writeByte(windowId);
 		serializer.writeShort(slot);
-		ItemStackSerializer.writeItemStack(serializer, version, cache.getLocale(), itemstack, true);
+		ItemStackSerializer.writeItemStack(serializer, version, cache.getAttributesCache().getLocale(), itemstack, true);
 		return RecyclableSingletonList.create(serializer);
 	}
 

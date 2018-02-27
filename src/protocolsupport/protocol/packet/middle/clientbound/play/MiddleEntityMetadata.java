@@ -12,8 +12,8 @@ public abstract class MiddleEntityMetadata extends MiddleEntity {
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
 		super.readFromServerData(serverdata);
-		entity = cache.getWatchedEntity(entityId);
-		metadata.init(serverdata, connection.getVersion(), cache.getLocale(), entity);
+		entity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
+		metadata.init(serverdata, connection.getVersion(), cache.getAttributesCache().getLocale(), entity);
 	}
 
 	@Override

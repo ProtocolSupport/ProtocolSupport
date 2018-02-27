@@ -90,7 +90,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_5_6_7.World
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.noop.NoopPong;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_5_6.ServerInfo;
 import protocolsupport.protocol.pipeline.version.AbstractLegacyPacketEncoder;
-import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.utils.registry.PacketIdTransformerRegistry;
 
 public class PacketEncoder extends AbstractLegacyPacketEncoder {

@@ -26,7 +26,7 @@ public abstract class MiddleInventoryClick extends ServerBoundMiddlePacket {
 		creator.writeByte(button);
 		creator.writeShort(actionNumber);
 		creator.writeByte(mode);
-		ItemStackSerializer.writeItemStack(creator, ProtocolVersionsHelper.LATEST_PC, cache.getLocale(), itemstack, false);
+		ItemStackSerializer.writeItemStack(creator, ProtocolVersionsHelper.LATEST_PC, cache.getAttributesCache().getLocale(), itemstack, false);
 		return RecyclableSingletonList.create(creator);
 	}
 

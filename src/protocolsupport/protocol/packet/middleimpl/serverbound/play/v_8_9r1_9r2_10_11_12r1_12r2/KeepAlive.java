@@ -14,7 +14,7 @@ public class KeepAlive extends MiddleKeepAlive {
 		} else {
 			keepAliveId = clientdata.readLong();
 		}
-		keepAliveId = cache.tryConfirmKeepAlive((int) keepAliveId);
+		keepAliveId = cache.getKeepAliveCache().tryConfirmKeepAlive((int) keepAliveId);
 	}
 
 }

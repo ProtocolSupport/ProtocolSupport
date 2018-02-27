@@ -23,7 +23,7 @@ public class Advancements extends MiddleAdvancements {
 		serializer.writeBoolean(reset);
 		ArraySerializer.writeVarIntTArray(serializer, advancementsMapping, (to, element) -> {
 			StringSerializer.writeString(to, version, element.getObj1());
-			writeAdvanvement(to, version, cache.getLocale(), element.getObj2());
+			writeAdvanvement(to, version, cache.getAttributesCache().getLocale(), element.getObj2());
 		});
 		ArraySerializer.writeVarIntStringArray(serializer, version, removeAdvancements);
 		ArraySerializer.writeVarIntTArray(serializer, advancementsProgress, (to, element) -> {

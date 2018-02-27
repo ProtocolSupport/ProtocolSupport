@@ -9,7 +9,7 @@ import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
 import protocolsupport.protocol.typeremapper.watchedentity.DataWatcherDataRemapper;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 
@@ -35,13 +35,13 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 		z = serverdata.readDouble();
 		yaw = serverdata.readUnsignedByte();
 		pitch = serverdata.readUnsignedByte();
-		metadata.init(serverdata, connection.getVersion(), cache.getLocale(), entity);
+		metadata.init(serverdata, connection.getVersion(), cache.getAttributesCache().getLocale(), entity);
 	}
 
 	@Override
 	public boolean postFromServerRead() {
-		cache.addWatchedEntity(entity);
-		NetworkDataCache.PlayerListEntry entry = cache.getPlayerListEntry(entity.getUUID());
+		cache.getWatchedEntityCache().addWatchedEntity(entity);
+		PlayerListEntry entry = cache.getPlayerListCache().getPlayerListEntry(entity.getUUID());
 		if (entry != null) {
 			name = entry.getUserName();
 			properties = entry.getProperties().getAll(true);

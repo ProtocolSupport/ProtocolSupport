@@ -26,7 +26,7 @@ public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 		reset = serverdata.readBoolean();
 		advancementsMapping = ArraySerializer.readVarIntTArray(
 			serverdata, Any.class,
-			buf -> new Any<String, Advancement>(StringSerializer.readString(buf, ProtocolVersionsHelper.LATEST_PC), Advancement.read(buf, cache.getLocale()))
+			buf -> new Any<String, Advancement>(StringSerializer.readString(buf, ProtocolVersionsHelper.LATEST_PC), Advancement.read(buf, cache.getAttributesCache().getLocale()))
 		);
 		removeAdvancements = ArraySerializer.readVarIntStringArray(serverdata, ProtocolVersionsHelper.LATEST_PC);
 		advancementsProgress = ArraySerializer.readVarIntTArray(
