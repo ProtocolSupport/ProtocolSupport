@@ -128,7 +128,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				break;
 			}
 		}
-		//BLEEHH!
+		//BLEEHH! TODO: Not?
 		clientdata.readBytes(clientdata.readableBytes());
 	}
 
@@ -277,7 +277,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			transaction.slot = VarNumberSerializer.readVarInt(from);
 			transaction.oldItem = ItemStackSerializer.readItemStack(from, version, locale, true);
 			transaction.newItem = ItemStackSerializer.readItemStack(from, version, locale, true);
-			System.out.println("Inv transaction read: sId: " + transaction.sourceId + " wId: " + transaction.inventoryId + " action: " + transaction.action + " slot: " + transaction.slot 
+			bug("Inv transaction read: sId: " + transaction.sourceId + " wId: " + transaction.inventoryId + " action: " + transaction.action + " slot: " + transaction.slot 
 					+ " oldItem: " + transaction.oldItem.toString()  + ((!transaction.oldItem.isNull()) ? transaction.oldItem.getTag() : "") + " newItem: " + transaction.newItem.toString() + (!transaction.newItem.isNull() ? transaction.newItem.getTag() : ""));
 			return transaction;
 		}
@@ -392,7 +392,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				}
 			}
 			
-			//"normal" transactions.
+			//"Normal" transactions.
 			ItemStackWrapperKey oldItemKey = new ItemStackWrapperKey(transaction.getOldItem());
 			ItemStackWrapperKey newItemKey = new ItemStackWrapperKey(transaction.getNewItem());
 			
@@ -565,17 +565,21 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				}
 				return deficits.isEmpty();
 			});
-			deficitDeque.cycleDown((item, deficits) -> {
-				bug("ITEM LEFT: " + item + " DEFICITS:");
-				deficits.cycleDown(deficit -> {bug("D" + deficit.slot() + " - " + deficit.amount()); return false;});
-				return false;
-			});
-			surplusDeque.cycleDown((item, deficits) -> {
-				bug("ITEM LEFT: " + item + " SURPLUSSES:");
-				deficits.cycleDown(deficit -> {bug("S" + deficit.slot() + " - " + deficit.amount()); return false;});
-				return false;
-			});
-			bug("Sending " + packets.size() + " packets.... :S"); 
+			
+			//Don't worry this is just debug.
+			if (godlyDebug) {
+				deficitDeque.cycleDown((item, deficits) -> {
+					bug("ITEM LEFT: " + item + " DEFICITS:");
+					deficits.cycleDown(deficit -> {bug("D" + deficit.slot() + " - " + deficit.amount()); return false;});
+					return false;
+				});
+				surplusDeque.cycleDown((item, deficits) -> {
+					bug("ITEM LEFT: " + item + " SURPLUSSES:");
+					deficits.cycleDown(deficit -> {bug("S" + deficit.slot() + " - " + deficit.amount()); return false;});
+					return false;
+				});
+				bug("Sending " + packets.size() + " packets.... :S"); 
+			}
 			return packets;
 		}
 		

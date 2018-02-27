@@ -3,6 +3,7 @@ package protocolsupport.protocol.storage.pe;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacket.InfTransactions;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.BeaconTemple;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.EnchantHopper;
+import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 public class PEInventoryCache {
@@ -11,6 +12,7 @@ public class PEInventoryCache {
 	private final InfTransactions infTransactions = new InfTransactions();
 	private final EnchantHopper enchantHopper = new EnchantHopper();
 	private final BeaconTemple beaconTemple = new BeaconTemple();
+	private Position[] fakeInvs = new Position[2];
 	private long inventoryLockMillis = 0;
 	private int fuelTime = 0;
 	private int smeltTime = 200;
@@ -34,6 +36,10 @@ public class PEInventoryCache {
 
 	public BeaconTemple getBeaconTemple() {
 		return beaconTemple;
+	}
+
+	public Position[] getFakeInvs() {
+		return fakeInvs;
 	}
 
 	public void lockInventory() {
