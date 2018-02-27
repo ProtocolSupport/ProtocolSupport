@@ -9,7 +9,7 @@ public class HeldSlot extends MiddleHeldSlot {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		cache.setSelectedSlot(slot);
+		cache.getPEDataCache().getInventoryCache().setSelectedSlot(slot);
 		return RecyclableSingletonList.create(EntityEquipment.createUpdateHand(connection.getVersion(), cache.getLocale(),
 				cache.getSelfPlayerEntityId(), cache.getWatchedSelf().getDataCache().getHand(), slot, true));
 	}

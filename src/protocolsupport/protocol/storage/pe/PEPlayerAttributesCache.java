@@ -4,6 +4,8 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.Validate;
 
+import protocolsupport.protocol.utils.types.GameMode;
+
 public class PEPlayerAttributesCache {
 
 	private boolean fakesetpositionswitch = true;
@@ -13,17 +15,15 @@ public class PEPlayerAttributesCache {
 		return fakesetpositionswitch ? 20.0 : 30.0;
 	}
 
-
-
-	private int gamemode = 0;
+	private GameMode gamemode = GameMode.SURVIVAL;
 	private boolean canFly = false;
 	private boolean isFlying = false;
 
-	public void setGameMode(int gamemode) {
+	public void setGameMode(GameMode gamemode) {
 		this.gamemode = gamemode;
 	}
 
-	public int getGameMode() {
+	public GameMode getGameMode() {
 		return this.gamemode;
 	}
 
@@ -39,8 +39,6 @@ public class PEPlayerAttributesCache {
 	public boolean isFlying() {
 		return this.isFlying;
 	}
-
-
 
 	private UUID peClientUUID;
 

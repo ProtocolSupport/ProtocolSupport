@@ -76,8 +76,8 @@ public class PositionLook extends ServerBoundMiddlePacket {
 		}
 
 		//TODO: (re)move this shit
-		if (cache.getSignTag() != null) {
-			NBTTagCompoundWrapper signTag = cache.getSignTag();
+		if (cache.getPEDataCache().getSignTag() != null) {
+			NBTTagCompoundWrapper signTag = cache.getPEDataCache().getSignTag();
 			int x = signTag.getIntNumber("x");
 			int y = signTag.getIntNumber("y");
 			int z = signTag.getIntNumber("z");
@@ -92,7 +92,7 @@ public class PositionLook extends ServerBoundMiddlePacket {
 				}
 			}
 			packets.add(MiddleUpdateSign.create(new Position(x, y, z), nbtLines));
-			cache.setSignTag(null);
+			cache.getPEDataCache().setSignTag(null);
 		}
 
 		return packets;

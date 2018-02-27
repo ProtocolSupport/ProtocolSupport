@@ -42,7 +42,7 @@ public class MoveVehicle extends ServerBoundMiddlePacket {
 		NetworkEntity vehicle = cache.getWatchedEntity(vehicleId);
 		if (vehicle != null) {
 			if(vehicle.getType() == NetworkEntityType.BOAT) {
-				packets.add(MiddleSteerBoat.create(cache.isRightPaddleTurning(), cache.isLeftPaddleTurning()));
+				packets.add(MiddleSteerBoat.create(cache.getPEDataCache().isRightPaddleTurning(), cache.getPEDataCache().isLeftPaddleTurning()));
 			}
 			PocketEntityData typeData = PocketData.getPocketEntityData(vehicle.getType());
 			if (typeData != null && typeData.getOffset() != null) {

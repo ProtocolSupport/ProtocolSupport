@@ -30,9 +30,8 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		cache.getInfTransactions().clear();
+		cache.getPEDataCache().getInventoryCache().getInfTransactions().clear();
 		if (type == WindowType.HORSE) {
-			
 			//TODO: Fix this shit. Horses are a pain in the ass and require a different packer. Lama's are even worse with their variable slots. We'll see.
 			NetworkEntity horse = cache.getWatchedEntity(horseId);
 			if (horse != null) {

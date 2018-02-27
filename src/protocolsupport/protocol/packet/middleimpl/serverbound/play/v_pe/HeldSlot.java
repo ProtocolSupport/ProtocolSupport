@@ -4,15 +4,17 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleHeldSlot;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.pe.PEInventoryCache;
 
 public class HeldSlot extends MiddleHeldSlot {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
+		PEInventoryCache invCache = cache.getPEDataCache().getInventoryCache();
 		VarNumberSerializer.readVarLong(clientdata);
-		cache.setItemInHand(ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), cache.getLocale(), true));
+		invCache.setItemInHand(ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), cache.getLocale(), true));
 		clientdata.readByte();
-		cache.setSelectedSlot(slot = clientdata.readByte());
+		invCache.setSelectedSlot(slot = clientdata.readByte());
 		clientdata.readByte();
 	}
 

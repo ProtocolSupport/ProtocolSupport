@@ -11,26 +11,12 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 import io.netty.util.internal.ThreadLocalRandom;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
-<<<<<<< HEAD
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnObject.PreparedItem;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacket.InfTransactions;
-import protocolsupport.protocol.typeremapper.pe.PEInventory.BeaconTemple;
-import protocolsupport.protocol.typeremapper.pe.PEInventory.EnchantHopper;
-import protocolsupport.protocol.typeremapper.pe.PEMovementConfirmationPacketQueue;
-=======
 import protocolsupport.protocol.storage.pe.PEDataCache;
->>>>>>> branch 'mcpenew' of https://github.com/ProtocolSupport/ProtocolSupport.git
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.types.Environment;
-import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.Utils;
-<<<<<<< HEAD
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-=======
->>>>>>> branch 'mcpenew' of https://github.com/ProtocolSupport/ProtocolSupport.git
 
 public class NetworkDataCache {
 
@@ -121,25 +107,6 @@ public class NetworkDataCache {
 			   (Math.abs(cZ - z) > pocketPositionLeniency);
 	}
 
-	private boolean isRightPaddleTurning;
-	private boolean isLeftPaddleTurning;
-	
-	public boolean isRightPaddleTurning() {
-		return isRightPaddleTurning;
-	}
-
-	public void setRightPaddleTurning(boolean isRightPaddleTurning) {
-		this.isRightPaddleTurning = isRightPaddleTurning;
-	}
-
-	public boolean isLeftPaddleTurning() {
-		return isLeftPaddleTurning;
-	}
-
-	public void setLeftPaddleTurning(boolean isLeftPaddleTurning) {
-		this.isLeftPaddleTurning = isLeftPaddleTurning;
-	}
-
 	private WindowType windowType = WindowType.PLAYER;
 	private int windowId = 0;
 	private int windowSlots = 46;
@@ -178,22 +145,10 @@ public class NetworkDataCache {
 		actionNumber = 0;
 	}
 	
-	private EnchantHopper enchantHopper = new EnchantHopper();
-	public EnchantHopper getEnchantHopper() {
-		return enchantHopper;
-	}
-	
-	private BeaconTemple beaconTemple = new BeaconTemple();
-	public BeaconTemple getBeaconTemple() {
-		return beaconTemple;
-	}
-	
 	protected final TIntObjectHashMap<NetworkEntity> watchedEntities = new TIntObjectHashMap<>();
 	protected NetworkEntity player;
 	protected final HashMap<UUID, NetworkDataCache.PlayerListEntry> playerlist = new HashMap<>();
 	protected Environment dimensionId;
-	protected float maxHealth = 20.0F;
-	private int selectedSlot = 0;
 
 	public void addWatchedEntity(NetworkEntity entity) {
 		watchedEntities.put(entity.getId(), entity);
@@ -239,14 +194,6 @@ public class NetworkDataCache {
 		getPEDataCache().getChunkCache().clear();
 	}
 	
-	public int getSelectedSlot() {
-		return selectedSlot;
-	}
-
-	public void setSelectedSlot(int selectedSlot) {
-		this.selectedSlot = selectedSlot;
-	}
-
 	public void addPlayerListEntry(UUID uuid, PlayerListEntry entry) {
 		playerlist.put(uuid, entry);
 	}
@@ -383,70 +330,12 @@ public class NetworkDataCache {
 		}
 	}
 
-
-	private GameMode gamemode = GameMode.SURVIVAL;
-	private boolean canFly = false;
-	private boolean isFlying = false;
-
-	public void setGameMode(GameMode gamemode) {
-		this.gamemode = gamemode;
-	}
-
-	public GameMode getGameMode() {
-		return this.gamemode;
-	}
-
-	public void updateFlying(boolean canFly, boolean isFlying) {
-		this.canFly = canFly;
-		this.isFlying = isFlying;
-	}
-
-	public boolean canFly() {
-		return this.canFly;
-	}
-
-	public boolean isFlying() {
-		return this.isFlying;
-	}
-
-	private NBTTagCompoundWrapper signTag;
-	private ItemStackWrapper itemInHand = ItemStackWrapper.NULL;
+	private PEDataCache pedatacache;
 	
-	public void setSignTag(NBTTagCompoundWrapper signTag) { this.signTag = signTag; }
-	public NBTTagCompoundWrapper getSignTag() { return signTag; }
-	public ItemStackWrapper getItemInHand() { return itemInHand; }
-	public void setItemInHand(ItemStackWrapper itemInHand) { this.itemInHand = itemInHand; }
-
-	private String title;
-	private int visibleOnScreenTicks = 100; // default fadeIn = 20; default stay = 60; default fadeOut = 20;
-	private long lastSentTitle;
-
-	public String getTitle() {
-		return title;
+	public void initPECash() {
+		this.pedatacache = new PEDataCache();
 	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public int getVisibleOnScreenTicks() {
-		return visibleOnScreenTicks;
-	}
-
-	public void setVisibleOnScreenTicks(int visibleOnScreenTicks) {
-		this.visibleOnScreenTicks = visibleOnScreenTicks;
-	}
-
-	public long getLastSentTitle() {
-		return lastSentTitle;
-	}
-
 	
-	public void setLastSentTitle(long lastSentTitle) {
-		this.lastSentTitle = lastSentTitle;
-	}
-
-	private final PEDataCache pedatacache = new PEDataCache();
 	public PEDataCache getPEDataCache() {
 		return pedatacache;
 	}

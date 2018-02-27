@@ -30,7 +30,7 @@ public class BlockTileUpdate extends ServerBoundMiddlePacket {
 		if (nbt.hasKeyOfType("id", NBTTagType.STRING)) {
 			switch(nbt.getString("id")) {
 				case "Sign": {
-					cache.setSignTag(nbt);
+					cache.getPEDataCache().setSignTag(nbt);
 					break;
 				}
 				case "Beacon": {

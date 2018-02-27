@@ -5,6 +5,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventorySe
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.pe.PEInventoryCache;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
@@ -16,10 +17,11 @@ public class InventorySetItems extends MiddleInventorySetItems {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		if(cache.isInventoryLocked()) {
+		ProtocolVersion version = connection.getVersion();
+		PEInventoryCache invCache = cache.getPEDataCache().getInventoryCache();
+		if(invCache.isInventoryLocked()) {
 			return RecyclableEmptyList.get();
 		}
-		ProtocolVersion version = connection.getVersion();
 		String locale = cache.getLocale();
 		RecyclableArrayList<ClientBoundPacketData> contentpackets = RecyclableArrayList.create();
 		ItemStackWrapper[] items = itemstacks.toArray(new ItemStackWrapper[itemstacks.size()]);
@@ -73,11 +75,11 @@ public class InventorySetItems extends MiddleInventorySetItems {
 			}
 			case ENCHANT: { //Faked with hopper thingy, server sends the two slots though.
 				ItemStackWrapper[] peInventory = new ItemStackWrapper[36];
-				cache.getEnchantHopper().setInputOutputStack(items[0]);
-				cache.getEnchantHopper().setLapisStack(items[1]);
+				invCache.getEnchantHopper().setInputOutputStack(items[0]);
+				invCache.getEnchantHopper().setLapisStack(items[1]);
 				System.arraycopy(items, 29, peInventory, 0,  9);
 				System.arraycopy(items,  2, peInventory, 9, 27);
-				contentpackets.add(cache.getEnchantHopper().updateInventory(cache, version));
+				contentpackets.add(invCache.getEnchantHopper().updateInventory(cache, version));
 				contentpackets.add(create(version, locale, PESource.POCKET_INVENTORY, peInventory));
 				break;
 			}
