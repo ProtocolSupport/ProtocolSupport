@@ -4,7 +4,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.glowstone.entity.meta.profile.GlowPlayerProfile;
 import org.bukkit.BanList;
 import org.bukkit.event.player.PlayerLoginEvent;
 
@@ -13,6 +12,7 @@ import com.flowpowered.network.Message;
 import net.glowstone.EventFactory;
 import net.glowstone.GlowServer;
 import net.glowstone.entity.GlowPlayer;
+import net.glowstone.entity.meta.profile.GlowPlayerProfile;
 import net.glowstone.io.PlayerDataService.PlayerReader;
 import net.glowstone.net.GlowSession;
 import net.glowstone.net.message.play.game.UserListItemMessage;
