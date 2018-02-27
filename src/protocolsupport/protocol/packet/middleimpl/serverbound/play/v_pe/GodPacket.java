@@ -9,6 +9,7 @@ import org.bukkit.util.Vector;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockDig;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockPlace;
@@ -74,7 +75,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	protected int slot;
 	protected Position position = new Position(0, 0, 0);
 	protected float fromX, fromY, fromZ;
-	protected float cX, cY, cZ;
+	protected float cX, cY, cZ; //cursor position
 	protected int face;
 	protected int targetId;
 
@@ -160,12 +161,19 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 		switch(actionId) {
 			case ACTION_USE_ITEM: {
-				bug("CLICK! Face: " + face + "Subtype: " + subTypeId);
+				bug("CLICK! Position: " + position + " Face: " + face + "Subtype: " + subTypeId + " Cursor: " + cX + ", " + cY + ", " + cZ);
 				switch(subTypeId) {
 					case USE_CLICK_AIR:
 						face = -1;
 					case USE_CLICK_BLOCK: {
 						packets.add(MiddleBlockPlace.create(position, face, 0, cX, cY, cZ));
+						if ( //Whenever the player places a block far away we want the server to update it, because PE might not be allowed to do it.
+							(Math.abs(cache.getClientX() - position.getX()) > 4) ||
+							(Math.abs(cache.getClientY() - position.getY()) > 4) ||
+							(Math.abs(cache.getClientZ() - position.getZ()) > 4)
+						) {
+							InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.BlockUpdateRequest(position));
+						}
 						break;
 					}
 					case USE_DIG_BLOCK: {
