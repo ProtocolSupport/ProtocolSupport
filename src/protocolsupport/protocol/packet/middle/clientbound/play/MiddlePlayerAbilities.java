@@ -19,10 +19,4 @@ public abstract class MiddlePlayerAbilities extends ClientBoundMiddlePacket {
 		walkspeed = serverdata.readFloat();
 	}
 
-	@Override
-	public boolean postFromServerRead() {
-		cache.getPEDataCache().getAttributesCache().updateFlying((flags & flagOffsetCanFly) == flagOffsetCanFly, (flags & flagOffsetIsFlying) == flagOffsetIsFlying);
-		return true;
-	}
-
 }

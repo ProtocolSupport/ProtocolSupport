@@ -29,6 +29,7 @@ import protocolsupport.protocol.storage.NetworkDataCache;
 import protocolsupport.protocol.storage.pe.PEInventoryCache;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupport.protocol.utils.types.BlockFace;
 import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
@@ -167,22 +168,24 @@ public class GodPacket extends ServerBoundMiddlePacket {
 						face = -1;
 					case USE_CLICK_BLOCK: {
 						packets.add(MiddleBlockPlace.create(position, face, 0, cX, cY, cZ));
-						if ( //Whenever the player places a block far away we want the server to update it, because PE might not be allowed to do it.
-							(Math.abs(cache.getClientX() - position.getX()) > 4) ||
-							(Math.abs(cache.getClientY() - position.getY()) > 4) ||
-							(Math.abs(cache.getClientZ() - position.getZ()) > 4)
-						) {
-							InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.BlockUpdateRequest(position));
-						}
 						break;
 					}
 					case USE_DIG_BLOCK: {
-						if(cache.getPEDataCache().getAttributesCache().getGameMode() == GameMode.CREATIVE) { //instabreak
+						face = -1;
+						if (cache.getPEDataCache().getAttributesCache().getGameMode() == GameMode.CREATIVE) { //instabreak
 							packets.add(MiddleBlockDig.create(MiddleBlockDig.Action.START_DIG, position, 0));
 							packets.add(MiddleBlockDig.create(MiddleBlockDig.Action.FINISH_DIG, position, 0));
 						}
 						break;
 					}
+				}
+				if ( //Whenever the player places a block far away we want the server to update it, because PE might not be allowed to do it.
+					(Math.abs(cache.getClientX() - position.getX()) > 5) ||
+					(Math.abs(cache.getClientY() - position.getY()) > 5) ||
+					(Math.abs(cache.getClientZ() - position.getZ()) > 5)
+				) {
+					BlockFace.getById(face).modPosition(position); //Modify position to update the correct block.
+					InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.BlockUpdateRequest(position));
 				}
 				break;
 			}
