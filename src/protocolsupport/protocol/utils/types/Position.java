@@ -45,6 +45,12 @@ public class Position {
 		return new Position(location.getBlockX(), location.getBlockY(), location.getBlockZ());
 	}
 
+	public void mod(int x, int y, int z) {
+		modifyX(x);
+		modifyY(y);
+		modifyZ(z);
+	}
+
 	public void modifyX(int cnt) {
 		x += cnt;
 	}

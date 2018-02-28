@@ -57,7 +57,8 @@ public class InventoryData extends MiddleInventoryData {
 			case BEACON: {
 				switch(type) {
 					case 0: {
-						break;
+						invCache.getBeaconTemple().setLevel(value);
+						return invCache.getBeaconTemple().updateTemple(version, cache);
 					}
 					case 1: {
 						invCache.getBeaconTemple().setPrimaryEffect(value);

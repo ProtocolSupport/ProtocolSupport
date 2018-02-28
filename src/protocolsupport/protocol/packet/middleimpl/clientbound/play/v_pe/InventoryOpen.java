@@ -58,7 +58,8 @@ public class InventoryOpen extends MiddleInventoryOpen {
 		}
 		//Normal inventory.
 		Position open = PEInventory.prepareFakeInventory(title, connection, cache, packets);
-		if (!PEInventory.doDoubleChest(cache)) {
+		//Unless we have a doublechest or beacon which take some time to create, open the inventory straight away.
+		if (!PEInventory.doDoubleChest(cache) && cache.getOpenedWindow() != WindowType.BEACON) {
 			packets.add(create(connection.getVersion(), windowId, type, open, -1));
 		}
 		return packets;
