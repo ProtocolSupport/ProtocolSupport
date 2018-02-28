@@ -11,70 +11,55 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
-import protocolsupport.protocol.typeremapper.pe.PEInventory.InvBlock;
+import protocolsupport.protocol.typeremapper.pe.PEInventory;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.utils.minecraftdata.PocketData;
-import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData;
-import protocolsupport.protocol.utils.types.NetworkEntity;
-import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 
 public class InventoryOpen extends MiddleInventoryOpen {
 	
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		cache.getPEDataCache().getInventoryCache().getInfTransactions().clear();
+		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
+		//Horses
 		if (type == WindowType.HORSE) {
 			//TODO: Fix this shit. Horses are a pain in the ass and require a different packer. Lama's are even worse with their variable slots. We'll see.
-			NetworkEntity horse = cache.getWatchedEntity(horseId);
-			if (horse != null) {
-				PocketEntityData horseTypeData = PocketData.getPocketEntityData(horse.getType());
-				if (horseTypeData != null && horseTypeData.getInventoryFilter() != null) {
-					NBTTagCompoundWrapper filter = horseTypeData.getInventoryFilter().getFilter().clone();
-					if (horse.getType() == NetworkEntityType.LAMA) {
-						NBTTagListWrapper newSlots = filter.getList("slots");
-						for(int i = 0; i < (horse.getDataCache().getStrength() * 3); i++) {
-							NBTTagCompoundWrapper slot = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-							NBTTagCompoundWrapper item = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-							item.setByte("Count", 1);
-							item.setShort("Damage", 0);
-							item.setShort("id", 0);
-							slot.setCompound("item", item);
-							slot.setInt("slotNumber", i+2);
-							newSlots.addCompound(slot);
-						}
-						filter.setList("slots", newSlots);
-					}
-					RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-					packets.add(openEquipment(connection.getVersion(), 2, type, horseId, filter));
-					packets.add(InventorySetItems.create(connection.getVersion(), cache.getLocale(), 2, new ItemStackWrapper[] {ItemStackWrapper.NULL, ItemStackWrapper.NULL}));
-					//return RecyclableSingletonList.create(openEquipment(connection.getVersion(), 2, type, horseId, filter));
-					return packets;
-				}
-			}
-			
+//			NetworkEntity horse = cache.getWatchedEntity(horseId);
+//			if (horse != null) {
+//				PocketEntityData horseTypeData = PocketData.getPocketEntityData(horse.getType());
+//				if (horseTypeData != null && horseTypeData.getInventoryFilter() != null) {
+//					NBTTagCompoundWrapper filter = horseTypeData.getInventoryFilter().getFilter().clone();
+//					if (horse.getType() == NetworkEntityType.LAMA) {
+//						NBTTagListWrapper newSlots = filter.getList("slots");
+//						for(int i = 0; i < (horse.getDataCache().getStrength() * 3); i++) {
+//							NBTTagCompoundWrapper slot = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+//							NBTTagCompoundWrapper item = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+//							item.setByte("Count", 1);
+//							item.setShort("Damage", 0);
+//							item.setShort("id", 0);
+//							slot.setCompound("item", item);
+//							slot.setInt("slotNumber", i+2);
+//							newSlots.addCompound(slot);
+//						}
+//						filter.setList("slots", newSlots);
+//					}
+//					RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
+//					packets.add(openEquipment(connection.getVersion(), 2, type, horseId, filter));
+//					packets.add(InventorySetItems.create(connection.getVersion(), cache.getLocale(), 2, new ItemStackWrapper[] {ItemStackWrapper.NULL, ItemStackWrapper.NULL}));
+//					//return RecyclableSingletonList.create(openEquipment(connection.getVersion(), 2, type, horseId, filter));
+//					return packets;
+//				}
+//			}
+			return packets;
 		}
-		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		if (connection.hasMetadata("peInvBlocks")) {
-			InvBlock[] blocks = (InvBlock[]) connection.getMetadata("peInvBlocks");
-			packets.addAll(InvBlock.prepareFakeInventory(connection.getVersion(), cache.getLocale(), blocks, type, title, cache.getOpenedWindowSlots()));
-			if (
-				(type == WindowType.CHEST && cache.getOpenedWindowSlots() > 27)
-			) {
-				System.out.println("Smuggling double chest data: " + windowId);
-				//When it is a doublechest, re-smuggle the windowId back to the metadata.
-				connection.addMetadata("smuggledWindowId", windowId);
-			} else {
-				//Only double chests need some time to verify on the client (FFS Mojang!), the rest can be instantly opened after preparing.
-				packets.add(create(connection.getVersion(), windowId, type, blocks[0].getPosition(), -1));
-			}
+		//Normal inventory.
+		Position open = PEInventory.prepareFakeInventory(title, connection, cache, packets);
+		if (!PEInventory.doDoubleChest(cache)) {
+			packets.add(create(connection.getVersion(), windowId, type, open, -1));
 		}
 		return packets;
 	}
@@ -95,7 +80,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 		return serializer;
 	}
 	
-	public static void sendInventory(Connection connection, int windowId, WindowType type, Position pePosition, int horseId) {
+	public static void sendInventoryOpen(Connection connection, int windowId, WindowType type, Position pePosition, int horseId) {
 		System.out.println("Opening " + type + " inventory: " + windowId);
 		ByteBuf serializer = Unpooled.buffer();
 		VarNumberSerializer.writeVarInt(serializer, PEPacketIDs.CONTAINER_OPEN);

@@ -128,7 +128,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				break;
 			}
 		}
-		//BLEEHH!
+		//BLEEHH! TODO: Not?
 		clientdata.readBytes(clientdata.readableBytes());
 	}
 
@@ -236,8 +236,11 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				break;
 			}
 		}
-		//Trigger inventory update, ALWAYS since PE sometimes 'guesses' or doesn't trust the server, we generally want an inventory update scheduled.
-		packets.addAll(Click.MIDDLE.create(cache, -999, ItemStackWrapper.NULL));
+		if (invCache.shouldSendUpdate()) {
+			//Trigger inventory update, ALWAYS since PE sometimes 'guesses' or doesn't trust the server, we generally want an inventory update scheduled.
+			InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.InventoryUpdateRequest(7));
+			invCache.lockInventoryUpdate();
+		}
 		return packets;
 	}
 
@@ -277,7 +280,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			transaction.slot = VarNumberSerializer.readVarInt(from);
 			transaction.oldItem = ItemStackSerializer.readItemStack(from, version, locale, true);
 			transaction.newItem = ItemStackSerializer.readItemStack(from, version, locale, true);
-			System.out.println("Inv transaction read: sId: " + transaction.sourceId + " wId: " + transaction.inventoryId + " action: " + transaction.action + " slot: " + transaction.slot 
+			bug("Inv transaction read: sId: " + transaction.sourceId + " wId: " + transaction.inventoryId + " action: " + transaction.action + " slot: " + transaction.slot 
 					+ " oldItem: " + transaction.oldItem.toString()  + ((!transaction.oldItem.isNull()) ? transaction.oldItem.getTag() : "") + " newItem: " + transaction.newItem.toString() + (!transaction.newItem.isNull() ? transaction.newItem.getTag() : ""));
 			return transaction;
 		}
@@ -392,7 +395,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				}
 			}
 			
-			//"normal" transactions.
+			//"Normal" transactions.
 			ItemStackWrapperKey oldItemKey = new ItemStackWrapperKey(transaction.getOldItem());
 			ItemStackWrapperKey newItemKey = new ItemStackWrapperKey(transaction.getNewItem());
 			
@@ -565,17 +568,21 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				}
 				return deficits.isEmpty();
 			});
-			deficitDeque.cycleDown((item, deficits) -> {
-				bug("ITEM LEFT: " + item + " DEFICITS:");
-				deficits.cycleDown(deficit -> {bug("D" + deficit.slot() + " - " + deficit.amount()); return false;});
-				return false;
-			});
-			surplusDeque.cycleDown((item, deficits) -> {
-				bug("ITEM LEFT: " + item + " SURPLUSSES:");
-				deficits.cycleDown(deficit -> {bug("S" + deficit.slot() + " - " + deficit.amount()); return false;});
-				return false;
-			});
-			bug("Sending " + packets.size() + " packets.... :S"); 
+			
+			//Don't worry this is just debug.
+			if (godlyDebug) {
+				deficitDeque.cycleDown((item, deficits) -> {
+					bug("ITEM LEFT: " + item + " DEFICITS:");
+					deficits.cycleDown(deficit -> {bug("D" + deficit.slot() + " - " + deficit.amount()); return false;});
+					return false;
+				});
+				surplusDeque.cycleDown((item, deficits) -> {
+					bug("ITEM LEFT: " + item + " SURPLUSSES:");
+					deficits.cycleDown(deficit -> {bug("S" + deficit.slot() + " - " + deficit.amount()); return false;});
+					return false;
+				});
+				bug("Sending " + packets.size() + " packets.... :S"); 
+			}
 			return packets;
 		}
 		
@@ -847,8 +854,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	
 	protected enum Click {
 		LEFT	(0, 0),
-		RIGHT	(0, 1),
-		MIDDLE  (3, 2);
+		RIGHT	(0, 1);
 		
 		private final int mode;
 		private final int button;
@@ -863,7 +869,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			int actionNumber = cache.getActionNumber();
 			packets.add(MiddleInventoryClick.create(cache.getLocale(), cache.getOpenedWindowId(), slot, button, actionNumber, mode, item));
 			if(!item.isNull() && item.getTag() != null && !item.getTag().isNull()) {
-				System.out.println("My apologies??!!?!?!");
+				bug("My apologies??!!?!?!");
 				packets.add(MiddleInventoryTransaction.create(cache.getOpenedWindowId(), actionNumber, false));
 			}
 			return packets;

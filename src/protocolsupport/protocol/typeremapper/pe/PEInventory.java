@@ -2,25 +2,17 @@ package protocolsupport.protocol.typeremapper.pe;
 
 import java.util.EnumMap;
 
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.block.Block;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.Inventory;
-
-import protocolsupport.ProtocolSupport;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.utils.Any;
+import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockChangeSingle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockTileUpdate;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventorySetItems;
 import protocolsupport.protocol.storage.NetworkDataCache;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import protocolsupport.protocol.storage.pe.PEInventoryCache;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.TileEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
@@ -37,166 +29,93 @@ import protocolsupport.zplatform.itemstack.NBTTagType;
  */
 public class PEInventory {
 	
-	//To store data about fake inventory blocks for async usage.
-	//Data stored inside will be used to reconstruct the block after the inventory is closed.
-	public static class InvBlock {
-		private final Position position;
-		private final int typeData;
-		
-		//Constructor is called in sync!
-		@SuppressWarnings("deprecation")
-		public InvBlock(Block b) {
-			position = Position.fromBukkit(b.getLocation());
-			typeData = MinecraftData.getBlockStateFromIdAndData(b.getTypeId(), b.getData());
-		}
-		
-		public Position getPosition() {
-			return position;
-		}
-		
-		public int getTypeData() {
-			return typeData;
-		}
-		
-		//Table with PE ids and access to tile id, to place the inventory blocks.
-		private static void regInvBlockType(WindowType type, int containerId, TileEntityType tileType) {
-			invBlockType.put(type, new Any<Integer, TileEntityType>(containerId << 4, tileType));
-		}
-		private static EnumMap<WindowType, Any<Integer, TileEntityType>> invBlockType = new EnumMap<>(WindowType.class);
-		static {
-			regInvBlockType(WindowType.CHEST, 			54, TileEntityType.CHEST);
-			regInvBlockType(WindowType.CRAFTING_TABLE, 	58, TileEntityType.UNKNOWN);
-			regInvBlockType(WindowType.FURNACE, 		61, TileEntityType.FURNACE);
-			regInvBlockType(WindowType.DISPENSER, 		23, TileEntityType.DISPENSER);
-			regInvBlockType(WindowType.ENCHANT, 	   154, TileEntityType.HOPPER); //Fake with hopper
-			regInvBlockType(WindowType.BREWING, 	   117, TileEntityType.BREWING_STAND);
-			regInvBlockType(WindowType.BEACON, 		   138, TileEntityType.BEACON);
-			regInvBlockType(WindowType.ANVIL, 		   145, TileEntityType.UNKNOWN);
-			regInvBlockType(WindowType.HOPPER, 		   154, TileEntityType.HOPPER);
-			regInvBlockType(WindowType.DROPPER,		   158, TileEntityType.DROPPER);
-			regInvBlockType(WindowType.SHULKER, 		54, TileEntityType.CHEST); //Fake with chest
-		}
-		public static Any<Integer, TileEntityType> getContainerData(WindowType type) {
-			return invBlockType.get(type);
-		}
-		
-		//Call in sync! Stores information to set and reset fake container blocks and schedules an inventory update.
-		public static void saveFakeInventoryInformation(Connection connection, Inventory inventory) {
-			Location mainLoc = connection.getPlayer().getLocation();
-			//If the player is not on the ground or almost at bedrock, 
-			//set the fake blocks above so the player doesn't fall on to it or so they aren't out of the world.
-			if ((!connection.getPlayer().isOnGround()) || (mainLoc.getBlockY() < 4)) {
-				mainLoc.add(0, 6, 0);
-			}
-			if (inventory.getType() == InventoryType.BEACON && inventory.getLocation() != null) {
-				//Since beacon power is checked clientside, we can't even fake the block in position we please.
-				mainLoc = inventory.getLocation();
-				mainLoc.add(1, 2, 0);
-			}
-			connection.addMetadata("peInvBlocks", new InvBlock[] {
-					new InvBlock(mainLoc.subtract(1, 2, 0).getBlock()), 
-					new InvBlock(mainLoc.	  add(1, 0, 0).getBlock())
-				});
-			Location headChestLock = mainLoc;
-			//Double chests need some ticks to configure after the inventory blocks are placed. We need to resend the inventory open.
-			if (inventory.getSize() > 27) {
-				Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), new Runnable() {
-					@Override
-					public void run() {
-						if (connection.hasMetadata("smuggledWindowId")) {
-							InventoryOpen.sendInventory(connection, 
-								(int) connection.getMetadata("smuggledWindowId"),
-								WindowType.CHEST, 
-								Position.fromBukkit(headChestLock),
-								-1
-							);
-							connection.getPlayer().updateInventory();
-							connection.removeMetadata("smuggledWindowId");
-						}
-					}
-				}, 2);
-			}
-		}
-		
-		//Creates a fake container at the location of the fake blocks.
-		public static RecyclableArrayList<ClientBoundPacketData> prepareFakeInventory(ProtocolVersion version, String locale, InvBlock[] blocks, WindowType type, BaseComponent title, int slots) {
-			RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-			Any<Integer, TileEntityType> typeData = InvBlock.getContainerData(type);
-			if(typeData != null) {
-				Position mainpos = blocks[0].getPosition();
-				packets.add(BlockChangeSingle.create(version, mainpos, typeData.getObj1()));
-				NBTTagCompoundWrapper tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-				tag.setString("CustomName", title.toLegacyText(locale));
-				if (typeData.getObj2() != TileEntityType.UNKNOWN) {
-					tag.setString("id", typeData.getObj2().getRegistryId());
-				}
-				if (type == WindowType.CHEST && slots > 27) {
-					Position auxPos = blocks[1].getPosition();
-					packets.add(BlockChangeSingle.create(version, auxPos, typeData.getObj1()));
-					tag.setInt("pairx", auxPos.getX());
-					tag.setInt("pairz", auxPos.getZ());
-					tag.setByte("pairlead", 1);
-					packets.add(BlockTileUpdate.create(version, mainpos, tag));
-					NBTTagCompoundWrapper auxTag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();;
-					auxTag.setString("CustomName", title.toLegacyText(locale));
-					auxTag.setString("id", typeData.getObj2().getRegistryId());
-					auxTag.setInt("pairx", mainpos.getX());
-					auxTag.setInt("pairz", mainpos.getZ());
-					auxTag.setByte("pairlead", 0);
-					packets.add(BlockTileUpdate.create(version, auxPos, auxTag));
-				} else {
-					packets.add(BlockTileUpdate.create(version, mainpos, tag));
-				}
-				
-			}
-			return packets;
-		}
-		
-		//Reset all fake container blocks belonging to the connection.
-		public static void destroyFakeContainers(Connection connection) {
-			if (connection.hasMetadata("peInvBlocks")) {
-				InvBlock[] blocks = ((InvBlock[]) connection.getMetadata("peInvBlocks"));
-				for (int i = 0; i < blocks.length; i++) {
-					connection.sendPacket(ServerPlatform.get().getPacketFactory().createBlockUpdatePacket(
-							blocks[i].getPosition(), blocks[i].getTypeData()));
-				}
-				connection.removeMetadata("peInvBlocks");
-			}
-		}
-		
-		//Creates packets for resetting fake container blocks belonging to the connection.
-		public static RecyclableArrayList<ClientBoundPacketData> destroyFakeInventory(Connection connection) {
-			RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-			if (connection.hasMetadata("peInvBlocks")) {
-				InvBlock[] blocks = ((InvBlock[]) connection.getMetadata("peInvBlocks"));
-				for (int i = 0; i < blocks.length; i++) {
-					packets.add(BlockChangeSingle.create(connection.getVersion(), blocks[i].getPosition(), blocks[i].getTypeData()));
-				}
-				connection.removeMetadata("peInvBlocks");
-			}
-			return packets;
-		}
-		
+	//Table with PE ids and access to tile id, to place the inventory blocks.
+	private static void regInvBlockType(WindowType type, int containerId, TileEntityType tileType) {
+		invBlockType.put(type, new Any<Integer, TileEntityType>(containerId << 4, tileType));
+	}
+	private static EnumMap<WindowType, Any<Integer, TileEntityType>> invBlockType = new EnumMap<>(WindowType.class);
+	static {
+		regInvBlockType(WindowType.CHEST, 			54, TileEntityType.CHEST);
+		regInvBlockType(WindowType.CRAFTING_TABLE, 	58, TileEntityType.UNKNOWN);
+		regInvBlockType(WindowType.FURNACE, 		61, TileEntityType.FURNACE);
+		regInvBlockType(WindowType.DISPENSER, 		23, TileEntityType.DISPENSER);
+		regInvBlockType(WindowType.ENCHANT, 	   154, TileEntityType.HOPPER); //Fake with hopper
+		regInvBlockType(WindowType.BREWING, 	   117, TileEntityType.BREWING_STAND);
+		regInvBlockType(WindowType.BEACON, 		   138, TileEntityType.BEACON);
+		regInvBlockType(WindowType.ANVIL, 		   145, TileEntityType.UNKNOWN);
+		regInvBlockType(WindowType.HOPPER, 		   154, TileEntityType.HOPPER);
+		regInvBlockType(WindowType.DROPPER,		   158, TileEntityType.DROPPER);
+		regInvBlockType(WindowType.SHULKER, 		54, TileEntityType.CHEST); //Fake with chest
+	}
+	private static Any<Integer, TileEntityType> getContainerData(WindowType type) {
+		return invBlockType.get(type);
 	}
 	
-	//Uses bukkit to schedule an inventory update in PE
-	public static void scheduleInventoryUpdate(Connection connection) {
-		if (
-				(
-						(!connection.hasMetadata("lastScheduledInventoryUpdate")) ||
-						(System.currentTimeMillis() - (long) connection.getMetadata("lastScheduledInventoryUpdate") >= 250)
-				) &&
-				(connection.getPlayer().getGameMode() != GameMode.CREATIVE)
-		   ) {
-			connection.addMetadata("lastScheduledInventoryUpdate", System.currentTimeMillis());
-			Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), new Runnable() {
-				@Override
-				public void run() {
-					connection.getPlayer().updateInventory();
-					connection.getPlayer().setItemOnCursor(connection.getPlayer().getItemOnCursor());
-				}
-			}, 10);
+	public static Position prepareFakeInventory(BaseComponent title, Connection connection, NetworkDataCache cache, RecyclableArrayList<ClientBoundPacketData> packets) {
+		ProtocolVersion version = connection.getVersion();
+		PEInventoryCache invCache = cache.getPEDataCache().getInventoryCache();
+		Any<Integer, TileEntityType> typeData = getContainerData(cache.getOpenedWindow());
+		//Get position under client's feet.
+		Position position = new Position(
+						(int) cache.getClientX() - 2, 
+						(int) cache.getClientY() - 2, 
+						(int) cache.getClientZ()
+					);
+		if(typeData != null) {
+			//If client is falling or extremely low, get above head.
+			if (cache.getPEDataCache().getAttributesCache().isFlying() || cache.getClientY() < 4) {
+				position.modifyY(6);
+			}
+			invCache.getFakeContainers().addFirst(position);
+			//Create fake inventory block.
+			packets.add(BlockChangeSingle.create(version, position, typeData.getObj1()));
+			//Set tile data for fake block.
+			NBTTagCompoundWrapper tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+			tag.setString("CustomName", title.toLegacyText(cache.getLocale()));
+			if (typeData.getObj2() != TileEntityType.UNKNOWN) {
+				tag.setString("id", typeData.getObj2().getRegistryId());
+			}
+			//Large inventories require doublechest that requires two blocks and nbt.
+			if (doDoubleChest(cache)) {
+				Position auxPos = position.clone();
+				auxPos.modifyX(1); //Get adjacend block.
+				invCache.getFakeContainers().addLast(auxPos);
+				packets.add(BlockChangeSingle.create(version, auxPos, typeData.getObj1()));
+				tag.setInt("pairx", auxPos.getX());
+				tag.setInt("pairz", auxPos.getZ());
+				tag.setByte("pairlead", 1);
+				packets.add(BlockTileUpdate.create(version, position, tag));
+				NBTTagCompoundWrapper auxTag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();;
+				auxTag.setString("CustomName", title.toLegacyText(cache.getLocale()));
+				auxTag.setString("id", typeData.getObj2().getRegistryId());
+				auxTag.setInt("pairx", position.getX());
+				auxTag.setInt("pairz", position.getZ());
+				auxTag.setByte("pairlead", 0);
+				packets.add(BlockTileUpdate.create(version, auxPos, auxTag));
+				//Schedule the double chest open on the server. The client needs time to settle in.
+				InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.InventoryOpenRequest(
+						cache.getOpenedWindowId(), cache.getOpenedWindow(), position, -1)
+				);
+				//Since we probably miss the first contents, request an update.
+				InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.InventoryUpdateRequest(4));	
+			} else {
+				packets.add(BlockTileUpdate.create(version, position, tag));
+			}
 		}
+		return position;
+	}
+	
+	//Check if player has / needs "fake" double chest.
+	public static boolean doDoubleChest(NetworkDataCache cache) {
+		return (cache.getOpenedWindow() == WindowType.CHEST && cache.getOpenedWindowSlots() > 27);
+	}
+	
+	//Request reset for all fake container blocks.
+	public static void destroyFakeContainers(Connection connection, NetworkDataCache cache) {
+		cache.getPEDataCache().getInventoryCache().getFakeContainers().cycleDown(position -> {
+			InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.BlockUpdateRequest(position));
+			return true;
+		});
 	}
 	
 	//To store data to fake an entire beacon.
@@ -213,15 +132,15 @@ public class PEInventory {
 			this.secondary = effect;
 		}
 		
-		public RecyclableArrayList<ClientBoundPacketData> updateNBT(ProtocolVersion version, Connection connection) {
+		public RecyclableArrayList<ClientBoundPacketData> updateNBT(ProtocolVersion version, NetworkDataCache cache) {
 			RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-			if (connection.hasMetadata("peInvBlocks")) {
-				InvBlock[] blocks = (InvBlock[]) connection.getMetadata("peInvBlocks");
+			PEInventoryCache invCache = cache.getPEDataCache().getInventoryCache();
+			if (cache.getOpenedWindow() == WindowType.BEACON && invCache.getFakeContainers().hasFirst()) {
 				NBTTagCompoundWrapper tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
 				tag.setString("id", "beacon");
 				tag.setInt("primary", primary);
 				tag.setInt("secondary", secondary);
-				packets.add(BlockTileUpdate.create(version, blocks[0].getPosition(), tag));
+				packets.add(BlockTileUpdate.create(version, invCache.getFakeContainers().getFirst(), tag));
 			}
 			return packets;
 		}

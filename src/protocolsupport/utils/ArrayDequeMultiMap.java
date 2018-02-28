@@ -223,6 +223,14 @@ public class ArrayDequeMultiMap<K, V> {
 		private static final long serialVersionUID = -5508375911312087313L;
 
 		/**
+		 * Get if the deque has at least a non-null first element.
+		 * @return
+		 */
+		public boolean hasFirst() {
+			return !isEmpty() && peekFirst() != null;
+		}
+
+		/**
 		 * Cycles down (top to bottom) the child deque and removes value if true is returned.
 		 * @param func
 		 * the function to run with the value references.
@@ -230,7 +238,7 @@ public class ArrayDequeMultiMap<K, V> {
 		public void cycleDown(Function<T, Boolean> func) {
 			cycle(iterator(), func);
 		}
-		
+
 		/**
 		 * Cycles up (bottom to top) the child deque and removes value if true is returned.
 		 * @param func
@@ -239,7 +247,7 @@ public class ArrayDequeMultiMap<K, V> {
 		public void cycleUp(Function<T, Boolean> func) {
 			cycle(descendingIterator(), func);
 		}
-		
+
 		private void cycle(Iterator<T> itorator, Function<T, Boolean> func) {
 			while(itorator.hasNext()) {
 				T e = itorator.next();
@@ -248,6 +256,7 @@ public class ArrayDequeMultiMap<K, V> {
 				}
 			}
 		}
+
 	}
-	
+
 }
