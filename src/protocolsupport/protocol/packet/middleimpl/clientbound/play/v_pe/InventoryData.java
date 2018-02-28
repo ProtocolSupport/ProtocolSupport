@@ -57,18 +57,15 @@ public class InventoryData extends MiddleInventoryData {
 			case BEACON: {
 				switch(type) {
 					case 0: {
-						System.out.println("Beacon Level: " + value);
 						break;
 					}
 					case 1: {
-						System.out.println("Beacon Primary: " + value);
 						invCache.getBeaconTemple().setPrimaryEffect(value);
-						return invCache.getBeaconTemple().updateNBT(version, connection);
+						return invCache.getBeaconTemple().updateNBT(version, cache);
 					}
 					case 2: {
-						System.out.println("Beacon Secondary: " + value);
 						invCache.getBeaconTemple().setSecondaryEffect(value);
-						return invCache.getBeaconTemple().updateNBT(version, connection);
+						return invCache.getBeaconTemple().updateNBT(version, cache);
 					}
 				}
 				break;
@@ -82,6 +79,7 @@ public class InventoryData extends MiddleInventoryData {
 						return RecyclableSingletonList.create(create(version, windowId, 0, Math.round(value / 2) * 2));
 					}
 					case 1: { //Fuel time (0 - 20) (20 is full)
+						//TODO: make a formula?
 						//To be honest I have no clue how it works on the inside, I just tried until the bar matches PC :F
 						RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 						packets.add(create(version, windowId, 1, value > 0 ? 20 : 0));

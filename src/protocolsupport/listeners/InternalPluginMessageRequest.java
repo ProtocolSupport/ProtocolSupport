@@ -55,20 +55,15 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 					request.getPosition(), MinecraftData.getBlockStateFromIdAndData(block.getTypeId(), block.getData()))
 			);
 		});
+		register(InventoryOpenRequest.class, (connection, request) -> {
+			InventoryOpen.sendInventoryOpen(connection, request.getWindowId(), request.getType(), request.getPosition(), request.getHorseId());
+		});
 		register(InventoryUpdateRequest.class, (connection, request) -> {
 			Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), new Runnable() {
 				@Override
 				public void run() {
 					connection.getPlayer().updateInventory();
 					connection.getPlayer().setItemOnCursor(connection.getPlayer().getItemOnCursor());
-				}
-			}, request.getDelayTicks());
-		});
-		register(InventoryOpenRequest.class, (connection, request) -> {
-			Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), new Runnable() {
-				@Override
-				public void run() {
-					InventoryOpen.sendInventoryOpen(connection, request.getWindowId(), request.getType(), request.getPosition(), request.getHorseId());
 				}
 			}, request.getDelayTicks());
 		});
@@ -118,7 +113,7 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 		}
 
 	}
-	
+
 	public static class BlockUpdateRequest extends PluginMessageData {
 
 		protected Position position;
@@ -146,7 +141,59 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 		}
 
 	}
-	
+
+	public static class InventoryOpenRequest extends PluginMessageData {
+
+		int windowId;
+		WindowType type;
+		Position position;
+		int horseId;
+
+		public InventoryOpenRequest() {
+			this(0, WindowType.PLAYER, new Position(0,0,0), 0);
+		}
+
+		public InventoryOpenRequest(int windowId, WindowType type, Position position, int horseId) {
+			this.windowId = windowId;
+			this.type = type;
+			this.position = position;
+			this.horseId = horseId;
+		}
+
+		@Override
+		protected void read(ByteBuf from) {
+			windowId = from.readInt();
+			type = WindowType.getById(StringSerializer.readString(from, ProtocolVersionsHelper.LATEST_PC));
+			PositionSerializer.readPositionTo(from, position);
+			horseId = from.readInt();
+		}
+
+		@Override
+		protected void write(ByteBuf to) {
+			to.writeInt(windowId);
+			StringSerializer.writeString(to, ProtocolVersionsHelper.LATEST_PC, type.getId());
+			PositionSerializer.writePosition(to, position);
+			to.writeInt(horseId);
+		}
+
+		public int getWindowId() {
+			return windowId;
+		}
+
+		public WindowType getType() {
+			return type;
+		}
+
+		public Position getPosition() {
+			return position;
+		}
+
+		public int getHorseId() {
+			return horseId;
+		}
+
+	}
+
 	public static class InventoryUpdateRequest extends PluginMessageData {
 
 		protected int delayTicks;
@@ -167,66 +214,6 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 		@Override
 		protected void write(ByteBuf to) {
 			to.writeInt(delayTicks);
-		}
-
-		public int getDelayTicks() {
-			return delayTicks;
-		}
-
-	}
-	
-	public static class InventoryOpenRequest extends PluginMessageData {
-
-		int windowId;
-		WindowType type;
-		Position position;
-		int horseId;
-		int delayTicks;
-
-		public InventoryOpenRequest() {
-			this(0, WindowType.PLAYER, new Position(0,0,0), 0, 0);
-		}
-
-		public InventoryOpenRequest(int windowId, WindowType type, Position position, int horseId, int delayTicks) {
-			this.windowId = windowId;
-			this.type = type;
-			this.position = position;
-			this.horseId = horseId;
-			this.delayTicks = delayTicks;
-		}
-
-		@Override
-		protected void read(ByteBuf from) {
-			windowId = from.readInt();
-			type = WindowType.getById(StringSerializer.readString(from, ProtocolVersionsHelper.LATEST_PC));
-			PositionSerializer.readPositionTo(from, position);
-			horseId = from.readInt();
-			delayTicks = from.readInt();
-		}
-
-		@Override
-		protected void write(ByteBuf to) {
-			to.writeInt(windowId);
-			StringSerializer.writeString(to, ProtocolVersionsHelper.LATEST_PC, type.getId());
-			PositionSerializer.writePosition(to, position);
-			to.writeInt(horseId);
-			to.writeInt(delayTicks);
-		}
-
-		public int getWindowId() {
-			return windowId;
-		}
-
-		public WindowType getType() {
-			return type;
-		}
-
-		public Position getPosition() {
-			return position;
-		}
-
-		public int getHorseId() {
-			return horseId;
 		}
 
 		public int getDelayTicks() {

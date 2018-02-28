@@ -4,6 +4,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacke
 import protocolsupport.protocol.typeremapper.pe.PEInventory.BeaconTemple;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.EnchantHopper;
 import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.utils.ArrayDequeMultiMap.ChildDeque;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 public class PEInventoryCache {
@@ -12,8 +13,9 @@ public class PEInventoryCache {
 	private final InfTransactions infTransactions = new InfTransactions();
 	private final EnchantHopper enchantHopper = new EnchantHopper();
 	private final BeaconTemple beaconTemple = new BeaconTemple();
-	private Position[] fakeInvs = new Position[2];
+	private ChildDeque<Position> fakeContainers = new ChildDeque<Position>();
 	private long inventoryLockMillis = 0;
+	private long inventoryUpdateMillis = 0;
 	private int fuelTime = 0;
 	private int smeltTime = 200;
 	private int selectedSlot = 0;
@@ -38,8 +40,8 @@ public class PEInventoryCache {
 		return beaconTemple;
 	}
 
-	public Position[] getFakeInvs() {
-		return fakeInvs;
+	public ChildDeque<Position> getFakeContainers() {
+		return fakeContainers;
 	}
 
 	public void lockInventory() {
@@ -48,6 +50,14 @@ public class PEInventoryCache {
 
 	public boolean isInventoryLocked() {
 		return System.currentTimeMillis() - inventoryLockMillis < 230;
+	}
+
+	public void lockInventoryUpdate() {
+		inventoryUpdateMillis = System.currentTimeMillis();
+	}
+
+	public boolean shouldSendUpdate() {
+		return System.currentTimeMillis() - inventoryUpdateMillis > 200;
 	}
 
 	public int getFuelTime() {

@@ -236,8 +236,11 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				break;
 			}
 		}
-		//Trigger inventory update, ALWAYS since PE sometimes 'guesses' or doesn't trust the server, we generally want an inventory update scheduled.
-		packets.addAll(Click.MIDDLE.create(cache, -999, ItemStackWrapper.NULL));
+		if (invCache.shouldSendUpdate()) {
+			//Trigger inventory update, ALWAYS since PE sometimes 'guesses' or doesn't trust the server, we generally want an inventory update scheduled.
+			InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.InventoryUpdateRequest(7));
+			invCache.lockInventoryUpdate();
+		}
 		return packets;
 	}
 
@@ -851,8 +854,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	
 	protected enum Click {
 		LEFT	(0, 0),
-		RIGHT	(0, 1),
-		MIDDLE  (3, 2);
+		RIGHT	(0, 1);
 		
 		private final int mode;
 		private final int button;
@@ -867,7 +869,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			int actionNumber = cache.getActionNumber();
 			packets.add(MiddleInventoryClick.create(cache.getLocale(), cache.getOpenedWindowId(), slot, button, actionNumber, mode, item));
 			if(!item.isNull() && item.getTag() != null && !item.getTag().isNull()) {
-				System.out.println("My apologies??!!?!?!");
+				bug("My apologies??!!?!?!");
 				packets.add(MiddleInventoryTransaction.create(cache.getOpenedWindowId(), actionNumber, false));
 			}
 			return packets;

@@ -9,10 +9,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.potion.PotionEffectType;
@@ -26,8 +22,6 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.tab.TabAPI;
 import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.protocol.typeremapper.pe.PEInventory;
-import protocolsupport.protocol.typeremapper.pe.PEInventory.InvBlock;
 import protocolsupport.zplatform.ServerPlatform;
 
 public class FeatureEmulation implements Listener {
@@ -106,37 +100,6 @@ public class FeatureEmulation implements Listener {
 				}
 			}
 		}, 1);
-	}
-	
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onInventoryOpen(InventoryOpenEvent event) {
-		if(
-			(event.getInventory().getType() != InventoryType.MERCHANT) &&
-			(event.getPlayer() instanceof Player)
-		  ) {
-			Player player = (Player) event.getPlayer();
-			Connection connection = ProtocolSupportAPI.getConnection(player);
-			if (
-				(connection != null) &&
-				(connection.getVersion().getProtocolType() == ProtocolType.PE)
-			) {
-				InvBlock.saveFakeInventoryInformation(connection, event.getInventory());
-			}
-		}
-	}
-	
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
-	public void onInventoryClick(InventoryClickEvent event) {
-		if ((event.getClick() != ClickType.CREATIVE) && (event.getWhoClicked() instanceof Player)) {
-			Player clicker = (Player) event.getWhoClicked();
-			Connection connection = ProtocolSupportAPI.getConnection(clicker);
-			if(
-				(connection != null) &&
-				(connection.getVersion().getProtocolType() == ProtocolType.PE)
-			) {
-				PEInventory.scheduleInventoryUpdate(connection);
-			}
-		}
 	}
 
 }
