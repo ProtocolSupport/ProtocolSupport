@@ -71,6 +71,7 @@ public class ProtocolSupport extends JavaPlugin {
 	@Override
 	public void onLoad() {
 		try {
+			System.setProperty("java.awt.headless", "true");
 			buildinfo = new BuildInfo();
 		} catch (Throwable t) {
 			getLogger().severe("Unable to load buildinfo, make sure you built this version using Gradle");
