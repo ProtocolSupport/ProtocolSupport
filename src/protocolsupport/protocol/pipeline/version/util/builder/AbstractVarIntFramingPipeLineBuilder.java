@@ -1,4 +1,4 @@
-package protocolsupport.protocol.pipeline.version;
+package protocolsupport.protocol.pipeline.version.util.builder;
 
 import io.netty.channel.Channel;
 import protocolsupport.api.Connection;

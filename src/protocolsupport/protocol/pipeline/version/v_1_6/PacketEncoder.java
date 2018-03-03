@@ -89,7 +89,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7_8.SetPa
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7_8_9r1_9r2_10_11_12r1_12r2.PlayerAbilities;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.noop.NoopPong;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_5_6.ServerInfo;
-import protocolsupport.protocol.pipeline.version.AbstractLegacyPacketEncoder;
+import protocolsupport.protocol.pipeline.version.util.encoder.AbstractLegacyPacketEncoder;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.utils.registry.PacketIdTransformerRegistry;
 

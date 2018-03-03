@@ -1,11 +1,11 @@
-package protocolsupport.protocol.pipeline.version;
+package protocolsupport.protocol.pipeline.version.util.encoder;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.EncoderException;
 import protocolsupport.api.Connection;
@@ -40,12 +40,11 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 			return;
 		}
 		NetworkState currentProtocol = connection.getNetworkState();
-		ClientBoundMiddlePacket packetTransformer = null;
 		try {
-			packetTransformer = registry.getTransformer(currentProtocol, VarNumberSerializer.readVarInt(input));
+			ClientBoundMiddlePacket packetTransformer = registry.getTransformer(currentProtocol, VarNumberSerializer.readVarInt(input));
 			packetTransformer.readFromServerData(input);
 			if (packetTransformer.postFromServerRead()) {
-				try (RecyclableCollection<ClientBoundPacketData> data = packetTransformer.toData()) {
+				try (RecyclableCollection<ClientBoundPacketData> data = processPackets(ctx.channel(), packetTransformer.toData())) {
 					for (ClientBoundPacketData packetdata : data) {
 						ByteBuf senddata = Allocator.allocateBuffer();
 						writePacketId(senddata, getNewPacketId(currentProtocol, packetdata.getPacketId()));
@@ -58,13 +57,16 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 			if (ServerPlatform.get().getMiscUtils().isDebugging()) {
 				input.readerIndex(0);
 				throw new EncoderException(MessageFormat.format(
-					"Unable to transform or read middle packet {0} (data: {1})",
-					Objects.toString(packetTransformer), Arrays.toString(MiscSerializer.readAllBytes(input))
+					"Unable to transform or read packet data {0}", Arrays.toString(MiscSerializer.readAllBytes(input))
 				), exception);
 			} else {
 				throw exception;
 			}
 		}
+	}
+
+	protected RecyclableCollection<ClientBoundPacketData> processPackets(Channel channel, RecyclableCollection<ClientBoundPacketData> data) {
+		return data;
 	}
 
 	protected abstract void writePacketId(ByteBuf to, int packetId);

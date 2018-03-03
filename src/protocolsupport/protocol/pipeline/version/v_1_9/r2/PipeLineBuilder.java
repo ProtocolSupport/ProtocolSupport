@@ -4,7 +4,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
-import protocolsupport.protocol.pipeline.version.AbstractVarIntFramingPipeLineBuilder;
+import protocolsupport.protocol.pipeline.version.util.builder.AbstractVarIntFramingPipeLineBuilder;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 
 public class PipeLineBuilder extends AbstractVarIntFramingPipeLineBuilder {

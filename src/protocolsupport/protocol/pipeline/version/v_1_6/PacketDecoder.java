@@ -30,7 +30,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_6_7.EntityA
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_6_7.PositionLook;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_6_7.SteerVehicle;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_6_7_8_9r1_9r2_10_11_12r1_12r2.PlayerAbilities;
-import protocolsupport.protocol.pipeline.version.AbstractLegacyPacketDecoder;
+import protocolsupport.protocol.pipeline.version.util.decoder.AbstractLegacyPacketDecoder;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 
 public class PacketDecoder extends AbstractLegacyPacketDecoder {
