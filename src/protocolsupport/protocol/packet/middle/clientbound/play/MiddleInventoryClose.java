@@ -14,7 +14,7 @@ public abstract class MiddleInventoryClose extends ClientBoundMiddlePacket {
 
 	@Override
 	public boolean postFromServerRead() {
-		cache.closeWindow();
+		cache.getWindowCache().closeWindow();
 		return true;
 	}
 

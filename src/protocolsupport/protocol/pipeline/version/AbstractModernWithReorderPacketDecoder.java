@@ -8,7 +8,7 @@ import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.legacy.LegacyAnimatePacketReorderer;
 
 public class AbstractModernWithReorderPacketDecoder extends AbstractPacketDecoder {

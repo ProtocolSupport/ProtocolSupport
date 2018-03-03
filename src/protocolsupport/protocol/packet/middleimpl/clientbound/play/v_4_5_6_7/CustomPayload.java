@@ -23,7 +23,10 @@ public class CustomPayload extends MiddleCustomPayload {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID, version);
 		StringSerializer.writeString(serializer, version, tag);
 		if (tag.equals("MC|TrList")) {
-			MerchantDataSerializer.writeMerchantData(newdata, version, cache.getLocale(), MerchantDataSerializer.readMerchantData(data, ProtocolVersionsHelper.LATEST_PC, cache.getLocale()));
+			MerchantDataSerializer.writeMerchantData(
+				newdata, version, cache.getAttributesCache().getLocale(),
+				MerchantDataSerializer.readMerchantData(data, ProtocolVersionsHelper.LATEST_PC, cache.getAttributesCache().getLocale())
+			);
 		} else {
 			newdata.writeBytes(data);
 		}

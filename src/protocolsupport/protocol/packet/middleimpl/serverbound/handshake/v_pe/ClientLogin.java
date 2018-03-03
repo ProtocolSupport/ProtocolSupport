@@ -72,7 +72,7 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 				new TypeToken<Map<String, List<String>>>() {}.getType()
 			));
 			username = JsonUtils.getString(chaindata.getObj2(), "displayName");
-			cache.getPEDataCache().getAttributesCache().setPEClientUUID(UUID.fromString(JsonUtils.getString(chaindata.getObj2(), "identity")));
+			cache.getAttributesCache().setPEClientUUID(UUID.fromString(JsonUtils.getString(chaindata.getObj2(), "identity")));
 			if (chaindata.getObj1() != null) {
 				connection.addMetadata(XUID_METADATA_KEY, JsonUtils.getString(chaindata.getObj2(), "XUID"));
 			}
@@ -85,7 +85,7 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 			String[] rserveraddresssplit = rserveraddress.split("[:]");
 			host = rserveraddresssplit[0];
 			port = Integer.parseInt(rserveraddresssplit[1]);
-			cache.setLocale(clientinfo.get("LanguageCode"));
+			cache.getAttributesCache().setLocale(clientinfo.get("LanguageCode"));
 		} catch (ParseException e) {
 			throw new DecoderException("Unable to parse jwt", e);
 		}

@@ -23,7 +23,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		serializer.writeDouble(z);
 		serializer.writeByte(yaw);
 		serializer.writeByte(pitch);
-		DataWatcherDeserializer.encodeData(serializer, version, cache.getLocale(), metadata.getRemapped());
+		DataWatcherDeserializer.encodeData(serializer, version, cache.getAttributesCache().getLocale(), metadata.getRemapped());
 		return RecyclableSingletonList.create(serializer);
 	}
 

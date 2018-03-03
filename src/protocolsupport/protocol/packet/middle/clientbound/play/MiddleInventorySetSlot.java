@@ -16,7 +16,7 @@ public abstract class MiddleInventorySetSlot extends ClientBoundMiddlePacket {
 	public void readFromServerData(ByteBuf serverdata) {
 		windowId = serverdata.readUnsignedByte();
 		slot = serverdata.readShort();
-		itemstack = ItemStackSerializer.readItemStack(serverdata, ProtocolVersionsHelper.LATEST_PC, cache.getLocale(), false);
+		itemstack = ItemStackSerializer.readItemStack(serverdata, ProtocolVersionsHelper.LATEST_PC, cache.getAttributesCache().getLocale(), false);
 	}
 
 }

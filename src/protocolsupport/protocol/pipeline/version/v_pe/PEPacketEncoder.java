@@ -56,7 +56,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldPar
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldSound;
 import protocolsupport.protocol.pipeline.version.AbstractPacketEncoder;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
@@ -122,7 +122,7 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 
 	@Override
 	protected RecyclableCollection<ClientBoundPacketData> processPackets(RecyclableCollection<ClientBoundPacketData> packets) {
-		return cache.getPEDataCache().getMovementConfirmQueue().processClientBoundPackets(packets);
+		return cache.getPEDimSwitchMoveConfirmQueue().processClientBoundPackets(packets);
 	}
 
 	@Override

@@ -13,7 +13,7 @@ public class KickDisconnect extends MiddleKickDisconnect {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		return create(connection.getVersion(), cache.getLocale(), message);
+		return create(connection.getVersion(), cache.getAttributesCache().getLocale(), message);
 	}
 
 	public static RecyclableCollection<ClientBoundPacketData> create(ProtocolVersion version, String locale, BaseComponent message) {

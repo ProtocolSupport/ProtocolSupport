@@ -28,7 +28,7 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.pe.PEPlayerAttributesCache;
+import protocolsupport.protocol.storage.netcache.AttributesCache;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.typeremapper.pe.PESkinModel;
 import protocolsupport.utils.JsonUtils;
@@ -40,7 +40,7 @@ public class PlayerInfo extends MiddlePlayerInfo {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		PEPlayerAttributesCache attrscache = cache.getPEDataCache().getAttributesCache();
+		AttributesCache attrscache = cache.getAttributesCache();
 		ProtocolVersion version = connection.getVersion();
 		switch (action) {
 			case ADD: {
@@ -52,7 +52,7 @@ public class PlayerInfo extends MiddlePlayerInfo {
 					//TODO: cache player uuid to avoid getPlayer() calls
 					MiscSerializer.writeUUID(serializer, connection.getVersion(), info.uuid.equals(connection.getPlayer().getUniqueId()) ? attrscache.getPEClientUUID() : info.uuid);
 					VarNumberSerializer.writeVarInt(serializer, 0); //entity id
-					StringSerializer.writeString(serializer, version, info.getName(cache.getLocale()));
+					StringSerializer.writeString(serializer, version, info.getName(attrscache.getLocale()));
 					Any<Boolean, String> skininfo = getSkinInfo(info);
 					byte[] skindata = skininfo != null ? skinprovider.getSkinData(skininfo.getObj2()) : null;
 					if (skindata != null) {

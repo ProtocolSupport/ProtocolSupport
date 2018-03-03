@@ -5,7 +5,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.pe.PEItemEntityCache.ItemEntityInfo;
+import protocolsupport.protocol.storage.netcache.PEItemEntityCache.ItemEntityInfo;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
@@ -23,7 +23,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		NetworkEntity entity = cache.getWatchedEntity(entityId);
+		NetworkEntity entity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
 		if (entity == null) {
 			return RecyclableEmptyList.get();
 		}
@@ -32,16 +32,16 @@ public class EntityMetadata extends MiddleEntityMetadata {
 				RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 				DataWatcherObject<?> itemWatcher = metadata.getOriginal().get(DataWatcherObjectIndex.Item.ITEM);
 				if (itemWatcher != null) {
-					ItemEntityInfo i = cache.getPEDataCache().getItemEntityCache().getItem(entityId);
+					ItemEntityInfo i = cache.getPEItemEntityCache().getItem(entityId);
 					if (i != null) {
 						packets.addAll(i.updateItem(connection.getVersion(), (ItemStackWrapper) metadata.getOriginal().get(DataWatcherObjectIndex.Item.ITEM).getValue()));
 					}
 				}
-				packets.add(create(entity, cache.getLocale(), metadata.getRemapped(), connection.getVersion()));
+				packets.add(create(entity, cache.getAttributesCache().getLocale(), metadata.getRemapped(), connection.getVersion()));
 				return packets;
 			}
 			default: {
-				return RecyclableSingletonList.create(create(entity, cache.getLocale(), metadata.getRemapped(), connection.getVersion()));
+				return RecyclableSingletonList.create(create(entity, cache.getAttributesCache().getLocale(), metadata.getRemapped(), connection.getVersion()));
 			}
 		}
 	}

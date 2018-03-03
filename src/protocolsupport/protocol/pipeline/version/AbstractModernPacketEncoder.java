@@ -3,7 +3,7 @@ package protocolsupport.protocol.pipeline.version;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 
 public abstract class AbstractModernPacketEncoder extends AbstractPacketEncoder {
 

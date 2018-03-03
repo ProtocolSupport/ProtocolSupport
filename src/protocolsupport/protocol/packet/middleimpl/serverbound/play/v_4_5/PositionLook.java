@@ -36,7 +36,7 @@ public class PositionLook extends ServerBoundMiddlePacket {
 		if ((y == -999.0D) && (yhead == -999.0D)) {
 			return RecyclableSingletonList.create(MiddleLook.create(yaw, pitch, onGround));
 		} else {
-			int teleportId = cache.tryTeleportConfirm(x, y, z);
+			int teleportId = cache.getMovementCache().tryTeleportConfirm(x, y, z);
 			if (teleportId == -1) {
 				return RecyclableSingletonList.create(MiddlePositionLook.create(x, y, z, yaw, pitch, onGround));
 			} else {

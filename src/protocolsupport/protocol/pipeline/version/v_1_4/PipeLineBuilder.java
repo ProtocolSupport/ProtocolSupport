@@ -5,7 +5,7 @@ import io.netty.channel.ChannelPipeline;
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.version.AbstractNoopFramingPipeLineBuilder;
-import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 
 public class PipeLineBuilder extends AbstractNoopFramingPipeLineBuilder {
 

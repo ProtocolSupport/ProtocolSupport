@@ -21,8 +21,8 @@ public class EntityStatus extends MiddleEntityStatus {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		if(allowedIds.contains(status)) {
-			NetworkEntity e = cache.getWatchedEntity(entityId);
-			if (e == null) { // Sometimes the server (nasty plugins?) tries to send Entity Status updates for despawned entities, if the entity isn't cached, ignore the update.
+			NetworkEntity e = cache.getWatchedEntityCache().getWatchedEntity(entityId);
+			if (e == null) {
 				return RecyclableEmptyList.get();
 			}
 			if ((status == 31) && (e.getType() == NetworkEntityType.FISHING_FLOAT)) {
@@ -39,7 +39,7 @@ public class EntityStatus extends MiddleEntityStatus {
 		return packets;
 	}
 
-	public static int PE_UNLEASH = 63;
+	public static final int PE_UNLEASH = 63;
 
 	public static ClientBoundPacketData create(NetworkEntity entity, int status, ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_EVENT, version);

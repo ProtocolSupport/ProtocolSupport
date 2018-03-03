@@ -18,11 +18,13 @@ public class Position extends MiddlePosition {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		int chunkX = NumberConversions.floor(x) >> 4;
 		int chunkZ = NumberConversions.floor(z) >> 4;
-		if (!cache.getPEDataCache().getChunkCache().isChunkMarkedAsSent(chunkX, chunkZ)) {
+		if (!cache.getPEChunkMapCache().isMarkedAsSent(chunkX, chunkZ)) {
 			packets.add(Chunk.createEmptyChunk(version, chunkX, chunkZ));
 		}
-		if(cache.shouldResendPEClientPosition()) {
-			packets.add(create(version, cache.getSelfPlayerEntityId(), x, y + 0.01, z, pitch, yaw, ANIMATION_MODE_TELEPORT));
+		//PE sends position that intercects blocks bounding boxes in some cases
+		//Server doesn't accept such movements and will send a set position, but we ignore it unless it is above leniency
+		if (cache.getMovementCache().isPositionAboveLeniency()) {
+			packets.add(create(version, cache.getWatchedEntityCache().getSelfPlayerEntityId(), x, y + 0.01, z, pitch, yaw, ANIMATION_MODE_TELEPORT));
 		}
 		return packets;
 	}
@@ -30,7 +32,7 @@ public class Position extends MiddlePosition {
 	@Override
 	public boolean postFromServerRead() {
 		if (teleportConfirmId != 0) {
-			cache.setTeleportLocation(x, y, z, teleportConfirmId);
+			cache.getMovementCache().setTeleportLocation(x, y, z, teleportConfirmId);
 		}
 		return true;
 	}

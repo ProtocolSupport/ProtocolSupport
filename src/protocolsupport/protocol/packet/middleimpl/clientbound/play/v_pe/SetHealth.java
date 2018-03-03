@@ -13,10 +13,11 @@ public class SetHealth extends MiddleSetHealth {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		double shealth = (health * 20.0F) / cache.getMaxHealth();
-		packets.add(EntitySetAttributes.create(version, cache.getSelfPlayerEntityId(), EntitySetAttributes.createAttribute("minecraft:health", shealth)));
-		packets.add(EntitySetAttributes.create(version, cache.getSelfPlayerEntityId(), EntitySetAttributes.createAttribute("minecraft:player.hunger", food)));
-		packets.add(EntitySetAttributes.create(version, cache.getSelfPlayerEntityId(), EntitySetAttributes.createAttribute("minecraft:player.saturation", saturation)));
+		double shealth = (health * 20.0F) / cache.getAttributesCache().getMaxHealth();
+		int playerEntityId = cache.getWatchedEntityCache().getSelfPlayerEntityId();
+		packets.add(EntitySetAttributes.create(version, playerEntityId, EntitySetAttributes.createAttribute("minecraft:health", shealth)));
+		packets.add(EntitySetAttributes.create(version, playerEntityId, EntitySetAttributes.createAttribute("minecraft:player.hunger", food)));
+		packets.add(EntitySetAttributes.create(version, playerEntityId, EntitySetAttributes.createAttribute("minecraft:player.saturation", saturation)));
 		if (health <= 0.0) {
 			ClientBoundPacketData respawnpos = ClientBoundPacketData.create(PEPacketIDs.RESPAWN_POS, version);
 			respawnpos.writeFloatLE(0);

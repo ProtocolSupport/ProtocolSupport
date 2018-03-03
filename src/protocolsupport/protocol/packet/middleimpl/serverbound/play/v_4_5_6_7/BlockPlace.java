@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockPlace;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
+import protocolsupport.protocol.utils.i18n.I18NData;
 
 public class BlockPlace extends MiddleBlockPlace {
 
@@ -11,7 +12,7 @@ public class BlockPlace extends MiddleBlockPlace {
 	public void readFromClientData(ByteBuf clientdata) {
 		PositionSerializer.readLegacyPositionBTo(clientdata, position);
 		face = clientdata.readByte();
-		ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), cache.getLocale(), false);//while it is read from a client, we don't need to remap this item
+		ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), I18NData.DEFAULT_LOCALE, false);
 		cX = clientdata.readUnsignedByte() / 16.0F;
 		cY = clientdata.readUnsignedByte() / 16.0F;
 		cZ = clientdata.readUnsignedByte() / 16.0F;

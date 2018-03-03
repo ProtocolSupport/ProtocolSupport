@@ -18,7 +18,7 @@ public abstract class MiddleCreativeSetSlot extends ServerBoundMiddlePacket {
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_CREATIVE_SET_SLOT);
 		creator.writeShort(slot);
-		ItemStackSerializer.writeItemStack(creator, ProtocolVersionsHelper.LATEST_PC, cache.getLocale(), itemstack, false);
+		ItemStackSerializer.writeItemStack(creator, ProtocolVersionsHelper.LATEST_PC, cache.getAttributesCache().getLocale(), itemstack, false);
 		return RecyclableSingletonList.create(creator);
 	}
 

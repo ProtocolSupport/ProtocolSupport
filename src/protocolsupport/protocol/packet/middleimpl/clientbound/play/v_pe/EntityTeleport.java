@@ -15,7 +15,7 @@ public class EntityTeleport extends MiddleEntityTeleport {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		NetworkEntity wentity = cache.getWatchedEntity(entityId);
+		NetworkEntity wentity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
 		if ((wentity != null) && (wentity.getType() == NetworkEntityType.PLAYER)) {
 			return RecyclableSingletonList.create(Position.create(version, entityId, x, y, z, pitch, yaw, Position.ANIMATION_MODE_ALL));
 		} else {

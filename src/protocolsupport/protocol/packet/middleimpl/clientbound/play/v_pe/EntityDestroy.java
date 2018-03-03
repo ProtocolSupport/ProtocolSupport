@@ -17,9 +17,9 @@ public class EntityDestroy extends MiddleEntityDestroy {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		ProtocolVersion version = connection.getVersion();
 		for (int entityId : entityIds) {
-			NetworkEntity entity = cache.getWatchedEntity(entityId);
+			NetworkEntity entity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
 			if ((entity != null) && (entity.getType() == NetworkEntityType.ITEM)) {
-				cache.getPEDataCache().getItemEntityCache().removeItem(entityId);
+				cache.getPEItemEntityCache().removeItem(entityId);
 			}
 			packets.add(create(version, entityId));
 		}

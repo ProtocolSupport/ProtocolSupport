@@ -15,7 +15,7 @@ public abstract class MiddleEntityDestroy extends ClientBoundMiddlePacket {
 
 	@Override
 	public boolean postFromServerRead() {
-		cache.removeWatchedEntities(entityIds);
+		cache.getWatchedEntityCache().removeWatchedEntities(entityIds);
 		return true;
 	}
 

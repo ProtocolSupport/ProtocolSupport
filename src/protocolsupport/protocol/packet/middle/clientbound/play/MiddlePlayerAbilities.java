@@ -21,7 +21,7 @@ public abstract class MiddlePlayerAbilities extends ClientBoundMiddlePacket {
 
 	@Override
 	public boolean postFromServerRead() {
-		cache.getPEDataCache().getAttributesCache().updateFlying((flags & flagOffsetCanFly) == flagOffsetCanFly, (flags & flagOffsetIsFlying) == flagOffsetIsFlying);
+		cache.getAttributesCache().updatePEFlying((flags & flagOffsetCanFly) == flagOffsetCanFly, (flags & flagOffsetIsFlying) == flagOffsetIsFlying);
 		return true;
 	}
 

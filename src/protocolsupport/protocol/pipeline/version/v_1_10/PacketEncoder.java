@@ -90,7 +90,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r2_10_11_1
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_7_8_9r1_9r2_10_11_12r1_12r2.Pong;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_7_8_9r1_9r2_10_11_12r1_12r2.ServerInfo;
 import protocolsupport.protocol.pipeline.version.AbstractModernPacketEncoder;
-import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.utils.registry.PacketIdTransformerRegistry;
 
 public class PacketEncoder extends AbstractModernPacketEncoder {

@@ -12,8 +12,9 @@ public class SetExperience extends MiddleSetExperience {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		packets.add(EntitySetAttributes.create(version, cache.getSelfPlayerEntityId(), EntitySetAttributes.createAttribute("minecraft:player.experience", exp)));
-		packets.add(EntitySetAttributes.create(version, cache.getSelfPlayerEntityId(), EntitySetAttributes.createAttribute("minecraft:player.level", level)));
+		int playerEntityId = cache.getWatchedEntityCache().getSelfPlayerEntityId();
+		packets.add(EntitySetAttributes.create(version, playerEntityId, EntitySetAttributes.createAttribute("minecraft:player.experience", exp)));
+		packets.add(EntitySetAttributes.create(version, playerEntityId, EntitySetAttributes.createAttribute("minecraft:player.level", level)));
 		return packets;
 	}
 

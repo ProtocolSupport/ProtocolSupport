@@ -20,7 +20,7 @@ public abstract class MiddleInventoryClick extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		return RecyclableSingletonList.create(create(cache.getLocale(), windowId, slot, button, actionNumber, mode, itemstack));
+		return RecyclableSingletonList.create(create(cache.getAttributesCache().getLocale(), windowId, slot, button, actionNumber, mode, itemstack));
 	}
 
 	public static ServerBoundPacketData create(String locale, int windowId, int slot, int button, int actionNumber, int mode, ItemStackWrapper itemstack) {

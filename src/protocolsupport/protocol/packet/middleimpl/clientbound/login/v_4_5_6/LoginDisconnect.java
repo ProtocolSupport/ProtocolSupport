@@ -14,7 +14,7 @@ public class LoginDisconnect extends MiddleLoginDisconnect {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.LOGIN_DISCONNECT_ID, version);
-		StringSerializer.writeString(serializer, version, message.toLegacyText(cache.getLocale()));
+		StringSerializer.writeString(serializer, version, message.toLegacyText(cache.getAttributesCache().getLocale()));
 		return RecyclableSingletonList.create(serializer);
 	}
 

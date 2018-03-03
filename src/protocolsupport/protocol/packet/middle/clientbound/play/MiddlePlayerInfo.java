@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
@@ -9,7 +10,8 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.storage.netcache.PlayerListCache;
+import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
 import protocolsupport.protocol.utils.EnumConstantLookups;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.GameMode;
@@ -71,35 +73,25 @@ public abstract class MiddlePlayerInfo extends ClientBoundMiddlePacket {
 
 	@Override
 	public boolean postFromServerRead() {
-		for (Info info : infos) {
-			info.previousinfo = cache.getPlayerListEntry(info.uuid);
-			if (info.previousinfo != null) {
-				info.previousinfo = info.previousinfo.clone();
+		PlayerListCache plcache = cache.getPlayerListCache();
+		switch (action) {
+			case ADD: {
+				Arrays.stream(infos)
+				.forEach(info -> plcache.addEntry(info.uuid, new PlayerListEntry(info.username, info.displayNameJson, Arrays.asList(info.properties))));
+				break;
 			}
-			switch (action) {
-				case ADD: {
-					NetworkDataCache.PlayerListEntry entry = new NetworkDataCache.PlayerListEntry(info.username);
-					entry.setDisplayNameJson(info.displayNameJson);
-					for (ProfileProperty property : info.properties) {
-						entry.getProperties().add(property);
-					}
-					cache.addPlayerListEntry(info.uuid, entry);
-					break;
-				}
-				case DISPLAY_NAME: {
-					NetworkDataCache.PlayerListEntry entry = cache.getPlayerListEntry(info.uuid);
-					if (entry != null) {
-						entry.setDisplayNameJson(info.displayNameJson);
-					}
-					break;
-				}
-				case REMOVE: {
-					cache.removePlayerListEntry(info.uuid);
-					break;
-				}
-				default: {
-					break;
-				}
+			case DISPLAY_NAME: {
+				Arrays.stream(infos)
+				.forEach(info -> plcache.getEntry(info.uuid).setDisplayNameJson(info.displayNameJson));
+				break;
+			}
+			case REMOVE: {
+				Arrays.stream(infos)
+				.forEach(info -> plcache.removeEntry(info.uuid));
+				break;
+			}
+			default: {
+				break;
 			}
 		}
 		return true;
@@ -112,7 +104,6 @@ public abstract class MiddlePlayerInfo extends ClientBoundMiddlePacket {
 
 	protected static class Info {
 		public UUID uuid;
-		public NetworkDataCache.PlayerListEntry previousinfo;
 		public String username;
 		public int ping;
 		public GameMode gamemode;
