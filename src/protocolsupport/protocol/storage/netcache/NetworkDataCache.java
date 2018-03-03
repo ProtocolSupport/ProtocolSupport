@@ -49,12 +49,6 @@ public class NetworkDataCache {
 		return itementitycache;
 	}
 
-	//TODO: move to pe channel attrs instead
-	protected final PEDimensionSwitchMovementConfirmationPacketQueue pedimswitchmvconfirmq = new PEDimensionSwitchMovementConfirmationPacketQueue();
-	public PEDimensionSwitchMovementConfirmationPacketQueue getPEDimSwitchMoveConfirmQueue() {
-		return pedimswitchmvconfirmq;
-	}
-
 	@Override
 	public String toString() {
 		return Utils.toStringAllFields(this);

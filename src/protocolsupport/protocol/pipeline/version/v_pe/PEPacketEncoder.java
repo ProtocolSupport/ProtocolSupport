@@ -116,13 +116,15 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BLOCK_ACTION_ID, BlockAction.class);
 	}
 
-	public PEPacketEncoder(Connection connection, NetworkDataCache storage) {
+	protected final PEDimensionSwitchMovementConfirmationPacketQueue dimswitchq;
+	public PEPacketEncoder(Connection connection, NetworkDataCache storage, PEDimensionSwitchMovementConfirmationPacketQueue dimswitchq) {
 		super(connection, storage);
+		this.dimswitchq = dimswitchq;
 	}
 
 	@Override
 	protected RecyclableCollection<ClientBoundPacketData> processPackets(RecyclableCollection<ClientBoundPacketData> packets) {
-		return cache.getPEDimSwitchMoveConfirmQueue().processClientBoundPackets(packets);
+		return dimswitchq.processClientBoundPackets(packets);
 	}
 
 	@Override

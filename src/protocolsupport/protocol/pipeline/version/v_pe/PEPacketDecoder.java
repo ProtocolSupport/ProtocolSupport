@@ -23,7 +23,6 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Position
 import protocolsupport.protocol.pipeline.version.AbstractPacketDecoder;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
-import protocolsupport.protocol.storage.netcache.PEDimensionSwitchMovementConfirmationPacketQueue;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -47,8 +46,10 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		registry.register(NetworkState.PLAY, PEPacketIDs.MAP_INFO_REQUEST, MapInfoRequest.class);
 	}
 
-	public PEPacketDecoder(Connection connection, NetworkDataCache cache) {
+	protected final PEDimensionSwitchMovementConfirmationPacketQueue dimswitchq;
+	public PEPacketDecoder(Connection connection, NetworkDataCache cache, PEDimensionSwitchMovementConfirmationPacketQueue dimswitchq) {
 		super(connection, cache);
+		this.dimswitchq = dimswitchq;
 	}
 
 	@Override
@@ -66,11 +67,10 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 			if (input.isReadable()) {
 				throw new DecoderException("Did not read all data from packet " + packetTransformer.getClass().getName() + ", bytes left: " + input.readableBytes());
 			}
-			PEDimensionSwitchMovementConfirmationPacketQueue confirmqueue = cache.getPEDimSwitchMoveConfirmQueue();
-			RecyclableCollection<ServerBoundPacketData> packets = confirmqueue.processServerBoundPackets(packetTransformer.toNative());
-			if (confirmqueue.shouldScheduleUnlock()) {
+			RecyclableCollection<ServerBoundPacketData> packets = dimswitchq.processServerBoundPackets(packetTransformer.toNative());
+			if (dimswitchq.shouldScheduleUnlock()) {
 				ctx.channel().eventLoop().schedule(() -> {
-					confirmqueue.unlock();
+					dimswitchq.unlock();
 					connection.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("PS|PushQueue"));
 				}, 5, TimeUnit.SECONDS);
 			}
