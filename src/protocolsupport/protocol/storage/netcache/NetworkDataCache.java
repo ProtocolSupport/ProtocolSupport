@@ -30,7 +30,7 @@ public class NetworkDataCache {
 	}
 
 	protected final AttributesCache attrscache = new AttributesCache();
-	public final AttributesCache getAttributesCache() {
+	public AttributesCache getAttributesCache() {
 		return attrscache;
 	}
 
