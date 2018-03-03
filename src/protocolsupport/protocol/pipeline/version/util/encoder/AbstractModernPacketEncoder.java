@@ -1,4 +1,4 @@
-package protocolsupport.protocol.pipeline.version;
+package protocolsupport.protocol.pipeline.version.util.encoder;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.Connection;

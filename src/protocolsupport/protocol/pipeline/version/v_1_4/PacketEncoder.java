@@ -87,7 +87,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2.InventorySetItems;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2.InventorySetSlot;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2.TimeUpdate;
-import protocolsupport.protocol.pipeline.version.AbstractLegacyPacketEncoder;
+import protocolsupport.protocol.pipeline.version.util.encoder.AbstractLegacyPacketEncoder;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.utils.registry.PacketIdTransformerRegistry;
 
