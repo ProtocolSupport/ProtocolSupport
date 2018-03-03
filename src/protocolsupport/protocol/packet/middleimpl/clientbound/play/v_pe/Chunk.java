@@ -24,7 +24,7 @@ public class Chunk extends MiddleChunk {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		if (full || bitmask == 0xFFFF) {
+		if (full || (bitmask == 0xFFFF)) {
 			ProtocolVersion version = connection.getVersion();
 			cache.getPEChunkMapCache().markSent(chunkX, chunkZ);
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHUNK_DATA, version);

@@ -51,7 +51,7 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 					request.getPosition(), MinecraftData.getBlockStateFromIdAndData(block.getTypeId(), block.getData()))
 			);
 		});
-		
+
 	}
 
 	@NeedsNoArgConstructor
@@ -98,7 +98,7 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 		}
 
 	}
-	
+
 	public static class BlockUpdateRequest extends PluginMessageData {
 
 		protected Position position;
@@ -110,7 +110,7 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 		public BlockUpdateRequest(Position position) {
 			this.position = position;
 		}
-		
+
 		@Override
 		protected void read(ByteBuf from) {
 			this.position = PositionSerializer.readPosition(from);
