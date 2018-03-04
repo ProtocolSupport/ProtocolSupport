@@ -35,7 +35,7 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 			connection.receivePacket(ServerPlatform.get().getPacketFactory().createInboundInventoryClosePacket());
 			return false;
 		} else {
-			cache.setOpenedWindow(type);
+			cache.getWindowCache().setOpenedWindow(type);
 			return true;
 		}
 	}

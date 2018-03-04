@@ -1,4 +1,4 @@
-package protocolsupport.protocol.storage.pe;
+package protocolsupport.protocol.storage.netcache;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
 import protocolsupport.api.ProtocolVersion;

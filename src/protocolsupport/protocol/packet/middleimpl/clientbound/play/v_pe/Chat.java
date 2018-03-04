@@ -17,7 +17,7 @@ public class Chat extends MiddleChat {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHAT, version);
 		serializer.writeByte(position == MessagePosition.HOTBAR ? 5 : 0); //type
 		serializer.writeByte(0); //isLocalise?
-		StringSerializer.writeString(serializer, version, message.toLegacyText(cache.getLocale()));
+		StringSerializer.writeString(serializer, version, message.toLegacyText(cache.getAttributesCache().getLocale()));
 		StringSerializer.writeString(serializer, version, ""); //Xbox user ID
 		return RecyclableSingletonList.create(serializer);
 	}

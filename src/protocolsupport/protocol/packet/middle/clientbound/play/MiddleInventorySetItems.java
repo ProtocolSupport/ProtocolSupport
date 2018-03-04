@@ -19,7 +19,7 @@ public abstract class MiddleInventorySetItems extends ClientBoundMiddlePacket {
 		int count = serverdata.readShort();
 		itemstacks.clear();
 		for (int i = 0; i < count; i++) {
-			itemstacks.add(ItemStackSerializer.readItemStack(serverdata, ProtocolVersionsHelper.LATEST_PC, cache.getLocale(), false));
+			itemstacks.add(ItemStackSerializer.readItemStack(serverdata, ProtocolVersionsHelper.LATEST_PC, cache.getAttributesCache().getLocale(), false));
 		}
 	}
 

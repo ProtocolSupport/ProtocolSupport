@@ -30,7 +30,7 @@ public class PositionLook extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		int teleportId = cache.tryTeleportConfirm(x, y, z);
+		int teleportId = cache.getMovementCache().tryTeleportConfirm(x, y, z);
 		if (teleportId == -1) {
 			return RecyclableSingletonList.create(MiddlePositionLook.create(x, y, z, yaw, pitch, onGround));
 		} else {

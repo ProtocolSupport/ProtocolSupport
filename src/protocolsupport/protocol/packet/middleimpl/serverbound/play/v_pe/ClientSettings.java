@@ -11,8 +11,8 @@ public class ClientSettings extends MiddleClientSettings {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		VarNumberSerializer.readSVarInt(clientdata); //pocket view distance
-		locale = cache.getLocale();
+		VarNumberSerializer.readSVarInt(clientdata); //view distance
+		locale = cache.getAttributesCache().getLocale();
 		viewDist = Bukkit.getViewDistance();
 		chatMode = ChatMode.NORMAL;
 		chatColors = true;

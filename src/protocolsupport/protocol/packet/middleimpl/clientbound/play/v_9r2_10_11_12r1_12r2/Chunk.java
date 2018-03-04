@@ -26,7 +26,7 @@ public class Chunk extends MiddleChunk {
 		serializer.writeInt(chunkZ);
 		serializer.writeBoolean(full);
 		VarNumberSerializer.writeVarInt(serializer, bitmask);
-		transformer.loadData(data, bitmask, cache.hasSkyLightInCurrentDimension(), full);
+		transformer.loadData(data, bitmask, cache.getAttributesCache().hasSkyLightInCurrentDimension(), full);
 		ArraySerializer.writeByteArray(serializer, version, transformer.toLegacyData(version));
 		VarNumberSerializer.writeVarInt(serializer, tiles.length);
 		for (NBTTagCompoundWrapper tile : tiles) {

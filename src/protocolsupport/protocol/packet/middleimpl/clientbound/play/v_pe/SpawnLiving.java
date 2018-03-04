@@ -21,7 +21,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		return RecyclableSingletonList.create(create(
 			version,
 			entity, x, y, z,
-			motX / 8.000F, motY / 8000.F, motZ / 8000.F, pitch, yaw, cache.getLocale(),
+			motX / 8.000F, motY / 8000.F, motZ / 8000.F, pitch, yaw, cache.getAttributesCache().getLocale(),
 			null, PEDataValues.getLivingEntityTypeId(IdRemapper.ENTITY.getTable(version).getRemap(entity.getType()))
 		));
 	}
@@ -46,10 +46,13 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		return serializer;
 	}
 
-	public static ClientBoundPacketData create(ProtocolVersion version,
-			NetworkEntity entity, double x, double y, double z,
-			float motX, float motY, float motZ,
-			float pitch, float yaw, String locale, ArrayMap<DataWatcherObject<?>> metadata, int entityType) {
+	public static ClientBoundPacketData create(
+		ProtocolVersion version,
+		NetworkEntity entity, double x, double y, double z,
+		float motX, float motY, float motZ,
+		float pitch, float yaw, String locale,
+		ArrayMap<DataWatcherObject<?>> metadata, int entityType
+	) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SPAWN_ENTITY, version);
 		VarNumberSerializer.writeSVarLong(serializer, entity.getId());
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());

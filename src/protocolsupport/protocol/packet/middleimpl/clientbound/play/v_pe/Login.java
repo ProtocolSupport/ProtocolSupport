@@ -9,7 +9,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSu
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.pe.PEPlayerAttributesCache;
+import protocolsupport.protocol.storage.netcache.AttributesCache;
 import protocolsupport.protocol.typeremapper.pe.PEAdventureSettings;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.Environment;
@@ -74,7 +74,7 @@ public class Login extends MiddleLogin {
 		packets.add(startgame);
 		//player metadata and settings update, so it won't behave strangely until metadata update is sent by server
 		packets.add(PEAdventureSettings.createPacket(cache));
-		packets.add(EntityMetadata.createFaux(cache.getWatchedSelf(), cache.getLocale(), version));
+		packets.add(EntityMetadata.createFaux(cache.getWatchedEntityCache().getSelfPlayer(), cache.getAttributesCache().getLocale(), version));
 		//can now switch to game state
 		packets.add(LoginSuccess.createPlayStatus(version, 3));
 		//send chunk radius update without waiting for request, works anyway
@@ -82,12 +82,12 @@ public class Login extends MiddleLogin {
 		ClientBoundPacketData chunkradius = ClientBoundPacketData.create(PEPacketIDs.CHUNK_RADIUS, version);
 		VarNumberSerializer.writeSVarInt(chunkradius, (int) Math.ceil((Bukkit.getViewDistance() + 1) * Math.sqrt(2)));
 		packets.add(chunkradius);
-		PEPlayerAttributesCache attrscache = cache.getPEDataCache().getAttributesCache();
+		AttributesCache attrscache = cache.getAttributesCache();
 		//fake chunks with position, because pe doesn't like spawning in no chunk world
-		Respawn.addFakeChunksAndPos(version, playerEntityId, attrscache.getFakeSetPositionY(), packets);
+		Respawn.addFakeChunksAndPos(version, playerEntityId, attrscache.getPEFakeSetPositionY(), packets);
 		//add two dimension switches to make sure that player ends up in right dimension even if bungee dimension switch on server switch broke stuff
-		Respawn.create(version, dimension != Environment.OVERWORLD ? Environment.OVERWORLD: Environment.THE_END, playerEntityId, attrscache.getFakeSetPositionY(), packets);
-		Respawn.create(version, dimension, playerEntityId, attrscache.getFakeSetPositionY(), packets);
+		Respawn.create(version, dimension != Environment.OVERWORLD ? Environment.OVERWORLD: Environment.THE_END, playerEntityId, attrscache.getPEFakeSetPositionY(), packets);
+		Respawn.create(version, dimension, playerEntityId, attrscache.getPEFakeSetPositionY(), packets);
 		return packets;
 	}
 

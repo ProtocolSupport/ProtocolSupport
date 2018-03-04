@@ -1,11 +1,11 @@
-package protocolsupport.protocol.pipeline.version;
+package protocolsupport.protocol.pipeline.version.util.encoder;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.EncoderException;
 import protocolsupport.api.Connection;
@@ -14,7 +14,7 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.MessageToMessageEncoder;
@@ -24,13 +24,11 @@ import protocolsupport.zplatform.ServerPlatform;
 public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<ByteBuf> {
 
 	protected final Connection connection;
-	protected final NetworkDataCache cache;
-	public AbstractPacketEncoder(Connection connection, NetworkDataCache cache) {
+	public AbstractPacketEncoder(Connection connection, NetworkDataCache storage) {
 		this.connection = connection;
-		this.cache = cache;
 		registry.setCallBack(object -> {
 			object.setConnection(this.connection);
-			object.setSharedStorage(this.cache);
+			object.setSharedStorage(storage);
 		});
 	}
 
@@ -42,12 +40,11 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 			return;
 		}
 		NetworkState currentProtocol = connection.getNetworkState();
-		ClientBoundMiddlePacket packetTransformer = null;
 		try {
-			packetTransformer = registry.getTransformer(currentProtocol, VarNumberSerializer.readVarInt(input));
+			ClientBoundMiddlePacket packetTransformer = registry.getTransformer(currentProtocol, VarNumberSerializer.readVarInt(input));
 			packetTransformer.readFromServerData(input);
 			if (packetTransformer.postFromServerRead()) {
-				try (RecyclableCollection<ClientBoundPacketData> data = processPackets(packetTransformer.toData())) {
+				try (RecyclableCollection<ClientBoundPacketData> data = processPackets(ctx.channel(), packetTransformer.toData())) {
 					for (ClientBoundPacketData packetdata : data) {
 						ByteBuf senddata = Allocator.allocateBuffer();
 						writePacketId(senddata, getNewPacketId(currentProtocol, packetdata.getPacketId()));
@@ -60,8 +57,7 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 			if (ServerPlatform.get().getMiscUtils().isDebugging()) {
 				input.readerIndex(0);
 				throw new EncoderException(MessageFormat.format(
-					"Unable to transform or read middle packet {0} (data: {1})",
-					Objects.toString(packetTransformer), Arrays.toString(MiscSerializer.readAllBytes(input))
+					"Unable to transform or read packet data {0}", Arrays.toString(MiscSerializer.readAllBytes(input))
 				), exception);
 			} else {
 				throw exception;
@@ -69,8 +65,8 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 		}
 	}
 
-	protected RecyclableCollection<ClientBoundPacketData> processPackets(RecyclableCollection<ClientBoundPacketData> packets) {
-		return packets;
+	protected RecyclableCollection<ClientBoundPacketData> processPackets(Channel channel, RecyclableCollection<ClientBoundPacketData> data) {
+		return data;
 	}
 
 	protected abstract void writePacketId(ByteBuf to, int packetId);

@@ -52,7 +52,7 @@ public class Position {
 	public void modifyZ(int cnt) {
 		z += cnt;
 	}
-	
+
 	public Location toBukkit(World world) {
 		return new Location(world, x, y, z);
 	}

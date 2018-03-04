@@ -6,6 +6,7 @@ import protocolsupport.protocol.packet.middle.serverbound.play.MiddlePositionLoo
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleTeleportAccept;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.netcache.MovementCache;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -34,23 +35,16 @@ public class PositionLook extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
+		MovementCache movecache = cache.getMovementCache();
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
-		cache.updatePEPositionLeniency((y - cache.getClientY()) > 0);
-		int teleportId = cache.peekTeleportConfirmId();
+		movecache.updatePEPositionLeniency(y);
+		movecache.setPEClientPosition(x, y, z);
+		//PE doesn't send a movement confirm after position set, so we just confirm teleport straight away
+		int teleportId = movecache.teleportConfirm();
 		if (teleportId != -1) {
-			//PE sends AVERAGE positions (FFS Mojang) so sometimes the BoundingBox of the player will collide inadvertently.
-			//We fake the servers position in this instance and shrug and resent a rounded position of the player.
 			packets.add(MiddleTeleportAccept.create(teleportId));
-			cache.payTeleportConfirm();
-			double[] serverPos = cache.getTeleportLocation();
-			packets.add(MiddlePositionLook.create(serverPos[0], serverPos[1], serverPos[2], yaw, pitch, onGround));
-			cache.setLastClientPosition(x, y, z);
-			//TODO: Play around more with these numbers to perhaps make things even more smooth.
-			x = Math.floor(x * 8) / 8; y = Math.ceil((y + 0.3) * 8) / 8; z = Math.floor(z * 8) / 8;
-		} else {
-			cache.setLastClientPosition(x, y, z);
+			packets.add(MiddlePositionLook.create(movecache.getX(), movecache.getY(), movecache.getZ(), yaw, pitch, onGround));
 		}
-
 		packets.add(MiddlePositionLook.create(x, y, z, yaw, pitch, onGround));
 
 //		//TODO: fix or move this shit

@@ -385,7 +385,7 @@ public class PEDataValues {
 		protected ArrayBasedIdRemappingTable createTable() {
 			return new ArrayBasedIdRemappingTable(14);
 		}
-	
+
 		private void registerRemapEntry(WindowType type, int to, ProtocolVersion version) {
 			registerRemapEntry(type.toLegacyId(), to, version);
 		}

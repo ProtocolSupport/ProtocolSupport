@@ -23,7 +23,7 @@ public abstract class MiddleClientSettings extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		cache.setLocale(locale);
+		cache.getAttributesCache().setLocale(locale);
 		return RecyclableSingletonList.create(create(locale, viewDist, chatMode, chatColors, skinFlags, mainHand));
 	}
 

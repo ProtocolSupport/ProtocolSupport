@@ -9,6 +9,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetPassengers;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.netcache.WatchedEntityCache;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.NetworkEntity.DataCache;
@@ -26,33 +27,34 @@ public class SetPassengers extends MiddleSetPassengers {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
+		WatchedEntityCache wecache = cache.getWatchedEntityCache();
 		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		NetworkEntity vehicle = cache.getWatchedEntity(vehicleId);
-		if(vehicle != null) {
+		NetworkEntity vehicle = wecache.getWatchedEntity(vehicleId);
+		if (vehicle != null) {
 			TIntHashSet prevPassengersIds = passengers.get(vehicleId);
 			if (prevPassengersIds == null) {
 				prevPassengersIds = new TIntHashSet();
 			}
 			TIntHashSet newPassengersIds = new TIntHashSet(passengersIds);
 			for (int passengerId : passengersIds) {
-				NetworkEntity passenger = cache.getWatchedEntity(passengerId);
+				NetworkEntity passenger = wecache.getWatchedEntity(passengerId);
 				if (passenger != null) {
-					//TODO: Fix and Update this: Rider positions.
+					// TODO: Fix and Update this: Rider positions.
 					DataCache data = passenger.getDataCache();
 					if (vehicle.isOfType(NetworkEntityType.PIG)) {
 						data.rider = new DataCache.Rider(new Vector(0.0, 2.8, 0.0), false);
-						packets.add(EntitySetAttributes.create(version, cache.getSelfPlayerEntityId(), EntitySetAttributes.createAttribute("minecraft:horse.jump_strength", 0.432084373616155)));
+						packets.add(EntitySetAttributes.create(version, wecache.getSelfPlayerEntityId(), EntitySetAttributes.createAttribute("minecraft:horse.jump_strength", 0.432084373616155)));
 					} else if (vehicle.isOfType(NetworkEntityType.BASE_HORSE)) {
 						data.rider = new DataCache.Rider(new Vector(0.0, 2.3, -0.2), true, 180f, -180f);
-						packets.add(EntitySetAttributes.create(version, cache.getSelfPlayerEntityId(), EntitySetAttributes.createAttribute("minecraft:horse.jump_strength", 0.966967527085333)));
+						packets.add(EntitySetAttributes.create(version, wecache.getSelfPlayerEntityId(), EntitySetAttributes.createAttribute("minecraft:horse.jump_strength", 0.966967527085333)));
 					} else {
 						data.rider = new DataCache.Rider(true);
 					}
-					packets.add(EntityMetadata.createFaux(passenger, cache.getLocale(), version));
+					packets.add(EntityMetadata.createFaux(passenger, cache.getAttributesCache().getLocale(), version));
 
 					packets.add(create(version, vehicleId, passengerId, LINK));
-					if (cache.isSelf(passengerId)) {
+					if (wecache.getSelfPlayerEntityId() == passengerId) {
 						packets.add(create(version, vehicleId, 0, LINK));
 					}
 				}
@@ -61,13 +63,13 @@ public class SetPassengers extends MiddleSetPassengers {
 				@Override
 				public boolean execute(int passengerId) {
 					if (!newPassengersIds.contains(passengerId)) {
-						NetworkEntity passenger = cache.getWatchedEntity(passengerId);
-						if(passenger != null) {
-							//Also update meta.
+						NetworkEntity passenger = wecache.getWatchedEntity(passengerId);
+						if (passenger != null) {
+							// Also update meta.
 							passenger.getDataCache().rider = new DataCache.Rider(false);
-							packets.add(EntityMetadata.createFaux(passenger, cache.getLocale(), version));
+							packets.add(EntityMetadata.createFaux(passenger, cache.getAttributesCache().getLocale(), version));
 							packets.add(create(version, vehicleId, passengerId, UNLINK));
-							if (cache.isSelf(passengerId)) {
+							if (wecache.getSelfPlayerEntityId() == passengerId) {
 								packets.add(create(version, vehicleId, 0, UNLINK));
 							}
 						}

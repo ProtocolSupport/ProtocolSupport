@@ -11,12 +11,12 @@ public class EntityLeash extends MiddleEntityLeash {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		NetworkEntity wentity = cache.getWatchedEntity(entityId);
+		NetworkEntity wentity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
 		if (wentity == null) {
 			return RecyclableEmptyList.get();
 		}
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		packets.add(EntityMetadata.createFaux(wentity, cache.getLocale(), connection.getVersion()));
+		packets.add(EntityMetadata.createFaux(wentity, cache.getAttributesCache().getLocale(), connection.getVersion()));
 		if (vehicleId == -1) {
 			packets.add(EntityStatus.create(wentity, EntityStatus.PE_UNLEASH, connection.getVersion()));
 		}

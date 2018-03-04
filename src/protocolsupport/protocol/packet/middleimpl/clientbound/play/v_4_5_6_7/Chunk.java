@@ -26,7 +26,7 @@ public class Chunk extends MiddleChunk {
 		chunkdata.writeInt(chunkX);
 		chunkdata.writeInt(chunkZ);
 		chunkdata.writeBoolean(full);
-		boolean hasSkyLight = cache.hasSkyLightInCurrentDimension();
+		boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
 		if ((bitmask == 0) && full) {
 			chunkdata.writeShort(1);
 			chunkdata.writeShort(0);
@@ -45,7 +45,7 @@ public class Chunk extends MiddleChunk {
 		for (NBTTagCompoundWrapper tile : tiles) {
 			packets.add(BlockTileUpdate.createPacketData(
 				version,
-				cache.getLocale(),
+				cache.getAttributesCache().getLocale(),
 				TileEntityType.getByRegistryId(TileNBTRemapper.getTileType(tile)),
 				TileNBTRemapper.getPosition(tile),
 				tile

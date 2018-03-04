@@ -17,7 +17,7 @@ public abstract class MiddleEntityEquipment extends ClientBoundMiddlePacket {
 	public void readFromServerData(ByteBuf serverdata) {
 		entityId = VarNumberSerializer.readVarInt(serverdata);
 		slot = VarNumberSerializer.readVarInt(serverdata);
-		itemstack = ItemStackSerializer.readItemStack(serverdata, ProtocolVersionsHelper.LATEST_PC, cache.getLocale(), false);
+		itemstack = ItemStackSerializer.readItemStack(serverdata, ProtocolVersionsHelper.LATEST_PC, cache.getAttributesCache().getLocale(), false);
 	}
 
 }

@@ -9,7 +9,7 @@ public abstract class MiddleKeepAlive extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		keepAliveId = cache.storeServerKeepAliveId(serverdata.readLong());
+		keepAliveId = cache.getKeepAliveCache().storeServerKeepAliveId(serverdata.readLong());
 	}
 
 }

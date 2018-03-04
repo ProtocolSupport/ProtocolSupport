@@ -1,6 +1,7 @@
 package protocolsupport.protocol.pipeline.version.v_pe;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
 import protocolsupport.api.Connection;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.packet.ClientBoundPacket;
@@ -54,9 +55,9 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldCus
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldEvent;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldParticle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldSound;
-import protocolsupport.protocol.pipeline.version.AbstractPacketEncoder;
+import protocolsupport.protocol.pipeline.version.util.encoder.AbstractPacketEncoder;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.NetworkDataCache;
+import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
@@ -116,13 +117,15 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BLOCK_ACTION_ID, BlockAction.class);
 	}
 
-	public PEPacketEncoder(Connection connection, NetworkDataCache storage) {
+	protected final PEDimensionSwitchMovementConfirmationPacketQueue dimswitchq;
+	public PEPacketEncoder(Connection connection, NetworkDataCache storage, PEDimensionSwitchMovementConfirmationPacketQueue dimswitchq) {
 		super(connection, storage);
+		this.dimswitchq = dimswitchq;
 	}
 
 	@Override
-	protected RecyclableCollection<ClientBoundPacketData> processPackets(RecyclableCollection<ClientBoundPacketData> packets) {
-		return cache.getPEDataCache().getMovementConfirmQueue().processClientBoundPackets(packets);
+	protected RecyclableCollection<ClientBoundPacketData> processPackets(Channel channel, RecyclableCollection<ClientBoundPacketData> packets) {
+		return dimswitchq.processClientBoundPackets(packets);
 	}
 
 	@Override

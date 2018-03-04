@@ -9,7 +9,7 @@ public class LoginDisconnect extends MiddleLoginDisconnect {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		return KickDisconnect.create(connection.getVersion(), cache.getLocale(), message);
+		return KickDisconnect.create(connection.getVersion(), cache.getAttributesCache().getLocale(), message);
 	}
 
 }

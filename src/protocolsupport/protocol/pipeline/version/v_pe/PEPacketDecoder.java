@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.Connection;
@@ -20,10 +21,9 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Interact
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.MapInfoRequest;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PlayerAction;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PositionLook;
-import protocolsupport.protocol.pipeline.version.AbstractPacketDecoder;
+import protocolsupport.protocol.pipeline.version.util.decoder.AbstractPacketDecoder;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.NetworkDataCache;
-import protocolsupport.protocol.storage.pe.PEDimensionSwitchMovementConfirmationPacketQueue;
+import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -47,8 +47,10 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		registry.register(NetworkState.PLAY, PEPacketIDs.MAP_INFO_REQUEST, MapInfoRequest.class);
 	}
 
-	public PEPacketDecoder(Connection connection, NetworkDataCache cache) {
+	protected final PEDimensionSwitchMovementConfirmationPacketQueue dimswitchq;
+	public PEPacketDecoder(Connection connection, NetworkDataCache cache, PEDimensionSwitchMovementConfirmationPacketQueue dimswitchq) {
 		super(connection, cache);
+		this.dimswitchq = dimswitchq;
 	}
 
 	@Override
@@ -56,30 +58,28 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		if (!input.isReadable()) {
 			return;
 		}
-		ServerBoundMiddlePacket packetTransformer = null;
 		try {
-			packetTransformer = registry.getTransformer(
-				connection.getNetworkState(),
-				readPacketId(input)
-			);
-			packetTransformer.readFromClientData(input);
+			decodeAndTransform(ctx.channel(), input, list);
 			if (input.isReadable()) {
-				throw new DecoderException("Did not read all data from packet " + packetTransformer.getClass().getName() + ", bytes left: " + input.readableBytes());
+				throw new DecoderException("Did not read all data from packet, bytes left: " + input.readableBytes());
 			}
-			PEDimensionSwitchMovementConfirmationPacketQueue confirmqueue = cache.getPEDataCache().getMovementConfirmQueue();
-			RecyclableCollection<ServerBoundPacketData> packets = confirmqueue.processServerBoundPackets(packetTransformer.toNative());
-			if (confirmqueue.shouldScheduleUnlock()) {
+			if (dimswitchq.shouldScheduleUnlock()) {
 				ctx.channel().eventLoop().schedule(() -> {
-					confirmqueue.unlock();
+					dimswitchq.unlock();
 					connection.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("PS|PushQueue"));
 				}, 5, TimeUnit.SECONDS);
 			}
-			addPackets(packets, list);
 		} catch (Exception e) {
-			throwFailedTransformException(e, packetTransformer, input);
+			throwFailedTransformException(e, input);
 		}
 	}
 
+	@Override
+	protected RecyclableCollection<ServerBoundPacketData> processPackets(Channel channel, RecyclableCollection<ServerBoundPacketData> data) {
+		return dimswitchq.processServerBoundPackets(data);
+	}
+
+	@Override
 	protected int readPacketId(ByteBuf from) {
 		int id = VarNumberSerializer.readVarInt(from);
 		from.readByte();
