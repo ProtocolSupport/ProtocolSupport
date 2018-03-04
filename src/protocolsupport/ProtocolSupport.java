@@ -58,6 +58,8 @@ public class ProtocolSupport extends JavaPlugin {
 
 	public ProtocolSupport() {
 		instance = this;
+		// Make sure our use of AWT do not trigger GUI components to start
+		System.setProperty("java.awt.headless", "true");
 	}
 
 	private BuildInfo buildinfo;
