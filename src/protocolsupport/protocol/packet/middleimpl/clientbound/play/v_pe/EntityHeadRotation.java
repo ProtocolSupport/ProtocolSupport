@@ -10,7 +10,7 @@ public class EntityHeadRotation extends MiddleEntityHeadRotation {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		NetworkEntity entity = cache.getWatchedEntity(entityId);
+		NetworkEntity entity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
 		if (entity != null) {
 			entity.getDataCache().setHeadRotation(headRot);
 		}

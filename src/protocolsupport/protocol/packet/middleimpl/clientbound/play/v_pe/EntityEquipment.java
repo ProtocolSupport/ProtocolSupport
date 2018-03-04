@@ -19,8 +19,8 @@ public class EntityEquipment extends MiddleEntityEquipment {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		String locale = cache.getLocale();
-		NetworkEntity entity = cache.getWatchedEntity(entityId);
+		String locale = cache.getAttributesCache().getLocale();
+		NetworkEntity entity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
 		if (entity == null) {
 			return RecyclableEmptyList.get();
 		}
@@ -58,7 +58,7 @@ public class EntityEquipment extends MiddleEntityEquipment {
 		} else {
 			dataCache.setOffHand(itemstack);
 		}
-		return RecyclableSingletonList.create(createUpdateHand(version, locale, entityId, itemstack, cache.isSelf(entityId) ? cache.getPEDataCache().getInventoryCache().getSelectedSlot() : 0, slot == 1));
+		return RecyclableSingletonList.create(createUpdateHand(version, locale, entityId, itemstack, cache.getWatchedEntityCache().isSelf(entityId) ? cache.getPEInventoryCache().getSelectedSlot() : 0, slot == 1));
 	}
 	
 	public static ClientBoundPacketData createUpdateHand(ProtocolVersion version, String locale, int entityId, ItemStackWrapper itemstack, int slot, boolean isMainHand) {

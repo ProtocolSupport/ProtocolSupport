@@ -31,11 +31,11 @@ public class CustomPayload extends MiddleCustomPayload {
 		if (tag.equals("MC|ItemName")) {
 			ArraySerializer.writeByteArray(newdata, ProtocolVersionsHelper.LATEST_PC, olddata);
 		} else if (tag.equals("MC|BSign") || tag.equals("MC|BEdit")) {
-			ItemStackWrapper book = ItemStackSerializer.readItemStack(olddata, version, cache.getLocale(), true);
+			ItemStackWrapper book = ItemStackSerializer.readItemStack(olddata, version, cache.getAttributesCache().getLocale(), true);
 			if (!book.isNull()) {
 				book.setType(Material.BOOK_AND_QUILL);
 			}
-			ItemStackSerializer.writeItemStack(newdata, ProtocolVersionsHelper.LATEST_PC, cache.getLocale(), book, false);
+			ItemStackSerializer.writeItemStack(newdata, ProtocolVersionsHelper.LATEST_PC, cache.getAttributesCache().getLocale(), book, false);
 		} else if (tag.equals("MC|AdvCdm")) {
 			tag = "MC|AdvCmd";
 			newdata.writeByte(olddata.readByte());

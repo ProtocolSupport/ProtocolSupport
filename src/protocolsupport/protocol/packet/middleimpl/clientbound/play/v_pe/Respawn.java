@@ -17,12 +17,18 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 public class Respawn extends MiddleRespawn {
 
 	@Override
+	public boolean postFromServerRead() {
+		cache.getPEChunkMapCache().clear();
+		return super.postFromServerRead();
+	}
+
+	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		if (cache.getOpenedWindow() != WindowType.PLAYER) {
-			InventoryClose.create(connection.getVersion(), cache.getOpenedWindowId());
+		if (cache.getWindowCache().getOpenedWindow() != WindowType.PLAYER) {
+			packets.add(InventoryClose.create(connection.getVersion(), cache.getWindowCache().getOpenedWindowId()));
 		}
-		create(connection.getVersion(), dimension, cache.getWatchedSelf(), cache.getPEDataCache().getAttributesCache().getFakeSetPositionY(), packets);
+		create(connection.getVersion(), dimension, cache.getWatchedEntityCache().getSelfPlayer(), cache.getAttributesCache().getPEFakeSetPositionY(), packets);
 		return packets;
 	}
 

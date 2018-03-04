@@ -11,8 +11,9 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockChangeSingle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockTileUpdate;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventorySetItems;
-import protocolsupport.protocol.storage.NetworkDataCache;
-import protocolsupport.protocol.storage.pe.PEInventoryCache;
+import protocolsupport.protocol.storage.netcache.NetworkDataCache;
+import protocolsupport.protocol.storage.netcache.PEInventoryCache;
+import protocolsupport.protocol.storage.netcache.WindowCache;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.TileEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
@@ -23,12 +24,9 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagType;
 
-/**
- * Hacky hack. This class is probably the biggest hack in ProtocolSupprt. Buyers be aware, this can break easily!
- * It is also necessary, without inventories (faked or otherwise) minecraft is unplayable!
- */
+//Auxiliary class for faking and using different inventories in PE.
 public class PEInventory {
-	
+
 	//Table with PE ids and access to tile id, to place the inventory blocks.
 	private static void regInvBlockType(WindowType type, int containerId, TileEntityType tileType) {
 		invBlockType.put(type, new Any<Integer, TileEntityType>(containerId << 4, tileType));
@@ -50,21 +48,21 @@ public class PEInventory {
 	private static Any<Integer, TileEntityType> getContainerData(WindowType type) {
 		return invBlockType.get(type);
 	}
-	private static final int EMERALD_BLOCK = 133 << 4; 
-	
+
+	//Create matching block and tile change packets to fake inventories and store positions of to reset them later. 
 	public static Position prepareFakeInventory(BaseComponent title, Connection connection, NetworkDataCache cache, RecyclableArrayList<ClientBoundPacketData> packets) {
 		ProtocolVersion version = connection.getVersion();
-		PEInventoryCache invCache = cache.getPEDataCache().getInventoryCache();
-		Any<Integer, TileEntityType> typeData = getContainerData(cache.getOpenedWindow());
-		//Get position under client's feet.
-		Position position = new Position(
-						(int) cache.getClientX() - 2, 
-						(int) cache.getClientY() - 2, 
-						(int) cache.getClientZ()
-					);
-		if(typeData != null) {
+		WindowCache winCache = cache.getWindowCache();
+		PEInventoryCache invCache = cache.getPEInventoryCache();
+		Any<Integer, TileEntityType> typeData = getContainerData(winCache.getOpenedWindow());
+		Position position = new Position(0,0,0);
+		if (typeData != null) {
+			//Get position under client's feet.
+			position.setX((int) cache.getMovementCache().getPEClientX() - 2);
+			position.setY((int) cache.getMovementCache().getPEClientY() - 2);
+			position.setZ((int) cache.getMovementCache().getPEClientZ());
 			//If client is falling or extremely low, get above head.
-			if (cache.getPEDataCache().getAttributesCache().isFlying() || cache.getClientY() < 4) {
+			if (cache.getAttributesCache().isPEFlying() || cache.getMovementCache().getPEClientY() < 4) {
 				position.modifyY(6);
 			}
 			invCache.getFakeContainers().addFirst(position);
@@ -72,7 +70,7 @@ public class PEInventory {
 			packets.add(BlockChangeSingle.create(version, position, typeData.getObj1()));
 			//Set tile data for fake block.
 			NBTTagCompoundWrapper tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-			tag.setString("CustomName", title.toLegacyText(cache.getLocale()));
+			tag.setString("CustomName", title.toLegacyText(cache.getAttributesCache().getLocale()));
 			if (typeData.getObj2() != TileEntityType.UNKNOWN) {
 				tag.setString("id", typeData.getObj2().getRegistryId());
 			}
@@ -87,7 +85,7 @@ public class PEInventory {
 				tag.setByte("pairlead", 1);
 				packets.add(BlockTileUpdate.create(version, position, tag));
 				NBTTagCompoundWrapper auxTag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();;
-				auxTag.setString("CustomName", title.toLegacyText(cache.getLocale()));
+				auxTag.setString("CustomName", title.toLegacyText(cache.getAttributesCache().getLocale()));
 				auxTag.setString("id", typeData.getObj2().getRegistryId());
 				auxTag.setInt("pairx", position.getX());
 				auxTag.setInt("pairz", position.getZ());
@@ -98,31 +96,33 @@ public class PEInventory {
 			} else {
 				packets.add(BlockTileUpdate.create(version, position, tag));
 			}
-			if (doDoubleChest(cache) || cache.getOpenedWindow() == WindowType.BEACON) {
+			if (doDoubleChest(cache) || winCache.getOpenedWindow() == WindowType.BEACON) {
 				//Schedule the double chest or beacon open on the server. The client needs time to settle in.
 				InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.InventoryOpenRequest(
-						cache.getOpenedWindowId(), cache.getOpenedWindow(), position, -1)
+						winCache.getOpenedWindowId(), winCache.getOpenedWindow(), position, -1)
 				);
 			}
 		}
 		return position;
 	}
-	
+
 	//Check if player has / needs "fake" double chest.
 	public static boolean doDoubleChest(NetworkDataCache cache) {
-		return (cache.getOpenedWindow() == WindowType.CHEST && cache.getOpenedWindowSlots() > 27);
+		return (cache.getWindowCache().getOpenedWindow() == WindowType.CHEST && cache.getWindowCache().getOpenedWindowSlots() > 27);
 	}
-	
+
 	//Request reset for all fake container blocks.
 	public static void destroyFakeContainers(Connection connection, NetworkDataCache cache) {
-		cache.getPEDataCache().getInventoryCache().getFakeContainers().cycleDown(position -> {
+		cache.getPEInventoryCache().getFakeContainers().cycleDown(position -> {
 			InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.BlockUpdateRequest(position));
 			return true;
 		});
 	}
-	
+
 	//To store data to fake an entire beacon.
 	public static class BeaconTemple {
+
+		private static final int EMERALD_BLOCK = 133 << 4; 
 
 		private int level = 0;
 		private int primary = 0;
@@ -135,15 +135,15 @@ public class PEInventory {
 		public void setPrimaryEffect(int effect) {
 			this.primary = effect;
 		}
-		
+
 		public void setSecondaryEffect(int effect) {
 			this.secondary = effect;
 		}
 
 		public RecyclableArrayList<ClientBoundPacketData> updateTemple(ProtocolVersion version, NetworkDataCache cache) {
 			RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-			PEInventoryCache invCache = cache.getPEDataCache().getInventoryCache();
-			if (cache.getOpenedWindow() == WindowType.BEACON && invCache.getFakeContainers().hasFirst()) {
+			PEInventoryCache invCache = cache.getPEInventoryCache();
+			if (cache.getWindowCache().getOpenedWindow() == WindowType.BEACON && invCache.getFakeContainers().hasFirst()) {
 				Position position = invCache.getFakeContainers().getFirst();
 				for (int i = 1; i < level + 1; i++) {
 					for (int x = -i; x < i + 1; x++) {
@@ -158,11 +158,11 @@ public class PEInventory {
 			}
 			return packets;
 		}
-		
+
 		public RecyclableArrayList<ClientBoundPacketData> updateNBT(ProtocolVersion version, NetworkDataCache cache) {
 			RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-			PEInventoryCache invCache = cache.getPEDataCache().getInventoryCache();
-			if (cache.getOpenedWindow() == WindowType.BEACON && invCache.getFakeContainers().hasFirst()) {
+			PEInventoryCache invCache = cache.getPEInventoryCache();
+			if (cache.getWindowCache().getOpenedWindow() == WindowType.BEACON && invCache.getFakeContainers().hasFirst()) {
 				NBTTagCompoundWrapper tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
 				tag.setString("id", "beacon");
 				tag.setInt("primary", primary);
@@ -171,42 +171,42 @@ public class PEInventory {
 			}
 			return packets;
 		}
-		
+
 	}
-	
+
 	//To store data to fake the enchantment process using hoppers.
 	public static class EnchantHopper {
-		
+
 		private ItemStackWrapper inputOutputSlot = ItemStackWrapper.NULL;
 		private ItemStackWrapper lapisSlot = ItemStackWrapper.NULL;
 		private int[] optionXP   = 	new int[] { 0,  0,  0};
 		private int[] optionEnch = 	new int[] {-1, -1, -1};
 		private int[] optionLvl  = 	new int[] { 1,  1,  1};
-		
+
 		public void setInputOutputStack(ItemStackWrapper inputOutputStack) {
 			this.inputOutputSlot = inputOutputStack;
 		}
-		
+
 		public ItemStackWrapper getInput() {
 			return inputOutputSlot;
 		}
-		
+
 		public void setLapisStack(ItemStackWrapper lapisStack) {
 			this.lapisSlot = lapisStack;
 		}
-		
+
 		public void updateOptionXP(int num, int xp) {
 			optionXP[num] = xp;
 		}
-		
+
 		public void updateOptionEnch(int num, int enchant) {
 			optionEnch[num] = enchant;
 		}
-		
+
 		public void updateOptionLevel(int num, int lvl) {
 			optionLvl[num] = lvl;
 		}
-		
+
 		public ClientBoundPacketData updateInventory(NetworkDataCache cache, ProtocolVersion version) {
 			ItemStackWrapper[] contents = new ItemStackWrapper[5];
 			contents[0] = inputOutputSlot;
@@ -216,7 +216,6 @@ public class PEInventory {
 				if (optionEnch[i] < 0) { contents[i+2] = ItemStackWrapper.NULL; break;}
 				ItemStackWrapper option = inputOutputSlot.cloneItemStack();
 				if (option.isNull()) { break; }
-				System.out.println("Woo not -1!");
 				NBTTagCompoundWrapper tag = (option.getTag() == null || option.getTag().isNull()) ?
 				ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound() : option.getTag();
 				//Display
@@ -241,11 +240,11 @@ public class PEInventory {
 				option.setTag(tag);
 				contents[i+2] = option;
 			}
-			return InventorySetItems.create(version, cache.getLocale(), cache.getOpenedWindowId(), contents);
+			return InventorySetItems.create(version, cache.getAttributesCache().getLocale(), cache.getWindowCache().getOpenedWindowId(), contents);
 		}
-		
+
 	}
-	
+
 	//Slot thingy numbers.
 	public static class PESource {
 		public static final int POCKET_FAUX_DROP = -999;
@@ -272,5 +271,5 @@ public class PEInventory {
 		public static final int POCKET_CREATIVE_INVENTORY = 121;
 		public static final int POCKET_CLICKED_SLOT = 124;
 	}
-	
+
 }

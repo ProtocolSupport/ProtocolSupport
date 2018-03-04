@@ -1,9 +1,9 @@
-package protocolsupport.protocol.storage.pe;
+package protocolsupport.protocol.storage.netcache;
 
 public class PETitleCache {
 
 	private String title;
-	private int visibleOnScreenTicks = 20 + 60 + 20; // default fadeIn = 20; default stay = 60; default fadeOut = 20;
+	private int visibleOnScreenTicks = 20 + 60 + 20;
 	private long lastSentTitle;
 
 	public String getTitle() {
@@ -25,10 +25,6 @@ public class PETitleCache {
 
 	public long getLastSentTitle() {
 		return lastSentTitle;
-	}
-
-	public void setLastSentTitle(long lastSentTitle) {
-		this.lastSentTitle = lastSentTitle;
 	}
 
 }

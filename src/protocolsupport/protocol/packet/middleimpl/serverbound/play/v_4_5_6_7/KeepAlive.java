@@ -7,7 +7,7 @@ public class KeepAlive extends MiddleKeepAlive {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		keepAliveId = cache.tryConfirmKeepAlive(clientdata.readInt());
+		keepAliveId = cache.getKeepAliveCache().tryConfirmKeepAlive(clientdata.readInt());
 	}
 
 }

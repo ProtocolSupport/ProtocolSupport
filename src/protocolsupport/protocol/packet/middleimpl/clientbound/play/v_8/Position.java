@@ -32,7 +32,7 @@ public class Position extends MiddlePosition {
 	@Override
 	public boolean postFromServerRead() {
 		if (teleportConfirmId != 0) {
-			cache.setTeleportLocation(x, y, z, teleportConfirmId);
+			cache.getMovementCache().setTeleportLocation(x, y, z, teleportConfirmId);
 		}
 		return true;
 	}

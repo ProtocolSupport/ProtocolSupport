@@ -41,7 +41,7 @@ public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 
 	@Override
 	public boolean postFromServerRead() {
-		cache.addWatchedEntity(entity);
+		cache.getWatchedEntityCache().addWatchedEntity(entity);
 		return !IdSkipper.ENTITY.getTable(connection.getVersion()).shouldSkip(entity.getType());
 	}
 

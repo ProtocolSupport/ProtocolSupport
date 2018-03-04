@@ -5,7 +5,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.pe.PEItemEntityCache.ItemEntityInfo;
+import protocolsupport.protocol.storage.netcache.PEItemEntityCache.ItemEntityInfo;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.typeremapper.watchedentity.DataWatcherDataRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherObjectIndex;
@@ -24,7 +24,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		NetworkEntity entity = cache.getWatchedEntity(entityId);
+		NetworkEntity entity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
 		if(entity == null) {
 			return packets;
 		}
@@ -32,7 +32,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 			case ITEM: {
 				DataWatcherObject<?> itemWatcher = metadata.getOriginal().get(DataWatcherObjectIndex.Item.ITEM);
 				if (itemWatcher != null) {
-					ItemEntityInfo i = cache.getPEDataCache().getItemEntityCache().getItem(entityId);
+					ItemEntityInfo i = cache.getPEItemEntityCache().getItem(entityId);
 					if (i != null) {
 						packets.addAll(i.updateItem(connection.getVersion(), (ItemStackWrapper) metadata.getOriginal().get(DataWatcherObjectIndex.Item.ITEM).getValue()));
 					}
@@ -46,7 +46,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 						packets.add(EntitySetAttributes.create(connection.getVersion(), entity, EntitySetAttributes.createAttribute("minecraft:health", Math.ceil((Float) healthWatcher.getValue()))));
 					}
 				}
-				packets.add(create(entity, cache.getLocale(), metadata.getRemapped(), connection.getVersion()));
+				packets.add(create(entity, cache.getAttributesCache().getLocale(), metadata.getRemapped(), connection.getVersion()));
 			}
 		}
 		return packets;

@@ -32,10 +32,10 @@ public class Animation extends ServerBoundMiddlePacket {
 			return RecyclableSingletonList.create(MiddleAnimation.create(0));
 		} else {
 			if ((action & 0x01) == 0) {
-				cache.getPEDataCache().setLeftPaddleTurning(paddleTime != prevLeftPaddle);
+				cache.getMovementCache().setPELeftPaddleTurning(paddleTime != prevLeftPaddle);
 				prevLeftPaddle = paddleTime;
 			} else {
-				cache.getPEDataCache().setRightPaddleTurning(paddleTime != prevRightPaddle);
+				cache.getMovementCache().setPERightPaddleTurning(paddleTime != prevRightPaddle);
 				prevRightPaddle = paddleTime;
 			}
 		}

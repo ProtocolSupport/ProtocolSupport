@@ -5,7 +5,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventorySe
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.pe.PEInventoryCache;
+import protocolsupport.protocol.storage.netcache.PEInventoryCache;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
@@ -18,14 +18,14 @@ public class InventorySetItems extends MiddleInventorySetItems {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		PEInventoryCache invCache = cache.getPEDataCache().getInventoryCache();
+		PEInventoryCache invCache = cache.getPEInventoryCache();
 		if(invCache.isInventoryLocked()) {
 			return RecyclableEmptyList.get();
 		}
-		String locale = cache.getLocale();
+		String locale = cache.getAttributesCache().getLocale();
 		RecyclableArrayList<ClientBoundPacketData> contentpackets = RecyclableArrayList.create();
 		ItemStackWrapper[] items = itemstacks.toArray(new ItemStackWrapper[itemstacks.size()]);
-		switch(cache.getOpenedWindow()) {
+		switch(cache.getWindowCache().getOpenedWindow()) {
 			case PLAYER: {
 				ItemStackWrapper[] peInvGridResult = new ItemStackWrapper[1];
 				ItemStackWrapper[] peInvGrid = new ItemStackWrapper[5];
@@ -107,7 +107,7 @@ public class InventorySetItems extends MiddleInventorySetItems {
 				break;
 			}
 			default: {
-				int wSlots = cache.getOpenedWindowSlots();
+				int wSlots = cache.getWindowCache().getOpenedWindowSlots();
 				int peWSlots = wSlots;
 				if(wSlots > 16) { 
 					//PE only has doublechest or single chest interface for high slots.

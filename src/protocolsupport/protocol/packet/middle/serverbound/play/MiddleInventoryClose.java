@@ -12,7 +12,7 @@ public abstract class MiddleInventoryClose extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		cache.closeWindow();
+		cache.getWindowCache().closeWindow();
 		return RecyclableSingletonList.create(create(windowId));
 	}
 	

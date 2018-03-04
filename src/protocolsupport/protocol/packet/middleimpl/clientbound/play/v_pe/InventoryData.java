@@ -4,7 +4,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryData;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.pe.PEInventoryCache;
+import protocolsupport.protocol.storage.netcache.PEInventoryCache;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -16,8 +16,8 @@ public class InventoryData extends MiddleInventoryData {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		PEInventoryCache invCache = cache.getPEDataCache().getInventoryCache();
-		switch(cache.getOpenedWindow()) {
+		PEInventoryCache invCache = cache.getPEInventoryCache();
+		switch(cache.getWindowCache().getOpenedWindow()) {
 			case FURNACE: {
 				switch(type) {
 					case 0: { //Fire icon (Burned ticks) (Tick in PE is 50ms while in PC it's 20)

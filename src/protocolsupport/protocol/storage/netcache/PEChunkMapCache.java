@@ -1,24 +1,25 @@
-package protocolsupport.protocol.storage.pe;
+package protocolsupport.protocol.storage.netcache;
 
 import java.util.HashSet;
+import java.util.Set;
 
 public class PEChunkMapCache {
 
-	private final HashSet<ChunkCoord> sentChunks = new HashSet<>();
+	protected final Set<ChunkCoord> sentChunks = new HashSet<>();
 
 	public void clear() {
 		sentChunks.clear();
 	}
 
-	public void markSentChunk(int x, int z) {
+	public void markSent(int x, int z) {
 		sentChunks.add(new ChunkCoord(x, z));
 	}
 
-	public void unmarkSentChunk(int x, int z) {
+	public void unmarkSent(int x, int z) {
 		sentChunks.remove(new ChunkCoord(x, z));
 	}
 
-	public boolean isChunkMarkedAsSent(int x, int z) {
+	public boolean isMarkedAsSent(int x, int z) {
 		return sentChunks.contains(new ChunkCoord(x, z));
 	}
 

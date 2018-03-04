@@ -46,7 +46,7 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		NetworkEntity entity = cache.getWatchedEntity(entityId);
+		NetworkEntity entity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
 		if (entity != null) {
 			return RecyclableSingletonList.create(create(connection.getVersion(), entity, 
 					attributes.values().stream().filter(attr -> !forbiddenAttrNames.contains(attr.key)).toArray(Attribute[]::new)

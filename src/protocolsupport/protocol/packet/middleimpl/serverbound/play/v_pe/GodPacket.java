@@ -25,8 +25,9 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.NetworkDataCache;
-import protocolsupport.protocol.storage.pe.PEInventoryCache;
+import protocolsupport.protocol.storage.netcache.NetworkDataCache;
+import protocolsupport.protocol.storage.netcache.PEInventoryCache;
+import protocolsupport.protocol.storage.netcache.WindowCache;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.BlockFace;
@@ -80,19 +81,21 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	protected int face;
 	protected int targetId;
 
+	//TODO: Remove debug (can delete all lines starting with "bug(") if all is well.
 	public static void bug(String bugger) {
 		if(godlyDebug) { System.out.println(bugger); }
 	}
 	
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		System.out.println("NEEWWW GODPACKET! Hooraayy it's a god packet. Don't we all reeeaaally love godpackets? I do. IDDOODD I REALLY DO LOVE THEM. THTHISS IS THE BEST DAY IN MY LIFE.");
+		String locale = cache.getAttributesCache().getLocale();
+		bug("NEEWWW GODPACKET! Hooraayy it's a god packet. Don't we all reeeaaally love godpackets? I do. IDDOODD I REALLY DO LOVE THEM. THTHISS IS THE BEST DAY IN MY LIFE.");
 		actionId = VarNumberSerializer.readVarInt(clientdata);
-		System.out.println("ACTION: " + actionId);
+		bug("ACTION: " + actionId);
 
 		transactions = new InfTransaction[VarNumberSerializer.readVarInt(clientdata)];
 		for(int i = 0; i < transactions.length; i++) {
-			transactions[i] = InfTransaction.readFromStream(clientdata, cache.getLocale(), connection.getVersion());
+			transactions[i] = InfTransaction.readFromStream(clientdata, locale, connection.getVersion());
 		}
 
 		switch(actionId) {
@@ -101,7 +104,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				PositionSerializer.readPEPositionTo(clientdata, position);
 				face = VarNumberSerializer.readSVarInt(clientdata);
 				slot = VarNumberSerializer.readSVarInt(clientdata);
-				itemstack = ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), cache.getLocale(), true);
+				itemstack = ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), locale, true);
 				fromX = clientdata.readFloatLE(); fromY = clientdata.readFloatLE(); fromZ = clientdata.readFloatLE();
 				cX = clientdata.readFloatLE(); cY = clientdata.readFloatLE(); cZ = clientdata.readFloatLE();
 				break;
@@ -110,7 +113,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				targetId = (int) VarNumberSerializer.readVarLong(clientdata);
 				subTypeId = VarNumberSerializer.readVarInt(clientdata);
 				slot = VarNumberSerializer.readSVarInt(clientdata);
-				itemstack = ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), cache.getLocale(), true);
+				itemstack = ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), locale, true);
 				fromX = clientdata.readFloatLE(); fromY = clientdata.readFloatLE(); fromZ = clientdata.readFloatLE();
 				cX = clientdata.readFloatLE(); cY = clientdata.readFloatLE(); cZ = clientdata.readFloatLE();
 				break;
@@ -118,7 +121,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			case ACTION_RELEASE_ITEM: {
 				subTypeId = VarNumberSerializer.readVarInt(clientdata);
 				slot = VarNumberSerializer.readSVarInt(clientdata);
-				itemstack = ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), cache.getLocale(), true);
+				itemstack = ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), locale, true);
 				fromX = clientdata.readFloatLE(); fromY = clientdata.readFloatLE(); fromZ = clientdata.readFloatLE();
 				break;
 			}
@@ -158,7 +161,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		PEInventoryCache invCache = cache.getPEDataCache().getInventoryCache();
+		PEInventoryCache invCache = cache.getPEInventoryCache();
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 		switch(actionId) {
 			case ACTION_USE_ITEM: {
@@ -172,7 +175,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 					}
 					case USE_DIG_BLOCK: {
 						face = -1;
-						if (cache.getPEDataCache().getAttributesCache().getGameMode() == GameMode.CREATIVE) { //instabreak
+						if (cache.getAttributesCache().getPEGameMode() == GameMode.CREATIVE) { //instabreak
 							packets.add(MiddleBlockDig.create(MiddleBlockDig.Action.START_DIG, position, 0));
 							packets.add(MiddleBlockDig.create(MiddleBlockDig.Action.FINISH_DIG, position, 0));
 						}
@@ -180,9 +183,9 @@ public class GodPacket extends ServerBoundMiddlePacket {
 					}
 				}
 				if ( //Whenever the player places a block far away we want the server to update it, because PE might not be allowed to do it.
-					(Math.abs(cache.getClientX() - position.getX()) > 5) ||
-					(Math.abs(cache.getClientY() - position.getY()) > 5) ||
-					(Math.abs(cache.getClientZ() - position.getZ()) > 5)
+					(Math.abs(cache.getMovementCache().getPEClientX() - position.getX()) > 5) ||
+					(Math.abs(cache.getMovementCache().getPEClientY() - position.getY()) > 5) ||
+					(Math.abs(cache.getMovementCache().getPEClientZ() - position.getZ()) > 5)
 				) {
 					BlockFace.getById(face).modPosition(position); //Modify position to update the correct block.
 					InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.BlockUpdateRequest(position));
@@ -192,7 +195,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			case ACTION_INTERACT: {
 				switch(subTypeId) {
 					case INTERACT_INTERACT: {
-						NetworkEntity target = cache.getWatchedEntity(targetId);
+						NetworkEntity target = cache.getWatchedEntityCache().getWatchedEntity(targetId);
 						if(target == null || !target.isOfType(NetworkEntityType.ARMOR_STAND)) {
 							packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT, null, 0));
 						}
@@ -323,22 +326,22 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	public static class InfTransactions {
 		private ArrayDequeMultiMap<ItemStackWrapperKey, SlotWrapperValue> surplusDeque = new ArrayDequeMultiMap<>();
 		private ArrayDequeMultiMap<ItemStackWrapperKey, SlotWrapperValue> deficitDeque = new ArrayDequeMultiMap<>();
-		private List<ServerBoundPacketData> misc = new ArrayList<>();
-		
+		private List<ServerBoundPacketData> misc = new ArrayList<>(1);
+
 		public void clear() {
 			surplusDeque.clear();
 			deficitDeque.clear();
 			misc.clear();
 		}
-		
+
 		public void customCursorSurplus(NetworkDataCache cache, ItemStackWrapper itemstack) {
 			clear();
-			if ((!itemstack.isNull()) && !((cache.getPEDataCache().getAttributesCache().getGameMode() == GameMode.CREATIVE) && (cache.getOpenedWindow() == WindowType.PLAYER))) {
+			if ((!itemstack.isNull()) && !((cache.getAttributesCache().getPEGameMode() == GameMode.CREATIVE) && (cache.getWindowCache().getOpenedWindow() == WindowType.PLAYER))) {
 				bug("SERVER INTERVENTION ON CURSOR ITEM!! Clearing surplus deficit thingy!");
-				//TODO removing comparing code when are all kinks are worked out.
+				//TODO removing comparing debug code when are all kinks are worked out.
 				ByteBuf screwThis = Unpooled.buffer();
-				ItemStackSerializer.writeItemStack(screwThis, ProtocolVersion.MINECRAFT_PE, cache.getLocale(), itemstack, true);
-				ItemStackWrapper remapped = ItemStackSerializer.readItemStack(screwThis, ProtocolVersion.MINECRAFT_PE, cache.getLocale(), true);
+				ItemStackSerializer.writeItemStack(screwThis, ProtocolVersion.MINECRAFT_PE, cache.getAttributesCache().getLocale(), itemstack, true);
+				ItemStackWrapper remapped = ItemStackSerializer.readItemStack(screwThis, ProtocolVersion.MINECRAFT_PE, cache.getAttributesCache().getLocale(), true);
 				if(!itemstack.isNull()) {
 					System.out.println("COMPARING");
 					System.out.println(itemstack.getTag());
@@ -347,9 +350,10 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				surplusDeque.put(new ItemStackWrapperKey(remapped), new SlotWrapperValue(-1, itemstack.getAmount(), itemstack.getAmount()));
 			}
 		}
-		
+
 		public void cacheTransaction(NetworkDataCache cache, InfTransaction transaction) {
-			PEInventoryCache invCache = cache.getPEDataCache().getInventoryCache();
+			WindowCache winCache = cache.getWindowCache();
+			PEInventoryCache invCache = cache.getPEInventoryCache();
 			int pcSlot = transformSlot(cache, transaction.getInventoryId(), transaction.getSlot());
 			
 			bug("Going through cache stuff with slot: " + pcSlot);
@@ -360,11 +364,11 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			}
 			
 			//Creative transactions.
-			if ((cache.getPEDataCache().getAttributesCache().getGameMode() == GameMode.CREATIVE) && (cache.getOpenedWindow() == WindowType.PLAYER)) {
+			if ((cache.getAttributesCache().getPEGameMode() == GameMode.CREATIVE) && (winCache.getOpenedWindow() == WindowType.PLAYER)) {
 				if ((transaction.getSourceId() != SOURCE_CREATIVE) && (pcSlot != -1)) {
 					if(!transaction.getNewItem().isNull()) System.out.println(transaction.getNewItem().getTag());
 					//Creative transaction use -1 not for cursor but throwing items, cursoritems are actually deleted on serverside.
-					misc.add(MiddleCreativeSetSlot.create(cache.getLocale(), (pcSlot == -999 ? -1 : pcSlot), transaction.getNewItem()));
+					misc.add(MiddleCreativeSetSlot.create(cache.getAttributesCache().getLocale(), (pcSlot == -999 ? -1 : pcSlot), transaction.getNewItem()));
 					if (pcSlot == invCache.getSelectedSlot()) {
 						invCache.setItemInHand(transaction.getNewItem());
 					}
@@ -373,7 +377,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			}
 			
 			//Anvil naming is only done and known based on the clicked item.
-			if (pcSlot == 2 && cache.getOpenedWindow() == WindowType.ANVIL && !transaction.getOldItem().isNull()) {
+			if (pcSlot == 2 && winCache.getOpenedWindow() == WindowType.ANVIL && !transaction.getOldItem().isNull()) {
 				NBTTagCompoundWrapper tag = transaction.getOldItem().getTag();
 				if (tag.hasKeyOfType("display", NBTTagType.COMPOUND)) {
 					NBTTagCompoundWrapper display = tag.getCompound("display");
@@ -384,13 +388,13 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			}
 			
 			//Enchantment via hoppers. Yes, it's a hack but it's only possible this way.
-			if (cache.getOpenedWindow() == WindowType.ENCHANT) {
+			if (winCache.getOpenedWindow() == WindowType.ENCHANT) {
 				if (pcSlot == 0) {
 					invCache.getEnchantHopper().setInputOutputStack(transaction.getNewItem());
 				} else if (pcSlot == 1 && (transaction.getNewItem().isNull() || (transaction.getNewItem().getType() == Material.INK_SACK && transaction.getNewItem().getData() == 4))) {
 					invCache.getEnchantHopper().setLapisStack(transaction.getNewItem());
 				} else if (pcSlot > 1 && pcSlot <= 4 && transaction.getInventoryId() != PESource.POCKET_INVENTORY) { //If and only if on of the three fake hopper option slots are clicked proceed with the enchanting.
-					misc.add(MiddleInventoryEnchant.create(cache.getOpenedWindowId(), pcSlot - 2));
+					misc.add(MiddleInventoryEnchant.create(winCache.getOpenedWindowId(), pcSlot - 2));
 					return;
 				}
 			}
@@ -467,7 +471,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			//Since pocket simulates most things clientside, 
 			//we stop any incoming inventory traffic when processing slots
 			//until the manual override kicks in.
-			cache.getPEDataCache().getInventoryCache().lockInventory();
+			cache.getPEInventoryCache().lockInventory();
 			
 			bug("PROCESSING MISC");
 			
@@ -650,7 +654,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		}
 		
 		public boolean isCraftingResult(NetworkDataCache cache) {
-			return slot() == 0 && cache.getOpenedWindow() == WindowType.CRAFTING_TABLE;
+			return slot() == 0 && cache.getWindowCache().getOpenedWindow() == WindowType.CRAFTING_TABLE;
 		}
 		
 		public boolean isEmpty() {
@@ -713,7 +717,8 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	}
 	
 	private static int transformSlot(NetworkDataCache cache, int peInventoryId, int peSlot) {
-		switch(cache.getOpenedWindow()) {
+		WindowCache winCache = cache.getWindowCache();
+		switch(winCache.getOpenedWindow()) {
 			case PLAYER: {
 				switch(peInventoryId) {
 					case PESource.POCKET_CLICKED_SLOT: {
@@ -751,7 +756,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				}
 			}
 			case BREWING: {
-				if (peInventoryId == cache.getOpenedWindowId()) {
+				if (peInventoryId == winCache.getOpenedWindowId()) {
 					if(peSlot == 0) {
 						return 3;
 					} else if (peSlot >= 1 && peSlot <= 3) {
@@ -818,7 +823,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				}
 			}
 			default: {
-				int wSlots = cache.getOpenedWindowSlots();
+				int wSlots = winCache.getOpenedWindowSlots();
 				if(wSlots > 16) { wSlots = wSlots / 9 * 9; }
 				return invSlotToContainerSlot(peInventoryId, wSlots, peSlot);
 			}
@@ -866,11 +871,11 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		
 		public RecyclableArrayList<ServerBoundPacketData> create(NetworkDataCache cache, int slot, ItemStackWrapper item) {
 			RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
-			int actionNumber = cache.getActionNumber();
-			packets.add(MiddleInventoryClick.create(cache.getLocale(), cache.getOpenedWindowId(), slot, button, actionNumber, mode, item));
+			int actionNumber = cache.getPEInventoryCache().getActionNumber();
+			packets.add(MiddleInventoryClick.create(cache.getAttributesCache().getLocale(), cache.getWindowCache().getOpenedWindowId(), slot, button, actionNumber, mode, item));
 			if(!item.isNull() && item.getTag() != null && !item.getTag().isNull()) {
 				bug("My apologies??!!?!?!");
-				packets.add(MiddleInventoryTransaction.create(cache.getOpenedWindowId(), actionNumber, false));
+				packets.add(MiddleInventoryTransaction.create(cache.getWindowCache().getOpenedWindowId(), actionNumber, false));
 			}
 			return packets;
 		}

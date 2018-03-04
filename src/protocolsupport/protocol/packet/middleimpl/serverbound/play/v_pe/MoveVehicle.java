@@ -39,10 +39,13 @@ public class MoveVehicle extends ServerBoundMiddlePacket {
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
-		NetworkEntity vehicle = cache.getWatchedEntity(vehicleId);
+		NetworkEntity vehicle = cache.getWatchedEntityCache().getWatchedEntity(vehicleId);
 		if (vehicle != null) {
 			if(vehicle.getType() == NetworkEntityType.BOAT) {
-				packets.add(MiddleSteerBoat.create(cache.getPEDataCache().isRightPaddleTurning(), cache.getPEDataCache().isLeftPaddleTurning()));
+				packets.add(MiddleSteerBoat.create(
+					cache.getMovementCache().isPERightPaddleTurning(), 
+					cache.getMovementCache().isPELeftPaddleTurning())
+				);
 			}
 			PocketEntityData typeData = PocketData.getPocketEntityData(vehicle.getType());
 			if (typeData != null && typeData.getOffset() != null) {
@@ -61,7 +64,7 @@ public class MoveVehicle extends ServerBoundMiddlePacket {
 		return packets;
 	}
 	
-	public static byte getLastYaw() {
+	public static byte getLastVehicleYaw() {
 		return lastYaw;
 	}
 

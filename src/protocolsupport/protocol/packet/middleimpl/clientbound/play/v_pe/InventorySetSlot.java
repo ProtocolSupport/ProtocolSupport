@@ -5,7 +5,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventorySe
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.pe.PEInventoryCache;
+import protocolsupport.protocol.storage.netcache.PEInventoryCache;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -18,18 +18,18 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		PEInventoryCache invCache = cache.getPEDataCache().getInventoryCache();
+		PEInventoryCache invCache = cache.getPEInventoryCache();
 		if (invCache.isInventoryLocked()) {
 			return RecyclableEmptyList.get();
 		}
-		String locale = cache.getLocale();
+		String locale = cache.getAttributesCache().getLocale();
 		if (slot == -1) {
 			//TODO: Figure out how to not fuck this up.
 			//Cursor slot can be set by plugin (only if a window is actually open), this will cause issues however with the deficit/surplus stack so we add them manually here.
 			invCache.getInfTransactions().customCursorSurplus(cache, itemstack);
 			return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_CLICKED_SLOT, 0, itemstack));
 		}
-		switch(cache.getOpenedWindow()) {
+		switch(cache.getWindowCache().getOpenedWindow()) {
 			case PLAYER: {
 				if (slot == 0) {
 					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_CRAFTING_RESULT, 0, itemstack));
@@ -112,7 +112,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 				}
 			}
 			default: {
-				int wSlots = cache.getOpenedWindowSlots();
+				int wSlots = cache.getWindowCache().getOpenedWindowSlots();
 				//Makes malformated inventory slot amounts to work. (Essentials's /invsee for example)
 				if(wSlots > 16) { wSlots = wSlots / 9 * 9; }
 				if (slot > wSlots) {

@@ -58,7 +58,7 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 					break;
 				}
 			}
-			cache.setOpenedWindow(type, windowId, cacheSlots);
+			cache.getWindowCache().setOpenedWindow(type, windowId, cacheSlots);
 			return true;
 		}
 	}

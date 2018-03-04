@@ -34,15 +34,14 @@ public class CustomPayload extends MiddleCustomPayload {
 			tag = "MC|AdvCmd";
 			data = MiscSerializer.readAllBytes(clientdata);
 		} else if (tag.equals("MC|BSign") || tag.equals("MC|BEdit")) {
-			ItemStackWrapper book = ItemStackSerializer.readItemStack(clientdata, version, cache.getLocale(), true);
+			ItemStackWrapper book = ItemStackSerializer.readItemStack(clientdata, version, cache.getAttributesCache().getLocale(), true);
 			if (!book.isNull()) {
 				book.setType(Material.BOOK_AND_QUILL);
 				if ((version == ProtocolVersion.MINECRAFT_1_8) && tag.equals("MC|BSign")) {
-					remapBookPages(book, cache.getLocale());
+					remapBookPages(book, cache.getAttributesCache().getLocale());
 				}
 			}
-			System.out.println("PCBOOK: " + book + " NBT" + book.getTag());
-			ItemStackSerializer.writeItemStack(newdata, ProtocolVersionsHelper.LATEST_PC, cache.getLocale(), book, false);
+			ItemStackSerializer.writeItemStack(newdata, ProtocolVersionsHelper.LATEST_PC, cache.getAttributesCache().getLocale(), book, false);
 			data = MiscSerializer.readAllBytes(newdata);
 		} else {
 			data = MiscSerializer.readAllBytes(clientdata);

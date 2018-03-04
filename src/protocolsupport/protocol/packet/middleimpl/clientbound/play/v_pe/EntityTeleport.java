@@ -19,7 +19,7 @@ public class EntityTeleport extends MiddleEntityTeleport {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		NetworkEntity entity = cache.getWatchedEntity(entityId);
+		NetworkEntity entity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
 		if (entity == null) {
 			return RecyclableEmptyList.get();
 		}
@@ -36,7 +36,7 @@ public class EntityTeleport extends MiddleEntityTeleport {
 			}
 		}
 		if (entity.getDataCache().isRiding()) {
-			NetworkEntity vehicle = cache.getWatchedEntity(entity.getDataCache().getVehicleId());
+			NetworkEntity vehicle = cache.getWatchedEntityCache().getWatchedEntity(entity.getDataCache().getVehicleId());
 			if (vehicle != null) {
 				if (vehicle.getType() == NetworkEntityType.BOAT) {
 					//This bunch calculates the relative head position. Apparently the player is a bit turned inside the boat (in PE) so another little offset is needed.
@@ -58,7 +58,7 @@ public class EntityTeleport extends MiddleEntityTeleport {
 		}
 		return RecyclableSingletonList.create(updateGeneral(version, entity, x, y, z, pitch, headYaw, yaw, onGround, false));
 	}
-	
+
 	public static ClientBoundPacketData create(ProtocolVersion version, NetworkEntity entity, double x, double y, double z, byte pitch, byte headYaw, byte yaw, boolean onGround, boolean teleported) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_TELEPORT, version);
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
@@ -72,7 +72,7 @@ public class EntityTeleport extends MiddleEntityTeleport {
 		serializer.writeBoolean(teleported);
 		return serializer;
 	}
-	
+
 	public static ClientBoundPacketData updateGeneral(ProtocolVersion version, NetworkEntity entity, double x, double y, double z, byte pitch, byte headYaw, byte yaw, boolean onGround, boolean teleported) {
 		if (entity.getType() == NetworkEntityType.PLAYER) {
 			return Position.create(version, entity, x, y, z, pitch, yaw, teleported ? Position.ANIMATION_MODE_TELEPORT : Position.ANIMATION_MODE_ALL);

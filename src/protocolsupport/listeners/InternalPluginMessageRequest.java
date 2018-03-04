@@ -125,7 +125,7 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 		public BlockUpdateRequest(Position position) {
 			this.position = position;
 		}
-		
+
 		@Override
 		protected void read(ByteBuf from) {
 			PositionSerializer.readPositionTo(from, position);

@@ -9,7 +9,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSu
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.pe.PEPlayerAttributesCache;
+import protocolsupport.protocol.storage.netcache.AttributesCache;
 import protocolsupport.protocol.typeremapper.pe.PEAdventureSettings;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
@@ -27,7 +27,7 @@ public class Login extends MiddleLogin {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {		
 		ProtocolVersion version = connection.getVersion();
-		NetworkEntity player = cache.getWatchedSelf();
+		NetworkEntity player = cache.getWatchedEntityCache().getSelfPlayer();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		//Send fake resource packet for sounds.
 		ClientBoundPacketData resourcepack = ClientBoundPacketData.create(PEPacketIDs.RESOURCE_PACK, version);
@@ -82,7 +82,7 @@ public class Login extends MiddleLogin {
 		packets.add(startgame);
 		//Player metadata and settings update, so it won't behave strangely until metadata update is sent by server
 		packets.add(PEAdventureSettings.createPacket(cache));
-		packets.add(EntityMetadata.createFaux(player, cache.getLocale(), version));
+		packets.add(EntityMetadata.createFaux(player, cache.getAttributesCache().getLocale(), version));
 		//Can now switch to game state
 		packets.add(LoginSuccess.createPlayStatus(version, 3));
 		//Send chunk radius update without waiting for request, works anyway
@@ -101,13 +101,14 @@ public class Login extends MiddleLogin {
 		VarNumberSerializer.writeVarInt(creativeInventoryPacket, peInv.getItemCount());
 		creativeInventoryPacket.writeBytes(peInv.getCreativeItems());
 		packets.add(creativeInventoryPacket);
-		PEPlayerAttributesCache attrscache = cache.getPEDataCache().getAttributesCache();
-		attrscache.setGameMode(gamemode);
+		//Set PE gamemode.
+		AttributesCache attrscache = cache.getAttributesCache();
+		attrscache.setPEGameMode(gamemode);
 		//fake chunks with position, because pe doesn't like spawning in no chunk world
-		Respawn.addFakeChunksAndPos(version, cache.getWatchedSelf(), attrscache.getFakeSetPositionY(), packets);
+		Respawn.addFakeChunksAndPos(version, player, attrscache.getPEFakeSetPositionY(), packets);
 		//add two dimension switches to make sure that player ends up in right dimension even if bungee dimension switch on server switch broke stuff
-		Respawn.create(version, dimension != Environment.OVERWORLD ? Environment.OVERWORLD: Environment.THE_END, cache.getWatchedSelf(), attrscache.getFakeSetPositionY(), packets);
-		Respawn.create(version, dimension, cache.getWatchedSelf(), attrscache.getFakeSetPositionY(), packets);
+		Respawn.create(version, dimension != Environment.OVERWORLD ? Environment.OVERWORLD: Environment.THE_END, player, attrscache.getPEFakeSetPositionY(), packets);
+		Respawn.create(version, dimension, player, attrscache.getPEFakeSetPositionY(), packets);
 		return packets;
 	}
 

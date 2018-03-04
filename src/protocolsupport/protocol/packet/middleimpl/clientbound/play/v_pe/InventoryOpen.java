@@ -23,7 +23,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		cache.getPEDataCache().getInventoryCache().getInfTransactions().clear();
+		cache.getPEInventoryCache().getInfTransactions().clear();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		//Horses
 		if (type == WindowType.HORSE) {
@@ -59,7 +59,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 		//Normal inventory.
 		Position open = PEInventory.prepareFakeInventory(title, connection, cache, packets);
 		//Unless we have a doublechest or beacon which take some time to create, open the inventory straight away.
-		if (!PEInventory.doDoubleChest(cache) && cache.getOpenedWindow() != WindowType.BEACON) {
+		if (!PEInventory.doDoubleChest(cache) && type != WindowType.BEACON) {
 			packets.add(create(connection.getVersion(), windowId, type, open, -1));
 		}
 		return packets;

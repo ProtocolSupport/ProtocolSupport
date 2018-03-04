@@ -32,7 +32,7 @@ public class BookEdit extends ServerBoundMiddlePacket {
 	protected String photo;
 	protected String title;
 	protected String author;
-	
+
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		ProtocolVersion version = connection.getVersion();
@@ -68,7 +68,7 @@ public class BookEdit extends ServerBoundMiddlePacket {
 			}
 		}
 	}
-	
+
 	private static final int TYPE_REPLACE = 0;
 	private static final int TYPE_ADD = 1;
 	private static final int TYPE_DELETE = 2;
@@ -77,7 +77,7 @@ public class BookEdit extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		ItemStackWrapper bookItem = cache.getPEDataCache().getInventoryCache().getItemInHand();
+		ItemStackWrapper bookItem = cache.getPEInventoryCache().getItemInHand();
 		if (!bookItem.isNull() && bookItem.getType() == Material.BOOK_AND_QUILL) {
 			NBTTagCompoundWrapper bookNBT = bookItem.getTag() != null && !bookItem.getTag().isNull() ? bookItem.getTag() : ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
 			NBTTagListWrapper pages = bookNBT.hasKeyOfType("pages", NBTTagType.LIST) ? bookNBT.getList("pages"): ServerPlatform.get().getWrapperFactory().createEmptyNBTList();

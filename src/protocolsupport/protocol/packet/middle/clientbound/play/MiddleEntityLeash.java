@@ -17,7 +17,7 @@ public abstract class MiddleEntityLeash extends ClientBoundMiddlePacket {
 
 	@Override
 	public boolean postFromServerRead() {
-		NetworkEntity entity = cache.getWatchedEntity(entityId);
+		NetworkEntity entity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
 		if (entity != null) {
 			entity.getDataCache().setAttachedId(vehicleId);
 		}

@@ -14,8 +14,6 @@ import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
 public class EntityStatus extends MiddleEntityStatus {
 
-	public static final int PE_UNLEASH = 63;
-	
 	//TODO: Actually remap and skip the status codes. It seems that with the new update PE crashes if ID is unknown.
 	TIntHashSet allowedIds = new TIntHashSet(new int[] {2, 3, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 31, 34, 57, 63});
 
@@ -23,8 +21,8 @@ public class EntityStatus extends MiddleEntityStatus {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		if(allowedIds.contains(status)) {
-			NetworkEntity e = cache.getWatchedEntity(entityId);
-			if (e == null) { // Sometimes the server (nasty plugins?) tries to send Entity Status updates for despawned entities, if the entity isn't cached, ignore the update.
+			NetworkEntity e = cache.getWatchedEntityCache().getWatchedEntity(entityId);
+			if (e == null) {
 				return RecyclableEmptyList.get();
 			}
 			if ((status == 31) && (e.getType() == NetworkEntityType.FISHING_FLOAT)) {
@@ -40,6 +38,8 @@ public class EntityStatus extends MiddleEntityStatus {
 		}
 		return packets;
 	}
+
+	public static final int PE_UNLEASH = 63;
 
 	public static ClientBoundPacketData create(NetworkEntity entity, int status, ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_EVENT, version);

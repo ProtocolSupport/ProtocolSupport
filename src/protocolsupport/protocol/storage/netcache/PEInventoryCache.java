@@ -1,9 +1,10 @@
-package protocolsupport.protocol.storage.pe;
+package protocolsupport.protocol.storage.netcache;
 
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacket.InfTransactions;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.BeaconTemple;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.EnchantHopper;
 import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.utils.Utils;
 import protocolsupport.utils.ArrayDequeMultiMap.ChildDeque;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
@@ -19,6 +20,7 @@ public class PEInventoryCache {
 	private int fuelTime = 0;
 	private int smeltTime = 200;
 	private int selectedSlot = 0;
+	private int PEActionNumber = 0;
 
 	public ItemStackWrapper getItemInHand() {
 		return itemInHand; 
@@ -82,6 +84,19 @@ public class PEInventoryCache {
 
 	public void setSelectedSlot(int selectedSlot) {
 		this.selectedSlot = selectedSlot;
+	}
+
+	public int getActionNumber() {
+		return PEActionNumber++;
+	}
+
+	public void resetActionNumber() {
+		PEActionNumber = 0;
+	}
+
+	@Override
+	public String toString() {
+		return Utils.toStringAllFields(this);
 	}
 
 }

@@ -10,7 +10,7 @@ public class PlayerAbilities extends MiddlePlayerAbilities {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		cache.getPEDataCache().getAttributesCache().updateFlying((flags & flagOffsetCanFly) == flagOffsetCanFly, (flags & flagOffsetIsFlying) == flagOffsetIsFlying);
+		cache.getAttributesCache().updatePEFlying((flags & flagOffsetCanFly) == flagOffsetCanFly, (flags & flagOffsetIsFlying) == flagOffsetIsFlying);
 		return RecyclableSingletonList.create(PEAdventureSettings.createPacket(cache));
 	}
 

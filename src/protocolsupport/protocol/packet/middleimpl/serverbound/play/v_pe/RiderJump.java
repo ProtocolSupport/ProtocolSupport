@@ -22,7 +22,7 @@ public class RiderJump extends ServerBoundMiddlePacket {
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 		//TODO: Why this not work? :F
-		packets.add(MiddleEntityAction.create(cache.getSelfPlayerEntityId(), MiddleEntityAction.Action.START_JUMP, 100));
+		packets.add(MiddleEntityAction.create(riderId, MiddleEntityAction.Action.START_JUMP, 100));
 		packets.add(MiddleSteerVehicle.create(0, 0, 0x1)); // 0x1 = jump vehicle
 		return packets;
 	}

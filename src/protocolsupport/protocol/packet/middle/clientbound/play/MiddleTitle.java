@@ -53,7 +53,7 @@ public abstract class MiddleTitle extends ClientBoundMiddlePacket {
 			connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_11)
 		) {
 			connection.sendPacket(ServerPlatform.get().getPacketFactory().createOutboundChatPacket(
-				ChatAPI.toJSON(new TextComponent(message.toLegacyText(cache.getLocale()))),
+				ChatAPI.toJSON(new TextComponent(message.toLegacyText(cache.getAttributesCache().getLocale()))),
 				MessagePosition.HOTBAR.ordinal()
 			));
 			return false;

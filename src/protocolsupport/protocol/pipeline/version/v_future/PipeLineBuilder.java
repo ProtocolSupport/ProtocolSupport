@@ -2,7 +2,7 @@ package protocolsupport.protocol.pipeline.version.v_future;
 
 import io.netty.channel.Channel;
 import protocolsupport.api.Connection;
-import protocolsupport.protocol.pipeline.version.AbstractVarIntFramingPipeLineBuilder;
+import protocolsupport.protocol.pipeline.version.util.builder.AbstractVarIntFramingPipeLineBuilder;
 
 public class PipeLineBuilder extends AbstractVarIntFramingPipeLineBuilder {
 

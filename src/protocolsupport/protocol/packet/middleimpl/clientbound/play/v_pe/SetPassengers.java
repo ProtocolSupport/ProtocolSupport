@@ -10,6 +10,7 @@ import protocolsupport.api.unsafe.pemetadata.PEMetaProviderSPI;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetPassengers;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.netcache.WatchedEntityCache;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.minecraftdata.PocketData;
 import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData.PocketRiderInfo;
@@ -28,23 +29,23 @@ public class SetPassengers extends MiddleSetPassengers {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
+		WatchedEntityCache wecache = cache.getWatchedEntityCache();
 		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		NetworkEntity vehicle = cache.getWatchedEntity(vehicleId);
-		if(vehicle != null) {
+		NetworkEntity vehicle = wecache.getWatchedEntity(vehicleId);
+		if (vehicle != null) {
 			TIntHashSet prevPassengersIds = passengers.get(vehicleId);
 			if (prevPassengersIds == null) {
 				prevPassengersIds = new TIntHashSet();
 			}
 			TIntHashSet newPassengersIds = new TIntHashSet(passengersIds);
 			for (int passengerId : passengersIds) {
-				NetworkEntity passenger = cache.getWatchedEntity(passengerId);
+				NetworkEntity passenger = wecache.getWatchedEntity(passengerId);
 				if (passenger != null) {
 					//MOJANG.... WHYYYYY?!
-					if (vehicle.isOfType(NetworkEntityType.PIG)) { //If we don't do this we crash, but perhaps this can better be done at spawn.
+					if (vehicle.isOfType(NetworkEntityType.PIG)) { //If we don't do this we crash, but TODO: perhaps this can better be done at spawn.
 						packets.add(EntitySetAttributes.create(version, vehicle, EntitySetAttributes.createAttribute("minecraft:horse.jump_strength", 0.432084373616155))); 
 					}
-					
 					DataCache data = passenger.getDataCache();
 					if (data.isRiding() && data.getVehicleId() != vehicleId) {
 						//In case we are jumping from vehicle to vehicle.
@@ -62,7 +63,7 @@ public class SetPassengers extends MiddleSetPassengers {
 						data.setRotationlock(rideInfo.getRotationLock());
 						data.setVehicleId(vehicleId);
 					}
-					packets.add(EntityMetadata.createFaux(passenger, cache.getLocale(), version));
+					packets.add(EntityMetadata.createFaux(passenger, cache.getAttributesCache().getLocale(), version));
 					packets.add(create(version, vehicleId, passengerId, LINK));
 				}
 			}
@@ -70,11 +71,11 @@ public class SetPassengers extends MiddleSetPassengers {
 				@Override
 				public boolean execute(int passengerId) {
 					if (!newPassengersIds.contains(passengerId)) {
-						NetworkEntity passenger = cache.getWatchedEntity(passengerId);
+						NetworkEntity passenger = wecache.getWatchedEntity(passengerId);
 						if (passenger != null) {
 							//Also update meta.
 							passenger.getDataCache().setVehicleId(0);
-							packets.add(EntityMetadata.createFaux(passenger, cache.getLocale(), version));
+							packets.add(EntityMetadata.createFaux(passenger, cache.getAttributesCache().getLocale(), version));
 							packets.add(create(version, vehicleId, passengerId, UNLINK));
 						}
 					}

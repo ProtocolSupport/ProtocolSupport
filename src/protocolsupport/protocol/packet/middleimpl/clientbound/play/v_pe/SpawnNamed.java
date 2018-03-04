@@ -19,7 +19,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SPAWN_PLAYER, version);
 		MiscSerializer.writeUUID(serializer, connection.getVersion(), entity.getUUID());
-		StringSerializer.writeString(serializer, version, name);
+		StringSerializer.writeString(serializer, version, cache.getPlayerListCache().getEntry(entity.getUUID()).getName(cache.getAttributesCache().getLocale()));
 		VarNumberSerializer.writeSVarLong(serializer, entity.getId());
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		serializer.writeFloatLE((float) x);
@@ -31,8 +31,8 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		serializer.writeFloatLE(pitch);
 		serializer.writeFloatLE(yaw); //head yaw actually
 		serializer.writeFloatLE(yaw);
-		ItemStackSerializer.writeItemStack(serializer, version, cache.getLocale(), ItemStackWrapper.NULL, true);
-		EntityMetadata.encodeMeta(serializer, version, cache.getLocale(), EntityMetadata.transform(entity, metadata.getRemapped(), version));
+		ItemStackSerializer.writeItemStack(serializer, version, cache.getAttributesCache().getLocale(), ItemStackWrapper.NULL, true);
+		EntityMetadata.encodeMeta(serializer, version, cache.getAttributesCache().getLocale(), EntityMetadata.transform(entity, metadata.getRemapped(), version));
 		VarNumberSerializer.writeVarInt(serializer, 0); //?
 		VarNumberSerializer.writeVarInt(serializer, 0); //?
 		VarNumberSerializer.writeVarInt(serializer, 0); //?

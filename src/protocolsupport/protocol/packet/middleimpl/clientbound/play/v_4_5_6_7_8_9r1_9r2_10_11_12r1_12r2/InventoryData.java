@@ -16,22 +16,22 @@ public class InventoryData extends MiddleInventoryData {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		if ((version == ProtocolVersion.MINECRAFT_1_8) && (cache.getOpenedWindow() == WindowType.ENCHANT)) {
+		if ((version == ProtocolVersion.MINECRAFT_1_8) && (cache.getWindowCache().getOpenedWindow() == WindowType.ENCHANT)) {
 			enchTypeVal[type] = value;
 			if ((type >= 7) && (type <= 9)) {
 				ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_DATA_ID, version);
 				serializer.writeByte(windowId);
 				serializer.writeShort(type - 3);
 				serializer.writeShort((value << 8) | enchTypeVal[type - 3]);
-				return RecyclableSingletonList.<ClientBoundPacketData>create(serializer);
+				return RecyclableSingletonList.create(serializer);
 			} else if ((type >= 4) && (type <= 6)) {
 				ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_DATA_ID, version);
 				serializer.writeByte(windowId);
 				serializer.writeShort(type);
 				serializer.writeShort(((enchTypeVal[type + 3]) << 8) | value);
-				return RecyclableSingletonList.<ClientBoundPacketData>create(serializer);
+				return RecyclableSingletonList.create(serializer);
 			}
-		} else if (version.isBefore(ProtocolVersion.MINECRAFT_1_8) && (cache.getOpenedWindow() == WindowType.FURNACE)) {
+		} else if (version.isBefore(ProtocolVersion.MINECRAFT_1_8) && (cache.getWindowCache().getOpenedWindow() == WindowType.FURNACE)) {
 			if (type < furTypeTr.length) {
 				type = furTypeTr[type];
 			}
@@ -40,7 +40,7 @@ public class InventoryData extends MiddleInventoryData {
 		serializer.writeByte(windowId);
 		serializer.writeShort(type);
 		serializer.writeShort(value);
-		return RecyclableSingletonList.<ClientBoundPacketData>create(serializer);
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

@@ -40,7 +40,7 @@ public class Interact extends ServerBoundMiddlePacket {
 				break;
 			}
 			case OPEN_INVENTORY: {
-				return RecyclableSingletonList.create(MiddleEntityAction.create(cache.getSelfPlayerEntityId(), MiddleEntityAction.Action.OPEN_HORSE_INV, 0));
+				return RecyclableSingletonList.create(MiddleEntityAction.create(cache.getWatchedEntityCache().getSelfPlayerEntityId(), MiddleEntityAction.Action.OPEN_HORSE_INV, 0));
 			}
 		}
 		return RecyclableEmptyList.get();

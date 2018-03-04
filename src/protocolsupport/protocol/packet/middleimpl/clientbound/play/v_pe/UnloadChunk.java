@@ -9,7 +9,7 @@ public class UnloadChunk extends MiddleUnloadChunk {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		cache.getPEDataCache().getChunkCache().unmarkSentChunk(chunkX, chunkZ);
+		cache.getPEChunkMapCache().unmarkSent(chunkX, chunkZ);
 		return RecyclableEmptyList.get();
 	}
 

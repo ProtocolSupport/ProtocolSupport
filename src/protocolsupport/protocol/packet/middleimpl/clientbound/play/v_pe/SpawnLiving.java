@@ -26,7 +26,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		packets.add(create(
 			version,
 			entity, x, y, z,
-			motX / 8.000F, motY / 8000.F, motZ / 8000.F, pitch, yaw, cache.getLocale(),
+			motX / 8.000F, motY / 8000.F, motZ / 8000.F, pitch, yaw, cache.getAttributesCache().getLocale(),
 			null, PEDataValues.getLivingEntityTypeId(IdRemapper.ENTITY.getTable(version).getRemap(entity.getType()))
 		));
 		DataWatcherObject<?> healthWatcher = metadata.getOriginal().get(DataWatcherObjectIndex.EntityLiving.HEALTH);

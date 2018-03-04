@@ -40,7 +40,7 @@ public abstract class ItemStackWrapper {
 	public abstract ItemStackWrapper cloneItemStack();
 
 
-	public static ItemStackWrapper NULL = new ItemStackWrapper() {
+	public static final ItemStackWrapper NULL = new ItemStackWrapper() {
 
 		@Override
 		public boolean isNull() {

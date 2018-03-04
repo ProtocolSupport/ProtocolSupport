@@ -313,7 +313,7 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 	public Message createUpdateChunkPacket(Chunk chunk) {
 		return ((GlowChunk) chunk).toMessage();
 	}
-	
+
 	@Override
 	public Message createBlockUpdatePacket(Position pos, int block) {
 		return new BlockChangeMessage(pos.getX(), pos.getY(), pos.getZ(), block);

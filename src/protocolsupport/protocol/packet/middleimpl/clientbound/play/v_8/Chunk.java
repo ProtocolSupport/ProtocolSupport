@@ -27,7 +27,7 @@ public class Chunk extends MiddleChunk {
 		chunkdata.writeInt(chunkX);
 		chunkdata.writeInt(chunkZ);
 		chunkdata.writeBoolean(full);
-		boolean hasSkyLight = cache.hasSkyLightInCurrentDimension();
+		boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
 		if ((bitmask == 0) && full) {
 			chunkdata.writeShort(1);
 			ArraySerializer.writeByteArray(chunkdata, version, EmptyChunk.get18ChunkData(hasSkyLight));
