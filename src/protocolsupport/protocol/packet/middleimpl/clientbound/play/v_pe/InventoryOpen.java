@@ -74,7 +74,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.EQUIPMENT, version);
 		serializer.writeByte(windowId);
 		serializer.writeByte(IdRemapper.WINDOWTYPE.getTable(version).getRemap(type.toLegacyId()));
-		VarNumberSerializer.writeSVarInt(serializer, 0);
+		serializer.writeByte(0);
 		VarNumberSerializer.writeSVarLong(serializer, entityId);
 		System.out.println("OPEN EQ - Eid: "+ entityId + "wId: " + windowId + " type: " + IdRemapper.WINDOWTYPE.getTable(version).getRemap(type.toLegacyId()) +  " Tag: " + nbt);
 		ItemStackSerializer.writeTag(serializer, true, version, nbt);
