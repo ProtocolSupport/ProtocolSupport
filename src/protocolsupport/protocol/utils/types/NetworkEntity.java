@@ -97,7 +97,7 @@ public class NetworkEntity {
 
 		//Cache for PE shizzles.
 		private long peBaseFlags = 0;
-		private byte sizeModifier = 1;
+		private float sizeModifier = 1f;
 		private int attachedId = -1;
 		private Byte headRotation = null;
 		private int vehicleId = 0;
@@ -116,11 +116,11 @@ public class NetworkEntity {
 			return peBaseFlags;
 		}
 
-		public byte getSizeModifier() {
+		public float getSizeModifier() {
 			return sizeModifier;
 		}
 
-		public void setSizeModifier(byte sizeModifier) {
+		public void setSizeModifier(float sizeModifier) {
 			this.sizeModifier = sizeModifier;
 		}
 

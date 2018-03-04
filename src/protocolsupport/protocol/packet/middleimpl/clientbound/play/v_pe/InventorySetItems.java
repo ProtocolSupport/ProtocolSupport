@@ -27,6 +27,7 @@ public class InventorySetItems extends MiddleInventorySetItems {
 		ItemStackWrapper[] items = itemstacks.toArray(new ItemStackWrapper[itemstacks.size()]);
 		switch(cache.getWindowCache().getOpenedWindow()) {
 			case PLAYER: {
+				if (items.length < 46) { break; }
 				ItemStackWrapper[] peInvGridResult = new ItemStackWrapper[1];
 				ItemStackWrapper[] peInvGrid = new ItemStackWrapper[5];
 				ItemStackWrapper[] peArmor = new ItemStackWrapper[4];
@@ -104,6 +105,9 @@ public class InventorySetItems extends MiddleInventorySetItems {
 				contentpackets.add(create(version, locale, PESource.POCKET_CRAFTING_RESULT, craftingGridResult));
 				contentpackets.add(create(version, locale, PESource.POCKET_CRAFTING_GRID_ADD, craftingSlots));
 				contentpackets.add(create(version, locale, PESource.POCKET_INVENTORY, peInventory));
+				break;
+			}
+			case VILLAGER: {
 				break;
 			}
 			default: {

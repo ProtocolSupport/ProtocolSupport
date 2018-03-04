@@ -229,7 +229,7 @@ public enum SpecificRemapper {
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				getObject(original, DataWatcherObjectIndex.Ageable.AGE, DataWatcherObjectBoolean.class).ifPresent(boolWatcher -> {
 					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_BABY, boolWatcher.getValue());
-					entity.getDataCache().setSizeModifier((byte) (boolWatcher.getValue() ? 0.5 : 1));
+					entity.getDataCache().setSizeModifier(boolWatcher.getValue() ? 0.5f : 1f);
 				});
 				//Send scale -> avoid big mobs with floating heads.
 				remapped.put(39, new DataWatcherObjectFloatLe(entity.getDataCache().getSizeModifier() * PEMetaProviderSPI.getProvider().getSizeScale(
@@ -446,7 +446,11 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.PolarBear.STANDING_UP, 13) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_2)
 	),
 	VILLAGER(NetworkEntityType.VILLAGER, SpecificRemapper.AGEABLE,
-		new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Villager.PROFESSION, 2), ProtocolVersion.MINECRAFT_PE),
+		new Entry(new IndexValueRemapper<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Villager.PROFESSION, 2) {
+			@Override
+			public DataWatcherObjectSVarInt remapValue(DataWatcherObjectVarInt object) {
+				return new DataWatcherObjectSVarInt(object.getValue() == 5 ? 0 : object.getValue()); //TODO: use regular remapper when nitwit is implemented.
+			}}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Villager.PROFESSION, 13) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_2),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Villager.PROFESSION, 12) {}, ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Villager.PROFESSION, 16), ProtocolVersionsHelper.BEFORE_1_9)
@@ -490,7 +494,7 @@ public enum SpecificRemapper {
 		new Entry(new DataWatcherDataRemapper() {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
-				entity.getDataCache().setSizeModifier((byte) 6);
+				entity.getDataCache().setSizeModifier(6f);
 				float entitySize = 6f * PEMetaProviderSPI.getProvider().getSizeScale(entity.getUUID(), entity.getId(), entity.getType().getBukkitType());
 				remapped.put(39, new DataWatcherObjectFloatLe(entitySize)); //Send scale -> Giants are Giant Zombies in PE.
 				PocketEntityData pocketdata = PocketData.getPocketEntityData(entity.getType());
@@ -578,7 +582,7 @@ public enum SpecificRemapper {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				getObject(original, DataWatcherObjectIndex.Slime.SIZE, DataWatcherObjectVarInt.class).ifPresent(intWatcher -> {
-					entity.getDataCache().setSizeModifier((byte) ((int) intWatcher.getValue()));
+					entity.getDataCache().setSizeModifier((int) intWatcher.getValue());
 				});
 				float entitySize = PEMetaProviderSPI.getProvider().getSizeScale(entity.getUUID(), entity.getId(), entity.getType().getBukkitType()) * entity.getDataCache().getSizeModifier();
 				remapped.put(39, new DataWatcherObjectFloatLe(entitySize)); //Send slime scale.

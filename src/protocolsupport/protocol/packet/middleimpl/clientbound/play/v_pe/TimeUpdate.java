@@ -12,7 +12,7 @@ public class TimeUpdate extends MiddleTimeUpdate {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.UPDATE_TIME, connection.getVersion());
-		VarNumberSerializer.writeSVarInt(serializer, (int) (worldAge % Integer.MAX_VALUE));
+		VarNumberSerializer.writeSVarInt(serializer, (int) timeOfDay);
 		return RecyclableSingletonList.create(serializer);
 	}
 

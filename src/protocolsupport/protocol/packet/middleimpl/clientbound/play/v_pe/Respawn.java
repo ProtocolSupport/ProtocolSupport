@@ -27,6 +27,7 @@ public class Respawn extends MiddleRespawn {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		if (cache.getWindowCache().getOpenedWindow() != WindowType.PLAYER) {
 			packets.add(InventoryClose.create(connection.getVersion(), cache.getWindowCache().getOpenedWindowId()));
+			cache.getWindowCache().closeWindow();
 		}
 		create(connection.getVersion(), dimension, cache.getWatchedEntityCache().getSelfPlayer(), cache.getAttributesCache().getPEFakeSetPositionY(), packets);
 		return packets;
