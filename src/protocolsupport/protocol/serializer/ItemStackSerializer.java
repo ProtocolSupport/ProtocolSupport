@@ -83,19 +83,7 @@ public class ItemStackSerializer {
 		}
 		ItemStackWrapper witemstack = itemstack;
 		if (isToClient) {
-			witemstack = witemstack.cloneItemStack();
-			IntTuple iddata = ItemStackRemapper.ID_DATA_REMAPPING_REGISTRY.getTable(version).getRemap(witemstack.getTypeId(), witemstack.getData());
-			if (iddata != null) {
-				witemstack.setTypeId(iddata.getI1());
-				if (iddata.getI2() != -1) {
-					witemstack.setData(iddata.getI2());
-				}
-			}
-			if (ItemStackWriteEvent.getHandlerList().getRegisteredListeners().length > 0) {
-				ItemStackWriteEvent event = new InternalItemStackWriteEvent(version, locale, itemstack, witemstack);
-				Bukkit.getPluginManager().callEvent(event);
-			}
-			witemstack = ItemStackRemapper.remapToClient(version, locale, itemstack.getTypeId(), witemstack);
+			witemstack = remapItemToClient(version, locale, witemstack);
 		}
 		if (version == ProtocolVersion.MINECRAFT_PE) {
 			int id = witemstack.getTypeId();
@@ -210,6 +198,22 @@ public class ItemStackSerializer {
 
 	private static final boolean isUsingPENBT(ProtocolVersion version) {
 		return (version.getProtocolType() == ProtocolType.PE) && (version == ProtocolVersion.MINECRAFT_PE);
+	}
+
+	public static ItemStackWrapper remapItemToClient(ProtocolVersion version, String locale, ItemStackWrapper itemstack) {
+		ItemStackWrapper witemstack = itemstack.cloneItemStack();
+		IntTuple iddata = ItemStackRemapper.ID_DATA_REMAPPING_REGISTRY.getTable(version).getRemap(witemstack.getTypeId(), witemstack.getData());
+		if (iddata != null) {
+			witemstack.setTypeId(iddata.getI1());
+			if (iddata.getI2() != -1) {
+				witemstack.setData(iddata.getI2());
+			}
+		}
+		if (ItemStackWriteEvent.getHandlerList().getRegisteredListeners().length > 0) {
+			ItemStackWriteEvent event = new InternalItemStackWriteEvent(version, locale, itemstack, witemstack);
+			Bukkit.getPluginManager().callEvent(event);
+		}
+		return ItemStackRemapper.remapToClient(version, locale, itemstack.getTypeId(), witemstack);
 	}
 
 	public static class InternalItemStackWriteEvent extends ItemStackWriteEvent {

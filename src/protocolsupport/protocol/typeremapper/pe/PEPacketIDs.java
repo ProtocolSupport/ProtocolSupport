@@ -77,7 +77,7 @@ public class PEPacketIDs {
 	//public static final int TAB_COMPLETE = 76;
 	public static final int COMMAND_REQUEST = 77;
 	//public static final int COMMAND_BLOCK_UPDATE = 78;
-	//public static final int TRADE_UPDATE = 80;
+	public static final int TRADE_UPDATE = 80;
 	public static final int EQUIPMENT = 81;
 	public static final int RESOURCE_INFO = 82;
 	public static final int RESOURCE_DATA = 83;

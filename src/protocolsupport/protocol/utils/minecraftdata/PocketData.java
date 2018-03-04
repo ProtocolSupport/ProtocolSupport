@@ -10,9 +10,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
+import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class PocketData {
@@ -25,6 +28,16 @@ public class PocketData {
 	
 	public static BufferedReader getResource(String name) {
 		return Utils.getResource("pe/" + name);
+	}
+	
+	public static NBTTagCompoundWrapper ItemStackToPENBT(ProtocolVersion version, String locale, ItemStackWrapper itemstack) {
+		NBTTagCompoundWrapper item = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+		itemstack = ItemStackSerializer.remapItemToClient(version, locale, itemstack);
+		item.setByte("Count", itemstack.getAmount());
+		item.setShort("Damage", itemstack.getData());
+		item.setShort("id", itemstack.getTypeId());
+		item.setCompound("tag", itemstack.getTag());
+		return item;
 	}
 	
 	//Extra entity data such as BoundingBoxes, RiderPositions and Offsets necessary for Pocket Edition.
