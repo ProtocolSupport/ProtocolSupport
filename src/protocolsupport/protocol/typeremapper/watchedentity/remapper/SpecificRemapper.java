@@ -103,6 +103,7 @@ public enum SpecificRemapper {
 					air.set(airWatcher.getValue() >= 300 ? 0 : airWatcher.getValue());
 				});
 				remapped.put(7, new DataWatcherObjectShortLe(air.get()));
+				remapped.put(43, new DataWatcherObjectShortLe(300));
 
 				// = PE Bounding Box =
 				if(pocketdata.getBoundingBox() != null) {
@@ -301,10 +302,13 @@ public enum SpecificRemapper {
 					remapped.put(16, new DataWatcherObjectVarInt(((byteWatcher.getValue() & (1 << (6-1))) != 0) ? 0b100000 : 0));
 					System.out.println(((byteWatcher.getValue() & (1 << (2-1))) != 0));
 					if ((byteWatcher.getValue() & (1 << (2-1))) != 0) {
+						
 						System.out.println("Wierd inventoryproperties set.");
 						//When tamed set these weird properties to make the inventory work. FFS Mojang.
+						//remapped.put(5, new DataWatcherObjectSVarLong(253)); // set owner meta to a dummy entity ID
 						remapped.put(45, new DataWatcherObjectByte((byte) 12));
-						remapped.put(46, new DataWatcherObjectVarInt(2));
+						remapped.put(46, new DataWatcherObjectVarInt(2)); //Animal slots (left side of the image)
+						//remapped.put(47, new DataWatcherObjectVarInt(3)); //Strength multiplier? Hardcoded to three (lamas have 3 slots per strength)
 					}
 				});
 			}

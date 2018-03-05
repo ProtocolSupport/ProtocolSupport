@@ -13,11 +13,17 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEInventory;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.protocol.utils.minecraftdata.PocketData;
+import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData;
+import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 
 public class InventoryOpen extends MiddleInventoryOpen {
 	
@@ -28,33 +34,38 @@ public class InventoryOpen extends MiddleInventoryOpen {
 		//Horses
 		if (type == WindowType.HORSE) {
 			//TODO: Fix this shit. Horses are a pain in the ass and require a different packer. Lama's are even worse with their variable slots. We'll see.
-//			NetworkEntity horse = cache.getWatchedEntity(horseId);
-//			if (horse != null) {
-//				PocketEntityData horseTypeData = PocketData.getPocketEntityData(horse.getType());
-//				if (horseTypeData != null && horseTypeData.getInventoryFilter() != null) {
-//					NBTTagCompoundWrapper filter = horseTypeData.getInventoryFilter().getFilter().clone();
-//					if (horse.getType() == NetworkEntityType.LAMA) {
-//						NBTTagListWrapper newSlots = filter.getList("slots");
-//						for(int i = 0; i < (horse.getDataCache().getStrength() * 3); i++) {
-//							NBTTagCompoundWrapper slot = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-//							NBTTagCompoundWrapper item = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-//							item.setByte("Count", 1);
-//							item.setShort("Damage", 0);
-//							item.setShort("id", 0);
-//							slot.setCompound("item", item);
-//							slot.setInt("slotNumber", i+2);
-//							newSlots.addCompound(slot);
-//						}
-//						filter.setList("slots", newSlots);
-//					}
-//					RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-//					packets.add(openEquipment(connection.getVersion(), 2, type, horseId, filter));
-//					packets.add(InventorySetItems.create(connection.getVersion(), cache.getLocale(), 2, new ItemStackWrapper[] {ItemStackWrapper.NULL, ItemStackWrapper.NULL}));
-//					//return RecyclableSingletonList.create(openEquipment(connection.getVersion(), 2, type, horseId, filter));
-//					return packets;
-//				}
-//			}
+			NetworkEntity horse = cache.getWatchedEntityCache().getWatchedEntity(horseId);
+			if (horse != null) {
+				PocketEntityData horseTypeData = PocketData.getPocketEntityData(horse.getType());
+				if (horseTypeData != null && horseTypeData.getInventoryFilter() != null) {
+					NBTTagCompoundWrapper filter = horseTypeData.getInventoryFilter().getFilter().clone();
+					if (horse.getType() == NetworkEntityType.LAMA) {
+						NBTTagListWrapper newSlots = filter.getList("slots");
+						for(int i = 0; i < (horse.getDataCache().getStrength() * 3); i++) {
+							NBTTagCompoundWrapper slot = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+							NBTTagCompoundWrapper item = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+							item.setByte("Count", 1);
+							item.setShort("Damage", 0);
+							item.setShort("id", 0);
+							slot.setCompound("item", item);
+							slot.setInt("slotNumber", i+1);
+							newSlots.addCompound(slot);
+						}
+						filter.setList("slots", newSlots);
+					}
+					ByteBuf yolo = Unpooled.buffer();
+					ItemStackSerializer.writeTag(yolo, true, connection.getVersion(), filter);
+					System.out.println(ItemStackSerializer.readTag(yolo, true, connection.getVersion()));
+					packets.add(openEquipment(connection.getVersion(), windowId, type, horseId, filter));
+					//packets.add(InventorySetItems.create(connection.getVersion(), cache.getAttributesCache().getLocale(), 2, new ItemStackWrapper[] {ItemStackWrapper.NULL, ItemStackWrapper.NULL}));
+					//return RecyclableSingletonList.create(openEquipment(connection.getVersion(), 2, type, horseId, filter));
+					return packets;
+				}
+			}
 			return packets;
+		} else if (type == WindowType.VILLAGER) {
+			System.out.println("VILLAGER: " + horseId + " slots: " + slots + " title " + title.toLegacyText());
+			packets.add(create(connection.getVersion(), windowId, type, new Position(0,0,0), horseId));
 		}
 		//Normal inventory.
 		Position open = PEInventory.prepareFakeInventory(title, connection, cache, packets);
@@ -74,7 +85,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.EQUIPMENT, version);
 		serializer.writeByte(windowId);
 		serializer.writeByte(IdRemapper.WINDOWTYPE.getTable(version).getRemap(type.toLegacyId()));
-		serializer.writeByte(0);
+		VarNumberSerializer.writeSVarInt(serializer, 0); //? :F
 		VarNumberSerializer.writeSVarLong(serializer, entityId);
 		System.out.println("OPEN EQ - Eid: "+ entityId + "wId: " + windowId + " type: " + IdRemapper.WINDOWTYPE.getTable(version).getRemap(type.toLegacyId()) +  " Tag: " + nbt);
 		ItemStackSerializer.writeTag(serializer, true, version, nbt);

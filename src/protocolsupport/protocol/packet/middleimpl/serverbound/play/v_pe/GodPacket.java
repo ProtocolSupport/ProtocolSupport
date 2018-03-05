@@ -203,6 +203,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 						break;
 					}
 					case INTERACT_ATTACK: {
+						System.out.println("ATTACK EID: " + targetId);
 						packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.ATTACK, null, 0));
 						break;
 					}

@@ -36,7 +36,9 @@ public class PocketData {
 		item.setByte("Count", itemstack.getAmount());
 		item.setShort("Damage", itemstack.getData());
 		item.setShort("id", itemstack.getTypeId());
-		item.setCompound("tag", itemstack.getTag());
+		if (itemstack.getTag() != null && !itemstack.getTag().isNull()) {
+			item.setCompound("tag", itemstack.getTag().clone());
+		}
 		return item;
 	}
 	
