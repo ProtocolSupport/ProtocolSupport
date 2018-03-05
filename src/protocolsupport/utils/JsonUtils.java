@@ -50,6 +50,20 @@ public class JsonUtils {
 		throw new JsonSyntaxException("Missing " + name + ", expected to find a string");
 	}
 
+	public static float getAsFloat(JsonElement jsonElement, String s) {
+		if (jsonElement.isJsonPrimitive() && jsonElement.getAsJsonPrimitive().isNumber()) {
+			return jsonElement.getAsFloat();
+		}
+		throw new JsonSyntaxException("Expected " + s + " to be a Float, was " + toString(jsonElement));
+	}
+
+	public static float getFloat(JsonObject jsonObject, String s) {
+		if (jsonObject.has(s)) {
+			return getAsFloat(jsonObject.get(s), s);
+		}
+		throw new JsonSyntaxException("Missing " + s + ", expected to find a Float");
+	}
+
 	public static int getAsInt(JsonElement jsonElement, String s) {
 		if (jsonElement.isJsonPrimitive() && jsonElement.getAsJsonPrimitive().isNumber()) {
 			return jsonElement.getAsInt();
@@ -62,6 +76,13 @@ public class JsonUtils {
 			return getAsInt(jsonObject.get(s), s);
 		}
 		throw new JsonSyntaxException("Missing " + s + ", expected to find a Int");
+	}
+
+	public static JsonObject getJsonObject(JsonObject jsonObject, String name) {
+		if (jsonObject.has(name)) {
+			return getAsJsonObject(jsonObject.get(name), name);
+		}
+		throw new JsonSyntaxException("Missing " + name + ", expected to find a JsonObject");
 	}
 
 	public static JsonObject getAsJsonObject(JsonElement jsonElement, String name) {
