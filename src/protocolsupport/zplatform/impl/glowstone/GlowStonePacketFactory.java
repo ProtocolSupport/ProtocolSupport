@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
+import org.bukkit.SoundCategory;
 import org.bukkit.WorldType;
 import org.bukkit.entity.Entity;
 import org.json.simple.JSONArray;
@@ -138,6 +139,8 @@ import net.glowstone.util.TextMessage;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.protocol.utils.authlib.GameProfile;
+import protocolsupport.protocol.utils.minecraftdata.BlockData;
+import protocolsupport.protocol.utils.minecraftdata.BlockData.BlockDataEntry;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.zplatform.PlatformPacketFactory;
@@ -215,9 +218,16 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 		return new SetCompressionMessage(threshold);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public Message createBlockBreakSoundPacket(Position pos, Material type) {
-		return null; // TODO: create a getStepSound() equivalent
+		BlockDataEntry blockdataentry = BlockData.getById(type.getId());
+		return new SoundEffectMessage(
+			blockdataentry.getBreakSound(), SoundCategory.BLOCKS,
+			pos.getX(), pos.getY(), pos.getZ(),
+			(blockdataentry.getVolume() + 1.0F) / 2.0F,
+			blockdataentry.getPitch() * 0.8F
+		);
 	}
 
 	@Override

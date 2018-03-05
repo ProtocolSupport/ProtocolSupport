@@ -37,6 +37,8 @@ import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.authlib.GameProfile;
+import protocolsupport.protocol.utils.minecraftdata.BlockData;
+import protocolsupport.protocol.utils.minecraftdata.BlockData.BlockDataEntry;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.zplatform.PlatformPacketFactory;
@@ -141,12 +143,12 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	@Override
 	@SuppressWarnings("deprecation")
 	public Object createBlockBreakSoundPacket(Position pos, Material type) {
-		SoundEffectType blocksound = Block.getById(type.getId()).getStepSound();
+		BlockDataEntry blockdataentry = BlockData.getById(type.getId());
 		return new PacketPlayOutNamedSoundEffect(
-			blocksound.e(), SoundCategory.BLOCKS,
+			SoundEffect.a.getId(blockdataentry.getBreakSound()), SoundCategory.BLOCKS,
 			pos.getX(), pos.getY(), pos.getZ(),
-			(blocksound.a() + 1.0F) / 2.0F,
-			blocksound.b() * 0.8F
+			(blockdataentry.getVolume() + 1.0F) / 2.0F,
+			blockdataentry.getPitch() * 0.8F
 		);
 	}
 

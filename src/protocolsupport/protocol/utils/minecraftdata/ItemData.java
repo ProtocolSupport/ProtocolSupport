@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import protocolsupport.protocol.utils.minecraftdata.BlockData.BlockDataEntry;
 import protocolsupport.utils.JsonUtils;
 
 public class ItemData {
@@ -12,7 +13,6 @@ public class ItemData {
 	private static final HashMap<String, Integer> nameToId = new HashMap<>();
 
 	static {
-		read("blocks.json");
 		read("items.json");
 	}
 
@@ -27,7 +27,14 @@ public class ItemData {
 	}
 
 	public static Integer getIdByName(String name) {
-		return nameToId.get(name);
+		Integer runtimeId = nameToId.get(name);
+		if (runtimeId == null) {
+			BlockDataEntry entry = BlockData.getByName(name);
+			if (entry != null) {
+				runtimeId = entry.getRuntimeId();
+			}
+		}
+		return runtimeId;
 	}
 
 }
