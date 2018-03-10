@@ -161,7 +161,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 
 	@Override
 	public Object createFakeJoinGamePacket() {
-		return new PacketPlayOutLogin(0, EnumGamemode.NOT_SET, false, 0, EnumDifficulty.EASY, 60, WorldType.NORMAL, false);
+		return new PacketPlayOutLogin(0, EnumGamemode.SURVIVAL, false, 0, EnumDifficulty.EASY, 60, WorldType.NORMAL, false);
 	}
 
 	@Override
