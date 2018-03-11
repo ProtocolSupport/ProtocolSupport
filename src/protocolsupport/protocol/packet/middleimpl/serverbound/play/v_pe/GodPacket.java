@@ -240,7 +240,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				break;
 			}
 		}
-		if (invCache.shouldSendUpdate()) {
+		if (invCache.shouldSendUpdate() && cache.getAttributesCache().getPEGameMode() != GameMode.CREATIVE) {
 			//Trigger inventory update, ALWAYS since PE sometimes 'guesses' or doesn't trust the server, we generally want an inventory update scheduled.
 			InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.InventoryUpdateRequest(7));
 			invCache.lockInventoryUpdate();
