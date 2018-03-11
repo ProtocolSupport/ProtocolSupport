@@ -27,7 +27,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 			version,
 			entity, x, y, z,
 			motX / 8.000F, motY / 8000.F, motZ / 8000.F, pitch, yaw, cache.getAttributesCache().getLocale(),
-			null, PEDataValues.getLivingEntityTypeId(IdRemapper.ENTITY.getTable(version).getRemap(entity.getType()))
+			metadata.getRemapped(), PEDataValues.getLivingEntityTypeId(IdRemapper.ENTITY.getTable(version).getRemap(entity.getType()))
 		));
 		DataWatcherObject<?> healthWatcher = metadata.getOriginal().get(DataWatcherObjectIndex.EntityLiving.HEALTH);
 		if (healthWatcher != null) {
@@ -37,7 +37,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 	}
 
 	public static ClientBoundPacketData createSimple(ProtocolVersion version,
-			int entityId, double x, double y, double z, int peEntityType) {
+			long entityId, double x, double y, double z, int peEntityType) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SPAWN_ENTITY, version);
 		VarNumberSerializer.writeSVarLong(serializer, entityId);
 		VarNumberSerializer.writeVarLong(serializer, entityId);
