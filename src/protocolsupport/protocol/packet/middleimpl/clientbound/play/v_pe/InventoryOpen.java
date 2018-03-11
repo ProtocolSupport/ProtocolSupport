@@ -17,14 +17,11 @@ import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.minecraftdata.PocketData;
 import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData;
 import protocolsupport.protocol.utils.types.NetworkEntity;
-import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 
 public class InventoryOpen extends MiddleInventoryOpen {
 	
@@ -40,27 +37,8 @@ public class InventoryOpen extends MiddleInventoryOpen {
 			if (horse != null) {
 				PocketEntityData horseTypeData = PocketData.getPocketEntityData(horse.getType());
 				if (horseTypeData != null && horseTypeData.getInventoryFilter() != null) {
-					NBTTagCompoundWrapper filter = horseTypeData.getInventoryFilter().getFilter().clone();
-					if (horse.getType() == NetworkEntityType.LAMA) {
-						NBTTagListWrapper newSlots = filter.getList("slots");
-						for(int i = 0; i < (horse.getDataCache().getStrength() * 3); i++) {
-							NBTTagCompoundWrapper slot = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-							NBTTagCompoundWrapper item = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-							item.setByte("Count", 1);
-							item.setShort("Damage", 0);
-							item.setShort("id", 0);
-							slot.setCompound("item", item);
-							slot.setInt("slotNumber", i+1);
-							newSlots.addCompound(slot);
-						}
-						filter.setList("slots", newSlots);
-					}
-					ByteBuf yolo = Unpooled.buffer();
-					ItemStackSerializer.writeTag(yolo, true, version, filter);
-					System.out.println(ItemStackSerializer.readTag(yolo, true, connection.getVersion()));
+					NBTTagCompoundWrapper filter = horseTypeData.getInventoryFilter().getFilter();
 					packets.add(openEquipment(connection.getVersion(), windowId, type, horseId, filter));
-					//packets.add(InventorySetItems.create(connection.getVersion(), cache.getAttributesCache().getLocale(), 2, new ItemStackWrapper[] {ItemStackWrapper.NULL, ItemStackWrapper.NULL}));
-					//return RecyclableSingletonList.create(openEquipment(connection.getVersion(), 2, type, horseId, filter));
 					return packets;
 				}
 			}

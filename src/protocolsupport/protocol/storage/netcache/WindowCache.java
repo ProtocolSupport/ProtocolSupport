@@ -8,11 +8,13 @@ public class WindowCache {
 	private WindowType windowType = WindowType.PLAYER;
 	private int windowId = 0;
 	private int windowSlots = 46;
+	private int horseId = -1;
 
-	public void setOpenedWindow(WindowType windowType, int windowId, int slots) {
+	public void setOpenedWindow(WindowType windowType, int windowId, int slots, int horseId) {
 		this.windowType = windowType;
 		this.windowId = windowId;
 		this.windowSlots = slots;
+		this.horseId = horseId;
 	}
 
 	public WindowType getOpenedWindow() {
@@ -25,6 +27,10 @@ public class WindowCache {
 
 	public int getOpenedWindowSlots() {
 		return this.windowSlots;
+	}
+
+	public int getHorseId() {
+		return horseId;
 	}
 
 	public void closeWindow() {

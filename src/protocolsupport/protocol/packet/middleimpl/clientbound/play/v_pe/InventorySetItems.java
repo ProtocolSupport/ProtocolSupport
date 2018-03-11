@@ -6,8 +6,10 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.PEInventoryCache;
+import protocolsupport.protocol.storage.netcache.WindowCache;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -18,6 +20,7 @@ public class InventorySetItems extends MiddleInventorySetItems {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
+		WindowCache winCache = cache.getWindowCache();
 		PEInventoryCache invCache = cache.getPEInventoryCache();
 		if(invCache.isInventoryLocked()) {
 			return RecyclableEmptyList.get();
@@ -25,9 +28,8 @@ public class InventorySetItems extends MiddleInventorySetItems {
 		String locale = cache.getAttributesCache().getLocale();
 		RecyclableArrayList<ClientBoundPacketData> contentpackets = RecyclableArrayList.create();
 		ItemStackWrapper[] items = itemstacks.toArray(new ItemStackWrapper[itemstacks.size()]);
-		switch(cache.getWindowCache().getOpenedWindow()) {
+		switch(winCache.getOpenedWindow()) {
 			case PLAYER: {
-				System.out.println("PLAAYYEER");
 				if (items.length < 46) { break; }
 				ItemStackWrapper[] peInvGridResult = new ItemStackWrapper[1];
 				ItemStackWrapper[] peInvGrid = new ItemStackWrapper[5];
@@ -122,6 +124,13 @@ public class InventorySetItems extends MiddleInventorySetItems {
 				contentpackets.add(create(version, locale, PESource.POCKET_TRADE_INPUT_2, peTradeSB));
 				contentpackets.add(create(version, locale, PESource.POCKET_TRADE_OUTPUT, peTradeResult));
 				contentpackets.add(create(version, locale, PESource.POCKET_INVENTORY, peInventory));
+				break;
+			}
+			case HORSE: {
+				NetworkEntity horse = cache.getWatchedEntityCache().getWatchedEntity(winCache.getHorseId());
+				if (horse != null) {
+					
+				}
 				break;
 			}
 			default: {

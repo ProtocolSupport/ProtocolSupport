@@ -300,15 +300,10 @@ public enum SpecificRemapper {
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				getObject(original, DataWatcherObjectIndex.BaseHorse.FLAGS, DataWatcherObjectByte.class).ifPresent(byteWatcher -> {
 					remapped.put(16, new DataWatcherObjectVarInt(((byteWatcher.getValue() & (1 << (6-1))) != 0) ? 0b100000 : 0));
-					System.out.println(((byteWatcher.getValue() & (1 << (2-1))) != 0));
 					if ((byteWatcher.getValue() & (1 << (2-1))) != 0) {
-						
-						System.out.println("Wierd inventoryproperties set.");
 						//When tamed set these weird properties to make the inventory work. FFS Mojang.
-						//remapped.put(5, new DataWatcherObjectSVarLong(253)); // set owner meta to a dummy entity ID
-						remapped.put(45, new DataWatcherObjectByte((byte) 12));
-						remapped.put(46, new DataWatcherObjectVarInt(2)); //Animal slots (left side of the image)
-						//remapped.put(47, new DataWatcherObjectVarInt(3)); //Strength multiplier? Hardcoded to three (lamas have 3 slots per strength)
+						remapped.put(45, new DataWatcherObjectByte((byte) 12)); //Inventory Type
+						remapped.put(46, new DataWatcherObjectSVarInt(2)); //Animal slots (left side of the image)
 					}
 				});
 			}
@@ -340,7 +335,16 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.BattleHorse.ARMOR, 22), ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	CARGO_HORSE(NetworkEntityType.CARGO_HORSE, SpecificRemapper.BASE_HORSE,
-		new Entry(new PeSimpleFlagRemapper(DataWatcherObjectIndex.CargoHorse.HAS_CHEST, PeMetaBase.FLAG_CHESTED), ProtocolVersion.MINECRAFT_PE),
+		new Entry(new DataWatcherDataRemapper() {
+			@Override
+			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
+				getObject(original, DataWatcherObjectIndex.CargoHorse.HAS_CHEST, DataWatcherObjectBoolean.class)
+				.ifPresent(boolWatcher -> {
+					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_CHESTED, boolWatcher.getValue());
+					remapped.put(47, new DataWatcherObjectSVarInt(boolWatcher.getValue() ? 3 : 0)); //Strength multiplier for chest size.
+				});
+			}
+		}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.CargoHorse.HAS_CHEST, 15) {}, ProtocolVersionsHelper.RANGE__1_11__1_12_2)
 	),
 	COMMON_HORSE(NetworkEntityType.COMMON_HORSE, SpecificRemapper.BATTLE_HORSE),
@@ -355,11 +359,13 @@ public enum SpecificRemapper {
 		new Entry(new FirstMetaDataAddRemapper(19, new DataWatcherObjectByte((byte) 4)), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_6_1, ProtocolVersion.MINECRAFT_1_8))
 	),
 	DONKEY(NetworkEntityType.DONKEY, SpecificRemapper.CARGO_HORSE,
+		new Entry(new FirstMetaDataAddRemapper(75, new DataWatcherObjectSVarInt(5)), ProtocolVersion.MINECRAFT_PE), //Fake strength for when chested.
 		new Entry(new FirstMetaDataAddRemapper(14, new DataWatcherObjectVarInt(1)), ProtocolVersion.MINECRAFT_1_10),
 		new Entry(new FirstMetaDataAddRemapper(13, new DataWatcherObjectVarInt(1)), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new FirstMetaDataAddRemapper(19, new DataWatcherObjectByte((byte) 1)), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_6_1, ProtocolVersion.MINECRAFT_1_8))
 	),
 	MULE(NetworkEntityType.MULE, SpecificRemapper.CARGO_HORSE,
+		new Entry(new FirstMetaDataAddRemapper(75, new DataWatcherObjectSVarInt(5)), ProtocolVersion.MINECRAFT_PE), //Fake strength for when chested.
 		new Entry(new FirstMetaDataAddRemapper(14, new DataWatcherObjectVarInt(2)), ProtocolVersion.MINECRAFT_1_10),
 		new Entry(new FirstMetaDataAddRemapper(13, new DataWatcherObjectVarInt(2)), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new FirstMetaDataAddRemapper(19, new DataWatcherObjectByte((byte) 2)), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_6_1, ProtocolVersion.MINECRAFT_1_8))
