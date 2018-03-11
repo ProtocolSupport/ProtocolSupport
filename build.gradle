@@ -40,18 +40,35 @@ File gen = new File('gen')
 gen.deleteDir();
 gen.mkdirs();
 
+def spigotJar = 'spigot-1.12.2-R0.1-SNAPSHOT-b1408.jar'
+def glowstoneJar = 'glowstone-2018.2.0-20180209.231901-7.jar'
+
 task updateLibs(type: Download) {
 	src([
-		'https://yivesmirror.com/files/spigot/spigot-1.12.2-R0.1-SNAPSHOT-b1408.jar',
-		'https://repo.glowstone.net/repository/snapshots/net/glowstone/glowstone/2018.2.0-SNAPSHOT/glowstone-2018.2.0-20180209.231901-7.jar'
+			'https://repo.glowstone.net/repository/snapshots/net/glowstone/glowstone/2018.2.0-SNAPSHOT/' + glowstoneJar,
 	])
 	dest dllibs
 	onlyIfNewer true
 	overwrite true
 }
 
+task downloadSpigot {
+	doLast {
+		// Work around issue where 'onlyIfNewer' does not work with yivesmirror.com
+		def destFile = new File(dllibs, spigotJar)
+		if (!destFile.exists()) {
+			download {
+				src 'https://yivesmirror.com/files/spigot/' + spigotJar
+				dest dllibs
+				overwrite true
+			}
+		}
+	}
+}
+
 compileJava.dependsOn(clean)
 compileJava.dependsOn(updateLibs)
+compileJava.dependsOn(downloadSpigot)
 compileJava.finalizedBy(test)
 
 sourceSets {
@@ -105,7 +122,7 @@ repositories {
 }
 
 dependencies {
-	shadow files('buildprocessor/BuildProcessor.jar', new File(dllibs, 'spigot-1.12.2-R0.1-SNAPSHOT-b1408.jar'), new File(dllibs, 'glowstone-2018.2.0-20180209.231901-7.jar'))
+	shadow files('buildprocessor/BuildProcessor.jar', new File(dllibs, spigotJar), new File(dllibs, glowstoneJar))
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 	compile group: 'net.sf.trove4j', name: 'trove4j', version: '3.0.3'
 	compile group: 'com.google.code.gson', name: 'gson', version: '2.8.0'
