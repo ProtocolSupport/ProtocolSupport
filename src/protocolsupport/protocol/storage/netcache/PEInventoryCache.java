@@ -3,6 +3,7 @@ package protocolsupport.protocol.storage.netcache;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacket.InfTransactions;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.BeaconTemple;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.EnchantHopper;
+import protocolsupport.protocol.typeremapper.pe.PEInventory.TradeVillager;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.ArrayDequeMultiMap.ChildDeque;
@@ -14,6 +15,7 @@ public class PEInventoryCache {
 	private final InfTransactions infTransactions = new InfTransactions();
 	private final EnchantHopper enchantHopper = new EnchantHopper();
 	private final BeaconTemple beaconTemple = new BeaconTemple();
+	private final TradeVillager tradeVillager = new TradeVillager();
 	private ChildDeque<Position> fakeContainers = new ChildDeque<Position>();
 	private long inventoryLockMillis = 0;
 	private long inventoryUpdateMillis = 0;
@@ -40,6 +42,10 @@ public class PEInventoryCache {
 
 	public BeaconTemple getBeaconTemple() {
 		return beaconTemple;
+	}
+
+	public TradeVillager getTradeVillager() {
+		return tradeVillager;
 	}
 
 	public ChildDeque<Position> getFakeContainers() {

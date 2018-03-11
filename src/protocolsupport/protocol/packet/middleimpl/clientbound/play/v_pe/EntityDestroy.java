@@ -26,7 +26,7 @@ public class EntityDestroy extends MiddleEntityDestroy {
 		return packets;
 	}
 
-	public static ClientBoundPacketData create(ProtocolVersion version, int entityId) {
+	public static ClientBoundPacketData create(ProtocolVersion version, long entityId) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_DESTROY, version);
 		VarNumberSerializer.writeSVarLong(serializer, entityId);
 		return serializer;

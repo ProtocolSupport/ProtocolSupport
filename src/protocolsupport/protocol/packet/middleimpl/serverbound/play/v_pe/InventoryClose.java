@@ -5,20 +5,19 @@ import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClose;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.typeremapper.pe.PEInventory;
-import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class InventoryClose extends ServerBoundMiddlePacket {
 
-	protected byte windowId;
+	protected int windowId;
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		windowId = clientdata.readByte();
-		if (cache.getAttributesCache().getPEGameMode() == GameMode.CREATIVE && windowId == -1) {
-			windowId = 0; //Destroying items or something like that. Well it should just be 0 for pc.
+		if (windowId == -1) {
+			windowId = cache.getWindowCache().getOpenedWindowId(); //Some inventories are a mess :F
 		}
 	}
 

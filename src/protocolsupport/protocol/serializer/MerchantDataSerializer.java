@@ -56,30 +56,32 @@ public class MerchantDataSerializer {
 		}
 	}
 
-	public static void writePEMerchantData(ByteBuf to, ProtocolVersion version, NetworkDataCache cache, MerchantData merchdata) {
+	public static void writePEMerchantData(ByteBuf to, ProtocolVersion version, NetworkDataCache cache, long villagerId, String title, MerchantData merchdata) {
 		String locale = cache.getAttributesCache().getLocale();
-		to.writeByte((byte) merchdata.getWindowId());
+		to.writeByte((byte) cache.getWindowCache().getOpenedWindowId());
 		to.writeByte(IdRemapper.WINDOWTYPE.getTable(version).getRemap(WindowType.VILLAGER.toLegacyId()));
 		VarNumberSerializer.writeSVarInt(to, 0); //?
 		VarNumberSerializer.writeSVarInt(to, 0); //?
 		to.writeBoolean(true); //Is always willing!
-		VarNumberSerializer.writeSVarLong(to, 86); //Trader eID.
+		VarNumberSerializer.writeSVarLong(to, villagerId);
 		VarNumberSerializer.writeSVarLong(to, cache.getWatchedEntityCache().getSelfPlayerEntityId());
-		StringSerializer.writeString(to, version, "Trade"); //TODO: get the correct name in here.
+		StringSerializer.writeString(to, version, title);
 		NBTTagCompoundWrapper tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
 		NBTTagListWrapper recipes = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
-		//TODO Fix this not working. The second option is showing in toString(), but doens't get encoded (I think).
-		for (TradeOffer offer : merchdata.getOffers()) {
-			NBTTagCompoundWrapper recipe = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-			recipe.setCompound("buyA", PocketData.ItemStackToPENBT(version, locale, offer.getItemStack1()));
-			recipe.setCompound("sell", PocketData.ItemStackToPENBT(version, locale, offer.getResult()));
-			if (offer.hasItemStack2()) {
-				recipe.setCompound("buyB", PocketData.ItemStackToPENBT(version, locale, offer.getItemStack2()));
+		if (merchdata != null) {
+			for (TradeOffer offer : merchdata.getOffers()) {
+				NBTTagCompoundWrapper recipe = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+				ServerPlatform.get().getMiscUtils();
+				recipe.setCompound("buyA", PocketData.ItemStackToPENBT(version, locale, offer.getItemStack1()));
+				recipe.setCompound("sell", PocketData.ItemStackToPENBT(version, locale, offer.getResult()));
+				if (offer.hasItemStack2()) {
+					recipe.setCompound("buyB", PocketData.ItemStackToPENBT(version, locale, offer.getItemStack2()));
+				}
+				recipe.setInt("uses", offer.isDisabled() ? offer.getMaxUses() : offer.getUses());
+				recipe.setInt("maxUses", offer.getMaxUses());
+				//recipe.setByte("rewardExp", 0);
+				recipes.addCompound(recipe);
 			}
-			recipe.setInt("uses", offer.isDisabled() ? offer.getMaxUses() : offer.getUses());
-			recipe.setInt("maxUses", offer.getMaxUses());
-			//recipe.setByte("rewardExp", 0);
-			recipes.addCompound(recipe);
 		}
 		tag.setList("Recipes", recipes);
 		ItemStackSerializer.writeTag(to, true, version, tag);

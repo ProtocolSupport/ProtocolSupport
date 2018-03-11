@@ -171,6 +171,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 						face = -1;
 					case USE_CLICK_BLOCK: {
 						packets.add(MiddleBlockPlace.create(position, face, 0, cX, cY, cZ));
+						BlockFace.getById(face).modPosition(position); //Modify position to update the correct block.
 						break;
 					}
 					case USE_DIG_BLOCK: {
@@ -183,11 +184,10 @@ public class GodPacket extends ServerBoundMiddlePacket {
 					}
 				}
 				if ( //Whenever the player places a block far away we want the server to update it, because PE might not be allowed to do it.
-					(Math.abs(cache.getMovementCache().getPEClientX() - position.getX()) > 5) ||
-					(Math.abs(cache.getMovementCache().getPEClientY() - position.getY()) > 5) ||
-					(Math.abs(cache.getMovementCache().getPEClientZ() - position.getZ()) > 5)
+					(Math.abs(cache.getMovementCache().getPEClientX() - position.getX()) > 4) ||
+					(Math.abs(cache.getMovementCache().getPEClientY() - position.getY()) > 4) ||
+					(Math.abs(cache.getMovementCache().getPEClientZ() - position.getZ()) > 4)
 				) {
-					BlockFace.getById(face).modPosition(position); //Modify position to update the correct block.
 					InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.BlockUpdateRequest(position));
 				}
 				break;
@@ -722,9 +722,6 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		switch(winCache.getOpenedWindow()) {
 			case PLAYER: {
 				switch(peInventoryId) {
-					case PESource.POCKET_CLICKED_SLOT: {
-						return -1;
-					}
 					case PESource.POCKET_CRAFTING_RESULT: {
 						return 0;
 					}
@@ -735,21 +732,16 @@ public class GodPacket extends ServerBoundMiddlePacket {
 					case PESource.POCKET_ARMOR_EQUIPMENT: {
 						return peSlot + 5;
 					}
-					case PESource.POCKET_INVENTORY: {
-						if (peSlot < 9) {
-							return peSlot + 36;
-						} else {
-							return peSlot;
-						}
-					}
 					case PESource.POCKET_OFFHAND: {
 						return 45;
 					}
-					case PESource.POCKET_FAUX_DROP: {
-						return peInventoryId;
-					}
 					case PESource.POCKET_CRAFTING_GRID_USE_INGREDIENT:  {
-						return -333;
+						return -333; //Fake id for craft tracking.
+					}
+					case PESource.POCKET_FAUX_DROP:
+					case PESource.POCKET_CLICKED_SLOT:
+					case PESource.POCKET_INVENTORY: {
+						return invSlotToContainerSlot(peInventoryId, 9, peSlot);
 					}
 					default: {
 						return -666;
@@ -782,7 +774,6 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				return invSlotToContainerSlot(peInventoryId, 3, peSlot);
 			}
 			case ENCHANT: {
-				bug("PE SLOT " + peSlot + " PC SLOT " + invSlotToContainerSlot(peInventoryId, 2, peSlot));
 				//We fake enchanting with hoppers, but the server slots are still 0 and 1 for the inventory.
 				return invSlotToContainerSlot(peInventoryId, 2, peSlot);
 			}
@@ -795,9 +786,6 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			}
 			case CRAFTING_TABLE: {
 				switch(peInventoryId) {
-					case PESource.POCKET_CLICKED_SLOT: {
-						return -1;
-					}
 					case PESource.POCKET_CRAFTING_RESULT: {
 						return 0;
 					}
@@ -805,18 +793,34 @@ public class GodPacket extends ServerBoundMiddlePacket {
 					case PESource.POCKET_CRAFTING_GRID_REMOVE: {
 						return peSlot + 1;
 					}
-					case PESource.POCKET_INVENTORY: {
-						if (peSlot < 9) {
-							return peSlot + 37;
-						} else {
-							return peSlot + 1;
-						}
-					}
-					case PESource.POCKET_FAUX_DROP: {
-						return peInventoryId;
-					}
 					case PESource.POCKET_CRAFTING_GRID_USE_INGREDIENT:  {
-						return -333;
+						return -333; //Fake id for tracking ingredients.
+					}
+					case PESource.POCKET_FAUX_DROP:
+					case PESource.POCKET_CLICKED_SLOT:
+					case PESource.POCKET_INVENTORY: {
+						return invSlotToContainerSlot(peInventoryId, 10, peSlot);
+					}
+					default: {
+						return -666;
+					}
+				}
+			}
+			case VILLAGER: {
+				switch(peInventoryId) {
+					case PESource.POCKET_TRADE_INPUT_1: {
+						return 0;
+					}
+					case PESource.POCKET_TRADE_INPUT_2: {
+						return 1;
+					}
+					case PESource.POCKET_TRADE_OUTPUT: {
+						return 2;
+					}
+					case PESource.POCKET_FAUX_DROP:
+					case PESource.POCKET_CLICKED_SLOT:
+					case PESource.POCKET_INVENTORY: {
+						return invSlotToContainerSlot(peInventoryId, 3, peSlot);
 					}
 					default: {
 						return -666;

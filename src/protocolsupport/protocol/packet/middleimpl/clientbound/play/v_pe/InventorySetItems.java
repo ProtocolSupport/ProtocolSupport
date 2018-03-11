@@ -27,6 +27,7 @@ public class InventorySetItems extends MiddleInventorySetItems {
 		ItemStackWrapper[] items = itemstacks.toArray(new ItemStackWrapper[itemstacks.size()]);
 		switch(cache.getWindowCache().getOpenedWindow()) {
 			case PLAYER: {
+				System.out.println("PLAAYYEER");
 				if (items.length < 46) { break; }
 				ItemStackWrapper[] peInvGridResult = new ItemStackWrapper[1];
 				ItemStackWrapper[] peInvGrid = new ItemStackWrapper[5];
@@ -108,6 +109,19 @@ public class InventorySetItems extends MiddleInventorySetItems {
 				break;
 			}
 			case VILLAGER: {
+				ItemStackWrapper[] peTradeSA = new ItemStackWrapper[1];
+				ItemStackWrapper[] peTradeSB = new ItemStackWrapper[1];
+				ItemStackWrapper[] peTradeResult = new ItemStackWrapper[1];
+				ItemStackWrapper[] peInventory = new ItemStackWrapper[36];
+				System.arraycopy(items,  0, peTradeSA, 		0 , 1);
+				System.arraycopy(items,  1, peTradeSB, 		0,  1);
+				System.arraycopy(items,  2, peTradeResult, 	0,  1);
+				System.arraycopy(items, 30, peInventory, 	0,  9);
+				System.arraycopy(items,  3, peInventory, 	9, 27);
+				contentpackets.add(create(version, locale, PESource.POCKET_TRADE_INPUT_1, peTradeSA));
+				contentpackets.add(create(version, locale, PESource.POCKET_TRADE_INPUT_2, peTradeSB));
+				contentpackets.add(create(version, locale, PESource.POCKET_TRADE_OUTPUT, peTradeResult));
+				contentpackets.add(create(version, locale, PESource.POCKET_INVENTORY, peInventory));
 				break;
 			}
 			default: {

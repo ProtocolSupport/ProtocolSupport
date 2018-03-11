@@ -24,7 +24,6 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 		}
 		String locale = cache.getAttributesCache().getLocale();
 		if (slot == -1) {
-			//TODO: Figure out how to not fuck this up.
 			//Cursor slot can be set by plugin (only if a window is actually open), this will cause issues however with the deficit/surplus stack so we add them manually here.
 			invCache.getInfTransactions().customCursorSurplus(cache, itemstack);
 			return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_CLICKED_SLOT, 0, itemstack));
@@ -109,6 +108,22 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_INVENTORY, slot - 37, itemstack));
 				} else {
 					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_INVENTORY, slot - 1, itemstack));
+				}
+			}
+			case VILLAGER: {
+				switch(slot) {
+					case 0: {
+						return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_TRADE_INPUT_1, 0, itemstack));
+					}
+					case 1: {
+						return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_TRADE_INPUT_2, 0, itemstack));
+					}
+					case 2: {
+						return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_TRADE_OUTPUT, 0, itemstack));
+					}
+					default: {
+						return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_INVENTORY, slot >= 30 ? slot - 30 : slot + 6, itemstack));
+					}
 				}
 			}
 			default: {

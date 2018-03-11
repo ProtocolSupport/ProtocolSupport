@@ -12,6 +12,7 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEInventory;
+import protocolsupport.protocol.typeremapper.pe.PEInventory.TradeVillager;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.minecraftdata.PocketData;
 import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData;
@@ -29,8 +30,9 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		cache.getPEInventoryCache().getInfTransactions().clear();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
+		ProtocolVersion version = connection.getVersion();
+		cache.getPEInventoryCache().getInfTransactions().clear();
 		//Horses
 		if (type == WindowType.HORSE) {
 			//TODO: Fix this shit. Horses are a pain in the ass and require a different packer. Lama's are even worse with their variable slots. We'll see.
@@ -54,7 +56,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 						filter.setList("slots", newSlots);
 					}
 					ByteBuf yolo = Unpooled.buffer();
-					ItemStackSerializer.writeTag(yolo, true, connection.getVersion(), filter);
+					ItemStackSerializer.writeTag(yolo, true, version, filter);
 					System.out.println(ItemStackSerializer.readTag(yolo, true, connection.getVersion()));
 					packets.add(openEquipment(connection.getVersion(), windowId, type, horseId, filter));
 					//packets.add(InventorySetItems.create(connection.getVersion(), cache.getAttributesCache().getLocale(), 2, new ItemStackWrapper[] {ItemStackWrapper.NULL, ItemStackWrapper.NULL}));
@@ -65,13 +67,16 @@ public class InventoryOpen extends MiddleInventoryOpen {
 			return packets;
 		} else if (type == WindowType.VILLAGER) {
 			System.out.println("VILLAGER: " + horseId + " slots: " + slots + " title " + title.toLegacyText());
-			packets.add(create(connection.getVersion(), windowId, type, new Position(0,0,0), horseId));
-		}
-		//Normal inventory.
-		Position open = PEInventory.prepareFakeInventory(title, connection, cache, packets);
-		//Unless we have a doublechest or beacon which take some time to create, open the inventory straight away.
-		if (!PEInventory.doDoubleChest(cache) && type != WindowType.BEACON) {
-			packets.add(create(connection.getVersion(), windowId, type, open, -1));
+			TradeVillager villager = cache.getPEInventoryCache().getTradeVillager();
+			villager.setTitle(title);
+			packets.add(villager.spawnVillager(cache, version));
+		} else {
+			//Normal inventory.
+			Position open = PEInventory.prepareFakeInventory(title, connection, cache, packets);
+			//Unless we have a doublechest or beacon which take some time to create, open the inventory straight away.
+			if (!PEInventory.doDoubleChest(cache) && type != WindowType.BEACON) {
+				packets.add(create(version, windowId, type, open, -1));
+			}
 		}
 		return packets;
 	}

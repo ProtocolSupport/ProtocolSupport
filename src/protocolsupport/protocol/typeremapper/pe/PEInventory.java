@@ -2,6 +2,8 @@ package protocolsupport.protocol.typeremapper.pe;
 
 import java.util.EnumMap;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
@@ -10,10 +12,17 @@ import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockChangeSingle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockTileUpdate;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityDestroy;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventorySetItems;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnLiving;
+import protocolsupport.protocol.serializer.MerchantDataSerializer;
+import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.storage.netcache.PEInventoryCache;
 import protocolsupport.protocol.storage.netcache.WindowCache;
+import protocolsupport.protocol.utils.types.MerchantData;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.TileEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
@@ -117,6 +126,9 @@ public class PEInventory {
 			InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.BlockUpdateRequest(position));
 			return true;
 		});
+		if (cache.getPEInventoryCache().getTradeVillager().isSpawned()) {
+			cache.getPEInventoryCache().getTradeVillager().despawnVillager(connection);
+		}
 	}
 
 	//To store data to fake an entire beacon.
@@ -241,6 +253,51 @@ public class PEInventory {
 				contents[i+2] = option;
 			}
 			return InventorySetItems.create(version, cache.getAttributesCache().getLocale(), cache.getWindowCache().getOpenedWindowId(), contents);
+		}
+
+	}
+
+	//To store data to fake trading using fake villager.
+	public static class TradeVillager {
+
+		private final long EID = (long) Integer.MAX_VALUE + 1l;
+		private final int ETYPE = PEDataValues.getLivingEntityTypeId(NetworkEntityType.VILLAGER);
+		private BaseComponent title;
+		private boolean spawned = false;
+
+		public boolean isSpawned() {
+			return spawned;
+		}
+
+		public void setTitle(BaseComponent title) {
+			this.title = title;
+		}
+
+		public ClientBoundPacketData spawnVillager(NetworkDataCache cache, ProtocolVersion version) {
+			spawned = true;
+			return SpawnLiving.createSimple(version, EID, 
+					cache.getMovementCache().getPEClientX(), 
+					cache.getMovementCache().getPEClientY() - 2, 
+					cache.getMovementCache().getPEClientZ(), 
+			ETYPE);
+		}
+
+		public ClientBoundPacketData updateTrade(NetworkDataCache cache, ProtocolVersion version, MerchantData data) {
+			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.TRADE_UPDATE, version);
+			MerchantDataSerializer.writePEMerchantData(serializer, 
+					version, cache, EID, title.toLegacyText(cache.getAttributesCache().getLocale()), data
+			);
+			return serializer;
+		}
+
+		public void despawnVillager(Connection connection) {
+			ByteBuf serializer = Unpooled.buffer();
+			VarNumberSerializer.writeVarInt(serializer, PEPacketIDs.ENTITY_DESTROY);
+			serializer.writeByte(0);
+			serializer.writeByte(0);
+			serializer.writeBytes(EntityDestroy.create(connection.getVersion(), EID));
+			spawned = false;
+			connection.sendRawPacket(MiscSerializer.readAllBytes(serializer));
 		}
 
 	}
