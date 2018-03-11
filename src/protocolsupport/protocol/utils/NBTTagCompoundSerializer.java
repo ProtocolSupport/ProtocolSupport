@@ -431,7 +431,7 @@ public class NBTTagCompoundSerializer {
 	private static void writePeListPayload(ByteBuf os, boolean varint, NBTTagListWrapper tag) throws IOException {
 		NBTTagType type = tag.getType();
 		os.writeByte(type.getId());
-		writePeNBTInt(os, varint, tag.size());
+		writePeNBTSInt(os, varint, tag.size());
 		for (int i = 0; i < tag.size(); i++) {
 			switch (type) {
 				case END: {
@@ -596,7 +596,7 @@ public class NBTTagCompoundSerializer {
 
 	private static void readPeListPayload(ByteBuf is, boolean varint, NBTTagListWrapper tag) throws IOException {
 		NBTTagType type = NBTTagType.fromId(is.readByte());
-		int size = readPeNBTInt(is, varint);
+		int size = readPeNBTSInt(is, varint);
 		if ((type == NBTTagType.END) && (size > 0)) {
 			throw new IOException("Missing type");
 		}
