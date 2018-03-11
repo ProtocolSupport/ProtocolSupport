@@ -203,7 +203,6 @@ public class GodPacket extends ServerBoundMiddlePacket {
 						break;
 					}
 					case INTERACT_ATTACK: {
-						System.out.println("ATTACK EID: " + targetId);
 						packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.ATTACK, null, 0));
 						break;
 					}
@@ -216,13 +215,8 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			}
 			case ACTION_RELEASE_ITEM: {
 				switch(subTypeId) {
-					case RELEASE_RELEASE: {
-						bug("RELEASING!");
+					case RELEASE_RELEASE: { //Eating or stringing bow.
 						packets.add(MiddleBlockDig.create(MiddleBlockDig.Action.FINISH_USE, new Position(0, -0, 0), 0));
-						break;
-					}
-					case RELEASE_CONSUME: {
-						bug("CONSUMING");
 						break;
 					}
 				}
