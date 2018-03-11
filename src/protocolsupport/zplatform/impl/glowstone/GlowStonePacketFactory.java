@@ -102,6 +102,8 @@ import net.glowstone.net.message.play.inv.SetWindowSlotMessage;
 import net.glowstone.net.message.play.inv.TransactionMessage;
 import net.glowstone.net.message.play.inv.WindowClickMessage;
 import net.glowstone.net.message.play.inv.WindowPropertyMessage;
+import net.glowstone.net.message.play.player.AdvancementTabMessage;
+import net.glowstone.net.message.play.player.AdvancementsMessage;
 import net.glowstone.net.message.play.player.BlockPlacementMessage;
 import net.glowstone.net.message.play.player.BossBarMessage;
 import net.glowstone.net.message.play.player.CameraMessage;
@@ -733,12 +735,12 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 
 	@Override
 	public int getOutPlayAdvancementsTabPacketId() {
-		return 0x37; //TODO: getOpcode(ProtocolType.PLAY, OUTBOUND, AdvancementTabMessage.class);
+		return 0x37; //TODO
 	}
 
 	@Override
 	public int getOutPlayAdvancementsPacketId() {
-		return 0x4D; //TODO: getOpcode(ProtocolType.PLAY, OUTBOUND, AdvancementsMessage.class);
+		return getOpcode(ProtocolType.PLAY, OUTBOUND, AdvancementsMessage.class);
 	}
 
 	@Override
@@ -934,7 +936,7 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 
 	@Override
 	public int getInPlayAdvancementTabPacketId() {
-		return 0x19; //TODO: getOpcode(ProtocolType.PLAY, INBOUND, AdvancementTabMessage.class);
+		return getOpcode(ProtocolType.PLAY, INBOUND, AdvancementTabMessage.class);
 	}
 
 

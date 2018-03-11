@@ -1,11 +1,11 @@
-package protocolsupport.protocol.typeremapper.legacy;
+package protocolsupport.protocol.typeremapper.packet;
 
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
-public class LegacyAnimatePacketReorderer {
+public class AnimatePacketReorderer {
 
 	protected ServerBoundPacketData animatePacket;
 
