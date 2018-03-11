@@ -17,6 +17,7 @@ import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 public class EntityMetadata extends MiddleEntityMetadata {
@@ -24,6 +25,8 @@ public class EntityMetadata extends MiddleEntityMetadata {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
+		ProtocolVersion version = connection.getVersion();
+		String locale = cache.getAttributesCache().getLocale();
 		NetworkEntity entity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
 		if(entity == null) {
 			return packets;
@@ -34,7 +37,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 				if (itemWatcher != null) {
 					ItemEntityInfo i = cache.getPEItemEntityCache().getItem(entityId);
 					if (i != null) {
-						packets.addAll(i.updateItem(connection.getVersion(), (ItemStackWrapper) metadata.getOriginal().get(DataWatcherObjectIndex.Item.ITEM).getValue()));
+						packets.addAll(i.updateItem(version, (ItemStackWrapper) metadata.getOriginal().get(DataWatcherObjectIndex.Item.ITEM).getValue()));
 					}
 				}
 				break;
@@ -43,10 +46,22 @@ public class EntityMetadata extends MiddleEntityMetadata {
 				if (entity.isOfType(NetworkEntityType.LIVING)) {
 					DataWatcherObject<?> healthWatcher = metadata.getOriginal().get(DataWatcherObjectIndex.EntityLiving.HEALTH);
 					if (healthWatcher != null) {
-						packets.add(EntitySetAttributes.create(connection.getVersion(), entity, EntitySetAttributes.createAttribute("minecraft:health", Math.ceil((Float) healthWatcher.getValue()))));
+						packets.add(EntitySetAttributes.create(version, entity, EntitySetAttributes.createAttribute("minecraft:health", Math.ceil((Float) healthWatcher.getValue()))));
 					}
 				}
-				packets.add(create(entity, cache.getAttributesCache().getLocale(), metadata.getRemapped(), connection.getVersion()));
+				if (entity.isOfType(NetworkEntityType.BATTLE_HORSE)) {
+					DataWatcherObject<?> armorWatcher = metadata.getOriginal().get(DataWatcherObjectIndex.BattleHorse.ARMOR);
+					if (armorWatcher != null) {
+						int type = (Integer) armorWatcher.getValue();
+						packets.add(EntityEquipment.create(version, locale, entityId, 
+								ItemStackWrapper.NULL,
+								type == 0 ? ItemStackWrapper.NULL : ServerPlatform.get().getWrapperFactory().createItemStack(416 + (Integer) armorWatcher.getValue()), 
+								ItemStackWrapper.NULL, 
+								ItemStackWrapper.NULL
+							));
+					}
+				}
+				packets.add(create(entity, locale, metadata.getRemapped(), version));
 			}
 		}
 		return packets;

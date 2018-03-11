@@ -9,26 +9,29 @@ import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.NetworkEntity.DataCache;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 public class EntityEquipment extends MiddleEntityEquipment {
-	
+
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
+		System.out.println("dddd");
 		ProtocolVersion version = connection.getVersion();
 		String locale = cache.getAttributesCache().getLocale();
 		NetworkEntity entity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
 		if (entity == null) {
 			return RecyclableEmptyList.get();
 		}
+		if (entity.isOfType(NetworkEntityType.BASE_HORSE)) {
+			System.out.println("HORSEY ARMOUR: slot - " + slot);
+		}
 		DataCache dataCache = entity.getDataCache();
 		if (slot > 1) {
 			// Armor update
-			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOB_ARMOR_EQUIPMENT, version);
-			VarNumberSerializer.writeVarLong(serializer, entityId);
 			switch (slot) {
 				case (2): {
 					dataCache.setBoots(itemstack);
@@ -47,11 +50,7 @@ public class EntityEquipment extends MiddleEntityEquipment {
 					break;
 				}
 			}
-			ItemStackSerializer.writeItemStack(serializer, version, locale, dataCache.getHelmet(), true);
-			ItemStackSerializer.writeItemStack(serializer, version, locale, dataCache.getChestplate(), true);
-			ItemStackSerializer.writeItemStack(serializer, version, locale, dataCache.getLeggings(), true);
-			ItemStackSerializer.writeItemStack(serializer, version, locale, dataCache.getBoots(), true);
-			return RecyclableSingletonList.create(serializer);
+			return RecyclableSingletonList.create(create(version, locale, entityId, dataCache.getHelmet(), dataCache.getChestplate(), dataCache.getLeggings(), dataCache.getBoots()));
 		}
 		if (slot == 1) {
 			dataCache.setHand(itemstack);
@@ -60,7 +59,17 @@ public class EntityEquipment extends MiddleEntityEquipment {
 		}
 		return RecyclableSingletonList.create(createUpdateHand(version, locale, entityId, itemstack, cache.getWatchedEntityCache().isSelf(entityId) ? cache.getPEInventoryCache().getSelectedSlot() : 0, slot == 1));
 	}
-	
+
+	public static ClientBoundPacketData create(ProtocolVersion version, String locale, long entityId, ItemStackWrapper helmet, ItemStackWrapper chestplate, ItemStackWrapper leggings, ItemStackWrapper boots) {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOB_ARMOR_EQUIPMENT, version);
+		VarNumberSerializer.writeVarLong(serializer, entityId);
+		ItemStackSerializer.writeItemStack(serializer, version, locale, helmet, true);
+		ItemStackSerializer.writeItemStack(serializer, version, locale, chestplate, true);
+		ItemStackSerializer.writeItemStack(serializer, version, locale, leggings, true);
+		ItemStackSerializer.writeItemStack(serializer, version, locale, boots, true);
+		return serializer;
+	}
+
 	public static ClientBoundPacketData createUpdateHand(ProtocolVersion version, String locale, int entityId, ItemStackWrapper itemstack, int slot, boolean isMainHand) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOB_EQUIPMENT, version);
 		VarNumberSerializer.writeVarLong(serializer, entityId);
