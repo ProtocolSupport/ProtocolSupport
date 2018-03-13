@@ -821,6 +821,33 @@ public class GodPacket extends ServerBoundMiddlePacket {
 					}
 				}
 			}
+			case HORSE: {
+				if (peInventoryId == winCache.getOpenedWindowId()) {
+					NetworkEntity horse = cache.getWatchedEntityCache().getWatchedEntity(winCache.getHorseId());
+					if (horse != null) {
+						switch(horse.getType()) {
+							case DONKEY:
+							case MULE: {
+								if (peSlot == 0) {
+									return 0;
+								} else {
+									return peSlot + 1;
+								}
+							}
+							case LAMA: {
+								if (peSlot == 0) {
+									return 1;
+								} else {
+									return peSlot + 1;
+								}
+							}
+							default: {
+								break; //Fallthrough to defualt.
+							}
+						}
+					}
+				}
+			}
 			default: {
 				int wSlots = winCache.getOpenedWindowSlots();
 				if(wSlots > 16) { wSlots = wSlots / 9 * 9; }
