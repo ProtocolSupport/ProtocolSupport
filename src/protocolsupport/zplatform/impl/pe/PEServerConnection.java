@@ -49,6 +49,11 @@ public class PEServerConnection extends SimpleChannelInboundHandler<ByteBuf> {
 	}
 
 	@Override
+	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+		clientchannel.close();
+	}
+
+	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 		if (ServerPlatform.get().getMiscUtils().isDebugging()) {
 			System.err.println("PEProxy server connection exception occured");
