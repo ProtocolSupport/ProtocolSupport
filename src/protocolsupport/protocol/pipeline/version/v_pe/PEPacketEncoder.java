@@ -32,6 +32,13 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntitySt
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityTeleport;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityVelocity;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Explosion;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.HeldSlot;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventoryClose;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventoryConfirmTransaction;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventoryData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventoryOpen;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventorySetItems;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventorySetSlot;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.KeepAlive;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.KickDisconnect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Login;
@@ -117,10 +124,17 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WORLD_SOUND_ID, WorldSound.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WORLD_CUSTOM_SOUND_ID, WorldCustomSound.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BLOCK_BREAK_ANIMATION_ID, BlockBreakAnimation.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_HELD_SLOT_ID, HeldSlot.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_OPEN_ID, InventoryOpen.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_CLOSE_ID, InventoryClose.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_SET_ITEMS_ID, InventorySetItems.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_SET_SLOT_ID, InventorySetSlot.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UPDATE_TILE_ID, BlockTileUpdate.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_MAP_ID, Map.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_EQUIPMENT_ID, EntityEquipment.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BLOCK_ACTION_ID, BlockAction.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_DATA_ID, InventoryData.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_TRANSACTION_ID, InventoryConfirmTransaction.class);
 	}
 
 	protected final PEDimensionSwitchMovementConfirmationPacketQueue dimswitchq;

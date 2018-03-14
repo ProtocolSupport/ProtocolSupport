@@ -39,7 +39,7 @@ public class GlowStoneWrapperFactory implements PlatformWrapperFactory {
 	
 	@Override
 	public ItemStackWrapper createItemStack(ItemStack item) {
-		return GlowStoneItemStackWrapper.create(item);
+		return new GlowStoneItemStackWrapper(item);
 	}
 
 	@Override

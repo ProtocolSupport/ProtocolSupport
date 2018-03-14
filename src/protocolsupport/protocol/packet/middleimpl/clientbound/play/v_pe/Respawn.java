@@ -10,6 +10,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -24,6 +25,10 @@ public class Respawn extends MiddleRespawn {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
+		if (cache.getWindowCache().getOpenedWindow() != WindowType.PLAYER) {
+			packets.add(InventoryClose.create(connection.getVersion(), cache.getWindowCache().getOpenedWindowId()));
+			cache.getWindowCache().closeWindow();
+		}
 		create(connection.getVersion(), dimension, cache.getWatchedEntityCache().getSelfPlayer(), cache.getAttributesCache().getPEFakeSetPositionY(), packets);
 		return packets;
 	}

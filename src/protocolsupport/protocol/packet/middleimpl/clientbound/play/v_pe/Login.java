@@ -11,6 +11,7 @@ import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.AttributesCache;
 import protocolsupport.protocol.typeremapper.pe.PEAdventureSettings;
+import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.protocol.utils.types.GameMode;
@@ -18,6 +19,8 @@ import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.zplatform.impl.pe.PECraftingManager;
+import protocolsupport.zplatform.impl.pe.PECreativeInventory;
 
 public class Login extends MiddleLogin {
 
@@ -87,6 +90,17 @@ public class Login extends MiddleLogin {
 		ClientBoundPacketData chunkradius = ClientBoundPacketData.create(PEPacketIDs.CHUNK_RADIUS, version);
 		VarNumberSerializer.writeSVarInt(chunkradius, (int) Math.ceil((Bukkit.getViewDistance() + 1) * Math.sqrt(2)));
 		packets.add(chunkradius);
+		//Send crafting recipes
+		ClientBoundPacketData craftPacket = ClientBoundPacketData.create(PEPacketIDs.CRAFTING_DATA, version); 
+		craftPacket.writeBytes(PECraftingManager.getInstance().getAllRecipes());
+		packets.add(craftPacket);
+		//Send all creative items (from PE json)
+		PECreativeInventory peInv = PECreativeInventory.getInstance(); 
+		ClientBoundPacketData creativeInventoryPacket = ClientBoundPacketData.create(PEPacketIDs.INVENTORY_CONTENT, version);
+		VarNumberSerializer.writeVarInt(creativeInventoryPacket, PESource.POCKET_CREATIVE_INVENTORY);
+		VarNumberSerializer.writeVarInt(creativeInventoryPacket, peInv.getItemCount());
+		creativeInventoryPacket.writeBytes(peInv.getCreativeItems());
+		packets.add(creativeInventoryPacket);
 		//Set PE gamemode.
 		AttributesCache attrscache = cache.getAttributesCache();
 		attrscache.setPEGameMode(gamemode);
