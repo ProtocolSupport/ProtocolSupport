@@ -2177,10 +2177,22 @@
   },
   {
     "id": 544,
-    "name": "weather.rain"
+    "name": "ui.toast.in"
   },
   {
     "id": 545,
+    "name": "ui.toast.out"
+  },
+  {
+    "id": 546,
+    "name": "ui.toast.challenge_complete"
+  },
+  {
+    "id": 547,
+    "name": "weather.rain"
+  },
+  {
+    "id": 548,
     "name": "weather.rain.above"
   }
 ]

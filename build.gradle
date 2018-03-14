@@ -9,11 +9,13 @@ buildscript {
 		classpath 'org.vafer:jdependency:1.1'
 		classpath files('gradle/plugins/shadowPlugin.jar')
 	}
+	repositories {
+		mavenCentral()
+	}
 }
 
 plugins {
 	id 'java'
-	id 'de.undercouch.download' version '3.1.1'
 }
 
 apply plugin: com.github.jengelman.gradle.plugins.shadow.ShadowPlugin
@@ -22,24 +24,22 @@ tasks.withType(AbstractCompile) {
 	classpath += configurations.shadow
 }
 
+
 tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
 }
 
 group 'protocolsupport'
 version '4.29-dev-pe'
-
 sourceCompatibility = 1.8
 
-import de.undercouch.gradle.tasks.download.Download
 
-File dllibs = new File('dllibs')
-dllibs.mkdirs()
+import java.text.MessageFormat
 
-File gen = new File('gen')
-gen.deleteDir();
-gen.mkdirs();
+File dlDepsDir = new File('dllibs')
+dlDepsDir.mkdirs()
 
+<<<<<<< HEAD
 task updateLibs(type: Download) {
 	src([
 		'https://yivesmirror.com/files/spigot/spigot-1.12.2-R0.1-SNAPSHOT-b1408.jar',
@@ -50,10 +50,39 @@ task updateLibs(type: Download) {
 	onlyIfNewer true
 	overwrite true
 }
+def dlDeps = [
+	new Tuple(
+		'https://yivesmirror.com/files/spigot/spigot-1.12.2-R0.1-SNAPSHOT-b1609.jar',
+		'spigot-1.12.2-1.jar'
+	),
+	new Tuple(
+		'https://repo.glowstone.net/repository/snapshots/net/glowstone/glowstone/2018.2.0-SNAPSHOT/glowstone-2018.2.0-20180209.231901-7.jar',
+		'glowstone-1.12.2-1.jar'
+	),
+	new Tuple(
+		'https://build.true-games.org/job/RakNetServer/21/artifact/target/RakNetServer.jar',
+		'raknetserver-21.jar'
+]
 
-compileJava.dependsOn(clean)
-compileJava.dependsOn(updateLibs)
-compileJava.finalizedBy(test)
+task updateLibs(type: DefaultTask) {doLast{
+	def dlDepsNames = new HashSet<String>()
+	dlDeps.each({
+		String dlDepUrl = it[0]
+		File dlDepFile = new File(dlDepsDir, it[1])
+		dlDepsNames.add(dlDepFile.getName())
+		if (!dlDepFile.exists()) {
+			logger.lifecycle(MessageFormat.format("Downloading {0} from {1}", dlDepFile.getName(), dlDepUrl))
+			ant.get(src: dlDepUrl, dest: dlDepFile)
+		} else {
+			logger.lifecycle(MessageFormat.format("Skipping download of {0} because it already exists", dlDepFile.getName()))
+		}
+	})
+	dlDepsDir.listFiles().findAll({ !dlDepsNames.contains(it.getName()) }).each({
+		logger.lifecycle(MessageFormat.format("Deleting old dllib {0}", it.getName()))
+		it.delete()
+	})
+}}
+
 
 sourceSets {
 	main {
@@ -71,49 +100,51 @@ sourceSets {
 	}
 }
 
-
-task generateLocaleList(type: DefaultTask) {doLast{
-	ArrayList<String> locales = new ArrayList<String>();
-	for (String filename : new File(sourceSets.main.resources.srcDirs.iterator().next(), "resources/i18n").list()) {
-		String[] split = filename.split("[.]");
-		if (split.length == 2 && split[1].equals("lang")) {
-			locales.add(split[0]);
-		}
-	}
-	File languageslist = new File(gen, "resources/i18n/languages");
-	languageslist.getParentFile().mkdirs();
-	languageslist.createNewFile();
-	PrintWriter writer = new PrintWriter(languageslist);
-	for (String locale : locales) {
-		writer.println(locale);
-	}
-	writer.close();
-}}
-
-task generateInfo(type: DefaultTask) {doLast{
-	Properties properties = new Properties();
-	properties.setProperty("buildtime", new Date().format("yyyy.MM.dd 'at' HH:mm:ss z"));
-	properties.setProperty("buildhost", System.getProperty("protocolsupport.buildhost", "unknown"));
-	properties.setProperty("buildnumber", System.getProperty("protocolsupport.buildnumber", "unknown"));
-	File buildinfo = new File(gen, "resources/buildinfo");
-	buildinfo.getParentFile().mkdirs();
-	buildinfo.createNewFile();
-	properties.store(new FileOutputStream(buildinfo), "Build info");
-}}
-
 repositories {
 	mavenCentral()
 }
 
 dependencies {
-	shadow files('buildprocessor/BuildProcessor.jar', new File(dllibs, 'spigot-1.12.2-R0.1-SNAPSHOT-b1408.jar'), new File(dllibs, 'glowstone-2018.2.0-20180209.231901-7.jar'))
-	compile files(new File(dllibs, 'RakNetServer.jar'))
+	shadow files('buildprocessor/BuildProcessor.jar')
+	shadow fileTree(dir: dlDepsDir, include: '*.jar')
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 	compile group: 'net.sf.trove4j', name: 'trove4j', version: '3.0.3'
 	compile group: 'com.google.code.gson', name: 'gson', version: '2.8.0'
 	compile group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '5.2'
 	testCompile group: 'junit', name: 'junit', version: '4.12'
 }
+
+
+File genDir = new File('gen')
+genDir.deleteDir()
+genDir.mkdirs()
+
+task generateLocaleList(type: DefaultTask) {doLast{
+	File langsListFile = new File(genDir, "resources/i18n/languages")
+	langsListFile.getParentFile().mkdirs()
+	langsListFile.createNewFile()
+	new PrintWriter(langsListFile).withCloseable({ writer ->
+		new File(sourceSets.main.resources.srcDirs.iterator().next(), "resources/i18n").list()
+		.each({
+			String[] split = it.split("[.]");
+			if (split.length == 2 && split[1].equals("lang")) {
+				writer.println(split[0])
+			}
+		})		
+	})
+}}
+
+task generateInfo(type: DefaultTask) {doLast{
+	Properties properties = new Properties()
+	properties.setProperty("buildtime", new Date().format("yyyy.MM.dd 'at' HH:mm:ss z"))
+	properties.setProperty("buildhost", System.getProperty("protocolsupport.buildhost", "unknown"))
+	properties.setProperty("buildnumber", System.getProperty("protocolsupport.buildnumber", "unknown"))
+	File buildInfoFile = new File(genDir, "resources/buildinfo")
+	buildInfoFile.getParentFile().mkdirs()
+	buildInfoFile.createNewFile()
+	new FileOutputStream(buildInfoFile).withCloseable({ properties.store(it, "Build info") })
+}}
+
 
 shadowJar {
 	doFirst {
@@ -122,7 +153,7 @@ shadowJar {
 
 	from sourceSets.main.java.srcDirs
 	from 'LICENSE'
-	from gen
+	from genDir
 
 	minimizeJar = true
 
@@ -141,8 +172,11 @@ shadowJar {
 	relocate 'udpserversocketchannel', 'protocolsupport.libs.udpserversocketchannel'
 }
 
-shadowJar.dependsOn(generateInfo)
-shadowJar.dependsOn(generateLocaleList)
 
+compileJava.dependsOn(clean)
+compileJava.dependsOn(updateLibs)
+compileJava.finalizedBy(test)
 jar.enabled = false
 jar.finalizedBy(shadowJar)
+shadowJar.dependsOn(generateInfo)
+shadowJar.dependsOn(generateLocaleList)

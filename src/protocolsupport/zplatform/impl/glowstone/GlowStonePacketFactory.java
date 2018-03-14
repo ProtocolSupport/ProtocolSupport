@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
+import org.bukkit.SoundCategory;
 import org.bukkit.WorldType;
 import org.bukkit.entity.Entity;
 import org.json.simple.JSONArray;
@@ -101,6 +102,8 @@ import net.glowstone.net.message.play.inv.SetWindowSlotMessage;
 import net.glowstone.net.message.play.inv.TransactionMessage;
 import net.glowstone.net.message.play.inv.WindowClickMessage;
 import net.glowstone.net.message.play.inv.WindowPropertyMessage;
+import net.glowstone.net.message.play.player.AdvancementTabMessage;
+import net.glowstone.net.message.play.player.AdvancementsMessage;
 import net.glowstone.net.message.play.player.BlockPlacementMessage;
 import net.glowstone.net.message.play.player.BossBarMessage;
 import net.glowstone.net.message.play.player.CameraMessage;
@@ -138,6 +141,8 @@ import net.glowstone.util.TextMessage;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.protocol.utils.authlib.GameProfile;
+import protocolsupport.protocol.utils.minecraftdata.BlockData;
+import protocolsupport.protocol.utils.minecraftdata.BlockData.BlockDataEntry;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.zplatform.PlatformPacketFactory;
@@ -229,9 +234,16 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 		return new SetCompressionMessage(threshold);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public Message createBlockBreakSoundPacket(Position pos, Material type) {
-		return null; // TODO: create a getStepSound() equivalent
+		BlockDataEntry blockdataentry = BlockData.getById(type.getId());
+		return new SoundEffectMessage(
+			blockdataentry.getBreakSound(), SoundCategory.BLOCKS,
+			pos.getX(), pos.getY(), pos.getZ(),
+			(blockdataentry.getVolume() + 1.0F) / 2.0F,
+			blockdataentry.getPitch() * 0.8F
+		);
 	}
 
 	@Override
@@ -737,12 +749,12 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 
 	@Override
 	public int getOutPlayAdvancementsTabPacketId() {
-		return 0x37; //TODO: getOpcode(ProtocolType.PLAY, OUTBOUND, AdvancementTabMessage.class);
+		return 0x37; //TODO
 	}
 
 	@Override
 	public int getOutPlayAdvancementsPacketId() {
-		return 0x4D; //TODO: getOpcode(ProtocolType.PLAY, OUTBOUND, AdvancementsMessage.class);
+		return getOpcode(ProtocolType.PLAY, OUTBOUND, AdvancementsMessage.class);
 	}
 
 	@Override
@@ -938,7 +950,7 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 
 	@Override
 	public int getInPlayAdvancementTabPacketId() {
-		return 0x19; //TODO: getOpcode(ProtocolType.PLAY, INBOUND, AdvancementTabMessage.class);
+		return getOpcode(ProtocolType.PLAY, INBOUND, AdvancementTabMessage.class);
 	}
 
 
