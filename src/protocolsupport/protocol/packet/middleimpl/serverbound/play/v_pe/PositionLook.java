@@ -57,8 +57,8 @@ public class PositionLook extends ServerBoundMiddlePacket {
 		if (teleportId != -1) {
 			packets.add(MiddleTeleportAccept.create(teleportId));
 			packets.add(MiddlePositionLook.create(movecache.getX(), movecache.getY(), movecache.getZ(), headYaw, pitch, onGround));
-			//TODO: Play around more with these numbers to perhaps make things even more smooth.
-			x = Math.floor(x * 8) / 8; y = Math.ceil((y + 0.3) * 8) / 8; z = Math.floor(z * 8) / 8;
+			//TODO: Play around more with these numbers to perhaps make things even more smooth. (Round to 8ths of blocks?)
+			//x = Math.floor(x * 8) / 8; y = Math.ceil((y + 0.3) * 8) / 8; z = Math.floor(z * 8) / 8;
 		}
 		if (player.getDataCache().isRiding()) {
 			NetworkEntity vehicle = cache.getWatchedEntityCache().getWatchedEntity(player.getDataCache().getVehicleId());
