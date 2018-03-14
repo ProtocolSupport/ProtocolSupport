@@ -18,6 +18,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Chat;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.ClientSettings;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.CommandRequest;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.EntityStatus;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacket;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Interact;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.MapInfoRequest;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.MoveVehicle;
@@ -53,6 +54,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		registry.register(NetworkState.PLAY, PEPacketIDs.ENTITY_EVENT, EntityStatus.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.MAP_INFO_REQUEST, MapInfoRequest.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.RIDER_JUMP, RiderJump.class);
+		registry.register(NetworkState.PLAY, PEPacketIDs.GOD_PACKET, GodPacket.class);
 	}
 
 	protected final PEDimensionSwitchMovementConfirmationPacketQueue dimswitchq;

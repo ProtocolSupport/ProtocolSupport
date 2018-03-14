@@ -29,7 +29,7 @@ public class PEPacketIDs {
 	public static final int ENTITY_EVENT = 27;
 	public static final int ENTITY_EFFECT = 28;
 	public static final int SET_ATTRIBUTES = 29;
-	public static final int INVENTORY_TRANSACTION = 30;
+	public static final int GOD_PACKET = 30;
 	public static final int MOB_EQUIPMENT = 31;
 	public static final int MOB_ARMOR_EQUIPMENT = 32;
 	public static final int INTERACT = 33;
