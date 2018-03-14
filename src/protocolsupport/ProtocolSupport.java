@@ -34,6 +34,7 @@ import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRema
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
 import protocolsupport.protocol.utils.i18n.I18NData;
+import protocolsupport.protocol.utils.minecraftdata.BlockData;
 import protocolsupport.protocol.utils.minecraftdata.ItemData;
 import protocolsupport.protocol.utils.minecraftdata.KeybindData;
 import protocolsupport.protocol.utils.minecraftdata.PocketData;
@@ -58,7 +59,6 @@ public class ProtocolSupport extends JavaPlugin {
 
 	public ProtocolSupport() {
 		instance = this;
-		// Make sure our use of AWT do not trigger GUI components to start
 		System.setProperty("java.awt.headless", "true");
 	}
 
@@ -97,6 +97,7 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(DataWatcherObjectIndex.class.getName());
 			Class.forName(DataWatcherObjectIdRegistry.class.getName());
 			Class.forName(Allocator.class.getName());
+			Class.forName(BlockData.class.getName());
 			Class.forName(ItemData.class.getName());
 			Class.forName(PotionData.class.getName());
 			Class.forName(SoundData.class.getName());

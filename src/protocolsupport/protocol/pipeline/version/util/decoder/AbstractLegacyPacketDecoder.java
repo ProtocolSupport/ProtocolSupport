@@ -9,7 +9,7 @@ import io.netty.channel.ChannelHandlerContext;
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
-import protocolsupport.protocol.typeremapper.legacy.LegacyAnimatePacketReorderer;
+import protocolsupport.protocol.typeremapper.packet.AnimatePacketReorderer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -21,7 +21,7 @@ public abstract class AbstractLegacyPacketDecoder extends AbstractPacketDecoder 
 	}
 
 	protected final ReplayingDecoderBuffer buffer = new ReplayingDecoderBuffer(Unpooled.buffer());
-	protected final LegacyAnimatePacketReorderer animateReorderer = new LegacyAnimatePacketReorderer();
+	protected final AnimatePacketReorderer animateReorderer = new AnimatePacketReorderer();
 
 	@Override
 	public void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {

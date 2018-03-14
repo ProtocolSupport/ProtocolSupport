@@ -1,8 +1,12 @@
 package protocolsupport.protocol.pipeline.version.v_1_8;
 
+import java.util.concurrent.TimeUnit;
+
+import io.netty.channel.Channel;
 import protocolsupport.api.Connection;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2.EncryptionRequest;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r2_10_11_12r1_12r2.LoginDisconnect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r2_10_11_12r1_12r2.LoginSuccess;
@@ -91,7 +95,10 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_7_8_9r1_9
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_7_8_9r1_9r2_10_11_12r1_12r2.ServerInfo;
 import protocolsupport.protocol.pipeline.version.util.encoder.AbstractModernPacketEncoder;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
+import protocolsupport.protocol.typeremapper.packet.ChunkSendIntervalPacketQueue;
 import protocolsupport.protocol.utils.registry.PacketIdTransformerRegistry;
+import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.zplatform.ServerPlatform;
 
 public class PacketEncoder extends AbstractModernPacketEncoder {
 
@@ -270,8 +277,26 @@ public class PacketEncoder extends AbstractModernPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CRAFTING_GRID_CONFIRM, NoopCraftingGridConfirm.class);
 	}
 
+	protected final ChunkSendIntervalPacketQueue chunkqueue = new ChunkSendIntervalPacketQueue();
+
 	public PacketEncoder(Connection connection, NetworkDataCache storage) {
 		super(connection, storage);
+	}
+
+	@Override
+	protected RecyclableCollection<ClientBoundPacketData> processPackets(Channel channel, RecyclableCollection<ClientBoundPacketData> data) {
+		RecyclableCollection<ClientBoundPacketData> allowed = chunkqueue.processPackets(data);
+		long delay = chunkqueue.getUnlockDelay();
+		if (delay != -1) {
+			channel.eventLoop().schedule(
+				() -> {
+					chunkqueue.unlock();
+					connection.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("PS|PushQueue"));
+				},
+				delay, TimeUnit.NANOSECONDS
+			);
+		}
+		return allowed;
 	}
 
 }

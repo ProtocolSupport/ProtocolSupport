@@ -1,1018 +1,2288 @@
 [
   {
     "id": 0,
-    "name": "air"
+    "name": "air",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 1,
-    "name": "stone"
+    "name": "stone",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 2,
-    "name": "grass"
+    "name": "grass",
+    "sounds": {
+      "break": 43,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 3,
-    "name": "dirt"
+    "name": "dirt",
+    "sounds": {
+      "break": 48,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 4,
-    "name": "cobblestone"
+    "name": "cobblestone",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 5,
-    "name": "planks"
+    "name": "planks",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 6,
-    "name": "sapling"
+    "name": "sapling",
+    "sounds": {
+      "break": 43,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 7,
-    "name": "bedrock"
+    "name": "bedrock",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 8,
-    "name": "flowing_water"
+    "name": "flowing_water",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 9,
-    "name": "water"
+    "name": "water",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 10,
-    "name": "flowing_lava"
+    "name": "flowing_lava",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 11,
-    "name": "lava"
+    "name": "lava",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 12,
-    "name": "sand"
+    "name": "sand",
+    "sounds": {
+      "break": 90,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 13,
-    "name": "gravel"
+    "name": "gravel",
+    "sounds": {
+      "break": 48,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 14,
-    "name": "gold_ore"
+    "name": "gold_ore",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 15,
-    "name": "iron_ore"
+    "name": "iron_ore",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 16,
-    "name": "coal_ore"
+    "name": "coal_ore",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 17,
-    "name": "log"
+    "name": "log",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 18,
-    "name": "leaves"
+    "name": "leaves",
+    "sounds": {
+      "break": 43,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 19,
-    "name": "sponge"
+    "name": "sponge",
+    "sounds": {
+      "break": 43,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 20,
-    "name": "glass"
+    "name": "glass",
+    "sounds": {
+      "break": 38,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 21,
-    "name": "lapis_ore"
+    "name": "lapis_ore",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 22,
-    "name": "lapis_block"
+    "name": "lapis_block",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 23,
-    "name": "dispenser"
+    "name": "dispenser",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 24,
-    "name": "sandstone"
+    "name": "sandstone",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 25,
-    "name": "noteblock"
+    "name": "noteblock",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 26,
-    "name": "bed"
+    "name": "bed",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 27,
-    "name": "golden_rail"
+    "name": "golden_rail",
+    "sounds": {
+      "break": 66,
+      "volume": 1.0,
+      "pitch": 1.5
+    }
   },
   {
     "id": 28,
-    "name": "detector_rail"
+    "name": "detector_rail",
+    "sounds": {
+      "break": 66,
+      "volume": 1.0,
+      "pitch": 1.5
+    }
   },
   {
     "id": 29,
-    "name": "sticky_piston"
+    "name": "sticky_piston",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 30,
-    "name": "web"
+    "name": "web",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 31,
-    "name": "tallgrass"
+    "name": "tallgrass",
+    "sounds": {
+      "break": 43,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 32,
-    "name": "deadbush"
+    "name": "deadbush",
+    "sounds": {
+      "break": 43,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 33,
-    "name": "piston"
+    "name": "piston",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 34,
-    "name": "piston_head"
+    "name": "piston_head",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 35,
-    "name": "wool"
+    "name": "wool",
+    "sounds": {
+      "break": 18,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 36,
-    "name": "piston_extension"
+    "name": "piston_extension",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 37,
-    "name": "yellow_flower"
+    "name": "yellow_flower",
+    "sounds": {
+      "break": 43,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 38,
-    "name": "red_flower"
+    "name": "red_flower",
+    "sounds": {
+      "break": 43,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 39,
-    "name": "brown_mushroom"
+    "name": "brown_mushroom",
+    "sounds": {
+      "break": 43,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 40,
-    "name": "red_mushroom"
+    "name": "red_mushroom",
+    "sounds": {
+      "break": 43,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 41,
-    "name": "gold_block"
+    "name": "gold_block",
+    "sounds": {
+      "break": 66,
+      "volume": 1.0,
+      "pitch": 1.5
+    }
   },
   {
     "id": 42,
-    "name": "iron_block"
+    "name": "iron_block",
+    "sounds": {
+      "break": 66,
+      "volume": 1.0,
+      "pitch": 1.5
+    }
   },
   {
     "id": 43,
-    "name": "double_stone_slab"
+    "name": "double_stone_slab",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 44,
-    "name": "stone_slab"
+    "name": "stone_slab",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 45,
-    "name": "brick_block"
+    "name": "brick_block",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 46,
-    "name": "tnt"
+    "name": "tnt",
+    "sounds": {
+      "break": 43,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 47,
-    "name": "bookshelf"
+    "name": "bookshelf",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 48,
-    "name": "mossy_cobblestone"
+    "name": "mossy_cobblestone",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 49,
-    "name": "obsidian"
+    "name": "obsidian",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 50,
-    "name": "torch"
+    "name": "torch",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 51,
-    "name": "fire"
+    "name": "fire",
+    "sounds": {
+      "break": 18,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 52,
-    "name": "mob_spawner"
+    "name": "mob_spawner",
+    "sounds": {
+      "break": 66,
+      "volume": 1.0,
+      "pitch": 1.5
+    }
   },
   {
     "id": 53,
-    "name": "oak_stairs"
+    "name": "oak_stairs",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 54,
-    "name": "chest"
+    "name": "chest",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 55,
-    "name": "redstone_wire"
+    "name": "redstone_wire",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 56,
-    "name": "diamond_ore"
+    "name": "diamond_ore",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 57,
-    "name": "diamond_block"
+    "name": "diamond_block",
+    "sounds": {
+      "break": 66,
+      "volume": 1.0,
+      "pitch": 1.5
+    }
   },
   {
     "id": 58,
-    "name": "crafting_table"
+    "name": "crafting_table",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 59,
-    "name": "wheat"
+    "name": "wheat",
+    "sounds": {
+      "break": 43,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 60,
-    "name": "farmland"
+    "name": "farmland",
+    "sounds": {
+      "break": 48,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 61,
-    "name": "furnace"
+    "name": "furnace",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 62,
-    "name": "lit_furnace"
+    "name": "lit_furnace",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 63,
-    "name": "standing_sign"
+    "name": "standing_sign",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 64,
-    "name": "wooden_door"
+    "name": "wooden_door",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 65,
-    "name": "ladder"
+    "name": "ladder",
+    "sounds": {
+      "break": 57,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 66,
-    "name": "rail"
+    "name": "rail",
+    "sounds": {
+      "break": 66,
+      "volume": 1.0,
+      "pitch": 1.5
+    }
   },
   {
     "id": 67,
-    "name": "stone_stairs"
+    "name": "stone_stairs",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 68,
-    "name": "wall_sign"
+    "name": "wall_sign",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 69,
-    "name": "lever"
+    "name": "lever",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 70,
-    "name": "stone_pressure_plate"
+    "name": "stone_pressure_plate",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 71,
-    "name": "iron_door"
+    "name": "iron_door",
+    "sounds": {
+      "break": 66,
+      "volume": 1.0,
+      "pitch": 1.5
+    }
   },
   {
     "id": 72,
-    "name": "wooden_pressure_plate"
+    "name": "wooden_pressure_plate",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 73,
-    "name": "redstone_ore"
+    "name": "redstone_ore",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 74,
-    "name": "lit_redstone_ore"
+    "name": "lit_redstone_ore",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 75,
-    "name": "unlit_redstone_torch"
+    "name": "unlit_redstone_torch",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 76,
-    "name": "redstone_torch"
+    "name": "redstone_torch",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 77,
-    "name": "stone_button"
+    "name": "stone_button",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 78,
-    "name": "snow_layer"
+    "name": "snow_layer",
+    "sounds": {
+      "break": 102,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 79,
-    "name": "ice"
+    "name": "ice",
+    "sounds": {
+      "break": 38,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 80,
-    "name": "snow"
+    "name": "snow",
+    "sounds": {
+      "break": 102,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 81,
-    "name": "cactus"
+    "name": "cactus",
+    "sounds": {
+      "break": 18,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 82,
-    "name": "clay"
+    "name": "clay",
+    "sounds": {
+      "break": 48,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 83,
-    "name": "reeds"
+    "name": "reeds",
+    "sounds": {
+      "break": 43,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 84,
-    "name": "jukebox"
+    "name": "jukebox",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 85,
-    "name": "fence"
+    "name": "fence",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 86,
-    "name": "pumpkin"
+    "name": "pumpkin",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 87,
-    "name": "netherrack"
+    "name": "netherrack",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 88,
-    "name": "soul_sand"
+    "name": "soul_sand",
+    "sounds": {
+      "break": 90,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 89,
-    "name": "glowstone"
+    "name": "glowstone",
+    "sounds": {
+      "break": 38,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 90,
-    "name": "portal"
+    "name": "portal",
+    "sounds": {
+      "break": 38,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 91,
-    "name": "lit_pumpkin"
+    "name": "lit_pumpkin",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 92,
-    "name": "cake"
+    "name": "cake",
+    "sounds": {
+      "break": 18,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 93,
-    "name": "unpowered_repeater"
+    "name": "unpowered_repeater",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 94,
-    "name": "powered_repeater"
+    "name": "powered_repeater",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 95,
-    "name": "stained_glass"
+    "name": "stained_glass",
+    "sounds": {
+      "break": 38,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 96,
-    "name": "trapdoor"
+    "name": "trapdoor",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 97,
-    "name": "monster_egg"
+    "name": "monster_egg",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 98,
-    "name": "stonebrick"
+    "name": "stonebrick",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 99,
-    "name": "brown_mushroom_block"
+    "name": "brown_mushroom_block",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 100,
-    "name": "red_mushroom_block"
+    "name": "red_mushroom_block",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 101,
-    "name": "iron_bars"
+    "name": "iron_bars",
+    "sounds": {
+      "break": 66,
+      "volume": 1.0,
+      "pitch": 1.5
+    }
   },
   {
     "id": 102,
-    "name": "glass_pane"
+    "name": "glass_pane",
+    "sounds": {
+      "break": 38,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 103,
-    "name": "melon_block"
+    "name": "melon_block",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 104,
-    "name": "pumpkin_stem"
+    "name": "pumpkin_stem",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 105,
-    "name": "melon_stem"
+    "name": "melon_stem",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 106,
-    "name": "vine"
+    "name": "vine",
+    "sounds": {
+      "break": 43,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 107,
-    "name": "fence_gate"
+    "name": "fence_gate",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 108,
-    "name": "brick_stairs"
+    "name": "brick_stairs",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 109,
-    "name": "stone_brick_stairs"
+    "name": "stone_brick_stairs",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 110,
-    "name": "mycelium"
+    "name": "mycelium",
+    "sounds": {
+      "break": 43,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 111,
-    "name": "waterlily"
+    "name": "waterlily",
+    "sounds": {
+      "break": 43,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 112,
-    "name": "nether_brick"
+    "name": "nether_brick",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 113,
-    "name": "nether_brick_fence"
+    "name": "nether_brick_fence",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 114,
-    "name": "nether_brick_stairs"
+    "name": "nether_brick_stairs",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 115,
-    "name": "nether_wart"
+    "name": "nether_wart",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 116,
-    "name": "enchanting_table"
+    "name": "enchanting_table",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 117,
-    "name": "brewing_stand"
+    "name": "brewing_stand",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 118,
-    "name": "cauldron"
+    "name": "cauldron",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 119,
-    "name": "end_portal"
+    "name": "end_portal",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 120,
-    "name": "end_portal_frame"
+    "name": "end_portal_frame",
+    "sounds": {
+      "break": 38,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 121,
-    "name": "end_stone"
+    "name": "end_stone",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 122,
-    "name": "dragon_egg"
+    "name": "dragon_egg",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 123,
-    "name": "redstone_lamp"
+    "name": "redstone_lamp",
+    "sounds": {
+      "break": 38,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 124,
-    "name": "lit_redstone_lamp"
+    "name": "lit_redstone_lamp",
+    "sounds": {
+      "break": 38,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 125,
-    "name": "double_wooden_slab"
+    "name": "double_wooden_slab",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 126,
-    "name": "wooden_slab"
+    "name": "wooden_slab",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 127,
-    "name": "cocoa"
+    "name": "cocoa",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 128,
-    "name": "sandstone_stairs"
+    "name": "sandstone_stairs",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 129,
-    "name": "emerald_ore"
+    "name": "emerald_ore",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 130,
-    "name": "ender_chest"
+    "name": "ender_chest",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 131,
-    "name": "tripwire_hook"
+    "name": "tripwire_hook",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 132,
-    "name": "tripwire"
+    "name": "tripwire",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 133,
-    "name": "emerald_block"
+    "name": "emerald_block",
+    "sounds": {
+      "break": 66,
+      "volume": 1.0,
+      "pitch": 1.5
+    }
   },
   {
     "id": 134,
-    "name": "spruce_stairs"
+    "name": "spruce_stairs",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 135,
-    "name": "birch_stairs"
+    "name": "birch_stairs",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 136,
-    "name": "jungle_stairs"
+    "name": "jungle_stairs",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 137,
-    "name": "command_block"
+    "name": "command_block",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 138,
-    "name": "beacon"
+    "name": "beacon",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 139,
-    "name": "cobblestone_wall"
+    "name": "cobblestone_wall",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 140,
-    "name": "flower_pot"
+    "name": "flower_pot",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 141,
-    "name": "carrots"
+    "name": "carrots",
+    "sounds": {
+      "break": 43,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 142,
-    "name": "potatoes"
+    "name": "potatoes",
+    "sounds": {
+      "break": 43,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 143,
-    "name": "wooden_button"
+    "name": "wooden_button",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 144,
-    "name": "skull"
+    "name": "skull",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 145,
-    "name": "anvil"
+    "name": "anvil",
+    "sounds": {
+      "break": 6,
+      "volume": 0.3,
+      "pitch": 1.0
+    }
   },
   {
     "id": 146,
-    "name": "trapped_chest"
+    "name": "trapped_chest",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 147,
-    "name": "light_weighted_pressure_plate"
+    "name": "light_weighted_pressure_plate",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 148,
-    "name": "heavy_weighted_pressure_plate"
+    "name": "heavy_weighted_pressure_plate",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 149,
-    "name": "unpowered_comparator"
+    "name": "unpowered_comparator",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 150,
-    "name": "powered_comparator"
+    "name": "powered_comparator",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 151,
-    "name": "daylight_detector"
+    "name": "daylight_detector",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 152,
-    "name": "redstone_block"
+    "name": "redstone_block",
+    "sounds": {
+      "break": 66,
+      "volume": 1.0,
+      "pitch": 1.5
+    }
   },
   {
     "id": 153,
-    "name": "quartz_ore"
+    "name": "quartz_ore",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 154,
-    "name": "hopper"
+    "name": "hopper",
+    "sounds": {
+      "break": 66,
+      "volume": 1.0,
+      "pitch": 1.5
+    }
   },
   {
     "id": 155,
-    "name": "quartz_block"
+    "name": "quartz_block",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 156,
-    "name": "quartz_stairs"
+    "name": "quartz_stairs",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 157,
-    "name": "activator_rail"
+    "name": "activator_rail",
+    "sounds": {
+      "break": 66,
+      "volume": 1.0,
+      "pitch": 1.5
+    }
   },
   {
     "id": 158,
-    "name": "dropper"
+    "name": "dropper",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 159,
-    "name": "stained_hardened_clay"
+    "name": "stained_hardened_clay",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 160,
-    "name": "stained_glass_pane"
+    "name": "stained_glass_pane",
+    "sounds": {
+      "break": 38,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 161,
-    "name": "leaves2"
+    "name": "leaves2",
+    "sounds": {
+      "break": 43,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 162,
-    "name": "log2"
+    "name": "log2",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 163,
-    "name": "acacia_stairs"
+    "name": "acacia_stairs",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 164,
-    "name": "dark_oak_stairs"
+    "name": "dark_oak_stairs",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 165,
-    "name": "slime"
+    "name": "slime",
+    "sounds": {
+      "break": 97,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 166,
-    "name": "barrier"
+    "name": "barrier",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 167,
-    "name": "iron_trapdoor"
+    "name": "iron_trapdoor",
+    "sounds": {
+      "break": 66,
+      "volume": 1.0,
+      "pitch": 1.5
+    }
   },
   {
     "id": 168,
-    "name": "prismarine"
+    "name": "prismarine",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 169,
-    "name": "sea_lantern"
+    "name": "sea_lantern",
+    "sounds": {
+      "break": 38,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 170,
-    "name": "hay_block"
+    "name": "hay_block",
+    "sounds": {
+      "break": 43,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 171,
-    "name": "carpet"
+    "name": "carpet",
+    "sounds": {
+      "break": 18,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 172,
-    "name": "hardened_clay"
+    "name": "hardened_clay",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 173,
-    "name": "coal_block"
+    "name": "coal_block",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 174,
-    "name": "packed_ice"
+    "name": "packed_ice",
+    "sounds": {
+      "break": 38,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 175,
-    "name": "double_plant"
+    "name": "double_plant",
+    "sounds": {
+      "break": 43,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 176,
-    "name": "standing_banner"
+    "name": "standing_banner",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 177,
-    "name": "wall_banner"
+    "name": "wall_banner",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 178,
-    "name": "daylight_detector_inverted"
+    "name": "daylight_detector_inverted",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 179,
-    "name": "red_sandstone"
+    "name": "red_sandstone",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 180,
-    "name": "red_sandstone_stairs"
+    "name": "red_sandstone_stairs",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 181,
-    "name": "double_stone_slab2"
+    "name": "double_stone_slab2",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 182,
-    "name": "stone_slab2"
+    "name": "stone_slab2",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 183,
-    "name": "spruce_fence_gate"
+    "name": "spruce_fence_gate",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 184,
-    "name": "birch_fence_gate"
+    "name": "birch_fence_gate",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 185,
-    "name": "jungle_fence_gate"
+    "name": "jungle_fence_gate",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 186,
-    "name": "dark_oak_fence_gate"
+    "name": "dark_oak_fence_gate",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 187,
-    "name": "acacia_fence_gate"
+    "name": "acacia_fence_gate",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 188,
-    "name": "spruce_fence"
+    "name": "spruce_fence",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 189,
-    "name": "birch_fence"
+    "name": "birch_fence",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 190,
-    "name": "jungle_fence"
+    "name": "jungle_fence",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 191,
-    "name": "dark_oak_fence"
+    "name": "dark_oak_fence",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 192,
-    "name": "acacia_fence"
+    "name": "acacia_fence",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 193,
-    "name": "spruce_door"
+    "name": "spruce_door",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 194,
-    "name": "birch_door"
+    "name": "birch_door",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 195,
-    "name": "jungle_door"
+    "name": "jungle_door",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 196,
-    "name": "acacia_door"
+    "name": "acacia_door",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 197,
-    "name": "dark_oak_door"
+    "name": "dark_oak_door",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 198,
-    "name": "end_rod"
+    "name": "end_rod",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 199,
-    "name": "chorus_plant"
+    "name": "chorus_plant",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 200,
-    "name": "chorus_flower"
+    "name": "chorus_flower",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 201,
-    "name": "purpur_block"
+    "name": "purpur_block",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 202,
-    "name": "purpur_pillar"
+    "name": "purpur_pillar",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 203,
-    "name": "purpur_stairs"
+    "name": "purpur_stairs",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 204,
-    "name": "purpur_double_slab"
+    "name": "purpur_double_slab",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 205,
-    "name": "purpur_slab"
+    "name": "purpur_slab",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 206,
-    "name": "end_bricks"
+    "name": "end_bricks",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 207,
-    "name": "beetroots"
+    "name": "beetroots",
+    "sounds": {
+      "break": 43,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 208,
-    "name": "grass_path"
+    "name": "grass_path",
+    "sounds": {
+      "break": 43,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 209,
-    "name": "end_gateway"
+    "name": "end_gateway",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 210,
-    "name": "repeating_command_block"
+    "name": "repeating_command_block",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 211,
-    "name": "chain_command_block"
+    "name": "chain_command_block",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 212,
-    "name": "frosted_ice"
+    "name": "frosted_ice",
+    "sounds": {
+      "break": 38,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 213,
-    "name": "magma"
+    "name": "magma",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 214,
-    "name": "nether_wart_block"
+    "name": "nether_wart_block",
+    "sounds": {
+      "break": 122,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 215,
-    "name": "red_nether_brick"
+    "name": "red_nether_brick",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 216,
-    "name": "bone_block"
+    "name": "bone_block",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 217,
-    "name": "structure_void"
+    "name": "structure_void",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 218,
-    "name": "observer"
+    "name": "observer",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 219,
-    "name": "white_shulker_box"
+    "name": "white_shulker_box",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 220,
-    "name": "orange_shulker_box"
+    "name": "orange_shulker_box",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 221,
-    "name": "magenta_shulker_box"
+    "name": "magenta_shulker_box",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 222,
-    "name": "light_blue_shulker_box"
+    "name": "light_blue_shulker_box",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 223,
-    "name": "yellow_shulker_box"
+    "name": "yellow_shulker_box",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 224,
-    "name": "lime_shulker_box"
+    "name": "lime_shulker_box",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 225,
-    "name": "pink_shulker_box"
+    "name": "pink_shulker_box",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 226,
-    "name": "gray_shulker_box"
+    "name": "gray_shulker_box",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 227,
-    "name": "silver_shulker_box"
+    "name": "silver_shulker_box",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 228,
-    "name": "cyan_shulker_box"
+    "name": "cyan_shulker_box",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 229,
-    "name": "purple_shulker_box"
+    "name": "purple_shulker_box",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 230,
-    "name": "blue_shulker_box"
+    "name": "blue_shulker_box",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 231,
-    "name": "brown_shulker_box"
+    "name": "brown_shulker_box",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 232,
-    "name": "green_shulker_box"
+    "name": "green_shulker_box",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 233,
-    "name": "red_shulker_box"
+    "name": "red_shulker_box",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 234,
-    "name": "black_shulker_box"
+    "name": "black_shulker_box",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 235,
-    "name": "white_glazed_terracotta"
+    "name": "white_glazed_terracotta",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 236,
-    "name": "orange_glazed_terracotta"
+    "name": "orange_glazed_terracotta",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 237,
-    "name": "magenta_glazed_terracotta"
+    "name": "magenta_glazed_terracotta",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 238,
-    "name": "light_blue_glazed_terracotta"
+    "name": "light_blue_glazed_terracotta",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 239,
-    "name": "yellow_glazed_terracotta"
+    "name": "yellow_glazed_terracotta",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 240,
-    "name": "lime_glazed_terracotta"
+    "name": "lime_glazed_terracotta",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 241,
-    "name": "pink_glazed_terracotta"
+    "name": "pink_glazed_terracotta",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 242,
-    "name": "gray_glazed_terracotta"
+    "name": "gray_glazed_terracotta",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 243,
-    "name": "silver_glazed_terracotta"
+    "name": "silver_glazed_terracotta",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 244,
-    "name": "cyan_glazed_terracotta"
+    "name": "cyan_glazed_terracotta",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 245,
-    "name": "purple_glazed_terracotta"
+    "name": "purple_glazed_terracotta",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 246,
-    "name": "blue_glazed_terracotta"
+    "name": "blue_glazed_terracotta",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 247,
-    "name": "brown_glazed_terracotta"
+    "name": "brown_glazed_terracotta",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 248,
-    "name": "green_glazed_terracotta"
+    "name": "green_glazed_terracotta",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 249,
-    "name": "red_glazed_terracotta"
+    "name": "red_glazed_terracotta",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 250,
-    "name": "black_glazed_terracotta"
+    "name": "black_glazed_terracotta",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 251,
-    "name": "concrete"
+    "name": "concrete",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 252,
-    "name": "concrete_powder"
+    "name": "concrete_powder",
+    "sounds": {
+      "break": 90,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   },
   {
     "id": 255,
-    "name": "structure_block"
+    "name": "structure_block",
+    "sounds": {
+      "break": 107,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
   }
 ]
