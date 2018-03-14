@@ -12,8 +12,7 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 public class RiderJump extends ServerBoundMiddlePacket {
 
 	protected long jumptime;
-	int i = 0;
-	
+
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		jumptime = VarNumberSerializer.readVarLong(clientdata);
@@ -21,14 +20,11 @@ public class RiderJump extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		i++;
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
-		//TODO: Fix this, it don't work :'(
 		int selfId = cache.getWatchedEntityCache().getSelfPlayerEntityId();
 		packets.add(MiddleEntityAction.create(selfId, MiddleEntityAction.Action.START_JUMP, (int) jumptime / 2));
 		packets.add(MiddleSteerVehicle.create(0, 0, 0x1)); // 0x1 = jump vehicle
 		packets.add(MiddleEntityAction.create(selfId, MiddleEntityAction.Action.STOP_JUMP, 0));
-		
 		return packets;
 	}
 

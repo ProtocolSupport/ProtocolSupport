@@ -35,10 +35,10 @@ public class SpigotWrapperFactory implements PlatformWrapperFactory {
 	public ItemStackWrapper createItemStack(int typeId) {
 		return SpigotItemStackWrapper.create(typeId);
 	}
-	
+
 	@Override
 	public ItemStackWrapper createItemStack(ItemStack item) {
-		return new SpigotItemStackWrapper(CraftItemStack.asNMSCopy(item));
+		return SpigotItemStackWrapper.create(CraftItemStack.asNMSCopy(item));
 	}
 
 	@Override

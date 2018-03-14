@@ -13,12 +13,16 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 public class SpigotItemStackWrapper extends ItemStackWrapper {
 
 	protected final ItemStack itemstack;
-	public SpigotItemStackWrapper(ItemStack itemstack) {
+	protected SpigotItemStackWrapper(ItemStack itemstack) {
 		this.itemstack = itemstack;
 	}
 
 	public static ItemStackWrapper create(int typeId) {
 		return new SpigotItemStackWrapper(new ItemStack(Item.getById(typeId)));
+	}
+
+	public static ItemStackWrapper create(ItemStack stack) {
+		return new SpigotItemStackWrapper(stack);
 	}
 
 	@Override

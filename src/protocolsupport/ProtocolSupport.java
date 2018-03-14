@@ -45,8 +45,6 @@ import protocolsupport.utils.Utils;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.impl.pe.PECraftingManager;
-import protocolsupport.zplatform.impl.pe.PECreativeInventory;
 import protocolsupport.zplatform.impl.pe.PEProxyServer;
 
 public class ProtocolSupport extends JavaPlugin {
@@ -141,8 +139,6 @@ public class ProtocolSupport extends JavaPlugin {
 		getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
 			Thread pocketPacketCache = new Thread(() -> {
 				PocketData.readEntityDatas();
-				PECraftingManager.getInstance().registerRecipes();
-				PECreativeInventory.getInstance().generateCreativeInventoryItems();
 			});
 			pocketPacketCache.setDaemon(true);
 			pocketPacketCache.start();

@@ -49,11 +49,6 @@ public class NetworkDataCache {
 		return itementitycache;
 	}
 
-	private final PEInventoryCache inventorycache = new PEInventoryCache();
-	public PEInventoryCache getPEInventoryCache() {
-		return inventorycache;
-	}
-
 	@Override
 	public String toString() {
 		return Utils.toStringAllFields(this);
