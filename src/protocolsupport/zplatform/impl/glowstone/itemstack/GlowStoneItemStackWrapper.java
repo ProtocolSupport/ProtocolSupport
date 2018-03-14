@@ -14,13 +14,17 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 public class GlowStoneItemStackWrapper extends ItemStackWrapper {
 
 	protected final ItemStack itemstack;
-	public GlowStoneItemStackWrapper(ItemStack itemstack) {
+	protected GlowStoneItemStackWrapper(ItemStack itemstack) {
 		this.itemstack = itemstack;
 	}
 
 	@SuppressWarnings("deprecation")
 	public static ItemStackWrapper create(int typeId) {
 		return new GlowStoneItemStackWrapper(new ItemStack(typeId));
+	}
+
+	public static ItemStackWrapper create(ItemStack stack) {
+		return new GlowStoneItemStackWrapper(stack);
 	}
 
 	@Override
