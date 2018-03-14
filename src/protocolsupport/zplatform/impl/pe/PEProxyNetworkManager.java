@@ -14,7 +14,6 @@ public class PEProxyNetworkManager extends SimpleChannelInboundHandler<ByteBuf> 
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-		super.channelInactive(ctx);
 		if (serverconnection != null) {
 			serverconnection.close();
 		}
