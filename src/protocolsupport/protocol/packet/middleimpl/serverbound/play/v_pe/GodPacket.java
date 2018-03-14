@@ -4,25 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Material;
-import org.bukkit.util.Vector;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockDig;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockPlace;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCreativeSetSlot;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClick;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryEnchant;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryTransaction;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUseEntity;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
@@ -30,11 +25,8 @@ import protocolsupport.protocol.storage.netcache.PEInventoryCache;
 import protocolsupport.protocol.storage.netcache.WindowCache;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.types.BlockFace;
 import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.NetworkEntity;
-import protocolsupport.protocol.utils.types.NetworkEntityType;
-import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.ArrayDequeMultiMap;
 import protocolsupport.utils.ArrayDequeMultiMap.ChildDeque;
@@ -70,16 +62,9 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	private static boolean godlyDebug = true;
 	//Transactions
 	protected InfTransaction[] transactions;
-	//Complex Actions
+	//Wrapped packet
 	protected int actionId;
-	protected int subTypeId = -1;
-	protected ItemStackWrapper itemstack;
-	protected int slot;
-	protected Position position = new Position(0, 0, 0);
-	protected float fromX, fromY, fromZ;
-	protected float cX, cY, cZ; //cursor position
-	protected int face;
-	protected int targetId;
+	protected ServerBoundMiddlePacket packet;
 
 	//TODO: Remove debug (can delete all lines starting with "bug(") if all is well.
 	public static void bug(String bugger) {
@@ -100,37 +85,31 @@ public class GodPacket extends ServerBoundMiddlePacket {
 
 		switch(actionId) {
 			case ACTION_USE_ITEM: {
-				subTypeId = VarNumberSerializer.readVarInt(clientdata);
-				PositionSerializer.readPEPositionTo(clientdata, position);
-				face = VarNumberSerializer.readSVarInt(clientdata);
-				slot = VarNumberSerializer.readSVarInt(clientdata);
-				itemstack = ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), locale, true);
-				fromX = clientdata.readFloatLE(); fromY = clientdata.readFloatLE(); fromZ = clientdata.readFloatLE();
-				cX = clientdata.readFloatLE(); cY = clientdata.readFloatLE(); cZ = clientdata.readFloatLE();
+				packet = new UseItem();
 				break;
 			}
-			case ACTION_INTERACT: {
-				targetId = (int) VarNumberSerializer.readVarLong(clientdata);
-				subTypeId = VarNumberSerializer.readVarInt(clientdata);
-				slot = VarNumberSerializer.readSVarInt(clientdata);
-				itemstack = ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), locale, true);
-				fromX = clientdata.readFloatLE(); fromY = clientdata.readFloatLE(); fromZ = clientdata.readFloatLE();
-				cX = clientdata.readFloatLE(); cY = clientdata.readFloatLE(); cZ = clientdata.readFloatLE();
+			case ACTION_USE_ENTITY: {
+				packet = new UseEntity();
 				break;
 			}
 			case ACTION_RELEASE_ITEM: {
-				subTypeId = VarNumberSerializer.readVarInt(clientdata);
-				slot = VarNumberSerializer.readSVarInt(clientdata);
-				itemstack = ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), locale, true);
-				fromX = clientdata.readFloatLE(); fromY = clientdata.readFloatLE(); fromZ = clientdata.readFloatLE();
+				packet = new ReleaseItem();
 				break;
 			}
 			case ACTION_NORMAL:
 			case ACTION_MISMATCH:
 			default: {
+				packet = null;
 				break;
 			}
 		}
+		
+		if (packet != null) {
+			packet.setSharedStorage(cache);
+			packet.setConnection(connection);
+			packet.readFromClientData(clientdata);
+		}
+		
 		//BLEEHH! TODO: Not?
 		clientdata.readBytes(clientdata.readableBytes());
 	}
@@ -145,94 +124,20 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	public static final int ACTION_NORMAL = 0;
 	public static final int ACTION_MISMATCH = 1;
 	public static final int ACTION_USE_ITEM = 2;
-	public static final int ACTION_INTERACT = 3;
+	public static final int ACTION_USE_ENTITY = 3;
 	public static final int ACTION_RELEASE_ITEM = 4;
-	//Action - Item Release
-	public static final int RELEASE_RELEASE = 0;
-	public static final int RELEASE_CONSUME = 1;
-	//Action - Item Use
-	public static final int USE_CLICK_BLOCK = 0;
-	public static final int USE_CLICK_AIR = 1;
-	public static final int USE_DIG_BLOCK = 2;
-	//Action - Interact
-	public static final int INTERACT_INTERACT = 0;
-	public static final int INTERACT_ATTACK = 1;
-	public static final int INTERACT_AT = 2;
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		PEInventoryCache invCache = cache.getPEInventoryCache();
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
-		switch(actionId) {
-			case ACTION_USE_ITEM: {
-				bug("CLICK! Position: " + position + " Face: " + face + "Subtype: " + subTypeId + " Cursor: " + cX + ", " + cY + ", " + cZ);
-				switch(subTypeId) {
-					case USE_CLICK_AIR:
-						face = -1;
-					case USE_CLICK_BLOCK: {
-						packets.add(MiddleBlockPlace.create(position, face, 0, cX, cY, cZ));
-						BlockFace.getById(face).modPosition(position); //Modify position to update the correct block.
-						break;
-					}
-					case USE_DIG_BLOCK: {
-						face = -1;
-						if (cache.getAttributesCache().getPEGameMode() == GameMode.CREATIVE) { //instabreak
-							packets.add(MiddleBlockDig.create(MiddleBlockDig.Action.START_DIG, position, 0));
-							packets.add(MiddleBlockDig.create(MiddleBlockDig.Action.FINISH_DIG, position, 0));
-						}
-						break;
-					}
-				}
-				if ( //Whenever the player places a block far away we want the server to update it, because PE might not be allowed to do it.
-					(Math.abs(cache.getMovementCache().getPEClientX() - position.getX()) > 4) ||
-					(Math.abs(cache.getMovementCache().getPEClientY() - position.getY()) > 4) ||
-					(Math.abs(cache.getMovementCache().getPEClientZ() - position.getZ()) > 4)
-				) {
-					InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.BlockUpdateRequest(position));
-				}
-				break;
+		if (packet != null) {
+			packets.addAll(packet.toNative());
+		} else if (actionId == ACTION_NORMAL) {
+			for (InfTransaction transaction : transactions) {
+				invCache.getInfTransactions().cacheTransaction(cache, transaction);
 			}
-			case ACTION_INTERACT: {
-				switch(subTypeId) {
-					case INTERACT_INTERACT: {
-						NetworkEntity target = cache.getWatchedEntityCache().getWatchedEntity(targetId);
-						if(target == null || !target.isOfType(NetworkEntityType.ARMOR_STAND)) {
-							packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT, null, 0));
-						}
-						packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT_AT, new Vector(cX, cY, cZ), 0));
-						break;
-					}
-					case INTERACT_ATTACK: {
-						packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.ATTACK, null, 0));
-						break;
-					}
-					case INTERACT_AT: {
-						packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT_AT, new Vector(cX, cY, cZ), 0));
-						break;
-					}
-				}
-				break;
-			}
-			case ACTION_RELEASE_ITEM: {
-				switch(subTypeId) {
-					case RELEASE_RELEASE: { //Eating or stringing bow.
-						packets.add(MiddleBlockDig.create(MiddleBlockDig.Action.FINISH_USE, new Position(0, -0, 0), 0));
-						break;
-					}
-				}
-				break;
-			}
-			case ACTION_NORMAL: { //Normal inventory transaction.
-				for (InfTransaction transaction : transactions) {
-					invCache.getInfTransactions().cacheTransaction(cache, transaction);
-				}
-				packets.addAll(invCache.getInfTransactions().process(cache));
-				break;
-			}
-			case ACTION_MISMATCH:
-			default: {
-				break;
-			}
+			packets.addAll(invCache.getInfTransactions().process(cache));
 		}
 		if (invCache.shouldSendUpdate() && cache.getAttributesCache().getPEGameMode() != GameMode.CREATIVE) {
 			//Trigger inventory update, ALWAYS since PE sometimes 'guesses' or doesn't trust the server, we generally want an inventory update scheduled.
