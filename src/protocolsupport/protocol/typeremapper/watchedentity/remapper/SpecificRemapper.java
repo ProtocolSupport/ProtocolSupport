@@ -96,25 +96,11 @@ public enum SpecificRemapper {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				getObject(original, DataWatcherObjectIndex.Entity.FLAGS, DataWatcherObjectByte.class)
-				.ifPresent(baseflags -> entity.getDataCache().baseMetaFlags = baseflags.getValue());
+				.ifPresent(baseflags -> entity.getDataCache().setPcBaseFlags(baseflags.getValue()));
 				getObject(original, DataWatcherObjectIndex.EntityLiving.HAND_USE, DataWatcherObjectByte.class)
 				.ifPresent(activehandflags -> {
-					byte activehandvalue = activehandflags.getValue();
-					byte basevalue = entity.getDataCache().baseMetaFlags;
-					switch (activehandvalue) {
-						case 1: {
-							basevalue |= (1 << 4);
-							break;
-						}
-						case 0: {
-							basevalue &= ~(1 << 4);
-							break;
-						}
-						default: {
-							break;
-						}
-					}
-					remapped.put(0, new DataWatcherObjectByte(basevalue));
+					entity.getDataCache().setPcBaseFlag(5, activehandflags.getValue());
+					remapped.put(0, new DataWatcherObjectByte(entity.getDataCache().getPcBaseFlags()));
 				});
 			}
 		}, ProtocolVersionsHelper.BEFORE_1_9)

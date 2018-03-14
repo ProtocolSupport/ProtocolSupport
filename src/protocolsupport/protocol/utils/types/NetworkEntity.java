@@ -56,12 +56,44 @@ public class NetworkEntity {
 	}
 
 	public static class DataCache {
-		public boolean firstMeta = true;
-		public byte baseMetaFlags;
+
+		private byte pcBaseFlags = 0;
+		private boolean firstMeta = true;
+
+		public byte getPcBaseFlags() {
+			return pcBaseFlags;
+		}
+
+		public boolean getPcBaseFlag(int bitpos) {
+			return (pcBaseFlags & (1 << (bitpos - 1))) != 0;
+		}
+
+		public void setPcBaseFlag(int bitpos, boolean value) {
+			setPcBaseFlag(bitpos, value ? 1 : 0);
+		}
+
+		public void setPcBaseFlag(int bitpos, int value) {
+			pcBaseFlags &= ~(1 << (bitpos - 1));
+			pcBaseFlags |= (value << (bitpos - 1));
+		}
+
+		public void setPcBaseFlags(byte pcBaseFlags) {
+			this.pcBaseFlags = pcBaseFlags;
+		}
+
+		public boolean isFirstMeta() {
+			return firstMeta;
+		}
+
+		public void setFirstMeta(boolean firstMeta) {
+			this.firstMeta = firstMeta;
+		}
+
 		@Override
 		public String toString() {
 			return Utils.toStringAllFields(this);
 		}
+
 	}
 
 }
