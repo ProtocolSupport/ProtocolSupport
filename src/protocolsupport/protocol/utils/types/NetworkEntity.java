@@ -63,8 +63,9 @@ public class NetworkEntity {
 	}
 
 	public static class DataCache {
+
 		private byte pcBaseFlags = 0;
-		private boolean firstMeta = false;
+		private boolean firstMeta = true;
 
 		public byte getPcBaseFlags() {
 			return pcBaseFlags;
@@ -244,7 +245,7 @@ public class NetworkEntity {
 		public String toString() {
 			return Utils.toStringAllFields(this);
 		}
-		
+
 	}
 
 }

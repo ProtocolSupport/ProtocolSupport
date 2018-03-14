@@ -204,22 +204,8 @@ public enum SpecificRemapper {
 				.ifPresent(baseflags -> entity.getDataCache().setPcBaseFlags(baseflags.getValue()));
 				getObject(original, DataWatcherObjectIndex.EntityLiving.HAND_USE, DataWatcherObjectByte.class)
 				.ifPresent(activehandflags -> {
-					byte activehandvalue = activehandflags.getValue();
-					byte basevalue = entity.getDataCache().getPcBaseFlags();
-					switch (activehandvalue) {
-						case 1: {
-							basevalue |= (1 << 4);
-							break;
-						}
-						case 0: {
-							basevalue &= ~(1 << 4);
-							break;
-						}
-						default: {
-							break;
-						}
-					}
-					remapped.put(0, new DataWatcherObjectByte(basevalue));
+					entity.getDataCache().setPcBaseFlag(5, activehandflags.getValue());
+					remapped.put(0, new DataWatcherObjectByte(entity.getDataCache().getPcBaseFlags()));
 				});
 			}
 		}, ProtocolVersionsHelper.BEFORE_1_9)
