@@ -51,7 +51,7 @@ def dlDepsC = [
 	new Tuple(
 		'https://repo.glowstone.net/repository/snapshots/net/glowstone/glowstone/2018.2.0-SNAPSHOT/glowstone-2018.2.0-20180209.231901-7.jar',
 		'glowstone-1.12.2-1.jar'
-	),
+	)
 ]
 
 def dlDepsS = [
@@ -62,7 +62,7 @@ def dlDepsS = [
 	new Tuple(
 		'https://build.true-games.org/job/UdpServerSocketChannel/11/artifact/target/UdpServerSocketChannel.jar',
 		'udpserver-2.jar'
-	),
+	)
 ]
 
 void dlDeps(def dlDeps, File dlDepsDir) {
