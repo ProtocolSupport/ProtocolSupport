@@ -24,3 +24,5 @@ dllibs/
 # IntelliJ
 .idea/
 *.iml
+/dllibsc/
+/dllibss/
