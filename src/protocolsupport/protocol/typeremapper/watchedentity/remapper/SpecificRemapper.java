@@ -99,8 +99,8 @@ public enum SpecificRemapper {
 				.ifPresent(baseflags -> entity.getDataCache().setPcBaseFlags(baseflags.getValue()));
 				getObject(original, DataWatcherObjectIndex.EntityLiving.HAND_USE, DataWatcherObjectByte.class)
 				.ifPresent(activehandflags -> {
-					entity.getDataCache().setPcBaseFlag(5, activehandflags.getValue());
-					remapped.put(0, new DataWatcherObjectByte(entity.getDataCache().getPcBaseFlags()));
+					entity.getDataCache().setBaseFlag(5, activehandflags.getValue());
+					remapped.put(0, new DataWatcherObjectByte(entity.getDataCache().getBaseFlags()));
 				});
 			}
 		}, ProtocolVersionsHelper.BEFORE_1_9)
