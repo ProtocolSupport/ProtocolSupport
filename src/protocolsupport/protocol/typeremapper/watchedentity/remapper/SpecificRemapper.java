@@ -96,7 +96,7 @@ public enum SpecificRemapper {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				getObject(original, DataWatcherObjectIndex.Entity.FLAGS, DataWatcherObjectByte.class)
-				.ifPresent(baseflags -> entity.getDataCache().setPcBaseFlags(baseflags.getValue()));
+				.ifPresent(baseflags -> entity.getDataCache().setBaseFlags(baseflags.getValue()));
 				getObject(original, DataWatcherObjectIndex.EntityLiving.HAND_USE, DataWatcherObjectByte.class)
 				.ifPresent(activehandflags -> {
 					entity.getDataCache().setBaseFlag(5, activehandflags.getValue());

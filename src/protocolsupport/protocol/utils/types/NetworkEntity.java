@@ -77,7 +77,7 @@ public class NetworkEntity {
 			baseFlags |= (value << (bitpos - 1));
 		}
 
-		public void setPcBaseFlags(byte baseFlags) {
+		public void setBaseFlags(byte baseFlags) {
 			this.baseFlags = baseFlags;
 		}
 
