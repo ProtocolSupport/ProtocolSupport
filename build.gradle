@@ -51,7 +51,7 @@ def dlDeps = [
 	),
 	new Tuple(
 		'https://build.true-games.org/job/RakNetServer/lastSuccessfulBuild/artifact/target/RakNetServer.jar',
-		'raknetserver-1.jar'
+		'raknetserver-2.jar'
 	)
 ]
 
