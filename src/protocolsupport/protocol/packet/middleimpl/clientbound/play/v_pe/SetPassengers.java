@@ -6,11 +6,14 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.procedure.TIntProcedure;
 import gnu.trove.set.hash.TIntHashSet;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.unsafe.pemetadata.PEMetaProviderSPI;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetPassengers;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.WatchedEntityCache;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.protocol.utils.minecraftdata.PocketData;
+import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData.PocketRiderInfo;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.NetworkEntity.DataCache;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
@@ -21,7 +24,6 @@ public class SetPassengers extends MiddleSetPassengers {
 
 	public static final int UNLINK = 0;
 	public static final int LINK = 1;
-	public static final int PASSENGER = 2;
 
 	private final TIntObjectHashMap<TIntHashSet> passengers = new TIntObjectHashMap<>();
 
@@ -40,23 +42,29 @@ public class SetPassengers extends MiddleSetPassengers {
 			for (int passengerId : passengersIds) {
 				NetworkEntity passenger = wecache.getWatchedEntity(passengerId);
 				if (passenger != null) {
-					// TODO: Fix and Update this: Rider positions.
+					//MOJANG.... WHYYYYY?!
+					if (vehicle.isOfType(NetworkEntityType.PIG)) { //If we don't do this we crash, but TODO: perhaps this can better be done at spawn.
+						packets.add(EntitySetAttributes.create(version, vehicle, EntitySetAttributes.createAttribute("minecraft:horse.jump_strength", 0.432084373616155))); 
+					}
 					DataCache data = passenger.getDataCache();
-					if (vehicle.isOfType(NetworkEntityType.PIG)) {
-						data.rider = new DataCache.Rider(new Vector(0.0, 2.8, 0.0), false);
-						packets.add(EntitySetAttributes.create(version, wecache.getSelfPlayerEntityId(), EntitySetAttributes.createAttribute("minecraft:horse.jump_strength", 0.432084373616155)));
-					} else if (vehicle.isOfType(NetworkEntityType.BASE_HORSE)) {
-						data.rider = new DataCache.Rider(new Vector(0.0, 2.3, -0.2), true, 180f, -180f);
-						packets.add(EntitySetAttributes.create(version, wecache.getSelfPlayerEntityId(), EntitySetAttributes.createAttribute("minecraft:horse.jump_strength", 0.966967527085333)));
-					} else {
-						data.rider = new DataCache.Rider(true);
+					if (data.isRiding() && data.getVehicleId() != vehicleId) {
+						//In case we are jumping from vehicle to vehicle.
+						packets.add(create(version, data.getVehicleId(), passengerId, UNLINK));
+					}
+					PocketRiderInfo rideInfo = PocketData.getPocketEntityData(vehicle.getType()).getRiderInfo();
+					if (rideInfo != null) {
+						System.out.println("Passenger Type: " + passenger.getType().toString() + "Veh pos + " + rideInfo.getPosition());
+						if (passenger.getType() == NetworkEntityType.PLAYER) {
+							float vehicleSize = PEMetaProviderSPI.getProvider().getSizeScale(vehicle.getUUID(), vehicle.getId(), vehicle.getType().getBukkitType()) * vehicle.getDataCache().getSizeModifier();
+							data.setRiderPosition(rideInfo.getPosition().multiply(new Vector(vehicleSize, vehicleSize, vehicleSize)));
+						} else {
+							data.setRiderPosition(new Vector(0, -0.125, 0));
+						}
+						data.setRotationlock(rideInfo.getRotationLock());
+						data.setVehicleId(vehicleId);
 					}
 					packets.add(EntityMetadata.createFaux(passenger, cache.getAttributesCache().getLocale(), version));
-
 					packets.add(create(version, vehicleId, passengerId, LINK));
-					if (wecache.getSelfPlayerEntityId() == passengerId) {
-						packets.add(create(version, vehicleId, 0, LINK));
-					}
 				}
 			}
 			prevPassengersIds.forEach(new TIntProcedure() {
@@ -65,13 +73,10 @@ public class SetPassengers extends MiddleSetPassengers {
 					if (!newPassengersIds.contains(passengerId)) {
 						NetworkEntity passenger = wecache.getWatchedEntity(passengerId);
 						if (passenger != null) {
-							// Also update meta.
-							passenger.getDataCache().rider = new DataCache.Rider(false);
+							//Also update meta.
+							passenger.getDataCache().setVehicleId(0);
 							packets.add(EntityMetadata.createFaux(passenger, cache.getAttributesCache().getLocale(), version));
 							packets.add(create(version, vehicleId, passengerId, UNLINK));
-							if (wecache.getSelfPlayerEntityId() == passengerId) {
-								packets.add(create(version, vehicleId, 0, UNLINK));
-							}
 						}
 					}
 					return true;

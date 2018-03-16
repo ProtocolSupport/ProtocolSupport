@@ -40,6 +40,16 @@ public class Position {
 	public void setZ(int z) {
 		this.z = z;
 	}
+	
+	public static Position fromBukkit(Location location) {
+		return new Position(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+	}
+
+	public void mod(int x, int y, int z) {
+		modifyX(x);
+		modifyY(y);
+		modifyZ(z);
+	}
 
 	public void modifyX(int cnt) {
 		x += cnt;

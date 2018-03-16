@@ -19,6 +19,7 @@ import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexV
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapperNumberToFloatLe;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapperNumberToInt;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapperNumberToSVarInt;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapperNumberToSVarLong;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapperNumberToShort;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapperStringClamp;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.PeFlagRemapper;
@@ -46,8 +47,10 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVecto
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3fLe;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3vi;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import protocolsupport.protocol.utils.minecraftdata.PocketData;
+import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData;
 import protocolsupport.protocol.utils.types.NetworkEntity;
-import protocolsupport.protocol.utils.types.NetworkEntity.DataCache.Rider;
+import protocolsupport.protocol.utils.types.NetworkEntity.DataCache;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.CollectionsUtils;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
@@ -60,31 +63,38 @@ public enum SpecificRemapper {
 		new Entry(new DataWatcherDataRemapper() {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
+				DataCache data = entity.getDataCache();
+				PocketEntityData pocketdata = PocketData.getPocketEntityData(entity.getType());
+				float entitySize = PEMetaProviderSPI.getProvider().getSizeScale(entity.getUUID(), entity.getId(), entity.getType().getBukkitType()) * data.getSizeModifier();
+				
 				// = PE Lead =
 				//Leashing is set in Entity Leash.
-				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_LEASHED, entity.getDataCache().attachedId != -1);
-				remapped.put(38, new DataWatcherObjectSVarLong(entity.getDataCache().attachedId));
+				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_LEASHED, data.getAttachedId() != -1);
+				remapped.put(38, new DataWatcherObjectSVarLong(data.getAttachedId()));
 
 				// = PE Nametag =
-				//Doing this for players makes nametags behave weird or only when close.
 				DataWatcherObject<?> nameTagWatcher = original.get(DataWatcherObjectIndex.Entity.NAMETAG);
+				//Doing this for players makes nametags behave weird or only when close.
 				boolean doNametag = ((nameTagWatcher != null) && (entity.getType() != NetworkEntityType.PLAYER));
 				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_SHOW_NAMETAG, doNametag);
-				if (doNametag) { remapped.put(4, nameTagWatcher); }
+				if (doNametag) { 
+					remapped.put(4, nameTagWatcher); 
+				}
 
 				// = PE Riding =
-				Rider rider = entity.getDataCache().rider;
-				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_RIDING, rider.riding);
-				if (rider.riding) {
-					//Extra data PE needs for vehicles. Set in setPassenger.
-					remapped.put(57, new DataWatcherObjectVector3fLe(rider.position));
-					remapped.put(58, new DataWatcherObjectByte((byte) ((rider.rotationLocked) ? 1 : 0)));
-					if(rider.rotationMax != null) {
-						remapped.put(59, new DataWatcherObjectFloatLe(rider.rotationMax));
+				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_COLLIDE, !data.isRiding());
+				if (data.isRiding()) {
+					System.out.println("RIDERPOSITION: " + data.getRiderPosition());
+					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_RIDING, true);
+					remapped.put(57, new DataWatcherObjectVector3fLe(data.getRiderPosition()));
+					remapped.put(58, new DataWatcherObjectByte((byte) ((data.getRotationlock() != null) ? 1 : 0)));
+					if (data.getRotationlock() != null) {
+						System.out.println("RIDERLOCK: " + data.getRotationlock());
+						remapped.put(59, new DataWatcherObjectFloatLe(data.getRotationlock()));
+						remapped.put(60, new DataWatcherObjectFloatLe(-data.getRotationlock()));
 					}
-					if(rider.rotationMin != null) {
-						remapped.put(60, new DataWatcherObjectFloatLe(rider.rotationMin));
-					}
+				} else {
+					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_RIDING, false);
 				}
 
 				// = PE Air =
@@ -93,11 +103,13 @@ public enum SpecificRemapper {
 					air.set(airWatcher.getValue() >= 300 ? 0 : airWatcher.getValue());
 				});
 				remapped.put(7, new DataWatcherObjectShortLe(air.get()));
+				remapped.put(43, new DataWatcherObjectShortLe(300));
 
 				// = PE Bounding Box =
-				//TODO: Put real numbers in? This will allow mobs to push PE player properly and such xD Perhaps necessary for PE Lighting?
-				remapped.put(54, new DataWatcherObjectFloatLe(0.6f)); //Width
-				remapped.put(55, new DataWatcherObjectFloatLe(1.8f)); //Height
+				if(pocketdata.getBoundingBox() != null) {
+					remapped.put(54, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getWidth() * entitySize));
+					remapped.put(55, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getHeight() * entitySize));
+				}
 
 				// = PE Interaction =
 				remapped.put(40, new DataWatcherObjectString(PEMetaProviderSPI.getProvider().getUseText(
@@ -105,9 +117,13 @@ public enum SpecificRemapper {
 				)));
 
 				// = PE Size =
-				remapped.put(39, new DataWatcherObjectFloatLe(PEMetaProviderSPI.getProvider().getSizeScale(
-					entity.getUUID(), entity.getId(), entity.getType().getBukkitType()
-				)));
+				remapped.put(39, new DataWatcherObjectFloatLe(entitySize));
+				
+				// = PE Interaction =
+				String interactText = PEMetaProviderSPI.getProvider().getUseText(entity.getUUID(), entity.getId(), entity.getType().getBukkitType());
+				if(interactText != null) {
+					remapped.put(40, new DataWatcherObjectString(interactText));
+				}
 
 			}}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new PeSimpleFlagAdder(
@@ -127,6 +143,9 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Entity.NO_GRAVITY, 5) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_2)
 	),
 	LIVING(NetworkEntityType.LIVING, SpecificRemapper.ENTITY,
+		new Entry(new PeSimpleFlagAdder(
+				new int[] {PeMetaBase.FLAG_CAN_CLIMB}, new boolean[] {true}
+		), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.EntityLiving.HAND_USE,
 				new int[] {1}, new int[] {PeMetaBase.FLAG_USING_ITEM}
 		), ProtocolVersion.MINECRAFT_PE),
@@ -163,7 +182,7 @@ public enum SpecificRemapper {
 	),
 	PLAYER(NetworkEntityType.PLAYER, SpecificRemapper.LIVING,
 		new Entry(new PeSimpleFlagAdder(
-				new int[] {PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG, PeMetaBase.FLAG_COLLIDE}, new boolean[] {true, true}
+				new int[] {PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG}, new boolean[] {true}
 			), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectFloat>(DataWatcherObjectIndex.Player.ADDITIONAL_HEARTS, 11) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_2),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectFloat>(DataWatcherObjectIndex.Player.ADDITIONAL_HEARTS, 10) {}, ProtocolVersionsHelper.ALL_1_9),
@@ -197,10 +216,10 @@ public enum SpecificRemapper {
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				getObject(original, DataWatcherObjectIndex.Ageable.AGE, DataWatcherObjectBoolean.class).ifPresent(boolWatcher -> {
 					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_BABY, boolWatcher.getValue());
-					entity.getDataCache().sizeModifier = (byte) (boolWatcher.getValue() ? 0.5 : 1);
+					entity.getDataCache().setSizeModifier(boolWatcher.getValue() ? 0.5f : 1f);
 				});
 				//Send scale -> avoid big mobs with floating heads.
-				remapped.put(39, new DataWatcherObjectFloatLe(entity.getDataCache().sizeModifier * PEMetaProviderSPI.getProvider().getSizeScale(
+				remapped.put(39, new DataWatcherObjectFloatLe(entity.getDataCache().getSizeModifier() * PEMetaProviderSPI.getProvider().getSizeScale(
 					entity.getUUID(), entity.getId(), entity.getType().getBukkitType()
 				)));
 			}}, ProtocolVersion.MINECRAFT_PE),
@@ -258,17 +277,19 @@ public enum SpecificRemapper {
 	CHICKEN(NetworkEntityType.CHICKEN, SpecificRemapper.AGEABLE),
 	SQUID(NetworkEntityType.SQUID, SpecificRemapper.INSENTIENT),
 	BASE_HORSE(NetworkEntityType.BASE_HORSE, SpecificRemapper.AGEABLE,
-		//TODO: Not thse flags? These just make the horse disappear :/ PeMetaBase.FLAG_REARING PeMetaBase.FLAG_BREATHING
 		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.BaseHorse.FLAGS,
-				new int[] {2, 3, 4}, new int[] {PeMetaBase.FLAG_TAMED, PeMetaBase.FLAG_SADDLED, PeMetaBase.FLAG_CHESTED}),
+				//TODO: Eating?
+				new int[] {2, 3, 3, 3, 4, /*5,*/ 6, 7}, new int[] {PeMetaBase.FLAG_TAMED, PeMetaBase.FLAG_SADDLED, PeMetaBase.FLAG_WASD_CONTROLLED, PeMetaBase.FLAG_CAN_POWER_JUMP, PeMetaBase.FLAG_IN_LOVE, /*PeMetaBase.FLAG_USING_ITEM,*/ PeMetaBase.FLAG_REARING, PeMetaBase.FLAG_BREATHING}),
 			ProtocolVersion.MINECRAFT_PE),
 		new Entry(new DataWatcherDataRemapper(){
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				getObject(original, DataWatcherObjectIndex.BaseHorse.FLAGS, DataWatcherObjectByte.class).ifPresent(byteWatcher -> {
-					if((byteWatcher.getValue() & (1 << (6-1))) != 0) {
-						//TODO: Store PE horseflags when neeeded.
-						remapped.put(16, new DataWatcherObjectVarInt(0b100000));
+					remapped.put(16, new DataWatcherObjectVarInt(((byteWatcher.getValue() & (1 << (6-1))) != 0) ? 0b100000 : 0));
+					if ((byteWatcher.getValue() & (1 << (2-1))) != 0) {
+						//When tamed set these weird properties to make the inventory work. FFS Mojang.
+						remapped.put(45, new DataWatcherObjectByte((byte) 12)); //Inventory Type
+						remapped.put(46, new DataWatcherObjectSVarInt(2)); //Animal slots (left side of the image)
 					}
 				});
 			}
@@ -300,6 +321,16 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.BattleHorse.ARMOR, 22), ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	CARGO_HORSE(NetworkEntityType.CARGO_HORSE, SpecificRemapper.BASE_HORSE,
+		new Entry(new DataWatcherDataRemapper() {
+			@Override
+			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
+				getObject(original, DataWatcherObjectIndex.CargoHorse.HAS_CHEST, DataWatcherObjectBoolean.class)
+				.ifPresent(boolWatcher -> {
+					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_CHESTED, boolWatcher.getValue());
+					remapped.put(47, new DataWatcherObjectSVarInt(boolWatcher.getValue() ? 3 : 0)); //Strength multiplier for chest size.
+				});
+			}
+		}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.CargoHorse.HAS_CHEST, 15) {}, ProtocolVersionsHelper.RANGE__1_11__1_12_2)
 	),
 	COMMON_HORSE(NetworkEntityType.COMMON_HORSE, SpecificRemapper.BATTLE_HORSE),
@@ -314,11 +345,13 @@ public enum SpecificRemapper {
 		new Entry(new FirstMetaDataAddRemapper(19, new DataWatcherObjectByte((byte) 4)), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_6_1, ProtocolVersion.MINECRAFT_1_8))
 	),
 	DONKEY(NetworkEntityType.DONKEY, SpecificRemapper.CARGO_HORSE,
+		new Entry(new FirstMetaDataAddRemapper(75, new DataWatcherObjectSVarInt(5)), ProtocolVersion.MINECRAFT_PE), //Fake strength for when chested.
 		new Entry(new FirstMetaDataAddRemapper(14, new DataWatcherObjectVarInt(1)), ProtocolVersion.MINECRAFT_1_10),
 		new Entry(new FirstMetaDataAddRemapper(13, new DataWatcherObjectVarInt(1)), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new FirstMetaDataAddRemapper(19, new DataWatcherObjectByte((byte) 1)), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_6_1, ProtocolVersion.MINECRAFT_1_8))
 	),
 	MULE(NetworkEntityType.MULE, SpecificRemapper.CARGO_HORSE,
+		new Entry(new FirstMetaDataAddRemapper(75, new DataWatcherObjectSVarInt(5)), ProtocolVersion.MINECRAFT_PE), //Fake strength for when chested.
 		new Entry(new FirstMetaDataAddRemapper(14, new DataWatcherObjectVarInt(2)), ProtocolVersion.MINECRAFT_1_10),
 		new Entry(new FirstMetaDataAddRemapper(13, new DataWatcherObjectVarInt(2)), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new FirstMetaDataAddRemapper(19, new DataWatcherObjectByte((byte) 2)), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_6_1, ProtocolVersion.MINECRAFT_1_8))
@@ -327,6 +360,13 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Lama.VARIANT, 2), ProtocolVersion.MINECRAFT_PE),
 		//new Entry(new IndexValueRemapperNumberToByte(DataWatcherObjectIndex.Lama.CARPET_COLOR, 3), ProtocolVersion.MINECRAFT_PE), TODO: Carpet Color. Done via slots instead?
 		new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Lama.STRENGTH, 75), ProtocolVersion.MINECRAFT_PE), //TODO: Should max strength also be added?
+		new Entry(new DataWatcherDataRemapper() {
+			@Override
+			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
+				getObject(original, DataWatcherObjectIndex.Lama.STRENGTH, DataWatcherObjectVarInt.class).ifPresent(intWatcher -> {
+					entity.getDataCache().setStrength(intWatcher.getValue());
+				});
+			}}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Lama.STRENGTH, 16) {}, ProtocolVersionsHelper.RANGE__1_11__1_12_2),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Lama.CARPET_COLOR, 17) {}, ProtocolVersionsHelper.RANGE__1_11__1_12_2),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Lama.VARIANT, 18) {}, ProtocolVersionsHelper.RANGE__1_11__1_12_2)
@@ -402,7 +442,11 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectBoolean>(DataWatcherObjectIndex.PolarBear.STANDING_UP, 13) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_2)
 	),
 	VILLAGER(NetworkEntityType.VILLAGER, SpecificRemapper.AGEABLE,
-		new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Villager.PROFESSION, 2), ProtocolVersion.MINECRAFT_PE),
+		new Entry(new IndexValueRemapper<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Villager.PROFESSION, 2) {
+			@Override
+			public DataWatcherObjectSVarInt remapValue(DataWatcherObjectVarInt object) {
+				return new DataWatcherObjectSVarInt(object.getValue() == 5 ? 0 : object.getValue()); //TODO: use regular remapper when nitwit is implemented.
+			}}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Villager.PROFESSION, 13) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_2),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Villager.PROFESSION, 12) {}, ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Villager.PROFESSION, 16), ProtocolVersionsHelper.BEFORE_1_9)
@@ -446,9 +490,14 @@ public enum SpecificRemapper {
 		new Entry(new DataWatcherDataRemapper() {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
-				remapped.put(39, new DataWatcherObjectFloatLe(6f * PEMetaProviderSPI.getProvider().getSizeScale(
-						entity.getUUID(), entity.getId(), entity.getType().getBukkitType()
-				))); //Send scale -> Giants are Giant Zombies in PE.
+				entity.getDataCache().setSizeModifier(6f);
+				float entitySize = 6f * PEMetaProviderSPI.getProvider().getSizeScale(entity.getUUID(), entity.getId(), entity.getType().getBukkitType());
+				remapped.put(39, new DataWatcherObjectFloatLe(entitySize)); //Send scale -> Giants are Giant Zombies in PE.
+				PocketEntityData pocketdata = PocketData.getPocketEntityData(entity.getType());
+				if (pocketdata.getBoundingBox() != null) {
+					remapped.put(54, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getWidth() * entitySize));
+					remapped.put(55, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getHeight() * entitySize));
+				}
 			}
 		}, ProtocolVersion.MINECRAFT_PE)),
 	SILVERFISH(NetworkEntityType.SILVERFISH, SpecificRemapper.INSENTIENT),
@@ -529,11 +578,15 @@ public enum SpecificRemapper {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				getObject(original, DataWatcherObjectIndex.Slime.SIZE, DataWatcherObjectVarInt.class).ifPresent(intWatcher -> {
-					entity.getDataCache().sizeModifier = (byte) ((int) intWatcher.getValue());
+					entity.getDataCache().setSizeModifier((int) intWatcher.getValue());
 				});
-				remapped.put(39, new DataWatcherObjectFloatLe(PEMetaProviderSPI.getProvider().getSizeScale(
-					entity.getUUID(), entity.getId(), entity.getType().getBukkitType()
-				) * entity.getDataCache().sizeModifier)); //Send slime scale.
+				float entitySize = PEMetaProviderSPI.getProvider().getSizeScale(entity.getUUID(), entity.getId(), entity.getType().getBukkitType()) * entity.getDataCache().getSizeModifier();
+				remapped.put(39, new DataWatcherObjectFloatLe(entitySize)); //Send slime scale.
+				PocketEntityData pocketdata = PocketData.getPocketEntityData(entity.getType());
+				if (pocketdata.getBoundingBox() != null) {
+					remapped.put(54, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getWidth() * entitySize));
+					remapped.put(55, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getHeight() * entitySize));
+				}
 			}}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Slime.SIZE, 12) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_2),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Slime.SIZE, 11) {}, ProtocolVersionsHelper.ALL_1_9),
@@ -586,9 +639,9 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Shulker.COLOR, 15) {}, ProtocolVersionsHelper.RANGE__1_11__1_12_2)
 	),
 	WITHER(NetworkEntityType.WITHER, SpecificRemapper.INSENTIENT,
-		new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Wither.TARGET1, 50), ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Wither.TARGET2, 51), ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Wither.TARGET3, 52), ProtocolVersion.MINECRAFT_PE),
+		new Entry(new IndexValueRemapperNumberToSVarLong(DataWatcherObjectIndex.Wither.TARGET1, 50), ProtocolVersion.MINECRAFT_PE),
+		new Entry(new IndexValueRemapperNumberToSVarLong(DataWatcherObjectIndex.Wither.TARGET2, 51), ProtocolVersion.MINECRAFT_PE),
+		new Entry(new IndexValueRemapperNumberToSVarLong(DataWatcherObjectIndex.Wither.TARGET3, 52), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Wither.INVULNERABLE_TIME, 49), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Wither.TARGET1, 12) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_2),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Wither.TARGET1, 11) {}, ProtocolVersionsHelper.ALL_1_9),
@@ -643,17 +696,19 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Parrot.VARIANT, 15) {}, ProtocolVersionsHelper.ALL_1_12)
 	),
 	ARMOR_STAND_MOB(NetworkEntityType.ARMOR_STAND_MOB, SpecificRemapper.ARMOR_STAND),
-	BOAT(NetworkEntityType.BOAT,
-		new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Boat.VARIANT, 4), ProtocolVersion.MINECRAFT_PE),
+	BOAT(NetworkEntityType.BOAT, SpecificRemapper.ENTITY,
+		new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Boat.VARIANT, 2), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapper<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Boat.LEFT_PADDLE, 13) {
 			@Override
 			public DataWatcherObject<?> remapValue(DataWatcherObjectBoolean object) {
-				return new DataWatcherObjectFloatLe(object.getValue() ? Float.MAX_VALUE: 0f);
+				//TODO: Actually increment and send correct 'paddletime'.
+				return new DataWatcherObjectFloatLe(object.getValue() ? 0.05f: 0f);
 			}},ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapper<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Boat.RIGHT_PADDLE, 14) {
 			@Override
 			public DataWatcherObject<?> remapValue(DataWatcherObjectBoolean object) {
-				return new DataWatcherObjectFloatLe(object.getValue() ? Float.MAX_VALUE: 0f);
+				//TODO: Actually increment and send correct 'paddletime'.
+				return new DataWatcherObjectFloatLe(object.getValue() ? 0.05f: 0f);
 			}},ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Boat.TIME_SINCE_LAST_HIT, 6) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_2),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Boat.TIME_SINCE_LAST_HIT, 5) {}, ProtocolVersionsHelper.ALL_1_9),
@@ -697,6 +752,12 @@ public enum SpecificRemapper {
 	EXP_BOTTLE(NetworkEntityType.EXP_BOTTLE, SpecificRemapper.ENTITY),
 	LEASH_KNOT(NetworkEntityType.LEASH_KNOT, SpecificRemapper.ENTITY),
 	FISHING_FLOAT(NetworkEntityType.FISHING_FLOAT, SpecificRemapper.ENTITY,
+		new Entry(new IndexValueRemapper<DataWatcherObjectVarInt>(DataWatcherObjectIndex.FinshingFloat.HOOKED_ENTITY, 5) {
+			@Override
+			public DataWatcherObject<?> remapValue(DataWatcherObjectVarInt object) {
+				return new DataWatcherObjectSVarLong(object.getValue() - 1);
+			}
+		}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.FinshingFloat.HOOKED_ENTITY, 6) {}, ProtocolVersionsHelper.RANGE__1_10__1_12_2),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.FinshingFloat.HOOKED_ENTITY, 5) {}, ProtocolVersionsHelper.ALL_1_9)
 	),
@@ -758,7 +819,16 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.MinecartFurnace.POWERED, 16), ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	MINECART_TNT(NetworkEntityType.MINECART_TNT, SpecificRemapper.MINECART),
-	MINECART_SPAWNER(NetworkEntityType.MINECART_MOB_SPAWNER, SpecificRemapper.MINECART),
+	MINECART_SPAWNER(NetworkEntityType.MINECART_MOB_SPAWNER, SpecificRemapper.MINECART,
+			new Entry(new DataWatcherDataRemapper() {
+				@Override
+				public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
+					//Simulate spawnerMinecart in Pocket.
+					remapped.put(16, new DataWatcherObjectSVarInt(52));
+					remapped.put(17, new DataWatcherObjectSVarInt(6));
+					remapped.put(18, new DataWatcherObjectByte((byte) 1));
+				}
+			}, ProtocolVersion.MINECRAFT_PE)),
 	MINECART_HOPPER(NetworkEntityType.MINECART_HOPPER, SpecificRemapper.MINECART),
 	MINECART_COMMAND(NetworkEntityType.MINECART_COMMAND, SpecificRemapper.MINECART,
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectString>(DataWatcherObjectIndex.MinecartCommand.COMMAND, 71) {}, ProtocolVersion.MINECRAFT_PE),

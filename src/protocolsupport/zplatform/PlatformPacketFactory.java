@@ -17,10 +17,16 @@ public interface PlatformPacketFactory {
 	public Object createInboundKeepAlivePacket(long keepAliveId);
 
 	public Object createInboundInventoryClosePacket();
+	
+	public Object createInboundInventoryConfirmTransactionPacket(int windowId, int actionNumber, boolean accepted);
 
 	public Object createInboundPluginMessagePacket(String tag, byte[] data);
 
+	public Object createInboundCustomPayloadPacket(String tag, byte[] data);
+
 	public Object createOutboundChatPacket(String message, int position);
+
+	public Object createOutboundUpdateChunkPacket(Chunk chunk);
 
 	public Object createTabHeaderFooterPacket(BaseComponent header, BaseComponent footer);
 
@@ -43,7 +49,7 @@ public interface PlatformPacketFactory {
 	public Object createSetCompressionPacket(int threshold);
 
 	public Object createBlockBreakSoundPacket(Position pos, Material type);
-
+	
 	public Object createStatusPongPacket(long pingId);
 
 	public Object createStausServerInfoPacket(List<String> profiles, ProtocolInfo info, String icon, String motd, int maxPlayers);

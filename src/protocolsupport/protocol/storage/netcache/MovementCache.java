@@ -59,11 +59,25 @@ public class MovementCache {
 	private double peClientZ;
 	private long pePositionLeniencyIncreaseTimestamp;
 	private double pePositionLeniency = 0.5;
+	private boolean peLeftPaddleTurning = false;
+	private boolean peRightPaddleTurning = false;
 
 	public void setPEClientPosition(double x, double y, double z) {
 		this.peClientX = x;
 		this.peClinetY = y;
 		this.peClientZ = z;
+	}
+
+	public double getPEClientX() {
+		return peClientX;
+	}
+
+	public double getPEClientY() {
+		return peClinetY;
+	}
+
+	public double getPEClientZ() {
+		return peClientZ;
 	}
 
 	public void updatePEPositionLeniency(double currentPEClientY) {
@@ -75,8 +89,24 @@ public class MovementCache {
 		}
 	}
 
-	public boolean isPositionAboveLeniency() {
+	public boolean isPEPositionAboveLeniency() {
 		return (Math.abs(peClientX - x) > pePositionLeniency) || (Math.abs(peClinetY - y) > pePositionLeniency) || (Math.abs(peClientZ - z) > pePositionLeniency);
+	}
+
+	public boolean isPELeftPaddleTurning() {
+		return peLeftPaddleTurning;
+	}
+
+	public void setPELeftPaddleTurning(boolean peLeftPaddleTurning) {
+		this.peLeftPaddleTurning = peLeftPaddleTurning;
+	}
+
+	public boolean isPERightPaddleTurning() {
+		return peRightPaddleTurning;
+	}
+
+	public void setPERightPaddleTurning(boolean peRightPaddleTurning) {
+		this.peRightPaddleTurning = peRightPaddleTurning;
 	}
 
 	@Override

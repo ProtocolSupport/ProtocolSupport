@@ -111,6 +111,16 @@ public class Utils {
 		}
 		return (number + base) - mod;
 	}
+	
+	public static int shortDegree(int number, int system) {
+		if (number <= (system/-2)) { number += system; } 
+		if (number > (system/2)) { number -= system; }
+		return number;
+	}
+
+	public static int roundDown(int n, int m) {
+		return n >= 0 ? (n / m) * m : ((n - m + 1) / m) * m;
+	}
 
 	public static <T> T getJavaPropertyValue(String property, T defaultValue, Function<String, T> converter) {
 		return getRawJavaPropertyValue("protocolsupport."+property, defaultValue, converter);

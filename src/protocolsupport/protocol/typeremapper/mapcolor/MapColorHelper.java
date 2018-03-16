@@ -17,10 +17,10 @@ public class MapColorHelper {
 	}
 
 	public static int getARGB(IMapColor color) {
-		return toARGB((byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue(), (byte) 0xff);
+		return toARGB((byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue(), color.getId() <= 3 ? (byte) 0 : (byte) 0xff);
 	}
 
-	private static int toARGB(byte r, byte g, byte b, byte a) {
+	public static int toARGB(byte r, byte g, byte b, byte a) {
 		long result = r & 0xff;
 		result |= (g & 0xff) << 8;
 		result |= (b & 0xff) << 16;

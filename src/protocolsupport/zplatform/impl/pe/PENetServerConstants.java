@@ -14,10 +14,10 @@ public class PENetServerConstants {
 		public String getServerInfo(Channel channel) {
 			//TODO: fake pspe packets for ping passthrough
 			return String.join(";",
-				"MCPE",
-				Bukkit.getMotd().replace(";", ":"),
-				String.valueOf(ProtocolVersion.MINECRAFT_PE.getId()), POCKET_VERSION,
-				String.valueOf(Bukkit.getOnlinePlayers().size()), String.valueOf(Bukkit.getMaxPlayers())
+					"MCPE",
+					Bukkit.getMotd().replace(";", ":"),
+					String.valueOf(ProtocolVersion.MINECRAFT_PE.getId()), POCKET_VERSION,
+					String.valueOf(Bukkit.getOnlinePlayers().size()), String.valueOf(Bukkit.getMaxPlayers())
 			);
 		}
 		@Override

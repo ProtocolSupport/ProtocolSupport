@@ -24,9 +24,7 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 		type = WindowType.getById(StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC, 32));
 		title = ChatAPI.fromJSON(StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC));
 		slots = serverdata.readUnsignedByte();
-		if (type == WindowType.HORSE) {
-			horseId = serverdata.readInt();
-		}
+		horseId = type == WindowType.HORSE ? serverdata.readInt() : -1;
 	}
 
 	@Override
@@ -35,7 +33,30 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 			connection.receivePacket(ServerPlatform.get().getPacketFactory().createInboundInventoryClosePacket());
 			return false;
 		} else {
-			cache.getWindowCache().setOpenedWindow(type);
+			int cacheSlots;
+			switch(type) {
+				case ANVIL: {
+					cacheSlots = 3;
+					break;
+				}
+				case BEACON: {
+					cacheSlots = 1;
+					break;
+				}
+				case CRAFTING_TABLE: {
+					cacheSlots = 10;
+					break;
+				}
+				case ENCHANT: {
+					cacheSlots = 2;
+					break;
+				}
+				default: {
+					cacheSlots = slots;
+					break;
+				}
+			}
+			cache.getWindowCache().setOpenedWindow(type, windowId, cacheSlots, horseId);
 			return true;
 		}
 	}

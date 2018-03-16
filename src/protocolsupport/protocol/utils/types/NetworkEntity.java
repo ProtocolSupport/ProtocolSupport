@@ -1,11 +1,11 @@
 package protocolsupport.protocol.utils.types;
 
+import protocolsupport.utils.Utils;
+import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+
 import java.util.UUID;
 
 import org.bukkit.util.Vector;
-
-import protocolsupport.utils.Utils;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 public class NetworkEntity {
 
@@ -96,18 +96,49 @@ public class NetworkEntity {
 			this.firstMeta = firstMeta;
 		}
 
+		public boolean isFirstMeta() {
+			return firstMeta;
+		}
+
+		public void setFirstMeta(boolean firstMeta) {
+			this.firstMeta = firstMeta;
+		}
+
 		//Cache for PE shizzles.
 		private long peBaseFlags = 0;
-		public byte sizeModifier = 1;
-		public int attachedId = -1; //Leashed? Data is send in pocket meta, but might be useful to store for other things.
-		public Rider rider = new Rider(false);
+		private float sizeModifier = 1f;
+		private int attachedId = -1;
+		private Byte headRotation = null;
+		private int vehicleId = 0;
+		private Vector riderPosition = null;
+		private Float rotationlock = null;
+		private float maxHealth = 20f;
+		private int strength = 0;
 		private ItemStackWrapper helmet = ItemStackWrapper.NULL;
 		private ItemStackWrapper chestplate = ItemStackWrapper.NULL;
 		private ItemStackWrapper leggings = ItemStackWrapper.NULL;
 		private ItemStackWrapper boots = ItemStackWrapper.NULL;
-
+		private ItemStackWrapper hand = ItemStackWrapper.NULL;
+		private ItemStackWrapper offhand = ItemStackWrapper.NULL;
+		
 		public long getPeBaseFlags() {
 			return peBaseFlags;
+		}
+
+		public float getSizeModifier() {
+			return sizeModifier;
+		}
+
+		public void setSizeModifier(float sizeModifier) {
+			this.sizeModifier = sizeModifier;
+		}
+
+		public int getAttachedId() {
+			return attachedId;
+		}
+
+		public void setAttachedId(int attachedId) {
+			this.attachedId = attachedId;
 		}
 
 		public boolean getPeBaseFlag(int bitpos) {
@@ -150,34 +181,73 @@ public class NetworkEntity {
 		}
 
 		public ItemStackWrapper getBoots() { return this.boots; }
+		
+		public void setHand(ItemStackWrapper hand) {
+			this.hand = hand;
+		}
 
-		public static class Rider {
-			public boolean riding = false;
-			public Vector position = new Vector(0, 0.6, 0);
-			public boolean rotationLocked = false;
-			public Float rotationMin;
-			public Float rotationMax;
+		public ItemStackWrapper getHand() { return this.hand; }
+		
+		public void setOffHand(ItemStackWrapper offhand) {
+			this.offhand = offhand;
+		}
 
-			public Rider(boolean riding) {
-				this.riding = riding;
+		public ItemStackWrapper getOffhand() { return this.offhand; }
+		
+		public void setHeadRotation(byte headRot) {
+			this.headRotation = headRot;
+		}
+		
+		public byte getHeadRotation(byte normalRotation) {
+			if (headRotation != null) {
+				return headRotation;
 			}
+			return normalRotation;
+		}
+		
+		public int getVehicleId() {
+			return vehicleId;
+		}
+		
+		public boolean isRiding() {
+			return vehicleId != 0;
+		}
 
-			public Rider(Vector position, boolean rotationLocked, float rotationMax, float rotationMin) {
-				this(true, position, rotationLocked, rotationMax, rotationMin);
-			}
+		public void setVehicleId(int vehicleId) {
+			this.vehicleId = vehicleId;
+		}
 
-			public Rider(Vector position, boolean rotationLocked) {
-				this(true, position, rotationLocked, null, null);
-			}
+		public Vector getRiderPosition() {
+			return riderPosition;
+		}
 
-			public Rider(boolean riding, Vector position, boolean rotationLocked, Float rotationMax, Float rotationMin) {
-				this.riding = riding;
-				this.position = position;
-				this.rotationLocked = rotationLocked;
-				this.rotationMax = rotationMax;
-				this.rotationMin = rotationMin;
-			}
-		};
+		public void setRiderPosition(Vector riderPosition) {
+			this.riderPosition = riderPosition;
+		}
+
+		public Float getRotationlock() {
+			return rotationlock;
+		}
+
+		public void setRotationlock(Float rotationlock) {
+			this.rotationlock = rotationlock;
+		}
+
+		public float getMaxHealth() {
+			return maxHealth;
+		}
+
+		public void setMaxHealth(float maxHealth) {
+			this.maxHealth = maxHealth;
+		}
+
+		public int getStrength() {
+			return strength;
+		}
+
+		public void setStrength(int strength) {
+			this.strength = strength;
+		}
 
 		@Override
 		public String toString() {

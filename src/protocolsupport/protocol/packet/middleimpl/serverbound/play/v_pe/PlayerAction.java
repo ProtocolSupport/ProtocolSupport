@@ -51,6 +51,7 @@ public class PlayerAction extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
+		int selfId = cache.getWatchedEntityCache().getSelfPlayerEntityId();
 		switch (action) {
 			case RESPAWN1:
 			case DIMENSION_CHANGE: {
@@ -82,22 +83,22 @@ public class PlayerAction extends ServerBoundMiddlePacket {
 				return RecyclableSingletonList.create(MiddleBlockDig.create(MiddleBlockDig.Action.FINISH_USE, new Position(0, 0, 0), 255));
 			}
 			case START_SPRINT: {
-				return RecyclableSingletonList.create(MiddleEntityAction.create(cache.getWatchedEntityCache().getSelfPlayerEntityId(), MiddleEntityAction.Action.START_SPRINT, 0));
+				return RecyclableSingletonList.create(MiddleEntityAction.create(selfId, MiddleEntityAction.Action.START_SPRINT, 0));
 			}
 			case STOP_SPRINT: {
-				return RecyclableSingletonList.create(MiddleEntityAction.create(cache.getWatchedEntityCache().getSelfPlayerEntityId(), MiddleEntityAction.Action.STOP_SPRINT, 0));
+				return RecyclableSingletonList.create(MiddleEntityAction.create(selfId, MiddleEntityAction.Action.STOP_SPRINT, 0));
 			}
 			case START_SNEAK: {
-				return RecyclableSingletonList.create(MiddleEntityAction.create(cache.getWatchedEntityCache().getSelfPlayerEntityId(), MiddleEntityAction.Action.START_SNEAK, 0));
+				return RecyclableSingletonList.create(MiddleEntityAction.create(selfId, MiddleEntityAction.Action.START_SNEAK, 0));
 			}
 			case STOP_SNEAK: {
-				return RecyclableSingletonList.create(MiddleEntityAction.create(cache.getWatchedEntityCache().getSelfPlayerEntityId(), MiddleEntityAction.Action.STOP_SNEAK, 0));
+				return RecyclableSingletonList.create(MiddleEntityAction.create(selfId, MiddleEntityAction.Action.STOP_SNEAK, 0));
 			}
 			case STOP_SLEEPING: {
-				return RecyclableSingletonList.create(MiddleEntityAction.create(cache.getWatchedEntityCache().getSelfPlayerEntityId(), MiddleEntityAction.Action.LEAVE_BED, 0));
+				return RecyclableSingletonList.create(MiddleEntityAction.create(selfId, MiddleEntityAction.Action.LEAVE_BED, 0));
 			}
 			case START_GLIDE: {
-				return RecyclableSingletonList.create(MiddleEntityAction.create(cache.getWatchedEntityCache().getSelfPlayerEntityId(), MiddleEntityAction.Action.START_ELYTRA_FLY, 0));
+				return RecyclableSingletonList.create(MiddleEntityAction.create(selfId, MiddleEntityAction.Action.START_ELYTRA_FLY, 0));
 			}
 			default: {
 				return RecyclableEmptyList.get();

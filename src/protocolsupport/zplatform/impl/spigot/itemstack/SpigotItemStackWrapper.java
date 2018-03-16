@@ -21,6 +21,10 @@ public class SpigotItemStackWrapper extends ItemStackWrapper {
 		return new SpigotItemStackWrapper(new ItemStack(Item.getById(typeId)));
 	}
 
+	public static ItemStackWrapper create(ItemStack stack) {
+		return new SpigotItemStackWrapper(stack);
+	}
+
 	@Override
 	public org.bukkit.inventory.ItemStack asBukkitMirror() {
 		return CraftItemStack.asCraftMirror(itemstack);

@@ -18,6 +18,10 @@ public class DataWatcherDataRemapper {
 		originalMetadata.clear();
 		remappedMetadata.clear();
 		DataWatcherDeserializer.decodeDataTo(serverdata, ProtocolVersionsHelper.LATEST_PC, locale, originalMetadata);
+		remap(version, entity);
+	}
+	
+	public void remap(ProtocolVersion version, NetworkEntity entity) {
 		if (entity != null) {
 			SpecificRemapper.fromWatchedType(entity.getType()).getRemaps(version)
 			.forEach(remapper -> remapper.remap(entity, originalMetadata, remappedMetadata));

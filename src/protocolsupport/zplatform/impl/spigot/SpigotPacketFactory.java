@@ -61,6 +61,20 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	public Object createInboundInventoryClosePacket() {
 		return new PacketPlayInCloseWindow();
 	}
+	
+	@Override
+	public Object createInboundInventoryConfirmTransactionPacket(int windowId, int actionNumber, boolean accepted) {
+		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer());
+		serializer.writeByte(windowId);
+		serializer.writeShort(actionNumber);
+		serializer.writeByte(accepted ? 1 : 0);
+		PacketPlayInTransaction packet = new PacketPlayInTransaction();
+		try {
+			packet.a(serializer);
+		} catch (IOException e) {
+		}
+		return packet;
+	}
 
 	@Override
 	public Object createInboundPluginMessagePacket(String tag, byte[] data) {
@@ -73,6 +87,24 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 		} catch (IOException e) {
 		}
 		return packet;
+	}
+	
+	@Override
+	public Object createInboundCustomPayloadPacket(String tag, byte[] data) {
+		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer());
+		StringSerializer.writeString(serializer, ProtocolVersionsHelper.LATEST_PC, tag);
+		serializer.writeBytes(data);
+		PacketPlayInCustomPayload packet = new PacketPlayInCustomPayload();
+		try {
+			packet.a(serializer);
+		} catch (IOException e) {
+		}
+		return packet;
+	}
+	
+	@Override
+	public Object createOutboundUpdateChunkPacket(Chunk chunk) {
+		return new PacketPlayOutMapChunk(((CraftChunk) chunk).getHandle(), 0xFFFF);
 	}
 
 	@Override
@@ -151,7 +183,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 			blockdataentry.getPitch() * 0.8F
 		);
 	}
-
+	
 	@Override
 	public Object createStatusPongPacket(long pingId) {
 		return new PacketStatusOutPong(pingId);

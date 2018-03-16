@@ -13,5 +13,5 @@ public abstract class MiddleGameStateChange extends ClientBoundMiddlePacket {
 		type = serverdata.readByte();
 		value = serverdata.readFloat();
 	}
-
+	
 }

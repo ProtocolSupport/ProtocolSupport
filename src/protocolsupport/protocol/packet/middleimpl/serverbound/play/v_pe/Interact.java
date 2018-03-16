@@ -3,12 +3,13 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 import org.bukkit.util.Vector;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
+import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;import protocolsupport.protocol.packet.middle.serverbound.play.MiddleEntityAction;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSteerVehicle;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableEmptyList;
+import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class Interact extends ServerBoundMiddlePacket {
 
@@ -31,19 +32,17 @@ public class Interact extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 		switch (peAction) {
 			case LEAVE_VEHICLE: {
-				packets.add(MiddleSteerVehicle.create(0, 0, 0x2)); // 0x2 = unmount vehicle
-				break;
+				return RecyclableSingletonList.create(MiddleSteerVehicle.create(0, 0, 0x2)); // 0x2 = unmount vehicle
 			}
 			case MOUSE_OVER: {
 				break;
 			}
 			case OPEN_INVENTORY: {
-				break;
+				return RecyclableSingletonList.create(MiddleEntityAction.create(cache.getWatchedEntityCache().getSelfPlayerEntityId(), MiddleEntityAction.Action.OPEN_HORSE_INV, 0));
 			}
 		}
-		return packets;
+		return RecyclableEmptyList.get();
 	}
 }

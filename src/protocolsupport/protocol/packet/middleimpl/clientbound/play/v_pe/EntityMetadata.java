@@ -7,43 +7,64 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.PEItemEntityCache.ItemEntityInfo;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.protocol.typeremapper.watchedentity.DataWatcherDataRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectSVarLong;
 import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
+import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 
 public class EntityMetadata extends MiddleEntityMetadata {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
+		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
+		ProtocolVersion version = connection.getVersion();
+		String locale = cache.getAttributesCache().getLocale();
 		NetworkEntity entity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
-		if (entity == null) {
-			return RecyclableEmptyList.get();
+		if(entity == null) {
+			return packets;
 		}
-		switch (entity.getType()) {
+		switch(entity.getType()) {
 			case ITEM: {
-				RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 				DataWatcherObject<?> itemWatcher = metadata.getOriginal().get(DataWatcherObjectIndex.Item.ITEM);
 				if (itemWatcher != null) {
 					ItemEntityInfo i = cache.getPEItemEntityCache().getItem(entityId);
 					if (i != null) {
-						packets.addAll(i.updateItem(connection.getVersion(), (ItemStackWrapper) metadata.getOriginal().get(DataWatcherObjectIndex.Item.ITEM).getValue()));
+						packets.addAll(i.updateItem(version, (ItemStackWrapper) metadata.getOriginal().get(DataWatcherObjectIndex.Item.ITEM).getValue()));
 					}
 				}
-				packets.add(create(entity, cache.getAttributesCache().getLocale(), metadata.getRemapped(), connection.getVersion()));
-				return packets;
+				break;
 			}
 			default: {
-				return RecyclableSingletonList.create(create(entity, cache.getAttributesCache().getLocale(), metadata.getRemapped(), connection.getVersion()));
+				if (entity.isOfType(NetworkEntityType.LIVING)) {
+					DataWatcherObject<?> healthWatcher = metadata.getOriginal().get(DataWatcherObjectIndex.EntityLiving.HEALTH);
+					if (healthWatcher != null) {
+						packets.add(EntitySetAttributes.create(version, entity, EntitySetAttributes.createAttribute("minecraft:health", Math.ceil((Float) healthWatcher.getValue()))));
+					}
+				}
+				if (entity.isOfType(NetworkEntityType.BATTLE_HORSE)) {
+					DataWatcherObject<?> armorWatcher = metadata.getOriginal().get(DataWatcherObjectIndex.BattleHorse.ARMOR);
+					if (armorWatcher != null) {
+						int type = (Integer) armorWatcher.getValue();
+						packets.add(EntityEquipment.create(version, locale, entityId, 
+								ItemStackWrapper.NULL,
+								type == 0 ? ItemStackWrapper.NULL : ServerPlatform.get().getWrapperFactory().createItemStack(416 + (Integer) armorWatcher.getValue()), 
+								ItemStackWrapper.NULL, 
+								ItemStackWrapper.NULL
+							));
+					}
+				}
+				packets.add(create(entity, locale, metadata.getRemapped(), version));
 			}
 		}
+		return packets;
 	}
 
 	public static ClientBoundPacketData createFaux(NetworkEntity entity, String locale, ArrayMap<DataWatcherObject<?>> fauxMeta, ProtocolVersion version) {
@@ -51,7 +72,9 @@ public class EntityMetadata extends MiddleEntityMetadata {
 	}
 
 	public static ClientBoundPacketData createFaux(NetworkEntity entity, String locale, ProtocolVersion version) {
-		return create(entity, locale, transform(entity, new ArrayMap<DataWatcherObject<?>>(76), version), version);
+		DataWatcherDataRemapper faux = new DataWatcherDataRemapper();
+		faux.remap(version, entity);
+		return create(entity, locale, transform(entity, faux.getRemapped(), version), version);
 	}
 
 	public static ArrayMap<DataWatcherObject<?>> transform(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> peMetadata, ProtocolVersion version) {
@@ -67,7 +90,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 	}
 
 	public static void encodeMeta(ByteBuf to, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> peMetadata) {
-		//For now. Iterate two times :P
+		//For now. Iterate two times :P TODO: Fake varint, if that's possible.
 		int entries = 0;
 		for (int key = peMetadata.getMinKey(); key < peMetadata.getMaxKey(); key++) {
 			DataWatcherObject<?> object = peMetadata.get(key);
@@ -75,7 +98,6 @@ public class EntityMetadata extends MiddleEntityMetadata {
 				entries++;
 			}
 		}
-
 		//We stored that. Now write the length first and then go.
 		VarNumberSerializer.writeVarInt(to, entries);
 		for (int key = peMetadata.getMinKey(); key < peMetadata.getMaxKey(); key++) {
@@ -84,6 +106,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 				VarNumberSerializer.writeVarInt(to, key);
 				VarNumberSerializer.writeVarInt(to, DataWatcherObjectIdRegistry.getTypeId(object, version));
 				object.writeToStream(to, version, locale);
+				entries++;
 			}
 		}
 	}
@@ -96,8 +119,8 @@ public class EntityMetadata extends MiddleEntityMetadata {
 			return id++;
 		}
 
-		public static int FLAG_ON_FIRE = takeNextId(); //1
-		public static int FLAG_SNEAKING = takeNextId();
+		public static int FLAG_ON_FIRE = takeNextId(); //0
+		public static int FLAG_SNEAKING = takeNextId(); //1
 		public static int FLAG_RIDING = takeNextId();
 		public static int FLAG_SPRINTING = takeNextId();
 		public static int FLAG_USING_ITEM = takeNextId();
@@ -105,18 +128,18 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		public static int FLAG_TEMPTED = takeNextId();
 		public static int FLAG_IN_LOVE = takeNextId();
 		public static int FLAG_SADDLED = takeNextId();
-		public static int FLAG_POWERED = takeNextId(); //10
-		public static int FLAG_IGNITED = takeNextId();
+		public static int FLAG_POWERED = takeNextId(); 
+		public static int FLAG_IGNITED = takeNextId(); //10
 		public static int FLAG_BABY = takeNextId();
+		public static int FLAG_CONVERTING = takeNextId();
 		public static int FLAG_CRITICAL = takeNextId();
 		public static int FLAG_SHOW_NAMETAG = takeNextId();
 		public static int FLAG_ALWAYS_SHOW_NAMETAG = takeNextId();
 		public static int FLAG_NO_AI = takeNextId();
 		public static int FLAG_SILENT = takeNextId();
-		public static int FLAG_unknown1 = takeNextId();
 		public static int FLAG_CLIMBING = takeNextId();
-		public static int FLAG_CAN_CLIMB = takeNextId(); //20
-		public static int FLAG_CAN_SWIM = takeNextId();
+		public static int FLAG_CAN_CLIMB = takeNextId(); 
+		public static int FLAG_CAN_SWIM = takeNextId(); //20
 		public static int FLAG_CAN_FLY = takeNextId();
 		public static int FLAG_RESTING = takeNextId();
 		public static int FLAG_SITTING = takeNextId();
@@ -125,8 +148,8 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		public static int FLAG_CHARGED = takeNextId();
 		public static int FLAG_TAMED = takeNextId();
 		public static int FLAG_LEASHED = takeNextId();
-		public static int FLAG_SHEARED = takeNextId(); //30
-		public static int FLAG_GLIDING = takeNextId();
+		public static int FLAG_SHEARED = takeNextId();
+		public static int FLAG_GLIDING = takeNextId(); //30
 		public static int FLAG_ELDER = takeNextId();
 		public static int FLAG_MOVING = takeNextId();
 		public static int FLAG_BREATHING = takeNextId();
@@ -135,16 +158,16 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		public static int FLAG_SHOW_BASE = takeNextId();
 		public static int FLAG_REARING = takeNextId();
 		public static int FLAG_VIBRATING = takeNextId();
-		public static int FLAG_IDLING = takeNextId(); //40
-		public static int FLAG_EVOKER_SPELL = takeNextId();
+		public static int FLAG_IDLING = takeNextId();
+		public static int FLAG_EVOKER_SPELL = takeNextId(); //40
 		public static int FLAG_CHARGE_ATTACK = takeNextId();
 		public static int FLAG_WASD_CONTROLLED = takeNextId();
-		public static int FLAG_unknown2 = takeNextId();
+		public static int FLAG_CAN_POWER_JUMP = takeNextId();
 		public static int FLAG_LINGER = takeNextId();
 		public static int FLAG_COLLIDE = takeNextId();
 		public static int FLAG_GRAVITY = takeNextId();
-		public static int FLAG_unknown3 = takeNextId();
-		public static int FLAG_DANCING = takeNextId();
+		public static int FLAG_FIRE_IMMUNE = takeNextId();
+		public static int FLAG_DANCING = takeNextId(); //48
 
 	}
 }

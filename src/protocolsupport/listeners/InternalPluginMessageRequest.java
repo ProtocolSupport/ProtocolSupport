@@ -35,7 +35,7 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 
 	@SuppressWarnings("unchecked")
 	protected static <T extends PluginMessageData> void register(Class<T> dataclass, BiConsumer<Connection, T> handler) {
-		subchannelToClass.put(dataclass.getName(), dataclass);
+		subchannelToClass.put(dataclass.getSimpleName(), dataclass);
 		handlers.put(dataclass, (BiConsumer<Connection, PluginMessageData>) handler);
 	}
 
@@ -51,7 +51,6 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 					request.getPosition(), MinecraftData.getBlockStateFromIdAndData(block.getTypeId(), block.getData()))
 			);
 		});
-
 	}
 
 	@NeedsNoArgConstructor
@@ -113,7 +112,7 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 
 		@Override
 		protected void read(ByteBuf from) {
-			this.position = PositionSerializer.readPosition(from);
+			PositionSerializer.readPositionTo(from, position);
 		}
 
 		@Override
@@ -131,7 +130,7 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 		ByteBuf buf = Allocator.allocateBuffer();
 		try {
 			MiscSerializer.writeUUID(buf, ProtocolVersionsHelper.LATEST_PC, uuid);
-			StringSerializer.writeString(buf, ProtocolVersionsHelper.LATEST_PC, (data.getClass().getName()));
+			StringSerializer.writeString(buf, ProtocolVersionsHelper.LATEST_PC, (data.getClass().getSimpleName()));
 			data.write(buf);
 			connection.receivePacket(ServerPlatform.get().getPacketFactory().createInboundPluginMessagePacket(TAG, MiscSerializer.readAllBytes(buf)));
 		} finally {

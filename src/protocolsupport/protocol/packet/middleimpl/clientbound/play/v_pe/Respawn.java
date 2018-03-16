@@ -9,6 +9,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSu
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.Environment;
+import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -23,11 +24,11 @@ public class Respawn extends MiddleRespawn {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		create(connection.getVersion(), dimension, cache.getWatchedEntityCache().getSelfPlayerEntityId(), cache.getAttributesCache().getPEFakeSetPositionY(), packets);
+		create(connection.getVersion(), dimension, cache.getWatchedEntityCache().getSelfPlayer(), cache.getAttributesCache().getPEFakeSetPositionY(), packets);
 		return packets;
 	}
 
-	public static void create(ProtocolVersion version, Environment dimension, int playerEntityId, double posY, RecyclableCollection<ClientBoundPacketData> packets) {
+	public static void create(ProtocolVersion version, Environment dimension, NetworkEntity player, double posY, RecyclableCollection<ClientBoundPacketData> packets) {
 		ClientBoundPacketData changedim = ClientBoundPacketData.create(PEPacketIDs.CHANGE_DIMENSION, version);
 		VarNumberSerializer.writeSVarInt(changedim, getPeDimensionId(dimension));
 		changedim.writeFloatLE(0); //x
@@ -36,16 +37,16 @@ public class Respawn extends MiddleRespawn {
 		changedim.writeBoolean(true); //respawn
 		packets.add(changedim);
 		packets.add(LoginSuccess.createPlayStatus(version, 3));
-		addFakeChunksAndPos(version, playerEntityId, posY, packets);
+		addFakeChunksAndPos(version, player, posY, packets);
 	}
 
-	public static void addFakeChunksAndPos(ProtocolVersion version, int playerEntityId, double posY, RecyclableCollection<ClientBoundPacketData> packets) {
+	public static void addFakeChunksAndPos(ProtocolVersion version, NetworkEntity player, double posY, RecyclableCollection<ClientBoundPacketData> packets) {
 		for (int x = -2; x <= 2; x++) {
 			for (int z = -2; z <= 2; z++) {
 				packets.add(Chunk.createEmptyChunk(version, x, z));
 			}
 		}
-		packets.add(Position.create(version, playerEntityId, 0, posY, 0, 0, 0, Position.ANIMATION_MODE_TELEPORT));
+		packets.add(Position.create(version, player, 0, posY, 0, 0, 0, Position.ANIMATION_MODE_TELEPORT));
 	}
 
 	public static int getPeDimensionId(Environment dimId) {

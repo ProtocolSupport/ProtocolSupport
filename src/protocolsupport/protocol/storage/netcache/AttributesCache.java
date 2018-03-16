@@ -6,6 +6,7 @@ import org.apache.commons.lang3.Validate;
 
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.types.Environment;
+import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.utils.Utils;
 
 public class AttributesCache {
@@ -18,6 +19,10 @@ public class AttributesCache {
 
 	public boolean hasSkyLightInCurrentDimension() {
 		return dimension == Environment.OVERWORLD;
+	}
+
+	public Environment getDimension() {
+		return dimension;
 	}
 
 
@@ -68,15 +73,15 @@ public class AttributesCache {
 
 
 
-	private int peGameMode = 0;
+	private GameMode peGameMode = GameMode.SURVIVAL;
 	private boolean peCanFly = false;
 	private boolean peIsFlying = false;
 
-	public void setPEGameMode(int gamemode) {
+	public void setPEGameMode(GameMode gamemode) {
 		this.peGameMode = gamemode;
 	}
 
-	public int getPEGameMode() {
+	public GameMode getPEGameMode() {
 		return this.peGameMode;
 	}
 

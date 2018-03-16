@@ -11,6 +11,7 @@ import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
+import protocolsupport.protocol.utils.types.Position;
 
 public class BlockChangeSingle extends MiddleBlockChangeSingle {
 
@@ -22,10 +23,11 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
+		System.out.println("single block!");
 		return RecyclableSingletonList.create(BlockChangeSingle.create(connection.getVersion(), position, id));
 	}
 
-	public static ClientBoundPacketData create(ProtocolVersion version, protocolsupport.protocol.utils.types.Position position, int state) {
+	public static ClientBoundPacketData create(ProtocolVersion version, Position position, int state) {
 		state = PEDataValues.BLOCK_ID.getRemap(IdRemapper.BLOCK.getTable(version).getRemap(state));
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.UPDATE_BLOCK, version);
 		PositionSerializer.writePEPosition(serializer, position);

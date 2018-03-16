@@ -26,6 +26,10 @@ public class WatchedEntityCache {
 		return player != null ? player.getId() : -1;
 	}
 
+	public boolean isSelf(int eId) {
+		return getSelfPlayerEntityId() == eId;
+	}
+
 	private void readdSelfPlayer() {
 		if (player != null) {
 			addWatchedEntity(player);

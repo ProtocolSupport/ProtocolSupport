@@ -46,7 +46,7 @@ public abstract class MiddleUseEntity extends ServerBoundMiddlePacket {
 		return creator;
 	}
 
-	protected enum Action {
+	public enum Action {
 		INTERACT, ATTACK, INTERACT_AT;
 		public static final EnumConstantLookups.EnumConstantLookup<Action> CONSTANT_LOOKUP = new EnumConstantLookups.EnumConstantLookup<>(Action.class);
 	}
