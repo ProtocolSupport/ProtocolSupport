@@ -34,12 +34,12 @@ import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.impl.encapsulated.EncapsulatedProtocolInfo;
 import protocolsupport.zplatform.impl.encapsulated.EncapsulatedProtocolUtils;
 
-public class PEServerConnection extends SimpleChannelInboundHandler<ByteBuf> {
+public class PEProxyServerConnection extends SimpleChannelInboundHandler<ByteBuf> {
 
-	private final Channel clientchannel;
-	private final ByteBuf handshakepacket;
-	public PEServerConnection(Channel clientchannel, ByteBuf handshakepacket) {
-		this.clientchannel = clientchannel;
+	protected final Channel clientconnection;
+	protected final ByteBuf handshakepacket;
+	public PEProxyServerConnection(Channel clientchannel, ByteBuf handshakepacket) {
+		this.clientconnection = clientchannel;
 		this.handshakepacket = handshakepacket;
 	}
 
@@ -49,8 +49,11 @@ public class PEServerConnection extends SimpleChannelInboundHandler<ByteBuf> {
 	}
 
 	@Override
-	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-		clientchannel.close();
+	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf bytebuf) throws Exception {
+		ByteBuf cbytebuf = Unpooled.copiedBuffer(bytebuf);
+		clientconnection.eventLoop().execute(() ->
+			clientconnection.writeAndFlush(cbytebuf).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE
+		));
 	}
 
 	@Override
@@ -60,17 +63,11 @@ public class PEServerConnection extends SimpleChannelInboundHandler<ByteBuf> {
 			cause.printStackTrace();
 		}
 		ctx.channel().close();
-		clientchannel.close();
 	}
 
 	@Override
-	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf bytebuf) throws Exception {
-		ByteBuf cbytebuf = Unpooled.copiedBuffer(bytebuf);
-		clientchannel.eventLoop().execute(() ->
-			clientchannel
-			.writeAndFlush(cbytebuf)
-			.addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE
-		));
+	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+		clientconnection.close();
 	}
 
 
@@ -170,14 +167,14 @@ public class PEServerConnection extends SimpleChannelInboundHandler<ByteBuf> {
 						}
 					}
 				})
-				.addLast("handler", new PEServerConnection(clientchannel, handshakepacket));
+				.addLast("handler", new PEProxyServerConnection(clientchannel, handshakepacket));
 			}
 		})
 		.connect(serveraddr, Bukkit.getPort())
 		.channel();
 	}
 
-	private static ByteBuf createHandshake(InetSocketAddress remote) {
+	protected static ByteBuf createHandshake(InetSocketAddress remote) {
 		ByteBuf data = Unpooled.buffer();
 		data.writeByte(0);
 		EncapsulatedProtocolUtils.writeInfo(data, new EncapsulatedProtocolInfo(remote, true));

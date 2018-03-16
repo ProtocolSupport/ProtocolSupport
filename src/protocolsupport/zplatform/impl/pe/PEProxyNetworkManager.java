@@ -10,12 +10,17 @@ import protocolsupport.zplatform.ServerPlatform;
 
 public class PEProxyNetworkManager extends SimpleChannelInboundHandler<ByteBuf> {
 
-	private Channel serverconnection;
+	protected Channel serverconnection;
 
 	@Override
-	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-		if (serverconnection != null) {
-			serverconnection.close();
+	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf bytebuf) throws Exception {
+		ByteBuf cbytebuf = Unpooled.copiedBuffer(bytebuf);
+		if (serverconnection == null) {
+			serverconnection = PEProxyServerConnection.connectToServer(ctx.channel(), cbytebuf);
+		} else {
+			serverconnection.eventLoop().execute(
+				() -> serverconnection.writeAndFlush(cbytebuf).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE)
+			);
 		}
 	}
 
@@ -26,18 +31,12 @@ public class PEProxyNetworkManager extends SimpleChannelInboundHandler<ByteBuf> 
 			cause.printStackTrace();
 		}
 		ctx.channel().close();
-		if (serverconnection != null) {
-			serverconnection.close();
-		}
 	}
 
 	@Override
-	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf bytebuf) throws Exception {
-		ByteBuf cbytebuf = Unpooled.copiedBuffer(bytebuf);
-		if (serverconnection == null) {
-			serverconnection = PEServerConnection.connectToServer(ctx.channel(), cbytebuf);
-		} else {
-			serverconnection.eventLoop().execute(() -> serverconnection.writeAndFlush(cbytebuf).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE));
+	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+		if (serverconnection != null) {
+			serverconnection.close();
 		}
 	}
 
