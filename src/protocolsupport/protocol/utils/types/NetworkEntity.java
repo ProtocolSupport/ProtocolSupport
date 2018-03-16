@@ -64,28 +64,36 @@ public class NetworkEntity {
 
 	public static class DataCache {
 
-		private byte pcBaseFlags = 0;
+		private byte baseFlags = 0;
 		private boolean firstMeta = true;
 
-		public byte getPcBaseFlags() {
-			return pcBaseFlags;
+		public byte getBaseFlags() {
+			return baseFlags;
 		}
 
-		public boolean getPcBaseFlag(int bitpos) {
-			return (pcBaseFlags & (1 << (bitpos - 1))) != 0;
+		public boolean getBaseFlag(int bitpos) {
+			return (baseFlags & (1 << (bitpos - 1))) != 0;
 		}
 
-		public void setPcBaseFlag(int bitpos, boolean value) {
-			setPcBaseFlag(bitpos, value ? 1 : 0);
+		public void setBaseFlag(int bitpos, boolean value) {
+			setBaseFlag(bitpos, value ? 1 : 0);
 		}
 
-		public void setPcBaseFlag(int bitpos, int value) {
-			pcBaseFlags &= ~(1 << (bitpos - 1));
-			pcBaseFlags |= (value << (bitpos - 1));
+		public void setBaseFlag(int bitpos, int value) {
+			baseFlags &= ~(1 << (bitpos - 1));
+			baseFlags |= (value << (bitpos - 1));
 		}
 
-		public void setPcBaseFlags(byte pcBaseFlags) {
-			this.pcBaseFlags = pcBaseFlags;
+		public void setBaseFlags(byte baseFlags) {
+			this.baseFlags = baseFlags;
+		}
+
+		public boolean isFirstMeta() {
+			return firstMeta;
+		}
+
+		public void setFirstMeta(boolean firstMeta) {
+			this.firstMeta = firstMeta;
 		}
 
 		public boolean isFirstMeta() {

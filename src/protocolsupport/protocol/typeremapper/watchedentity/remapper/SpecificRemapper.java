@@ -201,11 +201,11 @@ public enum SpecificRemapper {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				getObject(original, DataWatcherObjectIndex.Entity.FLAGS, DataWatcherObjectByte.class)
-				.ifPresent(baseflags -> entity.getDataCache().setPcBaseFlags(baseflags.getValue()));
+				.ifPresent(baseflags -> entity.getDataCache().setBaseFlags(baseflags.getValue()));
 				getObject(original, DataWatcherObjectIndex.EntityLiving.HAND_USE, DataWatcherObjectByte.class)
 				.ifPresent(activehandflags -> {
-					entity.getDataCache().setPcBaseFlag(5, activehandflags.getValue());
-					remapped.put(0, new DataWatcherObjectByte(entity.getDataCache().getPcBaseFlags()));
+					entity.getDataCache().setBaseFlag(5, activehandflags.getValue());
+					remapped.put(0, new DataWatcherObjectByte(entity.getDataCache().getBaseFlags()));
 				});
 			}
 		}, ProtocolVersionsHelper.BEFORE_1_9)
