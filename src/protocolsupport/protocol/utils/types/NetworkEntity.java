@@ -96,14 +96,6 @@ public class NetworkEntity {
 			this.firstMeta = firstMeta;
 		}
 
-		public boolean isFirstMeta() {
-			return firstMeta;
-		}
-
-		public void setFirstMeta(boolean firstMeta) {
-			this.firstMeta = firstMeta;
-		}
-
 		//Cache for PE shizzles.
 		private long peBaseFlags = 0;
 		private float sizeModifier = 1f;
