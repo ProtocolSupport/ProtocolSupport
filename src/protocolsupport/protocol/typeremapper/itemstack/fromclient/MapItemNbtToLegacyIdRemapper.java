@@ -11,7 +11,7 @@ public class MapItemNbtToLegacyIdRemapper implements ItemStackSpecificRemapper {
 	@Override
 	public ItemStackWrapper remap(ProtocolVersion version, String locale, ItemStackWrapper itemstack) {
 		NBTTagCompoundWrapper tag = itemstack.getTag();
-		if (tag != null && !tag.isNull() && tag.hasKeyOfType("map_uuid", NBTTagType.STRING)) {
+		if ((tag != null) && !tag.isNull() && tag.hasKeyOfType("map_uuid", NBTTagType.STRING)) {
 			try {
 				itemstack.setData(Integer.parseInt(tag.getString("map_uuid")));
 			} catch (NumberFormatException e) { }

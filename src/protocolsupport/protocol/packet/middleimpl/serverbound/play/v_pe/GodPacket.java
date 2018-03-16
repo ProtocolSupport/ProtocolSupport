@@ -11,7 +11,7 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
 public class GodPacket extends ServerBoundMiddlePacket {
-	
+
 	//Transactions
 	protected InfTransaction[] transactions;
 	//Wrapped packet
@@ -47,13 +47,13 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				break;
 			}
 		}
-		
+
 		if (packet != null) {
 			packet.setSharedStorage(cache);
 			packet.setConnection(connection);
 			packet.readFromClientData(clientdata);
 		}
-		
+
 		clientdata.readBytes(clientdata.readableBytes());
 	}
 

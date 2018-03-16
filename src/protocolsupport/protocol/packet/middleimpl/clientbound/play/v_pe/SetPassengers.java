@@ -44,10 +44,10 @@ public class SetPassengers extends MiddleSetPassengers {
 				if (passenger != null) {
 					//MOJANG.... WHYYYYY?!
 					if (vehicle.isOfType(NetworkEntityType.PIG)) { //If we don't do this we crash, but TODO: perhaps this can better be done at spawn.
-						packets.add(EntitySetAttributes.create(version, vehicle, EntitySetAttributes.createAttribute("minecraft:horse.jump_strength", 0.432084373616155))); 
+						packets.add(EntitySetAttributes.create(version, vehicle, EntitySetAttributes.createAttribute("minecraft:horse.jump_strength", 0.432084373616155)));
 					}
 					DataCache data = passenger.getDataCache();
-					if (data.isRiding() && data.getVehicleId() != vehicleId) {
+					if (data.isRiding() && (data.getVehicleId() != vehicleId)) {
 						//In case we are jumping from vehicle to vehicle.
 						packets.add(create(version, data.getVehicleId(), passengerId, UNLINK));
 					}

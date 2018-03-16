@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Properties;
 import java.util.logging.Level;
+
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.unsafe.pemetadata.PEMetaProviderSPI;
 import protocolsupport.api.unsafe.peskins.PESkinsProviderSPI;

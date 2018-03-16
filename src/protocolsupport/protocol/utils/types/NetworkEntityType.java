@@ -129,7 +129,7 @@ public enum NetworkEntityType {
 		}
 		return typeId;
 	}
-	
+
 	public EntityType getBukkitType() {
 		return bukkitType;
 	}

@@ -59,11 +59,11 @@ public class SpawnLiving extends MiddleSpawnLiving {
 	public static ClientBoundPacketData create(ProtocolVersion version,
 			NetworkEntity entity, double x, double y, double z,
 			float motX, float motY, float motZ,
-			float pitch, float yaw, 
+			float pitch, float yaw,
 			String locale, ArrayMap<DataWatcherObject<?>> metadata, int entityType
 		) {
 		PocketEntityData typeData = PocketData.getPocketEntityData(entity.getType());
-		if (typeData != null && typeData.getOffset() != null) {
+		if ((typeData != null) && (typeData.getOffset() != null)) {
 			PocketOffset offset = typeData.getOffset();
 			x += offset.getX();
 			y += offset.getY();

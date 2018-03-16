@@ -7,12 +7,12 @@ import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 public class PEPotion {
 	private static final TObjectIntHashMap<String> nameToPeId = new TObjectIntHashMap<String>();
 	private static final TIntObjectHashMap<String> peIdToName = new TIntObjectHashMap<String>();
-	
+
 	static {
 		register("mundane", 1);
 		register("thick", 3);
 		register("awkward", 4);
-		
+
 		register("regeneration", 28);
 		register("swiftness", 14);
 		register("fire_resistance", 12);
@@ -36,7 +36,7 @@ public class PEPotion {
 		register("strong_strength", 33);
 
 		register("long_mundane", 2);
-		
+
 		register("long_night_vision", 6);
 		register("long_invisibility", 8);
 		register("long_leaping", 10);
@@ -49,23 +49,23 @@ public class PEPotion {
 		register("long_strength", 32);
 		register("long_weakness", 35);
 	}
-	
+
 	private static void register(String name, int id) {
 		nameToPeId.put(name, id);
 		nameToPeId.put(MinecraftData.addNamespacePrefix(name), id);
 		peIdToName.put(id, MinecraftData.addNamespacePrefix(name));
 	}
-	
+
 	public static boolean hasPERemap(String nbttag) {
 		return nameToPeId.containsKey(nbttag);
 	}
-	
+
 	public static int toPEId(String nbttag) {
 		return nameToPeId.get(nbttag);
 	}
-	
+
 	public static String fromPEId(int id) {
 		return peIdToName.get(id);
 	}
-	
+
 }

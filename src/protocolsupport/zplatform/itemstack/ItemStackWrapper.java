@@ -4,7 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 public abstract class ItemStackWrapper {
-	
+
 	public abstract ItemStack asBukkitMirror();
 
 	public abstract boolean isNull();
@@ -105,12 +105,12 @@ public abstract class ItemStackWrapper {
 		public ItemStack asBukkitMirror() {
 			throw reject();
 		}
-		
+
 		@Override
 		public String toString() {
 			return "0xNULL@0";
 		}
-		
+
 	};
 
 }

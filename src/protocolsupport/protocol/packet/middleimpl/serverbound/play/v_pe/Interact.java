@@ -3,7 +3,8 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 import org.bukkit.util.Vector;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;import protocolsupport.protocol.packet.middle.serverbound.play.MiddleEntityAction;
+import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleEntityAction;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSteerVehicle;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;

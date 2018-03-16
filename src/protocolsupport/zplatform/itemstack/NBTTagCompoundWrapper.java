@@ -25,7 +25,7 @@ public abstract class NBTTagCompoundWrapper {
 	public abstract int getIntNumber(String key);
 
 	public abstract byte getByteNumber(String key);
-	
+
 	public abstract short getShortNumber(String key);
 
 	public abstract long getLongNumber(String key);
@@ -63,7 +63,8 @@ public abstract class NBTTagCompoundWrapper {
 	public abstract void setIntArray(String key, int[] value);
 
 	public abstract void setLongArray(String key, long[] value);
-	
+
+	@Override
 	public abstract NBTTagCompoundWrapper clone();
 
 	public static final NBTTagCompoundWrapper NULL = new NBTTagCompoundWrapper() {
@@ -121,7 +122,7 @@ public abstract class NBTTagCompoundWrapper {
 		public int getIntNumber(String key) {
 			throw reject();
 		}
-		
+
 		@Override
 		public short getShortNumber(String key) {
 			throw reject();
@@ -221,7 +222,7 @@ public abstract class NBTTagCompoundWrapper {
 		public void setLongArray(String key, long[] value) {
 			throw reject();
 		}
-		
+
 		@Override
 		public NBTTagCompoundWrapper clone() {
 			return this;

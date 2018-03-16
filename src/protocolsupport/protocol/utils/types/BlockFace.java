@@ -17,7 +17,7 @@ public enum BlockFace {
 
 	private static final ArrayMap<BlockFace> byId = CollectionsUtils.makeEnumMappingArrayMap(BlockFace.class, BlockFace::getNetworkId);
 	private final int netId;
-	private final int modX; 
+	private final int modX;
 	private final int modY;
 	private final int modZ;
 

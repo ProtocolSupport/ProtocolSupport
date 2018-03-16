@@ -15,7 +15,7 @@ public abstract class MiddleInventoryClose extends ServerBoundMiddlePacket {
 		cache.getWindowCache().closeWindow();
 		return RecyclableSingletonList.create(create(windowId));
 	}
-	
+
 	public static ServerBoundPacketData create(int windowId) {
 		System.out.println("Closing INV: " + windowId);
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_WINDOW_CLOSE);

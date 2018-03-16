@@ -15,7 +15,7 @@ public abstract class MiddleAnimation extends ServerBoundMiddlePacket {
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		return RecyclableSingletonList.create(create(usedHand));
 	}
-	
+
 	public static ServerBoundPacketData create(int usedHand) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_ANIMATION);
 		VarNumberSerializer.writeVarInt(creator, usedHand);

@@ -98,5 +98,5 @@ public class PEPacketIDs {
 	//public static final int SETTINGS_RESPONSE = 103;
 	//public static final int SHOW_PROFILE = 104;
 	//public static final int SET_DEFAULT_GAMEMODE = 105;
-	
+
 }

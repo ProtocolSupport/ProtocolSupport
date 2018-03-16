@@ -66,7 +66,7 @@ public enum SpecificRemapper {
 				DataCache data = entity.getDataCache();
 				PocketEntityData pocketdata = PocketData.getPocketEntityData(entity.getType());
 				float entitySize = PEMetaProviderSPI.getProvider().getSizeScale(entity.getUUID(), entity.getId(), entity.getType().getBukkitType()) * data.getSizeModifier();
-				
+
 				// = PE Lead =
 				//Leashing is set in Entity Leash.
 				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_LEASHED, data.getAttachedId() != -1);
@@ -77,8 +77,8 @@ public enum SpecificRemapper {
 				//Doing this for players makes nametags behave weird or only when close.
 				boolean doNametag = ((nameTagWatcher != null) && (entity.getType() != NetworkEntityType.PLAYER));
 				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_SHOW_NAMETAG, doNametag);
-				if (doNametag) { 
-					remapped.put(4, nameTagWatcher); 
+				if (doNametag) {
+					remapped.put(4, nameTagWatcher);
 				}
 
 				// = PE Riding =
@@ -118,7 +118,7 @@ public enum SpecificRemapper {
 
 				// = PE Size =
 				remapped.put(39, new DataWatcherObjectFloatLe(entitySize));
-				
+
 				// = PE Interaction =
 				String interactText = PEMetaProviderSPI.getProvider().getUseText(entity.getUUID(), entity.getId(), entity.getType().getBukkitType());
 				if(interactText != null) {
@@ -578,7 +578,7 @@ public enum SpecificRemapper {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				getObject(original, DataWatcherObjectIndex.Slime.SIZE, DataWatcherObjectVarInt.class).ifPresent(intWatcher -> {
-					entity.getDataCache().setSizeModifier((int) intWatcher.getValue());
+					entity.getDataCache().setSizeModifier(intWatcher.getValue());
 				});
 				float entitySize = PEMetaProviderSPI.getProvider().getSizeScale(entity.getUUID(), entity.getId(), entity.getType().getBukkitType()) * entity.getDataCache().getSizeModifier();
 				remapped.put(39, new DataWatcherObjectFloatLe(entitySize)); //Send slime scale.

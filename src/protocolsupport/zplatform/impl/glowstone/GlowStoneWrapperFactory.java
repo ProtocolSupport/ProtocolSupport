@@ -36,7 +36,7 @@ public class GlowStoneWrapperFactory implements PlatformWrapperFactory {
 	public ItemStackWrapper createItemStack(int typeId) {
 		return GlowStoneItemStackWrapper.create(typeId);
 	}
-	
+
 	@Override
 	public ItemStackWrapper createItemStack(ItemStack item) {
 		return GlowStoneItemStackWrapper.create(item);

@@ -25,7 +25,7 @@ public class UseItem extends ServerBoundMiddlePacket {
 	protected float fromX, fromY, fromZ;
 	protected float cX, cY, cZ; //cursor position
 	protected int face;
-	
+
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		subTypeId = VarNumberSerializer.readVarInt(clientdata);

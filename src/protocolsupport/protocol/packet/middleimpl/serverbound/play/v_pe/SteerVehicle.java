@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSteerVehicle;
 
 public class SteerVehicle extends MiddleSteerVehicle {
-	
+
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		sideForce = clientdata.readFloatLE();

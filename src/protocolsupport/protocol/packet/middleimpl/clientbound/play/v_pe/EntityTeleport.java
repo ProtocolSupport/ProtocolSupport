@@ -40,8 +40,8 @@ public class EntityTeleport extends MiddleEntityTeleport {
 			if (vehicle != null) {
 				if (vehicle.getType() == NetworkEntityType.BOAT) {
 					//This bunch calculates the relative head position. Apparently the player is a bit turned inside the boat (in PE) so another little offset is needed.
-					float relYaw = (float) (headYaw - vehicle.getDataCache().getHeadRotation(yaw) + 11.38);
-					if (relYaw <= -128) { relYaw += 256; } 
+					float relYaw = (float) ((headYaw - vehicle.getDataCache().getHeadRotation(yaw)) + 11.38);
+					if (relYaw <= -128) { relYaw += 256; }
 					if (relYaw > 128) { relYaw -= 256; }
 					System.out.println("BOAT: " + vehicle.getDataCache().getHeadRotation(yaw));
 					System.out.println("HEAD: " + headYaw);

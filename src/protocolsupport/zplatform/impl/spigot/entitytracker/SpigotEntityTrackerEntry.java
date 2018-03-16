@@ -276,9 +276,9 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 			this.tracker.velocityChanged = false;
 		}
 	}
-	
+
 	private boolean hasSignificantVelocity() {
-		return Math.abs(tracker.motX) > 1 || Math.abs(tracker.motY) > 1 || Math.abs(tracker.motZ) > 1;
+		return (Math.abs(tracker.motX) > 1) || (Math.abs(tracker.motY) > 1) || (Math.abs(tracker.motZ) > 1);
 	}
 
 	private void updateMetadataAndAttributes() {
@@ -310,7 +310,7 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 			player.playerConnection.sendPacket(pepacket);
 		}
 	}
-	
+
 	public void broadcastPE(final Packet<?> packet) {
 		for (final EntityPlayer entityplayer : this.trackedPEPlayers) {
 			entityplayer.playerConnection.sendPacket(packet);

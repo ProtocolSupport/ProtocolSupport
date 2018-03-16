@@ -15,7 +15,7 @@ public abstract class MiddleSteerBoat extends ServerBoundMiddlePacket {
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		return RecyclableSingletonList.create(create(rightPaddleTurning, leftPaddleTurning));
 	}
-	
+
 	public static ServerBoundPacketData create(boolean rightPaddleTurning, boolean leftPaddleTurning) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_STEER_BOAT);
 		creator.writeBoolean(rightPaddleTurning);
