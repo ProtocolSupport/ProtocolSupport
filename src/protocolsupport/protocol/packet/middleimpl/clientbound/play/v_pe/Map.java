@@ -14,8 +14,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class Map extends MiddleMap {
 
 	//public static final int FLAG_ENTITY_UPDATE = 0x08;
-	public static final int FLAG_DECORATION_UPDATE = 0x04;
-	public static final int FLAG_TEXTURE_UPDATE = 0x02;
+	protected static final int FLAG_DECORATION_UPDATE = 0x04;
+	protected static final int FLAG_TEXTURE_UPDATE = 0x02;
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {

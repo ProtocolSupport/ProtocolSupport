@@ -21,7 +21,7 @@ public class UseEntity extends ServerBoundMiddlePacket {
 	protected ItemStackWrapper itemstack;
 	protected int slot;
 	protected float fromX, fromY, fromZ;
-	protected float cX, cY, cZ; //cursor position
+	protected float cX, cY, cZ;
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
@@ -29,18 +29,22 @@ public class UseEntity extends ServerBoundMiddlePacket {
 		subTypeId = VarNumberSerializer.readVarInt(clientdata);
 		slot = VarNumberSerializer.readSVarInt(clientdata);
 		itemstack = ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), cache.getAttributesCache().getLocale(), true);
-		fromX = clientdata.readFloatLE(); fromY = clientdata.readFloatLE(); fromZ = clientdata.readFloatLE();
-		cX = clientdata.readFloatLE(); cY = clientdata.readFloatLE(); cZ = clientdata.readFloatLE();
+		fromX = clientdata.readFloatLE();
+		fromY = clientdata.readFloatLE();
+		fromZ = clientdata.readFloatLE();
+		cX = clientdata.readFloatLE();
+		cY = clientdata.readFloatLE();
+		cZ = clientdata.readFloatLE();
 	}
 
-	public static final int INTERACT_INTERACT = 0;
-	public static final int INTERACT_ATTACK = 1;
-	public static final int INTERACT_AT = 2;
+	protected static final int INTERACT_INTERACT = 0;
+	protected static final int INTERACT_ATTACK = 1;
+	protected static final int INTERACT_AT = 2;
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
-		switch(subTypeId) {
+		switch (subTypeId) {
 			case INTERACT_INTERACT: {
 				NetworkEntity target = cache.getWatchedEntityCache().getWatchedEntity(targetId);
 				if((target == null) || !target.isOfType(NetworkEntityType.ARMOR_STAND)) {

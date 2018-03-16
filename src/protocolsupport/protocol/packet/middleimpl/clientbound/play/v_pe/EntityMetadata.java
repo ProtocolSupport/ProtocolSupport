@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntitySetAttributes.AttributeInfo;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.PEItemEntityCache.ItemEntityInfo;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
@@ -15,6 +16,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectSVarL
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
+import protocolsupport.utils.ObjectFloatTuple;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.zplatform.ServerPlatform;
@@ -28,10 +30,10 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		ProtocolVersion version = connection.getVersion();
 		String locale = cache.getAttributesCache().getLocale();
 		NetworkEntity entity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
-		if(entity == null) {
+		if (entity == null) {
 			return packets;
 		}
-		switch(entity.getType()) {
+		switch (entity.getType()) {
 			case ITEM: {
 				DataWatcherObject<?> itemWatcher = metadata.getOriginal().get(DataWatcherObjectIndex.Item.ITEM);
 				if (itemWatcher != null) {
@@ -46,7 +48,9 @@ public class EntityMetadata extends MiddleEntityMetadata {
 				if (entity.isOfType(NetworkEntityType.LIVING)) {
 					DataWatcherObject<?> healthWatcher = metadata.getOriginal().get(DataWatcherObjectIndex.EntityLiving.HEALTH);
 					if (healthWatcher != null) {
-						packets.add(EntitySetAttributes.create(version, entity, EntitySetAttributes.createAttribute("minecraft:health", Math.ceil((Float) healthWatcher.getValue()))));
+						packets.add(EntitySetAttributes.create(
+							version, entity, new ObjectFloatTuple<>(AttributeInfo.HEALTH, ((Float) healthWatcher.getValue()))
+						));
 					}
 				}
 				if (entity.isOfType(NetworkEntityType.BATTLE_HORSE)) {
@@ -54,11 +58,11 @@ public class EntityMetadata extends MiddleEntityMetadata {
 					if (armorWatcher != null) {
 						int type = (Integer) armorWatcher.getValue();
 						packets.add(EntityEquipment.create(version, locale, entityId,
-								ItemStackWrapper.NULL,
-								type == 0 ? ItemStackWrapper.NULL : ServerPlatform.get().getWrapperFactory().createItemStack(416 + (Integer) armorWatcher.getValue()),
-								ItemStackWrapper.NULL,
-								ItemStackWrapper.NULL
-							));
+							ItemStackWrapper.NULL,
+							type == 0 ? ItemStackWrapper.NULL : ServerPlatform.get().getWrapperFactory().createItemStack(416 + (Integer) armorWatcher.getValue()),
+							ItemStackWrapper.NULL,
+							ItemStackWrapper.NULL
+						));
 					}
 				}
 				packets.add(create(entity, locale, metadata.getRemapped(), version));

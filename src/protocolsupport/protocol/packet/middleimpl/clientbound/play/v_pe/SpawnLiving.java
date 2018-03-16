@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnLiving;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntitySetAttributes.AttributeInfo;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
@@ -13,7 +14,9 @@ import protocolsupport.protocol.utils.minecraftdata.PocketData;
 import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData;
 import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData.PocketOffset;
 import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
+import protocolsupport.utils.ObjectFloatTuple;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -29,15 +32,17 @@ public class SpawnLiving extends MiddleSpawnLiving {
 			motX / 8.000F, motY / 8000.F, motZ / 8000.F, pitch, yaw, cache.getAttributesCache().getLocale(),
 			metadata.getRemapped(), PEDataValues.getLivingEntityTypeId(IdRemapper.ENTITY.getTable(version).getRemap(entity.getType()))
 		));
+		if (entity.isOfType(NetworkEntityType.PIG)) {
+			packets.add(EntitySetAttributes.create(version, entity, new ObjectFloatTuple<>(AttributeInfo.HORSE_JUMP_STRENGTH, 0.432084373616155F)));
+		}
 		DataWatcherObject<?> healthWatcher = metadata.getOriginal().get(DataWatcherObjectIndex.EntityLiving.HEALTH);
 		if (healthWatcher != null) {
-			packets.add(EntitySetAttributes.create(version, entity, EntitySetAttributes.createAttribute("minecraft:health", (Float) healthWatcher.getValue())));
+			packets.add(EntitySetAttributes.create(version, entity, new ObjectFloatTuple<>(AttributeInfo.HEALTH, (Float) healthWatcher.getValue())));
 		}
 		return packets;
 	}
 
-	public static ClientBoundPacketData createSimple(ProtocolVersion version,
-			long entityId, double x, double y, double z, int peEntityType) {
+	public static ClientBoundPacketData createSimple(ProtocolVersion version, long entityId, double x, double y, double z, int peEntityType) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SPAWN_ENTITY, version);
 		VarNumberSerializer.writeSVarLong(serializer, entityId);
 		VarNumberSerializer.writeVarLong(serializer, entityId);
@@ -61,7 +66,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 			float motX, float motY, float motZ,
 			float pitch, float yaw,
 			String locale, ArrayMap<DataWatcherObject<?>> metadata, int entityType
-		) {
+	) {
 		PocketEntityData typeData = PocketData.getPocketEntityData(entity.getType());
 		if ((typeData != null) && (typeData.getOffset() != null)) {
 			PocketOffset offset = typeData.getOffset();
@@ -83,13 +88,13 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		serializer.writeFloatLE(motZ);
 		serializer.writeFloatLE(pitch);
 		serializer.writeFloatLE(yaw);
-		VarNumberSerializer.writeVarInt(serializer, 0); //attributes, send in separate packet
+		VarNumberSerializer.writeVarInt(serializer, 0); //attributes, sent in separate packet
 		if (metadata == null) {
 			VarNumberSerializer.writeVarInt(serializer, 0);
 		} else {
 			EntityMetadata.encodeMeta(serializer, version, locale, EntityMetadata.transform(entity, metadata, version));
 		}
-		VarNumberSerializer.writeVarInt(serializer, 0); //links, send in separate packet
+		VarNumberSerializer.writeVarInt(serializer, 0); //links, sent in separate packet
 		return serializer;
 	}
 

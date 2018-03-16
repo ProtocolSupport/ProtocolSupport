@@ -17,9 +17,9 @@ public class Chat extends MiddleChat {
 	public void readFromClientData(ByteBuf clientdata) {
 		ProtocolVersion version = connection.getVersion();
 		int type = clientdata.readUnsignedByte();
-		Validate.isTrue(type == validChatType, MessageFormat.format("Unexcepted serverbound chat type, expected {0}, but received {1}", validChatType, type));
+		Validate.isTrue(type == validChatType, MessageFormat.format("Unexpected serverbound chat type, expected {0}, but received {1}", validChatType, type));
 		clientdata.readBoolean(); //needs translation
-		StringSerializer.readString(clientdata, version); //skip sender
+		StringSerializer.readString(clientdata, version); //sender
 		message = StringSerializer.readString(clientdata, version);
 		StringSerializer.readString(clientdata, version); //Xbox user ID
 	}

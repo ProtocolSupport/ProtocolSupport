@@ -66,12 +66,10 @@ public enum SpecificRemapper {
 				DataCache data = entity.getDataCache();
 				PocketEntityData pocketdata = PocketData.getPocketEntityData(entity.getType());
 				float entitySize = PEMetaProviderSPI.getProvider().getSizeScale(entity.getUUID(), entity.getId(), entity.getType().getBukkitType()) * data.getSizeModifier();
-
 				// = PE Lead =
 				//Leashing is set in Entity Leash.
 				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_LEASHED, data.getAttachedId() != -1);
 				remapped.put(38, new DataWatcherObjectSVarLong(data.getAttachedId()));
-
 				// = PE Nametag =
 				DataWatcherObject<?> nameTagWatcher = original.get(DataWatcherObjectIndex.Entity.NAMETAG);
 				//Doing this for players makes nametags behave weird or only when close.
@@ -80,23 +78,19 @@ public enum SpecificRemapper {
 				if (doNametag) {
 					remapped.put(4, nameTagWatcher);
 				}
-
 				// = PE Riding =
 				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_COLLIDE, !data.isRiding());
 				if (data.isRiding()) {
-					System.out.println("RIDERPOSITION: " + data.getRiderPosition());
 					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_RIDING, true);
 					remapped.put(57, new DataWatcherObjectVector3fLe(data.getRiderPosition()));
 					remapped.put(58, new DataWatcherObjectByte((byte) ((data.getRotationlock() != null) ? 1 : 0)));
 					if (data.getRotationlock() != null) {
-						System.out.println("RIDERLOCK: " + data.getRotationlock());
 						remapped.put(59, new DataWatcherObjectFloatLe(data.getRotationlock()));
 						remapped.put(60, new DataWatcherObjectFloatLe(-data.getRotationlock()));
 					}
 				} else {
 					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_RIDING, false);
 				}
-
 				// = PE Air =
 				AtomicInteger air = new AtomicInteger(0);
 				getObject(original, DataWatcherObjectIndex.Entity.AIR, DataWatcherObjectVarInt.class).ifPresent(airWatcher -> {
@@ -104,31 +98,25 @@ public enum SpecificRemapper {
 				});
 				remapped.put(7, new DataWatcherObjectShortLe(air.get()));
 				remapped.put(43, new DataWatcherObjectShortLe(300));
-
 				// = PE Bounding Box =
 				if(pocketdata.getBoundingBox() != null) {
 					remapped.put(54, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getWidth() * entitySize));
 					remapped.put(55, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getHeight() * entitySize));
 				}
-
 				// = PE Interaction =
 				remapped.put(40, new DataWatcherObjectString(PEMetaProviderSPI.getProvider().getUseText(
 					entity.getUUID(), entity.getId(), entity.getType().getBukkitType()
 				)));
-
 				// = PE Size =
 				remapped.put(39, new DataWatcherObjectFloatLe(entitySize));
-
 				// = PE Interaction =
 				String interactText = PEMetaProviderSPI.getProvider().getUseText(entity.getUUID(), entity.getId(), entity.getType().getBukkitType());
 				if(interactText != null) {
 					remapped.put(40, new DataWatcherObjectString(interactText));
 				}
 
-			}}, ProtocolVersion.MINECRAFT_PE),
-		new Entry(new PeSimpleFlagAdder(
-				new int[] {PeMetaBase.FLAG_GRAVITY}, new boolean[] {true}
-			), ProtocolVersion.MINECRAFT_PE),
+		}}, ProtocolVersion.MINECRAFT_PE),
+		new Entry(new PeSimpleFlagAdder(new int[] {PeMetaBase.FLAG_GRAVITY}, new boolean[] {true}), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.Entity.FLAGS,
 				new int[] {1, 2, 4, 6, 8}, new int[] {PeMetaBase.FLAG_ON_FIRE, PeMetaBase.FLAG_SNEAKING, PeMetaBase.FLAG_SPRINTING, PeMetaBase.FLAG_INVISIBLE, PeMetaBase.FLAG_GLIDING}
 		), ProtocolVersion.MINECRAFT_PE),

@@ -23,7 +23,6 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		System.out.println("single block!");
 		return RecyclableSingletonList.create(BlockChangeSingle.create(connection.getVersion(), position, id));
 	}
 

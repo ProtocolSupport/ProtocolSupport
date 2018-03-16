@@ -10,7 +10,7 @@ public abstract class MiddlePacket {
 
 	protected Connection connection;
 
-	public final void setConnection(Connection connection) {
+	public void setConnection(Connection connection) {
 		this.connection = connection;
 	}
 

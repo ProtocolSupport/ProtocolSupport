@@ -27,9 +27,9 @@ public class Interact extends ServerBoundMiddlePacket {
 		}
 	}
 
-	private static final int LEAVE_VEHICLE = 3;
-	private static final int MOUSE_OVER = 4;
-	private static final int OPEN_INVENTORY = 6;
+	protected static final int LEAVE_VEHICLE = 3;
+	protected static final int MOUSE_OVER = 4;
+	protected static final int OPEN_INVENTORY = 6;
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
@@ -46,4 +46,5 @@ public class Interact extends ServerBoundMiddlePacket {
 		}
 		return RecyclableEmptyList.get();
 	}
+
 }

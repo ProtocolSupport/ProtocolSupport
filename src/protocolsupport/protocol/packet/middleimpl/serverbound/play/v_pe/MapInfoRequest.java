@@ -18,4 +18,5 @@ public class MapInfoRequest extends ServerBoundMiddlePacket {
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		return RecyclableEmptyList.get();
 	}
+
 }

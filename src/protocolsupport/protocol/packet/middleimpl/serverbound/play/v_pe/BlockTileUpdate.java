@@ -30,7 +30,7 @@ public class BlockTileUpdate extends ServerBoundMiddlePacket {
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		if (nbt.hasKeyOfType("id", NBTTagType.STRING)) {
-			switch(nbt.getString("id")) {
+			switch (nbt.getString("id")) {
 				case "Sign": {
 					signTag = nbt;
 					break;

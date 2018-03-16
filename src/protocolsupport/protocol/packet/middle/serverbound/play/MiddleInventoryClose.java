@@ -17,7 +17,6 @@ public abstract class MiddleInventoryClose extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(int windowId) {
-		System.out.println("Closing INV: " + windowId);
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_WINDOW_CLOSE);
 		creator.writeByte(windowId);
 		return creator;

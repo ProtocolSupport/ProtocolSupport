@@ -24,13 +24,12 @@ public class EntityStatus extends ServerBoundMiddlePacket {
 		entityId = VarNumberSerializer.readSVarLong(clientdata);
 		status = clientdata.readByte();
 		data = VarNumberSerializer.readSVarInt(clientdata);
-		System.out.println("ENTITYEVENT!!! " + entityId + " - " + status + " - " + data);
 	}
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		if ((status == 57) && (data != 0)) {
-			//Somewhy you need to resent the packet send by the client to confirm he's eating.
+			//For some reason you need to resend the packet sent by the client to confirm he's eating.
 			sendResponse(connection, (int) entityId, status, data);
 		} else if (status == 62) {
 			return RecyclableSingletonList.create(TradeSelect(data));

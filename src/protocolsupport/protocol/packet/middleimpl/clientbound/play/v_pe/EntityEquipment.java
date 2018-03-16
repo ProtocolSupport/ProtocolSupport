@@ -8,7 +8,6 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.NetworkEntity.DataCache;
-import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -18,33 +17,29 @@ public class EntityEquipment extends MiddleEntityEquipment {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		System.out.println("dddd");
 		ProtocolVersion version = connection.getVersion();
 		String locale = cache.getAttributesCache().getLocale();
 		NetworkEntity entity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
 		if (entity == null) {
 			return RecyclableEmptyList.get();
 		}
-		if (entity.isOfType(NetworkEntityType.BASE_HORSE)) {
-			System.out.println("HORSEY ARMOUR: slot - " + slot);
-		}
 		DataCache dataCache = entity.getDataCache();
 		if (slot > 1) {
 			// Armor update
 			switch (slot) {
-				case (2): {
+				case 2: {
 					dataCache.setBoots(itemstack);
 					break;
 				}
-				case (3): {
+				case 3: {
 					dataCache.setLeggings(itemstack);
 					break;
 				}
-				case (4): {
+				case 4: {
 					dataCache.setChestplate(itemstack);
 					break;
 				}
-				case (5): {
+				case 5: {
 					dataCache.setHelmet(itemstack);
 					break;
 				}

@@ -22,10 +22,6 @@ public class PositionLook extends ServerBoundMiddlePacket {
 	protected float headYaw;
 	protected byte mode;
 	protected boolean onGround;
-	protected long vehicle;
-	protected int huh1;
-	protected int huh2;
-	protected double fakeYaw;
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
@@ -38,10 +34,10 @@ public class PositionLook extends ServerBoundMiddlePacket {
 		yaw = clientdata.readFloatLE();
 		mode = clientdata.readByte(); //mode
 		onGround = clientdata.readBoolean();
-		vehicle = VarNumberSerializer.readVarLong(clientdata);
+		VarNumberSerializer.readVarLong(clientdata);
 		if (mode == 2) {
-			huh1 = VarNumberSerializer.readSVarInt(clientdata);
-			huh2 = VarNumberSerializer.readSVarInt(clientdata);
+			VarNumberSerializer.readSVarInt(clientdata);
+			VarNumberSerializer.readSVarInt(clientdata);
 		}
 	}
 
@@ -57,13 +53,12 @@ public class PositionLook extends ServerBoundMiddlePacket {
 		if (teleportId != -1) {
 			packets.add(MiddleTeleportAccept.create(teleportId));
 			packets.add(MiddlePositionLook.create(movecache.getX(), movecache.getY(), movecache.getZ(), headYaw, pitch, onGround));
-			//TODO: Play around more with these numbers to perhaps make things even more smooth. (Round to 8ths of blocks?)
-			//x = Math.floor(x * 8) / 8; y = Math.ceil((y + 0.3) * 8) / 8; z = Math.floor(z * 8) / 8;
 		}
+		//yaw fix for boats due to relative vs absolute
 		if (player.getDataCache().isRiding()) {
 			NetworkEntity vehicle = cache.getWatchedEntityCache().getWatchedEntity(player.getDataCache().getVehicleId());
 			if (vehicle.isOfType(NetworkEntityType.BOAT)) {
-				yaw = ((360f/256f) * MoveVehicle.getLastVehicleYaw()) + yaw + 90;
+				yaw = ((360f/256f) * cache.getAttributesCache().getPELastVehicleYaw()) + yaw + 90;
 			}
 		}
 		packets.add(MiddlePositionLook.create(x, y, z, yaw, pitch, onGround));
