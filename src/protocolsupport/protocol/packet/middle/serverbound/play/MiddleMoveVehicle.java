@@ -18,7 +18,7 @@ public abstract class MiddleMoveVehicle extends ServerBoundMiddlePacket {
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		return RecyclableSingletonList.create(create(x, y, z, yaw, pitch));
 	}
-	
+
 	public static ServerBoundPacketData create(double x, double y, double z, float yaw, float pitch) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_MOVE_VEHICLE);
 		creator.writeDouble(x);

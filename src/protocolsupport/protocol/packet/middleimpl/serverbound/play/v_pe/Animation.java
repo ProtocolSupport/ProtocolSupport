@@ -16,7 +16,7 @@ public class Animation extends ServerBoundMiddlePacket {
 	protected float paddleTime;
 	protected float prevRightPaddle;
 	protected float prevLeftPaddle;
-	
+
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		action = VarNumberSerializer.readSVarInt(clientdata);

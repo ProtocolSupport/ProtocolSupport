@@ -18,32 +18,31 @@ public class EntityStatus extends ServerBoundMiddlePacket {
 	protected long entityId;
 	protected byte status;
 	protected int data;
-	
+
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		entityId = VarNumberSerializer.readSVarLong(clientdata);
 		status = clientdata.readByte();
 		data = VarNumberSerializer.readSVarInt(clientdata);
-		System.out.println("ENTITYEVENT!!! " + entityId + " - " + status + " - " + data);
 	}
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		if (status == 57 && data != 0) {
-			//Somewhy you need to resent the packet send by the client to confirm he's eating.
+		if ((status == 57) && (data != 0)) {
+			//For some reason you need to resend the packet sent by the client to confirm he's eating.
 			sendResponse(connection, (int) entityId, status, data);
 		} else if (status == 62) {
 			return RecyclableSingletonList.create(TradeSelect(data));
 		}
 		return RecyclableEmptyList.get();
 	}
-	
+
 	private static ServerBoundPacketData TradeSelect(int page) {
 		ByteBuf payload = Unpooled.buffer();
 		payload.writeInt(page);
 		return MiddleCustomPayload.create("MC|TrSel", MiscSerializer.readAllBytes(payload));
 	}
-	
+
 	public static void sendResponse(Connection connection, int entityId, byte status, int data) {
 		ByteBuf statusResponse = Unpooled.buffer(); //Can't use normal packet, we need data too.
 		VarNumberSerializer.writeVarInt(statusResponse, PEPacketIDs.ENTITY_EVENT);

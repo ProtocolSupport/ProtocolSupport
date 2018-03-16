@@ -3,7 +3,8 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 import org.bukkit.util.Vector;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;import protocolsupport.protocol.packet.middle.serverbound.play.MiddleEntityAction;
+import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleEntityAction;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSteerVehicle;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -26,9 +27,9 @@ public class Interact extends ServerBoundMiddlePacket {
 		}
 	}
 
-	private static final int LEAVE_VEHICLE = 3;
-	private static final int MOUSE_OVER = 4;
-	private static final int OPEN_INVENTORY = 6;
+	protected static final int LEAVE_VEHICLE = 3;
+	protected static final int MOUSE_OVER = 4;
+	protected static final int OPEN_INVENTORY = 6;
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
@@ -45,4 +46,5 @@ public class Interact extends ServerBoundMiddlePacket {
 		}
 		return RecyclableEmptyList.get();
 	}
+
 }

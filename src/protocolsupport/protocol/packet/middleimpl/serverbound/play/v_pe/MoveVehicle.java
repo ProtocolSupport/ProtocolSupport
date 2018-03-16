@@ -21,8 +21,7 @@ public class MoveVehicle extends ServerBoundMiddlePacket {
 	protected float x, y, z;
 	protected byte pitch, headYaw, yaw;
 	protected boolean teleported, onGround;
-	protected static byte lastYaw = 0;
-	
+
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		vehicleId = (int) VarNumberSerializer.readVarLong(clientdata);
@@ -41,14 +40,14 @@ public class MoveVehicle extends ServerBoundMiddlePacket {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 		NetworkEntity vehicle = cache.getWatchedEntityCache().getWatchedEntity(vehicleId);
 		if (vehicle != null) {
-			if(vehicle.getType() == NetworkEntityType.BOAT) {
+			if (vehicle.getType() == NetworkEntityType.BOAT) {
 				packets.add(MiddleSteerBoat.create(
-					cache.getMovementCache().isPERightPaddleTurning(), 
+					cache.getMovementCache().isPERightPaddleTurning(),
 					cache.getMovementCache().isPELeftPaddleTurning())
 				);
 			}
 			PocketEntityData typeData = PocketData.getPocketEntityData(vehicle.getType());
-			if (typeData != null && typeData.getOffset() != null) {
+			if ((typeData != null) && (typeData.getOffset() != null)) {
 				PocketOffset offset = typeData.getOffset();
 				x -= offset.getX();
 				y -= offset.getY();
@@ -57,15 +56,11 @@ public class MoveVehicle extends ServerBoundMiddlePacket {
 				yaw = (byte) Utils.shortDegree(yaw - offset.getYaw(), 256);
 			}
 		}
-		lastYaw = yaw;
+		cache.getAttributesCache().setPELastVehicleYaw(yaw);
 		float realPitch = (360f/256f) * pitch;
 		float realYaw = (360f/256f) * yaw;
 		packets.add(MiddleMoveVehicle.create(x, y, z, realYaw, realPitch));
 		return packets;
-	}
-	
-	public static byte getLastVehicleYaw() {
-		return lastYaw;
 	}
 
 }

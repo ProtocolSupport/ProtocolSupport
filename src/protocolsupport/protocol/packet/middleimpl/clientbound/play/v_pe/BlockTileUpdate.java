@@ -17,7 +17,7 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		return RecyclableSingletonList.create(create(connection.getVersion(), position, tag));
 	}
-	
+
 	public static ClientBoundPacketData create(ProtocolVersion version, protocolsupport.protocol.utils.types.Position position, NBTTagCompoundWrapper tag) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.TILE_DATA_UPDATE, version);
 		PositionSerializer.writePEPosition(serializer, position);

@@ -25,35 +25,30 @@ public class EntityTeleport extends MiddleEntityTeleport {
 		}
 		byte headYaw = entity.getDataCache().getHeadRotation(yaw);
 		PocketEntityData typeData = PocketData.getPocketEntityData(entity.getType());
-		if (typeData != null) {
-			if (typeData.getOffset() != null) {
-				PocketOffset offset = typeData.getOffset();
-				x += offset.getX();
-				y += offset.getY();
-				z += offset.getZ();
-				pitch += offset.getPitch();
-				yaw += offset.getYaw();
-			}
+		if ((typeData != null) && (typeData.getOffset() != null)) {
+			PocketOffset offset = typeData.getOffset();
+			x += offset.getX();
+			y += offset.getY();
+			z += offset.getZ();
+			pitch += offset.getPitch();
+			yaw += offset.getYaw();
 		}
 		if (entity.getDataCache().isRiding()) {
 			NetworkEntity vehicle = cache.getWatchedEntityCache().getWatchedEntity(entity.getDataCache().getVehicleId());
 			if (vehicle != null) {
 				if (vehicle.getType() == NetworkEntityType.BOAT) {
 					//This bunch calculates the relative head position. Apparently the player is a bit turned inside the boat (in PE) so another little offset is needed.
-					float relYaw = (float) (headYaw - vehicle.getDataCache().getHeadRotation(yaw) + 11.38);
-					if (relYaw <= -128) { relYaw += 256; } 
+					float relYaw = (float) ((headYaw - vehicle.getDataCache().getHeadRotation(yaw)) + 11.38);
+					if (relYaw <= -128) { relYaw += 256; }
 					if (relYaw > 128) { relYaw -= 256; }
-					System.out.println("BOAT: " + vehicle.getDataCache().getHeadRotation(yaw));
-					System.out.println("HEAD: " + headYaw);
-					System.out.println("YAWY: " + relYaw);
 					return RecyclableSingletonList.create(updateGeneral(version, entity, x, y, z, pitch, (byte) 0, (byte) relYaw, onGround, false));
 				}
 			} else {
-				//If the vehicle is killed a unlink might not be send yet.
+				//If the vehicle is killed a unlink might not be sent yet.
 				entity.getDataCache().setVehicleId(0);
 			}
 		}
-		if(entity.getType() == NetworkEntityType.BOAT) {
+		if (entity.getType() == NetworkEntityType.BOAT) {
 			entity.getDataCache().setHeadRotation(yaw);
 		}
 		return RecyclableSingletonList.create(updateGeneral(version, entity, x, y, z, pitch, headYaw, yaw, onGround, false));

@@ -64,7 +64,7 @@ public class AttributesCache {
 
 
 
-	private boolean peFakeSetPositionSwitch = true;
+	protected boolean peFakeSetPositionSwitch = true;
 
 	public double getPEFakeSetPositionY() {
 		peFakeSetPositionSwitch = !peFakeSetPositionSwitch;
@@ -73,9 +73,9 @@ public class AttributesCache {
 
 
 
-	private GameMode peGameMode = GameMode.SURVIVAL;
-	private boolean peCanFly = false;
-	private boolean peIsFlying = false;
+	protected GameMode peGameMode = GameMode.SURVIVAL;
+	protected boolean peCanFly = false;
+	protected boolean peIsFlying = false;
 
 	public void setPEGameMode(GameMode gamemode) {
 		this.peGameMode = gamemode;
@@ -96,6 +96,17 @@ public class AttributesCache {
 
 	public boolean isPEFlying() {
 		return this.peIsFlying;
+	}
+
+
+	protected byte peLastVehicleYaw;
+
+	public void setPELastVehicleYaw(byte peLastVehicleYaw) {
+		this.peLastVehicleYaw = peLastVehicleYaw;
+	}
+
+	public byte getPELastVehicleYaw() {
+		return peLastVehicleYaw;
 	}
 
 

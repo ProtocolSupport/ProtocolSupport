@@ -6,7 +6,6 @@ import org.bukkit.enchantments.Enchantment;
 
 import gnu.trove.map.hash.TIntIntHashMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.IdRemappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable;
@@ -79,7 +78,7 @@ public class PEDataValues {
 	public static int getLivingEntityTypeId(NetworkEntityType type) {
 		return livingEntityType.get(type);
 	}
-	
+
 	public static NetworkEntityType getLivingTypeFromPeNetworkId(int networkId) {
 		return livingTypeFromNetwork.get(networkId);
 	}
@@ -141,7 +140,7 @@ public class PEDataValues {
 			BLOCK_ID.setRemap(MinecraftData.getBlockStateFromIdAndData(from, i), MinecraftData.getBlockStateFromIdAndData(to, dataTo));
 		}
 	}
-	
+
 	private static final TIntIntHashMap pcEnchantToPe = new TIntIntHashMap();
 	private static final TIntIntHashMap peEnchantToPc = new TIntIntHashMap();
 	@SuppressWarnings("deprecation")
@@ -173,7 +172,7 @@ public class PEDataValues {
 		registerEnchantRemap(Enchantment.LURE, 24);
 		registerEnchantRemap(Enchantment.MENDING, 26);
 	}
-	
+
 	public static int pcToPeEnchant(int pcId) {
 		return pcEnchantToPe.get(pcId);
 	}

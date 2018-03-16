@@ -97,7 +97,7 @@ public class SpigotNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 	public int getIntNumber(String key) {
 		return tag.getInt(key);
 	}
-	
+
 	@Override
 	public short getShortNumber(String key) {
 		return tag.getShort(key);
@@ -198,7 +198,7 @@ public class SpigotNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 	public void setLongArray(String key, long[] value) {
 		tag.set(key, new NBTTagLongArray(value));
 	}
-	
+
 	@Override
 	public NBTTagCompoundWrapper clone() {
 		return wrap((NBTTagCompound) tag.clone());

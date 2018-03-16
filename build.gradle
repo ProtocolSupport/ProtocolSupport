@@ -37,10 +37,13 @@ sourceCompatibility = 1.8
 
 import java.text.MessageFormat
 
-File dlDepsDir = new File('dllibs')
-dlDepsDir.mkdirs()
+File dlDepsDirC = new File('dllibsc')
+dlDepsDirC.mkdirs()
 
-def dlDeps = [
+File dlDepsDirS = new File('dllibss')
+dlDepsDirS.mkdirs()
+
+def dlDepsC = [
 	new Tuple(
 		'https://yivesmirror.com/files/spigot/spigot-1.12.2-R0.1-SNAPSHOT-b1609.jar',
 		'spigot-1.12.2-1.jar'
@@ -48,14 +51,21 @@ def dlDeps = [
 	new Tuple(
 		'https://repo.glowstone.net/repository/snapshots/net/glowstone/glowstone/2018.2.0-SNAPSHOT/glowstone-2018.2.0-20180209.231901-7.jar',
 		'glowstone-1.12.2-1.jar'
-	),
-	new Tuple(
-		'https://build.true-games.org/job/RakNetServer/21/artifact/target/RakNetServer.jar',
-		'raknetserver-21.jar'
 	)
 ]
 
-task updateLibs(type: DefaultTask) {doLast{
+def dlDepsS = [
+	new Tuple(
+		'https://build.true-games.org/job/RakNetServer/25/artifact/target/RakNetServer.jar',
+		'raknetserver-5.jar'
+	),
+	new Tuple(
+		'https://build.true-games.org/job/UdpServerSocketChannel/11/artifact/target/UdpServerSocketChannel.jar',
+		'udpserver-2.jar'
+	)
+]
+
+void dlDeps(def dlDeps, File dlDepsDir) {
 	def dlDepsNames = new HashSet<String>()
 	dlDeps.each({
 		String dlDepUrl = it[0]
@@ -72,6 +82,11 @@ task updateLibs(type: DefaultTask) {doLast{
 		logger.lifecycle(MessageFormat.format("Deleting old dllib {0}", it.getName()))
 		it.delete()
 	})
+}
+
+task updateLibs(type: DefaultTask) {doLast{
+	dlDeps(dlDepsC, dlDepsDirC)
+	dlDeps(dlDepsS, dlDepsDirS)
 }}
 
 
@@ -97,8 +112,8 @@ repositories {
 
 dependencies {
 	shadow files('buildprocessor/BuildProcessor.jar')
-	shadow fileTree(dir: dlDepsDir, include: '*.jar')
-	compile files(new File(dlDepsDir, 'raknetserver-21.jar'))
+	shadow fileTree(dir: dlDepsDirC, include: '*.jar')
+	compile fileTree(dir: dlDepsDirS, include: '*.jar')
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 	compile group: 'net.sf.trove4j', name: 'trove4j', version: '3.0.3'
 	compile group: 'com.google.code.gson', name: 'gson', version: '2.8.0'

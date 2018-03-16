@@ -7,6 +7,7 @@ import org.bukkit.Material;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
@@ -58,13 +59,40 @@ import protocolsupport.zplatform.itemstack.NBTTagType;
  *  Debugging can be a pain in the butt, I hope the comments can provide some help.
  */
 public class GodPacket extends ServerBoundMiddlePacket {
-	
+
 	private static boolean godlyDebug = true;
 	//Transactions
 	protected InfTransaction[] transactions;
 	//Wrapped packet
+	protected static final int ACTION_NORMAL = 0;
+	protected static final int ACTION_MISMATCH = 1;
+	protected static final int ACTION_USE_ITEM = 2;
+	protected static final int ACTION_USE_ENTITY = 3;
+	protected static final int ACTION_RELEASE_ITEM = 4;
+
+	protected UseItem useItemMiddlePacket = new UseItem();
+	protected UseEntity useEntityMiddlePacket = new UseEntity();
+	protected ReleaseItem releaseItemMiddlePacket = new ReleaseItem();
+
+	@Override
+	public void setConnection(Connection connection) {
+		super.setConnection(connection);
+		useItemMiddlePacket.setConnection(connection);
+		useEntityMiddlePacket.setConnection(connection);
+		releaseItemMiddlePacket.setConnection(connection);
+	}
+
+	@Override
+	public void setSharedStorage(NetworkDataCache sharedstorage) {
+		super.setSharedStorage(sharedstorage);
+		useItemMiddlePacket.setSharedStorage(sharedstorage);
+		useEntityMiddlePacket.setSharedStorage(sharedstorage);
+		releaseItemMiddlePacket.setSharedStorage(sharedstorage);
+	}
+
 	protected int actionId;
-	protected ServerBoundMiddlePacket packet;
+	protected InvTransaction[] transactions;
+	protected ServerBoundMiddlePacket simpleActionMiddlePacket;
 
 	//TODO: Remove debug (can delete all lines starting with "bug(") if all is well.
 	public static void bug(String bugger) {
@@ -83,56 +111,45 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			transactions[i] = InfTransaction.readFromStream(clientdata, locale, connection.getVersion());
 		}
 
-		switch(actionId) {
+		switch (actionId) {
 			case ACTION_USE_ITEM: {
-				packet = new UseItem();
+				simpleActionMiddlePacket = useItemMiddlePacket;
 				break;
 			}
 			case ACTION_USE_ENTITY: {
-				packet = new UseEntity();
+				simpleActionMiddlePacket = useEntityMiddlePacket;
 				break;
 			}
 			case ACTION_RELEASE_ITEM: {
-				packet = new ReleaseItem();
+				simpleActionMiddlePacket = releaseItemMiddlePacket;
 				break;
 			}
 			case ACTION_NORMAL:
 			case ACTION_MISMATCH:
 			default: {
-				packet = null;
+				simpleActionMiddlePacket = null;
 				break;
 			}
 		}
-		
-		if (packet != null) {
-			packet.setSharedStorage(cache);
-			packet.setConnection(connection);
-			packet.readFromClientData(clientdata);
+
+		if (simpleActionMiddlePacket != null) {
+			simpleActionMiddlePacket.readFromClientData(clientdata);
 		}
-		
-		//BLEEHH! TODO: Not?
-		clientdata.readBytes(clientdata.readableBytes());
+		clientdata.skipBytes(clientdata.readableBytes());
 	}
 
-	//Sources
-	public static final int SOURCE_CONTAINER = 0;
-	public static final int SOURCE_GLOBAL = 1;
-	public static final int SOURCE_WORLD_INTERACTION = 2;
-	public static final int SOURCE_CREATIVE = 3;
-	public static final int SOURCE_TODO = 99999;
-	//Actions
-	public static final int ACTION_NORMAL = 0;
-	public static final int ACTION_MISMATCH = 1;
-	public static final int ACTION_USE_ITEM = 2;
-	public static final int ACTION_USE_ENTITY = 3;
-	public static final int ACTION_RELEASE_ITEM = 4;
+	protected static final int SOURCE_CONTAINER = 0;
+	protected static final int SOURCE_GLOBAL = 1;
+	protected static final int SOURCE_WORLD_INTERACTION = 2;
+	protected static final int SOURCE_CREATIVE = 3;
+	protected static final int SOURCE_TODO = 99999;
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		PEInventoryCache invCache = cache.getPEInventoryCache();
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
-		if (packet != null) {
-			packets.addAll(packet.toNative());
+		if (simpleActionMiddlePacket != null) {
+			simpleActionMiddlePacket.toNative();
 		} else if (actionId == ACTION_NORMAL) {
 			for (InfTransaction transaction : transactions) {
 				invCache.getInfTransactions().cacheTransaction(cache, transaction);
@@ -147,7 +164,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		return packets;
 	}
 
-	public static class InfTransaction {
+	protected static class InvTransaction {
 
 		private int sourceId;
 		private int inventoryId;
@@ -156,10 +173,10 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		private ItemStackWrapper oldItem;
 		private ItemStackWrapper newItem;
 
-		private static InfTransaction readFromStream(ByteBuf from, String locale, ProtocolVersion version) {
-			InfTransaction transaction = new InfTransaction();
+		private static InvTransaction readFromStream(ByteBuf from, String locale, ProtocolVersion version) {
+			InvTransaction transaction = new InvTransaction();
 			transaction.sourceId = VarNumberSerializer.readVarInt(from);
-			switch(transaction.sourceId) {
+			switch (transaction.sourceId) {
 				case SOURCE_CONTAINER: {
 					transaction.inventoryId = VarNumberSerializer.readSVarInt(from);
 					break;

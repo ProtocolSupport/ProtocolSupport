@@ -22,10 +22,10 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class SetPassengers extends MiddleSetPassengers {
 
-	public static final int UNLINK = 0;
-	public static final int LINK = 1;
+	protected static final int UNLINK = 0;
+	protected static final int LINK = 1;
 
-	private final TIntObjectHashMap<TIntHashSet> passengers = new TIntObjectHashMap<>();
+	protected final TIntObjectHashMap<TIntHashSet> passengers = new TIntObjectHashMap<>();
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
@@ -42,18 +42,13 @@ public class SetPassengers extends MiddleSetPassengers {
 			for (int passengerId : passengersIds) {
 				NetworkEntity passenger = wecache.getWatchedEntity(passengerId);
 				if (passenger != null) {
-					//MOJANG.... WHYYYYY?!
-					if (vehicle.isOfType(NetworkEntityType.PIG)) { //If we don't do this we crash, but TODO: perhaps this can better be done at spawn.
-						packets.add(EntitySetAttributes.create(version, vehicle, EntitySetAttributes.createAttribute("minecraft:horse.jump_strength", 0.432084373616155))); 
-					}
 					DataCache data = passenger.getDataCache();
-					if (data.isRiding() && data.getVehicleId() != vehicleId) {
+					if (data.isRiding() && (data.getVehicleId() != vehicleId)) {
 						//In case we are jumping from vehicle to vehicle.
 						packets.add(create(version, data.getVehicleId(), passengerId, UNLINK));
 					}
 					PocketRiderInfo rideInfo = PocketData.getPocketEntityData(vehicle.getType()).getRiderInfo();
 					if (rideInfo != null) {
-						System.out.println("Passenger Type: " + passenger.getType().toString() + "Veh pos + " + rideInfo.getPosition());
 						if (passenger.getType() == NetworkEntityType.PLAYER) {
 							float vehicleSize = PEMetaProviderSPI.getProvider().getSizeScale(vehicle.getUUID(), vehicle.getId(), vehicle.getType().getBukkitType()) * vehicle.getDataCache().getSizeModifier();
 							data.setRiderPosition(rideInfo.getPosition().multiply(new Vector(vehicleSize, vehicleSize, vehicleSize)));

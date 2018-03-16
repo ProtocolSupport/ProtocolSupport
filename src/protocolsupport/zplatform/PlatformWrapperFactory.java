@@ -17,7 +17,7 @@ public interface PlatformWrapperFactory {
 	public NBTTagCompoundWrapper createEmptyNBTCompound();
 
 	public ItemStackWrapper createItemStack(int typeId);
-	
+
 	public ItemStackWrapper createItemStack(ItemStack item);
 
 	public AbstractHandshakeListener createHandshakeListener(NetworkManagerWrapper networkmanager);

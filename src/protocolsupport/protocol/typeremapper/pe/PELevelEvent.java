@@ -58,7 +58,7 @@ public class PELevelEvent {
 	public static final int PARTICLE_EYE_DESPAWN = 2003;
 	public static final int PARTICLE_SPAWN = 2004;
 	public static final int PARTICLE_BONEMEAL = 2005;
-	
+
 	public static final int BLOCK_PARTICLES = 2014;
 
 	public static final int START_RAIN = 3001;

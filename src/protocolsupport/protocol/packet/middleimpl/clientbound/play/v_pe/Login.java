@@ -25,7 +25,7 @@ import protocolsupport.zplatform.impl.pe.PECreativeInventory;
 public class Login extends MiddleLogin {
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {		
+	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
 		NetworkEntity player = cache.getWatchedEntityCache().getSelfPlayer();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();

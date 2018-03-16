@@ -29,25 +29,18 @@ public class PlayerAction extends ServerBoundMiddlePacket {
 
 	protected Position breakPosition = null;
 
-	private static final int START_BREAK = 0;
-	private static final int ABORT_BREAK = 1;
-	private static final int STOP_BREAK = 2;
-	//private static final int GET_UPDATED_BLOCK = 3;
-	private static final int RELEASE_ITEM = 4;
-	//private static final int START_SLEEPING = 5;
-	private static final int STOP_SLEEPING = 6;
-	private static final int RESPAWN1 = 7;
-	//private static final int JUMP = 8;
-	private static final int START_SPRINT = 9;
-	private static final int STOP_SPRINT = 10;
-	private static final int START_SNEAK = 11;
-	private static final int STOP_SNEAK = 12;
-	private static final int DIMENSION_CHANGE = 13;
-	//private static final int DIMENSION_CHANGE_ACK = 14;
-	private static final int START_GLIDE = 15;
-	//private static final int STOP_GLIDE = 16;
-	//private static final int BUILD_DENIED = 17;
-	//private static final int CONTINUE_BREAK = 18;
+	protected static final int START_BREAK = 0;
+	protected static final int ABORT_BREAK = 1;
+	protected static final int STOP_BREAK = 2;
+	protected static final int RELEASE_ITEM = 4;
+	protected static final int STOP_SLEEPING = 6;
+	protected static final int RESPAWN1 = 7;
+	protected static final int START_SPRINT = 9;
+	protected static final int STOP_SPRINT = 10;
+	protected static final int START_SNEAK = 11;
+	protected static final int STOP_SNEAK = 12;
+	protected static final int DIMENSION_CHANGE = 13;
+	protected static final int START_GLIDE = 15;
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {

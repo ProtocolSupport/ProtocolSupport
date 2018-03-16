@@ -20,7 +20,7 @@ public class DataWatcherDataRemapper {
 		DataWatcherDeserializer.decodeDataTo(serverdata, ProtocolVersionsHelper.LATEST_PC, locale, originalMetadata);
 		remap(version, entity);
 	}
-	
+
 	public void remap(ProtocolVersion version, NetworkEntity entity) {
 		if (entity != null) {
 			SpecificRemapper.fromWatchedType(entity.getType()).getRemaps(version)

@@ -18,7 +18,7 @@ public class MonsterEggFromPEIdRemapper implements ItemStackSpecificRemapper {
 		if (itemstack.getData() > 0) {
 			NetworkEntityType type = PEDataValues.getLivingTypeFromPeNetworkId(itemstack.getData());
 			if (type != null) {
-				NBTTagCompoundWrapper tag = (itemstack.getTag() != null && !itemstack.getTag().isNull()) ? itemstack.getTag() : ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+				NBTTagCompoundWrapper tag = ((itemstack.getTag() != null) && !itemstack.getTag().isNull()) ? itemstack.getTag() : ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
 				NBTTagCompoundWrapper entityTag = tag.hasKeyOfType("EntityTag", NBTTagType.COMPOUND) ? tag.getCompound("EntityTag") : ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
 				entityTag.setString("id", MinecraftData.addNamespacePrefix(type.getBukkitType().getName()));
 				tag.setCompound("EntityTag", entityTag);

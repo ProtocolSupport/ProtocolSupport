@@ -127,7 +127,7 @@ public class GlowStoneNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 	public int getIntNumber(String key) {
 		return getNumber(key).intValue();
 	}
-	
+
 	@Override
 	public short getShortNumber(String key) {
 		return getNumber(key).shortValue();
@@ -236,7 +236,7 @@ public class GlowStoneNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 	public void setLongArray(String key, long[] value) {
 		//TODO: actually implement this
 	}
-	
+
 	@Override
 	public NBTTagCompoundWrapper clone() {
 		try {

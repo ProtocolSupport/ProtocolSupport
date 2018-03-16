@@ -15,7 +15,7 @@ public class EnchantFromPEEnchantRemapper implements ItemStackSpecificRemapper {
 
 	@Override
 	public ItemStackWrapper remap(ProtocolVersion version, String locale, ItemStackWrapper itemstack) {
-		if(itemstack.getTag() != null && !itemstack.getTag().isNull()) {
+		if((itemstack.getTag() != null) && !itemstack.getTag().isNull()) {
 			NBTTagCompoundWrapper tag = itemstack.getTag();
 			if (tag.hasKeyOfType("ench", NBTTagType.LIST)) {
 				tag.setList("ench", remapEnchantList(tag.getList("ench", NBTTagType.COMPOUND)));
