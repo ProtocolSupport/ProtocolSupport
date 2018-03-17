@@ -61,8 +61,6 @@ import protocolsupport.zplatform.itemstack.NBTTagType;
 public class GodPacket extends ServerBoundMiddlePacket {
 
 	private static boolean godlyDebug = true;
-	//Transactions
-	protected InfTransaction[] transactions;
 	//Wrapped packet
 	protected static final int ACTION_NORMAL = 0;
 	protected static final int ACTION_MISMATCH = 1;
@@ -106,9 +104,9 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		actionId = VarNumberSerializer.readVarInt(clientdata);
 		bug("ACTION: " + actionId);
 
-		transactions = new InfTransaction[VarNumberSerializer.readVarInt(clientdata)];
+		transactions = new InvTransaction[VarNumberSerializer.readVarInt(clientdata)];
 		for(int i = 0; i < transactions.length; i++) {
-			transactions[i] = InfTransaction.readFromStream(clientdata, locale, connection.getVersion());
+			transactions[i] = InvTransaction.readFromStream(clientdata, locale, connection.getVersion());
 		}
 
 		switch (actionId) {
@@ -151,7 +149,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		if (simpleActionMiddlePacket != null) {
 			simpleActionMiddlePacket.toNative();
 		} else if (actionId == ACTION_NORMAL) {
-			for (InfTransaction transaction : transactions) {
+			for (InvTransaction transaction : transactions) {
 				invCache.getInfTransactions().cacheTransaction(cache, transaction);
 			}
 			packets.addAll(invCache.getInfTransactions().process(cache));
@@ -268,7 +266,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			}
 		}
 
-		public void cacheTransaction(NetworkDataCache cache, InfTransaction transaction) {
+		public void cacheTransaction(NetworkDataCache cache, InvTransaction transaction) {
 			WindowCache winCache = cache.getWindowCache();
 			PEInventoryCache invCache = cache.getPEInventoryCache();
 			int pcSlot = transformSlot(cache, transaction.getInventoryId(), transaction.getSlot());
