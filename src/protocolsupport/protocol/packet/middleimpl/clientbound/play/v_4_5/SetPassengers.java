@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5;
 
-import gnu.trove.map.hash.TIntIntHashMap;
+import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetPassengers;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -9,8 +9,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class SetPassengers extends MiddleSetPassengers {
 
-	private final TIntIntHashMap vehiclePassenger = new TIntIntHashMap();
-	private int passengerId;
+	protected final Int2IntOpenHashMap vehiclePassenger = new Int2IntOpenHashMap();
+	protected int passengerId;
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
