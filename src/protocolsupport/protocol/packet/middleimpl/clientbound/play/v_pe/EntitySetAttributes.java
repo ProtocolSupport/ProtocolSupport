@@ -52,7 +52,7 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 		}
 	}
 
-	protected static HashMap<String, AttributeInfo> remapAttrs = new HashMap<>();
+	protected static final HashMap<String, AttributeInfo> remapAttrs = new HashMap<>();
 	static {
 		remapAttrs.put("generic.movementSpeed", AttributeInfo.MOVE_SPEED);
 		remapAttrs.put("generic.attackDamage", AttributeInfo.ATTACK_DAMAGE);

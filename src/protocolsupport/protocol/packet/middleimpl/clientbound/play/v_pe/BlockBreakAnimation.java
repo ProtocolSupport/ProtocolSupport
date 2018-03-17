@@ -10,7 +10,7 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class BlockBreakAnimation extends MiddleBlockBreakAnimation {
 
-	private final TIntObjectHashMap<TimePle> animations = new TIntObjectHashMap<>();
+	protected final TIntObjectHashMap<TimePle> animations = new TIntObjectHashMap<>();
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
@@ -34,7 +34,7 @@ public class BlockBreakAnimation extends MiddleBlockBreakAnimation {
 	}
 
 	//Tuple for AnimationTime.
-	private class TimePle {
+	protected static class TimePle {
 
 		private boolean started;
 		private final long starttime;
