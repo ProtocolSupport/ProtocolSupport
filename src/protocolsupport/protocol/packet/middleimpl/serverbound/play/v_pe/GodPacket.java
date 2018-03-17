@@ -147,7 +147,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		PEInventoryCache invCache = cache.getPEInventoryCache();
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 		if (simpleActionMiddlePacket != null) {
-			simpleActionMiddlePacket.toNative();
+			return simpleActionMiddlePacket.toNative();
 		} else if (actionId == ACTION_NORMAL) {
 			for (InvTransaction transaction : transactions) {
 				invCache.getInfTransactions().cacheTransaction(cache, transaction);
