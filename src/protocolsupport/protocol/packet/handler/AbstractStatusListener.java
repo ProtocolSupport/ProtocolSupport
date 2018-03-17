@@ -123,11 +123,6 @@ public abstract class AbstractStatusListener {
 		}
 
 		@Override
-		public List<String> getSampleText() {
-			return new ArrayList<String>(sample);
-		}
-
-		@Override
 		public Iterator<Player> iterator() {
 			return new Iterator<Player>() {
 				private final Iterator<Player> iterator = players.iterator();
@@ -150,7 +145,10 @@ public abstract class AbstractStatusListener {
 			};
 		}
 
-		@Override
+		public List<String> getSampleText() {
+			return new ArrayList<String>(sample);
+		}
+
 		public void setSampleText(List<String> sample) {
 			this.sample = new HashSet<>(sample);
 			this.players.removeIf(player -> !sample.contains(player.getName()));
