@@ -116,11 +116,11 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 				serializer.writeFloatLE(attrInfo.getMaxValue());
 				serializer.writeFloatLE(attr.getFloat());
 			}
-			float defaultValue = attrInfo.getDefaultValue();
-			if (defaultValue == -1) {
-				defaultValue = attr.getFloat();
+			if (attrInfo == AttributeInfo.MOVE_SPEED) {
+				serializer.writeFloatLE(attr.getFloat());
+			} else {
+				serializer.writeFloatLE(attrInfo.getDefaultValue());
 			}
-			serializer.writeFloatLE(defaultValue);
 			StringSerializer.writeString(serializer, version, attrInfo.getName());
 		}
 		return serializer;
