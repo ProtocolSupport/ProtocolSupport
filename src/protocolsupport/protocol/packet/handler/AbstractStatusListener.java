@@ -122,6 +122,7 @@ public abstract class AbstractStatusListener {
 			this.icon = icon;
 		}
 
+		@Override
 		public List<String> getSampleText() {
 			return new ArrayList<String>(sample);
 		}
@@ -149,6 +150,7 @@ public abstract class AbstractStatusListener {
 			};
 		}
 
+		@Override
 		public void setSampleText(List<String> sample) {
 			this.sample = new HashSet<>(sample);
 			this.players.removeIf(player -> !sample.contains(player.getName()));

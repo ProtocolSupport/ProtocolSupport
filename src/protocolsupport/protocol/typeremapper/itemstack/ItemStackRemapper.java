@@ -7,8 +7,7 @@ import java.util.List;
 
 import org.bukkit.Material;
 
-import gnu.trove.decorator.TIntObjectMapDecorator;
-import gnu.trove.map.hash.TIntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.fromclient.MonsterEggFromLegacyIdRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.fromclient.PotionFromLegacyIdRemapper;
@@ -201,10 +200,10 @@ public class ItemStackRemapper {
 			registerRemapEntry(Material.NETHER_BRICK_ITEM, Material.CLAY_BRICK, ProtocolVersionsHelper.BEFORE_1_5);
 			registerRemapEntry(Material.QUARTZ, Material.FEATHER, ProtocolVersionsHelper.BEFORE_1_5);
 		}
-		private void registerRemapEntry(Material from, Material to, ProtocolVersion... versions) {
+		protected void registerRemapEntry(Material from, Material to, ProtocolVersion... versions) {
 			registerRemapEntry(from, to, -1, versions);
 		}
-		private void registerRemapEntry(Material from, Material to, int dataTo, ProtocolVersion... versions) {
+		protected void registerRemapEntry(Material from, Material to, int dataTo, ProtocolVersion... versions) {
 			for (ProtocolVersion version : versions) {
 				getTable(version).setSingleRemap(from.getId(), to.getId(), dataTo);
 			}
@@ -215,23 +214,22 @@ public class ItemStackRemapper {
 		}
 	}
 
-	private static final TIntObjectHashMap<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>> toClientRemapper = new TIntObjectHashMap<>();
-	private static final TIntObjectHashMap<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>> fromClientRemapper = new TIntObjectHashMap<>();
+	protected static final Int2ObjectOpenHashMap<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>> toClientRemapper = new Int2ObjectOpenHashMap<>();
+	protected static final Int2ObjectOpenHashMap<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>> fromClientRemapper = new Int2ObjectOpenHashMap<>();
 
-	private static void registerToClientRemapper(Material material, ItemStackSpecificRemapper transformer, ProtocolVersion... versions) {
+	protected static void registerToClientRemapper(Material material, ItemStackSpecificRemapper transformer, ProtocolVersion... versions) {
 		registerRemapper(toClientRemapper, material, transformer, versions);
 	}
 
-	private static void registerFromClientRemapper(Material material, ItemStackSpecificRemapper transformer, ProtocolVersion... versions) {
+	protected static void registerFromClientRemapper(Material material, ItemStackSpecificRemapper transformer, ProtocolVersion... versions) {
 		registerRemapper(fromClientRemapper, material, transformer, versions);
 	}
 
-	private static void registerRemapper(TIntObjectHashMap<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>> registry, Material material, ItemStackSpecificRemapper transformer, ProtocolVersion... versions) {
+	protected static void registerRemapper(Int2ObjectOpenHashMap<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>> registry, Material material, ItemStackSpecificRemapper transformer, ProtocolVersion... versions) {
 		EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>> map = Utils.getFromMapOrCreateDefault(
-			new TIntObjectMapDecorator<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>>(registry),
-			material.getId(), new EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>(ProtocolVersion.class)
+			registry, material.getId(), new EnumMap<>(ProtocolVersion.class)
 		);
-		Arrays.stream(versions).forEach(version -> Utils.getFromMapOrCreateDefault(map, version, new ArrayList<ItemStackSpecificRemapper>()).add(transformer));
+		Arrays.stream(versions).forEach(version -> Utils.getFromMapOrCreateDefault(map, version, new ArrayList<>()).add(transformer));
 	}
 
 	//Order is important because some transformers may add tags in new format
@@ -259,11 +257,10 @@ public class ItemStackRemapper {
 		return remap(fromClientRemapper, version, locale, itemstack.getTypeId(), itemstack);
 	}
 
-	private static ItemStackWrapper remap(
-			TIntObjectHashMap<EnumMap<ProtocolVersion,
-			List<ItemStackSpecificRemapper>>> registry,
-			ProtocolVersion version, String locale,
-			int originalTypeId, ItemStackWrapper itemstack
+	protected static ItemStackWrapper remap(
+		Int2ObjectOpenHashMap<EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>>> registry,
+		ProtocolVersion version, String locale,
+		int originalTypeId, ItemStackWrapper itemstack
 	) {
 		EnumMap<ProtocolVersion, List<ItemStackSpecificRemapper>> map = registry.get(originalTypeId);
 		if (map != null) {
