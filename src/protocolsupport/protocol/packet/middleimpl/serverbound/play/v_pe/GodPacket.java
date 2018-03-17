@@ -90,7 +90,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		if (simpleActionMiddlePacket != null) {
-			simpleActionMiddlePacket.toNative();
+			return simpleActionMiddlePacket.toNative();
 		}
 		return RecyclableEmptyList.get();
 	}
