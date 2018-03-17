@@ -1,6 +1,6 @@
 package protocolsupport.protocol.storage.netcache;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityDestroy;
@@ -14,7 +14,7 @@ import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 //TODO: move to network entity data cache
 public class PEItemEntityCache {
 
-	protected final TIntObjectHashMap<ItemEntityInfo> preparedItems = new TIntObjectHashMap<>();
+	protected final Int2ObjectOpenHashMap<ItemEntityInfo> preparedItems = new Int2ObjectOpenHashMap<>();
 
 	public void removeItem(int entityId) {
 		preparedItems.remove(entityId);
