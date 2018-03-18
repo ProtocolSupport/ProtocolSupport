@@ -1,12 +1,12 @@
 package protocolsupport.protocol.storage.netcache;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.utils.Utils;
 
 public class WatchedEntityCache {
 
-	protected final TIntObjectHashMap<NetworkEntity> watchedEntities = new TIntObjectHashMap<>();
+	protected final Int2ObjectOpenHashMap<NetworkEntity> watchedEntities = new Int2ObjectOpenHashMap<>();
 	protected NetworkEntity player;
 
 	public void addWatchedEntity(NetworkEntity entity) {

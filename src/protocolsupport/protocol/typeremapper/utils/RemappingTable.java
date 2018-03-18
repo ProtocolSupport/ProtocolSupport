@@ -3,8 +3,8 @@ package protocolsupport.protocol.typeremapper.utils;
 import java.util.EnumMap;
 import java.util.HashMap;
 
-import gnu.trove.map.hash.TIntIntHashMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.utils.IntTuple;
 
 public class RemappingTable {
@@ -45,7 +45,10 @@ public class RemappingTable {
 
 	public static class HashMapBasedIdRemappingTable extends IdRemappingTable {
 
-		protected final TIntIntHashMap table = new TIntIntHashMap(16, 0.75F, -1, -1);
+		protected final Int2IntOpenHashMap table = new Int2IntOpenHashMap();
+		{
+			table.defaultReturnValue(-1);
+		}
 
 		@Override
 		public void setRemap(int from, int to) {
@@ -55,7 +58,7 @@ public class RemappingTable {
 		@Override
 		public int getRemap(int id) {
 			int r = table.get(id);
-			return r != -1 ? r : id;
+			return r != table.defaultReturnValue() ? r : id;
 		}
 
 	}
@@ -93,12 +96,12 @@ public class RemappingTable {
 
 	public static final class ComplexIdRemappingTable extends RemappingTable {
 
-		protected final TIntObjectHashMap<SecondaryPartRemapper> table = new TIntObjectHashMap<>();
+		protected final Int2ObjectOpenHashMap<SecondaryPartRemapper> table = new Int2ObjectOpenHashMap<>();
 
 		protected static class SecondaryPartRemapper {
 
 			protected IntTuple singleRemapEntry = null;
-			protected final TIntObjectHashMap<IntTuple> oneToAnotherRemap = new TIntObjectHashMap<IntTuple>();
+			protected final Int2ObjectOpenHashMap<IntTuple> oneToAnotherRemap = new Int2ObjectOpenHashMap<IntTuple>();
 
 			private void setSingleRemap(int primaryTo, int secondaryTo) {
 				this.singleRemapEntry = new IntTuple(primaryTo, secondaryTo);

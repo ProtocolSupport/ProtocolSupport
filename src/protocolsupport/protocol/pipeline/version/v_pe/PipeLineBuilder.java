@@ -6,6 +6,7 @@ import protocolsupport.api.Connection;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.IPipeLineBuilder;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
+import protocolsupport.protocol.typeremapper.packet.PEDimensionSwitchMovementConfirmationPacketQueue;
 
 public class PipeLineBuilder implements IPipeLineBuilder {
 

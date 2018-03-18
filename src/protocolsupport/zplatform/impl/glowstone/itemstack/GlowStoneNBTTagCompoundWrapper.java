@@ -242,7 +242,7 @@ public class GlowStoneNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 		try {
 			return wrap(Mojangson.parseCompound(Mojangson.fromTag(tag)));
 		} catch (MojangsonParseException e) {
-			return null;
+			return NBTTagCompoundWrapper.NULL;
 		}
 	}
 

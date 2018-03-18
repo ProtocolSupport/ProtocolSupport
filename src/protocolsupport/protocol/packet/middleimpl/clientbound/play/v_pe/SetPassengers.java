@@ -2,9 +2,9 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import org.bukkit.util.Vector;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
-import gnu.trove.procedure.TIntProcedure;
-import gnu.trove.set.hash.TIntHashSet;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.ints.IntIterator;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.unsafe.pemetadata.PEMetaProviderSPI;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetPassengers;
@@ -25,7 +25,7 @@ public class SetPassengers extends MiddleSetPassengers {
 	protected static final int UNLINK = 0;
 	protected static final int LINK = 1;
 
-	protected final TIntObjectHashMap<TIntHashSet> passengers = new TIntObjectHashMap<>();
+	protected final Int2ObjectOpenHashMap<IntOpenHashSet> passengers = new Int2ObjectOpenHashMap<>();
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
@@ -34,11 +34,11 @@ public class SetPassengers extends MiddleSetPassengers {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		NetworkEntity vehicle = wecache.getWatchedEntity(vehicleId);
 		if (vehicle != null) {
-			TIntHashSet prevPassengersIds = passengers.get(vehicleId);
+			IntOpenHashSet prevPassengersIds = passengers.get(vehicleId);
 			if (prevPassengersIds == null) {
-				prevPassengersIds = new TIntHashSet();
+				prevPassengersIds = new IntOpenHashSet();
 			}
-			TIntHashSet newPassengersIds = new TIntHashSet(passengersIds);
+			IntOpenHashSet newPassengersIds = new IntOpenHashSet(passengersIds);
 			for (int passengerId : passengersIds) {
 				NetworkEntity passenger = wecache.getWatchedEntity(passengerId);
 				if (passenger != null) {
@@ -62,21 +62,18 @@ public class SetPassengers extends MiddleSetPassengers {
 					packets.add(create(version, vehicleId, passengerId, LINK));
 				}
 			}
-			prevPassengersIds.forEach(new TIntProcedure() {
-				@Override
-				public boolean execute(int passengerId) {
-					if (!newPassengersIds.contains(passengerId)) {
-						NetworkEntity passenger = wecache.getWatchedEntity(passengerId);
-						if (passenger != null) {
-							//Also update meta.
-							passenger.getDataCache().setVehicleId(0);
-							packets.add(EntityMetadata.createFaux(passenger, cache.getAttributesCache().getLocale(), version));
-							packets.add(create(version, vehicleId, passengerId, UNLINK));
-						}
+			IntIterator prevPassengersIdsIter = prevPassengersIds.iterator();
+			while (prevPassengersIdsIter.hasNext()) {
+				int passengerId = prevPassengersIdsIter.nextInt();
+				if (!newPassengersIds.contains(passengerId)) {
+					NetworkEntity passenger = wecache.getWatchedEntity(passengerId);
+					if (passenger != null) {
+						passenger.getDataCache().setVehicleId(0);
+						packets.add(EntityMetadata.createFaux(passenger, cache.getAttributesCache().getLocale(), version));
+						packets.add(create(version, vehicleId, passengerId, UNLINK));
 					}
-					return true;
 				}
-			});
+			}
 			passengers.put(vehicleId, newPassengersIds);
 		}
 		return packets;

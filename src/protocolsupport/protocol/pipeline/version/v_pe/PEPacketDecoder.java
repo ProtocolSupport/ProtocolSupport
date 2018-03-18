@@ -32,6 +32,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.SteerVeh
 import protocolsupport.protocol.pipeline.version.util.decoder.AbstractPacketDecoder;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
+import protocolsupport.protocol.typeremapper.packet.PEDimensionSwitchMovementConfirmationPacketQueue;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -83,7 +84,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 				ctx.channel().eventLoop().schedule(() -> {
 					dimswitchq.unlock();
 					connection.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("PS|PushQueue"));
-				}, 5, TimeUnit.SECONDS);
+				}, PEDimensionSwitchMovementConfirmationPacketQueue.UNLOCK_DELAY, TimeUnit.SECONDS);
 			}
 		} catch (Exception e) {
 			throwFailedTransformException(e, input);

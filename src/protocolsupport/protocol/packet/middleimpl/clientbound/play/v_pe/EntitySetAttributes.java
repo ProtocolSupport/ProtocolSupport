@@ -52,7 +52,7 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 		}
 	}
 
-	protected static HashMap<String, AttributeInfo> remapAttrs = new HashMap<>();
+	protected static final HashMap<String, AttributeInfo> remapAttrs = new HashMap<>();
 	static {
 		remapAttrs.put("generic.movementSpeed", AttributeInfo.MOVE_SPEED);
 		remapAttrs.put("generic.attackDamage", AttributeInfo.ATTACK_DAMAGE);
@@ -116,11 +116,11 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 				serializer.writeFloatLE(attrInfo.getMaxValue());
 				serializer.writeFloatLE(attr.getFloat());
 			}
-			float defaultValue = attrInfo.getDefaultValue();
-			if (defaultValue == -1) {
-				defaultValue = attr.getFloat();
+			if (attrInfo == AttributeInfo.MOVE_SPEED) {
+				serializer.writeFloatLE(attr.getFloat());
+			} else {
+				serializer.writeFloatLE(attrInfo.getDefaultValue());
 			}
-			serializer.writeFloatLE(defaultValue);
 			StringSerializer.writeString(serializer, version, attrInfo.getName());
 		}
 		return serializer;

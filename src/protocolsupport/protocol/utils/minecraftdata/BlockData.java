@@ -5,13 +5,13 @@ import java.util.HashMap;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.utils.JsonUtils;
 
 public class BlockData {
 
 	private static final HashMap<String, BlockDataEntry> byName = new HashMap<>();
-	private static final TIntObjectHashMap<BlockDataEntry> byId = new TIntObjectHashMap<>();
+	private static final Int2ObjectOpenHashMap<BlockDataEntry> byId = new Int2ObjectOpenHashMap<>();
 
 	static {
 		read("blocks.json");

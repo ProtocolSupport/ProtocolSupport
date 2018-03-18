@@ -3,7 +3,7 @@ package protocolsupport.protocol.typeremapper.utils;
 import java.util.EnumSet;
 import java.util.HashSet;
 
-import gnu.trove.map.hash.TIntByteHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ByteOpenHashMap;
 
 public class SkippingTable {
 
@@ -39,7 +39,7 @@ public class SkippingTable {
 
 	public static class HashMapBasedIntSkippingTable extends IntSkippingTable {
 
-		protected final TIntByteHashMap table = new TIntByteHashMap(16, 0.75F);
+		protected final Int2ByteOpenHashMap table = new Int2ByteOpenHashMap();
 
 		@Override
 		public void setSkip(int id) {

@@ -1,12 +1,13 @@
 package protocolsupport.protocol.typeremapper.pe;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
-import gnu.trove.map.hash.TObjectIntHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 
 public class PEPotion {
-	private static final TObjectIntHashMap<String> nameToPeId = new TObjectIntHashMap<String>();
-	private static final TIntObjectHashMap<String> peIdToName = new TIntObjectHashMap<String>();
+
+	protected static final Object2IntOpenHashMap<String> nameToPeId = new Object2IntOpenHashMap<String>();
+	protected static final Int2ObjectOpenHashMap<String> peIdToName = new Int2ObjectOpenHashMap<String>();
 
 	static {
 		register("mundane", 1);

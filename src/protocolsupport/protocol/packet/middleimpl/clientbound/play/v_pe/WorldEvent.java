@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
-import gnu.trove.map.hash.TIntIntHashMap;
+import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldEvent;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.pe.PELevelEvent;
@@ -9,7 +9,7 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class WorldEvent extends MiddleWorldEvent {
 
-	private static final TIntIntHashMap remaps = new TIntIntHashMap();
+	private static final Int2IntOpenHashMap remaps = new Int2IntOpenHashMap();
 	static {
 		remaps.put(1000, PELevelEvent.SOUND_CLICK);
 		remaps.put(1001, PELevelEvent.SOUND_CLICK_FAIL);
