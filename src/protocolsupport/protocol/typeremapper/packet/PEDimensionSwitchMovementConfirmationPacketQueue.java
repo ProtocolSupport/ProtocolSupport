@@ -1,4 +1,4 @@
-package protocolsupport.protocol.pipeline.version.v_pe;
+package protocolsupport.protocol.typeremapper.packet;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,10 +7,13 @@ import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class PEDimensionSwitchMovementConfirmationPacketQueue {
+
+	public static final int UNLOCK_DELAY = Utils.getJavaPropertyValue("pe.dimswitchdelay", 2, Integer::parseInt);
 
 	protected final ArrayList<ClientBoundPacketData> queue = new ArrayList<>(2000);
 	protected State state = State.SCANNING_FOR_LOGIN_STATUS;
