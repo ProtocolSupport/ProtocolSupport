@@ -7,6 +7,9 @@ public class NetworkEntityDataCacheFactory {
 			case LAMA: {
 				return new NetworkEntityLamaDataCache();
 			}
+			case ITEM: {
+				return new NetworkEntityItemDataCache();
+			}
 			default: {
 				return new NetworkEntityDataCache();
 			}

@@ -39,14 +39,9 @@ public class NetworkDataCache {
 		return pechunkmapcache;
 	}
 
-	private final PETitleCache titlecache = new PETitleCache();
+	protected final PETitleCache titlecache = new PETitleCache();
 	public PETitleCache getTitleCache() {
 		return titlecache;
-	}
-
-	private final PEItemEntityCache itementitycache = new PEItemEntityCache();
-	public PEItemEntityCache getPEItemEntityCache() {
-		return itementitycache;
 	}
 
 	@Override
