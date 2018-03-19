@@ -8,9 +8,9 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntitySe
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.typeremapper.watchedentity.DataWatcherDataRemapper;
-import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectSVarLong;
 import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
 import protocolsupport.protocol.utils.types.networkentity.NetworkEntityItemDataCache;
@@ -35,33 +35,28 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		}
 		switch (entity.getType()) {
 			case ITEM: {
-				DataWatcherObject<?> itemWatcher = metadata.getOriginal().get(DataWatcherObjectIndex.Item.ITEM);
-				if (itemWatcher != null) {
+				DataWatcherObjectIndex.Item.ITEM.getValue(metadata.getOriginal()).ifPresent(itemWatcher -> {
 					NetworkEntityItemDataCache itemDataCache = (NetworkEntityItemDataCache) entity.getDataCache();
-					packets.addAll(itemDataCache.updateItem(version, entity.getId(), (ItemStackWrapper) metadata.getOriginal().get(DataWatcherObjectIndex.Item.ITEM).getValue()));
-				}
+					packets.addAll(itemDataCache.updateItem(version, entity.getId(), itemWatcher.getValue()));
+				});
 				break;
 			}
 			default: {
 				if (entity.getType().isOfType(NetworkEntityType.LIVING)) {
-					DataWatcherObject<?> healthWatcher = metadata.getOriginal().get(DataWatcherObjectIndex.EntityLiving.HEALTH);
-					if (healthWatcher != null) {
-						packets.add(EntitySetAttributes.create(
-							version, entity, new ObjectFloatTuple<>(AttributeInfo.HEALTH, ((Float) healthWatcher.getValue()))
-						));
-					}
+					DataWatcherObjectIndex.EntityLiving.HEALTH.getValue(metadata.getOriginal()).ifPresent(healthWatcher -> {
+						packets.add(EntitySetAttributes.create(version, entity, new ObjectFloatTuple<>(AttributeInfo.HEALTH, healthWatcher.getValue())));
+					});
 				}
 				if (entity.getType().isOfType(NetworkEntityType.BATTLE_HORSE)) {
-					DataWatcherObject<?> armorWatcher = metadata.getOriginal().get(DataWatcherObjectIndex.BattleHorse.ARMOR);
-					if (armorWatcher != null) {
-						int type = (Integer) armorWatcher.getValue();
+					DataWatcherObjectIndex.BattleHorse.ARMOR.getValue(metadata.getOriginal()).ifPresent(armorWatcher -> {
+						int type = armorWatcher.getValue();
 						packets.add(EntityEquipment.create(version, locale, entityId,
 							ItemStackWrapper.NULL,
-							type == 0 ? ItemStackWrapper.NULL : ServerPlatform.get().getWrapperFactory().createItemStack(416 + (Integer) armorWatcher.getValue()),
+							type == 0 ? ItemStackWrapper.NULL : ServerPlatform.get().getWrapperFactory().createItemStack(416 + armorWatcher.getValue()),
 							ItemStackWrapper.NULL,
 							ItemStackWrapper.NULL
 						));
-					}
+					});
 				}
 				packets.add(create(entity, locale, metadata.getRemapped(), version));
 			}

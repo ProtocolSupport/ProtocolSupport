@@ -1,13 +1,15 @@
 package protocolsupport.protocol.typeremapper.watchedentity.remapper.value;
 
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
 import protocolsupport.utils.Utils;
 
-public final class IndexValueRemapperStringClamp extends IndexValueRemapper<DataWatcherObjectString> {
+public class IndexValueRemapperStringClamp extends IndexValueRemapper<String, DataWatcherObjectString> {
 
-	private final int limit;
-	public IndexValueRemapperStringClamp(int fromIndex, int toIndex, int limit) {
+	protected final int limit;
+
+	public IndexValueRemapperStringClamp(DataWatcherObjectIndex<DataWatcherObjectString> fromIndex, int toIndex, int limit) {
 		super(fromIndex, toIndex);
 		this.limit = limit;
 	}

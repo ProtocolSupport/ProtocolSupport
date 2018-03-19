@@ -7,8 +7,8 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class PeSimpleFlagAdder extends DataWatcherDataRemapper {
 
-	private final int[] flags;
-	private final boolean[] set;
+	protected final int[] flags;
+	protected final boolean[] set;
 
 	public PeSimpleFlagAdder(int[] flags, boolean[] set) {
 		this.flags = flags;
@@ -17,7 +17,7 @@ public class PeSimpleFlagAdder extends DataWatcherDataRemapper {
 
 	@Override
 	public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
-		for(int i = 0; i < flags.length; i++) {
+		for (int i = 0; i < flags.length; i++) {
 			entity.getDataCache().setPeBaseFlag(flags[i], set[i]);
 		}
 	}

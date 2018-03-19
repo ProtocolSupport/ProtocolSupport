@@ -1,18 +1,19 @@
 package protocolsupport.protocol.typeremapper.watchedentity.remapper.value;
 
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloatLe;
 
-public class IndexValueRemapperNumberToFloatLe extends IndexValueRemapper<DataWatcherObject<?>> {
+public class IndexValueRemapperNumberToFloatLe extends IndexValueRemapper<Number, DataWatcherObject<Number>> {
 
-	public IndexValueRemapperNumberToFloatLe(int fromIndex, int toIndex) {
-		super(fromIndex, toIndex);
+	@SuppressWarnings("unchecked")
+	public IndexValueRemapperNumberToFloatLe(DataWatcherObjectIndex<? extends DataWatcherObject<? extends Number>> fromIndex, int toIndex) {
+		super((DataWatcherObjectIndex<DataWatcherObject<Number>>) fromIndex, toIndex);
 	}
 
 	@Override
-	public DataWatcherObject<?> remapValue(DataWatcherObject<?> object) {
-		Number number = (Number) object.getValue();
-		return new DataWatcherObjectFloatLe(number.floatValue());
+	public DataWatcherObject<?> remapValue(DataWatcherObject<Number> object) {
+		return new DataWatcherObjectFloatLe(object.getValue().floatValue());
 	}
 
 }
