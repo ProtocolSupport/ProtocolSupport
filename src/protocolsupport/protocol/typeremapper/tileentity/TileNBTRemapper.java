@@ -12,9 +12,9 @@ import protocolsupport.protocol.typeremapper.itemstack.toclient.PlayerSkullToLeg
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityType;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.minecraftdata.ItemData;
-import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.TileEntityType;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
 import protocolsupport.utils.IntTuple;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;

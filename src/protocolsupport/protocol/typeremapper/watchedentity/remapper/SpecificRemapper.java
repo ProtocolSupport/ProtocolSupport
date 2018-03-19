@@ -31,8 +31,8 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectStrin
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3f;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
-import protocolsupport.protocol.utils.types.NetworkEntity;
-import protocolsupport.protocol.utils.types.NetworkEntityType;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
 import protocolsupport.utils.CollectionsUtils;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.utils.Utils;

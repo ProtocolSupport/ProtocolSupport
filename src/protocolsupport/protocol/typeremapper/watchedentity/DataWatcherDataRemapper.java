@@ -6,7 +6,7 @@ import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRema
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class DataWatcherDataRemapper {

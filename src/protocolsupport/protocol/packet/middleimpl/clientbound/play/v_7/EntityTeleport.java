@@ -3,8 +3,8 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityTeleport;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.utils.types.NetworkEntity;
-import protocolsupport.protocol.utils.types.NetworkEntityType;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 

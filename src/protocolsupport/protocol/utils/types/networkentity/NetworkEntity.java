@@ -1,4 +1,4 @@
-package protocolsupport.protocol.utils.types;
+package protocolsupport.protocol.utils.types.networkentity;
 
 import java.util.UUID;
 
@@ -22,14 +22,16 @@ public class NetworkEntity {
 		return createPlayer(null, id);
 	}
 
-	private final UUID uuid;
-	private final int id;
-	private final NetworkEntityType type;
+	protected final UUID uuid;
+	protected final int id;
+	protected final NetworkEntityType type;
+	protected final NetworkEntityDataCache cache;
 
 	public NetworkEntity(UUID uuid, int id, NetworkEntityType type) {
 		this.uuid = uuid;
 		this.id = id;
 		this.type = type;
+		this.cache = NetworkEntityDataCacheFactory.create(getType());
 	}
 
 	public UUID getUUID() {
@@ -44,56 +46,13 @@ public class NetworkEntity {
 		return type;
 	}
 
-	private final DataCache cache = new DataCache();
-
-	public DataCache getDataCache() {
+	public NetworkEntityDataCache getDataCache() {
 		return cache;
 	}
 
 	@Override
 	public String toString() {
 		return Utils.toStringAllFields(this);
-	}
-
-	public static class DataCache {
-
-		private byte baseFlags = 0;
-		private boolean firstMeta = true;
-
-		public byte getBaseFlags() {
-			return baseFlags;
-		}
-
-		public boolean getBaseFlag(int bitpos) {
-			return (baseFlags & (1 << (bitpos - 1))) != 0;
-		}
-
-		public void setBaseFlag(int bitpos, boolean value) {
-			setBaseFlag(bitpos, value ? 1 : 0);
-		}
-
-		public void setBaseFlag(int bitpos, int value) {
-			baseFlags &= ~(1 << (bitpos - 1));
-			baseFlags |= (value << (bitpos - 1));
-		}
-
-		public void setBaseFlags(byte baseFlags) {
-			this.baseFlags = baseFlags;
-		}
-
-		public boolean isFirstMeta() {
-			return firstMeta;
-		}
-
-		public void setFirstMeta(boolean firstMeta) {
-			this.firstMeta = firstMeta;
-		}
-
-		@Override
-		public String toString() {
-			return Utils.toStringAllFields(this);
-		}
-
 	}
 
 }

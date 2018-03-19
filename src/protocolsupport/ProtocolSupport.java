@@ -36,7 +36,7 @@ import protocolsupport.protocol.utils.minecraftdata.ItemData;
 import protocolsupport.protocol.utils.minecraftdata.KeybindData;
 import protocolsupport.protocol.utils.minecraftdata.PotionData;
 import protocolsupport.protocol.utils.minecraftdata.SoundData;
-import protocolsupport.protocol.utils.types.NetworkEntityType;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;

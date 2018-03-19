@@ -1,4 +1,4 @@
-package protocolsupport.protocol.utils.types;
+package protocolsupport.protocol.utils.types.networkentity;
 
 import java.text.MessageFormat;
 import java.util.Arrays;

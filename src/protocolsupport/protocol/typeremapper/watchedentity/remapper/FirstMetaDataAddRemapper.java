@@ -1,7 +1,7 @@
 package protocolsupport.protocol.typeremapper.watchedentity.remapper;
 
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class FirstMetaDataAddRemapper extends DataWatcherDataRemapper {
