@@ -1,4 +1,4 @@
-package protocolsupport.protocol.utils.types;
+package protocolsupport.protocol.utils.types.networkentity;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
@@ -21,6 +21,10 @@ public enum NetworkEntityType {
 	AGEABLE(EType.NONE, -1, NetworkEntityType.INSENTIENT),
 	TAMEABLE(EType.NONE, -1, NetworkEntityType.AGEABLE),
 	ARMOR_STAND(EType.NONE, -1, NetworkEntityType.LIVING),
+	COW(EType.MOB, EntityType.COW, NetworkEntityType.AGEABLE),
+	MUSHROOM_COW(EType.MOB, EntityType.MUSHROOM_COW, NetworkEntityType.COW),
+	CHICKEN(EType.MOB, EntityType.CHICKEN, NetworkEntityType.AGEABLE),
+	SQUID(EType.MOB, EntityType.SQUID, NetworkEntityType.INSENTIENT),
 	BASE_HORSE(EType.NONE, -1, NetworkEntityType.AGEABLE),
 	BATTLE_HORSE(EType.NONE, -1, BASE_HORSE),
 	CARGO_HORSE(EType.NONE, -1, BASE_HORSE),
@@ -37,10 +41,6 @@ public enum NetworkEntityType {
 	OCELOT(EType.MOB, EntityType.OCELOT, TAMEABLE),
 	WOLF(EType.MOB, EntityType.WOLF, TAMEABLE),
 	PIG(EType.MOB, EntityType.PIG, AGEABLE),
-	COW(EType.MOB, EntityType.COW, NetworkEntityType.AGEABLE),
-	MUSHROOM_COW(EType.MOB, EntityType.MUSHROOM_COW, NetworkEntityType.COW),
-	CHICKEN(EType.MOB, EntityType.CHICKEN, NetworkEntityType.AGEABLE),
-	SQUID(EType.MOB, EntityType.SQUID, NetworkEntityType.INSENTIENT),
 	RABBIT(EType.MOB, EntityType.RABBIT, AGEABLE),
 	SHEEP(EType.MOB, EntityType.SHEEP, AGEABLE),
 	POLAR_BEAR(EType.MOB, EntityType.POLAR_BEAR, AGEABLE),
@@ -123,15 +123,15 @@ public enum NetworkEntityType {
 		return superType;
 	}
 
+	public EntityType getBukkitType() {
+		return bukkitType;
+	}
+
 	public int getNetworkTypeId() {
 		if (isOfType(MINECART)) {
 			return MINECART.typeId;
 		}
 		return typeId;
-	}
-
-	public EntityType getBukkitType() {
-		return bukkitType;
 	}
 
 	public String getRegistrySTypeId() {

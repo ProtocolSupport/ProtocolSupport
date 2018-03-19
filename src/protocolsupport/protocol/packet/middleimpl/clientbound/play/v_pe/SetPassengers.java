@@ -14,9 +14,9 @@ import protocolsupport.protocol.storage.netcache.WatchedEntityCache;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.minecraftdata.PocketData;
 import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData.PocketRiderInfo;
-import protocolsupport.protocol.utils.types.NetworkEntity;
-import protocolsupport.protocol.utils.types.NetworkEntity.DataCache;
-import protocolsupport.protocol.utils.types.NetworkEntityType;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntityDataCache;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -42,7 +42,7 @@ public class SetPassengers extends MiddleSetPassengers {
 			for (int passengerId : passengersIds) {
 				NetworkEntity passenger = wecache.getWatchedEntity(passengerId);
 				if (passenger != null) {
-					DataCache data = passenger.getDataCache();
+					NetworkEntityDataCache data = passenger.getDataCache();
 					if (data.isRiding() && (data.getVehicleId() != vehicleId)) {
 						//In case we are jumping from vehicle to vehicle.
 						packets.add(create(version, data.getVehicleId(), passengerId, UNLINK));
@@ -55,7 +55,7 @@ public class SetPassengers extends MiddleSetPassengers {
 						} else {
 							data.setRiderPosition(new Vector(0, -0.125, 0));
 						}
-						data.setRotationlock(rideInfo.getRotationLock());
+						data.setRotationLock(rideInfo.getRotationLock());
 						data.setVehicleId(vehicleId);
 					}
 					packets.add(EntityMetadata.createFaux(passenger, cache.getAttributesCache().getLocale(), version));

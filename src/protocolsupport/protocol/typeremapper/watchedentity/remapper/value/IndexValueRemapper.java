@@ -6,7 +6,7 @@ import java.text.MessageFormat;
 
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherDataRemapper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public abstract class IndexValueRemapper<T extends DataWatcherObject<?>> extends DataWatcherDataRemapper {

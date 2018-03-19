@@ -49,9 +49,10 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVecto
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.minecraftdata.PocketData;
 import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData;
-import protocolsupport.protocol.utils.types.NetworkEntity;
-import protocolsupport.protocol.utils.types.NetworkEntity.DataCache;
-import protocolsupport.protocol.utils.types.NetworkEntityType;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntityDataCache;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntityLamaDataCache;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
 import protocolsupport.utils.CollectionsUtils;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.utils.Utils;
@@ -63,7 +64,7 @@ public enum SpecificRemapper {
 		new Entry(new DataWatcherDataRemapper() {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
-				DataCache data = entity.getDataCache();
+				NetworkEntityDataCache data = entity.getDataCache();
 				PocketEntityData pocketdata = PocketData.getPocketEntityData(entity.getType());
 				float entitySize = PEMetaProviderSPI.getProvider().getSizeScale(entity.getUUID(), entity.getId(), entity.getType().getBukkitType()) * data.getSizeModifier();
 				// = PE Lead =
@@ -83,10 +84,10 @@ public enum SpecificRemapper {
 				if (data.isRiding()) {
 					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_RIDING, true);
 					remapped.put(57, new DataWatcherObjectVector3fLe(data.getRiderPosition()));
-					remapped.put(58, new DataWatcherObjectByte((byte) ((data.getRotationlock() != null) ? 1 : 0)));
-					if (data.getRotationlock() != null) {
-						remapped.put(59, new DataWatcherObjectFloatLe(data.getRotationlock()));
-						remapped.put(60, new DataWatcherObjectFloatLe(-data.getRotationlock()));
+					remapped.put(58, new DataWatcherObjectByte((byte) ((data.getRotationLock() != null) ? 1 : 0)));
+					if (data.getRotationLock() != null) {
+						remapped.put(59, new DataWatcherObjectFloatLe(data.getRotationLock()));
+						remapped.put(60, new DataWatcherObjectFloatLe(-data.getRotationLock()));
 					}
 				} else {
 					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_RIDING, false);
@@ -352,7 +353,7 @@ public enum SpecificRemapper {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				getObject(original, DataWatcherObjectIndex.Lama.STRENGTH, DataWatcherObjectVarInt.class).ifPresent(intWatcher -> {
-					entity.getDataCache().setStrength(intWatcher.getValue());
+					((NetworkEntityLamaDataCache) entity.getDataCache()).setStrength(intWatcher.getValue());
 				});
 			}}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Lama.STRENGTH, 16) {}, ProtocolVersionsHelper.RANGE__1_11__1_12_2),

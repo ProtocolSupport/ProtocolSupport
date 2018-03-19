@@ -13,8 +13,8 @@ import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherO
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectSVarLong;
-import protocolsupport.protocol.utils.types.NetworkEntity;
-import protocolsupport.protocol.utils.types.NetworkEntityType;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.utils.ObjectFloatTuple;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
@@ -45,7 +45,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 				break;
 			}
 			default: {
-				if (entity.isOfType(NetworkEntityType.LIVING)) {
+				if (entity.getType().isOfType(NetworkEntityType.LIVING)) {
 					DataWatcherObject<?> healthWatcher = metadata.getOriginal().get(DataWatcherObjectIndex.EntityLiving.HEALTH);
 					if (healthWatcher != null) {
 						packets.add(EntitySetAttributes.create(
@@ -53,7 +53,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 						));
 					}
 				}
-				if (entity.isOfType(NetworkEntityType.BATTLE_HORSE)) {
+				if (entity.getType().isOfType(NetworkEntityType.BATTLE_HORSE)) {
 					DataWatcherObject<?> armorWatcher = metadata.getOriginal().get(DataWatcherObjectIndex.BattleHorse.ARMOR);
 					if (armorWatcher != null) {
 						int type = (Integer) armorWatcher.getValue();

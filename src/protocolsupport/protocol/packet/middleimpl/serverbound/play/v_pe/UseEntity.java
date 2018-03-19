@@ -8,8 +8,8 @@ import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUseEntity;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.types.NetworkEntity;
-import protocolsupport.protocol.utils.types.NetworkEntityType;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
@@ -47,7 +47,7 @@ public class UseEntity extends ServerBoundMiddlePacket {
 		switch (subTypeId) {
 			case INTERACT_INTERACT: {
 				NetworkEntity target = cache.getWatchedEntityCache().getWatchedEntity(targetId);
-				if ((target == null) || !target.isOfType(NetworkEntityType.ARMOR_STAND)) {
+				if ((target == null) || !target.getType().isOfType(NetworkEntityType.ARMOR_STAND)) {
 					packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT, null, 0));
 				}
 				packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT_AT, new Vector(cX, cY, cZ), 0));

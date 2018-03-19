@@ -7,8 +7,8 @@ import protocolsupport.protocol.packet.middle.serverbound.play.MiddleTeleportAcc
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.MovementCache;
-import protocolsupport.protocol.utils.types.NetworkEntity;
-import protocolsupport.protocol.utils.types.NetworkEntityType;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -57,7 +57,7 @@ public class PositionLook extends ServerBoundMiddlePacket {
 		//yaw fix for boats due to relative vs absolute
 		if (player.getDataCache().isRiding()) {
 			NetworkEntity vehicle = cache.getWatchedEntityCache().getWatchedEntity(player.getDataCache().getVehicleId());
-			if (vehicle.isOfType(NetworkEntityType.BOAT)) {
+			if (vehicle.getType() == NetworkEntityType.BOAT) {
 				yaw = ((360f/256f) * cache.getAttributesCache().getPELastVehicleYaw()) + yaw + 90;
 			}
 		}

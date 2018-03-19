@@ -6,21 +6,18 @@ import java.util.Map;
 
 import org.bukkit.util.Vector;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.utils.types.NetworkEntityType;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class PocketData {
-
-	private final static Gson gson = new Gson();
 
 	public static JsonObject getFileObject(String name) {
 		return new JsonParser().parse(getResource(name)).getAsJsonObject();
@@ -47,7 +44,7 @@ public class PocketData {
 
 	public static void readEntityDatas() {
 		getFileObject("entitydata.json").entrySet().forEach(entry -> {
-			entityDatas.put(NetworkEntityType.valueOf(entry.getKey()), gson.fromJson(entry.getValue(), PocketEntityData.class).init());
+			entityDatas.put(NetworkEntityType.valueOf(entry.getKey()), Utils.GSON.fromJson(entry.getValue(), PocketEntityData.class).init());
 		});
 	}
 
@@ -154,4 +151,5 @@ public class PocketData {
 			}
 		}
 	}
+
 }

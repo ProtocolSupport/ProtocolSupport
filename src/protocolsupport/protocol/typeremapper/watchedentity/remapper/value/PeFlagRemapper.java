@@ -3,7 +3,7 @@ package protocolsupport.protocol.typeremapper.watchedentity.remapper.value;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherDataRemapper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
-import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public final class PeFlagRemapper extends DataWatcherDataRemapper {
