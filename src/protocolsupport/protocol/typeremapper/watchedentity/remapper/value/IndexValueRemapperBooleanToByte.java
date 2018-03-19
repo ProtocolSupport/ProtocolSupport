@@ -1,12 +1,13 @@
 package protocolsupport.protocol.typeremapper.watchedentity.remapper.value;
 
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
 
-public final class IndexValueRemapperBooleanToByte extends IndexValueRemapper<DataWatcherObjectBoolean> {
+public class IndexValueRemapperBooleanToByte extends IndexValueRemapper<Boolean, DataWatcherObjectBoolean> {
 
-	public IndexValueRemapperBooleanToByte(int fromIndex, int toIndex) {
+	public IndexValueRemapperBooleanToByte(DataWatcherObjectIndex<DataWatcherObjectBoolean> fromIndex, int toIndex) {
 		super(fromIndex, toIndex);
 	}
 
