@@ -23,6 +23,7 @@ import protocolsupport.protocol.pipeline.common.VarIntFrameEncoder;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.netty.Decompressor;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer;
@@ -31,6 +32,7 @@ import protocolsupport.zplatform.PlatformUtils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.impl.encapsulated.EncapsulatedProtocolInfo;
 import protocolsupport.zplatform.impl.encapsulated.EncapsulatedProtocolUtils;
+import protocolsupport.zplatform.impl.pe.PEProxyServerInfoHandler;
 
 public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
@@ -228,8 +230,12 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 				setProtocol(channel, ProtocolUtils.readNewHandshake(firstpacketdata));
 				break;
 			}
-			case 0x01: { // pe handshake
+			case PEPacketIDs.LOGIN: {
 				setProtocol(channel, ProtocolUtils.readPEHandshake(firstpacketdata));
+				break;
+			}
+			case PEProxyServerInfoHandler.PACKET_ID: {
+				setProtocol(channel, ProtocolVersion.MINECRAFT_PE);
 				break;
 			}
 			default: {

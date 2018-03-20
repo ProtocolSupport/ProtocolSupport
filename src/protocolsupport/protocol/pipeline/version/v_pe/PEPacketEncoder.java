@@ -58,6 +58,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldCus
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldEvent;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldParticle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldSound;
+import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_pe.ServerInfo;
 import protocolsupport.protocol.pipeline.version.util.encoder.AbstractPacketEncoder;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
@@ -73,6 +74,7 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 		}
 		registry.register(NetworkState.LOGIN, ClientBoundPacket.LOGIN_DISCONNECT_ID, LoginDisconnect.class);
 		registry.register(NetworkState.LOGIN, ClientBoundPacket.LOGIN_SUCCESS_ID, LoginSuccess.class);
+		registry.register(NetworkState.STATUS, ClientBoundPacket.STATUS_SERVER_INFO_ID, ServerInfo.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_KEEP_ALIVE_ID, KeepAlive.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_LOGIN_ID, Login.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID, CustomPayload.class);
@@ -137,6 +139,10 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 
 	@Override
 	protected void writePacketId(ByteBuf to, int packetId) {
+		sWritePacketId(to, packetId);
+	}
+
+	public static void sWritePacketId(ByteBuf to, int packetId) {
 		VarNumberSerializer.writeVarInt(to, packetId);
 		to.writeByte(0);
 		to.writeByte(0);

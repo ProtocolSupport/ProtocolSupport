@@ -12,6 +12,7 @@ import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_pe.ClientLogin;
+import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_pe.Ping;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Animation;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.BlockTileUpdate;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Chat;
@@ -34,6 +35,7 @@ import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.zplatform.ServerPlatform;
+import protocolsupport.zplatform.impl.pe.PEProxyServerInfoHandler;
 
 public class PEPacketDecoder extends AbstractPacketDecoder {
 
@@ -41,6 +43,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		for (int i = 0; i < 255; i++) {
 			registry.register(NetworkState.PLAY, i, Noop.class);
 		}
+		registry.register(NetworkState.HANDSHAKING, PEProxyServerInfoHandler.PACKET_ID, Ping.class);
 		registry.register(NetworkState.HANDSHAKING, PEPacketIDs.LOGIN, ClientLogin.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.CLIENT_SETTINGS, ClientSettings.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.PLAYER_MOVE, PositionLook.class);
@@ -91,7 +94,11 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 	}
 
 	@Override
-	protected int readPacketId(ByteBuf from) {
+	public int readPacketId(ByteBuf from) {
+		return sReadPacketId(from);
+	}
+
+	public static int sReadPacketId(ByteBuf from) {
 		int id = VarNumberSerializer.readVarInt(from);
 		from.readByte();
 		from.readByte();
