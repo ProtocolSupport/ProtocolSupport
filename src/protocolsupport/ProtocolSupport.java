@@ -19,6 +19,7 @@ import protocolsupport.listeners.ReloadCommandBlocker;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
+import protocolsupport.protocol.packet.handler.AbstractStatusListener;
 import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.IdSkipper;
@@ -110,6 +111,7 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(ClientBoundPacket.class.getName());
 			Class.forName(InitialPacketDecoder.class.getName());
 			Class.forName(AbstractLoginListener.class.getName());
+			Class.forName(AbstractStatusListener.class.getName());
 			Class.forName(SoundRemapper.class.getName());
 			Class.forName(IdSkipper.class.getName());
 			Class.forName(SpecificRemapper.class.getName());
