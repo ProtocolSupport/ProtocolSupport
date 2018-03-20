@@ -34,7 +34,7 @@ public abstract class AbstractStatusListener {
 	private static final int statusThreads = Utils.getJavaPropertyValue("statusthreads", 2, Integer::parseInt);
 	private static final int statusThreadKeepAlive = Utils.getJavaPropertyValue("statusthreadskeepalive", 60, Integer::parseInt);
 
-	public static void init() {
+	static {
 		ProtocolSupport.logInfo(MessageFormat.format("Status threads max count: {0}, keep alive time: {1}", statusThreads, statusThreadKeepAlive));
 	}
 
