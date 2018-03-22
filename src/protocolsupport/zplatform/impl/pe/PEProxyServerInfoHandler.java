@@ -13,6 +13,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelOutboundHandlerAdapter;
 import io.netty.channel.ChannelPromise;
 import io.netty.handler.codec.EncoderException;
+import io.netty.util.AttributeKey;
 import io.netty.util.ReferenceCountUtil;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.protocol.pipeline.version.v_pe.PEPacketDecoder;
@@ -42,8 +43,13 @@ public class PEProxyServerInfoHandler implements PingHandler {
 
 	public static final int PACKET_ID = 3;
 
+	protected static AttributeKey<Boolean> sentInfoKey = AttributeKey.valueOf("___PSPEServerInfoSentInfo");
+
 	@Override
 	public String getServerInfo(Channel channel) {
+		if (Utils.isTrue(channel.attr(sentInfoKey).getAndSet(Boolean.TRUE))) {
+			return "";
+		}
 		try {
 			ByteBuf request = Unpooled.buffer();
 			PEPacketEncoder.sWritePacketId(request, PACKET_ID);
