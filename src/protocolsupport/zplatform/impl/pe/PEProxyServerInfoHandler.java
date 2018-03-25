@@ -57,13 +57,15 @@ public class PEProxyServerInfoHandler implements PingHandler {
 			channel.pipeline().addBefore(PEProxyNetworkManager.NAME, "peproxy-serverinfo", interceptor);
 			channel.pipeline().context(interceptor).fireChannelRead(request);
 			PingResponse ping = interceptor.response.take();
-			//TODO: use new pe ping format
 			return String.join(";",
 				"MCPE",
 				ping.getMotd().toLegacyText(I18NData.DEFAULT_LOCALE).replace(";", ":"),
 				String.valueOf(ping.getProtocolData().getVersion()), "1.12.11",
 				String.valueOf(ping.getPlayers().getOnline()),
-				String.valueOf(ping.getPlayers().getMax())
+				String.valueOf(ping.getPlayers().getMax()),
+				"1337", //TODO: find out how it is used, apprently that is some sort of id
+				"ProtocolSupportPE",
+				"Survival"
 			);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
