@@ -24,7 +24,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_7_8_9r1_9r2
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12r1_12r2.CustomPayload;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12r1_12r2.EntityAction;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12r1_12r2.KeepAlive;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12r1_12r2.Position;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12r1_12r2.Move;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12r1_12r2.Spectate;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12r1_12r2.SteerVehicle;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12r1_12r2.UpdateSign;
@@ -32,7 +32,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_9r1_9r2_10_
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_9r1_9r2_10_11_12r1_12r2.BlockDig;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_9r1_9r2_10_11_12r1_12r2.ClientSettings;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_9r1_9r2_10_11_12r1_12r2.MoveVehicle;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_9r1_9r2_10_11_12r1_12r2.PositionLook;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_9r1_9r2_10_11_12r1_12r2.MoveLook;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_9r1_9r2_10_11_12r1_12r2.SteerBoat;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_9r1_9r2_10_11_12r1_12r2.TabComplete;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_9r1_9r2_10_11_12r1_12r2.TeleportAccept;
@@ -65,8 +65,8 @@ public class PacketDecoder extends AbstractModernPacketDecoder {
 		registry.register(NetworkState.PLAY, 0x0B, UseEntity.class);
 		registry.register(NetworkState.PLAY, 0x0C, KeepAlive.class);
 		registry.register(NetworkState.PLAY, 0x0D, Flying.class);
-		registry.register(NetworkState.PLAY, 0x0E, Position.class);
-		registry.register(NetworkState.PLAY, 0x0F, PositionLook.class);
+		registry.register(NetworkState.PLAY, 0x0E, Move.class);
+		registry.register(NetworkState.PLAY, 0x0F, MoveLook.class);
 		registry.register(NetworkState.PLAY, 0x10, Look.class);
 		registry.register(NetworkState.PLAY, 0x11, MoveVehicle.class);
 		registry.register(NetworkState.PLAY, 0x12, SteerBoat.class);

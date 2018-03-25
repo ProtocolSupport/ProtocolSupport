@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_4_5_6.
 import protocolsupport.protocol.packet.middleimpl.serverbound.login.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2.EncryptionResponse;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5.EntityAction;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5.PlayerAbilities;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5.PositionLook;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5.MoveLook;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6.ClientCommand;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6.ClientSettings;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6.CustomPayload;
@@ -16,7 +16,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7.Ani
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7.BlockDig;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7.BlockPlace;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7.KeepAlive;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7.Position;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7.Move;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7.TabComplete;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7.UpdateSign;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2.Chat;
@@ -40,9 +40,9 @@ public class PacketDecoder extends AbstractLegacyPacketDecoder {
 		registry.register(NetworkState.PLAY, 0x03, Chat.class);
 		registry.register(NetworkState.PLAY, 0x07, UseEntity.class);
 		registry.register(NetworkState.PLAY, 0x0A, Flying.class);
-		registry.register(NetworkState.PLAY, 0x0B, Position.class);
+		registry.register(NetworkState.PLAY, 0x0B, Move.class);
 		registry.register(NetworkState.PLAY, 0x0C, Look.class);
-		registry.register(NetworkState.PLAY, 0x0D, PositionLook.class);
+		registry.register(NetworkState.PLAY, 0x0D, MoveLook.class);
 		registry.register(NetworkState.PLAY, 0x0E, BlockDig.class);
 		registry.register(NetworkState.PLAY, 0x0F, BlockPlace.class);
 		registry.register(NetworkState.PLAY, 0x10, HeldSlot.class);

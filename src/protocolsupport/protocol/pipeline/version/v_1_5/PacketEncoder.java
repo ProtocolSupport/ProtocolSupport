@@ -27,9 +27,9 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopVehi
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopWorldBorder;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.Chat;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.PlayerAbilities;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.Position;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.SetPosition;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.SetHealth;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.SetPassengers;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.VehiclePassengers;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.Animation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.BlockAction;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.BlockBreakAnimation;
@@ -39,9 +39,9 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.Explo
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.GameStateChange;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.HeldSlot;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.KickDisconnect;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.Login;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.StartGame;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.Map;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.Respawn;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.ChangeDimension;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.SpawnExpOrb;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.SpawnGlobal;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.SpawnLiving;
@@ -68,7 +68,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.Ent
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityRelMoveLook;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityVelocity;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.KeepAlive;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.PlayerInfo;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.PlayerListSetEntry;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.SetExperience;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.UnloadChunk;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.WorldEvent;
@@ -176,14 +176,14 @@ public class PacketEncoder extends AbstractLegacyPacketEncoder {
 		registry.register(NetworkState.STATUS, ClientBoundPacket.STATUS_SERVER_INFO_ID, ServerInfo.class);
 		registry.register(NetworkState.STATUS, ClientBoundPacket.STATUS_PONG_ID, NoopPong.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_KEEP_ALIVE_ID, KeepAlive.class);
-		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_LOGIN_ID, Login.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_LOGIN_ID, StartGame.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CHAT_ID, Chat.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UPDATE_TIME_ID, TimeUpdate.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_EQUIPMENT_ID, EntityEquipment.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_POSITION_ID, SpawnPosition.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UPDATE_HEALTH_ID, SetHealth.class);
-		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_RESPAWN_ID, Respawn.class);
-		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_POSITION_ID, Position.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_RESPAWN_ID, ChangeDimension.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_POSITION_ID, SetPosition.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_HELD_SLOT_ID, HeldSlot.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BED_ID, UseBed.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ANIMATION_ID, Animation.class);
@@ -227,7 +227,7 @@ public class PacketEncoder extends AbstractLegacyPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_TRANSACTION_ID, InventoryConfirmTransaction.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_MAP_ID, Map.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UPDATE_TILE_ID, BlockTileUpdate.class);
-		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_PLAYER_INFO_ID, PlayerInfo.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_PLAYER_INFO_ID, PlayerListSetEntry.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ABILITIES_ID, PlayerAbilities.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_TAB_COMPLETE_ID, TabComplete.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SCOREBOARD_OBJECTIVE_ID, ScoreboardObjective.class);
@@ -236,7 +236,7 @@ public class PacketEncoder extends AbstractLegacyPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SCOREBOARD_TEAM_ID, ScoreboardTeam.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID, CustomPayload.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_KICK_DISCONNECT_ID, KickDisconnect.class);
-		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SET_PASSENGERS_ID, SetPassengers.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SET_PASSENGERS_ID, VehiclePassengers.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CHUNK_UNLOAD_ID, UnloadChunk.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SERVER_DIFFICULTY_ID, NoopServerDifficulty.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_COMBAT_EVENT_ID, NoopCombatEvent.class);

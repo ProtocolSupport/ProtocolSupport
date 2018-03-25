@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8;
+package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_6_7;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
@@ -9,7 +9,7 @@ import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class PositionLook extends ServerBoundMiddlePacket {
+public class MoveLook extends ServerBoundMiddlePacket {
 
 	protected double x;
 	protected double y;
@@ -20,12 +20,13 @@ public class PositionLook extends ServerBoundMiddlePacket {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		x = clientdata.readDouble();
-		y = clientdata.readDouble();
-		z = clientdata.readDouble();
-		yaw = clientdata.readFloat();
-		pitch = clientdata.readFloat();
-		onGround = clientdata.readBoolean();
+		 x = clientdata.readDouble();
+		 y = clientdata.readDouble();
+		 clientdata.readDouble();
+		 z = clientdata.readDouble();
+		 yaw = clientdata.readFloat();
+		 pitch = clientdata.readFloat();
+		 onGround = clientdata.readBoolean();
 	}
 
 	@Override

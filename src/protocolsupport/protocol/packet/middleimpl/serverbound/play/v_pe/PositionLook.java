@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddlePositionLook;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleMoveLook;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleTeleportAccept;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -52,7 +52,7 @@ public class PositionLook extends ServerBoundMiddlePacket {
 		int teleportId = movecache.teleportConfirm();
 		if (teleportId != -1) {
 			packets.add(MiddleTeleportAccept.create(teleportId));
-			packets.add(MiddlePositionLook.create(movecache.getX(), movecache.getY(), movecache.getZ(), headYaw, pitch, onGround));
+			packets.add(MiddleMoveLook.create(movecache.getX(), movecache.getY(), movecache.getZ(), headYaw, pitch, onGround));
 		}
 		//yaw fix for boats due to relative vs absolute
 		if (player.getDataCache().isRiding()) {
@@ -61,7 +61,7 @@ public class PositionLook extends ServerBoundMiddlePacket {
 				yaw = ((360f/256f) * cache.getAttributesCache().getPELastVehicleYaw()) + yaw + 90;
 			}
 		}
-		packets.add(MiddlePositionLook.create(x, y, z, yaw, pitch, onGround));
+		packets.add(MiddleMoveLook.create(x, y, z, yaw, pitch, onGround));
 		BlockTileUpdate.trySignSign(packets);
 		return packets;
 	}
