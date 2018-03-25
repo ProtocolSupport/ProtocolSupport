@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
-import protocolsupport.protocol.packet.middle.clientbound.play.MiddlePlayerInfo;
+import protocolsupport.protocol.packet.middle.clientbound.play.MiddlePlayerListSetEntry;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.storage.netcache.PlayerListCache;
@@ -14,7 +14,7 @@ import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
-public class PlayerInfo extends MiddlePlayerInfo {
+public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 
 	protected final HashMap<UUID, String> oldNames = new HashMap<>();
 

@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_9r1_9r2_10_11_12r1_12r2;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddlePositionLook;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleMoveLook;
 
-public class PositionLook extends MiddlePositionLook {
+public class MoveLook extends MiddleMoveLook {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {

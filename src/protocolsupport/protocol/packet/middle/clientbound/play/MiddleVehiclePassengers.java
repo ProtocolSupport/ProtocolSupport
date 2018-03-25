@@ -5,7 +5,7 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 
-public abstract class MiddleSetPassengers extends ClientBoundMiddlePacket {
+public abstract class MiddleVehiclePassengers extends ClientBoundMiddlePacket {
 
 	protected int vehicleId;
 	protected int[] passengersIds;

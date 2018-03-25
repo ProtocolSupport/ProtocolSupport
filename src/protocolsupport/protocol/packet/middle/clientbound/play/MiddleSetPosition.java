@@ -6,7 +6,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 
-public abstract class MiddlePosition extends ClientBoundMiddlePacket {
+public abstract class MiddleSetPosition extends ClientBoundMiddlePacket {
 
 	protected double xOrig;
 	protected double yOrig;

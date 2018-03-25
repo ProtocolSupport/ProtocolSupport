@@ -3,14 +3,14 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleLook;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddlePositionLook;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleMoveLook;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleTeleportAccept;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class PositionLook extends ServerBoundMiddlePacket {
+public class MoveLook extends ServerBoundMiddlePacket {
 
 	protected double x;
 	protected double y;
@@ -38,11 +38,11 @@ public class PositionLook extends ServerBoundMiddlePacket {
 		} else {
 			int teleportId = cache.getMovementCache().tryTeleportConfirm(x, y, z);
 			if (teleportId == -1) {
-				return RecyclableSingletonList.create(MiddlePositionLook.create(x, y, z, yaw, pitch, onGround));
+				return RecyclableSingletonList.create(MiddleMoveLook.create(x, y, z, yaw, pitch, onGround));
 			} else {
 				RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 				packets.add(MiddleTeleportAccept.create(teleportId));
-				packets.add(MiddlePositionLook.create(x, y, z, yaw, pitch, onGround));
+				packets.add(MiddleMoveLook.create(x, y, z, yaw, pitch, onGround));
 				return packets;
 			}
 		}

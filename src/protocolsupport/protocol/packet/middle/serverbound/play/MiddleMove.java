@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public abstract class MiddlePosition extends ServerBoundMiddlePacket {
+public abstract class MiddleMove extends ServerBoundMiddlePacket {
 
 	protected double x;
 	protected double y;

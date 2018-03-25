@@ -1,14 +1,15 @@
-package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12r1_12r2;
+package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddlePosition;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleMove;
 
-public class Position extends MiddlePosition {
+public class Move extends MiddleMove {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		x = clientdata.readDouble();
 		y = clientdata.readDouble();
+		clientdata.readDouble();
 		z = clientdata.readDouble();
 		onGround = clientdata.readBoolean();
 	}

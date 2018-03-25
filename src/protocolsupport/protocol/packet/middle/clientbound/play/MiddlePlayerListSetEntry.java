@@ -17,7 +17,7 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.utils.Utils;
 
-public abstract class MiddlePlayerInfo extends ClientBoundMiddlePacket {
+public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 
 	protected Action action;
 	protected Info[] infos;
