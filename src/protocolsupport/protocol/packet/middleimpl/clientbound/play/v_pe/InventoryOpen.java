@@ -29,7 +29,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		ProtocolVersion version = connection.getVersion();
-		cache.getPEInventoryCache().getInfTransactions().clear();
+		cache.getPEInventoryCache().getTransactionRemapper().clear();
 		//Horses
 		if (type == WindowType.HORSE) {
 			//TODO: Fix this shit. Horses are a pain in the ass and require a different packer. Lama's are even worse with their variable slots. We'll see.

@@ -12,7 +12,7 @@ public class InventoryClose extends MiddleInventoryClose {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		cache.getPEInventoryCache().getInfTransactions().clear();
+		cache.getPEInventoryCache().getTransactionRemapper().clear();
 		PEInventory.destroyFakeContainers(connection, cache);
 		return RecyclableSingletonList.create(create(connection.getVersion(), windowId));
 	}

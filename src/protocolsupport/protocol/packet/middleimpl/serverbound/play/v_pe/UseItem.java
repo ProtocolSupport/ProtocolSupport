@@ -51,13 +51,13 @@ public class UseItem extends ServerBoundMiddlePacket {
 		switch (subTypeId) {
 			case USE_CLICK_AIR: {
 				face = -1;
-				BlockFace.getById(face).modPosition(position); //Modify position to update the correct block.
 				packets.add(MiddleBlockPlace.create(position, face, 0, cX, cY, cZ));
+				BlockFace.getById(face).modPosition(position); //Modify position to update the correct block.
 				break;
 			}
 			case USE_CLICK_BLOCK: {
-				BlockFace.getById(face).modPosition(position); //Modify position to update the correct block.
 				packets.add(MiddleBlockPlace.create(position, face, 0, cX, cY, cZ));
+				BlockFace.getById(face).modPosition(position); //Modify position to update the correct block.
 				break;
 			}
 			case USE_DIG_BLOCK: {

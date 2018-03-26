@@ -1,9 +1,9 @@
 package protocolsupport.protocol.storage.netcache;
 
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacket.InfTransactions;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.BeaconTemple;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.EnchantHopper;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.TradeVillager;
+import protocolsupport.protocol.typeremapper.pe.PETransactionRemapper;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.ArrayDequeMultiMap.ChildDeque;
@@ -12,7 +12,7 @@ import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 public class PEInventoryCache {
 
 	private ItemStackWrapper itemInHand = ItemStackWrapper.NULL;
-	private final InfTransactions infTransactions = new InfTransactions();
+	private final PETransactionRemapper transactionRemapper = new PETransactionRemapper();
 	private final EnchantHopper enchantHopper = new EnchantHopper();
 	private final BeaconTemple beaconTemple = new BeaconTemple();
 	private final TradeVillager tradeVillager = new TradeVillager();
@@ -32,8 +32,8 @@ public class PEInventoryCache {
 		this.itemInHand = itemInHand;
 	}
 
-	public InfTransactions getInfTransactions() {
-		return infTransactions;
+	public PETransactionRemapper getTransactionRemapper() {
+		return transactionRemapper;
 	}
 
 	public EnchantHopper getEnchantHopper() {
