@@ -11,7 +11,7 @@ public class CraftingGridConfirm extends MiddleCraftingGridConfirm {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData creator = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CRAFTING_GRID_CONFIRM, connection.getVersion());
+		ClientBoundPacketData creator = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CRAFTING_GRID_CONFIRM);
 		creator.writeByte(windowId);
 		VarNumberSerializer.writeVarInt(creator, recipeId);
 		return RecyclableSingletonList.create(creator);

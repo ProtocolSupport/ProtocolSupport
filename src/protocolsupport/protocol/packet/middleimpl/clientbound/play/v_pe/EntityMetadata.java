@@ -80,7 +80,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 	}
 
 	public static ClientBoundPacketData create(NetworkEntity entity, String locale, ArrayMap<DataWatcherObject<?>> peMetadata, ProtocolVersion version) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SET_ENTITY_DATA, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SET_ENTITY_DATA);
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		EntityMetadata.encodeMeta(serializer, version, locale, transform(entity, peMetadata, version));
 		return serializer;

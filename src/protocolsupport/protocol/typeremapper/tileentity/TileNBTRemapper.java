@@ -170,25 +170,25 @@ public class TileNBTRemapper {
 			}, ProtocolVersion.MINECRAFT_PE
 		);
 		register(
-				TileEntityType.MOB_SPAWNER,
-				(version, input) -> {
-					input.remove("SpawnPotentials");
+			TileEntityType.MOB_SPAWNER,
+			(version, input) -> {
+				input.remove("SpawnPotentials");
 
-					int entityId = 0;
+				int entityId = 0;
 
-					if (input.hasKeyOfType("SpawnData", NBTTagType.COMPOUND)) {
-						NBTTagCompoundWrapper compound = input.getCompound("SpawnData");
-						entityId = PEDataValues.getLivingEntityTypeId(NetworkEntityType.getByRegistrySTypeId(compound.getString("id")));
-						compound.setInt("Type", entityId);
-					}
+				if (input.hasKeyOfType("SpawnData", NBTTagType.COMPOUND)) {
+					NBTTagCompoundWrapper compound = input.getCompound("SpawnData");
+					entityId = PEDataValues.getEntityTypeId(NetworkEntityType.getByRegistrySTypeId(compound.getString("id")));
+					compound.setInt("Type", entityId);
+				}
 
-					input.setInt("EntityId", entityId);
-					input.setFloat("DisplayEntityWidth", 1);
-					input.setFloat("DisplayEntityHeight", 1);
-					input.setFloat("DisplayEntityScale", 1);
-					return input;
-				},
-				ProtocolVersion.MINECRAFT_PE
+				input.setInt("EntityId", entityId);
+				input.setFloat("DisplayEntityWidth", 1);
+				input.setFloat("DisplayEntityHeight", 1);
+				input.setFloat("DisplayEntityScale", 1);
+				return input;
+			},
+			ProtocolVersion.MINECRAFT_PE
 		);
 		register(
 				TileEntityType.BED,

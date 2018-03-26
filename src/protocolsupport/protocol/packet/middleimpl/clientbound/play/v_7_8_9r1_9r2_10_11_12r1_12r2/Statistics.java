@@ -15,7 +15,7 @@ public class Statistics extends MiddleStatistics {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_STATISTICS_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_STATISTICS_ID);
 		ArraySerializer.writeVarIntTArray(serializer, statistics, (to, stat) -> {
 			StringSerializer.writeString(to, version, stat.name);
 			VarNumberSerializer.writeVarInt(to, stat.value);

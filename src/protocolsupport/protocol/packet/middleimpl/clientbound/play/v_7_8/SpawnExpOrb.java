@@ -11,7 +11,7 @@ public class SpawnExpOrb extends MiddleSpawnExpOrb {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_EXP_ORB_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_EXP_ORB_ID);
 		VarNumberSerializer.writeVarInt(serializer, entity.getId());
 		serializer.writeInt((int) (x * 32));
 		serializer.writeInt((int) (y * 32));

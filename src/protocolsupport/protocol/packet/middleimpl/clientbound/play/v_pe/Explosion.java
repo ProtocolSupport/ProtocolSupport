@@ -16,14 +16,14 @@ public class Explosion extends MiddleExplosion {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		packets.add(create(version, x, y , z, radius, blocks));
+		packets.add(create(x, y , z, radius, blocks));
 		packets.add(EntityVelocity.create(version, cache.getWatchedEntityCache().getSelfPlayerEntityId(), pMotX, pMotY, pMotZ));
 		packets.add(WorldParticle.create(PELevelEvent.PARTICLE_HUGE_EXPLOSION_SEED, x, y, z));
 		return packets;
 	}
 
-	public static ClientBoundPacketData create(ProtocolVersion version, float x, float y, float z, float radius, Position[] blocks) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.EXPLODE, version);
+	public static ClientBoundPacketData create(float x, float y, float z, float radius, Position[] blocks) {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.EXPLODE);
 		serializer.writeFloatLE(x);
 		serializer.writeFloatLE(y);
 		serializer.writeFloatLE(z);

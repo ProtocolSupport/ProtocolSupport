@@ -10,7 +10,7 @@ public class EntityHeadRotation extends MiddleEntityHeadRotation {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_HEAD_ROTATION_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_HEAD_ROTATION_ID);
 		serializer.writeInt(entityId);
 		serializer.writeByte(headRot);
 		return RecyclableSingletonList.create(serializer);

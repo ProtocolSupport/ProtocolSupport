@@ -20,7 +20,7 @@ public class WorldEvent extends MiddleWorldEvent {
 		if (effectId == 2001) {
 			data = IdRemapper.BLOCK.getTable(version).getRemap((data & 0xFFF) << 4) >> 4;
 		}
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_EVENT_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_EVENT_ID);
 		serializer.writeInt(effectId);
 		PositionSerializer.writeLegacyPositionB(serializer, position);
 		serializer.writeInt(data);

@@ -3,7 +3,6 @@ package protocolsupport.protocol.packet.middleimpl;
 import io.netty.buffer.ByteBuf;
 import io.netty.util.Recycler;
 import io.netty.util.Recycler.Handle;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.WrappingBuffer;
 import protocolsupport.utils.recyclable.Recyclable;
@@ -17,7 +16,7 @@ public class ClientBoundPacketData extends WrappingBuffer implements Recyclable 
 		}
 	};
 
-	public static ClientBoundPacketData create(int packetId, ProtocolVersion version) {
+	public static ClientBoundPacketData create(int packetId) {
 		ClientBoundPacketData packetdata = recycler.get();
 		packetdata.packetId = packetId;
 		return packetdata;

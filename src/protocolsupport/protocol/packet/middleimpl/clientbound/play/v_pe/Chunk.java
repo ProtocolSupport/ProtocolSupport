@@ -27,7 +27,7 @@ public class Chunk extends MiddleChunk {
 		if (full || (bitmask == 0xFFFF)) { //Only send full or 'full' chunks to PE.
 			ProtocolVersion version = connection.getVersion();
 			cache.getPEChunkMapCache().markSent(chunkX, chunkZ);
-			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHUNK_DATA, version);
+			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHUNK_DATA);
 			VarNumberSerializer.writeSVarInt(serializer, chunkX);
 			VarNumberSerializer.writeSVarInt(serializer, chunkZ);
 			transformer.loadData(data, bitmask, cache.getAttributesCache().hasSkyLightInCurrentDimension(), full);
@@ -47,7 +47,7 @@ public class Chunk extends MiddleChunk {
 	}
 
 	public static ClientBoundPacketData createEmptyChunk(ProtocolVersion version, int chunkX, int chunkZ) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHUNK_DATA, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHUNK_DATA);
 		VarNumberSerializer.writeSVarInt(serializer, chunkX);
 		VarNumberSerializer.writeSVarInt(serializer, chunkZ);
 		ByteBuf chunkdata = Unpooled.buffer();

@@ -23,7 +23,7 @@ public class Chunk extends MiddleChunk {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID, version);
+		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID);
 		chunkdata.writeInt(chunkX);
 		chunkdata.writeInt(chunkZ);
 		chunkdata.writeBoolean(full);

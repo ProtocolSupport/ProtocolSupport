@@ -29,14 +29,14 @@ public class ChangeDimension extends MiddleChangeDimension {
 	}
 
 	public static void create(ProtocolVersion version, Environment dimension, NetworkEntity player, double posY, RecyclableCollection<ClientBoundPacketData> packets) {
-		ClientBoundPacketData changedim = ClientBoundPacketData.create(PEPacketIDs.CHANGE_DIMENSION, version);
+		ClientBoundPacketData changedim = ClientBoundPacketData.create(PEPacketIDs.CHANGE_DIMENSION);
 		VarNumberSerializer.writeSVarInt(changedim, getPeDimensionId(dimension));
 		changedim.writeFloatLE(0); //x
 		changedim.writeFloatLE(0); //y
 		changedim.writeFloatLE(0); //z
 		changedim.writeBoolean(true); //respawn
 		packets.add(changedim);
-		packets.add(LoginSuccess.createPlayStatus(version, 3));
+		packets.add(LoginSuccess.createPlayStatus(3));
 		addFakeChunksAndPos(version, player, posY, packets);
 	}
 
@@ -46,7 +46,7 @@ public class ChangeDimension extends MiddleChangeDimension {
 				packets.add(Chunk.createEmptyChunk(version, x, z));
 			}
 		}
-		packets.add(SetPosition.create(version, player, 0, posY, 0, 0, 0, SetPosition.ANIMATION_MODE_TELEPORT));
+		packets.add(SetPosition.create(player, 0, posY, 0, 0, 0, SetPosition.ANIMATION_MODE_TELEPORT));
 	}
 
 	public static int getPeDimensionId(Environment dimId) {

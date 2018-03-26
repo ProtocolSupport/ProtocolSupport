@@ -55,7 +55,7 @@ public class EntityEquipment extends MiddleEntityEquipment {
 	}
 
 	public static ClientBoundPacketData create(ProtocolVersion version, String locale, long entityId, ItemStackWrapper helmet, ItemStackWrapper chestplate, ItemStackWrapper leggings, ItemStackWrapper boots) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOB_ARMOR_EQUIPMENT, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOB_ARMOR_EQUIPMENT);
 		VarNumberSerializer.writeVarLong(serializer, entityId);
 		ItemStackSerializer.writeItemStack(serializer, version, locale, helmet, true);
 		ItemStackSerializer.writeItemStack(serializer, version, locale, chestplate, true);
@@ -65,7 +65,7 @@ public class EntityEquipment extends MiddleEntityEquipment {
 	}
 
 	public static ClientBoundPacketData createUpdateHand(ProtocolVersion version, String locale, int entityId, ItemStackWrapper itemstack, int slot, boolean isMainHand) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOB_EQUIPMENT, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOB_EQUIPMENT);
 		VarNumberSerializer.writeVarLong(serializer, entityId);
 		ItemStackSerializer.writeItemStack(serializer, version, locale, itemstack, true);
 		serializer.writeByte(slot);

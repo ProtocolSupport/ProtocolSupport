@@ -14,7 +14,7 @@ public class VehiclePassengers extends MiddleVehiclePassengers {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_LEASH_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_LEASH_ID);
 		serializer.writeInt(passengerId);
 		serializer.writeInt(passengersIds.length == 0 ? -1 : vehicleId);
 		serializer.writeBoolean(false);

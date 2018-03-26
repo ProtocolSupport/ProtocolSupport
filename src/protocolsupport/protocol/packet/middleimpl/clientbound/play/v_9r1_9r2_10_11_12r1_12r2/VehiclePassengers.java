@@ -12,7 +12,7 @@ public class VehiclePassengers extends MiddleVehiclePassengers {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SET_PASSENGERS_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SET_PASSENGERS_ID);
 		VarNumberSerializer.writeVarInt(serializer, vehicleId);
 		ArraySerializer.writeVarIntVarIntArray(serializer, passengersIds);
 		return RecyclableSingletonList.create(serializer);

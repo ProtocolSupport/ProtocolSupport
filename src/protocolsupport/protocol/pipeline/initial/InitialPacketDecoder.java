@@ -46,7 +46,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
 	protected static final EnumMap<ProtocolVersion, IPipeLineBuilder> pipelineBuilders = new EnumMap<>(ProtocolVersion.class);
 	static {
-		pipelineBuilders.put(ProtocolVersion.MINECRAFT_FUTURE, new protocolsupport.protocol.pipeline.version.v_future.PipeLineBuilder());
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_FUTURE, new protocolsupport.protocol.pipeline.version.v_f.PipeLineBuilder());
 		IPipeLineBuilder builder1122 = new protocolsupport.protocol.pipeline.version.v_1_12.r2.PipeLineBuilder();
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_12_2, builder1122);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_12_1, builder1122);
@@ -72,7 +72,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_5_2, builder15);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_5_1, builder15);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_4_7, new protocolsupport.protocol.pipeline.version.v_1_4.PipeLineBuilder());
-		pipelineBuilders.put(ProtocolVersion.MINECRAFT_LEGACY, new protocolsupport.protocol.pipeline.version.v_legacy.PipeLineBuilder());
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_LEGACY, new protocolsupport.protocol.pipeline.version.v_l.PipeLineBuilder());
 		IPipeLineBuilder builderpe = new protocolsupport.protocol.pipeline.version.v_pe.PipeLineBuilder();
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_PE_FUTURE, builderpe);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_PE, builderpe);

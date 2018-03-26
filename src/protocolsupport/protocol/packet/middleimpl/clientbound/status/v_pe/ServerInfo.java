@@ -13,7 +13,7 @@ public class ServerInfo extends MiddleServerInfo {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEProxyServerInfoHandler.PACKET_ID, ProtocolVersionsHelper.LATEST_PC);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEProxyServerInfoHandler.PACKET_ID);
 		StringSerializer.writeString(serializer, ProtocolVersionsHelper.LATEST_PC, PingResponse.toJson(ping));
 		return RecyclableSingletonList.create(serializer);
 	}

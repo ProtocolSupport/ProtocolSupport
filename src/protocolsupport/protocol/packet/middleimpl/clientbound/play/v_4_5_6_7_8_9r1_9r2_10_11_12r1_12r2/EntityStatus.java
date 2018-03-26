@@ -10,7 +10,7 @@ public class EntityStatus extends MiddleEntityStatus {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_STATUS_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_STATUS_ID);
 		serializer.writeInt(entityId);
 		serializer.writeByte(status);
 		return RecyclableSingletonList.create(serializer);

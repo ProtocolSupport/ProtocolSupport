@@ -11,7 +11,7 @@ public class EntityEffectAdd extends MiddleEntityEffectAdd {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_EFFECT_ADD_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_EFFECT_ADD_ID);
 		VarNumberSerializer.writeVarInt(serializer, entityId);
 		serializer.writeByte(effectId);
 		serializer.writeByte(amplifier);

@@ -2,7 +2,6 @@ package protocolsupport.protocol.typeremapper.pe;
 
 import java.util.Arrays;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.AttributesCache;
@@ -50,7 +49,7 @@ public class PEAdventureSettings {
 	}
 
 	public static ClientBoundPacketData createPacket(int entityId, int... flags) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ADVENTURE_SETTINGS, ProtocolVersion.MINECRAFT_PE);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ADVENTURE_SETTINGS);
 		VarNumberSerializer.writeVarInt(serializer, Arrays.stream(flags).reduce(0, (left, right) -> left | right));
 		VarNumberSerializer.writeVarInt(serializer, 0); //?
 		VarNumberSerializer.writeVarInt(serializer, PERMISSIONS_ALLOW_ALL);

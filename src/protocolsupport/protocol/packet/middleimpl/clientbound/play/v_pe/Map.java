@@ -19,7 +19,7 @@ public class Map extends MiddleMap {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MAP_ITEM_DATA, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MAP_ITEM_DATA);
 		VarNumberSerializer.writeSVarLong(serializer, itemData);
 
 		int flags = 0;

@@ -28,7 +28,7 @@ public class ChangeGameState extends MiddleGameStateChange {
 			case 3: {
 				int gamemode = (int) value;
 				cache.getAttributesCache().setPEGameMode(GameMode.getById(gamemode));
-				ClientBoundPacketData changeGameType = ClientBoundPacketData.create(PEPacketIDs.CHANGE_PLAYER_GAMETYPE, connection.getVersion());
+				ClientBoundPacketData changeGameType = ClientBoundPacketData.create(PEPacketIDs.CHANGE_PLAYER_GAMETYPE);
 				VarNumberSerializer.writeSVarInt(changeGameType, gamemode);
 				packets.add(changeGameType);
 				packets.add(PEAdventureSettings.createPacket(cache));

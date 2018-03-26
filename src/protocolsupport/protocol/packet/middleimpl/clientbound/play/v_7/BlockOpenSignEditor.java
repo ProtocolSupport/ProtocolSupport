@@ -11,7 +11,7 @@ public class BlockOpenSignEditor extends MiddleBlockOpenSignEditor {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SIGN_EDITOR_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SIGN_EDITOR_ID);
 		PositionSerializer.writeLegacyPositionI(serializer, position);
 		return RecyclableSingletonList.create(serializer);
 	}

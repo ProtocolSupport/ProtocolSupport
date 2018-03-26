@@ -23,7 +23,7 @@ public class MonsterEggToPEIdSpecificRemapper implements ItemStackSpecificRemapp
 			return itemstack;
 		}
 
-		itemstack.setData(PEDataValues.getLivingEntityTypeId(NetworkEntityType.getByRegistrySTypeId(id)));
+		itemstack.setData(PEDataValues.getEntityTypeId(NetworkEntityType.getByRegistrySTypeId(id)));
 		return itemstack;
 	}
 

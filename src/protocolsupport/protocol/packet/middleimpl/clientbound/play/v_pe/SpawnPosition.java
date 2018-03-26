@@ -12,7 +12,7 @@ public class SpawnPosition extends MiddleSpawnPosition {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SPAWN_POS, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SPAWN_POS);
 		VarNumberSerializer.writeSVarInt(serializer, 1); //1 - sets level spawn position, 0 - sets player respawn position
 		PositionSerializer.writePEPosition(serializer, position);
 		serializer.writeBoolean(true); //isn't used when setting level spawn position, unknown use for player respawn position

@@ -11,7 +11,7 @@ public class Explosion extends MiddleExplosion {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_EXPLOSION_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_EXPLOSION_ID);
 		serializer.writeDouble(x);
 		serializer.writeDouble(y);
 		serializer.writeDouble(z);

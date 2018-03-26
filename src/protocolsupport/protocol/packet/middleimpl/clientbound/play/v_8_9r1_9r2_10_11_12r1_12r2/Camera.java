@@ -11,7 +11,7 @@ public class Camera extends MiddleCamera {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CAMERA_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CAMERA_ID);
 		VarNumberSerializer.writeVarInt(serializer, entityId);
 		return RecyclableSingletonList.create(serializer);
 	}

@@ -54,7 +54,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 	}
 
 	protected static ClientBoundPacketData create(String name, boolean add, ProtocolVersion version) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_PLAYER_INFO_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_PLAYER_INFO_ID);
 		StringSerializer.writeString(serializer, version, Utils.clampString(name, 16));
 		serializer.writeBoolean(add);
 		serializer.writeShort(0);

@@ -13,7 +13,7 @@ public class ResourcePack extends MiddleResourcePack {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_RESOURCE_PACK_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_RESOURCE_PACK_ID);
 		StringSerializer.writeString(serializer, version, url);
 		StringSerializer.writeString(serializer, version, hash);
 		return RecyclableSingletonList.create(serializer);

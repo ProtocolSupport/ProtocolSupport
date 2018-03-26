@@ -42,7 +42,7 @@ public class EntityStatus extends MiddleEntityStatus {
 	public static final int UNLEASH = 63;
 
 	public static ClientBoundPacketData create(NetworkEntity entity, int status, ProtocolVersion version) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_EVENT, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_EVENT);
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		serializer.writeByte((byte) status);
 		VarNumberSerializer.writeVarInt(serializer, 0); //?

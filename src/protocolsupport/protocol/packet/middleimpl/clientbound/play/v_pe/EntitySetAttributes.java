@@ -102,7 +102,7 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 
 	@SafeVarargs
 	public static ClientBoundPacketData create(ProtocolVersion version, NetworkEntity entity, ObjectFloatTuple<AttributeInfo>... attributes) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SET_ATTRIBUTES, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SET_ATTRIBUTES);
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		VarNumberSerializer.writeVarInt(serializer, attributes.length);
 		for (ObjectFloatTuple<AttributeInfo> attr : attributes) {

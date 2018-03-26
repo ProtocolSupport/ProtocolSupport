@@ -25,7 +25,7 @@ public class SetPosition extends MiddleSetPosition {
 		//PE sends position that intersects blocks bounding boxes in some cases
 		//Server doesn't accept such movements and will send a set position, but we ignore it unless it is above leniency
 		if (cache.getMovementCache().isPEPositionAboveLeniency()) {
-			packets.add(create(version, cache.getWatchedEntityCache().getSelfPlayer(), x, y + 0.01, z, pitch, yaw, ANIMATION_MODE_TELEPORT));
+			packets.add(create(cache.getWatchedEntityCache().getSelfPlayer(), x, y + 0.01, z, pitch, yaw, ANIMATION_MODE_TELEPORT));
 		}
 		return packets;
 	}
@@ -41,10 +41,10 @@ public class SetPosition extends MiddleSetPosition {
 	public static final int ANIMATION_MODE_ALL = 0;
 	public static final int ANIMATION_MODE_TELEPORT = 2;
 
-	public static ClientBoundPacketData create(ProtocolVersion version, NetworkEntity entity, double x, double y, double z, float pitch, float yaw, int mode) {
+	public static ClientBoundPacketData create(NetworkEntity entity, double x, double y, double z, float pitch, float yaw, int mode) {
 		y = y + 1.6200000047683716D;
 		float realYaw = (float) (yaw * (360D/256D));
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_MOVE, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_MOVE);
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		serializer.writeFloatLE((float) x);
 		serializer.writeFloatLE((float) y);

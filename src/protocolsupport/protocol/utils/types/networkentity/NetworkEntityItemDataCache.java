@@ -41,13 +41,13 @@ public class NetworkEntityItemDataCache extends NetworkEntityDataCache {
 		RecyclableArrayList<ClientBoundPacketData> updatepackets = RecyclableArrayList.create();
 		if ((this.itemstack == null) || !this.itemstack.equals(itemstack)) {
 			if (spawned) {
-				updatepackets.add(EntityDestroy.create(version, entityId));
+				updatepackets.add(EntityDestroy.create(entityId));
 				spawned = false;
 			}
 			this.itemstack = itemstack;
 		}
 		if (!spawned) {
-			ClientBoundPacketData spawn = ClientBoundPacketData.create(PEPacketIDs.ADD_ITEM_ENTITY, version);
+			ClientBoundPacketData spawn = ClientBoundPacketData.create(PEPacketIDs.ADD_ITEM_ENTITY);
 			VarNumberSerializer.writeSVarLong(spawn, entityId);
 			VarNumberSerializer.writeVarLong(spawn, entityId);
 			ItemStackSerializer.writeItemStack(spawn, version, I18NData.DEFAULT_LOCALE, itemstack, true);

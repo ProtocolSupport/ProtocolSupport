@@ -80,7 +80,7 @@ public class VehiclePassengers extends MiddleVehiclePassengers {
 	}
 
 	public static ClientBoundPacketData create(ProtocolVersion version, int vehicleId, int passengerId, int action) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_LINK, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_LINK);
 		VarNumberSerializer.writeSVarLong(serializer, vehicleId);
 		VarNumberSerializer.writeSVarLong(serializer, passengerId);
 		serializer.writeByte(action);

@@ -44,7 +44,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 		ProtocolVersion version = connection.getVersion();
 		switch (action) {
 			case ADD: {
-				ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_INFO, version);
+				ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_INFO);
 				serializer.writeByte(0);
 				PESkinsProvider skinprovider = PESkinsProviderSPI.getProvider();
 				VarNumberSerializer.writeVarInt(serializer, infos.length);
@@ -68,7 +68,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 				return RecyclableSingletonList.create(serializer);
 			}
 			case REMOVE: {
-				ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_INFO, version);
+				ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_INFO);
 				serializer.writeByte(1);
 				VarNumberSerializer.writeVarInt(serializer, infos.length);
 				for (Info info : infos) {

@@ -23,7 +23,7 @@ public class GameStateChange extends MiddleGameStateChange {
 				break;
 			}
 		}
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_GAME_STATE_CHANGE_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_GAME_STATE_CHANGE_ID);
 		serializer.writeByte(type);
 		serializer.writeByte((int) value);
 		return RecyclableSingletonList.create(serializer);

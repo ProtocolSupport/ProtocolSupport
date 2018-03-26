@@ -12,7 +12,7 @@ public class BlockBreakAnimation extends MiddleBlockBreakAnimation {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BLOCK_BREAK_ANIMATION_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BLOCK_BREAK_ANIMATION_ID);
 		VarNumberSerializer.writeVarInt(serializer, entityId);
 		PositionSerializer.writePosition(serializer, position);
 		serializer.writeByte(stage);

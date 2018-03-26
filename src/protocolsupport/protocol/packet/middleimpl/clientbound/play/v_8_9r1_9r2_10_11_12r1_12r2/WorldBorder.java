@@ -11,7 +11,7 @@ public class WorldBorder extends MiddleWorldBorder {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_BORDER_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_BORDER_ID);
 		VarNumberSerializer.writeVarInt(serializer, action.ordinal());
 		switch (action) {
 			case SET_SIZE: {

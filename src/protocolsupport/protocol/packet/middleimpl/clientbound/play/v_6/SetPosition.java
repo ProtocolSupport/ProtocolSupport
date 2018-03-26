@@ -11,7 +11,7 @@ public class SetPosition extends MiddleSetPosition {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		y += + 1.6200000047683716D;
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_POSITION_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_POSITION_ID);
 		serializer.writeDouble(x);
 		serializer.writeDouble(y);
 		serializer.writeDouble(y + 1.6200000047683716D);

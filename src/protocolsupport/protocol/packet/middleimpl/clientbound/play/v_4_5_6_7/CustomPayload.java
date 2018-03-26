@@ -20,7 +20,7 @@ public class CustomPayload extends MiddleCustomPayload {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID);
 		StringSerializer.writeString(serializer, version, tag);
 		if (tag.equals("MC|TrList")) {
 			MerchantDataSerializer.writeMerchantData(

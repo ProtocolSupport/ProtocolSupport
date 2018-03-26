@@ -13,7 +13,7 @@ public class ChangeDimension extends MiddleChangeDimension {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_RESPAWN_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_RESPAWN_ID);
 		serializer.writeInt(dimension.getId());
 		serializer.writeByte(difficulty.getId());
 		serializer.writeByte(gamemode.getId());

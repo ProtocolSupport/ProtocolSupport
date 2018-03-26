@@ -14,7 +14,7 @@ public class ServerInfo extends MiddleServerInfo {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.STATUS_SERVER_INFO_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.STATUS_SERVER_INFO_ID);
 		StringSerializer.writeString(serializer, version, PingResponse.toJson(ping));
 		return RecyclableSingletonList.create(serializer);
 	}

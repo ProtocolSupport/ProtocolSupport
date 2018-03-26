@@ -27,19 +27,19 @@ public class StartGame extends MiddleStartGame {
 		NetworkEntity player = cache.getWatchedEntityCache().getSelfPlayer();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		//Send fake resource packet for sounds.
-		ClientBoundPacketData resourcepack = ClientBoundPacketData.create(PEPacketIDs.RESOURCE_PACK, version);
+		ClientBoundPacketData resourcepack = ClientBoundPacketData.create(PEPacketIDs.RESOURCE_PACK);
 		resourcepack.writeBoolean(false); // required
 		resourcepack.writeShortLE(0); //beh packs count
 		resourcepack.writeShortLE(0); //res packs count
 		packets.add(resourcepack);
 		//Send fake resource stack for sounds.
-		ClientBoundPacketData resourcestack = ClientBoundPacketData.create(PEPacketIDs.RESOURCE_STACK, version);
+		ClientBoundPacketData resourcestack = ClientBoundPacketData.create(PEPacketIDs.RESOURCE_STACK);
 		resourcestack.writeBoolean(false); // required
 		VarNumberSerializer.writeVarInt(resourcestack, 0); //beh packs count
 		VarNumberSerializer.writeVarInt(resourcestack, 0); //res packs count
 		packets.add(resourcestack);
 		//Send actual start game information.
-		ClientBoundPacketData startgame = ClientBoundPacketData.create(PEPacketIDs.START_GAME, version);
+		ClientBoundPacketData startgame = ClientBoundPacketData.create(PEPacketIDs.START_GAME);
 		VarNumberSerializer.writeSVarLong(startgame, playerEntityId); //player eid
 		VarNumberSerializer.writeVarLong(startgame, playerEntityId); //player eid
 		VarNumberSerializer.writeSVarInt(startgame, gamemode.getId()); //player gamemode
@@ -81,10 +81,10 @@ public class StartGame extends MiddleStartGame {
 		packets.add(PEAdventureSettings.createPacket(cache));
 		packets.add(EntityMetadata.createFaux(player, cache.getAttributesCache().getLocale(), version));
 		//Can now switch to game state
-		packets.add(LoginSuccess.createPlayStatus(version, 3));
+		packets.add(LoginSuccess.createPlayStatus(3));
 		//Send chunk radius update without waiting for request, works anyway
 		//PE uses circle to calculate visible chunks, so the view distance should cover all chunks that are sent by server (pc square should fit into pe circle)
-		ClientBoundPacketData chunkradius = ClientBoundPacketData.create(PEPacketIDs.CHUNK_RADIUS, version);
+		ClientBoundPacketData chunkradius = ClientBoundPacketData.create(PEPacketIDs.CHUNK_RADIUS);
 		VarNumberSerializer.writeSVarInt(chunkradius, (int) Math.ceil((Bukkit.getViewDistance() + 1) * Math.sqrt(2)));
 		packets.add(chunkradius);
 		//Set PE gamemode.

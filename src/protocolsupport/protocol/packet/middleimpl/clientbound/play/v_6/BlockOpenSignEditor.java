@@ -17,7 +17,7 @@ public class BlockOpenSignEditor extends MiddleBlockOpenSignEditor {
 		if (version == ProtocolVersion.MINECRAFT_1_6_1) {
 			return RecyclableEmptyList.get();
 		}
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SIGN_EDITOR_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SIGN_EDITOR_ID);
 		serializer.writeByte(0);
 		PositionSerializer.writeLegacyPositionI(serializer, position);
 		return RecyclableSingletonList.create(serializer);

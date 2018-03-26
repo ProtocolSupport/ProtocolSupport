@@ -14,7 +14,7 @@ public class EntityEquipment extends MiddleEntityEquipment {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_EQUIPMENT_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_EQUIPMENT_ID);
 		VarNumberSerializer.writeVarInt(serializer, entityId);
 		VarNumberSerializer.writeVarInt(serializer, slot);
 		ItemStackSerializer.writeItemStack(serializer, version, cache.getAttributesCache().getLocale(), itemstack, true);

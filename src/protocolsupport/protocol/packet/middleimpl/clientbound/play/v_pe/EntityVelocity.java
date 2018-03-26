@@ -16,7 +16,7 @@ public class EntityVelocity extends MiddleEntityVelocity {
 	}
 
 	public static ClientBoundPacketData create(ProtocolVersion version, int entityId, float motX, float motY, float motZ) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_VELOCITY, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_VELOCITY);
 		VarNumberSerializer.writeVarLong(serializer, entityId);
 		serializer.writeFloatLE(motX / 8000.0F);
 		serializer.writeFloatLE(motY / 8000.0F);

@@ -13,7 +13,7 @@ public class ScoreboardObjective extends MiddleScoreboardObjective {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SCOREBOARD_OBJECTIVE_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SCOREBOARD_OBJECTIVE_ID);
 		StringSerializer.writeString(serializer, version, name);
 		StringSerializer.writeString(serializer, version, mode == 1 ? "" : value);
 		serializer.writeByte(mode);
