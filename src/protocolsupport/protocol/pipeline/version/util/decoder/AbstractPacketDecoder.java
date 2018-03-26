@@ -55,7 +55,7 @@ public abstract class AbstractPacketDecoder extends MessageToMessageDecoder<Byte
 		if (ServerPlatform.get().getMiscUtils().isDebugging()) {
 			data.readerIndex(0);
 			throw new DecoderException(MessageFormat.format(
-				"Unable to transform or read packet data {1}", Arrays.toString(MiscSerializer.readAllBytes(data))
+				"Unable to transform or read packet data {0}", Arrays.toString(MiscSerializer.readAllBytes(data))
 			), exception);
 		} else {
 			throw exception;
