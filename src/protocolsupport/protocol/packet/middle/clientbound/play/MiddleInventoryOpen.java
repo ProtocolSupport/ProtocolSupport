@@ -29,34 +29,33 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 
 	@Override
 	public boolean postFromServerRead() {
+		int invSlots = slots;
+		switch (type) {
+			case ANVIL: {
+				invSlots = 3;
+				break;
+			}
+			case BEACON: {
+				invSlots = 1;
+				break;
+			}
+			case CRAFTING_TABLE: {
+				invSlots = 10;
+				break;
+			}
+			case ENCHANT: {
+				invSlots = 2;
+				break;
+			}
+			default: {
+				break;
+			}
+		}
+		cache.getWindowCache().setOpenedWindow(type, windowId, invSlots, horseId);
 		if (IdSkipper.INVENTORY.getTable(connection.getVersion()).shouldSkip(type)) {
 			connection.receivePacket(ServerPlatform.get().getPacketFactory().createInboundInventoryClosePacket());
 			return false;
 		} else {
-			int cacheSlots;
-			switch(type) {
-				case ANVIL: {
-					cacheSlots = 3;
-					break;
-				}
-				case BEACON: {
-					cacheSlots = 1;
-					break;
-				}
-				case CRAFTING_TABLE: {
-					cacheSlots = 10;
-					break;
-				}
-				case ENCHANT: {
-					cacheSlots = 2;
-					break;
-				}
-				default: {
-					cacheSlots = slots;
-					break;
-				}
-			}
-			cache.getWindowCache().setOpenedWindow(type, windowId, cacheSlots, horseId);
 			return true;
 		}
 	}

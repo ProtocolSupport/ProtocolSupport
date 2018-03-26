@@ -74,10 +74,12 @@ public class ConnectionImpl extends Connection {
 
 	@Override
 	public void sendPacket(Object packet) {
-		runTask(() -> {
+		networkmanager.getChannel().eventLoop().submit(() -> {
 			try {
 				ChannelHandlerContext ctx = networkmanager.getChannel().pipeline().context(ChannelHandlers.LOGIC);
-				ctx.writeAndFlush(packet);
+				if (ctx != null) {
+					ctx.writeAndFlush(packet);
+				}
 			} catch (Throwable t) {
 				System.err.println("Error occured while packet sending");
 				t.printStackTrace();
@@ -87,10 +89,12 @@ public class ConnectionImpl extends Connection {
 
 	@Override
 	public void receivePacket(Object packet) {
-		runTask(() -> {
+		networkmanager.getChannel().eventLoop().submit(() -> {
 			try {
 				ChannelHandlerContext ctx = networkmanager.getChannel().pipeline().context(ChannelHandlers.LOGIC);
-				ctx.fireChannelRead(packet);
+				if (ctx != null) {
+					ctx.fireChannelRead(packet);
+				}
 			} catch (Throwable t) {
 				System.err.println("Error occured while packet receiving");
 				t.printStackTrace();
@@ -101,10 +105,12 @@ public class ConnectionImpl extends Connection {
 	@Override
 	public void sendRawPacket(byte[] data) {
 		ByteBuf dataInst = Unpooled.wrappedBuffer(data);
-		runTask(() -> {
+		networkmanager.getChannel().eventLoop().submit(() -> {
 			try {
 				ChannelHandlerContext ctx = networkmanager.getChannel().pipeline().context(ChannelHandlers.RAW_CAPTURE_SEND);
-				ctx.writeAndFlush(dataInst);
+				if (ctx != null) {
+					ctx.writeAndFlush(dataInst);
+				}
 			} catch (Throwable t) {
 				System.err.println("Error occured while raw packet sending");
 				t.printStackTrace();
@@ -115,23 +121,17 @@ public class ConnectionImpl extends Connection {
 	@Override
 	public void receiveRawPacket(byte[] data) {
 		ByteBuf dataInst = Unpooled.wrappedBuffer(data);
-		runTask(() -> {
+		networkmanager.getChannel().eventLoop().submit(() -> {
 			try {
 				ChannelHandlerContext ctx = networkmanager.getChannel().pipeline().context(ChannelHandlers.RAW_CAPTURE_RECEIVE);
-				ctx.fireChannelRead(dataInst);
+				if (ctx != null) {
+					ctx.fireChannelRead(dataInst);
+				}
 			} catch (Throwable t) {
 				System.err.println("Error occured while raw packet receiving");
 				t.printStackTrace();
 			}
 		});
-	}
-
-	private void runTask(Runnable task) {
-		if (networkmanager.getChannel().eventLoop().inEventLoop()) {
-			task.run();
-		} else {
-			networkmanager.getChannel().eventLoop().submit(task);
-		}
 	}
 
 	public static ConnectionImpl getFromChannel(Channel channel) {
