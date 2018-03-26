@@ -16,7 +16,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_PLAYER_INFO_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_PLAYER_INFO_ID);
 		VarNumberSerializer.writeVarInt(serializer, action.ordinal());
 		VarNumberSerializer.writeVarInt(serializer, infos.length);
 		for (Info info : infos) {

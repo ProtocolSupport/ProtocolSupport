@@ -23,14 +23,14 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 
 	public static ClientBoundPacketData createPacketData(ProtocolVersion version, TileEntityType type, Position position, NBTTagCompoundWrapper tag) {
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9_4) && (type == TileEntityType.SIGN)) {
-			ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.LEGACY_PLAY_UPDATE_SIGN_ID, version);
+			ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.LEGACY_PLAY_UPDATE_SIGN_ID);
 			PositionSerializer.writePosition(serializer, position);
 			for (String line : TileNBTRemapper.getSignLines(tag)) {
 				StringSerializer.writeString(serializer, version, line);
 			}
 			return serializer;
 		} else {
-			ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_UPDATE_TILE_ID, version);
+			ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_UPDATE_TILE_ID);
 			PositionSerializer.writePosition(serializer, position);
 			serializer.writeByte(type.getNetworkId());
 			ItemStackSerializer.writeTag(serializer, version, TileNBTRemapper.remap(version, tag));

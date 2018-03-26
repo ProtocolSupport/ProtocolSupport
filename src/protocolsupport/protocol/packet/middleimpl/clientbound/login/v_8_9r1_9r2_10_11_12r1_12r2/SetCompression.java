@@ -11,7 +11,7 @@ public class SetCompression extends MiddleSetCompression {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.LOGIN_SET_COMPRESSION_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.LOGIN_SET_COMPRESSION_ID);
 		VarNumberSerializer.writeVarInt(serializer, threshold);
 		return RecyclableSingletonList.create(serializer);
 	}

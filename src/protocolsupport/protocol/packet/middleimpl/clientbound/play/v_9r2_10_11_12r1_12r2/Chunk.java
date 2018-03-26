@@ -21,7 +21,7 @@ public class Chunk extends MiddleChunk {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID);
 		serializer.writeInt(chunkX);
 		serializer.writeInt(chunkZ);
 		serializer.writeBoolean(full);

@@ -10,7 +10,7 @@ public class Entity extends MiddleEntity {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_ID);
 		serializer.writeInt(entityId);
 		return RecyclableSingletonList.create(serializer);
 	}

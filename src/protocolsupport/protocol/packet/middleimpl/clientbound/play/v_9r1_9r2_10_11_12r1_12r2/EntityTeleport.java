@@ -11,7 +11,7 @@ public class EntityTeleport extends MiddleEntityTeleport {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_TELEPORT_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_TELEPORT_ID);
 		VarNumberSerializer.writeVarInt(serializer, entityId);
 		serializer.writeDouble(x);
 		serializer.writeDouble(y);

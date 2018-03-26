@@ -23,7 +23,7 @@ public class InventorySetItems extends MiddleInventorySetItems {
 		} else if (version.isBefore(ProtocolVersion.MINECRAFT_1_8) && (cache.getWindowCache().getOpenedWindow() == WindowType.ENCHANT)) {
 			itemstacks.remove(1);
 		}
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_SET_ITEMS_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_SET_ITEMS_ID);
 		serializer.writeByte(windowId);
 		serializer.writeShort(itemstacks.size());
 		for (ItemStackWrapper itemstack : itemstacks) {

@@ -11,7 +11,7 @@ public class SetHealth extends MiddleSetHealth {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_UPDATE_HEALTH_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_UPDATE_HEALTH_ID);
 		serializer.writeFloat(health);
 		VarNumberSerializer.writeVarInt(serializer, food);
 		serializer.writeFloat(saturation);

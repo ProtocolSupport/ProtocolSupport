@@ -10,7 +10,7 @@ public class GameStateChange extends MiddleGameStateChange {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_GAME_STATE_CHANGE_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_GAME_STATE_CHANGE_ID);
 		serializer.writeByte(type);
 		serializer.writeFloat(value);
 		return RecyclableSingletonList.create(serializer);

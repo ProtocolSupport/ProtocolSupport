@@ -10,7 +10,7 @@ public class ServerDifficulty extends MiddleServerDifficulty {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SERVER_DIFFICULTY_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SERVER_DIFFICULTY_ID);
 		serializer.writeByte(difficulty.getId());
 		return RecyclableSingletonList.create(serializer);
 	}

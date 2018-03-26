@@ -17,7 +17,7 @@ public class Title extends MiddleTitle {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_TITLE_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_TITLE_ID);
 		int actionId = action.ordinal();
 		VarNumberSerializer.writeVarInt(serializer, actionId > 2 ? actionId - 1 : actionId);
 		switch (action) {

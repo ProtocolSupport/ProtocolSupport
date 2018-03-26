@@ -11,7 +11,7 @@ public class SetExperience extends MiddleSetExperience {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_EXPERIENCE_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_EXPERIENCE_ID);
 		serializer.writeFloat(exp);
 		VarNumberSerializer.writeVarInt(serializer, level);
 		VarNumberSerializer.writeVarInt(serializer, totalExp);

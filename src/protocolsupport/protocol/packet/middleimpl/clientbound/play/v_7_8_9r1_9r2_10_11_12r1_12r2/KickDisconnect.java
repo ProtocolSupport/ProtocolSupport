@@ -15,7 +15,7 @@ public class KickDisconnect extends MiddleKickDisconnect {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_KICK_DISCONNECT_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_KICK_DISCONNECT_ID);
 		StringSerializer.writeString(serializer, version, ChatAPI.toJSON(LegacyChatJson.convert(message, version, cache.getAttributesCache().getLocale())));
 		return RecyclableSingletonList.create(serializer);
 	}

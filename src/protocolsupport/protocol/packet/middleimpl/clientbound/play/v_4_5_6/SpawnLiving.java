@@ -14,7 +14,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_LIVING_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_LIVING_ID);
 		serializer.writeInt(entity.getId());
 		serializer.writeByte(IdRemapper.ENTITY.getTable(version).getRemap(entity.getType()).getNetworkTypeId());
 		serializer.writeInt((int) (x * 32));

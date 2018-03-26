@@ -10,7 +10,7 @@ public class HeldSlot extends MiddleHeldSlot {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_HELD_SLOT_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_HELD_SLOT_ID);
 		serializer.writeShort(slot);
 		return RecyclableSingletonList.create(serializer);
 	}

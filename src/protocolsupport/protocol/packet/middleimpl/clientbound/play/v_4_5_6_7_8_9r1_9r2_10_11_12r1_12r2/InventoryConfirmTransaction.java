@@ -10,7 +10,7 @@ public class InventoryConfirmTransaction extends MiddleInventoryConfirmTransacti
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_TRANSACTION_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_TRANSACTION_ID);
 		serializer.writeByte(windowId);
 		serializer.writeShort(actionNumber);
 		serializer.writeBoolean(accepted);

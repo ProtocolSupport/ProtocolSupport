@@ -10,7 +10,7 @@ public class EntityLeash extends MiddleEntityLeash {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_LEASH_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_LEASH_ID);
 		serializer.writeInt(entityId);
 		serializer.writeInt(vehicleId);
 		return RecyclableSingletonList.create(serializer);

@@ -10,7 +10,7 @@ public class InventoryClose extends MiddleInventoryClose {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_CLOSE_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_CLOSE_ID);
 		serializer.writeByte(windowId);
 		return RecyclableSingletonList.create(serializer);
 	}

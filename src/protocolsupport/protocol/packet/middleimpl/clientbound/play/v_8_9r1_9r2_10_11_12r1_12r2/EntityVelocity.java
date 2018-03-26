@@ -11,7 +11,7 @@ public class EntityVelocity extends MiddleEntityVelocity {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_VELOCITY_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_VELOCITY_ID);
 		VarNumberSerializer.writeVarInt(serializer, entityId);
 		serializer.writeShort(motX);
 		serializer.writeShort(motY);

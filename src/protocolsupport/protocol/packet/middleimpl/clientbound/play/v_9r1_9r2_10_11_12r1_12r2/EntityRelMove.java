@@ -11,7 +11,7 @@ public class EntityRelMove extends MiddleEntityRelMove {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_REL_MOVE_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_REL_MOVE_ID);
 		VarNumberSerializer.writeVarInt(serializer, entityId);
 		serializer.writeShort(relX);
 		serializer.writeShort(relY);

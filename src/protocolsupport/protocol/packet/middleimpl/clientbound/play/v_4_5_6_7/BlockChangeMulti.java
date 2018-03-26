@@ -15,7 +15,7 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
 		ArrayBasedIdRemappingTable remapper = IdRemapper.BLOCK.getTable(version);
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BLOCK_CHANGE_MULTI_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BLOCK_CHANGE_MULTI_ID);
 		serializer.writeInt(chunkX);
 		serializer.writeInt(chunkZ);
 		serializer.writeShort(records.length);

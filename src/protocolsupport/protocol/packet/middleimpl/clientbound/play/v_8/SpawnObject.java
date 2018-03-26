@@ -31,7 +31,7 @@ public class SpawnObject extends MiddleSpawnObject {
 				break;
 			}
 		}
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_OBJECT_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_OBJECT_ID);
 		VarNumberSerializer.writeVarInt(serializer, entity.getId());
 		serializer.writeByte(type.getNetworkTypeId());
 		serializer.writeInt((int) (x * 32));

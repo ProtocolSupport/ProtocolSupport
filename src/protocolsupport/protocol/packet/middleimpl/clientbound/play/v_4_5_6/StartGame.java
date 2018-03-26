@@ -13,7 +13,7 @@ public class StartGame extends MiddleStartGame {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_LOGIN_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_LOGIN_ID);
 		serializer.writeInt(playerEntityId);
 		StringSerializer.writeString(serializer, version, leveltype);
 		serializer.writeByte(gamemode.getId() | (hardcore ? 0x8 : 0));
