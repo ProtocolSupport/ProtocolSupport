@@ -31,11 +31,11 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 
 	@Override
 	public boolean postFromServerRead() {
+		cache.getWindowCache().setOpenedWindow(type);
 		if (IdSkipper.INVENTORY.getTable(connection.getVersion()).shouldSkip(type)) {
 			connection.receivePacket(ServerPlatform.get().getPacketFactory().createInboundInventoryClosePacket());
 			return false;
 		} else {
-			cache.getWindowCache().setOpenedWindow(type);
 			return true;
 		}
 	}
