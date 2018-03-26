@@ -58,7 +58,7 @@ public abstract class AbstractStatusListener {
 		}
 		sentInfo = true;
 
-		executeTask(() -> {
+		statusprocessor.execute(() -> {
 			ServerPingResponseEvent revent = createResponse(networkManager.getChannel());
 			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createStausServerInfoPacket(
 				revent.getPlayers(), revent.getProtocolInfo(),
@@ -91,10 +91,6 @@ public abstract class AbstractStatusListener {
 		Bukkit.getPluginManager().callEvent(revent);
 
 		return revent;
-	}
-
-	public static void executeTask(Runnable runnable) {
-		statusprocessor.execute(runnable);
 	}
 
 	@SuppressWarnings("unchecked")
