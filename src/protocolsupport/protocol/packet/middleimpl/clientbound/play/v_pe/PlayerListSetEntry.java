@@ -24,6 +24,7 @@ import protocolsupport.api.unsafe.peskins.PESkinsProviderSPI;
 import protocolsupport.api.utils.Any;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddlePlayerListSetEntry;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.pipeline.version.v_pe.PEPacketEncoder;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -115,13 +116,10 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 		@Override
 		public void accept(byte[] skindata) {
 			ByteBuf serializer = Unpooled.buffer();
-			VarNumberSerializer.writeVarInt(serializer, PEPacketIDs.PLAYER_SKIN);
-			serializer.writeByte(0);
-			serializer.writeByte(0);
+			PEPacketEncoder.sWritePacketId(serializer, PEPacketIDs.PLAYER_SKIN);
 			MiscSerializer.writeUUID(serializer, connection.getVersion(), uuid.equals(connection.getPlayer().getUniqueId()) ? clientUUID : uuid);
 			writeSkinData(connection.getVersion(), serializer, true, isNormalModel, skindata);
-			byte[] rawpacket = MiscSerializer.readAllBytes(serializer);
-			connection.sendRawPacket(rawpacket);
+			connection.sendRawPacket(MiscSerializer.readAllBytes(serializer));
 		}
 	}
 
