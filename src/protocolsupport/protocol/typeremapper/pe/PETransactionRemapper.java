@@ -69,7 +69,6 @@ public class PETransactionRemapper {
 	
 	//See [Documentation](https://github.com/ProtocolSupport/ProtocolSupport/wiki/PSPE:-Inventory-Managing#the-real-stuff)
 	public void processTransactions(NetworkDataCache cache, RecyclableArrayList<ServerBoundPacketData> packets) {
-		cache.getPEInventoryCache().lockInventory();
 		deficits.cycleUp((item, itemDeficit) -> {
 			ChildDeque<SlotBudget> itemSurplus = surpluses.get(item);
 			if (itemSurplus != null) {
