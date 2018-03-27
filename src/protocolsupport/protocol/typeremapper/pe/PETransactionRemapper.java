@@ -138,6 +138,21 @@ public class PETransactionRemapper {
 			return itemDeficit.isEmpty();
 		});
 	}
+	
+	public void processCreativeTransactions(NetworkDataCache cache, InvTransaction transaction, RecyclableArrayList<ServerBoundPacketData> packets) {
+		if ((transaction.getSourceId() != SOURCE_CREATIVE) && !transaction.isCursor()) {
+			//Creative transaction use -1 not for cursor but throwing items, cursoritems are actually deleted on serverside.
+			packets.add(MiddleCreativeSetSlot.create(cache.getAttributesCache().getLocale(), (pcSlot == InvTransaction.DROP ? InvTransaction.CURSOR : pcSlot), transaction.getNewItem()));
+			if (pcSlot == invCache.getSelectedSlot()) {
+				invCache.setItemInHand(transaction.getNewItem());
+			}
+		}
+	}
+	
+	public boolean isCreativeTransaction(NetworkDataCache cache) {
+		return (cache.getAttributesCache().getPEGameMode() == GameMode.CREATIVE) &&
+			(winCache.getOpenedWindow() == WindowType.PLAYER);
+	}
 
 	protected boolean isSwapping(SlotBudget deficit) {
 		return (surpluses.getVeryLast() != null) && (deficit.getSlot() == surpluses.getVeryLast().getSlot());
