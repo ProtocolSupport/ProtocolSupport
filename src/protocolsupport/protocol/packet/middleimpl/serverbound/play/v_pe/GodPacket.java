@@ -129,11 +129,17 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		if (simpleActionMiddlePacket != null) {
 			return simpleActionMiddlePacket.toNative();
 		} else if (actionId == ACTION_NORMAL) {
+			PETransactionRemapper remapper = invCache.getTransactionRemapper();
+			cache.getPEInventoryCache().lockInventory();
 			for (InvTransaction transaction : transactions) {
 				PESlotRemapper.remapServerboundSlot(cache, transaction);
-				invCache.getTransactionRemapper().cacheTransaction(transaction);
+				if (remapper.isCreativeTransaction(cache)) {
+					remapper.processC
+				} else {
+					remapper.cacheTransaction(transaction);	
+				}
 			}
-			invCache.getTransactionRemapper().processTransactions(cache, packets);
+			remapper.processTransactions(cache, packets);
 		}
 		if (invCache.shouldSendUpdate() && cache.getAttributesCache().getPEGameMode() != GameMode.CREATIVE) {
 			//Trigger inventory update, ALWAYS since PE sometimes 'guesses' or doesn't trust the server, we generally want an inventory update scheduled.
@@ -149,6 +155,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		public static final int CURSOR = -1;
 		public static final int TABLE = -333;
 		public static final int MISSING_REMAP = -666;
+		public static final int DROP = -999;
 		private int sourceId;
 		private int inventoryId;
 		private int action;
