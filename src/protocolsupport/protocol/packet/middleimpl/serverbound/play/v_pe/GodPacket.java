@@ -12,6 +12,7 @@ import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.storage.netcache.PEInventoryCache;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
 import protocolsupport.protocol.typeremapper.pe.PESlotRemapper;
+import protocolsupport.protocol.typeremapper.pe.PETransactionRemapper;
 import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
@@ -116,11 +117,11 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		clientdata.skipBytes(clientdata.readableBytes());
 	}
 
-	protected static final int SOURCE_CONTAINER = 0;
-	protected static final int SOURCE_GLOBAL = 1;
-	protected static final int SOURCE_WORLD_INTERACTION = 2;
-	protected static final int SOURCE_CREATIVE = 3;
-	protected static final int SOURCE_TODO = 99999;
+	public static final int SOURCE_CONTAINER = 0;
+	public static final int SOURCE_GLOBAL = 1;
+	public static final int SOURCE_WORLD_INTERACTION = 2;
+	public static final int SOURCE_CREATIVE = 3;
+	public static final int SOURCE_TODO = 99999;
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
@@ -134,7 +135,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			for (InvTransaction transaction : transactions) {
 				PESlotRemapper.remapServerboundSlot(cache, transaction);
 				if (remapper.isCreativeTransaction(cache)) {
-					remapper.processC
+					remapper.processCreativeTransactions(cache, transaction, packets);
 				} else {
 					remapper.cacheTransaction(transaction);	
 				}

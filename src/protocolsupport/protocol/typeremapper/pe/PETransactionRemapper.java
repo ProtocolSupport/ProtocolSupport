@@ -1,10 +1,13 @@
 package protocolsupport.protocol.typeremapper.pe;
 
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCreativeSetSlot;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClick;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryTransaction;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacket;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacket.InvTransaction;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
+import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.ArrayDequeMultiMap;
 import protocolsupport.utils.ArrayDequeMultiMap.ChildDeque;
@@ -140,18 +143,19 @@ public class PETransactionRemapper {
 	}
 	
 	public void processCreativeTransactions(NetworkDataCache cache, InvTransaction transaction, RecyclableArrayList<ServerBoundPacketData> packets) {
-		if ((transaction.getSourceId() != SOURCE_CREATIVE) && !transaction.isCursor()) {
+		if ((transaction.getSourceId() != GodPacket.SOURCE_CREATIVE) && !transaction.isCursor()) {
 			//Creative transaction use -1 not for cursor but throwing items, cursoritems are actually deleted on serverside.
-			packets.add(MiddleCreativeSetSlot.create(cache.getAttributesCache().getLocale(), (pcSlot == InvTransaction.DROP ? InvTransaction.CURSOR : pcSlot), transaction.getNewItem()));
-			if (pcSlot == invCache.getSelectedSlot()) {
-				invCache.setItemInHand(transaction.getNewItem());
+			int slot = transaction.getSlot() == InvTransaction.DROP ? InvTransaction.CURSOR : transaction.getSlot();
+			packets.add(MiddleCreativeSetSlot.create(cache.getAttributesCache().getLocale(), slot, transaction.getNewItem()));
+			if (slot == cache.getPEInventoryCache().getSelectedSlot()) {
+				cache.getPEInventoryCache().setItemInHand(transaction.getNewItem());
 			}
 		}
 	}
 	
 	public boolean isCreativeTransaction(NetworkDataCache cache) {
 		return (cache.getAttributesCache().getPEGameMode() == GameMode.CREATIVE) &&
-			(winCache.getOpenedWindow() == WindowType.PLAYER);
+			(cache.getWindowCache().getOpenedWindow() == WindowType.PLAYER);
 	}
 
 	protected boolean isSwapping(SlotBudget deficit) {
