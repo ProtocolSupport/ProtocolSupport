@@ -36,13 +36,11 @@ public class PETransactionRemapper {
 				}
 			} else {
 				if (!transaction.getOldItem().isNull() && !transaction.isCursor()) {
-					rectifyCraftRemove(transaction, oldItem);
 					int money = transaction.getOldItem().getAmount();
 					bug("Surplus WN added: " + transaction.getOldItem().toString() + " on: " + transaction.getSlot() + " amount: " + money);
 					surpluses.put(oldItem, new SlotBudget(transaction.getSlot(), transaction.getOldItem().getAmount(), money), transaction.isCursor());
 				}
 				if (!transaction.getNewItem().isNull()) {
-					rectifyCraftAdd(transaction, newItem);
 					int money = transaction.getNewItem().getAmount();
 					bug("Deficit WN added: " + transaction.getNewItem().toString() + " on: " + transaction.getSlot() + " amount: " + money);
 					deficits.put(newItem, new SlotBudget(transaction.getSlot(), 0, money), transaction.isCursor());
@@ -79,38 +77,40 @@ public class PETransactionRemapper {
 					itemSurplus.cycleDown(surplus -> {
 						int money = deficit.getAmount() < surplus.getAmount() ? deficit.getAmount() : surplus.getAmount();
 						bug(item.getKeyItem().toString() + "-> [" + surplus.getSlot() + ", " + surplus.getSlotAmount() + ", " + surplus.getAmount() + "] - [" + deficit.getSlot() + ", " + deficit.getSlotAmount()+ ", " + deficit.getAmount() + "]");
-						if (!surplus.isCursor() && !deficit.isToUseInTable() && !(deficit.isCursor() && deficit.hasStack() && surplus.isCraftingResult(cache))) {
-							bug("Getting stack..");
-							Click.LEFT.on(surplus.getSlot(), item.get(surplus.getSlotAmount()), cache, packets);
-						}
-						if (deficit.isCursor() && !surplus.isCursor()) {
-							if (deficit.hasStack()) {
-								bug("Deficit was in cursor and we already clicked so we need to pick it up again.");
-								Click.LEFT.on(surplus.getSlot(), item.get(surplus.getSlotAmount() + deficit.getSlotAmount()), cache, packets);
+						if (surplus.getSlot() != deficit.getSlot() && !deficit.isToUseInTable()) {
+							if (!surplus.isCursor() && !(deficit.isCursor() && deficit.hasStack() && surplus.isCraftingResult(cache))) {
+								bug("Getting stack..");
+								Click.LEFT.on(surplus.getSlot(), item.get(surplus.getSlotAmount()), cache, packets);
 							}
-							bug("Paying back");
-							for (int i = 0; i < (surplus.getSlotAmount() - money); i++) {
-								Click.RIGHT.on(surplus.getSlot(), (i == 0) ? ItemStackWrapper.NULL : item.get(i), cache, packets);
-							}
-						} 
-						if (!deficit.isCursor() && !deficit.isToUseInTable()) {
-							if (money == surplus.getSlotAmount()) {
-								if (!isSwapping(deficit)) { //not swapping.
-									bug("Putting all on deficit!");
-									Click.LEFT.on(deficit.getSlot(), (!deficit.hasStack()) ? ItemStackWrapper.NULL : item.get(deficit.getSlotAmount()), cache, packets);
-								} else {
-									bug("swapping!");
+							if (deficit.isCursor() && !surplus.isCursor()) {
+								if (deficit.hasStack()) {
+									bug("Deficit was in cursor and we already clicked so we need to pick it up again.");
+									Click.LEFT.on(surplus.getSlot(), item.get(surplus.getSlotAmount() + deficit.getSlotAmount()), cache, packets);
 								}
-							} else {
-								bug("putting some on deficit!");
-								for (int i = 0; i < money; i++) {
-									Click.RIGHT.on(deficit.getSlot(), ((deficit.getSlotAmount() + i) == 0) ? ItemStackWrapper.NULL : item.get(deficit.getSlotAmount() + i), cache, packets);
+								bug("Paying back");
+								for (int i = 0; i < (surplus.getSlotAmount() - money); i++) {
+									Click.RIGHT.on(surplus.getSlot(), (i == 0) ? ItemStackWrapper.NULL : item.get(i), cache, packets);
+								}
+							} 
+							if (!deficit.isCursor()) {
+								if (money == surplus.getSlotAmount()) {
+									if (!isSwapping(deficit)) { //not swapping.
+										bug("Putting all on deficit!");
+										Click.LEFT.on(deficit.getSlot(), (!deficit.hasStack()) ? ItemStackWrapper.NULL : item.get(deficit.getSlotAmount()), cache, packets);
+									} else {
+										bug("swapping!");
+									}
+								} else {
+									bug("putting some on deficit!");
+									for (int i = 0; i < money; i++) {
+										Click.RIGHT.on(deficit.getSlot(), ((deficit.getSlotAmount() + i) == 0) ? ItemStackWrapper.NULL : item.get(deficit.getSlotAmount() + i), cache, packets);
+									}
 								}
 							}
 						}
 						surplus.pay(money);
 						deficit.receive(money);
-						if (!surplus.isCursor() && !deficit.isToUseInTable() && !deficit.isCursor() && surplus.hasStack()) {
+						if (!surplus.isCursor() && !deficit.isToUseInTable() && !deficit.isCursor() && surplus.hasStack() && (surplus.getSlot() != deficit.getSlot())) {
 							bug("Putting surplus back");
 							Click.LEFT.on(surplus.getSlot(), ItemStackWrapper.NULL, cache, packets);
 						}
@@ -141,10 +141,10 @@ public class PETransactionRemapper {
 			return itemDeficit.isEmpty();
 		});
 	}
-	
-	public void processCreativeTransactions(NetworkDataCache cache, InvTransaction transaction, RecyclableArrayList<ServerBoundPacketData> packets) {
+
+	public void processCreativeTransaction(NetworkDataCache cache, InvTransaction transaction, RecyclableArrayList<ServerBoundPacketData> packets) {
 		if ((transaction.getSourceId() != GodPacket.SOURCE_CREATIVE) && !transaction.isCursor()) {
-			//Creative transaction use -1 not for cursor but throwing items, cursoritems are actually deleted on serverside.
+			//Creative transaction use -1 not for cursor but throwing items, cursoritems are actually deleted serverside.
 			int slot = transaction.getSlot() == InvTransaction.DROP ? InvTransaction.CURSOR : transaction.getSlot();
 			packets.add(MiddleCreativeSetSlot.create(cache.getAttributesCache().getLocale(), slot, transaction.getNewItem()));
 			if (slot == cache.getPEInventoryCache().getSelectedSlot()) {
@@ -152,7 +152,7 @@ public class PETransactionRemapper {
 			}
 		}
 	}
-	
+
 	public boolean isCreativeTransaction(NetworkDataCache cache) {
 		return (cache.getAttributesCache().getPEGameMode() == GameMode.CREATIVE) &&
 			(cache.getWindowCache().getOpenedWindow() == WindowType.PLAYER);
@@ -160,43 +160,6 @@ public class PETransactionRemapper {
 
 	protected boolean isSwapping(SlotBudget deficit) {
 		return (surpluses.getVeryLast() != null) && (deficit.getSlot() == surpluses.getVeryLast().getSlot());
-	}
-
-	//See [Documentation](https://github.com/ProtocolSupport/ProtocolSupport/wiki/PSPE:-Inventory-Managing#crafting)
-	protected void rectifyCraftRemove(InvTransaction transaction, ItemKey oldItem) {
-		if (transaction.isCraftingRemove() && deficits.containsKey(oldItem)) {
-			deficits.get(oldItem).stream()
-			.filter(deficit -> deficit.getSlot() == transaction.getSlot())
-			.forEach(deficit -> {
-				int money = transaction.getOldItem().getAmount() - deficit.getAmount();
-				deficit.setAmount(-money);
-				if (money >= 0) {
-					deficits.remove(oldItem, deficit);
-					if (money > 0 && !transaction.isCursor()) { //No cursor surplus!
-						surpluses.put(oldItem, new SlotBudget(transaction.getSlot(), transaction.getOldItem().getAmount(), money), transaction.isCursor());
-					}
-				}
-			});
-		}
-	}
-
-	//See [Documentation](https://github.com/ProtocolSupport/ProtocolSupport/wiki/PSPE:-Inventory-Managing#crafting)
-	protected void rectifyCraftAdd(InvTransaction transaction, ItemKey newItem) {
-		if (transaction.isCraftingAdd() && surpluses.containsKey(newItem)) {
-			surpluses.get(newItem).stream()
-			.filter(surplus -> surplus.getSlot() == transaction.getSlot())
-			.forEach(surplus -> {
-				int money = surplus.getAmount() - transaction.getNewItem().getAmount();
-				surplus.setAmount(money);
-				if (money <= 0) {
-					surpluses.get(newItem).remove(surplus);
-					if (money < 0) { 
-						deficits.put(newItem, new SlotBudget(transaction.getSlot(), 0, -money), transaction.isCursor());
-					}
-				}
-				return;
-			});
-		}
 	}
 
 	protected enum Click {

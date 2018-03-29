@@ -2,6 +2,8 @@ package protocolsupport.protocol.typeremapper.pe;
 
 import java.util.EnumMap;
 
+import org.bukkit.Material;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import protocolsupport.api.Connection;
@@ -9,14 +11,20 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.utils.Any;
 import protocolsupport.listeners.InternalPluginMessageRequest;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryEnchant;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockChangeSingle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockTileUpdate;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityDestroy;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventorySetItems;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnLiving;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacket.InvTransaction;
 import protocolsupport.protocol.serializer.MerchantDataSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.storage.netcache.PEInventoryCache;
@@ -84,7 +92,7 @@ public class PEInventory {
 				tag.setString("id", typeData.getObj2().getRegistryId());
 			}
 			//Large inventories require doublechest that requires two blocks and nbt.
-			if (doDoubleChest(cache)) {
+			if (shouldDoDoubleChest(cache)) {
 				Position auxPos = position.clone();
 				auxPos.modifyX(1); //Get adjacend block.
 				invCache.getFakeContainers().addLast(auxPos);
@@ -105,18 +113,12 @@ public class PEInventory {
 			} else {
 				packets.add(BlockTileUpdate.create(version, position, tag));
 			}
-			if (doDoubleChest(cache) || winCache.getOpenedWindow() == WindowType.BEACON) {
-				//Schedule the double chest or beacon open on the server. The client needs time to settle in.
-				InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.InventoryOpenRequest(
-						winCache.getOpenedWindowId(), winCache.getOpenedWindow(), position, -1)
-				);
-			}
 		}
 		return position;
 	}
 
 	//Check if player has / needs "fake" double chest.
-	public static boolean doDoubleChest(NetworkDataCache cache) {
+	public static boolean shouldDoDoubleChest(NetworkDataCache cache) {
 		return (cache.getWindowCache().getOpenedWindow() == WindowType.CHEST && cache.getWindowCache().getOpenedWindowSlots() > 27);
 	}
 
@@ -128,6 +130,21 @@ public class PEInventory {
 		});
 		if (cache.getPEInventoryCache().getTradeVillager().isSpawned()) {
 			cache.getPEInventoryCache().getTradeVillager().despawnVillager(connection);
+		}
+	}
+	
+	public static void processAnvilName(InvTransaction transaction, RecyclableArrayList<ServerBoundPacketData> packets) {
+		//Anvil naming is only done and known based on the clicked item.
+		if (transaction.getSlot() == 2 && !transaction.getOldItem().isNull()) {
+			NBTTagCompoundWrapper tag = transaction.getOldItem().getTag();
+			if (tag.hasKeyOfType("display", NBTTagType.COMPOUND)) {
+				NBTTagCompoundWrapper display = tag.getCompound("display");
+				if (display.hasKeyOfType("Name", NBTTagType.STRING)) {
+					ByteBuf payload = Unpooled.buffer();
+					StringSerializer.writeString(payload, ProtocolVersionsHelper.LATEST_PC, display.getString("Name"));
+					packets.add(MiddleCustomPayload.create("MC|ItemName", MiscSerializer.readAllBytes(payload)));
+				}
+			}
 		}
 	}
 
@@ -218,8 +235,8 @@ public class PEInventory {
 		public void updateOptionLevel(int num, int lvl) {
 			optionLvl[num] = lvl;
 		}
-
-		public ClientBoundPacketData updateInventory(NetworkDataCache cache, ProtocolVersion version) {
+		
+		public ItemStackWrapper[] compileInventory() {
 			ItemStackWrapper[] contents = new ItemStackWrapper[5];
 			contents[0] = inputOutputSlot;
 			contents[1] = lapisSlot;
@@ -252,9 +269,27 @@ public class PEInventory {
 				option.setTag(tag);
 				contents[i+2] = option;
 			}
-			return InventorySetItems.create(version, cache.getAttributesCache().getLocale(), cache.getWindowCache().getOpenedWindowId(), contents);
+			return contents;
 		}
 
+		public ClientBoundPacketData updateInventory(NetworkDataCache cache, ProtocolVersion version) {
+			return InventorySetItems.create(version, cache.getAttributesCache().getLocale(), cache.getWindowCache().getOpenedWindowId(), compileInventory());
+		}
+
+		public boolean handleInventoryClick(NetworkDataCache cache, InvTransaction transaction, RecyclableArrayList<ServerBoundPacketData> packets) {
+			if (transaction.getSlot() == 0) {
+				setInputOutputStack(transaction.getNewItem());
+			} else if (transaction.getSlot() == 1 && (transaction.getNewItem().isNull() || (transaction.getNewItem().getType() == Material.INK_SACK && transaction.getNewItem().getData() == 4))) {
+				setLapisStack(transaction.getNewItem());
+			//If and only if on of the three fake hopper option slots are clicked proceed with the enchanting.
+			} else if ((transaction.getSlot() > 1 && transaction.getSlot() <= 4) && (transaction.getInventoryId() != PESource.POCKET_INVENTORY)) {
+				packets.add(MiddleInventoryEnchant.create(cache.getWindowCache().getOpenedWindowId(), transaction.getSlot() - 2));
+				//Stop caching inventory transaction (not necessary when we enchant!)
+				return false;
+			}
+			//Proceed with inventory transaction caching.
+			return true;
+		}
 	}
 
 	//To store data to fake trading using fake villager.

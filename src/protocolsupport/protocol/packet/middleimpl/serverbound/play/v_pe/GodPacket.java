@@ -10,10 +10,13 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.storage.netcache.PEInventoryCache;
+import protocolsupport.protocol.storage.netcache.WindowCache;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
+import protocolsupport.protocol.typeremapper.pe.PEInventory;
 import protocolsupport.protocol.typeremapper.pe.PESlotRemapper;
 import protocolsupport.protocol.typeremapper.pe.PETransactionRemapper;
 import protocolsupport.protocol.utils.types.GameMode;
+import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -126,6 +129,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		PEInventoryCache invCache = cache.getPEInventoryCache();
+		WindowCache winCache = cache.getWindowCache();
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 		if (simpleActionMiddlePacket != null) {
 			return simpleActionMiddlePacket.toNative();
@@ -135,9 +139,15 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			for (InvTransaction transaction : transactions) {
 				PESlotRemapper.remapServerboundSlot(cache, transaction);
 				if (remapper.isCreativeTransaction(cache)) {
-					remapper.processCreativeTransactions(cache, transaction, packets);
+					remapper.processCreativeTransaction(cache, transaction, packets);
 				} else {
-					remapper.cacheTransaction(transaction);	
+					if ((winCache.getOpenedWindow() != WindowType.ENCHANT) || 
+							invCache.getEnchantHopper().handleInventoryClick(cache, transaction, packets)) {
+						if (winCache.getOpenedWindow() == WindowType.ANVIL) {
+							PEInventory.processAnvilName(transaction, packets);
+						}
+						remapper.cacheTransaction(transaction);	
+					}
 				}
 			}
 			remapper.processTransactions(cache, packets);

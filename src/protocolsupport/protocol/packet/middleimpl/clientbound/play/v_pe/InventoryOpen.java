@@ -4,12 +4,14 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.netcache.WindowCache;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEInventory;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.TradeVillager;
@@ -29,31 +31,37 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		ProtocolVersion version = connection.getVersion();
+		WindowCache winCache = cache.getWindowCache();
 		cache.getPEInventoryCache().getTransactionRemapper().clear();
-		//Horses
 		if (type == WindowType.HORSE) {
-			//TODO: Fix this shit. Horses are a pain in the ass and require a different packer. Lama's are even worse with their variable slots. We'll see.
+			//Horses, requires filter & some metadata to open.
+			//TODO: Fix this shit. Horses are a pain in the ass and require a different packet with nbt.
+			//Lama's are even worse with their variable slots. Some of this even has to be send in FREAKING metadata.
+			//For now it seems most of the horses work but the filter's might still need adjusting, this code is correct however.
 			NetworkEntity horse = cache.getWatchedEntityCache().getWatchedEntity(horseId);
 			if (horse != null) {
 				PocketEntityData horseTypeData = PocketData.getPocketEntityData(horse.getType());
 				if (horseTypeData != null && horseTypeData.getInventoryFilter() != null) {
-					NBTTagCompoundWrapper filter = horseTypeData.getInventoryFilter().getFilter();
-					packets.add(openEquipment(connection.getVersion(), windowId, type, horseId, filter));
-					return packets;
+					packets.add(openEquipment(connection.getVersion(), windowId, type, horseId, horseTypeData.getInventoryFilter().getFilter()));
 				}
 			}
-			return packets;
 		} else if (type == WindowType.VILLAGER) {
+			//Villagers, require fake villager to be spawned and with merchantdata it opens the actual inventory.
 			System.out.println("VILLAGER: " + horseId + " slots: " + slots + " title " + title.toLegacyText());
 			TradeVillager villager = cache.getPEInventoryCache().getTradeVillager();
 			villager.setTitle(title);
 			packets.add(villager.spawnVillager(cache, version));
 		} else {
-			//Normal inventory.
+			//Normal inventory, requires fake blocks to open.
 			Position open = PEInventory.prepareFakeInventory(title, connection, cache, packets);
-			//Unless we have a doublechest or beacon which take some time to create, open the inventory straight away.
-			if (!PEInventory.doDoubleChest(cache) && type != WindowType.BEACON) {
+			if (!PEInventory.shouldDoDoubleChest(cache) && type != WindowType.BEACON) {
+				//Unless we have a doublechest or beacon which take some time to create, open the inventory straight away.
 				packets.add(create(version, windowId, type, open, -1));
+			} else {
+				//Schedule the double chest or beacon open on the server. The client needs time to settle in after preparing the large inventories.
+				InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.InventoryOpenRequest(
+						winCache.getOpenedWindowId(), winCache.getOpenedWindow(), open, -1, 2
+				));
 			}
 		}
 		return packets;
@@ -68,7 +76,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.EQUIPMENT, version);
 		serializer.writeByte(windowId);
 		serializer.writeByte(IdRemapper.WINDOWTYPE.getTable(version).getRemap(type.toLegacyId()));
-		VarNumberSerializer.writeSVarInt(serializer, 0); //? :F
+		VarNumberSerializer.writeSVarInt(serializer, 0); //UNKOWN :F
 		VarNumberSerializer.writeSVarLong(serializer, entityId);
 		System.out.println("OPEN EQ - Eid: "+ entityId + "wId: " + windowId + " type: " + IdRemapper.WINDOWTYPE.getTable(version).getRemap(type.toLegacyId()) +  " Tag: " + nbt);
 		ItemStackSerializer.writeTag(serializer, true, version, nbt);
