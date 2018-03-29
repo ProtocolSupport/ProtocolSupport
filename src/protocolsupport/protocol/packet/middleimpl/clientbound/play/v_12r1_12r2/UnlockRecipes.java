@@ -12,7 +12,7 @@ public class UnlockRecipes extends MiddleUnlockRecipes {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_UNLOCK_RECIPES, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_UNLOCK_RECIPES);
 		MiscSerializer.writeVarIntEnum(serializer, action);
 		serializer.writeBoolean(openBook);
 		serializer.writeBoolean(enableFiltering);

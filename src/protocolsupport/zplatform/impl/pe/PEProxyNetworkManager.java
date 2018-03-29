@@ -10,6 +10,8 @@ import protocolsupport.zplatform.ServerPlatform;
 
 public class PEProxyNetworkManager extends SimpleChannelInboundHandler<ByteBuf> {
 
+	public static final String NAME = "peproxy-nm";
+
 	protected Channel serverconnection;
 
 	@Override

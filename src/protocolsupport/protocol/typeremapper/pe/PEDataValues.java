@@ -12,15 +12,15 @@ import protocolsupport.protocol.typeremapper.utils.RemappingTable;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.HashMapBasedIdRemappingTable;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
-import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
 
 public class PEDataValues {
 
-	private static final EnumMap<NetworkEntityType, Integer> livingEntityType = new EnumMap<>(NetworkEntityType.class);
-	private static final Int2ObjectOpenHashMap<NetworkEntityType> livingTypeFromNetwork = new Int2ObjectOpenHashMap<NetworkEntityType>();
+	private static final EnumMap<NetworkEntityType, Integer> entityType = new EnumMap<>(NetworkEntityType.class);
+	private static final Int2ObjectOpenHashMap<NetworkEntityType> livingTypeFromNetwork = new Int2ObjectOpenHashMap<>();
 	private static void registerLivingType(NetworkEntityType type, int networkId) {
-		livingEntityType.put(type, networkId);
+		entityType.put(type, networkId);
 		livingTypeFromNetwork.put(networkId, type);
 	}
 	static {
@@ -73,55 +73,49 @@ public class PEDataValues {
 		registerLivingType(NetworkEntityType.VINDICATOR, 57);
 		registerLivingType(NetworkEntityType.EVOKER, 104);
 		registerLivingType(NetworkEntityType.VEX, 105);
+
+		entityType.put(NetworkEntityType.ARMOR_STAND_OBJECT, 61);
+		entityType.put(NetworkEntityType.TNT, 65);
+		entityType.put(NetworkEntityType.FALLING_OBJECT, 66);
+		//TODO: Fix pistons, moving blocks? -> 67
+		entityType.put(NetworkEntityType.EXP_BOTTLE, 68);
+		entityType.put(NetworkEntityType.EXP_ORB, 69);
+		entityType.put(NetworkEntityType.ENDEREYE, 70);
+		entityType.put(NetworkEntityType.ENDER_CRYSTAL, 71);
+		entityType.put(NetworkEntityType.FIREWORK, 72);
+		entityType.put(NetworkEntityType.SHULKER_BULLET, 76);
+		entityType.put(NetworkEntityType.FISHING_FLOAT, 77);
+		entityType.put(NetworkEntityType.DRAGON_FIREBALL, 79);
+		entityType.put(NetworkEntityType.ARROW, 80);
+		entityType.put(NetworkEntityType.SNOWBALL, 81);
+		entityType.put(NetworkEntityType.EGG, 82);
+		entityType.put(NetworkEntityType.MINECART, 84);
+		entityType.put(NetworkEntityType.FIREBALL, 85);
+		entityType.put(NetworkEntityType.POTION, 86);
+		entityType.put(NetworkEntityType.ENDERPEARL, 87);
+		entityType.put(NetworkEntityType.LEASH_KNOT, 88);
+		entityType.put(NetworkEntityType.WITHER_SKULL, 89);
+		entityType.put(NetworkEntityType.BOAT, 90);
+		//TODO: WitherSkull dangerous? -> 91
+		entityType.put(NetworkEntityType.FIRECHARGE, 94);
+		entityType.put(NetworkEntityType.AREA_EFFECT_CLOUD, 95);
+		entityType.put(NetworkEntityType.MINECART_HOPPER, 96);
+		entityType.put(NetworkEntityType.MINECART_TNT, 97);
+		entityType.put(NetworkEntityType.MINECART_CHEST, 98);
+		entityType.put(NetworkEntityType.MINECART_COMMAND, 100);
+		entityType.put(NetworkEntityType.MINECART_FURNACE, 84); //Hack, we remap a furnace using entitymetadata.
+		entityType.put(NetworkEntityType.MINECART_MOB_SPAWNER, 84); //Hack, we remap a mobspawner using entitymetadata.
+		entityType.put(NetworkEntityType.AREA_EFFECT_CLOUD, 101);
+		entityType.put(NetworkEntityType.LAMA_SPIT, 102);
+		entityType.put(NetworkEntityType.EVOCATOR_FANGS, 103);
 	}
 
-	public static int getLivingEntityTypeId(NetworkEntityType type) {
-		return livingEntityType.get(type);
+	public static int getEntityTypeId(NetworkEntityType type) {
+		return entityType.get(type);
 	}
 
 	public static NetworkEntityType getLivingTypeFromPeNetworkId(int networkId) {
 		return livingTypeFromNetwork.get(networkId);
-	}
-
-	private static final EnumMap<NetworkEntityType, Integer> objectEntityType = new EnumMap<>(NetworkEntityType.class);
-	static {
-		objectEntityType.put(NetworkEntityType.ARMOR_STAND_OBJECT, 61);
-		objectEntityType.put(NetworkEntityType.TNT, 65);
-		objectEntityType.put(NetworkEntityType.FALLING_OBJECT, 66);
-		//TODO: Fix pistons, moving blocks? -> 67
-		objectEntityType.put(NetworkEntityType.EXP_BOTTLE, 68);
-		objectEntityType.put(NetworkEntityType.ENDEREYE, 70);
-		objectEntityType.put(NetworkEntityType.ENDER_CRYSTAL, 71);
-		objectEntityType.put(NetworkEntityType.FIREWORK, 72);
-		objectEntityType.put(NetworkEntityType.SHULKER_BULLET, 76);
-		objectEntityType.put(NetworkEntityType.FISHING_FLOAT, 77);
-		objectEntityType.put(NetworkEntityType.DRAGON_FIREBALL, 79);
-		objectEntityType.put(NetworkEntityType.ARROW, 80);
-		objectEntityType.put(NetworkEntityType.SNOWBALL, 81);
-		objectEntityType.put(NetworkEntityType.EGG, 82);
-		objectEntityType.put(NetworkEntityType.MINECART, 84);
-		objectEntityType.put(NetworkEntityType.FIREBALL, 85);
-		objectEntityType.put(NetworkEntityType.POTION, 86);
-		objectEntityType.put(NetworkEntityType.ENDERPEARL, 87);
-		objectEntityType.put(NetworkEntityType.LEASH_KNOT, 88);
-		objectEntityType.put(NetworkEntityType.WITHER_SKULL, 89);
-		objectEntityType.put(NetworkEntityType.BOAT, 90);
-		//TODO: WitherSkull dangerous? -> 91
-		objectEntityType.put(NetworkEntityType.FIRECHARGE, 94);
-		objectEntityType.put(NetworkEntityType.AREA_EFFECT_CLOUD, 95);
-		objectEntityType.put(NetworkEntityType.MINECART_HOPPER, 96);
-		objectEntityType.put(NetworkEntityType.MINECART_TNT, 97);
-		objectEntityType.put(NetworkEntityType.MINECART_CHEST, 98);
-		objectEntityType.put(NetworkEntityType.MINECART_COMMAND, 100);
-		objectEntityType.put(NetworkEntityType.MINECART_FURNACE, 84); //Hack, we remap a furnace using entitymetadata.
-		objectEntityType.put(NetworkEntityType.MINECART_MOB_SPAWNER, 84); //Hack, we remap a mobspawner using entitymetadata.
-		objectEntityType.put(NetworkEntityType.AREA_EFFECT_CLOUD, 101);
-		objectEntityType.put(NetworkEntityType.LAMA_SPIT, 102);
-		objectEntityType.put(NetworkEntityType.EVOCATOR_FANGS, 103);
-	}
-
-	public static int getObjectEntityTypeId(NetworkEntityType type) {
-		return objectEntityType.get(type);
 	}
 
 	public static final ArrayBasedIdRemappingTable BLOCK_ID = new ArrayBasedIdRemappingTable(MinecraftData.BLOCK_ID_MAX * MinecraftData.BLOCK_DATA_MAX);

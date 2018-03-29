@@ -1,15 +1,17 @@
 package protocolsupport.protocol.typeremapper.watchedentity.remapper.value;
 
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 
-public abstract class IndexValueRemapperNoOp<T extends DataWatcherObject<?>> extends IndexValueRemapper<T> {
+public class IndexValueRemapperNoOp extends IndexValueRemapper<Object, DataWatcherObject<Object>> {
 
-	public IndexValueRemapperNoOp(int fromIndex, int toIndex) {
-		super(fromIndex, toIndex);
+	@SuppressWarnings("unchecked")
+	public IndexValueRemapperNoOp(DataWatcherObjectIndex<? extends DataWatcherObject<?>> fromIndex, int toIndex) {
+		super((DataWatcherObjectIndex<DataWatcherObject<Object>>) fromIndex, toIndex);
 	}
 
 	@Override
-	public DataWatcherObject<?> remapValue(T object) {
+	public DataWatcherObject<?> remapValue(DataWatcherObject<Object> object) {
 		return object;
 	}
 

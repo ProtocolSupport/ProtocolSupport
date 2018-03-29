@@ -18,7 +18,7 @@ public class InventoryClose extends MiddleInventoryClose {
 	}
 	
 	public static ClientBoundPacketData create(ProtocolVersion version, int windowId) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CONTAINER_CLOSE, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CONTAINER_CLOSE);
 		serializer.writeByte(windowId);
 		return serializer;
 	}

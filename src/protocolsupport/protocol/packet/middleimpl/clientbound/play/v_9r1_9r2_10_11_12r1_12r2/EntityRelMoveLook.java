@@ -11,7 +11,7 @@ public class EntityRelMoveLook extends MiddleEntityRelMoveLook {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_REL_MOVE_LOOK_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_REL_MOVE_LOOK_ID);
 		VarNumberSerializer.writeVarInt(serializer, entityId);
 		serializer.writeShort(relX);
 		serializer.writeShort(relY);

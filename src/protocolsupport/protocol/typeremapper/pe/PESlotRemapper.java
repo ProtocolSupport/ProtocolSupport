@@ -4,7 +4,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacke
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.storage.netcache.WindowCache;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
-import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
 
 public class PESlotRemapper {
 	

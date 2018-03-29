@@ -1,11 +1,11 @@
 package protocolsupport.protocol.utils.datawatcher.objects;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 
-public class DataWatcherObjectSVarLong extends ReadableDataWatcherObjectNumber<Long> {
+public class DataWatcherObjectSVarLong extends DataWatcherObject<Long> {
 
 	public DataWatcherObjectSVarLong() {
 	}
@@ -16,11 +16,6 @@ public class DataWatcherObjectSVarLong extends ReadableDataWatcherObjectNumber<L
 
 	public DataWatcherObjectSVarLong(int value) {
 		this.value = (long) value;
-	}
-
-	@Override
-	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) throws DecoderException {
-		value = VarNumberSerializer.readSVarLong(from);
 	}
 
 	@Override

@@ -49,7 +49,7 @@ public class LegacyPotion {
 	}
 
 	public static int toLegacyId(String nbttag, boolean isThrowable) {
-		int value = toLegacyId.get(nbttag);
+		int value = toLegacyId.getInt(nbttag);
 		return isThrowable ? value + 8192 : value;
 	}
 

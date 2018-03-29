@@ -6,6 +6,7 @@ import protocolsupport.api.Connection;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
+import protocolsupport.protocol.pipeline.version.v_pe.PEPacketEncoder;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
@@ -32,22 +33,20 @@ public class EntityStatus extends ServerBoundMiddlePacket {
 			//For some reason you need to resend the packet sent by the client to confirm he's eating.
 			sendResponse(connection, (int) entityId, status, data);
 		} else if (status == 62) {
-			return RecyclableSingletonList.create(TradeSelect(data));
+			return RecyclableSingletonList.create(createTradeSelect(data));
 		}
 		return RecyclableEmptyList.get();
 	}
 
-	private static ServerBoundPacketData TradeSelect(int page) {
+	protected static ServerBoundPacketData createTradeSelect(int page) {
 		ByteBuf payload = Unpooled.buffer();
 		payload.writeInt(page);
 		return MiddleCustomPayload.create("MC|TrSel", MiscSerializer.readAllBytes(payload));
 	}
 
-	public static void sendResponse(Connection connection, int entityId, byte status, int data) {
-		ByteBuf statusResponse = Unpooled.buffer(); //Can't use normal packet, we need data too.
-		VarNumberSerializer.writeVarInt(statusResponse, PEPacketIDs.ENTITY_EVENT);
-		statusResponse.writeByte(0);
-		statusResponse.writeByte(0);
+	protected static void sendResponse(Connection connection, int entityId, byte status, int data) {
+		ByteBuf statusResponse = Unpooled.buffer();
+		PEPacketEncoder.sWritePacketId(statusResponse, PEPacketIDs.ENTITY_EVENT);
 		VarNumberSerializer.writeVarLong(statusResponse, entityId);
 		statusResponse.writeByte(status);
 		VarNumberSerializer.writeSVarInt(statusResponse, data);

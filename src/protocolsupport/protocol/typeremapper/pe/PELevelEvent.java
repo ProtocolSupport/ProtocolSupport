@@ -1,6 +1,5 @@
 package protocolsupport.protocol.typeremapper.pe;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.types.Position;
@@ -122,7 +121,7 @@ public class PELevelEvent {
 		PARTICLE_DRAGONS_BREATH 		= PARTICLE | 41;
 
 	public static ClientBoundPacketData createPacket(int levelEvent, float x, float y, float z, int data) {
-		ClientBoundPacketData clientLevelEvent = ClientBoundPacketData.create(PEPacketIDs.LEVEL_EVENT, ProtocolVersion.MINECRAFT_PE);
+		ClientBoundPacketData clientLevelEvent = ClientBoundPacketData.create(PEPacketIDs.LEVEL_EVENT);
 		VarNumberSerializer.writeSVarInt(clientLevelEvent, levelEvent);
 		clientLevelEvent.writeFloatLE(x);
 		clientLevelEvent.writeFloatLE(y);

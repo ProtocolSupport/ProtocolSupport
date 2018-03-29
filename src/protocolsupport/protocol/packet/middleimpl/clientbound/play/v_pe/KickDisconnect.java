@@ -17,7 +17,7 @@ public class KickDisconnect extends MiddleKickDisconnect {
 	}
 
 	public static RecyclableCollection<ClientBoundPacketData> create(ProtocolVersion version, String locale, BaseComponent message) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.DISCONNECT, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.DISCONNECT);
 		serializer.writeBoolean(false); //do not hide disconnection screen
 		StringSerializer.writeString(serializer, version, message.toLegacyText(locale));
 		return RecyclableSingletonList.create(serializer);

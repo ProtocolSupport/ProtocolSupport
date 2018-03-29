@@ -22,7 +22,7 @@ public class InventoryData extends MiddleInventoryData {
 				switch(type) {
 					case 0: { //Fire icon (Burned ticks) (Tick in PE is 50ms while in PC it's 20)
 						int peValue = Math.round((((float) value * 400) / invCache.getFuelTime()));
-						return RecyclableSingletonList.create(create(version, windowId, 2, peValue));
+						return RecyclableSingletonList.create(create(windowId, 2, peValue));
 					}
 					case 1: { //Fuel burn time
 						if(value != 0) {
@@ -31,7 +31,7 @@ public class InventoryData extends MiddleInventoryData {
 						break;
 					}
 					case 2: { //Cook time (How long the item has been cooking)
-						return RecyclableSingletonList.create(create(version, windowId, 0, Math.round((((float) value * 400) / invCache.getSmeltTime()))));
+						return RecyclableSingletonList.create(create(windowId, 0, Math.round((((float) value * 400) / invCache.getSmeltTime()))));
 					}
 					case 3: { //Smelt time (How long it takes for the item to smelt)
 						if(value != 0) {
@@ -77,20 +77,20 @@ public class InventoryData extends MiddleInventoryData {
 			case BREWING: {
 				switch(type) {
 					case 0: { //Brew time (0 - 400) (400 is empty)
-						return RecyclableSingletonList.create(create(version, windowId, 0, Math.round(value / 2) * 2));
+						return RecyclableSingletonList.create(create(windowId, 0, Math.round(value / 2) * 2));
 					}
 					case 1: { //Fuel time (0 - 20) (20 is full)
 						//TODO: make a formula?
 						//To be honest I have no clue how it works on the inside, I just tried until the bar matches PC :F
 						RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-						packets.add(create(version, windowId, 1, value > 0 ? 20 : 0));
+						packets.add(create( windowId, 1, value > 0 ? 20 : 0));
 						int inv = 20 - value;
 						if (inv > 6)  { inv += (inv- 6); }
 						if (inv > 10) { inv += (inv-10); }
 						if (inv > 30) { inv += (inv-30); }
 						if (inv > 50) { inv += (inv-50); }
 						if (inv > 60) { inv += (inv-60); }
-						packets.add(create(version, windowId, 2, 20 + inv));
+						packets.add(create( windowId, 2, 20 + inv));
 						return packets;
 					}
 				}
@@ -103,8 +103,8 @@ public class InventoryData extends MiddleInventoryData {
 		return RecyclableEmptyList.get();
 	}
 	
-	public static ClientBoundPacketData create(ProtocolVersion version, int windowId, int type, int value) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CONTAINER_DATA, version);
+	public static ClientBoundPacketData create(int windowId, int type, int value) {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CONTAINER_DATA);
 		serializer.writeByte(windowId);
 		VarNumberSerializer.writeSVarInt(serializer, type);
 		VarNumberSerializer.writeSVarInt(serializer, value);

@@ -17,7 +17,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SPAWN_PLAYER, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SPAWN_PLAYER);
 		MiscSerializer.writeUUID(serializer, connection.getVersion(), entity.getUUID());
 		StringSerializer.writeString(serializer, version, cache.getPlayerListCache().getEntry(entity.getUUID()).getName(cache.getAttributesCache().getLocale()));
 		VarNumberSerializer.writeSVarLong(serializer, entity.getId());

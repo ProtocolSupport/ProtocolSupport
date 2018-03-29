@@ -59,7 +59,7 @@ public class Title extends MiddleTitle {
 	}
 
 	private static ClientBoundPacketData create(ProtocolVersion version, int action, String text, int fadeIn, int stay, int fadeOut) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SET_TITLE, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SET_TITLE);
 		VarNumberSerializer.writeSVarInt(serializer, action);
 		StringSerializer.writeString(serializer, version, text);
 		VarNumberSerializer.writeSVarInt(serializer, fadeIn);

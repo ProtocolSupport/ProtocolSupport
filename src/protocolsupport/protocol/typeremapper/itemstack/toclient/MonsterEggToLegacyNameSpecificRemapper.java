@@ -3,7 +3,7 @@ package protocolsupport.protocol.typeremapper.itemstack.toclient;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackNBTSpecificRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityType;
-import protocolsupport.protocol.utils.types.NetworkEntityType;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 

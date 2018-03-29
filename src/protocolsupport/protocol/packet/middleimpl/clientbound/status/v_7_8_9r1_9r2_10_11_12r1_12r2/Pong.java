@@ -10,7 +10,7 @@ public class Pong extends MiddlePong {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.STATUS_PONG_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.STATUS_PONG_ID);
 		serializer.writeLong(pingId);
 		return RecyclableSingletonList.create(serializer);
 	}

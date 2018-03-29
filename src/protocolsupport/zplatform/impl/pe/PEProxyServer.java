@@ -13,16 +13,16 @@ public class PEProxyServer {
 
 	private final RakNetServer peserver = new RakNetServer(
 		new InetSocketAddress(Bukkit.getIp().isEmpty() ? "0.0.0.0": Bukkit.getIp(), Bukkit.getPort()),
-		PENetServerConstants.PING_HANDLER,
+		new PEProxyServerInfoHandler(),
 		new UserChannelInitializer() {
 			@Override
 			public void init(Channel channel) {
 				ChannelPipeline pipeline = channel.pipeline();
 				pipeline.addLast(new PECompressor());
 				pipeline.addLast(new PEDecompressor());
-				pipeline.addLast(new PEProxyNetworkManager());
+				pipeline.addLast(PEProxyNetworkManager.NAME, new PEProxyNetworkManager());
 			}
-		}, PENetServerConstants.USER_PACKET_ID
+		}, 0xFE
 	);
 
 	public void start() {

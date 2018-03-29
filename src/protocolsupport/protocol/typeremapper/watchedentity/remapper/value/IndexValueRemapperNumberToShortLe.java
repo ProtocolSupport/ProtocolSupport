@@ -1,17 +1,18 @@
 package protocolsupport.protocol.typeremapper.watchedentity.remapper.value;
 
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectShortLe;
-import protocolsupport.protocol.utils.datawatcher.objects.ReadableDataWatcherObjectNumber;
 
-public final class IndexValueRemapperNumberToShortLe extends IndexValueRemapper<ReadableDataWatcherObjectNumber<?>> {
+public final class IndexValueRemapperNumberToShortLe extends IndexValueRemapper<Number, DataWatcherObject<Number>> {
 
-	public IndexValueRemapperNumberToShortLe(int fromIndex, int toIndex) {
-		super(fromIndex, toIndex);
+	@SuppressWarnings("unchecked")
+	public IndexValueRemapperNumberToShortLe(DataWatcherObjectIndex<? extends DataWatcherObject<? extends Number>> fromIndex, int toIndex) {
+		super((DataWatcherObjectIndex<DataWatcherObject<Number>>) fromIndex, toIndex);
 	}
 
 	@Override
-	public DataWatcherObject<?> remapValue(ReadableDataWatcherObjectNumber<?> object) {
+	public DataWatcherObject<?> remapValue(DataWatcherObject<Number> object) {
 		return new DataWatcherObjectShortLe(object.getValue().shortValue());
 	}
 

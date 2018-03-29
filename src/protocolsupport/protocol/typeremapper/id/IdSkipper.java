@@ -13,9 +13,9 @@ import protocolsupport.protocol.typeremapper.utils.SkippingTable.EnumSkippingTab
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.GenericSkippingTable;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.HashMapBasedIntSkippingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Particle;
 import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
 
 public class IdSkipper {
 

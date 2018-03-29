@@ -13,7 +13,7 @@ public class AdvancementsTab extends MiddleAdvancementsTab {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ADVANCEMENTS_TAB, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ADVANCEMENTS_TAB);
 		if (identifier != null) {
 			serializer.writeBoolean(true);
 			StringSerializer.writeString(serializer, version, identifier);

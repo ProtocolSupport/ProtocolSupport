@@ -7,8 +7,8 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.utils.types.NetworkEntity;
-import protocolsupport.protocol.utils.types.NetworkEntity.DataCache;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntityDataCache;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -24,7 +24,7 @@ public class EntityEquipment extends MiddleEntityEquipment {
 		if (entity == null) {
 			return RecyclableEmptyList.get();
 		}
-		DataCache dataCache = entity.getDataCache();
+		NetworkEntityDataCache dataCache = entity.getDataCache();
 		if (slot > 1) {
 			// Armor update
 			switch (slot) {
@@ -56,7 +56,7 @@ public class EntityEquipment extends MiddleEntityEquipment {
 	}
 
 	public static ClientBoundPacketData create(ProtocolVersion version, String locale, long entityId, ItemStackWrapper helmet, ItemStackWrapper chestplate, ItemStackWrapper leggings, ItemStackWrapper boots) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOB_ARMOR_EQUIPMENT, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOB_ARMOR_EQUIPMENT);
 		VarNumberSerializer.writeVarLong(serializer, entityId);
 		ItemStackSerializer.writeItemStack(serializer, version, locale, helmet, true);
 		ItemStackSerializer.writeItemStack(serializer, version, locale, chestplate, true);
@@ -66,7 +66,7 @@ public class EntityEquipment extends MiddleEntityEquipment {
 	}
 
 	public static ClientBoundPacketData createUpdateHand(ProtocolVersion version, String locale, int entityId, ItemStackWrapper itemstack, int slot, boolean isMainHand) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOB_EQUIPMENT, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOB_EQUIPMENT);
 		VarNumberSerializer.writeVarLong(serializer, entityId);
 		ItemStackSerializer.writeItemStack(serializer, version, locale, itemstack, true);
 		serializer.writeByte(slot);

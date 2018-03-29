@@ -7,6 +7,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.pipeline.version.v_pe.PEPacketEncoder;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
@@ -18,9 +19,9 @@ import protocolsupport.protocol.typeremapper.pe.PEInventory.TradeVillager;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.minecraftdata.PocketData;
 import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData;
-import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -69,11 +70,11 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	
 	public static ClientBoundPacketData create(ProtocolVersion version, int windowId, WindowType type, Position pePosition, int horseId) {
 		System.out.println("Opening " + type + " inventory: " + windowId);
-		return (ClientBoundPacketData) serialize(ClientBoundPacketData.create(PEPacketIDs.CONTAINER_OPEN, version), version, windowId, type, pePosition, horseId);
+		return (ClientBoundPacketData) serialize(ClientBoundPacketData.create(PEPacketIDs.CONTAINER_OPEN), version, windowId, type, pePosition, horseId);
 	}
 	
 	public static ClientBoundPacketData openEquipment(ProtocolVersion version, int windowId, WindowType type, long entityId, NBTTagCompoundWrapper nbt) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.EQUIPMENT, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.EQUIPMENT);
 		serializer.writeByte(windowId);
 		serializer.writeByte(IdRemapper.WINDOWTYPE.getTable(version).getRemap(type.toLegacyId()));
 		VarNumberSerializer.writeSVarInt(serializer, 0); //UNKOWN :F
@@ -86,9 +87,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	public static void sendInventoryOpen(Connection connection, int windowId, WindowType type, Position pePosition, int horseId) {
 		System.out.println("Opening " + type + " inventory: " + windowId);
 		ByteBuf serializer = Unpooled.buffer();
-		VarNumberSerializer.writeVarInt(serializer, PEPacketIDs.CONTAINER_OPEN);
-		serializer.writeByte(0);
-		serializer.writeByte(0);
+		PEPacketEncoder.sWritePacketId(serializer, PEPacketIDs.CONTAINER_OPEN);
 		serialize(serializer, connection.getVersion(), windowId, type, pePosition, horseId);
 		connection.sendRawPacket(MiscSerializer.readAllBytes(serializer));
 	}

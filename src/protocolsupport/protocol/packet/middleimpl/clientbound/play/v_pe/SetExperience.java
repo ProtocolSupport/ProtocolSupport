@@ -4,7 +4,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetExperience;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntitySetAttributes.AttributeInfo;
-import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
 import protocolsupport.utils.ObjectFloatTuple;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;

@@ -20,7 +20,7 @@ public class WorldSound extends MiddleWorldSound {
 		if (soundname == null) {
 			return RecyclableEmptyList.get();
 		}
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_CUSTOM_SOUND_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_CUSTOM_SOUND_ID);
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_6_1)) {
 			soundname = Utils.clampString(soundname, 32);
 		}

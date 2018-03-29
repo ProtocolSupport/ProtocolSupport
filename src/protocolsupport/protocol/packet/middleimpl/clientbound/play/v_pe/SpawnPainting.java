@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnPainting;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -13,8 +12,7 @@ public class SpawnPainting extends MiddleSpawnPainting {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ProtocolVersion version = connection.getVersion();
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SPAWN_PAINTING, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SPAWN_PAINTING);
 		VarNumberSerializer.writeSVarLong(serializer, entityId);
 		VarNumberSerializer.writeVarLong(serializer, entityId);
 		// In MCPE the paintings are always +1 blocks ahead where it should be, so we need to edit the coordinates a bit
@@ -42,7 +40,7 @@ public class SpawnPainting extends MiddleSpawnPainting {
 		VarNumberSerializer.writeVarInt(serializer, position.getY());
 		VarNumberSerializer.writeSVarInt(serializer, mcpeZ);
 		VarNumberSerializer.writeSVarInt(serializer, direction);
-		StringSerializer.writeString(serializer, version, type);
+		StringSerializer.writeString(serializer, connection.getVersion(), type);
 		return RecyclableSingletonList.create(serializer);
 	}
 }

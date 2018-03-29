@@ -28,7 +28,7 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 
 	public static ClientBoundPacketData create(ProtocolVersion version, Position position, int state) {
 		state = PEDataValues.BLOCK_ID.getRemap(IdRemapper.BLOCK.getTable(version).getRemap(state));
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.UPDATE_BLOCK, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.UPDATE_BLOCK);
 		PositionSerializer.writePEPosition(serializer, position);
 		VarNumberSerializer.writeVarInt(serializer, MinecraftData.getBlockIdFromState(state));
 		VarNumberSerializer.writeVarInt(serializer, (flags << 4) | MinecraftData.getBlockDataFromState(state));

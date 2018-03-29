@@ -3,11 +3,10 @@ package protocolsupport.protocol.utils.datawatcher.objects;
 import org.bukkit.util.Vector;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.utils.datawatcher.ReadableDataWatcherObject;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 
-public class DataWatcherObjectVector3fLe extends ReadableDataWatcherObject<Vector> {
+public class DataWatcherObjectVector3fLe extends DataWatcherObject<Vector> {
 
 	public DataWatcherObjectVector3fLe() {
 		value = new Vector(0, 0, 0);
@@ -15,13 +14,6 @@ public class DataWatcherObjectVector3fLe extends ReadableDataWatcherObject<Vecto
 
 	public DataWatcherObjectVector3fLe(Vector position) {
 		value = position;
-	}
-
-	@Override
-	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) throws DecoderException {
-		value.setX(from.readFloatLE());
-		value.setY(from.readFloatLE());
-		value.setZ(from.readFloatLE());
 	}
 
 	@Override

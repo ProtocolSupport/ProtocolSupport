@@ -17,7 +17,7 @@ public class WorldCustomSound extends MiddleWorldCustomSound {
 	}
 
 	public static ClientBoundPacketData create(ProtocolVersion version, String id, int x, int y, int z, float volume, float pitch) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAY_SOUND, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAY_SOUND);
 		StringSerializer.writeString(serializer, version, id);
 		VarNumberSerializer.writeSVarInt(serializer, x);
 		VarNumberSerializer.writeVarInt(serializer, y);

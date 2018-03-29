@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.typeremapper.watchedentity.DataWatcherDataRemapper;
-import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
 
 public abstract class MiddleEntityMetadata extends MiddleEntity {
 

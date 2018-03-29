@@ -19,6 +19,7 @@ import protocolsupport.listeners.ReloadCommandBlocker;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
+import protocolsupport.protocol.packet.handler.AbstractStatusListener;
 import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.IdSkipper;
@@ -31,10 +32,10 @@ import protocolsupport.protocol.typeremapper.pe.PEPotion;
 import protocolsupport.protocol.typeremapper.pe.PESkinModel;
 import protocolsupport.protocol.typeremapper.sound.SoundRemapper;
 import protocolsupport.protocol.typeremapper.tileentity.TileNBTRemapper;
-import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherObjectIndex;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.minecraftdata.BlockData;
 import protocolsupport.protocol.utils.minecraftdata.ItemData;
@@ -42,7 +43,7 @@ import protocolsupport.protocol.utils.minecraftdata.KeybindData;
 import protocolsupport.protocol.utils.minecraftdata.PocketData;
 import protocolsupport.protocol.utils.minecraftdata.PotionData;
 import protocolsupport.protocol.utils.minecraftdata.SoundData;
-import protocolsupport.protocol.utils.types.NetworkEntityType;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
@@ -50,6 +51,7 @@ import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.impl.pe.PECraftingManager;
 import protocolsupport.zplatform.impl.pe.PECreativeInventory;
 import protocolsupport.zplatform.impl.pe.PEProxyServer;
+import protocolsupport.zplatform.impl.pe.PEProxyServerInfoHandler;
 
 public class ProtocolSupport extends JavaPlugin {
 
@@ -111,6 +113,7 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(ClientBoundPacket.class.getName());
 			Class.forName(InitialPacketDecoder.class.getName());
 			Class.forName(AbstractLoginListener.class.getName());
+			Class.forName(AbstractStatusListener.class.getName());
 			Class.forName(SoundRemapper.class.getName());
 			Class.forName(IdSkipper.class.getName());
 			Class.forName(SpecificRemapper.class.getName());
@@ -121,6 +124,7 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(LegacyPotion.class.getName());
 			Class.forName(LegacyEntityType.class.getName());
 			Class.forName(LegacyEffect.class.getName());
+			Class.forName(PEProxyServerInfoHandler.class.getName());
 			Class.forName(PESkinsProviderSPI.class.getName());
 			Class.forName(PEMetaProviderSPI.class.getName());
 			Class.forName(PESkinModel.class.getName());

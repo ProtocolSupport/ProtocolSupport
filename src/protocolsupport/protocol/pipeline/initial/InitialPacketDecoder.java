@@ -23,6 +23,7 @@ import protocolsupport.protocol.pipeline.common.VarIntFrameEncoder;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.netty.Decompressor;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer;
@@ -31,6 +32,7 @@ import protocolsupport.zplatform.PlatformUtils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.impl.encapsulated.EncapsulatedProtocolInfo;
 import protocolsupport.zplatform.impl.encapsulated.EncapsulatedProtocolUtils;
+import protocolsupport.zplatform.impl.pe.PEProxyServerInfoHandler;
 
 public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
@@ -44,7 +46,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
 	protected static final EnumMap<ProtocolVersion, IPipeLineBuilder> pipelineBuilders = new EnumMap<>(ProtocolVersion.class);
 	static {
-		pipelineBuilders.put(ProtocolVersion.MINECRAFT_FUTURE, new protocolsupport.protocol.pipeline.version.v_future.PipeLineBuilder());
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_FUTURE, new protocolsupport.protocol.pipeline.version.v_f.PipeLineBuilder());
 		IPipeLineBuilder builder1122 = new protocolsupport.protocol.pipeline.version.v_1_12.r2.PipeLineBuilder();
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_12_2, builder1122);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_12_1, builder1122);
@@ -70,7 +72,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_5_2, builder15);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_5_1, builder15);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_4_7, new protocolsupport.protocol.pipeline.version.v_1_4.PipeLineBuilder());
-		pipelineBuilders.put(ProtocolVersion.MINECRAFT_LEGACY, new protocolsupport.protocol.pipeline.version.v_legacy.PipeLineBuilder());
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_LEGACY, new protocolsupport.protocol.pipeline.version.v_l.PipeLineBuilder());
 		IPipeLineBuilder builderpe = new protocolsupport.protocol.pipeline.version.v_pe.PipeLineBuilder();
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_PE_FUTURE, builderpe);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_PE, builderpe);
@@ -228,8 +230,12 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 				setProtocol(channel, ProtocolUtils.readNewHandshake(firstpacketdata));
 				break;
 			}
-			case 0x01: { // pe handshake
+			case PEPacketIDs.LOGIN: {
 				setProtocol(channel, ProtocolUtils.readPEHandshake(firstpacketdata));
+				break;
+			}
+			case PEProxyServerInfoHandler.PACKET_ID: {
+				setProtocol(channel, ProtocolVersion.MINECRAFT_PE);
 				break;
 			}
 			default: {

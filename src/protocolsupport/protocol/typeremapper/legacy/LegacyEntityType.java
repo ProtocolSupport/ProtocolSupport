@@ -2,7 +2,7 @@ package protocolsupport.protocol.typeremapper.legacy;
 
 import java.util.EnumMap;
 
-import protocolsupport.protocol.utils.types.NetworkEntityType;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
 
 public class LegacyEntityType {
 

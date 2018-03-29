@@ -17,7 +17,7 @@ public class BlockAction extends MiddleBlockAction {
 			case 54: // chest
 			case 130: // enderchest
 			case 146: // trapped chest
-				ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.TILE_EVENT, connection.getVersion());
+				ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.TILE_EVENT);
 				PositionSerializer.writePEPosition(serializer, this.position);
 				VarNumberSerializer.writeSVarInt(serializer, 1);
 				if (this.info2 > 0) { // Open

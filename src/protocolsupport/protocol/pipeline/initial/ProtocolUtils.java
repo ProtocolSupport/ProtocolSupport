@@ -26,6 +26,8 @@ public class ProtocolUtils {
 	}
 
 	protected static ProtocolVersion readOldHandshake(ByteBuf data) {
+		//pre 1.3.1 doesn't send a protocol version
+		//but we assume first byte as protocol versions anyway because the chance of string length first byte being a valid protocol versions number is too small
 		return ProtocolVersionsHelper.getOldProtocolVersion(data.readUnsignedByte());
 	}
 

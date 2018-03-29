@@ -17,7 +17,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_OPEN_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_OPEN_ID);
 		serializer.writeByte(windowId);
 		StringSerializer.writeString(serializer, version, IdRemapper.INVENTORY.getTable(version).getRemap(type).getId());
 		StringSerializer.writeString(serializer, version, ChatAPI.toJSON(LegacyChatJson.convert(title, version, cache.getAttributesCache().getLocale())));

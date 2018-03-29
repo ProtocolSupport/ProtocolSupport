@@ -75,7 +75,6 @@ public class PEProxyServerConnection extends SimpleChannelInboundHandler<ByteBuf
 		InetSocketAddress remote = (InetSocketAddress) clientchannel.remoteAddress();
 		EventLoopGroup loopgroup = ServerPlatform.get().getMiscUtils().getServerEventLoop();
 		Class<? extends Channel> channel = loopgroup instanceof EpollEventLoopGroup ? EpollSocketChannel.class : NioSocketChannel.class;
-		handshakepacket.readerIndex(0);
 		String serveraddr = Bukkit.getIp();
 		if (serveraddr.isEmpty()) {
 			serveraddr = "127.0.0.1";

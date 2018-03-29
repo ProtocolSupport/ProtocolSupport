@@ -27,7 +27,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2.R
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12r1_12r2.CustomPayload;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12r1_12r2.EntityAction;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12r1_12r2.KeepAlive;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12r1_12r2.Position;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12r1_12r2.Move;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12r1_12r2.Spectate;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12r1_12r2.SteerVehicle;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12r1_12r2.UpdateSign;
@@ -48,7 +48,7 @@ public class PacketDecoder extends AbstractModernWithReorderPacketDecoder {
 		registry.register(NetworkState.PLAY, 0x01, Chat.class);
 		registry.register(NetworkState.PLAY, 0x02, UseEntity.class);
 		registry.register(NetworkState.PLAY, 0x03, Flying.class);
-		registry.register(NetworkState.PLAY, 0x04, Position.class);
+		registry.register(NetworkState.PLAY, 0x04, Move.class);
 		registry.register(NetworkState.PLAY, 0x05, Look.class);
 		registry.register(NetworkState.PLAY, 0x06, PositionLook.class);
 		registry.register(NetworkState.PLAY, 0x07, BlockDig.class);

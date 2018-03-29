@@ -62,7 +62,7 @@ public class PEPotion {
 	}
 
 	public static int toPEId(String nbttag) {
-		return nameToPeId.get(nbttag);
+		return nameToPeId.getInt(nbttag);
 	}
 
 	public static String fromPEId(int id) {

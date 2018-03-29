@@ -9,7 +9,7 @@ import protocolsupport.protocol.storage.netcache.PEInventoryCache;
 import protocolsupport.protocol.storage.netcache.WindowCache;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -129,7 +129,7 @@ public class InventorySetItems extends MiddleInventorySetItems {
 			case HORSE: {
 				NetworkEntity horse = cache.getWatchedEntityCache().getWatchedEntity(winCache.getHorseId());
 				if (horse != null) {
-					
+					//TODO: continue.
 				}
 				break;
 			}
@@ -155,7 +155,7 @@ public class InventorySetItems extends MiddleInventorySetItems {
 	}
 	
 	public static ClientBoundPacketData create(ProtocolVersion version, String locale, int windowId, ItemStackWrapper[] itemstacks) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.INVENTORY_CONTENT, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.INVENTORY_CONTENT);
 		VarNumberSerializer.writeVarInt(serializer, windowId);
 		VarNumberSerializer.writeVarInt(serializer, itemstacks.length);
 		//Also get the nulls for remapped slots in between ;)

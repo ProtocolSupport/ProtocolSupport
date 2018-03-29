@@ -11,7 +11,7 @@ public class EntityEffectRemove extends MiddleEntityEffectRemove {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_EFFECT_REMOVE_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_EFFECT_REMOVE_ID);
 		VarNumberSerializer.writeVarInt(serializer, entityId);
 		serializer.writeByte(effectId);
 		return RecyclableSingletonList.create(serializer);

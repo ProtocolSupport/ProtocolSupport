@@ -11,7 +11,7 @@ public class Animation extends MiddleAnimation {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ANIMATION_ID, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ANIMATION_ID);
 		VarNumberSerializer.writeVarInt(serializer, entityId);
 		serializer.writeByte(animation);
 		return RecyclableSingletonList.create(serializer);

@@ -15,7 +15,7 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BLOCK_CHANGE_SINGLE_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BLOCK_CHANGE_SINGLE_ID);
 		PositionSerializer.writeLegacyPositionB(serializer, position);
 		id = IdRemapper.BLOCK.getTable(version).getRemap(id);
 		serializer.writeShort(MinecraftData.getBlockIdFromState(id));

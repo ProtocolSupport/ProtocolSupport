@@ -8,13 +8,13 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.minecraftdata.PocketData;
 import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData;
 import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData.PocketOffset;
-import protocolsupport.protocol.utils.types.NetworkEntity;
-import protocolsupport.protocol.utils.types.NetworkEntityType;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.utils.ObjectFloatTuple;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
@@ -27,45 +27,30 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		packets.add(create(
-			version,
+			version, cache.getAttributesCache().getLocale(),
 			entity, x, y, z,
-			motX / 8.000F, motY / 8000.F, motZ / 8000.F, pitch, yaw, cache.getAttributesCache().getLocale(),
-			metadata.getRemapped(), PEDataValues.getLivingEntityTypeId(IdRemapper.ENTITY.getTable(version).getRemap(entity.getType()))
+			motX / 8.000F, motY / 8000.F, motZ / 8000.F, pitch, yaw,
+			metadata.getRemapped()
 		));
-		if (entity.isOfType(NetworkEntityType.PIG)) {
+		if (entity.getType() == NetworkEntityType.PIG) {
 			packets.add(EntitySetAttributes.create(version, entity, new ObjectFloatTuple<>(AttributeInfo.HORSE_JUMP_STRENGTH, 0.432084373616155F)));
 		}
-		DataWatcherObject<?> healthWatcher = metadata.getOriginal().get(DataWatcherObjectIndex.EntityLiving.HEALTH);
-		if (healthWatcher != null) {
-			packets.add(EntitySetAttributes.create(version, entity, new ObjectFloatTuple<>(AttributeInfo.HEALTH, (Float) healthWatcher.getValue())));
-		}
+		DataWatcherObjectIndex.EntityLiving.HEALTH.getValue(metadata.getOriginal()).ifPresent(healthWatcher -> {
+			packets.add(EntitySetAttributes.create(version, entity, new ObjectFloatTuple<>(AttributeInfo.HEALTH, healthWatcher.getValue())));
+		});
 		return packets;
 	}
 
-	public static ClientBoundPacketData createSimple(ProtocolVersion version, long entityId, double x, double y, double z, int peEntityType) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SPAWN_ENTITY, version);
-		VarNumberSerializer.writeSVarLong(serializer, entityId);
-		VarNumberSerializer.writeVarLong(serializer, entityId);
-		VarNumberSerializer.writeVarInt(serializer, peEntityType);
-		serializer.writeFloatLE((float) x);
-		serializer.writeFloatLE((float) y);
-		serializer.writeFloatLE((float) z);
-		serializer.writeFloatLE(0);
-		serializer.writeFloatLE(0);
-		serializer.writeFloatLE(0);
-		serializer.writeFloatLE(0);
-		serializer.writeFloatLE(0);
-		VarNumberSerializer.writeVarInt(serializer, 0);
-		VarNumberSerializer.writeVarInt(serializer, 0);
-		VarNumberSerializer.writeVarInt(serializer, 0);
-		return serializer;
+	public static ClientBoundPacketData createSimple(ProtocolVersion version, String locale, NetworkEntity entity, double x, double y, double z) {
+		return create(version, locale, entity, x, y, z, 0, 0, 0, 0, 0, null);
 	}
 
-	public static ClientBoundPacketData create(ProtocolVersion version,
-			NetworkEntity entity, double x, double y, double z,
-			float motX, float motY, float motZ,
-			float pitch, float yaw,
-			String locale, ArrayMap<DataWatcherObject<?>> metadata, int entityType
+	public static ClientBoundPacketData create(
+		ProtocolVersion version, String locale,
+		NetworkEntity entity, double x, double y, double z,
+		float motX, float motY, float motZ,
+		float pitch, float yaw,
+		ArrayMap<DataWatcherObject<?>> metadata
 	) {
 		PocketEntityData typeData = PocketData.getPocketEntityData(entity.getType());
 		if ((typeData != null) && (typeData.getOffset() != null)) {
@@ -76,10 +61,10 @@ public class SpawnLiving extends MiddleSpawnLiving {
 			pitch += offset.getPitch();
 			yaw += offset.getYaw();
 		}
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SPAWN_ENTITY, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SPAWN_ENTITY);
 		VarNumberSerializer.writeSVarLong(serializer, entity.getId());
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
-		VarNumberSerializer.writeVarInt(serializer, entityType);
+		VarNumberSerializer.writeVarInt(serializer, PEDataValues.getEntityTypeId(IdRemapper.ENTITY.getTable(version).getRemap(entity.getType())));
 		serializer.writeFloatLE((float) x);
 		serializer.writeFloatLE((float) y);
 		serializer.writeFloatLE((float) z);

@@ -34,7 +34,7 @@ public abstract class AbstractStatusListener {
 	private static final int statusThreads = Utils.getJavaPropertyValue("statusthreads", 2, Integer::parseInt);
 	private static final int statusThreadKeepAlive = Utils.getJavaPropertyValue("statusthreadskeepalive", 60, Integer::parseInt);
 
-	public static void init() {
+	static {
 		ProtocolSupport.logInfo(MessageFormat.format("Status threads max count: {0}, keep alive time: {1}", statusThreads, statusThreadKeepAlive));
 	}
 
@@ -58,7 +58,7 @@ public abstract class AbstractStatusListener {
 		}
 		sentInfo = true;
 
-		executeTask(() -> {
+		statusprocessor.execute(() -> {
 			ServerPingResponseEvent revent = createResponse(networkManager.getChannel());
 			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createStausServerInfoPacket(
 				revent.getPlayers(), revent.getProtocolInfo(),
@@ -91,10 +91,6 @@ public abstract class AbstractStatusListener {
 		Bukkit.getPluginManager().callEvent(revent);
 
 		return revent;
-	}
-
-	public static void executeTask(Runnable runnable) {
-		statusprocessor.execute(runnable);
 	}
 
 	@SuppressWarnings("unchecked")

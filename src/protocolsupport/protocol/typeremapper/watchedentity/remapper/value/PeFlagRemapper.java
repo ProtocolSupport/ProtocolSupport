@@ -2,31 +2,33 @@ package protocolsupport.protocol.typeremapper.watchedentity.remapper.value;
 
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.DataWatcherDataRemapper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
-import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public final class PeFlagRemapper extends DataWatcherDataRemapper {
 
-	private final int fromByteId;
-	private final int[] fromBitPosi;
-	private final int[] toPosi;
+	protected final DataWatcherObjectIndex<DataWatcherObjectByte> fromByteId;
+	protected final int[] fromBitPosI;
+	protected final int[] toPosI;
 
-	public PeFlagRemapper(int fromByteId, int[] fromBitPosi, int[] toPosi) {
+	public PeFlagRemapper(DataWatcherObjectIndex<DataWatcherObjectByte> fromByteId, int[] fromBitPosi, int[] toPosi) {
 		this.fromByteId = fromByteId;
-		this.fromBitPosi = fromBitPosi;
-		this.toPosi = toPosi;
+		this.fromBitPosI = fromBitPosi;
+		this.toPosI = toPosi;
 	}
 
 	@Override
 	public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
-		getObject(original, fromByteId, DataWatcherObjectByte.class).ifPresent(fromByteWatcher -> {
+		fromByteId.getValue(original)
+		.ifPresent(fromByteWatcher -> {
 			byte fromByte = fromByteWatcher.getValue();
-			for(int i = 0; i < fromBitPosi.length; i++) {
-				if(toPosi[i] < 0) {
-					entity.getDataCache().setPeBaseFlag((-1 * toPosi[i]), (((fromByte >> (fromBitPosi[i] - 1)) & 1) ^ 1));
+			for (int i = 0; i < fromBitPosI.length; i++) {
+				if (toPosI[i] < 0) {
+					entity.getDataCache().setPeBaseFlag((-1 * toPosI[i]), (((fromByte >> (fromBitPosI[i] - 1)) & 1) ^ 1));
 				} else {
-					entity.getDataCache().setPeBaseFlag(toPosi[i], ((fromByte >> (fromBitPosi[i] - 1)) & 1));
+					entity.getDataCache().setPeBaseFlag(toPosI[i], ((fromByte >> (fromBitPosI[i] - 1)) & 1));
 				}
 			}
 		});

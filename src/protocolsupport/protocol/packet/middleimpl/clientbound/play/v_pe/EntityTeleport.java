@@ -8,8 +8,8 @@ import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.minecraftdata.PocketData;
 import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData;
 import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData.PocketOffset;
-import protocolsupport.protocol.utils.types.NetworkEntity;
-import protocolsupport.protocol.utils.types.NetworkEntityType;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -55,7 +55,7 @@ public class EntityTeleport extends MiddleEntityTeleport {
 	}
 
 	public static ClientBoundPacketData create(ProtocolVersion version, NetworkEntity entity, double x, double y, double z, byte pitch, byte headYaw, byte yaw, boolean onGround, boolean teleported) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_TELEPORT, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_TELEPORT);
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		serializer.writeFloatLE((float) x);
 		serializer.writeFloatLE((float) y);
@@ -70,7 +70,7 @@ public class EntityTeleport extends MiddleEntityTeleport {
 
 	public static ClientBoundPacketData updateGeneral(ProtocolVersion version, NetworkEntity entity, double x, double y, double z, byte pitch, byte headYaw, byte yaw, boolean onGround, boolean teleported) {
 		if (entity.getType() == NetworkEntityType.PLAYER) {
-			return Position.create(version, entity, x, y, z, pitch, yaw, teleported ? Position.ANIMATION_MODE_TELEPORT : Position.ANIMATION_MODE_ALL);
+			return SetPosition.create(entity, x, y, z, pitch, yaw, teleported ? SetPosition.ANIMATION_MODE_TELEPORT : SetPosition.ANIMATION_MODE_ALL);
 		} else {
 			return create(version, entity, x, y, z, pitch, headYaw, yaw, onGround, teleported);
 		}

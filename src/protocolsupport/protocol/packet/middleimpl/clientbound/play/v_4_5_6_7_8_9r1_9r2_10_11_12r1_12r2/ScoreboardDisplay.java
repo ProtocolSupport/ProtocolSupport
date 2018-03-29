@@ -13,7 +13,7 @@ public class ScoreboardDisplay extends MiddleScoreboardDisplay {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SCOREBOARD_DISPLAY_SLOT_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SCOREBOARD_DISPLAY_SLOT_ID);
 		serializer.writeByte(position);
 		StringSerializer.writeString(serializer, version, name);
 		return RecyclableSingletonList.create(serializer);

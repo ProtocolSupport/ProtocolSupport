@@ -11,7 +11,7 @@ public class CollectEffect extends MiddleCollectEffect {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.TAKE_ITEM_ENTITY, connection.getVersion());
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.TAKE_ITEM_ENTITY);
 		VarNumberSerializer.writeVarLong(serializer, entityId);
 		VarNumberSerializer.writeVarLong(serializer, collectorId);
 		return RecyclableSingletonList.create(serializer);

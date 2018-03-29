@@ -14,7 +14,7 @@ public class Chat extends MiddleChat {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHAT, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHAT);
 		serializer.writeByte(position == MessagePosition.HOTBAR ? 5 : 0); //type
 		serializer.writeByte(0); //isLocalise?
 		StringSerializer.writeString(serializer, version, message.toLegacyText(cache.getAttributesCache().getLocale()));

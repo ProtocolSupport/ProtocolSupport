@@ -8,7 +8,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.utils.types.NetworkEntity;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
 import protocolsupport.utils.ObjectFloatTuple;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -102,7 +102,7 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 
 	@SafeVarargs
 	public static ClientBoundPacketData create(ProtocolVersion version, NetworkEntity entity, ObjectFloatTuple<AttributeInfo>... attributes) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SET_ATTRIBUTES, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SET_ATTRIBUTES);
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		VarNumberSerializer.writeVarInt(serializer, attributes.length);
 		for (ObjectFloatTuple<AttributeInfo> attr : attributes) {

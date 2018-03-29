@@ -19,13 +19,13 @@ public class InventoryData extends MiddleInventoryData {
 		if ((version == ProtocolVersion.MINECRAFT_1_8) && (cache.getWindowCache().getOpenedWindow() == WindowType.ENCHANT)) {
 			enchTypeVal[type] = value;
 			if ((type >= 7) && (type <= 9)) {
-				ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_DATA_ID, version);
+				ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_DATA_ID);
 				serializer.writeByte(windowId);
 				serializer.writeShort(type - 3);
 				serializer.writeShort((value << 8) | enchTypeVal[type - 3]);
 				return RecyclableSingletonList.create(serializer);
 			} else if ((type >= 4) && (type <= 6)) {
-				ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_DATA_ID, version);
+				ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_DATA_ID);
 				serializer.writeByte(windowId);
 				serializer.writeShort(type);
 				serializer.writeShort(((enchTypeVal[type + 3]) << 8) | value);
@@ -36,7 +36,7 @@ public class InventoryData extends MiddleInventoryData {
 				type = furTypeTr[type];
 			}
 		}
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_DATA_ID, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_DATA_ID);
 		serializer.writeByte(windowId);
 		serializer.writeShort(type);
 		serializer.writeShort(value);

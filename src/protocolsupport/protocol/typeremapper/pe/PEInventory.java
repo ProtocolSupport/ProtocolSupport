@@ -1,6 +1,7 @@
 package protocolsupport.protocol.typeremapper.pe;
 
 import java.util.EnumMap;
+import java.util.UUID;
 
 import org.bukkit.Material;
 
@@ -30,10 +31,11 @@ import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.storage.netcache.PEInventoryCache;
 import protocolsupport.protocol.storage.netcache.WindowCache;
 import protocolsupport.protocol.utils.types.MerchantData;
-import protocolsupport.protocol.utils.types.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.TileEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
@@ -295,8 +297,7 @@ public class PEInventory {
 	//To store data to fake trading using fake villager.
 	public static class TradeVillager {
 
-		private final long EID = (long) Integer.MAX_VALUE + 1l;
-		private final int ETYPE = PEDataValues.getLivingEntityTypeId(NetworkEntityType.VILLAGER);
+		private final NetworkEntity villager = new NetworkEntity(UUID.randomUUID(), Integer.MAX_VALUE - 10, NetworkEntityType.VILLAGER);
 		private BaseComponent title;
 		private boolean spawned = false;
 
@@ -310,17 +311,19 @@ public class PEInventory {
 
 		public ClientBoundPacketData spawnVillager(NetworkDataCache cache, ProtocolVersion version) {
 			spawned = true;
-			return SpawnLiving.createSimple(version, EID, 
+			return SpawnLiving.createSimple(version, 
+					cache.getAttributesCache().getLocale(),
+					villager,
 					cache.getMovementCache().getPEClientX(), 
 					cache.getMovementCache().getPEClientY() - 2, 
-					cache.getMovementCache().getPEClientZ(), 
-			ETYPE);
+					cache.getMovementCache().getPEClientZ() 
+			);
 		}
 
 		public ClientBoundPacketData updateTrade(NetworkDataCache cache, ProtocolVersion version, MerchantData data) {
-			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.TRADE_UPDATE, version);
+			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.TRADE_UPDATE);
 			MerchantDataSerializer.writePEMerchantData(serializer, 
-					version, cache, EID, title.toLegacyText(cache.getAttributesCache().getLocale()), data
+					version, cache, villager.getId(), title.toLegacyText(cache.getAttributesCache().getLocale()), data
 			);
 			return serializer;
 		}
@@ -330,7 +333,7 @@ public class PEInventory {
 			VarNumberSerializer.writeVarInt(serializer, PEPacketIDs.ENTITY_DESTROY);
 			serializer.writeByte(0);
 			serializer.writeByte(0);
-			serializer.writeBytes(EntityDestroy.create(connection.getVersion(), EID));
+			serializer.writeBytes(EntityDestroy.create(villager.getId()));
 			spawned = false;
 			connection.sendRawPacket(MiscSerializer.readAllBytes(serializer));
 		}

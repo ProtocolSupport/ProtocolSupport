@@ -19,7 +19,7 @@ public class Advancements extends MiddleAdvancements {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ADVANCEMENTS, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ADVANCEMENTS);
 		serializer.writeBoolean(reset);
 		ArraySerializer.writeVarIntTArray(serializer, advancementsMapping, (to, element) -> {
 			StringSerializer.writeString(to, version, element.getObj1());

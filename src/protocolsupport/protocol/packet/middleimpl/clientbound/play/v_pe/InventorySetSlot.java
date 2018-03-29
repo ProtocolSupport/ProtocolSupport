@@ -146,7 +146,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 	
 	public static ClientBoundPacketData create(ProtocolVersion version, String locale, int windowId, int slot, ItemStackWrapper itemstack) {
 		System.err.println("SLOTTTY: " + slot);
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.INVENTORY_SLOT, version);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.INVENTORY_SLOT);
 		VarNumberSerializer.writeVarInt(serializer, windowId);
 		VarNumberSerializer.writeVarInt(serializer, slot);
 		ItemStackSerializer.writeItemStack(serializer, version, locale, itemstack, true);

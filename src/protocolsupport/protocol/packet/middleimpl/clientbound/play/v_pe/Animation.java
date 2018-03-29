@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleAnimation;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -13,13 +12,12 @@ public class Animation extends MiddleAnimation {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ProtocolVersion version = connection.getVersion();
 		switch (animation) {
 			case 0: {
-				return RecyclableSingletonList.create(create(version, entityId, 1));
+				return RecyclableSingletonList.create(create(entityId, 1));
 			}
 			case 2: {
-				return RecyclableSingletonList.create(create(version, entityId, 3));
+				return RecyclableSingletonList.create(create(entityId, 3));
 			}
 			default: {
 				return RecyclableEmptyList.get();
@@ -27,8 +25,8 @@ public class Animation extends MiddleAnimation {
 		}
 	}
 
-	private static ClientBoundPacketData create(ProtocolVersion version, int entityId, int animation) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ANIMATION, version);
+	private static ClientBoundPacketData create(int entityId, int animation) {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ANIMATION);
 		VarNumberSerializer.writeSVarInt(serializer, animation);
 		VarNumberSerializer.writeVarLong(serializer, entityId);
 		return serializer;
