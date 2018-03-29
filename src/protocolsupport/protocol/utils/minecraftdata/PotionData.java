@@ -3,12 +3,12 @@ package protocolsupport.protocol.utils.minecraftdata;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.utils.JsonUtils;
 
 public class PotionData {
 
-	private static final TIntObjectHashMap<String> idToName = new TIntObjectHashMap<>();
+	private static final Int2ObjectOpenHashMap<String> idToName = new Int2ObjectOpenHashMap<>();
 
 	static {
 		for (JsonElement element : MinecraftData.iterateJsonArrayResource("potions.json")) {

@@ -56,7 +56,12 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 			);
 		});
 		register(InventoryOpenRequest.class, (connection, request) -> {
-			InventoryOpen.sendInventoryOpen(connection, request.getWindowId(), request.getType(), request.getPosition(), request.getHorseId());
+			Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), new Runnable() {
+				@Override
+				public void run() {
+					InventoryOpen.sendInventoryOpen(connection, request.getWindowId(), request.getType(), request.getPosition(), request.getHorseId());
+				}
+			}, request.getDelayTicks());
 		});
 		register(InventoryUpdateRequest.class, (connection, request) -> {
 			Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), new Runnable() {
@@ -144,20 +149,22 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 
 	public static class InventoryOpenRequest extends PluginMessageData {
 
-		int windowId;
-		WindowType type;
-		Position position;
-		int horseId;
+		protected int windowId;
+		protected WindowType type;
+		protected Position position;
+		protected int horseId;
+		protected int delayTicks;
 
 		public InventoryOpenRequest() {
-			this(0, WindowType.PLAYER, new Position(0,0,0), 0);
+			this(0, WindowType.PLAYER, new Position(0,0,0), 0, 0);
 		}
 
-		public InventoryOpenRequest(int windowId, WindowType type, Position position, int horseId) {
+		public InventoryOpenRequest(int windowId, WindowType type, Position position, int horseId, int delayTicks) {
 			this.windowId = windowId;
 			this.type = type;
 			this.position = position;
 			this.horseId = horseId;
+			this.delayTicks = delayTicks;
 		}
 
 		@Override
@@ -166,6 +173,7 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 			type = WindowType.getById(StringSerializer.readString(from, ProtocolVersionsHelper.LATEST_PC));
 			PositionSerializer.readPositionTo(from, position);
 			horseId = from.readInt();
+			delayTicks = from.readInt();
 		}
 
 		@Override
@@ -174,6 +182,7 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 			StringSerializer.writeString(to, ProtocolVersionsHelper.LATEST_PC, type.getId());
 			PositionSerializer.writePosition(to, position);
 			to.writeInt(horseId);
+			to.writeInt(delayTicks);
 		}
 
 		public int getWindowId() {
@@ -190,6 +199,10 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 
 		public int getHorseId() {
 			return horseId;
+		}
+
+		public int getDelayTicks() {
+			return delayTicks;
 		}
 
 	}

@@ -1,42 +1,26 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.Material;
-
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCreativeSetSlot;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClick;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryEnchant;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryTransaction;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.storage.netcache.PEInventoryCache;
 import protocolsupport.protocol.storage.netcache.WindowCache;
 import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupport.protocol.typeremapper.pe.PEInventory;
+import protocolsupport.protocol.typeremapper.pe.PESlotRemapper;
+import protocolsupport.protocol.typeremapper.pe.PETransactionRemapper;
 import protocolsupport.protocol.utils.types.GameMode;
-import protocolsupport.protocol.utils.types.NetworkEntity;
 import protocolsupport.protocol.utils.types.WindowType;
-import protocolsupport.utils.ArrayDequeMultiMap;
-import protocolsupport.utils.ArrayDequeMultiMap.ChildDeque;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagType;
 
 /**
  * Lo and behold. The PE GodPacket. 
@@ -136,23 +120,37 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		clientdata.skipBytes(clientdata.readableBytes());
 	}
 
-	protected static final int SOURCE_CONTAINER = 0;
-	protected static final int SOURCE_GLOBAL = 1;
-	protected static final int SOURCE_WORLD_INTERACTION = 2;
-	protected static final int SOURCE_CREATIVE = 3;
-	protected static final int SOURCE_TODO = 99999;
+	public static final int SOURCE_CONTAINER = 0;
+	public static final int SOURCE_GLOBAL = 1;
+	public static final int SOURCE_WORLD_INTERACTION = 2;
+	public static final int SOURCE_CREATIVE = 3;
+	public static final int SOURCE_TODO = 99999;
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		PEInventoryCache invCache = cache.getPEInventoryCache();
+		WindowCache winCache = cache.getWindowCache();
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 		if (simpleActionMiddlePacket != null) {
 			return simpleActionMiddlePacket.toNative();
 		} else if (actionId == ACTION_NORMAL) {
+			PETransactionRemapper remapper = invCache.getTransactionRemapper();
+			cache.getPEInventoryCache().lockInventory();
 			for (InvTransaction transaction : transactions) {
-				invCache.getInfTransactions().cacheTransaction(cache, transaction);
+				PESlotRemapper.remapServerboundSlot(cache, transaction);
+				if (remapper.isCreativeTransaction(cache)) {
+					remapper.processCreativeTransaction(cache, transaction, packets);
+				} else {
+					if ((winCache.getOpenedWindow() != WindowType.ENCHANT) || 
+							invCache.getEnchantHopper().handleInventoryClick(cache, transaction, packets)) {
+						if (winCache.getOpenedWindow() == WindowType.ANVIL) {
+							PEInventory.processAnvilName(transaction, packets);
+						}
+						remapper.cacheTransaction(transaction);	
+					}
+				}
 			}
-			packets.addAll(invCache.getInfTransactions().process(cache));
+			remapper.processTransactions(cache, packets);
 		}
 		if (invCache.shouldSendUpdate() && cache.getAttributesCache().getPEGameMode() != GameMode.CREATIVE) {
 			//Trigger inventory update, ALWAYS since PE sometimes 'guesses' or doesn't trust the server, we generally want an inventory update scheduled.
@@ -162,8 +160,13 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		return packets;
 	}
 
-	protected static class InvTransaction {
-
+	public static class InvTransaction {
+		
+		//Special slot ids from remapping.
+		public static final int CURSOR = -1;
+		public static final int TABLE = -333;
+		public static final int MISSING_REMAP = -666;
+		public static final int DROP = -999;
 		private int sourceId;
 		private int inventoryId;
 		private int action;
@@ -198,34 +201,59 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			transaction.slot = VarNumberSerializer.readVarInt(from);
 			transaction.oldItem = ItemStackSerializer.readItemStack(from, version, locale, true);
 			transaction.newItem = ItemStackSerializer.readItemStack(from, version, locale, true);
-			bug("Inv transaction read: sId: " + transaction.sourceId + " wId: " + transaction.inventoryId + " action: " + transaction.action + " slot: " + transaction.slot 
-					+ " oldItem: " + transaction.oldItem.toString()  + ((!transaction.oldItem.isNull()) ? transaction.oldItem.getTag() : "") + " newItem: " + transaction.newItem.toString() + (!transaction.newItem.isNull() ? transaction.newItem.getTag() : ""));
+			bug("Inv transaction read:"
+					+ " sId: " + transaction.sourceId 
+					+ " wId: " + transaction.inventoryId 
+					+ " action: " + transaction.action 
+					+ " slot: " + transaction.slot 
+					+ " oldItem: " + transaction.oldItem.toString()  + ((!transaction.oldItem.isNull()) ? transaction.oldItem.getTag() : "") 
+					+ " newItem: " + transaction.newItem.toString() + (!transaction.newItem.isNull() ? transaction.newItem.getTag() : ""));
 			return transaction;
 		}
-		
+
 		public int getSourceId() {
 			return sourceId;
 		}
-
 
 		public int getInventoryId() {
 			return inventoryId;
 		}
 
-
 		public int getAction() {
 			return action;
 		}
 
+		public void setSlot(int slot) {
+			this.slot = slot;
+		}
 
 		public int getSlot() {
 			return slot;
 		}
+
+		public boolean isValid() {
+			return slot != MISSING_REMAP;
+		}
+
+		public boolean isCursor() {
+			return slot == CURSOR;
+		}
+
+		public boolean isCraftingAdd() {
+			return inventoryId == PESource.POCKET_CRAFTING_GRID_ADD ||
+				inventoryId == PESource.POCKET_ANVIL_INPUT ||
+				inventoryId == PESource.POCKET_ANVIL_MATERIAL;
+		}
 		
+		public boolean isCraftingRemove() {
+			return inventoryId == PESource.POCKET_CRAFTING_GRID_REMOVE ||
+				inventoryId == PESource.POCKET_ANVIL_INPUT || 
+				inventoryId == PESource.POCKET_ANVIL_MATERIAL;
+		}
+
 		public ItemStackWrapper getOldItem() {
 			return oldItem;
 		}
-
 
 		public ItemStackWrapper getNewItem() {
 			return newItem;
@@ -238,7 +266,8 @@ public class GodPacket extends ServerBoundMiddlePacket {
 
 	}
 	
-	public static class InfTransactions {
+/*	public static class InfTransactions {
+
 		private ArrayDequeMultiMap<ItemStackWrapperKey, SlotWrapperValue> surplusDeque = new ArrayDequeMultiMap<>();
 		private ArrayDequeMultiMap<ItemStackWrapperKey, SlotWrapperValue> deficitDeque = new ArrayDequeMultiMap<>();
 		private List<ServerBoundPacketData> misc = new ArrayList<>(1);
@@ -629,175 +658,9 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			return keyItem.toString();
 		}
 		
-	}
+	}*/
 	
-	private static int transformSlot(NetworkDataCache cache, int peInventoryId, int peSlot) {
-		WindowCache winCache = cache.getWindowCache();
-		switch(winCache.getOpenedWindow()) {
-			case PLAYER: {
-				switch(peInventoryId) {
-					case PESource.POCKET_CRAFTING_RESULT: {
-						return 0;
-					}
-					case PESource.POCKET_CRAFTING_GRID_ADD:
-					case PESource.POCKET_CRAFTING_GRID_REMOVE: {
-						return peSlot + 1;
-					}
-					case PESource.POCKET_ARMOR_EQUIPMENT: {
-						return peSlot + 5;
-					}
-					case PESource.POCKET_OFFHAND: {
-						return 45;
-					}
-					case PESource.POCKET_CRAFTING_GRID_USE_INGREDIENT:  {
-						return -333; //Fake id for craft tracking.
-					}
-					case PESource.POCKET_FAUX_DROP:
-					case PESource.POCKET_CLICKED_SLOT:
-					case PESource.POCKET_INVENTORY: {
-						return invSlotToContainerSlot(peInventoryId, 9, peSlot);
-					}
-					default: {
-						return -666;
-					}
-				}
-			}
-			case BREWING: {
-				if (peInventoryId == winCache.getOpenedWindowId()) {
-					if(peSlot == 0) {
-						return 3;
-					} else if (peSlot >= 1 && peSlot <= 3) {
-						return peSlot - 1;
-					}
-				}
-				return invSlotToContainerSlot(peInventoryId, 5, peSlot);
-			}
-			case ANVIL: {
-				switch(peInventoryId) {
-					case PESource.POCKET_ANVIL_INPUT: {
-						return 0;
-					}
-					case PESource.POCKET_ANVIL_MATERIAL: {
-						return 1;
-					}
-					case PESource.POCKET_ANVIL_RESULT:
-					case PESource.POCKET_ANVIL_OUTPUT: {
-						return 2;
-					}
-				}
-				return invSlotToContainerSlot(peInventoryId, 3, peSlot);
-			}
-			case ENCHANT: {
-				//We fake enchanting with hoppers, but the server slots are still 0 and 1 for the inventory.
-				return invSlotToContainerSlot(peInventoryId, 2, peSlot);
-			}
-			case BEACON: {
-				if (peInventoryId == PESource.POCKET_BEACON) {
-					return 0;
-				} else {
-					return invSlotToContainerSlot(peInventoryId, 1, peSlot);
-				}
-			}
-			case CRAFTING_TABLE: {
-				switch(peInventoryId) {
-					case PESource.POCKET_CRAFTING_RESULT: {
-						return 0;
-					}
-					case PESource.POCKET_CRAFTING_GRID_ADD:
-					case PESource.POCKET_CRAFTING_GRID_REMOVE: {
-						return peSlot + 1;
-					}
-					case PESource.POCKET_CRAFTING_GRID_USE_INGREDIENT:  {
-						return -333; //Fake id for tracking ingredients.
-					}
-					case PESource.POCKET_FAUX_DROP:
-					case PESource.POCKET_CLICKED_SLOT:
-					case PESource.POCKET_INVENTORY: {
-						return invSlotToContainerSlot(peInventoryId, 10, peSlot);
-					}
-					default: {
-						return -666;
-					}
-				}
-			}
-			case VILLAGER: {
-				switch(peInventoryId) {
-					case PESource.POCKET_TRADE_INPUT_1: {
-						return 0;
-					}
-					case PESource.POCKET_TRADE_INPUT_2: {
-						return 1;
-					}
-					case PESource.POCKET_TRADE_OUTPUT: {
-						return 2;
-					}
-					case PESource.POCKET_FAUX_DROP:
-					case PESource.POCKET_CLICKED_SLOT:
-					case PESource.POCKET_INVENTORY: {
-						return invSlotToContainerSlot(peInventoryId, 3, peSlot);
-					}
-					default: {
-						return -666;
-					}
-				}
-			}
-			case HORSE: {
-				if (peInventoryId == winCache.getOpenedWindowId()) {
-					NetworkEntity horse = cache.getWatchedEntityCache().getWatchedEntity(winCache.getHorseId());
-					if (horse != null) {
-						switch(horse.getType()) {
-							case DONKEY:
-							case MULE: {
-								if (peSlot == 0) {
-									return 0;
-								} else {
-									return peSlot + 1;
-								}
-							}
-							case LAMA: {
-								if (peSlot == 0) {
-									return 1;
-								} else {
-									return peSlot + 1;
-								}
-							}
-							default: {
-								break; //Fallthrough to defualt.
-							}
-						}
-					}
-				}
-			}
-			default: {
-				int wSlots = winCache.getOpenedWindowSlots();
-				if(wSlots > 16) { wSlots = wSlots / 9 * 9; }
-				return invSlotToContainerSlot(peInventoryId, wSlots, peSlot);
-			}
-		}
-	}
-	
-	private static int invSlotToContainerSlot(int peInventoryId, int start, int peSlot) {
-		switch(peInventoryId) {
-			case PESource.POCKET_CLICKED_SLOT: {
-				return -1;
-			}
-			case PESource.POCKET_FAUX_DROP: {
-				return peInventoryId;
-			}
-			case PESource.POCKET_INVENTORY: {
-				if (peSlot < 9) {
-					return peSlot + (27 + start);
-				} else {
-					return peSlot - (9 - start);
-				}
-			}
-			default: {
-				return peSlot;
-			}
-		}
-	}
-	
-	private static ServerBoundPacketData anvilName(String name) {
+	/*private static ServerBoundPacketData anvilName(String name) {
 		ByteBuf payload = Unpooled.buffer();
 		StringSerializer.writeString(payload, ProtocolVersionsHelper.LATEST_PC, name);
 		return MiddleCustomPayload.create("MC|ItemName", MiscSerializer.readAllBytes(payload));
@@ -815,17 +678,14 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			this.button = button;
 		}
 		
-		public RecyclableArrayList<ServerBoundPacketData> create(NetworkDataCache cache, int slot, ItemStackWrapper item) {
-			RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
+		public void on(int slot, ItemStackWrapper item, NetworkDataCache cache, RecyclableArrayList<ServerBoundPacketData> packets) {
 			int actionNumber = cache.getPEInventoryCache().getActionNumber();
 			packets.add(MiddleInventoryClick.create(cache.getAttributesCache().getLocale(), cache.getWindowCache().getOpenedWindowId(), slot, button, actionNumber, mode, item));
 			if(!item.isNull() && item.getTag() != null && !item.getTag().isNull()) {
-				bug("My apologies??!!?!?!");
 				packets.add(MiddleInventoryTransaction.create(cache.getWindowCache().getOpenedWindowId(), actionNumber, false));
 			}
-			return packets;
 		}
 		
-	}
+	}*/
 
 }

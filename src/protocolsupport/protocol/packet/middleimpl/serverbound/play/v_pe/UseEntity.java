@@ -47,7 +47,7 @@ public class UseEntity extends ServerBoundMiddlePacket {
 		switch (subTypeId) {
 			case INTERACT_INTERACT: {
 				NetworkEntity target = cache.getWatchedEntityCache().getWatchedEntity(targetId);
-				if((target == null) || !target.isOfType(NetworkEntityType.ARMOR_STAND)) {
+				if ((target == null) || !target.isOfType(NetworkEntityType.ARMOR_STAND)) {
 					packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT, null, 0));
 				}
 				packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT_AT, new Vector(cX, cY, cZ), 0));

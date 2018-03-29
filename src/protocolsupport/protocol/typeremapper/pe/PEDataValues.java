@@ -4,8 +4,8 @@ import java.util.EnumMap;
 
 import org.bukkit.enchantments.Enchantment;
 
-import gnu.trove.map.hash.TIntIntHashMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.IdRemappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable;
@@ -18,7 +18,7 @@ import protocolsupport.protocol.utils.types.WindowType;
 public class PEDataValues {
 
 	private static final EnumMap<NetworkEntityType, Integer> livingEntityType = new EnumMap<>(NetworkEntityType.class);
-	private static final TIntObjectHashMap<NetworkEntityType> livingTypeFromNetwork = new TIntObjectHashMap<NetworkEntityType>();
+	private static final Int2ObjectOpenHashMap<NetworkEntityType> livingTypeFromNetwork = new Int2ObjectOpenHashMap<NetworkEntityType>();
 	private static void registerLivingType(NetworkEntityType type, int networkId) {
 		livingEntityType.put(type, networkId);
 		livingTypeFromNetwork.put(networkId, type);
@@ -141,8 +141,8 @@ public class PEDataValues {
 		}
 	}
 
-	private static final TIntIntHashMap pcEnchantToPe = new TIntIntHashMap();
-	private static final TIntIntHashMap peEnchantToPc = new TIntIntHashMap();
+	private static final Int2IntOpenHashMap pcEnchantToPe = new Int2IntOpenHashMap();
+	private static final Int2IntOpenHashMap peEnchantToPc = new Int2IntOpenHashMap();
 	@SuppressWarnings("deprecation")
 	private static void registerEnchantRemap(Enchantment enchantment, int peId) {
 		pcEnchantToPe.put(enchantment.getId(), peId);

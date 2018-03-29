@@ -1,13 +1,13 @@
 package protocolsupport.protocol.typeremapper.legacy;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
-import gnu.trove.map.hash.TObjectIntHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 
 public class LegacyPotion {
 
-	private static final TObjectIntHashMap<String> toLegacyId = new TObjectIntHashMap<>();
-	private static final TIntObjectHashMap<String> fromLegacyId = new TIntObjectHashMap<>();
+	private static final Object2IntOpenHashMap<String> toLegacyId = new Object2IntOpenHashMap<>();
+	private static final Int2ObjectOpenHashMap<String> fromLegacyId = new Int2ObjectOpenHashMap<>();
 	static {
 		register("night_vision", 8230);
 		register("long_night_vision", 8262);
