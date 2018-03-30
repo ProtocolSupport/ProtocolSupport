@@ -61,7 +61,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	protected int actionId;
 	protected InvTransaction[] transactions;
 	protected ServerBoundMiddlePacket simpleActionMiddlePacket;
-	
+
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		String locale = cache.getAttributesCache().getLocale();

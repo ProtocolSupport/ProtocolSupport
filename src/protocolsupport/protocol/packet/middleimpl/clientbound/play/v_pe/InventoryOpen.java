@@ -14,6 +14,7 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.WindowCache;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.typeremapper.pe.inventory.fakes.PEFakeContainer;
 import protocolsupport.protocol.typeremapper.pe.inventory.fakes.PEFakeVillager;
@@ -35,10 +36,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 		WindowCache winCache = cache.getWindowCache();
 		cache.getPEInventoryCache().getTransactionRemapper().clear();
 		if (type == WindowType.HORSE) {
-			//Horses, requires filter & some metadata to open.
-			//TODO: Fix this shit. Horses are a pain in the ass and require a different packet with nbt.
-			//Lama's are even worse with their variable slots. Some of this even has to be send in FREAKING metadata.
-			//For now it seems most of the horses work but the filter's might still need adjusting, this code is correct however.
+			//TODO: Fix lama filter in entitydata.json, add correct metadata for horse inventories.
 			NetworkEntity horse = cache.getWatchedEntityCache().getWatchedEntity(horseId);
 			if (horse != null) {
 				PocketEntityData horseTypeData = PocketData.getPocketEntityData(horse.getType());
@@ -69,23 +67,20 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	}
 	
 	public static ClientBoundPacketData create(ProtocolVersion version, int windowId, WindowType type, Position pePosition, int horseId) {
-		System.out.println("Opening " + type + " inventory: " + windowId);
 		return (ClientBoundPacketData) serialize(ClientBoundPacketData.create(PEPacketIDs.CONTAINER_OPEN), version, windowId, type, pePosition, horseId);
 	}
 	
 	public static ClientBoundPacketData openEquipment(ProtocolVersion version, int windowId, WindowType type, long entityId, NBTTagCompoundWrapper nbt) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.EQUIPMENT);
 		serializer.writeByte(windowId);
-		serializer.writeByte(IdRemapper.WINDOWTYPE.getTable(version).getRemap(type.toLegacyId()));
+		serializer.writeByte(PEDataValues.WINDOWTYPE.getTable(version).getRemap(type.toLegacyId()));
 		VarNumberSerializer.writeSVarInt(serializer, 0); //UNKOWN :F
 		VarNumberSerializer.writeSVarLong(serializer, entityId);
-		System.out.println("OPEN EQ - Eid: "+ entityId + "wId: " + windowId + " type: " + IdRemapper.WINDOWTYPE.getTable(version).getRemap(type.toLegacyId()) +  " Tag: " + nbt);
 		ItemStackSerializer.writeTag(serializer, true, version, nbt);
 		return serializer;
 	}
 	
 	public static void sendInventoryOpen(Connection connection, int windowId, WindowType type, Position pePosition, int horseId) {
-		System.out.println("Opening " + type + " inventory: " + windowId);
 		ByteBuf serializer = Unpooled.buffer();
 		PEPacketEncoder.sWritePacketId(serializer, PEPacketIDs.CONTAINER_OPEN);
 		serialize(serializer, connection.getVersion(), windowId, type, pePosition, horseId);
@@ -94,7 +89,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	
 	private static ByteBuf serialize(ByteBuf serializer, ProtocolVersion version, int windowId, WindowType type, Position pePosition, int horseId) {
 		serializer.writeByte(windowId);
-		serializer.writeByte(IdRemapper.WINDOWTYPE.getTable(version).getRemap(
+		serializer.writeByte(PEDataValues.WINDOWTYPE.getTable(version).getRemap(
 				IdRemapper.INVENTORY.getTable(version).getRemap(type)
 			.toLegacyId()));
 		PositionSerializer.writePEPosition(serializer, pePosition);

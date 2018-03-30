@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
-import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.utils.minecraftdata.PocketData;
 import protocolsupport.protocol.utils.types.MerchantData;
 import protocolsupport.protocol.utils.types.WindowType;
@@ -59,7 +59,7 @@ public class MerchantDataSerializer {
 	public static void writePEMerchantData(ByteBuf to, ProtocolVersion version, NetworkDataCache cache, long villagerId, String title, MerchantData merchdata) {
 		String locale = cache.getAttributesCache().getLocale();
 		to.writeByte((byte) cache.getWindowCache().getOpenedWindowId());
-		to.writeByte(IdRemapper.WINDOWTYPE.getTable(version).getRemap(WindowType.VILLAGER.toLegacyId()));
+		to.writeByte(PEDataValues.WINDOWTYPE.getTable(version).getRemap(WindowType.VILLAGER.toLegacyId()));
 		VarNumberSerializer.writeSVarInt(to, 0); //?
 		VarNumberSerializer.writeSVarInt(to, 0); //?
 		to.writeBoolean(true); //Is always willing!
