@@ -236,7 +236,10 @@ public class PETransactionRemapper {
 		}
 
 		public boolean isCraftingResult(NetworkDataCache cache) {
-			return slot == 0 && cache.getWindowCache().getOpenedWindow() == WindowType.CRAFTING_TABLE;
+			return (slot == 0) && (
+					(cache.getWindowCache().getOpenedWindow() == WindowType.CRAFTING_TABLE) ||
+					(cache.getWindowCache().getOpenedWindow() == WindowType.PLAYER)
+			);
 		}
 
 		public boolean isEmpty() {
