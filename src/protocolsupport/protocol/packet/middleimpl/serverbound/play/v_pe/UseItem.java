@@ -9,6 +9,7 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.pe.inventory.PEInventory;
 import protocolsupport.protocol.utils.types.BlockFace;
 import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.Position;
@@ -56,6 +57,9 @@ public class UseItem extends ServerBoundMiddlePacket {
 			}
 			case USE_CLICK_BLOCK: {
 				packets.add(MiddleBlockPlace.create(position, face, 0, cX, cY, cZ));
+				if (PEInventory.shouldDoClickUpdate(itemstack)) {
+					packets.add(MiddleBlockPlace.create(Position.ZERO, -1, 0, cX, cY, cZ));
+				}
 				//Modify position to request server update for the correct block.
 				BlockFace.getById(face).modPosition(position);
 				break;

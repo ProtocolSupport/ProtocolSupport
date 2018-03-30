@@ -1,6 +1,26 @@
 package protocolsupport.protocol.typeremapper.pe.inventory;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.Material;
+
+import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+
 public class PEInventory {
+
+	private static List<Material> clickUpdateMaterials = new ArrayList<Material>(9);
+	static {
+		clickUpdateMaterials.add(Material.BOAT);
+		clickUpdateMaterials.add(Material.BOAT_ACACIA);
+		clickUpdateMaterials.add(Material.BOAT_BIRCH);
+		clickUpdateMaterials.add(Material.BOAT_DARK_OAK);
+		clickUpdateMaterials.add(Material.BOAT_JUNGLE);
+		clickUpdateMaterials.add(Material.BOAT_SPRUCE);
+	}
+	public static boolean shouldDoClickUpdate(ItemStackWrapper itemstack) {
+		return !itemstack.isNull() && clickUpdateMaterials.contains(itemstack.getType());
+	}
 
 	//Slot thingy numbers.
 	public static class PESource {

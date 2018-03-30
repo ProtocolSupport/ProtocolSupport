@@ -30,6 +30,8 @@ import protocolsupport.protocol.typeremapper.legacy.LegacyPotion;
 import protocolsupport.protocol.typeremapper.mapcolor.MapColorRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEPotion;
 import protocolsupport.protocol.typeremapper.pe.PESkinModel;
+import protocolsupport.protocol.typeremapper.pe.inventory.PEInventory;
+import protocolsupport.protocol.typeremapper.pe.inventory.fakes.PEFakeContainer;
 import protocolsupport.protocol.typeremapper.sound.SoundRemapper;
 import protocolsupport.protocol.typeremapper.tileentity.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
@@ -129,6 +131,8 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(PEMetaProviderSPI.class.getName());
 			Class.forName(PESkinModel.class.getName());
 			Class.forName(PEPotion.class.getName());
+			Class.forName(PEInventory.class.getName());
+			Class.forName(PEFakeContainer.class.getName());
 			ServerPlatform.get().inject();
 		} catch (Throwable t) {
 			getLogger().log(Level.SEVERE, "Error when loading, make sure you are using supported server version", t);

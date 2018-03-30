@@ -108,7 +108,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		WindowCache winCache = cache.getWindowCache();
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 		if (simpleActionMiddlePacket != null) {
-			return simpleActionMiddlePacket.toNative();
+			packets.addAll(simpleActionMiddlePacket.toNative());
 		} else if (actionId == ACTION_NORMAL) {
 			PETransactionRemapper remapper = invCache.getTransactionRemapper();
 			cache.getPEInventoryCache().lockInventory();
