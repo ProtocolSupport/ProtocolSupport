@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.pe;
+package protocolsupport.protocol.typeremapper.pe.inventory;
 
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCreativeSetSlot;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClick;

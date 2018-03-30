@@ -13,7 +13,7 @@ public class CustomPayload extends MiddleCustomPayload {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		if (tag.equals("MC|TrList")) {
-			return RecyclableSingletonList.create(cache.getPEInventoryCache().getTradeVillager().updateTrade(
+			return RecyclableSingletonList.create(cache.getPEInventoryCache().getFakeVillager().updateTrade(
 					cache, connection.getVersion(),
 					MerchantDataSerializer.readMerchantData(data, ProtocolVersionsHelper.LATEST_PC, cache.getAttributesCache().getLocale()))
 			);

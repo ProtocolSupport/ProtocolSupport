@@ -6,8 +6,8 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.PEInventoryCache;
-import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.protocol.typeremapper.pe.inventory.PEInventory.PESource;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -79,11 +79,11 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 			}
 			case ENCHANT: {
 				if (slot == 0) {
-					invCache.getEnchantHopper().setInputOutputStack(itemstack);
-					return RecyclableSingletonList.create(invCache.getEnchantHopper().updateInventory(cache, version)); //Fake with hopper :F
+					invCache.getFakeEnchanting().setInputOutputStack(itemstack);
+					return RecyclableSingletonList.create(invCache.getFakeEnchanting().updateInventory(cache, version)); //Fake with hopper :F
 				} else if (slot == 1) {
-					invCache.getEnchantHopper().setLapisStack(itemstack);
-					return RecyclableSingletonList.create(invCache.getEnchantHopper().updateInventory(cache, version));
+					invCache.getFakeEnchanting().setLapisStack(itemstack);
+					return RecyclableSingletonList.create(invCache.getFakeEnchanting().updateInventory(cache, version));
 				} else {
 					return RecyclableSingletonList.create(create(version, locale, PESource.POCKET_INVENTORY, slot >= 29 ? slot - 29 : slot + 7, itemstack));
 				}

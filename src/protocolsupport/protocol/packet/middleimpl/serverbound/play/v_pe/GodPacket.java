@@ -1,50 +1,36 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.storage.netcache.PEInventoryCache;
 import protocolsupport.protocol.storage.netcache.WindowCache;
-import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
-import protocolsupport.protocol.typeremapper.pe.PEInventory;
-import protocolsupport.protocol.typeremapper.pe.PESlotRemapper;
-import protocolsupport.protocol.typeremapper.pe.PETransactionRemapper;
+import protocolsupport.protocol.typeremapper.pe.inventory.PESlotRemapper;
+import protocolsupport.protocol.typeremapper.pe.inventory.PETransactionRemapper;
+import protocolsupport.protocol.typeremapper.pe.inventory.PEInventory.PESource;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagType;
 
-/**
- * Lo and behold. The PE GodPacket. 
- * DKTAPPS THANK YOU FOR HELPING ME WITH THE VALUES! - This would be insufferable without him.
- * 
- * This packet handles amongst other things
- *  - Using items (Right clicking)
- *  - Interacting (left and right clicking mob)
- *  - Releasing items (shoot bow, eat food)
- *  - Getting creative items
- *  - Renaming items in anvil
- *  - Enchanting items using hopper (FFS)
- *  - MANAGING INVENTORY
- *  
- *  Apart from managing inventories it is the usual packet deal,
- *  except that we have an extra layer of encapsulation.
- *  
- *  Managing inventories works very different in PE, it sends slots, like creative instead of clicks.
- *  To simulate clicks we use a complex system that calculates them.
- *  Debugging can be a pain in the butt, I hope the comments can provide some help.
- */
+//The PE GodPacket! See [Documentation](https://github.com/ProtocolSupport/ProtocolSupport/wiki/PSPE:-GodPacket)
 public class GodPacket extends ServerBoundMiddlePacket {
 
-	private static boolean godlyDebug = true;
 	//Wrapped packet
 	protected static final int ACTION_NORMAL = 0;
 	protected static final int ACTION_MISMATCH = 1;
@@ -75,24 +61,15 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	protected int actionId;
 	protected InvTransaction[] transactions;
 	protected ServerBoundMiddlePacket simpleActionMiddlePacket;
-
-	//TODO: Remove debug (can delete all lines starting with "bug(") if all is well.
-	public static void bug(String bugger) {
-		if(godlyDebug) { System.out.println(bugger); }
-	}
 	
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		String locale = cache.getAttributesCache().getLocale();
-		bug("NEEWWW GODPACKET! Hooraayy it's a god packet. Don't we all reeeaaally love godpackets? I do. IDDOODD I REALLY DO LOVE THEM. THTHISS IS THE BEST DAY IN MY LIFE.");
 		actionId = VarNumberSerializer.readVarInt(clientdata);
-		bug("ACTION: " + actionId);
-
 		transactions = new InvTransaction[VarNumberSerializer.readVarInt(clientdata)];
 		for(int i = 0; i < transactions.length; i++) {
 			transactions[i] = InvTransaction.readFromStream(clientdata, locale, connection.getVersion());
 		}
-
 		switch (actionId) {
 			case ACTION_USE_ITEM: {
 				simpleActionMiddlePacket = useItemMiddlePacket;
@@ -113,7 +90,6 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				break;
 			}
 		}
-
 		if (simpleActionMiddlePacket != null) {
 			simpleActionMiddlePacket.readFromClientData(clientdata);
 		}
@@ -142,9 +118,9 @@ public class GodPacket extends ServerBoundMiddlePacket {
 					remapper.processCreativeTransaction(cache, transaction, packets);
 				} else {
 					if ((winCache.getOpenedWindow() != WindowType.ENCHANT) || 
-							invCache.getEnchantHopper().handleInventoryClick(cache, transaction, packets)) {
+							invCache.getFakeEnchanting().handleInventoryClick(cache, transaction, packets)) {
 						if (winCache.getOpenedWindow() == WindowType.ANVIL) {
-							PEInventory.processAnvilName(transaction, packets);
+							processAnvilName(transaction, packets);
 						}
 						remapper.cacheTransaction(transaction);	
 					}
@@ -201,7 +177,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			transaction.slot = VarNumberSerializer.readVarInt(from);
 			transaction.oldItem = ItemStackSerializer.readItemStack(from, version, locale, true);
 			transaction.newItem = ItemStackSerializer.readItemStack(from, version, locale, true);
-			bug("Inv transaction read:"
+			System.out.println("Inv transaction read:"
 					+ " sId: " + transaction.sourceId 
 					+ " wId: " + transaction.inventoryId 
 					+ " action: " + transaction.action 
@@ -239,18 +215,6 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			return slot == CURSOR;
 		}
 
-		public boolean isCraftingAdd() {
-			return inventoryId == PESource.POCKET_CRAFTING_GRID_ADD ||
-				inventoryId == PESource.POCKET_ANVIL_INPUT ||
-				inventoryId == PESource.POCKET_ANVIL_MATERIAL;
-		}
-		
-		public boolean isCraftingRemove() {
-			return inventoryId == PESource.POCKET_CRAFTING_GRID_REMOVE ||
-				inventoryId == PESource.POCKET_ANVIL_INPUT || 
-				inventoryId == PESource.POCKET_ANVIL_MATERIAL;
-		}
-
 		public ItemStackWrapper getOldItem() {
 			return oldItem;
 		}
@@ -264,6 +228,21 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			return Utils.toStringAllFields(this);
 		}
 
+	}
+	
+	protected static void processAnvilName(InvTransaction transaction, RecyclableArrayList<ServerBoundPacketData> packets) {
+		//Anvil naming is only done and known based on the clicked item.
+		if (transaction.getSlot() == 2 && !transaction.getOldItem().isNull()) {
+			NBTTagCompoundWrapper tag = transaction.getOldItem().getTag();
+			if (tag.hasKeyOfType("display", NBTTagType.COMPOUND)) {
+				NBTTagCompoundWrapper display = tag.getCompound("display");
+				if (display.hasKeyOfType("Name", NBTTagType.STRING)) {
+					ByteBuf payload = Unpooled.buffer();
+					StringSerializer.writeString(payload, ProtocolVersionsHelper.LATEST_PC, display.getString("Name"));
+					packets.add(MiddleCustomPayload.create("MC|ItemName", MiscSerializer.readAllBytes(payload)));
+				}
+			}
+		}
 	}
 
 }

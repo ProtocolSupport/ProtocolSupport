@@ -14,9 +14,9 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.WindowCache;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
-import protocolsupport.protocol.typeremapper.pe.PEInventory;
-import protocolsupport.protocol.typeremapper.pe.PEInventory.TradeVillager;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.protocol.typeremapper.pe.inventory.fakes.FakeContainer;
+import protocolsupport.protocol.typeremapper.pe.inventory.fakes.FakeVillager;
 import protocolsupport.protocol.utils.minecraftdata.PocketData;
 import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData;
 import protocolsupport.protocol.utils.types.Position;
@@ -49,13 +49,13 @@ public class InventoryOpen extends MiddleInventoryOpen {
 		} else if (type == WindowType.VILLAGER) {
 			//Villagers, require fake villager to be spawned and with merchantdata it opens the actual inventory.
 			System.out.println("VILLAGER: " + horseId + " slots: " + slots + " title " + title.toLegacyText());
-			TradeVillager villager = cache.getPEInventoryCache().getTradeVillager();
+			FakeVillager villager = cache.getPEInventoryCache().getFakeVillager();
 			villager.setTitle(title);
 			packets.add(villager.spawnVillager(cache, version));
 		} else {
 			//Normal inventory, requires fake blocks to open.
-			Position open = PEInventory.prepareFakeInventory(title, connection, cache, packets);
-			if (!PEInventory.shouldDoDoubleChest(cache) && type != WindowType.BEACON) {
+			Position open = FakeContainer.prepareContainer(title, connection, cache, packets);
+			if (!FakeContainer.shouldDoDoubleChest(cache) && type != WindowType.BEACON) {
 				//Unless we have a doublechest or beacon which take some time to create, open the inventory straight away.
 				packets.add(create(version, windowId, type, open, -1));
 			} else {

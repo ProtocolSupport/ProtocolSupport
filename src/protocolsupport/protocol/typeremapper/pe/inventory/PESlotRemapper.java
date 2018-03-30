@@ -1,9 +1,9 @@
-package protocolsupport.protocol.typeremapper.pe;
+package protocolsupport.protocol.typeremapper.pe.inventory;
 
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacket.InvTransaction;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.storage.netcache.WindowCache;
-import protocolsupport.protocol.typeremapper.pe.PEInventory.PESource;
+import protocolsupport.protocol.typeremapper.pe.inventory.PEInventory.PESource;
 import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
 
 public class PESlotRemapper {

@@ -44,29 +44,29 @@ public class InventoryData extends MiddleInventoryData {
 			}
 			case ENCHANT: {
 				if (type <= 2) { //(0-2) EnchantmentXP per option
-					invCache.getEnchantHopper().updateOptionXP(type, value);
+					invCache.getFakeEnchanting().updateOptionXP(type, value);
 				} else if (type == 3) {
 					break; //Use for weird item names?
 				} else if (type <= 6) { //(4-6) EnchantmentId per option
-					invCache.getEnchantHopper().updateOptionEnch(type - 4, value);
+					invCache.getFakeEnchanting().updateOptionEnch(type - 4, value);
 				} else if (type <= 9) { //(7-9) EnchantmentLvl per option
-					invCache.getEnchantHopper().updateOptionLevel(type - 7, value);
+					invCache.getFakeEnchanting().updateOptionLevel(type - 7, value);
 				}
 				break;
 			}
 			case BEACON: {
 				switch(type) {
 					case 0: {
-						invCache.getBeaconTemple().setLevel(value);
-						return invCache.getBeaconTemple().updateTemple(version, cache);
+						invCache.getFakeBeacon().setLevel(value);
+						return invCache.getFakeBeacon().updateTemple(version, cache);
 					}
 					case 1: {
-						invCache.getBeaconTemple().setPrimaryEffect(value);
-						return invCache.getBeaconTemple().updateNBT(version, cache);
+						invCache.getFakeBeacon().setPrimaryEffect(value);
+						return invCache.getFakeBeacon().updateNBT(version, cache);
 					}
 					case 2: {
-						invCache.getBeaconTemple().setSecondaryEffect(value);
-						return invCache.getBeaconTemple().updateNBT(version, cache);
+						invCache.getFakeBeacon().setSecondaryEffect(value);
+						return invCache.getFakeBeacon().updateNBT(version, cache);
 					}
 				}
 				break;
