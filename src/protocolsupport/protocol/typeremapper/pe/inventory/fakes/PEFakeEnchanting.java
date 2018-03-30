@@ -17,7 +17,7 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagType;
 
-public class FakeEnchanting {
+public class PEFakeEnchanting {
 
 	private ItemStackWrapper inputOutputSlot = ItemStackWrapper.NULL;
 	private ItemStackWrapper lapisSlot = ItemStackWrapper.NULL;

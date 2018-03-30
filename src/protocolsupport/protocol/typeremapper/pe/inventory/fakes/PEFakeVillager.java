@@ -19,7 +19,7 @@ import protocolsupport.protocol.utils.types.MerchantData;
 import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
 import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
 
-public class FakeVillager {
+public class PEFakeVillager {
 
 	private final NetworkEntity villager = new NetworkEntity(UUID.randomUUID(), Integer.MAX_VALUE - 10, NetworkEntityType.VILLAGER);
 	private BaseComponent title;

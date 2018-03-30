@@ -12,7 +12,7 @@ import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
-public class FakeBeacon {
+public class PEFakeBeacon {
 
 	private static final int EMERALD_BLOCK = 133 << 4;
 

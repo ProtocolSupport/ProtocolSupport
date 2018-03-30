@@ -1,6 +1,5 @@
 package protocolsupport.protocol.typeremapper.pe.inventory;
 
-//Auxiliary class for faking and using different inventories in PE.
 public class PEInventory {
 
 	//Slot thingy numbers.

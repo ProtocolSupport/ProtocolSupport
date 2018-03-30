@@ -1,9 +1,9 @@
 package protocolsupport.protocol.storage.netcache;
 
 import protocolsupport.protocol.typeremapper.pe.inventory.PETransactionRemapper;
-import protocolsupport.protocol.typeremapper.pe.inventory.fakes.FakeBeacon;
-import protocolsupport.protocol.typeremapper.pe.inventory.fakes.FakeEnchanting;
-import protocolsupport.protocol.typeremapper.pe.inventory.fakes.FakeVillager;
+import protocolsupport.protocol.typeremapper.pe.inventory.fakes.PEFakeBeacon;
+import protocolsupport.protocol.typeremapper.pe.inventory.fakes.PEFakeEnchanting;
+import protocolsupport.protocol.typeremapper.pe.inventory.fakes.PEFakeVillager;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.ArrayDequeMultiMap.ChildDeque;
@@ -13,9 +13,9 @@ public class PEInventoryCache {
 
 	private ItemStackWrapper itemInHand = ItemStackWrapper.NULL;
 	private final PETransactionRemapper transactionRemapper = new PETransactionRemapper();
-	private final FakeBeacon fakeBeacon = new FakeBeacon();
-	private final FakeEnchanting fakeEnchanting = new FakeEnchanting();
-	private final FakeVillager fakeVillager = new FakeVillager();
+	private final PEFakeBeacon fakeBeacon = new PEFakeBeacon();
+	private final PEFakeEnchanting fakeEnchanting = new PEFakeEnchanting();
+	private final PEFakeVillager fakeVillager = new PEFakeVillager();
 	private ChildDeque<Position> fakeContainers = new ChildDeque<Position>();
 	private long inventoryLockMillis = 0;
 	private long inventoryUpdateMillis = 0;
@@ -36,15 +36,15 @@ public class PEInventoryCache {
 		return transactionRemapper;
 	}
 
-	public FakeBeacon getFakeBeacon() {
+	public PEFakeBeacon getFakeBeacon() {
 		return fakeBeacon;
 	}
 
-	public FakeEnchanting getFakeEnchanting() {
+	public PEFakeEnchanting getFakeEnchanting() {
 		return fakeEnchanting;
 	}
 
-	public FakeVillager getFakeVillager() {
+	public PEFakeVillager getFakeVillager() {
 		return fakeVillager;
 	}
 

@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClose;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.typeremapper.pe.inventory.fakes.FakeContainer;
+import protocolsupport.protocol.typeremapper.pe.inventory.fakes.PEFakeContainer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -27,7 +27,7 @@ public class InventoryClose extends ServerBoundMiddlePacket {
 		if (windowId == cache.getWindowCache().getOpenedWindowId()) {
 			cache.getPEInventoryCache().getTransactionRemapper().clear();
 			cache.getWindowCache().closeWindow();
-			FakeContainer.destroyContainers(connection, cache);
+			PEFakeContainer.destroyContainers(connection, cache);
 			return RecyclableSingletonList.create(MiddleInventoryClose.create(windowId));
 		}
 		return RecyclableEmptyList.get();

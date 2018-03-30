@@ -20,7 +20,7 @@ import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
-public class FakeContainer {
+public class PEFakeContainer {
 
 	//Table with PE ids and access to tile id, to place the inventory blocks.
 	private static void regInvBlockType(WindowType type, int containerId, TileEntityType tileType) {
