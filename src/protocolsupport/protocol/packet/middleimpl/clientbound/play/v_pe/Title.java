@@ -23,7 +23,7 @@ public class Title extends MiddleTitle {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		PETitleCache titlecache = cache.getTitleCache();
+		PETitleCache titlecache = cache.getPETitleCache();
 		ProtocolVersion version = connection.getVersion();
 		switch (this.action) {
 			case HIDE: {
