@@ -478,13 +478,13 @@
 	"BLAZE": {
 		"BoundingBox": {
 			"width": 0.5,
-			"heigth": 1.8
+			"height": 1.8
 		}
 	},
 	"SPIDER": {
 		"BoundingBox": {
 			"width": 1.4,
-			"heigth": 0.9
+			"height": 0.9
 		},
 		"RiderInfo": {
 			"x": 0.0,
@@ -495,7 +495,7 @@
 	"CAVE_SPIDER": {
 		"BoundingBox": {
 			"width": 0.7,
-			"heigth": 0.5
+			"height": 0.5
 		},
 		"RiderInfo": {
 			"x": 0.0,
@@ -506,43 +506,43 @@
 	"CREEPER": {
 		"BoundingBox": {
 			"width": 0.6,
-			"heigth": 1.8
+			"height": 1.8
 		}
 	},
 	"GHAST": {
 		"BoundingBox": {
 			"width": 4.0,
-			"heigth": 4.0
+			"height": 4.0
 		}
 	},
 	"SLIME": {
 		"BoundingBox": {
 			"width": 0.52,
-			"heigth": 0.52
+			"height": 0.52
 		}
 	},
 	"MAGMA_CUBE": {
 		"BoundingBox": {
 			"width": 0.52,
-			"heigth": 0.52
+			"height": 0.52
 		}
 	},
 	"SKELETON": {
 		"BoundingBox": {
 			"width": 0.6,
-			"heigth": 1.95
+			"height": 1.95
 		}
 	},
 	"WITHER_SKELETON": {
 		"BoundingBox": {
 			"width": 0.72,
-			"heigth": 2
+			"height": 2
 		}
 	},
 	"STRAY": {
 		"BoundingBox": {
 			"width": 0.6,
-			"heigth": 1.95
+			"height": 1.95
 		}
 	},
 	"WITCH": {
@@ -639,7 +639,7 @@
 	"TNT": {
 		"BoundingBox": {
 			"width": 0.98,
-			"heigth": 0.98
+			"height": 0.98
 		},
 		"Offset": {
 			"x": 0.0,
@@ -652,31 +652,31 @@
 	"SNOWBALL": {
 		"BoundingBox": {
 			"width": 0.25,
-			"heigth": 0.25
+			"height": 0.25
 		}
 	},
 	"EGG": {
 		"BoundingBox": {
 			"width": 0.25,
-			"heigth": 0.25
+			"height": 0.25
 		}
 	},
 	"FIREBALL": {
 		"BoundingBox": {
 			"width": 0.31,
-			"heigth": 0.31
+			"height": 0.31
 		}
 	},
 	"FIRECHARGE": {
 		"BoundingBox": {
 			"width": 0.31,
-			"heigth": 0.31
+			"height": 0.31
 		}
 	},
 	"ENDERPEARL": {
 		"BoundingBox": {
 			"width": 0.25,
-			"heigth": 0.25
+			"height": 0.25
 		}
 	},
 	"WITHER_SKULL": {
@@ -694,19 +694,19 @@
 	"ENDEREYE": {
 		"BoundingBox": {
 			"width": 0.25,
-			"heigth": 0.25
+			"height": 0.25
 		}
 	},
 	"POTION": {
 		"BoundingBox": {
 			"width": 0.25,
-			"heigth": 0.25
+			"height": 0.25
 		}
 	},
 	"EXP_BOTTLE": {
 		"BoundingBox": {
 			"width": 0.25,
-			"heigth": 0.25
+			"height": 0.25
 		}
 	},
 	"LEASH_KNOT": {
@@ -770,19 +770,19 @@
 	"FIREWORK": {
 		"BoundingBox": {
 			"width": 0.25,
-			"heigth": 0.25
+			"height": 0.25
 		}
 	},
 	"ITEM_FRAME": {
 		"BoundingBox": {
 			"width": 0.98,
-			"heigth": 0.98
+			"height": 0.98
 		}
 	},
 	"ENDER_CRYSTAL": {
 		"BoundingBox": {
 			"width": 0.98,
-			"heigth": 0.98
+			"height": 0.98
 		}
 	},
 	"ARMOR_STAND_OBJECT": {
@@ -800,25 +800,25 @@
 	"SHULKER_BULLET": {
 		"BoundingBox": {
 			"width": 0.625,
-			"heigth": 0.625
+			"height": 0.625
 		}
 	},
 	"LAMA_SPIT": {
 		"BoundingBox": {
 			"width": 0.31,
-			"heigth": 0.31
+			"height": 0.31
 		}
 	},
 	"DRAGON_FIREBALL": {
 		"BoundingBox": {
 			"width": 0.31,
-			"heigth": 0.31
+			"height": 0.31
 		}
 	},
 	"EVOCATOR_FANGS": {
 		"BoundingBox": {
 			"width": 0.31,
-			"heigth": 0.31
+			"height": 0.31
 		}
 	},
 	"MINECART": {
