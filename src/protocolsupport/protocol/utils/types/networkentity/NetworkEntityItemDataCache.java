@@ -58,6 +58,7 @@ public class NetworkEntityItemDataCache extends NetworkEntityDataCache {
 			spawn.writeFloatLE(motY / 8000);
 			spawn.writeFloatLE(motZ / 8000);
 			VarNumberSerializer.writeVarInt(spawn, 0); // Metadata?
+			spawn.writeBoolean(false); //From fishing. Why do we care?
 			updatepackets.add(spawn);
 			spawned = true;
 		}

@@ -30,7 +30,7 @@ public abstract class PESkinsProvider {
 
 	protected static byte[] toData(BufferedImage skin) {
 		Validate.isTrue(skin.getWidth() == 64, "Must be 64 pixels wide");
-		Validate.isTrue((skin.getHeight() == 64) || (skin.getHeight() == 32), "Must be 64 or 32 pixels high");
+		Validate.isTrue((skin.getHeight() == 128) || (skin.getHeight() == 64) || (skin.getHeight() == 32), "Must be 128, 64 or 32 pixels high");
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		for (int y = 0; y < skin.getHeight(); y++) {
 			for (int x = 0; x < skin.getWidth(); x++) {
