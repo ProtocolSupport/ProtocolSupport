@@ -20,8 +20,11 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SPAWN_PLAYER);
 		MiscSerializer.writeUUID(serializer, connection.getVersion(), entity.getUUID());
 		StringSerializer.writeString(serializer, version, cache.getPlayerListCache().getEntry(entity.getUUID()).getName(cache.getAttributesCache().getLocale()));
+		StringSerializer.writeString(serializer, version, ""); //ThirdPartyName :F
+		VarNumberSerializer.writeVarInt(serializer, 0); //Platform
 		VarNumberSerializer.writeSVarLong(serializer, entity.getId());
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
+		StringSerializer.writeString(serializer, version, ""); //Chat :F
 		serializer.writeFloatLE((float) x);
 		serializer.writeFloatLE((float) y);
 		serializer.writeFloatLE((float) z);

@@ -73,6 +73,9 @@ public class StartGame extends MiddleStartGame {
 		VarNumberSerializer.writeSVarInt(startgame, PEAdventureSettings.GROUP_NORMAL); //permission level
 		VarNumberSerializer.writeSVarInt(startgame, 4); //game publish setting
 		startgame.writeIntLE((int) Math.ceil((Bukkit.getViewDistance() + 1) * Math.sqrt(2))); //Server chunk tick radius..
+		startgame.writeBoolean(false); //Platformbroadcast
+		VarNumberSerializer.writeVarInt(startgame, 0); //Broadcast mode
+		startgame.writeBoolean(false); //Broadcast intent
 		StringSerializer.writeString(startgame, connection.getVersion(), ""); //level ID (empty string)
 		StringSerializer.writeString(startgame, connection.getVersion(), ""); //world name (empty string)
 		StringSerializer.writeString(startgame, connection.getVersion(), ""); //premium world template id (empty string)

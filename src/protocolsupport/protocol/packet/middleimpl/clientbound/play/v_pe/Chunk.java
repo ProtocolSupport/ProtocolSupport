@@ -51,12 +51,15 @@ public class Chunk extends MiddleChunk {
 		VarNumberSerializer.writeSVarInt(serializer, chunkX);
 		VarNumberSerializer.writeSVarInt(serializer, chunkZ);
 		ByteBuf chunkdata = Unpooled.buffer();
-		chunkdata.writeByte(1); //section count
-		chunkdata.writeByte(0); //1st section storage version
-		chunkdata.writeZero(4096); //1st section blocks
-		chunkdata.writeZero(2048); //1st section block data
-		chunkdata.writeZero(512); //heightmap
-		chunkdata.writeZero(256); //biomes
+		chunkdata.writeByte(1); //1st section
+	    chunkdata.writeByte(1); //New subchunk version!
+	    //VarNumberSerializer.writeVarInt(chunkdata, 0); //blockstorage count (first is blocks second is water, we only do first for now) TODO: new beta, write zero and be done?
+	    chunkdata.writeByte((1 << 1) | 1);  //Runtimeflag and palette id.
+	    chunkdata.writeZero(512);
+	    VarNumberSerializer.writeSVarInt(chunkdata, 1); //Palette size
+	    VarNumberSerializer.writeSVarInt(chunkdata, 0); //Air
+		chunkdata.writeZero(512); //heightmap.
+		chunkdata.writeZero(256); //Biomedata.
 		chunkdata.writeByte(0); //borders
 		VarNumberSerializer.writeSVarInt(chunkdata, 0); //extra data
 		ArraySerializer.writeByteArray(serializer, version, chunkdata);

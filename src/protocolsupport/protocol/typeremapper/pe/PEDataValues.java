@@ -12,6 +12,7 @@ import protocolsupport.protocol.typeremapper.utils.RemappingTable;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.HashMapBasedIdRemappingTable;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import protocolsupport.protocol.utils.minecraftdata.PocketData;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
 
@@ -105,7 +106,7 @@ public class PEDataValues {
 		entityType.put(NetworkEntityType.MINECART_COMMAND, 100);
 		entityType.put(NetworkEntityType.MINECART_FURNACE, 84); //Hack, we remap a furnace using entitymetadata.
 		entityType.put(NetworkEntityType.MINECART_MOB_SPAWNER, 84); //Hack, we remap a mobspawner using entitymetadata.
-		entityType.put(NetworkEntityType.AREA_EFFECT_CLOUD, 101);
+		//TODO: Lingering Potion? -> 101
 		entityType.put(NetworkEntityType.LAMA_SPIT, 102);
 		entityType.put(NetworkEntityType.EVOCATOR_FANGS, 103);
 	}
@@ -119,20 +120,10 @@ public class PEDataValues {
 	}
 
 	public static final ArrayBasedIdRemappingTable BLOCK_ID = new ArrayBasedIdRemappingTable(MinecraftData.BLOCK_ID_MAX * MinecraftData.BLOCK_DATA_MAX);
-	private static void registerBlockRemap(int from, int to) {
-		for (int i = 0; i < MinecraftData.BLOCK_DATA_MAX; i++) {
-			BLOCK_ID.setRemap(MinecraftData.getBlockStateFromIdAndData(from, i), MinecraftData.getBlockStateFromIdAndData(to, i));
-		}
-	}
-	private static void registerBlockRemap(int from, int dataFrom, int to, int dataTo) {
-		for (int i = 0; i < MinecraftData.BLOCK_DATA_MAX; i++) {
-			BLOCK_ID.setRemap(MinecraftData.getBlockStateFromIdAndData(from, dataFrom), MinecraftData.getBlockStateFromIdAndData(to, dataTo));
-		}
-	}
-	private static void registerBlockRemap(int from, int to, int dataTo) {
-		for (int i = 0; i < MinecraftData.BLOCK_DATA_MAX; i++) {
-			BLOCK_ID.setRemap(MinecraftData.getBlockStateFromIdAndData(from, i), MinecraftData.getBlockStateFromIdAndData(to, dataTo));
-		}
+	static {
+		PocketData.readBlockRemaps((from, to) -> {
+			BLOCK_ID.setRemap(from, to);
+		});
 	}
 
 	private static final Int2IntOpenHashMap pcEnchantToPe = new Int2IntOpenHashMap();
@@ -189,141 +180,88 @@ public class PEDataValues {
 		PE_ITEM_ID.setComplexRemap(to, dataTo, from, dataFrom);
 	}
 
-	private static void registerBlockAndItemRemap(int from, int to) {
-		registerBlockRemap(from, to);
-		registerItemRemap(from, to);
-	}
-	private static void registerBlockAndItemRemap(int from, int dataFrom, int to, int dataTo) {
-		registerBlockRemap(from, dataFrom, to, dataTo);
-		registerItemRemap(from, dataFrom, to, dataTo);
-	}
-	private static void registerBlockAndItemRemap(int from, int to, int dataTo) {
-		registerBlockRemap(from, to, dataTo);
-		registerItemRemap(from, to, dataTo);
-	}
-
 	static {
 		// ===[ BLOCKS ]===
 		// Concrete Powder
-		registerBlockAndItemRemap(252, 237);
+		registerItemRemap(252, 237);
 		// Chain Command Block
-		registerBlockAndItemRemap(211, 189);
+		registerItemRemap(211, 189);
 		// Repeating Command Block
-		registerBlockAndItemRemap(210, 188);
+		registerItemRemap(210, 188);
 		// Grass Path
-		registerBlockAndItemRemap(208, 198);
+		registerItemRemap(208, 198);
 		// Double Wooden Slab
-		registerBlockAndItemRemap(125, 157);
-		registerBlockAndItemRemap(126, 158);
-		registerBlockAndItemRemap(95, 241); // STAINED_GLASS
-		registerBlockAndItemRemap(157, 126); // ACTIVATOR_RAIL
-		registerBlockAndItemRemap(158, 125); // DROPPER
-		registerBlockAndItemRemap(198, 208); // END_ROD
-		registerBlockAndItemRemap(199, 240); // CHORUS_PLANT
-		registerBlockAndItemRemap(207, 244); // BEETROOT_BLOCK
-		registerBlockAndItemRemap(208, 198); // GRASS_PATH
-		registerBlockAndItemRemap(212, 207); // FROSTED_ICE
-		registerBlockAndItemRemap(218, 251); // OBSERVER
-		registerBlockAndItemRemap(235, 220); // WHITE_GLAZED_TERRACOTTA
-		registerBlockAndItemRemap(236, 221); // ORANGE_GLAZED_TERRACOTTA
-		registerBlockAndItemRemap(237, 222); // MAGENTA_GLAZED_TERRACOTTA
-		registerBlockAndItemRemap(238, 223); // LIGHT_BLUE_GLAZED_TERRACOTTA
-		registerBlockAndItemRemap(239, 224); // YELLOW_GLAZED_TERRACOTTA
-		registerBlockAndItemRemap(240, 225); // LIME_GLAZED_TERRACOTTA
-		registerBlockAndItemRemap(241, 226); // PINK_GLAZED_TERRACOTTA
-		registerBlockAndItemRemap(242, 227); // GRAY_GLAZED_TERRACOTTA
-		registerBlockAndItemRemap(243, 228); // SILVER_GLAZED_TERRACOTTA
-		registerBlockAndItemRemap(244, 229); // CYAN_GLAZED_TERRACOTTA
-		registerBlockAndItemRemap(245, 219); // PURPLE_GLAZED_TERRACOTTA
-		registerBlockAndItemRemap(246, 231); // BLUE_GLAZED_TERRACOTTA
-		registerBlockAndItemRemap(247, 232); // BROWN_GLAZED_TERRACOTTA
-		registerBlockAndItemRemap(248, 233); // GREEN_GLAZED_TERRACOTTA
-		registerBlockAndItemRemap(249, 234); // RED_GLAZED_TERRACOTTA
-		registerBlockAndItemRemap(250, 235); // BLACK_GLAZED_TERRACOTTA
-		registerBlockAndItemRemap(251, 236); // CONCRETE
-		registerBlockAndItemRemap(255, 252); // STRUCTURE_BLOCK
-		registerBlockAndItemRemap(166, 95);  // BARRIER
-		registerBlockAndItemRemap(154, 410);  // HOPPER
-		registerBlockAndItemRemap(36, 250);  // Block Being Moved By Piston
-		registerBlockAndItemRemap(205, 203);  // Purpur slab
-		registerBlockAndItemRemap(204, 201);  // Purpur double slab TODO: replace to real double slab
-		registerBlockAndItemRemap(202, 201, 2);  // Purpur pillar
+		registerItemRemap(125, 157);
+		registerItemRemap(126, 158);
+		registerItemRemap(95, 241); // STAINED_GLASS
+		registerItemRemap(157, 126); // ACTIVATOR_RAIL
+		registerItemRemap(158, 125); // DROPPER
+		registerItemRemap(198, 208); // END_ROD
+		registerItemRemap(199, 240); // CHORUS_PLANT
+		registerItemRemap(207, 244); // BEETROOT_BLOCK
+		registerItemRemap(208, 198); // GRASS_PATH
+		registerItemRemap(212, 207); // FROSTED_ICE
+		registerItemRemap(218, 251); // OBSERVER
+		registerItemRemap(235, 220); // WHITE_GLAZED_TERRACOTTA
+		registerItemRemap(236, 221); // ORANGE_GLAZED_TERRACOTTA
+		registerItemRemap(237, 222); // MAGENTA_GLAZED_TERRACOTTA
+		registerItemRemap(238, 223); // LIGHT_BLUE_GLAZED_TERRACOTTA
+		registerItemRemap(239, 224); // YELLOW_GLAZED_TERRACOTTA
+		registerItemRemap(240, 225); // LIME_GLAZED_TERRACOTTA
+		registerItemRemap(241, 226); // PINK_GLAZED_TERRACOTTA
+		registerItemRemap(242, 227); // GRAY_GLAZED_TERRACOTTA
+		registerItemRemap(243, 228); // SILVER_GLAZED_TERRACOTTA
+		registerItemRemap(244, 229); // CYAN_GLAZED_TERRACOTTA
+		registerItemRemap(245, 219); // PURPLE_GLAZED_TERRACOTTA
+		registerItemRemap(246, 231); // BLUE_GLAZED_TERRACOTTA
+		registerItemRemap(247, 232); // BROWN_GLAZED_TERRACOTTA
+		registerItemRemap(248, 233); // GREEN_GLAZED_TERRACOTTA
+		registerItemRemap(249, 234); // RED_GLAZED_TERRACOTTA
+		registerItemRemap(250, 235); // BLACK_GLAZED_TERRACOTTA
+		registerItemRemap(251, 236); // CONCRETE
+		registerItemRemap(255, 252); // STRUCTURE_BLOCK
+		registerItemRemap(166, 95);  // BARRIER
+		registerItemRemap(154, 410);  // HOPPER
+		registerItemRemap(36, 250);  // Block Being Moved By Piston
+		registerItemRemap(205, 203);  // Purpur slab
+		registerItemRemap(204, 201);  // Purpur double slab TODO: replace to real double slab
+		registerItemRemap(202, 201, 2);  // Purpur pillar
 		// Nether slab -> Quartz slab
-		registerBlockAndItemRemap(44, 7, 44, 6);
-		registerBlockAndItemRemap(44, 14, 44, 15);
-		registerBlockAndItemRemap(43, 7, 43, 6);
+		registerItemRemap(44, 7, 44, 6);
+		registerItemRemap(44, 14, 44, 15);
+		registerItemRemap(43, 7, 43, 6);
 		// And vice-versa
-		registerBlockAndItemRemap(44, 6, 44, 7);
-		registerBlockAndItemRemap(44, 15, 44, 14);
-		registerBlockAndItemRemap(43, 6, 43, 7);
+		registerItemRemap(44, 6, 44, 7);
+		registerItemRemap(44, 15, 44, 14);
+		registerItemRemap(43, 6, 43, 7);
 		// Prismarine data ID mismatch
-		registerBlockAndItemRemap(168, 1, 168, 2);
-		registerBlockAndItemRemap(168, 2, 168, 1);
+		registerItemRemap(168, 1, 168, 2);
+		registerItemRemap(168, 2, 168, 1);
 		// Podzol
-		registerBlockAndItemRemap(3, 2, 243, 0);
+		registerItemRemap(3, 2, 243, 0);
 		// Colored Fences
-		registerBlockRemap(188, 85, 1);
-		registerBlockRemap(189, 85, 2);
-		registerBlockRemap(190, 85, 3);
-		registerBlockRemap(192, 85, 4);
-		registerBlockRemap(191, 85, 5);
 		registerItemRemap(188, 0, 85, 1);
 		registerItemRemap(189, 0, 85, 2);
 		registerItemRemap(190, 0, 85, 3);
 		registerItemRemap(192, 0, 85, 4);
 		registerItemRemap(191, 0, 85, 5);
 		// Shulker Boxes
-		registerBlockAndItemRemap(219, 218, 0); // WHITE_SHULKER_BOX
-		registerBlockAndItemRemap(220, 218, 1); // ORANGE_SHULKER_BOX
-		registerBlockAndItemRemap(221, 218, 2); // MAGENTA_SHULKER_BOX
-		registerBlockAndItemRemap(222, 218, 3); // LIGHT_BLUE_SHULKER_BOX
-		registerBlockAndItemRemap(223, 218, 4); // YELLOW_SHULKER_BOX
-		registerBlockAndItemRemap(224, 218, 5); // LIME_SHULKER_BOX
-		registerBlockAndItemRemap(225, 218, 6); // PINK_SHULKER_BOX
-		registerBlockAndItemRemap(226, 218, 7); // GRAY_SHULKER_BOX
-		registerBlockAndItemRemap(227, 218, 8); // SILVER_SHULKER_BOX
-		registerBlockAndItemRemap(228, 218, 9); // CYAN_SHULKER_BOX
-		registerBlockAndItemRemap(229, 218, 10); // PURPLE_SHULKER_BOX
-		registerBlockAndItemRemap(230, 218, 11); // BLUE_SHULKER_BOX
-		registerBlockAndItemRemap(231, 218, 12); // BROWN_SHULKER_BOX
-		registerBlockAndItemRemap(232, 218, 13); // GREEN_SHULKER_BOX
-		registerBlockAndItemRemap(233, 218, 14); // RED_SHULKER_BOX
-		registerBlockAndItemRemap(234, 218, 15); // BLACK_SHULKER_BOX
-		// Trap Doors...
-		// Wooden
-		registerBlockRemap(96, 0, 96, 3);
-		registerBlockRemap(96, 1, 96, 2);
-		registerBlockRemap(96, 2, 96, 1);
-		registerBlockRemap(96, 3, 96, 0);
-		registerBlockRemap(96, 4, 96, 11);
-		registerBlockRemap(96, 5, 96, 10);
-		registerBlockRemap(96, 6, 96, 9);
-		registerBlockRemap(96, 7, 96, 8);
-		registerBlockRemap(96, 8, 96, 7);
-		registerBlockRemap(96, 9, 96, 6);
-		registerBlockRemap(96, 10, 96, 5);
-		registerBlockRemap(96, 11, 96, 4);
-		registerBlockRemap(96, 12, 96, 15);
-		registerBlockRemap(96, 13, 96, 14);
-		registerBlockRemap(96, 14, 96, 13);
-		registerBlockRemap(96, 15, 96, 12);
-		// Iron
-		registerBlockRemap(167, 0, 167, 3);
-		registerBlockRemap(167, 1, 167, 2);
-		registerBlockRemap(167, 2, 167, 1);
-		registerBlockRemap(167, 3, 167, 0);
-		registerBlockRemap(167, 4, 167, 11);
-		registerBlockRemap(167, 5, 167, 10);
-		registerBlockRemap(167, 6, 167, 9);
-		registerBlockRemap(167, 7, 167, 8);
-		registerBlockRemap(167, 8, 167, 7);
-		registerBlockRemap(167, 9, 167, 6);
-		registerBlockRemap(167, 10, 167, 5);
-		registerBlockRemap(167, 11, 167, 4);
-		registerBlockRemap(167, 12, 167, 15);
-		registerBlockRemap(167, 13, 167, 14);
-		registerBlockRemap(167, 14, 167, 13);
-		registerBlockRemap(167, 15, 167, 12);
+		registerItemRemap(219, 218, 0); // WHITE_SHULKER_BOX
+		registerItemRemap(220, 218, 1); // ORANGE_SHULKER_BOX
+		registerItemRemap(221, 218, 2); // MAGENTA_SHULKER_BOX
+		registerItemRemap(222, 218, 3); // LIGHT_BLUE_SHULKER_BOX
+		registerItemRemap(223, 218, 4); // YELLOW_SHULKER_BOX
+		registerItemRemap(224, 218, 5); // LIME_SHULKER_BOX
+		registerItemRemap(225, 218, 6); // PINK_SHULKER_BOX
+		registerItemRemap(226, 218, 7); // GRAY_SHULKER_BOX
+		registerItemRemap(227, 218, 8); // SILVER_SHULKER_BOX
+		registerItemRemap(228, 218, 9); // CYAN_SHULKER_BOX
+		registerItemRemap(229, 218, 10); // PURPLE_SHULKER_BOX
+		registerItemRemap(230, 218, 11); // BLUE_SHULKER_BOX
+		registerItemRemap(231, 218, 12); // BROWN_SHULKER_BOX
+		registerItemRemap(232, 218, 13); // GREEN_SHULKER_BOX
+		registerItemRemap(233, 218, 14); // RED_SHULKER_BOX
+		registerItemRemap(234, 218, 15); // BLACK_SHULKER_BOX
 
 		// ===[ ITEMS ]===
 		registerItemRemap(410, 422); // PRISMARINE_CRYSTALS

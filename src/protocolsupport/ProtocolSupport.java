@@ -28,6 +28,7 @@ import protocolsupport.protocol.typeremapper.legacy.LegacyEffect;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityType;
 import protocolsupport.protocol.typeremapper.legacy.LegacyPotion;
 import protocolsupport.protocol.typeremapper.mapcolor.MapColorRemapper;
+import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEPotion;
 import protocolsupport.protocol.typeremapper.pe.PESkinModel;
 import protocolsupport.protocol.typeremapper.pe.inventory.PEInventory;
@@ -126,6 +127,7 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(LegacyPotion.class.getName());
 			Class.forName(LegacyEntityType.class.getName());
 			Class.forName(LegacyEffect.class.getName());
+			Class.forName(PEDataValues.class.getName());
 			Class.forName(PEProxyServerInfoHandler.class.getName());
 			Class.forName(PESkinsProviderSPI.class.getName());
 			Class.forName(PEMetaProviderSPI.class.getName());
