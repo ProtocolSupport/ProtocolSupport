@@ -38,7 +38,6 @@ public class BookEdit extends ServerBoundMiddlePacket {
 		ProtocolVersion version = connection.getVersion();
 		type = clientdata.readByte();
 		slot = clientdata.readByte();
-		slot -= 9;
 		switch(type) {
 			case TYPE_REPLACE: {
 				pagenum = clientdata.readByte();
