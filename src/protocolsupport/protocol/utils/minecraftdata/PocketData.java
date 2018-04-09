@@ -41,9 +41,8 @@ public class PocketData {
 	}
 
 	public static void readBlockRemaps(BiConsumer<Integer, Integer> func) {
-		getFileObject("blockremaps.json").entrySet().forEach(entry -> {
-			JsonObject element = entry.getValue().getAsJsonObject();
-			func.accept(element.get("from").getAsInt(), element.get("to").getAsInt());
+		getFileObject("blockremaps.json").get("Remaps").getAsJsonArray().forEach(entry -> {
+			func.accept(entry.getAsJsonObject().get("from").getAsInt(), entry.getAsJsonObject().get("to").getAsInt());
 		});
 	}
 
