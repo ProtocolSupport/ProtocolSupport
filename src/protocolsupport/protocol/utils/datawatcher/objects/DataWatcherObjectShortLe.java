@@ -2,9 +2,9 @@ package protocolsupport.protocol.utils.datawatcher.objects;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.datawatcher.ReadableDataWatcherObject;
 
-public class DataWatcherObjectShortLe extends DataWatcherObject<Short> {
+public class DataWatcherObjectShortLe extends ReadableDataWatcherObject<Short> {
 
 	public DataWatcherObjectShortLe() {
 	}
@@ -15,6 +15,11 @@ public class DataWatcherObjectShortLe extends DataWatcherObject<Short> {
 
 	public DataWatcherObjectShortLe(int i) {
 		value = (short) i;
+	}
+
+	@Override
+	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {
+		this.value = from.readShortLE();
 	}
 
 	@Override
