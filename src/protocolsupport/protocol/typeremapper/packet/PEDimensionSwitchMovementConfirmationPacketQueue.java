@@ -3,6 +3,8 @@ package protocolsupport.protocol.typeremapper.packet;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import it.unimi.dsi.fastutil.ints.IntSet;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -14,7 +16,9 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 public class PEDimensionSwitchMovementConfirmationPacketQueue {
 
 	public static final int UNLOCK_DELAY = Utils.getJavaPropertyValue("pe.dimswitchdelay", 2, Integer::parseInt);
-
+	protected static final IntSet fallthroughPackets = new IntOpenHashSet(new int[] {
+			PEPacketIDs.RESOURCE_PACK, PEPacketIDs.RESOURCE_INFO, PEPacketIDs.RESOURCE_DATA, PEPacketIDs.RESOURCE_STACK, PEPacketIDs.RESOURCE_REQUEST, PEPacketIDs.RESOURCE_RESPONSE
+	});
 	protected final ArrayList<ClientBoundPacketData> queue = new ArrayList<>(2000);
 	protected State state = State.SCANNING_FOR_LOGIN_STATUS;
 
@@ -36,7 +40,7 @@ public class PEDimensionSwitchMovementConfirmationPacketQueue {
 
 	private void processClientBoundPackets0(Collection<ClientBoundPacketData> sendpackets, RecyclableArrayList<ClientBoundPacketData> allowed) {
 		for (ClientBoundPacketData sendpacket : sendpackets) {
-			if (!isPacketSendingAllowed()) {
+			if (!isPacketSendingAllowed() && !fallthroughPackets.contains(sendpacket.getPacketId())) {
 				queue.add(sendpacket);
 			} else {
 				allowed.add(sendpacket);
@@ -81,8 +85,10 @@ public class PEDimensionSwitchMovementConfirmationPacketQueue {
 					state = State.WAITING_UNLOCK;
 				}
 				if ((state == State.WAITING_UNLOCK) || (state == State.UNLOCK_SCHEDULED)) {
-					packet.recycle();
-					continue;
+					if (!fallthroughPackets.contains(packet.getPacketId())) {
+						packet.recycle();
+						continue;
+					}
 				}
 				allowed.add(packet);
 			}
