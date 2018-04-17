@@ -3,7 +3,7 @@ package protocolsupport.zplatform.impl.glowstone.network;
 import java.net.InetSocketAddress;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -23,8 +23,8 @@ import net.glowstone.net.GlowSession;
 import net.glowstone.net.ProxyData;
 import net.glowstone.net.pipeline.MessageHandler;
 import net.glowstone.net.protocol.ProtocolType;
-import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.api.utils.NetworkState;
+import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.zplatform.impl.glowstone.GlowStoneMiscUtils;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
@@ -127,13 +127,12 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 	}
 
 	@Override
-	public ProfileProperty[] getSpoofedProperties() {
+	public Collection<ProfileProperty> getSpoofedProperties() {
 		GlowPlayerProfile profile = getSpoofedProfile();
 		return profile == null ? null :
 		profile.getProperties().stream()
 		.map(property -> new ProfileProperty(property.getName(), property.getValue(), property.getSignature()))
-		.collect(Collectors.toList())
-		.toArray(new ProfileProperty[0]);
+		.collect(Collectors.toList());
 	}
 
 	private GlowPlayerProfile getSpoofedProfile() {
@@ -142,11 +141,11 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 	}
 
 	@Override
-	public void setSpoofedProfile(UUID uuid, ProfileProperty[] properties) {
+	public void setSpoofedProfile(UUID uuid, Collection<ProfileProperty> properties) {
 		ProxyData old = getSession().getProxyData();
 		List<com.destroystokyo.paper.profile.ProfileProperty> glowproperties = Collections.emptyList();
 		if (properties != null) {
-			glowproperties = Arrays.stream(properties)
+			glowproperties = properties.stream()
 			.map(prop -> new com.destroystokyo.paper.profile.ProfileProperty(prop.getName(), prop.getValue(), prop.getSignature()))
 			.collect(Collectors.toList());
 		}

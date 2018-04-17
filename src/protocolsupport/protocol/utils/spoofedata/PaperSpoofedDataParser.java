@@ -1,16 +1,21 @@
 package protocolsupport.protocol.utils.spoofedata;
 
-import java.util.UUID;
+import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.function.Function;
 
 import org.bukkit.Bukkit;
 
 import com.destroystokyo.paper.event.player.PlayerHandshakeEvent;
+import com.google.common.reflect.TypeToken;
 
-import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
+import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.utils.Utils;
 
 public class PaperSpoofedDataParser implements Function<String, SpoofedData> {
+
+	@SuppressWarnings("serial")
+	protected static final Type properties_type = new TypeToken<Collection<ProfileProperty>>() {}.getType();
 
 	@Override
 	public SpoofedData apply(String hostname) {
@@ -21,11 +26,12 @@ public class PaperSpoofedDataParser implements Function<String, SpoofedData> {
 				if (handshakeEvent.isFailed()) {
 					return new SpoofedData(handshakeEvent.getFailMessage());
 				}
-				String spoofedHostname = handshakeEvent.getServerHostname();
-				String spoofedAddress = handshakeEvent.getSocketAddressHostname();
-				UUID uuid = handshakeEvent.getUniqueId();
-				ProfileProperty[] properties = Utils.GSON.fromJson(handshakeEvent.getPropertiesJson(), ProfileProperty[].class);
-				return new SpoofedData(spoofedHostname, spoofedAddress, uuid, properties);
+				return new SpoofedData(
+					handshakeEvent.getServerHostname(),
+					handshakeEvent.getSocketAddressHostname(),
+					handshakeEvent.getUniqueId(),
+					Utils.GSON.fromJson(handshakeEvent.getPropertiesJson(), properties_type)
+				);
 			}
 		}
 		return null;

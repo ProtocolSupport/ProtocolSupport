@@ -50,8 +50,8 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	public static GlowPlayerProfile toGlowStoneGameProfile(GameProfile profile) {
 		return new GlowPlayerProfile(
 			profile.getName(), profile.getUUID(),
-			profile.getProperties().values()
-			.stream()
+			profile.getProperties().values().stream()
+			.flatMap(List::stream)
 			.map(property -> new ProfileProperty(property.getName(), property.getValue(), property.getSignature()))
 			.collect(Collectors.toList())
 		);

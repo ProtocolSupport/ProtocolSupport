@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.handler;
 import java.security.PrivateKey;
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -28,7 +29,7 @@ import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.PlayerLoginStartEvent;
-import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
+import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.utils.Utils;
@@ -98,10 +99,9 @@ public abstract class AbstractLoginListener implements IHasProfile {
 
 	public void initOfflineModeGameProfile() {
 		profile = new GameProfile(networkManager.getSpoofedUUID() != null ? networkManager.getSpoofedUUID() : generateOffileModeUUID(), profile.getName());
-		if (networkManager.getSpoofedProperties() != null) {
-			for (ProfileProperty property : networkManager.getSpoofedProperties()) {
-				profile.addProperty(property);
-			}
+		Collection<ProfileProperty> spoofedProperties = networkManager.getSpoofedProperties();
+		if (spoofedProperties != null) {
+			spoofedProperties.forEach(profile::addProperty);
 		}
 	}
 
@@ -202,7 +202,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 		}
 		if (newUUID != null) {
 			GameProfile newProfile = new GameProfile(newUUID, profile.getName());
-			newProfile.getProperties().putAll(profile.getProperties());
+			newProfile.addProperties(profile.getProperties());
 			profile = newProfile;
 		}
 

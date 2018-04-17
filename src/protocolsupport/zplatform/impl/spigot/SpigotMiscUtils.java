@@ -2,9 +2,9 @@ package protocolsupport.zplatform.impl.spigot;
 
 import java.security.KeyPair;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
+import java.util.stream.Collectors;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -31,7 +31,6 @@ import net.minecraft.server.v1_12_R1.EnumProtocol;
 import net.minecraft.server.v1_12_R1.MinecraftServer;
 import net.minecraft.server.v1_12_R1.NBTTagCompound;
 import net.minecraft.server.v1_12_R1.WorldServer;
-import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
@@ -97,10 +96,13 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	public static com.mojang.authlib.GameProfile toMojangGameProfile(GameProfile profile) {
 		com.mojang.authlib.GameProfile mojangGameProfile = new com.mojang.authlib.GameProfile(profile.getUUID(), profile.getName());
-		for (Entry<String, ProfileProperty> entry : profile.getProperties().entrySet()) {
-			ProfileProperty property = entry.getValue();
-			mojangGameProfile.getProperties().put(entry.getKey(), new Property(property.getName(), property.getValue(), property.getSignature()));
-		}
+		com.mojang.authlib.properties.PropertyMap mojangProperties = mojangGameProfile.getProperties();
+		profile.getProperties().entrySet().forEach(entry -> mojangProperties.putAll(
+			entry.getKey(),
+			entry.getValue().stream()
+			.map(p -> new Property(p.getName(), p.getValue(), p.getSignature()))
+			.collect(Collectors.toList()))
+		);
 		return mojangGameProfile;
 	}
 

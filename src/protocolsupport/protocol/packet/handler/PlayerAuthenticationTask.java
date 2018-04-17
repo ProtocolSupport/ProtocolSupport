@@ -3,9 +3,11 @@ package protocolsupport.protocol.packet.handler;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
@@ -63,7 +65,8 @@ public class PlayerAuthenticationTask {
 
 		PlayerPropertiesResolveEvent propResolve = new PlayerPropertiesResolveEvent(
 			ConnectionImpl.getFromChannel(listener.networkManager.getChannel()),
-			playerName, listener.profile.getProperties().values()
+			playerName,
+			listener.profile.getProperties().values().stream().flatMap(List::stream).map(property -> new ProfileProperty(property)).collect(Collectors.toList())
 		);
 		Bukkit.getPluginManager().callEvent(propResolve);
 		listener.profile.clearProperties();
