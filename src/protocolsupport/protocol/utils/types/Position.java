@@ -7,6 +7,8 @@ import protocolsupport.utils.Utils;
 
 public class Position {
 
+	public static final Position ZERO = new Position(0, 0, 0);
+
 	protected int x;
 	protected int y;
 	protected int z;

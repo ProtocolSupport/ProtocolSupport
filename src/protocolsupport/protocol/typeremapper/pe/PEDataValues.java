@@ -274,15 +274,17 @@ public class PEDataValues {
 		registerItemRemap(449, 450); // TOTEM
 		registerItemRemap(450, 445); // SHULKER_SHELL
 		registerItemRemap(322, 1, 466, 0); // Enchanted Golden Apple
-		registerItemRemap(444, 333, 1); // Spruce Boat
-		registerItemRemap(445, 333, 2); // Birch Boat
-		registerItemRemap(446, 333, 3); // Jungle Boat
-		registerItemRemap(447, 333, 4); // Acacia Boat
-		registerItemRemap(448, 333, 5); // Dark Oak Boat
+		registerItemRemap(333, 0, 333, 0); // Oak Boat
+		registerItemRemap(444, 0, 333, 1); // Spruce Boat
+		registerItemRemap(445, 0, 333, 2); // Birch Boat
+		registerItemRemap(446, 0, 333, 3); // Jungle Boat
+		registerItemRemap(447, 0, 333, 4); // Acacia Boat
+		registerItemRemap(448, 0, 333, 5); // Dark Oak Boat
 		registerItemRemap(422, 443); // Minecart with a Command Block
-		registerItemRemap(335, 325, 1); // Milk Bucket
-		registerItemRemap(326, 325, 8); // Water Bucket
-		registerItemRemap(327, 325, 10); // Lava Bucket
+		registerItemRemap(325, 0, 325, 0); // Bucket
+		registerItemRemap(335, 0, 325, 1); // Milk Bucket
+		registerItemRemap(326, 0, 325, 8); // Water Bucket
+		registerItemRemap(327, 0, 325, 10); // Lava Bucket
 		// Records
 		registerItemRemap(2256, 500);
 		registerItemRemap(2257, 501);

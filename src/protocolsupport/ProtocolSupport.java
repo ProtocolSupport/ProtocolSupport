@@ -31,6 +31,8 @@ import protocolsupport.protocol.typeremapper.mapcolor.MapColorRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEPotion;
 import protocolsupport.protocol.typeremapper.pe.PESkinModel;
+import protocolsupport.protocol.typeremapper.pe.inventory.PEInventory;
+import protocolsupport.protocol.typeremapper.pe.inventory.fakes.PEFakeContainer;
 import protocolsupport.protocol.typeremapper.sound.SoundRemapper;
 import protocolsupport.protocol.typeremapper.tileentity.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
@@ -49,6 +51,8 @@ import protocolsupport.utils.Utils;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.zplatform.ServerPlatform;
+import protocolsupport.zplatform.impl.pe.PECraftingManager;
+import protocolsupport.zplatform.impl.pe.PECreativeInventory;
 import protocolsupport.zplatform.impl.pe.PEProxyServer;
 import protocolsupport.zplatform.impl.pe.PEProxyServerInfoHandler;
 
@@ -129,6 +133,8 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(PEMetaProviderSPI.class.getName());
 			Class.forName(PESkinModel.class.getName());
 			Class.forName(PEPotion.class.getName());
+			Class.forName(PEInventory.class.getName());
+			Class.forName(PEFakeContainer.class.getName());
 			ServerPlatform.get().inject();
 		} catch (Throwable t) {
 			getLogger().log(Level.SEVERE, "Error when loading, make sure you are using supported server version", t);
@@ -147,6 +153,8 @@ public class ProtocolSupport extends JavaPlugin {
 		getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
 			Thread pocketPacketCache = new Thread(() -> {
 				PocketData.readEntityDatas();
+				PECraftingManager.getInstance().registerRecipes();
+				PECreativeInventory.getInstance().generateCreativeInventoryItems();
 			});
 			pocketPacketCache.setDaemon(true);
 			pocketPacketCache.start();

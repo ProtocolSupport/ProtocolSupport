@@ -24,10 +24,5 @@ dllibs/
 # IntelliJ
 .idea/
 *.iml
-<<<<<<< HEAD
-/dllibss/
-/dllibsc/
-=======
 /dllibsc/
 /dllibss/
->>>>>>> refs/heads/master
