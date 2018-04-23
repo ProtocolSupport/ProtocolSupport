@@ -745,12 +745,7 @@ public enum SpecificRemapper {
 	EXP_BOTTLE(NetworkEntityType.EXP_BOTTLE, SpecificRemapper.ENTITY),
 	LEASH_KNOT(NetworkEntityType.LEASH_KNOT, SpecificRemapper.ENTITY),
 	FISHING_FLOAT(NetworkEntityType.FISHING_FLOAT, SpecificRemapper.ENTITY,
-		new Entry(new IndexValueRemapper<Integer, DataWatcherObjectVarInt>(DataWatcherObjectIndex.FishingFloat.HOOKED_ENTITY, PeMetaBase.TARGET) {
-			@Override
-			public DataWatcherObject<?> remapValue(DataWatcherObjectVarInt object) {
-				return new DataWatcherObjectSVarLong(object.getValue() - 1);
-			}
-		}, ProtocolVersion.MINECRAFT_PE),
+		new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.FishingFloat.HOOKED_ENTITY, PeMetaBase.OWNER), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.FishingFloat.HOOKED_ENTITY, 6), ProtocolVersionsHelper.RANGE__1_10__1_12_2),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.FishingFloat.HOOKED_ENTITY, 5), ProtocolVersionsHelper.ALL_1_9)
 	),
