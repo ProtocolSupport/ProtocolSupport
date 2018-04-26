@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.chat.ChatAPI;
-import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
+import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
