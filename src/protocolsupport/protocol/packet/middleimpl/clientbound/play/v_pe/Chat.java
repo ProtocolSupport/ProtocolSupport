@@ -19,6 +19,7 @@ public class Chat extends MiddleChat {
 		serializer.writeByte(0); //isLocalise?
 		StringSerializer.writeString(serializer, version, message.toLegacyText(cache.getAttributesCache().getLocale()));
 		StringSerializer.writeString(serializer, version, ""); //Xbox user ID
+		StringSerializer.writeString(serializer, version, ""); //Platform chat id.
 		return RecyclableSingletonList.create(serializer);
 	}
 

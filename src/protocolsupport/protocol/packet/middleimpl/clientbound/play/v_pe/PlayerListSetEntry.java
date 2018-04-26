@@ -54,6 +54,8 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 					MiscSerializer.writeUUID(serializer, connection.getVersion(), info.uuid.equals(connection.getPlayer().getUniqueId()) ? attrscache.getPEClientUUID() : info.uuid);
 					VarNumberSerializer.writeVarInt(serializer, 0); //entity id
 					StringSerializer.writeString(serializer, version, info.getName(attrscache.getLocale()));
+					StringSerializer.writeString(serializer, version, ""); //Third party name
+					VarNumberSerializer.writeVarInt(serializer, 0); //PlatformId
 					Any<Boolean, String> skininfo = getSkinInfo(info);
 					byte[] skindata = skininfo != null ? skinprovider.getSkinData(skininfo.getObj2()) : null;
 					if (skindata != null) {
@@ -65,6 +67,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 						}
 					}
 					StringSerializer.writeString(serializer, version, ""); //xuid
+					StringSerializer.writeString(serializer, version, ""); //Chat channel thing
 				}
 				return RecyclableSingletonList.create(serializer);
 			}

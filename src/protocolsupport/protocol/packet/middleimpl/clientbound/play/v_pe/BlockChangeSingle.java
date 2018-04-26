@@ -5,10 +5,8 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChange
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -27,11 +25,11 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 	}
 
 	public static ClientBoundPacketData create(ProtocolVersion version, Position position, int state) {
-		state = PEDataValues.BLOCK_ID.getRemap(IdRemapper.BLOCK.getTable(version).getRemap(state));
+		state = PEDataValues.BLOCK_ID.getRemap(state);
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.UPDATE_BLOCK);
 		PositionSerializer.writePEPosition(serializer, position);
-		VarNumberSerializer.writeVarInt(serializer, MinecraftData.getBlockIdFromState(state));
-		VarNumberSerializer.writeVarInt(serializer, (flags << 4) | MinecraftData.getBlockDataFromState(state));
+		VarNumberSerializer.writeVarInt(serializer, state);
+		VarNumberSerializer.writeVarInt(serializer, flags);
 		return serializer;
 	}
 
