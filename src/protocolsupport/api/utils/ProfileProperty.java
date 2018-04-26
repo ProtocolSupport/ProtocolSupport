@@ -1,5 +1,7 @@
 package protocolsupport.api.utils;
 
+import java.util.Objects;
+
 import org.apache.commons.lang3.Validate;
 
 import protocolsupport.utils.Utils;
@@ -61,6 +63,24 @@ public class ProfileProperty {
 	@Override
 	public String toString() {
 		return Utils.toStringAllFields(this);
+	}
+
+	@Override
+	public int hashCode() {
+		int nvHash = getName().hashCode() ^ getValue().hashCode();
+		return hasSignature() ? nvHash ^ getSignature().hashCode() : nvHash;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		ProfileProperty otherProperty = (ProfileProperty) obj;
+		return
+			getName().equals(otherProperty.getName()) &&
+			getValue().equalsIgnoreCase(otherProperty.getValue()) &&
+			Objects.equals(getSignature(), otherProperty.getSignature());
 	}
 
 }

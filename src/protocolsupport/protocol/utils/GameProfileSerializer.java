@@ -1,7 +1,7 @@
 package protocolsupport.protocol.utils;
 
-import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
@@ -31,7 +31,7 @@ public class GameProfileSerializer {
 		}
 		if (!gameProfile.getProperties().isEmpty()) {
 			NBTTagCompoundWrapper propertiesTag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-			for (Entry<String, List<ProfileProperty>> entry : gameProfile.getProperties().entrySet()) {
+			for (Entry<String, Set<ProfileProperty>> entry : gameProfile.getProperties().entrySet()) {
 				NBTTagListWrapper propertiesListTag = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
 				for (ProfileProperty property : entry.getValue()) {
 					NBTTagCompoundWrapper propertyTag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();

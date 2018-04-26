@@ -69,12 +69,14 @@ public abstract class AbstractLoginListenerPlay implements IHasProfile {
 		//tick connection keep now
 		keepConnection();
 		//now fire login event
-		PlayerLoginFinishEvent event = new PlayerLoginFinishEvent(ConnectionImpl.getFromChannel(networkManager.getChannel()), profile.getName(), profile.getUUID(), onlineMode);
+		PlayerLoginFinishEvent event = new PlayerLoginFinishEvent(ConnectionImpl.getFromChannel(networkManager.getChannel()), profile, onlineMode);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.isLoginDenied()) {
 			disconnect(event.getDenyLoginMessage());
 			return;
 		}
+		profile.clearProperties();
+		profile.addProperties(event.getProperties());
 		ready = true;
 	}
 
