@@ -1,17 +1,20 @@
 package protocolsupport.protocol.utils.authlib;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
-import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
+import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.utils.Utils;
 
 public class GameProfile {
 
 	private final UUID uuid;
 	private final String name;
-	private final HashMap<String, ProfileProperty> properties = new HashMap<>();
+	private final Map<String, Set<ProfileProperty>> properties = new HashMap<>();
 
 	public GameProfile(UUID uuid, String name) {
 		if ((uuid == null) && (name == null)) {
@@ -29,20 +32,24 @@ public class GameProfile {
 		return uuid;
 	}
 
-	public Map<String, ProfileProperty> getProperties() {
-		return new HashMap<>(properties);
+	public Map<String, Set<ProfileProperty>> getProperties() {
+		return Collections.unmodifiableMap(properties);
 	}
 
-	public boolean hasProperty(String name) {
+	public boolean hasProperties(String name) {
 		return properties.containsKey(name);
 	}
 
-	public void removeProperty(String name) {
+	public void removeProperties(String name) {
 		properties.remove(name);
 	}
 
 	public void addProperty(ProfileProperty property) {
-		properties.put(property.getName(), property);
+		Utils.getFromMapOrCreateDefault(properties, property.getName(), new HashSet<>()).add(property);
+	}
+
+	public void addProperties(Map<String, Set<ProfileProperty>> propertiesMap) {
+		propertiesMap.entrySet().forEach(entry -> Utils.getFromMapOrCreateDefault(properties, entry.getKey(), new HashSet<>()).addAll(entry.getValue()));
 	}
 
 	public void clearProperties() {

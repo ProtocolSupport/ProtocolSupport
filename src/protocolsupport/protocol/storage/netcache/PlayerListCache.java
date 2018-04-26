@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import protocolsupport.api.chat.ChatAPI;
-import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
+import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.utils.Utils;
 
 public class PlayerListCache {

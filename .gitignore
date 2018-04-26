@@ -5,6 +5,8 @@ libs/
 target/
 gen/
 dllibs/
+dllibss/
+dllibsc/
 
 .externalToolBuilders/
  # Eclipse Files #
@@ -24,5 +26,7 @@ dllibs/
 # IntelliJ
 .idea/
 *.iml
-/dllibsc/
-/dllibss/
+
+# jRebel
+*.rebel.xml.bak
+resources/rebel.xml
