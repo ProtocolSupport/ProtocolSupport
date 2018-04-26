@@ -1,6 +1,7 @@
 package protocolsupport.zplatform.network;
 
 import java.net.InetSocketAddress;
+import java.util.Collection;
 import java.util.UUID;
 
 import org.bukkit.entity.Player;
@@ -8,8 +9,8 @@ import org.bukkit.entity.Player;
 import io.netty.channel.Channel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
 import protocolsupport.api.utils.NetworkState;
+import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.protocol.packet.handler.IHasProfile;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 
@@ -45,9 +46,9 @@ public abstract class NetworkManagerWrapper {
 
 	public abstract UUID getSpoofedUUID();
 
-	public abstract ProfileProperty[] getSpoofedProperties();
+	public abstract Collection<ProfileProperty> getSpoofedProperties();
 
-	public abstract void setSpoofedProfile(UUID uuid, ProfileProperty[] properties);
+	public abstract void setSpoofedProfile(UUID uuid, Collection<ProfileProperty> properties);
 
 	public abstract Player getBukkitPlayer();
 

@@ -3,6 +3,7 @@ package protocolsupport.zplatform.impl.glowstone;
 import java.security.KeyPair;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 import java.util.stream.Collectors;
@@ -52,8 +53,8 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	public static GlowPlayerProfile toGlowStoneGameProfile(GameProfile profile) {
 		return new GlowPlayerProfile(
 			profile.getName(), profile.getUUID(),
-			profile.getProperties().values()
-			.stream()
+			profile.getProperties().values().stream()
+			.flatMap(Set::stream)
 			.map(property -> new ProfileProperty(property.getName(), property.getValue(), property.getSignature()))
 			.collect(Collectors.toList())
 		);

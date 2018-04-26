@@ -23,7 +23,6 @@ public class SpoofedDataParser {
 					return result;
 				}
 			} catch (Exception e) {
-				// ignore
 			}
 		}
 		return null;

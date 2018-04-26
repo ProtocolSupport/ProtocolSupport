@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
+import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnNamed;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
