@@ -73,7 +73,7 @@ public class ProfileProperty {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj.getClass() != getClass()) {
+		if (getClass() != obj.getClass()) {
 			return false;
 		}
 		ProfileProperty otherProperty = (ProfileProperty) obj;
