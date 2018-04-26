@@ -62,7 +62,9 @@ public class PositionLook extends ServerBoundMiddlePacket {
 			}
 		}
 		packets.add(MiddleMoveLook.create(x, y, z, yaw, pitch, onGround));
-		BlockTileUpdate.trySignSign(packets);
+		if (cache.getPETileCache().shouldSignSign()) {
+			cache.getPETileCache().signSign(packets);
+		}
 		return packets;
 	}
 
