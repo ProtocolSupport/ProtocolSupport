@@ -26,6 +26,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Inventor
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacket;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.MapInfoRequest;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.MoveVehicle;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PlayerAbilities;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PlayerAction;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PositionLook;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.RiderJump;
@@ -65,6 +66,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		registry.register(NetworkState.PLAY, PEPacketIDs.MAP_INFO_REQUEST, MapInfoRequest.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.EDIT_BOOK, BookEdit.class);
 		registry.register(NetworkState.PLAY, PEPacketIDs.RIDER_JUMP, RiderJump.class);
+		registry.register(NetworkState.PLAY, PEPacketIDs.ADVENTURE_SETTINGS, PlayerAbilities.class);
 	}
 
 	protected final PEDimensionSwitchMovementConfirmationPacketQueue dimswitchq;
