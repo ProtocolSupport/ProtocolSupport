@@ -44,7 +44,6 @@ public class InventoryOpen extends MiddleInventoryOpen {
 			}
 		} else if (type == WindowType.VILLAGER) {
 			//Villagers, require fake villager to be spawned and with merchantdata it opens the actual inventory.
-			System.out.println("VILLAGER: " + horseId + " slots: " + slots + " title " + title.toLegacyText());
 			PEFakeVillager villager = cache.getPEInventoryCache().getFakeVillager();
 			villager.setTitle(title);
 			packets.add(villager.spawnVillager(cache, version));
