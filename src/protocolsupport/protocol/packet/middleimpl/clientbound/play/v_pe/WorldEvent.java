@@ -6,6 +6,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PELevelEvent;
 import protocolsupport.protocol.typeremapper.pe.PESoundLevelEvent;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -79,7 +80,7 @@ public class WorldEvent extends MiddleWorldEvent {
 				}
 			}
 			case 2001: { //Break block
-				data = PEDataValues.BLOCK_ID.getRemap(((data & 0xFFF) << 4) | data >> 12);
+				data = PEDataValues.BLOCK_ID.getRemap(MinecraftData.getBlockStateFromObjData(data));
 			}
 		}
 		return RecyclableSingletonList.create(PELevelEvent.createPacket(remaps.get(effectId), position.getX(), position.getY(), position.getZ(), data));

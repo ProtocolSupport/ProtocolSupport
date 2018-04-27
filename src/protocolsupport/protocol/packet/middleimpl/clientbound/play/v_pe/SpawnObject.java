@@ -31,7 +31,6 @@ public class SpawnObject extends MiddleSpawnObject {
 			}
 			case FALLING_OBJECT: {
 				spawnmeta = new ArrayMap<>(DataWatcherDeserializer.MAX_USED_META_INDEX + 1);
-				System.out.println("Hello: " + objectdata + " - " + Integer.toBinaryString(objectdata) + " - " + MinecraftData.getBlockStateFromObjData(objectdata));
 				y -= 0.1; //Freaking PE pushes block because block breaks after sand is spawned
 				spawnmeta.put(PeMetaBase.VARIANT, new DataWatcherObjectSVarInt(PEDataValues.BLOCK_ID.getRemap(MinecraftData.getBlockStateFromObjData(objectdata))));
 			}
