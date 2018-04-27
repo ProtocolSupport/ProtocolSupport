@@ -103,7 +103,6 @@ public class EntityMetadata extends MiddleEntityMetadata {
 				VarNumberSerializer.writeVarInt(to, key);
 				VarNumberSerializer.writeVarInt(to, DataWatcherObjectIdRegistry.getTypeId(object, version));
 				object.writeToStream(to, version, locale);
-				entries++;
 			}
 		}
 	}

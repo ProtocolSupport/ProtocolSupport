@@ -38,4 +38,12 @@ public class MinecraftData {
 		return blockstate & 0xF;
 	}
 
+	public static int getBlockStateFromObjData(int objectdata) {
+		return ((objectdata & 0xFFF) << 4) | (objectdata >> 12);
+	}
+
+	public static int getObjDataFromBlockState(int blockstate) {
+		return (blockstate >> 4) | (blockstate & 0xF) << 12;
+	}
+
 }
