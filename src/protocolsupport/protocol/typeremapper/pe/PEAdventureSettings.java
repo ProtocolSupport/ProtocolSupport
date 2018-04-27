@@ -55,7 +55,7 @@ public class PEAdventureSettings {
 		VarNumberSerializer.writeVarInt(serializer, PERMISSIONS_ALLOW_ALL);
 		VarNumberSerializer.writeVarInt(serializer, GROUP_NORMAL);
 		VarNumberSerializer.writeVarInt(serializer, 0); //? (custom flags)
-		VarNumberSerializer.writeSVarLong(serializer, 0);
+		serializer.writeLongLE(entityId); //FFS mojang, be consistant.
 		return serializer;
 	}
 
