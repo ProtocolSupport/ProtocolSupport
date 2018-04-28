@@ -8,6 +8,9 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public abstract class MiddlePlayerAbilities extends ServerBoundMiddlePacket {
 
+	protected static final int flagOffsetIsFlying = 0x2;
+	protected static final int flagOffsetCanFly = 0x4;
+
 	protected int flags;
 	protected float flySpeed;
 	protected float walkSpeed;

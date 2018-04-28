@@ -3,7 +3,10 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldEvent;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PELevelEvent;
+import protocolsupport.protocol.typeremapper.pe.PESoundLevelEvent;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -62,6 +65,24 @@ public class WorldEvent extends MiddleWorldEvent {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
+		switch (effectId) { // SPECIAL CASES
+			case 1010: { // Records
+				// To make the code a bit simplier, we are going to just get the event ID from the record ID
+				// first record ID: 2256 (13)
+				// first sound level event ID: 101 (13)
+				// diff = 2155
+				int soundLevelId = data - 2155;
+				// If the soundLevelId != any Minecraft record, the song will stop
+				if (data != 0) { // The vanilla server uses 0 as the "please stop this song" data
+					return RecyclableSingletonList.create(PESoundLevelEvent.createPacket(soundLevelId, position));
+				} else { // If else, stop the record by sending the STOP_RECORD sound event
+					return RecyclableSingletonList.create(PESoundLevelEvent.createPacket(PESoundLevelEvent.STOP_RECORD, position));
+				}
+			}
+			case 2001: { //Break block
+				data = PEDataValues.BLOCK_ID.getRemap(MinecraftData.getBlockStateFromObjData(data));
+			}
+		}
 		return RecyclableSingletonList.create(PELevelEvent.createPacket(remaps.get(effectId), position.getX(), position.getY(), position.getZ(), data));
 	}
 

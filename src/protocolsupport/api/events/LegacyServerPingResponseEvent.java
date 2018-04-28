@@ -1,13 +1,13 @@
 package protocolsupport.api.events;
 
-/**
- * This event is no longer fired
- * Use {@link ServerPingResponseEvent} instead
- */
 import java.net.InetSocketAddress;
 
 import protocolsupport.api.Connection;
 
+/**
+ * This event is no longer fired
+ * @deprecated Use {@link ServerPingResponseEvent} instead
+ */
 @Deprecated
 public class LegacyServerPingResponseEvent extends ServerPingResponseEvent {
 

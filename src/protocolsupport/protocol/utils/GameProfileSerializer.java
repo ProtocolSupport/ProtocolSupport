@@ -1,11 +1,12 @@
 package protocolsupport.protocol.utils;
 
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 
-import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
+import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -30,15 +31,16 @@ public class GameProfileSerializer {
 		}
 		if (!gameProfile.getProperties().isEmpty()) {
 			NBTTagCompoundWrapper propertiesTag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-			for (Entry<String, ProfileProperty> entry : gameProfile.getProperties().entrySet()) {
+			for (Entry<String, Set<ProfileProperty>> entry : gameProfile.getProperties().entrySet()) {
 				NBTTagListWrapper propertiesListTag = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
-				ProfileProperty property = entry.getValue();
-				NBTTagCompoundWrapper propertyTag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-				propertyTag.setString(PROPERTY_VALUE_KEY, property.getValue());
-				if (property.hasSignature()) {
-					propertyTag.setString(PROPERTY_SIGNATURE_KEY, property.getSignature());
+				for (ProfileProperty property : entry.getValue()) {
+					NBTTagCompoundWrapper propertyTag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+					propertyTag.setString(PROPERTY_VALUE_KEY, property.getValue());
+					if (property.hasSignature()) {
+						propertyTag.setString(PROPERTY_SIGNATURE_KEY, property.getSignature());
+					}
+					propertiesListTag.addCompound(propertyTag);
 				}
-				propertiesListTag.addCompound(propertyTag);
 				propertiesTag.setList(entry.getKey(), propertiesListTag);
 			}
 			tag.setCompound(PROPERTIES_KEY, propertiesTag);
@@ -70,9 +72,9 @@ public class GameProfileSerializer {
 					NBTTagCompoundWrapper value = list.getCompound(i);
 					String propertyValue = value.getString(PROPERTY_VALUE_KEY);
 					if (value.hasKeyOfType(PROPERTY_SIGNATURE_KEY, NBTTagType.STRING)) {
-						gameProfile.getProperties().put(propertyName, new ProfileProperty(propertyName, propertyValue, value.getString(PROPERTY_SIGNATURE_KEY)));
+						gameProfile.addProperty(new ProfileProperty(propertyName, propertyValue, value.getString(PROPERTY_SIGNATURE_KEY)));
 					} else {
-						gameProfile.getProperties().put(propertyName, new ProfileProperty(propertyName, propertyValue));
+						gameProfile.addProperty(new ProfileProperty(propertyName, propertyValue));
 					}
 				}
 			}

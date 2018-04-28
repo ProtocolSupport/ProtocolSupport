@@ -3,6 +3,7 @@ package protocolsupport.protocol.utils.minecraftdata;
 import java.io.BufferedReader;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.bukkit.util.Vector;
 
@@ -37,6 +38,12 @@ public class PocketData {
 			item.setCompound("tag", itemstack.getTag().clone());
 		}
 		return item;
+	}
+
+	public static void readBlockRemaps(BiConsumer<Integer, Integer> func) {
+		getFileObject("blockremaps.json").get("Remaps").getAsJsonArray().forEach(entry -> {
+			func.accept(entry.getAsJsonObject().get("from").getAsInt(), entry.getAsJsonObject().get("to").getAsInt());
+		});
 	}
 
 	//Extra entity data such as BoundingBoxes, RiderPositions and Offsets necessary for Pocket Edition.
