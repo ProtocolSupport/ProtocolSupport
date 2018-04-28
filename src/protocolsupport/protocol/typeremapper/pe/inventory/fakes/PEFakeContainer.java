@@ -86,8 +86,6 @@ public class PEFakeContainer {
 				auxTag.setInt("pairz", position.getZ());
 				auxTag.setByte("pairlead", 0);
 				packets.add(BlockTileUpdate.create(version, auxPos, auxTag));
-				//Since we probably miss the first contents, request an update.
-				InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.InventoryUpdateRequest(4));	
 			} else {
 				packets.add(BlockTileUpdate.create(version, position, tag));
 			}

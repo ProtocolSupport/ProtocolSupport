@@ -12,6 +12,7 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.netcache.PEInventoryCache;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
@@ -32,7 +33,9 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		ProtocolVersion version = connection.getVersion();
-		cache.getPEInventoryCache().getTransactionRemapper().clear();
+		PEInventoryCache invCache = cache.getPEInventoryCache();
+		//Don't muck with unhandled transactions, just clear it.
+		invCache.getTransactionRemapper().clear();
 		if (type == WindowType.HORSE) {
 			//TODO: Fix lama filter in entitydata.json, add correct metadata for horse inventories.
 			NetworkEntity horse = cache.getWatchedEntityCache().getWatchedEntity(horseId);
@@ -48,14 +51,17 @@ public class InventoryOpen extends MiddleInventoryOpen {
 			villager.setTitle(title);
 			packets.add(villager.spawnVillager(cache, version));
 		} else {
-			//Normal inventory, requires fake blocks to open.
-			PEFakeContainer.destroyContainers(connection, cache); //First clear remaining blocks (Plugins don't always close inventories)
+			//Normal inventory, requires fake blocks to open. First check if plugins (Hmmpf) have closed inventory.
+			if (invCache.getPreviousWindowId() != 0 && invCache.getPreviousWindowId() != windowId) {
+				packets.add(InventoryClose.create(version, invCache.getPreviousWindowId()));
+			}
 			Position open = PEFakeContainer.prepareContainer(title, connection, cache, packets);
 			//The fake blocks take some time, we schedule the opening be requesting a delay from the server.
 			InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.InventoryOpenRequest(
 					windowId, type, open, -1, 2
 			));
 		}
+		invCache.setPreviousWindowId(windowId);
 		return packets;
 	}
 	

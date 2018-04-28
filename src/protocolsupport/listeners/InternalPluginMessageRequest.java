@@ -6,6 +6,8 @@ import java.util.UUID;
 import java.util.function.BiConsumer;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
@@ -45,21 +47,32 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 
 	static {
 		register(ChunkUpdateRequest.class, (connection, request) -> {
-			connection.sendPacket(ServerPlatform.get().getPacketFactory().createUpdateChunkPacket(
-					connection.getPlayer().getWorld().getChunkAt(request.getChunkX(), request.getChunkZ()))
-			);
+			Bukkit.getScheduler().runTask(ProtocolSupport.getInstance(), () -> {
+				Chunk chunk = connection.getPlayer().getWorld().getChunkAt(request.getChunkX(), request.getChunkZ());
+				if (chunk.isLoaded()) {
+					connection.sendPacket(ServerPlatform.get().getPacketFactory().createUpdateChunkPacket(
+							connection.getPlayer().getWorld().getChunkAt(request.getChunkX(), request.getChunkZ()))
+					);
+				}
+			});
 		});
 		register(BlockUpdateRequest.class, (connection, request) -> {
-			Block block = request.getPosition().toBukkit(connection.getPlayer().getWorld()).getBlock();
-			connection.sendPacket(ServerPlatform.get().getPacketFactory().createBlockUpdatePacket(
-					request.getPosition(), MinecraftData.getBlockStateFromIdAndData(block.getTypeId(), block.getData()))
-			);
+			Bukkit.getScheduler().runTask(ProtocolSupport.getInstance(), () -> {
+				Location place = request.getPosition().toBukkit(connection.getPlayer().getWorld());
+				if (place.getChunk().isLoaded()) {
+					Block block = place.getBlock();
+					connection.sendPacket(ServerPlatform.get().getPacketFactory().createBlockUpdatePacket(
+							request.getPosition(), MinecraftData.getBlockStateFromIdAndData(block.getTypeId(), block.getData()))
+					);
+				}
+			});
 		});
 		register(InventoryOpenRequest.class, (connection, request) -> {
 			Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), new Runnable() {
 				@Override
 				public void run() {
 					InventoryOpen.sendInventoryOpen(connection, request.getWindowId(), request.getType(), request.getPosition(), request.getHorseId());
+					connection.getPlayer().updateInventory();
 				}
 			}, request.getDelayTicks());
 		});

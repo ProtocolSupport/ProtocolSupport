@@ -23,6 +23,7 @@ public class PEInventoryCache {
 	private int smeltTime = 200;
 	private int selectedSlot = 0;
 	private int PEActionNumber = 0;
+	private int previousWindowId = 0;
 
 	public ItemStackWrapper getItemInHand() {
 		return itemInHand; 
@@ -102,6 +103,14 @@ public class PEInventoryCache {
 
 	public void resetActionNumber() {
 		PEActionNumber = 0;
+	}
+
+	public int getPreviousWindowId() {
+		return previousWindowId;
+	}
+
+	public void setPreviousWindowId(int previousWindowId) {
+		this.previousWindowId = previousWindowId;
 	}
 
 	@Override

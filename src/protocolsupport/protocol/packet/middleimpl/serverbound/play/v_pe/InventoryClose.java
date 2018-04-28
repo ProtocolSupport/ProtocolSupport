@@ -19,6 +19,7 @@ public class InventoryClose extends ServerBoundMiddlePacket {
 		if (windowId == -1) {
 			windowId = cache.getWindowCache().getOpenedWindowId(); //Some inventories are a mess :F
 		}
+		cache.getPEInventoryCache().setPreviousWindowId(0);
 	}
 
 	@Override
