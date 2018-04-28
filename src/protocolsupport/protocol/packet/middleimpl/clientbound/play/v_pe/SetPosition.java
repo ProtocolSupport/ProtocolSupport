@@ -43,15 +43,15 @@ public class SetPosition extends MiddleSetPosition {
 
 	public static ClientBoundPacketData create(NetworkEntity entity, double x, double y, double z, float pitch, float yaw, int mode) {
 		y = y + 1.6200000047683716D;
-		float realYaw = (float) (yaw * (360D/256D));
+		float headYaw = (float) (yaw  * (360D/256D));
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_MOVE);
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		serializer.writeFloatLE((float) x);
 		serializer.writeFloatLE((float) y);
 		serializer.writeFloatLE((float) z);
 		serializer.writeFloatLE(pitch);
-		serializer.writeFloatLE(realYaw);
-		serializer.writeFloatLE(realYaw); //head yaw actually
+		serializer.writeFloatLE((float) yaw);
+		serializer.writeFloatLE(headYaw);
 		serializer.writeByte(mode);
 		serializer.writeBoolean(false); //on ground
 		VarNumberSerializer.writeVarLong(serializer, entity.getDataCache().getVehicleId());
