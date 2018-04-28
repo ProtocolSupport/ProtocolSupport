@@ -68,21 +68,15 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 			});
 		});
 		register(InventoryOpenRequest.class, (connection, request) -> {
-			Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), new Runnable() {
-				@Override
-				public void run() {
-					InventoryOpen.sendInventoryOpen(connection, request.getWindowId(), request.getType(), request.getPosition(), request.getHorseId());
-					connection.getPlayer().updateInventory();
-				}
+			Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), () -> {
+				InventoryOpen.sendInventoryOpen(connection, request.getWindowId(), request.getType(), request.getPosition(), request.getHorseId());
+				connection.getPlayer().updateInventory();
 			}, request.getDelayTicks());
 		});
 		register(InventoryUpdateRequest.class, (connection, request) -> {
-			Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), new Runnable() {
-				@Override
-				public void run() {
+			Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), () -> {
 					connection.getPlayer().updateInventory();
 					connection.getPlayer().setItemOnCursor(connection.getPlayer().getItemOnCursor());
-				}
 			}, request.getDelayTicks());
 		});
 	}
