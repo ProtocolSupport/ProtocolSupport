@@ -82,9 +82,9 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 			if (rserveraddress == null) {
 				throw new DecoderException("ServerAddress is missing");
 			}
-			String[] rserveraddresssplit = rserveraddress.split("[:]");
-			host = rserveraddresssplit[0];
-			port = Integer.parseInt(rserveraddresssplit[1]);
+			int lastIndexOf = rserveraddress.lastIndexOf(":");
+			host = rserveraddress.substring(0, lastIndexOf);
+			port = Integer.parseInt(rserveraddress.substring(lastIndexOf + 1, rserveraddress.length()));
 			cache.getAttributesCache().setLocale(clientinfo.get("LanguageCode"));
 		} catch (ParseException e) {
 			throw new DecoderException("Unable to parse jwt", e);
