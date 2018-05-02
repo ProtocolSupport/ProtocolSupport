@@ -14,6 +14,9 @@ public class WorldCustomSound extends MiddleWorldCustomSound {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_CUSTOM_SOUND_ID);
+		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_5_2)) {
+			id = id.substring(0, Math.min(id.length(), 32));
+		}
 		StringSerializer.writeString(serializer, version, id);
 		serializer.writeInt(x);
 		serializer.writeInt(y);
