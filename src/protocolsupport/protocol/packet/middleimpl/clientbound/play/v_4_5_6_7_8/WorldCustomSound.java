@@ -5,6 +5,7 @@ import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldCustomSound;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -14,8 +15,8 @@ public class WorldCustomSound extends MiddleWorldCustomSound {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_CUSTOM_SOUND_ID);
-		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_5_2) && id.length() > 32) {
-			id = id.substring(0, 32);
+		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_5_2)) {
+			id = Utils.clampString(id, 32);
 		}
 		StringSerializer.writeString(serializer, version, id);
 		serializer.writeInt(x);
