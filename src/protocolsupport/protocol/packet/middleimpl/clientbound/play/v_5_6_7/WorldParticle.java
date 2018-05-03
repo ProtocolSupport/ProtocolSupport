@@ -40,6 +40,9 @@ public class WorldParticle extends MiddleWorldParticle {
 				break;
 			}
 		}
+		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4) && count == 0) {
+			count = 1;
+		}
 		StringSerializer.writeString(serializer, version, name);
 		serializer.writeFloat(x);
 		serializer.writeFloat(y);
@@ -48,7 +51,7 @@ public class WorldParticle extends MiddleWorldParticle {
 		serializer.writeFloat(offY);
 		serializer.writeFloat(offZ);
 		serializer.writeFloat(speed);
-		serializer.writeInt(Math.max(count, 1));
+		serializer.writeInt(count);
 		return RecyclableSingletonList.create(serializer);
 	}
 
