@@ -48,7 +48,7 @@ public class WorldParticle extends MiddleWorldParticle {
 		serializer.writeFloat(offY);
 		serializer.writeFloat(offZ);
 		serializer.writeFloat(speed);
-		serializer.writeInt(count);
+		serializer.writeInt(Math.max(count, 1));
 		return RecyclableSingletonList.create(serializer);
 	}
 
