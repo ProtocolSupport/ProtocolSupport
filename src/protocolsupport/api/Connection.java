@@ -1,6 +1,8 @@
 package protocolsupport.api;
 
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -247,23 +249,51 @@ public abstract class Connection {
 
 		public static class PacketEvent {
 
-			protected Object packet;
+			protected Object mainpacket;
 			protected boolean cancelled;
+			protected ArrayList<Object> packets = new ArrayList<>();
 
 			/**
-			 * Returns packet
+			 * Returns main packet (packet that triggered this event)
 			 * @return native packet instance
 			 */
 			public Object getPacket() {
-				return packet;
+				return mainpacket;
 			}
 
 			/**
-			 * Sets packet
+			 * Returns all packets that will be processed <br>
+			 * This collection can be used to manually position additional packets when interop with other plugins is required
+			 * @return all native packets instances that will be processed
+			 */
+			public List<Object> getPackets() {
+				return packets;
+			}
+
+			/**
+			 * Adds packet before the main packet <br>
+			 * This packet will be processed before the main packet
+			 * @param packet native packet instance
+			 */
+			public void addPacketBefore(Object packet) {
+				packets.add(packets.indexOf(mainpacket), packet);
+			}
+
+			/**
+			 * Adds packet after the main packet
+			 * This packet will be processed after the main packet
+			 * @param packet native packet instance
+			 */
+			public void addPacketAfter(Object packet) {
+				packets.add(packets.indexOf(mainpacket) + 1, packet);
+			}
+
+			/**
+			 * Sets main packet
 			 * @param packet native packet instance
 			 */
 			public void setPacket(Object packet) {
-				this.packet = packet;
+				this.mainpacket = packet;
 			}
 
 			/**

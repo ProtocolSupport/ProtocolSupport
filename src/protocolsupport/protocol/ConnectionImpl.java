@@ -3,6 +3,7 @@ package protocolsupport.protocol;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.text.MessageFormat;
+import java.util.Collection;
 
 import org.bukkit.entity.Player;
 
@@ -157,8 +158,8 @@ public class ConnectionImpl extends Connection {
 
 		public static LPacketEvent create(Object packet) {
 			LPacketEvent packetevent = recycler.get();
-			packetevent.packet = packet;
-			packetevent.cancelled = false;
+			packetevent.mainpacket = packet;
+			packetevent.packets.add(packet);
 			return packetevent;
 		}
 
@@ -168,6 +169,9 @@ public class ConnectionImpl extends Connection {
 		}
 
 		public void recycle() {
+			this.mainpacket = null;
+			this.packets.clear();
+			this.cancelled = false;
 			this.handle.recycle(this);
 		}
 
@@ -178,7 +182,7 @@ public class ConnectionImpl extends Connection {
 
 	}
 
-	public Object handlePacketSend(Object packet) {
+	public void handlePacketSend(Object packet, Collection<Object> storeTo) {
 		try (LPacketEvent packetevent = LPacketEvent.create(packet)) {
 			for (PacketListener listener : packetlisteners) {
 				try {
@@ -188,11 +192,13 @@ public class ConnectionImpl extends Connection {
 					t.printStackTrace();
 				}
 			}
-			return packetevent.isCancelled() ? null : packetevent.getPacket();
+			if (!packetevent.isCancelled()) {
+				storeTo.addAll(packetevent.getPackets());
+			}
 		}
 	}
 
-	public Object handlePacketReceive(Object packet) {
+	public void handlePacketReceive(Object packet, Collection<Object> storeTo) {
 		try (LPacketEvent packetevent = LPacketEvent.create(packet)) {
 			for (PacketListener listener : packetlisteners) {
 				try {
@@ -202,7 +208,9 @@ public class ConnectionImpl extends Connection {
 					t.printStackTrace();
 				}
 			}
-			return packetevent.isCancelled() ? null : packetevent.getPacket();
+			if (!packetevent.isCancelled()) {
+				storeTo.addAll(packetevent.getPackets());
+			}
 		}
 	}
 

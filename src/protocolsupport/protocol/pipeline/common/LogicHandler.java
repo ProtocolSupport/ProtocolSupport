@@ -4,14 +4,13 @@ import java.io.IOException;
 import java.nio.channels.ClosedChannelException;
 import java.text.MessageFormat;
 import java.util.HashSet;
+import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPromise;
 import io.netty.channel.unix.Errors.NativeIoException;
+import io.netty.handler.codec.MessageToMessageCodec;
 import io.netty.handler.timeout.ReadTimeoutException;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.events.ConnectionCloseEvent;
@@ -22,7 +21,7 @@ import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
-public class LogicHandler extends ChannelDuplexHandler {
+public class LogicHandler extends MessageToMessageCodec<Object, Object> {
 
 	protected static final HashSet<Class<? extends Throwable>> ignoreExceptions = new HashSet<>();
 	static {
@@ -33,27 +32,28 @@ public class LogicHandler extends ChannelDuplexHandler {
 	}
 
 	protected final ConnectionImpl connection;
-	public LogicHandler(ConnectionImpl connection) {
+	protected final Class<?> nativePacketSuperClass;
+	public LogicHandler(ConnectionImpl connection, Class<?> nativePacketSuperClass) {
 		this.connection = connection;
+		this.nativePacketSuperClass = nativePacketSuperClass;
 	}
 
 	@Override
-	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		msg = connection.handlePacketReceive(msg);
-		if (msg == null) {
-			return;
+	protected void decode(ChannelHandlerContext ctx, Object packet, List<Object> out) throws Exception {
+		if (!nativePacketSuperClass.isInstance(packet)) {
+			out.add(packet);
+		} else {
+			connection.handlePacketReceive(packet, out);
 		}
-		super.channelRead(ctx, msg);
 	}
 
 	@Override
-	public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
-		msg = connection.handlePacketSend(msg);
-		if (msg == null) {
-			promise.setSuccess();
-			return;
+	protected void encode(ChannelHandlerContext ctx, Object packet, List<Object> out) throws Exception {
+		if (!nativePacketSuperClass.isInstance(packet)) {
+			out.add(packet);
+		} else {
+			connection.handlePacketSend(packet, out);
 		}
-		super.write(ctx, msg, promise);
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class LogicHandler extends ChannelDuplexHandler {
 		public NetworkException(Throwable original, ConnectionImpl connection) {
 			super(MessageFormat.format(
 				"ProtocolSupport(buildinfo: {0}): Network exception occured(address: {1}, username: {2}, version: {3})",
-				JavaPlugin.getPlugin(ProtocolSupport.class).getBuildInfo(),
+				ProtocolSupport.getInstance().getBuildInfo(),
 				connection.getAddress(),
 				connection.getNetworkManagerWrapper().getUserName(),
 				connection.getVersion()
