@@ -26,14 +26,13 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.Anima
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.BlockAction;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.BlockBreakAnimation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.BlockChangeSingle;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.ChangeDimension;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.EntityTeleport;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.Explosion;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.GameStateChange;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.HeldSlot;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.KickDisconnect;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.StartGame;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.Map;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.ChangeDimension;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.SpawnExpOrb;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.SpawnGlobal;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.SpawnLiving;
@@ -41,6 +40,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.Spawn
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.SpawnObject;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.SpawnPainting;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.SpawnPosition;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.StartGame;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.TabComplete;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.UseBed;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.BlockChangeMulti;

@@ -82,7 +82,7 @@ public abstract class Profile {
 
 	/**
 	 * Returns current properties <br>
-	 * These properties can be changed by {@link PlayerProfileCompleteEvent} property management methods 
+	 * These properties can be changed by {@link PlayerProfileCompleteEvent} property management methods
 	 * @return current properties
 	 */
 	public Set<String> getPropertiesNames() {
@@ -91,7 +91,7 @@ public abstract class Profile {
 
 	/**
 	 * Returns current properties <br>
-	 * These properties can be changed by {@link PlayerProfileCompleteEvent} property management methods 
+	 * These properties can be changed by {@link PlayerProfileCompleteEvent} property management methods
 	 * @param name property name
 	 * @return current properties
 	 */

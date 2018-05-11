@@ -120,7 +120,7 @@ public abstract class AbstractLoginListener {
 
 					profile.setOnlineMode(event.isOnlineMode());
 					forcedUUID = event.getForcedUUID();
-					if (forcedUUID == null && profile.isOnlineMode() && !event.useOnlineModeUUID()) {
+					if ((forcedUUID == null) && profile.isOnlineMode() && !event.useOnlineModeUUID()) {
 						forcedUUID = Profile.generateOfflineModeUUID(profile.getName());
 					}
 

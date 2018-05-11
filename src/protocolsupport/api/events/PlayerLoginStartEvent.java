@@ -124,6 +124,7 @@ public class PlayerLoginStartEvent extends PlayerAbstractLoginEvent {
 	 * @param uuid forced uuid
 	 * @deprecated Use {@link PlayerProfileCompleteEvent#setForcedUUID(UUID)}
 	 */
+	@Deprecated
 	public void setForcedUUID(UUID uuid) {
 		this.uuid = uuid;
 	}
@@ -134,6 +135,7 @@ public class PlayerLoginStartEvent extends PlayerAbstractLoginEvent {
 	 * @return currently set forced uuid
 	 * @deprecated Use {@link PlayerProfileCompleteEvent#getForcedUUID()}
 	 */
+	@Deprecated
 	public UUID getForcedUUID() {
 		return uuid;
 	}

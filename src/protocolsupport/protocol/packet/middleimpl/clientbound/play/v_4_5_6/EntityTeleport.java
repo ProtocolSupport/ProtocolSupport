@@ -13,7 +13,7 @@ public class EntityTeleport extends MiddleEntityTeleport {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		NetworkEntity watchedEntity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
-		if (watchedEntity != null && watchedEntity.getType() == NetworkEntityType.MINECART) {
+		if ((watchedEntity != null) && (watchedEntity.getType() == NetworkEntityType.MINECART)) {
 			y += 0.5;
 		}
 

@@ -110,7 +110,7 @@ public class PlayerLoginFinishEvent extends PlayerAbstractLoginEvent {
 	@Deprecated
 	public boolean hasProperty(ProfileProperty property) {
 		Set<ProfileProperty> propertiesWithName = properties.get(property.getName());
-		return propertiesWithName != null && propertiesWithName.contains(property);
+		return (propertiesWithName != null) && propertiesWithName.contains(property);
 	}
 
 	/**
