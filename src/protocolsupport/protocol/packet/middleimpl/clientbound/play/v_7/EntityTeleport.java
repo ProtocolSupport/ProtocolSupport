@@ -15,10 +15,12 @@ public class EntityTeleport extends MiddleEntityTeleport {
 		NetworkEntity wentity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
 		y *= 32;
 		if (wentity != null) {
-			if (wentity.getType() == NetworkEntityType.TNT ||wentity.getType() == NetworkEntityType.FALLING_OBJECT) {
-				y += 16;
-			} else if (wentity.getType() == NetworkEntityType.MINECART) {
-				y += 0.5;
+			switch (wentity.getType()) {
+				case TNT:
+				case FALLING_OBJECT:
+				case MINECART:
+					y += 16;
+					break;
 			}
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_TELEPORT_ID);
