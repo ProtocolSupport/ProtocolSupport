@@ -14,6 +14,13 @@ public class EntityTeleport extends MiddleEntityTeleport {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		NetworkEntity wentity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
 		y *= 32;
+		if (wentity != null) {
+			if (wentity.getType() == NetworkEntityType.TNT ||wentity.getType() == NetworkEntityType.FALLING_OBJECT) {
+				y += 16;
+			} else if (wentity.getType() == NetworkEntityType.MINECART) {
+				y += 0.5;
+			}
+		}
 		if ((wentity != null) && ((wentity.getType() == NetworkEntityType.TNT) || (wentity.getType() == NetworkEntityType.FALLING_OBJECT))) {
 			y += 16;
 		}
