@@ -21,9 +21,6 @@ public class EntityTeleport extends MiddleEntityTeleport {
 				y += 0.5;
 			}
 		}
-		if ((wentity != null) && ((wentity.getType() == NetworkEntityType.TNT) || (wentity.getType() == NetworkEntityType.FALLING_OBJECT))) {
-			y += 16;
-		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_TELEPORT_ID);
 		serializer.writeInt(entityId);
 		serializer.writeInt((int) (x * 32));
