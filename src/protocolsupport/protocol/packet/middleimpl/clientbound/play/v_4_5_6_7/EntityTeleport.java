@@ -1,9 +1,11 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7;
 
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityTeleport;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -16,12 +18,11 @@ public class EntityTeleport extends MiddleEntityTeleport {
 		NetworkEntity watchedEntity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
 		y *= 32;
 		if (watchedEntity != null) {
-			switch (watchedEntity.getType()) {
-				case TNT:
-				case FALLING_OBJECT:
-				case MINECART:
-					y += 16;
-					break;
+			NetworkEntityType entityType = watchedEntity.getType();
+			if (entityType == NetworkEntityType.TNT || entityType == NetworkEntityType.FALLING_OBJECT
+				&& connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_1_7_5)
+				|| entityType == NetworkEntityType.MINECART) {
+				y += 16;
 			}
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_TELEPORT_ID);
