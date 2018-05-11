@@ -19,9 +19,9 @@ public class EntityTeleport extends MiddleEntityTeleport {
 		y *= 32;
 		if (watchedEntity != null) {
 			NetworkEntityType entityType = watchedEntity.getType();
-			if (entityType == NetworkEntityType.TNT || entityType == NetworkEntityType.FALLING_OBJECT
-				&& connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_1_7_5)
-				|| entityType == NetworkEntityType.MINECART) {
+			if (entityType == NetworkEntityType.MINECART ||
+				(entityType == NetworkEntityType.TNT || entityType == NetworkEntityType.FALLING_OBJECT
+					&& connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_1_7_5))) {
 				y += 16;
 			}
 		}
