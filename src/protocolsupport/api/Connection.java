@@ -13,11 +13,14 @@ import com.google.common.base.Objects;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ReadOnlyByteBuf;
 import protocolsupport.api.utils.NetworkState;
+import protocolsupport.api.utils.Profile;
+import protocolsupport.protocol.utils.authlib.GameProfile;
 
 @SuppressWarnings("deprecation")
 public abstract class Connection {
 
 	protected volatile ProtocolVersion version = ProtocolVersion.UNKNOWN;
+	protected Profile profile = new GameProfile();
 
 	/**
 	 * Returns native network manager object <br>
@@ -51,6 +54,14 @@ public abstract class Connection {
 	 * @param newRemote new remote address
 	 */
 	public abstract void changeAddress(InetSocketAddress newRemote);
+
+	/**
+	 * Returns {@link Profile} object
+	 * @return {@link Profile} object
+	 */
+	public Profile getProfile() {
+		return profile;
+	}
 
 	/**
 	 * Returns {@link Player} object if possible

@@ -21,6 +21,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.storage.ProtocolStorage;
+import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class ConnectionImpl extends Connection {
@@ -66,6 +67,11 @@ public class ConnectionImpl extends Connection {
 	@Override
 	public Player getPlayer() {
 		return networkmanager.getBukkitPlayer();
+	}
+
+	@Override
+	public GameProfile getProfile() {
+		return (GameProfile) super.getProfile();
 	}
 
 	@Override
@@ -291,8 +297,8 @@ public class ConnectionImpl extends Connection {
 	@Override
 	public String toString() {
 		return MessageFormat.format(
-			"{0}(player: {1}, address: {2}, rawaddress: {3}, version: {4}, metadata: {5})",
-			getClass().getName(), getPlayer(), getAddress(), getRawAddress(), getVersion(), metadata
+			"{0}(profile: {1}, player: {2}, address: {3}, rawaddress: {4}, version: {5}, metadata: {6})",
+			getClass().getName(), getProfile(), getPlayer(), getAddress(), getRawAddress(), getVersion(), metadata
 		);
 	}
 

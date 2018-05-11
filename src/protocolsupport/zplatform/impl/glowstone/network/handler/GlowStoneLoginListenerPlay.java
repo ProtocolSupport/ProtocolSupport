@@ -17,7 +17,6 @@ import net.glowstone.io.PlayerDataService.PlayerReader;
 import net.glowstone.net.GlowSession;
 import net.glowstone.net.message.play.game.UserListItemMessage;
 import protocolsupport.protocol.packet.handler.AbstractLoginListenerPlay;
-import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.zplatform.impl.glowstone.GlowStoneMiscUtils;
 import protocolsupport.zplatform.impl.glowstone.network.GlowStoneNetworkManagerWrapper;
@@ -27,13 +26,13 @@ public class GlowStoneLoginListenerPlay extends AbstractLoginListenerPlay implem
 
 	protected static final GlowServer server = GlowStoneMiscUtils.getServer();
 
-	protected GlowStoneLoginListenerPlay(NetworkManagerWrapper networkmanager, GameProfile profile, boolean onlineMode, String hostname) {
-		super(networkmanager, profile, onlineMode, hostname);
+	protected GlowStoneLoginListenerPlay(NetworkManagerWrapper networkmanager, String hostname) {
+		super(networkmanager, hostname);
 	}
 
 	@Override
 	protected JoinData createJoinData() {
-		GlowPlayerProfile glowstoneProfile = GlowStoneMiscUtils.toGlowStoneGameProfile(profile);
+		GlowPlayerProfile glowstoneProfile = GlowStoneMiscUtils.toGlowStoneGameProfile(connection.getProfile());
 		PlayerReader reader = server.getPlayerDataService().beginReadingData(glowstoneProfile.getUniqueId());
 		GlowPlayer player = new GlowPlayer(((GlowStoneNetworkManagerWrapper) networkManager).getSession(), glowstoneProfile, reader);
 		return new JoinData(player, player, reader) {

@@ -1,59 +1,63 @@
 package protocolsupport.protocol.utils.authlib;
 
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import protocolsupport.api.utils.Profile;
 import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.utils.Utils;
 
-public class GameProfile {
+public class GameProfile extends Profile {
 
-	private final UUID uuid;
-	private final String name;
-	private final Map<String, Set<ProfileProperty>> properties = new HashMap<>();
+	public GameProfile() {
+	}
 
-	public GameProfile(UUID uuid, String name) {
-		if ((uuid == null) && (name == null)) {
-			throw new IllegalArgumentException("Both name and uuid can't be null");
-		}
+	public GameProfile(UUID uuid, String name, ProfileProperty... properties) {
 		this.uuid = uuid;
+		this.name = name;
+		Arrays.stream(properties).forEach(this::addProperty);
+	}
+
+	public void setOnlineMode(boolean onlineMode) {
+		this.onlineMode = onlineMode;
+	}
+
+	public void setOriginalName(String name) {
+		this.originalname = name;
 		this.name = name;
 	}
 
-	public String getName() {
-		return name;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public UUID getUUID() {
-		return uuid;
+	public void setOriginalUUID(UUID uuid) {
+		this.originaluuid = uuid;
+		this.uuid = uuid;
+	}
+
+	public void setUUID(UUID uuid) {
+		this.uuid = uuid;
 	}
 
 	public Map<String, Set<ProfileProperty>> getProperties() {
-		return Collections.unmodifiableMap(properties);
+		return properties;
 	}
 
-	public boolean hasProperties(String name) {
-		return properties.containsKey(name);
-	}
-
-	public void removeProperties(String name) {
-		properties.remove(name);
-	}
-
-	public void addProperty(ProfileProperty property) {
-		Utils.getFromMapOrCreateDefault(properties, property.getName(), new HashSet<>()).add(property);
-	}
-
-	public void addProperties(Map<String, Set<ProfileProperty>> propertiesMap) {
-		propertiesMap.entrySet().forEach(entry -> Utils.getFromMapOrCreateDefault(properties, entry.getKey(), new HashSet<>()).addAll(entry.getValue()));
+	public void setProperties(Map<String, Set<ProfileProperty>> propertiesMap) {
+		properties.clear();
+		properties.putAll(propertiesMap);
 	}
 
 	public void clearProperties() {
 		properties.clear();
+	}
+
+	public void addProperty(ProfileProperty profileProperty) {
+		Utils.getFromMapOrCreateDefault(properties, profileProperty.getName(), new HashSet<>()).add(profileProperty);
 	}
 
 	@Override

@@ -19,8 +19,8 @@ import protocolsupport.api.events.PlayerDisconnectEvent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
+@SuppressWarnings("deprecation")
 public class LogicHandler extends MessageToMessageCodec<Object, Object> {
 
 	protected static final HashSet<Class<? extends Throwable>> ignoreExceptions = new HashSet<>();
@@ -70,11 +70,9 @@ public class LogicHandler extends MessageToMessageCodec<Object, Object> {
 
 		public NetworkException(Throwable original, ConnectionImpl connection) {
 			super(MessageFormat.format(
-				"ProtocolSupport(buildinfo: {0}): Network exception occured(address: {1}, username: {2}, version: {3})",
+				"ProtocolSupport(buildinfo: {0}): Network exception occured(connection: {1})",
 				ProtocolSupport.getInstance().getBuildInfo(),
-				connection.getAddress(),
-				connection.getNetworkManagerWrapper().getUserName(),
-				connection.getVersion()
+				connection
 			), original);
 		}
 	}
@@ -88,13 +86,12 @@ public class LogicHandler extends MessageToMessageCodec<Object, Object> {
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		super.channelInactive(ctx);
-		NetworkManagerWrapper networkmanager = connection.getNetworkManagerWrapper();
-		String username = networkmanager.getUserName();
+		String username = connection.getProfile().getName();
 		if (username != null) {
-			Bukkit.getPluginManager().callEvent(new PlayerDisconnectEvent(connection, username));
+			Bukkit.getPluginManager().callEvent(new PlayerDisconnectEvent(connection));
 		}
 		Bukkit.getPluginManager().callEvent(new ConnectionCloseEvent(connection));
-		ProtocolStorage.removeConnection(networkmanager.getRawAddress());
+		ProtocolStorage.removeConnection(connection.getRawAddress());
 	}
 
 }

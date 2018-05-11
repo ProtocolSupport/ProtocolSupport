@@ -12,8 +12,8 @@ import org.bukkit.event.HandlerList;
 
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
+import protocolsupport.api.utils.Profile;
 import protocolsupport.api.utils.ProfileProperty;
-import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.utils.Utils;
 
 /**
@@ -22,76 +22,20 @@ import protocolsupport.utils.Utils;
  */
 public class PlayerLoginFinishEvent extends PlayerAbstractLoginEvent {
 
-	private final UUID uuid;
-	private final boolean onlineMode;
-
-	public PlayerLoginFinishEvent(Connection connection, GameProfile profile, boolean onlineMode) {
-		super(connection, profile.getName());
-		this.uuid = profile.getUUID();
-		this.onlineMode = onlineMode;
-		this.properties.putAll(profile.getProperties());
-	}
-
 	@Deprecated
 	public PlayerLoginFinishEvent(Connection connection, String username, UUID uuid, boolean onlineMode) {
-		super(connection, username);
-		this.uuid = uuid;
-		this.onlineMode = onlineMode;
+		super(connection);
 	}
 
 	@Deprecated
 	public PlayerLoginFinishEvent(InetSocketAddress address, String username, UUID uuid, boolean onlineMode) {
-		this(ProtocolSupportAPI.getConnection(address), username, uuid, onlineMode);
+		this(ProtocolSupportAPI.getConnection(address));
 	}
 
-	/**
-	 * Returns player uuid
-	 * @return player uuid
-	 */
-	public UUID getUUID() {
-		return uuid;
+	public PlayerLoginFinishEvent(Connection connection) {
+		super(connection);
+		connection.getProfile().getPropertiesNames().forEach(name -> properties.put(name, connection.getProfile().getProperties(name)));
 	}
-
-	/**
-	 * Returns true if this player logged in using online-mode checks
-	 * @return true if this player logged in using online-mode checks
-	 */
-	public boolean isOnlineMode() {
-		return onlineMode;
-	}
-
-	private final Map<String, Set<ProfileProperty>> properties = new HashMap<>();
-
-	public Map<String, Set<ProfileProperty>> getProperties() {
-		return Collections.unmodifiableMap(properties);
-	}
-
-	public boolean hasProperties(String name) {
-		return properties.containsKey(name);
-	}
-
-	public boolean hasProperty(ProfileProperty property) {
-		Set<ProfileProperty> propertiesWithName = properties.get(property.getName());
-		return propertiesWithName != null && propertiesWithName.contains(property);
-	}
-
-	public void removeProperties(String name) {
-		properties.remove(name);
-	}
-
-	public void removeProperty(ProfileProperty property) {
-		String propertyName = property.getName();
-		Set<ProfileProperty> propertiesWithName = properties.get(propertyName);
-		propertiesWithName.remove(property);
-		if (propertiesWithName.isEmpty()) {
-			properties.remove(propertyName);
-		}
-	}
-
-	public void addProperty(ProfileProperty property) {
-		Utils.getFromMapOrCreateDefault(properties, property.getName(), new HashSet<>()).add(property);
-	}
-
 
 	private static final HandlerList list = new HandlerList();
 
@@ -102,6 +46,99 @@ public class PlayerLoginFinishEvent extends PlayerAbstractLoginEvent {
 
 	public static HandlerList getHandlerList() {
 		return list;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	/**
+	 * Returns true if this player logged in using online-mode checks
+	 * @return true if this player logged in using online-mode checks
+	 * @deprecated Use {@link Profile#isOnlineMode()}
+	 */
+	@Deprecated
+	public boolean isOnlineMode() {
+		return getConnection().getProfile().isOnlineMode();
+	}
+
+	/**
+	 * Returns player uuid
+	 * @return player uuid
+	 * @deprecated Use {@link Profile#getUUID()} (profile can be acquired using {@link Connection#getProfile()})
+	 */
+	@Deprecated
+	public UUID getUUID() {
+		return getConnection().getProfile().getUUID();
+	}
+
+	protected final Map<String, Set<ProfileProperty>> properties = new HashMap<>();
+
+	/**
+	 * @deprecated Use {@link PlayerProfileCompleteEvent}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public Map<String, Set<ProfileProperty>> getProperties() {
+		return Collections.unmodifiableMap(properties);
+	}
+
+	/**
+	 * @deprecated Use {@link PlayerProfileCompleteEvent}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public boolean hasProperties(String name) {
+		return properties.containsKey(name);
+	}
+
+	/**
+	 * @deprecated Use {@link PlayerProfileCompleteEvent}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public boolean hasProperty(ProfileProperty property) {
+		Set<ProfileProperty> propertiesWithName = properties.get(property.getName());
+		return propertiesWithName != null && propertiesWithName.contains(property);
+	}
+
+	/**
+	 * @deprecated Use {@link PlayerProfileCompleteEvent}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public void removeProperties(String name) {
+		properties.remove(name);
+	}
+
+	/**
+	 * @deprecated Use {@link PlayerProfileCompleteEvent}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public void removeProperty(ProfileProperty property) {
+		String propertyName = property.getName();
+		Set<ProfileProperty> propertiesWithName = properties.get(propertyName);
+		propertiesWithName.remove(property);
+		if (propertiesWithName.isEmpty()) {
+			properties.remove(propertyName);
+		}
+	}
+
+	@Deprecated
+	public void addProperty(ProfileProperty property) {
+		Utils.getFromMapOrCreateDefault(properties, property.getName(), new HashSet<>()).add(property);
 	}
 
 }

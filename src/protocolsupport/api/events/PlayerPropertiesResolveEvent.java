@@ -26,9 +26,15 @@ public class PlayerPropertiesResolveEvent extends PlayerEvent {
 		}
 	}
 
-	@Deprecated
 	public PlayerPropertiesResolveEvent(InetSocketAddress address, String username, Collection<ProfileProperty> properties) {
 		this(ProtocolSupportAPI.getConnection(address), username, properties);
+	}
+
+	public PlayerPropertiesResolveEvent(Connection connection) {
+		super(connection);
+		for (String name : connection.getProfile().getPropertiesNames()) {
+			addProperty(new ProfileProperty(connection.getProfile().getProperties(name).iterator().next()));
+		}
 	}
 
 	/**

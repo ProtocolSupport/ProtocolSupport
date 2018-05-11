@@ -8,7 +8,7 @@ import protocolsupport.api.Connection;
 
 public abstract class ConnectionEvent extends Event {
 
-	private final Connection connection;
+	protected final Connection connection;
 
 	public ConnectionEvent(Connection connection, boolean isAsync) {
 		super(isAsync);
