@@ -7,9 +7,6 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-/**
- * Created by JunHyeong Lim on 2018-05-12
- */
 public class SpawnObject extends AbstractSpawnObject {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData0() {

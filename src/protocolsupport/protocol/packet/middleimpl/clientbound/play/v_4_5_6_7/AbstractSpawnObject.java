@@ -7,9 +7,6 @@ import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
-/**
- * Created by JunHyeong Lim on 2018-05-12
- */
 public abstract class AbstractSpawnObject extends MiddleSpawnObject {
 
 	private void adjustLocation(int data) {

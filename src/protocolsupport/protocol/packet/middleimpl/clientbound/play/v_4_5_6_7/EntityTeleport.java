@@ -9,9 +9,6 @@ import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-/**
- * Created by JunHyeong Lim on 2018-05-12
- */
 public class EntityTeleport extends MiddleEntityTeleport {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
