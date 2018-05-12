@@ -67,12 +67,12 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.BlockBrea
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.BlockChangeSingle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.BlockOpenSignEditor;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.Chat;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.SpawnObject;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.StartGame;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.Map;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.SetPosition;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.ResourcePack;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.SpawnNamed;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.SpawnObject;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.SpawnPainting;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.SpawnPosition;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.UseBed;

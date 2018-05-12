@@ -44,6 +44,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.Explo
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.GameStateChange;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.HeldSlot;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.KickDisconnect;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.SpawnObject;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.StartGame;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.Map;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.ChangeDimension;
@@ -51,7 +52,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.Spawn
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.SpawnGlobal;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.SpawnLiving;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.SpawnNamed;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.SpawnObject;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.SpawnPainting;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.SpawnPosition;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.TabComplete;
