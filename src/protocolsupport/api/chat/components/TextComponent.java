@@ -1,5 +1,8 @@
 package protocolsupport.api.chat.components;
 
+/**
+ * Chat component that displays provided text
+ */
 public class TextComponent extends BaseComponent {
 
 	private final String text;

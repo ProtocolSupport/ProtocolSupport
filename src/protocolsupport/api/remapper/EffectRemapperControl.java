@@ -7,6 +7,7 @@ import protocolsupport.api.ProtocolVersion;
 /**
  * @deprecated Isn't used, was added by mistake, and isn't useful anyway because it doesn't support remapping data along with effect id
  */
+@Deprecated
 public class EffectRemapperControl {
 
 	public EffectRemapperControl(ProtocolVersion version) {

@@ -11,7 +11,7 @@ import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.utils.Profile;
 
 /**
- * This event is fired after player login start (after login start packet which contains client username)
+ * This event is fired after receiving client username (login start packet)
  */
 public class PlayerLoginStartEvent extends PlayerAbstractLoginEvent {
 

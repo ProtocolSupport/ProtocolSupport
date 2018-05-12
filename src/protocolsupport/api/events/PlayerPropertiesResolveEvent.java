@@ -11,7 +11,7 @@ import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
 
 /**
- * This event is fired after receiving player properties
+ * This event is fired after player profile complete (either after doing online-mode checks, or after generating offline-mode profile)
  * @deprecated Use {@link PlayerLoginFinishEvent}
  */
 @Deprecated
