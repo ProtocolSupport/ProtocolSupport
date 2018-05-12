@@ -35,6 +35,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.Ent
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityRelMove;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityRelMoveLook;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityTeleport;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityVelocity;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.KeepAlive;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.PlayerListSetEntry;
@@ -66,13 +67,12 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.BlockBrea
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.BlockChangeSingle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.BlockOpenSignEditor;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.Chat;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.EntityTeleport;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.SpawnObject;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.StartGame;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.Map;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.SetPosition;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.ResourcePack;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.SpawnNamed;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.SpawnObject;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.SpawnPainting;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.SpawnPosition;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.UseBed;
