@@ -32,6 +32,10 @@ public class WatchedEntityCache {
 		return watchedEntities.get(entityId);
 	}
 
+	public boolean hasWatchedEntity(int entityId) {
+		return watchedEntities.containsKey(entityId);
+	}
+
 	public void removeWatchedEntities(int[] entityIds) {
 		for (int entityId : entityIds) {
 			watchedEntities.remove(entityId);
