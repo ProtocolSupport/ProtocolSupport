@@ -15,7 +15,6 @@ public class WorldEvent extends MiddleWorldEvent {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		effectId = IdRemapper.EFFECT.getTable(version).getRemap(effectId);
 		effectId = LegacyEffect.getLegacyId(version, effectId);
 		if (effectId == 2001) {
 			data = IdRemapper.BLOCK.getTable(version).getRemap((data & 0xFFF) << 4) >> 4;

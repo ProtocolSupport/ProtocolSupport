@@ -53,7 +53,6 @@ import net.minecraft.server.v1_12_R1.PacketPlayInWindowClick;
 import net.minecraft.server.v1_12_R1.PlayerInteractManager;
 import net.minecraft.server.v1_12_R1.PlayerList;
 import protocolsupport.protocol.packet.handler.AbstractLoginListenerPlay;
-import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
@@ -61,8 +60,8 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 
 	protected static final MinecraftServer server = SpigotMiscUtils.getServer();
 
-	public SpigotLoginListenerPlay(NetworkManagerWrapper networkmanager, GameProfile profile, boolean onlineMode, String hostname) {
-		super(networkmanager, profile, onlineMode, hostname);
+	public SpigotLoginListenerPlay(NetworkManagerWrapper networkmanager, String hostname) {
+		super(networkmanager, hostname);
 	}
 
 	@Override
@@ -72,7 +71,7 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 
 	@Override
 	protected JoinData createJoinData() {
-		com.mojang.authlib.GameProfile mojangGameProfile = SpigotMiscUtils.toMojangGameProfile(profile);
+		com.mojang.authlib.GameProfile mojangGameProfile = SpigotMiscUtils.toMojangGameProfile(connection.getProfile());
 		EntityPlayer entity = new EntityPlayer(server, server.getWorldServer(0), mojangGameProfile, new PlayerInteractManager(server.getWorldServer(0)));
 		return new JoinData(entity.getBukkitEntity(), entity) {
 			@Override

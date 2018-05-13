@@ -1,5 +1,7 @@
 package protocolsupport.zplatform.impl.glowstone.injector;
 
+import com.flowpowered.network.Message;
+
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelException;
@@ -40,7 +42,7 @@ public class GlowStoneServerConnectionChannel extends ChannelInitializer {
 		pipeline.addFirst(GlowStoneChannelHandlers.READ_TIMEOUT, new SimpleReadTimeoutHandler(30));
 		pipeline.addAfter(GlowStoneChannelHandlers.READ_TIMEOUT, ChannelHandlers.INITIAL_DECODER, new InitialPacketDecoder());
 		pipeline.addBefore(GlowStoneChannelHandlers.NETWORK_MANAGER, "ps_glowstone_sync_ticker", GlowStoneSyncTickerStarter.INSTANCE);
-		pipeline.addBefore(GlowStoneChannelHandlers.NETWORK_MANAGER, ChannelHandlers.LOGIC, new LogicHandler(connection));
+		pipeline.addBefore(GlowStoneChannelHandlers.NETWORK_MANAGER, ChannelHandlers.LOGIC, new LogicHandler(connection, Message.class));
 		pipeline.replace(GlowStoneChannelHandlers.FRAMING, GlowStoneChannelHandlers.FRAMING, new GlowStoneFramingHandler());
 		pipeline.addAfter(GlowStoneChannelHandlers.FRAMING, ChannelHandlers.RAW_CAPTURE_SEND, new RawPacketDataCaptureSend(connection));
 		pipeline.addAfter(GlowStoneChannelHandlers.FRAMING, ChannelHandlers.RAW_CAPTURE_RECEIVE, new RawPacketDataCaptureReceive(connection));

@@ -1,10 +1,14 @@
 package protocolsupport.protocol.packet.handler;
 
+import java.math.BigInteger;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.security.PrivateKey;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadLocalRandom;
@@ -16,8 +20,8 @@ import javax.crypto.SecretKey;
 
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
-
-import com.google.common.base.Charsets;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerPreLoginEvent;
 
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -25,21 +29,27 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import protocolsupport.ProtocolSupport;
-import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.PlayerLoginStartEvent;
+import protocolsupport.api.events.PlayerProfileCompleteEvent;
+import protocolsupport.api.events.PlayerPropertiesResolveEvent;
+import protocolsupport.api.utils.Profile;
 import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_pe.ClientLogin;
+import protocolsupport.protocol.utils.MinecraftEncryption;
 import protocolsupport.protocol.utils.authlib.GameProfile;
+import protocolsupport.protocol.utils.authlib.MinecraftSessionService;
+import protocolsupport.protocol.utils.authlib.MinecraftSessionService.AuthenticationUnavailableException;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
-public abstract class AbstractLoginListener implements IHasProfile {
+@SuppressWarnings("deprecation")
+public abstract class AbstractLoginListener {
 
-	private static final int loginThreadKeepAlive = Utils.getJavaPropertyValue("loginthreadskeepalive", 60, Integer::parseInt);
+	protected static final int loginThreadKeepAlive = Utils.getJavaPropertyValue("loginthreadskeepalive", 60, Integer::parseInt);
 
 	static {
 		ProtocolSupport.logInfo(MessageFormat.format("Login threads keep alive time: {0}", loginThreadKeepAlive));
@@ -53,17 +63,10 @@ public abstract class AbstractLoginListener implements IHasProfile {
 	);
 
 	protected final NetworkManagerWrapper networkManager;
-	protected final Connection connection;
+	protected final ConnectionImpl connection;
 	protected final String hostname;
 	protected final byte[] randomBytes = new byte[4];
-	protected int loginTicks;
-	protected SecretKey loginKey;
 	protected LoginState state = LoginState.HELLO;
-	protected GameProfile profile;
-
-	protected boolean isOnlineMode = Bukkit.getOnlineMode();
-	protected boolean useOnlineModeUUID = isOnlineMode;
-	protected UUID forcedUUID = null;
 
 	public AbstractLoginListener(NetworkManagerWrapper networkmanager, String hostname) {
 		this.networkManager = networkmanager;
@@ -72,11 +75,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 		ThreadLocalRandom.current().nextBytes(randomBytes);
 	}
 
-	@Override
-	public GameProfile getProfile() {
-		return profile;
-	}
-
+	protected int loginTicks;
 	public void tick() {
 		if (loginTicks++ == 600) {
 			disconnect("Took too long to log in");
@@ -98,22 +97,11 @@ public abstract class AbstractLoginListener implements IHasProfile {
 		}
 	}
 
-	public void initOfflineModeGameProfile() {
-		profile = new GameProfile(networkManager.getSpoofedUUID() != null ? networkManager.getSpoofedUUID() : generateOffileModeUUID(), profile.getName());
-		Collection<ProfileProperty> spoofedProperties = networkManager.getSpoofedProperties();
-		if (spoofedProperties != null) {
-			spoofedProperties.forEach(profile::addProperty);
-		}
+	protected String getConnectionRepr() {
+		return (connection.getProfile().getName() != null) ? (connection.getProfile() + " (" + networkManager.getAddress() + ")") : networkManager.getAddress().toString();
 	}
 
-	protected UUID generateOffileModeUUID() {
-		return UUID.nameUUIDFromBytes(("OfflinePlayer:" + profile.getName()).getBytes(Charsets.UTF_8));
-	}
-
-	public String getConnectionRepr() {
-		return (profile != null) ? (profile + " (" + networkManager.getAddress() + ")") : networkManager.getAddress().toString();
-	}
-
+	protected UUID forcedUUID = null;
 	public void handleLoginStart(String name) {
 		Validate.isTrue(state == LoginState.HELLO, "Unexpected hello packet");
 		state = LoginState.ONLINEMODERESOLVE;
@@ -121,53 +109,39 @@ public abstract class AbstractLoginListener implements IHasProfile {
 			@Override
 			public void run() {
 				try {
-					profile = new GameProfile(null, name);
+					GameProfile profile = connection.getProfile();
+					profile.setOriginalName(name);
 
-					PlayerLoginStartEvent event = new PlayerLoginStartEvent(
-						connection,
-						profile.getName(),
-						isOnlineMode,
-						useOnlineModeUUID,
-						hostname
-					);
+					PlayerLoginStartEvent event = new PlayerLoginStartEvent(connection, hostname);
 					Bukkit.getPluginManager().callEvent(event);
 					if (event.isLoginDenied()) {
 						AbstractLoginListener.this.disconnect(event.getDenyLoginMessage());
 						return;
 					}
 
-					isOnlineMode = event.isOnlineMode();
-					useOnlineModeUUID = event.useOnlineModeUUID();
+					profile.setOnlineMode(event.isOnlineMode());
 					forcedUUID = event.getForcedUUID();
+					if ((forcedUUID == null) && profile.isOnlineMode() && !event.useOnlineModeUUID()) {
+						forcedUUID = Profile.generateOfflineModeUUID(profile.getName());
+					}
 
-					switch (connection.getVersion().getProtocolType()) {
-						case PC: {
-							if (isOnlineMode) {
+					if (profile.isOnlineMode()) {
+						switch (connection.getVersion().getProtocolType()) {
+							case PC: {
 								state = LoginState.KEY;
 								networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginEncryptionBeginPacket(ServerPlatform.get().getMiscUtils().getEncryptionKeyPair().getPublic(), randomBytes));
-							} else {
-								new PlayerAuthenticationTask(AbstractLoginListener.this, isOnlineMode).run();
+								break;
 							}
-							break;
-						}
-						case PE: {
-							if (isOnlineMode) {
-								String xuid = (String) connection.getMetadata(ClientLogin.XUID_METADATA_KEY);
-								if (xuid == null) {
-									disconnect("This server is in online mode, but no valid XUID was found (XBOX live auth required)");
-									return;
-								} else {
-									if (useOnlineModeUUID && (forcedUUID == null)) {
-										forcedUUID = new UUID(0, Long.parseLong(xuid));
-									}
-								}
+							case PE: {
+								loginOnlinePE();
+								break;
 							}
-							new PlayerAuthenticationTask(AbstractLoginListener.this, false).run();
-							break;
+							default: {
+								throw new IllegalArgumentException(MessageFormat.format("Unknown protocol type {0}", connection.getVersion().getProtocolType()));
+							}
 						}
-						default: {
-							throw new IllegalArgumentException(MessageFormat.format("Unknown protocol type {0}", connection.getVersion().getProtocolType()));
-						}
+					} else {
+						loginOffline();
 					}
 				} catch (Throwable t) {
 					AbstractLoginListener.this.disconnect("Error occured while logging in");
@@ -198,9 +172,9 @@ public abstract class AbstractLoginListener implements IHasProfile {
 					if (!Arrays.equals(randomBytes, encryptionpakcet.getNonce(privatekey))) {
 						throw new IllegalStateException("Invalid nonce!");
 					}
-					loginKey = encryptionpakcet.getSecretKey(privatekey);
+					SecretKey loginKey = encryptionpakcet.getSecretKey(privatekey);
 					enableEncryption(loginKey);
-					new PlayerAuthenticationTask(AbstractLoginListener.this, isOnlineMode).run();
+					loginOnline(loginKey);
 				} catch (Throwable t) {
 					AbstractLoginListener.this.disconnect("Error occured while logging in");
 					if (ServerPlatform.get().getMiscUtils().isDebugging()) {
@@ -216,23 +190,114 @@ public abstract class AbstractLoginListener implements IHasProfile {
 		ServerPlatform.get().getMiscUtils().enableEncryption(pipeline, key, isFullEncryption(connection.getVersion()));
 	}
 
+	public void loginOffline() {
+		try {
+			GameProfile profile = connection.getProfile();
+			profile.setOriginalUUID(networkManager.getSpoofedUUID() != null ? networkManager.getSpoofedUUID() : Profile.generateOfflineModeUUID(profile.getName()));
+			Collection<ProfileProperty> spoofedProperties = networkManager.getSpoofedProperties();
+			if (spoofedProperties != null) {
+				spoofedProperties.forEach(profile::addProperty);
+			}
+			finishLogin();
+		} catch (Exception exception) {
+			disconnect("Failed to verify username!");
+			Bukkit.getLogger().log(Level.SEVERE, "Exception verifying " + connection.getProfile().getOriginalName(), exception);
+		}
+	}
+
+	public void loginOnline(SecretKey key) {
+		try {
+			MinecraftSessionService.checkHasJoinedServerAndUpdateProfile(
+				connection.getProfile(),
+				new BigInteger(MinecraftEncryption.createHash(ServerPlatform.get().getMiscUtils().getEncryptionKeyPair().getPublic(), key)).toString(16),
+				ServerPlatform.get().getMiscUtils().isProxyPreventionEnabled() ? networkManager.getAddress().getHostString() : null
+			);
+			finishLogin();
+		} catch (AuthenticationUnavailableException authenticationunavailableexception) {
+			disconnect("Authentication servers are down. Please try again later, sorry!");
+			Bukkit.getLogger().severe("Couldn't verify username because servers are unavailable");
+		} catch (Exception exception) {
+			disconnect("Failed to verify username!");
+			Bukkit.getLogger().log(Level.SEVERE, "Exception verifying " + connection.getProfile().getOriginalName(), exception);
+		}
+	}
+
+	public void loginOnlinePE() {
+		try {
+			String xuid = (String) connection.getMetadata(ClientLogin.XUID_METADATA_KEY);
+			if (xuid == null) {
+				disconnect("This server is in online mode, but no valid XUID was found (XBOX live auth required)");
+				return;
+			}
+			connection.getProfile().setOriginalUUID(new UUID(0, Long.parseLong(xuid)));
+			finishLogin();
+		} catch (Exception exception) {
+			disconnect("Failed to verify username!");
+			Bukkit.getLogger().log(Level.SEVERE, "Exception verifying " + connection.getProfile().getOriginalName(), exception);
+		}
+	}
+
 	@SuppressWarnings("unchecked")
-	public void setReadyToAccept() {
-		UUID newUUID = null;
-		if (isOnlineMode && !useOnlineModeUUID) {
-			newUUID = generateOffileModeUUID();
-		}
-		if (forcedUUID != null) {
-			newUUID = forcedUUID;
-		}
-		if (newUUID != null) {
-			GameProfile newProfile = new GameProfile(newUUID, profile.getName());
-			newProfile.addProperties(profile.getProperties());
-			profile = newProfile;
+	protected void finishLogin() throws InterruptedException, ExecutionException  {
+		if (!networkManager.isConnected()) {
+			return;
 		}
 
-		Bukkit.getLogger().info("UUID of player " + profile.getName() + " is " + profile.getUUID());
+		GameProfile profile = connection.getProfile();
+		InetSocketAddress saddress = networkManager.getAddress();
 
+		InetAddress address = saddress.getAddress();
+
+		//properties resolve event, only fire if has registered listeners, because it doesn't allow multiple properties for same name
+		if (PlayerPropertiesResolveEvent.getHandlerList().getRegisteredListeners().length > 0) {
+			PlayerPropertiesResolveEvent propResolve = new PlayerPropertiesResolveEvent(connection);
+			Bukkit.getPluginManager().callEvent(propResolve);
+			profile.clearProperties();
+			propResolve.getProperties().values().forEach(profile::addProperty);
+		}
+
+		//profile complete event
+		//forced uuid is inherited for login start legacy uuid change methods
+		PlayerProfileCompleteEvent event = new PlayerProfileCompleteEvent(connection);
+		event.setForcedUUID(forcedUUID);
+		Bukkit.getPluginManager().callEvent(event);
+		if (event.getForcedName() != null) {
+			profile.setName(event.getForcedName());
+		}
+		if (event.getForcedUUID() != null) {
+			profile.setUUID(event.getForcedUUID());
+		}
+		profile.setProperties(event.getProperties());
+
+		//bukkit async prelogin event, no uuid and name modifications sohuld be done after it, so this event must be always fired after profile complete
+		AsyncPlayerPreLoginEvent asyncEvent = new AsyncPlayerPreLoginEvent(profile.getName(), address, profile.getUUID());
+		Bukkit.getPluginManager().callEvent(asyncEvent);
+
+		//legacy bukkit sync prelogin event, fire only if has listeners to avoid waiting for main thread
+		//the kick result is inherited from async pre login event
+		PlayerPreLoginEvent syncEvent = new PlayerPreLoginEvent(profile.getName(), address, profile.getUUID());
+		if (asyncEvent.getResult() != PlayerPreLoginEvent.Result.ALLOWED) {
+			syncEvent.disallow(asyncEvent.getResult(), asyncEvent.getKickMessage());
+		}
+		if (PlayerPreLoginEvent.getHandlerList().getRegisteredListeners().length != 0) {
+			if (ServerPlatform.get().getMiscUtils().callSyncTask(() -> {
+				Bukkit.getPluginManager().callEvent(syncEvent);
+				return syncEvent.getResult();
+			}).get() != PlayerPreLoginEvent.Result.ALLOWED) {
+				disconnect(syncEvent.getKickMessage());
+				return;
+			}
+		}
+
+		//kick if not allowed
+		if (syncEvent.getResult() != PlayerPreLoginEvent.Result.ALLOWED) {
+			disconnect(syncEvent.getKickMessage());
+			return;
+		}
+
+		Bukkit.getLogger().info("UUID of player " + connection.getProfile().getName() + " is " + connection.getProfile().getUUID());
+
+		//enable compression if version does support it
 		if (hasCompression(connection.getVersion())) {
 			int threshold = ServerPlatform.get().getMiscUtils().getCompressionThreshold();
 			if (threshold >= 0) {
@@ -248,6 +313,7 @@ public abstract class AbstractLoginListener implements IHasProfile {
 			}
 		}
 
+		//switch to login listener play which allows infinitely waiting on login screen if needed
 		AbstractLoginListenerPlay listener = getLoginListenerPlay();
 		networkManager.setPacketListener(listener);
 		listener.finishLogin();

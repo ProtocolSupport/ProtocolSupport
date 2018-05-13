@@ -29,6 +29,12 @@ public class ChatAPI {
 	.registerTypeHierarchyAdapter(HoverAction.class, new HoverActionSerializer())
 	.create();
 
+	/**
+	 * Convers json string to chat component
+	 * @param json json string
+	 * @return chat component
+	 * @throws JsonParseException if passed string is not in json format
+	 */
 	public static BaseComponent fromJSON(String json) throws JsonParseException {
 		try {
 			BaseComponent result = gson.fromJson(json, BaseComponent.class);
@@ -38,22 +44,51 @@ public class ChatAPI {
 		}
 	}
 
+	/**
+	 * Converts chat component to json string
+	 * @param component chatcomponent
+	 * @return json string
+	 */
 	public static String toJSON(BaseComponent component) {
 		return component != null ? gson.toJson(component) : null;
 	}
 
+	/**
+	 * Sends message to player
+	 * @param player player
+	 * @param message chat component
+	 */
 	public static void sendMessage(Player player, BaseComponent message) {
 		sendMessage(player, message, MessagePosition.CHAT);
 	}
 
+	/**
+	 * Sends message to player
+	 * @param player player
+	 * @param messageJson chat json string
+	 */
 	public static void sendMessage(Player player, String messageJson) {
 		sendMessage(player, messageJson, MessagePosition.CHAT);
 	}
 
+	/**
+	 * Sends message to player<br>
+	 * Allows setting position of the message
+	 * @param player player
+	 * @param message chat component
+	 * @param position message position
+	 */
 	public static void sendMessage(Player player, BaseComponent message, MessagePosition position) {
 		sendMessage(player, toJSON(message), position);
 	}
 
+	/**
+	 * Sends message to player<br>
+	 * Allows setting position of the message
+	 * @param player player
+	 * @param messageJson chat json string
+	 * @param position message position
+	 */
 	public static void sendMessage(Player player, String messageJson, MessagePosition position) {
 		Validate.notNull(player, "Player can't be null");
 		Validate.notNull(messageJson, "Message can't be null");

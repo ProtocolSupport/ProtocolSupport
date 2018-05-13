@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.UUID;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -19,13 +18,12 @@ public class MinecraftSessionService {
 
 	private static final String hasJoinedUrl = "https://sessionserver.mojang.com/session/minecraft/hasJoined";
 
-	public static GameProfile hasJoinedServer(String name, String hash, String ip) throws AuthenticationUnavailableException, MalformedURLException {
-		final URL url = new URL(hasJoinedUrl + "?username=" + name + "&serverId=" + hash + (ip != null ? "&ip=" + ip : ""));
+	public static void checkHasJoinedServerAndUpdateProfile(GameProfile profile, String hash, String ip) throws AuthenticationUnavailableException, MalformedURLException {
+		final URL url = new URL(hasJoinedUrl + "?username=" + profile.getOriginalName() + "&serverId=" + hash + (ip != null ? "&ip=" + ip : ""));
 		try {
 			JsonObject root = new JsonParser().parse(new InputStreamReader(url.openStream())).getAsJsonObject();
-			String rname = JsonUtils.getString(root, "name");
-			UUID ruuid = UUIDTypeAdapter.fromString(JsonUtils.getString(root, "id"));
-			GameProfile profile = new GameProfile(ruuid, rname);
+			profile.setOriginalName(JsonUtils.getString(root, "name"));
+			profile.setOriginalUUID(UUIDTypeAdapter.fromString(JsonUtils.getString(root, "id")));
 			JsonArray properties = JsonUtils.getJsonArray(root, "properties");
 			for (JsonElement property : properties) {
 				JsonObject propertyobj = property.getAsJsonObject();
@@ -35,7 +33,6 @@ public class MinecraftSessionService {
 					JsonUtils.getString(propertyobj, "signature")
 				));
 			}
-			return profile;
 		} catch (IOException | IllegalStateException | JsonParseException e) {
 			throw new AuthenticationUnavailableException();
 		}

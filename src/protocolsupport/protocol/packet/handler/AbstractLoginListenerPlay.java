@@ -18,30 +18,22 @@ import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.common.SimpleReadTimeoutHandler;
-import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
-public abstract class AbstractLoginListenerPlay implements IHasProfile {
+public abstract class AbstractLoginListenerPlay {
 
 	protected final NetworkManagerWrapper networkManager;
-	protected final GameProfile profile;
-	protected final boolean onlineMode;
 	protected final String hostname;
+	protected final ConnectionImpl connection;
 
-	protected AbstractLoginListenerPlay(NetworkManagerWrapper networkmanager, GameProfile profile, boolean onlineMode, String hostname) {
+	protected AbstractLoginListenerPlay(NetworkManagerWrapper networkmanager, String hostname) {
 		this.networkManager = networkmanager;
-		this.profile = profile;
-		this.onlineMode = onlineMode;
+		this.connection = ConnectionImpl.getFromChannel(networkmanager.getChannel());
 		this.hostname = hostname;
 	}
 
-	@Override
-	public GameProfile getProfile() {
-		return profile;
-	}
-
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	public void finishLogin() {
 		if (!networkManager.isConnected()) {
 			return;
@@ -49,7 +41,7 @@ public abstract class AbstractLoginListenerPlay implements IHasProfile {
 
 		//send login success and wait for finish
 		CountDownLatch waitpacketsend = new CountDownLatch(1);
-		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginSuccessPacket(profile), new GenericFutureListener<Future<? super Void>>() {
+		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginSuccessPacket(connection.getProfile()), new GenericFutureListener<Future<? super Void>>() {
 			@Override
 			public void operationComplete(Future<? super Void> p0) throws Exception {
 				waitpacketsend.countDown();
@@ -69,14 +61,13 @@ public abstract class AbstractLoginListenerPlay implements IHasProfile {
 		//tick connection keep now
 		keepConnection();
 		//now fire login event
-		PlayerLoginFinishEvent event = new PlayerLoginFinishEvent(ConnectionImpl.getFromChannel(networkManager.getChannel()), profile, onlineMode);
+		PlayerLoginFinishEvent event = new PlayerLoginFinishEvent(connection);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.isLoginDenied()) {
 			disconnect(event.getDenyLoginMessage());
 			return;
 		}
-		profile.clearProperties();
-		profile.addProperties(event.getProperties());
+		connection.getProfile().setProperties(event.getProperties());
 		ready = true;
 	}
 
@@ -103,14 +94,14 @@ public abstract class AbstractLoginListenerPlay implements IHasProfile {
 
 		//kick players with same uuid
 		Bukkit.getOnlinePlayers().stream()
-		.filter(player -> player.getUniqueId().equals(profile.getUUID()))
+		.filter(player -> player.getUniqueId().equals(connection.getProfile().getUUID()))
 		.forEach(player -> player.kickPlayer("You logged in from another location"));
 
 		//get player
 		JoinData joindata = createJoinData();
 
 		//ps sync login event
-		PlayerSyncLoginEvent syncloginevent = new PlayerSyncLoginEvent(ConnectionImpl.getFromChannel(networkManager.getChannel()), joindata.player);
+		PlayerSyncLoginEvent syncloginevent = new PlayerSyncLoginEvent(connection, joindata.player);
 		Bukkit.getPluginManager().callEvent(syncloginevent);
 		if (syncloginevent.isLoginDenied()) {
 			disconnect(syncloginevent.getDenyLoginMessage());
@@ -146,7 +137,7 @@ public abstract class AbstractLoginListenerPlay implements IHasProfile {
 	}
 
 	protected String getConnectionRepr() {
-		return (profile != null) ? (profile + " (" + networkManager.getAddress() + ")") : networkManager.getAddress().toString();
+		return (connection.getProfile() + " (" + networkManager.getAddress() + ")");
 	}
 
 	public void disconnect(final String s) {

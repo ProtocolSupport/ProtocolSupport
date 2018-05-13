@@ -35,11 +35,11 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8.SpawnEx
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8.SpawnGlobal;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8.SpawnLiving;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2.Animation;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2.ChangeDimension;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2.Explosion;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2.GameStateChange;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2.HeldSlot;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2.KickDisconnect;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2.ChangeDimension;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2.Statistics;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2.TabComplete;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.Chunk;
@@ -49,8 +49,8 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.EntityRel
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.EntityRelMoveLook;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.EntityTeleport;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.Map;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.SetPosition;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.ScoreboardTeam;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.SetPosition;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.SpawnNamed;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.SpawnObject;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.SpawnPainting;
@@ -77,9 +77,8 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_1
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2.EntityVelocity;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2.InventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2.KeepAlive;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2.StartGame;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2.PlayerListSetEntry;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2.PlayerListHeaderFooter;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2.PlayerListSetEntry;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2.ResourcePack;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2.ScoreboardObjective;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2.ScoreboardScore;
@@ -87,6 +86,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_1
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2.SetExperience;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2.SetHealth;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2.SpawnPosition;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2.StartGame;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2.UseBed;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2.WorldBorder;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2.WorldEvent;

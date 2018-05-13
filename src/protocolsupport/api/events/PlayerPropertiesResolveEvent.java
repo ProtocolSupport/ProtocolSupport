@@ -11,7 +11,7 @@ import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
 
 /**
- * This event is fired after receiving player properties
+ * This event is fired after player profile complete (either after doing online-mode checks, or after generating offline-mode profile)
  * @deprecated Use {@link PlayerLoginFinishEvent}
  */
 @Deprecated
@@ -26,9 +26,15 @@ public class PlayerPropertiesResolveEvent extends PlayerEvent {
 		}
 	}
 
-	@Deprecated
 	public PlayerPropertiesResolveEvent(InetSocketAddress address, String username, Collection<ProfileProperty> properties) {
 		this(ProtocolSupportAPI.getConnection(address), username, properties);
+	}
+
+	public PlayerPropertiesResolveEvent(Connection connection) {
+		super(connection);
+		for (String name : connection.getProfile().getPropertiesNames()) {
+			addProperty(new ProfileProperty(connection.getProfile().getProperties(name).iterator().next()));
+		}
 	}
 
 	/**
