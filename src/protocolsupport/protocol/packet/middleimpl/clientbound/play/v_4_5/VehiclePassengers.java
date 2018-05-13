@@ -33,7 +33,8 @@ public class VehiclePassengers extends MiddleVehiclePassengers {
 		}
 		WatchedEntityCache entityCache = cache.getWatchedEntityCache();
 		if (passengersIds.length != 0 && entityCache.hasWatchedEntity(vehicleId) && entityCache.hasWatchedEntity(passengerId)) {
-			if (entityCache.hasWatchedEntity(passengerToVehicle.getOrDefault(passengerId, -1))) {
+			int prevVehicleId = passengerToVehicle.getOrDefault(passengerId, -1);
+			if (entityCache.hasWatchedEntity(prevVehicleId)) {
 				return false;
 			} else {
 				passengerToVehicle.put(passengerId, vehicleId);
