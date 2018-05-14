@@ -60,9 +60,7 @@ public class SpawnObject extends MiddleSpawnObject {
 				break;
 			}
 			case MINECART: {
-				if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_6_1)) {
-					y += 16;
-				}
+				y += 16;
 				break;
 			}
 			default: {
