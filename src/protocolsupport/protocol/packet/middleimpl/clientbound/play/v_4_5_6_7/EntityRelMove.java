@@ -5,13 +5,28 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityRelMo
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.legacy.LegacyRelMoveConverter;
 import protocolsupport.protocol.typeremapper.legacy.LegacyRelMoveConverter.RelMove;
+import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class EntityRelMove extends MiddleEntityRelMove {
+	protected void addRemainder() {
+		NetworkEntity watchedEntity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
+		if (watchedEntity != null) {
+			Position remainderPos = watchedEntity.getRelRemainderPosition();
+			relX += remainderPos.getX();
+			relY += remainderPos.getY();
+			relZ += remainderPos.getZ();
+			remainderPos.setX(relX % 128);
+			remainderPos.setY(relY % 128);
+			remainderPos.setZ(relZ % 128);
+		}
+	}
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
+		addRemainder();
 		int relMoveX = relX / 128;
 		int relMoveY = relY / 128;
 		int relMoveZ = relZ / 128;
