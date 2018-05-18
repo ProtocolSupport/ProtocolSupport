@@ -5,8 +5,8 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityRelMo
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.legacy.LegacyRelMoveConverter;
 import protocolsupport.protocol.typeremapper.legacy.LegacyRelMoveConverter.RelMove;
+import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntityRelRemainderCache;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -14,13 +14,13 @@ public class EntityRelMove extends MiddleEntityRelMove {
 	protected void addRemainder() {
 		NetworkEntity watchedEntity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
 		if (watchedEntity != null) {
-			NetworkEntityRelRemainderCache remainderCache = watchedEntity.getRelRemainderCache();
-			relX += remainderCache.getX();
-			relY += remainderCache.getY();
-			relZ += remainderCache.getZ();
-			remainderCache.setX(relX % 128);
-			remainderCache.setY(relY % 128);
-			remainderCache.setZ(relZ % 128);
+			Position remainderPos = watchedEntity.getRelRemainderPosition();
+			relX += remainderPos.getX();
+			relY += remainderPos.getY();
+			relZ += remainderPos.getZ();
+			remainderPos.setX(relX % 128);
+			remainderPos.setY(relY % 128);
+			remainderPos.setZ(relZ % 128);
 		}
 	}
 

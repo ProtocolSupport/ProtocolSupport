@@ -1,5 +1,6 @@
 package protocolsupport.protocol.utils.types.networkentity;
 
+import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.Utils;
 
 import java.util.UUID;
@@ -26,14 +27,14 @@ public class NetworkEntity {
 	protected final int id;
 	protected final NetworkEntityType type;
 	protected final NetworkEntityDataCache cache;
-	protected final NetworkEntityRelRemainderCache relRemainderCache;
+	protected final Position relRemainderCache;
 
 	public NetworkEntity(UUID uuid, int id, NetworkEntityType type) {
 		this.uuid = uuid;
 		this.id = id;
 		this.type = type;
 		this.cache = NetworkEntityDataCacheFactory.create(getType());
-		this.relRemainderCache = new NetworkEntityRelRemainderCache();
+		this.relRemainderCache = new Position(0, 0, 0);
 	}
 
 	public UUID getUUID() {
@@ -52,7 +53,7 @@ public class NetworkEntity {
 		return cache;
 	}
 
-	public NetworkEntityRelRemainderCache getRelRemainderCache() {
+	public Position getRelRemainderPosition() {
 		return relRemainderCache;
 	}
 
