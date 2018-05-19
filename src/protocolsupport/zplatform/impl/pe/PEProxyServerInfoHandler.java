@@ -60,7 +60,7 @@ public class PEProxyServerInfoHandler implements PingHandler {
 			return String.join(";",
 				"MCPE",
 				ping.getMotd().toLegacyText(I18NData.DEFAULT_LOCALE).replace(";", ":"),
-				String.valueOf(ping.getProtocolData().getVersion()), "1.12.14",
+				String.valueOf(ping.getProtocolData().getVersion()), "1.14.1",
 				String.valueOf(ping.getPlayers().getOnline()),
 				String.valueOf(ping.getPlayers().getMax()),
 				"1337", //TODO: find out how it is used, apprently that is some sort of id
