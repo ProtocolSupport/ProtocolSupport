@@ -21,7 +21,7 @@ public class ConnectionHandshakeEvent extends ConnectionEvent {
 
 	/**
 	 * Returns the hostname to which client connects to
-	 * This is data can contain spoofed data
+	 * This data can contain spoofed data
 	 * @return hostname
 	 */
 	public String getHostname() {
@@ -30,7 +30,7 @@ public class ConnectionHandshakeEvent extends ConnectionEvent {
 
 	/**
 	 * Sets hostname to which client connects to
-	 * This data can contains spoofed data
+	 * This data can contain spoofed data
 	 * @param hostname hostname
 	 */
 	public void setHostname(String hostname) {
@@ -38,9 +38,9 @@ public class ConnectionHandshakeEvent extends ConnectionEvent {
 	}
 
 	/**
-	 * Returns true if server should attempt hostname spoofed data parsing in hostname in case proxy is enabled
+	 * Returns true if server should attempt hostname spoofed data parsing in case proxy is enabled
 	 * Returns true by default
-	 * @return true if server should attempt hostname spoofed data parsing in hostname in case proxy is enabled
+	 * @return true if server should attempt hostname spoofed data parsing in case proxy is enabled
 	 */
 	public boolean shouldParseHostname() {
 		return shouldParseHostname;

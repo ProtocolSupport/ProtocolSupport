@@ -19,7 +19,7 @@ import protocolsupport.protocol.storage.ProtocolStorage;
 
 public class ProtocolSupportAPI {
 
-	private static final BigInteger apiversion = BigInteger.valueOf(4);
+	private static final BigInteger apiversion = BigInteger.valueOf(5);
 	/**
 	 * Returns ProtocolSupport API version <br>
 	 * This number is incremented every time API changes (behavior change, method/field added/removed)
@@ -124,10 +124,17 @@ public class ProtocolSupportAPI {
 
 
 
+
+
+
+
+
+
+
 	/**
 	 * @param version protocol version for you want to control remapping
 	 * @return item remapper control
-	 * @deprecated instance can be constructed directly
+	 * @deprecated use {@link ItemRemapperControl#ItemRemapperControl(ProtocolVersion)}
 	 */
 	@Deprecated
 	public static ItemRemapperControl getItemRemapper(ProtocolVersion version) {
@@ -137,7 +144,7 @@ public class ProtocolSupportAPI {
 	/**
 	 * @param version protocol version for you want to control remapping
 	 * @return block remapper control
-	 * @deprecated instance can be constructed directly
+	 * @deprecated use {@link BlockRemapperControl#BlockRemapperControl(ProtocolVersion)}
 	 */
 	@Deprecated
 	public static BlockRemapperControl getBlockRemapper(ProtocolVersion version) {

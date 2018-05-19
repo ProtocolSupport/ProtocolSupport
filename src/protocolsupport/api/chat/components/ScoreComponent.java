@@ -5,6 +5,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
+/**
+ * Chat component that displays a scoreboard score
+ */
 public class ScoreComponent extends BaseComponent {
 
 	private final String playername;

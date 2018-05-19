@@ -15,7 +15,6 @@ public class WorldEvent extends MiddleWorldEvent {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		effectId = IdRemapper.EFFECT.getTable(version).getRemap(effectId);
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9)) {
 			effectId = LegacyEffect.getLegacyId(version, effectId);
 			if (effectId == 2001) {

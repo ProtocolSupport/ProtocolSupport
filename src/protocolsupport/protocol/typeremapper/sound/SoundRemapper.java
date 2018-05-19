@@ -124,6 +124,7 @@ public class SoundRemapper {
 			registerRemapEntry("entity.hostile.death", "damage.hit", ProtocolVersionsHelper.BEFORE_1_7);
 			registerRemapEntry("entity.generic.hurt", "damage.hit", ProtocolVersionsHelper.BEFORE_1_7);
 			registerRemapEntry("entity.player.death", "damage.hit", ProtocolVersionsHelper.BEFORE_1_7);
+			registerRemapEntry("entity.player.hurt", "damage.hit", ProtocolVersionsHelper.BEFORE_1_6);
 			registerRemapEntry("entity.creeper.death", "mob.creeper.death", ProtocolVersionsHelper.BEFORE_1_9_AND_PE);
 			registerRemapEntry("entity.horse.gallop", "mob.horse.gallop", ProtocolVersionsHelper.BEFORE_1_9_AND_PE);
 			registerRemapEntry("entity.wither.spawn", "mob.wither.spawn", ProtocolVersionsHelper.BEFORE_1_9_AND_PE);

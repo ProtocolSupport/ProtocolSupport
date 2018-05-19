@@ -12,6 +12,12 @@ import com.google.common.collect.Lists;
 import protocolsupport.api.TranslationAPI;
 import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
 
+/**
+ * Chat component that displays translated key and arguments into the current client language <br>
+ * Note: ProtocolSupport always translate components serverside, so this component will never be actually sent to client <br>
+ * This unfortunately breaks clientside custom translations, but the don't have other way <br>
+ * But it is possible to inject custom serverside translation using {@link TranslationAPI#registerTranslation(String, java.io.InputStream)}
+ */
 public class TranslateComponent extends BaseComponent {
 
 	private final String translationKey;

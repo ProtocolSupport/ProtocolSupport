@@ -3,6 +3,7 @@ package protocolsupport.zplatform.impl.spigot.injector.network;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import net.minecraft.server.v1_12_R1.NetworkManager;
+import net.minecraft.server.v1_12_R1.Packet;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.common.LogicHandler;
@@ -35,7 +36,7 @@ public class SpigotServerConnectionChannel extends ChannelInitializer {
 		connection.storeInChannel(channel);
 		ProtocolStorage.addConnection(channel.remoteAddress(), connection);
 		pipeline.addAfter(SpigotChannelHandlers.READ_TIMEOUT, ChannelHandlers.INITIAL_DECODER, new InitialPacketDecoder());
-		pipeline.addBefore(SpigotChannelHandlers.NETWORK_MANAGER, ChannelHandlers.LOGIC, new LogicHandler(connection));
+		pipeline.addBefore(SpigotChannelHandlers.NETWORK_MANAGER, ChannelHandlers.LOGIC, new LogicHandler(connection, Packet.class));
 		pipeline.remove("legacy_query");
 		pipeline.replace(SpigotChannelHandlers.READ_TIMEOUT, SpigotChannelHandlers.READ_TIMEOUT, new SimpleReadTimeoutHandler(30));
 		pipeline.replace(SpigotChannelHandlers.SPLITTER, SpigotChannelHandlers.SPLITTER, new SpigotWrappedSplitter());

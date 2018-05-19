@@ -12,7 +12,7 @@ public class GlowStoneLoginListener extends AbstractLoginListener implements Glo
 
 	@Override
 	protected AbstractLoginListenerPlay getLoginListenerPlay() {
-		return new GlowStoneLoginListenerPlay(networkManager, profile, isOnlineMode, hostname);
+		return new GlowStoneLoginListenerPlay(networkManager, hostname);
 	}
 
 }

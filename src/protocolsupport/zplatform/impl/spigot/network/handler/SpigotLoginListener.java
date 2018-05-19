@@ -51,7 +51,7 @@ public class SpigotLoginListener extends AbstractLoginListener implements ITicka
 
 	@Override
 	protected SpigotLoginListenerPlay getLoginListenerPlay() {
-		return new SpigotLoginListenerPlay(networkManager, profile, isOnlineMode, hostname);
+		return new SpigotLoginListenerPlay(networkManager, hostname);
 	}
 
 }

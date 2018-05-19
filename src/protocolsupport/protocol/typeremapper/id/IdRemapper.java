@@ -10,7 +10,6 @@ import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.EnumRemappi
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.IdRemappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.EnumRemappingTable;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable.HashMapBasedIdRemappingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.WindowType;
@@ -272,13 +271,6 @@ public class IdRemapper {
 		@Override
 		protected EnumRemappingTable<NetworkEntityType> createTable() {
 			return new EnumRemappingTable<>(NetworkEntityType.class);
-		}
-	};
-
-	public static final IdRemappingRegistry<HashMapBasedIdRemappingTable> EFFECT = new IdRemappingRegistry<HashMapBasedIdRemappingTable>() {
-		@Override
-		protected HashMapBasedIdRemappingTable createTable() {
-			return new HashMapBasedIdRemappingTable();
 		}
 	};
 

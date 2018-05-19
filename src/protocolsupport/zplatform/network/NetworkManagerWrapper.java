@@ -11,8 +11,6 @@ import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.api.utils.ProfileProperty;
-import protocolsupport.protocol.packet.handler.IHasProfile;
-import protocolsupport.protocol.utils.authlib.GameProfile;
 
 public abstract class NetworkManagerWrapper {
 
@@ -51,20 +49,5 @@ public abstract class NetworkManagerWrapper {
 	public abstract void setSpoofedProfile(UUID uuid, Collection<ProfileProperty> properties);
 
 	public abstract Player getBukkitPlayer();
-
-	public String getUserName() {
-		Player player = getBukkitPlayer();
-		if (player != null) {
-			return player.getName();
-		} else {
-			Object listener = getPacketListener();
-			if (listener instanceof IHasProfile) {
-				GameProfile profile = ((IHasProfile) listener).getProfile();
-				return profile != null ? profile.getName() : null;
-			} else {
-				return null;
-			}
-		}
-	}
 
 }

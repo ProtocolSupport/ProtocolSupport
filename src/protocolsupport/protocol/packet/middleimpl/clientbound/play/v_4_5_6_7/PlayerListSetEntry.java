@@ -32,18 +32,22 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		switch (action) {
 			case ADD: {
-				Arrays.stream(infos).forEach(info -> packets.add(create(info.getName(cache.getAttributesCache().getLocale()), (short) info.ping, true, version)));
+				Arrays.stream(infos).forEach(info -> packets.add(create(version, info.getName(cache.getAttributesCache().getLocale()), true, (short) info.ping)));
 				break;
 			}
 			case DISPLAY_NAME: {
 				Arrays.stream(infos).forEach(info -> {
-					packets.add(create(oldNames.get(info.uuid), (short) info.ping, false, version));
-					packets.add(create(info.getName(cache.getAttributesCache().getLocale()), (short) info.ping, true, version));
+					packets.add(create(version, oldNames.get(info.uuid), false, (short) info.ping));
+					packets.add(create(version, info.getName(cache.getAttributesCache().getLocale()), true, (short) info.ping));
 				});
 				break;
 			}
 			case REMOVE: {
-				Arrays.stream(infos).forEach(info -> packets.add(create(oldNames.get(info.uuid), (short) info.ping, false, version)));
+				Arrays.stream(infos).forEach(info -> packets.add(create(version, oldNames.get(info.uuid), false, (short) info.ping)));
+				break;
+			}
+			case PING: {
+				Arrays.stream(infos).forEach(info -> packets.add(create(version, oldNames.get(info.uuid), true, (short) info.ping)));
 				break;
 			}
 			default: {
@@ -53,7 +57,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 		return packets;
 	}
 
-	protected static ClientBoundPacketData create(String name, short ping, boolean add, ProtocolVersion version) {
+	protected static ClientBoundPacketData create(ProtocolVersion version, String name, boolean add, short ping) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_PLAYER_INFO_ID);
 		StringSerializer.writeString(serializer, version, Utils.clampString(name, 16));
 		serializer.writeBoolean(add);
