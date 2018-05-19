@@ -122,7 +122,9 @@ public class PEDataValues {
 	public static final ArrayBasedIdRemappingTable BLOCK_ID = new ArrayBasedIdRemappingTable(MinecraftData.BLOCK_ID_MAX * MinecraftData.BLOCK_DATA_MAX);
 	static {
 		PocketData.readBlockRemaps((from, to) -> {
-			BLOCK_ID.setRemap(from, to);
+			if (from >= 0) {
+				BLOCK_ID.setRemap(from, to);
+			}
 		});
 	}
 
