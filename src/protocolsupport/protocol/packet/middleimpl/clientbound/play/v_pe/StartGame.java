@@ -57,6 +57,7 @@ public class StartGame extends MiddleStartGame {
 		startgame.writeBoolean(false); //disable achievements
 		VarNumberSerializer.writeSVarInt(startgame, 0); //time
 		startgame.writeBoolean(false); //edu mode
+		startgame.writeBoolean(false); //edu features
 		startgame.writeFloatLE(0); //rain level
 		startgame.writeFloatLE(0); //lighting level
 		startgame.writeBoolean(true); //is multiplayer
@@ -73,6 +74,9 @@ public class StartGame extends MiddleStartGame {
 		startgame.writeBoolean(false); //Platformbroadcast
 		VarNumberSerializer.writeVarInt(startgame, 0); //Broadcast mode
 		startgame.writeBoolean(false); //Broadcast intent
+		startgame.writeBoolean(false); //hasLockedRes pack
+		startgame.writeBoolean(false); //hasLockedBeh pack
+		startgame.writeBoolean(false); //hasLocked world template.
 		StringSerializer.writeString(startgame, connection.getVersion(), ""); //level ID (empty string)
 		StringSerializer.writeString(startgame, connection.getVersion(), ""); //world name (empty string)
 		StringSerializer.writeString(startgame, connection.getVersion(), ""); //premium world template id (empty string)
