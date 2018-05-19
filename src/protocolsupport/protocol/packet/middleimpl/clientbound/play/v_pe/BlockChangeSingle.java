@@ -13,11 +13,12 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class BlockChangeSingle extends MiddleBlockChangeSingle {
 
-    private static final int flag_update_neighbors = 0b0001;
-    private static final int flag_network = 0b0010;
-    private static final int flag_priority = 0b1000;
+	protected static final int flag_update_neighbors = 0b0001;
+	protected static final int flag_network = 0b0010;
+	protected static final int flag_nographic = 0b0100;
+	protected static final int flag_priority = 0b1000;
 
-    private static final int flags = (flag_update_neighbors | flag_network | flag_priority);
+	protected static final int flags = (flag_update_neighbors | flag_network | flag_priority);
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
@@ -30,6 +31,7 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 		PositionSerializer.writePEPosition(serializer, position);
 		VarNumberSerializer.writeVarInt(serializer, state);
 		VarNumberSerializer.writeVarInt(serializer, flags);
+		VarNumberSerializer.writeVarInt(serializer, 0); //Normal layer (liquid not implemented in java yet)
 		return serializer;
 	}
 
