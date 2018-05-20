@@ -60,8 +60,8 @@ public class ServerPlatform {
 		return identifier;
 	}
 
-	public void inject() {
-		injector.inject();
+	public PlatformInjector getInjector() {
+		return injector;
 	}
 
 	public PlatformUtils getMiscUtils() {

@@ -6,13 +6,21 @@ import protocolsupport.zplatform.impl.glowstone.injector.packets.GlowStonePacket
 public class GlowstonePlatformInjector implements PlatformInjector {
 
 	@Override
-	public void inject() {
+	public void onLoad() {
 		try {
 			GlowStonePacketsInjector.inject();
 			GlowStoneNettyInjector.inject();
 		} catch (IllegalArgumentException | IllegalAccessException | SecurityException | InstantiationException e) {
 			throw new RuntimeException("Error while injecting", e);
 		}
+	}
+
+	@Override
+	public void onEnable() {
+	}
+
+	@Override
+	public void onDisable() {
 	}
 
 }
