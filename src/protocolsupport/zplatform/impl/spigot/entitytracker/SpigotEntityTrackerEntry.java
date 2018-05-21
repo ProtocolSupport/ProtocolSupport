@@ -315,8 +315,8 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 
 	@Override
 	public boolean c(EntityPlayer entityplayer) {
-		double diffX = entityplayer.locX - (entity.locX);
-		double diffZ = entityplayer.locZ - (entity.locZ / 4096.0);
+		double diffX = entityplayer.locX - entity.locX;
+		double diffZ = entityplayer.locZ - entity.locZ;
 		int lTrackRange = Math.min(trackRange, viewDistance);
 		return (diffX >= -lTrackRange) && (diffX <= lTrackRange) && (diffZ >= -lTrackRange) && (diffZ <= lTrackRange) && entity.a(entityplayer);
 	}
