@@ -82,6 +82,16 @@ import protocolsupport.utils.CachedInstanceOfChain;
 
 public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 
+	protected static final boolean paperTrackedPlayersMapPresent = checkPaperTrackedPlayersMap();
+	protected static final boolean checkPaperTrackedPlayersMap() {
+		try {
+			EntityTrackerEntry.class.getDeclaredField("trackedPlayerMap");
+			return true;
+		} catch (NoSuchFieldException | SecurityException e) {
+			return false;
+		}
+	}
+
 	protected final Entity entity;
 	protected final int trackRange;
 	protected final int updateInterval;
@@ -250,7 +260,7 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 						}
 					}
 					entityplayer.d(entity);
-					trackedPlayers.add(entityplayer);
+					addTrackedPlayer(entityplayer);
 					Packet<?> spawnPacket = createSpawnPacket();
 					entityplayer.playerConnection.sendPacket(spawnPacket);
 					if (!entity.getDataWatcher().d()) {
@@ -306,10 +316,26 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 					entity.b(entityplayer);
 					entityplayer.d(entity);
 				}
-			} else if (trackedPlayers.remove(entityplayer)) {
+			} else if (removeTrackedPlayer(entityplayer)) {
 				entity.c(entityplayer);
 				entityplayer.c(entity);
 			}
+		}
+	}
+
+	protected void addTrackedPlayer(EntityPlayer entityplayer) {
+		if (paperTrackedPlayersMapPresent) {
+			trackedPlayerMap.put(entityplayer, Boolean.TRUE);
+		} else {
+			trackedPlayers.add(entityplayer);
+		}
+	}
+
+	protected boolean removeTrackedPlayer(EntityPlayer entityplayer) {
+		if (paperTrackedPlayersMapPresent) {
+			return trackedPlayerMap.remove(entityplayer) != null;
+		} else {
+			return trackedPlayers.remove(entityplayer);
 		}
 	}
 
