@@ -5,6 +5,7 @@ import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnNamed;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
 import protocolsupport.protocol.typeremapper.legacy.LegacyDataWatcherSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -16,7 +17,8 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_NAMED_ID);
 		serializer.writeInt(entity.getId());
-		StringSerializer.writeString(serializer, version, cache.getPlayerListCache().getEntry(entity.getUUID()).getName(cache.getAttributesCache().getLocale()));
+		PlayerListEntry entry = cache.getPlayerListCache().getEntry(entity.getUUID());
+		StringSerializer.writeString(serializer, version, entry != null ? entry.getCurrentName(cache.getAttributesCache().getLocale()) : "UNKNOWN");
 		serializer.writeInt((int) (x * 32));
 		serializer.writeInt((int) (y * 32));
 		serializer.writeInt((int) (z * 32));

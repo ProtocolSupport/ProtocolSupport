@@ -25,7 +25,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		UUID uuid = entity.getUUID();
 		StringSerializer.writeString(serializer, version, version == ProtocolVersion.MINECRAFT_1_7_10 ? uuid.toString() : uuid.toString().replace("-", ""));
 		PlayerListEntry entry = cache.getPlayerListCache().getEntry(uuid);
-		StringSerializer.writeString(serializer, version, entry.getName(cache.getAttributesCache().getLocale()));
+		StringSerializer.writeString(serializer, version, entry != null ? entry.getCurrentName(cache.getAttributesCache().getLocale()) : "UNKNOWN");
 		if (version == ProtocolVersion.MINECRAFT_1_7_10) {
 			List<ProfileProperty> properties = entry.getProperties(true);
 			VarNumberSerializer.writeVarInt(serializer, properties.size());

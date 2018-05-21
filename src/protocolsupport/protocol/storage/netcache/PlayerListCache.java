@@ -2,7 +2,6 @@ package protocolsupport.protocol.storage.netcache;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,18 +9,10 @@ import java.util.UUID;
 
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.utils.ProfileProperty;
+import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.utils.Utils;
 
 public class PlayerListCache {
-
-	protected static final PlayerListEntry unknown = new PlayerListEntry("PS|UNKNOWN", null, Collections.emptyList()) {
-		@Override
-		public void addProperty(ProfileProperty property) {
-		};
-		@Override
-		public void setDisplayNameJson(String displayNameJson) {
-		};
-	};
 
 	protected final HashMap<UUID, PlayerListEntry> playerlist = new HashMap<>();
 
@@ -30,30 +21,58 @@ public class PlayerListCache {
 	}
 
 	public PlayerListEntry getEntry(UUID uuid) {
-		return playerlist.getOrDefault(uuid, unknown);
+		return playerlist.get(uuid);
 	}
 
-	public void removeEntry(UUID uuid) {
-		playerlist.remove(uuid);
+	public PlayerListEntry removeEntry(UUID uuid) {
+		return playerlist.remove(uuid);
 	}
 
 	public static class PlayerListEntry {
 		protected final String name;
 		protected String displayNameJson;
+		protected int ping;
+		protected GameMode gamemode;
 		protected final Map<String, ProfileProperty> propSigned = new HashMap<>();
 		protected final Map<String, ProfileProperty> propUnsigned = new HashMap<>();
 
-		public PlayerListEntry(String name, String displayNameJson, Collection<ProfileProperty> properties) {
+		public PlayerListEntry(String name, int ping, GameMode gamemode, String displayNameJson, Collection<ProfileProperty> properties) {
 			this.name = name;
+			this.ping = ping;
+			this.gamemode = gamemode;
 			this.displayNameJson = displayNameJson;
 			properties.forEach(this::addProperty);
+		}
+
+		public String getUserName() {
+			return name;
+		}
+
+		public String getDisplayNameJson() {
+			return displayNameJson;
 		}
 
 		public void setDisplayNameJson(String displayNameJson) {
 			this.displayNameJson = displayNameJson;
 		}
 
-		public String getName(String locale) {
+		public int getPing() {
+			return ping;
+		}
+
+		public void setPing(int ping) {
+			this.ping = ping;
+		}
+
+		public GameMode getGameMode() {
+			return gamemode;
+		}
+
+		public void setGameMode(GameMode gamemode) {
+			this.gamemode = gamemode;
+		}
+
+		public String getCurrentName(String locale) {
 			return displayNameJson != null ? ChatAPI.fromJSON(displayNameJson).toLegacyText(locale) : name;
 		}
 
@@ -80,6 +99,12 @@ public class PlayerListCache {
 		public String toString() {
 			return Utils.toStringAllFields(this);
 		}
+
+		@Override
+		public PlayerListEntry clone() {
+			return new PlayerListEntry(name, ping, gamemode, displayNameJson, getProperties(false));
+		}
+
 	}
 
 	@Override

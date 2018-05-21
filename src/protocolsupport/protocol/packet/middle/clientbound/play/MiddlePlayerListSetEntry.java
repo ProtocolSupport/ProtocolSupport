@@ -1,10 +1,11 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.chat.ChatAPI;
+import protocolsupport.api.utils.Any;
 import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
@@ -20,104 +21,95 @@ import protocolsupport.utils.Utils;
 public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 
 	protected Action action;
-	protected Info[] infos;
+	protected final HashMap<UUID, Any<PlayerListEntry, PlayerListEntry>> infos = new HashMap<>();
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
+		infos.clear();
+		PlayerListCache plcache = cache.getPlayerListCache();
 		action = MiscSerializer.readVarIntEnum(serverdata, Action.CONSTANT_LOOKUP);
-		infos = new Info[VarNumberSerializer.readVarInt(serverdata)];
-		for (int i = 0; i < infos.length; i++) {
-			Info info = new Info();
-			info.uuid = MiscSerializer.readUUID(serverdata);
+		Utils.repeat(VarNumberSerializer.readVarInt(serverdata), () -> {
+			UUID uuid = MiscSerializer.readUUID(serverdata);
 			switch (action) {
 				case ADD: {
-					info.username = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC, 16);
-					info.properties = new ProfileProperty[VarNumberSerializer.readVarInt(serverdata)];
-					for (int j = 0; j < info.properties.length; j++) {
+					PlayerListEntry oldEntry = plcache.getEntry(uuid);
+					if (oldEntry != null) {
+						oldEntry = oldEntry.clone();
+					}
+					String username = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC, 16);
+					ArrayList<ProfileProperty> properties = new ArrayList<>();
+					Utils.repeat(VarNumberSerializer.readVarInt(serverdata), () -> {;
 						String name = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
 						String value = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
 						String signature = null;
 						if (serverdata.readBoolean()) {
 							signature = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
 						}
-						info.properties[j] = new ProfileProperty(name, value, signature);
-					}
-					info.gamemode = GameMode.getById(VarNumberSerializer.readVarInt(serverdata));
-					info.ping = VarNumberSerializer.readVarInt(serverdata);
+						properties.add(new ProfileProperty(name, value, signature));
+					});
+					GameMode gamemode = GameMode.getById(VarNumberSerializer.readVarInt(serverdata));
+					int ping = VarNumberSerializer.readVarInt(serverdata);
+					String displayNameJson = null;
 					if (serverdata.readBoolean()) {
-						info.displayNameJson = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
+						displayNameJson = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
 					}
+					PlayerListEntry currentEntry = new PlayerListEntry(username, ping, gamemode, displayNameJson, properties);
+					plcache.addEntry(uuid, currentEntry);
+					infos.put(uuid, new Any<>(oldEntry, currentEntry));
 					break;
 				}
 				case GAMEMODE: {
-					info.gamemode = GameMode.getById(VarNumberSerializer.readVarInt(serverdata));
+					GameMode gamemode = GameMode.getById(VarNumberSerializer.readVarInt(serverdata));
+					PlayerListEntry currentEntry = plcache.getEntry(uuid);
+					if (currentEntry != null) {
+						PlayerListEntry oldEntry = currentEntry.clone();
+						currentEntry.setGameMode(gamemode);
+						infos.put(uuid, new Any<>(oldEntry, currentEntry));
+					}
 					break;
 				}
 				case PING: {
-					info.ping = VarNumberSerializer.readVarInt(serverdata);
+					int ping = VarNumberSerializer.readVarInt(serverdata);
+					PlayerListEntry currentEntry = plcache.getEntry(uuid);
+					if (currentEntry != null) {
+						PlayerListEntry oldEntry = currentEntry.clone();
+						currentEntry.setPing(ping);
+						infos.put(uuid, new Any<>(oldEntry, currentEntry));
+					}
 					break;
 				}
 				case DISPLAY_NAME: {
+					String displayNameJson = null;
 					if (serverdata.readBoolean()) {
-						info.displayNameJson = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
+						displayNameJson = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
+					}
+					PlayerListEntry currentEntry = plcache.getEntry(uuid);
+					if (currentEntry != null) {
+						PlayerListEntry oldEntry = currentEntry.clone();
+						currentEntry.setDisplayNameJson(displayNameJson);
+						infos.put(uuid, new Any<>(oldEntry, currentEntry));
 					}
 					break;
 				}
 				case REMOVE: {
+					PlayerListEntry oldEntry = plcache.removeEntry(uuid);
+					if (oldEntry != null) {
+						infos.put(uuid, new Any<>(oldEntry, null));
+					}
 					break;
 				}
 			}
-			infos[i] = info;
-		}
+		});
 	}
 
 	@Override
 	public boolean postFromServerRead() {
-		PlayerListCache plcache = cache.getPlayerListCache();
-		switch (action) {
-			case ADD: {
-				Arrays.stream(infos)
-				.forEach(info -> plcache.addEntry(info.uuid, new PlayerListEntry(info.username, info.displayNameJson, Arrays.asList(info.properties))));
-				break;
-			}
-			case DISPLAY_NAME: {
-				Arrays.stream(infos)
-				.forEach(info -> plcache.getEntry(info.uuid).setDisplayNameJson(info.displayNameJson));
-				break;
-			}
-			case REMOVE: {
-				Arrays.stream(infos)
-				.forEach(info -> plcache.removeEntry(info.uuid));
-				break;
-			}
-			default: {
-				break;
-			}
-		}
-		return true;
+		return !infos.isEmpty();
 	}
 
 	protected static enum Action {
 		ADD, GAMEMODE, PING, DISPLAY_NAME, REMOVE;
 		public static final EnumConstantLookups.EnumConstantLookup<Action> CONSTANT_LOOKUP = new EnumConstantLookups.EnumConstantLookup<>(Action.class);
-	}
-
-	protected static class Info {
-		public UUID uuid;
-		public String username;
-		public int ping;
-		public GameMode gamemode;
-		public String displayNameJson;
-		public ProfileProperty[] properties;
-
-		public String getName(String locale) {
-			return displayNameJson == null ? username : ChatAPI.fromJSON(displayNameJson).toLegacyText(locale);
-		}
-
-		@Override
-		public String toString() {
-			return Utils.toStringAllFields(this);
-		}
 	}
 
 }
