@@ -175,14 +175,22 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 					entity.getId(),
 					(byte) MathHelper.d((entity.yaw * 256.0f) / 360.0f),
 					(byte) MathHelper.d((entity.pitch * 256.0f) / 360.0f),
-					entity.onGround)
-				);
+					entity.onGround
+				));
 			} else {
 				if ((a > 0) || (entity instanceof EntityArrow)) {
 					if (entity instanceof EntityPlayer) {
 						scanPlayers(new ArrayList<>(trackedPlayers));
 					}
 					broadcast(new PacketPlayOutEntityTeleport(this.entity));
+					if (entity instanceof EntityPlayer) {
+						broadcast(new PacketPlayOutEntity.PacketPlayOutEntityLook(
+							entity.getId(),
+							(byte) MathHelper.d((entity.yaw * 256.0f) / 360.0f),
+							(byte) MathHelper.d((entity.pitch * 256.0f) / 360.0f),
+							entity.onGround
+						));
+					}
 				}
 				boolean lUpdateVelocity = updateVelocity;
 				if ((entity instanceof EntityLiving) && ((EntityLiving) entity).cP()) {
