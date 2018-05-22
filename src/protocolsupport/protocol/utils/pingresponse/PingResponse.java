@@ -16,11 +16,11 @@ import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.modifiers.ClickAction;
 import protocolsupport.api.chat.modifiers.HoverAction;
 import protocolsupport.api.chat.modifiers.Modifier;
+import protocolsupport.protocol.utils.chat.ClickActionSerializer;
+import protocolsupport.protocol.utils.chat.ComponentSerializer;
+import protocolsupport.protocol.utils.chat.HoverActionSerializer;
+import protocolsupport.protocol.utils.chat.ModifierSerializer;
 import protocolsupport.utils.JsonUtils;
-import protocolsupport.utils.chat.ClickActionSerializer;
-import protocolsupport.utils.chat.ComponentSerializer;
-import protocolsupport.utils.chat.HoverActionSerializer;
-import protocolsupport.utils.chat.ModifierSerializer;
 
 public class PingResponse {
 

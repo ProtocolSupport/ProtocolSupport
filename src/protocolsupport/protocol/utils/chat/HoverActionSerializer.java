@@ -1,4 +1,4 @@
-package protocolsupport.utils.chat;
+package protocolsupport.protocol.utils.chat;
 
 import java.lang.reflect.Type;
 
