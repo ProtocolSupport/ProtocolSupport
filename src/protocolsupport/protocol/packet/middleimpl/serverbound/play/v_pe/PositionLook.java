@@ -36,8 +36,8 @@ public class PositionLook extends ServerBoundMiddlePacket {
 		onGround = clientdata.readBoolean();
 		VarNumberSerializer.readVarLong(clientdata);
 		if (mode == 2) {
-			VarNumberSerializer.readSVarInt(clientdata);
-			VarNumberSerializer.readSVarInt(clientdata);
+			clientdata.readIntLE();
+			clientdata.readIntLE();
 		}
 	}
 
