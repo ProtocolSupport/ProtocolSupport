@@ -30,4 +30,10 @@ public abstract class MiddleSpawnPainting extends ClientBoundMiddlePacket {
 		direction = serverdata.readUnsignedByte();
 	}
 
+	@Override
+	public boolean postFromServerRead() {
+		cache.getWatchedEntityCache().addWatchedEntity(entity);
+		return true;
+	}
+
 }

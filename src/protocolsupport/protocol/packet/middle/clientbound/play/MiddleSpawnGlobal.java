@@ -22,4 +22,10 @@ public abstract class MiddleSpawnGlobal extends ClientBoundMiddlePacket {
 		z = serverdata.readDouble();
 	}
 
+	@Override
+	public boolean postFromServerRead() {
+		cache.getWatchedEntityCache().addWatchedEntity(entity);
+		return true;
+	}
+
 }
