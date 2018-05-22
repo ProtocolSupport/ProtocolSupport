@@ -60,6 +60,10 @@ public class SpawnObject extends MiddleSpawnObject {
 				objectdata--;
 				break;
 			}
+			case MINECART: {
+				y += 16;
+				break;
+			}
 			default: {
 				break;
 			}
