@@ -29,7 +29,11 @@ public enum NetworkEntityType {
 	BATTLE_HORSE(EType.NONE, -1, BASE_HORSE),
 	CARGO_HORSE(EType.NONE, -1, BASE_HORSE),
 	BASE_SKELETON(EType.NONE, -1, INSENTIENT),
+	// Specials (Spawned by separate packets)
 	EXP_ORB(EType.NONE, -1),
+	PAINTING(EType.NONE, -1),
+	// Globals (Has a network type id, but no game values)
+	THUNDERBOLT(EType.GLOBAL, 1),
 	// Mobs (Network and game values are the same)
 	COMMON_HORSE(EType.MOB, EntityType.HORSE, BATTLE_HORSE),
 	ZOMBIE_HORSE(EType.MOB, EntityType.ZOMBIE_HORSE, BATTLE_HORSE),
@@ -143,11 +147,12 @@ public enum NetworkEntityType {
 	}
 
 	public enum EType {
-		NONE, OBJECT, MOB
+		NONE, OBJECT, MOB, GLOBAL
 	}
 
 	private static final ArrayMap<NetworkEntityType> OBJECT_BY_N_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.OBJECT), (w -> w.typeId));
 	private static final ArrayMap<NetworkEntityType> MOB_BY_N_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.MOB), (w -> w.typeId));
+	private static final ArrayMap<NetworkEntityType> GLOBAL_BY_N_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.GLOBAL), (w -> w.typeId));
 	private static final ArrayMap<NetworkEntityType> BY_R_INT_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()), (w -> w.bukkitType.getTypeId()));
 	private static final HashMap<String, NetworkEntityType> BY_R_STRING_ID = new HashMap<>();
 	static {
@@ -160,7 +165,7 @@ public enum NetworkEntityType {
 	public static NetworkEntityType getObjectByNetworkTypeId(int objectTypeId) {
 		NetworkEntityType type = OBJECT_BY_N_ID.get(objectTypeId);
 		if (type == null) {
-			throw new IllegalArgumentException(MessageFormat.format("Unknown object network type id {0}", objectTypeId));
+			throw new IllegalArgumentException(MessageFormat.format("Unknown object entity network type id {0}", objectTypeId));
 		}
 		return type;
 	}
@@ -176,7 +181,15 @@ public enum NetworkEntityType {
 	public static NetworkEntityType getMobByNetworkTypeId(int mobTypeId) {
 		NetworkEntityType type = MOB_BY_N_ID.get(mobTypeId);
 		if (type == null) {
-			throw new IllegalArgumentException(MessageFormat.format("Unknown mob network type id {0}", mobTypeId));
+			throw new IllegalArgumentException(MessageFormat.format("Unknown mob entity network type id {0}", mobTypeId));
+		}
+		return type;
+	}
+
+	public static NetworkEntityType getGlobalByNetworkTypeId(int globalTypeId) {
+		NetworkEntityType type = GLOBAL_BY_N_ID.get(globalTypeId);
+		if (type == null) {
+			throw new IllegalArgumentException(MessageFormat.format("Unknown global entity network type id {0}", globalTypeId));
 		}
 		return type;
 	}
