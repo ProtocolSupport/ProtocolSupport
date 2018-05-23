@@ -1,6 +1,5 @@
 package protocolsupport.zplatform.impl.spigot.entitytracker;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -17,7 +16,6 @@ import net.minecraft.server.v1_12_R1.AttributeInstance;
 import net.minecraft.server.v1_12_R1.AttributeMapServer;
 import net.minecraft.server.v1_12_R1.Block;
 import net.minecraft.server.v1_12_R1.BlockPosition;
-import net.minecraft.server.v1_12_R1.DataWatcher;
 import net.minecraft.server.v1_12_R1.Entity;
 import net.minecraft.server.v1_12_R1.EntityAreaEffectCloud;
 import net.minecraft.server.v1_12_R1.EntityArmorStand;
@@ -93,6 +91,7 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 	}
 
 	protected final Entity entity;
+	protected final Set<AttributeInstance> attributes;
 	protected final int trackRange;
 	protected final int updateInterval;
 	protected final boolean updateVelocity;
@@ -103,15 +102,25 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 	protected double lastScanLocY;
 	protected double lastScanLocZ;
 
-	protected int lastHeadYaw;
-	protected double lastSentMotX;
-	protected double lastSentMotY;
-	protected double lastSentMotZ;
+	protected double lastLocX;
+	protected double lastLocY;
+	protected double lastLocZ;
+	protected float lastYaw;
+	protected float lastPitch;
+	protected float lastHeadYaw;
+	protected double lastMotX;
+	protected double lastMotY;
+	protected double lastMotZ;
 	protected List<Entity> lastPassengers = Collections.emptyList();
 
 	public SpigotEntityTrackerEntry(Entity entity, int trackRange, int viewDistance, int updateInterval, boolean updateVelocity) {
 		super(entity, trackRange, viewDistance, updateInterval, updateVelocity);
 		this.entity = entity;
+		if (entity instanceof EntityLiving) {
+			this.attributes = ((AttributeMapServer) ((EntityLiving) entity).getAttributeMap()).getAttributes();
+		} else {
+			this.attributes = Collections.emptySet();
+		}
 		this.trackRange = trackRange;
 		this.viewDistance = viewDistance;
 		this.updateInterval = updateInterval;
@@ -119,7 +128,6 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 		this.lastScanLocX = entity.locX;
 		this.lastScanLocY = entity.locY;
 		this.lastScanLocZ = entity.locZ;
-		this.lastHeadYaw = MathHelper.d((entity.getHeadRotation() * 256.0f) / 360.0f);
 	}
 
 	@Override
@@ -138,6 +146,24 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 		return entity.getId();
 	}
 
+	protected void updateRotationIfChanged() {
+		float eYaw = entity.yaw;
+		float ePitch = entity.pitch;
+		if (
+			Math.abs(eYaw - lastYaw) >= 1 ||
+			Math.abs(eYaw - lastPitch) >= 1
+		) {
+			lastYaw = eYaw;
+			lastPitch = ePitch;
+			broadcast(new PacketPlayOutEntity.PacketPlayOutEntityLook(
+				entity.getId(),
+				(byte) MathHelper.d((eYaw * 256.0f) / 360.0f),
+				(byte) MathHelper.d((ePitch * 256.0f) / 360.0f),
+				entity.onGround
+			));
+		}
+	}
+
 	@Override
 	public void track(List<EntityHuman> worldPlayers) {
 		b = false;
@@ -153,69 +179,66 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 			lastPassengers = passengers;
 			broadcastIncludingSelf(new PacketPlayOutMount(entity));
 		}
-		if (entity instanceof EntityItemFrame) {
-			EntityItemFrame frame = (EntityItemFrame) this.entity;
+		if (((a % 10) == 0) && entity instanceof EntityItemFrame) {
+			EntityItemFrame frame = (EntityItemFrame) entity;
 			ItemStack itemstack = frame.getItem();
-			if (((a % 10) == 0) && (itemstack.getItem() instanceof ItemWorldMap)) {
+			if (itemstack.getItem() instanceof ItemWorldMap) {
 				WorldMap worldmap = Items.FILLED_MAP.getSavedMap(itemstack, entity.world);
 				for (EntityHuman entityhuman : trackedPlayers) {
 					EntityPlayer entityplayer = (EntityPlayer) entityhuman;
 					worldmap.a(entityplayer, itemstack);
-					Packet<?> packet = Items.FILLED_MAP.a(itemstack, this.entity.world, entityplayer);
+					Packet<?> packet = Items.FILLED_MAP.a(itemstack, entity.world, entityplayer);
 					if (packet != null) {
 						entityplayer.playerConnection.sendPacket(packet);
 					}
 				}
 			}
-			updateMetadataAndAttributes();
 		}
-		if (((a % updateInterval) == 0) || entity.impulse || entity.getDataWatcher().a()) {
+		if (((a > 0) && (a % updateInterval) == 0) || entity.impulse) {
+			entity.impulse = false;
 			if (entity.isPassenger()) {
-				broadcast(new PacketPlayOutEntity.PacketPlayOutEntityLook(
-					entity.getId(),
-					(byte) MathHelper.d((entity.yaw * 256.0f) / 360.0f),
-					(byte) MathHelper.d((entity.pitch * 256.0f) / 360.0f),
-					entity.onGround
-				));
+				updateRotationIfChanged();
 			} else {
-				if ((a > 0) || (entity instanceof EntityArrow)) {
-					if (entity instanceof EntityPlayer) {
-						scanPlayers(new ArrayList<>(trackedPlayers));
-					}
-					broadcast(new PacketPlayOutEntityTeleport(this.entity));
-					if (entity instanceof EntityPlayer) {
-						broadcast(new PacketPlayOutEntity.PacketPlayOutEntityLook(
-							entity.getId(),
-							(byte) MathHelper.d((entity.yaw * 256.0f) / 360.0f),
-							(byte) MathHelper.d((entity.pitch * 256.0f) / 360.0f),
-							entity.onGround
-						));
-					}
+				if (
+					Math.abs(entity.locX - lastLocX) >= 0.03125D ||
+					Math.abs(entity.locX - lastLocX) >= 0.015625D ||
+					Math.abs(entity.locX - lastLocX) >= 0.03125D
+				) {
+					lastLocX = entity.locX;
+					lastLocY = entity.locY;
+					lastLocZ = entity.locZ;
+					broadcast(new PacketPlayOutEntityTeleport(entity));
+				} else {
+					updateRotationIfChanged();
 				}
-				boolean lUpdateVelocity = updateVelocity;
-				if ((entity instanceof EntityLiving) && ((EntityLiving) entity).cP()) {
-					lUpdateVelocity = true;
-				}
-				if ((a > 0) && lUpdateVelocity) {
-					double diffMotX = entity.motX - lastSentMotX;
-					double diffMotY = entity.motY - lastSentMotY;
-					double diffMotZ = entity.motZ - lastSentMotZ;
+				if (updateVelocity) {
+					double diffMotX = entity.motX - lastMotX;
+					double diffMotY = entity.motY - lastMotY;
+					double diffMotZ = entity.motZ - lastMotZ;
 					double diffMot = (diffMotX * diffMotX) + (diffMotY * diffMotY) + (diffMotZ * diffMotZ);
 					if ((diffMot > 4.0E-4) || ((diffMot > 0.0) && (entity.motX == 0.0) && (entity.motY == 0.0) && (entity.motZ == 0.0))) {
-						lastSentMotX = entity.motX;
-						lastSentMotY = entity.motY;
-						lastSentMotZ = entity.motZ;
-						broadcast(new PacketPlayOutEntityVelocity(entity.getId(), lastSentMotX, lastSentMotY, lastSentMotZ));
+						lastMotX = entity.motX;
+						lastMotY = entity.motY;
+						lastMotZ = entity.motZ;
+						broadcast(new PacketPlayOutEntityVelocity(entity.getId(), lastMotX, lastMotY, lastMotZ));
 					}
 				}
 			}
-			updateMetadataAndAttributes();
-			int currentHeadYaw = MathHelper.d((this.entity.getHeadRotation() * 256.0f) / 360.0f);
-			if (Math.abs(currentHeadYaw - lastHeadYaw) >= 1) {
-				lastHeadYaw = currentHeadYaw;
-				broadcast(new PacketPlayOutEntityHeadRotation(entity, (byte) currentHeadYaw));
+			float eHeadYaw = entity.getHeadRotation();
+			if (Math.abs(eHeadYaw - lastHeadYaw) >= 1) {
+				lastHeadYaw = eHeadYaw;
+				broadcast(new PacketPlayOutEntityHeadRotation(entity, (byte) MathHelper.d((eHeadYaw * 256.0f) / 360.0f)));
 			}
-			entity.impulse = false;
+		}
+		if (entity.getDataWatcher().a()) {
+			broadcastIncludingSelf(new PacketPlayOutEntityMetadata(entity.getId(), entity.getDataWatcher(), false));
+		}
+		if (!attributes.isEmpty()) {
+			if (entity instanceof EntityPlayer) {
+				((EntityPlayer) this.entity).getBukkitEntity().injectScaledMaxHealth(attributes, false);
+			}
+			broadcastIncludingSelf(new PacketPlayOutUpdateAttributes(entity.getId(), attributes));
+			attributes.clear();
 		}
 		++this.a;
 		if (entity.velocityChanged) {
@@ -238,27 +261,10 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 		}
 	}
 
-	protected void updateMetadataAndAttributes() {
-		DataWatcher datawatcher = this.entity.getDataWatcher();
-		if (datawatcher.a()) {
-			broadcastIncludingSelf(new PacketPlayOutEntityMetadata(entity.getId(), datawatcher, false));
-		}
-		if (entity instanceof EntityLiving) {
-			Set<AttributeInstance> updateAttrs = ((AttributeMapServer) ((EntityLiving) entity).getAttributeMap()).getAttributes();
-			if (!updateAttrs.isEmpty()) {
-				if (this.entity instanceof EntityPlayer) {
-					((EntityPlayer) this.entity).getBukkitEntity().injectScaledMaxHealth(updateAttrs, false);
-				}
-				this.broadcastIncludingSelf(new PacketPlayOutUpdateAttributes(this.entity.getId(), updateAttrs));
-			}
-			updateAttrs.clear();
-		}
-	}
-
 	@Override
 	public void updatePlayer(EntityPlayer entityplayer) {
 		AsyncCatcher.catchOp("player tracker update");
-		if (entityplayer != this.entity) {
+		if (entityplayer != entity) {
 			if (c(entityplayer)) {
 				if (!trackedPlayers.contains(entityplayer) && (canPlayerSeeTrackerChunk(entityplayer) || entity.attachedToPlayer)) {
 					if (entity instanceof EntityPlayer) {
@@ -270,49 +276,46 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 					entityplayer.d(entity);
 					addTrackedPlayer(entityplayer);
 					Packet<?> spawnPacket = createSpawnPacket();
+					lastLocX = entity.locX;
+					lastLocY = entity.locY;
+					lastLocZ = entity.locZ;
+					lastYaw = entity.yaw;
+					lastPitch = entity.pitch;
 					entityplayer.playerConnection.sendPacket(spawnPacket);
+					lastHeadYaw = entity.getHeadRotation();
+					broadcast(new PacketPlayOutEntityHeadRotation(entity, (byte) MathHelper.d((lastHeadYaw * 256.0f) / 360.0f)));
 					if (!entity.getDataWatcher().d()) {
 						entityplayer.playerConnection.sendPacket(new PacketPlayOutEntityMetadata(entity.getId(), entity.getDataWatcher(), true));
 					}
-					boolean lUpdateVelocity = updateVelocity;
 					if (entity instanceof EntityLiving) {
-						Collection<AttributeInstance> updateAttrs = ((AttributeMapServer) ((EntityLiving) entity).getAttributeMap()).c();
+						EntityLiving entityliving = (EntityLiving) entity;
+						Collection<AttributeInstance> updateAttrs = ((AttributeMapServer) entityliving.getAttributeMap()).c();
 						if (entity.getId() == entityplayer.getId()) {
 							((EntityPlayer) entity).getBukkitEntity().injectScaledMaxHealth(updateAttrs, false);
 						}
 						if (!updateAttrs.isEmpty()) {
 							entityplayer.playerConnection.sendPacket(new PacketPlayOutUpdateAttributes(entity.getId(), updateAttrs));
 						}
-						if (((EntityLiving) entity).cP()) {
-							lUpdateVelocity = true;
-						}
-					}
-					lastSentMotX = entity.motX;
-					lastSentMotY = entity.motY;
-					lastSentMotZ = entity.motZ;
-					if (lUpdateVelocity && !(spawnPacket instanceof PacketPlayOutSpawnEntityLiving)) {
-						entityplayer.playerConnection.sendPacket(new PacketPlayOutEntityVelocity(entity.getId(), entity.motX, entity.motY, entity.motZ));
-					}
-					if (entity instanceof EntityLiving) {
 						for (EnumItemSlot enumitemslot : EnumItemSlot.values()) {
-							ItemStack itemstack = ((EntityLiving) entity).getEquipment(enumitemslot);
+							ItemStack itemstack = entityliving.getEquipment(enumitemslot);
 							if (!itemstack.isEmpty()) {
 								entityplayer.playerConnection.sendPacket(new PacketPlayOutEntityEquipment(entity.getId(), enumitemslot, itemstack));
 							}
 						}
+						for (MobEffect mobeffect : entityliving.getEffects()) {
+							entityplayer.playerConnection.sendPacket(new PacketPlayOutEntityEffect(entity.getId(), mobeffect));
+						}
+					}
+					if (updateVelocity && !(spawnPacket instanceof PacketPlayOutSpawnEntityLiving)) {
+						lastMotX = entity.motX;
+						lastMotY = entity.motY;
+						lastMotZ = entity.motZ;
+						entityplayer.playerConnection.sendPacket(new PacketPlayOutEntityVelocity(entity.getId(), entity.motX, entity.motY, entity.motZ));
 					}
 					if (entity instanceof EntityHuman) {
 						EntityHuman entityhuman = (EntityHuman) entity;
 						if (entityhuman.isSleeping()) {
 							entityplayer.playerConnection.sendPacket(new PacketPlayOutBed(entityhuman, new BlockPosition(entity)));
-						}
-					}
-					lastHeadYaw = MathHelper.d((entity.getHeadRotation() * 256.0f) / 360.0f);
-					broadcast(new PacketPlayOutEntityHeadRotation(entity, (byte) lastHeadYaw));
-					if (entity instanceof EntityLiving) {
-						EntityLiving entityliving = (EntityLiving) entity;
-						for (MobEffect mobeffect : entityliving.getEffects()) {
-							entityplayer.playerConnection.sendPacket(new PacketPlayOutEntityEffect(entity.getId(), mobeffect));
 						}
 					}
 					if (!entity.bF().isEmpty()) {
