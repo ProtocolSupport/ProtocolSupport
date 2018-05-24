@@ -1,8 +1,14 @@
 package protocolsupport.protocol.typeremapper.pe;
 
+import java.io.BufferedReader;
 import java.util.EnumMap;
+import java.util.Map;
 
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.util.Vector;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -12,11 +18,19 @@ import protocolsupport.protocol.typeremapper.utils.RemappingTable;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.HashMapBasedIdRemappingTable;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
-import protocolsupport.protocol.utils.minecraftdata.PocketData;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
+import protocolsupport.utils.Utils;
 
 public class PEDataValues {
+
+	public static BufferedReader getResource(String name) {
+		return Utils.getResource("pe/" + name);
+	}
+
+	private static JsonObject getFileObject(String name) {
+		return new JsonParser().parse(getResource(name)).getAsJsonObject();
+	}
 
 	private static final EnumMap<NetworkEntityType, Integer> entityType = new EnumMap<>(NetworkEntityType.class);
 	private static final Int2ObjectOpenHashMap<NetworkEntityType> livingTypeFromNetwork = new Int2ObjectOpenHashMap<>();
@@ -121,8 +135,8 @@ public class PEDataValues {
 
 	public static final ArrayBasedIdRemappingTable BLOCK_ID = new ArrayBasedIdRemappingTable(MinecraftData.BLOCK_ID_MAX * MinecraftData.BLOCK_DATA_MAX);
 	static {
-		PocketData.readBlockRemaps((from, to) -> {
-			BLOCK_ID.setRemap(from, to);
+		getFileObject("blockremaps.json").get("Remaps").getAsJsonArray().forEach(entry -> {
+			BLOCK_ID.setRemap(entry.getAsJsonObject().get("from").getAsInt(), entry.getAsJsonObject().get("to").getAsInt());
 		});
 	}
 
@@ -374,5 +388,93 @@ public class PEDataValues {
 			registerRemapEntry(type.toLegacyId(), to, version);
 		}
 	};
+
+
+	private final static Map<NetworkEntityType, PEEntityData> entityData = new EnumMap<NetworkEntityType, PEEntityData>(NetworkEntityType.class);
+	static {
+		getFileObject("entitydata.json").entrySet().forEach(entry -> {
+			entityData.put(NetworkEntityType.valueOf(entry.getKey()), Utils.GSON.fromJson(entry.getValue(), PEEntityData.class));
+		});
+	}
+
+	public static PEEntityData getEntityData(NetworkEntityType type) {
+		return entityData.get(type);
+	}
+
+	public static class PEEntityData {
+		private BoundingBox boundingBox;
+		private Offset offset;
+		private RiderInfo riderInfo;
+
+		public BoundingBox getBoundingBox() {
+			return boundingBox;
+		}
+
+		public Offset getOffset() {
+			return offset;
+		}
+
+		public RiderInfo getRiderInfo() {
+			return riderInfo;
+		}
+
+		public static class BoundingBox {
+			private float width;
+			private float height;
+
+			public float getWidth() {
+				return width;
+			}
+
+			public float getHeight() {
+				return height;
+			}
+		}
+
+		public static class Offset {
+			private float x;
+			private float y;
+			private float z;
+			private byte yaw;
+			private byte pitch;
+
+			public float getX() {
+				return x;
+			}
+
+			public float getY() {
+				return y;
+			}
+
+			public float getZ() {
+				return z;
+			}
+
+			public byte getYaw() {
+				return yaw;
+			}
+
+			public byte getPitch() {
+				return pitch;
+			}
+		}
+
+		public static class RiderInfo {
+			private double x;
+			private double y;
+			private double z;
+			private final Float rotationlock = null; //Optional
+
+			public Vector getPosition() {
+				return new Vector(x, y + 1.2, z);
+			}
+
+			public Float getRotationLock() {
+				return rotationlock;
+			}
+
+		}
+
+	}
 
 }

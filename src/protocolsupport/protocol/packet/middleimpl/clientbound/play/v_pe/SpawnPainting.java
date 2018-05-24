@@ -13,8 +13,8 @@ public class SpawnPainting extends MiddleSpawnPainting {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SPAWN_PAINTING);
-		VarNumberSerializer.writeSVarLong(serializer, entityId);
-		VarNumberSerializer.writeVarLong(serializer, entityId);
+		VarNumberSerializer.writeSVarLong(serializer, entity.getId());
+		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		// In MCPE the paintings are always +1 blocks ahead where it should be, so we need to edit the coordinates a bit
 		int mcpeX = position.getX();
 		int mcpeZ = position.getZ();

@@ -11,6 +11,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
@@ -33,12 +34,20 @@ public class FeatureEmulation implements Listener {
 				ProtocolVersion version = ProtocolSupportAPI.getProtocolVersion(player);
 				return (version.getProtocolType() == ProtocolType.PC) && version.isBefore(ProtocolVersion.MINECRAFT_1_9);
 			})
-			.filter(player -> player.hasPotionEffect(PotionEffectType.LEVITATION))
-			.filter(player -> !player.isFlying())
+			.filter(player -> player.hasPotionEffect(PotionEffectType.LEVITATION) && !player.isFlying())
 			.forEach(player -> {
-				Vector vel = player.getVelocity();
-				vel.setY(vel.getY() + (((0.05D * (((byte) player.getPotionEffect(PotionEffectType.LEVITATION).getAmplifier()) + 1)) - vel.getY()) * 0.2D));
-				player.setVelocity(vel);
+				PotionEffect levitation = player.getPotionEffect(PotionEffectType.LEVITATION);
+				int amplifierByte = (byte) levitation.getAmplifier();
+				if (levitation.getAmplifier() != amplifierByte) {
+					player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, levitation.getDuration(), amplifierByte), true);
+					Vector vel = player.getVelocity();
+					double noLevitationVelY = (vel.getY() - ((levitation.getAmplifier() + 1) * 0.01)) / 0.8;
+					double byteAmplifierVelY = (noLevitationVelY * 0.8D) + ((amplifierByte + 1) * 0.01);
+					vel.setY(byteAmplifierVelY);
+					player.setVelocity(vel);
+				} else {
+					player.setVelocity(player.getVelocity());
+				}
 			});
 		}, 1, 1);
 	}

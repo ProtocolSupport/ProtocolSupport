@@ -3,8 +3,9 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Base64;
+import java.util.List;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -30,6 +31,7 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.AttributesCache;
+import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.typeremapper.pe.PESkinModel;
 import protocolsupport.utils.JsonUtils;
@@ -45,25 +47,26 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 		ProtocolVersion version = connection.getVersion();
 		switch (action) {
 			case ADD: {
+				PESkinsProvider skinprovider = PESkinsProviderSPI.getProvider();
 				ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_INFO);
 				serializer.writeByte(0);
-				PESkinsProvider skinprovider = PESkinsProviderSPI.getProvider();
-				VarNumberSerializer.writeVarInt(serializer, infos.length);
-				for (Info info : infos) {
-					//TODO: cache player uuid to avoid getPlayer() calls
-					MiscSerializer.writeUUID(serializer, connection.getVersion(), info.uuid.equals(connection.getPlayer().getUniqueId()) ? attrscache.getPEClientUUID() : info.uuid);
+				VarNumberSerializer.writeVarInt(serializer, infos.size());
+				for (Entry<UUID, Any<PlayerListEntry, PlayerListEntry>> entry : infos.entrySet()) {
+					UUID uuid = entry.getKey();
+					PlayerListEntry currentEntry = entry.getValue().getObj2();
+					MiscSerializer.writeUUID(serializer, version, uuid.equals(connection.getPlayer().getUniqueId()) ? attrscache.getPEClientUUID() : uuid);
 					VarNumberSerializer.writeVarInt(serializer, 0); //entity id
-					StringSerializer.writeString(serializer, version, info.getName(attrscache.getLocale()));
+					StringSerializer.writeString(serializer, version, currentEntry.getCurrentName(attrscache.getLocale()));
 					StringSerializer.writeString(serializer, version, ""); //Third party name
 					VarNumberSerializer.writeVarInt(serializer, 0); //PlatformId
-					Any<Boolean, String> skininfo = getSkinInfo(info);
+					Any<Boolean, String> skininfo = getSkinInfo(currentEntry.getProperties(true));
 					byte[] skindata = skininfo != null ? skinprovider.getSkinData(skininfo.getObj2()) : null;
 					if (skindata != null) {
 						writeSkinData(version, serializer, false, skininfo.getObj1(), skindata);
 					} else {
 						writeSkinData(version, serializer, false, false, DefaultPESkinsProvider.DEFAULT_STEVE);
 						if (skininfo != null) {
-							skinprovider.scheduleGetSkinData(skininfo.getObj2(), new SkinUpdate(connection, info.uuid, attrscache.getPEClientUUID(), skininfo.getObj1()));
+							skinprovider.scheduleGetSkinData(skininfo.getObj2(), new SkinUpdate(connection, uuid, attrscache.getPEClientUUID(), skininfo.getObj1()));
 						}
 					}
 					StringSerializer.writeString(serializer, version, ""); //xuid
@@ -74,9 +77,9 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 			case REMOVE: {
 				ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_INFO);
 				serializer.writeByte(1);
-				VarNumberSerializer.writeVarInt(serializer, infos.length);
-				for (Info info : infos) {
-					MiscSerializer.writeUUID(serializer, connection.getVersion(), info.uuid);
+				VarNumberSerializer.writeVarInt(serializer, infos.size());
+				for (Entry<UUID, Any<PlayerListEntry, PlayerListEntry>> entry : infos.entrySet()) {
+					MiscSerializer.writeUUID(serializer, version, entry.getKey());
 				}
 				return RecyclableSingletonList.create(serializer);
 			}
@@ -86,10 +89,11 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 		}
 	}
 
-	protected static Any<Boolean, String> getSkinInfo(Info info) {
-		Optional<ProfileProperty> property = Arrays.stream(info.properties)
-		.filter(p -> p.getName().equals("textures"))
-		.findAny();
+	protected static Any<Boolean, String> getSkinInfo(List<ProfileProperty> properties) {
+		Optional<ProfileProperty> property =
+			properties.stream()
+			.filter(p -> p.getName().equals("textures"))
+			.findAny();
 		if (property.isPresent()) {
 			JsonElement propertyjson = new JsonParser().parse(new InputStreamReader(new ByteArrayInputStream(Base64.getDecoder().decode(property.get().getValue())), StandardCharsets.UTF_8));
 			JsonObject texturesobject = JsonUtils.getJsonObject(JsonUtils.getAsJsonObject(propertyjson, "root element"), "textures");

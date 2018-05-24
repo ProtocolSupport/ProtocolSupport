@@ -4,7 +4,6 @@ import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityTeleport;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -13,10 +12,24 @@ public class EntityTeleport extends MiddleEntityTeleport {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		NetworkEntity watchedEntity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
-		if ((watchedEntity != null) && (watchedEntity.getType() == NetworkEntityType.MINECART)) {
-			y += 0.5;
+		if (watchedEntity != null) {
+			switch (watchedEntity.getType()) {
+				case MINECART:
+				case MINECART_CHEST:
+				case MINECART_FURNACE:
+				case MINECART_TNT:
+				case MINECART_MOB_SPAWNER:
+				case MINECART_HOPPER:
+				case MINECART_COMMAND:
+				case BOAT: {
+					y += 0.5;
+					break;
+				}
+				default: {
+					break;
+				}
+			}
 		}
-
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_TELEPORT_ID);
 		serializer.writeInt(entityId);
 		serializer.writeInt((int) (x * 32));

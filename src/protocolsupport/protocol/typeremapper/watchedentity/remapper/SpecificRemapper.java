@@ -13,6 +13,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.unsafe.pemetadata.PEMetaProviderSPI;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata.PeMetaBase;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
+import protocolsupport.protocol.typeremapper.pe.PEDataValues.PEEntityData;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapperBooleanToByte;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapperDirectionToByte;
@@ -45,8 +46,6 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarIn
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3fLe;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3vi;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
-import protocolsupport.protocol.utils.minecraftdata.PocketData;
-import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
@@ -65,7 +64,7 @@ public enum SpecificRemapper {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				NetworkEntityDataCache data = entity.getDataCache();
-				PocketEntityData pocketdata = PocketData.getPocketEntityData(entity.getType());
+				PEEntityData pocketdata = PEDataValues.getEntityData(entity.getType());
 				float entitySize = PEMetaProviderSPI.getProvider().getSizeScale(entity.getUUID(), entity.getId(), entity.getType().getBukkitType()) * data.getSizeModifier();
 				// = PE Lead =
 				//Leashing is set in Entity Leash.
@@ -479,7 +478,7 @@ public enum SpecificRemapper {
 				entity.getDataCache().setSizeModifier(6f);
 				float entitySize = 6f * PEMetaProviderSPI.getProvider().getSizeScale(entity.getUUID(), entity.getId(), entity.getType().getBukkitType());
 				remapped.put(PeMetaBase.SCALE, new DataWatcherObjectFloatLe(entitySize)); //Send scale -> Giants are Giant Zombies in PE.
-				PocketEntityData pocketdata = PocketData.getPocketEntityData(entity.getType());
+				PEEntityData pocketdata = PEDataValues.getEntityData(entity.getType());
 				if (pocketdata.getBoundingBox() != null) {
 					remapped.put(PeMetaBase.BOUNDINGBOX_WIDTH, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getWidth() * entitySize));
 					remapped.put(PeMetaBase.BOUNDINGBOX_HEIGTH, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getHeight() * entitySize));
@@ -508,7 +507,7 @@ public enum SpecificRemapper {
 					float sizescale = PEMetaProviderSPI.getProvider().getSizeScale(entity.getUUID(), entity.getId(), entity.getType().getBukkitType());
 					float entitySize = boolWatcher.getValue() ? 0.5f * sizescale : sizescale;
 					remapped.put(PeMetaBase.SCALE, new DataWatcherObjectFloatLe(entitySize)); //Send scale -> avoid big mobs with floating heads.
-					PocketEntityData pocketdata = PocketData.getPocketEntityData(entity.getType());
+					PEEntityData pocketdata = PEDataValues.getEntityData(entity.getType());
 					if (pocketdata.getBoundingBox() != null) {
 						remapped.put(PeMetaBase.BOUNDINGBOX_WIDTH, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getWidth() * entitySize));
 						remapped.put(PeMetaBase.BOUNDINGBOX_HEIGTH, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getHeight() * entitySize));
@@ -572,7 +571,7 @@ public enum SpecificRemapper {
 				});
 				float entitySize = PEMetaProviderSPI.getProvider().getSizeScale(entity.getUUID(), entity.getId(), entity.getType().getBukkitType()) * entity.getDataCache().getSizeModifier();
 				remapped.put(PeMetaBase.SCALE, new DataWatcherObjectFloatLe(entitySize)); //Send slime scale.
-				PocketEntityData pocketdata = PocketData.getPocketEntityData(entity.getType());
+				PEEntityData pocketdata = PEDataValues.getEntityData(entity.getType());
 				if (pocketdata.getBoundingBox() != null) {
 					remapped.put(PeMetaBase.BOUNDINGBOX_WIDTH, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getWidth() * entitySize));
 					remapped.put(PeMetaBase.BOUNDINGBOX_HEIGTH, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getHeight() * entitySize));

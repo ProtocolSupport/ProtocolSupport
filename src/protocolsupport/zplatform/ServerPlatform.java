@@ -1,6 +1,5 @@
 package protocolsupport.zplatform;
 
-import org.bukkit.Bukkit;
 import org.spigotmc.SpigotConfig;
 
 import net.glowstone.GlowServer;
@@ -10,7 +9,6 @@ import protocolsupport.zplatform.impl.glowstone.GlowStoneMiscUtils;
 import protocolsupport.zplatform.impl.glowstone.GlowStonePacketFactory;
 import protocolsupport.zplatform.impl.glowstone.GlowStoneWrapperFactory;
 import protocolsupport.zplatform.impl.glowstone.injector.GlowstonePlatformInjector;
-import protocolsupport.zplatform.impl.paper.injector.PaperPlatformInjector;
 import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
 import protocolsupport.zplatform.impl.spigot.SpigotPacketFactory;
 import protocolsupport.zplatform.impl.spigot.SpigotWrapperFactory;
@@ -27,11 +25,7 @@ public class ServerPlatform {
 		try {
 			NetworkManager.class.getDeclaredFields();
 			SpigotConfig.class.getDeclaredFields();
-			if (Bukkit.getVersion().toLowerCase().contains("paper")) {
-				current = new ServerPlatform(ServerPlatformIdentifier.SPIGOT, new PaperPlatformInjector(), new SpigotMiscUtils(), new SpigotPacketFactory(), new SpigotWrapperFactory());
-			} else {
-				current = new ServerPlatform(ServerPlatformIdentifier.SPIGOT, new SpigotPlatformInjector(), new SpigotMiscUtils(), new SpigotPacketFactory(), new SpigotWrapperFactory());
-			}
+			current = new ServerPlatform(ServerPlatformIdentifier.SPIGOT, new SpigotPlatformInjector(), new SpigotMiscUtils(), new SpigotPacketFactory(), new SpigotWrapperFactory());
 		} catch (Throwable t) {
 		}
 		try {
@@ -66,8 +60,8 @@ public class ServerPlatform {
 		return identifier;
 	}
 
-	public void inject() {
-		injector.inject();
+	public PlatformInjector getInjector() {
+		return injector;
 	}
 
 	public void onEnable() {

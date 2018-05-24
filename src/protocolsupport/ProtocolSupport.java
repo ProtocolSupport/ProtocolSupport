@@ -41,7 +41,6 @@ import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.minecraftdata.BlockData;
 import protocolsupport.protocol.utils.minecraftdata.ItemData;
 import protocolsupport.protocol.utils.minecraftdata.KeybindData;
-import protocolsupport.protocol.utils.minecraftdata.PocketData;
 import protocolsupport.protocol.utils.minecraftdata.PotionData;
 import protocolsupport.protocol.utils.minecraftdata.SoundData;
 import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
@@ -49,6 +48,8 @@ import protocolsupport.utils.Utils;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.zplatform.ServerPlatform;
+import protocolsupport.zplatform.impl.spigot.entitytracker.SpigotEntityTracker;
+import protocolsupport.zplatform.impl.spigot.entitytracker.SpigotEntityTrackerEntry;
 import protocolsupport.zplatform.impl.pe.PEProxyServer;
 import protocolsupport.zplatform.impl.pe.PEProxyServerInfoHandler;
 
@@ -106,7 +107,6 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(SoundData.class.getName());
 			Class.forName(KeybindData.class.getName());
 			Class.forName(I18NData.class.getName());
-			Class.forName(PocketData.class.getName());
 			Class.forName(Compressor.class.getName());
 			Class.forName(ServerBoundPacket.class.getName());
 			Class.forName(ClientBoundPacket.class.getName());
@@ -123,13 +123,16 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(LegacyPotion.class.getName());
 			Class.forName(LegacyEntityType.class.getName());
 			Class.forName(LegacyEffect.class.getName());
+			Class.forName(SpigotEntityTracker.class.getName());
+			Class.forName(SpigotEntityTrackerEntry.class.getName());
 			Class.forName(PEDataValues.class.getName());
 			Class.forName(PEProxyServerInfoHandler.class.getName());
 			Class.forName(PESkinsProviderSPI.class.getName());
 			Class.forName(PEMetaProviderSPI.class.getName());
+			Class.forName(PEDataValues.class.getName());
 			Class.forName(PESkinModel.class.getName());
 			Class.forName(PEPotion.class.getName());
-			ServerPlatform.get().inject();
+			ServerPlatform.get().getInjector().onLoad();
 		} catch (Throwable t) {
 			getLogger().log(Level.SEVERE, "Error when loading, make sure you are using supported server version", t);
 			Bukkit.shutdown();
@@ -138,22 +141,13 @@ public class ProtocolSupport extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		ServerPlatform.get().onEnable();
+		ServerPlatform.get().getInjector().onEnable();
 		getCommand("protocolsupport").setExecutor(new CommandHandler());
 		getServer().getPluginManager().registerEvents(new FeatureEmulation(), this);
 		getServer().getPluginManager().registerEvents(new ReloadCommandBlocker(), this);
 		getServer().getPluginManager().registerEvents(new MultiplePassengersRestrict(), this);
 		getServer().getMessenger().registerIncomingPluginChannel(this, InternalPluginMessageRequest.TAG, new InternalPluginMessageRequest());
 		getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
-			Thread pocketPacketCache = new Thread(() -> {
-				PocketData.readEntityDatas();
-			});
-			pocketPacketCache.setDaemon(true);
-			pocketPacketCache.start();
-			try {
-				pocketPacketCache.join();
-			} catch (InterruptedException e) {
-			}
 			(peserver = new PEProxyServer()).start();
 		});
 	}
@@ -161,7 +155,7 @@ public class ProtocolSupport extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		Bukkit.shutdown();
-		ServerPlatform.get().onDisable();
+		ServerPlatform.get().getInjector().onDisable();
 		if (peserver != null) {
 			peserver.stop();
 		}
