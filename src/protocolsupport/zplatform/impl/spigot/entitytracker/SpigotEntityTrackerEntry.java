@@ -201,8 +201,8 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 			} else {
 				if (
 					Math.abs(entity.locX - lastLocX) >= 0.03125D ||
-					Math.abs(entity.locX - lastLocX) >= 0.015625D ||
-					Math.abs(entity.locX - lastLocX) >= 0.03125D
+					Math.abs(entity.locY - lastLocY) >= 0.015625D ||
+					Math.abs(entity.locZ - lastLocZ) >= 0.03125D
 				) {
 					lastLocX = entity.locX;
 					lastLocY = entity.locY;
