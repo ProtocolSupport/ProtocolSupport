@@ -40,7 +40,17 @@ public class PlayerAction extends ServerBoundMiddlePacket {
 	protected static final int START_SNEAK = 11;
 	protected static final int STOP_SNEAK = 12;
 	protected static final int DIMENSION_CHANGE = 13;
+	protected static final int DIMENSION_CHANGE_ACK = 14;
 	protected static final int START_GLIDE = 15;
+	protected static final int STOP_GLIDE = 16;
+	protected static final int BUILD_DENIED = 17;
+	protected static final int CONTINUE_BREAK = 18;
+
+	protected static final int SET_ENCHANTMENT_SEED = 20;
+	protected static final int START_SWIMMING = 21;
+	protected static final int STOP_SWIMMING = 22;
+	protected static final int START_SPIN_ATTACK = 23;
+	protected static final int STOP_SPIN_ATTACK = 24;
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
