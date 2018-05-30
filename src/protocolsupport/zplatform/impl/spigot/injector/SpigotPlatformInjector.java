@@ -1,7 +1,6 @@
 package protocolsupport.zplatform.impl.spigot.injector;
 
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import protocolsupport.ProtocolSupport;
 import protocolsupport.zplatform.PlatformInjector;
@@ -10,7 +9,7 @@ import protocolsupport.zplatform.impl.spigot.injector.network.SpigotNettyInjecto
 public class SpigotPlatformInjector implements PlatformInjector {
 
 	@Override
-	public void inject() {
+	public void onLoad() {
 		try {
 			SpigotServerInjector.inject();
 			SpigotNettyInjector.inject();
@@ -21,7 +20,7 @@ public class SpigotPlatformInjector implements PlatformInjector {
 
 	@Override
 	public void onEnable() {
-		Bukkit.getPluginManager().registerEvents(new SpigotEntityTrackerInjector(), JavaPlugin.getPlugin(ProtocolSupport.class));
+		Bukkit.getPluginManager().registerEvents(new SpigotEntityTrackerInjector(), ProtocolSupport.getInstance());
 	}
 
 	@Override

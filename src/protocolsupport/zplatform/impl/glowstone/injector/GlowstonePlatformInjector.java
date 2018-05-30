@@ -6,7 +6,7 @@ import protocolsupport.zplatform.impl.glowstone.injector.packets.GlowStonePacket
 public class GlowstonePlatformInjector implements PlatformInjector {
 
 	@Override
-	public void inject() {
+	public void onLoad() {
 		try {
 			GlowStonePacketsInjector.inject();
 			GlowStoneNettyInjector.inject();

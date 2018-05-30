@@ -1,6 +1,11 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2;
 
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.UUID;
+
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.utils.Any;
 import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddlePlayerListSetEntry;
@@ -8,6 +13,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -18,14 +24,16 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_PLAYER_INFO_ID);
 		VarNumberSerializer.writeVarInt(serializer, action.ordinal());
-		VarNumberSerializer.writeVarInt(serializer, infos.length);
-		for (Info info : infos) {
-			MiscSerializer.writeUUID(serializer, version, info.uuid);
+		VarNumberSerializer.writeVarInt(serializer, infos.size());
+		for (Entry<UUID, Any<PlayerListEntry, PlayerListEntry>> entry : infos.entrySet()) {
+			MiscSerializer.writeUUID(serializer, version, entry.getKey());
+			PlayerListEntry currentEntry = entry.getValue().getObj2();
 			switch (action) {
 				case ADD: {
-					StringSerializer.writeString(serializer, version, info.username);
-					VarNumberSerializer.writeVarInt(serializer, info.properties.length);
-					for (ProfileProperty property : info.properties) {
+					StringSerializer.writeString(serializer, version, currentEntry.getUserName());
+					List<ProfileProperty> properties = currentEntry.getProperties(false);
+					VarNumberSerializer.writeVarInt(serializer, properties.size());
+					for (ProfileProperty property : properties) {
 						StringSerializer.writeString(serializer, version, property.getName());
 						StringSerializer.writeString(serializer, version, property.getValue());
 						serializer.writeBoolean(property.hasSignature());
@@ -33,26 +41,28 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 							StringSerializer.writeString(serializer, version, property.getSignature());
 						}
 					}
-					VarNumberSerializer.writeVarInt(serializer, info.gamemode.getId());
-					VarNumberSerializer.writeVarInt(serializer, info.ping);
-					serializer.writeBoolean(info.displayNameJson != null);
-					if (info.displayNameJson != null) {
-						StringSerializer.writeString(serializer, version, info.displayNameJson);
+					VarNumberSerializer.writeVarInt(serializer, currentEntry.getGameMode().getId());
+					VarNumberSerializer.writeVarInt(serializer, currentEntry.getPing());
+					String displayNameJson = currentEntry.getDisplayNameJson();
+					serializer.writeBoolean(displayNameJson != null);
+					if (displayNameJson != null) {
+						StringSerializer.writeString(serializer, version, displayNameJson);
 					}
 					break;
 				}
 				case GAMEMODE: {
-					VarNumberSerializer.writeVarInt(serializer, info.gamemode.getId());
+					VarNumberSerializer.writeVarInt(serializer, currentEntry.getGameMode().getId());
 					break;
 				}
 				case PING: {
-					VarNumberSerializer.writeVarInt(serializer, info.ping);
+					VarNumberSerializer.writeVarInt(serializer, currentEntry.getPing());
 					break;
 				}
 				case DISPLAY_NAME: {
-					serializer.writeBoolean(info.displayNameJson != null);
-					if (info.displayNameJson != null) {
-						StringSerializer.writeString(serializer, version, info.displayNameJson);
+					String displayNameJson = currentEntry.getDisplayNameJson();
+					serializer.writeBoolean(displayNameJson != null);
+					if (displayNameJson != null) {
+						StringSerializer.writeString(serializer, version, displayNameJson);
 					}
 					break;
 				}

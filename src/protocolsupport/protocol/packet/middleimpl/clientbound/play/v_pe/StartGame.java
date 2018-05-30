@@ -68,7 +68,10 @@ public class StartGame extends MiddleStartGame {
 		startgame.writeBoolean(false); //broadcast to xbl
 		startgame.writeBoolean(true); //commands enabled
 		startgame.writeBoolean(false); //needs texture pack
-		VarNumberSerializer.writeVarInt(startgame, 0); //game rules
+		VarNumberSerializer.writeVarInt(startgame, 1); //game rules
+		StringSerializer.writeString(startgame, version, "dodaylightcycle");
+		VarNumberSerializer.writeVarInt(startgame, 1); //bool gamerule
+		startgame.writeBoolean(false);
 		startgame.writeBoolean(false); //player map enabled
 		startgame.writeBoolean(false); //trust players
 		VarNumberSerializer.writeSVarInt(startgame, PEAdventureSettings.GROUP_NORMAL); //permission level

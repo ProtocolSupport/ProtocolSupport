@@ -7,12 +7,11 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntitySe
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
+import protocolsupport.protocol.typeremapper.pe.PEDataValues.PEEntityData;
+import protocolsupport.protocol.typeremapper.pe.PEDataValues.PEEntityData.Offset;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
-import protocolsupport.protocol.utils.minecraftdata.PocketData;
-import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData;
-import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData.PocketOffset;
 import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
 import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
@@ -52,9 +51,9 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		float pitch, float yaw,
 		ArrayMap<DataWatcherObject<?>> metadata
 	) {
-		PocketEntityData typeData = PocketData.getPocketEntityData(entity.getType());
+		PEEntityData typeData = PEDataValues.getEntityData(entity.getType());
 		if ((typeData != null) && (typeData.getOffset() != null)) {
-			PocketOffset offset = typeData.getOffset();
+			Offset offset = typeData.getOffset();
 			x += offset.getX();
 			y += offset.getY();
 			z += offset.getZ();

@@ -7,6 +7,7 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -19,7 +20,8 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SPAWN_PLAYER);
 		MiscSerializer.writeUUID(serializer, connection.getVersion(), entity.getUUID());
-		StringSerializer.writeString(serializer, version, cache.getPlayerListCache().getEntry(entity.getUUID()).getName(cache.getAttributesCache().getLocale()));
+		PlayerListEntry entry = cache.getPlayerListCache().getEntry(entity.getUUID());
+		StringSerializer.writeString(serializer, version, entry != null ? entry.getCurrentName(cache.getAttributesCache().getLocale()) : "UNKNOWN");
 		StringSerializer.writeString(serializer, version, ""); //ThirdPartyName :F
 		VarNumberSerializer.writeVarInt(serializer, 0); //Platform
 		VarNumberSerializer.writeSVarLong(serializer, entity.getId());

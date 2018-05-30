@@ -11,9 +11,9 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleVehiclePass
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.WatchedEntityCache;
+import protocolsupport.protocol.typeremapper.pe.PEDataValues;
+import protocolsupport.protocol.typeremapper.pe.PEDataValues.PEEntityData.RiderInfo;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.utils.minecraftdata.PocketData;
-import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData.PocketRiderInfo;
 import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
 import protocolsupport.protocol.utils.types.networkentity.NetworkEntityDataCache;
 import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
@@ -47,7 +47,7 @@ public class VehiclePassengers extends MiddleVehiclePassengers {
 						//In case we are jumping from vehicle to vehicle.
 						packets.add(create(version, data.getVehicleId(), passengerId, UNLINK));
 					}
-					PocketRiderInfo rideInfo = PocketData.getPocketEntityData(vehicle.getType()).getRiderInfo();
+					RiderInfo rideInfo = PEDataValues.getEntityData(vehicle.getType()).getRiderInfo();
 					if (rideInfo != null) {
 						if (passenger.getType() == NetworkEntityType.PLAYER) {
 							float vehicleSize = PEMetaProviderSPI.getProvider().getSizeScale(vehicle.getUUID(), vehicle.getId(), vehicle.getType().getBukkitType()) * vehicle.getDataCache().getSizeModifier();

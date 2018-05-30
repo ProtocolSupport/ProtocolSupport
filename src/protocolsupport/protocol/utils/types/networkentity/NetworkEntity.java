@@ -14,6 +14,10 @@ public class NetworkEntity {
 		return new NetworkEntity(uuid, id, NetworkEntityType.getObjectByNetworkTypeIdAndData(typeId, objectData));
 	}
 
+	public static NetworkEntity createGlobal(int id, int typeId) {
+		return new NetworkEntity(null, id, NetworkEntityType.getGlobalByNetworkTypeId(typeId));
+	}
+
 	public static NetworkEntity createPlayer(UUID uuid, int id) {
 		return new NetworkEntity(uuid, id, NetworkEntityType.PLAYER);
 	}

@@ -12,8 +12,8 @@ public class SpawnGlobal extends MiddleSpawnGlobal {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_WEATHER_ID);
-		VarNumberSerializer.writeVarInt(serializer, entityId);
-		serializer.writeByte(type);
+		VarNumberSerializer.writeVarInt(serializer, entity.getId());
+		serializer.writeByte(entity.getType().getNetworkTypeId());
 		serializer.writeInt((int) (x * 32));
 		serializer.writeInt((int) (y * 32));
 		serializer.writeInt((int) (z * 32));

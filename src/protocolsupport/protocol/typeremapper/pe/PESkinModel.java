@@ -9,8 +9,8 @@ import protocolsupport.utils.Utils;
 
 public class PESkinModel {
 
-	private static final PESkinModel normal = loadSkinModel("pe/normal_model.json");
-	private static final PESkinModel slim = loadSkinModel("pe/slim_model.json");
+	private static final PESkinModel normal = loadSkinModel("normal_model.json");
+	private static final PESkinModel slim = loadSkinModel("slim_model.json");
 
 	public static PESkinModel getSkinModel(boolean isSlim) {
 		return isSlim ? slim : normal;
@@ -45,7 +45,7 @@ public class PESkinModel {
 	}
 
 	protected static PESkinModel loadSkinModel(String resourcename) {
-		JsonElement element = new JsonParser().parse(Utils.getResource(resourcename));
+		JsonElement element = new JsonParser().parse(PEDataValues.getResource(resourcename));
 		JsonObject object = JsonUtils.getAsJsonObject(element, "root element");
 		return new PESkinModel(
 			JsonUtils.getString(object, "skinId"),

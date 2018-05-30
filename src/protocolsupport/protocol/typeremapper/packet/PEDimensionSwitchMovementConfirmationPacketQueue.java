@@ -13,7 +13,7 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class PEDimensionSwitchMovementConfirmationPacketQueue {
 
-	public static final int UNLOCK_DELAY = Utils.getJavaPropertyValue("pe.dimswitchdelay", 2, Integer::parseInt);
+	public static final int UNLOCK_DELAY = Utils.getJavaPropertyValue("pe.dimswitchdelay", 5, Integer::parseInt);
 
 	protected final ArrayList<ClientBoundPacketData> queue = new ArrayList<>(2000);
 	protected State state = State.SCANNING_FOR_LOGIN_STATUS;

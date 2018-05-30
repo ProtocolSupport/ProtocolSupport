@@ -14,10 +14,10 @@ import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.chat.modifiers.ClickAction;
 import protocolsupport.api.chat.modifiers.HoverAction;
 import protocolsupport.api.chat.modifiers.Modifier;
-import protocolsupport.utils.chat.ClickActionSerializer;
-import protocolsupport.utils.chat.ComponentSerializer;
-import protocolsupport.utils.chat.HoverActionSerializer;
-import protocolsupport.utils.chat.ModifierSerializer;
+import protocolsupport.protocol.utils.chat.ClickActionSerializer;
+import protocolsupport.protocol.utils.chat.ComponentSerializer;
+import protocolsupport.protocol.utils.chat.HoverActionSerializer;
+import protocolsupport.protocol.utils.chat.ModifierSerializer;
 import protocolsupport.zplatform.ServerPlatform;
 
 public class ChatAPI {

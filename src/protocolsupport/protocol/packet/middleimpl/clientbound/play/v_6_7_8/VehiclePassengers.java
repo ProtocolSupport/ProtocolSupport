@@ -4,7 +4,9 @@ import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleVehiclePassengers;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class VehiclePassengers extends MiddleVehiclePassengers {
@@ -14,22 +16,34 @@ public class VehiclePassengers extends MiddleVehiclePassengers {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_LEASH_ID);
-		serializer.writeInt(passengerId);
-		serializer.writeInt(passengersIds.length == 0 ? -1 : vehicleId);
-		serializer.writeBoolean(false);
-		return RecyclableSingletonList.create(serializer);
+		if (cache.getWatchedEntityCache().getWatchedEntity(vehicleId) == null) {
+			return RecyclableEmptyList.get();
+		}
+		if (passengersIds.length == 0) {
+			int passengerId = vehiclePassenger.remove(vehicleId);
+			if (passengerId != vehiclePassenger.defaultReturnValue()) {
+				return RecyclableSingletonList.create(create(passengerId, -1));
+			}
+		} else {
+			int newPassengerId = passengersIds[0];
+			int oldPassengerId = vehiclePassenger.put(vehicleId, newPassengerId);
+			if (oldPassengerId == vehiclePassenger.defaultReturnValue()) {
+				return RecyclableSingletonList.create(create(newPassengerId, vehicleId));
+			} else if (newPassengerId != oldPassengerId) {
+				RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
+				packets.add(create(oldPassengerId, -1));
+				packets.add(create(newPassengerId, vehicleId));
+			}
+		}
+		return RecyclableEmptyList.get();
 	}
 
-	@Override
-	public boolean postFromServerRead() {
-		if (passengersIds.length == 0) {
-			passengerId = vehiclePassenger.remove(vehicleId);
-		} else {
-			passengerId = passengersIds[0];
-			vehiclePassenger.put(vehicleId, passengerId);
-		}
-		return true;
+	protected static ClientBoundPacketData create(int passengerId, int vehicleId) {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_LEASH_ID);
+		serializer.writeInt(passengerId);
+		serializer.writeInt(vehicleId);
+		serializer.writeBoolean(false);
+		return serializer;
 	}
 
 }

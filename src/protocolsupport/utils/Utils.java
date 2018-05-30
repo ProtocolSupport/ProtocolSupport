@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.function.Function;
+import java.util.stream.IntStream;
 
 import com.google.gson.Gson;
 
@@ -118,8 +119,8 @@ public class Utils {
 		return number;
 	}
 
-	public static int roundDown(int n, int m) {
-		return n >= 0 ? (n / m) * m : (((n - m) + 1) / m) * m;
+	public static void repeat(int count, Runnable action) {
+	    IntStream.range(0, count).forEach(i -> action.run());
 	}
 
 	public static <T> T getJavaPropertyValue(String property, T defaultValue, Function<String, T> converter) {

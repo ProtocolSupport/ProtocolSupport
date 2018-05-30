@@ -6,9 +6,9 @@ import protocolsupport.protocol.packet.middle.serverbound.play.MiddleMoveVehicle
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSteerBoat;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.minecraftdata.PocketData;
-import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData;
-import protocolsupport.protocol.utils.minecraftdata.PocketData.PocketEntityData.PocketOffset;
+import protocolsupport.protocol.typeremapper.pe.PEDataValues;
+import protocolsupport.protocol.typeremapper.pe.PEDataValues.PEEntityData;
+import protocolsupport.protocol.typeremapper.pe.PEDataValues.PEEntityData.Offset;
 import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
 import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
 import protocolsupport.utils.Utils;
@@ -46,9 +46,9 @@ public class MoveVehicle extends ServerBoundMiddlePacket {
 					cache.getMovementCache().isPELeftPaddleTurning())
 				);
 			}
-			PocketEntityData typeData = PocketData.getPocketEntityData(vehicle.getType());
+			PEEntityData typeData = PEDataValues.getEntityData(vehicle.getType());
 			if ((typeData != null) && (typeData.getOffset() != null)) {
-				PocketOffset offset = typeData.getOffset();
+				Offset offset = typeData.getOffset();
 				x -= offset.getX();
 				y -= offset.getY();
 				z -= offset.getZ();

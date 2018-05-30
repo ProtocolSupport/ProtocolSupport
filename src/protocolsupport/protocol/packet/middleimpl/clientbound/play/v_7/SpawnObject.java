@@ -52,7 +52,14 @@ public class SpawnObject extends MiddleSpawnObject {
 				y += 16;
 				break;
 			}
-			case TNT: {
+			case TNT:
+			case MINECART:
+			case MINECART_CHEST:
+			case MINECART_FURNACE:
+			case MINECART_TNT:
+			case MINECART_MOB_SPAWNER:
+			case MINECART_HOPPER:
+			case MINECART_COMMAND: {
 				y += 16;
 				break;
 			}
