@@ -74,4 +74,9 @@ public class ChunkSendIntervalPacketQueue {
 		ALLOWED, WAITING_UNLOCK_SCHEDULE, WAITING_UNLOCK;
 	}
 
+	public void release() {
+		queue.forEach(packet -> packet.recycle());
+		queue.clear();
+	}
+
 }
