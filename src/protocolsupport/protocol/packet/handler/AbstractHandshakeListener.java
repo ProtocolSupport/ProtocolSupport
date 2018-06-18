@@ -46,7 +46,7 @@ public abstract class AbstractHandshakeListener {
 				//version check
 				if (!connection.getVersion().isSupported()) {
 					if (connection.getVersion().equals(ProtocolVersion.MINECRAFT_PE_LEGACY)) {
-						disconnect("Outdated PE client!");
+						disconnect(MessageFormat.format(ServerPlatform.get().getMiscUtils().getOutdatedClientMessage().replace("'", "''"), ServerPlatform.get().getMiscUtils().getVersionName()));
 					} else {
 						disconnect(MessageFormat.format(ServerPlatform.get().getMiscUtils().getOutdatedServerMessage().replace("'", "''"), ServerPlatform.get().getMiscUtils().getVersionName()));
 					}
