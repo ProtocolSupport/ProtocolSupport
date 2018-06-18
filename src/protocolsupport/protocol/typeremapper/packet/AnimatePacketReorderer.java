@@ -45,4 +45,10 @@ public class AnimatePacketReorderer {
 		}
 	}
 
+	public void release() {
+		if (animatePacket != null) {
+			animatePacket.recycle();
+		}
+	}
+
 }

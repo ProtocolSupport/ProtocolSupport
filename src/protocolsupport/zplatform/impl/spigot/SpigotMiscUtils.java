@@ -137,6 +137,11 @@ public class SpigotMiscUtils implements PlatformUtils {
 	}
 
 	@Override
+	public String getOutdatedClientMessage() {
+		return SpigotConfig.outdatedClientMessage;
+	}
+
+	@Override
 	public boolean isRunning() {
 		return getServer().isRunning();
 	}
