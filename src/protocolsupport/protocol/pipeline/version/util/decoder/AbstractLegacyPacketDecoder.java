@@ -53,4 +53,10 @@ public abstract class AbstractLegacyPacketDecoder extends AbstractPacketDecoder 
 		return buffer.readUnsignedByte();
 	}
 
+	@Override
+	public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+		super.handlerRemoved(ctx);
+		animateReorderer.release();
+	}
+
 }
