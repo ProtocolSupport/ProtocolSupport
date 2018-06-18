@@ -134,6 +134,11 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	}
 
 	@Override
+	public String getOutdatedClientMessage() {
+		return "Outdated client! I\'m running {0}";
+	}
+
+	@Override
 	public boolean isRunning() {
 		return true;
 	}
