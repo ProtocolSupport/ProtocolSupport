@@ -22,7 +22,7 @@ public class CollectionsUtils {
 		return map;
 	}
 
-	public static <K extends Enum<K>, V extends Enum<V>> EnumMap<K, V> makeEnumMappingEnumMap(Class<V> e, Class<K> k, Function<V, K> mapping) {
+	public static <K extends Enum<K>, V extends Enum<V>> Map<K, V> makeEnumMappingEnumMap(Class<V> e, Class<K> k, Function<V, K> mapping) {
 		EnumMap<K, V> map = new EnumMap<>(k);
 		for (V v : e.getEnumConstants()) {
 			map.put(mapping.apply(v), v);
@@ -31,11 +31,11 @@ public class CollectionsUtils {
 	}
 
 	public static <V extends Enum<V>> ArrayMap<V> makeEnumMappingArrayMap(Class<V> e, ToIntFunction<V> mapping) {
-		return new ArrayMap<V>(Arrays.stream(e.getEnumConstants()).map(c -> new ArrayMap.Entry<>(mapping.applyAsInt(c), c)).collect(Collectors.toList()));
+		return new ArrayMap<>(Arrays.stream(e.getEnumConstants()).map(c -> new ArrayMap.Entry<>(mapping.applyAsInt(c), c)).collect(Collectors.toList()));
 	}
 
 	public static <V extends Enum<V>> ArrayMap<V> makeEnumMappingArrayMap(Stream<V> stream, ToIntFunction<V> mapping) {
-		return new ArrayMap<V>(stream.map(c -> new ArrayMap.Entry<>(mapping.applyAsInt(c), c)).collect(Collectors.toList()));
+		return new ArrayMap<>(stream.map(c -> new ArrayMap.Entry<>(mapping.applyAsInt(c), c)).collect(Collectors.toList()));
 	}
 
 	public static class ArrayMap<T> {

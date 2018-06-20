@@ -1,7 +1,6 @@
 package protocolsupport.protocol.utils.datawatcher;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
@@ -51,7 +50,7 @@ public class DataWatcherDeserializer {
 		}
 	}
 
-	private static void register(Class<? extends ReadableDataWatcherObject<?>> clazz) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	private static void register(Class<? extends ReadableDataWatcherObject<?>> clazz) throws NoSuchMethodException {
 		Constructor<? extends ReadableDataWatcherObject<?>> constr = clazz.getConstructor();
 		registry[DataWatcherObjectIdRegistry.getTypeId(clazz, ProtocolVersionsHelper.LATEST_PC)] = constr;
 	}

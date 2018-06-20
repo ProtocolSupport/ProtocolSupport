@@ -93,7 +93,7 @@ public class GlowStoneLoginListenerPlay extends AbstractLoginListenerPlay implem
 			server.broadcastMessage(message);
 		}
 		Message addMessage = new UserListItemMessage(UserListItemMessage.Action.ADD_PLAYER, glowplayer.getUserListEntry());
-		List<UserListItemMessage.Entry> entries = new ArrayList<UserListItemMessage.Entry>();
+		List<UserListItemMessage.Entry> entries = new ArrayList<>();
 		for (GlowPlayer other : server.getRawOnlinePlayers()) {
 			if (!other.equals(glowplayer) && other.canSee(glowplayer)) {
 				other.getSession().send(addMessage);

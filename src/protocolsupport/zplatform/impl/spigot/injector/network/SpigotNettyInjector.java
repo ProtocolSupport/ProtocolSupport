@@ -17,7 +17,7 @@ import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
 public class SpigotNettyInjector {
 
 	@SuppressWarnings("unchecked")
-	public static void inject() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+	public static void inject() throws IllegalAccessException, NoSuchFieldException {
 		ServerConnection serverConnection = SpigotMiscUtils.getServer().an();
 		List<NetworkManager> nmList = null;
 		try {

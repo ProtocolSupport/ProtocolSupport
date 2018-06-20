@@ -18,7 +18,7 @@ public abstract class RemappingRegistry<T extends RemappingTable> {
 
 	protected abstract T createTable();
 
-	public static abstract class IdRemappingRegistry<T extends IdRemappingTable> extends RemappingRegistry<T> {
+	public abstract static class IdRemappingRegistry<T extends IdRemappingTable> extends RemappingRegistry<T> {
 
 		public void registerRemapEntry(int from, int to, ProtocolVersion... versions) {
 			for (ProtocolVersion version : versions) {
@@ -28,7 +28,7 @@ public abstract class RemappingRegistry<T extends RemappingTable> {
 
 	}
 
-	public static abstract class EnumRemappingRegistry<T extends Enum<T>, R extends EnumRemappingTable<T>> extends RemappingRegistry<R> {
+	public abstract static class EnumRemappingRegistry<T extends Enum<T>, R extends EnumRemappingTable<T>> extends RemappingRegistry<R> {
 
 		public void registerRemapEntry(T from, T to, ProtocolVersion... versions) {
 			for (ProtocolVersion version : versions) {
@@ -38,7 +38,7 @@ public abstract class RemappingRegistry<T extends RemappingTable> {
 
 	}
 
-	public static abstract class GenericRemappingRegistry<T, R extends GenericRemappingTable<T>> extends RemappingRegistry<R> {
+	public abstract static class GenericRemappingRegistry<T, R extends GenericRemappingTable<T>> extends RemappingRegistry<R> {
 
 		public void registerRemapEntry(T from, T to, ProtocolVersion... versions) {
 			for (ProtocolVersion version : versions) {

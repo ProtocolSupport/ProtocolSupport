@@ -918,7 +918,8 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 	}
 
 
-	private static final int INBOUND = 0, OUTBOUND = 1;
+	private static final int INBOUND = 0;
+	private static final int OUTBOUND = 1;
 
 	@SuppressWarnings("unchecked")
 	private static int getOpcode(ProtocolType protocolType, int direction, Class<? extends Message> messageClass) {

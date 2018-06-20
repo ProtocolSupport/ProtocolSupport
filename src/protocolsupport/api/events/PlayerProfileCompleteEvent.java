@@ -60,7 +60,7 @@ public class PlayerProfileCompleteEvent extends ConnectionEvent {
 		this.forcedUUID = uuid;
 	}
 
-	protected final Map<String, Set<ProfileProperty>> properties = new HashMap<String, Set<ProfileProperty>>();
+	protected final Map<String, Set<ProfileProperty>> properties = new HashMap<>();
 
 	/**
 	 * Returns properties

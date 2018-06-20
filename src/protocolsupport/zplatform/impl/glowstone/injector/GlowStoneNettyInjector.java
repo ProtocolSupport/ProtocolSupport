@@ -17,7 +17,7 @@ public class GlowStoneNettyInjector {
 
 	private static final CountDownLatch injectFinishedLatch = new CountDownLatch(1);
 
-	public static void inject() throws IllegalArgumentException, IllegalAccessException {
+	public static void inject() {
 		Bukkit.getScheduler().scheduleSyncDelayedTask(JavaPlugin.getPlugin(ProtocolSupport.class), () -> {
 			try {
 				injectFinishedLatch.await();
@@ -41,7 +41,7 @@ public class GlowStoneNettyInjector {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static <T> T getWithWait(Field field, Object obj) throws IllegalArgumentException, IllegalAccessException {
+	private static <T> T getWithWait(Field field, Object obj) throws IllegalAccessException {
 		Object val = null;
 		while (true) {
 			val = field.get(obj);

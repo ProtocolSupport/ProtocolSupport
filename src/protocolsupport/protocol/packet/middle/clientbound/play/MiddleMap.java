@@ -25,7 +25,7 @@ public abstract class MiddleMap extends ClientBoundMiddlePacket {
 		showIcons = serverdata.readBoolean();
 		icons = ArraySerializer.readVarIntTArray(
 			serverdata, Icon.class,
-			(from) -> new Icon(from.readUnsignedByte(), from.readUnsignedByte(), from.readUnsignedByte())
+			from -> new Icon(from.readUnsignedByte(), from.readUnsignedByte(), from.readUnsignedByte())
 		);
 		columns = serverdata.readUnsignedByte();
 		if (columns > 0) {

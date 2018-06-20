@@ -429,7 +429,7 @@ public class SoundRemapper {
 		}
 		@Override
 		protected GenericRemappingTable<String> createTable() {
-			return new GenericRemappingTable<String>();
+			return new GenericRemappingTable<>();
 		}
 
 	};

@@ -129,7 +129,7 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 	@Override
 	public Collection<ProfileProperty> getSpoofedProperties() {
 		GlowPlayerProfile profile = getSpoofedProfile();
-		return profile == null ? null :
+		return profile == null ? Collections.emptyList() :
 		profile.getProperties().stream()
 		.map(property -> new ProfileProperty(property.getName(), property.getValue(), property.getSignature()))
 		.collect(Collectors.toList());

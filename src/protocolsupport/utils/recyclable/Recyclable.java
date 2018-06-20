@@ -7,7 +7,7 @@ public interface Recyclable extends Closeable {
 	public void recycle();
 
 	@Override
-	default public void close() {
+	public default void close() {
 		recycle();
 	}
 

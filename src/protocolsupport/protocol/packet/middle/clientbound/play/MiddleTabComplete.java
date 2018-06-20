@@ -14,7 +14,7 @@ public abstract class MiddleTabComplete extends ClientBoundMiddlePacket {
 	public void readFromServerData(ByteBuf serverdata) {
 		matches = ArraySerializer.readVarIntTArray(
 			serverdata, String.class,
-			(from) -> StringSerializer.readString(from, ProtocolVersionsHelper.LATEST_PC)
+			from -> StringSerializer.readString(from, ProtocolVersionsHelper.LATEST_PC)
 		);
 	}
 

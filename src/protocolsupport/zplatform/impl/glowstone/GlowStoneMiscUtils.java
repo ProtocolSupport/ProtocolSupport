@@ -150,7 +150,7 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 
 	@Override
 	public boolean isDebugging() {
-		return debug == true;
+		return debug;
 	}
 
 	@Override

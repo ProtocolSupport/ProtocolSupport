@@ -367,6 +367,22 @@ public enum ProtocolVersion {
 			return Integer.compare(id, o.id);
 		}
 
+		@Override
+		public boolean equals(Object obj) {
+			if (obj == null) {
+				return false;
+			}
+			if (!getClass().equals(obj.getClass())) {
+				return false;
+			}
+			return id == ((OrderId) obj).id;
+		}
+
+		@Override
+		public int hashCode() {
+			return id;
+		}
+
 	}
 
 }

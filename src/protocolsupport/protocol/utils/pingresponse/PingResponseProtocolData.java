@@ -6,7 +6,6 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
@@ -44,7 +43,7 @@ public class PingResponseProtocolData {
 	public static class Serializer implements JsonDeserializer<PingResponseProtocolData>, JsonSerializer<PingResponseProtocolData> {
 
 		@Override
-		public PingResponseProtocolData deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+		public PingResponseProtocolData deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) {
 			JsonObject jsonObject = JsonUtils.getAsJsonObject(jsonElement, "version");
 			return new PingResponseProtocolData(JsonUtils.getString(jsonObject, "name"), JsonUtils.getInt(jsonObject, "protocol"));
 		}
