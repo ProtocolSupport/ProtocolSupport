@@ -34,7 +34,7 @@ public class MapColorHelper {
 		long rmean = (r1 + r2) / 2;
 		long r = r1 - r2;
 		long g = g1 - g2;
-		long b = b1 - b1;
+		long b = b1 - b2;
 		return (((512 + rmean) * r * r) >> 8) + (4 * g * g) + (((767 - rmean) * b * b) >> 8);
 	}
 
