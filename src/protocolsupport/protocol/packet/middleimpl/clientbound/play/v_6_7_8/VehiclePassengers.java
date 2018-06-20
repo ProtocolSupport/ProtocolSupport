@@ -12,7 +12,9 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class VehiclePassengers extends MiddleVehiclePassengers {
 
 	protected final Int2IntOpenHashMap vehiclePassenger = new Int2IntOpenHashMap();
-	protected int passengerId;
+	{
+		vehiclePassenger.defaultReturnValue(-1);
+	}
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
@@ -33,6 +35,7 @@ public class VehiclePassengers extends MiddleVehiclePassengers {
 				RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 				packets.add(create(oldPassengerId, -1));
 				packets.add(create(newPassengerId, vehicleId));
+				return packets;
 			}
 		}
 		return RecyclableEmptyList.get();
