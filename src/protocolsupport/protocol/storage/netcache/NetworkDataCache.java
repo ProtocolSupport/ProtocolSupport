@@ -34,6 +34,26 @@ public class NetworkDataCache {
 		return attrscache;
 	}
 
+	protected final PEChunkMapCache pechunkmapcache = new PEChunkMapCache();
+	public PEChunkMapCache getPEChunkMapCache() {
+		return pechunkmapcache;
+	}
+
+	protected final PETitleCache petitlecache = new PETitleCache();
+	public PETitleCache getPETitleCache() {
+		return petitlecache;
+	}
+
+	protected final PETileCache petilecache = new PETileCache();
+	public PETileCache getPETileCache() {
+		return petilecache;
+	}
+
+	private final PEInventoryCache inventorycache = new PEInventoryCache();
+	public PEInventoryCache getPEInventoryCache() {
+		return inventorycache;
+	}
+
 	@Override
 	public String toString() {
 		return Utils.toStringAllFields(this);

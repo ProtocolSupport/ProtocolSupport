@@ -23,6 +23,7 @@ public enum WindowType {
 	PLAYER("_____FAKETYPE_PLAYER");
 
 	private final String id;
+
 	WindowType(String id) {
 		this.id = id;
 	}

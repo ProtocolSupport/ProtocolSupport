@@ -12,9 +12,13 @@ public abstract class MiddleHeldSlot extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
+		return RecyclableSingletonList.create(create(slot));
+	}
+
+	public static ServerBoundPacketData create(int slot) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_HELD_SLOT);
 		creator.writeShort(slot);
-		return RecyclableSingletonList.create(creator);
+		return creator;
 	}
 
 }

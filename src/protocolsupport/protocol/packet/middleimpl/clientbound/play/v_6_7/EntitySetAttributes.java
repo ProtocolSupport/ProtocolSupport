@@ -34,7 +34,7 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 			if (version != ProtocolVersion.MINECRAFT_1_6_1) {
 				serializer.writeShort(attribute.modifiers.length);
 				for (Modifier modifier : attribute.modifiers) {
-					MiscSerializer.writeUUID(serializer, modifier.uuid);
+					MiscSerializer.writeUUID(serializer, connection.getVersion(), modifier.uuid);
 					serializer.writeDouble(modifier.amount);
 					serializer.writeByte(modifier.operation);
 				}

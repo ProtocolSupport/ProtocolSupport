@@ -105,6 +105,12 @@ public abstract class ItemStackWrapper {
 		public ItemStack asBukkitMirror() {
 			throw reject();
 		}
+
+		@Override
+		public String toString() {
+			return "0xNULL@0";
+		}
+
 	};
 
 }

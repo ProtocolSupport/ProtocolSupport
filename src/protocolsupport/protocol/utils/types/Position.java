@@ -1,8 +1,13 @@
 package protocolsupport.protocol.utils.types;
 
+import org.bukkit.Location;
+import org.bukkit.World;
+
 import protocolsupport.utils.Utils;
 
 public class Position {
+
+	public static final Position ZERO = new Position(0, 0, 0);
 
 	protected int x;
 	protected int y;
@@ -38,6 +43,16 @@ public class Position {
 		this.z = z;
 	}
 
+	public static Position fromBukkit(Location location) {
+		return new Position(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+	}
+
+	public void mod(int x, int y, int z) {
+		modifyX(x);
+		modifyY(y);
+		modifyZ(z);
+	}
+
 	public void modifyX(int cnt) {
 		x += cnt;
 	}
@@ -48,6 +63,15 @@ public class Position {
 
 	public void modifyZ(int cnt) {
 		z += cnt;
+	}
+
+	public Location toBukkit(World world) {
+		return new Location(world, x, y, z);
+	}
+
+	@Override
+	public Position clone() {
+		return new Position(x, y, z);
 	}
 
 	@Override

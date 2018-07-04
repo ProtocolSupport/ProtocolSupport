@@ -3,9 +3,15 @@ package protocolsupport.protocol.serializer;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.storage.netcache.NetworkDataCache;
+import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.utils.types.MerchantData;
+import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.protocol.utils.types.MerchantData.TradeOffer;
+import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 
 public class MerchantDataSerializer {
 
@@ -49,8 +55,52 @@ public class MerchantDataSerializer {
 		}
 	}
 
+	public static void writePEMerchantData(ByteBuf to, ProtocolVersion version, NetworkDataCache cache, long villagerId, String title, MerchantData merchdata) {
+		String locale = cache.getAttributesCache().getLocale();
+		to.writeByte((byte) cache.getWindowCache().getOpenedWindowId());
+		to.writeByte(PEDataValues.WINDOWTYPE.getTable(version).getRemap(WindowType.VILLAGER.toLegacyId()));
+		VarNumberSerializer.writeSVarInt(to, 0); //?
+		VarNumberSerializer.writeSVarInt(to, 0); //?
+		to.writeBoolean(true); //Is always willing!
+		VarNumberSerializer.writeSVarLong(to, villagerId);
+		VarNumberSerializer.writeSVarLong(to, cache.getWatchedEntityCache().getSelfPlayerEntityId());
+		StringSerializer.writeString(to, version, title);
+		NBTTagCompoundWrapper tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+		NBTTagListWrapper recipes = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
+		if (merchdata != null) {
+			for (TradeOffer offer : merchdata.getOffers()) {
+				NBTTagCompoundWrapper recipe = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+				ServerPlatform.get().getMiscUtils();
+				recipe.setCompound("buyA", ItemStackToPENBT(version, locale, offer.getItemStack1()));
+				recipe.setCompound("sell", ItemStackToPENBT(version, locale, offer.getResult()));
+				if (offer.hasItemStack2()) {
+					recipe.setCompound("buyB", ItemStackToPENBT(version, locale, offer.getItemStack2()));
+				}
+				recipe.setInt("uses", offer.isDisabled() ? offer.getMaxUses() : offer.getUses());
+				recipe.setInt("maxUses", offer.getMaxUses());
+				//recipe.setByte("rewardExp", 0);
+				recipes.addCompound(recipe);
+			}
+		}
+		tag.setList("Recipes", recipes);
+		ItemStackSerializer.writeTag(to, true, version, tag);
+	}
+
 	private static boolean isUsingUsesCount(ProtocolVersion version) {
 		return (version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
+	}
+
+	//TODO: Find proper place for this.
+	private static NBTTagCompoundWrapper ItemStackToPENBT(ProtocolVersion version, String locale, ItemStackWrapper itemstack) {
+		NBTTagCompoundWrapper item = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+		itemstack = ItemStackSerializer.remapItemToClient(version, locale, itemstack);
+		item.setByte("Count", itemstack.getAmount());
+		item.setShort("Damage", itemstack.getData());
+		item.setShort("id", itemstack.getTypeId());
+		if ((itemstack.getTag() != null) && !itemstack.getTag().isNull()) {
+			item.setCompound("tag", itemstack.getTag().clone());
+		}
+		return item;
 	}
 
 }

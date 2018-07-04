@@ -18,7 +18,7 @@ public class SpawnPainting extends MiddleSpawnPainting {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_PAINTING_ID);
 		VarNumberSerializer.writeVarInt(serializer, entity.getId());
-		MiscSerializer.writeUUID(serializer, entity.getUUID());
+		MiscSerializer.writeUUID(serializer, version, entity.getUUID());
 		StringSerializer.writeString(serializer, version, type);
 		PositionSerializer.writePosition(serializer, position);
 		serializer.writeByte(direction);

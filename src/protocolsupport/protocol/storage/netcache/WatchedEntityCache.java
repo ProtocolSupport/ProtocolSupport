@@ -18,8 +18,16 @@ public class WatchedEntityCache {
 		addWatchedEntity(player);
 	}
 
+	public NetworkEntity getSelfPlayer() {
+		return player;
+	}
+
 	public int getSelfPlayerEntityId() {
 		return player != null ? player.getId() : -1;
+	}
+
+	public boolean isSelf(int eId) {
+		return getSelfPlayerEntityId() == eId;
 	}
 
 	private void readdSelfPlayer() {

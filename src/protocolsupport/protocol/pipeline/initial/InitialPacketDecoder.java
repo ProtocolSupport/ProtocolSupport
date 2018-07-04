@@ -23,6 +23,7 @@ import protocolsupport.protocol.pipeline.common.VarIntFrameEncoder;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.netty.Decompressor;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer;
@@ -31,6 +32,7 @@ import protocolsupport.zplatform.PlatformUtils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.impl.encapsulated.EncapsulatedProtocolInfo;
 import protocolsupport.zplatform.impl.encapsulated.EncapsulatedProtocolUtils;
+import protocolsupport.zplatform.impl.pe.PEProxyServerInfoHandler;
 
 public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
@@ -71,6 +73,10 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_5_1, builder15);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_4_7, new protocolsupport.protocol.pipeline.version.v_1_4.PipeLineBuilder());
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_LEGACY, new protocolsupport.protocol.pipeline.version.v_l.PipeLineBuilder());
+		IPipeLineBuilder builderpe = new protocolsupport.protocol.pipeline.version.v_pe.PipeLineBuilder();
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_PE_FUTURE, builderpe);
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_PE, builderpe);
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_PE_LEGACY, builderpe);
 	}
 
 	protected final ReplayingDecoderBuffer buffer = new ReplayingDecoderBuffer(Unpooled.buffer());
@@ -224,6 +230,14 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 				setProtocol(channel, ProtocolUtils.readNewHandshake(firstpacketdata));
 				break;
 			}
+			case PEPacketIDs.LOGIN: {
+				setProtocol(channel, ProtocolUtils.readPEHandshake(firstpacketdata));
+				break;
+			}
+			case PEProxyServerInfoHandler.PACKET_ID: {
+				setProtocol(channel, ProtocolVersion.MINECRAFT_PE);
+				break;
+			}
 			default: {
 				throw new DecoderException("Unable to detect incoming protocol");
 			}
@@ -260,6 +274,8 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		if (!ProtocolSupportAPI.isProtocolVersionEnabled(version)) {
 			if (version.getProtocolType() == ProtocolType.PC) {
 				version = version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4) ? ProtocolVersion.MINECRAFT_LEGACY : ProtocolVersion.MINECRAFT_FUTURE;
+			} else if (version.getProtocolType() == ProtocolType.PE) {
+				version = version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE) ? ProtocolVersion.MINECRAFT_PE_FUTURE : ProtocolVersion.MINECRAFT_PE_LEGACY;
 			} else {
 				throw new IllegalArgumentException(MessageFormat.format("Unable to get legacy or future version for disabled protocol version {0}", version));
 			}

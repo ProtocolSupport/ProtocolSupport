@@ -3,6 +3,7 @@ package protocolsupport.zplatform;
 import java.security.PublicKey;
 import java.util.List;
 
+import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 
@@ -13,9 +14,19 @@ import protocolsupport.protocol.utils.types.Position;
 
 public interface PlatformPacketFactory {
 
+	public Object createInboundKeepAlivePacket(long keepAliveId);
+
 	public Object createInboundInventoryClosePacket();
 
+	public Object createInboundInventoryConfirmTransactionPacket(int windowId, int actionNumber, boolean accepted);
+
+	public Object createInboundPluginMessagePacket(String tag, byte[] data);
+
+	public Object createInboundCustomPayloadPacket(String tag, byte[] data);
+
 	public Object createOutboundChatPacket(String message, int position);
+
+	public Object createOutboundUpdateChunkPacket(Chunk chunk);
 
 	public Object createTabHeaderFooterPacket(BaseComponent header, BaseComponent footer);
 
@@ -51,6 +62,9 @@ public interface PlatformPacketFactory {
 
 	public Object createEntityStatusPacket(Entity entity, int status);
 
+	public Object createUpdateChunkPacket(Chunk chunk);
+
+	public Object createBlockUpdatePacket(Position pos, int block);
 
 	public int getOutLoginDisconnectPacketId();
 

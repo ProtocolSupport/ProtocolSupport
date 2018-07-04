@@ -23,6 +23,10 @@ public class GlowStoneItemStackWrapper extends ItemStackWrapper {
 		return new GlowStoneItemStackWrapper(new ItemStack(typeId));
 	}
 
+	public static ItemStackWrapper create(ItemStack stack) {
+		return new GlowStoneItemStackWrapper(stack);
+	}
+
 	@Override
 	public ItemStack asBukkitMirror() {
 		return itemstack;

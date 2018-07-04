@@ -20,6 +20,7 @@ import org.bukkit.util.CachedServerIcon;
 import com.destroystokyo.paper.profile.ProfileProperty;
 
 import io.netty.channel.ChannelPipeline;
+import io.netty.channel.EventLoopGroup;
 import net.glowstone.GlowServer;
 import net.glowstone.entity.meta.profile.GlowPlayerProfile;
 import net.glowstone.io.nbt.NbtSerialization;
@@ -37,6 +38,7 @@ import protocolsupport.protocol.utils.MinecraftEncryption;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.zplatform.PlatformUtils;
+import protocolsupport.zplatform.impl.glowstone.injector.GlowStoneNettyInjector;
 import protocolsupport.zplatform.impl.glowstone.itemstack.GlowStoneNBTTagCompoundWrapper;
 import protocolsupport.zplatform.impl.glowstone.network.GlowStoneChannelHandlers;
 import protocolsupport.zplatform.impl.glowstone.network.pipeline.GlowStoneFramingHandler;
@@ -132,6 +134,11 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	}
 
 	@Override
+	public String getOutdatedClientMessage() {
+		return "Outdated client! I\'m running {0}";
+	}
+
+	@Override
 	public boolean isRunning() {
 		return true;
 	}
@@ -220,6 +227,11 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	@Override
 	public void setFraming(ChannelPipeline pipeline, IPacketSplitter splitter, IPacketPrepender prepender) {
 		((GlowStoneFramingHandler) pipeline.get(GlowStoneChannelHandlers.FRAMING)).setRealFraming(prepender, splitter);
+	}
+
+	@Override
+	public EventLoopGroup getServerEventLoop() {
+		return GlowStoneNettyInjector.getServerEventLoop();
 	}
 
 }

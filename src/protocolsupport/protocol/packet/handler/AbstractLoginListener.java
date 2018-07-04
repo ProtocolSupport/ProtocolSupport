@@ -31,6 +31,7 @@ import protocolsupport.api.events.PlayerProfileCompleteEvent;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent;
 import protocolsupport.api.utils.Profile;
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_pe.ClientLogin;
 import protocolsupport.protocol.utils.MinecraftEncryption;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.protocol.utils.authlib.MinecraftSessionService;
@@ -93,34 +94,50 @@ public abstract class AbstractLoginListener {
 	public void handleLoginStart(String name) {
 		Validate.isTrue(state == LoginState.HELLO, "Unexpected hello packet");
 		state = LoginState.ONLINEMODERESOLVE;
-		loginprocessor.execute(() -> {
-			try {
-				GameProfile profile = connection.getProfile();
-				profile.setOriginalName(name);
 
-				PlayerLoginStartEvent event = new PlayerLoginStartEvent(connection, hostname);
-				Bukkit.getPluginManager().callEvent(event);
-				if (event.isLoginDenied()) {
-					AbstractLoginListener.this.disconnect(event.getDenyLoginMessage());
-					return;
-				}
+		loginprocessor.execute(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					GameProfile profile = connection.getProfile();
+					profile.setOriginalName(name);
 
-				profile.setOnlineMode(event.isOnlineMode());
-				forcedUUID = event.getForcedUUID();
-				if ((forcedUUID == null) && profile.isOnlineMode() && !event.useOnlineModeUUID()) {
-					forcedUUID = Profile.generateOfflineModeUUID(profile.getName());
-				}
+					PlayerLoginStartEvent event = new PlayerLoginStartEvent(connection, hostname);
+					Bukkit.getPluginManager().callEvent(event);
+					if (event.isLoginDenied()) {
+						AbstractLoginListener.this.disconnect(event.getDenyLoginMessage());
+						return;
+					}
 
-				if (profile.isOnlineMode()) {
-					state = LoginState.KEY;
-					networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginEncryptionBeginPacket(ServerPlatform.get().getMiscUtils().getEncryptionKeyPair().getPublic(), randomBytes));
-				} else {
-					loginOffline();
-				}
-			} catch (Throwable t) {
-				AbstractLoginListener.this.disconnect("Error occured while logging in");
-				if (ServerPlatform.get().getMiscUtils().isDebugging()) {
-					t.printStackTrace();
+					profile.setOnlineMode(event.isOnlineMode());
+					forcedUUID = event.getForcedUUID();
+					if ((forcedUUID == null) && profile.isOnlineMode() && !event.useOnlineModeUUID()) {
+						forcedUUID = Profile.generateOfflineModeUUID(profile.getName());
+					}
+
+					if (profile.isOnlineMode()) {
+						switch (connection.getVersion().getProtocolType()) {
+							case PC: {
+								state = LoginState.KEY;
+								networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginEncryptionBeginPacket(ServerPlatform.get().getMiscUtils().getEncryptionKeyPair().getPublic(), randomBytes));
+								break;
+							}
+							case PE: {
+								loginOnlinePE();
+								break;
+							}
+							default: {
+								throw new IllegalArgumentException(MessageFormat.format("Unknown protocol type {0}", connection.getVersion().getProtocolType()));
+							}
+						}
+					} else {
+						loginOffline();
+					}
+				} catch (Throwable t) {
+					AbstractLoginListener.this.disconnect("Error occured while logging in");
+					if (ServerPlatform.get().getMiscUtils().isDebugging()) {
+						t.printStackTrace();
+					}
 				}
 			}
 		});
@@ -183,6 +200,21 @@ public abstract class AbstractLoginListener {
 		} catch (AuthenticationUnavailableException authenticationunavailableexception) {
 			disconnect("Authentication servers are down. Please try again later, sorry!");
 			Bukkit.getLogger().severe("Couldn't verify username because servers are unavailable");
+		} catch (Exception exception) {
+			disconnect("Failed to verify username!");
+			Bukkit.getLogger().log(Level.SEVERE, "Exception verifying " + connection.getProfile().getOriginalName(), exception);
+		}
+	}
+
+	public void loginOnlinePE() {
+		try {
+			String xuid = (String) connection.getMetadata(ClientLogin.XUID_METADATA_KEY);
+			if (xuid == null) {
+				disconnect("This server is in online mode, but no valid XUID was found (XBOX live auth required)");
+				return;
+			}
+			connection.getProfile().setOriginalUUID(new UUID(0, Long.parseLong(xuid)));
+			finishLogin();
 		} catch (Exception exception) {
 			disconnect("Failed to verify username!");
 			Bukkit.getLogger().log(Level.SEVERE, "Exception verifying " + connection.getProfile().getOriginalName(), exception);

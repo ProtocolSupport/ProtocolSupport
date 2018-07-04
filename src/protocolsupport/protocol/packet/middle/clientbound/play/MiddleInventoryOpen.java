@@ -24,14 +24,34 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 		type = WindowType.getById(StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC, 32));
 		title = ChatAPI.fromJSON(StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC));
 		slots = serverdata.readUnsignedByte();
-		if (type == WindowType.HORSE) {
-			horseId = serverdata.readInt();
-		}
+		horseId = type == WindowType.HORSE ? serverdata.readInt() : -1;
 	}
 
 	@Override
 	public boolean postFromServerRead() {
-		cache.getWindowCache().setOpenedWindow(type);
+		int invSlots = slots;
+		switch (type) {
+			case ANVIL: {
+				invSlots = 3;
+				break;
+			}
+			case BEACON: {
+				invSlots = 1;
+				break;
+			}
+			case CRAFTING_TABLE: {
+				invSlots = 10;
+				break;
+			}
+			case ENCHANT: {
+				invSlots = 2;
+				break;
+			}
+			default: {
+				break;
+			}
+		}
+		cache.getWindowCache().setOpenedWindow(type, windowId, invSlots, horseId);
 		if (IdSkipper.INVENTORY.getTable(connection.getVersion()).shouldSkip(type)) {
 			connection.receivePacket(ServerPlatform.get().getPacketFactory().createInboundInventoryClosePacket());
 			return false;

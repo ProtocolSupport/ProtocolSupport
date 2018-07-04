@@ -1,5 +1,7 @@
 package protocolsupport.zplatform.impl.glowstone;
 
+import org.bukkit.inventory.ItemStack;
+
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.protocol.packet.handler.AbstractStatusListener;
@@ -33,6 +35,11 @@ public class GlowStoneWrapperFactory implements PlatformWrapperFactory {
 	@Override
 	public ItemStackWrapper createItemStack(int typeId) {
 		return GlowStoneItemStackWrapper.create(typeId);
+	}
+
+	@Override
+	public ItemStackWrapper createItemStack(ItemStack item) {
+		return GlowStoneItemStackWrapper.create(item);
 	}
 
 	@Override

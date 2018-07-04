@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.bukkit.Chunk;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_12_R1.CraftChunk;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.spigotmc.SpigotConfig;
 
@@ -30,6 +32,10 @@ import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
+import protocolsupport.protocol.serializer.PositionSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.protocol.utils.minecraftdata.BlockData;
 import protocolsupport.protocol.utils.minecraftdata.BlockData.BlockDataEntry;
@@ -40,8 +46,65 @@ import protocolsupport.zplatform.PlatformPacketFactory;
 public class SpigotPacketFactory implements PlatformPacketFactory {
 
 	@Override
+	public Object createInboundKeepAlivePacket(long keepAliveId) {
+		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer());
+		serializer.writeLong(keepAliveId);
+		PacketPlayInKeepAlive packet = new PacketPlayInKeepAlive();
+		try {
+			packet.a(serializer);
+		} catch (IOException e) {
+		}
+		return packet;
+	}
+
+	@Override
 	public Object createInboundInventoryClosePacket() {
 		return new PacketPlayInCloseWindow();
+	}
+
+	@Override
+	public Object createInboundInventoryConfirmTransactionPacket(int windowId, int actionNumber, boolean accepted) {
+		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer());
+		serializer.writeByte(windowId);
+		serializer.writeShort(actionNumber);
+		serializer.writeByte(accepted ? 1 : 0);
+		PacketPlayInTransaction packet = new PacketPlayInTransaction();
+		try {
+			packet.a(serializer);
+		} catch (IOException e) {
+		}
+		return packet;
+	}
+
+	@Override
+	public Object createInboundPluginMessagePacket(String tag, byte[] data) {
+		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer());
+		StringSerializer.writeString(serializer, ProtocolVersionsHelper.LATEST_PC, tag);
+		serializer.writeBytes(data);
+		PacketPlayInCustomPayload packet = new PacketPlayInCustomPayload();
+		try {
+			packet.a(serializer);
+		} catch (IOException e) {
+		}
+		return packet;
+	}
+
+	@Override
+	public Object createInboundCustomPayloadPacket(String tag, byte[] data) {
+		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer());
+		StringSerializer.writeString(serializer, ProtocolVersionsHelper.LATEST_PC, tag);
+		serializer.writeBytes(data);
+		PacketPlayInCustomPayload packet = new PacketPlayInCustomPayload();
+		try {
+			packet.a(serializer);
+		} catch (IOException e) {
+		}
+		return packet;
+	}
+
+	@Override
+	public Object createOutboundUpdateChunkPacket(Chunk chunk) {
+		return new PacketPlayOutMapChunk(((CraftChunk) chunk).getHandle(), 0xFFFF);
 	}
 
 	@Override
@@ -167,6 +230,24 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	@Override
 	public Object createEntityStatusPacket(org.bukkit.entity.Entity entity, int status) {
 		return new PacketPlayOutEntityStatus(((CraftEntity) entity).getHandle(), (byte) status);
+	}
+
+	@Override
+	public Object createUpdateChunkPacket(Chunk chunk) {
+		return new PacketPlayOutMapChunk(((CraftChunk) chunk).getHandle(), 0xFFFF);
+	}
+
+	@Override
+	public Object createBlockUpdatePacket(Position pos, int block) {
+		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer());
+		PositionSerializer.writePosition(serializer, pos);
+		VarNumberSerializer.writeVarInt(serializer, block);
+		PacketPlayOutBlockChange packet = new PacketPlayOutBlockChange();
+		try {
+			packet.a(serializer);
+		} catch (IOException e) {
+		}
+		return packet;
 	}
 
 

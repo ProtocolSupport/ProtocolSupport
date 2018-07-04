@@ -8,6 +8,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.SoundCategory;
 import org.bukkit.WorldType;
@@ -20,6 +21,7 @@ import com.flowpowered.network.Message;
 import com.flowpowered.network.service.CodecLookupService;
 
 import net.glowstone.GlowServer;
+import net.glowstone.chunk.GlowChunk;
 import net.glowstone.entity.meta.profile.GlowPlayerProfile;
 import net.glowstone.net.message.KickMessage;
 import net.glowstone.net.message.SetCompressionMessage;
@@ -148,8 +150,33 @@ import protocolsupport.zplatform.PlatformPacketFactory;
 public class GlowStonePacketFactory implements PlatformPacketFactory {
 
 	@Override
+	public Object createInboundKeepAlivePacket(long keepAliveId) {
+		return new PingMessage(keepAliveId);
+	}
+
+	@Override
 	public Message createInboundInventoryClosePacket() {
 		return new CloseWindowMessage(0);
+	}
+
+	@Override
+	public Object createInboundPluginMessagePacket(String tag, byte[] data) {
+		return new PluginMessage(tag, data);
+	}
+
+	@Override
+	public Message createInboundInventoryConfirmTransactionPacket(int windowId, int actionNumber, boolean accepted) {
+		return new TransactionMessage(windowId, actionNumber, accepted);
+	}
+
+	@Override
+	public Message createInboundCustomPayloadPacket(String tag, byte[] data) {
+		return new PluginMessage(tag, data);
+	}
+
+	@Override
+	public Message createOutboundUpdateChunkPacket(Chunk chunk) {
+		return ((GlowChunk) chunk).toMessage();
 	}
 
 	@Override
@@ -291,8 +318,18 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
-	public Object createEntityStatusPacket(Entity entity, int status) {
+	public Message createEntityStatusPacket(Entity entity, int status) {
 		return new EntityStatusMessage(entity.getEntityId(), status);
+	}
+
+	@Override
+	public Message createUpdateChunkPacket(Chunk chunk) {
+		return ((GlowChunk) chunk).toMessage();
+	}
+
+	@Override
+	public Message createBlockUpdatePacket(Position pos, int block) {
+		return new BlockChangeMessage(pos.getX(), pos.getY(), pos.getZ(), block);
 	}
 
 

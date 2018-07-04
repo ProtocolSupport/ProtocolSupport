@@ -4,6 +4,30 @@ import java.util.Arrays;
 
 public class MapColorHelper {
 
+	//TODO: fix all the colors and perhaps do this more effectively.
+	public static int fixColorId(int id) {
+		switch(id) {
+			case 54:
+			return 50;
+			case 50:
+			return 54;
+			default:
+			return id;
+		}
+	}
+
+	public static int getARGB(IMapColor color) {
+		return toARGB((byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue(), color.getId() <= 3 ? (byte) 0 : (byte) 0xff);
+	}
+
+	public static int toARGB(byte r, byte g, byte b, byte a) {
+		long result = r & 0xff;
+		result |= (g & 0xff) << 8;
+		result |= (b & 0xff) << 16;
+		result |= (a & 0xff) << 24;
+		return (int) (result & 0xFFFFFFFFL);
+	}
+
 	public static IMapColor getSimilarModernColor(ModernMapColor color, int maxMapColorId) {
 		return getSimilarMapColor(color, ModernMapColor.values(), ModernMapColor.Color4.getId(), maxMapColorId);
 	}

@@ -127,6 +127,10 @@ public enum NetworkEntityType {
 		return superType;
 	}
 
+	public EntityType getBukkitType() {
+		return bukkitType;
+	}
+
 	public int getNetworkTypeId() {
 		if (isOfType(MINECART)) {
 			return MINECART.typeId;
