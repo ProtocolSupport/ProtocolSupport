@@ -13,7 +13,7 @@ import protocolsupport.utils.ReflectionUtils;
 
 public class GlowStonePacketsInjector {
 
-	public static void inject() throws IllegalArgumentException, IllegalAccessException, InstantiationException {
+	public static void inject() throws IllegalAccessException, InstantiationException {
 		injectInboundHandler(ProtocolType.HANDSHAKE.getProtocol(), HandshakeMessage.class, GlowStoneHandshakeStartPacketHandler.class);
 		injectInboundHandler(ProtocolType.STATUS.getProtocol(), StatusRequestMessage.class, GlowStoneStatusServerInfoRequestHandler.class);
 		injectInboundHandler(ProtocolType.STATUS.getProtocol(), StatusPingMessage.class, GlowStoneStatusServerPingHandler.class);
@@ -22,7 +22,7 @@ public class GlowStonePacketsInjector {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private static void injectInboundHandler(GlowProtocol protocol, Class message, Class handler) throws IllegalArgumentException, IllegalAccessException, InstantiationException {
+	private static void injectInboundHandler(GlowProtocol protocol, Class message, Class handler) throws IllegalAccessException, InstantiationException {
 		HandlerLookupService svc = (HandlerLookupService) ReflectionUtils.getField(GlowProtocol.class, "handlers").get(protocol);
 		svc.bind(message, handler);
 	}

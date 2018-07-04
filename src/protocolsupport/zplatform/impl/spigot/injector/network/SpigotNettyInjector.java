@@ -19,7 +19,9 @@ import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
 public class SpigotNettyInjector {
 
 	@SuppressWarnings("unchecked")
+
 	private static List<NetworkManager> getNetworkManagerList() throws IllegalArgumentException, IllegalAccessException, SecurityException, NoSuchFieldException {
+
 		ServerConnection serverConnection = SpigotMiscUtils.getServer().an();
 		try {
 			return (List<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("pending")).get(serverConnection);

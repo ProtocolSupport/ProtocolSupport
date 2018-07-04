@@ -26,7 +26,7 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 		playerEntityId = serverdata.readInt();
 		int gmdata = serverdata.readByte();
 		gamemode = GameMode.getById(gmdata & 0xFFFFFFF7);
-		hardcore = (gmdata & 0x8) == 0x8 ? true : false;
+		hardcore = (gmdata & 0x8) == 0x8;
 		dimension = Environment.getById(serverdata.readInt());
 		difficulty = Difficulty.getById(serverdata.readByte());
 		serverdata.readByte();

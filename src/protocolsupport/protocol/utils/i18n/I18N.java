@@ -13,10 +13,7 @@ public class I18N {
 	public I18N(String locale, List<String> lines) {
 		this.lang = locale;
 		for (String line : lines) {
-			if (line.isEmpty()) {
-				continue;
-			}
-			if (line.startsWith("#")) {
+			if (line.isEmpty() || line.startsWith("#")) {
 				continue;
 			}
 			String[] split = line.split("[=]", 2);

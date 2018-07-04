@@ -38,7 +38,7 @@ public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 					}
 					String username = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC, 16);
 					ArrayList<ProfileProperty> properties = new ArrayList<>();
-					Utils.repeat(VarNumberSerializer.readVarInt(serverdata), () -> {;
+					Utils.repeat(VarNumberSerializer.readVarInt(serverdata), () -> {
 						String name = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
 						String value = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
 						String signature = null;

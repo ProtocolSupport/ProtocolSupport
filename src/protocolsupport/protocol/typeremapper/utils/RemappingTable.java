@@ -101,7 +101,7 @@ public class RemappingTable {
 		protected static class SecondaryPartRemapper {
 
 			protected IntTuple singleRemapEntry = null;
-			protected final Int2ObjectOpenHashMap<IntTuple> oneToAnotherRemap = new Int2ObjectOpenHashMap<IntTuple>();
+			protected final Int2ObjectOpenHashMap<IntTuple> oneToAnotherRemap = new Int2ObjectOpenHashMap<>();
 
 			private void setSingleRemap(int primaryTo, int secondaryTo) {
 				this.singleRemapEntry = new IntTuple(primaryTo, secondaryTo);
@@ -135,12 +135,7 @@ public class RemappingTable {
 		}
 
 		protected SecondaryPartRemapper getOrCreateSecondaryPartRemapper(int primaryFrom) {
-			SecondaryPartRemapper sremapper = table.get(primaryFrom);
-			if (sremapper == null) {
-				sremapper = new SecondaryPartRemapper();
-				table.put(primaryFrom, sremapper);
-			}
-			return sremapper;
+			return table.computeIfAbsent(primaryFrom, k -> new SecondaryPartRemapper());
 		}
 
 	}

@@ -14,12 +14,12 @@ public class CachedInstanceOfChain<T> {
 	}
 
 	public T selectPath(Class<?> clazz) {
-		return cachedPaths.computeIfAbsent(clazz, k -> {
-			return knownPaths.entrySet().stream()
+		return cachedPaths.computeIfAbsent(clazz, k ->
+			knownPaths.entrySet().stream()
 			.filter(entry -> entry.getKey().isAssignableFrom(k))
-			.map(entry -> entry.getValue())
-			.findFirst().orElse(null);
-		});
+			.map(Map.Entry::getValue)
+			.findFirst().orElse(null)
+		);
 	}
 
 }

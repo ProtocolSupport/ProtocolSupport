@@ -22,7 +22,7 @@ public class MinecraftEncryption {
 	}
 
 	public static byte[] createHash(final PublicKey publicKey, final SecretKey secretKey) {
-		return createHash("SHA-1", new byte[][] { secretKey.getEncoded(), publicKey.getEncoded() });
+		return createHash("SHA-1", secretKey.getEncoded(), publicKey.getEncoded());
 	}
 
 	private static byte[] createHash(final String hashAlgoName, final byte[]... data) {

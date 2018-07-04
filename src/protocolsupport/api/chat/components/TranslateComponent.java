@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
 import protocolsupport.api.TranslationAPI;
@@ -25,12 +24,7 @@ public class TranslateComponent extends BaseComponent {
 
 	@Deprecated
 	public TranslateComponent(String translationKey, Object... values) {
-		this(translationKey, Lists.transform(Arrays.asList(values), new Function<Object, BaseComponent>() {
-			@Override
-			public BaseComponent apply(Object v) {
-				return v instanceof BaseComponent ? (BaseComponent) v : new TextComponent(v.toString());
-			}
-		}));
+		this(translationKey, Lists.transform(Arrays.asList(values), v -> v instanceof BaseComponent ? (BaseComponent) v : new TextComponent(v.toString())));
 	}
 
 	public TranslateComponent(String translationKey, BaseComponent... values) {
@@ -48,12 +42,7 @@ public class TranslateComponent extends BaseComponent {
 
 	@Deprecated
 	public List<Object> getArgs() {
-		return Lists.transform(args, new Function<BaseComponent, Object>() {
-			@Override
-			public Object apply(BaseComponent v) {
-				return v;
-			}
-		});
+		return Collections.unmodifiableList(args);
 	}
 
 	public List<BaseComponent> getTranslationArgs() {
@@ -62,12 +51,7 @@ public class TranslateComponent extends BaseComponent {
 
 	@Override
 	public String getValue(String locale) {
-		return TranslationAPI.translate(locale, translationKey, Lists.transform(args, new Function<BaseComponent, String>() {
-			@Override
-			public String apply(BaseComponent v) {
-				return LegacyChat.toText(v, locale);
-			}
-		}).toArray(new String[0]));
+		return TranslationAPI.translate(locale, translationKey, Lists.transform(args, v -> LegacyChat.toText(v, locale)).toArray(new String[0]));
 	}
 
 }
