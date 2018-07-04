@@ -22,11 +22,12 @@ public class GlowStoneNettyInjector {
 
 	private static final CountDownLatch injectFinishedLatch = new CountDownLatch(1);
 
-	public static void inject() throws IllegalArgumentException, IllegalAccessException {
+	public static void inject() {
 		Bukkit.getScheduler().scheduleSyncDelayedTask(JavaPlugin.getPlugin(ProtocolSupport.class), () -> {
 			try {
 				injectFinishedLatch.await();
 			} catch (InterruptedException e) {
+				System.err.println("Interrupted while waiting for inject finish");
 				e.printStackTrace();
 			}
 		});
@@ -36,7 +37,8 @@ public class GlowStoneNettyInjector {
 				Channel channel = getWithWait(ReflectionUtils.getField(GameServer.class, "channel"), getGameServer());
 				channel.pipeline().addFirst(new GlowStoneNettyServerChannelHandler());
 				Bukkit.getOnlinePlayers().forEach(player -> player.kickPlayer("Channel reset"));
-			} catch (IllegalArgumentException | IllegalAccessException e) {
+			} catch (IllegalArgumentException | IllegalAccessException | InterruptedException e) {
+				System.err.println("Unable to inject");
 				e.printStackTrace();
 			}
 			injectFinishedLatch.countDown();
@@ -52,15 +54,12 @@ public class GlowStoneNettyInjector {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static <T> T getWithWait(Field field, Object obj) throws IllegalArgumentException, IllegalAccessException {
+	private static <T> T getWithWait(Field field, Object obj) throws IllegalAccessException, InterruptedException {
 		Object val = null;
 		while (true) {
 			val = field.get(obj);
 			if (val == null) {
-				try {
-					Thread.sleep(50);
-				} catch (InterruptedException e) {
-				}
+				Thread.sleep(50);
 			} else {
 				break;
 			}

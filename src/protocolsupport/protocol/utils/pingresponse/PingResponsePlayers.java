@@ -8,7 +8,6 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
@@ -59,7 +58,7 @@ public class PingResponsePlayers {
 
 	public static class Serializer implements JsonDeserializer<PingResponsePlayers>, JsonSerializer<PingResponsePlayers> {
 		@Override
-		public PingResponsePlayers deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+		public PingResponsePlayers deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) {
 			JsonObject jsonObject = JsonUtils.getAsJsonObject(jsonElement, "players");
 			PingResponsePlayers players = new PingResponsePlayers(JsonUtils.getInt(jsonObject, "max"), JsonUtils.getInt(jsonObject, "online"));
 			if (JsonUtils.isJsonArray(jsonObject, "sample")) {

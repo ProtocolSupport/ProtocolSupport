@@ -119,7 +119,7 @@ public class ProtocolSupportAPI {
 	 * @return all currently enabled protocol versions
 	 */
 	public static Collection<ProtocolVersion> getEnabledProtocolVersions() {
-		return new ArrayList<ProtocolVersion>(enabledVersions);
+		return new ArrayList<>(enabledVersions);
 	}
 
 

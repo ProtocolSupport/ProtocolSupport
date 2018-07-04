@@ -142,7 +142,7 @@ public abstract class AbstractStatusListener {
 		}
 
 		public List<String> getSampleText() {
-			return new ArrayList<String>(sample);
+			return new ArrayList<>(sample);
 		}
 
 		public void setSampleText(List<String> sample) {

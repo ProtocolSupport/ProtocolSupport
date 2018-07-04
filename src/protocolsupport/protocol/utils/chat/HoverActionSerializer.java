@@ -6,7 +6,6 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
@@ -18,7 +17,7 @@ import protocolsupport.api.chat.modifiers.HoverAction;
 public class HoverActionSerializer implements JsonDeserializer<HoverAction>, JsonSerializer<HoverAction> {
 
 	@Override
-	public HoverAction deserialize(JsonElement element, Type type, JsonDeserializationContext ctx) throws JsonParseException {
+	public HoverAction deserialize(JsonElement element, Type type, JsonDeserializationContext ctx) {
 		JsonObject jsonObject = element.getAsJsonObject();
 		JsonPrimitive actionJson = jsonObject.getAsJsonPrimitive("action");
 		if (actionJson == null) {

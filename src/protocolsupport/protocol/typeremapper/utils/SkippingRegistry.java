@@ -18,7 +18,7 @@ public abstract class SkippingRegistry<T extends SkippingTable> {
 
 	protected abstract T createTable();
 
-	public static abstract class IntSkippingRegistry<T extends IntSkippingTable> extends SkippingRegistry<T> {
+	public abstract static class IntSkippingRegistry<T extends IntSkippingTable> extends SkippingRegistry<T> {
 
 		public void registerSkipEntry(int id, ProtocolVersion... versions) {
 			for (ProtocolVersion version : versions) {
@@ -28,7 +28,7 @@ public abstract class SkippingRegistry<T extends SkippingTable> {
 
 	}
 
-	public static abstract class EnumSkippingRegistry<T extends Enum<T>, R extends EnumSkippingTable<T>> extends SkippingRegistry<R> {
+	public abstract static class EnumSkippingRegistry<T extends Enum<T>, R extends EnumSkippingTable<T>> extends SkippingRegistry<R> {
 
 		public void registerSkipEntry(T id, ProtocolVersion... versions) {
 			for (ProtocolVersion version : versions) {
@@ -38,7 +38,7 @@ public abstract class SkippingRegistry<T extends SkippingTable> {
 
 	}
 
-	public static abstract class GenericSkippingRegistry<T, R extends GenericSkippingTable<T>> extends SkippingRegistry<R> {
+	public abstract static class GenericSkippingRegistry<T, R extends GenericSkippingTable<T>> extends SkippingRegistry<R> {
 
 		public void registerSkipEntry(T id, ProtocolVersion... versions) {
 			for (ProtocolVersion version : versions) {

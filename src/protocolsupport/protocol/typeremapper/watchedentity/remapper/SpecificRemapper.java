@@ -891,7 +891,7 @@ public enum SpecificRemapper {
 	DRAGON_FIREBALL(NetworkEntityType.DRAGON_FIREBALL, SpecificRemapper.ENTITY),
 	EVOCATOR_FANGS(NetworkEntityType.EVOCATOR_FANGS, SpecificRemapper.ENTITY);
 
-	private static final EnumMap<NetworkEntityType, SpecificRemapper> wtype = CollectionsUtils.makeEnumMappingEnumMap(SpecificRemapper.class, NetworkEntityType.class, (e -> e.type));
+	private static final Map<NetworkEntityType, SpecificRemapper> wtype = CollectionsUtils.makeEnumMappingEnumMap(SpecificRemapper.class, NetworkEntityType.class, (e -> e.type));
 
 	public static SpecificRemapper fromWatchedType(NetworkEntityType type) {
 		return wtype.getOrDefault(type, SpecificRemapper.NONE);

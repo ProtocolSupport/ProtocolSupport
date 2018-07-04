@@ -6,7 +6,6 @@ import java.net.InetSocketAddress;
 import java.security.PrivateKey;
 import java.text.MessageFormat;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
@@ -23,11 +22,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerPreLoginEvent;
 
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelPipeline;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
@@ -35,7 +30,6 @@ import protocolsupport.api.events.PlayerLoginStartEvent;
 import protocolsupport.api.events.PlayerProfileCompleteEvent;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent;
 import protocolsupport.api.utils.Profile;
-import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_pe.ClientLogin;
 import protocolsupport.protocol.utils.MinecraftEncryption;
@@ -86,12 +80,7 @@ public abstract class AbstractLoginListener {
 	public void disconnect(String s) {
 		try {
 			Bukkit.getLogger().info("Disconnecting " + getConnectionRepr() + ": " + s);
-			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(s), new GenericFutureListener<Future<? super Void>>() {
-				@Override
-				public void operationComplete(Future<? super Void> future)  {
-					networkManager.close(s);
-				}
-			});
+			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(s), future -> networkManager.close(s));
 		} catch (Exception exception) {
 			Bukkit.getLogger().log(Level.SEVERE, "Error whilst disconnecting player", exception);
 		}
@@ -105,6 +94,7 @@ public abstract class AbstractLoginListener {
 	public void handleLoginStart(String name) {
 		Validate.isTrue(state == LoginState.HELLO, "Unexpected hello packet");
 		state = LoginState.ONLINEMODERESOLVE;
+
 		loginprocessor.execute(new Runnable() {
 			@Override
 			public void run() {
@@ -164,22 +154,19 @@ public abstract class AbstractLoginListener {
 	public void handleEncryption(EncryptionPacketWrapper encryptionpakcet) {
 		Validate.isTrue(state == LoginState.KEY, "Unexpected key packet");
 		state = LoginState.AUTHENTICATING;
-		loginprocessor.execute(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					final PrivateKey privatekey = ServerPlatform.get().getMiscUtils().getEncryptionKeyPair().getPrivate();
-					if (!Arrays.equals(randomBytes, encryptionpakcet.getNonce(privatekey))) {
-						throw new IllegalStateException("Invalid nonce!");
-					}
-					SecretKey loginKey = encryptionpakcet.getSecretKey(privatekey);
-					enableEncryption(loginKey);
-					loginOnline(loginKey);
-				} catch (Throwable t) {
-					AbstractLoginListener.this.disconnect("Error occured while logging in");
-					if (ServerPlatform.get().getMiscUtils().isDebugging()) {
-						t.printStackTrace();
-					}
+		loginprocessor.execute(() -> {
+			try {
+				final PrivateKey privatekey = ServerPlatform.get().getMiscUtils().getEncryptionKeyPair().getPrivate();
+				if (!Arrays.equals(randomBytes, encryptionpakcet.getNonce(privatekey))) {
+					throw new IllegalStateException("Invalid nonce!");
+				}
+				SecretKey loginKey = encryptionpakcet.getSecretKey(privatekey);
+				enableEncryption(loginKey);
+				loginOnline(loginKey);
+			} catch (Throwable t) {
+				AbstractLoginListener.this.disconnect("Error occured while logging in");
+				if (ServerPlatform.get().getMiscUtils().isDebugging()) {
+					t.printStackTrace();
 				}
 			}
 		});
@@ -194,10 +181,7 @@ public abstract class AbstractLoginListener {
 		try {
 			GameProfile profile = connection.getProfile();
 			profile.setOriginalUUID(networkManager.getSpoofedUUID() != null ? networkManager.getSpoofedUUID() : Profile.generateOfflineModeUUID(profile.getName()));
-			Collection<ProfileProperty> spoofedProperties = networkManager.getSpoofedProperties();
-			if (spoofedProperties != null) {
-				spoofedProperties.forEach(profile::addProperty);
-			}
+			networkManager.getSpoofedProperties().forEach(profile::addProperty);
 			finishLogin();
 		} catch (Exception exception) {
 			disconnect("Failed to verify username!");
@@ -301,14 +285,9 @@ public abstract class AbstractLoginListener {
 		if (hasCompression(connection.getVersion())) {
 			int threshold = ServerPlatform.get().getMiscUtils().getCompressionThreshold();
 			if (threshold >= 0) {
-				this.networkManager.sendPacket(
+				networkManager.sendPacket(
 					ServerPlatform.get().getPacketFactory().createSetCompressionPacket(threshold),
-					new ChannelFutureListener() {
-						@Override
-						public void operationComplete(ChannelFuture future)  {
-							ServerPlatform.get().getMiscUtils().enableCompression(networkManager.getChannel().pipeline(), threshold);
-						}
-					}
+					future -> ServerPlatform.get().getMiscUtils().enableCompression(networkManager.getChannel().pipeline(), threshold)
 				);
 			}
 		}
