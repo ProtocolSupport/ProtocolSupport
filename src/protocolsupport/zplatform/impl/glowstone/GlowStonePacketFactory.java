@@ -244,13 +244,13 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 			UUID randomUUID = UUID.randomUUID();
 			GlowPlayerProfile[] playerProfiles = new GlowPlayerProfile[profiles.size()];
 			for (int i = 0; i < profiles.size(); i++) {
-				playerProfiles[i] = new GlowPlayerProfile(profiles.get(i), randomUUID);
+				playerProfiles[i] = new GlowPlayerProfile(profiles.get(i), randomUUID, false);
 			}
 			playerProfiles = Arrays.copyOfRange(playerProfiles, 0, Math.min(playerProfiles.length, server.getPlayerSampleCount()));
 			for (GlowPlayerProfile profile : playerProfiles) {
 				JSONObject sample = new JSONObject();
 				sample.put("name", profile.getName());
-				sample.put("id", profile.getUniqueId().toString());
+				sample.put("id", profile.getId().toString());
 				playerSample.add(sample);
 			}
 			players.put("sample", playerSample);

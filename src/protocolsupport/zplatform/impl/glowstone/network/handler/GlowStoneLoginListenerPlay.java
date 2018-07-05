@@ -33,7 +33,7 @@ public class GlowStoneLoginListenerPlay extends AbstractLoginListenerPlay implem
 	@Override
 	protected JoinData createJoinData() {
 		GlowPlayerProfile glowstoneProfile = GlowStoneMiscUtils.toGlowStoneGameProfile(connection.getProfile());
-		PlayerReader reader = server.getPlayerDataService().beginReadingData(glowstoneProfile.getUniqueId());
+		PlayerReader reader = server.getPlayerDataService().beginReadingData(glowstoneProfile.getId());
 		GlowPlayer player = new GlowPlayer(((GlowStoneNetworkManagerWrapper) networkManager).getSession(), glowstoneProfile, reader);
 		return new JoinData(player, player, reader) {
 			@Override
@@ -88,7 +88,7 @@ public class GlowStoneLoginListenerPlay extends AbstractLoginListenerPlay implem
 
 		GlowServer.logger.info(glowplayer.getName() + " [" + networkManager.getAddress() + "] connected, UUID: " + glowplayer.getUniqueId());
 
-		String message = EventFactory.onPlayerJoin(glowplayer).getJoinMessage();
+		String message = EventFactory.getInstance().onPlayerJoin(glowplayer).getJoinMessage();
 		if ((message != null) && !message.isEmpty()) {
 			server.broadcastMessage(message);
 		}

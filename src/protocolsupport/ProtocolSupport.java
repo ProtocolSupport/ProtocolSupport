@@ -42,8 +42,6 @@ import protocolsupport.utils.Utils;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.impl.spigot.entitytracker.SpigotEntityTracker;
-import protocolsupport.zplatform.impl.spigot.entitytracker.SpigotEntityTrackerEntry;
 
 public class ProtocolSupport extends JavaPlugin {
 
@@ -113,8 +111,6 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(LegacyPotion.class.getName());
 			Class.forName(LegacyEntityType.class.getName());
 			Class.forName(LegacyEffect.class.getName());
-			Class.forName(SpigotEntityTracker.class.getName());
-			Class.forName(SpigotEntityTrackerEntry.class.getName());
 			ServerPlatform.get().getInjector().onLoad();
 		} catch (Throwable t) {
 			getLogger().log(Level.SEVERE, "Error when loading, make sure you are using supported server version", t);

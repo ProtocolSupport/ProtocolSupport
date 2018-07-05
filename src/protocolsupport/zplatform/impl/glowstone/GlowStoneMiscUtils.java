@@ -54,8 +54,8 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 			profile.getProperties().values().stream()
 			.flatMap(Set::stream)
 			.map(property -> new ProfileProperty(property.getName(), property.getValue(), property.getSignature()))
-			.collect(Collectors.toList())
-		);
+			.collect(Collectors.toList()),
+		false);
 	}
 
 	public static ProtocolType netStateToProtocol(NetworkState type) {
