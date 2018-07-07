@@ -151,7 +151,7 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 		float ePitch = entity.pitch;
 		if (
 			Math.abs(eYaw - lastYaw) >= 1 ||
-			Math.abs(eYaw - lastPitch) >= 1
+			Math.abs(ePitch - lastPitch) >= 1
 		) {
 			lastYaw = eYaw;
 			lastPitch = ePitch;
@@ -255,9 +255,17 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 				}
 			}
 			if (!cancelled) {
-				this.broadcastIncludingSelf(new PacketPlayOutEntityVelocity(this.entity));
+				broadcastIncludingSelf(new PacketPlayOutEntityVelocity(this.entity));
 			}
 			entity.velocityChanged = false;
+		}
+	}
+
+	@Override
+	public void a(final EntityPlayer entityplayer) {
+		if (removeTrackedPlayer(entityplayer)) {
+			entity.c(entityplayer);
+			entityplayer.c(entity);
 		}
 	}
 
@@ -327,9 +335,8 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 					entity.b(entityplayer);
 					entityplayer.d(entity);
 				}
-			} else if (removeTrackedPlayer(entityplayer)) {
-				entity.c(entityplayer);
-				entityplayer.c(entity);
+			} else {
+				a(entityplayer);
 			}
 		}
 	}

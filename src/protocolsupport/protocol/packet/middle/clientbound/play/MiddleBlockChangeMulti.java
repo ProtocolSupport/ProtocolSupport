@@ -16,7 +16,7 @@ public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {
 	public void readFromServerData(ByteBuf serverdata) {
 		chunkX = serverdata.readInt();
 		chunkZ = serverdata.readInt();
-		records = ArraySerializer.readVarIntTArray(serverdata, Record.class, (from) -> new Record(from.readUnsignedShort(), VarNumberSerializer.readVarInt(from)));
+		records = ArraySerializer.readVarIntTArray(serverdata, Record.class, from -> new Record(from.readUnsignedShort(), VarNumberSerializer.readVarInt(from)));
 	}
 
 	public static class Record {

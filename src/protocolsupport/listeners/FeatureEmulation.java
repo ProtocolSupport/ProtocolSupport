@@ -28,28 +28,30 @@ import protocolsupport.zplatform.ServerPlatform;
 public class FeatureEmulation implements Listener {
 
 	public FeatureEmulation() {
-		Bukkit.getScheduler().runTaskTimer(ProtocolSupport.getInstance(), () -> {
-			Bukkit.getOnlinePlayers().stream()
-			.filter(player -> {
-				ProtocolVersion version = ProtocolSupportAPI.getProtocolVersion(player);
-				return (version.getProtocolType() == ProtocolType.PC) && version.isBefore(ProtocolVersion.MINECRAFT_1_9);
-			})
-			.filter(player -> player.hasPotionEffect(PotionEffectType.LEVITATION) && !player.isFlying())
-			.forEach(player -> {
-				PotionEffect levitation = player.getPotionEffect(PotionEffectType.LEVITATION);
-				int amplifierByte = (byte) levitation.getAmplifier();
-				if (levitation.getAmplifier() != amplifierByte) {
-					player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, levitation.getDuration(), amplifierByte), true);
-					Vector vel = player.getVelocity();
-					double noLevitationVelY = (vel.getY() - ((levitation.getAmplifier() + 1) * 0.01)) / 0.8;
-					double byteAmplifierVelY = (noLevitationVelY * 0.8D) + ((amplifierByte + 1) * 0.01);
-					vel.setY(byteAmplifierVelY);
-					player.setVelocity(vel);
-				} else {
-					player.setVelocity(player.getVelocity());
-				}
-			});
-		}, 1, 1);
+		Bukkit.getScheduler().runTaskTimer(
+			ProtocolSupport.getInstance(),
+			() ->
+				Bukkit.getOnlinePlayers().stream()
+				.filter(player -> {
+					ProtocolVersion version = ProtocolSupportAPI.getProtocolVersion(player);
+					return (version.getProtocolType() == ProtocolType.PC) && version.isBefore(ProtocolVersion.MINECRAFT_1_9);
+				})
+				.filter(player -> player.hasPotionEffect(PotionEffectType.LEVITATION) && !player.isFlying())
+				.forEach(player -> {
+					PotionEffect levitation = player.getPotionEffect(PotionEffectType.LEVITATION);
+					int amplifierByte = (byte) levitation.getAmplifier();
+					if (levitation.getAmplifier() != amplifierByte) {
+						player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, levitation.getDuration(), amplifierByte), true);
+						Vector vel = player.getVelocity();
+						double noLevitationVelY = (vel.getY() - ((levitation.getAmplifier() + 1) * 0.01)) / 0.8;
+						double byteAmplifierVelY = (noLevitationVelY * 0.8D) + ((amplifierByte + 1) * 0.01);
+						vel.setY(byteAmplifierVelY);
+						player.setVelocity(vel);
+					} else {
+						player.setVelocity(player.getVelocity());
+					}
+				}),
+			1, 1);
 	}
 
 	@EventHandler
@@ -99,14 +101,11 @@ public class FeatureEmulation implements Listener {
 
 	@EventHandler
 	public void onJoin(final PlayerJoinEvent event) {
-		Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), new Runnable() {
-			@Override
-			public void run() {
-				BaseComponent header = TabAPI.getDefaultHeader();
-				BaseComponent footer = TabAPI.getDefaultFooter();
-				if ((header != null) || (footer != null)) {
-					TabAPI.sendHeaderFooter(event.getPlayer(), header, footer);
-				}
+		Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), () -> {
+			BaseComponent header = TabAPI.getDefaultHeader();
+			BaseComponent footer = TabAPI.getDefaultFooter();
+			if ((header != null) || (footer != null)) {
+				TabAPI.sendHeaderFooter(event.getPlayer(), header, footer);
 			}
 		}, 1);
 	}

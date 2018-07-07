@@ -7,7 +7,7 @@ import it.unimi.dsi.fastutil.ints.Int2ByteOpenHashMap;
 
 public class SkippingTable {
 
-	public static abstract class IntSkippingTable extends SkippingTable {
+	public abstract static class IntSkippingTable extends SkippingTable {
 
 		public abstract void setSkip(int id);
 

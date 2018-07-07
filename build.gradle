@@ -49,8 +49,8 @@ def dlDepsC = [
 		'spigot-1.12.2-2.jar'
 	),
 	new Tuple(
-		'https://repo.glowstone.net/repository/snapshots/net/glowstone/glowstone/2018.2.0-SNAPSHOT/glowstone-2018.2.0-20180209.231901-7.jar',
-		'glowstone-1.12.2-1.jar'
+		'https://github.com/GlowstoneMC/Glowstone/releases/download/2018.6.0/glowstone.jar',
+		'glowstone-1.12.2-2.jar'
 	)
 ]
 

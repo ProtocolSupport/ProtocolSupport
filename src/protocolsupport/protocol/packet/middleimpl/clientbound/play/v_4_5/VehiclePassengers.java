@@ -35,6 +35,7 @@ public class VehiclePassengers extends MiddleVehiclePassengers {
 				RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 				packets.add(create(oldPassengerId, -1));
 				packets.add(create(newPassengerId, vehicleId));
+				return packets;
 			}
 		}
 		return RecyclableEmptyList.get();

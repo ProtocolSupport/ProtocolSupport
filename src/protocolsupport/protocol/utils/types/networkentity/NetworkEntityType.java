@@ -233,8 +233,4 @@ public enum NetworkEntityType {
 		this(etype, typeId, null);
 	}
 
-	NetworkEntityType(EType etype, EntityType bukkitType) {
-		this(etype, bukkitType, null);
-	}
-
 }

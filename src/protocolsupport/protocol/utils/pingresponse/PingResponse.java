@@ -8,7 +8,6 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
@@ -92,7 +91,7 @@ public class PingResponse {
 	public static class Serializer implements JsonDeserializer<PingResponse>, JsonSerializer<PingResponse> {
 
 		@Override
-		public PingResponse deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext ctx) throws JsonParseException {
+		public PingResponse deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext ctx) {
 			JsonObject jsonObject = JsonUtils.getAsJsonObject(jsonElement, "status");
 			PingResponse ping = new PingResponse();
 			if (jsonObject.has("version")) {

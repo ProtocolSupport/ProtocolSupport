@@ -7,7 +7,7 @@ import java.lang.reflect.Modifier;
 
 public class ReflectionUtils {
 
-	public static void setStaticFinalField(Field field, Object newValue) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+	public static void setStaticFinalField(Field field, Object newValue) throws NoSuchFieldException, IllegalAccessException {
 		ReflectionUtils.setAccessible(Field.class.getDeclaredField("modifiers")).setInt(field, field.getModifiers() & ~Modifier.FINAL);
 		ReflectionUtils.setAccessible(Field.class.getDeclaredField("root")).set(field, null);
 		ReflectionUtils.setAccessible(Field.class.getDeclaredField("overrideFieldAccessor")).set(field, null);

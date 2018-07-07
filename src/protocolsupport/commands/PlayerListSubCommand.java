@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
@@ -24,7 +25,7 @@ public class PlayerListSubCommand implements SubCommand {
 		for (ProtocolVersion version : ProtocolVersion.getAllSupported()) {
 			List<String> players = Bukkit.getOnlinePlayers().stream()
 			.filter(player -> ProtocolSupportAPI.getProtocolVersion(player) == version)
-			.map(player -> player.getName())
+			.map(Player::getName)
 			.collect(Collectors.toList());
 			if (!players.isEmpty() || verbose) {
 				sender.sendMessage(ChatColor.YELLOW + "[" + version.getName() + "]: " + ChatColor.GREEN + String.join(", ", players));

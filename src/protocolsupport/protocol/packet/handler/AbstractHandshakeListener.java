@@ -7,8 +7,6 @@ import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
 import protocolsupport.api.events.ConnectionHandshakeEvent;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.ConnectionImpl;
@@ -91,12 +89,7 @@ public abstract class AbstractHandshakeListener {
 
 	@SuppressWarnings("unchecked")
 	protected void disconnect(String message) {
-		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), new GenericFutureListener<Future<? super Void>>() {
-			@Override
-			public void operationComplete(Future<? super Void> arg0)  {
-				networkManager.close(message);
-			}
-		});
+		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), future -> networkManager.close(message));
 	}
 
 	protected abstract AbstractLoginListener getLoginListener(NetworkManagerWrapper networkManager, String hostname);

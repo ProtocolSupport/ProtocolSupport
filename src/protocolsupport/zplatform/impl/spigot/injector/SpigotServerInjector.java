@@ -4,7 +4,7 @@ import protocolsupport.zplatform.impl.spigot.block.SpigotBlockWaterLilyBoundsFix
 
 public class SpigotServerInjector {
 
-	public static void inject() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+	public static void inject() throws IllegalAccessException, NoSuchFieldException {
 		SpigotBlockWaterLilyBoundsFixer.inject();
 	}
 

@@ -74,7 +74,7 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 	public void setAddress(InetSocketAddress address) {
 		ProxyData old = getSession().getProxyData();
 		if (old != null) {
-			getSession().setProxyData(new ProxyData(null, null, address, null, old.getProfile().getUniqueId(), new ArrayList<>(old.getProfile().getProperties())));
+			getSession().setProxyData(new ProxyData(null, null, address, null, old.getProfile().getId(), new ArrayList<>(old.getProfile().getProperties())));
 		} else {
 			getSession().setProxyData(new ProxyData(null, null, address, null, fakeUUID, Collections.emptyList()));
 		}
@@ -137,13 +137,13 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 	@Override
 	public UUID getSpoofedUUID() {
 		GlowPlayerProfile profile = getSpoofedProfile();
-		return profile != null ? profile.getUniqueId() : null;
+		return profile != null ? profile.getId() : null;
 	}
 
 	@Override
 	public Collection<ProfileProperty> getSpoofedProperties() {
 		GlowPlayerProfile profile = getSpoofedProfile();
-		return profile == null ? null :
+		return profile == null ? Collections.emptyList() :
 		profile.getProperties().stream()
 		.map(property -> new ProfileProperty(property.getName(), property.getValue(), property.getSignature()))
 		.collect(Collectors.toList());

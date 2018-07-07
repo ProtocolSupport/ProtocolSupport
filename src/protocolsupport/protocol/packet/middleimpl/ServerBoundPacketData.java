@@ -40,19 +40,19 @@ public class ServerBoundPacketData extends WrappingBuffer implements Recyclable 
 	}
 
 	@Override
+	public void recycle() {
+		clear();
+		packet = null;
+		handle.recycle(this);
+	}
+
+	@Override
 	public void setBuf(ByteBuf buf) {
 	}
 
 	@Override
 	protected void finalize() {
 		release();
-	}
-
-	@Override
-	public void recycle() {
-		clear();
-		packet = null;
-		handle.recycle(this);
 	}
 
 }

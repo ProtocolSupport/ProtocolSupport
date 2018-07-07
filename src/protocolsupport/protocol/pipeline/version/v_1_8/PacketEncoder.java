@@ -3,6 +3,7 @@ package protocolsupport.protocol.pipeline.version.v_1_8;
 import java.util.concurrent.TimeUnit;
 
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
 import protocolsupport.api.Connection;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.packet.ClientBoundPacket;
@@ -297,6 +298,12 @@ public class PacketEncoder extends AbstractModernPacketEncoder {
 			);
 		}
 		return allowed;
+	}
+
+	@Override
+	public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+		super.handlerRemoved(ctx);
+		chunkqueue.release();
 	}
 
 }

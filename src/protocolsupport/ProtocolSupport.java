@@ -48,8 +48,6 @@ import protocolsupport.utils.Utils;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.impl.spigot.entitytracker.SpigotEntityTracker;
-import protocolsupport.zplatform.impl.spigot.entitytracker.SpigotEntityTrackerEntry;
 import protocolsupport.zplatform.impl.pe.PEProxyServer;
 import protocolsupport.zplatform.impl.pe.PEProxyServerInfoHandler;
 
@@ -123,8 +121,6 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(LegacyPotion.class.getName());
 			Class.forName(LegacyEntityType.class.getName());
 			Class.forName(LegacyEffect.class.getName());
-			Class.forName(SpigotEntityTracker.class.getName());
-			Class.forName(SpigotEntityTrackerEntry.class.getName());
 			Class.forName(PEDataValues.class.getName());
 			Class.forName(PEProxyServerInfoHandler.class.getName());
 			Class.forName(PESkinsProviderSPI.class.getName());

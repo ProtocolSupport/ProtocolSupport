@@ -159,12 +159,7 @@ public abstract class AbstractLoginListenerPlay {
 
 	@SuppressWarnings("unchecked")
 	protected void disconnect0(String s) {
-		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createPlayDisconnectPacket(s), new GenericFutureListener<Future<? super Void>>() {
-			@Override
-			public void operationComplete(Future<? super Void> future) {
-				networkManager.close(s);
-			}
-		});
+		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createPlayDisconnectPacket(s), future -> networkManager.close(s));
 	}
 
 	protected abstract JoinData createJoinData();
