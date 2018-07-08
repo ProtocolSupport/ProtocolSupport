@@ -15,7 +15,7 @@ public abstract class MiddleStatistics extends ClientBoundMiddlePacket {
 	public void readFromServerData(ByteBuf serverdata) {
 		statistics = ArraySerializer.readVarIntTArray(
 			serverdata, Statistic.class,
-			(from) -> new Statistic(StringSerializer.readString(from, ProtocolVersionsHelper.LATEST_PC), VarNumberSerializer.readVarInt(serverdata))
+			from -> new Statistic(StringSerializer.readString(from, ProtocolVersionsHelper.LATEST_PC), VarNumberSerializer.readVarInt(serverdata))
 		);
 	}
 

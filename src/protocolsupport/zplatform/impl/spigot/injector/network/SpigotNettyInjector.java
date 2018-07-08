@@ -29,7 +29,7 @@ public class SpigotNettyInjector {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static void inject() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+	public static void inject() throws IllegalAccessException, NoSuchFieldException {
 		ServerConnection serverConnection = SpigotMiscUtils.getServer().an();
 		Field connectionsListField = ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("g"));
 		ChannelInjectList connectionsList = new ChannelInjectList(getNetworkManagerList(), (List<ChannelFuture>) connectionsListField.get(serverConnection));

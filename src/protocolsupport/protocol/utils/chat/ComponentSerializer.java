@@ -26,7 +26,7 @@ import protocolsupport.utils.JsonUtils;
 public class ComponentSerializer implements JsonDeserializer<BaseComponent>, JsonSerializer<BaseComponent> {
 
 	@Override
-	public BaseComponent deserialize(JsonElement element, Type type, JsonDeserializationContext ctx) throws JsonParseException {
+	public BaseComponent deserialize(JsonElement element, Type type, JsonDeserializationContext ctx) {
 		if (element.isJsonPrimitive()) {
 			return new TextComponent(element.getAsString());
 		}

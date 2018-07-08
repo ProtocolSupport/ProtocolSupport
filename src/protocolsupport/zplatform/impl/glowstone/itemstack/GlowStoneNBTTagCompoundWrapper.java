@@ -65,10 +65,7 @@ public class GlowStoneNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 	@Override
 	public boolean hasKeyOfType(String tagname, NBTTagType type) {
 		Tag<?> tagval = tag.getValue().get(tagname);
-		if ((tagval != null) && (tagval.getType().getId() == type.getId())) {
-			return true;
-		}
-		return false;
+		return ((tagval != null) && (tagval.getType().getId() == type.getId()));
 	}
 
 	@Override

@@ -6,7 +6,7 @@ import protocolsupport.utils.ReflectionUtils;
 
 public class SpigotBlockWaterLilyBoundsFixer {
 
-	public static void inject() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+	public static void inject() throws NoSuchFieldException, IllegalAccessException {
 		ReflectionUtils.setStaticFinalField(ReflectionUtils.getField(BlockWaterLily.class, "a"), new AxisAlignedBB(0.0625, 0.0, 0.0625, 0.9375, 0.015625, 0.9375));
 	}
 

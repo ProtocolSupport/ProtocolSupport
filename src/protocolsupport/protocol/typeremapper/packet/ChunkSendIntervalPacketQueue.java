@@ -8,6 +8,7 @@ import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.Utils;
+import protocolsupport.utils.recyclable.Recyclable;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -75,7 +76,7 @@ public class ChunkSendIntervalPacketQueue {
 	}
 
 	public void release() {
-		queue.forEach(packet -> packet.recycle());
+		queue.forEach(Recyclable::recycle);
 		queue.clear();
 	}
 

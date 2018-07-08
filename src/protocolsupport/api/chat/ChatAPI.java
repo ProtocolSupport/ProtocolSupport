@@ -35,7 +35,7 @@ public class ChatAPI {
 	 * @return chat component
 	 * @throws JsonParseException if passed string is not in json format
 	 */
-	public static BaseComponent fromJSON(String json) throws JsonParseException {
+	public static BaseComponent fromJSON(String json) {
 		try {
 			BaseComponent result = gson.fromJson(json, BaseComponent.class);
 			return result != null ? result : new TextComponent("");
