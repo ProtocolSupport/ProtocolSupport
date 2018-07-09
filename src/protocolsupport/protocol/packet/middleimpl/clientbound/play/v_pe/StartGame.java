@@ -1,7 +1,10 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
+import net.minecraft.server.v1_12_R1.EntityPlayer;
 import org.bukkit.Bukkit;
 
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.entity.Player;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleStartGame;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -10,6 +13,7 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.AttributesCache;
+import protocolsupport.protocol.typeremapper.pe.FixedPlayerConnection;
 import protocolsupport.protocol.typeremapper.pe.PEAdventureSettings;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.Environment;
@@ -105,6 +109,17 @@ public class StartGame extends MiddleStartGame {
 		//add two dimension switches to make sure that player ends up in right dimension even if bungee dimension switch on server switch broke stuff
 		ChangeDimension.create(version, dimension != Environment.OVERWORLD ? Environment.OVERWORLD: Environment.THE_END, player, attrscache.getPEFakeSetPositionY(), packets);
 		ChangeDimension.create(version, dimension, player, attrscache.getPEFakeSetPositionY(), packets);
+
+		// TODO: This shouldn't be here
+		Player bukkitPlayer = this.connection.getPlayer();
+		EntityPlayer entityPlayer = ((CraftPlayer) bukkitPlayer).getHandle();
+		entityPlayer.playerConnection = new FixedPlayerConnection(
+			entityPlayer.server,
+			entityPlayer.playerConnection.networkManager,
+			entityPlayer
+		);
+		System.out.println("rip original player connection, we are now using " + entityPlayer.playerConnection);
+
 		return packets;
 	}
 
