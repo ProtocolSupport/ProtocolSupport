@@ -79,13 +79,12 @@ public class InventoryData extends MiddleInventoryData {
 					case 0: { //Brew time (0 - 400) (400 is empty)
 						return RecyclableSingletonList.create(create(windowId, 0, Math.round(value / 2) * 2));
 					}
-					case 1: { //Fuel time (0 - 20) (20 is full)
+					case 1: { //Fuel remaining (0 - 20) (20 is full)
 						RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-						int val1 = value > 0 ? 20 : 0;
-						// This is an approximate formula to match measured values.
-						int val2 = (int) Math.floor(Math.pow(1.298, (20-value))) + 20;
-						packets.add(create( windowId, 1, val1));
-						packets.add(create( windowId, 2, val2));
+						// FuelAmount: Current amount of fuel (0-20)
+						packets.add(create( windowId, 1, value));
+						// FuelTotal: Maximum amount of fuel (always 20)
+						packets.add(create( windowId, 2, 20));
 						return packets;
 					}
 				}
