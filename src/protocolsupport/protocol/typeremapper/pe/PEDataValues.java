@@ -406,21 +406,23 @@ public class PEDataValues {
 	}
 
 	public static class PEEntityData {
-		private BoundingBox boundingBox;
-		private Offset offset;
-		private RiderInfo riderInfo;
+		// Note that these fields must have non-standard naming to match
+		// the format in entitydata.json
+		private BoundingBox BoundingBox;
+		private Offset Offset;
+		private RiderInfo RiderInfo;
 		private PocketInventoryFilter InventoryFilter;
 
 		public BoundingBox getBoundingBox() {
-			return boundingBox;
+			return BoundingBox;
 		}
 
 		public Offset getOffset() {
-			return offset;
+			return Offset;
 		}
 
 		public RiderInfo getRiderInfo() {
-			return riderInfo;
+			return RiderInfo;
 		}
 
 		public PocketInventoryFilter getInventoryFilter() {
