@@ -79,18 +79,12 @@ public class InventoryData extends MiddleInventoryData {
 					case 0: { //Brew time (0 - 400) (400 is empty)
 						return RecyclableSingletonList.create(create(windowId, 0, Math.round(value / 2) * 2));
 					}
-					case 1: { //Fuel time (0 - 20) (20 is full)
-						//TODO: make a formula?
-						//To be honest I have no clue how it works on the inside, I just tried until the bar matches PC :F
+					case 1: { //Fuel remaining (0 - 20) (20 is full)
 						RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-						packets.add(create( windowId, 1, value > 0 ? 20 : 0));
-						int inv = 20 - value;
-						if (inv > 6)  { inv += (inv- 6); }
-						if (inv > 10) { inv += (inv-10); }
-						if (inv > 30) { inv += (inv-30); }
-						if (inv > 50) { inv += (inv-50); }
-						if (inv > 60) { inv += (inv-60); }
-						packets.add(create( windowId, 2, 20 + inv));
+						// FuelAmount: Current amount of fuel (0-20)
+						packets.add(create( windowId, 1, value));
+						// FuelTotal: Maximum amount of fuel (always 20)
+						packets.add(create( windowId, 2, 20));
 						return packets;
 					}
 				}
