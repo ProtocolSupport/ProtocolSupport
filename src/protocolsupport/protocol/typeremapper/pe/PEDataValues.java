@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.util.EnumMap;
 import java.util.Map;
 
+import com.google.gson.annotations.SerializedName;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.util.Vector;
 
@@ -406,10 +407,17 @@ public class PEDataValues {
 	}
 
 	public static class PEEntityData {
+		@SerializedName("BoundingBox")
 		private BoundingBox boundingBox;
+
+		@SerializedName("Offset")
 		private Offset offset;
+
+		@SerializedName("RiderInfo")
 		private RiderInfo riderInfo;
-		private PocketInventoryFilter InventoryFilter;
+
+		@SerializedName("InventoryFilter")
+		private PocketInventoryFilter inventoryFilter;
 
 		public BoundingBox getBoundingBox() {
 			return boundingBox;
@@ -424,12 +432,12 @@ public class PEDataValues {
 		}
 
 		public PocketInventoryFilter getInventoryFilter() {
-			return InventoryFilter;
+			return inventoryFilter;
 		}
 
 		public PEEntityData init() {
-			if(InventoryFilter != null) {
-				InventoryFilter.init();
+			if(inventoryFilter != null) {
+				inventoryFilter.init();
 			}
 			return this;
 		}
