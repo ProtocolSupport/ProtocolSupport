@@ -20,20 +20,21 @@ public class InventoryData extends MiddleInventoryData {
 		switch(cache.getWindowCache().getOpenedWindow()) {
 			case FURNACE: {
 				switch(type) {
-					case 0: { //Fire icon (Burned ticks) (Tick in PE is 50ms while in PC it's 20)
-						int peValue = Math.round((((float) value * 400) / invCache.getFuelTime()));
-						return RecyclableSingletonList.create(create(windowId, 2, peValue));
+					case 0: { //Fire icon (Update how much fuel has burned)
+						int peValue = Math.round((((float) value * 200) / invCache.getFuelTime()));
+						return RecyclableSingletonList.create(create(windowId, 1, peValue));
 					}
-					case 1: { //Fuel burn time
+					case 1: { //Fuel burn time (Set max amount of fuel available)
 						if(value != 0) {
 							invCache.setFuelTime(value);
 						}
 						break;
 					}
-					case 2: { //Cook time (How long the item has been cooking)
-						return RecyclableSingletonList.create(create(windowId, 0, Math.round((((float) value * 400) / invCache.getSmeltTime()))));
+					case 2: { //Cook time (Update how long the item has been cooking)
+						int peValue = Math.round((((float) value * 200) / invCache.getSmeltTime()));
+						return RecyclableSingletonList.create(create(windowId, 0, peValue));
 					}
-					case 3: { //Smelt time (How long it takes for the item to smelt)
+					case 3: { //Smelt time (Set how long it takes for the item to smelt)
 						if(value != 0) {
 							invCache.setSmeltTime(value);
 						}
