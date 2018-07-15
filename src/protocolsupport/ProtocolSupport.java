@@ -177,6 +177,10 @@ public class ProtocolSupport extends JavaPlugin {
 		ProtocolSupport.getInstance().getLogger().info(message);
 	}
 
+	public static void logWarning(String message) {
+		ProtocolSupport.getInstance().getLogger().warning(message);
+	}
+
 	public static class BuildInfo {
 		public final String buildtime;
 		public final String buildhost;
