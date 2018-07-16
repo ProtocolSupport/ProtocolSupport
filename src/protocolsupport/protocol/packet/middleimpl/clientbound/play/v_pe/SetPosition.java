@@ -24,9 +24,9 @@ public class SetPosition extends MiddleSetPosition {
 		}
 		//PE sends position that intersects blocks bounding boxes in some cases
 		//Server doesn't accept such movements and will send a set position, but we ignore it unless it is above leniency
-		if (cache.getMovementCache().isPEPositionAboveLeniency()) {
+		//if (cache.getMovementCache().isPEPositionAboveLeniency()) {
 			packets.add(create(cache.getWatchedEntityCache().getSelfPlayer(), x, y + 0.01, z, pitch, yaw, ANIMATION_MODE_TELEPORT));
-		}
+		//}
 		return packets;
 	}
 
