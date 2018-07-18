@@ -208,10 +208,9 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 		return new SetCompressionMessage(threshold);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public Message createBlockBreakSoundPacket(Position pos, Material type) {
-		BlockDataEntry blockdataentry = BlockData.getById(type.getId());
+		BlockDataEntry blockdataentry = BlockData.get(type);
 		return new SoundEffectMessage(
 			blockdataentry.getBreakSound(), SoundCategory.BLOCKS,
 			pos.getX(), pos.getY(), pos.getZ(),
@@ -710,6 +709,22 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 	public int getOutPlayUnlockRecipesPacketId() {
 		return getOpcode(ProtocolType.PLAY, OUTBOUND, UnlockRecipesMessage.class);
 	}
+
+	@Override
+	public int getOutPlayDeclareCommandsPacketId() {
+		return 0x11; //TODO:
+	}
+
+	@Override
+	public int getOutPlayDeclareRecipesPacketId() {
+		return 0x54; //TODO
+	}
+
+	@Override
+	public int getOutPlayDeclareTagsPacket() {
+		return 0x55; //TODO
+	}
+
 
 	@Override
 	public int getOutPlayAdvancementsTabPacketId() {

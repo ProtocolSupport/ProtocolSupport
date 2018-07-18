@@ -1,8 +1,9 @@
 package protocolsupport.protocol.typeremapper.legacy;
 
+import org.bukkit.NamespacedKey;
+
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 
 public class LegacyPotion {
 
@@ -44,8 +45,8 @@ public class LegacyPotion {
 
 	private static void register(String name, int id) {
 		toLegacyId.put(name, id);
-		toLegacyId.put(MinecraftData.addNamespacePrefix(name), id);
-		fromLegacyId.put(id, MinecraftData.addNamespacePrefix(name));
+		toLegacyId.put(NamespacedKey.minecraft(name).toString(), id);
+		fromLegacyId.put(id, NamespacedKey.minecraft(name).toString());
 	}
 
 	public static int toLegacyId(String nbttag, boolean isThrowable) {

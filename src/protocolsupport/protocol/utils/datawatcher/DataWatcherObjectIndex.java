@@ -11,6 +11,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectDirec
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectItemStack;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectNBTTagCompound;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalChat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalUUID;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
@@ -38,7 +39,7 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 	public static class Entity {
 		public static final DataWatcherObjectIndex<DataWatcherObjectByte> FLAGS = takeNextIndex(DataWatcherObjectByte.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> AIR = takeNextIndex(DataWatcherObjectVarInt.class);
-		public static final DataWatcherObjectIndex<DataWatcherObjectString> NAMETAG = takeNextIndex(DataWatcherObjectString.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectOptionalChat> NAMETAG = takeNextIndex(DataWatcherObjectOptionalChat.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> NAMETAG_VISIBLE = takeNextIndex(DataWatcherObjectBoolean.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> SILENT = takeNextIndex(DataWatcherObjectBoolean.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> NO_GRAVITY = takeNextIndex(DataWatcherObjectBoolean.class);
@@ -241,6 +242,7 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> VARIANT = takeNextIndex(DataWatcherObjectVarInt.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> LEFT_PADDLE = takeNextIndex(DataWatcherObjectBoolean.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> RIGHT_PADDLE = takeNextIndex(DataWatcherObjectBoolean.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> SPLASH_TIMER = takeNextIndex(DataWatcherObjectVarInt.class);
 	}
 
 	public static class Tnt extends Entity {
@@ -308,9 +310,7 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 		public static final DataWatcherObjectIndex<DataWatcherObjectFloat> RADIUS = takeNextIndex(DataWatcherObjectFloat.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> COLOR = takeNextIndex(DataWatcherObjectVarInt.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> SINGLE_POINT = takeNextIndex(DataWatcherObjectBoolean.class);
-		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> PARTICLE = takeNextIndex(DataWatcherObjectVarInt.class);
-		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> PARTICLE_DATA1 = takeNextIndex(DataWatcherObjectVarInt.class);
-		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> PARTICLE_DATA2 = takeNextIndex(DataWatcherObjectVarInt.class);
+		//TODO: particle
 	}
 
 	protected static final HashMap<Class<?>, Integer> lastTakenId = new HashMap<>();

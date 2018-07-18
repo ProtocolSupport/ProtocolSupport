@@ -4,11 +4,9 @@ import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.protocol.packet.handler.AbstractStatusListener;
 import protocolsupport.zplatform.PlatformWrapperFactory;
-import protocolsupport.zplatform.impl.glowstone.itemstack.GlowStoneItemStackWrapper;
 import protocolsupport.zplatform.impl.glowstone.itemstack.GlowStoneNBTTagCompoundWrapper;
 import protocolsupport.zplatform.impl.glowstone.itemstack.GlowStoneNBTTagListWrapper;
 import protocolsupport.zplatform.impl.glowstone.network.handler.GlowStoneLoginListener;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
@@ -28,11 +26,6 @@ public class GlowStoneWrapperFactory implements PlatformWrapperFactory {
 	@Override
 	public NBTTagCompoundWrapper createEmptyNBTCompound() {
 		return GlowStoneNBTTagCompoundWrapper.createEmpty();
-	}
-
-	@Override
-	public ItemStackWrapper createItemStack(int typeId) {
-		return GlowStoneItemStackWrapper.create(typeId);
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.legacy.LegacyPainting;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -35,7 +36,7 @@ public class SpawnPainting extends MiddleSpawnPainting {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_PAINTING_ID);
 		VarNumberSerializer.writeVarInt(serializer, entity.getId());
-		StringSerializer.writeString(serializer, version, type);
+		StringSerializer.writeString(serializer, version, LegacyPainting.getName(type));
 		PositionSerializer.writeLegacyPositionI(serializer, position);
 		serializer.writeInt(direction);
 		return RecyclableSingletonList.create(serializer);

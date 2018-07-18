@@ -5,6 +5,7 @@ import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChangeMulti;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.legacy.LegacyBlockId;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -22,7 +23,7 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 		serializer.writeInt(records.length * 4);
 		for (Record record : records) {
 			serializer.writeShort(record.coord);
-			serializer.writeShort(remapper.getRemap(record.id));
+			serializer.writeShort(LegacyBlockId.getCombinedId(remapper.getRemap(record.id)));
 		}
 		return RecyclableSingletonList.create(serializer);
 	}

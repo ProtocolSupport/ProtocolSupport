@@ -90,6 +90,9 @@ public class ClientBoundPacket {
 	public static final int PLAY_ADVANCEMENTS = ServerPlatform.get().getPacketFactory().getOutPlayAdvancementsPacketId();
 	public static final int PLAY_ADVANCEMENTS_TAB = ServerPlatform.get().getPacketFactory().getOutPlayAdvancementsTabPacketId();
 	public static final int PLAY_CRAFTING_GRID_CONFIRM = ServerPlatform.get().getPacketFactory().getOutPlayCraftingGridConfirmPacketId();
+	public static final int PLAY_DECLARE_COMMANDS = ServerPlatform.get().getPacketFactory().getOutPlayDeclareCommandsPacketId();
+	public static final int PLAY_DECLARE_RECIPES = ServerPlatform.get().getPacketFactory().getOutPlayDeclareRecipesPacketId();
+	public static final int PLAY_DECLARE_TAGS = ServerPlatform.get().getPacketFactory().getOutPlayDeclareTagsPacket();
 
 	public static final int LEGACY_PLAY_UPDATE_SIGN_ID = 100;
 

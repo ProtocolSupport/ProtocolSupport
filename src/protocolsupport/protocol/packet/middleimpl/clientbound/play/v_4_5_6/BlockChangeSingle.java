@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChange
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import protocolsupport.protocol.typeremapper.legacy.LegacyBlockId;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -17,9 +17,9 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BLOCK_CHANGE_SINGLE_ID);
 		PositionSerializer.writeLegacyPositionB(serializer, position);
-		id = IdRemapper.BLOCK.getTable(version).getRemap(id);
-		serializer.writeShort(MinecraftData.getBlockIdFromState(id));
-		serializer.writeByte(MinecraftData.getBlockDataFromState(id));
+		id = LegacyBlockId.getCombinedId(IdRemapper.BLOCK.getTable(version).getRemap(id));
+		serializer.writeShort(LegacyBlockId.getIdFromCombinedId(id));
+		serializer.writeByte(LegacyBlockId.getDataFromCombinedId(id));
 		return RecyclableSingletonList.create(serializer);
 	}
 

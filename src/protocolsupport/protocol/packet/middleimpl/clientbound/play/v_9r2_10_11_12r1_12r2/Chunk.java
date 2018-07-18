@@ -16,7 +16,7 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class Chunk extends MiddleChunk {
 
-	private final ChunkTransformer transformer = ChunkTransformer.create(BlockFormat.VARIES);
+	private final ChunkTransformer transformer = ChunkTransformer.create(BlockFormat.VARIES_LEGACY);
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {

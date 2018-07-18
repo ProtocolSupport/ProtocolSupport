@@ -86,10 +86,9 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 		getSession().send((Message) packet);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public void sendPacket(Object packet, GenericFutureListener<? extends Future<? super Void>> genericListener, GenericFutureListener<? extends Future<? super Void>>... futureListeners) {
-		getSession().sendWithFuture((Message) packet).addListener(genericListener).addListeners(futureListeners);
+	public void sendPacket(Object packet, GenericFutureListener<? extends Future<? super Void>> genericListener) {
+		getSession().sendWithFuture((Message) packet).addListener(genericListener);
 	}
 
 	@Override

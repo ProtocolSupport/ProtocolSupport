@@ -2,7 +2,7 @@ package protocolsupport.protocol.typeremapper.legacy;
 
 import java.util.EnumMap;
 
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
+import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 
 public class LegacyEntityType {
 
@@ -90,7 +90,12 @@ public class LegacyEntityType {
 	}
 
 	public static String getLegacyName(NetworkEntityType type) {
-		return legacyNames.getOrDefault(type, type.getRegistrySTypeId());
+		return legacyNames.getOrDefault(type, type.getKey());
+	}
+
+	@SuppressWarnings("deprecation")
+	public static int getLegacyId(NetworkEntityType type) {
+		return type.getBukkitType().getTypeId();
 	}
 
 }

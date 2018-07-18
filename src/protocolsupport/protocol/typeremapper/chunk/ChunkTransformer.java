@@ -8,15 +8,15 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 public abstract class ChunkTransformer {
 
 	public static enum BlockFormat {
-		VARIES, //format for 1.9+
+		VARIES_LEGACY, //format for 1.12-
 		SHORT, //format for 1.8
 		BYTE, //format for 1.7-
 	}
 
 	public static ChunkTransformer create(BlockFormat format) {
 		switch (format) {
-			case VARIES: {
-				return new ChunkTransformerVaries();
+			case VARIES_LEGACY: {
+				return new ChunkTransformerVariesLegacy();
 			}
 			case SHORT: {
 				return new ChunkTransformerShort();
@@ -59,10 +59,11 @@ public abstract class ChunkTransformer {
 
 	protected static class ChunkSection {
 
-		private static final int[] globalpalette = new int[Short.MAX_VALUE * 2];
+		protected static final int globalPaletteBitsPerBlock = 14;
+		protected static final int[] globalPaletteData = new int[Short.MAX_VALUE * 2];
 		static {
-			for (int i = 0; i < globalpalette.length; i++) {
-				globalpalette[i] = i;
+			for (int i = 0; i < globalPaletteData.length; i++) {
+				globalPaletteData[i] = i;
 			}
 		}
 
@@ -72,10 +73,9 @@ public abstract class ChunkTransformer {
 
 		public ChunkSection(ByteBuf datastream, boolean hasSkyLight) {
 			byte bitsPerBlock = datastream.readByte();
-			int[] palette = globalpalette;
-			int palettelength = VarNumberSerializer.readVarInt(datastream);
-			if (palettelength != 0) {
-				palette = new int[palettelength];
+			int[] palette = globalPaletteData;
+			if (bitsPerBlock != globalPaletteBitsPerBlock) {
+				palette = new int[VarNumberSerializer.readVarInt(datastream)];
 				for (int i = 0; i < palette.length; i++) {
 					palette[i] = VarNumberSerializer.readVarInt(datastream);
 				}

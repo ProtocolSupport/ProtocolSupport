@@ -224,6 +224,12 @@ public interface PlatformPacketFactory {
 
 	public int getOutPlayCraftingGridConfirmPacketId();
 
+	public int getOutPlayDeclareCommandsPacketId();
+
+	public int getOutPlayDeclareRecipesPacketId();
+
+	public int getOutPlayDeclareTagsPacket();
+
 
 	public int getInHandshakeStartPacketId();
 

@@ -8,6 +8,7 @@ import java.util.concurrent.FutureTask;
 import javax.crypto.SecretKey;
 
 import org.bukkit.Location;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
@@ -22,6 +23,8 @@ public interface PlatformUtils {
 	public ItemStack createItemStackFromNBTTag(NBTTagCompoundWrapper tag);
 
 	public NBTTagCompoundWrapper createNBTTagFromItemStack(ItemStack itemstack);
+
+	public int getNetworkMobTypeId(EntityType type);
 
 	public List<Player> getNearbyPlayers(Location location, double rX, double rY, double rZ);
 

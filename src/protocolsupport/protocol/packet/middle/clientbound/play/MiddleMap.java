@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
@@ -25,7 +26,13 @@ public abstract class MiddleMap extends ClientBoundMiddlePacket {
 		showIcons = serverdata.readBoolean();
 		icons = ArraySerializer.readVarIntTArray(
 			serverdata, Icon.class,
-			from -> new Icon(from.readUnsignedByte(), from.readUnsignedByte(), from.readUnsignedByte())
+			from -> new Icon(
+				VarNumberSerializer.readVarInt(from),
+				from.readUnsignedByte(),
+				from.readUnsignedByte(),
+				from.readByte(),
+				from.readBoolean() ? StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC) : null
+			)
 		);
 		columns = serverdata.readUnsignedByte();
 		if (columns > 0) {
@@ -37,13 +44,18 @@ public abstract class MiddleMap extends ClientBoundMiddlePacket {
 	}
 
 	public static class Icon {
-		public int dirtype;
-		public int x;
-		public int z;
-		public Icon(int dirtype, int x, int z) {
-			this.dirtype = dirtype;
+		//TODO: enum for icon types
+		public final int type;
+		public final int x;
+		public final int z;
+		public final int direction;
+		public final String displayName;
+		public Icon(int type, int x, int z, int direction, String displayName) {
+			this.type = type;
 			this.x = x;
 			this.z = z;
+			this.direction = direction;
+			this.displayName = displayName;
 		}
 	}
 

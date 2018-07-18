@@ -1,5 +1,7 @@
 package protocolsupport.protocol.utils.minecraftdata;
 
+import org.bukkit.NamespacedKey;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -13,7 +15,7 @@ public class PotionData {
 	static {
 		for (JsonElement element : MinecraftData.iterateJsonArrayResource("potions.json")) {
 			JsonObject object = element.getAsJsonObject();
-			idToName.put(JsonUtils.getInt(object, "id"), MinecraftData.addNamespacePrefix(JsonUtils.getString(object, "name")));
+			idToName.put(JsonUtils.getInt(object, "id"), NamespacedKey.minecraft(JsonUtils.getString(object, "name")).toString());
 		}
 	}
 

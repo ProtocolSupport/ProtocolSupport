@@ -27,17 +27,17 @@ import protocolsupport.protocol.typeremapper.legacy.LegacyPotion;
 import protocolsupport.protocol.typeremapper.mapcolor.MapColorRemapper;
 import protocolsupport.protocol.typeremapper.sound.SoundRemapper;
 import protocolsupport.protocol.typeremapper.tileentity.TileNBTRemapper;
-import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
+import protocolsupport.protocol.typeremapper.watchedentity.SpecificRemapper;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.minecraftdata.BlockData;
-import protocolsupport.protocol.utils.minecraftdata.ItemData;
+import protocolsupport.protocol.utils.minecraftdata.ItemMaterialData;
 import protocolsupport.protocol.utils.minecraftdata.KeybindData;
 import protocolsupport.protocol.utils.minecraftdata.PotionData;
 import protocolsupport.protocol.utils.minecraftdata.SoundData;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
+import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
@@ -79,7 +79,7 @@ public class ProtocolSupport extends JavaPlugin {
 		} else {
 			getLogger().info(MessageFormat.format("Detected {0} server implementation type", ServerPlatform.get().getIdentifier().getName()));
 		}
-		if (!ServerPlatform.get().getMiscUtils().getVersionName().equals("1.12.2")) {
+		if (!ServerPlatform.get().getMiscUtils().getVersionName().equals("1.13-pre7")) {
 			getLogger().severe("Unsupported server version " + ServerPlatform.get().getMiscUtils().getVersionName());
 			Bukkit.shutdown();
 			return;
@@ -92,7 +92,7 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(DataWatcherObjectIdRegistry.class.getName());
 			Class.forName(Allocator.class.getName());
 			Class.forName(BlockData.class.getName());
-			Class.forName(ItemData.class.getName());
+			Class.forName(ItemMaterialData.class.getName());
 			Class.forName(PotionData.class.getName());
 			Class.forName(SoundData.class.getName());
 			Class.forName(KeybindData.class.getName());

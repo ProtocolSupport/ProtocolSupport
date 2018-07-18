@@ -6,12 +6,12 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public abstract class MiddleInventorySetItems extends ClientBoundMiddlePacket {
 
 	protected int windowId;
-	protected ArrayList<ItemStackWrapper> itemstacks = new ArrayList<>();
+	protected ArrayList<NetworkItemStack> itemstacks = new ArrayList<>();
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {

@@ -5,6 +5,10 @@ import protocolsupport.protocol.utils.types.Position;
 
 public class PositionSerializer {
 
+	public static void skipPosition(ByteBuf from) {
+		from.skipBytes(Long.BYTES);
+	}
+
 	public static Position readPosition(ByteBuf from) {
 		long l = from.readLong();
 		return new Position((int) (l >> 38), (int) ((l >> 26) & 0xFFFL), (int) ((l << 38) >> 38));

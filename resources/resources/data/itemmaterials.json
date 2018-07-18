@@ -1,0 +1,3122 @@
+[
+  {
+    "material": "ACACIA_BOAT",
+    "id": 757
+  },
+  {
+    "material": "ACACIA_BUTTON",
+    "id": 245
+  },
+  {
+    "material": "ACACIA_DOOR",
+    "id": 455
+  },
+  {
+    "material": "ACACIA_FENCE",
+    "id": 179
+  },
+  {
+    "material": "ACACIA_FENCE_GATE",
+    "id": 214
+  },
+  {
+    "material": "ACACIA_LEAVES",
+    "id": 60
+  },
+  {
+    "material": "ACACIA_LOG",
+    "id": 36
+  },
+  {
+    "material": "ACACIA_PLANKS",
+    "id": 17
+  },
+  {
+    "material": "ACACIA_PRESSURE_PLATE",
+    "id": 164
+  },
+  {
+    "material": "ACACIA_SAPLING",
+    "id": 23
+  },
+  {
+    "material": "ACACIA_SLAB",
+    "id": 116
+  },
+  {
+    "material": "ACACIA_STAIRS",
+    "id": 301
+  },
+  {
+    "material": "ACACIA_TRAPDOOR",
+    "id": 191
+  },
+  {
+    "material": "ACACIA_WOOD",
+    "id": 54
+  },
+  {
+    "material": "ACTIVATOR_RAIL",
+    "id": 261
+  },
+  {
+    "material": "AIR",
+    "id": 0
+  },
+  {
+    "material": "ALLIUM",
+    "id": 101
+  },
+  {
+    "material": "ANDESITE",
+    "id": 6
+  },
+  {
+    "material": "ANVIL",
+    "id": 247
+  },
+  {
+    "material": "APPLE",
+    "id": 466
+  },
+  {
+    "material": "ARMOR_STAND",
+    "id": 716
+  },
+  {
+    "material": "ARROW",
+    "id": 468
+  },
+  {
+    "material": "AZURE_BLUET",
+    "id": 102
+  },
+  {
+    "material": "BAKED_POTATO",
+    "id": 689
+  },
+  {
+    "material": "BARRIER",
+    "id": 279
+  },
+  {
+    "material": "BAT_SPAWN_EGG",
+    "id": 629
+  },
+  {
+    "material": "BEACON",
+    "id": 238
+  },
+  {
+    "material": "BEDROCK",
+    "id": 25
+  },
+  {
+    "material": "BEEF",
+    "id": 609
+  },
+  {
+    "material": "BEETROOT",
+    "id": 744
+  },
+  {
+    "material": "BEETROOT_SEEDS",
+    "id": 745
+  },
+  {
+    "material": "BEETROOT_SOUP",
+    "id": 746
+  },
+  {
+    "material": "BIRCH_BOAT",
+    "id": 755
+  },
+  {
+    "material": "BIRCH_BUTTON",
+    "id": 243
+  },
+  {
+    "material": "BIRCH_DOOR",
+    "id": 453
+  },
+  {
+    "material": "BIRCH_FENCE",
+    "id": 177
+  },
+  {
+    "material": "BIRCH_FENCE_GATE",
+    "id": 212
+  },
+  {
+    "material": "BIRCH_LEAVES",
+    "id": 58
+  },
+  {
+    "material": "BIRCH_LOG",
+    "id": 34
+  },
+  {
+    "material": "BIRCH_PLANKS",
+    "id": 15
+  },
+  {
+    "material": "BIRCH_PRESSURE_PLATE",
+    "id": 162
+  },
+  {
+    "material": "BIRCH_SAPLING",
+    "id": 21
+  },
+  {
+    "material": "BIRCH_SLAB",
+    "id": 114
+  },
+  {
+    "material": "BIRCH_STAIRS",
+    "id": 235
+  },
+  {
+    "material": "BIRCH_TRAPDOOR",
+    "id": 189
+  },
+  {
+    "material": "BIRCH_WOOD",
+    "id": 52
+  },
+  {
+    "material": "BLACK_BANNER",
+    "id": 740
+  },
+  {
+    "material": "BLACK_BED",
+    "id": 601
+  },
+  {
+    "material": "BLACK_CARPET",
+    "id": 297
+  },
+  {
+    "material": "BLACK_CONCRETE",
+    "id": 410
+  },
+  {
+    "material": "BLACK_CONCRETE_POWDER",
+    "id": 426
+  },
+  {
+    "material": "BLACK_GLAZED_TERRACOTTA",
+    "id": 394
+  },
+  {
+    "material": "BLACK_SHULKER_BOX",
+    "id": 378
+  },
+  {
+    "material": "BLACK_STAINED_GLASS",
+    "id": 326
+  },
+  {
+    "material": "BLACK_STAINED_GLASS_PANE",
+    "id": 342
+  },
+  {
+    "material": "BLACK_TERRACOTTA",
+    "id": 278
+  },
+  {
+    "material": "BLACK_WOOL",
+    "id": 97
+  },
+  {
+    "material": "BLAZE_POWDER",
+    "id": 623
+  },
+  {
+    "material": "BLAZE_ROD",
+    "id": 615
+  },
+  {
+    "material": "BLAZE_SPAWN_EGG",
+    "id": 630
+  },
+  {
+    "material": "BLUE_BANNER",
+    "id": 736
+  },
+  {
+    "material": "BLUE_BED",
+    "id": 597
+  },
+  {
+    "material": "BLUE_CARPET",
+    "id": 293
+  },
+  {
+    "material": "BLUE_CONCRETE",
+    "id": 406
+  },
+  {
+    "material": "BLUE_CONCRETE_POWDER",
+    "id": 422
+  },
+  {
+    "material": "BLUE_GLAZED_TERRACOTTA",
+    "id": 390
+  },
+  {
+    "material": "BLUE_ICE",
+    "id": 448
+  },
+  {
+    "material": "BLUE_ORCHID",
+    "id": 100
+  },
+  {
+    "material": "BLUE_SHULKER_BOX",
+    "id": 374
+  },
+  {
+    "material": "BLUE_STAINED_GLASS",
+    "id": 322
+  },
+  {
+    "material": "BLUE_STAINED_GLASS_PANE",
+    "id": 338
+  },
+  {
+    "material": "BLUE_TERRACOTTA",
+    "id": 274
+  },
+  {
+    "material": "BLUE_WOOL",
+    "id": 93
+  },
+  {
+    "material": "BONE",
+    "id": 583
+  },
+  {
+    "material": "BONE_BLOCK",
+    "id": 359
+  },
+  {
+    "material": "BONE_MEAL",
+    "id": 582
+  },
+  {
+    "material": "BOOK",
+    "id": 552
+  },
+  {
+    "material": "BOOKSHELF",
+    "id": 137
+  },
+  {
+    "material": "BOW",
+    "id": 467
+  },
+  {
+    "material": "BOWL",
+    "id": 488
+  },
+  {
+    "material": "BRAIN_CORAL",
+    "id": 439
+  },
+  {
+    "material": "BRAIN_CORAL_BLOCK",
+    "id": 434
+  },
+  {
+    "material": "BRAIN_CORAL_FAN",
+    "id": 444
+  },
+  {
+    "material": "BREAD",
+    "id": 504
+  },
+  {
+    "material": "BREWING_STAND",
+    "id": 625
+  },
+  {
+    "material": "BRICK",
+    "id": 546
+  },
+  {
+    "material": "BRICKS",
+    "id": 135
+  },
+  {
+    "material": "BRICK_SLAB",
+    "id": 122
+  },
+  {
+    "material": "BRICK_STAIRS",
+    "id": 216
+  },
+  {
+    "material": "BROWN_BANNER",
+    "id": 737
+  },
+  {
+    "material": "BROWN_BED",
+    "id": 598
+  },
+  {
+    "material": "BROWN_CARPET",
+    "id": 294
+  },
+  {
+    "material": "BROWN_CONCRETE",
+    "id": 407
+  },
+  {
+    "material": "BROWN_CONCRETE_POWDER",
+    "id": 423
+  },
+  {
+    "material": "BROWN_GLAZED_TERRACOTTA",
+    "id": 391
+  },
+  {
+    "material": "BROWN_MUSHROOM",
+    "id": 108
+  },
+  {
+    "material": "BROWN_MUSHROOM_BLOCK",
+    "id": 203
+  },
+  {
+    "material": "BROWN_SHULKER_BOX",
+    "id": 375
+  },
+  {
+    "material": "BROWN_STAINED_GLASS",
+    "id": 323
+  },
+  {
+    "material": "BROWN_STAINED_GLASS_PANE",
+    "id": 339
+  },
+  {
+    "material": "BROWN_TERRACOTTA",
+    "id": 275
+  },
+  {
+    "material": "BROWN_WOOL",
+    "id": 94
+  },
+  {
+    "material": "BUBBLE_CORAL",
+    "id": 440
+  },
+  {
+    "material": "BUBBLE_CORAL_BLOCK",
+    "id": 435
+  },
+  {
+    "material": "BUBBLE_CORAL_FAN",
+    "id": 445
+  },
+  {
+    "material": "BUCKET",
+    "id": 532
+  },
+  {
+    "material": "CACTUS",
+    "id": 172
+  },
+  {
+    "material": "CACTUS_GREEN",
+    "id": 569
+  },
+  {
+    "material": "CAKE",
+    "id": 585
+  },
+  {
+    "material": "CARROT",
+    "id": 687
+  },
+  {
+    "material": "CARROT_ON_A_STICK",
+    "id": 699
+  },
+  {
+    "material": "CARVED_PUMPKIN",
+    "id": 182
+  },
+  {
+    "material": "CAULDRON",
+    "id": 626
+  },
+  {
+    "material": "CAVE_SPIDER_SPAWN_EGG",
+    "id": 631
+  },
+  {
+    "material": "CHAINMAIL_BOOTS",
+    "id": 512
+  },
+  {
+    "material": "CHAINMAIL_CHESTPLATE",
+    "id": 510
+  },
+  {
+    "material": "CHAINMAIL_HELMET",
+    "id": 509
+  },
+  {
+    "material": "CHAINMAIL_LEGGINGS",
+    "id": 511
+  },
+  {
+    "material": "CHAIN_COMMAND_BLOCK",
+    "id": 355
+  },
+  {
+    "material": "CHARCOAL",
+    "id": 470
+  },
+  {
+    "material": "CHEST",
+    "id": 149
+  },
+  {
+    "material": "CHEST_MINECART",
+    "id": 554
+  },
+  {
+    "material": "CHICKEN",
+    "id": 611
+  },
+  {
+    "material": "CHICKEN_SPAWN_EGG",
+    "id": 632
+  },
+  {
+    "material": "CHIPPED_ANVIL",
+    "id": 248
+  },
+  {
+    "material": "CHISELED_QUARTZ_BLOCK",
+    "id": 257
+  },
+  {
+    "material": "CHISELED_RED_SANDSTONE",
+    "id": 351
+  },
+  {
+    "material": "CHISELED_SANDSTONE",
+    "id": 69
+  },
+  {
+    "material": "CHISELED_STONE_BRICKS",
+    "id": 202
+  },
+  {
+    "material": "CHORUS_FLOWER",
+    "id": 143
+  },
+  {
+    "material": "CHORUS_FRUIT",
+    "id": 742
+  },
+  {
+    "material": "CHORUS_PLANT",
+    "id": 142
+  },
+  {
+    "material": "CLAY",
+    "id": 173
+  },
+  {
+    "material": "CLAY_BALL",
+    "id": 547
+  },
+  {
+    "material": "CLOCK",
+    "id": 559
+  },
+  {
+    "material": "COAL",
+    "id": 469
+  },
+  {
+    "material": "COAL_BLOCK",
+    "id": 299
+  },
+  {
+    "material": "COAL_ORE",
+    "id": 31
+  },
+  {
+    "material": "COARSE_DIRT",
+    "id": 10
+  },
+  {
+    "material": "COBBLESTONE",
+    "id": 12
+  },
+  {
+    "material": "COBBLESTONE_SLAB",
+    "id": 121
+  },
+  {
+    "material": "COBBLESTONE_STAIRS",
+    "id": 157
+  },
+  {
+    "material": "COBBLESTONE_WALL",
+    "id": 239
+  },
+  {
+    "material": "COBWEB",
+    "id": 75
+  },
+  {
+    "material": "COCOA_BEANS",
+    "id": 570
+  },
+  {
+    "material": "COD",
+    "id": 561
+  },
+  {
+    "material": "COD_BUCKET",
+    "id": 544
+  },
+  {
+    "material": "COD_SPAWN_EGG",
+    "id": 633
+  },
+  {
+    "material": "COMMAND_BLOCK",
+    "id": 237
+  },
+  {
+    "material": "COMMAND_BLOCK_MINECART",
+    "id": 722
+  },
+  {
+    "material": "COMPARATOR",
+    "id": 458
+  },
+  {
+    "material": "COMPASS",
+    "id": 557
+  },
+  {
+    "material": "CONDUIT",
+    "id": 449
+  },
+  {
+    "material": "COOKED_BEEF",
+    "id": 610
+  },
+  {
+    "material": "COOKED_CHICKEN",
+    "id": 612
+  },
+  {
+    "material": "COOKED_COD",
+    "id": 565
+  },
+  {
+    "material": "COOKED_MUTTON",
+    "id": 724
+  },
+  {
+    "material": "COOKED_PORKCHOP",
+    "id": 527
+  },
+  {
+    "material": "COOKED_RABBIT",
+    "id": 712
+  },
+  {
+    "material": "COOKED_SALMON",
+    "id": 566
+  },
+  {
+    "material": "COOKIE",
+    "id": 602
+  },
+  {
+    "material": "COW_SPAWN_EGG",
+    "id": 634
+  },
+  {
+    "material": "CRACKED_STONE_BRICKS",
+    "id": 201
+  },
+  {
+    "material": "CRAFTING_TABLE",
+    "id": 152
+  },
+  {
+    "material": "CREEPER_HEAD",
+    "id": 697
+  },
+  {
+    "material": "CREEPER_SPAWN_EGG",
+    "id": 635
+  },
+  {
+    "material": "CUT_RED_SANDSTONE",
+    "id": 352
+  },
+  {
+    "material": "CUT_SANDSTONE",
+    "id": 70
+  },
+  {
+    "material": "CYAN_BANNER",
+    "id": 734
+  },
+  {
+    "material": "CYAN_BED",
+    "id": 595
+  },
+  {
+    "material": "CYAN_CARPET",
+    "id": 291
+  },
+  {
+    "material": "CYAN_CONCRETE",
+    "id": 404
+  },
+  {
+    "material": "CYAN_CONCRETE_POWDER",
+    "id": 420
+  },
+  {
+    "material": "CYAN_DYE",
+    "id": 573
+  },
+  {
+    "material": "CYAN_GLAZED_TERRACOTTA",
+    "id": 388
+  },
+  {
+    "material": "CYAN_SHULKER_BOX",
+    "id": 372
+  },
+  {
+    "material": "CYAN_STAINED_GLASS",
+    "id": 320
+  },
+  {
+    "material": "CYAN_STAINED_GLASS_PANE",
+    "id": 336
+  },
+  {
+    "material": "CYAN_TERRACOTTA",
+    "id": 272
+  },
+  {
+    "material": "CYAN_WOOL",
+    "id": 91
+  },
+  {
+    "material": "DAMAGED_ANVIL",
+    "id": 249
+  },
+  {
+    "material": "DANDELION",
+    "id": 98
+  },
+  {
+    "material": "DANDELION_YELLOW",
+    "id": 578
+  },
+  {
+    "material": "DARK_OAK_BOAT",
+    "id": 758
+  },
+  {
+    "material": "DARK_OAK_BUTTON",
+    "id": 246
+  },
+  {
+    "material": "DARK_OAK_DOOR",
+    "id": 456
+  },
+  {
+    "material": "DARK_OAK_FENCE",
+    "id": 180
+  },
+  {
+    "material": "DARK_OAK_FENCE_GATE",
+    "id": 215
+  },
+  {
+    "material": "DARK_OAK_LEAVES",
+    "id": 61
+  },
+  {
+    "material": "DARK_OAK_LOG",
+    "id": 37
+  },
+  {
+    "material": "DARK_OAK_PLANKS",
+    "id": 18
+  },
+  {
+    "material": "DARK_OAK_PRESSURE_PLATE",
+    "id": 165
+  },
+  {
+    "material": "DARK_OAK_SAPLING",
+    "id": 24
+  },
+  {
+    "material": "DARK_OAK_SLAB",
+    "id": 117
+  },
+  {
+    "material": "DARK_OAK_STAIRS",
+    "id": 302
+  },
+  {
+    "material": "DARK_OAK_TRAPDOOR",
+    "id": 192
+  },
+  {
+    "material": "DARK_OAK_WOOD",
+    "id": 55
+  },
+  {
+    "material": "DARK_PRISMARINE",
+    "id": 345
+  },
+  {
+    "material": "DARK_PRISMARINE_SLAB",
+    "id": 130
+  },
+  {
+    "material": "DARK_PRISMARINE_STAIRS",
+    "id": 348
+  },
+  {
+    "material": "DAYLIGHT_DETECTOR",
+    "id": 253
+  },
+  {
+    "material": "DEAD_BRAIN_CORAL_BLOCK",
+    "id": 429
+  },
+  {
+    "material": "DEAD_BUBBLE_CORAL_BLOCK",
+    "id": 430
+  },
+  {
+    "material": "DEAD_BUSH",
+    "id": 78
+  },
+  {
+    "material": "DEAD_FIRE_CORAL_BLOCK",
+    "id": 431
+  },
+  {
+    "material": "DEAD_HORN_CORAL_BLOCK",
+    "id": 432
+  },
+  {
+    "material": "DEAD_TUBE_CORAL_BLOCK",
+    "id": 428
+  },
+  {
+    "material": "DEBUG_STICK",
+    "id": 763
+  },
+  {
+    "material": "DETECTOR_RAIL",
+    "id": 73
+  },
+  {
+    "material": "DIAMOND",
+    "id": 471
+  },
+  {
+    "material": "DIAMOND_AXE",
+    "id": 486
+  },
+  {
+    "material": "DIAMOND_BLOCK",
+    "id": 151
+  },
+  {
+    "material": "DIAMOND_BOOTS",
+    "id": 520
+  },
+  {
+    "material": "DIAMOND_CHESTPLATE",
+    "id": 518
+  },
+  {
+    "material": "DIAMOND_HELMET",
+    "id": 517
+  },
+  {
+    "material": "DIAMOND_HOE",
+    "id": 500
+  },
+  {
+    "material": "DIAMOND_HORSE_ARMOR",
+    "id": 719
+  },
+  {
+    "material": "DIAMOND_LEGGINGS",
+    "id": 519
+  },
+  {
+    "material": "DIAMOND_ORE",
+    "id": 150
+  },
+  {
+    "material": "DIAMOND_PICKAXE",
+    "id": 485
+  },
+  {
+    "material": "DIAMOND_SHOVEL",
+    "id": 484
+  },
+  {
+    "material": "DIAMOND_SWORD",
+    "id": 483
+  },
+  {
+    "material": "DIORITE",
+    "id": 4
+  },
+  {
+    "material": "DIRT",
+    "id": 9
+  },
+  {
+    "material": "DISPENSER",
+    "id": 67
+  },
+  {
+    "material": "DOLPHIN_SPAWN_EGG",
+    "id": 636
+  },
+  {
+    "material": "DONKEY_SPAWN_EGG",
+    "id": 637
+  },
+  {
+    "material": "DRAGON_BREATH",
+    "id": 747
+  },
+  {
+    "material": "DRAGON_EGG",
+    "id": 227
+  },
+  {
+    "material": "DRAGON_HEAD",
+    "id": 698
+  },
+  {
+    "material": "DRIED_KELP",
+    "id": 606
+  },
+  {
+    "material": "DRIED_KELP_BLOCK",
+    "id": 550
+  },
+  {
+    "material": "DROPPER",
+    "id": 262
+  },
+  {
+    "material": "DROWNED_SPAWN_EGG",
+    "id": 638
+  },
+  {
+    "material": "EGG",
+    "id": 556
+  },
+  {
+    "material": "ELDER_GUARDIAN_SPAWN_EGG",
+    "id": 639
+  },
+  {
+    "material": "ELYTRA",
+    "id": 753
+  },
+  {
+    "material": "EMERALD",
+    "id": 684
+  },
+  {
+    "material": "EMERALD_BLOCK",
+    "id": 233
+  },
+  {
+    "material": "EMERALD_ORE",
+    "id": 230
+  },
+  {
+    "material": "ENCHANTED_BOOK",
+    "id": 704
+  },
+  {
+    "material": "ENCHANTED_GOLDEN_APPLE",
+    "id": 530
+  },
+  {
+    "material": "ENCHANTING_TABLE",
+    "id": 223
+  },
+  {
+    "material": "ENDERMAN_SPAWN_EGG",
+    "id": 640
+  },
+  {
+    "material": "ENDERMITE_SPAWN_EGG",
+    "id": 641
+  },
+  {
+    "material": "ENDER_CHEST",
+    "id": 231
+  },
+  {
+    "material": "ENDER_EYE",
+    "id": 627
+  },
+  {
+    "material": "ENDER_PEARL",
+    "id": 614
+  },
+  {
+    "material": "END_CRYSTAL",
+    "id": 741
+  },
+  {
+    "material": "END_PORTAL_FRAME",
+    "id": 224
+  },
+  {
+    "material": "END_ROD",
+    "id": 141
+  },
+  {
+    "material": "END_STONE",
+    "id": 225
+  },
+  {
+    "material": "END_STONE_BRICKS",
+    "id": 226
+  },
+  {
+    "material": "EVOKER_SPAWN_EGG",
+    "id": 642
+  },
+  {
+    "material": "EXPERIENCE_BOTTLE",
+    "id": 680
+  },
+  {
+    "material": "FARMLAND",
+    "id": 153
+  },
+  {
+    "material": "FEATHER",
+    "id": 495
+  },
+  {
+    "material": "FERMENTED_SPIDER_EYE",
+    "id": 622
+  },
+  {
+    "material": "FERN",
+    "id": 77
+  },
+  {
+    "material": "FILLED_MAP",
+    "id": 603
+  },
+  {
+    "material": "FIREWORK_ROCKET",
+    "id": 702
+  },
+  {
+    "material": "FIREWORK_STAR",
+    "id": 703
+  },
+  {
+    "material": "FIRE_CHARGE",
+    "id": 681
+  },
+  {
+    "material": "FIRE_CORAL",
+    "id": 441
+  },
+  {
+    "material": "FIRE_CORAL_BLOCK",
+    "id": 436
+  },
+  {
+    "material": "FIRE_CORAL_FAN",
+    "id": 446
+  },
+  {
+    "material": "FISHING_ROD",
+    "id": 558
+  },
+  {
+    "material": "FLINT",
+    "id": 525
+  },
+  {
+    "material": "FLINT_AND_STEEL",
+    "id": 465
+  },
+  {
+    "material": "FLOWER_POT",
+    "id": 686
+  },
+  {
+    "material": "FURNACE",
+    "id": 154
+  },
+  {
+    "material": "FURNACE_MINECART",
+    "id": 555
+  },
+  {
+    "material": "GHAST_SPAWN_EGG",
+    "id": 643
+  },
+  {
+    "material": "GHAST_TEAR",
+    "id": 616
+  },
+  {
+    "material": "GLASS",
+    "id": 64
+  },
+  {
+    "material": "GLASS_BOTTLE",
+    "id": 620
+  },
+  {
+    "material": "GLASS_PANE",
+    "id": 207
+  },
+  {
+    "material": "GLISTERING_MELON_SLICE",
+    "id": 628
+  },
+  {
+    "material": "GLOWSTONE",
+    "id": 185
+  },
+  {
+    "material": "GLOWSTONE_DUST",
+    "id": 560
+  },
+  {
+    "material": "GOLDEN_APPLE",
+    "id": 529
+  },
+  {
+    "material": "GOLDEN_AXE",
+    "id": 493
+  },
+  {
+    "material": "GOLDEN_BOOTS",
+    "id": 524
+  },
+  {
+    "material": "GOLDEN_CARROT",
+    "id": 692
+  },
+  {
+    "material": "GOLDEN_CHESTPLATE",
+    "id": 522
+  },
+  {
+    "material": "GOLDEN_HELMET",
+    "id": 521
+  },
+  {
+    "material": "GOLDEN_HOE",
+    "id": 501
+  },
+  {
+    "material": "GOLDEN_HORSE_ARMOR",
+    "id": 718
+  },
+  {
+    "material": "GOLDEN_LEGGINGS",
+    "id": 523
+  },
+  {
+    "material": "GOLDEN_PICKAXE",
+    "id": 492
+  },
+  {
+    "material": "GOLDEN_SHOVEL",
+    "id": 491
+  },
+  {
+    "material": "GOLDEN_SWORD",
+    "id": 490
+  },
+  {
+    "material": "GOLD_BLOCK",
+    "id": 110
+  },
+  {
+    "material": "GOLD_INGOT",
+    "id": 473
+  },
+  {
+    "material": "GOLD_NUGGET",
+    "id": 617
+  },
+  {
+    "material": "GOLD_ORE",
+    "id": 29
+  },
+  {
+    "material": "GRANITE",
+    "id": 2
+  },
+  {
+    "material": "GRASS",
+    "id": 76
+  },
+  {
+    "material": "GRASS_BLOCK",
+    "id": 8
+  },
+  {
+    "material": "GRASS_PATH",
+    "id": 304
+  },
+  {
+    "material": "GRAVEL",
+    "id": 28
+  },
+  {
+    "material": "GRAY_BANNER",
+    "id": 732
+  },
+  {
+    "material": "GRAY_BED",
+    "id": 593
+  },
+  {
+    "material": "GRAY_CARPET",
+    "id": 289
+  },
+  {
+    "material": "GRAY_CONCRETE",
+    "id": 402
+  },
+  {
+    "material": "GRAY_CONCRETE_POWDER",
+    "id": 418
+  },
+  {
+    "material": "GRAY_DYE",
+    "id": 575
+  },
+  {
+    "material": "GRAY_GLAZED_TERRACOTTA",
+    "id": 386
+  },
+  {
+    "material": "GRAY_SHULKER_BOX",
+    "id": 370
+  },
+  {
+    "material": "GRAY_STAINED_GLASS",
+    "id": 318
+  },
+  {
+    "material": "GRAY_STAINED_GLASS_PANE",
+    "id": 334
+  },
+  {
+    "material": "GRAY_TERRACOTTA",
+    "id": 270
+  },
+  {
+    "material": "GRAY_WOOL",
+    "id": 89
+  },
+  {
+    "material": "GREEN_BANNER",
+    "id": 738
+  },
+  {
+    "material": "GREEN_BED",
+    "id": 599
+  },
+  {
+    "material": "GREEN_CARPET",
+    "id": 295
+  },
+  {
+    "material": "GREEN_CONCRETE",
+    "id": 408
+  },
+  {
+    "material": "GREEN_CONCRETE_POWDER",
+    "id": 424
+  },
+  {
+    "material": "GREEN_GLAZED_TERRACOTTA",
+    "id": 392
+  },
+  {
+    "material": "GREEN_SHULKER_BOX",
+    "id": 376
+  },
+  {
+    "material": "GREEN_STAINED_GLASS",
+    "id": 324
+  },
+  {
+    "material": "GREEN_STAINED_GLASS_PANE",
+    "id": 340
+  },
+  {
+    "material": "GREEN_TERRACOTTA",
+    "id": 276
+  },
+  {
+    "material": "GREEN_WOOL",
+    "id": 95
+  },
+  {
+    "material": "GUARDIAN_SPAWN_EGG",
+    "id": 644
+  },
+  {
+    "material": "GUNPOWDER",
+    "id": 496
+  },
+  {
+    "material": "HAY_BLOCK",
+    "id": 281
+  },
+  {
+    "material": "HEART_OF_THE_SEA",
+    "id": 779
+  },
+  {
+    "material": "HEAVY_WEIGHTED_PRESSURE_PLATE",
+    "id": 252
+  },
+  {
+    "material": "HOPPER",
+    "id": 256
+  },
+  {
+    "material": "HOPPER_MINECART",
+    "id": 708
+  },
+  {
+    "material": "HORN_CORAL",
+    "id": 442
+  },
+  {
+    "material": "HORN_CORAL_BLOCK",
+    "id": 437
+  },
+  {
+    "material": "HORN_CORAL_FAN",
+    "id": 447
+  },
+  {
+    "material": "HORSE_SPAWN_EGG",
+    "id": 645
+  },
+  {
+    "material": "HUSK_SPAWN_EGG",
+    "id": 646
+  },
+  {
+    "material": "ICE",
+    "id": 170
+  },
+  {
+    "material": "INFESTED_CHISELED_STONE_BRICKS",
+    "id": 198
+  },
+  {
+    "material": "INFESTED_COBBLESTONE",
+    "id": 194
+  },
+  {
+    "material": "INFESTED_CRACKED_STONE_BRICKS",
+    "id": 197
+  },
+  {
+    "material": "INFESTED_MOSSY_STONE_BRICKS",
+    "id": 196
+  },
+  {
+    "material": "INFESTED_STONE",
+    "id": 193
+  },
+  {
+    "material": "INFESTED_STONE_BRICKS",
+    "id": 195
+  },
+  {
+    "material": "INK_SAC",
+    "id": 567
+  },
+  {
+    "material": "IRON_AXE",
+    "id": 464
+  },
+  {
+    "material": "IRON_BARS",
+    "id": 206
+  },
+  {
+    "material": "IRON_BLOCK",
+    "id": 111
+  },
+  {
+    "material": "IRON_BOOTS",
+    "id": 516
+  },
+  {
+    "material": "IRON_CHESTPLATE",
+    "id": 514
+  },
+  {
+    "material": "IRON_DOOR",
+    "id": 450
+  },
+  {
+    "material": "IRON_HELMET",
+    "id": 513
+  },
+  {
+    "material": "IRON_HOE",
+    "id": 499
+  },
+  {
+    "material": "IRON_HORSE_ARMOR",
+    "id": 717
+  },
+  {
+    "material": "IRON_INGOT",
+    "id": 472
+  },
+  {
+    "material": "IRON_LEGGINGS",
+    "id": 515
+  },
+  {
+    "material": "IRON_NUGGET",
+    "id": 761
+  },
+  {
+    "material": "IRON_ORE",
+    "id": 30
+  },
+  {
+    "material": "IRON_PICKAXE",
+    "id": 463
+  },
+  {
+    "material": "IRON_SHOVEL",
+    "id": 462
+  },
+  {
+    "material": "IRON_SWORD",
+    "id": 474
+  },
+  {
+    "material": "IRON_TRAPDOOR",
+    "id": 280
+  },
+  {
+    "material": "ITEM_FRAME",
+    "id": 685
+  },
+  {
+    "material": "JACK_O_LANTERN",
+    "id": 186
+  },
+  {
+    "material": "JUKEBOX",
+    "id": 174
+  },
+  {
+    "material": "JUNGLE_BOAT",
+    "id": 756
+  },
+  {
+    "material": "JUNGLE_BUTTON",
+    "id": 244
+  },
+  {
+    "material": "JUNGLE_DOOR",
+    "id": 454
+  },
+  {
+    "material": "JUNGLE_FENCE",
+    "id": 178
+  },
+  {
+    "material": "JUNGLE_FENCE_GATE",
+    "id": 213
+  },
+  {
+    "material": "JUNGLE_LEAVES",
+    "id": 59
+  },
+  {
+    "material": "JUNGLE_LOG",
+    "id": 35
+  },
+  {
+    "material": "JUNGLE_PLANKS",
+    "id": 16
+  },
+  {
+    "material": "JUNGLE_PRESSURE_PLATE",
+    "id": 163
+  },
+  {
+    "material": "JUNGLE_SAPLING",
+    "id": 22
+  },
+  {
+    "material": "JUNGLE_SLAB",
+    "id": 115
+  },
+  {
+    "material": "JUNGLE_STAIRS",
+    "id": 236
+  },
+  {
+    "material": "JUNGLE_TRAPDOOR",
+    "id": 190
+  },
+  {
+    "material": "JUNGLE_WOOD",
+    "id": 53
+  },
+  {
+    "material": "KELP",
+    "id": 549
+  },
+  {
+    "material": "KNOWLEDGE_BOOK",
+    "id": 762
+  },
+  {
+    "material": "LADDER",
+    "id": 155
+  },
+  {
+    "material": "LAPIS_BLOCK",
+    "id": 66
+  },
+  {
+    "material": "LAPIS_LAZULI",
+    "id": 571
+  },
+  {
+    "material": "LAPIS_ORE",
+    "id": 65
+  },
+  {
+    "material": "LARGE_FERN",
+    "id": 310
+  },
+  {
+    "material": "LAVA_BUCKET",
+    "id": 534
+  },
+  {
+    "material": "LEAD",
+    "id": 720
+  },
+  {
+    "material": "LEATHER",
+    "id": 540
+  },
+  {
+    "material": "LEATHER_BOOTS",
+    "id": 508
+  },
+  {
+    "material": "LEATHER_CHESTPLATE",
+    "id": 506
+  },
+  {
+    "material": "LEATHER_HELMET",
+    "id": 505
+  },
+  {
+    "material": "LEATHER_LEGGINGS",
+    "id": 507
+  },
+  {
+    "material": "LEVER",
+    "id": 158
+  },
+  {
+    "material": "LIGHT_BLUE_BANNER",
+    "id": 728
+  },
+  {
+    "material": "LIGHT_BLUE_BED",
+    "id": 589
+  },
+  {
+    "material": "LIGHT_BLUE_CARPET",
+    "id": 285
+  },
+  {
+    "material": "LIGHT_BLUE_CONCRETE",
+    "id": 398
+  },
+  {
+    "material": "LIGHT_BLUE_CONCRETE_POWDER",
+    "id": 414
+  },
+  {
+    "material": "LIGHT_BLUE_DYE",
+    "id": 579
+  },
+  {
+    "material": "LIGHT_BLUE_GLAZED_TERRACOTTA",
+    "id": 382
+  },
+  {
+    "material": "LIGHT_BLUE_SHULKER_BOX",
+    "id": 366
+  },
+  {
+    "material": "LIGHT_BLUE_STAINED_GLASS",
+    "id": 314
+  },
+  {
+    "material": "LIGHT_BLUE_STAINED_GLASS_PANE",
+    "id": 330
+  },
+  {
+    "material": "LIGHT_BLUE_TERRACOTTA",
+    "id": 266
+  },
+  {
+    "material": "LIGHT_BLUE_WOOL",
+    "id": 85
+  },
+  {
+    "material": "LIGHT_GRAY_BANNER",
+    "id": 733
+  },
+  {
+    "material": "LIGHT_GRAY_BED",
+    "id": 594
+  },
+  {
+    "material": "LIGHT_GRAY_CARPET",
+    "id": 290
+  },
+  {
+    "material": "LIGHT_GRAY_CONCRETE",
+    "id": 403
+  },
+  {
+    "material": "LIGHT_GRAY_CONCRETE_POWDER",
+    "id": 419
+  },
+  {
+    "material": "LIGHT_GRAY_DYE",
+    "id": 574
+  },
+  {
+    "material": "LIGHT_GRAY_GLAZED_TERRACOTTA",
+    "id": 387
+  },
+  {
+    "material": "LIGHT_GRAY_SHULKER_BOX",
+    "id": 371
+  },
+  {
+    "material": "LIGHT_GRAY_STAINED_GLASS",
+    "id": 319
+  },
+  {
+    "material": "LIGHT_GRAY_STAINED_GLASS_PANE",
+    "id": 335
+  },
+  {
+    "material": "LIGHT_GRAY_TERRACOTTA",
+    "id": 271
+  },
+  {
+    "material": "LIGHT_GRAY_WOOL",
+    "id": 90
+  },
+  {
+    "material": "LIGHT_WEIGHTED_PRESSURE_PLATE",
+    "id": 251
+  },
+  {
+    "material": "LILAC",
+    "id": 306
+  },
+  {
+    "material": "LILY_PAD",
+    "id": 219
+  },
+  {
+    "material": "LIME_BANNER",
+    "id": 730
+  },
+  {
+    "material": "LIME_BED",
+    "id": 591
+  },
+  {
+    "material": "LIME_CARPET",
+    "id": 287
+  },
+  {
+    "material": "LIME_CONCRETE",
+    "id": 400
+  },
+  {
+    "material": "LIME_CONCRETE_POWDER",
+    "id": 416
+  },
+  {
+    "material": "LIME_DYE",
+    "id": 577
+  },
+  {
+    "material": "LIME_GLAZED_TERRACOTTA",
+    "id": 384
+  },
+  {
+    "material": "LIME_SHULKER_BOX",
+    "id": 368
+  },
+  {
+    "material": "LIME_STAINED_GLASS",
+    "id": 316
+  },
+  {
+    "material": "LIME_STAINED_GLASS_PANE",
+    "id": 332
+  },
+  {
+    "material": "LIME_TERRACOTTA",
+    "id": 268
+  },
+  {
+    "material": "LIME_WOOL",
+    "id": 87
+  },
+  {
+    "material": "LINGERING_POTION",
+    "id": 751
+  },
+  {
+    "material": "LLAMA_SPAWN_EGG",
+    "id": 647
+  },
+  {
+    "material": "MAGENTA_BANNER",
+    "id": 727
+  },
+  {
+    "material": "MAGENTA_BED",
+    "id": 588
+  },
+  {
+    "material": "MAGENTA_CARPET",
+    "id": 284
+  },
+  {
+    "material": "MAGENTA_CONCRETE",
+    "id": 397
+  },
+  {
+    "material": "MAGENTA_CONCRETE_POWDER",
+    "id": 413
+  },
+  {
+    "material": "MAGENTA_DYE",
+    "id": 580
+  },
+  {
+    "material": "MAGENTA_GLAZED_TERRACOTTA",
+    "id": 381
+  },
+  {
+    "material": "MAGENTA_SHULKER_BOX",
+    "id": 365
+  },
+  {
+    "material": "MAGENTA_STAINED_GLASS",
+    "id": 313
+  },
+  {
+    "material": "MAGENTA_STAINED_GLASS_PANE",
+    "id": 329
+  },
+  {
+    "material": "MAGENTA_TERRACOTTA",
+    "id": 265
+  },
+  {
+    "material": "MAGENTA_WOOL",
+    "id": 84
+  },
+  {
+    "material": "MAGMA_BLOCK",
+    "id": 356
+  },
+  {
+    "material": "MAGMA_CREAM",
+    "id": 624
+  },
+  {
+    "material": "MAGMA_CUBE_SPAWN_EGG",
+    "id": 648
+  },
+  {
+    "material": "MAP",
+    "id": 691
+  },
+  {
+    "material": "MELON",
+    "id": 208
+  },
+  {
+    "material": "MELON_SEEDS",
+    "id": 608
+  },
+  {
+    "material": "MELON_SLICE",
+    "id": 605
+  },
+  {
+    "material": "MILK_BUCKET",
+    "id": 541
+  },
+  {
+    "material": "MINECART",
+    "id": 535
+  },
+  {
+    "material": "MOOSHROOM_SPAWN_EGG",
+    "id": 649
+  },
+  {
+    "material": "MOSSY_COBBLESTONE",
+    "id": 138
+  },
+  {
+    "material": "MOSSY_COBBLESTONE_WALL",
+    "id": 240
+  },
+  {
+    "material": "MOSSY_STONE_BRICKS",
+    "id": 200
+  },
+  {
+    "material": "MULE_SPAWN_EGG",
+    "id": 650
+  },
+  {
+    "material": "MUSHROOM_STEM",
+    "id": 205
+  },
+  {
+    "material": "MUSHROOM_STEW",
+    "id": 489
+  },
+  {
+    "material": "MUSIC_DISC_11",
+    "id": 774
+  },
+  {
+    "material": "MUSIC_DISC_13",
+    "id": 764
+  },
+  {
+    "material": "MUSIC_DISC_BLOCKS",
+    "id": 766
+  },
+  {
+    "material": "MUSIC_DISC_CAT",
+    "id": 765
+  },
+  {
+    "material": "MUSIC_DISC_CHIRP",
+    "id": 767
+  },
+  {
+    "material": "MUSIC_DISC_FAR",
+    "id": 768
+  },
+  {
+    "material": "MUSIC_DISC_MALL",
+    "id": 769
+  },
+  {
+    "material": "MUSIC_DISC_MELLOHI",
+    "id": 770
+  },
+  {
+    "material": "MUSIC_DISC_STAL",
+    "id": 771
+  },
+  {
+    "material": "MUSIC_DISC_STRAD",
+    "id": 772
+  },
+  {
+    "material": "MUSIC_DISC_WAIT",
+    "id": 775
+  },
+  {
+    "material": "MUSIC_DISC_WARD",
+    "id": 773
+  },
+  {
+    "material": "MUTTON",
+    "id": 723
+  },
+  {
+    "material": "MYCELIUM",
+    "id": 218
+  },
+  {
+    "material": "NAME_TAG",
+    "id": 721
+  },
+  {
+    "material": "NAUTILUS_SHELL",
+    "id": 778
+  },
+  {
+    "material": "NETHERRACK",
+    "id": 183
+  },
+  {
+    "material": "NETHER_BRICK",
+    "id": 705
+  },
+  {
+    "material": "NETHER_BRICKS",
+    "id": 220
+  },
+  {
+    "material": "NETHER_BRICK_FENCE",
+    "id": 221
+  },
+  {
+    "material": "NETHER_BRICK_SLAB",
+    "id": 124
+  },
+  {
+    "material": "NETHER_BRICK_STAIRS",
+    "id": 222
+  },
+  {
+    "material": "NETHER_QUARTZ_ORE",
+    "id": 255
+  },
+  {
+    "material": "NETHER_STAR",
+    "id": 700
+  },
+  {
+    "material": "NETHER_WART",
+    "id": 618
+  },
+  {
+    "material": "NETHER_WART_BLOCK",
+    "id": 357
+  },
+  {
+    "material": "NOTE_BLOCK",
+    "id": 71
+  },
+  {
+    "material": "OAK_BOAT",
+    "id": 539
+  },
+  {
+    "material": "OAK_BUTTON",
+    "id": 241
+  },
+  {
+    "material": "OAK_DOOR",
+    "id": 451
+  },
+  {
+    "material": "OAK_FENCE",
+    "id": 175
+  },
+  {
+    "material": "OAK_FENCE_GATE",
+    "id": 210
+  },
+  {
+    "material": "OAK_LEAVES",
+    "id": 56
+  },
+  {
+    "material": "OAK_LOG",
+    "id": 32
+  },
+  {
+    "material": "OAK_PLANKS",
+    "id": 13
+  },
+  {
+    "material": "OAK_PRESSURE_PLATE",
+    "id": 160
+  },
+  {
+    "material": "OAK_SAPLING",
+    "id": 19
+  },
+  {
+    "material": "OAK_SLAB",
+    "id": 112
+  },
+  {
+    "material": "OAK_STAIRS",
+    "id": 148
+  },
+  {
+    "material": "OAK_TRAPDOOR",
+    "id": 187
+  },
+  {
+    "material": "OAK_WOOD",
+    "id": 50
+  },
+  {
+    "material": "OBSERVER",
+    "id": 361
+  },
+  {
+    "material": "OBSIDIAN",
+    "id": 139
+  },
+  {
+    "material": "OCELOT_SPAWN_EGG",
+    "id": 651
+  },
+  {
+    "material": "ORANGE_BANNER",
+    "id": 726
+  },
+  {
+    "material": "ORANGE_BED",
+    "id": 587
+  },
+  {
+    "material": "ORANGE_CARPET",
+    "id": 283
+  },
+  {
+    "material": "ORANGE_CONCRETE",
+    "id": 396
+  },
+  {
+    "material": "ORANGE_CONCRETE_POWDER",
+    "id": 412
+  },
+  {
+    "material": "ORANGE_DYE",
+    "id": 581
+  },
+  {
+    "material": "ORANGE_GLAZED_TERRACOTTA",
+    "id": 380
+  },
+  {
+    "material": "ORANGE_SHULKER_BOX",
+    "id": 364
+  },
+  {
+    "material": "ORANGE_STAINED_GLASS",
+    "id": 312
+  },
+  {
+    "material": "ORANGE_STAINED_GLASS_PANE",
+    "id": 328
+  },
+  {
+    "material": "ORANGE_TERRACOTTA",
+    "id": 264
+  },
+  {
+    "material": "ORANGE_TULIP",
+    "id": 104
+  },
+  {
+    "material": "ORANGE_WOOL",
+    "id": 83
+  },
+  {
+    "material": "OXEYE_DAISY",
+    "id": 107
+  },
+  {
+    "material": "PACKED_ICE",
+    "id": 300
+  },
+  {
+    "material": "PAINTING",
+    "id": 528
+  },
+  {
+    "material": "PAPER",
+    "id": 551
+  },
+  {
+    "material": "PARROT_SPAWN_EGG",
+    "id": 652
+  },
+  {
+    "material": "PEONY",
+    "id": 308
+  },
+  {
+    "material": "PETRIFIED_OAK_SLAB",
+    "id": 120
+  },
+  {
+    "material": "PHANTOM_MEMBRANE",
+    "id": 777
+  },
+  {
+    "material": "PHANTOM_SPAWN_EGG",
+    "id": 653
+  },
+  {
+    "material": "PIG_SPAWN_EGG",
+    "id": 654
+  },
+  {
+    "material": "PINK_BANNER",
+    "id": 731
+  },
+  {
+    "material": "PINK_BED",
+    "id": 592
+  },
+  {
+    "material": "PINK_CARPET",
+    "id": 288
+  },
+  {
+    "material": "PINK_CONCRETE",
+    "id": 401
+  },
+  {
+    "material": "PINK_CONCRETE_POWDER",
+    "id": 417
+  },
+  {
+    "material": "PINK_DYE",
+    "id": 576
+  },
+  {
+    "material": "PINK_GLAZED_TERRACOTTA",
+    "id": 385
+  },
+  {
+    "material": "PINK_SHULKER_BOX",
+    "id": 369
+  },
+  {
+    "material": "PINK_STAINED_GLASS",
+    "id": 317
+  },
+  {
+    "material": "PINK_STAINED_GLASS_PANE",
+    "id": 333
+  },
+  {
+    "material": "PINK_TERRACOTTA",
+    "id": 269
+  },
+  {
+    "material": "PINK_TULIP",
+    "id": 106
+  },
+  {
+    "material": "PINK_WOOL",
+    "id": 88
+  },
+  {
+    "material": "PISTON",
+    "id": 81
+  },
+  {
+    "material": "PLAYER_HEAD",
+    "id": 695
+  },
+  {
+    "material": "PODZOL",
+    "id": 11
+  },
+  {
+    "material": "POISONOUS_POTATO",
+    "id": 690
+  },
+  {
+    "material": "POLAR_BEAR_SPAWN_EGG",
+    "id": 655
+  },
+  {
+    "material": "POLISHED_ANDESITE",
+    "id": 7
+  },
+  {
+    "material": "POLISHED_DIORITE",
+    "id": 5
+  },
+  {
+    "material": "POLISHED_GRANITE",
+    "id": 3
+  },
+  {
+    "material": "POPPED_CHORUS_FRUIT",
+    "id": 743
+  },
+  {
+    "material": "POPPY",
+    "id": 99
+  },
+  {
+    "material": "PORKCHOP",
+    "id": 526
+  },
+  {
+    "material": "POTATO",
+    "id": 688
+  },
+  {
+    "material": "POTION",
+    "id": 619
+  },
+  {
+    "material": "POWERED_RAIL",
+    "id": 72
+  },
+  {
+    "material": "PRISMARINE",
+    "id": 343
+  },
+  {
+    "material": "PRISMARINE_BRICKS",
+    "id": 344
+  },
+  {
+    "material": "PRISMARINE_BRICK_SLAB",
+    "id": 129
+  },
+  {
+    "material": "PRISMARINE_BRICK_STAIRS",
+    "id": 347
+  },
+  {
+    "material": "PRISMARINE_CRYSTALS",
+    "id": 710
+  },
+  {
+    "material": "PRISMARINE_SHARD",
+    "id": 709
+  },
+  {
+    "material": "PRISMARINE_SLAB",
+    "id": 128
+  },
+  {
+    "material": "PRISMARINE_STAIRS",
+    "id": 346
+  },
+  {
+    "material": "PUFFERFISH",
+    "id": 564
+  },
+  {
+    "material": "PUFFERFISH_BUCKET",
+    "id": 542
+  },
+  {
+    "material": "PUFFERFISH_SPAWN_EGG",
+    "id": 656
+  },
+  {
+    "material": "PUMPKIN",
+    "id": 181
+  },
+  {
+    "material": "PUMPKIN_PIE",
+    "id": 701
+  },
+  {
+    "material": "PUMPKIN_SEEDS",
+    "id": 607
+  },
+  {
+    "material": "PURPLE_BANNER",
+    "id": 735
+  },
+  {
+    "material": "PURPLE_BED",
+    "id": 596
+  },
+  {
+    "material": "PURPLE_CARPET",
+    "id": 292
+  },
+  {
+    "material": "PURPLE_CONCRETE",
+    "id": 405
+  },
+  {
+    "material": "PURPLE_CONCRETE_POWDER",
+    "id": 421
+  },
+  {
+    "material": "PURPLE_DYE",
+    "id": 572
+  },
+  {
+    "material": "PURPLE_GLAZED_TERRACOTTA",
+    "id": 389
+  },
+  {
+    "material": "PURPLE_SHULKER_BOX",
+    "id": 373
+  },
+  {
+    "material": "PURPLE_STAINED_GLASS",
+    "id": 321
+  },
+  {
+    "material": "PURPLE_STAINED_GLASS_PANE",
+    "id": 337
+  },
+  {
+    "material": "PURPLE_TERRACOTTA",
+    "id": 273
+  },
+  {
+    "material": "PURPLE_WOOL",
+    "id": 92
+  },
+  {
+    "material": "PURPUR_BLOCK",
+    "id": 144
+  },
+  {
+    "material": "PURPUR_PILLAR",
+    "id": 145
+  },
+  {
+    "material": "PURPUR_SLAB",
+    "id": 127
+  },
+  {
+    "material": "PURPUR_STAIRS",
+    "id": 146
+  },
+  {
+    "material": "QUARTZ",
+    "id": 706
+  },
+  {
+    "material": "QUARTZ_BLOCK",
+    "id": 258
+  },
+  {
+    "material": "QUARTZ_PILLAR",
+    "id": 259
+  },
+  {
+    "material": "QUARTZ_SLAB",
+    "id": 125
+  },
+  {
+    "material": "QUARTZ_STAIRS",
+    "id": 260
+  },
+  {
+    "material": "RABBIT",
+    "id": 711
+  },
+  {
+    "material": "RABBIT_FOOT",
+    "id": 714
+  },
+  {
+    "material": "RABBIT_HIDE",
+    "id": 715
+  },
+  {
+    "material": "RABBIT_SPAWN_EGG",
+    "id": 657
+  },
+  {
+    "material": "RABBIT_STEW",
+    "id": 713
+  },
+  {
+    "material": "RAIL",
+    "id": 156
+  },
+  {
+    "material": "REDSTONE",
+    "id": 537
+  },
+  {
+    "material": "REDSTONE_BLOCK",
+    "id": 254
+  },
+  {
+    "material": "REDSTONE_LAMP",
+    "id": 228
+  },
+  {
+    "material": "REDSTONE_ORE",
+    "id": 166
+  },
+  {
+    "material": "REDSTONE_TORCH",
+    "id": 167
+  },
+  {
+    "material": "RED_BANNER",
+    "id": 739
+  },
+  {
+    "material": "RED_BED",
+    "id": 600
+  },
+  {
+    "material": "RED_CARPET",
+    "id": 296
+  },
+  {
+    "material": "RED_CONCRETE",
+    "id": 409
+  },
+  {
+    "material": "RED_CONCRETE_POWDER",
+    "id": 425
+  },
+  {
+    "material": "RED_GLAZED_TERRACOTTA",
+    "id": 393
+  },
+  {
+    "material": "RED_MUSHROOM",
+    "id": 109
+  },
+  {
+    "material": "RED_MUSHROOM_BLOCK",
+    "id": 204
+  },
+  {
+    "material": "RED_NETHER_BRICKS",
+    "id": 358
+  },
+  {
+    "material": "RED_SAND",
+    "id": 27
+  },
+  {
+    "material": "RED_SANDSTONE",
+    "id": 350
+  },
+  {
+    "material": "RED_SANDSTONE_SLAB",
+    "id": 126
+  },
+  {
+    "material": "RED_SANDSTONE_STAIRS",
+    "id": 353
+  },
+  {
+    "material": "RED_SHULKER_BOX",
+    "id": 377
+  },
+  {
+    "material": "RED_STAINED_GLASS",
+    "id": 325
+  },
+  {
+    "material": "RED_STAINED_GLASS_PANE",
+    "id": 341
+  },
+  {
+    "material": "RED_TERRACOTTA",
+    "id": 277
+  },
+  {
+    "material": "RED_TULIP",
+    "id": 103
+  },
+  {
+    "material": "RED_WOOL",
+    "id": 96
+  },
+  {
+    "material": "REPEATER",
+    "id": 457
+  },
+  {
+    "material": "REPEATING_COMMAND_BLOCK",
+    "id": 354
+  },
+  {
+    "material": "ROSE_BUSH",
+    "id": 307
+  },
+  {
+    "material": "ROSE_RED",
+    "id": 568
+  },
+  {
+    "material": "ROTTEN_FLESH",
+    "id": 613
+  },
+  {
+    "material": "SADDLE",
+    "id": 536
+  },
+  {
+    "material": "SALMON",
+    "id": 562
+  },
+  {
+    "material": "SALMON_BUCKET",
+    "id": 543
+  },
+  {
+    "material": "SALMON_SPAWN_EGG",
+    "id": 658
+  },
+  {
+    "material": "SAND",
+    "id": 26
+  },
+  {
+    "material": "SANDSTONE",
+    "id": 68
+  },
+  {
+    "material": "SANDSTONE_SLAB",
+    "id": 119
+  },
+  {
+    "material": "SANDSTONE_STAIRS",
+    "id": 229
+  },
+  {
+    "material": "SCUTE",
+    "id": 461
+  },
+  {
+    "material": "SEAGRASS",
+    "id": 79
+  },
+  {
+    "material": "SEA_LANTERN",
+    "id": 349
+  },
+  {
+    "material": "SEA_PICKLE",
+    "id": 80
+  },
+  {
+    "material": "SHEARS",
+    "id": 604
+  },
+  {
+    "material": "SHEEP_SPAWN_EGG",
+    "id": 659
+  },
+  {
+    "material": "SHIELD",
+    "id": 752
+  },
+  {
+    "material": "SHULKER_BOX",
+    "id": 362
+  },
+  {
+    "material": "SHULKER_SHELL",
+    "id": 760
+  },
+  {
+    "material": "SHULKER_SPAWN_EGG",
+    "id": 660
+  },
+  {
+    "material": "SIGN",
+    "id": 531
+  },
+  {
+    "material": "SILVERFISH_SPAWN_EGG",
+    "id": 661
+  },
+  {
+    "material": "SKELETON_HORSE_SPAWN_EGG",
+    "id": 663
+  },
+  {
+    "material": "SKELETON_SKULL",
+    "id": 693
+  },
+  {
+    "material": "SKELETON_SPAWN_EGG",
+    "id": 662
+  },
+  {
+    "material": "SLIME_BALL",
+    "id": 553
+  },
+  {
+    "material": "SLIME_BLOCK",
+    "id": 303
+  },
+  {
+    "material": "SLIME_SPAWN_EGG",
+    "id": 664
+  },
+  {
+    "material": "SMOOTH_QUARTZ",
+    "id": 131
+  },
+  {
+    "material": "SMOOTH_RED_SANDSTONE",
+    "id": 132
+  },
+  {
+    "material": "SMOOTH_SANDSTONE",
+    "id": 133
+  },
+  {
+    "material": "SMOOTH_STONE",
+    "id": 134
+  },
+  {
+    "material": "SNOW",
+    "id": 169
+  },
+  {
+    "material": "SNOWBALL",
+    "id": 538
+  },
+  {
+    "material": "SNOW_BLOCK",
+    "id": 171
+  },
+  {
+    "material": "SOUL_SAND",
+    "id": 184
+  },
+  {
+    "material": "SPAWNER",
+    "id": 147
+  },
+  {
+    "material": "SPECTRAL_ARROW",
+    "id": 749
+  },
+  {
+    "material": "SPIDER_EYE",
+    "id": 621
+  },
+  {
+    "material": "SPIDER_SPAWN_EGG",
+    "id": 665
+  },
+  {
+    "material": "SPLASH_POTION",
+    "id": 748
+  },
+  {
+    "material": "SPONGE",
+    "id": 62
+  },
+  {
+    "material": "SPRUCE_BOAT",
+    "id": 754
+  },
+  {
+    "material": "SPRUCE_BUTTON",
+    "id": 242
+  },
+  {
+    "material": "SPRUCE_DOOR",
+    "id": 452
+  },
+  {
+    "material": "SPRUCE_FENCE",
+    "id": 176
+  },
+  {
+    "material": "SPRUCE_FENCE_GATE",
+    "id": 211
+  },
+  {
+    "material": "SPRUCE_LEAVES",
+    "id": 57
+  },
+  {
+    "material": "SPRUCE_LOG",
+    "id": 33
+  },
+  {
+    "material": "SPRUCE_PLANKS",
+    "id": 14
+  },
+  {
+    "material": "SPRUCE_PRESSURE_PLATE",
+    "id": 161
+  },
+  {
+    "material": "SPRUCE_SAPLING",
+    "id": 20
+  },
+  {
+    "material": "SPRUCE_SLAB",
+    "id": 113
+  },
+  {
+    "material": "SPRUCE_STAIRS",
+    "id": 234
+  },
+  {
+    "material": "SPRUCE_TRAPDOOR",
+    "id": 188
+  },
+  {
+    "material": "SPRUCE_WOOD",
+    "id": 51
+  },
+  {
+    "material": "SQUID_SPAWN_EGG",
+    "id": 666
+  },
+  {
+    "material": "STICK",
+    "id": 487
+  },
+  {
+    "material": "STICKY_PISTON",
+    "id": 74
+  },
+  {
+    "material": "STONE",
+    "id": 1
+  },
+  {
+    "material": "STONE_AXE",
+    "id": 482
+  },
+  {
+    "material": "STONE_BRICKS",
+    "id": 199
+  },
+  {
+    "material": "STONE_BRICK_SLAB",
+    "id": 123
+  },
+  {
+    "material": "STONE_BRICK_STAIRS",
+    "id": 217
+  },
+  {
+    "material": "STONE_BUTTON",
+    "id": 168
+  },
+  {
+    "material": "STONE_HOE",
+    "id": 498
+  },
+  {
+    "material": "STONE_PICKAXE",
+    "id": 481
+  },
+  {
+    "material": "STONE_PRESSURE_PLATE",
+    "id": 159
+  },
+  {
+    "material": "STONE_SHOVEL",
+    "id": 480
+  },
+  {
+    "material": "STONE_SLAB",
+    "id": 118
+  },
+  {
+    "material": "STONE_SWORD",
+    "id": 479
+  },
+  {
+    "material": "STRAY_SPAWN_EGG",
+    "id": 667
+  },
+  {
+    "material": "STRING",
+    "id": 494
+  },
+  {
+    "material": "STRIPPED_ACACIA_LOG",
+    "id": 42
+  },
+  {
+    "material": "STRIPPED_ACACIA_WOOD",
+    "id": 48
+  },
+  {
+    "material": "STRIPPED_BIRCH_LOG",
+    "id": 40
+  },
+  {
+    "material": "STRIPPED_BIRCH_WOOD",
+    "id": 46
+  },
+  {
+    "material": "STRIPPED_DARK_OAK_LOG",
+    "id": 43
+  },
+  {
+    "material": "STRIPPED_DARK_OAK_WOOD",
+    "id": 49
+  },
+  {
+    "material": "STRIPPED_JUNGLE_LOG",
+    "id": 41
+  },
+  {
+    "material": "STRIPPED_JUNGLE_WOOD",
+    "id": 47
+  },
+  {
+    "material": "STRIPPED_OAK_LOG",
+    "id": 38
+  },
+  {
+    "material": "STRIPPED_OAK_WOOD",
+    "id": 44
+  },
+  {
+    "material": "STRIPPED_SPRUCE_LOG",
+    "id": 39
+  },
+  {
+    "material": "STRIPPED_SPRUCE_WOOD",
+    "id": 45
+  },
+  {
+    "material": "STRUCTURE_BLOCK",
+    "id": 459
+  },
+  {
+    "material": "STRUCTURE_VOID",
+    "id": 360
+  },
+  {
+    "material": "SUGAR",
+    "id": 584
+  },
+  {
+    "material": "SUGAR_CANE",
+    "id": 548
+  },
+  {
+    "material": "SUNFLOWER",
+    "id": 305
+  },
+  {
+    "material": "TALL_GRASS",
+    "id": 309
+  },
+  {
+    "material": "TERRACOTTA",
+    "id": 298
+  },
+  {
+    "material": "TIPPED_ARROW",
+    "id": 750
+  },
+  {
+    "material": "TNT",
+    "id": 136
+  },
+  {
+    "material": "TNT_MINECART",
+    "id": 707
+  },
+  {
+    "material": "TORCH",
+    "id": 140
+  },
+  {
+    "material": "TOTEM_OF_UNDYING",
+    "id": 759
+  },
+  {
+    "material": "TRAPPED_CHEST",
+    "id": 250
+  },
+  {
+    "material": "TRIDENT",
+    "id": 776
+  },
+  {
+    "material": "TRIPWIRE_HOOK",
+    "id": 232
+  },
+  {
+    "material": "TROPICAL_FISH",
+    "id": 563
+  },
+  {
+    "material": "TROPICAL_FISH_BUCKET",
+    "id": 545
+  },
+  {
+    "material": "TROPICAL_FISH_SPAWN_EGG",
+    "id": 668
+  },
+  {
+    "material": "TUBE_CORAL",
+    "id": 438
+  },
+  {
+    "material": "TUBE_CORAL_BLOCK",
+    "id": 433
+  },
+  {
+    "material": "TUBE_CORAL_FAN",
+    "id": 443
+  },
+  {
+    "material": "TURTLE_EGG",
+    "id": 427
+  },
+  {
+    "material": "TURTLE_HELMET",
+    "id": 460
+  },
+  {
+    "material": "TURTLE_SPAWN_EGG",
+    "id": 669
+  },
+  {
+    "material": "VEX_SPAWN_EGG",
+    "id": 670
+  },
+  {
+    "material": "VILLAGER_SPAWN_EGG",
+    "id": 671
+  },
+  {
+    "material": "VINDICATOR_SPAWN_EGG",
+    "id": 672
+  },
+  {
+    "material": "VINE",
+    "id": 209
+  },
+  {
+    "material": "WATER_BUCKET",
+    "id": 533
+  },
+  {
+    "material": "WET_SPONGE",
+    "id": 63
+  },
+  {
+    "material": "WHEAT",
+    "id": 503
+  },
+  {
+    "material": "WHEAT_SEEDS",
+    "id": 502
+  },
+  {
+    "material": "WHITE_BANNER",
+    "id": 725
+  },
+  {
+    "material": "WHITE_BED",
+    "id": 586
+  },
+  {
+    "material": "WHITE_CARPET",
+    "id": 282
+  },
+  {
+    "material": "WHITE_CONCRETE",
+    "id": 395
+  },
+  {
+    "material": "WHITE_CONCRETE_POWDER",
+    "id": 411
+  },
+  {
+    "material": "WHITE_GLAZED_TERRACOTTA",
+    "id": 379
+  },
+  {
+    "material": "WHITE_SHULKER_BOX",
+    "id": 363
+  },
+  {
+    "material": "WHITE_STAINED_GLASS",
+    "id": 311
+  },
+  {
+    "material": "WHITE_STAINED_GLASS_PANE",
+    "id": 327
+  },
+  {
+    "material": "WHITE_TERRACOTTA",
+    "id": 263
+  },
+  {
+    "material": "WHITE_TULIP",
+    "id": 105
+  },
+  {
+    "material": "WHITE_WOOL",
+    "id": 82
+  },
+  {
+    "material": "WITCH_SPAWN_EGG",
+    "id": 673
+  },
+  {
+    "material": "WITHER_SKELETON_SKULL",
+    "id": 694
+  },
+  {
+    "material": "WITHER_SKELETON_SPAWN_EGG",
+    "id": 674
+  },
+  {
+    "material": "WOLF_SPAWN_EGG",
+    "id": 675
+  },
+  {
+    "material": "WOODEN_AXE",
+    "id": 478
+  },
+  {
+    "material": "WOODEN_HOE",
+    "id": 497
+  },
+  {
+    "material": "WOODEN_PICKAXE",
+    "id": 477
+  },
+  {
+    "material": "WOODEN_SHOVEL",
+    "id": 476
+  },
+  {
+    "material": "WOODEN_SWORD",
+    "id": 475
+  },
+  {
+    "material": "WRITABLE_BOOK",
+    "id": 682
+  },
+  {
+    "material": "WRITTEN_BOOK",
+    "id": 683
+  },
+  {
+    "material": "YELLOW_BANNER",
+    "id": 729
+  },
+  {
+    "material": "YELLOW_BED",
+    "id": 590
+  },
+  {
+    "material": "YELLOW_CARPET",
+    "id": 286
+  },
+  {
+    "material": "YELLOW_CONCRETE",
+    "id": 399
+  },
+  {
+    "material": "YELLOW_CONCRETE_POWDER",
+    "id": 415
+  },
+  {
+    "material": "YELLOW_GLAZED_TERRACOTTA",
+    "id": 383
+  },
+  {
+    "material": "YELLOW_SHULKER_BOX",
+    "id": 367
+  },
+  {
+    "material": "YELLOW_STAINED_GLASS",
+    "id": 315
+  },
+  {
+    "material": "YELLOW_STAINED_GLASS_PANE",
+    "id": 331
+  },
+  {
+    "material": "YELLOW_TERRACOTTA",
+    "id": 267
+  },
+  {
+    "material": "YELLOW_WOOL",
+    "id": 86
+  },
+  {
+    "material": "ZOMBIE_HEAD",
+    "id": 696
+  },
+  {
+    "material": "ZOMBIE_HORSE_SPAWN_EGG",
+    "id": 677
+  },
+  {
+    "material": "ZOMBIE_PIGMAN_SPAWN_EGG",
+    "id": 678
+  },
+  {
+    "material": "ZOMBIE_SPAWN_EGG",
+    "id": 676
+  },
+  {
+    "material": "ZOMBIE_VILLAGER_SPAWN_EGG",
+    "id": 679
+  }
+]

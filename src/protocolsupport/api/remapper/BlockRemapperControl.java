@@ -1,12 +1,13 @@
 package protocolsupport.api.remapper;
 
+import java.util.Arrays;
+
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Material;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 
 public class BlockRemapperControl {
 
@@ -17,7 +18,7 @@ public class BlockRemapperControl {
 		IdRemapper.BLOCK.applyDefaultRemaps();
 	}
 
-	private final ArrayBasedIdRemappingTable table;
+	protected final ArrayBasedIdRemappingTable table;
 
 	public BlockRemapperControl(ProtocolVersion version) {
 		Validate.isTrue(version.isSupported(), "Can't control block remapping for unsupported version");
@@ -25,101 +26,96 @@ public class BlockRemapperControl {
 	}
 
 	/**
-	 * Sets remap from one material to another for all data
+	 * Sets remap from one blockstate runtime id to another
+	 * @param from blockstate runtime which will be remapped
+	 * @param to blockstate runtime to which remap will occur
+	 */
+	public void setRemap(int from, int to) {
+		table.setRemap(from, to);
+	}
+
+	/**
+	 * Returns remap for specified blockstate runtime id
+	 * @param id blockstate runtime id
+	 * @return remap for specified blockstate runtime id
+	 */
+	public int getRemap(int id) {
+		return table.getRemap(id);
+	}
+
+
+
+
+
+
+
+	/**
+	 * Returns remap for specified material (right now it just returns itself)
+	 * @param material {@link Material}
+	 * @return remap for specified material
+	 * @deprecated blockdata now represents full blockstate
+	 */
+	public Material getRemap(Material material) {
+		return material;
+	}
+
+	/**
+	 * Sets remap from one material to another for all data (right now does nothing)
 	 * @param from {@link Material} which will be remapped
 	 * @param to {@link Material} to which remap will occur
 	 */
-	@SuppressWarnings("deprecation")
 	public void setRemap(Material from, Material to) {
+	}
+
+	/**
+	 * Returns remap for specified material and data (right now it just returns itself)
+	 * @param entry {@link MaterialAndData}
+	 * @return remap for specified material and data
+	 * @deprecated data no longer exists
+	 */
+	public MaterialAndData getRemap(MaterialAndData entry) {
+		return entry;
+	}
+
+	/**
+	 * Sets remap for specified material and data (right now does nothing)
+	 * @param from {@link MaterialAndData} which will be remapped
+	 * @param to {@link MaterialAndData} to which remap will occur
+	 * @deprecated data no longer exists
+	 */
+	public void setRemap(MaterialAndData from, MaterialAndData to) {
 		setRemap(from.getId(), to.getId());
 	}
 
 	/**
-	 * Sets remap from one item id to another for all data
-	 * @param from item id which will be remapped
-	 * @param to item id to which remap will occur
-	 */
-	public void setRemap(int from, int to) {
-		for (int i = 0; i < MinecraftData.BLOCK_DATA_MAX; i++) {
-			setRemap(from, i, to, i);
-		}
-	}
-
-	/**
-	 * Returns remap for specified material
-	 * @param material {@link Material}
-	 * @return remap for specified material
-	 * @deprecated returns material remap for data 0
-	 */
-	@Deprecated
-	public Material getRemap(Material material) {
-		return Material.getMaterial(getRemap(material.getId()));
-	}
-
-	/**
-	 * Returns remap for specified item id
-	 * @param id item id
-	 * @return remap for specified item id
-	 * @deprecated returns item id remap for data 0
-	 */
-	@Deprecated
-	public int getRemap(int id) {
-		return MinecraftData.getBlockIdFromState(table.getRemap(MinecraftData.getBlockStateFromIdAndData(id, 0)));
-	}
-
-	/**
-	 * Returns remap for specified material and data
-	 * @param entry {@link MaterialAndData}
-	 * @return remap for specified material and data
-	 */
-	public MaterialAndData getRemap(MaterialAndData entry) {
-		Validate.inclusiveBetween(0, MinecraftData.BLOCK_ID_MAX, entry.getId());
-		Validate.inclusiveBetween(0, MinecraftData.BLOCK_DATA_MAX, entry.getData());
-		int combinedId = table.getRemap(MinecraftData.getBlockStateFromIdAndData(entry.getId(), entry.getData()));
-		return new MaterialAndData(MinecraftData.getBlockIdFromState(combinedId), MinecraftData.getBlockDataFromState(combinedId));
-	}
-
-	/**
-	 * Sets remap for specified material and data
-	 * @param from {@link MaterialAndData} which will be remapped
-	 * @param to {@link MaterialAndData} to which remap will occur
-	 */
-	public void setRemap(MaterialAndData from, MaterialAndData to) {
-		setRemap(from.getId(), from.getData(), to.getId(), to.getData());
-	}
-
-	/**
-	 * Sets remap for specified material and data
+	 * Sets remap for specified material and data (right now does nothing)
 	 * @param matFrom {@link Material} which will be remapped
-	 * @param dataFrom item data which will be remapped
+	 * @param dataFrom block data which will be remapped
 	 * @param matTo {@link Material} to which remap will occur
-	 * @param dataTo item data to which remap will occur
+	 * @param dataTo block data to which remap will occur
+	 * @deprecated data no longer exists
 	 */
-	@SuppressWarnings("deprecation")
 	public void setRemap(Material matFrom, int dataFrom, Material matTo, int dataTo) {
-		setRemap(matFrom.getId(), dataFrom, matTo.getId(), dataTo);
 	}
 
 	/**
-	 * Sets remap for specified material and data
-	 * @param idFrom item id which will be remapped
-	 * @param dataFrom item data which will be remapped
-	 * @param idTo item id to which remap will occur
-	 * @param dataTo item data to which remap will occur
+	 * Sets remap for specified material and data (right now does nothing)
+	 * @param idFrom block id which will be remapped
+	 * @param dataFrom block data which will be remapped
+	 * @param idTo block id to which remap will occur
+	 * @param dataTo block data to which remap will occur
+	 * @deprecated data no longer exists
 	 */
 	public void setRemap(int idFrom, int dataFrom, int idTo, int dataTo) {
-		Validate.inclusiveBetween(0, MinecraftData.BLOCK_ID_MAX, idFrom);
-		Validate.inclusiveBetween(0, MinecraftData.BLOCK_DATA_MAX, dataFrom);
-		Validate.inclusiveBetween(0, MinecraftData.BLOCK_ID_MAX, idTo);
-		Validate.inclusiveBetween(0, MinecraftData.BLOCK_DATA_MAX, dataTo);
-		table.setRemap(MinecraftData.getBlockStateFromIdAndData(idFrom, dataFrom), MinecraftData.getBlockStateFromIdAndData(idTo, dataTo));
 	}
 
+	/**
+	 * @deprecated data no longer exists
+	 */
 	public static class MaterialAndData {
 		private final int id;
 		private final int data;
 
-		@SuppressWarnings("deprecation")
 		public MaterialAndData(Material material, int data) {
 			this(material.getId(), data);
 		}
@@ -129,9 +125,8 @@ public class BlockRemapperControl {
 			this.data = data;
 		}
 
-		@SuppressWarnings("deprecation")
 		public Material getMaterial() {
-			return Material.getMaterial(id);
+			return Arrays.stream(Material.values()).filter(m -> m.getId() == id).findAny().orElse(null);
 		}
 
 		public int getId() {

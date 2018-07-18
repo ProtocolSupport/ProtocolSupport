@@ -86,8 +86,6 @@ public class GlowStoneLoginListenerPlay extends AbstractLoginListenerPlay implem
 			throw new IllegalStateException("Unable to set GlowSession online field", e);
 		}
 
-		GlowServer.logger.info(glowplayer.getName() + " [" + networkManager.getAddress() + "] connected, UUID: " + glowplayer.getUniqueId());
-
 		String message = EventFactory.onPlayerJoin(glowplayer).getJoinMessage();
 		if ((message != null) && !message.isEmpty()) {
 			server.broadcastMessage(message);

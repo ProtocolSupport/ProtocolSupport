@@ -7,7 +7,7 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public abstract class MiddleInventoryClick extends ServerBoundMiddlePacket {
 
@@ -16,7 +16,7 @@ public abstract class MiddleInventoryClick extends ServerBoundMiddlePacket {
 	protected int button;
 	protected int actionNumber;
 	protected int mode;
-	protected ItemStackWrapper itemstack;
+	protected NetworkItemStack itemstack;
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {

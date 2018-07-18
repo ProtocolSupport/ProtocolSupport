@@ -13,9 +13,13 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopBoss
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopCamera;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopCombatEvent;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopCraftingGridConfirm;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopDeclareCommands;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopDeclareRecipes;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopDeclareTags;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopPlayerListHeaderFooter;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopServerDifficulty;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopSetCooldown;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopStatistics;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopTitle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopUnlockRecipes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopVehicleMove;
@@ -85,7 +89,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2.GameStateChange;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2.HeldSlot;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2.KickDisconnect;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2.Statistics;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2.TabComplete;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_7_8_9r1_9r2_10_11_12r1_12r2.Pong;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_7_8_9r1_9r2_10_11_12r1_12r2.ServerInfo;
@@ -234,7 +237,6 @@ public class PacketEncoder extends AbstractModernPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_MAP_ID, Map.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UPDATE_TILE_ID, BlockTileUpdate.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SIGN_EDITOR_ID, BlockOpenSignEditor.class);
-		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_STATISTICS_ID, Statistics.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_PLAYER_INFO_ID, PlayerListSetEntry.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ABILITIES_ID, PlayerAbilities.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_TAB_COMPLETE_ID, TabComplete.class);
@@ -260,6 +262,10 @@ public class PacketEncoder extends AbstractModernPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ADVANCEMENTS, NoopAdvancements.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ADVANCEMENTS_TAB, NoopAdvanementsTab.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CRAFTING_GRID_CONFIRM, NoopCraftingGridConfirm.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_STATISTICS_ID, NoopStatistics.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_DECLARE_COMMANDS, NoopDeclareCommands.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_DECLARE_RECIPES, NoopDeclareRecipes.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_DECLARE_TAGS, NoopDeclareTags.class);
 	}
 
 	public PacketEncoder(Connection connection, NetworkDataCache storage) {

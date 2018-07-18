@@ -6,16 +6,13 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
-import protocolsupport.protocol.typeremapper.itemstack.toclient.DragonHeadSpecificRemapper;
-import protocolsupport.protocol.typeremapper.itemstack.toclient.PlayerSkullToLegacyOwnerSpecificRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.DragonHeadToDragonPlayerHeadComplexRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PlayerHeadToLegacyOwnerComplexRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityType;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.minecraftdata.ItemData;
+import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.TileEntityType;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
-import protocolsupport.utils.IntTuple;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -31,7 +28,6 @@ public class TileNBTRemapper {
 		newToOldType.put(TileEntityType.COMMAND_BLOCK, "Control");
 		newToOldType.put(TileEntityType.BEACON, "Beacon");
 		newToOldType.put(TileEntityType.SKULL, "Skull");
-		newToOldType.put(TileEntityType.FLOWER_POT, "FlowerPot");
 		newToOldType.put(TileEntityType.BANNER, "Banner");
 		newToOldType.put(TileEntityType.STRUCTURE, "Structure");
 		newToOldType.put(TileEntityType.END_GATEWAY, "Airportal");
@@ -63,7 +59,7 @@ public class TileNBTRemapper {
 			(version, input) -> {
 				if (!input.hasKeyOfType("SpawnData", NBTTagType.COMPOUND)) {
 					NBTTagCompoundWrapper spawndata = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-					spawndata.setString("id", NetworkEntityType.PIG.getRegistrySTypeId());
+					spawndata.setString("id", NetworkEntityType.PIG.getKey());
 					input.setCompound("SpawnData", spawndata);
 				}
 				return input;
@@ -101,7 +97,7 @@ public class TileNBTRemapper {
 			(version, input) -> {
 				if (input.getIntNumber("SkullType") == 5) {
 					input.setByte("SkullType", 3);
-					input.setCompound("Owner", DragonHeadSpecificRemapper.createTag());
+					input.setCompound("Owner", DragonHeadToDragonPlayerHeadComplexRemapper.createTag());
 				}
 				return input;
 			},
@@ -110,22 +106,10 @@ public class TileNBTRemapper {
 		register(
 			TileEntityType.SKULL,
 			(version, input) -> {
-				PlayerSkullToLegacyOwnerSpecificRemapper.remap(input, "Owner", "ExtraType");
+				PlayerHeadToLegacyOwnerComplexRemapper.remap(input, "Owner", "ExtraType");
 				return input;
 			},
 			ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_7_5)
-		);
-		register(
-			TileEntityType.FLOWER_POT,
-			(version, input) -> {
-				Integer id = ItemData.getIdByName(input.getString("Item"));
-				if (id != null) {
-					IntTuple iddata = ItemStackRemapper.ID_DATA_REMAPPING_REGISTRY.getTable(version).getRemap(id, 0);
-					input.setInt("Item", iddata != null ? iddata.getI1() : id);
-				}
-				return input;
-			},
-			ProtocolVersionsHelper.BEFORE_1_8
 		);
 	}
 

@@ -6,6 +6,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleScoreboardT
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -18,9 +19,9 @@ public class ScoreboardTeam extends MiddleScoreboardTeam {
 		StringSerializer.writeString(serializer, version, name);
 		serializer.writeByte(mode);
 		if ((mode == 0) || (mode == 2)) {
-			StringSerializer.writeString(serializer, version, displayName);
-			StringSerializer.writeString(serializer, version, prefix);
-			StringSerializer.writeString(serializer, version, suffix);
+			StringSerializer.writeString(serializer, version, Utils.clampString(displayName.toLegacyText(), 32));
+			StringSerializer.writeString(serializer, version, Utils.clampString(prefix.toLegacyText(), 16));
+			StringSerializer.writeString(serializer, version, Utils.clampString(suffix.toLegacyText(), 16));
 			serializer.writeByte(friendlyFire);
 			StringSerializer.writeString(serializer, version, nameTagVisibility);
 			StringSerializer.writeString(serializer, version, collisionRule);

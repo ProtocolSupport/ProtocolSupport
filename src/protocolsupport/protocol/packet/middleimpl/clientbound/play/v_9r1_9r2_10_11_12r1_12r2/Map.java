@@ -21,7 +21,7 @@ public class Map extends MiddleMap {
 		serializer.writeByte(scale);
 		serializer.writeBoolean(showIcons);
 		ArraySerializer.writeVarIntTArray(serializer, icons, (to, icon) -> {
-			to.writeByte(icon.dirtype);
+			to.writeByte(((icon.type <= 9 ? icon.type : 0) << 4) | icon.direction);
 			to.writeByte(icon.x);
 			to.writeByte(icon.z);
 		});

@@ -30,7 +30,7 @@ public abstract class ItemStackWriteEvent extends Event {
 
 	/**
 	 * Returns the original itemstack clone (no remaps applied) <br>
-	 * Modifying this itemstack has not effect
+	 * Modifying this itemstack has no effect
 	 * @return original itemstack
 	 */
 	public ItemStack getOriginal() {
@@ -54,10 +54,10 @@ public abstract class ItemStackWriteEvent extends Event {
 	}
 
 	/**
-	 * Returns the remapped itemstack <br>
-	 * This itemstack should be modified to change the resulting sent itemstack <br>
-	 * Modifying this itemstack to unsupported values (air material (0 type id), impossible data (< 0, > Short.MAX_VALUE), or impossible count (< 0, > 127)) will cause a client error
+	 * Previously returned the resulting itemstack
+	 * Now returns a writethrough shared stone itemstack which only copies lore and name to the result
 	 * @return resulting itemstack
+	 * @deprecated replaced by ability to add lore and set name for resulting itemstack
 	 */
 	public abstract ItemStack getResult();
 

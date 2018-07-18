@@ -1,6 +1,7 @@
 name: ProtocolSupport
 main: protocolsupport.ProtocolSupport
 version: 4.29-dev
+api-version: 1.13
 authors:
 - _Shevchik_
 - 7kasper

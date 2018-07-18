@@ -13,6 +13,9 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopBoss
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopCamera;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopCombatEvent;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopCraftingGridConfirm;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopDeclareCommands;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopDeclareRecipes;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopDeclareTags;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopPlayerListHeaderFooter;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopResourcePack;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopServerDifficulty;
@@ -257,6 +260,9 @@ public class PacketEncoder extends AbstractLegacyPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ADVANCEMENTS, NoopAdvancements.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ADVANCEMENTS_TAB, NoopAdvanementsTab.class);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CRAFTING_GRID_CONFIRM, NoopCraftingGridConfirm.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_DECLARE_COMMANDS, NoopDeclareCommands.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_DECLARE_RECIPES, NoopDeclareRecipes.class);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_DECLARE_TAGS, NoopDeclareTags.class);
 	}
 
 	public PacketEncoder(Connection connection, NetworkDataCache storage) {

@@ -2,8 +2,8 @@ package protocolsupport.protocol.typeremapper.chunk;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.legacy.LegacyBlockId;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 
 public class ChunkTransformerByte extends ChunkTransformer {
 
@@ -21,9 +21,9 @@ public class ChunkTransformerByte extends ChunkTransformer {
 				BlockStorageReader storage = section.blockdata;
 				int blockdataacc = 0;
 				for (int block = 0; block < blocksInSection; block++) {
-					int blockstate = table.getRemap(storage.getBlockState(block));
-					data[blockIdIndex + block] = (byte) MinecraftData.getBlockIdFromState(blockstate);
-					byte blockdata = (byte) MinecraftData.getBlockDataFromState(blockstate);
+					int blockstate = LegacyBlockId.getCombinedId(table.getRemap(storage.getBlockState(block)));
+					data[blockIdIndex + block] = (byte) LegacyBlockId.getIdFromCombinedId(blockstate);
+					byte blockdata = (byte) LegacyBlockId.getDataFromCombinedId(blockstate);
 					if ((block & 1) == 0) {
 						blockdataacc = blockdata;
 					} else {

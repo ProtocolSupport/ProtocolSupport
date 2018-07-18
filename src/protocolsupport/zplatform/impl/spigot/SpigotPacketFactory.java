@@ -9,23 +9,23 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_13_R1.entity.CraftEntity;
 import org.spigotmc.SpigotConfig;
 
 import com.google.common.collect.BiMap;
 
 import io.netty.buffer.Unpooled;
-import net.minecraft.server.v1_12_R1.*;
-import net.minecraft.server.v1_12_R1.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_12_R1.PacketPlayInFlying.PacketPlayInLook;
-import net.minecraft.server.v1_12_R1.PacketPlayInFlying.PacketPlayInPosition;
-import net.minecraft.server.v1_12_R1.PacketPlayInFlying.PacketPlayInPositionLook;
-import net.minecraft.server.v1_12_R1.PacketPlayOutEntity.PacketPlayOutEntityLook;
-import net.minecraft.server.v1_12_R1.PacketPlayOutEntity.PacketPlayOutRelEntityMove;
-import net.minecraft.server.v1_12_R1.PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook;
-import net.minecraft.server.v1_12_R1.PacketPlayOutTitle.EnumTitleAction;
-import net.minecraft.server.v1_12_R1.ServerPing.ServerData;
-import net.minecraft.server.v1_12_R1.ServerPing.ServerPingPlayerSample;
+import net.minecraft.server.v1_13_R1.*;
+import net.minecraft.server.v1_13_R1.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_13_R1.PacketPlayInFlying.PacketPlayInLook;
+import net.minecraft.server.v1_13_R1.PacketPlayInFlying.PacketPlayInPosition;
+import net.minecraft.server.v1_13_R1.PacketPlayInFlying.PacketPlayInPositionLook;
+import net.minecraft.server.v1_13_R1.PacketPlayOutEntity.PacketPlayOutEntityLook;
+import net.minecraft.server.v1_13_R1.PacketPlayOutEntity.PacketPlayOutRelEntityMove;
+import net.minecraft.server.v1_13_R1.PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook;
+import net.minecraft.server.v1_13_R1.PacketPlayOutTitle.EnumTitleAction;
+import net.minecraft.server.v1_13_R1.ServerPing.ServerData;
+import net.minecraft.server.v1_13_R1.ServerPing.ServerPingPlayerSample;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
@@ -110,9 +110,8 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public Object createBlockBreakSoundPacket(Position pos, Material type) {
-		BlockDataEntry blockdataentry = BlockData.getById(type.getId());
+		BlockDataEntry blockdataentry = BlockData.get(type);
 		return new PacketPlayOutNamedSoundEffect(
 			SoundEffect.a.getId(blockdataentry.getBreakSound()), SoundCategory.BLOCKS,
 			pos.getX(), pos.getY(), pos.getZ(),
@@ -156,7 +155,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	protected static final PacketDataSerializer emptyPDS = new PacketDataSerializer(Unpooled.EMPTY_BUFFER);
 	@Override
 	public Object createEmptyCustomPayloadPacket(String tag) {
-		return new PacketPlayOutCustomPayload(tag, emptyPDS);
+		return new PacketPlayOutCustomPayload(new MinecraftKey("ps", tag), emptyPDS);
 	}
 
 	@Override
@@ -598,6 +597,21 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	@Override
 	public int getOutPlayCraftingGridConfirmPacketId() {
 		return getOutId(PacketPlayOutAutoRecipe.class);
+	}
+
+	@Override
+	public int getOutPlayDeclareCommandsPacketId() {
+		return getOutId(PacketPlayOutCommands.class);
+	}
+
+	@Override
+	public int getOutPlayDeclareRecipesPacketId() {
+		return getOutId(PacketPlayOutRecipeUpdate.class);
+	}
+
+	@Override
+	public int getOutPlayDeclareTagsPacket() {
+		return getOutId(PacketPlayOutTags.class);
 	}
 
 

@@ -11,11 +11,10 @@ import protocolsupport.protocol.typeremapper.utils.SkippingTable;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.ArrayBasedIntSkippingTable;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.EnumSkippingTable;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.GenericSkippingTable;
-import protocolsupport.protocol.typeremapper.utils.SkippingTable.HashMapBasedIntSkippingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Particle;
 import protocolsupport.protocol.utils.types.WindowType;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
 
 public class IdSkipper {
 
@@ -32,7 +31,7 @@ public class IdSkipper {
 
 	};
 
-	public static final IntSkippingRegistry<HashMapBasedIntSkippingTable> ENCHANT = new IntSkippingRegistry<HashMapBasedIntSkippingTable>() {
+	public static final GenericSkippingRegistry<String, GenericSkippingTable<String>> ENCHANT = new GenericSkippingRegistry<String, GenericSkippingTable<String>>() {
 		{
 			registerSkipEntry(Enchantment.SWEEPING_EDGE, ProtocolVersionsHelper.BEFORE_1_11_1);
 			registerSkipEntry(Enchantment.BINDING_CURSE, ProtocolVersionsHelper.BEFORE_1_10);
@@ -43,13 +42,13 @@ public class IdSkipper {
 			registerSkipEntry(Enchantment.LURE, ProtocolVersionsHelper.BEFORE_1_7);
 			registerSkipEntry(Enchantment.LUCK, ProtocolVersionsHelper.BEFORE_1_7);
 		}
-		@SuppressWarnings("deprecation")
 		protected void registerSkipEntry(Enchantment ench, ProtocolVersion... versions) {
-			registerSkipEntry(ench.getId(), versions);
+			registerSkipEntry(ench.getKey().getKey(), versions);
+			registerSkipEntry(ench.getKey().toString(), versions);
 		}
 		@Override
-		protected HashMapBasedIntSkippingTable createTable() {
-			return new HashMapBasedIntSkippingTable();
+		protected GenericSkippingTable<String> createTable() {
+			return new GenericSkippingTable<>();
 		}
 	};
 

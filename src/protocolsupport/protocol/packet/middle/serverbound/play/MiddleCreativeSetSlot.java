@@ -7,12 +7,12 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public abstract class MiddleCreativeSetSlot extends ServerBoundMiddlePacket {
 
 	protected int slot;
-	protected ItemStackWrapper itemstack;
+	protected NetworkItemStack itemstack;
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {

@@ -6,6 +6,7 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 
@@ -16,6 +17,10 @@ public abstract class MiddleCustomPayload extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
+		//TODO: implement after implementing namespaced key usage
+		if (true) {
+			return RecyclableEmptyList.get();
+		}
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_CUSTOM_PAYLOAD);
 		StringSerializer.writeString(creator, ProtocolVersionsHelper.LATEST_PC, tag);
 		creator.writeBytes(data);

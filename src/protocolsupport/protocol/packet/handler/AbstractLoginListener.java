@@ -75,7 +75,6 @@ public abstract class AbstractLoginListener {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void disconnect(String s) {
 		try {
 			Bukkit.getLogger().info("Disconnecting " + getConnectionRepr() + ": " + s);
@@ -189,7 +188,6 @@ public abstract class AbstractLoginListener {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	protected void finishLogin() throws InterruptedException, ExecutionException  {
 		if (!networkManager.isConnected()) {
 			return;

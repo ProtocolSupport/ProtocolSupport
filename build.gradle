@@ -43,8 +43,8 @@ dlDepsDirS.mkdirs()
 
 def dlDepsC = [
 	new Tuple(
-		'https://yivesmirror.com/files/paperspigot/PaperSpigot-1.12.2-b1421.jar',
-		'spigot-1.12.2-2.jar'
+		'https://yivesmirror.com/files/spigot/spigot-1.13-pre7-R0.1-SNAPSHOT-b1687.jar',
+		'spigot-1.13-1.jar'
 	),
 	new Tuple(
 		'https://repo.glowstone.net/repository/snapshots/net/glowstone/glowstone/2018.2.0-SNAPSHOT/glowstone-2018.2.0-20180209.231901-7.jar',

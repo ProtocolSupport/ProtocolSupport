@@ -14,8 +14,8 @@ public class UnlockRecipes extends MiddleUnlockRecipes {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_UNLOCK_RECIPES);
 		MiscSerializer.writeVarIntEnum(serializer, action);
-		serializer.writeBoolean(openBook);
-		serializer.writeBoolean(enableFiltering);
+		serializer.writeBoolean(craftRecipeBookOpen);
+		serializer.writeBoolean(craftRecipeBookFiltering);
 		ArraySerializer.writeVarIntVarIntArray(serializer, recipes1);
 		if (action == Action.INIT) {
 			ArraySerializer.writeVarIntVarIntArray(serializer, recipes2);

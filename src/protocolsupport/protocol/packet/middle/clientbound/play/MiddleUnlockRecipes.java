@@ -9,16 +9,20 @@ import protocolsupport.protocol.utils.EnumConstantLookups;
 public abstract class MiddleUnlockRecipes extends ClientBoundMiddlePacket {
 
 	protected Action action;
-	protected boolean openBook;
-	protected boolean enableFiltering;
+	protected boolean craftRecipeBookOpen;
+	protected boolean craftRecipeBookFiltering;
+	protected boolean smeltingRecipeBookOpen;
+	protected boolean smeltingRecipeBookFiltering;
 	protected int[] recipes1;
 	protected int[] recipes2;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
 		action = MiscSerializer.readVarIntEnum(serverdata, Action.CONSTANT_LOOKUP);
-		openBook = serverdata.readBoolean();
-		enableFiltering = serverdata.readBoolean();
+		craftRecipeBookOpen = serverdata.readBoolean();
+		craftRecipeBookFiltering = serverdata.readBoolean();
+		smeltingRecipeBookOpen = serverdata.readBoolean();
+		smeltingRecipeBookFiltering = serverdata.readBoolean();
 		recipes1 = ArraySerializer.readVarIntVarIntArray(serverdata);
 		if (action == Action.INIT) {
 			recipes2 = ArraySerializer.readVarIntVarIntArray(serverdata);

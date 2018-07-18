@@ -5,12 +5,13 @@ import java.util.Objects;
 
 import org.spigotmc.SneakyThrow;
 
-import net.minecraft.server.v1_12_R1.MojangsonParseException;
-import net.minecraft.server.v1_12_R1.MojangsonParser;
-import net.minecraft.server.v1_12_R1.NBTBase;
-import net.minecraft.server.v1_12_R1.NBTTagCompound;
-import net.minecraft.server.v1_12_R1.NBTTagList;
-import net.minecraft.server.v1_12_R1.NBTTagLongArray;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
+import net.minecraft.server.v1_13_R1.MojangsonParser;
+import net.minecraft.server.v1_13_R1.NBTBase;
+import net.minecraft.server.v1_13_R1.NBTTagCompound;
+import net.minecraft.server.v1_13_R1.NBTTagList;
+import net.minecraft.server.v1_13_R1.NBTTagLongArray;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagType;
@@ -29,7 +30,7 @@ public class SpigotNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 	public static NBTTagCompoundWrapper fromJson(String json) {
 		try {
 			return new SpigotNBTTagCompoundWrapper(MojangsonParser.parse(json));
-		} catch (MojangsonParseException e) {
+		} catch (CommandSyntaxException e) {
 			SneakyThrow.sneaky(e);
 		}
 		return null;
@@ -55,7 +56,7 @@ public class SpigotNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 
 	@Override
 	public Collection<String> getKeys() {
-		return tag.c();
+		return tag.getKeys();
 	}
 
 	@Override

@@ -13,6 +13,7 @@ import javax.crypto.SecretKey;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
@@ -114,6 +115,11 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 				(playerLocation.getY() <= (location.getY() + y)) &&
 				(playerLocation.getZ() <= (location.getZ() + z));
 		}).collect(Collectors.toList());
+	}
+
+	@Override
+	public int getNetworkMobTypeId(EntityType type) {
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

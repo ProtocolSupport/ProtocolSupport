@@ -12,9 +12,8 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
-//TODO: Create types for cmd control data and use them to share more code
 public class CustomPayload extends MiddleCustomPayload {
 
 	private final ByteBuf newdata = Unpooled.buffer();
@@ -23,31 +22,29 @@ public class CustomPayload extends MiddleCustomPayload {
 	public void readFromClientData(ByteBuf clientdata) {
 		ProtocolVersion version = connection.getVersion();
 		tag = StringSerializer.readString(clientdata, version, 20);
-		if (clientdata.readableBytes() > Short.MAX_VALUE) {
-			throw new DecoderException("Payload may not be larger than 32767 bytes");
-		}
 		newdata.clear();
-		ByteBuf olddata = Unpooled.wrappedBuffer(ArraySerializer.readByteArray(clientdata, version));
-		if (tag.equals("MC|ItemName")) {
-			ArraySerializer.writeByteArray(newdata, ProtocolVersionsHelper.LATEST_PC, olddata);
-		} else if (tag.equals("MC|BSign") || tag.equals("MC|BEdit")) {
-			ItemStackWrapper book = ItemStackSerializer.readItemStack(olddata, version, cache.getAttributesCache().getLocale(), true);
-			if (!book.isNull()) {
-				book.setType(Material.BOOK_AND_QUILL);
-			}
-			ItemStackSerializer.writeItemStack(newdata, ProtocolVersionsHelper.LATEST_PC, cache.getAttributesCache().getLocale(), book, false);
-		} else if (tag.equals("MC|AdvCdm")) {
-			tag = "MC|AdvCmd";
-			newdata.writeByte(olddata.readByte());
-			newdata.writeInt(olddata.readInt());
-			newdata.writeInt(olddata.readInt());
-			newdata.writeInt(olddata.readInt());
-			StringSerializer.writeString(newdata, ProtocolVersionsHelper.LATEST_PC, StringSerializer.readString(olddata, version));
-			newdata.writeBoolean(true);
-		} else {
-			newdata.writeBytes(olddata);
-		}
-		data = MiscSerializer.readAllBytes(newdata);
+		ByteBuf olddata = Unpooled.wrappedBuffer(ArraySerializer.readByteArray(clientdata, version, Short.MAX_VALUE));
+//TODO: transform to new packets
+//		if (tag.equals("MC|ItemName")) {
+//			ArraySerializer.writeByteArray(newdata, ProtocolVersionsHelper.LATEST_PC, olddata);
+//		} else if (tag.equals("MC|BSign") || tag.equals("MC|BEdit")) {
+//			ItemStackWrapper book = ItemStackSerializer.readItemStack(olddata, version, cache.getAttributesCache().getLocale(), true);
+//			if (!book.isNull()) {
+//				book.setType(Material.BOOK_AND_QUILL);
+//			}
+//			ItemStackSerializer.writeItemStack(newdata, ProtocolVersionsHelper.LATEST_PC, cache.getAttributesCache().getLocale(), book, false);
+//		} else if (tag.equals("MC|AdvCdm")) {
+//			tag = "MC|AdvCmd";
+//			newdata.writeByte(olddata.readByte());
+//			newdata.writeInt(olddata.readInt());
+//			newdata.writeInt(olddata.readInt());
+//			newdata.writeInt(olddata.readInt());
+//			StringSerializer.writeString(newdata, ProtocolVersionsHelper.LATEST_PC, StringSerializer.readString(olddata, version));
+//			newdata.writeBoolean(true);
+//		} else {
+//			newdata.writeBytes(olddata);
+//		}
+//		data = MiscSerializer.readAllBytes(newdata);
 	}
 
 }

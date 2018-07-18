@@ -8,9 +8,9 @@ import java.util.ListIterator;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
-import net.minecraft.server.v1_12_R1.ChatComponentText;
-import net.minecraft.server.v1_12_R1.NetworkManager;
-import net.minecraft.server.v1_12_R1.ServerConnection;
+import net.minecraft.server.v1_13_R1.ChatComponentText;
+import net.minecraft.server.v1_13_R1.NetworkManager;
+import net.minecraft.server.v1_13_R1.ServerConnection;
 import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
 
@@ -18,14 +18,14 @@ public class SpigotNettyInjector {
 
 	@SuppressWarnings("unchecked")
 	public static void inject() throws IllegalAccessException, NoSuchFieldException {
-		ServerConnection serverConnection = SpigotMiscUtils.getServer().an();
+		ServerConnection serverConnection = SpigotMiscUtils.getServer().getServerConnection();
 		List<NetworkManager> nmList = null;
 		try {
 			nmList = (List<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("pending")).get(serverConnection);
 		} catch (NoSuchFieldException e) {
-			nmList = (List<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("h")).get(serverConnection);
+			nmList = (List<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("g")).get(serverConnection);
 		}
-		Field connectionsListField = ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("g"));
+		Field connectionsListField = ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("f"));
 		ChannelInjectList connectionsList = new ChannelInjectList(nmList, (List<ChannelFuture>) connectionsListField.get(serverConnection));
 		connectionsListField.set(serverConnection, connectionsList);
 		connectionsList.injectExisting();

@@ -8,7 +8,7 @@ public class TabComplete extends MiddleTabComplete {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		string = StringSerializer.readString(clientdata, connection.getVersion());
+		string = StringSerializer.readString(clientdata, connection.getVersion(), 256);
 	}
 
 }

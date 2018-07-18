@@ -9,12 +9,10 @@ public class TabComplete extends MiddleTabComplete {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		string = StringSerializer.readString(clientdata, connection.getVersion());
-		assumecommand = clientdata.readBoolean();
+		string = StringSerializer.readString(clientdata, connection.getVersion(), 256);
+		clientdata.readBoolean();
 		if (clientdata.readBoolean()) {
-			position = PositionSerializer.readPosition(clientdata);
-		} else {
-			position = null;
+			PositionSerializer.skipPosition(clientdata);
 		}
 	}
 

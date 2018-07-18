@@ -8,7 +8,7 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public class InventorySetItems extends MiddleInventorySetItems {
 
@@ -26,7 +26,7 @@ public class InventorySetItems extends MiddleInventorySetItems {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_SET_ITEMS_ID);
 		serializer.writeByte(windowId);
 		serializer.writeShort(itemstacks.size());
-		for (ItemStackWrapper itemstack : itemstacks) {
+		for (NetworkItemStack itemstack : itemstacks) {
 			ItemStackSerializer.writeItemStack(serializer, version, cache.getAttributesCache().getLocale(), itemstack, true);
 		}
 		return RecyclableSingletonList.create(serializer);
