@@ -13,6 +13,8 @@ import javax.crypto.SecretKey;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -119,6 +121,16 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 
 	@Override
 	public int getNetworkMobTypeId(EntityType type) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public int getNetworkItemId(Material material) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public int getNetworkBlockStateId(BlockData blockdata) {
 		throw new UnsupportedOperationException();
 	}
 

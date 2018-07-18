@@ -7,7 +7,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.remapper.BlockRemapperControl.MaterialAndData;
 import protocolsupport.protocol.typeremapper.itemstack.LegacyItemType;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
-import protocolsupport.protocol.utils.minecraftdata.ItemMaterialData;
+import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 
 @SuppressWarnings("deprecation")
@@ -33,7 +33,7 @@ public class ItemRemapperControl {
 	 * @return remap for specified material
 	 */
 	public Material getRemap(Material material) {
-		return ItemMaterialData.getByRuntimeId(getRemap(ItemMaterialData.getRuntimeId(material)));
+		return ItemMaterialLookup.getByRuntimeId(getRemap(ItemMaterialLookup.getRuntimeId(material)));
 	}
 
 	/**
@@ -51,7 +51,7 @@ public class ItemRemapperControl {
 	 * @param to {@link Material} to which remap will occur
 	 */
 	public void setRemap(Material from, Material to) {
-		setRemap(ItemMaterialData.getRuntimeId(from), ItemMaterialData.getRuntimeId(to));
+		setRemap(ItemMaterialLookup.getRuntimeId(from), ItemMaterialLookup.getRuntimeId(to));
 	}
 
 	/**

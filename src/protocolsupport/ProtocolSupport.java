@@ -28,12 +28,12 @@ import protocolsupport.protocol.typeremapper.mapcolor.MapColorRemapper;
 import protocolsupport.protocol.typeremapper.sound.SoundRemapper;
 import protocolsupport.protocol.typeremapper.tileentity.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.SpecificRemapper;
+import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.minecraftdata.BlockData;
-import protocolsupport.protocol.utils.minecraftdata.ItemMaterialData;
 import protocolsupport.protocol.utils.minecraftdata.KeybindData;
 import protocolsupport.protocol.utils.minecraftdata.PotionData;
 import protocolsupport.protocol.utils.minecraftdata.SoundData;
@@ -42,8 +42,6 @@ import protocolsupport.utils.Utils;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.impl.spigot.entitytracker.SpigotEntityTracker;
-import protocolsupport.zplatform.impl.spigot.entitytracker.SpigotEntityTrackerEntry;
 
 public class ProtocolSupport extends JavaPlugin {
 
@@ -92,10 +90,10 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(DataWatcherObjectIdRegistry.class.getName());
 			Class.forName(Allocator.class.getName());
 			Class.forName(BlockData.class.getName());
-			Class.forName(ItemMaterialData.class.getName());
 			Class.forName(PotionData.class.getName());
 			Class.forName(SoundData.class.getName());
 			Class.forName(KeybindData.class.getName());
+			Class.forName(ItemMaterialLookup.class.getName());
 			Class.forName(I18NData.class.getName());
 			Class.forName(Compressor.class.getName());
 			Class.forName(ServerBoundPacket.class.getName());
@@ -113,8 +111,6 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(LegacyPotion.class.getName());
 			Class.forName(LegacyEntityType.class.getName());
 			Class.forName(LegacyEffect.class.getName());
-			Class.forName(SpigotEntityTracker.class.getName());
-			Class.forName(SpigotEntityTrackerEntry.class.getName());
 			ServerPlatform.get().getInjector().onLoad();
 		} catch (Throwable t) {
 			getLogger().log(Level.SEVERE, "Error when loading, make sure you are using supported server version", t);

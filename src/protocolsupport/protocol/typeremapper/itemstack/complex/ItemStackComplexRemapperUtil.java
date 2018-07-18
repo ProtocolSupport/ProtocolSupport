@@ -16,8 +16,8 @@ import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.EmptyBoo
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.EnchantFilterNBTComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PlayerHeadToLegacyOwnerComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PotionToLegacyIdComplexRemapper;
+import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.minecraftdata.ItemMaterialData;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
@@ -38,7 +38,7 @@ public class ItemStackComplexRemapperUtil {
 		Int2ObjectOpenHashMap<EnumMap<ProtocolVersion, List<ItemStackComplexRemapper>>> registry,
 		Material material, ItemStackComplexRemapper transformer, ProtocolVersion... versions
 	) {
-		EnumMap<ProtocolVersion, List<ItemStackComplexRemapper>> map = Utils.getFromMapOrCreateDefault(registry, ItemMaterialData.getRuntimeId(material), new EnumMap<>(ProtocolVersion.class));
+		EnumMap<ProtocolVersion, List<ItemStackComplexRemapper>> map = Utils.getFromMapOrCreateDefault(registry, ItemMaterialLookup.getRuntimeId(material), new EnumMap<>(ProtocolVersion.class));
 		Arrays.stream(versions).forEach(version -> Utils.getFromMapOrCreateDefault(map, version, new ArrayList<>()).add(transformer));
 	}
 

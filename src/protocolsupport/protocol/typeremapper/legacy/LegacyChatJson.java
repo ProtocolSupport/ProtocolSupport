@@ -18,8 +18,8 @@ import protocolsupport.api.chat.components.TranslateComponent;
 import protocolsupport.api.chat.modifiers.ClickAction;
 import protocolsupport.api.chat.modifiers.HoverAction;
 import protocolsupport.protocol.typeremapper.itemstack.LegacyItemIdData;
+import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.minecraftdata.ItemMaterialData;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -108,9 +108,9 @@ public class LegacyChatJson {
 			HoverAction hover = component.getHoverAction();
 			if ((hover != null) && (hover.getType() == HoverAction.Type.SHOW_ITEM)) {
 				NBTTagCompoundWrapper compound = ServerPlatform.get().getWrapperFactory().createNBTCompoundFromJson(hover.getValue());
-				Material material = ItemMaterialData.getByKey(compound.getString("id"));
+				Material material = ItemMaterialLookup.getByKey(compound.getString("id"));
 				if (material != null) {
-					compound.setInt("id", LegacyItemIdData.getIdFromLegacyCombinedId(LegacyItemIdData.getLegacyCombinedIdByModernId(ItemMaterialData.getRuntimeId(material))));
+					compound.setInt("id", LegacyItemIdData.getIdFromLegacyCombinedId(LegacyItemIdData.getLegacyCombinedIdByModernId(ItemMaterialLookup.getRuntimeId(material))));
 				}
 				component.setHoverAction(new HoverAction(HoverAction.Type.SHOW_ITEM, compound.toString()));
 			}

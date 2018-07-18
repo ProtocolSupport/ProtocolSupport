@@ -11,10 +11,14 @@ import javax.crypto.SecretKey;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_13_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_13_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_13_R1.block.CraftBlockState;
 import org.bukkit.craftbukkit.v1_13_R1.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_13_R1.util.CraftIconCache;
+import org.bukkit.craftbukkit.v1_13_R1.util.CraftMagicNumbers;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -27,9 +31,11 @@ import com.mojang.authlib.properties.Property;
 
 import io.netty.channel.ChannelPipeline;
 import net.minecraft.server.v1_13_R1.AxisAlignedBB;
+import net.minecraft.server.v1_13_R1.Block;
 import net.minecraft.server.v1_13_R1.EntityPlayer;
 import net.minecraft.server.v1_13_R1.EntityTypes;
 import net.minecraft.server.v1_13_R1.EnumProtocol;
+import net.minecraft.server.v1_13_R1.Item;
 import net.minecraft.server.v1_13_R1.MinecraftServer;
 import net.minecraft.server.v1_13_R1.NBTTagCompound;
 import net.minecraft.server.v1_13_R1.WorldServer;
@@ -112,6 +118,17 @@ public class SpigotMiscUtils implements PlatformUtils {
 	@Override
 	public int getNetworkMobTypeId(EntityType type) {
 		return EntityTypes.REGISTRY.a(EntityTypes.a(type.getName()));
+	}
+
+	@Override
+	public int getNetworkItemId(Material material) {
+		Item item = CraftMagicNumbers.getItem(material);
+		return item != null ? Item.getId(item) : -1;
+	}
+
+	@Override
+	public int getNetworkBlockStateId(BlockData blockdata) {
+		return Block.getCombinedId(((CraftBlockState) blockdata).getHandle());
 	}
 
 	@Override

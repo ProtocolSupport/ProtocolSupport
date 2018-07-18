@@ -5,8 +5,8 @@ import org.bukkit.Material;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.IdRemappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.minecraftdata.ItemMaterialData;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 
 public class LegacyItemType {
@@ -185,7 +185,7 @@ public class LegacyItemType {
 			registerRemapEntry(Material.QUARTZ, Material.FEATHER, ProtocolVersionsHelper.BEFORE_1_5);
 		}
 		protected void registerRemapEntry(Material from, Material to, ProtocolVersion... versions) {
-			registerRemapEntry(ItemMaterialData.getRuntimeId(from), ItemMaterialData.getRuntimeId(to), versions);
+			registerRemapEntry(ItemMaterialLookup.getRuntimeId(from), ItemMaterialLookup.getRuntimeId(to), versions);
 		}
 		@Override
 		protected ArrayBasedIdRemappingTable createTable() {

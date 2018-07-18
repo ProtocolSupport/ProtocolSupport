@@ -1,19 +1,19 @@
-package protocolsupport.protocol.utils.minecraftdata;
+package protocolsupport.protocol.utils;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Material;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import protocolsupport.utils.JsonUtils;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
+import protocolsupport.zplatform.ServerPlatform;
 
-public class ItemMaterialData {
+@SuppressWarnings("deprecation")
+public class ItemMaterialLookup {
 
 	private static final Map<String, Material> byKey = new HashMap<>();
 	private static final ArrayMap<Material> byRuntimeId = new ArrayMap<>(MinecraftData.ID_MAX);
@@ -21,15 +21,17 @@ public class ItemMaterialData {
 
 	static {
 		toRuntimeId.defaultReturnValue(-1);
-		for (JsonElement element : MinecraftData.iterateJsonArrayResource("itemmaterials.json")) {
-			JsonObject object = element.getAsJsonObject();
-			Material material = Material.getMaterial(JsonUtils.getString(object, "material"));
-			int id = JsonUtils.getInt(object, "id");
-			byKey.put(material.getKey().getKey(), material);
-			byKey.put(material.getKey().toString(), material);
-			byRuntimeId.put(id, material);
-			toRuntimeId.put(material, id);
-		}
+		Arrays.stream(Material.values())
+		.filter(m -> !m.isLegacy())
+		.forEach(material -> {
+			int id = ServerPlatform.get().getMiscUtils().getNetworkItemId(material);
+			if (id != -1) {
+				byKey.put(material.getKey().getKey(), material);
+				byKey.put(material.getKey().toString(), material);
+				byRuntimeId.put(id, material);
+				toRuntimeId.put(material, id);
+			}
+		});
 	}
 
 	public static Material getByKey(String key) {
