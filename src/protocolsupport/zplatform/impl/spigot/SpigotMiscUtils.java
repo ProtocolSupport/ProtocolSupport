@@ -15,7 +15,7 @@ import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_13_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_13_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_13_R1.block.CraftBlockState;
+import org.bukkit.craftbukkit.v1_13_R1.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_13_R1.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_13_R1.util.CraftIconCache;
 import org.bukkit.craftbukkit.v1_13_R1.util.CraftMagicNumbers;
@@ -128,7 +128,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public int getNetworkBlockStateId(BlockData blockdata) {
-		return Block.getCombinedId(((CraftBlockState) blockdata).getHandle());
+		return Block.getCombinedId(((CraftBlockData) blockdata).getState());
 	}
 
 	@Override

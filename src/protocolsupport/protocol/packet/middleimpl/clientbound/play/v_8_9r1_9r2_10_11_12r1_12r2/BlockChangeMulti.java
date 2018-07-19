@@ -23,7 +23,7 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 		serializer.writeInt(chunkZ);
 		ArraySerializer.writeVarIntTArray(serializer, records, (to, record) -> {
 			to.writeShort(record.coord);
-			VarNumberSerializer.writeVarInt(to, LegacyBlockId.getCombinedId(remapper.getRemap(record.id)));
+			VarNumberSerializer.writeVarInt(to, LegacyBlockId.getLegacyCombinedId(remapper.getRemap(record.id)));
 		});
 		return RecyclableSingletonList.create(serializer);
 	}

@@ -18,7 +18,7 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BLOCK_CHANGE_SINGLE_ID);
 		PositionSerializer.writePosition(serializer, position);
-		VarNumberSerializer.writeVarInt(serializer, LegacyBlockId.getCombinedId(IdRemapper.BLOCK.getTable(version).getRemap(id)));
+		VarNumberSerializer.writeVarInt(serializer, LegacyBlockId.getLegacyCombinedId(IdRemapper.BLOCK.getTable(version).getRemap(id)));
 		return RecyclableSingletonList.create(serializer);
 	}
 

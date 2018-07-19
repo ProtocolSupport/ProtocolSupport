@@ -15,6 +15,8 @@ import java.util.function.Function;
 import java.util.stream.IntStream;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 
 import protocolsupport.ProtocolSupport;
 
@@ -136,8 +138,13 @@ public class Utils {
 	}
 
 	private static final String resourcesDirName = "resources";
+
 	public static BufferedReader getResource(String name) {
 		return new BufferedReader(new InputStreamReader(ProtocolSupport.class.getClassLoader().getResourceAsStream(resourcesDirName + "/" + name), StandardCharsets.UTF_8));
+	}
+
+	public static Iterable<JsonElement> iterateJsonArrayResource(String name) {
+		return new JsonParser().parse(getResource(name)).getAsJsonArray();
 	}
 
 }

@@ -20,7 +20,9 @@ import protocolsupport.protocol.packet.handler.AbstractStatusListener;
 import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.IdSkipper;
-import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.LegacyItemIdData;
+import protocolsupport.protocol.typeremapper.itemstack.LegacyItemType;
+import protocolsupport.protocol.typeremapper.legacy.LegacyBlockId;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEffect;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityType;
 import protocolsupport.protocol.typeremapper.legacy.LegacyPotion;
@@ -94,6 +96,8 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(SoundData.class.getName());
 			Class.forName(KeybindData.class.getName());
 			Class.forName(ItemMaterialLookup.class.getName());
+			Class.forName(LegacyBlockId.class.getName());
+			Class.forName(LegacyItemIdData.class.getName());
 			Class.forName(I18NData.class.getName());
 			Class.forName(Compressor.class.getName());
 			Class.forName(ServerBoundPacket.class.getName());
@@ -105,7 +109,7 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(IdSkipper.class.getName());
 			Class.forName(SpecificRemapper.class.getName());
 			Class.forName(IdRemapper.class.getName());
-			Class.forName(ItemStackRemapper.class.getName());
+			Class.forName(LegacyItemType.class.getName());
 			Class.forName(TileNBTRemapper.class.getName());
 			Class.forName(MapColorRemapper.class.getName());
 			Class.forName(LegacyPotion.class.getName());

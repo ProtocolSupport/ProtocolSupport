@@ -9,13 +9,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import protocolsupport.utils.JsonUtils;
+import protocolsupport.utils.Utils;
 
 public class BlockData {
 
 	private static final Map<Material, BlockDataEntry> byMaterial = new EnumMap<>(Material.class);
 
 	static {
-		for (JsonElement element : MinecraftData.iterateJsonArrayResource("blocks.json")) {
+		for (JsonElement element : Utils.iterateJsonArrayResource(MinecraftData.getResourcePath("blocks.json"))) {
 			JsonObject object = element.getAsJsonObject();
 			JsonObject soundobject = JsonUtils.getJsonObject(object, "sounds");
 			Material material = Material.getMaterial(JsonUtils.getString(object, "material"));

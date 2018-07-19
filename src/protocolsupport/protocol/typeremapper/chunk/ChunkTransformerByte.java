@@ -21,9 +21,9 @@ public class ChunkTransformerByte extends ChunkTransformer {
 				BlockStorageReader storage = section.blockdata;
 				int blockdataacc = 0;
 				for (int block = 0; block < blocksInSection; block++) {
-					int blockstate = LegacyBlockId.getCombinedId(table.getRemap(storage.getBlockState(block)));
-					data[blockIdIndex + block] = (byte) LegacyBlockId.getIdFromCombinedId(blockstate);
-					byte blockdata = (byte) LegacyBlockId.getDataFromCombinedId(blockstate);
+					int blockstate = LegacyBlockId.getLegacyCombinedId(table.getRemap(storage.getBlockState(block)));
+					data[blockIdIndex + block] = (byte) LegacyBlockId.getIdFromLegacyCombinedId(blockstate);
+					byte blockdata = (byte) LegacyBlockId.getDataFromLegacyCombinedId(blockstate);
 					if ((block & 1) == 0) {
 						blockdataacc = blockdata;
 					} else {

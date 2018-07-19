@@ -26,7 +26,7 @@ public class ChunkTransformerVariesLegacy extends ChunkTransformer {
 					BlockStorageReader storage = section.blockdata;
 					BlockStorageWriter blockstorage = new BlockStorageWriter(bitsPerBlock__1_9__1_12, blocksInSection);
 					for (int block = 0; block < blocksInSection; block++) {
-						blockstorage.setBlockState(block, LegacyBlockId.getCombinedId(table.getRemap(storage.getBlockState(block))));
+						blockstorage.setBlockState(block, LegacyBlockId.getLegacyCombinedId(table.getRemap(storage.getBlockState(block))));
 					}
 					long[] ldata = blockstorage.getBlockData();
 					VarNumberSerializer.writeVarInt(chunkdata, ldata.length);
