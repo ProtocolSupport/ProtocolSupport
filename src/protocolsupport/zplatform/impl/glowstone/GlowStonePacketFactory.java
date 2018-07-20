@@ -316,6 +316,11 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
+	public int getOutLoginCustomPayloadPacketId() {
+		return 0x04; //TODO
+	}
+
+	@Override
 	public int getOutStatusServerInfoPacketId() {
 		return getOpcode(ProtocolType.STATUS, OUTBOUND, StatusResponseMessage.class);
 	}
@@ -427,7 +432,7 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 
 	@Override
 	public int getOutPlayEntityPacketId() {
-		return 0x25; // TODO: not implemented in Glowstone
+		return 0x27; // TODO: not implemented in Glowstone
 	}
 
 	@Override
@@ -711,8 +716,23 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
+	public int getOutPlayAdvancementsTabPacketId() {
+		return 0x37; //TODO
+	}
+
+	@Override
+	public int getOutPlayAdvancementsPacketId() {
+		return getOpcode(ProtocolType.PLAY, OUTBOUND, AdvancementsMessage.class);
+	}
+
+	@Override
+	public int getOutPlayCraftRecipeConfirmPacketId() {
+		return getOpcode(ProtocolType.PLAY, OUTBOUND, CraftRecipeResponseMessage.class);
+	}
+
+	@Override
 	public int getOutPlayDeclareCommandsPacketId() {
-		return 0x11; //TODO:
+		return 0x11; //TODO
 	}
 
 	@Override
@@ -725,20 +745,19 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 		return 0x55; //TODO
 	}
 
-
 	@Override
-	public int getOutPlayAdvancementsTabPacketId() {
-		return 0x37; //TODO
+	public int getOutPlayQueryNBTResponsePacketId() {
+		return 0x1D; //TODO
 	}
 
 	@Override
-	public int getOutPlayAdvancementsPacketId() {
-		return getOpcode(ProtocolType.PLAY, OUTBOUND, AdvancementsMessage.class);
+	public int getOutPlayStopSoundPacketId() {
+		return 0x4C; //TODO
 	}
 
 	@Override
-	public int getOutPlayCraftingGridConfirmPacketId() {
-		return getOpcode(ProtocolType.PLAY, OUTBOUND, CraftRecipeResponseMessage.class);
+	public int getOutPlayLookAtPacketId() {
+		return 0x31; //TODO
 	}
 
 
@@ -765,6 +784,11 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 	@Override
 	public int getInLoginEncryptionBeginPacketId() {
 		return getOpcode(ProtocolType.LOGIN, INBOUND, EncryptionKeyResponseMessage.class);
+	}
+
+	@Override
+	public int getInLoginCustomPayloadPacketId() {
+		return 0x02; //TODO
 	}
 
 	@Override
@@ -918,18 +942,68 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
-	public int getInPlayCraftingBookPacketId() {
+	public int getInPlayRecipeBookDataPacketId() {
 		return getOpcode(ProtocolType.PLAY, INBOUND, CraftingBookDataMessage.class);
 	}
 
 	@Override
-	public int getInPlayPrepareCraftingGridPacketId() {
+	public int getInPlayCraftRecipeRequestPacketId() {
 		return getOpcode(ProtocolType.PLAY, INBOUND, CraftRecipeRequestMessage.class);
 	}
 
 	@Override
 	public int getInPlayAdvancementTabPacketId() {
 		return getOpcode(ProtocolType.PLAY, INBOUND, AdvancementTabMessage.class);
+	}
+
+	@Override
+	public int getInPlayQueryBlockNBTPacketId() {
+		return 0x01; //TODO
+	}
+
+	@Override
+	public int getInPlayQueryEntityNBTPacketId() {
+		return 0x0C; //TODO
+	}
+
+	@Override
+	public int getInPlayEditBookPacketId() {
+		return 0x0B; //TODO
+	}
+
+	@Override
+	public int getInPlayPickItemPacketId() {
+		return 0x15; //TODO
+	}
+
+	@Override
+	public int getInPlayNameItemPacketId() {
+		return 0x1C; //TODO
+	}
+
+	@Override
+	public int getInPlaySelectTradePacketId() {
+		return 0x1F; //TODO
+	}
+
+	@Override
+	public int getInPlaySetBeaconEffectPacketId() {
+		return 0x20; //TODO
+	}
+
+	@Override
+	public int getInPlayUpdateCommandBlockPacketId() {
+		return 0x22; //TODO
+	}
+
+	@Override
+	public int getInPlayUpdateCommandMinecartPacketId() {
+		return 0x23; //TODO
+	}
+
+	@Override
+	public int getInPlayUpdateStructureBlockPacketId() {
+		return 0x25; //TODO
 	}
 
 

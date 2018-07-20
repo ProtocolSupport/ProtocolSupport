@@ -24,7 +24,7 @@ import protocolsupport.protocol.typeremapper.itemstack.LegacyItemIdData;
 import protocolsupport.protocol.typeremapper.itemstack.LegacyItemType;
 import protocolsupport.protocol.typeremapper.legacy.LegacyBlockId;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEffect;
-import protocolsupport.protocol.typeremapper.legacy.LegacyEntityType;
+import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
 import protocolsupport.protocol.typeremapper.legacy.LegacyPotion;
 import protocolsupport.protocol.typeremapper.mapcolor.MapColorRemapper;
 import protocolsupport.protocol.typeremapper.sound.SoundRemapper;
@@ -113,7 +113,7 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(TileNBTRemapper.class.getName());
 			Class.forName(MapColorRemapper.class.getName());
 			Class.forName(LegacyPotion.class.getName());
-			Class.forName(LegacyEntityType.class.getName());
+			Class.forName(LegacyEntityId.class.getName());
 			Class.forName(LegacyEffect.class.getName());
 			ServerPlatform.get().getInjector().onLoad();
 		} catch (Throwable t) {

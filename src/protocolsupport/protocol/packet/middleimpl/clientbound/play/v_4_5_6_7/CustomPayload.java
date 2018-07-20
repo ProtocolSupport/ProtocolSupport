@@ -25,7 +25,7 @@ public class CustomPayload extends MiddleCustomPayload {
 		if (tag.equals("MC|TrList")) {
 			MerchantDataSerializer.writeMerchantData(
 				newdata, version, cache.getAttributesCache().getLocale(),
-				MerchantDataSerializer.readMerchantData(data, ProtocolVersionsHelper.LATEST_PC, cache.getAttributesCache().getLocale())
+				MerchantDataSerializer.readMerchantData(Unpooled.wrappedBuffer(data), ProtocolVersionsHelper.LATEST_PC, cache.getAttributesCache().getLocale())
 			);
 		} else {
 			newdata.writeBytes(data);

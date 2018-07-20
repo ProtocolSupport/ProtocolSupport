@@ -15,6 +15,7 @@ public class TabComplete extends MiddleTabComplete {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		return RecyclableEmptyList.get();
+//TODO: implement
 //		ProtocolVersion version = connection.getVersion();
 //		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_TAB_COMPLETE_ID);
 //		ArraySerializer.writeVarIntTArray(serializer, matches, (to, match) -> StringSerializer.writeString(to, version, match));

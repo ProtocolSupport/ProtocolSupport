@@ -8,7 +8,7 @@ import java.util.function.BiFunction;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.DragonHeadToDragonPlayerHeadComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PlayerHeadToLegacyOwnerComplexRemapper;
-import protocolsupport.protocol.typeremapper.legacy.LegacyEntityType;
+import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Position;
@@ -72,7 +72,7 @@ public class TileNBTRemapper {
 				NBTTagCompoundWrapper spawndata = input.getCompound("SpawnData");
 				NetworkEntityType type = NetworkEntityType.getByRegistrySTypeId(spawndata.getString("id"));
 				if (type != NetworkEntityType.NONE) {
-					spawndata.setString("id", LegacyEntityType.getLegacyName(type));
+					spawndata.setString("id", LegacyEntityId.getLegacyName(type));
 				}
 				return input;
 			},
@@ -86,7 +86,7 @@ public class TileNBTRemapper {
 				input.remove("SpawnData");
 				NetworkEntityType type = NetworkEntityType.getByRegistrySTypeId(spawndata.getString("id"));
 				if (type != NetworkEntityType.NONE) {
-					input.setString("EntityId", LegacyEntityType.getLegacyName(type));
+					input.setString("EntityId", LegacyEntityId.getLegacyName(type));
 				}
 				return input;
 			},

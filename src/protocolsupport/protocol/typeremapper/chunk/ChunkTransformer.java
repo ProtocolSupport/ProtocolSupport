@@ -7,34 +7,11 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class ChunkTransformer {
 
-	public static enum BlockFormat {
-		VARIES_LEGACY, //format for 1.12-
-		SHORT, //format for 1.8
-		BYTE, //format for 1.7-
-	}
-
-	public static ChunkTransformer create(BlockFormat format) {
-		switch (format) {
-			case VARIES_LEGACY: {
-				return new ChunkTransformerVariesLegacy();
-			}
-			case SHORT: {
-				return new ChunkTransformerShort();
-			}
-			case BYTE: {
-				return new ChunkTransformerByte();
-			}
-			default: {
-				throw new IllegalArgumentException();
-			}
-		}
-	}
-
 	protected int columnsCount;
 	protected boolean hasSkyLight;
 	protected boolean hasBiomeData;
 	protected final ChunkSection[] sections = new ChunkSection[16];
-	protected final byte[] biomeData = new byte[256];
+	protected final int[] biomeData = new int[256];
 
 	public void loadData(byte[] data, int bitmap, boolean hasSkyLight, boolean hasBiomeData) {
 		this.columnsCount = Integer.bitCount(bitmap);
@@ -49,7 +26,9 @@ public abstract class ChunkTransformer {
 			}
 		}
 		if (hasBiomeData) {
-			chunkdata.readBytes(biomeData);
+			for (int i = 0; i < biomeData.length; i++) {
+				biomeData[i] = chunkdata.readInt();
+			}
 		}
 	}
 

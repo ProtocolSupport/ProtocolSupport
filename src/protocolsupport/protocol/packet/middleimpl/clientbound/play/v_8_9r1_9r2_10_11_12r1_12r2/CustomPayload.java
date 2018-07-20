@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2;
 
+import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCustomPayload;
@@ -20,7 +21,7 @@ public class CustomPayload extends MiddleCustomPayload {
 		if (tag.equals("MC|TrList")) {
 			MerchantDataSerializer.writeMerchantData(
 				serializer, version, cache.getAttributesCache().getLocale(),
-				MerchantDataSerializer.readMerchantData(data, ProtocolVersionsHelper.LATEST_PC, cache.getAttributesCache().getLocale())
+				MerchantDataSerializer.readMerchantData(Unpooled.wrappedBuffer(data), ProtocolVersionsHelper.LATEST_PC, cache.getAttributesCache().getLocale())
 			);
 		} else {
 			serializer.writeBytes(data);

@@ -11,7 +11,7 @@ import protocolsupport.utils.netty.Allocator;
 
 public class ChunkTransformerVariesLegacy extends ChunkTransformer {
 
-	protected static final int bitsPerBlock__1_9__1_12 = 13;
+	protected static final int bitsPerBlock = 13;
 
 	@Override
 	public byte[] toLegacyData(ProtocolVersion version) {
@@ -21,10 +21,10 @@ public class ChunkTransformerVariesLegacy extends ChunkTransformer {
 			for (int i = 0; i < sections.length; i++) {
 				ChunkSection section = sections[i];
 				if (section != null) {
-					chunkdata.writeByte(bitsPerBlock__1_9__1_12);
+					chunkdata.writeByte(bitsPerBlock);
 					VarNumberSerializer.writeVarInt(chunkdata, 0);
 					BlockStorageReader storage = section.blockdata;
-					BlockStorageWriter blockstorage = new BlockStorageWriter(bitsPerBlock__1_9__1_12, blocksInSection);
+					BlockStorageWriter blockstorage = new BlockStorageWriter(bitsPerBlock, blocksInSection);
 					for (int block = 0; block < blocksInSection; block++) {
 						blockstorage.setBlockState(block, LegacyBlockId.getLegacyCombinedId(table.getRemap(storage.getBlockState(block))));
 					}
@@ -40,7 +40,9 @@ public class ChunkTransformerVariesLegacy extends ChunkTransformer {
 				}
 			}
 			if (hasBiomeData) {
-				chunkdata.writeBytes(biomeData);
+				for (int i = 0; i < biomeData.length; i++) {
+					chunkdata.writeByte(biomeData[i]);
+				}
 			}
 			return MiscSerializer.readAllBytes(chunkdata);
 		} finally {

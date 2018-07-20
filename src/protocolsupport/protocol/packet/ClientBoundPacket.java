@@ -8,6 +8,7 @@ public class ClientBoundPacket {
 	public static final int LOGIN_ENCRYPTION_BEGIN_ID = ServerPlatform.get().getPacketFactory().getOutLoginEncryptionBeginPacketId();
 	public static final int LOGIN_SUCCESS_ID = ServerPlatform.get().getPacketFactory().getOutLoginSuccessPacketId();
 	public static final int LOGIN_SET_COMPRESSION_ID = ServerPlatform.get().getPacketFactory().getOutLoginSetCompressionPacketId();
+	public static final int LOGIN_CUSTOM_PAYLOAD = ServerPlatform.get().getPacketFactory().getOutLoginCustomPayloadPacketId();
 	public static final int STATUS_SERVER_INFO_ID = ServerPlatform.get().getPacketFactory().getOutStatusServerInfoPacketId();
 	public static final int STATUS_PONG_ID = ServerPlatform.get().getPacketFactory().getOutStatusPongPacketId();
 	public static final int PLAY_KEEP_ALIVE_ID = ServerPlatform.get().getPacketFactory().getOutPlayKeepAlivePacketId();
@@ -89,10 +90,13 @@ public class ClientBoundPacket {
 	public static final int PLAY_UNLOCK_RECIPES = ServerPlatform.get().getPacketFactory().getOutPlayUnlockRecipesPacketId();
 	public static final int PLAY_ADVANCEMENTS = ServerPlatform.get().getPacketFactory().getOutPlayAdvancementsPacketId();
 	public static final int PLAY_ADVANCEMENTS_TAB = ServerPlatform.get().getPacketFactory().getOutPlayAdvancementsTabPacketId();
-	public static final int PLAY_CRAFTING_GRID_CONFIRM = ServerPlatform.get().getPacketFactory().getOutPlayCraftingGridConfirmPacketId();
+	public static final int PLAY_CRAFT_RECIPE_CONFIRM = ServerPlatform.get().getPacketFactory().getOutPlayCraftRecipeConfirmPacketId();
 	public static final int PLAY_DECLARE_COMMANDS = ServerPlatform.get().getPacketFactory().getOutPlayDeclareCommandsPacketId();
 	public static final int PLAY_DECLARE_RECIPES = ServerPlatform.get().getPacketFactory().getOutPlayDeclareRecipesPacketId();
 	public static final int PLAY_DECLARE_TAGS = ServerPlatform.get().getPacketFactory().getOutPlayDeclareTagsPacket();
+	public static final int PLAY_QUERY_NBT_RESPONSE = ServerPlatform.get().getPacketFactory().getOutPlayQueryNBTResponsePacketId();
+	public static final int PLAY_STOP_SOUND = ServerPlatform.get().getPacketFactory().getOutPlayStopSoundPacketId();
+	public static final int PLAY_LOOK_AT = ServerPlatform.get().getPacketFactory().getOutPlayLookAtPacketId();
 
 	public static final int LEGACY_PLAY_UPDATE_SIGN_ID = 100;
 

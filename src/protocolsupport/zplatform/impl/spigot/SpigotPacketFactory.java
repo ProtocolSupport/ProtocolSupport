@@ -190,6 +190,11 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
+	public int getOutLoginCustomPayloadPacketId() {
+		return getOutId(PacketLoginOutCustomPayload.class);
+	}
+
+	@Override
 	public int getOutStatusServerInfoPacketId() {
 		return getOutId(PacketStatusOutServerInfo.class);
 	}
@@ -595,7 +600,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
-	public int getOutPlayCraftingGridConfirmPacketId() {
+	public int getOutPlayCraftRecipeConfirmPacketId() {
 		return getOutId(PacketPlayOutAutoRecipe.class);
 	}
 
@@ -612,6 +617,21 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	@Override
 	public int getOutPlayDeclareTagsPacket() {
 		return getOutId(PacketPlayOutTags.class);
+	}
+
+	@Override
+	public int getOutPlayQueryNBTResponsePacketId() {
+		return getOutId(PacketPlayOutNBTQuery.class);
+	}
+
+	@Override
+	public int getOutPlayStopSoundPacketId() {
+		return getOutId(PacketPlayOutStopSound.class);
+	}
+
+	@Override
+	public int getOutPlayLookAtPacketId() {
+		return getOutId(PacketPlayOutLookAt.class);
 	}
 
 
@@ -638,6 +658,11 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	@Override
 	public int getInLoginEncryptionBeginPacketId() {
 		return getInId(PacketLoginInEncryptionBegin.class);
+	}
+
+	@Override
+	public int getInLoginCustomPayloadPacketId() {
+		return getInId(PacketLoginInCustomPayload.class);
 	}
 
 	@Override
@@ -791,18 +816,68 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
-	public int getInPlayCraftingBookPacketId() {
+	public int getInPlayRecipeBookDataPacketId() {
 		return getInId(PacketPlayInRecipeDisplayed.class);
 	}
 
 	@Override
-	public int getInPlayPrepareCraftingGridPacketId() {
+	public int getInPlayCraftRecipeRequestPacketId() {
 		return getInId(PacketPlayInAutoRecipe.class);
 	}
 
 	@Override
 	public int getInPlayAdvancementTabPacketId() {
 		return getInId(PacketPlayInAdvancements.class);
+	}
+
+	@Override
+	public int getInPlayQueryBlockNBTPacketId() {
+		return getInId(PacketPlayInTileNBTQuery.class);
+	}
+
+	@Override
+	public int getInPlayQueryEntityNBTPacketId() {
+		return getInId(PacketPlayInEntityNBTQuery.class);
+	}
+
+	@Override
+	public int getInPlayEditBookPacketId() {
+		return getInId(PacketPlayInBEdit.class);
+	}
+
+	@Override
+	public int getInPlayPickItemPacketId() {
+		return getInId(PacketPlayInPickItem.class);
+	}
+
+	@Override
+	public int getInPlayNameItemPacketId() {
+		return getInId(PacketPlayInItemName.class);
+	}
+
+	@Override
+	public int getInPlaySelectTradePacketId() {
+		return getInId(PacketPlayInTrSel.class);
+	}
+
+	@Override
+	public int getInPlaySetBeaconEffectPacketId() {
+		return getInId(PacketPlayInBeacon.class);
+	}
+
+	@Override
+	public int getInPlayUpdateCommandBlockPacketId() {
+		return getInId(PacketPlayInSetCommandBlock.class);
+	}
+
+	@Override
+	public int getInPlayUpdateCommandMinecartPacketId() {
+		return getInId(PacketPlayInSetCommandMinecart.class);
+	}
+
+	@Override
+	public int getInPlayUpdateStructureBlockPacketId() {
+		return getInId(PacketPlayInStruct.class);
 	}
 
 

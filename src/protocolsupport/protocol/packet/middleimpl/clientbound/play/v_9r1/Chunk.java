@@ -4,11 +4,11 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2.BlockTileUpdate;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.BlockTileUpdate;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformer;
-import protocolsupport.protocol.typeremapper.chunk.ChunkTransformer.BlockFormat;
+import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerVariesLegacy;
 import protocolsupport.protocol.typeremapper.tileentity.TileNBTRemapper;
 import protocolsupport.protocol.utils.types.TileEntityType;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
@@ -17,7 +17,7 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class Chunk extends MiddleChunk {
 
-	private final ChunkTransformer transformer = ChunkTransformer.create(BlockFormat.VARIES_LEGACY);
+	protected final ChunkTransformer transformer = new ChunkTransformerVariesLegacy();
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {

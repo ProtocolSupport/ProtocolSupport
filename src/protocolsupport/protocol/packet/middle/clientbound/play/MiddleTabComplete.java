@@ -7,13 +7,13 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleTabComplete extends ClientBoundMiddlePacket {
 
-	protected int transactionId;
+	protected int id;
 	//TODO: structure
 	protected byte[] data;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		transactionId = VarNumberSerializer.readVarInt(serverdata);
+		id = VarNumberSerializer.readVarInt(serverdata);
 		data = MiscSerializer.readAllBytes(serverdata);
 	}
 

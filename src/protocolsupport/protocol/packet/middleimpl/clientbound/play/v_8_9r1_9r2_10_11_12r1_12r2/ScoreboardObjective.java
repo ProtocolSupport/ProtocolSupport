@@ -4,6 +4,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleScoreboardObjective;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -16,7 +17,7 @@ public class ScoreboardObjective extends MiddleScoreboardObjective {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SCOREBOARD_OBJECTIVE_ID);
 		StringSerializer.writeString(serializer, version, name);
-		serializer.writeByte(mode.ordinal());
+		MiscSerializer.writeByteEnum(serializer, mode);
 		if (mode != Mode.REMOVE) {
 			StringSerializer.writeString(serializer, version, Utils.clampString(value.toLegacyText(cache.getAttributesCache().getLocale()), 32));
 			StringSerializer.writeString(serializer, version, getTypeString(type));

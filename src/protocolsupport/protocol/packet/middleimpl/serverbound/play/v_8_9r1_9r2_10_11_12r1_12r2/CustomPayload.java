@@ -1,36 +1,27 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12r1_12r2;
 
-import org.bukkit.Material;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
-import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagType;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public class CustomPayload extends MiddleCustomPayload {
 
-	private final ByteBuf newdata = Unpooled.buffer();
+//	protected final ByteBuf newdata = Unpooled.buffer();
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		ProtocolVersion version = connection.getVersion();
 		tag = StringSerializer.readString(clientdata, version, 20);
-		if (clientdata.readableBytes() > Short.MAX_VALUE) {
-			throw new DecoderException("Payload may not be larger than 32767 bytes");
-		}
-		newdata.clear();
-		data = MiscSerializer.readAllBytes(clientdata);
+		data = MiscSerializer.readAllBytesWithLimit(clientdata, Short.MAX_VALUE);
 //TODO: transform to new packets
 //		if (tag.equals("MC|AdvCdm")) {
 //			tag = "MC|AdvCmd";

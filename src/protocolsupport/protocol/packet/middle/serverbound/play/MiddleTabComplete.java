@@ -11,13 +11,13 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public abstract class MiddleTabComplete extends ServerBoundMiddlePacket {
 
-	protected int transactionId;
+	protected int id;
 	protected String string;
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_TAB_COMPLETE);
-		VarNumberSerializer.writeVarInt(creator, transactionId);
+		VarNumberSerializer.writeVarInt(creator, id);
 		StringSerializer.writeString(creator, ProtocolVersionsHelper.LATEST_PC, string);
 		return RecyclableSingletonList.create(creator);
 	}

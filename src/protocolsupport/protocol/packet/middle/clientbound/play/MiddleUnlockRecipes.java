@@ -5,6 +5,7 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.utils.EnumConstantLookups;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleUnlockRecipes extends ClientBoundMiddlePacket {
 
@@ -13,8 +14,8 @@ public abstract class MiddleUnlockRecipes extends ClientBoundMiddlePacket {
 	protected boolean craftRecipeBookFiltering;
 	protected boolean smeltingRecipeBookOpen;
 	protected boolean smeltingRecipeBookFiltering;
-	protected int[] recipes1;
-	protected int[] recipes2;
+	protected String[] recipes1;
+	protected String[] recipes2;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
@@ -23,9 +24,9 @@ public abstract class MiddleUnlockRecipes extends ClientBoundMiddlePacket {
 		craftRecipeBookFiltering = serverdata.readBoolean();
 		smeltingRecipeBookOpen = serverdata.readBoolean();
 		smeltingRecipeBookFiltering = serverdata.readBoolean();
-		recipes1 = ArraySerializer.readVarIntVarIntArray(serverdata);
+		recipes1 = ArraySerializer.readVarIntStringArray(serverdata, ProtocolVersionsHelper.LATEST_PC);
 		if (action == Action.INIT) {
-			recipes2 = ArraySerializer.readVarIntVarIntArray(serverdata);
+			recipes2 = ArraySerializer.readVarIntStringArray(serverdata, ProtocolVersionsHelper.LATEST_PC);
 		}
 	}
 
