@@ -20,14 +20,6 @@ public class CustomPayload extends MiddleCustomPayload {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID);
 		StringSerializer.writeString(serializer, version, LegacyCustomPayloadChannelName.toPre13(cache.getCustomPayloadChannelCache().getLegacyName(tag)));
 		switch (tag) {
-			case LegacyCustomPayloadChannelName.MODERN_REGISTER:
-			case LegacyCustomPayloadChannelName.MODERN_UNREGISTER: {
-				StringSerializer.writeString(
-					serializer, version,
-					StringSerializer.readString(Unpooled.wrappedBuffer(data), ProtocolVersionsHelper.LATEST_PC)
-				);
-				break;
-			}
 			case (LegacyCustomPayloadChannelName.MODERN_TRADER_LIST): {
 				String locale = cache.getAttributesCache().getLocale();
 				MerchantDataSerializer.writeMerchantData(
