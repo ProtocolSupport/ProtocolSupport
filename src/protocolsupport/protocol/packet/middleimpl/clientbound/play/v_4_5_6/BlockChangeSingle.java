@@ -5,7 +5,7 @@ import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChangeSingle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.legacy.LegacyBlockId;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -17,7 +17,7 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BLOCK_CHANGE_SINGLE_ID);
 		PositionSerializer.writeLegacyPositionB(serializer, position);
-		id = LegacyBlockId.getLegacyCombinedId(IdRemapper.BLOCK.getTable(version).getRemap(id));
+		id = LegacyBlockId.getLegacyCombinedId(LegacyBlockData.REGISTRY.getTable(version).getRemap(id));
 		serializer.writeShort(LegacyBlockId.getIdFromLegacyCombinedId(id));
 		serializer.writeByte(LegacyBlockId.getDataFromLegacyCombinedId(id));
 		return RecyclableSingletonList.create(serializer);

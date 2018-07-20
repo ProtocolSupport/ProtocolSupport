@@ -6,7 +6,7 @@ import org.apache.commons.lang3.Validate;
 import org.bukkit.Material;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 
 public class BlockRemapperControl {
@@ -15,14 +15,14 @@ public class BlockRemapperControl {
 	 * Resets all block remaps to default ones
 	 */
 	public static void resetToDefault() {
-		IdRemapper.BLOCK.applyDefaultRemaps();
+		LegacyBlockData.REGISTRY.applyDefaultRemaps();
 	}
 
 	protected final ArrayBasedIdRemappingTable table;
 
 	public BlockRemapperControl(ProtocolVersion version) {
 		Validate.isTrue(version.isSupported(), "Can't control block remapping for unsupported version");
-		table = IdRemapper.BLOCK.getTable(version);
+		table = LegacyBlockData.REGISTRY.getTable(version);
 	}
 
 	/**

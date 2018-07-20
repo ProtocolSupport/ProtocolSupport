@@ -18,6 +18,7 @@ import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.protocol.packet.handler.AbstractStatusListener;
 import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
+import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.typeremapper.id.IdSkipper;
 import protocolsupport.protocol.typeremapper.itemstack.LegacyItemIdData;
@@ -95,8 +96,9 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(PotionData.class.getName());
 			Class.forName(SoundData.class.getName());
 			Class.forName(KeybindData.class.getName());
-			Class.forName(ItemMaterialLookup.class.getName());
+			Class.forName(LegacyBlockData.class.getName());
 			Class.forName(LegacyBlockId.class.getName());
+			Class.forName(ItemMaterialLookup.class.getName());
 			Class.forName(LegacyItemIdData.class.getName());
 			Class.forName(I18NData.class.getName());
 			Class.forName(Compressor.class.getName());

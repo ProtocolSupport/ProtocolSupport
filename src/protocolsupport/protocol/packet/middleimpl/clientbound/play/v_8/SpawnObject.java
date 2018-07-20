@@ -5,6 +5,7 @@ import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnObject;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -18,7 +19,7 @@ public class SpawnObject extends MiddleSpawnObject {
 		NetworkEntityType type = IdRemapper.ENTITY.getTable(version).getRemap(entity.getType());
 		switch (type) {
 			case FALLING_OBJECT: {
-				int id = IdRemapper.BLOCK.getTable(version).getRemap((objectdata & 4095) << 4) >> 4;
+				int id = LegacyBlockData.REGISTRY.getTable(version).getRemap((objectdata & 4095) << 4) >> 4;
 				int data = (objectdata >> 12) & 0xF;
 				objectdata = (data << 12) | id;
 				break;

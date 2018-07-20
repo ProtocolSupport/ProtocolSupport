@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.utils.netty.Allocator;
 
@@ -14,7 +14,7 @@ public class ChunkTransformerVaries extends ChunkTransformer {
 
 	@Override
 	public byte[] toLegacyData(ProtocolVersion version) {
-		ArrayBasedIdRemappingTable table = IdRemapper.BLOCK.getTable(version);
+		ArrayBasedIdRemappingTable table = LegacyBlockData.REGISTRY.getTable(version);
 		ByteBuf chunkdata = Allocator.allocateBuffer();
 		try {
 			for (int i = 0; i < sections.length; i++) {

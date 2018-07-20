@@ -1,7 +1,7 @@
 package protocolsupport.protocol.typeremapper.chunk;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.legacy.LegacyBlockId;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 
@@ -9,7 +9,7 @@ public class ChunkTransformerShort extends ChunkTransformer {
 
 	@Override
 	public byte[] toLegacyData(ProtocolVersion version) {
-		ArrayBasedIdRemappingTable table = IdRemapper.BLOCK.getTable(ProtocolVersion.MINECRAFT_1_8);
+		ArrayBasedIdRemappingTable table = LegacyBlockData.REGISTRY.getTable(ProtocolVersion.MINECRAFT_1_8);
 		byte[] data = new byte[((hasSkyLight ? 12288 : 10240) * columnsCount) + 256];
 		int blockIdIndex = 0;
 		int blockLightIndex = 8192 * columnsCount;

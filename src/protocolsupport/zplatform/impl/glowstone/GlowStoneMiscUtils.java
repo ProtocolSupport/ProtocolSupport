@@ -135,6 +135,11 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	}
 
 	@Override
+	public List<BlockData> getBlockStates(Material material) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public ItemStack createItemStackFromNBTTag(NBTTagCompoundWrapper tag) {
 		return NbtSerialization.readItem(((GlowStoneNBTTagCompoundWrapper) tag).unwrap());
 	}

@@ -4,6 +4,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnObject;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.id.IdRemapper;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -45,7 +46,7 @@ public class SpawnObject extends MiddleSpawnObject {
 				break;
 			}
 			case FALLING_OBJECT: {
-				int id = IdRemapper.BLOCK.getTable(version).getRemap((objectdata & 4095) << 4) >> 4;
+				int id = LegacyBlockData.REGISTRY.getTable(version).getRemap((objectdata & 4095) << 4) >> 4;
 				int data = (objectdata >> 12) & 0xF;
 				objectdata = (id | (data << 16));
 				y += 16;

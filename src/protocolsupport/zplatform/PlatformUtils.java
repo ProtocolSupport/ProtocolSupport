@@ -32,6 +32,8 @@ public interface PlatformUtils {
 
 	public int getNetworkBlockStateId(BlockData blockdata);
 
+	public List<BlockData> getBlockStates(Material material);
+
 	public List<Player> getNearbyPlayers(Location location, double rX, double rY, double rZ);
 
 	public String getOutdatedServerMessage();

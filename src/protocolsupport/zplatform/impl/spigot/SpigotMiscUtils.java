@@ -132,6 +132,14 @@ public class SpigotMiscUtils implements PlatformUtils {
 	}
 
 	@Override
+	public List<BlockData> getBlockStates(Material material) {
+		return
+			CraftMagicNumbers.getBlock(material).getStates().a().stream()
+			.map(CraftBlockData::fromData)
+			.collect(Collectors.toList());
+	}
+
+	@Override
 	public ItemStack createItemStackFromNBTTag(NBTTagCompoundWrapper tag) {
 		return CraftItemStack.asCraftMirror(net.minecraft.server.v1_13_R1.ItemStack.a(((SpigotNBTTagCompoundWrapper) tag).unwrap()));
 	}
