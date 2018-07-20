@@ -3,7 +3,6 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import java.util.ArrayList;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.server.v1_13_R1.PacketPlayOutWorldParticles;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -13,18 +12,17 @@ import protocolsupport.protocol.utils.types.Particle;
 public abstract class MiddleWorldParticle extends ClientBoundMiddlePacket {
 
 //TODO: structure
-//	protected Particle type;
-//	protected boolean longdist;
-//	protected float x;
-//	protected float y;
-//	protected float z;
-//	protected float offX;
-//	protected float offY;
-//	protected float offZ;
-//	protected float speed;
-//	protected int count;
-//	protected ArrayList<Object> adddata = new ArrayList<>();
-	protected byte[] data;
+	protected Particle type;
+	protected boolean longdist;
+	protected float x;
+	protected float y;
+	protected float z;
+	protected float offX;
+	protected float offY;
+	protected float offZ;
+	protected float speed;
+	protected int count;
+	protected ArrayList<Object> adddata = new ArrayList<>();
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
@@ -39,7 +37,6 @@ public abstract class MiddleWorldParticle extends ClientBoundMiddlePacket {
 //		speed = serverdata.readFloat();
 //		count = serverdata.readInt();
 //		adddata.clear();
-		data = MiscSerializer.readAllBytes(serverdata);
 	}
 
 	@Override
