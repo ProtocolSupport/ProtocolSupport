@@ -9,6 +9,7 @@ import protocolsupport.protocol.serializer.MerchantDataSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -18,7 +19,10 @@ public class CustomPayload extends MiddleCustomPayload {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID);
-		StringSerializer.writeString(serializer, version, LegacyCustomPayloadChannelName.toPre13(cache.getCustomPayloadChannelCache().getLegacyName(tag)));
+		StringSerializer.writeString(
+			serializer, version,
+			Utils.clampString(LegacyCustomPayloadChannelName.toPre13(cache.getCustomPayloadChannelCache().getLegacyName(tag)), 20)
+		);
 		switch (tag) {
 			case (LegacyCustomPayloadChannelName.MODERN_TRADER_LIST): {
 				String locale = cache.getAttributesCache().getLocale();

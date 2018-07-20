@@ -13,7 +13,7 @@ public abstract class MiddleCustomPayload extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		tag = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC, 20);
+		tag = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
 		data = MiscSerializer.readAllBytes(serverdata);
 	}
 
