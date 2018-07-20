@@ -13,9 +13,13 @@ public abstract class MiddlePickItem extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_MOVE_VEHICLE);
-		VarNumberSerializer.writeVarInt(creator, slot);
-		return RecyclableSingletonList.create(creator);
+		return RecyclableSingletonList.create(create(slot));
+	}
+
+	public static ServerBoundPacketData create(int slot) {
+		ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacket.PLAY_MOVE_VEHICLE);
+		VarNumberSerializer.writeVarInt(serializer, slot);
+		return serializer;
 	}
 
 }

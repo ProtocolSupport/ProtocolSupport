@@ -20,7 +20,7 @@ public class DragonHeadToDragonPlayerHeadComplexRemapper implements ItemStackCom
 		itemstack.setTypeId(ItemMaterialLookup.getRuntimeId(Material.PLAYER_HEAD));
 		NBTTagCompoundWrapper wrapper = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
 		wrapper.setCompound("SkullOwner", createTag());
-		itemstack.setTag(wrapper);
+		itemstack.setNBT(wrapper);
 		return itemstack;
 	}
 

@@ -7,6 +7,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCustomPaylo
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MerchantDataSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -17,14 +18,28 @@ public class CustomPayload extends MiddleCustomPayload {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID);
-		StringSerializer.writeString(serializer, version, tag);
-		if (tag.equals("MC|TrList")) {
-			MerchantDataSerializer.writeMerchantData(
-				serializer, version, cache.getAttributesCache().getLocale(),
-				MerchantDataSerializer.readMerchantData(Unpooled.wrappedBuffer(data), ProtocolVersionsHelper.LATEST_PC, cache.getAttributesCache().getLocale())
-			);
-		} else {
-			serializer.writeBytes(data);
+		StringSerializer.writeString(serializer, version, LegacyCustomPayloadChannelName.toPre13(cache.getCustomPayloadChannelCache().getLegacyName(tag)));
+		switch (tag) {
+			case LegacyCustomPayloadChannelName.MODERN_REGISTER:
+			case LegacyCustomPayloadChannelName.MODERN_UNREGISTER: {
+				StringSerializer.writeString(
+					serializer, version,
+					StringSerializer.readString(Unpooled.wrappedBuffer(data), ProtocolVersionsHelper.LATEST_PC)
+				);
+				break;
+			}
+			case (LegacyCustomPayloadChannelName.MODERN_TRADER_LIST): {
+				String locale = cache.getAttributesCache().getLocale();
+				MerchantDataSerializer.writeMerchantData(
+					serializer, connection.getVersion(), locale,
+					MerchantDataSerializer.readMerchantData(Unpooled.wrappedBuffer(data), ProtocolVersionsHelper.LATEST_PC, locale)
+				);
+				break;
+			}
+			default: {
+				serializer.writeBytes(data);
+				break;
+			}
 		}
 		return RecyclableSingletonList.create(serializer);
 	}

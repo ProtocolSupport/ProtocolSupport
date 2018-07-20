@@ -1,14 +1,8 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import java.util.ArrayList;
-
 import io.netty.buffer.ByteBuf;
-import net.minecraft.server.v1_13_R1.PacketPlayOutWorldParticles;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.id.IdSkipper;
-import protocolsupport.protocol.utils.types.Particle;
 
 public abstract class MiddleWorldParticle extends ClientBoundMiddlePacket {
 

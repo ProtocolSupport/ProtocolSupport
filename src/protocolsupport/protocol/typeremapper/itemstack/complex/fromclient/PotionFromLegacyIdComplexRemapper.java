@@ -18,10 +18,10 @@ public class PotionFromLegacyIdComplexRemapper implements ItemStackComplexRemapp
 		int data = itemstack.getLegacyData();
 		String name = LegacyPotion.fromLegacyId(data);
 		if (!StringUtils.isEmpty(name)) {
-			NBTTagCompoundWrapper tag = itemstack.getTag();
+			NBTTagCompoundWrapper tag = itemstack.getNBT();
 			if (tag.isNull()) {
 				tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-				itemstack.setTag(tag);
+				itemstack.setNBT(tag);
 			}
 			tag.setString("Potion", name);
 			itemstack.setTypeId(ItemMaterialLookup.getRuntimeId(LegacyPotion.isThrowable(data) ? Material.SPLASH_POTION : Material.POTION));

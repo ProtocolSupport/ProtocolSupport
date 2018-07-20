@@ -8,9 +8,9 @@ public abstract class ItemStackNBTComplexRemapper implements ItemStackComplexRem
 
 	@Override
 	public NetworkItemStack remap(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
-		NBTTagCompoundWrapper tag = itemstack.getTag();
+		NBTTagCompoundWrapper tag = itemstack.getNBT();
 		if (!tag.isNull()) {
-			itemstack.setTag(remapTag(version, locale, itemstack, tag));
+			itemstack.setNBT(remapTag(version, locale, itemstack, tag));
 		}
 		return itemstack;
 	}
