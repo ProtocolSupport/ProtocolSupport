@@ -22,4 +22,10 @@ public abstract class MiddleTabComplete extends ServerBoundMiddlePacket {
 		return RecyclableSingletonList.create(creator);
 	}
 
+	public static ServerBoundPacketData create(int id, String text) {
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_TAB_COMPLETE);
+		VarNumberSerializer.writeVarInt(creator, id);
+		StringSerializer.writeString(creator, ProtocolVersionsHelper.LATEST_PC, text);
+		return creator;
+	}
 }
