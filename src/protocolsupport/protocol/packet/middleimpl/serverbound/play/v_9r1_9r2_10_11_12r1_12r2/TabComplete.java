@@ -2,8 +2,11 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_9r1_9r2_10
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleTabComplete;
+import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class TabComplete extends MiddleTabComplete {
 
@@ -16,4 +19,11 @@ public class TabComplete extends MiddleTabComplete {
 		}
 	}
 
+	@Override
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
+		String string = this.string;
+		if (string.startsWith("/"))
+			string = string.substring(1);
+		return RecyclableSingletonList.create(MiddleTabComplete.create(0, string));
+	}
 }
