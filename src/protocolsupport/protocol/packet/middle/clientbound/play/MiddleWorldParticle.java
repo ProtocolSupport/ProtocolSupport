@@ -1,28 +1,24 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import java.util.ArrayList;
-
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.id.IdSkipper;
-import protocolsupport.protocol.utils.types.Particle;
 
 public abstract class MiddleWorldParticle extends ClientBoundMiddlePacket {
 
 //TODO: structure
-	protected Particle type;
-	protected boolean longdist;
-	protected float x;
-	protected float y;
-	protected float z;
-	protected float offX;
-	protected float offY;
-	protected float offZ;
-	protected float speed;
-	protected int count;
-	protected ArrayList<Object> adddata = new ArrayList<>();
+//	protected Particle type;
+//	protected boolean longdist;
+//	protected float x;
+//	protected float y;
+//	protected float z;
+//	protected float offX;
+//	protected float offY;
+//	protected float offZ;
+//	protected float speed;
+//	protected int count;
+//	protected ArrayList<Object> adddata = new ArrayList<>();
+	protected byte[] data;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
@@ -37,6 +33,7 @@ public abstract class MiddleWorldParticle extends ClientBoundMiddlePacket {
 //		speed = serverdata.readFloat();
 //		count = serverdata.readInt();
 //		adddata.clear();
+		data = MiscSerializer.readAllBytes(serverdata);
 	}
 
 	@Override
