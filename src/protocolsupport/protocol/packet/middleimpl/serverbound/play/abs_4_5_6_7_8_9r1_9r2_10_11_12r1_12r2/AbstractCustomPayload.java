@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.abs_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2;
 
+import java.nio.charset.StandardCharsets;
 import java.util.StringJoiner;
 
 import org.bukkit.Material;
@@ -21,7 +22,6 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.CustomPayloadChannelCache;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -36,15 +36,11 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 	protected String tag;
 	protected byte[] data;
 
-
-	protected final ByteBuf buffer = Unpooled.buffer();
-
 	protected RecyclableCollection<ServerBoundPacketData> transformRegisterUnregister(boolean register) {
-		buffer.clear();
 		CustomPayloadChannelCache ccache = cache.getCustomPayloadChannelCache();
 		String modernTag = LegacyCustomPayloadChannelName.fromPre13(tag);
 		StringJoiner payloadModernTagJoiner = new StringJoiner("\u0000");
-		for (String payloadLegacyTag : StringSerializer.readString(Unpooled.wrappedBuffer(data), connection.getVersion()).split("[\u0000]")) {
+		for (String payloadLegacyTag : new String(data, StandardCharsets.UTF_8).split("\u0000")) {
 			String payloadModernTag = LegacyCustomPayloadChannelName.fixPre13(payloadLegacyTag);
 			if (register) {
 				ccache.register(payloadModernTag, payloadLegacyTag);
@@ -53,8 +49,7 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 			}
 			payloadModernTagJoiner.add(payloadModernTag);
 		}
-		StringSerializer.writeString(buffer, ProtocolVersionsHelper.LATEST_PC, payloadModernTagJoiner.toString());
-		return RecyclableSingletonList.create(MiddleCustomPayload.create(modernTag, buffer));
+		return RecyclableSingletonList.create(MiddleCustomPayload.create(modernTag, payloadModernTagJoiner.toString().getBytes(StandardCharsets.UTF_8)));
 	}
 
 	protected RecyclableCollection<ServerBoundPacketData> transformBookEdit() {
