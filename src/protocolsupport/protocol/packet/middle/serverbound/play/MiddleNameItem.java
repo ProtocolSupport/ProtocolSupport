@@ -14,9 +14,13 @@ public abstract class MiddleNameItem extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_NAME_ITEM);
-		StringSerializer.writeString(creator, ProtocolVersionsHelper.LATEST_PC, name);
-		return RecyclableSingletonList.create(creator);
+		return RecyclableSingletonList.create(create(name));
+	}
+
+	public static ServerBoundPacketData create(String name) {
+		ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacket.PLAY_NAME_ITEM);
+		StringSerializer.writeString(serializer, ProtocolVersionsHelper.LATEST_PC, name);
+		return serializer;
 	}
 
 }

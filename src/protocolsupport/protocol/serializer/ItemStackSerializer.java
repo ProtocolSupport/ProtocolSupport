@@ -34,7 +34,7 @@ public class ItemStackSerializer {
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
 			itemstack.setLegacyData(from.readUnsignedShort());
 		}
-		itemstack.setTag(readTag(from, version));
+		itemstack.setNBT(readTag(from, version));
 		if (isFromClient) {
 			itemstack = ItemStackRemapper.remapFromClient(version, locale, itemstack);
 		}
@@ -56,7 +56,7 @@ public class ItemStackSerializer {
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
 			to.writeShort(witemstack.getLegacyData());
 		}
-		writeTag(to, version, witemstack.getTag());
+		writeTag(to, version, witemstack.getNBT());
 	}
 
 	public static NBTTagCompoundWrapper readTag(ByteBuf from, ProtocolVersion version) {

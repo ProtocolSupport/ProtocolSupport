@@ -27,11 +27,11 @@ public class NetworkItemStack {
 		this.amount = amount;
 	}
 
-	public NBTTagCompoundWrapper getTag() {
+	public NBTTagCompoundWrapper getNBT() {
 		return nbt;
 	}
 
-	public void setTag(NBTTagCompoundWrapper nbt) {
+	public void setNBT(NBTTagCompoundWrapper nbt) {
 		this.nbt = nbt;
 	}
 
@@ -47,7 +47,7 @@ public class NetworkItemStack {
 		NetworkItemStack stack = new NetworkItemStack();
 		stack.setTypeId(getTypeId());
 		stack.setAmount(getAmount());
-		stack.setTag(getTag());
+		stack.setNBT(getNBT());
 		return stack;
 	}
 
@@ -74,7 +74,7 @@ public class NetworkItemStack {
 		}
 
 		@Override
-		public void setTag(NBTTagCompoundWrapper tag) {
+		public void setNBT(NBTTagCompoundWrapper tag) {
 			throw reject();
 		}
 
@@ -89,7 +89,7 @@ public class NetworkItemStack {
 		}
 
 		@Override
-		public NBTTagCompoundWrapper getTag() {
+		public NBTTagCompoundWrapper getNBT() {
 			throw reject();
 		}
 

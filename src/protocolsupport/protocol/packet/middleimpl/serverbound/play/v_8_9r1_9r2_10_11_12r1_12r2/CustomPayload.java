@@ -1,58 +1,57 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12r1_12r2;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.api.chat.ChatAPI;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
+import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.abs_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2.AbstractCustomPayload;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagType;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
+import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
+import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
-public class CustomPayload extends MiddleCustomPayload {
-
-//	protected final ByteBuf newdata = Unpooled.buffer();
+public class CustomPayload extends AbstractCustomPayload {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		ProtocolVersion version = connection.getVersion();
 		tag = StringSerializer.readString(clientdata, version, 20);
 		data = MiscSerializer.readAllBytesWithLimit(clientdata, Short.MAX_VALUE);
-//TODO: transform to new packets
-//		if (tag.equals("MC|AdvCdm")) {
-//			tag = "MC|AdvCmd";
-//			data = MiscSerializer.readAllBytes(clientdata);
-//		} else if (tag.equals("MC|BSign") || tag.equals("MC|BEdit")) {
-//			ItemStackWrapper book = ItemStackSerializer.readItemStack(clientdata, version, cache.getAttributesCache().getLocale(), true);
-//			if (!book.isNull()) {
-//				book.setType(Material.BOOK_AND_QUILL);
-//				if ((version == ProtocolVersion.MINECRAFT_1_8) && tag.equals("MC|BSign")) {
-//					remapBookPages(book, cache.getAttributesCache().getLocale());
-//				}
-//			}
-//			ItemStackSerializer.writeItemStack(newdata, ProtocolVersionsHelper.LATEST_PC, cache.getAttributesCache().getLocale(), book, false);
-//			data = MiscSerializer.readAllBytes(newdata);
-//		} else {
-//			data = MiscSerializer.readAllBytes(clientdata);
-//		}
 	}
 
-	private static void remapBookPages(NetworkItemStack itemstack, String locale) {
-		NBTTagCompoundWrapper tag = itemstack.getTag();
-		if (!tag.isNull()) {
-			if (tag.hasKeyOfType("pages", NBTTagType.LIST)) {
-				NBTTagListWrapper pages = tag.getList("pages", NBTTagType.STRING);
-				NBTTagListWrapper newPages = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
-				for (int i = 0; i < pages.size(); i++) {
-					newPages.addString(ChatAPI.fromJSON(pages.getString(i)).toLegacyText(locale));
-				}
-				tag.setList("pages", newPages);
+	@Override
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
+		switch (tag) {
+			case LegacyCustomPayloadChannelName.LEGACY_REGISTER: {
+				return transformRegisterUnregister(true);
 			}
-			itemstack.setTag(tag);
+			case LegacyCustomPayloadChannelName.LEGACY_UNREGISTER: {
+				return transformRegisterUnregister(false);
+			}
+			case LegacyCustomPayloadChannelName.LEGACY_BOOK_EDIT: {
+				return transformBookEdit();
+			}
+			case LegacyCustomPayloadChannelName.LEGACY_BOOK_SIGN: {
+				return transformBookSign();
+			}
+			case LegacyCustomPayloadChannelName.LEGACY_SET_BEACON: {
+				return transformSetBeaconEffect();
+			}
+			case LegacyCustomPayloadChannelName.LEGACY_NAME_ITEM: {
+				return transformNameItem();
+			}
+			case LegacyCustomPayloadChannelName.LEGACY_PICK_ITEM: {
+				return transformNameItem();
+			}
+			case LegacyCustomPayloadChannelName.LEGACY_COMMAND_RIGHT_NAME:
+			case LegacyCustomPayloadChannelName.LEGACY_COMMAND_TYPO_NAME:
+			case LegacyCustomPayloadChannelName.LEGACY_COMMAND_BLOCK_NAME: {
+				//TODO: implement
+				return RecyclableEmptyList.get();
+			}
+			default: {
+				return transformCustomPayload();
+			}
 		}
 	}
 

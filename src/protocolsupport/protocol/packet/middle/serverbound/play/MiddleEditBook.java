@@ -4,6 +4,7 @@ import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 import protocolsupport.zplatform.itemstack.NetworkItemStack;
@@ -15,10 +16,14 @@ public abstract class MiddleEditBook extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_EDIT_BOOK);
-		ItemStackSerializer.writeItemStack(creator, connection.getVersion(), cache.getAttributesCache().getLocale(), book, false);
-		creator.writeBoolean(signing);
-		return RecyclableSingletonList.create(creator);
+		return RecyclableSingletonList.create(create(cache.getAttributesCache().getLocale(), book, signing));
+	}
+
+	public static ServerBoundPacketData create(String locale, NetworkItemStack book, boolean signing) {
+		ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacket.PLAY_EDIT_BOOK);
+		ItemStackSerializer.writeItemStack(serializer, ProtocolVersionsHelper.LATEST_PC, locale, book, false);
+		serializer.writeBoolean(signing);
+		return serializer;
 	}
 
 }

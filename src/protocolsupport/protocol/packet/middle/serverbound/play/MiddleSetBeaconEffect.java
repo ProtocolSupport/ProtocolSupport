@@ -14,10 +14,14 @@ public abstract class MiddleSetBeaconEffect extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_SET_BEACON_EFFECT);
-		VarNumberSerializer.writeVarInt(creator, primary);
-		VarNumberSerializer.writeVarInt(creator, secondary);
-		return RecyclableSingletonList.create(creator);
+		return RecyclableSingletonList.create(create(primary, secondary));
+	}
+
+	public static ServerBoundPacketData create(int primary, int secondary) {
+		ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacket.PLAY_SET_BEACON_EFFECT);
+		VarNumberSerializer.writeVarInt(serializer, primary);
+		VarNumberSerializer.writeVarInt(serializer, secondary);
+		return serializer;
 	}
 
 }

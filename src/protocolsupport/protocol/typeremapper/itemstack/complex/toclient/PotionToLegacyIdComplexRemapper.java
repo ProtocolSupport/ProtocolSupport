@@ -18,7 +18,7 @@ public class PotionToLegacyIdComplexRemapper implements ItemStackComplexRemapper
 
 	@Override
 	public NetworkItemStack remap(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
-		NBTTagCompoundWrapper tag = itemstack.getTag();
+		NBTTagCompoundWrapper tag = itemstack.getNBT();
 		if (tag.isNull()) {
 			return itemstack;
 		}
