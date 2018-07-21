@@ -1,18 +1,21 @@
 package protocolsupport.protocol.typeremapper.block;
 
+import java.util.Arrays;
+
 import org.bukkit.Material;
-import org.bukkit.block.data.Bisected;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.block.data.type.Leaves;
+import org.bukkit.block.data.type.Door;
+import org.bukkit.block.data.type.Door.Hinge;
+import org.bukkit.block.data.type.Switch;
+import org.bukkit.block.data.type.Switch.Face;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.IdRemappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
-import protocolsupport.protocol.utils.BlockDataUtils;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
-import protocolsupport.zplatform.PlatformUtils;
 import protocolsupport.zplatform.ServerPlatform;
 
 public class LegacyBlockData {
@@ -35,6 +38,47 @@ public class LegacyBlockData {
 			registerRemapEntry(Material.SPRUCE_LEAVES, Material.SPRUCE_LEAVES.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemapEntry(Material.OAK_LEAVES, Material.OAK_LEAVES.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemapEntry(Material.TALL_GRASS, Material.TALL_GRASS.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
+			for (Material wButton : Arrays.asList(
+				Material.ACACIA_BUTTON, Material.BIRCH_BUTTON, Material.DARK_OAK_BUTTON,
+				Material.JUNGLE_BUTTON, Material.OAK_BUTTON, Material.SPRUCE_BUTTON
+			)) {
+				for (BlockData blockdata : ServerPlatform.get().getMiscUtils().getBlockStates(wButton)) {
+					Switch originalButton = (Switch) blockdata;
+					Switch oakButton = (Switch) Material.OAK_BUTTON.createBlockData();
+					oakButton.setFace(originalButton.getFace());
+					if (originalButton.getFace() == Face.CEILING || originalButton.getFace() == Face.FLOOR) {
+						oakButton.setFacing(BlockFace.NORTH);
+					} else {
+						oakButton.setFacing(originalButton.getFacing());
+					}
+					oakButton.setPowered(originalButton.isPowered());
+					registerRemapEntry(originalButton, oakButton, ProtocolVersionsHelper.BEFORE_1_13);
+				}
+			}
+			for (Material door : Arrays.asList(
+				Material.ACACIA_DOOR, Material.BIRCH_DOOR, Material.DARK_OAK_DOOR,
+				Material.JUNGLE_DOOR, Material.OAK_DOOR, Material.SPRUCE_DOOR,
+				Material.IRON_DOOR
+			)) {
+				for (BlockData blockdata : ServerPlatform.get().getMiscUtils().getBlockStates(door)) {
+					Door originalDoor = (Door) blockdata;
+					Door cloneDoor = (Door) door.createBlockData();
+					if (originalDoor.getHalf() == Half.TOP) {
+						cloneDoor.setHalf(Half.TOP);
+						cloneDoor.setHinge(originalDoor.getHinge());
+						cloneDoor.setPowered(originalDoor.isPowered());
+						cloneDoor.setFacing(BlockFace.EAST);
+						cloneDoor.setOpen(false);
+					} else if (originalDoor.getHalf() == Half.BOTTOM) {
+						cloneDoor.setHalf(Half.BOTTOM);
+						cloneDoor.setHinge(Hinge.RIGHT);
+						cloneDoor.setPowered(false);
+						cloneDoor.setFacing(originalDoor.getFacing());
+						cloneDoor.setOpen(originalDoor.isOpen());
+					}
+					registerRemapEntry(originalDoor, cloneDoor, ProtocolVersionsHelper.BEFORE_1_13);
+				}
+			}
 
 			registerRemapEntry(Material.ACACIA_LEAVES, Material.BIRCH_LEAVES.createBlockData(), ProtocolVersionsHelper.BEFORE_1_7);
 			registerRemapEntry(Material.DARK_OAK_LEAVES, Material.OAK_LEAVES.createBlockData(), ProtocolVersionsHelper.BEFORE_1_7);
