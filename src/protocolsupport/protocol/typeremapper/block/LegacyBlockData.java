@@ -28,54 +28,70 @@ public class LegacyBlockData {
 			applyDefaultRemaps();
 		}
 
+		protected void remapButtonState(Switch from, Switch to) {
+			to.setFace(from.getFace());
+			if (from.getFace() == Face.CEILING || from.getFace() == Face.FLOOR) {
+				to.setFacing(BlockFace.NORTH);
+			} else {
+				to.setFacing(from.getFacing());
+			}
+			to.setPowered(from.isPowered());
+		}
+
+		protected void remapDoorState(Door from, Door to) {
+			if (from.getHalf() == Half.TOP) {
+				to.setHalf(Half.TOP);
+				to.setHinge(from.getHinge());
+				to.setPowered(from.isPowered());
+				to.setFacing(BlockFace.EAST);
+				to.setOpen(false);
+			} else if (from.getHalf() == Half.BOTTOM) {
+				to.setHalf(Half.BOTTOM);
+				to.setHinge(Hinge.RIGHT);
+				to.setPowered(false);
+				to.setFacing(from.getFacing());
+				to.setOpen(from.isOpen());
+			}
+		}
+
 		public void applyDefaultRemaps() {
 			remappings.clear();
 
-			registerRemapEntry(Material.ACACIA_LEAVES, Material.ACACIA_LEAVES.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
-			registerRemapEntry(Material.DARK_OAK_LEAVES, Material.DARK_OAK_LEAVES.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
-			registerRemapEntry(Material.BIRCH_LEAVES, Material.BIRCH_LEAVES.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
-			registerRemapEntry(Material.JUNGLE_LEAVES, Material.JUNGLE_LEAVES.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
-			registerRemapEntry(Material.SPRUCE_LEAVES, Material.SPRUCE_LEAVES.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
-			registerRemapEntry(Material.OAK_LEAVES, Material.OAK_LEAVES.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
-			registerRemapEntry(Material.TALL_GRASS, Material.TALL_GRASS.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
-			for (Material wButton : Arrays.asList(
-				Material.ACACIA_BUTTON, Material.BIRCH_BUTTON, Material.DARK_OAK_BUTTON,
+			for (Material material : Arrays.asList(
+				Material.ACACIA_LEAVES, Material.DARK_OAK_LEAVES, Material.BIRCH_LEAVES,
+				Material.JUNGLE_LEAVES, Material.SPRUCE_LEAVES, Material.OAK_LEAVES,
+				Material.ACACIA_FENCE, Material.DARK_OAK_FENCE, Material.BIRCH_FENCE,
+				Material.JUNGLE_FENCE, Material.SPRUCE_FENCE, Material.OAK_FENCE,
+				Material.TALL_GRASS
+			)) {
+				registerRemapEntry(material, material.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
+			}
+			for (Material button : Arrays.asList(
+				Material.ACACIA_BUTTON, Material.DARK_OAK_BUTTON, Material.BIRCH_BUTTON,
 				Material.JUNGLE_BUTTON, Material.OAK_BUTTON, Material.SPRUCE_BUTTON
 			)) {
-				for (BlockData blockdata : ServerPlatform.get().getMiscUtils().getBlockStates(wButton)) {
+				for (BlockData blockdata : ServerPlatform.get().getMiscUtils().getBlockStates(button)) {
 					Switch originalButton = (Switch) blockdata;
 					Switch oakButton = (Switch) Material.OAK_BUTTON.createBlockData();
-					oakButton.setFace(originalButton.getFace());
-					if (originalButton.getFace() == Face.CEILING || originalButton.getFace() == Face.FLOOR) {
-						oakButton.setFacing(BlockFace.NORTH);
-					} else {
-						oakButton.setFacing(originalButton.getFacing());
-					}
-					oakButton.setPowered(originalButton.isPowered());
+					remapButtonState(originalButton, oakButton);
 					registerRemapEntry(originalButton, oakButton, ProtocolVersionsHelper.BEFORE_1_13);
 				}
 			}
+			for (BlockData blockdata : ServerPlatform.get().getMiscUtils().getBlockStates(Material.STONE_BUTTON)) {
+				Switch originalButton = (Switch) blockdata;
+				Switch cloneButton = (Switch) originalButton.clone();
+				remapButtonState(originalButton, cloneButton);
+				registerRemapEntry(originalButton, cloneButton, ProtocolVersionsHelper.BEFORE_1_13);
+			}
 			for (Material door : Arrays.asList(
-				Material.ACACIA_DOOR, Material.BIRCH_DOOR, Material.DARK_OAK_DOOR,
+				Material.ACACIA_DOOR, Material.DARK_OAK_DOOR, Material.BIRCH_DOOR,
 				Material.JUNGLE_DOOR, Material.OAK_DOOR, Material.SPRUCE_DOOR,
 				Material.IRON_DOOR
 			)) {
 				for (BlockData blockdata : ServerPlatform.get().getMiscUtils().getBlockStates(door)) {
 					Door originalDoor = (Door) blockdata;
 					Door cloneDoor = (Door) door.createBlockData();
-					if (originalDoor.getHalf() == Half.TOP) {
-						cloneDoor.setHalf(Half.TOP);
-						cloneDoor.setHinge(originalDoor.getHinge());
-						cloneDoor.setPowered(originalDoor.isPowered());
-						cloneDoor.setFacing(BlockFace.EAST);
-						cloneDoor.setOpen(false);
-					} else if (originalDoor.getHalf() == Half.BOTTOM) {
-						cloneDoor.setHalf(Half.BOTTOM);
-						cloneDoor.setHinge(Hinge.RIGHT);
-						cloneDoor.setPowered(false);
-						cloneDoor.setFacing(originalDoor.getFacing());
-						cloneDoor.setOpen(originalDoor.isOpen());
-					}
+					remapDoorState(originalDoor, cloneDoor);
 					registerRemapEntry(originalDoor, cloneDoor, ProtocolVersionsHelper.BEFORE_1_13);
 				}
 			}
