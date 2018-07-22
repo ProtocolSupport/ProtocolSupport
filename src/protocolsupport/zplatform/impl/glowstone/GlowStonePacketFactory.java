@@ -1,24 +1,8 @@
 package protocolsupport.zplatform.impl.glowstone;
 
-import java.lang.reflect.Field;
-import java.security.PublicKey;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentMap;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.SoundCategory;
-import org.bukkit.WorldType;
-import org.bukkit.entity.Entity;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-
 import com.flowpowered.network.Codec.CodecRegistration;
 import com.flowpowered.network.Message;
 import com.flowpowered.network.service.CodecLookupService;
-
 import net.glowstone.GlowServer;
 import net.glowstone.entity.meta.profile.GlowPlayerProfile;
 import net.glowstone.net.message.KickMessage;
@@ -136,6 +120,13 @@ import net.glowstone.net.message.status.StatusResponseMessage;
 import net.glowstone.net.protocol.GlowProtocol;
 import net.glowstone.net.protocol.ProtocolType;
 import net.glowstone.util.TextMessage;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.SoundCategory;
+import org.bukkit.WorldType;
+import org.bukkit.entity.Entity;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.protocol.utils.authlib.GameProfile;
@@ -144,6 +135,13 @@ import protocolsupport.protocol.utils.minecraftdata.BlockData.BlockDataEntry;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.zplatform.PlatformPacketFactory;
+
+import java.lang.reflect.Field;
+import java.security.PublicKey;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentMap;
 
 public class GlowStonePacketFactory implements PlatformPacketFactory {
 
@@ -243,13 +241,13 @@ public class GlowStonePacketFactory implements PlatformPacketFactory {
 			UUID randomUUID = UUID.randomUUID();
 			GlowPlayerProfile[] playerProfiles = new GlowPlayerProfile[profiles.size()];
 			for (int i = 0; i < profiles.size(); i++) {
-				playerProfiles[i] = new GlowPlayerProfile(profiles.get(i), randomUUID);
+				playerProfiles[i] = new GlowPlayerProfile(profiles.get(i), randomUUID, false); // TODO: This tells Glowstone to query it async, should it be async or not?
 			}
 			playerProfiles = Arrays.copyOfRange(playerProfiles, 0, Math.min(playerProfiles.length, server.getPlayerSampleCount()));
 			for (GlowPlayerProfile profile : playerProfiles) {
 				JSONObject sample = new JSONObject();
 				sample.put("name", profile.getName());
-				sample.put("id", profile.getUniqueId().toString());
+				sample.put("id", profile.getId().toString());
 				playerSample.add(sample);
 			}
 			players.put("sample", playerSample);

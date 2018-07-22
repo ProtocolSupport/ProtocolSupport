@@ -57,7 +57,8 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 			profile.getProperties().values().stream()
 			.flatMap(Set::stream)
 			.map(property -> new ProfileProperty(property.getName(), property.getValue(), property.getSignature()))
-			.collect(Collectors.toList())
+			.collect(Collectors.toList()),
+			false // TODO: This tells Glowstone to query it async, should it be async or not?
 		);
 	}
 

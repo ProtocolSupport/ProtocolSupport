@@ -1,19 +1,7 @@
 package protocolsupport.zplatform.impl.glowstone.network;
 
-import java.net.InetSocketAddress;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import org.bukkit.entity.Player;
-
 import com.flowpowered.network.Message;
 import com.flowpowered.network.protocol.AbstractProtocol;
-
 import io.netty.channel.Channel;
 import io.netty.util.AttributeKey;
 import io.netty.util.concurrent.Future;
@@ -23,10 +11,20 @@ import net.glowstone.net.GlowSession;
 import net.glowstone.net.ProxyData;
 import net.glowstone.net.pipeline.MessageHandler;
 import net.glowstone.net.protocol.ProtocolType;
+import org.bukkit.entity.Player;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.zplatform.impl.glowstone.GlowStoneMiscUtils;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
+
+import java.net.InetSocketAddress;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 
@@ -60,7 +58,7 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 	public void setAddress(InetSocketAddress address) {
 		ProxyData old = getSession().getProxyData();
 		if (old != null) {
-			getSession().setProxyData(new ProxyData(null, null, address, null, old.getProfile().getUniqueId(), new ArrayList<>(old.getProfile().getProperties())));
+			getSession().setProxyData(new ProxyData(null, null, address, null, old.getProfile().getId(), new ArrayList<>(old.getProfile().getProperties())));
 		} else {
 			getSession().setProxyData(new ProxyData(null, null, address, null, fakeUUID, Collections.emptyList()));
 		}
@@ -122,7 +120,7 @@ public class GlowStoneNetworkManagerWrapper extends NetworkManagerWrapper {
 	@Override
 	public UUID getSpoofedUUID() {
 		GlowPlayerProfile profile = getSpoofedProfile();
-		return profile != null ? profile.getUniqueId() : null;
+		return profile != null ? profile.getId() : null;
 	}
 
 	@Override
