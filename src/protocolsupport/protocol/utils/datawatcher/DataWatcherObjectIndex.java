@@ -14,6 +14,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectNBTTa
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalChat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalUUID;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectParticle;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3f;
@@ -310,7 +311,7 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 		public static final DataWatcherObjectIndex<DataWatcherObjectFloat> RADIUS = takeNextIndex(DataWatcherObjectFloat.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> COLOR = takeNextIndex(DataWatcherObjectVarInt.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> SINGLE_POINT = takeNextIndex(DataWatcherObjectBoolean.class);
-		//TODO: particle
+		public static final DataWatcherObjectIndex<DataWatcherObjectParticle> PARTICLE = takeNextIndex(DataWatcherObjectParticle.class);
 	}
 
 	protected static final HashMap<Class<?>, Integer> lastTakenId = new HashMap<>();

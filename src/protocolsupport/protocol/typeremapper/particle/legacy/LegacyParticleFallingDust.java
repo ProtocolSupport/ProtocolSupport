@@ -1,14 +1,12 @@
 package protocolsupport.protocol.typeremapper.particle.legacy;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.Connection;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockId;
-import protocolsupport.protocol.utils.types.particle.Particle;
 
-public class LegacyParticleFallingDust extends Particle {
+public class LegacyParticleFallingDust extends LegacyParticle {
 
 	protected int blockstate;
 
@@ -18,13 +16,18 @@ public class LegacyParticleFallingDust extends Particle {
 	}
 
 	@Override
-	public void remap(Connection connection, NetworkDataCache cache) {
-		blockstate = LegacyBlockId.getLegacyObjDataFromLegacyBlockState(LegacyBlockId.getLegacyCombinedId(LegacyBlockData.REGISTRY.getTable(connection.getVersion()).getRemap(blockstate)));
+	public void remap(ProtocolVersion version, String locale) {
+		blockstate = LegacyBlockId.getLegacyObjDataFromLegacyBlockState(LegacyBlockId.getLegacyCombinedId(LegacyBlockData.REGISTRY.getTable(version).getRemap(blockstate)));
 	}
 
 	@Override
 	public void writeData(ByteBuf buf) {
 		VarNumberSerializer.writeVarInt(buf, blockstate);
+	}
+
+	@Override
+	public int getFirstParameter() {
+		return blockstate;
 	}
 
 }

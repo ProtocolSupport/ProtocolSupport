@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.typeremapper.particle.legacy.LegacyParticle;
 import protocolsupport.protocol.typeremapper.watchedentity.value.IndexValueRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.value.IndexValueRemapperBooleanToByte;
 import protocolsupport.protocol.typeremapper.watchedentity.value.IndexValueRemapperNoOp;
@@ -22,6 +23,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoole
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
+import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.utils.CollectionsUtils;
@@ -559,14 +561,59 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.COLOR, 7), ProtocolVersionsHelper.RANGE__1_10__1_12_2),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.COLOR, 6), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.SINGLE_POINT, 8), ProtocolVersionsHelper.RANGE__1_10__1_12_2),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.SINGLE_POINT, 7), ProtocolVersionsHelper.ALL_1_9)
-//TODO: implement after implementing particles
-//		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.PARTICLE, 9), ProtocolVersionsHelper.RANGE__1_10__1_12_2),
-//		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.PARTICLE, 8), ProtocolVersionsHelper.ALL_1_9),
-//		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.PARTICLE_DATA1, 10), ProtocolVersionsHelper.RANGE__1_10__1_12_2),
-//		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.PARTICLE_DATA1, 9), ProtocolVersionsHelper.ALL_1_9),
-//		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.PARTICLE_DATA2, 11), ProtocolVersionsHelper.RANGE__1_10__1_12_2),
-//		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.PARTICLE_DATA2, 10), ProtocolVersionsHelper.ALL_1_9)
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.SINGLE_POINT, 7), ProtocolVersionsHelper.ALL_1_9),
+		new Entry(new DataWatcherObjectRemapper() {
+			@Override
+			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
+				DataWatcherObjectIndex.AreaEffectCloud.PARTICLE.getValue(original).ifPresent((particleWatcher) -> {
+					particleWatcher.remapParticle(ProtocolVersion.MINECRAFT_1_12_2, I18NData.DEFAULT_LOCALE);
+					if (particleWatcher.getValue() instanceof LegacyParticle) {
+						LegacyParticle particle = (LegacyParticle) particleWatcher.getValue();
+						remapped.put(9, new DataWatcherObjectVarInt(particle.getId()));
+						remapped.put(10, new DataWatcherObjectVarInt(particle.getFirstParameter()));
+						remapped.put(11, new DataWatcherObjectVarInt(particle.getSecondParameter()));
+					}
+				});
+			}}, ProtocolVersionsHelper.ALL_1_12),
+		new Entry(new DataWatcherObjectRemapper() {
+			@Override
+			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
+				DataWatcherObjectIndex.AreaEffectCloud.PARTICLE.getValue(original).ifPresent((particleWatcher) -> {
+					particleWatcher.remapParticle(ProtocolVersion.MINECRAFT_1_11_1, I18NData.DEFAULT_LOCALE);
+					if (particleWatcher.getValue() instanceof LegacyParticle) {
+						LegacyParticle particle = (LegacyParticle) particleWatcher.getValue();
+						remapped.put(9, new DataWatcherObjectVarInt(particle.getId()));
+						remapped.put(10, new DataWatcherObjectVarInt(particle.getFirstParameter()));
+						remapped.put(11, new DataWatcherObjectVarInt(particle.getSecondParameter()));
+					}
+				});
+			}}, ProtocolVersion.MINECRAFT_1_11, ProtocolVersion.MINECRAFT_1_11_1),
+		new Entry(new DataWatcherObjectRemapper() {
+			@Override
+			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
+				DataWatcherObjectIndex.AreaEffectCloud.PARTICLE.getValue(original).ifPresent((particleWatcher) -> {
+					particleWatcher.remapParticle(ProtocolVersion.MINECRAFT_1_10, I18NData.DEFAULT_LOCALE);
+					if (particleWatcher.getValue() instanceof LegacyParticle) {
+						LegacyParticle particle = (LegacyParticle) particleWatcher.getValue();
+						remapped.put(9, new DataWatcherObjectVarInt(particle.getId()));
+						remapped.put(10, new DataWatcherObjectVarInt(particle.getFirstParameter()));
+						remapped.put(11, new DataWatcherObjectVarInt(particle.getSecondParameter()));
+					}
+				});
+			}}, ProtocolVersion.MINECRAFT_1_10),
+		new Entry(new DataWatcherObjectRemapper() {
+			@Override
+			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
+				DataWatcherObjectIndex.AreaEffectCloud.PARTICLE.getValue(original).ifPresent((particleWatcher) -> {
+					particleWatcher.remapParticle(ProtocolVersion.MINECRAFT_1_9_4, I18NData.DEFAULT_LOCALE);
+					if (particleWatcher.getValue() instanceof LegacyParticle) {
+						LegacyParticle particle = (LegacyParticle) particleWatcher.getValue();
+						remapped.put(8, new DataWatcherObjectVarInt(particle.getId()));
+						remapped.put(9, new DataWatcherObjectVarInt(particle.getFirstParameter()));
+						remapped.put(10, new DataWatcherObjectVarInt(particle.getSecondParameter()));
+					}
+				});
+			}}, ProtocolVersionsHelper.ALL_1_9)
 	),
 	SHULKER_BULLET(NetworkEntityType.SHULKER_BULLET, ENTITY),
 	LAMA_SPIT(NetworkEntityType.LAMA_SPIT, ENTITY),

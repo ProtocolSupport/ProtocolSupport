@@ -1,11 +1,9 @@
 package protocolsupport.protocol.utils.types.particle;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.zplatform.itemstack.NetworkItemStack;
@@ -34,9 +32,7 @@ public class ParticleItem extends Particle {
 	}
 
 	@Override
-	public void remap(Connection connection, NetworkDataCache cache) {
-		version = connection.getVersion();
-		locale = cache.getAttributesCache().getLocale();
+	public void remap(ProtocolVersion version, String locale) {
 		item = ItemStackRemapper.remapToClient(version, locale, item);
 	}
 

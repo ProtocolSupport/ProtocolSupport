@@ -7,8 +7,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import protocolsupport.api.Connection;
-import protocolsupport.protocol.storage.netcache.NetworkDataCache;
+import protocolsupport.api.ProtocolVersion;
 
 public class Particle {
 
@@ -100,7 +99,7 @@ public class Particle {
 
 	public void readData(ByteBuf buf) { };
 
-	public void remap(Connection connection, NetworkDataCache cache) { };
+	public void remap(ProtocolVersion version, String locale) { };
 
 	public void writeData(ByteBuf buf) { };
 
