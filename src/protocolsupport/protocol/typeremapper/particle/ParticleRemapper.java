@@ -5,6 +5,9 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.typeremapper.particle.legacy.LegacyParticleBlockCrack;
+import protocolsupport.protocol.typeremapper.particle.legacy.LegacyParticleFallingDust;
+import protocolsupport.protocol.typeremapper.particle.legacy.LegacyParticleIconCrack;
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
@@ -97,8 +100,8 @@ public class ParticleRemapper {
 			registerRemap(ParticleItemSlime.class, () -> new Particle(33, "slime"), ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemap(ParticleHeart.class, () -> new Particle(34, "heart"), ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemap(ParticleBarrier.class, () -> new Particle(35, "barrier"), ProtocolVersionsHelper.RANGE__1_8__1_12_2);
-			registerRemap(ParticleItem.class, () -> new Particle(36, "iconcrack"), ProtocolVersionsHelper.BEFORE_1_13);
-			registerRemap(ParticleBlock.class, () -> new Particle(37, "blockcrack"), ProtocolVersionsHelper.BEFORE_1_13);
+			registerRemap(ParticleItem.class, (from) -> new LegacyParticleIconCrack(36, "iconcrack", ((ParticleItem) from).getItem()), ProtocolVersionsHelper.BEFORE_1_13);
+			registerRemap(ParticleBlock.class, (from) -> new LegacyParticleBlockCrack(37, "blockcrack", ((ParticleBlock) from).getBlockstate()), ProtocolVersionsHelper.BEFORE_1_13);
 			//registerRemap(ParticleBlock.class, () -> new Particle(38, "blockdust"), ProtocolVersionsHelper.BEFORE_1_13); TODO: Gone?
 			registerRemap(ParticleRain.class, () -> new Particle(39, "droplet"), ProtocolVersionsHelper.RANGE__1_8__1_12_2);
 			//registerRemap(ParticleTake.class, () -> new Particle(40, "take"), ProtocolVersionsHelper.BEFORE_1_13); TODO: GONE
@@ -107,7 +110,7 @@ public class ParticleRemapper {
 			registerRemap(ParticleEndRod.class, () -> new Particle(43, "endRod"), ProtocolVersionsHelper.RANGE__1_9__1_12_2);
 			registerRemap(ParticleDamageIndicator.class, () -> new Particle(44, "damageIndicator"), ProtocolVersionsHelper.RANGE__1_9__1_12_2);
 			registerRemap(ParticleSweepAttack.class, () -> new Particle(45, "sweepAttack"), ProtocolVersionsHelper.RANGE__1_9__1_12_2);
-			registerRemap(ParticleFallingDust.class, () -> new Particle(46, "fallingdust"), ProtocolVersionsHelper.RANGE__1_10__1_12_2);
+			registerRemap(ParticleFallingDust.class, (from) -> new LegacyParticleFallingDust(46, "fallingdust", ((ParticleFallingDust) from).getBlockstate()), ProtocolVersionsHelper.RANGE__1_10__1_12_2);
 			registerRemap(ParticleTotemOfUndying.class, () -> new Particle(47, "totem"), ProtocolVersionsHelper.RANGE__1_11_1__1_12_2);
 			registerRemap(ParticleSpit.class, () -> new Particle(48, "spit"), ProtocolVersionsHelper.RANGE__1_11_1__1_12_2);
 
@@ -120,7 +123,7 @@ public class ParticleRemapper {
 			registerSkip(ParticleEndRod.class, ProtocolVersionsHelper.BEFORE_1_9);
 			registerSkip(ParticleDamageIndicator.class, ProtocolVersionsHelper.BEFORE_1_9);
 			registerSkip(ParticleSweepAttack.class, ProtocolVersionsHelper.BEFORE_1_9);
-			registerSkip(ParticleFallingDust.class, ProtocolVersionsHelper.BEFORE_1_10);
+			registerSkip(ParticleFallingDust.class, ProtocolVersionsHelper.BEFORE_1_10); //TODO: Remap to BlockCrack for older versions? :D
 			registerSkip(ParticleTotemOfUndying.class, ProtocolVersionsHelper.BEFORE_1_11);
 			registerSkip(ParticleSpit.class, ProtocolVersionsHelper.BEFORE_1_11);
 		}

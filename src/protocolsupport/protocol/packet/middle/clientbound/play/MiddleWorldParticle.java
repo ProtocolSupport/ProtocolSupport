@@ -36,6 +36,7 @@ public abstract class MiddleWorldParticle extends ClientBoundMiddlePacket {
 
 	@Override
 	public boolean postFromServerRead() {
+		particle.remap(connection, cache);
 		return particle.getId() != Particle.SKIP;
 	}
 

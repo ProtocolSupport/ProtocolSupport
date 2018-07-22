@@ -44,4 +44,12 @@ public class LegacyBlockId {
 		return (id << 4) | data;
 	}
 
+	public static int getLegacyCombinedIdFromLegacyObjData(int objectdata) {
+		return ((objectdata & 0xFFF) << 4) | (objectdata >> 12);
+	}
+
+	public static int getLegacyObjDataFromLegacyBlockState(int blockstate) {
+		return (blockstate >> 4) | (blockstate & 0xF) << 12;
+	}
+
 }

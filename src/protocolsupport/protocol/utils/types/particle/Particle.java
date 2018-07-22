@@ -7,6 +7,8 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import protocolsupport.api.Connection;
+import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 
 public class Particle {
 
@@ -16,6 +18,7 @@ public class Particle {
 	private static int pId = 0;
 	private static void registerParticle(Supplier<Particle> particle) {
 		idToParticle.put(pId, particle);
+		particleToId.put(particle.get().getClass(), pId);
 		pId++;
 	}
 	static {
@@ -82,11 +85,10 @@ public class Particle {
 	public Particle(int id, String name) {
 		this.id = id;
 		this.name = name;
-		particleToId.put(this.getClass(), id);
 	}
 
-	private final String name;
-	private final int id;
+	protected String name;
+	protected int id;
 
 	public int getId() {
 		return id;
@@ -97,6 +99,8 @@ public class Particle {
 	}
 
 	public void readData(ByteBuf buf) { };
+
+	public void remap(Connection connection, NetworkDataCache cache) { };
 
 	public void writeData(ByteBuf buf) { };
 
