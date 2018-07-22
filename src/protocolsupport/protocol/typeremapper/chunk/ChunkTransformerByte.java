@@ -2,7 +2,7 @@ package protocolsupport.protocol.typeremapper.chunk;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
-import protocolsupport.protocol.typeremapper.legacy.LegacyBlockId;
+import protocolsupport.protocol.typeremapper.block.LegacyBlockId;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 
 public class ChunkTransformerByte extends ChunkTransformer {

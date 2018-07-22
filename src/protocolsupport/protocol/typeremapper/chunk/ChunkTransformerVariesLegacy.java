@@ -5,7 +5,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
-import protocolsupport.protocol.typeremapper.legacy.LegacyBlockId;
+import protocolsupport.protocol.typeremapper.block.LegacyBlockId;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.utils.netty.Allocator;
 
