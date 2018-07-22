@@ -66,7 +66,7 @@ public class LegacyCustomPayloadChannelName {
 
 	@SuppressWarnings("deprecation")
 	public static String fixPre13(String legacyName) {
-		return new NamespacedKey("l", invalid_key_pattern.matcher(legacyName).replaceAll("")).toString();
+		return new NamespacedKey("l", invalid_key_pattern.matcher(legacyName.toLowerCase()).replaceAll("")).toString();
 	}
 
 }
