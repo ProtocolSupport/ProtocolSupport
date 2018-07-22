@@ -1,6 +1,8 @@
 package protocolsupport.protocol.typeremapper.block;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -8,6 +10,9 @@ import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.Door.Hinge;
+import org.bukkit.block.data.type.Fence;
+import org.bukkit.block.data.type.Gate;
+import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Switch;
 import org.bukkit.block.data.type.Switch.Face;
 
@@ -28,7 +33,21 @@ public class LegacyBlockData {
 			applyDefaultRemaps();
 		}
 
-		protected void remapButtonState(Switch from, Switch to) {
+		protected Gate toPre13GateState(Gate from, Gate to) {
+			to.setInWall(false);
+			to.setFacing(from.getFacing());
+			to.setOpen(from.isOpen());
+			to.setPowered(from.isPowered());
+			return to;
+		}
+
+		protected Fence toPre13FenceState(Fence from, Fence to) {
+			to.setWaterlogged(false);
+			from.getAllowedFaces().stream().forEach(face -> to.setFace(face, from.hasFace(face)));
+			return to;
+		}
+
+		protected Switch toPre13ButtonState(Switch from, Switch to) {
 			to.setFace(from.getFace());
 			if (from.getFace() == Face.CEILING || from.getFace() == Face.FLOOR) {
 				to.setFacing(BlockFace.NORTH);
@@ -36,9 +55,10 @@ public class LegacyBlockData {
 				to.setFacing(from.getFacing());
 			}
 			to.setPowered(from.isPowered());
+			return to;
 		}
 
-		protected void remapDoorState(Door from, Door to) {
+		protected Door toPre13DoorState(Door from, Door to) {
 			if (from.getHalf() == Half.TOP) {
 				to.setHalf(Half.TOP);
 				to.setHinge(from.getHinge());
@@ -52,52 +72,85 @@ public class LegacyBlockData {
 				to.setFacing(from.getFacing());
 				to.setOpen(from.isOpen());
 			}
+			return to;
+		}
+
+		protected Slab toPre13SlabState(Slab from, Slab to) {
+			to.setWaterlogged(false);
+			to.setType(from.getType());
+			return to;
 		}
 
 		public void applyDefaultRemaps() {
 			remappings.clear();
 
-			for (Material material : Arrays.asList(
-				Material.ACACIA_LEAVES, Material.DARK_OAK_LEAVES, Material.BIRCH_LEAVES,
-				Material.JUNGLE_LEAVES, Material.SPRUCE_LEAVES, Material.OAK_LEAVES,
-				Material.ACACIA_FENCE, Material.DARK_OAK_FENCE, Material.BIRCH_FENCE,
-				Material.JUNGLE_FENCE, Material.SPRUCE_FENCE, Material.OAK_FENCE,
-				Material.TALL_GRASS
-			)) {
-				registerRemapEntry(material, material.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
-			}
-			for (Material button : Arrays.asList(
-				Material.ACACIA_BUTTON, Material.DARK_OAK_BUTTON, Material.BIRCH_BUTTON,
-				Material.JUNGLE_BUTTON, Material.OAK_BUTTON, Material.SPRUCE_BUTTON
-			)) {
-				for (BlockData blockdata : ServerPlatform.get().getMiscUtils().getBlockStates(button)) {
-					Switch originalButton = (Switch) blockdata;
-					Switch oakButton = (Switch) Material.OAK_BUTTON.createBlockData();
-					remapButtonState(originalButton, oakButton);
-					registerRemapEntry(originalButton, oakButton, ProtocolVersionsHelper.BEFORE_1_13);
-				}
-			}
-			for (BlockData blockdata : ServerPlatform.get().getMiscUtils().getBlockStates(Material.STONE_BUTTON)) {
-				Switch originalButton = (Switch) blockdata;
-				Switch cloneButton = (Switch) originalButton.clone();
-				remapButtonState(originalButton, cloneButton);
-				registerRemapEntry(originalButton, cloneButton, ProtocolVersionsHelper.BEFORE_1_13);
-			}
-			for (Material door : Arrays.asList(
-				Material.ACACIA_DOOR, Material.DARK_OAK_DOOR, Material.BIRCH_DOOR,
-				Material.JUNGLE_DOOR, Material.OAK_DOOR, Material.SPRUCE_DOOR,
-				Material.IRON_DOOR
-			)) {
-				for (BlockData blockdata : ServerPlatform.get().getMiscUtils().getBlockStates(door)) {
-					Door originalDoor = (Door) blockdata;
-					Door cloneDoor = (Door) door.createBlockData();
-					remapDoorState(originalDoor, cloneDoor);
-					registerRemapEntry(originalDoor, cloneDoor, ProtocolVersionsHelper.BEFORE_1_13);
-				}
-			}
 
-			registerRemapEntry(Material.ACACIA_LEAVES, Material.BIRCH_LEAVES.createBlockData(), ProtocolVersionsHelper.BEFORE_1_7);
-			registerRemapEntry(Material.DARK_OAK_LEAVES, Material.OAK_LEAVES.createBlockData(), ProtocolVersionsHelper.BEFORE_1_7);
+			this.registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.ACACIA_LEAVES, Material.DARK_OAK_LEAVES, Material.BIRCH_LEAVES,
+					Material.JUNGLE_LEAVES, Material.SPRUCE_LEAVES, Material.OAK_LEAVES,
+					Material.ACACIA_FENCE, Material.DARK_OAK_FENCE, Material.BIRCH_FENCE,
+					Material.JUNGLE_FENCE, Material.SPRUCE_FENCE, Material.OAK_FENCE,
+					Material.TALL_GRASS
+				),
+				o -> o.getMaterial().createBlockData(),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+
+			this.<Gate>registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.ACACIA_FENCE_GATE, Material.DARK_OAK_FENCE_GATE, Material.BIRCH_FENCE_GATE,
+					Material.JUNGLE_FENCE_GATE, Material.OAK_FENCE_GATE, Material.SPRUCE_FENCE_GATE
+				),
+				o -> toPre13GateState(o, (Gate) o.clone()),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+
+			this.<Switch>registerRemapEntryForAllStates(
+				Material.STONE_BUTTON,
+				o -> toPre13ButtonState(o, (Switch) o.clone()),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+			this.<Switch>registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.ACACIA_BUTTON, Material.DARK_OAK_BUTTON, Material.BIRCH_BUTTON,
+					Material.JUNGLE_BUTTON, Material.OAK_BUTTON, Material.SPRUCE_BUTTON
+				),
+				o -> toPre13ButtonState(o, (Switch) Material.OAK_BUTTON.createBlockData()),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+
+			this.<Door>registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.ACACIA_DOOR, Material.DARK_OAK_DOOR, Material.BIRCH_DOOR,
+					Material.JUNGLE_DOOR, Material.OAK_DOOR, Material.SPRUCE_DOOR,
+					Material.IRON_DOOR
+				),
+				o -> toPre13DoorState(o, (Door) o.getMaterial().createBlockData()),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+
+			this.<Slab>registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.ACACIA_SLAB, Material.DARK_OAK_SLAB, Material.BIRCH_SLAB,
+					Material.JUNGLE_SLAB, Material.OAK_SLAB, Material.SPRUCE_SLAB,
+					Material.COBBLESTONE_SLAB, Material.SANDSTONE_SLAB
+				),
+				o -> toPre13SlabState(o, (Slab) o.getMaterial().createBlockData()),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+			this.<Slab>registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.PRISMARINE_BRICK_SLAB, Material.PRISMARINE_SLAB, Material.DARK_PRISMARINE_SLAB,
+					Material.PETRIFIED_OAK_SLAB
+				),
+				o -> toPre13SlabState(o, (Slab) Material.STONE_SLAB.createBlockData()),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+
+
+			this.registerRemapEntryForAllStates(Material.ACACIA_LEAVES, Material.BIRCH_LEAVES.createBlockData(), ProtocolVersionsHelper.BEFORE_1_7);
+			this.registerRemapEntryForAllStates(Material.DARK_OAK_LEAVES, Material.OAK_LEAVES.createBlockData(), ProtocolVersionsHelper.BEFORE_1_7);
 //TODO: update to new material enum
 //			remappings.clear();
 //			registerRemapEntry(Material.CONCRETE, Material.BRICK, ProtocolVersionsHelper.BEFORE_1_12);
@@ -215,9 +268,22 @@ public class LegacyBlockData {
 //			registerRemapEntry(Material.REDSTONE_COMPARATOR_ON, Material.DIODE_BLOCK_ON, ProtocolVersionsHelper.BEFORE_1_5);
 		}
 
-		protected void registerRemapEntry(Material from, BlockData to, ProtocolVersion... versions) {
+		protected void registerRemapEntryForAllStates(Material from, BlockData to, ProtocolVersion... versions) {
 			ServerPlatform.get().getMiscUtils().getBlockStates(from)
 			.forEach(blockdata -> registerRemapEntry(blockdata, to, versions));
+		}
+
+		protected <T extends BlockData> void registerRemapEntryForAllStates(List<Material> materials, Function<T, BlockData> remapFunc, ProtocolVersion... versions) {
+			for (Material material : materials) {
+				registerRemapEntryForAllStates(material, remapFunc, versions);
+			}
+		}
+
+		@SuppressWarnings("unchecked")
+		protected <T extends BlockData> void registerRemapEntryForAllStates(Material material, Function<T, BlockData> remapFunc, ProtocolVersion... versions) {
+			for (BlockData blockdata : ServerPlatform.get().getMiscUtils().getBlockStates(material)) {
+				registerRemapEntry(blockdata, remapFunc.apply((T) blockdata), versions);
+			}
 		}
 
 		protected void registerRemapEntry(BlockData from, BlockData to, ProtocolVersion... versions) {
