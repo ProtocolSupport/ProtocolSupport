@@ -42,7 +42,9 @@ public class ChunkTransformerByte extends ChunkTransformer {
 			}
 		}
 		if (hasBiomeData) {
-			System.arraycopy(biomeData, 0, data, skyLightIndex, 256);
+			for (int i = 0; i < biomeData.length; i++) {
+				data[skyLightIndex + i] = (byte) biomeData[i];
+			}
 		}
 		return data;
 	}
