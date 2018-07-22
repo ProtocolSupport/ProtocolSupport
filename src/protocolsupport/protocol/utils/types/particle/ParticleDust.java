@@ -4,9 +4,8 @@ import io.netty.buffer.ByteBuf;
 
 public class ParticleDust extends Particle {
 
-	@Override
-	public String getName() {
-		return "minecraft:dust";
+	public ParticleDust(int pId) {
+		super(pId, "minecraft:dust");
 	}
 
 	@Override

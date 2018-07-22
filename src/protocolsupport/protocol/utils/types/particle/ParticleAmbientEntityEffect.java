@@ -2,9 +2,8 @@ package protocolsupport.protocol.utils.types.particle;
 
 public class ParticleAmbientEntityEffect extends Particle {
 
-	@Override
-	public String getName() {
-		return "minecraft:ambient_entity_effect";
+	public ParticleAmbientEntityEffect(int id) {
+		super(id, "minecraft:ambient_entity_effect");
 	}
 
 }

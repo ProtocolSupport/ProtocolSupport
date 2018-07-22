@@ -11,7 +11,17 @@ public class WorldParticle extends MiddleWorldParticle {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_PARTICLES_ID);
-		serializer.writeBytes(data);
+		serializer.writeInt(particle.getId());
+		serializer.writeBoolean(longdist);
+		serializer.writeFloat(x);
+		serializer.writeFloat(y);
+		serializer.writeFloat(z);
+		serializer.writeFloat(offX);
+		serializer.writeFloat(offY);
+		serializer.writeFloat(offZ);
+		serializer.writeFloat(speed);
+		serializer.writeInt(count);
+		particle.writeData(serializer);
 		return RecyclableSingletonList.create(serializer);
 	}
 

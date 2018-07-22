@@ -2,9 +2,8 @@ package protocolsupport.protocol.utils.types.particle;
 
 public class ParticleSplash extends Particle {
 
-	@Override
-	public String getName() {
-		return "minecraft:splash";
+	public ParticleSplash(int pId) {
+		super(pId, "minecraft:splash");
 	}
 
 }
