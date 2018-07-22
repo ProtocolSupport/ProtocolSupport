@@ -47,7 +47,7 @@ public class DataWatcherObjectIdRegistry {
 		register(DataWatcherObjectChat.class, 4, ProtocolVersionsHelper.AFTER_1_8);
 		register(DataWatcherObjectOptionalChat.class, 5, ProtocolVersionsHelper.LATEST_PC);
 		register(DataWatcherObjectItemStack.class, 6, ProtocolVersionsHelper.LATEST_PC);
-		register(DataWatcherObjectItemStack.class, 5, ProtocolVersionsHelper.RANGE__1_9__1_12_2);
+		register(DataWatcherObjectItemStack.class, 5, ProtocolVersionsHelper.BEFORE_1_13);
 		register(DataWatcherObjectBoolean.class, 7, ProtocolVersionsHelper.LATEST_PC);
 		register(DataWatcherObjectBoolean.class, 6, ProtocolVersionsHelper.RANGE__1_9__1_12_2);
 		register(DataWatcherObjectVector3f.class, 8, ProtocolVersionsHelper.LATEST_PC);
