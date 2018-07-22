@@ -22,7 +22,7 @@ public class SpigotLoginListener extends AbstractLoginListener implements ITicka
 	}
 
 	@Override
-	public void X_() {
+	public void Y_() {
 		tick();
 	}
 

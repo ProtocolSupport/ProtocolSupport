@@ -76,7 +76,7 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 	}
 
 	@Override
-	public void X_() {
+	public void Y_() {
 		tick();
 	}
 
