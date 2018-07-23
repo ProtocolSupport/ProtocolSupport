@@ -210,6 +210,14 @@ public class LegacyBlockData {
 				ProtocolVersionsHelper.BEFORE_1_13
 			);
 
+			this.registerRemapEntryForAllStates(
+					Arrays.asList(
+							Material.CAVE_AIR, Material.VOID_AIR
+					),
+					Material.AIR.createBlockData(),
+					ProtocolVersionsHelper.BEFORE_1_13
+			);
+
 			this.registerRemapEntryForAllStates(Material.ACACIA_LEAVES, Material.BIRCH_LEAVES.createBlockData(), ProtocolVersionsHelper.BEFORE_1_7);
 			this.registerRemapEntryForAllStates(Material.DARK_OAK_LEAVES, Material.OAK_LEAVES.createBlockData(), ProtocolVersionsHelper.BEFORE_1_7);
 
