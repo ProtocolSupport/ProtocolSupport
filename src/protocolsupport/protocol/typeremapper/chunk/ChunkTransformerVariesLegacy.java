@@ -5,7 +5,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
-import protocolsupport.protocol.typeremapper.block.LegacyBlockId;
+import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.utils.netty.Allocator;
 
@@ -26,7 +26,7 @@ public class ChunkTransformerVariesLegacy extends ChunkTransformer {
 					BlockStorageReader storage = section.blockdata;
 					BlockStorageWriter blockstorage = new BlockStorageWriter(bitsPerBlock, blocksInSection);
 					for (int block = 0; block < blocksInSection; block++) {
-						blockstorage.setBlockState(block, LegacyBlockId.getLegacyCombinedId(table.getRemap(storage.getBlockState(block))));
+						blockstorage.setBlockState(block, PreFlatteningBlockIdData.getLegacyCombinedId(table.getRemap(storage.getBlockState(block))));
 					}
 					long[] ldata = blockstorage.getBlockData();
 					VarNumberSerializer.writeVarInt(chunkdata, ldata.length);

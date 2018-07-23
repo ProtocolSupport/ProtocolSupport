@@ -2,7 +2,7 @@ package protocolsupport.protocol.typeremapper.chunk;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
-import protocolsupport.protocol.typeremapper.block.LegacyBlockId;
+import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 
 public class ChunkTransformerShort extends ChunkTransformer {
@@ -21,7 +21,7 @@ public class ChunkTransformerShort extends ChunkTransformer {
 				for (int block = 0; block < blocksInSection; block++) {
 					int dataindex = blockIdIndex + (block << 1);
 					int blockstate = storage.getBlockState(block);
-					blockstate = LegacyBlockId.getLegacyCombinedId(table.getRemap(blockstate));
+					blockstate = PreFlatteningBlockIdData.getLegacyCombinedId(table.getRemap(blockstate));
 					data[dataindex] = (byte) blockstate;
 					data[dataindex + 1] = (byte) (blockstate >> 8);
 				}

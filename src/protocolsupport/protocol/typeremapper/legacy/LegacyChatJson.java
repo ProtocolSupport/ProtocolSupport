@@ -17,7 +17,7 @@ import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.chat.components.TranslateComponent;
 import protocolsupport.api.chat.modifiers.ClickAction;
 import protocolsupport.api.chat.modifiers.HoverAction;
-import protocolsupport.protocol.typeremapper.itemstack.LegacyItemIdData;
+import protocolsupport.protocol.typeremapper.itemstack.PreFlatteningItemIdData;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.Utils;
@@ -110,7 +110,7 @@ public class LegacyChatJson {
 				NBTTagCompoundWrapper compound = ServerPlatform.get().getWrapperFactory().createNBTCompoundFromJson(hover.getValue());
 				Material material = ItemMaterialLookup.getByKey(compound.getString("id"));
 				if (material != null) {
-					compound.setInt("id", LegacyItemIdData.getIdFromLegacyCombinedId(LegacyItemIdData.getLegacyCombinedIdByModernId(ItemMaterialLookup.getRuntimeId(material))));
+					compound.setInt("id", PreFlatteningItemIdData.getIdFromLegacyCombinedId(PreFlatteningItemIdData.getLegacyCombinedIdByModernId(ItemMaterialLookup.getRuntimeId(material))));
 				}
 				component.setHoverAction(new HoverAction(HoverAction.Type.SHOW_ITEM, compound.toString()));
 			}

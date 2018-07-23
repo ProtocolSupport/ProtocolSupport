@@ -13,7 +13,7 @@ import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.Utils;
 
-public class LegacyItemIdData {
+public class PreFlatteningItemIdData {
 
 	private static final int[] toLegacyId = new int[MinecraftData.ID_MAX];
 	private static final Int2IntMap fromLegacyId = new Int2IntOpenHashMap();
@@ -27,7 +27,7 @@ public class LegacyItemIdData {
 		int combinedLegacyStoneId = formLegacyCombinedId(1, 0);
 		Arrays.fill(toLegacyId, combinedLegacyStoneId);
 		fromLegacyId.defaultReturnValue(1);
-		for (JsonElement element : Utils.iterateJsonArrayResource(MappingsData.getResourcePath("legacyitemid.json"))) {
+		for (JsonElement element : Utils.iterateJsonArrayResource(MappingsData.getResourcePath("preflatteningitemiddata.json"))) {
 			JsonObject object = element.getAsJsonObject();
 			register(JsonUtils.getString(object, "itemkey"), JsonUtils.getInt(object, "legacyid"), JsonUtils.getInt(object, "legacydata"));
 		}
