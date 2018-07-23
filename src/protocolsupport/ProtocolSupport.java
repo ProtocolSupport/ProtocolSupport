@@ -28,6 +28,7 @@ import protocolsupport.protocol.typeremapper.legacy.LegacyEffect;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
 import protocolsupport.protocol.typeremapper.legacy.LegacyPotion;
 import protocolsupport.protocol.typeremapper.mapcolor.MapColorRemapper;
+import protocolsupport.protocol.typeremapper.particle.ParticleRemapper;
 import protocolsupport.protocol.typeremapper.sound.SoundRemapper;
 import protocolsupport.protocol.typeremapper.tileentity.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.SpecificRemapper;
@@ -117,6 +118,7 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(LegacyPotion.class.getName());
 			Class.forName(LegacyEntityId.class.getName());
 			Class.forName(LegacyEffect.class.getName());
+			Class.forName(ParticleRemapper.class.getName());
 			ServerPlatform.get().getInjector().onLoad();
 		} catch (Throwable t) {
 			getLogger().log(Level.SEVERE, "Error when loading, make sure you are using supported server version", t);

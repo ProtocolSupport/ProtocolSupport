@@ -32,6 +32,7 @@ public abstract class MiddleWorldParticle extends ClientBoundMiddlePacket {
 		count = serverdata.readInt();
 		particle.readData(serverdata);
 		particle = ParticleRemapper.remap(connection.getVersion(), particle);
+		particle.remap(connection.getVersion(), cache.getAttributesCache().getLocale());
 	}
 
 	@Override

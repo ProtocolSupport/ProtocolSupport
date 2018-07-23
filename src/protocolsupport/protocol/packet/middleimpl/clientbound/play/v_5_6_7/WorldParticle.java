@@ -14,31 +14,6 @@ public class WorldParticle extends MiddleWorldParticle {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_PARTICLES_ID);
-// TODO: implement the special cases in ParticleRemapper.
-//		String name = type.getName();
-//		switch (type) {
-//			case ITEM_CRACK: {
-//				//TODO:
-//				IntTuple iddata = ItemStackRemapper.REGISTRY.getTable(version).getRemap(adddata.get(0), adddata.get(1));
-//				if (iddata != null) {
-//					name += "_" + iddata.getI1() + "_" + (iddata.getI2() != -1 ? iddata.getI2() : adddata.get(1));
-//				} else {
-//					name += "_" + adddata.get(0) + "_" +  adddata.get(1);
-//				}
-//				break;
-//			}
-//			case BLOCK_CRACK:
-//			case BLOCK_DUST: {
-//				//TODO:
-//				int blockstate = adddata.get(0);
-//				blockstate = IdRemapper.BLOCK.getTable(version).getRemap(MinecraftData.getBlockStateFromIdAndData(blockstate & 4095, blockstate >> 12));
-//				name += "_" + MinecraftData.getBlockIdFromState(blockstate) + "_" + MinecraftData.getBlockDataFromState(blockstate);
-//				break;
-//			}
-//			default: {
-//				break;
-//			}
-//		}
 		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4) && (count == 0)) {
 			count = 1;
 		}

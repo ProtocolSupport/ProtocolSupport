@@ -88,7 +88,7 @@ public class LegacyBlockData {
 			to.setShape(Shape.STRAIGHT);
 			to.setWaterlogged(false);
 			to.setFacing(from.getFacing());
-			to.setHalf(from.getHalf());
+			//to.setHalf(from.getHalf()); TODO: wait for spigot fix.
 			return to;
 		}
 
@@ -97,7 +97,7 @@ public class LegacyBlockData {
 			to.setPowered(false);
 			to.setFacing(from.getFacing());
 			to.setOpen(from.isOpen());
-			to.setHalf(from.getHalf());
+			//to.setHalf(from.getHalf()); TODO: wait for spigot fix.
 			return to;
 		}
 
