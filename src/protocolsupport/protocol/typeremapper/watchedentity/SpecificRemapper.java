@@ -9,7 +9,7 @@ import java.util.Map;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
-import protocolsupport.protocol.typeremapper.block.LegacyBlockId;
+import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
 import protocolsupport.protocol.typeremapper.particle.legacy.LegacyParticle;
 import protocolsupport.protocol.typeremapper.watchedentity.value.IndexValueRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.value.IndexValueRemapperBooleanToByte;
@@ -504,8 +504,8 @@ public enum SpecificRemapper {
 			public DataWatcherObject<?> remapValue(DataWatcherObjectVarInt object) {
 				//TODO Figure something out for this version thingy.
 				int newstate = LegacyBlockData.REGISTRY.getTable(ProtocolVersion.MINECRAFT_1_12_2).getRemap(object.getValue());
-				int legacystate = LegacyBlockId.getLegacyCombinedId(newstate);
-				return new DataWatcherObjectVarInt(LegacyBlockId.getLegacyObjDataFromLegacyBlockState(legacystate));
+				int legacystate = PreFlatteningBlockIdData.getLegacyCombinedId(newstate);
+				return new DataWatcherObjectVarInt(PreFlatteningBlockIdData.getLegacyObjDataFromLegacyBlockState(legacystate));
 			}}, ProtocolVersionsHelper.RANGE__1_10__1_12_2),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.BLOCK, 8), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Minecart.BLOCK, 20), ProtocolVersion.MINECRAFT_1_8),
@@ -514,9 +514,9 @@ public enum SpecificRemapper {
 			public DataWatcherObject<?> remapValue(DataWatcherObjectVarInt object) {
 				//TODO Figure something out for this version thingy.
 				int newstate = LegacyBlockData.REGISTRY.getTable(ProtocolVersion.MINECRAFT_1_6_4).getRemap(object.getValue());
-				int legacystate = LegacyBlockId.getLegacyCombinedId(newstate);
-				int id = LegacyBlockId.getIdFromLegacyCombinedId(legacystate);
-				int data = LegacyBlockId.getDataFromLegacyCombinedId(legacystate);
+				int legacystate = PreFlatteningBlockIdData.getLegacyCombinedId(newstate);
+				int id = PreFlatteningBlockIdData.getIdFromLegacyCombinedId(legacystate);
+				int data = PreFlatteningBlockIdData.getDataFromLegacyCombinedId(legacystate);
 				return new DataWatcherObjectInt((data << 16) | id);
 			}
 		}, ProtocolVersionsHelper.BEFORE_1_6),
