@@ -55,6 +55,14 @@ public class PreFlatteningBlockIdData {
 		return oldId & 0xF;
 	}
 
+	public static int getLegacyCombinedIdFromLegacyObjData(int objectdata) {
+		return ((objectdata & 0xFFF) << 4) | (objectdata >> 12);
+	}
+
+	public static int getLegacyObjDataFromLegacyBlockState(int blockstate) {
+		return (blockstate >> 4) | (blockstate & 0xF) << 12;
+	}
+
 	private static int formLegacyCombinedId(int id, int data) {
 		return (id << 4) | data;
 	}

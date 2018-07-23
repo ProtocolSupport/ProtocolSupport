@@ -18,6 +18,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectNBTTa
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalChat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalUUID;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectParticle;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectShort;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
@@ -67,6 +68,7 @@ public class DataWatcherObjectIdRegistry {
 		register(DataWatcherObjectShort.class, 1, ProtocolVersionsHelper.BEFORE_1_9);
 		register(DataWatcherObjectInt.class, 2, ProtocolVersionsHelper.BEFORE_1_9);
 		register(DataWatcherObjectVector3i.class, 6, ProtocolVersionsHelper.BEFORE_1_9);
+		register(DataWatcherObjectParticle.class, 15, ProtocolVersionsHelper.LATEST_PC);
 	}
 
 	public static int getTypeId(@SuppressWarnings("rawtypes") Class<? extends DataWatcherObject> clazz, ProtocolVersion version) {

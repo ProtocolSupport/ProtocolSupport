@@ -2,9 +2,8 @@ package protocolsupport.protocol.utils.types.particle;
 
 public class ParticleBubblePop extends Particle {
 
-	@Override
-	public String getName() {
-		return "minecraft:bubble_pop";
+	public ParticleBubblePop(int pId) {
+		super(pId, "minecraft:bubble_pop");
 	}
 
 }

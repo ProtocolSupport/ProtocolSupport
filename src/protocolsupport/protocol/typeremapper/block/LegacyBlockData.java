@@ -90,7 +90,7 @@ public class LegacyBlockData {
 			to.setShape(Shape.STRAIGHT);
 			to.setWaterlogged(false);
 			to.setFacing(from.getFacing());
-			to.setHalf(from.getHalf());
+			//to.setHalf(from.getHalf()); TODO: wait for spigot fix.
 			return to;
 		}
 
@@ -99,7 +99,7 @@ public class LegacyBlockData {
 			to.setPowered(false);
 			to.setFacing(from.getFacing());
 			to.setOpen(from.isOpen());
-			to.setHalf(from.getHalf());
+			//to.setHalf(from.getHalf()); TODO: wait for spigot fix.
 			return to;
 		}
 
@@ -337,8 +337,15 @@ public class LegacyBlockData {
 				o -> toPre13RedstoneWireState(o, (RedstoneWire) o.clone()),
 				ProtocolVersionsHelper.BEFORE_1_13
 			);
-			//TODO: remap new 1.13 blocks
 
+			this.registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.CAVE_AIR, Material.VOID_AIR
+				),
+				Material.AIR.createBlockData(),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+			//TODO: remap new 1.13 blocks
 
 			this.registerRemapEntryForAllStates(Material.ACACIA_LEAVES, Material.BIRCH_LEAVES.createBlockData(), ProtocolVersionsHelper.BEFORE_1_7);
 			this.registerRemapEntryForAllStates(Material.DARK_OAK_LEAVES, Material.OAK_LEAVES.createBlockData(), ProtocolVersionsHelper.BEFORE_1_7);

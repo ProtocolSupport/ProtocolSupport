@@ -2,9 +2,8 @@ package protocolsupport.protocol.utils.types.particle;
 
 public class ParticleDrippingLava extends Particle {
 
-	@Override
-	public String getName() {
-		return "minecraft:dripping_lava";
+	public ParticleDrippingLava(int pId) {
+		super(pId, "minecraft:dripping_lava");
 	}
 
 }

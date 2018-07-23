@@ -2,9 +2,8 @@ package protocolsupport.protocol.utils.types.particle;
 
 public class ParticleAngryVillager extends Particle {
 
-	@Override
-	public String getName() {
-		return "minecraft:angry_villager";
+	public ParticleAngryVillager(int pId) {
+		super(pId, "minecraft:angry_villager");
 	}
 
 }
