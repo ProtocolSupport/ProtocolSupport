@@ -1,10 +1,9 @@
 package protocolsupport.protocol.utils.types.particle;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
@@ -28,12 +27,13 @@ public class ParticleItem extends Particle {
 
 	@Override
 	public void readData(ByteBuf buf) {
-		item = ItemStackSerializer.readItemStack(buf, ProtocolVersion.getLatest(ProtocolType.PC), I18NData.DEFAULT_LOCALE, false);
+		item = ItemStackSerializer.readItemStack(buf, ProtocolVersionsHelper.LATEST_PC, I18NData.DEFAULT_LOCALE, false);
 	}
 
 	@Override
 	public void remap(ProtocolVersion version, String locale) {
-		item = ItemStackRemapper.remapToClient(version, locale, item);
+		this.version = version;
+		this.locale = locale;
 	}
 
 	@Override

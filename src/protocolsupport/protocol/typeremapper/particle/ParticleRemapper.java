@@ -61,7 +61,6 @@ import protocolsupport.protocol.utils.types.particle.ParticleWitch;
 
 public class ParticleRemapper {
 
-	
 	private static final RemappingRegistry<ParticleRemappingTable> REMAPS = new RemappingRegistry<ParticleRemappingTable>(){
 		{
 			//Legacy (<1.13) remaps for old ids and names.
@@ -73,7 +72,6 @@ public class ParticleRemapper {
 			registerRemap(ParticleSplash.class, () -> new LegacyParticle(5, "splash"), ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemap(ParticleFishing.class, () -> new LegacyParticle(6, "wake"), ProtocolVersionsHelper.RANGE__1_7_5__1_12_2);
 			registerRemap(ParticleUnderwater.class, () -> new LegacyParticle(7, "suspended"), ProtocolVersionsHelper.BEFORE_1_13);
-			//registerRemap(ParticleDepth.class, () -> new LegacyParticle(8, "depthsuspend"), ProtocolVersionsHelper.BEFORE_1_13); TODO: I think this is removed.
 			registerRemap(ParticleCrit.class, () -> new LegacyParticle(9, "crit"), ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemap(ParticleEnchantedHit.class, () -> new LegacyParticle(10, "magicCrit"), ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemap(ParticleSmoke.class, () -> new LegacyParticle(11, "smoke"), ProtocolVersionsHelper.BEFORE_1_13);
@@ -93,25 +91,22 @@ public class ParticleRemapper {
 			registerRemap(ParticleEnchant.class, () -> new LegacyParticle(25, "enchantmenttable"), ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemap(ParticleFlame.class, () -> new LegacyParticle(26, "flame"), ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemap(ParticleLava.class, () -> new LegacyParticle(27, "lava"), ProtocolVersionsHelper.BEFORE_1_13);
-			//registerRemap(ParticleFootStep.class, () -> new LegacyParticle(28, "footstep"), ProtocolVersionsHelper.BEFORE_1_13); TODO: I think removed :/
 			registerRemap(ParticleCloud.class, () -> new LegacyParticle(29, "cloud"), ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemap(ParticleDust.class, () -> new LegacyParticle(30, "reddust"), ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemap(ParticleItemSnowball.class, () -> new LegacyParticle(31, "snowballpoof"), ProtocolVersionsHelper.BEFORE_1_13);
-			//registerRemap(ParticlePoof.class, () -> new LegacyParticle(32, "snowshovel"), ProtocolVersionsHelper.BEFORE_1_13); TODO: removed?
 			registerRemap(ParticleItemSlime.class, () -> new LegacyParticle(33, "slime"), ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemap(ParticleHeart.class, () -> new LegacyParticle(34, "heart"), ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemap(ParticleBarrier.class, () -> new LegacyParticle(35, "barrier"), ProtocolVersionsHelper.RANGE__1_8__1_12_2);
 			registerRemap(ParticleItem.class, (from) -> new LegacyParticleIconCrack(36, "iconcrack", ((ParticleItem) from).getItem()), ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemap(ParticleBlock.class, (from) -> new LegacyParticleBlockCrack(37, "blockcrack", ((ParticleBlock) from).getBlockstate()), ProtocolVersionsHelper.BEFORE_1_13);
-			//registerRemap(ParticleBlock.class, () -> new LegacyParticle(38, "blockdust"), ProtocolVersionsHelper.BEFORE_1_13); TODO: Gone?
 			registerRemap(ParticleRain.class, () -> new LegacyParticle(39, "droplet"), ProtocolVersionsHelper.RANGE__1_8__1_12_2);
-			//registerRemap(ParticleTake.class, () -> new LegacyParticle(40, "take"), ProtocolVersionsHelper.BEFORE_1_13); TODO: GONE
 			registerRemap(ParticleElderGuardian.class, () -> new LegacyParticle(41, "mobappearance"), ProtocolVersionsHelper.RANGE__1_8__1_12_2);
 			registerRemap(ParticleDragonBreath.class, () -> new LegacyParticle(42, "dragonbreath"), ProtocolVersionsHelper.RANGE__1_9__1_12_2);
 			registerRemap(ParticleEndRod.class, () -> new LegacyParticle(43, "endRod"), ProtocolVersionsHelper.RANGE__1_9__1_12_2);
 			registerRemap(ParticleDamageIndicator.class, () -> new LegacyParticle(44, "damageIndicator"), ProtocolVersionsHelper.RANGE__1_9__1_12_2);
 			registerRemap(ParticleSweepAttack.class, () -> new LegacyParticle(45, "sweepAttack"), ProtocolVersionsHelper.RANGE__1_9__1_12_2);
 			registerRemap(ParticleFallingDust.class, (from) -> new LegacyParticleFallingDust(46, "fallingdust", ((ParticleFallingDust) from).getBlockstate()), ProtocolVersionsHelper.RANGE__1_10__1_12_2);
+			registerRemap(ParticleFallingDust.class, (from) -> new LegacyParticleBlockCrack(37, "blockcrack", ((ParticleFallingDust) from).getBlockstate()), ProtocolVersionsHelper.BEFORE_1_10);
 			registerRemap(ParticleTotemOfUndying.class, () -> new LegacyParticle(47, "totem"), ProtocolVersionsHelper.RANGE__1_11_1__1_12_2);
 			registerRemap(ParticleSpit.class, () -> new LegacyParticle(48, "spit"), ProtocolVersionsHelper.RANGE__1_11_1__1_12_2);
 
@@ -124,7 +119,6 @@ public class ParticleRemapper {
 			registerSkip(ParticleEndRod.class, ProtocolVersionsHelper.BEFORE_1_9);
 			registerSkip(ParticleDamageIndicator.class, ProtocolVersionsHelper.BEFORE_1_9);
 			registerSkip(ParticleSweepAttack.class, ProtocolVersionsHelper.BEFORE_1_9);
-			registerSkip(ParticleFallingDust.class, ProtocolVersionsHelper.BEFORE_1_10); //TODO: Remap to BlockCrack for older versions? :D
 			registerSkip(ParticleTotemOfUndying.class, ProtocolVersionsHelper.BEFORE_1_11);
 			registerSkip(ParticleSpit.class, ProtocolVersionsHelper.BEFORE_1_11);
 		}
@@ -139,7 +133,8 @@ public class ParticleRemapper {
 		}
 		protected void registerRemap(Class<? extends Particle> from, Function<Particle, Particle> remapFunction, ProtocolVersion... versions) {
 			for (ProtocolVersion version : versions) {
-				REMAPS.getTable(version).setRemap(from, remapFunction);
+				//Utils.getFromMapOrCreateDefault(table, version, createTable());
+				getTable(version).setRemap(from, remapFunction);
 			}
 		}
 		@Override

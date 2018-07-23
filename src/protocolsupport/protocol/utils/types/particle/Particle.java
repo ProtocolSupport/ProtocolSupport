@@ -1,6 +1,6 @@
 package protocolsupport.protocol.utils.types.particle;
 
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
@@ -12,69 +12,70 @@ import protocolsupport.api.ProtocolVersion;
 public class Particle {
 
 	public static int SKIP = -1;
-	private static Int2ObjectMap<Supplier<Particle>> idToParticle = new Int2ObjectArrayMap<>(50);
+	private static Int2ObjectMap<Function<Integer, Particle>> idToParticle = new Int2ObjectArrayMap<>(50);
 	private static Object2IntMap<Class <? extends Particle>> particleToId = new Object2IntArrayMap<>(50);
 	private static int pId = 0;
-	private static void registerParticle(Supplier<Particle> particle) {
+	private static void registerParticle(Function<Integer, Particle> particle) {
 		idToParticle.put(pId, particle);
-		particleToId.put(particle.get().getClass(), pId);
+		particleToId.put(particle.apply(pId).getClass(), pId);
 		pId++;
 	}
 	static {
-		registerParticle(() -> new ParticleAngryVillager(pId));
-		registerParticle(() -> new ParticleBarrier(pId));
-		registerParticle(() -> new ParticleBlock(pId));
-		registerParticle(() -> new ParticleBubble(pId));
-		registerParticle(() -> new ParticleCloud(pId));
-		registerParticle(() -> new ParticleCrit(pId));
-		registerParticle(() -> new ParticleDamageIndicator(pId));
-		registerParticle(() -> new ParticleDragonBreath(pId));
-		registerParticle(() -> new ParticleDrippingLava(pId));
-		registerParticle(() -> new ParticleDrippingWater(pId));
-		registerParticle(() -> new ParticleDust(pId));
-		registerParticle(() -> new ParticleEffect(pId));
-		registerParticle(() -> new ParticleElderGuardian(pId));
-		registerParticle(() -> new ParticleEnchantedHit(pId));
-		registerParticle(() -> new ParticleEnchant(pId));
-		registerParticle(() -> new ParticleEndRod(pId));
-		registerParticle(() -> new ParticleEntityEffect(pId));
-		registerParticle(() -> new ParticleExplosionEmitter(pId));
-		registerParticle(() -> new ParticleExplosion(pId));
-		registerParticle(() -> new ParticleFallingDust(pId));
-		registerParticle(() -> new ParticleFirework(pId));
-		registerParticle(() -> new ParticleFishing(pId));
-		registerParticle(() -> new ParticleFlame(pId));
-		registerParticle(() -> new ParticleHappyVillager(pId));
-		registerParticle(() -> new ParticleHeart(pId));
-		registerParticle(() -> new ParticleInstantEffect(pId));
-		registerParticle(() -> new ParticleItem(pId));
-		registerParticle(() -> new ParticleItemSlime(pId));
-		registerParticle(() -> new ParticleItemSnowball(pId));
-		registerParticle(() -> new ParticleLargeSmoke(pId));
-		registerParticle(() -> new ParticleLava(pId));
-		registerParticle(() -> new ParticleMycelium(pId));
-		registerParticle(() -> new ParticleNote(pId));
-		registerParticle(() -> new ParticlePoof(pId));
-		registerParticle(() -> new ParticlePortal(pId));
-		registerParticle(() -> new ParticleRain(pId));
-		registerParticle(() -> new ParticleSmoke(pId));
-		registerParticle(() -> new ParticleSpit(pId));
-		registerParticle(() -> new ParticleSquidInk(pId));
-		registerParticle(() -> new ParticleSweepAttack(pId));
-		registerParticle(() -> new ParticleTotemOfUndying(pId));
-		registerParticle(() -> new ParticleUnderwater(pId));
-		registerParticle(() -> new ParticleSplash(pId));
-		registerParticle(() -> new ParticleWitch(pId));
-		registerParticle(() -> new ParticleBubblePop(pId));
-		registerParticle(() -> new ParticleCurrentDown(pId));
-		registerParticle(() -> new ParticleBubbleColumnUp(pId));
-		registerParticle(() -> new ParticleNautilus(pId));
-		registerParticle(() -> new ParticleDolphin(pId));
-		registerParticle(() -> new ParticleSkip());
+		registerParticle((pId) -> new ParticleAmbientEntityEffect(pId));
+		registerParticle((pId) -> new ParticleAngryVillager(pId));
+		registerParticle((pId) -> new ParticleBarrier(pId));
+		registerParticle((pId) -> new ParticleBlock(pId));
+		registerParticle((pId) -> new ParticleBubble(pId));
+		registerParticle((pId) -> new ParticleCloud(pId));
+		registerParticle((pId) -> new ParticleCrit(pId));
+		registerParticle((pId) -> new ParticleDamageIndicator(pId));
+		registerParticle((pId) -> new ParticleDragonBreath(pId));
+		registerParticle((pId) -> new ParticleDrippingLava(pId));
+		registerParticle((pId) -> new ParticleDrippingWater(pId));
+		registerParticle((pId) -> new ParticleDust(pId));
+		registerParticle((pId) -> new ParticleEffect(pId));
+		registerParticle((pId) -> new ParticleElderGuardian(pId));
+		registerParticle((pId) -> new ParticleEnchantedHit(pId));
+		registerParticle((pId) -> new ParticleEnchant(pId));
+		registerParticle((pId) -> new ParticleEndRod(pId));
+		registerParticle((pId) -> new ParticleEntityEffect(pId));
+		registerParticle((pId) -> new ParticleExplosionEmitter(pId));
+		registerParticle((pId) -> new ParticleExplosion(pId));
+		registerParticle((pId) -> new ParticleFallingDust(pId));
+		registerParticle((pId) -> new ParticleFirework(pId));
+		registerParticle((pId) -> new ParticleFishing(pId));
+		registerParticle((pId) -> new ParticleFlame(pId));
+		registerParticle((pId) -> new ParticleHappyVillager(pId));
+		registerParticle((pId) -> new ParticleHeart(pId));
+		registerParticle((pId) -> new ParticleInstantEffect(pId));
+		registerParticle((pId) -> new ParticleItem(pId));
+		registerParticle((pId) -> new ParticleItemSlime(pId));
+		registerParticle((pId) -> new ParticleItemSnowball(pId));
+		registerParticle((pId) -> new ParticleLargeSmoke(pId));
+		registerParticle((pId) -> new ParticleLava(pId));
+		registerParticle((pId) -> new ParticleMycelium(pId));
+		registerParticle((pId) -> new ParticleNote(pId));
+		registerParticle((pId) -> new ParticlePoof(pId));
+		registerParticle((pId) -> new ParticlePortal(pId));
+		registerParticle((pId) -> new ParticleRain(pId));
+		registerParticle((pId) -> new ParticleSmoke(pId));
+		registerParticle((pId) -> new ParticleSpit(pId));
+		registerParticle((pId) -> new ParticleSquidInk(pId));
+		registerParticle((pId) -> new ParticleSweepAttack(pId));
+		registerParticle((pId) -> new ParticleTotemOfUndying(pId));
+		registerParticle((pId) -> new ParticleUnderwater(pId));
+		registerParticle((pId) -> new ParticleSplash(pId));
+		registerParticle((pId) -> new ParticleWitch(pId));
+		registerParticle((pId) -> new ParticleBubblePop(pId));
+		registerParticle((pId) -> new ParticleCurrentDown(pId));
+		registerParticle((pId) -> new ParticleBubbleColumnUp(pId));
+		registerParticle((pId) -> new ParticleNautilus(pId));
+		registerParticle((pId) -> new ParticleDolphin(pId));
+		registerParticle((pId) -> new ParticleSkip());
 	}
 
 	public static Particle fromId(int id) {
-		return idToParticle.getOrDefault(id, () -> null).get();
+		return idToParticle.getOrDefault(id, (pId) -> null).apply(id);
 	}
 
 	public static int toId(Class<? extends Particle> particle) {
