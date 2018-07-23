@@ -8,10 +8,18 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.Rotatable;
+import org.bukkit.block.data.type.Bed;
+import org.bukkit.block.data.type.Chest;
+import org.bukkit.block.data.type.Chest.Type;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.Door.Hinge;
-import org.bukkit.block.data.type.Fence;
+import org.bukkit.block.data.type.EnderChest;
+import org.bukkit.block.data.type.Fire;
 import org.bukkit.block.data.type.Gate;
+import org.bukkit.block.data.type.PistonHead;
+import org.bukkit.block.data.type.RedstoneWire;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Stairs;
 import org.bukkit.block.data.type.Stairs.Shape;
@@ -41,12 +49,6 @@ public class LegacyBlockData {
 			to.setFacing(from.getFacing());
 			to.setOpen(from.isOpen());
 			to.setPowered(from.isPowered());
-			return to;
-		}
-
-		protected Fence toPre13FenceState(Fence from, Fence to) {
-			to.setWaterlogged(false);
-			from.getAllowedFaces().stream().forEach(face -> to.setFace(face, from.hasFace(face)));
 			return to;
 		}
 
@@ -101,6 +103,55 @@ public class LegacyBlockData {
 			return to;
 		}
 
+		protected Chest toPre13ChestState(Chest from, Chest to) {
+			to.setWaterlogged(false);
+			to.setType(Type.SINGLE);
+			to.setFacing(from.getFacing());
+			return to;
+		}
+
+		protected EnderChest toPre13EnderChestState(EnderChest from, EnderChest to) {
+			to.setWaterlogged(false);
+			to.setFacing(from.getFacing());
+			return to;
+		}
+
+		protected PistonHead toPre13PistonHeadState(PistonHead from, PistonHead to) {
+			to.setShort(false);
+			to.setFacing(from.getFacing());
+			to.setType(from.getType());
+			return to;
+		}
+
+		protected Fire toPre13FireState(Fire from, Fire to) {
+			to.setAge(from.getAge());
+			from.getAllowedFaces().forEach(face -> to.setFace(face, false));
+			return to;
+		}
+
+		protected RedstoneWire toPre13RedstoneWireState(RedstoneWire from, RedstoneWire to) {
+			to.setPower(from.getPower());
+			from.getAllowedFaces().forEach(face -> to.setFace(face, RedstoneWire.Connection.NONE));
+			return to;
+		}
+
+		protected Bed cloneBed(Bed from, Bed to) {
+			to.setFacing(from.getFacing());
+			to.setPart(from.getPart());
+			//TODO: clone isOccupied
+			return to;
+		}
+
+		protected Rotatable cloneRotatable(Rotatable from, Rotatable to) {
+			to.setRotation(from.getRotation());
+			return to;
+		}
+
+		protected Directional cloneDirectional(Directional from, Directional to) {
+			to.setFacing(from.getFacing());
+			return to;
+		}
+
 		public void applyDefaultRemaps() {
 			remappings.clear();
 
@@ -111,7 +162,19 @@ public class LegacyBlockData {
 					Material.JUNGLE_LEAVES, Material.SPRUCE_LEAVES, Material.OAK_LEAVES,
 					Material.ACACIA_FENCE, Material.DARK_OAK_FENCE, Material.BIRCH_FENCE,
 					Material.JUNGLE_FENCE, Material.SPRUCE_FENCE, Material.OAK_FENCE,
-					Material.TALL_GRASS
+					Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL,
+					Material.TALL_GRASS, Material.BROWN_MUSHROOM_BLOCK, Material.GLASS_PANE,
+					Material.BLACK_STAINED_GLASS_PANE, Material.BLUE_STAINED_GLASS_PANE, Material.BROWN_STAINED_GLASS_PANE, Material.CYAN_STAINED_GLASS_PANE,
+					Material.GRAY_STAINED_GLASS_PANE, Material.GREEN_STAINED_GLASS_PANE, Material.LIGHT_BLUE_STAINED_GLASS_PANE, Material.LIGHT_GRAY_STAINED_GLASS_PANE,
+					Material.LIME_STAINED_GLASS_PANE, Material.MAGENTA_STAINED_GLASS_PANE, Material.ORANGE_STAINED_GLASS_PANE, Material.PINK_STAINED_GLASS_PANE,
+					Material.PURPLE_STAINED_GLASS_PANE, Material.RED_STAINED_GLASS_PANE, Material.WHITE_STAINED_GLASS_PANE, Material.YELLOW_STAINED_GLASS_PANE,
+					Material.CHORUS_PLANT, Material.MUSHROOM_STEW,
+					Material.CREEPER_HEAD, Material.CREEPER_WALL_HEAD,
+					Material.ZOMBIE_HEAD, Material.ZOMBIE_WALL_HEAD,
+					Material.SKELETON_SKULL, Material.SKELETON_WALL_SKULL,
+					Material.WITHER_SKELETON_SKULL, Material.WITHER_SKELETON_WALL_SKULL,
+					Material.PLAYER_HEAD, Material.PLAYER_WALL_HEAD,
+					Material.GRASS_BLOCK, Material.MYCELIUM, Material.PODZOL
 				),
 				o -> o.getMaterial().createBlockData(),
 				ProtocolVersionsHelper.BEFORE_1_13
@@ -210,10 +273,77 @@ public class LegacyBlockData {
 				ProtocolVersionsHelper.BEFORE_1_13
 			);
 
+			this.<Bed>registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.BLACK_BED, Material.BLUE_BED, Material.BROWN_BED, Material.CYAN_BED,
+					Material.GRAY_BED, Material.GREEN_BED, Material.LIGHT_BLUE_BED, Material.LIGHT_GRAY_BED,
+					Material.LIME_BED, Material.MAGENTA_BED, Material.ORANGE_BED, Material.PINK_BED,
+					Material.PURPLE_BED, Material.RED_BED, Material.WHITE_BED, Material.YELLOW_BED
+				),
+				o -> cloneBed(o, (Bed) o.getMaterial().createBlockData()),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+
+			this.<Rotatable>registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.BLACK_BANNER, Material.BLUE_BANNER, Material.BROWN_BANNER, Material.CYAN_BANNER,
+					Material.GRAY_BANNER, Material.GREEN_BANNER, Material.LIGHT_BLUE_BANNER, Material.LIGHT_GRAY_BANNER,
+					Material.LIME_BANNER, Material.MAGENTA_BANNER, Material.ORANGE_BANNER, Material.PINK_BANNER,
+					Material.PURPLE_BANNER, Material.RED_BANNER, Material.WHITE_BANNER, Material.YELLOW_BANNER
+				),
+				o -> cloneRotatable(o, (Rotatable) o.getMaterial().createBlockData()),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+
+			this.<Directional>registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.BLACK_WALL_BANNER, Material.BLUE_WALL_BANNER, Material.BROWN_WALL_BANNER, Material.CYAN_WALL_BANNER,
+					Material.GRAY_WALL_BANNER, Material.GREEN_WALL_BANNER, Material.LIGHT_BLUE_WALL_BANNER, Material.LIGHT_GRAY_WALL_BANNER,
+					Material.LIME_WALL_BANNER, Material.MAGENTA_WALL_BANNER, Material.ORANGE_WALL_BANNER, Material.PINK_WALL_BANNER,
+					Material.PURPLE_WALL_BANNER, Material.RED_WALL_BANNER, Material.WHITE_WALL_BANNER, Material.YELLOW_WALL_BANNER
+				),
+				o -> cloneDirectional(o, (Directional) o.getMaterial().createBlockData()),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+
+			this.<Chest>registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.CHEST, Material.TRAPPED_CHEST
+				),
+				o -> toPre13ChestState(o, (Chest) o.clone()),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+
+			this.<EnderChest>registerRemapEntryForAllStates(
+				Material.ENDER_CHEST,
+				o -> toPre13EnderChestState(o, (EnderChest) o.clone()),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+
+			this.<PistonHead>registerRemapEntryForAllStates(
+				Material.PISTON_HEAD,
+				o -> toPre13PistonHeadState(o, (PistonHead) o.clone()),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+
+			this.<Fire>registerRemapEntryForAllStates(
+				Material.FIRE,
+				o -> toPre13FireState(o, (Fire) o.clone()),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+
+			this.<RedstoneWire>registerRemapEntryForAllStates(
+				Material.REDSTONE_WIRE,
+				o -> toPre13RedstoneWireState(o, (RedstoneWire) o.clone()),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+			//TODO: remap new 1.13 blocks
+
+
 			this.registerRemapEntryForAllStates(Material.ACACIA_LEAVES, Material.BIRCH_LEAVES.createBlockData(), ProtocolVersionsHelper.BEFORE_1_7);
 			this.registerRemapEntryForAllStates(Material.DARK_OAK_LEAVES, Material.OAK_LEAVES.createBlockData(), ProtocolVersionsHelper.BEFORE_1_7);
 
-			//TODO: complete remap list
+			//TODO: port old remap list
 		}
 
 		protected void registerRemapEntryForAllStates(List<Material> materials, BlockData to, ProtocolVersion... versions) {
