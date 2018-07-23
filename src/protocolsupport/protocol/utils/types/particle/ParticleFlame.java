@@ -2,9 +2,8 @@ package protocolsupport.protocol.utils.types.particle;
 
 public class ParticleFlame extends Particle {
 
-	@Override
-	public String getName() {
-		return "minecraft:flame";
+	public ParticleFlame(int pId) {
+		super(pId, "minecraft:flame");
 	}
 
 }
