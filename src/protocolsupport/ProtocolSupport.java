@@ -173,6 +173,10 @@ public class ProtocolSupport extends JavaPlugin {
 		}
 	}
 
+	public static void logTrace(String message) {
+		ProtocolSupport.getInstance().getLogger().fine(message);
+	}
+
 	public static void logInfo(String message) {
 		ProtocolSupport.getInstance().getLogger().info(message);
 	}
