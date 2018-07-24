@@ -40,7 +40,7 @@ public class SpawnObject extends MiddleSpawnObject {
 					entity,
 					x, y, z,
 					motX / 8.000F, motY / 8000.F, motZ / 8000.F,
-					pitch, yaw,
+					pitch, yaw, 0,
 					spawnmeta
 				));
 			}
