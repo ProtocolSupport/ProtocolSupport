@@ -1437,7 +1437,7 @@
   {
     "blockdata": "minecraft:chest[facing=north,type=single,waterlogged=false]",
     "legacyid": 54,
-    "legacydata": 0
+    "legacydata": 2
   },
   {
     "blockdata": "minecraft:chest[facing=south,type=single,waterlogged=false]",
@@ -1632,7 +1632,7 @@
   {
     "blockdata": "minecraft:furnace[facing=north,lit=false]",
     "legacyid": 61,
-    "legacydata": 0
+    "legacydata": 2
   },
   {
     "blockdata": "minecraft:furnace[facing=south,lit=false]",
@@ -3792,7 +3792,7 @@
   {
     "blockdata": "minecraft:ender_chest[facing=north,waterlogged=false]",
     "legacyid": 130,
-    "legacydata": 0
+    "legacydata": 2
   },
   {
     "blockdata": "minecraft:ender_chest[facing=south,waterlogged=false]",
@@ -4342,7 +4342,7 @@
   {
     "blockdata": "minecraft:trapped_chest[facing=north,type=single,waterlogged=false]",
     "legacyid": 146,
-    "legacydata": 0
+    "legacydata": 2
   },
   {
     "blockdata": "minecraft:trapped_chest[facing=south,type=single,waterlogged=false]",

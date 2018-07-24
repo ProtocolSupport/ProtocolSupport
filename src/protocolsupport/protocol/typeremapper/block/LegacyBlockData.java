@@ -13,8 +13,8 @@ import org.bukkit.block.data.Orientable;
 import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.type.Bed;
 import org.bukkit.block.data.type.Chest;
-import org.bukkit.block.data.type.Chest.Type;
 import org.bukkit.block.data.type.Door;
+import org.bukkit.block.data.type.EnderChest;
 import org.bukkit.block.data.type.Door.Hinge;
 import org.bukkit.block.data.type.Fire;
 import org.bukkit.block.data.type.Gate;
@@ -102,13 +102,6 @@ public class LegacyBlockData {
 			to.setFacing(from.getFacing());
 			to.setOpen(from.isOpen());
 			to.setHalf(from.getHalf());
-			return to;
-		}
-
-		protected Chest toPre13ChestState(Chest from, Chest to) {
-			to.setWaterlogged(false);
-			to.setType(Type.SINGLE);
-			to.setFacing(from.getFacing());
 			return to;
 		}
 
@@ -331,7 +324,12 @@ public class LegacyBlockData {
 				Arrays.asList(
 					Material.CHEST, Material.TRAPPED_CHEST
 				),
-				o -> toPre13ChestState(o, (Chest) o.clone()),
+				o -> {
+					EnderChest enderChest = (EnderChest) Material.ENDER_CHEST.createBlockData();
+					enderChest.setWaterlogged(false);
+					enderChest.setFacing(o.getFacing());
+					return enderChest;
+				},
 				ProtocolVersionsHelper.BEFORE_1_13
 			);
 
