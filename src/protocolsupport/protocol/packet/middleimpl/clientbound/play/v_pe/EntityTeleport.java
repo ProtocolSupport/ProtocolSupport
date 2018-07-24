@@ -57,14 +57,14 @@ public class EntityTeleport extends MiddleEntityTeleport {
 	public static ClientBoundPacketData create(ProtocolVersion version, NetworkEntity entity, double x, double y, double z, byte pitch, byte headYaw, byte yaw, boolean onGround, boolean teleported) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_TELEPORT);
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
+		int flag = onGround ? (teleported ? 192 : 128) : (teleported ? 64 : 0);
+		serializer.writeByte(flag);
 		serializer.writeFloatLE((float) x);
 		serializer.writeFloatLE((float) y);
 		serializer.writeFloatLE((float) z);
 		serializer.writeByte(pitch);
 		serializer.writeByte(headYaw);
 		serializer.writeByte(yaw);
-		serializer.writeBoolean(onGround);
-		serializer.writeBoolean(teleported);
 		return serializer;
 	}
 

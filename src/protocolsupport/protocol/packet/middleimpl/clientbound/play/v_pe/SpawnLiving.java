@@ -28,7 +28,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		packets.add(create(
 			version, cache.getAttributesCache().getLocale(),
 			entity, x, y, z,
-			motX / 8.000F, motY / 8000.F, motZ / 8000.F, pitch, yaw,
+			motX / 8.000F, motY / 8000.F, motZ / 8000.F, pitch, yaw, headPitch,
 			metadata.getRemapped()
 		));
 		if (entity.getType() == NetworkEntityType.PIG) {
@@ -41,14 +41,14 @@ public class SpawnLiving extends MiddleSpawnLiving {
 	}
 
 	public static ClientBoundPacketData createSimple(ProtocolVersion version, String locale, NetworkEntity entity, double x, double y, double z) {
-		return create(version, locale, entity, x, y, z, 0, 0, 0, 0, 0, null);
+		return create(version, locale, entity, x, y, z, 0, 0, 0, 0, 0, 0, null);
 	}
 
 	public static ClientBoundPacketData create(
 		ProtocolVersion version, String locale,
 		NetworkEntity entity, double x, double y, double z,
 		float motX, float motY, float motZ,
-		float pitch, float yaw,
+		float pitch, float yaw, float headYaw,
 		ArrayMap<DataWatcherObject<?>> metadata
 	) {
 		PEEntityData typeData = PEDataValues.getEntityData(entity.getType());
@@ -72,6 +72,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		serializer.writeFloatLE(motZ);
 		serializer.writeFloatLE(pitch);
 		serializer.writeFloatLE(yaw);
+		serializer.writeFloatLE(headYaw);
 		VarNumberSerializer.writeVarInt(serializer, 0); //attributes, sent in separate packet
 		if (metadata == null) {
 			VarNumberSerializer.writeVarInt(serializer, 0);
