@@ -9,7 +9,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.potion.PotionEffect;
@@ -53,14 +52,6 @@ public class FeatureEmulation implements Listener {
 					}
 				}),
 			1, 1);
-	}
-
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onInteractir(PlayerInteractEvent event) {
-		Block clicked = event.getClickedBlock();
-		if (clicked != null) {
-			event.getPlayer().sendMessage(clicked.getBlockData().toString());
-		}
 	}
 
 	@EventHandler
