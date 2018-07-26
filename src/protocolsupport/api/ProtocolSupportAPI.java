@@ -13,8 +13,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.entity.Player;
 
-import protocolsupport.api.remapper.BlockRemapperControl;
-import protocolsupport.api.remapper.ItemRemapperControl;
 import protocolsupport.protocol.storage.ProtocolStorage;
 
 public class ProtocolSupportAPI {
@@ -120,35 +118,6 @@ public class ProtocolSupportAPI {
 	 */
 	public static Collection<ProtocolVersion> getEnabledProtocolVersions() {
 		return new ArrayList<>(enabledVersions);
-	}
-
-
-
-
-
-
-
-
-
-
-	/**
-	 * @param version protocol version for you want to control remapping
-	 * @return item remapper control
-	 * @deprecated use {@link ItemRemapperControl#ItemRemapperControl(ProtocolVersion)}
-	 */
-	@Deprecated
-	public static ItemRemapperControl getItemRemapper(ProtocolVersion version) {
-		return new ItemRemapperControl(version);
-	}
-
-	/**
-	 * @param version protocol version for you want to control remapping
-	 * @return block remapper control
-	 * @deprecated use {@link BlockRemapperControl#BlockRemapperControl(ProtocolVersion)}
-	 */
-	@Deprecated
-	public static BlockRemapperControl getBlockRemapper(ProtocolVersion version) {
-		return new BlockRemapperControl(version);
 	}
 
 }

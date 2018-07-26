@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.Material;
 
+import protocolsupport.api.MaterialAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.IdRemappingRegistry;
@@ -12,8 +13,6 @@ import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRe
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
-import protocolsupport.zplatform.PlatformUtils;
-import protocolsupport.zplatform.ServerPlatform;
 
 public class LegacyItemType {
 
@@ -26,14 +25,13 @@ public class LegacyItemType {
 		}
 		public void applyDefaultRemaps() {
 
-			PlatformUtils putils = ServerPlatform.get().getMiscUtils();
 			Arrays.stream(Material.values())
 			.filter(m -> m.isItem() && m.isBlock())
 			.forEach(materialFrom -> {
-				int networkIdFrom = putils.getBlockDataNetworkId(materialFrom.createBlockData());
+				int networkIdFrom = MaterialAPI.getBlockDataNetworkId(materialFrom.createBlockData());
 				Arrays.stream(ProtocolVersion.getAllSupported())
 				.forEach(version -> {
-					Material materialTo = putils.getBlockDataByNetworkId(LegacyBlockData.REGISTRY.getTable(version).getRemap(networkIdFrom)).getMaterial();
+					Material materialTo = MaterialAPI.getBlockDataByNetworkId(LegacyBlockData.REGISTRY.getTable(version).getRemap(networkIdFrom)).getMaterial();
 					if (!materialFrom.equals(materialTo) && !materialTo.equals(Material.AIR) && materialTo.isItem()) {
 						registerRemapEntry(materialFrom, materialTo, version);
 					}
