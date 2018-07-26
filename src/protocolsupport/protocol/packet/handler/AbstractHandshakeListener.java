@@ -87,7 +87,6 @@ public abstract class AbstractHandshakeListener {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	protected void disconnect(String message) {
 		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), future -> networkManager.close(message));
 	}

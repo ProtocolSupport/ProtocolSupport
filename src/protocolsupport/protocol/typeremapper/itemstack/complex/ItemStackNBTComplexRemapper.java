@@ -1,8 +1,8 @@
 package protocolsupport.protocol.typeremapper.itemstack.complex;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public abstract class ItemStackNBTComplexRemapper implements ItemStackComplexRemapper {
 

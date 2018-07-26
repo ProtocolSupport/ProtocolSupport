@@ -6,7 +6,7 @@ public class NamespacedKeyUtils {
 
 	@SuppressWarnings("deprecation")
 	public static NamespacedKey fromString(String s) {
-		if (s == null || s.isEmpty()) {
+		if ((s == null) || s.isEmpty()) {
 			return null;
 		}
 		String[] split = s.split("[:]", 2);

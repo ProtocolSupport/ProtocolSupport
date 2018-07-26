@@ -35,7 +35,7 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 	protected String tag;
 	protected byte[] data;
 
-	protected RecyclableCollection<ServerBoundPacketData> transformRegisterUnregister(boolean register) {
+	protected RecyclableCollection<ServerBoundPacketData> transformRegisterUnregister() {
 		String modernTag = LegacyCustomPayloadChannelName.fromPre13(tag);
 		StringJoiner payloadModernTagJoiner = new StringJoiner("\u0000");
 		for (String payloadLegacyTag : new String(data, StandardCharsets.UTF_8).split("\u0000")) {

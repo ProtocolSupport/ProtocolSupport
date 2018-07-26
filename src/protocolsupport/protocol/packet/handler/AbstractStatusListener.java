@@ -93,7 +93,6 @@ public abstract class AbstractStatusListener {
 		return revent;
 	}
 
-	@SuppressWarnings("unchecked")
 	public void handlePing(long pingId) {
 		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createStatusPongPacket(pingId), ChannelFutureListener.CLOSE);
 	}

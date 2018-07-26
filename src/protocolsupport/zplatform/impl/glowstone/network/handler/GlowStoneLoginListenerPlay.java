@@ -1,6 +1,14 @@
 package protocolsupport.zplatform.impl.glowstone.network.handler;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.BanList;
+import org.bukkit.event.player.PlayerLoginEvent;
+
 import com.flowpowered.network.Message;
+
 import net.glowstone.EventFactory;
 import net.glowstone.GlowServer;
 import net.glowstone.entity.GlowPlayer;
@@ -8,17 +16,11 @@ import net.glowstone.entity.meta.profile.GlowPlayerProfile;
 import net.glowstone.io.PlayerDataService.PlayerReader;
 import net.glowstone.net.GlowSession;
 import net.glowstone.net.message.play.game.UserListItemMessage;
-import org.bukkit.BanList;
-import org.bukkit.event.player.PlayerLoginEvent;
 import protocolsupport.protocol.packet.handler.AbstractLoginListenerPlay;
 import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.zplatform.impl.glowstone.GlowStoneMiscUtils;
 import protocolsupport.zplatform.impl.glowstone.network.GlowStoneNetworkManagerWrapper;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 
 public class GlowStoneLoginListenerPlay extends AbstractLoginListenerPlay implements GlowStoneTickableListener {
 

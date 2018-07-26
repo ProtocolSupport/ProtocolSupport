@@ -21,8 +21,9 @@ public class TabComplete extends MiddleTabComplete {
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		String string = this.string;
-		if (string.startsWith("/"))
+		if (string.startsWith("/")) {
 			string = string.substring(1);
+		}
 		return RecyclableSingletonList.create(MiddleTabComplete.create(0, string));
 	}
 }

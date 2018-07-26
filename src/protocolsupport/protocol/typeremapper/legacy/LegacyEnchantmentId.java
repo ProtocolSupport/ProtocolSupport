@@ -52,7 +52,7 @@ public class LegacyEnchantmentId {
 	}
 
 	public static Enchantment getById(int id) {
-		if (id >= 0 && id < byLegacyId.length) {
+		if ((id >= 0) && (id < byLegacyId.length)) {
 			return byLegacyId[id];
 		} else {
 			return null;

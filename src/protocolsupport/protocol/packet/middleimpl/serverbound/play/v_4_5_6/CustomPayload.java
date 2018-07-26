@@ -22,11 +22,9 @@ public class CustomPayload extends AbstractCustomPayload {
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		switch (tag) {
-			case LegacyCustomPayloadChannelName.LEGACY_REGISTER: {
-				return transformRegisterUnregister(true);
-			}
+			case LegacyCustomPayloadChannelName.LEGACY_REGISTER:
 			case LegacyCustomPayloadChannelName.LEGACY_UNREGISTER: {
-				return transformRegisterUnregister(false);
+				return transformRegisterUnregister();
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_BOOK_EDIT: {
 				return transformBookEdit();

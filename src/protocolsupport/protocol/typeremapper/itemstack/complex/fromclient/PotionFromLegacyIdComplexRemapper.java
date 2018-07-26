@@ -8,8 +8,8 @@ import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexR
 import protocolsupport.protocol.typeremapper.legacy.LegacyPotionId;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public class PotionFromLegacyIdComplexRemapper implements ItemStackComplexRemapper {
 

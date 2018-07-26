@@ -150,8 +150,8 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 		float eYaw = entity.yaw;
 		float ePitch = entity.pitch;
 		if (
-			Math.abs(eYaw - lastYaw) >= 1 ||
-			Math.abs(ePitch - lastPitch) >= 1
+			(Math.abs(eYaw - lastYaw) >= 1) ||
+			(Math.abs(ePitch - lastPitch) >= 1)
 		) {
 			lastYaw = eYaw;
 			lastPitch = ePitch;
@@ -179,7 +179,7 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 			lastPassengers = passengers;
 			broadcastIncludingSelf(new PacketPlayOutMount(entity));
 		}
-		if (((a % 10) == 0) && entity instanceof EntityItemFrame) {
+		if (((a % 10) == 0) && (entity instanceof EntityItemFrame)) {
 			EntityItemFrame frame = (EntityItemFrame) entity;
 			ItemStack itemstack = frame.getItem();
 			if (itemstack.getItem() instanceof ItemWorldMap) {
@@ -195,15 +195,15 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 				}
 			}
 		}
-		if (((a > 0) && (a % updateInterval) == 0) || entity.impulse) {
+		if (((a > 0) && ((a % updateInterval) == 0)) || entity.impulse) {
 			entity.impulse = false;
 			if (entity.isPassenger()) {
 				updateRotationIfChanged();
 			} else {
 				if (
-					Math.abs(entity.locX - lastLocX) >= 0.03125D ||
-					Math.abs(entity.locY - lastLocY) >= 0.015625D ||
-					Math.abs(entity.locZ - lastLocZ) >= 0.03125D
+					(Math.abs(entity.locX - lastLocX) >= 0.03125D) ||
+					(Math.abs(entity.locY - lastLocY) >= 0.015625D) ||
+					(Math.abs(entity.locZ - lastLocZ) >= 0.03125D)
 				) {
 					lastLocX = entity.locX;
 					lastLocY = entity.locY;

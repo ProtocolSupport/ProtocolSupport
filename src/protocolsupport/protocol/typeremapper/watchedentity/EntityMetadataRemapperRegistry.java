@@ -435,7 +435,7 @@ public enum EntityMetadataRemapperRegistry {
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Turtle.GOING_HOME, 17), ProtocolVersion.MINECRAFT_1_13),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Turtle.TRAVELING, 18), ProtocolVersion.MINECRAFT_1_13)
 	),
-	DROWNED(NetworkEntityType.DROWNED, ZOMBIE, 
+	DROWNED(NetworkEntityType.DROWNED, ZOMBIE,
 			new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Drowned.HAS_TARGET, 15), ProtocolVersion.MINECRAFT_1_13)
 	),
 	// Objects

@@ -59,6 +59,7 @@ public abstract class ItemStackWriteEvent extends Event {
 	 * @return resulting itemstack
 	 * @deprecated replaced by ability to add lore and set name for resulting itemstack
 	 */
+	@Deprecated
 	public abstract ItemStack getResult();
 
 	private static final HandlerList list = new HandlerList();
