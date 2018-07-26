@@ -21,7 +21,7 @@ public class CustomPayload extends MiddleCustomPayload {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID);
 		StringSerializer.writeString(
 			serializer, version,
-			Utils.clampString(LegacyCustomPayloadChannelName.toPre13(cache.getCustomPayloadChannelCache().getLegacyName(tag)), 20)
+			Utils.clampString(LegacyCustomPayloadChannelName.toPre13(tag), 20)
 		);
 		switch (tag) {
 			case (LegacyCustomPayloadChannelName.MODERN_TRADER_LIST): {

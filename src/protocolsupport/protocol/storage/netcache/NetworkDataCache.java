@@ -34,11 +34,6 @@ public class NetworkDataCache {
 		return attrscache;
 	}
 
-	protected final CustomPayloadChannelCache cpchannelcache = new CustomPayloadChannelCache();
-	public CustomPayloadChannelCache getCustomPayloadChannelCache() {
-		return cpchannelcache;
-	}
-
 	@Override
 	public String toString() {
 		return Utils.toStringAllFields(this);

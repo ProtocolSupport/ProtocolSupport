@@ -19,7 +19,6 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.netcache.CustomPayloadChannelCache;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -37,17 +36,10 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 	protected byte[] data;
 
 	protected RecyclableCollection<ServerBoundPacketData> transformRegisterUnregister(boolean register) {
-		CustomPayloadChannelCache ccache = cache.getCustomPayloadChannelCache();
 		String modernTag = LegacyCustomPayloadChannelName.fromPre13(tag);
 		StringJoiner payloadModernTagJoiner = new StringJoiner("\u0000");
 		for (String payloadLegacyTag : new String(data, StandardCharsets.UTF_8).split("\u0000")) {
-			String payloadModernTag = LegacyCustomPayloadChannelName.fixPre13(payloadLegacyTag);
-			if (register) {
-				ccache.register(payloadModernTag, payloadLegacyTag);
-			} else {
-				ccache.unregister(payloadModernTag);
-			}
-			payloadModernTagJoiner.add(payloadModernTag);
+			payloadModernTagJoiner.add(LegacyCustomPayloadChannelName.fixPre13(payloadLegacyTag));
 		}
 		return RecyclableSingletonList.create(MiddleCustomPayload.create(modernTag, payloadModernTagJoiner.toString().getBytes(StandardCharsets.UTF_8)));
 	}
