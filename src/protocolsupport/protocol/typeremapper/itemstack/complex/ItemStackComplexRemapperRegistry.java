@@ -9,11 +9,15 @@ import org.bukkit.Material;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.DisplayNameFromLegacyTextComplexRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.EnchantFromLegacyIdComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.PotionFromLegacyIdComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.BookPagesToLegacyTextComplexRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.DisplayNameToLegacyTextComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.DragonHeadToDragonPlayerHeadComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.EmptyBookPageAdderComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.EnchantFilterNBTComplexRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.EnchantToLegacyIdComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PlayerHeadToLegacyOwnerComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PotionToLegacyIdComplexRemapper;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
@@ -21,7 +25,7 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
-public class ItemStackComplexRemapperUtil {
+public class ItemStackComplexRemapperRegistry {
 
 	protected static final Int2ObjectOpenHashMap<EnumMap<ProtocolVersion, List<ItemStackComplexRemapper>>> toClientRemapper = new Int2ObjectOpenHashMap<>();
 	protected static final Int2ObjectOpenHashMap<EnumMap<ProtocolVersion, List<ItemStackComplexRemapper>>> fromClientRemapper = new Int2ObjectOpenHashMap<>();
@@ -38,25 +42,43 @@ public class ItemStackComplexRemapperUtil {
 		Int2ObjectOpenHashMap<EnumMap<ProtocolVersion, List<ItemStackComplexRemapper>>> registry,
 		Material material, ItemStackComplexRemapper transformer, ProtocolVersion... versions
 	) {
+		if (!material.isItem()) {
+			throw new IllegalArgumentException(material + " is not an item");
+		}
 		EnumMap<ProtocolVersion, List<ItemStackComplexRemapper>> map = Utils.getFromMapOrCreateDefault(registry, ItemMaterialLookup.getRuntimeId(material), new EnumMap<>(ProtocolVersion.class));
 		Arrays.stream(versions).forEach(version -> Utils.getFromMapOrCreateDefault(map, version, new ArrayList<>()).add(transformer));
 	}
 
 	static {
-		DragonHeadToDragonPlayerHeadComplexRemapper dragonHeaderRemapper = new DragonHeadToDragonPlayerHeadComplexRemapper();
-		registerToClient(Material.DRAGON_HEAD, dragonHeaderRemapper, ProtocolVersionsHelper.BEFORE_1_9);
-		registerToClient(Material.DRAGON_WALL_HEAD, dragonHeaderRemapper, ProtocolVersionsHelper.BEFORE_1_9);
-		PlayerHeadToLegacyOwnerComplexRemapper playerHeadRemapper = new PlayerHeadToLegacyOwnerComplexRemapper();
-		registerToClient(Material.PLAYER_HEAD, playerHeadRemapper, ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_7_5));
-		registerToClient(Material.PLAYER_WALL_HEAD, playerHeadRemapper, ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_7_5));
+		registerToClient(Material.DRAGON_HEAD, new DragonHeadToDragonPlayerHeadComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
+		registerToClient(Material.PLAYER_HEAD, new PlayerHeadToLegacyOwnerComplexRemapper(), ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_7_5));
 		registerToClient(Material.POTION, new PotionToLegacyIdComplexRemapper(false), ProtocolVersionsHelper.BEFORE_1_9);
 		registerToClient(Material.SPLASH_POTION, new PotionToLegacyIdComplexRemapper(true), ProtocolVersionsHelper.BEFORE_1_9);
 		registerToClient(Material.LINGERING_POTION, new PotionToLegacyIdComplexRemapper(true), ProtocolVersionsHelper.BEFORE_1_9);
 		registerToClient(Material.WRITABLE_BOOK, new EmptyBookPageAdderComplexRemapper(), ProtocolVersionsHelper.ALL_PC);
 		registerToClient(Material.WRITTEN_BOOK, new BookPagesToLegacyTextComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_8);
 		EnchantFilterNBTComplexRemapper enchantfilter = new EnchantFilterNBTComplexRemapper();
-		Arrays.stream(Material.values()).forEach(material -> registerToClient(material, enchantfilter, ProtocolVersionsHelper.ALL_PC));
+		EnchantToLegacyIdComplexRemapper enchanttolegacyid = new EnchantToLegacyIdComplexRemapper();
+		DisplayNameToLegacyTextComplexRemapper dnametolegacytext = new DisplayNameToLegacyTextComplexRemapper();
+		Arrays.stream(Material.values())
+		.filter(Material::isItem)
+		.forEach(material -> {
+			registerToClient(material, enchantfilter, ProtocolVersionsHelper.ALL_PC);
+			registerToClient(material, enchanttolegacyid, ProtocolVersionsHelper.BEFORE_1_13);
+			registerToClient(material, dnametolegacytext, ProtocolVersionsHelper.BEFORE_1_13);
+		});
+	}
+
+	static {
 		registerFromClient(Material.POTION, new PotionFromLegacyIdComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
+		EnchantFromLegacyIdComplexRemapper enchantfromlegacyid = new EnchantFromLegacyIdComplexRemapper();
+		DisplayNameFromLegacyTextComplexRemapper dnamefromlegacytext = new DisplayNameFromLegacyTextComplexRemapper();
+		Arrays.stream(Material.values())
+		.filter(Material::isItem)
+		.forEach(material -> {
+			registerFromClient(material, enchantfromlegacyid, ProtocolVersionsHelper.BEFORE_1_13);
+			registerFromClient(material, dnamefromlegacytext, ProtocolVersionsHelper.BEFORE_1_13);
+		});
 	}
 
 	protected static NetworkItemStack remapComplex(

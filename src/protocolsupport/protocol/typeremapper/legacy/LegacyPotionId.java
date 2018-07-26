@@ -5,7 +5,7 @@ import org.bukkit.NamespacedKey;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 
-public class LegacyPotion {
+public class LegacyPotionId {
 
 	private static final Object2IntOpenHashMap<String> toLegacyId = new Object2IntOpenHashMap<>();
 	private static final Int2ObjectOpenHashMap<String> fromLegacyId = new Int2ObjectOpenHashMap<>();

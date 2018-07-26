@@ -2,7 +2,7 @@ package protocolsupport.protocol.typeremapper.itemstack.complex.toclient;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapper;
-import protocolsupport.protocol.typeremapper.legacy.LegacyPotion;
+import protocolsupport.protocol.typeremapper.legacy.LegacyPotionId;
 import protocolsupport.protocol.utils.minecraftdata.PotionData;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
@@ -28,8 +28,8 @@ public class PotionToLegacyIdComplexRemapper implements ItemStackComplexRemapper
 			if (tagList.size() >= 1) {
 				potion = PotionData.getNameById(tagList.getCompound(0).getIntNumber("Id"));
 			}
-			itemstack.setLegacyData(LegacyPotion.toLegacyId(potion, isThrowablePotion));
-			String basicTypeName = LegacyPotion.getBasicTypeName(potion);
+			itemstack.setLegacyData(LegacyPotionId.toLegacyId(potion, isThrowablePotion));
+			String basicTypeName = LegacyPotionId.getBasicTypeName(potion);
 			if (basicTypeName != null) {
 //TODO: implement after implementing helper for setting display name via nbt
 //				itemstack.setDisplayName(TranslationAPI.translate(locale, basicTypeName));

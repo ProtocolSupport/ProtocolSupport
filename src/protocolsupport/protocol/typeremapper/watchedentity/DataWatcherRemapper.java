@@ -18,7 +18,7 @@ public class DataWatcherRemapper {
 		remappedMetadata.clear();
 		DataWatcherDeserializer.decodeDataTo(serverdata, ProtocolVersionsHelper.LATEST_PC, locale, originalMetadata);
 		if (entity != null) {
-			SpecificRemapper.fromWatchedType(entity.getType()).getRemaps(version)
+			EntityMetadataRemapperRegistry.fromWatchedType(entity.getType()).getRemaps(version)
 			.forEach(remapper -> remapper.remap(entity, originalMetadata, remappedMetadata));
 			entity.getDataCache().setFirstMeta(false);
 		}

@@ -32,7 +32,7 @@ import protocolsupport.utils.CollectionsUtils;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.utils.Utils;
 
-public enum SpecificRemapper {
+public enum EntityMetadataRemapperRegistry {
 
 	NONE(NetworkEntityType.NONE),
 	// Mobs
@@ -651,16 +651,16 @@ public enum SpecificRemapper {
 	DRAGON_FIREBALL(NetworkEntityType.DRAGON_FIREBALL, ENTITY),
 	EVOCATOR_FANGS(NetworkEntityType.EVOCATOR_FANGS, ENTITY);
 
-	private static final Map<NetworkEntityType, SpecificRemapper> wtype = CollectionsUtils.makeEnumMappingEnumMap(SpecificRemapper.class, NetworkEntityType.class, (e -> e.type));
+	private static final Map<NetworkEntityType, EntityMetadataRemapperRegistry> wtype = CollectionsUtils.makeEnumMappingEnumMap(EntityMetadataRemapperRegistry.class, NetworkEntityType.class, (e -> e.type));
 
-	public static SpecificRemapper fromWatchedType(NetworkEntityType type) {
+	public static EntityMetadataRemapperRegistry fromWatchedType(NetworkEntityType type) {
 		return wtype.getOrDefault(type, NONE);
 	}
 
 	private final NetworkEntityType type;
 	private final EnumMap<ProtocolVersion, List<DataWatcherObjectRemapper>> entries = new EnumMap<>(ProtocolVersion.class);
 
-	SpecificRemapper(NetworkEntityType type, Entry... entries) {
+	EntityMetadataRemapperRegistry(NetworkEntityType type, Entry... entries) {
 		this.type = type;
 		for (Entry entry : entries) {
 			for (ProtocolVersion version : entry.versions) {
@@ -669,7 +669,7 @@ public enum SpecificRemapper {
 		}
 	}
 
-	SpecificRemapper(NetworkEntityType type, SpecificRemapper superType, Entry... entries) {
+	EntityMetadataRemapperRegistry(NetworkEntityType type, EntityMetadataRemapperRegistry superType, Entry... entries) {
 		this.type = type;
 		for (Map.Entry<ProtocolVersion, List<DataWatcherObjectRemapper>> entry : superType.entries.entrySet()) {
 			Utils.getFromMapOrCreateDefault(this.entries, entry.getKey(), new ArrayList<DataWatcherObjectRemapper>()).addAll(entry.getValue());
