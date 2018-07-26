@@ -218,7 +218,7 @@ public class LegacyBlockData {
 					Material.PRISMARINE_BRICK_SLAB, Material.PRISMARINE_SLAB, Material.DARK_PRISMARINE_SLAB,
 					Material.PETRIFIED_OAK_SLAB
 				),
-				o -> toPre13SlabState(o, (Slab) createBlockData(o.getMaterial())),
+				o -> toPre13SlabState(o, (Slab) createBlockData(Material.COBBLESTONE_SLAB)),
 				ProtocolVersionsHelper.BEFORE_1_13
 			);
 			this.registerRemapEntryForAllStates(
