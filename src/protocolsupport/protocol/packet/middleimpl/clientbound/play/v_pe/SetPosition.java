@@ -10,30 +10,34 @@ import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
 public class SetPosition extends MiddleSetPosition {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		int chunkX = NumberConversions.floor(x) >> 4;
-		int chunkZ = NumberConversions.floor(z) >> 4;
-		if (!cache.getPEChunkMapCache().isMarkedAsSent(chunkX, chunkZ)) {
-			packets.add(Chunk.createEmptyChunk(version, chunkX, chunkZ));
-		}
 		//PE sends position that intersects blocks bounding boxes in some cases
 		//Server doesn't accept such movements and will send a set position, but we ignore it unless it is above leniency
-		if (cache.getMovementCache().isPEPositionAboveLeniency()) {
+		if (cache.getMovementCache().isPEPositionAboveLeniency() && cache.getPositionQueue().onPosition(x, y, z, pitch, yaw)) {
+			RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
+			int chunkX = NumberConversions.floor(x) >> 4;
+			int chunkZ = NumberConversions.floor(z) >> 4;
+			if (!cache.getPEChunkMapCache().isMarkedAsSent(chunkX, chunkZ)) {
+				packets.add(Chunk.createEmptyChunk(version, chunkX, chunkZ));
+			}
+
 			packets.add(create(cache.getWatchedEntityCache().getSelfPlayer(), x, y + 0.01, z, pitch, yaw, ANIMATION_MODE_TELEPORT));
+			return packets;
 		}
-		return packets;
+		return RecyclableEmptyList.get();
 	}
 
 	@Override
 	public boolean postFromServerRead() {
 		if (teleportConfirmId != 0) {
 			cache.getMovementCache().setTeleportLocation(x, y, z, teleportConfirmId);
+			cache.getPositionQueue().getAwaitQueue().add(teleportConfirmId);
 		}
 		return true;
 	}

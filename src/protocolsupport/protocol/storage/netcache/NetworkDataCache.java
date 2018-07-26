@@ -49,6 +49,11 @@ public class NetworkDataCache {
 		return petilecache;
 	}
 
+	protected final PEPositionQueue positionQueue = new PEPositionQueue();
+	public PEPositionQueue getPositionQueue() {
+		return positionQueue;
+	}
+
 	@Override
 	public String toString() {
 		return Utils.toStringAllFields(this);
