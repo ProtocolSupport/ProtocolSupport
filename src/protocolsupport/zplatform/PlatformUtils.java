@@ -26,13 +26,15 @@ public interface PlatformUtils {
 
 	public NBTTagCompoundWrapper createNBTTagFromItemStack(ItemStack itemstack);
 
-	public int getNetworkMobTypeId(EntityType type);
+	public int getMobTypeNetworkId(EntityType type);
 
-	public int getNetworkItemId(Material material);
+	public int getItemNetworkId(Material material);
 
-	public int getNetworkBlockStateId(BlockData blockdata);
+	public int getBlockDataNetworkId(BlockData blockdata);
 
-	public List<BlockData> getBlockStates(Material material);
+	public BlockData getBlockDataByNetworkId(int id);
+
+	public List<BlockData> getBlockDataList(Material material);
 
 	public List<Player> getNearbyPlayers(Location location, double rX, double rY, double rZ);
 

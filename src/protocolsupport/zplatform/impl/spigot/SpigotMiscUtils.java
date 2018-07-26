@@ -116,23 +116,28 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public int getNetworkMobTypeId(EntityType type) {
+	public int getMobTypeNetworkId(EntityType type) {
 		return EntityTypes.REGISTRY.a(EntityTypes.a(type.getName()));
 	}
 
 	@Override
-	public int getNetworkItemId(Material material) {
+	public int getItemNetworkId(Material material) {
 		Item item = CraftMagicNumbers.getItem(material);
 		return item != null ? Item.getId(item) : -1;
 	}
 
 	@Override
-	public int getNetworkBlockStateId(BlockData blockdata) {
+	public int getBlockDataNetworkId(BlockData blockdata) {
 		return Block.getCombinedId(((CraftBlockData) blockdata).getState());
 	}
 
 	@Override
-	public List<BlockData> getBlockStates(Material material) {
+	public BlockData getBlockDataByNetworkId(int id) {
+		return CraftBlockData.fromData(Block.getByCombinedId(id));
+	}
+
+	@Override
+	public List<BlockData> getBlockDataList(Material material) {
 		return
 			CraftMagicNumbers.getBlock(material).getStates().a().stream()
 			.map(CraftBlockData::fromData)

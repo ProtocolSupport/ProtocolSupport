@@ -24,7 +24,7 @@ public class ItemMaterialLookup {
 		Arrays.stream(Material.values())
 		.filter(m -> !m.isLegacy())
 		.forEach(material -> {
-			int id = ServerPlatform.get().getMiscUtils().getNetworkItemId(material);
+			int id = ServerPlatform.get().getMiscUtils().getItemNetworkId(material);
 			if (id != -1) {
 				byKey.put(material.getKey().getKey(), material);
 				byKey.put(material.getKey().toString(), material);

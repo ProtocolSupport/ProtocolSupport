@@ -19,7 +19,7 @@ public class PreFlatteningBlockIdData {
 
 	private static final int[] toLegacyId = new int[MinecraftData.ID_MAX];
 	private static void register(String modernBlockState, int legacyId, int legacyData) {
-		toLegacyId[ServerPlatform.get().getMiscUtils().getNetworkBlockStateId(Bukkit.createBlockData(modernBlockState))] = formLegacyCombinedId(legacyId, legacyData);
+		toLegacyId[ServerPlatform.get().getMiscUtils().getBlockDataNetworkId(Bukkit.createBlockData(modernBlockState))] = formLegacyCombinedId(legacyId, legacyData);
 	}
 	static {
 		//TODO: replace with -1 and throw exception on legacy id missing

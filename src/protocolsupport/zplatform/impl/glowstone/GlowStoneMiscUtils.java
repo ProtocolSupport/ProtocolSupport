@@ -121,22 +121,27 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 	}
 
 	@Override
-	public int getNetworkMobTypeId(EntityType type) {
+	public int getMobTypeNetworkId(EntityType type) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public int getNetworkItemId(Material material) {
+	public int getItemNetworkId(Material material) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public int getNetworkBlockStateId(BlockData blockdata) {
+	public int getBlockDataNetworkId(BlockData blockdata) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public List<BlockData> getBlockStates(Material material) {
+	public BlockData getBlockDataByNetworkId(int id) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public List<BlockData> getBlockDataList(Material material) {
 		throw new UnsupportedOperationException();
 	}
 

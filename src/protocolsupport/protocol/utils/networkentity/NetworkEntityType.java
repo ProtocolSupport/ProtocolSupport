@@ -235,7 +235,7 @@ public enum NetworkEntityType {
 	NetworkEntityType(EType etype, EntityType bukkitType, NetworkEntityType superType) {
 		this.etype = etype;
 		this.bukkitType = bukkitType;
-		this.typeId = ServerPlatform.get().getMiscUtils().getNetworkMobTypeId(bukkitType);
+		this.typeId = ServerPlatform.get().getMiscUtils().getMobTypeNetworkId(bukkitType);
 		this.superType = superType;
 	}
 

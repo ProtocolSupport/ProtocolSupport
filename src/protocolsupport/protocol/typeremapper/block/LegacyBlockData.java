@@ -479,7 +479,7 @@ public class LegacyBlockData {
 					Material.LIME_GLAZED_TERRACOTTA, Material.MAGENTA_GLAZED_TERRACOTTA, Material.ORANGE_GLAZED_TERRACOTTA, Material.PINK_GLAZED_TERRACOTTA,
 					Material.PURPLE_GLAZED_TERRACOTTA, Material.RED_GLAZED_TERRACOTTA, Material.WHITE_GLAZED_TERRACOTTA, Material.YELLOW_GLAZED_TERRACOTTA
 				),
-				Material.BRICK.createBlockData(),
+				Material.BRICKS.createBlockData(),
 				ProtocolVersionsHelper.BEFORE_1_12
 			);
 			this.registerRemapEntryForAllStates(Material.BLACK_CONCRETE_POWDER, Material.BLACK_WOOL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_12);
@@ -519,9 +519,9 @@ public class LegacyBlockData {
 
 			this.registerRemapEntryForAllStates(Material.STRUCTURE_VOID, Material.GLASS.createBlockData(), ProtocolVersionsHelper.BEFORE_1_10);
 			this.registerRemapEntryForAllStates(Material.NETHER_WART_BLOCK, Material.RED_WOOL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_10);
-			this.registerRemapEntryForAllStates(Material.RED_NETHER_BRICKS, Material.NETHER_BRICK.createBlockData(), ProtocolVersionsHelper.BEFORE_1_10);
+			this.registerRemapEntryForAllStates(Material.RED_NETHER_BRICKS, Material.NETHER_BRICKS.createBlockData(), ProtocolVersionsHelper.BEFORE_1_10);
 			this.registerRemapEntryForAllStates(Material.MAGMA_BLOCK, Material.NETHERRACK.createBlockData(), ProtocolVersionsHelper.BEFORE_1_10);
-			this.registerRemapEntryForAllStates(Material.BONE_BLOCK, Material.BRICK.createBlockData(), ProtocolVersionsHelper.BEFORE_1_10);
+			this.registerRemapEntryForAllStates(Material.BONE_BLOCK, Material.BRICKS.createBlockData(), ProtocolVersionsHelper.BEFORE_1_10);
 
 
 			this.registerRemapEntryForAllStates(Material.END_GATEWAY, Material.END_PORTAL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_9);
@@ -621,12 +621,21 @@ public class LegacyBlockData {
 
 			this.registerRemapEntryForAllStates(Material.TALL_GRASS, Material.GRASS.createBlockData(), ProtocolVersionsHelper.BEFORE_1_7);
 			this.registerRemapEntryForAllStates(Material.PACKED_ICE, Material.BLUE_WOOL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_7);
-			this.registerRemapEntryForAllStates(Material.ACACIA_LOG, Material.OAK_LOG.createBlockData(), ProtocolVersionsHelper.BEFORE_1_7);
-			this.registerRemapEntryForAllStates(Material.DARK_OAK_LOG, Material.OAK_LOG.createBlockData(), ProtocolVersionsHelper.BEFORE_1_7);
-			this.registerRemapEntryForAllStates(Material.ACACIA_STAIRS, Material.OAK_STAIRS.createBlockData(), ProtocolVersionsHelper.BEFORE_1_7);
-			this.registerRemapEntryForAllStates(Material.DARK_OAK_STAIRS, Material.OAK_STAIRS.createBlockData(), ProtocolVersionsHelper.BEFORE_1_7);
-			this.registerRemapEntryForAllStates(Material.ACACIA_LEAVES, Material.OAK_LEAVES.createBlockData(), ProtocolVersionsHelper.BEFORE_1_7);
-			this.registerRemapEntryForAllStates(Material.DARK_OAK_LEAVES, Material.OAK_LEAVES.createBlockData(), ProtocolVersionsHelper.BEFORE_1_7);
+			this.registerRemapEntryForAllStates(
+				Arrays.asList(Material.ACACIA_LOG, Material.DARK_OAK_LOG),
+				Material.OAK_LOG.createBlockData(),
+				ProtocolVersionsHelper.BEFORE_1_7
+			);
+			this.registerRemapEntryForAllStates(
+				Arrays.asList(Material.ACACIA_STAIRS, Material.DARK_OAK_STAIRS),
+				Material.OAK_STAIRS.createBlockData(),
+				ProtocolVersionsHelper.BEFORE_1_7
+			);
+			this.registerRemapEntryForAllStates(
+				Arrays.asList(Material.ACACIA_LEAVES, Material.DARK_OAK_LEAVES),
+				Material.OAK_LEAVES.createBlockData(),
+				ProtocolVersionsHelper.BEFORE_1_7
+			);
 			this.registerRemapEntryForAllStates(
 				Arrays.asList(
 					Material.BLACK_STAINED_GLASS, Material.BLUE_STAINED_GLASS, Material.BROWN_STAINED_GLASS, Material.CYAN_STAINED_GLASS,
@@ -684,6 +693,7 @@ public class LegacyBlockData {
 
 
 			this.registerRemapEntryForAllStates(Material.QUARTZ_BLOCK, Material.STONE.createBlockData(), ProtocolVersionsHelper.BEFORE_1_5);
+			this.registerRemapEntryForAllStates(Material.NETHER_QUARTZ_ORE, Material.COAL_ORE.createBlockData(), ProtocolVersionsHelper.BEFORE_1_5);
 			this.registerRemapEntryForAllStates(Material.DAYLIGHT_DETECTOR, Material.COBBLESTONE_SLAB.createBlockData(), ProtocolVersionsHelper.BEFORE_1_5);
 			this.registerRemapEntryForAllStates(Material.REDSTONE_BLOCK, Material.EMERALD_BLOCK.createBlockData(), ProtocolVersionsHelper.BEFORE_1_5);
 			this.registerRemapEntryForAllStates(Material.ACTIVATOR_RAIL, Material.DETECTOR_RAIL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_5);
@@ -709,6 +719,11 @@ public class LegacyBlockData {
 				o -> toPre13StairsState(o, (Stairs) Material.COBBLESTONE_STAIRS.createBlockData()),
 				ProtocolVersionsHelper.BEFORE_1_5
 			);
+			this.<Slab>registerRemapEntryForAllStates(
+				Material.QUARTZ_SLAB,
+				o -> toPre13SlabState(o, (Slab) Material.COBBLESTONE_SLAB.createBlockData()),
+				ProtocolVersionsHelper.BEFORE_1_5
+			);
 			this.<Directional>registerRemapEntryForAllStates(
 				Material.TRAPPED_CHEST,
 				o -> cloneDirectional(o, (Directional) Material.ENDER_CHEST.createBlockData()),
@@ -728,7 +743,7 @@ public class LegacyBlockData {
 		}
 
 		protected void registerRemapEntryForAllStates(Material from, BlockData to, ProtocolVersion... versions) {
-			ServerPlatform.get().getMiscUtils().getBlockStates(from)
+			ServerPlatform.get().getMiscUtils().getBlockDataList(from)
 			.forEach(blockdata -> registerRemapEntry(blockdata, to, versions));
 		}
 
@@ -740,15 +755,15 @@ public class LegacyBlockData {
 
 		@SuppressWarnings("unchecked")
 		protected <T extends BlockData> void registerRemapEntryForAllStates(Material material, Function<T, BlockData> remapFunc, ProtocolVersion... versions) {
-			for (BlockData blockdata : ServerPlatform.get().getMiscUtils().getBlockStates(material)) {
+			for (BlockData blockdata : ServerPlatform.get().getMiscUtils().getBlockDataList(material)) {
 				registerRemapEntry(blockdata, remapFunc.apply((T) blockdata), versions);
 			}
 		}
 
 		protected void registerRemapEntry(BlockData from, BlockData to, ProtocolVersion... versions) {
 			registerRemapEntry(
-				ServerPlatform.get().getMiscUtils().getNetworkBlockStateId(from),
-				ServerPlatform.get().getMiscUtils().getNetworkBlockStateId(to),
+				ServerPlatform.get().getMiscUtils().getBlockDataNetworkId(from),
+				ServerPlatform.get().getMiscUtils().getBlockDataNetworkId(to),
 				versions
 			);
 		}
