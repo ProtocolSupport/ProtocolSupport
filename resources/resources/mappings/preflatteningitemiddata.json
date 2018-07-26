@@ -250,11 +250,6 @@
     "legacydata": 0
   },
   {
-    "itemkey": "red_bed",
-    "legacyid": 26,
-    "legacydata": 0
-  },
-  {
     "itemkey": "powered_rail",
     "legacyid": 27,
     "legacydata": 0
@@ -446,58 +441,43 @@
   },
   {
     "itemkey": "stone_slab",
-    "legacyid": 43,
+    "legacyid": 44,
     "legacydata": 0
   },
   {
     "itemkey": "sandstone_slab",
-    "legacyid": 43,
+    "legacyid": 44,
     "legacydata": 1
   },
   {
     "itemkey": "petrified_oak_slab",
-    "legacyid": 43,
+    "legacyid": 44,
     "legacydata": 2
   },
   {
     "itemkey": "cobblestone_slab",
-    "legacyid": 43,
+    "legacyid": 44,
     "legacydata": 3
   },
   {
     "itemkey": "brick_slab",
-    "legacyid": 43,
+    "legacyid": 44,
     "legacydata": 4
   },
   {
     "itemkey": "stone_brick_slab",
-    "legacyid": 43,
+    "legacyid": 44,
     "legacydata": 5
   },
   {
     "itemkey": "nether_brick_slab",
-    "legacyid": 43,
+    "legacyid": 44,
     "legacydata": 6
   },
   {
     "itemkey": "quartz_slab",
-    "legacyid": 43,
+    "legacyid": 44,
     "legacydata": 7
-  },
-  {
-    "itemkey": "smooth_stone",
-    "legacyid": 43,
-    "legacydata": 8
-  },
-  {
-    "itemkey": "smooth_sandstone",
-    "legacyid": 43,
-    "legacydata": 9
-  },
-  {
-    "itemkey": "smooth_quartz",
-    "legacyid": 43,
-    "legacydata": 15
   },
   {
     "itemkey": "bricks",
@@ -545,11 +525,6 @@
     "legacydata": 0
   },
   {
-    "itemkey": "redstone",
-    "legacyid": 55,
-    "legacydata": 0
-  },
-  {
     "itemkey": "diamond_ore",
     "legacyid": 56,
     "legacydata": 0
@@ -565,11 +540,6 @@
     "legacydata": 0
   },
   {
-    "itemkey": "wheat",
-    "legacyid": 59,
-    "legacydata": 16
-  },
-  {
     "itemkey": "farmland",
     "legacyid": 60,
     "legacydata": 0
@@ -577,16 +547,6 @@
   {
     "itemkey": "furnace",
     "legacyid": 61,
-    "legacydata": 0
-  },
-  {
-    "itemkey": "sign",
-    "legacyid": 63,
-    "legacydata": 0
-  },
-  {
-    "itemkey": "oak_door",
-    "legacyid": 64,
     "legacydata": 0
   },
   {
@@ -615,11 +575,6 @@
     "legacydata": 0
   },
   {
-    "itemkey": "iron_door",
-    "legacyid": 71,
-    "legacydata": 0
-  },
-  {
     "itemkey": "oak_pressure_plate",
     "legacyid": 72,
     "legacydata": 0
@@ -631,8 +586,8 @@
   },
   {
     "itemkey": "redstone_torch",
-    "legacyid": 75,
-    "legacydata": 1
+    "legacyid": 76,
+    "legacydata": 0
   },
   {
     "itemkey": "stone_button",
@@ -662,11 +617,6 @@
   {
     "itemkey": "clay",
     "legacyid": 82,
-    "legacydata": 0
-  },
-  {
-    "itemkey": "sugar_cane",
-    "legacyid": 83,
     "legacydata": 0
   },
   {
@@ -702,16 +652,6 @@
   {
     "itemkey": "jack_o_lantern",
     "legacyid": 91,
-    "legacydata": 0
-  },
-  {
-    "itemkey": "cake",
-    "legacyid": 92,
-    "legacydata": 0
-  },
-  {
-    "itemkey": "repeater",
-    "legacyid": 93,
     "legacydata": 0
   },
   {
@@ -925,23 +865,8 @@
     "legacydata": 0
   },
   {
-    "itemkey": "nether_wart",
-    "legacyid": 115,
-    "legacydata": 16
-  },
-  {
     "itemkey": "enchanting_table",
     "legacyid": 116,
-    "legacydata": 0
-  },
-  {
-    "itemkey": "brewing_stand",
-    "legacyid": 117,
-    "legacydata": 0
-  },
-  {
-    "itemkey": "cauldron",
-    "legacyid": 118,
     "legacydata": 0
   },
   {
@@ -966,32 +891,32 @@
   },
   {
     "itemkey": "oak_slab",
-    "legacyid": 125,
+    "legacyid": 126,
     "legacydata": 0
   },
   {
     "itemkey": "spruce_slab",
-    "legacyid": 125,
+    "legacyid": 126,
     "legacydata": 1
   },
   {
     "itemkey": "birch_slab",
-    "legacyid": 125,
+    "legacyid": 126,
     "legacydata": 2
   },
   {
     "itemkey": "jungle_slab",
-    "legacyid": 125,
+    "legacyid": 126,
     "legacydata": 3
   },
   {
     "itemkey": "acacia_slab",
-    "legacyid": 125,
+    "legacyid": 126,
     "legacydata": 4
   },
   {
     "itemkey": "dark_oak_slab",
-    "legacyid": 125,
+    "legacyid": 126,
     "legacydata": 5
   },
   {
@@ -1012,11 +937,6 @@
   {
     "itemkey": "tripwire_hook",
     "legacyid": 131,
-    "legacydata": 0
-  },
-  {
-    "itemkey": "string",
-    "legacyid": 132,
     "legacydata": 0
   },
   {
@@ -1092,11 +1012,6 @@
   {
     "itemkey": "heavy_weighted_pressure_plate",
     "legacyid": 148,
-    "legacydata": 0
-  },
-  {
-    "itemkey": "comparator",
-    "legacyid": 149,
     "legacydata": 0
   },
   {
@@ -1505,11 +1420,6 @@
     "legacydata": 5
   },
   {
-    "itemkey": "white_banner",
-    "legacyid": 176,
-    "legacydata": 0
-  },
-  {
     "itemkey": "red_sandstone",
     "legacyid": 179,
     "legacydata": 0
@@ -1531,13 +1441,8 @@
   },
   {
     "itemkey": "red_sandstone_slab",
-    "legacyid": 181,
+    "legacyid": 182,
     "legacydata": 0
-  },
-  {
-    "itemkey": "smooth_red_sandstone",
-    "legacyid": 181,
-    "legacydata": 8
   },
   {
     "itemkey": "spruce_fence_gate",
@@ -1590,31 +1495,6 @@
     "legacydata": 0
   },
   {
-    "itemkey": "spruce_door",
-    "legacyid": 193,
-    "legacydata": 0
-  },
-  {
-    "itemkey": "birch_door",
-    "legacyid": 194,
-    "legacydata": 0
-  },
-  {
-    "itemkey": "jungle_door",
-    "legacyid": 195,
-    "legacydata": 0
-  },
-  {
-    "itemkey": "acacia_door",
-    "legacyid": 196,
-    "legacydata": 0
-  },
-  {
-    "itemkey": "dark_oak_door",
-    "legacyid": 197,
-    "legacydata": 0
-  },
-  {
     "itemkey": "end_rod",
     "legacyid": 198,
     "legacydata": 0
@@ -1646,7 +1526,7 @@
   },
   {
     "itemkey": "purpur_slab",
-    "legacyid": 204,
+    "legacyid": 205,
     "legacydata": 0
   },
   {
@@ -2185,6 +2065,11 @@
     "legacydata": 0
   },
   {
+    "itemkey": "string",
+    "legacyid": 287,
+    "legacydata": 0
+  },
+  {
     "itemkey": "feather",
     "legacyid": 288,
     "legacydata": 0
@@ -2222,6 +2107,11 @@
   {
     "itemkey": "wheat_seeds",
     "legacyid": 295,
+    "legacydata": 0
+  },
+  {
+    "itemkey": "wheat",
+    "legacyid": 296,
     "legacydata": 0
   },
   {
@@ -2360,6 +2250,16 @@
     "legacydata": 1
   },
   {
+    "itemkey": "sign",
+    "legacyid": 323,
+    "legacydata": 0
+  },
+  {
+    "itemkey": "oak_door",
+    "legacyid": 324,
+    "legacydata": 0
+  },
+  {
     "itemkey": "bucket",
     "legacyid": 325,
     "legacydata": 0
@@ -2382,6 +2282,16 @@
   {
     "itemkey": "saddle",
     "legacyid": 329,
+    "legacydata": 0
+  },
+  {
+    "itemkey": "iron_door",
+    "legacyid": 330,
+    "legacydata": 0
+  },
+  {
+    "itemkey": "redstone",
+    "legacyid": 331,
     "legacydata": 0
   },
   {
@@ -2412,6 +2322,11 @@
   {
     "itemkey": "clay_ball",
     "legacyid": 337,
+    "legacydata": 0
+  },
+  {
+    "itemkey": "sugar_cane",
+    "legacyid": 338,
     "legacydata": 0
   },
   {
@@ -2585,6 +2500,16 @@
     "legacydata": 0
   },
   {
+    "itemkey": "cake",
+    "legacyid": 354,
+    "legacydata": 0
+  },
+  {
+    "itemkey": "red_bed",
+    "legacyid": 355,
+    "legacydata": 0
+  },
+  {
     "itemkey": "orange_bed",
     "legacyid": 355,
     "legacydata": 1
@@ -2653,6 +2578,11 @@
     "itemkey": "black_bed",
     "legacyid": 355,
     "legacydata": 15
+  },
+  {
+    "itemkey": "repeater",
+    "legacyid": 356,
+    "legacydata": 0
   },
   {
     "itemkey": "cookie",
@@ -2730,6 +2660,11 @@
     "legacydata": 0
   },
   {
+    "itemkey": "nether_wart",
+    "legacyid": 372,
+    "legacydata": 0
+  },
+  {
     "itemkey": "potion",
     "legacyid": 373,
     "legacydata": 0
@@ -2760,6 +2695,16 @@
     "legacydata": 0
   },
   {
+    "itemkey": "brewing_stand",
+    "legacyid": 379,
+    "legacydata": 0
+  },
+  {
+    "itemkey": "cauldron",
+    "legacyid": 380,
+    "legacydata": 0
+  },
+  {
     "itemkey": "ender_eye",
     "legacyid": 381,
     "legacydata": 0
@@ -2768,6 +2713,71 @@
     "itemkey": "glistering_melon_slice",
     "legacyid": 382,
     "legacydata": 0
+  },
+  {
+    "itemkey": "pig_spawn_egg",
+    "legacyid": 383,
+    "legacydata": 0
+  },
+  {
+    "itemkey": "elder_guardian_spawn_egg",
+    "legacyid": 383,
+    "legacydata": 4
+  },
+  {
+    "itemkey": "wither_skeleton_spawn_egg",
+    "legacyid": 383,
+    "legacydata": 5
+  },
+  {
+    "itemkey": "stray_spawn_egg",
+    "legacyid": 383,
+    "legacydata": 6
+  },
+  {
+    "itemkey": "husk_spawn_egg",
+    "legacyid": 383,
+    "legacydata": 23
+  },
+  {
+    "itemkey": "zombie_villager_spawn_egg",
+    "legacyid": 383,
+    "legacydata": 27
+  },
+  {
+    "itemkey": "skeleton_horse_spawn_egg",
+    "legacyid": 383,
+    "legacydata": 28
+  },
+  {
+    "itemkey": "zombie_horse_spawn_egg",
+    "legacyid": 383,
+    "legacydata": 29
+  },
+  {
+    "itemkey": "donkey_spawn_egg",
+    "legacyid": 383,
+    "legacydata": 31
+  },
+  {
+    "itemkey": "mule_spawn_egg",
+    "legacyid": 383,
+    "legacydata": 32
+  },
+  {
+    "itemkey": "evoker_spawn_egg",
+    "legacyid": 383,
+    "legacydata": 34
+  },
+  {
+    "itemkey": "vex_spawn_egg",
+    "legacyid": 383,
+    "legacydata": 35
+  },
+  {
+    "itemkey": "vindicator_spawn_egg",
+    "legacyid": 383,
+    "legacydata": 36
   },
   {
     "itemkey": "creeper_spawn_egg",
@@ -2855,11 +2865,6 @@
     "legacydata": 69
   },
   {
-    "itemkey": "pig_spawn_egg",
-    "legacyid": 383,
-    "legacydata": 90
-  },
-  {
     "itemkey": "sheep_spawn_egg",
     "legacyid": 383,
     "legacydata": 91
@@ -2905,9 +2910,29 @@
     "legacydata": 101
   },
   {
+    "itemkey": "polar_bear_spawn_egg",
+    "legacyid": 383,
+    "legacydata": 102
+  },
+  {
+    "itemkey": "llama_spawn_egg",
+    "legacyid": 383,
+    "legacydata": 103
+  },
+  {
+    "itemkey": "parrot_spawn_egg",
+    "legacyid": 383,
+    "legacydata": 105
+  },
+  {
     "itemkey": "villager_spawn_egg",
     "legacyid": 383,
     "legacydata": 120
+  },
+  {
+    "itemkey": "turtle_spawn_egg",
+    "legacyid": 383,
+    "legacydata": 255
   },
   {
     "itemkey": "experience_bottle",
@@ -3032,6 +3057,11 @@
   {
     "itemkey": "enchanted_book",
     "legacyid": 403,
+    "legacydata": 0
+  },
+  {
+    "itemkey": "comparator",
+    "legacyid": 404,
     "legacydata": 0
   },
   {
@@ -3210,8 +3240,38 @@
     "legacydata": 14
   },
   {
+    "itemkey": "white_banner",
+    "legacyid": 425,
+    "legacydata": 15
+  },
+  {
     "itemkey": "end_crystal",
     "legacyid": 426,
+    "legacydata": 0
+  },
+  {
+    "itemkey": "spruce_door",
+    "legacyid": 427,
+    "legacydata": 0
+  },
+  {
+    "itemkey": "birch_door",
+    "legacyid": 428,
+    "legacydata": 0
+  },
+  {
+    "itemkey": "jungle_door",
+    "legacyid": 429,
+    "legacydata": 0
+  },
+  {
+    "itemkey": "acacia_door",
+    "legacyid": 430,
+    "legacydata": 0
+  },
+  {
+    "itemkey": "dark_oak_door",
+    "legacyid": 431,
     "legacydata": 0
   },
   {
