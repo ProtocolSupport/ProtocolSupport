@@ -41,7 +41,6 @@ import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.IdRemapping
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
-import protocolsupport.zplatform.ServerPlatform;
 
 public class LegacyBlockData {
 
@@ -267,7 +266,7 @@ public class LegacyBlockData {
 					Material.PURPLE_BED, Material.RED_BED, Material.WHITE_BED, Material.YELLOW_BED
 				),
 				o -> {
-					Bed bed = (Bed) createBlockData(o.getMaterial());
+					Bed bed = (Bed) createBlockData(Material.RED_BED);
 					bed.setFacing(o.getFacing());
 					bed.setPart(o.getPart());
 					return bed;
@@ -776,11 +775,7 @@ public class LegacyBlockData {
 		}
 
 		protected void registerRemapEntry(BlockData from, BlockData to, ProtocolVersion... versions) {
-			registerRemapEntry(
-				ServerPlatform.get().getMiscUtils().getBlockDataNetworkId(from),
-				ServerPlatform.get().getMiscUtils().getBlockDataNetworkId(to),
-				versions
-			);
+			registerRemapEntry(MaterialAPI.getBlockDataNetworkId(from), MaterialAPI.getBlockDataNetworkId(to), versions);
 		}
 
 		@Override
