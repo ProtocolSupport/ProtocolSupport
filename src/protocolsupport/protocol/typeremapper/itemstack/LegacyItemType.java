@@ -40,8 +40,13 @@ public class LegacyItemType {
 				});
 			});
 
+
 			registerRemapEntry(Material.CHEST, Material.CHEST, ProtocolVersionsHelper.ALL_PC);
 			registerRemapEntry(Material.TRAPPED_CHEST, Material.TRAPPED_CHEST, ProtocolVersionsHelper.ALL_PC);
+
+
+			registerRemapEntry(Material.KELP, Material.GRASS, ProtocolVersionsHelper.BEFORE_1_13);
+			registerRemapEntry(Material.DRIED_KELP, Material.GRASS, ProtocolVersionsHelper.BEFORE_1_13);
 
 
 			registerRemapEntry(Material.KNOWLEDGE_BOOK, Material.BOOK, ProtocolVersionsHelper.BEFORE_1_12);

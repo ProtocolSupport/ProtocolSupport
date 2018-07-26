@@ -393,7 +393,11 @@ public class LegacyBlockData {
 				Material.GRASS.createBlockData(),
 				ProtocolVersionsHelper.BEFORE_1_13
 			);
-			this.registerRemapEntryForAllStates(Material.TALL_SEAGRASS, Material.TALL_GRASS.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
+			this.registerRemapEntryForAllStates(
+				Arrays.asList(Material.TALL_SEAGRASS, Material.KELP, Material.KELP_PLANT),
+				Material.TALL_GRASS.createBlockData(),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
 			this.<Orientable>registerRemapEntryForAllStates(
 				Material.STRIPPED_ACACIA_LOG,
 				o -> cloneOrientable(o, (Orientable) Material.ACACIA_LOG.createBlockData()),
@@ -619,7 +623,11 @@ public class LegacyBlockData {
 			);
 
 
-			this.registerRemapEntryForAllStates(Material.TALL_GRASS, Material.GRASS.createBlockData(), ProtocolVersionsHelper.BEFORE_1_7);
+			this.registerRemapEntryForAllStates(
+				Arrays.asList(Material.KELP, Material.KELP_PLANT, Material.TALL_SEAGRASS, Material.TALL_GRASS),
+				Material.GRASS.createBlockData(),
+				ProtocolVersionsHelper.BEFORE_1_7
+			);
 			this.registerRemapEntryForAllStates(Material.PACKED_ICE, Material.BLUE_WOOL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_7);
 			this.registerRemapEntryForAllStates(
 				Arrays.asList(Material.ACACIA_LOG, Material.DARK_OAK_LOG),
