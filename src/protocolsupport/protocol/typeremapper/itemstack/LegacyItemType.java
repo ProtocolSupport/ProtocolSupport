@@ -44,7 +44,18 @@ public class LegacyItemType {
 
 
 			registerRemapEntry(Material.KELP, Material.GRASS, ProtocolVersionsHelper.BEFORE_1_13);
-			registerRemapEntry(Material.DRIED_KELP, Material.GRASS, ProtocolVersionsHelper.BEFORE_1_13);
+			registerRemapEntry(Material.DRIED_KELP, Material.POTATO, ProtocolVersionsHelper.BEFORE_1_13);
+			registerRemapEntry(
+				Arrays.asList(Material.COD_BUCKET, Material.PUFFERFISH_BUCKET, Material.SALMON_BUCKET, Material.TROPICAL_FISH_BUCKET),
+				Material.WATER_BUCKET,
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+			registerRemapEntry(Material.HEART_OF_THE_SEA, Material.LIGHT_BLUE_DYE, ProtocolVersionsHelper.BEFORE_1_13);
+			registerRemapEntry(Material.NAUTILUS_SHELL, Material.LIGHT_GRAY_DYE, ProtocolVersionsHelper.BEFORE_1_13);
+			registerRemapEntry(Material.PHANTOM_MEMBRANE, Material.GRAY_DYE, ProtocolVersionsHelper.BEFORE_1_13);
+			registerRemapEntry(Material.SCUTE, Material.LIME_DYE, ProtocolVersionsHelper.BEFORE_1_13);
+			registerRemapEntry(Material.TURTLE_HELMET, Material.CHAINMAIL_HELMET, ProtocolVersionsHelper.BEFORE_1_13);
+			registerRemapEntry(Material.TRIDENT, Material.DIAMOND_HOE, ProtocolVersionsHelper.BEFORE_1_13);
 
 
 			registerRemapEntry(Material.KNOWLEDGE_BOOK, Material.BOOK, ProtocolVersionsHelper.BEFORE_1_12);

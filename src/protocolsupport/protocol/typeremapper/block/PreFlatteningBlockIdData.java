@@ -22,7 +22,6 @@ public class PreFlatteningBlockIdData {
 		toLegacyId[ServerPlatform.get().getMiscUtils().getBlockDataNetworkId(Bukkit.createBlockData(modernBlockState))] = formLegacyCombinedId(legacyId, legacyData);
 	}
 	static {
-		//TODO: replace with -1 and throw exception on legacy id missing
 		Arrays.fill(toLegacyId, formLegacyCombinedId(1, 0));
 		//air
 		toLegacyId[0] = 0;
