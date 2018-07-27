@@ -123,7 +123,7 @@ task generateLocaleList(type: DefaultTask) {doLast{
 		new File(sourceSets.main.resources.srcDirs.iterator().next(), "resources/i18n").list()
 		.each({
 			String[] split = it.split("[.]");
-			if (split.length == 2 && split[1].equals("lang")) {
+			if (split.length == 2 && split[1].equals("json")) {
 				writer.println(split[0])
 			}
 		})		
