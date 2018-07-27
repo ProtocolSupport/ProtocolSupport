@@ -2497,7 +2497,7 @@
   {
     "blockdata": "minecraft:nether_portal[axis=x]",
     "legacyid": 90,
-    "legacydata": 0
+    "legacydata": 1
   },
   {
     "blockdata": "minecraft:nether_portal[axis=z]",
