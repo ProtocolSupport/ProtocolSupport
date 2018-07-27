@@ -2,6 +2,7 @@ package protocolsupport.utils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
@@ -12,6 +13,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.google.gson.Gson;
@@ -87,6 +89,18 @@ public class Utils {
 			copied += limit;
 		}
 		return list;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T[] concatArrays(T[]... arrays) {
+		if (arrays.length == 0) {
+			throw new IllegalArgumentException("Cant concat arrays if there is no arrays");
+		}
+		return
+			Arrays.stream(arrays)
+			.flatMap(Arrays::stream)
+			.collect(Collectors.toList())
+			.toArray((T[]) Array.newInstance(arrays[0].getClass().getComponentType(), 0));
 	}
 
 	public static int getSplitCount(int length, int maxlength) {

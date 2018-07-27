@@ -6,10 +6,13 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
+import protocolsupport.protocol.typeremapper.particle.ParticleRemapper;
 import protocolsupport.protocol.typeremapper.particle.legacy.LegacyParticle;
 import protocolsupport.protocol.typeremapper.watchedentity.value.IndexValueRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.value.IndexValueRemapperBooleanToByte;
@@ -25,9 +28,9 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoole
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
-import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
+import protocolsupport.protocol.utils.types.particle.Particle;
 import protocolsupport.utils.CollectionsUtils;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.utils.Utils;
@@ -413,7 +416,7 @@ public enum EntityMetadataRemapperRegistry {
 	ARMOR_STAND_MOB(NetworkEntityType.ARMOR_STAND_MOB, ARMOR_STAND),
 	//TODO Remap these better for old version? Hand over some meta? Eg slime size for phantom or so.
 	PHANTOM(NetworkEntityType.PHANTOM, INSENTIENT,
-			new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Phantom.SIZE, 12), ProtocolVersion.MINECRAFT_1_13)
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Phantom.SIZE, 12), ProtocolVersion.MINECRAFT_1_13)
 	),
 	DOLPHIN(NetworkEntityType.DOLPHIN, INSENTIENT),
 	BASE_FISH(NetworkEntityType.BASE_FISH, INSENTIENT,
@@ -487,46 +490,61 @@ public enum EntityMetadataRemapperRegistry {
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Item.ITEM, 5), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Item.ITEM, 10), ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	MINECART(NetworkEntityType.MINECART, ENTITY,
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.SHAKING_POWER, 6), ProtocolVersionsHelper.RANGE__1_10__1_13),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.SHAKING_POWER, 5), ProtocolVersionsHelper.ALL_1_9),
-		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Minecart.SHAKING_POWER, 17), ProtocolVersionsHelper.BEFORE_1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.SHAKING_DIRECTION, 7), ProtocolVersionsHelper.RANGE__1_10__1_13),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.SHAKING_DIRECTION, 6), ProtocolVersionsHelper.ALL_1_9),
-		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Minecart.SHAKING_DIRECTION, 18), ProtocolVersionsHelper.BEFORE_1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.DAMAGE_TAKEN, 8), ProtocolVersionsHelper.RANGE__1_10__1_13),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.DAMAGE_TAKEN, 7), ProtocolVersionsHelper.ALL_1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.DAMAGE_TAKEN, 19), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1)),
-		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Minecart.DAMAGE_TAKEN, 19), ProtocolVersionsHelper.BEFORE_1_6),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.BLOCK, 9), ProtocolVersion.MINECRAFT_1_13),
-		new Entry(new IndexValueRemapper<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Minecart.BLOCK, 9) {
-			@Override
-			public DataWatcherObject<?> remapValue(DataWatcherObjectVarInt object) {
-				//TODO Figure something out for this version thingy.
-				int newstate = LegacyBlockData.REGISTRY.getTable(ProtocolVersion.MINECRAFT_1_12_2).getRemap(object.getValue());
-				int legacystate = PreFlatteningBlockIdData.getLegacyCombinedId(newstate);
-				return new DataWatcherObjectVarInt(PreFlatteningBlockIdData.getLegacyObjDataFromLegacyBlockState(legacystate));
-			}}, ProtocolVersionsHelper.RANGE__1_10__1_12_2),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.BLOCK, 8), ProtocolVersionsHelper.ALL_1_9),
-		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Minecart.BLOCK, 20), ProtocolVersion.MINECRAFT_1_8),
-		new Entry(new IndexValueRemapper<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Minecart.BLOCK, 20) {
-			@Override
-			public DataWatcherObject<?> remapValue(DataWatcherObjectVarInt object) {
-				//TODO Figure something out for this version thingy.
-				int newstate = LegacyBlockData.REGISTRY.getTable(ProtocolVersion.MINECRAFT_1_6_4).getRemap(object.getValue());
-				int legacystate = PreFlatteningBlockIdData.getLegacyCombinedId(newstate);
-				int id = PreFlatteningBlockIdData.getIdFromLegacyCombinedId(legacystate);
-				int data = PreFlatteningBlockIdData.getDataFromLegacyCombinedId(legacystate);
-				return new DataWatcherObjectInt((data << 16) | id);
-			}
-		}, ProtocolVersionsHelper.BEFORE_1_6),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.BLOCK_Y, 10), ProtocolVersionsHelper.RANGE__1_10__1_13),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.BLOCK_Y, 9), ProtocolVersionsHelper.ALL_1_9),
-		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Minecart.BLOCK_Y, 21), ProtocolVersionsHelper.BEFORE_1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.SHOW_BLOCK, 11), ProtocolVersionsHelper.RANGE__1_10__1_13),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.SHOW_BLOCK, 10), ProtocolVersionsHelper.ALL_1_9),
-		new Entry(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.Minecart.SHOW_BLOCK, 22), ProtocolVersionsHelper.BEFORE_1_9)
-	),
+	MINECART(NetworkEntityType.MINECART, ENTITY, Utils.concatArrays(
+		new Entry[] {
+			new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.SHAKING_POWER, 6), ProtocolVersionsHelper.RANGE__1_10__1_13),
+			new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.SHAKING_POWER, 5), ProtocolVersionsHelper.ALL_1_9),
+			new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Minecart.SHAKING_POWER, 17), ProtocolVersionsHelper.BEFORE_1_9),
+			new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.SHAKING_DIRECTION, 7), ProtocolVersionsHelper.RANGE__1_10__1_13),
+			new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.SHAKING_DIRECTION, 6), ProtocolVersionsHelper.ALL_1_9),
+			new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Minecart.SHAKING_DIRECTION, 18), ProtocolVersionsHelper.BEFORE_1_9),
+			new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.DAMAGE_TAKEN, 8), ProtocolVersionsHelper.RANGE__1_10__1_13),
+			new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.DAMAGE_TAKEN, 7), ProtocolVersionsHelper.ALL_1_9),
+			new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.DAMAGE_TAKEN, 19), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1)),
+			new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Minecart.DAMAGE_TAKEN, 19), ProtocolVersionsHelper.BEFORE_1_6),
+			new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.BLOCK, 9), ProtocolVersion.MINECRAFT_1_13)
+		},
+		Entry.createPerVersion(
+			version ->
+				new IndexValueRemapper<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Minecart.BLOCK, 9) {
+					@Override
+					public DataWatcherObject<?> remapValue(DataWatcherObjectVarInt object) {
+						return new DataWatcherObjectVarInt(
+							PreFlatteningBlockIdData.getLegacyObjDataFromLegacyBlockState(
+								PreFlatteningBlockIdData.getLegacyCombinedId(LegacyBlockData.REGISTRY.getTable(version).getRemap(object.getValue()))
+							)
+						);
+					}
+				},
+			ProtocolVersionsHelper.RANGE__1_10__1_12_2
+		),
+		new Entry[] {
+			new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.BLOCK, 8), ProtocolVersionsHelper.ALL_1_9),
+			new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Minecart.BLOCK, 20), ProtocolVersion.MINECRAFT_1_8),
+		},
+		Entry.createPerVersion(
+			version ->
+				new IndexValueRemapper<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Minecart.BLOCK, 20) {
+					@Override
+					public DataWatcherObject<?> remapValue(DataWatcherObjectVarInt object) {
+						int blockstate = PreFlatteningBlockIdData.getLegacyCombinedId(LegacyBlockData.REGISTRY.getTable(version).getRemap(object.getValue()));
+						return new DataWatcherObjectInt(
+							(PreFlatteningBlockIdData.getDataFromLegacyCombinedId(blockstate) << 16) |
+							PreFlatteningBlockIdData.getIdFromLegacyCombinedId(blockstate)
+						);
+					}
+				},
+			ProtocolVersionsHelper.BEFORE_1_6
+		),
+		new Entry[] {
+			new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.BLOCK_Y, 10), ProtocolVersionsHelper.RANGE__1_10__1_13),
+			new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.BLOCK_Y, 9), ProtocolVersionsHelper.ALL_1_9),
+			new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Minecart.BLOCK_Y, 21), ProtocolVersionsHelper.BEFORE_1_9),
+			new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.SHOW_BLOCK, 11), ProtocolVersionsHelper.RANGE__1_10__1_13),
+			new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.SHOW_BLOCK, 10), ProtocolVersionsHelper.ALL_1_9),
+			new Entry(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.Minecart.SHOW_BLOCK, 22), ProtocolVersionsHelper.BEFORE_1_9)
+		}
+	)),
 	MINECART_CHEST(NetworkEntityType.MINECART_CHEST, MINECART),
 	MINECART_FURNACE(NetworkEntityType.MINECART_FURNACE, MINECART,
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.MinecartFurnace.POWERED, 12), ProtocolVersionsHelper.RANGE__1_10__1_13),
@@ -585,80 +603,48 @@ public enum EntityMetadataRemapperRegistry {
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EnderCrystal.SHOW_BOTTOM, 6), ProtocolVersionsHelper.ALL_1_9)
 	),
 	ARMOR_STAND_OBJECT(NetworkEntityType.ARMOR_STAND_OBJECT, ARMOR_STAND),
-	AREA_EFFECT_CLOUD(NetworkEntityType.AREA_EFFECT_CLOUD, ENTITY,
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.PARTICLE, 9), ProtocolVersion.MINECRAFT_1_13),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.RADIUS, 6), ProtocolVersionsHelper.RANGE__1_10__1_13),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.RADIUS, 5), ProtocolVersionsHelper.ALL_1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.COLOR, 7), ProtocolVersionsHelper.RANGE__1_10__1_13),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.COLOR, 6), ProtocolVersionsHelper.ALL_1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.SINGLE_POINT, 8), ProtocolVersionsHelper.RANGE__1_10__1_13),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.SINGLE_POINT, 7), ProtocolVersionsHelper.ALL_1_9),
-		new Entry(new DataWatcherObjectRemapper() {
-			@Override
-			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
-				DataWatcherObjectIndex.AreaEffectCloud.PARTICLE.getValue(original).ifPresent((particleWatcher) -> {
-					particleWatcher.remapParticle(ProtocolVersion.MINECRAFT_1_12_2, I18NData.DEFAULT_LOCALE);
-					if (particleWatcher.getValue() instanceof LegacyParticle) {
-						LegacyParticle particle = (LegacyParticle) particleWatcher.getValue();
-						remapped.put(9, new DataWatcherObjectVarInt(particle.getId()));
-						remapped.put(10, new DataWatcherObjectVarInt(particle.getFirstParameter()));
-						remapped.put(11, new DataWatcherObjectVarInt(particle.getSecondParameter()));
+	AREA_EFFECT_CLOUD(NetworkEntityType.AREA_EFFECT_CLOUD, ENTITY, Utils.concatArrays(
+		new Entry[] {
+			new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.PARTICLE, 9), ProtocolVersion.MINECRAFT_1_13),
+			new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.RADIUS, 6), ProtocolVersionsHelper.RANGE__1_10__1_13),
+			new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.RADIUS, 5), ProtocolVersionsHelper.ALL_1_9),
+			new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.COLOR, 7), ProtocolVersionsHelper.RANGE__1_10__1_13),
+			new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.COLOR, 6), ProtocolVersionsHelper.ALL_1_9),
+			new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.SINGLE_POINT, 8), ProtocolVersionsHelper.RANGE__1_10__1_13),
+			new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.SINGLE_POINT, 7), ProtocolVersionsHelper.ALL_1_9)
+		},
+		Entry.createPerVersion(
+			version ->
+				new DataWatcherObjectRemapper() {
+					@Override
+					public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
+						DataWatcherObjectIndex.AreaEffectCloud.PARTICLE.getValue(original).ifPresent(particleObject -> {
+							Particle particle = ParticleRemapper.remap(version, particleObject.getValue());
+							remapped.put(9, new DataWatcherObjectVarInt(particle.getId()));
+							if (particle instanceof LegacyParticle) {
+								LegacyParticle lParticle = (LegacyParticle) particleObject.getValue();
+								remapped.put(10, new DataWatcherObjectVarInt(lParticle.getFirstParameter()));
+								remapped.put(11, new DataWatcherObjectVarInt(lParticle.getSecondParameter()));
+							}
+						});
 					}
-				});
-			}}, ProtocolVersionsHelper.ALL_1_12),
-		new Entry(new DataWatcherObjectRemapper() {
-			@Override
-			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
-				DataWatcherObjectIndex.AreaEffectCloud.PARTICLE.getValue(original).ifPresent((particleWatcher) -> {
-					particleWatcher.remapParticle(ProtocolVersion.MINECRAFT_1_11_1, I18NData.DEFAULT_LOCALE);
-					if (particleWatcher.getValue() instanceof LegacyParticle) {
-						LegacyParticle particle = (LegacyParticle) particleWatcher.getValue();
-						remapped.put(9, new DataWatcherObjectVarInt(particle.getId()));
-						remapped.put(10, new DataWatcherObjectVarInt(particle.getFirstParameter()));
-						remapped.put(11, new DataWatcherObjectVarInt(particle.getSecondParameter()));
-					}
-				});
-			}}, ProtocolVersion.MINECRAFT_1_11, ProtocolVersion.MINECRAFT_1_11_1),
-		new Entry(new DataWatcherObjectRemapper() {
-			@Override
-			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
-				DataWatcherObjectIndex.AreaEffectCloud.PARTICLE.getValue(original).ifPresent((particleWatcher) -> {
-					particleWatcher.remapParticle(ProtocolVersion.MINECRAFT_1_10, I18NData.DEFAULT_LOCALE);
-					if (particleWatcher.getValue() instanceof LegacyParticle) {
-						LegacyParticle particle = (LegacyParticle) particleWatcher.getValue();
-						remapped.put(9, new DataWatcherObjectVarInt(particle.getId()));
-						remapped.put(10, new DataWatcherObjectVarInt(particle.getFirstParameter()));
-						remapped.put(11, new DataWatcherObjectVarInt(particle.getSecondParameter()));
-					}
-				});
-			}}, ProtocolVersion.MINECRAFT_1_10),
-		new Entry(new DataWatcherObjectRemapper() {
-			@Override
-			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
-				DataWatcherObjectIndex.AreaEffectCloud.PARTICLE.getValue(original).ifPresent((particleWatcher) -> {
-					particleWatcher.remapParticle(ProtocolVersion.MINECRAFT_1_9_4, I18NData.DEFAULT_LOCALE);
-					if (particleWatcher.getValue() instanceof LegacyParticle) {
-						LegacyParticle particle = (LegacyParticle) particleWatcher.getValue();
-						remapped.put(8, new DataWatcherObjectVarInt(particle.getId()));
-						remapped.put(9, new DataWatcherObjectVarInt(particle.getFirstParameter()));
-						remapped.put(10, new DataWatcherObjectVarInt(particle.getSecondParameter()));
-					}
-				});
-			}}, ProtocolVersionsHelper.ALL_1_9)
-	),
+				},
+			ProtocolVersionsHelper.RANGE__1_9__1_12_2
+		)
+	)),
 	SHULKER_BULLET(NetworkEntityType.SHULKER_BULLET, ENTITY),
 	LAMA_SPIT(NetworkEntityType.LAMA_SPIT, ENTITY),
 	DRAGON_FIREBALL(NetworkEntityType.DRAGON_FIREBALL, ENTITY),
 	EVOCATOR_FANGS(NetworkEntityType.EVOCATOR_FANGS, ENTITY);
 
-	private static final Map<NetworkEntityType, EntityMetadataRemapperRegistry> wtype = CollectionsUtils.makeEnumMappingEnumMap(EntityMetadataRemapperRegistry.class, NetworkEntityType.class, (e -> e.type));
+	protected static final Map<NetworkEntityType, EntityMetadataRemapperRegistry> wtype = CollectionsUtils.makeEnumMappingEnumMap(EntityMetadataRemapperRegistry.class, NetworkEntityType.class, (e -> e.type));
 
 	public static EntityMetadataRemapperRegistry fromWatchedType(NetworkEntityType type) {
 		return wtype.getOrDefault(type, NONE);
 	}
 
-	private final NetworkEntityType type;
-	private final EnumMap<ProtocolVersion, List<DataWatcherObjectRemapper>> entries = new EnumMap<>(ProtocolVersion.class);
+	protected final NetworkEntityType type;
+	protected final EnumMap<ProtocolVersion, List<DataWatcherObjectRemapper>> entries = new EnumMap<>(ProtocolVersion.class);
 
 	EntityMetadataRemapperRegistry(NetworkEntityType type, Entry... entries) {
 		this.type = type;
@@ -685,13 +671,23 @@ public enum EntityMetadataRemapperRegistry {
 		return entries.getOrDefault(version, Collections.emptyList());
 	}
 
-	private static class Entry {
-		private final DataWatcherObjectRemapper remapper;
-		private final List<ProtocolVersion> versions;
+	protected static class Entry {
+
+		public static Entry[] createPerVersion(Function<ProtocolVersion, DataWatcherObjectRemapper> func, ProtocolVersion... versions) {
+			return
+				Arrays.stream(versions)
+				.map(version -> new Entry(func.apply(version), version))
+				.collect(Collectors.toList())
+				.toArray(new Entry[0]);
+		}
+
+		protected final DataWatcherObjectRemapper remapper;
+		protected final List<ProtocolVersion> versions;
 		public Entry(DataWatcherObjectRemapper remapper, ProtocolVersion... versions) {
 			this.remapper = remapper;
 			this.versions = Arrays.asList(versions);
 		}
+
 	}
 
 }

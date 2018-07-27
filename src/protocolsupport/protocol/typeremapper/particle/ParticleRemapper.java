@@ -1,5 +1,6 @@
 package protocolsupport.protocol.typeremapper.particle;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -61,7 +62,7 @@ import protocolsupport.protocol.utils.types.particle.ParticleWitch;
 
 public class ParticleRemapper {
 
-	private static final RemappingRegistry<ParticleRemappingTable> REMAPS = new RemappingRegistry<ParticleRemappingTable>(){
+	protected static final RemappingRegistry<ParticleRemappingTable> REGISTRY = new RemappingRegistry<ParticleRemappingTable>(){
 		{
 			//Legacy (<1.13) remaps for old ids and names.
 			registerRemap(ParticlePoof.class, () -> new LegacyParticle(0, "explode"), ProtocolVersionsHelper.BEFORE_1_13);
@@ -97,45 +98,58 @@ public class ParticleRemapper {
 			registerRemap(ParticleItemSlime.class, () -> new LegacyParticle(33, "slime"), ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemap(ParticleHeart.class, () -> new LegacyParticle(34, "heart"), ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemap(ParticleBarrier.class, () -> new LegacyParticle(35, "barrier"), ProtocolVersionsHelper.RANGE__1_8__1_12_2);
-			registerRemap(ParticleItem.class, (from) -> new LegacyParticleIconCrack(36, "iconcrack", ((ParticleItem) from).getItem()), ProtocolVersionsHelper.BEFORE_1_13);
-			registerRemap(ParticleBlock.class, (from) -> new LegacyParticleBlockCrack(37, "blockcrack", ((ParticleBlock) from).getBlockstate()), ProtocolVersionsHelper.BEFORE_1_13);
+			Arrays.stream(ProtocolVersionsHelper.BEFORE_1_13)
+			.forEach(version -> {
+				registerRemap(
+					ParticleItem.class,
+					from -> new LegacyParticleIconCrack(36, "iconcrack", version, from.getItem()),
+					version
+				);
+				registerRemap(
+					ParticleBlock.class,
+					from -> new LegacyParticleBlockCrack(37, "blockcrack", version, from.getBlockstate()),
+					version
+				);
+			});
 			registerRemap(ParticleRain.class, () -> new LegacyParticle(39, "droplet"), ProtocolVersionsHelper.RANGE__1_8__1_12_2);
 			registerRemap(ParticleElderGuardian.class, () -> new LegacyParticle(41, "mobappearance"), ProtocolVersionsHelper.RANGE__1_8__1_12_2);
 			registerRemap(ParticleDragonBreath.class, () -> new LegacyParticle(42, "dragonbreath"), ProtocolVersionsHelper.RANGE__1_9__1_12_2);
 			registerRemap(ParticleEndRod.class, () -> new LegacyParticle(43, "endRod"), ProtocolVersionsHelper.RANGE__1_9__1_12_2);
 			registerRemap(ParticleDamageIndicator.class, () -> new LegacyParticle(44, "damageIndicator"), ProtocolVersionsHelper.RANGE__1_9__1_12_2);
 			registerRemap(ParticleSweepAttack.class, () -> new LegacyParticle(45, "sweepAttack"), ProtocolVersionsHelper.RANGE__1_9__1_12_2);
-			registerRemap(ParticleFallingDust.class, (from) -> new LegacyParticleFallingDust(46, "fallingdust", ((ParticleFallingDust) from).getBlockstate()), ProtocolVersionsHelper.RANGE__1_10__1_12_2);
-			registerRemap(ParticleFallingDust.class, (from) -> new LegacyParticleBlockCrack(37, "blockcrack", ((ParticleFallingDust) from).getBlockstate()), ProtocolVersionsHelper.BEFORE_1_10);
+			registerRemap(ParticleFallingDust.class, from -> new LegacyParticleFallingDust(46, "fallingdust", from.getBlockstate()), ProtocolVersionsHelper.RANGE__1_10__1_12_2);
+			Arrays.stream(ProtocolVersionsHelper.BEFORE_1_10)
+			.forEach(version ->
+				registerRemap(
+					ParticleFallingDust.class,
+					from -> new LegacyParticleBlockCrack(37, "blockcrack", version, from.getBlockstate()),
+					version
+				)
+			);
 			registerRemap(ParticleTotemOfUndying.class, () -> new LegacyParticle(47, "totem"), ProtocolVersionsHelper.RANGE__1_11_1__1_12_2);
 			registerRemap(ParticleSpit.class, () -> new LegacyParticle(48, "spit"), ProtocolVersionsHelper.RANGE__1_11_1__1_12_2);
 
-			//Skip some particles for older versions.
-			registerSkip(ParticleFishing.class, ProtocolVersionsHelper.BEFORE_1_7);
-			registerSkip(ParticleBarrier.class, ProtocolVersionsHelper.BEFORE_1_8);
-			registerSkip(ParticleRain.class, ProtocolVersionsHelper.BEFORE_1_8);
-			registerSkip(ParticleElderGuardian.class, ProtocolVersionsHelper.BEFORE_1_8);
+			registerSkip(ParticleTotemOfUndying.class, ProtocolVersionsHelper.BEFORE_1_11);
+			registerSkip(ParticleSpit.class, ProtocolVersionsHelper.BEFORE_1_11);
 			registerSkip(ParticleDragonBreath.class, ProtocolVersionsHelper.BEFORE_1_9);
 			registerSkip(ParticleEndRod.class, ProtocolVersionsHelper.BEFORE_1_9);
 			registerSkip(ParticleDamageIndicator.class, ProtocolVersionsHelper.BEFORE_1_9);
 			registerSkip(ParticleSweepAttack.class, ProtocolVersionsHelper.BEFORE_1_9);
-			registerSkip(ParticleTotemOfUndying.class, ProtocolVersionsHelper.BEFORE_1_11);
-			registerSkip(ParticleSpit.class, ProtocolVersionsHelper.BEFORE_1_11);
+			registerSkip(ParticleRain.class, ProtocolVersionsHelper.BEFORE_1_8);
+			registerSkip(ParticleElderGuardian.class, ProtocolVersionsHelper.BEFORE_1_8);
+			registerSkip(ParticleFishing.class, ProtocolVersionsHelper.BEFORE_1_7);
+			registerSkip(ParticleBarrier.class, ProtocolVersionsHelper.BEFORE_1_8);
 		}
 		protected void registerSkip(Class<? extends Particle> from, ProtocolVersion... versions) {
-			registerRemap(from, ParticleSkip.class, versions);
-		}
-		protected void registerRemap(Class<? extends Particle> from, Class<? extends Particle> to, ProtocolVersion... versions) {
-			registerRemap(from, () -> Particle.fromId(Particle.toId(to)), versions);
+			registerRemap(from, ParticleSkip::new, versions);
 		}
 		protected void registerRemap(Class<? extends Particle> from, Supplier<Particle> to, ProtocolVersion... versions) {
-			registerRemap(from, (part) -> to.get(), versions);
+			registerRemap(from, part -> to.get(), versions);
 		}
-		protected void registerRemap(Class<? extends Particle> from, Function<Particle, Particle> remapFunction, ProtocolVersion... versions) {
-			for (ProtocolVersion version : versions) {
-				//Utils.getFromMapOrCreateDefault(table, version, createTable());
-				getTable(version).setRemap(from, remapFunction);
-			}
+		@SuppressWarnings("unchecked")
+		protected <T extends Particle> void registerRemap(Class<T> from, Function<T, Particle> remapFunction, ProtocolVersion... versions) {
+			Arrays.stream(versions)
+			.forEach(version -> getTable(version).setRemap(from, (Function<Particle, Particle>) remapFunction));
 		}
 		@Override
 		protected ParticleRemappingTable createTable() {
@@ -143,7 +157,7 @@ public class ParticleRemapper {
 		}
 	};
 
-	private static class ParticleRemappingTable extends RemappingTable {
+	protected static class ParticleRemappingTable extends RemappingTable {
 
 		protected final HashMap<Class<? extends Particle>, Function<Particle, Particle>> table = new HashMap<>();
 
@@ -152,13 +166,13 @@ public class ParticleRemapper {
 		}
 
 		public Function<Particle, Particle> getRemap(Class<? extends Particle> particle) {
-			return table.getOrDefault(particle, (part) -> part);
+			return table.getOrDefault(particle, part -> part);
 		}
 
 	}
 
 	public static Particle remap(ProtocolVersion version, Particle particle) {
-		return REMAPS.getTable(version).getRemap(particle.getClass()).apply(particle);
+		return REGISTRY.getTable(version).getRemap(particle.getClass()).apply(particle);
 	}
 
 }

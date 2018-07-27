@@ -12,15 +12,10 @@ public class LegacyParticleIconCrack extends LegacyParticle {
 	protected ProtocolVersion version;
 	protected String locale;
 
-	public LegacyParticleIconCrack(int id, String name, NetworkItemStack item) {
+	public LegacyParticleIconCrack(int id, String name, ProtocolVersion version, NetworkItemStack item) {
 		super(id, name);
-		this.item = item;
-	}
-
-	@Override
-	public void remap(ProtocolVersion version, String locale) {
-		item = ItemStackRemapper.remapToClient(version, locale, item);
-		name += "_" + item.getTypeId() + "_" + item.getLegacyData();
+		this.item = ItemStackRemapper.remapToClient(version, locale, item);
+		this.name += "_" + item.getTypeId() + "_" + item.getLegacyData();
 	}
 
 	@Override

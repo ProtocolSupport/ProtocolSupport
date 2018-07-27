@@ -7,6 +7,7 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
+//TODO: create construtor that accept target protocol version and locale and add it to remap registry
 public class ParticleItem extends Particle {
 
 	public ParticleItem(int pId) {
@@ -21,19 +22,9 @@ public class ParticleItem extends Particle {
 		return item;
 	}
 
-	public void setItem(NetworkItemStack item) {
-		this.item = item;
-	}
-
 	@Override
 	public void readData(ByteBuf buf) {
 		item = ItemStackSerializer.readItemStack(buf, ProtocolVersionsHelper.LATEST_PC, I18NData.DEFAULT_LOCALE, false);
-	}
-
-	@Override
-	public void remap(ProtocolVersion version, String locale) {
-		this.version = version;
-		this.locale = locale;
 	}
 
 	@Override

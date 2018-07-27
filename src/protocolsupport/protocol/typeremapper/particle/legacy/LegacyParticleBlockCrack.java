@@ -10,15 +10,11 @@ public class LegacyParticleBlockCrack extends LegacyParticle {
 
 	protected int blockstate;
 
-	public LegacyParticleBlockCrack(int id, String name, int blockstate) {
+	public LegacyParticleBlockCrack(int id, String name, ProtocolVersion version, int blockstate) {
 		super(id, name);
-		this.blockstate = blockstate;
-	}
-
-	@Override
-	public void remap(ProtocolVersion version, String locale) {
-		blockstate = PreFlatteningBlockIdData.getLegacyObjDataFromLegacyBlockState(PreFlatteningBlockIdData.getLegacyCombinedId(LegacyBlockData.REGISTRY.getTable(version).getRemap(blockstate)));
-		name += "_" + blockstate;
+		int combinedId = PreFlatteningBlockIdData.getLegacyCombinedId(LegacyBlockData.REGISTRY.getTable(version).getRemap(blockstate));
+		this.blockstate = PreFlatteningBlockIdData.getLegacyObjDataFromLegacyBlockState(combinedId);
+		this.name += "_" + PreFlatteningBlockIdData.getIdFromLegacyCombinedId(combinedId) + "_" + PreFlatteningBlockIdData.getDataFromLegacyCombinedId(combinedId);
 	}
 
 	@Override

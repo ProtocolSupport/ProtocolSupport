@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.typeremapper.particle.ParticleRemapper;
 import protocolsupport.protocol.utils.types.particle.Particle;
+import protocolsupport.protocol.utils.types.particle.ParticleRegistry;
 
 public abstract class MiddleWorldParticle extends ClientBoundMiddlePacket {
 
@@ -20,7 +21,7 @@ public abstract class MiddleWorldParticle extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		particle = Particle.fromId(serverdata.readInt());
+		particle = ParticleRegistry.fromId(serverdata.readInt());
 		longdist = serverdata.readBoolean();
 		x = serverdata.readFloat();
 		y = serverdata.readFloat();
@@ -32,12 +33,11 @@ public abstract class MiddleWorldParticle extends ClientBoundMiddlePacket {
 		count = serverdata.readInt();
 		particle.readData(serverdata);
 		particle = ParticleRemapper.remap(connection.getVersion(), particle);
-		particle.remap(connection.getVersion(), cache.getAttributesCache().getLocale());
 	}
 
 	@Override
 	public boolean postFromServerRead() {
-		return particle.getId() != Particle.SKIP;
+		return particle.getId() != ParticleRegistry.ID_SKIP;
 	}
 
 }

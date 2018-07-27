@@ -1,6 +1,5 @@
 package protocolsupport.protocol.utils;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -75,15 +74,8 @@ public class ProtocolVersionsHelper {
 
 	public static final ProtocolVersion[] AFTER_1_8 = ProtocolVersion.getAllAfterE(ProtocolVersion.MINECRAFT_1_8);
 
-	public static final ProtocolVersion[] concat(ProtocolVersion[] versions, ProtocolVersion... moreVersions) {
-		ArrayList<ProtocolVersion> all = new ArrayList<>();
-		all.addAll(Arrays.asList(versions));
-		all.addAll(Arrays.asList(moreVersions));
-		return all.toArray(new ProtocolVersion[all.size()]);
-	}
-
-	private static final Int2ObjectOpenHashMap<ProtocolVersion> byOldProtocolId = new Int2ObjectOpenHashMap<>();
-	private static final Int2ObjectOpenHashMap<ProtocolVersion> byNewProtocolId = new Int2ObjectOpenHashMap<>();
+	protected static final Int2ObjectOpenHashMap<ProtocolVersion> byOldProtocolId = new Int2ObjectOpenHashMap<>();
+	protected static final Int2ObjectOpenHashMap<ProtocolVersion> byNewProtocolId = new Int2ObjectOpenHashMap<>();
 	static {
 		Arrays.stream(ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_6_4)).forEach(version -> byOldProtocolId.put(version.getId(), version));
 		Arrays.stream(ProtocolVersion.getAllAfterI(ProtocolVersion.MINECRAFT_1_7_5)).forEach(version -> byNewProtocolId.put(version.getId(), version));
