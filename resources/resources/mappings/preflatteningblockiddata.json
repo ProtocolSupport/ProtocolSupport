@@ -1810,14 +1810,9 @@
     "legacydata": 11
   },
   {
-    "blockdata": "minecraft:oak_door[facing=north,half=lower,hinge=left,open=false,powered=false]",
-    "legacyid": 64,
-    "legacydata": 12
-  },
-  {
     "blockdata": "minecraft:ladder[facing=north,waterlogged=false]",
     "legacyid": 65,
-    "legacydata": 0
+    "legacydata": 2
   },
   {
     "blockdata": "minecraft:ladder[facing=south,waterlogged=false]",
@@ -2095,11 +2090,6 @@
     "legacydata": 11
   },
   {
-    "blockdata": "minecraft:iron_door[facing=north,half=lower,hinge=left,open=false,powered=false]",
-    "legacyid": 71,
-    "legacydata": 12
-  },
-  {
     "blockdata": "minecraft:oak_pressure_plate[powered=false]",
     "legacyid": 72,
     "legacydata": 0
@@ -2140,16 +2130,6 @@
     "legacydata": 4
   },
   {
-    "blockdata": "minecraft:redstone_torch[lit=false]",
-    "legacyid": 75,
-    "legacydata": 5
-  },
-  {
-    "blockdata": "minecraft:redstone_torch[lit=true]",
-    "legacyid": 76,
-    "legacydata": 0
-  },
-  {
     "blockdata": "minecraft:redstone_wall_torch[facing=east,lit=true]",
     "legacyid": 76,
     "legacydata": 1
@@ -2168,6 +2148,16 @@
     "blockdata": "minecraft:redstone_wall_torch[facing=north,lit=true]",
     "legacyid": 76,
     "legacydata": 4
+  },
+  {
+    "blockdata": "minecraft:redstone_torch[lit=false]",
+    "legacyid": 75,
+    "legacydata": 5
+  },
+  {
+    "blockdata": "minecraft:redstone_torch[lit=true]",
+    "legacyid": 76,
+    "legacydata": 5
   },
   {
     "blockdata": "minecraft:stone_button[face=ceiling,facing=north,powered=false]",
@@ -3626,8 +3616,8 @@
   },
   {
     "blockdata": "minecraft:oak_slab[type=bottom,waterlogged=false]",
-    "legacyid": 125,
-    "legacydata": 6
+    "legacyid": 126,
+    "legacydata": 0
   },
   {
     "blockdata": "minecraft:spruce_slab[type=bottom,waterlogged=false]",
@@ -4128,11 +4118,6 @@
     "blockdata": "minecraft:mossy_cobblestone_wall[east=false,north=false,south=false,up=false,waterlogged=false,west=false]",
     "legacyid": 139,
     "legacydata": 1
-  },
-  {
-    "blockdata": "minecraft:cobblestone_wall[east=false,north=false,south=false,up=true,waterlogged=false,west=false]",
-    "legacyid": 139,
-    "legacydata": 2
   },
   {
     "blockdata": "minecraft:potted_cactus",
@@ -5701,17 +5686,17 @@
   },
   {
     "blockdata": "minecraft:red_sandstone_slab[type=bottom,waterlogged=false]",
-    "legacyid": 181,
-    "legacydata": 1
-  },
-  {
-    "blockdata": "minecraft:smooth_red_sandstone",
-    "legacyid": 181,
-    "legacydata": 8
+    "legacyid": 182,
+    "legacydata": 0
   },
   {
     "blockdata": "minecraft:red_sandstone_slab[type=top,waterlogged=false]",
     "legacyid": 182,
+    "legacydata": 8
+  },
+  {
+    "blockdata": "minecraft:smooth_red_sandstone",
+    "legacyid": 181,
     "legacydata": 8
   },
   {
@@ -6200,11 +6185,6 @@
     "legacydata": 11
   },
   {
-    "blockdata": "minecraft:spruce_door[facing=north,half=lower,hinge=left,open=false,powered=false]",
-    "legacyid": 193,
-    "legacydata": 12
-  },
-  {
     "blockdata": "minecraft:birch_door[facing=east,half=lower,hinge=right,open=false,powered=false]",
     "legacyid": 194,
     "legacydata": 0
@@ -6263,11 +6243,6 @@
     "blockdata": "minecraft:birch_door[facing=east,half=upper,hinge=right,open=false,powered=true]",
     "legacyid": 194,
     "legacydata": 11
-  },
-  {
-    "blockdata": "minecraft:birch_door[facing=north,half=lower,hinge=left,open=false,powered=false]",
-    "legacyid": 194,
-    "legacydata": 12
   },
   {
     "blockdata": "minecraft:jungle_door[facing=east,half=lower,hinge=right,open=false,powered=false]",
@@ -6330,11 +6305,6 @@
     "legacydata": 11
   },
   {
-    "blockdata": "minecraft:jungle_door[facing=north,half=lower,hinge=left,open=false,powered=false]",
-    "legacyid": 195,
-    "legacydata": 12
-  },
-  {
     "blockdata": "minecraft:acacia_door[facing=east,half=lower,hinge=right,open=false,powered=false]",
     "legacyid": 196,
     "legacydata": 0
@@ -6395,11 +6365,6 @@
     "legacydata": 11
   },
   {
-    "blockdata": "minecraft:acacia_door[facing=north,half=lower,hinge=left,open=false,powered=false]",
-    "legacyid": 196,
-    "legacydata": 12
-  },
-  {
     "blockdata": "minecraft:dark_oak_door[facing=east,half=lower,hinge=right,open=false,powered=false]",
     "legacyid": 197,
     "legacydata": 0
@@ -6458,11 +6423,6 @@
     "blockdata": "minecraft:dark_oak_door[facing=east,half=upper,hinge=right,open=false,powered=true]",
     "legacyid": 197,
     "legacydata": 11
-  },
-  {
-    "blockdata": "minecraft:dark_oak_door[facing=north,half=lower,hinge=left,open=false,powered=false]",
-    "legacyid": 197,
-    "legacydata": 12
   },
   {
     "blockdata": "minecraft:end_rod[facing=down]",
@@ -6596,8 +6556,8 @@
   },
   {
     "blockdata": "minecraft:purpur_slab[type=bottom,waterlogged=false]",
-    "legacyid": 204,
-    "legacydata": 1
+    "legacyid": 205,
+    "legacydata": 0
   },
   {
     "blockdata": "minecraft:purpur_slab[type=top,waterlogged=false]",
