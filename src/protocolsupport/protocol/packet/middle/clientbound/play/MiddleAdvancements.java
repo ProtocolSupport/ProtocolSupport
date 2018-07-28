@@ -11,7 +11,7 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.utils.EnumConstantLookups;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 
@@ -64,7 +64,7 @@ public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 		protected static AdvancementDisplay read(ByteBuf from, String locale) {
 			BaseComponent title = ChatAPI.fromJSON(StringSerializer.readString(from, ProtocolVersionsHelper.LATEST_PC));
 			BaseComponent description = ChatAPI.fromJSON(StringSerializer.readString(from, ProtocolVersionsHelper.LATEST_PC));
-			ItemStackWrapper icon = ItemStackSerializer.readItemStack(from, ProtocolVersionsHelper.LATEST_PC, locale, false);
+			NetworkItemStack icon = ItemStackSerializer.readItemStack(from, ProtocolVersionsHelper.LATEST_PC, locale, false);
 			FrameType type = MiscSerializer.readVarIntEnum(from, FrameType.CONSTANT_LOOKUP);
 			int flags = from.readInt();
 			String background = (flags & flagHasBackgroundOffset) != 0 ? StringSerializer.readString(from, ProtocolVersionsHelper.LATEST_PC) : null;
@@ -75,13 +75,13 @@ public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 
 		public final BaseComponent title;
 		public final BaseComponent description;
-		public final ItemStackWrapper icon;
+		public final NetworkItemStack icon;
 		public final FrameType frametype;
 		public final int flags;
 		public final String background;
 		public final float x;
 		public final float y;
-		public AdvancementDisplay(BaseComponent title, BaseComponent description, ItemStackWrapper icon, FrameType frametype, int flags, String background, float x, float y) {
+		public AdvancementDisplay(BaseComponent title, BaseComponent description, NetworkItemStack icon, FrameType frametype, int flags, String background, float x, float y) {
 			this.title = title;
 			this.description = description;
 			this.icon = icon;

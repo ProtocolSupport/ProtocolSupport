@@ -6,6 +6,8 @@ public abstract class NBTTagCompoundWrapper {
 
 	public abstract boolean isNull();
 
+	public abstract Object unwrap();
+
 	public abstract void remove(String key);
 
 	public abstract Collection<String> getKeys();
@@ -62,8 +64,13 @@ public abstract class NBTTagCompoundWrapper {
 
 	public static final NBTTagCompoundWrapper NULL = new NBTTagCompoundWrapper() {
 
-		private UnsupportedOperationException reject() {
+		protected UnsupportedOperationException reject() {
 			return new UnsupportedOperationException("Null tag");
+		}
+
+		@Override
+		public Object unwrap() {
+			throw reject();
 		}
 
 		@Override

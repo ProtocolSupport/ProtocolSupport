@@ -11,7 +11,7 @@ import protocolsupport.api.Connection;
  */
 public class PlayerSyncLoginEvent extends PlayerAbstractLoginEvent {
 
-	private final Player player;
+	protected final Player player;
 	public PlayerSyncLoginEvent(Connection connection, Player player) {
 		super(connection, false);
 		this.player = player;

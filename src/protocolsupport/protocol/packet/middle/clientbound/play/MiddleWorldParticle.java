@@ -1,16 +1,14 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import java.util.ArrayList;
-
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.id.IdSkipper;
-import protocolsupport.protocol.utils.types.Particle;
+import protocolsupport.protocol.typeremapper.particle.ParticleRemapper;
+import protocolsupport.protocol.utils.types.particle.Particle;
+import protocolsupport.protocol.utils.types.particle.ParticleRegistry;
 
 public abstract class MiddleWorldParticle extends ClientBoundMiddlePacket {
 
-	protected Particle type;
+	protected Particle particle;
 	protected boolean longdist;
 	protected float x;
 	protected float y;
@@ -20,11 +18,10 @@ public abstract class MiddleWorldParticle extends ClientBoundMiddlePacket {
 	protected float offZ;
 	protected float speed;
 	protected int count;
-	protected ArrayList<Integer> adddata = new ArrayList<>();
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		type = Particle.getById(serverdata.readInt());
+		particle = ParticleRegistry.fromId(serverdata.readInt());
 		longdist = serverdata.readBoolean();
 		x = serverdata.readFloat();
 		y = serverdata.readFloat();
@@ -34,15 +31,13 @@ public abstract class MiddleWorldParticle extends ClientBoundMiddlePacket {
 		offZ = serverdata.readFloat();
 		speed = serverdata.readFloat();
 		count = serverdata.readInt();
-		adddata.clear();
-		while (serverdata.isReadable()) {
-			adddata.add(VarNumberSerializer.readVarInt(serverdata));
-		}
+		particle.readData(serverdata);
+		particle = ParticleRemapper.remap(connection.getVersion(), particle);
 	}
 
 	@Override
 	public boolean postFromServerRead() {
-		return !IdSkipper.PARTICLE.getTable(connection.getVersion()).shouldSkip(type);
+		return particle.getId() != ParticleRegistry.ID_SKIP;
 	}
 
 }

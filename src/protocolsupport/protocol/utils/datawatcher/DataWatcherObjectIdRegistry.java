@@ -15,8 +15,10 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloat
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectItemStack;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectNBTTagCompound;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalChat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalUUID;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectParticle;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectShort;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
@@ -37,25 +39,36 @@ public class DataWatcherObjectIdRegistry {
 	}
 
 	static {
-		register(DataWatcherObjectBlockState.class, 12, ProtocolVersionsHelper.AFTER_1_8);
-		register(DataWatcherObjectBoolean.class, 6, ProtocolVersionsHelper.AFTER_1_8);
 		register(DataWatcherObjectByte.class, 0, ProtocolVersionsHelper.ALL_PC);
-		register(DataWatcherObjectChat.class, 4, ProtocolVersionsHelper.AFTER_1_8);
-		register(DataWatcherObjectDirection.class, 10, ProtocolVersionsHelper.AFTER_1_8);
+		register(DataWatcherObjectVarInt.class, 1, ProtocolVersionsHelper.AFTER_1_8);
 		register(DataWatcherObjectFloat.class, 2, ProtocolVersionsHelper.AFTER_1_8);
 		register(DataWatcherObjectFloat.class, 3, ProtocolVersionsHelper.BEFORE_1_9);
-		register(DataWatcherObjectInt.class, 2, ProtocolVersionsHelper.BEFORE_1_9);
-		register(DataWatcherObjectItemStack.class, 5, ProtocolVersionsHelper.ALL_PC);
-		register(DataWatcherObjectNBTTagCompound.class, 13, ProtocolVersionsHelper.AFTER_1_11);
-		register(DataWatcherObjectOptionalPosition.class, 9, ProtocolVersionsHelper.AFTER_1_8);
-		register(DataWatcherObjectOptionalUUID.class, 11, ProtocolVersionsHelper.AFTER_1_8);
-		register(DataWatcherObjectPosition.class, 8, ProtocolVersionsHelper.AFTER_1_8);
-		register(DataWatcherObjectShort.class, 1, ProtocolVersionsHelper.BEFORE_1_9);
 		register(DataWatcherObjectString.class, 3, ProtocolVersionsHelper.AFTER_1_8);
 		register(DataWatcherObjectString.class, 4, ProtocolVersionsHelper.BEFORE_1_9);
-		register(DataWatcherObjectVarInt.class, 1, ProtocolVersionsHelper.AFTER_1_8);
-		register(DataWatcherObjectVector3f.class, 7, ProtocolVersionsHelper.ALL_PC);
+		register(DataWatcherObjectChat.class, 4, ProtocolVersionsHelper.AFTER_1_8);
+		register(DataWatcherObjectOptionalChat.class, 5, ProtocolVersionsHelper.LATEST_PC);
+		register(DataWatcherObjectItemStack.class, 6, ProtocolVersionsHelper.LATEST_PC);
+		register(DataWatcherObjectItemStack.class, 5, ProtocolVersionsHelper.BEFORE_1_13);
+		register(DataWatcherObjectBoolean.class, 7, ProtocolVersionsHelper.LATEST_PC);
+		register(DataWatcherObjectBoolean.class, 6, ProtocolVersionsHelper.RANGE__1_9__1_12_2);
+		register(DataWatcherObjectVector3f.class, 8, ProtocolVersionsHelper.LATEST_PC);
+		register(DataWatcherObjectVector3f.class, 7, ProtocolVersionsHelper.BEFORE_1_13);
+		register(DataWatcherObjectPosition.class, 9, ProtocolVersionsHelper.LATEST_PC);
+		register(DataWatcherObjectPosition.class, 8, ProtocolVersionsHelper.RANGE__1_9__1_12_2);
+		register(DataWatcherObjectOptionalPosition.class, 10, ProtocolVersionsHelper.LATEST_PC);
+		register(DataWatcherObjectOptionalPosition.class, 9, ProtocolVersionsHelper.RANGE__1_9__1_12_2);
+		register(DataWatcherObjectDirection.class, 11, ProtocolVersionsHelper.LATEST_PC);
+		register(DataWatcherObjectDirection.class, 10, ProtocolVersionsHelper.RANGE__1_9__1_12_2);
+		register(DataWatcherObjectOptionalUUID.class, 12, ProtocolVersionsHelper.LATEST_PC);
+		register(DataWatcherObjectOptionalUUID.class, 11, ProtocolVersionsHelper.RANGE__1_9__1_12_2);
+		register(DataWatcherObjectBlockState.class, 13, ProtocolVersionsHelper.LATEST_PC);
+		register(DataWatcherObjectBlockState.class, 12, ProtocolVersionsHelper.RANGE__1_9__1_12_2);
+		register(DataWatcherObjectNBTTagCompound.class, 14, ProtocolVersionsHelper.LATEST_PC);
+		register(DataWatcherObjectNBTTagCompound.class, 13, ProtocolVersionsHelper.RANGE__1_11__1_12_2);
+		register(DataWatcherObjectShort.class, 1, ProtocolVersionsHelper.BEFORE_1_9);
+		register(DataWatcherObjectInt.class, 2, ProtocolVersionsHelper.BEFORE_1_9);
 		register(DataWatcherObjectVector3i.class, 6, ProtocolVersionsHelper.BEFORE_1_9);
+		register(DataWatcherObjectParticle.class, 15, ProtocolVersionsHelper.LATEST_PC);
 	}
 
 	public static int getTypeId(@SuppressWarnings("rawtypes") Class<? extends DataWatcherObject> clazz, ProtocolVersion version) {

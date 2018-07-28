@@ -19,12 +19,13 @@ public class ScoreboardTeam extends MiddleScoreboardTeam {
 		StringSerializer.writeString(serializer, version, name);
 		serializer.writeByte(mode);
 		if ((mode == 0) || (mode == 2)) {
-			StringSerializer.writeString(serializer, version, displayName);
-			StringSerializer.writeString(serializer, version, prefix);
-			StringSerializer.writeString(serializer, version, suffix);
+			String locale = cache.getAttributesCache().getLocale();
+			StringSerializer.writeString(serializer, version, Utils.clampString(displayName.toLegacyText(locale), 32));
+			StringSerializer.writeString(serializer, version, Utils.clampString(prefix.toLegacyText(locale), 16));
+			StringSerializer.writeString(serializer, version, Utils.clampString(suffix.toLegacyText(locale), 16));
 			serializer.writeByte(friendlyFire);
 			StringSerializer.writeString(serializer, version, nameTagVisibility);
-			serializer.writeByte(color);
+			serializer.writeByte(color <= 15 ? color : -1);
 		}
 		if ((mode == 0) || (mode == 3) || (mode == 4)) {
 			ArraySerializer.writeVarIntTArray(serializer, players, (to, element) -> StringSerializer.writeString(to, version, Utils.clampString(element, 16)));

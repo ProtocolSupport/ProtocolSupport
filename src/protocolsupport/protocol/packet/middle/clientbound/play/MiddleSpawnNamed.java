@@ -6,8 +6,8 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.watchedentity.DataWatcherDataRemapper;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.typeremapper.watchedentity.DataWatcherRemapper;
+import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 
 public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 
@@ -17,7 +17,7 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 	protected double z;
 	protected int yaw;
 	protected int pitch;
-	protected DataWatcherDataRemapper metadata = new DataWatcherDataRemapper();
+	protected DataWatcherRemapper metadata = new DataWatcherRemapper();
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {

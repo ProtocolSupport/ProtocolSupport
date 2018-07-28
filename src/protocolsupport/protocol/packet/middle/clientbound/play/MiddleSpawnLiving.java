@@ -6,9 +6,9 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.id.IdSkipper;
-import protocolsupport.protocol.typeremapper.watchedentity.DataWatcherDataRemapper;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
+import protocolsupport.protocol.typeremapper.watchedentity.DataWatcherRemapper;
+import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 
 public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 
@@ -22,7 +22,7 @@ public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 	protected int motX;
 	protected int motY;
 	protected int motZ;
-	protected DataWatcherDataRemapper metadata = new DataWatcherDataRemapper();
+	protected DataWatcherRemapper metadata = new DataWatcherRemapper();
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
@@ -45,7 +45,7 @@ public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 	@Override
 	public boolean postFromServerRead() {
 		cache.getWatchedEntityCache().addWatchedEntity(entity);
-		return !IdSkipper.ENTITY.getTable(connection.getVersion()).shouldSkip(entity.getType());
+		return !GenericIdSkipper.ENTITY.getTable(connection.getVersion()).shouldSkip(entity.getType());
 	}
 
 }

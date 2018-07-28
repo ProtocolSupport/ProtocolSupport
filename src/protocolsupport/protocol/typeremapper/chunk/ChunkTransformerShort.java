@@ -1,14 +1,15 @@
 package protocolsupport.protocol.typeremapper.chunk;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
+import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 
 public class ChunkTransformerShort extends ChunkTransformer {
 
 	@Override
 	public byte[] toLegacyData(ProtocolVersion version) {
-		ArrayBasedIdRemappingTable table = IdRemapper.BLOCK.getTable(ProtocolVersion.MINECRAFT_1_8);
+		ArrayBasedIdRemappingTable table = LegacyBlockData.REGISTRY.getTable(ProtocolVersion.MINECRAFT_1_8);
 		byte[] data = new byte[((hasSkyLight ? 12288 : 10240) * columnsCount) + 256];
 		int blockIdIndex = 0;
 		int blockLightIndex = 8192 * columnsCount;
@@ -20,7 +21,7 @@ public class ChunkTransformerShort extends ChunkTransformer {
 				for (int block = 0; block < blocksInSection; block++) {
 					int dataindex = blockIdIndex + (block << 1);
 					int blockstate = storage.getBlockState(block);
-					blockstate = table.getRemap(blockstate);
+					blockstate = PreFlatteningBlockIdData.getCombinedId(table.getRemap(blockstate));
 					data[dataindex] = (byte) blockstate;
 					data[dataindex + 1] = (byte) (blockstate >> 8);
 				}
@@ -34,7 +35,9 @@ public class ChunkTransformerShort extends ChunkTransformer {
 			}
 		}
 		if (hasBiomeData) {
-			System.arraycopy(biomeData, 0, data, skyLightIndex, 256);
+			for (int i = 0; i < biomeData.length; i++) {
+				data[skyLightIndex + i] = (byte) biomeData[i];
+			}
 		}
 		return data;
 	}

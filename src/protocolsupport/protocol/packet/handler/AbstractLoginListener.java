@@ -6,7 +6,6 @@ import java.net.InetSocketAddress;
 import java.security.PrivateKey;
 import java.text.MessageFormat;
 import java.util.Arrays;
-import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -28,7 +27,6 @@ import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.PlayerLoginStartEvent;
 import protocolsupport.api.events.PlayerProfileCompleteEvent;
-import protocolsupport.api.events.PlayerPropertiesResolveEvent;
 import protocolsupport.api.utils.Profile;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.utils.MinecraftEncryption;
@@ -75,7 +73,6 @@ public abstract class AbstractLoginListener {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void disconnect(String s) {
 		try {
 			Bukkit.getLogger().info("Disconnecting " + getConnectionRepr() + ": " + s);
@@ -89,7 +86,6 @@ public abstract class AbstractLoginListener {
 		return (connection.getProfile().getName() != null) ? (connection.getProfile() + " (" + networkManager.getAddress() + ")") : networkManager.getAddress().toString();
 	}
 
-	protected UUID forcedUUID = null;
 	public void handleLoginStart(String name) {
 		Validate.isTrue(state == LoginState.HELLO, "Unexpected hello packet");
 		state = LoginState.ONLINEMODERESOLVE;
@@ -106,10 +102,6 @@ public abstract class AbstractLoginListener {
 				}
 
 				profile.setOnlineMode(event.isOnlineMode());
-				forcedUUID = event.getForcedUUID();
-				if ((forcedUUID == null) && profile.isOnlineMode() && !event.useOnlineModeUUID()) {
-					forcedUUID = Profile.generateOfflineModeUUID(profile.getName());
-				}
 
 				if (profile.isOnlineMode()) {
 					state = LoginState.KEY;
@@ -189,7 +181,6 @@ public abstract class AbstractLoginListener {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	protected void finishLogin() throws InterruptedException, ExecutionException  {
 		if (!networkManager.isConnected()) {
 			return;
@@ -200,18 +191,8 @@ public abstract class AbstractLoginListener {
 
 		InetAddress address = saddress.getAddress();
 
-		//properties resolve event, only fire if has registered listeners, because it doesn't allow multiple properties for same name
-		if (PlayerPropertiesResolveEvent.getHandlerList().getRegisteredListeners().length > 0) {
-			PlayerPropertiesResolveEvent propResolve = new PlayerPropertiesResolveEvent(connection);
-			Bukkit.getPluginManager().callEvent(propResolve);
-			profile.clearProperties();
-			propResolve.getProperties().values().forEach(profile::addProperty);
-		}
-
 		//profile complete event
-		//forced uuid is inherited for login start legacy uuid change methods
 		PlayerProfileCompleteEvent event = new PlayerProfileCompleteEvent(connection);
-		event.setForcedUUID(forcedUUID);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.getForcedName() != null) {
 			profile.setName(event.getForcedName());

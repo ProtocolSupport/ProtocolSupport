@@ -7,34 +7,11 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class ChunkTransformer {
 
-	public static enum BlockFormat {
-		VARIES, //format for 1.9+
-		SHORT, //format for 1.8
-		BYTE, //format for 1.7-
-	}
-
-	public static ChunkTransformer create(BlockFormat format) {
-		switch (format) {
-			case VARIES: {
-				return new ChunkTransformerVaries();
-			}
-			case SHORT: {
-				return new ChunkTransformerShort();
-			}
-			case BYTE: {
-				return new ChunkTransformerByte();
-			}
-			default: {
-				throw new IllegalArgumentException();
-			}
-		}
-	}
-
 	protected int columnsCount;
 	protected boolean hasSkyLight;
 	protected boolean hasBiomeData;
 	protected final ChunkSection[] sections = new ChunkSection[16];
-	protected final byte[] biomeData = new byte[256];
+	protected final int[] biomeData = new int[256];
 
 	public void loadData(byte[] data, int bitmap, boolean hasSkyLight, boolean hasBiomeData) {
 		this.columnsCount = Integer.bitCount(bitmap);
@@ -49,7 +26,9 @@ public abstract class ChunkTransformer {
 			}
 		}
 		if (hasBiomeData) {
-			chunkdata.readBytes(biomeData);
+			for (int i = 0; i < biomeData.length; i++) {
+				biomeData[i] = chunkdata.readInt();
+			}
 		}
 	}
 
@@ -59,10 +38,11 @@ public abstract class ChunkTransformer {
 
 	protected static class ChunkSection {
 
-		private static final int[] globalpalette = new int[Short.MAX_VALUE * 2];
+		protected static final int globalPaletteBitsPerBlock = 14;
+		protected static final int[] globalPaletteData = new int[Short.MAX_VALUE * 2];
 		static {
-			for (int i = 0; i < globalpalette.length; i++) {
-				globalpalette[i] = i;
+			for (int i = 0; i < globalPaletteData.length; i++) {
+				globalPaletteData[i] = i;
 			}
 		}
 
@@ -72,10 +52,9 @@ public abstract class ChunkTransformer {
 
 		public ChunkSection(ByteBuf datastream, boolean hasSkyLight) {
 			byte bitsPerBlock = datastream.readByte();
-			int[] palette = globalpalette;
-			int palettelength = VarNumberSerializer.readVarInt(datastream);
-			if (palettelength != 0) {
-				palette = new int[palettelength];
+			int[] palette = globalPaletteData;
+			if (bitsPerBlock != globalPaletteBitsPerBlock) {
+				palette = new int[VarNumberSerializer.readVarInt(datastream)];
 				for (int i = 0; i < palette.length; i++) {
 					palette[i] = VarNumberSerializer.readVarInt(datastream);
 				}

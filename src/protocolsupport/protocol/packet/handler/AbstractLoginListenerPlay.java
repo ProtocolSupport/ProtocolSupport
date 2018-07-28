@@ -33,7 +33,6 @@ public abstract class AbstractLoginListenerPlay {
 		this.hostname = hostname;
 	}
 
-	@SuppressWarnings({ "unchecked", "deprecation" })
 	public void finishLogin() {
 		if (!networkManager.isConnected()) {
 			return;
@@ -67,7 +66,6 @@ public abstract class AbstractLoginListenerPlay {
 			disconnect(event.getDenyLoginMessage());
 			return;
 		}
-		connection.getProfile().setProperties(event.getProperties());
 		ready = true;
 	}
 
@@ -120,7 +118,7 @@ public abstract class AbstractLoginListenerPlay {
 		}
 
 		//send packet to notify about actual login phase finished
-		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("PS|FinishLogin"));
+		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("finishlogin"));
 		//add player to game
 		joinGame(joindata.data);
 	}
@@ -128,7 +126,7 @@ public abstract class AbstractLoginListenerPlay {
 	protected void keepConnection() {
 		//custom payload does nothing on a client when sent with invalid tag,
 		//but it resets client readtimeouthandler, and that is exactly what we need
-		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("PS|KeepAlive"));
+		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("keepalive"));
 		//we also need to reset server readtimeouthandler (may be null if netty already teared down the pipeline)
 		SimpleReadTimeoutHandler timeouthandler = ChannelHandlers.getTimeoutHandler(networkManager.getChannel().pipeline());
 		if (timeouthandler != null) {
@@ -157,7 +155,6 @@ public abstract class AbstractLoginListenerPlay {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	protected void disconnect0(String s) {
 		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createPlayDisconnectPacket(s), future -> networkManager.close(s));
 	}

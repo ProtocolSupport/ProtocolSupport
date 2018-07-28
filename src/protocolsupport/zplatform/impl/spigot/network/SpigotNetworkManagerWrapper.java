@@ -14,11 +14,11 @@ import com.mojang.authlib.properties.Property;
 import io.netty.channel.Channel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import net.minecraft.server.v1_12_R1.ChatComponentText;
-import net.minecraft.server.v1_12_R1.NetworkManager;
-import net.minecraft.server.v1_12_R1.Packet;
-import net.minecraft.server.v1_12_R1.PacketListener;
-import net.minecraft.server.v1_12_R1.PlayerConnection;
+import net.minecraft.server.v1_13_R1.ChatComponentText;
+import net.minecraft.server.v1_13_R1.NetworkManager;
+import net.minecraft.server.v1_13_R1.Packet;
+import net.minecraft.server.v1_13_R1.PacketListener;
+import net.minecraft.server.v1_13_R1.PlayerConnection;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
@@ -72,8 +72,8 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 	}
 
 	@Override
-	public void sendPacket(Object packet, GenericFutureListener<? extends Future<? super Void>> genericListener, @SuppressWarnings("unchecked") GenericFutureListener<? extends Future<? super Void>>... futureListeners) {
-		internal.sendPacket((Packet<?>) packet, genericListener, futureListeners);
+	public void sendPacket(Object packet, GenericFutureListener<? extends Future<? super Void>> genericListener) {
+		internal.sendPacket((Packet<?>) packet, genericListener);
 	}
 
 	@Override

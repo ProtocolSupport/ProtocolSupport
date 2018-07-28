@@ -16,7 +16,7 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 public class Map extends MiddleMap {
 
 	@SuppressWarnings("deprecation")
-	private static final int mapId = Material.MAP.getId();
+	private static final int mapId = Material.LEGACY_MAP.getId();
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
@@ -36,7 +36,7 @@ public class Map extends MiddleMap {
 			iconsdata.writeShort((icons.length * 3) + 1);
 			iconsdata.writeByte(1);
 			for (Icon icon : icons) {
-				iconsdata.writeByte(icon.dirtype);
+				iconsdata.writeByte(((icon.type <= 9 ? icon.type : 0) << 4) | icon.direction);
 				iconsdata.writeByte(icon.x);
 				iconsdata.writeByte(icon.z);
 			}

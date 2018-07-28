@@ -4,13 +4,13 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public abstract class MiddleInventorySetSlot extends ClientBoundMiddlePacket {
 
 	protected int windowId;
 	protected int slot;
-	protected ItemStackWrapper itemstack;
+	protected NetworkItemStack itemstack;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
