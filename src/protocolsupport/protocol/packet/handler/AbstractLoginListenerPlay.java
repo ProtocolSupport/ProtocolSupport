@@ -33,7 +33,6 @@ public abstract class AbstractLoginListenerPlay {
 		this.hostname = hostname;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void finishLogin() {
 		if (!networkManager.isConnected()) {
 			return;
@@ -67,7 +66,6 @@ public abstract class AbstractLoginListenerPlay {
 			disconnect(event.getDenyLoginMessage());
 			return;
 		}
-		connection.getProfile().setProperties(event.getProperties());
 		ready = true;
 	}
 

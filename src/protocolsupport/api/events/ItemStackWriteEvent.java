@@ -5,21 +5,15 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.utils.i18n.I18NData;
 
 /**
  * This event is fired when itemstack is being written to client
  */
 public abstract class ItemStackWriteEvent extends Event {
 
-	private final ProtocolVersion version;
-	private final String locale;
-	private final ItemStack original;
-
-	@Deprecated
-	public ItemStackWriteEvent(ProtocolVersion version, ItemStack original) {
-		this(version, I18NData.DEFAULT_LOCALE, original);
-	}
+	protected final ProtocolVersion version;
+	protected final String locale;
+	protected final ItemStack original;
 
 	public ItemStackWriteEvent(ProtocolVersion version, String locale, ItemStack original) {
 		super(true);
@@ -52,15 +46,6 @@ public abstract class ItemStackWriteEvent extends Event {
 	public String getLocale() {
 		return locale;
 	}
-
-	/**
-	 * Previously returned the resulting itemstack
-	 * Now returns a writethrough shared stone itemstack which only copies lore and name to the result
-	 * @return resulting itemstack
-	 * @deprecated replaced by ability to add lore and set name for resulting itemstack
-	 */
-	@Deprecated
-	public abstract ItemStack getResult();
 
 	private static final HandlerList list = new HandlerList();
 
