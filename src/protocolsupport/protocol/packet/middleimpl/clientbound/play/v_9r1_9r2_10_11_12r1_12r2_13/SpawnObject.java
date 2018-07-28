@@ -6,7 +6,9 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnObject
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.typeremapper.basic.GenericIdRemapper;
+import protocolsupport.protocol.typeremapper.basic.ObjectDataRemaper;
+import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -15,10 +17,12 @@ public class SpawnObject extends MiddleSpawnObject {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
+		NetworkEntityType type = GenericIdRemapper.ENTITY.getTable(version).getRemap(entity.getType());
+		objectdata = ObjectDataRemaper.REGISTRY.getTable(version).getRemap(type).applyAsInt(objectdata);
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_OBJECT_ID);
 		VarNumberSerializer.writeVarInt(serializer, entity.getId());
 		MiscSerializer.writeUUID(serializer, entity.getUUID());
-		serializer.writeByte(IdRemapper.ENTITY.getTable(version).getRemap(entity.getType()).getNetworkTypeId());
+		serializer.writeByte(type.getNetworkTypeId());
 		serializer.writeDouble(x);
 		serializer.writeDouble(y);
 		serializer.writeDouble(z);

@@ -17,10 +17,16 @@ import protocolsupport.zplatform.ServerPlatform;
 @SuppressWarnings("deprecation")
 public class PreFlatteningBlockIdData {
 
-	private static final int[] toLegacyId = new int[MinecraftData.ID_MAX];
-	private static void register(String modernBlockState, int legacyId, int legacyData) {
+	protected static final int[] toLegacyId = new int[MinecraftData.ID_MAX];
+
+	protected static int formLegacyCombinedId(int id, int data) {
+		return (id << 4) | data;
+	}
+
+	protected static void register(String modernBlockState, int legacyId, int legacyData) {
 		toLegacyId[ServerPlatform.get().getMiscUtils().getBlockDataNetworkId(Bukkit.createBlockData(modernBlockState))] = formLegacyCombinedId(legacyId, legacyData);
 	}
+
 	static {
 		Arrays.fill(toLegacyId, formLegacyCombinedId(1, 0));
 		//air
@@ -42,28 +48,24 @@ public class PreFlatteningBlockIdData {
 		}
 	}
 
-	public static int getLegacyCombinedId(int modernId) {
+	public static int getCombinedId(int modernId) {
 		return toLegacyId[modernId];
 	}
 
-	public static int getIdFromLegacyCombinedId(int legacyId) {
+	public static int getIdFromCombinedId(int legacyId) {
 		return legacyId >> 4;
 	}
 
-	public static int getDataFromLegacyCombinedId(int oldId) {
+	public static int getDataFromCombinedId(int oldId) {
 		return oldId & 0xF;
 	}
 
-	public static int getLegacyCombinedIdFromLegacyObjData(int objectdata) {
-		return ((objectdata & 0xFFF) << 4) | (objectdata >> 12);
+	public static int convertCombinedIdToM12(int blockstate) {
+		return (getIdFromCombinedId(blockstate)) | (getDataFromCombinedId(blockstate) << 12);
 	}
 
-	public static int getLegacyObjDataFromLegacyBlockState(int blockstate) {
-		return (blockstate >> 4) | ((blockstate & 0xF) << 12);
-	}
-
-	private static int formLegacyCombinedId(int id, int data) {
-		return (id << 4) | data;
+	public static int convertCombinedIdToM16(int blockstate) {
+		return (getIdFromCombinedId(blockstate)) | (getDataFromCombinedId(blockstate) << 16);
 	}
 
 }

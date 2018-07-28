@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.sound;
+package protocolsupport.protocol.typeremapper.basic;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.GenericRemappingRegistry;

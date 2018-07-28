@@ -10,8 +10,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
-import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
+import protocolsupport.protocol.typeremapper.block.BlockIdRemappingHelper;
 import protocolsupport.protocol.typeremapper.particle.ParticleRemapper;
 import protocolsupport.protocol.typeremapper.particle.legacy.LegacyParticle;
 import protocolsupport.protocol.typeremapper.watchedentity.value.IndexValueRemapper;
@@ -243,9 +242,9 @@ public enum EntityMetadataRemapperRegistry {
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Villager.PROFESSION, 16), ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	ENDERMAN(NetworkEntityType.ENDERMAN, INSENTIENT,
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Enderman.CARRIED_BLOCK, 12), ProtocolVersionsHelper.RANGE__1_10__1_13),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Enderman.CARRIED_BLOCK, 11), ProtocolVersionsHelper.ALL_1_9),
 //TODO: Remap this.
+//		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Enderman.CARRIED_BLOCK, 12), ProtocolVersionsHelper.RANGE__1_10__1_13),
+//		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Enderman.CARRIED_BLOCK, 11), ProtocolVersionsHelper.ALL_1_9),
 //		new Entry(new IndexValueRemapper<Integer, DataWatcherObjectBlockState>(DataWatcherObjectIndex.Enderman.CARRIED_BLOCK, 16) {
 //			@Override
 //			public DataWatcherObject<?> remapValue(DataWatcherObjectBlockState object) {
@@ -509,32 +508,38 @@ public enum EntityMetadataRemapperRegistry {
 				new IndexValueRemapper<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Minecart.BLOCK, 9) {
 					@Override
 					public DataWatcherObject<?> remapValue(DataWatcherObjectVarInt object) {
-						return new DataWatcherObjectVarInt(
-							PreFlatteningBlockIdData.getLegacyObjDataFromLegacyBlockState(
-								PreFlatteningBlockIdData.getLegacyCombinedId(LegacyBlockData.REGISTRY.getTable(version).getRemap(object.getValue()))
-							)
-						);
+						return new DataWatcherObjectVarInt(BlockIdRemappingHelper.remapToCombinedIdM12(version, object.getValue()));
 					}
 				},
 			ProtocolVersionsHelper.RANGE__1_10__1_12_2
 		),
+		Entry.createPerVersion(
+			version ->
+				new IndexValueRemapper<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Minecart.BLOCK, 8) {
+					@Override
+					public DataWatcherObject<?> remapValue(DataWatcherObjectVarInt object) {
+						return new DataWatcherObjectVarInt(BlockIdRemappingHelper.remapToCombinedIdM12(version, object.getValue()));
+					}
+				},
+			ProtocolVersionsHelper.ALL_1_9
+		),
 		new Entry[] {
-			new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.BLOCK, 8), ProtocolVersionsHelper.ALL_1_9),
-			new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Minecart.BLOCK, 20), ProtocolVersion.MINECRAFT_1_8),
+			new Entry(new IndexValueRemapper<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Minecart.BLOCK, 20) {
+				@Override
+				public DataWatcherObject<?> remapValue(DataWatcherObjectVarInt object) {
+					return new DataWatcherObjectInt(BlockIdRemappingHelper.remapToCombinedIdM12(ProtocolVersion.MINECRAFT_1_8, object.getValue()));
+				}
+			}, ProtocolVersion.MINECRAFT_1_8),
 		},
 		Entry.createPerVersion(
 			version ->
 				new IndexValueRemapper<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Minecart.BLOCK, 20) {
 					@Override
 					public DataWatcherObject<?> remapValue(DataWatcherObjectVarInt object) {
-						int blockstate = PreFlatteningBlockIdData.getLegacyCombinedId(LegacyBlockData.REGISTRY.getTable(version).getRemap(object.getValue()));
-						return new DataWatcherObjectInt(
-							(PreFlatteningBlockIdData.getDataFromLegacyCombinedId(blockstate) << 16) |
-							PreFlatteningBlockIdData.getIdFromLegacyCombinedId(blockstate)
-						);
+						return new DataWatcherObjectInt(BlockIdRemappingHelper.remapToCombinedIdM16(version, object.getValue()));
 					}
 				},
-			ProtocolVersionsHelper.BEFORE_1_6
+			ProtocolVersionsHelper.BEFORE_1_8
 		),
 		new Entry[] {
 			new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.BLOCK_Y, 10), ProtocolVersionsHelper.RANGE__1_10__1_13),

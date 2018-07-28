@@ -17,13 +17,13 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		ArrayBasedIdRemappingTable remapper = LegacyBlockData.REGISTRY.getTable(version);
+		ArrayBasedIdRemappingTable table = LegacyBlockData.REGISTRY.getTable(version);
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BLOCK_CHANGE_MULTI_ID);
 		serializer.writeInt(chunkX);
 		serializer.writeInt(chunkZ);
 		ArraySerializer.writeVarIntTArray(serializer, records, (to, record) -> {
 			to.writeShort(record.coord);
-			VarNumberSerializer.writeVarInt(to, PreFlatteningBlockIdData.getLegacyCombinedId(remapper.getRemap(record.id)));
+			VarNumberSerializer.writeVarInt(to, PreFlatteningBlockIdData.getCombinedId(table.getRemap(record.id)));
 		});
 		return RecyclableSingletonList.create(serializer);
 	}

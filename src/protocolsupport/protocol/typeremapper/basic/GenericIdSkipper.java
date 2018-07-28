@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.id;
+package protocolsupport.protocol.typeremapper.basic;
 
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.potion.PotionEffectType;
@@ -14,7 +14,7 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
 
-public class IdSkipper {
+public class GenericIdSkipper {
 
 	public static final EnumSkippingRegistry<NetworkEntityType, EnumSkippingTable<NetworkEntityType>> ENTITY = new EnumSkippingRegistry<NetworkEntityType, EnumSkippingTable<NetworkEntityType>>() {
 		{

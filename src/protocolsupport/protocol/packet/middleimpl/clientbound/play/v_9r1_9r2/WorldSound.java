@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldSound;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.sound.SoundRemapper;
+import protocolsupport.protocol.typeremapper.basic.SoundRemapper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;

@@ -1,7 +1,7 @@
 package protocolsupport.protocol.typeremapper.itemstack.complex.toclient;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.id.IdSkipper;
+import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.CommonTagNames;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackNBTComplexRemapper;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.GenericSkippingTable;
@@ -25,7 +25,7 @@ public class EnchantFilterNBTComplexRemapper extends ItemStackNBTComplexRemapper
 	}
 
 	protected NBTTagListWrapper filterEnchantList(ProtocolVersion version, NBTTagListWrapper oldList) {
-		GenericSkippingTable<String> enchSkip = IdSkipper.ENCHANT.getTable(version);
+		GenericSkippingTable<String> enchSkip = GenericIdSkipper.ENCHANT.getTable(version);
 		NBTTagListWrapper newList = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
 		for (int i = 0; i < oldList.size(); i++) {
 			NBTTagCompoundWrapper enchData = oldList.getCompound(i);

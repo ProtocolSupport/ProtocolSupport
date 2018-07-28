@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.tileentity;
+package protocolsupport.protocol.typeremapper.basic;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -20,9 +20,9 @@ import protocolsupport.zplatform.itemstack.NBTTagType;
 
 public class TileNBTRemapper {
 
-	private static final String tileEntityTypeKey = "id";
+	protected static final String tileEntityTypeKey = "id";
 
-	private static final EnumMap<TileEntityType, String> newToOldType = new EnumMap<>(TileEntityType.class);
+	protected static final EnumMap<TileEntityType, String> newToOldType = new EnumMap<>(TileEntityType.class);
 	static {
 		newToOldType.put(TileEntityType.MOB_SPAWNER, "MobSpawner");
 		newToOldType.put(TileEntityType.COMMAND_BLOCK, "Control");
@@ -34,9 +34,9 @@ public class TileNBTRemapper {
 		newToOldType.put(TileEntityType.SIGN, "Sign");
 	}
 
-	private static final EnumMap<TileEntityType, EnumMap<ProtocolVersion, List<BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper>>>> registry = new EnumMap<>(TileEntityType.class);
+	protected static final EnumMap<TileEntityType, EnumMap<ProtocolVersion, List<BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper>>>> registry = new EnumMap<>(TileEntityType.class);
 
-	private static void register(TileEntityType type, BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper> transformer, ProtocolVersion... versions) {
+	protected static void register(TileEntityType type, BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper> transformer, ProtocolVersion... versions) {
 		EnumMap<ProtocolVersion, List<BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper>>> map = Utils.getFromMapOrCreateDefault(registry, type, new EnumMap<>(ProtocolVersion.class));
 		for (ProtocolVersion version : versions) {
 			Utils.getFromMapOrCreateDefault(map, version, new ArrayList<>()).add(transformer);

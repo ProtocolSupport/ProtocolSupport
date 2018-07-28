@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.id;
+package protocolsupport.protocol.typeremapper.basic;
 
 import java.util.ArrayList;
 
@@ -11,9 +11,7 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
 
-public class IdRemapper {
-
-
+public class GenericIdRemapper {
 
 	public static final EnumRemappingRegistry<NetworkEntityType, EnumRemappingTable<NetworkEntityType>> ENTITY = new EnumRemappingRegistry<NetworkEntityType, EnumRemappingTable<NetworkEntityType>>() {
 		final class Mapping {

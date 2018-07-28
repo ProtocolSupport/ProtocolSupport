@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.typeremapper.id.IdSkipper;
+import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
 
 public abstract class MiddleEntityEffectRemove extends MiddleEntity {
 
@@ -15,7 +15,7 @@ public abstract class MiddleEntityEffectRemove extends MiddleEntity {
 
 	@Override
 	public boolean postFromServerRead() {
-		return !IdSkipper.EFFECT.getTable(connection.getVersion()).shouldSkip(effectId);
+		return !GenericIdSkipper.EFFECT.getTable(connection.getVersion()).shouldSkip(effectId);
 	}
 
 }

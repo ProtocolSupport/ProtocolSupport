@@ -22,7 +22,7 @@ public class WorldEvent extends MiddleWorldEvent {
 		if (effectId == 2001) {
 			data = LegacyBlockData.REGISTRY.getTable(version).getRemap(data);
 			if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
-				data = PreFlatteningBlockIdData.getLegacyObjDataFromLegacyBlockState(PreFlatteningBlockIdData.getLegacyCombinedId(data));
+				data = PreFlatteningBlockIdData.convertCombinedIdToM12(PreFlatteningBlockIdData.getCombinedId(data));
 			}
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_EVENT_ID);

@@ -2,6 +2,7 @@ package protocolsupport.protocol.typeremapper.particle;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -62,7 +63,7 @@ import protocolsupport.protocol.utils.types.particle.ParticleWitch;
 
 public class ParticleRemapper {
 
-	protected static final RemappingRegistry<ParticleRemappingTable> REGISTRY = new RemappingRegistry<ParticleRemappingTable>(){
+	protected static final RemappingRegistry<ParticleRemappingTable> REGISTRY = new RemappingRegistry<ParticleRemappingTable>() {
 		{
 			//Legacy (<1.13) remaps for old ids and names.
 			registerRemap(ParticlePoof.class, () -> new LegacyParticle(0, "explode"), ProtocolVersionsHelper.BEFORE_1_13);
@@ -159,7 +160,7 @@ public class ParticleRemapper {
 
 	protected static class ParticleRemappingTable extends RemappingTable {
 
-		protected final HashMap<Class<? extends Particle>, Function<Particle, Particle>> table = new HashMap<>();
+		protected final Map<Class<? extends Particle>, Function<Particle, Particle>> table = new HashMap<>();
 
 		public void setRemap(Class<? extends Particle> particle, Function<Particle, Particle> remap) {
 			table.put(particle, remap);
