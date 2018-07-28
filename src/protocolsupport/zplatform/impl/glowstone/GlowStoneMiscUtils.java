@@ -25,17 +25,20 @@ import com.destroystokyo.paper.profile.ProfileProperty;
 import io.netty.channel.ChannelPipeline;
 import net.glowstone.GlowServer;
 import net.glowstone.entity.meta.profile.GlowPlayerProfile;
+import net.glowstone.inventory.GlowItemFactory;
 import net.glowstone.io.nbt.NbtSerialization;
 import net.glowstone.net.pipeline.CompressionHandler;
 import net.glowstone.net.pipeline.MessageHandler;
 import net.glowstone.net.protocol.ProtocolType;
 import net.glowstone.util.GlowServerIcon;
+import net.glowstone.util.nbt.CompoundTag;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
 import protocolsupport.protocol.pipeline.common.PacketDecrypter;
 import protocolsupport.protocol.pipeline.common.PacketEncrypter;
+import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.MinecraftEncryption;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.utils.ReflectionUtils;
@@ -44,6 +47,7 @@ import protocolsupport.zplatform.impl.glowstone.itemstack.GlowStoneNBTTagCompoun
 import protocolsupport.zplatform.impl.glowstone.network.GlowStoneChannelHandlers;
 import protocolsupport.zplatform.impl.glowstone.network.pipeline.GlowStoneFramingHandler;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public class GlowStoneMiscUtils implements PlatformUtils {
 
@@ -147,12 +151,22 @@ public class GlowStoneMiscUtils implements PlatformUtils {
 
 	@Override
 	public ItemStack createItemStackFromNBTTag(NBTTagCompoundWrapper tag) {
-		return NbtSerialization.readItem(((GlowStoneNBTTagCompoundWrapper) tag).unwrap());
+		return NbtSerialization.readItem((CompoundTag) tag.unwrap());
 	}
 
 	@Override
 	public NBTTagCompoundWrapper createNBTTagFromItemStack(ItemStack itemstack) {
 		return GlowStoneNBTTagCompoundWrapper.wrap(NbtSerialization.writeItem(itemstack, 0));
+	}
+
+	@Override
+	public ItemStack createItemStackFromNetwork(NetworkItemStack stack) {
+		ItemStack itemstack = new ItemStack(ItemMaterialLookup.getByRuntimeId(stack.getTypeId()), stack.getAmount());
+		NBTTagCompoundWrapper nbt = stack.getNBT();
+		if (!nbt.isNull()) {
+			itemstack.setItemMeta(GlowItemFactory.instance().readNbt(itemstack.getType(), (CompoundTag) nbt.unwrap()));
+		}
+		return itemstack;
 	}
 
 	@Override

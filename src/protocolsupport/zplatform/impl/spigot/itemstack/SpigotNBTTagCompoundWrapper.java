@@ -23,6 +23,7 @@ public class SpigotNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 		this.tag = tag;
 	}
 
+	@Override
 	public final NBTTagCompound unwrap() {
 		return tag;
 	}

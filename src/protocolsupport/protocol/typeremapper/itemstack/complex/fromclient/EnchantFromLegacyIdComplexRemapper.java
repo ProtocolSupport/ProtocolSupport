@@ -3,9 +3,9 @@ package protocolsupport.protocol.typeremapper.itemstack.complex.fromclient;
 import org.bukkit.enchantments.Enchantment;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.itemstack.complex.CommonTagNames;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackNBTComplexRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEnchantmentId;
+import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
@@ -16,12 +16,12 @@ public class EnchantFromLegacyIdComplexRemapper extends ItemStackNBTComplexRemap
 
 	@Override
 	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, String locale, NetworkItemStack itemstack, NBTTagCompoundWrapper tag) {
-		if (tag.hasKeyOfType(CommonTagNames.LEGACY_ENCHANTMENTS, NBTTagType.LIST)) {
-			tag.setList(CommonTagNames.MODERN_ENCHANTMENTS, remapEnchantList(tag.getList(CommonTagNames.LEGACY_ENCHANTMENTS, NBTTagType.COMPOUND)));
-			tag.remove(CommonTagNames.LEGACY_ENCHANTMENTS);
+		if (tag.hasKeyOfType(CommonNBT.LEGACY_ENCHANTMENTS, NBTTagType.LIST)) {
+			tag.setList(CommonNBT.MODERN_ENCHANTMENTS, remapEnchantList(tag.getList(CommonNBT.LEGACY_ENCHANTMENTS, NBTTagType.COMPOUND)));
+			tag.remove(CommonNBT.LEGACY_ENCHANTMENTS);
 		}
-		if (tag.hasKeyOfType(CommonTagNames.BOOK_ENCHANTMENTS, NBTTagType.LIST)) {
-			tag.setList(CommonTagNames.BOOK_ENCHANTMENTS, remapEnchantList(tag.getList(CommonTagNames.BOOK_ENCHANTMENTS, NBTTagType.COMPOUND)));
+		if (tag.hasKeyOfType(CommonNBT.BOOK_ENCHANTMENTS, NBTTagType.LIST)) {
+			tag.setList(CommonNBT.BOOK_ENCHANTMENTS, remapEnchantList(tag.getList(CommonNBT.BOOK_ENCHANTMENTS, NBTTagType.COMPOUND)));
 		}
 		return tag;
 	}

@@ -6,8 +6,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+
+import org.bukkit.Bukkit;
+import org.bukkit.inventory.ItemStack;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
@@ -16,9 +20,14 @@ import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.events.ItemStackWriteEvent;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
+import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.protocol.utils.NBTTagCompoundSerializer;
+import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagType;
 import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public class ItemStackSerializer {
@@ -46,17 +55,31 @@ public class ItemStackSerializer {
 			to.writeShort(-1);
 			return;
 		}
-		NetworkItemStack witemstack = itemstack;
 		if (isToClient) {
-			witemstack = ItemStackRemapper.remapToClient(version, locale, witemstack.cloneItemStack());
-			//TODO: fire new itemstack write event here
+			if (ItemStackWriteEvent.getHandlerList().getRegisteredListeners().length > 0) {
+				ItemStack bukkitStack = ServerPlatform.get().getMiscUtils().createItemStackFromNetwork(itemstack);
+				ItemStackWriteEvent event = new ItemStackWriteEvent(version, locale, bukkitStack);
+				Bukkit.getPluginManager().callEvent(event);
+				List<String> additionalLore = event.getAdditionalLore();
+				if (!additionalLore.isEmpty()) {
+					NBTTagCompoundWrapper nbt = itemstack.getNBT();
+					if (nbt.isNull()) {
+						nbt = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+					}
+					NBTTagCompoundWrapper displayNBT = CommonNBT.getOrCreateDisplayTag(nbt);
+					NBTTagListWrapper loreNBT = displayNBT.getList(CommonNBT.DISPLAY_LORE, NBTTagType.STRING);
+					additionalLore.forEach(loreNBT::addString);
+					displayNBT.setList(CommonNBT.DISPLAY_LORE, loreNBT);
+					itemstack.setNBT(nbt);
+				}
+			}
 		}
-		to.writeShort(witemstack.getTypeId());
-		to.writeByte(witemstack.getAmount());
+		to.writeShort(itemstack.getTypeId());
+		to.writeByte(itemstack.getAmount());
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
-			to.writeShort(witemstack.getLegacyData());
+			to.writeShort(itemstack.getLegacyData());
 		}
-		writeTag(to, version, witemstack.getNBT());
+		writeTag(to, version, itemstack.getNBT());
 	}
 
 	public static NBTTagCompoundWrapper readTag(ByteBuf from, ProtocolVersion version) {

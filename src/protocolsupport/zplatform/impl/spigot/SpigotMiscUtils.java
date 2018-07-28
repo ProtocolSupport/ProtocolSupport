@@ -55,6 +55,7 @@ import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketDecomp
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedPrepender;
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedSplitter;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public class SpigotMiscUtils implements PlatformUtils {
 
@@ -146,7 +147,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public ItemStack createItemStackFromNBTTag(NBTTagCompoundWrapper tag) {
-		return CraftItemStack.asCraftMirror(net.minecraft.server.v1_13_R1.ItemStack.a(((SpigotNBTTagCompoundWrapper) tag).unwrap()));
+		return CraftItemStack.asCraftMirror(net.minecraft.server.v1_13_R1.ItemStack.a((NBTTagCompound) tag.unwrap()));
 	}
 
 	@Override
@@ -155,6 +156,16 @@ public class SpigotMiscUtils implements PlatformUtils {
 		NBTTagCompound compound = new NBTTagCompound();
 		nmsitemstack.save(compound);
 		return SpigotNBTTagCompoundWrapper.wrap(compound);
+	}
+
+	@Override
+	public ItemStack createItemStackFromNetwork(NetworkItemStack stack) {
+		net.minecraft.server.v1_13_R1.ItemStack nmsitemstack = new net.minecraft.server.v1_13_R1.ItemStack(Item.getById(stack.getTypeId()), stack.getAmount());
+		NBTTagCompoundWrapper nbt = stack.getNBT();
+		if (!nbt.isNull()) {
+			nmsitemstack.setTag((NBTTagCompound) nbt.unwrap());
+		}
+		return CraftItemStack.asBukkitCopy(nmsitemstack);
 	}
 
 	@Override

@@ -19,10 +19,13 @@ import io.netty.channel.ChannelPipeline;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public interface PlatformUtils {
 
 	public ItemStack createItemStackFromNBTTag(NBTTagCompoundWrapper tag);
+
+	public ItemStack createItemStackFromNetwork(NetworkItemStack stack);
 
 	public NBTTagCompoundWrapper createNBTTagFromItemStack(ItemStack itemstack);
 
