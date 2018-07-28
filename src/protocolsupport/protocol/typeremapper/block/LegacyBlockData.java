@@ -164,7 +164,8 @@ public class LegacyBlockData {
 					Material.SKELETON_SKULL, Material.SKELETON_WALL_SKULL,
 					Material.WITHER_SKELETON_SKULL, Material.WITHER_SKELETON_WALL_SKULL,
 					Material.PLAYER_HEAD, Material.PLAYER_WALL_HEAD,
-					Material.GRASS_BLOCK, Material.MYCELIUM, Material.PODZOL
+					Material.GRASS_BLOCK, Material.MYCELIUM, Material.PODZOL,
+					Material.NOTE_BLOCK
 				),
 				o -> createBlockData(o.getMaterial()),
 				ProtocolVersionsHelper.BEFORE_1_13
