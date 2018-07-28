@@ -20,6 +20,8 @@ import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.ChatAPI;
+import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.events.ItemStackWriteEvent;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.utils.CommonNBT;
@@ -55,25 +57,36 @@ public class ItemStackSerializer {
 			to.writeShort(-1);
 			return;
 		}
+
 		if (isToClient) {
 			if (ItemStackWriteEvent.getHandlerList().getRegisteredListeners().length > 0) {
 				ItemStack bukkitStack = ServerPlatform.get().getMiscUtils().createItemStackFromNetwork(itemstack);
 				ItemStackWriteEvent event = new ItemStackWriteEvent(version, locale, bukkitStack);
 				Bukkit.getPluginManager().callEvent(event);
 				List<String> additionalLore = event.getAdditionalLore();
-				if (!additionalLore.isEmpty()) {
+				BaseComponent forcedDisplayName = event.getForcedDisplayName();
+				if (forcedDisplayName != null || !additionalLore.isEmpty()) {
 					NBTTagCompoundWrapper nbt = itemstack.getNBT();
 					if (nbt.isNull()) {
 						nbt = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
 					}
 					NBTTagCompoundWrapper displayNBT = CommonNBT.getOrCreateDisplayTag(nbt);
-					NBTTagListWrapper loreNBT = displayNBT.getList(CommonNBT.DISPLAY_LORE, NBTTagType.STRING);
-					additionalLore.forEach(loreNBT::addString);
-					displayNBT.setList(CommonNBT.DISPLAY_LORE, loreNBT);
+
+					if (forcedDisplayName != null) {
+						displayNBT.setString(CommonNBT.DISPLAY_NAME, ChatAPI.toJSON(forcedDisplayName));
+					}
+
+					if (!additionalLore.isEmpty()) {
+						NBTTagListWrapper loreNBT = displayNBT.getList(CommonNBT.DISPLAY_LORE, NBTTagType.STRING);
+						additionalLore.forEach(loreNBT::addString);
+						displayNBT.setList(CommonNBT.DISPLAY_LORE, loreNBT);
+					}
+
 					itemstack.setNBT(nbt);
 				}
 			}
 		}
+
 		to.writeShort(itemstack.getTypeId());
 		to.writeByte(itemstack.getAmount());
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {

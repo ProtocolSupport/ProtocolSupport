@@ -8,6 +8,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.components.BaseComponent;
 
 /**
  * This event is fired when itemstack is being written to client
@@ -51,6 +52,7 @@ public class ItemStackWriteEvent extends Event {
 	}
 
 	protected List<String> additionalLore = new ArrayList<>();
+	protected BaseComponent forcedDisplayName = null;
 
 	/**
 	 * Returns a mutable copy of additional lore that will be added to item
@@ -58,6 +60,24 @@ public class ItemStackWriteEvent extends Event {
 	 */
 	public List<String> getAdditionalLore() {
 		return additionalLore;
+	}
+
+	/**
+	 * Returns current forced display name that will be applied to item <br>
+	 * Returns null if not set
+	 * @return forced display name
+	 */
+	public BaseComponent getForcedDisplayName() {
+		return forcedDisplayName;
+	}
+
+	/**
+	 * Sets forced display name that will be applied to item <br>
+	 * Null for not set
+	 * @param forcedDisplayName forced display name
+	 */
+	public void setForcedDisplayName(BaseComponent forcedDisplayName) {
+		this.forcedDisplayName = forcedDisplayName;
 	}
 
 	private static final HandlerList list = new HandlerList();
