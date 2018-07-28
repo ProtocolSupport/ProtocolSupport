@@ -25,7 +25,6 @@ import protocolsupport.api.tab.TabAPI;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.zplatform.ServerPlatform;
 
-@SuppressWarnings("deprecation")
 public class FeatureEmulation implements Listener {
 
 	public FeatureEmulation() {

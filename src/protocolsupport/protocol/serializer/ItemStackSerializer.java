@@ -65,7 +65,7 @@ public class ItemStackSerializer {
 				Bukkit.getPluginManager().callEvent(event);
 				List<String> additionalLore = event.getAdditionalLore();
 				BaseComponent forcedDisplayName = event.getForcedDisplayName();
-				if (forcedDisplayName != null || !additionalLore.isEmpty()) {
+				if ((forcedDisplayName != null) || !additionalLore.isEmpty()) {
 					NBTTagCompoundWrapper nbt = itemstack.getNBT();
 					if (nbt.isNull()) {
 						nbt = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();

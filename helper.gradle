@@ -1,0 +1,21 @@
+import java.text.MessageFormat
+
+ext.dlDeps = {
+	def dlDeps, File dlDepsDir ->
+		def dlDepsNames = new HashSet<String>()
+		dlDeps.each({
+			String dlDepUrl = it[0]
+			File dlDepFile = new File(dlDepsDir, it[1])
+			dlDepsNames.add(dlDepFile.getName())
+			if (!dlDepFile.exists()) {
+				logger.lifecycle(MessageFormat.format("Downloading {0} from {1}", dlDepFile.getName(), dlDepUrl))
+				ant.get(src: dlDepUrl, dest: dlDepFile)
+			} else {
+				logger.lifecycle(MessageFormat.format("Skipping download of {0} because it already exists", dlDepFile.getName()))
+			}
+		})
+		dlDepsDir.listFiles().findAll({ !dlDepsNames.contains(it.getName()) }).each({
+			logger.lifecycle(MessageFormat.format("Deleting old dllib {0}", it.getName()))
+			it.delete()
+		})
+}

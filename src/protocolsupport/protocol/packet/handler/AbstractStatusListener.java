@@ -3,10 +3,8 @@ package protocolsupport.protocol.packet.handler;
 import java.net.InetAddress;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -79,14 +77,12 @@ public abstract class AbstractStatusListener {
 		bevent.setServerIcon(Bukkit.getServerIcon());
 		Bukkit.getPluginManager().callEvent(bevent);
 
-		String icon = bevent.getIcon() != null ? ServerPlatform.get().getMiscUtils().convertBukkitIconToBase64(bevent.getIcon()) : null;
-		motd = bevent.getMotd();
-		maxPlayers = bevent.getMaxPlayers();
-
 		ServerPingResponseEvent revent = new ServerPingResponseEvent(
 			connection,
 			new ProtocolInfo(connection.getVersion(), ServerPlatform.get().getMiscUtils().getModName() + " " + ServerPlatform.get().getMiscUtils().getVersionName()),
-			icon, motd, maxPlayers, bevent.getSampleText()
+			bevent.getIcon() != null ? ServerPlatform.get().getMiscUtils().convertBukkitIconToBase64(bevent.getIcon()) : null,
+			bevent.getMotd(), bevent.getMaxPlayers(),
+			bevent.players.stream().map(Player::getName).collect(Collectors.toList())
 		);
 		Bukkit.getPluginManager().callEvent(revent);
 
@@ -99,12 +95,10 @@ public abstract class AbstractStatusListener {
 
 	public static class InternalServerListPingEvent extends ServerListPingEvent {
 
-		private final List<Player> players;
-		private Set<String> sample;
+		protected final List<Player> players;
 		protected InternalServerListPingEvent(InetAddress address, String motd, int maxPlayers, List<Player> players) {
 			super(address, motd, maxPlayers);
 			this.players = players;
-			this.sample = this.players.stream().map(Player::getName).collect(Collectors.toSet());
 		}
 
 		protected CachedServerIcon icon;
@@ -119,34 +113,7 @@ public abstract class AbstractStatusListener {
 
 		@Override
 		public Iterator<Player> iterator() {
-			return new Iterator<Player>() {
-				private final Iterator<Player> iterator = players.iterator();
-				private Player player;
-				@Override
-				public boolean hasNext() {
-					return iterator.hasNext();
-				}
-
-				@Override
-				public Player next() {
-					return (player = iterator.next());
-				}
-
-				@Override
-				public void remove() {
-					iterator.remove();
-					sample.remove(player.getName());
-				}
-			};
-		}
-
-		public List<String> getSampleText() {
-			return new ArrayList<>(sample);
-		}
-
-		public void setSampleText(List<String> sample) {
-			this.sample = new HashSet<>(sample);
-			this.players.removeIf(player -> !sample.contains(player.getName()));
+			return players.iterator();
 		}
 
 	}

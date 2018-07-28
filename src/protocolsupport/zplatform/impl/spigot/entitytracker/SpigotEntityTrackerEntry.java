@@ -344,8 +344,7 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 
 	protected void addTrackedPlayer(EntityPlayer entityplayer) {
 		if (paperTrackedPlayersMapPresent) {
-			throw new IllegalStateException();
-//			trackedPlayerMap.put(entityplayer, Boolean.TRUE);
+			trackedPlayerMap.put(entityplayer, Boolean.TRUE);
 		} else {
 			trackedPlayers.add(entityplayer);
 		}
@@ -353,8 +352,7 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 
 	protected boolean removeTrackedPlayer(EntityPlayer entityplayer) {
 		if (paperTrackedPlayersMapPresent) {
-			throw new IllegalStateException();
-//			return trackedPlayerMap.remove(entityplayer) != null;
+			return trackedPlayerMap.remove(entityplayer) != null;
 		} else {
 			return trackedPlayers.remove(entityplayer);
 		}

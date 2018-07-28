@@ -18,6 +18,7 @@ plugins {
 	id 'java'
 }
 
+apply from: 'helper.gradle'
 apply plugin: com.github.jengelman.gradle.plugins.shadow.ShadowPlugin
 
 tasks.withType(AbstractCompile) {
@@ -29,11 +30,11 @@ tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
 }
 
+
 group 'protocolsupport'
 version '4.29-dev'
 sourceCompatibility = JavaVersion.VERSION_1_8
 
-import java.text.MessageFormat
 
 File dlDepsDirC = new File('dllibsc')
 dlDepsDirC.mkdirs()
@@ -43,36 +44,13 @@ dlDepsDirS.mkdirs()
 
 def dlDepsC = [
 	new Tuple(
-		'https://yivesmirror.com/files/spigot/spigot-1.13-R0.1-SNAPSHOT-b1726.jar',
-		'spigot-1.13-2.jar'
-	),
-	new Tuple(
-		'https://repo.glowstone.net/nexus/content/repositories/snapshots/net/glowstone/glowstone/2018.7.0-SNAPSHOT/glowstone-2018.7.0-20180721.230223-1.jar',
-		'glowstone-1.12.2-2.jar'
+		'https://repo.perfectdreams.net/com/destroystokyo/paper/paper/1.13-R0.1-SNAPSHOT/paper-1.13-R0.1-SNAPSHOT.jar',
+		'spigot-1.13-3.jar'
 	)
 ]
 
 def dlDepsS = [
 ]
-
-void dlDeps(def dlDeps, File dlDepsDir) {
-	def dlDepsNames = new HashSet<String>()
-	dlDeps.each({
-		String dlDepUrl = it[0]
-		File dlDepFile = new File(dlDepsDir, it[1])
-		dlDepsNames.add(dlDepFile.getName())
-		if (!dlDepFile.exists()) {
-			logger.lifecycle(MessageFormat.format("Downloading {0} from {1}", dlDepFile.getName(), dlDepUrl))
-			ant.get(src: dlDepUrl, dest: dlDepFile)
-		} else {
-			logger.lifecycle(MessageFormat.format("Skipping download of {0} because it already exists", dlDepFile.getName()))
-		}
-	})
-	dlDepsDir.listFiles().findAll({ !dlDepsNames.contains(it.getName()) }).each({
-		logger.lifecycle(MessageFormat.format("Deleting old dllib {0}", it.getName()))
-		it.delete()
-	})
-}
 
 task updateLibs(type: DefaultTask) {doLast{
 	dlDeps(dlDepsC, dlDepsDirC)
@@ -119,14 +97,15 @@ task generateLocaleList(type: DefaultTask) {doLast{
 	File langsListFile = new File(genDir, "resources/i18n/languages")
 	langsListFile.getParentFile().mkdirs()
 	langsListFile.createNewFile()
-	new PrintWriter(langsListFile).withCloseable({ writer ->
-		new File(sourceSets.main.resources.srcDirs.iterator().next(), "resources/i18n").list()
-		.each({
-			String[] split = it.split("[.]");
-			if (split.length == 2 && split[1].equals("json")) {
-				writer.println(split[0])
-			}
-		})		
+	new PrintWriter(langsListFile).withCloseable({
+		writer ->
+			new File(sourceSets.main.resources.srcDirs.iterator().next(), "resources/i18n").list()
+			.each({
+				String[] split = it.split("[.]");
+				if (split.length == 2 && split[1].equals("json")) {
+					writer.println(split[0])
+				}
+			})		
 	})
 }}
 
