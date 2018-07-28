@@ -14,6 +14,7 @@ import protocolsupport.protocol.typeremapper.particle.legacy.LegacyParticleIconC
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.types.particle.Particle;
 import protocolsupport.protocol.utils.types.particle.ParticleAmbientEntityEffect;
 import protocolsupport.protocol.utils.types.particle.ParticleAngryVillager;
@@ -103,7 +104,7 @@ public class ParticleRemapper {
 			.forEach(version -> {
 				registerRemap(
 					ParticleItem.class,
-					from -> new LegacyParticleIconCrack(36, "iconcrack", version, from.getItem()),
+					from -> new LegacyParticleIconCrack(36, "iconcrack", version, I18NData.DEFAULT_LOCALE, from.getItem()),
 					version
 				);
 				registerRemap(

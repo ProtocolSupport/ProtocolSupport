@@ -9,10 +9,8 @@ import protocolsupport.zplatform.itemstack.NetworkItemStack;
 public class LegacyParticleIconCrack extends LegacyParticle {
 
 	protected NetworkItemStack item;
-	protected ProtocolVersion version;
-	protected String locale;
 
-	public LegacyParticleIconCrack(int id, String name, ProtocolVersion version, NetworkItemStack item) {
+	public LegacyParticleIconCrack(int id, String name, ProtocolVersion version, String locale, NetworkItemStack item) {
 		super(id, name);
 		this.item = ItemStackRemapper.remapToClient(version, locale, item);
 		this.name += "_" + item.getTypeId() + "_" + item.getLegacyData();
