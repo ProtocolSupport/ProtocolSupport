@@ -39,7 +39,7 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 		String modernTag = LegacyCustomPayloadChannelName.fromPre13(tag);
 		StringJoiner payloadModernTagJoiner = new StringJoiner("\u0000");
 		for (String payloadLegacyTag : new String(data, StandardCharsets.UTF_8).split("\u0000")) {
-			payloadModernTagJoiner.add(LegacyCustomPayloadChannelName.fixPre13(payloadLegacyTag));
+			payloadModernTagJoiner.add(LegacyCustomPayloadChannelName.fromPre13(payloadLegacyTag));
 		}
 		return RecyclableSingletonList.create(MiddleCustomPayload.create(modernTag, payloadModernTagJoiner.toString().getBytes(StandardCharsets.UTF_8)));
 	}

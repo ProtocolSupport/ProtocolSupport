@@ -50,6 +50,8 @@ public class LegacyCustomPayloadChannelName {
 		}
 	}
 
+	protected static final Pattern invalid_key_pattern = Pattern.compile("[^a-z0-9._-]+");
+	@SuppressWarnings("deprecation")
 	public static String fromPre13(String legacyName) {
 		switch (legacyName) {
 			case LEGACY_REGISTER: {
@@ -65,16 +67,9 @@ public class LegacyCustomPayloadChannelName {
 				return MODERN_BUNGEECORD;
 			}
 			default: {
-				return fixPre13(legacyName);
+				return new NamespacedKey("l", invalid_key_pattern.matcher(legacyName.toLowerCase()).replaceAll("")).toString();
 			}
 		}
-	}
-
-	protected static final Pattern invalid_key_pattern = Pattern.compile("[^a-z0-9._-]+");
-
-	@SuppressWarnings("deprecation")
-	public static String fixPre13(String legacyName) {
-		return new NamespacedKey("l", invalid_key_pattern.matcher(legacyName.toLowerCase()).replaceAll("")).toString();
 	}
 
 }
