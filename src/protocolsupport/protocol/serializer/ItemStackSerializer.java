@@ -85,6 +85,8 @@ public class ItemStackSerializer {
 					itemstack.setNBT(nbt);
 				}
 			}
+
+			itemstack = ItemStackRemapper.remapToClient(version, locale, itemstack);
 		}
 
 		to.writeShort(itemstack.getTypeId());
