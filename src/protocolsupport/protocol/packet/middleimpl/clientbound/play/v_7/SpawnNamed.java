@@ -26,14 +26,21 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		UUID uuid = entity.getUUID();
 		StringSerializer.writeString(serializer, version, version == ProtocolVersion.MINECRAFT_1_7_10 ? uuid.toString() : uuid.toString().replace("-", ""));
 		PlayerListEntry entry = cache.getPlayerListCache().getEntry(uuid);
-		StringSerializer.writeString(serializer, version, entry != null ? Utils.clampString(entry.getCurrentName(cache.getAttributesCache().getLocale()), 16) : "UNKNOWN");
-		if (version == ProtocolVersion.MINECRAFT_1_7_10) {
-			List<ProfileProperty> properties = entry.getProperties(true);
-			VarNumberSerializer.writeVarInt(serializer, properties.size());
-			for (ProfileProperty property : properties) {
-				StringSerializer.writeString(serializer, version, property.getName());
-				StringSerializer.writeString(serializer, version, property.getValue());
-				StringSerializer.writeString(serializer, version, property.getSignature());
+		if (entry != null) {
+			StringSerializer.writeString(serializer, version, Utils.clampString(entry.getCurrentName(cache.getAttributesCache().getLocale()), 16));
+			if (version == ProtocolVersion.MINECRAFT_1_7_10) {
+				List<ProfileProperty> properties = entry.getProperties(true);
+				VarNumberSerializer.writeVarInt(serializer, properties.size());
+				for (ProfileProperty property : properties) {
+					StringSerializer.writeString(serializer, version, property.getName());
+					StringSerializer.writeString(serializer, version, property.getValue());
+					StringSerializer.writeString(serializer, version, property.getSignature());
+				}
+			}
+		} else {
+			StringSerializer.writeString(serializer, version, "UNKNOWN");
+			if (version == ProtocolVersion.MINECRAFT_1_7_10) {
+				VarNumberSerializer.writeVarInt(serializer, 0);
 			}
 		}
 		serializer.writeInt((int) (x * 32));
