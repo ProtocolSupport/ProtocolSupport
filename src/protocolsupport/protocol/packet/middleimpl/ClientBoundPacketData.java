@@ -45,9 +45,4 @@ public class ClientBoundPacketData extends WrappingBuffer implements Recyclable 
 	public void setBuf(ByteBuf buf) {
 	}
 
-	@Override
-	protected void finalize() {
-		release();
-	}
-
 }
