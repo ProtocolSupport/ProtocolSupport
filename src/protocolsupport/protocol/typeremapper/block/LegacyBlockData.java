@@ -154,7 +154,7 @@ public class LegacyBlockData {
 					Material.ACACIA_FENCE, Material.DARK_OAK_FENCE, Material.BIRCH_FENCE,
 					Material.JUNGLE_FENCE, Material.SPRUCE_FENCE, Material.OAK_FENCE,
 					Material.IRON_BARS,
-					Material.VINE, Material.CHORUS_PLANT, Material.MUSHROOM_STEM, Material.BROWN_MUSHROOM_BLOCK, Material.GLASS_PANE,
+					Material.CHORUS_PLANT, Material.MUSHROOM_STEM, Material.BROWN_MUSHROOM_BLOCK, Material.GLASS_PANE,
 					Material.BLACK_STAINED_GLASS_PANE, Material.BLUE_STAINED_GLASS_PANE, Material.BROWN_STAINED_GLASS_PANE, Material.CYAN_STAINED_GLASS_PANE,
 					Material.GRAY_STAINED_GLASS_PANE, Material.GREEN_STAINED_GLASS_PANE, Material.LIGHT_BLUE_STAINED_GLASS_PANE, Material.LIGHT_GRAY_STAINED_GLASS_PANE,
 					Material.LIME_STAINED_GLASS_PANE, Material.MAGENTA_STAINED_GLASS_PANE, Material.ORANGE_STAINED_GLASS_PANE, Material.PINK_STAINED_GLASS_PANE,
@@ -173,6 +173,15 @@ public class LegacyBlockData {
 			this.<MultipleFacing>registerRemapEntryForAllStates(
 				Arrays.asList(Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL),
 				o -> clearMutipleFacing((MultipleFacing) createBlockData(o.getMaterial())),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+			this.<MultipleFacing>registerRemapEntryForAllStates(
+				Material.VINE,
+				o -> {
+					MultipleFacing mfacing = (MultipleFacing) o.clone();
+					mfacing.setFace(BlockFace.UP, true);
+					return mfacing;
+				},
 				ProtocolVersionsHelper.BEFORE_1_13
 			);
 			this.<Gate>registerRemapEntryForAllStates(
