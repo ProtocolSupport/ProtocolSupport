@@ -10,13 +10,13 @@ import org.bukkit.Bukkit;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.unix.Errors.NativeIoException;
-import io.netty.handler.codec.MessageToMessageCodec;
 import io.netty.handler.timeout.ReadTimeoutException;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.events.ConnectionCloseEvent;
 import protocolsupport.api.events.ConnectionOpenEvent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.storage.ProtocolStorage;
+import protocolsupport.utils.netty.MessageToMessageCodec;
 import protocolsupport.zplatform.ServerPlatform;
 
 public class LogicHandler extends MessageToMessageCodec<Object, Object> {
