@@ -638,6 +638,21 @@ public class LegacyBlockData {
 				o -> toPre13DoorState(o, (Door) createBlockData(Material.OAK_DOOR)),
 				ProtocolVersionsHelper.BEFORE_1_8
 			);
+			this.registerRemapEntryForAllStates(Material.RED_SAND, Material.SAND.createBlockData(), ProtocolVersionsHelper.BEFORE_1_8);
+			this.registerRemapEntryForAllStates(Material.RED_SANDSTONE, Material.SANDSTONE.createBlockData(), ProtocolVersionsHelper.BEFORE_1_8);
+			this.registerRemapEntryForAllStates(Material.CHISELED_RED_SANDSTONE, Material.CHISELED_SANDSTONE.createBlockData(), ProtocolVersionsHelper.BEFORE_1_8);
+			this.registerRemapEntryForAllStates(Material.CUT_RED_SANDSTONE, Material.CUT_SANDSTONE.createBlockData(), ProtocolVersionsHelper.BEFORE_1_8);
+			this.registerRemapEntryForAllStates(Material.SMOOTH_RED_SANDSTONE, Material.SMOOTH_SANDSTONE.createBlockData(), ProtocolVersionsHelper.BEFORE_1_8);
+			this.<Slab>registerRemapEntryForAllStates(
+				Material.RED_SANDSTONE_SLAB,
+				o -> toPre13SlabState(o, (Slab) Material.SANDSTONE_SLAB.createBlockData()),
+				ProtocolVersionsHelper.BEFORE_1_8
+			);
+			this.<Stairs>registerRemapEntryForAllStates(
+				Material.RED_SANDSTONE_STAIRS,
+				o -> toPre13StairsState(o, (Stairs) Material.SANDSTONE_STAIRS.createBlockData()),
+				ProtocolVersionsHelper.BEFORE_1_8
+			);
 
 
 			this.registerRemapEntryForAllStates(
