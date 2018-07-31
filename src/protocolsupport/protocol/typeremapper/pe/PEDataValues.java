@@ -2,6 +2,7 @@ package protocolsupport.protocol.typeremapper.pe;
 
 import java.io.BufferedReader;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.annotations.SerializedName;
@@ -394,6 +395,120 @@ public class PEDataValues {
 		}
 	};
 
+	private static HashMap<NetworkEntityType, HashMap<Integer, Integer>> entityStatusRemaps = new HashMap<>();
+
+	private static void registerEntityStatusRemap(int pcStatus, int peStatus, NetworkEntityType entityType) {
+		HashMap<Integer, Integer> mapping = entityStatusRemaps.get(entityType);
+		if (mapping == null) {
+			mapping = new HashMap<>();
+			entityStatusRemaps.put(entityType, mapping);
+		}
+		mapping.put(pcStatus, peStatus);
+	}
+
+	private static void registerEntityStatusRemap(int pcStatus, int peStatus) {
+		registerEntityStatusRemap(pcStatus, peStatus, null);
+	}
+
+	private static void initEntityStatusRemaps() {
+		registerEntityStatusRemap(2, 2); // HURT_ANIMATION
+		registerEntityStatusRemap(3, -1, NetworkEntityType.SNOWBALL); // SNOWBALL_POOF
+		registerEntityStatusRemap(3, -1, NetworkEntityType.EGG); // EGG_ICONCRACK
+		registerEntityStatusRemap(3, 3); // DEATH_ANIMATION
+		registerEntityStatusRemap(6, 6); // TAME_FAIL
+		registerEntityStatusRemap(7, 7); // TAME_SUCCESS
+		registerEntityStatusRemap(8, 8); // SHAKE_WET
+		registerEntityStatusRemap(9, 9); // USE_ITEM
+		registerEntityStatusRemap(10, 10, NetworkEntityType.SHEEP); // EAT_GRASS_ANIMATION
+		registerEntityStatusRemap(10, 10, NetworkEntityType.MINECART_TNT); // MINECART_TNT_PRIME_FUSE
+		registerEntityStatusRemap(11, 19); // IRON_GOLEM_OFFER_FLOWER
+		registerEntityStatusRemap(15, 24); // WITCH_SPELL_PARTICLES
+		registerEntityStatusRemap(16, 16); // ZOMBIE_VILLAGER_CURE
+		registerEntityStatusRemap(17, 25); // FIREWORK_PARTICLES
+		registerEntityStatusRemap(18, 21); // LOVE_PARTICLES
+		registerEntityStatusRemap(20, 27); // SILVERFISH_SPAWN_ANIMATION
+		registerEntityStatusRemap(31, 13); // FISH_HOOK_HOOK
+		registerEntityStatusRemap(34, 20); // IRON_GOLEM_WITHDRAW_FLOWER
+		registerEntityStatusRemap(35, 65); // CONSUME_TOTEM
+
+		/*
+		TODO: List of known PC entity status codes that are currently missing remaps. This
+		might result in	missing/broken functionality on PE.
+		TIPPED_ARROW = 0;
+		ROTATED_JUMP_rabbit = 1;
+		RESET_SPAWNER_minecartspawner = 1;
+		SNOWBALL_POOF_snowball = 3;
+		EGG_ICONCRACK_egg = 3;
+		ATTACK = 4;
+		VILLAGER_MATE_HEARTS = 12;
+		VILLAGER_ANGRY = 13;
+		VILLAGER_HAPPY = 14;
+		RESET_ROTATION = 19;
+		ENABLE_REDUCED_DEBUG = 22;
+		DISABLE_REDUCED_DEBUG = 23;
+		SET_OP_LEVEL_0 = 24;
+		SET_OP_LEVEL_1 = 25;
+		SET_OP_LEVEL_2 = 26;
+		SET_OP_LEVEL_3 = 27
+		SET_OP_LEVEL_4 = 28;
+		SHIELD_BLOCK = 29;
+		SHIELD_BREAK = 30;
+		ARMOR_STAND_HIT = 32;
+		ENTITY_HURT_THORNS = 33;
+		ENTITY_HURT_DROWN = 36;
+		ENTITY_HURT_BURN = 37;
+
+		TODO: List of known PE entity status codes that are never sent. Presumably,
+		some PE functionality is missing because of this.
+		FISH_HOOK_BUBBLE = 11;
+		FISH_HOOK_POSITION = 12;
+		FISH_HOOK_TEASE = 14;
+		SQUID_INK_CLOUD = 15;
+		RESPAWN = 18;
+		WITCH_DRINK_POTION = 29;
+		WITCH_THROW_POTION = 30;
+		PLAYER_ADD_XP_LEVELS = 34;
+		ELDER_GUARDIAN_CURSE = 35;
+		AGENT_ARM_SWING = 36;
+		ENDER_DRAGON_DEATH = 37;
+		DUST_PARTICLES = 38;
+		ARROW_SHAKE = 39;
+		EATING_ITEM = 57;
+		BABY_ANIMAL_FEED = 60;
+		DEATH_SMOKE_CLOUD = 61;
+		COMPLETE_TRADE = 62;
+		PLAYER_CHECK_TREASURE_HUNTER_ACHIEVEMENT = 66;
+		ENTITY_SPAWN = 67;
+		DRAGON_PUKE = 68;
+		ITEM_ENTITY_MERGE = 69;
+		*/
+	}
+
+	static {
+		initEntityStatusRemaps();
+	}
+
+	/**
+	 * Return the PE entity status code for the given PC entity status code and
+	 * entity type. If no mapping is possible, -1 is returned.
+	 */
+	public static int getEntityStatusRemap(int pcStatus, NetworkEntityType entityType) {
+		int peStatus = -1;
+
+		HashMap<Integer, Integer> entity_mapping = entityStatusRemaps.get(entityType);
+		if (entity_mapping != null && entity_mapping.containsKey(pcStatus)) {
+			// If we have a specific key, use the value, even if it's -1 (that means
+			// that we should ignore the default mapping)
+			peStatus = entity_mapping.get(pcStatus);
+		} else {
+			HashMap<Integer, Integer> default_mapping = entityStatusRemaps.get(null);
+			if (entity_mapping != null && default_mapping.containsKey(pcStatus)) {
+				peStatus = default_mapping.get(pcStatus);
+			}
+		}
+
+		return peStatus;
+	}
 
 	private final static Map<NetworkEntityType, PEEntityData> entityData = new EnumMap<NetworkEntityType, PEEntityData>(NetworkEntityType.class);
 	static {
