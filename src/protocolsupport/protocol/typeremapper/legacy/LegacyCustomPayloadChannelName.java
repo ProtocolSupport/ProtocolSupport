@@ -2,7 +2,7 @@ package protocolsupport.protocol.typeremapper.legacy;
 
 import java.util.regex.Pattern;
 
-import org.bukkit.NamespacedKey;
+import protocolsupport.protocol.utils.NamespacedKeyUtils;
 
 public class LegacyCustomPayloadChannelName {
 
@@ -10,7 +10,6 @@ public class LegacyCustomPayloadChannelName {
 	public static final String MODERN_UNREGISTER = "minecraft:unregister";
 	public static final String MODERN_TRADER_LIST = "minecraft:trader_list";
 	public static final String MODERN_BRAND = "minecraft:brand";
-	public static final String MODERN_BUNGEECORD = "bungeecord:main";
 
 	public static final String LEGACY_REGISTER = "REGISTER";
 	public static final String LEGACY_UNREGISTER = "UNREGISTER";
@@ -22,7 +21,6 @@ public class LegacyCustomPayloadChannelName {
 	public static final String LEGACY_SET_BEACON = "MC|Beacon";
 	public static final String LEGACY_NAME_ITEM = "MC|ItemName";
 	public static final String LEGACY_PICK_ITEM = "MC|PickItem";
-	public static final String LEGACY_BUNGEECORD = "BungeeCord";
 
 	public static String toPre13(String modernName) {
 		switch (modernName) {
@@ -41,17 +39,13 @@ public class LegacyCustomPayloadChannelName {
 			case MODERN_UNREGISTER: {
 				return LEGACY_UNREGISTER;
 			}
-			case MODERN_BUNGEECORD: {
-				return LEGACY_BUNGEECORD;
-			}
 			default: {
 				return modernName;
 			}
 		}
 	}
 
-	protected static final Pattern invalid_key_pattern = Pattern.compile("[^a-z0-9._-]+");
-	@SuppressWarnings("deprecation")
+	protected static final Pattern invalid_pattern = Pattern.compile("[^a-z0-9._-]+");
 	public static String fromPre13(String legacyName) {
 		switch (legacyName) {
 			case LEGACY_REGISTER: {
@@ -63,11 +57,19 @@ public class LegacyCustomPayloadChannelName {
 			case "MC|Brand": {
 				return MODERN_BRAND;
 			}
-			case LEGACY_BUNGEECORD: {
-				return MODERN_BUNGEECORD;
+			case "BungeeCord": {
+				return "bungeecord:main";
 			}
 			default: {
-				return new NamespacedKey("l", invalid_key_pattern.matcher(legacyName.toLowerCase()).replaceAll("")).toString();
+				String[] split = legacyName.toLowerCase().split(NamespacedKeyUtils.SEPARATOR, 2);
+				if (split.length == 1) {
+					return NamespacedKeyUtils.combine("l", invalid_pattern.matcher(split[0]).replaceAll(""));
+				} else {
+					return NamespacedKeyUtils.combine(
+						invalid_pattern.matcher(split[0]).replaceAll(""),
+						invalid_pattern.matcher(split[1]).replaceAll("")
+					);
+				}
 			}
 		}
 	}
