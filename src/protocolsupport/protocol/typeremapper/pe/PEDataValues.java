@@ -1,10 +1,12 @@
 package protocolsupport.protocol.typeremapper.pe;
 
 import java.io.BufferedReader;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gson.JsonArray;
 import com.google.gson.annotations.SerializedName;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.util.Vector;
@@ -138,9 +140,177 @@ public class PEDataValues {
 	}
 
 	public static final ArrayBasedIdRemappingTable BLOCK_ID = new ArrayBasedIdRemappingTable(MinecraftData.BLOCK_ID_MAX * MinecraftData.BLOCK_DATA_MAX);
+
+	private static HashMap<Integer, ArrayList<Integer>> blockIdRemaps = new HashMap<>();
+	private static HashMap<Integer, ArrayList<Integer>> blockStateRemaps = new HashMap<>();
+
+	private static void registerBlockIdRemap(int pcId, int peId) {
+		ArrayList<Integer> remappedIds = blockIdRemaps.get(peId);
+		if (remappedIds == null) {
+			remappedIds = new ArrayList<>();
+			blockIdRemaps.put(peId, remappedIds);
+		}
+		remappedIds.add(pcId);
+	}
+
+	private static void registerBlockStateRemap(int pcId, int pcData, int peId, int peData) {
+		int peBlockState = (peId << 4) | peData;
+
+		ArrayList<Integer> remappedBlockStates = blockStateRemaps.get(peBlockState);
+		if (remappedBlockStates == null) {
+			remappedBlockStates = new ArrayList<>();
+			blockStateRemaps.put(peBlockState, remappedBlockStates);
+		}
+
+		int pcBlockState = (pcId << 4) | pcData;
+		remappedBlockStates.add(pcBlockState);
+	}
+
 	static {
-		getFileObject("blockremaps.json").get("Remaps").getAsJsonArray().forEach(entry -> {
-			BLOCK_ID.setRemap(entry.getAsJsonObject().get("from").getAsInt(), entry.getAsJsonObject().get("to").getAsInt());
+
+		// ===[ BLOCKS ]===
+		// Concrete Powder
+		registerBlockIdRemap(252, 237);
+		// Chain Command Block
+		registerBlockIdRemap(211, 189);
+		// Repeating Command Block
+		registerBlockIdRemap(210, 188);
+		// Double Wooden Slab
+		registerBlockIdRemap(125, 157);
+		registerBlockIdRemap(126, 158);
+		registerBlockIdRemap(95, 241); // STAINED_GLASS
+		registerBlockIdRemap(157, 126); // ACTIVATOR_RAIL
+		registerBlockIdRemap(158, 125); // DROPPER
+		registerBlockIdRemap(198, 208); // END_ROD
+		registerBlockIdRemap(199, 240); // CHORUS_PLANT
+		registerBlockIdRemap(207, 244); // BEETROOT_BLOCK
+		registerBlockIdRemap(208, 198); // GRASS_PATH
+		registerBlockIdRemap(212, 207); // FROSTED_ICE
+		registerBlockIdRemap(218, 251); // OBSERVER
+		registerBlockIdRemap(235, 220); // WHITE_GLAZED_TERRACOTTA
+		registerBlockIdRemap(236, 221); // ORANGE_GLAZED_TERRACOTTA
+		registerBlockIdRemap(237, 222); // MAGENTA_GLAZED_TERRACOTTA
+		registerBlockIdRemap(238, 223); // LIGHT_BLUE_GLAZED_TERRACOTTA
+		registerBlockIdRemap(239, 224); // YELLOW_GLAZED_TERRACOTTA
+		registerBlockIdRemap(240, 225); // LIME_GLAZED_TERRACOTTA
+		registerBlockIdRemap(241, 226); // PINK_GLAZED_TERRACOTTA
+		registerBlockIdRemap(242, 227); // GRAY_GLAZED_TERRACOTTA
+		registerBlockIdRemap(243, 228); // SILVER_GLAZED_TERRACOTTA
+		registerBlockIdRemap(244, 229); // CYAN_GLAZED_TERRACOTTA
+		registerBlockIdRemap(245, 219); // PURPLE_GLAZED_TERRACOTTA
+		registerBlockIdRemap(246, 231); // BLUE_GLAZED_TERRACOTTA
+		registerBlockIdRemap(247, 232); // BROWN_GLAZED_TERRACOTTA
+		registerBlockIdRemap(248, 233); // GREEN_GLAZED_TERRACOTTA
+		registerBlockIdRemap(249, 234); // RED_GLAZED_TERRACOTTA
+		registerBlockIdRemap(250, 235); // BLACK_GLAZED_TERRACOTTA
+		registerBlockIdRemap(251, 236); // CONCRETE
+		registerBlockIdRemap(255, 252); // STRUCTURE_BLOCK
+		registerBlockIdRemap(166, 95);  // BARRIER
+		registerBlockIdRemap(154, 410);  // HOPPER
+		registerBlockIdRemap(36, 250);  // Block Being Moved By Piston
+		registerBlockIdRemap(205, 203);  // Purpur slab
+		registerBlockIdRemap(204, 201);  // Purpur double slab TODO: replace to real double slab
+		registerBlockStateRemap(202, 0, 201, 2);  // Purpur pillar
+		// Nether slab -> Quartz slab
+		registerBlockStateRemap(44, 7, 44, 6);
+		registerBlockStateRemap(44, 14, 44, 15);
+		registerBlockStateRemap(43, 7, 43, 6);
+		// And vice-versa
+		registerBlockStateRemap(44, 6, 44, 7);
+		registerBlockStateRemap(44, 15, 44, 14);
+		registerBlockStateRemap(43, 6, 43, 7);
+		// Prismarine data ID mismatch
+		registerBlockStateRemap(168, 1, 168, 2);
+		registerBlockStateRemap(168, 2, 168, 1);
+		// Podzol
+		registerBlockStateRemap(3, 2, 243, 0);
+		// Colored Fences
+		registerBlockStateRemap(188, 0, 85, 1);
+		registerBlockStateRemap(189, 0, 85, 2);
+		registerBlockStateRemap(190, 0, 85, 3);
+		registerBlockStateRemap(192, 0, 85, 4);
+		registerBlockStateRemap(191, 0, 85, 5);
+		// Shulker Boxes
+		registerBlockStateRemap(219, 0, 218, 0); // WHITE_SHULKER_BOX
+		registerBlockStateRemap(220, 0, 218, 1); // ORANGE_SHULKER_BOX
+		registerBlockStateRemap(221, 0, 218, 2); // MAGENTA_SHULKER_BOX
+		registerBlockStateRemap(222, 0, 218, 3); // LIGHT_BLUE_SHULKER_BOX
+		registerBlockStateRemap(223, 0, 218, 4); // YELLOW_SHULKER_BOX
+		registerBlockStateRemap(224, 0, 218, 5); // LIME_SHULKER_BOX
+		registerBlockStateRemap(225, 0, 218, 6); // PINK_SHULKER_BOX
+		registerBlockStateRemap(226, 0, 218, 7); // GRAY_SHULKER_BOX
+		registerBlockStateRemap(227, 0, 218, 8); // SILVER_SHULKER_BOX
+		registerBlockStateRemap(228, 0, 218, 9); // CYAN_SHULKER_BOX
+		registerBlockStateRemap(229, 0, 218, 10); // PURPLE_SHULKER_BOX
+		registerBlockStateRemap(230, 0, 218, 11); // BLUE_SHULKER_BOX
+		registerBlockStateRemap(231, 0, 218, 12); // BROWN_SHULKER_BOX
+		registerBlockStateRemap(232, 0, 218, 13); // GREEN_SHULKER_BOX
+		registerBlockStateRemap(233, 0, 218, 14); // RED_SHULKER_BOX
+		registerBlockStateRemap(234, 0, 218, 15); // BLACK_SHULKER_BOX
+		// Trap Doors...
+		// Wooden
+		registerBlockStateRemap(96, 0, 96, 3);
+		registerBlockStateRemap(96, 1, 96, 2);
+		registerBlockStateRemap(96, 2, 96, 1);
+		registerBlockStateRemap(96, 3, 96, 0);
+		registerBlockStateRemap(96, 4, 96, 11);
+		registerBlockStateRemap(96, 5, 96, 10);
+		registerBlockStateRemap(96, 6, 96, 9);
+		registerBlockStateRemap(96, 7, 96, 8);
+		registerBlockStateRemap(96, 8, 96, 7);
+		registerBlockStateRemap(96, 9, 96, 6);
+		registerBlockStateRemap(96, 10, 96, 5);
+		registerBlockStateRemap(96, 11, 96, 4);
+		registerBlockStateRemap(96, 12, 96, 15);
+		registerBlockStateRemap(96, 13, 96, 14);
+		registerBlockStateRemap(96, 14, 96, 13);
+		registerBlockStateRemap(96, 15, 96, 12);
+		// Iron
+		registerBlockStateRemap(167, 0, 167, 3);
+		registerBlockStateRemap(167, 1, 167, 2);
+		registerBlockStateRemap(167, 2, 167, 1);
+		registerBlockStateRemap(167, 3, 167, 0);
+		registerBlockStateRemap(167, 4, 167, 11);
+		registerBlockStateRemap(167, 5, 167, 10);
+		registerBlockStateRemap(167, 6, 167, 9);
+		registerBlockStateRemap(167, 7, 167, 8);
+		registerBlockStateRemap(167, 8, 167, 7);
+		registerBlockStateRemap(167, 9, 167, 6);
+		registerBlockStateRemap(167, 10, 167, 5);
+		registerBlockStateRemap(167, 11, 167, 4);
+		registerBlockStateRemap(167, 12, 167, 15);
+		registerBlockStateRemap(167, 13, 167, 14);
+		registerBlockStateRemap(167, 14, 167, 13);
+		registerBlockStateRemap(167, 15, 167, 12);
+		// Jukebox
+		registerBlockStateRemap(84, 1, 84, 0);
+		registerBlockStateRemap(84, 0, 84, 0);
+
+		JsonArray blocksJson = new JsonParser().parse(getResource("blocks.json")).getAsJsonArray();
+		blocksJson.forEach(entry -> {
+			// For most blocks, map PC blockState to PE runtime ID. For some blocks,
+			// the PE id/blockState is different from the PC id/blockState. These
+			// are encoded in our remaps.
+			int runtimeID = entry.getAsJsonObject().get("runtimeID").getAsInt();
+			int id = entry.getAsJsonObject().get("id").getAsInt(); // PE id
+			int data = entry.getAsJsonObject().get("data").getAsInt(); // PE data
+
+			int blockState = (id << 4) | data;
+			ArrayList<Integer> remappedIds = blockIdRemaps.get(id);
+			ArrayList<Integer> remappedBlockStates = blockStateRemaps.get(blockState);
+
+			if (remappedIds != null) {
+				remappedIds.forEach(remappedId -> {
+					int remappedBlockState = (remappedId << 4) | data;
+					BLOCK_ID.setRemap(remappedBlockState, runtimeID);
+				});
+			} else if (remappedBlockStates != null) {
+				remappedBlockStates.forEach(remappedBlockState -> {
+					BLOCK_ID.setRemap(remappedBlockState, runtimeID);
+				});
+			} else {
+				BLOCK_ID.setRemap(blockState, runtimeID);
+			}
 		});
 	}
 
