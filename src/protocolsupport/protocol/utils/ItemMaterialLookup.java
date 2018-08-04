@@ -15,9 +15,9 @@ import protocolsupport.zplatform.ServerPlatform;
 @SuppressWarnings("deprecation")
 public class ItemMaterialLookup {
 
-	private static final Map<String, Material> byKey = new HashMap<>();
-	private static final ArrayMap<Material> byRuntimeId = new ArrayMap<>(MinecraftData.ID_MAX);
-	private static final Object2IntMap<Material> toRuntimeId = new Object2IntOpenHashMap<>();
+	protected static final Map<String, Material> byKey = new HashMap<>();
+	protected static final ArrayMap<Material> byRuntimeId = new ArrayMap<>(MinecraftData.ITEM_COUNT);
+	protected static final Object2IntMap<Material> toRuntimeId = new Object2IntOpenHashMap<>();
 
 	static {
 		toRuntimeId.defaultReturnValue(-1);

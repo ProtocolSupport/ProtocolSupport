@@ -805,7 +805,7 @@ public class LegacyBlockData {
 
 		@Override
 		protected ArrayBasedIdRemappingTable createTable() {
-			return new ArrayBasedIdRemappingTable(MinecraftData.ID_MAX);
+			return new ArrayBasedIdRemappingTable(MinecraftData.BLOCKDATA_COUNT);
 		}
 	}
 

@@ -15,9 +15,9 @@ import protocolsupport.utils.Utils;
 
 public class PreFlatteningItemIdData {
 
-	private static final int[] toLegacyId = new int[MinecraftData.ID_MAX];
-	private static final Int2IntMap fromLegacyId = new Int2IntOpenHashMap();
-	private static void register(String modernKey, int legacyMainId, int legacyData) {
+	protected static final int[] toLegacyId = new int[MinecraftData.ITEM_COUNT];
+	protected static final Int2IntMap fromLegacyId = new Int2IntOpenHashMap();
+	protected static void register(String modernKey, int legacyMainId, int legacyData) {
 		int modernId = ItemMaterialLookup.getRuntimeId(ItemMaterialLookup.getByKey(modernKey));
 		int combinedLegacyId = formLegacyCombinedId(legacyMainId, legacyData);
 		toLegacyId[modernId] = combinedLegacyId;
@@ -49,7 +49,7 @@ public class PreFlatteningItemIdData {
 		return fromLegacyId.get(formLegacyCombinedId(legacyId, data));
 	}
 
-	private static int formLegacyCombinedId(int legacyId, int data) {
+	protected static int formLegacyCombinedId(int legacyId, int data) {
 		return (legacyId << 16) | data;
 	}
 

@@ -17,7 +17,7 @@ import protocolsupport.zplatform.ServerPlatform;
 @SuppressWarnings("deprecation")
 public class PreFlatteningBlockIdData {
 
-	protected static final int[] toLegacyId = new int[MinecraftData.ID_MAX];
+	protected static final int[] toLegacyId = new int[MinecraftData.BLOCKDATA_COUNT];
 
 	protected static int formLegacyCombinedId(int id, int data) {
 		return (id << 4) | data;

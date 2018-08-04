@@ -16,7 +16,6 @@ import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 
 public class LegacyItemType {
 
-
 	public static final ItemIdRemappingRegistry REGISTRY = new ItemIdRemappingRegistry();
 
 	public static class ItemIdRemappingRegistry extends IdRemappingRegistry<ArrayBasedIdRemappingTable> {
@@ -125,7 +124,7 @@ public class LegacyItemType {
 
 		@Override
 		protected ArrayBasedIdRemappingTable createTable() {
-			return new ArrayBasedIdRemappingTable(MinecraftData.ID_MAX);
+			return new ArrayBasedIdRemappingTable(MinecraftData.ITEM_COUNT);
 		}
 
 	}
