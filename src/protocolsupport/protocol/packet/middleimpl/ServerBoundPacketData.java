@@ -50,4 +50,9 @@ public class ServerBoundPacketData extends WrappingBuffer implements Recyclable 
 	public void setBuf(ByteBuf buf) {
 	}
 
+	@Override
+	protected void finalize() throws Throwable {
+		release();
+	}
+
 }
