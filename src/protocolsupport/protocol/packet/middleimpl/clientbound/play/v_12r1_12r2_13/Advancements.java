@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_12r1_12r2_
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleAdvancements;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -15,6 +16,10 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class Advancements extends MiddleAdvancements {
+
+	public Advancements(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {

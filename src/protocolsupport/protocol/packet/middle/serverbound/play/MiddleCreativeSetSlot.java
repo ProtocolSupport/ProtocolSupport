@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -10,6 +11,10 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public abstract class MiddleCreativeSetSlot extends ServerBoundMiddlePacket {
+
+	public MiddleCreativeSetSlot(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected int slot;
 	protected NetworkItemStack itemstack;

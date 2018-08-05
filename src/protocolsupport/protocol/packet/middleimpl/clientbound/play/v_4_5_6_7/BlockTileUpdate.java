@@ -2,6 +2,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockTileUpdate;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -18,9 +19,15 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class BlockTileUpdate extends MiddleBlockTileUpdate {
 
+	public BlockTileUpdate(ConnectionImpl connection) {
+		super(connection);
+	}
+
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		return RecyclableSingletonList.create(createPacketData(connection.getVersion(), cache.getAttributesCache().getLocale(), TileEntityType.getByNetworkId(type), position, tag));
+		return RecyclableSingletonList.create(createPacketData(
+			connection.getVersion(), connection.getCache().getAttributesCache().getLocale(), TileEntityType.getByNetworkId(type), position, tag
+		));
 	}
 
 	public static ClientBoundPacketData createPacketData(ProtocolVersion version, String locale, TileEntityType type, Position position, NBTTagCompoundWrapper tag) {

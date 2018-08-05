@@ -2,11 +2,16 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClick;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.utils.types.WindowType;
 
 public class InventoryClick extends MiddleInventoryClick {
+
+	public InventoryClick(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {

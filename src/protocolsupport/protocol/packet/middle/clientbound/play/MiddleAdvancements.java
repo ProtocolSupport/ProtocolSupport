@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.utils.Any;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
@@ -14,6 +15,10 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
+
+	public MiddleAdvancements(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected boolean reset;
 	protected Any<String, Advancement>[] advancementsMapping;

@@ -1,7 +1,7 @@
 package protocolsupport.protocol.pipeline.version.v_1_12.r1;
 
-import protocolsupport.api.Connection;
 import protocolsupport.api.utils.NetworkState;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_7_8_9r1_9r2_10_11_12r1_12r2_13.SetProtocol;
 import protocolsupport.protocol.packet.middleimpl.serverbound.login.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.EncryptionResponse;
 import protocolsupport.protocol.packet.middleimpl.serverbound.login.v_7_8_9r1_9r2_10_11_12r1_12r2_13.LoginStart;
@@ -41,53 +41,52 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_9r1_9r2_10_
 import protocolsupport.protocol.packet.middleimpl.serverbound.status.v_7_8_9r1_9r2_10_11_12r1_12r2_13.Ping;
 import protocolsupport.protocol.packet.middleimpl.serverbound.status.v_7_8_9r1_9r2_10_11_12r1_12r2_13.ServerInfoRequest;
 import protocolsupport.protocol.pipeline.version.util.decoder.AbstractModernPacketDecoder;
-import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 
 public class PacketDecoder extends AbstractModernPacketDecoder {
 
 	{
-		registry.register(NetworkState.HANDSHAKING, 0x00, SetProtocol.class);
-		registry.register(NetworkState.LOGIN, 0x00, LoginStart.class);
-		registry.register(NetworkState.LOGIN, 0x01, EncryptionResponse.class);
-		registry.register(NetworkState.STATUS, 0x00, ServerInfoRequest.class);
-		registry.register(NetworkState.STATUS, 0x01, Ping.class);
-		registry.register(NetworkState.PLAY, 0x00, TeleportAccept.class);
-		registry.register(NetworkState.PLAY, 0x01, PrepareCraftingGrid.class);
-		registry.register(NetworkState.PLAY, 0x02, TabComplete.class);
-		registry.register(NetworkState.PLAY, 0x03, Chat.class);
-		registry.register(NetworkState.PLAY, 0x04, ClientCommand.class);
-		registry.register(NetworkState.PLAY, 0x05, ClientSettings.class);
-		registry.register(NetworkState.PLAY, 0x06, InventoryTransaction.class);
-		registry.register(NetworkState.PLAY, 0x07, InventoryEnchant.class);
-		registry.register(NetworkState.PLAY, 0x08, InventoryClick.class);
-		registry.register(NetworkState.PLAY, 0x09, InventoryClose.class);
-		registry.register(NetworkState.PLAY, 0x0A, CustomPayload.class);
-		registry.register(NetworkState.PLAY, 0x0B, UseEntity.class);
-		registry.register(NetworkState.PLAY, 0x0C, KeepAlive.class);
-		registry.register(NetworkState.PLAY, 0x0D, Flying.class);
-		registry.register(NetworkState.PLAY, 0x0E, Move.class);
-		registry.register(NetworkState.PLAY, 0x0F, MoveLook.class);
-		registry.register(NetworkState.PLAY, 0x10, Look.class);
-		registry.register(NetworkState.PLAY, 0x11, MoveVehicle.class);
-		registry.register(NetworkState.PLAY, 0x12, SteerBoat.class);
-		registry.register(NetworkState.PLAY, 0x13, PlayerAbilities.class);
-		registry.register(NetworkState.PLAY, 0x14, BlockDig.class);
-		registry.register(NetworkState.PLAY, 0x15, EntityAction.class);
-		registry.register(NetworkState.PLAY, 0x16, SteerVehicle.class);
-		registry.register(NetworkState.PLAY, 0x17, RecipeBookData.class);
-		registry.register(NetworkState.PLAY, 0x18, ResourcePackStatus.class);
-		registry.register(NetworkState.PLAY, 0x19, AdvancementTab.class);
-		registry.register(NetworkState.PLAY, 0x1A, HeldSlot.class);
-		registry.register(NetworkState.PLAY, 0x1B, CreativeSetSlot.class);
-		registry.register(NetworkState.PLAY, 0x1C, UpdateSign.class);
-		registry.register(NetworkState.PLAY, 0x1D, Animation.class);
-		registry.register(NetworkState.PLAY, 0x1E, Spectate.class);
-		registry.register(NetworkState.PLAY, 0x1F, BlockPlace.class);
-		registry.register(NetworkState.PLAY, 0x20, UseItem.class);
+		registry.register(NetworkState.HANDSHAKING, 0x00, SetProtocol::new);
+		registry.register(NetworkState.LOGIN, 0x00, LoginStart::new);
+		registry.register(NetworkState.LOGIN, 0x01, EncryptionResponse::new);
+		registry.register(NetworkState.STATUS, 0x00, ServerInfoRequest::new);
+		registry.register(NetworkState.STATUS, 0x01, Ping::new);
+		registry.register(NetworkState.PLAY, 0x00, TeleportAccept::new);
+		registry.register(NetworkState.PLAY, 0x01, PrepareCraftingGrid::new);
+		registry.register(NetworkState.PLAY, 0x02, TabComplete::new);
+		registry.register(NetworkState.PLAY, 0x03, Chat::new);
+		registry.register(NetworkState.PLAY, 0x04, ClientCommand::new);
+		registry.register(NetworkState.PLAY, 0x05, ClientSettings::new);
+		registry.register(NetworkState.PLAY, 0x06, InventoryTransaction::new);
+		registry.register(NetworkState.PLAY, 0x07, InventoryEnchant::new);
+		registry.register(NetworkState.PLAY, 0x08, InventoryClick::new);
+		registry.register(NetworkState.PLAY, 0x09, InventoryClose::new);
+		registry.register(NetworkState.PLAY, 0x0A, CustomPayload::new);
+		registry.register(NetworkState.PLAY, 0x0B, UseEntity::new);
+		registry.register(NetworkState.PLAY, 0x0C, KeepAlive::new);
+		registry.register(NetworkState.PLAY, 0x0D, Flying::new);
+		registry.register(NetworkState.PLAY, 0x0E, Move::new);
+		registry.register(NetworkState.PLAY, 0x0F, MoveLook::new);
+		registry.register(NetworkState.PLAY, 0x10, Look::new);
+		registry.register(NetworkState.PLAY, 0x11, MoveVehicle::new);
+		registry.register(NetworkState.PLAY, 0x12, SteerBoat::new);
+		registry.register(NetworkState.PLAY, 0x13, PlayerAbilities::new);
+		registry.register(NetworkState.PLAY, 0x14, BlockDig::new);
+		registry.register(NetworkState.PLAY, 0x15, EntityAction::new);
+		registry.register(NetworkState.PLAY, 0x16, SteerVehicle::new);
+		registry.register(NetworkState.PLAY, 0x17, RecipeBookData::new);
+		registry.register(NetworkState.PLAY, 0x18, ResourcePackStatus::new);
+		registry.register(NetworkState.PLAY, 0x19, AdvancementTab::new);
+		registry.register(NetworkState.PLAY, 0x1A, HeldSlot::new);
+		registry.register(NetworkState.PLAY, 0x1B, CreativeSetSlot::new);
+		registry.register(NetworkState.PLAY, 0x1C, UpdateSign::new);
+		registry.register(NetworkState.PLAY, 0x1D, Animation::new);
+		registry.register(NetworkState.PLAY, 0x1E, Spectate::new);
+		registry.register(NetworkState.PLAY, 0x1F, BlockPlace::new);
+		registry.register(NetworkState.PLAY, 0x20, UseItem::new);
 	}
 
-	public PacketDecoder(Connection connection, NetworkDataCache sharedstorage) {
-		super(connection, sharedstorage);
+	public PacketDecoder(ConnectionImpl connection) {
+		super(connection);
 	}
 
 }

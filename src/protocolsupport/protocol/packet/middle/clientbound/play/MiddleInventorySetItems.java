@@ -3,12 +3,17 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import java.util.ArrayList;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public abstract class MiddleInventorySetItems extends ClientBoundMiddlePacket {
+
+	public MiddleInventorySetItems(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected int windowId;
 	protected ArrayList<NetworkItemStack> itemstacks = new ArrayList<>();

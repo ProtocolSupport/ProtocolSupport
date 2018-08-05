@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6;
 import org.bukkit.Material;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleMap;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -14,6 +15,10 @@ import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class Map extends MiddleMap {
+
+	public Map(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	@SuppressWarnings("deprecation")
 	private static final int mapId = Material.LEGACY_MAP.getId();

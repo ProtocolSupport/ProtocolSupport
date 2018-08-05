@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldSound;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -12,6 +13,10 @@ import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class WorldSound extends MiddleWorldSound {
+
+	public WorldSound(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {

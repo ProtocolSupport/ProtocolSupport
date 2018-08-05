@@ -2,11 +2,16 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleEntityAction;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class EntityAction extends MiddleEntityAction {
+
+	public EntityAction(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	private static final ArrayMap<Action> actionById8 = new ArrayMap<>(
 		new ArrayMap.Entry<>(0, Action.START_SNEAK), new ArrayMap.Entry<>(1, Action.STOP_SNEAK),

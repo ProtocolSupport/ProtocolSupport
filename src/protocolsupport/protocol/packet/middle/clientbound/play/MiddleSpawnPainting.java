@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
@@ -12,6 +13,10 @@ import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Position;
 
 public abstract class MiddleSpawnPainting extends ClientBoundMiddlePacket {
+
+	public MiddleSpawnPainting(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected NetworkEntity entity;
 	protected int type;

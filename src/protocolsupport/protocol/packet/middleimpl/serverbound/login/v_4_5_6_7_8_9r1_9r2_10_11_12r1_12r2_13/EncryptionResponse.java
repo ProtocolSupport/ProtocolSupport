@@ -2,10 +2,15 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.login.v_4_5_6_7_8
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.login.MiddleEncryptionResponse;
 import protocolsupport.protocol.serializer.ArraySerializer;
 
 public class EncryptionResponse extends MiddleEncryptionResponse {
+
+	public EncryptionResponse(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {

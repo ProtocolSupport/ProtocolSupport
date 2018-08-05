@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleTabComplete;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -13,6 +14,10 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class TabComplete extends MiddleTabComplete {
+
+	public TabComplete(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {

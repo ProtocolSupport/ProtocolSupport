@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
@@ -11,6 +12,10 @@ import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.zplatform.ServerPlatform;
 
 public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
+
+	public MiddleInventoryOpen(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected int windowId;
 	protected WindowType type;

@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -10,6 +11,10 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public abstract class MiddleEditBook extends ServerBoundMiddlePacket {
+
+	public MiddleEditBook(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected NetworkItemStack book;
 	protected boolean signing;

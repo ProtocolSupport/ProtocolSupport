@@ -1,23 +1,16 @@
 package protocolsupport.protocol.packet.middle;
 
-import protocolsupport.api.Connection;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.utils.Utils;
-import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
-@NeedsNoArgConstructor
 public abstract class MiddlePacket {
 
-	protected Connection connection;
-
-	public final void setConnection(Connection connection) {
+	protected final ConnectionImpl connection;
+	protected final NetworkDataCache cache; //TODO: remove this field and use ConnectinImpl#getCache where needed
+	public MiddlePacket(ConnectionImpl connection) {
 		this.connection = connection;
-	}
-
-	protected NetworkDataCache cache;
-
-	public void setSharedStorage(NetworkDataCache sharedstorage) {
-		this.cache = sharedstorage;
+		this.cache = connection.getCache();
 	}
 
 	@Override

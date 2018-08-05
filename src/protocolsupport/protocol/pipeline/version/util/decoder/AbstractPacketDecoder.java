@@ -8,33 +8,29 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.MessageToMessageDecoder;
-import protocolsupport.api.Connection;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.netcache.NetworkDataCache;
-import protocolsupport.protocol.utils.registry.MiddleTransformerRegistry;
+import protocolsupport.protocol.utils.registry.MiddlePacketRegistry;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.zplatform.ServerPlatform;
 
 public abstract class AbstractPacketDecoder extends MessageToMessageDecoder<ByteBuf> {
 
-	protected final MiddleTransformerRegistry<ServerBoundMiddlePacket> registry = new MiddleTransformerRegistry<>();
+	protected final ConnectionImpl connection;
+	protected final MiddlePacketRegistry<ServerBoundMiddlePacket> registry;
 
-	protected final Connection connection;
-	public AbstractPacketDecoder(Connection connection, NetworkDataCache cache) {
+	public AbstractPacketDecoder(ConnectionImpl connection) {
 		this.connection = connection;
-		registry.setCallBack(object -> {
-			object.setConnection(this.connection);
-			object.setSharedStorage(cache);
-		});
+		this.registry = new MiddlePacketRegistry<>(connection);
 	}
 
 	protected abstract int readPacketId(ByteBuf buffer);
 
-	protected void decodeAndTransform(Channel channel, ByteBuf buffer, List<Object> to) throws InstantiationException, IllegalAccessException {
+	protected void decodeAndTransform(Channel channel, ByteBuf buffer, List<Object> to) {
 		ServerBoundMiddlePacket packetTransformer = registry.getTransformer(connection.getNetworkState(), readPacketId(buffer));
 		packetTransformer.readFromClientData(buffer);
 		try (RecyclableCollection<ServerBoundPacketData> data = processPackets(channel, packetTransformer.toNative())) {

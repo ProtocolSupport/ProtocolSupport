@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
@@ -8,6 +9,10 @@ import protocolsupport.protocol.utils.EnumConstantLookups;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleUnlockRecipes extends ClientBoundMiddlePacket {
+
+	public MiddleUnlockRecipes(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected Action action;
 	protected boolean craftRecipeBookOpen;

@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -13,6 +14,10 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public abstract class MiddleUpdateCommandBlock extends ServerBoundMiddlePacket {
+
+	public MiddleUpdateCommandBlock(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected Position position = new Position(0, 0, 0);
 	protected String command;

@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -10,6 +11,10 @@ import protocolsupport.protocol.utils.EnumConstantLookups.EnumConstantLookup;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleScoreboardObjective extends ClientBoundMiddlePacket {
+
+	public MiddleScoreboardObjective(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected String name;
 	protected Mode mode;

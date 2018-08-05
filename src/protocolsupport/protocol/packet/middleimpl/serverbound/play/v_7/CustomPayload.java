@@ -2,6 +2,7 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_7;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.abs_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2.AbstractCustomPayload;
 import protocolsupport.protocol.serializer.ArraySerializer;
@@ -11,6 +12,10 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
 public class CustomPayload extends AbstractCustomPayload {
+
+	public CustomPayload(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {

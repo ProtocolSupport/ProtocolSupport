@@ -1,12 +1,17 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.typeremapper.particle.ParticleRemapper;
 import protocolsupport.protocol.utils.types.particle.Particle;
 import protocolsupport.protocol.utils.types.particle.ParticleRegistry;
 
 public abstract class MiddleWorldParticle extends ClientBoundMiddlePacket {
+
+	public MiddleWorldParticle(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected Particle particle;
 	protected boolean longdist;

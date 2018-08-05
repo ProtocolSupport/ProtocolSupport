@@ -1,11 +1,16 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_13;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleRecipeBookData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 
 public class RecipeBookData extends MiddleRecipeBookData {
+
+	public RecipeBookData(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {

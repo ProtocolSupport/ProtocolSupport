@@ -9,6 +9,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleEditBook;
@@ -33,11 +34,15 @@ import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 
+	public AbstractCustomPayload(ConnectionImpl connection) {
+		super(connection);
+	}
+
 	protected String tag;
 	protected byte[] data;
 
 	protected RecyclableCollection<ServerBoundPacketData> transformRegisterUnregister(boolean register) {
-		CustomPayloadChannelsCache ccache = cache.getChannelsCache();
+		CustomPayloadChannelsCache ccache = connection.getCache().getChannelsCache();
 		String modernTag = LegacyCustomPayloadChannelName.fromPre13(tag);
 		StringJoiner payloadModernTagJoiner = new StringJoiner("\u0000");
 		for (String payloadLegacyTag : new String(data, StandardCharsets.UTF_8).split("\u0000")) {
@@ -53,7 +58,7 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 	}
 
 	protected RecyclableCollection<ServerBoundPacketData> transformBookEdit() {
-		String locale = cache.getAttributesCache().getLocale();
+		String locale = connection.getCache().getAttributesCache().getLocale();
 		NetworkItemStack book = ItemStackSerializer.readItemStack(Unpooled.wrappedBuffer(data), connection.getVersion(), locale, true);
 		book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITTEN_BOOK));
 		if (!book.isNull()) {
@@ -65,7 +70,7 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 
 	protected RecyclableCollection<ServerBoundPacketData> transformBookSign() {
 		ProtocolVersion version = connection.getVersion();
-		String locale = cache.getAttributesCache().getLocale();
+		String locale = connection.getCache().getAttributesCache().getLocale();
 		NetworkItemStack book = ItemStackSerializer.readItemStack(Unpooled.wrappedBuffer(data), version, locale, true);
 		if (!book.isNull()) {
 			book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITTEN_BOOK));

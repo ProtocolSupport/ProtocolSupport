@@ -7,6 +7,7 @@ import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.ChatAPI.MessagePosition;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -15,6 +16,10 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.zplatform.ServerPlatform;
 
 public abstract class MiddleTitle extends ClientBoundMiddlePacket {
+
+	public MiddleTitle(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected Action action;
 	protected BaseComponent message;

@@ -21,6 +21,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.storage.ProtocolStorage;
+import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
@@ -292,6 +293,12 @@ public class ConnectionImpl extends Connection {
 				return rawpacketevent.getDirectData();
 			}
 		}
+	}
+
+	protected final NetworkDataCache cache = new NetworkDataCache();
+
+	public NetworkDataCache getCache() {
+		return cache;
 	}
 
 	@Override

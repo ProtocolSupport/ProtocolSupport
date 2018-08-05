@@ -1,11 +1,16 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.login.v_13;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.login.MiddleLoginCustomPayload;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class LoginCustomPayload extends MiddleLoginCustomPayload {
+
+	public LoginCustomPayload(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
