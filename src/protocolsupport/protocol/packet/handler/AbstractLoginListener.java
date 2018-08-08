@@ -38,7 +38,7 @@ import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 @SuppressWarnings("deprecation")
-public abstract class AbstractLoginListener {
+public abstract class AbstractLoginListener implements IPacketListener {
 
 	protected static final int loginThreadKeepAlive = Utils.getJavaPropertyValue("loginthreadskeepalive", 60, Integer::parseInt);
 
@@ -73,12 +73,14 @@ public abstract class AbstractLoginListener {
 		}
 	}
 
+	@Override
 	public void disconnect(String s) {
 		try {
 			Bukkit.getLogger().info("Disconnecting " + getConnectionRepr() + ": " + s);
 			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(s), future -> networkManager.close(s));
-		} catch (Exception exception) {
+		} catch (Throwable exception) {
 			Bukkit.getLogger().log(Level.SEVERE, "Error whilst disconnecting player", exception);
+			networkManager.close("Error whilst disconnecting player, force closing connection");
 		}
 	}
 
@@ -194,6 +196,10 @@ public abstract class AbstractLoginListener {
 		//profile complete event
 		PlayerProfileCompleteEvent event = new PlayerProfileCompleteEvent(connection);
 		Bukkit.getPluginManager().callEvent(event);
+		if (event.isLoginDenied()) {
+			disconnect(event.getDenyLoginMessage());
+			return;
+		}
 		if (event.getForcedName() != null) {
 			profile.setName(event.getForcedName());
 		}

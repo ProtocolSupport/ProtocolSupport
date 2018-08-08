@@ -34,6 +34,18 @@ public abstract class Connection {
 	public abstract boolean isConnected();
 
 	/**
+	 * Closes the connection
+	 */
+	public abstract void close();
+
+	/**
+	 * Disconnects client with sending disconnect message <br>
+	 * If sending disconnect message is impossible, just closes the connection
+	 * @param message disconnect message
+	 */
+	public abstract void disconnect(String message);
+
+	/**
 	 * Returns real remote address
 	 * @return real remote address
 	 */

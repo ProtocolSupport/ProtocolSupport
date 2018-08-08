@@ -21,7 +21,7 @@ import protocolsupport.protocol.pipeline.common.SimpleReadTimeoutHandler;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
-public abstract class AbstractLoginListenerPlay {
+public abstract class AbstractLoginListenerPlay implements IPacketListener {
 
 	protected final NetworkManagerWrapper networkManager;
 	protected final String hostname;
@@ -138,6 +138,7 @@ public abstract class AbstractLoginListenerPlay {
 		return (connection.getProfile() + " (" + networkManager.getAddress() + ")");
 	}
 
+	@Override
 	public void disconnect(final String s) {
 		try {
 			Bukkit.getLogger().info("Disconnecting " + getConnectionRepr() + ": " + s);
@@ -150,8 +151,9 @@ public abstract class AbstractLoginListenerPlay {
 			} else {
 				disconnect0(s);
 			}
-		} catch (Exception exception) {
+		} catch (Throwable exception) {
 			Bukkit.getLogger().log(Level.SEVERE, "Error whilst disconnecting player", exception);
+			networkManager.close("Error whilst disconnecting player, force closing connection");
 		}
 	}
 
