@@ -150,7 +150,6 @@ public class LegacyBlockData {
 				Arrays.asList(
 					Material.ACACIA_LEAVES, Material.DARK_OAK_LEAVES, Material.BIRCH_LEAVES,
 					Material.JUNGLE_LEAVES, Material.SPRUCE_LEAVES, Material.OAK_LEAVES,
-					Material.TALL_GRASS, Material.ROSE_BUSH, Material.LARGE_FERN,
 					Material.ACACIA_FENCE, Material.DARK_OAK_FENCE, Material.BIRCH_FENCE,
 					Material.JUNGLE_FENCE, Material.SPRUCE_FENCE, Material.OAK_FENCE,
 					Material.IRON_BARS,
