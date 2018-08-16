@@ -25,14 +25,15 @@ public class MoveVehicle extends ServerBoundMiddlePacket {
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		vehicleId = (int) VarNumberSerializer.readVarLong(clientdata);
+		byte flag = clientdata.readByte();
+		onGround = (flag & 128) == 128;
+		teleported = (flag & 64) == 64;
 		x = clientdata.readFloatLE();
 		y = clientdata.readFloatLE();
 		z = clientdata.readFloatLE();
 		pitch = clientdata.readByte();
 		headYaw = clientdata.readByte();
 		yaw = clientdata.readByte();
-		onGround = clientdata.readBoolean();
-		teleported = clientdata.readBoolean();
 	}
 
 	@Override

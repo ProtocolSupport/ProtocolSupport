@@ -55,7 +55,7 @@ public class MovementCache {
 
 	private static final int peIncreasedLeniencyMillis = 1000;
 	private double peClientX;
-	private double peClinetY;
+	private double peClientY;
 	private double peClientZ;
 	private long pePositionLeniencyIncreaseTimestamp;
 	private double pePositionLeniency = 0.5;
@@ -64,7 +64,7 @@ public class MovementCache {
 
 	public void setPEClientPosition(double x, double y, double z) {
 		this.peClientX = x;
-		this.peClinetY = y;
+		this.peClientY = y;
 		this.peClientZ = z;
 	}
 
@@ -73,7 +73,7 @@ public class MovementCache {
 	}
 
 	public double getPEClientY() {
-		return peClinetY;
+		return peClientY;
 	}
 
 	public double getPEClientZ() {
@@ -81,7 +81,7 @@ public class MovementCache {
 	}
 
 	public void updatePEPositionLeniency(double currentPEClientY) {
-		if (currentPEClientY > peClinetY) {
+		if (currentPEClientY > peClientY) {
 			pePositionLeniency = 3;
 			pePositionLeniencyIncreaseTimestamp = System.currentTimeMillis();
 		} else if ((pePositionLeniency != 0.5) && ((System.currentTimeMillis() - pePositionLeniencyIncreaseTimestamp) > peIncreasedLeniencyMillis)) {
@@ -90,7 +90,7 @@ public class MovementCache {
 	}
 
 	public boolean isPEPositionAboveLeniency() {
-		return (Math.abs(peClientX - x) > pePositionLeniency) || (Math.abs(peClinetY - y) > pePositionLeniency) || (Math.abs(peClientZ - z) > pePositionLeniency);
+		return (Math.abs(peClientX - x) > pePositionLeniency) || (Math.abs(peClientY - y) > pePositionLeniency) || (Math.abs(peClientZ - z) > pePositionLeniency);
 	}
 
 	public boolean isPELeftPaddleTurning() {
