@@ -22,7 +22,7 @@ public abstract class MessageToMessageEncoder<I> extends ChannelOutboundHandlerA
 		this.matcher = TypeParameterMatcher.get(clazz);
 	}
 
-	public boolean acceptOutboundMessage(final Object o)  {
+	public boolean acceptOutboundMessage(final Object o) {
 		return this.matcher.match(o);
 	}
 

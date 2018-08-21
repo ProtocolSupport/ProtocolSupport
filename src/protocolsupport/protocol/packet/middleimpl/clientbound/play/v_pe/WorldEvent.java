@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldEvent;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
@@ -11,6 +12,10 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class WorldEvent extends MiddleWorldEvent {
+
+	public WorldEvent(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	private static final Int2IntOpenHashMap remaps = new Int2IntOpenHashMap();
 	static {

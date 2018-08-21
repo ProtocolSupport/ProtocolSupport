@@ -6,10 +6,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import org.bukkit.Bukkit;
+import org.bukkit.inventory.ItemStack;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
@@ -18,60 +20,71 @@ import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.ChatAPI;
+import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.events.ItemStackWriteEvent;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
+import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.protocol.utils.NBTTagCompoundSerializer;
 import protocolsupport.utils.IntTuple;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
+import protocolsupport.zplatform.itemstack.NBTTagType;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
+//TODO AAAAHAHHHHHAAAAAAAAAAAaaaaaaaHHHHHH HEEEELLLLPPPP
 public class ItemStackSerializer {
 
-	public static ItemStackWrapper readItemStack(ByteBuf from, ProtocolVersion version, String locale, boolean isFromClient) {
+	public static NetworkItemStack readItemStack(ByteBuf from, ProtocolVersion version, String locale, boolean isFromClient) {
 		int type = 0;
 		if (version == ProtocolVersion.MINECRAFT_PE) {
 			type = VarNumberSerializer.readSVarInt(from);
 		} else {
 			type = from.readShort();
 		}
-		if (type >= 0) {
-			ItemStackWrapper itemstack = ServerPlatform.get().getWrapperFactory().createItemStack(type);
-			if (version == ProtocolVersion.MINECRAFT_PE) {
-				if(type == 0) { //Non or empty item stacks can also be 0 in PE.
-					return ItemStackWrapper.NULL;
-				}
-				int amountdata = VarNumberSerializer.readSVarInt(from);
-				int data = (amountdata >> 8) & 0xFFFF;
-				itemstack.setAmount(amountdata & 0x7F);
-				itemstack.setData(data);
-				IntTuple itemAndData = PEDataValues.PE_ITEM_ID.getRemap(type, data);
-				if (itemAndData != null) {
-					itemstack.setTypeId(itemAndData.getI1());
-					if (itemAndData.getI2() != -1) {
-						itemstack.setData(itemAndData.getI2());
-					} else {
-						itemstack.setData(data); // changing the item ID resets the data to 0
-					}
-				}
-				itemstack.setTag(readTag(from, false, version));
-				//TODO: Read the rest properly..
-				from.readByte(); //TODO: CanPlaceOn PE
-				from.readByte(); //TODO: CanDestroy PE
-			} else {
-				itemstack.setAmount(from.readByte());
-				itemstack.setData(from.readUnsignedShort());
-				itemstack.setTag(readTag(from, version));
-			}
-			if (isFromClient) {
-				itemstack = ItemStackRemapper.remapFromClient(version, locale, itemstack.cloneItemStack());
-			}
-			return itemstack;
+		if (type < 0 || (type == 0 && version == ProtocolVersion.MINECRAFT_PE)) {
+			//Non or empty item stacks can also be 0 in PE.
+			return NetworkItemStack.NULL;
 		}
-		return ItemStackWrapper.NULL;
+		NetworkItemStack itemstack = new NetworkItemStack();
+		itemstack.setTypeId(type);
+		if (version == ProtocolVersion.MINECRAFT_PE) {
+			int amountdata = VarNumberSerializer.readSVarInt(from);
+			itemstack.setAmount(amountdata & 0x7F);
+			itemstack.setLegacyData((amountdata >> 8) & 0xFFFF);
+		} else {
+			itemstack.setAmount(from.readByte());
+		}
+		if (version.getProtocolType() == ProtocolType.PC && version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
+			itemstack.setLegacyData(from.readUnsignedShort());
+		}
+		if (version == ProtocolVersion.MINECRAFT_PE) {
+			//IntTuple itemAndData = PEDataValues.PE_ITEM_ID.getRemap(type, data);
+			//TODO REMAP!
+			//if (itemAndData != null) {
+			//	itemstack.setTypeId(itemAndData.getI1());
+			//	if (itemAndData.getI2() != -1) {
+			//		itemstack.setData(itemAndData.getI2());
+			//	} else {
+			//		itemstack.setData(data); // changing the item ID resets the data to 0
+			//	}
+			//}
+			itemstack.setNBT(readTag(from, false, version));
+			//TODO: Read the rest properly..
+			from.readByte(); //TODO: CanPlaceOn PE
+			from.readByte(); //TODO: CanDestroy PE
+		} else {
+			itemstack.setNBT(readTag(from, version));
+		}
+		if (isFromClient) {
+			itemstack = ItemStackRemapper.remapFromClient(version, locale, itemstack);
+		}
+		return itemstack;
 	}
 
+<<<<<<< HEAD
 	public static void writeItemStack(ByteBuf to, ProtocolVersion version, String locale, ItemStackWrapper itemstack, boolean isToClient) {
 		if ((itemstack == null) || itemstack.isNull()) {
 			if (version == ProtocolVersion.MINECRAFT_PE) {
@@ -79,10 +92,16 @@ public class ItemStackSerializer {
 			} else {
 				to.writeShort(-1);
 			}
+=======
+	public static void writeItemStack(ByteBuf to, ProtocolVersion version, String locale, NetworkItemStack itemstack, boolean isToClient) {
+		if (itemstack.isNull()) {
+			to.writeShort(-1);
+>>>>>>> branch 'master' of https://github.com/ProtocolSupport/ProtocolSupport.git
 			return;
 		}
-		ItemStackWrapper witemstack = itemstack;
+
 		if (isToClient) {
+<<<<<<< HEAD
 			witemstack = remapItemToClient(version, locale, witemstack);
 		}
 		if (version == ProtocolVersion.MINECRAFT_PE) {
@@ -94,9 +113,36 @@ public class ItemStackSerializer {
 				id = itemAndData.getI1();
 				if (itemAndData.getI2() != -1) {
 					data = itemAndData.getI2();
+=======
+			if (ItemStackWriteEvent.getHandlerList().getRegisteredListeners().length > 0) {
+				ItemStack bukkitStack = ServerPlatform.get().getMiscUtils().createItemStackFromNetwork(itemstack);
+				ItemStackWriteEvent event = new ItemStackWriteEvent(version, locale, bukkitStack);
+				Bukkit.getPluginManager().callEvent(event);
+				List<String> additionalLore = event.getAdditionalLore();
+				BaseComponent forcedDisplayName = event.getForcedDisplayName();
+				if ((forcedDisplayName != null) || !additionalLore.isEmpty()) {
+					NBTTagCompoundWrapper nbt = itemstack.getNBT();
+					if (nbt.isNull()) {
+						nbt = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+					}
+					NBTTagCompoundWrapper displayNBT = CommonNBT.getOrCreateDisplayTag(nbt);
+
+					if (forcedDisplayName != null) {
+						displayNBT.setString(CommonNBT.DISPLAY_NAME, ChatAPI.toJSON(forcedDisplayName));
+					}
+
+					if (!additionalLore.isEmpty()) {
+						NBTTagListWrapper loreNBT = displayNBT.getList(CommonNBT.DISPLAY_LORE, NBTTagType.STRING);
+						additionalLore.forEach(loreNBT::addString);
+						displayNBT.setList(CommonNBT.DISPLAY_LORE, loreNBT);
+					}
+
+					itemstack.setNBT(nbt);
+>>>>>>> branch 'master' of https://github.com/ProtocolSupport/ProtocolSupport.git
 				}
 			}
 
+<<<<<<< HEAD
 			VarNumberSerializer.writeSVarInt(to, id);
 			VarNumberSerializer.writeSVarInt(to, ((data & 0xFFFF) << 8) | witemstack.getAmount());
 			writeTag(to, false, version, witemstack.getTag());
@@ -107,7 +153,20 @@ public class ItemStackSerializer {
 			to.writeByte(witemstack.getAmount());
 			to.writeShort(witemstack.getData());
 			writeTag(to, version, witemstack.getTag());
+=======
+			itemstack = ItemStackRemapper.remapToClient(version, locale, itemstack);
+>>>>>>> branch 'master' of https://github.com/ProtocolSupport/ProtocolSupport.git
 		}
+<<<<<<< HEAD
+=======
+
+		to.writeShort(itemstack.getTypeId());
+		to.writeByte(itemstack.getAmount());
+		if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
+			to.writeShort(itemstack.getLegacyData());
+		}
+		writeTag(to, version, itemstack.getNBT());
+>>>>>>> branch 'master' of https://github.com/ProtocolSupport/ProtocolSupport.git
 	}
 
 	public static NBTTagCompoundWrapper readTag(ByteBuf from, ProtocolVersion version) {
@@ -200,6 +259,7 @@ public class ItemStackSerializer {
 		return (version.getProtocolType() == ProtocolType.PE) && (version == ProtocolVersion.MINECRAFT_PE);
 	}
 
+	//TODO Oh god help me..
 	public static ItemStackWrapper remapItemToClient(ProtocolVersion version, String locale, ItemStackWrapper itemstack) {
 		ItemStackWrapper witemstack = itemstack.cloneItemStack();
 		IntTuple iddata = ItemStackRemapper.ID_DATA_REMAPPING_REGISTRY.getTable(version).getRemap(witemstack.getTypeId(), witemstack.getData());

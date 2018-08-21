@@ -49,6 +49,11 @@ public class MiscSerializer {
 		return MiscSerializer.readBytes(buf, buf.readableBytes());
 	}
 
+	public static byte[] readAllBytesWithLimit(ByteBuf buf, int limit) {
+		checkLimit(buf.readableBytes(), limit);
+		return readAllBytes(buf);
+	}
+
 	public static byte[] readBytes(ByteBuf buf, int length) {
 		byte[] result = new byte[length];
 		buf.readBytes(result);

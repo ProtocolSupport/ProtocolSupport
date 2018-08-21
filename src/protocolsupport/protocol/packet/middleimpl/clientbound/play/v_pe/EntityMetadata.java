@@ -2,27 +2,31 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntitySetAttributes.AttributeInfo;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.typeremapper.watchedentity.DataWatcherDataRemapper;
+import protocolsupport.protocol.typeremapper.watchedentity.DataWatcherRemapper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectSVarLong;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntityItemDataCache;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
+import protocolsupport.protocol.utils.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.networkentity.NetworkEntityItemDataCache;
+import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.utils.ObjectFloatTuple;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public class EntityMetadata extends MiddleEntityMetadata {
+
+	public EntityMetadata(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
@@ -49,12 +53,13 @@ public class EntityMetadata extends MiddleEntityMetadata {
 				}
 				if (entity.getType().isOfType(NetworkEntityType.BATTLE_HORSE)) {
 					DataWatcherObjectIndex.BattleHorse.ARMOR.getValue(metadata.getOriginal()).ifPresent(armorWatcher -> {
-						int type = armorWatcher.getValue();
+						//int type = armorWatcher.getValue();
 						packets.add(EntityEquipment.create(version, locale, entityId,
-							ItemStackWrapper.NULL,
-							type == 0 ? ItemStackWrapper.NULL : ServerPlatform.get().getWrapperFactory().createItemStack(416 + armorWatcher.getValue()),
-							ItemStackWrapper.NULL,
-							ItemStackWrapper.NULL
+							NetworkItemStack.NULL,
+							//TODO Fix for 1.13
+							/*type == 0 ?*/ NetworkItemStack.NULL /*: ServerPlatform.get().getWrapperFactory().createItemStack(416 + armorWatcher.getValue())*/,
+							NetworkItemStack.NULL,
+							NetworkItemStack.NULL
 						));
 					});
 				}
@@ -69,7 +74,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 	}
 
 	public static ClientBoundPacketData createFaux(NetworkEntity entity, String locale, ProtocolVersion version) {
-		DataWatcherDataRemapper faux = new DataWatcherDataRemapper();
+		DataWatcherRemapper faux = new DataWatcherRemapper();
 		faux.remap(version, entity);
 		return create(entity, locale, transform(entity, faux.getRemapped(), version), version);
 	}

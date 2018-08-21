@@ -46,7 +46,7 @@ public class ClientBoundPacketData extends WrappingBuffer implements Recyclable 
 	}
 
 	@Override
-	protected void finalize() {
+	protected void finalize() throws Throwable {
 		release();
 	}
 

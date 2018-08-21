@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.bukkit.Material;
+
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.TranslationAPI;
 import protocolsupport.api.chat.components.BaseComponent;
@@ -15,8 +17,9 @@ import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.chat.components.TranslateComponent;
 import protocolsupport.api.chat.modifiers.ClickAction;
 import protocolsupport.api.chat.modifiers.HoverAction;
+import protocolsupport.protocol.typeremapper.itemstack.PreFlatteningItemIdData;
+import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.minecraftdata.ItemData;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -105,9 +108,9 @@ public class LegacyChatJson {
 			HoverAction hover = component.getHoverAction();
 			if ((hover != null) && (hover.getType() == HoverAction.Type.SHOW_ITEM)) {
 				NBTTagCompoundWrapper compound = ServerPlatform.get().getWrapperFactory().createNBTCompoundFromJson(hover.getValue());
-				Integer id = ItemData.getIdByName(compound.getString("id"));
-				if (id != null) {
-					compound.setInt("id", id);
+				Material material = ItemMaterialLookup.getByKey(compound.getString("id"));
+				if (material != null) {
+					compound.setInt("id", PreFlatteningItemIdData.getIdFromLegacyCombinedId(PreFlatteningItemIdData.getLegacyCombinedIdByModernId(ItemMaterialLookup.getRuntimeId(material))));
 				}
 				component.setHoverAction(new HoverAction(HoverAction.Type.SHOW_ITEM, compound.toString()));
 			}

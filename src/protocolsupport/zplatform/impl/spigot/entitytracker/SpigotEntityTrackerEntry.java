@@ -12,70 +12,70 @@ import org.bukkit.event.player.PlayerVelocityEvent;
 import org.bukkit.util.Vector;
 import org.spigotmc.AsyncCatcher;
 
-import net.minecraft.server.v1_12_R1.AttributeInstance;
-import net.minecraft.server.v1_12_R1.AttributeMapServer;
-import net.minecraft.server.v1_12_R1.Block;
-import net.minecraft.server.v1_12_R1.BlockPosition;
-import net.minecraft.server.v1_12_R1.Entity;
-import net.minecraft.server.v1_12_R1.EntityAreaEffectCloud;
-import net.minecraft.server.v1_12_R1.EntityArmorStand;
-import net.minecraft.server.v1_12_R1.EntityArrow;
-import net.minecraft.server.v1_12_R1.EntityBoat;
-import net.minecraft.server.v1_12_R1.EntityDragonFireball;
-import net.minecraft.server.v1_12_R1.EntityEgg;
-import net.minecraft.server.v1_12_R1.EntityEnderCrystal;
-import net.minecraft.server.v1_12_R1.EntityEnderPearl;
-import net.minecraft.server.v1_12_R1.EntityEnderSignal;
-import net.minecraft.server.v1_12_R1.EntityEvokerFangs;
-import net.minecraft.server.v1_12_R1.EntityExperienceOrb;
-import net.minecraft.server.v1_12_R1.EntityFallingBlock;
-import net.minecraft.server.v1_12_R1.EntityFireball;
-import net.minecraft.server.v1_12_R1.EntityFireworks;
-import net.minecraft.server.v1_12_R1.EntityFishingHook;
-import net.minecraft.server.v1_12_R1.EntityHuman;
-import net.minecraft.server.v1_12_R1.EntityItem;
-import net.minecraft.server.v1_12_R1.EntityItemFrame;
-import net.minecraft.server.v1_12_R1.EntityLeash;
-import net.minecraft.server.v1_12_R1.EntityLiving;
-import net.minecraft.server.v1_12_R1.EntityLlamaSpit;
-import net.minecraft.server.v1_12_R1.EntityMinecartAbstract;
-import net.minecraft.server.v1_12_R1.EntityPainting;
-import net.minecraft.server.v1_12_R1.EntityPlayer;
-import net.minecraft.server.v1_12_R1.EntityPotion;
-import net.minecraft.server.v1_12_R1.EntityShulkerBullet;
-import net.minecraft.server.v1_12_R1.EntitySmallFireball;
-import net.minecraft.server.v1_12_R1.EntitySnowball;
-import net.minecraft.server.v1_12_R1.EntitySpectralArrow;
-import net.minecraft.server.v1_12_R1.EntityTNTPrimed;
-import net.minecraft.server.v1_12_R1.EntityThrownExpBottle;
-import net.minecraft.server.v1_12_R1.EntityTippedArrow;
-import net.minecraft.server.v1_12_R1.EntityTrackerEntry;
-import net.minecraft.server.v1_12_R1.EntityTypes;
-import net.minecraft.server.v1_12_R1.EntityWitherSkull;
-import net.minecraft.server.v1_12_R1.EnumItemSlot;
-import net.minecraft.server.v1_12_R1.IAnimal;
-import net.minecraft.server.v1_12_R1.ItemStack;
-import net.minecraft.server.v1_12_R1.ItemWorldMap;
-import net.minecraft.server.v1_12_R1.Items;
-import net.minecraft.server.v1_12_R1.MathHelper;
-import net.minecraft.server.v1_12_R1.MobEffect;
-import net.minecraft.server.v1_12_R1.Packet;
-import net.minecraft.server.v1_12_R1.PacketPlayOutBed;
-import net.minecraft.server.v1_12_R1.PacketPlayOutEntity;
-import net.minecraft.server.v1_12_R1.PacketPlayOutEntityEffect;
-import net.minecraft.server.v1_12_R1.PacketPlayOutEntityEquipment;
-import net.minecraft.server.v1_12_R1.PacketPlayOutEntityHeadRotation;
-import net.minecraft.server.v1_12_R1.PacketPlayOutEntityMetadata;
-import net.minecraft.server.v1_12_R1.PacketPlayOutEntityTeleport;
-import net.minecraft.server.v1_12_R1.PacketPlayOutEntityVelocity;
-import net.minecraft.server.v1_12_R1.PacketPlayOutMount;
-import net.minecraft.server.v1_12_R1.PacketPlayOutNamedEntitySpawn;
-import net.minecraft.server.v1_12_R1.PacketPlayOutSpawnEntity;
-import net.minecraft.server.v1_12_R1.PacketPlayOutSpawnEntityExperienceOrb;
-import net.minecraft.server.v1_12_R1.PacketPlayOutSpawnEntityLiving;
-import net.minecraft.server.v1_12_R1.PacketPlayOutSpawnEntityPainting;
-import net.minecraft.server.v1_12_R1.PacketPlayOutUpdateAttributes;
-import net.minecraft.server.v1_12_R1.WorldMap;
+import net.minecraft.server.v1_13_R1.AttributeInstance;
+import net.minecraft.server.v1_13_R1.AttributeMapServer;
+import net.minecraft.server.v1_13_R1.Block;
+import net.minecraft.server.v1_13_R1.BlockPosition;
+import net.minecraft.server.v1_13_R1.Entity;
+import net.minecraft.server.v1_13_R1.EntityAreaEffectCloud;
+import net.minecraft.server.v1_13_R1.EntityArmorStand;
+import net.minecraft.server.v1_13_R1.EntityArrow;
+import net.minecraft.server.v1_13_R1.EntityBoat;
+import net.minecraft.server.v1_13_R1.EntityDragonFireball;
+import net.minecraft.server.v1_13_R1.EntityEgg;
+import net.minecraft.server.v1_13_R1.EntityEnderCrystal;
+import net.minecraft.server.v1_13_R1.EntityEnderPearl;
+import net.minecraft.server.v1_13_R1.EntityEnderSignal;
+import net.minecraft.server.v1_13_R1.EntityEvokerFangs;
+import net.minecraft.server.v1_13_R1.EntityExperienceOrb;
+import net.minecraft.server.v1_13_R1.EntityFallingBlock;
+import net.minecraft.server.v1_13_R1.EntityFireball;
+import net.minecraft.server.v1_13_R1.EntityFireworks;
+import net.minecraft.server.v1_13_R1.EntityFishingHook;
+import net.minecraft.server.v1_13_R1.EntityHuman;
+import net.minecraft.server.v1_13_R1.EntityItem;
+import net.minecraft.server.v1_13_R1.EntityItemFrame;
+import net.minecraft.server.v1_13_R1.EntityLeash;
+import net.minecraft.server.v1_13_R1.EntityLiving;
+import net.minecraft.server.v1_13_R1.EntityLlamaSpit;
+import net.minecraft.server.v1_13_R1.EntityMinecartAbstract;
+import net.minecraft.server.v1_13_R1.EntityPainting;
+import net.minecraft.server.v1_13_R1.EntityPlayer;
+import net.minecraft.server.v1_13_R1.EntityPotion;
+import net.minecraft.server.v1_13_R1.EntityShulkerBullet;
+import net.minecraft.server.v1_13_R1.EntitySmallFireball;
+import net.minecraft.server.v1_13_R1.EntitySnowball;
+import net.minecraft.server.v1_13_R1.EntitySpectralArrow;
+import net.minecraft.server.v1_13_R1.EntityTNTPrimed;
+import net.minecraft.server.v1_13_R1.EntityThrownExpBottle;
+import net.minecraft.server.v1_13_R1.EntityThrownTrident;
+import net.minecraft.server.v1_13_R1.EntityTippedArrow;
+import net.minecraft.server.v1_13_R1.EntityTrackerEntry;
+import net.minecraft.server.v1_13_R1.EntityTypes;
+import net.minecraft.server.v1_13_R1.EntityWitherSkull;
+import net.minecraft.server.v1_13_R1.EnumItemSlot;
+import net.minecraft.server.v1_13_R1.IAnimal;
+import net.minecraft.server.v1_13_R1.ItemStack;
+import net.minecraft.server.v1_13_R1.ItemWorldMap;
+import net.minecraft.server.v1_13_R1.MathHelper;
+import net.minecraft.server.v1_13_R1.MobEffect;
+import net.minecraft.server.v1_13_R1.Packet;
+import net.minecraft.server.v1_13_R1.PacketPlayOutBed;
+import net.minecraft.server.v1_13_R1.PacketPlayOutEntity;
+import net.minecraft.server.v1_13_R1.PacketPlayOutEntityEffect;
+import net.minecraft.server.v1_13_R1.PacketPlayOutEntityEquipment;
+import net.minecraft.server.v1_13_R1.PacketPlayOutEntityHeadRotation;
+import net.minecraft.server.v1_13_R1.PacketPlayOutEntityMetadata;
+import net.minecraft.server.v1_13_R1.PacketPlayOutEntityTeleport;
+import net.minecraft.server.v1_13_R1.PacketPlayOutEntityVelocity;
+import net.minecraft.server.v1_13_R1.PacketPlayOutMount;
+import net.minecraft.server.v1_13_R1.PacketPlayOutNamedEntitySpawn;
+import net.minecraft.server.v1_13_R1.PacketPlayOutSpawnEntity;
+import net.minecraft.server.v1_13_R1.PacketPlayOutSpawnEntityExperienceOrb;
+import net.minecraft.server.v1_13_R1.PacketPlayOutSpawnEntityLiving;
+import net.minecraft.server.v1_13_R1.PacketPlayOutSpawnEntityPainting;
+import net.minecraft.server.v1_13_R1.PacketPlayOutUpdateAttributes;
+import net.minecraft.server.v1_13_R1.WorldMap;
 import protocolsupport.utils.CachedInstanceOfChain;
 
 public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
@@ -150,8 +150,8 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 		float eYaw = entity.yaw;
 		float ePitch = entity.pitch;
 		if (
-			Math.abs(eYaw - lastYaw) >= 1 ||
-			Math.abs(ePitch - lastPitch) >= 1
+			(Math.abs(eYaw - lastYaw) >= 1) ||
+			(Math.abs(ePitch - lastPitch) >= 1)
 		) {
 			lastYaw = eYaw;
 			lastPitch = ePitch;
@@ -174,35 +174,36 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 			b = true;
 			scanPlayers(worldPlayers);
 		}
-		List<Entity> passengers = entity.bF();
+		List<Entity> passengers = entity.bP();
 		if (!passengers.equals(lastPassengers)) {
 			lastPassengers = passengers;
 			broadcastIncludingSelf(new PacketPlayOutMount(entity));
 		}
-		if (((a % 10) == 0) && entity instanceof EntityItemFrame) {
+		if (((a % 10) == 0) && (entity instanceof EntityItemFrame)) {
 			EntityItemFrame frame = (EntityItemFrame) entity;
 			ItemStack itemstack = frame.getItem();
 			if (itemstack.getItem() instanceof ItemWorldMap) {
-				WorldMap worldmap = Items.FILLED_MAP.getSavedMap(itemstack, entity.world);
+				ItemWorldMap itemworldmap = ((ItemWorldMap) itemstack.getItem());
+				WorldMap worldmap = ItemWorldMap.getSavedMap(itemstack, entity.world);
 				for (EntityHuman entityhuman : trackedPlayers) {
 					EntityPlayer entityplayer = (EntityPlayer) entityhuman;
 					worldmap.a(entityplayer, itemstack);
-					Packet<?> packet = Items.FILLED_MAP.a(itemstack, entity.world, entityplayer);
+					Packet<?> packet = itemworldmap.a(itemstack, entity.world, entityplayer);
 					if (packet != null) {
 						entityplayer.playerConnection.sendPacket(packet);
 					}
 				}
 			}
 		}
-		if (((a > 0) && (a % updateInterval) == 0) || entity.impulse) {
+		if (((a > 0) && ((a % updateInterval) == 0)) || entity.impulse) {
 			entity.impulse = false;
 			if (entity.isPassenger()) {
 				updateRotationIfChanged();
 			} else {
 				if (
-					Math.abs(entity.locX - lastLocX) >= 0.03125D ||
-					Math.abs(entity.locY - lastLocY) >= 0.015625D ||
-					Math.abs(entity.locZ - lastLocZ) >= 0.03125D
+					(Math.abs(entity.locX - lastLocX) >= 0.03125D) ||
+					(Math.abs(entity.locY - lastLocY) >= 0.015625D) ||
+					(Math.abs(entity.locZ - lastLocZ) >= 0.03125D)
 				) {
 					lastLocX = entity.locX;
 					lastLocY = entity.locY;
@@ -326,11 +327,11 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 							entityplayer.playerConnection.sendPacket(new PacketPlayOutBed(entityhuman, new BlockPosition(entity)));
 						}
 					}
-					if (!entity.bF().isEmpty()) {
+					if (!entity.bP().isEmpty()) {
 						entityplayer.playerConnection.sendPacket(new PacketPlayOutMount(entity));
 					}
 					if (entity.isPassenger()) {
-						entityplayer.playerConnection.sendPacket(new PacketPlayOutMount(entity.bJ()));
+						entityplayer.playerConnection.sendPacket(new PacketPlayOutMount(entity.getVehicle()));
 					}
 					entity.b(entityplayer);
 					entityplayer.d(entity);
@@ -366,7 +367,7 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 	}
 
 	protected boolean canPlayerSeeTrackerChunk(EntityPlayer entityplayer) {
-		return entityplayer.x().getPlayerChunkMap().a(entityplayer, entity.ab, entity.ad);
+		return entityplayer.getWorldServer().getPlayerChunkMap().a(entityplayer, entity.ae, entity.ag);
 	}
 
 	protected static final CachedInstanceOfChain<Function<Entity, Packet<?>>> createSpawnPacketMethods = new CachedInstanceOfChain<>();
@@ -382,7 +383,7 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 		createSpawnPacketMethods.setKnownPath(EntityBoat.class, entity -> new PacketPlayOutSpawnEntity(entity, 1));
 		createSpawnPacketMethods.setKnownPath(EntityExperienceOrb.class, entity -> new PacketPlayOutSpawnEntityExperienceOrb((EntityExperienceOrb) entity));
 		createSpawnPacketMethods.setKnownPath(EntityFishingHook.class, entity -> {
-			EntityHuman entityhuman = ((EntityFishingHook) entity).l();
+			EntityHuman entityhuman = ((EntityFishingHook) entity).i();
 			return new PacketPlayOutSpawnEntity(entity, 90, (entityhuman == null) ? entity.getId() : entityhuman.getId());
 		});
 		createSpawnPacketMethods.setKnownPath(EntitySpectralArrow.class, entity -> {
@@ -394,6 +395,10 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 			return new PacketPlayOutSpawnEntity(entity, 60, 1 + ((shooter == null) ? entity.getId() : shooter.getId()));
 		});
 		createSpawnPacketMethods.setKnownPath(EntitySnowball.class, entity -> new PacketPlayOutSpawnEntity(entity, 61));
+		createSpawnPacketMethods.setKnownPath(EntityThrownTrident.class, entity -> {
+			Entity shooter = ((EntityArrow) entity).shooter;
+            return new PacketPlayOutSpawnEntity(entity, 94, 1 + ((shooter == null) ? entity.getId() : shooter.getId()));
+        });
 		createSpawnPacketMethods.setKnownPath(EntityLlamaSpit.class, entity -> new PacketPlayOutSpawnEntity(entity, 68));
 		createSpawnPacketMethods.setKnownPath(EntityPotion.class, entity -> new PacketPlayOutSpawnEntity(entity, 73));
 		createSpawnPacketMethods.setKnownPath(EntityThrownExpBottle.class, entity -> new PacketPlayOutSpawnEntity(entity, 75));
@@ -446,7 +451,7 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 			return new PacketPlayOutSpawnEntity(entity, 77, 0, entityleash.getBlockPosition());
 		});
 		createSpawnPacketMethods.setKnownPath(EntityAreaEffectCloud.class, entity -> new PacketPlayOutSpawnEntity(entity, 3));
-		EntityTypes.b.iterator().forEachRemaining(createSpawnPacketMethods::selectPath);
+		EntityTypes.REGISTRY.iterator().forEachRemaining(t -> createSpawnPacketMethods.selectPath(t.c()));
 	}
 
 	protected Packet<?> createSpawnPacket() {

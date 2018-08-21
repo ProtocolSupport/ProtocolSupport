@@ -2,6 +2,7 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.listeners.InternalPluginMessageRequest;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockDig;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockPlace;
@@ -14,12 +15,16 @@ import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public class UseItem extends ServerBoundMiddlePacket {
 
+	public UseItem(ConnectionImpl connection) {
+		super(connection);
+	}
+
 	protected int subTypeId = -1;
-	protected ItemStackWrapper itemstack;
+	protected NetworkItemStack itemstack;
 	protected int slot;
 	protected Position position = new Position(0, 0, 0);
 	protected float fromX, fromY, fromZ;

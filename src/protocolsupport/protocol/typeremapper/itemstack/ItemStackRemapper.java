@@ -1,13 +1,5 @@
 package protocolsupport.protocol.typeremapper.itemstack;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.List;
-
-import org.bukkit.Material;
-
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.fromclient.BookPagesFromPERemapper;
 import protocolsupport.protocol.typeremapper.itemstack.fromclient.EnchantFromPEEnchantRemapper;
@@ -38,8 +30,9 @@ import protocolsupport.protocol.typeremapper.utils.RemappingTable.ComplexIdRemap
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapperRegistry;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
-@SuppressWarnings("deprecation")
 public class ItemStackRemapper {
 
 	public static final ItemIdDataRemappingRegistry ID_DATA_REMAPPING_REGISTRY = new ItemIdDataRemappingRegistry();
@@ -327,8 +320,24 @@ public class ItemStackRemapper {
 				}
 				return itemstack;
 			}
+=======
+	public static NetworkItemStack remapToClient(ProtocolVersion version, String locale,  NetworkItemStack itemstack) {
+		itemstack = ItemStackComplexRemapperRegistry.remapToClient(version, locale, itemstack);
+		itemstack.setTypeId(LegacyItemType.REGISTRY.getTable(version).getRemap(itemstack.getTypeId()));
+		if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
+			int legacyCombinedId = PreFlatteningItemIdData.getLegacyCombinedIdByModernId(itemstack.getTypeId());
+			itemstack.setTypeId(PreFlatteningItemIdData.getIdFromLegacyCombinedId(legacyCombinedId));
+			itemstack.setLegacyData(PreFlatteningItemIdData.getDataFromLegacyCombinedId(legacyCombinedId));
+>>>>>>> branch 'master' of https://github.com/ProtocolSupport/ProtocolSupport.git
 		}
 		return itemstack;
+	}
+
+	public static NetworkItemStack remapFromClient(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
+		if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
+			itemstack.setTypeId(PreFlatteningItemIdData.getModernIdByLegacyIdData(itemstack.getTypeId(), itemstack.getLegacyData()));
+		}
+		return ItemStackComplexRemapperRegistry.remapFromClient(version, locale, itemstack);
 	}
 
 }

@@ -1,13 +1,12 @@
 package protocolsupport.protocol.pipeline.version.v_l;
 
-import protocolsupport.api.Connection;
 import protocolsupport.api.utils.NetworkState;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_l.LoginDisconnect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.noop.NoopPong;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_l.ServerInfo;
 import protocolsupport.protocol.pipeline.version.util.encoder.AbstractLegacyPacketEncoder;
-import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.utils.registry.PacketIdTransformerRegistry;
 
 public class PacketEncoder extends AbstractLegacyPacketEncoder {
@@ -24,13 +23,13 @@ public class PacketEncoder extends AbstractLegacyPacketEncoder {
 	}
 
 	{
-		registry.register(NetworkState.LOGIN, ClientBoundPacket.LOGIN_DISCONNECT_ID, LoginDisconnect.class);
-		registry.register(NetworkState.STATUS, ClientBoundPacket.STATUS_SERVER_INFO_ID, ServerInfo.class);
-		registry.register(NetworkState.STATUS, ClientBoundPacket.STATUS_PONG_ID, NoopPong.class);
+		registry.register(NetworkState.LOGIN, ClientBoundPacket.LOGIN_DISCONNECT_ID, LoginDisconnect::new);
+		registry.register(NetworkState.STATUS, ClientBoundPacket.STATUS_SERVER_INFO_ID, ServerInfo::new);
+		registry.register(NetworkState.STATUS, ClientBoundPacket.STATUS_PONG_ID, NoopPong::new);
 	}
 
-	public PacketEncoder(Connection connection, NetworkDataCache storage) {
-		super(connection, storage);
+	public PacketEncoder(ConnectionImpl connection) {
+		super(connection);
 	}
 
 }

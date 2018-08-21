@@ -2,18 +2,18 @@ package protocolsupport.zplatform.impl.spigot.itemstack;
 
 import java.util.Objects;
 
-import net.minecraft.server.v1_12_R1.NBTBase;
-import net.minecraft.server.v1_12_R1.NBTTagByte;
-import net.minecraft.server.v1_12_R1.NBTTagByteArray;
-import net.minecraft.server.v1_12_R1.NBTTagDouble;
-import net.minecraft.server.v1_12_R1.NBTTagFloat;
-import net.minecraft.server.v1_12_R1.NBTTagInt;
-import net.minecraft.server.v1_12_R1.NBTTagIntArray;
-import net.minecraft.server.v1_12_R1.NBTTagList;
-import net.minecraft.server.v1_12_R1.NBTTagLong;
-import net.minecraft.server.v1_12_R1.NBTTagLongArray;
-import net.minecraft.server.v1_12_R1.NBTTagShort;
-import net.minecraft.server.v1_12_R1.NBTTagString;
+import net.minecraft.server.v1_13_R1.NBTBase;
+import net.minecraft.server.v1_13_R1.NBTTagByte;
+import net.minecraft.server.v1_13_R1.NBTTagByteArray;
+import net.minecraft.server.v1_13_R1.NBTTagDouble;
+import net.minecraft.server.v1_13_R1.NBTTagFloat;
+import net.minecraft.server.v1_13_R1.NBTTagInt;
+import net.minecraft.server.v1_13_R1.NBTTagIntArray;
+import net.minecraft.server.v1_13_R1.NBTTagList;
+import net.minecraft.server.v1_13_R1.NBTTagLong;
+import net.minecraft.server.v1_13_R1.NBTTagLongArray;
+import net.minecraft.server.v1_13_R1.NBTTagShort;
+import net.minecraft.server.v1_13_R1.NBTTagString;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagType;
@@ -31,7 +31,7 @@ public class SpigotNBTTagListWrapper extends NBTTagListWrapper {
 
 	@Override
 	public NBTTagType getType() {
-		return NBTTagType.fromId(tag.g());
+		return NBTTagType.fromId(tag.d());
 	}
 
 	@Override
@@ -46,13 +46,13 @@ public class SpigotNBTTagListWrapper extends NBTTagListWrapper {
 
 	@Override
 	public NBTTagCompoundWrapper getCompound(int index) {
-		return new SpigotNBTTagCompoundWrapper(tag.get(index));
+		return new SpigotNBTTagCompoundWrapper(tag.getCompound(index));
 	}
 
 	@Override
 	public NBTTagListWrapper getList(int index) {
         if ((index >= 0) && (index < size())) {
-            NBTBase nbtBase = tag.i(index);
+            NBTBase nbtBase = tag.get(index);
             if (nbtBase.getTypeId() == NBTTagType.LIST.getId()) {
                 return new SpigotNBTTagListWrapper((NBTTagList) nbtBase);
             }
@@ -67,13 +67,13 @@ public class SpigotNBTTagListWrapper extends NBTTagListWrapper {
 
 	@Override
 	public int getIntNumber(int index) {
-		return tag.c(index);
+		return tag.h(index);
 	}
 
 	@Override
 	public long getLongNumber(int index) {
         if ((index >= 0) && (index < size())) {
-            NBTBase nbtBase = tag.i(index);
+            NBTBase nbtBase = tag.get(index);
             if (nbtBase.getTypeId() == NBTTagType.LONG.getId()) {
                 return ((NBTTagLong) nbtBase).d();
             }
@@ -88,13 +88,13 @@ public class SpigotNBTTagListWrapper extends NBTTagListWrapper {
 
 	@Override
 	public double getDoubleNumber(int index) {
-		return tag.f(index);
+		return tag.k(index);
 	}
 
 	@Override
 	public byte[] getByteArray(int index) {
         if ((index >= 0) && (index < size())) {
-            NBTBase nbtBase = tag.i(index);
+            NBTBase nbtBase = tag.get(index);
             if (nbtBase.getTypeId() == NBTTagType.BYTE_ARRAY.getId()) {
                 return ((NBTTagByteArray) nbtBase).c();
             }
@@ -104,13 +104,18 @@ public class SpigotNBTTagListWrapper extends NBTTagListWrapper {
 
 	@Override
 	public int[] getIntArray(int index) {
-		return tag.d(index);
+		return tag.i(index);
 	}
 
 	@Override
 	public long[] getLongArray(int index) {
-		//TODO: actually implement this
-		return new long[0];
+        if ((index >= 0) && (index < size())) {
+            NBTBase nbtBase = tag.get(index);
+            if (nbtBase.getTypeId() == NBTTagType.LONG_ARRAY.getId()) {
+                return ((NBTTagLongArray) nbtBase).d();
+            }
+        }
+        return new long[0];
 	}
 
 	@Override

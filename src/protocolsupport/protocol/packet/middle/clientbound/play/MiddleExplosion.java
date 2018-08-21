@@ -1,10 +1,15 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.utils.types.Position;
 
 public abstract class MiddleExplosion extends ClientBoundMiddlePacket {
+
+	public MiddleExplosion(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected float x;
 	protected float y;

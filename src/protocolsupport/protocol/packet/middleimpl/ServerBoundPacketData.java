@@ -51,7 +51,7 @@ public class ServerBoundPacketData extends WrappingBuffer implements Recyclable 
 	}
 
 	@Override
-	protected void finalize() {
+	protected void finalize() throws Throwable {
 		release();
 	}
 

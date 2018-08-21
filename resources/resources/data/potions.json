@@ -106,5 +106,17 @@
   {
     "id": 27,
     "name": "unluck"
+  },
+  {
+    "id": 28,
+    "name": "slow_falling"
+  },
+  {
+    "id": 29,
+    "name": "conduit_power"
+  },
+  {
+    "id": 30,
+    "name": "dolphins_grace"
   }
 ]

@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 import org.bukkit.util.Vector;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleEntityAction;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSteerVehicle;
@@ -13,6 +14,10 @@ import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class Interact extends ServerBoundMiddlePacket {
+
+	public Interact(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected short peAction;
 	protected int targetId;

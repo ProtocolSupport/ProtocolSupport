@@ -32,7 +32,7 @@ public abstract class NetworkManagerWrapper {
 
 	public abstract void sendPacket(Object packet);
 
-	public abstract void sendPacket(Object packet, GenericFutureListener<? extends Future<? super Void>> genericListener, @SuppressWarnings("unchecked") GenericFutureListener<? extends Future<? super Void>>... futureListeners);
+	public abstract void sendPacket(Object packet, GenericFutureListener<? extends Future<? super Void>> genericListener);
 
 	public abstract void setProtocol(NetworkState state);
 

@@ -17,13 +17,11 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
-@SuppressWarnings("deprecation")
 public class InternalPluginMessageRequest implements PluginMessageListener {
 
 	private static final UUID uuid = UUID.randomUUID();
@@ -48,7 +46,7 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 		register(BlockUpdateRequest.class, (connection, request) -> {
 			Block block = request.getPosition().toBukkit(connection.getPlayer().getWorld()).getBlock();
 			connection.sendPacket(ServerPlatform.get().getPacketFactory().createBlockUpdatePacket(
-					request.getPosition(), MinecraftData.getBlockStateFromIdAndData(block.getTypeId(), block.getData()))
+					request.getPosition(), ServerPlatform.get().getMiscUtils().getBlockDataNetworkId(block.getBlockData()))
 			);
 		});
 	}

@@ -14,6 +14,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectDirec
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectItemStack;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectNBTTagCompound;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalChat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalUUID;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectPosition;
@@ -36,6 +37,7 @@ public class DataWatcherDeserializer {
 			register(DataWatcherObjectFloat.class);
 			register(DataWatcherObjectString.class);
 			register(DataWatcherObjectChat.class);
+			register(DataWatcherObjectOptionalChat.class);
 			register(DataWatcherObjectItemStack.class);
 			register(DataWatcherObjectBoolean.class);
 			register(DataWatcherObjectVector3f.class);

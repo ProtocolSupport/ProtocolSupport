@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleMap;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -13,6 +14,10 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class Map extends MiddleMap {
 
+	public Map(ConnectionImpl connection) {
+		super(connection);
+	}
+
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
@@ -21,7 +26,7 @@ public class Map extends MiddleMap {
 		serializer.writeByte(scale);
 		serializer.writeBoolean(showIcons);
 		ArraySerializer.writeVarIntTArray(serializer, icons, (to, icon) -> {
-			to.writeByte(icon.dirtype);
+			to.writeByte(((icon.type <= 9 ? icon.type : 0) << 4) | icon.direction);
 			to.writeByte(icon.x);
 			to.writeByte(icon.z);
 		});

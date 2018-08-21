@@ -1,11 +1,16 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddlePlayerAbilities;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEAdventureSettings;
 
 public class PlayerAbilities extends MiddlePlayerAbilities {
+
+	public PlayerAbilities(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected int peFlags;
 

@@ -2,6 +2,7 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_6;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -12,6 +13,10 @@ import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class Ping extends ServerBoundMiddlePacket {
+
+	public Ping(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected String hostname;
 	protected int port;

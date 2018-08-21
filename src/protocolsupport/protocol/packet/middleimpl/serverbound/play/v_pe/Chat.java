@@ -6,11 +6,16 @@ import org.apache.commons.lang3.Validate;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleChat;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class Chat extends MiddleChat {
+
+	public Chat(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	private static final int validChatType = 1;
 

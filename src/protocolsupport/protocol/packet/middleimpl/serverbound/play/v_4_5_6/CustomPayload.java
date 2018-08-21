@@ -1,53 +1,60 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6;
 
-import org.bukkit.Material;
-
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
+import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.abs_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2.AbstractCustomPayload;
 import protocolsupport.protocol.serializer.ArraySerializer;
-import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
+import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
-//TODO: Create types for cmd control data and use them to share more code
-public class CustomPayload extends MiddleCustomPayload {
+public class CustomPayload extends AbstractCustomPayload {
 
-	private final ByteBuf newdata = Unpooled.buffer();
+	public CustomPayload(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		ProtocolVersion version = connection.getVersion();
 		tag = StringSerializer.readString(clientdata, version, 20);
-		if (clientdata.readableBytes() > Short.MAX_VALUE) {
-			throw new DecoderException("Payload may not be larger than 32767 bytes");
-		}
-		newdata.clear();
-		ByteBuf olddata = Unpooled.wrappedBuffer(ArraySerializer.readByteArray(clientdata, version, Short.MAX_VALUE));
-		if (tag.equals("MC|ItemName")) {
-			ArraySerializer.writeByteArray(newdata, ProtocolVersionsHelper.LATEST_PC, olddata);
-		} else if (tag.equals("MC|BSign") || tag.equals("MC|BEdit")) {
-			ItemStackWrapper book = ItemStackSerializer.readItemStack(olddata, version, cache.getAttributesCache().getLocale(), true);
-			if (!book.isNull()) {
-				book.setType(Material.BOOK_AND_QUILL);
+		data = ArraySerializer.readByteArray(clientdata, version, Short.MAX_VALUE);
+	}
+
+	@Override
+	public RecyclableCollection<ServerBoundPacketData> toNative() {
+		switch (tag) {
+			case LegacyCustomPayloadChannelName.LEGACY_REGISTER: {
+				return transformRegisterUnregister(true);
 			}
-			ItemStackSerializer.writeItemStack(newdata, ProtocolVersionsHelper.LATEST_PC, cache.getAttributesCache().getLocale(), book, false);
-		} else if (tag.equals("MC|AdvCdm")) {
-			tag = "MC|AdvCmd";
-			newdata.writeByte(0);
-			newdata.writeInt(olddata.readInt());
-			newdata.writeInt(olddata.readInt());
-			newdata.writeInt(olddata.readInt());
-			StringSerializer.writeString(newdata, ProtocolVersionsHelper.LATEST_PC, StringSerializer.readString(olddata, version));
-			newdata.writeBoolean(true);
-		} else {
-			newdata.writeBytes(olddata);
+			case LegacyCustomPayloadChannelName.LEGACY_UNREGISTER: {
+				return transformRegisterUnregister(false);
+			}
+			case LegacyCustomPayloadChannelName.LEGACY_BOOK_EDIT: {
+				return transformBookEdit();
+			}
+			case LegacyCustomPayloadChannelName.LEGACY_BOOK_SIGN: {
+				return transformBookSign();
+			}
+			case LegacyCustomPayloadChannelName.LEGACY_SET_BEACON: {
+				return transformSetBeaconEffect();
+			}
+			case LegacyCustomPayloadChannelName.LEGACY_NAME_ITEM: {
+				return transformNameItem();
+			}
+			case LegacyCustomPayloadChannelName.LEGACY_COMMAND_RIGHT_NAME:
+			case LegacyCustomPayloadChannelName.LEGACY_COMMAND_TYPO_NAME:
+			case LegacyCustomPayloadChannelName.LEGACY_COMMAND_BLOCK_NAME: {
+				//TODO: implement
+				return RecyclableEmptyList.get();
+			}
+			default: {
+				return transformCustomPayload();
+			}
 		}
-		data = MiscSerializer.readAllBytes(newdata);
 	}
 
 }

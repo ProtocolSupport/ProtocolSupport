@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7_8;
 
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleVehiclePassengers;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -10,6 +11,10 @@ import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class VehiclePassengers extends MiddleVehiclePassengers {
+
+	public VehiclePassengers(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected final Int2IntOpenHashMap vehiclePassenger = new Int2IntOpenHashMap();
 	{

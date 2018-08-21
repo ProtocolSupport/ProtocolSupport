@@ -9,6 +9,7 @@ public enum ServerBoundPacket {
 	STATUS_PING(ServerPlatform.get().getPacketFactory().getInStatusPingPacketId()),
 	LOGIN_START(ServerPlatform.get().getPacketFactory().getInLoginStartPacketId()),
 	LOGIN_ENCRYPTION_BEGIN(ServerPlatform.get().getPacketFactory().getInLoginEncryptionBeginPacketId()),
+	LOGIN_CUSTOM_PAYLOAD(ServerPlatform.get().getPacketFactory().getInLoginCustomPayloadPacketId()),
 	PLAY_KEEP_ALIVE(ServerPlatform.get().getPacketFactory().getInPlayKeepAlivePacketId()),
 	PLAY_CHAT(ServerPlatform.get().getPacketFactory().getInPlayChatPacketId()),
 	PLAY_USE_ENTITY(ServerPlatform.get().getPacketFactory().getInPlayUseEntityPacketId()),
@@ -39,9 +40,19 @@ public enum ServerBoundPacket {
 	PLAY_SPECTATE(ServerPlatform.get().getPacketFactory().getInPlaySpectatePacketId()),
 	PLAY_RESOURCE_PACK_STATUS(ServerPlatform.get().getPacketFactory().getInPlayResourcePackStatusPacketId()),
 	PLAY_TELEPORT_ACCEPT(ServerPlatform.get().getPacketFactory().getInPlayTeleportAcceptPacketId()),
-	PLAY_CRAFTING_BOOK_DATA(ServerPlatform.get().getPacketFactory().getInPlayCraftingBookPacketId()),
-	PLAY_PREPARE_CRAFTING_GRID(ServerPlatform.get().getPacketFactory().getInPlayPrepareCraftingGridPacketId()),
-	PLAY_ADVANCEMENT_TAB(ServerPlatform.get().getPacketFactory().getInPlayAdvancementTabPacketId());
+	PLAY_RECIPE_BOOK_DATA(ServerPlatform.get().getPacketFactory().getInPlayRecipeBookDataPacketId()),
+	PLAY_CRAFT_RECIPE_REQUEST(ServerPlatform.get().getPacketFactory().getInPlayCraftRecipeRequestPacketId()),
+	PLAY_ADVANCEMENT_TAB(ServerPlatform.get().getPacketFactory().getInPlayAdvancementTabPacketId()),
+	PLAY_QUERY_BLOCK_NBT(ServerPlatform.get().getPacketFactory().getInPlayQueryBlockNBTPacketId()),
+	PLAY_QUERY_ENTITY_NBT(ServerPlatform.get().getPacketFactory().getInPlayQueryEntityNBTPacketId()),
+	PLAY_EDIT_BOOK(ServerPlatform.get().getPacketFactory().getInPlayEditBookPacketId()),
+	PLAY_PICK_ITEM(ServerPlatform.get().getPacketFactory().getInPlayPickItemPacketId()),
+	PLAY_NAME_ITEM(ServerPlatform.get().getPacketFactory().getInPlayNameItemPacketId()),
+	PLAY_SELECT_TRADE(ServerPlatform.get().getPacketFactory().getInPlaySelectTradePacketId()),
+	PLAY_SET_BEACON_EFFECT(ServerPlatform.get().getPacketFactory().getInPlaySetBeaconEffectPacketId()),
+	PLAY_UPDATE_COMMAND_BLOCK(ServerPlatform.get().getPacketFactory().getInPlayUpdateCommandBlockPacketId()),
+	PLAY_UPDATE_COMMAND_MINECART(ServerPlatform.get().getPacketFactory().getInPlayUpdateCommandMinecartPacketId()),
+	PLAY_UPDATE_STRUCTURE_BLOCK(ServerPlatform.get().getPacketFactory().getInPlayUpdateStructureBlockPacketId());
 
 	private final int id;
 	ServerBoundPacket(int id) {
