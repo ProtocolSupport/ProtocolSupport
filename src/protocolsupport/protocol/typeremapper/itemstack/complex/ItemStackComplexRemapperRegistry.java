@@ -9,17 +9,26 @@ import org.bukkit.Material;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.BookPagesFromPERemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.DisplayNameFromLegacyTextComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.EnchantFromLegacyIdComplexRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.EnchantFromPEEnchantRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.LeatherArmorFromPERemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.PotionFromLegacyIdComplexRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.PotionFromPEIdRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.BookPagesToLegacyTextComplexRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.BookPagesToPESpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.DisplayNameToLegacyTextComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.DragonHeadToDragonPlayerHeadComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.EmptyBookPageAdderComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.EnchantFilterNBTComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.EnchantToLegacyIdComplexRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.EnchantToPEEnchantSpecificRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.LeatherArmorToPESpecificRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.MapItemLegacyIdToNbtSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PlayerHeadToLegacyOwnerComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PotionToLegacyIdComplexRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PotionToPEIdSpecificRemapper;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.Utils;
@@ -60,25 +69,71 @@ public class ItemStackComplexRemapperRegistry {
 		EnchantFilterNBTComplexRemapper enchantfilter = new EnchantFilterNBTComplexRemapper();
 		EnchantToLegacyIdComplexRemapper enchanttolegacyid = new EnchantToLegacyIdComplexRemapper();
 		DisplayNameToLegacyTextComplexRemapper dnametolegacytext = new DisplayNameToLegacyTextComplexRemapper();
+		EnchantToPEEnchantSpecificRemapper peenchantremapper = new EnchantToPEEnchantSpecificRemapper();
 		Arrays.stream(Material.values())
 		.filter(Material::isItem)
 		.forEach(material -> {
 			registerToClient(material, enchantfilter, ProtocolVersionsHelper.ALL_PC);
 			registerToClient(material, enchanttolegacyid, ProtocolVersionsHelper.BEFORE_1_13);
 			registerToClient(material, dnametolegacytext, ProtocolVersionsHelper.BEFORE_1_13);
+			registerToClient(material, peenchantremapper, ProtocolVersion.MINECRAFT_PE);
 		});
+		registerToClient(Material.MAP, new MapItemLegacyIdToNbtSpecificRemapper(), ProtocolVersion.MINECRAFT_PE);
+		PotionToPEIdSpecificRemapper pepotion = new PotionToPEIdSpecificRemapper();
+		registerToClient(Material.POTION, pepotion, ProtocolVersion.MINECRAFT_PE);
+		registerToClient(Material.SPLASH_POTION, pepotion, ProtocolVersion.MINECRAFT_PE);
+		registerToClient(Material.LINGERING_POTION, pepotion, ProtocolVersion.MINECRAFT_PE);
+		registerToClient(Material.TIPPED_ARROW, pepotion, ProtocolVersion.MINECRAFT_PE);
+		//TODO FIX
+		//registerToClient(Material.MONSTER_EGG, new MonsterEggToPEIdSpecificRemapper(), ProtocolVersion.MINECRAFT_PE);
+		BookPagesToPESpecificRemapper pebook = new BookPagesToPESpecificRemapper();
+		registerToClient(Material.WRITTEN_BOOK, pebook, ProtocolVersion.MINECRAFT_PE);
+		//TODO FIX
+		//registerToClient(Material.BOOK_AND_QUILL, pebook, ProtocolVersion.MINECRAFT_PE);
+		//FireworkToPETagSpecificRemapper pefireworks = new FireworkToPETagSpecificRemapper();
+		//TODO FIX
+		//registerToClient(Material.FIREWORK_CHARGE, pefireworks, ProtocolVersion.MINECRAFT_PE);
+		//registerToClient(Material.FIREWORK, pefireworks, ProtocolVersion.MINECRAFT_PE);
+		LeatherArmorToPESpecificRemapper peleatherarmor = new LeatherArmorToPESpecificRemapper();
+		registerToClient(Material.LEATHER_HELMET, peleatherarmor, ProtocolVersion.MINECRAFT_PE);
+		registerToClient(Material.LEATHER_CHESTPLATE, peleatherarmor, ProtocolVersion.MINECRAFT_PE);
+		registerToClient(Material.LEATHER_LEGGINGS, peleatherarmor, ProtocolVersion.MINECRAFT_PE);
+		registerToClient(Material.LEATHER_BOOTS, peleatherarmor, ProtocolVersion.MINECRAFT_PE);
 	}
 
 	static {
 		registerFromClient(Material.POTION, new PotionFromLegacyIdComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
 		EnchantFromLegacyIdComplexRemapper enchantfromlegacyid = new EnchantFromLegacyIdComplexRemapper();
 		DisplayNameFromLegacyTextComplexRemapper dnamefromlegacytext = new DisplayNameFromLegacyTextComplexRemapper();
+		EnchantFromPEEnchantRemapper frompeenchantremapper = new EnchantFromPEEnchantRemapper();
 		Arrays.stream(Material.values())
 		.filter(Material::isItem)
 		.forEach(material -> {
 			registerFromClient(material, enchantfromlegacyid, ProtocolVersionsHelper.BEFORE_1_13);
 			registerFromClient(material, dnamefromlegacytext, ProtocolVersionsHelper.BEFORE_1_13);
+			registerFromClient(material, frompeenchantremapper, ProtocolVersion.MINECRAFT_PE);
 		});
+		//TODO FIX
+		//registerFromClient(Material.MAP, new MapItemNbtToLegacyIdRemapper(), ProtocolVersion.MINECRAFT_PE);
+		//registerFromClient(Material.MONSTER_EGG, new MonsterEggFromPEIdRemapper(), ProtocolVersion.MINECRAFT_PE);
+		BookPagesFromPERemapper frompebook = new BookPagesFromPERemapper();
+		registerFromClient(Material.WRITTEN_BOOK, frompebook, ProtocolVersion.MINECRAFT_PE);
+		//TODO FIX
+		//registerFromClient(Material.BOOK_AND_QUILL, frompebook, ProtocolVersion.MINECRAFT_PE);
+		PotionFromPEIdRemapper frompepotion = new PotionFromPEIdRemapper();
+		registerFromClient(Material.POTION, frompepotion, ProtocolVersion.MINECRAFT_PE);
+		registerFromClient(Material.SPLASH_POTION, frompepotion, ProtocolVersion.MINECRAFT_PE);
+		registerFromClient(Material.LINGERING_POTION, frompepotion, ProtocolVersion.MINECRAFT_PE);
+		registerFromClient(Material.TIPPED_ARROW, frompepotion, ProtocolVersion.MINECRAFT_PE);
+		LeatherArmorFromPERemapper frompeleatherarmor = new LeatherArmorFromPERemapper();
+		registerFromClient(Material.LEATHER_HELMET, frompeleatherarmor, ProtocolVersion.MINECRAFT_PE);
+		registerFromClient(Material.LEATHER_CHESTPLATE, frompeleatherarmor, ProtocolVersion.MINECRAFT_PE);
+		registerFromClient(Material.LEATHER_LEGGINGS, frompeleatherarmor, ProtocolVersion.MINECRAFT_PE);
+		registerFromClient(Material.LEATHER_BOOTS, frompeleatherarmor, ProtocolVersion.MINECRAFT_PE);
+		//TODO FIX
+		//FireworkFromPETagRemapper frompefireworks = new FireworkFromPETagRemapper();
+		//registerFromClient(Material.FIREWORK_CHARGE, frompefireworks, ProtocolVersion.MINECRAFT_PE);
+		//registerFromClient(Material.FIREWORK, frompefireworks, ProtocolVersion.MINECRAFT_PE);
 	}
 
 	protected static NetworkItemStack remapComplex(

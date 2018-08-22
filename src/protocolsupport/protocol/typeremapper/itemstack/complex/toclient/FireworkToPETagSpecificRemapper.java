@@ -1,18 +1,18 @@
-package protocolsupport.protocol.typeremapper.itemstack.toclient;
+package protocolsupport.protocol.typeremapper.itemstack.complex.toclient;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.itemstack.ItemStackSpecificRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapper;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagType;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
-public class FireworkToPETagSpecificRemapper implements ItemStackSpecificRemapper {
+public class FireworkToPETagSpecificRemapper implements ItemStackComplexRemapper {
 
 	@Override
-	public ItemStackWrapper remap(ProtocolVersion version, String locale, ItemStackWrapper itemstack) {
-		NBTTagCompoundWrapper tag = itemstack.getTag();
+	public NetworkItemStack remap(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
+		NBTTagCompoundWrapper tag = itemstack.getNBT();
 		if (tag.isNull()) {
 			return itemstack;
 		}

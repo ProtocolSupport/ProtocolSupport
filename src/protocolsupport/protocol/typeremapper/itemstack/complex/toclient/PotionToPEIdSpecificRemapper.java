@@ -1,19 +1,19 @@
-package protocolsupport.protocol.typeremapper.itemstack.toclient;
+package protocolsupport.protocol.typeremapper.itemstack.complex.toclient;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.itemstack.ItemStackSpecificRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEPotion;
 import protocolsupport.protocol.utils.minecraftdata.PotionData;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagType;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
-public class PotionToPEIdSpecificRemapper implements ItemStackSpecificRemapper {
+public class PotionToPEIdSpecificRemapper implements ItemStackComplexRemapper {
 
 	@Override
-	public ItemStackWrapper remap(ProtocolVersion version, String locale, ItemStackWrapper itemstack) {
-		NBTTagCompoundWrapper tag = itemstack.getTag();
+	public NetworkItemStack remap(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
+		NBTTagCompoundWrapper tag = itemstack.getNBT();
 		if (tag.isNull()) {
 			return itemstack;
 		}
@@ -26,8 +26,8 @@ public class PotionToPEIdSpecificRemapper implements ItemStackSpecificRemapper {
 			if (PEPotion.hasPERemap(potion)) {
 				tag.remove("Potion");
 				tag.remove("CustomPotionEffects");
-				itemstack.setTag(tag);
-				itemstack.setData(PEPotion.toPEId(potion));
+				itemstack.setNBT(tag);
+				itemstack.setLegacyData(PEPotion.toPEId(potion));
 			}
 		}
 		return itemstack;

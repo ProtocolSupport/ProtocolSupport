@@ -1,19 +1,19 @@
-package protocolsupport.protocol.typeremapper.itemstack.toclient;
+package protocolsupport.protocol.typeremapper.itemstack.complex.toclient;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.ChatAPI.JsonParseException;
-import protocolsupport.protocol.typeremapper.itemstack.ItemStackNBTSpecificRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackNBTComplexRemapper;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagType;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
-public class BookPagesToPESpecificRemapper extends ItemStackNBTSpecificRemapper {
+public class BookPagesToPESpecificRemapper extends ItemStackNBTComplexRemapper {
 
 	@Override
-	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, String locale, ItemStackWrapper itemstack, NBTTagCompoundWrapper tag) {
+	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, String locale, NetworkItemStack itemstack, NBTTagCompoundWrapper tag) {
 		if (tag.hasKeyOfType("pages", NBTTagType.LIST)) {
 			NBTTagListWrapper pages = tag.getList("pages", NBTTagType.STRING);
 			NBTTagListWrapper newpages = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();

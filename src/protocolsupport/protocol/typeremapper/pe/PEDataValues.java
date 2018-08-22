@@ -14,10 +14,10 @@ import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.IdRemappingRegistry;
+import protocolsupport.protocol.typeremapper.legacy.LegacyEnchantmentId;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.HashMapBasedIdRemappingTable;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.Utils;
@@ -134,19 +134,11 @@ public class PEDataValues {
 		return livingTypeFromNetwork.get(networkId);
 	}
 
-	public static final ArrayBasedIdRemappingTable BLOCK_ID = new ArrayBasedIdRemappingTable(MinecraftData.BLOCK_ID_MAX * MinecraftData.BLOCK_DATA_MAX);
-	static {
-		getFileObject("blockremaps.json").get("Remaps").getAsJsonArray().forEach(entry -> {
-			BLOCK_ID.setRemap(entry.getAsJsonObject().get("from").getAsInt(), entry.getAsJsonObject().get("to").getAsInt());
-		});
-	}
-
 	private static final Int2IntOpenHashMap pcEnchantToPe = new Int2IntOpenHashMap();
 	private static final Int2IntOpenHashMap peEnchantToPc = new Int2IntOpenHashMap();
-	@SuppressWarnings("deprecation")
 	private static void registerEnchantRemap(Enchantment enchantment, int peId) {
-		pcEnchantToPe.put(enchantment.getId(), peId);
-		peEnchantToPc.put(peId, enchantment.getId());
+		pcEnchantToPe.put(LegacyEnchantmentId.getId(enchantment), peId);
+		peEnchantToPc.put(peId, LegacyEnchantmentId.getId(enchantment));
 	}
 	static {
 		registerEnchantRemap(Enchantment.OXYGEN, 6);

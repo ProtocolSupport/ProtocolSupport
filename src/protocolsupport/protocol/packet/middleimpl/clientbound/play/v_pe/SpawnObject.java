@@ -5,11 +5,9 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnObject;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata.PeMetaBase;
-import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectSVarInt;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityItemDataCache;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -37,7 +35,7 @@ public class SpawnObject extends MiddleSpawnObject {
 			case FALLING_OBJECT: {
 				spawnmeta = new ArrayMap<>(DataWatcherDeserializer.MAX_USED_META_INDEX + 1);
 				y -= 0.1; //Freaking PE pushes block because block breaks after sand is spawned
-				spawnmeta.put(PeMetaBase.VARIANT, new DataWatcherObjectSVarInt(PEDataValues.BLOCK_ID.getRemap(MinecraftData.getBlockStateFromObjData(objectdata))));
+				spawnmeta.put(PeMetaBase.VARIANT, new DataWatcherObjectSVarInt(objectdata));
 			}
 			default: {
 				return RecyclableSingletonList.create(SpawnLiving.create(

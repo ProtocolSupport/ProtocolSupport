@@ -1,30 +1,29 @@
-package protocolsupport.protocol.typeremapper.itemstack.fromclient;
-
-import org.bukkit.Material;
+package protocolsupport.protocol.typeremapper.itemstack.complex.fromclient;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.itemstack.ItemStackSpecificRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagType;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
-public class EnchantFromPEEnchantRemapper implements ItemStackSpecificRemapper {
+public class EnchantFromPEEnchantRemapper implements ItemStackComplexRemapper {
 
 	@Override
-	public ItemStackWrapper remap(ProtocolVersion version, String locale, ItemStackWrapper itemstack) {
-		if((itemstack.getTag() != null) && !itemstack.getTag().isNull()) {
-			NBTTagCompoundWrapper tag = itemstack.getTag();
+	public NetworkItemStack remap(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
+		if((itemstack.getNBT() != null) && !itemstack.getNBT().isNull()) {
+			NBTTagCompoundWrapper tag = itemstack.getNBT();
 			if (tag.hasKeyOfType("ench", NBTTagType.LIST)) {
 				tag.setList("ench", remapEnchantList(tag.getList("ench", NBTTagType.COMPOUND)));
 			}
 			if (tag.hasKeyOfType("stored-enchants", NBTTagType.LIST)) {
 				tag.setList("stored-enchants", remapEnchantList(tag.getList("stored-enchants", NBTTagType.COMPOUND)));
 			}
-			itemstack.setTag(tag);
-			if (itemstack.getType() == Material.ARROW) { itemstack.setType(Material.TIPPED_ARROW); }
+			itemstack.setNBT(tag);
+			//TODO WITH REMAP!
+			//if (MaterialAPI.getItemByNetworkId(itemstack.getTypeId()) == Material.ARROW) { itemstack.setTypeId(MaterialAPI.getItemNetworkId(Material.TIPPED_ARROW)); }
 		}
 		return itemstack;
 	}

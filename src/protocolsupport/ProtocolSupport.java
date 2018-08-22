@@ -28,8 +28,6 @@ import protocolsupport.protocol.typeremapper.basic.SoundRemapper;
 import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
-import protocolsupport.protocol.typeremapper.id.IdRemapper;
-import protocolsupport.protocol.typeremapper.id.IdSkipper;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.LegacyItemType;
 import protocolsupport.protocol.typeremapper.itemstack.PreFlatteningItemIdData;
@@ -138,8 +136,6 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(AbstractLoginListener.class.getName());
 			Class.forName(AbstractStatusListener.class.getName());
 			Class.forName(SoundRemapper.class.getName());
-			Class.forName(IdSkipper.class.getName());
-			Class.forName(IdRemapper.class.getName());
 			Class.forName(ItemStackRemapper.class.getName());
 			Class.forName(TileNBTRemapper.class.getName());
 			Class.forName(MapColorRemapper.class.getName());

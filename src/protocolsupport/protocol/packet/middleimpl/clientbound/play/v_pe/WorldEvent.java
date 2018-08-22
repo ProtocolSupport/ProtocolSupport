@@ -4,10 +4,8 @@ import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldEvent;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PELevelEvent;
 import protocolsupport.protocol.typeremapper.pe.PESoundLevelEvent;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -83,9 +81,6 @@ public class WorldEvent extends MiddleWorldEvent {
 				} else { // If else, stop the record by sending the STOP_RECORD sound event
 					return RecyclableSingletonList.create(PESoundLevelEvent.createPacket(PESoundLevelEvent.STOP_RECORD, position));
 				}
-			}
-			case 2001: { //Break block
-				data = PEDataValues.BLOCK_ID.getRemap(MinecraftData.getBlockStateFromObjData(data));
 			}
 		}
 		return RecyclableSingletonList.create(PELevelEvent.createPacket(remaps.get(effectId), position.getX(), position.getY(), position.getZ(), data));

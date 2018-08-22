@@ -1,17 +1,17 @@
-package protocolsupport.protocol.typeremapper.itemstack.fromclient;
+package protocolsupport.protocol.typeremapper.itemstack.complex.fromclient;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.itemstack.ItemStackNBTSpecificRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackNBTComplexRemapper;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagType;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
-public class BookPagesFromPERemapper extends ItemStackNBTSpecificRemapper {
+public class BookPagesFromPERemapper extends ItemStackNBTComplexRemapper {
 
 	@Override
-	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, String locale, ItemStackWrapper itemstack, NBTTagCompoundWrapper tag) {
+	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, String locale, NetworkItemStack itemstack, NBTTagCompoundWrapper tag) {
 		if (tag.hasKeyOfType("pages", NBTTagType.LIST)) {
 			NBTTagListWrapper pages = tag.getList("pages", NBTTagType.COMPOUND);
 			NBTTagListWrapper newpages = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
@@ -22,6 +22,5 @@ public class BookPagesFromPERemapper extends ItemStackNBTSpecificRemapper {
 		}
 		return tag;
 	}
-
 
 }
