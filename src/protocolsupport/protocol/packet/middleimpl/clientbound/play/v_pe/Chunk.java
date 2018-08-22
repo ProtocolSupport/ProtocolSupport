@@ -12,7 +12,7 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformer;
-import protocolsupport.protocol.typeremapper.chunk.ChunkTransformer.BlockFormat;
+import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerPE;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -25,7 +25,7 @@ public class Chunk extends MiddleChunk {
 		super(connection);
 	}
 
-	private final ChunkTransformer transformer = ChunkTransformer.create(BlockFormat.PE);
+	private final ChunkTransformer transformer = new ChunkTransformerPE();
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {

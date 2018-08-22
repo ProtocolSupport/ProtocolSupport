@@ -4,11 +4,8 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.pe.PEDataValues;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.utils.netty.Allocator;
 
-//TODO: HEEELLLLPPPP AHHHRRHRHRH :F
 public class ChunkTransformerPE extends ChunkTransformer {
 
 	protected static final int flag_runtime = 1;
@@ -18,7 +15,6 @@ public class ChunkTransformerPE extends ChunkTransformer {
 
 	@Override
 	public byte[] toLegacyData(ProtocolVersion version) {
-		ArrayBasedIdRemappingTable table = PEDataValues.BLOCK_ID;
 		ByteBuf chunkdata = Allocator.allocateBuffer();
 		try {
 			chunkdata.writeByte(sections.length);
@@ -31,7 +27,7 @@ public class ChunkTransformerPE extends ChunkTransformer {
 					for (int x = 0; x < 16 ; x++) {
 						for (int z = 0; z < 16; z++) {
 							for (int y = 0; y < 16; y++) {
-								chunkdata.writeShortLE(palette.getRuntimeId(table.getRemap(getBlockState(section, x, y, z))));
+								chunkdata.writeShortLE(palette.getRuntimeId(getBlockState(section, x, y, z)));
 							}
 						}
 					}
@@ -47,7 +43,9 @@ public class ChunkTransformerPE extends ChunkTransformer {
 				}
 			}
 			chunkdata.writeZero(512); //heightmap (will be recalculated by client anyway)
-			chunkdata.writeBytes(biomeData);
+			for (int i = 0; i < biomeData.length; i++) {
+				chunkdata.writeByte(biomeData[i]);
+			}
 			return MiscSerializer.readAllBytes(chunkdata);
 		} finally {
 			chunkdata.release();

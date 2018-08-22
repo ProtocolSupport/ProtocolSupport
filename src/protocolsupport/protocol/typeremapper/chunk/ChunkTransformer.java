@@ -7,36 +7,6 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class ChunkTransformer {
 
-<<<<<<< HEAD
-	public static enum BlockFormat {
-		VARIES, //format for 1.9+
-		SHORT, //format for 1.8
-		BYTE, //format for 1.7-
-		PE,
-	}
-
-	public static ChunkTransformer create(BlockFormat format) {
-		switch (format) {
-			case VARIES: {
-				return new ChunkTransformerVaries();
-			}
-			case SHORT: {
-				return new ChunkTransformerShort();
-			}
-			case BYTE: {
-				return new ChunkTransformerByte();
-			}
-			case PE: {
-				return new ChunkTransformerPE();
-			}
-			default: {
-				throw new IllegalArgumentException();
-			}
-		}
-	}
-
-=======
->>>>>>> branch 'master' of https://github.com/ProtocolSupport/ProtocolSupport.git
 	protected int columnsCount;
 	protected boolean hasSkyLight;
 	protected boolean hasBiomeData;
