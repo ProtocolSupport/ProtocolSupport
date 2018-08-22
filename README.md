@@ -17,6 +17,8 @@ Known issues:
 
 
 Known wontfix issues:
+* [1.12 and earlier] Chests are seen as enderchests. (Intenional to prevent rendering glitches!)  
+[Check this plugin if you want different behaviour](https://www.spigotmc.org/resources/protocolsupportchestfix.59314/)
 * [1.8 and earlier] Thrown potion texture is invalid
 * [1.8 and earlier] Can't control vehicle
 * [1.6 and earlier] Stats are not sent
