@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChangeMulti;
@@ -17,10 +16,10 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 		super(connection);
 	}
 
+	protected final ArrayBasedIdRemappingTable blockRemappingTable = LegacyBlockData.REGISTRY.getTable(connection.getVersion());
+
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ProtocolVersion version = connection.getVersion();
-		ArrayBasedIdRemappingTable remapper = LegacyBlockData.REGISTRY.getTable(version);
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BLOCK_CHANGE_MULTI_ID);
 		serializer.writeInt(chunkX);
 		serializer.writeInt(chunkZ);
@@ -28,7 +27,7 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 		serializer.writeInt(records.length * 4);
 		for (Record record : records) {
 			serializer.writeShort(record.coord);
-			serializer.writeShort(PreFlatteningBlockIdData.getCombinedId(remapper.getRemap(record.id)));
+			serializer.writeShort(PreFlatteningBlockIdData.getCombinedId(blockRemappingTable.getRemap(record.id)));
 		}
 		return RecyclableSingletonList.create(serializer);
 	}

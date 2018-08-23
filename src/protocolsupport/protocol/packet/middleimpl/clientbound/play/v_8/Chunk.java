@@ -8,6 +8,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.BlockTileUpdate;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
+import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformer;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerShort;
 import protocolsupport.protocol.typeremapper.chunk.EmptyChunk;
@@ -22,7 +23,7 @@ public class Chunk extends MiddleChunk {
 		super(connection);
 	}
 
-	protected final ChunkTransformer transformer = new ChunkTransformerShort();
+	protected final ChunkTransformer transformer = new ChunkTransformerShort(LegacyBlockData.REGISTRY.getTable(connection.getVersion()));
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
@@ -39,7 +40,7 @@ public class Chunk extends MiddleChunk {
 		} else {
 			chunkdata.writeShort(bitmask);
 			transformer.loadData(data, bitmask, hasSkyLight, full);
-			ArraySerializer.writeByteArray(chunkdata, version, transformer.toLegacyData(version));
+			ArraySerializer.writeByteArray(chunkdata, version, transformer.toLegacyData());
 		}
 		packets.add(chunkdata);
 		for (NBTTagCompoundWrapper tile : tiles) {
