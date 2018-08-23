@@ -4,7 +4,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
@@ -127,14 +126,16 @@ public class ItemStackSerializer {
 					//fake length
 					to.writeShort(0);
 					//actual nbt
-					try (OutputStream outputstream = new GZIPOutputStream(new ByteBufOutputStream(to))) {
-						NBTTagCompoundSerializer.writeTag(new DataOutputStream(outputstream), tag);
+					try (DataOutputStream outputstream = new DataOutputStream(new GZIPOutputStream(new ByteBufOutputStream(to)))) {
+						NBTTagCompoundSerializer.writeTag(outputstream, tag);
 					}
 					//now replace fake length with real length
 					to.setShort(writerIndex, to.writerIndex() - writerIndex - Short.BYTES);
 				}
 			} else if (isUsingDirectNBT(version)) {
-				NBTTagCompoundSerializer.writeTag(new ByteBufOutputStream(to), tag);
+				try (ByteBufOutputStream outputstream = new ByteBufOutputStream(to)) {
+					NBTTagCompoundSerializer.writeTag(outputstream, tag);
+				}
 			} else {
 				throw new IllegalArgumentException(MessageFormat.format("Dont know how to write nbt of version {0}", version));
 			}

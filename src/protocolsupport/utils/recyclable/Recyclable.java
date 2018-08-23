@@ -1,8 +1,6 @@
 package protocolsupport.utils.recyclable;
 
-import java.io.Closeable;
-
-public interface Recyclable extends Closeable {
+public interface Recyclable extends AutoCloseable {
 
 	public void recycle();
 
