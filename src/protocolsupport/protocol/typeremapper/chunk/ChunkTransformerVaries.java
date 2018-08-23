@@ -12,6 +12,7 @@ public class ChunkTransformerVaries extends ChunkTransformerBB {
 
 	protected static final int globalPaletteBitsPerBlock = 14;
 
+	@Override
 	public void toLegacyData(ByteBuf buffer) {
 		for (int i = 0; i < sections.length; i++) {
 			ChunkSection section = sections[i];
