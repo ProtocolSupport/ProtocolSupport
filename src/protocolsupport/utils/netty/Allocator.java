@@ -50,14 +50,6 @@ public class Allocator {
 		}
 	}
 
-	public static ByteBuf allocateUnpooledBuffer() {
-		if (direct) {
-			return UnpooledByteBufAllocator.DEFAULT.directBuffer();
-		} else {
-			return UnpooledByteBufAllocator.DEFAULT.heapBuffer();
-		}
-	}
-
 	public static void withTempBuffer(Consumer<ByteBuf> operation) {
 		ByteBuf buffer = allocateBuffer();
 		try {
