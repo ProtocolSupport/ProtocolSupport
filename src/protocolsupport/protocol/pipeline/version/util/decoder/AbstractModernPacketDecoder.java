@@ -25,7 +25,7 @@ public abstract class AbstractModernPacketDecoder extends AbstractPacketDecoder 
 			return;
 		}
 		try {
-			decodeAndTransform(ctx.channel(), input, out);
+			decodeAndTransform(ctx, input, out);
 			if (input.isReadable()) {
 				throw new DecoderException("Did not read all data from packet, bytes left: " + input.readableBytes());
 			}

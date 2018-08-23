@@ -5,6 +5,8 @@ import io.netty.handler.codec.DecoderException;
 
 public class VarNumberSerializer {
 
+	public static final int MAX_LENGTH = 5;
+
 	public static int readVarInt(ByteBuf from) {
 		int value = 0;
 		int length = 0;
@@ -12,7 +14,7 @@ public class VarNumberSerializer {
 		do {
 			part = from.readByte();
 			value |= (part & 0x7F) << (length++ * 7);
-			if (length > 5) {
+			if (length > MAX_LENGTH) {
 				throw new DecoderException("VarInt too big");
 			}
 		} while (part < 0);

@@ -31,7 +31,7 @@ public abstract class AbstractLegacyPacketDecoder extends AbstractPacketDecoder 
 		while (buffer.isReadable()) {
 			buffer.markReaderIndex();
 			try {
-				decodeAndTransform(ctx.channel(), buffer, list);
+				decodeAndTransform(ctx, buffer, list);
 			} catch (EOFSignal signal) {
 				buffer.resetReaderIndex();
 				break;
