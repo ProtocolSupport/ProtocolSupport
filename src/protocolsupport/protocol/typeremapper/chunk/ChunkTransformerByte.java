@@ -3,7 +3,7 @@ package protocolsupport.protocol.typeremapper.chunk;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 
-public class ChunkTransformerByte extends ChunkTransformer {
+public class ChunkTransformerByte extends ChunkTransformerBA {
 
 	public ChunkTransformerByte(ArrayBasedIdRemappingTable blockRemappingTable) {
 		super(blockRemappingTable);

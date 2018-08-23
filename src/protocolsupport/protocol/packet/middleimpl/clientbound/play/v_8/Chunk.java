@@ -9,7 +9,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_1
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
-import protocolsupport.protocol.typeremapper.chunk.ChunkTransformer;
+import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerBA;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerShort;
 import protocolsupport.protocol.typeremapper.chunk.EmptyChunk;
 import protocolsupport.protocol.utils.types.TileEntityType;
@@ -23,7 +23,7 @@ public class Chunk extends MiddleChunk {
 		super(connection);
 	}
 
-	protected final ChunkTransformer transformer = new ChunkTransformerShort(LegacyBlockData.REGISTRY.getTable(connection.getVersion()));
+	protected final ChunkTransformerBA transformer = new ChunkTransformerShort(LegacyBlockData.REGISTRY.getTable(connection.getVersion()));
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {

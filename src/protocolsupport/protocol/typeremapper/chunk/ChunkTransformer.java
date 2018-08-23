@@ -39,8 +39,6 @@ public abstract class ChunkTransformer {
 		}
 	}
 
-	public abstract byte[] toLegacyData();
-
 	protected static final int blocksInSection = 16 * 16 * 16;
 
 	protected static class ChunkSection {
