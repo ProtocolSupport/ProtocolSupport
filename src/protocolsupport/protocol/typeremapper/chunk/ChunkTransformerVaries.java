@@ -2,15 +2,15 @@ package protocolsupport.protocol.typeremapper.chunk;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.utils.netty.Allocator;
 
 public class ChunkTransformerVaries extends ChunkTransformer {
 
-	protected static final int bitsPerBlock = 14;
+	protected static final int globalPaletteBitsPerBlock = 14;
 
 	@Override
 	public byte[] toLegacyData(ProtocolVersion version) {
@@ -20,16 +20,24 @@ public class ChunkTransformerVaries extends ChunkTransformer {
 			for (int i = 0; i < sections.length; i++) {
 				ChunkSection section = sections[i];
 				if (section != null) {
-					chunkdata.writeByte(bitsPerBlock);
 					BlockStorageReader storage = section.blockdata;
-					BlockStorageWriter blockstorage = new BlockStorageWriter(bitsPerBlock, blocksInSection);
-					for (int block = 0; block < blocksInSection; block++) {
-						blockstorage.setBlockState(block, table.getRemap(storage.getBlockState(block)));
-					}
-					long[] ldata = blockstorage.getBlockData();
-					VarNumberSerializer.writeVarInt(chunkdata, ldata.length);
-					for (long l : ldata) {
-						chunkdata.writeLong(l);
+					int bitsPerBlock = storage.getBitsPerBlock();
+					if (bitsPerBlock > 8) {
+						chunkdata.writeByte(globalPaletteBitsPerBlock);
+						BlockStorageWriter blockstorage = new BlockStorageWriter(globalPaletteBitsPerBlock, blocksInSection);
+						for (int blockIndex = 0; blockIndex < blocksInSection; blockIndex++) {
+							blockstorage.setBlockState(blockIndex, table.getRemap(storage.getBlockState(blockIndex)));
+						}
+						ArraySerializer.writeVarIntLongArray(chunkdata, blockstorage.getBlockData());
+					} else {
+						chunkdata.writeByte(bitsPerBlock);
+						BlockPalette palette = new BlockPalette();
+						BlockStorageWriter blockstorage = new BlockStorageWriter(bitsPerBlock, blocksInSection);
+						for (int blockIndex = 0; blockIndex < blocksInSection; blockIndex++) {
+							blockstorage.setBlockState(blockIndex, palette.getRuntimeId(table.getRemap(storage.getBlockState(blockIndex))));
+						}
+						ArraySerializer.writeVarIntVarIntArray(chunkdata, palette.getBlockStates());
+						ArraySerializer.writeVarIntLongArray(chunkdata, blockstorage.getBlockData());
 					}
 					chunkdata.writeBytes(section.blocklight);
 					if (hasSkyLight) {

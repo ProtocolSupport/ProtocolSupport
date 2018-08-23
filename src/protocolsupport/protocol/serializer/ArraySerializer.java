@@ -114,4 +114,11 @@ public class ArraySerializer {
 		}
 	}
 
+	public static void writeVarIntLongArray(ByteBuf to, long[] array) {
+		VarNumberSerializer.writeVarInt(to, array.length);
+		for (long element : array) {
+			to.writeLong(element);
+		}
+	}
+
 }
