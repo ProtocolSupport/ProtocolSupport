@@ -56,6 +56,7 @@ import protocolsupport.utils.Utils;
 import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.zplatform.ServerPlatform;
+import protocolsupport.zplatform.impl.pe.PEPaletteCompiler;
 import protocolsupport.zplatform.impl.pe.PEProxyServer;
 import protocolsupport.zplatform.impl.pe.PEProxyServerInfoHandler;
 
@@ -149,6 +150,7 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(PEDataValues.class.getName());
 			Class.forName(PESkinModel.class.getName());
 			Class.forName(PEPotion.class.getName());
+			Class.forName(PEPaletteCompiler.class.getName());
 			ServerPlatform.get().getInjector().onLoad();
 		} catch (Throwable t) {
 			getLogger().log(Level.SEVERE, "Error when loading, make sure you are using supported server version", t);
@@ -165,6 +167,7 @@ public class ProtocolSupport extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new MultiplePassengersRestrict(), this);
 		getServer().getMessenger().registerIncomingPluginChannel(this, InternalPluginMessageRequest.TAG, new InternalPluginMessageRequest());
 		getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
+			PEPaletteCompiler.getInstance().compilePaletteDefinition();
 			(peserver = new PEProxyServer()).start();
 		});
 		getServer().getPluginManager().registerEvents(new LocaleUseLoader(), this);

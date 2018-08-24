@@ -14,8 +14,8 @@ import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.IdRemappingRegistry;
+import protocolsupport.protocol.typeremapper.itemstack.PreFlatteningItemIdData;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEnchantmentId;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.HashMapBasedIdRemappingTable;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
@@ -172,19 +172,19 @@ public class PEDataValues {
 		return peEnchantToPc.get(peId);
 	}
 
-	public static final RemappingTable.ComplexIdRemappingTable ITEM_ID = new RemappingTable.ComplexIdRemappingTable();
-	public static final RemappingTable.ComplexIdRemappingTable PE_ITEM_ID = new RemappingTable.ComplexIdRemappingTable();
+	public static final Int2IntOpenHashMap pcItemToPe = new Int2IntOpenHashMap();
+	public static final Int2IntOpenHashMap peItemToPc = new Int2IntOpenHashMap();
 	private static void registerItemRemap(int from, int to) {
-		ITEM_ID.setSingleRemap(from, to, -1);
-		PE_ITEM_ID.setSingleRemap(to, from, -1);
+		pcItemToPe.put(PreFlatteningItemIdData.getModernIdByLegacyIdData(from, 0), PreFlatteningItemIdData.getModernIdByLegacyIdData(to, 0));
+		peItemToPc.put(PreFlatteningItemIdData.getModernIdByLegacyIdData(to, 0), PreFlatteningItemIdData.getModernIdByLegacyIdData(from, 0));
 	}
 	private static void registerItemRemap(int from, int to, int dataTo) {
-		ITEM_ID.setSingleRemap(from, to, dataTo);
-		PE_ITEM_ID.setSingleRemap(to, from, dataTo);
+		pcItemToPe.put(PreFlatteningItemIdData.getModernIdByLegacyIdData(from, 0), PreFlatteningItemIdData.getModernIdByLegacyIdData(to, dataTo));
+		peItemToPc.put(PreFlatteningItemIdData.getModernIdByLegacyIdData(to, dataTo), PreFlatteningItemIdData.getModernIdByLegacyIdData(from, 0));
 	}
 	private static void registerItemRemap(int from, int dataFrom, int to, int dataTo) {
-		ITEM_ID.setComplexRemap(from, dataFrom, to, dataTo);
-		PE_ITEM_ID.setComplexRemap(to, dataTo, from, dataFrom);
+		pcItemToPe.put(PreFlatteningItemIdData.getModernIdByLegacyIdData(from, dataFrom), PreFlatteningItemIdData.getModernIdByLegacyIdData(to, dataTo));
+		peItemToPc.put(PreFlatteningItemIdData.getModernIdByLegacyIdData(to, dataTo), PreFlatteningItemIdData.getModernIdByLegacyIdData(from, dataFrom));
 	}
 
 	static {
@@ -309,6 +309,14 @@ public class PEDataValues {
 		registerItemRemap(442, 268); // SHIELD -> WOODEN SWORD
 		registerItemRemap(439, 262); // SPECTRAL ARROW -> ARROW
 		registerItemRemap(343, 408); // POWERED MINECART -> MINECART WITH A HOPPER
+	}
+
+	public static int pcToPeItem(int combinedId) {
+		return pcItemToPe.get(combinedId);
+	}
+
+	public static int peToPcItem(int combinedId) {
+		return peItemToPc.get(combinedId);
 	}
 
 	public static final IdRemappingRegistry<HashMapBasedIdRemappingTable> PARTICLE = new IdRemappingRegistry<HashMapBasedIdRemappingTable>() {

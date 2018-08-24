@@ -3,7 +3,6 @@ package protocolsupport.protocol.typeremapper.itemstack;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapperRegistry;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
-import protocolsupport.utils.IntTuple;
 import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public class ItemStackRemapper {
@@ -16,13 +15,9 @@ public class ItemStackRemapper {
 			itemstack.setTypeId(PreFlatteningItemIdData.getIdFromLegacyCombinedId(legacyCombinedId));
 			itemstack.setLegacyData(PreFlatteningItemIdData.getDataFromLegacyCombinedId(legacyCombinedId));
 			if (version == ProtocolVersion.MINECRAFT_PE) {
-				IntTuple itemAndData = PEDataValues.ITEM_ID.getRemap(itemstack.getTypeId(), itemstack.getLegacyData());
-				if (itemAndData != null) {
-					itemstack.setTypeId(itemAndData.getI1());
-					if (itemAndData.getI2() != -1) {
-						itemstack.setLegacyData(itemAndData.getI2());
-					}
-				}
+				int peCombinedId = PEDataValues.pcToPeItem(legacyCombinedId);
+				itemstack.setTypeId(PreFlatteningItemIdData.getIdFromLegacyCombinedId(peCombinedId));
+				itemstack.setLegacyData(PreFlatteningItemIdData.getDataFromLegacyCombinedId(peCombinedId));
 			}
 		}
 		return itemstack;
@@ -30,18 +25,12 @@ public class ItemStackRemapper {
 
 	public static NetworkItemStack remapFromClient(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
 		if (version == ProtocolVersion.MINECRAFT_PE || version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
-			itemstack.setTypeId(PreFlatteningItemIdData.getModernIdByLegacyIdData(itemstack.getTypeId(), itemstack.getLegacyData()));
+			int legacyCombinedId = PreFlatteningItemIdData.formLegacyCombinedId(itemstack.getTypeId(), itemstack.getLegacyData());
+			itemstack.setTypeId(PreFlatteningItemIdData.getModernIdByLegacyCombinedId(legacyCombinedId));
 			if (version == ProtocolVersion.MINECRAFT_PE) {
-				int prevData = itemstack.getLegacyData();
-				IntTuple itemAndData = PEDataValues.PE_ITEM_ID.getRemap(itemstack.getTypeId(), itemstack.getLegacyData());
-				if (itemAndData != null) {
-					itemstack.setTypeId(itemAndData.getI1());
-					if (itemAndData.getI2() != -1) {
-						itemstack.setLegacyData(itemAndData.getI2());
-					} else {
-						itemstack.setLegacyData(prevData); // changing the item ID resets the data to 0
-					}
-				}
+				int peCombinedId = PEDataValues.pcToPeItem(legacyCombinedId);
+				itemstack.setTypeId(PreFlatteningItemIdData.getIdFromLegacyCombinedId(peCombinedId));
+				itemstack.setLegacyData(PreFlatteningItemIdData.getDataFromLegacyCombinedId(peCombinedId));
 			}
 		}
 		return ItemStackComplexRemapperRegistry.remapFromClient(version, locale, itemstack);

@@ -9,8 +9,9 @@ import java.util.ListIterator;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
+import io.netty.channel.epoll.Epoll;
 import net.minecraft.server.v1_13_R1.ChatComponentText;
-import net.minecraft.server.v1_13_R1.LazyInitVar;
+import net.minecraft.server.v1_13_R1.MinecraftServer;
 import net.minecraft.server.v1_13_R1.NetworkManager;
 import net.minecraft.server.v1_13_R1.ServerConnection;
 import protocolsupport.utils.ReflectionUtils;
@@ -33,14 +34,17 @@ public class SpigotNettyInjector {
 		connectionsList.injectExisting();
 	}
 
+	@SuppressWarnings("deprecation")
 	public static EventLoopGroup getServerEventLoop() {
 		try {
-			if (ReflectionUtils.setAccessible(ReflectionUtils.getField(LazyInitVar.class, "b")).getBoolean(ServerConnection.b)) {
+			//TODO Shevfix
+			if (MinecraftServer.getServer().getPropertyManager().getBoolean("use-native-transport", false) && Epoll.isAvailable()) {
+			//if (ReflectionUtils.setAccessible(ReflectionUtils.getField(LazyInitVar.class, "b")).getBoolean(ServerConnection.b)) {
 				return ServerConnection.b.a();
 			} else {
 				return ServerConnection.a.a();
 			}
-		} catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
+		} catch (SecurityException | IllegalArgumentException /*| IllegalAccessException*/ e) {
 			throw new RuntimeException("Unable to get event loop", e);
 		}
 	}
