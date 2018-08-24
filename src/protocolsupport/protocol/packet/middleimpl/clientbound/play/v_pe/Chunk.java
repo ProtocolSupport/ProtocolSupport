@@ -11,9 +11,10 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
-import protocolsupport.protocol.typeremapper.chunk.ChunkTransformer;
+import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerBB;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerPE;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -25,7 +26,7 @@ public class Chunk extends MiddleChunk {
 		super(connection);
 	}
 
-	private final ChunkTransformer transformer = new ChunkTransformerPE();
+	private final ChunkTransformerBB transformer = new ChunkTransformerPE(null);
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
@@ -36,8 +37,8 @@ public class Chunk extends MiddleChunk {
 			VarNumberSerializer.writeSVarInt(serializer, chunkX);
 			VarNumberSerializer.writeSVarInt(serializer, chunkZ);
 			transformer.loadData(data, bitmask, cache.getAttributesCache().hasSkyLightInCurrentDimension(), full);
-			ByteBuf chunkdata = Unpooled.buffer();
-			chunkdata.writeBytes(transformer.toLegacyData(version));
+			ByteBuf chunkdata = Allocator.allocateBuffer();
+			transformer.toLegacyData(chunkdata);
 			chunkdata.writeByte(0); //borders
 			VarNumberSerializer.writeSVarInt(chunkdata, 0); //extra data
 			for (NBTTagCompoundWrapper tile : tiles) {

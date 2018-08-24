@@ -1,12 +1,14 @@
 package protocolsupport.protocol.typeremapper.chunk;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.utils.netty.Allocator;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 
-public class ChunkTransformerPE extends ChunkTransformer {
+public class ChunkTransformerPE extends ChunkTransformerBB {
+
+	public ChunkTransformerPE(ArrayBasedIdRemappingTable blockRemappingTable) {
+		super(blockRemappingTable);
+	}
 
 	protected static final int flag_runtime = 1;
 
@@ -14,8 +16,7 @@ public class ChunkTransformerPE extends ChunkTransformer {
 	protected static final int bitsPerBlock = 16;
 
 	@Override
-	public byte[] toLegacyData(ProtocolVersion version) {
-		ByteBuf chunkdata = Allocator.allocateBuffer();
+	public void toLegacyData(ByteBuf chunkdata) {
 		try {
 			chunkdata.writeByte(sections.length);
 			for (int i = 0; i < sections.length; i++) {
@@ -31,8 +32,9 @@ public class ChunkTransformerPE extends ChunkTransformer {
 							}
 						}
 					}
-					VarNumberSerializer.writeSVarInt(chunkdata, palette.getSize());
-					for (int blockstate : palette.getBlockStates()) {
+					int[] blockstates = palette.getBlockStates();
+					VarNumberSerializer.writeSVarInt(chunkdata, blockstates.length);
+					for (int blockstate : blockstates) {
 						VarNumberSerializer.writeSVarInt(chunkdata, blockstate);
 					}
 				} else {
@@ -46,7 +48,6 @@ public class ChunkTransformerPE extends ChunkTransformer {
 			for (int i = 0; i < biomeData.length; i++) {
 				chunkdata.writeByte(biomeData[i]);
 			}
-			return MiscSerializer.readAllBytes(chunkdata);
 		} finally {
 			chunkdata.release();
 		}

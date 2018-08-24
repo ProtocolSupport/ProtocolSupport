@@ -74,7 +74,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 			return;
 		}
 		try {
-			decodeAndTransform(ctx.channel(), input, list);
+			decodeAndTransform(ctx, input, list);
 			if (input.isReadable()) {
 				throw new DecoderException("Did not read all data from packet, bytes left: " + input.readableBytes());
 			}
