@@ -17,7 +17,6 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.registry.MiddlePacketRegistry;
-import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.MessageToMessageEncoder;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.zplatform.ServerPlatform;
@@ -46,7 +45,7 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 			if (packetTransformer.postFromServerRead()) {
 				try (RecyclableCollection<ClientBoundPacketData> data = processPackets(ctx.channel(), packetTransformer.toData())) {
 					for (ClientBoundPacketData packetdata : data) {
-						ByteBuf senddata = Allocator.allocateBuffer();
+						ByteBuf senddata = ctx.alloc().ioBuffer(packetdata.readableBytes() + VarNumberSerializer.MAX_LENGTH);
 						writePacketId(senddata, getNewPacketId(currentProtocol, packetdata.getPacketId()));
 						senddata.writeBytes(packetdata);
 						output.add(senddata);

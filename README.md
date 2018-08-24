@@ -20,9 +20,12 @@ Known issues:
 
 
 Known wontfix issues:
+* [1.12 and earlier] Chests are seen as enderchests. (Intentional to prevent rendering glitches!)  
+[Check this plugin if you want different behaviour](https://www.spigotmc.org/resources/protocolsupportchestfix.59314/)
 * [1.8 and earlier] Thrown potion texture is invalid
 * [1.8 and earlier] Can't control vehicle
 * [1.6 and earlier] Stats are not sent
+* [1.4.7] Server shows up as "incompatible" in the server list, impossible to fix due to the lack of an way to verify the client version during server list ping
 
 ---
 

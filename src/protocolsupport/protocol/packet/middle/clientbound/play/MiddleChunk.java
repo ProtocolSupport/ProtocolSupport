@@ -31,7 +31,7 @@ public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 		data = ArraySerializer.readByteArray(serverdata, ProtocolVersionsHelper.LATEST_PC);
 		tiles = ArraySerializer.readVarIntTArray(
 			serverdata, NBTTagCompoundWrapper.class,
-			from -> ItemStackSerializer.readTag(serverdata, ProtocolVersionsHelper.LATEST_PC)
+			from -> ItemStackSerializer.readTag(from, ProtocolVersionsHelper.LATEST_PC)
 		);
 	}
 

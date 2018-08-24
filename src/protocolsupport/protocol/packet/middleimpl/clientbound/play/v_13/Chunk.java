@@ -9,11 +9,12 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
-import protocolsupport.protocol.typeremapper.chunk.ChunkTransformer;
+import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
+import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerBB;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerVaries;
+import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class Chunk extends MiddleChunk {
 
@@ -21,22 +22,22 @@ public class Chunk extends MiddleChunk {
 		super(connection);
 	}
 
-	protected final ChunkTransformer transformer = new ChunkTransformerVaries();
+	protected final ChunkTransformerBB transformer = new ChunkTransformerVaries(LegacyBlockData.REGISTRY.getTable(connection.getVersion()));
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
+		transformer.loadData(data, bitmask, cache.getAttributesCache().hasSkyLightInCurrentDimension(), full);
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID);
 		serializer.writeInt(chunkX);
 		serializer.writeInt(chunkZ);
 		serializer.writeBoolean(full);
 		VarNumberSerializer.writeVarInt(serializer, bitmask);
-		transformer.loadData(data, bitmask, cache.getAttributesCache().hasSkyLightInCurrentDimension(), full);
-		ArraySerializer.writeByteArray(serializer, version, transformer.toLegacyData(version));
-		VarNumberSerializer.writeVarInt(serializer, tiles.length);
-		for (NBTTagCompoundWrapper tile : tiles) {
-			ItemStackSerializer.writeTag(serializer, version, TileNBTRemapper.remap(version, tile));
-		}
+		Allocator.withTempBuffer(tempbuffer -> {
+			transformer.toLegacyData(tempbuffer);
+			ArraySerializer.writeByteArray(serializer, version, tempbuffer);
+		});
+		ArraySerializer.writeVarIntTArray(serializer, tiles, (to, tile) -> ItemStackSerializer.writeTag(to, version, TileNBTRemapper.remap(version, tile)));
 		return RecyclableSingletonList.create(serializer);
 	}
 

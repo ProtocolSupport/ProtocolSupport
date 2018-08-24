@@ -1,15 +1,16 @@
 package protocolsupport.protocol.typeremapper.chunk;
 
-import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 
-public class ChunkTransformerShort extends ChunkTransformer {
+public class ChunkTransformerShort extends ChunkTransformerBA {
+
+	public ChunkTransformerShort(ArrayBasedIdRemappingTable blockRemappingTable) {
+		super(blockRemappingTable);
+	}
 
 	@Override
-	public byte[] toLegacyData(ProtocolVersion version) {
-		ArrayBasedIdRemappingTable table = LegacyBlockData.REGISTRY.getTable(ProtocolVersion.MINECRAFT_1_8);
+	public byte[] toLegacyData() {
 		byte[] data = new byte[((hasSkyLight ? 12288 : 10240) * columnsCount) + 256];
 		int blockIdIndex = 0;
 		int blockLightIndex = 8192 * columnsCount;
@@ -21,7 +22,7 @@ public class ChunkTransformerShort extends ChunkTransformer {
 				for (int block = 0; block < blocksInSection; block++) {
 					int dataindex = blockIdIndex + (block << 1);
 					int blockstate = storage.getBlockState(block);
-					blockstate = PreFlatteningBlockIdData.getCombinedId(table.getRemap(blockstate));
+					blockstate = PreFlatteningBlockIdData.getCombinedId(blockRemappingTable.getRemap(blockstate));
 					data[dataindex] = (byte) blockstate;
 					data[dataindex + 1] = (byte) (blockstate >> 8);
 				}

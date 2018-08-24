@@ -6,7 +6,8 @@ import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
-import protocolsupport.protocol.typeremapper.chunk.ChunkTransformer;
+import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
+import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerBA;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerByte;
 import protocolsupport.protocol.typeremapper.chunk.EmptyChunk;
 import protocolsupport.protocol.utils.types.TileEntityType;
@@ -21,7 +22,7 @@ public class Chunk extends MiddleChunk {
 		super(connection);
 	}
 
-	protected final ChunkTransformer transformer = new ChunkTransformerByte();
+	protected final ChunkTransformerBA transformer = new ChunkTransformerByte(LegacyBlockData.REGISTRY.getTable(connection.getVersion()));
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
@@ -42,7 +43,7 @@ public class Chunk extends MiddleChunk {
 			chunkdata.writeShort(bitmask);
 			chunkdata.writeShort(0);
 			transformer.loadData(data, bitmask, hasSkyLight, full);
-			byte[] compressed = Compressor.compressStatic(transformer.toLegacyData(version));
+			byte[] compressed = Compressor.compressStatic(transformer.toLegacyData());
 			chunkdata.writeInt(compressed.length);
 			chunkdata.writeBytes(compressed);
 		}

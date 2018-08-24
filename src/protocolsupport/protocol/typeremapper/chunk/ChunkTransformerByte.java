@@ -1,15 +1,16 @@
 package protocolsupport.protocol.typeremapper.chunk;
 
-import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 
-public class ChunkTransformerByte extends ChunkTransformer {
+public class ChunkTransformerByte extends ChunkTransformerBA {
+
+	public ChunkTransformerByte(ArrayBasedIdRemappingTable blockRemappingTable) {
+		super(blockRemappingTable);
+	}
 
 	@Override
-	public byte[] toLegacyData(ProtocolVersion version) {
-		ArrayBasedIdRemappingTable table = LegacyBlockData.REGISTRY.getTable(version);
+	public byte[] toLegacyData() {
 		byte[] data = new byte[((hasSkyLight ? 10240 : 8192) * columnsCount) + 256];
 		int blockIdIndex = 0;
 		int blockDataIndex = 4096 * columnsCount;
@@ -21,7 +22,7 @@ public class ChunkTransformerByte extends ChunkTransformer {
 				BlockStorageReader storage = section.blockdata;
 				int blockdataacc = 0;
 				for (int block = 0; block < blocksInSection; block++) {
-					int blockstate = PreFlatteningBlockIdData.getCombinedId(table.getRemap(storage.getBlockState(block)));
+					int blockstate = PreFlatteningBlockIdData.getCombinedId(blockRemappingTable.getRemap(storage.getBlockState(block)));
 					data[blockIdIndex + block] = (byte) PreFlatteningBlockIdData.getIdFromCombinedId(blockstate);
 					byte blockdata = (byte) PreFlatteningBlockIdData.getDataFromCombinedId(blockstate);
 					if ((block & 1) == 0) {

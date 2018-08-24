@@ -1,5 +1,7 @@
 package protocolsupport.utils.netty;
 
+import java.util.function.Consumer;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -48,11 +50,12 @@ public class Allocator {
 		}
 	}
 
-	public static ByteBuf allocateUnpooledBuffer() {
-		if (direct) {
-			return UnpooledByteBufAllocator.DEFAULT.directBuffer();
-		} else {
-			return UnpooledByteBufAllocator.DEFAULT.heapBuffer();
+	public static void withTempBuffer(Consumer<ByteBuf> operation) {
+		ByteBuf buffer = allocateBuffer();
+		try {
+			operation.accept(buffer);
+		} finally {
+			buffer.release();
 		}
 	}
 

@@ -6,6 +6,7 @@ import java.util.List;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.MessageToMessageDecoder;
 import protocolsupport.protocol.ConnectionImpl;
@@ -14,7 +15,6 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.registry.MiddlePacketRegistry;
-import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.zplatform.ServerPlatform;
 
@@ -30,12 +30,12 @@ public abstract class AbstractPacketDecoder extends MessageToMessageDecoder<Byte
 
 	protected abstract int readPacketId(ByteBuf buffer);
 
-	protected void decodeAndTransform(Channel channel, ByteBuf buffer, List<Object> to) {
+	protected void decodeAndTransform(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> to) {
 		ServerBoundMiddlePacket packetTransformer = registry.getTransformer(connection.getNetworkState(), readPacketId(buffer));
 		packetTransformer.readFromClientData(buffer);
-		try (RecyclableCollection<ServerBoundPacketData> data = processPackets(channel, packetTransformer.toNative())) {
+		try (RecyclableCollection<ServerBoundPacketData> data = processPackets(ctx.channel(), packetTransformer.toNative())) {
 			for (ServerBoundPacketData packetdata : data) {
-				ByteBuf receivedata = Allocator.allocateBuffer();
+				ByteBuf receivedata = ctx.channel().alloc().ioBuffer(packetdata.readableBytes() + VarNumberSerializer.MAX_LENGTH);
 				VarNumberSerializer.writeVarInt(receivedata, packetdata.getPacketId());
 				receivedata.writeBytes(packetdata);
 				to.add(receivedata);

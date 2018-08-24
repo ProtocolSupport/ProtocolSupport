@@ -2,8 +2,10 @@ package protocolsupport.protocol.typeremapper.chunk;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 
 public abstract class ChunkTransformer {
 
@@ -12,6 +14,11 @@ public abstract class ChunkTransformer {
 	protected boolean hasBiomeData;
 	protected final ChunkSection[] sections = new ChunkSection[16];
 	protected final int[] biomeData = new int[256];
+
+	protected final ArrayBasedIdRemappingTable blockRemappingTable;
+	public ChunkTransformer(ArrayBasedIdRemappingTable blockRemappingTable) {
+		this.blockRemappingTable = blockRemappingTable;
+	}
 
 	public void loadData(byte[] data, int bitmap, boolean hasSkyLight, boolean hasBiomeData) {
 		this.columnsCount = Integer.bitCount(bitmap);
@@ -32,14 +39,12 @@ public abstract class ChunkTransformer {
 		}
 	}
 
-	public abstract byte[] toLegacyData(ProtocolVersion version);
-
 	protected static final int blocksInSection = 16 * 16 * 16;
 
 	protected static class ChunkSection {
 
 		protected static final int globalPaletteBitsPerBlock = 14;
-		protected static final int[] globalPaletteData = new int[Short.MAX_VALUE * 2];
+		protected static final int[] globalPaletteData = new int[MinecraftData.BLOCKDATA_COUNT];
 		static {
 			for (int i = 0; i < globalPaletteData.length; i++) {
 				globalPaletteData[i] = i;
@@ -54,10 +59,7 @@ public abstract class ChunkTransformer {
 			byte bitsPerBlock = datastream.readByte();
 			int[] palette = globalPaletteData;
 			if (bitsPerBlock != globalPaletteBitsPerBlock) {
-				palette = new int[VarNumberSerializer.readVarInt(datastream)];
-				for (int i = 0; i < palette.length; i++) {
-					palette[i] = VarNumberSerializer.readVarInt(datastream);
-				}
+				palette = ArraySerializer.readVarIntVarIntArray(datastream);
 			}
 			this.blockdata = new BlockStorageReader(palette, bitsPerBlock, VarNumberSerializer.readVarInt(datastream));
 			this.blockdata.readFromStream(datastream);
