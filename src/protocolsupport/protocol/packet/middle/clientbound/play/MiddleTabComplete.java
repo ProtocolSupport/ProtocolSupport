@@ -24,25 +24,20 @@ public abstract class MiddleTabComplete extends ClientBoundMiddlePacket {
 		id = VarNumberSerializer.readVarInt(serverdata);
 		start = VarNumberSerializer.readVarInt(serverdata);
 		length = VarNumberSerializer.readVarInt(serverdata);
-		matches = ArraySerializer.readVarIntTArray(serverdata, CommandMatch.class, (data) -> {
+		matches = ArraySerializer.readVarIntTArray(serverdata, CommandMatch.class, data -> {
 			String match = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC, 32767);
-			boolean hasTooltip = serverdata.readBoolean();
-			String tooltip = null;
-			if (hasTooltip) {
-				tooltip = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
-			}
-			return new CommandMatch(match, hasTooltip, tooltip);
+			String tooltip = serverdata.readBoolean() ? StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC) : null;
+			return new CommandMatch(match, tooltip);
 		});
 	}
 
 	public class CommandMatch {
-		String match;
-		boolean hasTooltip;
-		String tooltip;
 
-		private CommandMatch(String match, boolean hasTooltip, String tooltip) {
+		protected final String match;
+		protected final String tooltip;
+
+		public CommandMatch(String match, String tooltip) {
 			this.match = match;
-			this.hasTooltip = hasTooltip;
 			this.tooltip = tooltip;
 		}
 
@@ -51,11 +46,13 @@ public abstract class MiddleTabComplete extends ClientBoundMiddlePacket {
 		}
 
 		public boolean hasTooltip() {
-			return hasTooltip;
+			return tooltip != null;
 		}
 
 		public String getTooltip() {
 			return tooltip;
 		}
+
 	}
+
 }
