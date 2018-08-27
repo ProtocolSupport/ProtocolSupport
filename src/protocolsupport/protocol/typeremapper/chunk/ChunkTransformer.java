@@ -15,9 +15,9 @@ public abstract class ChunkTransformer {
 	protected final ChunkSection[] sections = new ChunkSection[16];
 	protected final int[] biomeData = new int[256];
 
-	protected final ArrayBasedIdRemappingTable blockRemappingTable;
+	protected final ArrayBasedIdRemappingTable blockTypeRemappingTable;
 	public ChunkTransformer(ArrayBasedIdRemappingTable blockRemappingTable) {
-		this.blockRemappingTable = blockRemappingTable;
+		this.blockTypeRemappingTable = blockRemappingTable;
 	}
 
 	public void loadData(byte[] data, int bitmap, boolean hasSkyLight, boolean hasBiomeData) {

@@ -6,8 +6,10 @@ import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRe
 
 public class ChunkTransformerVaries extends ChunkTransformerBB {
 
-	public ChunkTransformerVaries(ArrayBasedIdRemappingTable blockRemappingTable) {
-		super(blockRemappingTable);
+	protected final ArrayBasedIdRemappingTable blockFlatteningIdRemappingTable;
+	public ChunkTransformerVaries(ArrayBasedIdRemappingTable blockTypeRemappingTable, ArrayBasedIdRemappingTable blockFlatteningIdRemappingTable) {
+		super(blockTypeRemappingTable);
+		this.blockFlatteningIdRemappingTable = blockFlatteningIdRemappingTable;
 	}
 
 	protected static final int globalPaletteBitsPerBlock = 14;
@@ -23,7 +25,7 @@ public class ChunkTransformerVaries extends ChunkTransformerBB {
 					buffer.writeByte(globalPaletteBitsPerBlock);
 					BlockStorageWriter blockstorage = new BlockStorageWriter(globalPaletteBitsPerBlock, blocksInSection);
 					for (int blockIndex = 0; blockIndex < blocksInSection; blockIndex++) {
-						blockstorage.setBlockState(blockIndex, blockRemappingTable.getRemap(storage.getBlockState(blockIndex)));
+						blockstorage.setBlockState(blockIndex, blockFlatteningIdRemappingTable.getRemap(blockTypeRemappingTable.getRemap(storage.getBlockState(blockIndex))));
 					}
 					ArraySerializer.writeVarIntLongArray(buffer, blockstorage.getBlockData());
 				} else {
@@ -31,7 +33,7 @@ public class ChunkTransformerVaries extends ChunkTransformerBB {
 					BlockPalette palette = new BlockPalette();
 					BlockStorageWriter blockstorage = new BlockStorageWriter(bitsPerBlock, blocksInSection);
 					for (int blockIndex = 0; blockIndex < blocksInSection; blockIndex++) {
-						blockstorage.setBlockState(blockIndex, palette.getRuntimeId(blockRemappingTable.getRemap(storage.getBlockState(blockIndex))));
+						blockstorage.setBlockState(blockIndex, palette.getRuntimeId(blockFlatteningIdRemappingTable.getRemap(blockTypeRemappingTable.getRemap(storage.getBlockState(blockIndex)))));
 					}
 					ArraySerializer.writeVarIntVarIntArray(buffer, palette.getBlockStates());
 					ArraySerializer.writeVarIntLongArray(buffer, blockstorage.getBlockData());

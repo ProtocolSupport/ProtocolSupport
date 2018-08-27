@@ -552,6 +552,14 @@
     }
   },
   {
+    "material": "BRAIN_CORAL_WALL_FAN",
+    "sounds": {
+      "break": 68,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
     "material": "BREWING_STAND",
     "sounds": {
       "break": 138,
@@ -721,6 +729,14 @@
   },
   {
     "material": "BUBBLE_CORAL_FAN",
+    "sounds": {
+      "break": 68,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BUBBLE_CORAL_WALL_FAN",
     "sounds": {
       "break": 68,
       "volume": 1.0,
@@ -1256,7 +1272,39 @@
     }
   },
   {
+    "material": "DEAD_BRAIN_CORAL_FAN",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DEAD_BRAIN_CORAL_WALL_FAN",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
     "material": "DEAD_BUBBLE_CORAL_BLOCK",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DEAD_BUBBLE_CORAL_FAN",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DEAD_BUBBLE_CORAL_WALL_FAN",
     "sounds": {
       "break": 138,
       "volume": 1.0,
@@ -1280,6 +1328,22 @@
     }
   },
   {
+    "material": "DEAD_FIRE_CORAL_FAN",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DEAD_FIRE_CORAL_WALL_FAN",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
     "material": "DEAD_HORN_CORAL_BLOCK",
     "sounds": {
       "break": 138,
@@ -1288,7 +1352,39 @@
     }
   },
   {
+    "material": "DEAD_HORN_CORAL_FAN",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DEAD_HORN_CORAL_WALL_FAN",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
     "material": "DEAD_TUBE_CORAL_BLOCK",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DEAD_TUBE_CORAL_FAN",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DEAD_TUBE_CORAL_WALL_FAN",
     "sounds": {
       "break": 138,
       "volume": 1.0,
@@ -1505,6 +1601,14 @@
   },
   {
     "material": "FIRE_CORAL_FAN",
+    "sounds": {
+      "break": 68,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "FIRE_CORAL_WALL_FAN",
     "sounds": {
       "break": 68,
       "volume": 1.0,
@@ -1849,6 +1953,14 @@
   },
   {
     "material": "HORN_CORAL_FAN",
+    "sounds": {
+      "break": 68,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "HORN_CORAL_WALL_FAN",
     "sounds": {
       "break": 68,
       "volume": 1.0,
@@ -4321,6 +4433,14 @@
   },
   {
     "material": "TUBE_CORAL_FAN",
+    "sounds": {
+      "break": 68,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "TUBE_CORAL_WALL_FAN",
     "sounds": {
       "break": 68,
       "volume": 1.0,

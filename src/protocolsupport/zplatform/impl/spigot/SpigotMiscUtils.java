@@ -13,12 +13,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.craftbukkit.v1_13_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_13_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_13_R1.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.v1_13_R1.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_13_R1.util.CraftIconCache;
-import org.bukkit.craftbukkit.v1_13_R1.util.CraftMagicNumbers;
+import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_13_R2.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_13_R2.util.CraftIconCache;
+import org.bukkit.craftbukkit.v1_13_R2.util.CraftMagicNumbers;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -30,15 +30,16 @@ import com.google.common.collect.Lists;
 import com.mojang.authlib.properties.Property;
 
 import io.netty.channel.ChannelPipeline;
-import net.minecraft.server.v1_13_R1.AxisAlignedBB;
-import net.minecraft.server.v1_13_R1.Block;
-import net.minecraft.server.v1_13_R1.EntityPlayer;
-import net.minecraft.server.v1_13_R1.EntityTypes;
-import net.minecraft.server.v1_13_R1.EnumProtocol;
-import net.minecraft.server.v1_13_R1.Item;
-import net.minecraft.server.v1_13_R1.MinecraftServer;
-import net.minecraft.server.v1_13_R1.NBTTagCompound;
-import net.minecraft.server.v1_13_R1.WorldServer;
+import net.minecraft.server.v1_13_R2.AxisAlignedBB;
+import net.minecraft.server.v1_13_R2.Block;
+import net.minecraft.server.v1_13_R2.EntityPlayer;
+import net.minecraft.server.v1_13_R2.EntityTypes;
+import net.minecraft.server.v1_13_R2.EnumProtocol;
+import net.minecraft.server.v1_13_R2.IRegistry;
+import net.minecraft.server.v1_13_R2.Item;
+import net.minecraft.server.v1_13_R2.MinecraftServer;
+import net.minecraft.server.v1_13_R2.NBTTagCompound;
+import net.minecraft.server.v1_13_R2.WorldServer;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
@@ -118,7 +119,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 	@SuppressWarnings("deprecation")
 	@Override
 	public int getMobTypeNetworkId(EntityType type) {
-		return EntityTypes.REGISTRY.a(EntityTypes.a(type.getName()));
+		return IRegistry.ENTITY_TYPE.a(EntityTypes.a(type.getName()));
 	}
 
 	@Override
@@ -147,12 +148,12 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public ItemStack createItemStackFromNBTTag(NBTTagCompoundWrapper tag) {
-		return CraftItemStack.asCraftMirror(net.minecraft.server.v1_13_R1.ItemStack.a((NBTTagCompound) tag.unwrap()));
+		return CraftItemStack.asCraftMirror(net.minecraft.server.v1_13_R2.ItemStack.a((NBTTagCompound) tag.unwrap()));
 	}
 
 	@Override
 	public NBTTagCompoundWrapper createNBTTagFromItemStack(ItemStack itemstack) {
-		net.minecraft.server.v1_13_R1.ItemStack nmsitemstack = CraftItemStack.asNMSCopy(itemstack);
+		net.minecraft.server.v1_13_R2.ItemStack nmsitemstack = CraftItemStack.asNMSCopy(itemstack);
 		NBTTagCompound compound = new NBTTagCompound();
 		nmsitemstack.save(compound);
 		return SpigotNBTTagCompoundWrapper.wrap(compound);
@@ -160,7 +161,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public ItemStack createItemStackFromNetwork(NetworkItemStack stack) {
-		net.minecraft.server.v1_13_R1.ItemStack nmsitemstack = new net.minecraft.server.v1_13_R1.ItemStack(Item.getById(stack.getTypeId()), stack.getAmount());
+		net.minecraft.server.v1_13_R2.ItemStack nmsitemstack = new net.minecraft.server.v1_13_R2.ItemStack(Item.getById(stack.getTypeId()), stack.getAmount());
 		NBTTagCompoundWrapper nbt = stack.getNBT();
 		if (!nbt.isNull()) {
 			nmsitemstack.setTag((NBTTagCompound) nbt.unwrap());
@@ -195,7 +196,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public boolean isProxyPreventionEnabled() {
-		return getServer().U();
+		return getServer().S();
 	}
 
 	@Override
@@ -215,12 +216,12 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public int getCompressionThreshold() {
-		return getServer().ay();
+		return getServer().aw();
 	}
 
 	@Override
 	public KeyPair getEncryptionKeyPair() {
-		return getServer().G();
+		return getServer().E();
 	}
 
 	@Override

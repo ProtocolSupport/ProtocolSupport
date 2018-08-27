@@ -66,7 +66,12 @@ public class ParticleRemapper {
 
 	protected static final RemappingRegistry<ParticleRemappingTable> REGISTRY = new RemappingRegistry<ParticleRemappingTable>() {
 		{
-			//Legacy (<1.13) remaps for old ids and names.
+			Arrays.stream(ProtocolVersionsHelper.AFTER_1_12_2)
+			.forEach(version -> {
+				registerRemap(ParticleBlock.class, from -> new ParticleBlock(from.getId(), version, from.getBlockData()), version);
+				registerRemap(ParticleItem.class, from -> new ParticleItem(from.getId(), version, I18NData.DEFAULT_LOCALE, from.getItemStack()), version);
+			});
+
 			registerRemap(ParticlePoof.class, () -> new LegacyParticle(0, "explode"), ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemap(ParticleExplosion.class, () -> new LegacyParticle(1, "largeexplode"), ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemap(ParticleExplosionEmitter.class, () -> new LegacyParticle(2, "hugeexplosion"), ProtocolVersionsHelper.BEFORE_1_13);
@@ -104,12 +109,12 @@ public class ParticleRemapper {
 			.forEach(version -> {
 				registerRemap(
 					ParticleItem.class,
-					from -> new LegacyParticleIconCrack(36, "iconcrack", version, I18NData.DEFAULT_LOCALE, from.getItem()),
+					from -> new LegacyParticleIconCrack(36, "iconcrack", version, I18NData.DEFAULT_LOCALE, from.getItemStack()),
 					version
 				);
 				registerRemap(
 					ParticleBlock.class,
-					from -> new LegacyParticleBlockCrack(37, "blockcrack", version, from.getBlockstate()),
+					from -> new LegacyParticleBlockCrack(37, "blockcrack", version, from.getBlockData()),
 					version
 				);
 			});
