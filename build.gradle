@@ -44,8 +44,8 @@ dlDepsDirS.mkdirs()
 
 def dlDepsC = [
 	new Tuple(
-		'https://repo.perfectdreams.net/com/destroystokyo/paper/paper/1.13-R0.1-SNAPSHOT/paper-1.13-R0.1-SNAPSHOT.jar',
-		'spigot-1.13-3.jar'
+		'https://www.dropbox.com/s/b0p9s2zq0xnnlye/paper-1.13.1-180.jar?dl=1',
+		'spigot-1.13.1-1.jar'
 	)
 ]
 
