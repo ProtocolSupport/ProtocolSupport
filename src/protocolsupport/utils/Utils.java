@@ -1,6 +1,7 @@
 package protocolsupport.utils;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -17,8 +18,9 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
+import com.google.gson.JsonObject;
 
 import protocolsupport.ProtocolSupport;
 
@@ -153,12 +155,23 @@ public class Utils {
 
 	private static final String resourcesDirName = "resources";
 
-	public static BufferedReader getResource(String name) {
-		return new BufferedReader(new InputStreamReader(ProtocolSupport.class.getClassLoader().getResourceAsStream(resourcesDirName + "/" + name), StandardCharsets.UTF_8));
+	public static InputStream getResource(String name) {
+		return ProtocolSupport.class.getClassLoader().getResourceAsStream(resourcesDirName + "/" + name);
+	}
+
+	public static BufferedReader getResourceBuffered(String name) {
+		InputStream resource = getResource(name);
+		return resource != null ? new BufferedReader(new InputStreamReader(resource, StandardCharsets.UTF_8)) : null;
+	}
+
+	public static JsonObject getResourceJson(String name) {
+		BufferedReader reader = getResourceBuffered(name);
+		return reader != null ? Utils.GSON.fromJson(reader, JsonObject.class) : null;
 	}
 
 	public static Iterable<JsonElement> iterateJsonArrayResource(String name) {
-		return new JsonParser().parse(getResource(name)).getAsJsonArray();
+		BufferedReader reader = getResourceBuffered(name);
+		return reader != null ?  Utils.GSON.fromJson(reader, JsonArray.class) : null;
 	}
 
 }

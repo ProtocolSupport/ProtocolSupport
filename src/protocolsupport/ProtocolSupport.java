@@ -23,8 +23,10 @@ import protocolsupport.protocol.typeremapper.basic.GenericIdRemapper;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
 import protocolsupport.protocol.typeremapper.basic.SoundRemapper;
 import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
+import protocolsupport.protocol.typeremapper.block.FlatteningBlockId;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
+import protocolsupport.protocol.typeremapper.itemstack.FlatteningItemId;
 import protocolsupport.protocol.typeremapper.itemstack.LegacyItemType;
 import protocolsupport.protocol.typeremapper.itemstack.PreFlatteningItemIdData;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapperRegistry;
@@ -107,10 +109,12 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(LegacyEffect.class.getName());
 			Class.forName(GenericIdSkipper.class.getName());
 			Class.forName(LegacyBlockData.class.getName());
+			Class.forName(FlatteningBlockId.class.getName());
 			Class.forName(PreFlatteningBlockIdData.class.getName());
 			Class.forName(TileNBTRemapper.class.getName());
 			Class.forName(ItemMaterialLookup.class.getName());
 			Class.forName(LegacyItemType.class.getName());
+			Class.forName(FlatteningItemId.class.getName());
 			Class.forName(PreFlatteningItemIdData.class.getName());
 			Class.forName(ItemStackComplexRemapperRegistry.class.getName());
 			Class.forName(MapColorRemapper.class.getName());
@@ -157,7 +161,7 @@ public class ProtocolSupport extends JavaPlugin {
 		public final String buildnumber;
 		public BuildInfo() throws IOException {
 			Properties properties = new Properties();
-			properties.load(Utils.getResource("buildinfo"));
+			properties.load(Utils.getResourceBuffered("buildinfo"));
 			buildtime = properties.getProperty("buildtime");
 			buildhost = properties.getProperty("buildhost");
 			buildnumber = properties.getProperty("buildnumber");
