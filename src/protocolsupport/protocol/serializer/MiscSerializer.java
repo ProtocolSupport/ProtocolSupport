@@ -2,6 +2,8 @@ package protocolsupport.protocol.serializer;
 
 import java.text.MessageFormat;
 import java.util.UUID;
+import java.util.function.Consumer;
+import java.util.function.ObjIntConsumer;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
@@ -53,6 +55,17 @@ public class MiscSerializer {
 		if (length > limit) {
 			throw new DecoderException(MessageFormat.format("Size {0} is bigger than allowed {1}", length, limit));
 		}
+	}
+
+	public static void writeLengthPrefixedBytes(ByteBuf to, ObjIntConsumer<ByteBuf> lengthWriter, Consumer<ByteBuf> dataWriter) {
+		int lengthWriterIndex = to.writerIndex();
+		lengthWriter.accept(to, 0);
+		int writerIndexDataStart = to.writerIndex();
+		dataWriter.accept(to);
+		int writerIndexDataEnd = to.writerIndex();
+		to.writerIndex(lengthWriterIndex);
+		lengthWriter.accept(to, writerIndexDataEnd - writerIndexDataStart);
+		to.writerIndex(writerIndexDataEnd);
 	}
 
 }

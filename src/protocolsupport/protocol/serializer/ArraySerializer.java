@@ -3,6 +3,7 @@ package protocolsupport.protocol.serializer;
 import java.lang.reflect.Array;
 import java.text.MessageFormat;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import io.netty.buffer.ByteBuf;
@@ -29,6 +30,14 @@ public class ArraySerializer {
 		return MiscSerializer.readBytes(from, length);
 	}
 
+	private static boolean isUsingShortLength(ProtocolVersion version) {
+		return (version.getProtocolType() == ProtocolType.PC) && version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10);
+	}
+
+	private static boolean isUsingVarIntLength(ProtocolVersion version) {
+		return (version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
+	}
+
 	public static void writeByteArray(ByteBuf to, ProtocolVersion version, ByteBuf data) {
 		if (isUsingShortLength(version)) {
 			to.writeShort(data.readableBytes());
@@ -44,12 +53,8 @@ public class ArraySerializer {
 		writeByteArray(to, version, Unpooled.wrappedBuffer(data));
 	}
 
-	private static boolean isUsingShortLength(ProtocolVersion version) {
-		return (version.getProtocolType() == ProtocolType.PC) && version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10);
-	}
-
-	private static boolean isUsingVarIntLength(ProtocolVersion version) {
-		return (version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
+	public static void writeVarIntByteArray(ByteBuf to, Consumer<ByteBuf> dataWriter) {
+		MiscSerializer.writeLengthPrefixedBytes(to, VarNumberSerializer::writeFixedSizeVarInt, dataWriter);
 	}
 
 	@SuppressWarnings("unchecked")

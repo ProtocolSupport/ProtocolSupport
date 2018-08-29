@@ -48,7 +48,6 @@ import protocolsupport.protocol.utils.minecraftdata.PotionData;
 import protocolsupport.protocol.utils.minecraftdata.SoundData;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.utils.Utils;
-import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.zplatform.ServerPlatform;
 
@@ -97,7 +96,6 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(NetworkEntityType.class.getName());
 			Class.forName(DataWatcherObjectIndex.class.getName());
 			Class.forName(DataWatcherObjectIdRegistry.class.getName());
-			Class.forName(Allocator.class.getName());
 			Class.forName(BlockData.class.getName());
 			Class.forName(PotionData.class.getName());
 			Class.forName(SoundData.class.getName());

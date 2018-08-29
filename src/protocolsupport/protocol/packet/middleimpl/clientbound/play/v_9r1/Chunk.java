@@ -13,7 +13,6 @@ import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerBB;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerVariesLegacy;
 import protocolsupport.protocol.utils.types.TileEntityType;
-import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
@@ -36,10 +35,7 @@ public class Chunk extends MiddleChunk {
 		chunkdata.writeInt(chunkZ);
 		chunkdata.writeBoolean(full);
 		VarNumberSerializer.writeVarInt(chunkdata, bitmask);
-		Allocator.withTempBuffer(tempbuffer -> {
-			transformer.toLegacyData(tempbuffer);
-			ArraySerializer.writeByteArray(chunkdata, version, tempbuffer);
-		});
+		ArraySerializer.writeVarIntByteArray(chunkdata, transformer::writeLegacyData);
 		packets.add(chunkdata);
 		for (NBTTagCompoundWrapper tile : tiles) {
 			packets.add(BlockTileUpdate.createPacketData(
