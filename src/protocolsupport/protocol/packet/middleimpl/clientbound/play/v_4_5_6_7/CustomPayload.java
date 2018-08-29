@@ -41,7 +41,7 @@ public class CustomPayload extends MiddleCustomPayload {
 				break;
 			}
 			default: {
-				ArraySerializer.writerShortByteArray(serializer, data);
+				ArraySerializer.writeShortByteArray(serializer, data);
 				break;
 			}
 		}

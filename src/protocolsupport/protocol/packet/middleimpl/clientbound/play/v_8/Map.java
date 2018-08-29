@@ -38,7 +38,7 @@ public class Map extends MiddleMap {
 			serializer.writeByte(rows);
 			serializer.writeByte(xstart);
 			serializer.writeByte(zstart);
-			ArraySerializer.writeByteArray(serializer, version, colors);
+			ArraySerializer.writeVarIntByteArray(serializer, colors);
 		}
 		return RecyclableSingletonList.create(serializer);
 	}

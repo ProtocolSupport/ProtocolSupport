@@ -36,11 +36,11 @@ public class Chunk extends MiddleChunk {
 		boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
 		if ((bitmask == 0) && full) {
 			chunkdata.writeShort(1);
-			ArraySerializer.writeByteArray(chunkdata, version, EmptyChunk.get18ChunkData(hasSkyLight));
+			ArraySerializer.writeVarIntByteArray(chunkdata, EmptyChunk.get18ChunkData(hasSkyLight));
 		} else {
-			chunkdata.writeShort(bitmask);
 			transformer.loadData(data, bitmask, hasSkyLight, full);
-			ArraySerializer.writeByteArray(chunkdata, version, transformer.toLegacyData());
+			chunkdata.writeShort(bitmask);
+			ArraySerializer.writeVarIntByteArray(chunkdata, transformer.toLegacyData());
 		}
 		packets.add(chunkdata);
 		for (NBTTagCompoundWrapper tile : tiles) {

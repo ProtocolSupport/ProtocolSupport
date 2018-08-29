@@ -34,16 +34,16 @@ public class Chunk extends MiddleChunk {
 		chunkdata.writeBoolean(full);
 		boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
 		if ((bitmask == 0) && full) {
+			byte[] compressed = EmptyChunk.getPre18ChunkData(hasSkyLight);
 			chunkdata.writeShort(1);
 			chunkdata.writeShort(0);
-			byte[] compressed = EmptyChunk.getPre18ChunkData(hasSkyLight);
 			chunkdata.writeInt(compressed.length);
 			chunkdata.writeBytes(compressed);
 		} else {
-			chunkdata.writeShort(bitmask);
-			chunkdata.writeShort(0);
 			transformer.loadData(data, bitmask, hasSkyLight, full);
 			byte[] compressed = Compressor.compressStatic(transformer.toLegacyData());
+			chunkdata.writeShort(bitmask);
+			chunkdata.writeShort(0);
 			chunkdata.writeInt(compressed.length);
 			chunkdata.writeBytes(compressed);
 		}
