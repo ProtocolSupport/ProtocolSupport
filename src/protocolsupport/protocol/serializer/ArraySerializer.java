@@ -7,7 +7,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 
@@ -38,19 +37,24 @@ public class ArraySerializer {
 		return (version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
 	}
 
-	public static void writeByteArray(ByteBuf to, ProtocolVersion version, ByteBuf data) {
+	public static void writeByteArray(ByteBuf to, ProtocolVersion version, byte[] data) {
 		if (isUsingShortLength(version)) {
-			to.writeShort(data.readableBytes());
+			to.writeShort(data.length);
 		} else if (isUsingVarIntLength(version)) {
-			VarNumberSerializer.writeVarInt(to, data.readableBytes());
+			VarNumberSerializer.writeVarInt(to, data.length);
 		} else {
 			throw new IllegalArgumentException(MessageFormat.format("Dont know how to write byte array of version {0}", version));
 		}
 		to.writeBytes(data);
 	}
 
-	public static void writeByteArray(ByteBuf to, ProtocolVersion version, byte[] data) {
-		writeByteArray(to, version, Unpooled.wrappedBuffer(data));
+	public static void writerShortByteArray(ByteBuf to, ByteBuf data) {
+		to.writeShort(data.readableBytes());
+		to.writeBytes(data);
+	}
+
+	public static void writeShortByteArray(ByteBuf to, Consumer<ByteBuf> dataWriter) {
+		MiscSerializer.writeLengthPrefixedBytes(to, (lTo, length) -> lTo.writeShort(length), dataWriter);
 	}
 
 	public static void writeVarIntByteArray(ByteBuf to, Consumer<ByteBuf> dataWriter) {

@@ -117,30 +117,30 @@ public class ItemStackSerializer {
 	}
 
 	public static void writeTag(ByteBuf to, ProtocolVersion version, NBTTagCompoundWrapper tag) {
-		try {
-			if (isUsingShortLengthNBT(version)) {
-				if (tag.isNull()) {
-					to.writeShort(-1);
-				} else {
-					int writerIndex = to.writerIndex();
-					//fake length
-					to.writeShort(0);
-					//actual nbt
-					try (DataOutputStream outputstream = new DataOutputStream(new GZIPOutputStream(new ByteBufOutputStream(to)))) {
-						NBTTagCompoundSerializer.writeTag(outputstream, tag);
-					}
-					//now replace fake length with real length
-					to.setShort(writerIndex, to.writerIndex() - writerIndex - Short.BYTES);
-				}
-			} else if (isUsingDirectNBT(version)) {
-				try (ByteBufOutputStream outputstream = new ByteBufOutputStream(to)) {
-					NBTTagCompoundSerializer.writeTag(outputstream, tag);
-				}
+		if (isUsingShortLengthNBT(version)) {
+			if (tag.isNull()) {
+				to.writeShort(-1);
 			} else {
-				throw new IllegalArgumentException(MessageFormat.format("Dont know how to write nbt of version {0}", version));
+				MiscSerializer.writeLengthPrefixedBytes(
+					to,
+					(lTo, length) -> lTo.writeShort(length),
+					lTo -> {
+						try (DataOutputStream outputstream = new DataOutputStream(new GZIPOutputStream(new ByteBufOutputStream(lTo)))) {
+							NBTTagCompoundSerializer.writeTag(outputstream, tag);
+						} catch (IOException e) {
+							throw new EncoderException(e);
+						}
+					}
+				);
 			}
-		} catch (Throwable ioexception) {
-			throw new EncoderException(ioexception);
+		} else if (isUsingDirectNBT(version)) {
+			try (ByteBufOutputStream outputstream = new ByteBufOutputStream(to)) {
+				NBTTagCompoundSerializer.writeTag(outputstream, tag);
+			} catch (IOException e) {
+				throw new EncoderException(e);
+			}
+		} else {
+			throw new IllegalArgumentException(MessageFormat.format("Dont know how to write nbt of version {0}", version));
 		}
 	}
 

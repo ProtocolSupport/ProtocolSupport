@@ -3,7 +3,6 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
@@ -14,12 +13,12 @@ public abstract class MiddleCustomPayload extends ClientBoundMiddlePacket {
 	}
 
 	protected String tag;
-	protected byte[] data;
+	protected ByteBuf data;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
 		tag = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
-		data = MiscSerializer.readAllBytes(serverdata);
+		data = serverdata.readSlice(serverdata.readableBytes());
 	}
 
 }
