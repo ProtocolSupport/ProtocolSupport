@@ -19,7 +19,7 @@ public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 	protected int chunkZ;
 	protected boolean full;
 	protected int bitmask;
-	protected byte[] data;
+	protected ByteBuf data;
 	protected NBTTagCompoundWrapper[] tiles;
 
 	@Override
@@ -28,7 +28,7 @@ public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 		chunkZ = serverdata.readInt();
 		full = serverdata.readBoolean();
 		bitmask = VarNumberSerializer.readVarInt(serverdata);
-		data = ArraySerializer.readByteArray(serverdata, ProtocolVersionsHelper.LATEST_PC);
+		data = ArraySerializer.readVarIntByteArraySlice(serverdata);
 		tiles = ArraySerializer.readVarIntTArray(
 			serverdata, NBTTagCompoundWrapper.class,
 			from -> ItemStackSerializer.readTag(from, ProtocolVersionsHelper.LATEST_PC)

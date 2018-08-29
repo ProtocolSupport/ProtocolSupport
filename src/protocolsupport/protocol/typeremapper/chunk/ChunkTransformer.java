@@ -1,7 +1,6 @@
 package protocolsupport.protocol.typeremapper.chunk;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
@@ -20,11 +19,10 @@ public abstract class ChunkTransformer {
 		this.blockTypeRemappingTable = blockRemappingTable;
 	}
 
-	public void loadData(byte[] data, int bitmap, boolean hasSkyLight, boolean hasBiomeData) {
+	public void loadData(ByteBuf chunkdata, int bitmap, boolean hasSkyLight, boolean hasBiomeData) {
 		this.columnsCount = Integer.bitCount(bitmap);
 		this.hasSkyLight = hasSkyLight;
 		this.hasBiomeData = hasBiomeData;
-		ByteBuf chunkdata = Unpooled.wrappedBuffer(data);
 		for (int i = 0; i < sections.length; i++) {
 			if ((bitmap & (1 << i)) != 0) {
 				sections[i] = new ChunkSection(chunkdata, hasSkyLight);

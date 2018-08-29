@@ -6,7 +6,6 @@ import java.util.StringJoiner;
 import org.bukkit.Material;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.ConnectionImpl;
@@ -39,13 +38,13 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 	}
 
 	protected String tag;
-	protected byte[] data;
+	protected ByteBuf data;
 
 	protected RecyclableCollection<ServerBoundPacketData> transformRegisterUnregister(boolean register) {
 		CustomPayloadChannelsCache ccache = connection.getCache().getChannelsCache();
 		String modernTag = LegacyCustomPayloadChannelName.fromPre13(tag);
 		StringJoiner payloadModernTagJoiner = new StringJoiner("\u0000");
-		for (String payloadLegacyTag : new String(data, StandardCharsets.UTF_8).split("\u0000")) {
+		for (String payloadLegacyTag : data.toString(StandardCharsets.UTF_8).split("\u0000")) {
 			String payloadModernTag = LegacyCustomPayloadChannelName.fromPre13(payloadLegacyTag);
 			if (register) {
 				ccache.register(payloadModernTag, payloadLegacyTag);
@@ -59,7 +58,7 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 
 	protected RecyclableCollection<ServerBoundPacketData> transformBookEdit() {
 		String locale = connection.getCache().getAttributesCache().getLocale();
-		NetworkItemStack book = ItemStackSerializer.readItemStack(Unpooled.wrappedBuffer(data), connection.getVersion(), locale, true);
+		NetworkItemStack book = ItemStackSerializer.readItemStack(data, connection.getVersion(), locale, true);
 		book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITTEN_BOOK));
 		if (!book.isNull()) {
 			return RecyclableSingletonList.create(MiddleEditBook.create(locale, book, false));
@@ -71,7 +70,7 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 	protected RecyclableCollection<ServerBoundPacketData> transformBookSign() {
 		ProtocolVersion version = connection.getVersion();
 		String locale = connection.getCache().getAttributesCache().getLocale();
-		NetworkItemStack book = ItemStackSerializer.readItemStack(Unpooled.wrappedBuffer(data), version, locale, true);
+		NetworkItemStack book = ItemStackSerializer.readItemStack(data, version, locale, true);
 		if (!book.isNull()) {
 			book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITTEN_BOOK));
 			if (connection.getVersion() == ProtocolVersion.MINECRAFT_1_8) {
@@ -95,19 +94,18 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 	}
 
 	protected RecyclableCollection<ServerBoundPacketData> transformSetBeaconEffect() {
-		ByteBuf databuf = Unpooled.wrappedBuffer(data);
-		int primary = databuf.readInt();
-		int secondary = databuf.readInt();
+		int primary = data.readInt();
+		int secondary = data.readInt();
 		return RecyclableSingletonList.create(MiddleSetBeaconEffect.create(primary, secondary));
 	}
 
 	protected RecyclableCollection<ServerBoundPacketData> transformNameItem() {
-		String name = StringSerializer.readString(Unpooled.wrappedBuffer(data), connection.getVersion());
+		String name = StringSerializer.readString(data, connection.getVersion());
 		return RecyclableSingletonList.create(MiddleNameItem.create(name));
 	}
 
 	protected RecyclableCollection<ServerBoundPacketData> transformPickItem() {
-		int slot = VarNumberSerializer.readVarInt(Unpooled.wrappedBuffer(data));
+		int slot = VarNumberSerializer.readVarInt(data);
 		return RecyclableSingletonList.create(MiddlePickItem.create(slot));
 	}
 

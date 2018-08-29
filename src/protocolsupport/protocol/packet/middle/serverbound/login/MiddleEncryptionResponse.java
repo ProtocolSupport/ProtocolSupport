@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.login;
 
+import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
@@ -14,8 +15,8 @@ public abstract class MiddleEncryptionResponse extends ServerBoundMiddlePacket {
 		super(connection);
 	}
 
-	protected byte[] sharedSecret;
-	protected byte[] verifyToken;
+	protected ByteBuf sharedSecret;
+	protected ByteBuf verifyToken;
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {

@@ -40,9 +40,13 @@ public class MiscSerializer {
 		return MiscSerializer.readBytes(buf, buf.readableBytes());
 	}
 
-	public static byte[] readAllBytesWithLimit(ByteBuf buf, int limit) {
+	public static ByteBuf readAllBytesSlice(ByteBuf from) {
+		return from.readSlice(from.readableBytes());
+	}
+
+	public static ByteBuf readAllBytesSlice(ByteBuf buf, int limit) {
 		checkLimit(buf.readableBytes(), limit);
-		return readAllBytes(buf);
+		return readAllBytesSlice(buf);
 	}
 
 	public static byte[] readBytes(ByteBuf buf, int length) {

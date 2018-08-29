@@ -44,7 +44,7 @@ public abstract class MiddleMap extends ClientBoundMiddlePacket {
 			rows = serverdata.readUnsignedByte();
 			xstart = serverdata.readUnsignedByte();
 			zstart = serverdata.readUnsignedByte();
-			colors = ArraySerializer.readByteArray(serverdata, ProtocolVersionsHelper.LATEST_PC);
+			colors = ArraySerializer.readVarIntByteArray(serverdata);
 		}
 	}
 
