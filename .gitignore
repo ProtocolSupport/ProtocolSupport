@@ -26,3 +26,5 @@ dllibs/
 *.iml
 /dllibsc/
 /dllibss/
+/libraries_runtime/
+/libraries_shade/

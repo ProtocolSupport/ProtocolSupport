@@ -1,21 +1,38 @@
 import java.text.MessageFormat
 
-ext.dlDeps = {
-	def dlDeps, File dlDepsDir ->
-		def dlDepsNames = new HashSet<String>()
-		dlDeps.each({
-			String dlDepUrl = it[0]
-			File dlDepFile = new File(dlDepsDir, it[1])
-			dlDepsNames.add(dlDepFile.getName())
-			if (!dlDepFile.exists()) {
-				logger.lifecycle(MessageFormat.format("Downloading {0} from {1}", dlDepFile.getName(), dlDepUrl))
-				ant.get(src: dlDepUrl, dest: dlDepFile)
+class UpdateLibrariesTask extends DefaultTask {
+	File directory
+	List<Map> libraries
+
+	@TaskAction
+	def update() {
+		Set<String> librariesNames = new HashSet<>()
+
+		libraries.each({
+			String url = it.get("url")
+			String libraryName = it.get("name")
+
+			librariesNames.add(libraryName)
+
+			File libraryFile = new File(directory, libraryName)
+			if (!libraryFile.exists()) {
+				logger.lifecycle(MessageFormat.format("Downloading library {0} from {1}", libraryName, url))
+				ant.get(src: url, dest: libraryFile)
 			} else {
-				logger.lifecycle(MessageFormat.format("Skipping download of {0} because it already exists", dlDepFile.getName()))
+				logger.lifecycle(MessageFormat.format("Skipping download of library {0} because it already exists", libraryName))
 			}
 		})
-		dlDepsDir.listFiles().findAll({ !dlDepsNames.contains(it.getName()) }).each({
-			logger.lifecycle(MessageFormat.format("Deleting old dllib {0}", it.getName()))
+
+		directory.listFiles()
+		.findAll({
+			!librariesNames.contains(it.getName())
+		})
+		.each({
+			logger.lifecycle(MessageFormat.format("Deleting old library {0}", it.getName()))
 			it.delete()
 		})
+	}
+
 }
+
+ext.UpdateLibrariesTask = UpdateLibrariesTask
