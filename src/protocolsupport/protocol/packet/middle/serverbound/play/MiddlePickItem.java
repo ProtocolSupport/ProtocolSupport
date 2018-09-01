@@ -22,7 +22,7 @@ public abstract class MiddlePickItem extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(int slot) {
-		ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacket.PLAY_MOVE_VEHICLE);
+		ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacket.PLAY_PICK_ITEM);
 		VarNumberSerializer.writeVarInt(serializer, slot);
 		return serializer;
 	}
