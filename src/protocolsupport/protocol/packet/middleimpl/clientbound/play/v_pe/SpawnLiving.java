@@ -11,6 +11,7 @@ import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues.PEEntityData;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues.PEEntityData.Offset;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
@@ -83,7 +84,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		if (metadata == null) {
 			VarNumberSerializer.writeVarInt(serializer, 0);
 		} else {
-			EntityMetadata.encodeMeta(serializer, version, locale, EntityMetadata.transform(entity, metadata, version));
+			DataWatcherDeserializer.encodePEData(serializer, version, locale, EntityMetadata.transform(entity, metadata, version));
 		}
 		VarNumberSerializer.writeVarInt(serializer, 0); //links, sent in separate packet
 		return serializer;

@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
-import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityMetadata;
@@ -9,8 +8,8 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntitySe
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.typeremapper.watchedentity.DataWatcherRemapper;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectSVarLong;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
@@ -87,29 +86,8 @@ public class EntityMetadata extends MiddleEntityMetadata {
 	public static ClientBoundPacketData create(NetworkEntity entity, String locale, ArrayMap<DataWatcherObject<?>> peMetadata, ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SET_ENTITY_DATA);
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
-		EntityMetadata.encodeMeta(serializer, version, locale, transform(entity, peMetadata, version));
+		DataWatcherDeserializer.encodePEData(serializer, version, locale, transform(entity, peMetadata, version));
 		return serializer;
-	}
-
-	public static void encodeMeta(ByteBuf to, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> peMetadata) {
-		//For now. Iterate two times :P TODO: Fake varint, if that's possible.
-		int entries = 0;
-		for (int key = peMetadata.getMinKey(); key < peMetadata.getMaxKey(); key++) {
-			DataWatcherObject<?> object = peMetadata.get(key);
-			if (object != null) {
-				entries++;
-			}
-		}
-		//We stored that. Now write the length first and then go.
-		VarNumberSerializer.writeVarInt(to, entries);
-		for (int key = peMetadata.getMinKey(); key < peMetadata.getMaxKey(); key++) {
-			DataWatcherObject<?> object = peMetadata.get(key);
-			if (object != null) {
-				VarNumberSerializer.writeVarInt(to, key);
-				VarNumberSerializer.writeVarInt(to, DataWatcherObjectIdRegistry.getTypeId(object, version));
-				object.writeToStream(to, version, locale);
-			}
-		}
 	}
 
 	public static class PeMetaBase {

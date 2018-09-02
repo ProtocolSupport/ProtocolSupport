@@ -6,6 +6,7 @@ import java.util.function.Supplier;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBlockState;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;
@@ -93,6 +94,28 @@ public class DataWatcherDeserializer {
 			to.writeByte(0);
 		}
 		to.writeByte(0xFF);
+	}
+
+	public static void encodePEData(ByteBuf to, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> peMetadata) {
+		int entries = 0;
+		int writerPreIndex = to.writerIndex();
+		//Fake fixed-varint length.
+		to.writeZero(5);
+		for (int key = peMetadata.getMinKey(); key < peMetadata.getMaxKey(); key++) {
+			DataWatcherObject<?> object = peMetadata.get(key);
+			if (object != null) {
+				VarNumberSerializer.writeVarInt(to, key);
+				VarNumberSerializer.writeVarInt(to, DataWatcherObjectIdRegistry.getTypeId(object, version));
+				object.writeToStream(to, version, locale);
+				entries++;
+			}
+		}
+		int writerPostIndex = to.writerIndex();
+		//Overwrite fake length.
+		to.writerIndex(writerPreIndex);
+		VarNumberSerializer.writeFixedSizeVarInt(to, entries);
+		//Return writer.
+		to.writerIndex(writerPostIndex);
 	}
 
 }

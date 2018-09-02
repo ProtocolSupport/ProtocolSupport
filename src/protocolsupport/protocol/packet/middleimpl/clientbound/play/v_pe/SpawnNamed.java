@@ -10,6 +10,7 @@ import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 import protocolsupport.zplatform.itemstack.NetworkItemStack;
@@ -42,7 +43,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		serializer.writeFloatLE(yaw); //head yaw actually
 		serializer.writeFloatLE(yaw);
 		ItemStackSerializer.writeItemStack(serializer, version, cache.getAttributesCache().getLocale(), NetworkItemStack.NULL, true);
-		EntityMetadata.encodeMeta(serializer, version, cache.getAttributesCache().getLocale(), EntityMetadata.transform(entity, metadata.getRemapped(), version));
+		DataWatcherDeserializer.encodePEData(serializer, version, cache.getAttributesCache().getLocale(), EntityMetadata.transform(entity, metadata.getRemapped(), version));
 		VarNumberSerializer.writeVarInt(serializer, 0); //?
 		VarNumberSerializer.writeVarInt(serializer, 0); //?
 		VarNumberSerializer.writeVarInt(serializer, 0); //?
