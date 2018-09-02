@@ -22,6 +22,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.CustomPayloadChannelsCache;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
+import protocolsupport.protocol.utils.types.UsedHand;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -61,7 +62,7 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 		NetworkItemStack book = ItemStackSerializer.readItemStack(data, connection.getVersion(), locale, true);
 		book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITTEN_BOOK));
 		if (!book.isNull()) {
-			return RecyclableSingletonList.create(MiddleEditBook.create(locale, book, false));
+			return RecyclableSingletonList.create(MiddleEditBook.create(locale, book, false, UsedHand.MAIN));
 		} else {
 			return RecyclableEmptyList.get();
 		}
@@ -87,7 +88,7 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 					book.setNBT(nbt);
 				}
 			}
-			return RecyclableSingletonList.create(MiddleEditBook.create(locale, book, true));
+			return RecyclableSingletonList.create(MiddleEditBook.create(locale, book, true, UsedHand.MAIN));
 		} else {
 			return RecyclableEmptyList.get();
 		}

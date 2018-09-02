@@ -7,6 +7,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUseEntity;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.utils.types.UsedHand;
 
 public class UseEntity extends MiddleUseEntity {
 
@@ -20,12 +21,12 @@ public class UseEntity extends MiddleUseEntity {
 		action = MiscSerializer.readVarIntEnum(clientdata, Action.CONSTANT_LOOKUP);
 		switch (action) {
 			case INTERACT: {
-				usedHand = VarNumberSerializer.readVarInt(clientdata);
+				hand = MiscSerializer.readVarIntEnum(clientdata, UsedHand.CONSTANT_LOOKUP);
 				break;
 			}
 			case INTERACT_AT: {
 				interactedAt = new Vector(clientdata.readFloat(), clientdata.readFloat(), clientdata.readFloat());
-				usedHand = VarNumberSerializer.readVarInt(clientdata);
+				hand = MiscSerializer.readVarIntEnum(clientdata, UsedHand.CONSTANT_LOOKUP);
 				break;
 			}
 			case ATTACK: {
