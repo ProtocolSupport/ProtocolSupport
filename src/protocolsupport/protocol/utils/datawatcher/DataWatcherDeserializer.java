@@ -100,7 +100,7 @@ public class DataWatcherDeserializer {
 		int entries = 0;
 		int writerPreIndex = to.writerIndex();
 		//Fake fixed-varint length.
-		to.writeZero(5);
+		to.writeZero(VarNumberSerializer.MAX_LENGTH);
 		for (int key = peMetadata.getMinKey(); key < peMetadata.getMaxKey(); key++) {
 			DataWatcherObject<?> object = peMetadata.get(key);
 			if (object != null) {
