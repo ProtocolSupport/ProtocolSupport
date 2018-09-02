@@ -9,6 +9,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import protocolsupport.api.MaterialAPI;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 
 public class PEPaletteCompiler {
@@ -20,7 +21,7 @@ public class PEPaletteCompiler {
 		return INSTANCE;
 	}
 
-	private AtomicInteger paletteSize;
+	private AtomicInteger paletteSize = new AtomicInteger();
 	private byte[] globalPaletteDefinition;
 
 	public byte[] getGlobalPaletteDefinition() {
@@ -40,6 +41,7 @@ public class PEPaletteCompiler {
 			buf.writeShortLE(MaterialAPI.getItemNetworkId(material));
 			paletteSize.incrementAndGet();
 		});
+		globalPaletteDefinition = MiscSerializer.readAllBytes(buf);
 	}
 
 	//TODO Actually remap needed keys.

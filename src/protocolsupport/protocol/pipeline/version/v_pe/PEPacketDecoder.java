@@ -101,8 +101,6 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 
 	public static int sReadPacketId(ByteBuf from) {
 		int id = VarNumberSerializer.readVarInt(from);
-		from.readByte();
-		from.readByte();
 		return id;
 	}
 

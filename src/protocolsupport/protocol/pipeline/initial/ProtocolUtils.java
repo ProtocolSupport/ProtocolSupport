@@ -41,8 +41,6 @@ public class ProtocolUtils {
 	}
 
 	protected static ProtocolVersion readPEHandshake(ByteBuf data) {
-		data.readByte();
-		data.readByte();
 		int incomingversion = data.readInt();
 		int cversion = ProtocolVersion.MINECRAFT_PE.getId();
 		if (incomingversion == cversion) {

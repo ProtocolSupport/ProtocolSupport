@@ -69,7 +69,7 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 	@SuppressWarnings("serial")
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		clientdata.readInt();
+		System.out.println("!!!!!!!!!"  + clientdata.readInt());
 		ByteBuf logindata = Unpooled.wrappedBuffer(ArraySerializer.readVarIntByteArray(clientdata));
 		try {
 			Any<Key, JsonObject> chaindata = extractChainData(Utils.GSON.fromJson(

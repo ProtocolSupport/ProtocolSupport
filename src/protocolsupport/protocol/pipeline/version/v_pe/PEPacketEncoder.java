@@ -143,8 +143,6 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 
 	public static void sWritePacketId(ByteBuf to, int packetId) {
 		VarNumberSerializer.writeVarInt(to, packetId);
-		to.writeByte(0);
-		to.writeByte(0);
 	}
 
 	@Override
