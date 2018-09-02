@@ -22,11 +22,10 @@ import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.Utils;
 
-//GOD NO. NO! NO GOD NO!
 public class PEDataValues {
 
 	public static BufferedReader getResource(String name) {
-		return Utils.getResource("pe/" + name);
+		return Utils.getResourceBuffered("pe/" + name);
 	}
 
 	private static JsonObject getFileObject(String name) {

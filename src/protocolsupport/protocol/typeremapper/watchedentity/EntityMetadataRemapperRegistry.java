@@ -125,10 +125,10 @@ public enum EntityMetadataRemapperRegistry {
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Entity.AIR, 1), ProtocolVersionsHelper.RANGE__1_9__1_13),
 		new Entry(new IndexValueRemapperNumberToShort(DataWatcherObjectIndex.Entity.AIR, 1), ProtocolVersionsHelper.BEFORE_1_9),
 		new Entry(new IndexValueRemapperOptionalChatToString(DataWatcherObjectIndex.Entity.NAMETAG, 2, 64), ProtocolVersionsHelper.RANGE__1_9__1_12_2),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Entity.NAMETAG, 2), ProtocolVersion.MINECRAFT_1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Entity.NAMETAG, 2), ProtocolVersionsHelper.AFTER_1_12_2),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Entity.NAMETAG_VISIBLE, 3), ProtocolVersionsHelper.RANGE__1_9__1_13),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Entity.SILENT, 4), ProtocolVersionsHelper.RANGE__1_9__1_13),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Entity.NO_GRAVITY, 5), ProtocolVersionsHelper.RANGE__1_10__1_13)
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Entity.NO_GRAVITY, 5), ProtocolVersionsHelper.RANGE__1_10__1_13_1)
 	),
 	LIVING(NetworkEntityType.LIVING, EntityMetadataRemapperRegistry.ENTITY,
 		new Entry(new PeSimpleFlagAdder(
@@ -146,43 +146,43 @@ public enum EntityMetadataRemapperRegistry {
 		new Entry(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.Entity.NAMETAG_VISIBLE, 3), ProtocolVersion.MINECRAFT_1_8),
 		new Entry(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.Entity.NAMETAG_VISIBLE, 11), ProtocolVersionsHelper.RANGE__1_6__1_7),
 		new Entry(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.Entity.NAMETAG_VISIBLE, 6), ProtocolVersionsHelper.BEFORE_1_6),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EntityLiving.HAND_USE, 6), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EntityLiving.HAND_USE, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EntityLiving.HAND_USE, 5), ProtocolVersionsHelper.ALL_1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EntityLiving.HEALTH, 7), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EntityLiving.HEALTH, 7), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EntityLiving.HEALTH, 6), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_9_4, ProtocolVersion.MINECRAFT_1_6_1)),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EntityLiving.POTION_COLOR, 8), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EntityLiving.POTION_COLOR, 8), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EntityLiving.POTION_COLOR, 7), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.EntityLiving.POTION_COLOR, 7), ProtocolVersionsHelper.RANGE__1_6__1_8),
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.EntityLiving.POTION_COLOR, 8), ProtocolVersionsHelper.BEFORE_1_6),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EntityLiving.POTION_AMBIENT, 9), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EntityLiving.POTION_AMBIENT, 9), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EntityLiving.POTION_AMBIENT, 8), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.EntityLiving.POTION_AMBIENT, 8), ProtocolVersionsHelper.RANGE__1_6__1_8),
 		new Entry(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.EntityLiving.POTION_AMBIENT, 9), ProtocolVersionsHelper.BEFORE_1_6),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EntityLiving.ARROWS_IN, 10), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EntityLiving.ARROWS_IN, 10), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EntityLiving.ARROWS_IN, 9), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNumberToByte(DataWatcherObjectIndex.EntityLiving.ARROWS_IN, 9), ProtocolVersionsHelper.RANGE__1_6__1_8),
 		new Entry(new IndexValueRemapperNumberToByte(DataWatcherObjectIndex.EntityLiving.ARROWS_IN, 10), ProtocolVersionsHelper.BEFORE_1_6)
 	),
 	INSENTIENT(NetworkEntityType.INSENTIENT, LIVING,
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Insentient.FLAGS, 11), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Insentient.FLAGS, 11), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Insentient.FLAGS, 10), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Insentient.FLAGS, 15), ProtocolVersion.MINECRAFT_1_8)
 	),
-	PLAYER(NetworkEntityType.PLAYER, EntityMetadataRemapperRegistry.LIVING,
+	PLAYER(NetworkEntityType.PLAYER, LIVING,
 		new Entry(new PeSimpleFlagAdder(new int[] {PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG}, new boolean[] {true}), ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.ADDITIONAL_HEARTS, 11), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.ADDITIONAL_HEARTS, 11), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.ADDITIONAL_HEARTS, 10), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.ADDITIONAL_HEARTS, 17), ProtocolVersionsHelper.BEFORE_1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.SCORE, 12),  ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.SCORE, 12),  ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.SCORE, 11),  ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Player.SCORE, 18),  ProtocolVersionsHelper.BEFORE_1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.SKIN_FLAGS, 13), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.SKIN_FLAGS, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.SKIN_FLAGS, 12), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.SKIN_FLAGS, 10), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1)),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.MAIN_HAND, 14), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.MAIN_HAND, 14), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.MAIN_HAND, 13), ProtocolVersionsHelper.ALL_1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.LEFT_SHOULDER_ENTITY, 15), ProtocolVersionsHelper.RANGE__1_12__1_13),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.RIGHT_SHOULDER_ENTITY, 16), ProtocolVersionsHelper.RANGE__1_12__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.LEFT_SHOULDER_ENTITY, 15), ProtocolVersionsHelper.RANGE__1_12__1_13_1),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.RIGHT_SHOULDER_ENTITY, 16), ProtocolVersionsHelper.RANGE__1_12__1_13_1),
 		new Entry(new DataWatcherObjectRemapper() {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
@@ -196,7 +196,7 @@ public enum EntityMetadataRemapperRegistry {
 			}
 		}, ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	AGEABLE(NetworkEntityType.AGEABLE, EntityMetadataRemapperRegistry.INSENTIENT,
+	AGEABLE(NetworkEntityType.AGEABLE, INSENTIENT,
 		new Entry(new DataWatcherObjectRemapper() {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
@@ -210,8 +210,8 @@ public enum EntityMetadataRemapperRegistry {
 				)));
 			}
 		}, ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Ageable.IS_BABY, 12), ProtocolVersionsHelper.RANGE__1_10__1_13),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Ageable.IS_BABY, 11), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Ageable.IS_BABY, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Ageable.IS_BABY, 11), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapper<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Ageable.IS_BABY, 12) {
 			@Override
 			public DataWatcherObject<?> remapValue(DataWatcherObjectBoolean object) {
@@ -241,24 +241,24 @@ public enum EntityMetadataRemapperRegistry {
 				});
 			}
 		}, ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Tameable.TAME_FLAGS, 13), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Tameable.TAME_FLAGS, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Tameable.TAME_FLAGS, 12),ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Tameable.TAME_FLAGS, 16), ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	ARMOR_STAND(NetworkEntityType.ARMOR_STAND, LIVING,
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ArmorStand.FLAGS, 11), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ArmorStand.FLAGS, 11), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ArmorStand.FLAGS, 10), ProtocolVersionsHelper.RANGE__1_8__1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ArmorStand.HEAD_ROT, 12), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ArmorStand.HEAD_ROT, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ArmorStand.HEAD_ROT, 11), ProtocolVersionsHelper.RANGE__1_8__1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ArmorStand.BODY_ROT, 13), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ArmorStand.BODY_ROT, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ArmorStand.BODY_ROT, 12), ProtocolVersionsHelper.RANGE__1_8__1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ArmorStand.LEFT_ARM_ROT, 14), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ArmorStand.LEFT_ARM_ROT, 14), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ArmorStand.LEFT_ARM_ROT, 13), ProtocolVersionsHelper.RANGE__1_8__1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ArmorStand.RIGHT_ARM_ROT, 15), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ArmorStand.RIGHT_ARM_ROT, 15), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ArmorStand.RIGHT_ARM_ROT, 14), ProtocolVersionsHelper.RANGE__1_8__1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ArmorStand.LEFT_LEG_ROT, 16), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ArmorStand.LEFT_LEG_ROT, 16), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ArmorStand.LEFT_LEG_ROT, 15), ProtocolVersionsHelper.RANGE__1_8__1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ArmorStand.RIGHT_LEG_ROT, 17), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ArmorStand.RIGHT_LEG_ROT, 17), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ArmorStand.RIGHT_LEG_ROT, 16), ProtocolVersionsHelper.RANGE__1_8__1_9)
 	),
 	COW(NetworkEntityType.COW, AGEABLE),
@@ -284,7 +284,7 @@ public enum EntityMetadataRemapperRegistry {
 				});
 			}
 		}, ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.BaseHorse.FLAGS, 13), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.BaseHorse.FLAGS, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.BaseHorse.FLAGS, 12), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.BaseHorse.FLAGS, 16), ProtocolVersionsHelper.BEFORE_1_9)
 	),
@@ -302,10 +302,10 @@ public enum EntityMetadataRemapperRegistry {
 				});
 			}
 		},  ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.BattleHorse.VARIANT, 15), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.BattleHorse.VARIANT, 15), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.BattleHorse.VARIANT, 14), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.BattleHorse.VARIANT, 20), ProtocolVersionsHelper.BEFORE_1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.BattleHorse.ARMOR, 16), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.BattleHorse.ARMOR, 16), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.BattleHorse.ARMOR, 17), ProtocolVersion.MINECRAFT_1_10),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.BattleHorse.ARMOR, 16), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.BattleHorse.ARMOR, 22), ProtocolVersionsHelper.BEFORE_1_9)
@@ -321,7 +321,7 @@ public enum EntityMetadataRemapperRegistry {
 				});
 			}
 		}, ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.CargoHorse.HAS_CHEST, 15), ProtocolVersionsHelper.RANGE__1_11__1_13)
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.CargoHorse.HAS_CHEST, 15), ProtocolVersionsHelper.RANGE__1_11__1_13_1)
 	),
 	COMMON_HORSE(NetworkEntityType.COMMON_HORSE, BATTLE_HORSE),
 	ZOMBIE_HORSE(NetworkEntityType.ZOMBIE_HORSE, BATTLE_HORSE,
@@ -357,20 +357,20 @@ public enum EntityMetadataRemapperRegistry {
 					((NetworkEntityLamaDataCache) entity.getDataCache()).setStrength(intWatcher.getValue());
 				});
 			}}, ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Lama.STRENGTH, 16), ProtocolVersionsHelper.RANGE__1_11__1_13),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Lama.CARPET_COLOR, 17), ProtocolVersionsHelper.RANGE__1_11__1_13),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Lama.VARIANT, 18), ProtocolVersionsHelper.RANGE__1_11__1_13)
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Lama.STRENGTH, 16), ProtocolVersionsHelper.RANGE__1_11__1_13_1),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Lama.CARPET_COLOR, 17), ProtocolVersionsHelper.RANGE__1_11__1_13_1),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Lama.VARIANT, 18), ProtocolVersionsHelper.RANGE__1_11__1_13_1)
 	),
 	BAT(NetworkEntityType.BAT, INSENTIENT,
 		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.Bat.HANGING,
 			new int[] {1, 1}, new int[] {PeMetaBase.FLAG_RESTING, -PeMetaBase.FLAG_GRAVITY}), //If the bat is hanging, remove it's gravity to prevent it from falling.
 		ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Bat.HANGING, 12), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Bat.HANGING, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Bat.HANGING, 11), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Bat.HANGING, 16), ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	OCELOT(NetworkEntityType.OCELOT, TAMEABLE,
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Ocelot.VARIANT, 15), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Ocelot.VARIANT, 15), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Ocelot.VARIANT, 14), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNumberToByte(DataWatcherObjectIndex.Ocelot.VARIANT, 18), ProtocolVersionsHelper.BEFORE_1_9)
 	),
@@ -381,14 +381,14 @@ public enum EntityMetadataRemapperRegistry {
 				return new DataWatcherObjectByte((byte) (15 - object.getValue()));
 			}
 		}, ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.HEALTH, 15), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.HEALTH, 15), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.HEALTH, 14), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.HEALTH, 18), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1)),
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Wolf.HEALTH, 18), ProtocolVersionsHelper.BEFORE_1_6),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.BEGGING, 16), ProtocolVersion.MINECRAFT_1_10),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.BEGGING, 15), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.Wolf.BEGGING, 19), ProtocolVersionsHelper.BEFORE_1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.COLLAR_COLOR, 17), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.COLLAR_COLOR, 17), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.COLLAR_COLOR, 16), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNumberToByte(DataWatcherObjectIndex.Wolf.COLLAR_COLOR, 20), ProtocolVersion.MINECRAFT_1_8),
 		new Entry(new IndexValueRemapper<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Wolf.COLLAR_COLOR, 20) {
@@ -400,14 +400,14 @@ public enum EntityMetadataRemapperRegistry {
 	),
 	PIG(NetworkEntityType.PIG, AGEABLE,
 		new Entry(new PeSimpleFlagRemapper(DataWatcherObjectIndex.Pig.HAS_SADLLE, PeMetaBase.FLAG_SADDLED), ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Pig.HAS_SADLLE, 13), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Pig.HAS_SADLLE, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Pig.HAS_SADLLE, 12), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.Pig.HAS_SADLLE, 16), ProtocolVersionsHelper.BEFORE_1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Pig.BOOST_TIME, 14), ProtocolVersionsHelper.RANGE__1_11_1__1_13)
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Pig.BOOST_TIME, 14), ProtocolVersionsHelper.RANGE__1_11_1__1_13_1)
 	),
 	RABBIT(NetworkEntityType.RABBIT, AGEABLE,
 		new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Rabbit.VARIANT, PeMetaBase.VARIANT), ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Rabbit.VARIANT, 13), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Rabbit.VARIANT, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Rabbit.VARIANT, 12), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNumberToByte(DataWatcherObjectIndex.Rabbit.VARIANT, 18), ProtocolVersionsHelper.BEFORE_1_9)
 	),
@@ -421,23 +421,23 @@ public enum EntityMetadataRemapperRegistry {
 		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.Sheep.FLAGS,
 			new int[] {5}, new int[] {PeMetaBase.FLAG_SHEARED}),
 		ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Sheep.FLAGS, 13), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Sheep.FLAGS, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Sheep.FLAGS, 12), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Sheep.FLAGS, 16), ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	POLAR_BEAR(NetworkEntityType.POLAR_BEAR, AGEABLE,
 		//TODO: Just like horses, disappears. Perhaps send a unknown entitystatus aswell? Meh.
 		new Entry(new PeSimpleFlagRemapper(DataWatcherObjectIndex.PolarBear.STANDING_UP, PeMetaBase.FLAG_REARING), ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.PolarBear.STANDING_UP, 13), ProtocolVersionsHelper.RANGE__1_10__1_13)
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.PolarBear.STANDING_UP, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_1)
 	),
-	VILLAGER(NetworkEntityType.VILLAGER, EntityMetadataRemapperRegistry.AGEABLE,
+	VILLAGER(NetworkEntityType.VILLAGER, AGEABLE,
 		new Entry(new IndexValueRemapper<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Villager.PROFESSION, PeMetaBase.VARIANT) {
 			@Override
 			public DataWatcherObjectSVarInt remapValue(DataWatcherObjectVarInt object) {
 				return new DataWatcherObjectSVarInt(object.getValue() == 5 ? 0 : object.getValue()); //TODO: use regular remapper when nitwit is implemented.
 			}
 		}, ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Villager.PROFESSION, 13), ProtocolVersionsHelper.RANGE__1_10__1_12_2),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Villager.PROFESSION, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Villager.PROFESSION, 12), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Villager.PROFESSION, 16), ProtocolVersionsHelper.BEFORE_1_9)
 	),
@@ -472,7 +472,7 @@ public enum EntityMetadataRemapperRegistry {
 //				return new DataWatcherObjectByte((byte) MinecraftData.getBlockDataFromState(object.getValue()));
 //			}
 //		}, ProtocolVersionsHelper.BEFORE_1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Enderman.SCREAMING, 13), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Enderman.SCREAMING, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Enderman.SCREAMING, 12), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.Enderman.SCREAMING, 18), ProtocolVersionsHelper.BEFORE_1_9)
 	),
@@ -493,14 +493,14 @@ public enum EntityMetadataRemapperRegistry {
 	SILVERFISH(NetworkEntityType.SILVERFISH, INSENTIENT),
 	ENDERMITE(NetworkEntityType.ENDERMITE, INSENTIENT),
 	ENDER_DRAGON(NetworkEntityType.ENDER_DRAGON, INSENTIENT,
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EnderDragon.PHASE, 12), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EnderDragon.PHASE, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EnderDragon.PHASE, 11), ProtocolVersionsHelper.ALL_1_9)
 	),
 	SNOWMAN(NetworkEntityType.SNOWMAN, INSENTIENT,
 		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.Snowman.NO_HAT,
 				new int[] {5}, new int[] {-PeMetaBase.FLAG_SHEARED}
 		), ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Snowman.NO_HAT, 12), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Snowman.NO_HAT, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Snowman.NO_HAT, 11), ProtocolVersionsHelper.ALL_1_9)
 	),
 	ZOMBIE(NetworkEntityType.ZOMBIE, INSENTIENT,
@@ -520,15 +520,15 @@ public enum EntityMetadataRemapperRegistry {
 				});
 			}
 		}, ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Zombie.BABY, 12), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Zombie.BABY, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Zombie.BABY, 11), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.Zombie.BABY, 12), ProtocolVersionsHelper.BEFORE_1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Zombie.HANDS_UP, 14), ProtocolVersionsHelper.RANGE__1_11__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Zombie.HANDS_UP, 14), ProtocolVersionsHelper.RANGE__1_11__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Zombie.HANDS_UP, 15), ProtocolVersion.MINECRAFT_1_10),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Zombie.HANDS_UP, 14), ProtocolVersionsHelper.ALL_1_9)
 	),
 	ZOMBIE_VILLAGER(NetworkEntityType.ZOMBIE_VILLAGER, ZOMBIE,
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ZombieVillager.CONVERTING, 15), ProtocolVersionsHelper.RANGE__1_11__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ZombieVillager.CONVERTING, 15), ProtocolVersionsHelper.RANGE__1_11__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ZombieVillager.CONVERTING, 14), ProtocolVersion.MINECRAFT_1_10),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ZombieVillager.CONVERTING, 13), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.ZombieVillager.CONVERTING, 14), ProtocolVersionsHelper.BEFORE_1_9)
@@ -536,7 +536,7 @@ public enum EntityMetadataRemapperRegistry {
 	HUSK(NetworkEntityType.HUSK, ZOMBIE),
 	ZOMBIE_PIGMAN(NetworkEntityType.ZOMBIE_PIGMAN, ZOMBIE),
 	BLAZE(NetworkEntityType.BLAZE, INSENTIENT,
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Blaze.ON_FIRE, 12), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Blaze.ON_FIRE, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Blaze.ON_FIRE, 11), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Blaze.ON_FIRE, 16), ProtocolVersionsHelper.BEFORE_1_9)
 	),
@@ -544,7 +544,7 @@ public enum EntityMetadataRemapperRegistry {
 		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.Spider.CLIMBING,
 			new int[] {1}, new int[] {PeMetaBase.FLAG_CLIMBING}
 		), ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Spider.CLIMBING, 12), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Spider.CLIMBING, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Spider.CLIMBING, 11), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Spider.CLIMBING, 16), ProtocolVersionsHelper.BEFORE_1_9)
 	),
@@ -552,18 +552,18 @@ public enum EntityMetadataRemapperRegistry {
 	CREEPER(NetworkEntityType.CREEPER, INSENTIENT,
 		new Entry(new PeSimpleFlagRemapper(DataWatcherObjectIndex.Creeper.IGNITED, PeMetaBase.FLAG_IGNITED), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new PeSimpleFlagRemapper(DataWatcherObjectIndex.Creeper.POWERED, PeMetaBase.FLAG_CHARGED), ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Creeper.STATE, 12), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Creeper.STATE, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Creeper.STATE, 11), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNumberToByte(DataWatcherObjectIndex.Creeper.STATE, 16), ProtocolVersionsHelper.BEFORE_1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Creeper.POWERED, 13), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Creeper.POWERED, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Creeper.POWERED, 12), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.Creeper.POWERED, 17), ProtocolVersionsHelper.BEFORE_1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Creeper.IGNITED, 14), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Creeper.IGNITED, 14), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Creeper.IGNITED, 13), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.Creeper.IGNITED, 18), ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	GHAST(NetworkEntityType.GHAST, INSENTIENT,
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Ghast.ATTACKING, 12), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Ghast.ATTACKING, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Ghast.ATTACKING, 11), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.Ghast.ATTACKING, 16), ProtocolVersionsHelper.BEFORE_1_9)
 	),
@@ -583,13 +583,13 @@ public enum EntityMetadataRemapperRegistry {
 				}
 			}
 		}, ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Slime.SIZE, 12), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Slime.SIZE, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Slime.SIZE, 11), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNumberToByte(DataWatcherObjectIndex.Slime.SIZE, 16), ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	MAGMA_CUBE(NetworkEntityType.MAGMA_CUBE, SLIME),
 	BASE_SKELETON(NetworkEntityType.BASE_SKELETON, INSENTIENT,
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Skeleton.SWINGING_HANDS, 12), ProtocolVersionsHelper.RANGE__1_11__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Skeleton.SWINGING_HANDS, 12), ProtocolVersionsHelper.RANGE__1_11__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Skeleton.SWINGING_HANDS, 13), ProtocolVersion.MINECRAFT_1_10),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Skeleton.SWINGING_HANDS, 12), ProtocolVersionsHelper.ALL_1_9)
 	),
@@ -603,12 +603,12 @@ public enum EntityMetadataRemapperRegistry {
 		new Entry(new FirstDataWatcherUpdateObjectAddRemapper(12, new DataWatcherObjectVarInt(2)), ProtocolVersion.MINECRAFT_1_10)
 	),
 	WITCH(NetworkEntityType.WITCH, INSENTIENT,
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Witch.DRINKING_POTION, 12), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Witch.DRINKING_POTION, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Witch.DRINKING_POTION, 11), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.Witch.DRINKING_POTION, 16), ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	IRON_GOLEM(NetworkEntityType.IRON_GOLEM, INSENTIENT,
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.IronGolem.PLAYER_CREATED, 12), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.IronGolem.PLAYER_CREATED, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.IronGolem.PLAYER_CREATED, 11), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.IronGolem.PLAYER_CREATED, 16), ProtocolVersionsHelper.BEFORE_1_9)
 	),
@@ -621,7 +621,7 @@ public enum EntityMetadataRemapperRegistry {
 		}, ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Shulker.SHIELD_HEIGHT, PeMetaBase.SHULKER_HEIGHT), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperDirectionToByte(DataWatcherObjectIndex.Shulker.DIRECTION, PeMetaBase.SHULKER_DIRECTION), ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Shulker.DIRECTION, 12), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Shulker.DIRECTION, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Shulker.DIRECTION, 11), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapper<DataWatcherObjectOptionalPosition>(DataWatcherObjectIndex.Shulker.ATTACHMENT_POS, PeMetaBase.SHULKER_ATTACH_POS) {
 			@Override
@@ -629,32 +629,32 @@ public enum EntityMetadataRemapperRegistry {
 				return new DataWatcherObjectVector3vi(object.getValue());
 			}
 		}, ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Shulker.ATTACHMENT_POS, 13), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Shulker.ATTACHMENT_POS, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Shulker.ATTACHMENT_POS, 12), ProtocolVersionsHelper.ALL_1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Shulker.SHIELD_HEIGHT, 14), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Shulker.SHIELD_HEIGHT, 14), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Shulker.SHIELD_HEIGHT, 13), ProtocolVersionsHelper.ALL_1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Shulker.COLOR, 15), ProtocolVersionsHelper.RANGE__1_11__1_13)
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Shulker.COLOR, 15), ProtocolVersionsHelper.RANGE__1_11__1_13_1)
 	),
 	WITHER(NetworkEntityType.WITHER, INSENTIENT,
 		new Entry(new IndexValueRemapperNumberToSVarLong(DataWatcherObjectIndex.Wither.TARGET1, PeMetaBase.WITHER_TARGET1), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNumberToSVarLong(DataWatcherObjectIndex.Wither.TARGET2, PeMetaBase.WITHER_TARGET2), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNumberToSVarLong(DataWatcherObjectIndex.Wither.TARGET3, PeMetaBase.WITHER_TARGET3), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Wither.INVULNERABLE_TIME, PeMetaBase.INVULNERABLE_TIME), ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wither.TARGET1, 12), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wither.TARGET1, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wither.TARGET1, 11), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Wither.TARGET1, 17), ProtocolVersionsHelper.BEFORE_1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wither.TARGET2, 13), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wither.TARGET2, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wither.TARGET2, 12), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Wither.TARGET2, 18), ProtocolVersionsHelper.BEFORE_1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wither.TARGET3, 14), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wither.TARGET3, 14), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wither.TARGET3, 13), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Wither.TARGET3, 19), ProtocolVersionsHelper.BEFORE_1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wither.INVULNERABLE_TIME, 15), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wither.INVULNERABLE_TIME, 15), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wither.INVULNERABLE_TIME, 14), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Wither.INVULNERABLE_TIME, 20), ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	GUARDIAN(NetworkEntityType.GUARDIAN, INSENTIENT,
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Guardian.SPIKES, 12), ProtocolVersionsHelper.RANGE__1_11__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Guardian.SPIKES, 12), ProtocolVersionsHelper.RANGE__1_11__1_13_1),
 		new Entry(new IndexValueRemapper<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Guardian.SPIKES, 12) {
 			@Override
 			public DataWatcherObject<?> remapValue(DataWatcherObjectBoolean object) {
@@ -673,54 +673,55 @@ public enum EntityMetadataRemapperRegistry {
 				return new DataWatcherObjectInt(object.getValue() ? (byte) 2 : (byte) 0);
 			}
 		}, ProtocolVersion.MINECRAFT_1_8),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Guardian.TARGET_ID, 13), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Guardian.TARGET_ID, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Guardian.TARGET_ID, 12), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Guardian.TARGET_ID, 17), ProtocolVersion.MINECRAFT_1_8)
 	),
 	ELDER_GUARDIAN(NetworkEntityType.ELDER_GUARDIAN, GUARDIAN),
 	VINDICATOR(NetworkEntityType.VINDICATOR, INSENTIENT,
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Vindicator.HAS_TARGET, 12), ProtocolVersionsHelper.RANGE__1_11__1_13)
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Vindicator.HAS_TARGET, 12), ProtocolVersionsHelper.RANGE__1_11__1_13_1)
 	),
 	EVOKER(NetworkEntityType.EVOKER, INSENTIENT,
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Evoker.SPELL, 12), ProtocolVersionsHelper.RANGE__1_11__1_13)
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Evoker.SPELL, 12), ProtocolVersionsHelper.RANGE__1_11__1_13_1)
 	),
 	ILLUSIONER(NetworkEntityType.ILLUSIONER, EVOKER),
 	VEX(NetworkEntityType.VEX, INSENTIENT,
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Vex.FLAGS, 12), ProtocolVersionsHelper.RANGE__1_11__1_13)
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Vex.FLAGS, 12), ProtocolVersionsHelper.RANGE__1_11__1_13_1)
 	),
 	PARROT(NetworkEntityType.PARROT, TAMEABLE,
 		new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Parrot.VARIANT, PeMetaBase.VARIANT), ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Parrot.VARIANT, 15), ProtocolVersionsHelper.RANGE__1_12__1_13)
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Parrot.VARIANT, 15), ProtocolVersionsHelper.RANGE__1_12__1_13_1)
 	),
 	ARMOR_STAND_MOB(NetworkEntityType.ARMOR_STAND_MOB, ARMOR_STAND),
 	//TODO Remap these better for old version? Hand over some meta? Eg slime size for phantom or so.
 	PHANTOM(NetworkEntityType.PHANTOM, INSENTIENT,
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Phantom.SIZE, 12), ProtocolVersion.MINECRAFT_1_13)
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Phantom.SIZE, 12), ProtocolVersionsHelper.AFTER_1_12_2)
 	),
 	DOLPHIN(NetworkEntityType.DOLPHIN, INSENTIENT),
 	BASE_FISH(NetworkEntityType.BASE_FISH, INSENTIENT,
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.BaseFish.FROM_BUCKET, 12), ProtocolVersion.MINECRAFT_1_13)
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.BaseFish.FROM_BUCKET, 12), ProtocolVersionsHelper.AFTER_1_12_2)
 	),
 	COD(NetworkEntityType.COD, BASE_FISH),
 	PUFFERFISH(NetworkEntityType.PUFFERFISH, BASE_FISH,
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.PufferFish.PUFF_STATE, 13), ProtocolVersion.MINECRAFT_1_13)
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.PufferFish.PUFF_STATE, 13), ProtocolVersionsHelper.AFTER_1_12_2)
 	),
 	SALMON(NetworkEntityType.SALMON, BASE_FISH),
 	TROPICAL_FISH(NetworkEntityType.TROPICAL_FISH, BASE_FISH,
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.TropicalFish.VARIANT, 13), ProtocolVersion.MINECRAFT_1_13)
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.TropicalFish.VARIANT, 13), ProtocolVersionsHelper.AFTER_1_12_2)
 	),
 	TURTLE(NetworkEntityType.TURTLE, AGEABLE,
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Turtle.HOME_POS, 13), ProtocolVersion.MINECRAFT_1_13),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Turtle.HAS_EGG, 14), ProtocolVersion.MINECRAFT_1_13),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Turtle.LAYING_EGG, 15), ProtocolVersion.MINECRAFT_1_13),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Turtle.TRAVEL_POS, 16), ProtocolVersion.MINECRAFT_1_13),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Turtle.GOING_HOME, 17), ProtocolVersion.MINECRAFT_1_13),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Turtle.TRAVELING, 18), ProtocolVersion.MINECRAFT_1_13)
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Turtle.HOME_POS, 13), ProtocolVersionsHelper.AFTER_1_12_2),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Turtle.HAS_EGG, 14), ProtocolVersionsHelper.AFTER_1_12_2),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Turtle.LAYING_EGG, 15), ProtocolVersionsHelper.AFTER_1_12_2),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Turtle.TRAVEL_POS, 16), ProtocolVersionsHelper.AFTER_1_12_2),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Turtle.GOING_HOME, 17), ProtocolVersionsHelper.AFTER_1_12_2),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Turtle.TRAVELING, 18), ProtocolVersionsHelper.AFTER_1_12_2)
 	),
 	DROWNED(NetworkEntityType.DROWNED, ZOMBIE,
-			new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Drowned.HAS_TARGET, 15), ProtocolVersion.MINECRAFT_1_13)
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Drowned.HAS_TARGET, 15), ProtocolVersionsHelper.AFTER_1_12_2)
 	),
-	BOAT(NetworkEntityType.BOAT, EntityMetadataRemapperRegistry.ENTITY,
+	// Objects
+	BOAT(NetworkEntityType.BOAT, ENTITY,
 		new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Boat.VARIANT, PeMetaBase.VARIANT), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapper<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Boat.LEFT_PADDLE, PeMetaBase.PADDLE_TIME_LEFT) {
 			@Override
@@ -734,27 +735,27 @@ public enum EntityMetadataRemapperRegistry {
 				//TODO: Actually increment and send correct 'paddletime'.
 				return new DataWatcherObjectFloatLe(object.getValue() ? 0.05f: 0f);
 			}},ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Boat.TIME_SINCE_LAST_HIT, 6), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Boat.TIME_SINCE_LAST_HIT, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Boat.TIME_SINCE_LAST_HIT, 5), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Boat.TIME_SINCE_LAST_HIT, 17), ProtocolVersionsHelper.BEFORE_1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Boat.FORWARD_DIRECTION, 7), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Boat.FORWARD_DIRECTION, 7), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Boat.FORWARD_DIRECTION, 6), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Boat.FORWARD_DIRECTION, 18), ProtocolVersionsHelper.BEFORE_1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Boat.DAMAGE_TAKEN, 8), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Boat.DAMAGE_TAKEN, 8), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Boat.DAMAGE_TAKEN, 7), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Boat.DAMAGE_TAKEN, 19), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1)),
 		new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Boat.DAMAGE_TAKEN, 19), ProtocolVersionsHelper.BEFORE_1_6),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Boat.VARIANT, 9), ProtocolVersionsHelper.RANGE__1_10__1_13),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Boat.LEFT_PADDLE, 10), ProtocolVersionsHelper.RANGE__1_10__1_13),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Boat.RIGHT_PADDLE, 11), ProtocolVersionsHelper.RANGE__1_10__1_13),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Boat.SPLASH_TIMER, 12), ProtocolVersion.MINECRAFT_1_13)
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Boat.VARIANT, 9), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Boat.LEFT_PADDLE, 10), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Boat.RIGHT_PADDLE, 11), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Boat.SPLASH_TIMER, 12), ProtocolVersionsHelper.AFTER_1_12_2)
 	),
 	TNT(NetworkEntityType.TNT, ENTITY,
 		new Entry(new PeSimpleFlagAdder(
 			new int[] {PeMetaBase.FLAG_IGNITED}, new boolean[] {true}
 		), ProtocolVersion.MINECRAFT_PE),
 		new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Tnt.FUSE, PeMetaBase.FUSE_LENGTH), ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Tnt.FUSE, 6), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Tnt.FUSE, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Tnt.FUSE, 5), ProtocolVersionsHelper.ALL_1_9)
 	),
 	SNOWBALL(NetworkEntityType.SNOWBALL, ENTITY),
@@ -763,14 +764,14 @@ public enum EntityMetadataRemapperRegistry {
 	FIRECHARGE(NetworkEntityType.FIRECHARGE, ENTITY),
 	ENDERPEARL(NetworkEntityType.ENDERPEARL, ENTITY),
 	WITHER_SKULL(NetworkEntityType.WITHER_SKULL, FIREBALL,
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.WitherSkull.CHARGED, 6), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.WitherSkull.CHARGED, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.WitherSkull.CHARGED, 5), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.WitherSkull.CHARGED, 10), ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	FALLING_OBJECT(NetworkEntityType.FALLING_OBJECT, ENTITY),
 	ENDEREYE(NetworkEntityType.ENDEREYE, ENTITY),
 	POTION(NetworkEntityType.POTION, ENTITY,
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Potion.ITEM, 6), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Potion.ITEM, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Potion.ITEM, 7), ProtocolVersion.MINECRAFT_1_10),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Potion.ITEM, 5), ProtocolVersionsHelper.ALL_1_9)
 	),
@@ -778,30 +779,30 @@ public enum EntityMetadataRemapperRegistry {
 	LEASH_KNOT(NetworkEntityType.LEASH_KNOT, ENTITY),
 	FISHING_FLOAT(NetworkEntityType.FISHING_FLOAT, ENTITY,
 		new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.FishingFloat.HOOKED_ENTITY, PeMetaBase.OWNER), ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.FishingFloat.HOOKED_ENTITY, 6), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.FishingFloat.HOOKED_ENTITY, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.FishingFloat.HOOKED_ENTITY, 5), ProtocolVersionsHelper.ALL_1_9)
 	),
 	ITEM(NetworkEntityType.ITEM, ENTITY,
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Item.ITEM, 6), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Item.ITEM, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Item.ITEM, 5), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Item.ITEM, 10), ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	MINECART(NetworkEntityType.MINECART, ENTITY, Utils.concatArrays(
 		new Entry[] {
 				//PE TODO: Damagetime and shake direction & block remapping :F
-				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.SHAKING_POWER, 6), ProtocolVersionsHelper.RANGE__1_10__1_13),
+				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.SHAKING_POWER, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.SHAKING_POWER, 5), ProtocolVersionsHelper.ALL_1_9),
 				new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Minecart.SHAKING_POWER, 17), ProtocolVersionsHelper.BEFORE_1_9),
-				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.SHAKING_DIRECTION, 7), ProtocolVersionsHelper.RANGE__1_10__1_13),
+				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.SHAKING_DIRECTION, 7), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.SHAKING_DIRECTION, 6), ProtocolVersionsHelper.ALL_1_9),
 				new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Minecart.SHAKING_DIRECTION, 18), ProtocolVersionsHelper.BEFORE_1_9),
-				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.DAMAGE_TAKEN, 8), ProtocolVersionsHelper.RANGE__1_10__1_13),
+				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.DAMAGE_TAKEN, 8), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.DAMAGE_TAKEN, 7), ProtocolVersionsHelper.ALL_1_9),
 				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.DAMAGE_TAKEN, 19), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1)),
 				new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Minecart.DAMAGE_TAKEN, 19), ProtocolVersionsHelper.BEFORE_1_6),
 				//TODO Block Remapping for PE/
 				//new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Minecart.BLOCK, PeMetaBase.MINECART_BLOCK), ProtocolVersion.MINECRAFT_PE),
-				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.BLOCK, 9), ProtocolVersion.MINECRAFT_1_13)
+				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.BLOCK, 9), ProtocolVersionsHelper.AFTER_1_12_2)
 			},
 			Entry.createPerVersion(
 				version ->
@@ -844,20 +845,21 @@ public enum EntityMetadataRemapperRegistry {
 			new Entry[] {
 				new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Minecart.BLOCK_Y, PeMetaBase.MINECART_OFFSET), ProtocolVersion.MINECRAFT_PE),
 				new Entry(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.Minecart.SHOW_BLOCK, PeMetaBase.MINECART_DISPLAY), ProtocolVersion.MINECRAFT_PE),
-				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.BLOCK_Y, 10), ProtocolVersionsHelper.RANGE__1_10__1_13),
+				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.BLOCK_Y, 10), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.BLOCK_Y, 9), ProtocolVersionsHelper.ALL_1_9),
 				new Entry(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Minecart.BLOCK_Y, 21), ProtocolVersionsHelper.BEFORE_1_9),
-				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.SHOW_BLOCK, 11), ProtocolVersionsHelper.RANGE__1_10__1_13),
+				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.SHOW_BLOCK, 11), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.SHOW_BLOCK, 10), ProtocolVersionsHelper.ALL_1_9),
 				new Entry(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.Minecart.SHOW_BLOCK, 22), ProtocolVersionsHelper.BEFORE_1_9)
-			}
-		)),
-	MINECART_CHEST(NetworkEntityType.MINECART_CHEST, EntityMetadataRemapperRegistry.MINECART),
-	MINECART_FURNACE(NetworkEntityType.MINECART_FURNACE, EntityMetadataRemapperRegistry.MINECART,
+		}
+	)),
+	MINECART_CHEST(NetworkEntityType.MINECART_CHEST, MINECART),
+	MINECART_FURNACE(NetworkEntityType.MINECART_FURNACE, MINECART,
 		new Entry(new DataWatcherObjectRemapper() {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				//Simulate furnaceMinecart in Pocket.
+				//TODO Fix id shizzle.
 				remapped.put(PeMetaBase.MINECART_BLOCK, new DataWatcherObjectSVarInt(61));
 				DataWatcherObjectIndex.MinecartFurnace.POWERED.getValue(original).ifPresent(boolWatcher -> {if(boolWatcher.getValue()) {
 					remapped.put(PeMetaBase.MINECART_BLOCK, new DataWatcherObjectSVarInt(62));
@@ -866,12 +868,12 @@ public enum EntityMetadataRemapperRegistry {
 				remapped.put(PeMetaBase.MINECART_DISPLAY, new DataWatcherObjectByte((byte) 1));
 			}
 		}, ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.MinecartFurnace.POWERED, 12), ProtocolVersionsHelper.RANGE__1_10__1_12_2),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.MinecartFurnace.POWERED, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.MinecartFurnace.POWERED, 11), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.MinecartFurnace.POWERED, 16), ProtocolVersionsHelper.BEFORE_1_9)
 	),
-	MINECART_TNT(NetworkEntityType.MINECART_TNT, EntityMetadataRemapperRegistry.MINECART),
-	MINECART_SPAWNER(NetworkEntityType.MINECART_MOB_SPAWNER, EntityMetadataRemapperRegistry.MINECART,
+	MINECART_TNT(NetworkEntityType.MINECART_TNT, MINECART),
+	MINECART_SPAWNER(NetworkEntityType.MINECART_MOB_SPAWNER, MINECART,
 			new Entry(new DataWatcherObjectRemapper() {
 				@Override
 				public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
@@ -881,14 +883,14 @@ public enum EntityMetadataRemapperRegistry {
 					//remapped.put(PeMetaBase.MINECART_DISPLAY, new DataWatcherObjectByte((byte) 1));
 				}
 			}, ProtocolVersion.MINECRAFT_PE)),
-	MINECART_HOPPER(NetworkEntityType.MINECART_HOPPER, EntityMetadataRemapperRegistry.MINECART),
-	MINECART_COMMAND(NetworkEntityType.MINECART_COMMAND, EntityMetadataRemapperRegistry.MINECART,
+	MINECART_HOPPER(NetworkEntityType.MINECART_HOPPER, MINECART),
+	MINECART_COMMAND(NetworkEntityType.MINECART_COMMAND, MINECART,
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.MinecartCommand.COMMAND, PeMetaBase.COMMAND_COMMAND), ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.MinecartCommand.COMMAND, 12), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.MinecartCommand.COMMAND, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.MinecartCommand.COMMAND, 11), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.MinecartCommand.COMMAND, 23), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_8)),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.MinecartCommand.LAST_OUTPUT, PeMetaBase.COMMAND_LAST_OUTPUT), ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.MinecartCommand.LAST_OUTPUT, 13), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.MinecartCommand.LAST_OUTPUT, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.MinecartCommand.LAST_OUTPUT, 12), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.MinecartCommand.LAST_OUTPUT, 24), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_8))
 	),
@@ -896,28 +898,31 @@ public enum EntityMetadataRemapperRegistry {
 		new Entry(new PeFlagRemapper(DataWatcherObjectIndex.Arrow.CIRTICAL,
 			new int[] {1}, new int[] {PeMetaBase.FLAG_CRITICAL}
 		), ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Arrow.CIRTICAL, 6), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Arrow.CIRTICAL, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Arrow.CIRTICAL, 5), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Arrow.CIRTICAL, 15), ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	SPECTRAL_ARROW(NetworkEntityType.SPECTRAL_ARROW, ARROW),
 	TIPPED_ARROW(NetworkEntityType.TIPPED_ARROW, ARROW,
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.TippedArrow.COLOR, 7), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.TippedArrow.COLOR, 7), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.TippedArrow.COLOR, 6), ProtocolVersionsHelper.ALL_1_9)
+	),
+	THROWN_TRIDENT(NetworkEntityType.THROWN_TRIDENT, ARROW,
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Trident.LOYALTY, 7), ProtocolVersionsHelper.AFTER_1_12_2)
 	),
 	FIREWORK(NetworkEntityType.FIREWORK, ENTITY,
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Firework.ITEM, PeMetaBase.FIREWORK_TYPE), ProtocolVersion.MINECRAFT_PE),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Firework.ITEM, 6), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Firework.ITEM, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Firework.ITEM, 5), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Firework.ITEM, 8), ProtocolVersionsHelper.BEFORE_1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Firework.USER, 7), ProtocolVersionsHelper.RANGE__1_11_1__1_13)
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Firework.USER, 7), ProtocolVersionsHelper.RANGE__1_11_1__1_13_1)
 	),
 	ITEM_FRAME(NetworkEntityType.ITEM_FRAME, ENTITY,
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ItemFrame.ITEM, 6), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ItemFrame.ITEM, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ItemFrame.ITEM, 5), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ItemFrame.ITEM, 8), ProtocolVersion.MINECRAFT_1_8),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ItemFrame.ITEM, 2), ProtocolVersionsHelper.BEFORE_1_8),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ItemFrame.ROTATION, 7), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ItemFrame.ROTATION, 7), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ItemFrame.ROTATION, 6), ProtocolVersionsHelper.ALL_1_9),
 		new Entry(new IndexValueRemapperNumberToByte(DataWatcherObjectIndex.ItemFrame.ROTATION, 9), ProtocolVersion.MINECRAFT_1_8),
 		new Entry(new IndexValueRemapper<DataWatcherObjectVarInt>(DataWatcherObjectIndex.ItemFrame.ROTATION, 3) {
@@ -928,48 +933,45 @@ public enum EntityMetadataRemapperRegistry {
 		}, ProtocolVersionsHelper.BEFORE_1_8)
 	),
 	ENDER_CRYSTAL(NetworkEntityType.ENDER_CRYSTAL, ENTITY,
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EnderCrystal.TARGET, 6), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EnderCrystal.TARGET, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EnderCrystal.TARGET, 5), ProtocolVersionsHelper.ALL_1_9),
-		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EnderCrystal.SHOW_BOTTOM, 7), ProtocolVersionsHelper.RANGE__1_10__1_13),
+		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EnderCrystal.SHOW_BOTTOM, 7), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EnderCrystal.SHOW_BOTTOM, 6), ProtocolVersionsHelper.ALL_1_9)
 	),
 	ARMOR_STAND_OBJECT(NetworkEntityType.ARMOR_STAND_OBJECT, ARMOR_STAND),
 	AREA_EFFECT_CLOUD(NetworkEntityType.AREA_EFFECT_CLOUD, ENTITY, Utils.concatArrays(
 		new Entry[] {
 				new Entry(new IndexValueRemapperNumberToFloatLe(DataWatcherObjectIndex.AreaEffectCloud.RADIUS, PeMetaBase.AREA_EFFECT_RADIUS), ProtocolVersion.MINECRAFT_PE),
-				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.PARTICLE, 9), ProtocolVersion.MINECRAFT_1_13),
+				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.PARTICLE, 9), ProtocolVersionsHelper.AFTER_1_12_2),
 				//TODO: area effectcloud waiting? Particle?
 				//new Entry(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.AreaEffectCloud.PARTICLE, PeMetaBase.AREA_EFFECT_PARTICLE), ProtocolVersion.MINECRAFT_PE),
-				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.RADIUS, 6), ProtocolVersionsHelper.RANGE__1_10__1_13),
+				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.RADIUS, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.RADIUS, 5), ProtocolVersionsHelper.ALL_1_9),
-				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.COLOR, 7), ProtocolVersionsHelper.RANGE__1_10__1_13),
+				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.COLOR, 7), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.COLOR, 6), ProtocolVersionsHelper.ALL_1_9),
-				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.SINGLE_POINT, 8), ProtocolVersionsHelper.RANGE__1_10__1_13),
+				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.SINGLE_POINT, 8), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.SINGLE_POINT, 7), ProtocolVersionsHelper.ALL_1_9)
-			},
-			Entry.createPerVersion(
-				version ->
-					new DataWatcherObjectRemapper() {
-						@Override
-						public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
-							DataWatcherObjectIndex.AreaEffectCloud.PARTICLE.getValue(original).ifPresent(particleObject -> {
-								Particle particle = ParticleRemapper.remap(version, particleObject.getValue());
-								remapped.put(9, new DataWatcherObjectVarInt(particle.getId()));
-								if (particle instanceof LegacyParticle) {
-									LegacyParticle lParticle = (LegacyParticle) particleObject.getValue();
-									remapped.put(10, new DataWatcherObjectVarInt(lParticle.getFirstParameter()));
-									remapped.put(11, new DataWatcherObjectVarInt(lParticle.getSecondParameter()));
-								}
-							});
+		},
+		Entry.createPerVersion(version -> new DataWatcherObjectRemapper() {
+				@Override
+				public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
+					DataWatcherObjectIndex.AreaEffectCloud.PARTICLE.getValue(original).ifPresent(particleObject -> {
+						Particle particle = ParticleRemapper.remap(version, particleObject.getValue());
+						remapped.put(9, new DataWatcherObjectVarInt(particle.getId()));
+						if (particle instanceof LegacyParticle) {
+							LegacyParticle lParticle = (LegacyParticle) particleObject.getValue();
+							remapped.put(10, new DataWatcherObjectVarInt(lParticle.getFirstParameter()));
+							remapped.put(11, new DataWatcherObjectVarInt(lParticle.getSecondParameter()));
 						}
-					},
-				ProtocolVersionsHelper.RANGE__1_9__1_12_2
-			)
-		)),
-	SHULKER_BULLET(NetworkEntityType.SHULKER_BULLET, EntityMetadataRemapperRegistry.ENTITY),
-	LAMA_SPIT(NetworkEntityType.LAMA_SPIT, EntityMetadataRemapperRegistry.ENTITY),
-	DRAGON_FIREBALL(NetworkEntityType.DRAGON_FIREBALL, EntityMetadataRemapperRegistry.ENTITY),
-	EVOCATOR_FANGS(NetworkEntityType.EVOCATOR_FANGS, EntityMetadataRemapperRegistry.ENTITY);
+					});
+				}
+			}, ProtocolVersionsHelper.RANGE__1_9__1_12_2
+		)
+	)),
+	SHULKER_BULLET(NetworkEntityType.SHULKER_BULLET, ENTITY),
+	LAMA_SPIT(NetworkEntityType.LAMA_SPIT, ENTITY),
+	DRAGON_FIREBALL(NetworkEntityType.DRAGON_FIREBALL, ENTITY),
+	EVOCATOR_FANGS(NetworkEntityType.EVOCATOR_FANGS, ENTITY);
 
 	protected static final Map<NetworkEntityType, EntityMetadataRemapperRegistry> wtype = CollectionsUtils.makeEnumMappingEnumMap(EntityMetadataRemapperRegistry.class, NetworkEntityType.class, (e -> e.type));
 

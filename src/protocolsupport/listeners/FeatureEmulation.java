@@ -58,7 +58,7 @@ public class FeatureEmulation implements Listener {
 				event.setCancelled(true);
 				player.addPotionEffect(new PotionEffect(
 					effect.getType(), effect.getDuration(), amplifierByte,
-					effect.isAmbient(), effect.hasParticles(), effect.getColor()
+					effect.isAmbient(), effect.hasParticles(), effect.hasIcon()
 				), true);
 			}
 		}

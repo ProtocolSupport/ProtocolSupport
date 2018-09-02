@@ -13,6 +13,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.types.BlockFace;
 import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.utils.types.UsedHand;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.zplatform.itemstack.NetworkItemStack;
@@ -57,12 +58,12 @@ public class UseItem extends ServerBoundMiddlePacket {
 			case USE_CLICK_AIR: {
 				face = -1;
 				BlockFace.getById(face).modPosition(position); //Modify position to update the correct block.
-				packets.add(MiddleBlockPlace.create(position, face, 0, cX, cY, cZ));
+				packets.add(MiddleBlockPlace.create(position, face, UsedHand.MAIN, cX, cY, cZ));
 				break;
 			}
 			case USE_CLICK_BLOCK: {
 				BlockFace.getById(face).modPosition(position); //Modify position to update the correct block.
-				packets.add(MiddleBlockPlace.create(position, face, 0, cX, cY, cZ));
+				packets.add(MiddleBlockPlace.create(position, face, UsedHand.MAIN, cX, cY, cZ));
 				break;
 			}
 			case USE_DIG_BLOCK: {

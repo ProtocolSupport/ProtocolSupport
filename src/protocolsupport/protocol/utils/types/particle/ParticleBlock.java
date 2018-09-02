@@ -1,7 +1,10 @@
 package protocolsupport.protocol.utils.types.particle;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.block.FlatteningBlockId;
+import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 
 public class ParticleBlock extends Particle {
 
@@ -9,24 +12,25 @@ public class ParticleBlock extends Particle {
 		super(pId, "minecraft:block");
 	}
 
-	protected int blockstate;
-
-	public int getBlockstate() {
-		return blockstate;
+	public ParticleBlock(int pId, ProtocolVersion version, int blockdata) {
+		this(pId);
+		this.blockdata = FlatteningBlockId.REGISTRY.getTable(version).getRemap(LegacyBlockData.REGISTRY.getTable(version).getRemap(blockdata));
 	}
 
-	public void setBlockstate(int blockstate) {
-		this.blockstate = blockstate;
+	protected int blockdata;
+
+	public int getBlockData() {
+		return blockdata;
 	}
 
 	@Override
 	public void readData(ByteBuf buf) {
-		blockstate = VarNumberSerializer.readVarInt(buf);
+		blockdata = VarNumberSerializer.readVarInt(buf);
 	}
 
 	@Override
 	public void writeData(ByteBuf buf) {
-		VarNumberSerializer.writeVarInt(buf, blockstate);
+		VarNumberSerializer.writeVarInt(buf, blockdata);
 	}
 
 }

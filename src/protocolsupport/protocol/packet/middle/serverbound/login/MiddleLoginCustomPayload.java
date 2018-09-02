@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.login;
 
+import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
@@ -15,7 +16,7 @@ public abstract class MiddleLoginCustomPayload extends ServerBoundMiddlePacket {
 	}
 
 	protected int id;
-	protected byte[] data;
+	protected ByteBuf data;
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {

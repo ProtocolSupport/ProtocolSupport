@@ -9,6 +9,6 @@ public abstract class ChunkTransformerBB extends ChunkTransformer {
 		super(blockRemappingTable);
 	}
 
-	public abstract void toLegacyData(ByteBuf buffer);
+	public abstract void writeLegacyData(ByteBuf buffer);
 
 }

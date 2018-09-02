@@ -3,6 +3,8 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.api.chat.ChatAPI;
+import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
@@ -19,7 +21,7 @@ public abstract class MiddleBossBar extends ClientBoundMiddlePacket {
 
 	protected UUID uuid;
 	protected Action action;
-	protected String title;
+	protected BaseComponent title;
 	protected float percent;
 	protected int color;
 	protected int divider;
@@ -31,7 +33,7 @@ public abstract class MiddleBossBar extends ClientBoundMiddlePacket {
 		action = MiscSerializer.readVarIntEnum(serverdata, Action.CONSTANT_LOOKUP);
 		switch (action) {
 			case ADD: {
-				title = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
+				title = ChatAPI.fromJSON(StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC));
 				percent = serverdata.readFloat();
 				color = VarNumberSerializer.readVarInt(serverdata);
 				divider = VarNumberSerializer.readVarInt(serverdata);
@@ -46,7 +48,7 @@ public abstract class MiddleBossBar extends ClientBoundMiddlePacket {
 				break;
 			}
 			case UPDATE_TITLE: {
-				title = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
+				title = ChatAPI.fromJSON(StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC));
 				break;
 			}
 			case UPDATE_STYLE: {

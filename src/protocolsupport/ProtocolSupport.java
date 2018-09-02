@@ -26,9 +26,10 @@ import protocolsupport.protocol.typeremapper.basic.GenericIdRemapper;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
 import protocolsupport.protocol.typeremapper.basic.SoundRemapper;
 import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
+import protocolsupport.protocol.typeremapper.block.FlatteningBlockId;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
-import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.FlatteningItemId;
 import protocolsupport.protocol.typeremapper.itemstack.LegacyItemType;
 import protocolsupport.protocol.typeremapper.itemstack.PreFlatteningItemIdData;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapperRegistry;
@@ -53,7 +54,6 @@ import protocolsupport.protocol.utils.minecraftdata.PotionData;
 import protocolsupport.protocol.utils.minecraftdata.SoundData;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.utils.Utils;
-import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.impl.pe.PEPaletteCompiler;
@@ -96,7 +96,7 @@ public class ProtocolSupport extends JavaPlugin {
 		} else {
 			getLogger().info(MessageFormat.format("Detected {0} server implementation type", ServerPlatform.get().getIdentifier().getName()));
 		}
-		if (!ServerPlatform.get().getMiscUtils().getVersionName().equals("1.13")) {
+		if (!ServerPlatform.get().getMiscUtils().getVersionName().equals("1.13.1")) {
 			getLogger().severe("Unsupported server version " + ServerPlatform.get().getMiscUtils().getVersionName());
 			Bukkit.shutdown();
 			return;
@@ -107,7 +107,6 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(NetworkEntityType.class.getName());
 			Class.forName(DataWatcherObjectIndex.class.getName());
 			Class.forName(DataWatcherObjectIdRegistry.class.getName());
-			Class.forName(Allocator.class.getName());
 			Class.forName(BlockData.class.getName());
 			Class.forName(PotionData.class.getName());
 			Class.forName(SoundData.class.getName());
@@ -119,10 +118,12 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(LegacyEffect.class.getName());
 			Class.forName(GenericIdSkipper.class.getName());
 			Class.forName(LegacyBlockData.class.getName());
+			Class.forName(FlatteningBlockId.class.getName());
 			Class.forName(PreFlatteningBlockIdData.class.getName());
 			Class.forName(TileNBTRemapper.class.getName());
 			Class.forName(ItemMaterialLookup.class.getName());
 			Class.forName(LegacyItemType.class.getName());
+			Class.forName(FlatteningItemId.class.getName());
 			Class.forName(PreFlatteningItemIdData.class.getName());
 			Class.forName(ItemStackComplexRemapperRegistry.class.getName());
 			Class.forName(MapColorRemapper.class.getName());
@@ -137,7 +138,6 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(AbstractLoginListener.class.getName());
 			Class.forName(AbstractStatusListener.class.getName());
 			Class.forName(SoundRemapper.class.getName());
-			Class.forName(ItemStackRemapper.class.getName());
 			Class.forName(TileNBTRemapper.class.getName());
 			Class.forName(MapColorRemapper.class.getName());
 			Class.forName(LegacyPotionId.class.getName());
@@ -192,7 +192,7 @@ public class ProtocolSupport extends JavaPlugin {
 		public final String buildnumber;
 		public BuildInfo() throws IOException {
 			Properties properties = new Properties();
-			properties.load(Utils.getResource("buildinfo"));
+			properties.load(Utils.getResourceBuffered("buildinfo"));
 			buildtime = properties.getProperty("buildtime");
 			buildhost = properties.getProperty("buildhost");
 			buildnumber = properties.getProperty("buildnumber");

@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2;
 
-import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
@@ -33,7 +32,7 @@ public class CustomPayload extends MiddleCustomPayload {
 				String locale = cache.getAttributesCache().getLocale();
 				MerchantDataSerializer.writeMerchantData(
 					serializer, connection.getVersion(), locale,
-					MerchantDataSerializer.readMerchantData(Unpooled.wrappedBuffer(data), ProtocolVersionsHelper.LATEST_PC, locale)
+					MerchantDataSerializer.readMerchantData(data, ProtocolVersionsHelper.LATEST_PC, locale)
 				);
 				break;
 			}

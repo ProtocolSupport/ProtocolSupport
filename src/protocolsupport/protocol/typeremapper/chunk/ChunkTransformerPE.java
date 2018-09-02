@@ -16,7 +16,7 @@ public class ChunkTransformerPE extends ChunkTransformerBB {
 	protected static final int bitsPerBlock = 16;
 
 	@Override
-	public void toLegacyData(ByteBuf chunkdata) {
+	public void writeLegacyData(ByteBuf chunkdata) {
 		try {
 			chunkdata.writeByte(sections.length);
 			for (int i = 0; i < sections.length; i++) {

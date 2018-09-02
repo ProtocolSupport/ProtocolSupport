@@ -11,6 +11,7 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
+import protocolsupport.protocol.utils.types.UsedHand;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.zplatform.itemstack.NetworkItemStack;
@@ -53,17 +54,17 @@ public class UseEntity extends ServerBoundMiddlePacket {
 			case INTERACT_INTERACT: {
 				NetworkEntity target = cache.getWatchedEntityCache().getWatchedEntity(targetId);
 				if ((target == null) || !target.getType().isOfType(NetworkEntityType.ARMOR_STAND)) {
-					packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT, null, 0));
+					packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT, null, UsedHand.MAIN));
 				}
-				packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT_AT, new Vector(cX, cY, cZ), 0));
+				packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT_AT, new Vector(cX, cY, cZ), UsedHand.MAIN));
 				break;
 			}
 			case INTERACT_ATTACK: {
-				packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.ATTACK, null, 0));
+				packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.ATTACK, null, UsedHand.MAIN));
 				break;
 			}
 			case INTERACT_AT: {
-				packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT_AT, new Vector(cX, cY, cZ), 0));
+				packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT_AT, new Vector(cX, cY, cZ), UsedHand.MAIN));
 				break;
 			}
 		}

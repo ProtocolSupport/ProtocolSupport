@@ -19,6 +19,8 @@ public class ItemStackRemapper {
 				itemstack.setTypeId(PreFlatteningItemIdData.getIdFromLegacyCombinedId(peCombinedId));
 				itemstack.setLegacyData(PreFlatteningItemIdData.getDataFromLegacyCombinedId(peCombinedId));
 			}
+		} else {
+			itemstack.setTypeId(FlatteningItemId.REGISTRY_TO_CLIENT.getTable(version).getRemap(itemstack.getTypeId()));
 		}
 		return itemstack;
 	}
@@ -32,6 +34,8 @@ public class ItemStackRemapper {
 				itemstack.setTypeId(PreFlatteningItemIdData.getIdFromLegacyCombinedId(peCombinedId));
 				itemstack.setLegacyData(PreFlatteningItemIdData.getDataFromLegacyCombinedId(peCombinedId));
 			}
+		} else {
+			itemstack.setTypeId(FlatteningItemId.REGISTRY_FROM_CLIENT.getTable(version).getRemap(itemstack.getTypeId()));
 		}
 		return ItemStackComplexRemapperRegistry.remapFromClient(version, locale, itemstack);
 	}

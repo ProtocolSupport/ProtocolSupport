@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUseEntity;
 import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.utils.types.UsedHand;
 
 public class UseEntity extends MiddleUseEntity {
 
@@ -15,6 +16,7 @@ public class UseEntity extends MiddleUseEntity {
 	public void readFromClientData(ByteBuf clientdata) {
 		entityId = clientdata.readInt();
 		action = MiscSerializer.readByteEnum(clientdata, Action.CONSTANT_LOOKUP);
+		hand = UsedHand.MAIN;
 	}
 
 }

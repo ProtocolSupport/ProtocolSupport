@@ -9,10 +9,10 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
+import protocolsupport.protocol.typeremapper.block.FlatteningBlockId;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerBB;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerVaries;
-import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -22,7 +22,10 @@ public class Chunk extends MiddleChunk {
 		super(connection);
 	}
 
-	protected final ChunkTransformerBB transformer = new ChunkTransformerVaries(LegacyBlockData.REGISTRY.getTable(connection.getVersion()));
+	protected final ChunkTransformerBB transformer = new ChunkTransformerVaries(
+		LegacyBlockData.REGISTRY.getTable(connection.getVersion()),
+		FlatteningBlockId.REGISTRY.getTable(connection.getVersion())
+	);
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
@@ -33,10 +36,7 @@ public class Chunk extends MiddleChunk {
 		serializer.writeInt(chunkZ);
 		serializer.writeBoolean(full);
 		VarNumberSerializer.writeVarInt(serializer, bitmask);
-		Allocator.withTempBuffer(tempbuffer -> {
-			transformer.toLegacyData(tempbuffer);
-			ArraySerializer.writeByteArray(serializer, version, tempbuffer);
-		});
+		ArraySerializer.writeVarIntByteArray(serializer, transformer::writeLegacyData);
 		ArraySerializer.writeVarIntTArray(serializer, tiles, (to, tile) -> ItemStackSerializer.writeTag(to, version, TileNBTRemapper.remap(version, tile)));
 		return RecyclableSingletonList.create(serializer);
 	}

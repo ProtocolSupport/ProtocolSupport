@@ -3,7 +3,8 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_9r1_9r2_10
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockPlace;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.utils.types.UsedHand;
 
 public class UseItem extends MiddleBlockPlace {
 
@@ -13,7 +14,7 @@ public class UseItem extends MiddleBlockPlace {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		usedHand = VarNumberSerializer.readVarInt(clientdata);
+		hand = MiscSerializer.readVarIntEnum(clientdata, UsedHand.CONSTANT_LOOKUP);
 		face = -1;
 	}
 

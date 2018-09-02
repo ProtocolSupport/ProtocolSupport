@@ -7,7 +7,7 @@ import java.text.MessageFormat;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
-import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class EncapsulatedProtocolUtils {
@@ -17,12 +17,12 @@ public class EncapsulatedProtocolUtils {
 	public static EncapsulatedProtocolInfo readInfo(ByteBuf from) {
 		int encapVersion = VarNumberSerializer.readVarInt(from);
 		if (encapVersion > CURRENT_VERSION) {
-			throw new DecoderException(MessageFormat.format("Unsupported encapsulation protocol verrsion {}", encapVersion));
+			throw new DecoderException(MessageFormat.format("Unsupported encapsulation protocol version {0}", encapVersion));
 		}
 		InetSocketAddress remoteaddress = null;
 		if (from.readBoolean()) {
 			try {
-				InetAddress address = InetAddress.getByAddress(MiscSerializer.readBytes(from, VarNumberSerializer.readVarInt(from)));
+				InetAddress address = InetAddress.getByAddress(ArraySerializer.readVarIntByteArray(from));
 				remoteaddress = new InetSocketAddress(address, VarNumberSerializer.readVarInt(from));
 			} catch (UnknownHostException e) {
 				throw new DecoderException("Invalid ip address");

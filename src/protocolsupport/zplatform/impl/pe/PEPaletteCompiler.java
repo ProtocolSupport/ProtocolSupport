@@ -6,10 +6,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.bukkit.Material;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import protocolsupport.api.MaterialAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.utils.netty.Allocator;
 
 public class PEPaletteCompiler {
 
@@ -32,7 +32,7 @@ public class PEPaletteCompiler {
 	}
 
 	public void compilePaletteDefinition() {
-		ByteBuf buf = Allocator.allocateBuffer();
+		ByteBuf buf = Unpooled.buffer();
 		Arrays.stream(Material.values())
 		.filter(m -> m.isBlock())
 		.forEach(material -> {

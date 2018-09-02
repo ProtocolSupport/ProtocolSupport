@@ -4,7 +4,7 @@ import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.noop.NoopSetCompression;
-import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.EncryptionRequest;
+import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_4_5_6_7.EncryptionRequest;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r2_10_11_12r1_12r2_13.LoginDisconnect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r2_10_11_12r1_12r2_13.LoginSuccess;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopAdvancements;

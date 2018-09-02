@@ -14,7 +14,6 @@ import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerBB;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerPE;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -37,14 +36,14 @@ public class Chunk extends MiddleChunk {
 			VarNumberSerializer.writeSVarInt(serializer, chunkX);
 			VarNumberSerializer.writeSVarInt(serializer, chunkZ);
 			transformer.loadData(data, bitmask, cache.getAttributesCache().hasSkyLightInCurrentDimension(), full);
-			ByteBuf chunkdata = Allocator.allocateBuffer();
-			transformer.toLegacyData(chunkdata);
+			ByteBuf chunkdata = Unpooled.buffer();
+			transformer.writeLegacyData(chunkdata);
 			chunkdata.writeByte(0); //borders
 			VarNumberSerializer.writeSVarInt(chunkdata, 0); //extra data
 			for (NBTTagCompoundWrapper tile : tiles) {
 				ItemStackSerializer.writeTag(chunkdata, true, version, TileNBTRemapper.remap(version, tile));
 			}
-			ArraySerializer.writeByteArray(serializer, version, chunkdata);
+			ArraySerializer.writeVarIntByteArray(serializer, chunkdata);
 			return RecyclableSingletonList.create(serializer);
 		} else { //Request a full chunk.
 			InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.ChunkUpdateRequest(chunkX, chunkZ));
@@ -68,7 +67,7 @@ public class Chunk extends MiddleChunk {
 		chunkdata.writeZero(256); //Biomedata.
 		chunkdata.writeByte(0); //borders
 		VarNumberSerializer.writeSVarInt(chunkdata, 0); //extra data
-		ArraySerializer.writeByteArray(serializer, version, chunkdata);
+		ArraySerializer.writeVarIntByteArray(serializer, chunkdata);
 		return serializer;
 	}
 

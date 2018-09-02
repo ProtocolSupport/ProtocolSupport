@@ -18,9 +18,7 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.utils.netty.Allocator;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
 public class InternalPluginMessageRequest implements PluginMessageListener {
 
@@ -51,7 +49,6 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 		});
 	}
 
-	@NeedsNoArgConstructor
 	public static abstract class PluginMessageData {
 
 		protected abstract void read(ByteBuf from);
@@ -125,7 +122,7 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 	}
 
 	public static void receivePluginMessageRequest(Connection connection, PluginMessageData data) {
-		ByteBuf buf = Allocator.allocateBuffer();
+		ByteBuf buf = Unpooled.buffer();
 		try {
 			MiscSerializer.writeUUID(buf, ProtocolVersionsHelper.LATEST_PC, uuid);
 			StringSerializer.writeString(buf, ProtocolVersionsHelper.LATEST_PC, (data.getClass().getSimpleName()));

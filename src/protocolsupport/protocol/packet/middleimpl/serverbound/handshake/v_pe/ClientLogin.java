@@ -70,7 +70,7 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		clientdata.readInt();
-		ByteBuf logindata = Unpooled.wrappedBuffer(ArraySerializer.readByteArray(clientdata, connection.getVersion()));
+		ByteBuf logindata = Unpooled.wrappedBuffer(ArraySerializer.readVarIntByteArray(clientdata));
 		try {
 			Any<Key, JsonObject> chaindata = extractChainData(Utils.GSON.fromJson(
 				new InputStreamReader(new ByteBufInputStream(logindata, logindata.readIntLE())),

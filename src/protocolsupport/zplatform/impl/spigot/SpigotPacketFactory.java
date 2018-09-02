@@ -10,24 +10,24 @@ import java.util.UUID;
 
 import org.bukkit.Chunk;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_13_R1.CraftChunk;
-import org.bukkit.craftbukkit.v1_13_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_13_R2.CraftChunk;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
 import org.spigotmc.SpigotConfig;
 
 import com.google.common.collect.BiMap;
 
 import io.netty.buffer.Unpooled;
-import net.minecraft.server.v1_13_R1.*;
-import net.minecraft.server.v1_13_R1.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_13_R1.PacketPlayInFlying.PacketPlayInLook;
-import net.minecraft.server.v1_13_R1.PacketPlayInFlying.PacketPlayInPosition;
-import net.minecraft.server.v1_13_R1.PacketPlayInFlying.PacketPlayInPositionLook;
-import net.minecraft.server.v1_13_R1.PacketPlayOutEntity.PacketPlayOutEntityLook;
-import net.minecraft.server.v1_13_R1.PacketPlayOutEntity.PacketPlayOutRelEntityMove;
-import net.minecraft.server.v1_13_R1.PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook;
-import net.minecraft.server.v1_13_R1.PacketPlayOutTitle.EnumTitleAction;
-import net.minecraft.server.v1_13_R1.ServerPing.ServerData;
-import net.minecraft.server.v1_13_R1.ServerPing.ServerPingPlayerSample;
+import net.minecraft.server.v1_13_R2.*;
+import net.minecraft.server.v1_13_R2.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_13_R2.PacketPlayInFlying.PacketPlayInLook;
+import net.minecraft.server.v1_13_R2.PacketPlayInFlying.PacketPlayInPosition;
+import net.minecraft.server.v1_13_R2.PacketPlayInFlying.PacketPlayInPositionLook;
+import net.minecraft.server.v1_13_R2.PacketPlayOutEntity.PacketPlayOutEntityLook;
+import net.minecraft.server.v1_13_R2.PacketPlayOutEntity.PacketPlayOutRelEntityMove;
+import net.minecraft.server.v1_13_R2.PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook;
+import net.minecraft.server.v1_13_R2.PacketPlayOutTitle.EnumTitleAction;
+import net.minecraft.server.v1_13_R2.ServerPing.ServerData;
+import net.minecraft.server.v1_13_R2.ServerPing.ServerPingPlayerSample;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
@@ -176,7 +176,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	public Object createBlockBreakSoundPacket(Position pos, Material type) {
 		BlockDataEntry blockdataentry = BlockData.get(type);
 		return new PacketPlayOutNamedSoundEffect(
-			SoundEffect.a.getId(blockdataentry.getBreakSound()), SoundCategory.BLOCKS,
+			IRegistry.SOUND_EVENT.fromId(blockdataentry.getBreakSound()), SoundCategory.BLOCKS,
 			pos.getX(), pos.getY(), pos.getZ(),
 			(blockdataentry.getVolume() + 1.0F) / 2.0F,
 			blockdataentry.getPitch() * 0.8F
@@ -223,7 +223,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 
 	@Override
 	public Object createFakeJoinGamePacket() {
-		return new PacketPlayOutLogin(0, EnumGamemode.SURVIVAL, false, 0, EnumDifficulty.EASY, 60, WorldType.NORMAL, false);
+		return new PacketPlayOutLogin(0, EnumGamemode.SURVIVAL, false, DimensionManager.OVERWORLD, EnumDifficulty.EASY, 60, WorldType.NORMAL, false);
 	}
 
 	@Override

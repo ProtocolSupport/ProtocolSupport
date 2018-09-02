@@ -9,6 +9,7 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.EnumConstantLookups;
+import protocolsupport.protocol.utils.types.UsedHand;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -21,27 +22,27 @@ public abstract class MiddleUseEntity extends ServerBoundMiddlePacket {
 	protected int entityId;
 	protected Action action;
 	protected Vector interactedAt;
-	protected int usedHand;
+	protected UsedHand hand;
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		return RecyclableSingletonList.create(create(entityId, action, interactedAt, usedHand));
+		return RecyclableSingletonList.create(create(entityId, action, interactedAt, hand));
 	}
 
-	public static ServerBoundPacketData create(int entityId, Action action, Vector interactedAt, int usedHand) {
+	public static ServerBoundPacketData create(int entityId, Action action, Vector interactedAt, UsedHand hand) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_USE_ENTITY);
 		VarNumberSerializer.writeVarInt(creator, entityId);
 		MiscSerializer.writeVarIntEnum(creator, action);
 		switch (action) {
 			case INTERACT: {
-				VarNumberSerializer.writeVarInt(creator, usedHand);
+				MiscSerializer.writeVarIntEnum(creator, hand);
 				break;
 			}
 			case INTERACT_AT: {
 				creator.writeFloat((float) interactedAt.getX());
 				creator.writeFloat((float) interactedAt.getY());
 				creator.writeFloat((float) interactedAt.getZ());
-				VarNumberSerializer.writeVarInt(creator, usedHand);
+				MiscSerializer.writeVarIntEnum(creator, hand);
 				break;
 			}
 			case ATTACK: {

@@ -14,14 +14,14 @@ public abstract class MiddleEncryptionRequest extends ClientBoundMiddlePacket {
 	}
 
 	protected String serverId;
-	protected byte[] publicKey;
-	protected byte[] verifyToken;
+	protected ByteBuf publicKey;
+	protected ByteBuf verifyToken;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
 		serverId = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
-		publicKey = ArraySerializer.readByteArray(serverdata, ProtocolVersionsHelper.LATEST_PC);
-		verifyToken = ArraySerializer.readByteArray(serverdata, ProtocolVersionsHelper.LATEST_PC);
+		publicKey = ArraySerializer.readVarIntByteArraySlice(serverdata);
+		verifyToken = ArraySerializer.readVarIntByteArraySlice(serverdata);
 	}
 
 }

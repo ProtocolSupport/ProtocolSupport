@@ -10,7 +10,7 @@ public class KeybindData {
 	private static final HashMap<String, String> nameToKeyRepr = new HashMap<>();
 
 	static {
-		Utils.getResource(MinecraftData.getResourcePath("keybinds")).lines()
+		Utils.getResourceBuffered(MinecraftData.getResourcePath("keybinds")).lines()
 		.filter(line -> !line.isEmpty())
 		.forEach(line -> {
 			String[] split = line.split("[:]");

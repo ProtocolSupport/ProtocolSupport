@@ -144,8 +144,8 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 		if (isSkinUpdate) {
 			StringSerializer.writeString(serializer, version, "Steve");
 		}
-		ArraySerializer.writeByteArray(serializer, version, skindata);
-		ArraySerializer.writeByteArray(serializer, version, new byte[0]); //cape data
+		ArraySerializer.writeVarIntByteArray(serializer, skindata);
+		ArraySerializer.writeVarIntByteArray(serializer, new byte[0]); //cape data
 		StringSerializer.writeString(serializer, version, model.getGeometryId());
 		StringSerializer.writeString(serializer, version, model.getGeometryData());
 	}

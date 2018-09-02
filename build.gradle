@@ -21,10 +21,10 @@ plugins {
 apply from: 'helper.gradle'
 apply plugin: com.github.jengelman.gradle.plugins.shadow.ShadowPlugin
 
+
 tasks.withType(AbstractCompile) {
 	classpath += configurations.shadow
 }
-
 
 tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
@@ -38,18 +38,18 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 
 import java.text.MessageFormat
 
-File dlDepsDirC = new File('dllibsc')
-dlDepsDirC.mkdirs()
+File librariesRuntimeDirectory = new File('libraries_runtime')
+librariesRuntimeDirectory.mkdirs()
 
-File dlDepsDirS = new File('dllibss')
-dlDepsDirS.mkdirs()
+File librariesShadeDirectory = new File('libraries_shade')
+librariesShadeDirectory.mkdirs()
 
-def dlDepsC = [
-	new Tuple(
-		'https://repo.perfectdreams.net/com/destroystokyo/paper/paper/1.13-R0.1-SNAPSHOT/paper-1.13-R0.1-SNAPSHOT.jar',
-		'spigot-1.13-3.jar'
-	)
-]
+task updateRuntimeLibraries(type: UpdateLibrariesTask) {
+	directory = librariesRuntimeDirectory
+	libraries = [
+		[name: 'spigot-1.13.1-1.jar', url: 'https://www.dropbox.com/s/b0p9s2zq0xnnlye/paper-1.13.1-180.jar?dl=1']
+	]
+}
 
 def dlDepsS = [
 	new Tuple(
@@ -62,10 +62,13 @@ def dlDepsS = [
 	)
 ]
 
-task updateLibs(type: DefaultTask) {doLast{
-	dlDeps(dlDepsC, dlDepsDirC)
-	dlDeps(dlDepsS, dlDepsDirS)
-}}
+task updateShadeLibraries(type: UpdateLibrariesTask) {
+	directory = librariesShadeDirectory
+	libraries = [
+		[name: 'raknetserver-7.jar', url:'https://build.true-games.org/job/RakNetServer/27/artifact/target/RakNetServer.jar'],
+		[name: 'udpserver-2.jar', url: 'https://build.true-games.org/job/UdpServerSocketChannel/11/artifact/target/UdpServerSocketChannel.jar']
+	]
+}
 
 
 sourceSets {
@@ -89,9 +92,8 @@ repositories {
 }
 
 dependencies {
-	shadow files('buildprocessor/BuildProcessor.jar')
-	shadow fileTree(dir: dlDepsDirC, include: '*.jar')
-	compile fileTree(dir: dlDepsDirS, include: '*.jar')
+	shadow fileTree(dir: librariesRuntimeDirectory, include: '*.jar')
+	compile fileTree(dir: librariesShadeDirectory, include: '*.jar')
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 	compile group: 'it.unimi.dsi', name: 'fastutil', version: '8.1.1'
 	compile group: 'com.google.code.gson', name: 'gson', version: '2.8.0'
@@ -168,7 +170,8 @@ shadowJar {
 
 
 compileJava.dependsOn(clean)
-compileJava.dependsOn(updateLibs)
+compileJava.dependsOn(updateRuntimeLibraries)
+compileJava.dependsOn(updateShadeLibraries)
 compileJava.finalizedBy(test)
 jar.enabled = false
 jar.finalizedBy(shadowJar)

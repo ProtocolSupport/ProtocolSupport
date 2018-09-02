@@ -7,6 +7,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUseEntity;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.utils.types.UsedHand;
 
 public class UseEntity extends MiddleUseEntity {
 
@@ -21,6 +22,7 @@ public class UseEntity extends MiddleUseEntity {
 		if (action == Action.INTERACT_AT) {
 			interactedAt = new Vector(clientdata.readFloat(), clientdata.readFloat(), clientdata.readFloat());
 		}
+		hand = UsedHand.MAIN;
 	}
 
 }

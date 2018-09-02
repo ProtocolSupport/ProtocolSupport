@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
@@ -22,8 +20,6 @@ public class CustomPayload extends MiddleCustomPayload {
 		super(connection);
 	}
 
-	protected final ByteBuf buffer = Unpooled.buffer();
-
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
@@ -34,17 +30,18 @@ public class CustomPayload extends MiddleCustomPayload {
 		);
 		switch (tag) {
 			case LegacyCustomPayloadChannelName.MODERN_TRADER_LIST: {
-				buffer.clear();
 				String locale = cache.getAttributesCache().getLocale();
-				MerchantDataSerializer.writeMerchantData(
-					buffer, connection.getVersion(), locale,
-					MerchantDataSerializer.readMerchantData(Unpooled.wrappedBuffer(data), ProtocolVersionsHelper.LATEST_PC, locale)
+				ArraySerializer.writeShortByteArray(
+					serializer,
+					to -> MerchantDataSerializer.writeMerchantData(
+						to, version, locale,
+						MerchantDataSerializer.readMerchantData(data, ProtocolVersionsHelper.LATEST_PC, locale)
+					)
 				);
-				ArraySerializer.writeByteArray(serializer, version, buffer);
 				break;
 			}
 			default: {
-				ArraySerializer.writeByteArray(serializer, version, data);
+				ArraySerializer.writeShortByteArray(serializer, data);
 				break;
 			}
 		}

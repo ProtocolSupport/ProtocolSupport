@@ -4,13 +4,14 @@ import io.netty.buffer.ByteBuf;
 
 public class Particle {
 
+	protected final int id;
+
 	public Particle(int id, String name) {
 		this.id = id;
 		this.name = name;
 	}
 
 	protected String name;
-	protected int id;
 
 	public int getId() {
 		return id;

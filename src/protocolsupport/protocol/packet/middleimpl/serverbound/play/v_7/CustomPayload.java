@@ -21,7 +21,7 @@ public class CustomPayload extends AbstractCustomPayload {
 	public void readFromClientData(ByteBuf clientdata) {
 		ProtocolVersion version = connection.getVersion();
 		tag = StringSerializer.readString(clientdata, version, 20);
-		data = ArraySerializer.readByteArray(clientdata, version, Short.MAX_VALUE);
+		data = ArraySerializer.readShortByteArraySlice(clientdata, Short.MAX_VALUE);
 	}
 
 	@Override

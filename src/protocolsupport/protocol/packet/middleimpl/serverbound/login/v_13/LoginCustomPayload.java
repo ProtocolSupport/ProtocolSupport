@@ -16,7 +16,7 @@ public class LoginCustomPayload extends MiddleLoginCustomPayload {
 	public void readFromClientData(ByteBuf clientdata) {
 		id = VarNumberSerializer.readVarInt(clientdata);
 		if (clientdata.readBoolean()) {
-			data = MiscSerializer.readAllBytesWithLimit(clientdata, 1048576);
+			data = MiscSerializer.readAllBytesSlice(clientdata, 1048576);
 		} else {
 			data = null;
 		}

@@ -22,7 +22,7 @@ public class ChunkTransformerShort extends ChunkTransformerBA {
 				for (int block = 0; block < blocksInSection; block++) {
 					int dataindex = blockIdIndex + (block << 1);
 					int blockstate = storage.getBlockState(block);
-					blockstate = PreFlatteningBlockIdData.getCombinedId(blockRemappingTable.getRemap(blockstate));
+					blockstate = PreFlatteningBlockIdData.getCombinedId(blockTypeRemappingTable.getRemap(blockstate));
 					data[dataindex] = (byte) blockstate;
 					data[dataindex + 1] = (byte) (blockstate >> 8);
 				}
