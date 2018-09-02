@@ -19,6 +19,7 @@ import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.zplatform.impl.pe.PEPaletteCompiler;
 
 public class StartGame extends MiddleStartGame {
 
@@ -51,8 +52,8 @@ public class StartGame extends MiddleStartGame {
 		startgame.writeFloatLE(0); //player x
 		startgame.writeFloatLE(0); //player y
 		startgame.writeFloatLE(0); //player z
-		startgame.writeFloatLE(0); //player yaw
 		startgame.writeFloatLE(0); //player pitch
+		startgame.writeFloatLE(0); //player yaw
 		VarNumberSerializer.writeSVarInt(startgame, 0); //seed
 		VarNumberSerializer.writeSVarInt(startgame, ChangeDimension.getPeDimensionId(dimension)); //world dimension
 		VarNumberSerializer.writeSVarInt(startgame, 1); //world type (1 - infinite)
@@ -73,7 +74,7 @@ public class StartGame extends MiddleStartGame {
 		VarNumberSerializer.writeVarInt(startgame, 1); //game rules
 		StringSerializer.writeString(startgame, version, "dodaylightcycle");
 		VarNumberSerializer.writeVarInt(startgame, 1); //bool gamerule
-		startgame.writeBoolean(false);
+		startgame.writeBoolean(false); //bonus chest
 		startgame.writeBoolean(false); //player map enabled
 		startgame.writeBoolean(false); //trust players
 		VarNumberSerializer.writeSVarInt(startgame, PEAdventureSettings.GROUP_NORMAL); //permission level
@@ -91,6 +92,8 @@ public class StartGame extends MiddleStartGame {
 		startgame.writeBoolean(false); //is trial
 		startgame.writeLongLE(0); //world ticks
 		VarNumberSerializer.writeSVarInt(startgame, 0); //enchantment seed FFS MOJANG
+		VarNumberSerializer.writeVarInt(startgame, PEPaletteCompiler.getInstance().getPaletteSize());
+		startgame.writeBytes(PEPaletteCompiler.getInstance().getGlobalPaletteDefinition());
 		packets.add(startgame);
 		//Player metadata and settings update, so it won't behave strangely until metadata update is sent by server
 		packets.add(PEAdventureSettings.createPacket(cache));
