@@ -1,6 +1,7 @@
 package protocolsupport.protocol.utils.datawatcher;
 
-import java.lang.reflect.Constructor;
+import java.text.MessageFormat;
+import java.util.function.Supplier;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
@@ -17,6 +18,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectNBTTa
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalChat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalUUID;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectParticle;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
@@ -29,32 +31,32 @@ public class DataWatcherDeserializer {
 	public static final int MAX_USED_META_INDEX = 31;
 
 	@SuppressWarnings("unchecked")
-	private static final Constructor<? extends ReadableDataWatcherObject<?>>[] registry = new Constructor[256];
+	private static final Supplier<? extends ReadableDataWatcherObject<?>>[] registry = new Supplier[256];
 	static {
 		try {
-			register(DataWatcherObjectByte.class);
-			register(DataWatcherObjectVarInt.class);
-			register(DataWatcherObjectFloat.class);
-			register(DataWatcherObjectString.class);
-			register(DataWatcherObjectChat.class);
-			register(DataWatcherObjectOptionalChat.class);
-			register(DataWatcherObjectItemStack.class);
-			register(DataWatcherObjectBoolean.class);
-			register(DataWatcherObjectVector3f.class);
-			register(DataWatcherObjectPosition.class);
-			register(DataWatcherObjectOptionalPosition.class);
-			register(DataWatcherObjectDirection.class);
-			register(DataWatcherObjectOptionalUUID.class);
-			register(DataWatcherObjectBlockState.class);
-			register(DataWatcherObjectNBTTagCompound.class);
+			register(DataWatcherObjectByte::new);
+			register(DataWatcherObjectVarInt::new);
+			register(DataWatcherObjectFloat::new);
+			register(DataWatcherObjectString::new);
+			register(DataWatcherObjectChat::new);
+			register(DataWatcherObjectOptionalChat::new);
+			register(DataWatcherObjectItemStack::new);
+			register(DataWatcherObjectBoolean::new);
+			register(DataWatcherObjectVector3f::new);
+			register(DataWatcherObjectPosition::new);
+			register(DataWatcherObjectOptionalPosition::new);
+			register(DataWatcherObjectDirection::new);
+			register(DataWatcherObjectOptionalUUID::new);
+			register(DataWatcherObjectBlockState::new);
+			register(DataWatcherObjectNBTTagCompound::new);
+			register(DataWatcherObjectParticle::new);
 		} catch (Exception e) {
 			throw new RuntimeException("Exception in datawatcher init", e);
 		}
 	}
 
-	private static void register(Class<? extends ReadableDataWatcherObject<?>> clazz) throws NoSuchMethodException {
-		Constructor<? extends ReadableDataWatcherObject<?>> constr = clazz.getConstructor();
-		registry[DataWatcherObjectIdRegistry.getTypeId(clazz, ProtocolVersionsHelper.LATEST_PC)] = constr;
+	private static void register(Supplier<? extends ReadableDataWatcherObject<?>> supplier) throws NoSuchMethodException {
+		registry[DataWatcherObjectIdRegistry.getTypeId(supplier.get().getClass(), ProtocolVersionsHelper.LATEST_PC)] = supplier;
 	}
 
 	public static void decodeDataTo(ByteBuf from, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> to) {
@@ -65,11 +67,11 @@ public class DataWatcherDeserializer {
 			}
 			int type = from.readUnsignedByte();
 			try {
-				ReadableDataWatcherObject<?> object = registry[type].newInstance();
+				ReadableDataWatcherObject<?> object = registry[type].get();
 				object.readFromStream(from, version, locale);
 				to.put(key, object);
 			} catch (Exception e) {
-				throw new DecoderException("Unable to decode datawatcher object", e);
+				throw new DecoderException(MessageFormat.format("Unable to decode datawatcher object (type: {0}, index: {1})", type, key), e);
 			}
 		} while (true);
 	}

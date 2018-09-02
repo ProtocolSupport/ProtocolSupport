@@ -76,7 +76,6 @@ repositories {
 }
 
 dependencies {
-	shadow files('buildprocessor/BuildProcessor.jar')
 	shadow fileTree(dir: librariesRuntimeDirectory, include: '*.jar')
 	compile fileTree(dir: librariesShadeDirectory, include: '*.jar')
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
