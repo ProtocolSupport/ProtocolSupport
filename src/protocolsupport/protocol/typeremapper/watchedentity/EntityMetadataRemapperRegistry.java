@@ -627,7 +627,7 @@ public enum EntityMetadataRemapperRegistry {
 							Particle particle = ParticleRemapper.remap(version, particleObject.getValue());
 							remapped.put(9, new DataWatcherObjectVarInt(particle.getId()));
 							if (particle instanceof LegacyParticle) {
-								LegacyParticle lParticle = (LegacyParticle) particleObject.getValue();
+								LegacyParticle lParticle = (LegacyParticle) particle;
 								remapped.put(10, new DataWatcherObjectVarInt(lParticle.getFirstParameter()));
 								remapped.put(11, new DataWatcherObjectVarInt(lParticle.getSecondParameter()));
 							}
