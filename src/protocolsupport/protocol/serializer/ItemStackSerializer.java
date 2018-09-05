@@ -40,7 +40,7 @@ public class ItemStackSerializer {
 		} else {
 			type = from.readShort();
 		}
-		if (type < 0 || (type == 0 && version == ProtocolVersion.MINECRAFT_PE)) {
+		if ((type < 0) || ((type == 0) && (version == ProtocolVersion.MINECRAFT_PE))) {
 			//Non or empty item stacks can also be 0 in PE.
 			return NetworkItemStack.NULL;
 		}
@@ -53,7 +53,7 @@ public class ItemStackSerializer {
 		} else {
 			itemstack.setAmount(from.readByte());
 		}
-		if (version.getProtocolType() == ProtocolType.PC && version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
+		if ((version.getProtocolType() == ProtocolType.PC) && version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
 			itemstack.setLegacyData(from.readUnsignedShort());
 		}
 		if (version == ProtocolVersion.MINECRAFT_PE) {

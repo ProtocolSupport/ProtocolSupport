@@ -203,7 +203,7 @@ public class SpigotNBTTagCompoundWrapper extends NBTTagCompoundWrapper {
 
 	@Override
 	public NBTTagCompoundWrapper clone() {
-		return wrap((NBTTagCompound) tag.clone());
+		return wrap(tag.clone());
 	}
 
 	@Override

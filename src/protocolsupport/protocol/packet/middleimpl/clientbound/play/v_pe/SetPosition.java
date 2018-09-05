@@ -55,7 +55,7 @@ public class SetPosition extends MiddleSetPosition {
 		serializer.writeFloatLE((float) y);
 		serializer.writeFloatLE((float) z);
 		serializer.writeFloatLE(pitch);
-		serializer.writeFloatLE((float) yaw);
+		serializer.writeFloatLE(yaw);
 		serializer.writeFloatLE(headYaw);
 		serializer.writeByte(mode);
 		serializer.writeBoolean(false); //on ground

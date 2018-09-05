@@ -51,21 +51,10 @@ task updateRuntimeLibraries(type: UpdateLibrariesTask) {
 	]
 }
 
-def dlDepsS = [
-	new Tuple(
-		'https://build.true-games.org/job/RakNetServer/27/artifact/target/RakNetServer.jar',
-		'raknetserver-7.jar'
-	),
-	new Tuple(
-		'https://build.true-games.org/job/UdpServerSocketChannel/11/artifact/target/UdpServerSocketChannel.jar',
-		'udpserver-2.jar'
-	)
-]
-
 task updateShadeLibraries(type: UpdateLibrariesTask) {
 	directory = librariesShadeDirectory
 	libraries = [
-		[name: 'raknetserver-7.jar', url:'https://build.true-games.org/job/RakNetServer/27/artifact/target/RakNetServer.jar'],
+		[name: 'raknetserver-8.jar', url: 'https://build.true-games.org/job/RakNetServer/29/artifact/target/RakNetServer.jar'],
 		[name: 'udpserver-2.jar', url: 'https://build.true-games.org/job/UdpServerSocketChannel/11/artifact/target/UdpServerSocketChannel.jar']
 	]
 }

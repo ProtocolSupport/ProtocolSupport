@@ -21,7 +21,6 @@ import com.nimbusds.jose.crypto.factories.DefaultJWSVerifierFactory;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
-import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
@@ -69,8 +68,8 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 	@SuppressWarnings("serial")
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		System.out.println("!!!!!!!!!"  + clientdata.readInt());
-		ByteBuf logindata = Unpooled.wrappedBuffer(ArraySerializer.readVarIntByteArray(clientdata));
+		clientdata.readInt();
+		ByteBuf logindata = ArraySerializer.readVarIntByteArraySlice(clientdata);
 		try {
 			Any<Key, JsonObject> chaindata = extractChainData(Utils.GSON.fromJson(
 				new InputStreamReader(new ByteBufInputStream(logindata, logindata.readIntLE())),

@@ -17,39 +17,35 @@ public class ChunkTransformerPE extends ChunkTransformerBB {
 
 	@Override
 	public void writeLegacyData(ByteBuf chunkdata) {
-		try {
-			chunkdata.writeByte(sections.length);
-			for (int i = 0; i < sections.length; i++) {
-				chunkdata.writeByte(1); //subchunk version
-				ChunkSection section = sections[i];
-				if (section != null) {
-					BlockPalette palette = new BlockPalette();
-					chunkdata.writeByte((bitsPerBlock << 1) | flag_runtime);
-					for (int x = 0; x < 16 ; x++) {
-						for (int z = 0; z < 16; z++) {
-							for (int y = 0; y < 16; y++) {
-								chunkdata.writeShortLE(palette.getRuntimeId(getBlockState(section, x, y, z)));
-							}
+		chunkdata.writeByte(sections.length);
+		for (int i = 0; i < sections.length; i++) {
+			chunkdata.writeByte(1); //subchunk version
+			ChunkSection section = sections[i];
+			if (section != null) {
+				BlockPalette palette = new BlockPalette();
+				chunkdata.writeByte((bitsPerBlock << 1) | flag_runtime);
+				for (int x = 0; x < 16 ; x++) {
+					for (int z = 0; z < 16; z++) {
+						for (int y = 0; y < 16; y++) {
+							chunkdata.writeShortLE(palette.getRuntimeId(getBlockState(section, x, y, z)));
 						}
 					}
-					int[] blockstates = palette.getBlockStates();
-					VarNumberSerializer.writeSVarInt(chunkdata, blockstates.length);
-					for (int blockstate : blockstates) {
-						VarNumberSerializer.writeSVarInt(chunkdata, blockstate);
-					}
-				} else {
-					chunkdata.writeByte((1 << 1) | flag_runtime);
-					chunkdata.writeZero(512);
-					VarNumberSerializer.writeSVarInt(chunkdata, 1);
-					VarNumberSerializer.writeSVarInt(chunkdata, 0);
 				}
+				int[] blockstates = palette.getBlockStates();
+				VarNumberSerializer.writeSVarInt(chunkdata, blockstates.length);
+				for (int blockstate : blockstates) {
+					VarNumberSerializer.writeSVarInt(chunkdata, blockstate);
+				}
+			} else {
+				chunkdata.writeByte((1 << 1) | flag_runtime);
+				chunkdata.writeZero(512);
+				VarNumberSerializer.writeSVarInt(chunkdata, 1);
+				VarNumberSerializer.writeSVarInt(chunkdata, 0);
 			}
-			chunkdata.writeZero(512); //heightmap (will be recalculated by client anyway)
-			for (int i = 0; i < biomeData.length; i++) {
-				chunkdata.writeByte(biomeData[i]);
-			}
-		} finally {
-			chunkdata.release();
+		}
+		chunkdata.writeZero(512); //heightmap (will be recalculated by client anyway)
+		for (int i = 0; i < biomeData.length; i++) {
+			chunkdata.writeByte(biomeData[i]);
 		}
 	}
 

@@ -10,7 +10,7 @@ public class ItemStackRemapper {
 	public static NetworkItemStack remapToClient(ProtocolVersion version, String locale,  NetworkItemStack itemstack) {
 		itemstack = ItemStackComplexRemapperRegistry.remapToClient(version, locale, itemstack);
 		itemstack.setTypeId(LegacyItemType.REGISTRY.getTable(version).getRemap(itemstack.getTypeId()));
-		if (version == ProtocolVersion.MINECRAFT_PE || version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
+		if ((version == ProtocolVersion.MINECRAFT_PE) || version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
 			int legacyCombinedId = PreFlatteningItemIdData.getLegacyCombinedIdByModernId(itemstack.getTypeId());
 			itemstack.setTypeId(PreFlatteningItemIdData.getIdFromLegacyCombinedId(legacyCombinedId));
 			itemstack.setLegacyData(PreFlatteningItemIdData.getDataFromLegacyCombinedId(legacyCombinedId));
@@ -26,7 +26,7 @@ public class ItemStackRemapper {
 	}
 
 	public static NetworkItemStack remapFromClient(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
-		if (version == ProtocolVersion.MINECRAFT_PE || version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
+		if ((version == ProtocolVersion.MINECRAFT_PE) || version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
 			int legacyCombinedId = PreFlatteningItemIdData.formLegacyCombinedId(itemstack.getTypeId(), itemstack.getLegacyData());
 			itemstack.setTypeId(PreFlatteningItemIdData.getModernIdByLegacyCombinedId(legacyCombinedId));
 			if (version == ProtocolVersion.MINECRAFT_PE) {

@@ -24,7 +24,7 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 
 	private static final UUID uuid = UUID.randomUUID();
 
-	public static final String TAG = "protocolsupport:ir";
+	public static final String TAG = "ps:ir";
 
 	protected static final Map<String, Class<? extends PluginMessageData>> subchannelToClass = new HashMap<>();
 	protected static final Map<Class<? extends PluginMessageData>, BiConsumer<Connection, PluginMessageData>> handlers = new HashMap<>();

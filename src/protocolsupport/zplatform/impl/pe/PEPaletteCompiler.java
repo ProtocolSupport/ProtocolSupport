@@ -21,7 +21,7 @@ public class PEPaletteCompiler {
 		return INSTANCE;
 	}
 
-	private AtomicInteger paletteSize = new AtomicInteger();
+	private final AtomicInteger paletteSize = new AtomicInteger();
 	private byte[] globalPaletteDefinition;
 
 	public byte[] getGlobalPaletteDefinition() {

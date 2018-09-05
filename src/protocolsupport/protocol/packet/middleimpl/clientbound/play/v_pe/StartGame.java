@@ -94,6 +94,7 @@ public class StartGame extends MiddleStartGame {
 		VarNumberSerializer.writeSVarInt(startgame, 0); //enchantment seed FFS MOJANG
 		VarNumberSerializer.writeVarInt(startgame, PEPaletteCompiler.getInstance().getPaletteSize());
 		startgame.writeBytes(PEPaletteCompiler.getInstance().getGlobalPaletteDefinition());
+		StringSerializer.writeString(startgame, version, ""); //???
 		packets.add(startgame);
 		//Player metadata and settings update, so it won't behave strangely until metadata update is sent by server
 		packets.add(PEAdventureSettings.createPacket(cache));

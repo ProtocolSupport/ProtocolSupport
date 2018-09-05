@@ -12,6 +12,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.unsafe.pemetadata.PEMetaProviderSPI;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata.PeMetaBase;
 import protocolsupport.protocol.typeremapper.block.BlockIdRemappingHelper;
@@ -19,7 +20,6 @@ import protocolsupport.protocol.typeremapper.particle.ParticleRemapper;
 import protocolsupport.protocol.typeremapper.particle.legacy.LegacyParticle;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues.PEEntityData;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityLamaDataCache;
 import protocolsupport.protocol.typeremapper.watchedentity.value.IndexValueRemapper;
 import protocolsupport.protocol.typeremapper.watchedentity.value.IndexValueRemapperBooleanToByte;
 import protocolsupport.protocol.typeremapper.watchedentity.value.IndexValueRemapperDirectionToByte;
@@ -52,6 +52,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVecto
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3vi;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityDataCache;
+import protocolsupport.protocol.utils.networkentity.NetworkEntityLamaDataCache;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.protocol.utils.types.particle.Particle;
@@ -76,10 +77,11 @@ public enum EntityMetadataRemapperRegistry {
 				// = PE Nametag =
 				Optional<DataWatcherObjectOptionalChat> nameTagWatcher = DataWatcherObjectIndex.Entity.NAMETAG.getValue(original);
 				//Doing this for players makes nametags behave weird or only when close.
-				boolean doNametag = ((nameTagWatcher.isPresent()) && (entity.getType() != NetworkEntityType.PLAYER));
-				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_SHOW_NAMETAG, doNametag);
-				if (doNametag) {
-					remapped.put(PeMetaBase.NAMETAG, nameTagWatcher.get());
+				boolean doNameTag = ((nameTagWatcher.isPresent()) && (entity.getType() != NetworkEntityType.PLAYER));
+				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_SHOW_NAMETAG, doNameTag);
+				if (doNameTag) {
+					BaseComponent nameTag = nameTagWatcher.get().getValue();
+					remapped.put(PeMetaBase.NAMETAG, new DataWatcherObjectString(nameTag != null ? nameTag.toLegacyText() : ""));
 				}
 				// = PE Riding =
 				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_COLLIDE, !data.isRiding());

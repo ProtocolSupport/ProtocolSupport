@@ -26,6 +26,7 @@ public class SpigotWrapperFactory implements PlatformWrapperFactory {
 		return SpigotNBTTagCompoundWrapper.createEmpty();
 	}
 
+	@Override
 	public AbstractHandshakeListener createHandshakeListener(NetworkManagerWrapper networkmanager) {
 		return new SpigotHandshakeListener(networkmanager);
 	}
