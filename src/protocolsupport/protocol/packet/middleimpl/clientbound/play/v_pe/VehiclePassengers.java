@@ -25,7 +25,6 @@ public class VehiclePassengers extends MiddleVehiclePassengers {
 
 	public VehiclePassengers(ConnectionImpl connection) {
 		super(connection);
-		// TODO Auto-generated constructor stub
 	}
 
 	protected static final int UNLINK = 0;

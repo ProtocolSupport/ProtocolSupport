@@ -25,7 +25,6 @@ public class SpawnLiving extends MiddleSpawnLiving {
 
 	public SpawnLiving(ConnectionImpl connection) {
 		super(connection);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

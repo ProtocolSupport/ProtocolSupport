@@ -18,7 +18,6 @@ public class EntityEquipment extends MiddleEntityEquipment {
 
 	public EntityEquipment(ConnectionImpl connection) {
 		super(connection);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
