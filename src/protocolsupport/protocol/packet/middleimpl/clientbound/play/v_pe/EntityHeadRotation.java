@@ -11,7 +11,6 @@ public class EntityHeadRotation extends MiddleEntityHeadRotation {
 
 	public EntityHeadRotation(ConnectionImpl connection) {
 		super(connection);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
