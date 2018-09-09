@@ -51,6 +51,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		VarNumberSerializer.writeVarInt(serializer, 0); //?
 		serializer.writeLongLE(0); //?
 		VarNumberSerializer.writeVarInt(serializer, 0); //entity links
+		StringSerializer.writeString(serializer, version, "");
 		return RecyclableSingletonList.create(serializer);
 	}
 

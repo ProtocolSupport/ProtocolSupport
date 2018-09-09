@@ -149,6 +149,12 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		public static final int FLAG_FIRE_IMMUNE = takeNextFlag();
 		public static final int FLAG_DANCING = takeNextFlag();
 		public static final int FLAG_ENCHANTED = takeNextFlag(); //50
+		public static final int FLAG_SHOW_TRIDENT_ROPE = takeNextFlag();
+		public static final int FLAG_CONTAINER_PRIVATE = takeNextFlag();
+		public static final int FLAG_TRANSORMATION = takeNextFlag();
+		public static final int FLAG_SPIN_ATTACK = takeNextFlag();
+		public static final int FLAG_SWIMMING = takeNextFlag();
+		public static final int FLAG_BRIBED = takeNextFlag();
 
 		protected static int metaId = 0;
 		protected static int takeNextMeta() {
@@ -231,6 +237,16 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		public static final int CONTROLLING_SEAT = takeNextMeta();
 		public static final int STRENGTH = takeNextMeta();
 		public static final int MAX_STRENGTH = takeNextMeta();
+		public static final int UNKNOWN_10 = takeNextMeta();
+		public static final int LIMITED_LIFE = takeNextMeta();
+		public static final int ARMOUR_STAND_POSE = takeNextMeta();
+		public static final int END_CRYSTAL_TIME = takeNextMeta();
+		public static final int ALWAYS_SHOW_NAMETAG = takeNextMeta();
+		public static final int COLOR_2 = takeNextMeta();
+		public static final int UNKNOWN_11 = takeNextMeta();
+		public static final int SCORE = takeNextMeta();
+		public static final int BALLOON_ATTACHED = takeNextMeta();
+		public static final int PUFFERFISH_SIZE = takeNextMeta();
 
 	}
 }

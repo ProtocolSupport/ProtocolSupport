@@ -24,8 +24,12 @@ import protocolsupport.utils.Utils;
 
 public class PEDataValues {
 
+	public static String getResourcePath(String name) {
+		return "pe/" + name;
+	}
+
 	public static BufferedReader getResource(String name) {
-		return Utils.getResourceBuffered("pe/" + name);
+		return Utils.getResourceBuffered(getResourcePath(name));
 	}
 
 	private static JsonObject getFileObject(String name) {

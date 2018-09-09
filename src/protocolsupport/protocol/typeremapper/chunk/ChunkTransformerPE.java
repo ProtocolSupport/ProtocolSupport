@@ -2,6 +2,7 @@ package protocolsupport.protocol.typeremapper.chunk;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.pe.PEBlocks;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 
 public class ChunkTransformerPE extends ChunkTransformerBB {
@@ -34,13 +35,13 @@ public class ChunkTransformerPE extends ChunkTransformerBB {
 				int[] blockstates = palette.getBlockStates();
 				VarNumberSerializer.writeSVarInt(chunkdata, blockstates.length);
 				for (int blockstate : blockstates) {
-					VarNumberSerializer.writeSVarInt(chunkdata, blockstate);
+					VarNumberSerializer.writeSVarInt(chunkdata, PEBlocks.getPocketRuntimeId(blockTypeRemappingTable.getRemap(blockstate)));
 				}
 			} else {
 				chunkdata.writeByte((1 << 1) | flag_runtime);
 				chunkdata.writeZero(512);
-				VarNumberSerializer.writeSVarInt(chunkdata, 1);
-				VarNumberSerializer.writeSVarInt(chunkdata, 0);
+				VarNumberSerializer.writeSVarInt(chunkdata, 1); //Palette size
+				VarNumberSerializer.writeSVarInt(chunkdata, 0); //Air
 			}
 		}
 		chunkdata.writeZero(512); //heightmap (will be recalculated by client anyway)

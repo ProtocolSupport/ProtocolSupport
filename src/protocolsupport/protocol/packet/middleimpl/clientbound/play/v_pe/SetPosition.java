@@ -60,6 +60,10 @@ public class SetPosition extends MiddleSetPosition {
 		serializer.writeByte(mode);
 		serializer.writeBoolean(false); //on ground
 		VarNumberSerializer.writeVarLong(serializer, entity.getDataCache().getVehicleId());
+		if (mode == ANIMATION_MODE_TELEPORT) {
+			serializer.writeIntLE(0); //teleportCause
+			serializer.writeIntLE(0); //teleportItem
+		}
 		return serializer;
 	}
 

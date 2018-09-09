@@ -13,6 +13,8 @@ public class LoginSuccess extends MiddleLoginSuccess {
 		super(connection);
 	}
 
+	public static final int PLAYER_SPAWN = 3;
+
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		return RecyclableSingletonList.create(createPlayStatus(0));

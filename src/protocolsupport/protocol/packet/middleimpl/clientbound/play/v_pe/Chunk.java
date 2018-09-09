@@ -9,6 +9,7 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
+import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerBB;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerPE;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
@@ -23,7 +24,7 @@ public class Chunk extends MiddleChunk {
 		super(connection);
 	}
 
-	private final ChunkTransformerBB transformer = new ChunkTransformerPE(null);
+	private final ChunkTransformerBB transformer = new ChunkTransformerPE(LegacyBlockData.REGISTRY.getTable(connection.getVersion()));
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
@@ -37,7 +38,6 @@ public class Chunk extends MiddleChunk {
 			ArraySerializer.writeVarIntByteArray(serializer, chunkdata -> {
 				transformer.writeLegacyData(chunkdata);
 				chunkdata.writeByte(0); //borders
-				VarNumberSerializer.writeSVarInt(chunkdata, 0); //extra data
 				for (NBTTagCompoundWrapper tile : tiles) {
 					ItemStackSerializer.writeTag(chunkdata, true, version, TileNBTRemapper.remap(version, tile));
 				}
@@ -54,7 +54,7 @@ public class Chunk extends MiddleChunk {
 		VarNumberSerializer.writeSVarInt(serializer, chunkX);
 		VarNumberSerializer.writeSVarInt(serializer, chunkZ);
 		ArraySerializer.writeVarIntByteArray(serializer, chunkdata -> {
-			chunkdata.writeByte(1); //1st section
+			chunkdata.writeByte(1); //1 section
 		    chunkdata.writeByte(1); //New subchunk version!
 		    //VarNumberSerializer.writeVarInt(chunkdata, 0); //blockstorage count (first is blocks second is water, we only do first for now) TODO: new beta, write zero and be done?
 		    chunkdata.writeByte((1 << 1) | 1);  //Runtimeflag and palette id.
@@ -64,7 +64,6 @@ public class Chunk extends MiddleChunk {
 			chunkdata.writeZero(512); //heightmap.
 			chunkdata.writeZero(256); //Biomedata.
 			chunkdata.writeByte(0); //borders
-			VarNumberSerializer.writeSVarInt(chunkdata, 0); //extra data
 		});
 		return serializer;
 	}

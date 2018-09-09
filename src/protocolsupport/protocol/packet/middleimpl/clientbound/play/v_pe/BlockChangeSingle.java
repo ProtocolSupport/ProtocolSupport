@@ -6,6 +6,8 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChange
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
+import protocolsupport.protocol.typeremapper.pe.PEBlocks;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -32,7 +34,7 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 	public static ClientBoundPacketData create(ProtocolVersion version, Position position, int state) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.UPDATE_BLOCK);
 		PositionSerializer.writePEPosition(serializer, position);
-		VarNumberSerializer.writeVarInt(serializer, state);
+		VarNumberSerializer.writeVarInt(serializer, PEBlocks.getPocketRuntimeId(LegacyBlockData.REGISTRY.getTable(version).getRemap(state)));
 		VarNumberSerializer.writeVarInt(serializer, flags);
 		VarNumberSerializer.writeVarInt(serializer, 0); //Normal layer (liquid not implemented in java yet)
 		return serializer;

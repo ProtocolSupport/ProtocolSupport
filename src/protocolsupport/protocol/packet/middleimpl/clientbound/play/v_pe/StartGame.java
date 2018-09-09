@@ -12,6 +12,7 @@ import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.AttributesCache;
 import protocolsupport.protocol.typeremapper.pe.PEAdventureSettings;
+import protocolsupport.protocol.typeremapper.pe.PEBlocks;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 import protocolsupport.protocol.utils.types.Environment;
@@ -19,7 +20,6 @@ import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.zplatform.impl.pe.PEPaletteCompiler;
 
 public class StartGame extends MiddleStartGame {
 
@@ -71,9 +71,9 @@ public class StartGame extends MiddleStartGame {
 		startgame.writeBoolean(false); //broadcast to xbl
 		startgame.writeBoolean(true); //commands enabled
 		startgame.writeBoolean(false); //needs texture pack
-		VarNumberSerializer.writeVarInt(startgame, 1); //game rules
-		StringSerializer.writeString(startgame, version, "dodaylightcycle");
-		VarNumberSerializer.writeVarInt(startgame, 1); //bool gamerule
+		VarNumberSerializer.writeVarInt(startgame, 0); //game rules
+		//StringSerializer.writeString(startgame, version, "dodaylightcycle");
+		//VarNumberSerializer.writeVarInt(startgame, 1); //bool gamerule
 		startgame.writeBoolean(false); //bonus chest
 		startgame.writeBoolean(false); //player map enabled
 		startgame.writeBoolean(false); //trust players
@@ -92,15 +92,14 @@ public class StartGame extends MiddleStartGame {
 		startgame.writeBoolean(false); //is trial
 		startgame.writeLongLE(0); //world ticks
 		VarNumberSerializer.writeSVarInt(startgame, 0); //enchantment seed FFS MOJANG
-		VarNumberSerializer.writeVarInt(startgame, PEPaletteCompiler.getInstance().getPaletteSize());
-		startgame.writeBytes(PEPaletteCompiler.getInstance().getGlobalPaletteDefinition());
-		StringSerializer.writeString(startgame, version, ""); //???
+		startgame.writeBytes(PEBlocks.getPocketRuntimeDefinition());
+		StringSerializer.writeString(startgame, version, ""); //Multiplayer correlation id.
 		packets.add(startgame);
 		//Player metadata and settings update, so it won't behave strangely until metadata update is sent by server
 		packets.add(PEAdventureSettings.createPacket(cache));
 		packets.add(EntityMetadata.createFaux(player, cache.getAttributesCache().getLocale(), version));
 		//Can now switch to game state
-		packets.add(LoginSuccess.createPlayStatus(3));
+		packets.add(LoginSuccess.createPlayStatus(LoginSuccess.PLAYER_SPAWN));
 		//Send chunk radius update without waiting for request, works anyway
 		//PE uses circle to calculate visible chunks, so the view distance should cover all chunks that are sent by server (pc square should fit into pe circle)
 		ClientBoundPacketData chunkradius = ClientBoundPacketData.create(PEPacketIDs.CHUNK_RADIUS);

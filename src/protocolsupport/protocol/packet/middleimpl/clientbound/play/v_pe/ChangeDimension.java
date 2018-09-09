@@ -41,7 +41,7 @@ public class ChangeDimension extends MiddleChangeDimension {
 		changedim.writeFloatLE(0); //z
 		changedim.writeBoolean(true); //respawn
 		packets.add(changedim);
-		packets.add(LoginSuccess.createPlayStatus(3));
+		packets.add(LoginSuccess.createPlayStatus(LoginSuccess.PLAYER_SPAWN));
 		addFakeChunksAndPos(version, player, posY, packets);
 	}
 
