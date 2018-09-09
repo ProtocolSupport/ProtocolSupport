@@ -1,18 +1,21 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
 public class GodPacket extends ServerBoundMiddlePacket {
+
+	public GodPacket(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected static final int ACTION_NORMAL = 0;
 	protected static final int ACTION_MISMATCH = 1;
@@ -20,25 +23,9 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	protected static final int ACTION_USE_ENTITY = 3;
 	protected static final int ACTION_RELEASE_ITEM = 4;
 
-	protected UseItem useItemMiddlePacket = new UseItem();
-	protected UseEntity useEntityMiddlePacket = new UseEntity();
-	protected ReleaseItem releaseItemMiddlePacket = new ReleaseItem();
-
-	@Override
-	public void setConnection(Connection connection) {
-		super.setConnection(connection);
-		useItemMiddlePacket.setConnection(connection);
-		useEntityMiddlePacket.setConnection(connection);
-		releaseItemMiddlePacket.setConnection(connection);
-	}
-
-	@Override
-	public void setSharedStorage(NetworkDataCache sharedstorage) {
-		super.setSharedStorage(sharedstorage);
-		useItemMiddlePacket.setSharedStorage(sharedstorage);
-		useEntityMiddlePacket.setSharedStorage(sharedstorage);
-		releaseItemMiddlePacket.setSharedStorage(sharedstorage);
-	}
+	protected UseItem useItemMiddlePacket = new UseItem(connection);
+	protected UseEntity useEntityMiddlePacket = new UseEntity(connection);
+	protected ReleaseItem releaseItemMiddlePacket = new ReleaseItem(connection);
 
 	protected int actionId;
 	protected InvTransaction[] transactions;

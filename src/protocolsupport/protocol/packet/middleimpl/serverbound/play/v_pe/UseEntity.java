@@ -3,22 +3,28 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 import org.bukkit.util.Vector;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUseEntity;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
+import protocolsupport.protocol.utils.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
+import protocolsupport.protocol.utils.types.UsedHand;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public class UseEntity extends ServerBoundMiddlePacket {
 
+	public UseEntity(ConnectionImpl connection) {
+		super(connection);
+	}
+
 	protected int targetId;
 	protected int subTypeId = -1;
-	protected ItemStackWrapper itemstack;
+	protected NetworkItemStack itemstack;
 	protected int slot;
 	protected float fromX, fromY, fromZ;
 	protected float cX, cY, cZ;
@@ -48,17 +54,17 @@ public class UseEntity extends ServerBoundMiddlePacket {
 			case INTERACT_INTERACT: {
 				NetworkEntity target = cache.getWatchedEntityCache().getWatchedEntity(targetId);
 				if ((target == null) || !target.getType().isOfType(NetworkEntityType.ARMOR_STAND)) {
-					packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT, null, 0));
+					packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT, null, UsedHand.MAIN));
 				}
-				packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT_AT, new Vector(cX, cY, cZ), 0));
+				packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT_AT, new Vector(cX, cY, cZ), UsedHand.MAIN));
 				break;
 			}
 			case INTERACT_ATTACK: {
-				packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.ATTACK, null, 0));
+				packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.ATTACK, null, UsedHand.MAIN));
 				break;
 			}
 			case INTERACT_AT: {
-				packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT_AT, new Vector(cX, cY, cZ), 0));
+				packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT_AT, new Vector(cX, cY, cZ), UsedHand.MAIN));
 				break;
 			}
 		}

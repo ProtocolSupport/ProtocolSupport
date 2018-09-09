@@ -1,7 +1,7 @@
 package protocolsupport.protocol.storage.netcache;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 import protocolsupport.utils.Utils;
 
 public class WatchedEntityCache {

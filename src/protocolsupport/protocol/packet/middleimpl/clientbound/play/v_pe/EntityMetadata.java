@@ -1,28 +1,31 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
-import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntitySetAttributes.AttributeInfo;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.typeremapper.watchedentity.DataWatcherDataRemapper;
+import protocolsupport.protocol.typeremapper.watchedentity.DataWatcherRemapper;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectSVarLong;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntityItemDataCache;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
+import protocolsupport.protocol.utils.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.networkentity.NetworkEntityItemDataCache;
+import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.utils.ObjectFloatTuple;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public class EntityMetadata extends MiddleEntityMetadata {
+
+	public EntityMetadata(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
@@ -49,12 +52,13 @@ public class EntityMetadata extends MiddleEntityMetadata {
 				}
 				if (entity.getType().isOfType(NetworkEntityType.BATTLE_HORSE)) {
 					DataWatcherObjectIndex.BattleHorse.ARMOR.getValue(metadata.getOriginal()).ifPresent(armorWatcher -> {
-						int type = armorWatcher.getValue();
+						//int type = armorWatcher.getValue();
 						packets.add(EntityEquipment.create(version, locale, entityId,
-							ItemStackWrapper.NULL,
-							type == 0 ? ItemStackWrapper.NULL : ServerPlatform.get().getWrapperFactory().createItemStack(416 + armorWatcher.getValue()),
-							ItemStackWrapper.NULL,
-							ItemStackWrapper.NULL
+							NetworkItemStack.NULL,
+							//TODO Fix for 1.13
+							/*type == 0 ?*/ NetworkItemStack.NULL /*: ServerPlatform.get().getWrapperFactory().createItemStack(416 + armorWatcher.getValue())*/,
+							NetworkItemStack.NULL,
+							NetworkItemStack.NULL
 						));
 					});
 				}
@@ -69,7 +73,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 	}
 
 	public static ClientBoundPacketData createFaux(NetworkEntity entity, String locale, ProtocolVersion version) {
-		DataWatcherDataRemapper faux = new DataWatcherDataRemapper();
+		DataWatcherRemapper faux = new DataWatcherRemapper();
 		faux.remap(version, entity);
 		return create(entity, locale, transform(entity, faux.getRemapped(), version), version);
 	}
@@ -82,29 +86,8 @@ public class EntityMetadata extends MiddleEntityMetadata {
 	public static ClientBoundPacketData create(NetworkEntity entity, String locale, ArrayMap<DataWatcherObject<?>> peMetadata, ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SET_ENTITY_DATA);
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
-		EntityMetadata.encodeMeta(serializer, version, locale, transform(entity, peMetadata, version));
+		DataWatcherDeserializer.encodePEData(serializer, version, locale, transform(entity, peMetadata, version));
 		return serializer;
-	}
-
-	public static void encodeMeta(ByteBuf to, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> peMetadata) {
-		//For now. Iterate two times :P TODO: Fake varint, if that's possible.
-		int entries = 0;
-		for (int key = peMetadata.getMinKey(); key < peMetadata.getMaxKey(); key++) {
-			DataWatcherObject<?> object = peMetadata.get(key);
-			if (object != null) {
-				entries++;
-			}
-		}
-		//We stored that. Now write the length first and then go.
-		VarNumberSerializer.writeVarInt(to, entries);
-		for (int key = peMetadata.getMinKey(); key < peMetadata.getMaxKey(); key++) {
-			DataWatcherObject<?> object = peMetadata.get(key);
-			if (object != null) {
-				VarNumberSerializer.writeVarInt(to, key);
-				VarNumberSerializer.writeVarInt(to, DataWatcherObjectIdRegistry.getTypeId(object, version));
-				object.writeToStream(to, version, locale);
-			}
-		}
 	}
 
 	public static class PeMetaBase {
@@ -166,6 +149,12 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		public static final int FLAG_FIRE_IMMUNE = takeNextFlag();
 		public static final int FLAG_DANCING = takeNextFlag();
 		public static final int FLAG_ENCHANTED = takeNextFlag(); //50
+		public static final int FLAG_SHOW_TRIDENT_ROPE = takeNextFlag();
+		public static final int FLAG_CONTAINER_PRIVATE = takeNextFlag();
+		public static final int FLAG_TRANSORMATION = takeNextFlag();
+		public static final int FLAG_SPIN_ATTACK = takeNextFlag();
+		public static final int FLAG_SWIMMING = takeNextFlag();
+		public static final int FLAG_BRIBED = takeNextFlag();
 
 		protected static int metaId = 0;
 		protected static int takeNextMeta() {
@@ -248,6 +237,16 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		public static final int CONTROLLING_SEAT = takeNextMeta();
 		public static final int STRENGTH = takeNextMeta();
 		public static final int MAX_STRENGTH = takeNextMeta();
+		public static final int UNKNOWN_10 = takeNextMeta();
+		public static final int LIMITED_LIFE = takeNextMeta();
+		public static final int ARMOUR_STAND_POSE = takeNextMeta();
+		public static final int END_CRYSTAL_TIME = takeNextMeta();
+		public static final int ALWAYS_SHOW_NAMETAG = takeNextMeta();
+		public static final int COLOR_2 = takeNextMeta();
+		public static final int UNKNOWN_11 = takeNextMeta();
+		public static final int SCORE = takeNextMeta();
+		public static final int BALLOON_ATTACHED = takeNextMeta();
+		public static final int PUFFERFISH_SIZE = takeNextMeta();
 
 	}
 }

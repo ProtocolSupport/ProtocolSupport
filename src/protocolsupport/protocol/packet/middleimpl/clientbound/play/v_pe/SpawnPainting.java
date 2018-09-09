@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnPainting;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -9,6 +10,10 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class SpawnPainting extends MiddleSpawnPainting {
+
+	public SpawnPainting(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
@@ -40,7 +45,8 @@ public class SpawnPainting extends MiddleSpawnPainting {
 		VarNumberSerializer.writeVarInt(serializer, position.getY());
 		VarNumberSerializer.writeSVarInt(serializer, mcpeZ);
 		VarNumberSerializer.writeSVarInt(serializer, direction);
-		StringSerializer.writeString(serializer, connection.getVersion(), type);
+		//TODO: Fix Type
+		StringSerializer.writeString(serializer, connection.getVersion(), ""+type);
 		return RecyclableSingletonList.create(serializer);
 	}
 }

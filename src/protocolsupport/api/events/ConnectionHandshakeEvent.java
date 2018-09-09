@@ -11,8 +11,8 @@ import protocolsupport.api.Connection;
  */
 public class ConnectionHandshakeEvent extends ConnectionEvent {
 
-	private String hostname;
-	private boolean shouldParseHostname = true;
+	protected String hostname;
+	protected boolean shouldParseHostname = true;
 
 	public ConnectionHandshakeEvent(Connection connection, String hostname) {
 		super(connection);

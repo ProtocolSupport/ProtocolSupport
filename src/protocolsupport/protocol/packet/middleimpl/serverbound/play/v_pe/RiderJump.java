@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleEntityAction;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSteerVehicle;
@@ -10,6 +11,10 @@ import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class RiderJump extends ServerBoundMiddlePacket {
+
+	public RiderJump(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected long jumptime;
 

@@ -16,7 +16,7 @@ import protocolsupport.protocol.utils.spoofedata.SpoofedDataParser;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
-public abstract class AbstractHandshakeListener {
+public abstract class AbstractHandshakeListener implements IPacketListener {
 
 	protected final NetworkManagerWrapper networkManager;
 	protected AbstractHandshakeListener(NetworkManagerWrapper networkmanager) {
@@ -87,9 +87,13 @@ public abstract class AbstractHandshakeListener {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	protected void disconnect(String message) {
-		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), future -> networkManager.close(message));
+	@Override
+	public void disconnect(String message) {
+		try {
+			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), future -> networkManager.close(message));
+		} catch (Throwable exception) {
+			networkManager.close("Error whilst disconnecting player, force closing connection");
+		}
 	}
 
 	protected abstract AbstractLoginListener getLoginListener(NetworkManagerWrapper networkManager, String hostname);

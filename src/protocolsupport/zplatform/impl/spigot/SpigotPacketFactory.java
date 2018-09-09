@@ -10,24 +10,24 @@ import java.util.UUID;
 
 import org.bukkit.Chunk;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_12_R1.CraftChunk;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_13_R2.CraftChunk;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
 import org.spigotmc.SpigotConfig;
 
 import com.google.common.collect.BiMap;
 
 import io.netty.buffer.Unpooled;
-import net.minecraft.server.v1_12_R1.*;
-import net.minecraft.server.v1_12_R1.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_12_R1.PacketPlayInFlying.PacketPlayInLook;
-import net.minecraft.server.v1_12_R1.PacketPlayInFlying.PacketPlayInPosition;
-import net.minecraft.server.v1_12_R1.PacketPlayInFlying.PacketPlayInPositionLook;
-import net.minecraft.server.v1_12_R1.PacketPlayOutEntity.PacketPlayOutEntityLook;
-import net.minecraft.server.v1_12_R1.PacketPlayOutEntity.PacketPlayOutRelEntityMove;
-import net.minecraft.server.v1_12_R1.PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook;
-import net.minecraft.server.v1_12_R1.PacketPlayOutTitle.EnumTitleAction;
-import net.minecraft.server.v1_12_R1.ServerPing.ServerData;
-import net.minecraft.server.v1_12_R1.ServerPing.ServerPingPlayerSample;
+import net.minecraft.server.v1_13_R2.*;
+import net.minecraft.server.v1_13_R2.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_13_R2.PacketPlayInFlying.PacketPlayInLook;
+import net.minecraft.server.v1_13_R2.PacketPlayInFlying.PacketPlayInPosition;
+import net.minecraft.server.v1_13_R2.PacketPlayInFlying.PacketPlayInPositionLook;
+import net.minecraft.server.v1_13_R2.PacketPlayOutEntity.PacketPlayOutEntityLook;
+import net.minecraft.server.v1_13_R2.PacketPlayOutEntity.PacketPlayOutRelEntityMove;
+import net.minecraft.server.v1_13_R2.PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook;
+import net.minecraft.server.v1_13_R2.PacketPlayOutTitle.EnumTitleAction;
+import net.minecraft.server.v1_13_R2.ServerPing.ServerData;
+import net.minecraft.server.v1_13_R2.ServerPing.ServerPingPlayerSample;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
@@ -173,11 +173,10 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public Object createBlockBreakSoundPacket(Position pos, Material type) {
-		BlockDataEntry blockdataentry = BlockData.getById(type.getId());
+		BlockDataEntry blockdataentry = BlockData.get(type);
 		return new PacketPlayOutNamedSoundEffect(
-			SoundEffect.a.getId(blockdataentry.getBreakSound()), SoundCategory.BLOCKS,
+			IRegistry.SOUND_EVENT.fromId(blockdataentry.getBreakSound()), SoundCategory.BLOCKS,
 			pos.getX(), pos.getY(), pos.getZ(),
 			(blockdataentry.getVolume() + 1.0F) / 2.0F,
 			blockdataentry.getPitch() * 0.8F
@@ -219,12 +218,12 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	protected static final PacketDataSerializer emptyPDS = new PacketDataSerializer(Unpooled.EMPTY_BUFFER);
 	@Override
 	public Object createEmptyCustomPayloadPacket(String tag) {
-		return new PacketPlayOutCustomPayload(tag, emptyPDS);
+		return new PacketPlayOutCustomPayload(new MinecraftKey("ps", tag), emptyPDS);
 	}
 
 	@Override
 	public Object createFakeJoinGamePacket() {
-		return new PacketPlayOutLogin(0, EnumGamemode.SURVIVAL, false, 0, EnumDifficulty.EASY, 60, WorldType.NORMAL, false);
+		return new PacketPlayOutLogin(0, EnumGamemode.SURVIVAL, false, DimensionManager.OVERWORLD, EnumDifficulty.EASY, 60, WorldType.NORMAL, false);
 	}
 
 	@Override
@@ -269,6 +268,11 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	@Override
 	public int getOutLoginSetCompressionPacketId() {
 		return getOutId(PacketLoginOutSetCompression.class);
+	}
+
+	@Override
+	public int getOutLoginCustomPayloadPacketId() {
+		return getOutId(PacketLoginOutCustomPayload.class);
 	}
 
 	@Override
@@ -677,8 +681,38 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
-	public int getOutPlayCraftingGridConfirmPacketId() {
+	public int getOutPlayCraftRecipeConfirmPacketId() {
 		return getOutId(PacketPlayOutAutoRecipe.class);
+	}
+
+	@Override
+	public int getOutPlayDeclareCommandsPacketId() {
+		return getOutId(PacketPlayOutCommands.class);
+	}
+
+	@Override
+	public int getOutPlayDeclareRecipesPacketId() {
+		return getOutId(PacketPlayOutRecipeUpdate.class);
+	}
+
+	@Override
+	public int getOutPlayDeclareTagsPacket() {
+		return getOutId(PacketPlayOutTags.class);
+	}
+
+	@Override
+	public int getOutPlayQueryNBTResponsePacketId() {
+		return getOutId(PacketPlayOutNBTQuery.class);
+	}
+
+	@Override
+	public int getOutPlayStopSoundPacketId() {
+		return getOutId(PacketPlayOutStopSound.class);
+	}
+
+	@Override
+	public int getOutPlayLookAtPacketId() {
+		return getOutId(PacketPlayOutLookAt.class);
 	}
 
 
@@ -705,6 +739,11 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	@Override
 	public int getInLoginEncryptionBeginPacketId() {
 		return getInId(PacketLoginInEncryptionBegin.class);
+	}
+
+	@Override
+	public int getInLoginCustomPayloadPacketId() {
+		return getInId(PacketLoginInCustomPayload.class);
 	}
 
 	@Override
@@ -858,18 +897,68 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
-	public int getInPlayCraftingBookPacketId() {
+	public int getInPlayRecipeBookDataPacketId() {
 		return getInId(PacketPlayInRecipeDisplayed.class);
 	}
 
 	@Override
-	public int getInPlayPrepareCraftingGridPacketId() {
+	public int getInPlayCraftRecipeRequestPacketId() {
 		return getInId(PacketPlayInAutoRecipe.class);
 	}
 
 	@Override
 	public int getInPlayAdvancementTabPacketId() {
 		return getInId(PacketPlayInAdvancements.class);
+	}
+
+	@Override
+	public int getInPlayQueryBlockNBTPacketId() {
+		return getInId(PacketPlayInTileNBTQuery.class);
+	}
+
+	@Override
+	public int getInPlayQueryEntityNBTPacketId() {
+		return getInId(PacketPlayInEntityNBTQuery.class);
+	}
+
+	@Override
+	public int getInPlayEditBookPacketId() {
+		return getInId(PacketPlayInBEdit.class);
+	}
+
+	@Override
+	public int getInPlayPickItemPacketId() {
+		return getInId(PacketPlayInPickItem.class);
+	}
+
+	@Override
+	public int getInPlayNameItemPacketId() {
+		return getInId(PacketPlayInItemName.class);
+	}
+
+	@Override
+	public int getInPlaySelectTradePacketId() {
+		return getInId(PacketPlayInTrSel.class);
+	}
+
+	@Override
+	public int getInPlaySetBeaconEffectPacketId() {
+		return getInId(PacketPlayInBeacon.class);
+	}
+
+	@Override
+	public int getInPlayUpdateCommandBlockPacketId() {
+		return getInId(PacketPlayInSetCommandBlock.class);
+	}
+
+	@Override
+	public int getInPlayUpdateCommandMinecartPacketId() {
+		return getInId(PacketPlayInSetCommandMinecart.class);
+	}
+
+	@Override
+	public int getInPlayUpdateStructureBlockPacketId() {
+		return getInId(PacketPlayInStruct.class);
 	}
 
 

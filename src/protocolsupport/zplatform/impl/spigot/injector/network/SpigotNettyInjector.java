@@ -9,42 +9,42 @@ import java.util.ListIterator;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
-import net.minecraft.server.v1_12_R1.ChatComponentText;
-import net.minecraft.server.v1_12_R1.LazyInitVar;
-import net.minecraft.server.v1_12_R1.NetworkManager;
-import net.minecraft.server.v1_12_R1.ServerConnection;
+import io.netty.channel.epoll.Epoll;
+import net.minecraft.server.v1_13_R2.ChatComponentText;
+import net.minecraft.server.v1_13_R2.MinecraftServer;
+import net.minecraft.server.v1_13_R2.NetworkManager;
+import net.minecraft.server.v1_13_R2.ServerConnection;
 import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
 
 public class SpigotNettyInjector {
 
 	@SuppressWarnings("unchecked")
-	private static List<NetworkManager> getNetworkManagerList() throws IllegalArgumentException, IllegalAccessException, SecurityException, NoSuchFieldException {
-		ServerConnection serverConnection = SpigotMiscUtils.getServer().an();
-		try {
-			return (List<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("pending")).get(serverConnection);
-		} catch (NoSuchFieldException e) {
-			return (List<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("h")).get(serverConnection);
-		}
-	}
-
-	@SuppressWarnings("unchecked")
 	public static void inject() throws IllegalAccessException, NoSuchFieldException {
-		ServerConnection serverConnection = SpigotMiscUtils.getServer().an();
-		Field connectionsListField = ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("g"));
-		ChannelInjectList connectionsList = new ChannelInjectList(getNetworkManagerList(), (List<ChannelFuture>) connectionsListField.get(serverConnection));
+		ServerConnection serverConnection = SpigotMiscUtils.getServer().getServerConnection();
+		List<NetworkManager> nmList = null;
+		try {
+			nmList = (List<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("pending")).get(serverConnection);
+		} catch (NoSuchFieldException e) {
+			nmList = (List<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("g")).get(serverConnection);
+		}
+		Field connectionsListField = ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("f"));
+		ChannelInjectList connectionsList = new ChannelInjectList(nmList, (List<ChannelFuture>) connectionsListField.get(serverConnection));
 		connectionsListField.set(serverConnection, connectionsList);
 		connectionsList.injectExisting();
 	}
 
+	@SuppressWarnings("deprecation")
 	public static EventLoopGroup getServerEventLoop() {
 		try {
-			if (ReflectionUtils.setAccessible(ReflectionUtils.getField(LazyInitVar.class, "b")).getBoolean(ServerConnection.b)) {
-				return ServerConnection.b.c();
+			//TODO Shevfix
+			if (MinecraftServer.getServer().getPropertyManager().getBoolean("use-native-transport", false) && Epoll.isAvailable()) {
+			//if (ReflectionUtils.setAccessible(ReflectionUtils.getField(LazyInitVar.class, "b")).getBoolean(ServerConnection.b)) {
+				return ServerConnection.b.a();
 			} else {
-				return ServerConnection.a.c();
+				return ServerConnection.a.a();
 			}
-		} catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
+		} catch (SecurityException | IllegalArgumentException /*| IllegalAccessException*/ e) {
 			throw new RuntimeException("Unable to get event loop", e);
 		}
 	}

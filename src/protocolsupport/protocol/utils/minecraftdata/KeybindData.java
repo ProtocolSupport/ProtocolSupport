@@ -3,12 +3,14 @@ package protocolsupport.protocol.utils.minecraftdata;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 
+import protocolsupport.utils.Utils;
+
 public class KeybindData {
 
 	private static final HashMap<String, String> nameToKeyRepr = new HashMap<>();
 
 	static {
-		MinecraftData.getResource("keybinds").lines()
+		Utils.getResourceBuffered(MinecraftData.getResourcePath("keybinds")).lines()
 		.filter(line -> !line.isEmpty())
 		.forEach(line -> {
 			String[] split = line.split("[:]");

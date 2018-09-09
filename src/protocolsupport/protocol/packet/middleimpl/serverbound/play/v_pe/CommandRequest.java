@@ -2,6 +2,7 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleChat;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -12,6 +13,10 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class CommandRequest extends ServerBoundMiddlePacket {
+
+	public CommandRequest(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected static final int ORIGIN_DEV_CONSOLE = 3;
 	protected static final int ORIGIN_TEST = 4;

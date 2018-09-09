@@ -7,6 +7,7 @@ import java.util.UUID;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.utils.Any;
 import protocolsupport.api.utils.ProfileProperty;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -19,6 +20,10 @@ import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.utils.Utils;
 
 public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
+
+	public MiddlePlayerListSetEntry(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected Action action;
 	protected final HashMap<UUID, Any<PlayerListEntry, PlayerListEntry>> infos = new HashMap<>();

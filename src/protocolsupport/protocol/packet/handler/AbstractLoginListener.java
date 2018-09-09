@@ -28,7 +28,6 @@ import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.PlayerLoginStartEvent;
 import protocolsupport.api.events.PlayerProfileCompleteEvent;
-import protocolsupport.api.events.PlayerPropertiesResolveEvent;
 import protocolsupport.api.utils.Profile;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_pe.ClientLogin;
@@ -41,7 +40,7 @@ import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 @SuppressWarnings("deprecation")
-public abstract class AbstractLoginListener {
+public abstract class AbstractLoginListener implements IPacketListener {
 
 	protected static final int loginThreadKeepAlive = Utils.getJavaPropertyValue("loginthreadskeepalive", 60, Integer::parseInt);
 
@@ -76,13 +75,14 @@ public abstract class AbstractLoginListener {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@Override
 	public void disconnect(String s) {
 		try {
 			Bukkit.getLogger().info("Disconnecting " + getConnectionRepr() + ": " + s);
 			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(s), future -> networkManager.close(s));
-		} catch (Exception exception) {
+		} catch (Throwable exception) {
 			Bukkit.getLogger().log(Level.SEVERE, "Error whilst disconnecting player", exception);
+			networkManager.close("Error whilst disconnecting player, force closing connection");
 		}
 	}
 
@@ -107,6 +107,7 @@ public abstract class AbstractLoginListener {
 				}
 
 				profile.setOnlineMode(event.isOnlineMode());
+
 				forcedUUID = event.getForcedUUID();
 				if ((forcedUUID == null) && profile.isOnlineMode() && !event.useOnlineModeUUID()) {
 					forcedUUID = Profile.generateOfflineModeUUID(profile.getName());
@@ -216,7 +217,6 @@ public abstract class AbstractLoginListener {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	protected void finishLogin() throws InterruptedException, ExecutionException  {
 		if (!networkManager.isConnected()) {
 			return;
@@ -227,19 +227,13 @@ public abstract class AbstractLoginListener {
 
 		InetAddress address = saddress.getAddress();
 
-		//properties resolve event, only fire if has registered listeners, because it doesn't allow multiple properties for same name
-		if (PlayerPropertiesResolveEvent.getHandlerList().getRegisteredListeners().length > 0) {
-			PlayerPropertiesResolveEvent propResolve = new PlayerPropertiesResolveEvent(connection);
-			Bukkit.getPluginManager().callEvent(propResolve);
-			profile.clearProperties();
-			propResolve.getProperties().values().forEach(profile::addProperty);
-		}
-
 		//profile complete event
-		//forced uuid is inherited for login start legacy uuid change methods
 		PlayerProfileCompleteEvent event = new PlayerProfileCompleteEvent(connection);
-		event.setForcedUUID(forcedUUID);
 		Bukkit.getPluginManager().callEvent(event);
+		if (event.isLoginDenied()) {
+			disconnect(event.getDenyLoginMessage());
+			return;
+		}
 		if (event.getForcedName() != null) {
 			profile.setName(event.getForcedName());
 		}

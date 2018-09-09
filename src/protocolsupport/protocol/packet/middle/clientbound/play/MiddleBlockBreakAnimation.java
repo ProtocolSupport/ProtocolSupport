@@ -1,9 +1,14 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleBlockBreakAnimation extends MiddleBlock {
+
+	public MiddleBlockBreakAnimation(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected int entityId;
 	protected int stage;

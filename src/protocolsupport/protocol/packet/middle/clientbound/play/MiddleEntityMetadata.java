@@ -1,13 +1,18 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.typeremapper.watchedentity.DataWatcherDataRemapper;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.typeremapper.watchedentity.DataWatcherRemapper;
+import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 
 public abstract class MiddleEntityMetadata extends MiddleEntity {
 
+	public MiddleEntityMetadata(ConnectionImpl connection) {
+		super(connection);
+	}
+
 	protected NetworkEntity entity;
-	protected DataWatcherDataRemapper metadata = new DataWatcherDataRemapper();
+	protected DataWatcherRemapper metadata = new DataWatcherRemapper();
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {

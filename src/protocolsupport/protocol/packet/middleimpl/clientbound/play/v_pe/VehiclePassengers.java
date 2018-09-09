@@ -7,6 +7,7 @@ import it.unimi.dsi.fastutil.ints.IntIterator;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.unsafe.pemetadata.PEMetaProviderSPI;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleVehiclePassengers;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -14,13 +15,18 @@ import protocolsupport.protocol.storage.netcache.WatchedEntityCache;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues.PEEntityData.RiderInfo;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntityDataCache;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
+import protocolsupport.protocol.utils.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.networkentity.NetworkEntityDataCache;
+import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class VehiclePassengers extends MiddleVehiclePassengers {
+
+	public VehiclePassengers(ConnectionImpl connection) {
+		super(connection);
+		// TODO Auto-generated constructor stub
+	}
 
 	protected static final int UNLINK = 0;
 	protected static final int LINK = 1;

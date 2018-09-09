@@ -18,76 +18,46 @@ plugins {
 	id 'java'
 }
 
+apply from: 'helper.gradle'
 apply plugin: com.github.jengelman.gradle.plugins.shadow.ShadowPlugin
+
 
 tasks.withType(AbstractCompile) {
 	classpath += configurations.shadow
 }
 
-
 tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
 }
+
 
 group 'protocolsupport'
 version '4.29-dev-pe'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 
-
 import java.text.MessageFormat
 
-File dlDepsDirC = new File('dllibsc')
-dlDepsDirC.mkdirs()
+File librariesRuntimeDirectory = new File('libraries_runtime')
+librariesRuntimeDirectory.mkdirs()
 
-File dlDepsDirS = new File('dllibss')
-dlDepsDirS.mkdirs()
+File librariesShadeDirectory = new File('libraries_shade')
+librariesShadeDirectory.mkdirs()
 
-def dlDepsC = [
-	new Tuple(
-		'https://yivesmirror.com/files/paperspigot/PaperSpigot-1.12.2-b1421.jar',
-		'spigot-1.12.2-2.jar'
-	),
-	new Tuple(
-		'https://github.com/GlowstoneMC/Glowstone/releases/download/2018.6.0/glowstone.jar',
-		'glowstone-1.12.2-2.jar'
-	)
-]
-
-def dlDepsS = [
-	new Tuple(
-		'https://build.true-games.org/job/RakNetServer/27/artifact/target/RakNetServer.jar',
-		'raknetserver-7.jar'
-	),
-	new Tuple(
-		'https://build.true-games.org/job/UdpServerSocketChannel/11/artifact/target/UdpServerSocketChannel.jar',
-		'udpserver-2.jar'
-	)
-]
-
-void dlDeps(def dlDeps, File dlDepsDir) {
-	def dlDepsNames = new HashSet<String>()
-	dlDeps.each({
-		String dlDepUrl = it[0]
-		File dlDepFile = new File(dlDepsDir, it[1])
-		dlDepsNames.add(dlDepFile.getName())
-		if (!dlDepFile.exists()) {
-			logger.lifecycle(MessageFormat.format("Downloading {0} from {1}", dlDepFile.getName(), dlDepUrl))
-			ant.get(src: dlDepUrl, dest: dlDepFile)
-		} else {
-			logger.lifecycle(MessageFormat.format("Skipping download of {0} because it already exists", dlDepFile.getName()))
-		}
-	})
-	dlDepsDir.listFiles().findAll({ !dlDepsNames.contains(it.getName()) }).each({
-		logger.lifecycle(MessageFormat.format("Deleting old dllib {0}", it.getName()))
-		it.delete()
-	})
+task updateRuntimeLibraries(type: UpdateLibrariesTask) {
+	directory = librariesRuntimeDirectory
+	libraries = [
+		[name: 'spigot-1.13.1-1.jar', url: 'https://www.dropbox.com/s/b0p9s2zq0xnnlye/paper-1.13.1-180.jar?dl=1']
+	]
 }
 
-task updateLibs(type: DefaultTask) {doLast{
-	dlDeps(dlDepsC, dlDepsDirC)
-	dlDeps(dlDepsS, dlDepsDirS)
-}}
+task updateShadeLibraries(type: UpdateLibrariesTask) {
+	directory = librariesShadeDirectory
+	libraries = [
+		[name: 'raknetserver-8.jar', url: 'https://build.true-games.org/job/RakNetServer/29/artifact/target/RakNetServer.jar'],
+		[name: 'udpserver-2.jar', url: 'https://build.true-games.org/job/UdpServerSocketChannel/11/artifact/target/UdpServerSocketChannel.jar']
+	]
+}
 
 
 sourceSets {
@@ -111,9 +81,8 @@ repositories {
 }
 
 dependencies {
-	shadow files('buildprocessor/BuildProcessor.jar')
-	shadow fileTree(dir: dlDepsDirC, include: '*.jar')
-	compile fileTree(dir: dlDepsDirS, include: '*.jar')
+	shadow fileTree(dir: librariesRuntimeDirectory, include: '*.jar')
+	compile fileTree(dir: librariesShadeDirectory, include: '*.jar')
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 	compile group: 'it.unimi.dsi', name: 'fastutil', version: '8.1.1'
 	compile group: 'com.google.code.gson', name: 'gson', version: '2.8.0'
@@ -130,14 +99,15 @@ task generateLocaleList(type: DefaultTask) {doLast{
 	File langsListFile = new File(genDir, "resources/i18n/languages")
 	langsListFile.getParentFile().mkdirs()
 	langsListFile.createNewFile()
-	new PrintWriter(langsListFile).withCloseable({ writer ->
-		new File(sourceSets.main.resources.srcDirs.iterator().next(), "resources/i18n").list()
-		.each({
-			String[] split = it.split("[.]");
-			if (split.length == 2 && split[1].equals("lang")) {
-				writer.println(split[0])
-			}
-		})		
+	new PrintWriter(langsListFile).withCloseable({
+		writer ->
+			new File(sourceSets.main.resources.srcDirs.iterator().next(), "resources/i18n").list()
+			.each({
+				String[] split = it.split("[.]");
+				if (split.length == 2 && split[1].equals("json")) {
+					writer.println(split[0])
+				}
+			})		
 	})
 }}
 
@@ -189,7 +159,8 @@ shadowJar {
 
 
 compileJava.dependsOn(clean)
-compileJava.dependsOn(updateLibs)
+compileJava.dependsOn(updateRuntimeLibraries)
+compileJava.dependsOn(updateShadeLibraries)
 compileJava.finalizedBy(test)
 jar.enabled = false
 jar.finalizedBy(shadowJar)

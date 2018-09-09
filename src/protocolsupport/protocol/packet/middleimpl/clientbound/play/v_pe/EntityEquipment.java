@@ -1,19 +1,25 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityEquipment;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntityDataCache;
+import protocolsupport.protocol.utils.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.networkentity.NetworkEntityDataCache;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public class EntityEquipment extends MiddleEntityEquipment {
+
+	public EntityEquipment(ConnectionImpl connection) {
+		super(connection);
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
@@ -54,7 +60,7 @@ public class EntityEquipment extends MiddleEntityEquipment {
 		return RecyclableSingletonList.create(createUpdateHand(version, locale, entityId, itemstack, 0, slot == 1));
 	}
 
-	public static ClientBoundPacketData create(ProtocolVersion version, String locale, long entityId, ItemStackWrapper helmet, ItemStackWrapper chestplate, ItemStackWrapper leggings, ItemStackWrapper boots) {
+	public static ClientBoundPacketData create(ProtocolVersion version, String locale, long entityId, NetworkItemStack helmet, NetworkItemStack chestplate, NetworkItemStack leggings, NetworkItemStack boots) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOB_ARMOR_EQUIPMENT);
 		VarNumberSerializer.writeVarLong(serializer, entityId);
 		ItemStackSerializer.writeItemStack(serializer, version, locale, helmet, true);
@@ -64,7 +70,7 @@ public class EntityEquipment extends MiddleEntityEquipment {
 		return serializer;
 	}
 
-	public static ClientBoundPacketData createUpdateHand(ProtocolVersion version, String locale, int entityId, ItemStackWrapper itemstack, int slot, boolean isMainHand) {
+	public static ClientBoundPacketData createUpdateHand(ProtocolVersion version, String locale, int entityId, NetworkItemStack itemstack, int slot, boolean isMainHand) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOB_EQUIPMENT);
 		VarNumberSerializer.writeVarLong(serializer, entityId);
 		ItemStackSerializer.writeItemStack(serializer, version, locale, itemstack, true);

@@ -1,8 +1,13 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 
 public abstract class MiddleEntityTeleport extends MiddleEntity {
+
+	public MiddleEntityTeleport(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected double x;
 	protected double y;

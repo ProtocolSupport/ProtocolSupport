@@ -16,7 +16,7 @@ import protocolsupport.utils.Utils;
 /**
  * This event is fired after player profile complete (either after doing online-mode checks, or after generating offline-mode profile)
  */
-public class PlayerProfileCompleteEvent extends ConnectionEvent {
+public class PlayerProfileCompleteEvent extends PlayerAbstractLoginEvent {
 
 	public PlayerProfileCompleteEvent(Connection connection) {
 		super(connection);

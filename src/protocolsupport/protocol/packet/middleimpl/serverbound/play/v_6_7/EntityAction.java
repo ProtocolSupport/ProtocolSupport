@@ -1,10 +1,15 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_6_7;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleEntityAction;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class EntityAction extends MiddleEntityAction {
+
+	public EntityAction(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	private static final ArrayMap<Action> actionById = new ArrayMap<>(
 		new ArrayMap.Entry<>(1, Action.START_SNEAK), new ArrayMap.Entry<>(2, Action.STOP_SNEAK),

@@ -26,7 +26,14 @@ dllibsc/
 # IntelliJ
 .idea/
 *.iml
+<<<<<<< HEAD
 
 # jRebel
 *.rebel.xml.bak
 resources/rebel.xml
+=======
+/dllibsc/
+/dllibss/
+/libraries_runtime/
+/libraries_shade/
+>>>>>>> branch 'master' of https://github.com/ProtocolSupport/ProtocolSupport.git

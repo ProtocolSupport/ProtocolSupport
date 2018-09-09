@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleLook;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleMoveLook;
@@ -11,6 +12,10 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class MoveLook extends ServerBoundMiddlePacket {
+
+	public MoveLook(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected double x;
 	protected double y;

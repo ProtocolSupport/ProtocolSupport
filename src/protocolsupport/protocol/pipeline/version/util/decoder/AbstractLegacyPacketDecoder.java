@@ -6,9 +6,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
-import protocolsupport.api.Connection;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.packet.AnimatePacketReorderer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
@@ -16,8 +15,8 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public abstract class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
 
-	public AbstractLegacyPacketDecoder(Connection connection, NetworkDataCache storage) {
-		super(connection, storage);
+	public AbstractLegacyPacketDecoder(ConnectionImpl connection) {
+		super(connection);
 	}
 
 	protected final ReplayingDecoderBuffer buffer = new ReplayingDecoderBuffer(Unpooled.buffer());
@@ -32,7 +31,7 @@ public abstract class AbstractLegacyPacketDecoder extends AbstractPacketDecoder 
 		while (buffer.isReadable()) {
 			buffer.markReaderIndex();
 			try {
-				decodeAndTransform(ctx.channel(), buffer, list);
+				decodeAndTransform(ctx, buffer, list);
 			} catch (EOFSignal signal) {
 				buffer.resetReaderIndex();
 				break;
